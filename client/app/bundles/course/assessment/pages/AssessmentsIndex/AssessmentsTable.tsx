@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AssessmentListData,
@@ -6,8 +5,8 @@ import {
 } from 'types/course/assessment/assessments';
 
 import Note from 'lib/components/core/Note';
-import { ColumnTemplate, VerticalTable } from 'lib/components/core/table';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
+import Table, { ColumnTemplate } from 'lib/components/table';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -18,115 +17,116 @@ import StatusBadges from './StatusBadges';
 
 interface AssessmentsTableProps {
   assessments: AssessmentsListData;
-  top: string;
 }
 
 const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
   const { display, assessments } = props.assessments;
   const { t } = useTranslation();
 
-  const columns: ColumnTemplate<AssessmentListData>[] = useMemo(
-    () => [
-      {
-        header: t(translations.title),
-        content: (assessment) => (
-          <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
-            <label className="m-0 font-normal" title={assessment.title}>
-              <Link
-                // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
-                className="line-clamp-2 xl:line-clamp-1"
-                to={assessment.url}
-              >
-                {assessment.title}
-              </Link>
-            </label>
+  const columns: ColumnTemplate<AssessmentListData>[] = [
+    {
+      of: 'title',
+      title: t(translations.title),
+      cell: (assessment) => (
+        <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
+          <label className="m-0 font-normal" title={assessment.title}>
+            <Link
+              // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
+              className="line-clamp-2 xl:line-clamp-1"
+              to={assessment.url}
+            >
+              {assessment.title}
+            </Link>
+          </label>
 
-            {!display.isStudent && <StatusBadges for={assessment} />}
-          </div>
-        ),
-      },
-      {
-        header: t(translations.exp),
-        content: (assessment) => assessment.baseExp ?? '-',
-        align: 'right',
-        hideColumnWhen: !display.isGamified,
-        className: 'max-md:!hidden',
-      },
-      {
-        header: t(translations.bonusExp),
-        content: (assessment) => assessment.timeBonusExp ?? '-',
-        align: 'right',
-        hideColumnWhen: !display.bonusAttributes,
-        className: 'max-lg:!hidden',
-      },
-      {
-        header: t(translations.neededFor),
-        content: (assessment) => (
-          <StackedBadges
-            assessmentUrl={assessment.url}
-            badges={assessment.topConditionals}
-            remainingCount={assessment.remainingConditionalsCount}
-          />
-        ),
-        hideColumnWhen: !display.isAchievementsEnabled,
-        className: 'max-xl:!hidden whitespace-nowrap',
-      },
-      {
-        header: t(translations.startsAt),
-        content: (assessment) => (
-          <PersonalStartEndTime
-            className={
-              assessment.isStartTimeBegin
-                ? 'text-neutral-400'
-                : 'font-bold group-hover?:animate-pulse'
-            }
-            hideInfo={assessment.status === 'submitted'}
-            timeInfo={assessment.startAt}
-          />
-        ),
-        className: 'max-lg:!hidden whitespace-nowrap',
-      },
-      {
-        header: t(translations.bonusEndsAt),
-        content: (assessment) => (
-          <PersonalStartEndTime
-            className={assessment.isBonusEnded ? 'text-neutral-400' : ''}
-            hideInfo={assessment.status === 'submitted'}
-            timeInfo={assessment.bonusEndAt}
-          />
-        ),
-        hideColumnWhen: !display.bonusAttributes,
-        className: 'max-lg:!hidden whitespace-nowrap',
-      },
-      {
-        header: t(translations.endsAt),
-        content: (assessment) => (
-          <PersonalStartEndTime
-            className={`${
-              display.isStudent &&
-              assessment.status !== 'submitted' &&
-              assessment.isEndTimePassed
-                ? 'text-red-500'
-                : ''
-            } ${assessment.status === 'submitted' ? 'text-neutral-400' : ''}`}
-            hideInfo={assessment.status === 'submitted'}
-            timeInfo={assessment.endAt}
-          />
-        ),
-        hideColumnWhen: !display.endTimes,
-        className: 'whitespace-nowrap pointer-coarse:max-sm:!hidden',
-      },
-      {
-        content: (assessment) => ({
-          render: (
-            <ActionButtons for={assessment} student={display.isStudent} />
-          ),
-          className: 'relative',
-        }),
-      },
-    ],
-    [display],
-  );
+          {!display.isStudent && <StatusBadges for={assessment} />}
+        </div>
+      ),
+    },
+    {
+      of: 'baseExp',
+      title: t(translations.exp),
+      cell: (assessment) => assessment.baseExp ?? '-',
+      unless: !display.isGamified,
+      className: 'max-md:!hidden text-right',
+    },
+    {
+      of: 'timeBonusExp',
+      title: t(translations.bonusExp),
+      cell: (assessment) => assessment.timeBonusExp ?? '-',
+      unless: !display.bonusAttributes,
+      className: 'max-lg:!hidden text-right',
+    },
+    {
+      id: 'conditionals',
+      title: t(translations.neededFor),
+      cell: (assessment) => (
+        <StackedBadges
+          assessmentUrl={assessment.url}
+          badges={assessment.topConditionals}
+          remainingCount={assessment.remainingConditionalsCount}
+        />
+      ),
+      unless: !display.isAchievementsEnabled,
+      className: 'max-xl:!hidden whitespace-nowrap',
+    },
+    {
+      of: 'startAt',
+      title: t(translations.startsAt),
+      cell: (assessment) => (
+        <PersonalStartEndTime
+          className={
+            assessment.isStartTimeBegin
+              ? 'text-neutral-400'
+              : 'font-bold group-hover?:animate-pulse'
+          }
+          hideInfo={assessment.status === 'submitted'}
+          timeInfo={assessment.startAt}
+        />
+      ),
+      className: 'max-lg:!hidden whitespace-nowrap',
+    },
+    {
+      of: 'bonusEndAt',
+      title: t(translations.bonusEndsAt),
+      cell: (assessment) => (
+        <PersonalStartEndTime
+          className={assessment.isBonusEnded ? 'text-neutral-400' : ''}
+          hideInfo={assessment.status === 'submitted'}
+          timeInfo={assessment.bonusEndAt}
+        />
+      ),
+      unless: !display.bonusAttributes,
+      className: 'max-lg:!hidden whitespace-nowrap',
+    },
+    {
+      of: 'endAt',
+      title: t(translations.endsAt),
+      cell: (assessment) => (
+        <PersonalStartEndTime
+          className={`${
+            display.isStudent &&
+            assessment.status !== 'submitted' &&
+            assessment.isEndTimePassed
+              ? 'text-red-500'
+              : ''
+          } ${assessment.status === 'submitted' ? 'text-neutral-400' : ''}`}
+          hideInfo={assessment.status === 'submitted'}
+          timeInfo={assessment.endAt}
+        />
+      ),
+      unless: !display.endTimes,
+      className: 'whitespace-nowrap pointer-coarse:max-sm:!hidden',
+    },
+    {
+      id: 'actions',
+      title: t(translations.actions),
+      className: 'relative',
+      cell: (assessment) => (
+        <ActionButtons for={assessment} student={display.isStudent} />
+      ),
+    },
+  ];
 
   if (assessments.length === 0)
     return (
@@ -142,11 +142,11 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
     );
 
   return (
-    <VerticalTable
+    <Table
       className="-mx-6 w-screen sm:m-0 sm:mt-8 sm:w-full"
+      columns={columns}
       data={assessments}
-      headerClassName={`bg-neutral-50 z-10 ${props.top}`}
-      rowClassName={(assessment): string =>
+      getRowClassName={(assessment): string =>
         `group w-full bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100 ${
           !assessment.isStartTimeBegin ||
           !assessment.conditionSatisfied ||
@@ -163,12 +163,8 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
             : ''
         }`
       }
-      rowKey={(assessment): string => assessment.id.toString()}
-      stickyHeader
-      variant="outlined"
-    >
-      {columns}
-    </VerticalTable>
+      getRowId={(assessment): string => assessment.id.toString()}
+    />
   );
 };
 
