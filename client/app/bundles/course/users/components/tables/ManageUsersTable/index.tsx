@@ -77,6 +77,9 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       title: t(tableTranslations.phantom),
       cell: (user) => <PhantomSwitch for={user} />,
       csvDownloadable: true,
+      sortProps: {
+        sort: (a, b) => +(a.phantom ?? 0) - +(b.phantom ?? 0),
+      },
     },
     {
       of: 'groups',
