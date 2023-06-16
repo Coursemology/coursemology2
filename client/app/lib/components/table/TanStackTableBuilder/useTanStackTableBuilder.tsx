@@ -39,9 +39,19 @@ const useTanStackTableBuilder = <D extends object>(
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState({
+    pageSize:
+      props.pagination?.initialPageSize ??
+      props.pagination?.rowsPerPage?.[0] ??
+      10,
+    pageIndex: props.pagination?.initialPageIndex ?? 0,
+  });
 
   const trimAndSetSearchKeyword = (keyword: string): void =>
     setSearchKeyword(keyword.trim());
+
+  const resetPagination = (): void =>
+    setPagination((current) => ({ ...current, pageIndex: 0 }));
 
   const table = useReactTable({
     data: props.data,
@@ -56,16 +66,15 @@ const useTanStackTableBuilder = <D extends object>(
     onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: trimAndSetSearchKeyword,
+    onPaginationChange: setPagination,
     autoResetPageIndex: false,
-    state: { rowSelection, columnFilters, globalFilter: searchKeyword },
+    state: {
+      rowSelection,
+      columnFilters,
+      globalFilter: searchKeyword,
+      pagination,
+    },
     initialState: {
-      pagination: {
-        pageSize:
-          props.pagination?.initialPageSize ??
-          props.pagination?.rowsPerPage?.[0] ??
-          10,
-        pageIndex: props.pagination?.initialPageIndex ?? 0,
-      },
       sorting: props.sort?.initially && [
         {
           id: props.sort.initially.by,
@@ -105,16 +114,22 @@ const useTanStackTableBuilder = <D extends object>(
                 header.column.getFacetedUniqueValues().keys(),
               ).sort(),
               getFilterLabel: getRealColumn(index)?.filterProps?.getLabel,
-              onAddFilter: (value): void =>
+              onAddFilter: (value): void => {
+                resetPagination();
                 header.column.setFilterValue((currentFilters?: unknown[]) =>
                   currentFilters?.filter((filter) => filter !== value),
-                ),
-              onClearFilters: (): void =>
-                header.column.setFilterValue(undefined),
-              onRemoveFilter: (value): void =>
+                );
+              },
+              onClearFilters: (): void => {
+                resetPagination();
+                header.column.setFilterValue(undefined);
+              },
+              onRemoveFilter: (value): void => {
+                resetPagination();
                 header.column.setFilterValue((currentFilters?: unknown[]) =>
                   currentFilters ? [...currentFilters, value] : [value],
-                ),
+                );
+              },
               tooltipLabel: props.filter?.tooltipLabel,
               clearFiltersLabel: props.filter?.clearFilterTooltipLabel,
             }
