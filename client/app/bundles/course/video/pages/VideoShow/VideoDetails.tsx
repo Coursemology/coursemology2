@@ -1,7 +1,7 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import { VideoData } from 'types/course/videos';
 
-import { TableContainer } from 'lib/components/core/table';
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
@@ -14,7 +14,6 @@ const VideoDetails = (props: Props): JSX.Element => {
   const { for: video } = props;
   const { t } = useTranslation();
 
-  // TODO: Migrate to Tables API once it is ready
   return (
     <TableContainer dense variant="outlined">
       <TableBody>

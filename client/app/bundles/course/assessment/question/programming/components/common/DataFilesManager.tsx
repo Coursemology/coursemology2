@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { ProgrammingFormData } from 'types/course/assessment/question/programming';
 
-import { TableContainer } from 'lib/components/core/table';
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
