@@ -12,4 +12,6 @@ export const downloadCsv = (csvData: string, filename?: string): void => {
   document.body.appendChild(link);
 
   link.click();
+
+  document.body.removeChild(link);
 };
