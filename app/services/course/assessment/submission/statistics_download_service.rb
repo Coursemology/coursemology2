@@ -24,7 +24,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
                   calculated(:log_count, :graded_at, :grade, :grader_ids).
                   includes(:course_user, :publisher)
     assessment = submissions&.first&.assessment&.calculated(:maximum_grade)
-    @course_users_hash ||= @current_course.course_users.to_h { |cu| [cu.user_id, [cu.id, cu.name]] }
+    @course_users_hash ||= @current_course.course_users.to_h { |cu| [cu.user_id, cu] }
+    @questions = assessment&.questions || []
     statistics_file_path = File.join(@base_dir, 'statistics.csv')
     CSV.open(statistics_file_path, 'w') do |csv|
       download_statistics_header csv
@@ -48,32 +49,42 @@ class Course::Assessment::Submission::StatisticsDownloadService
     csv << [I18n.t('course.assessment.submission.submissions.statistics_download_service.name'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.phantom'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.status'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.grade'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.max_grade'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.exp_points'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.start_date_time'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.submitted_date_time'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.time_taken'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.graded_date_time'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.grading_time'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.grader'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.publisher')]
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.publisher'),
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.exp_points'),
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.grade'),
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.max_grade'),
+            *csv_header_question_grade]
+  end
+
+  def csv_header_question_grade
+    questions = @questions
+    questions.each_with_index.map do |question, index|
+      "Q#{index + 1} grade (Max grade: #{question.maximum_grade})"
+    end
   end
 
   def download_statistics(csv, submission, assessment)
-    csv << [submission.course_user.name,
-            submission.course_user.phantom?,
+    course_user = @course_users_hash[submission.creator_id]
+    csv << [course_user.name,
+            course_user.phantom?,
             submission.workflow_state,
-            submission.grade.to_f,
-            assessment.maximum_grade,
-            csv_exp_points(submission),
             csv_created_at(submission),
             csv_submitted_date_time(submission),
             csv_time_taken(submission),
             csv_graded_at(submission),
             csv_grading_time(submission),
             csv_grader(submission),
-            csv_publisher(submission)]
+            csv_publisher(submission),
+            csv_exp_points(submission),
+            submission.grade.to_f,
+            assessment.maximum_grade,
+            *csv_question_grade(submission)]
   end
 
   def csv_empty
@@ -85,6 +96,14 @@ class Course::Assessment::Submission::StatisticsDownloadService
       format_duration submission.submitted_at.to_time.to_i - submission.created_at.to_time.to_i
     else
       csv_empty
+    end
+  end
+
+  def csv_question_grade(submission)
+    question_ids = @questions.map(&:id)
+    question_ids&.map do |qn_id|
+      answer = submission.answers.from_question(qn_id).find(&:current_answer?)
+      answer ? answer.grade.to_s : '-'
     end
   end
 
@@ -127,8 +146,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
   def csv_grader(submission)
     if submission.grader_ids
       graders = submission.grader_ids.map do |grader_id|
-        cu = @course_users_hash[grader_id] || [0, 'System']
-        cu[1]
+        cu = @course_users_hash[grader_id] || { name: 'System' }
+        cu.name
       end
       graders.join(', ')
     else
@@ -138,13 +157,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
 
   def csv_publisher(submission)
     if submission.publisher
-      course_user = submission.publisher.course_users.
-                    find_by(course_id: submission.assessment.course_id)
-      if course_user
-        course_user.name
-      else
-        submission.publisher.name
-      end
+      course_user = @course_users_hash[submission.publisher_id]
+      course_user ? course_user.name : submission.publisher.name
     else
       csv_empty
     end
