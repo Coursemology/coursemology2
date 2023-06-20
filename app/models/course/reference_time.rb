@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::ReferenceTime < ApplicationRecord
+  include DuplicationStateTrackingConcern
+
   belongs_to :reference_timeline, class_name: Course::ReferenceTimeline.name, inverse_of: :reference_times
   belongs_to :lesson_plan_item, class_name: Course::LessonPlan::Item.name, inverse_of: :reference_times
 
@@ -23,6 +25,8 @@ class Course::ReferenceTime < ApplicationRecord
     self.start_at = duplicator.time_shift(other.start_at)
     self.bonus_end_at = duplicator.time_shift(other.bonus_end_at) if other.bonus_end_at
     self.end_at = duplicator.time_shift(other.end_at) if other.end_at
+
+    set_duplication_flag
   end
 
   private
@@ -39,6 +43,26 @@ class Course::ReferenceTime < ApplicationRecord
 
   def reset_closing_reminders
     actable = lesson_plan_item.actable
+
+    # When `duplicating?`, `end_at` change is emitted from the associated `Course::LessonPlan::Item`.
+    # If the `Course::LessonPlan::Item` includes `Course::ClosingReminderConcern`, `end_at_changed?`
+    # will be true on `before_save`, so the closing reminder token and job will be reset there. So,
+    # there is no need for reference time to trigger the reset at all.
+    #
+    # Furthermore, when `duplicating?`, a `Course::LessonPlan::Item`'s default reference time MUST be
+    # saved first for the `delegate`s to work. Otherwise, `end_at`, `end_at_changed?`, and other
+    # delegated reference time-related attributes in `Course::LessonPlan::Item` will raise a
+    # `Module::DelegationError` exception, akin to a cyclic dependency (but not exactly). In fact, we
+    # are doing it in this method; see `actable&.end_at` below.
+    #
+    # Therefore, we skip the reset here when `duplicating?` and let the `Course::LessonPlan::Item`
+    # trigger the closing reminder reset. Rather, it's not a reset, but create (since it's for a new
+    # duplicated record).
+    #
+    # Note that this isn't a problem when a new `Course::LessonPlan::Item` is created normally (not
+    # via duplication), thanks to `after_initialize :set_default_reference_time, if: :new_record?` in
+    # `Course::LessonPlan::Item`.
+    return if duplicating?
 
     # This check prevents `create_closing_reminders_at` from creating another `*ClosingReminderJob` if
     # `end_at` was changed from the `actable` (that includes `Course::ClosingReminderConcern`).
