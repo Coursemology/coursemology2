@@ -17,7 +17,7 @@ const ActiveTableToolbar = (props: ActiveTableToolbarProps): JSX.Element => {
   return (
     <div className="flex w-full items-center justify-between">
       <Typography>
-        {t(translations.selectedNStudents, { n: props.selectedRows.length })}
+        {t(translations.selectedNUsers, { n: props.selectedRows.length })}
       </Typography>
 
       {props.timelinesMap && (
