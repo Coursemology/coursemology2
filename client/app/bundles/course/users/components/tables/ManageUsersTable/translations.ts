@@ -73,9 +73,9 @@ const translations = defineMessages({
     id: 'course.users.ManageUsersTable.group',
     defaultMessage: 'Group: {name}',
   },
-  selectedNStudents: {
-    id: 'course.users.ManageUsersTable.selectedNStudents',
-    defaultMessage: 'Selected {n, plural, =1 {# student} other {# students}}',
+  selectedNUsers: {
+    id: 'course.users.ManageUsersTable.selectedNUsers',
+    defaultMessage: 'Selected {n, plural, =1 {# user} other {# users}}',
   },
   assignToTimeline: {
     id: 'course.users.ManageUsersTable.assignToTimeline',
