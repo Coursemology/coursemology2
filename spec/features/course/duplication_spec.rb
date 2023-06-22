@@ -45,9 +45,17 @@ RSpec.feature 'Course: Duplication' do
       context 'when I am a manager in another course', js: true do
         let(:source_course) { create(:course) }
         let!(:course_user) { create(:course_manager, course: source_course, user: user) }
-        let(:assessment_title) { SecureRandom.hex }
-        let!(:assessment) { create(:assessment, title: assessment_title, tab: source_course.assessment_tabs.first) }
+        let(:assessment_title1) { SecureRandom.hex }
+        let(:assessment_title2) { SecureRandom.hex }
         let(:new_course_title) { SecureRandom.hex }
+        let!(:assessment1) { create(:assessment, title: assessment_title1, tab: source_course.assessment_tabs.first) }
+
+        let!(:assessment2) do
+          create(:assessment,
+                 title: assessment_title2,
+                 tab: source_course.assessment_tabs.first,
+                 end_at: 2.days.from_now)
+        end
 
         scenario 'I can duplicate objects from that course' do
           visit course_duplication_path(course)
@@ -61,12 +69,12 @@ RSpec.feature 'Course: Duplication' do
           find("[role='option']", text: course.title).click
 
           find('.items-selector-menu span span', text: 'Assessments').click
-          find('label', text: assessment_title).click
+          find('label', text: assessment_title1).click
           click_on 'Duplicate Items'
           click_on 'Duplicate'
 
           wait_for_job
-          expect(course.assessments.where(title: assessment_title).count).to be(1)
+          expect(course.assessments.where(title: assessment_title1).count).to be(1)
         end
 
         scenario 'I can duplicate the whole course' do
@@ -85,11 +93,13 @@ RSpec.feature 'Course: Duplication' do
           wait_for_job
           duplicated_course = Course.find_by(title: new_course_title)
           expect(duplicated_course).to be_present
-          expect(duplicated_course.assessments.where(title: assessment_title).count).to eq(1)
+          expect(duplicated_course.assessments.where(title: assessment_title1).count).to eq(1)
+          expect(duplicated_course.assessments.where(title: assessment_title2).count).to eq(1)
 
           # As only course and assessment duplication source tracing is currently supported,
           # we will only test for these two
-          expect(duplicated_course.assessments.where(title: assessment_title).first.source.id).to eq(assessment.id)
+          expect(duplicated_course.assessments.where(title: assessment_title1).first.source.id).to eq(assessment1.id)
+          expect(duplicated_course.assessments.where(title: assessment_title2).first.source.id).to eq(assessment2.id)
           expect(duplicated_course.source.id).to eq(source_course.id)
         end
       end
