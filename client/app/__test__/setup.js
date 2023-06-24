@@ -72,4 +72,5 @@ jest.mock('lib/components/form/fields/RichTextField', () =>
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: jest.fn(),
+  unstable_usePrompt: jest.fn(),
 }));
