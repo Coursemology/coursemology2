@@ -1,8 +1,14 @@
 const { join, resolve } = require('path');
-const { IgnorePlugin, ContextReplacementPlugin } = require('webpack');
+const {
+  IgnorePlugin,
+  ContextReplacementPlugin,
+  DefinePlugin,
+} = require('webpack');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const Dotenv = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
+const packageJSON = require('./package.json');
 
 module.exports = {
   entry: {
@@ -77,6 +83,10 @@ module.exports = {
         },
         mode: 'write-references',
       },
+    }),
+    new DefinePlugin({
+      FIRST_BUILD_YEAR: JSON.stringify(packageJSON.firstBuildYear),
+      LATEST_BUILD_YEAR: JSON.stringify(new Date().getFullYear()),
     }),
   ],
   module: {

@@ -27,7 +27,8 @@ const translations = defineMessages({
   },
   copyright: {
     id: 'app.Footer.copyright',
-    defaultMessage: 'Copyright © {year} Coursemology. All rights reserved.',
+    defaultMessage:
+      'Copyright © {from}–{to} Coursemology. All rights reserved.',
   },
 });
 
@@ -58,7 +59,10 @@ const Footer = (): JSX.Element => {
       </div>
 
       <Typography variant="caption">
-        {t(translations.copyright, { year: '2023' })}
+        {t(translations.copyright, {
+          from: FIRST_BUILD_YEAR,
+          to: LATEST_BUILD_YEAR,
+        })}
       </Typography>
     </footer>
   );

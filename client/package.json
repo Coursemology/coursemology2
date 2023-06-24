@@ -192,6 +192,7 @@
     "cheerio": "1.0.0-rc.10"
   },
   "license": "MIT",
+  "firstBuildYear": 2013,
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
   "main": "app/index.js"
 }
