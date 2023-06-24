@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 class AnnouncementsController < ApplicationController
-  load_resource :announcement, class: GenericAnnouncement.name, only: :mark_as_read,
-                               id_param: :announcement_id
-
-  add_breadcrumb :index, :announcements_path
+  load_resource :announcement, class: GenericAnnouncement.name, only: :mark_as_read, id_param: :announcement_id
 
   def index
     respond_to do |format|

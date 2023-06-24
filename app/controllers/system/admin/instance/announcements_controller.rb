@@ -2,7 +2,6 @@
 class System::Admin::Instance::AnnouncementsController < System::Admin::Instance::Controller
   load_and_authorize_resource :announcement, through: :current_tenant, parent: false,
                                              class: ::Instance::Announcement.name
-  add_breadcrumb :index, :admin_instance_announcements_path
 
   def index
     respond_to do |format|

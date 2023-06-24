@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Admin::ComponentSettingsController < Course::Admin::Controller
   before_action :load_settings
-  add_breadcrumb :edit, :course_admin_components_path
 
   def edit
     respond_to do |format|

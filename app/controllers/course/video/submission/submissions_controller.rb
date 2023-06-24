@@ -6,9 +6,7 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
 
   def index
     respond_to do |format|
-      format.html do
-        add_breadcrumb t('.submissions')
-      end
+      format.html
       format.json do
         @submissions = @submissions.includes([{ experience_points_record: :course_user }, :statistic])
         @my_students = current_course_user.try(:my_students) || []

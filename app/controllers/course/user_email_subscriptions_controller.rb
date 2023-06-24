@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 class Course::UserEmailSubscriptionsController < Course::ComponentController
-  include Course::UsersBreadcrumbConcern
-
   load_resource :course_user, through: :course, id_param: :user_id
-
-  before_action :add_breadcrumbs
 
   def edit
     authorize!(:manage, Course::UserEmailUnsubscription.new(course_user: @course_user))
@@ -23,11 +19,6 @@ class Course::UserEmailSubscriptionsController < Course::ComponentController
   end
 
   private
-
-  def add_breadcrumbs
-    add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
-    add_breadcrumb :index
-  end
 
   def email_setting_params
     params.require(:user_email_subscriptions).permit(:component, :course_assessment_category_id, :setting)

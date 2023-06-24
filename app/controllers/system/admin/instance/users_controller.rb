@@ -2,7 +2,6 @@
 class System::Admin::Instance::UsersController < System::Admin::Instance::Controller
   load_and_authorize_resource :instance_user, class: InstanceUser.name,
                                               parent: false, except: [:index]
-  add_breadcrumb :index, :admin_instance_users_path
 
   def index
     respond_to do |format|

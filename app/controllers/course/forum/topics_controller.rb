@@ -8,7 +8,6 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   before_action :load_topic, except: [:create]
   load_resource :topic, class: Course::Forum::Topic.name, through: :forum, only: [:create]
   authorize_resource :topic, class: Course::Forum::Topic.name, except: [:set_resolved]
-  before_action :add_topic_breadcrumb
   after_action :mark_posts_read, only: [:show]
 
   def show
@@ -70,13 +69,6 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def load_topic
     @topic ||= @forum.topics.friendly.find(params[:id])
-  end
-
-  def add_topic_breadcrumb
-    return unless @topic&.persisted?
-
-    add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum,
-                                                         @topic)
   end
 
   def mark_posts_read

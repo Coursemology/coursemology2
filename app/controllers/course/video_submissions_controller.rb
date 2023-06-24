@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 class Course::VideoSubmissionsController < Course::ComponentController
-  include Course::UsersBreadcrumbConcern
-
   load_resource :course_user, through: :course, id_param: :user_id
   before_action :authorize_analyze_video!
   before_action :load_video_submissions
-  before_action :add_breadcrumbs
 
   def index
     @videos = @course.videos.ordered_by_date_and_title
@@ -15,11 +12,6 @@ class Course::VideoSubmissionsController < Course::ComponentController
   end
 
   private
-
-  def add_breadcrumbs
-    add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
-    add_breadcrumb :index
-  end
 
   # @return [Course::VideosComponent]
   # @return [nil] If component is disabled.

@@ -2,7 +2,6 @@
 class Course::Forum::ForumsController < Course::Forum::Controller
   include Course::UsersHelper
   load_resource :forum, class: Course::Forum.name, through: :course, only: [:index, :new, :create]
-  before_action :add_forum_item_breadcrumb
 
   def index
     respond_to do |format|
@@ -118,10 +117,6 @@ class Course::Forum::ForumsController < Course::Forum::Controller
 
   def forum_params
     params.require(:forum).permit(:name, :description, :forum_topics_auto_subscribe, :course_id)
-  end
-
-  def add_forum_item_breadcrumb
-    add_breadcrumb @forum.name, course_forum_path(current_course, @forum) if @forum&.persisted?
   end
 
   def skip_load_forum?

@@ -3,7 +3,6 @@ class Course::Assessment::SkillsController < Course::ComponentController
   load_and_authorize_resource :skill, class: Course::Assessment::Skill.name, through: :course,
                                       through_association: :assessment_skills
   before_action :load_skill_branches
-  add_breadcrumb :index, :course_assessments_skills_path
 
   def index
     @skills = @skills.includes(:skill_branch).group_by(&:skill_branch)

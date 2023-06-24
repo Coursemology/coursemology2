@@ -3,7 +3,6 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
   load_and_authorize_resource :instance_user, class: InstanceUser.name,
                                               parent: false,
                                               except: [:new, :create, :destroy]
-  add_breadcrumb :index, :admin_instance_users_path
 
   def index
     @invitations = @instance.invitations.order(name: :asc)

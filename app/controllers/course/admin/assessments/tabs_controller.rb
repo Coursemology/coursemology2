@@ -8,9 +8,6 @@ class Course::Admin::Assessments::TabsController < Course::Admin::Controller
                               through: :category,
                               class: Course::Assessment::Tab.name
 
-  add_breadcrumb :index, :course_admin_assessments_path
-  before_action :add_category_breadcrumb
-
   def new
   end
 
@@ -36,10 +33,6 @@ class Course::Admin::Assessments::TabsController < Course::Admin::Controller
 
   def tab_params
     params.require(:tab).permit(:title, :weight)
-  end
-
-  def add_category_breadcrumb
-    add_breadcrumb @category.title, course_admin_assessments_path(current_course)
   end
 
   # @return [Course::AssessmentsComponent]

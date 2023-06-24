@@ -4,8 +4,6 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
   load_and_authorize_resource :question_bundle_assignment, class: Course::Assessment::QuestionBundleAssignment,
                                                            through: :assessment
 
-  before_action :add_breadcrumbs
-
   def index
     @question_group_lookup = @assessment.question_groups.select(:id, :title).to_h { |qg| [qg.id, qg.title] }
     @question_bundle_lookup = @assessment.question_bundles.select(:id, :title).to_h { |qb| [qb.id, qb.title] }
@@ -90,11 +88,5 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
       end
       [submission.creator_id, hash]
     end
-  end
-
-  def add_breadcrumbs
-    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment))
-    add_breadcrumb('Question Bundle Assignment',
-                   course_assessment_question_bundle_assignments_path(current_course, @assessment))
   end
 end

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Course::ExperiencePoints::DisbursementController < Course::ComponentController
-  include Course::UsersBreadcrumbConcern
   before_action :load_resource
   before_action :authorize_resource
 

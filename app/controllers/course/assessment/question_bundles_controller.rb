@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::QuestionBundlesController < Course::Assessment::Controller
   load_and_authorize_resource :question_bundle, class: Course::Assessment::QuestionBundle, through: :assessment
-  before_action :add_breadcrumbs
 
   def index
   end
@@ -39,11 +38,6 @@ class Course::Assessment::QuestionBundlesController < Course::Assessment::Contro
   end
 
   private
-
-  def add_breadcrumbs
-    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment))
-    add_breadcrumb('Question Bundles', course_assessment_question_bundles_path(current_course, @assessment))
-  end
 
   def question_bundle_params
     params.require(:question_bundle).permit(:title, :group_id)

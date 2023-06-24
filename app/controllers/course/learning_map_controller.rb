@@ -5,7 +5,6 @@ class Course::LearningMapController < Course::ComponentController
 
   before_action :authorize_learning_map
   before_action :authorize_update, only: [:add_parent_node, :remove_parent_node, :toggle_satisfiability_type]
-  add_breadcrumb :index, :course_learning_map_path
 
   def index
     respond_to do |format|

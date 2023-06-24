@@ -4,8 +4,6 @@ class Course::Assessment::QuestionBundleQuestionsController < Course::Assessment
                                                          through: :assessment
   skip_load_resource :question_bundle_question, only: [:new, :create]
 
-  before_action :add_breadcrumbs
-
   def index
     @question_bundle_questions =
       Course::Assessment::QuestionBundleQuestion.where(id: @question_bundle_questions).
@@ -49,12 +47,6 @@ class Course::Assessment::QuestionBundleQuestionsController < Course::Assessment
   end
 
   private
-
-  def add_breadcrumbs
-    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment))
-    add_breadcrumb('Question Bundle Questions',
-                   course_assessment_question_bundle_questions_path(current_course, @assessment))
-  end
 
   def question_bundle_question_params
     params.require(:question_bundle_question).permit(:weight, :bundle_id, :question_id)

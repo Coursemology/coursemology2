@@ -3,8 +3,6 @@ class InstanceUserRoleRequestsController < ApplicationController
   load_and_authorize_resource :user_role_request, through: :current_tenant, parent: false,
                                                   class: ::Instance::UserRoleRequest.name
   def index
-    add_breadcrumb current_tenant.name, :admin_instance_admin_path
-    add_breadcrumb :index, :instance_user_role_requests_path
     @user_role_requests = @user_role_requests.includes(:confirmer, :user)
 
     respond_to do |format|

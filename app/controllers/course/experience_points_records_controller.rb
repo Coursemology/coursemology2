@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 class Course::ExperiencePointsRecordsController < Course::ComponentController
-  include Course::UsersBreadcrumbConcern
-
   load_resource :course_user, through: :course, id_param: :user_id
   load_and_authorize_resource :experience_points_record, through: :course_user,
                                                          class: Course::ExperiencePointsRecord.name
-  before_action :add_breadcrumbs
 
   def index
     respond_to do |format|
@@ -51,11 +48,6 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
 
   def experience_points_record_params
     params.require(:experience_points_record).permit(:points_awarded, :reason)
-  end
-
-  def add_breadcrumbs
-    add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
-    add_breadcrumb :index
   end
 
   # @return [Course::ExperiencePointsComponent]

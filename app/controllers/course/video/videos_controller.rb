@@ -26,10 +26,7 @@ class Course::Video::VideosController < Course::Video::Controller
 
   def show
     respond_to do |format|
-      format.html do
-        add_breadcrumb @video.title
-        render 'index'
-      end
+      format.html { render 'index' }
       format.json { render 'show' }
     end
   end
