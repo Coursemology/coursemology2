@@ -51,12 +51,9 @@ RSpec.describe 'Course: Announcements', type: :feature do
           visit course_path(course)
         end
 
-        it 'shows the correct number of unread items' do
+        it 'shows the correct number of unread items', js: true do
           expect(course.announcements.unread_by(first_user).count).to eq(1)
-          expect(page).to have_link(I18n.t('course.announcements.sidebar_title'))
-          within find_link(I18n.t('course.announcements.sidebar_title')) do
-            find('.unread', text: '1')
-          end
+          expect(find_sidebar.find_link(I18n.t('course.announcements.sidebar_title'))).to have_text 1
         end
       end
     end

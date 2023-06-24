@@ -144,7 +144,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       scenario 'I can view the Material Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'course.material.sidebar_title')
+        expect(find_sidebar).to have_text(I18n.t('course.material.sidebar_title'))
       end
 
       scenario 'I can view valid subfolders' do

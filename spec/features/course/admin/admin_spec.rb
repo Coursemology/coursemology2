@@ -16,7 +16,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
       scenario 'I can view the Course Admin Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'layouts.course_admin.title')
+        expect(find_sidebar).to have_text(I18n.t('layouts.course_admin.title'))
       end
 
       scenario 'I can change the course attributes' do
@@ -54,7 +54,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
 
         visit current_path
 
-        course_logo = find('#course-sidebar-logo img')
+        course_logo = find_sidebar.find_all('img').first
         expect(course_logo[:src]).to include(course.reload.logo.medium.url)
       end
 
@@ -98,7 +98,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
       scenario 'I cannot view the Course Admin Sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: 'layouts.course_admin.title')
+        expect(find_sidebar).not_to have_text(I18n.t('layouts.course_admin.title'))
       end
     end
 
@@ -108,7 +108,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
       scenario 'I cannot view the Course Admin Sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: 'layouts.course_admin.title')
+        expect(find_sidebar).not_to have_text(I18n.t('layouts.course_admin.title'))
       end
     end
   end

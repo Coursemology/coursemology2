@@ -144,6 +144,10 @@ module Capybara::TestGroupHelpers
       expect(page).to have_text('Failed submitting this form. Please try again.')
     end
 
+    def find_sidebar
+      all('aside').first
+    end
+
     def confirm_registartion_token_via_email
       token = ActionMailer::Base.deliveries.last.body.match(/confirmation_token=.*(?=")/)
       visit "/users/confirmation?#{token}"

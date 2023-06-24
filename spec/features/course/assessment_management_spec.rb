@@ -65,7 +65,7 @@ RSpec.feature 'Course: Assessments: Management', js: true do
         visit course_path(course)
 
         assessment_sidebar = 'activerecord.attributes.course/assessment/category/title.default'
-        expect(page).to have_selector('li', text: assessment_sidebar)
+        expect(find_sidebar).to have_text(assessment_sidebar)
       end
 
       scenario 'I can see published assessments' do
