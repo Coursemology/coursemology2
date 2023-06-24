@@ -16,9 +16,13 @@ html
     = render 'layouts/favicon'
 
   body
-    = render 'layouts/topbar'
-    div#root.container-fluid
-      = global_announcements
-      = flash_messages
-      div class=page_class
+    - if rails_page?
+      = render 'layouts/topbar'
+      div#root.container-fluid
+        = global_announcements
+        = flash_messages
+        div class=@page_class
+          = yield
+    - else
+      div#root
         = yield
