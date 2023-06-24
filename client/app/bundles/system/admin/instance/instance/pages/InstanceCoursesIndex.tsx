@@ -3,37 +3,37 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { Link, Typography } from '@mui/material';
 
+import CoursesButtons from 'bundles/system/admin/admin/components/buttons/CoursesButtons';
+import CoursesTable from 'bundles/system/admin/admin/components/tables/CoursesTable';
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
-import CoursesButtons from '../../components/buttons/CoursesButtons';
-import CoursesTable from '../../components/tables/CoursesTable';
-import { deleteCourse, indexCourses } from '../../operations';
-import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
+import { deleteCourse, indexCourses } from '../operations';
+import { getAdminCounts, getAllCourseMiniEntities } from '../selectors';
 
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.admin.CoursesIndex.header',
+    id: 'system.admin.instance.instance.InstanceCoursesIndex.header',
     defaultMessage: 'Courses',
   },
   title: {
-    id: 'system.admin.admin.CoursesIndex.title',
+    id: 'system.admin.instance.instance.InstanceCoursesIndex.title',
     defaultMessage: 'Courses',
   },
   fetchCoursesFailure: {
-    id: 'system.admin.admin.CoursesIndex.fetchCoursesFailure',
+    id: 'system.admin.instance.instance.InstanceCoursesIndex.fetchCoursesFailure',
     defaultMessage: 'Failed to fetch courses.',
   },
   totalCourses: {
-    id: 'system.admin.admin.CoursesIndex.totalCourses',
+    id: 'system.admin.instance.instance.InstanceCoursesIndex.totalCourses',
     defaultMessage: 'Total Courses: {count}',
   },
   activeCourses: {
-    id: 'system.admin.admin.CoursesIndex.activeCourses',
+    id: 'system.admin.instance.instance.InstanceCoursesIndex.activeCourses',
     defaultMessage: 'Active Courses (in the past 7 days): {count}',
   },
 });
@@ -86,14 +86,10 @@ const CoursesIndex: FC<Props> = (props) => {
   const renderSummaryContent: JSX.Element = (
     <>
       <Typography variant="body2">
-        {intl.formatMessage(translations.totalCourses, {
-          count: totalCount,
-        })}
+        {intl.formatMessage(translations.totalCourses, { count: totalCount })}
       </Typography>
       <Typography variant="body2">
-        {intl.formatMessage(translations.activeCourses, {
-          count: activeCount,
-        })}
+        {intl.formatMessage(translations.activeCourses, { count: activeCount })}
       </Typography>
     </>
   );
@@ -106,6 +102,7 @@ const CoursesIndex: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         <CoursesTable
+          className="border-none"
           courses={courses}
           renderRowActionComponent={(course): JSX.Element => (
             <CoursesButtons course={course} deleteOperation={deleteCourse} />

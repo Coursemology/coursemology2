@@ -5,42 +5,36 @@ import { Link, Typography } from '@mui/material';
 
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
-import UsersButtons from '../../components/buttons/UsersButtons';
-import InstanceUsersTabs from '../../components/navigation/InstanceUsersTabs';
-import UsersTable from '../../components/tables/UsersTable';
-import { indexUsers } from '../../operations';
-import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
+import UsersButtons from '../components/buttons/UsersButtons';
+import UsersTable from '../components/tables/UsersTable';
+import { indexUsers } from '../operations';
+import { getAdminCounts, getAllUserMiniEntities } from '../selectors';
 
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
-  header: {
-    id: 'system.admin.instance.instance.InstanceUsersIndex.header',
-    defaultMessage: 'Users',
-  },
   title: {
-    id: 'system.admin.instance.instance.InstanceUsersIndex.title',
+    id: 'system.admin.admin.UsersIndex.title',
     defaultMessage: 'Users',
   },
   fetchUsersFailure: {
-    id: 'system.admin.instance.instance.InstanceUsersIndex.fetchUsersFailure',
+    id: 'system.admin.admin.UsersIndex.fetchUsersFailure',
     defaultMessage: 'Failed to fetch users.',
   },
   totalUsers: {
-    id: 'system.admin.instance.instance.InstanceUsersIndex.totalUsers',
+    id: 'system.admin.admin.UsersIndex.totalUsers',
     defaultMessage:
       'Total Users: {allCount} ({adminCount} Administrators' +
-      ', {instructorCount} Instructors, {normalCount} Normal)',
+      ', {normalCount} Normal)',
   },
   activeUsers: {
-    id: 'system.admin.instance.instance.InstanceUsersIndex.activeUsers',
+    id: 'system.admin.admin.UsersIndex.activeUsers',
     defaultMessage:
       'Active Users: {allCount} ({adminCount} Administrators' +
-      ', {instructorCount} Instructors, {normalCount} Normal){br}' +
+      ', {normalCount} Normal){br}' +
       '(active in the past 7 days)',
   },
 });
@@ -64,10 +58,9 @@ const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState({ active: false, role: '' });
-  const users = useAppSelector(getAllUserMiniEntities);
   const userCounts = useAppSelector(getAdminCounts);
+  const users = useAppSelector(getAllUserMiniEntities);
   const dispatch = useAppDispatch();
-
   const { activeUsers: activeCounts, totalUsers: totalCounts } = userCounts;
 
   const totalUser = useMemo(
@@ -106,26 +99,6 @@ const UsersIndex: FC<Props> = (props) => {
         activeCounts.adminCount ?? 0,
         filter.active && filter.role === 'administrator',
         (): void => setFilter({ active: true, role: 'administrator' }),
-      ),
-    [totalCounts.allCount, filter.active, filter.role],
-  );
-
-  const totalInstructor = useMemo(
-    () =>
-      countWithLink(
-        totalCounts.instructorCount ?? 0,
-        !filter.active && filter.role === 'instructor',
-        (): void => setFilter({ active: false, role: 'instructor' }),
-      ),
-    [totalCounts.allCount, filter.active, filter.role],
-  );
-
-  const totalActiveInstructor = useMemo(
-    () =>
-      countWithLink(
-        activeCounts.instructorCount ?? 0,
-        filter.active && filter.role === 'instructor',
-        (): void => setFilter({ active: true, role: 'instructor' }),
       ),
     [totalCounts.allCount, filter.active, filter.role],
   );
@@ -171,7 +144,6 @@ const UsersIndex: FC<Props> = (props) => {
         {intl.formatMessage(translations.totalUsers, {
           allCount: totalUser,
           adminCount: totalAdmin,
-          instructorCount: totalInstructor,
           normalCount: totalNormal,
         })}
       </Typography>
@@ -179,7 +151,6 @@ const UsersIndex: FC<Props> = (props) => {
         {intl.formatMessage(translations.activeUsers, {
           allCount: totalActiveUser,
           adminCount: totalActiveAdmin,
-          instructorCount: totalActiveInstructor,
           normalCount: totalActiveNormal,
           br: <br />,
         })}
@@ -189,9 +160,7 @@ const UsersIndex: FC<Props> = (props) => {
 
   return (
     <>
-      <PageHeader title={intl.formatMessage(translations.header)} />
-      <InstanceUsersTabs currentTab="instance-users-tab" />
-      <SummaryCard renderContent={renderSummaryContent} />
+      <SummaryCard className="mx-6 mt-6" renderContent={renderSummaryContent} />
 
       {isLoading ? (
         <LoadingIndicator />

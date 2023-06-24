@@ -7,8 +7,8 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import InstanceForm from '../../components/forms/InstanceForm';
-import { createInstance } from '../../operations';
+import InstanceForm from '../components/forms/InstanceForm';
+import { createInstance } from '../operations';
 
 interface Props {
   open: boolean;

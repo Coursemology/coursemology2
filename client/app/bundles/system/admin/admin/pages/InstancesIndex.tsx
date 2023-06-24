@@ -7,11 +7,12 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import InstancesButtons from '../../components/buttons/InstancesButtons';
-import InstancesTable from '../../components/tables/InstancesTable';
-import { indexInstances } from '../../operations';
-import { getAllInstanceMiniEntities, getPermissions } from '../../selectors';
-import InstanceNew from '../InstanceNew';
+import InstancesButtons from '../components/buttons/InstancesButtons';
+import InstancesTable from '../components/tables/InstancesTable';
+import { indexInstances } from '../operations';
+import { getAllInstanceMiniEntities, getPermissions } from '../selectors';
+
+import InstanceNew from './InstanceNew';
 
 const translations = defineMessages({
   header: {
@@ -52,19 +53,21 @@ const InstancesIndex: FC = () => {
 
   return (
     <>
-      {permissions.canCreateInstances && (
-        <Button
-          className="absolute right-6 top-4 z-50"
-          id="new-instance-button"
-          onClick={(): void => setIsOpen(true)}
-          variant="outlined"
-        >
-          {t(translations.newInstance)}
-        </Button>
-      )}
-
       <InstancesTable
+        className="border-none"
         instances={instances}
+        newInstanceButton={
+          permissions.canCreateInstances && (
+            <Button
+              className="whitespace-nowrap"
+              id="new-instance-button"
+              onClick={(): void => setIsOpen(true)}
+              variant="outlined"
+            >
+              {t(translations.newInstance)}
+            </Button>
+          )
+        }
         renderRowActionComponent={(instance): JSX.Element => (
           <InstancesButtons instance={instance} />
         )}

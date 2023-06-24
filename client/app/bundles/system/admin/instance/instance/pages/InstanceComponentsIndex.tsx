@@ -14,7 +14,7 @@ import { ComponentData } from 'types/system/instance/components';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import tableTranslations from 'lib/translations/table';
 
-import { indexComponents, updateComponents } from '../../operations';
+import { indexComponents, updateComponents } from '../operations';
 
 type Props = WrappedComponentProps;
 
@@ -33,7 +33,7 @@ const translations = defineMessages({
   },
 });
 
-const InstanceComponentsForm: FC<Props> = (props) => {
+const InstanceComponentsIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -97,4 +97,4 @@ const InstanceComponentsForm: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(InstanceComponentsForm);
+export default injectIntl(InstanceComponentsIndex);

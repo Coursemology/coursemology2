@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { Fragment, ReactElement, ReactNode } from 'react';
 import { defineMessages } from 'react-intl';
 import { InstanceMiniEntity } from 'types/system/instances';
 
@@ -13,6 +13,7 @@ interface InstanceTableProps {
   instances: InstanceMiniEntity[];
   renderRowActionComponent: (instance: InstanceMiniEntity) => ReactElement;
   className?: string;
+  newInstanceButton?: ReactNode;
 }
 
 const translations = defineMessages({
@@ -108,6 +109,11 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       search={{ searchPlaceholder: t(translations.searchText) }}
       toolbar={{
         show: true,
+        buttons: [
+          <Fragment key="newInstanceButton">
+            {props.newInstanceButton}
+          </Fragment>,
+        ],
       }}
     />
   );
