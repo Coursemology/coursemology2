@@ -142,7 +142,7 @@ RSpec.feature 'Course: Homepage' do
         visit course_path(course)
 
         within find("#todo-#{assessment_todos[:enter_password].id}") do
-          expect(page).to have_text('ENTER PASSWORD')
+          expect(page).to have_text('Unlock')
         end
 
         [:completed, :unpublished].each do |status|
@@ -150,11 +150,11 @@ RSpec.feature 'Course: Homepage' do
         end
 
         within find("#todo-#{assessment_todos[:not_started].id}") do
-          expect(page).to have_text('ATTEMPT')
+          expect(page).to have_text('Attempt')
         end
 
         within find("#todo-#{assessment_todos[:in_progress].id}") do
-          expect(page).to have_text('RESUME')
+          expect(page).to have_text('Resume')
         end
 
         find("#todo-ignore-button-#{assessment_todos[:in_progress].id}").click
@@ -163,11 +163,11 @@ RSpec.feature 'Course: Homepage' do
         # Reload page to load other todos
         visit course_path(course)
         within find("#todo-#{video_todo.id}") do
-          expect(page).to have_text('WATCH')
+          expect(page).to have_text('Watch')
         end
 
         within find("#todo-#{survey_todo.id}") do
-          expect(page).to have_text('RESPOND')
+          expect(page).to have_text('Respond')
         end
       end
     end
@@ -202,7 +202,7 @@ RSpec.feature 'Course: Homepage' do
 
       scenario 'I am able to see the course description', js: true do
         visit course_path(course)
-        expect(page).to have_selector('h2', text: 'Description')
+        expect(page).to have_text('Description')
         expect(page).to have_text(course.description)
       end
     end
