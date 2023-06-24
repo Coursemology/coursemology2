@@ -43,7 +43,9 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
         end.not_to(change { protected_submission.logs.count })
 
         # Logout and login again and visit the same submission
-        logout
+        click_on 'OK'
+        perform_logout_in_course CourseUser.for_user(user).first.name
+
         login_as(user)
         wait_for_page
 
@@ -88,8 +90,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
 
         visit course_assessment_submission_logs_path(course, protected_assessment, submission)
 
-        expect(page).
-          to have_content(I18n.t('course.assessment.submission.logs.index.header'))
+        expect(page).to have_text 'Access Logs'
       end
     end
   end
