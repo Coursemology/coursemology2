@@ -188,15 +188,11 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
 
         # Delete all MCQ options
         visit edit_path
-        find_all('section').each do |choice_section|
-          within choice_section do
-            find_button('Delete choice').click
-          end
-        end
 
+        find_all('button[aria-label="Delete choice"]').each(&:click)
         click_button 'Save changes'
-
         wait_for_page
+
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(0)
       end
