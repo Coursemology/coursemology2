@@ -2,8 +2,6 @@
 class Course::LessonPlan::Controller < Course::ComponentController
   include Course::LessonPlan::ActsAsLessonPlanItemConcern
 
-  add_breadcrumb :index, :course_lesson_plan_path
-
   private
 
   # Define lesson plan component for the check whether the component is defined.

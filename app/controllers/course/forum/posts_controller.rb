@@ -4,7 +4,6 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   authorize_resource :topic
   skip_authorize_resource :post, only: :toggle_answer
   before_action :authorize_locked_topic, only: [:create]
-  before_action :add_topic_breadcrumb
 
   include Course::Discussion::PostsConcern
 
@@ -84,10 +83,6 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def load_topic
     @topic ||= @forum.topics.friendly.find(topic_id_param)
-  end
-
-  def add_topic_breadcrumb
-    add_breadcrumb @topic.title, course_forum_topic_path(current_course, @forum, @topic)
   end
 
   def post_vote_param

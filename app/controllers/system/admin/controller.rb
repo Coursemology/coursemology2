@@ -7,6 +7,4 @@ class System::Admin::Controller < ApplicationController
   def authorize_admin
     authorize!(:manage, :all)
   end
-
-  add_breadcrumb :index, :admin_path
 end

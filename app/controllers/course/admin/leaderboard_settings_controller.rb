@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::Admin::LeaderboardSettingsController < Course::Admin::Controller
-  add_breadcrumb :edit, :course_admin_leaderboard_path
-
   def edit
     respond_to do |format|
       format.html { render 'course/admin/index' }

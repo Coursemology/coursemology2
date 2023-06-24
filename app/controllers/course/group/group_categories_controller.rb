@@ -3,7 +3,6 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   include Course::Group::GroupManagerConcern
 
   load_and_authorize_resource :group_category, class: Course::GroupCategory
-  before_action :add_group_breadcrumb
 
   def index
     respond_to do |format|
@@ -122,10 +121,6 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
                     :id,
                     members: [:id, :role] # id is course user id
                   ])
-  end
-
-  def add_group_breadcrumb
-    add_breadcrumb :index, course_group_categories_path(current_course)
   end
 
   # @return [Course::GroupsComponent]

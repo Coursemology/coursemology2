@@ -2,8 +2,6 @@
 class System::Admin::Instance::CoursesController < System::Admin::Instance::Controller
   load_and_authorize_resource :course, through: :instance
 
-  add_breadcrumb :index, :admin_instance_courses_path
-
   def index
     respond_to do |format|
       format.html { render 'system/admin/instance/admin/index' }

@@ -3,8 +3,6 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
   before_action :load_and_authorize_submission
 
   def new
-    add_breadcrumb(@assessment.title, course_assessment_path(current_course, @assessment))
-    add_breadcrumb :new
   end
 
   def create

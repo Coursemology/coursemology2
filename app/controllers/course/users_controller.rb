@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Course::UsersController < Course::ComponentController
-  include Course::UsersBreadcrumbConcern
   include Course::UsersControllerManagementConcern
 
   before_action :load_resource

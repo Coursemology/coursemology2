@@ -3,7 +3,6 @@ class Course::AnnouncementsController < Course::ComponentController
   include Course::UsersHelper
 
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
-  before_action :add_announcement_breadcrumb
 
   after_action :mark_announcements_as_read, only: [:index]
 
@@ -48,10 +47,6 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def announcement_params
     params.require(:announcement).permit(:title, :content, :sticky, :start_at, :end_at)
-  end
-
-  def add_announcement_breadcrumb
-    add_breadcrumb @settings.title || :index, :course_announcements_path
   end
 
   # @return [Course::AnnouncementsComponent] The announcement component.

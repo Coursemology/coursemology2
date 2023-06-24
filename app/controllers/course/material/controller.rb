@@ -3,8 +3,6 @@ class Course::Material::Controller < Course::ComponentController
   load_and_authorize_resource :folder, through: :course, through_association: :material_folders,
                                        class: Course::Material::Folder.name
 
-  before_action :add_folder_breadcrumb
-
   private
 
   # @return [Course::MaterialsComponent] The materials component.
@@ -13,16 +11,6 @@ class Course::Material::Controller < Course::ComponentController
     current_component_host[:course_materials_component]
   end
   helper_method :component
-
-  def add_folder_breadcrumb
-    folders_chain = @folder.ancestors.reverse << @folder
-    root_folder = folders_chain.shift
-
-    add_breadcrumb root_folder_name, course_material_folder_path(current_course, root_folder)
-    folders_chain.each do |folder|
-      add_breadcrumb folder.name, course_material_folder_path(current_course, folder)
-    end
-  end
 
   def root_folder_name
     component.settings.title || t('course.material.sidebar_title')

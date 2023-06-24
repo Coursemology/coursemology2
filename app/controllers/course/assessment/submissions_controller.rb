@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::SubmissionsController < Course::ComponentController
   before_action :load_submissions
-  before_action :add_submissions_breadcrumb
+  before_action :load_category
   before_action :load_group_managers, only: [:pending, :index]
 
   def index
@@ -59,6 +59,8 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
       end
   end
 
+  alias_method :load_category, :category
+
   # Load student submissions.
   def load_submissions
     student_ids = if current_course_user&.student?
@@ -97,10 +99,6 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
     @assessments_hash = @assessments.to_h do |assessment|
       [assessment.id, assessment]
     end
-  end
-
-  def add_submissions_breadcrumb
-    add_breadcrumb :index, course_submissions_path(current_course, category: category)
   end
 
   # @return [Course::AssessmentsComponent]

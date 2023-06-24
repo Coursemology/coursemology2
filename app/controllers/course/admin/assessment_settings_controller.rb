@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
-  add_breadcrumb :index, :course_admin_assessments_path
-
   def edit
     respond_to do |format|
       format.html { render 'course/admin/index' }

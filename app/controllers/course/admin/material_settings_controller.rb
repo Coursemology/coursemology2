@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::Admin::MaterialSettingsController < Course::Admin::Controller
-  add_breadcrumb :edit, :course_admin_materials_path
-
   def edit
     respond_to do |format|
       format.html { render 'course/admin/index' }

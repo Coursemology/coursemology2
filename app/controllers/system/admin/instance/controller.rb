@@ -2,7 +2,6 @@
 class System::Admin::Instance::Controller < ApplicationController
   before_action :load_instance
   before_action :authorize_instance_admin
-  before_action :add_instance_breadcrumb
 
   private
 
@@ -12,9 +11,5 @@ class System::Admin::Instance::Controller < ApplicationController
 
   def authorize_instance_admin
     authorize!(:show, @instance)
-  end
-
-  def add_instance_breadcrumb
-    add_breadcrumb @instance.name, :admin_instance_admin_path
   end
 end

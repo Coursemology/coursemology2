@@ -4,7 +4,6 @@ class Course::Admin::Assessments::CategoriesController < Course::Admin::Controll
                               through: :course,
                               through_association: :assessment_categories,
                               class: Course::Assessment::Category.name
-  add_breadcrumb :index, :course_admin_assessments_path
 
   def new
   end

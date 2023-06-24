@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::LeaderboardsController < Course::ComponentController
   include Course::LeaderboardsHelper
-  before_action :add_leaderboard_breadcrumb
   before_action :check_component_settings
   before_action :preload_course_levels, only: [:index]
   before_action :fetch_course_users, only: [:index]
@@ -29,10 +28,6 @@ class Course::LeaderboardsController < Course::ComponentController
   # Preload course.levels to reduce SQL calls in leaderboard view. See course#level_for.
   def preload_course_levels
     @course.levels.to_a
-  end
-
-  def add_leaderboard_breadcrumb
-    add_breadcrumb @settings.title || :index, :course_leaderboard_path
   end
 
   # @return [Course::LeaderboardComponent] The leaderboard component.

@@ -5,7 +5,6 @@ class Course::Discussion::TopicsController < Course::ComponentController
   load_and_authorize_resource :discussion_topic, through: :course, instance_name: :topic,
                                                  class: Course::Discussion::Topic.name,
                                                  parent: false
-  before_action :add_topics_breadcrumb
 
   def index
   end
@@ -91,10 +90,6 @@ class Course::Discussion::TopicsController < Course::ComponentController
       ordered_by_updated_at.
       merge(Course::Discussion::Topic.from_user(my_student_ids)).
       preload(:actable)
-  end
-
-  def add_topics_breadcrumb
-    add_breadcrumb @settings.title || :index, :course_topics_path
   end
 
   def component

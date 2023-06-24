@@ -3,7 +3,6 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
   load_and_authorize_resource :skill_branch, class: Course::Assessment::SkillBranch.name,
                                              through: :course,
                                              through_association: :assessment_skill_branches
-  add_breadcrumb :index, :course_assessments_skills_path
 
   def create
     if @skill_branch.save

@@ -4,8 +4,6 @@ class Course::Controller < ApplicationController
   before_action :set_last_active_at
   helper name
 
-  before_action :add_course_breadcrumb
-
   # Gets the sidebar items. The sidebar items are ordered by the settings of current course.
   #
   # @param [Symbol] type The type of sidebar item, all sidebar items will be returned if the type
@@ -75,11 +73,6 @@ class Course::Controller < ApplicationController
                                                      current_component_host.sidebar_items)
     defined_sidebar_settings = sidebar_settings.sidebar_items.select { |item| item.id.present? }
     defined_sidebar_settings.to_h { |item| [item.id, item.weight] }
-  end
-
-  def add_course_breadcrumb
-    add_breadcrumb(current_course.title, course_path(current_course)) if
-      current_course.present? && current_course.id.present?
   end
 
   def set_last_active_at

@@ -3,7 +3,6 @@ class Course::UserInvitationsController < Course::ComponentController
   before_action :authorize_invitation!
   load_resource :invitation, through: :course, class: Course::UserInvitation, parent: false,
                              only: :destroy
-  add_breadcrumb :index, :course_users_students_path
 
   def index
     respond_to do |format|

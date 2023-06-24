@@ -5,8 +5,6 @@ class Course::Admin::Videos::TabsController < Course::Admin::Controller
                               through_association: :video_tabs,
                               class: Course::Video::Tab.name
 
-  add_breadcrumb :index, :course_admin_videos_path
-
   def new
   end
 

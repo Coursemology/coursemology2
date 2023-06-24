@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::Admin::Discussion::TopicSettingsController < Course::Admin::Controller
-  add_breadcrumb :edit, :course_admin_topics_path
-
   def edit
     respond_to do |format|
       format.html { render 'course/admin/index' }
