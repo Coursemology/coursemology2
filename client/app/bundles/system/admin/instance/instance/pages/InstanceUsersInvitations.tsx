@@ -3,14 +3,13 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
-import PendingInvitationsButtons from '../../components/buttons/PendingInvitationsButtons';
-import InstanceUsersTabs from '../../components/navigation/InstanceUsersTabs';
-import UserInvitationsTable from '../../components/tables/UserInvitationsTable';
-import { fetchInvitations } from '../../operations';
-import { getAllInvitationMiniEntities } from '../../selectors';
+import PendingInvitationsButtons from '../components/buttons/PendingInvitationsButtons';
+import InstanceUsersTabs from '../components/navigation/InstanceUsersTabs';
+import UserInvitationsTable from '../components/tables/UserInvitationsTable';
+import { fetchInvitations } from '../operations';
+import { getAllInvitationMiniEntities } from '../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -58,7 +57,9 @@ const InstanceUsersInvitations: FC<Props> = (props) => {
       .catch(() => toast.error(intl.formatMessage(translations.failure)));
   }, [dispatch]);
 
-  const renderBody: JSX.Element = (
+  if (isLoading) return <LoadingIndicator />;
+
+  return (
     <>
       <InstanceUsersTabs currentTab="invitations-tab" />
       <UserInvitationsTable
@@ -74,13 +75,6 @@ const InstanceUsersInvitations: FC<Props> = (props) => {
         invitations={acceptedInvitations}
         title={intl.formatMessage(translations.accepted)}
       />
-    </>
-  );
-
-  return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.header)} />
-      {isLoading ? <LoadingIndicator /> : renderBody}
     </>
   );
 };

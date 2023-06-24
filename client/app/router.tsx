@@ -84,12 +84,12 @@ import VideoSubmissionEdit from 'bundles/course/video/submission/pages/VideoSubm
 import VideoSubmissionShow from 'bundles/course/video/submission/pages/VideoSubmissionShow';
 import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSubmissionsIndex';
 import UserVideoSubmissionsIndex from 'bundles/course/video-submissions/pages/UserVideoSubmissionsIndex';
-import AdminNavigator from 'bundles/system/admin/admin/pages/AdminNavigator';
+import AdminNavigator from 'bundles/system/admin/admin/AdminNavigator';
 import AnnouncementIndex from 'bundles/system/admin/admin/pages/AnnouncementsIndex';
 import CourseIndex from 'bundles/system/admin/admin/pages/CoursesIndex';
 import InstancesIndex from 'bundles/system/admin/admin/pages/InstancesIndex';
 import UserIndex from 'bundles/system/admin/admin/pages/UsersIndex';
-import InstanceAdminNavigator from 'bundles/system/admin/instance/instance/pages/InstanceAdminNavigator';
+import InstanceAdminNavigator from 'bundles/system/admin/instance/instance/InstanceAdminNavigator';
 import InstanceAnnouncementsIndex from 'bundles/system/admin/instance/instance/pages/InstanceAnnouncementsIndex';
 import InstanceComponentsIndex from 'bundles/system/admin/instance/instance/pages/InstanceComponentsIndex';
 import InstanceCoursesIndex from 'bundles/system/admin/instance/instance/pages/InstanceCoursesIndex';
@@ -680,6 +680,7 @@ const router: RouteObject[] = [
           },
           {
             path: 'admin',
+            handle: AdminNavigator.handle,
             element: <AdminNavigator />,
             children: [
               {
@@ -704,9 +705,9 @@ const router: RouteObject[] = [
               },
             ],
           },
-          // `admin/instance` cannot be nested in `admin/*` because it has a different container element
           {
             path: 'admin/instance',
+            handle: InstanceAdminNavigator.handle,
             element: <InstanceAdminNavigator />,
             children: [
               {

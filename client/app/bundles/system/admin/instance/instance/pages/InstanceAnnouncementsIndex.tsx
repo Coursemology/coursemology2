@@ -1,13 +1,13 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import {
@@ -15,11 +15,11 @@ import {
   deleteAnnouncement,
   indexAnnouncements,
   updateAnnouncement,
-} from '../../operations';
+} from '../operations';
 import {
   getAllAnnouncementMiniEntities,
   getAnnouncementPermission,
-} from '../../selectors';
+} from '../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -46,7 +46,7 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const headerToolbars: ReactElement[] = [];
+
   const announcements = useAppSelector(getAllAnnouncementMiniEntities);
   const announcementPermission = useAppSelector(getAnnouncementPermission);
   const dispatch = useAppDispatch();
@@ -59,21 +59,21 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  if (announcementPermission) {
-    headerToolbars.push(
-      <Button
-        key="new-announcement-button"
-        id="new-announcement-button"
-        onClick={(): void => setIsOpen(true)}
-        variant="outlined"
-      >
-        {intl.formatMessage(translations.newAnnouncement)}
-      </Button>,
-    );
-  }
+  if (isLoading) return <LoadingIndicator />;
 
-  const renderBody: JSX.Element = (
-    <>
+  return (
+    <Page>
+      {announcementPermission && (
+        <Button
+          key="new-announcement-button"
+          id="new-announcement-button"
+          onClick={(): void => setIsOpen(true)}
+          variant="outlined"
+        >
+          {intl.formatMessage(translations.newAnnouncement)}
+        </Button>
+      )}
+
       {announcements.length === 0 ? (
         <Note message={intl.formatMessage(translations.noAnnouncements)} />
       ) : (
@@ -85,23 +85,14 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
           updateOperation={updateAnnouncement}
         />
       )}
+
       <AnnouncementNew
         canSticky={false}
         createOperation={createAnnouncement}
         onClose={(): void => setIsOpen(false)}
         open={isOpen}
       />
-    </>
-  );
-
-  return (
-    <>
-      <PageHeader
-        title={intl.formatMessage(translations.header)}
-        toolbars={headerToolbars}
-      />
-      {isLoading ? <LoadingIndicator /> : renderBody}
-    </>
+    </Page>
   );
 };
 

@@ -3,13 +3,12 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
-import PendingRoleRequestsButtons from '../../components/buttons/PendingRoleRequestsButtons';
-import InstanceUserRoleRequestsTable from '../../components/tables/InstanceUserRoleRequestsTable';
-import { fetchRoleRequests } from '../../operations';
-import { getAllRoleRequestsMiniEntities } from '../../selectors';
+import PendingRoleRequestsButtons from '../components/buttons/PendingRoleRequestsButtons';
+import InstanceUserRoleRequestsTable from '../components/tables/InstanceUserRoleRequestsTable';
+import { fetchRoleRequests } from '../operations';
+import { getAllRoleRequestsMiniEntities } from '../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -68,33 +67,28 @@ const InstanceUserRoleRequestsIndex: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
+  if (isLoading) return <LoadingIndicator />;
+
   return (
     <>
-      <PageHeader title={intl.formatMessage(translations.header)} />
-      {isLoading ? (
-        <LoadingIndicator />
-      ) : (
-        <>
-          <InstanceUserRoleRequestsTable
-            pendingRoleRequests
-            renderRowActionComponent={(roleRequest): JSX.Element => (
-              <PendingRoleRequestsButtons roleRequest={roleRequest} />
-            )}
-            roleRequests={pendingRoleRequests}
-            title={intl.formatMessage(translations.pending)}
-          />
-          <InstanceUserRoleRequestsTable
-            approvedRoleRequests
-            roleRequests={approvedRoleRequests}
-            title={intl.formatMessage(translations.approved)}
-          />
-          <InstanceUserRoleRequestsTable
-            rejectedRoleRequests
-            roleRequests={rejectedRoleRequests}
-            title={intl.formatMessage(translations.rejected)}
-          />
-        </>
-      )}
+      <InstanceUserRoleRequestsTable
+        pendingRoleRequests
+        renderRowActionComponent={(roleRequest): JSX.Element => (
+          <PendingRoleRequestsButtons roleRequest={roleRequest} />
+        )}
+        roleRequests={pendingRoleRequests}
+        title={intl.formatMessage(translations.pending)}
+      />
+      <InstanceUserRoleRequestsTable
+        approvedRoleRequests
+        roleRequests={approvedRoleRequests}
+        title={intl.formatMessage(translations.approved)}
+      />
+      <InstanceUserRoleRequestsTable
+        rejectedRoleRequests
+        roleRequests={rejectedRoleRequests}
+        title={intl.formatMessage(translations.rejected)}
+      />
     </>
   );
 };
