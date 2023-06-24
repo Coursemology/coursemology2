@@ -11,7 +11,6 @@ module ApplicationHelper
   include ApplicationNotificationsHelper
 
   include ApplicationFormattersHelper
-  include ApplicationSidebarHelper
   include RouteOverridesHelper
   include FormForWithResourceHelper
   include RenderWithinLayoutHelper
