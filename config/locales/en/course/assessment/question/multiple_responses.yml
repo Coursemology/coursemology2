@@ -3,9 +3,6 @@ en:
     assessment:
       question:
         multiple_responses:
-          new:
-            multiple_response_header: 'New Multiple Response Question'
-            multiple_choice_header: 'New Multiple Choice Question'
           question_type:
             multiple_response: Multiple Response
             multiple_choice: Multiple Choice

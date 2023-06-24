@@ -3,6 +3,4 @@ zh:
     assessment:
       question:
         voice_responses:
-          new:
-            voice_response_header: '音频回答题'
           question_type: 音频回答题

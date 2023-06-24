@@ -3,10 +3,6 @@ en:
     assessment:
       submission:
         submissions:
-          index:
-            submissions: 'Submissions'
-          edit:
-            attempt: :'course.assessment.assessments.assessment.attempt'
           download_statistics:
             no_submission_statistics: 'No submission fulfilled your requirements for downloading'
           statistics_download_service:

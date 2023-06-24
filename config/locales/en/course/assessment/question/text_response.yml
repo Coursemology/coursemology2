@@ -3,10 +3,6 @@ en:
     assessment:
       question:
         text_responses:
-          new:
-            text_response: 'New Text Response Question'
-            file_upload: 'New File Upload Question'
-            comprehension: 'New Comprehension Question'
           form_comprehension:
             multiline_explanation_comprehension_html: >
               Adding solutions allows the question to be autograded. Students can only input plaintext.

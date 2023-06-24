@@ -10,8 +10,6 @@ en:
         sidebar_title: :'course.assessment.assessments.index.header'
         index:
           header: "Assessments"
-        assessment:
-          attempt: "Attempt"
         show:
           public_test: "Public"
           private_test: "Private"
