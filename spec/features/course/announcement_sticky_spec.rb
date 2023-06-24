@@ -32,7 +32,7 @@ RSpec.describe 'Course: Announcements', type: :feature, js: true do
         subject { first('div.announcement') }
 
         it 'shows sticky announcement on top' do
-          expect(subject).to have_selector('h3', text: sticky_announcement.title)
+          expect(subject).to have_text(sticky_announcement.title)
         end
       end
     end
