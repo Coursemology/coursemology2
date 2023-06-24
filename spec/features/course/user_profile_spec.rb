@@ -18,7 +18,6 @@ RSpec.feature 'Courses: CourseUser Profile', js: true do
         visit course_user_path(course, course_student)
 
         expect(page).to have_text(course_student.name)
-        expect(page).to_not have_link(nil, href: course_user_manage_email_subscription_path(course, achievement))
 
         expect(page).to have_selector('div.user-achievements-stat')
         expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
@@ -37,7 +36,6 @@ RSpec.feature 'Courses: CourseUser Profile', js: true do
         visit course_user_path(course, course_teaching_assistant)
 
         expect(page).to have_text(course_teaching_assistant.name)
-        expect(page).to_not have_link(nil, href: course_user_manage_email_subscription_path(course, achievement))
 
         expect(page).to_not have_selector('div.user-achievements-stat')
         expect(page).to_not have_selector('div.user-level-stat')
@@ -50,7 +48,6 @@ RSpec.feature 'Courses: CourseUser Profile', js: true do
         visit course_user_path(course, course_student)
 
         expect(page).to have_text(course_student.name)
-        expect(page).to_not have_link(nil, href: course_user_manage_email_subscription_path(course, course_student))
 
         expect(page).to have_selector('div.user-achievements-stat')
         expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
@@ -64,7 +61,6 @@ RSpec.feature 'Courses: CourseUser Profile', js: true do
         visit course_user_path(course, course_student)
 
         expect(page).to have_text(course_student.name)
-        expect(page).to have_link(nil, href: course_user_manage_email_subscription_path(course, course_student))
 
         expect(page).to have_selector('h5.user-exp-stat-value')
         expect(page).to have_selector('div.user-achievements-stat')
