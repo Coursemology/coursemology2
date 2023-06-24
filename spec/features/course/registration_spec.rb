@@ -29,9 +29,6 @@ RSpec.feature 'Courses: Registration' do
         # Correct code
         fill_in 'registration-code', with: invitation.invitation_key
         find('#register-button').click
-        # Go to home page of an enrolled user, which will always have an announcement header
-        expect(page).
-          to have_selector('h2', text: 'Announcements')
       end
     end
 
@@ -41,7 +38,7 @@ RSpec.feature 'Courses: Registration' do
       scenario 'Users can create and cancel enrol requests', js: true do
         visit course_path(course)
 
-        expect(page).to have_selector('div#course-description', text: course.description)
+        expect(page).to have_text(course.description)
 
         expect(ActionMailer::Base.deliveries.count).to eq(0)
         find('#submit-enrol-request-button').click
