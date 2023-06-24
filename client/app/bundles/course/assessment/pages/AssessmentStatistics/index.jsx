@@ -5,8 +5,8 @@ import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 
 import {
   fetchAncestors,
@@ -168,17 +168,17 @@ const AssessmentStatisticsPage = ({
   };
 
   return (
-    <main className="space-y-5">
-      <PageHeader
-        returnLink={assessment?.url}
-        title={intl.formatMessage(translations.header, {
-          title: assessment?.title,
-        })}
-      />
+    <Page
+      backTo={assessment?.url}
+      className="space-y-5"
+      title={intl.formatMessage(translations.header, {
+        title: assessment?.title,
+      })}
+    >
       <StatisticsPanel allStudents={allStudents} submissions={submissions} />
       {renderAncestorSelect()}
       <div style={styles.ancestorStatistics}>{renderAncestorStatistics()}</div>
-    </main>
+    </Page>
   );
 };
 

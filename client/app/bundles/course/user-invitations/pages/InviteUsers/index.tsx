@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { InvitationResult } from 'types/course/userInvitations';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
@@ -61,8 +61,7 @@ const InviteUsers: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
+    <Page title={intl.formatMessage(translations.manageUsersHeader)} unpadded>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -71,7 +70,8 @@ const InviteUsers: FC<Props> = (props) => {
             permissions={permissions}
             sharedData={sharedData}
           />
-          <Box>
+
+          <Page.PaddedSection>
             <Grid
               alignItems="flex-end"
               container
@@ -88,7 +88,8 @@ const InviteUsers: FC<Props> = (props) => {
               </Grid>
             </Grid>
             <IndividualInviteForm openResultDialog={openResultDialog} />
-          </Box>
+          </Page.PaddedSection>
+
           <InvitationResultDialog
             handleClose={(): void => setShowInvitationResultDialog(false)}
             invitationResult={invitationResult}
@@ -96,7 +97,7 @@ const InviteUsers: FC<Props> = (props) => {
           />
         </>
       )}
-    </>
+    </Page>
   );
 };
 

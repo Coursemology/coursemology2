@@ -43,8 +43,8 @@ const Question = (props: QuestionProps): JSX.Element => {
             } ${!dragging ? 'hover?:slot-1-neutral-100' : ''}`}
           >
             <section
-              className={`top-20 flex w-full items-start bg-slot-1 px-6 py-6 ${
-                !dragging ? 'sticky z-10' : ''
+              className={`flex w-full items-start bg-slot-1 px-6 py-6 ${
+                !dragging ? 'sticky top-0 z-10' : ''
               }`}
               {...provided.dragHandleProps}
             >

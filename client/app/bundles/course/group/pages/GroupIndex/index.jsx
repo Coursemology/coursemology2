@@ -6,9 +6,9 @@ import { Tab, Tabs } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import CourseAPI from 'api/course';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import PageHeader from 'lib/components/navigation/PageHeader';
 
 import GroupNew from '../GroupNew';
 
@@ -82,19 +82,18 @@ const GroupIndex = (props) => {
       <Note message={intl.formatMessage(translations.noCategory)} />
     ) : (
       <>
-        {renderTabs}
+        <Page.UnpaddedSection>{renderTabs}</Page.UnpaddedSection>
         <Outlet />
       </>
     );
 
   return (
-    <>
-      <PageHeader
-        title={intl.formatMessage(translations.groups)}
-        toolbars={headerToolbars}
-      />
+    <Page
+      actions={headerToolbars}
+      title={intl.formatMessage(translations.groups)}
+    >
       {isLoading ? <LoadingIndicator /> : renderBody}
-    </>
+    </Page>
   );
 };
 

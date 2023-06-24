@@ -3,8 +3,8 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { VideoSubmissionListData } from 'types/course/videoSubmissions';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 
 import UserVideoSubmissionTable from '../../components/tables/UserVideoSubmissionTable';
 import { fetchVideoSubmissions } from '../../operations';
@@ -52,16 +52,16 @@ const UserVideoSubmissionsIndex: FC<Props> = (props) => {
   }, []);
 
   return (
-    <>
-      <PageHeader
-        title={intl.formatMessage(translations.videoSubmissionsHeader)}
-      />
+    <Page
+      title={intl.formatMessage(translations.videoSubmissionsHeader)}
+      unpadded
+    >
       {isLoading ? (
         <LoadingIndicator />
       ) : (
         <UserVideoSubmissionTable videoSubmissions={videoSubmissions} />
       )}
-    </>
+    </Page>
   );
 };
 

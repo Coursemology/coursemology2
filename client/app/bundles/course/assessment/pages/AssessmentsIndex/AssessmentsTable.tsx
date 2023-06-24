@@ -144,7 +144,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
 
   return (
     <Table
-      className="-mx-6 w-screen sm:m-0 sm:mt-8 sm:w-full"
+      className="w-screen border-none sm:w-full"
       columns={columns}
       data={assessments}
       getRowClassName={(assessment): string =>

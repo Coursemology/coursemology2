@@ -14,8 +14,8 @@ import {
 import PropTypes from 'prop-types';
 
 import { defaultComponentTitles } from 'course/translations.intl';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 
 import LevelRow from '../../components/LevelRow';
 import {
@@ -217,16 +217,16 @@ class LevelsIndex extends Component {
 
   render() {
     return (
-      <>
-        <PageHeader
-          title={
-            <FormattedMessage
-              {...defaultComponentTitles.course_levels_component}
-            />
-          }
-        />
+      <Page
+        title={
+          <FormattedMessage
+            {...defaultComponentTitles.course_levels_component}
+          />
+        }
+        unpadded
+      >
         {this.props.isLoading ? <LoadingIndicator /> : this.renderBody()}
-      </>
+      </Page>
     );
   }
 }

@@ -47,7 +47,7 @@ const AssessmentsIndex = (): JSX.Element => {
         >
           {data.display.category.tabs.length > 1 && (
             <Tabs
-              className="sticky top-0 z-20 -mx-6 h-20 w-screen bg-white border-only-b-neutral-200 sm:mx-0 sm:w-full sm:rounded-b-md"
+              className="sticky top-0 z-20 h-20 bg-white border-only-b-neutral-200"
               onChange={(_, id): void => {
                 setParams({
                   category: data.display.category.id.toString(),

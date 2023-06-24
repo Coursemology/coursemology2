@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 import { Card, CardContent, CardHeader } from '@mui/material';
 
 import DescriptionCard from 'lib/components/core/DescriptionCard';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { getVideosURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -57,14 +57,7 @@ const VideoShow: FC<Props> = (props) => {
     }
   }, [dispatch, videoId]);
 
-  if (isLoading) {
-    return (
-      <>
-        <PageHeader title={intl.formatMessage(translations.video)} />
-        <LoadingIndicator />
-      </>
-    );
-  }
+  if (isLoading) return <LoadingIndicator />;
 
   const headerToolbars: ReactElement[] = [];
 
@@ -101,16 +94,16 @@ const VideoShow: FC<Props> = (props) => {
     : getVideosURL(getCourseId());
 
   return (
-    <main className="space-y-5">
-      <PageHeader
-        returnLink={returnLink}
-        title={intl.formatMessage(translations.videoTitle, {
-          title: video?.title,
-        })}
-        toolbars={headerToolbars}
-      />
+    <Page
+      actions={headerToolbars}
+      backTo={returnLink}
+      className="space-y-5"
+      title={intl.formatMessage(translations.videoTitle, {
+        title: video?.title,
+      })}
+    >
       {isLoading ? <LoadingIndicator /> : renderBody}
-    </main>
+    </Page>
   );
 };
 

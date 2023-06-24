@@ -67,11 +67,11 @@ const translations = defineMessages({
   },
   addSkill: {
     id: 'course.assessment.skills.SkillsTable.addSkill',
-    defaultMessage: 'Add Skill',
+    defaultMessage: 'Skill',
   },
   addSkillBranch: {
     id: 'course.assessment.skills.SkillsTable.addSkillBranch',
-    defaultMessage: 'Add Skill Branch',
+    defaultMessage: 'Skill Branch',
   },
 });
 
@@ -179,6 +179,7 @@ const SkillsTable: FC<Props> = (props: Props) => {
               background: 'white',
               fontSize: 14,
               marginLeft: 12,
+              whiteSpace: 'nowrap',
             }}
             variant="outlined"
           >
@@ -270,6 +271,7 @@ const SkillsTable: FC<Props> = (props: Props) => {
             >
               <Slide
                 appear
+                className="border-only-t-neutral-200"
                 container={containerRef.current}
                 direction="up"
                 in={isOpen}
@@ -278,8 +280,6 @@ const SkillsTable: FC<Props> = (props: Props) => {
                   overflow: 'auto',
                   maxHeight: '20vh',
                   minHeight: '20vh',
-                  borderRadius: '5px',
-                  borderTop: '1px solid #aaaaaa',
                 }}
               >
                 <Box>

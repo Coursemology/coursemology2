@@ -7,6 +7,7 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -22,8 +23,8 @@ import {
 } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
 import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 
 import DestinationCourseSelector from './DestinationCourseSelector';
 import DuplicateAllButton from './DuplicateAllButton';
@@ -81,9 +82,6 @@ const styles = {
     gridTemplateColumns: '210px auto',
     gridTemplateRows: 'auto',
   },
-  sidebar: {
-    padding: '25px 20px',
-  },
   itemsSidebarHeader: {
     padding: '25px 20px 0px 20px',
   },
@@ -133,19 +131,22 @@ class Duplication extends Component {
 
     return (
       <div style={styles.bodyGrid}>
-        <div style={styles.sidebar}>
-          <h3>
+        <div>
+          <Typography variant="h6">
             <FormattedMessage {...translations.fromCourse} />
-          </h3>
+          </Typography>
         </div>
+
         <Paper style={styles.mainPanel}>{this.renderFromCourseMain()}</Paper>
 
-        <div style={styles.sidebar}>{this.renderToCourseSidebar()}</div>
+        <div>{this.renderToCourseSidebar()}</div>
+
         <Paper style={styles.mainPanel}>
           <DestinationCourseSelector />
         </Paper>
 
         {this.renderItemsSelectorSidebar()}
+
         {duplicationMode === duplicationModes.OBJECT && isCourseSelected ? (
           <Paper style={styles.mainPanel}>
             <ItemsSelector />
@@ -195,11 +196,7 @@ class Duplication extends Component {
     const { duplicationMode, isCourseSelected } = this.props;
 
     if (duplicationMode === duplicationModes.COURSE) {
-      return (
-        <div style={styles.sidebar}>
-          <DuplicateAllButton />
-        </div>
-      );
+      return <DuplicateAllButton />;
     }
     if (isCourseSelected) {
       return (
@@ -225,22 +222,14 @@ class Duplication extends Component {
       >
         <FormControlLabel
           key={duplicationModes.COURSE}
-          control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
-          label={
-            <b>
-              <FormattedMessage {...translations.newCourse} />
-            </b>
-          }
+          control={<Radio className="py-0" />}
+          label={<FormattedMessage {...translations.newCourse} />}
           value={duplicationModes.COURSE}
         />
         <FormControlLabel
           key={duplicationModes.OBJECT}
-          control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
-          label={
-            <b>
-              <FormattedMessage {...translations.existingCourse} />
-            </b>
-          }
+          control={<Radio className="py-0" />}
+          label={<FormattedMessage {...translations.existingCourse} />}
           value={duplicationModes.OBJECT}
         />
       </RadioGroup>
@@ -250,9 +239,9 @@ class Duplication extends Component {
   renderToCourseSidebar() {
     const { dispatch, modesAllowed } = this.props;
     const header = (
-      <h3>
+      <Typography variant="h6">
         <FormattedMessage {...translations.toCourse} />
-      </h3>
+      </Typography>
     );
 
     const isSingleValidMode =
@@ -274,12 +263,9 @@ class Duplication extends Component {
 
   render() {
     return (
-      <>
-        <PageHeader
-          title={<FormattedMessage {...translations.duplicateData} />}
-        />
+      <Page title={<FormattedMessage {...translations.duplicateData} />}>
         {this.renderBody()}
-      </>
+      </Page>
     );
   }
 }

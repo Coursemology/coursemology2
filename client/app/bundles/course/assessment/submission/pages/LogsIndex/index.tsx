@@ -1,5 +1,5 @@
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import Preload from 'lib/components/wrappers/Preload';
 import { getAssessmentSubmissionURL } from 'lib/helpers/url-builders';
 import { getAssessmentId, getCourseId } from 'lib/helpers/url-helpers';
@@ -17,19 +17,13 @@ const LogsIndex = (): JSX.Element => {
   return (
     <Preload render={<LoadingIndicator />} while={fetchLogs}>
       {(data): JSX.Element => (
-        <div className="space-y-5">
-          <PageHeader
-            returnLink={getAssessmentSubmissionURL(
-              getCourseId(),
-              getAssessmentId(),
-            )}
-            title={t(translations.accessLogs)}
-          />
-          <div>
-            <LogsHead with={data.info} />
-            <LogsContent with={data.logs} />
-          </div>
-        </div>
+        <Page
+          backTo={getAssessmentSubmissionURL(getCourseId(), getAssessmentId())}
+          title={t(translations.accessLogs)}
+        >
+          <LogsHead with={data.info} />
+          <LogsContent with={data.logs} />
+        </Page>
       )}
     </Preload>
   );

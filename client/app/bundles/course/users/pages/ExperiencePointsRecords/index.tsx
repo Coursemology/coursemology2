@@ -1,16 +1,17 @@
-import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useState } from 'react';
+import { defineMessages } from 'react-intl';
 
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
-import PageHeader from 'lib/components/navigation/PageHeader';
+import Page from 'lib/components/core/layouts/Page';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId, getCourseUserId } from 'lib/helpers/url-helpers';
 import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import ExperiencePointsTable from '../../components/tables/ExperiencePointsTable';
 import { getExperiencePointsRecordsSettings } from '../../selectors';
 
-type Props = WrappedComponentProps;
+const ROWS_PER_PAGE = 25 as const;
 
 const translations = defineMessages({
   experiencePointsHistory: {
@@ -27,34 +28,30 @@ const translations = defineMessages({
   },
 });
 
-const ExperiencePointsRecords: FC<Props> = (props) => {
-  const { intl } = props;
-  const ROWS_PER_PAGE = 25;
-  const [pageNum, setPageNum] = useState(1);
-  const experiencePointsRecordSettings = useAppSelector(
-    getExperiencePointsRecordsSettings,
-  );
+const ExperiencePointsRecords = (): JSX.Element => {
+  const { t } = useTranslation();
 
-  const handlePageChange = (num: number): void => {
-    setPageNum(num);
-  };
+  const [pageNum, setPageNum] = useState(1);
+
+  const records = useAppSelector(getExperiencePointsRecordsSettings);
 
   return (
-    <>
-      <PageHeader
-        returnLink={getCourseUserURL(getCourseId(), getCourseUserId())}
-        title={`${intl.formatMessage(
-          translations.experiencePointsRecordsHeader,
-        )} ${experiencePointsRecordSettings.courseUserName}`}
-      />
+    <Page
+      backTo={getCourseUserURL(getCourseId(), getCourseUserId())}
+      title={t(translations.experiencePointsHistoryHeader, {
+        for: records.courseUserName,
+      })}
+      unpadded
+    >
       <BackendPagination
-        handlePageChange={handlePageChange}
+        handlePageChange={setPageNum}
         pageNum={pageNum}
-        rowCount={experiencePointsRecordSettings.rowCount}
+        rowCount={records.rowCount}
         rowsPerPage={ROWS_PER_PAGE}
       />
+
       <ExperiencePointsTable page={pageNum} />
-    </>
+    </Page>
   );
 };
 

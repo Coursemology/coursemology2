@@ -3,19 +3,12 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
-import {
-  Grid,
-  MenuItem,
-  Paper,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { CourseUserEntity } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
@@ -163,10 +156,7 @@ const PersonalTimesShow: FC<Props> = (props) => {
 
   const renderBody = currentUser && (
     <>
-      <Paper
-        elevation={3}
-        sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
-      >
+      <div style={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}>
         <Stack spacing={1}>
           <Typography variant="h6">
             {intl.formatMessage(translations.courseUserHeader)}
@@ -216,17 +206,17 @@ const PersonalTimesShow: FC<Props> = (props) => {
             </>
           )}
         </Stack>
-      </Paper>
+      </div>
+
       <PersonalTimesTable personalTimes={personalTimes} />
     </>
   );
 
   return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
+    <Page title={intl.formatMessage(translations.manageUsersHeader)} unpadded>
       <UserManagementTabs permissions={permissions} sharedData={sharedData} />
       {isLoading ? <LoadingIndicator /> : renderBody}
-    </>
+    </Page>
   );
 };
 

@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
-import { Paper, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import SelectCourseUser from '../../components/misc/SelectCourseUser';
@@ -50,8 +50,7 @@ const PersonalTimes: FC<Props> = (props) => {
   }, [dispatch]);
 
   return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
+    <Page title={intl.formatMessage(translations.manageUsersHeader)} unpadded>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -60,19 +59,17 @@ const PersonalTimes: FC<Props> = (props) => {
             permissions={permissions}
             sharedData={sharedData}
           />
-          <Paper
-            elevation={3}
-            sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
-          >
+
+          <div style={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}>
             <Typography sx={{ marginBottom: '24px' }} variant="h6">
               {intl.formatMessage(translations.courseUserHeader)}
             </Typography>
 
             <SelectCourseUser />
-          </Paper>
+          </div>
         </>
       )}
-    </>
+    </Page>
   );
 };
 

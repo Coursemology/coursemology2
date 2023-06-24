@@ -2,9 +2,9 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import manageUsersTranslations from 'lib/translations/course/users/index';
 
@@ -56,10 +56,10 @@ const ManageStudents: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <PageHeader
-        title={intl.formatMessage(manageUsersTranslations.manageUsersHeader)}
-      />
+    <Page
+      title={intl.formatMessage(manageUsersTranslations.manageUsersHeader)}
+      unpadded
+    >
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -68,6 +68,7 @@ const ManageStudents: FC<Props> = (props) => {
             permissions={permissions}
             sharedData={sharedData}
           />
+
           {students.length > 0 ? (
             <ManageUsersTable
               className="mt-8"
@@ -83,7 +84,7 @@ const ManageStudents: FC<Props> = (props) => {
           )}
         </>
       )}
-    </>
+    </Page>
   );
 };
 

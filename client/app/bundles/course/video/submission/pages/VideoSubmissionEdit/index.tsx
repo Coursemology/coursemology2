@@ -6,8 +6,8 @@ import { VideoEditSubmissionData } from 'types/course/video/submissions';
 
 import CourseAPI from 'api/course';
 import DescriptionCard from 'lib/components/core/DescriptionCard';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 
 import SubmissionEditWithStore from './SubmissionEditWithStore';
 
@@ -52,14 +52,7 @@ const VideoSubmissionEdit: FC<Props> = (props) => {
     }
   }, [submissionId]);
 
-  if (isLoading) {
-    return (
-      <>
-        <PageHeader title={intl.formatMessage(translations.watchingVideo)} />
-        <LoadingIndicator />
-      </>
-    );
-  }
+  if (isLoading) return <LoadingIndicator />;
 
   const renderBody = editVideoSubmission ? (
     <>
@@ -72,14 +65,13 @@ const VideoSubmissionEdit: FC<Props> = (props) => {
     </>
   ) : null;
   return (
-    <>
-      <PageHeader
-        title={intl.formatMessage(translations.header, {
-          title: editVideoSubmission?.videoTitle,
-        })}
-      />
+    <Page
+      title={intl.formatMessage(translations.header, {
+        title: editVideoSubmission?.videoTitle,
+      })}
+    >
       {isLoading ? <LoadingIndicator /> : renderBody}
-    </>
+    </Page>
   );
 };
 

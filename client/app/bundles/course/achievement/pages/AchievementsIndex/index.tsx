@@ -98,10 +98,7 @@ const AchievementsIndex: FC = () => {
   return (
     <Page
       actions={headerToolbars}
-      title={t({
-        id: 'course.achievement.AchievementsIndex.header',
-        defaultMessage: 'Achievements',
-      })}
+      title={t(translations.achievements)}
       unpadded
     >
       {isLoading ? (

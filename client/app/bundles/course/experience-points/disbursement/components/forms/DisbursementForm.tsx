@@ -17,6 +17,7 @@ import {
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
+import Page from 'lib/components/core/layouts/Page';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -174,7 +175,7 @@ const DisbursementForm: FC<Props> = (props) => {
   };
 
   return (
-    <>
+    <Page.PaddedSection>
       <Autocomplete
         className="filter-group max-w-lg"
         clearOnEscape
@@ -241,14 +242,17 @@ const DisbursementForm: FC<Props> = (props) => {
               </Button>
             </Grid>
           </Grid>
-          <DisbursementTable
-            filteredUsers={filteredCourseUsers}
-            onClickCopy={onClickCopy}
-            onClickRemove={onClickRemove}
-          />
+
+          <Page.UnpaddedSection>
+            <DisbursementTable
+              filteredUsers={filteredCourseUsers}
+              onClickCopy={onClickCopy}
+              onClickRemove={onClickRemove}
+            />
+          </Page.UnpaddedSection>
         </form>
       </FormProvider>
-    </>
+    </Page.PaddedSection>
   );
 };
 

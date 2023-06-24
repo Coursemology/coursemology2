@@ -3,8 +3,8 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import { indexAnnouncements } from './operations';
@@ -45,12 +45,9 @@ const GlobalAnnouncementsIndex: FC<Props> = (props) => {
     />
   );
 
-  return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.header)} />
-      {isLoading ? <LoadingIndicator /> : renderBody}
-    </>
-  );
+  return <Page>{isLoading ? <LoadingIndicator /> : renderBody}</Page>;
 };
 
-export default injectIntl(GlobalAnnouncementsIndex);
+const handle = translations.header;
+
+export default Object.assign(injectIntl(GlobalAnnouncementsIndex), { handle });
