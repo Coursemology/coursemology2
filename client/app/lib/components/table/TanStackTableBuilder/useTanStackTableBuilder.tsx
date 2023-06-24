@@ -47,9 +47,6 @@ const useTanStackTableBuilder = <D extends object>(
     pageIndex: props.pagination?.initialPageIndex ?? 0,
   });
 
-  const trimAndSetSearchKeyword = (keyword: string): void =>
-    setSearchKeyword(keyword.trim());
-
   const resetPagination = (): void =>
     setPagination((current) => ({ ...current, pageIndex: 0 }));
 
@@ -65,13 +62,13 @@ const useTanStackTableBuilder = <D extends object>(
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: trimAndSetSearchKeyword,
+    onGlobalFilterChange: setSearchKeyword,
     onPaginationChange: setPagination,
     autoResetPageIndex: false,
     state: {
       rowSelection,
       columnFilters,
-      globalFilter: searchKeyword,
+      globalFilter: searchKeyword.trim(),
       pagination,
     },
     initialState: {
@@ -176,7 +173,7 @@ const useTanStackTableBuilder = <D extends object>(
           ),
       },
       searchKeyword,
-      onSearchKeywordChange: trimAndSetSearchKeyword,
+      onSearchKeywordChange: setSearchKeyword,
       onDownloadCsv: props.csvDownload && generateAndDownloadCsv,
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,
