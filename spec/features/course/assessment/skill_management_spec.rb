@@ -13,7 +13,7 @@ RSpec.describe 'Course: Skills' do
 
       scenario 'I can create a skill' do
         visit course_assessments_skills_path(course)
-        find('button.new-skill-button').click
+        click_button 'Skill'
 
         skill_attributes = attributes_for(:course_assessment_skill)
         fill_in 'title', with: skill_attributes[:title]
