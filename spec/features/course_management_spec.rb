@@ -10,12 +10,13 @@ RSpec.feature 'Courses' do
     before { login_as(user, scope: :user) }
 
     scenario 'Users can see a list of published courses', js: true do
-      create(:course)
-      create(:course, :published)
+      unpublished_course = create(:course)
+      published_course = create(:course, :published)
 
       visit courses_path
-      expect(all('.course').count).to eq(1)
-      expect(all('button.new-course-button').count).to eq(1)
+      expect(page).to have_text(published_course.title)
+      expect(page).not_to have_text(unpublished_course.title)
+      expect(page).to have_button('New Course')
     end
 
     scenario 'Users can see a list of their courses' do
