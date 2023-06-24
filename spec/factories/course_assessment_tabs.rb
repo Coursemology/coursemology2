@@ -10,7 +10,7 @@ FactoryBot.define do
       options[:course] = course if course
       build(:course_assessment_category, options)
     end
-    title { 'Tab' }
+    sequence(:title) { |n| "Tab #{n}" }
     weight { generate(:course_assessment_tab_weight) }
   end
 end
