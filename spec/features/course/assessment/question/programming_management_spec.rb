@@ -232,7 +232,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           fill_in 'Memory limit', with: question.memory_limit + 10
           click_button 'Save changes'
 
-          expect(page).to have_css('button', text: 'CONTINUE')
+          expect(page).to have_css('button', text: 'Continue')
         end
 
         it 'does not show the confirmation dialog when the course is not gamified' do
@@ -242,7 +242,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           fill_in 'Title', with: "#{question.title} updated"
           click_button 'Save changes'
 
-          expect(page).not_to have_css('button', text: 'CONTINUE')
+          expect(page).not_to have_css('button', text: 'Continue')
         end
 
         it 'does not show the confirmation dialog when there is no submission' do
@@ -251,7 +251,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           fill_in 'Title', with: "#{question.title} updated"
           click_button 'Save changes'
 
-          expect(page).not_to have_css('button', text: 'CONTINUE')
+          expect(page).not_to have_css('button', text: 'Continue')
         end
 
         it 'does not show the confirmation dialog when the assessment is non-autograded' do
@@ -261,7 +261,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           fill_in 'Title', with: "#{question.title} updated"
           click_button 'Save changes'
 
-          expect(page).not_to have_css('button', text: 'CONTINUE')
+          expect(page).not_to have_css('button', text: 'Continue')
         end
       end
     end
