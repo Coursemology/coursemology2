@@ -41,19 +41,31 @@ const Footer = (): JSX.Element => {
   return (
     <footer className="flex max-w-[1000px] flex-col space-y-5 p-5 border-only-t-neutral-200">
       <div className="flex flex-row space-x-5">
-        <Link href="#">{t(translations.termsOfService)}</Link>
+        <Link href="/pages/terms_of_service" opensInNewTab>
+          {t(translations.termsOfService)}
+        </Link>
 
-        <Link href="#">{t(translations.privacyPolicy)}</Link>
+        <Link href="/pages/privacy_policy" opensInNewTab>
+          {t(translations.privacyPolicy)}
+        </Link>
 
         <Link external href="mailto:coursemology@gmail.com">
           {t(translations.contactUs)}
         </Link>
 
-        <Link external href="#">
+        <Link
+          external
+          href="https://coursemology.github.io/coursemology-help/"
+          opensInNewTab
+        >
           {t(translations.instructorsGuide)}
         </Link>
 
-        <Link external href="#">
+        <Link
+          external
+          href="https://github.com/Coursemology/coursemology2"
+          opensInNewTab
+        >
           {t(translations.github)}
         </Link>
       </div>
