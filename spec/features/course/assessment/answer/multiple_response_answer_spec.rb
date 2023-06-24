@@ -26,11 +26,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
           visit edit_course_assessment_submission_path(course, assessment, submission)
 
           option = assessment.questions.first.actable.options.first
-          # Click correct answer
-          page.
-            find(:xpath, '//*[@id="app-root"]
-                          /div[2]/form/div/label[1]/span[1]/input', visible: false).
-            click
+          find('label', text: option.option).click
 
           click_button('Save Draft')
           expect(current_path).to eq(
@@ -78,9 +74,9 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
       scenario 'I can view the correct answer' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        element = page.
-                  find(:xpath, '//*[@id="app-root"]/div[3]
-                                /form/div/label[1]/span[2]/b/div', visible: false)
+        option = assessment.questions.first.actable.options.first
+        element = find('b', text: option.option).find('div')
+
         expect(element.style('background-color')['background-color']).to eq('rgba(232, 245, 233, 1)')
       end
     end
