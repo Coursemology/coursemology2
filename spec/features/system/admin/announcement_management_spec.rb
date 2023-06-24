@@ -23,8 +23,8 @@ RSpec.feature 'System: Administration: Announcements' do
         find('button.btn-submit').click
         wait_for_page
         expect(current_path).to eq(admin_announcements_path)
-        expect(page).to have_selector('h3', text: announcement[:title])
-        expect(page).to have_selector('p', text: announcement[:content])
+        expect(page).to have_text(announcement[:title])
+        expect(page).to have_text(announcement[:content])
         expect_toastify('New announcement posted!')
       end
 
@@ -48,7 +48,7 @@ RSpec.feature 'System: Administration: Announcements' do
 
         expect(current_path).to eq admin_announcements_path
         within find("#announcement-#{announcement.id}") do
-          expect(page).to have_selector('h3', text: new_title)
+          expect(page).to have_text(new_title)
         end
         expect(announcement.reload.title).to eq(new_title)
       end
