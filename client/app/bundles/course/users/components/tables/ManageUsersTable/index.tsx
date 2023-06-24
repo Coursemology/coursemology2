@@ -171,7 +171,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
 
   return (
     <Table
-      className={props.className}
+      className={`border-none ${props.className ?? ''}`}
       columns={columns}
       csvDownload={{ filename: props.csvDownloadFilename }}
       data={users}

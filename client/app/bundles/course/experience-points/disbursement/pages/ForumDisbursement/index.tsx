@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { ForumDisbursementUserEntity } from 'types/course/disbursement';
 
+import Page from 'lib/components/core/layouts/Page';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -68,17 +69,16 @@ const ForumDisbursement: FC = () => {
   };
 
   return (
-    <>
+    <Page.PaddedSection>
       <Grid item xs>
         <Paper
-          elevation={3}
           sx={{
             padding: '5px 10px 0px 10px',
             marginBottom: '5px',
             display: 'flex',
             alignItems: 'center',
-            backgroundColor: '#eeeeee',
           }}
+          variant="outlined"
         >
           <FilterForm
             initialValues={{
@@ -143,7 +143,7 @@ const ForumDisbursement: FC = () => {
           </Dialog>
         )}
       </Grid>
-    </>
+    </Page.PaddedSection>
   );
 };
 

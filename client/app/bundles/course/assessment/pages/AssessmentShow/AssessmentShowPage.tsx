@@ -11,6 +11,7 @@ import {
 import { AssessmentData } from 'types/course/assessment/assessments';
 
 import DescriptionCard from 'lib/components/core/DescriptionCard';
+import Page from 'lib/components/core/layouts/Page';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -32,9 +33,12 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (
-    <main className="space-y-5">
-      <AssessmentShowHeader with={assessment} />
-
+    <Page
+      actions={<AssessmentShowHeader with={assessment} />}
+      backTo={assessment.indexUrl}
+      className="space-y-5"
+      title={assessment.title}
+    >
       {assessment.status === 'unavailable' && (
         <UnavailableAlert for={assessment} />
       )}
@@ -166,7 +170,7 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
           )}
         </Subsection>
       )}
-    </main>
+    </Page>
   );
 };
 

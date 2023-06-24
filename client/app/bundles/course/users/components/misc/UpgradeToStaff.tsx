@@ -10,7 +10,6 @@ import {
   Checkbox,
   Grid,
   MenuItem,
-  Paper,
   TextField,
   Typography,
 } from '@mui/material';
@@ -104,10 +103,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
   };
 
   return (
-    <Paper
-      elevation={3}
-      sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
-    >
+    <div style={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}>
       <Typography sx={{ marginBottom: '24px' }} variant="h6">
         {intl.formatMessage(translations.upgradeHeader)}
       </Typography>
@@ -166,7 +162,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
           {intl.formatMessage(translations.upgradeButton)}
         </LoadingButton>
       </Grid>
-    </Paper>
+    </div>
   );
 };
 

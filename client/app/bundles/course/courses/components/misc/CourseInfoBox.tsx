@@ -1,84 +1,50 @@
-import { FC } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { CardContent, Grid, Link, Typography } from '@mui/material';
-import { blue } from '@mui/material/colors';
+import { Avatar, Grid, Link, Paper, Typography } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
 
 import { getCourseURL } from 'lib/helpers/url-builders';
 
-interface Props extends WrappedComponentProps {
+interface CourseInfoBoxProps {
   course: CourseMiniEntity;
 }
 
-const CourseInfoBox: FC<Props> = (props) => {
+const CourseInfoBox = (props: CourseInfoBoxProps): JSX.Element => {
   const { course } = props;
 
   return (
     <Grid item lg={1} md={1} sm={1} style={{ padding: 10 }} xl={1} xs={1}>
-      <div
-        className="course"
-        style={{
-          borderStyle: 'solid',
-          borderWidth: 0.2,
-          borderColor: blue[50],
-          borderRadius: 10,
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
+      <Paper
+        className="flex h-full flex-col justify-between"
+        variant="outlined"
       >
         <Link
+          className="flex h-full flex-col space-y-4 p-4 no-underline hover?:bg-neutral-100"
           href={getCourseURL(course.id)}
           // Change to Router-DOM Link and use this after courses sidebar is migrated
           // to={getCourseURL(course.id)}
-          style={{
-            textDecoration: 'none',
-          }}
         >
-          <p
+          <Avatar
+            alt={course.title}
             className="wh-40"
-            dangerouslySetInnerHTML={{ __html: course.logoUrl }}
-            style={{
-              textAlign: 'center',
-              marginBottom: 0,
-              marginTop: 10,
-            }}
+            src={course.logoUrl}
+            variant="rounded"
           />
-          <CardContent style={{ padding: 5 }}>
-            <Typography
-              align="center"
-              color="black"
-              component="div"
-              variant="h6"
-            >
-              {course.title}
-            </Typography>
-          </CardContent>
+
+          <Typography color="black" variant="h6">
+            {course.title}
+          </Typography>
         </Link>
+
         {course.description && (
-          <CardContent
-            style={{
-              padding: '5px 5px 5px 5px',
-              height: 100,
-              overflow: 'auto',
-              margin: 5,
-              borderStyle: 'solid',
-              borderWidth: 0.2,
-              borderColor: blue[50],
-              borderRadius: 5,
-            }}
-          >
+          <div className="h-[10rem] shrink-0 overflow-auto p-4 border-only-t-neutral-200">
             <Typography
               dangerouslySetInnerHTML={{ __html: course.description }}
               variant="body2"
             />
-          </CardContent>
+          </div>
         )}
-      </div>
+      </Paper>
     </Grid>
   );
 };
 
-export default injectIntl(CourseInfoBox);
+export default CourseInfoBox;

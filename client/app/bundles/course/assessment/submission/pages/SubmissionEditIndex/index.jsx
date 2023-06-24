@@ -13,6 +13,7 @@ import {
 import PropTypes from 'prop-types';
 import withHeartbeatWorker from 'workers/withHeartbeatWorker';
 
+import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import withRouter from 'lib/components/navigation/withRouter';
@@ -427,11 +428,11 @@ class VisibleSubmissionEditIndex extends Component {
     if (isLoading) return <LoadingIndicator />;
     if (isSubmissionBlocked) return <BlockedSubmission />;
     return (
-      <>
+      <Page>
         {this.renderAssessment()}
         {this.renderProgress()}
         {this.renderContent()}
-      </>
+      </Page>
     );
   }
 }

@@ -15,7 +15,6 @@ import {
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { attemptAssessment, deleteAssessment } from '../../operations';
@@ -83,7 +82,7 @@ const AssessmentShowHeader = (
   };
 
   return (
-    <PageHeader returnLink={assessment.indexUrl} title={assessment.title}>
+    <>
       {assessment.deleteUrl && (
         <DeleteButton
           aria-label={t(translations.deleteAssessment)}
@@ -101,10 +100,7 @@ const AssessmentShowHeader = (
       {assessment.editUrl && (
         <Tooltip disableInteractive title={t(translations.editAssessment)}>
           <Link to={assessment.editUrl}>
-            <IconButton
-              aria-label={t(translations.editAssessment)}
-              className="text-white"
-            >
+            <IconButton aria-label={t(translations.editAssessment)}>
               <Create />
             </IconButton>
           </Link>
@@ -114,10 +110,7 @@ const AssessmentShowHeader = (
       {assessment.monitoringUrl && (
         <Tooltip disableInteractive title={t(translations.pulsegrid)}>
           <Link to={assessment.monitoringUrl}>
-            <IconButton
-              aria-label={t(translations.pulsegrid)}
-              className="text-white"
-            >
+            <IconButton aria-label={t(translations.pulsegrid)}>
               <MonitorHeart />
             </IconButton>
           </Link>
@@ -130,10 +123,7 @@ const AssessmentShowHeader = (
           title={t(translations.assessmentStatistics)}
         >
           <Link to={assessment.statisticsUrl}>
-            <IconButton
-              aria-label={t(translations.assessmentStatistics)}
-              className="text-white"
-            >
+            <IconButton aria-label={t(translations.assessmentStatistics)}>
               <Assessment />
             </IconButton>
           </Link>
@@ -143,10 +133,7 @@ const AssessmentShowHeader = (
       {assessment.submissionsUrl && (
         <Tooltip disableInteractive title={t(translations.submissions)}>
           <Link to={assessment.submissionsUrl}>
-            <IconButton
-              aria-label={t(translations.submissions)}
-              className="text-white"
-            >
+            <IconButton aria-label={t(translations.submissions)}>
               <Inventory />
             </IconButton>
           </Link>
@@ -157,16 +144,16 @@ const AssessmentShowHeader = (
         <Link to={actionButtonUrl}>
           <Button
             aria-label={t(ACTION_LABELS[assessment.status])}
-            className="ml-4 bg-white"
+            className="ml-4"
             disabled={attempting}
             onClick={handleActionButton}
-            variant="outlined"
+            variant="contained"
           >
             {t(ACTION_LABELS[assessment.status])}
           </Button>
         </Link>
       )}
-    </PageHeader>
+    </>
   );
 };
 

@@ -8,8 +8,8 @@ import {
   SkillMiniEntity,
 } from 'types/course/assessment/skills/skills';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import SkillDialog from '../../components/dialogs/SkillDialog';
@@ -137,14 +137,23 @@ const SkillsIndex: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.skills)} />
+    <Page title={intl.formatMessage(translations.skills)} unpadded>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
         <>
-          <Grid columnGap={0.2} container direction="row">
-            <Grid id="skill-branches" item xs>
+          <Grid
+            className="border-only-b-neutral-200"
+            columnGap={0.2}
+            container
+            direction="row"
+          >
+            <Grid
+              className="border-only-r-neutral-200"
+              id="skill-branches"
+              item
+              xs
+            >
               <SkillsTable
                 addClick={newSkillBranchClick}
                 addDisabled={!skillPermissions.canCreateSkill}
@@ -185,7 +194,7 @@ const SkillsIndex: FC<Props> = (props) => {
           />
         </>
       )}
-    </>
+    </Page>
   );
 };
 

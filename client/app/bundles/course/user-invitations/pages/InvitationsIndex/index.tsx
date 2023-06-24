@@ -3,8 +3,8 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
@@ -69,8 +69,7 @@ const InviteUsers: FC<Props> = (props) => {
   }, [dispatch]);
 
   return (
-    <Box>
-      <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
+    <Page title={intl.formatMessage(translations.manageUsersHeader)} unpadded>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -79,15 +78,19 @@ const InviteUsers: FC<Props> = (props) => {
             permissions={permissions}
             sharedData={sharedData}
           />
-          <Box className="invitations-bar-chart" sx={{ margin: '12px 0px' }}>
-            <InvitationsBarChart
-              accepted={acceptedInvitations.length}
-              pending={pendingInvitations.length}
-            />
-          </Box>
-          <Typography style={{ whiteSpace: 'pre-line' }} variant="body2">
-            {intl.formatMessage(translations.invitationsInfo)}
-          </Typography>
+
+          <Page.PaddedSection>
+            <Box className="invitations-bar-chart" sx={{ margin: '12px 0px' }}>
+              <InvitationsBarChart
+                accepted={acceptedInvitations.length}
+                pending={pendingInvitations.length}
+              />
+            </Box>
+
+            <Typography style={{ whiteSpace: 'pre-line' }} variant="body2">
+              {intl.formatMessage(translations.invitationsInfo)}
+            </Typography>
+          </Page.PaddedSection>
 
           {pendingInvitations.length > 0 && (
             <UserInvitationsTable
@@ -109,7 +112,7 @@ const InviteUsers: FC<Props> = (props) => {
           )}
         </>
       )}
-    </Box>
+    </Page>
   );
 };
 

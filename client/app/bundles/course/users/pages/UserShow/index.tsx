@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import Box from '@mui/material/Box';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
@@ -14,12 +14,6 @@ import { getUserEntity } from '../../selectors';
 import UserStatistics from '../UserStatistics';
 
 type Props = WrappedComponentProps;
-
-const styles = {
-  userShowPage: {
-    '& > * + *': { marginTop: '24px !important' },
-  },
-};
 
 const UserShow: FC<Props> = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +36,7 @@ const UserShow: FC<Props> = () => {
   }
 
   return (
-    <Box sx={styles.userShowPage}>
+    <Page className="space-y-5">
       <UserProfileCard user={user} />
       {user.achievements && (
         <UserProfileAchievements achievements={user.achievements} />
@@ -51,7 +45,7 @@ const UserShow: FC<Props> = () => {
       {user.skillBranches && (
         <UserProfileSkills skillBranches={user.skillBranches} />
       )}
-    </Box>
+    </Page>
   );
 };
 

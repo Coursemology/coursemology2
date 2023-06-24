@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import PropTypes from 'prop-types';
 
-import PageHeader from 'lib/components/navigation/PageHeader';
+import Page from 'lib/components/core/layouts/Page';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import {
@@ -123,8 +123,7 @@ const StatisticsIndex = ({
   };
 
   return (
-    <>
-      <PageHeader title={t(translations.statistics)} />
+    <Page title={t(translations.statistics)} unpadded>
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
@@ -144,10 +143,12 @@ const StatisticsIndex = ({
           <StaffStatistics {...staffStatistics} />
         </TabPanel>
         <TabPanel index={2} value={value}>
-          <CourseStatistics {...courseStatistics} />
+          <Page.PaddedSection>
+            <CourseStatistics {...courseStatistics} />
+          </Page.PaddedSection>
         </TabPanel>
       </Box>
-    </>
+    </Page>
   );
 };
 

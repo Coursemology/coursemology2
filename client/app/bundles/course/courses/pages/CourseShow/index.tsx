@@ -3,6 +3,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
+import { CourseEntity } from 'types/course/courses';
 
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import Page from 'lib/components/core/layouts/Page';
@@ -33,6 +34,13 @@ const translations = defineMessages({
   },
 });
 
+const getShouldShowEnrolOptions = (course: CourseEntity): boolean => {
+  const info = course.registrationInfo;
+  if (!info) return false;
+
+  return info.isDisplayCodeForm || info.isEnrollable;
+};
+
 const CourseShow: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
@@ -62,23 +70,25 @@ const CourseShow: FC<Props> = (props) => {
     <Page className="space-y-5">
       {!course.permissions.isCurrentCourseUser && (
         <>
-          <div style={{ display: 'flex', justifyContent: 'right' }}>
-            {course.registrationInfo && (
-              <CourseEnrolOptions registrationInfo={course.registrationInfo} />
-            )}
-          </div>
+          {getShouldShowEnrolOptions(course) && (
+            <div className="flex justify-end">
+              <CourseEnrolOptions registrationInfo={course.registrationInfo!} />
+            </div>
+          )}
 
-          <section className="space-y-2">
-            <Typography variant="h6">
-              {intl.formatMessage(translations.descriptionHeader)}
-            </Typography>
+          {course.description.trim() && (
+            <section className="space-y-2">
+              <Typography variant="h6">
+                {intl.formatMessage(translations.descriptionHeader)}
+              </Typography>
 
-            <Typography
-              dangerouslySetInnerHTML={{ __html: course.description }}
-              id="course-description"
-              variant="body2"
-            />
-          </section>
+              <Typography
+                dangerouslySetInnerHTML={{ __html: course.description }}
+                id="course-description"
+                variant="body2"
+              />
+            </section>
+          )}
 
           <section className="space-y-2">
             <Typography variant="h6">

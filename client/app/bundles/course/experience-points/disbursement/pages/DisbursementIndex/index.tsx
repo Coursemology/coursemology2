@@ -8,11 +8,11 @@ import {
 import { toast } from 'react-toastify';
 import { Group } from '@mui/icons-material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import { Grid, Tab, Tabs } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import palette from 'theme/palette';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch } from 'lib/hooks/store';
 
 import { fetchDisbursements, fetchForumDisbursements } from '../../operations';
@@ -58,8 +58,7 @@ const DisbursementIndex: FC<Props> = (props) => {
   }, [dispatch]);
 
   return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.disbursements)} />
+    <Page title={intl.formatMessage(translations.disbursements)} unpadded>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -71,7 +70,6 @@ const DisbursementIndex: FC<Props> = (props) => {
             style={{
               backgroundColor: palette.background.default,
             }}
-            sx={{ marginBottom: 2 }}
             TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
             value={tabValue}
             variant="fullWidth"
@@ -91,29 +89,15 @@ const DisbursementIndex: FC<Props> = (props) => {
               value="general-disbursement-tab"
             />
           </Tabs>
-          <Grid
-            columnSpacing={2}
-            container
-            direction="row"
-            display={tabValue === 'general-disbursement-tab' ? 'flex' : 'none'}
-            id="general-disbursement-tab"
-            rowSpacing={2}
-          >
+
+          {tabValue === 'general-disbursement-tab' ? (
             <GeneralDisbursement />
-          </Grid>
-          <Grid
-            columnSpacing={2}
-            container
-            direction="column"
-            display={tabValue === 'forum-disbursement-tab' ? 'flex' : 'none'}
-            id="forum-disbursement-tab"
-            rowSpacing={2}
-          >
+          ) : (
             <ForumDisbursement />
-          </Grid>
+          )}
         </>
       )}
-    </>
+    </Page>
   );
 };
 

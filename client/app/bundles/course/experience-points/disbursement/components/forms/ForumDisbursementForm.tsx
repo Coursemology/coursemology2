@@ -19,6 +19,7 @@ import {
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
+import Page from 'lib/components/core/layouts/Page';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch } from 'lib/hooks/store';
@@ -162,10 +163,13 @@ const ForumDisbursementForm: FC<Props> = (props) => {
             </Button>
           </Grid>
         </Grid>
-        <ForumDisbursementTable
-          forumUsers={forumUsers}
-          onPostClick={onPostClick}
-        />
+
+        <Page.UnpaddedSection>
+          <ForumDisbursementTable
+            forumUsers={forumUsers}
+            onPostClick={onPostClick}
+          />
+        </Page.UnpaddedSection>
       </form>
     </FormProvider>
   );

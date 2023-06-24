@@ -4,9 +4,9 @@ import { toast } from 'react-toastify';
 import { VideoSubmission } from 'types/course/video/submissions';
 
 import CourseAPI from 'api/course';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { getVideosURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
@@ -66,14 +66,14 @@ const VideoSubmissionsIndex: FC<Props> = (props) => {
     : getVideosURL(getCourseId());
 
   return (
-    <>
-      <PageHeader
-        returnLink={returnLink}
-        title={`${intl.formatMessage({
-          id: 'course.video.submissions.VideoSubmissionsIndex.header',
-          defaultMessage: 'Video Submissions',
-        })} ${data?.videoTitle ? `- ${data.videoTitle}` : ''}`}
-      />
+    <Page
+      backTo={returnLink}
+      title={`${intl.formatMessage({
+        id: 'course.video.submissions.VideoSubmissionsIndex.header',
+        defaultMessage: 'Video Submissions',
+      })} ${data?.videoTitle ? `- ${data.videoTitle}` : ''}`}
+      unpadded
+    >
       {data &&
         data.myStudentSubmissions.length === 0 &&
         data.studentSubmissions.length === 0 &&
@@ -106,7 +106,7 @@ const VideoSubmissionsIndex: FC<Props> = (props) => {
             )}
         </>
       )}
-    </>
+    </Page>
   );
 };
 

@@ -1,11 +1,11 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Grid, Tooltip, Typography } from '@mui/material';
 
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -58,27 +58,22 @@ const AchievementShow: FC<Props> = (props) => {
     return null;
   }
 
-  const headerToolbars: ReactElement[] = [];
-
-  if (achievementMiniEntity.permissions?.canManage) {
-    headerToolbars.push(
-      <AchievementManagementButtons
-        key={achievementMiniEntity.id}
-        achievement={achievementMiniEntity}
-        navigateToIndex
-      />,
-    );
-  }
-
   return (
-    <>
-      <PageHeader
-        returnLink={`/courses/${courseId}/achievements/`}
-        title={intl.formatMessage(translations.header, {
-          title: achievementMiniEntity.title,
-        })}
-        toolbars={headerToolbars}
-      />
+    <Page
+      actions={
+        achievementMiniEntity.permissions?.canManage && (
+          <AchievementManagementButtons
+            key={achievementMiniEntity.id}
+            achievement={achievementMiniEntity}
+            navigateToIndex
+          />
+        )
+      }
+      backTo={`/courses/${courseId}/achievements/`}
+      title={intl.formatMessage(translations.header, {
+        title: achievementMiniEntity.title,
+      })}
+    >
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -127,7 +122,7 @@ const AchievementShow: FC<Props> = (props) => {
           </Grid>
         )
       )}
-    </>
+    </Page>
   );
 };
 
