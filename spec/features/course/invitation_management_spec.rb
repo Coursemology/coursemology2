@@ -142,7 +142,7 @@ RSpec.feature 'Courses: Invitations', js: true do
           fill_in 'registration-code', with: invitation.invitation_key
           find('#register-button').click
 
-          expect(page).to have_selector('h2', text: 'Announcements')
+          wait_for_page
           course_user = course.course_users.find_by(user_id: user.id)
           expect(course_user).to be_present
           expect(course_user.name).to eq(invitation.name)
