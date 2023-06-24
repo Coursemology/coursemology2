@@ -39,11 +39,16 @@ RSpec.feature 'System: Administration: Courses', js: true do
 
         visit admin_courses_path
 
-        find(:xpath, '//*[@id="app-root"]/div[1]/div[4]/div[2]/div[2]/p[2]/button').click
-        expect(page).to have_selector("tr.course_#{active_course.id}", text: active_course.title)
-        expect(page).to have_link(nil, href: "//#{active_course.instance.host}/courses/#{active_course.id}")
+        within find('p', text: 'Active Courses', exact_text: false) do
+          click_button
+        end
 
-        expect(page).not_to have_selector('p.course_title', text: inactive_course.title)
+        expect(page).to have_link(
+          active_course.title,
+          href: "//#{active_course.instance.host}/courses/#{active_course.id}"
+        )
+
+        expect(page).not_to have_text(inactive_course.title)
       end
 
       scenario 'I can delete a course' do
