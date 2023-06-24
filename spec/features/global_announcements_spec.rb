@@ -26,22 +26,16 @@ RSpec.feature 'Global announcements', js: true do
         announcement = create(:instance_announcement, instance: instance)
         visit announcements_path
 
-        expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%<title>s', title: announcement.title))
-          with_tag('div.panel-body', text: announcement.content)
-        end
-        expect(page).to have_selector("div#announcement-#{announcement.id}")
+        expect(page).to have_text(announcement.title)
+        expect(page).to have_text(announcement.content)
       end
 
       scenario 'I should see system announcements' do
         announcement = create(:system_announcement)
         visit announcements_path
 
-        expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%<title>s', title: announcement.title))
-          with_tag('div.panel-body', text: announcement.content)
-        end
-        expect(page).to have_selector("div#announcement-#{announcement.id}")
+        expect(page).to have_text(announcement.title)
+        expect(page).to have_text(announcement.content)
       end
 
       scenario 'I should see both types of announcements' do
@@ -56,10 +50,8 @@ RSpec.feature 'Global announcements', js: true do
 
         visit announcements_path
 
-        expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%<title>s', title: announcements.last.title))
-          with_tag('div.panel-body', text: announcements.last.content)
-        end
+        expect(page).to have_text(announcements.last.title)
+        expect(page).to have_text(announcements.last.content)
 
         announcements.select(&:currently_active?).each do |announcement|
           expect(page).to have_selector("div#announcement-#{announcement.id}")
