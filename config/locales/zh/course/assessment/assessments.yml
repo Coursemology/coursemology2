@@ -10,8 +10,6 @@ zh:
         sidebar_title: :'course.assessment.assessments.index.header'
         index:
           header: "测验"
-        assessment:
-          attempt: "练习"
         show:
           public_test: "公开"
           private_test: "私有"

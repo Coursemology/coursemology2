@@ -4,7 +4,6 @@ zh:
     ended: '已结束'
     plain_text_link: '%{text} (%{url})'
     click_here: '点击此处'
-    percentage: '%{percentage}%'
   helpers:
     submit:
       condition_level:

@@ -3,6 +3,4 @@ en:
     assessment:
       question:
         voice_responses:
-          new:
-            voice_response_header: 'Audio Response Question'
           question_type: Audio Response

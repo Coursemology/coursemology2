@@ -4,7 +4,6 @@ en:
     ended: 'Ended'
     plain_text_link: '%{text} (%{url})'
     click_here: 'Click here'
-    percentage: '%{percentage}%'
   helpers:
     submit:
       condition_level:

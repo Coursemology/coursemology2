@@ -3,9 +3,6 @@ zh:
     assessment:
       question:
         multiple_responses:
-          new:
-            multiple_response_header: '新多解题'
-            multiple_choice_header: '新多选题'
           question_type:
             multiple_response: 多解题
             multiple_choice: 多选题
