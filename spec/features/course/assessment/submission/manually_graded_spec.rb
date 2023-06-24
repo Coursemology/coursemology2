@@ -242,7 +242,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
                                                      multiple_programming_submission)
 
         # The Run Code button is only shown for the auto_gradable? questions
-        expect(page).to have_css('#run-code', text: 'RUN CODE', count: 2)
+        expect(page).to have_button('Run Code', exact_text: false, count: 2)
       end
 
       scenario 'I see submitted programming answers with code tags' do
