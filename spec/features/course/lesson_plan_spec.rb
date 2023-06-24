@@ -52,10 +52,10 @@ RSpec.feature 'Course: Lesson Plan' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view the LessonPlan Sidebar item' do
+      scenario 'I can view the LessonPlan Sidebar item', js: true do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'course.lesson_plan.items.sidebar_title')
+        expect(find_sidebar).to have_text(I18n.t('course.lesson_plan.items.sidebar_title'))
       end
 
       scenario 'I can view all lesson plan items and milestones', js: true do

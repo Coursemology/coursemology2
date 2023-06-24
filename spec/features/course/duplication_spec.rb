@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Duplication' do
+RSpec.feature 'Course: Duplication', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -18,7 +18,7 @@ RSpec.feature 'Course: Duplication' do
         scenario 'I cannot view the Duplication Sidebar item' do
           visit course_path(course)
 
-          expect(page).not_to have_selector('li', text: 'layouts.duplication.title')
+          expect(find_sidebar).not_to have_text(I18n.t('layouts.duplication.title'))
         end
       end
 
@@ -28,7 +28,7 @@ RSpec.feature 'Course: Duplication' do
         scenario 'I can view the Duplication Sidebar item' do
           visit course_path(course)
 
-          expect(page).to have_selector('li', text: 'layouts.duplication.title')
+          expect(find_sidebar).to have_text(I18n.t('layouts.duplication.title'))
         end
       end
     end
@@ -39,10 +39,10 @@ RSpec.feature 'Course: Duplication' do
       scenario 'I can view the Duplication Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'layouts.duplication.title')
+        expect(find_sidebar).to have_text(I18n.t('layouts.duplication.title'))
       end
 
-      context 'when I am a manager in another course', js: true do
+      context 'when I am a manager in another course' do
         let(:source_course) { create(:course) }
         let!(:course_user) { create(:course_manager, course: source_course, user: user) }
         let(:assessment_title1) { SecureRandom.hex }
@@ -108,11 +108,13 @@ RSpec.feature 'Course: Duplication' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I cannot view the Duplication Sidebar item and cannot duplicate a course' do
+      scenario 'I cannot view the Duplication Sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: 'layouts.duplication.title')
+        expect(find_sidebar).not_to have_text(I18n.t('layouts.duplication.title'))
+      end
 
+      scenario 'I cannot access the duplication page', js: false do
         visit course_duplication_path(course)
 
         expect(page.status_code).to eq(403)

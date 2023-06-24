@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Levels' do
+RSpec.feature 'Course: Levels', js: true do
   subject { page }
 
   let!(:instance) { Instance.default }
@@ -24,10 +24,10 @@ RSpec.feature 'Course: Levels' do
       scenario 'I can view the Level Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'course.levels.sidebar_title')
+        expect(find_sidebar).to have_text(I18n.t('course.levels.sidebar_title'))
       end
 
-      scenario 'I can view course levels', js: true do
+      scenario 'I can view course levels' do
         visit course_levels_path(course)
 
         (1..3).each do |i|
@@ -38,7 +38,7 @@ RSpec.feature 'Course: Levels' do
         end
       end
 
-      scenario 'I can create a course level', js: true do
+      scenario 'I can create a course level' do
         visit course_levels_path(course)
         find('#add-level').click
         find('#save-levels').click
@@ -49,7 +49,7 @@ RSpec.feature 'Course: Levels' do
         expect(course.reload.levels.count).to eq 5
       end
 
-      scenario 'I can delete a course level', js: true do
+      scenario 'I can delete a course level' do
         visit course_levels_path(course)
         find('#delete_2').click
         find('#save-levels').click
@@ -66,7 +66,7 @@ RSpec.feature 'Course: Levels' do
       scenario 'I cannot view the Level Sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: 'course.levels.sidebar_title')
+        expect(find_sidebar).not_to have_text(I18n.t('course.levels.sidebar_title'))
       end
     end
   end

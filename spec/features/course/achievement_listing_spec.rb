@@ -62,8 +62,7 @@ RSpec.feature 'Course: Achievements' do
       scenario 'I can view the Achievement Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: I18n.t('course.achievement.achievements.'\
-                                                         'sidebar_title'))
+        expect(find_sidebar).to have_text(I18n.t('course.achievement.achievements.sidebar_title'))
       end
 
       scenario 'I can view all users who have obtained an achievement' do

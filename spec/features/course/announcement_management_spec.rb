@@ -83,10 +83,10 @@ RSpec.feature 'Course: Announcements' do
     context 'As an Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view the Announcement Sidebar item' do
+      scenario 'I can view the Announcement Sidebar item', js: true do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'course.announcements.sidebar_title')
+        expect(find_sidebar).to have_text(I18n.t('course.announcements.sidebar_title'))
       end
 
       scenario 'I can see the started announcements', js: true do

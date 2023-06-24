@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Courses: Groups' do
+RSpec.feature 'Courses: Groups', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -17,10 +17,10 @@ RSpec.feature 'Courses: Groups' do
       scenario 'I can view the Group Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'course.groups.sidebar_title')
+        expect(find_sidebar).to have_text(I18n.t('course.groups.sidebar_title'))
       end
 
-      scenario 'I can view all the group categories in course', js: true do
+      scenario 'I can view all the group categories in course' do
         visit course_group_category_path(course, group_category1)
 
         expect(page).to have_selector('h5', text: 'Groups')
@@ -34,7 +34,7 @@ RSpec.feature 'Courses: Groups' do
         expect(page).to have_link(group_category1.name, href: course_group_category_path(course, group_category1))
       end
 
-      scenario 'I can view all the groups under a group category', js: true do
+      scenario 'I can view all the groups under a group category' do
         visit course_group_category_path(course, group_category1)
 
         groups.each do |group|
@@ -113,7 +113,7 @@ RSpec.feature 'Courses: Groups' do
       scenario 'I can view the Group Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'course.groups.sidebar_title')
+        expect(find_sidebar).to have_text(I18n.t('course.groups.sidebar_title'))
       end
 
       # scenario 'I can edit my group' do
@@ -149,7 +149,7 @@ RSpec.feature 'Courses: Groups' do
       scenario 'I cannot view the Group Sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: 'course.groups.sidebar_title')
+        expect(find_sidebar).not_to have_text(I18n.t('course.groups.sidebar_title'))
       end
     end
   end

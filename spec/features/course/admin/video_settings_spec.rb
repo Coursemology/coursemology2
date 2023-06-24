@@ -24,14 +24,14 @@ RSpec.feature 'Course: Administration: Videos', js: true do
         expect(page).to have_field(title_field, with: new_title)
 
         visit current_path
-        expect(page).to have_selector('li a', text: new_title)
+        expect(find_sidebar).to have_text(new_title)
 
         fill_in title_field, with: empty_title
         click_button 'Save changes'
         expect_toastify('Your changes have been saved.')
 
         visit current_path
-        expect(page).to have_selector('li a', text: I18n.t('course.video.videos.sidebar_title'))
+        expect(find_sidebar).to have_text(I18n.t('course.video.videos.sidebar_title'))
       end
     end
   end

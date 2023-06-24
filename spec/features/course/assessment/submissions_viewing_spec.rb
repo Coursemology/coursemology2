@@ -86,12 +86,9 @@ RSpec.describe 'Course: Submissions Viewing' do
         expect(page).to have_no_content_tag_for(attempting_submission)
         expect(page).to have_no_content_tag_for(published_submission)
 
-        # All Pending submissions can be assessed from the sidebar
-        within find('.sidebar') do
-          expect(page).
-            to have_link(I18n.t('course.assessment.submissions.sidebar_title'),
-                         href: course_submissions_path(course))
-        end
+        expect(find_sidebar).
+          to have_link(I18n.t('course.assessment.submissions.sidebar_title'),
+                       href: course_submissions_path(course))
       end
 
       # COMMENTED OUT as it is not possible to select the options for filtering

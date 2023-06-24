@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Courses: Staff Management' do
+RSpec.feature 'Courses: Staff Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -16,7 +16,7 @@ RSpec.feature 'Courses: Staff Management' do
       scenario 'I cannot view the Users Management Sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: 'layouts.course_users.title')
+        expect(find_sidebar).not_to have_text(I18n.t('layouts.course_users.title'))
       end
     end
 
@@ -27,10 +27,10 @@ RSpec.feature 'Courses: Staff Management' do
       scenario 'I can view the Users Management Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'layouts.course_users.title')
+        expect(find_sidebar).to have_text(I18n.t('layouts.course_users.title'))
       end
 
-      scenario 'I cannot access the staff list' do
+      scenario 'I cannot access the staff list', js: false do
         visit course_users_staff_path(course)
         expect(page.status_code).to eq(403)
       end
@@ -42,10 +42,10 @@ RSpec.feature 'Courses: Staff Management' do
       scenario 'I can view the Users Management Sidebar item' do
         visit course_path(course)
 
-        expect(page).to have_selector('li', text: 'layouts.course_users.title')
+        expect(find_sidebar).to have_text(I18n.t('layouts.course_users.title'))
       end
 
-      scenario 'I can view the list of staff', js: true do
+      scenario 'I can view the list of staff' do
         visit course_users_staff_path(course)
 
         course_students.each do |student|
@@ -57,7 +57,7 @@ RSpec.feature 'Courses: Staff Management' do
         end
       end
 
-      scenario 'I can change staff name and role', js: true do
+      scenario 'I can change staff name and role' do
         new_name = 'new staff name'
         staff_to_change = course_managers.sample
         visit course_users_staff_path(course)
@@ -82,7 +82,7 @@ RSpec.feature 'Courses: Staff Management' do
         expect(staff_to_change.name).to eq(new_name)
       end
 
-      scenario 'I can upgrade students to staff', js: true do
+      scenario 'I can upgrade students to staff' do
         visit course_users_staff_path(course)
 
         staff_to_be = course_students[0]
@@ -104,7 +104,7 @@ RSpec.feature 'Courses: Staff Management' do
         end
       end
 
-      scenario 'I can delete staff', js: true do
+      scenario 'I can delete staff' do
         staff_to_delete = course_managers.sample
         visit course_users_staff_path(course)
 
