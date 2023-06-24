@@ -137,12 +137,8 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
 
         # Delete all solutions from question
         visit edit_path
-        find_all('section').each do |solution_section|
-          within solution_section do
-            find_button('Delete solution').click
-          end
-        end
 
+        find_all('button[aria-label="Delete solution"]').each(&:click)
         click_button 'Save changes'
         wait_for_page
 
