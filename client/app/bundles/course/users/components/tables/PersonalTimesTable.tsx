@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
-  Link,
   Paper,
   Table,
   TableBody,
@@ -11,6 +10,7 @@ import {
 } from '@mui/material';
 import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
 
+import Link from 'lib/components/core/Link';
 import {
   CourseComponentIconName,
   defensivelyGetIcon,
@@ -53,7 +53,7 @@ const getLink = (item: PersonalTimeMiniEntity): JSX.Element => {
   }
 
   return (
-    <Link href={url} style={{ textDecoration: 'none' }}>
+    <Link to={url} underline="hover">
       {item.title}
     </Link>
   );

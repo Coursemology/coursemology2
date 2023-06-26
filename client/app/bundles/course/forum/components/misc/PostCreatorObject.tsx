@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Avatar, IconButton, Link } from '@mui/material';
+import { Avatar, IconButton } from '@mui/material';
 
+import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface PostCreatorProps {
@@ -58,8 +59,9 @@ const PostCreatorObject = (props: PostCreatorProps): PostCreatorReturnProps => {
           alt={creator.name}
           className="h-20 w-20"
           component={Link}
-          href={creator.userUrl}
           src={creator.imageUrl}
+          to={creator.userUrl}
+          underline="none"
         />
       ),
       name: creator.name,
@@ -74,8 +76,9 @@ const PostCreatorObject = (props: PostCreatorProps): PostCreatorReturnProps => {
           alt={creator.name}
           className="h-20 w-20"
           component={Link}
-          href={creator.userUrl}
           src={creator.imageUrl}
+          to={creator.userUrl}
+          underline="none"
         />
       ),
       name: creator.name,

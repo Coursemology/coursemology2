@@ -1,9 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -43,11 +44,8 @@ const CoursesIndex: FC<Props> = (props) => {
   const dispatch = useAppDispatch();
   const totalCount =
     filter.active && courseCounts.totalCourses !== 0 ? (
-      <Link
-        component="button"
-        onClick={(): void => setFilter({ active: false })}
-      >
-        <strong>{courseCounts.totalCourses}</strong>
+      <Link onClick={(): void => setFilter({ active: false })}>
+        {courseCounts.totalCourses}
       </Link>
     ) : (
       <strong>{courseCounts.totalCourses}</strong>
@@ -55,10 +53,7 @@ const CoursesIndex: FC<Props> = (props) => {
 
   const activeCount =
     !filter.active && courseCounts.activeCourses !== 0 ? (
-      <Link
-        component="button"
-        onClick={(): void => setFilter({ active: true })}
-      >
+      <Link onClick={(): void => setFilter({ active: true })}>
         <strong>{courseCounts.activeCourses}</strong>
       </Link>
     ) : (

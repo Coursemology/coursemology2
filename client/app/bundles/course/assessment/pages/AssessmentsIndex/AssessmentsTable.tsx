@@ -31,9 +31,9 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
         <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
           <label className="m-0 font-normal" title={assessment.title}>
             <Link
-              // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
               className="line-clamp-2 xl:line-clamp-1"
               to={assessment.url}
+              underline="hover"
             >
               {assessment.title}
             </Link>

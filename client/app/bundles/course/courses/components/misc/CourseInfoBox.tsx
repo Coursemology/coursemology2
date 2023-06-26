@@ -1,6 +1,7 @@
-import { Avatar, Grid, Link, Paper, Typography } from '@mui/material';
+import { Avatar, Grid, Paper, Typography } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
 
+import Link from 'lib/components/core/Link';
 import { getCourseURL } from 'lib/helpers/url-builders';
 
 interface CourseInfoBoxProps {
@@ -18,9 +19,7 @@ const CourseInfoBox = (props: CourseInfoBoxProps): JSX.Element => {
       >
         <Link
           className="flex h-full flex-col space-y-4 p-4 no-underline hover?:bg-neutral-100"
-          href={getCourseURL(course.id)}
-          // Change to Router-DOM Link and use this after courses sidebar is migrated
-          // to={getCourseURL(course.id)}
+          to={getCourseURL(course.id)}
         >
           <Avatar
             alt={course.title}

@@ -3,7 +3,6 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import ErrorIcon from '@mui/icons-material/Error';
 import {
   Chip,
-  Link,
   Stack,
   TableBody,
   TableCell,
@@ -16,6 +15,7 @@ import { SubmissionMiniEntity } from 'types/course/assessment/submissions';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import Page from 'lib/components/core/layouts/Page';
 import TableContainer from 'lib/components/core/layouts/TableContainer';
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
@@ -169,7 +169,7 @@ const SubmissionsTable: FC<Props> = (props) => {
             </TableCell>
             <TableCell>
               <Link
-                href={getCourseUserURL(getCourseId(), submission.courseUserId)}
+                to={getCourseUserURL(getCourseId(), submission.courseUserId)}
                 underline="hover"
               >
                 {submission.courseUserName}
@@ -177,7 +177,7 @@ const SubmissionsTable: FC<Props> = (props) => {
             </TableCell>
             <TableCell>
               <Link
-                href={getAssessmentURL(getCourseId(), submission.assessmentId)}
+                to={getAssessmentURL(getCourseId(), submission.assessmentId)}
                 underline="hover"
               >
                 {submission.assessmentTitle}
@@ -202,7 +202,7 @@ const SubmissionsTable: FC<Props> = (props) => {
                     {submission.teachingStaff?.map((staff) => (
                       <Link
                         key={staff.teachingStaffId}
-                        href={getCourseUserURL(
+                        to={getCourseUserURL(
                           getCourseId(),
                           staff.teachingStaffId,
                         )}

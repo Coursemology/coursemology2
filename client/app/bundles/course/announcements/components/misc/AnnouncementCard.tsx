@@ -2,7 +2,7 @@ import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { DateRange, PushPin } from '@mui/icons-material';
-import { Link, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { Operation } from 'store';
 import {
@@ -13,6 +13,7 @@ import {
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
+import Link from 'lib/components/core/Link';
 import { useAppDispatch } from 'lib/hooks/store';
 import { formatFullDateTime } from 'lib/moment';
 
@@ -106,10 +107,7 @@ const AnnouncementCard: FC<Props> = (props) => {
       return <span>{announcement.creator.name}</span>;
     }
     return (
-      <Link
-        href={announcement.creator.userUrl ?? '#'}
-        style={{ textDecoration: 'none' }}
-      >
+      <Link to={announcement.creator.userUrl} underline="hover">
         {announcement.creator.name}
       </Link>
     );
