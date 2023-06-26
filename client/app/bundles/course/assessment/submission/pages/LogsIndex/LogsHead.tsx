@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import { Chip, TableBody, TableCell, TableRow } from '@mui/material';
 import palette from 'theme/palette';
 import { LogsMainInfo } from 'types/course/assessment/submission/logs';
@@ -49,9 +48,7 @@ const LogsHead: FC<Props> = (props) => {
             {t(translations.assessmentTitle)}
           </TableCell>
           <TableCell>
-            <RouterLink to={info.assessmentUrl}>
-              {info.assessmentTitle}
-            </RouterLink>
+            <Link to={info.assessmentUrl}>{info.assessmentTitle}</Link>
           </TableCell>
         </TableRow>
 
@@ -67,7 +64,7 @@ const LogsHead: FC<Props> = (props) => {
             {t(translations.submissionWorkflowState)}
           </TableCell>
           <TableCell>
-            <RouterLink to={info.editUrl}>
+            <Link to={info.editUrl}>
               <Chip
                 label={translateStatus(info.submissionWorkflowState)}
                 style={{
@@ -76,7 +73,7 @@ const LogsHead: FC<Props> = (props) => {
                     palette.submissionStatus[info.submissionWorkflowState],
                 }}
               />
-            </RouterLink>
+            </Link>
           </TableCell>
         </TableRow>
       </TableBody>

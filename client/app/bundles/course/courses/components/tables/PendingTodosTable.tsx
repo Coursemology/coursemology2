@@ -3,7 +3,6 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import {
   Button,
-  Link,
   Stack,
   TableBody,
   TableCell,
@@ -15,6 +14,7 @@ import equal from 'fast-deep-equal';
 import { TodoData } from 'types/course/lesson-plan/todos';
 
 import TableContainer from 'lib/components/core/layouts/TableContainer';
+import Link from 'lib/components/core/Link';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import {
   getAssessmentAttemptURL,
@@ -259,10 +259,10 @@ const PendingTodosTable: FC<Props> = (props) => {
             >
               <TableCell>
                 <Link
-                  href={`${getCourseURL(getCourseId())}/${todoType}/${
+                  to={`${getCourseURL(getCourseId())}/${todoType}/${
                     todo.itemActableId
                   }`}
-                  style={{ textDecoration: 'none' }}
+                  underline="hover"
                 >
                   {todo.itemActableTitle}
                 </Link>

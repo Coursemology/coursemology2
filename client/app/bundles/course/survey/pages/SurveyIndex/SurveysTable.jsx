@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Button,
   Switch,
@@ -16,6 +16,7 @@ import RespondButton from 'course/survey/containers/RespondButton';
 import { surveyShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
 import TableContainer from 'lib/components/core/layouts/TableContainer';
+import Link from 'lib/components/core/Link';
 import { formatShortDateTime } from 'lib/moment';
 
 import SurveyBadges from './SurveyBadges';
@@ -108,10 +109,10 @@ const SurveysTable = (props) => {
             <TableCell colSpan={6} style={styles.wrap}>
               <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
                 <label className="m-0 font-normal" title={survey.title}>
-                  <Link // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
-                    key={survey.id}
+                  <Link
                     className="line-clamp-2 xl:line-clamp-1"
                     to={`/courses/${courseId}/surveys/${survey.id}`}
+                    underline="hover"
                   >
                     {survey.title}
                   </Link>

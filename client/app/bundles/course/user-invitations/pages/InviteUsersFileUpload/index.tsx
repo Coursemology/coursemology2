@@ -2,10 +2,11 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { toast } from 'react-toastify';
 import DownloadIcon from '@mui/icons-material/Download';
-import { Link, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { InvitationResult } from 'types/course/userInvitations';
 
 import CourseAPI from 'api/course';
+import Link from 'lib/components/core/Link';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -153,9 +154,8 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         <Link
           download="template.csv"
           href={downloadTemplatePath}
+          opensInNewTab
           style={{ textDecoration: 'none', cursor: 'pointer' }}
-          target="_blank"
-          variant="inherit"
         >
           {t(translations.template)}
           <DownloadIcon
