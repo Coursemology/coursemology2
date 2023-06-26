@@ -1,6 +1,5 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
-import { Link } from 'react-router-dom';
 import {
   Campaign,
   CheckCircle,
@@ -15,6 +14,7 @@ import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumEntity, ForumTopicEntity } from 'types/course/forums';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
@@ -212,17 +212,9 @@ const ForumTopicTable: FC<Props> = (props) => {
               </div>
               <div>
                 {t(translations.startedBy)}{' '}
-                {postCreatorObject.userUrl ? (
-                  <a
-                    href={postCreatorObject.userUrl}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {postCreatorObject.name}
-                  </a>
-                ) : (
-                  postCreatorObject.name
-                )}
+                <Link opensInNewTab to={postCreatorObject.userUrl}>
+                  {postCreatorObject.name}
+                </Link>
                 {postCreatorObject.visibilityIcon}
               </div>
             </>
@@ -265,17 +257,10 @@ const ForumTopicTable: FC<Props> = (props) => {
           });
           return (
             <>
-              {postCreatorObject.userUrl ? (
-                <a
-                  href={postCreatorObject.userUrl}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {postCreatorObject.name}
-                </a>
-              ) : (
-                postCreatorObject.name
-              )}
+              <Link opensInNewTab to={postCreatorObject.userUrl}>
+                {postCreatorObject.name}
+              </Link>
+
               {postCreatorObject.visibilityIcon}
               <div className="whitespace-nowrap">
                 {formatLongDateTime(latestPostCreator.createdAt)}

@@ -6,6 +6,7 @@ import { Card, CardContent } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
 import { defensivelyGetIcon } from 'lib/constants/icons';
 
 import { nodeShape } from '../../propTypes';
@@ -113,13 +114,9 @@ const Node = (props) => {
           <div style={styles.content}>
             <CardContent style={styles.contentText}>
               <div>
-                <a
-                  href={`${node.contentUrl}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
+                <Link opensInNewTab to={`${node.contentUrl}`}>
                   {node.title}
-                </a>
+                </Link>
               </div>
               {canModify && (
                 <UnlockRateDisplay

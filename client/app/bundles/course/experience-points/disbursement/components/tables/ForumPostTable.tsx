@@ -5,6 +5,7 @@ import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumDisbursementPostEntity } from 'types/course/disbursement';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
@@ -73,15 +74,16 @@ const ForumPostTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const post = data[dataIndex];
           return (
-            <a
-              href={getForumTopicURL(
+            <Link
+              opensInNewTab
+              to={getForumTopicURL(
                 getCourseId(),
                 post.forumSlug,
                 post.topicSlug,
               )}
             >
               {post.title}
-            </a>
+            </Link>
           );
         },
       },

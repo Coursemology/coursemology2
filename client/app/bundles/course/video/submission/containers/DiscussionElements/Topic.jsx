@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { Divider } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 
 import { seekToDirectly } from '../../actions/video';
@@ -34,12 +35,10 @@ const Topic = (props) => {
       <div className={styles.topicTimestamp}>
         <span className="glyphicon glyphicon-chevron-down" />
         &nbsp;
-        <a className="cursor-pointer" onClick={props.onTimeStampClick}>
-          <b>
-            Time:
-            {formatTimestamp(props.timestamp)}
-          </b>
-        </a>
+        <Link onClick={props.onTimeStampClick}>
+          Time:
+          {formatTimestamp(props.timestamp)}
+        </Link>
         &nbsp;
         <span className="glyphicon glyphicon-chevron-down" />
       </div>

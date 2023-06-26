@@ -16,6 +16,7 @@ import {
 import { AdminStats, UserMiniEntity, UserRoles } from 'types/users';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
@@ -294,7 +295,12 @@ const UsersTable: FC<Props> = (props) => {
             <ul className="mb-0 pl-0">
               {user.instances.map((instance) => (
                 <li key={instance.name} className="list-none">
-                  <a href={`//${instance.host}/admin/users`}>{instance.name}</a>
+                  <Link
+                    href={`//${instance.host}/admin/users`}
+                    underline="hover"
+                  >
+                    {instance.name}
+                  </Link>
                 </li>
               ))}
             </ul>

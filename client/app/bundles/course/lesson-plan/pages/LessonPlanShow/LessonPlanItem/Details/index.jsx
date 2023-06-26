@@ -2,6 +2,8 @@ import { PureComponent } from 'react';
 import { CardContent, CardHeader } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
+
 import Chips from './Chips';
 
 class Details extends PureComponent {
@@ -16,7 +18,13 @@ class Details extends PureComponent {
   renderTitle() {
     const { title, itemPath } = this.props;
     return (
-      <CardHeader title={itemPath ? <a href={itemPath}>{title}</a> : title} />
+      <CardHeader
+        title={
+          <Link to={itemPath} underline="hover" variant="h6">
+            {title}
+          </Link>
+        }
+      />
     );
   }
 

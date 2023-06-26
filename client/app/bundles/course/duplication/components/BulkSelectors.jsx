@@ -1,6 +1,8 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
+
 const translations = defineMessages({
   selectAll: {
     id: 'course.duplication.BulkSelectors.selectAll',
@@ -25,18 +27,18 @@ const styles = {
 
 const BulkSelectors = ({ callback, styles: userStyles = {} }) => (
   <>
-    <a
+    <Link
       onClick={() => callback(true)}
       style={{ ...styles.selectLink, ...userStyles.selectLink }}
     >
       <FormattedMessage {...translations.selectAll} />
-    </a>
-    <a
+    </Link>
+    <Link
       onClick={() => callback(false)}
       style={{ ...styles.deselectLink, ...userStyles.deselectLink }}
     >
       <FormattedMessage {...translations.deselectAll} />
-    </a>
+    </Link>
   </>
 );
 

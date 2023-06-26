@@ -1,10 +1,10 @@
 import { FC, MouseEvent } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { scroller } from 'react-scroll';
 import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
 import { CourseUserEntity } from 'types/course/courseUsers';
 
+import Link from 'lib/components/core/Link';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 
 import UserProfileCardStats from './UserProfileCardStats';
@@ -65,7 +65,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
           </Link>
         )}
         {user.achievements && (
-          <a
+          <Link
             href="#user-profile-achievements"
             onClick={(e): void => handleScrollToAchievements(e)}
           >
@@ -74,7 +74,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
               title={intl.formatMessage(translations.achievements)}
               value={user.achievements.length}
             />
-          </a>
+          </Link>
         )}
       </Grid>
     );

@@ -5,6 +5,7 @@ import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { DisbursementCourseUserMiniEntity } from 'types/course/disbursement';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -77,13 +78,12 @@ const DisbursementTable: FC<Props> = (props: Props) => {
           },
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
-          <a
+          <Link
             href={getCourseUserURL(getCourseId(), filteredUsers[dataIndex].id)}
-            rel="noopener noreferrer"
-            target="_blank"
+            opensInNewTab
           >
             {filteredUsers[dataIndex].name}
-          </a>
+          </Link>
         ),
       },
     },

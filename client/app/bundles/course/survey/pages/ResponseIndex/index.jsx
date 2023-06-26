@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 import {
   Card,
@@ -24,6 +23,7 @@ import { fetchResponses } from 'course/survey/actions/responses';
 import { responseShape, surveyShape } from 'course/survey/propTypes';
 import surveyTranslations from 'course/survey/translations';
 import BarChart from 'lib/components/core/BarChart';
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import moment, { formatLongDateTime } from 'lib/moment';
 
@@ -182,9 +182,9 @@ const ResponseIndex = (props) => {
         {tableResponses.map((response) => (
           <TableRow key={response.course_user.id}>
             <TableCell colSpan={2}>
-              <a href={response.course_user.path}>
+              <Link to={response.course_user.path}>
                 {response.course_user.name}
-              </a>
+              </Link>
             </TableCell>
             <TableCell>{renderResponseStatus(response)}</TableCell>
             <TableCell>{renderSubmittedAt(response)}</TableCell>

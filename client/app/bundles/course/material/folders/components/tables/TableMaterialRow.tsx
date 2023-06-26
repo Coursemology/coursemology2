@@ -4,6 +4,7 @@ import { Stack, TableCell, TableRow } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { MaterialMiniEntity } from 'types/course/material/folders';
 
+import Link from 'lib/components/core/Link';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatFullDateTime } from 'lib/moment';
 
@@ -25,18 +26,18 @@ const TableMaterialRow: FC<Props> = (props) => {
         <Stack spacing={1}>
           <Stack alignItems="center" direction="row" spacing={0.5}>
             <DescriptionIcon htmlColor="grey" />
-            <a
+            <Link
               href={material.materialUrl}
-              rel="noopener noreferrer"
+              opensInNewTab
               style={{
                 textOverflow: 'initial',
                 whiteSpace: 'normal',
                 wordBreak: 'break-word',
               }}
-              target="_blank"
+              underline="hover"
             >
               {material.name}
-            </a>
+            </Link>
           </Stack>
           {material.description !== null &&
             material.description.length !== 0 && (
@@ -60,9 +61,11 @@ const TableMaterialRow: FC<Props> = (props) => {
           minWidth: '60px',
         }}
       >
-        <Stack>
+        <Stack className="items-start">
           <div>{formatFullDateTime(material.updatedAt)}</div>
-          <a href={material.updater.userUrl ?? '#'}>{material.updater.name}</a>
+          <Link to={material.updater.userUrl} underline="hover">
+            {material.updater.name}
+          </Link>
         </Stack>
       </TableCell>
       {!isCurrentCourseStudent && (

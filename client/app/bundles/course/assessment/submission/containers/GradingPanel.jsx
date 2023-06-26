@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
@@ -49,9 +50,9 @@ class VisibleGradingPanel extends Component {
     const courseId = getCourseId();
     if (courseUser && courseUser.id) {
       return (
-        <a href={getCourseUserURL(courseId, courseUser.id)}>
+        <Link to={getCourseUserURL(courseId, courseUser.id)}>
           {courseUser.name}
-        </a>
+        </Link>
       );
     }
     if (courseUser) {
@@ -149,7 +150,7 @@ class VisibleGradingPanel extends Component {
     if (showGrader) {
       if (grader && grader.id) {
         graderInfo = (
-          <a href={getCourseUserURL(courseId, grader.id)}>{grader.name}</a>
+          <Link to={getCourseUserURL(courseId, grader.id)}>{grader.name}</Link>
         );
       } else if (grader) {
         // System or deleted users should not be linked to

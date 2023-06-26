@@ -6,12 +6,12 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { Tooltip } from 'react-tooltip';
-import { Link } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumDisbursementUserEntity } from 'types/course/disbursement';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -89,13 +89,12 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
           style: { overflowWrap: 'anywhere', padding: '5px 14px' },
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
-          <a
-            href={getCourseUserURL(getCourseId(), forumUsers[dataIndex].id)}
-            rel="noopener noreferrer"
-            target="_blank"
+          <Link
+            opensInNewTab
+            to={getCourseUserURL(getCourseId(), forumUsers[dataIndex].id)}
           >
             {forumUsers[dataIndex].name}
-          </a>
+          </Link>
         ),
       },
     },
@@ -165,12 +164,8 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
 
             <Link
               className={`view-posts-${forumUsers[dataIndex].id}`}
-              component="button"
               data-tooltip-id="view-posts"
-              form=""
-              onClick={(): void => {
-                onPostClick(forumUsers[dataIndex]);
-              }}
+              onClick={(): void => onPostClick(forumUsers[dataIndex])}
             >
               {forumUsers[dataIndex].postCount}
             </Link>

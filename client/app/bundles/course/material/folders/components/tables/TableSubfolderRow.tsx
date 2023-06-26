@@ -1,6 +1,5 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
-import { Link } from 'react-router-dom';
 import {
   Block as BlockIcon,
   Folder as FolderIcon,
@@ -10,6 +9,7 @@ import { Stack, TableCell, TableRow, Tooltip } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { FolderMiniEntity } from 'types/course/material/folders';
 
+import Link from 'lib/components/core/Link';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatFullDateTime } from 'lib/moment';
@@ -55,6 +55,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
               to={`/courses/${getCourseId()}/materials/folders/${
                 subfolder.id
               }/`}
+              underline="hover"
             >
               {`${subfolder.name} (${subfolder.itemCount})`}
             </Link>

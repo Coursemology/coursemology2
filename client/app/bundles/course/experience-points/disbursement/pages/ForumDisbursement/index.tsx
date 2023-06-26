@@ -13,6 +13,7 @@ import {
 import { ForumDisbursementUserEntity } from 'types/course/disbursement';
 
 import Page from 'lib/components/core/layouts/Page';
+import Link from 'lib/components/core/Link';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -124,14 +125,11 @@ const ForumDisbursement: FC = () => {
                   startDate: formatLongDateTime(filters.startTime),
                   endDate: formatLongDateTime(filters.endTime),
                 })}{' '}
-                <a
-                  href={getCourseUserURL(
-                    getCourseId(),
-                    selectedForumPostUser.id,
-                  )}
+                <Link
+                  to={getCourseUserURL(getCourseId(), selectedForumPostUser.id)}
                 >
                   {selectedForumPostUser.name}
-                </a>
+                </Link>
               </div>
               <IconButton onClick={(): void => setSelectedForumPostUser(null)}>
                 <CloseIcon />
