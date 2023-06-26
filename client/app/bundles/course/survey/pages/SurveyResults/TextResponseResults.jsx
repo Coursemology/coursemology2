@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 import {
   Button,
   CardContent,
@@ -11,6 +10,8 @@ import {
   TableRow,
 } from '@mui/material';
 import PropTypes from 'prop-types';
+
+import Link from 'lib/components/core/Link';
 
 const styles = {
   expandableThreshold: 10,

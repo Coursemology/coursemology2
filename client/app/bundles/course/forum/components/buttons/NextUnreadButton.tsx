@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { Button, Tooltip } from '@mui/material';
 
+import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {

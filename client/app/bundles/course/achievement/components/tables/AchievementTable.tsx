@@ -1,6 +1,5 @@
 import { FC, memo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { DragIndicator } from '@mui/icons-material';
 import { Switch } from '@mui/material';
 import equal from 'fast-deep-equal';
@@ -11,6 +10,7 @@ import {
 } from 'types/course/achievements';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';

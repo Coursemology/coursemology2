@@ -5,6 +5,7 @@ import { Link as MuiLink, Typography } from '@mui/material';
 
 interface LinkProps extends ComponentProps<typeof MuiLink> {
   to?: string | null | boolean;
+  reloads?: boolean;
   opensInNewTab?: boolean;
   external?: boolean;
 }
@@ -12,7 +13,7 @@ interface LinkProps extends ComponentProps<typeof MuiLink> {
 type LinkRef = HTMLAnchorElement;
 
 const Link = forwardRef<LinkRef, LinkProps>((props, ref): JSX.Element => {
-  const { opensInNewTab, external, to: route, ...linkProps } = props;
+  const { opensInNewTab, external, to: route, reloads, ...linkProps } = props;
 
   const children = (
     <>
@@ -48,6 +49,7 @@ const Link = forwardRef<LinkRef, LinkProps>((props, ref): JSX.Element => {
       {...(route && {
         component: ReactRouterLink,
         to: route,
+        reloadDocument: reloads,
       })}
     >
       {children}

@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { Avatar, Typography } from '@mui/material';
 import { NotificationData } from 'types/course/notifications';
 
+import Link from 'lib/components/core/Link';
 import {
   getAchievementURL,
   getAssessmentURL,
