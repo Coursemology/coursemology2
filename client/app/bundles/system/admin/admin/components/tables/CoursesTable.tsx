@@ -3,6 +3,7 @@ import { defineMessages } from 'react-intl';
 import { CourseMiniEntity } from 'types/system/courses';
 import { UserBasicMiniEntity } from 'types/users';
 
+import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
@@ -43,7 +44,9 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
     }
     return (
       <li key={owner.id} className="list-none">
-        <a href={`/users/${owner.id}`}>{owner.name}</a>
+        <Link to={`/users/${owner.id}`} underline="hover">
+          {owner.name}
+        </Link>
       </li>
     );
   };
@@ -55,9 +58,12 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       sortable: true,
       searchable: true,
       cell: (course) => (
-        <a href={`//${course.instance.host}/courses/${course.id}`}>
+        <Link
+          href={`//${course.instance.host}/courses/${course.id}`}
+          underline="hover"
+        >
           {course.title}
-        </a>
+        </Link>
       ),
     },
     {
@@ -75,11 +81,12 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       title: t(tableTranslations.activeUsers),
       sortable: true,
       cell: (course) => (
-        <a
+        <Link
           href={`//${course.instance.host}/courses/${course.id}/students?active=true`}
+          underline="hover"
         >
           {course.activeUserCount}
-        </a>
+        </Link>
       ),
     },
     {
@@ -87,9 +94,12 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       title: t(tableTranslations.totalUsers),
       sortable: true,
       cell: (course) => (
-        <a href={`//${course.instance.host}/courses/${course.id}/students`}>
+        <Link
+          href={`//${course.instance.host}/courses/${course.id}/students`}
+          underline="hover"
+        >
           {course.userCount}
-        </a>
+        </Link>
       ),
     },
     {
@@ -97,7 +107,9 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       title: t(tableTranslations.instance),
       sortable: true,
       cell: (course) => (
-        <a href={`//${course.instance.host}`}>{course.instance.name}</a>
+        <Link href={`//${course.instance.host}`} underline="hover">
+          {course.instance.name}
+        </Link>
       ),
       searchProps: { getValue: (course) => course.instance.name },
     },
@@ -107,9 +119,7 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       sortable: true,
       searchable: true,
       cell: (course) => (
-        <ul className="mb-0 pl-0">
-          {course.owners.map((owner) => renderOwnerLink(owner))}
-        </ul>
+        <ul className="mb-0 pl-0">{course.owners.map(renderOwnerLink)}</ul>
       ),
       searchProps: {
         getValue: (course) =>

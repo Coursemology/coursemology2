@@ -5,6 +5,7 @@ import { Paper } from '@mui/material';
 import { yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
 import withRouter from 'lib/components/navigation/withRouter';
 import { getProgrammingFileURL } from 'lib/helpers/url-builders';
 
@@ -64,9 +65,9 @@ class ProgrammingFile extends Component {
           <span>
             <FormattedMessage {...translations.sizeTooBig} />
             &nbsp;
-            <a href={downloadLink}>
+            <Link href={downloadLink}>
               <FormattedMessage {...translations.downloadFile} />
-            </a>
+            </Link>
           </span>
         </Paper>
       );

@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { InstanceBasicMiniEntity } from 'types/system/instances';
 
+import Link from 'lib/components/core/Link';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -38,13 +39,12 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
             <TableRow key={`instance-${instance.id}`} hover>
               <TableCell>
                 <Typography className="instance_title" variant="body2">
-                  <a
+                  <Link
                     href={`//${instance.host}/users/${userId}`}
-                    rel="noopener noreferrer"
-                    target="_blank"
+                    opensInNewTab
                   >
                     {instance.name}
-                  </a>
+                  </Link>
                 </Typography>
               </TableCell>
             </TableRow>

@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import Link from 'lib/components/core/Link';
 import { useAppSelector } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -76,20 +77,16 @@ const PostCard: FC<Props> = (props) => {
             avatar={postCreatorObject.avatar}
             className="pb-0"
             subheader={formatLongDateTime(post.createdAt)}
-            subheaderTypographyProps={{ variant: 'body1' }}
             title={
               <>
-                {postCreatorObject.userUrl ? (
-                  <a
-                    href={postCreatorObject.userUrl}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {postCreatorObject.name}
-                  </a>
-                ) : (
-                  postCreatorObject.name
-                )}
+                <Link
+                  opensInNewTab
+                  to={postCreatorObject.userUrl}
+                  variant="body1"
+                >
+                  {postCreatorObject.name}
+                </Link>
+
                 {postCreatorObject.visibilityIcon}
               </>
             }

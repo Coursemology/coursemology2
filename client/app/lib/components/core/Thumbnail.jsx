@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
 import formTranslations from 'lib/translations/form';
 
 const styles = {
@@ -93,9 +94,9 @@ class Thumbnail extends PureComponent {
     return (
       <div style={rootStyle}>
         <div style={containerStyle}>
-          <a onClick={onThumbnailClick}>
+          <Link onClick={onThumbnailClick} underline="none">
             <img alt={altText} src={source} style={thumbnailStyle} {...props} />
-          </a>
+          </Link>
         </div>
         <Dialog
           maxWidth="xl"

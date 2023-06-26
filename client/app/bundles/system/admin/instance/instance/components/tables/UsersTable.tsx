@@ -20,6 +20,7 @@ import {
 } from 'types/system/instance/users';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
   FIELD_DEBOUNCE_DELAY_MS,
@@ -264,19 +265,15 @@ const UsersTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const user = users[dataIndex];
           return (
-            <Typography
+            <Link
               key={`courses-${user.id}`}
               className="user_courses"
-              variant="body2"
+              opensInNewTab
+              to={`/users/${user.userId}`}
+              underline="hover"
             >
-              <a
-                href={`/users/${user.userId}`}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {user.courses}
-              </a>
-            </Typography>
+              {user.courses}
+            </Link>
           );
         },
       },

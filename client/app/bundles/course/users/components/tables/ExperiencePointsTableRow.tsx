@@ -1,5 +1,4 @@
 import { FC, memo, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { TableCell, TableRow, TextField } from '@mui/material';
 import equal from 'fast-deep-equal';
 import {
@@ -7,6 +6,7 @@ import {
   ExperiencePointsRowData,
 } from 'types/course/experiencePointsRecords';
 
+import Link from 'lib/components/core/Link';
 import { formatLongDateTime } from 'lib/moment';
 
 import PointManagementButtons from '../buttons/PointManagementButtons';
@@ -79,9 +79,9 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
   const renderReason = (): JSX.Element | string => {
     if (!record.reason.isManuallyAwarded) {
       return (
-        <a href={record.reason.link} rel="noopener noreferrer" target="_blank">
+        <Link opensInNewTab to={record.reason.link}>
           {rowData.reason}
-        </a>
+        </Link>
       );
     }
     if (record.permissions.canUpdate) {

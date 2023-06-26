@@ -7,6 +7,7 @@ import { AxiosError } from 'axios';
 import CourseAPI from 'api/course';
 import InfoLabel from 'lib/components/core/InfoLabel';
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import { getWorkbinFileURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
@@ -175,9 +176,9 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
     const url = getWorkbinFileURL(getCourseId(), props.folderId, material.id);
 
     return (
-      <a href={url} rel="noopener noreferrer" target="_blank">
+      <Link href={url} opensInNewTab>
         {value}
-      </a>
+      </Link>
     );
   };
 

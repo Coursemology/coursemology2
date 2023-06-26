@@ -3,6 +3,8 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
+
 import { fields } from '../../../constants';
 import { updateItem } from '../../../operations';
 
@@ -67,7 +69,9 @@ class ItemRow extends Component {
     return (
       <tr>
         {columnsVisible[fields.ITEM_TYPE] ? <td>{type}</td> : null}
-        <td>{itemPath ? <a href={itemPath}>{title}</a> : title}</td>
+        <td>
+          <Link to={itemPath}>{title}</Link>
+        </td>
         {columnsVisible[fields.START_AT] ? (
           <DateCell fieldName="start_at" fieldValue={startAt} {...dateProps} />
         ) : null}

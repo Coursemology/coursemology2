@@ -5,6 +5,7 @@ import { Chip } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import Link from 'lib/components/core/Link';
 
 import destroy from '../actions/attachments';
 import { workflowStates } from '../constants';
@@ -65,12 +66,9 @@ class VisibleUploadedFileView extends Component {
         key={attachment.id}
         clickable
         label={
-          <a
-            download
-            href={VisibleUploadedFileView.buildAttachmentUrl(attachment)}
-          >
+          <Link href={VisibleUploadedFileView.buildAttachmentUrl(attachment)}>
             {attachment.name}
-          </a>
+          </Link>
         }
         onDelete={onDelete}
         style={styles.chip}

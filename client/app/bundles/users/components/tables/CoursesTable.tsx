@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { UserCourseMiniEntity } from 'types/users';
 
+import Link from 'lib/components/core/Link';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 
@@ -50,23 +51,23 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
               </TableCell>
               <TableCell style={{ maxWidth: '400px' }}>
                 <Typography className="course_title" variant="body2">
-                  <a
+                  <Link
                     href={`/courses/${course.id}`}
-                    rel="noopener noreferrer"
-                    target="_blank"
+                    opensInNewTab
+                    underline="hover"
                   >
                     {course.title}
-                  </a>
+                  </Link>
                 </Typography>
               </TableCell>
               <TableCell>
-                <a
+                <Link
                   href={`/users/${course.courseUserId}`}
-                  rel="noopener noreferrer"
-                  target="_blank"
+                  opensInNewTab
+                  underline="hover"
                 >
                   {course.courseUserName}
-                </a>
+                </Link>
               </TableCell>
               <TableCell style={{ maxWidth: '100px' }}>
                 {COURSE_USER_ROLES[course.courseUserRole]}

@@ -4,7 +4,6 @@ import {
   Avatar,
   AvatarGroup,
   Box,
-  Link,
   Tooltip,
   useMediaQuery,
 } from '@mui/material';
@@ -17,6 +16,7 @@ import {
 } from 'types/course/leaderboard';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import { getAchievementURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
@@ -145,15 +145,14 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
               )}
               marginRight={1}
               src={individualData[dataIndex].imageUrl}
+              underline="none"
             />
-            <a
-              href={getCourseUserURL(
-                getCourseId(),
-                individualData[dataIndex].id,
-              )}
+            <Link
+              to={getCourseUserURL(getCourseId(), individualData[dataIndex].id)}
+              underline="hover"
             >
               {individualData[dataIndex].name}
-            </a>
+            </Link>
           </Box>
         ),
       },
@@ -239,6 +238,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
                     href={getAchievementURL(getCourseId(), achievement.id)}
                     id={`achievement_${achievement.id}`}
                     src={achievement.badge.url}
+                    underline="none"
                   />
                 </Tooltip>
               );
@@ -298,6 +298,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
                     component={Link}
                     href={getCourseUserURL(getCourseId(), user.id)}
                     src={user.imageUrl}
+                    underline="none"
                   />
                 </Tooltip>
               ))}

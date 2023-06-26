@@ -1,14 +1,16 @@
 import { memo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 import { Warning } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
-import { Chip, IconButton, Link, TableCell, TableRow } from '@mui/material';
+import { Chip, IconButton, TableCell, TableRow } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import Link from 'lib/components/core/Link';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import {
   getCourseUserURL,
@@ -28,11 +30,6 @@ import translations from '../../translations';
 import submissionsTranslations from './translations';
 
 const styles = {
-  nameWrapper: {
-    display: 'inline',
-    flexWrap: 'nowrap',
-    alignItems: 'center',
-  },
   chip: {
     width: 100,
   },
@@ -80,6 +77,8 @@ const SubmissionsTableRow = (props) => {
     unsubmitConfirmation: false,
     deleteConfirmation: false,
   });
+
+  const navigate = useNavigate();
 
   const getGradeString = () => {
     if (submission.workflowState === workflowStates.Unstarted) return null;
@@ -174,17 +173,23 @@ const SubmissionsTableRow = (props) => {
 
     return (
       <span className="submission-access-logs" data-tooltip-id="access-logs">
-        <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
-          <IconButton size="large" style={styles.button}>
-            <History
-              htmlColor={
-                palette.submissionIcon.history[
-                  submission.logCount > 1 ? 'none' : 'default'
-                ]
-              }
-            />
-          </IconButton>
-        </a>
+        <IconButton
+          onClick={() =>
+            navigate(
+              getSubmissionLogsURL(courseId, assessmentId, submission.id),
+            )
+          }
+          size="large"
+          style={styles.button}
+        >
+          <History
+            htmlColor={
+              palette.submissionIcon.history[
+                submission.logCount > 1 ? 'none' : 'default'
+              ]
+            }
+          />
+        </IconButton>
       </span>
     );
   };
@@ -292,12 +297,9 @@ const SubmissionsTableRow = (props) => {
         <TableCell style={styles.tableCell}>
           <span className="flex items-center">
             {renderPhantomUserIcon(submission)}
-            <a
-              href={getCourseUserURL(courseId, submission.courseUser.id)}
-              style={styles.nameWrapper}
-            >
+            <Link to={getCourseUserURL(courseId, submission.courseUser.id)}>
               {submission.courseUser.name}
-            </a>
+            </Link>
           </span>
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
@@ -321,16 +323,14 @@ const SubmissionsTableRow = (props) => {
           {submission.graders && submission.graders.length > 0
             ? submission.graders.map((grader) => (
                 <div key={`grader_${grader.id}`}>
-                  {!grader.id || grader.id === 0 ? (
-                    <div style={styles.nameWrapper}>{grader.name}</div>
-                  ) : (
-                    <a
-                      href={getCourseUserURL(courseId, grader.id)}
-                      style={styles.nameWrapper}
-                    >
-                      {grader.name}
-                    </a>
-                  )}
+                  <Link
+                    to={
+                      Boolean(grader.id && grader.id !== 0) &&
+                      getCourseUserURL(courseId, grader.id)
+                    }
+                  >
+                    {grader.name}
+                  </Link>
                   <br />
                 </div>
               ))

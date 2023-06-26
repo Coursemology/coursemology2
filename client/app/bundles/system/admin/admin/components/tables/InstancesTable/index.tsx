@@ -2,6 +2,7 @@ import { Fragment, ReactElement, ReactNode } from 'react';
 import { defineMessages } from 'react-intl';
 import { InstanceMiniEntity } from 'types/system/instances';
 
+import Link from 'lib/components/core/Link';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -53,9 +54,12 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       title: t(tableTranslations.activeUsers),
       sortable: true,
       cell: (instance) => (
-        <a href={`//${instance.host}/admin/users?active=true`}>
+        <Link
+          href={`//${instance.host}/admin/users?active=true`}
+          underline="hover"
+        >
           {instance.activeUserCount}
-        </a>
+        </Link>
       ),
     },
     {
@@ -63,7 +67,9 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       title: t(tableTranslations.totalUsers),
       sortable: true,
       cell: (instance) => (
-        <a href={`//${instance.host}/admin/users`}>{instance.userCount}</a>
+        <Link href={`//${instance.host}/admin/users`} underline="hover">
+          {instance.userCount}
+        </Link>
       ),
     },
 
@@ -72,9 +78,12 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       title: t(tableTranslations.activeCourses),
       sortable: true,
       cell: (instance) => (
-        <a href={`//${instance.host}/admin/courses?active=true`}>
+        <Link
+          href={`//${instance.host}/admin/courses?active=true`}
+          underline="hover"
+        >
           {instance.activeCourseCount}
-        </a>
+        </Link>
       ),
     },
     {
@@ -82,7 +91,9 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       title: t(tableTranslations.totalCourses),
       sortable: true,
       cell: (instance) => (
-        <a href={`//${instance.host}/admin/courses`}>{instance.courseCount}</a>
+        <Link href={`//${instance.host}/admin/courses`} underline="hover">
+          {instance.courseCount}
+        </Link>
       ),
     },
     {

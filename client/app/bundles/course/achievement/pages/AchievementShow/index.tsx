@@ -5,6 +5,7 @@ import { Grid, Tooltip, Typography } from '@mui/material';
 
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import Page from 'lib/components/core/layouts/Page';
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -108,13 +109,13 @@ const AchievementShow: FC<Props> = (props) => {
               if (courseUser.obtainedAt !== null)
                 return (
                   <Grid key={courseUser.id} item lg={1} sm={3} xs={4}>
-                    <a href={getCourseUserURL(courseId, courseUser.id)}>
+                    <Link to={getCourseUserURL(courseId, courseUser.id)}>
                       <AvatarWithLabel
                         imageUrl={courseUser.imageUrl!}
                         label={courseUser.name}
                         size="sm"
                       />
-                    </a>
+                    </Link>
                   </Grid>
                 );
               return null;

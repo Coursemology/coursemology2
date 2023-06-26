@@ -9,6 +9,7 @@ import { duplicateItems } from 'course/duplication/operations';
 import { courseShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import Link from 'lib/components/core/Link';
 
 import AchievementsListing from './AchievementsListing';
 import AssessmentsListing from './AssessmentsListing';
@@ -83,11 +84,9 @@ class DuplicateItemsConfirmation extends Component {
         </ListSubheader>
         <Card>
           <CardContent>
-            <h4>
-              <a href={url} rel="noopener noreferrer" target="_blank">
-                {destinationCourse.title}
-              </a>
-            </h4>
+            <Link opensInNewTab to={url} variant="h6">
+              {destinationCourse.title}
+            </Link>
           </CardContent>
         </Card>
       </>

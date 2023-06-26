@@ -1,16 +1,12 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import {
-  ChevronRight,
-  Delete,
-  ExpandMore,
-  OpenInNew,
-} from '@mui/icons-material';
+import { ChevronRight, Delete, ExpandMore } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import { postPackShape } from 'course/assessment/submission/propTypes';
+import Link from 'lib/components/core/Link';
 import { getForumTopicURL, getForumURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
@@ -68,9 +64,9 @@ export default class SelectedPostCard extends Component {
       renderedName = `${renderedName.slice(0, MAX_NAME_LENGTH)}...`;
     }
     return (
-      <a href={url} rel="noopener noreferrer" target="_blank">
-        {renderedName} <OpenInNew fontSize="inherit" />
-      </a>
+      <Link opensInNewTab to={url}>
+        {renderedName}
+      </Link>
     );
   }
 
