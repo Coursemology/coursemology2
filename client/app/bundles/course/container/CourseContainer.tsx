@@ -1,5 +1,10 @@
-import { ComponentRef, useRef, useState } from 'react';
-import { LoaderFunction, Outlet, useLoaderData } from 'react-router-dom';
+import { ComponentRef, useEffect, useRef, useState } from 'react';
+import {
+  LoaderFunction,
+  Outlet,
+  useLoaderData,
+  useLocation,
+} from 'react-router-dom';
 import { MenuOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { CourseLayoutData } from 'types/course/courses';
@@ -13,10 +18,18 @@ import Breadcrumbs from './Breadcrumbs';
 import Sidebar from './Sidebar';
 
 const CourseContainer = (): JSX.Element => {
+  const location = useLocation();
+
   const data = useLoaderData() as CourseLayoutData;
 
   const sidebarRef = useRef<ComponentRef<typeof Sidebar>>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    ref.current?.scrollTo({ behavior: 'smooth', top: 0 });
+  }, [location.pathname]);
 
   const { crumbs, loading, activePath } = useDynamicNest();
 
@@ -29,7 +42,7 @@ const CourseContainer = (): JSX.Element => {
         onChangeVisibility={setSidebarOpen}
       />
 
-      <div className="h-full w-full overflow-scroll">
+      <div ref={ref} className="h-full w-full overflow-scroll">
         <div className="flex h-[4rem] w-full items-center">
           {!sidebarOpen && (
             <IconButton onClick={(): void => sidebarRef.current?.show()}>
