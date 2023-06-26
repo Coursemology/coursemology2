@@ -1,14 +1,16 @@
 import { ComponentProps } from 'react';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { ArrowOutward } from '@mui/icons-material';
 import { Link as MuiLink, Typography } from '@mui/material';
 
 interface LinkProps extends ComponentProps<typeof MuiLink> {
+  to?: string | null;
   opensInNewTab?: boolean;
   external?: boolean;
 }
 
 const Link = (props: LinkProps): JSX.Element => {
-  const { opensInNewTab, external, ...linkProps } = props;
+  const { opensInNewTab, external, to: route, ...linkProps } = props;
 
   const children = (
     <>
@@ -17,22 +19,31 @@ const Link = (props: LinkProps): JSX.Element => {
     </>
   );
 
-  if (!props.href && !props.onClick)
+  if (!route && !props.href && !props.onClick)
     return (
-      <Typography component="span" variant={props.variant ?? 'body2'}>
+      <Typography
+        className={props.className}
+        component="span"
+        id={props.id}
+        variant={props.variant ?? 'body2'}
+      >
         {children}
       </Typography>
     );
 
   return (
     <MuiLink
-      className="cursor-pointer"
       color="links"
       variant="body2"
       {...linkProps}
+      className={`cursor-pointer ${props.className ?? ''}`}
       {...(opensInNewTab && {
         target: '_blank',
         rel: 'noopener noreferrer',
+      })}
+      {...(route && {
+        component: ReactRouterLink,
+        to: route,
       })}
     >
       {children}
