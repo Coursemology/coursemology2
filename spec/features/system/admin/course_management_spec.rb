@@ -43,11 +43,15 @@ RSpec.feature 'System: Administration: Courses', js: true do
           find_all('a').first.click
         end
 
+        search_field = find_field('Search courses by title or owner')
+
+        search_field.set(active_course.title)
         expect(page).to have_link(
           active_course.title,
           href: "//#{active_course.instance.host}/courses/#{active_course.id}"
         )
 
+        search_field.set(inactive_course.title)
         expect(page).not_to have_text(inactive_course.title)
       end
 
