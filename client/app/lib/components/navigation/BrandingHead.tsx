@@ -1,9 +1,9 @@
 import { ReactNode, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { AdminPanelSettingsOutlined, ChevronRight } from '@mui/icons-material';
 import { Avatar, IconButton, Typography } from '@mui/material';
 
+import Link from 'lib/components/core/Link';
 import PopupMenu from 'lib/components/core/PopupMenu';
 import { useAppContext } from 'lib/containers/AppContainer';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -81,9 +81,9 @@ const AdminMenuButton = (): JSX.Element | null => {
 const Brand = (): JSX.Element => {
   const { t } = useTranslation();
 
-  // TODO: Remove `reloadDocument` once fully SPA
+  // TODO: Remove `reloads` once fully SPA
   return (
-    <Link reloadDocument to="/">
+    <Link reloads to="/" underline="hover">
       <Typography>{t(translations.coursemology)}</Typography>
     </Link>
   );

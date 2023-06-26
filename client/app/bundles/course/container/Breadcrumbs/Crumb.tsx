@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
 import { Grow, Typography } from '@mui/material';
+
+import Link from 'lib/components/core/Link';
 
 interface CrumbProps {
   children: ReactNode;
@@ -18,7 +19,9 @@ const Crumb = (props: CrumbProps): JSX.Element => {
 
   return (
     <Grow key={title?.toString()} in style={{ transformOrigin: 'center left' }}>
-      {url ? <Link to={url}>{crumbText}</Link> : crumbText}
+      <Link to={url} underline="hover">
+        {crumbText}
+      </Link>
     </Grow>
   );
 };

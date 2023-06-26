@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
 import {
   AssessmentListData,
   AssessmentsListData,
 } from 'types/course/assessment/assessments';
 
+import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import StackedBadges from 'lib/components/extensions/StackedBadges';

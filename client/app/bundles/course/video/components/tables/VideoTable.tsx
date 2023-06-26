@@ -1,6 +1,5 @@
 import { FC, memo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { Switch } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -8,6 +7,7 @@ import { VideoListData, VideoPermissions } from 'types/course/videos';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
+import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import { getVideoSubmissionsURL, getVideoURL } from 'lib/helpers/url-builders';

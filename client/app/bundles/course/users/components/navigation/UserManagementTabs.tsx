@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
 import {
@@ -8,6 +7,7 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 
+import Link from 'lib/components/core/Link';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
 import { getCourseURL } from 'lib/helpers/url-builders';
 import { getCourseId, getCurrentPath } from 'lib/helpers/url-helpers';

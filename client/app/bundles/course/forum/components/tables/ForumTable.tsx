@@ -1,6 +1,5 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
-import { Link } from 'react-router-dom';
 import Email from '@mui/icons-material/Email';
 import Help from '@mui/icons-material/Help';
 import { Tooltip, Typography } from '@mui/material';
@@ -9,6 +8,7 @@ import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumEntity } from 'types/course/forums';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
 import useTranslation from 'lib/hooks/useTranslation';

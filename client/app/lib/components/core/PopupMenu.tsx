@@ -5,7 +5,6 @@ import {
   useContext,
   useRef,
 } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Divider,
   List,
@@ -16,6 +15,8 @@ import {
   Popover,
   Typography,
 } from '@mui/material';
+
+import Link from 'lib/components/core/Link';
 
 interface PopupMenuContextProps {
   close: () => void;
@@ -84,7 +85,13 @@ const PopupMenuButton = (props: PopupMenuButtonProps): JSX.Element => {
     </ListItem>
   );
 
-  return href && !props.disabled ? <Link to={href}>{button}</Link> : button;
+  return href && !props.disabled ? (
+    <Link to={href} underline="hover">
+      {button}
+    </Link>
+  ) : (
+    button
+  );
 };
 
 interface PopupMenuTextProps extends ComponentProps<typeof Typography> {

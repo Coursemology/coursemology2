@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { VideoSubmissionListData } from 'types/course/videoSubmissions';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
+import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { formatShortDateTime } from 'lib/moment';

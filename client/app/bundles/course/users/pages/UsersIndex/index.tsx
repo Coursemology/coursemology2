@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Avatar, Grid, Typography } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';

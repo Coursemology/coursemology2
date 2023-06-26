@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { Box, Tab, Tabs } from '@mui/material';
+
+import Link from 'lib/components/core/Link';
 
 interface Props extends WrappedComponentProps {
   currentTab: string;

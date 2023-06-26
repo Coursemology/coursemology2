@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 import {
   Button,
   CardContent,
@@ -18,6 +17,7 @@ import PropTypes from 'prop-types';
 import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';
 import { sorts } from 'course/survey/utils';
+import Link from 'lib/components/core/Link';
 import Thumbnail from 'lib/components/core/Thumbnail';
 
 const styles = {
