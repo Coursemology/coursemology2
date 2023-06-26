@@ -26,7 +26,7 @@ RSpec.feature 'System: Administration: Users', js: true do
         visit admin_users_path
 
         within find('p', text: 'Total Users', exact_text: false) do
-          find_all('button').first.click
+          find_all('a').first.click
         end
 
         User.human_users.normal.ordered_by_name.limit(3).each do |user|
