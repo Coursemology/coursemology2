@@ -1,15 +1,17 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, forwardRef } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { ArrowOutward } from '@mui/icons-material';
 import { Link as MuiLink, Typography } from '@mui/material';
 
 interface LinkProps extends ComponentProps<typeof MuiLink> {
-  to?: string | null;
+  to?: string | null | boolean;
   opensInNewTab?: boolean;
   external?: boolean;
 }
 
-const Link = (props: LinkProps): JSX.Element => {
+type LinkRef = HTMLAnchorElement;
+
+const Link = forwardRef<LinkRef, LinkProps>((props, ref): JSX.Element => {
   const { opensInNewTab, external, to: route, ...linkProps } = props;
 
   const children = (
@@ -22,6 +24,7 @@ const Link = (props: LinkProps): JSX.Element => {
   if (!route && !props.href && !props.onClick)
     return (
       <Typography
+        ref={ref}
         className={props.className}
         component="span"
         id={props.id}
@@ -33,6 +36,7 @@ const Link = (props: LinkProps): JSX.Element => {
 
   return (
     <MuiLink
+      ref={ref}
       color="links"
       variant="body2"
       {...linkProps}
@@ -49,6 +53,8 @@ const Link = (props: LinkProps): JSX.Element => {
       {children}
     </MuiLink>
   );
-};
+});
+
+Link.displayName = 'Link';
 
 export default Link;
