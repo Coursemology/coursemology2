@@ -40,7 +40,7 @@ RSpec.feature 'System: Administration: Courses', js: true do
         visit admin_courses_path
 
         within find('p', text: 'Active Courses', exact_text: false) do
-          click_button
+          find_all('a').first.click
         end
 
         expect(page).to have_link(
