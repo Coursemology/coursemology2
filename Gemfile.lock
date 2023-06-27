@@ -227,7 +227,7 @@ GEM
     edge (0.6.1)
       activerecord (>= 5.0.0)
     ejs (1.1.1)
-    email_spec (2.2.1)
+    email_spec (2.2.2)
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.7)
@@ -331,8 +331,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    launchy (2.5.0)
-      addressable (~> 2.7)
+    launchy (2.5.2)
+      addressable (~> 2.8)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -372,7 +372,7 @@ GEM
     multi_json (1.15.0)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
-    net-imap (0.3.4)
+    net-imap (0.3.6)
       date
       net-protocol
     net-pop (0.1.2)
@@ -600,7 +600,7 @@ GEM
     thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.1.0)
-    timeout (0.3.2)
+    timeout (0.4.0)
     traceroute (0.8.1)
       rails (>= 3.0.0)
     twitter-typeahead-rails (0.11.1)
