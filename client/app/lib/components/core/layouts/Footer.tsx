@@ -30,10 +30,6 @@ const translations = defineMessages({
     defaultMessage:
       'Copyright © {from}–{to} Coursemology. All rights reserved.',
   },
-  lastBuildCommitSHA: {
-    id: 'app.Footer.lastBuildCommitSHA',
-    defaultMessage: 'Last built on {time} at {sha}.',
-  },
 });
 
 /**
@@ -78,13 +74,6 @@ const Footer = (): JSX.Element => {
         {t(translations.copyright, {
           from: FIRST_BUILD_YEAR,
           to: LATEST_BUILD_YEAR,
-        })}
-      </Typography>
-
-      <Typography color="text.disabled" variant="caption">
-        {t(translations.lastBuildCommitSHA, {
-          time: LATEST_BUILD_TIME,
-          sha: LATEST_COMMIT_HEAD_SHA,
         })}
       </Typography>
     </footer>
