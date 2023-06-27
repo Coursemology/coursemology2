@@ -17,3 +17,5 @@ declare module '*.svg?url' {
 
 declare const FIRST_BUILD_YEAR: string;
 declare const LATEST_BUILD_YEAR: string;
+declare const LATEST_BUILD_TIME: string;
+declare const LATEST_COMMIT_HEAD_SHA: string;
