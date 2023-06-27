@@ -6,15 +6,15 @@ import { Avatar, Grid, Typography } from '@mui/material';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
-import CoursesTable from '../../components/tables/CoursesTable';
-import InstancesTable from '../../components/tables/InstancesTable';
-import { fetchUser } from '../../operations';
+import CoursesTable from '../components/tables/CoursesTable';
+import InstancesTable from '../components/tables/InstancesTable';
+import { fetchUser } from '../operations';
 import {
   getAllCompletedCourseMiniEntities,
   getAllCurrentCourseMiniEntities,
   getAllInstanceMiniEntities,
   getUserEntity,
-} from '../../selectors';
+} from '../selectors';
 
 interface Props extends WrappedComponentProps {}
 
