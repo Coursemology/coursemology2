@@ -1,4 +1,5 @@
 const { join, resolve } = require('path');
+const childProcess = require('child_process');
 const {
   IgnorePlugin,
   ContextReplacementPlugin,
@@ -9,6 +10,13 @@ const Dotenv = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const packageJSON = require('./package.json');
+
+const buildTime = new Date();
+
+const headCommitHash = childProcess
+  .execSync('git rev-parse --short HEAD')
+  .toString()
+  .trim();
 
 module.exports = {
   entry: {
@@ -86,7 +94,9 @@ module.exports = {
     }),
     new DefinePlugin({
       FIRST_BUILD_YEAR: JSON.stringify(packageJSON.firstBuildYear),
-      LATEST_BUILD_YEAR: JSON.stringify(new Date().getFullYear()),
+      LATEST_BUILD_YEAR: JSON.stringify(buildTime.getFullYear()),
+      LATEST_BUILD_TIME: JSON.stringify(buildTime.toLocaleString('en-GB')),
+      LATEST_COMMIT_HEAD_SHA: JSON.stringify(headCommitHash),
     }),
   ],
   module: {
