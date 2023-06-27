@@ -165,15 +165,8 @@ jobs:
           no_output_timeout: 10m
           command: |
             mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-              circleci tests split --split-by=timings)"
-
-            bundle exec rspec \
-              --format progress \
-              --format RspecJunitFormatter \
-              --out /tmp/test-results/rspec.xml \
-              --format progress \
-              $TEST_FILES
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb"
+            echo "$TEST_FILES" | circleci tests run --command="xargs bundle exec rspec --format progress --format RspecJunitFormatter --out /tmp/test-results/rspec.xml --format progress" --verbose --split-by=timings
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
