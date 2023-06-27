@@ -170,8 +170,6 @@ module.exports = {
     File: true,
     FileReader: true,
     JSX: true,
-    FIRST_BUILD_YEAR: true,
-    LATEST_BUILD_YEAR: true,
   },
   overrides: [
     {
