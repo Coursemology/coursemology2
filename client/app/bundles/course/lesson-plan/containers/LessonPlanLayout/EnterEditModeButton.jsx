@@ -7,7 +7,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 const translations = defineMessages({
   enterEditMode: {
     id: 'course.lessonPlan.LessonPlanLayout.EnterEditModeButton.enterEditMode',
-    defaultMessage: 'Enter Edit Mode',
+    defaultMessage: 'Edit Mode',
   },
 });
 
@@ -16,7 +16,6 @@ const EnterEditModeButton = () => {
   const courseId = getCourseId();
   return (
     <Button
-      className="mr-4"
       onClick={() => navigate(`/courses/${courseId}/lesson_plan/edit`)}
       variant="outlined"
     >

@@ -85,11 +85,11 @@ export class LessonPlanShow extends Component {
       <Page
         actions={
           this.props.canManageLessonPlan && (
-            <>
+            <div className="space-x-4">
               <EnterEditModeButton />
               <NewMilestoneButton />
               <NewEventButton />
-            </>
+            </div>
           )
         }
         title={<FormattedMessage {...translations.lessonPlan} />}

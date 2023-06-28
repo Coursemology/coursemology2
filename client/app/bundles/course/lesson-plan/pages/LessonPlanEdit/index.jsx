@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Page from 'lib/components/core/layouts/Page';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import { lessonPlanTypesGroups } from 'lib/types';
 
 import { fields } from '../../constants';
 import ColumnVisibilityDropdown from '../../containers/ColumnVisibilityDropdown';
-import ExitEditModeButton from '../../containers/LessonPlanLayout/ExitEditModeButton';
 import NewEventButton from '../../containers/LessonPlanLayout/NewEventButton';
 import NewMilestoneButton from '../../containers/LessonPlanLayout/NewMilestoneButton';
 import translations from '../../translations';
@@ -78,20 +78,21 @@ export class LessonPlanEdit extends Component {
 
   render() {
     const { groups } = this.props;
+    const courseId = getCourseId();
 
     return (
       <Page
         actions={
           this.props.canManageLessonPlan && (
-            <>
-              <ExitEditModeButton />
+            <div className="space-x-4">
               <NewMilestoneButton />
               <NewEventButton />
               <ColumnVisibilityDropdown />
-            </>
+            </div>
           )
         }
-        title={<FormattedMessage {...translations.lessonPlan} />}
+        backTo={`/courses/${courseId}/lesson_plan`}
+        title={<FormattedMessage {...translations.editLessonPlan} />}
       >
         <div className="mt-8">
           <table className="border-separate border-spacing-x-4">
