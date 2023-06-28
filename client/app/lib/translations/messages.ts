@@ -16,11 +16,6 @@ const messagesTranslations = defineMessages({
     defaultMessage:
       'An error occurred when saving your changes. You may reload and try again.',
   },
-  passwordIsVisible: {
-    id: 'lib.translations.messages.passwordIsVisible',
-    defaultMessage:
-      'Your password is visible! Watch out for eyes behind you...',
-  },
 });
 
 export default messagesTranslations;
