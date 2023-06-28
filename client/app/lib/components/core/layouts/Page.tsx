@@ -26,7 +26,7 @@ const Page = (props: PageProps): JSX.Element => {
     <div>
       {(props.title || props.actions) && (
         <header className="flex min-h-[6rem] items-center bg-white px-6 border-only-b-neutral-200">
-          <div className="flex w-full items-center justify-between space-x-4">
+          <div className="flex w-full flex-col sm:flex-row sm:items-center sm:justify-between sm:space-x-4">
             {props.title && (
               <div className="flex items-center space-x-4">
                 {route && (
@@ -45,7 +45,9 @@ const Page = (props: PageProps): JSX.Element => {
             )}
 
             {props.actions && (
-              <div className="flex space-x-2">{props.actions}</div>
+              <div className="sm:0 my-4 flex w-full justify-end space-x-2 sm:w-fit sm:justify-normal">
+                {props.actions}
+              </div>
             )}
           </div>
         </header>
