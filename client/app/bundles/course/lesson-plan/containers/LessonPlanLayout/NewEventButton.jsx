@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -10,7 +11,7 @@ import { actions } from '../../store';
 const translations = defineMessages({
   newEvent: {
     id: 'course.lessonPlan.LessonPlanLayout.NewEventButton.newEvent',
-    defaultMessage: 'New Event',
+    defaultMessage: 'Event',
   },
   success: {
     id: 'course.lessonPlan.LessonPlanLayout.NewEventButton.success',
@@ -50,12 +51,10 @@ class NewEventButton extends Component {
   };
 
   render() {
-    if (!this.props.canManageLessonPlan) {
-      return <div />;
-    }
+    if (!this.props.canManageLessonPlan) return null;
 
     return (
-      <Button color="primary" onClick={this.showForm} variant="contained">
+      <Button onClick={this.showForm} startIcon={<Add />} variant="contained">
         <FormattedMessage {...translations.newEvent} />
       </Button>
     );

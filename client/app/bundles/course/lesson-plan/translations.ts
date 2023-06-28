@@ -55,6 +55,10 @@ const translations = defineMessages({
     id: 'course.lessonPlan.LessonPlanLayout.lessonPlan',
     defaultMessage: 'Lesson Plan',
   },
+  editLessonPlan: {
+    id: 'course.lessonPlan.LessonPlanLayout.editLessonPlan',
+    defaultMessage: 'Edit Lesson Plan',
+  },
   empty: {
     id: 'course.lessonPlan.LessonPlanLayout.empty',
     defaultMessage: 'The lesson plan is empty.',

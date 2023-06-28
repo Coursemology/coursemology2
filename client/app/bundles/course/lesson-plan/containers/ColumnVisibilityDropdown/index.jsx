@@ -19,13 +19,6 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  dropdown: {
-    display: 'inline-block',
-    marginLeft: 16,
-  },
-};
-
 class ColumnVisibilityDropdown extends Component {
   constructor(props) {
     super(props);
@@ -55,7 +48,7 @@ class ColumnVisibilityDropdown extends Component {
     const { dispatch, columnsVisible } = this.props;
 
     return (
-      <div style={styles.dropdown}>
+      <>
         <Button
           color="secondary"
           endIcon={<KeyboardArrowDown />}
@@ -64,6 +57,7 @@ class ColumnVisibilityDropdown extends Component {
         >
           <FormattedMessage {...translations.label} />
         </Button>
+
         <Popover
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
@@ -91,7 +85,7 @@ class ColumnVisibilityDropdown extends Component {
             )}
           </MenuList>
         </Popover>
-      </div>
+      </>
     );
   }
 }
