@@ -32,28 +32,34 @@ const translations = defineMessages({
   },
 });
 
-/**
- * TODO: Populate with appropriate links when pages are ready.
- */
 const Footer = (): JSX.Element => {
   const { t } = useTranslation();
 
   return (
     <footer className="flex max-w-[1000px] flex-col space-y-5 p-5 border-only-t-neutral-200">
-      <div className="flex flex-row space-x-5">
-        <Link href="/pages/terms_of_service" opensInNewTab>
+      <div className="-mx-3 -my-1 flex flex-wrap">
+        <Link
+          className="mx-3 my-1"
+          href="/pages/terms_of_service"
+          opensInNewTab
+        >
           {t(translations.termsOfService)}
         </Link>
 
-        <Link href="/pages/privacy_policy" opensInNewTab>
+        <Link className="mx-3 my-1" href="/pages/privacy_policy" opensInNewTab>
           {t(translations.privacyPolicy)}
         </Link>
 
-        <Link external href="mailto:coursemology@gmail.com">
+        <Link
+          className="mx-3 my-1"
+          external
+          href="mailto:coursemology@gmail.com"
+        >
           {t(translations.contactUs)}
         </Link>
 
         <Link
+          className="mx-3 my-1"
           external
           href="https://coursemology.github.io/coursemology-help/"
           opensInNewTab
@@ -62,6 +68,7 @@ const Footer = (): JSX.Element => {
         </Link>
 
         <Link
+          className="mx-3 my-1"
           external
           href="https://github.com/Coursemology/coursemology2"
           opensInNewTab
