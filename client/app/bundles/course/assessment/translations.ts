@@ -396,14 +396,6 @@ const translations = defineMessages({
     id: 'course.assessment.show.showOptions',
     defaultMessage: 'Show options',
   },
-  changeToMrqFull: {
-    id: 'course.assessment.show.changeToMrqFull',
-    defaultMessage: 'Convert to Multiple Response (MRQ)',
-  },
-  changeToMcqFull: {
-    id: 'course.assessment.show.changeToMcqFull',
-    defaultMessage: 'Convert to Multiple Choice (MCQ)',
-  },
   multipleChoice: {
     id: 'course.assessment.show.multipleChoice',
     defaultMessage: 'Multiple Choice (MCQ)',

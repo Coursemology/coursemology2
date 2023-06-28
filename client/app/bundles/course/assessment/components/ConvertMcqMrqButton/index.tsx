@@ -32,8 +32,8 @@ const ConvertMcqMrqButton = (props: ConvertMcqMrqButtonProps): JSX.Element => {
         variant="outlined"
       >
         {question.mcqMrqType === 'mcq'
-          ? t(translations.changeToMrqFull)
-          : t(translations.changeToMcqFull)}
+          ? t(translations.changeToMrq)
+          : t(translations.changeToMcq)}
       </Button>
 
       {!props.new && (
