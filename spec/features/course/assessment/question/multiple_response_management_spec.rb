@@ -18,10 +18,10 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         new_mcq_page = window_opened_by { click_link 'Multiple Choice (MCQ)' }
 
         within_window new_mcq_page do
-          click_on 'Convert to Multiple Response (MRQ)'
+          click_on 'Convert to MRQ'
           expect(page).to have_text('Responses')
 
-          click_on 'Convert to Multiple Choice (MCQ)'
+          click_on 'Convert to MCQ'
           expect(page).to have_text('Choices')
         end
       end
@@ -32,10 +32,10 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         new_mrq_page = window_opened_by { click_link 'Multiple Response (MRQ)' }
 
         within_window new_mrq_page do
-          click_on 'Convert to Multiple Choice (MCQ)'
+          click_on 'Convert to MCQ'
           expect(page).to have_text('Choices')
 
-          click_on 'Convert to Multiple Response (MRQ)'
+          click_on 'Convert to MRQ'
           expect(page).to have_text('Responses')
         end
       end
@@ -163,14 +163,14 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         # Switching in edit page
         # Switch MRQ to MCQ
         visit edit_path
-        click_button 'Convert to Multiple Choice (MCQ)'
         click_button 'Convert to MCQ'
+        find_all('button', text: 'Convert to MCQ').last.click
 
         wait_for_page
 
         # Switch MCQ to MRQ
-        click_button 'Convert to Multiple Response (MRQ)'
         click_button 'Convert to MRQ'
+        find_all('button', text: 'Convert to MRQ').last.click
 
         wait_for_page
 
@@ -178,13 +178,13 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         visit course_assessment_path(course, assessment)
 
         # Switch MRQ to MCQ
-        click_button 'Convert to Multiple Choice (MCQ)'
         click_button 'Convert to MCQ'
+        find_all('button', text: 'Convert to MCQ').last.click
         expect_toastify('Question type successfully changed.')
         expect(page).to have_text(
           I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')
         )
-        expect(page).to have_button('Convert to Multiple Response (MRQ)')
+        expect(page).to have_button('Convert to MRQ')
 
         # Delete all MCQ options
         visit edit_path

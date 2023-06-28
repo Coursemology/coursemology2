@@ -142,7 +142,7 @@ const Question = (props: QuestionProps): JSX.Element => {
               </div>
             </section>
 
-            <section className="px-6 pt-4">
+            <section className="space-y-4 px-6 pt-4">
               {question.description && (
                 <Typography
                   dangerouslySetInnerHTML={{
