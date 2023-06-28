@@ -69,11 +69,18 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
           }
         />
 
-        <div className="ml-[34px] space-y-2">
+        <div
+          className={`${
+            props.size === 'small' ? 'ml-[2.9rem]' : 'ml-[3.4rem]'
+          } space-y-2`}
+        >
           {description && (
             <Typography
               color={props.disabled ? 'text.disabled' : 'text.secondary'}
-              variant={descriptionVariant ?? 'body2'}
+              variant={
+                descriptionVariant ??
+                (props.size === 'small' ? 'caption' : 'body2')
+              }
             >
               {description}
             </Typography>
