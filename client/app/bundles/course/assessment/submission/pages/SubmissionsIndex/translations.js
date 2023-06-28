@@ -13,7 +13,7 @@ const translations = defineMessages({
   },
   submissionStatus: {
     id: 'course.assessment.submission.SubmissionsIndex.submissionStatus',
-    defaultMessage: 'Submission Status',
+    defaultMessage: 'Status',
   },
   grade: {
     id: 'course.assessment.submission.SubmissionsIndex.grade',
@@ -21,7 +21,7 @@ const translations = defineMessages({
   },
   experiencePoints: {
     id: 'course.assessment.submission.SubmissionsIndex.experiencePoints',
-    defaultMessage: 'Experience Points Awarded',
+    defaultMessage: 'EXP Awarded',
   },
   dateSubmitted: {
     id: 'course.assessment.submission.SubmissionsIndex.dateSubmitted',
