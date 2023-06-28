@@ -262,7 +262,6 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                   fullWidth
                   inputProps={{ autoComplete: 'off' }}
                   label={t(translations.currentPassword)}
-                  showPasswordVisibilityHint
                   type="password"
                   variant="filled"
                 />
@@ -284,8 +283,9 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                   fullWidth
                   inputProps={{ autoComplete: 'new-password' }}
                   label={t(translations.newPassword)}
-                  onChangePasswordVisibility={setRequirePasswordConfirmation}
-                  showPasswordVisibilityHint
+                  onChangePasswordVisibility={(visible): void =>
+                    setRequirePasswordConfirmation(!visible)
+                  }
                   type="password"
                   variant="filled"
                 />
