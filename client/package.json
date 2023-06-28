@@ -84,7 +84,7 @@
     "react-emitter-factory": "^1.1.2",
     "react-hook-form": "^7.43.9",
     "react-hot-keys": "^2.7.2",
-    "react-image-crop": "^10.1.4",
+    "react-image-crop": "^10.1.5",
     "react-intl": "^6.4.4",
     "react-player": "^2.12.0",
     "react-redux": "^8.1.1",

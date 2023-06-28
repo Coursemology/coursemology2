@@ -8341,10 +8341,10 @@ react-hot-keys@^2.7.2:
     hotkeys-js "^3.8.1"
     prop-types "^15.7.2"
 
-react-image-crop@^10.1.4:
-  version "10.1.4"
-  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-10.1.4.tgz#b625326ba55979669b08b8c3d0e3b3fd3808e5f6"
-  integrity sha512-bEc/SfJRPU06ApivtzuNmofEH3rqf1WsKgWNwloiZ4ttCB37DEETwR4KsQb+KkW87srvRtWpCbOhPs0a4TVAKw==
+react-image-crop@^10.1.5:
+  version "10.1.5"
+  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-10.1.5.tgz#60f9d81405b01b6925629cae235e8406616fc0e5"
+  integrity sha512-BL8Rd/UHCE4O5GcYQiWDKVh5JOJb0Ic/Gde2W171v5nY7RyQzFLM1cxIzlYfESLO/lNgBVhDHuEV9RHnqALMkA==
   dependencies:
     clsx "^1.2.1"
 
