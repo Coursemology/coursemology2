@@ -20,6 +20,7 @@ import { pink, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 
 import { workflowStates } from '../../constants';
 import { assessmentShape } from '../../propTypes';
@@ -35,7 +36,7 @@ const styles = {
   tableCell: {
     padding: '0.5em',
     textOverflow: 'initial',
-    whiteSpace: 'normal',
+    whiteSpace: 'nowrap',
     wordBreak: 'break-word',
     alignItems: 'center',
   },
@@ -355,7 +356,7 @@ export default class SubmissionsTable extends Component {
     );
 
     return (
-      <>
+      <TableContainer dense variant="bare">
         <Table style={{ ...(isActive ? {} : styles.hideTable) }}>
           <TableHead>
             <TableRow>
@@ -380,7 +381,7 @@ export default class SubmissionsTable extends Component {
           <TableBody>{this.renderRowUsers()}</TableBody>
         </Table>
         {this.renderRowTooltips()}
-      </>
+      </TableContainer>
     );
   }
 }

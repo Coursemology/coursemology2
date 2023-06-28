@@ -112,7 +112,7 @@ const translations = defineMessages({
   },
   expAwarded: {
     id: 'course.assessment.submission.expAwarded',
-    defaultMessage: 'Experience Points Awarded',
+    defaultMessage: 'EXP Awarded',
   },
   grader: {
     id: 'course.assessment.submission.grader',
