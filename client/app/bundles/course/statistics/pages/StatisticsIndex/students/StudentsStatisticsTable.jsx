@@ -41,7 +41,8 @@ const translations = defineMessages({
   },
   tableTitle: {
     id: 'course.statistics.StatisticsIndex.students.tableTitle',
-    defaultMessage: 'Student Statistics',
+    defaultMessage:
+      'Student Statistics ({numStudents} students, {numPhantom} phantom)',
   },
   tutorFilter: {
     id: 'course.statistics.StatisticsIndex.students.tutorFilter',
@@ -68,6 +69,16 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
     }
     return students;
   }, [showMyStudentsOnly, students]);
+  const numStudentType = useMemo(() => {
+    const numStudents = filteredStudents.filter(
+      (s) => s.studentType === 'Normal',
+    ).length;
+    const numPhantom = filteredStudents.filter(
+      (s) => s.studentType === 'Phantom',
+    ).length;
+
+    return { numStudents, numPhantom };
+  }, [filteredStudents]);
 
   const { t } = useTranslation();
 
@@ -89,10 +100,12 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
       downloadOptions: {
         filename: 'students_statistics',
       },
-      jumpToPage: true,
       print: false,
       rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
-      rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
+      rowsPerPageOptions: [
+        DEFAULT_TABLE_ROWS_PER_PAGE,
+        filteredStudents.length,
+      ],
       selectableRows: 'none',
       sortOrder: {
         name: 'experiencePoints',
@@ -244,7 +257,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
       height="30px"
       includeRowNumber
       options={options}
-      title={t(translations.tableTitle)}
+      title={t(translations.tableTitle, numStudentType)}
     />
   );
 };
