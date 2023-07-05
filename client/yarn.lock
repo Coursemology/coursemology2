@@ -2693,10 +2693,10 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
-"@types/sharedworker@^0.0.97":
-  version "0.0.97"
-  resolved "https://registry.yarnpkg.com/@types/sharedworker/-/sharedworker-0.0.97.tgz#d13dbe42dfaae39541bd9116b9d518b4855be3cf"
-  integrity sha512-YfsV5HDhtt+Q9fR5lTb6PTCb/hYJqwc3N7iR6Qh6Cp2YamV4xk3j7MA0PIuxi5m3mFpoflce/+NGIjauIawBSQ==
+"@types/sharedworker@^0.0.98":
+  version "0.0.98"
+  resolved "https://registry.yarnpkg.com/@types/sharedworker/-/sharedworker-0.0.98.tgz#70c66dc474d3dc2bf206f04d6e225527e7b7cc40"
+  integrity sha512-rbG+lDkY5YZFVitGfyQDTcKNHyxda23VRO7QP9HAixVJMoEAhou9jijkD/cGisy0Z7/uF6vZFWkxo8QNSg+m6Q==
 
 "@types/sizzle@*":
   version "2.3.3"
