@@ -189,7 +189,7 @@ const Form = <
       setInitialValues(newInitialValues);
 
       Object.entries(data).forEach(([fieldName, value]) => {
-        setValue(fieldName as FieldPath<D>, value);
+        setValue(fieldName as FieldPath<D>, value as D[string]);
       });
     },
   });
