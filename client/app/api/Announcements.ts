@@ -4,10 +4,7 @@ import BaseAPI from './Base';
 import { APIResponse } from './types';
 
 export default class AnnouncementsAPI extends BaseAPI {
-  // eslint-disable-next-line class-methods-use-this
-  get #urlPrefix(): string {
-    return `/announcements`;
-  }
+  #urlPrefix: string = '/announcements';
 
   /**
    * Fetches all the announcements (admin and instance announcements)

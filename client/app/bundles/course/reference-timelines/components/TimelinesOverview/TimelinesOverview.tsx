@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { TimelineData } from 'types/course/referenceTimelines';
 
 import useTranslation from 'lib/hooks/useTranslation';

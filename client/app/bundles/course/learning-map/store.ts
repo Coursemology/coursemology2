@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 
 import { actionTypes, elementTypes } from './constants';
 import { LearningMapState } from './types';

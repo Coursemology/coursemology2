@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Draggable } from '@hello-pangea/dnd';
 import { Delete, DragIndicator, Undo } from '@mui/icons-material';
 import { IconButton, Tooltip, Typography } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { OptionEntity } from 'types/course/assessment/question/multiple-responses';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Launch } from '@mui/icons-material';
 import { Alert, Autocomplete, Box, Typography } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { isNumber } from 'lodash';
 import {
   AssessmentConditionData,

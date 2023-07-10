@@ -20,7 +20,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import {
   ConditionAbility,
   ConditionData,

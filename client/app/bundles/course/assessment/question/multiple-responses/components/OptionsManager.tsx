@@ -9,7 +9,7 @@ import {
 import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Add } from '@mui/icons-material';
 import { Button, Paper, Typography } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { OptionEntity } from 'types/course/assessment/question/multiple-responses';
 
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';

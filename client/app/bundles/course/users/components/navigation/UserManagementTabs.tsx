@@ -58,34 +58,32 @@ interface TabData {
   count?: number;
 }
 
-const courseUrl = getCourseURL(getCourseId());
-
 const allTabs = {
   studentsTab: {
     label: translations.studentsTitle,
-    href: `${courseUrl}/students`,
+    href: 'students',
   },
   staffTab: {
     label: translations.staffTitle,
-    href: `${courseUrl}/staff`,
+    href: 'staff',
   },
   enrolRequestsTab: {
     label: translations.enrolRequestsTitle,
-    href: `${courseUrl}/enrol_requests`,
+    href: 'enrol_requests',
     count: 0,
   },
   inviteTab: {
     label: translations.inviteTitle,
-    href: `${courseUrl}/users/invite`,
+    href: 'users/invite',
   },
   userInvitationsTab: {
     label: translations.userInvitationsTitle,
-    href: `${courseUrl}/user_invitations`,
+    href: 'user_invitations',
     count: 0,
   },
   personalTimesTab: {
     label: translations.personalTimesTitle,
-    href: `${courseUrl}/users/personal_times`,
+    href: 'users/personal_times',
   },
 };
 
@@ -117,13 +115,15 @@ const generateTabs = (
 const UserManagementTabs: FC<Props> = (props) => {
   const { permissions, sharedData, intl } = props;
 
+  const courseUrl = getCourseURL(getCourseId());
+
   const tabs = generateTabs(permissions, sharedData);
 
   const getCurrentTabIndex = (): number => {
     const path = getCurrentPath();
     const res = tabs.findIndex(
       (tab) =>
-        tab.href === path ||
+        path?.includes(tab.href) ||
         (path?.includes('personal_times') &&
           tab.href?.includes('personal_times')),
     );
@@ -152,7 +152,7 @@ const UserManagementTabs: FC<Props> = (props) => {
                   tab.count === 0 || tab.count === undefined ? 8 : 26,
                 textDecoration: 'none',
               }}
-              to={tab.href}
+              to={`${courseUrl}/${tab.href}`}
             />
           ))}
         </Tabs>

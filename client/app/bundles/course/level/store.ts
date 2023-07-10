@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import { LevelsState } from 'types/course/levels';
 
 import actionTypes from './constants';
