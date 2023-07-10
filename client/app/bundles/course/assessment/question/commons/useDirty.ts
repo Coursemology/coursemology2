@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import produce, { castDraft } from 'immer';
+import { castDraft, produce } from 'immer';
 
 interface UseDirtyHook<T> {
   isDirty: boolean;

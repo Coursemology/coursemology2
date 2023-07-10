@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 import { InstanceBasicListData } from 'types/system/instances';
 import { UserBasicListData, UserCourseListData } from 'types/users';
 import { createEntityStore, saveListToStore } from 'utilities/store';

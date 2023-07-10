@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 
 import actionTypes, { duplicationModes } from 'course/duplication/constants';
 import { getEmptySelectedItems, nestFolders } from 'course/duplication/utils';

@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Undo } from '@mui/icons-material';
 import { IconButton, Select, Tooltip, Typography } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
-import produce from 'immer';
+import { produce } from 'immer';
 import { SolutionEntity } from 'types/course/assessment/question/text-responses';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useMatches } from 'react-router-dom';
-import produce from 'immer';
+import { produce } from 'immer';
 
 import { buildCrumbsData } from './builder';
 import { combineCrumbs, CrumbData, CrumbState } from './crumbs';

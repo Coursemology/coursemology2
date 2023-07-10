@@ -15,7 +15,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { SidebarItem, SidebarItems } from 'types/course/admin/sidebar';
 
 import Section from 'lib/components/core/layouts/Section';

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { CampaignOutlined, Close } from '@mui/icons-material';
 import { IconButton, Typography } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { AnnouncementMiniEntity } from 'types/course/announcements';
 
 import GlobalAPI from 'api';

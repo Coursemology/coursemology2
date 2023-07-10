@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 
 import actionTypes from './constants';
 import { UserEmailSubscriptionsState } from './types';

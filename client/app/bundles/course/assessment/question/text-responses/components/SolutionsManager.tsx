@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { Add } from '@mui/icons-material';
 import { Alert, Button, Paper, Typography } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { SolutionEntity } from 'types/course/assessment/question/text-responses';
 
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';

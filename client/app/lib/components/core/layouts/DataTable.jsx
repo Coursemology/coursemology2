@@ -1,5 +1,5 @@
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
-import produce from 'immer';
+import { produce } from 'immer';
 import MUIDataTable from 'mui-datatables';
 
 import styles from 'lib/components/core/layouts/layout.scss';
