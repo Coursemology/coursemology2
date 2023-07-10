@@ -13,7 +13,7 @@ if user_signed_in?
     json.url user_path(current_user)
     json.avatarUrl user_image(current_user)
     json.role current_user.role
-    json.instanceRole controller.current_instance_user.role
+    json.instanceRole controller.current_instance_user&.role
   end
 
   json.signOutUrl destroy_user_session_path
