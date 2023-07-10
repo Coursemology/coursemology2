@@ -12,7 +12,9 @@ import SubmissionsAPI from './Assessment/Submissions';
 import BaseCourseAPI from './Base';
 
 export default class UserInvitationsAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = `/courses/${this.courseId}`;
+  get #urlPrefix(): string {
+    return `/courses/${this.courseId}`;
+  }
 
   /**
    * Fetches data from user invitations index
@@ -24,7 +26,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
   > {
-    return this.client.get(`${this.#baseUrlPrefix}/user_invitations`);
+    return this.client.get(`${this.#urlPrefix}/user_invitations`);
   }
 
   /**
@@ -59,7 +61,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     }
 
     return this.client.post(
-      `${this.#baseUrlPrefix}/users/invite`,
+      `${this.#urlPrefix}/users/invite`,
       formData,
       config,
     );
@@ -73,7 +75,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       courseRegistrationKey: string;
     }>
   > {
-    return this.client.get(`${this.#baseUrlPrefix}/users/invite`);
+    return this.client.get(`${this.#urlPrefix}/users/invite`);
   }
 
   /**
@@ -86,7 +88,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     }>
   > {
     return this.client.get(
-      `${this.#baseUrlPrefix}/user_invitations?without_invitations=true`,
+      `${this.#urlPrefix}/user_invitations?without_invitations=true`,
     );
   }
 
@@ -103,7 +105,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       params = { course: { registration_key: 'checked' } };
     }
     return this.client.post(
-      `${this.#baseUrlPrefix}/users/toggle_registration`,
+      `${this.#urlPrefix}/users/toggle_registration`,
       params,
     );
   }
@@ -116,7 +118,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       templatePath: string;
     }>
   > {
-    return this.client.get(`${this.#baseUrlPrefix}/users/invite`);
+    return this.client.get(`${this.#urlPrefix}/users/invite`);
   }
 
   /**
@@ -128,7 +130,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
   resendAllInvitations(): Promise<
     AxiosResponse<{ invitations: InvitationListData[] }>
   > {
-    return this.client.post(`${this.#baseUrlPrefix}/users/resend_invitations`);
+    return this.client.post(`${this.#urlPrefix}/users/resend_invitations`);
   }
 
   /**
@@ -142,9 +144,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     invitationId: number,
   ): Promise<AxiosResponse<InvitationListData>> {
     return this.client.post(
-      `${
-        this.#baseUrlPrefix
-      }/user_invitations/${invitationId}/resend_invitation`,
+      `${this.#urlPrefix}/user_invitations/${invitationId}/resend_invitation`,
     );
   }
 
@@ -157,7 +157,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    */
   delete(invitationId: number): Promise<AxiosResponse> {
     return this.client.delete(
-      `${this.#baseUrlPrefix}/user_invitations/${invitationId}`,
+      `${this.#urlPrefix}/user_invitations/${invitationId}`,
     );
   }
 }

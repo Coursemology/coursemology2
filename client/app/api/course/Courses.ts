@@ -11,7 +11,7 @@ import { APIResponse } from 'api/types';
 import BaseCourseAPI from './Base';
 
 export default class CoursesAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = '/courses';
+  #urlPrefix: string = '/courses';
 
   /**
    * Fetches all of the courses
@@ -21,7 +21,7 @@ export default class CoursesAPI extends BaseCourseAPI {
     instanceUserRoleRequest?: RoleRequestBasicListData;
     permissions: CoursePermissions;
   }> {
-    return this.client.get(this.#baseUrlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   /**
@@ -30,11 +30,11 @@ export default class CoursesAPI extends BaseCourseAPI {
   fetch(courseId: number): APIResponse<{
     course: CourseData;
   }> {
-    return this.client.get(`${this.#baseUrlPrefix}/${courseId}`);
+    return this.client.get(`${this.#urlPrefix}/${courseId}`);
   }
 
   fetchLayout(courseId: number): APIResponse<CourseLayoutData> {
-    return this.client.get(`${this.#baseUrlPrefix}/${courseId}/sidebar`);
+    return this.client.get(`${this.#urlPrefix}/${courseId}/sidebar`);
   }
 
   /**
@@ -53,7 +53,7 @@ export default class CoursesAPI extends BaseCourseAPI {
     id: number;
     title: string;
   }> {
-    return this.client.post(this.#baseUrlPrefix, params);
+    return this.client.post(this.#urlPrefix, params);
   }
 
   /**
