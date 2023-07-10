@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FormControlLabel, Switch } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { CodaveriSettingsData } from 'types/course/admin/codaveri';
 
 import Section from 'lib/components/core/layouts/Section';

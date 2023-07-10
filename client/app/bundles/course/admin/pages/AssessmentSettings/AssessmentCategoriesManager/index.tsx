@@ -1,7 +1,7 @@
 import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import {
   AssessmentCategory,
   AssessmentTab,

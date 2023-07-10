@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Paper } from '@mui/material';
-import produce from 'immer';
+import { produce } from 'immer';
 import { AssessmentData } from 'types/course/assessment/assessments';
 import { QuestionData } from 'types/course/assessment/questions';
 
