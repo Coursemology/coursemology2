@@ -14,7 +14,9 @@ import { TimelineData } from 'types/course/referenceTimelines';
 import BaseCourseAPI from './Base';
 
 export default class UsersAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = `/courses/${this.courseId}`;
+  get #urlPrefix(): string {
+    return `/courses/${this.courseId}`;
+  }
 
   /**
    * Fetches a list of users in a course.
@@ -32,7 +34,7 @@ export default class UsersAPI extends BaseCourseAPI {
       manageCourseUsersData?: ManageCourseUsersSharedData;
     }>
   > {
-    return this.client.get(`${this.#baseUrlPrefix}/users`, {
+    return this.client.get(`${this.#urlPrefix}/users`, {
       params: { as_basic_data: asBasicData },
     });
   }
@@ -48,7 +50,7 @@ export default class UsersAPI extends BaseCourseAPI {
       timelines?: Record<TimelineData['id'], string>;
     }>
   > {
-    return this.client.get(`${this.#baseUrlPrefix}/students`);
+    return this.client.get(`${this.#urlPrefix}/students`);
   }
 
   /**
@@ -62,7 +64,7 @@ export default class UsersAPI extends BaseCourseAPI {
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
   > {
-    return this.client.get(`${this.#baseUrlPrefix}/staff`);
+    return this.client.get(`${this.#urlPrefix}/staff`);
   }
 
   /**
@@ -73,7 +75,7 @@ export default class UsersAPI extends BaseCourseAPI {
       user: CourseUserData;
     }>
   > {
-    return this.client.get(`${this.#baseUrlPrefix}/users/${userId}`);
+    return this.client.get(`${this.#urlPrefix}/users/${userId}`);
   }
 
   /**
@@ -85,7 +87,7 @@ export default class UsersAPI extends BaseCourseAPI {
    * error response: {}
    */
   delete(userId: number): Promise<AxiosResponse> {
-    return this.client.delete(`${this.#baseUrlPrefix}/users/${userId}`);
+    return this.client.delete(`${this.#urlPrefix}/users/${userId}`);
   }
 
   /**
@@ -101,7 +103,7 @@ export default class UsersAPI extends BaseCourseAPI {
     userId: number,
     params: UpdateCourseUserPatchData | object,
   ): Promise<AxiosResponse> {
-    return this.client.patch(`${this.#baseUrlPrefix}/users/${userId}`, params);
+    return this.client.patch(`${this.#urlPrefix}/users/${userId}`, params);
   }
 
   /**
@@ -127,7 +129,7 @@ export default class UsersAPI extends BaseCourseAPI {
       },
     };
 
-    return this.client.patch(`${this.#baseUrlPrefix}/upgrade_to_staff`, params);
+    return this.client.patch(`${this.#urlPrefix}/upgrade_to_staff`, params);
   }
 
   assignToTimeline(
@@ -137,7 +139,7 @@ export default class UsersAPI extends BaseCourseAPI {
     const params = { course_users: { ids, reference_timeline_id: timelineId } };
 
     return this.client.patch(
-      `${this.#baseUrlPrefix}/users/assign_timeline`,
+      `${this.#urlPrefix}/users/assign_timeline`,
       params,
     );
   }

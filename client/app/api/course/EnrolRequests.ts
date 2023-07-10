@@ -11,7 +11,9 @@ import {
 import BaseCourseAPI from './Base';
 
 export default class UserInvitationsAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = `/courses/${this.courseId}/enrol_requests`;
+  get #urlPrefix(): string {
+    return `/courses/${this.courseId}/enrol_requests`;
+  }
 
   /**
    * Fetches data from enrol requests index
@@ -23,7 +25,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
   > {
-    return this.client.get(this.#baseUrlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   /**
@@ -36,7 +38,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     requestId: number,
   ): Promise<AxiosResponse<EnrolRequestListData>> {
     return this.client.patch(
-      `${this.#baseUrlPrefix}/${requestId}/approve`,
+      `${this.#urlPrefix}/${requestId}/approve`,
       enrolRequest,
     );
   }
@@ -47,6 +49,6 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon error.
    */
   reject(requestId: number): Promise<AxiosResponse<EnrolRequestListData>> {
-    return this.client.patch(`${this.#baseUrlPrefix}/${requestId}/reject`);
+    return this.client.patch(`${this.#urlPrefix}/${requestId}/reject`);
   }
 }
