@@ -114,6 +114,7 @@ const javaBuilder = (data: FormData, metadata: JavaMetadata): void => {
   }
 
   appendInsertsInto(data, metadata);
+  appendFilesInto(data, 'data', metadata.dataFiles);
 
   appendTestCasesInto(data, metadata, (_data, type, testCase) => {
     appendTestCaseInto(data, type, testCase);
