@@ -1328,8 +1328,8 @@ const translations = defineMessages({
     defaultMessage: 'Evaluation packages are in ZIPs only.',
   },
   questionSavedRedirecting: {
-    id: 'course.assessment.question.programming.questionSavedRedirecting',
-    defaultMessage: 'Question saved. Redirecting...',
+    id: 'course.assessment.question.programminquestion.questionSavedRedirecting',
+    defaultMessage: 'Question saved.',
   },
   evaluatingSubmissions: {
     id: 'course.assessment.question.programming.evaluatingSubmissions',

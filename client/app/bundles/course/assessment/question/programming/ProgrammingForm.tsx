@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ProgrammingFormData,
   ProgrammingPostStatusData,
@@ -45,6 +46,8 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
 
   const { languageOptions, getModeFromId } = useLanguageMode(data.languages);
 
+  const navigate = useNavigate();
+
   const submitForm = async (rawData: ProgrammingFormData): Promise<void> => {
     if (!props.onSubmit) return undefined;
 
@@ -57,7 +60,7 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
 
       const toastSuccessAndRedirect = (): void => {
         toast.success(t(translations.questionSavedRedirecting));
-        window.location.href = response.redirectAssessmentUrl;
+        navigate(response.redirectAssessmentUrl);
       };
 
       if (!response.importJobUrl) return toastSuccessAndRedirect();
