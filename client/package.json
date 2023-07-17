@@ -48,7 +48,7 @@
     "@sgratzl/chartjs-chart-boxplot": "^3.8.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/react-table": "^8.9.3",
-    "ace-builds": "^1.23.1",
+    "ace-builds": "^1.23.4",
     "axios": "^1.4.0",
     "babel-plugin-formatjs": "^10.5.3",
     "chart.js": "^3.8.2",
