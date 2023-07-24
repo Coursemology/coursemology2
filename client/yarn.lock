@@ -2658,10 +2658,10 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
-"@types/sharedworker@^0.0.100":
-  version "0.0.100"
-  resolved "https://registry.yarnpkg.com/@types/sharedworker/-/sharedworker-0.0.100.tgz#5f3a8a541678b98d50acb22226874656533f0899"
-  integrity sha512-rW7xt4WgeS8VHWL9bhwBVAw64YZA5YcjrehIYdUHITZ5I6tQdjzx4BZVIYyh3j1RpSp4DEHyp8RS+U0k1reUgA==
+"@types/sharedworker@^0.0.101":
+  version "0.0.101"
+  resolved "https://registry.yarnpkg.com/@types/sharedworker/-/sharedworker-0.0.101.tgz#e0483a36576b021b42fb43ed9ba5367678b9bcc3"
+  integrity sha512-dSTl9XX/CGJSjL0Ex9FSQxg1nziCPMafjE6NpHRD1G7HslelX6Wfv8PmCGe1NfdvTd6h8u82Zvs9McgVUFnalA==
 
 "@types/sizzle@*":
   version "2.3.3"
