@@ -133,7 +133,7 @@
     "@types/react-resizable": "^3.0.4",
     "@types/react-virtualized-auto-sizer": "^1.0.1",
     "@types/react-window": "^1.8.5",
-    "@types/sharedworker": "^0.0.100",
+    "@types/sharedworker": "^0.0.101",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
