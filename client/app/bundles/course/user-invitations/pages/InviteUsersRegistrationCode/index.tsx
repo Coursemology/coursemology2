@@ -142,7 +142,7 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
       }}
     >
       <DialogTitle>
-        {`${intl.formatMessage(translations.registrationCode)}`}
+        {intl.formatMessage(translations.registrationCode)}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2}>

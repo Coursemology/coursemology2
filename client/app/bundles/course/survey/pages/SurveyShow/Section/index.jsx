@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { sectionShape, surveyShape } from 'course/survey/propTypes';
+import { sectionShape } from 'course/survey/propTypes';
 
 import DeleteSectionButton from './DeleteSectionButton';
 import EditSectionButton from './EditSectionButton';
@@ -113,7 +113,6 @@ class Section extends Component {
 }
 
 Section.propTypes = {
-  survey: surveyShape,
   section: sectionShape,
   index: PropTypes.number.isRequired,
   first: PropTypes.bool.isRequired,

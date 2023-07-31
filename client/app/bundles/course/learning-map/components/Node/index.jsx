@@ -114,7 +114,7 @@ const Node = (props) => {
           <div style={styles.content}>
             <CardContent style={styles.contentText}>
               <div>
-                <Link opensInNewTab to={`${node.contentUrl}`}>
+                <Link opensInNewTab to={node.contentUrl}>
                   {node.title}
                 </Link>
               </div>

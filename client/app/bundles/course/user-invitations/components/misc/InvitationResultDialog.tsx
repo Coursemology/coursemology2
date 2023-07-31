@@ -115,7 +115,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
       open={open}
       sx={styles.dialogStyle}
     >
-      <DialogTitle>{`${intl.formatMessage(translations.header)}`}</DialogTitle>
+      <DialogTitle>{intl.formatMessage(translations.header)}</DialogTitle>
       <DialogContent>
         <Typography gutterBottom variant="body2">
           {intl.formatMessage(translations.body, {

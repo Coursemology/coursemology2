@@ -110,7 +110,7 @@ const Tab = (props: TabProps): JSX.Element => {
             <div className="flex w-full items-center justify-between sm:w-fit">
               <div className="flex items-center">
                 <DragIndicator
-                  className={`${(stationary || disabled) && 'invisible'}`}
+                  className={stationary || disabled ? 'invisible' : ''}
                   color="disabled"
                   fontSize="small"
                 />
