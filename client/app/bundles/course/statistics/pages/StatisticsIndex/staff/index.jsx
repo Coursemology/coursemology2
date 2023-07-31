@@ -4,7 +4,6 @@ import { defineMessages } from 'react-intl';
 import ErrorCard from 'lib/components/core/ErrorCard';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { staffIndexShape } from '../../../propTypes/staff';
@@ -14,9 +13,8 @@ const options = {
     filename: 'staff_statistics',
   },
   jumpToPage: true,
+  pagination: false,
   print: false,
-  rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
-  rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
   selectableRows: 'none',
   sortOrder: {
     name: 'averageMarkingTime',

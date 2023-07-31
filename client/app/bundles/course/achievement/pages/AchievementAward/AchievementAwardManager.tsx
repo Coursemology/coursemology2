@@ -20,7 +20,6 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
@@ -179,9 +178,8 @@ const AchievementAwardManager: FC<Props> = (props) => {
     download: false,
     filter: false,
     jumpToPage: true,
+    pagination: false,
     print: false,
-    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     selectableRows: 'none',
     setRowProps: (_row, dataIndex, _rowIndex) => {
       const obtainedAchievement =
