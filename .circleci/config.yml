@@ -129,7 +129,7 @@ jobs:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: coursemology_test
 
-    parallelism: 25
+    parallelism: 30
 
     working_directory: ~/repo
 
