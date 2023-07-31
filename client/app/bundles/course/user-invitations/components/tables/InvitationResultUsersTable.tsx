@@ -6,10 +6,7 @@ import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { CourseUserData } from 'types/course/courseUsers';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
-import {
-  COURSE_USER_ROLES,
-  DEFAULT_TABLE_ROWS_PER_PAGE,
-} from 'lib/constants/sharedConstants';
+import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -25,10 +22,8 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
   const options: TableOptions = {
     download: true,
     filter: false,
-    pagination: true,
+    pagination: false,
     print: false,
-    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: false,
     selectableRows: 'none',
     setTableProps: (): object => {

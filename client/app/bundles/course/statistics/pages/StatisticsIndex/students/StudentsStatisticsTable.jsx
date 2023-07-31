@@ -5,7 +5,6 @@ import { FormControlLabel, Switch } from '@mui/material';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Link from 'lib/components/core/Link';
-import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { studentsStatisticsTableShape } from '../../../propTypes/students';
@@ -100,12 +99,8 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
       downloadOptions: {
         filename: 'students_statistics',
       },
+      pagination: false,
       print: false,
-      rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
-      rowsPerPageOptions: [
-        DEFAULT_TABLE_ROWS_PER_PAGE,
-        filteredStudents.length,
-      ],
       selectableRows: 'none',
       sortOrder: {
         name: 'experiencePoints',
