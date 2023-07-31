@@ -165,12 +165,11 @@ const FolderForm: FC<Props> = (props) => {
           </div>
 
           {editing && advanceStartAt !== 0 && (
-            <div style={{ marginTop: 12 }}>{`${t(
-              translations.earlyAccessMessage,
-              {
+            <div style={{ marginTop: 12 }}>
+              {t(translations.earlyAccessMessage, {
                 numDays: Math.ceil(advanceStartAt / (24 * 60 * 60)),
-              },
-            )}`}</div>
+              })}
+            </div>
           )}
         </>
       )}

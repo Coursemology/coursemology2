@@ -149,7 +149,7 @@ const Category = (props: CategoryProps): JSX.Element => {
               <div className="flex w-full items-center justify-between sm:w-fit">
                 <div className="flex items-center">
                   <DragIndicator
-                    className={`${props.disabled && 'invisible'}`}
+                    className={props.disabled ? 'invisible' : ''}
                     color="disabled"
                     fontSize="small"
                   />

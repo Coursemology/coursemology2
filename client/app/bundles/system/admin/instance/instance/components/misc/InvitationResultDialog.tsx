@@ -91,7 +91,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
       onClose={handleDialogClose}
       open
     >
-      <DialogTitle>{`${intl.formatMessage(translations.header)}`}</DialogTitle>
+      <DialogTitle>{intl.formatMessage(translations.header)}</DialogTitle>
       <DialogContent>
         {duplicateUsers && duplicateUsers.length > 0 && (
           <div className="duplicates">

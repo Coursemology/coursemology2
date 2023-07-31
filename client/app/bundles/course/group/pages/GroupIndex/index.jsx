@@ -72,7 +72,7 @@ const GroupIndex = (props) => {
             className="no-underline outline-none"
             component={Link}
             label={category.name}
-            to={`${category.id}`}
+            to={category.id}
             value={category.id}
           />
         ))}

@@ -241,7 +241,7 @@ const Form = <
               </Button>
 
               <Button
-                className={`${props.disabled && 'bg-neutral-500'}`}
+                className={props.disabled ? 'bg-neutral-500' : ''}
                 disabled={props.disabled}
                 disableElevation
                 type="submit"
