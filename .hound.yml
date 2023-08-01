@@ -4,9 +4,5 @@ rubocop:
   config_file: .rubocop.yml
   version: 1.22.1
 
-jshint:
-  config_file: .jshintrc
-  ignore_file: .jshintignore
-
-scss:
-  config_file: .scss-lint.yml
+javascript:
+  enabled: false
