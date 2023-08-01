@@ -140,11 +140,6 @@ module Capybara::TestGroupHelpers
       all('aside').first
     end
 
-    def perform_logout_in_course(user_name)
-      find_sidebar.find_all('div', text: user_name).first.click
-      find('span', text: 'Sign out').click
-      wait_for_page
-    end
 
     def confirm_registartion_token_via_email
       token = ActionMailer::Base.deliveries.last.body.match(/confirmation_token=.*(?=")/)
