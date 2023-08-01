@@ -1,41 +1,57 @@
-import { ComponentProps } from 'react';
 import { defineMessages } from 'react-intl';
 
 import GlobalAPI from 'api';
-import PopupMenu from 'lib/components/core/PopupMenu';
 import { useAppContext } from 'lib/containers/AppContainer';
+import { useAuthenticator } from 'lib/hooks/session';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import PopupMenu from '../core/PopupMenu';
 
 const translations = defineMessages({
   accountSettings: {
-    id: 'course.courses.CourseUserItem.accountSettings',
+    id: 'lib.component.navigation.UserPopupMenuList.accountSettings',
     defaultMessage: 'Account settings',
   },
+  accountSettingsSubtitle: {
+    id: 'lib.component.navigation.UserPopupMenuList.accountSettingsSubtitle',
+    defaultMessage: 'Language, emails, and password',
+  },
   signOut: {
-    id: 'course.courses.CourseUserItem.signOut',
+    id: 'lib.component.navigation.UserPopupMenuList.signOut',
     defaultMessage: 'Sign out',
+  },
+  goToYourSiteWideProfile: {
+    id: 'lib.component.navigation.UserPopupMenuList.goToYourSiteWideProfile',
+    defaultMessage: 'Go to your site-wide profile',
   },
 });
 
-const UserPopupMenuList = (
-  props: Pick<ComponentProps<typeof PopupMenu.List>, 'header'>,
-): JSX.Element => {
+const UserPopupMenuList = (): JSX.Element | null => {
+  const { user } = useAppContext();
+
   const { t } = useTranslation();
 
-  const { signOutUrl } = useAppContext();
+  const { deauthenticate } = useAuthenticator();
+
+  if (!user) return null;
 
   const signOut = async (): Promise<void> => {
-    if (!signOutUrl) return;
+    await GlobalAPI.users.signOut();
 
-    await GlobalAPI.users.signOut(signOutUrl);
-
-    // TODO: Reset Redux store and navigate via React Router once SPA.
-    window.location.href = '/';
+    deauthenticate();
+    window.location.href = '/users/sign_in';
   };
 
   return (
-    <PopupMenu.List header={props.header}>
-      <PopupMenu.Button to="/user/profile/edit">
+    <PopupMenu.List>
+      <PopupMenu.Button to={`/users/${user.id}`}>
+        {t(translations.goToYourSiteWideProfile)}
+      </PopupMenu.Button>
+
+      <PopupMenu.Button
+        secondary={t(translations.accountSettingsSubtitle)}
+        to="/user/profile/edit"
+      >
         {t(translations.accountSettings)}
       </PopupMenu.Button>
 

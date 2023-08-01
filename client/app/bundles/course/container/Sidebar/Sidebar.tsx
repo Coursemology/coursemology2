@@ -38,8 +38,10 @@ const Sidebar = forwardRef<ComponentRef<typeof SidebarContainer>, SidebarProps>(
       >
         <section className="border-only-b-neutral-200">
           <BrandingHead.Mini />
+
           <CourseItem in={data} />
-          <CourseUserItem from={data} />
+
+          {data.courseUserName && <CourseUserItem from={data} />}
         </section>
 
         <section className="h-full space-y-4 overflow-y-scroll px-3 py-4">

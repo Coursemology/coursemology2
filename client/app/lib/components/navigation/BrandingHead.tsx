@@ -1,13 +1,15 @@
-import { ReactNode, useState } from 'react';
+import { ComponentRef, ReactNode, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { AdminPanelSettingsOutlined, ChevronRight } from '@mui/icons-material';
-import { Avatar, IconButton, Typography } from '@mui/material';
+import { ChevronRight, KeyboardArrowDown } from '@mui/icons-material';
+import { Avatar, Button, Typography } from '@mui/material';
 
 import Link from 'lib/components/core/Link';
 import PopupMenu from 'lib/components/core/PopupMenu';
 import { useAppContext } from 'lib/containers/AppContainer';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import AdminPopupMenuList from './AdminPopupMenuList';
+import CourseSwitcherPopupMenu from './CourseSwitcherPopupMenu';
 import UserPopupMenuList from './UserPopupMenuList';
 
 const translations = defineMessages({
@@ -15,76 +17,35 @@ const translations = defineMessages({
     id: 'app.BrandingItem.coursemology',
     defaultMessage: 'Coursemology',
   },
-  adminPanel: {
-    id: 'course.courses.BrandingItem.adminPanel',
-    defaultMessage: 'System Admin Panel',
+  goToOtherCourses: {
+    id: 'app.BrandingItem.goToOtherCourses',
+    defaultMessage: 'Courses',
   },
-  instanceAdminPanel: {
-    id: 'course.courses.BrandingItem.instanceAdminPanel',
-    defaultMessage: 'Instance Admin Panel',
-  },
-  superuser: {
-    id: 'course.courses.BrandingItem.superuser',
-    defaultMessage: 'Superuser',
+  signIn: {
+    id: 'app.BrandingItem.signIn',
+    defaultMessage: 'Sign in',
   },
 });
 
 interface BrandingHeadProps {
   title?: string | null;
+  withoutCourseSwitcher?: boolean;
+  withoutUserMenu?: boolean;
 }
-
-const AdminMenuButton = (): JSX.Element | null => {
-  const { t } = useTranslation();
-
-  const { user } = useAppContext();
-
-  const isSuperAdmin = user?.role === 'administrator';
-  const isInstanceAdmin = user?.instanceRole === 'administrator';
-
-  const [anchorElement, setAnchorElement] = useState<HTMLElement>();
-
-  if (!(isSuperAdmin || isInstanceAdmin)) return null;
-
-  return (
-    <>
-      <IconButton
-        className="-mr-4 ml-4"
-        edge="end"
-        onClick={(e): void => setAnchorElement(e.currentTarget)}
-      >
-        <AdminPanelSettingsOutlined />
-      </IconButton>
-
-      <PopupMenu
-        anchorEl={anchorElement}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        onClose={(): void => setAnchorElement(undefined)}
-      >
-        <PopupMenu.List header={t(translations.superuser)}>
-          {isSuperAdmin && (
-            <PopupMenu.Button to="/admin">
-              {t(translations.adminPanel)}
-            </PopupMenu.Button>
-          )}
-
-          {(isSuperAdmin || isInstanceAdmin) && (
-            <PopupMenu.Button to="/admin/instance">
-              {t(translations.instanceAdminPanel)}
-            </PopupMenu.Button>
-          )}
-        </PopupMenu.List>
-      </PopupMenu>
-    </>
-  );
-};
 
 const Brand = (): JSX.Element => {
   const { t } = useTranslation();
 
-  // TODO: Remove `reloads` once fully SPA
   return (
-    <Link reloads to="/" underline="hover">
-      <Typography>{t(translations.coursemology)}</Typography>
+    <Link
+      className="hover:text-primary"
+      color="inherit"
+      to="/"
+      underline="none"
+    >
+      <Typography className="font-medium tracking-tighter">
+        {t(translations.coursemology)}
+      </Typography>
     </Link>
   );
 };
@@ -92,33 +53,48 @@ const Brand = (): JSX.Element => {
 const UserMenuButton = (): JSX.Element | null => {
   const { user } = useAppContext();
 
+  const { t } = useTranslation();
+
   const [anchorElement, setAnchorElement] = useState<HTMLElement>();
 
-  if (!user) return null;
+  if (!user)
+    return (
+      <Link to="/users/sign_in">
+        <Button variant="contained">{t(translations.signIn)}</Button>
+      </Link>
+    );
 
   return (
     <>
-      <div
-        className="!-mr-4 flex h-full cursor-pointer select-none items-center space-x-4 p-4 border-only-l-neutral-200 hover:bg-neutral-100 active:bg-neutral-200"
+      <Avatar
+        alt={user.name}
+        className="ring-neutral-200 ring-offset-1 wh-12 hover:ring-2"
+        data-testid="user-menu-button"
         onClick={(e): void => setAnchorElement(e.currentTarget)}
         role="button"
+        src={user.avatarUrl}
         tabIndex={0}
-      >
-        <Avatar alt={user.name} className="wh-12" src={user.avatarUrl} />
-
-        <Typography
-          className="max-w-[15rem] overflow-hidden text-ellipsis whitespace-nowrap text-neutral-500 max-md:hidden"
-          variant="body2"
-        >
-          {user.name}
-        </Typography>
-      </div>
+      />
 
       <PopupMenu
         anchorEl={anchorElement}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         onClose={(): void => setAnchorElement(undefined)}
       >
+        <PopupMenu.List className="-space-y-6">
+          <PopupMenu.Text className="max-w-lg font-medium">
+            {user.name}
+          </PopupMenu.Text>
+
+          <PopupMenu.Text color="text.secondary">
+            {user.primaryEmail}
+          </PopupMenu.Text>
+        </PopupMenu.List>
+
+        <PopupMenu.Divider />
+
+        <AdminPopupMenuList />
+
         <UserPopupMenuList />
       </PopupMenu>
     </>
@@ -126,35 +102,55 @@ const UserMenuButton = (): JSX.Element | null => {
 };
 
 const BrandingHeadContainer = (props: { children: ReactNode }): JSX.Element => (
-  <div className="flex h-[4rem] items-center justify-between px-4">
+  <div className="flex h-[4.5rem] items-center justify-between px-4">
     {props.children}
   </div>
 );
 
-const BrandingHead = (props: BrandingHeadProps): JSX.Element => (
-  <BrandingHeadContainer>
-    <div className="flex items-center space-x-2">
-      <Brand />
+const BrandingHead = (props: BrandingHeadProps): JSX.Element => {
+  const { t } = useTranslation();
 
-      {props.title && (
-        <div className="flex items-center space-x-2 text-neutral-500">
-          <ChevronRight />
-          <Typography className="line-clamp-1">{props.title}</Typography>
+  const courseSwitcherRef =
+    useRef<ComponentRef<typeof CourseSwitcherPopupMenu>>(null);
+
+  return (
+    <>
+      <BrandingHeadContainer>
+        <div className="flex items-center space-x-2">
+          <Brand />
+
+          {props.title && (
+            <div className="flex items-center space-x-2 text-neutral-500">
+              <ChevronRight />
+              <Typography className="line-clamp-1">{props.title}</Typography>
+            </div>
+          )}
         </div>
-      )}
-    </div>
 
-    <div className="flex h-full items-center space-x-4">
-      <AdminMenuButton />
-      <UserMenuButton />
-    </div>
-  </BrandingHeadContainer>
-);
+        <div className="flex h-full items-center space-x-4">
+          {!props.withoutCourseSwitcher && (
+            <Button
+              endIcon={<KeyboardArrowDown />}
+              onClick={(e): void => courseSwitcherRef.current?.open(e)}
+              variant="text"
+            >
+              {t(translations.goToOtherCourses)}
+            </Button>
+          )}
+
+          {!props.withoutUserMenu && <UserMenuButton />}
+        </div>
+      </BrandingHeadContainer>
+
+      <CourseSwitcherPopupMenu ref={courseSwitcherRef} />
+    </>
+  );
+};
 
 const MiniBrandingHead = (): JSX.Element => (
   <BrandingHeadContainer>
     <Brand />
-    <AdminMenuButton />
+    <UserMenuButton />
   </BrandingHeadContainer>
 );
 

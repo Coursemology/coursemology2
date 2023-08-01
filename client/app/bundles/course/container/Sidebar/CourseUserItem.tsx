@@ -4,7 +4,6 @@ import { Avatar, Typography } from '@mui/material';
 import { CourseLayoutData } from 'types/course/courses';
 
 import PopupMenu from 'lib/components/core/PopupMenu';
-import UserPopupMenuList from 'lib/components/navigation/UserPopupMenuList';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -34,16 +33,6 @@ const translations = defineMessages({
     id: 'course.courses.CourseUserItem.inCoursemology',
     defaultMessage: 'In Coursemology',
   },
-  notInThisCourse: {
-    id: 'course.courses.CourseUserItem.notInThisCourse',
-    defaultMessage: 'Not in this course',
-  },
-  notInThisCourseHint: {
-    id: 'course.courses.CourseUserItem.notInThisCourseHint',
-    defaultMessage:
-      'You are not a user in this course. So, you can only view publicly available information about this course. ' +
-      "You may contact this course's instructor to be invited to this course.",
-  },
 });
 
 interface CourseUserItemProps {
@@ -56,29 +45,24 @@ interface CourseUserNameAndRoleProps {
 
 const CourseUserNameAndRole = (
   props: CourseUserNameAndRoleProps,
-): JSX.Element => {
-  const { t } = useTranslation();
+): JSX.Element => (
+  <>
+    <Typography
+      className="overflow-hidden text-ellipsis whitespace-nowrap"
+      variant="body2"
+    >
+      {props.from.courseUserName}
+    </Typography>
 
-  return (
-    <>
-      <Typography
-        className="overflow-hidden text-ellipsis whitespace-nowrap"
-        variant="body2"
-      >
-        {props.from.courseUserName ?? props.from.userName}
-      </Typography>
-
-      <Typography
-        className="overflow-hidden text-ellipsis whitespace-nowrap"
-        color="text.secondary"
-        variant="caption"
-      >
-        {COURSE_USER_ROLES[props.from.courseUserRole!] ??
-          t(translations.notInThisCourse)}
-      </Typography>
-    </>
-  );
-};
+    <Typography
+      className="overflow-hidden text-ellipsis whitespace-nowrap"
+      color="text.secondary"
+      variant="caption"
+    >
+      {COURSE_USER_ROLES[props.from.courseUserRole!]}
+    </Typography>
+  </>
+);
 
 const SimpleCourseUserItemContent = (
   props: CourseUserItemProps,
@@ -147,47 +131,33 @@ const CourseUserItem = (props: CourseUserItemProps): JSX.Element => {
         anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         onClose={(): void => setAnchorElement(undefined)}
       >
-        {data.courseUserName ? (
-          <>
-            {data.userName !== data.courseUserName && (
-              <>
-                <PopupMenu.Text
-                  className="max-w-[20rem] leading-tight"
-                  color="text.disabled"
-                  variant="caption"
-                >
-                  {t(translations.differentCourseNameHint)}
-                </PopupMenu.Text>
+        <>
+          {data.userName !== data.courseUserName && (
+            <>
+              <PopupMenu.Text
+                className="max-w-[20rem] leading-tight"
+                color="text.disabled"
+                variant="caption"
+              >
+                {t(translations.differentCourseNameHint)}
+              </PopupMenu.Text>
 
-                <PopupMenu.Divider />
-              </>
-            )}
+              <PopupMenu.Divider />
+            </>
+          )}
 
-            <PopupMenu.List header={t(translations.inThisCourse)}>
-              <PopupMenu.Button to={data.courseUserUrl}>
-                {t(translations.goToYourProfile)}
+          <PopupMenu.List header={t(translations.inThisCourse)}>
+            <PopupMenu.Button to={data.courseUserUrl}>
+              {t(translations.goToYourProfile)}
+            </PopupMenu.Button>
+
+            {data.manageEmailSubscriptionUrl && (
+              <PopupMenu.Button to={data.manageEmailSubscriptionUrl}>
+                {t(translations.manageEmailSubscriptions)}
               </PopupMenu.Button>
-
-              {data.manageEmailSubscriptionUrl && (
-                <PopupMenu.Button to={data.manageEmailSubscriptionUrl}>
-                  {t(translations.manageEmailSubscriptions)}
-                </PopupMenu.Button>
-              )}
-            </PopupMenu.List>
-          </>
-        ) : (
-          <PopupMenu.Text
-            className="max-w-[20rem] leading-tight"
-            color="text.disabled"
-            variant="caption"
-          >
-            {t(translations.notInThisCourseHint)}
-          </PopupMenu.Text>
-        )}
-
-        <PopupMenu.Divider />
-
-        <UserPopupMenuList header={t(translations.inCoursemology)} />
+            )}
+          </PopupMenu.List>
+        </>
       </PopupMenu>
     </>
   );

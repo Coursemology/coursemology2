@@ -43,7 +43,10 @@ const LevelRing = (props: LevelRingProps): JSX.Element => {
       {props.children}
 
       <div className="absolute -bottom-3 rounded-lg bg-primary px-1.5 py-1">
-        <Typography className="font-semibold leading-none" variant="body2">
+        <Typography
+          className="font-semibold leading-none text-white"
+          variant="body2"
+        >
           {progress.level}
         </Typography>
       </div>
