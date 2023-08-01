@@ -57,7 +57,7 @@ const SearchField = (props: SearchFieldProps): JSX.Element => {
             {isPending && <LoadingIndicator bare size={20} />}
 
             {keyword && (
-              <IconButton edge="end" onClick={clearKeyword}>
+              <IconButton edge="end" onClick={clearKeyword} tabIndex={-1}>
                 <Clear />
               </IconButton>
             )}
