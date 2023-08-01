@@ -1,7 +1,4 @@
-import { BrowserRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
-
-import Providers from 'lib/components/wrappers/Providers';
+import { render } from 'test-utils';
 
 import SubmissionsTable from '../SubmissionsTable';
 
@@ -27,6 +24,7 @@ const defaultProps = {
   isUnsubmitting: false,
   isDeleting: false,
   isReminding: false,
+  isActive: true,
   dispatch: () => {},
   submissions: [
     {
@@ -47,62 +45,48 @@ const defaultProps = {
   ],
 };
 
-const setupTest = (propsOverrides) => {
-  const props = { ...defaultProps, ...propsOverrides };
-  const submissionsTable = mount(
-    <Providers>
-      <BrowserRouter>
-        <SubmissionsTable {...props} />
-      </BrowserRouter>
-    </Providers>,
-  );
-
-  return {
-    props,
-    submissionsTable,
-    rowCount: submissionsTable.find('tr.submission-row'),
-    logCount: submissionsTable.find('span.submission-access-logs'),
-    unsubmitCount: submissionsTable.find('span.unsubmit-button'),
-    deleteCount: submissionsTable.find('span.delete-button'),
-  };
-};
-
 describe('<SubmissionsTable />', () => {
   describe('when canViewLogs, canUnsubmitSubmission and canDeleteAllSubmissions are set to true ', () => {
     it('renders the submissions table with access log links', () => {
-      const assessmentProps = {
-        ...defaultAssessmentProps,
-        canViewLogs: true,
-        canUnsubmitSubmission: true,
-        canDeleteAllSubmissions: true,
-      };
-      const { rowCount, logCount, unsubmitCount, deleteCount } = setupTest({
-        assessment: assessmentProps,
-      });
+      const page = render(
+        <SubmissionsTable
+          {...defaultProps}
+          assessment={{
+            ...defaultAssessmentProps,
+            canViewLogs: true,
+            canUnsubmitSubmission: true,
+            canDeleteAllSubmissions: true,
+          }}
+        />,
+      );
 
-      expect(rowCount).toHaveLength(1);
-      expect(logCount).toHaveLength(1);
-      expect(unsubmitCount).toHaveLength(1);
-      expect(deleteCount).toHaveLength(1);
+      expect(page.getByText('John').closest('tr')).toBeVisible();
+      expect(page.getByTestId('HistoryIcon').closest('button')).toBeVisible();
+      expect(page.getByTestId('DeleteIcon').closest('button')).toBeVisible();
+      expect(
+        page.getByTestId('RemoveCircleIcon').closest('button'),
+      ).toBeVisible();
     });
   });
 
   describe('when canViewLogs, canUnsubmitSubmission and canDeleteAllSubmissions are set to false', () => {
     it('renders the submissions table without access log links', () => {
-      const assessmentProps = {
-        ...defaultAssessmentProps,
-        canViewLogs: false,
-        canUnsubmitSubmission: false,
-        canDeleteAllSubmissions: false,
-      };
-      const { rowCount, logCount, unsubmitCount, deleteCount } = setupTest({
-        assessment: assessmentProps,
-      });
+      const page = render(
+        <SubmissionsTable
+          {...defaultProps}
+          assessment={{
+            ...defaultAssessmentProps,
+            canViewLogs: false,
+            canUnsubmitSubmission: false,
+            canDeleteAllSubmissions: false,
+          }}
+        />,
+      );
 
-      expect(rowCount).toHaveLength(1);
-      expect(logCount).toHaveLength(0);
-      expect(unsubmitCount).toHaveLength(0);
-      expect(deleteCount).toHaveLength(0);
+      expect(page.getByText('John').closest('tr')).toBeVisible();
+      expect(page.queryByTestId('HistoryIcon')).not.toBeInTheDocument();
+      expect(page.queryByTestId('DeleteIcon')).not.toBeInTheDocument();
+      expect(page.queryByTestId('RemoveCircleIcon')).not.toBeInTheDocument();
     });
   });
 });
