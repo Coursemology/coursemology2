@@ -50,7 +50,7 @@ const NewQuestionMenu = (props: NewQuestionMenuProps): JSX.Element => {
         open={creating}
       >
         {newQuestionUrls.map((url) => (
-          <Link key={url.type} href={url.url} opensInNewTab underline="hover">
+          <Link key={url.type} opensInNewTab to={url.url} underline="none">
             <MenuItem>{t(NEW_QUESTION_LABELS[url.type])}</MenuItem>
           </Link>
         ))}

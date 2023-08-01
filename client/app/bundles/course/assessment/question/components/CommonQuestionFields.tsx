@@ -150,7 +150,7 @@ const CommonQuestionFields = <T extends FieldValues>(
               : translations.noSkillsCanCreateSkills,
             {
               url: (chunks) => (
-                <Link href={skillsUrl} opensInNewTab>
+                <Link opensInNewTab to={skillsUrl}>
                   {chunks}
                 </Link>
               ),

@@ -361,16 +361,13 @@ const translations = defineMessages({
   },
   questionDuplicated: {
     id: 'course.assessment.show.questionDuplicated',
-    defaultMessage: 'Your question has been duplicated.',
+    defaultMessage:
+      'Your question has been duplicated. <link>Go to the assessment</link>',
   },
   questionDuplicatedRefreshing: {
     id: 'course.assessment.show.questionDuplicatedRefreshing',
     defaultMessage:
       'Your question has been duplicated. We are refreshing to show you the latest changes.',
-  },
-  goToAssessment: {
-    id: 'course.assessment.show.goToAssessment',
-    defaultMessage: 'Go to the assessment',
   },
   errorDuplicatingQuestion: {
     id: 'course.assessment.show.errorDuplicatingQuestion',

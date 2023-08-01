@@ -77,8 +77,8 @@ const SurveyConditionForm = (
 
                 <Link
                   className="flex items-center space-x-2"
-                  href={surveys[id].url}
                   opensInNewTab
+                  to={surveys[id].url}
                 >
                   <Typography variant="caption">
                     {t(translations.details)}

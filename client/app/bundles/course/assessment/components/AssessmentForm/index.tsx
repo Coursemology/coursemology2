@@ -684,7 +684,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               <FormCheckboxField
                 description={t(translations.examMonitoringHint, {
                   pulsegrid: (chunk) => (
-                    <Link href={pulsegridUrl} opensInNewTab>
+                    <Link opensInNewTab to={pulsegridUrl}>
                       {chunk}
                     </Link>
                   ),
@@ -729,7 +729,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             >
               {t(translations.secretHint, {
                 pulsegrid: (chunk) => (
-                  <Link href={pulsegridUrl} opensInNewTab>
+                  <Link opensInNewTab to={pulsegridUrl}>
                     {chunk}
                   </Link>
                 ),

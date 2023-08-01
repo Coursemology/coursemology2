@@ -52,8 +52,8 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
               <TableCell style={{ maxWidth: '400px' }}>
                 <Typography className="course_title" variant="body2">
                   <Link
-                    href={`/courses/${course.id}`}
                     opensInNewTab
+                    to={`/courses/${course.id}`}
                     underline="hover"
                   >
                     {course.title}
@@ -62,8 +62,8 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
               </TableCell>
               <TableCell>
                 <Link
-                  href={`/users/${course.courseUserId}`}
                   opensInNewTab
+                  to={`/users/${course.courseUserId}`}
                   underline="hover"
                 >
                   {course.courseUserName}
