@@ -109,7 +109,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
             direction="column"
             item
           >
-            <Typography variant="h4">{user.name}</Typography>
+            <Typography variant="h5">{user.name}</Typography>
             <Typography>
               <strong>{COURSE_USER_ROLES[user.role]}</strong>
             </Typography>
