@@ -41,11 +41,7 @@ const MasqueradeBanner = (props: MasqueradeBannerProps): JSX.Element => {
         </Typography>
       </div>
 
-      <Link
-        className="text-inherit"
-        href={stopMasqueradingUrl}
-        underline="hover"
-      >
+      <Link className="text-inherit" to={stopMasqueradingUrl} underline="hover">
         {t(translations.stopMasquerading)}
       </Link>
     </div>
