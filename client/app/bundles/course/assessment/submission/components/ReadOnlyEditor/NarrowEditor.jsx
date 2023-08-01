@@ -9,12 +9,14 @@ import { annotationShape } from '../../propTypes';
 import AddCommentIcon from './AddCommentIcon';
 
 const styles = {
-  editor: {
+  editorContainer: {
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: grey[200],
     borderRadius: 5,
-    padding: 5,
+    overflow: 'auto',
+  },
+  editor: {
     width: '100%',
     tableLayout: 'fixed',
   },
@@ -200,8 +202,13 @@ const NarrowEditor = (props) => {
   const { content } = props;
 
   return (
-    <div style={{ overflow: 'auto' }}>
-      <table ref={editorRef} className="codehilite" style={styles.editor}>
+    <div style={styles.editorContainer}>
+      <table
+        ref={editorRef}
+        cellSpacing={0}
+        className="codehilite"
+        style={styles.editor}
+      >
         <tbody>
           {content.map((line, index) => (
             // eslint-disable-next-line react/no-array-index-key

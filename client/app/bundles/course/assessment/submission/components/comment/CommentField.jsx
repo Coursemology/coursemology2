@@ -1,7 +1,8 @@
 import { Component } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { Tooltip } from 'react-tooltip';
-import { Button, CircularProgress } from '@mui/material';
+import { Send } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import PropTypes from 'prop-types';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
@@ -9,7 +10,7 @@ import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 const translations = defineMessages({
   prompt: {
     id: 'course.assessment.submission.comment.CommentField.prompt',
-    defaultMessage: 'Enter your comment here',
+    defaultMessage: 'Add a new comment here...',
   },
   comment: {
     id: 'course.assessment.submission.comment.CommentField.comment',
@@ -26,7 +27,7 @@ const translations = defineMessages({
   },
 });
 
-export default class CommentField extends Component {
+class CommentField extends Component {
   onChange(nextValue) {
     const { handleChange } = this.props;
     handleChange(nextValue);
@@ -34,6 +35,7 @@ export default class CommentField extends Component {
 
   render() {
     const {
+      intl,
       createComment,
       inputId,
       isSubmittingNormalComment,
@@ -55,48 +57,43 @@ export default class CommentField extends Component {
         <CKEditorRichText
           disabled={isSubmittingNormalComment || isSubmittingDelayedComment}
           inputId={inputId}
-          label={
-            <h4>
-              <FormattedMessage {...translations.prompt} />
-            </h4>
-          }
           onChange={(nextValue) => this.onChange(nextValue)}
+          placeholder={intl.formatMessage(translations.prompt)}
           value={value}
         />
-        <Button
-          color="primary"
-          disabled={disableCommentButton}
-          onClick={() => createComment(value)}
-          startIcon={
-            isSubmittingNormalComment ? <CircularProgress size={24} /> : null
-          }
-          style={{ marginRight: 10, marginBottom: 10 }}
-          variant="contained"
-        >
-          <FormattedMessage {...translations.comment} />
-        </Button>
-        {renderDelayedCommentButton && (
-          <span data-tooltip-id={`delayed-comment-button-${inputId}`}>
-            <Button
-              color="warning"
-              disabled={disableCommentButton}
-              onClick={() => createComment(value, true)}
-              startIcon={
-                isSubmittingNormalComment ? (
-                  <CircularProgress size={24} />
-                ) : null
-              }
-              style={{ marginRight: 10, marginBottom: 10 }}
-              variant="contained"
-            >
-              <FormattedMessage {...translations.commentDelayed} />
-            </Button>
 
-            <Tooltip id={`delayed-comment-button-${inputId}`}>
-              <FormattedMessage {...translations.commentDelayedDescription} />
-            </Tooltip>
-          </span>
-        )}
+        <div>
+          <LoadingButton
+            color="primary"
+            disabled={disableCommentButton}
+            endIcon={<Send />}
+            loading={isSubmittingNormalComment}
+            onClick={() => createComment(value)}
+            style={{ marginRight: 10, marginBottom: 10 }}
+            variant="contained"
+          >
+            {intl.formatMessage(translations.comment)}
+          </LoadingButton>
+
+          {renderDelayedCommentButton && (
+            <span data-tooltip-id={`delayed-comment-button-${inputId}`}>
+              <LoadingButton
+                color="warning"
+                disabled={disableCommentButton}
+                loading={isSubmittingDelayedComment}
+                onClick={() => createComment(value, true)}
+                style={{ marginRight: 10, marginBottom: 10 }}
+                variant="contained"
+              >
+                {intl.formatMessage(translations.commentDelayed)}
+              </LoadingButton>
+
+              <Tooltip id={`delayed-comment-button-${inputId}`}>
+                {intl.formatMessage(translations.commentDelayedDescription)}
+              </Tooltip>
+            </span>
+          )}
+        </div>
       </>
     );
   }
@@ -112,4 +109,8 @@ CommentField.propTypes = {
 
   createComment: PropTypes.func,
   handleChange: PropTypes.func,
+
+  intl: PropTypes.object.isRequired,
 };
+
+export default injectIntl(CommentField);

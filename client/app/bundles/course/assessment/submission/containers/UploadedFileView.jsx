@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Chip } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
@@ -14,7 +14,7 @@ import { attachmentShape } from '../propTypes';
 const translations = defineMessages({
   uploadedFiles: {
     id: 'course.assessment.submission.UploadedFileView.uploadedFiles',
-    defaultMessage: 'Uploaded Files:',
+    defaultMessage: 'Uploaded Files',
   },
   deleteConfirmation: {
     id: 'course.assessment.submission.UploadedFileView.deleteConfirmation',
@@ -101,12 +101,16 @@ class VisibleUploadedFileView extends Component {
     const { intl, attachments } = this.props;
     return (
       <>
-        <strong>{intl.formatMessage(translations.uploadedFiles)}</strong>
+        <Typography variant="h6">
+          {intl.formatMessage(translations.uploadedFiles)}
+        </Typography>
         <div style={styles.wrapper}>
           {attachments.length ? (
             attachments.map(this.renderAttachment, this)
           ) : (
-            <span>{intl.formatMessage(translations.noFiles)}</span>
+            <Typography color="text.secondary" variant="body2">
+              {intl.formatMessage(translations.noFiles)}
+            </Typography>
           )}
         </div>
         {this.renderDeleteDialog()}

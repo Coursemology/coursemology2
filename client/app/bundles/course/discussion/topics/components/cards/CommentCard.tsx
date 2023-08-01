@@ -8,7 +8,7 @@ import {
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { LoadingButton } from '@mui/lab';
-import { Avatar, Button, CardHeader } from '@mui/material';
+import { Avatar, Button, CardHeader, Typography } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import { CommentPostMiniEntity } from 'types/course/comments';
 
@@ -169,7 +169,12 @@ const CommentCard: FC<Props> = (props) => {
       );
     }
 
-    return <div dangerouslySetInnerHTML={{ __html: post.text }} />;
+    return (
+      <Typography
+        dangerouslySetInnerHTML={{ __html: post.text }}
+        variant="body2"
+      />
+    );
   };
 
   return (

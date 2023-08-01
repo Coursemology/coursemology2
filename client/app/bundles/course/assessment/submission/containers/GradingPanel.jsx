@@ -11,6 +11,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -195,7 +196,9 @@ class VisibleGradingPanel extends Component {
 
     return (
       <div>
-        <h4>{intl.formatMessage(translations.gradeSummary)}</h4>
+        <Typography variant="h6">
+          {intl.formatMessage(translations.gradeSummary)}
+        </Typography>
         <Table style={styles.table}>
           <TableHead>
             <TableRow>
@@ -276,7 +279,9 @@ class VisibleGradingPanel extends Component {
 
     return (
       <div>
-        <h4>{intl.formatMessage(translations.statistics)}</h4>
+        <Typography variant="h6">
+          {intl.formatMessage(translations.statistics)}
+        </Typography>
         <Table style={styles.table}>
           <TableBody>
             {tableRow(

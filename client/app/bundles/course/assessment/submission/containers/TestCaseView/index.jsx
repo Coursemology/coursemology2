@@ -1,16 +1,11 @@
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { Tooltip } from 'react-tooltip';
-import Check from '@mui/icons-material/Check';
+import { Done } from '@mui/icons-material';
 import Clear from '@mui/icons-material/Clear';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Warning from '@mui/icons-material/Warning';
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Paper,
+  Alert,
+  Chip,
   Table,
   TableBody,
   TableCell,
@@ -18,40 +13,24 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { green, red, yellow } from '@mui/material/colors';
+import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import Expandable from 'lib/components/core/Expandable';
+import Accordion from 'lib/components/core/layouts/Accordion';
 
 import { workflowStates } from '../../constants';
 import { testCaseShape } from '../../propTypes';
 
 const styles = {
-  panel: {
-    margin: 0,
-  },
-  panelSummary: {
-    fontSize: 16,
-  },
   testCaseRow: {
     unattempted: {},
     correct: { backgroundColor: green[50] },
     wrong: { backgroundColor: red[50] },
   },
-  testCasesContainer: {
-    marginBottom: 20,
-  },
 };
 
 const translations = defineMessages({
-  testCases: {
-    id: 'course.assessment.submission.TestCaseView.testCases',
-    defaultMessage: 'Test Cases',
-  },
-  identifier: {
-    id: 'course.assessment.submission.TestCaseView.identifier',
-    defaultMessage: 'Identifier',
-  },
   expression: {
     id: 'course.assessment.submission.TestCaseView.experession',
     defaultMessage: 'Expression',
@@ -64,9 +43,9 @@ const translations = defineMessages({
     id: 'course.assessment.submission.TestCaseView.output',
     defaultMessage: 'Output',
   },
-  passed: {
-    id: 'course.assessment.submission.TestCaseView.passed',
-    defaultMessage: 'Passed',
+  allPassed: {
+    id: 'course.assessment.submission.TestCaseView.allPassed',
+    defaultMessage: 'All passed',
   },
   publicTestCases: {
     id: 'course.assessment.submission.TestCaseView.publicTestCases',
@@ -82,15 +61,12 @@ const translations = defineMessages({
   },
   staffOnlyTestCases: {
     id: 'course.assessment.submission.TestCaseView.staffOnlyTestCases',
-    defaultMessage:
-      'You are able to view these test cases because you are staff. \
-                    Students will not be able to see them.',
+    defaultMessage: 'Only staff can see this.',
   },
   staffOnlyOutputStream: {
     id: 'course.assessment.submission.TestCaseView.staffOnlyOutputStream',
     defaultMessage:
-      'You can view the output streams because you are staff. \
-                    Students will not be able to see them.',
+      "Only staff can see this. Students can't see output streams.",
   },
   standardOutput: {
     id: 'course.assessment.submission.TestCaseView.standardOutput',
@@ -106,6 +82,10 @@ const translations = defineMessages({
       'The answer is currently being evaluated, come back after a while \
                     to see the latest results.',
   },
+  noOutputs: {
+    id: 'course.assessment.submission.TestCaseView.noOutputs',
+    defaultMessage: 'No outputs',
+  },
 });
 
 export class VisibleTestCaseView extends Component {
@@ -113,84 +93,28 @@ export class VisibleTestCaseView extends Component {
     return (
       <Accordion
         defaultExpanded={false}
+        disabled={!output}
+        disableGutters
+        icon={
+          !output && (
+            <Chip
+              label={<FormattedMessage {...translations.noOutputs} />}
+              size="small"
+              variant="outlined"
+            />
+          )
+        }
         id={outputStreamType}
         style={styles.panel}
+        subtitle={
+          showStaffOnlyWarning && (
+            <FormattedMessage {...translations.staffOnlyOutputStream} />
+          )
+        }
+        title={<FormattedMessage {...translations[outputStreamType]} />}
       >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          style={styles.panelSummary}
-        >
-          <>
-            <FormattedMessage {...translations[outputStreamType]} />
-            {showStaffOnlyWarning &&
-              VisibleTestCaseView.renderStaffOnlyOutputStreamWarning(
-                outputStreamType,
-              )}
-          </>
-        </AccordionSummary>
-        <AccordionDetails>
-          <pre style={{ width: '100%' }}>{output}</pre>
-        </AccordionDetails>
+        <pre style={{ width: '100%' }}>{output}</pre>
       </Accordion>
-    );
-  }
-
-  static renderConditionalOutputStreamIcon(outputStreamType) {
-    if (outputStreamType === 'standardOutput') {
-      return <Warning id="warning-icon-standard-output" />;
-    }
-    return <Warning id="warning-icon-standard-error" />;
-  }
-
-  static renderStaffOnlyOutputStreamWarning(outputStreamType) {
-    return (
-      <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a data-tooltip-id="staff-only-output-stream" data-tooltip-offset={8}>
-          {VisibleTestCaseView.renderConditionalOutputStreamIcon(
-            outputStreamType,
-          )}
-        </a>
-
-        <Tooltip id="staff-only-output-stream">
-          <FormattedMessage {...translations.staffOnlyOutputStream} />
-        </Tooltip>
-      </span>
-    );
-  }
-
-  static renderStaffOnlyTestCasesWarning(testCaseType) {
-    return (
-      <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a data-tooltip-id="staff-only-test-cases" data-tooltip-offset={8}>
-          {VisibleTestCaseView.renderConditionalTestCaseWarningIcon(
-            testCaseType,
-          )}
-        </a>
-
-        <Tooltip id="staff-only-test-cases">
-          <FormattedMessage {...translations.staffOnlyTestCases} />
-        </Tooltip>
-      </span>
-    );
-  }
-
-  static renderConditionalTestCaseWarningIcon(testCaseType) {
-    if (testCaseType === 'publicTestCases') {
-      return <Warning id="warning-icon-public-test-cases" />;
-    }
-    if (testCaseType === 'privateTestCases') {
-      return <Warning id="warning-icon-private-test-cases" />;
-    }
-    return <Warning id="warning-icon-evaluation-test-cases" />;
-  }
-
-  static renderTitle(testCaseType, warn) {
-    return (
-      <>
-        <FormattedMessage {...translations[testCaseType]} />
-        {warn &&
-          VisibleTestCaseView.renderStaffOnlyTestCasesWarning(testCaseType)}
-      </>
     );
   }
 
@@ -208,47 +132,62 @@ export class VisibleTestCaseView extends Component {
     let testCaseIcon;
     if (testCase.passed !== undefined) {
       testCaseResult = testCase.passed ? 'correct' : 'wrong';
-      testCaseIcon = testCase.passed ? <Check /> : <Clear />;
+      testCaseIcon = testCase.passed ? (
+        <Done color="success" />
+      ) : (
+        <Clear color="error" />
+      );
     }
 
-    const tableRowColumnFor = (field) => (
-      <TableCell style={styles.testCaseCell}>{field}</TableCell>
-    );
-
     return (
-      <TableRow
-        key={testCase.identifier}
-        style={styles.testCaseRow[testCaseResult]}
-      >
-        {canReadTests && tableRowColumnFor(truncatedIdentifier)}
-
-        {tableRowColumnFor(
-          <Expandable over={40}>
-            <Typography className="h-full break-all font-mono text-[1.3rem]">
-              {testCase.expression}
-            </Typography>
-          </Expandable>,
+      <Fragment key={testCase.identifier}>
+        {canReadTests && (
+          <TableRow style={styles.testCaseRow[testCaseResult]}>
+            <TableCell
+              className="h-fit border-none pb-0 leading-none"
+              colSpan={5}
+            >
+              <Typography
+                className="break-all"
+                color="text.secondary"
+                variant="caption"
+              >
+                {truncatedIdentifier}
+              </Typography>
+            </TableCell>
+          </TableRow>
         )}
 
-        {tableRowColumnFor(
-          <Expandable over={40}>
-            <Typography className="h-full break-all font-mono text-[1.3rem]">
-              {testCase.expected || ''}
-            </Typography>
-          </Expandable>,
-        )}
-
-        {(canReadTests || showPublicTestCasesOutput) &&
-          tableRowColumnFor(
+        <TableRow style={styles.testCaseRow[testCaseResult]}>
+          <TableCell className="w-full pt-1">
             <Expandable over={40}>
               <Typography className="h-full break-all font-mono text-[1.3rem]">
-                {testCase.output || ''}
+                {testCase.expression}
               </Typography>
-            </Expandable>,
+            </Expandable>
+          </TableCell>
+
+          <TableCell className="w-full pt-1">
+            <Expandable over={40}>
+              <Typography className="h-full break-all font-mono text-[1.3rem]">
+                {testCase.expected || ''}
+              </Typography>
+            </Expandable>
+          </TableCell>
+
+          {(canReadTests || showPublicTestCasesOutput) && (
+            <TableCell className="w-full pt-1">
+              <Expandable over={40}>
+                <Typography className="h-full break-all font-mono text-[1.3rem]">
+                  {testCase.output || ''}
+                </Typography>
+              </Expandable>
+            </TableCell>
           )}
 
-        {tableRowColumnFor(testCaseIcon)}
-      </TableRow>
+          <TableCell>{testCaseIcon}</TableCell>
+        </TableRow>
+      </Fragment>
     );
   }
 
@@ -264,54 +203,60 @@ export class VisibleTestCaseView extends Component {
       return null;
     }
 
-    const passedTestCases = testCases.reduce((val, testCase) => {
-      if (testCase.passed !== undefined) {
-        return val && testCase.passed;
-      }
-      return val;
-    }, true);
-    let headerStyle = { ...styles.panelSummary };
-    if (collapsible && !isDraftAnswer) {
-      headerStyle = {
-        ...headerStyle,
-        backgroundColor: passedTestCases ? green[100] : red[100],
-      };
-    }
-
-    const tableHeaderColumnFor = (field) => (
-      <TableCell style={styles.testCaseCell}>
-        <FormattedMessage {...translations[field]} />
-      </TableCell>
+    const passedTestCases = testCases.reduce(
+      (passed, testCase) => passed && testCase?.passed,
+      true,
     );
 
-    const title = VisibleTestCaseView.renderTitle(testCaseType, warn);
+    const shouldShowAllPassed = !isDraftAnswer && passedTestCases;
 
     return (
       <Accordion
+        className={shouldShowAllPassed && 'border-success'}
         defaultExpanded={!collapsible}
+        disableGutters
+        icon={
+          shouldShowAllPassed && (
+            <Chip
+              color="success"
+              icon={<Done />}
+              label={<FormattedMessage {...translations.allPassed} />}
+              size="small"
+              variant="outlined"
+            />
+          )
+        }
         id={testCaseType}
-        style={styles.panel}
+        subtitle={
+          warn && <FormattedMessage {...translations.staffOnlyTestCases} />
+        }
+        title={<FormattedMessage {...translations[testCaseType]} />}
       >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} style={headerStyle}>
-          {title}
-        </AccordionSummary>
-        <AccordionDetails style={{ overflowX: 'auto' }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {canReadTests && tableHeaderColumnFor('identifier')}
-                {tableHeaderColumnFor('expression')}
-                {tableHeaderColumnFor('expected')}
-                {((graderView && canReadTests) || showPublicTestCasesOutput) &&
-                  tableHeaderColumnFor('output')}
-                {tableHeaderColumnFor('passed')}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {testCases.map(this.renderTestCaseRow.bind(this))}
-            </TableBody>
-          </Table>
-        </AccordionDetails>
+        <Table className="table-fixed">
+          <TableHead>
+            <TableRow>
+              <TableCell className="w-full">
+                <FormattedMessage {...translations.expression} />
+              </TableCell>
+
+              <TableCell className="w-full">
+                <FormattedMessage {...translations.expected} />
+              </TableCell>
+
+              {((graderView && canReadTests) || showPublicTestCasesOutput) && (
+                <TableCell className="w-full">
+                  <FormattedMessage {...translations.output} />
+                </TableCell>
+              )}
+
+              <TableCell className="w-24" />
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {testCases.map(this.renderTestCaseRow.bind(this))}
+          </TableBody>
+        </Table>
       </Accordion>
     );
   }
@@ -342,27 +287,20 @@ export class VisibleTestCaseView extends Component {
       (graderView && testCases.canReadTests) || showEvaluationTestToStudents;
 
     return (
-      <div style={styles.testCasesContainer}>
+      <div className="my-5 space-y-5">
         {isAutograding && (
-          <Paper
-            style={{
-              padding: 10,
-              backgroundColor: yellow[100],
-              marginBottom: 20,
-            }}
-          >
+          <Alert severity="info">
             <FormattedMessage {...translations.autogradeProgress} />
-          </Paper>
+          </Alert>
         )}
-        <h3>
-          <FormattedMessage {...translations.testCases} />
-        </h3>
+
         {this.renderTestCases(
           testCases.public_test,
           'publicTestCases',
           false,
           isDraftAnswer,
         )}
+
         {showPrivateTest &&
           this.renderTestCases(
             testCases.private_test,
@@ -370,6 +308,7 @@ export class VisibleTestCaseView extends Component {
             !showPrivateTestToStudents,
             isDraftAnswer,
           )}
+
         {showEvaluationTest &&
           this.renderTestCases(
             testCases.evaluation_test,
@@ -377,6 +316,7 @@ export class VisibleTestCaseView extends Component {
             !showEvaluationTestToStudents,
             isDraftAnswer,
           )}
+
         {showOutputStreams &&
           !collapsible &&
           VisibleTestCaseView.renderOutputStream(
@@ -384,6 +324,7 @@ export class VisibleTestCaseView extends Component {
             testCases.stdout,
             !showStdoutAndStderr,
           )}
+
         {showOutputStreams &&
           !collapsible &&
           VisibleTestCaseView.renderOutputStream(

@@ -35,7 +35,7 @@ const TestCasesTable = (
       title={props.title}
     >
       <TableContainer dense stickyHeader variant="bare">
-        <TableHead className="sticky top-[5rem] z-10 bg-white">
+        <TableHead className="sticky top-0 z-10 bg-white">
           <TableRow>
             <TableCell className="border-b border-solid border-b-neutral-200 py-0 pl-4 pr-0">
               {t(translations.expression)}

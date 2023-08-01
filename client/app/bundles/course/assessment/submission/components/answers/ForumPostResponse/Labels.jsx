@@ -1,5 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Cached, Delete } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 import { orange, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -43,16 +44,22 @@ const Labels = ({ post }) => {
       {/* Actually, a post that has been deleted will have its isUpdated as null,
           but we are checking here just to be sure.  */}
       {isPostUpdated && !isPostDeleted && (
-        <div style={{ ...styles.label, ...styles.labelEdited }}>
+        <Typography
+          style={{ ...styles.label, ...styles.labelEdited }}
+          variant="body2"
+        >
           <Cached style={styles.iconWidth} />
           <FormattedMessage {...translations.postEdited} />
-        </div>
+        </Typography>
       )}
       {isPostDeleted && (
-        <div style={{ ...styles.label, ...styles.labelDeleted }}>
+        <Typography
+          style={{ ...styles.label, ...styles.labelDeleted }}
+          variant="body2"
+        >
           <Delete style={styles.iconWidth} />
           <FormattedMessage {...translations.postDeleted} />
-        </div>
+        </Typography>
       )}
     </>
   );

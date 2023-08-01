@@ -8,6 +8,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
 } from '@mui/material';
 import { yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -101,12 +102,12 @@ class PastAnswers extends Component {
 
     return (
       <div key={answer.id}>
-        <h4>
+        <Typography variant="h6">
           {answer.isDraftAnswer
             ? intl.formatMessage(translations.savedAt)
             : intl.formatMessage(translations.submittedAt)}
           : {date}
-        </h4>
+        </Typography>
         {this.getAnswersHistory(question, answer)}
         <hr style={styles.horizontalRule} />
       </div>

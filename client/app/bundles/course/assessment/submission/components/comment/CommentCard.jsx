@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
-import { Avatar, Button, CardHeader } from '@mui/material';
+import { Avatar, Button, CardHeader, Typography } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -156,7 +156,9 @@ export default class CommentCard extends Component {
       );
     }
 
-    return <div dangerouslySetInnerHTML={{ __html: text }} />;
+    return (
+      <Typography dangerouslySetInnerHTML={{ __html: text }} variant="body2" />
+    );
   }
 
   render() {
