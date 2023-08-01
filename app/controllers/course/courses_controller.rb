@@ -39,7 +39,7 @@ class Course::CoursesController < Course::Controller
   protected
 
   def publicly_accessible?
-    params[:action] == 'index'
+    Set[:index, :sidebar].include?(action_name.to_sym)
   end
 
   private
