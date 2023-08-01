@@ -79,6 +79,10 @@ const CoursesIndex: FC = () => {
       .catch(() => toast.error(t(translations.fetchCoursesFailure)));
   }, [dispatch]);
 
+  useEffect(() => {
+    setIsNewCourseDialogOpen(shouldOpenNewCourseDialog);
+  }, [shouldOpenNewCourseDialog]);
+
   // Adding appropriate button to the header
   const headerToolbars: ReactElement[] = [];
   if (coursesPermissions?.canCreate) {
