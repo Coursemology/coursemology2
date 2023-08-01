@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class User::SessionsController < Devise::SessionsController
+  respond_to :json
+
   # before_filter :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
