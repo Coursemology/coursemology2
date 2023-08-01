@@ -141,9 +141,10 @@ module Capybara::TestGroupHelpers
     end
 
 
-    def confirm_registartion_token_via_email
+    def confirm_registration_token_via_email
       token = ActionMailer::Base.deliveries.last.body.match(/confirmation_token=.*(?=")/)
       visit "/users/confirmation?#{token}"
+      wait_for_page
     end
   end
 end

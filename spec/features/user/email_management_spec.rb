@@ -64,11 +64,12 @@ RSpec.feature 'User: Emails', js: true do
           click_button 'Add email address'
           fill_in 'newEmail', with: invitation1.email
           click_button 'Add email address'
+          wait_for_page
           expect(page).to have_selector('section', text: invitation1.email)
         end.to change { user.emails.count }.by(1)
 
         expect do
-          confirm_registartion_token_via_email
+          confirm_registration_token_via_email
         end.to change(course1.users, :count).by(1).
           and change(course2.users, :count).by(1)
       end
@@ -89,7 +90,7 @@ RSpec.feature 'User: Emails', js: true do
         end.to change(user.emails, :count).by(1).
           and change(other_user.emails, :count).by(-1)
 
-        confirm_registartion_token_via_email
+        confirm_registration_token_via_email
         expect(user.emails.last.reload.confirmed_at).not_to be_nil
       end
     end
