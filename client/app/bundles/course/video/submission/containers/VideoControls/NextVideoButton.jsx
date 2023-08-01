@@ -5,7 +5,7 @@ import SkipNext from '@mui/icons-material/SkipNext';
 import { IconButton, Tooltip } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import axios from 'lib/axios';
+import CourseAPI from 'api/course';
 
 import translations from '../../translations';
 
@@ -19,6 +19,7 @@ const propTypes = {
 
 const NextVideoButton = (props) => {
   const [isLoading, setIsLoading] = useState(false);
+
   if (!props.url) {
     return (
       <Tooltip title={props.intl.formatMessage(translations.noNextVideo)}>
@@ -39,7 +40,8 @@ const NextVideoButton = (props) => {
         onClick={() => {
           setIsLoading(true);
           if (!props.nextVideoSubmissionExists) {
-            axios.get(props.url).then((response) => {
+            CourseAPI.video.submissions.attempt(props.url).then((response) => {
+              // TODO: Use `navigate` from `useNavigate` once bundle is ready.
               window.location.href = response.data.submissionUrl;
             });
           } else {

@@ -6,6 +6,8 @@ import {
   AchievementPermissions,
 } from 'types/course/achievements';
 
+import { APIResponse } from 'api/types';
+
 import BaseCourseAPI from './Base';
 
 export default class AchievementsAPI extends BaseCourseAPI {
@@ -16,40 +18,27 @@ export default class AchievementsAPI extends BaseCourseAPI {
   /**
    * Fetches a list of achievements in a course.
    */
-  index(): Promise<
-    AxiosResponse<{
-      achievements: AchievementListData[];
-      permissions: AchievementPermissions;
-    }>
-  > {
+  index(): APIResponse<{
+    achievements: AchievementListData[];
+    permissions: AchievementPermissions;
+  }> {
     return this.client.get(this.#urlPrefix);
   }
 
   /**
    * Fetches an achievement.
    */
-  fetch(achievementId: number): Promise<
-    AxiosResponse<{
-      achievement: AchievementData;
-    }>
-  > {
-    return this.client.get(`${this.#urlPrefix}/${achievementId}`);
+  fetch(id: number): APIResponse<{ achievement: AchievementData }> {
+    return this.client.get(`${this.#urlPrefix}/${id}`);
   }
 
   /**
    * Fetches course users related to an achievement.
-   *
-   * @param {number} achievementId
-   * @return {Promise}
    */
-  fetchAchievementCourseUsers(achievementId: number): Promise<
-    AxiosResponse<{
-      achievementCourseUsers: AchievementCourseUserData[];
-    }>
-  > {
-    return this.client.get(
-      `${this.#urlPrefix}/${achievementId}/achievement_course_users`,
-    );
+  fetchAchievementCourseUsers(id: number): APIResponse<{
+    achievementCourseUsers: AchievementCourseUserData[];
+  }> {
+    return this.client.get(`${this.#urlPrefix}/${id}/achievement_course_users`);
   }
 
   /**
@@ -59,43 +48,34 @@ export default class AchievementsAPI extends BaseCourseAPI {
    *   {
    *     achievement: { :title, :description, etc }
    *   }
-   * @return {Promise}
-   * success response: { :id } - ID of created achievement.
-   * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  create(params: FormData): Promise<
-    AxiosResponse<{
-      id: number;
-    }>
-  > {
+  create(params: FormData): APIResponse<{ id: number }> {
     return this.client.post(this.#urlPrefix, params);
   }
 
   /**
    * Updates the achievement.
    *
-   * @param {number} achievementId
+   * @param {number} id
    * @param {object} params - params in the format of { achievement: { :title, :description, etc } }
-   * @return {Promise}
-   * success response: {}
-   * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   update(
-    achievementId: number,
+    id: number,
     params: FormData | object,
-  ): Promise<AxiosResponse> {
-    return this.client.patch(`${this.#urlPrefix}/${achievementId}`, params);
+  ): APIResponse<{ achievement: AchievementData }> {
+    return this.client.patch(`${this.#urlPrefix}/${id}`, params);
   }
 
   /**
    * Deletes an achievement.
    *
    * @param {number} achievementId
-   * @return {Promise}
-   * success response: {}
-   * error response: {}
    */
   delete(achievementId: number): Promise<AxiosResponse> {
     return this.client.delete(`${this.#urlPrefix}/${achievementId}`);
+  }
+
+  reorder(ordering: string): APIResponse {
+    return this.client.post(`${this.#urlPrefix}/reorder`, ordering);
   }
 }
