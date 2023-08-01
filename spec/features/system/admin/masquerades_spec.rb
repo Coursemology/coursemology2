@@ -17,8 +17,11 @@ RSpec.feature 'System: Administration: Masquerade', js: true do
 
       scenario 'I can masquerade a user' do
         visit admin_users_path
+
         find(".user-masquerade-#{user_to_masquerade.id}").click
-        expect(page).to have_selector('li', text: user_to_masquerade.name)
+        wait_for_page
+
+        expect(page).to have_text("Masquerading as #{user_to_masquerade.name}")
       end
     end
 
