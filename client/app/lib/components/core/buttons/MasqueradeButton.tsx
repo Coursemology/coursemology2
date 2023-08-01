@@ -2,6 +2,7 @@ import { defineMessages } from 'react-intl';
 import TheaterComedy from '@mui/icons-material/TheaterComedy';
 import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 
+import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props extends IconButtonProps {
@@ -22,8 +23,10 @@ const translations = defineMessages({
 });
 
 const MasqueradeButton = (props: Props): JSX.Element => {
-  const { canMasquerade, ...otherProps } = props;
+  const { canMasquerade, href, ...otherProps } = props;
+
   const { t } = useTranslation();
+
   return (
     <Tooltip
       title={
@@ -32,11 +35,11 @@ const MasqueradeButton = (props: Props): JSX.Element => {
           : t(translations.masqueradeDisabledTooltip)
       }
     >
-      <span>
+      <Link to={href}>
         <IconButton disabled={!canMasquerade} {...otherProps}>
           <TheaterComedy />
         </IconButton>
-      </span>
+      </Link>
     </Tooltip>
   );
 };
