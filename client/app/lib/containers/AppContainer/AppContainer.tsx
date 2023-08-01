@@ -4,7 +4,6 @@ import NotificationPopup from 'lib/containers/NotificationPopup';
 
 import { loader, useAppLoader } from './AppLoader';
 import GlobalAnnouncements from './GlobalAnnouncements';
-import IfRailsSaysSafeToRender from './IfRailsSaysSafeToRender';
 import MasqueradeBanner from './MasqueradeBanner';
 
 const AppContainer = (): JSX.Element => {
@@ -24,9 +23,7 @@ const AppContainer = (): JSX.Element => {
         <GlobalAnnouncements in={data.announcements} />
       )}
 
-      <IfRailsSaysSafeToRender>
-        <Outlet context={homeData} />
-      </IfRailsSaysSafeToRender>
+      <Outlet context={homeData} />
 
       <NotificationPopup />
     </div>
