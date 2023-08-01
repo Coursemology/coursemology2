@@ -2,11 +2,14 @@ import { InstanceUserRoles } from './system/instance/users';
 import { UserRoles } from './users';
 
 interface HomeLayoutUserData {
+  id: number;
   name: string;
+  primaryEmail: string;
   url: string;
   avatarUrl: string;
   role: UserRoles;
   instanceRole: InstanceUserRoles;
+  canCreateNewCourse: boolean;
 }
 
 export interface HomeLayoutCourseData {
@@ -20,7 +23,6 @@ export interface HomeLayoutCourseData {
 export interface HomeLayoutData {
   courses?: HomeLayoutCourseData[];
   user?: HomeLayoutUserData;
-  signOutUrl?: string;
   masqueradeUserName?: string;
   stopMasqueradingUrl?: string;
 }
