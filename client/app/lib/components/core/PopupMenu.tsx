@@ -43,7 +43,7 @@ const PopupMenu = (props: PopupMenuProps): JSX.Element => {
       anchorEl={anchorEl}
       anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
       classes={{
-        paper: 'max-w-[50rem] sm:max-w-full rounded-xl shadow-lg mr-[1.6rem]',
+        paper: 'max-w-[50rem] sm:max-w-full rounded-xl shadow-lg',
       }}
       onClose={onClose}
       open={Boolean(anchorEl)}
@@ -63,6 +63,8 @@ interface PopupMenuButtonProps {
   children?: ReactNode;
   textProps?: ComponentProps<typeof Typography>;
   disabled?: boolean;
+  secondary?: ReactNode;
+  secondaryAction?: ReactNode;
 }
 
 const PopupMenuButton = (props: PopupMenuButtonProps): JSX.Element => {
@@ -76,9 +78,17 @@ const PopupMenuButton = (props: PopupMenuButtonProps): JSX.Element => {
   };
 
   const button = (
-    <ListItem disablePadding>
-      <ListItemButton disabled={props.disabled} onClick={handleClick}>
-        <ListItemText primaryTypographyProps={props.textProps}>
+    <ListItem disablePadding secondaryAction={props.secondaryAction}>
+      <ListItemButton
+        disabled={props.disabled}
+        onClick={handleClick}
+        tabIndex={-1}
+      >
+        <ListItemText
+          primaryTypographyProps={props.textProps}
+          secondary={props.secondary}
+          secondaryTypographyProps={{ variant: 'caption' }}
+        >
           {props.children}
         </ListItemText>
       </ListItemButton>
@@ -86,7 +96,7 @@ const PopupMenuButton = (props: PopupMenuButtonProps): JSX.Element => {
   );
 
   return href && !props.disabled ? (
-    <Link to={href} underline="hover">
+    <Link color="inherit" to={href} underline="none">
       {button}
     </Link>
   ) : (
