@@ -1,4 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { store } from 'store';
 import { render, waitFor } from 'test-utils';
 
@@ -7,7 +7,7 @@ import CourseAPI from 'api/course';
 import ObjectDuplication from '../index';
 
 const client = CourseAPI.duplication.client;
-const mock = new MockAdapter(client);
+const mock = createMockAdapter(client);
 
 const responseData = {
   sourceCourse: { id: 5 },

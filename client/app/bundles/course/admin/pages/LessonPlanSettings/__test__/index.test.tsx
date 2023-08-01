@@ -1,4 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
@@ -26,7 +26,7 @@ const expectedPayload = {
   },
 };
 
-const mock = new MockAdapter(CourseAPI.admin.lessonPlan.client);
+const mock = createMockAdapter(CourseAPI.admin.lessonPlan.client);
 
 describe('<LessonPlanSettings />', () => {
   it('allow lesson plan item settings to be set', async () => {

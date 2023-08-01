@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import MockAdapter from 'axios-mock-adapter';
 import { mount } from 'enzyme';
+import { createMockAdapter } from 'mocks/axiosMock';
 
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
@@ -9,7 +9,7 @@ import storeCreator from 'course/survey/store';
 import ResponseEdit from '../index';
 
 const client = CourseAPI.survey.responses.client;
-const mock = new MockAdapter(client);
+const mock = createMockAdapter(client);
 
 const responseData = {
   response: {

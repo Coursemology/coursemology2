@@ -1,11 +1,11 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 
 import RespondButton from '../index';
 
-const mock = new MockAdapter(CourseAPI.survey.responses.client);
+const mock = createMockAdapter(CourseAPI.survey.responses.client);
 
 beforeEach(() => {
   mock.reset();
