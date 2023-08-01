@@ -117,21 +117,6 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
-  describe ApplicationThemingConcern do
-    context 'when the instance has a theme' do
-      it 'uses the theme' do
-        pending 'an instance with a theme'
-        raise
-      end
-    end
-
-    context 'when the instance does not have a theme' do
-      it 'uses the default theme' do
-        expect(controller.send(:deduce_theme)).to eq('default')
-      end
-    end
-  end
-
   describe ApplicationUserConcern do
     context 'when the action raises a CanCan::AccessDenied' do
       run_rescue

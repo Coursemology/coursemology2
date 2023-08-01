@@ -196,10 +196,6 @@ gem 'cancancan'
 # We also want stricter sanitization.
 gem 'rails_utils', git: 'https://github.com/raymondtangsc/rails_utils.git', branch: 'full-sanitize-flash'
 
-# Themes for instances
-gem 'themes_on_rails', '>= 0.3.1', git: 'https://github.com/raymondtangsc/themes_on_rails',
-                                   branch: 'xtang/rails_6'
-
 # Forms made easy for Rails
 gem 'simple_form'
 gem 'simple_form-bootstrap', git: 'https://github.com/purfectliterature/simple_form-bootstrap'

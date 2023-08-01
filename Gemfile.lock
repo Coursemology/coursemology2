@@ -55,14 +55,6 @@ GIT
     rails_utils (4.0.0)
       rails (>= 3.2)
 
-GIT
-  remote: https://github.com/raymondtangsc/themes_on_rails
-  revision: 4446d795aad4eaf730f7250646f25bfdb09de799
-  branch: xtang/rails_6
-  specs:
-    themes_on_rails (0.4.0)
-      rails (>= 3.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -734,7 +726,6 @@ DEPENDENCIES
   spring
   sprockets (< 4.0.0)
   stackprof
-  themes_on_rails (>= 0.3.1)!
   traceroute
   twitter-typeahead-rails
   tzinfo-data
