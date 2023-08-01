@@ -74,6 +74,8 @@ Rails.application.routes.draw do
     masquerades: 'user/masquerades'
   }
 
+  get 'csrf_token' => 'csrf_token#csrf_token'
+
   resources :announcements, only: [:index] do
     post 'mark_as_read'
   end
