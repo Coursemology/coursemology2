@@ -61,3 +61,6 @@ export default {
   STAFF_ROLES,
   AVAILABLE_LOCALES,
 };
+
+export const DEFAULT_LOCALE = 'en' as const;
+export const DEFAULT_TIME_ZONE = 'Asia/Singapore' as const;
