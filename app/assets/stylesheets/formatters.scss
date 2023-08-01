@@ -1,7 +1,0 @@
-// Styles for formatting resources.
-.user {
-  > .image > img {
-    @include fit-round-img(50px);
-    margin-right: 0.5em;
-  }
-}
