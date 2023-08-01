@@ -1,119 +1,77 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Submissions: Programming Answers' do
+RSpec.describe 'Course: Assessments: Submissions: Programming Answers', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
-    let(:assessment2) { create(:assessment, :published_with_programming_question, course: course) }
-    let(:submission) do
-      create(:submission, *submission_traits, assessment: assessment, creator: user)
-    end
-    let(:submission2) do
-      create(:submission, *submission_traits2, assessment: assessment2, creator: user)
-    end
+    let(:submission) { create(:submission, *submission_traits, assessment: assessment, creator: user) }
     let(:submission_traits) { nil }
-    let(:submission_traits2) { nil }
 
     before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
+      let(:submission_traits) { :attempting }
+      let(:answer_code) { 'this is a testing code whatever lol' }
 
-      scenario 'I can save my submission', js: true do
-        pending 'Removed add/delete file links for CS1010S'
+      scenario 'I can save my submission' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        # Fill in every single successive item
-        within find(content_tag_selector(submission.answers.first)) do
-          all('div.files div.nested-fields').each_with_index do |file, i|
-            within file do
-              fill_in 'filename', with: "test #{i}.py"
-            end
-          end
-        end
+        find('div', class: 'ace_editor').click
+        send_keys answer_code
+        click_button 'Save Draft'
+        wait_for_page
 
-        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
-        expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, assessment, submission)
-        )
-
-        submission.answers.first.specific.files.reload.each_with_index do |_, i|
-          expect(page).to have_field('filename', with: "test #{i}.py")
-        end
-
-        # Add a new file
-        click_link(I18n.t('course.assessment.answer.programming.programming.add_file'))
-        new_file_name = 'new_file.py'
-        expected_files = [new_file_name] + submission.answers.first.specific.files.map(&:filename)
-        within find(content_tag_selector(submission.answers.first)) do
-          within all('div.files div.nested-fields').first do
-            fill_in 'filename', with: new_file_name
-          end
-        end
-        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
-
-        expected_files.each do |file|
-          expect(page).to have_field('filename', with: file)
-        end
-
-        # Delete files
-        within find(content_tag_selector(submission.answers.first)) do
-          all(:link, I18n.t('course.assessment.answer.programming.file_fields.delete')).
-            each(&:click)
-        end
-        click_button I18n.t('course.assessment.submission.submissions.buttons.save')
-
-        expect(page).not_to have_field('filename')
+        file = submission.answers.first.specific.files.reload.first
+        expect(file.content).to eq(answer_code)
       end
 
-      pending 'I can only see public test cases but cannot update my finalized submission ' do
+      scenario 'I can only see public test cases but cannot update my finalized submission ' do
         create(:course_assessment_question_programming,
                assessment: assessment, test_case_count: 1, private_test_case_count: 1,
                evaluation_test_case_count: 1)
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        expect(page).to have_selector('.code')
-        click_button I18n.t('course.assessment.submission.submissions.buttons.finalise')
+        expect(page).to have_selector('.ace_editor')
 
-        within find(content_tag_selector(submission.answers.first)) do
-          expect(page).not_to have_selector('.code')
-        end
+        click_button 'Finalise Submission'
+        click_button 'Continue'
 
-        # Check that student can only see public but not private and evalution test cases.
-        expect(page).
-          to have_text(I18n.t('course.assessment.answer.programming.test_cases.public'))
-        expect(page).
-          not_to have_text(I18n.t('course.assessment.answer.programming.test_cases.private'))
-        expect(page).
-          not_to have_text(I18n.t('course.assessment.answer.programming.test_cases.evaluation'))
+        expect(page).not_to have_selector('.ace_editor')
+
+        expect(page).to have_text('Public Test Cases')
+        expect(page).not_to have_text('Private Test Cases')
+        expect(page).not_to have_text('Evaluation Test Cases')
       end
     end
 
     context 'As Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
-      let(:submission_traits) { :submitted }
-      let(:submission_traits2) { :attempting }
 
-      pending 'I can view the test cases' do
-        # View test cases for submitted submission
-        visit edit_course_assessment_submission_path(course, assessment, submission)
+      context 'when submission is submitted' do
+        let(:submission_traits) { :submitted }
 
-        within find(content_tag_selector(submission.answers.first)) do
+        scenario 'I can view the test cases' do
+          visit edit_course_assessment_submission_path(course, assessment, submission)
+
           assessment.questions.first.actable.test_cases.each do |test_case|
-            expect(page).to have_content_tag_for(test_case)
+            expect(page).to have_text(test_case.identifier)
           end
         end
+      end
 
-        # View test cases for attempting submission
-        visit edit_course_assessment_submission_path(course, assessment_2, submission2)
+      context 'when submission is attempting' do
+        let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
 
-        within find(content_tag_selector(submission2.answers.first)) do
-          assessment_2.questions.first.actable.test_cases.each do |solution|
-            expect(page).to have_content_tag_for(solution)
+        scenario 'I can view the test cases' do
+          visit edit_course_assessment_submission_path(course, assessment, submission)
+
+          assessment.questions.first.actable.test_cases.each do |test_case|
+            expect(page).to have_text(test_case.identifier)
           end
         end
       end
