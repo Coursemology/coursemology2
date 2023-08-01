@@ -1,9 +1,9 @@
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import { InstanceMiniEntity } from 'types/system/instances';
 
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { updateInstance } from '../../../operations';

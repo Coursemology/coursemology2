@@ -2,12 +2,12 @@ import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { scroller } from 'react-scroll';
-import { toast } from 'react-toastify';
 import { Add } from '@mui/icons-material';
 import { Fab, Tooltip } from '@mui/material';
 import { ForumTopicEntity, ForumTopicPostFormData } from 'types/course/forums';
 
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumTopicPostForm from '../../components/forms/ForumTopicPostForm';

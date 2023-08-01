@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { VideoSubmissionListData } from 'types/course/videoSubmissions';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import toast from 'lib/hooks/toast';
 
 import UserVideoSubmissionTable from '../../components/tables/UserVideoSubmissionTable';
 import { fetchVideoSubmissions } from '../../operations';

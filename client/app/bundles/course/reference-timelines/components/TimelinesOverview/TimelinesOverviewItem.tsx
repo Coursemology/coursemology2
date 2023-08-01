@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { MoreVert } from '@mui/icons-material';
 import { Divider, IconButton, Menu, MenuItem } from '@mui/material';
 import { TimelineData } from 'types/course/referenceTimelines';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { useLastSaved, useSetLastSaved } from '../../contexts';

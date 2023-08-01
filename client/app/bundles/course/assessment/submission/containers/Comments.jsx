@@ -1,9 +1,10 @@
 import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
+
+import toast from 'lib/hooks/toast';
 
 import * as commentActions from '../actions/comments';
 import CommentCard from '../components/comment/CommentCard';

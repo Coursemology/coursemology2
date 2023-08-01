@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
 
 import CoursesButtons from 'bundles/system/admin/admin/components/buttons/CoursesButtons';
@@ -10,6 +9,7 @@ import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { deleteCourse, indexCourses } from '../operations';
 import { getAdminCounts, getAllCourseMiniEntities } from '../selectors';

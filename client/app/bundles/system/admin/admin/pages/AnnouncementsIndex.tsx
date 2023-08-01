@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
@@ -8,6 +7,7 @@ import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew'
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import {
   createAnnouncement,

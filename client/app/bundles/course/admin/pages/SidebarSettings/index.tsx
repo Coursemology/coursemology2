@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { SidebarItems } from 'types/course/admin/sidebar';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { fetchSidebarItems, updateSidebarItems } from './operations';

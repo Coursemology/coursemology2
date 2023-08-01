@@ -1,5 +1,4 @@
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import { CheckCircle, CheckCircleOutline } from '@mui/icons-material';
 import { Chip, IconButton, IconButtonProps } from '@mui/material';
 import {
@@ -9,6 +8,7 @@ import {
 } from 'types/course/forums';
 
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { toggleForumTopicPostAnswer } from '../../operations';

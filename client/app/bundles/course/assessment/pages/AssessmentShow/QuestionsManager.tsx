@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Paper } from '@mui/material';
 import { produce } from 'immer';
 import { AssessmentData } from 'types/course/assessment/assessments';
 import { QuestionData } from 'types/course/assessment/questions';
 
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { reorderQuestions } from '../../operations';

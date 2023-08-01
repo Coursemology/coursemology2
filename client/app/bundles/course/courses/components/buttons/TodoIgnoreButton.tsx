@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { removeTodo } from '../../operations';
 
@@ -48,10 +48,7 @@ const TodoIgnoreButton: FC<Props> = (props) => {
     <Button
       color="secondary"
       id={`todo-ignore-button-${todoId}`}
-      onClick={(): void => {
-        onIgnore();
-      }}
-      style={{ width: 80 }}
+      onClick={onIgnore}
     >
       {intl.formatMessage(translations.ignoreButtonText)}
     </Button>

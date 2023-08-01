@@ -5,7 +5,6 @@ import {
   IntlShape,
   WrappedComponentProps,
 } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
 import {
@@ -19,6 +18,7 @@ import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import TopicList from '../../components/lists/TopicList';
 import { fetchTabData } from '../../operations';

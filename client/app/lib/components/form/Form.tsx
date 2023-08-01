@@ -13,13 +13,13 @@ import {
   useForm,
   UseFormWatch,
 } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Slide, Typography } from '@mui/material';
 import { isEmpty } from 'lodash';
 import { AnyObjectSchema } from 'yup';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import messagesTranslations from 'lib/translations/messages';

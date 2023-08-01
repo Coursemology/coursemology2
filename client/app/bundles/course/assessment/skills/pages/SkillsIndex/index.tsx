@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Grid } from '@mui/material';
 import {
   SkillBranchMiniEntity,
@@ -11,6 +10,7 @@ import {
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import SkillDialog from '../../components/dialogs/SkillDialog';
 import SkillsTable from '../../components/tables/SkillsTable';

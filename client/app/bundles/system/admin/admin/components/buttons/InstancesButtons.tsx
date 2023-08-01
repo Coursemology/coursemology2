@@ -1,11 +1,11 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 import { InstanceMiniEntity } from 'types/system/instances';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { deleteInstance } from '../../operations';
 

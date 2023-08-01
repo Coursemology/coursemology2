@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import {
   VoiceResponseData,
   VoiceResponseFormData,
@@ -6,6 +5,7 @@ import {
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';

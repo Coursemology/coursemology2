@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { MaterialsSettingsData } from 'types/course/admin/materials';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { FormEmitter } from 'lib/components/form/Form';
 import Preload from 'lib/components/wrappers/Preload';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 

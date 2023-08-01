@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { Alert } from '@mui/material';
 import { TimelineData } from 'types/course/referenceTimelines';
 
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 

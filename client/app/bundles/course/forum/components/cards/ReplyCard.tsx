@@ -2,13 +2,13 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Element, scroller } from 'react-scroll';
-import { toast } from 'react-toastify';
 import { Button, Card, CardActions, CardContent } from '@mui/material';
 import { ForumTopicPostFormData } from 'types/course/forums';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 

@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import {
   Card,
   CardContent,
@@ -20,6 +19,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import { getVideoSubmissionsURL } from 'lib/helpers/url-builders';
 import { getCourseId, getVideoId } from 'lib/helpers/url-helpers';
+import toast from 'lib/hooks/toast';
 import { formatLongDateTime } from 'lib/moment';
 
 import StatisticsWithStore from './StatisticsWithStore';
@@ -84,7 +84,7 @@ const VideoSubmissionShow: FC<Props> = (props) => {
   useEffect(() => {
     if (submissionId) {
       CourseAPI.video.submissions
-        .fetch(submissionId)
+        .fetch(+submissionId)
         .then((response) => {
           setVideoSubmission(response.data);
           setIsLoading(false);

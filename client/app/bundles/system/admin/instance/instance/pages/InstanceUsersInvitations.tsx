@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import PendingInvitationsButtons from '../components/buttons/PendingInvitationsButtons';
 import InstanceUsersTabs from '../components/navigation/InstanceUsersTabs';

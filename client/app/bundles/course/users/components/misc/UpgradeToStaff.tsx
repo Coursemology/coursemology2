@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { LoadingButton } from '@mui/lab';
@@ -20,6 +19,7 @@ import {
 
 import { STAFF_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { upgradeToStaff } from '../../operations';
 import { getStudentOptionMiniEntities } from '../../selectors';

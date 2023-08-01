@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Stack } from '@mui/material';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteFolder, deleteMaterial } from '../../operations';

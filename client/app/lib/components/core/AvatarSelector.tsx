@@ -1,11 +1,11 @@
 import { ChangeEventHandler, useState } from 'react';
-import { toast } from 'react-toastify';
 import { Create } from '@mui/icons-material';
 import { Avatar, Button } from '@mui/material';
 
 import translations from 'bundles/user/translations';
 import ImageCropDialog from 'lib/components/core/dialogs/ImageCropDialog';
 import Subsection from 'lib/components/core/layouts/Subsection';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
 

@@ -1,7 +1,6 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Card, CardContent, CardHeader } from '@mui/material';
 
 import DescriptionCard from 'lib/components/core/DescriptionCard';
@@ -10,6 +9,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { getVideosURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import VideoManagementButtons from '../../components/buttons/VideoManagementButtons';
 import WatchVideoButton from '../../components/buttons/WatchVideoButton';

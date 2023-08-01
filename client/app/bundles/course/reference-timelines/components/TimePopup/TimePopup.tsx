@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
 import moment from 'moment';
 import {
@@ -7,6 +6,7 @@ import {
 } from 'types/course/referenceTimelines';
 
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { useSetLastSaved } from '../../contexts';

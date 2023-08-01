@@ -5,7 +5,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Group } from '@mui/icons-material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { Tab, Tabs } from '@mui/material';
@@ -14,6 +13,7 @@ import palette from 'theme/palette';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { fetchDisbursements, fetchForumDisbursements } from '../../operations';
 import ForumDisbursement from '../ForumDisbursement';

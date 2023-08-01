@@ -1,9 +1,9 @@
 import { createElement, useState } from 'react';
-import { toast } from 'react-toastify';
 import { Create, Delete } from '@mui/icons-material';
 import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
 import { ConditionData, ConditionsData } from 'types/course/conditions';
 
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import specify from './specifiers';
@@ -60,7 +60,7 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
           <Typography variant="body2">{props.condition.description}</Typography>
         </div>
 
-        <div className="hoverable:invisible group-hover?:visible flex items-center">
+        <div className="flex items-center hoverable:invisible group-hover?:visible">
           {editing ? (
             createElement(component, {
               condition: props.condition,

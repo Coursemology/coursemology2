@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { QuestionData } from 'types/course/assessment/questions';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteQuestion } from '../../../operations';
@@ -31,14 +31,12 @@ const DeleteQuestionButtonPrompt = (
       .promise(deleteQuestion(question.deleteUrl), {
         pending: t(translations.deletingQuestion),
         success: t(translations.questionDeleted),
-        error: {
-          render: ({ data }) => {
-            const error = (data as Error)?.message;
-            return error || t(translations.errorDeletingQuestion);
-          },
-        },
       })
       .then(props.onDelete)
+      .catch((error) => {
+        const message = (error as Error)?.message;
+        toast.error(message || t(translations.errorDeletingQuestion));
+      })
       .finally(() => setDeleting(false));
   };
 

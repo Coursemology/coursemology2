@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { ExpandMore } from '@mui/icons-material';
 import { Button, Menu, MenuItem } from '@mui/material';
 import { CourseUserMiniEntity } from 'types/course/courseUsers';
@@ -7,6 +6,7 @@ import { TimelineData } from 'types/course/referenceTimelines';
 
 import { assignToTimeline } from 'bundles/course/users/operations';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from './translations';

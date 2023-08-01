@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
 import { CourseEntity } from 'types/course/courses';
 
@@ -9,6 +8,7 @@ import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import CourseAnnouncements from '../../components/misc/CourseAnnouncements';
 import CourseEnrolOptions from '../../components/misc/CourseEnrolOptions';

@@ -1,6 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { toast } from 'react-toastify';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Typography } from '@mui/material';
 import { InvitationResult } from 'types/course/userInvitations';
@@ -8,6 +7,7 @@ import { InvitationResult } from 'types/course/userInvitations';
 import CourseAPI from 'api/course';
 import Link from 'lib/components/core/Link';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';

@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import InstancesButtons from '../components/buttons/InstancesButtons';

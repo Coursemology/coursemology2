@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import {
   RoleRequestBasicListData,
   UserRoleRequestForm,
@@ -12,6 +11,7 @@ import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 

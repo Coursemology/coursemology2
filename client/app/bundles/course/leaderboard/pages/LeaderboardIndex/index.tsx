@@ -5,7 +5,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { toast } from 'react-toastify';
 import { AutoFixHigh, EmojiEvents, Group, Person } from '@mui/icons-material';
 import { Grid, Tab, Tabs } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -15,6 +14,7 @@ import palette from 'theme/palette';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import LeaderboardTable from '../../components/tables/LeaderboardTable';
 import fetchLeaderboard from '../../operations';

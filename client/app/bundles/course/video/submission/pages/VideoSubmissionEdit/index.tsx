@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { VideoEditSubmissionData } from 'types/course/video/submissions';
 
 import CourseAPI from 'api/course';
 import DescriptionCard from 'lib/components/core/DescriptionCard';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import toast from 'lib/hooks/toast';
 
 import SubmissionEditWithStore from './SubmissionEditWithStore';
 
@@ -38,7 +38,7 @@ const VideoSubmissionEdit: FC<Props> = (props) => {
   useEffect(() => {
     if (submissionId) {
       CourseAPI.video.submissions
-        .edit(submissionId)
+        .edit(+submissionId)
         .then((response) => {
           setEditVideoSubmission(response.data);
           setIsLoading(false);

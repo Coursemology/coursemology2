@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Grid, Typography } from '@mui/material';
 import { InvitationResult } from 'types/course/userInvitations';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
 import RegistrationCodeButton from '../../components/buttons/RegistrationCodeButton';

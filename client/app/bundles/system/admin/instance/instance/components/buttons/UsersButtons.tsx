@@ -1,12 +1,12 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 import { InstanceUserMiniEntity } from 'types/system/instance/users';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { USER_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { deleteUser } from '../../operations';
 

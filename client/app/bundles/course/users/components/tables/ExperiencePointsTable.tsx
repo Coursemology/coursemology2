@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import {
   Paper,
   Table,
@@ -13,6 +12,7 @@ import {
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { getCourseUserId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import tableTranslations from 'lib/translations/table';
 
 import { fetchExperiencePointsRecord } from '../../operations';

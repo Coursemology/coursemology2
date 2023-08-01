@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { uploadMaterials } from '../../operations';
 import MaterialUploadForm from '../forms/MaterialUploadForm';

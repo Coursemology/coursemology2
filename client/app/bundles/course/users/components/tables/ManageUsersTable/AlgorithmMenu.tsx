@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { toast } from 'react-toastify';
 import { MenuItem, TextField } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { CourseUserMiniEntity } from 'types/course/courseUsers';
@@ -8,6 +7,7 @@ import { TimelineAlgorithm } from 'types/course/personalTimes';
 import { updateUser } from 'bundles/course/users/operations';
 import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from './translations';

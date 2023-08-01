@@ -7,7 +7,7 @@ import {
 
 import Section from 'lib/components/core/layouts/Section';
 import Form, { FormEmitter } from 'lib/components/form/Form';
-import loadingToast from 'lib/hooks/loadingToast';
+import { loadingToast } from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';

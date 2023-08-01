@@ -2,7 +2,7 @@ import CourseAPI from 'api/course';
 import actionTypes from 'course/duplication/constants';
 import pollJob from 'lib/helpers/jobHelpers';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import loadingToast from 'lib/hooks/loadingToast';
+import { loadingToast } from 'lib/hooks/toast';
 
 import { actions } from './store';
 import { getItemsPayload } from './utils';

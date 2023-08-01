@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import { VideoListData } from 'types/course/videos';
 
 import CourseAPI from 'api/course';
 import { getEditVideoSubmissionURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import toast from 'lib/hooks/toast';
 
 interface Props extends WrappedComponentProps {
   video: VideoListData;

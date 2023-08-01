@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
 import {
   Dialog,
@@ -17,6 +16,7 @@ import Link from 'lib/components/core/Link';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 

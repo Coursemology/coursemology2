@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AchievementForm from '../../components/forms/AchievementForm';

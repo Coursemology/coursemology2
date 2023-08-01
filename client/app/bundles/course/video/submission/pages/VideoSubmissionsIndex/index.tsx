@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { VideoSubmission } from 'types/course/video/submissions';
 
 import CourseAPI from 'api/course';
@@ -9,6 +8,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import { getVideosURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import toast from 'lib/hooks/toast';
 
 import VideoSubmissionsTable from '../../components/tables/VideoSubmissionsTable';
 

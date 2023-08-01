@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { East } from '@mui/icons-material';
 import { Alert, Chip, Typography } from '@mui/material';
 import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { convertMcqMrq } from '../../operations';
@@ -50,16 +50,14 @@ const ConvertMcqMrqPrompt = (props: ConvertMcqMrqPromptProps): JSX.Element => {
         success: unsubmit
           ? t(translations.questionTypeChangedUnsubmitted)
           : t(translations.questionTypeChanged),
-        error: {
-          render: ({ data }) => {
-            const error = (data as Error)?.message;
-            return error || t(translations.errorChangingQuestionType);
-          },
-        },
       })
       .then((data) => {
         props.onConvertComplete({ ...question, ...data });
         props.onClose();
+      })
+      .catch((error) => {
+        const message = (error as Error)?.message;
+        toast.error(message || t(translations.errorChangingQuestionType));
       })
       .finally(() => setConverting(false));
   };

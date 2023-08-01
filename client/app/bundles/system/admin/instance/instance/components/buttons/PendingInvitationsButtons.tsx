@@ -1,12 +1,12 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 import { InvitationRowData } from 'types/system/instance/invitations';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EmailButton from 'lib/components/core/buttons/EmailButton';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { deleteInvitation, resendInvitationEmail } from '../../operations';
 

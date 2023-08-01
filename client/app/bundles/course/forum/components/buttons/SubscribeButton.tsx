@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Button, Switch, Tooltip } from '@mui/material';
 import { EmailSubscriptionSetting } from 'types/course/forums';
 
 import Link from 'lib/components/core/Link';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import {

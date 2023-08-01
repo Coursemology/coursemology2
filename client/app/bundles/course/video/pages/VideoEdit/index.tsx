@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import { VideoFormData, VideoListData } from 'types/course/videos';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import VideoForm from '../../components/forms/VideoForm';

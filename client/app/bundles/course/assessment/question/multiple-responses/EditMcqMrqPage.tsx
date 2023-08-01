@@ -1,6 +1,5 @@
 import { ElementType } from 'react';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import {
   McqMrqData,
   McqMrqFormData,
@@ -8,6 +7,7 @@ import {
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 

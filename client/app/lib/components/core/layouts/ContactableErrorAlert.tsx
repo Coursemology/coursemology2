@@ -1,8 +1,8 @@
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Alert, AlertProps, Typography } from '@mui/material';
 
 import Link from 'lib/components/core/Link';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({

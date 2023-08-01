@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import {
   SkillBranchMiniEntity,
   SkillMiniEntity,
@@ -9,6 +8,7 @@ import {
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { deleteSkill, deleteSkillBranch } from '../../operations';
 

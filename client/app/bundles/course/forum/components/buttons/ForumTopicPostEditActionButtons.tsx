@@ -1,11 +1,11 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import { ForumTopicPostEntity } from 'types/course/forums';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 

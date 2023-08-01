@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import {
   ItemWithTimeData,
   TimeData,
@@ -7,6 +6,7 @@ import {
 } from 'types/course/referenceTimelines';
 
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { useLastSaved, useSetLastSaved } from '../../contexts';
