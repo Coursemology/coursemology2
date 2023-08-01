@@ -7,6 +7,7 @@ const {
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const packageJSON = require('./package.json');
 
@@ -20,7 +21,8 @@ module.exports = {
     ],
   },
   output: {
-    path: join(__dirname, '..', 'public', 'webpack'),
+    path: join(__dirname, 'build'),
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -73,6 +75,7 @@ module.exports = {
       publicPath: '/webpack/',
       writeToFileEmit: true,
     }),
+    new HtmlWebpackPlugin({ template: './public/index.html' }),
     // Do not require all locales in moment
     new ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
     new ForkTsCheckerWebpackPlugin({
