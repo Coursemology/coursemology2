@@ -167,7 +167,7 @@ const SidebarContainer = forwardRef<SidebarContainerRef, SidebarContainerProps>(
       if (!(mobile && smallScreen)) return;
 
       setPinned(false);
-    }, [location.pathname]);
+    }, [location.pathname, location.search]);
 
     const Container = mobile ? Collapsible : Hoverable;
 
