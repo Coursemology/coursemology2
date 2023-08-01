@@ -29,3 +29,8 @@ export interface VideoEditSubmissionData {
   videoDescription: string;
   videoData: object;
 }
+
+export interface VideoSubmissionAttemptData {
+  submissionId: number;
+  submissionUrl?: string;
+}
