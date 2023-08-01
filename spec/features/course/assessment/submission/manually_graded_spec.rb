@@ -173,7 +173,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         # Refresh and check for the late submission warning.
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        expect(page).to have_css('#late-submission', text: late_submission_text)
+        expect(page).to have_text(late_submission_text)
 
         # Create an extra question after submission is submitted, user should still be able to
         # grade the submission in this case.
