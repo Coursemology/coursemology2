@@ -30,9 +30,10 @@ RSpec.feature 'Courses: Staff Management', js: true do
         expect(find_sidebar).to have_text(I18n.t('layouts.course_users.title'))
       end
 
-      scenario 'I cannot access the staff list', js: false do
+      scenario 'I cannot access the staff list' do
         visit course_users_staff_path(course)
-        expect(page.status_code).to eq(403)
+
+        expect_forbidden
       end
     end
 

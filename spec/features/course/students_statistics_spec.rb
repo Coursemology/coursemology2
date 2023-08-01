@@ -64,6 +64,12 @@ RSpec.feature 'Course: Student Statistics' do
 
         expect(page).not_to have_selector('li', text: I18n.t('course.statistics.header'))
       end
+
+      scenario 'I cannot access the statistics page' do
+        visit course_statistics_path(course)
+
+        expect_forbidden
+      end
     end
   end
 end

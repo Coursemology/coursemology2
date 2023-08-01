@@ -81,10 +81,10 @@ RSpec.describe 'Course: Assessments: Questions: Voice Response Management', js: 
     context 'As a Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I cannot add questions', js: false do
+      scenario 'I cannot add questions' do
         visit new_course_assessment_question_voice_response_path(course, assessment)
 
-        expect(page.status_code).to eq(403)
+        expect_forbidden
       end
     end
   end

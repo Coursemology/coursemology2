@@ -114,10 +114,10 @@ RSpec.feature 'Course: Duplication', js: true do
         expect(find_sidebar).not_to have_text(I18n.t('layouts.duplication.title'))
       end
 
-      scenario 'I cannot access the duplication page', js: false do
+      scenario 'I cannot access the duplication page' do
         visit course_duplication_path(course)
 
-        expect(page.status_code).to eq(403)
+        expect_forbidden
       end
     end
   end
