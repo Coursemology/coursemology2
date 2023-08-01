@@ -21,6 +21,8 @@ export interface HomeLayoutCourseData {
 }
 
 export interface HomeLayoutData {
+  locale: string;
+  timeZone: string | null;
   courses?: HomeLayoutCourseData[];
   user?: HomeLayoutUserData;
   masqueradeUserName?: string;
