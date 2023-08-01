@@ -55,7 +55,7 @@ const LogsHead: FC<Props> = (props) => {
         <TableRow>
           <TableCell variant="head">{t(translations.studentName)}</TableCell>
           <TableCell>
-            <Link href={info.studentUrl}>{info.studentName}</Link>
+            <Link to={info.studentUrl}>{info.studentName}</Link>
           </TableCell>
         </TableRow>
 

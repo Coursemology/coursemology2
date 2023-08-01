@@ -137,8 +137,8 @@ const SubscribeButton: FC<Props> = ({
     subscribedTooltip = t(translations.userSettingSubscribed, {
       manageMySubscriptionLink: (
         <Link
-          href={emailSubscription.manageEmailSubscriptionUrl ?? ''}
           opensInNewTab
+          to={emailSubscription.manageEmailSubscriptionUrl ?? ''}
         >
           {t(commonTranslations.manageMySubscriptions)}
         </Link>

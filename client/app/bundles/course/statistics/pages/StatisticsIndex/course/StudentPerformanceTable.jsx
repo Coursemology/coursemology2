@@ -245,7 +245,7 @@ const StudentPerformanceTable = ({
         customBodyRenderLite: (dataIndex) => {
           const student = displayedStudents[dataIndex];
           return (
-            <Link key={student.id} href={student.nameLink} opensInNewTab>
+            <Link key={student.id} opensInNewTab to={student.nameLink}>
               {student.name}
             </Link>
           );
@@ -303,7 +303,7 @@ const StudentPerformanceTable = ({
             <>
               {groupManagers.map((m, index) => (
                 <span key={m.id}>
-                  <Link href={m.nameLink} opensInNewTab>
+                  <Link opensInNewTab to={m.nameLink}>
                     {m.name}
                   </Link>
                   {index < groupManagers.length - 1 && ', '}
@@ -347,8 +347,8 @@ const StudentPerformanceTable = ({
           return (
             <Link
               key={student.id}
-              href={student.experiencePointsLink}
               opensInNewTab
+              to={student.experiencePointsLink}
             >
               {student.experiencePoints}
             </Link>
@@ -428,8 +428,8 @@ const StudentPerformanceTable = ({
           return (
             <Link
               key={student.id}
-              href={student.videoSubmissionLink}
               opensInNewTab
+              to={student.videoSubmissionLink}
             >
               {student.videoSubmissionCount}
             </Link>

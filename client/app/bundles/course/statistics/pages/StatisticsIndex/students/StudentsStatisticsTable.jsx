@@ -168,7 +168,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
             <>
               {groupManagers.map((m, index) => (
                 <span key={m.id}>
-                  <Link href={m.nameLink} opensInNewTab>
+                  <Link opensInNewTab to={m.nameLink}>
                     {m.name}
                   </Link>
                   {index < groupManagers.length - 1 && ', '}
@@ -201,8 +201,8 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
           return (
             <Link
               key={student.id}
-              href={student.experiencePointsLink}
               opensInNewTab
+              to={student.experiencePointsLink}
             >
               {student.experiencePoints}
             </Link>
@@ -224,8 +224,8 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
           return (
             <Link
               key={student.id}
-              href={student.videoSubmissionLink}
               opensInNewTab
+              to={student.videoSubmissionLink}
             >
               {student.videoSubmissionCount}
             </Link>

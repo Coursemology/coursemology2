@@ -4,6 +4,7 @@ import { ContentCopy, Create, DragIndicator } from '@mui/icons-material';
 import { Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import { QuestionData } from 'types/course/assessment/questions';
 
+import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -124,13 +125,14 @@ const Question = (props: QuestionProps): JSX.Element => {
 
                 {question.editUrl && (
                   <Tooltip disableInteractive title={t(translations.edit)}>
-                    <IconButton
-                      aria-label={t(translations.edit)}
-                      disabled={disabled || dragging}
-                      href={question.editUrl}
-                    >
-                      <Create />
-                    </IconButton>
+                    <Link to={question.editUrl}>
+                      <IconButton
+                        aria-label={t(translations.edit)}
+                        disabled={disabled || dragging}
+                      >
+                        <Create />
+                      </IconButton>
+                    </Link>
                   </Tooltip>
                 )}
 

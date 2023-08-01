@@ -128,8 +128,8 @@ const AssessmentConditionForm = (
 
                   <Link
                     className="flex items-center space-x-2"
-                    href={assessments[id].url}
                     opensInNewTab
+                    to={assessments[id].url}
                   >
                     <Typography variant="caption">
                       {t(translations.details)}

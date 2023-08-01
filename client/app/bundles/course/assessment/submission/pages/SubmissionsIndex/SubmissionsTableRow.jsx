@@ -216,7 +216,6 @@ const SubmissionsTableRow = (props) => {
           <Chip
             clickable
             component={Link}
-            href={getEditSubmissionURL(courseId, assessmentId, submission.id)}
             icon={renderUnpublishedWarning(submission)}
             label={msg}
             style={{
@@ -227,6 +226,7 @@ const SubmissionsTableRow = (props) => {
               textColor: 'white',
               color: palette.links,
             }}
+            to={getEditSubmissionURL(courseId, assessmentId, submission.id)}
             variant="filled"
           />
         )}

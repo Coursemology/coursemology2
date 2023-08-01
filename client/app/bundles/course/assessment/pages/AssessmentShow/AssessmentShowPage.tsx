@@ -55,7 +55,7 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
             {assessment.materialsDisabled && (
               <Alert severity="warning">
                 {t(translations.materialsDisabledHint)}&nbsp;
-                <Link href={assessment.componentsSettingsUrl} opensInNewTab>
+                <Link opensInNewTab to={assessment.componentsSettingsUrl}>
                   {t(translations.manageComponents)}
                 </Link>
               </Alert>
@@ -118,10 +118,8 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
               {assessment.unlocks.map((condition) => (
                 <Link
                   key={condition.url}
-                  // TODO: Remove once we get rid of Bootstrap for the love of God
-                  className="no-underline"
-                  href={condition.url}
                   opensInNewTab
+                  to={condition.url}
                   underline="none"
                 >
                   <ListItem className="group hover?:bg-neutral-100">

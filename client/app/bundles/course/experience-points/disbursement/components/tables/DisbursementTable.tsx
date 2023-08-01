@@ -79,8 +79,8 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <Link
-            href={getCourseUserURL(getCourseId(), filteredUsers[dataIndex].id)}
             opensInNewTab
+            to={getCourseUserURL(getCourseId(), filteredUsers[dataIndex].id)}
           >
             {filteredUsers[dataIndex].name}
           </Link>

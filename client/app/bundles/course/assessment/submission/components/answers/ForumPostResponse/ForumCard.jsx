@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { OpenInNew } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
@@ -16,6 +15,7 @@ import {
   forumTopicPostPackShape,
   postPackShape,
 } from 'course/assessment/submission/propTypes';
+import Link from 'lib/components/core/Link';
 import { getForumURL } from 'lib/helpers/url-builders';
 
 import CardTitle from './CardTitle';
@@ -114,17 +114,17 @@ export default class ForumCard extends Component {
         </AccordionSummary>
         <Divider />
         <AccordionActions style={styles.AccordionActions}>
-          <Button
-            endIcon={<OpenInNew />}
-            href={getForumURL(
+          <Link
+            opensInNewTab
+            to={getForumURL(
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,
             )}
-            target="_blank"
-            variant="contained"
           >
-            <FormattedMessage {...translations.viewForumInNewTab} />
-          </Button>
+            <Button variant="contained">
+              <FormattedMessage {...translations.viewForumInNewTab} />
+            </Button>
+          </Link>
         </AccordionActions>
         <Divider />
         <div style={styles.container}>
