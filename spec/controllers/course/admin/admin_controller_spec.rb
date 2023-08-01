@@ -8,7 +8,7 @@ RSpec.describe Course::Admin::AdminController do
     before { sign_in(user) }
 
     describe '#index' do
-      subject { get :index, params: { course_id: course } }
+      subject { get :index, as: :json, params: { course_id: course } }
 
       context 'when the user is a Course Manager' do
         let(:user) { create(:course_manager, course: course).user }

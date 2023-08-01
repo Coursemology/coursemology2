@@ -150,7 +150,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
     describe '#extract_instance_variables' do
       subject do
-        get :edit, params: { course_id: course, assessment_id: assessment, id: immutable_submission }
+        get :edit, as: :json, params: { course_id: course, assessment_id: assessment, id: immutable_submission }
       end
 
       it 'extracts instance variables from services' do

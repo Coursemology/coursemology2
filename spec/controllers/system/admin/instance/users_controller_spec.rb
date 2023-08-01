@@ -9,7 +9,7 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
     let(:normal_user) { create(:user) }
 
     describe '#index' do
-      subject { get :index }
+      subject { get :index, as: :json }
 
       context 'when an instance administrator visits the page' do
         before { sign_in(instance_admin) }

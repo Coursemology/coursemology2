@@ -16,7 +16,7 @@ RSpec.describe Course::LearningMapController, type: :controller do
       before do
         allow(controller).to receive_message_chain('current_component_host.[]').and_return(nil)
       end
-      subject { get :index, params: { course_id: course.id } }
+      subject { get :index, as: :json, params: { course_id: course.id } }
       it 'raises a component not found error' do
         expect { subject }.to raise_error(ComponentNotFoundError)
       end
@@ -27,7 +27,7 @@ RSpec.describe Course::LearningMapController, type: :controller do
       let!(:achievement2) { create(:course_achievement, course: course) }
 
       subject do
-        post :add_parent_node, params: {
+        post :add_parent_node, as: :json, params: {
           course_id: course.id, parent_node_id: "achievement-#{achievement1.id}",
           node_id: "achievement-#{achievement2.id}"
         }
@@ -52,7 +52,7 @@ RSpec.describe Course::LearningMapController, type: :controller do
       end
 
       subject do
-        post :remove_parent_node, params: {
+        post :remove_parent_node, as: :json, params: {
           course_id: course.id, parent_node_id: "achievement-#{achievement1.id}",
           node_id: "achievement-#{achievement2.id}"
         }
@@ -74,7 +74,7 @@ RSpec.describe Course::LearningMapController, type: :controller do
                                       satisfiability_type: :all_conditions)
         end
         subject do
-          post :toggle_satisfiability_type, params: {
+          post :toggle_satisfiability_type, as: :json, params: {
             course_id: course.id, node_id: "achievement-#{achievement.id}"
           }
         end
@@ -94,7 +94,7 @@ RSpec.describe Course::LearningMapController, type: :controller do
                                       satisfiability_type: :at_least_one_condition)
         end
         subject do
-          post :toggle_satisfiability_type, params: {
+          post :toggle_satisfiability_type, as: :json, params: {
             course_id: course.id, node_id: "achievement-#{achievement.id}"
           }
         end

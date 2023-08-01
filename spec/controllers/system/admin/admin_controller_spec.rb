@@ -9,7 +9,7 @@ RSpec.describe System::Admin::AdminController do
     before { sign_in(user) }
 
     describe '#index' do
-      before { get :index }
+      before { get :index, as: :json }
       it { is_expected.to render_template('index') }
     end
   end

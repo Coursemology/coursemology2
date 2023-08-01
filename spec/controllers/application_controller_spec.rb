@@ -121,11 +121,6 @@ RSpec.describe ApplicationController, type: :controller do
     context 'when the action raises a CanCan::AccessDenied' do
       run_rescue
 
-      it 'renders the access denied page to /pages/403' do
-        post :create
-        expect(response).to render_template('pages/403')
-      end
-
       it 'returns HTTP status 403' do
         post :create
         expect(response.status).to eq(403)

@@ -13,7 +13,7 @@ RSpec.describe Course::ReferenceTimelinesController, type: :controller do
     before { sign_in(user) }
 
     describe '#index' do
-      subject { get :index, params: { course_id: course } }
+      subject { get :index, as: :json, params: { course_id: course } }
 
       context 'when the user is a manager of the course' do
         let(:user) { create(:course_manager, course: course).user }

@@ -51,12 +51,11 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
       end
 
       subject do
-        get :edit,
-            params: {
-              course_id: course,
-              assessment_id: assessment,
-              id: text_response
-            }
+        get :edit, as: :json, params: {
+          course_id: course,
+          assessment_id: assessment,
+          id: text_response
+        }
       end
 
       context 'when edit page is loaded' do

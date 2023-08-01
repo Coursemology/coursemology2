@@ -9,7 +9,7 @@ RSpec.describe Course::Statistics::StatisticsController, type: :controller do
     let(:course_user) { create(:course_user, course: course) }
 
     describe '#index' do
-      subject { get :index, params: { course_id: course, user_id: course_user } }
+      subject { get :index, as: :json, params: { course_id: course, user_id: course_user } }
 
       context 'when a Normal User visits the page' do
         let(:user) { create(:user) }
