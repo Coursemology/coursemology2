@@ -64,17 +64,7 @@ module Course::ControllerHelper
     end
   end
 
-  def url_to_course_logo(course)
-    asset_url(course_logo_local_url(course))
-  end
-
   def url_to_material(course, folder, material)
     course_material_folder_material_path(course, folder, material)
-  end
-
-  private
-
-  def course_logo_local_url(course)
-    course.logo.medium.url || 'course_default_logo.svg'
   end
 end
