@@ -2,33 +2,46 @@ const { merge } = require('webpack-merge');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const common = require('./webpack.common');
+const packageJSON = require('./package.json');
 
-const DEV_SERVER_PORT = 8080;
-const DEFAULT_LOCALHOST_HOST = 'localhost:5000';
+const SERVER_PORT = packageJSON.devServer.serverPort;
+const APP_HOST = packageJSON.devServer.appHost;
 
 module.exports = merge(common, {
   mode: 'development',
-  output: {
-    filename: '[name].js',
-    pathinfo: false,
-    publicPath: `//localhost:${DEV_SERVER_PORT}/webpack/`,
-
-    /**
-     * If the host name of the app (e.g., `localhost:5000`) is different from
-     * that of webpack-dev-server's (e.g., `localhost:8080`), worker scripts
-     * and assets packed by webpack will be hosted under webpack-dev-server's
-     * host name. Accessing these resources from the app's host name will
-     * trigger `SecurityError` in-browser due to the different origins. Forcing
-     * webpack-dev-server's `publicPath` to the app's host name bypasses this,
-     * but may not work if the app is hosted on multiple different domains,
-     * e.g., on both `localhost` and ngrok.
-     */
-    workerPublicPath: `//${DEFAULT_LOCALHOST_HOST}/webpack/`,
-  },
   devtool: 'eval-cheap-module-source-map',
   devServer: {
-    port: DEV_SERVER_PORT,
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    allowedHosts: [`.${APP_HOST}`],
+    historyApiFallback: true,
+    devMiddleware: {
+      index: false,
+    },
+    proxy: {
+      context: () => true,
+      changeOrigin: true,
+      onProxyReq: (proxyReq) => {
+        proxyReq.setHeader('origin', `http://${proxyReq.host}:${SERVER_PORT}`);
+      },
+      router: (request) => ({
+        protocol: 'http:',
+        host: request.headers.host.split(':')[0],
+        port: SERVER_PORT,
+      }),
+      bypass: (request) => {
+        const target = request.headers.host.split(':')[0];
+
+        if (request.query.format === 'json') {
+          console.info(
+            '\x1b[36m%s\x1b[0m',
+            `[proxy] ${request.url} -> ${target}${request.url}`,
+          );
+
+          return null;
+        }
+
+        return '/index.html';
+      },
+    },
   },
   optimization: {
     removeAvailableModules: false,
