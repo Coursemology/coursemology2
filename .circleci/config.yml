@@ -31,90 +31,50 @@ commands:
     steps:
       - checkout
 
-      # Checkout submodules
       - run:
           name: Checkout submodules
           command: git submodule update --init --recursive
 
-  restore_ruby_cache:
+  rehydrate_ruby_deps:
     steps:
-      # Install bundler version
-      - run:
-          name: Install bundler version 2.2.33
-          command: gem install bundler:2.2.33
-
-      # Restore cached Ruby dependencies
       - restore_cache:
+          name: Restore Ruby dependencies cache
           keys:
             - v3.0.5-ruby-{{ checksum "Gemfile.lock" }}
-            # Fallback to using the latest cache if no exact match is found
             - v3.0.5-ruby-
 
-      # Update Ruby dependencies
       - run:
-          name: Install dependencies
-          command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle --without development:production --deployment
+          name: Install Bundler
+          command: gem install bundler:2.2.33
 
-      # Recache the updated Ruby dependencies
+      - run:
+          name: Install Ruby dependencies
+          command: bundle install --jobs=4 --retry=3 --path vendor/bundle --without development:production --deployment
+
       - save_cache:
           paths:
             - ./vendor/bundle
             - ./.bundle
           key: v3.0.5-ruby-{{ checksum "Gemfile.lock" }}
 
-  build_and_restore_node_cache:
+  rehydrate_node_deps:
     steps:
-      # Use the desired Node version
-      - run:
-          name: Swap Node versions
-          command: |
-            set +e
-            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-            nvm install v18.12.1
-            nvm alias default 18.12.1
-
-            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
-            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-
-      # Restore cached Node dependencies
       - restore_cache:
+          name: Restore client Yarn dependencies cache
           keys:
-            - v18.12.1-node-{{ checksum "client/yarn.lock" }}
-            # Fallback to using the latest cache if no exact match is found
+            - v18.12.1-node-{{ checksum "client/yarn.lock" }}-{{ checksum "client/vendor/recorderjs/package.json" }}
             - v18.12.1-node-
 
-      # Update Node dependencies
-      - run: cd client && yarn install && cd -
+      - run:
+          name: Install client Yarn dependencies
+          working_directory: client
+          command: yarn install
 
-      # Recache the updated Node dependencies
       - save_cache:
           paths:
             - ./client/node_modules
-          key: v18.12.1-node-{{ checksum "client/yarn.lock" }}
-
-  restore_node_cache:
-    steps:
-      - restore_cache:
-          name: Restore Node cache
-          keys:
-            - v18.12.1-node-{{ checksum "client/yarn.lock" }}
-            # Fallback to using the latest cache if no exact match is found
-            - v18.12.1-node-
-
-  build_and_cache_client:
-    steps:
-      - run:
-          name: Build client
-          command: cd client && yarn build:production && cd -
-      - save_cache:
-          paths:
-            - ./client/build
-            - ./public/webpack
-          key: v1-yarn-build-{{ .Revision }}
+            - ./client/vendor/recorderjs/node_modules
+          key: v18.12.1-node-{{ checksum "client/yarn.lock" }}-{{ checksum "client/vendor/recorderjs/package.json" }}
 
   restore_client_cache:
     steps:
@@ -123,75 +83,150 @@ commands:
           keys:
             - v1-yarn-build-{{ .Revision }}
 
+  build_and_cache_client:
+    steps:
+      - restore_client_cache
+
+      - run:
+          name: Build client
+          working_directory: client
+          command: yarn build:test
+
+      - save_cache:
+          paths:
+            - ./client/build
+          key: v1-yarn-build-{{ .Revision }}
+
   setup_db:
     steps:
       - run:
-          name: Setup DB
-          command: |
-            bundle exec rake db:setup
+          name: Set up test database
+          command: bundle exec rake db:setup
+
+  serve_static_site:
+    steps:
+      - run:
+          name: Download dirt-cheap-rocket
+          command: curl https://github.com/Coursemology/dirt-cheap-rocket/releases/latest/download/dirt-cheap-rocket.cjs -o dirt-cheap-rocket.cjs -L
+      - run:
+          name: Serve static site
+          command: node dirt-cheap-rocket.cjs
+          background: true
           environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+            DCR_CLIENT_PORT: 4200
+            DCR_SERVER_PORT: 6969
+            DCR_PUBLIC_PATH: /static
+            DCR_ASSETS_DIR: client/build
+
+  serve_rails_server:
+    steps:
+      - run:
+          name: Serve Rails server
+          command: bundle exec rails s -p 6969
+          background: true
+      - run:
+          name: Wait for Rails server
+          command: curl -s --retry 1000 --retry-delay 1 --retry-connrefused http://lvh.me:6969
+
+  setup_docker_layer_cache:
+    steps:
+      - setup_remote_docker:
+          version: 20.10.18
+          docker_layer_caching: true
+
+  # Install Ghostscript so `identify` in ImageMagick works with PDF files.
+  # To remove PDF security policy for ImageMagick (Ubuntu 20.04), see https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion
+  # This is currently not used as CircleCI would fail to install occasionally.
+  install_ghostscript_and_imagemagick:
+    steps:
+      - run:
+          name: Install Ghostscript and ImageMagick
+          command: |
+            sudo apt update
+            sudo apt install imagemagick
+            sudo apt install ghostscript
+            sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
 jobs:
-  test:
+  build_client:
+    executor: node
+
+    steps:
+      - checkout_with_submodules
+      - rehydrate_node_deps
+      - build_and_cache_client
+
+  test_playwright:
     executor: ruby_with_postgres
     parallelism: 30
 
     steps:
       - checkout_with_submodules
+      - setup_docker_layer_cache
 
-      - restore_ruby_cache
-      - restore_node_cache
-
+      - rehydrate_ruby_deps
       - restore_client_cache
 
-      # Install ghostscript so `identify` in ImageMagick works with PDF files.
-      # Remove pdf security policy for imagemagick (ubuntu 20.04)
-      # https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion
-      # Installations below are currently disabled as CircleCI would fail to install occasionally
-      # - run:
-      #     name: install ghostscript and imagemagick
-      #     command: |
-      #       sudo apt update
-      #       sudo apt install imagemagick
-      #       sudo apt install ghostscript
-      #       sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+      - setup_db
+      - serve_static_site
+      - serve_rails_server
 
-      - setup_remote_docker:
-          version: 20.10.18
-          docker_layer_caching: true
+      - run:
+          name: Install Playwright dependencies
+          working_directory: tests
+          command: yarn install; yarn prepare
+
+      - run:
+          name: Run Playwright tests
+          working_directory: tests
+          command: npx playwright test --reporter=junit --shard=${SHARD}/${CIRCLE_NODE_TOTAL}
+          environment:
+            SHARD: "$((${CIRCLE_NODE_INDEX}+1))"
+            PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
+
+      - store_test_results:
+          path: ~/repo/tests/results.xml
+
+  test_rspec:
+    executor: ruby_with_postgres
+    parallelism: 30
+
+    steps:
+      - checkout_with_submodules
+      - setup_docker_layer_cache
+
+      - rehydrate_ruby_deps
+      - restore_client_cache
 
       - setup_db
+      - serve_static_site
 
-      # Run tests!
       - run:
-          name: run
+          name: Run RSpec tests
           no_output_timeout: 10m
           command: |
             mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-              circleci tests split --split-by=timings)"
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
 
             bundle exec rspec \
               --format progress \
               --format RspecJunitFormatter \
               --out /tmp/test-results/rspec.xml \
-              --format progress \
-              $TEST_FILES
+              -- ${TEST_FILES}
 
-      # Collect reports
       - store_test_results:
           path: /tmp/test-results
+
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
 
-  lint:
+  factorybot_lint:
     executor: ruby_with_postgres
 
     steps:
       - checkout
-      - restore_ruby_cache
+      - rehydrate_ruby_deps
       - setup_db
 
       - run:
@@ -203,55 +238,76 @@ jobs:
 
     steps:
       - checkout_with_submodules
-      - build_and_restore_node_cache
-      - build_and_cache_client
+      - rehydrate_node_deps
 
       - run:
-          name: Run yarn checks
-          command: |
-            cd client
-            yarn lint
+          name: Run ESLint and Prettier checks
+          working_directory: client
+          command: yarn lint
 
   jstest:
     executor: node
 
     steps:
       - checkout_with_submodules
-      - build_and_restore_node_cache
-      - build_and_cache_client
+      - rehydrate_node_deps
 
-      # Build frontend JS
       - run:
-          name: Run yarn checks
-          command: |
-            cd client && yarn
-            yarn testci
+          name: Build translations
+          working_directory: client
+          command: yarn run build:translations
 
-  i18n:
+      - run:
+          name: Run Jest tests
+          working_directory: client
+          command: yarn testci
+
+  i18n_en:
     executor: ruby_with_postgres
 
     steps:
       - checkout
-      - restore_ruby_cache
+      - rehydrate_ruby_deps
       - setup_db
 
-      # Run i18n checks!
       - run:
-          name: Run i18n checks
-          command: |
-            bundle exec i18n-tasks unused
-            bundle exec i18n-tasks missing
+          name: Check for unused translations (English)
+          command: bundle exec i18n-tasks unused --locales en
+
+      - run:
+          name: Check for missing translations (English)
+          command: bundle exec i18n-tasks missing --locales en
+
+  i18n_zh:
+    executor: ruby_with_postgres
+
+    steps:
+      - checkout
+      - rehydrate_ruby_deps
+      - setup_db
+
+      - run:
+          name: Check for unused translations (Mandarin)
+          command: bundle exec i18n-tasks unused --locales zh
+
+      - run:
+          name: Check for missing translations (Mandarin)
+          command: bundle exec i18n-tasks missing --locales zh
 
 workflows:
-  version: 2
   build_and_test_and_lint:
     jobs:
-      - lint
       - jslint
       - jstest
-      - i18n
-      - test:
+      - build_client
+      - i18n_en
+      - i18n_zh
+      - factorybot_lint
+      - test_rspec:
           requires:
-            - lint
-            - jslint
-            - jstest
+            - build_client
+            - factorybot_lint
+      - test_playwright:
+          requires:
+            - build_client
+
