@@ -5,7 +5,7 @@ const {
   DefinePlugin,
 } = require('webpack');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const Dotenv = require('dotenv-webpack');
+const DotenvPlugin = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const packageJSON = require('./package.json');
@@ -67,7 +67,7 @@ module.exports = {
     moduleIds: 'deterministic',
   },
   plugins: [
-    new Dotenv(),
+    new DotenvPlugin(),
     new IgnorePlugin({ resourceRegExp: /__test__/ }),
     new WebpackManifestPlugin({
       publicPath: '/webpack/',
