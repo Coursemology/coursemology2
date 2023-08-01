@@ -10,7 +10,6 @@ class ApplicationController < ActionController::Base
   include ApplicationControllerMultitenancyConcern
   include ApplicationComponentsConcern
   include ApplicationInternationalizationConcern
-  include ApplicationThemingConcern
   include ApplicationUserConcern
   include ApplicationUserTimeZoneConcern
   include ApplicationInstanceUserConcern

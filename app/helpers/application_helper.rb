@@ -3,7 +3,6 @@
 module ApplicationHelper
   include FontAwesome::Rails::IconHelper
 
-  include ApplicationThemingHelper
   include ApplicationAnnouncementsHelper
   include ApplicationJobsHelper
   include ApplicationWidgetsHelper
