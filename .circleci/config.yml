@@ -1,8 +1,23 @@
-# Ruby CircleCI 2.1 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-ruby/ for more details
-#
 version: 2.1
+
+executors:
+  ruby_with_postgres:
+    docker:
+      - image: cimg/ruby:3.0.5-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          BUNDLE_APP_CONFIG: ~/repo/.bundle
+          DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+
+      - image: cimg/postgres:14.5
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: coursemology_test
+
+    working_directory: ~/repo
+    resource_class: large
 
 commands:
   checkout_with_submodules:
@@ -112,26 +127,8 @@ commands:
 
 jobs:
   test:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.5-browsers
-        environment:
-          PG_HOST: localhost
-          PG_USER: ubuntu
-          RAILS_ENV: test
-          BUNDLE_APP_CONFIG: ~/repo/.bundle
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: cimg/postgres:14.5
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: coursemology_test
-
+    executor: ruby_with_postgres
     parallelism: 30
-
-    working_directory: ~/repo
 
     steps:
       - checkout_with_submodules
@@ -174,8 +171,6 @@ jobs:
               --out /tmp/test-results/rspec.xml \
               --format progress \
               $TEST_FILES
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # Collect reports
       - store_test_results:
@@ -183,38 +178,18 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
-    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
-    resource_class: large
 
   lint:
-    docker:
-      - image: cimg/ruby:3.0.5-browsers
-        environment:
-          PG_HOST: localhost
-          PG_USER: ubuntu
-          RAILS_ENV: test
-          BUNDLE_APP_CONFIG: ~/repo/.bundle
-
-      - image: cimg/postgres:14.5
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: coursemology_test
-
-    working_directory: ~/repo
+    executor: ruby_with_postgres
 
     steps:
       - checkout
-
       - restore_ruby_cache
-
       - setup_db
 
       - run:
           name: Run FactoryBot lint
-          command: |
-            bundle exec rake factory_bot:lint
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+          command: bundle exec rake factory_bot:lint
 
   jslint:
     docker:
@@ -264,30 +239,11 @@ jobs:
     resource_class: large
 
   i18n:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.5-browsers
-        environment:
-          PG_HOST: localhost
-          PG_USER: ubuntu
-          RAILS_ENV: test
-          BUNDLE_APP_CONFIG: ~/repo/.bundle
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: cimg/postgres:14.5
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: coursemology_test
-
-    working_directory: ~/repo
+    executor: ruby_with_postgres
 
     steps:
       - checkout
-
       - restore_ruby_cache
-
       - setup_db
 
       # Run i18n checks!
@@ -296,9 +252,6 @@ jobs:
           command: |
             bundle exec i18n-tasks unused
             bundle exec i18n-tasks missing
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
-    resource_class: large
 
 workflows:
   version: 2
