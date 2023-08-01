@@ -83,17 +83,9 @@ module Capybara::TestGroupHelpers
     # to ensure certain changes are made before continuing with the tests.
     def expect_toastify(message)
       wait_for_page # To ensure toast is open
-      found = false
-      find_all('div.Toastify__toast').each do |toast|
-        within toast do
-          toast_text = find('div.Toastify__toast-body', visible: true).text
-          found = true if toast_text.include? message
-          find('div.Toastify__toast-body', visible: true).click
-          break if found
-        end
-      end
-      wait_for_page # To ensure toast is closed
-      expect(found).to be_truthy
+      container = find_all('.Toastify').first
+      expect(container).to have_text(message)
+      find('p', text: message).click
     end
 
     # Finds a react-beautiful-dnd draggable element
