@@ -2,8 +2,7 @@
 # Test group helpers for setting the tenant for tests.
 module ActsAsTenant::TestGroupHelpers
   def self.build_host(instance)
-    port = Capybara.current_session&.server&.port
-    if port
+    if (port = Application::Application.config.x.client_port)
       "http://#{instance.host}:#{port}"
     else
       "http://#{instance.host}"
