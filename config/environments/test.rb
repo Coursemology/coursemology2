@@ -43,7 +43,7 @@ Rails.application.configure do
   config.action_mailer.default_options = { from: 'coursemology@example.org' }
 
   # We will assume that we are running on localhost
-  config.action_mailer.default_url_options = { host: 'localhost' }
+  config.action_mailer.default_url_options = { host: 'lvh.me:4200' }
 
   # Use the threaded background job adapter for replicating the production environment.
   config.active_job.queue_adapter = ActiveJob::QueueAdapters::BackgroundThreadAdapter.new
@@ -54,7 +54,10 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
-  config.x.default_host = 'coursemology.lvh.me'
+  config.x.default_host = 'lvh.me'
+  config.x.client_port = 4200
+  config.x.server_port = 6969
+  config.x.default_user_password = 'lolololol'
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
