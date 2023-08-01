@@ -20,7 +20,7 @@ const LearningRateRecords: FC = () => {
   const { t } = useTranslation();
   return (
     <>
-      <Typography variant="h4">{t(translations.header)}</Typography>
+      <Typography variant="h6">{t(translations.header)}</Typography>
       <Preload
         render={<LoadingIndicator />}
         while={fetchCourseUserLearningRateData}
