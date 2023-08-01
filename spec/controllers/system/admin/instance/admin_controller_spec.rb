@@ -9,7 +9,7 @@ RSpec.describe System::Admin::Instance::AdminController do
     before { sign_in(user) }
 
     describe '#index' do
-      subject { get :index }
+      subject { get :index, as: :json }
       context 'when a system administrator visits the page' do
         let(:user) { create(:administrator) }
         it { is_expected.to render_template(:index) }

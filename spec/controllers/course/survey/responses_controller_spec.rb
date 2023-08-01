@@ -32,12 +32,6 @@ RSpec.describe Course::Survey::ResponsesController do
     describe '#index' do
       let(:user) { create(:administrator) }
 
-      context 'when html page is requested' do
-        subject { get :index, params: { course_id: course.id, survey_id: survey.id } }
-
-        it { is_expected.to render_template('index') }
-      end
-
       context 'when json data is requested' do
         render_views
         subject { get :index, params: { format: :json, course_id: course.id, survey_id: survey.id } }

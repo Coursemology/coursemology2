@@ -13,7 +13,7 @@ RSpec.describe Course::Assessment::SubmissionsController do
 
     describe '#index' do
       context 'when no category is specified' do
-        before { get :index, params: { course_id: course } }
+        before { get :index, as: :json, params: { course_id: course } }
 
         it 'sets the category to the first category' do
           first_category = course.assessment_categories.first
@@ -29,7 +29,7 @@ RSpec.describe Course::Assessment::SubmissionsController do
         let!(:submission) do
           create(:submission, :published, creator: student, assessment: assessment)
         end
-        before { get :index, params: { course_id: course, category: category } }
+        before { get :index, as: :json, params: { course_id: course, category: category } }
 
         it 'sets the category to be the specified category' do
           expect(controller.instance_variable_get(:@category)).to eq(category)

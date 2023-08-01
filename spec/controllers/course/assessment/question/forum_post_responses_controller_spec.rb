@@ -51,12 +51,11 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController, type:
       end
 
       subject do
-        get :edit,
-            params: {
-              course_id: course,
-              assessment_id: assessment,
-              id: forum_post_response
-            }
+        get :edit, as: :json, params: {
+          course_id: course,
+          assessment_id: assessment,
+          id: forum_post_response
+        }
       end
 
       context 'when edit page is loaded' do

@@ -19,7 +19,7 @@ RSpec.describe Course::Discussion::TopicsController do
     let(:topics) { controller.instance_variable_get(:@topics) }
 
     describe '#index' do
-      subject { get :index, params: { course_id: course } }
+      subject { get :index, as: :json, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
         before { sign_in(staff) }

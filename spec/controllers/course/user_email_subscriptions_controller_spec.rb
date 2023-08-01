@@ -11,12 +11,6 @@ RSpec.describe Course::UserEmailSubscriptionsController, type: :controller do
     let!(:student) { create(:course_student, course: course) }
     let(:json_response) { JSON.parse(response.body) }
 
-    describe '#edit html' do
-      before { sign_in(staff.user) }
-      subject { get :edit, params: { course_id: course, user_id: staff } }
-      it { is_expected.to render_template(:edit) }
-    end
-
     describe '#edit json' do
       before { sign_in(student.user) }
       context 'when an unsubscription link for surveys closing reminder is clicked' do

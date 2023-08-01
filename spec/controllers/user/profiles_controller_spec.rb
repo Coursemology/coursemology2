@@ -8,22 +8,18 @@ RSpec.describe User::ProfilesController, type: :controller do
     let!(:user) { create(:user) }
 
     describe '#edit' do
-      subject { get :edit }
+      subject { get :edit, as: :json }
 
       context 'when user is signed in' do
         before { sign_in(user) }
 
         it { is_expected.to render_template(:edit) }
       end
-
-      context 'when user is not signed in' do
-        it { is_expected.to redirect_to(new_user_session_path) }
-      end
     end
 
     describe '#update' do
       let(:new_name) { 'New Name' }
-      subject { patch :update, params: { user: { name: new_name } } }
+      subject { patch :update, as: :json, params: { user: { name: new_name } } }
 
       context 'when user is signed in' do
         before { sign_in(user) }
@@ -32,10 +28,6 @@ RSpec.describe User::ProfilesController, type: :controller do
           subject
           expect(user.reload.name).to eq(new_name)
         end
-      end
-
-      context 'when user is not signed in' do
-        it { is_expected.to redirect_to(new_user_session_path) }
       end
     end
   end

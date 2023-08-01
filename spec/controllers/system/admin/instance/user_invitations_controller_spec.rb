@@ -8,7 +8,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
     let(:normal_user) { create(:user) }
 
     describe '#index' do
-      subject { get :index }
+      subject { get :index, as: :json }
 
       context 'when a system administrator visits the page' do
         before { sign_in(instance_admin) }

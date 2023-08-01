@@ -15,7 +15,7 @@ RSpec.describe Course::UsersController, type: :controller do
 
     describe '#students' do
       before { sign_in(user) }
-      subject { get :students, params: { course_id: course } }
+      subject { get :students, as: :json, params: { course_id: course } }
 
       context 'when a course manager visits the page' do
         let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
@@ -35,7 +35,7 @@ RSpec.describe Course::UsersController, type: :controller do
 
     describe '#staff' do
       before { sign_in(user) }
-      subject { get :staff, params: { course_id: course } }
+      subject { get :staff, as: :json, params: { course_id: course } }
 
       context 'when a course manager visits the page' do
         let!(:course_lecturer) { create(:course_manager, course: course, user: user) }

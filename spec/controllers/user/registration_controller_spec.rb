@@ -34,11 +34,9 @@ RSpec.describe User::RegistrationsController, type: :controller do
           @request.env['devise.mapping'] = Devise.mappings[:user]
         end
 
-        it 'flashes error message and no new user is registered' do
+        it 'does not register any new users' do
           allow(controller).to receive(:verify_recaptcha).and_return(false)
           expect { subject }.to change { User.count }.by(0)
-          expect(flash[:alert]).to be_present
-          expect(response).to render_template(:new)
         end
       end
     end

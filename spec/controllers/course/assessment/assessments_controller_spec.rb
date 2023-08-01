@@ -20,27 +20,25 @@ RSpec.describe Course::Assessment::AssessmentsController do
     describe '#index' do
       context 'when a category is given' do
         before do
-          post :index,
-               params: {
-                 course_id: course,
-                 id: immutable_assessment,
-                 assessment: { title: '' },
-                 category: category
-               }
+          post :index, as: :json, params: {
+            course_id: course,
+            id: immutable_assessment,
+            assessment: { title: '' },
+            category: category
+          }
         end
         it { expect(controller.instance_variable_get(:@category)).to eq(category) }
       end
 
       context 'when a tab is given' do
         before do
-          post :index,
-               params: {
-                 course_id: course,
-                 id: immutable_assessment,
-                 assessment: { title: '' },
-                 category: category,
-                 tab: tab
-               }
+          post :index, as: :json, params: {
+            course_id: course,
+            id: immutable_assessment,
+            assessment: { title: '' },
+            category: category,
+            tab: tab
+          }
         end
         it { expect(controller.instance_variable_get(:@tab)).to eq(tab) }
       end
@@ -53,7 +51,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         assessment
       end
 
-      subject { get :edit, params: { course_id: course, id: assessment } }
+      subject { get :edit, as: :json, params: { course_id: course, id: assessment } }
 
       context 'when edit page is loaded' do
         it 'sanitizes the description text' do
