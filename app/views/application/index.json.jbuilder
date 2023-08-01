@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 if user_signed_in?
   my_courses = Course.containing_user(current_user).ordered_by_start_at
+  course_last_active_times_hash = CourseUser.for_user(current_user).pluck(:course_id, :last_active_at).to_h
+
   if my_courses.present?
     json.courses my_courses do |course|
+      json.id course.id
       json.title course.title
       json.url course_path(course)
+      json.logoUrl url_to_course_logo(course)
+      json.lastActiveAt course_last_active_times_hash[course.id]
     end
   end
 

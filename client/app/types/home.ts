@@ -9,8 +9,16 @@ interface HomeLayoutUserData {
   instanceRole: InstanceUserRoles;
 }
 
+export interface HomeLayoutCourseData {
+  id: number;
+  title: string;
+  url: string;
+  logoUrl: string;
+  lastActiveAt: string | null;
+}
+
 export interface HomeLayoutData {
-  courses?: { title: string; url: string }[];
+  courses?: HomeLayoutCourseData[];
   user?: HomeLayoutUserData;
   signOutUrl?: string;
   masqueradeUserName?: string;
