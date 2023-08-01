@@ -2,6 +2,7 @@ import { defineMessages } from 'react-intl';
 import { Typography } from '@mui/material';
 
 import Link from 'lib/components/core/Link';
+import { SUPPORT_EMAIL } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
@@ -50,13 +51,9 @@ const Footer = (): JSX.Element => {
           {t(translations.privacyPolicy)}
         </Link>
 
-        <Link
-          className="mx-3 my-1"
-          external
-          href="mailto:coursemology@gmail.com"
-        >
-          {t(translations.contactUs)}
-        </Link>
+          <Link className="mx-3 my-1" external href={`mailto:${SUPPORT_EMAIL}`}>
+            {t(translations.contactUs)}
+          </Link>
 
         <Link
           className="mx-3 my-1"

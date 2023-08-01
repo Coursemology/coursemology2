@@ -2,6 +2,7 @@ import { defineMessages } from 'react-intl';
 import { AlertProps } from '@mui/material';
 
 import ContactableErrorAlert from 'lib/components/core/layouts/ContactableErrorAlert';
+import { SUPPORT_EMAIL } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
@@ -18,8 +19,6 @@ const translations = defineMessages({
       'The page URL is: {url}',
   },
 });
-
-const SUPPORT_EMAIL = 'coursemology@gmail.com' as const;
 
 interface EvaluatorErrorPanelProps extends AlertProps {
   children: string;
