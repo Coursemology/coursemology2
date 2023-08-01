@@ -51,9 +51,6 @@ global.$ = jQuery;
 global.jQuery = jQuery;
 global.buildContextOptions = buildContextOptions;
 
-// Global mocks
-document.head.innerHTML = `<meta name="server-context" data-i18n-locale="en" data-time-zone="${timeZone}">`;
-
 window.history.pushState({}, '', `/courses/${courseId}`);
 
 // Global helper functions
