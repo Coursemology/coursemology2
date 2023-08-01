@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::ComponentController < Course::Controller
-  layout 'course'
-
   before_action :load_current_component_host
   before_action :check_component
   before_action :load_settings
