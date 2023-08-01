@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import AttributionsProvider from './AttributionsProvider';
 import ErrorBoundary from './ErrorBoundary';
 import I18nProvider from './I18nProvider';
 import RollbarProvider from './RollbarWrapper';
@@ -17,7 +18,9 @@ const Providers = (props: ProvidersProps): JSX.Element => (
       <StoreProvider persistor={props.persistor} store={props.store}>
         <I18nProvider>
           <ThemeProvider>
-            <ToastProvider>{props.children}</ToastProvider>
+            <ToastProvider>
+              <AttributionsProvider>{props.children}</AttributionsProvider>
+            </ToastProvider>
           </ThemeProvider>
         </I18nProvider>
       </StoreProvider>
