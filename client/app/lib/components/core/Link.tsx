@@ -8,25 +8,34 @@ interface LinkProps extends ComponentProps<typeof MuiLink> {
   reloads?: boolean;
   opensInNewTab?: boolean;
   external?: boolean;
+  disabled?: boolean;
 }
 
 type LinkRef = HTMLAnchorElement;
 
 const Link = forwardRef<LinkRef, LinkProps>((props, ref): JSX.Element => {
-  const { opensInNewTab, external, to: route, reloads, ...linkProps } = props;
+  const {
+    opensInNewTab,
+    external,
+    to: route,
+    reloads,
+    disabled,
+    ...linkProps
+  } = props;
 
   const children = (
     <>
       {props.children}
-      {external && <ArrowOutward fontSize="inherit" />}
+      {external && <ArrowOutward className="-mt-1" fontSize="inherit" />}
     </>
   );
 
-  if (!route && !props.href && !props.onClick)
+  if (disabled || (!route && !props.href && !props.onClick))
     return (
       <Typography
         ref={ref}
         className={props.className}
+        color={disabled ? 'text.disabled' : undefined}
         component="span"
         id={props.id}
         variant={props.variant ?? 'body2'}
