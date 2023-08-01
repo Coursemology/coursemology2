@@ -134,4 +134,11 @@ Rails.application.configure do
   # config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess,
   #                                                       ActiveSupport::Duration]
   config.active_record.use_yaml_unsafe_load = true
+
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins(/coursemology\.org:([0-9]+)/, /(.*?)\.coursemology\.org:([0-9]+)/)
+      resource '*', headers: :any, methods: [:get, :post, :patch, :put], credentials: true
+    end
+  end
 end

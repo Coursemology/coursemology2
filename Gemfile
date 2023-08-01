@@ -10,6 +10,9 @@ gem 'rails', '~> 6.0.6.1'
 # Use PostgreSQL for the backend
 gem 'pg'
 
+# Enables CORS configuration to allow sharing resources with client on another domain
+gem 'rack-cors'
+
 # Instance/Course settings
 gem 'settings_on_rails'
 # Manage read/unread status

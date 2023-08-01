@@ -81,4 +81,11 @@ Rails.application.configure do
   config.action_cable.disable_request_forgery_protection = true
 
   config.hosts << ".#{config.x.default_app_host}"
+
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins(/lvh\.me:([0-9]+)/, /(.*?)\.lvh\.me:([0-9]+)/)
+      resource '*', headers: :any, methods: [:get, :post, :patch, :put], credentials: true
+    end
+  end
 end
