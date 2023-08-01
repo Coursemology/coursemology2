@@ -12,10 +12,12 @@ interface AccordionProps extends ComponentProps<typeof MuiAccordion> {
   children: NonNullable<ReactNode>;
   subtitle?: string;
   disabled?: boolean;
+  icon?: ReactNode;
 }
 
 const Accordion = (props: AccordionProps): JSX.Element => {
-  const { title, children, subtitle, disabled, ...accordionProps } = props;
+  const { title, children, subtitle, disabled, icon, ...accordionProps } =
+    props;
 
   return (
     <MuiAccordion
@@ -30,9 +32,13 @@ const Accordion = (props: AccordionProps): JSX.Element => {
       }}
     >
       <MuiAccordionSummary
-        classes={{ content: 'flex flex-col m-0 p-0' }}
+        classes={{
+          content: 'flex flex-col !m-0 p-0',
+          expandIconWrapper: icon ? 'rotate-0' : undefined,
+        }}
         className="space-x-2 px-9 py-6 hover:bg-neutral-100"
-        expandIcon={<ExpandMore />}
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        expandIcon={icon || <ExpandMore />}
       >
         <Typography>{title}</Typography>
 
