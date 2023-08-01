@@ -61,9 +61,10 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.x.default_host = 'localhost:5000'
+  config.x.default_app_host = 'lvh.me'
+  config.x.default_host = "#{config.x.default_app_host}:5000"
 
-  config.action_mailer.default_url_options = { host: 'localhost:5000' }
+  config.action_mailer.default_url_options = { host: "#{config.x.default_app_host}:5000" }
 
   # Rails 6.0.5.1 security patch
   # To find out more unpermitted classes and add below then uncomment
@@ -78,4 +79,6 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
 
   config.action_cable.disable_request_forgery_protection = true
+
+  config.hosts << ".#{config.x.default_app_host}"
 end
