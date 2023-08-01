@@ -625,11 +625,6 @@ GEM
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
       selenium-webdriver (~> 4.0)
-    webpacker (5.4.4)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
@@ -746,9 +741,7 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   unread
   validates_hostname
-  wdm (>= 0.0.3)
   webdrivers
-  webpacker (<= 5.4.4)
   workflow
   workflow-activerecord (>= 4.1, < 7.0)
   yard

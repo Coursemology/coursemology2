@@ -40,9 +40,6 @@ gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
-# TODO: Check compatibility with webpacker 3.2.0 when it is released.
-# https://github.com/rails/webpacker/blob/4f65c5ee58666bbe58b234c48d47ec7d48fab4d8/CHANGELOG.md
-gem 'webpacker', '<= 5.4.4'
 # Internationalisation for JavaScript.
 gem 'i18n-js', '<= 3.10.0'
 
