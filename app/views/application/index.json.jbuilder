@@ -14,14 +14,15 @@ if user_signed_in?
   end
 
   json.user do
+    json.id current_user.id
     json.name current_user.name
+    json.primaryEmail current_user.email
     json.url user_path(current_user)
     json.avatarUrl user_image(current_user)
     json.role current_user.role
     json.instanceRole controller.current_instance_user&.role
+    json.canCreateNewCourse can?(:create, Course.new)
   end
-
-  json.signOutUrl destroy_user_session_path
 
   if user_masquerade?
     json.masqueradeUserName current_user.name
