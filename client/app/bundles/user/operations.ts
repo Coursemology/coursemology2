@@ -40,12 +40,12 @@ export const fetchAccountSettings = async (): Promise<AccountSettingsData> => {
 export const updateProfile = async (
   data: Partial<ProfileData>,
 ): Promise<Partial<ProfileData> | undefined> => {
-  if (!data.name && !data.timezone && !data.locale) return undefined;
+  if (!data.name && !data.timeZone && !data.locale) return undefined;
 
   const adaptedData: ProfilePostData = {
     user: {
       name: data.name,
-      time_zone: data.timezone,
+      time_zone: data.timeZone,
       locale: data.locale,
     },
   };
@@ -54,7 +54,7 @@ export const updateProfile = async (
     const response = await GlobalAPI.users.updateProfile(adaptedData);
     return {
       name: response.data.name,
-      timezone: response.data.timezone,
+      timeZone: response.data.timeZone,
       locale: response.data.locale,
     };
   } catch (error) {
@@ -159,7 +159,7 @@ export const resendConfirmationEmail = async (
   url: NonNullable<EmailData['confirmationEmailPath']>,
 ): Promise<void> => {
   try {
-    await GlobalAPI.users.resendConfirmationEmail(url);
+    await GlobalAPI.users.resendConfirmationEmailByURL(url);
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;

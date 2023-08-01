@@ -17,7 +17,7 @@ RSpec.feature 'User: Profile', js: true do
         time_zone = 'Singapore'
 
         fill_in 'name', with: new_name
-        select time_zone, from: 'timezone'
+        select time_zone, from: 'timeZone'
         click_button 'Save changes'
         wait_for_page
 
