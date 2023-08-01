@@ -5,7 +5,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { FormHelperText, InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 
-import axios from 'lib/axios';
+import attachmentsAPI from 'api/Attachments';
 
 import './CKEditor.css';
 
@@ -28,13 +28,9 @@ const uploadAdapter = (loader) => {
   return {
     upload: () =>
       new Promise((resolve, reject) => {
-        const formData = new FormData();
-
-        loader.file.then((file) => {
-          formData.append('file', file);
-          formData.append('name', file.name);
-          axios
-            .post('/attachments', formData)
+        loader.file.then((file: File) => {
+          attachmentsAPI
+            .upload(file)
             .then((response) => response.data)
             .then((data) => {
               if (data.success) {

@@ -1,48 +1,22 @@
-import { FC } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Button } from '@mui/material';
 
-import axios from 'lib/axios';
+import Link from 'lib/components/core/Link';
 
-interface Props extends WrappedComponentProps {
+interface TodoAccessButtonProps {
   accessButtonText: string;
   accessButtonLink: string;
-  submissionUrl: string;
-  isVideo: boolean;
-  isNewAttempt: boolean;
 }
 
-const TodoAccessButton: FC<Props> = (props) => {
-  const {
-    accessButtonText,
-    accessButtonLink,
-    submissionUrl,
-    isVideo,
-    isNewAttempt,
-  } = props;
+const TodoAccessButton = (props: TodoAccessButtonProps): JSX.Element => {
+  const { accessButtonText, accessButtonLink } = props;
+
   return (
-    <Button
-      color="primary"
-      onClick={(): void => {
-        // TODO: Refactor below to remove if else check
-        if (isVideo) {
-          axios.get(accessButtonLink).then((response) => {
-            window.location.href = `${submissionUrl}/${response.data.submissionId}/edit`;
-          });
-        } else if (isNewAttempt) {
-          axios.get(accessButtonLink).then((response) => {
-            window.location.href = response.data.redirectUrl;
-          });
-        } else {
-          window.location.href = accessButtonLink;
-        }
-      }}
-      style={{ width: 80 }}
-      variant="contained"
-    >
-      {accessButtonText}
-    </Button>
+    <Link to={accessButtonLink}>
+      <Button color="primary" size="small" variant="contained">
+        {accessButtonText}
+      </Button>
+    </Link>
   );
 };
 
-export default injectIntl(TodoAccessButton);
+export default TodoAccessButton;

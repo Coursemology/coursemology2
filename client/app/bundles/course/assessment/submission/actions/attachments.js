@@ -1,4 +1,4 @@
-import AttachmentsAPI from 'api/Attachments';
+import attachmentsAPI from 'api/Attachments';
 
 import actionTypes from '../constants';
 
@@ -6,7 +6,8 @@ export default function destroy(questionId, attachmentId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_ATTACHMENT_REQUEST });
 
-    return AttachmentsAPI.delete(attachmentId)
+    return attachmentsAPI
+      .delete(attachmentId)
       .then((response) => response.data)
       .then(() => {
         dispatch({

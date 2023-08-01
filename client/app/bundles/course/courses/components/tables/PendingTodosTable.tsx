@@ -25,7 +25,6 @@ import {
   getSurveyResponseURL,
   getSurveyURL,
   getVideoAttemptURL,
-  getVideoSubmissionsURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
@@ -105,7 +104,7 @@ const PendingTodosTable: FC<Props> = (props) => {
   const renderButtons = (todo: TodoData): JSX.Element => {
     let accessButtonText = '';
     let accessButtonLink = '';
-    let submissionUrl;
+
     // TODO: Refactor below by changing switch to dictionary
     switch (todoType) {
       case 'surveys':
@@ -150,10 +149,6 @@ const PendingTodosTable: FC<Props> = (props) => {
           )}/${todo.itemActableSpecificId}/edit`;
         }
 
-        submissionUrl = getAssessmentSubmissionURL(
-          getCourseId(),
-          todo.itemActableId,
-        );
         break;
 
       case 'videos':
@@ -163,10 +158,6 @@ const PendingTodosTable: FC<Props> = (props) => {
           todo.itemActableId,
         );
 
-        submissionUrl = getVideoSubmissionsURL(
-          getCourseId(),
-          todo.itemActableId,
-        );
         break;
       default:
         break;
@@ -182,13 +173,6 @@ const PendingTodosTable: FC<Props> = (props) => {
         <TodoAccessButton
           accessButtonLink={accessButtonLink}
           accessButtonText={accessButtonText}
-          isNewAttempt={
-            todo.progress === 'not_started' &&
-            todo.canAccess! &&
-            todo.canAttempt!
-          }
-          isVideo={todoType === 'videos'}
-          submissionUrl={submissionUrl ?? accessButtonLink}
         />
         <TodoIgnoreButton
           ignoreLink={getIgnoreTodoURL(getCourseId(), todo.id)}
