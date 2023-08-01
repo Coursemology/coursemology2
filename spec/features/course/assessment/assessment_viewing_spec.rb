@@ -53,10 +53,7 @@ RSpec.describe 'Course: Assessments: Viewing', js: true do
         create(:submission, assessment: assessment, creator: student_user)
         visit course_assessment_path(course, assessment)
 
-        expect(page).to have_link(
-          'Attempt',
-          href: course_assessment_path(course, assessment)
-        )
+        expect(page).to have_link('Attempt', href: course_assessment_attempt_path(course, assessment))
       end
     end
 
