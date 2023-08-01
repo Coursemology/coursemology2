@@ -1,6 +1,5 @@
 import { Fragment, useDeferredValue, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ArrowForwardRounded, SearchOffRounded } from '@mui/icons-material';
 import {
   List,
@@ -17,6 +16,7 @@ import { QuestionData } from 'types/course/assessment/questions';
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import Link from 'lib/components/core/Link';
+import { loadingToast } from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { duplicateQuestion } from '../../../operations';
@@ -127,46 +127,37 @@ const DuplicationPrompt = (props: DuplicationPromptProps): JSX.Element => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const duplicate = (duplicationUrl: string): void => {
+  const duplicate = async (duplicationUrl: string): Promise<void> => {
     setDuplicating(true);
 
-    toast
-      .promise(duplicateQuestion(duplicationUrl), {
-        pending: t(translations.duplicatingQuestion),
-        success: {
-          render: ({ data: result }) => {
-            const destinationUrl = result?.destinationUrl;
+    const toast = loadingToast(t(translations.duplicatingQuestion));
 
-            if (destinationUrl === pathname) {
-              navigate(0);
+    try {
+      const result = await duplicateQuestion(duplicationUrl);
+      const destinationUrl = result?.destinationUrl;
 
-              return (
-                <Typography variant="body2">
-                  {t(translations.questionDuplicatedRefreshing)}
-                </Typography>
-              );
-            }
+      if (destinationUrl === pathname) {
+        navigate(0);
+        toast.success(t(translations.questionDuplicatedRefreshing));
+      } else {
+        toast.success(
+          t(translations.questionDuplicated, {
+            link: (chunk) => (
+              <Link href={result?.destinationUrl} opensInNewTab>
+                {chunk} &rarr;
+              </Link>
+            ),
+          }),
+        );
+      }
 
-            return (
-              <Typography variant="body2">
-                {t(translations.questionDuplicated)}
-                &nbsp;
-                <Link href={result?.destinationUrl} opensInNewTab>
-                  {t(translations.goToAssessment)}&nbsp;&rarr;
-                </Link>
-              </Typography>
-            );
-          },
-        },
-        error: {
-          render: ({ data }) => {
-            const error = (data as Error)?.message;
-            return error || t(translations.errorDuplicatingQuestion);
-          },
-        },
-      })
-      .then(props.onClose)
-      .finally(() => setDuplicating(false));
+      props.onClose();
+    } catch (error) {
+      const message = (error as Error)?.message;
+      toast.error(message || t(translations.errorDuplicatingQuestion));
+    } finally {
+      setDuplicating(false);
+    }
   };
 
   const targetsList = useMemo(

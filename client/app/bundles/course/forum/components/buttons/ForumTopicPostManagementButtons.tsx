@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ForumTopicPostEntity } from 'types/course/forums';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteForumTopicPost } from '../../operations';

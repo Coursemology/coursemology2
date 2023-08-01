@@ -1,7 +1,7 @@
-import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 import CourseAPI from 'api/course';
+import toast from 'lib/hooks/toast';
 
 import { update } from '../../reducers/lessonPlanSettings';
 

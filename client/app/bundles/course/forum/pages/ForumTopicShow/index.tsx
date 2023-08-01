@@ -1,7 +1,6 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
 import { TopicType } from 'types/course/forums';
 
@@ -9,6 +8,7 @@ import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumTopicManagementButtons from '../../components/buttons/ForumTopicManagementButtons';

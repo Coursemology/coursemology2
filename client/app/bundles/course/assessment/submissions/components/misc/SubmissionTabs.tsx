@@ -1,12 +1,12 @@
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
 import { SubmissionsTabData } from 'types/course/assessment/submissions';
 
 import CustomBadge from 'lib/components/extensions/CustomBadge';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import {
   fetchAllStudentsPendingSubmissions,

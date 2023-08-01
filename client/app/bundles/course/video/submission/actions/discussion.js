@@ -1,10 +1,9 @@
-import { toast } from 'react-toastify';
-
 import CourseAPI from 'api/course';
 import {
   discussionActionTypes,
   postRequestingStatuses,
 } from 'lib/constants/videoConstants';
+import toast from 'lib/hooks/toast';
 
 /**
  * Creates an action to update the new post being created with the main comment box.

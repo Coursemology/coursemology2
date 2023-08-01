@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import {
   SubmissionAssessmentFilterData,
   SubmissionGroupFilterData,
@@ -11,6 +10,7 @@ import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import SubmissionFilter from './components/misc/SubmissionFilter';

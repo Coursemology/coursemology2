@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import {
   ThumbDownAlt,
   ThumbDownOffAlt,
@@ -11,6 +10,7 @@ import { IconButton, IconButtonProps } from '@mui/material';
 import { ForumTopicPostEntity } from 'types/course/forums';
 
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { voteTopicPost } from '../../operations';

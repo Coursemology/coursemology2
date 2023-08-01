@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import {
   Download as DownloadIcon,
   Downloading as DownloadingIcon,
@@ -9,6 +8,7 @@ import { IconButton, Tooltip } from '@mui/material';
 
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { downloadFolder } from '../../operations';
 

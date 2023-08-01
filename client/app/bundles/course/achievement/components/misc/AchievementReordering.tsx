@@ -1,13 +1,13 @@
-import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
+import { defineMessages } from 'react-intl';
 import { Button } from '@mui/material';
 
-import axios from 'lib/axios';
+import CourseAPI from 'api/course';
+import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 
 require('jquery-ui/ui/widgets/sortable');
 
-interface Props extends WrappedComponentProps {
+interface AchievementReorderingProps {
   handleReordering: (state: boolean) => void;
   isReordering: boolean;
 }
@@ -45,21 +45,21 @@ function serializedOrdering(): string {
   return $('tbody').first().sortable('serialize', options);
 }
 
-function submitReordering(ordering: string): Promise<void> {
-  const action = `${window.location.pathname}/reorder`;
+const AchievementReordering = (
+  props: AchievementReorderingProps,
+): JSX.Element => {
+  const { handleReordering, isReordering } = props;
 
-  return axios
-    .post(action, ordering)
-    .then(() => {
-      toast.success(translations.updateSuccess.defaultMessage);
-    })
-    .catch(() => {
-      toast.error(translations.updateFailed.defaultMessage);
-    });
-}
+  const { t } = useTranslation();
 
-const AchievementReordering: FC<Props> = (props: Props) => {
-  const { intl, handleReordering, isReordering } = props;
+  async function submitReordering(ordering: string): Promise<void> {
+    try {
+      await CourseAPI.achievements.reorder(ordering);
+      toast.success(t(translations.updateSuccess));
+    } catch {
+      toast.error(t(translations.updateFailed));
+    }
+  }
 
   return (
     <Button
@@ -87,10 +87,10 @@ const AchievementReordering: FC<Props> = (props: Props) => {
       variant="outlined"
     >
       {isReordering
-        ? intl.formatMessage(translations.endReorderAchievement)
-        : intl.formatMessage(translations.startReorderAchievement)}
+        ? t(translations.endReorderAchievement)
+        : t(translations.startReorderAchievement)}
     </Button>
   );
 };
 
-export default injectIntl(AchievementReordering);
+export default AchievementReordering;

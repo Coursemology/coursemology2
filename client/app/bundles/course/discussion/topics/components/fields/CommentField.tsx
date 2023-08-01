@@ -5,12 +5,12 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
 import { CommentTopicEntity } from 'types/course/comments';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { createPost } from '../../operations';
 

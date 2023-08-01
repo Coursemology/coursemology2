@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
 import { Button, Card, CardContent } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import withRouter from 'lib/components/navigation/withRouter';
+import toast from 'lib/hooks/toast';
 
 import * as annotationActions from '../actions/annotations';
 import CodaveriCommentCard from '../components/comment/CodaveriCommentCard';

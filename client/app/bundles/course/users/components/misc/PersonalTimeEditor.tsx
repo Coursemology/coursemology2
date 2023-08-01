@@ -7,7 +7,6 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Add from '@mui/icons-material/Add';
 import LockOpenOutlined from '@mui/icons-material/LockOpenOutlined';
@@ -23,6 +22,7 @@ import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import formTranslations from 'lib/translations/form';
 import tableTranslations from 'lib/translations/table';
 

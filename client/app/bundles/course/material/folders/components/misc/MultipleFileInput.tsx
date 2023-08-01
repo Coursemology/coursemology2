@@ -1,9 +1,10 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { FileUpload as FileUploadIcon } from '@mui/icons-material';
 import { Chip } from '@mui/material';
+
+import toast from 'lib/hooks/toast';
 
 interface Props extends WrappedComponentProps {
   uploadedFiles: File[];

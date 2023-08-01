@@ -1,6 +1,5 @@
 import { MouseEventHandler, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import {
   Assessment,
   Create,
@@ -15,6 +14,7 @@ import {
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { attemptAssessment, deleteAssessment } from '../../operations';
@@ -70,15 +70,14 @@ const AssessmentShowHeader = (
       .promise(deleteAssessment(deleteUrl), {
         pending: t(translations.deletingAssessment),
         success: t(translations.assessmentDeleted),
-        error: {
-          render: ({ data }) => {
-            const error = (data as Error)?.message;
-            return error || t(translations.errorDeletingAssessment);
-          },
-        },
       })
       .then((data: AssessmentDeleteResult) => navigate(data.redirect))
-      .catch(() => setDeleting(false));
+      .catch((error) => {
+        const message = (error as Error)?.message;
+        toast.error(message || t(translations.errorDeletingAssessment));
+
+        setDeleting(false);
+      });
   };
 
   return (

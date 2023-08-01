@@ -1,6 +1,5 @@
 import { CSSProperties, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Checkbox, CircularProgress } from '@mui/material';
 import { AxiosError } from 'axios';
 
@@ -10,6 +9,7 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import { getWorkbinFileURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import toast from 'lib/hooks/toast';
 import { formatLongDateTime } from 'lib/moment';
 
 import Toolbar from './Toolbar';

@@ -5,7 +5,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { toast } from 'react-toastify';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { LoadingButton } from '@mui/lab';
@@ -17,6 +16,7 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import Link from 'lib/components/core/Link';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import { formatLongDateTime } from 'lib/moment';
 
 import { deletePost, updatePost } from '../../operations';

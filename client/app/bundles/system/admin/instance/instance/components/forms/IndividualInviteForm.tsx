@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   IndividualInvites,
@@ -12,6 +11,7 @@ import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import formTranslations from 'lib/translations/form';
 import messagesTranslations from 'lib/translations/messages';
 

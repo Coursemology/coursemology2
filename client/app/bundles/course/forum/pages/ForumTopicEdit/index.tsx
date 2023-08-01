@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { ForumTopicEntity, ForumTopicFormData } from 'types/course/forums';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumTopicForm from '../../components/forms/ForumTopicForm';

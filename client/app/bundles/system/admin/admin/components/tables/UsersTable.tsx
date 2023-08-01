@@ -1,6 +1,5 @@
 import { FC, ReactElement, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import {
   CircularProgress,
   MenuItem,
@@ -25,6 +24,7 @@ import {
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import tableTranslations from 'lib/translations/table';
 
 import { indexUsers, updateUser } from '../../operations';

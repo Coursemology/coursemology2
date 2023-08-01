@@ -6,7 +6,6 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Button, Checkbox, Grid, Tooltip } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import equal from 'fast-deep-equal';
@@ -23,6 +22,7 @@ import Note from 'lib/components/core/Note';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import { formatShortDateTime } from 'lib/moment';
 
 import { awardAchievement } from '../../operations';

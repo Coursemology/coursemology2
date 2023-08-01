@@ -5,7 +5,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { toast } from 'react-toastify';
 import { Add } from '@mui/icons-material';
 import {
   Button,
@@ -28,6 +27,7 @@ import {
 } from 'types/course/conditions';
 
 import Subsection from 'lib/components/core/layouts/Subsection';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 

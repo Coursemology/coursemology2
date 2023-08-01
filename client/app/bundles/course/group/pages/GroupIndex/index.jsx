@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { Tab, Tabs } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -10,6 +9,7 @@ import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
+import toast from 'lib/hooks/toast';
 
 import GroupNew from '../GroupNew';
 

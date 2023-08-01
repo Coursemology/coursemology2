@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
 import { Grid, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { CourseUserEntity } from 'types/course/courseUsers';
@@ -11,6 +10,7 @@ import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import SelectCourseUser from '../../components/misc/SelectCourseUser';
 import UserManagementTabs from '../../components/navigation/UserManagementTabs';

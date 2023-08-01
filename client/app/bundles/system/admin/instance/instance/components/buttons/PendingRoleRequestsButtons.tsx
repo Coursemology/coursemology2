@@ -1,6 +1,5 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
 
@@ -9,6 +8,7 @@ import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EmailButton from 'lib/components/core/buttons/EmailButton';
 import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { approveRoleRequest, rejectRoleRequest } from '../../operations';

@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 
 import { getEnrolRequestURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { cancelEnrolRequest, submitEnrolRequest } from '../../operations';
 import CourseInvitationCodeForm from '../forms/CourseInvitationCodeForm';

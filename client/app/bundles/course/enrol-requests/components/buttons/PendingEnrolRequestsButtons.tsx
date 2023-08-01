@@ -1,6 +1,5 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 import { EnrolRequestRowData } from 'types/course/enrolRequests';
 
@@ -8,6 +7,7 @@ import AcceptButton from 'lib/components/core/buttons/AcceptButton';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 
 import { approveEnrolRequest, rejectEnrolRequest } from '../../operations';
 

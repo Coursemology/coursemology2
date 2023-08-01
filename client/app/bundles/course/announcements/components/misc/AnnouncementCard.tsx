@@ -1,6 +1,5 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { DateRange, PushPin } from '@mui/icons-material';
 import { Paper, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
@@ -15,6 +14,7 @@ import EditButton from 'lib/components/core/buttons/EditButton';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import Link from 'lib/components/core/Link';
 import { useAppDispatch } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import { formatFullDateTime } from 'lib/moment';
 
 import AnnouncementEdit from '../../pages/AnnouncementEdit';

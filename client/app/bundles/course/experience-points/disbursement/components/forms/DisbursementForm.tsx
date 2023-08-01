@@ -6,7 +6,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Autocomplete, Button, Grid, TextField } from '@mui/material';
 import {
@@ -21,6 +20,7 @@ import Page from 'lib/components/core/layouts/Page';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import formTranslations from 'lib/translations/form';
 
 import { createDisbursement } from '../../operations';
