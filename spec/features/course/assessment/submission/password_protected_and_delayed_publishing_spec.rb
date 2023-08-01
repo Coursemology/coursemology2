@@ -12,9 +12,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
     end
     let(:mrq_questions) { assessment.reload.questions.map(&:specific) }
     let(:student) { create(:course_student, course: course).user }
-    let(:submission) do
-      create(:submission, assessment: assessment, creator: student)
-    end
+    let(:submission) { create(:submission, :attempting, assessment: assessment, creator: student) }
 
     before { login_as(user, scope: :user) }
 
@@ -33,11 +31,11 @@ RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
         # The user should be redirect to submission edit page
         wait_for_page
         expect(current_path).to eq(edit_course_assessment_submission_path(course, assessment, last_submission))
+        click_button 'OK'
 
         # Logout and login again and visit the same submission
         logout
         login_as(user)
-        wait_for_page
 
         visit edit_course_assessment_submission_path(course, assessment, last_submission)
 

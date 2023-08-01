@@ -44,19 +44,19 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
 
         # Logout and login again and visit the same submission
         click_on 'OK'
-        perform_logout_in_course CourseUser.for_user(user).first.name
-
+        logout
         login_as(user)
-        wait_for_page
 
         expect do
           visit edit_course_assessment_submission_path(course, protected_assessment, protected_submission)
+          wait_for_page
         end.to change { protected_submission.logs.count }.by(1)
         expect(protected_submission.logs.last.valid_attempt?).to be(false)
 
         expect do
           fill_in 'password', with: protected_assessment.session_password
           click_button('Submit')
+          wait_for_page
         end.to change { protected_submission.logs.count }.by(1)
         wait_for_page
 
