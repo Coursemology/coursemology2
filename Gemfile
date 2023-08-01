@@ -194,14 +194,6 @@ gem 'cancancan'
 # We also want stricter sanitization.
 gem 'rails_utils', git: 'https://github.com/raymondtangsc/rails_utils.git', branch: 'full-sanitize-flash'
 
-# Forms made easy for Rails
-gem 'simple_form'
-gem 'simple_form-bootstrap', git: 'https://github.com/purfectliterature/simple_form-bootstrap'
-# Dynamic nested forms
-gem 'cocoon'
-gem 'bootstrap_tokenfield_rails'
-gem 'twitter-typeahead-rails'
-
 # Using CarrierWave for file uploads
 gem 'carrierwave'
 # Generate sequential filenames

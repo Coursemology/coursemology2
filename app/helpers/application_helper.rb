@@ -6,12 +6,10 @@ module ApplicationHelper
   include ApplicationAnnouncementsHelper
   include ApplicationJobsHelper
   include ApplicationWidgetsHelper
-  include ApplicationCocoonHelper
   include ApplicationNotificationsHelper
 
   include ApplicationFormattersHelper
   include RouteOverridesHelper
-  include FormForWithResourceHelper
   include RenderWithinLayoutHelper
 
   # Accesses the header tags specified for the current page
