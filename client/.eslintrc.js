@@ -158,6 +158,7 @@ module.exports = {
         ignorePropertyModificationsFor: ['draft', 'reducerObject'],
       },
     ],
+    'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
   },
   globals: {
     window: true,
@@ -193,7 +194,6 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
         'no-unused-vars': 'off',
-        'no-console': ['error', { allow: ['warn', 'error'] }],
         'react-hooks/rules-of-hooks': 'warn',
         'react/react-in-jsx-scope': 'off',
         'no-param-reassign': 'off',
