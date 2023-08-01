@@ -1,7 +1,13 @@
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { LoadingButton } from '@mui/lab';
-import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Typography,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 
 import formTranslations from 'lib/translations/form';
@@ -125,7 +131,9 @@ class ConfirmationDialog extends Component {
         open={open}
         style={{ zIndex: 9999 }}
       >
-        <DialogContent>{confirmationMessage}</DialogContent>
+        <DialogContent>
+          <Typography variant="body2">{confirmationMessage}</Typography>
+        </DialogContent>
         <DialogActions>{actions}</DialogActions>
       </Dialog>
     );
