@@ -139,7 +139,7 @@ const Tab = (props: TabProps): JSX.Element => {
 
               {!renaming && (
                 <IconButton
-                  className="hoverable:invisible group-hover?:visible ml-4"
+                  className="ml-4 hoverable:invisible group-hover?:visible"
                   disabled={isDragging || disabled}
                   onClick={(): void => setRenaming(true)}
                   size="small"
@@ -151,7 +151,7 @@ const Tab = (props: TabProps): JSX.Element => {
 
             {tab.canDeleteTab && !stationary && (
               <IconButton
-                className="hoverable:invisible group-hover?:visible ml-4 hoverable:ml-0"
+                className="ml-4 hoverable:invisible hoverable:ml-0 group-hover?:visible"
                 color="error"
                 disabled={isDragging || disabled}
                 onClick={handleClickDelete}

@@ -177,7 +177,7 @@ const Category = (props: CategoryProps): JSX.Element => {
 
                 {!renaming && (
                   <IconButton
-                    className="hoverable:invisible group-hover?:visible ml-4"
+                    className="ml-4 hoverable:invisible group-hover?:visible"
                     disabled={isDragging || props.disabled}
                     onClick={(): void => setRenaming(true)}
                     size="small"
