@@ -73,6 +73,7 @@ Rails.application.routes.draw do
     sessions: 'user/sessions',
     masquerades: 'user/masquerades',
     passwords: 'user/passwords',
+    confirmations: 'user/confirmations'
   }
 
   get 'csrf_token' => 'csrf_token#csrf_token'
