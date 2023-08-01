@@ -138,12 +138,6 @@ const props = {
   setRedo: jest.fn(),
 };
 
-// stub import function
-jest.mock(
-  'course/assessment/submission/loaders/ScribingViewLoader',
-  () => () => Promise.resolve(),
-);
-
 beforeEach(() => {
   mock.reset();
 
