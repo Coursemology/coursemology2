@@ -269,10 +269,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
     context 'As a Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I cannot add questions', js: false do
+      scenario 'I cannot add questions' do
         visit new_course_assessment_question_programming_path(course, assessment)
 
-        expect(page.status_code).to eq(403)
+        expect_forbidden
       end
     end
   end
