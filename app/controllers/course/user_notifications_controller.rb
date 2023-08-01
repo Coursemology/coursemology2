@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::UserNotificationsController < Course::Controller
+  skip_authorize_resource :course, only: [:fetch]
   load_and_authorize_resource :user_notification, class: UserNotification.name, only: :mark_as_read
 
   def fetch
