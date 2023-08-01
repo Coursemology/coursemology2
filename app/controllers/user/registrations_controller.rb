@@ -8,9 +8,18 @@ class User::RegistrationsController < Devise::RegistrationsController
   def new
     if @invitation&.confirmed?
       message = @invitation.confirmer ? t('.used_with_email', email: @invitation.confirmer.email) : t('.used')
-      redirect_to root_path, danger: message
+      render json: { message: message }, status: :conflict and return
+    elsif @invitation
+      course = @invitation.course
+
+      render json: {
+        name: @invitation.name,
+        email: @invitation.email,
+        courseTitle: course.title,
+        courseId: course.id
+      }
     else
-      super
+      head :no_content
     end
   end
 
@@ -18,13 +27,15 @@ class User::RegistrationsController < Devise::RegistrationsController
   def create
     unless verify_recaptcha
       build_resource(sign_up_params)
-      flash.now[:alert] = t('user.registrations.create.verify_recaptcha_alert')
-      flash.delete :recaptcha_error
-      return render :new
+      render json: { errors: t('user.registrations.create.verify_recaptcha_alert') }, status: :unprocessable_entity
+      return
     end
+
     User.transaction do
       super
+
       @invitation.confirm!(confirmer: resource) if @invitation && !@invitation.confirmed? && resource.persisted?
+      @user = resource
     end
   end
 
