@@ -1,6 +1,6 @@
-import { toast } from 'react-toastify';
+import { DEFAULT_TOAST_TIMEOUT_MS } from 'lib/components/wrappers/ToastProvider';
 
-const DEFAULT_TOAST_TIMEOUT_MS = 5000 as const;
+import toast from './toast';
 
 type Updater = (message: string) => void;
 
@@ -21,6 +21,7 @@ const loadingToast = (loadingMessage: string): LoadingToast => {
         isLoading: false,
         autoClose: DEFAULT_TOAST_TIMEOUT_MS,
         render: message,
+        closeButton: true,
       }),
     error: (message) =>
       toast.update(id, {
@@ -28,6 +29,7 @@ const loadingToast = (loadingMessage: string): LoadingToast => {
         isLoading: false,
         autoClose: DEFAULT_TOAST_TIMEOUT_MS,
         render: message,
+        closeButton: true,
       }),
   };
 };
