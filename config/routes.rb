@@ -462,4 +462,12 @@ Rails.application.routes.draw do
   end
 
   resources :attachment_references, path: 'attachments', only: [:create, :show, :destroy]
+
+  if Rails.env.test?
+    namespace :test do
+      post 'create' => 'factories#create'
+      delete 'clear_emails' => 'mailer#clear'
+      get 'last_sent_email' => 'mailer#last_sent'
+    end
+  end
 end
