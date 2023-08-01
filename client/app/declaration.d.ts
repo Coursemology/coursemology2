@@ -18,3 +18,7 @@ declare module '*.svg?url' {
 declare const FIRST_BUILD_YEAR: string;
 declare const LATEST_BUILD_YEAR: string;
 
+declare module '*.md' {
+  const markdown: string;
+  export default markdown;
+}

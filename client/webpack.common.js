@@ -173,6 +173,10 @@ module.exports = {
           exposes: 'moment',
         },
       },
+      {
+        test: /\.md$/,
+        type: 'asset/source',
+      },
     ],
   },
 };
