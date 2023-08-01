@@ -63,10 +63,10 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
 
   protected
 
-  # Round to "nearest" date in course's timezone, NOT user's timezone.
+  # Round to "nearest" date in course's time zone, NOT user's time zone.
   #
   # @param [ActiveSupport::TimeWithZone] datetime The datetime object to round.
-  # @param [String] course_tz The timezone of the course.
+  # @param [String] course_tz The time zone of the course.
   # @param [Boolean] to_2359 Whether to round off to 2359. This will set the datetime to be 2359 of the date before the
   #   rounded date.
   def round_to_date(datetime, course_tz, to_2359: false)

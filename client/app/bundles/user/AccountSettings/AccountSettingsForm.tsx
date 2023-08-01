@@ -61,7 +61,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
       object().shape(
         {
           name: string().required(t(translations.nameRequired)),
-          timezone: string().required(t(translations.timeZoneRequired)),
+          timeZone: string().required(t(translations.timeZoneRequired)),
           locale: string().required(t(translations.localeRequired)),
           currentPassword: string()
             .optional()
@@ -171,7 +171,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
 
             <Controller
               control={control}
-              name="timezone"
+              name="timeZone"
               render={({ field, fieldState }): JSX.Element => (
                 <FormSelectField
                   disabled={props.disabled}

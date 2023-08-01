@@ -2,7 +2,7 @@
 
 json.id current_user.id
 json.name current_user.name
-json.timezone current_user.time_zone
+json.timeZone user_time_zone
 json.locale I18n.locale
 json.imageUrl user_image(current_user)
 json.availableLocales I18n.available_locales
