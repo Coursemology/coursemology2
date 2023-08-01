@@ -6,15 +6,10 @@ import './initializers';
 import App from './App';
 import 'theme/index.css';
 
-$(() => {
-  const node = document.getElementById('app-root');
-  if (!node) return;
+const root = createRoot(document.getElementById('root') as HTMLElement);
 
-  const root = createRoot(node);
-
-  root.render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  );
-});
+root.render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
