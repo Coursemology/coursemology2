@@ -20,6 +20,9 @@ class ApplicationController < ActionController::Base
   rescue_from IllegalStateError, with: :handle_illegal_state_error
   rescue_from ActionController::InvalidAuthenticityToken, with: :handle_csrf_error
 
+  def index
+  end
+
   protected
 
   # Runs the provided block with Bullet disabled.
