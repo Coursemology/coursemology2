@@ -1,46 +1,38 @@
-import { Component } from 'react';
+import { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 
-import scribingViewLoader from 'course/assessment/submission/loaders/ScribingViewLoader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
 import { submissionShape } from '../../propTypes';
 
-import ScribingCanvas from './ScribingCanvas';
-import ScribingToolbar from './ScribingToolbar';
+const ScribingCanvas = lazy(() =>
+  import(/* webpackChunkName: "ScribingCanvas" */ './ScribingCanvas'),
+);
 
-const propTypes = {
+const ScribingToolbar = lazy(() =>
+  import(/* webpackChunkName: "ScribingToolbar" */ './ScribingToolbar'),
+);
+
+const ScribingViewComponent = (props) => {
+  const { answerId, submission } = props;
+  if (!answerId) return null;
+
+  return (
+    <Suspense fallback={<LoadingIndicator />}>
+      <div className="mb-4 items-center">
+        {submission.canUpdate && (
+          <ScribingToolbar key={`ScribingToolbar-${answerId}`} {...props} />
+        )}
+
+        <ScribingCanvas key={`ScribingCanvas-${answerId}`} {...props} />
+      </div>
+    </Suspense>
+  );
+};
+
+ScribingViewComponent.propTypes = {
   answerId: PropTypes.number.isRequired,
   submission: submissionShape,
 };
 
-const styles = {
-  canvasDiv: {
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-};
-
-export default class ScribingViewComponent extends Component {
-  UNSAFE_componentWillMount() {
-    scribingViewLoader().then(() => {
-      this.forceUpdate();
-    });
-  }
-
-  render() {
-    const { answerId, submission } = this.props;
-    return answerId ? (
-      <div style={styles.canvasDiv}>
-        {submission.canUpdate ? (
-          <ScribingToolbar
-            key={`ScribingToolbar-${answerId}`}
-            {...this.props}
-          />
-        ) : null}
-        <ScribingCanvas key={`ScribingCanvas-${answerId}`} {...this.props} />
-      </div>
-    ) : null;
-  }
-}
-
-ScribingViewComponent.propTypes = propTypes;
+export default ScribingViewComponent;

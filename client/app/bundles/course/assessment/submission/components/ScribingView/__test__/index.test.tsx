@@ -50,13 +50,8 @@ const mockSubmission = {
   ],
 };
 
-jest.mock(
-  'course/assessment/submission/loaders/ScribingViewLoader',
-  () => (): Promise<void> => Promise.resolve(),
-);
-
 describe('ScribingView', () => {
-  it('renders canvas', () => {
+  it('renders canvas', async () => {
     dispatch({
       type: actionTypes.FETCH_SUBMISSION_SUCCESS,
       payload: mockSubmission,
@@ -69,6 +64,6 @@ describe('ScribingView', () => {
 
     const page = render(<ScribingView answerId={answerId} />, { at: [url] });
 
-    expect(page.getByTestId(`canvas-${answerId}`)).toBeVisible();
+    expect(await page.findByTestId(`canvas-${answerId}`)).toBeVisible();
   });
 });

@@ -1,5 +1,6 @@
-/* eslint-disable no-undef, react/sort-comp */
+/* eslint-disable react/sort-comp */
 import { Component } from 'react';
+import { fabric } from 'fabric';
 import PropTypes from 'prop-types';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
