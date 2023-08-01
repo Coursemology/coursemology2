@@ -140,6 +140,9 @@ module Capybara::TestGroupHelpers
       all('aside').first
     end
 
+    def expect_forbidden
+      expect(page).to have_content("You don't have permission to access")
+    end
 
     def confirm_registration_token_via_email
       token = ActionMailer::Base.deliveries.last.body.match(/confirmation_token=.*(?=")/)
