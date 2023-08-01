@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useRouteError } from 'react-router-dom';
 
 import NotificationPopup from 'lib/containers/NotificationPopup';
 
@@ -30,4 +30,18 @@ const AppContainer = (): JSX.Element => {
   );
 };
 
-export default Object.assign(AppContainer, { loader });
+/**
+ * Rethrows the error from React Router so that `ErrorBoundary` can catch it
+ * and generate the `componentStack` from `ErrorInfo`.
+ *
+ * As of React Router 6.14.1, there is no way to get `componentStack` without
+ * `componentDidCatch` from a proper `ErrorBoundary`.
+ */
+const AppErrorBubbler = (): JSX.Element => {
+  throw useRouteError();
+};
+
+export default Object.assign(AppContainer, {
+  loader,
+  ErrorBoundary: AppErrorBubbler,
+});
