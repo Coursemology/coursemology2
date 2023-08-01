@@ -22,15 +22,18 @@ const DescriptionCard: FC<Props> = (props) => {
 
   return (
     <Card className="mt-6" variant="outlined">
-      <CardHeader title={t(translations.description)} />
+      <CardHeader
+        title={t(translations.description)}
+        titleTypographyProps={{
+          variant: 'h6',
+        }}
+      />
 
-      <CardContent>
-        <section className="rounded-lg bg-neutral-100 p-4">
-          <Typography
-            dangerouslySetInnerHTML={{ __html: description }}
-            variant="body2"
-          />
-        </section>
+      <CardContent className="pt-0">
+        <Typography
+          dangerouslySetInnerHTML={{ __html: description }}
+          variant="body2"
+        />
       </CardContent>
     </Card>
   );
