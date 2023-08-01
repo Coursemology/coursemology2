@@ -3,6 +3,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Avatar, Grid, Typography } from '@mui/material';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
@@ -63,7 +64,7 @@ const UserShow: FC<Props> = (props) => {
   }
 
   return (
-    <>
+    <Page>
       <Grid
         className="global-user-profile"
         container
@@ -89,7 +90,7 @@ const UserShow: FC<Props> = (props) => {
           item
           justifyContent={{ xs: 'center', sm: 'start' }}
         >
-          <Typography variant="h4">{user.name}</Typography>
+          <Typography variant="h5">{user.name}</Typography>
         </Grid>
       </Grid>
       {currentCourses.length > 0 && (
@@ -112,7 +113,7 @@ const UserShow: FC<Props> = (props) => {
           title={intl.formatMessage(translations.otherInstances)}
         />
       )}
-    </>
+    </Page>
   );
 };
 

@@ -4,6 +4,7 @@ import {
   EmailData,
   EmailPostData,
   EmailsData,
+  InvitedSignUpData,
   PasswordPostData,
   ProfileData,
   ProfilePostData,
@@ -72,13 +73,94 @@ export default class UsersAPI extends BaseAPI {
     return this.client.post(url);
   }
 
-  resendConfirmationEmail(
+  resendConfirmationEmailByURL(
     url: NonNullable<EmailData['confirmationEmailPath']>,
   ): APIResponse {
     return this.client.post(url);
   }
 
-  signOut(url: string): APIResponse {
-    return this.client.delete(url);
+  masquerade(url: string): APIResponse {
+    return this.client.get(url);
+  }
+
+  stopMasquerade(url: string): APIResponse {
+    return this.client.get(url);
+  }
+
+  signOut(): APIResponse {
+    return this.client.delete(`${this.#urlPrefix}/sign_out`);
+  }
+
+  signIn(email: string, password: string, rememberMe: boolean): APIResponse {
+    const formData = new FormData();
+
+    formData.append('user[email]', email);
+    formData.append('user[password]', password);
+    formData.append('user[remember_me]', rememberMe ? '1' : '0');
+
+    return this.client.post(`${this.#urlPrefix}/sign_in`, formData);
+  }
+
+  signUp(
+    name: string,
+    email: string,
+    password: string,
+    captchaResponse: string,
+    invitation?: string,
+  ): APIResponse<{ id: number | null; confirmed: boolean }> {
+    const formData = new FormData();
+
+    formData.append('user[name]', name);
+    formData.append('user[email]', email);
+    formData.append('user[password]', password);
+    formData.append('user[password_confirmation]', password);
+    formData.append('g-recaptcha-response', captchaResponse);
+    if (invitation) formData.append('invitation', invitation);
+
+    return this.client.post(this.#urlPrefix, formData);
+  }
+
+  verifyInvitationToken(token: string): APIResponse<InvitedSignUpData | null> {
+    return this.client.get(`${this.#urlPrefix}/sign_up`, {
+      params: { invitation: token },
+    });
+  }
+
+  requestResetPassword(email: string): APIResponse {
+    const formData = new FormData();
+
+    formData.append('user[email]', email);
+
+    return this.client.post(`${this.#urlPrefix}/password`, formData);
+  }
+
+  resendConfirmationEmail(email: string): APIResponse {
+    const formData = new FormData();
+
+    formData.append('user[email]', email);
+
+    return this.client.post(`${this.#urlPrefix}/confirmation`, formData);
+  }
+
+  verifyResetPasswordToken(token: string): APIResponse<{ email: string }> {
+    return this.client.get(`${this.#urlPrefix}/password/edit`, {
+      params: { reset_password_token: token },
+    });
+  }
+
+  resetPassword(token: string, password: string): APIResponse {
+    const formData = new FormData();
+
+    formData.append('user[reset_password_token]', token);
+    formData.append('user[password]', password);
+    formData.append('user[password_confirmation]', password);
+
+    return this.client.patch(`${this.#urlPrefix}/password`, formData);
+  }
+
+  confirmEmail(token: string): APIResponse<{ email: string }> {
+    return this.client.get(`${this.#urlPrefix}/confirmation`, {
+      params: { confirmation_token: token },
+    });
   }
 }

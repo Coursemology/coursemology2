@@ -133,3 +133,10 @@ export interface PasswordPostData {
     password_confirmation?: PasswordData['passwordConfirmation'];
   };
 }
+
+export interface InvitedSignUpData {
+  name: string;
+  email: string;
+  courseTitle: string;
+  courseId: string;
+}
