@@ -38,22 +38,6 @@ gem 'active_record_upsert', '0.11.1'
 # Create pretty URLs and work with human-friendly strings
 gem 'friendly_id'
 
-# Use SCSS for stylesheets
-gem 'sass-rails'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-
-# Internationalisation for JavaScript.
-gem 'i18n-js', '<= 3.10.0'
-
-# Use jQuery as the JavaScript library
-gem 'jquery-rails'
-# Our Coursemology will be themed using Bootstrap
-gem 'bootstrap-sass'
-gem 'bootstrap-sass-extras', '>= 0.1.0'
-gem 'autoprefixer-rails'
-# Use font-awesome for icons
-gem 'font-awesome-rails'
 # HTML Pipeline and dependencies
 gem 'html-pipeline'
 gem 'sanitize', '>= 4.6.3'
@@ -82,10 +66,6 @@ group :development do
   gem 'spring', platforms: [:ruby]
   gem 'listen'
 
-  # Gems to make development mode faster and less painful
-
-  gem 'wdm', '>= 0.0.3', platforms: [:mswin, :mswin64]
-
   # Helps to prevent database slowdowns
   gem 'lol_dba', require: false
 
@@ -95,9 +75,6 @@ group :development do
   # bundle exec yardoc generates the API under doc/.
   # Use yard stats --list-undoc to find what needs documenting.
   gem 'yard', group: :doc
-
-  # Gem to generate favicon
-  gem 'rails_real_favicon'
 end
 
 group :test do
@@ -222,6 +199,5 @@ gem 'rwordnet', git: 'https://github.com/makqien/rwordnet'
 gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
 
-gem 'sprockets', '< 4.0.0'
 gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'
