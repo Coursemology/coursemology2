@@ -213,8 +213,7 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
         expect(submission.answers.map(&:reload).all?(&:evaluated?)).to be(true)
 
         # This field should be filled when page loads
-        correct_exp = (assessment.base_exp * submission.grade /
-          assessment.questions.map(&:maximum_grade).sum).to_i
+        correct_exp = (assessment.base_exp * submission.grade / assessment.questions.map(&:maximum_grade).sum).to_i
         expect(find_field('submission_draft_points_awarded').value).to eq(correct_exp.to_s)
 
         submission_maximum_grade = 0
@@ -253,7 +252,7 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submission.submissions.buttons.unsubmit')
+        click_button 'Unsubmit Submission'
         expect(submission.reload.attempting?).to be_truthy
         expect(submission.points_awarded).to be_nil
         expect(submission.reload.latest_answers.all?(&:attempting?)).to be_truthy
@@ -265,7 +264,7 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button I18n.t('course.assessment.submission.submissions.buttons.unsubmit')
+        click_button 'Unsubmit Submission'
         expect(submission.reload.attempting?).to be_truthy
         expect(submission.points_awarded).to be_nil
         expect(submission.latest_answers.all?(&:attempting?)).to be_truthy
