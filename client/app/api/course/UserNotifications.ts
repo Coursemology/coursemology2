@@ -9,7 +9,7 @@ export default class UserNotificationsAPI extends BaseCourseAPI {
     return `/courses/${this.courseId}/user_notifications`;
   }
 
-  fetch(): APIResponse<UserNotificationData> {
+  fetch(): APIResponse<UserNotificationData | null> {
     return this.client.get(`${this.#urlPrefix}/fetch`);
   }
 
