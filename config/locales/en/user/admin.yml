@@ -1,5 +1,0 @@
-en:
-  user:
-    admin:
-      navbar:
-        account_settings: :'user.registrations.edit.header'

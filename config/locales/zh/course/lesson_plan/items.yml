@@ -5,9 +5,6 @@ zh:
         sidebar_title: :'course.lesson_plan.items.index.header'
         index:
           header: '课程计划'
-        ref: 'Ref: '
-        fixed_desc: >
-          这个项目的定制化时间线已被修复，它将不再被自动修改。
   activerecord:
     attributes:
       course/lesson_plan/item:

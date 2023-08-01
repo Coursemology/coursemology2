@@ -3,10 +3,6 @@ zh:
     registrations:
       new:
         header: :'layout.navbar.register'
-        already_registered_html: >
-          已经注册过？ 如果你已经拥有一个Coursemology账号, 你可以直接%{sign_in}.
-        password_hint: '至少需要 #{length} 个字符'
-        sign_up: :'user.registrations.new.header'
         used: >
           所提供的邀请码已被另一个账户所使用，请使用该账户登录。
         used_with_email: >
