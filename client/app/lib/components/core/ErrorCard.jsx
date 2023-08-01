@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -26,7 +26,9 @@ const ErrorCard = ({ message, cardStyles, headerStyles, messageStyles }) => (
       title="Error"
       titleTypographyProps={{ variant: 'body2', style: styles.headerTitle }}
     />
-    <CardContent style={messageStyles}>{message}</CardContent>
+    <CardContent style={messageStyles}>
+      <Typography variant="body2">{message}</Typography>
+    </CardContent>
   </Card>
 );
 
