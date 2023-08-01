@@ -102,7 +102,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "rollbar": "^2.26.2",
-    "sass": "^1.64.1",
+    "sass": "^1.64.2",
     "webfontloader": "^1.6.28",
     "yup": "^0.32.11"
   },
