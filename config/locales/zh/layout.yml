@@ -1,17 +1,6 @@
 zh:
   layout:
     coursemology: 'Coursemology'
-    navbar:
-      toggle_navigation: '切换导航'
-      courses: '课程'
-      all_courses: '全部课程'
-      help: '帮助'
-      register: '注册'
-      sign_in: '登录'
-      sign_out: '登出'
-      admin_panel: '管理小组'
-      instance_admin_panel: '实例管理小组'
-      stop_masquerading: '(停止伪装)'
   layouts:
     course_admin:
       title: '课程设置'

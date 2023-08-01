@@ -1,17 +1,6 @@
 en:
   layout:
     coursemology: 'Coursemology'
-    navbar:
-      toggle_navigation: 'Toggle Navigation'
-      courses: 'Courses'
-      all_courses: 'All Courses'
-      help: 'Help'
-      register: 'Register'
-      sign_in: 'Sign In'
-      sign_out: 'Sign Out'
-      admin_panel: 'Administration Panel'
-      instance_admin_panel: 'Instance Administration Panel'
-      stop_masquerading: '(Stop Masquerading)'
   layouts:
     course_admin:
       title: 'Course Settings'
