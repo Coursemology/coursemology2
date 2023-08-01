@@ -2,6 +2,7 @@ import { defineMessages } from 'react-intl';
 import { Typography } from '@mui/material';
 
 import Link from 'lib/components/core/Link';
+import { useAttributions } from 'lib/components/wrappers/AttributionsProvider';
 import { SUPPORT_EMAIL } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -35,6 +36,8 @@ const translations = defineMessages({
 
 const Footer = (): JSX.Element => {
   const { t } = useTranslation();
+
+  const attributions = useAttributions();
 
   return (
     <footer className="flex max-w-[1000px] flex-col space-y-5 p-5 border-only-t-neutral-200">
@@ -73,6 +76,18 @@ const Footer = (): JSX.Element => {
           {t(translations.github)}
         </Link>
       </div>
+
+      <section className="flex flex-col">
+        {attributions.map((attribution) => (
+          <Typography
+            key={attribution.name}
+            color="text.secondary"
+            variant="caption"
+          >
+            {attribution.content}
+          </Typography>
+        ))}
+      </section>
 
       <Typography variant="caption">
         {t(translations.copyright, {
