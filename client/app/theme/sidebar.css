@@ -1,0 +1,23 @@
+.sidebar-handle-enter {
+  animation-timing-function: ease-in-out;
+  animation-name: sidebar-handle-emphasize;
+  animation-duration: 400ms;
+  animation-delay: -50ms;
+}
+
+@keyframes sidebar-handle-emphasize {
+  0% {
+    transform: translateX(-200%);
+  }
+  20% {
+    transform: translateX(0.5rem);
+    animation-timing-function: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.sidebar-handle-exit {
+  @apply -translate-x-[200%] scale-y-0 transition-all;
+}

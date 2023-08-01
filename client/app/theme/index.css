@@ -2,17 +2,51 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    font-size: 10px;
+
+    /* Undoes MUI's font smoothing via the `CssBaseline` preflight
+    See https://mui.com/material-ui/react-css-baseline/#typography */
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+  }
+
+  strong {
+    @apply font-semibold;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  code,
+  pre {
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+  }
+
+  code:not(pre code) {
+    @apply rounded-lg bg-fuchsia-100 px-2 py-1 text-fuchsia-700;
+  }
+
+  pre {
+    @apply rounded-lg border border-solid border-neutral-300 bg-neutral-100 p-4;
+  }
+
+  blockquote {
+    @apply m-0 border-0 border-l-4 border-solid border-neutral-200 px-6 text-neutral-500;
+  }
+
+  button,
+  [type='button'],
+  [type='reset'],
+  [type='submit'],
+  [role='button'] {
+    @apply cursor-pointer;
+  }
+}
+
 @layer utilities {
-  /* TODO: Remove `visible` and `invisible` once `visibility` is
-           re-enabled in tailwind.config.js. */
-  .visible {
-    visibility: visible;
-  }
-
-  .invisible {
-    visibility: hidden;
-  }
-
   .key {
     @apply rounded-xl border border-solid px-2 py-0.5;
   }
@@ -28,56 +62,6 @@
   }
 }
 
-.sidebar-handle-enter {
-  animation-timing-function: ease-in-out;
-  animation-name: sidebar-handle-emphasize;
-  animation-duration: 400ms;
-  animation-delay: -50ms;
-}
-
-@keyframes sidebar-handle-emphasize {
-  0% {
-    transform: translateX(-200%);
-  }
-  20% {
-    transform: translateX(0.5rem);
-    animation-timing-function: cubic-bezier(0.68, -0.6, 0.32, 1.6);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.sidebar-handle-exit {
-  @apply -translate-x-[200%] scale-y-0 transition-all;
-}
-
-.bouncing-dot {
-  display: inline-block;
-  animation-name: bouncing-dot-bounce;
-  animation-duration: 700ms;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-}
-
-.bouncing-dot:nth-child(2) {
-  animation-delay: 125ms;
-}
-
-.bouncing-dot:nth-child(3) {
-  animation-delay: 250ms;
-}
-
-@keyframes bouncing-dot-bounce {
-  0% {
-    transform: none;
-  }
-
-  33% {
-    transform: translateY(-0.2em);
-  }
-
-  66% {
-    transform: none;
-  }
-}
+@import './bouncing-dot.css';
+@import './sidebar.css';
+@import './syntax-highlighting.css';

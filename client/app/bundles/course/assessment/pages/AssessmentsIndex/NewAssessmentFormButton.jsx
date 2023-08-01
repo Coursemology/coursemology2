@@ -159,7 +159,7 @@ class NewAssessmentFormButton extends Component {
           <DialogTitle>
             {intl.formatMessage(translations.newAssessment)}
           </DialogTitle>
-          <DialogContent>
+          <DialogContent className="pt-1">
             <AssessmentForm
               canManageMonitor={canManageMonitor}
               disabled={disabled}
