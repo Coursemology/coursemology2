@@ -62,8 +62,6 @@ gem 'jbuilder'
 gem 'slim-rails'
 # ejs for client-side templates
 gem 'ejs'
-# High Voltage for static pages
-gem 'high_voltage'
 # Paginator for Rails
 gem 'kaminari'
 # Work with Docker
