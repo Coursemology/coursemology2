@@ -9,7 +9,7 @@
   "scripts": {
     "test": "TZ=Asia/Singapore yarn run jest",
     "testci": "TZ=Asia/Singapore yarn run jest --maxWorkers=4",
-    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w --node-env=production --config webpack.prod.js",
+    "build:test": "export NODE_ENV=test && export BABEL_ENV=nothing && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
     "build:development": "yarn run build:translations && webpack serve --config webpack.dev.js",
     "build:profile": "yarn run build:translations && webpack serve --config webpack.profile.js --progress=profile",
