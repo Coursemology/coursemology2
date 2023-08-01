@@ -65,3 +65,8 @@ node_modules
 /.env.*
 /client/.env
 /client/.env.*
+
+# Ignore Playwright results
+test-results/
+playwright-report/
+playwright/.cache/
