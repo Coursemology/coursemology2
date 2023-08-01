@@ -198,5 +198,9 @@
   "license": "MIT",
   "firstBuildYear": 2013,
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
-  "main": "app/index.js"
+  "main": "app/index.js",
+  "devServer": {
+    "appHost": "lvh.me",
+    "serverPort": 5000
+  }
 }
