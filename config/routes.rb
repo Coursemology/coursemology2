@@ -71,7 +71,8 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: 'user/registrations',
     sessions: 'user/sessions',
-    masquerades: 'user/masquerades'
+    masquerades: 'user/masquerades',
+    passwords: 'user/passwords',
   }
 
   get 'csrf_token' => 'csrf_token#csrf_token'
