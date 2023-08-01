@@ -21,11 +21,10 @@ module ApplicationUserConcern
   protected
 
   def publicly_accessible?
-    is_a?(HighVoltage::PagesController)
+    action_name.to_sym == :index
   end
 
   def handle_access_denied(exception)
-    @exception = exception
-    render 'pages/403', status: :forbidden
+    render json: { errors: exception.message }, status: :forbidden
   end
 end
