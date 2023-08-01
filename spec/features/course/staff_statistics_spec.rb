@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Statistics: Staff' do
+RSpec.feature 'Course: Statistics: Staff', js: true do
   subject { page }
 
   let!(:instance) { Instance.default }
@@ -79,34 +79,32 @@ RSpec.feature 'Course: Statistics: Staff' do
       end
 
       scenario 'I can view staff summary' do
-        pending 'Migrated staff statistics to React-side'
-        visit course_statistics_staff_path(course)
+        visit course_statistics_path(course)
+        click_button 'Staff'
 
-        expect(page).to have_selector('li', text: I18n.t('course.statistics.staff.header'))
-
-        within find(content_tag_selector(tutor1)) do
-          expect(page).to have_selector('td', text: '1') # S/N
-          expect(page).to have_selector('td', text: tutor1.name)
-          expect(page).to have_selector('td', text: tutor1_submissions.size)
-          expect(page).to have_selector('td', text: "1 #{I18n.t('time.day')} 01:01:01")
+        within find('tr', text: tutor1.name) do |row|
+          expect(row).to have_selector('td', text: '1') # S/N
+          expect(row).to have_selector('td', text: tutor1.name)
+          expect(row).to have_selector('td', text: tutor1_submissions.size)
+          expect(row).to have_selector('td', text: "1 #{I18n.t('time.day')} 01:01:01")
         end
 
-        within find(content_tag_selector(tutor2)) do
-          expect(page).to have_selector('td', text: '2')
-          expect(page).to have_selector('td', text: tutor2.name)
-          expect(page).to have_selector('td', text: tutor2_submissions.size)
-          expect(page).to have_selector('td', text: "2 #{I18n.t('time.day')} 00:00:00")
+        within find('tr', text: tutor2.name) do |row|
+          expect(row).to have_selector('td', text: '2')
+          expect(row).to have_selector('td', text: tutor2.name)
+          expect(row).to have_selector('td', text: tutor2_submissions.size)
+          expect(row).to have_selector('td', text: "2 #{I18n.t('time.day')} 00:00:00")
         end
 
         # Do not reflect staff submissions as part of staff statistics.
-        within find(content_tag_selector(tutor3)) do
-          expect(page).to have_selector('td', text: '3')
-          expect(page).to have_selector('td', text: tutor3.name)
-          expect(page).to have_selector('td', text: '1')
-          expect(page).to have_selector('td', text: "3 #{I18n.t('time.day')} 00:00:00")
+        within find('tr', text: tutor3.name) do |row|
+          expect(row).to have_selector('td', text: '3')
+          expect(row).to have_selector('td', text: tutor3.name)
+          expect(row).to have_selector('td', text: '1')
+          expect(row).to have_selector('td', text: "3 #{I18n.t('time.day')} 00:00:00")
         end
 
-        expect(page).not_to have_content_tag_for(tutor4)
+        expect(page).not_to have_text(tutor4.name)
       end
     end
 
@@ -116,7 +114,7 @@ RSpec.feature 'Course: Statistics: Staff' do
       scenario 'I cannot see the sidebar item' do
         visit course_path(course)
 
-        expect(page).not_to have_selector('li', text: I18n.t('course.statistics.header'))
+        expect(find_sidebar).not_to have_text(I18n.t('course.statistics.header'))
       end
     end
   end
