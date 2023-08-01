@@ -1,7 +1,5 @@
 import moment from 'moment-timezone';
 
-import { timeZone } from 'lib/helpers/server-context';
-
 const LONG_DATE_FORMAT = 'DD MMM YYYY' as const;
 const LONG_TIME_FORMAT = 'h:mma' as const;
 const LONG_DATE_TIME_FORMAT =
@@ -19,8 +17,6 @@ export const SHORT_DATE_TIME_FORMAT =
 const FULL_DATE_TIME_FORMAT = 'dddd, MMMM D YYYY, HH:mm' as const;
 const MINI_DATE_TIME_FORMAT = 'D MMM YYYY HH:mm' as const;
 const MINI_DATE_TIME_YEARLESS_FORMAT = 'D MMM HH:mm' as const;
-
-moment.tz.setDefault(timeZone ?? undefined);
 
 // TODO: Do not export moment and create the helpers here
 export default moment;
