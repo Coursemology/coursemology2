@@ -1,12 +1,14 @@
 import { Component } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import {
+  Alert,
   Card,
   CardContent,
   CircularProgress,
   FormControlLabel,
   Switch,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -39,7 +41,7 @@ const translations = defineMessages({
   },
   viewPastAnswers: {
     id: 'course.assessment.submission.SubmissionAnswer.viewPastAnswers',
-    defaultMessage: 'View Past Answers',
+    defaultMessage: 'Past Answers',
   },
 });
 
@@ -167,11 +169,9 @@ class SubmissionAnswer extends Component {
   renderMissingAnswerPanel() {
     const { intl } = this.props;
     return (
-      <Card id="missing-answer" style={{ backgroundColor: yellow[100] }}>
-        <CardContent>
-          <span>{intl.formatMessage(translations.missingAnswer)}</span>
-        </CardContent>
-      </Card>
+      <Alert severity="warning">
+        {intl.formatMessage(translations.missingAnswer)}
+      </Alert>
     );
   }
 
@@ -192,11 +192,18 @@ class SubmissionAnswer extends Component {
     const renderer = this.getRenderer(question);
 
     return (
-      <>
-        <h3 style={{ display: 'inline-block' }}>{question.displayTitle}</h3>
+      <div>
+        <Typography className="mb-5 inline-block" variant="h6">
+          {question.displayTitle}
+        </Typography>
+
         {this.renderHistoryToggle(question)}
-        <div dangerouslySetInnerHTML={{ __html: question.description }} />
-        <hr />
+
+        <Typography
+          dangerouslySetInnerHTML={{ __html: question.description }}
+          variant="body2"
+        />
+
         {answerId
           ? renderer({
               question,
@@ -206,7 +213,7 @@ class SubmissionAnswer extends Component {
               showMcqMrqSolution,
             })
           : this.renderMissingAnswerPanel()}
-      </>
+      </div>
     );
   }
 }

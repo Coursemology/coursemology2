@@ -12,10 +12,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Paper,
   Step,
   StepButton,
   Stepper,
   SvgIcon,
+  Typography,
 } from '@mui/material';
 import { blue, grey, red, yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -45,17 +47,10 @@ const Comments = lazy(() =>
 );
 
 const styles = {
-  questionCardContainer: {
-    marginTop: 20,
-    padding: 40,
-  },
   explanationContainer: {
     marginTop: 30,
     marginBottom: 30,
     borderRadius: 5,
-  },
-  questionContainer: {
-    paddingTop: 10,
   },
   formButton: {
     marginBottom: 10,
@@ -64,9 +59,6 @@ const styles = {
   stepButton: {
     marginBottom: 5,
     marginRight: 5,
-  },
-  loadingComment: {
-    marginTop: 10,
   },
 };
 
@@ -178,7 +170,9 @@ const SubmissionEditForm = (props) => {
         {intl.formatMessage(translations.examDialogTitle)}
       </DialogTitle>
       <DialogContent>
-        {intl.formatMessage(translations.examDialogMessage)}
+        <Typography color="text.secondary" variant="body2">
+          {intl.formatMessage(translations.examDialogMessage)}
+        </Typography>
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={() => setExamNotice(false)}>
@@ -223,7 +217,11 @@ const SubmissionEditForm = (props) => {
             {explanation.explanations.map((exp, index) => {
               const key = `question-${questionId}-explanation-${index}`;
               return (
-                <div key={key} dangerouslySetInnerHTML={{ __html: exp }} />
+                <Typography
+                  key={key}
+                  dangerouslySetInnerHTML={{ __html: exp }}
+                  variant="body2"
+                />
               );
             })}
           </CardContent>
@@ -407,49 +405,48 @@ const SubmissionEditForm = (props) => {
   };
 
   const renderQuestions = () => (
-    <>
+    <div className="space-y-8">
       {questionIds.map((id, index) => {
         const question = questions[id];
         const { answerId, topicId, viewHistory } = question;
         const topic = topics[topicId];
         return (
-          <Element
-            key={id}
-            name={`step${index}`}
-            style={styles.questionContainer}
-          >
-            <SubmissionAnswer
-              {...{
-                readOnly: !attempting,
-                answerId,
-                question,
-                questionsFlags,
-                historyQuestions,
-                graderView,
-                showMcqMrqSolution,
-                handleToggleViewHistoryMode,
-              }}
-            />
-            {question.type === questionTypes.Programming && !viewHistory
-              ? renderExplanationPanel(id)
-              : null}
-            {viewHistory ? null : renderAutogradingErrorPanel(id)}
-            {viewHistory ? null : renderProgrammingQuestionActions(id)}
-            {viewHistory ? null : renderQuestionGrading(id)}
-            <Suspense
-              fallback={
-                <div style={styles.loadingComment}>
-                  {intl.formatMessage(translations.loadingComment)}
-                </div>
-              }
-            >
-              <Comments topic={topic} />
-            </Suspense>
-            <hr />
+          <Element key={id} name={`step${index}`}>
+            <Paper className="mb-5 p-6" variant="outlined">
+              <SubmissionAnswer
+                {...{
+                  readOnly: !attempting,
+                  answerId,
+                  question,
+                  questionsFlags,
+                  historyQuestions,
+                  graderView,
+                  showMcqMrqSolution,
+                  handleToggleViewHistoryMode,
+                }}
+              />
+              {question.type === questionTypes.Programming &&
+                !viewHistory &&
+                renderExplanationPanel(id)}
+
+              {!viewHistory && renderAutogradingErrorPanel(id)}
+              {!viewHistory && renderProgrammingQuestionActions(id)}
+              {!viewHistory && renderQuestionGrading(id)}
+
+              <Suspense
+                fallback={
+                  <Typography style={styles.loadingComment} variant="body2">
+                    {intl.formatMessage(translations.loadingComment)}
+                  </Typography>
+                }
+              >
+                <Comments topic={topic} />
+              </Suspense>
+            </Paper>
           </Element>
         );
       })}
-    </>
+    </div>
   );
 
   const renderResetDialog = () => (
@@ -664,7 +661,7 @@ const SubmissionEditForm = (props) => {
   );
 
   return (
-    <Card style={styles.questionCardContainer}>
+    <>
       <FormProvider {...methods}>
         <form
           encType="multipart/form-data"
@@ -704,7 +701,7 @@ const SubmissionEditForm = (props) => {
       {renderUnsubmitDialog()}
       {renderResetDialog()}
       {renderExamDialog()}
-    </Card>
+    </>
   );
 };
 

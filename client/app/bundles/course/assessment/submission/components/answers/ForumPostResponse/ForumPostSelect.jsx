@@ -1,8 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { AttachFile } from '@mui/icons-material';
-import { Button } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Button, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import CourseAPI from 'api/course';
@@ -30,11 +29,7 @@ const translations = defineMessages({
   selectInstructions: {
     id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.selectInstructions',
     defaultMessage:
-      'Select {maxPosts} forum {maxPosts, plural, one {post} other {posts}}.',
-  },
-  selectedPostsInstructions: {
-    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.selectedPostsInstructions',
-    defaultMessage:
+      '<strong>Select {maxPosts} forum {maxPosts, plural, one {post} other {posts}}</strong>. ' +
       'You have selected {numPosts} {numPosts, plural, one {post} other {posts}}.',
   },
   selectPostsButton: {
@@ -46,11 +41,6 @@ const translations = defineMessages({
 const styles = {
   root: {
     marginBottom: 16,
-  },
-  instruction: {
-    color: grey[700],
-    fontSize: 14,
-    marginBottom: 12,
   },
 };
 
@@ -112,31 +102,24 @@ export default class ForumPostSelect extends Component {
   }
 
   renderInstruction(postPacks, maxPosts) {
-    if (this.props.readOnly) {
-      return (
-        <div style={styles.instruction}>
+    return (
+      <Typography className="mb-5" color="text.secondary" variant="body2">
+        {this.props.readOnly ? (
           <FormattedMessage
             values={{ numPosts: postPacks.length }}
             {...translations.submittedInstructions}
           />
-        </div>
-      );
-    }
-    return (
-      <div style={styles.instruction}>
-        {/* TODO: Refactor the below into a single FormattedMessage once react-intl is upgraded:
-            https://formatjs.io/docs/react-intl/components/#rich-text-formatting */}
-        <strong>
+        ) : (
           <FormattedMessage
-            values={{ maxPosts }}
+            values={{
+              maxPosts,
+              numPosts: postPacks.length,
+              strong: (chunk) => <strong>{chunk}</strong>,
+            }}
             {...translations.selectInstructions}
           />
-        </strong>{' '}
-        <FormattedMessage
-          values={{ numPosts: postPacks.length }}
-          {...translations.selectedPostsInstructions}
-        />
-      </div>
+        )}
+      </Typography>
     );
   }
 

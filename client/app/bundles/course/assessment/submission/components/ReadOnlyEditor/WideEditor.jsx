@@ -20,11 +20,6 @@ const styles = {
     overflow: 'auto',
   },
   editor: {
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: grey[200],
-    borderRadius: 5,
-    padding: 5,
     width: '100%',
     overflow: 'hidden',
     tableLayout: 'fixed',
@@ -101,7 +96,7 @@ export default class WideEditor extends Component {
     const { content } = this.props;
     return (
       <div style={styles.editorContainer}>
-        <table className="codehilite" style={styles.editor}>
+        <table cellSpacing={0} className="codehilite" style={styles.editor}>
           <tbody>
             <tr>
               <td

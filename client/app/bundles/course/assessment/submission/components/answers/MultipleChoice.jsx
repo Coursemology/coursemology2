@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { FormControlLabel, Radio } from '@mui/material';
+import { FormControlLabel, Radio, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -20,21 +20,21 @@ const MultipleChoiceOptions = ({
       <FormControlLabel
         key={option.id}
         checked={value && value.length > 0 && option.id === value[0]}
-        control={<Radio style={{ padding: '0 12px', marginBottom: 10 }} />}
+        control={<Radio />}
         disabled={readOnly}
         label={
           <b>
-            <div
+            <Typography
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}
               style={
                 option.correct && readOnly && (showMcqMrqSolution || graderView)
                   ? {
                       backgroundColor: green[50],
                       verticalAlign: 'middle',
-                      marginBottom: 10,
                     }
-                  : { verticalAlign: 'middle', marginBottom: 10 }
+                  : { verticalAlign: 'middle' }
               }
+              variant="body2"
             />
           </b>
         }

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Warning from '@mui/icons-material/Warning';
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -36,7 +36,7 @@ class ProgrammingFile extends Component {
     const { file, fieldName, language } = this.props;
     return (
       <>
-        <h5>{file.filename}</h5>
+        <Typography>{file.filename}</Typography>
         <Editor
           filename={file.filename}
           language={language}

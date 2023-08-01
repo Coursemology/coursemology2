@@ -1,19 +1,14 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { Paper } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Paper, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+
+import TextField from 'lib/components/core/fields/TextField';
 
 import actionTypes from '../constants';
 import { questionGradeShape, questionShape } from '../propTypes';
 
 const GRADE_STEP = 1;
-
-const styles = {
-  container: {
-    marginTop: 20,
-  },
-};
 
 /**
  * Checks if the given value is a valid decimal of the form `0.00`.
@@ -60,10 +55,11 @@ class VisibleQuestionGrade extends Component {
 
   renderQuestionGrade() {
     const { question, grading } = this.props;
+
     return (
-      <div style={{ display: 'inline-block', paddingLeft: 10 }}>
+      <Typography variant="body2">
         {`${grading.grade} / ${question.maximumGrade}`}
-      </div>
+      </Typography>
     );
   }
 
@@ -73,9 +69,10 @@ class VisibleQuestionGrade extends Component {
     const maxGrade = question.maximumGrade;
 
     return (
-      <div style={{ display: 'inline-block', paddingLeft: 10 }}>
-        <input
-          className="grade"
+      <div className="flex items-center space-x-2">
+        <TextField
+          hiddenLabel
+          inputProps={{ className: 'grade' }}
           onBlur={(e) => this.processValue(e.target.value)}
           onChange={(e) => this.processValue(e.target.value, true)}
           onKeyDown={(e) => {
@@ -89,10 +86,13 @@ class VisibleQuestionGrade extends Component {
               this.stepGrade(-GRADE_STEP);
             }
           }}
+          size="small"
           style={{ width: 100 }}
           value={initialGrade ?? ''}
+          variant="filled"
         />
-        {` / ${maxGrade}`}
+
+        <Typography variant="body2">{` / ${maxGrade}`}</Typography>
       </div>
     );
   }
@@ -105,16 +105,14 @@ class VisibleQuestionGrade extends Component {
     }
 
     return (
-      <Paper style={styles.container}>
-        <div
-          style={{
-            backgroundColor: grey[100],
-            display: 'inline-block',
-            padding: 20,
-          }}
-        >
-          Grading
-        </div>
+      <Paper
+        className="flex items-center justify-between space-x-5 px-5 py-4"
+        variant="outlined"
+      >
+        <Typography color="text.secondary" variant="body1">
+          Grade
+        </Typography>
+
         {editable
           ? this.renderQuestionGradeField()
           : this.renderQuestionGrade()}

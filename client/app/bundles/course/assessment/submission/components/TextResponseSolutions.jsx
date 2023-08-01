@@ -5,6 +5,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 
 import { questionShape } from '../propTypes';
@@ -14,9 +15,9 @@ function renderTextResponseSolutions(question) {
   return (
     <>
       <hr />
-      <h4>
+      <Typography variant="h6">
         <FormattedMessage {...translations.solutions} />
-      </h4>
+      </Typography>
       <Table>
         <TableHead>
           <TableRow>
@@ -51,9 +52,9 @@ function renderTextResponseComprehensionPoint(point) {
   return (
     <>
       <br />
-      <h5>
+      <Typography variant="h6">
         <FormattedMessage {...translations.point} />
-      </h5>
+      </Typography>
       <Table>
         <TableBody>
           <TableRow>
@@ -104,9 +105,9 @@ function renderTextResponseComprehensionGroup(group) {
   return (
     <>
       <br />
-      <h4>
+      <Typography variant="h6">
         <FormattedMessage {...translations.group} />
-      </h4>
+      </Typography>
       <Table>
         <TableBody>
           <TableRow>
@@ -133,13 +134,12 @@ function renderTextResponseComprehensionGroup(group) {
 function renderTextResponseComprehension(question) {
   return (
     <>
-      <hr />
-      <h4>
+      <Typography variant="h6">
         <FormattedMessage
           {...translations.solutionsWithMaximumGrade}
           values={{ maximumGrade: question.maximumGrade }}
         />
-      </h4>
+      </Typography>
       {question.groups.map((group) => (
         <div key={group.id}>{renderTextResponseComprehensionGroup(group)}</div>
       ))}

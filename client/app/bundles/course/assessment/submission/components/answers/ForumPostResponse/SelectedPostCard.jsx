@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { ChevronRight, Delete, ExpandMore } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -95,12 +95,10 @@ export default class SelectedPostCard extends Component {
         ) : (
           <ChevronRight fontSize="small" />
         )}
-        {topic.isDeleted ? (
-          <span>
+        <Typography variant="body2">
+          {topic.isDeleted ? (
             <FormattedMessage {...translations.topicDeleted} />
-          </span>
-        ) : (
-          <span>
+          ) : (
             <FormattedMessage
               values={{
                 topicUrl: SelectedPostCard.renderLink(
@@ -114,8 +112,8 @@ export default class SelectedPostCard extends Component {
               }}
               {...translations.postMadeUnder}
             />
-          </span>
-        )}
+          )}
+        </Typography>
       </div>
     );
   }

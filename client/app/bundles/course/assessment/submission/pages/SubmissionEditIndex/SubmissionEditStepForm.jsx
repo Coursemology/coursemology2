@@ -8,6 +8,7 @@ import {
   CardContent,
   CardHeader,
   CircularProgress,
+  Paper,
   Step,
   StepButton,
   StepLabel,
@@ -512,7 +513,7 @@ const SubmissionEditStepForm = (props) => {
         {renderExplanationPanel(question)}
         {!attempting && graderView ? renderReevaluateButton() : null}
         {renderQuestionGrading(id)}
-        {renderGradingPanel()}
+
         {attempting ? (
           <div>
             {renderResetButton()}
@@ -521,17 +522,7 @@ const SubmissionEditStepForm = (props) => {
             {renderAnswerLoadingIndicator()}
           </div>
         ) : null}
-        <div>
-          {renderSaveGradeButton()}
-          {renderSaveDraftButton()}
 
-          <div style={{ display: 'inline', float: 'right' }}>
-            {renderFinaliseButton()}
-          </div>
-
-          {renderUnsubmitButton()}
-        </div>
-        <hr />
         <Comments topic={topic} />
       </>
     );
@@ -594,20 +585,37 @@ const SubmissionEditStepForm = (props) => {
   return (
     <div style={styles.questionContainer}>
       {renderStepper()}
-      <Card style={styles.questionCardContainer}>
-        <FormProvider {...methods}>
-          <form
-            encType="multipart/form-data"
-            id={formNames.SUBMISSION}
-            noValidate
-            onSubmit={handleSubmit((data) => onSubmit({ ...data }))}
-          >
-            <ErrorText errors={errors} />
+
+      <FormProvider {...methods}>
+        <form
+          encType="multipart/form-data"
+          id={formNames.SUBMISSION}
+          noValidate
+          onSubmit={handleSubmit((data) => onSubmit({ ...data }))}
+        >
+          <ErrorText errors={errors} />
+
+          <Paper className="mb-5 p-6" variant="outlined">
             {renderStepQuestion()}
-            {renderSubmitDialog()}
-          </form>
-        </FormProvider>
-      </Card>
+          </Paper>
+
+          {renderSubmitDialog()}
+        </form>
+      </FormProvider>
+
+      {renderGradingPanel()}
+
+      <div>
+        {renderSaveGradeButton()}
+        {renderSaveDraftButton()}
+
+        <div style={{ display: 'inline', float: 'right' }}>
+          {renderFinaliseButton()}
+        </div>
+
+        {renderUnsubmitButton()}
+      </div>
+
       {renderUnsubmitDialog()}
       {renderResetDialog()}
     </div>

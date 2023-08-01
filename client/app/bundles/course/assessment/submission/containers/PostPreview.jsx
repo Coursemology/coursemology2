@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import { ChevronRight } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import stripHtmlTags from 'lib/helpers/htmlFormatHelpers';
@@ -23,8 +24,11 @@ const VisiblePostPreview = (props) => {
   const { style, creator, text } = props;
   return (
     <div style={{ ...styles.postPreview, ...style }}>
-      <ExpandMore fontSize="inherit" style={styles.expand} />
-      {`${creator}: ${stripHtmlTags(text)}`}
+      <ChevronRight className="mr-2" fontSize="small" />
+
+      <Typography variant="body2">
+        {`${creator}: ${stripHtmlTags(text)}`}
+      </Typography>
     </div>
   );
 };

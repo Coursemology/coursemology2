@@ -3,7 +3,7 @@ import Dropzone from 'react-dropzone';
 import { Controller, useFormContext } from 'react-hook-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import FileUpload from '@mui/icons-material/FileUpload';
-import { Card, CardContent, Chip } from '@mui/material';
+import { Card, CardContent, Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 const translations = defineMessages({
@@ -78,13 +78,13 @@ class FileInput extends Component {
 
     if (!files || !files.length) {
       return (
-        <h4>
+        <Typography>
           {disabled ? (
             <FormattedMessage {...translations.uploadDisabled} />
           ) : (
             <FormattedMessage {...translations.uploadLabel} />
           )}
-        </h4>
+        </Typography>
       );
     }
     return (

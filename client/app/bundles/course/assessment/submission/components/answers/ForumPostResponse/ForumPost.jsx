@@ -7,6 +7,7 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -64,7 +65,7 @@ export default class ForumPost extends Component {
         />
         <Divider />
         <CardContent>
-          <div
+          <Typography
             ref={(divElement) => {
               this.divElement = divElement;
             }}
@@ -76,6 +77,7 @@ export default class ForumPost extends Component {
                   : MAX_POST_HEIGHT,
               overflow: 'hidden',
             }}
+            variant="body2"
           />
           {this.state.isExpandable && (
             <Button
