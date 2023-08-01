@@ -44,6 +44,8 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
         e.preventDefault();
         onPressEscape();
       }
+
+      return props.onKeyDown?.(e);
     };
 
     return (
