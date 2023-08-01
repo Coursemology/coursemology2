@@ -264,7 +264,6 @@ GEM
       raabro (~> 1.4)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    high_voltage (3.1.2)
     highline (2.0.3)
     html-pipeline (2.14.3)
       activesupport (>= 2)
@@ -671,7 +670,6 @@ DEPENDENCIES
   fog-aws (= 3.8.0)
   font-awesome-rails
   friendly_id
-  high_voltage
   html-pipeline
   html-pipeline-rouge_filter!
   http_accept_language
