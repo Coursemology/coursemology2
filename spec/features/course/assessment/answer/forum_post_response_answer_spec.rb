@@ -8,12 +8,9 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, :published_with_forum_post_response_question, course: course) }
-    before { login_as(user, scope: :user) }
+    let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
 
-    let(:submission) do
-      create(:submission, *submission_traits, assessment: assessment, creator: user)
-    end
-    let(:submission_traits) { nil }
+    before { login_as(user, scope: :user) }
 
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
