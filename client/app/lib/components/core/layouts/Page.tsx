@@ -23,9 +23,9 @@ const Page = (props: PageProps): JSX.Element => {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <>
       {(props.title || props.actions) && (
-        <header className="flex min-h-[6rem] items-center bg-white px-6 border-only-b-neutral-200">
+        <header className="flex min-h-[6rem] items-center bg-white px-6">
           <div className="flex w-full flex-col sm:flex-row sm:items-center sm:justify-between sm:space-x-4">
             {props.title && (
               <div className="flex items-center space-x-4">
@@ -60,7 +60,7 @@ const Page = (props: PageProps): JSX.Element => {
       >
         {props.children}
       </main>
-    </div>
+    </>
   );
 };
 
