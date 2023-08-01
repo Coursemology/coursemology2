@@ -1,4 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { dispatch } from 'store';
 import { act, fireEvent, render } from 'test-utils';
 
@@ -15,7 +15,7 @@ import actionTypes, {
 } from '../../../constants';
 
 const client = CourseAPI.assessment.answer.scribing.client;
-const mock = new MockAdapter(client);
+const mock = createMockAdapter(client);
 
 const assessmentId = 1;
 const submissionId = 2;

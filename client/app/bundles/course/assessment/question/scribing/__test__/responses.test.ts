@@ -1,5 +1,5 @@
 import { waitFor } from '@testing-library/react';
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { dispatch } from 'store';
 
 import CourseAPI from 'api/course';
@@ -9,7 +9,7 @@ import { createScribingQuestion, updateScribingQuestion } from '../operations';
 
 // Mock axios
 const client = CourseAPI.assessment.question.scribing.client;
-const mock = new MockAdapter(client);
+const mock = createMockAdapter(client);
 
 beforeEach(() => {
   mock.reset();

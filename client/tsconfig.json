@@ -29,7 +29,8 @@
     "paths": {
       "lib/*": ["lib/*"],
       "course/*": ["bundles/course/*"],
-      "test-utils": ["utilities/test-utils"]
+      "test-utils": ["utilities/test-utils"],
+      "mocks/*": ["__test__/mocks/*"]
     },
     "pretty": true,
     "resolveJsonModule": true,

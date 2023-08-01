@@ -1,4 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { dispatch } from 'store';
 
 import CourseAPI from 'api/course';
@@ -7,7 +7,7 @@ import history from 'lib/history';
 import { createResponse } from '../responses';
 
 const client = CourseAPI.survey.responses.client;
-const mock = new MockAdapter(client);
+const mock = createMockAdapter(client);
 const mockNavigate = jest.fn();
 
 beforeEach(() => {

@@ -1,4 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { store } from 'store';
 import { fireEvent, render, waitFor } from 'test-utils';
 
@@ -7,7 +7,7 @@ import CourseAPI from 'api/course';
 import { SurveyResults } from '../index';
 
 const client = CourseAPI.survey.surveys.client;
-const mock = new MockAdapter(client);
+const mock = createMockAdapter(client);
 
 const data = {
   sections: [

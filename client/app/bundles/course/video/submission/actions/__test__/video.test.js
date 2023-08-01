@@ -1,5 +1,5 @@
-import MockAdapter from 'axios-mock-adapter';
 import { List as makeImmutableList, Map as makeImmutableMap } from 'immutable';
+import { createMockAdapter } from 'mocks/axiosMock';
 
 import CourseAPI from 'api/course';
 import { playerStates } from 'lib/constants/videoConstants';
@@ -10,7 +10,7 @@ import { changePlayerState, endSession, sendEvents } from '../video';
 const videoId = '1';
 
 const client = CourseAPI.video.sessions.client;
-const mock = new MockAdapter(client, { delayResponse: 0 });
+const mock = createMockAdapter(client, { delayResponse: 0 });
 
 const oldSessionsFixtures = makeImmutableMap({
   25: {

@@ -1,11 +1,11 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 
 import MilestoneRow from '../MilestoneRow';
 
-const mock = new MockAdapter(CourseAPI.lessonPlan.client);
+const mock = createMockAdapter(CourseAPI.lessonPlan.client);
 
 beforeEach(() => {
   mock.reset();

@@ -1,6 +1,8 @@
 class ResizeObserver {
   observe() {}
+
   unobserve() {}
+
   disconnect() {}
 }
 

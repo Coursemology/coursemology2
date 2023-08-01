@@ -1,11 +1,11 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { render, waitFor, within } from 'test-utils';
 
 import CourseAPI from 'api/course';
 
 import ResponseIndex from '../index';
 
-const mock = new MockAdapter(CourseAPI.survey.responses.client);
+const mock = createMockAdapter(CourseAPI.survey.responses.client);
 
 const responsesData = {
   responses: [

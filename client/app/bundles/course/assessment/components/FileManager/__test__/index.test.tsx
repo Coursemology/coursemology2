@@ -1,4 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { act, fireEvent, render, RenderResult, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
@@ -29,8 +29,7 @@ const NEW_MATERIAL = {
   deleting: false,
 };
 
-const client = CourseAPI.materialFolders.client;
-const mock = new MockAdapter(client);
+const mock = createMockAdapter(CourseAPI.materialFolders.client);
 
 let fileManager: RenderResult;
 beforeEach(() => {

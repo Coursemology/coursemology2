@@ -1,11 +1,11 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 import ScribingQuestion from 'course/assessment/question/scribing/ScribingQuestion';
 
-const mock = new MockAdapter(CourseAPI.assessment.question.scribing.client);
-const assessmentsMock = new MockAdapter(
+const mock = createMockAdapter(CourseAPI.assessment.question.scribing.client);
+const assessmentsMock = createMockAdapter(
   CourseAPI.assessment.assessments.client,
 );
 

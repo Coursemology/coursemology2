@@ -1,4 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
@@ -24,7 +24,7 @@ const expectedPayload = {
   },
 };
 
-const mock = new MockAdapter(CourseAPI.admin.notifications.client);
+const mock = createMockAdapter(CourseAPI.admin.notifications.client);
 
 describe('<NotificationSettings />', () => {
   it('allow emails notification settings to be set', async () => {

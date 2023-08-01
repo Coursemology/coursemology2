@@ -1,4 +1,4 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
@@ -6,7 +6,7 @@ import CourseAPI from 'api/course';
 import LessonPlanLayout from '..';
 
 const client = CourseAPI.lessonPlan.client;
-const mock = new MockAdapter(client);
+const mock = createMockAdapter(client);
 
 beforeEach(() => {
   mock.reset();

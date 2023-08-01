@@ -1,11 +1,11 @@
-import MockAdapter from 'axios-mock-adapter';
+import { createMockAdapter } from 'mocks/axiosMock';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 
 import ItemRow from '../ItemRow';
 
-const mock = new MockAdapter(CourseAPI.lessonPlan.client);
+const mock = createMockAdapter(CourseAPI.lessonPlan.client);
 
 const startAt = '01-01-2017';
 const endAt = '02-02-2017';
