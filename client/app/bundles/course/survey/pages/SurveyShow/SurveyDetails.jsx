@@ -9,6 +9,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -63,12 +64,13 @@ const SurveyDetails = (props) => {
 
     return (
       <CardContent>
-        <h4>
+        <Typography variant="h6">
           <FormattedMessage {...surveyTranslations.description} />
-        </h4>
-        <p
+        </Typography>
+        <Typography
           dangerouslySetInnerHTML={{ __html: survey.description }}
           style={{ whiteSpace: 'pre-line' }}
+          variant="body2"
         />
       </CardContent>
     );

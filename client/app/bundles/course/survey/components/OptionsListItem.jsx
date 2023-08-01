@@ -1,5 +1,5 @@
 import { PureComponent } from 'react';
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import Thumbnail from 'lib/components/core/Thumbnail';
@@ -65,7 +65,10 @@ class OptionsListItem extends PureComponent {
         <div style={styles.gridOptionBody}>
           {optionText ? (
             <CardContent>
-              <p dangerouslySetInnerHTML={{ __html: optionText }} />
+              <Typography
+                dangerouslySetInnerHTML={{ __html: optionText }}
+                variant="body2"
+              />
             </CardContent>
           ) : null}
           {widget}
@@ -88,9 +91,10 @@ class OptionsListItem extends PureComponent {
         ) : (
           []
         )}
-        <p
+        <Typography
           dangerouslySetInnerHTML={{ __html: optionText || null }}
           style={styles.optionText}
+          variant="body2"
         />
       </div>
     );
