@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import type {} from '@mui/lab/themeAugmentation';
+import { CssBaseline } from '@mui/material';
 import {
   createTheme,
   StyledEngineProvider,
@@ -22,9 +24,6 @@ const pxToNumber = (pixels: string): number =>
   parseInt(pixels.replace('px', ''), 10);
 
 const ThemeProvider = (props: ThemeProviderProps): JSX.Element => {
-  // TODO: Replace with React's createRoot once true SPA is ready
-  const rootElement = document.getElementById('root');
-
   const theme = createTheme({
     palette,
     // https://material-ui.com/customization/themes/#typography---html-font-size
@@ -32,6 +31,16 @@ const ThemeProvider = (props: ThemeProviderProps): JSX.Element => {
     typography: {
       htmlFontSize: 10,
       fontFamily: `'Inter', 'sans-serif'`,
+      h1: undefined,
+      h2: undefined,
+      h3: {
+        fontWeight: 800,
+        letterSpacing: '-0.05em',
+      },
+      h4: {
+        fontWeight: 700,
+        letterSpacing: '-0.04em',
+      },
     },
     breakpoints: {
       values: {
@@ -51,42 +60,34 @@ const ThemeProvider = (props: ThemeProviderProps): JSX.Element => {
       MuiButton: {
         defaultProps: {
           disableElevation: true,
-          classes: { root: 'rounded-full px-4 py-2' },
+          classes: {
+            root: 'rounded-full',
+          },
         },
         styleOverrides: {
           root: { textTransform: 'none' },
         },
       },
+      MuiLoadingButton: {
+        defaultProps: {
+          disableElevation: true,
+          classes: {
+            root: 'rounded-full',
+            sizeLarge: 'px-5 py-3',
+            sizeMedium: 'px-3 py-2',
+            sizeSmall: 'min-w-[6rem] px-1 py-1',
+          },
+        },
+      },
       MuiDialog: {
         defaultProps: {
-          container: rootElement,
           PaperProps: {
             className: 'rounded-2xl shadow-2xl',
           },
         },
       },
-      MuiPopover: {
-        // TODO: *Must* remove once SPA is ready
-        // Popover elements, e.g., Menu, MenuItem, attaches an `overflow: hidden` style to this `container` to
-        // prevent scrolling and having the Popover floating senselessly in the `container`. Usually, this `container`
-        // defaults to `body`. This time, we set it to `rootElement` which is NOT `body` nor the viewport. This causes
-        // the senseless floating issue while the page scrolls.
-        defaultProps: { container: rootElement },
-      },
-      MuiPopper: {
-        defaultProps: { container: rootElement },
-      },
       MuiCard: { styleOverrides: { root: { overflow: 'visible' } } },
       MuiMenuItem: { styleOverrides: { root: { height: '48px' } } },
-      MuiDialogContent: {
-        styleOverrides: {
-          root: {
-            color: 'black',
-            fontSize: '16px',
-            fontFamily: `'Roboto', 'sans-serif'`,
-          },
-        },
-      },
       MuiAccordionSummary: {
         styleOverrides: {
           root: { width: '100%' },
@@ -126,11 +127,32 @@ const ThemeProvider = (props: ThemeProviderProps): JSX.Element => {
           root: { '&:last-child td, &:last-child th': { border: 0 } },
         },
       },
+      MuiFilledInput: {
+        defaultProps: {
+          disableUnderline: true,
+          classes: {
+            root: 'rounded-xl overflow-hidden',
+            focused: 'ring-2 ring-primary',
+            error: 'ring-2 ring-red-400',
+          },
+        },
+      },
+      MuiAlert: {
+        defaultProps: {
+          classes: {
+            // For some reasons, `Alert`s with `error` and `success` severities
+            // is shown with the faintest of colour that's almost invisible.
+            standardError: 'bg-red-100/70',
+            standardSuccess: 'bg-lime-50',
+          },
+        },
+      },
     },
   });
 
   return (
     <StyledEngineProvider injectFirst>
+      <CssBaseline />
       <MuiThemeProvider theme={theme}>{props.children}</MuiThemeProvider>
     </StyledEngineProvider>
   );
