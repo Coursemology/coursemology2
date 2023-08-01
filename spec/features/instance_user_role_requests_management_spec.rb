@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Instance::UserRoleRequests' do
+RSpec.feature 'Instance::UserRoleRequests', js: true do
   subject { page }
   let(:instance) { create(:instance) }
 
@@ -10,7 +10,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
     before { login_as(user, scope: :user) }
 
     context 'As a normal instance user' do
-      scenario 'I can create a new role request', type: :mailer, js: true do
+      scenario 'I can create a new role request', type: :mailer do
         visit courses_path
         find('#role-request-button').click
 
@@ -33,7 +33,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
         expect(request_created.reason).to eq(request.reason)
       end
 
-      scenario 'I can edit my existing role request', js: true do
+      scenario 'I can edit my existing role request' do
         request = create(:role_request, user: user, instance: instance)
         visit courses_path
         find('#role-request-button').click
@@ -46,7 +46,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
       end
     end
 
-    context 'As an instance admin', js: true do
+    context 'As an instance admin' do
       let(:user) { create(:instance_administrator).user }
       let!(:requests) { create_list(:role_request, 2, instance: instance) }
 
