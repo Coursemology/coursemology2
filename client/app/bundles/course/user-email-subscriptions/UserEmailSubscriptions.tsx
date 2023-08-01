@@ -29,7 +29,7 @@ const UserEmailSubscriptions = (): JSX.Element => {
 
     dispatch(
       fetchUserEmailSubscriptions(
-        queryParams,
+        Object.fromEntries(queryParams.entries()),
         () => setStatus('success'),
         () => setStatus('error'),
       ),
