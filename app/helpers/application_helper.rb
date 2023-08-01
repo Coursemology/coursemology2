@@ -5,7 +5,6 @@ module ApplicationHelper
 
   include ApplicationAnnouncementsHelper
   include ApplicationJobsHelper
-  include ApplicationWidgetsHelper
   include ApplicationNotificationsHelper
 
   include ApplicationFormattersHelper
