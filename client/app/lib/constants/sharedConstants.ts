@@ -62,5 +62,7 @@ export default {
   AVAILABLE_LOCALES,
 };
 
+export const SUPPORT_EMAIL = 'coursemology@gmail.com' as const;
+
 export const DEFAULT_LOCALE = 'en' as const;
 export const DEFAULT_TIME_ZONE = 'Asia/Singapore' as const;
