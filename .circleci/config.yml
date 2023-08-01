@@ -1,6 +1,13 @@
 version: 2.1
 
 executors:
+  node:
+    docker:
+      - image: cimg/node:18.12.1
+
+    working_directory: ~/repo
+    resource_class: large
+
   ruby_with_postgres:
     docker:
       - image: cimg/ruby:3.0.5-browsers
@@ -192,19 +199,11 @@ jobs:
           command: bundle exec rake factory_bot:lint
 
   jslint:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.5-browsers
-        environment:
-          RAILS_ENV: test
-
-    working_directory: ~/repo
+    executor: node
 
     steps:
       - checkout_with_submodules
-
       - build_and_restore_node_cache
-
       - build_and_cache_client
 
       - run:
@@ -212,22 +211,13 @@ jobs:
           command: |
             cd client
             yarn lint
-    resource_class: large
 
   jstest:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.5-browsers
-        environment:
-          RAILS_ENV: test
-
-    working_directory: ~/repo
+    executor: node
 
     steps:
       - checkout_with_submodules
-
       - build_and_restore_node_cache
-
       - build_and_cache_client
 
       # Build frontend JS
@@ -236,7 +226,6 @@ jobs:
           command: |
             cd client && yarn
             yarn testci
-    resource_class: large
 
   i18n:
     executor: ruby_with_postgres
