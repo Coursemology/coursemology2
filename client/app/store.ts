@@ -12,6 +12,7 @@ import deleteConfirmationReducer from 'lib/reducers/deleteConfirmation';
 import notificationPopupReducer from 'lib/reducers/notificationPopup';
 
 import globalAnnouncementReducer from './bundles/announcements/store';
+import sessionReducer from './bundles/common/store';
 import achievementsReducer from './bundles/course/achievement/store';
 import lessonPlanSettingsReducer from './bundles/course/admin/reducers/lessonPlanSettings';
 import notificationSettingsReducer from './bundles/course/admin/reducers/notificationSettings';
@@ -85,6 +86,7 @@ const rootReducer = combineReducers({
     user: globalUserReducer,
     announcements: globalAnnouncementReducer,
   }),
+  session: sessionReducer,
 
   // The following reducers are for UI related rendering.
   // TODO: remove these (avoid using redux to render UI components)
@@ -94,8 +96,13 @@ const rootReducer = combineReducers({
 
 const RESET_STORE_ACTION_TYPE = 'RESET_STORE_BOOM';
 
-const purgeableRootReducer: Reducer = (state, action) => {
-  if (action.type === RESET_STORE_ACTION_TYPE) state = undefined;
+const purgeableRootReducer: Reducer<AppState> = (state, action) => {
+  if (action.type === RESET_STORE_ACTION_TYPE) {
+    // `session` is generally NOT ephemeral. If `session` is accidentally
+    // purged without intuition, the router may flicker and break.
+    state = { session: state?.session } as AppState;
+  }
+
   return rootReducer(state, action);
 };
 
