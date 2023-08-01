@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Homepage' do
+RSpec.feature 'Course: Homepage', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -109,13 +109,13 @@ RSpec.feature 'Course: Homepage' do
         expect(course_user.reload.last_active_at).to be_within(1.hour).of(Time.zone.now)
       end
 
-      scenario 'I am able to see announcements in course homepage', js: true do
+      scenario 'I am able to see announcements in course homepage' do
         valid_announcement = create(:course_announcement, course: course)
         visit course_path(course)
         expect(page).to have_selector("#announcement-#{valid_announcement.id}")
       end
 
-      scenario 'I am able to see the activity feed in course homepage', js: true do
+      scenario 'I am able to see the activity feed in course homepage' do
         feed_notifications
 
         visit course_path(course)
@@ -124,7 +124,7 @@ RSpec.feature 'Course: Homepage' do
         end
       end
 
-      scenario 'I am unable to see activities with deleted objects in my course homepage', js: true do
+      scenario 'I am unable to see activities with deleted objects in my course homepage' do
         feed_notifications.each do |notification|
           notification.activity.object.delete
         end
@@ -135,7 +135,7 @@ RSpec.feature 'Course: Homepage' do
         end
       end
 
-      scenario 'I can view and ignore the relevant todos in my homepage', js: true do
+      scenario 'I can view and ignore the relevant todos in my homepage' do
         assessment_todos
         video_todo
         survey_todo
@@ -158,7 +158,7 @@ RSpec.feature 'Course: Homepage' do
         end
 
         find("#todo-ignore-button-#{assessment_todos[:in_progress].id}").click
-        expect(page).to have_selector('div.Toastify__toast-body', text: 'Pending task successfully ignored')
+        expect_toastify 'Pending task successfully ignored'
 
         # Reload page to load other todos
         visit course_path(course)
@@ -174,13 +174,13 @@ RSpec.feature 'Course: Homepage' do
 
     context 'As a user not registered for the course' do
       let(:user) { create(:user) }
-      scenario 'I am not able to see announcements in course homepage', js: true do
+      scenario 'I am not able to see announcements in course homepage' do
         valid_announcement = create(:course_announcement, course: course)
         visit course_path(course)
         expect(page).to_not have_selector("#announcement-#{valid_announcement.id}")
       end
 
-      scenario 'I am not able to see the activity feed in course homepage', js: true do
+      scenario 'I am not able to see the activity feed in course homepage' do
         feed_notifications
 
         visit course_path(course)
@@ -189,7 +189,7 @@ RSpec.feature 'Course: Homepage' do
         end
       end
 
-      scenario 'I am able to see owner and managers in instructors list', js: true do
+      scenario 'I am able to see owner and managers in instructors list' do
         manager = create(:course_manager, course: course)
         teaching_assistant = create(:course_teaching_assistant, course: course)
         visit course_path(course)
@@ -200,7 +200,7 @@ RSpec.feature 'Course: Homepage' do
         expect(page).not_to have_selector("#instructor-#{teaching_assistant.user_id}")
       end
 
-      scenario 'I am able to see the course description', js: true do
+      scenario 'I am able to see the course description' do
         visit course_path(course)
         expect(page).to have_text('Description')
         expect(page).to have_text(course.description)
