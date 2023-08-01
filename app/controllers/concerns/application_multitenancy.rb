@@ -13,8 +13,7 @@ module ApplicationMultitenancy
     tenant_host = deduce_tenant_host
     instance = Instance.find_tenant_by_host_or_default(tenant_host)
 
-    if Rails.env.production? && instance && instance.default? &&
-       instance.host.casecmp(tenant_host) != 0
+    if Rails.env.production? && instance.default? && instance.host.casecmp(tenant_host) != 0
       raise ActionController::RoutingError, 'Instance Not Found'
     end
 
@@ -25,7 +24,13 @@ module ApplicationMultitenancy
   # @return [String] The host, with www removed.
   def deduce_tenant_host
     if Rails.env.development?
-      'coursemology.org'
+      default_app_host = Application::Application.config.x.default_app_host
+
+      if request.host.downcase.ends_with?(default_app_host)
+        request.host.sub(default_app_host, 'coursemology.org')
+      else
+        'coursemology.org'
+      end
     elsif request.host.downcase.start_with?('www.')
       request.host[4..]
     else
