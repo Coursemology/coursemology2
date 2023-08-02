@@ -1,6 +1,0 @@
-zh:
-  attachments:
-    attachment:
-      uploaded_by: :'layouts.materials_uploader.uploaded_by'
-      delete_attachment: '删除'
-      confirm_delete_attachment: '确定要删除该附件吗？'

@@ -6,7 +6,6 @@ module ApplicationHelper
 
   include ApplicationFormattersHelper
   include RouteOverridesHelper
-  include RenderWithinLayoutHelper
 
   def user_time_zone
     user_signed_in? ? current_user.time_zone : nil

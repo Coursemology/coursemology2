@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 module Course::Assessment::Submission::SubmissionsHelper
-  include Course::Assessment::Submission::SubmissionsAutogradedHelper
   include Course::Assessment::Answer::ProgrammingTestCaseHelper
 
   # Return the last non-current attempt if the submission is being attempted,
