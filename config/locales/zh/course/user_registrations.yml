@@ -9,5 +9,3 @@ zh:
         code_taken_with_email: >
           所提供的邀请码已被%{email}使用，
           请使用该账户访问该课程。
-        requested: "你已经提交了课程的注册请求。"
-        registered: "你已注册为%{role}."

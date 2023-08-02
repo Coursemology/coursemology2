@@ -9,5 +9,3 @@ en:
         code_taken_with_email: >
           The provided invitation code has been claimed by %{email},
           please use that account to access the course instead.
-        requested: "You have submitted registration request to the course."
-        registered: "You have been registered as a %{role}."
