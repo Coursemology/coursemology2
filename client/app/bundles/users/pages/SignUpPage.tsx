@@ -50,8 +50,12 @@ const SignUpPage = (): JSX.Element => {
   };
 
   const handleSignUp = async (): Promise<void> => {
-    if (!captchaResponse)
-      throw new Error(`received ${captchaResponse} captchaResponse`);
+    if (!captchaResponse) {
+      setErrors({ recaptcha: t(translations.errorRecaptcha) });
+      resetCaptcha();
+      toast.error(t(translations.errorSigningUp));
+      return;
+    }
 
     setErrors({});
     setSubmitting(true);
@@ -147,6 +151,7 @@ const SignUpPage = (): JSX.Element => {
         />
 
         <TextField
+          autoComplete="off"
           disabled={Boolean(invitation?.email) || submitting}
           error={'email' in errors}
           fullWidth
@@ -163,6 +168,7 @@ const SignUpPage = (): JSX.Element => {
         />
 
         <PasswordTextField
+          autoComplete="off"
           autoFocus={Boolean(invitation)}
           disabled={submitting}
           error={'password' in errors}
@@ -184,6 +190,7 @@ const SignUpPage = (): JSX.Element => {
 
         {requirePasswordConfirmation && (
           <PasswordTextField
+            autoComplete="off"
             disabled={submitting}
             disablePasswordVisibilitySwitch
             error={'passwordConfirmation' in errors}
@@ -204,7 +211,12 @@ const SignUpPage = (): JSX.Element => {
           />
         )}
 
-        <CAPTCHAField ref={captchaRef} onChange={setCaptchaResponse} />
+        <CAPTCHAField
+          ref={captchaRef}
+          error={'recaptcha' in errors}
+          helperText={errors.recaptcha}
+          onChange={setCaptchaResponse}
+        />
       </Widget.Body>
 
       <LoadingButton

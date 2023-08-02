@@ -27,7 +27,8 @@ class User::RegistrationsController < Devise::RegistrationsController
   def create
     unless verify_recaptcha
       build_resource(sign_up_params)
-      render json: { errors: t('user.registrations.create.verify_recaptcha_alert') }, status: :unprocessable_entity
+      render json: { errors: { recaptcha: t('user.registrations.create.verify_recaptcha_alert') } },
+             status: :unprocessable_entity
       return
     end
 
