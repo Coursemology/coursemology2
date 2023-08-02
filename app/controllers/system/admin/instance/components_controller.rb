@@ -4,7 +4,6 @@ class System::Admin::Instance::ComponentsController < System::Admin::Instance::C
 
   def index
     respond_to do |format|
-      format.html { render 'system/admin/instance/admin/index' }
       format.json
     end
   end

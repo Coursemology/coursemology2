@@ -10,7 +10,6 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def new
     respond_to do |format|
-      format.html
       format.json { format_test_cases }
     end
   end
@@ -29,8 +28,6 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def edit
     respond_to do |format|
-      format.html
-
       format.json do
         @meta = programming_package_service.extract_meta if @programming_question.edit_online?
         format_test_cases

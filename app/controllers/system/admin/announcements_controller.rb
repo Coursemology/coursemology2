@@ -4,7 +4,6 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
 
   def index
     respond_to do |format|
-      format.html { render 'system/admin/admin/index' }
       format.json do
         @announcements = @announcements.includes(:creator)
       end

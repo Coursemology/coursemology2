@@ -13,7 +13,6 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
 
@@ -33,7 +32,6 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def show
     respond_to do |format|
-      format.html
       format.json do
         @assessment_time = @assessment.time_for(current_course_user)
         return render 'authenticate' unless can_access_assessment?

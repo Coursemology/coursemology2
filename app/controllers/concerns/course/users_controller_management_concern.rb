@@ -31,7 +31,6 @@ module Course::UsersControllerManagementConcern
 
   def students
     respond_to do |format|
-      format.html
       format.json do
         @course_users = @course_users.students.includes(:groups, user: :emails).order_alphabetically
       end
@@ -40,7 +39,6 @@ module Course::UsersControllerManagementConcern
 
   def staff
     respond_to do |format|
-      format.html
       format.json do
         @student_options = @course_users.students.order_alphabetically.pluck(:id, :name, :role)
         @course_users = @course_users.staff.includes(user: :emails).order_alphabetically

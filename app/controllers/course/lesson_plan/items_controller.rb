@@ -12,7 +12,6 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
 
   def index
     respond_to do |format|
-      format.html
       format.json { render_json_response }
     end
   end

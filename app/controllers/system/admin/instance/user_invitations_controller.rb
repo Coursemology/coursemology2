@@ -7,7 +7,6 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
   def index
     @invitations = @instance.invitations.order(name: :asc)
     respond_to do |format|
-      format.html { render 'system/admin/instance/admin/index' }
       format.json
     end
   end

@@ -7,7 +7,6 @@ class Course::Assessment::SkillsController < Course::ComponentController
   def index
     @skills = @skills.includes(:skill_branch).group_by(&:skill_branch)
     respond_to do |format|
-      format.html { render 'index' }
       format.json { render 'index' }
     end
   end

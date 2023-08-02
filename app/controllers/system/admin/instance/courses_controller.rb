@@ -4,7 +4,6 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
 
   def index
     respond_to do |format|
-      format.html { render 'system/admin/instance/admin/index' }
       format.json do
         preload_courses
       end

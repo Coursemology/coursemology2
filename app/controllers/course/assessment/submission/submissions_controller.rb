@@ -32,7 +32,6 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:view_all_submissions, @assessment)
 
     respond_to do |format|
-      format.html {} # rubocop:disable Lint/EmptyBlock
       format.json do
         @assessment = @assessment.calculated(:maximum_grade)
         @submissions = @submissions.calculated(:log_count, :graded_at, :grade, :grader_ids)
@@ -68,7 +67,6 @@ class Course::Assessment::Submission::SubmissionsController < \
     @monitoring_session_id = monitoring_service&.session&.id if should_monitor?
 
     respond_to do |format|
-      format.html
       format.json do
         return render json: { isSubmissionBlocked: true } if @submission.submission_view_blocked?(current_course_user)
 
@@ -283,7 +281,6 @@ class Course::Assessment::Submission::SubmissionsController < \
     log_service.log_submission_access(request)
 
     respond_to do |format|
-      format.html { render 'edit' }
       format.json { render json: { newSessionUrl: new_session_path } }
     end
   end

@@ -6,7 +6,6 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         @invitations = current_course.invitations.order(name: :asc)
         @without_invitations = params[:without_invitations]

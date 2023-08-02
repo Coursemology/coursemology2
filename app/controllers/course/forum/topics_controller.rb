@@ -12,7 +12,6 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def show
     respond_to do |format|
-      format.html { render 'course/forum/forums/index' }
       format.json do
         @topic.viewed_by(current_user)
         @topic.mark_as_read!(for: current_user)

@@ -2,7 +2,6 @@
 class Course::Admin::AdminController < Course::Admin::Controller
   def index
     respond_to do |format|
-      format.html { render 'course/admin/index' }
       format.json
     end
   end

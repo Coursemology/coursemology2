@@ -4,7 +4,6 @@ class Course::Material::FoldersController < Course::Material::Controller
 
   def show
     respond_to do |format|
-      format.html
       format.json do
         @subfolders = @folder.children.with_content_statistics.accessible_by(current_ability).
                       order(:name).includes(:owner).without_empty_linked_folder

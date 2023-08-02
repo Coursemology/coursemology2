@@ -5,12 +5,10 @@ class UsersController < ApplicationController
   def show
     if @user.built_in?
       respond_to do |format|
-        format.html { render file: 'public/404', layout: false, status: 404 }
         format.json { render file: 'public/404.json', layout: false, status: 404 }
       end
     else
       respond_to do |format|
-        format.html
         format.json do
           course_users =
             @user.course_users.with_course_statistics.from_instance(current_tenant).includes(:course)
