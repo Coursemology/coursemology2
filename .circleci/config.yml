@@ -184,7 +184,7 @@ jobs:
       name: ruby_with_postgres
       collects_rails_coverage: true
 
-    parallelism: 30
+    parallelism: 10
 
     steps:
       - checkout_with_submodules
