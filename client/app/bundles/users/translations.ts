@@ -143,6 +143,11 @@ const translations = defineMessages({
     defaultMessage:
       'Your password confirmation does not match your password above.',
   },
+  errorRecaptcha: {
+    id: 'users.errorRecaptcha',
+    defaultMessage:
+      'There was an error with the reCAPTCHA below, please try again.',
+  },
   errorSigningUp: {
     id: 'users.errorSigningUp',
     defaultMessage: 'An error occurred while creating your account.',
