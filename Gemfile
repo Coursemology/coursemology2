@@ -79,7 +79,6 @@ group :test do
   gem 'email_spec'
   gem 'rspec-html-matchers'
   gem 'should_not'
-  gem 'simplecov'
   gem 'shoulda-matchers'
 
   # Capybara for feature testing
@@ -112,11 +111,13 @@ group :development, :test do
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+
+  # Code Coverage reporters
+  gem 'simplecov'
+  gem 'codecov', require: false
 end
 
 group :ci do
-  # Code Coverage reporters
-  gem 'codecov', require: false
   gem 'rspec-retry'
   gem 'rspec_junit_formatter'
   gem 'rubocop-rails'

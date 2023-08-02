@@ -12,6 +12,11 @@ executors:
     resource_class: large
 
   ruby_with_postgres:
+    parameters:
+      collects_rails_coverage:
+        type: boolean
+        default: false
+
     docker:
       - image: cimg/ruby:3.0.5-browsers
         environment:
@@ -20,6 +25,7 @@ executors:
           RAILS_ENV: test
           BUNDLE_APP_CONFIG: ~/repo/.bundle
           DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+          COLLECT_COVERAGE: << parameters.collects_rails_coverage >>
 
       - image: cimg/postgres:14.5
         environment:
@@ -105,6 +111,8 @@ commands:
       - run:
           name: Set up test database
           command: bundle exec rake db:setup
+          environment:
+            COLLECT_COVERAGE: false
 
   serve_static_site:
     steps:
@@ -127,9 +135,21 @@ commands:
           name: Serve Rails server
           command: bundle exec rails s -p 6969
           background: true
+
       - run:
           name: Wait for Rails server
           command: curl -s --retry 1000 --retry-delay 1 --retry-connrefused http://lvh.me:6969
+
+  terminate_rails_and_wait_for_coverage_results:
+    steps:
+      - run:
+          name: Terminate Rails server
+          command: pkill -SIGTERM -f puma
+
+      - run:
+          name: Wait for Rails coverage results
+          no_output_timeout: 5m
+          command: until [ -f coverage/codecov-result.json ]; do sleep 1; done
 
   setup_docker_layer_cache:
     steps:
@@ -160,7 +180,10 @@ jobs:
       - build_and_cache_client
 
   test_playwright:
-    executor: ruby_with_postgres
+    executor:
+      name: ruby_with_postgres
+      collects_rails_coverage: true
+
     parallelism: 30
 
     steps:
@@ -182,9 +205,8 @@ jobs:
       - run:
           name: Run Playwright tests
           working_directory: tests
-          command: yarn test --reporter=junit --shard=${SHARD}/${CIRCLE_NODE_TOTAL}
+          command: SHARD="$((${CIRCLE_NODE_INDEX}+1))"; npx playwright test --shard=${SHARD}/${CIRCLE_NODE_TOTAL} --reporter=junit
           environment:
-            SHARD: "$((${CIRCLE_NODE_INDEX}+1))"
             PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
 
       - run:
@@ -196,6 +218,12 @@ jobs:
           upload_name: playwright-client
           file: tests/coverage/lcov.info
 
+      - terminate_rails_and_wait_for_coverage_results
+
+      - codecov/upload:
+          upload_name: playwright-rails
+          file: coverage/codecov-result.json
+
       - store_test_results:
           path: ~/repo/tests/results.xml
 
@@ -203,7 +231,10 @@ jobs:
           path: ~/repo/tests/results.xml
 
   test_rspec:
-    executor: ruby_with_postgres
+    executor:
+      name: ruby_with_postgres
+      collects_rails_coverage: true
+
     parallelism: 30
 
     steps:

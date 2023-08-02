@@ -15,7 +15,6 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-require 'coverage_helper'
 require 'rspec/retry' if ENV['CI']
 require File.expand_path('../config/environment', __dir__)
 
