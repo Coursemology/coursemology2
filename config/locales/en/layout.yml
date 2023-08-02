@@ -22,8 +22,6 @@ en:
       title: 'Manage Users'
     duplication:
       title: 'Duplicate Data'
-    materials_uploader:
-      uploaded_by: 'Uploaded By: %{name}'
     mailer:
       greeting: 'Hello, %{user}:'
     code_formatter:

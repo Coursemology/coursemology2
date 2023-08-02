@@ -260,50 +260,6 @@ RSpec.describe ApplicationFormattersHelper do
         result.define_singleton_method(:ended?) { Time.zone.now > end_at }
       end
     end
-
-    describe '#time_period_class' do
-      subject { helper.time_period_class(stub) }
-
-      context 'when the object is not started' do
-        let(:start_at) { Time.zone.now + 1.day }
-        let(:end_at) { Time.zone.now + 2.days }
-        it { is_expected.to eq(['not-started']) }
-      end
-
-      context 'when the object is currently active' do
-        let(:start_at) { Time.zone.now - 1.day }
-        let(:end_at) { Time.zone.now + 1.day }
-        it { is_expected.to eq(['currently-active']) }
-      end
-
-      context 'when the object is ended' do
-        let(:start_at) { Time.zone.now - 1.week }
-        let(:end_at) { Time.zone.now - 1.day }
-        it { is_expected.to eq(['ended']) }
-      end
-    end
-
-    describe '#time_period_message' do
-      subject { helper.time_period_message(stub) }
-
-      context 'when the object is not started' do
-        let(:start_at) { Time.zone.now + 1.day }
-        let(:end_at) { Time.zone.now + 2.days }
-        it { is_expected.to eq(I18n.t('common.not_started')) }
-      end
-
-      context 'when the object is currently active' do
-        let(:start_at) { Time.zone.now - 1.day }
-        let(:end_at) { Time.zone.now + 1.day }
-        it { is_expected.to be_nil }
-      end
-
-      context 'when the object is ended' do
-        let(:start_at) { Time.zone.now - 1.week }
-        let(:end_at) { Time.zone.now - 1.day }
-        it { is_expected.to eq(I18n.t('common.ended')) }
-      end
-    end
   end
 
   describe 'draft helper' do
@@ -311,34 +267,6 @@ RSpec.describe ApplicationFormattersHelper do
       Object.new.tap do |result|
         published = self.published
         result.define_singleton_method(:published?) { published }
-      end
-    end
-  end
-
-  describe 'unread helper' do
-    let(:stub) do
-      double.tap do |result|
-        me = self
-        result.define_singleton_method(:unread?) { |_| !me.read_status }
-      end
-    end
-
-    describe '#unread_class' do
-      subject { helper.unread_class(stub) }
-      before { controller.define_singleton_method(:current_user) { nil } }
-
-      context 'when the user has not read the item' do
-        let(:read_status) { false }
-        it 'returns ["unread"]' do
-          expect(subject).to eq(['unread'])
-        end
-      end
-
-      context 'when the user has read the item' do
-        let(:read_status) { true }
-        it 'returns an empty array' do
-          expect(subject).to eq([])
-        end
       end
     end
   end

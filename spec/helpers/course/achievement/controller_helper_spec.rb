@@ -39,15 +39,6 @@ RSpec.describe Course::Achievement::ControllerHelper do
       end
     end
 
-    describe '#display_achievement_badge' do
-      subject { helper.display_achievement_badge(achievement) }
-
-      it 'displays the default achievement badge' do
-        expect(subject).to have_tag('span.image')
-        expect(subject).to have_tag('img')
-      end
-    end
-
     describe '#achievement_status_class' do
       subject { helper.achievement_status_class(achievement, course_user) }
 

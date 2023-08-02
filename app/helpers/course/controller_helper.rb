@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 module Course::ControllerHelper
-  include Course::LessonPlan::TodosHelper
   include Course::LeaderboardsHelper
 
   # Formats the given +CourseUser+ as a user-visible string.

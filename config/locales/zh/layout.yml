@@ -22,8 +22,6 @@ zh:
       title: '管理用户'
     duplication:
       title: '复制数据'
-    materials_uploader:
-      uploaded_by: '由：%{name}上传'
     mailer:
       greeting: '你好, %{user}:'
     code_formatter:
