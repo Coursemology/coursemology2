@@ -22,10 +22,6 @@ en:
       title: 'Manage Users'
     duplication:
       title: 'Duplicate Data'
-    attachment_uploader:
-      uploaded_files: 'Uploaded Files:'
-      uploaded_file: 'Uploaded File:'
-      new_files: 'Upload New Files'
     materials_uploader:
       uploaded_by: 'Uploaded By: %{name}'
     mailer:

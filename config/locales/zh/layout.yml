@@ -22,10 +22,6 @@ zh:
       title: '管理用户'
     duplication:
       title: '复制数据'
-    attachment_uploader:
-      uploaded_files: '已上传文件:'
-      uploaded_file: '已上传文件:'
-      new_files: '上传新文件'
     materials_uploader:
       uploaded_by: '由：%{name}上传'
     mailer:
