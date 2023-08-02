@@ -30,7 +30,7 @@ const uploadAdapter = (loader) => {
       new Promise((resolve, reject) => {
         loader.file.then((file: File) => {
           attachmentsAPI
-            .upload(file)
+            .create(file)
             .then((response) => response.data)
             .then((data) => {
               if (data.success) {

@@ -19,21 +19,11 @@ class AttachmentReferencesController < ApplicationController
     success = @attachment_reference.destroy
 
     respond_to do |format|
-      format.html { render_html_response(success) }
       format.json { render_json_response(success) }
     end
   end
 
   private
-
-  def render_html_response(success)
-    if success
-      flash.now[:success] = t('.success')
-    else
-      flash.now[:danger] = t('.failure',
-                             error: @attachment_reference.errors.full_messsages.to_sentence)
-    end
-  end
 
   def render_json_response(success)
     if success

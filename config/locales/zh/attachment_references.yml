@@ -1,5 +1,0 @@
-zh:
-  attachment_references:
-    render_html_response:
-      success: '附件已删除'
-      failure: '附件删除失败：%{error}'
