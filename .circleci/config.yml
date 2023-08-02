@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  codecov: codecov/codecov@3.2.5
+
 executors:
   node:
     docker:
@@ -179,12 +182,24 @@ jobs:
       - run:
           name: Run Playwright tests
           working_directory: tests
-          command: npx playwright test --reporter=junit --shard=${SHARD}/${CIRCLE_NODE_TOTAL}
+          command: yarn test --reporter=junit --shard=${SHARD}/${CIRCLE_NODE_TOTAL}
           environment:
             SHARD: "$((${CIRCLE_NODE_INDEX}+1))"
             PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
 
+      - run:
+          name: Generate code coverage
+          working_directory: tests
+          command: yarn coverage
+
+      - codecov/upload:
+          upload_name: playwright-client
+          file: tests/coverage/lcov.info
+
       - store_test_results:
+          path: ~/repo/tests/results.xml
+
+      - store_artifacts:
           path: ~/repo/tests/results.xml
 
   test_rspec:
