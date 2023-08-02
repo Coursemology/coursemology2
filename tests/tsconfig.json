@@ -26,9 +26,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "outDir": "dist",
-    "paths": {
-      "helpers": ["helpers"]
-    },
     "pretty": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,

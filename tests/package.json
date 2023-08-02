@@ -4,14 +4,20 @@
   "repository": "https://github.com/Coursemology/coursemology2.git",
   "devDependencies": {
     "@playwright/test": "^1.36.1",
-    "@types/node": "^20.4.5"
+    "@types/node": "^20.4.5",
+    "nyc": "^15.1.0"
   },
   "scripts": {
     "prepare": "npx playwright install --with-deps",
-    "test": "npx playwright test"
+    "test": "npx playwright test",
+    "coverage": "npx nyc report --reporter=lcovonly --exclude-after-remap false"
   },
   "servers": {
     "clientURL": "http://lvh.me:4200",
     "serverURL": "http://lvh.me:6969"
+  },
+  "coverage": {
+    "outputDir": ".nyc_output",
+    "fileNamePrefix": "playwright_coverage_"
   }
 }
