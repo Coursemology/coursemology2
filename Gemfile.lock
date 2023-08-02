@@ -198,7 +198,6 @@ GEM
       multi_json
     edge (0.6.1)
       activerecord (>= 5.0.0)
-    ejs (1.1.1)
     email_spec (2.2.2)
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
@@ -603,7 +602,6 @@ DEPENDENCIES
   devise_masquerade
   docker-api
   edge
-  ejs
   email_spec
   factory_bot_rails
   ffi (>= 1.14.2)

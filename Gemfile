@@ -47,8 +47,6 @@ gem 'html-pipeline-rouge_filter', git: 'https://github.com/ekowidianto/html-pipe
 gem 'jbuilder'
 # Slim as the templating language
 gem 'slim-rails'
-# ejs for client-side templates
-gem 'ejs'
 # Paginator for Rails
 gem 'kaminari'
 # Work with Docker
