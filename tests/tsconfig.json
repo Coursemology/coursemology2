@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "baseUrl": "./",
+    "checkJs": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "esnext.intl",
+      "es2017.intl",
+      "es2018.intl"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noErrorTruncation": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noImplicitOverride": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "outDir": "dist",
+    "paths": {
+      "helpers": ["helpers"]
+    },
+    "pretty": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es6"
+  },
+  "exclude": ["node_modules", "playwright-report", "test-results"]
+}

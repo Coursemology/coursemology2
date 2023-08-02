@@ -1,4 +1,4 @@
-import { expect, test } from '../../helpers';
+import { expect, test } from 'helpers';
 
 test('can change password', async ({ authedPage: page }) => {
   const newPassword = 'newpassword';
