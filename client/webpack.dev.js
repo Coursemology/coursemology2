@@ -33,7 +33,7 @@ module.exports = merge(common, {
         if (request.query.format === 'json') {
           console.info(
             '\x1b[36m%s\x1b[0m',
-            `[proxy] ${request.url} -> ${target}${request.url}`,
+            `[proxy] ${request.url} -> ${target}:${SERVER_PORT}${request.url}`,
           );
 
           return null;
