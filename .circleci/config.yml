@@ -277,6 +277,10 @@ jobs:
           working_directory: client
           command: yarn testci
 
+      - codecov/upload:
+          upload_name: jest
+          file: client/coverage/lcov.info
+
   i18n_en:
     executor: ruby_with_postgres
 
