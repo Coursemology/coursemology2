@@ -42,6 +42,9 @@
     },
     "test": {
       "plugins": ["babel-plugin-transform-import-meta"]
+    },
+    "e2e-test": {
+      "plugins": ["istanbul"]
     }
   }
 }

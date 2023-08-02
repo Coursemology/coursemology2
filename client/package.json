@@ -9,7 +9,7 @@
   "scripts": {
     "test": "TZ=Asia/Singapore yarn run jest",
     "testci": "TZ=Asia/Singapore yarn run jest --maxWorkers=4",
-    "build:test": "export NODE_ENV=test && export BABEL_ENV=nothing && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
+    "build:test": "export NODE_ENV=test && export BABEL_ENV=e2e-test && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
     "build:development": "yarn run build:translations && webpack serve --config webpack.dev.js",
     "build:profile": "yarn run build:translations && webpack serve --config webpack.profile.js --progress=profile",
@@ -142,6 +142,7 @@
     "babel-jest": "^29.6.2",
     "babel-loader": "^9.0.0",
     "babel-plugin-import": "^1.13.6",
+    "babel-plugin-istanbul": "^6.1.1",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-react-remove-properties": "^0.3.0",
     "babel-plugin-transform-import-meta": "^2.2.0",
