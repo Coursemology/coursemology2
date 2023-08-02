@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { TheaterComedy } from '@mui/icons-material';
-import { Typography } from '@mui/material';
 
+import Banner from 'lib/components/core/layouts/Banner';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -27,24 +27,24 @@ const MasqueradeBanner = (props: MasqueradeBannerProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-wrap items-center justify-between space-x-4 bg-fuchsia-700 px-5 py-1 text-white border-only-b-fuchsia-300">
-      <div className="flex items-center space-x-4">
-        <TheaterComedy />
-
-        <Typography variant="body2">
-          {t(translations.masquerading, {
-            as: userName,
-            strong: (chunk) => (
-              <strong className="font-semibold">{chunk}</strong>
-            ),
-          })}
-        </Typography>
-      </div>
-
-      <Link className="text-inherit" to={stopMasqueradingUrl} underline="hover">
-        {t(translations.stopMasquerading)}
-      </Link>
-    </div>
+    <Banner
+      actions={
+        <Link
+          className="text-inherit"
+          to={stopMasqueradingUrl}
+          underline="hover"
+        >
+          {t(translations.stopMasquerading)}
+        </Link>
+      }
+      className="bg-fuchsia-700 text-white border-only-b-fuchsia-200"
+      icon={<TheaterComedy />}
+    >
+      {t(translations.masquerading, {
+        as: userName,
+        strong: (chunk) => <strong className="font-semibold">{chunk}</strong>,
+      })}
+    </Banner>
   );
 };
 
