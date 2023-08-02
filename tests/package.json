@@ -2,6 +2,7 @@
   "name": "coursemology2-tests",
   "version": "1.0.0",
   "repository": "https://github.com/Coursemology/coursemology2.git",
+  "license": "MIT",
   "devDependencies": {
     "@playwright/test": "^1.36.1",
     "@types/node": "^20.4.5",
