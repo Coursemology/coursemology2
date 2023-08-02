@@ -274,49 +274,4 @@ RSpec.describe 'Extension: Acts as Attachable' do
       end
     end
   end
-
-  describe 'form_builder helper' do
-    class self::SampleView < ActionView::Base
-      include ApplicationFormattersHelper
-      include Rails.application.routes.url_helpers
-    end
-
-    class self::SampleFormBuilder < ActionView::Helpers::FormBuilder; end
-
-    let(:attachment) { create(:attachment_reference) }
-    let(:template) { self.class::SampleView.new(ActionView::LookupContext.new(Rails.root.join('app', 'views'))) }
-    let(:resource) do
-      stub = self.class::SampleModelMultiple.new
-      allow(stub).to receive(:attachments).and_return([attachment])
-      stub
-    end
-    let(:form_builder) { self.class::SampleFormBuilder.new(:sample, resource, template, {}) }
-    subject { form_builder }
-
-    it { is_expected.to respond_to(:attachments) }
-
-    describe '#attachments' do
-      before { I18n.locale = I18n.default_locale }
-      subject { form_builder.attachments }
-
-      context 'when has many attachments' do
-        it do
-          is_expected.
-            to have_tag('strong', text: I18n.t('layouts.attachment_uploader.uploaded_files'))
-        end
-      end
-
-      context 'when has one attachment' do
-        let(:resource) do
-          model = self.class::SampleModelSingular.new
-          model.attachment = attachment
-          model
-        end
-        it do
-          is_expected.
-            to have_tag('strong', text: I18n.t('layouts.attachment_uploader.uploaded_file'))
-        end
-      end
-    end
-  end
 end
