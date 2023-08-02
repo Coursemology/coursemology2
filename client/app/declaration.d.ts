@@ -22,3 +22,7 @@ declare module '*.md' {
   const markdown: string;
   export default markdown;
 }
+
+interface Window {
+  _CSRF_TOKEN?: string;
+}

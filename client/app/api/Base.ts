@@ -72,12 +72,12 @@ export default class BaseAPI {
   }
 
   static #clearCSRFToken(): void {
-    globalThis._CSRF_TOKEN = undefined;
+    window._CSRF_TOKEN = undefined;
   }
 
   async #getAndSaveCSRFToken(): Promise<string> {
-    globalThis._CSRF_TOKEN ??= await this.#getCSRFToken();
-    return globalThis._CSRF_TOKEN;
+    window._CSRF_TOKEN ??= await this.#getCSRFToken();
+    return window._CSRF_TOKEN;
   }
 
   async #getCSRFToken(): Promise<string> {
