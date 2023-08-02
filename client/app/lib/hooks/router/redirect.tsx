@@ -36,19 +36,6 @@ const getForbiddenURL = (): string => {
   return url.pathname + url.search;
 };
 
-const getDefaultNotFoundURL = (): string => {
-  const chunks = window.location.host.split('.');
-  if (chunks.length < 3) return '/404';
-
-  const protocol = window.location.protocol;
-  const domainName = chunks.at(-2);
-  const topLevelDomain = chunks.at(-1);
-
-  const url = new URL(`${protocol}//${domainName}.${topLevelDomain}/404`);
-
-  return url.toString();
-};
-
 const useNextURL = (): { nextURL: string | null; expired: boolean } => {
   const [searchParams] = useSearchParams();
   const nextRawURL = searchParams.get(NEXT_URL_SEARCH_PARAM);
@@ -72,10 +59,6 @@ export const redirectToSignIn = (expired?: boolean): void => {
 
 export const redirectToForbidden = (): void => {
   window.location.href = getForbiddenURL();
-};
-
-export const redirectToDefaultNotFound = (): void => {
-  window.location.href = getDefaultNotFoundURL();
 };
 
 export const getForbiddenSourceURL = (rawURL: string): string | null => {
