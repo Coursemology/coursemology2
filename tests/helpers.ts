@@ -6,6 +6,7 @@ import {
 } from '@playwright/test';
 
 import packageJSON from './package.json';
+import { configureCoverage } from './coverage';
 
 interface User {
   id: number;
@@ -62,6 +63,9 @@ const extend = <T extends Page>(
 ) => use(Object.assign(page, extension) as T);
 
 export const test = base.extend<TestFixtures>({
+  context: async ({ context }, use) => {
+    await configureCoverage(context, use);
+  },
   page: async ({ page }, use) => {
     await extend(use, page, {
       getReCAPTCHA: () =>
