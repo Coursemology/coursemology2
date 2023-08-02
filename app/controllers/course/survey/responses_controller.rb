@@ -5,7 +5,6 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
   def index
     authorize!(:manage, @survey)
     respond_to do |format|
-      format.html { render 'course/survey/surveys/index' }
       format.json do
         @course_students = current_course.course_users.students.order_alphabetically
       end
@@ -27,7 +26,6 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
   def show
     authorize!(:read_answers, @response)
     respond_to do |format|
-      format.html { render 'course/survey/surveys/index' }
       format.json { render_response_json }
     end
   end
@@ -36,7 +34,6 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
     raise CanCan::AccessDenied if cannot?(:submit, @response) && cannot?(:modify, @response)
 
     respond_to do |format|
-      format.html { render 'course/survey/surveys/index' }
       format.json do
         @response.build_missing_answers
         if @response.save

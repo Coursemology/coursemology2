@@ -8,7 +8,6 @@ class Course::LearningMapController < Course::ComponentController
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         prepare_response_data
       end
@@ -74,7 +73,6 @@ class Course::LearningMapController < Course::ComponentController
 
   def error_response(errors)
     respond_to do |format|
-      format.html
       format.json do
         render json: { errors: errors }, status: :bad_request
       end

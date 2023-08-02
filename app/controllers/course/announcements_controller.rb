@@ -8,7 +8,6 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         @course_users_hash = preload_course_users_hash(current_course)
         @announcements = @announcements.includes(:creator).with_read_marks_for(current_user)

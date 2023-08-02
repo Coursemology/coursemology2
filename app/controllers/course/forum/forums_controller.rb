@@ -5,7 +5,6 @@ class Course::Forum::ForumsController < Course::Forum::Controller
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         @forums = @forums.with_forum_statistics(current_user)
         @unresolved_forums_ids = Course::Forum::Topic.filter_unresolved_forum(@forums.map(&:id))
@@ -15,7 +14,6 @@ class Course::Forum::ForumsController < Course::Forum::Controller
 
   def show
     respond_to do |format|
-      format.html { render 'index' }
       format.json do
         @topics = @forum.topics.accessible_by(current_ability).order_by_latest_post.with_topic_statistics.
                   with_read_marks_for(current_user).includes(:creator).with_earliest_and_latest_post

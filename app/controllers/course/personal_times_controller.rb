@@ -7,7 +7,6 @@ class Course::PersonalTimesController < Course::ComponentController
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         return unless params[:user_id].present?
 

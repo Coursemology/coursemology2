@@ -6,7 +6,6 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         updater_ids = @experience_points_records.active.pluck(:updater_id)
         @course_user_preload_service =

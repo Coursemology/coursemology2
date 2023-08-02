@@ -9,7 +9,6 @@ class Course::CoursesController < Course::Controller
 
   def show
     respond_to do |format|
-      format.html { render layout: 'course' }
       format.json do
         @currently_active_announcements = current_course.announcements.
                                           currently_active.includes(:creator)

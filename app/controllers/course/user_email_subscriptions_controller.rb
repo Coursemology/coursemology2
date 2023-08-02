@@ -6,7 +6,6 @@ class Course::UserEmailSubscriptionsController < Course::ComponentController
     authorize!(:manage, Course::UserEmailUnsubscription.new(course_user: @course_user))
     load_subscription_settings
     respond_to do |format|
-      format.html { render 'edit' }
       format.json { render partial: 'course/user_email_subscriptions/subscription_setting' }
     end
   end

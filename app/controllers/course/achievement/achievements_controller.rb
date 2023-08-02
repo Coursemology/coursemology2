@@ -9,7 +9,6 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
   def show
     @achievement_users = @achievement.course_users.without_phantom_users.students.includes([:user, :course])
     respond_to do |format|
-      format.html { render 'index' }
       format.json { render 'show' }
     end
   end

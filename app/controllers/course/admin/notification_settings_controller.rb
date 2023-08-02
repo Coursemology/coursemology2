@@ -2,7 +2,6 @@
 class Course::Admin::NotificationSettingsController < Course::Admin::Controller
   def edit
     respond_to do |format|
-      format.html { render 'course/admin/index' }
       format.json { @page_data = page_data }
     end
   end

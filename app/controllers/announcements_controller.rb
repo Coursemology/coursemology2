@@ -4,7 +4,6 @@ class AnnouncementsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         announcements = requesting_unread? ? unread_global_announcements : global_announcements
         @announcements = announcements.includes(:creator)

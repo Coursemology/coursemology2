@@ -5,7 +5,6 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
 
   def index
     respond_to do |format|
-      format.html { render 'system/admin/instance/admin/index' }
       format.json do
         load_instance_users
         load_counts

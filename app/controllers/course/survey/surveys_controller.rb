@@ -7,7 +7,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
       end
@@ -24,7 +23,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def show
     respond_to do |format|
-      format.html { render 'index' }
       format.json { render_survey_with_questions_json }
     end
   end
@@ -47,7 +45,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def results
     respond_to do |format|
-      format.html { render 'index' }
       format.json { preload_questions_results }
     end
   end

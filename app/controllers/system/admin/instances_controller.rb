@@ -4,7 +4,6 @@ class System::Admin::InstancesController < System::Admin::Controller
 
   def index
     respond_to do |format|
-      format.html { render 'system/admin/admin/index' }
       format.json do
         preload_instances
       end

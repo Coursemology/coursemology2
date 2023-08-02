@@ -6,7 +6,6 @@ class InstanceUserRoleRequestsController < ApplicationController
     @user_role_requests = @user_role_requests.includes(:confirmer, :user)
 
     respond_to do |format|
-      format.html { render 'system/admin/instance/admin/index' }
       format.json
     end
   end

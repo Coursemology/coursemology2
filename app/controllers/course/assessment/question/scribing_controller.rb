@@ -9,7 +9,6 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
 
   def new
     respond_to do |format|
-      format.html { render 'new' }
       format.json { render_scribing_question_json }
     end
   end
@@ -42,7 +41,6 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
 
   def edit
     respond_to do |format|
-      format.html { render 'edit' }
       format.json { render_scribing_question_json }
     end
   end

@@ -6,7 +6,6 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   def index
     respond_to do |format|
-      format.html
       format.json do
         @submissions = @submissions.from_category(category).confirmed
         @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
@@ -19,7 +18,6 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
   def pending
     respond_to do |format|
-      format.html
       format.json do
         @submissions = pending_submissions.from_course(current_course)
         @submission_count = @submissions.count
