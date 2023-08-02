@@ -1,4 +1,4 @@
-import { expect, getLastSentEmail, manufacture, test } from '../../helpers';
+import { expect, getLastSentEmail, manufacture, test } from 'helpers';
 
 const getHrefURLFromString = (string: string): string | undefined =>
   string.match(/href="(.*(?="))/)?.[1];

@@ -4,7 +4,7 @@ import {
   manufacture,
   getLastSentEmail,
   clearEmails,
-} from '../../helpers';
+} from 'helpers';
 
 test.describe('with an unconfirmed invitation', () => {
   let course: { id: number };

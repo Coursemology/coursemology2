@@ -1,4 +1,4 @@
-import { test, expect } from '../../helpers';
+import { test, expect } from 'helpers';
 
 test('can sign in', async ({ signInPage: page }) => {
   const { email, password } = await page.manufactureUser();
