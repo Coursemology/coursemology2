@@ -64,7 +64,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
     job = Course::Survey::SurveyDownloadJob.
           perform_later(@survey).job
     respond_to do |format|
-      format.html { redirect_to(job_path(job)) }
       format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end

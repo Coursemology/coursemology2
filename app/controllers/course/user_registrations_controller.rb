@@ -25,7 +25,8 @@ class Course::UserRegistrationsController < Course::ComponentController
 
     role = t("course.users.role.#{current_course_user.role}")
     message = t('course.users.new.already_registered', role: role)
-    redirect_to course_path(current_course), info: message
+
+    render json: { errors: message }, status: :conflict
   end
 
   def load_registration
@@ -37,18 +38,6 @@ class Course::UserRegistrationsController < Course::ComponentController
   # @return [Course::UserRegistrationService]
   def registration_service
     @registration_service ||= Course::UserRegistrationService.new
-  end
-
-  def create_success
-    success =
-      if @registration.course_user.present?
-        role = t("course.users.role.#{@registration.course_user.role}")
-        t('course.user_registrations.create.registered', role: role)
-      else
-        t('course.user_registrations.create.requested')
-      end
-
-    redirect_to course_path(current_course), success: success
   end
 
   # @return [Course::UsersComponent]

@@ -5,7 +5,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
   def show
     authorize!(:read_owner, @material.folder)
     create_submission if @folder.owner_type == 'Course::Assessment'
-    redirect_to @material.attachment.url(filename: @material.name)
+    render json: { redirectUrl: @material.attachment.url(filename: @material.name) }
   end
 
   def update

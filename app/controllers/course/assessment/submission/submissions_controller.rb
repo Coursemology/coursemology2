@@ -159,7 +159,6 @@ class Course::Assessment::Submission::SubmissionsController < \
     else
       job = download_job
       respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
         format.json { render partial: 'jobs/submitted', locals: { job: job } }
       end
     end
@@ -176,7 +175,6 @@ class Course::Assessment::Submission::SubmissionsController < \
     job = Course::Assessment::Submission::StatisticsDownloadJob.
           perform_later(current_course, current_user, submission_ids).job
     respond_to do |format|
-      format.html { redirect_to(job_path(job)) }
       format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end
@@ -240,7 +238,6 @@ class Course::Assessment::Submission::SubmissionsController < \
     job = Course::Assessment::Submission::DeletingJob.
           perform_later(current_user, submission_ids, @assessment).job
     respond_to do |format|
-      format.html { redirect_to(job_path(job)) }
       format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end
