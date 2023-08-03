@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAuthState } from 'lib/hooks/session';
 
 const AuthenticatedApp = lazy(
@@ -15,7 +16,15 @@ const AuthenticatableApp = (): JSX.Element => {
   const authenticated = useAuthState();
 
   return (
-    <Suspense>
+    <Suspense
+      fallback={
+        <LoadingIndicator.Delayed
+          containerClassName="h-screen items-center"
+          delayedForMS={250}
+          size={125}
+        />
+      }
+    >
       {authenticated ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </Suspense>
   );
