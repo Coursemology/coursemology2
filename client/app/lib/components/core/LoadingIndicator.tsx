@@ -1,3 +1,4 @@
+import { FC, useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material';
 
 interface LoadingIndicatorProps {
@@ -30,4 +31,24 @@ const LoadingIndicator = (props: LoadingIndicatorProps): JSX.Element => {
   );
 };
 
-export default LoadingIndicator;
+interface DelayedLoadingIndicatorProps extends LoadingIndicatorProps {
+  delayedForMS: number;
+}
+const DelayedLoadingIndicator: FC<DelayedLoadingIndicatorProps> = (props) => {
+  const { delayedForMS, ...otherProps } = props;
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setIsVisible(true);
+    }, delayedForMS);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  return isVisible ? <LoadingIndicator {...otherProps} /> : undefined;
+};
+
+export default Object.assign(LoadingIndicator, {
+  Delayed: DelayedLoadingIndicator,
+});
