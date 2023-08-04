@@ -18,6 +18,8 @@ class Course::Forum < ApplicationRecord
   has_many :topics, dependent: :destroy, inverse_of: :forum
   has_many :subscriptions, dependent: :destroy, inverse_of: :forum
 
+  default_scope { order(created_at: :asc) }
+
   # @!attribute [r] topic_count
   #   The number of topics in this forum.
   calculated :topic_count, (lambda do

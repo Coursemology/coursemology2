@@ -7,7 +7,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     respond_to do |format|
       format.html
       format.json do
-        @forums = @forums.order(:created_at).with_forum_statistics(current_user)
+        @forums = @forums.with_forum_statistics(current_user)
         @unresolved_forums_ids = Course::Forum::Topic.filter_unresolved_forum(@forums.map(&:id))
       end
     end
