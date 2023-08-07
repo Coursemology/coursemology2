@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.6.1'
+gem 'rails', '~> 6.1.7.4'
 
 # Use PostgreSQL for the backend
 gem 'pg'
