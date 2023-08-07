@@ -1,6 +1,22 @@
 GIT
-  remote: https://github.com/Coursemology/active_record-acts_as.git
-  revision: b853dd4aee7a218367411a3ba26fb8477ff2cda9
+  remote: https://github.com/Coursemology/polyglot.git
+  revision: f2637948d879ff695c2678fa72db978ac63390c1
+  specs:
+    coursemology-polyglot (0.3.5)
+      activesupport (>= 4.2)
+
+GIT
+  remote: https://github.com/aha-app/calculated_attributes
+  revision: af4e503a3a739501c6e74d6ac7690e8c84349b86
+  ref: af4e503a3a739501c6e74d6ac7690e8c84349b86
+  specs:
+    calculated_attributes (0.5.0)
+      activerecord (>= 3.2.20)
+
+GIT
+  remote: https://github.com/ekowidianto/active_record-acts_as.git
+  revision: 9e01feb01438ba6736f2d4a8140d9be18464afdc
+  branch: rails5.2.3
   specs:
     active_record-acts_as (3.0.1)
       activerecord (>= 4.2)
@@ -140,8 +156,6 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
-    calculated_attributes (0.5.0)
-      activerecord (>= 3.2.20)
     cancancan (3.5.0)
     capybara (3.40.0)
       addressable
@@ -583,7 +597,7 @@ DEPENDENCIES
   aws-sdk-s3
   bullet (>= 4.14.9)
   byebug
-  calculated_attributes
+  calculated_attributes!
   cancancan
   capybara
   capybara-screenshot
