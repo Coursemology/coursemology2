@@ -1,5 +1,6 @@
 import { defineMessages } from 'react-intl';
 import { Alert, AlertProps, Typography } from '@mui/material';
+import { getMailtoURLWithBody } from 'utilities';
 
 import Link from 'lib/components/core/Link';
 import toast from 'lib/hooks/toast';
@@ -30,12 +31,6 @@ const translations = defineMessages({
   },
 });
 
-const getMailtoURL = (email: string, subject: string, body: string): string => {
-  const encodedSubject = encodeURIComponent(subject);
-  const encodedBody = encodeURIComponent(body);
-  return `mailto:${email}?subject=${encodedSubject}&body=${encodedBody}`;
-};
-
 interface ContactableErrorAlertProps extends AlertProps {
   children: string;
   supportEmail: string;
@@ -56,7 +51,7 @@ const ContactableErrorAlert = (
 
   const { t } = useTranslation();
 
-  const emailURL = getMailtoURL(supportEmail, emailSubject, emailBody);
+  const emailURL = getMailtoURLWithBody(supportEmail, emailSubject, emailBody);
 
   const copyEmailBodyToClipboard = (): Promise<void> =>
     toast.promise(navigator.clipboard.writeText(emailBody), {

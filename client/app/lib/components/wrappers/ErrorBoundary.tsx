@@ -1,5 +1,7 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 
+import ContextualErrorPage from 'lib/components/core/layouts/ContextualErrorPage';
+
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
@@ -31,15 +33,17 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     if (!hasError) return this.props.children;
 
     return (
-      <main>
-        <h1>Something went wrong.</h1>
-        <h2>{error?.toString()}</h2>
-        <pre>
-          Component Stack
-          {info?.componentStack}
-        </pre>
-        <pre>{error?.stack}</pre>
-      </main>
+      <ContextualErrorPage from={error} stack={info}>
+        <main>
+          <h1>Something went wrong.</h1>
+          <h2>{error?.toString()}</h2>
+          <pre>
+            Component Stack
+            {info?.componentStack}
+          </pre>
+          <pre>{error?.stack}</pre>
+        </main>
+      </ContextualErrorPage>
     );
   }
 }
