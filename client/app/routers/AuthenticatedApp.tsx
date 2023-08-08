@@ -2,6 +2,7 @@
 import {
   createBrowserRouter,
   Navigate,
+  RouteObject,
   RouterProvider,
 } from 'react-router-dom';
 import { resetStore } from 'store';
@@ -128,682 +129,688 @@ import {
 import videoAttemptLoader from 'course/video/attemptLoader';
 import { videoHandle, videosHandle } from 'course/video/handles';
 import CourselessContainer from 'lib/containers/CourselessContainer';
+import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
 import { reservedRoutes } from './redirects';
 import createAppRouter from './router';
 
-const authenticatedRouter = createAppRouter([
-  {
-    path: 'courses/:courseId',
-    element: <CourseContainer />,
-    loader: CourseContainer.loader,
-    handle: CourseContainer.handle,
-    shouldRevalidate: ({ currentParams, nextParams }): boolean => {
-      const isChangingCourse = currentParams.courseId !== nextParams.courseId;
+const authenticatedRouter: Translated<RouteObject[]> = (t) =>
+  createAppRouter([
+    {
+      path: 'courses/:courseId',
+      element: <CourseContainer />,
+      loader: CourseContainer.loader,
+      handle: CourseContainer.handle,
+      shouldRevalidate: ({ currentParams, nextParams }): boolean => {
+        const isChangingCourse = currentParams.courseId !== nextParams.courseId;
 
-      // React Router's documentation never strictly mentioned that `shouldRevalidate`
-      // should be a pure function, but a good software engineer would probably expect
-      // it to be. Until we multi-course support in our Redux store, this is where
-      // we can detect the `courseId` is changing without janky `useEffect`. It should
-      // be safe since `resetStore` does not interfere with rendering or routing.
-      if (isChangingCourse) resetStore();
+        // React Router's documentation never strictly mentioned that `shouldRevalidate`
+        // should be a pure function, but a good software engineer would probably expect
+        // it to be. Until we multi-course support in our Redux store, this is where
+        // we can detect the `courseId` is changing without janky `useEffect`. It should
+        // be safe since `resetStore` does not interfere with rendering or routing.
+        if (isChangingCourse) resetStore();
 
-      return isChangingCourse;
+        return isChangingCourse;
+      },
+      children: [
+        {
+          index: true,
+          element: <CourseShow />,
+        },
+        {
+          path: 'timelines',
+          handle: TimelineDesigner.handle,
+          element: <TimelineDesigner />,
+        },
+        {
+          path: 'announcements',
+          handle: AnnouncementsIndex.handle,
+          element: <AnnouncementsIndex />,
+        },
+        {
+          path: 'comments',
+          handle: CommentIndex.handle,
+          element: <CommentIndex />,
+        },
+        {
+          path: 'leaderboard',
+          handle: LeaderboardIndex.handle,
+          element: <LeaderboardIndex />,
+        },
+        {
+          path: 'learning_map',
+          handle: LearningMap.handle,
+          element: <LearningMap />,
+        },
+        {
+          path: 'materials/folders',
+          handle: folderHandle,
+          // `:folderId` must be split this way so that `folderHandle` is matched
+          // to the stable (non-changing) match of `/materials/folders`. This allows
+          // the crumbs in the Workbin to not disappear when revalidated by the
+          // Dynamic Nest API's builder.
+          children: [
+            {
+              path: ':folderId',
+              element: <FolderShow />,
+            },
+          ],
+        },
+        {
+          path: 'levels',
+          handle: LevelsIndex.handle,
+          element: <LevelsIndex />,
+        },
+        {
+          path: 'statistics',
+          handle: StatisticsIndex.handle,
+          element: <StatisticsIndex />,
+        },
+        {
+          path: 'duplication',
+          handle: Duplication.handle,
+          element: <Duplication />,
+        },
+        {
+          path: 'enrol_requests',
+          handle: manageUserHandles.enrolRequests,
+          element: <UserRequests />,
+        },
+        {
+          path: 'user_invitations',
+          handle: manageUserHandles.invitations,
+          element: <InvitationsIndex />,
+        },
+        {
+          path: 'students',
+          handle: manageUserHandles.students,
+          element: <ManageStudents />,
+        },
+        {
+          path: 'staff',
+          handle: manageUserHandles.staff,
+          element: <ManageStaff />,
+        },
+        {
+          path: 'lesson_plan',
+          // @ts-ignore `connect` throws error when cannot find `store` as direct parent
+          element: <LessonPlanLayout />,
+          handle: LessonPlanLayout.handle,
+          children: [
+            {
+              index: true,
+              element: <LessonPlanShow />,
+            },
+            {
+              path: 'edit',
+              element: <LessonPlanEdit />,
+            },
+          ],
+        },
+        {
+          path: 'users',
+          children: [
+            {
+              index: true,
+              handle: UsersIndex.handle,
+              element: <UsersIndex />,
+            },
+            {
+              path: 'personal_times',
+              handle: manageUserHandles.personalizedTimelines,
+              element: <PersonalTimes />,
+            },
+            {
+              path: 'invite',
+              handle: manageUserHandles.inviteUsers,
+              element: <InviteUsers />,
+            },
+            {
+              path: 'disburse_experience_points',
+              handle: DisbursementIndex.handle,
+              element: <DisbursementIndex />,
+            },
+            {
+              path: ':userId',
+              handle: courseUserHandle,
+              children: [
+                {
+                  index: true,
+                  element: <CourseUserShow />,
+                },
+                {
+                  path: 'experience_points_records',
+                  handle: ExperiencePointsRecords.handle,
+                  element: <ExperiencePointsRecords />,
+                },
+              ],
+            },
+            {
+              path: ':userId/personal_times',
+              handle: courseUserPersonalizedTimelineHandle,
+              element: <PersonalTimesShow />,
+            },
+            {
+              path: ':userId/video_submissions',
+              handle: videoWatchHistoryHandle,
+              element: <UserVideoSubmissionsIndex />,
+            },
+            {
+              path: ':userId/manage_email_subscription',
+              handle: UserEmailSubscriptions.handle,
+              element: <UserEmailSubscriptions />,
+            },
+          ],
+        },
+        {
+          path: 'admin',
+          loader: SettingsNavigation.loader,
+          handle: SettingsNavigation.handle,
+          element: <SettingsNavigation />,
+          children: [
+            {
+              index: true,
+              element: <CourseSettings />,
+            },
+            {
+              path: 'components',
+              element: <ComponentSettings />,
+            },
+            {
+              path: 'sidebar',
+              element: <SidebarSettings />,
+            },
+            {
+              path: 'notifications',
+              element: <NotificationSettings />,
+            },
+            {
+              path: 'announcements',
+              element: <AnnouncementSettings />,
+            },
+            {
+              path: 'assessments',
+              element: <AssessmentSettings />,
+            },
+            {
+              path: 'materials',
+              element: <MaterialsSettings />,
+            },
+            {
+              path: 'forums',
+              element: <ForumsSettings />,
+            },
+            {
+              path: 'leaderboard',
+              element: <LeaderboardSettings />,
+            },
+            {
+              path: 'comments',
+              element: <CommentsSettings />,
+            },
+            {
+              path: 'videos',
+              element: <VideosSettings />,
+            },
+            {
+              path: 'lesson_plan',
+              element: <LessonPlanSettings />,
+            },
+            {
+              path: 'codaveri',
+              element: <CodaveriSettings />,
+            },
+          ],
+        },
+        {
+          path: 'surveys',
+          handle: SurveyIndex.handle,
+          children: [
+            {
+              index: true,
+              element: <SurveyIndex />,
+            },
+            {
+              path: ':surveyId',
+              handle: surveyHandle,
+              children: [
+                {
+                  index: true,
+                  element: <SurveyShow />,
+                },
+                {
+                  path: 'results',
+                  handle: SurveyResults.handle,
+                  element: <SurveyResults />,
+                },
+                {
+                  path: 'responses',
+                  children: [
+                    {
+                      index: true,
+                      handle: ResponseIndex.handle,
+                      element: <ResponseIndex />,
+                    },
+                    {
+                      path: ':responseId',
+                      children: [
+                        {
+                          index: true,
+                          handle: surveyResponseHandle,
+                          element: <ResponseShow />,
+                        },
+                        {
+                          path: 'edit',
+                          handle: ResponseEdit.handle,
+                          element: <ResponseEdit />,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          path: 'groups',
+          element: <GroupIndex />,
+          handle: GroupIndex.handle,
+          children: [
+            {
+              path: ':groupCategoryId',
+              element: <GroupShow />,
+            },
+          ],
+        },
+        {
+          path: 'videos',
+          handle: videosHandle,
+          children: [
+            {
+              index: true,
+              element: <VideosIndex />,
+            },
+            {
+              path: ':videoId',
+              handle: videoHandle,
+              children: [
+                {
+                  index: true,
+                  element: <VideoShow />,
+                },
+                {
+                  path: 'submissions',
+                  children: [
+                    {
+                      index: true,
+                      handle: VideoSubmissionsIndex.handle,
+                      element: <VideoSubmissionsIndex />,
+                    },
+                    {
+                      path: ':submissionId',
+                      handle: VideoSubmissionShow.handle,
+                      children: [
+                        {
+                          index: true,
+                          element: <VideoSubmissionShow />,
+                        },
+                        {
+                          path: 'edit',
+                          element: <VideoSubmissionEdit />,
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  path: 'attempt',
+                  loader: videoAttemptLoader(t),
+                },
+              ],
+            },
+          ],
+        },
+        {
+          path: 'forums',
+          handle: ForumsIndex.handle,
+          children: [
+            {
+              index: true,
+              element: <ForumsIndex />,
+            },
+            {
+              path: ':forumId',
+              handle: forumHandle,
+              children: [
+                {
+                  index: true,
+                  element: <ForumShow />,
+                },
+                {
+                  path: 'topics/:topicId',
+                  handle: forumTopicHandle,
+                  element: <ForumTopicShow />,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          path: 'achievements',
+          handle: AchievementsIndex.handle,
+          children: [
+            {
+              index: true,
+              element: <AchievementsIndex />,
+            },
+            {
+              path: ':achievementId',
+              handle: achievementHandle,
+              element: <AchievementShow />,
+            },
+          ],
+        },
+        {
+          path: 'assessments',
+          handle: assessmentsHandle,
+          children: [
+            {
+              index: true,
+              element: <AssessmentsIndex />,
+            },
+            {
+              path: 'submissions',
+              handle: SubmissionsIndex.handle,
+              element: <SubmissionsIndex />,
+            },
+            {
+              path: 'skills',
+              handle: SkillsIndex.handle,
+              element: <SkillsIndex />,
+            },
+            {
+              path: ':assessmentId',
+              handle: assessmentHandle,
+              children: [
+                {
+                  index: true,
+                  element: <AssessmentShow />,
+                },
+                {
+                  path: 'edit',
+                  handle: AssessmentEdit.handle,
+                  element: <AssessmentEdit />,
+                },
+                {
+                  path: 'attempt',
+                  loader: assessmentAttemptLoader(t),
+                },
+                {
+                  path: 'monitoring',
+                  handle: AssessmentMonitoring.handle,
+                  element: <AssessmentMonitoring />,
+                },
+                {
+                  path: 'sessions/new',
+                  element: <AssessmentSessionNew />,
+                },
+                {
+                  path: 'statistics',
+                  handle: AssessmentStatisticsPage.handle,
+                  // @ts-ignore `connect` throws error when cannot find `store` as direct parent
+                  element: <AssessmentStatisticsPage />,
+                },
+                {
+                  path: 'submissions',
+                  children: [
+                    {
+                      index: true,
+                      handle: AssessmentSubmissionsIndex.handle,
+                      element: <AssessmentSubmissionsIndex />,
+                    },
+                    {
+                      path: ':submissionId',
+                      children: [
+                        {
+                          path: 'edit',
+                          handle: SubmissionEditIndex.handle,
+                          element: <SubmissionEditIndex />,
+                        },
+                        {
+                          path: 'logs',
+                          handle: LogsIndex.handle,
+                          element: <LogsIndex />,
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  path: 'question',
+                  element: <QuestionFormOutlet />,
+                  handle: questionHandle,
+                  children: [
+                    {
+                      path: 'forum_post_responses',
+                      children: [
+                        {
+                          path: 'new',
+                          handle: NewForumPostResponsePage.handle,
+                          element: <NewForumPostResponsePage />,
+                        },
+                        {
+                          path: ':questionId/edit',
+                          element: <EditForumPostResponsePage />,
+                        },
+                      ],
+                    },
+                    {
+                      path: 'text_responses',
+                      children: [
+                        {
+                          path: 'new',
+                          handle: NewTextResponse.handle,
+                          element: <NewTextResponse />,
+                        },
+                        {
+                          path: ':questionId/edit',
+                          element: <EditTextResponse />,
+                        },
+                      ],
+                    },
+                    {
+                      path: 'voice_responses',
+                      children: [
+                        {
+                          path: 'new',
+                          handle: NewVoicePage.handle,
+                          element: <NewVoicePage />,
+                        },
+                        {
+                          path: ':questionId/edit',
+                          element: <EditVoicePage />,
+                        },
+                      ],
+                    },
+                    {
+                      path: 'multiple_responses',
+                      children: [
+                        {
+                          path: 'new',
+                          handle: NewMcqMrqPage.handle,
+                          element: <NewMcqMrqPage />,
+                        },
+                        {
+                          path: ':questionId/edit',
+                          element: <EditMcqMrqPage />,
+                        },
+                      ],
+                    },
+                    {
+                      path: 'scribing',
+                      children: [
+                        {
+                          path: 'new',
+                          handle: ScribingQuestion.handle,
+                          element: <ScribingQuestion />,
+                        },
+                        {
+                          path: ':questionId/edit',
+                          element: <ScribingQuestion />,
+                        },
+                      ],
+                    },
+                    {
+                      path: 'programming',
+                      children: [
+                        {
+                          path: 'new',
+                          handle: NewProgrammingQuestionPage.handle,
+                          element: <NewProgrammingQuestionPage />,
+                        },
+                        {
+                          path: ':questionId/edit',
+                          element: <EditProgrammingQuestionPage />,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
-    children: [
-      {
-        index: true,
-        element: <CourseShow />,
-      },
-      {
-        path: 'timelines',
-        handle: TimelineDesigner.handle,
-        element: <TimelineDesigner />,
-      },
-      {
-        path: 'announcements',
-        handle: AnnouncementsIndex.handle,
-        element: <AnnouncementsIndex />,
-      },
-      {
-        path: 'comments',
-        handle: CommentIndex.handle,
-        element: <CommentIndex />,
-      },
-      {
-        path: 'leaderboard',
-        handle: LeaderboardIndex.handle,
-        element: <LeaderboardIndex />,
-      },
-      {
-        path: 'learning_map',
-        handle: LearningMap.handle,
-        element: <LearningMap />,
-      },
-      {
-        path: 'materials/folders',
-        handle: folderHandle,
-        // `:folderId` must be split this way so that `folderHandle` is matched
-        // to the stable (non-changing) match of `/materials/folders`. This allows
-        // the crumbs in the Workbin to not disappear when revalidated by the
-        // Dynamic Nest API's builder.
-        children: [
-          {
-            path: ':folderId',
-            element: <FolderShow />,
-          },
-        ],
-      },
-      {
-        path: 'levels',
-        handle: LevelsIndex.handle,
-        element: <LevelsIndex />,
-      },
-      {
-        path: 'statistics',
-        handle: StatisticsIndex.handle,
-        element: <StatisticsIndex />,
-      },
-      {
-        path: 'duplication',
-        handle: Duplication.handle,
-        element: <Duplication />,
-      },
-      {
-        path: 'enrol_requests',
-        handle: manageUserHandles.enrolRequests,
-        element: <UserRequests />,
-      },
-      {
-        path: 'user_invitations',
-        handle: manageUserHandles.invitations,
-        element: <InvitationsIndex />,
-      },
-      {
-        path: 'students',
-        handle: manageUserHandles.students,
-        element: <ManageStudents />,
-      },
-      {
-        path: 'staff',
-        handle: manageUserHandles.staff,
-        element: <ManageStaff />,
-      },
-      {
-        path: 'lesson_plan',
-        // @ts-ignore `connect` throws error when cannot find `store` as direct parent
-        element: <LessonPlanLayout />,
-        handle: LessonPlanLayout.handle,
-        children: [
-          {
-            index: true,
-            element: <LessonPlanShow />,
-          },
-          {
-            path: 'edit',
-            element: <LessonPlanEdit />,
-          },
-        ],
-      },
-      {
-        path: 'users',
-        children: [
-          {
-            index: true,
-            handle: UsersIndex.handle,
-            element: <UsersIndex />,
-          },
-          {
-            path: 'personal_times',
-            handle: manageUserHandles.personalizedTimelines,
-            element: <PersonalTimes />,
-          },
-          {
-            path: 'invite',
-            handle: manageUserHandles.inviteUsers,
-            element: <InviteUsers />,
-          },
-          {
-            path: 'disburse_experience_points',
-            handle: DisbursementIndex.handle,
-            element: <DisbursementIndex />,
-          },
-          {
-            path: ':userId',
-            handle: courseUserHandle,
-            children: [
-              {
-                index: true,
-                element: <CourseUserShow />,
-              },
-              {
-                path: 'experience_points_records',
-                handle: ExperiencePointsRecords.handle,
-                element: <ExperiencePointsRecords />,
-              },
-            ],
-          },
-          {
-            path: ':userId/personal_times',
-            handle: courseUserPersonalizedTimelineHandle,
-            element: <PersonalTimesShow />,
-          },
-          {
-            path: ':userId/video_submissions',
-            handle: videoWatchHistoryHandle,
-            element: <UserVideoSubmissionsIndex />,
-          },
-          {
-            path: ':userId/manage_email_subscription',
-            handle: UserEmailSubscriptions.handle,
-            element: <UserEmailSubscriptions />,
-          },
-        ],
-      },
-      {
-        path: 'admin',
-        loader: SettingsNavigation.loader,
-        handle: SettingsNavigation.handle,
-        element: <SettingsNavigation />,
-        children: [
-          {
-            index: true,
-            element: <CourseSettings />,
-          },
-          {
-            path: 'components',
-            element: <ComponentSettings />,
-          },
-          {
-            path: 'sidebar',
-            element: <SidebarSettings />,
-          },
-          {
-            path: 'notifications',
-            element: <NotificationSettings />,
-          },
-          {
-            path: 'announcements',
-            element: <AnnouncementSettings />,
-          },
-          {
-            path: 'assessments',
-            element: <AssessmentSettings />,
-          },
-          {
-            path: 'materials',
-            element: <MaterialsSettings />,
-          },
-          {
-            path: 'forums',
-            element: <ForumsSettings />,
-          },
-          {
-            path: 'leaderboard',
-            element: <LeaderboardSettings />,
-          },
-          {
-            path: 'comments',
-            element: <CommentsSettings />,
-          },
-          {
-            path: 'videos',
-            element: <VideosSettings />,
-          },
-          {
-            path: 'lesson_plan',
-            element: <LessonPlanSettings />,
-          },
-          {
-            path: 'codaveri',
-            element: <CodaveriSettings />,
-          },
-        ],
-      },
-      {
-        path: 'surveys',
-        handle: SurveyIndex.handle,
-        children: [
-          {
-            index: true,
-            element: <SurveyIndex />,
-          },
-          {
-            path: ':surveyId',
-            handle: surveyHandle,
-            children: [
-              {
-                index: true,
-                element: <SurveyShow />,
-              },
-              {
-                path: 'results',
-                handle: SurveyResults.handle,
-                element: <SurveyResults />,
-              },
-              {
-                path: 'responses',
-                children: [
-                  {
-                    index: true,
-                    handle: ResponseIndex.handle,
-                    element: <ResponseIndex />,
-                  },
-                  {
-                    path: ':responseId',
-                    children: [
-                      {
-                        index: true,
-                        handle: surveyResponseHandle,
-                        element: <ResponseShow />,
-                      },
-                      {
-                        path: 'edit',
-                        handle: ResponseEdit.handle,
-                        element: <ResponseEdit />,
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: 'groups',
-        element: <GroupIndex />,
-        handle: GroupIndex.handle,
-        children: [
-          {
-            path: ':groupCategoryId',
-            element: <GroupShow />,
-          },
-        ],
-      },
-      {
-        path: 'videos',
-        handle: videosHandle,
-        children: [
-          {
-            index: true,
-            element: <VideosIndex />,
-          },
-          {
-            path: ':videoId',
-            handle: videoHandle,
-            children: [
-              {
-                index: true,
-                element: <VideoShow />,
-              },
-              {
-                path: 'submissions',
-                children: [
-                  {
-                    index: true,
-                    handle: VideoSubmissionsIndex.handle,
-                    element: <VideoSubmissionsIndex />,
-                  },
-                  {
-                    path: ':submissionId',
-                    handle: VideoSubmissionShow.handle,
-                    children: [
-                      {
-                        index: true,
-                        element: <VideoSubmissionShow />,
-                      },
-                      {
-                        path: 'edit',
-                        element: <VideoSubmissionEdit />,
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                path: 'attempt',
-                loader: videoAttemptLoader,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: 'forums',
-        handle: ForumsIndex.handle,
-        children: [
-          {
-            index: true,
-            element: <ForumsIndex />,
-          },
-          {
-            path: ':forumId',
-            handle: forumHandle,
-            children: [
-              {
-                index: true,
-                element: <ForumShow />,
-              },
-              {
-                path: 'topics/:topicId',
-                handle: forumTopicHandle,
-                element: <ForumTopicShow />,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: 'achievements',
-        handle: AchievementsIndex.handle,
-        children: [
-          {
-            index: true,
-            element: <AchievementsIndex />,
-          },
-          {
-            path: ':achievementId',
-            handle: achievementHandle,
-            element: <AchievementShow />,
-          },
-        ],
-      },
-      {
-        path: 'assessments',
-        handle: assessmentsHandle,
-        children: [
-          {
-            index: true,
-            element: <AssessmentsIndex />,
-          },
-          {
-            path: 'submissions',
-            handle: SubmissionsIndex.handle,
-            element: <SubmissionsIndex />,
-          },
-          {
-            path: 'skills',
-            handle: SkillsIndex.handle,
-            element: <SkillsIndex />,
-          },
-          {
-            path: ':assessmentId',
-            handle: assessmentHandle,
-            children: [
-              {
-                index: true,
-                element: <AssessmentShow />,
-              },
-              {
-                path: 'edit',
-                handle: AssessmentEdit.handle,
-                element: <AssessmentEdit />,
-              },
-              {
-                path: 'attempt',
-                loader: assessmentAttemptLoader,
-              },
-              {
-                path: 'monitoring',
-                handle: AssessmentMonitoring.handle,
-                element: <AssessmentMonitoring />,
-              },
-              {
-                path: 'sessions/new',
-                element: <AssessmentSessionNew />,
-              },
-              {
-                path: 'statistics',
-                handle: AssessmentStatisticsPage.handle,
-                // @ts-ignore `connect` throws error when cannot find `store` as direct parent
-                element: <AssessmentStatisticsPage />,
-              },
-              {
-                path: 'submissions',
-                children: [
-                  {
-                    index: true,
-                    handle: AssessmentSubmissionsIndex.handle,
-                    element: <AssessmentSubmissionsIndex />,
-                  },
-                  {
-                    path: ':submissionId',
-                    children: [
-                      {
-                        path: 'edit',
-                        handle: SubmissionEditIndex.handle,
-                        element: <SubmissionEditIndex />,
-                      },
-                      {
-                        path: 'logs',
-                        handle: LogsIndex.handle,
-                        element: <LogsIndex />,
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                path: 'question',
-                element: <QuestionFormOutlet />,
-                handle: questionHandle,
-                children: [
-                  {
-                    path: 'forum_post_responses',
-                    children: [
-                      {
-                        path: 'new',
-                        handle: NewForumPostResponsePage.handle,
-                        element: <NewForumPostResponsePage />,
-                      },
-                      {
-                        path: ':questionId/edit',
-                        element: <EditForumPostResponsePage />,
-                      },
-                    ],
-                  },
-                  {
-                    path: 'text_responses',
-                    children: [
-                      {
-                        path: 'new',
-                        handle: NewTextResponse.handle,
-                        element: <NewTextResponse />,
-                      },
-                      {
-                        path: ':questionId/edit',
-                        element: <EditTextResponse />,
-                      },
-                    ],
-                  },
-                  {
-                    path: 'voice_responses',
-                    children: [
-                      {
-                        path: 'new',
-                        handle: NewVoicePage.handle,
-                        element: <NewVoicePage />,
-                      },
-                      {
-                        path: ':questionId/edit',
-                        element: <EditVoicePage />,
-                      },
-                    ],
-                  },
-                  {
-                    path: 'multiple_responses',
-                    children: [
-                      {
-                        path: 'new',
-                        handle: NewMcqMrqPage.handle,
-                        element: <NewMcqMrqPage />,
-                      },
-                      {
-                        path: ':questionId/edit',
-                        element: <EditMcqMrqPage />,
-                      },
-                    ],
-                  },
-                  {
-                    path: 'scribing',
-                    children: [
-                      {
-                        path: 'new',
-                        handle: ScribingQuestion.handle,
-                        element: <ScribingQuestion />,
-                      },
-                      {
-                        path: ':questionId/edit',
-                        element: <ScribingQuestion />,
-                      },
-                    ],
-                  },
-                  {
-                    path: 'programming',
-                    children: [
-                      {
-                        path: 'new',
-                        handle: NewProgrammingQuestionPage.handle,
-                        element: <NewProgrammingQuestionPage />,
-                      },
-                      {
-                        path: ':questionId/edit',
-                        element: <EditProgrammingQuestionPage />,
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: '/',
-    element: <CourselessContainer withoutCourseSwitcher />,
-    children: [
-      {
-        index: true,
-        element: <DashboardPage />,
-      },
-    ],
-  },
-  {
-    path: '*',
-    element: <CourselessContainer />,
-    children: [
-      reservedRoutes,
-      {
-        path: 'admin',
-        handle: AdminNavigator.handle,
-        element: <AdminNavigator />,
-        children: [
-          {
-            index: true,
-            element: <Navigate to="announcements" />,
-          },
-          {
-            path: 'announcements',
-            element: <AnnouncementIndex />,
-          },
-          {
-            path: 'users',
-            element: <UserIndex />,
-          },
-          {
-            path: 'instances',
-            element: <InstancesIndex />,
-          },
-          {
-            path: 'courses',
-            element: <CourseIndex />,
-          },
-        ],
-      },
-      {
-        path: 'admin/instance',
-        handle: InstanceAdminNavigator.handle,
-        element: <InstanceAdminNavigator />,
-        children: [
-          {
-            index: true,
-            element: <Navigate to="announcements" />,
-          },
-          {
-            path: 'announcements',
-            element: <InstanceAnnouncementsIndex />,
-          },
-          {
-            path: 'components',
-            element: <InstanceComponentsIndex />,
-          },
-          {
-            path: 'courses',
-            element: <InstanceCoursesIndex />,
-          },
-          {
-            path: 'users',
-            element: <InstanceUsersIndex />,
-          },
-          {
-            path: 'users/invite',
-            element: <InstanceUsersInvite />,
-          },
-          {
-            path: 'user_invitations',
-            element: <InstanceUsersInvitations />,
-          },
-          {
-            path: 'role_requests',
-            element: <InstanceUserRoleRequestsIndex />,
-          },
-        ],
-      },
-      {
-        path: 'announcements',
-        handle: GlobalAnnouncementIndex.handle,
-        element: <GlobalAnnouncementIndex />,
-      },
-      {
-        path: 'users',
-        children: [
-          {
-            path: 'masquerade',
-            children: [
-              {
-                index: true,
-                loader: masqueradeLoader,
-              },
-              {
-                path: 'back',
-                loader: stopMasqueradeLoader,
-              },
-            ],
-          },
-          {
-            path: ':userId',
-            element: <UserShow />,
-          },
-        ],
-      },
-      {
-        path: 'user/profile/edit',
-        handle: AccountSettings.handle,
-        element: <AccountSettings />,
-      },
-      {
-        path: 'role_requests',
-        element: <Navigate to="/admin/instance/role_requests" />,
-      },
-    ],
-  },
-]);
+    {
+      path: '/',
+      element: <CourselessContainer withoutCourseSwitcher />,
+      children: [
+        {
+          index: true,
+          element: <DashboardPage />,
+        },
+      ],
+    },
+    {
+      path: '*',
+      element: <CourselessContainer />,
+      children: [
+        reservedRoutes,
+        {
+          path: 'admin',
+          handle: AdminNavigator.handle,
+          element: <AdminNavigator />,
+          children: [
+            {
+              index: true,
+              element: <Navigate to="announcements" />,
+            },
+            {
+              path: 'announcements',
+              element: <AnnouncementIndex />,
+            },
+            {
+              path: 'users',
+              element: <UserIndex />,
+            },
+            {
+              path: 'instances',
+              element: <InstancesIndex />,
+            },
+            {
+              path: 'courses',
+              element: <CourseIndex />,
+            },
+          ],
+        },
+        {
+          path: 'admin/instance',
+          handle: InstanceAdminNavigator.handle,
+          element: <InstanceAdminNavigator />,
+          children: [
+            {
+              index: true,
+              element: <Navigate to="announcements" />,
+            },
+            {
+              path: 'announcements',
+              element: <InstanceAnnouncementsIndex />,
+            },
+            {
+              path: 'components',
+              element: <InstanceComponentsIndex />,
+            },
+            {
+              path: 'courses',
+              element: <InstanceCoursesIndex />,
+            },
+            {
+              path: 'users',
+              element: <InstanceUsersIndex />,
+            },
+            {
+              path: 'users/invite',
+              element: <InstanceUsersInvite />,
+            },
+            {
+              path: 'user_invitations',
+              element: <InstanceUsersInvitations />,
+            },
+            {
+              path: 'role_requests',
+              element: <InstanceUserRoleRequestsIndex />,
+            },
+          ],
+        },
+        {
+          path: 'announcements',
+          handle: GlobalAnnouncementIndex.handle,
+          element: <GlobalAnnouncementIndex />,
+        },
+        {
+          path: 'users',
+          children: [
+            {
+              path: 'masquerade',
+              children: [
+                {
+                  index: true,
+                  loader: masqueradeLoader(t),
+                },
+                {
+                  path: 'back',
+                  loader: stopMasqueradeLoader(t),
+                },
+              ],
+            },
+            {
+              path: ':userId',
+              element: <UserShow />,
+            },
+          ],
+        },
+        {
+          path: 'user/profile/edit',
+          handle: AccountSettings.handle,
+          element: <AccountSettings />,
+        },
+        {
+          path: 'role_requests',
+          element: <Navigate to="/admin/instance/role_requests" />,
+        },
+      ],
+    },
+  ]);
 
-const AuthenticatedApp = (): JSX.Element => (
-  <RouterProvider router={createBrowserRouter(authenticatedRouter)} />
-);
+const AuthenticatedApp = (): JSX.Element => {
+  const { t } = useTranslation();
+
+  return (
+    <RouterProvider router={createBrowserRouter(authenticatedRouter(t))} />
+  );
+};
 
 export default AuthenticatedApp;
