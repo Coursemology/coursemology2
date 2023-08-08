@@ -40,19 +40,14 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # Handles +IllegalStateError+s with a HTTP 422.
   def handle_illegal_state_error(exception)
     @exception = exception
-    respond_to do |format|
-      format.json { render file: 'public/422.json', layout: false, status: 422 }
-    end
+    render json: { error: exception.message }, status: :unprocessable_entity
   end
 
   def handle_csrf_error(exception)
     @exception = exception
-    respond_to do |format|
-      format.json { render file: 'public/403.json', layout: false, status: 403 }
-    end
+    render json: { error: "Can't verify CSRF token authenticity" }, status: :forbidden
   end
 
   # lograge
