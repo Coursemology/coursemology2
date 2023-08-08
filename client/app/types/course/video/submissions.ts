@@ -32,5 +32,4 @@ export interface VideoEditSubmissionData {
 
 export interface VideoSubmissionAttemptData {
   submissionId: number;
-  submissionUrl?: string;
 }
