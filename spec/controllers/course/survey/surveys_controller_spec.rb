@@ -328,13 +328,13 @@ RSpec.describe Course::Survey::SurveysController do
       let(:user) { admin }
 
       subject do
-        get :download, params: { course_id: course.id, id: survey.id }
+        get :download, as: :json, params: { course_id: course.id, id: survey.id }
       end
 
-      it 'returns a html file' do
+      it 'renders a submitted job response' do
         subject
-        expect(response.header['Content-Type']).to include('text/html')
-        expect(response.status).to eq(302)
+        expect(response).to render_template(partial: 'jobs/_submitted')
+        expect(response).to have_http_status(:ok)
       end
     end
   end
