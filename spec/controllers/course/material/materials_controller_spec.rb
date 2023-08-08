@@ -21,7 +21,9 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
       let(:material) { create(:material, folder: folder) }
       subject { get :show, params: { course_id: course, folder_id: folder, id: material } }
 
-      it { is_expected.to redirect_to(material.attachment.url) }
+      it 'renders the attachment url' do
+        expect(subject.body).to include(material.attachment.url)
+      end
 
       context 'when a material is uploaded for an assessment' do
         let!(:assessment) do
@@ -37,7 +39,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
           subject
           expect(assessment.submissions.length).to eq(1)
           expect(assessment.submissions.first.answers.length).to eq(assessment.questions.length)
-          is_expected.to redirect_to(material_assessment.attachment.url)
+          expect(response.body).to include(material_assessment.attachment.url)
         end
       end
     end
