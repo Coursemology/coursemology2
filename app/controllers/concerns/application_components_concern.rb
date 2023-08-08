@@ -10,6 +10,6 @@ module ApplicationComponentsConcern
 
   def handle_component_not_found(exception)
     @exception = exception
-    render file: 'public/404', layout: false, status: :not_found
+    render json: { error: 'Component not found' }, status: :not_found
   end
 end

@@ -61,6 +61,10 @@ export const redirectToForbidden = (): void => {
   window.location.href = getForbiddenURL();
 };
 
+export const redirectToNotFound = (): void => {
+  window.location.href = '/404';
+};
+
 export const getForbiddenSourceURL = (rawURL: string): string | null => {
   const url = new URL(rawURL);
   return url.searchParams.get(FORBIDDEN_SOURCE_URL_SEARCH_PARAM);
