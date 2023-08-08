@@ -1,2 +1,5 @@
 GOOGLE_RECAPTCHA_SITE_KEY     = ""
 ROLLBAR_POST_CLIENT_ITEM_KEY  = ""
+SUPPORT_EMAIL                 = ""
+DEFAULT_LOCALE                = "en"
+DEFAULT_TIME_ZONE             = "Asia/Singapore"
