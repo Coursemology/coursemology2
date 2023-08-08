@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Alert, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
+import { ValidationError } from 'yup';
 
 import GlobalAPI from 'api';
 import Checkbox from 'lib/components/core/buttons/Checkbox';
@@ -16,6 +17,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import Widget from '../components/Widget';
 import translations from '../translations';
+import { emailValidationSchema } from '../validations';
 
 const SignInPage = (): JSX.Element => {
   const { t } = useTranslation();
@@ -25,6 +27,7 @@ const SignInPage = (): JSX.Element => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [errored, setErrored] = useState(false);
+  const [emailError, setEmailError] = useState<string>();
   const [submitting, setSubmitting] = useState(false);
 
   const { redirectable, expired } = useRedirectable();
@@ -33,11 +36,20 @@ const SignInPage = (): JSX.Element => {
   const handleSignIn = async (): Promise<void> => {
     setSubmitting(true);
     setErrored(false);
+    setEmailError(undefined);
 
     try {
-      await GlobalAPI.users.signIn(email, password, rememberMe);
+      const validatedEmail = await emailValidationSchema(t).validate(email);
+      if (!validatedEmail) throw new Error('Email validation failed');
+
+      await GlobalAPI.users.signIn(validatedEmail, password, rememberMe);
       authenticate();
     } catch (error) {
+      if (error instanceof ValidationError) {
+        setEmailError(error.message);
+        return;
+      }
+
       if (!(error instanceof AxiosError)) throw error;
 
       if (error.response?.status === 401) {
@@ -66,8 +78,9 @@ const SignInPage = (): JSX.Element => {
         <TextField
           autoFocus
           disabled={submitting}
-          error={errored}
+          error={errored || Boolean(emailError)}
           fullWidth
+          helperText={emailError}
           label={t(translations.emailAddress)}
           name="email"
           onChange={(e): void => setEmail(e.target.value)}
@@ -79,6 +92,7 @@ const SignInPage = (): JSX.Element => {
         />
 
         <PasswordTextField
+          autoFocus={Boolean(email)}
           disabled={submitting}
           error={errored}
           fullWidth
