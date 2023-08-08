@@ -4,10 +4,11 @@ import {
   redirect,
   useLoaderData,
 } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 
 import GlobalAPI from 'api';
 import Link from 'lib/components/core/Link';
+import { useEmailFromAuthPagesContext } from 'lib/containers/AuthPagesContainer';
 import toast from 'lib/hooks/toast';
 import useEffectOnce from 'lib/hooks/useEffectOnce';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -20,6 +21,8 @@ const ConfirmEmailPage = (): JSX.Element => {
 
   const email = useLoaderData() as string;
 
+  const [, setEmail] = useEmailFromAuthPagesContext();
+
   return (
     <Widget
       subtitle={t(translations.emailConfirmedSubtitle, {
@@ -28,6 +31,17 @@ const ConfirmEmailPage = (): JSX.Element => {
       })}
       title={t(translations.emailConfirmed)}
     >
+      <Link to="/users/sign_in">
+        <Button
+          fullWidth
+          onClick={(): void => setEmail(email)}
+          type="submit"
+          variant="contained"
+        >
+          {t(translations.signIn)}
+        </Button>
+      </Link>
+
       <Widget.Foot>
         <Typography color="text.secondary" variant="body2">
           {t(translations.manageAllEmailsInAccountSettings, {
