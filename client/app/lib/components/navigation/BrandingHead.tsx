@@ -1,5 +1,6 @@
 import { ComponentRef, ReactNode, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
+import { useLocation } from 'react-router-dom';
 import { ChevronRight, KeyboardArrowDown } from '@mui/icons-material';
 import { Avatar, Button, Typography } from '@mui/material';
 
@@ -113,6 +114,14 @@ const BrandingHead = (props: BrandingHeadProps): JSX.Element => {
   const courseSwitcherRef =
     useRef<ComponentRef<typeof CourseSwitcherPopupMenu>>(null);
 
+  const location = useLocation();
+
+  const { courses } = useAppContext();
+
+  const shouldShowCourseSwitcher =
+    !props.withoutCourseSwitcher &&
+    (Boolean(courses?.length) || location.pathname !== '/courses');
+
   return (
     <>
       <BrandingHeadContainer>
@@ -128,21 +137,27 @@ const BrandingHead = (props: BrandingHeadProps): JSX.Element => {
         </div>
 
         <div className="flex h-full items-center space-x-4">
-          {!props.withoutCourseSwitcher && (
-            <Button
-              endIcon={<KeyboardArrowDown />}
-              onClick={(e): void => courseSwitcherRef.current?.open(e)}
-              variant="text"
-            >
-              {t(translations.goToOtherCourses)}
-            </Button>
-          )}
+          {shouldShowCourseSwitcher &&
+            (courses?.length ? (
+              <Button
+                endIcon={<KeyboardArrowDown />}
+                onClick={(e): void => courseSwitcherRef.current?.open(e)}
+              >
+                {t(translations.goToOtherCourses)}
+              </Button>
+            ) : (
+              <Link to="/courses">
+                <Button>{t(translations.goToOtherCourses)}</Button>
+              </Link>
+            ))}
 
           {!props.withoutUserMenu && <UserMenuButton />}
         </div>
       </BrandingHeadContainer>
 
-      <CourseSwitcherPopupMenu ref={courseSwitcherRef} />
+      {Boolean(courses?.length) && (
+        <CourseSwitcherPopupMenu ref={courseSwitcherRef} />
+      )}
     </>
   );
 };
