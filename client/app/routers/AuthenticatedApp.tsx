@@ -119,6 +119,7 @@ import QuestionFormOutlet from 'course/assessment/question/components/QuestionFo
 import { CourseContainer } from 'course/container';
 import { forumHandle, forumTopicHandle } from 'course/forum/handles';
 import { folderHandle } from 'course/material/folders/handles';
+import materialLoader from 'course/material/materialLoader';
 import { videoWatchHistoryHandle } from 'course/statistics/handles';
 import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
 import {
@@ -193,7 +194,16 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
           children: [
             {
               path: ':folderId',
-              element: <FolderShow />,
+              children: [
+                {
+                  index: true,
+                  element: <FolderShow />,
+                },
+                {
+                  path: 'files/:materialId',
+                  loader: materialLoader(t),
+                },
+              ],
             },
           ],
         },
