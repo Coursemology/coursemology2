@@ -150,10 +150,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def monitoring
-    if monitor.nil?
-      render file: 'public/404', layout: false, status: :not_found
-      return
-    end
+    raise ComponentNotFoundError if monitor.nil?
 
     authorize! :read, @monitor
 
