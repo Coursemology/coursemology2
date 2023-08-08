@@ -205,7 +205,9 @@ jobs:
       - run:
           name: Run Playwright tests
           working_directory: tests
-          command: SHARD="$((${CIRCLE_NODE_INDEX}+1))"; npx playwright test --shard=${SHARD}/${CIRCLE_NODE_TOTAL} --reporter=junit
+          command: |
+            SHARD="$((${CIRCLE_NODE_INDEX}+1))"; npx playwright test --shard=${SHARD}/${CIRCLE_NODE_TOTAL} --reporter=junit
+            zip -r test-results.zip playright-report test-results
           environment:
             PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
 
@@ -214,11 +216,11 @@ jobs:
           working_directory: tests
           command: yarn coverage
 
+      - terminate_rails_and_wait_for_coverage_results
+
       - codecov/upload:
           upload_name: playwright-client
           file: tests/coverage/lcov.info
-
-      - terminate_rails_and_wait_for_coverage_results
 
       - codecov/upload:
           upload_name: playwright-rails
@@ -229,6 +231,9 @@ jobs:
 
       - store_artifacts:
           path: ~/repo/tests/results.xml
+
+      - store_artifacts:
+          path: ~/repo/tests/test-results.zip
 
   test_rspec:
     executor:

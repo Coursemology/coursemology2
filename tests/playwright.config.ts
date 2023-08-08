@@ -12,6 +12,7 @@ export default defineConfig({
   use: {
     baseURL: servers.clientURL,
     trace: 'on-first-retry',
+    screenshot: process.env.CI ? 'only-on-failure' : undefined,
   },
   projects: [
     {
