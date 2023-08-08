@@ -11,6 +11,7 @@ const config = {
   snapshotSerializers: ['<rootDir>/node_modules/enzyme-to-json/serializer'],
   moduleNameMapper: {
     '\\.(css|scss)$': '<rootDir>/app/__test__/mocks/fileMock.js',
+    '^assets(.*)$': '<rootDir>/app/__test__/mocks/svgMock.js',
     '.svg$': '<rootDir>/app/__test__/mocks/svgMock.js',
     '^mocks(.*)$': '<rootDir>/app/__test__/mocks$1',
     '^test-utils(.*)$': '<rootDir>/app/utilities/test-utils$1',
