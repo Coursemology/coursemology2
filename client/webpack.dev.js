@@ -7,6 +7,11 @@ const packageJSON = require('./package.json');
 const SERVER_PORT = packageJSON.devServer.serverPort;
 const APP_HOST = packageJSON.devServer.appHost;
 
+const BLUE_ANSI = '\x1b[36m%s\x1b[0m';
+
+const logProxy = (source, destination) =>
+  console.info(BLUE_ANSI, `[proxy] ${source} -> ${destination}`);
+
 module.exports = merge(common, {
   mode: 'development',
   devtool: 'eval-cheap-module-source-map',
@@ -28,14 +33,15 @@ module.exports = merge(common, {
         port: SERVER_PORT,
       }),
       bypass: (request) => {
-        const target = request.headers.host.split(':')[0];
+        const target = `${request.headers.host.split(':')[0]}:${SERVER_PORT}`;
 
-        if (request.query.format === 'json') {
-          console.info(
-            '\x1b[36m%s\x1b[0m',
-            `[proxy] ${request.url} -> ${target}:${SERVER_PORT}${request.url}`,
-          );
+        const isExplicitJSON = request.query.format === 'json';
+        const isAttachment =
+          request.url.startsWith('/uploads') ||
+          request.url.startsWith('/attachments');
 
+        if (isExplicitJSON || isAttachment) {
+          logProxy(request.url, `${target}${request.url}`);
           return null;
         }
 
