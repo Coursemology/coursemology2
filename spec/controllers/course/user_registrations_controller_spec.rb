@@ -18,22 +18,14 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             let!(:course_student) { create(:course_student, course: course, user: user) }
 
             it { expect { subject }.not_to(change { course.course_users.count }) }
-            it { is_expected.to redirect_to(course_path(course)) }
-            it 'sets the proper flash message' do
-              subject
-              expect(flash[:info]).to eq(I18n.t('course.users.new.already_registered'))
-            end
+            it { is_expected.to have_http_status(:conflict) }
           end
 
           context 'when the user is a manager of the course' do
             let!(:course_manager) { create(:course_manager, course: course, user: user) }
 
             it { expect { subject }.not_to(change { course.course_users.reload.count }) }
-            it { is_expected.to redirect_to(course_path(course)) }
-            it 'sets the proper flash message' do
-              subject
-              expect(flash[:info]).to eq(I18n.t('course.users.new.already_registered'))
-            end
+            it { is_expected.to have_http_status(:conflict) }
           end
         end
       end
@@ -67,11 +59,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             let(:registration_code) { invitation.invitation_key }
 
             it { expect { subject }.not_to(change { course.course_users.reload.count }) }
-            it { is_expected.to redirect_to(course_path(course)) }
-            it 'sets the proper flash message' do
-              subject
-              expect(flash[:info]).to eq(I18n.t('course.users.new.already_registered'))
-            end
+            it { is_expected.to have_http_status(:conflict) }
           end
         end
 
@@ -102,11 +90,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
             before { create(:course_student, course: course, user: user) }
 
             it { expect { subject }.not_to(change { course.course_users.count }) }
-            it { is_expected.to redirect_to(course_path(course)) }
-            it 'sets the proper flash message' do
-              subject
-              expect(flash[:info]).to eq(I18n.t('course.users.new.already_registered'))
-            end
+            it { is_expected.to have_http_status(:conflict) }
           end
         end
 
