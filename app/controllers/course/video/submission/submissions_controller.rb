@@ -24,18 +24,9 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
 
   def create
     if @submission.save
-      respond_to do |format|
-        format.json do
-          render json: { submissionId: @submission.id,
-                         submissionUrl: edit_course_video_submission_path(current_course, @submission.video,
-                                                                          @submission) },
-                 status: :ok
-        end
-      end
+      render json: { submissionId: @submission.id }
     elsif @submission.existing_submission.present?
-      respond_to do |format|
-        format.json { render json: { submissionId: @submission.existing_submission.id }, status: :ok }
-      end
+      render json: { submissionId: @submission.existing_submission.id }
     else
       render json: { errors: @submission.errors.full_messages.to_sentence }, status: :bad_request
     end
