@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 import {
   redirectToForbidden,
+  redirectToNotFound,
   redirectToSignIn,
 } from 'lib/hooks/router/redirect';
 
@@ -16,6 +17,16 @@ const isUnauthenticatedResponse = (response?: AxiosResponse): boolean =>
 const isUnauthorizedResponse = (response?: AxiosResponse): boolean =>
   response?.status === 403 &&
   response.data?.errors?.toLowerCase().includes('not authorized');
+
+const isComponentNotFoundResponse = (response?: AxiosResponse): boolean =>
+  response?.status === 404 &&
+  response.data?.error?.toLowerCase().includes('component not found');
+
+const redirectIfMatchesErrorIn = (response?: AxiosResponse): void => {
+  if (isUnauthenticatedResponse(response)) redirectToSignIn(true);
+  if (isUnauthorizedResponse(response)) redirectToForbidden();
+  if (isComponentNotFoundResponse(response)) redirectToNotFound();
+};
 
 const MAX_CSRF_RETRIES = 3;
 
@@ -60,9 +71,7 @@ export default class BaseAPI {
           return client.request(error.config);
         }
 
-        if (isUnauthenticatedResponse(error.response)) redirectToSignIn(true);
-
-        if (isUnauthorizedResponse(error.response)) redirectToForbidden();
+        redirectIfMatchesErrorIn(error.response);
 
         return Promise.reject(error);
       },
