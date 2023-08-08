@@ -124,8 +124,8 @@ commands:
           command: node dirt-cheap-rocket.cjs
           background: true
           environment:
-            DCR_CLIENT_PORT: 4200
-            DCR_SERVER_PORT: 6969
+            DCR_CLIENT_PORT: 3200
+            DCR_SERVER_PORT: 7979
             DCR_PUBLIC_PATH: /static
             DCR_ASSETS_DIR: client/build
 
@@ -133,12 +133,12 @@ commands:
     steps:
       - run:
           name: Serve Rails server
-          command: bundle exec rails s -p 6969
+          command: bundle exec rails s -p 7979
           background: true
 
       - run:
           name: Wait for Rails server
-          command: curl -s --retry 1000 --retry-delay 1 --retry-connrefused http://lvh.me:6969
+          command: curl -s --retry 1000 --retry-delay 1 --retry-connrefused http://lvh.me:7979
 
   terminate_rails_and_wait_for_coverage_results:
     steps:
