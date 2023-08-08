@@ -8,6 +8,7 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const packageJSON = require('./package.json');
 
@@ -76,6 +77,7 @@ module.exports = {
       writeToFileEmit: true,
     }),
     new HtmlWebpackPlugin({ template: './public/index.html' }),
+    new FaviconsWebpackPlugin({ logo: './favicon.svg', inject: true }),
     // Do not require all locales in moment
     new ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
     new ForkTsCheckerWebpackPlugin({
