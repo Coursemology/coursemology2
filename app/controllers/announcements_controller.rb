@@ -11,17 +11,19 @@ class AnnouncementsController < ApplicationController
     end
   end
 
-  # Marks the current GenericAnnouncement as read by the current user and responds without a body.
-  # This is meant to be called via javascript.
   def mark_as_read
-    @announcement.mark_as_read! for: current_user
-    head :ok
+    if current_user
+      @announcement.mark_as_read! for: current_user
+      head :ok
+    else
+      head :no_content
+    end
   end
 
   protected
 
   def publicly_accessible?
-    requesting_unread?
+    requesting_unread? || action_name.to_sym == :mark_as_read
   end
 
   private
