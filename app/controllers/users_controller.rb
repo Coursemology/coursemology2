@@ -6,7 +6,7 @@ class UsersController < ApplicationController
     if @user.built_in?
       head :not_found
     else
-      course_users = @user.course_users.with_course_statistics.from_instance(current_tenant).includes(:course)
+      course_users = @user.course_users.with_course_statistics.from_instance(current_tenant)
       @current_courses = course_users.merge(Course.current).order(created_at: :desc)
       @completed_courses = course_users.merge(Course.completed).order(created_at: :desc)
       @instances = other_instances

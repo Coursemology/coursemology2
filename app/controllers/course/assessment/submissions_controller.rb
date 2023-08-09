@@ -74,8 +74,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
     @submissions = Course::Assessment::Submission.by_users(student_ids).
                    ordered_by_submitted_date.accessible_by(current_ability).
                    calculated(:grade).
-                   includes(:assessment, :answers,
-                            experience_points_record: { course_user: [:course, :groups] })
+                   includes(:answers, experience_points_record: { course_user: [:course, :groups] })
   end
 
   # Load pending submissions, either for the entire course, or for my students only.
