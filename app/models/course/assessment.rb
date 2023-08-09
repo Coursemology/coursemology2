@@ -103,11 +103,8 @@ class Course::Assessment < ApplicationRecord
   # @!method self.ordered_by_date_and_title
   #   Orders the assessments by the starting date and title.
   scope :ordered_by_date_and_title, (lambda do
-    select(<<~SQL).
-      course_assessments.*, course_reference_times.start_at, course_lesson_plan_items.title
-    SQL
     joins(:lesson_plan_item).
-    merge(Course::LessonPlan::Item.ordered_by_date_and_title)
+      merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)
 
   # @!method with_submissions_by(creator)
