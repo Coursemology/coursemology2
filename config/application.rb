@@ -13,7 +13,8 @@ Dotenv::Railtie.load if ['development', 'test'].include? ENV['RAILS_ENV']
 module Application # rubocop:disable Style/ClassAndModuleChildren
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 6.0
+    config.autoloader = :classic
 
     config.assets.enabled = false
 
@@ -39,6 +40,7 @@ module Application # rubocop:disable Style/ClassAndModuleChildren
     config.eager_load_paths << "#{Rails.root}/app/notifiers"
 
     config.action_mailer.delivery_job = 'ActionMailer::MailDeliveryJob'
+    config.action_mailer.deliver_later_queue_name = :mailers
 
     config.x.default_user_time_zone = 'Singapore'
     config.x.public_download_folder = 'downloads'
