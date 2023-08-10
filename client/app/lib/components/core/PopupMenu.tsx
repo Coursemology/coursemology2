@@ -59,7 +59,7 @@ const PopupMenu = (props: PopupMenuProps): JSX.Element => {
 
 interface PopupMenuButtonProps {
   onClick?: () => void;
-  to?: string;
+  linkProps?: ComponentProps<typeof Link>;
   children?: ReactNode;
   textProps?: ComponentProps<typeof Typography>;
   disabled?: boolean;
@@ -68,7 +68,7 @@ interface PopupMenuButtonProps {
 }
 
 const PopupMenuButton = (props: PopupMenuButtonProps): JSX.Element => {
-  const { to: href } = props;
+  const { linkProps } = props;
 
   const { close } = useContext(PopupMenuContext);
 
@@ -95,8 +95,8 @@ const PopupMenuButton = (props: PopupMenuButtonProps): JSX.Element => {
     </ListItem>
   );
 
-  return href && !props.disabled ? (
-    <Link color="inherit" to={href} underline="none">
+  return linkProps && !props.disabled ? (
+    <Link color="inherit" {...linkProps} underline="none">
       {button}
     </Link>
   ) : (

@@ -44,13 +44,13 @@ const UserPopupMenuList = (): JSX.Element | null => {
 
   return (
     <PopupMenu.List>
-      <PopupMenu.Button to={`/users/${user.id}`}>
+      <PopupMenu.Button linkProps={{ to: `/users/${user.id}` }}>
         {t(translations.goToYourSiteWideProfile)}
       </PopupMenu.Button>
 
       <PopupMenu.Button
+        linkProps={{ to: '/user/profile/edit' }}
         secondary={t(translations.accountSettingsSubtitle)}
-        to="/user/profile/edit"
       >
         {t(translations.accountSettings)}
       </PopupMenu.Button>

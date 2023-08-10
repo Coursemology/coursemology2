@@ -147,12 +147,14 @@ const CourseUserItem = (props: CourseUserItemProps): JSX.Element => {
           )}
 
           <PopupMenu.List header={t(translations.inThisCourse)}>
-            <PopupMenu.Button to={data.courseUserUrl}>
+            <PopupMenu.Button linkProps={{ to: data.courseUserUrl }}>
               {t(translations.goToYourProfile)}
             </PopupMenu.Button>
 
             {data.manageEmailSubscriptionUrl && (
-              <PopupMenu.Button to={data.manageEmailSubscriptionUrl}>
+              <PopupMenu.Button
+                linkProps={{ to: data.manageEmailSubscriptionUrl }}
+              >
                 {t(translations.manageEmailSubscriptions)}
               </PopupMenu.Button>
             )}
