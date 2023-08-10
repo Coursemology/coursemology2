@@ -1,11 +1,12 @@
+import { ComponentProps } from 'react';
 import { defineMessages } from 'react-intl';
 import TheaterComedy from '@mui/icons-material/TheaterComedy';
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends IconButtonProps {
+interface MasqueradeButtonProps extends ComponentProps<typeof IconButton> {
   canMasquerade: boolean;
   component?: string;
   href?: string;
@@ -22,7 +23,7 @@ const translations = defineMessages({
   },
 });
 
-const MasqueradeButton = (props: Props): JSX.Element => {
+const MasqueradeButton = (props: MasqueradeButtonProps): JSX.Element => {
   const { canMasquerade, href, ...otherProps } = props;
 
   const { t } = useTranslation();
