@@ -84,7 +84,6 @@ group :test do
   # Capybara for feature testing
   gem 'capybara'
   gem 'capybara-selenium'
-  gem 'webdrivers'
 
   gem 'aws-sdk-s3'
   # Make screen shots in tests, helps with the debugging of JavaScript tests.
