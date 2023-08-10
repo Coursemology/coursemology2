@@ -47,7 +47,6 @@ const PopupMenu = (props: PopupMenuProps): JSX.Element => {
       }}
       onClose={onClose}
       open={Boolean(anchorEl)}
-      PaperProps={{ variant: 'outlined' }}
     >
       {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
       <PopupMenuContext.Provider value={{ close: onClose }}>
