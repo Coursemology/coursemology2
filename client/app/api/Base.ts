@@ -1,32 +1,9 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 import {
-  redirectToForbidden,
-  redirectToNotFound,
-  redirectToSignIn,
-} from 'lib/hooks/router/redirect';
-
-const isInvalidCSRFTokenResponse = (response?: AxiosResponse): boolean =>
-  response?.status === 403 &&
-  response.data?.error?.title?.toLowerCase().includes('csrf token');
-
-const isUnauthenticatedResponse = (response?: AxiosResponse): boolean =>
-  response?.status === 401 &&
-  response.data?.error?.toLowerCase().includes('sign in or sign up');
-
-const isUnauthorizedResponse = (response?: AxiosResponse): boolean =>
-  response?.status === 403 &&
-  response.data?.errors?.toLowerCase().includes('not authorized');
-
-const isComponentNotFoundResponse = (response?: AxiosResponse): boolean =>
-  response?.status === 404 &&
-  response.data?.error?.toLowerCase().includes('component not found');
-
-const redirectIfMatchesErrorIn = (response?: AxiosResponse): void => {
-  if (isUnauthenticatedResponse(response)) redirectToSignIn(true);
-  if (isUnauthorizedResponse(response)) redirectToForbidden();
-  if (isComponentNotFoundResponse(response)) redirectToNotFound();
-};
+  isInvalidCSRFTokenResponse,
+  redirectIfMatchesErrorIn,
+} from './ErrorHandling';
 
 const MAX_CSRF_RETRIES = 3;
 
