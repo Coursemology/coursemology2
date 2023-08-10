@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { Navigate } from 'react-router-dom';
 import { ArrowForward } from '@mui/icons-material';
-import { Avatar, Typography } from '@mui/material';
+import { Avatar, Stack, Typography } from '@mui/material';
 import moment from 'moment';
 import { HomeLayoutCourseData } from 'types/home';
 
@@ -12,21 +12,27 @@ import { useAppContext } from 'lib/containers/AppContainer';
 import useItems from 'lib/hooks/items/useItems';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import NewCourseButton from './components/NewCourseButton';
+
 const translations = defineMessages({
   searchCourses: {
-    id: 'lib.components.navigation.CourseSwitcherPopupMenu.searchCourses',
+    id: 'app.DashboardPage.searchCourses',
     defaultMessage: 'Search your courses',
   },
-  jumpBackIn: {
-    id: 'lib.components.navigation.CourseSwitcherPopupMenu.jumpBackIn',
-    defaultMessage: 'Jump back in',
+  allCourses: {
+    id: 'app.DashboardPage.allCourses',
+    defaultMessage: 'Courses',
+  },
+  yourCourses: {
+    id: 'app.DashboardPage.yourCourses',
+    defaultMessage: 'Your Courses',
   },
   lastAccessed: {
-    id: 'lib.components.navigation.CourseSwitcherPopupMenu.lastAccessed',
+    id: 'app.DashboardPage.lastAccessed',
     defaultMessage: 'Last accessed {at}',
   },
   noCoursesMatch: {
-    id: 'lib.components.navigation.CourseSwitcherPopupMenu.noCoursesMatch',
+    id: 'app.DashboardPage.noCoursesMatch',
     defaultMessage: 'Oops, no courses matched your search keyword.',
   },
 });
@@ -74,7 +80,7 @@ const CourseListItem = (props: CourseListItemProps): JSX.Element => {
 };
 
 const DashboardPage = (): JSX.Element => {
-  const { courses } = useAppContext();
+  const { courses, user } = useAppContext();
 
   const { t } = useTranslation();
 
@@ -89,10 +95,14 @@ const DashboardPage = (): JSX.Element => {
   );
 
   return (
-    <Page className="m-auto flex max-w-7xl flex-col justify-center space-y-7 pt-24">
-      <Typography className="max-w-7xl" variant="h4">
-        {t(translations.jumpBackIn)}
-      </Typography>
+    <Page className="m-auto flex max-w-7xl flex-col justify-center space-y-7">
+      <Stack alignItems="center" direction="row" justifyContent="space-between">
+        <Typography className="max-w-7xl" variant="h4">
+          {t(translations.yourCourses)}
+        </Typography>
+
+        {user?.canCreateNewCourse && <NewCourseButton />}
+      </Stack>
 
       <SearchField
         autoFocus
