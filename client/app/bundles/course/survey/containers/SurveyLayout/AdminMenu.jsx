@@ -131,7 +131,7 @@ const AdminMenu = (props) => {
   return (
     <>
       <IconButton onClick={handleClick}>
-        <MoreVert htmlColor="white" />
+        <MoreVert />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
