@@ -696,7 +696,7 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
     },
     {
       path: '/',
-      element: <CourselessContainer withoutCourseSwitcher />,
+      element: <CourselessContainer withGotoCoursesLink withUserMenu />,
       children: [
         {
           index: true,
@@ -706,7 +706,7 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
     },
     {
       path: '*',
-      element: <CourselessContainer />,
+      element: <CourselessContainer withCourseSwitcher withUserMenu />,
       children: [
         reservedRoutes,
         {

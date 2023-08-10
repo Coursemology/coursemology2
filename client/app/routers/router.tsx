@@ -26,7 +26,7 @@ const createAppRouter = (router: RouteObject[]): RouteObject[] => [
       ...router,
       {
         path: '*',
-        element: <CourselessContainer />,
+        element: <CourselessContainer withCourseSwitcher withUserMenu />,
         children: [
           {
             path: 'courses',

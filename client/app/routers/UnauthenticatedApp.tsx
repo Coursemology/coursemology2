@@ -20,7 +20,7 @@ const unauthenticatedRouter = createAppRouter([
   protectedRoutes,
   {
     path: '*',
-    element: <CourselessContainer withoutUserMenu />,
+    element: <CourselessContainer withGotoCoursesLink />,
     children: [
       {
         index: true,
