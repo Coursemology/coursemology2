@@ -119,6 +119,7 @@ const CourseSwitcherPopupMenu = forwardRef<
               <PopupMenu.Button
                 key={course.url}
                 disabled={course.id.toString() === getCourseId()}
+                linkProps={{ to: course.url }}
                 secondary={
                   course.id.toString() === getCourseId() &&
                   t(translations.thisCourse)
@@ -131,7 +132,6 @@ const CourseSwitcherPopupMenu = forwardRef<
                   )
                 }
                 textProps={{ className: 'line-clamp-2' }}
-                to={course.url}
               >
                 {course.title}
               </PopupMenu.Button>
@@ -151,24 +151,24 @@ const CourseSwitcherPopupMenu = forwardRef<
       )}
 
       <PopupMenu.List>
-        <PopupMenu.Button to="/courses">
+        <PopupMenu.Button linkProps={{ to: '/courses' }}>
           {t(translations.seeAllPublicCourses)}
         </PopupMenu.Button>
 
         {isSuperAdmin && (
-          <PopupMenu.Button to="/admin/courses">
+          <PopupMenu.Button linkProps={{ to: '/admin/courses' }}>
             {t(translations.seeAllCoursesInAdmin)}
           </PopupMenu.Button>
         )}
 
         {(isSuperAdmin || isInstanceAdmin) && (
-          <PopupMenu.Button to="/admin/instance/courses">
+          <PopupMenu.Button linkProps={{ to: '/admin/instance/courses' }}>
             {t(translations.seeAllCoursesInInstanceAdmin)}
           </PopupMenu.Button>
         )}
 
         {user?.canCreateNewCourse && (
-          <PopupMenu.Button to="/courses?new=true">
+          <PopupMenu.Button linkProps={{ to: '/courses?new=true' }}>
             {t(translations.createNewCourse)}
           </PopupMenu.Button>
         )}

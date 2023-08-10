@@ -39,15 +39,17 @@ const AdminPopupMenuList = (): JSX.Element | null => {
       {isSuperAdmin && (
         <>
           <PopupMenu.List>
-            <PopupMenu.Button to="/admin">
+            <PopupMenu.Button linkProps={{ to: '/admin' }}>
               {t(translations.adminPanel)}
             </PopupMenu.Button>
 
-            <PopupMenu.Button to="/sidekiq">
+            <PopupMenu.Button
+              linkProps={{ opensInNewTab: true, to: '/sidekiq' }}
+            >
               {t(translations.jobsDashboard)}
             </PopupMenu.Button>
 
-            <PopupMenu.Button to="/announcements">
+            <PopupMenu.Button linkProps={{ to: '/announcements' }}>
               {t(translations.siteWideAnnouncements)}
             </PopupMenu.Button>
           </PopupMenu.List>
@@ -58,7 +60,7 @@ const AdminPopupMenuList = (): JSX.Element | null => {
 
       {(isSuperAdmin || isInstanceAdmin) && (
         <PopupMenu.List>
-          <PopupMenu.Button to="/admin/instance">
+          <PopupMenu.Button linkProps={{ to: '/admin/instance' }}>
             {t(translations.instanceAdminPanel)}
           </PopupMenu.Button>
         </PopupMenu.List>
