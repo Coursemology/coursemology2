@@ -23,8 +23,9 @@ const getLastCrumbTitle = (crumbs: CrumbData[]): CrumbTitle | null => {
 };
 
 interface CourselessContainerProps {
-  withoutCourseSwitcher?: boolean;
-  withoutUserMenu?: boolean;
+  withCourseSwitcher?: boolean;
+  withGotoCoursesLink?: boolean;
+  withUserMenu?: boolean;
 }
 
 const CourselessContainer = (props: CourselessContainerProps): JSX.Element => {
@@ -42,8 +43,9 @@ const CourselessContainer = (props: CourselessContainerProps): JSX.Element => {
       <header>
         <BrandingHead
           title={title}
-          withoutCourseSwitcher={props.withoutCourseSwitcher}
-          withoutUserMenu={props.withoutUserMenu}
+          withCourseSwitcher={props.withCourseSwitcher}
+          withGotoCoursesLink={props.withGotoCoursesLink}
+          withUserMenu={props.withUserMenu}
         />
       </header>
 

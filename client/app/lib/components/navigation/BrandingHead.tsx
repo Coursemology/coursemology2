@@ -30,8 +30,9 @@ const translations = defineMessages({
 
 interface BrandingHeadProps {
   title?: string | null;
-  withoutCourseSwitcher?: boolean;
-  withoutUserMenu?: boolean;
+  withCourseSwitcher?: boolean;
+  withGotoCoursesLink?: boolean;
+  withUserMenu?: boolean;
 }
 
 const Brand = (): JSX.Element => {
@@ -119,8 +120,11 @@ const BrandingHead = (props: BrandingHeadProps): JSX.Element => {
   const { courses } = useAppContext();
 
   const shouldShowCourseSwitcher =
-    !props.withoutCourseSwitcher &&
+    props.withCourseSwitcher &&
     (Boolean(courses?.length) || location.pathname !== '/courses');
+
+  const shouldShowGoToCoursesLink =
+    (shouldShowCourseSwitcher && !courses?.length) || props.withGotoCoursesLink;
 
   return (
     <>
@@ -137,21 +141,22 @@ const BrandingHead = (props: BrandingHeadProps): JSX.Element => {
         </div>
 
         <div className="flex h-full items-center space-x-4">
-          {shouldShowCourseSwitcher &&
-            (courses?.length ? (
-              <Button
-                endIcon={<KeyboardArrowDown />}
-                onClick={(e): void => courseSwitcherRef.current?.open(e)}
-              >
-                {t(translations.goToOtherCourses)}
-              </Button>
-            ) : (
-              <Link to="/courses">
-                <Button>{t(translations.goToOtherCourses)}</Button>
-              </Link>
-            ))}
+          {shouldShowCourseSwitcher && courses?.length && (
+            <Button
+              endIcon={<KeyboardArrowDown />}
+              onClick={(e): void => courseSwitcherRef.current?.open(e)}
+            >
+              {t(translations.goToOtherCourses)}
+            </Button>
+          )}
 
-          {!props.withoutUserMenu && <UserMenuButton />}
+          {shouldShowGoToCoursesLink && (
+            <Link to="/courses">
+              <Button>{t(translations.goToOtherCourses)}</Button>
+            </Link>
+          )}
+
+          {props.withUserMenu && <UserMenuButton />}
         </div>
       </BrandingHeadContainer>
 
