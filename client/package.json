@@ -180,7 +180,7 @@
     "mkdirp": "^3.0.1",
     "postcss": "^8.4.27",
     "postcss-loader": "^7.3.3",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.1",
     "prettier-plugin-tailwindcss": "^0.4.1",
     "react-refresh": "^0.14.0",
     "redux-logger": "^3.0.6",
