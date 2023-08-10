@@ -17,13 +17,16 @@ export const fetchComponentSettings = async (): Data => {
 export const updateComponentSettings = async (data: CourseComponents): Data => {
   const adaptedData: CourseComponentsPostData = {
     settings_components: {
-      enabled_component_ids: data.reduce((enabledComponentIds, component) => {
-        if (component.enabled) {
-          enabledComponentIds.push(component.id);
-        }
+      enabled_component_ids: data.reduce(
+        (enabledComponentIds, component) => {
+          if (component.enabled) {
+            enabledComponentIds.push(component.id);
+          }
 
-        return enabledComponentIds;
-      }, <CourseComponent['id'][]>[]),
+          return enabledComponentIds;
+        },
+        <CourseComponent['id'][]>[],
+      ),
     },
   };
 

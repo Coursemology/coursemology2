@@ -34,7 +34,9 @@ const NEW_MCQ_MRQ_TEMPLATE: McqMrqData['question'] = {
   randomizeOptions: false,
 };
 
-const getMcqMrqType = (params: URLSearchParams): McqMrqFormData['mcqMrqType'] =>
+const getMcqMrqType = (
+  params: URLSearchParams,
+): McqMrqFormData['mcqMrqType'] =>
   params.get('multiple_choice') === 'true' ? 'mcq' : 'mrq';
 
 const NewMcqMrqPage = (): JSX.Element => {

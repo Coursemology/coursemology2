@@ -114,8 +114,9 @@ const useTanStackTableBuilder = <D extends object>(
               getFilterLabel: getRealColumn(index)?.filterProps?.getLabel,
               onAddFilter: (value): void => {
                 resetPagination();
-                header.column.setFilterValue((currentFilters?: unknown[]) =>
-                  currentFilters?.filter((filter) => filter !== value),
+                header.column.setFilterValue(
+                  (currentFilters?: unknown[]) =>
+                    currentFilters?.filter((filter) => filter !== value),
                 );
               },
               onClearFilters: (): void => {
