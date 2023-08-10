@@ -45,7 +45,7 @@ const translations = defineMessages({
     id: 'app.ErrorPage.forbiddenIllustrationAttribution',
     defaultMessage:
       'Graphic of an astronaut floating in space is created by <author>Storyset</author> from ' +
-      '<source>www.storyset.com</source>, with modifications. Otherwise, <back>go back</back>.',
+      '<source>www.storyset.com</source>, with modifications.',
   },
   error: {
     id: 'app.ErrorPage.error',
@@ -60,13 +60,13 @@ const translations = defineMessages({
     id: 'app.ErrorPage.errorIllustrationAttribution1',
     defaultMessage:
       'Graphic of a planet earth in space is created by <author>Storyset</author> from ' +
-      '<source>www.storyset.com</source>, with modifications. Otherwise, <back>go back</back>.',
+      '<source>www.storyset.com</source>, with modifications.',
   },
   errorIllustrationAttribution2: {
     id: 'app.ErrorPage.errorIllustrationAttribution2',
     defaultMessage:
       'Graphic of a fire ball is created by <author>Storyset</author> from ' +
-      '<source>www.storyset.com</source>, with modifications. Otherwise, <back>go back</back>.',
+      '<source>www.storyset.com</source>, with modifications.',
   },
 });
 
