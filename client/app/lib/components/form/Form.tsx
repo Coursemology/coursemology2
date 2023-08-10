@@ -3,7 +3,7 @@ import { ReactNode, useState } from 'react';
 import useEmitterFactory, { Emits } from 'react-emitter-factory';
 import {
   Control,
-  DeepPartial,
+  DefaultValues,
   FieldPath,
   FieldPathValue,
   FieldValues,
@@ -145,7 +145,7 @@ const Form = <
   const [initialValues, setInitialValues] = useState(props.initialValues);
 
   const methods = useForm({
-    defaultValues: props.initialValues as DeepPartial<D>,
+    defaultValues: props.initialValues as DefaultValues<D>,
     resolver: schema && transformableResolver(yupResolver(schema), transformer),
     context: schema && validationContext,
   });
