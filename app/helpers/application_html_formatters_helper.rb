@@ -13,7 +13,7 @@ module ApplicationHTMLFormattersHelper
 
   # List of video hosting site URLs to allow
   VIDEO_URL_WHITELIST = Regexp.union(
-    /\A(?:https?:)?\/\/(?:www\.)?youtube\.com\//,
+    /\A(?:https?:)?\/\/(?:www\.)?(?:m.)?youtube\.com\//,
     /\A(?:https?:)?\/\/(?:www\.)?youtu.be\//,
     /\A(?:https?:)?\/\/(?:www\.)?vimeo\.com\//,
     /\A(?:https?:)?\/\/(?:www\.)?vine\.co\//,
