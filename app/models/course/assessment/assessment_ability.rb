@@ -154,12 +154,18 @@ module Course::Assessment::AssessmentAbility
   end
 
   def define_teaching_staff_assessment_permissions
+    allow_teaching_staff_read_tab_and_categories
     allow_teaching_staff_manage_assessments
     allow_teaching_staff_grade_assessment_submissions
     allow_teaching_staff_manage_assessment_annotations
     disallow_teaching_staff_publish_assessment_submission_grades
     disallow_teaching_staff_force_submit_assessment_submissions
     disallow_teaching_staff_delete_assessment_submissions
+  end
+
+  def allow_teaching_staff_read_tab_and_categories
+    can :read, Course::Assessment::Tab, category: { course_id: course.id }
+    can :read, Course::Assessment::Category, course_id: course.id
   end
 
   def allow_teaching_staff_manage_assessments
