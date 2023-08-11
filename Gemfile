@@ -43,6 +43,8 @@ gem 'html-pipeline'
 gem 'sanitize', '>= 4.6.3'
 gem 'rinku'
 gem 'html-pipeline-rouge_filter', git: 'https://github.com/ekowidianto/html-pipeline-rouge_filter.git'
+gem 'ruby-oembed'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 # Slim as the templating language
