@@ -18,7 +18,8 @@ module ApplicationHTMLFormattersHelper
     /\A(?:https?:)?\/\/(?:www\.)?(?:player.)?vimeo\.com\//,
     /\A(?:https?:)?\/\/(?:www\.)?vine\.co\//,
     /\A(?:https?:)?\/\/(?:www\.)?instagram\.com\//,
-    /\A(?:https?:)?\/\/(?:www\.)?dailymotion\.com\//,
+    /\A(?:https?:)?\/\/(?:www\.)?(?:geo.)?dailymotion\.com\//,
+    /\A(?:https?:)?\/\/(?:www\.)?dai\.ly\//,
     /\A(?:https?:)?\/\/(?:www\.)?youku\.com\//
   )
 
