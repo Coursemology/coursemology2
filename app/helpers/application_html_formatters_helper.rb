@@ -22,6 +22,22 @@ module ApplicationHTMLFormattersHelper
     /\A(?:https?:)?\/\/(?:www\.)?youku\.com\//
   )
 
+  OEMBED_WHITELIST_TRANSFORMER = lambda do |env|
+    node, node_name = env[:node], env[:node_name]
+
+    return if env[:is_whitelisted] || !node.element?
+
+    return unless node_name == 'oembed'
+    return unless node['url']&.match VIDEO_URL_WHITELIST
+
+    resource = OEmbed::Providers.get(node['url'])
+    new_node = Nokogiri::HTML5.fragment(resource.html).children.first
+
+    node.add_next_sibling(new_node)
+
+    { node_whitelist: [node] }
+  end
+
   # Transformer to whitelist iframes containing embedded video content
   VIDEO_WHITELIST_TRANSFORMER = lambda do |env|
     node, node_name = env[:node], env[:node_name]
@@ -58,7 +74,7 @@ module ApplicationHTMLFormattersHelper
   end
 
   # SanitizationFilter Custom Options
-  # Link: https://github.com/jch/html-pipeline#2-how-do-i-customize-a-whitelist-for-sanitizationfilters
+  # See https://github.com/gjtorikian/html-pipeline#2-how-do-i-customize-an-allowlist-for-sanitizationfilters
   SANITIZATION_FILTER_WHITELIST = begin
     list = HTML::Pipeline::SanitizationFilter::ALLOWLIST.deep_dup
     list[:remove_contents] = ['style']
@@ -73,7 +89,7 @@ module ApplicationHTMLFormattersHelper
       'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'text-align',
       'width', 'list-style-type'
     ] }
-    list[:transformers] |= [VIDEO_WHITELIST_TRANSFORMER, IMAGE_WHITELIST_TRANSFORMER]
+    list[:transformers] |= [OEMBED_WHITELIST_TRANSFORMER, VIDEO_WHITELIST_TRANSFORMER, IMAGE_WHITELIST_TRANSFORMER]
     list
   end
 
