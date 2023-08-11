@@ -44,6 +44,15 @@
   [role='button'] {
     @apply cursor-pointer;
   }
+
+  /* For embed videos */
+  figure.media {
+    @apply m-0 relative aspect-video max-w-3xl;
+  }
+
+  figure.media > iframe {
+    @apply w-full h-full absolute;
+  }
 }
 
 @layer utilities {
