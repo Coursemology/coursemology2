@@ -1,4 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
@@ -18,7 +19,10 @@ const TextResponse = (props) => {
       control={control}
       name={`${answerId}.answer_text`}
       render={({ field }) => (
-        <div dangerouslySetInnerHTML={{ __html: field.value }} />
+        <Typography
+          dangerouslySetInnerHTML={{ __html: field.value }}
+          variant="body2"
+        />
       )}
     />
   );
