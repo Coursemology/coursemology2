@@ -120,6 +120,81 @@ RSpec.describe ApplicationFormattersHelper do
           expect(helper.format_html(html)).to be_empty
         end
       end
+
+      context 'when oembed tags are present' do
+        it 'transforms embedded content from youtube' do
+          html = <<-HTML
+            <oembed url="https://www.youtube.com/watch?v=jNQXAC9IVRw"></oembed>
+            <oembed url="https://youtube.com/watch?v=jNQXAC9IVRw"></oembed>
+            <oembed url="https://m.youtube.com/watch?v=jNQXAC9IVRw"></oembed>
+            <oembed url="https://youtu.be/jNQXAC9IVRw"></oembed>
+            <oembed url="http://www.youtube.com/watch?v=jNQXAC9IVRw"></oembed>
+            <oembed url="http://youtube.com/watch?v=jNQXAC9IVRw"></oembed>
+            <oembed url="http://m.youtube.com/watch?v=jNQXAC9IVRw"></oembed>
+            <oembed url="http://youtu.be/jNQXAC9IVRw"></oembed>
+          HTML
+
+          embed_count = html.scan('<oembed').size
+          result = helper.format_html(html)
+
+          expect(result.scan('<iframe').size).to eq(embed_count)
+          expect(result.scan('src="https://www.youtube.com/embed/jNQXAC9IVRw').size).to eq(embed_count)
+        end
+
+        it 'transforms embedded content from dailymotion' do
+          html = <<-HTML
+            <oembed url="https://www.dailymotion.com/video/x3k7o56"></oembed>
+            <oembed url="https://dailymotion.com/video/x3k7o56"></oembed>
+            <oembed url="https://dai.ly/x3k7o56"></oembed>
+            <oembed url="http://www.dailymotion.com/video/x3k7o56"></oembed>
+            <oembed url="http://dailymotion.com/video/x3k7o56"></oembed>
+            <oembed url="http://dai.ly/x3k7o56"></oembed>
+          HTML
+
+          embed_count = html.scan('<oembed').size
+          result = helper.format_html(html)
+
+          expect(result.scan('<iframe').size).to eq(embed_count)
+          expect(result.scan('src="https://geo.dailymotion.com/player.html?video=x3k7o56').size).to eq(embed_count)
+        end
+
+        it 'transforms embedded content from vimeo' do
+          html = <<-HTML
+            <oembed url="https://vimeo.com/channels/staffpicks/852794606"></oembed>
+            <oembed url="https://vimeo.com/852794606"></oembed>
+            <oembed url="https://www.vimeo.com/channels/staffpicks/852794606"></oembed>
+            <oembed url="https://www.vimeo.com/852794606"></oembed>
+            <oembed url="http://vimeo.com/channels/staffpicks/852794606"></oembed>
+            <oembed url="http://vimeo.com/852794606"></oembed>
+            <oembed url="http://www.vimeo.com/channels/staffpicks/852794606"></oembed>
+            <oembed url="http://www.vimeo.com/852794606"></oembed>
+          HTML
+
+          embed_count = html.scan('<oembed').size
+          result = helper.format_html(html)
+
+          expect(result.scan('<iframe').size).to eq(embed_count)
+          expect(result.scan('src="https://player.vimeo.com/video/852794606').size).to eq(embed_count)
+        end
+
+        it 'removes forbidden embedded content' do
+          html = <<-HTML
+            <oembed url="//beta.coursemology.org"></oembed>
+            <oembed url="//www.youtubeXcom.com"></oembed>
+            <oembed url="//wwwXinstagram.com"></oembed>
+            <oembed url="//vine.com"></oembed>
+            <oembed url="//dailymotion.co"></oembed>
+            <oembed url="//vimeo.org"></oembed>
+          HTML
+
+          expect(helper.format_html(html).squish).to be_empty
+        end
+
+        it 'removes oembed tags without url attribute' do
+          html = '<oembed></oembed>'
+          expect(helper.format_html(html)).to be_empty
+        end
+      end
     end
 
     describe '#format_code_block' do
