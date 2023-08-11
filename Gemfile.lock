@@ -482,6 +482,7 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
+    ruby-oembed (0.16.1)
     ruby-progressbar (1.13.0)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
@@ -638,6 +639,7 @@ DEPENDENCIES
   rspec-retry
   rspec_junit_formatter
   rubocop-rails
+  ruby-oembed
   rubyzip
   rwordnet!
   sanitize (>= 4.6.3)
