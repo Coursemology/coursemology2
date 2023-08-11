@@ -172,6 +172,8 @@ RSpec.describe Course::Assessment do
       # Course Tabs and Categories
       it { is_expected.not_to be_able_to(:manage, tab) }
       it { is_expected.not_to be_able_to(:manage, category) }
+      it { is_expected.to be_able_to(:read, tab) }
+      it { is_expected.to be_able_to(:read, category) }
 
       # Course Assessments
       it { is_expected.to be_able_to(:manage, unpublished_assessment) }
