@@ -65,7 +65,7 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
     <Page>
       {announcementPermission && (
         <Button
-          key="new-announcement-button"
+          className="float-right"
           id="new-announcement-button"
           onClick={(): void => setIsOpen(true)}
           variant="outlined"

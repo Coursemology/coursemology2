@@ -55,11 +55,9 @@ const AnnouncementsIndex: FC<Props> = (props) => {
   return (
     <Page>
       <Button
-        key="new-announcement-button"
+        className="float-right"
         id="new-announcement-button"
-        onClick={(): void => {
-          setIsOpen(true);
-        }}
+        onClick={(): void => setIsOpen(true)}
         variant="outlined"
       >
         {intl.formatMessage(translations.newAnnouncement)}
