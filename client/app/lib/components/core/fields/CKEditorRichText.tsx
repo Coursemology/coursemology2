@@ -131,6 +131,16 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
               },
             },
             placeholder,
+            mediaEmbed: {
+              removeProviders: [
+                'spotify',
+                'instagram',
+                'twitter',
+                'googleMaps',
+                'flickr',
+                'facebook',
+              ],
+            },
           }}
           data={value}
           disabled={disabled}
