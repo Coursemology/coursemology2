@@ -15,7 +15,7 @@ module ApplicationHTMLFormattersHelper
   VIDEO_URL_WHITELIST = Regexp.union(
     /\A(?:https?:)?\/\/(?:www\.)?(?:m.)?youtube\.com\//,
     /\A(?:https?:)?\/\/(?:www\.)?youtu.be\//,
-    /\A(?:https?:)?\/\/(?:www\.)?vimeo\.com\//,
+    /\A(?:https?:)?\/\/(?:www\.)?(?:player.)?vimeo\.com\//,
     /\A(?:https?:)?\/\/(?:www\.)?vine\.co\//,
     /\A(?:https?:)?\/\/(?:www\.)?instagram\.com\//,
     /\A(?:https?:)?\/\/(?:www\.)?dailymotion\.com\//,
