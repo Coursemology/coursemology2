@@ -54,7 +54,9 @@ const SignInPage = (): JSX.Element => {
 
       if (error.response?.status === 401) {
         setErrored(true);
-        toast.error(t(translations.invalidEmailOrPassword));
+        toast.error(
+          error.response?.data?.error || t(translations.invalidEmailOrPassword),
+        );
       }
     } finally {
       setSubmitting(false);
