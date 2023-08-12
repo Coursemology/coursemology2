@@ -50,11 +50,13 @@ const useNextURL = (): { nextURL: string | null; expired: boolean } => {
 /**
  * Redirects to the sign in page with the current URL as the next URL. To be used
  * in scopes outside React and/or React Router, e.g., Axios interceptors.
+ * Do not redirect to the same /users/sign_in url.
  *
  * @param expired Whether this redirect is caused by an expired session.
  */
 export const redirectToSignIn = (expired?: boolean): void => {
-  window.location.href = getAuthenticatableURL(getCurrentURL(), expired);
+  if (!window.location.pathname.startsWith('/users/sign_in'))
+    window.location.href = getAuthenticatableURL(getCurrentURL(), expired);
 };
 
 export const redirectToForbidden = (): void => {
