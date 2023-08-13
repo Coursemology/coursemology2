@@ -38,7 +38,7 @@ class Course::CoursesController < Course::Controller
   protected
 
   def publicly_accessible?
-    Set[:index, :sidebar].include?(action_name.to_sym)
+    Set[:index].include?(action_name.to_sym)
   end
 
   private
