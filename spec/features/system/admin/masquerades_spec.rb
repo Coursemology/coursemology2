@@ -29,7 +29,7 @@ RSpec.feature 'System: Administration: Masquerade', js: true do
       let(:user) { create(:instance_user, role: :administrator).user }
 
       scenario 'I cannot masquerade a user' do
-        visit masquerade_path(user_to_masquerade)
+        visit admin_users_path
 
         expect_forbidden
       end
@@ -39,7 +39,7 @@ RSpec.feature 'System: Administration: Masquerade', js: true do
       let(:user) { create(:instance_user).user }
 
       scenario 'I cannot masquerade a user' do
-        visit masquerade_path(user_to_masquerade)
+        visit admin_users_path
 
         expect_forbidden
       end
