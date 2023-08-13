@@ -103,10 +103,6 @@ import InstanceUsersIndex from 'bundles/system/admin/instance/instance/pages/Ins
 import InstanceUsersInvitations from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvitations';
 import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvite';
 import AccountSettings from 'bundles/user/AccountSettings';
-import {
-  masqueradeLoader,
-  stopMasqueradeLoader,
-} from 'bundles/users/masqueradeLoader';
 import UserShow from 'bundles/users/pages/UserShow';
 import { achievementHandle } from 'course/achievement/handles';
 import assessmentAttemptLoader from 'course/assessment/attemptLoader';
@@ -783,19 +779,6 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         {
           path: 'users',
           children: [
-            {
-              path: 'masquerade',
-              children: [
-                {
-                  index: true,
-                  loader: masqueradeLoader(t),
-                },
-                {
-                  path: 'back',
-                  loader: stopMasqueradeLoader(t),
-                },
-              ],
-            },
             {
               path: ':userId',
               element: <UserShow />,
