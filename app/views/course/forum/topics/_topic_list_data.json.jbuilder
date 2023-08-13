@@ -17,12 +17,16 @@ json.voteCount topic.vote_count
 json.postCount topic.post_count
 json.viewCount topic.view_count
 
-json.firstPostCreator do
-  json.partial! 'course/forum/posts/post_creator_data', post: first_post
+if first_post
+  json.firstPostCreator do
+    json.partial! 'course/forum/posts/post_creator_data', post: first_post
+  end
 end
 
-json.latestPostCreator do
-  json.partial! 'course/forum/posts/post_creator_data', post: last_post
+if last_post
+  json.latestPostCreator do
+    json.partial! 'course/forum/posts/post_creator_data', post: last_post
+  end
 end
 
 json.emailSubscription do

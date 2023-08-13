@@ -86,8 +86,8 @@ export interface ForumTopicListData {
   postCount: number;
   viewCount: number;
 
-  firstPostCreator: PostCreatorData;
-  latestPostCreator: PostCreatorData;
+  firstPostCreator?: PostCreatorData;
+  latestPostCreator?: PostCreatorData;
 
   emailSubscription: EmailSubscriptionSetting;
   permissions: ForumTopicListDataPermissions;
@@ -161,8 +161,8 @@ export interface ForumTopicEntity {
   postCount: ForumTopicListData['postCount'];
   viewCount: ForumTopicListData['viewCount'];
 
-  firstPostCreator: ForumTopicListData['firstPostCreator'];
-  latestPostCreator: ForumTopicListData['latestPostCreator'];
+  firstPostCreator?: ForumTopicListData['firstPostCreator'];
+  latestPostCreator?: ForumTopicListData['latestPostCreator'];
 
   emailSubscription: ForumTopicListData['emailSubscription'];
   permissions: ForumTopicListData['permissions'];

@@ -168,14 +168,16 @@ const ForumTopicTable: FC<Props> = (props) => {
         filter: false,
         sort: true,
         alignCenter: false,
-        customBodyRenderLite: (dataIndex): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element | null => {
           const topic = forumTopics[dataIndex];
           const firstPostCreator = topic.firstPostCreator;
-          const postCreatorObject = PostCreatorObject({
-            creator: firstPostCreator.creator,
-            isAnonymous: firstPostCreator.isAnonymous,
-            canViewAnonymous: firstPostCreator.permissions.canViewAnonymous,
-          });
+          const postCreatorObject =
+            firstPostCreator &&
+            PostCreatorObject({
+              creator: firstPostCreator.creator,
+              isAnonymous: firstPostCreator.isAnonymous,
+              canViewAnonymous: firstPostCreator.permissions.canViewAnonymous,
+            });
           return (
             <>
               <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
@@ -210,13 +212,15 @@ const ForumTopicTable: FC<Props> = (props) => {
                   <TopicTypeIcon topic={topic} />
                 </div>
               </div>
-              <div>
-                {t(translations.startedBy)}{' '}
-                <Link opensInNewTab to={postCreatorObject.userUrl}>
-                  {postCreatorObject.name}
-                </Link>
-                {postCreatorObject.visibilityIcon}
-              </div>
+              {postCreatorObject && (
+                <div>
+                  {t(translations.startedBy)}{' '}
+                  <Link opensInNewTab to={postCreatorObject.userUrl}>
+                    {postCreatorObject.name}
+                  </Link>
+                  {postCreatorObject.visibilityIcon}
+                </div>
+              )}
             </>
           );
         },
@@ -240,8 +244,8 @@ const ForumTopicTable: FC<Props> = (props) => {
               value1.data as ForumTopicEntity['latestPostCreator'];
             const latestPost2 =
               value2.data as ForumTopicEntity['latestPostCreator'];
-            const date1 = new Date(latestPost1.createdAt);
-            const date2 = new Date(latestPost2.createdAt);
+            const date1 = new Date(latestPost1?.createdAt ?? 0);
+            const date2 = new Date(latestPost2?.createdAt ?? 0);
             return (
               (date1.getTime() - date2.getTime()) * (order === 'asc' ? 1 : -1)
             );
