@@ -13,10 +13,12 @@ import BrandingHead from '../components/navigation/BrandingHead';
 import { useAppContext } from './AppContainer';
 
 const getLastCrumbTitle = (crumbs: CrumbData[]): CrumbTitle | null => {
-  const content = crumbs.at(-1)?.content;
+  const content = crumbs[crumbs.length - 1]?.content;
   if (!content) return null;
 
-  const actualContent = Array.isArray(content) ? content.at(-1) : content;
+  const actualContent = Array.isArray(content)
+    ? content[content.length - 1]
+    : content;
   if (!actualContent) return null;
 
   return actualContent.title;
