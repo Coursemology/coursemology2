@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 class Course::Achievement < ApplicationRecord
+  include Course::SanitizeDescriptionConcern
+
   acts_as_conditional
   mount_uploader :badge, ImageUploader
   has_many_attachments on: :description
 
   after_initialize :set_defaults, if: :new_record?
-  before_save :sanitize_text
 
   validates :title, length: { maximum: 255 }, presence: true
   validates :weight, numericality: { only_integer: true }, presence: true
@@ -75,9 +76,5 @@ class Course::Achievement < ApplicationRecord
 
   def duplicate_badge(other)
     self.badge = nil if other.badge_url && !badge.duplicate_from(other.badge)
-  end
-
-  def sanitize_text
-    self.description = ApplicationController.helpers.format_ckeditor_rich_text(description)
   end
 end

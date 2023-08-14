@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 #
 # This concern helps sanitize items with description fields, in case a malicious user bypasses
-# the sanitization provided by the WYSIWHG editor.
+# the sanitization provided by the WYSIWYG editor.
 module Course::SanitizeDescriptionConcern
   extend ActiveSupport::Concern
 
@@ -12,6 +12,6 @@ module Course::SanitizeDescriptionConcern
   private
 
   def sanitize_description
-    self.description = ApplicationController.helpers.format_ckeditor_rich_text(description)
+    self.description = ApplicationController.helpers.sanitize_ckeditor_rich_text(description)
   end
 end
