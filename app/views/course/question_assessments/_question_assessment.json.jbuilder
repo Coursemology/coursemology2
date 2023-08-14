@@ -10,7 +10,7 @@ json.defaultTitle question_assessment.default_title(question_number)
 json.title question.title
 json.unautogradable !question.auto_gradable? && assessment.autograded?
 json.type question_assessment.question.question_type
-json.description question.description unless question.description.blank?
+json.description format_ckeditor_rich_text(question.description) unless question.description.blank?
 
 if can?(:manage, assessment)
   json.editUrl url_for([:edit, current_course, assessment, question.specific])
