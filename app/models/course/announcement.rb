@@ -20,6 +20,6 @@ class Course::Announcement < ApplicationRecord
   belongs_to :course, inverse_of: :announcements
 
   def sanitize_text
-    self.content = ApplicationController.helpers.format_ckeditor_rich_text(content)
+    self.content = ApplicationController.helpers.sanitize_ckeditor_rich_text(content)
   end
 end
