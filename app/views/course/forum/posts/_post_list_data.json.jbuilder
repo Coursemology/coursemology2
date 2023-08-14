@@ -4,7 +4,7 @@ json.id post.id
 json.topicId topic.id
 json.parentId post.parent_id
 json.postUrl course_forum_topic_post_path(current_course, forum, topic, post)
-json.text post.text
+json.text format_ckeditor_rich_text(post.text)
 json.createdAt post.created_at
 json.isAnswer post.answer
 json.isUnread post.unread?(current_user)
