@@ -169,7 +169,7 @@
     "eslint-plugin-sonarjs": "^0.19.0",
     "expose-loader": "^4.1.0",
     "favicons": "^7.1.4",
-    "favicons-webpack-plugin": "^6.0.0",
+    "favicons-webpack-plugin": "^6.0.1",
     "fork-ts-checker-webpack-plugin": "^8.0.0",
     "glob": "^10.3.3",
     "html-webpack-plugin": "^5.5.3",

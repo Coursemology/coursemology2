@@ -5352,10 +5352,10 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
-favicons-webpack-plugin@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/favicons-webpack-plugin/-/favicons-webpack-plugin-6.0.0.tgz#a54777103e98ad64929e3ed5fbcafe6b3bae357c"
-  integrity sha512-wryICW2NjR9BORYjP1PN3CDbjVzXDxcemLMWQBdLJGhZlj0sYF7NNq+ddQtO/YJvBurYQ3YR1df5uXZRmcF9hw==
+favicons-webpack-plugin@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/favicons-webpack-plugin/-/favicons-webpack-plugin-6.0.1.tgz#56748abc612b605c684e7dcceca416531a13774a"
+  integrity sha512-Gl0Co4zIZq74EKXdpfe8FaoJqbuf0undV4UgpsL34vqICRAYUDwQdp3D+z+uxEOV0i9o+vHDn7Q6jaSxRiDJUA==
   dependencies:
     find-root "^1.1.0"
     parse-author "^2.0.0"
