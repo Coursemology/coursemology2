@@ -268,8 +268,6 @@ class VisibleSubmissionEditIndex extends Component {
         skippable,
         questionIds,
         passwordProtected,
-        categoryId,
-        tabId,
         allowPartialSubmission,
         showMcqAnswer,
         showMcqMrqSolution,
@@ -286,9 +284,6 @@ class VisibleSubmissionEditIndex extends Component {
       topics,
       isAutograding,
       isSaving,
-      match: {
-        params: { courseId },
-      },
     } = this.props;
 
     if (Object.values(questions).length === 0) {
@@ -296,8 +291,6 @@ class VisibleSubmissionEditIndex extends Component {
         <SubmissionEmptyForm
           attempting={workflowState === workflowStates.Attempting}
           canUpdate={canUpdate}
-          categoryId={categoryId}
-          courseId={courseId}
           graderView={graderView}
           handleSaveGrade={() => this.handleSaveGrade()}
           handleUnsubmit={() => this.handleUnsubmit()}
@@ -305,7 +298,6 @@ class VisibleSubmissionEditIndex extends Component {
           onSubmit={() => this.onSubmit()}
           published={workflowState === workflowStates.Published}
           submitted={workflowState === workflowStates.Submitted}
-          tabId={tabId}
         />
       );
     }

@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Card } from '@mui/material';
+import { Button, Card, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import history from 'lib/history';
 
 import { formNames } from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
@@ -41,8 +40,6 @@ const SubmissionEmptyForm = (props) => {
   const {
     attempting,
     canUpdate,
-    categoryId,
-    courseId,
     graderView,
     handleSaveGrade,
     onSubmit,
@@ -51,7 +48,6 @@ const SubmissionEmptyForm = (props) => {
     isSaving,
     published,
     submitted,
-    tabId,
   } = props;
 
   const { handleSubmit } = useForm();
@@ -61,18 +57,6 @@ const SubmissionEmptyForm = (props) => {
   if (!needShowSubmitButton && !needShowUnsubmitButton) {
     return null;
   }
-
-  const submitAndRedirect = () => {
-    onSubmit()
-      .then(() =>
-        history.push(
-          `/courses/${courseId}/assessments?category=${categoryId}&tab=${tabId}`,
-        ),
-      )
-      .then(() => {
-        window.location.reload(true);
-      });
-  };
 
   const renderGradingPanel = () => {
     if (attempting) {
@@ -106,7 +90,10 @@ const SubmissionEmptyForm = (props) => {
     }
     return (
       <div style={styles.submitContainer}>
-        <FormattedMessage {...translations.submitNoQuestionExplain} />
+        <Typography variant="body2">
+          <FormattedMessage {...translations.submitNoQuestionExplain} />
+        </Typography>
+
         <Button
           color="primary"
           disabled={isSaving}
@@ -153,10 +140,7 @@ const SubmissionEmptyForm = (props) => {
 
   return (
     <Card style={styles.questionCardContainer}>
-      <form
-        id={formNames.SUBMISSION}
-        onSubmit={handleSubmit(() => submitAndRedirect())}
-      >
+      <form id={formNames.SUBMISSION} onSubmit={handleSubmit(onSubmit)}>
         {renderGradingPanel()}
         {renderSaveGradeButton()}
         {renderSubmitButton()}
@@ -177,10 +161,6 @@ SubmissionEmptyForm.propTypes = {
   submitted: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
-
-  courseId: PropTypes.string.isRequired,
-  categoryId: PropTypes.number.isRequired,
-  tabId: PropTypes.number.isRequired,
 
   handleSaveGrade: PropTypes.func,
   handleUnsubmit: PropTypes.func,
