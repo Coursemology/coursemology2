@@ -87,11 +87,6 @@ const DashboardPage = (): JSX.Element => {
   const { processedItems: filteredCourses, handleSearch } = useItems(
     courses ?? [],
     ['title'],
-    (rawCourses) =>
-      rawCourses?.slice().sort((a, b) => {
-        return moment(b.lastActiveAt).diff(moment(a.lastActiveAt));
-      }),
-    courses?.length ?? 0,
   );
 
   return (
