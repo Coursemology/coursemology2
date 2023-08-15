@@ -14,7 +14,6 @@ class Course::Video::VideosController < Course::Video::Controller
         preload_video_item
         @videos = @videos.
                   from_tab(current_tab).
-                  ordered_by_date_and_title.
                   includes(:statistic).
                   with_submissions_by(current_user)
 

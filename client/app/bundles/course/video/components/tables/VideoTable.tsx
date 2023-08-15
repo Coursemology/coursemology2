@@ -40,6 +40,8 @@ const VideoTable: FC<Props> = (props) => {
     return <Note message={intl.formatMessage(translations.noVideo)} />;
   }
 
+  videos.sort((a, b) => a.title.localeCompare(b.title));
+
   const options: TableOptions = {
     download: false,
     filter: false,
