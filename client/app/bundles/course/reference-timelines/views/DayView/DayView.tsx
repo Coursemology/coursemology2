@@ -4,6 +4,7 @@ import { TimelineData } from 'types/course/referenceTimelines';
 
 import BetaChip from 'lib/components/core/BetaChip';
 import SearchField from 'lib/components/core/fields/SearchField';
+import useItems from 'lib/hooks/items/useItems';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -25,7 +26,9 @@ const DayView = (): JSX.Element => {
   const calendarRef = useRef<ComponentRef<typeof DayCalendar>>(null);
   const contentsRef = useRef<HTMLDivElement>(null);
 
-  const [filterKeyword, setFilterKeyword] = useState('');
+  const { processedItems: filteredItems, handleSearch } = useItems(items, [
+    'title',
+  ]);
 
   const [hiddenTimelineIds, setHiddenTimelineIds] = useState<
     Set<TimelineData['id']>
@@ -36,14 +39,6 @@ const DayView = (): JSX.Element => {
 
     return timelines.filter((timeline) => !hiddenTimelineIds.has(timeline.id));
   }, [hiddenTimelineIds, timelines]);
-
-  const filteredItems = useMemo(() => {
-    if (!filterKeyword) return items;
-
-    return items.filter((item) =>
-      item.title.toLowerCase().includes(filterKeyword.toLowerCase().trim()),
-    );
-  }, [filterKeyword, items]);
 
   return (
     <main className="relative flex h-[calc(100vh_-_4rem)] overflow-hidden">
@@ -68,7 +63,7 @@ const DayView = (): JSX.Element => {
           </div>
 
           <SearchField
-            onChangeKeyword={setFilterKeyword}
+            onChangeKeyword={handleSearch}
             placeholder={t(translations.searchItems)}
           />
         </section>
