@@ -3,7 +3,6 @@ import {
   MouseEventHandler,
   ReactNode,
   useImperativeHandle,
-  useMemo,
   useState,
 } from 'react';
 import { defineMessages } from 'react-intl';
@@ -13,6 +12,7 @@ import SearchField from 'lib/components/core/fields/SearchField';
 import PopupMenu from 'lib/components/core/PopupMenu';
 import { useAppContext } from 'lib/containers/AppContainer';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useItems from 'lib/hooks/items/useItems';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
@@ -75,16 +75,13 @@ const CourseSwitcherPopupMenu = forwardRef<
   const isSuperAdmin = user?.role === 'administrator';
   const isInstanceAdmin = user?.instanceRole === 'administrator';
 
-  const [filterKeyword, setFilterKeyword] = useState('');
+  const {
+    processedItems: filteredCourses,
+    handleSearch,
+    searchKeyword,
+  } = useItems(courses ?? [], ['title']);
+
   const [showCourseIds, setShowCourseIds] = useState(false);
-
-  const filteredCourses = useMemo(() => {
-    if (!filterKeyword) return courses;
-
-    return courses?.filter((course) =>
-      course.title.toLowerCase().includes(filterKeyword.toLowerCase()),
-    );
-  }, [filterKeyword]);
 
   return (
     <PopupMenu
@@ -101,7 +98,7 @@ const CourseSwitcherPopupMenu = forwardRef<
               <SearchField
                 autoFocus
                 noIcon
-                onChangeKeyword={setFilterKeyword}
+                onChangeKeyword={handleSearch}
                 onKeyDown={(e): void => {
                   if (e.key === 'Alt') {
                     e.preventDefault();
@@ -140,7 +137,7 @@ const CourseSwitcherPopupMenu = forwardRef<
             {!filteredCourses?.length && (
               <PopupMenu.Text color="text.secondary">
                 {t(translations.noCoursesMatch, {
-                  keyword: filterKeyword,
+                  keyword: searchKeyword,
                 })}
               </PopupMenu.Text>
             )}
