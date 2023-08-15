@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 interface UseSearchHook<T> {
   searchedItems: T[];
   handleSearch: (query: string) => void;
+  searchKeyword: string;
 }
 
 const useSearch = <T>(
@@ -20,7 +21,7 @@ const useSearch = <T>(
 
         return (
           typeof value === 'string' &&
-          value.toLowerCase().includes(searchKeyword.toLowerCase())
+          value.toLowerCase().includes(searchKeyword.toLowerCase().trim())
         );
       }),
     );
@@ -31,7 +32,7 @@ const useSearch = <T>(
     setSearchKeyword(trimmedKeyword);
   };
 
-  return { searchedItems, handleSearch };
+  return { searchedItems, handleSearch, searchKeyword };
 };
 
 export default useSearch;

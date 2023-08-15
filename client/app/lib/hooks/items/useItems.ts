@@ -5,6 +5,7 @@ import useSort from './useSort';
 interface UseItemsHook<T> {
   processedItems: T[];
   handleSearch: (query: string) => void;
+  searchKeyword: string;
   currentPage: number;
   totalPages: number;
   handlePageChange: (page: number) => void;
@@ -13,10 +14,13 @@ interface UseItemsHook<T> {
 const useItems = <T>(
   items: T[],
   searchKeys: (keyof T)[],
-  sortFunc: (itemsToSort: T[]) => T[],
-  itemsPerPage: number,
+  sortFunc?: (itemsToSort: T[]) => T[],
+  itemsPerPage?: number,
 ): UseItemsHook<T> => {
-  const { searchedItems, handleSearch } = useSearch(items, searchKeys);
+  const { searchedItems, handleSearch, searchKeyword } = useSearch(
+    items,
+    searchKeys,
+  );
   const { sortedItems } = useSort(searchedItems, sortFunc);
   const { paginatedItems, currentPage, totalPages, handlePageChange } =
     usePaginate(sortedItems, itemsPerPage);
@@ -29,6 +33,7 @@ const useItems = <T>(
   return {
     processedItems: paginatedItems,
     handleSearch: handleSearchAndPaginate,
+    searchKeyword,
     currentPage,
     totalPages,
     handlePageChange,

@@ -9,7 +9,7 @@ interface UsePaginateHook<T> {
 
 const usePaginate = <T>(
   items: T[],
-  itemsPerPage: number,
+  itemsPerPage: number = items.length,
 ): UsePaginateHook<T> => {
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
