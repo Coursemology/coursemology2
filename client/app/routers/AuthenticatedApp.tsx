@@ -139,16 +139,7 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
       loader: CourseContainer.loader,
       handle: CourseContainer.handle,
       shouldRevalidate: ({ currentParams, nextParams }): boolean => {
-        const isChangingCourse = currentParams.courseId !== nextParams.courseId;
-
-        // React Router's documentation never strictly mentioned that `shouldRevalidate`
-        // should be a pure function, but a good software engineer would probably expect
-        // it to be. Until we multi-course support in our Redux store, this is where
-        // we can detect the `courseId` is changing without janky `useEffect`. It should
-        // be safe since `resetStore` does not interfere with rendering or routing.
-        if (isChangingCourse) resetStore();
-
-        return isChangingCourse;
+        return currentParams.courseId !== nextParams.courseId;
       },
       children: [
         {
