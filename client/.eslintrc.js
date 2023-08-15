@@ -136,7 +136,7 @@ module.exports = {
     ],
     'simple-import-sort/exports': 'error',
     'sonarjs/cognitive-complexity': 'off',
-    'sonarjs/no-duplicate-string': ['error', 5],
+    'sonarjs/no-duplicate-string': ['error', { threshold: 5 }],
     'sonarjs/no-small-switch': 'off',
     'sonarjs/no-nested-template-literals': 'off',
     camelcase: ['warn', { properties: 'never', allow: ['^UNSAFE_'] }],
