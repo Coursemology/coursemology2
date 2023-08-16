@@ -5,7 +5,6 @@ import {
   RouteObject,
   RouterProvider,
 } from 'react-router-dom';
-import { resetStore } from 'store';
 
 import GlobalAnnouncementIndex from 'bundles/announcements/GlobalAnnouncementIndex';
 import DashboardPage from 'bundles/common/DashboardPage';

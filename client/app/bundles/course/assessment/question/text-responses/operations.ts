@@ -27,9 +27,8 @@ export const fetchNewFileUpload = async (): Promise<
 export const fetchEdit = async (
   id: number,
 ): Promise<TextResponseFormData<'edit'>> => {
-  const response = await CourseAPI.assessment.question.textResponse.fetchEdit(
-    id,
-  );
+  const response =
+    await CourseAPI.assessment.question.textResponse.fetchEdit(id);
   return response.data;
 };
 
@@ -57,9 +56,8 @@ export const create = async (data: TextResponseData): Promise<JustRedirect> => {
   const adaptedData = adaptPostData(data);
 
   try {
-    const response = await CourseAPI.assessment.question.textResponse.create(
-      adaptedData,
-    );
+    const response =
+      await CourseAPI.assessment.question.textResponse.create(adaptedData);
 
     return response.data;
   } catch (error) {
