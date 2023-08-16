@@ -42,9 +42,8 @@ export const createVoiceQuestion = async (
   const adaptedData = adaptPostData(data);
 
   try {
-    const response = await CourseAPI.assessment.question.voiceResponse.create(
-      adaptedData,
-    );
+    const response =
+      await CourseAPI.assessment.question.voiceResponse.create(adaptedData);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;

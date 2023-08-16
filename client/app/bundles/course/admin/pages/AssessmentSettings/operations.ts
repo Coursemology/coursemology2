@@ -110,9 +110,8 @@ export const createCategory = async (
   };
 
   try {
-    const response = await CourseAPI.admin.assessments.createCategory(
-      adaptedData,
-    );
+    const response =
+      await CourseAPI.admin.assessments.createCategory(adaptedData);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
@@ -151,9 +150,8 @@ export const moveAssessments = async (
   };
 
   try {
-    const response = await CourseAPI.admin.assessments.moveAssessments(
-      adaptedData,
-    );
+    const response =
+      await CourseAPI.admin.assessments.moveAssessments(adaptedData);
     return response.data.moved_assessments_count;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;

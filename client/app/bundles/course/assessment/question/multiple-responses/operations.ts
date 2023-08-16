@@ -51,9 +51,8 @@ export const create = async (data: McqMrqData): Promise<JustRedirect> => {
   const adaptedData = adaptPostData(data);
 
   try {
-    const response = await CourseAPI.assessment.question.mcqMrq.create(
-      adaptedData,
-    );
+    const response =
+      await CourseAPI.assessment.question.mcqMrq.create(adaptedData);
 
     return response.data;
   } catch (error) {

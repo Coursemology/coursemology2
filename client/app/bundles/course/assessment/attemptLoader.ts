@@ -21,9 +21,8 @@ const assessmentAttemptLoader: Translated<LoaderFunction> =
       const assessmentId = getIdFromUnknown(params?.assessmentId);
       if (!assessmentId) return redirect('/');
 
-      const { data } = await CourseAPI.assessment.assessments.attempt(
-        assessmentId,
-      );
+      const { data } =
+        await CourseAPI.assessment.assessments.attempt(assessmentId);
 
       return redirect(data.redirectUrl);
     } catch {

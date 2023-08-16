@@ -57,9 +57,8 @@ export const fetchAssessmentUnlockRequirements = async (
 export const fetchAssessmentEditData = async (
   assessmentId: string | null,
 ): Promise<any> => {
-  const response = await CourseAPI.assessment.assessments.fetchEditData(
-    assessmentId,
-  );
+  const response =
+    await CourseAPI.assessment.assessments.fetchEditData(assessmentId);
 
   return response.data;
 };
@@ -99,9 +98,8 @@ export const attemptAssessment = async (
   assessmentId: number,
 ): Promise<JustRedirect> => {
   try {
-    const response = await CourseAPI.assessment.assessments.attempt(
-      assessmentId,
-    );
+    const response =
+      await CourseAPI.assessment.assessments.attempt(assessmentId);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError)
@@ -126,9 +124,8 @@ export const duplicateQuestion = async (
   duplicationUrl: string,
 ): Promise<QuestionDuplicationResult> => {
   try {
-    const response = await CourseAPI.assessment.assessments.duplicateQuestion(
-      duplicationUrl,
-    );
+    const response =
+      await CourseAPI.assessment.assessments.duplicateQuestion(duplicationUrl);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
@@ -151,9 +148,8 @@ export const convertMcqMrq = async (
   convertUrl: string,
 ): Promise<McqMrqListData> => {
   try {
-    const response = await CourseAPI.assessment.assessments.convertMcqMrq(
-      convertUrl,
-    );
+    const response =
+      await CourseAPI.assessment.assessments.convertMcqMrq(convertUrl);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
