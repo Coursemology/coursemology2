@@ -21,34 +21,51 @@ module.exports = merge(common, {
     devMiddleware: {
       index: false,
     },
-    proxy: {
-      context: () => true,
-      changeOrigin: true,
-      onProxyReq: (proxyReq) => {
-        proxyReq.setHeader('origin', `http://${proxyReq.host}:${SERVER_PORT}`);
+    proxy: [
+      {
+        context: () => true,
+        changeOrigin: true,
+        onProxyReq: (proxyReq) => {
+          proxyReq.setHeader(
+            'origin',
+            `http://${proxyReq.host}:${SERVER_PORT}`,
+          );
+        },
+        router: (request) => ({
+          protocol: 'http:',
+          host: request.headers.host.split(':')[0],
+          port: SERVER_PORT,
+        }),
+        bypass: (request) => {
+          const target = `${request.headers.host.split(':')[0]}:${SERVER_PORT}`;
+
+          const isExplicitJSON = request.query.format === 'json';
+
+          const isAttachment =
+            request.url.startsWith('/downloads') ||
+            request.url.startsWith('/uploads') ||
+            request.url.startsWith('/attachments');
+
+          if (isExplicitJSON || isAttachment) {
+            logProxy(request.url, `${target}${request.url}`);
+            return null;
+          }
+
+          return '/index.html';
+        },
       },
-      router: (request) => ({
-        protocol: 'http:',
-        host: request.headers.host.split(':')[0],
-        port: SERVER_PORT,
-      }),
-      bypass: (request) => {
-        const target = `${request.headers.host.split(':')[0]}:${SERVER_PORT}`;
-
-        const isExplicitJSON = request.query.format === 'json';
-        const isAttachment =
-          request.url.startsWith('/downloads') ||
-          request.url.startsWith('/uploads') ||
-          request.url.startsWith('/attachments');
-
-        if (isExplicitJSON || isAttachment) {
-          logProxy(request.url, `${target}${request.url}`);
-          return null;
-        }
-
-        return '/index.html';
+      {
+        context: ['/cable'],
+        target: `ws://${APP_HOST}:${SERVER_PORT}`,
+        router: (request) => ({
+          protocol: 'ws:',
+          host: request.headers.host.split(':')[0],
+          port: SERVER_PORT,
+        }),
+        ws: true,
+        changeOrigin: true,
       },
-    },
+    ],
   },
   optimization: {
     removeAvailableModules: false,
