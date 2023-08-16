@@ -1,59 +1,43 @@
 import { ComponentType, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getIdFromUnknown } from 'utilities';
 
-import { getCourseId } from 'lib/helpers/url-helpers';
 import usePrompt from 'lib/hooks/router/usePrompt';
+
+import { getWorkerType, setUpWorker } from './constructors';
+import { HeartbeatWorker } from './types';
 
 interface WrappedComponentProps {
   setSessionId?: (sessionId: number) => void;
 }
 
-interface WorkerPort {
-  port: MessagePort;
-  terminatePort: () => void;
-}
-
-const setUpWorker = (): WorkerPort => {
-  const worker = new SharedWorker(
-    new URL('workers/heartbeat.worker.ts', import.meta.url),
-  );
-
-  worker.port.start();
-
-  return {
-    port: worker.port,
-    terminatePort: (): void => {
-      worker.port.postMessage({ type: 'disconnect' });
-      worker.port.close();
-    },
-  };
-};
-
 const withHeartbeatWorker = <P extends WrappedComponentProps>(
   Component: ComponentType<P>,
 ): ComponentType<P> => {
-  if (!globalThis.SharedWorker) return Component;
+  const workerType = getWorkerType();
+  if (!workerType) return Component;
 
   const WrappedComponent = (props: P): JSX.Element => {
-    const portRef = useRef<MessagePort>();
+    const workerRef = useRef<HeartbeatWorker>();
     const [sessionId, setSessionId] = useState<number>();
+
+    const params = useParams();
+    const courseId = getIdFromUnknown(params.courseId);
+    if (!courseId) throw new Error(`Illegal course ID: ${courseId}`);
 
     usePrompt(Boolean(sessionId));
 
     useEffect(() => {
-      if (!sessionId || portRef.current) return undefined;
+      if (!sessionId || workerRef.current) return undefined;
 
-      const { port, terminatePort } = setUpWorker();
-      portRef.current = port;
+      const worker = setUpWorker(workerType);
+      workerRef.current = worker;
 
-      const courseId = getCourseId();
-      if (!courseId)
-        throw new Error(`Encountered illegal course ID: ${courseId}`);
-
-      port.postMessage({ type: 'start', payload: { sessionId, courseId } });
+      worker.postMessage({ type: 'start', payload: { sessionId, courseId } });
 
       const terminateWorker = (): void => {
-        terminatePort();
-        portRef.current = undefined;
+        worker.terminate();
+        workerRef.current = undefined;
       };
 
       window.addEventListener('beforeunload', terminateWorker);
@@ -63,7 +47,6 @@ const withHeartbeatWorker = <P extends WrappedComponentProps>(
         window.removeEventListener('beforeunload', terminateWorker);
       };
     }, [sessionId]);
-
     return <Component {...props} setSessionId={setSessionId} />;
   };
 
