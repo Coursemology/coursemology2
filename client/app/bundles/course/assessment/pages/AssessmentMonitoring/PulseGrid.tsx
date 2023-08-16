@@ -5,6 +5,7 @@ import { MonitoringRequestData } from 'types/course/assessment/monitoring';
 
 import BetaChip from 'lib/components/core/BetaChip';
 import ErrorCard from 'lib/components/core/ErrorCard';
+import Page from 'lib/components/core/layouts/Page';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -59,7 +60,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
     );
 
   return (
-    <main className="flex h-full space-x-4">
+    <Page className="flex h-full space-x-4 pt-0">
       <aside className="w-full space-y-5">
         <div className="flex items-center space-x-4">
           <Typography variant="h6">{t(translations.pulsegrid)}</Typography>
@@ -80,7 +81,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
         <ConnectionStatus title={title} />
         <ActivityCenter />
       </aside>
-    </main>
+    </Page>
   );
 };
 
