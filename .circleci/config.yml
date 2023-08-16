@@ -9,7 +9,7 @@ executors:
       - image: cimg/node:18.17.0
 
     working_directory: ~/repo
-    resource_class: large
+    resource_class: xlarge
 
   ruby_with_postgres:
     parameters:
