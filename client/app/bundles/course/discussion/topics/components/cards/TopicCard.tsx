@@ -236,7 +236,10 @@ const TopicCard: FC<TopicCardProps> = (props) => {
       />
       <CardContent>
         {topic.content && (
-          <div dangerouslySetInnerHTML={{ __html: topic.content }} />
+          <Typography
+            dangerouslySetInnerHTML={{ __html: topic.content }}
+            variant="body2"
+          />
         )}
         {postListData.map((post) => {
           return (
