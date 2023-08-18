@@ -235,7 +235,10 @@ const CodaveriCommentCard: FC<Props> = (props) => {
     }
     return (
       <>
-        <div dangerouslySetInnerHTML={{ __html: post.text }} />
+        <Typography
+          dangerouslySetInnerHTML={{ __html: post.text }}
+          variant="body2"
+        />
         {renderRating()}
       </>
     );
