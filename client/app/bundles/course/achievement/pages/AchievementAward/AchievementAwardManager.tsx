@@ -6,7 +6,7 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { Button, Checkbox, Grid, Tooltip } from '@mui/material';
+import { Button, Checkbox, Grid, Tooltip, Typography } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -312,9 +312,10 @@ const AchievementAwardManager: FC<Props> = (props) => {
             />
           </Tooltip>
           <div style={styles.description}>
-            <p
+            <Typography
               dangerouslySetInnerHTML={{ __html: achievement.description }}
               style={{ whiteSpace: 'normal' }}
+              variant="body2"
             />
           </div>
         </Grid>
