@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { forumPostShape } from 'course/assessment/submission/propTypes';
@@ -18,9 +19,6 @@ const styles = {
     marginLeft: 42,
     marginTop: 12,
   },
-  subtext: {
-    color: '#aaa',
-  },
   post: {
     border: '1px dashed #ddd',
     opacity: 0.8,
@@ -29,9 +27,9 @@ const styles = {
 
 const ParentPost = ({ post, style = {} }) => (
   <div style={{ ...styles.parentPost, ...style }}>
-    <p style={styles.subtext}>
+    <Typography className="mb-5" color="text.secondary" variant="body2">
       <FormattedMessage {...translations.postMadeInResponseTo} />
-    </p>
+    </Typography>
     <Labels post={post} />
     <ForumPost isExpandable post={post} style={styles.post} />
   </div>

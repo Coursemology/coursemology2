@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { questionShape } from 'course/assessment/submission/propTypes';
@@ -19,7 +20,10 @@ const ForumPostResponse = (props) => {
         control={control}
         name={`${answerId}.answer_text`}
         render={({ field }) => (
-          <div dangerouslySetInnerHTML={{ __html: field.value }} />
+          <Typography
+            dangerouslySetInnerHTML={{ __html: field.value }}
+            variant="body2"
+          />
         )}
       />
     ) : (

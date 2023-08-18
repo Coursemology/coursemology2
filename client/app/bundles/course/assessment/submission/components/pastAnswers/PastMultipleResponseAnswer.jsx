@@ -1,4 +1,4 @@
-import { FormControlLabel, Radio } from '@mui/material';
+import { FormControlLabel, Radio, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
 
 import { answerShape, questionShape } from '../../propTypes';
@@ -15,13 +15,14 @@ const MultipleResponse = ({ question, answer }) => {
           disabled
           label={
             <b>
-              <div
+              <Typography
                 dangerouslySetInnerHTML={{ __html: option.option.trim() }}
                 style={
                   option.correct && selectedOptions.indexOf(option.id) !== -1
                     ? { backgroundColor: green[50] }
                     : null
                 }
+                variant="body2"
               />
             </b>
           }

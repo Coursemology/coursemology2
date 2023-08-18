@@ -15,6 +15,7 @@ import {
   Stepper,
   SvgIcon,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { blue, green, lightBlue, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -249,7 +250,11 @@ const SubmissionEditStepForm = (props) => {
           ) ? null : (
             <CardContent>
               {explanation.explanations.map((exp, idx) => (
-                <div key={idx} dangerouslySetInnerHTML={{ __html: exp }} />
+                <Typography
+                  key={idx}
+                  dangerouslySetInnerHTML={{ __html: exp }}
+                  variant="body2"
+                />
               ))}
             </CardContent>
           )}
