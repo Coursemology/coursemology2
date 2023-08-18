@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { Description as DescriptionIcon } from '@mui/icons-material';
-import { Stack, TableCell, TableRow } from '@mui/material';
+import { Stack, TableCell, TableRow, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { MaterialMiniEntity } from 'types/course/material/folders';
 
@@ -41,7 +41,7 @@ const TableMaterialRow: FC<Props> = (props) => {
           </Stack>
           {material.description !== null &&
             material.description.length !== 0 && (
-              <div
+              <Typography
                 dangerouslySetInnerHTML={{
                   __html: material.description,
                 }}
@@ -50,6 +50,7 @@ const TableMaterialRow: FC<Props> = (props) => {
                   whiteSpace: 'normal',
                   wordBreak: 'break-word',
                 }}
+                variant="body2"
               />
             )}
         </Stack>

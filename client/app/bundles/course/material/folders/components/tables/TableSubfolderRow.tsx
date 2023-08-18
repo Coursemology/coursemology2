@@ -5,7 +5,7 @@ import {
   Folder as FolderIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material';
-import { Stack, TableCell, TableRow, Tooltip } from '@mui/material';
+import { Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { FolderMiniEntity } from 'types/course/material/folders';
 
@@ -72,7 +72,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
           </Stack>
           {subfolder.description !== null &&
             subfolder.description.length !== 0 && (
-              <div
+              <Typography
                 dangerouslySetInnerHTML={{
                   __html: subfolder.description,
                 }}
@@ -83,6 +83,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
                   whiteSpace: 'normal',
                   wordBreak: 'break-word',
                 }}
+                variant="body2"
               />
             )}
         </Stack>
