@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { DragIndicator } from '@mui/icons-material';
-import { Switch } from '@mui/material';
+import { Switch, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import {
@@ -152,10 +152,11 @@ const AchievementTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const achievement = achievements[dataIndex];
           return (
-            <p
+            <Typography
               key={achievements[dataIndex].id}
               dangerouslySetInnerHTML={{ __html: achievement.description }}
               style={{ whiteSpace: 'normal' }}
+              variant="body2"
             />
           );
         },
@@ -173,7 +174,9 @@ const AchievementTable: FC<Props> = (props) => {
           return (
             <div key={achievements[dataIndex].id}>
               {conditions.map((condition) => (
-                <li key={condition.id}>{condition.description}</li>
+                <Typography key={condition.id} component="li" variant="body2">
+                  {condition.description}
+                </Typography>
               ))}
             </div>
           );
