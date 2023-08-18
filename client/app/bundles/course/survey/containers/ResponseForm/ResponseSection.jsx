@@ -1,6 +1,6 @@
 import { useFieldArray } from 'react-hook-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Card, CardContent, CardHeader } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -39,7 +39,10 @@ const ResponseSection = (props) => {
     <Card style={styles.card}>
       <CardHeader
         subheader={
-          <div dangerouslySetInnerHTML={{ __html: section.description }} />
+          <Typography
+            dangerouslySetInnerHTML={{ __html: section.description }}
+            variant="body2"
+          />
         }
         title={section.title}
       />
@@ -47,10 +50,11 @@ const ResponseSection = (props) => {
         {questionFields.map((question, questionIndex) => (
           <Card key={question.id} style={styles.questionCard}>
             <CardContent>
-              <p
+              <Typography
                 dangerouslySetInnerHTML={{
                   __html: `${questionIndex + 1}. ${question.description}`,
                 }}
+                variant="body2"
               />
               {question.answer && question.answer.present ? (
                 <ResponseAnswer

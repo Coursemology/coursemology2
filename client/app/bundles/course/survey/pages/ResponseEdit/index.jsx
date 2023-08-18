@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, ListSubheader } from '@mui/material';
+import { Card, CardContent, ListSubheader, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import {
@@ -105,9 +105,12 @@ const ResponseEdit = (props) => {
     <>
       {survey.description ? (
         <Card>
-          <CardContent
-            dangerouslySetInnerHTML={{ __html: survey.description }}
-          />
+          <CardContent>
+            <Typography
+              dangerouslySetInnerHTML={{ __html: survey.description }}
+              variant="body2"
+            />
+          </CardContent>
         </Card>
       ) : null}
       {renderBody()}

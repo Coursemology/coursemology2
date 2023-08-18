@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from '@mui/material';
+import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { sectionShape } from 'course/survey/propTypes';
@@ -15,7 +15,10 @@ const ResultsSection = ({ section, includePhantoms, anonymous }) => (
   <Card style={styles.card}>
     <CardHeader
       subheader={
-        <div dangerouslySetInnerHTML={{ __html: section.description }} />
+        <Typography
+          dangerouslySetInnerHTML={{ __html: section.description }}
+          variant="body2"
+        />
       }
       title={section.title}
     />

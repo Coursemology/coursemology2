@@ -9,6 +9,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -150,9 +151,12 @@ export class ResponseShow extends Component {
       <>
         {survey.description ? (
           <Card>
-            <CardContent
-              dangerouslySetInnerHTML={{ __html: survey.description }}
-            />
+            <CardContent>
+              <Typography
+                dangerouslySetInnerHTML={{ __html: survey.description }}
+                variant="body2"
+              />
+            </CardContent>
           </Card>
         ) : null}
         {this.renderBody()}
