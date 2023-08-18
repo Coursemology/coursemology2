@@ -43,7 +43,12 @@ class PastAnswers extends Component {
         );
       case questionTypes.Comprehension:
       case questionTypes.TextResponse:
-        return <div dangerouslySetInnerHTML={{ __html: answer.answer_text }} />;
+        return (
+          <Typography
+            dangerouslySetInnerHTML={{ __html: answer.answer_text }}
+            variant="body2"
+          />
+        );
       default:
         return (
           <Card style={{ backgroundColor: yellow[100] }}>

@@ -234,7 +234,10 @@ const CodaveriCommentCard = (props) => {
 
     return (
       <>
-        <div dangerouslySetInnerHTML={{ __html: text }} />
+        <Typography
+          dangerouslySetInnerHTML={{ __html: text }}
+          variant="body2"
+        />
         {renderRating()}
       </>
     );
