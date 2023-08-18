@@ -8,6 +8,7 @@ import {
   CardContent,
   CardHeader,
   ListSubheader,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -62,7 +63,10 @@ class Section extends Component {
       <Card>
         <CardHeader
           subheader={
-            <div dangerouslySetInnerHTML={{ __html: section.description }} />
+            <Typography
+              dangerouslySetInnerHTML={{ __html: section.description }}
+              variant="body2"
+            />
           }
           title={
             <div className="flex justify-between">

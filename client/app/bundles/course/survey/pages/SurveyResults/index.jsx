@@ -7,6 +7,7 @@ import {
   FormControlLabel,
   ListSubheader,
   Switch,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -97,16 +98,16 @@ export class SurveyResults extends Component {
       <>
         <Card>
           <CardContent>
-            <h4>
+            <Typography className="font-bold" variant="body2">
               <FormattedMessage
                 {...translations.responsesCount}
                 values={{ count: responsesCount.toString() }}
               />
-            </h4>
+            </Typography>
             {totalStudents === realStudents ? (
-              <p>
+              <Typography variant="body2">
                 <FormattedMessage {...translations.noPhantoms} />
-              </p>
+              </Typography>
             ) : (
               <FormControlLabel
                 control={

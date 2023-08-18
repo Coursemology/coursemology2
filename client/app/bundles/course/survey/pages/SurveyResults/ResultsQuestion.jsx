@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { questionTypes } from 'course/survey/constants';
@@ -13,9 +13,6 @@ import TextResponseResults from './TextResponseResults';
 const styles = {
   card: {
     marginBottom: 15,
-  },
-  required: {
-    fontStyle: 'italic',
   },
 };
 
@@ -63,15 +60,20 @@ class ResultsQuestion extends Component {
     return (
       <Card style={styles.card}>
         <CardContent>
-          <p
+          <Typography
             dangerouslySetInnerHTML={{
               __html: `${index + 1}. ${question.description}`,
             }}
+            variant="body2"
           />
           {question.required ? (
-            <p style={styles.required}>
+            <Typography
+              className="italic mt-5"
+              color="text.secondary"
+              variant="body2"
+            >
               <FormattedMessage {...formTranslations.starRequired} />
-            </p>
+            </Typography>
           ) : null}
         </CardContent>
         {this.renderSpecificResults()}
