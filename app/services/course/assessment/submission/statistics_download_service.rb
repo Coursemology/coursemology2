@@ -146,8 +146,7 @@ class Course::Assessment::Submission::StatisticsDownloadService
   def csv_grader(submission)
     if submission.grader_ids
       graders = submission.grader_ids.map do |grader_id|
-        cu = @course_users_hash[grader_id] || { name: 'System' }
-        cu.name
+        @course_users_hash[grader_id]&.name || 'System'
       end
       graders.join(', ')
     else
