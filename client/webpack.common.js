@@ -141,9 +141,9 @@ module.exports = {
         exclude: [/node_modules/, resolve(__dirname, 'app/lib/styles')],
       },
       {
-        test: /\.svg$/i,
+        test: /\.(csv|png|svg)$/i,
         type: 'asset',
-        resourceQuery: /url/, // *.svg?url
+        resourceQuery: /url/, // *.(csv|png|svg)?url
         exclude: /node_modules/,
       },
       {
