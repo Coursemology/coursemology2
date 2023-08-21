@@ -18,7 +18,7 @@ export interface CourseListData {
   id: number;
   title: string;
   description: string;
-  logoUrl: string;
+  logoUrl?: string;
   startAt: string;
 }
 
@@ -46,7 +46,7 @@ export interface CourseMiniEntity {
   id: number;
   title: string;
   description: string;
-  logoUrl: string;
+  logoUrl?: string;
   startAt: string;
 }
 
@@ -95,9 +95,9 @@ export interface CourseUserProgressData {
 export interface CourseLayoutData {
   courseTitle: string;
   courseUrl: string;
-  courseLogoUrl: string;
   courseUserUrl: string;
   userName: string;
+  courseLogoUrl?: string;
   courseUserName?: string;
   courseUserRole?: CourseUserRoles;
   userAvatarUrl?: string;

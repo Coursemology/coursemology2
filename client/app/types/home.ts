@@ -16,7 +16,7 @@ export interface HomeLayoutCourseData {
   id: number;
   title: string;
   url: string;
-  logoUrl: string;
+  logoUrl?: string;
   lastActiveAt: string | null;
 }
 
