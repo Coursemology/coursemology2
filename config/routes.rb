@@ -465,6 +465,14 @@ Rails.application.routes.draw do
 
   resources :attachment_references, path: 'attachments', only: [:create, :show, :destroy]
 
+  if Rails.env.production?
+    require 'sidekiq/web'
+    require 'sidekiq/cron/web'
+    authenticate :user, ->(u) { u.administrator? } do
+      mount Sidekiq::Web => '/sidekiq'
+    end
+  end
+
   if Rails.env.test?
     namespace :test do
       post 'create' => 'factories#create'

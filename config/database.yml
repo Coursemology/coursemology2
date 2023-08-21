@@ -17,3 +17,7 @@ test:
 production:
   <<: *default
   database: coursemology
+  host: <%= ENV["DB_HOST"] %>
+  username: <%= ENV["PROD_DB_USER"] %>
+  password: <%= ENV["PROD_DB_PASS"] %>
+  pool: <%= ENV["RAILS_MAX_THREADS"] || 5 %>

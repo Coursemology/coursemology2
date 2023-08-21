@@ -1,0 +1,11 @@
+:queues:
+  - highest
+  - delayed_highest
+  - medium_high
+  - delayed_medium_high
+  - default
+  - delayed_default
+  - mailers
+  - rollbar
+  - duplication
+  - lowest
