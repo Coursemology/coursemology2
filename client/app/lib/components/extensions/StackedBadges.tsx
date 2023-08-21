@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Avatar, Tooltip, Typography } from '@mui/material';
 import { AchievementBadgeData } from 'types/course/assessment/assessments';
 
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import Link from 'lib/components/core/Link';
 
 interface StackableBadgeProps {
@@ -40,7 +41,10 @@ const StackedBadges = (props: StackedBadgesProps): JSX.Element => (
           to={badge.url}
           underline="hover"
         >
-          <StackableBadge src={badge.badgeUrl} title={badge.title} />
+          <StackableBadge
+            src={getAchievementBadgeUrl(badge.badgeUrl, true)}
+            title={badge.title}
+          />
         </Link>
       ))}
 

@@ -9,6 +9,7 @@ import {
   AchievementPermissions,
 } from 'types/course/achievements';
 
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
@@ -109,11 +110,16 @@ const AchievementTable: FC<Props> = (props) => {
         sort: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const badge = achievements[dataIndex].badge;
+          const badgeUrl = getAchievementBadgeUrl(
+            badge.url,
+            achievements[dataIndex].permissions.canDisplayBadge,
+          );
+
           return (
             <img
               key={achievements[dataIndex].id}
               alt={badge.name}
-              src={badge.url}
+              src={badgeUrl}
               style={styles.badge}
             />
           );

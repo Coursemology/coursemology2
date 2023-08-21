@@ -1,6 +1,7 @@
 import { Avatar, Typography } from '@mui/material';
 import { AchievementGainedNotification } from 'types/course/userNotifications';
 
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../translations';
@@ -24,7 +25,7 @@ const AchievementGainedPopup = (
       <Avatar
         alt={notification.title}
         className="mb-6 wh-96"
-        src={notification.badgeUrl}
+        src={getAchievementBadgeUrl(notification.badgeUrl, true)}
         variant="square"
       />
 

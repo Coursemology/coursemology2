@@ -11,6 +11,7 @@ import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import { defaultComponentTitles } from 'course/translations.intl';
 import Thumbnail from 'lib/components/core/Thumbnail';
 
@@ -83,7 +84,7 @@ class AchievementsSelector extends Component {
         {achievement.published || <UnpublishedIcon />}
         <Thumbnail
           rootStyle={styles.badgeContainer}
-          src={achievement.url}
+          src={getAchievementBadgeUrl(achievement.url, true)}
           style={styles.badge}
         />
         {achievement.title}

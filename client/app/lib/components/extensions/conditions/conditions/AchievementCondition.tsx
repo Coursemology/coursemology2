@@ -6,6 +6,7 @@ import { AchievementMiniEntity } from 'types/course/achievements';
 import { AchievementConditionData } from 'types/course/conditions';
 
 import CourseAPI from 'api/course';
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -113,7 +114,7 @@ const AchievementConditionForm = (
                   <img
                     alt={achievement.title}
                     className="max-h-20 w-20"
-                    src={achievement.badge}
+                    src={getAchievementBadgeUrl(achievement.badge, true)}
                   />
 
                   <div>

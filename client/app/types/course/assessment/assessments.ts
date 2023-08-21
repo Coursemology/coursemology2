@@ -18,7 +18,7 @@ interface AssessmentActionsData {
 
 export interface AchievementBadgeData {
   url: string;
-  badgeUrl: string;
+  badgeUrl: string | null;
   title: string;
 }
 
