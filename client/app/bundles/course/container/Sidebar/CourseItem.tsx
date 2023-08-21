@@ -2,6 +2,7 @@ import { ComponentRef, useRef } from 'react';
 import { Avatar, Typography } from '@mui/material';
 import { CourseLayoutData } from 'types/course/courses';
 
+import { getCourseLogoUrl } from 'course/helper';
 import PopupMenu from 'lib/components/core/PopupMenu';
 import CourseSwitcherPopupMenu from 'lib/components/navigation/CourseSwitcherPopupMenu';
 
@@ -25,7 +26,7 @@ const CourseItem = (props: CourseItemProps): JSX.Element => {
         <Avatar
           alt={data.courseTitle}
           className="aspect-square rounded-xl wh-20"
-          src={data.courseLogoUrl}
+          src={getCourseLogoUrl(data.courseLogoUrl)}
           variant="rounded"
         />
 

@@ -5,6 +5,7 @@ import { Avatar, Stack, Typography } from '@mui/material';
 import moment from 'moment';
 import { HomeLayoutCourseData } from 'types/home';
 
+import { getCourseLogoUrl } from 'course/helper';
 import SearchField from 'lib/components/core/fields/SearchField';
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
@@ -57,7 +58,7 @@ const CourseListItem = (props: CourseListItemProps): JSX.Element => {
         <Avatar
           alt={course.title}
           className="wh-20"
-          src={course.logoUrl}
+          src={getCourseLogoUrl(course.logoUrl)}
           variant="rounded"
         />
 

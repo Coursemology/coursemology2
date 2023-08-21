@@ -4,6 +4,7 @@ import { Controller } from 'react-hook-form';
 import { Button, Grid, RadioGroup, Typography } from '@mui/material';
 import { CourseInfo, TimeOffset, TimeZones } from 'types/course/admin/course';
 
+import { getCourseLogoUrl } from 'course/helper';
 import AvatarSelector from 'lib/components/core/AvatarSelector';
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import InfoLabel from 'lib/components/core/InfoLabel';
@@ -118,7 +119,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
 
             <AvatarSelector
               alt={props.data.title}
-              defaultImageUrl={watch('logo')}
+              defaultImageUrl={getCourseLogoUrl(props.data.logo)}
               disabled={props.disabled}
               onSelectImage={setStagedLogo}
               stagedImage={stagedLogo}

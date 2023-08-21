@@ -1,6 +1,7 @@
 import { Avatar, Grid, Paper, Typography } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
 
+import { getCourseLogoUrl } from 'course/helper';
 import Link from 'lib/components/core/Link';
 import { getCourseURL } from 'lib/helpers/url-builders';
 
@@ -24,7 +25,7 @@ const CourseInfoBox = (props: CourseInfoBoxProps): JSX.Element => {
           <Avatar
             alt={course.title}
             className="wh-40"
-            src={course.logoUrl}
+            src={getCourseLogoUrl(course.logoUrl)}
             variant="rounded"
           />
 
