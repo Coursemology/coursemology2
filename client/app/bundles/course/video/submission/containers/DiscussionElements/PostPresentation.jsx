@@ -1,3 +1,4 @@
+import { Avatar } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import EditPostContainer from './EditPostContainer';
@@ -38,19 +39,23 @@ const PostPresentation = (props) => {
   return (
     <>
       {props.editMode || <PostMenu postId={props.postId} />}
-      <span
-        className={styles.userPic}
-        dangerouslySetInnerHTML={{ __html: props.userPicElement }}
-      />
-      <div className={styles.contentContainer}>
-        <span dangerouslySetInnerHTML={{ __html: props.userLink }} />
-        &nbsp;
-        <div className={styles.postTimestamp}>{props.createdAt}</div>
-        {props.editMode ? (
-          <EditPostContainer postId={props.postId} />
-        ) : (
-          <div dangerouslySetInnerHTML={{ __html: props.content }} />
-        )}
+      <div className="flex space-x-4">
+        <Avatar
+          alt={props.userPicElement}
+          className="wh-12"
+          src={props.userPicElement}
+          variant="rounded"
+        />
+        <div className={styles.contentContainer}>
+          <span dangerouslySetInnerHTML={{ __html: props.userLink }} />
+          &nbsp;
+          <div className={styles.postTimestamp}>{props.createdAt}</div>
+          {props.editMode ? (
+            <EditPostContainer postId={props.postId} />
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: props.content }} />
+          )}
+        </div>
       </div>
       {childrenElements}
     </>
