@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
+import { Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -65,9 +66,9 @@ export default class ImagePreview extends Component {
           {render(imageSrc, fileName)}
         </div>
         <div className="file-name">{fileName}</div>
-        <div>
+        <Typography>
           <FormattedMessage {...translations.dropzone} />
-        </div>
+        </Typography>
       </>
     );
   }
