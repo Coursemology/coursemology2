@@ -111,17 +111,6 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
   }
 
   /**
-   * Get path to download template csv file
-   */
-  getTemplateCsvPath(): Promise<
-    AxiosResponse<{
-      templatePath: string;
-    }>
-  > {
-    return this.client.get(`${this.#urlPrefix}/users/invite`);
-  }
-
-  /**
    * Resends all invitation emails.
    *
    * @return {Promise} updated invitations
