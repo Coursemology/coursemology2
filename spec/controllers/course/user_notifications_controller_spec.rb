@@ -76,7 +76,7 @@ RSpec.describe Course::UserNotificationsController, type: :controller do
           {
             'id' => achievement_gained_popup.id,
             'notificationType' => 'achievementGained',
-            'badgeUrl' => achievement.badge.url,
+            'badgeUrl' => achievement.badge.medium.url,
             'description' => achievement.description,
             'title' => achievement.title
           }

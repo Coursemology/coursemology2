@@ -6,6 +6,6 @@ module Course::Achievement::AchievementsHelper
   # @param [Course::Achievement|nil] achievement The achievement for which to display the badge.
   # @return [String] The image path to display for the achievement.
   def achievement_badge_path(achievement = nil)
-    image_path(achievement&.badge&.medium&.url || 'achievement_blank.png')
+    image_path(achievement.badge.medium.url) if achievement&.badge&.medium&.url
   end
 end
