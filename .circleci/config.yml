@@ -97,6 +97,17 @@ commands:
       - restore_client_cache
 
       - run:
+          name: Add env file to client folder
+          working_directory: client
+          command: |
+            touch .env
+            echo GOOGLE_RECAPTCHA_SITE_KEY="${GOOGLE_RECAPTCHA_SITE_KEY}" >> .env
+            echo ROLLBAR_POST_CLIENT_ITEM_KEY="${ROLLBAR_POST_CLIENT_ITEM_KEY}" >> .env
+            echo SUPPORT_EMAIL="${SUPPORT_EMAIL}" >> .env
+            echo DEFAULT_LOCALE="${DEFAULT_LOCALE}" >> .env
+            echo DEFAULT_TIME_ZONE="${DEFAULT_TIME_ZONE}" >> .env
+
+      - run:
           name: Build client
           working_directory: client
           command: yarn build:test
