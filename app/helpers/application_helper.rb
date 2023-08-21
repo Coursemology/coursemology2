@@ -12,12 +12,6 @@ module ApplicationHelper
   end
 
   def url_to_course_logo(course)
-    asset_url(course_logo_local_url(course))
-  end
-
-  private
-
-  def course_logo_local_url(course)
-    course.logo.medium.url || 'course_default_logo.svg'
+    course.logo.medium.url ? asset_url(course.logo.medium.url) : nil
   end
 end
