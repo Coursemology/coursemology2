@@ -58,10 +58,7 @@ RSpec.feature 'Courses: Invitations', js: true do
       scenario 'I can download a template file' do
         visit invite_course_users_path(course)
         click_button 'Invite from file'
-        expect(
-          find_link(nil,
-                    href: ActionController::Base.helpers.asset_path('course_user_invitation_template.csv'))
-        ).to be_present
+        expect(find_link(nil, download: 'template.csv')).to be_present
       end
 
       scenario 'I can enable and disable registration-code registrations' do
