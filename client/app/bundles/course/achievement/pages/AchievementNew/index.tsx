@@ -36,7 +36,7 @@ const initialValues = {
   title: '',
   description: '',
   published: false,
-  badge: { name: '', url: '', file: undefined }, // TODO: Pass url for local achievement_blank.png asset
+  badge: { name: '', url: '', file: undefined },
 };
 
 const AchievementNew: FC<Props> = (props) => {

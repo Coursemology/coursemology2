@@ -3,6 +3,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Grid, Tooltip, Typography } from '@mui/material';
 
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
@@ -86,7 +87,10 @@ const AchievementShow: FC<Props> = (props) => {
                   <img
                     alt={achievement.badge.name}
                     className="h-32"
-                    src={achievement.badge.url}
+                    src={getAchievementBadgeUrl(
+                      achievement.badge.url,
+                      achievement.permissions.canDisplayBadge,
+                    )}
                   />
                 </Tooltip>
 

@@ -69,8 +69,8 @@ const AchievementEdit: FC<Props> = (props) => {
     description: achievement.description,
     published: achievement.published,
     badge: {
-      name: achievement.badge?.name,
-      url: achievement.badge?.url,
+      name: achievement.badge.name,
+      url: achievement.badge.url,
       file: undefined,
     },
   };

@@ -15,6 +15,7 @@ import {
   AchievementEntity,
 } from 'types/course/achievements';
 
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -307,7 +308,10 @@ const AchievementAwardManager: FC<Props> = (props) => {
           >
             <img
               alt={achievement.badge.name}
-              src={achievement.badge.url}
+              src={getAchievementBadgeUrl(
+                achievement.badge.url,
+                achievement.permissions.canDisplayBadge,
+              )}
               style={styles.badge}
             />
           </Tooltip>

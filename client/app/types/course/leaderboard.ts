@@ -1,9 +1,13 @@
-/**
- * Data types for leaderboard data retrieved from backend through API call.
- */
-
-import { Achievement } from './achievements';
 import { CourseUserListData } from './courseUsers';
+
+interface Achievement {
+  id: number;
+  title: string;
+  badge: {
+    name: string;
+    url: string | null;
+  };
+}
 
 export interface LeaderboardSettings {
   leaderboardTitle?: string;

@@ -14,6 +14,7 @@ import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 const styles = {
@@ -40,8 +41,8 @@ class AchievementsListing extends Component {
             <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
             <UnpublishedIcon tooltipId="itemUnpublished" />
             <img
-              alt={achievement.url}
-              src={achievement.url}
+              alt={getAchievementBadgeUrl(achievement.url, true)}
+              src={getAchievementBadgeUrl(achievement.url, true)}
               style={styles.badge}
             />
             {achievement.title}

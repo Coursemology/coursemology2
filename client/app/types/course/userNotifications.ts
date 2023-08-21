@@ -6,7 +6,7 @@ export interface UserNotificationData {
 }
 
 export interface AchievementGainedNotification extends UserNotificationData {
-  badgeUrl: string;
+  badgeUrl: string | null;
   title: string;
   description: string;
 }

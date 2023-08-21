@@ -3,12 +3,6 @@ import { Permissions } from 'types';
 import { ConditionListData, ConditionsData } from './conditions';
 import type { CourseUserListData, CourseUserMiniEntity } from './courseUsers';
 
-export interface BadgeEntity {
-  name: string;
-  url: string;
-  file?: Blob;
-}
-
 export type AchievementPermissions = Permissions<
   'canCreate' | 'canManage' | 'canReorder'
 >;
@@ -17,17 +11,10 @@ export type AchievementListDataPermissions = Permissions<
   'canAward' | 'canDelete' | 'canDisplayBadge' | 'canEdit' | 'canManage'
 >;
 
-/**
- * Data types for achievement data retrieved from backend through API call.
- */
-
-export interface Achievement {
+export interface AchievementListData {
   id: number;
   title: string;
-  badge: BadgeEntity;
-}
-
-export interface AchievementListData extends Achievement {
+  badge: { name: string; url?: string | null };
   description: string;
   conditions: ConditionListData[];
   weight: number;
@@ -50,7 +37,10 @@ export interface AchievementCourseUserData extends CourseUserListData {
  * received backend data.
  */
 
-export interface AchievementMiniEntity extends Achievement {
+export interface AchievementMiniEntity {
+  id: number;
+  title: string;
+  badge: { name: string; url?: string | null };
   description: string;
   conditions: ConditionListData[];
   weight: number;
@@ -76,6 +66,10 @@ export interface AchievementFormData {
   id?: number;
   title: string;
   description: string;
-  badge: BadgeEntity;
+  badge: {
+    name: string;
+    url?: string | null;
+    file?: Blob;
+  };
   published: boolean;
 }

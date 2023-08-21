@@ -15,6 +15,7 @@ import {
   LeaderboardPoints,
 } from 'types/course/leaderboard';
 
+import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import { getAchievementURL, getCourseUserURL } from 'lib/helpers/url-builders';
@@ -233,7 +234,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
                     className="achievement"
                     component={Link}
                     id={`achievement_${achievement.id}`}
-                    src={achievement.badge.url}
+                    src={getAchievementBadgeUrl(achievement.badge.url, true)}
                     to={getAchievementURL(getCourseId(), achievement.id)}
                     underline="none"
                   />
