@@ -1,10 +1,10 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Typography } from '@mui/material';
 import { InvitationResult } from 'types/course/userInvitations';
 
-import CourseAPI from 'api/course';
+import { getCourseUserInviteTemplatePath } from 'course/helper';
 import Link from 'lib/components/core/Link';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -84,19 +84,12 @@ const translations = defineMessages({
 const InviteUsersFileUpload: FC<Props> = (props) => {
   const { open, onClose, openResultDialog } = props;
   const { t } = useTranslation();
-  const [downloadTemplatePath, setDownloadTemplatePath] = useState('');
   const dispatch = useAppDispatch();
 
   const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const permissions = useAppSelector(getManageCourseUserPermissions);
 
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
-
-  useEffect(() => {
-    CourseAPI.userInvitations.getTemplateCsvPath().then((response) => {
-      setDownloadTemplatePath(response.data.templatePath);
-    });
-  }, []);
 
   if (!open) {
     return null;
@@ -153,7 +146,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         <strong>{t(translations.exampleHeader)}</strong>
         <Link
           download="template.csv"
-          href={downloadTemplatePath}
+          href={getCourseUserInviteTemplatePath()}
           opensInNewTab
           style={{ textDecoration: 'none', cursor: 'pointer' }}
         >
