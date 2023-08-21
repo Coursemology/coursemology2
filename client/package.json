@@ -184,7 +184,7 @@
     "prettier-plugin-tailwindcss": "^0.5.3",
     "react-refresh": "^0.14.0",
     "redux-logger": "^3.0.6",
-    "sass": "^1.66.0",
+    "sass": "^1.66.1",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.3",
     "tailwindcss": "^3.3.3",
