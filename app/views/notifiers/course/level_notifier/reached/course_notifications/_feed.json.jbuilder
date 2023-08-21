@@ -10,7 +10,7 @@ json.id notification.id
 json.userInfo do
   json.name user.name
   json.userUrl url_to_user_or_course_user(current_course, user)
-  json.imageUrl activity.actor.profile_photo.url
+  json.imageUrl user_image(activity.actor)
 end
 
 json.actableType 'level'

@@ -12,7 +12,7 @@ instructors = current_course.managers.without_phantom_users.includes(:user).map(
 json.instructors instructors do |instructor|
   json.id instructor.id
   json.name instructor.name
-  json.imageUrl instructor.profile_photo.url
+  json.imageUrl user_image(instructor)
 end
 
 if can?(:manage, current_course) || current_course.user?(current_user)

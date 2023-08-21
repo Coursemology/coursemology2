@@ -14,7 +14,7 @@ json.creator do
   else
     json.name post.author_name
   end
-  json.imageUrl creator.profile_photo.medium.url || image_url('user_silhouette.svg')
+  json.imageUrl user_image(creator)
 end
 json.createdAt post.created_at&.iso8601
 json.topicId post.topic_id

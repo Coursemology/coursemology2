@@ -17,14 +17,9 @@ json.selected_post_packs selected_posts do |selected_post|
     json.creatorId selected_post.post_creator_id
     if selected_post.post_creator
       json.userName selected_post.post_creator.name
-      if selected_post.post_creator.profile_photo.medium.url.nil?
-        json.avatar image_path('user_silhouette.svg')
-      else
-        json.avatar image_path(selected_post.post_creator.profile_photo.medium.url)
-      end
+      json.avatar user_image(selected_post.post_creator)
     else
       json.userName 'Deleted User'
-      json.avatar image_path('user_silhouette.svg')
     end
     json.updatedAt selected_post.post_updated_at&.iso8601
     json.isUpdated selected_post.is_post_updated
@@ -38,14 +33,9 @@ json.selected_post_packs selected_posts do |selected_post|
       json.creatorId selected_post.parent_creator_id
       if selected_post.parent_creator
         json.userName selected_post.parent_creator.name
-        if selected_post.parent_creator.profile_photo.medium.url.nil?
-          json.avatar image_path('user_silhouette.svg')
-        else
-          json.avatar image_path(selected_post.parent_creator.profile_photo.medium.url)
-        end
+        json.avatar user_image(selected_post.parent_creator)
       else
         json.userName 'Deleted User'
-        json.avatar image_path('user_silhouette.svg')
       end
       json.updatedAt selected_post.parent_updated_at&.iso8601
       json.isUpdated selected_post.is_parent_updated
