@@ -152,7 +152,6 @@ group :production do
   gem 'stackprof'
   gem 'sidekiq'
   gem 'sidekiq-cron'
-  gem 'sinatra', require: nil
   gem 'rollbar', '>= 1.5.3'
 
   # better log format
