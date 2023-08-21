@@ -15,7 +15,7 @@ json.creator do
   json.id user.id
   json.userUrl url_to_user_or_course_user(current_course, user)
   json.name display_user(creator)
-  json.imageUrl creator.profile_photo.url
+  json.imageUrl user_image(creator)
 end
 json.content display_code_lines(file_annotation.file, file_annotation.line - 5, file_annotation.line)
 

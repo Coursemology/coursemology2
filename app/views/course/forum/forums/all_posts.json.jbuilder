@@ -21,11 +21,7 @@ json.forumTopicPostPacks @forum_topic_posts do |forum, topic_posts|
         json.text post.text
         json.creatorId post.creator.id
         json.userName post.creator&.name
-        if post.creator.profile_photo.medium.url.nil?
-          json.avatar image_path('user_silhouette.svg')
-        else
-          json.avatar image_path(post.creator.profile_photo.medium.url)
-        end
+        json.avatar user_image(post.creator)
         json.updatedAt post.updated_at&.iso8601
       end
       if post.parent_id
@@ -34,11 +30,7 @@ json.forumTopicPostPacks @forum_topic_posts do |forum, topic_posts|
           json.text post.parent.text
           json.creatorId post.parent.creator.id
           json.userName post.parent.creator&.name
-          if post.parent.creator.profile_photo.medium.url.nil?
-            json.avatar image_path('user_silhouette.svg')
-          else
-            json.avatar image_path(post.parent.creator.profile_photo.medium.url)
-          end
+          json.avatar user_image(post.parent.creator)
           json.updatedAt post.parent.updated_at&.iso8601
         end
       end

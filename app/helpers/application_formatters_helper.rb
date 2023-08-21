@@ -20,30 +20,12 @@ module ApplicationFormattersHelper
     user&.name
   end
 
-  # Displays the given user's image.
-  #
-  # @param [User] user The user to display
-  # @return [String] A HTML fragment containing the image to display for the user.
-  def display_user_image(user)
-    content_tag(:span, class: ['image']) do
-      if user.nil? || user.profile_photo.medium.url.nil?
-        image_tag('user_silhouette.svg')
-      else
-        image_tag(user.profile_photo.medium.url)
-      end
-    end
-  end
-
   # Return the given user's image url.
   #
   # @param [User] user The user to display
   # @return [String] A url for the image.
   def user_image(user)
-    if user.nil? || user.profile_photo.medium.url.nil?
-      image_path('user_silhouette.svg')
-    else
-      image_path(user.profile_photo.medium.url)
-    end
+    image_path(user.profile_photo.medium.url) if user&.profile_photo&.medium&.url
   end
 
   # Links to the given User.
