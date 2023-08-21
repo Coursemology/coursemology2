@@ -10,8 +10,8 @@ RSpec.describe Course::Achievement::ControllerHelper do
       context 'when no achievement is provided' do
         subject { helper.achievement_badge_path }
 
-        it 'returns the path of the default achievement badge' do
-          expect(subject).to include('/assets/achievement_blank-')
+        it 'returns nil' do
+          expect(subject).to be_nil
         end
       end
 
@@ -32,8 +32,8 @@ RSpec.describe Course::Achievement::ControllerHelper do
         end
 
         context 'when an achievement badge is not uploaded' do
-          it 'returns the path of the default achievement badge' do
-            expect(subject).to include('/assets/achievement_blank-')
+          it 'returns nil' do
+            expect(subject).to be_nil
           end
         end
       end

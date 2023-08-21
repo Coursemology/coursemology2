@@ -5,11 +5,7 @@ json.title achievement.title
 json.description format_ckeditor_rich_text(achievement.description)
 json.badge do
   json.name achievement[:badge]
-  if can?(:display_badge, achievement)
-    json.url achievement_badge_path(achievement)
-  else
-    json.url image_path('achievement_locked.svg')
-  end
+  json.url achievement_badge_path(achievement) if can?(:display_badge, achievement)
 end
 json.weight achievement.weight
 json.published achievement.published
