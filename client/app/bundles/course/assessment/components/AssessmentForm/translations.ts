@@ -315,7 +315,8 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.secretHint',
     defaultMessage:
       'If provided, Coursemology can automatically flag a connection as valid in <pulsegrid>PulseGrid</pulsegrid> if the ' +
-      "examinee's User Agent (UA) contains this secret. Otherwise, connections will be flagged only by heartbeat intervals.",
+      "examinee's User Agent (UA) contains this secret. Otherwise, connections will be flagged only by heartbeat intervals. " +
+      'This string is case-sensitive.',
   },
   minInterval: {
     id: 'course.assessment.AssessmentForm.minInterval',
