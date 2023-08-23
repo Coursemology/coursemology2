@@ -123,7 +123,7 @@
     "@types/enzyme": "^3.10.13",
     "@types/jest": "^29.5.3",
     "@types/jquery": "^3.5.16",
-    "@types/papaparse": "^5.3.7",
+    "@types/papaparse": "^5.3.8",
     "@types/rails__actioncable": "^6.1.6",
     "@types/react": "^18.2.20",
     "@types/react-beautiful-dnd": "^13.1.4",
