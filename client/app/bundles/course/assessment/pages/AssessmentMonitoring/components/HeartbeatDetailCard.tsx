@@ -1,0 +1,75 @@
+import { Chip, Typography } from '@mui/material';
+import { HeartbeatDetail } from 'types/channels/liveMonitoring';
+
+import useTranslation from 'lib/hooks/useTranslation';
+import moment, { formatPreciseDateTime } from 'lib/moment';
+
+import translations from '../../../translations';
+
+import UserAgentDetail from './UserAgentDetail';
+
+interface HeartbeatDetailCardProps {
+  of: HeartbeatDetail;
+  hasSecret?: boolean;
+  className?: string;
+}
+
+const HeartbeatDetailCard = (props: HeartbeatDetailCardProps): JSX.Element => {
+  const { of: heartbeat } = props;
+
+  const { t } = useTranslation();
+
+  return (
+    <section
+      className={`space-y-4 rounded-lg bg-neutral-100 p-4 ${
+        props.className ?? ''
+      }`}
+    >
+      <section>
+        <Typography color="text.secondary" variant="caption">
+          {t(translations.generatedAt)}
+        </Typography>
+
+        <span className="flex space-x-2 items-center">
+          <Typography variant="body2">
+            {formatPreciseDateTime(heartbeat.generatedAt)}
+          </Typography>
+
+          {heartbeat.stale ? (
+            <Chip
+              className="text-neutral-400 border-neutral-400"
+              label={t(translations.stale)}
+              size="small"
+              variant="outlined"
+            />
+          ) : (
+            <Chip
+              className="text-neutral-800 border-neutral-800"
+              label={t(translations.live)}
+              size="small"
+              variant="outlined"
+            />
+          )}
+        </span>
+
+        <Typography variant="caption">
+          {moment(heartbeat.generatedAt).fromNow()}
+        </Typography>
+      </section>
+
+      <section className="space-y-2">
+        <Typography color="text.secondary" variant="caption">
+          {t(translations.userAgent)}
+        </Typography>
+
+        <UserAgentDetail
+          of={heartbeat.userAgent}
+          valid={heartbeat.isValid}
+          validate={props.hasSecret}
+        />
+      </section>
+    </section>
+  );
+};
+
+export default HeartbeatDetailCard;
