@@ -1,5 +1,5 @@
 import Draggable from 'react-draggable';
-import { Cancel, CheckCircle, Close } from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import { Chip, IconButton, Popover, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
@@ -8,6 +8,9 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { formatPreciseDateTime, formatPreciseTime } from 'lib/moment';
 
 import translations from '../../../translations';
+
+import HeartbeatDetailCard from './HeartbeatDetailCard';
+import HeartbeatsTimeline from './HeartbeatsTimeline';
 
 interface SessionDetailsPopupProps {
   for: string;
@@ -105,32 +108,7 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
           {t(translations.lastHeartbeat)}
         </Typography>
 
-        <section className="space-y-4 rounded-lg bg-neutral-100 p-4">
-          <section>
-            <Typography color="text.secondary" variant="caption">
-              {t(translations.generatedAt)}
-            </Typography>
-
-            <Typography variant="body2">
-              {formatPreciseDateTime(lastHeartbeat?.generatedAt)}
-            </Typography>
-          </section>
-
-          <section>
-            <Typography color="text.secondary" variant="caption">
-              {t(translations.userAgent)}
-            </Typography>
-
-            {props.hasSecret ? (
-              <Validable
-                of={lastHeartbeat?.userAgent}
-                valid={lastHeartbeat?.isValid}
-              />
-            ) : (
-              <Blankable of={lastHeartbeat?.userAgent} />
-            )}
-          </section>
-        </section>
+        <HeartbeatDetailCard hasSecret={props.hasSecret} of={lastHeartbeat} />
 
         <Typography
           className="!-mb-1 !mt-7 ml-2"
@@ -141,6 +119,8 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
             n: heartbeats.length,
           })}
         </Typography>
+
+        <HeartbeatsTimeline hasSecret={props.hasSecret} in={heartbeats} />
 
         <Table
           columns={[

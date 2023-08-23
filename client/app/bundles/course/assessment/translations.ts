@@ -908,7 +908,7 @@ const translations = defineMessages({
   },
   detailsOfNHeartbeats: {
     id: 'course.assessment.monitoring.detailsOfNHeartbeats',
-    defaultMessage: 'Details of the last {n} heartbeats',
+    defaultMessage: 'Last {n} heartbeats',
   },
   connectedToLiveMonitoringChannel: {
     id: 'course.assessment.monitoring.connectedToLiveMonitoringChannel',
@@ -955,6 +955,14 @@ const translations = defineMessages({
   missingPresenceHint: {
     id: 'course.assessment.monitoring.missingPresenceHint',
     defaultMessage: "Next heartbeat hasn't been received in time.",
+  },
+  validHeartbeat: {
+    id: 'course.assessment.monitoring.validHeartbeat',
+    defaultMessage: 'Contains SUS',
+  },
+  invalidHeartbeat: {
+    id: 'course.assessment.monitoring.invalidHeartbeat',
+    defaultMessage: 'Does not contain SUS',
   },
   attemptingAssessment: {
     id: 'course.assessment.submission.attemptingAssessment',
