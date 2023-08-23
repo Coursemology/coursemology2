@@ -5,4 +5,5 @@ json.monitoring do
   json.min_interval_ms @monitor.min_interval_ms
   json.max_interval_ms @monitor.max_interval_ms
   json.offset_ms @monitor.offset_ms
+  json.blocks @monitor.blocks
 end

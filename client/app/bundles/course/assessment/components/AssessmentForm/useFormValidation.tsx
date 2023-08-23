@@ -121,6 +121,7 @@ const validationSchema = yup.object({
         .typeError(ft.required)
         .required(ft.required),
     }),
+    blocks: yup.bool(),
   }),
 });
 
@@ -144,7 +145,14 @@ const useFormValidation = (
     handleSubmit: (onValid, onInvalid): SubmitHandler<FieldValues> => {
       const postProcessor = (rawData): SubmitHandler<FieldValues> => {
         if (!rawData.session_protected) rawData.session_password = null;
+
         delete rawData.session_protected;
+
+        if (
+          (!rawData.session_password || !rawData.monitoring?.secret) &&
+          rawData.monitoring?.blocks !== undefined
+        )
+          rawData.monitoring.blocks = false;
 
         if (!rawData.password_protected && rawData.monitoring !== undefined)
           rawData.monitoring.enabled = false;
@@ -153,6 +161,7 @@ const useFormValidation = (
           delete rawData.monitoring.min_interval_ms;
           delete rawData.monitoring.max_interval_ms;
           delete rawData.monitoring.offset_ms;
+          delete rawData.monitoring.blocks;
         }
 
         return onValid(rawData);

@@ -33,6 +33,7 @@ export const DEFAULT_MONITORING_OPTIONS = {
   min_interval_ms: 20000,
   max_interval_ms: 30000,
   offset_ms: 3000,
+  blocks: false,
 };
 
 export default actionTypes;

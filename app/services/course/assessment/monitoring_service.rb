@@ -2,7 +2,7 @@
 class Course::Assessment::MonitoringService
   class << self
     def params
-      [:enabled, :secret, :min_interval_ms, :max_interval_ms, :offset_ms]
+      [:enabled, :secret, :min_interval_ms, :max_interval_ms, :offset_ms, :blocks]
     end
   end
 
