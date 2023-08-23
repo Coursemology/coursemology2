@@ -344,6 +344,22 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.milliseconds',
     defaultMessage: 'ms',
   },
+  blocksAccessesFromInvalidSUS: {
+    id: 'course.assessment.AssessmentForm.blocksAccessesFromInvalidSUS',
+    defaultMessage: 'Block accesses from browsers with invalid SUS',
+  },
+  blocksAccessesFromInvalidSUSHint: {
+    id: 'course.assessment.AssessmentForm.blocksAccessesFromInvalidSUSHint',
+    defaultMessage:
+      'If enabled, examinees using browsers with invalid SUS will be blocked from accessing this assessment. ' +
+      'Instructors can override access with the session unlock password. Heartbeats from an overridden browser ' +
+      'session will be flagged as valid in the PulseGrid.',
+  },
+  needSUSAndSessionUnlockPassword: {
+    id: 'course.assessment.AssessmentForm.needSUSAndSessionUnlockPassword',
+    defaultMessage:
+      'You need to specify a SUS and session unlock password to enable this.',
+  },
   hasToBePositiveIntegerMaxOneDay: {
     id: 'course.assessment.AssessmentForm.hasToBePositiveInteger',
     defaultMessage: 'Has to be a positive integer less than 86,400,000 ms',

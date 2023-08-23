@@ -67,6 +67,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const sessionProtected = watch('session_protected');
 
   const monitoring = watch('monitoring.enabled');
+  const hasMonitoringSecret = watch('monitoring.secret');
 
   // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
   const loadedTabs = tabs ?? watch('tabs');
@@ -675,6 +676,32 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         />
 
         {!autograded && passwordProtected && renderPasswordFields()}
+
+        {passwordProtected && monitoring && (
+          <Controller
+            control={control}
+            name="monitoring.blocks"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                description={t(translations.blocksAccessesFromInvalidSUSHint)}
+                disabled={
+                  !canManageMonitor ||
+                  !sessionProtected ||
+                  !hasMonitoringSecret ||
+                  disabled
+                }
+                disabledHint={
+                  !sessionProtected || !hasMonitoringSecret
+                    ? t(translations.needSUSAndSessionUnlockPassword)
+                    : undefined
+                }
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.blocksAccessesFromInvalidSUS)}
+              />
+            )}
+          />
+        )}
 
         {passwordProtected && monitoringEnabled && (
           <Controller
