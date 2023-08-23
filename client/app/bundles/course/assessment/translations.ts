@@ -878,10 +878,6 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.summaryCorrectAsAt',
     defaultMessage: 'Summary correct as at {time}',
   },
-  lastHeartbeat: {
-    id: 'course.assessment.monitoring.lastHeartbeat',
-    defaultMessage: 'Last heartbeat',
-  },
   generatedAt: {
     id: 'course.assessment.monitoring.generatedAt',
     defaultMessage: 'Generated at',
