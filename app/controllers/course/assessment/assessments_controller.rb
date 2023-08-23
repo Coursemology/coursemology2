@@ -12,41 +12,33 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
                    students_w_phantom: 'students_w_phantom' }.freeze
 
   def index
-    respond_to do |format|
-      format.json do
-        @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
+    @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
 
-        @items_hash = @course.lesson_plan_items.where(actable_id: @assessments.pluck(:id),
-                                                      actable_type: Course::Assessment.name).
-                      preload(actable: :conditions).
-                      with_reference_times_for(current_course_user).
-                      with_personal_times_for(current_course_user).
-                      to_h do |item|
-          [item.actable_id, item]
-        end
-
-        @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
-      end
+    @items_hash = @course.lesson_plan_items.where(actable_id: @assessments.pluck(:id),
+                                                  actable_type: Course::Assessment.name).
+                  preload(actable: :conditions).
+                  with_reference_times_for(current_course_user).
+                  with_personal_times_for(current_course_user).
+                  to_h do |item|
+      [item.actable_id, item]
     end
+
+    @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
   end
 
   def show
-    respond_to do |format|
-      format.json do
-        @assessment_time = @assessment.time_for(current_course_user)
-        return render 'authenticate' unless can_access_assessment?
+    @assessment_time = @assessment.time_for(current_course_user)
+    return render 'authenticate' unless can_access_assessment?
 
-        @question_assessments = @assessment.question_assessments.with_question_actables
-        @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
-        @questions = @assessment.questions.includes({ actable: :test_cases })
+    @question_assessments = @assessment.question_assessments.with_question_actables
+    @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
+    @questions = @assessment.questions.includes({ actable: :test_cases })
 
-        @requirements = @assessment.specific_conditions.map do |condition|
-          {
-            title: condition.title,
-            satisfied: current_course_user.present? ? condition.satisfied_by?(current_course_user) : nil
-          }.compact
-        end
-      end
+    @requirements = @assessment.specific_conditions.map do |condition|
+      {
+        title: condition.title,
+        satisfied: current_course_user.present? ? condition.satisfied_by?(current_course_user) : nil
+      }.compact
     end
   end
 
