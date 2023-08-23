@@ -8,7 +8,6 @@ import { formatPreciseDateTime } from 'lib/moment';
 
 import translations from '../../../translations';
 
-import HeartbeatDetailCard from './HeartbeatDetailCard';
 import HeartbeatsTimeline from './HeartbeatsTimeline';
 
 interface SessionDetailsPopupProps {
@@ -28,8 +27,6 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
     showing: heartbeats,
     generatedAt: time,
   } = props;
-
-  const lastHeartbeat = heartbeats[0];
 
   const { t } = useTranslation();
 
@@ -64,16 +61,6 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
             })}
           </Typography>
         </header>
-
-        <Typography
-          className="!-mb-1 ml-2"
-          color="text.secondary"
-          variant="body2"
-        >
-          {t(translations.lastHeartbeat)}
-        </Typography>
-
-        <HeartbeatDetailCard hasSecret={props.hasSecret} of={lastHeartbeat} />
 
         <Typography
           className="!-mb-1 !mt-7 ml-2"
