@@ -5,7 +5,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
 
-import { PRESENCE_COLORS } from './Session';
+import { PRESENCE_COLORS } from './ActiveSessionBlob';
 import SessionBlob from './SessionBlob';
 
 interface SessionBlobLegendProps {

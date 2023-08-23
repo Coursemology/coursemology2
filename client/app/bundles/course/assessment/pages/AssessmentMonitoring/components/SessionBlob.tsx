@@ -1,14 +1,15 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 import { Tooltip } from '@mui/material';
 import { Snapshot } from 'types/channels/liveMonitoring';
 
 interface SessionBlobProps extends ComponentProps<'div'> {
-  for?: Snapshot;
+  of?: Snapshot;
   className?: string;
+  children?: ReactNode;
 }
 
 const SessionBlob = (props: SessionBlobProps): JSX.Element => {
-  const { for: snapshot, ...divProps } = props;
+  const { of: snapshot, ...divProps } = props;
 
   const blob = (
     <div
