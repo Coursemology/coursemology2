@@ -1,11 +1,10 @@
 import Draggable from 'react-draggable';
 import { Close } from '@mui/icons-material';
-import { Chip, IconButton, Popover, Typography } from '@mui/material';
+import { IconButton, Popover, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
-import Table from 'lib/components/table';
 import useTranslation from 'lib/hooks/useTranslation';
-import { formatPreciseDateTime, formatPreciseTime } from 'lib/moment';
+import { formatPreciseDateTime } from 'lib/moment';
 
 import translations from '../../../translations';
 
@@ -21,40 +20,6 @@ interface SessionDetailsPopupProps {
   anchorsOn?: HTMLElement;
   hasSecret?: boolean;
 }
-
-interface BlankableProps {
-  of?: string;
-  className?: string;
-}
-
-interface ValidableProps extends BlankableProps {
-  valid?: boolean;
-}
-
-const Blankable = ({ of: value, className }: BlankableProps): JSX.Element => {
-  const { t } = useTranslation();
-
-  return value !== undefined ? (
-    <Typography className={className} variant="body2">
-      {value}
-    </Typography>
-  ) : (
-    <Typography
-      className={`italic ${className ?? ''}`}
-      color="text.disabled"
-      variant="body2"
-    >
-      {t(translations.blankField)}
-    </Typography>
-  );
-};
-
-const Validable = ({ valid, ...props }: ValidableProps): JSX.Element => (
-  <div className="flex space-x-2">
-    {valid ? <CheckCircle color="success" /> : <Cancel color="error" />}
-    <Blankable {...props} className="mt-0.5" />
-  </div>
-);
 
 const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
   const {
@@ -121,58 +86,6 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
         </Typography>
 
         <HeartbeatsTimeline hasSecret={props.hasSecret} in={heartbeats} />
-
-        <Table
-          columns={[
-            {
-              of: 'generatedAt',
-              title: t(translations.generatedAt),
-              cell: ({ generatedAt }) => formatPreciseTime(generatedAt),
-              className: '@lg:sticky @lg:left-0 @lg:bg-neutral-100 z-10',
-            },
-            {
-              of: 'stale',
-              title: t(translations.type),
-              cell: ({ stale }) =>
-                stale ? (
-                  <Chip
-                    color="info"
-                    label={t(translations.stale)}
-                    size="small"
-                    variant="outlined"
-                  />
-                ) : (
-                  <Chip
-                    color="success"
-                    label={t(translations.live)}
-                    size="small"
-                    variant="outlined"
-                  />
-                ),
-            },
-            {
-              of: 'userAgent',
-              title: t(translations.userAgent),
-              cell: ({ userAgent }) =>
-                props.hasSecret ? (
-                  <Validable
-                    of={lastHeartbeat?.userAgent}
-                    valid={lastHeartbeat?.isValid}
-                  />
-                ) : (
-                  <Blankable of={userAgent} />
-                ),
-              className: 'whitespace-nowrap',
-            },
-            {
-              of: 'ipAddress',
-              title: t(translations.ipAddress),
-              cell: ({ ipAddress }) => <Blankable of={ipAddress} />,
-            },
-          ]}
-          data={heartbeats}
-          getRowId={(heartbeat): string => heartbeat.generatedAt?.toString()}
-        />
       </Popover>
     </Draggable>
   );
