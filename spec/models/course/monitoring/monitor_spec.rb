@@ -35,6 +35,37 @@ RSpec.describe Course::Monitoring::Monitor, type: :model do
           expect(subject.errors[:max_interval_ms]).to be_present
         end
       end
+
+      context 'when secret is not set' do
+        it 'cannot block' do
+          subject.assign_attributes(secret: nil, blocks: true)
+          expect(subject).not_to be_valid
+          expect(subject.errors[:blocks]).to be_present
+        end
+      end
+
+      context 'when session protection is disabled' do
+        before { subject.assessment.update!(session_password: nil) }
+
+        it 'cannot block' do
+          subject.assign_attributes(blocks: true)
+          expect(subject).not_to be_valid
+          expect(subject.errors[:blocks]).to be_present
+        end
+      end
+
+      context 'when secret is set and session protection is enabled' do
+        before do
+          subject.update!(secret: SecureRandom.hex)
+          subject.assessment.update!(session_password: SecureRandom.hex)
+        end
+
+        it 'can block' do
+          subject.assign_attributes(blocks: true)
+          expect(subject).to be_valid
+          expect(subject.errors[:blocks]).not_to be_present
+        end
+      end
     end
 
     describe '#valid_secret?' do

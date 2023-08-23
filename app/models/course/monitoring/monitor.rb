@@ -9,8 +9,10 @@ class Course::Monitoring::Monitor < ApplicationRecord
   validates :min_interval_ms, numericality: { only_integer: true, greater_than_or_equal_to: DEFAULT_MIN_INTERVAL_MS }
   validates :max_interval_ms, numericality: { only_integer: true, greater_than: 0 }
   validates :offset_ms, numericality: { only_integer: true, greater_than: 0 }
+  validates :blocks, inclusion: { in: [true, false] }
 
   validate :max_interval_greater_than_min
+  validate :can_block_only_when_has_secret_and_session_protected
 
   def valid_secret?(string)
     secret? ? (string&.include?(secret) || false) : true
@@ -22,5 +24,11 @@ class Course::Monitoring::Monitor < ApplicationRecord
     return unless max_interval_ms.present? && min_interval_ms.present?
 
     errors.add(:max_interval_ms, :greater_than_min_interval) unless max_interval_ms > min_interval_ms
+  end
+
+  def can_block_only_when_has_secret_and_session_protected
+    return unless blocks? && (secret.blank? || !assessment.session_password_protected?)
+
+    errors.add(:blocks, :must_have_secret_and_session_protection)
   end
 end
