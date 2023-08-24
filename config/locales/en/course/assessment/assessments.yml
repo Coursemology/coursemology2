@@ -23,3 +23,5 @@ en:
           question_bundles: "Bundles"
           question_bundle_questions: "Bundle Questions"
           question_bundle_assignments: "Bundle Assignments"
+        unblock_monitor:
+          invalid_password: "The password you entered was invalid. Please try again."

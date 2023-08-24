@@ -5,6 +5,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   before_action :load_monitor, only: [:edit, :show]
   before_action :check_can_manage_monitor, only: [:index, :edit]
   before_action :check_monitoring_component_enabled, only: [:index, :edit]
+  before_action :raise_if_no_monitor, only: [:monitoring, :unblock_monitor]
+  before_action :check_blocked_by_monitor, only: [:show]
 
   COURSE_USERS = { my_students: 'my_students',
                    my_students_w_phantom: 'my_students_w_phantom',
@@ -142,11 +144,19 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def monitoring
-    raise ComponentNotFoundError if monitor.nil?
-
     authorize! :read, @monitor
 
     @monitor_id = monitor.id
+  end
+
+  def unblock_monitor
+    session_password = unblock_monitor_params[:password]
+
+    if monitoring_service&.unblock(session_password)
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
+    else
+      render json: { errors: t('.invalid_password') }, status: :bad_request
+    end
   end
 
   protected
@@ -186,6 +196,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def monitoring_params
     params.require(:assessment).permit(monitoring: Course::Assessment::MonitoringService.params)[:monitoring]
+  end
+
+  def unblock_monitor_params
+    params.require(:assessment).permit(:password)
   end
 
   # Randomized Assessment is temporarily hidden (PR#5406)
@@ -326,12 +340,26 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     @monitoring_component_enabled ||= current_component_host[:course_monitoring_component].present?
   end
 
+  def raise_if_no_monitor
+    raise ComponentNotFoundError if monitor.nil?
+  end
+
+  def check_blocked_by_monitor
+    render 'blocked_by_monitor' if blocked_by_monitor?
+  end
+
+  def blocked_by_monitor?
+    !can_manage_monitor? && monitoring_service&.should_block?(request.user_agent)
+  end
+
   def can_manage_monitor?
     @can_manage_monitor ||= can?(:manage, Course::Monitoring::Monitor.new) && monitoring_component_enabled?
   end
 
   def monitoring_service
-    @monitoring_service ||= Course::Assessment::MonitoringService.new(@assessment) if monitoring_component_enabled?
+    return unless monitoring_component_enabled?
+
+    @monitoring_service ||= Course::Assessment::MonitoringService.new(@assessment, session)
   end
 
   def monitor
