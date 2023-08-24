@@ -207,6 +207,7 @@ Rails.application.routes.draw do
           post 'reorder', on: :member
           post 'authenticate', on: :member
           post 'remind', on: :member
+          post 'unblock_monitor', on: :member
           get :requirements, on: :member
           get :statistics, on: :member
           get :monitoring, on: :member

@@ -10,10 +10,8 @@ can_attempt = can?(:attempt, assessment)
 can_observe = can?(:observe, assessment)
 can_manage = can?(:manage, assessment)
 
-json.id assessment.id
-json.title assessment.title
-json.tabTitle "#{@category.title}: #{@tab.title}"
-json.tabUrl course_assessments_path(course_id: current_course, category: @category, tab: @tab)
+json.partial! 'assessment_list_data', assessment: @assessment, category: @category, tab: @tab, course: current_course
+
 json.description assessment.description unless @assessment.description.blank?
 json.autograded assessment.autograded?
 json.hasTodo assessment.has_todo if can_manage

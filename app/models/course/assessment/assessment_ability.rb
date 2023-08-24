@@ -46,6 +46,7 @@ module Course::Assessment::AssessmentAbility
     can :read_material, Course::Assessment::Category, course_id: course.id
     can :read_material, Course::Assessment::Tab, category: { course_id: course.id }
     can :authenticate, Course::Assessment, lesson_plan_item: { published: true, course_id: course.id }
+    can :unblock_monitor, Course::Assessment, lesson_plan_item: { published: true, course_id: course.id }
     can :requirements, Course::Assessment, lesson_plan_item: { published: true, course_id: course.id }
   end
 
