@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::MonitoringService
   class << self
-    def for(submission, assessment)
-      new(submission, assessment) if assessment.monitor_id?
+    def for(submission, assessment, browser_session)
+      new(submission, assessment, browser_session) if assessment.monitor_id?
     end
 
     def continue_listening_from(assessment, creator_ids)
@@ -23,9 +23,11 @@ class Course::Assessment::Submission::MonitoringService
   end
 
   # Use `Course::Assessment::Submission::MonitoringService.for` for a safer initialization.
-  def initialize(submission, assessment)
+  def initialize(submission, assessment, browser_session)
     @submission = submission
+    @assessment = assessment
     @monitor = assessment.monitor
+    @browser_session = browser_session
   end
 
   def session
@@ -51,5 +53,15 @@ class Course::Assessment::Submission::MonitoringService
 
   def listening?
     @monitor.enabled? && session.listening?
+  end
+
+  def should_block?(string)
+    !unblocked? && @monitor&.blocks? && !@monitor&.valid_secret?(string)
+  end
+
+  private
+
+  def unblocked?
+    Course::Assessment::MonitoringService.unblocked?(@assessment.id, @browser_session)
   end
 end
