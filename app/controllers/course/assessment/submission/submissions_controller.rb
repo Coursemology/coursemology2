@@ -7,6 +7,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
+  before_action :check_blocked_by_monitor, only: [:create, :edit, :update]
   before_action :check_password, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
   before_action :check_zombie_jobs, only: [:edit]
@@ -299,11 +300,19 @@ class Course::Assessment::Submission::SubmissionsController < \
   def monitoring_service
     return nil unless should_monitor? || can_update_monitoring_session?
 
-    @monitoring_service ||= Course::Assessment::Submission::MonitoringService.for(@submission, @assessment)
+    @monitoring_service ||= Course::Assessment::Submission::MonitoringService.for(@submission, @assessment, session)
   end
 
   def stop_monitoring_session_if_submitted
     monitoring_service&.stop! if @submission.submitted?
+  end
+
+  def check_blocked_by_monitor
+    render json: { newSessionUrl: course_assessment_path(current_course, @assessment) } if blocked_by_monitor?
+  end
+
+  def blocked_by_monitor?
+    should_monitor? && monitoring_service&.should_block?(request.user_agent)
   end
 
   def not_downloadable
