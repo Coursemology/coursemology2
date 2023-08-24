@@ -82,13 +82,11 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
   end
 
   def broadcast_pulse_to_live_monitoring(heartbeat)
-    is_valid_secret = @monitor.valid_secret?(heartbeat.user_agent)
-
     Course::Monitoring::LiveMonitoringChannel.broadcast_pulse_to @monitor, @session, {
       sessionId: @session.id,
       status: @session.status,
       lastHeartbeatAt: heartbeat.generated_at,
-      isValid: is_valid_secret
+      isValid: valid_heartbeat?(heartbeat)
     }.compact
   end
 
@@ -122,5 +120,14 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
 
   def can_pulse?
     @can_pulse ||= can? :create, Course::Monitoring::Heartbeat.new(session: @session)
+  end
+
+  def assessment_id
+    @assessment_id ||= @monitor.assessment.id
+  end
+
+  def valid_heartbeat?(heartbeat)
+    @monitor.valid_secret?(heartbeat.user_agent) ||
+      Course::Assessment::MonitoringService.unblocked?(assessment_id, session)
   end
 end
