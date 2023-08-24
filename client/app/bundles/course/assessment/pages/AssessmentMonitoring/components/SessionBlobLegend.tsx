@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { Remove } from '@mui/icons-material';
 import { Tooltip, Typography } from '@mui/material';
 
 import useTranslation from 'lib/hooks/useTranslation';
@@ -20,9 +21,28 @@ const SessionBlobLegend = (props: SessionBlobLegendProps): JSX.Element => {
       title={
         <div className="flex flex-col space-y-4">
           <div className="flex space-x-2">
-            <SessionBlob className="bg-neutral-100" />
+            <SessionBlob className="border border-solid border-neutral-200/50" />
+
             <Typography className="mt-1" variant="body2">
               {t(translations.noActiveSessions)}
+            </Typography>
+          </div>
+
+          <div className="flex space-x-2">
+            <SessionBlob className="border border-solid border-neutral-200 bg-neutral-100" />
+
+            <Typography className="mt-1" variant="body2">
+              {t(translations.expiredSession)}
+            </Typography>
+          </div>
+
+          <div className="flex space-x-2">
+            <SessionBlob className="bg-neutral-200 flex items-center justify-center">
+              <Remove color="disabled" fontSize="small" />
+            </SessionBlob>
+
+            <Typography className="mt-1" variant="body2">
+              {t(translations.stoppedSession)}
             </Typography>
           </div>
 
