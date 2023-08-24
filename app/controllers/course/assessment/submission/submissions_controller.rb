@@ -35,14 +35,10 @@ class Course::Assessment::Submission::SubmissionsController < \
   def index
     authorize!(:view_all_submissions, @assessment)
 
-    respond_to do |format|
-      format.json do
-        @assessment = @assessment.calculated(:maximum_grade)
-        @submissions = @submissions.calculated(:log_count, :graded_at, :grade, :grader_ids)
-        @my_students = current_course_user&.my_students || []
-        @course_users = current_course.course_users.order_phantom_user.order_alphabetically
-      end
-    end
+    @assessment = @assessment.calculated(:maximum_grade)
+    @submissions = @submissions.calculated(:log_count, :graded_at, :grade, :grader_ids)
+    @my_students = current_course_user&.my_students || []
+    @course_users = current_course.course_users.order_phantom_user.order_alphabetically
   end
 
   def create # rubocop:disable Metrics/AbcSize
@@ -68,15 +64,10 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def edit
+    return render json: { isSubmissionBlocked: true } if @submission.submission_view_blocked?(current_course_user)
+
     @monitoring_session_id = monitoring_service&.session&.id if should_monitor?
-
-    respond_to do |format|
-      format.json do
-        return render json: { isSubmissionBlocked: true } if @submission.submission_view_blocked?(current_course_user)
-
-        @submission = @submission.calculated(:graded_at, :grade) unless @submission.attempting?
-      end
-    end
+    @submission = @submission.calculated(:graded_at, :grade) unless @submission.attempting?
   end
 
   def auto_grade
@@ -118,9 +109,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       @new_answer = @answer
     end
 
-    respond_to do |format|
-      format.json { render @new_answer }
-    end
+    render @new_answer
   end
 
   # Publish all the graded submissions.
@@ -132,22 +121,21 @@ class Course::Assessment::Submission::SubmissionsController < \
     else
       job = Course::Assessment::Submission::PublishingJob.
             perform_later(graded_submission_ids, @assessment, current_user).job
-      respond_to do |format|
-        format.json { render partial: 'jobs/submitted', locals: { job: job } }
-      end
+
+      render partial: 'jobs/submitted', locals: { job: job }
     end
   end
 
   # Force submit all submissions.
-  def force_submit_all # rubocop:disable Metrics/AbcSize
+  def force_submit_all
     authorize!(:force_submit_assessment_submission, @assessment)
     attempting_submissions = @assessment.submissions.by_users(course_user_ids).with_attempting_state
+
     if !attempting_submissions.empty? || !user_ids_without_submission.empty?
       job = Course::Assessment::Submission::ForceSubmittingJob.
             perform_later(@assessment, course_user_ids.pluck(:user_id), user_ids_without_submission, current_user).job
-      respond_to do |format|
-        format.json { render partial: 'jobs/submitted', locals: { job: job } }
-      end
+
+      render partial: 'jobs/submitted', locals: { job: job }
     else
       head :ok
     end
@@ -159,10 +147,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     if not_downloadable
       head :bad_request
     else
-      job = download_job
-      respond_to do |format|
-        format.json { render partial: 'jobs/submitted', locals: { job: job } }
-      end
+      render partial: 'jobs/submitted', locals: { job: download_job }
     end
   end
 
@@ -170,15 +155,15 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:manage, @assessment)
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
     if submission_ids.empty?
-      return render json: { error:
-                    I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics') },
-                    status: :bad_request
+      return render json: {
+        error: I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics')
+      }, status: :bad_request
     end
+
     job = Course::Assessment::Submission::StatisticsDownloadJob.
           perform_later(current_course, current_user, submission_ids).job
-    respond_to do |format|
-      format.json { render partial: 'jobs/submitted', locals: { job: job } }
-    end
+
+    render partial: 'jobs/submitted', locals: { job: job }
   end
 
   def unsubmit
@@ -206,9 +191,8 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     job = Course::Assessment::Submission::UnsubmittingJob.
           perform_later(current_user, submission_ids, @assessment, nil).job
-    respond_to do |format|
-      format.json { render partial: 'jobs/submitted', locals: { job: job } }
-    end
+
+    render partial: 'jobs/submitted', locals: { job: job }
   end
 
   def delete
@@ -239,9 +223,8 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     job = Course::Assessment::Submission::DeletingJob.
           perform_later(current_user, submission_ids, @assessment).job
-    respond_to do |format|
-      format.json { render partial: 'jobs/submitted', locals: { job: job } }
-    end
+
+    render partial: 'jobs/submitted', locals: { job: job }
   end
 
   private
@@ -284,9 +267,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     log_service.log_submission_access(request)
 
-    respond_to do |format|
-      format.json { render json: { newSessionUrl: new_session_path } }
-    end
+    render json: { newSessionUrl: new_session_path }
   end
 
   def authentication_service
