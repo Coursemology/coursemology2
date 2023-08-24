@@ -933,7 +933,17 @@ const translations = defineMessages({
   },
   noActiveSessions: {
     id: 'course.assessment.monitoring.noActiveSessions',
-    defaultMessage: 'No active sessions.',
+    defaultMessage: 'No active sessions. No attempts have been made.',
+  },
+  expiredSession: {
+    id: 'course.assessment.monitoring.expiredSession',
+    defaultMessage:
+      'Expired session. It has been at least 24 hours since the submission was made.',
+  },
+  stoppedSession: {
+    id: 'course.assessment.monitoring.stoppedSession',
+    defaultMessage:
+      'Stopped session. Student may have finalised their submission.',
   },
   alivePresenceHint: {
     id: 'course.assessment.monitoring.alivePresenceHint',
