@@ -206,8 +206,8 @@ const translations = defineMessages({
   sessionProtectionHint: {
     id: 'course.assessment.AssessmentForm.sessionProtectionHint',
     defaultMessage:
-      'If enabled, students can only access their attempt once. \
-      Further access will require the session unlock password.',
+      'If enabled, students can only access their attempt once. Further access will require ' +
+      'the session unlock password. Ideally, <b>do NOT give this password to students</b>.',
   },
   viewPasswordHint: {
     id: 'course.assessment.AssessmentForm.viewPasswordHint',
@@ -217,10 +217,6 @@ const translations = defineMessages({
   viewPassword: {
     id: 'course.assessment.AssessmentForm.viewPassword',
     defaultMessage: 'Assessment password',
-  },
-  sessionPasswordHint: {
-    id: 'course.assessment.AssessmentForm.sessionPasswordHint',
-    defaultMessage: 'Ideally, do NOT give this password to students.',
   },
   sessionPassword: {
     id: 'course.assessment.AssessmentForm.sessionPassword',
