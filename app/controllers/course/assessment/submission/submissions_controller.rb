@@ -3,11 +3,11 @@ class Course::Assessment::Submission::SubmissionsController < \
   Course::Assessment::Submission::Controller
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
   include Signals::EmissionConcern
+  include Course::Assessment::Submission::MonitoringConcern
 
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
-  before_action :check_blocked_by_monitor, only: [:create, :edit, :update]
   before_action :check_password, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
   before_action :check_zombie_jobs, only: [:edit]
@@ -15,8 +15,6 @@ class Course::Assessment::Submission::SubmissionsController < \
   # In these cases, new submission_questions must be created when the submission is next
   # edited or updated.
   before_action :load_or_create_submission_questions, only: [:edit, :update]
-
-  after_action :stop_monitoring_session_if_submitted, only: [:update]
 
   signals :assessment_submissions, after: [:unsubmit, :delete]
   signals :assessment_submissions, after: [:update], if: -> { @submission.saved_change_to_workflow_state? }
@@ -279,40 +277,6 @@ class Course::Assessment::Submission::SubmissionsController < \
   def log_service
     @log_service ||=
       Course::Assessment::SessionLogService.new(@assessment, session, @submission)
-  end
-
-  def monitoring_component_enabled?
-    current_component_host[:course_monitoring_component].present?
-  end
-
-  def should_monitor?
-    monitoring_component_enabled? &&
-      current_user.id == @submission.creator_id &&
-      current_course_user&.student? &&
-      can?(:create, Course::Monitoring::Session.new(creator_id: current_user.id)) &&
-      @assessment&.monitor&.enabled?
-  end
-
-  def can_update_monitoring_session?
-    can?(:update, Course::Monitoring::Session.new)
-  end
-
-  def monitoring_service
-    return nil unless should_monitor? || can_update_monitoring_session?
-
-    @monitoring_service ||= Course::Assessment::Submission::MonitoringService.for(@submission, @assessment, session)
-  end
-
-  def stop_monitoring_session_if_submitted
-    monitoring_service&.stop! if @submission.submitted?
-  end
-
-  def check_blocked_by_monitor
-    render json: { newSessionUrl: course_assessment_path(current_course, @assessment) } if blocked_by_monitor?
-  end
-
-  def blocked_by_monitor?
-    should_monitor? && monitoring_service&.should_block?(request.user_agent)
   end
 
   def not_downloadable
