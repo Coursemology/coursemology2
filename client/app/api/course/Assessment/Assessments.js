@@ -160,6 +160,20 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     );
   }
 
+  /**
+   * Overrides access for an assessment if blocked by the monitoring component.
+   *
+   * @param {number} assessmentId
+   * @param {string} password
+   * @returns {import('api/types').APIResponse<import('api/types').JustRedirect>}
+   */
+  unblockMonitor(assessmentId, password) {
+    return this.client.post(
+      `${this.#urlPrefix}/${assessmentId}/unblock_monitor`,
+      { assessment: { password } },
+    );
+  }
+
   get #urlPrefix() {
     return `/courses/${this.courseId}/assessments`;
   }

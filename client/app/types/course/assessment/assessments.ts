@@ -148,6 +148,19 @@ export interface UnauthenticatedAssessmentData {
   startAt: string;
 }
 
+export interface BlockedByMonitorAssessmentData {
+  id: number;
+  title: string;
+  tabTitle: string;
+  tabUrl: string;
+  blocked: true;
+}
+
+export type FetchAssessmentData =
+  | AssessmentData
+  | UnauthenticatedAssessmentData
+  | BlockedByMonitorAssessmentData;
+
 export interface AssessmentDeleteResult {
   redirect: string;
 }
@@ -163,5 +176,16 @@ export interface AssessmentAuthenticationFormData {
 }
 
 export const isAuthenticatedAssessmentData = (
-  data: AssessmentData | UnauthenticatedAssessmentData,
-): data is AssessmentData => (data as AssessmentData).permissions !== undefined;
+  data: FetchAssessmentData,
+): data is AssessmentData =>
+  (data as AssessmentData)?.permissions !== undefined;
+
+export const isUnauthenticatedAssessmentData = (
+  data: FetchAssessmentData,
+): data is UnauthenticatedAssessmentData =>
+  (data as UnauthenticatedAssessmentData)?.isAuthenticated !== undefined;
+
+export const isBlockedByMonitorAssessmentData = (
+  data: FetchAssessmentData,
+): data is BlockedByMonitorAssessmentData =>
+  (data as BlockedByMonitorAssessmentData)?.blocked === true;

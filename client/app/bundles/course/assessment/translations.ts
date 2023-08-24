@@ -960,6 +960,28 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.invalidHeartbeat',
     defaultMessage: 'Does not contain SUS',
   },
+  invalidBrowser: {
+    id: 'course.assessment.monitoring.invalidBrowser',
+    defaultMessage: 'Invalid browser configuration',
+  },
+  invalidBrowserSubtitle: {
+    id: 'course.assessment.monitoring.invalidBrowserSubtitle',
+    defaultMessage:
+      'Access to this assessment is not allowed with your current browser and/or its configuration. ' +
+      'Contact your instructor for assistance.',
+  },
+  sessionUnlockPassword: {
+    id: 'course.assessment.monitoring.sessionUnlockPassword',
+    defaultMessage: 'Session unlock password',
+  },
+  overrideAccess: {
+    id: 'course.assessment.monitoring.overrideAccess',
+    defaultMessage: 'Override access',
+  },
+  accessGrantedForThisSessionOnly: {
+    id: 'course.assessment.monitoring.accessGrantedForThisSessionOnly',
+    defaultMessage: 'Access will be granted only for this browser session.',
+  },
   attemptingAssessment: {
     id: 'course.assessment.submission.attemptingAssessment',
     defaultMessage: 'Creating a new submission...',
