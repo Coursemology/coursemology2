@@ -114,7 +114,9 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         name="session_protected"
         render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField
-            description={t(translations.sessionProtectionHint)}
+            description={t(translations.sessionProtectionHint, {
+              b: (chunk) => <strong>{chunk}</strong>,
+            })}
             disabled={autograded || disabled}
             field={field}
             fieldState={fieldState}
@@ -124,28 +126,22 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       />
 
       {sessionProtected && (
-        <>
-          <Controller
-            control={control}
-            name="session_password"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormTextField
-                disabled={disabled}
-                field={field}
-                fieldState={fieldState}
-                fullWidth
-                label={t(translations.sessionPassword)}
-                required
-                type="password"
-                variant="filled"
-              />
-            )}
-          />
-
-          <Typography className="!mt-0" color="text.secondary" variant="body2">
-            {t(translations.sessionPasswordHint)}
-          </Typography>
-        </>
+        <Controller
+          control={control}
+          name="session_password"
+          render={({ field, fieldState }): JSX.Element => (
+            <FormTextField
+              disabled={disabled}
+              field={field}
+              fieldState={fieldState}
+              fullWidth
+              label={t(translations.sessionPassword)}
+              required
+              type="password"
+              variant="filled"
+            />
+          )}
+        />
       )}
     </>
   );
