@@ -1,5 +1,5 @@
 import { ComponentProps, ReactNode } from 'react';
-import { Tooltip } from '@mui/material';
+import { Fade, Tooltip } from '@mui/material';
 import { Snapshot } from 'types/channels/liveMonitoring';
 
 interface SessionBlobProps extends ComponentProps<'div'> {
@@ -23,7 +23,14 @@ const SessionBlob = (props: SessionBlobProps): JSX.Element => {
   if (!snapshot) return blob;
 
   return (
-    <Tooltip arrow disableInteractive title={snapshot.userName}>
+    <Tooltip
+      arrow
+      disableInteractive
+      enterDelay={0}
+      title={snapshot.userName}
+      TransitionComponent={Fade}
+      TransitionProps={{ timeout: 0 }}
+    >
       {blob}
     </Tooltip>
   );
