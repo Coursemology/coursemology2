@@ -2,12 +2,11 @@
 import { AxiosError } from 'axios';
 import { Operation } from 'store';
 import {
-  AssessmentData,
   AssessmentDeleteResult,
   AssessmentsListData,
   AssessmentUnlockRequirements,
+  FetchAssessmentData,
   QuestionOrderPostData,
-  UnauthenticatedAssessmentData,
 } from 'types/course/assessment/assessments';
 import { MonitoringRequestData } from 'types/course/assessment/monitoring';
 import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
@@ -41,7 +40,7 @@ export const fetchAssessments = async (
 
 export const fetchAssessment = async (
   id: number,
-): Promise<AssessmentData | UnauthenticatedAssessmentData> => {
+): Promise<FetchAssessmentData> => {
   const response = await CourseAPI.assessment.assessments.fetch(id);
   return response.data;
 };
@@ -88,6 +87,23 @@ export const authenticateAssessment = async (
       adaptedData,
     );
     return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const unblockAssessment = async (
+  assessmentId: number,
+  password: string,
+): Promise<string> => {
+  try {
+    const response = await CourseAPI.assessment.assessments.unblockMonitor(
+      assessmentId,
+      password,
+    );
+
+    return response.data.redirectUrl;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
