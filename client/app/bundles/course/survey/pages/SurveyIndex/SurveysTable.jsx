@@ -95,6 +95,9 @@ const SurveysTable = (props) => {
           <TableCell colSpan={5}>
             <FormattedMessage {...translations.bonusEndsAt} />
           </TableCell>
+          <TableCell colSpan={2}>
+            <FormattedMessage {...translations.responses} />
+          </TableCell>
           {canCreate ? (
             <TableCell colSpan={2}>
               <FormattedMessage {...translations.published} />
@@ -133,6 +136,17 @@ const SurveysTable = (props) => {
                 ? formatShortDateTime(survey.bonus_end_at)
                 : '-'}
             </TableCell>
+            <TableCell colSpan={2}>
+              {survey.canManage && (
+                <Link
+                  className="line-clamp-2 xl:line-clamp-1"
+                  to={`/courses/${courseId}/surveys/${survey.id}/responses`}
+                  underline="hover"
+                >
+                  {'-'}
+                </Link>
+              )}
+            </TableCell>
             {canCreate ? (
               <TableCell colSpan={2}>{renderPublishToggle(survey)}</TableCell>
             ) : null}
@@ -149,19 +163,6 @@ const SurveysTable = (props) => {
                     variant="outlined"
                   >
                     <FormattedMessage {...translations.results} />
-                  </Button>
-                )}
-                {survey.canManage && (
-                  <Button
-                    onClick={() =>
-                      navigate(
-                        `/courses/${courseId}/surveys/${survey.id}/responses`,
-                      )
-                    }
-                    style={styles.button}
-                    variant="outlined"
-                  >
-                    <FormattedMessage {...translations.responses} />
                   </Button>
                 )}
                 <RespondButton
