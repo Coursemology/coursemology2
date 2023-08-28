@@ -42,6 +42,7 @@ const SurveysTable = (props) => {
   } = props;
 
   const navigate = useNavigate();
+  const canManageSurvey = surveys.some((survey) => survey.canManage);
 
   const renderPublishToggle = (survey) => {
     const { dispatch } = props;
@@ -95,9 +96,11 @@ const SurveysTable = (props) => {
           <TableCell colSpan={5}>
             <FormattedMessage {...translations.bonusEndsAt} />
           </TableCell>
-          <TableCell colSpan={2}>
-            <FormattedMessage {...translations.responses} />
-          </TableCell>
+          {canManageSurvey ? (
+            <TableCell colSpan={2}>
+              <FormattedMessage {...translations.responses} />
+            </TableCell>
+          ) : null}
           {canCreate ? (
             <TableCell colSpan={2}>
               <FormattedMessage {...translations.published} />
@@ -136,17 +139,19 @@ const SurveysTable = (props) => {
                 ? formatMiniDateTime(survey.bonus_end_at)
                 : '-'}
             </TableCell>
-            <TableCell colSpan={2}>
-              {survey.canManage && (
+            {canManageSurvey && survey.canManage ? (
+              <TableCell colSpan={2}>
                 <Link
                   className="line-clamp-2 xl:line-clamp-1"
                   to={`/courses/${courseId}/surveys/${survey.id}/responses`}
                   underline="hover"
                 >
-                  {'-'}
+                  {`${survey.numberOfSubmissions}/${survey.numberOfStudents}`}
                 </Link>
-              )}
-            </TableCell>
+              </TableCell>
+            ) : canManageSurvey ? (
+              <TableCell colSpan={2}>{'-'}</TableCell>
+            ) : null}
             {canCreate ? (
               <TableCell colSpan={2}>{renderPublishToggle(survey)}</TableCell>
             ) : null}
