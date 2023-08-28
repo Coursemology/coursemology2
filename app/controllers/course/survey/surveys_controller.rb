@@ -9,6 +9,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
     respond_to do |format|
       format.json do
         @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
+        @course_students = current_course.course_users.students
       end
     end
   end
@@ -23,7 +24,10 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def show
     respond_to do |format|
-      format.json { render_survey_with_questions_json }
+      format.json do
+        @course_students = current_course.course_users.students
+        render_survey_with_questions_json
+      end
     end
   end
 
@@ -45,7 +49,10 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def results
     respond_to do |format|
-      format.json { preload_questions_results }
+      format.json do
+        @course_students = current_course.course_users.students
+        preload_questions_results
+      end
     end
   end
 

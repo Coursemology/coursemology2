@@ -30,6 +30,14 @@ class Course::Survey < ApplicationRecord
     unscoped.joins(:lesson_plan_item).select(Course::LessonPlan::Item.arel_table[:id])
   end)
 
+  # Calculating the number of students who have already done the submission
+  calculated :student_submission_count, (lambda do
+    Course::Survey::Response.
+      select('count(*)').
+      where('course_survey_responses.submitted_at IS NOT NULL').
+      where('course_survey_responses.survey_id = course_surveys.id')
+  end)
+
   def can_user_start?(_user)
     allow_response_after_end || end_at.nil? || Time.zone.now < end_at
   end
