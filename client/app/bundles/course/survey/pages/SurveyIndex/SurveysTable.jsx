@@ -151,7 +151,7 @@ const SurveysTable = (props) => {
                   </Link>
                 </TableCell>
               ) : (
-                <TableCell colSpan={2}>{'-'}</TableCell>
+                <TableCell colSpan={2}>-</TableCell>
               ))}
             {canCreate ? (
               <TableCell colSpan={2}>{renderPublishToggle(survey)}</TableCell>

@@ -8,14 +8,15 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   def index
     respond_to do |format|
       format.json do
-        @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
         @course_students = current_course.course_users.students
+        @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
       end
     end
   end
 
   def create
     if @survey.save
+      @course_students = current_course.course_users.students
       render partial: 'survey', locals: { survey: @survey, survey_time: @survey.time_for(current_course_user) }
     else
       render json: { errors: @survey.errors }, status: :bad_request
@@ -33,6 +34,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def update
     if @survey.update(survey_params)
+      @course_students = current_course.course_users.students
       render_survey_with_questions_json
     else
       render json: { errors: @survey.errors }, status: :bad_request
