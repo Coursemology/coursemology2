@@ -139,19 +139,20 @@ const SurveysTable = (props) => {
                 ? formatMiniDateTime(survey.bonus_end_at)
                 : '-'}
             </TableCell>
-            {canManageSurvey && survey.canManage ? (
-              <TableCell colSpan={2}>
-                <Link
-                  className="line-clamp-2 xl:line-clamp-1"
-                  to={`/courses/${courseId}/surveys/${survey.id}/responses`}
-                  underline="hover"
-                >
-                  {`${survey.numberOfSubmissions}/${survey.numberOfStudents}`}
-                </Link>
-              </TableCell>
-            ) : canManageSurvey ? (
-              <TableCell colSpan={2}>{'-'}</TableCell>
-            ) : null}
+            {canManageSurvey &&
+              (survey.canManage ? (
+                <TableCell colSpan={2}>
+                  <Link
+                    className="line-clamp-2 xl:line-clamp-1"
+                    to={`/courses/${courseId}/surveys/${survey.id}/responses`}
+                    underline="hover"
+                  >
+                    {`${survey.numberOfSubmissions}/${survey.numberOfStudents}`}
+                  </Link>
+                </TableCell>
+              ) : (
+                <TableCell colSpan={2}>{'-'}</TableCell>
+              ))}
             {canCreate ? (
               <TableCell colSpan={2}>{renderPublishToggle(survey)}</TableCell>
             ) : null}
