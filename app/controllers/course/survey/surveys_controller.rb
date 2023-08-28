@@ -2,7 +2,7 @@
 class Course::Survey::SurveysController < Course::Survey::Controller
   include Course::Survey::ReorderingConcern
 
-  before_action :get_number_of_students_in_course, only: [:index, :create, :show, :update, :results]
+  before_action :number_of_students_in_course, only: [:index, :create, :show, :update, :results]
 
   skip_load_and_authorize_resource :survey, only: [:new, :create]
   build_and_authorize_new_lesson_plan_item :survey, class: Course::Survey, through: :course, only: [:new, :create]
@@ -74,7 +74,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   private
 
-  def get_number_of_students_in_course
+  def number_of_students_in_course
     @course_students = current_course.course_users.students
   end
 
@@ -106,7 +106,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def preload_student_submission_count
     @survey_submission_count_hash = @surveys.calculated(:student_submission_count).
-                                   to_h do |survey|
+                                    to_h do |survey|
       [survey.id, survey.student_submission_count]
     end
   end

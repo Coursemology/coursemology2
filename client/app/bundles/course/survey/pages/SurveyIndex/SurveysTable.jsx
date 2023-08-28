@@ -147,7 +147,7 @@ const SurveysTable = (props) => {
                     to={`/courses/${courseId}/surveys/${survey.id}/responses`}
                     underline="hover"
                   >
-                    {`${survey.numberOfSubmissions}/${survey.numberOfStudents}`}
+                    {`${survey.submissionCount}/${survey.numberOfStudents}`}
                   </Link>
                 </TableCell>
               ) : (
