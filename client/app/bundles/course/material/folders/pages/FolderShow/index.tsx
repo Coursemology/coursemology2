@@ -117,11 +117,7 @@ const FolderShow: FC = () => {
           ? getWorkbinFolderURL(getCourseId(), currFolderInfo.parentId)
           : undefined
       }
-      title={
-        currFolderInfo.name === null
-          ? t(translations.defaultHeader)
-          : currFolderInfo.name
-      }
+      title={currFolderInfo.name ?? t(translations.defaultHeader)}
       unpadded
     >
       <WorkbinTable
