@@ -12,7 +12,7 @@ json.description format_ckeditor_rich_text(survey.description)
 
 if can_manage_survey
   json.numberOfStudents @course_students.count
-  json.numberOfSubmissions survey.student_submission_count
+  json.numberOfSubmissions @survey_submission_count_hash ? @survey_submission_count_hash[survey.id] : survey.student_submission_count
 end
 
 can_update = can?(:update, survey)

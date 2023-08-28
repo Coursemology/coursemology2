@@ -2,13 +2,15 @@
 class Course::Survey::SurveysController < Course::Survey::Controller
   include Course::Survey::ReorderingConcern
 
+  before_action :get_number_of_students_in_course, only: [:index, :create, :show, :update, :results]
+
   skip_load_and_authorize_resource :survey, only: [:new, :create]
   build_and_authorize_new_lesson_plan_item :survey, class: Course::Survey, through: :course, only: [:new, :create]
 
   def index
     respond_to do |format|
       format.json do
-        @course_students = current_course.course_users.students
+        preload_student_submission_count
         @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
       end
     end
@@ -16,7 +18,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def create
     if @survey.save
-      @course_students = current_course.course_users.students
       render partial: 'survey', locals: { survey: @survey, survey_time: @survey.time_for(current_course_user) }
     else
       render json: { errors: @survey.errors }, status: :bad_request
@@ -26,7 +27,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   def show
     respond_to do |format|
       format.json do
-        @course_students = current_course.course_users.students
         render_survey_with_questions_json
       end
     end
@@ -34,7 +34,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def update
     if @survey.update(survey_params)
-      @course_students = current_course.course_users.students
       render_survey_with_questions_json
     else
       render json: { errors: @survey.errors }, status: :bad_request
@@ -52,7 +51,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   def results
     respond_to do |format|
       format.json do
-        @course_students = current_course.course_users.students
         preload_questions_results
       end
     end
@@ -75,6 +73,10 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   end
 
   private
+
+  def get_number_of_students_in_course
+    @course_students = current_course.course_users.students
+  end
 
   def render_survey_with_questions_json
     load_sections
@@ -100,5 +102,12 @@ class Course::Survey::SurveysController < Course::Survey::Controller
     ]
     fields << :anonymous if action_name == 'create' || @survey.can_toggle_anonymity?
     params.require(:survey).permit(*fields)
+  end
+
+  def preload_student_submission_count
+    @survey_submission_count_hash = @surveys.calculated(:student_submission_count).
+                                   to_h do |survey|
+      [survey.id, survey.student_submission_count]
+    end
   end
 end
