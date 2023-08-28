@@ -111,6 +111,8 @@ commands:
           name: Build client
           working_directory: client
           command: yarn build:test
+          environment:
+            AVAILABLE_CPUS: 4
 
       - save_cache:
           paths:
