@@ -17,7 +17,7 @@ import { surveyShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
 import TableContainer from 'lib/components/core/layouts/TableContainer';
 import Link from 'lib/components/core/Link';
-import { formatShortDateTime } from 'lib/moment';
+import { formatMiniDateTime } from 'lib/moment';
 
 import SurveyBadges from './SurveyBadges';
 
@@ -126,14 +126,14 @@ const SurveysTable = (props) => {
             <TableCell colSpan={3}>{survey.base_exp}</TableCell>
             <TableCell colSpan={3}>{survey.time_bonus_exp}</TableCell>
             <TableCell colSpan={5} style={styles.wrap}>
-              {formatShortDateTime(survey.start_at)}
+              {formatMiniDateTime(survey.start_at)}
             </TableCell>
             <TableCell colSpan={5} style={styles.wrap}>
-              {formatShortDateTime(survey.end_at)}
+              {formatMiniDateTime(survey.end_at)}
             </TableCell>
             <TableCell colSpan={5} style={styles.wrap}>
               {survey.bonus_end_at
-                ? formatShortDateTime(survey.bonus_end_at)
+                ? formatMiniDateTime(survey.bonus_end_at)
                 : '-'}
             </TableCell>
             <TableCell colSpan={2}>
