@@ -33,9 +33,11 @@ class Course::Survey < ApplicationRecord
   # Calculating the number of students who have already done the submission
   calculated :student_submission_count, (lambda do
     Course::Survey::Response.
-      select('count(*)').
+      joins('INNER JOIN course_users ON course_survey_responses.creator_id = course_users.user_id').
+      select('count(DISTINCT course_survey_responses.creator_id) AS student_submission_count').
       where('course_survey_responses.submitted_at IS NOT NULL').
-      where('course_survey_responses.survey_id = course_surveys.id')
+      where('course_survey_responses.survey_id = course_surveys.id').
+      where('course_users.role = 0')
   end)
 
   def can_user_start?(_user)
