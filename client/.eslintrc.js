@@ -248,7 +248,6 @@ module.exports = {
           { allow: ['arrowFunctions'] },
         ],
         '@typescript-eslint/no-explicit-any': 'error',
-        '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/prefer-as-const': 'error',
         '@typescript-eslint/restrict-template-expressions': [

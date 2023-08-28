@@ -37,7 +37,6 @@ const Accordion = (props: AccordionProps): JSX.Element => {
           expandIconWrapper: icon ? 'rotate-0' : undefined,
         }}
         className="space-x-2 px-9 py-6 hover:bg-neutral-100"
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         expandIcon={icon || <ExpandMore />}
       >
         <Typography>{title}</Typography>
