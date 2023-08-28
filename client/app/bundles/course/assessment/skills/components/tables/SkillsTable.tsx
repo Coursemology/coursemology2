@@ -110,9 +110,7 @@ const SkillsTable: FC<Props> = (props: Props) => {
   }
 
   const name =
-    skillBranchIndex !== -1 &&
-    data[skillBranchIndex] &&
-    data[skillBranchIndex].title
+    skillBranchIndex !== -1 && data[skillBranchIndex]?.title
       ? `${data[skillBranchIndex].title} - `
       : '';
 
