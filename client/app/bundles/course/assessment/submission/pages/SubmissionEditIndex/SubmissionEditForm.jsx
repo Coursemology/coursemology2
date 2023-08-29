@@ -64,6 +64,7 @@ const styles = {
 
 const SubmissionEditForm = (props) => {
   const {
+    allConsideredCorrect,
     attempting,
     canUpdate,
     codaveriFeedbackStatus,
@@ -401,7 +402,13 @@ const SubmissionEditForm = (props) => {
     const editable = !attempting && graderView;
     const visible = editable || published;
 
-    return visible ? <QuestionGrade editable={editable} id={id} /> : null;
+    return visible ? (
+      <QuestionGrade
+        allConsideredCorrect={allConsideredCorrect}
+        editable={editable}
+        id={id}
+      />
+    ) : null;
   };
 
   const renderQuestions = () => (
@@ -706,6 +713,7 @@ const SubmissionEditForm = (props) => {
 };
 
 SubmissionEditForm.propTypes = {
+  allConsideredCorrect: PropTypes.bool,
   initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 
