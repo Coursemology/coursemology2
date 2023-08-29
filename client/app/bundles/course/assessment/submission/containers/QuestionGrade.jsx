@@ -64,9 +64,15 @@ class VisibleQuestionGrade extends Component {
   }
 
   renderQuestionGradeField() {
-    const { question, grading } = this.props;
-    const initialGrade = grading.grade;
+    const { allConsideredCorrect, question, grading } = this.props;
+    let initialGrade = grading.grade;
+
     const maxGrade = question.maximumGrade;
+
+    if (!initialGrade && allConsideredCorrect) {
+      initialGrade = maxGrade;
+      this.processValue(initialGrade.toString(), true);
+    }
 
     return (
       <div className="flex items-center space-x-2">
@@ -106,11 +112,11 @@ class VisibleQuestionGrade extends Component {
 
     return (
       <Paper
-        className="flex items-center justify-between space-x-5 px-5 py-4"
+        className="flex items-center space-x-5 px-5 py-4"
         variant="outlined"
       >
         <Typography color="text.secondary" variant="body1">
-          Grade
+          Grade :
         </Typography>
 
         {editable
@@ -122,6 +128,7 @@ class VisibleQuestionGrade extends Component {
 }
 
 VisibleQuestionGrade.propTypes = {
+  allConsideredCorrect: PropTypes.bool,
   editable: PropTypes.bool.isRequired,
   grading: questionGradeShape,
   id: PropTypes.number.isRequired,

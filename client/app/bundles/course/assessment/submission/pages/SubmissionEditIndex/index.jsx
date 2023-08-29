@@ -341,6 +341,7 @@ class VisibleSubmissionEditIndex extends Component {
     }
     return (
       <SubmissionEditForm
+        allConsideredCorrect={this.allConsideredCorrect()}
         attempting={workflowState === workflowStates.Attempting}
         canUpdate={canUpdate}
         codaveriFeedbackStatus={codaveriFeedbackStatus}
