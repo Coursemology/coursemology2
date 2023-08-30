@@ -1,6 +1,5 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Button, useMediaQuery } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -19,7 +18,7 @@ import {
   getAllAchievementMiniEntities,
 } from '../../selectors';
 import AchievementNew from '../AchievementNew';
-import AddButton from 'lib/components/core/buttons/AddButton';
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   newAchievement: {
@@ -53,8 +52,6 @@ const AchievementsIndex: FC = () => {
   const achievementPermissions = useAppSelector(getAchievementPermissions);
   const dispatch = useAppDispatch();
 
-  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
-
   useEffect(() => {
     dispatch(fetchAchievements())
       .finally(() => setIsLoading(false))
@@ -77,27 +74,17 @@ const AchievementsIndex: FC = () => {
 
   if (achievementPermissions?.canCreate) {
     headerToolbars.push(
-      minWidthForAddButtonWithText ? (
-        <Button
-          key="new-achievement-button"
-          className="new-achievement-button"
-          onClick={(): void => {
-            setIsOpen(true);
-          }}
-          variant="outlined"
-        >
-          {t(translations.newAchievement)}
-        </Button>
-      ) : (
-        <AddButton
-          key="new-announcement-button"
-          className="new-announcement-button"
-          onClick={(): void => {
-            setIsOpen(true);
-          }}
-          tooltip={t(translations.newAchievement)}
-        />
-      ),
+      <WidthAdjustedNewButton
+        minWidth={720}
+        textButtonKey="new-achievement-button"
+        textButtonClassName="new-achievement-button"
+        nonTextButtonKey="new-achievement-button"
+        nonTextButtonClassName="new-achievement-button"
+        onClick={(): void => {
+          setIsOpen(true);
+        }}
+        text={t(translations.newAchievement)}
+      />,
     );
   }
 

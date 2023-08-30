@@ -1,7 +1,7 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
-import { Button, useMediaQuery } from '@mui/material';
+import { Button } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -18,7 +18,7 @@ import {
   getCoursePermissions,
 } from '../../selectors';
 import CoursesNew from '../CoursesNew';
-import AddButton from 'lib/components/core/buttons/AddButton';
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const styles = {
   newButton: {
@@ -52,8 +52,6 @@ const translations = defineMessages({
 
 const CoursesIndex: FC = () => {
   const { t } = useTranslation();
-
-  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
 
   const [params] = useSearchParams();
 
@@ -90,25 +88,15 @@ const CoursesIndex: FC = () => {
   const headerToolbars: ReactElement[] = [];
   if (coursesPermissions?.canCreate) {
     headerToolbars.push(
-      minWidthForAddButtonWithText ? (
-        <Button
-          key="new-course-button"
-          className="new-course-button"
-          color="primary"
-          onClick={(): void => setIsNewCourseDialogOpen(true)}
-          style={styles.newButton}
-          variant="outlined"
-        >
-          {t(translations.newCourse)}
-        </Button>
-      ) : (
-        <AddButton
-          key="new-course-button"
-          className="new-course-button"
-          onClick={(): void => setIsNewCourseDialogOpen(true)}
-          tooltip={t(translations.newCourse)}
-        />
-      ),
+      <WidthAdjustedNewButton
+        minWidth={720}
+        textButtonKey="new-course-button"
+        textButtonClassName="new-course-button"
+        nonTextButtonKey="new-course-button"
+        nonTextButtonClassName="new-course-button"
+        onClick={(): void => setIsNewCourseDialogOpen(true)}
+        text={t(translations.newCourse)}
+      />,
     );
   } else if (!isLoading && coursesPermissions?.isCurrentUser) {
     headerToolbars.push(

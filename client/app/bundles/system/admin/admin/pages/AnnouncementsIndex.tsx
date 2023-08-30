@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Button, useMediaQuery } from '@mui/material';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
@@ -16,7 +15,7 @@ import {
   updateAnnouncement,
 } from '../operations';
 import { getAllAnnouncementMiniEntities } from '../selectors';
-import AddButton from 'lib/components/core/buttons/AddButton';
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 type Props = WrappedComponentProps;
 
@@ -43,8 +42,6 @@ const AnnouncementsIndex: FC<Props> = (props) => {
   const announcements = useAppSelector(getAllAnnouncementMiniEntities);
   const dispatch = useAppDispatch();
 
-  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
-
   useEffect(() => {
     dispatch(indexAnnouncements())
       .catch(() =>
@@ -57,23 +54,15 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   return (
     <Page>
-      {minWidthForAddButtonWithText ? (
-        <Button
-          className="float-right"
-          id="new-announcement-button"
-          onClick={(): void => setIsOpen(true)}
-          variant="outlined"
-        >
-          {intl.formatMessage(translations.newAnnouncement)}
-        </Button>
-      ) : (
-        <AddButton
-          key="new-announcement-button"
-          className="float-right"
-          onClick={(): void => setIsOpen(true)}
-          tooltip={intl.formatMessage(translations.newAnnouncement)}
-        />
-      )}
+      <WidthAdjustedNewButton
+        minWidth={720}
+        textButtonKey="new-announcement-button"
+        textButtonClassName="float-right"
+        nonTextButtonKey="new-announcement-button"
+        nonTextButtonClassName="float-right"
+        onClick={(): void => setIsOpen(true)}
+        text={intl.formatMessage(translations.newAnnouncement)}
+      />
 
       <AnnouncementsDisplay
         announcementPermissions={{ canCreate: true }}

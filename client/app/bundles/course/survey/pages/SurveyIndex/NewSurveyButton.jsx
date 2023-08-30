@@ -1,16 +1,13 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { createSurvey, showSurveyForm } from 'course/survey/actions/surveys';
 import moment from 'lib/moment';
 
-import useMediaQuery from '@mui/material/useMediaQuery';
-import AddButton from 'lib/components/core/buttons/AddButton';
-
 import { formatSurveyFormData } from '../../utils';
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   newSurvey: {
@@ -47,8 +44,6 @@ const NewSurveyButton = (props) => {
   const { canCreate, intl } = props;
   const navigate = useNavigate();
 
-  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
-
   const createSurveyHandler = (data, setError) => {
     const { dispatch } = props;
 
@@ -84,23 +79,15 @@ const NewSurveyButton = (props) => {
   };
 
   return canCreate ? (
-    minWidthForAddButtonWithText ? (
-      <Button
-        key="new-survey-button"
-        className="new-survey-button"
-        onClick={showNewSurveyForm}
-        variant="outlined"
-      >
-        {intl.formatMessage(translations.newSurvey)}
-      </Button>
-    ) : (
-      <AddButton
-        key="new-survey-button"
-        className="new-survey-button"
-        onClick={showNewSurveyForm}
-        tooltip={intl.formatMessage(translations.newSurvey)}
-      />
-    )
+    <WidthAdjustedNewButton
+      minWidth={720}
+      textButtonKey="new-survey-button"
+      textButtonClassName="new-survey-button"
+      nonTextButtonKey="new-survey-button"
+      nonTextButtonClassName="new-survey-button"
+      onClick={showNewSurveyForm}
+      text={intl.formatMessage(translations.newSurvey)}
+    />
   ) : (
     <div />
   );

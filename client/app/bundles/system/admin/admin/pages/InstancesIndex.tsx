@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Button, useMediaQuery } from '@mui/material';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -13,7 +12,7 @@ import { indexInstances } from '../operations';
 import { getAllInstanceMiniEntities, getPermissions } from '../selectors';
 
 import InstanceNew from './InstanceNew';
-import AddButton from 'lib/components/core/buttons/AddButton';
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   header: {
@@ -43,7 +42,6 @@ const InstancesIndex: FC = () => {
 
   const permissions = useAppSelector(getPermissions);
   const instances = useAppSelector(getAllInstanceMiniEntities);
-  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
 
   useEffect(() => {
     dispatch(indexInstances())
@@ -59,24 +57,17 @@ const InstancesIndex: FC = () => {
         className="border-none"
         instances={instances}
         newInstanceButton={
-          permissions.canCreateInstances &&
-          (minWidthForAddButtonWithText ? (
-            <Button
-              className="whitespace-nowrap"
-              id="new-instance-button"
+          permissions.canCreateInstances && (
+            <WidthAdjustedNewButton
+              minWidth={720}
+              textButtonKey="new-instance-button"
+              textButtonClassName="whitespace-nowrap"
+              nonTextButtonKey="new-instance-button"
+              nonTextButtonClassName="whitespace-nowrap"
               onClick={(): void => setIsOpen(true)}
-              variant="outlined"
-            >
-              {t(translations.newInstance)}
-            </Button>
-          ) : (
-            <AddButton
-              key="new-instance-button"
-              className="whitespace-nowrap"
-              onClick={(): void => setIsOpen(true)}
-              tooltip={t(translations.newInstance)}
+              text={t(translations.newInstance)}
             />
-          ))
+          )
         }
         renderRowActionComponent={(instance): JSX.Element => (
           <InstancesButtons instance={instance} />

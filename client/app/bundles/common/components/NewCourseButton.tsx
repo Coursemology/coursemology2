@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Button, useMediaQuery } from '@mui/material';
 
 import CoursesNew from 'course/courses/pages/CoursesNew';
 import useTranslation from 'lib/hooks/useTranslation';
-import AddButton from 'lib/components/core/buttons/AddButton';
+import WidthAdjustedNewButton from './WidthAdjustedNewButton';
 
 const translations = defineMessages({
   newCourse: {
@@ -17,20 +16,17 @@ const NewCourseButton = (): JSX.Element => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { t } = useTranslation();
 
-  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
-
   return (
     <>
-      {minWidthForAddButtonWithText ? (
-        <Button onClick={(): void => setIsDialogOpen(true)} variant="outlined">
-          {t(translations.newCourse)}
-        </Button>
-      ) : (
-        <AddButton
-          onClick={(): void => setIsDialogOpen(true)}
-          tooltip={t(translations.newCourse)}
-        />
-      )}
+      <WidthAdjustedNewButton
+        minWidth={720}
+        textButtonKey="new-course-button"
+        textButtonClassName="new-course-button"
+        nonTextButtonKey="new-course-button"
+        nonTextButtonClassName="new-course-button"
+        onClick={(): void => setIsDialogOpen(true)}
+        text={t(translations.newCourse)}
+      />
       <CoursesNew
         onClose={(): void => setIsDialogOpen(false)}
         open={isDialogOpen}

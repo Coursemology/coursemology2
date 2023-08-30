@@ -1,7 +1,6 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
-import { Button, useMediaQuery } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -18,7 +17,7 @@ import {
   getVideoPermissions,
 } from '../../selectors';
 import VideoNew from '../VideoNew';
-import AddButton from 'lib/components/core/buttons/AddButton';
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   header: {
@@ -64,8 +63,6 @@ const VideosIndex: FC = () => {
   const videoPermissions = useAppSelector(getVideoPermissions);
   const dispatch = useAppDispatch();
 
-  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
-
   useEffect(() => {
     setIsLoading(true);
     dispatch(fetchVideos(tabId))
@@ -77,26 +74,15 @@ const VideosIndex: FC = () => {
 
   if (videoPermissions?.canManage) {
     headerToolbars.push(
-      minWidthForAddButtonWithText ? (
-        <Button
-          key="new-video-button"
-          className="new-video-button bg-white"
-          color="primary"
-          onClick={(): void => setIsOpen(true)}
-          variant="outlined"
-        >
-          {t(translations.newVideo)}
-        </Button>
-      ) : (
-        <AddButton
-          key="new-video-button"
-          className="new-video-button"
-          onClick={(): void => {
-            setIsOpen(true);
-          }}
-          tooltip={t(translations.newVideo)}
-        />
-      ),
+      <WidthAdjustedNewButton
+        minWidth={720}
+        textButtonKey="new-video-button"
+        textButtonClassName="new-video-button bg-white"
+        nonTextButtonKey="new-video-button"
+        nonTextButtonClassName="new-video-button"
+        onClick={(): void => setIsOpen(true)}
+        text={t(translations.newVideo)}
+      />,
     );
   }
 
