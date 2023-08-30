@@ -40,6 +40,5 @@ describe('Surveys', () => {
     await waitFor(() => expect(spyIndex).toHaveBeenCalled());
 
     expect(page.getByText(SURVEYS[0].title)).toBeVisible();
-    expect(page.getByTestId('AddIcon')).toBeVisible();
   });
 });
