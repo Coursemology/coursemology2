@@ -21,6 +21,7 @@ import {
   getAnnouncementPermission,
 } from '../selectors';
 import AddButton from 'lib/components/core/buttons/AddButton';
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 type Props = WrappedComponentProps;
 
@@ -67,24 +68,17 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   return (
     <Page
       actions={
-        announcementPermission &&
-        (minWidthForAddButtonWithText ? (
-          <Button
-            className="float-right"
-            id="new-announcement-button"
+        announcementPermission && (
+          <WidthAdjustedNewButton
+            minWidth={720}
+            textButtonKey="new-announcement-button"
+            textButtonClassName="float-right"
+            nonTextButtonKey="new-announcement-button"
+            nonTextButtonClassName="float-right"
             onClick={(): void => setIsOpen(true)}
-            variant="outlined"
-          >
-            {intl.formatMessage(translations.newAnnouncement)}
-          </Button>
-        ) : (
-          <AddButton
-            key="new-announcement-button"
-            className="float-right"
-            onClick={(): void => setIsOpen(true)}
-            tooltip={intl.formatMessage(translations.newAnnouncement)}
+            text={intl.formatMessage(translations.newAnnouncement)}
           />
-        ))
+        )
       }
       title={intl.formatMessage(translations.header)}
     >

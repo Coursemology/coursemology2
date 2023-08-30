@@ -18,7 +18,7 @@ import formTranslations from 'lib/translations/form';
 import AssessmentForm from '../../components/AssessmentForm';
 import actionTypes, { DEFAULT_MONITORING_OPTIONS } from '../../constants';
 import translations from '../../translations';
-import AddButton from 'lib/components/core/buttons/AddButton';
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 class NewAssessmentFormButton extends Component {
   constructor(props) {
@@ -69,7 +69,6 @@ class NewAssessmentFormButton extends Component {
   render() {
     const {
       confirmationDialogOpen,
-      minWidthForAddButtonWithText,
       disabled,
       dispatch,
       gamified,
@@ -140,23 +139,15 @@ class NewAssessmentFormButton extends Component {
 
     return (
       <>
-        {minWidthForAddButtonWithText ? (
-          <Button
-            className="bg-white"
-            disabled={disabled}
-            onClick={this.handleOpen}
-            variant="outlined"
-          >
-            {intl.formatMessage(translations.newAssessment)}
-          </Button>
-        ) : (
-          <AddButton
-            key="new-assessment-button"
-            className="new-assessment-button"
-            onClick={this.handleOpen}
-            tooltip={intl.formatMessage(translations.newAssessment)}
-          />
-        )}
+        <WidthAdjustedNewButton
+          minWidth={720}
+          textButtonKey="new-assessment-button"
+          textButtonClassName="bg-white"
+          nonTextButtonKey="new-assessment-button"
+          nonTextButtonClassName="new-assessment-button"
+          onClick={this.handleOpen}
+          text={intl.formatMessage(translations.newAssessment)}
+        />
 
         <Dialog
           disableEnforceFocus
@@ -207,7 +198,6 @@ NewAssessmentFormButton.propTypes = {
   categoryId: PropTypes.number.isRequired,
   tabId: PropTypes.number.isRequired,
   gamified: PropTypes.bool,
-  minWidthForAddButtonWithText: PropTypes.bool,
   randomizationAllowed: PropTypes.bool,
   canManageMonitor: PropTypes.bool,
   monitoringEnabled: PropTypes.bool,
