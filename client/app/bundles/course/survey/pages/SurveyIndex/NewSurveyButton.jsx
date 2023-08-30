@@ -1,10 +1,10 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { createSurvey, showSurveyForm } from 'course/survey/actions/surveys';
-import AddButton from 'lib/components/core/buttons/AddButton';
 import moment from 'lib/moment';
 
 import { formatSurveyFormData } from '../../utils';
@@ -41,11 +41,11 @@ const aWeekStartingTomorrow = () => {
 };
 
 const NewSurveyButton = (props) => {
-  const { canCreate } = props;
+  const { canCreate, intl } = props;
   const navigate = useNavigate();
 
   const createSurveyHandler = (data, setError) => {
-    const { dispatch, intl } = props;
+    const { dispatch } = props;
 
     const payload = formatSurveyFormData(data);
     const successMessage = intl.formatMessage(translations.success, data);
@@ -56,7 +56,7 @@ const NewSurveyButton = (props) => {
   };
 
   const showNewSurveyForm = () => {
-    const { dispatch, intl } = props;
+    const { dispatch } = props;
 
     return dispatch(
       showSurveyForm({
@@ -78,7 +78,18 @@ const NewSurveyButton = (props) => {
     );
   };
 
-  return canCreate ? <AddButton onClick={showNewSurveyForm} /> : <div />;
+  return canCreate ? (
+    <Button
+      key="new-survey-button"
+      className="new-survey-button"
+      onClick={showNewSurveyForm}
+      variant="outlined"
+    >
+      {intl.formatMessage(translations.newSurvey)}
+    </Button>
+  ) : (
+    <div />
+  );
 };
 
 NewSurveyButton.propTypes = propTypes;
