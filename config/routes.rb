@@ -55,6 +55,8 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
+  get '/health_check', to: 'health_check#show'
+
   concern :conditional do
     namespace :condition do
       resources :achievements, except: [:new, :edit]
