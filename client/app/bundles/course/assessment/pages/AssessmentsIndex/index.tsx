@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { Tab, Tabs } from '@mui/material';
+import { Tab, Tabs, useMediaQuery } from '@mui/material';
 import { AssessmentsListData } from 'types/course/assessment/assessments';
 
 import Page from 'lib/components/core/layouts/Page';
@@ -15,6 +15,7 @@ const AssessmentsIndex = (): JSX.Element => {
   const [params, setParams] = useSearchParams();
   const categoryId = parseInt(params.get('category') ?? '', 10) || undefined;
   const tabId = parseInt(params.get('tab') ?? '', 10) || undefined;
+  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
 
   const fetchAssessmentsInTab = (): Promise<AssessmentsListData> => {
     return fetchAssessments(categoryId, tabId);
@@ -34,6 +35,7 @@ const AssessmentsIndex = (): JSX.Element => {
                 key={data.display.tabId}
                 // @ts-ignore: component is still written in JSX
                 canManageMonitor={data.display.canManageMonitor}
+                minWidthForAddButtonWithText={minWidthForAddButtonWithText}
                 categoryId={data.display.category.id}
                 gamified={data.display.isGamified}
                 monitoringEnabled={data.display.isMonitoringEnabled}

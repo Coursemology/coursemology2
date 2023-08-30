@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Button } from '@mui/material';
+import { Button, useMediaQuery } from '@mui/material';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
@@ -16,6 +16,7 @@ import {
   updateAnnouncement,
 } from '../operations';
 import { getAllAnnouncementMiniEntities } from '../selectors';
+import AddButton from 'lib/components/core/buttons/AddButton';
 
 type Props = WrappedComponentProps;
 
@@ -42,6 +43,8 @@ const AnnouncementsIndex: FC<Props> = (props) => {
   const announcements = useAppSelector(getAllAnnouncementMiniEntities);
   const dispatch = useAppDispatch();
 
+  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
+
   useEffect(() => {
     dispatch(indexAnnouncements())
       .catch(() =>
@@ -54,14 +57,23 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   return (
     <Page>
-      <Button
-        className="float-right"
-        id="new-announcement-button"
-        onClick={(): void => setIsOpen(true)}
-        variant="outlined"
-      >
-        {intl.formatMessage(translations.newAnnouncement)}
-      </Button>
+      {minWidthForAddButtonWithText ? (
+        <Button
+          className="float-right"
+          id="new-announcement-button"
+          onClick={(): void => setIsOpen(true)}
+          variant="outlined"
+        >
+          {intl.formatMessage(translations.newAnnouncement)}
+        </Button>
+      ) : (
+        <AddButton
+          key="new-announcement-button"
+          className="float-right"
+          onClick={(): void => setIsOpen(true)}
+          tooltip={intl.formatMessage(translations.newAnnouncement)}
+        />
+      )}
 
       <AnnouncementsDisplay
         announcementPermissions={{ canCreate: true }}

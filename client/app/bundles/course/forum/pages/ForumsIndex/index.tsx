@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Button } from '@mui/material';
+import { Button, useMediaQuery } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -18,6 +18,7 @@ import {
   getForumPermissions,
 } from '../../selectors';
 import ForumNew from '../ForumNew';
+import AddButton from 'lib/components/core/buttons/AddButton';
 
 const translations = defineMessages({
   header: {
@@ -54,6 +55,8 @@ const ForumsIndex: FC = () => {
   const forumPermissions = useAppSelector(getForumPermissions);
   const forumMetadata = useAppSelector(getForumMetadata);
 
+  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
+
   useEffect(() => {
     dispatch(fetchForums())
       .finally(() => setIsLoading(false))
@@ -86,16 +89,26 @@ const ForumsIndex: FC = () => {
         handleMarkAllAsRead={handleMarkAllAsRead}
         nextUnreadTopicUrl={forumMetadata.nextUnreadTopicUrl}
       />
-      {forumPermissions?.canCreateForum && (
-        <Button
-          key="new-forum-button"
-          className="new-forum-button"
-          onClick={(): void => setIsForumNewDialogOpen(true)}
-          variant="outlined"
-        >
-          {t(translations.newForum)}
-        </Button>
-      )}
+      {forumPermissions?.canCreateForum &&
+        (minWidthForAddButtonWithText ? (
+          <Button
+            key="new-forum-button"
+            className="new-forum-button"
+            onClick={(): void => setIsForumNewDialogOpen(true)}
+            variant="outlined"
+          >
+            {t(translations.newForum)}
+          </Button>
+        ) : (
+          <AddButton
+            key="new-forum-button"
+            className="new-forum-button"
+            onClick={(): void => {
+              setIsForumNewDialogOpen(true);
+            }}
+            tooltip={t(translations.newForum)}
+          />
+        ))}
     </>
   );
 

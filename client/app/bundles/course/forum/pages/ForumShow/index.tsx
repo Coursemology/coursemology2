@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, useMediaQuery } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -16,6 +16,7 @@ import ForumTopicTable from '../../components/tables/ForumTopicTable';
 import { fetchForum, markAsRead } from '../../operations';
 import { getForum, getForumTopics } from '../../selectors';
 import ForumTopicNew from '../ForumTopicNew';
+import AddButton from 'lib/components/core/buttons/AddButton';
 
 const translations = defineMessages({
   header: {
@@ -58,6 +59,8 @@ const ForumShow: FC = () => {
   );
   const unreadTopicExists =
     forumTopics.filter((topic) => topic.isUnread).length > 0;
+
+  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
 
   useEffect(() => {
     setIsLoading(true);
@@ -103,16 +106,24 @@ const ForumShow: FC = () => {
         navigateToShowAfterUpdate
         showSubscribeButton
       />
-      {forum.permissions.canCreateTopic && (
-        <Button
-          key="new-topic-button"
-          className="new-topic-button"
-          onClick={(): void => setIsOpen(true)}
-          variant="outlined"
-        >
-          {t(translations.newTopic)}
-        </Button>
-      )}
+      {forum.permissions.canCreateTopic &&
+        (minWidthForAddButtonWithText ? (
+          <Button
+            key="new-topic-button"
+            className="new-topic-button"
+            onClick={(): void => setIsOpen(true)}
+            variant="outlined"
+          >
+            {t(translations.newTopic)}
+          </Button>
+        ) : (
+          <AddButton
+            key="new-topic-button"
+            className="new-topic-button"
+            onClick={(): void => setIsOpen(true)}
+            tooltip={t(translations.newTopic)}
+          />
+        ))}
     </>
   );
 

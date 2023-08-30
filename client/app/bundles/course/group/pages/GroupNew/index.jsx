@@ -1,13 +1,14 @@
 import { useCallback, useState } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Button } from '@mui/material';
+import { Button, useMediaQuery } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { createCategory } from '../../actions';
 import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
+import AddButton from 'lib/components/core/buttons/AddButton';
 
 const translations = defineMessages({
   new: {
@@ -50,19 +51,31 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
     dispatch({ type: actionTypes.CREATE_CATEGORY_FORM_SHOW });
   }, [dispatch]);
 
+  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
+
   return (
     <>
-      <Button
-        key="new-group-category-button"
-        className="new-group-category-button bg-white"
-        color="primary"
-        disabled={isManagingGroups}
-        onClick={handleOpen}
-        style={styles.newButton}
-        variant="outlined"
-      >
-        <FormattedMessage {...translations.new} />
-      </Button>
+      {minWidthForAddButtonWithText ? (
+        <Button
+          key="new-group-category-button"
+          className="new-group-category-button bg-white"
+          color="primary"
+          disabled={isManagingGroups}
+          onClick={handleOpen}
+          style={styles.newButton}
+          variant="outlined"
+        >
+          <FormattedMessage {...translations.new} />
+        </Button>
+      ) : (
+        <AddButton
+          key="new-group-category-button"
+          className="new-group-category-button bg-white"
+          disabled={isManagingGroups}
+          onClick={handleOpen}
+          tooltip={intl.formatMessage(translations.new)}
+        />
+      )}
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.new)}
         expectedDialogTypes={[dialogTypes.CREATE_CATEGORY]}
