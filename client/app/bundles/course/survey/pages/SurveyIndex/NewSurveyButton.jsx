@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 import { createSurvey, showSurveyForm } from 'course/survey/actions/surveys';
 import moment from 'lib/moment';
 
+import useMediaQuery from '@mui/material/useMediaQuery';
+import AddButton from 'lib/components/core/buttons/AddButton';
+
 import { formatSurveyFormData } from '../../utils';
 
 const translations = defineMessages({
@@ -44,6 +47,8 @@ const NewSurveyButton = (props) => {
   const { canCreate, intl } = props;
   const navigate = useNavigate();
 
+  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
+
   const createSurveyHandler = (data, setError) => {
     const { dispatch } = props;
 
@@ -79,14 +84,23 @@ const NewSurveyButton = (props) => {
   };
 
   return canCreate ? (
-    <Button
-      key="new-survey-button"
-      className="new-survey-button"
-      onClick={showNewSurveyForm}
-      variant="outlined"
-    >
-      {intl.formatMessage(translations.newSurvey)}
-    </Button>
+    minWidthForAddButtonWithText ? (
+      <Button
+        key="new-survey-button"
+        className="new-survey-button"
+        onClick={showNewSurveyForm}
+        variant="outlined"
+      >
+        {intl.formatMessage(translations.newSurvey)}
+      </Button>
+    ) : (
+      <AddButton
+        key="new-survey-button"
+        className="new-survey-button"
+        onClick={showNewSurveyForm}
+        tooltip={intl.formatMessage(translations.newSurvey)}
+      />
+    )
   ) : (
     <div />
   );

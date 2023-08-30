@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Button } from '@mui/material';
+import { Button, useMediaQuery } from '@mui/material';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
@@ -20,6 +20,7 @@ import {
   getAllAnnouncementMiniEntities,
   getAnnouncementPermission,
 } from '../selectors';
+import AddButton from 'lib/components/core/buttons/AddButton';
 
 type Props = WrappedComponentProps;
 
@@ -51,6 +52,8 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   const announcementPermission = useAppSelector(getAnnouncementPermission);
   const dispatch = useAppDispatch();
 
+  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
+
   useEffect(() => {
     dispatch(indexAnnouncements())
       .catch(() =>
@@ -62,18 +65,29 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   if (isLoading) return <LoadingIndicator />;
 
   return (
-    <Page>
-      {announcementPermission && (
-        <Button
-          className="float-right"
-          id="new-announcement-button"
-          onClick={(): void => setIsOpen(true)}
-          variant="outlined"
-        >
-          {intl.formatMessage(translations.newAnnouncement)}
-        </Button>
-      )}
-
+    <Page
+      actions={
+        announcementPermission &&
+        (minWidthForAddButtonWithText ? (
+          <Button
+            className="float-right"
+            id="new-announcement-button"
+            onClick={(): void => setIsOpen(true)}
+            variant="outlined"
+          >
+            {intl.formatMessage(translations.newAnnouncement)}
+          </Button>
+        ) : (
+          <AddButton
+            key="new-announcement-button"
+            className="float-right"
+            onClick={(): void => setIsOpen(true)}
+            tooltip={intl.formatMessage(translations.newAnnouncement)}
+          />
+        ))
+      }
+      title={intl.formatMessage(translations.header)}
+    >
       {announcements.length === 0 ? (
         <Note message={intl.formatMessage(translations.noAnnouncements)} />
       ) : (
