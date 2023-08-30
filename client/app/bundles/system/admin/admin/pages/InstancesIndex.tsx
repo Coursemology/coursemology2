@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -12,7 +13,6 @@ import { indexInstances } from '../operations';
 import { getAllInstanceMiniEntities, getPermissions } from '../selectors';
 
 import InstanceNew from './InstanceNew';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   header: {
@@ -60,12 +60,12 @@ const InstancesIndex: FC = () => {
           permissions.canCreateInstances && (
             <WidthAdjustedNewButton
               minWidth={720}
-              textButtonKey="new-instance-button"
-              textButtonClassName="whitespace-nowrap"
-              nonTextButtonKey="new-instance-button"
               nonTextButtonClassName="whitespace-nowrap"
+              nonTextButtonKey="new-instance-button"
               onClick={(): void => setIsOpen(true)}
               text={t(translations.newInstance)}
+              textButtonClassName="whitespace-nowrap"
+              textButtonKey="new-instance-button"
             />
           )
         }

@@ -1,4 +1,5 @@
 import { Button, useMediaQuery } from '@mui/material';
+
 import AddButton from 'lib/components/core/buttons/AddButton';
 
 interface WidthAdjustedNewButtonProps {
@@ -9,6 +10,7 @@ interface WidthAdjustedNewButtonProps {
   nonTextButtonClassName: string;
   onClick: () => void;
   text: string;
+  disabled?: boolean;
 }
 
 const WidthAdjustedNewButton = (
@@ -22,6 +24,7 @@ const WidthAdjustedNewButton = (
     <Button
       key={props.textButtonKey}
       className={props.textButtonClassName}
+      disabled={props.disabled ?? false}
       onClick={props.onClick}
       variant="outlined"
     >

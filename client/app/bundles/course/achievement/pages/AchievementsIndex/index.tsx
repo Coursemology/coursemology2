@@ -1,6 +1,7 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -18,7 +19,6 @@ import {
   getAllAchievementMiniEntities,
 } from '../../selectors';
 import AchievementNew from '../AchievementNew';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   newAchievement: {
@@ -76,14 +76,14 @@ const AchievementsIndex: FC = () => {
     headerToolbars.push(
       <WidthAdjustedNewButton
         minWidth={720}
-        textButtonKey="new-achievement-button"
-        textButtonClassName="new-achievement-button"
-        nonTextButtonKey="new-achievement-button"
         nonTextButtonClassName="new-achievement-button"
+        nonTextButtonKey="new-achievement-button"
         onClick={(): void => {
           setIsOpen(true);
         }}
         text={t(translations.newAchievement)}
+        textButtonClassName="new-achievement-button"
+        textButtonKey="new-achievement-button"
       />,
     );
   }
