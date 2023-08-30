@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { createSurvey, showSurveyForm } from 'course/survey/actions/surveys';
-import AddButton from 'course/survey/components/AddButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import moment from 'lib/moment';
 
 import { formatSurveyFormData } from '../../utils';
