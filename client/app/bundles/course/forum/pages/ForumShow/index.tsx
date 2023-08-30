@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
+import { Button } from '@mui/material';
 
-import AddButton from 'lib/components/core/buttons/AddButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -104,12 +104,14 @@ const ForumShow: FC = () => {
         showSubscribeButton
       />
       {forum.permissions.canCreateTopic && (
-        <AddButton
+        <Button
           key="new-topic-button"
           className="new-topic-button"
           onClick={(): void => setIsOpen(true)}
-          tooltip={t(translations.newTopic)}
-        />
+          variant="outlined"
+        >
+          {t(translations.newTopic)}
+        </Button>
       )}
     </>
   );
