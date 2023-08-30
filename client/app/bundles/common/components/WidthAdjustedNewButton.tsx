@@ -25,6 +25,7 @@ const WidthAdjustedNewButton = (
       key={props.textButtonKey}
       className={props.textButtonClassName}
       disabled={props.disabled ?? false}
+      id={props.textButtonKey}
       onClick={props.onClick}
       variant="outlined"
     >
@@ -34,6 +35,7 @@ const WidthAdjustedNewButton = (
     <AddButton
       key={props.nonTextButtonKey}
       className={props.nonTextButtonClassName}
+      id={props.nonTextButtonKey}
       onClick={props.onClick}
       tooltip={props.text}
     />
