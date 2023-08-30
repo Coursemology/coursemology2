@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { createSurvey, showSurveyForm } from 'course/survey/actions/surveys';
 import moment from 'lib/moment';
 
+import WidthAdjustedNewButton from '../../../../common/components/WidthAdjustedNewButton';
 import { formatSurveyFormData } from '../../utils';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   newSurvey: {
@@ -81,12 +81,12 @@ const NewSurveyButton = (props) => {
   return canCreate ? (
     <WidthAdjustedNewButton
       minWidth={720}
-      textButtonKey="new-survey-button"
-      textButtonClassName="new-survey-button"
-      nonTextButtonKey="new-survey-button"
       nonTextButtonClassName="new-survey-button"
+      nonTextButtonKey="new-survey-button"
       onClick={showNewSurveyForm}
       text={intl.formatMessage(translations.newSurvey)}
+      textButtonClassName="new-survey-button"
+      textButtonKey="new-survey-button"
     />
   ) : (
     <div />

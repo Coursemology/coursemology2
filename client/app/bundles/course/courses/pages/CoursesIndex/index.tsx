@@ -3,6 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '@mui/material';
 
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -18,7 +19,6 @@ import {
   getCoursePermissions,
 } from '../../selectors';
 import CoursesNew from '../CoursesNew';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const styles = {
   newButton: {
@@ -90,12 +90,12 @@ const CoursesIndex: FC = () => {
     headerToolbars.push(
       <WidthAdjustedNewButton
         minWidth={720}
-        textButtonKey="new-course-button"
-        textButtonClassName="new-course-button"
-        nonTextButtonKey="new-course-button"
         nonTextButtonClassName="new-course-button"
+        nonTextButtonKey="new-course-button"
         onClick={(): void => setIsNewCourseDialogOpen(true)}
         text={t(translations.newCourse)}
+        textButtonClassName="new-course-button"
+        textButtonKey="new-course-button"
       />,
     );
   } else if (!isLoading && coursesPermissions?.isCurrentUser) {

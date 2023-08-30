@@ -1,5 +1,6 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+
 import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 interface Props extends WrappedComponentProps {
@@ -19,12 +20,12 @@ const NewAnnouncementButton: FC<Props> = (props) => {
   return (
     <WidthAdjustedNewButton
       minWidth={720}
-      textButtonKey="new-announcement-button"
-      textButtonClassName="bg-white"
-      nonTextButtonKey="new-announcement-button"
       nonTextButtonClassName="new-announcement-button"
+      nonTextButtonKey="new-announcement-button"
       onClick={(): void => setIsOpen(true)}
       text={intl.formatMessage(translations.newAnnouncementTooltip)}
+      textButtonClassName="bg-white"
+      textButtonKey="new-announcement-button"
     />
   );
 };

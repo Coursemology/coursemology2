@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -15,7 +16,6 @@ import ForumTopicTable from '../../components/tables/ForumTopicTable';
 import { fetchForum, markAsRead } from '../../operations';
 import { getForum, getForumTopics } from '../../selectors';
 import ForumTopicNew from '../ForumTopicNew';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   header: {
@@ -106,12 +106,12 @@ const ForumShow: FC = () => {
       {forum.permissions.canCreateTopic && (
         <WidthAdjustedNewButton
           minWidth={720}
-          textButtonKey="new-topic-button"
-          textButtonClassName="new-topic-button"
-          nonTextButtonKey="new-topic-button"
           nonTextButtonClassName="new-topic-button"
+          nonTextButtonKey="new-topic-button"
           onClick={(): void => setIsOpen(true)}
           text={t(translations.newTopic)}
+          textButtonClassName="new-topic-button"
+          textButtonKey="new-topic-button"
         />
       )}
     </>

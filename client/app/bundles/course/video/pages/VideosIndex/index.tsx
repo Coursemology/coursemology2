@@ -2,6 +2,7 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -17,7 +18,6 @@ import {
   getVideoPermissions,
 } from '../../selectors';
 import VideoNew from '../VideoNew';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   header: {
@@ -76,12 +76,12 @@ const VideosIndex: FC = () => {
     headerToolbars.push(
       <WidthAdjustedNewButton
         minWidth={720}
-        textButtonKey="new-video-button"
-        textButtonClassName="new-video-button bg-white"
-        nonTextButtonKey="new-video-button"
         nonTextButtonClassName="new-video-button"
+        nonTextButtonKey="new-video-button"
         onClick={(): void => setIsOpen(true)}
         text={t(translations.newVideo)}
+        textButtonClassName="new-video-button bg-white"
+        textButtonKey="new-video-button"
       />,
     );
   }

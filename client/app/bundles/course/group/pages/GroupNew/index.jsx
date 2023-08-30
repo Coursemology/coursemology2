@@ -3,6 +3,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import WidthAdjustedNewButton from '../../../../common/components/WidthAdjustedNewButton';
 import { createCategory } from '../../actions';
 import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
@@ -22,12 +23,6 @@ const translations = defineMessages({
     defaultMessage: 'Failed to create group category.',
   },
 });
-
-const styles = {
-  newButton: {
-    fontSize: 14,
-  },
-};
 
 // Assumption: If the new button shows, it means that the user is able to create categories.
 const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
@@ -52,13 +47,14 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
   return (
     <>
       <WidthAdjustedNewButton
+        disabled={isManagingGroups}
         minWidth={720}
-        textButtonKey="new-group-category-button"
-        textButtonClassName="new-group-category-button bg-white"
-        nonTextButtonKey="new-group-category-button"
         nonTextButtonClassName="new-group-category-button bg-white"
+        nonTextButtonKey="new-group-category-button"
         onClick={handleOpen}
         text={intl.formatMessage(translations.new)}
+        textButtonClassName="new-group-category-button bg-white"
+        textButtonKey="new-group-category-button"
       />
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.new)}

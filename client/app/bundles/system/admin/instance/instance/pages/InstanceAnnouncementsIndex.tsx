@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Button, useMediaQuery } from '@mui/material';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
@@ -10,6 +9,7 @@ import Note from 'lib/components/core/Note';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 
+import WidthAdjustedNewButton from '../../../../../common/components/WidthAdjustedNewButton';
 import {
   createAnnouncement,
   deleteAnnouncement,
@@ -20,8 +20,6 @@ import {
   getAllAnnouncementMiniEntities,
   getAnnouncementPermission,
 } from '../selectors';
-import AddButton from 'lib/components/core/buttons/AddButton';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 type Props = WrappedComponentProps;
 
@@ -53,8 +51,6 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   const announcementPermission = useAppSelector(getAnnouncementPermission);
   const dispatch = useAppDispatch();
 
-  const minWidthForAddButtonWithText = useMediaQuery('(min-width:720px)');
-
   useEffect(() => {
     dispatch(indexAnnouncements())
       .catch(() =>
@@ -71,12 +67,12 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
         announcementPermission && (
           <WidthAdjustedNewButton
             minWidth={720}
-            textButtonKey="new-announcement-button"
-            textButtonClassName="float-right"
-            nonTextButtonKey="new-announcement-button"
             nonTextButtonClassName="float-right"
+            nonTextButtonKey="new-announcement-button"
             onClick={(): void => setIsOpen(true)}
             text={intl.formatMessage(translations.newAnnouncement)}
+            textButtonClassName="float-right"
+            textButtonKey="new-announcement-button"
           />
         )
       }

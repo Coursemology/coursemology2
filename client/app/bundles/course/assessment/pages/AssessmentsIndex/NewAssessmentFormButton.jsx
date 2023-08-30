@@ -15,10 +15,10 @@ import { createAssessment } from 'course/assessment/operations';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
 
+import WidthAdjustedNewButton from '../../../../common/components/WidthAdjustedNewButton';
 import AssessmentForm from '../../components/AssessmentForm';
 import actionTypes, { DEFAULT_MONITORING_OPTIONS } from '../../constants';
 import translations from '../../translations';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 class NewAssessmentFormButton extends Component {
   constructor(props) {
@@ -141,12 +141,12 @@ class NewAssessmentFormButton extends Component {
       <>
         <WidthAdjustedNewButton
           minWidth={720}
-          textButtonKey="new-assessment-button"
-          textButtonClassName="bg-white"
-          nonTextButtonKey="new-assessment-button"
           nonTextButtonClassName="new-assessment-button"
+          nonTextButtonKey="new-assessment-button"
           onClick={this.handleOpen}
           text={intl.formatMessage(translations.newAssessment)}
+          textButtonClassName="bg-white"
+          textButtonKey="new-assessment-button"
         />
 
         <Dialog

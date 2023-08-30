@@ -1,5 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
+
+import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -16,7 +18,6 @@ import {
   getForumPermissions,
 } from '../../selectors';
 import ForumNew from '../ForumNew';
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 
 const translations = defineMessages({
   header: {
@@ -88,12 +89,12 @@ const ForumsIndex: FC = () => {
       {forumPermissions?.canCreateForum && (
         <WidthAdjustedNewButton
           minWidth={720}
-          textButtonKey="new-forum-button"
-          textButtonClassName="new-forum-button"
-          nonTextButtonKey="new-forum-button"
           nonTextButtonClassName="new-forum-button"
+          nonTextButtonKey="new-forum-button"
           onClick={(): void => setIsForumNewDialogOpen(true)}
           text={t(translations.newForum)}
+          textButtonClassName="new-forum-button"
+          textButtonKey="new-forum-button"
         />
       )}
     </>
