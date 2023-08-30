@@ -51,12 +51,11 @@ class SurveyIndex extends Component {
   render() {
     return (
       <Page
+        actions={<NewSurveyButton />}
         title={<FormattedMessage {...surveyTranslations.surveys} />}
         unpadded
       >
         {this.renderBody()}
-
-        <NewSurveyButton />
 
         <Dialogs />
       </Page>
