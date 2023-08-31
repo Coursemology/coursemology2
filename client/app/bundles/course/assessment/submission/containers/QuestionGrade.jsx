@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import TextField from 'lib/components/core/fields/TextField';
 
-import actionTypes from '../constants';
+import actionTypes, { questionTypes } from '../constants';
 import {
   explanationShape,
   questionGradeShape,
@@ -76,6 +76,7 @@ class VisibleQuestionGrade extends Component {
   renderQuestionGradeField() {
     const {
       explanations,
+      numTestCases,
       question,
       grading,
       gradeIsUnsavedMessage,
@@ -85,11 +86,17 @@ class VisibleQuestionGrade extends Component {
     let initialGrade = grading.grade;
 
     const maxGrade = question.maximumGrade;
+    const isProgrammingWithTestCases =
+      question.type === questionTypes.Programming && numTestCases > 0;
+    const isMcqOrMrq = [
+      questionTypes.MultipleChoice,
+      questionTypes.MultipleResponse,
+    ].includes(question.type);
 
     if (
       !initialGrade &&
       (!explanations[id] || explanations[id].correct) &&
-      question.type === 'Programming'
+      (isProgrammingWithTestCases || isMcqOrMrq)
     ) {
       initialGrade = initialGrade === 0 ? initialGrade : maxGrade;
       this.processValue(initialGrade.toString(), true);
@@ -159,6 +166,7 @@ class VisibleQuestionGrade extends Component {
 
 VisibleQuestionGrade.propTypes = {
   explanations: PropTypes.objectOf(explanationShape),
+  numTestCases: PropTypes.number,
   gradeIsUnsavedMessage: PropTypes.node,
   gradeIsSaved: PropTypes.bool,
   setGradeIsSaved: PropTypes.func.isRequired,
@@ -172,12 +180,24 @@ VisibleQuestionGrade.propTypes = {
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { id } = ownProps;
+  let numPublicTest = 0;
+  let numPrivateTest = 0;
+
+  if (submission.testCases[id]) {
+    numPublicTest = submission.testCases[id].public_test
+      ? submission.testCases[id].public_test.length
+      : 0;
+    numPrivateTest = submission.testCases[id].private_test
+      ? submission.testCases[id].private_test.length
+      : 0;
+  }
   const { submittedAt, bonusEndAt, bonusPoints } = submission.submission;
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
   return {
     question: submission.questions[id],
     grading: submission.grading.questions[id],
+    numTestCases: numPublicTest + numPrivateTest,
     bonusAwarded,
   };
 }
