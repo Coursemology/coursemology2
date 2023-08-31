@@ -28,8 +28,7 @@ class Course::AssessmentsComponent < SimpleDelegator
         icon: :assessment, # TODO: category.icon in db that user can select and set
         title: category.title,
         weight: 2,
-        path: course_assessments_path(current_course, category: category),
-        unread: 0
+        path: course_assessments_path(current_course, category: category)
       }
     end
   end
