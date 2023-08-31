@@ -40,22 +40,19 @@ const VideoTable: FC<Props> = (props) => {
     return <Note message={intl.formatMessage(translations.noVideo)} />;
   }
 
-  const videoSortMethodByDateThenTitle = (val1, val2) => {
-    const post1 = val1 as VideoListData['startTimeInfo'];
-    const post2 = val2 as VideoListData['startTimeInfo'];
+  const videoSortMethodByDate = (
+    val1: VideoListData,
+    val2: VideoListData,
+  ): number => {
+    const post1 = val1.startTimeInfo;
+    const post2 = val2.startTimeInfo;
 
     const date1 = new Date(post1.referenceTime!);
     const date2 = new Date(post2.referenceTime!);
-    const dateComparison = date1.getTime() - date2.getTime();
-
-    if (dateComparison !== 0) {
-      return dateComparison;
-    } else {
-      return val1.title.localeCompare(val2.title);
-    }
+    return date1.getTime() - date2.getTime();
   };
 
-  const sortedVideos = videos.sort(videoSortMethodByDateThenTitle);
+  videos.sort(videoSortMethodByDate);
 
   const options: TableOptions = {
     download: false,
@@ -91,7 +88,7 @@ const VideoTable: FC<Props> = (props) => {
       label: 'Title',
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const video = videos[dataIndex];
@@ -242,9 +239,9 @@ const VideoTable: FC<Props> = (props) => {
   return (
     <DataTable
       columns={columns}
-      data={sortedVideos}
-      options={options}
+      data={videos}
       includeRowNumber
+      options={options}
       withMargin
     />
   );
