@@ -1,15 +1,19 @@
 import { Component } from 'react';
-import { connect } from 'react-redux';
-import { Paper, Typography } from '@mui/material';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import ErrorIcon from '@mui/icons-material/Error';
-import CustomTooltip from 'lib/components/core/CustomTooltip';
+import { Paper, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 import TextField from 'lib/components/core/fields/TextField';
 
 import actionTypes from '../constants';
-import { questionGradeShape, questionShape } from '../propTypes';
+import {
+  explanationShape,
+  questionGradeShape,
+  questionShape,
+} from '../propTypes';
 
 const GRADE_STEP = 1;
 
@@ -23,7 +27,8 @@ const isValidDecimal = (value) => /^\d*(\.\d?)?$/.test(value);
 
 class VisibleQuestionGrade extends Component {
   processValue(value, drafting) {
-    const { id, question, updateGrade, bonusAwarded } = this.props;
+    const { id, question, updateGrade, bonusAwarded, setGradeIsSaved } =
+      this.props;
 
     if (value.trim() === '') {
       updateGrade(id, null, bonusAwarded);
@@ -45,6 +50,8 @@ class VisibleQuestionGrade extends Component {
     } else {
       updateGrade(id, drafting ? value : parsedValue, bonusAwarded);
     }
+
+    setGradeIsSaved(false);
   }
 
   stepGrade(delta) {
@@ -68,18 +75,23 @@ class VisibleQuestionGrade extends Component {
 
   renderQuestionGradeField() {
     const {
-      allConsideredCorrect,
+      explanations,
       question,
       grading,
       gradeIsUnsavedMessage,
       gradeIsSaved,
+      id,
     } = this.props;
     let initialGrade = grading.grade;
 
     const maxGrade = question.maximumGrade;
 
-    if (!initialGrade && allConsideredCorrect) {
-      initialGrade = maxGrade;
+    if (
+      !initialGrade &&
+      (!explanations[id] || explanations[id].correct) &&
+      question.type === 'Programming'
+    ) {
+      initialGrade = initialGrade === 0 ? initialGrade : maxGrade;
       this.processValue(initialGrade.toString(), true);
     }
 
@@ -146,9 +158,10 @@ class VisibleQuestionGrade extends Component {
 }
 
 VisibleQuestionGrade.propTypes = {
-  allConsideredCorrect: PropTypes.bool,
+  explanations: PropTypes.objectOf(explanationShape),
   gradeIsUnsavedMessage: PropTypes.node,
   gradeIsSaved: PropTypes.bool,
+  setGradeIsSaved: PropTypes.func.isRequired,
   editable: PropTypes.bool.isRequired,
   grading: questionGradeShape,
   id: PropTypes.number.isRequired,
