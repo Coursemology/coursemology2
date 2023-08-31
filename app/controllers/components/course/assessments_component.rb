@@ -80,11 +80,7 @@ class Course::AssessmentsComponent < SimpleDelegator
   #   course_student or other users: 0
   def submission_count
     if current_course_user&.manager_or_owner?
-      if my_students_pending_submissions_count > 0
-        my_students_pending_submissions_count
-      else
-        pending_submissions_count
-      end
+      my_students_pending_submissions_count > 0 ? my_students_pending_submissions_count : pending_submissions_count
     elsif current_course_user&.staff?
       my_students_pending_submissions_count
     else
