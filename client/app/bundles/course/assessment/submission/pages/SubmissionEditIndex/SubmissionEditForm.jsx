@@ -64,7 +64,6 @@ const styles = {
 
 const SubmissionEditForm = (props) => {
   const {
-    allConsideredCorrect,
     attempting,
     canUpdate,
     codaveriFeedbackStatus,
@@ -108,7 +107,7 @@ const SubmissionEditForm = (props) => {
   let initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
   const [examNotice, setExamNotice] = useState(passwordProtected);
-  const [gradeIsSaved, setGradeIsSaved] = useState(false);
+  const [gradeIsSaved, setGradeIsSaved] = useState(true);
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
@@ -405,11 +404,12 @@ const SubmissionEditForm = (props) => {
 
     return visible ? (
       <QuestionGrade
-        allConsideredCorrect={allConsideredCorrect}
-        gradeIsUnsavedMessage={intl.formatMessage(translations.gradeUnsaved)}
-        gradeIsSaved={gradeIsSaved}
         editable={editable}
+        explanations={explanations}
+        gradeIsSaved={gradeIsSaved}
+        gradeIsUnsavedMessage={intl.formatMessage(translations.gradeUnsaved)}
         id={id}
+        setGradeIsSaved={setGradeIsSaved}
       />
     ) : null;
   };
@@ -719,7 +719,6 @@ const SubmissionEditForm = (props) => {
 };
 
 SubmissionEditForm.propTypes = {
-  allConsideredCorrect: PropTypes.bool,
   initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 

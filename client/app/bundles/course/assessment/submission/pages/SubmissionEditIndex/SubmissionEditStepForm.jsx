@@ -112,7 +112,7 @@ const SubmissionEditStepForm = (props) => {
   const initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
-  const [gradeIsSaved, setGradeIsSaved] = useState(false);
+  const [gradeIsSaved, setGradeIsSaved] = useState(true);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
   const [resetAnswerId, setResetAnswerId] = useState(null);
@@ -296,11 +296,12 @@ const SubmissionEditStepForm = (props) => {
 
     return visible ? (
       <QuestionGrade
-        allConsideredCorrect={allConsideredCorrect}
-        gradeIsUnsavedMessage={intl.formatMessage(translations.gradeUnsaved)}
-        gradeIsSaved={gradeIsSaved}
         editable={editable}
+        explanations={explanations}
+        gradeIsSaved={gradeIsSaved}
+        gradeIsUnsavedMessage={intl.formatMessage(translations.gradeUnsaved)}
         id={id}
+        setGradeIsSaved={setGradeIsSaved}
       />
     ) : null;
   };
