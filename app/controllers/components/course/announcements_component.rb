@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::AnnouncementsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
+  include Course::UnreadCountsConcern
 
   def self.display_name
     I18n.t('components.announcements.name')
@@ -20,7 +21,7 @@ class Course::AnnouncementsComponent < SimpleDelegator
         title: settings.title || t('course.announcements.sidebar_title'),
         weight: 1,
         path: course_announcements_path(current_course),
-        unread: unread_count
+        unread: unread_announcements_count
       }
     ]
   end
@@ -34,9 +35,5 @@ class Course::AnnouncementsComponent < SimpleDelegator
         path: course_admin_announcements_path(current_course)
       }
     ]
-  end
-
-  def unread_count
-    current_course.announcements.accessible_by(current_ability).unread_by(current_user).count
   end
 end

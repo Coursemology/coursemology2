@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Discussion::TopicsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
-  include Course::Discussion::TopicsHelper
+  include Course::UnreadCountsConcern
 
   def self.display_name
     I18n.t('components.discussion.topics.name')
@@ -21,7 +21,7 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
         title: settings.title || t('course.discussion.topics.sidebar_title'),
         weight: 5,
         path: course_topics_path(current_course),
-        unread: unread_count
+        unread: unread_comments_count
       }
     ]
   end
@@ -35,21 +35,5 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
         path: course_admin_topics_path(current_course)
       }
     ]
-  end
-
-  def unread_count
-    if staff_with_students?
-      my_students_unread_count
-    elsif current_course_user&.teaching_staff?
-      all_staff_unread_count
-    elsif current_course_user&.student?
-      all_student_unread_count
-    else
-      0
-    end
-  end
-
-  def staff_with_students?
-    current_course_user&.staff? && !current_course_user.my_students.empty?
   end
 end
