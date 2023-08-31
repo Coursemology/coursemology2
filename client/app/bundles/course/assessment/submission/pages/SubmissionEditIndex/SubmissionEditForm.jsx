@@ -108,6 +108,7 @@ const SubmissionEditForm = (props) => {
   let initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
   const [examNotice, setExamNotice] = useState(passwordProtected);
+  const [gradeIsSaved, setGradeIsSaved] = useState(false);
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
@@ -405,6 +406,8 @@ const SubmissionEditForm = (props) => {
     return visible ? (
       <QuestionGrade
         allConsideredCorrect={allConsideredCorrect}
+        gradeIsUnsavedMessage={intl.formatMessage(translations.gradeUnsaved)}
+        gradeIsSaved={gradeIsSaved}
         editable={editable}
         id={id}
       />
@@ -499,7 +502,10 @@ const SubmissionEditForm = (props) => {
       <Button
         color="primary"
         disabled={isSaving}
-        onClick={handleSaveGrade}
+        onClick={() => {
+          handleSaveGrade();
+          setGradeIsSaved(true);
+        }}
         style={styles.formButton}
         variant="contained"
       >

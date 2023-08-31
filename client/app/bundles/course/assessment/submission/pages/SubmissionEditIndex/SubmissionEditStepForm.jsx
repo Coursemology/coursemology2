@@ -112,6 +112,7 @@ const SubmissionEditStepForm = (props) => {
   const initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
+  const [gradeIsSaved, setGradeIsSaved] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
   const [resetAnswerId, setResetAnswerId] = useState(null);
@@ -293,7 +294,15 @@ const SubmissionEditStepForm = (props) => {
     const editable = !attempting && graderView;
     const visible = editable || published;
 
-    return visible ? <QuestionGrade editable={editable} id={id} /> : null;
+    return visible ? (
+      <QuestionGrade
+        allConsideredCorrect={allConsideredCorrect}
+        gradeIsUnsavedMessage={intl.formatMessage(translations.gradeUnsaved)}
+        gradeIsSaved={gradeIsSaved}
+        editable={editable}
+        id={id}
+      />
+    ) : null;
   };
 
   const renderReevaluateButton = () => {
@@ -404,7 +413,10 @@ const SubmissionEditStepForm = (props) => {
       <Button
         color="primary"
         disabled={isSaving}
-        onClick={handleSaveGrade}
+        onClick={() => {
+          handleSaveGrade();
+          setGradeIsSaved(true);
+        }}
         style={styles.formButton}
         variant="contained"
       >
