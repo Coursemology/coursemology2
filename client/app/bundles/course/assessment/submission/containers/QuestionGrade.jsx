@@ -1,6 +1,9 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Paper, Typography } from '@mui/material';
+import { injectIntl } from 'react-intl';
+import ErrorIcon from '@mui/icons-material/Error';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 import PropTypes from 'prop-types';
 
 import TextField from 'lib/components/core/fields/TextField';
@@ -64,7 +67,13 @@ class VisibleQuestionGrade extends Component {
   }
 
   renderQuestionGradeField() {
-    const { allConsideredCorrect, question, grading } = this.props;
+    const {
+      allConsideredCorrect,
+      question,
+      grading,
+      gradeIsUnsavedMessage,
+      gradeIsSaved,
+    } = this.props;
     let initialGrade = grading.grade;
 
     const maxGrade = question.maximumGrade;
@@ -76,6 +85,15 @@ class VisibleQuestionGrade extends Component {
 
     return (
       <div className="flex items-center space-x-2">
+        {!gradeIsSaved && (
+          <CustomTooltip title={gradeIsUnsavedMessage}>
+            <ErrorIcon
+              color="error"
+              fontSize="small"
+              style={{ marginLeft: 5, marginTop: -4 }}
+            />
+          </CustomTooltip>
+        )}
         <TextField
           hiddenLabel
           inputProps={{ className: 'grade' }}
@@ -129,6 +147,8 @@ class VisibleQuestionGrade extends Component {
 
 VisibleQuestionGrade.propTypes = {
   allConsideredCorrect: PropTypes.bool,
+  gradeIsUnsavedMessage: PropTypes.node,
+  gradeIsSaved: PropTypes.bool,
   editable: PropTypes.bool.isRequired,
   grading: questionGradeShape,
   id: PropTypes.number.isRequired,
@@ -165,4 +185,4 @@ const QuestionGrade = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(VisibleQuestionGrade);
-export default QuestionGrade;
+export default injectIntl(QuestionGrade);
