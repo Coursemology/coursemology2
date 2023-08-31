@@ -41,14 +41,21 @@ const VideoTable: FC<Props> = (props) => {
   }
 
   const videoSortMethodByDate = (
-    val1: VideoListData,
-    val2: VideoListData,
+    video1: VideoListData,
+    video2: VideoListData,
   ): number => {
-    const post1 = val1.startTimeInfo;
-    const post2 = val2.startTimeInfo;
+    const time1 = video1.startTimeInfo;
+    const time2 = video2.startTimeInfo;
 
-    const date1 = new Date(post1.referenceTime!);
-    const date2 = new Date(post2.referenceTime!);
+    const date1 = time1.referenceTime
+      ? new Date(time1.referenceTime)
+      : new Date(0);
+    const date2 = time2.referenceTime
+      ? new Date(time2.referenceTime)
+      : new Date(0);
+    if (date1.getTime() - date2.getTime() === 0) {
+      return video1.title.localeCompare(video2.title);
+    }
     return date1.getTime() - date2.getTime();
   };
 
