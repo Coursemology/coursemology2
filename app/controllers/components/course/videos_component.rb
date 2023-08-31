@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::VideosComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
+  include Course::UnreadCountsConcern
 
   def self.display_name
     I18n.t('components.video.name')
@@ -28,7 +29,7 @@ class Course::VideosComponent < SimpleDelegator
         title: settings.title || t('course.video.videos.sidebar_title'),
         weight: 12,
         path: course_videos_path(current_course, tab: current_course.default_video_tab),
-        unread: unread_count
+        unread: unwatched_videos_count
       }
     ]
   end
@@ -42,16 +43,5 @@ class Course::VideosComponent < SimpleDelegator
         path: course_admin_videos_path(current_course)
       }
     ]
-  end
-
-  def unread_count
-    return 0 unless current_course_user&.student?
-
-    Course::Video.
-      from_course(current_course).
-      unwatched_by(current_user).
-      published.
-      active.
-      count
   end
 end

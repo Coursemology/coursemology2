@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::UsersComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
+  include Course::UnreadCountsConcern
 
   def self.can_be_disabled_for_course?
     false
@@ -50,7 +51,7 @@ class Course::UsersComponent < SimpleDelegator
           else
             personal_times_course_users_path(current_course)
           end,
-        unread: can_manage_users ? current_course.enrol_requests.pending.count : 0
+        unread: pending_enrol_requests_count
       }
     ]
   end
