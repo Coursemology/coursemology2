@@ -144,7 +144,11 @@ const GroupCreationForm = (props) => {
   );
 
   useEffect(() => {
-    if (!isSingle && numToCreate === conflictingNames.length) {
+    if (
+      !isSingle &&
+      numToCreate > 0 &&
+      numToCreate === conflictingNames.length
+    ) {
       dispatch({ type: actionTypes.SET_IS_DISABLED_TRUE });
     } else {
       dispatch({ type: actionTypes.SET_IS_DISABLED_FALSE });
