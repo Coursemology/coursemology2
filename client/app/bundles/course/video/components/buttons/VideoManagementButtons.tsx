@@ -51,6 +51,7 @@ const VideoManagementButtons: FC<Props> = (props) => {
             title: video.title,
           }),
         );
+        setIsDeleting(false);
         if (navigateToIndex) {
           navigate(`${getVideosURL(getCourseId())}?tab=${video.tabId}`);
         }
