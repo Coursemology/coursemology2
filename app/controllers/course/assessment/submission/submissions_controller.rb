@@ -2,6 +2,7 @@
 class Course::Assessment::Submission::SubmissionsController < \
   Course::Assessment::Submission::Controller
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
+  include Signals::EmissionConcern
 
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
@@ -15,6 +16,9 @@ class Course::Assessment::Submission::SubmissionsController < \
   before_action :load_or_create_submission_questions, only: [:edit, :update]
 
   after_action :stop_monitoring_session_if_submitted, only: [:update]
+
+  signals :assessment_submissions, after: [:unsubmit, :delete]
+  signals :assessment_submissions, after: [:update], if: -> { @submission.saved_change_to_workflow_state? }
 
   delegate_to_service(:update)
   delegate_to_service(:submit_answer)
