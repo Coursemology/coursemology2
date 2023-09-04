@@ -87,7 +87,6 @@ group :test do
   gem 'capybara'
   gem 'capybara-selenium'
 
-  gem 'aws-sdk-s3'
   # Make screen shots in tests, helps with the debugging of JavaScript tests.
   gem 'capybara-screenshot'
 end
@@ -134,6 +133,10 @@ end
 group :production, :test do
   # Puma will be our app server
   gem 'puma'
+end
+
+group :production, :ci do
+  gem 'aws-sdk-s3'
 end
 
 group :production, :development do
