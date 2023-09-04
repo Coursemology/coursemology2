@@ -82,3 +82,7 @@ export const setI18nConfig = (config: Partial<I18nConfig>): void => {
 
   imperativeDispatch(actions.setI18nConfig(config));
 };
+
+export const syncSignals = (signals: Record<string, number>): void => {
+  imperativeDispatch(actions.updateUnread(signals));
+};

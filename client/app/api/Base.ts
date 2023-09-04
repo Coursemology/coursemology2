@@ -1,11 +1,22 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
+
+import { syncSignals } from 'lib/hooks/session';
 
 import {
   isInvalidCSRFTokenResponse,
   redirectIfMatchesErrorIn,
 } from './ErrorHandling';
 
-const MAX_CSRF_RETRIES = 3;
+const MAX_CSRF_RETRIES = 3 as const;
+
+const SIGNALS_HEADER_KEY = 'Signals-Sync' as const;
+
+const updateSignalsIfPresentIn = (response: AxiosResponse): void => {
+  const signals = response.headers[SIGNALS_HEADER_KEY.toLowerCase()];
+  if (!signals) return;
+
+  syncSignals(JSON.parse(signals));
+};
 
 export default class BaseAPI {
   #client: AxiosInstance | null = null;
@@ -35,6 +46,8 @@ export default class BaseAPI {
     client.interceptors.response.use(
       (response) => {
         if (response.config.method !== 'get') this.#retries = 0;
+
+        updateSignalsIfPresentIn(response);
 
         return response;
       },
