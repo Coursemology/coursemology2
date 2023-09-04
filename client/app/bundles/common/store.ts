@@ -20,12 +20,14 @@ export interface SessionState {
   authenticated: boolean;
   locale: string;
   timeZone: string;
+  unread: Record<string, number>;
 }
 
 const initialState: SessionState = {
   authenticated: false,
   locale: DEFAULT_LOCALE,
   timeZone: DEFAULT_TIME_ZONE,
+  unread: {},
 };
 
 export const sessionStore = createSlice({
@@ -41,6 +43,9 @@ export const sessionStore = createSlice({
     ) => {
       state.locale = action.payload.locale ?? DEFAULT_LOCALE;
       state.timeZone = action.payload.timeZone ?? DEFAULT_TIME_ZONE;
+    },
+    updateUnread: (state, action: PayloadAction<Record<string, number>>) => {
+      Object.assign(state.unread, action.payload);
     },
   },
 });
