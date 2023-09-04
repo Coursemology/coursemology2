@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 class Course::Discussion::TopicsController < Course::ComponentController
   include Course::UsersHelper
+  include Signals::EmissionConcern
 
   load_and_authorize_resource :discussion_topic, through: :course, instance_name: :topic,
                                                  class: Course::Discussion::Topic.name,
                                                  parent: false
+
+  signals :comments, after: [:index, :toggle_pending, :mark_as_read]
 
   def index
   end
