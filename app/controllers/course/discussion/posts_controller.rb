@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 class Course::Discussion::PostsController < Course::ComponentController
+  include Signals::EmissionConcern
+
   before_action :load_topic
   authorize_resource :specific_topic
 
   helper Course::Discussion::TopicsHelper.name.sub(/Helper$/, '')
   include Course::Discussion::PostsConcern
+
+  signals :comments, after: [:create, :destroy]
 
   def create
     result = @post.transaction do
