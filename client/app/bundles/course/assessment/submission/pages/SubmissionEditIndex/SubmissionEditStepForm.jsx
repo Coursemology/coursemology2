@@ -293,7 +293,13 @@ const SubmissionEditStepForm = (props) => {
     const editable = !attempting && graderView;
     const visible = editable || published;
 
-    return visible ? <QuestionGrade editable={editable} id={id} /> : null;
+    return visible ? (
+      <QuestionGrade
+        editable={editable}
+        handleSaveIndividualGrade={() => handleSaveGrade(id)}
+        id={id}
+      />
+    ) : null;
   };
 
   const renderReevaluateButton = () => {
@@ -404,7 +410,7 @@ const SubmissionEditStepForm = (props) => {
       <Button
         color="primary"
         disabled={isSaving}
-        onClick={handleSaveGrade}
+        onClick={() => handleSaveGrade(null)}
         style={styles.formButton}
         variant="contained"
       >

@@ -74,7 +74,7 @@ const SubmissionEmptyForm = (props) => {
       <Button
         color="primary"
         disabled={isSaving}
-        onClick={handleSaveGrade}
+        onClick={() => handleSaveGrade(null)}
         style={styles.formButton}
         variant="contained"
       >

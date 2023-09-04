@@ -280,6 +280,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.updateSuccess',
     defaultMessage: 'Submission updated successfully.',
   },
+  updateIndividualSuccess: {
+    id: 'course.assessment.submission.updateIndividualSuccess',
+    defaultMessage: 'Submission for {errors} updated successfully',
+  },
   updateFailure: {
     id: 'course.assessment.submission.updateFailure',
     defaultMessage: 'Submission update failed: {errors}',

@@ -474,7 +474,7 @@ export function importFiles(answerId, answerFields, language, setValue) {
   };
 }
 
-export function saveGrade(submissionId, grades, exp, published) {
+export function saveGrade(submissionId, grades, exp, published, questionTitle) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
   const payload = {
     submission: {
@@ -491,7 +491,16 @@ export function saveGrade(submissionId, grades, exp, published) {
       .then((response) => response.data)
       .then((data) => {
         dispatch({ type: actionTypes.SAVE_GRADE_SUCCESS, payload: data });
-        dispatch(setNotification(translations.updateSuccess));
+        if (questionTitle) {
+          dispatch(
+            setNotification(
+              translations.updateIndividualSuccess,
+              questionTitle,
+            ),
+          );
+        } else {
+          dispatch(setNotification(translations.updateSuccess));
+        }
       })
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });

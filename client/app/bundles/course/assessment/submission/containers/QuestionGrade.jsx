@@ -66,7 +66,7 @@ class VisibleQuestionGrade extends Component {
   }
 
   renderQuestionGradeField(dirty) {
-    const { question, grading, intl } = this.props;
+    const { question, grading, intl, handleSaveIndividualGrade } = this.props;
 
     const maxGrade = question.maximumGrade;
 
@@ -77,14 +77,16 @@ class VisibleQuestionGrade extends Component {
             className="w-40"
             hiddenLabel
             inputProps={{ className: 'grade' }}
-            onBlur={(e) => this.processValue(e.target.value)}
+            onBlur={(e) => {
+              handleSaveIndividualGrade();
+              this.processValue(e.target.value);
+            }}
             onChange={(e) => this.processValue(e.target.value, true)}
             onKeyDown={(e) => {
               if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 this.stepGrade(GRADE_STEP);
               }
-
               if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 this.stepGrade(-GRADE_STEP);
@@ -163,6 +165,7 @@ VisibleQuestionGrade.propTypes = {
   id: PropTypes.number.isRequired,
   question: questionShape,
   updateGrade: PropTypes.func.isRequired,
+  handleSaveIndividualGrade: PropTypes.func,
   bonusAwarded: PropTypes.number,
   intl: PropTypes.object.isRequired,
 };
