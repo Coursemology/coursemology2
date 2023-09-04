@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::Answer::Programming::AnnotationsController < \
   Course::Assessment::Submission::Answer::Programming::Controller
+  include Signals::EmissionConcern
+
   load_resource :actable, class: Course::Assessment::Answer::Programming.name,
                           singleton: true, through: :answer
   before_action :set_programming_answer
@@ -11,6 +13,8 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
                              through: :file
 
   include Course::Discussion::PostsConcern
+
+  signals :comments, after: [:create, :destroy]
 
   def create
     result = @annotation.class.transaction do
