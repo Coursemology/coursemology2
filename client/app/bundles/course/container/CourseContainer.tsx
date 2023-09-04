@@ -7,12 +7,13 @@ import {
 } from 'react-router-dom';
 import { MenuOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import { CourseLayoutData } from 'types/course/courses';
+import { CourseLayoutData, SidebarItemData } from 'types/course/courses';
 
 import CourseAPI from 'api/course';
 import PopupNotifier from 'course/user-notification/PopupNotifier';
 import Footer from 'lib/components/core/layouts/Footer';
 import { DataHandle, useDynamicNest } from 'lib/hooks/router/dynamicNest';
+import { syncSignals } from 'lib/hooks/session';
 
 import Breadcrumbs from './Breadcrumbs';
 import Sidebar from './Sidebar';
@@ -72,11 +73,34 @@ const CourseContainer = (): JSX.Element => {
   );
 };
 
+const extractUnreadCountsInto = (
+  record: Record<string, number>,
+  data: SidebarItemData[],
+): Record<string, number> =>
+  data.reduce<Record<string, number>>((unreads, item) => {
+    if (item.unread) unreads[item.key] = item.unread;
+    return unreads;
+  }, record);
+
+const extractUnreadCountsFromLayoutData = (
+  data: CourseLayoutData,
+): Record<string, number> => {
+  const unreads: Record<string, number> = {};
+
+  if (data.sidebar) extractUnreadCountsInto(unreads, data.sidebar);
+  if (data.adminSidebar) extractUnreadCountsInto(unreads, data.adminSidebar);
+
+  return unreads;
+};
+
 const loader: LoaderFunction = async ({ params }) => {
   const id = parseInt(params?.courseId ?? '', 10) || undefined;
   if (!id) throw new Error(`CourseContainer was loaded with ID: ${id}.`);
 
   const response = await CourseAPI.courses.fetchLayout(id);
+
+  syncSignals(extractUnreadCountsFromLayoutData(response.data));
+
   return response.data;
 };
 
