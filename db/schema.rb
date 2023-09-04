@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_17_051641) do
+ActiveRecord::Schema.define(version: 2023_09_04_095037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1316,7 +1316,7 @@ ActiveRecord::Schema.define(version: 2023_04_17_051641) do
 
   create_table "jobs", id: :uuid, default: nil, force: :cascade do |t|
     t.integer "status", default: 0, null: false
-    t.string "redirect_to", limit: 255
+    t.text "redirect_to"
     t.json "error"
     t.datetime "created_at"
     t.datetime "updated_at"
