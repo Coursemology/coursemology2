@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 class Course::Assessment::SubmissionQuestion::CommentsController < Course::Assessment::SubmissionQuestion::Controller
   include Course::Discussion::PostsConcern
+  include Signals::EmissionConcern
+
+  signals :comments, after: [:create]
 
   def create
     result = @submission_question.class.transaction do
