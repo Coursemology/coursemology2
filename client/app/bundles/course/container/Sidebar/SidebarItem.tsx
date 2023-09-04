@@ -5,6 +5,7 @@ import { Badge, Typography } from '@mui/material';
 import { SidebarItemData } from 'types/course/courses';
 
 import { defensivelyGetIcon } from 'lib/constants/icons';
+import { useUnreadCountForItem } from 'lib/hooks/session';
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface SidebarItemProps {
@@ -34,6 +35,8 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
     ref.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' });
   }, [isActive]);
 
+  const unreadCount = useUnreadCountForItem(item.key);
+
   return (
     <Link
       ref={ref}
@@ -50,7 +53,7 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
         }`}
         role="button"
       >
-        <Badge badgeContent={item.unread?.toString()} color="primary" max={999}>
+        <Badge badgeContent={unreadCount} color="primary" max={999}>
           <Icon />
         </Badge>
 
