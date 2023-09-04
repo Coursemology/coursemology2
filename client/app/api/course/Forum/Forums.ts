@@ -71,7 +71,7 @@ export default class ForumsAPI extends BaseCourseAPI {
   }
 
   /**
-   * Mark all topics as read in a forum.
+   * Mark all topics as read in all forums.
    */
   markAllAsRead(): APIResponse {
     return this.client.patch(`${this.#urlPrefix}/mark_all_as_read`);
