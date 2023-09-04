@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 class Course::Video::Submission::SubmissionsController < Course::Video::Submission::Controller
+  include Signals::EmissionConcern
+
   before_action :authorize_attempt_video!, only: :create
   before_action :authorize_analyze_video!, only: [:index, :show]
   skip_authorize_resource :submission, only: :edit
+
+  signals :videos, after: [:create]
 
   def index
     respond_to do |format|
