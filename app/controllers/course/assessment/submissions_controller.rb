@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 class Course::Assessment::SubmissionsController < Course::ComponentController
+  include Signals::EmissionConcern
+
   before_action :load_submissions
   before_action :load_category
-  before_action :load_group_managers, only: [:pending, :index]
+  before_action :load_group_managers, only: [:index, :pending]
+
+  signals :assessment_submissions, after: [:index, :pending]
 
   def index
     respond_to do |format|
