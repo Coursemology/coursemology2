@@ -112,18 +112,37 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(publish(params.submissionId, Object.values(grading), exp));
   }
 
-  handleSaveGrade() {
+  handleSaveGrade(id) {
     const {
       dispatch,
       match: { params },
       grading,
       exp,
       submission: { workflowState },
+      questions,
     } = this.props;
     const published = workflowState === workflowStates.Published;
-    dispatch(
-      saveGrade(params.submissionId, Object.values(grading), exp, published),
-    );
+    if (id) {
+      dispatch(
+        saveGrade(
+          params.submissionId,
+          [grading[id]],
+          null,
+          false,
+          questions[id].displayTitle,
+        ),
+      );
+    } else {
+      dispatch(
+        saveGrade(
+          params.submissionId,
+          Object.values(grading),
+          exp,
+          published,
+          null,
+        ),
+      );
+    }
   }
 
   handleToggleViewHistoryMode = (
@@ -292,7 +311,7 @@ class VisibleSubmissionEditIndex extends Component {
           attempting={workflowState === workflowStates.Attempting}
           canUpdate={canUpdate}
           graderView={graderView}
-          handleSaveGrade={() => this.handleSaveGrade()}
+          handleSaveGrade={(id) => this.handleSaveGrade(id)}
           handleUnsubmit={() => this.handleUnsubmit()}
           isSaving={isSaving}
           onSubmit={() => this.onSubmit()}
@@ -311,7 +330,7 @@ class VisibleSubmissionEditIndex extends Component {
           codaveriFeedbackStatus={codaveriFeedbackStatus}
           explanations={explanations}
           graderView={graderView}
-          handleSaveGrade={() => this.handleSaveGrade()}
+          handleSaveGrade={(id) => this.handleSaveGrade(id)}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           handleUnsubmit={() => this.handleUnsubmit()}
           historyQuestions={historyQuestions}
@@ -352,7 +371,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
         handleMark={() => this.handleMark()}
         handlePublish={() => this.handlePublish()}
-        handleSaveGrade={() => this.handleSaveGrade()}
+        handleSaveGrade={(id) => this.handleSaveGrade(id)}
         handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
         handleUnmark={() => this.handleUnmark()}
         handleUnsubmit={() => this.handleUnsubmit()}
