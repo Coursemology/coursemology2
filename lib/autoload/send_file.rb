@@ -6,7 +6,22 @@ module SendFile
   # @param [String] public_name The file's public name, by default set to the base name of the file.
   # @return [String] The url to the publicly accessible file
   def self.send_file(file, public_name = File.basename(file))
-    # TODO: Support remote path and publish the file on the load balancing server.
+    if Rails.env.production?
+      send_file_production(file, public_name)
+    else
+      send_file_development(file, public_name)
+    end
+  end
+
+  # Obtains the local path for the given publicly accessible file path.
+  #
+  # @param [String] path The URL to the publicly accessible file.
+  # @return [String] The absolute file path to the publicly accessible file.
+  def self.local_path(path)
+    File.join(Rails.public_path, URI.decode_www_form_component(path))
+  end
+
+  def self.send_file_development(file, public_name)
     downloads_dir = Application::Application.config.x.public_download_folder
     public_dir = File.join(Rails.public_path, downloads_dir)
 
@@ -16,11 +31,15 @@ module SendFile
     Addressable::URI.encode(File.join('/', downloads_dir, temporary_dir, public_name))
   end
 
-  # Obtains the local path for the given publicly accessible file path.
-  #
-  # @param [String] path The URL to the publicly accessible file.
-  # @return [String] The absolute file path to the publicly accessible file.
-  def self.local_path(path)
-    File.join(Rails.public_path, URI.decode_www_form_component(path))
+  def self.send_file_production(file, public_name)
+    current_time = Time.now.to_i
+    s3_key = "downloads/#{current_time}/#{public_name}"
+    object = S3_BUCKET.object(s3_key)
+    File.open(file, 'rb') do |f|
+      object.put(body: f)
+    end
+
+    signer = Aws::S3::Presigner.new
+    signer.presigned_url(:get_object, bucket: S3_BUCKET.name, key: s3_key)
   end
 end
