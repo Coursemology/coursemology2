@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 module Course::UsersControllerManagementConcern
-  include Course::LessonPlan::PersonalizationConcern
-
   extend ActiveSupport::Concern
+
+  include Course::LessonPlan::PersonalizationConcern
+  include Signals::EmissionConcern
 
   included do
     before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
     before_action :authorize_edit!, only: [:update, :destroy, :upgrade_to_staff, :assign_timeline]
+
+    signals :enrol_requests, after: [:students]
   end
 
   def update
