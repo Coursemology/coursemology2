@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 class Course::EnrolRequestsController < Course::ComponentController
+  include Signals::EmissionConcern
+
   skip_authorize_resource :course, only: [:create, :destroy]
   load_and_authorize_resource :enrol_request, through: :course, class: Course::EnrolRequest.name
+
+  signals :enrol_requests, after: [:index, :approve, :reject]
 
   def index
     @enrol_requests = @enrol_requests.includes(:confirmer, user: :emails)
