@@ -51,7 +51,9 @@ class VisibleQuestionGrade extends Component {
       updateGrade(id, drafting ? value : parsedValue, bonusAwarded);
     }
 
-    setGradeIsSaved(false);
+    if (drafting) {
+      setGradeIsSaved(false);
+    }
   }
 
   stepGrade(delta) {
