@@ -118,6 +118,8 @@ export type AppDispatch = ThunkDispatch<
   AnyAction
 >;
 
+export type Selector<T> = (state: AppState) => T;
+
 export type Operation<R = void> = ThunkAction<
   Promise<R>,
   AppState,
