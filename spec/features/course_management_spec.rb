@@ -33,7 +33,7 @@ RSpec.feature 'Courses', js: true do
     scenario 'Users can create a new course' do
       visit courses_path
 
-      find('button.new-course-button').click
+      click_button 'New Course'
       expect(page).to have_selector('h2', text: 'New Course')
       expect(subject).to have_field('title')
 
