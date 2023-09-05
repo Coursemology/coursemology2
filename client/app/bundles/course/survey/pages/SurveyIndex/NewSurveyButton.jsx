@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import { createSurvey, showSurveyForm } from 'course/survey/actions/surveys';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import moment from 'lib/moment';
 
-import WidthAdjustedNewButton from '../../../../common/components/WidthAdjustedNewButton';
 import { formatSurveyFormData } from '../../utils';
 
 const translations = defineMessages({
@@ -78,18 +78,12 @@ const NewSurveyButton = (props) => {
     );
   };
 
-  return canCreate ? (
-    <WidthAdjustedNewButton
-      minWidth={720}
-      nonTextButtonClassName="new-survey-button"
-      nonTextButtonKey="new-survey-button"
-      onClick={showNewSurveyForm}
-      text={intl.formatMessage(translations.newSurvey)}
-      textButtonClassName="new-survey-button"
-      textButtonKey="new-survey-button"
-    />
-  ) : (
-    <div />
+  if (!canCreate) return null;
+
+  return (
+    <AddButton onClick={showNewSurveyForm}>
+      {intl.formatMessage(translations.newSurvey)}
+    </AddButton>
   );
 };
 

@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '@mui/material';
 
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -19,13 +19,6 @@ import {
   getCoursePermissions,
 } from '../../selectors';
 import CoursesNew from '../CoursesNew';
-
-const styles = {
-  newButton: {
-    background: 'white',
-    fontSize: 14,
-  },
-};
 
 const translations = defineMessages({
   header: {
@@ -88,15 +81,9 @@ const CoursesIndex: FC = () => {
   const headerToolbars: ReactElement[] = [];
   if (coursesPermissions?.canCreate) {
     headerToolbars.push(
-      <WidthAdjustedNewButton
-        minWidth={720}
-        nonTextButtonClassName="new-course-button"
-        nonTextButtonKey="new-course-button"
-        onClick={(): void => setIsNewCourseDialogOpen(true)}
-        text={t(translations.newCourse)}
-        textButtonClassName="new-course-button"
-        textButtonKey="new-course-button"
-      />,
+      <AddButton onClick={(): void => setIsNewCourseDialogOpen(true)}>
+        {t(translations.newCourse)}
+      </AddButton>,
     );
   } else if (!isLoading && coursesPermissions?.isCurrentUser) {
     headerToolbars.push(
@@ -105,7 +92,6 @@ const CoursesIndex: FC = () => {
         color="primary"
         id="role-request-button"
         onClick={(): void => setRoleRequestDialogOpen(true)}
-        style={styles.newButton}
         variant="outlined"
       >
         {instanceUserRoleRequest

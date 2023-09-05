@@ -3,7 +3,8 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import WidthAdjustedNewButton from '../../../../common/components/WidthAdjustedNewButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
+
 import { createCategory } from '../../actions';
 import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
@@ -46,16 +47,9 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
 
   return (
     <>
-      <WidthAdjustedNewButton
-        disabled={isManagingGroups}
-        minWidth={720}
-        nonTextButtonClassName="new-group-category-button bg-white"
-        nonTextButtonKey="new-group-category-button"
-        onClick={handleOpen}
-        text={intl.formatMessage(translations.new)}
-        textButtonClassName="new-group-category-button bg-white"
-        textButtonKey="new-group-category-button"
-      />
+      <AddButton disabled={isManagingGroups} onClick={handleOpen}>
+        {intl.formatMessage(translations.new)}
+      </AddButton>
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.new)}
         expectedDialogTypes={[dialogTypes.CREATE_CATEGORY]}

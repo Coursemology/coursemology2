@@ -12,10 +12,10 @@ import {
 import PropTypes from 'prop-types';
 
 import { createAssessment } from 'course/assessment/operations';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
 
-import WidthAdjustedNewButton from '../../../../common/components/WidthAdjustedNewButton';
 import AssessmentForm from '../../components/AssessmentForm';
 import actionTypes, { DEFAULT_MONITORING_OPTIONS } from '../../constants';
 import translations from '../../translations';
@@ -139,15 +139,9 @@ class NewAssessmentFormButton extends Component {
 
     return (
       <>
-        <WidthAdjustedNewButton
-          minWidth={720}
-          nonTextButtonClassName="new-assessment-button"
-          nonTextButtonKey="new-assessment-button"
-          onClick={this.handleOpen}
-          text={intl.formatMessage(translations.newAssessment)}
-          textButtonClassName="bg-white"
-          textButtonKey="new-assessment-button"
-        />
+        <AddButton onClick={this.handleOpen}>
+          {intl.formatMessage(translations.newAssessment)}
+        </AddButton>
 
         <Dialog
           disableEnforceFocus

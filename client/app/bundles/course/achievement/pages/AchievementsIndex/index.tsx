@@ -1,7 +1,7 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -74,17 +74,12 @@ const AchievementsIndex: FC = () => {
 
   if (achievementPermissions?.canCreate) {
     headerToolbars.push(
-      <WidthAdjustedNewButton
-        minWidth={720}
-        nonTextButtonClassName="new-achievement-button"
-        nonTextButtonKey="new-achievement-button"
-        onClick={(): void => {
-          setIsOpen(true);
-        }}
-        text={t(translations.newAchievement)}
-        textButtonClassName="new-achievement-button"
-        textButtonKey="new-achievement-button"
-      />,
+      <AddButton
+        className="new-achievement-button"
+        onClick={(): void => setIsOpen(true)}
+      >
+        {t(translations.newAchievement)}
+      </AddButton>,
     );
   }
 

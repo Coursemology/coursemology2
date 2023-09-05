@@ -2,7 +2,7 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -74,15 +74,9 @@ const VideosIndex: FC = () => {
 
   if (videoPermissions?.canManage) {
     headerToolbars.push(
-      <WidthAdjustedNewButton
-        minWidth={720}
-        nonTextButtonClassName="new-video-button"
-        nonTextButtonKey="new-video-button"
-        onClick={(): void => setIsOpen(true)}
-        text={t(translations.newVideo)}
-        textButtonClassName="new-video-button bg-white"
-        textButtonKey="new-video-button"
-      />,
+      <AddButton onClick={(): void => setIsOpen(true)}>
+        {t(translations.newVideo)}
+      </AddButton>,
     );
   }
 
