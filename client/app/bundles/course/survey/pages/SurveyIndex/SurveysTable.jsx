@@ -142,7 +142,7 @@ const SurveysTable = (props) => {
             </TableCell>
             {shouldShowSubmissionsCount &&
               (survey.canManage ? (
-                <TableCell colSpan={2}>
+                <TableCell className="text-right" colSpan={2}>
                   <Link
                     className="line-clamp-2 xl:line-clamp-1"
                     to={`/courses/${courseId}/surveys/${survey.id}/responses`}
