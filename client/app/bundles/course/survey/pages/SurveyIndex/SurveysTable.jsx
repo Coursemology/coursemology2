@@ -43,7 +43,7 @@ const SurveysTable = (props) => {
 
   const navigate = useNavigate();
   const canManageSurveys = surveys.some((survey) => survey.canManage);
-  const shouldShowSubmissionsCount = canManageSurveys && studentsCount !== null;
+  const shouldShowResponsesCount = canManageSurveys && studentsCount !== null;
 
   const renderPublishToggle = (survey) => {
     const { dispatch } = props;
@@ -97,7 +97,7 @@ const SurveysTable = (props) => {
           <TableCell colSpan={5}>
             <FormattedMessage {...translations.bonusEndsAt} />
           </TableCell>
-          {shouldShowSubmissionsCount && (
+          {shouldShowResponsesCount && (
             <TableCell colSpan={2}>
               <FormattedMessage {...translations.responses} />
             </TableCell>
@@ -140,7 +140,7 @@ const SurveysTable = (props) => {
                 ? formatMiniDateTime(survey.bonus_end_at)
                 : '-'}
             </TableCell>
-            {shouldShowSubmissionsCount &&
+            {shouldShowResponsesCount &&
               (survey.canManage ? (
                 <TableCell className="text-right" colSpan={2}>
                   <Link
@@ -148,7 +148,7 @@ const SurveysTable = (props) => {
                     to={`/courses/${courseId}/surveys/${survey.id}/responses`}
                     underline="hover"
                   >
-                    {`${survey.submissionsCount}/${studentsCount}`}
+                    {`${survey.responsesCount}/${studentsCount}`}
                   </Link>
                 </TableCell>
               ) : (

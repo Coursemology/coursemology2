@@ -30,11 +30,10 @@ class Course::Survey < ApplicationRecord
     unscoped.joins(:lesson_plan_item).select(Course::LessonPlan::Item.arel_table[:id])
   end)
 
-  # Calculating the number of students who have already done the submission
-  calculated :student_submission_count, (lambda do
+  calculated :student_submitted_responses_count, (lambda do
     Course::Survey::Response.
       joins('INNER JOIN course_users ON course_survey_responses.creator_id = course_users.user_id').
-      select('count(DISTINCT course_survey_responses.creator_id) AS student_submission_count').
+      select('count(DISTINCT course_survey_responses.creator_id) AS student_submitted_responses_count').
       where('course_survey_responses.submitted_at IS NOT NULL').
       where('course_survey_responses.survey_id = course_surveys.id').
       where('course_users.role = 0')
