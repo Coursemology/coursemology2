@@ -45,13 +45,13 @@ class NewMilestoneButton extends Component {
   };
 
   render() {
-    if (!this.props.canManageLessonPlan) {
-      return <div />;
-    }
+    if (!this.props.canManageLessonPlan) return null;
+
+    const { intl } = this.props;
 
     return (
       <AddButton fixed onClick={this.showForm}>
-        <FormattedMessage {...translations.newMilestone} />
+        {intl.formatMessage(translations.newMilestone)}
       </AddButton>
     );
   }

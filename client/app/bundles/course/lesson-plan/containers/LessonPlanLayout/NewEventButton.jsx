@@ -53,9 +53,11 @@ class NewEventButton extends Component {
   render() {
     if (!this.props.canManageLessonPlan) return null;
 
+    const { intl } = this.props;
+
     return (
       <AddButton fixed onClick={this.showForm}>
-        <FormattedMessage {...translations.newEvent} />
+        {intl.formatMessage(translations.newEvent)}
       </AddButton>
     );
   }

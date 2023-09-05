@@ -29,7 +29,7 @@ describe('<NewMilestoneButton />', () => {
       { state },
     );
 
-    fireEvent.click(page.getByRole('button', { name: 'Milestone' }));
+    fireEvent.click(page.getByRole('button', { name: 'New Milestone' }));
 
     fireEvent.change(page.getByLabelText('Title', { exact: false }), {
       target: { value: milestoneData.title },
