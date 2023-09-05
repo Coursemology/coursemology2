@@ -38,11 +38,12 @@ const SurveysTable = (props) => {
   const {
     surveys,
     courseId,
-    surveysFlags: { canCreate },
+    surveysFlags: { canCreate, studentsCount },
   } = props;
 
   const navigate = useNavigate();
-  const canManageSurvey = surveys.some((survey) => survey.canManage);
+  const canManageSurveys = surveys.some((survey) => survey.canManage);
+  const shouldShowSubmissionsCount = canManageSurveys && studentsCount !== null;
 
   const renderPublishToggle = (survey) => {
     const { dispatch } = props;
@@ -96,16 +97,16 @@ const SurveysTable = (props) => {
           <TableCell colSpan={5}>
             <FormattedMessage {...translations.bonusEndsAt} />
           </TableCell>
-          {canManageSurvey ? (
+          {shouldShowSubmissionsCount && (
             <TableCell colSpan={2}>
               <FormattedMessage {...translations.responses} />
             </TableCell>
-          ) : null}
-          {canCreate ? (
+          )}
+          {canCreate && (
             <TableCell colSpan={2}>
               <FormattedMessage {...translations.published} />
             </TableCell>
-          ) : null}
+          )}
           <TableCell colSpan={canCreate ? 14 : 4} />
         </TableRow>
       </TableHead>
@@ -139,7 +140,7 @@ const SurveysTable = (props) => {
                 ? formatMiniDateTime(survey.bonus_end_at)
                 : '-'}
             </TableCell>
-            {canManageSurvey &&
+            {shouldShowSubmissionsCount &&
               (survey.canManage ? (
                 <TableCell colSpan={2}>
                   <Link
@@ -147,7 +148,7 @@ const SurveysTable = (props) => {
                     to={`/courses/${courseId}/surveys/${survey.id}/responses`}
                     underline="hover"
                   >
-                    {`${survey.submissionCount}/${survey.numberOfStudents}`}
+                    {`${survey.submissionsCount}/${studentsCount}`}
                   </Link>
                 </TableCell>
               ) : (
@@ -197,6 +198,7 @@ SurveysTable.propTypes = {
   surveys: PropTypes.arrayOf(surveyShape),
   surveysFlags: PropTypes.shape({
     canCreate: PropTypes.bool.isRequired,
+    studentsCount: PropTypes.number.isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };

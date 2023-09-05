@@ -17,7 +17,7 @@ describe('<MoveDownButton />', () => {
   it('injects handlers that allow survey section to be moved after the following section', async () => {
     const url = `/courses/${global.courseId}/surveys/${surveys[0].id}`;
     window.history.pushState({}, '', url);
-    dispatch(loadSurveys(surveys));
+    dispatch(loadSurveys({ surveys }));
 
     const spyMove = jest.spyOn(CourseAPI.survey.surveys, 'reorderSections');
 
