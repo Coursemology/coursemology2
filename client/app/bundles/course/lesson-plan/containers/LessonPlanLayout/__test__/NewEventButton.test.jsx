@@ -33,7 +33,7 @@ describe('<NewEventButton />', () => {
       { state },
     );
 
-    fireEvent.click(page.getByRole('button', { name: 'Event' }));
+    fireEvent.click(page.getByRole('button', { name: 'New Event' }));
 
     fireEvent.change(page.getByLabelText('Title', { exact: false }), {
       target: { value: eventData.title },
