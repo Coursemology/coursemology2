@@ -7,14 +7,13 @@ import {
 } from 'react-intl';
 import { AutoFixHigh, EmojiEvents, Group, Person } from '@mui/icons-material';
 import { Grid, Tab, Tabs } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import palette from 'theme/palette';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useMedia from 'lib/hooks/useMedia';
 
 import LeaderboardTable from '../../components/tables/LeaderboardTable';
 import fetchLeaderboard from '../../operations';
@@ -55,8 +54,7 @@ const translations = defineMessages({
 const LeaderboardIndex: FC<Props> = (props) => {
   const { intl } = props;
   const dispatch = useAppDispatch();
-  const theme = useTheme();
-  const tabView = useMediaQuery(theme.breakpoints.down('lg'));
+  const tabView = useMedia.MinWidth('lg');
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('leaderboard-tab');
   const [innerTabValue, setInnerTabValue] = useState('points-tab');
