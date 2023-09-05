@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -54,15 +54,14 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   return (
     <Page>
-      <WidthAdjustedNewButton
-        minWidth={720}
-        nonTextButtonClassName="float-right"
-        nonTextButtonKey="new-announcement-button"
+      <AddButton
+        className="float-right"
+        fixed
+        id="new-announcement-button"
         onClick={(): void => setIsOpen(true)}
-        text={intl.formatMessage(translations.newAnnouncement)}
-        textButtonClassName="float-right"
-        textButtonKey="new-announcement-button"
-      />
+      >
+        {intl.formatMessage(translations.newAnnouncement)}
+      </AddButton>
 
       <AnnouncementsDisplay
         announcementPermissions={{ canCreate: true }}

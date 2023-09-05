@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -104,15 +104,9 @@ const ForumShow: FC = () => {
         showSubscribeButton
       />
       {forum.permissions.canCreateTopic && (
-        <WidthAdjustedNewButton
-          minWidth={720}
-          nonTextButtonClassName="new-topic-button"
-          nonTextButtonKey="new-topic-button"
-          onClick={(): void => setIsOpen(true)}
-          text={t(translations.newTopic)}
-          textButtonClassName="new-topic-button"
-          textButtonKey="new-topic-button"
-        />
+        <AddButton onClick={(): void => setIsOpen(true)}>
+          {t(translations.newTopic)}
+        </AddButton>
       )}
     </>
   );

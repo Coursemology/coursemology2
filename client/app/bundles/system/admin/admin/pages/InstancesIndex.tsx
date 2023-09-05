@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -58,15 +58,13 @@ const InstancesIndex: FC = () => {
         instances={instances}
         newInstanceButton={
           permissions.canCreateInstances && (
-            <WidthAdjustedNewButton
-              minWidth={720}
-              nonTextButtonClassName="whitespace-nowrap"
-              nonTextButtonKey="new-instance-button"
+            <AddButton
+              className="whitespace-nowrap"
+              id="new-instance-button"
               onClick={(): void => setIsOpen(true)}
-              text={t(translations.newInstance)}
-              textButtonClassName="whitespace-nowrap"
-              textButtonKey="new-instance-button"
-            />
+            >
+              {t(translations.newInstance)}
+            </AddButton>
           )
         }
         renderRowActionComponent={(instance): JSX.Element => (

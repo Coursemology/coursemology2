@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { defineMessages } from 'react-intl';
 
 import CoursesNew from 'course/courses/pages/CoursesNew';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import WidthAdjustedNewButton from './WidthAdjustedNewButton';
 
 const translations = defineMessages({
   newCourse: {
@@ -19,15 +18,10 @@ const NewCourseButton = (): JSX.Element => {
 
   return (
     <>
-      <WidthAdjustedNewButton
-        minWidth={720}
-        nonTextButtonClassName="new-course-button"
-        nonTextButtonKey="new-course-button"
-        onClick={(): void => setIsDialogOpen(true)}
-        text={t(translations.newCourse)}
-        textButtonClassName="new-course-button"
-        textButtonKey="new-course-button"
-      />
+      <AddButton onClick={(): void => setIsDialogOpen(true)}>
+        {t(translations.newCourse)}
+      </AddButton>
+
       <CoursesNew
         onClose={(): void => setIsDialogOpen(false)}
         open={isDialogOpen}

@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Add } from '@mui/icons-material';
-import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
+
+import AddButton from 'lib/components/core/buttons/AddButton';
 
 import { createMilestone } from '../../operations';
 import { actions } from '../../store';
@@ -11,7 +11,7 @@ import { actions } from '../../store';
 const translations = defineMessages({
   newMilestone: {
     id: 'course.lessonPlan.LessonPlanLayout.NewMilestoneButton.newMilestone',
-    defaultMessage: 'Milestone',
+    defaultMessage: 'New Milestone',
   },
   success: {
     id: 'course.lessonPlan.LessonPlanLayout.NewMilestoneButton.success',
@@ -50,9 +50,9 @@ class NewMilestoneButton extends Component {
     }
 
     return (
-      <Button onClick={this.showForm} startIcon={<Add />} variant="contained">
+      <AddButton fixed onClick={this.showForm}>
         <FormattedMessage {...translations.newMilestone} />
-      </Button>
+      </AddButton>
     );
   }
 }

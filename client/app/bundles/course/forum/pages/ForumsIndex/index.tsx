@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
-import WidthAdjustedNewButton from 'bundles/common/components/WidthAdjustedNewButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -87,15 +87,9 @@ const ForumsIndex: FC = () => {
         nextUnreadTopicUrl={forumMetadata.nextUnreadTopicUrl}
       />
       {forumPermissions?.canCreateForum && (
-        <WidthAdjustedNewButton
-          minWidth={720}
-          nonTextButtonClassName="new-forum-button"
-          nonTextButtonKey="new-forum-button"
-          onClick={(): void => setIsForumNewDialogOpen(true)}
-          text={t(translations.newForum)}
-          textButtonClassName="new-forum-button"
-          textButtonKey="new-forum-button"
-        />
+        <AddButton onClick={(): void => setIsForumNewDialogOpen(true)}>
+          {t(translations.newForum)}
+        </AddButton>
       )}
     </>
   );
