@@ -8,12 +8,8 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   build_and_authorize_new_lesson_plan_item :survey, class: Course::Survey, through: :course, only: [:new, :create]
 
   def index
-    respond_to do |format|
-      format.json do
-        preload_student_submission_count
-        @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
-      end
-    end
+    preload_student_submission_count
+    @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
   end
 
   def create
@@ -25,11 +21,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   end
 
   def show
-    respond_to do |format|
-      format.json do
-        render_survey_with_questions_json
-      end
-    end
+    render_survey_with_questions_json
   end
 
   def update
@@ -49,11 +41,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   end
 
   def results
-    respond_to do |format|
-      format.json do
-        preload_questions_results
-      end
-    end
+    preload_questions_results
   end
 
   def remind
