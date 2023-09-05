@@ -44,7 +44,7 @@ const ThemeProvider = (props: ThemeProviderProps): JSX.Element => {
     },
     breakpoints: {
       values: {
-        xs: 0,
+        xs: pxToNumber(tailwindConfig.theme.screens.xs),
         sm: pxToNumber(tailwindConfig.theme.screens.sm),
         md: pxToNumber(tailwindConfig.theme.screens.md),
         lg: pxToNumber(tailwindConfig.theme.screens.lg),
