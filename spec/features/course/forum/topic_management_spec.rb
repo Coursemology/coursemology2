@@ -36,7 +36,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
 
         visit course_forum_path(course, forum)
 
-        find('button.new-topic-button').click
+        click_button 'New Topic'
         expect(page).to have_selector('h2', text: 'New Topic')
 
         # Create a topic with a missing title.
@@ -58,7 +58,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
 
         # Create a sticky topic with a title.
         visit course_forum_path(course, forum)
-        find('button.new-topic-button').click
+        click_button 'New Topic'
 
         fill_in 'title', with: topic.title
         fill_in_react_ck 'textarea[name=text]', 'awesome text'
@@ -235,7 +235,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
 
         visit course_forum_path(course, forum)
 
-        find('button.new-topic-button').click
+        click_button 'New Topic'
         expect(page).to have_selector('h2', text: 'New Topic')
 
         # Create a topic with a missing title.
@@ -257,7 +257,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
 
         # Create a question topic with a title.
         visit course_forum_path(course, forum)
-        find('button.new-topic-button').click
+        click_button 'New Topic'
 
         fill_in 'title', with: topic.title
         fill_in_react_ck 'textarea[name=text]', 'awesome text'
