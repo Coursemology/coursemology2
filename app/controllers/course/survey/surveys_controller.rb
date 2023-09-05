@@ -7,7 +7,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def index
     @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
-    preload_student_submission_count
+    preload_student_submitted_responses_counts
   end
 
   def create
@@ -86,9 +86,9 @@ class Course::Survey::SurveysController < Course::Survey::Controller
     params.require(:survey).permit(*fields)
   end
 
-  def preload_student_submission_count
-    @survey_submission_count_hash = @surveys.calculated(:student_submission_count).to_h do |survey|
-      [survey.id, survey.student_submission_count]
+  def preload_student_submitted_responses_counts
+    @student_submitted_responses_counts_hash = @surveys.calculated(:student_submitted_responses_count).to_h do |survey|
+      [survey.id, survey.student_submitted_responses_count]
     end
   end
 end
