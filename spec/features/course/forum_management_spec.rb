@@ -28,7 +28,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
 
         visit course_forums_path(course)
 
-        find('button.new-forum-button').click
+        click_button 'New Forum'
         expect(page).to have_selector('h2', text: 'New Forum')
 
         # Create a forum with a missing name.
