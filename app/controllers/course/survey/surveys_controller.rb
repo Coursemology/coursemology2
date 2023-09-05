@@ -2,14 +2,12 @@
 class Course::Survey::SurveysController < Course::Survey::Controller
   include Course::Survey::ReorderingConcern
 
-  before_action :number_of_students_in_course, only: [:index, :create, :show, :update, :results]
-
   skip_load_and_authorize_resource :survey, only: [:new, :create]
   build_and_authorize_new_lesson_plan_item :survey, class: Course::Survey, through: :course, only: [:new, :create]
 
   def index
-    preload_student_submission_count
     @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
+    preload_student_submission_count
   end
 
   def create
@@ -62,10 +60,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   private
 
-  def number_of_students_in_course
-    @course_students = current_course.course_users.students
-  end
-
   def render_survey_with_questions_json
     load_sections
     render partial: 'survey_with_questions', locals: {
@@ -93,8 +87,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   end
 
   def preload_student_submission_count
-    @survey_submission_count_hash = @surveys.calculated(:student_submission_count).
-                                    to_h do |survey|
+    @survey_submission_count_hash = @surveys.calculated(:student_submission_count).to_h do |survey|
       [survey.id, survey.student_submission_count]
     end
   end

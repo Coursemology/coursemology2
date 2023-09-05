@@ -57,12 +57,13 @@ export function loadSurvey(survey) {
   };
 }
 
-export function loadSurveys(surveys, canCreate) {
+export function loadSurveys(data) {
   return (dispatch) => {
     dispatch({
       type: actionTypes.LOAD_SURVEYS_SUCCESS,
-      surveys,
-      canCreate,
+      surveys: data.surveys,
+      canCreate: data.canCreate,
+      studentsCount: data.studentsCount,
     });
   };
 }
@@ -88,7 +89,7 @@ export function fetchSurveys() {
     return CourseAPI.survey.surveys
       .index()
       .then((response) => {
-        loadSurveys(response.data.surveys, response.data.canCreate)(dispatch);
+        loadSurveys(response.data)(dispatch);
       })
       .catch(() => {
         dispatch({ type: actionTypes.LOAD_SURVEYS_FAILURE });

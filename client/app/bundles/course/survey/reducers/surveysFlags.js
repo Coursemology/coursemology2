@@ -7,6 +7,7 @@ const initialState = {
   isQuestionMoved: false,
   isUnsubmittingResponse: false,
   disableSurveyShow: false,
+  studentsCount: null,
 };
 
 export default function (state = initialState, action) {
@@ -24,7 +25,12 @@ export default function (state = initialState, action) {
       return { ...state, isLoadingSurveys: true };
     }
     case actionTypes.LOAD_SURVEYS_SUCCESS: {
-      return { ...state, isLoadingSurveys: false, canCreate: action.canCreate };
+      return {
+        ...state,
+        isLoadingSurveys: false,
+        canCreate: action.canCreate,
+        studentsCount: action.studentsCount,
+      };
     }
     case actionTypes.LOAD_SURVEYS_FAILURE: {
       return { ...state, isLoadingSurveys: false };
