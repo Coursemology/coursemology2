@@ -14,7 +14,6 @@ interface AchievementReorderingProps {
 
 const styles = {
   AchievementReorderingButton: {
-    background: 'white',
     fontSize: 14,
     marginRight: 12,
   },
@@ -23,11 +22,11 @@ const styles = {
 const translations = defineMessages({
   startReorderAchievement: {
     id: 'course.achievement.AchievementReordering.startReorderAchievement',
-    defaultMessage: 'Start Re-ordering',
+    defaultMessage: 'Reorder',
   },
   endReorderAchievement: {
     id: 'course.achievement.AchievementReordering.endReorderAchievement',
-    defaultMessage: 'End Re-ordering',
+    defaultMessage: 'Save New Ordering',
   },
   updateFailed: {
     id: 'course.achievement.AchievementReordering.updateFailed',
@@ -84,7 +83,7 @@ const AchievementReordering = (
         }
       }}
       style={styles.AchievementReorderingButton}
-      variant="outlined"
+      variant={isReordering ? 'contained' : 'outlined'}
     >
       {isReordering
         ? t(translations.endReorderAchievement)
