@@ -15,7 +15,7 @@ RSpec.feature 'Course: Videos: Management', js: true do
         video = build_stubbed(:video)
         visit course_videos_path(course)
 
-        find('button.new-video-button').click
+        click_button 'New Video'
         expect(page).to have_selector('h2', text: 'New Video')
         fill_in 'title', with: video.title
         fill_in_react_ck 'textarea[name=description]', video.description
