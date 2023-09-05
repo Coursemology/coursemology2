@@ -1,12 +1,6 @@
 import { FC, memo, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Tooltip,
-  useMediaQuery,
-} from '@mui/material';
+import { Avatar, AvatarGroup, Box, Tooltip } from '@mui/material';
 import { TableColumns } from 'types/components/DataTable';
 import {
   GroupLeaderboardAchievement,
@@ -20,6 +14,7 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import { getAchievementURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useMedia from 'lib/hooks/useMedia';
 
 import { LeaderboardTableType } from '../../types';
 
@@ -83,8 +78,8 @@ const styles = {
 
 const LeaderboardTable: FC<Props> = (props: Props) => {
   const { data, id: tableType } = props;
-  const tabletView = useMediaQuery('(max-width:600px)');
-  const phoneView = useMediaQuery('(max-width:450px)');
+  const tabletView = useMedia.MinWidth('sm');
+  const phoneView = useMedia.MinWidth('xs');
   const [maxAvatars, setMaxAvatars] = useState(6);
 
   useEffect(() => {
