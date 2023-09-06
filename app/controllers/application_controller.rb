@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
 
   def handle_csrf_error(exception)
     @exception = exception
-    render json: { error: "Can't verify CSRF token authenticity" }, status: :forbidden
+    render json: { error: "Can't verify CSRF token authenticity - #{exception.message}" }, status: :forbidden
   end
 
   # lograge
@@ -58,7 +58,6 @@ class ApplicationController < ActionController::Base
                       else
                         'ERROR'
                       end
-
     payload[:remote_ip] = request.ip
     payload[:current_user_id] = current_user.id if current_user.present?
   end
