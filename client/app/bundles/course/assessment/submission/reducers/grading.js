@@ -5,22 +5,30 @@ const initialState = {
   expMultiplier: 1,
 };
 
-function sum(array) {
-  return array.filter((i) => i).reduce((acc, i) => acc + i, 0);
-}
+const sum = (array) => array.filter((i) => i).reduce((acc, i) => acc + i, 0);
 
-function computeExp(
+const computeExp = (
   questions,
   maximumGrade,
   basePoints,
   expMultiplier,
   bonusAwarded = 0,
-) {
+) => {
   const totalGrade = sum(Object.values(questions).map((q) => q.grade));
   return Math.round(
     (totalGrade / maximumGrade) * (basePoints + bonusAwarded) * expMultiplier,
   );
-}
+};
+
+const extractGrades = (answers) =>
+  answers.reduce((draft, { questionId, grading }) => {
+    draft[questionId] = {
+      ...grading,
+      originalGrade: grading.grade,
+    };
+
+    return draft;
+  }, {});
 
 export default function (state = initialState, action) {
   switch (action.type) {
@@ -34,12 +42,7 @@ export default function (state = initialState, action) {
     case actions.PUBLISH_SUCCESS: {
       return {
         ...state,
-        questions: {
-          ...action.payload.answers.reduce(
-            (obj, answer) => ({ ...obj, [answer.questionId]: answer.grading }),
-            {},
-          ),
-        },
+        questions: extractGrades(action.payload.answers),
         exp: action.payload.submission.pointsAwarded,
         basePoints: action.payload.submission.basePoints,
         maximumGrade: sum(

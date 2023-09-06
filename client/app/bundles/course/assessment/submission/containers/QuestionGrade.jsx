@@ -1,19 +1,14 @@
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import ErrorIcon from '@mui/icons-material/Error';
-import { Paper, Typography } from '@mui/material';
+import { Chip, Paper, Tooltip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import CustomTooltip from 'lib/components/core/CustomTooltip';
 import TextField from 'lib/components/core/fields/TextField';
 
-import actionTypes, { questionTypes } from '../constants';
-import {
-  explanationShape,
-  questionGradeShape,
-  questionShape,
-} from '../propTypes';
+import actionTypes from '../constants';
+import { questionGradeShape, questionShape } from '../propTypes';
+import translations from '../translations';
 
 const GRADE_STEP = 1;
 
@@ -27,8 +22,7 @@ const isValidDecimal = (value) => /^\d*(\.\d?)?$/.test(value);
 
 class VisibleQuestionGrade extends Component {
   processValue(value, drafting) {
-    const { id, question, updateGrade, bonusAwarded, setGradeIsSaved } =
-      this.props;
+    const { id, question, updateGrade, bonusAwarded } = this.props;
 
     if (value.trim() === '') {
       updateGrade(id, null, bonusAwarded);
@@ -49,10 +43,6 @@ class VisibleQuestionGrade extends Component {
       updateGrade(id, maxGrade, bonusAwarded);
     } else {
       updateGrade(id, drafting ? value : parsedValue, bonusAwarded);
-    }
-
-    if (drafting) {
-      setGradeIsSaved(false);
     }
   }
 
@@ -75,69 +65,55 @@ class VisibleQuestionGrade extends Component {
     );
   }
 
-  renderQuestionGradeField() {
-    const {
-      explanations,
-      numTestCases,
-      question,
-      grading,
-      gradeIsUnsavedMessage,
-      gradeIsSaved,
-      id,
-    } = this.props;
-    let initialGrade = grading.grade;
+  renderQuestionGradeField(dirty) {
+    const { question, grading, intl } = this.props;
 
     const maxGrade = question.maximumGrade;
-    const isProgrammingWithTestCases =
-      question.type === questionTypes.Programming && numTestCases > 0;
-    const isMcqOrMrq = [
-      questionTypes.MultipleChoice,
-      questionTypes.MultipleResponse,
-    ].includes(question.type);
-
-    if (
-      !initialGrade &&
-      (!explanations[id] || explanations[id].correct) &&
-      (isProgrammingWithTestCases || isMcqOrMrq)
-    ) {
-      initialGrade = initialGrade === 0 ? initialGrade : maxGrade;
-      this.processValue(initialGrade.toString(), true);
-    }
 
     return (
-      <div className="flex items-center space-x-2">
-        {!gradeIsSaved && (
-          <CustomTooltip title={gradeIsUnsavedMessage}>
-            <ErrorIcon
-              color="error"
-              fontSize="small"
-              style={{ marginLeft: 5, marginTop: -4 }}
-            />
-          </CustomTooltip>
-        )}
-        <TextField
-          hiddenLabel
-          inputProps={{ className: 'grade' }}
-          onBlur={(e) => this.processValue(e.target.value)}
-          onChange={(e) => this.processValue(e.target.value, true)}
-          onKeyDown={(e) => {
-            if (e.key === 'ArrowUp') {
-              e.preventDefault();
-              this.stepGrade(GRADE_STEP);
-            }
+      <div className="flex w-full justify-between items-center space-x-2">
+        <div className="flex items-center space-x-4">
+          <TextField
+            className="w-40"
+            hiddenLabel
+            inputProps={{ className: 'grade' }}
+            onBlur={(e) => this.processValue(e.target.value)}
+            onChange={(e) => this.processValue(e.target.value, true)}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                this.stepGrade(GRADE_STEP);
+              }
 
-            if (e.key === 'ArrowDown') {
-              e.preventDefault();
-              this.stepGrade(-GRADE_STEP);
-            }
-          }}
-          size="small"
-          style={{ width: 100 }}
-          value={initialGrade ?? ''}
-          variant="filled"
-        />
+              if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                this.stepGrade(-GRADE_STEP);
+              }
+            }}
+            placeholder={grading.originalGrade}
+            size="small"
+            value={grading.grade ?? ''}
+            variant="filled"
+          />
 
-        <Typography variant="body2">{` / ${maxGrade}`}</Typography>
+          <Typography color="text.disabled" variant="body2">
+            /
+          </Typography>
+
+          <Typography variant="body2">{maxGrade}</Typography>
+        </div>
+
+        <div className="space-x-4">
+          {dirty && (
+            <Tooltip title={intl.formatMessage(translations.gradeUnsavedHint)}>
+              <Chip
+                color="warning"
+                label={intl.formatMessage(translations.gradeUnsaved)}
+                size="small"
+              />
+            </Tooltip>
+          )}
+        </div>
       </div>
     );
   }
@@ -147,9 +123,13 @@ class VisibleQuestionGrade extends Component {
 
     if (!grading) return null;
 
+    const dirty = +grading.originalGrade !== +grading.grade;
+
     return (
       <Paper
-        className="flex items-center space-x-5 px-5 py-4"
+        className={`transition-none flex items-center space-x-5 px-5 py-4 ring-2 ${
+          dirty ? 'ring-2 ring-warning border-transparent' : 'ring-transparent'
+        }`}
         variant="outlined"
       >
         <Typography color="text.secondary" variant="body1">
@@ -157,7 +137,7 @@ class VisibleQuestionGrade extends Component {
         </Typography>
 
         {editable
-          ? this.renderQuestionGradeField()
+          ? this.renderQuestionGradeField(dirty)
           : this.renderQuestionGrade()}
       </Paper>
     );
@@ -165,11 +145,6 @@ class VisibleQuestionGrade extends Component {
 }
 
 VisibleQuestionGrade.propTypes = {
-  explanations: PropTypes.objectOf(explanationShape),
-  numTestCases: PropTypes.number,
-  gradeIsUnsavedMessage: PropTypes.node,
-  gradeIsSaved: PropTypes.bool,
-  setGradeIsSaved: PropTypes.func.isRequired,
   editable: PropTypes.bool.isRequired,
   grading: questionGradeShape,
   id: PropTypes.number.isRequired,
@@ -181,24 +156,12 @@ VisibleQuestionGrade.propTypes = {
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { id } = ownProps;
-  let numPublicTest = 0;
-  let numPrivateTest = 0;
-
-  if (submission.testCases[id]) {
-    numPublicTest = submission.testCases[id].public_test
-      ? submission.testCases[id].public_test.length
-      : 0;
-    numPrivateTest = submission.testCases[id].private_test
-      ? submission.testCases[id].private_test.length
-      : 0;
-  }
   const { submittedAt, bonusEndAt, bonusPoints } = submission.submission;
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
   return {
     question: submission.questions[id],
     grading: submission.grading.questions[id],
-    numTestCases: numPublicTest + numPrivateTest,
     bonusAwarded,
   };
 }
