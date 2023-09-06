@@ -8,13 +8,15 @@ latest_answer = last_attempt(answer)
 attempt = is_current_answer ? latest_answer : answer
 auto_grading = attempt&.auto_grading&.specific
 
+can_grade = can?(:grade, submission)
+
 # Required in response of reload_answer and submit_answer to update past answers with the latest_attempt
 # Removing this check will cause it to render the latest_answer recursively
 if is_current_answer && !latest_answer.current_answer?
   json.latestAnswer do
     json.partial! latest_answer, answer: latest_answer
     json.partial! 'course/assessment/answer/programming/annotations', programming_files: latest_answer.specific.files,
-                                                                      can_grade: can?(:grade, submission)
+                                                                      can_grade: can_grade
   end
 end
 
@@ -99,7 +101,9 @@ json.explanation do
       json.failureType 'private_test'
     end
 
-    json.correct attempt&.auto_grading && attempt&.correct
+    passed_evaluation_tests = failed_test_cases_by_type['evaluation_test'].blank?
+
+    json.correct attempt&.auto_grading && attempt&.correct && (can_grade && passed_evaluation_tests)
     json.explanations explanations
   end
 end
