@@ -30,6 +30,34 @@ const extractGrades = (answers) =>
     return draft;
   }, {});
 
+/**
+ * Extracts grades from `payload.answer`, and pre-fills the maximum grade for correct
+ * answers that have not been graded. "Correct" follows the definition of
+ * `explanation.correct` from the server.
+ */
+const extractPrefillableGrades = (payload) => {
+  const maxGrades = payload.questions.reduce((draft, question) => {
+    draft[question.id] = question.maximumGrade;
+    return draft;
+  }, {});
+
+  return payload.answers.reduce(
+    (draft, { questionId, grading, explanation }) => {
+      const prefillable = grading.grade === null && explanation?.correct;
+
+      draft[questionId] = {
+        ...grading,
+        originalGrade: grading.grade,
+        grade: prefillable ? maxGrades[questionId] : grading.grade,
+        prefilled: prefillable,
+      };
+
+      return draft;
+    },
+    {},
+  );
+};
+
 export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
@@ -42,7 +70,10 @@ export default function (state = initialState, action) {
     case actions.PUBLISH_SUCCESS: {
       return {
         ...state,
-        questions: extractGrades(action.payload.answers),
+        questions:
+          action.type === actions.FETCH_SUBMISSION_SUCCESS
+            ? extractPrefillableGrades(action.payload)
+            : extractGrades(action.payload.answers),
         exp: action.payload.submission.pointsAwarded,
         basePoints: action.payload.submission.basePoints,
         maximumGrade: sum(
@@ -55,7 +86,11 @@ export default function (state = initialState, action) {
       const bonusAwarded = action.bonusAwarded;
       const questions = {
         ...state.questions,
-        [action.id]: { ...state.questions[action.id], grade: action.grade },
+        [action.id]: {
+          ...state.questions[action.id],
+          grade: action.grade,
+          autofilled: false,
+        },
       };
 
       return {
