@@ -143,11 +143,9 @@ class VisibleQuestionGrade extends Component {
   }
 
   render() {
-    const { grading, editable } = this.props;
+    const { grading, editable, intl } = this.props;
 
-    if (!grading) {
-      return null;
-    }
+    if (!grading) return null;
 
     return (
       <Paper
@@ -155,7 +153,7 @@ class VisibleQuestionGrade extends Component {
         variant="outlined"
       >
         <Typography color="text.secondary" variant="body1">
-          Grade :
+          {intl.formatMessage(translations.grade)}
         </Typography>
 
         {editable
@@ -178,6 +176,7 @@ VisibleQuestionGrade.propTypes = {
   question: questionShape,
   updateGrade: PropTypes.func.isRequired,
   bonusAwarded: PropTypes.number,
+  intl: PropTypes.object.isRequired,
 };
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {
@@ -220,4 +219,5 @@ const QuestionGrade = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(VisibleQuestionGrade);
+
 export default injectIntl(QuestionGrade);
