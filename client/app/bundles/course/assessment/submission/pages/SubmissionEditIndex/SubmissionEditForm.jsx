@@ -107,7 +107,6 @@ const SubmissionEditForm = (props) => {
   let initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
   const [examNotice, setExamNotice] = useState(passwordProtected);
-  const [gradeIsSaved, setGradeIsSaved] = useState(true);
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
@@ -402,16 +401,7 @@ const SubmissionEditForm = (props) => {
     const editable = !attempting && graderView;
     const visible = editable || published;
 
-    return visible ? (
-      <QuestionGrade
-        editable={editable}
-        explanations={explanations}
-        gradeIsSaved={gradeIsSaved}
-        gradeIsUnsavedMessage={intl.formatMessage(translations.gradeUnsaved)}
-        id={id}
-        setGradeIsSaved={setGradeIsSaved}
-      />
-    ) : null;
+    return visible ? <QuestionGrade editable={editable} id={id} /> : null;
   };
 
   const renderQuestions = () => (
@@ -502,10 +492,7 @@ const SubmissionEditForm = (props) => {
       <Button
         color="primary"
         disabled={isSaving}
-        onClick={() => {
-          handleSaveGrade();
-          setGradeIsSaved(true);
-        }}
+        onClick={handleSaveGrade}
         style={styles.formButton}
         variant="contained"
       >
