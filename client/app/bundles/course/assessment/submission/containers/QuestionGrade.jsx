@@ -104,6 +104,19 @@ class VisibleQuestionGrade extends Component {
         </div>
 
         <div className="space-x-4">
+          {grading.prefilled && (
+            <Tooltip
+              title={intl.formatMessage(translations.gradePrefilledHint)}
+            >
+              <Chip
+                className="slot-1-neutral-400 border-slot-1 text-slot-1"
+                label={intl.formatMessage(translations.gradePrefilled)}
+                size="small"
+                variant="outlined"
+              />
+            </Tooltip>
+          )}
+
           {dirty && (
             <Tooltip title={intl.formatMessage(translations.gradeUnsavedHint)}>
               <Chip
