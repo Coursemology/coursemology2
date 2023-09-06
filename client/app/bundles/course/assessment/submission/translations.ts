@@ -67,10 +67,12 @@ const translations = defineMessages({
   },
   gradeUnsaved: {
     id: 'course.assessment.submission.gradeUnsaved',
+    defaultMessage: 'Unsaved',
+  },
+  gradeUnsavedHint: {
+    id: 'course.assessment.submission.gradeUnsavedHint',
     defaultMessage:
-      'There are grades in this assessment that has unsaved changes. \
-      Please click Save Grade button at the bottom of the page to finalise \
-      all the grades here',
+      'This grade is not yet saved. Click Save Grade at the end of the page to save all grade changes.',
   },
   submit: {
     id: 'course.asssessment.submission.submit',
