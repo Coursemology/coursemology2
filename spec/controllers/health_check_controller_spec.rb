@@ -13,7 +13,7 @@ RSpec.describe HealthCheckController, type: :controller do
   context 'when there is an exception' do
     before do
       allow_any_instance_of(HealthCheckController).
-        to receive(:publicly_accessible?).
+        to receive(:show).
         and_raise(Exception)
     end
 
