@@ -71,7 +71,7 @@ class VisibleQuestionGrade extends Component {
     const maxGrade = question.maximumGrade;
 
     return (
-      <div className="flex w-full justify-between items-center space-x-2">
+      <div className="flex w-full items-center space-x-2">
         <div className="flex items-center space-x-4">
           <TextField
             className="w-40"
@@ -103,7 +103,7 @@ class VisibleQuestionGrade extends Component {
           <Typography variant="body2">{maxGrade}</Typography>
         </div>
 
-        <div className="space-x-4">
+        <div className="px-4 space-x-4">
           {grading.prefilled && (
             <Tooltip
               title={intl.formatMessage(translations.gradePrefilledHint)}
