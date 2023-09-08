@@ -103,7 +103,7 @@ json.explanation do
 
     passed_evaluation_tests = failed_test_cases_by_type['evaluation_test'].blank?
 
-    json.correct attempt&.auto_grading && attempt&.correct && (can_grade && passed_evaluation_tests)
+    json.correct attempt&.auto_grading && attempt&.correct && (can_grade ? passed_evaluation_tests : true)
     json.explanations explanations
   end
 end
