@@ -21,6 +21,9 @@ en:
                 the allowable evaluator time limit in coursemology.
                 Please contact your course instructor to check this and if the problem persists,
                 please contact coursemology admin.
+              timeout_error: >
+                There is a timeout error as it takes a longer time to run the job. Please try again in a few minutes.
+                If the problem persists, please contact your course instructor or coursemology admin.
               container_unreachable: >
                 There is an error creating a docker for the evaluator.
                 This could be due to high server workload. Please try again in a few minutes.
