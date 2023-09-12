@@ -139,7 +139,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
 
       # combine all extracted data
       test_case_object[:id] = test_cases_with_id[test_name]
-      test_case_object[:timeout] = @question.time_limit * 1000 # in millisecond
+      test_case_object[:timeout] = @question.time_limit ? @question.time_limit * 1000 : nil # in millisecond
       test_case_object[:prefix] = prefix
       test_case_object[:expression] = expression
       test_case_object[:display] = display
