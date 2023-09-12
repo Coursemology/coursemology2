@@ -302,7 +302,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def should_monitor?
     monitoring_component_enabled? &&
       current_user.id == @submission.creator_id &&
-      current_course_user.student? &&
+      current_course_user&.student? &&
       can?(:create, Course::Monitoring::Session.new(creator_id: current_user.id)) &&
       @assessment&.monitor&.enabled?
   end
