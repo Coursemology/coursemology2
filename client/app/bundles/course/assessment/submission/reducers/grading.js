@@ -1,4 +1,4 @@
-import actions from '../constants';
+import actions, { questionTypes } from '../constants';
 
 const initialState = {
   questions: {},
@@ -41,9 +41,64 @@ const extractPrefillableGrades = (payload) => {
     return draft;
   }, {});
 
+  const mapQuestionIdToQuestionType = payload.questions.reduce(
+    (draft, question) => {
+      draft[question.id] = question.type;
+      return draft;
+    },
+    {},
+  );
+
+  /**
+   * numTestCases: should the testCases be defined, we return the number
+   * of testCases over there (public, private, and evaluation). Otherwise,
+   * return 0
+   */
+  const numTestCases = (testCases) => {
+    if (!testCases) {
+      return 0;
+    }
+
+    const numPublicTestCases = testCases.public_test?.length ?? 0;
+    const numPrivateTestCases = testCases.private_test?.length ?? 0;
+    const numEvaluationTestCases = testCases.evaluation_test?.length ?? 0;
+
+    return numPublicTestCases + numPrivateTestCases + numEvaluationTestCases;
+  };
+
+  /**
+   * isPrefillableByType: A function to decide whether a certain answer is
+   * prefillable based on its question type. The criteria based on type
+   * shall be either MultipleChoice, MultipleResponse, or Programming
+   *
+   * If the question type is Programming, there's an additional criteria
+   * in which there should be at least one test cases present
+   */
+  const isPrefillableByType = (questionId, testCases) => {
+    const questionType = mapQuestionIdToQuestionType[questionId];
+    if (
+      questionType === questionTypes.MultipleChoice ||
+      questionType === questionTypes.MultipleResponse
+    ) {
+      return true;
+    }
+
+    if (
+      questionType === questionTypes.Programming &&
+      numTestCases(testCases) > 0
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   return payload.answers.reduce(
-    (draft, { questionId, grading, explanation }) => {
-      const prefillable = grading.grade === null && explanation?.correct;
+    (draft, { questionId, grading, explanation, testCases }) => {
+      const prefillable =
+        grading.grade === null &&
+        explanation?.correct &&
+        isPrefillableByType(questionId, testCases);
 
       draft[questionId] = {
         ...grading,
