@@ -308,7 +308,10 @@ class VisibleGradingPanel extends Component {
                 )
               : null}
             {shouldRenderGrading
-              ? tableRow('gradedAt', formatLongDateTime(gradedAt))
+              ? tableRow(
+                  'gradedAt',
+                  gradedAt ? formatLongDateTime(gradedAt) : null,
+                )
               : null}
           </TableBody>
         </Table>
