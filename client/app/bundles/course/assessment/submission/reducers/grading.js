@@ -100,17 +100,34 @@ export default function (state = initialState, action) {
     case actions.MARK_SUCCESS:
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS: {
+      const { expMultiplier } = state;
+      const basePoints = action.payload.submission.basePoints;
+      const bonusAwarded = action.bonusAwarded;
+
+      const questionWithGrades =
+        action.type === actions.FETCH_SUBMISSION_SUCCESS
+          ? extractPrefillableGrades(action.payload)
+          : extractGrades(action.payload.answers);
+
+      const maxGrade = sum(
+        Object.values(action.payload.questions).map((q) => q.maximumGrade),
+      );
+
       return {
         ...state,
-        questions:
+        questions: questionWithGrades,
+        exp:
           action.type === actions.FETCH_SUBMISSION_SUCCESS
-            ? extractPrefillableGrades(action.payload)
-            : extractGrades(action.payload.answers),
-        exp: action.payload.submission.pointsAwarded,
-        basePoints: action.payload.submission.basePoints,
-        maximumGrade: sum(
-          Object.values(action.payload.questions).map((q) => q.maximumGrade),
-        ),
+            ? computeExp(
+                questionWithGrades,
+                maxGrade,
+                basePoints,
+                expMultiplier,
+                bonusAwarded,
+              )
+            : action.payload.submission.pointsAwarded,
+        basePoints,
+        maximumGrade: maxGrade,
       };
     }
     case actions.UPDATE_GRADING: {
