@@ -262,7 +262,7 @@ module ApplicationHTMLFormattersHelper
   def remove_internal_adjacent_code_tags(text)
     return unless text
 
-    detect_pre_tag = /<pre.*?>((?:.|\s)*?)<\/pre>/
+    detect_pre_tag = /<pre>([\s\S]*?)<\/pre>/
     text.gsub(detect_pre_tag) do |match|
       # Remove adjacent code tag (eg </code>  <code>) in the pre tag.
       match.gsub(/(?:<\/code>(.*?)<code.*?>)/, '\\1')
