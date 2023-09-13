@@ -31,7 +31,7 @@ const mockSubmission = {
   assessment: {},
   annotations: [],
   posts: [],
-  questions: [],
+  questions: [{ id: 1, type: 'Scribing', maximumGrade: 5 }],
   topics: [],
   answers: [
     {
