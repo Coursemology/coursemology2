@@ -1,4 +1,5 @@
 import actions, { questionTypes } from '../constants';
+import { arrayToObjectById } from '../utils';
 
 const initialState = {
   questions: {},
@@ -30,87 +31,61 @@ const extractGrades = (answers) =>
     return draft;
   }, {});
 
+const isSpecificAnswerGradePrefillableMap = {
+  [questionTypes.MultipleChoice]: () => true,
+  [questionTypes.MultipleResponse]: () => true,
+  [questionTypes.Programming]: (answer) => {
+    const { testCases } = answer;
+    const isPublicTestCasesExist = testCases?.public_test?.length > 0;
+    const isPrivateTestCasesExist = testCases?.private_test?.length > 0;
+    const isEvaluationTestCasesExist = testCases?.evaluation_test?.length > 0;
+    return (
+      isPublicTestCasesExist ||
+      isPrivateTestCasesExist ||
+      isEvaluationTestCasesExist
+    );
+  },
+  [questionTypes.TextResponse]: () => false,
+  [questionTypes.Comprehension]: () => false,
+  [questionTypes.FileUpload]: () => false,
+  [questionTypes.Scribing]: () => false,
+  [questionTypes.VoiceResponse]: () => false,
+  [questionTypes.ForumPostResponse]: () => false,
+};
+
+const isAnswerGradePrefillable = (answer, questionType) => {
+  const isAnswerPrefillable =
+    answer.grading.grade === null && answer.explanation?.correct;
+  const isSpecificAnswerPrefillable =
+    isSpecificAnswerGradePrefillableMap[questionType](answer);
+  return isAnswerPrefillable && isSpecificAnswerPrefillable;
+};
+
 /**
  * Extracts grades from `payload.answer`, and pre-fills the maximum grade for correct
  * answers that have not been graded. "Correct" follows the definition of
  * `explanation.correct` from the server.
  */
 const extractPrefillableGrades = (payload) => {
-  const maxGrades = payload.questions.reduce((draft, question) => {
-    draft[question.id] = question.maximumGrade;
+  const mapQuestionIdToQuestion = arrayToObjectById(payload.questions);
+
+  return payload.answers.reduce((draft, answer) => {
+    const { questionId, grading } = answer;
+    const prefillable = isAnswerGradePrefillable(
+      answer,
+      mapQuestionIdToQuestion[questionId].type,
+    );
+    draft[questionId] = {
+      ...grading,
+      originalGrade: grading.grade,
+      grade: prefillable
+        ? mapQuestionIdToQuestion[questionId].maximumGrade
+        : grading.grade,
+      prefilled: prefillable,
+    };
+
     return draft;
   }, {});
-
-  const mapQuestionIdToQuestionType = payload.questions.reduce(
-    (draft, question) => {
-      draft[question.id] = question.type;
-      return draft;
-    },
-    {},
-  );
-
-  /**
-   * numTestCases: should the testCases be defined, we return the number
-   * of testCases over there (public, private, and evaluation). Otherwise,
-   * return 0
-   */
-  const numTestCases = (testCases) => {
-    if (!testCases) {
-      return 0;
-    }
-
-    const numPublicTestCases = testCases.public_test?.length ?? 0;
-    const numPrivateTestCases = testCases.private_test?.length ?? 0;
-    const numEvaluationTestCases = testCases.evaluation_test?.length ?? 0;
-
-    return numPublicTestCases + numPrivateTestCases + numEvaluationTestCases;
-  };
-
-  /**
-   * isPrefillableByType: A function to decide whether a certain answer is
-   * prefillable based on its question type. The criteria based on type
-   * shall be either MultipleChoice, MultipleResponse, or Programming
-   *
-   * If the question type is Programming, there's an additional criteria
-   * in which there should be at least one test cases present
-   */
-  const isPrefillableByType = (questionId, testCases) => {
-    const questionType = mapQuestionIdToQuestionType[questionId];
-    if (
-      questionType === questionTypes.MultipleChoice ||
-      questionType === questionTypes.MultipleResponse
-    ) {
-      return true;
-    }
-
-    if (
-      questionType === questionTypes.Programming &&
-      numTestCases(testCases) > 0
-    ) {
-      return true;
-    }
-
-    return false;
-  };
-
-  return payload.answers.reduce(
-    (draft, { questionId, grading, explanation, testCases }) => {
-      const prefillable =
-        grading.grade === null &&
-        explanation?.correct &&
-        isPrefillableByType(questionId, testCases);
-
-      draft[questionId] = {
-        ...grading,
-        originalGrade: grading.grade,
-        grade: prefillable ? maxGrades[questionId] : grading.grade,
-        prefilled: prefillable,
-      };
-
-      return draft;
-    },
-    {},
-  );
 };
 
 export default function (state = initialState, action) {
