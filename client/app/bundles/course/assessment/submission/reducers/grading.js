@@ -92,23 +92,11 @@ const extractPrefillableGrades = (payload) => {
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case actions.FETCH_SUBMISSION_SUCCESS:
-    case actions.SAVE_DRAFT_SUCCESS:
-    case actions.FINALISE_SUCCESS:
-    case actions.UNSUBMIT_SUCCESS:
-    case actions.SAVE_GRADE_SUCCESS:
-    case actions.MARK_SUCCESS:
-    case actions.UNMARK_SUCCESS:
-    case actions.PUBLISH_SUCCESS: {
+    case actions.FETCH_SUBMISSION_SUCCESS: {
       const { expMultiplier } = state;
       const basePoints = action.payload.submission.basePoints;
       const bonusAwarded = action.bonusAwarded;
-
-      const questionWithGrades =
-        action.type === actions.FETCH_SUBMISSION_SUCCESS
-          ? extractPrefillableGrades(action.payload)
-          : extractGrades(action.payload.answers);
-
+      const questionWithGrades = extractPrefillableGrades(action.payload);
       const maxGrade = sum(
         Object.values(action.payload.questions).map((q) => q.maximumGrade),
       );
@@ -116,16 +104,34 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions: questionWithGrades,
-        exp:
-          action.type === actions.FETCH_SUBMISSION_SUCCESS
-            ? computeExp(
-                questionWithGrades,
-                maxGrade,
-                basePoints,
-                expMultiplier,
-                bonusAwarded,
-              )
-            : action.payload.submission.pointsAwarded,
+        exp: computeExp(
+          questionWithGrades,
+          maxGrade,
+          basePoints,
+          expMultiplier,
+          bonusAwarded,
+        ),
+        basePoints,
+        maximumGrade: maxGrade,
+      };
+    }
+    case actions.SAVE_DRAFT_SUCCESS:
+    case actions.FINALISE_SUCCESS:
+    case actions.UNSUBMIT_SUCCESS:
+    case actions.SAVE_GRADE_SUCCESS:
+    case actions.MARK_SUCCESS:
+    case actions.UNMARK_SUCCESS:
+    case actions.PUBLISH_SUCCESS: {
+      const basePoints = action.payload.submission.basePoints;
+      const questionWithGrades = extractGrades(action.payload.answers);
+      const maxGrade = sum(
+        Object.values(action.payload.questions).map((q) => q.maximumGrade),
+      );
+
+      return {
+        ...state,
+        questions: questionWithGrades,
+        exp: action.payload.submission.pointsAwarded,
         basePoints,
         maximumGrade: maxGrade,
       };
