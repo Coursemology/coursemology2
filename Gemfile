@@ -75,6 +75,8 @@ group :development do
   # bundle exec yardoc generates the API under doc/.
   # Use yard stats --list-undoc to find what needs documenting.
   gem 'yard', group: :doc
+
+  gem 'dotenv-rails'
 end
 
 group :test do

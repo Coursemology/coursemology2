@@ -196,6 +196,10 @@ GEM
     docker-api (2.2.0)
       excon (>= 0.47.0)
       multi_json
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     edge (0.6.1)
       activerecord (>= 5.0.0)
     email_spec (2.2.2)
@@ -598,6 +602,7 @@ DEPENDENCIES
   devise-multi_email
   devise_masquerade
   docker-api
+  dotenv-rails
   edge
   email_spec
   factory_bot_rails
