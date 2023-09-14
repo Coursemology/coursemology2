@@ -57,26 +57,23 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    $ bundle exec rake db:setup
    ```
 
-6. Start [webpack](https://webpack.github.io/) and the development app server
-
-   ```sh
-   $ foreman start
+6. Bind the IP address `127.0.0.1` to `lvh.me` by running the following command
+   ```
+   host lvh.me
+   ```
+   
+7. Open up 2 different terminals, each to run the Frontend and Backend. On the terminal for Frontend, run
+   ```
+   yarn build:development
+   ```
+   and on the terminal for Backend, run
+   ```
+   bundle exec rails s -p 5000
    ```
 
-   Or if you are not using foreman:
+8. Access the App by visiting `http://lvh.me:8080`
 
-   ```sh
-   # Start the webpack dev server:
-   $ cd client && yarn build:development
-   ```
-
-   Either way, run this command to compile the assets before running the test suite.
-
-   ```
-   $ cd client && yarn build:test
-   ```
-
-7. You're all set! Simply login with the default username and password:
+9. You're all set! Simply login with the default username and password:
 
 > Email: `test@example.org`
 >
