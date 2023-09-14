@@ -162,7 +162,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   end
 
   # Create new package or re-evaluate the old package.
-  def process_package # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def process_package
     if attachment_changed?
       attachment ? process_new_package : remove_old_package
     elsif should_evaluate_package
@@ -173,7 +173,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   def should_evaluate_package
     time_limit_changed? || memory_limit_changed? ||
-    language_id_changed? || (is_codaveri_changed? && is_codaveri) ||
+      language_id_changed? || is_codaveri_changed? ||
       import_job&.status == 'errored'
   end
 
@@ -235,7 +235,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     nil
   end
 
-  def validate_codaveri_question # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def validate_codaveri_question # rubocop:disable Metrics/AbcSize
     return if !is_codaveri || duplicating?
 
     if !codaveri_language_whitelist.include?(language.type.constantize)
