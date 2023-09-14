@@ -27,16 +27,11 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
   if (!autograded) return null;
 
   const autogradedAssessment = question.autogradedAssessment;
-  const hasSubmissions = question.hasSubmissions;
-  const codaveriDisabled = !question.codaveriEnabled || hasSubmissions;
+  const codaveriDisabled = !question.codaveriEnabled;
 
   return (
     <>
-      <Subsection
-        className="!mt-10"
-        subtitle={t(translations.evaluatorHint)}
-        title={t(translations.evaluator)}
-      >
+      <Subsection className="!mt-10" title={t(translations.evaluator)}>
         <Controller
           control={control}
           name="question.isCodaveri"
@@ -54,7 +49,7 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
               <RadioButton
                 className="my-0"
                 description={t(translations.defaultEvaluatorHint)}
-                disabled={hasSubmissions || props.disabled}
+                disabled={props.disabled}
                 label={t(translations.defaultEvaluator)}
                 value="default"
               />

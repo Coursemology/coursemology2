@@ -1123,11 +1123,6 @@ const translations = defineMessages({
     id: 'course.assessment.question.programming.evaluator',
     defaultMessage: 'Evaluator',
   },
-  evaluatorHint: {
-    id: 'course.assessment.question.programming.evaluatorHint',
-    defaultMessage:
-      'You cannot change this once there are submissions for this assessment.',
-  },
   defaultEvaluator: {
     id: 'course.assessment.question.programming.defaultEvaluator',
     defaultMessage: 'Default',
