@@ -1,5 +1,4 @@
 import { defineMessages, injectIntl } from 'react-intl';
-import { TextField } from '@mui/material';
 import {
   DateTimePicker as MuiDateTimePicker,
   LocalizationProvider,
@@ -8,6 +7,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import PropTypes from 'prop-types';
 
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
+import moment from 'lib/moment';
 
 const translations = defineMessages({
   invalidDateTime: {
@@ -23,11 +23,6 @@ const styles = {
   },
   dateTimeTextField: {
     marginRight: 5,
-  },
-  dialogStyle: {
-    '.MuiDialog-paper': {
-      overflowY: 'visible',
-    },
   },
 };
 
@@ -49,49 +44,44 @@ const FormDateTimePickerField = (props) => {
     ...custom
   } = props;
 
-  if (!renderIf) {
-    return null;
-  }
+  if (!renderIf) return null;
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <div style={{ ...styles.dateTimePicker, ...style }}>
         <MuiDateTimePicker
           {...field}
-          ampm
-          clearable
-          DialogProps={{ sx: styles.dialogStyle }}
+          ampm={false}
           disabled={disabled}
-          inputFormat="DD-MM-YYYY HH:mm"
+          format="DD-MM-YYYY HH:mm"
           label={label}
-          mask="__-__-____ __:__"
           onCancel={() => null}
+          value={moment(field.value)}
           {...custom}
-          renderInput={(params) => (
-            <TextField
-              className={className}
-              {...params}
-              error={
-                !!fieldState.error || (!suppressesFormatErrors && params.error)
-              }
-              fullWidth
-              helperText={
-                fieldState.error
-                  ? formatErrorMessage(fieldState.error.message)
-                  : !suppressesFormatErrors &&
-                    params.error &&
-                    formatErrorMessage(translations.invalidDateTime)
-              }
-              name={field.name}
-              {...(!disableShrinkingLabel && {
+          slotProps={{
+            textField: {
+              className,
+              required,
+              variant,
+              fullWidth: true,
+              name: field.name,
+              ref: field.ref,
+              ...(!suppressesFormatErrors && {
+                error: Boolean(fieldState.error),
+                helperText:
+                  fieldState.error &&
+                  formatErrorMessage(
+                    fieldState.error.message || translations.invalidDateTime,
+                  ),
+              }),
+              ...(!disableShrinkingLabel && {
                 InputLabelProps: { shrink: true },
-              })}
-              ref={field.ref}
-              required={required}
-              variant={variant}
-              {...(disableMargins ? null : { style: styles.dateTimeTextField })}
-            />
-          )}
+              }),
+              ...(!disableMargins && {
+                style: styles.dateTimeTextField,
+              }),
+            },
+          }}
         />
       </div>
     </LocalizationProvider>
