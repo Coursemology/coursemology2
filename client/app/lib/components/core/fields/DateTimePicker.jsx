@@ -1,6 +1,5 @@
 import { PureComponent } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
-import { TextField } from '@mui/material';
 import {
   DatePicker,
   LocalizationProvider,
@@ -57,7 +56,6 @@ const propTypes = {
     PropTypes.instanceOf(moment),
     PropTypes.string, // Date format from JSON string ( e.g. 2017-01-01T12:00:00+08:00 )
   ]),
-  clearable: PropTypes.bool,
   errorText: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
@@ -195,60 +193,48 @@ class DateTimePicker extends PureComponent {
   };
 
   render() {
-    const { label, errorText, name, disabled, style, clearable } = this.props;
-    let value = this.props.value;
-    // Convert string value to Date, which is expected by Date/TimePicker
-    if (value && typeof value === 'string') {
-      value = new Date(value);
-    }
+    const { label, errorText, name, disabled, style } = this.props;
+
+    const value = this.props.value ? moment(this.props.value) : null;
 
     return (
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <div style={{ ...styles.dateTimePicker, ...style }}>
           <DatePicker
-            clearable={clearable}
             disabled={disabled}
-            inputFormat="DD-MM-YYYY"
+            format="DD-MM-YYYY"
             label={label}
-            mask="__-__-____"
             onChange={this.updateDate}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                error={!!errorText || !!this.state.dateError}
-                helperText={this.state.dateError || errorText}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                name={name}
-                style={styles.dateTextField}
-                variant="standard"
-              />
-            )}
-            value={value || null}
+            slotProps={{
+              textField: {
+                name,
+                error: !!errorText || !!this.state.dateError,
+                helperText: this.state.dateError || errorText,
+                InputLabelProps: { shrink: true },
+                style: styles.dateTextField,
+                variant: 'standard',
+              },
+            }}
+            value={value}
           />
+
           <TimePicker
             ampm={false}
-            clearable={clearable}
             disabled={disabled}
             format="HH:mm"
             label="24-hr clock"
-            mask="__:__"
             onChange={this.updateTime}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                error={!!this.state.timeError}
-                helperText={this.state.timeError}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                name={name}
-                style={styles.timeTextField}
-                variant="standard"
-              />
-            )}
-            value={value || null}
+            slotProps={{
+              textField: {
+                name,
+                error: !!this.state.timeError,
+                helperText: this.state.timeError,
+                InputLabelProps: { shrink: true },
+                style: styles.timeTextField,
+                variant: 'standard',
+              },
+            }}
+            value={value}
           />
         </div>
       </LocalizationProvider>

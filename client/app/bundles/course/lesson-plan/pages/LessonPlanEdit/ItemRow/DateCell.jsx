@@ -51,10 +51,10 @@ class DateCell extends Component {
 
   render() {
     const { fieldName, fieldValue } = this.props;
+
     return (
       <td>
         <DateTimePicker
-          clearable={fieldName === 'end_at'}
           name={fieldName}
           onChange={this.updateItemDate}
           value={fieldValue}
