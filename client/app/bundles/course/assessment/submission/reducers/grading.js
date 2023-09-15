@@ -104,13 +104,15 @@ export default function (state = initialState, action) {
       return {
         ...state,
         questions: questionWithGrades,
-        exp: computeExp(
-          questionWithGrades,
-          maxGrade,
-          basePoints,
-          expMultiplier,
-          bonusAwarded,
-        ),
+        exp:
+          action.payload.submission.pointsAwarded ??
+          computeExp(
+            questionWithGrades,
+            maxGrade,
+            basePoints,
+            expMultiplier,
+            bonusAwarded,
+          ),
         basePoints,
         maximumGrade: maxGrade,
       };
