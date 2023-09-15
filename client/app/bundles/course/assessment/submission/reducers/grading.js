@@ -16,7 +16,7 @@ const computeExp = (
   bonusAwarded = 0,
 ) => {
   const totalGrade = sum(
-    Object.values(questions).map((q) => parseInt(q.grade, 10)),
+    Object.values(questions).map((q) => parseFloat(q.grade)),
   );
   return Math.round(
     (totalGrade / maximumGrade) * (basePoints + bonusAwarded) * expMultiplier,
