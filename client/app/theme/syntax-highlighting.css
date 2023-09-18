@@ -33,6 +33,6 @@ table.codehilite.table {
   border-spacing: 0;
 }
 
-div.highlight {
+div.highlight:not(code .highlight) {
   overflow: scroll;
 }
