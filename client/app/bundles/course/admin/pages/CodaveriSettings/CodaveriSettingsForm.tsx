@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { FormControlLabel, Switch } from '@mui/material';
+import { RadioGroup } from '@mui/material';
 import { produce } from 'immer';
 import { CodaveriSettingsData } from 'types/course/admin/codaveri';
 
+import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
+import Subsection from 'lib/components/core/layouts/Subsection';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from './translations';
@@ -40,17 +42,38 @@ const CodaveriSettingsForm = (
     <Section
       contentClassName="flex flex-col space-y-3"
       sticksToNavbar
-      subtitle={t(translations.codaverSettingsSubtitle)}
+      subtitle={t(translations.codaveriSettingsSubtitle)}
       title={t(translations.codaveriSettings)}
     >
-      <FormControlLabel
-        checked={codaveriSetting.isOnlyITSP}
-        className="mb-0"
-        control={<Switch />}
-        disabled={props.disabled}
-        label={t(translations.enableIsOnlyITSP)}
-        onChange={(_, checked): void => toggleSetting('isOnlyITSP', checked)}
-      />
+      <Subsection
+        className="!mt-12"
+        subtitle={t(translations.codaveriEngineDescription)}
+        title={t(translations.codaveriEngine)}
+      >
+        <RadioGroup
+          className="space-y-5"
+          onChange={(_, value): void =>
+            toggleSetting('isOnlyITSP', value === 'itsp')
+          }
+          value={codaveriSetting.isOnlyITSP ? 'itsp' : 'default'}
+        >
+          <RadioButton
+            className="my-0"
+            description={t(translations.defaultEngineDescription)}
+            disabled={props.disabled}
+            label={t(translations.defaultEngine)}
+            value="default"
+          />
+
+          <RadioButton
+            className="my-0"
+            description={t(translations.itspEngineDescription)}
+            disabled={props.disabled}
+            label={t(translations.itspEngine)}
+            value="itsp"
+          />
+        </RadioGroup>
+      </Subsection>
     </Section>
   );
 };

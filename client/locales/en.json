@@ -353,7 +353,7 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "to {tab}"
   },
-  "course.admin.CodaveriSettings.codaverSettingsSubtitle": {
+  "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
     "defaultMessage": "This is currently an experimental feature. Codaveri provides code evaluation and automated code feedback services for students' codes."
   },
   "course.admin.CodaveriSettings.codaveriSettings": {

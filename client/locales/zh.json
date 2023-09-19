@@ -356,7 +356,7 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "到 {tab}"
   },
-  "course.admin.CodaveriSettings.codaverSettingsSubtitle": {
+  "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
     "defaultMessage": "目前这是一项实验性功能。 Codaveri 为学生的代码提供代码测验和自动代码反馈服务。"
   },
   "course.admin.CodaveriSettings.codaveriSettings": {

@@ -15,18 +15,14 @@ RSpec.feature 'Course: Administration: Codaveri', js: true do
         visit course_admin_codaveri_path(course)
         expect(course.reload.codaveri_itsp_enabled?).to eq(nil)
 
-        control = find('label', text: 'Enable ITSP')
-        control.click
+        itsp_engine_radio_button = find('label', text: 'ITSP Engine')
+        itsp_engine_radio_button.click
         expect_toastify('Your changes have been saved.')
-
-        option = control.find('input', visible: false)
-        expect(option).to be_checked
         expect(course.reload.codaveri_itsp_enabled?).to eq(true)
 
-        control.click
+        default_engine_radio_button = find('label', text: 'Default Engine')
+        default_engine_radio_button.click
         expect_toastify('Your changes have been saved.')
-
-        expect(option).not_to be_checked
         expect(course.reload.codaveri_itsp_enabled?).to eq(false)
       end
     end
