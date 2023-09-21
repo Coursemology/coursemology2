@@ -82,6 +82,7 @@ const SubmissionEditForm = (props) => {
     onSubmitAnswer,
     onGenerateFeedback,
     onReevaluateAnswer,
+    handleSaveAllGrade,
     handleSaveGrade,
     handleToggleViewHistoryMode,
     handleUnmark,
@@ -404,7 +405,7 @@ const SubmissionEditForm = (props) => {
     return visible ? (
       <QuestionGrade
         editable={editable}
-        handleSaveIndividualGrade={() => handleSaveGrade(id)}
+        handleSaveGrade={() => handleSaveGrade(id)}
         id={id}
       />
     ) : null;
@@ -498,7 +499,7 @@ const SubmissionEditForm = (props) => {
       <Button
         color="primary"
         disabled={isSaving}
-        onClick={() => handleSaveGrade(null)}
+        onClick={() => handleSaveAllGrade()}
         style={styles.formButton}
         variant="contained"
       >
@@ -749,6 +750,7 @@ SubmissionEditForm.propTypes = {
   onReevaluateAnswer: PropTypes.func,
   onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
+  handleSaveAllGrade: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleMark: PropTypes.func,
   handleUnmark: PropTypes.func,
