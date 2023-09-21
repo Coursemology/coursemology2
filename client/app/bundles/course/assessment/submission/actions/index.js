@@ -4,6 +4,7 @@ import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../constants';
 import translations from '../translations';
+import { arrayToObjectById } from '../utils';
 
 const JOB_POLL_DELAY_MS = 500;
 const JOB_STAGGER_DELAY_MS = 400;
@@ -474,7 +475,7 @@ export function importFiles(answerId, answerFields, language, setValue) {
   };
 }
 
-export function saveGrade(submissionId, grades, exp, published, questionTitle) {
+export function saveAllGrade(submissionId, grades, exp, published) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
   const payload = {
     submission: {
@@ -484,23 +485,69 @@ export function saveGrade(submissionId, grades, exp, published, questionTitle) {
   };
 
   return (dispatch) => {
+    dispatch({ type: actionTypes.SAVE_ALL_GRADE_REQUEST });
+
+    return CourseAPI.assessment.submissions
+      .update(submissionId, payload)
+      .then((response) => response.data)
+      .then((data) => {
+        dispatch({ type: actionTypes.SAVE_ALL_GRADE_SUCCESS, payload: data });
+        dispatch(setNotification(translations.updateSuccess));
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.SAVE_ALL_GRADE_FAILURE });
+        dispatch(
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
+        );
+      });
+  };
+}
+
+export function saveGrade(
+  submissionId,
+  grades,
+  allGrades,
+  exp,
+  published,
+  questionTitle,
+) {
+  const expParam = published ? 'points_awarded' : 'draft_points_awarded';
+  const payload = {
+    submission: {
+      answers: grades,
+      [expParam]: exp,
+    },
+  };
+
+  const mapAnswerIdToAnswer = arrayToObjectById(allGrades);
+
+  return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_GRADE_REQUEST });
 
     return CourseAPI.assessment.submissions
       .update(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
-        dispatch({ type: actionTypes.SAVE_GRADE_SUCCESS, payload: data });
-        if (questionTitle) {
-          dispatch(
-            setNotification(
-              translations.updateIndividualSuccess,
-              questionTitle,
-            ),
-          );
-        } else {
-          dispatch(setNotification(translations.updateSuccess));
-        }
+        const dataWithPrefilledGrades = {
+          ...data,
+          answers: data.answers.map((answer) => ({
+            ...answer,
+            grading: {
+              id: answer.grading.id,
+              grade:
+                mapAnswerIdToAnswer[answer.grading.id].grade?.toString() ??
+                null,
+            },
+          })),
+        };
+
+        dispatch({
+          type: actionTypes.SAVE_GRADE_SUCCESS,
+          payload: dataWithPrefilledGrades,
+        });
+        dispatch(
+          setNotification(translations.updateIndividualSuccess, questionTitle),
+        );
       })
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });
