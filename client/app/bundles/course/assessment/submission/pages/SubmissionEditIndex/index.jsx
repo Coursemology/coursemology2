@@ -33,6 +33,7 @@ import {
   purgeSubmissionStore,
   reevaluateAnswer,
   resetAnswer,
+  saveAllGrade,
   saveDraft,
   saveGrade,
   submitAnswer,
@@ -122,13 +123,7 @@ class VisibleSubmissionEditIndex extends Component {
     } = this.props;
     const published = workflowState === workflowStates.Published;
     dispatch(
-      saveGrade(
-        params.submissionId,
-        Object.values(grading),
-        exp,
-        published,
-        null,
-      ),
+      saveAllGrade(params.submissionId, Object.values(grading), exp, published),
     );
   }
 
@@ -144,6 +139,7 @@ class VisibleSubmissionEditIndex extends Component {
       saveGrade(
         params.submissionId,
         [grading[id]],
+        Object.values(grading),
         exp,
         false,
         questions[id].displayTitle,
