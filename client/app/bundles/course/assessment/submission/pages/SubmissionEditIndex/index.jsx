@@ -112,37 +112,43 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(publish(params.submissionId, Object.values(grading), exp));
   }
 
-  handleSaveGrade(id) {
+  handleSaveAllGrade() {
     const {
       dispatch,
       match: { params },
       grading,
       exp,
       submission: { workflowState },
-      questions,
     } = this.props;
     const published = workflowState === workflowStates.Published;
-    if (id) {
-      dispatch(
-        saveGrade(
-          params.submissionId,
-          [grading[id]],
-          null,
-          false,
-          questions[id].displayTitle,
-        ),
-      );
-    } else {
-      dispatch(
-        saveGrade(
-          params.submissionId,
-          Object.values(grading),
-          exp,
-          published,
-          null,
-        ),
-      );
-    }
+    dispatch(
+      saveGrade(
+        params.submissionId,
+        Object.values(grading),
+        exp,
+        published,
+        null,
+      ),
+    );
+  }
+
+  handleSaveGrade(id) {
+    const {
+      dispatch,
+      match: { params },
+      grading,
+      exp,
+      questions,
+    } = this.props;
+    dispatch(
+      saveGrade(
+        params.submissionId,
+        [grading[id]],
+        exp,
+        false,
+        questions[id].displayTitle,
+      ),
+    );
   }
 
   handleToggleViewHistoryMode = (
@@ -311,6 +317,7 @@ class VisibleSubmissionEditIndex extends Component {
           attempting={workflowState === workflowStates.Attempting}
           canUpdate={canUpdate}
           graderView={graderView}
+          handleSaveAllGrade={() => this.handleSaveAllGrade()}
           handleSaveGrade={(id) => this.handleSaveGrade(id)}
           handleUnsubmit={() => this.handleUnsubmit()}
           isSaving={isSaving}
@@ -330,6 +337,7 @@ class VisibleSubmissionEditIndex extends Component {
           codaveriFeedbackStatus={codaveriFeedbackStatus}
           explanations={explanations}
           graderView={graderView}
+          handleSaveAllGrade={() => this.handleSaveAllGrade()}
           handleSaveGrade={(id) => this.handleSaveGrade(id)}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           handleUnsubmit={() => this.handleUnsubmit()}
@@ -371,6 +379,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
         handleMark={() => this.handleMark()}
         handlePublish={() => this.handlePublish()}
+        handleSaveAllGrade={() => this.handleSaveAllGrade()}
         handleSaveGrade={(id) => this.handleSaveGrade(id)}
         handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
         handleUnmark={() => this.handleUnmark()}
