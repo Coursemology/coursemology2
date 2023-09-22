@@ -114,7 +114,7 @@
     "@babel/preset-env": "^7.22.15",
     "@babel/preset-react": "^7.22.15",
     "@babel/preset-typescript": "^7.22.15",
-    "@formatjs/cli": "^6.1.5",
+    "@formatjs/cli": "^6.2.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.11",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^6.1.3",
