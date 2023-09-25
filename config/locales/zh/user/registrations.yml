@@ -11,4 +11,4 @@ zh:
       edit:
         header: '账户设置'
       create:
-        verify_recaptcha_alert: There was an error with the reCAPTCHA below, please try again.
+        verify_recaptcha_alert: 下方 reCAPTCHA 验证出现错误，请重试。
