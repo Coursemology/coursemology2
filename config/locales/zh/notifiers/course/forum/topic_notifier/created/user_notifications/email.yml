@@ -12,4 +12,4 @@ zh:
                   %{post}
                 unsubscribe:
                   tag: '取消订阅'
-                  message: '%从这个论坛主题的电子邮件通知中{unsubscribe_link}。'
+                  message: '%从这个论坛主题的电子邮件通知中{unsubscribe_link}'
