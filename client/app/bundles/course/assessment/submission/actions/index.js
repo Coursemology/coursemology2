@@ -1,10 +1,12 @@
+import { produce } from 'immer';
+
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../constants';
 import translations from '../translations';
-import { arrayToObjectById } from '../utils';
+// import { arrayToObjectById } from '../utils';
 
 const JOB_POLL_DELAY_MS = 500;
 const JOB_STAGGER_DELAY_MS = 400;
@@ -503,7 +505,7 @@ export function saveAllGrades(submissionId, grades, exp, published) {
   };
 }
 
-export function saveGrade(submissionId, grade, allGrades, exp, published) {
+export function saveGrade(submissionId, grade, questionId, exp, published) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
   const payload = {
     submission: {
@@ -511,9 +513,6 @@ export function saveGrade(submissionId, grade, allGrades, exp, published) {
       [expParam]: exp,
     },
   };
-
-  const mapAnswerIdToAnswer = arrayToObjectById(allGrades);
-
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_GRADE_REQUEST });
 
@@ -521,23 +520,18 @@ export function saveGrade(submissionId, grade, allGrades, exp, published) {
       .update(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
-        const dataWithPrefilledGrades = {
-          ...data,
-          answers: data.answers.map((answer) => ({
-            ...answer,
-            grading: {
-              id: answer.grading.id,
-              grade:
-                mapAnswerIdToAnswer[answer.grading.id].grade?.toString() ??
-                null,
-            },
-          })),
-        };
+        const updatedGrade = produce(data, (draftData) => {
+          const tempDraftData = draftData;
+          tempDraftData.answers = tempDraftData.answers.filter(
+            (answer) => answer.questionId === questionId,
+          );
+        });
 
         dispatch({
           type: actionTypes.SAVE_GRADE_SUCCESS,
-          payload: dataWithPrefilledGrades,
+          payload: updatedGrade,
         });
+        dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });
