@@ -3,7 +3,7 @@ import type { DebouncedFunc } from 'lodash';
 import { debounce } from 'lodash';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const useDebounce = <T extends (...args: any[]) => any>(
+export const useDebounce = <T extends (...args: any[]) => any>(
   callback: T,
   delay: number,
   deps: DependencyList,
@@ -18,5 +18,3 @@ const useDebounce = <T extends (...args: any[]) => any>(
   }, [debouncedCallback, delay, ...deps]);
   return debouncedCallback;
 };
-
-export default useDebounce;
