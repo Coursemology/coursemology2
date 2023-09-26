@@ -542,6 +542,17 @@ export function saveGrade(submissionId, grade, questionId, exp, published) {
   };
 }
 
+export function updateGrade(id, grade, bonusAwarded) {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.UPDATE_GRADING,
+      id,
+      grade,
+      bonusAwarded,
+    });
+  };
+}
+
 export function mark(submissionId, grades, exp) {
   const payload = {
     submission: {

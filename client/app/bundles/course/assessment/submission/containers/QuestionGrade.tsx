@@ -5,7 +5,7 @@ import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 
-import actionTypes from '../constants';
+import { updateGrade } from '../actions';
 import { QuestionData, QuestionGradeData } from '../questionGrade';
 import translations from '../translations';
 
@@ -47,18 +47,16 @@ const QuestionGrade: FC<Props> = (props) => {
 
   const dirty = (grading.originalGrade ?? 0) !== (grading.grade ?? 0);
 
-  const updateGrade = (id: number, grade: number | string | null): void => {
-    dispatch({
-      type: actionTypes.UPDATE_GRADING,
-      id,
-      grade,
-      bonusAwarded,
-    });
+  const handleUpdateGrade = (
+    id: number,
+    grade: number | string | null,
+  ): void => {
+    dispatch(updateGrade(id, grade, bonusAwarded));
   };
 
   const processValue = (value: string, drafting: boolean = false): void => {
     if (value.trim() === '') {
-      updateGrade(questionId, null);
+      handleUpdateGrade(questionId, null);
       return;
     }
 
@@ -67,16 +65,16 @@ const QuestionGrade: FC<Props> = (props) => {
     const parsedValue = parseFloat(value);
 
     if (!drafting && (Number.isNaN(parsedValue) || parsedValue < 0)) {
-      updateGrade(questionId, null);
+      handleUpdateGrade(questionId, null);
       return;
     }
 
     if (parsedValue >= maxGrade) {
-      updateGrade(questionId, maxGrade);
+      handleUpdateGrade(questionId, maxGrade);
       return;
     }
 
-    updateGrade(questionId, drafting ? value : parsedValue);
+    handleUpdateGrade(questionId, drafting ? value : parsedValue);
   };
 
   const stepGrade = (delta: number): void => {
@@ -85,7 +83,7 @@ const QuestionGrade: FC<Props> = (props) => {
         ? parseFloat(grading.grade)
         : grading.grade ?? 0;
     const newGrade = Math.max(Math.min(parsedValue + delta, maxGrade), 0);
-    updateGrade(questionId, newGrade);
+    handleUpdateGrade(questionId, newGrade);
   };
 
   const renderQuestionGradeField = (): JSX.Element => (
