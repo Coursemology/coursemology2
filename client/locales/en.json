@@ -5,6 +5,99 @@
   "announcements.GlobalAnnouncementIndex.header": {
     "defaultMessage": "All Announcements"
   },
+  "app.BrandingItem.coursemology": {
+    "defaultMessage": "Coursemology"
+  },
+  "app.BrandingItem.goToOtherCourses": {
+    "defaultMessage": "Courses"
+  },
+  "app.BrandingItem.signIn": {
+    "defaultMessage": "Sign in"
+  },
+  "app.DashboardPage.allCourses": {
+    "defaultMessage": "Courses"
+  },
+  "app.DashboardPage.lastAccessed": {
+    "defaultMessage": "Last accessed {at}"
+  },
+  "app.DashboardPage.noCoursesMatch": {
+    "defaultMessage": "Oops, no courses matched your search keyword."
+  },
+  "app.DashboardPage.searchCourses": {
+    "defaultMessage": "Search your courses"
+  },
+  "app.DashboardPage.yourCourses": {
+    "defaultMessage": "Your Courses"
+  },
+  "app.ErrorPage.error": {
+    "defaultMessage": "KABOOM, a meteor has just crashed."
+  },
+  "app.ErrorPage.errorIllustrationAttribution1": {
+    "defaultMessage": "Graphic of a planet earth in space is created by <author>Storyset</author> from <source>www.storyset.com</source>, with modifications."
+  },
+  "app.ErrorPage.errorIllustrationAttribution2": {
+    "defaultMessage": "Graphic of a fire ball is created by <author>Storyset</author> from <source>www.storyset.com</source>, with modifications."
+  },
+  "app.ErrorPage.errorSubtitle": {
+    "defaultMessage": "A fatal error has occurred. You may try again later. If the problem persists, <contact>contact us</contact>."
+  },
+  "app.ErrorPage.forbidden": {
+    "defaultMessage": "Hold up, this galaxy is off-limits to you!"
+  },
+  "app.ErrorPage.forbiddenIllustrationAttribution": {
+    "defaultMessage": "Graphic of an astronaut floating in space is created by <author>Storyset</author> from <source>www.storyset.com</source>, with modifications."
+  },
+  "app.ErrorPage.forbiddenSubtitle": {
+    "defaultMessage": "You don't have permission to access the information behind this page. If you believe this is a mistake, contact your administrator."
+  },
+  "app.ErrorPage.notFound": {
+    "defaultMessage": "That location doesn't exist in this universe..."
+  },
+  "app.ErrorPage.notFoundIllustrationAttribution": {
+    "defaultMessage": "Graphic of a dog floating in space is created by <author>Storyset</author> from <source>www.storyset.com</source>, with modifications."
+  },
+  "app.ErrorPage.notFoundSubtitle": {
+    "defaultMessage": "Check if you've typed the correct address, try again later, or <home>go back home</home>."
+  },
+  "app.Footer.contactUs": {
+    "defaultMessage": "Contact Us"
+  },
+  "app.Footer.copyright": {
+    "defaultMessage": "© {from}–{to} Coursemology."
+  },
+  "app.Footer.github": {
+    "defaultMessage": "GitHub"
+  },
+  "app.Footer.instructorsGuide": {
+    "defaultMessage": "Instructors' Guide"
+  },
+  "app.Footer.privacyPolicy": {
+    "defaultMessage": "Privacy Policy"
+  },
+  "app.Footer.termsOfService": {
+    "defaultMessage": "Terms of Service"
+  },
+  "app.PrivacyPolicyPage.privacyPolicy": {
+    "defaultMessage": "Privacy Policy"
+  },
+  "app.TermsOfServicePage.termsOfService": {
+    "defaultMessage": "Terms of Service"
+  },
+  "app.common.components.newCourse": {
+    "defaultMessage": "New Course"
+  },
+  "assessment.attemptLoader.errorAttemptingAssessment": {
+    "defaultMessage": "An error occurred while attempting this assessment. Try again later."
+  },
+  "client.video.attemptLoader.errorWatchVideo": {
+    "defaultMessage": "An error occurred while attempting to watch this video. Try again later."
+  },
+  "components.SidebarContainer.minimiseSidebar": {
+    "defaultMessage": "Minimise sidebar"
+  },
+  "components.SidebarContainer.pinSidebar": {
+    "defaultMessage": "Pin sidebar"
+  },
   "course.UserEmailSubscriptions.component": {
     "defaultMessage": "Topic"
   },
@@ -16,6 +109,9 @@
   },
   "course.UserEmailSubscriptions.enabled": {
     "defaultMessage": "Enabled?"
+  },
+  "course.UserEmailSubscriptions.fetchFailure": {
+    "defaultMessage": "Failed to fetch your email subscriptions. You may refresh and try again later."
   },
   "course.UserEmailSubscriptions.noEmailSubscriptionSettings": {
     "defaultMessage": "There is no available email subscription setting."
@@ -210,10 +306,10 @@
     "defaultMessage": "New Achievement"
   },
   "course.achievement.AchievementReordering.endReorderAchievement": {
-    "defaultMessage": "End Re-ordering Achievement"
+    "defaultMessage": "Save New Ordering"
   },
   "course.achievement.AchievementReordering.startReorderAchievement": {
-    "defaultMessage": "Start Re-ordering Achievement"
+    "defaultMessage": "Reorder"
   },
   "course.achievement.AchievementReordering.updateFailed": {
     "defaultMessage": "Reorder Failed."
@@ -229,6 +325,9 @@
   },
   "course.achievement.AchievementTable.noAchievement": {
     "defaultMessage": "No achievement"
+  },
+  "course.achievement.AchievementsIndex.achievements": {
+    "defaultMessage": "Achievements"
   },
   "course.achievement.AchievementsIndex.fetchAchievementsFailure": {
     "defaultMessage": "Failed to retrieve achievements."
@@ -288,7 +387,7 @@
     "defaultMessage": "Delete {title} tab?"
   },
   "course.admin.AssessmentSettings.enableMcqChoicesRandomisations": {
-    "defaultMessage": "Enable MCQ choices randomisations"
+    "defaultMessage": "Randomise MCQ choices"
   },
   "course.admin.AssessmentSettings.enableRandomisedAssessments": {
     "defaultMessage": "Enable randomised assessments"
@@ -310,6 +409,15 @@
   },
   "course.admin.AssessmentSettings.errorOccurredWhenMovingTabs": {
     "defaultMessage": "An error occurred while moving the tabs."
+  },
+  "course.admin.AssessmentSettings.maxProgrammingTimeLimit": {
+    "defaultMessage": "Maximum evaluation time limit"
+  },
+  "course.admin.AssessmentSettings.maxProgrammingTimeLimitHint": {
+    "defaultMessage": "This will be the upper bound for the time limits of all programming questions in this course. If there are programming questions with time limits greater than this, this time limit will take precedence."
+  },
+  "course.admin.AssessmentSettings.maxTimeLimitRequired": {
+    "defaultMessage": "Maximum programming time limit is required"
   },
   "course.admin.AssessmentSettings.moveAssessmentsThenDelete": {
     "defaultMessage": "Move assessments then delete"
@@ -338,8 +446,14 @@
   "course.admin.AssessmentSettings.outputsOfPublicTestCases": {
     "defaultMessage": "Outputs of Public test cases"
   },
-  "course.admin.AssessmentSettings.randomisation": {
-    "defaultMessage": "Randomisation options"
+  "course.admin.AssessmentSettings.positiveMaxTimeLimitRequired": {
+    "defaultMessage": "Maximum programming time limit must be a positive integer"
+  },
+  "course.admin.AssessmentSettings.programmingQuestionSettings": {
+    "defaultMessage": "Programming Question settings"
+  },
+  "course.admin.AssessmentSettings.seconds": {
+    "defaultMessage": "s"
   },
   "course.admin.AssessmentSettings.standardOutputsAndStandardErrors": {
     "defaultMessage": "Standard outputs and Standard errors"
@@ -353,17 +467,35 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "to {tab}"
   },
-  "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
-    "defaultMessage": "This is currently an experimental feature. Codaveri provides code evaluation and automated code feedback services for students' codes."
+  "course.admin.CodaveriSettings.codaveriEngine": {
+    "defaultMessage": "Codaveri Engine"
+  },
+  "course.admin.CodaveriSettings.codaveriEngineDescription": {
+    "defaultMessage": "Type of codaveri engine used to generate programming code feedback"
   },
   "course.admin.CodaveriSettings.codaveriSettings": {
     "defaultMessage": "Codaveri settings"
+  },
+  "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
+    "defaultMessage": "This is currently an experimental feature. Codaveri provides code evaluation and automated code feedback services for students' codes."
+  },
+  "course.admin.CodaveriSettings.defaultEngine": {
+    "defaultMessage": "Default Engine"
+  },
+  "course.admin.CodaveriSettings.defaultEngineDescription": {
+    "defaultMessage": "Uses generative AI and verification techniques"
   },
   "course.admin.CodaveriSettings.enableIsOnlyITSP": {
     "defaultMessage": "Enable ITSP"
   },
   "course.admin.CodaveriSettings.error": {
     "defaultMessage": "An error occurred while updating the codaveri setting."
+  },
+  "course.admin.CodaveriSettings.itspEngine": {
+    "defaultMessage": "ITSP Engine"
+  },
+  "course.admin.CodaveriSettings.itspEngineDescription": {
+    "defaultMessage": "Uses automated program repair technique"
   },
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "Comments settings"
@@ -809,6 +941,9 @@
   "course.admin.common.title": {
     "defaultMessage": "Title"
   },
+  "course.admin.courseSettings": {
+    "defaultMessage": "Course Settings"
+  },
   "course.announcement.AnnouncementsDisplay.searchBarPlaceholder": {
     "defaultMessage": "Search by title or content"
   },
@@ -884,6 +1019,9 @@
   "course.announcements.AnnouncementsIndex.searchBarPlaceholder": {
     "defaultMessage": "Search by announcement title"
   },
+  "course.announcements.GlobalAnnouncements.nUnreadAnnouncements": {
+    "defaultMessage": "{n} more unread {n, plural, one {announcement} other {announcements}}"
+  },
   "course.announcements.NewAnnouncementButton.newAnnouncementTooltip": {
     "defaultMessage": "New Announcement"
   },
@@ -898,6 +1036,9 @@
   },
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "Allow submission with incorrect answers"
+  },
+  "course.assessment.AssessmentForm.allowRecordDraftAnswer": {
+    "defaultMessage": "Allow versioning of draft programming answer"
   },
   "course.assessment.AssessmentForm.answersAndTestCases": {
     "defaultMessage": "Answers and test cases"
@@ -923,14 +1064,11 @@
   "course.assessment.AssessmentForm.calculateGradeWith": {
     "defaultMessage": "Calculate grade and EXP with"
   },
-  "course.assessment.AssessmentForm.containsCodaveriQuestion": {
-    "defaultMessage": "Switch to autograded mode is not allowed as there's codaveri programming question type in this assessment. This question type is only supported in manually-graded assessment."
-  },
   "course.assessment.AssessmentForm.delayedGradePublication": {
     "defaultMessage": "Enable delayed grade publication"
   },
   "course.assessment.AssessmentForm.delayedGradePublicationHint": {
-    "defaultMessage": "When delayed grade publication is on, gradings will not be immediately shown to students. To publish all gradings, you may click Publish Grades in the Submissions page."
+    "defaultMessage": "If enabled, gradings will not be immediately shown to students. To publish all gradings, you may click Publish Grades in the Submissions page."
   },
   "course.assessment.AssessmentForm.description": {
     "defaultMessage": "Description"
@@ -952,6 +1090,12 @@
   },
   "course.assessment.AssessmentForm.endAt": {
     "defaultMessage": "Ends at"
+  },
+  "course.assessment.AssessmentForm.examMonitoring": {
+    "defaultMessage": "Enable exam monitoring"
+  },
+  "course.assessment.AssessmentForm.examMonitoringHint": {
+    "defaultMessage": "If enabled, students' sessions will be monitored in real time from the moment they attempt the exam, until they finalise it or the first 24 hours since their attempt, whichever is earlier. Instructors can monitor these sessions in <pulsegrid>PulseGrid</pulsegrid>."
   },
   "course.assessment.AssessmentForm.examsAndAccessControl": {
     "defaultMessage": "Exams and access control"
@@ -980,17 +1124,47 @@
   "course.assessment.AssessmentForm.hasPersonalTimesHint": {
     "defaultMessage": "Timings for this item will be automatically adjusted for users based on learning rate."
   },
+  "course.assessment.AssessmentForm.hasToBeMoreThanMinInterval": {
+    "defaultMessage": "Has to be greater than the minimum value."
+  },
+  "course.assessment.AssessmentForm.hasToBeMoreThanValueMs": {
+    "defaultMessage": "Has to be at least 3000 ms."
+  },
+  "course.assessment.AssessmentForm.hasToBePositiveInteger": {
+    "defaultMessage": "Has to be a positive integer less than 86,400,000 ms"
+  },
   "course.assessment.AssessmentForm.hasTodo": {
     "defaultMessage": "Has TODO"
   },
   "course.assessment.AssessmentForm.hasTodoHint": {
     "defaultMessage": "When enabled, students will see this assessment in their TODO list."
   },
+  "course.assessment.AssessmentForm.intervalHint": {
+    "defaultMessage": "Controls how frequent heartbeats are sent from the students' browsers. Intervals are randomised between these two ranges."
+  },
+  "course.assessment.AssessmentForm.maxInterval": {
+    "defaultMessage": "Max interval"
+  },
+  "course.assessment.AssessmentForm.milliseconds": {
+    "defaultMessage": "ms"
+  },
+  "course.assessment.AssessmentForm.minInterval": {
+    "defaultMessage": "Min interval"
+  },
   "course.assessment.AssessmentForm.modeSwitchingHint": {
     "defaultMessage": "You can no longer change the grading mode because there are already submissions for this assessment."
   },
   "course.assessment.AssessmentForm.noTestCaseChosenError": {
     "defaultMessage": "Select at least one type of test case"
+  },
+  "course.assessment.AssessmentForm.offset": {
+    "defaultMessage": "Inter-heartbeat offset"
+  },
+  "course.assessment.AssessmentForm.offsetHint": {
+    "defaultMessage": "Controls how long PulseGrid should wait after the frequency interval before flagging a session as late."
+  },
+  "course.assessment.AssessmentForm.onlyManagersOwnersCanEdit": {
+    "defaultMessage": "Only Managers and Owners of this course can modify these options."
   },
   "course.assessment.AssessmentForm.organization": {
     "defaultMessage": "Organization"
@@ -1010,6 +1184,12 @@
   "course.assessment.AssessmentForm.publishedHint": {
     "defaultMessage": "Everyone can see this assessment."
   },
+  "course.assessment.AssessmentForm.secret": {
+    "defaultMessage": "Secret UA Substring (SUS)"
+  },
+  "course.assessment.AssessmentForm.secretHint": {
+    "defaultMessage": "If provided, Coursemology can automatically flag a connection as valid in <pulsegrid>PulseGrid</pulsegrid> if the examinee's User Agent (UA) contains this secret. Otherwise, connections will be flagged only by heartbeat intervals."
+  },
   "course.assessment.AssessmentForm.sessionPassword": {
     "defaultMessage": "Session unlock password"
   },
@@ -1020,7 +1200,7 @@
     "defaultMessage": "Enable session protection"
   },
   "course.assessment.AssessmentForm.sessionProtectionHint": {
-    "defaultMessage": "When session protection is on, students can only access their attempt once. Further access will require the session unlock password."
+    "defaultMessage": "If enabled, students can only access their attempt once. Further access will require the session unlock password."
   },
   "course.assessment.AssessmentForm.showEvaluation": {
     "defaultMessage": "Show evaluation test cases"
@@ -1139,407 +1319,527 @@
   "course.assessment.edit.update": {
     "defaultMessage": "Save"
   },
+  "course.assessment.monitoring.alivePresenceHint": {
+    "defaultMessage": "Last heartbeat was received in time."
+  },
+  "course.assessment.monitoring.alivePresenceHintSUSMatches": {
+    "defaultMessage": "Last heartbeat was received in time and the SUS matches."
+  },
+  "course.assessment.monitoring.blankField": {
+    "defaultMessage": "(blank)"
+  },
+  "course.assessment.monitoring.cannotConnectToLiveMonitoringChannel": {
+    "defaultMessage": "Oops, an error occurred when connecting to the live monitoring channel."
+  },
+  "course.assessment.monitoring.connected": {
+    "defaultMessage": "Connected"
+  },
+  "course.assessment.monitoring.connectedToLiveMonitoringChannel": {
+    "defaultMessage": "Connected to the live monitoring channel"
+  },
+  "course.assessment.monitoring.detailsOfNHeartbeats": {
+    "defaultMessage": "Details of the last {n} heartbeats"
+  },
+  "course.assessment.monitoring.disconnected": {
+    "defaultMessage": "Disconnected"
+  },
+  "course.assessment.monitoring.disconnectedFromLiveMonitoringChannel": {
+    "defaultMessage": "Disconnected from the live monitoring channel"
+  },
+  "course.assessment.monitoring.filterByGroup": {
+    "defaultMessage": "Filter by Group"
+  },
+  "course.assessment.monitoring.generatedAt": {
+    "defaultMessage": "Generated at"
+  },
+  "course.assessment.monitoring.ipAddress": {
+    "defaultMessage": "IP Address"
+  },
+  "course.assessment.monitoring.lastHeartbeat": {
+    "defaultMessage": "Last heartbeat"
+  },
+  "course.assessment.monitoring.latePresenceHint": {
+    "defaultMessage": "Next heartbeat hasn't been received in time, but still within the configured inter-heartbeats interval."
+  },
+  "course.assessment.monitoring.live": {
+    "defaultMessage": "Live"
+  },
+  "course.assessment.monitoring.missingPresenceHint": {
+    "defaultMessage": "Next heartbeat hasn't been received in time."
+  },
+  "course.assessment.monitoring.noActiveSessions": {
+    "defaultMessage": "No active sessions."
+  },
+  "course.assessment.monitoring.pulsegrid": {
+    "defaultMessage": "PulseGrid"
+  },
+  "course.assessment.monitoring.recentActivities": {
+    "defaultMessage": "Recent activities"
+  },
+  "course.assessment.monitoring.recentActivitiesHint": {
+    "defaultMessage": "These logs will disappear if you close this tab!"
+  },
+  "course.assessment.monitoring.stale": {
+    "defaultMessage": "Stale"
+  },
+  "course.assessment.monitoring.summaryCorrectAsAt": {
+    "defaultMessage": "Summary correct as at {time}"
+  },
+  "course.assessment.monitoring.type": {
+    "defaultMessage": "Type"
+  },
+  "course.assessment.monitoring.userAgent": {
+    "defaultMessage": "User Agent"
+  },
+  "course.assessment.monitoring.userHeartbeatContinuedStreaming": {
+    "defaultMessage": "{name}'s heartbeat just continued streaming."
+  },
+  "course.assessment.monitoring.userHeartbeatNotReceivedInTime": {
+    "defaultMessage": "{name}'s heartbeat wasn't received in time."
+  },
   "course.assessment.newAssessment": {
     "defaultMessage": "New Assessment"
   },
-  "course.assessment.question.programming.BuildLog.header": {
-    "defaultMessage": "Build Log",
-    "description": "Header for build log."
+  "course.assessment.question.forumPostResponses.enableTextResponse": {
+    "defaultMessage": "Include a text field for students to provide further inputs"
   },
-  "course.assessment.question.programming.BuildLog.stderrHeader": {
-    "defaultMessage": "Standard Error",
-    "description": "Header for standard error."
+  "course.assessment.question.forumPostResponses.forumPosts": {
+    "defaultMessage": "Additional Settings"
   },
-  "course.assessment.question.programming.BuildLog.stdoutHeader": {
-    "defaultMessage": "Standard Output",
-    "description": "Header for standard output."
+  "course.assessment.question.forumPostResponses.forumPostsRequirements": {
+    "defaultMessage": "Additional forum posts question settings for this question"
   },
-  "course.assessment.question.programming.OnlineEditor.notYetImplementedAlert": {
-    "defaultMessage": "Not yet implemented :(",
-    "description": "Alert message to be displayed when selected language does not have an online editor."
+  "course.assessment.question.forumPostResponses.maxPosts": {
+    "defaultMessage": "Maximum number of forum posts a student could select"
   },
-  "course.assessment.question.programming.OnlineEditor.selectLanguageAlert": {
-    "defaultMessage": "Please select a language.",
-    "description": "Alert message to be displayed when no language is selected."
+  "course.assessment.question.forumPostResponses.mustSpecifyMaximumPosts": {
+    "defaultMessage": "You must specify a valid, positive maximum posts to be allowed."
   },
-  "course.assessment.question.programming.OnlineEditorCppView.appendSubtitle": {
-    "defaultMessage": "For any function/variable declarations",
-    "description": "Subtitle for append code block."
+  "course.assessment.question.forumPostResponses.mustSpecifyPositiveMaximumPosts": {
+    "defaultMessage": "Maximum posts has to be positive."
   },
-  "course.assessment.question.programming.OnlineEditorCppView.testCasesDescription": {
-    "defaultMessage": "{note}: The expression in the {expression} column will be compared with the expression in the {expected} column using {expect_star} assertions from the {googletest}. Floating point numbers are formatted with {tostring}."
+  "course.assessment.question.multipleResponses.addChoice": {
+    "defaultMessage": "Add a new choice"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.addSolutionFileButton": {
-    "defaultMessage": "Add Solution File"
+  "course.assessment.question.multipleResponses.addResponse": {
+    "defaultMessage": "Add a new response"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.addSubmissionFileButton": {
-    "defaultMessage": "Add Submission File"
+  "course.assessment.question.multipleResponses.alwaysGradeAsCorrect": {
+    "defaultMessage": "Always grade as correct"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.appendSubtitle": {
-    "defaultMessage": "Within the scope for the test class: Declare any methods or instance variables here",
-    "description": "Subtitle for append code block."
+  "course.assessment.question.multipleResponses.alwaysGradeAsCorrectChoiceHint": {
+    "defaultMessage": "If enabled, this question will always be graded as correct, regardless of the submitted choice. Makes sense if there are no \"wrong\" choices in this question."
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.currentSolutionFilesHeader": {
-    "defaultMessage": "Current Solution Files",
-    "description": "Header for the current solution files panel."
+  "course.assessment.question.multipleResponses.alwaysGradeAsCorrectHint": {
+    "defaultMessage": "If enabled, this question will always be graded as correct, regardless of the submitted responses. Makes sense if there are no \"wrong\" responses in this question."
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.currentSubmissionFilesHeader": {
-    "defaultMessage": "Current Submission Files",
-    "description": "Header for the current submission files panel."
+  "course.assessment.question.multipleResponses.canConfigureSkills": {
+    "defaultMessage": "You can configure existing and create new skills at the <url>Skills</url> page."
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.expectEquals": {
-    "defaultMessage": "void expectEquals(expression, expected)",
-    "description": "Function template for expectEquals"
+  "course.assessment.question.multipleResponses.choice": {
+    "defaultMessage": "Choice"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.fileSubmissionDescription": {
-    "defaultMessage": "{file_submission}: Toggling this option on will allow you to upload java class files to be compiled individually, and allows you to test (individual/multiple) java classes. Toggled off, you will input code as templates, which will be used for you to test java functions. Note that you will need to upload either a submission or solution file at the very least for the compiler to compile the files correctly."
+  "course.assessment.question.multipleResponses.choiceWillBeDeleted": {
+    "defaultMessage": "This choice will be deleted once you save your changes."
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.fileSubmissionDescriptionNote": {
-    "defaultMessage": "File Submission",
-    "description": "Value of the key that is passed into the description of the file submission toggle."
+  "course.assessment.question.multipleResponses.choices": {
+    "defaultMessage": "Choices"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.newSolutionFilesHeader": {
-    "defaultMessage": "New Solution Files",
-    "description": "Header for the new solution files panel."
+  "course.assessment.question.multipleResponses.choicesHint": {
+    "defaultMessage": "Explanations are displayed after a student submits their choice for this question."
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.newSubmissionFilesHeader": {
-    "defaultMessage": "New Submission Files",
-    "description": "Header for the new submission files panel."
+  "course.assessment.question.multipleResponses.convertToMcqHint": {
+    "defaultMessage": "If this question is converted to a Multiple Choice Question (MCQ), students can only submit one out of the many <s>responses</s> choices above. Note that you may define multiple correct choices."
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.prependSubtitle": {
-    "defaultMessage": "For any library imports (optional, hidden, inserted before student's code)",
-    "description": "Subtitle for prepend code block."
+  "course.assessment.question.multipleResponses.convertToMrqHint": {
+    "defaultMessage": "If this question is converted to a Multiple Response Question (MRQ), students can submit multiple <s>choices</s> responses defined above."
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.solutionFilesHeader": {
-    "defaultMessage": "Solution Files",
-    "description": "Header for the solution files of the online editor."
+  "course.assessment.question.multipleResponses.deleteChoice": {
+    "defaultMessage": "Delete choice"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.submissionFilesHeader": {
-    "defaultMessage": "Submission Files",
-    "description": "Header for the submission files of the online editor."
+  "course.assessment.question.multipleResponses.deleteResponse": {
+    "defaultMessage": "Delete response"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.submitAsFileToggle": {
-    "defaultMessage": "File Submission"
+  "course.assessment.question.multipleResponses.description": {
+    "defaultMessage": "Description"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.submitAsFileToggleDisabled": {
-    "defaultMessage": "File Submission (This option cannot be switched as some answers have already been submitted)"
+  "course.assessment.question.multipleResponses.explanation": {
+    "defaultMessage": "Explanation"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.testCaseDescriptionCode": {
-    "defaultMessage": "CODE",
-    "description": "Value of the code key that is passed into the test case description."
+  "course.assessment.question.multipleResponses.explanationDescription": {
+    "defaultMessage": "The explanation to show after the student submits his answer."
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.testCaseDescriptionEditor": {
-    "defaultMessage": "CODE EDITOR",
-    "description": "Value of the code key that is passed into the test case description."
+  "course.assessment.question.multipleResponses.grading": {
+    "defaultMessage": "Grading"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.testCasesCodeDescription": {
-    "defaultMessage": "{editor}: Clicking {code} will toggle a code editor for you to write code into each test case. This allows you to initialize variables and call functions for each test. For example: {codeExample}{codeExampleExpression} and {codeExampleExpected} can then be input into {expression} and {expected} respectively."
+  "course.assessment.question.multipleResponses.ignoresRandomization": {
+    "defaultMessage": "Ignores randomization"
   },
-  "course.assessment.question.programming.OnlineEditorJavaView.testCasesDescription": {
-    "defaultMessage": "{note}: The expression in the {expression} column will be compared with the expression in the {expected} column using the {expectEquals} method as described in the append."
+  "course.assessment.question.multipleResponses.markAsCorrectChoice": {
+    "defaultMessage": "Mark as a correct choice"
   },
-  "course.assessment.question.programming.OnlineEditorView.addDataFileButton": {
-    "defaultMessage": "Add Data File",
-    "description": "Button for adding a new data file."
+  "course.assessment.question.multipleResponses.markAsCorrectResponse": {
+    "defaultMessage": "Mark as a correct response"
   },
-  "course.assessment.question.programming.OnlineEditorView.addNewTestButton": {
-    "defaultMessage": "Add new test",
-    "description": "Button for adding new test case."
+  "course.assessment.question.multipleResponses.maximumGrade": {
+    "defaultMessage": "Maximum grade"
   },
-  "course.assessment.question.programming.OnlineEditorView.appendSubtitle": {
-    "defaultMessage": "(optional, hidden, appended after student's code)",
-    "description": "Subtitle for append code block."
+  "course.assessment.question.multipleResponses.mustBeLessThanMaxMaximumGrade": {
+    "defaultMessage": "Must be less than 1000."
   },
-  "course.assessment.question.programming.OnlineEditorView.appendTitle": {
-    "defaultMessage": "Append",
-    "description": "Title for append code block."
+  "course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice": {
+    "defaultMessage": "You must specify at least one correct choice."
   },
-  "course.assessment.question.programming.OnlineEditorView.cannotBeBlankValidationError": {
-    "defaultMessage": "Cannot be blank."
+  "course.assessment.question.multipleResponses.mustSpecifyChoice": {
+    "defaultMessage": "You must specify a valid choice title."
   },
-  "course.assessment.question.programming.OnlineEditorView.currentDataFilesHeader": {
-    "defaultMessage": "Current Data Files",
-    "description": "Header for the current data files panel."
+  "course.assessment.question.multipleResponses.mustSpecifyMaximumGrade": {
+    "defaultMessage": "You must specify a valid, non-negative maximum grade to award."
   },
-  "course.assessment.question.programming.OnlineEditorView.dataFilesHeader": {
-    "defaultMessage": "Data Files",
-    "description": "Header for the data files of the online editor."
+  "course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade": {
+    "defaultMessage": "Maximum grade has to be non-negative."
   },
-  "course.assessment.question.programming.OnlineEditorView.evaluationTestCases": {
-    "defaultMessage": "Evaluation Test Cases",
-    "description": "Title for evaluation test cases panel."
+  "course.assessment.question.multipleResponses.mustSpecifyResponse": {
+    "defaultMessage": "You must specify a valid response title."
   },
-  "course.assessment.question.programming.OnlineEditorView.expectedHeader": {
-    "defaultMessage": "Expected",
-    "description": "Header for expected column of test cases panel."
+  "course.assessment.question.multipleResponses.newChoiceCannotUndo": {
+    "defaultMessage": "This is a new choice. It will immediately disappear if you delete before saving it."
   },
-  "course.assessment.question.programming.OnlineEditorView.expressionHeader": {
-    "defaultMessage": "Expression",
-    "description": "Header for expression column of test cases panel."
+  "course.assessment.question.multipleResponses.newResponseCannotUndo": {
+    "defaultMessage": "This is a new response. It will immediately disappear if you delete before saving it."
   },
-  "course.assessment.question.programming.OnlineEditorView.fileNameHeader": {
-    "defaultMessage": "File Name",
-    "description": "Header for file name column in current data files panel."
+  "course.assessment.question.multipleResponses.noSkillsCanCreateSkills": {
+    "defaultMessage": "There are no skills in this course yet. You can create new skills at the <url>Skills</url> page."
   },
-  "course.assessment.question.programming.OnlineEditorView.fileSizeHeader": {
-    "defaultMessage": "File Size",
-    "description": "Header for file size column in current data files panel."
+  "course.assessment.question.multipleResponses.questionCreated": {
+    "defaultMessage": "Question was successfully created."
   },
-  "course.assessment.question.programming.OnlineEditorView.hideTestCaseCodeEditorButton": {
-    "defaultMessage": "Hide",
-    "description": "Button for hiding the test case inline code editor."
+  "course.assessment.question.multipleResponses.questionDetails": {
+    "defaultMessage": "Question details"
   },
-  "course.assessment.question.programming.OnlineEditorView.hintHeader": {
-    "defaultMessage": "Hint",
-    "description": "Header for hint column of test cases panel."
+  "course.assessment.question.multipleResponses.randomizeChoices": {
+    "defaultMessage": "Randomize choices"
   },
-  "course.assessment.question.programming.OnlineEditorView.identifierHeader": {
-    "defaultMessage": "Identifier",
-    "description": "Header for identifier column of test cases panel."
+  "course.assessment.question.multipleResponses.randomizeChoicesHint": {
+    "defaultMessage": "If enabled, choices will always be randomized across attempts. Choices that ignore randomisation will always go to the end of the choices list."
   },
-  "course.assessment.question.programming.OnlineEditorView.newDataFilesHeader": {
-    "defaultMessage": "New Data Files",
-    "description": "Header for the new data files panel."
+  "course.assessment.question.multipleResponses.randomizeResponses": {
+    "defaultMessage": "Randomize responses"
   },
-  "course.assessment.question.programming.OnlineEditorView.noSolutionTemplateError": {
-    "defaultMessage": "For Codaveri to provide automated code correction, a solution code must be provided."
+  "course.assessment.question.multipleResponses.randomizeResponsesHint": {
+    "defaultMessage": "If enabled, responses will always be randomized across attempts. Responses that ignore randomisation will always go to the end of the responses' list."
   },
-  "course.assessment.question.programming.OnlineEditorView.noTestCaseErrorAlert": {
-    "defaultMessage": "At least 1 test case is required for autograded programming question."
+  "course.assessment.question.multipleResponses.response": {
+    "defaultMessage": "Response"
   },
-  "course.assessment.question.programming.OnlineEditorView.prependSubtitle": {
-    "defaultMessage": "(optional, hidden, inserted before student's code)",
-    "description": "Subtitle for prepend code block."
+  "course.assessment.question.multipleResponses.responseWillBeDeleted": {
+    "defaultMessage": "This response will be deleted once you save your changes."
   },
-  "course.assessment.question.programming.OnlineEditorView.prependTitle": {
-    "defaultMessage": "Prepend",
-    "description": "Title for prepend code block."
+  "course.assessment.question.multipleResponses.responses": {
+    "defaultMessage": "Responses"
   },
-  "course.assessment.question.programming.OnlineEditorView.privateTestCases": {
-    "defaultMessage": "Private Test Cases",
-    "description": "Title for private test cases panel."
+  "course.assessment.question.multipleResponses.responsesHint": {
+    "defaultMessage": "Explanations are displayed after a student submits their responses for this question."
   },
-  "course.assessment.question.programming.OnlineEditorView.publicTestCases": {
-    "defaultMessage": "Public Test Cases",
-    "description": "Title for public test cases panel."
+  "course.assessment.question.multipleResponses.saveChangesFirstBeforeConvertingMcqMrq": {
+    "defaultMessage": "Please save your changes before attempting to convert this question."
   },
-  "course.assessment.question.programming.OnlineEditorView.showTestCaseCodeEditorButton": {
-    "defaultMessage": "Code",
-    "description": "Button for showing the test case inline code editor."
+  "course.assessment.question.multipleResponses.skills": {
+    "defaultMessage": "Skills"
   },
-  "course.assessment.question.programming.OnlineEditorView.solutionSubtitle": {
-    "defaultMessage": "(optional, hidden, stores solution for future reference)",
-    "description": "Subtitle for solution template code block."
+  "course.assessment.question.multipleResponses.skillsHint": {
+    "defaultMessage": "Completing this question will boost these stats in the students' skills."
   },
-  "course.assessment.question.programming.OnlineEditorView.solutionTitle": {
-    "defaultMessage": "Solution Template",
-    "description": "Title for solution template code block."
+  "course.assessment.question.multipleResponses.staffOnlyComments": {
+    "defaultMessage": "Staff-only comments"
   },
-  "course.assessment.question.programming.OnlineEditorView.submissionTitle": {
-    "defaultMessage": "Submission Template",
-    "description": "Title for submission template code block."
+  "course.assessment.question.multipleResponses.staffOnlyCommentsHint": {
+    "defaultMessage": "Useful for internal notes or documentations. Students will never see this."
   },
-  "course.assessment.question.programming.OnlineEditorView.testCaseDescriptionGoogleTest": {
-    "defaultMessage": "Google Test Framework",
-    "description": "Name of Google's C++ test framework"
+  "course.assessment.question.multipleResponses.undoDeleteChoice": {
+    "defaultMessage": "Undo delete choice"
   },
-  "course.assessment.question.programming.OnlineEditorView.testCaseDescriptionNone": {
-    "defaultMessage": "None",
-    "description": "Value of the none key that is passed into the test case description."
+  "course.assessment.question.multipleResponses.undoDeleteResponse": {
+    "defaultMessage": "Undo delete response"
   },
-  "course.assessment.question.programming.OnlineEditorView.testCaseDescriptionNote": {
-    "defaultMessage": "NOTE",
-    "description": "Value of the note key that is passed into the test case description."
+  "course.assessment.question.programming.addFiles": {
+    "defaultMessage": "Add files"
   },
-  "course.assessment.question.programming.OnlineEditorView.testCaseDescriptionPrint": {
-    "defaultMessage": "print()",
-    "description": "Value of the print key that is passed into the test case description."
+  "course.assessment.question.programming.addTestCase": {
+    "defaultMessage": "Add a test case"
   },
-  "course.assessment.question.programming.OnlineEditorView.testCasesHeader": {
-    "defaultMessage": "Test Cases",
-    "description": "Header for the test cases of the online editor."
+  "course.assessment.question.programming.addTestCaseToBegin": {
+    "defaultMessage": "Add a test case to get started. ↗"
   },
-  "course.assessment.question.programming.OnlineEditorViewitorPythonView.testCasesDescription": {
-    "defaultMessage": "{note}: The expression in the {expression} column will be compared with the expression in the {expected} column using the equality operator. The return value of {print} is {none} and the printed output should not be confused with the return value."
+  "course.assessment.question.programming.append": {
+    "defaultMessage": "Append"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.attemptLimitFieldLabel": {
-    "defaultMessage": "Attempt Limit",
-    "description": "Label for the attempt limit input field."
+  "course.assessment.question.programming.appendHint": {
+    "defaultMessage": "Inserted after the submitted code. Useful for defining complex test cases or overriding functions or variables in the submitted code."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.attemptLimitPlaceholderMessage": {
-    "defaultMessage": "The maximum times that the students can test their answers (does not apply to staff)",
-    "description": "Placeholder message for attempt limit input field."
+  "course.assessment.question.programming.atLeastOneTestCaseRequired": {
+    "defaultMessage": "At least one test case is required."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.autograded": {
-    "defaultMessage": "Evaluate and Test Code"
+  "course.assessment.question.programming.attemptLimit": {
+    "defaultMessage": "Attempt limit"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.autogradedAssessment": {
-    "defaultMessage": "Answers to non-evaluation type programming questions will always receive the maximum grade"
+  "course.assessment.question.programming.autogradedAssessmentButNoEvaluationWarning": {
+    "defaultMessage": "This assessment is autograded. If code evaluation and testing is disabled, this question's submissions will always receive the maximum grade above since there are nothing for the autograder to test and grade."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.autogradedToggleDisabled": {
-    "defaultMessage": "This question cannot be switched to non-evaluation type as some answers have already been submitted"
+  "course.assessment.question.programming.buildLog": {
+    "defaultMessage": "Package build log"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.cannotBeBlankValidationError": {
-    "defaultMessage": "Cannot be blank."
+  "course.assessment.question.programming.buildLogHint": {
+    "defaultMessage": "These will disappear once the evaluation package is successfully imported."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.chooseEvaluator": {
-    "defaultMessage": "For code evaluation, use:"
+  "course.assessment.question.programming.canEnableCodaveriInComponents": {
+    "defaultMessage": "Contact the course manager or owner to enable this feature in Components in the Course Settings."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.codaveriEvaluator": {
-    "defaultMessage": "Codaveri Evaluator & Feedback (Experimental Feature)"
+  "course.assessment.question.programming.cannotBeMoreThanMaxLimit": {
+    "defaultMessage": "Cannot be more than {max} s."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.codaveriTooltip": {
-    "defaultMessage": "Codaveri provides code evaluation and automated code feedback services for students' codes. (Note that the code feedback is only provided upon finalising submissions)."
+  "course.assessment.question.programming.cannotDisableHasSubmissions": {
+    "defaultMessage": "You cannot disable this option once there are submissions."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.defaultEvaluator": {
-    "defaultMessage": "Default Evaluator"
+  "course.assessment.question.programming.codaveriEvaluator": {
+    "defaultMessage": "Codaveri"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.descriptionFieldLabel": {
-    "defaultMessage": "Description",
-    "description": "Label for the description input field."
+  "course.assessment.question.programming.codaveriEvaluatorHint": {
+    "defaultMessage": "On top of the default evaluation, this evaluator will provide automated code feedback powered by Codaveri when the submission is finalised. They will appear as draft comments for the instructors to review, edit, and publish."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.disableCodaveriTooltip": {
-    "defaultMessage": "Codaveri provides code evaluation and automated code feedback services for students' codes. This feature is currently disabled. To use it, please enable this component in the course/instance setting."
+  "course.assessment.question.programming.codeInserts": {
+    "defaultMessage": "Code inserts"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.downloadPackageLabel": {
-    "defaultMessage": "Download package",
-    "description": "Label for the downloading generated zip package."
+  "course.assessment.question.programming.codeInsertsHint": {
+    "defaultMessage": "These are inserted around submitted codes internally before evaluation. They are never exposed to anyone."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.editTestsOnlineButton": {
-    "defaultMessage": "Use Test Case Editor",
-    "description": "Button for editing tests online."
+  "course.assessment.question.programming.codeSubmission": {
+    "defaultMessage": "Code submission"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.evaluatingMessage": {
-    "defaultMessage": "Evaluating",
-    "description": "Text to be displayed when evaluating the programming question."
+  "course.assessment.question.programming.codeSubmissionHint": {
+    "defaultMessage": "Set the submission template below. Students can edit and submit their code in the editor to be compiled and tested."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.languageFieldLabel": {
-    "defaultMessage": "Language",
-    "description": "Label for the language input field."
+  "course.assessment.question.programming.cppTestCasesHint": {
+    "defaultMessage": "Expressions will be evaluated in the context of the submitted code. Their return values will then be compared against the Expected expectations using the <code>EXPECT_*</code> assertions from the <gtf>Google Test Framework</gtf>. Floating point numbers are formatted with <sts>std::to_string</sts>."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.lessThanEqualZeroValidationError": {
-    "defaultMessage": "Value must be greater than 0."
+  "course.assessment.question.programming.dataFiles": {
+    "defaultMessage": "Data files"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.loadingMessage": {
-    "defaultMessage": "Loading",
-    "description": "Text to be displayed when waiting for server response after form submission."
+  "course.assessment.question.programming.defaultEvaluator": {
+    "defaultMessage": "Default"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.maximumGradeFieldLabel": {
-    "defaultMessage": "Maximum Grade",
-    "description": "Label for the maximum grade input field."
+  "course.assessment.question.programming.defaultEvaluatorHint": {
+    "defaultMessage": "No fuss; just run the code according to the evaluation package below and report the test results."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.memoryLimitFieldLabel": {
-    "defaultMessage": "Memory Limit (MB)",
-    "description": "Label for the memory limit input field."
+  "course.assessment.question.programming.editOnline": {
+    "defaultMessage": "Create/edit online"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.newPackageButton": {
-    "defaultMessage": "Choose new package",
-    "description": "Button for uploading new zip package."
+  "course.assessment.question.programming.editOnlineHint": {
+    "defaultMessage": "Do everything right here in this page. Useful for quick edits (especially exams) or collaborating with other instructors."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.noFileChosenMessage": {
-    "defaultMessage": "No file chosen",
-    "description": "Message to be displayed when no file is chosen for a file input."
+  "course.assessment.question.programming.errorWhenSavingQuestion": {
+    "defaultMessage": "An error occurred when saving your changes."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.noPackageValidationError": {
-    "defaultMessage": "Package file required."
+  "course.assessment.question.programming.evaluateAndTestCode": {
+    "defaultMessage": "Evaluate and test code"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.packageUpdatedBy": {
-    "defaultMessage": "Updated by: {name}",
-    "description": "Shows the author who last modified the package through the online editor."
+  "course.assessment.question.programming.evaluateAndTestCodeHint": {
+    "defaultMessage": "If enabled, Coursemology can run, evaluate, and test submission codes when submitted. You can configure the evaluation package (parameters, data files, and test cases) below."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.packageUploadedBy": {
-    "defaultMessage": "Uploaded by: {name}",
-    "description": "Shows the author who last uploaded the zip package."
+  "course.assessment.question.programming.evaluatingSubmissions": {
+    "defaultMessage": "Hold tight, evaluating all submissions with the new package..."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.positiveNumberValidationError": {
-    "defaultMessage": "Value must be positive."
+  "course.assessment.question.programming.evaluationLimits": {
+    "defaultMessage": "Evaluation limits"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.resolveErrorsMessage": {
-    "defaultMessage": "This form has errors, please resolve before submitting."
+  "course.assessment.question.programming.evaluationTestCases": {
+    "defaultMessage": "Evaluation test cases"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.skillsFieldLabel": {
-    "defaultMessage": "Skills",
-    "description": "Label for the skills input field."
+  "course.assessment.question.programming.evaluationTestCasesHint": {
+    "defaultMessage": "Students cannot see these and will not know if any one fails."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.staffOnlyCommentsFieldLabel": {
-    "defaultMessage": "Staff only comments",
-    "description": "Label for the staff only comments input field."
+  "course.assessment.question.programming.evaluator": {
+    "defaultMessage": "Evaluator"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.submitButton": {
-    "defaultMessage": "Submit",
-    "description": "Button for submitting the form."
+  "course.assessment.question.programming.expected": {
+    "defaultMessage": "Expected"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.submitButtonTooltip": {
-    "defaultMessage": "Unable to update Codaveri question type as there are existing submissions"
+  "course.assessment.question.programming.expression": {
+    "defaultMessage": "Expression"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.submitConfirmation": {
-    "defaultMessage": "There are existing submissions for this autograded question. Updating this question will re-grade all submitted answers to this question and only system-issued EXP for the submissions will be re-calculated. Note that manually-issued EXP will not be updated. Are you sure you wish to continue?"
+  "course.assessment.question.programming.fileName": {
+    "defaultMessage": "File name"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.submitFailureMessage": {
-    "defaultMessage": "An error occurred, please try again."
+  "course.assessment.question.programming.fileSize": {
+    "defaultMessage": "Size"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.templatePackageFieldLabel": {
-    "defaultMessage": "Template Package",
-    "description": "Label for the template package input field."
+  "course.assessment.question.programming.fileSubmission": {
+    "defaultMessage": "File submission"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.timeLimitFieldLabel": {
-    "defaultMessage": "Time Limit (s)",
-    "description": "Label for the time limit input field."
+  "course.assessment.question.programming.fileSubmissionHint": {
+    "defaultMessage": "Upload Java files as submission templates. Students can edit online or upload their Java files to be compiled and tested."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.timeLimitRangeValidationError": {
-    "defaultMessage": "Time limit must be within 1 to {hard_time_limit}."
+  "course.assessment.question.programming.hasToBeAtLeastOne": {
+    "defaultMessage": "Has to be a valid positive number at least 1."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.titleFieldLabel": {
-    "defaultMessage": "Title",
-    "description": "Label for the title input field."
+  "course.assessment.question.programming.hasToBeValidNumber": {
+    "defaultMessage": "Has to be a valid positive number."
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.uploadPackageButton": {
-    "defaultMessage": "Upload Package",
-    "description": "Button for uploading package."
+  "course.assessment.question.programming.hideExplanation": {
+    "defaultMessage": "Hide this explanation"
   },
-  "course.assessment.question.programming.ProgrammingQuestionForm.uploadedPackageLabel": {
-    "defaultMessage": "Uploaded package",
-    "description": "Label for the existing uploaded zip package."
+  "course.assessment.question.programming.hint": {
+    "defaultMessage": "Hint"
   },
-  "course.assessment.question.programming.UploadedPackageTestCaseView.evaluationTestCases": {
-    "defaultMessage": "Evaluation Test Cases",
-    "description": "Title for evaluation test cases panel."
+  "course.assessment.question.programming.inlineCode": {
+    "defaultMessage": "Inline code"
   },
-  "course.assessment.question.programming.UploadedPackageTestCaseView.expectedHeader": {
-    "defaultMessage": "Expected",
-    "description": "Header for expected column of test cases panel."
+  "course.assessment.question.programming.javaTestCasesHint": {
+    "defaultMessage": "Expressions will be evaluated in the context of the submitted code. Their return values will be compared against the Expected expectations using the <code>expectEquals(expression, expected)</code> void. Its simplified definition is as follows, where <code>Object</code> has been overloaded for all Java primitives."
   },
-  "course.assessment.question.programming.UploadedPackageTestCaseView.expressionHeader": {
-    "defaultMessage": "Expression",
-    "description": "Header for expression column of test cases panel."
+  "course.assessment.question.programming.javaTestCasesHint2": {
+    "defaultMessage": "<code>printValue(Object val)</code> will be called on all Expressions and Expected expectations by default. Its simplified definition is as follows, where <code>Object</code> has been overloaded for all Java primitives."
   },
-  "course.assessment.question.programming.UploadedPackageTestCaseView.hintHeader": {
-    "defaultMessage": "Hint",
-    "description": "Header for hint column of test cases panel."
+  "course.assessment.question.programming.javaTestCasesHint3": {
+    "defaultMessage": "If you wish to override these behaviours, you may redefine these methods in <append>Append</append> above."
   },
-  "course.assessment.question.programming.UploadedPackageTestCaseView.identifierHeader": {
-    "defaultMessage": "Identifier",
-    "description": "Header for identifier column of test cases panel."
+  "course.assessment.question.programming.language": {
+    "defaultMessage": "Language"
   },
-  "course.assessment.question.programming.UploadedPackageTestCaseView.noTestsMessage": {
-    "defaultMessage": "No tests.",
-    "description": "Message to be displayed when there are no test cases."
+  "course.assessment.question.programming.languageAndEvaluation": {
+    "defaultMessage": "Language and evaluation"
   },
-  "course.assessment.question.programming.UploadedPackageTestCaseView.privateTestCases": {
-    "defaultMessage": "Private Test Cases",
-    "description": "Title for private test cases panel."
+  "course.assessment.question.programming.lastUpdated": {
+    "defaultMessage": "Last updated by {by} on {on}."
   },
-  "course.assessment.question.programming.UploadedPackageTestCaseView.publicTestCases": {
-    "defaultMessage": "Public Test Cases",
-    "description": "Title for public test cases panel."
+  "course.assessment.question.programming.lowestGradingPriority": {
+    "defaultMessage": "Lowest grading priority"
   },
-  "course.assessment.question.programming.UploadedPackageViewer.templateHeader": {
-    "defaultMessage": "Templates",
-    "description": "Header for submission templates of the uploaded package."
+  "course.assessment.question.programming.lowestGradingPriorityHint": {
+    "defaultMessage": "If enabled, this question's evaluation will always use the evaluator of the lowest priority. If unsure, just leave this unchecked."
   },
-  "course.assessment.question.programming.UploadedPackageViewer.testCasesHeader": {
-    "defaultMessage": "Test Cases",
-    "description": "Header for the test cases of the uploaded package."
+  "course.assessment.question.programming.megabytes": {
+    "defaultMessage": "MB"
+  },
+  "course.assessment.question.programming.memoryLimit": {
+    "defaultMessage": "Memory limit"
+  },
+  "course.assessment.question.programming.mustUploadPackage": {
+    "defaultMessage": "Please specify a valid evaluation package ZIP file."
+  },
+  "course.assessment.question.programming.noTestCases": {
+    "defaultMessage": "No test cases."
+  },
+  "course.assessment.question.programming.oneDuplicateFileNotAdded": {
+    "defaultMessage": "{name} was not added because other files with the same name were selected or already added. Remove the existing file(s) or rename the new file to add it."
+  },
+  "course.assessment.question.programming.packageCreationMode": {
+    "defaultMessage": "Package creation mode"
+  },
+  "course.assessment.question.programming.packageCreationModeHint": {
+    "defaultMessage": "You cannot change this mode once this question is successfully created. Choose wisely!"
+  },
+  "course.assessment.question.programming.packageInfoOnline": {
+    "defaultMessage": "Generated evaluation package"
+  },
+  "course.assessment.question.programming.packageInfoOnlineHint": {
+    "defaultMessage": "This package is generated from this online editor. You may download it for future reference."
+  },
+  "course.assessment.question.programming.packageInfoUpload": {
+    "defaultMessage": "Latest uploaded package"
+  },
+  "course.assessment.question.programming.packageInfoUploadHint": {
+    "defaultMessage": "Previews extracted from this package is shown below."
+  },
+  "course.assessment.question.programming.packageIsZipOnly": {
+    "defaultMessage": "Evaluation packages are in ZIPs only."
+  },
+  "course.assessment.question.programming.packagePending": {
+    "defaultMessage": "Package is still being imported. Come back again later?"
+  },
+  "course.assessment.question.programming.prepend": {
+    "defaultMessage": "Prepend"
+  },
+  "course.assessment.question.programming.prependHint": {
+    "defaultMessage": "Inserted before the submitted code. Useful for defining given helper functions, variables, or packages."
+  },
+  "course.assessment.question.programming.privateTestCases": {
+    "defaultMessage": "Private test cases"
+  },
+  "course.assessment.question.programming.privateTestCasesHint": {
+    "defaultMessage": "Students cannot see these, but can know if any one fails."
+  },
+  "course.assessment.question.programming.publicTestCases": {
+    "defaultMessage": "Public test cases"
+  },
+  "course.assessment.question.programming.pythonTestCasesHint": {
+    "defaultMessage": "Expressions will be evaluated in the context of the submitted code. Their return values will then be compared against the Expected expectations using the equality operator (<code>==</code>). Notably, <code>print()</code> returns <code>None</code>, so <code>print</code>ed outputs should not be confused with actual return values."
+  },
+  "course.assessment.question.programming.questionSavedButPackageError": {
+    "defaultMessage": "Your changes was saved, but the package wasn't successfully imported."
+  },
+  "course.assessment.question.programming.savingChanges": {
+    "defaultMessage": "Saving your changes..."
+  },
+  "course.assessment.question.programming.seconds": {
+    "defaultMessage": "s"
+  },
+  "course.assessment.question.programming.seeBuildLog": {
+    "defaultMessage": "See the build log"
+  },
+  "course.assessment.question.programming.showTestCasesExplanation": {
+    "defaultMessage": "How are these test cases run and compared?"
+  },
+  "course.assessment.question.programming.solutionHint": {
+    "defaultMessage": "Always hidden. Stored here for reference only."
+  },
+  "course.assessment.question.programming.someDuplicateFilesNotAdded": {
+    "defaultMessage": "These files were not added because other files with the same name were selected or already added."
+  },
+  "course.assessment.question.programming.standardError": {
+    "defaultMessage": "Standard error"
+  },
+  "course.assessment.question.programming.standardOutput": {
+    "defaultMessage": "Standard output"
+  },
+  "course.assessment.question.programming.submitConfirmation": {
+    "defaultMessage": "There are existing submissions for this autograded question. Updating this question will regrade all submitted answers to this question and only system-issued EXP for the submissions will be re-calculated. Note that manually-issued EXP will not be updated. Are you sure you wish to continue?"
+  },
+  "course.assessment.question.programming.template": {
+    "defaultMessage": "Template"
+  },
+  "course.assessment.question.programming.templateHint": {
+    "defaultMessage": "What appears in the editor when a new attempt is made."
+  },
+  "course.assessment.question.programming.templateMode": {
+    "defaultMessage": "Template mode"
+  },
+  "course.assessment.question.programming.templateModeHint": {
+    "defaultMessage": "You cannot change this mode once there are submissions."
+  },
+  "course.assessment.question.programming.templates": {
+    "defaultMessage": "Templates"
+  },
+  "course.assessment.question.programming.testCases": {
+    "defaultMessage": "Test cases"
+  },
+  "course.assessment.question.programming.timeLimit": {
+    "defaultMessage": "Time limit"
+  },
+  "course.assessment.question.programming.uploadNewPackage": {
+    "defaultMessage": "Upload a new package"
+  },
+  "course.assessment.question.programming.uploadNewPackageHint": {
+    "defaultMessage": "All existing submissions will be evaluated against this new package once it is successfully imported."
+  },
+  "course.assessment.question.programming.uploadPackage": {
+    "defaultMessage": "Manually create/edit offline and upload"
+  },
+  "course.assessment.question.programming.uploadPackageHint": {
+    "defaultMessage": "Pack the package as a ZIP file, then upload it here. Useful for complex test cases or if you host your course's evaluation packages in some version control system (e.g., Git, Mercurial, etc.)."
+  },
+  "course.assessment.question.programminquestion.questionSavedRedirecting": {
+    "defaultMessage": "Question saved."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.cannotBeBlankValidationError": {
     "defaultMessage": "Cannot be blank."
@@ -1557,6 +1857,9 @@
   },
   "course.assessment.question.scribing.ScribingQuestionForm.fileAttachmentRequired": {
     "defaultMessage": "File attachment required."
+  },
+  "course.assessment.question.scribing.ScribingQuestionForm.fileUploaded": {
+    "defaultMessage": "File uploaded:"
   },
   "course.assessment.question.scribing.ScribingQuestionForm.lessThanEqualZeroValidationError": {
     "defaultMessage": "Value must be greater than 0."
@@ -1604,8 +1907,83 @@
   "course.assessment.question.scribing.ScribingQuestionForm.valueMoreThan1000Error": {
     "defaultMessage": "Value must be less than 1000."
   },
+  "course.assessment.question.textResponses.addSolution": {
+    "defaultMessage": "Add a new solution"
+  },
+  "course.assessment.question.textResponses.allowFileUpload": {
+    "defaultMessage": "Allow file upload in the answer"
+  },
+  "course.assessment.question.textResponses.deleteSolution": {
+    "defaultMessage": "Delete solution"
+  },
+  "course.assessment.question.textResponses.exactMatch": {
+    "defaultMessage": "Exact Match"
+  },
+  "course.assessment.question.textResponses.fileUploadNote": {
+    "defaultMessage": "Note: File upload question is not auto-gradable. The autograder will always award the maximum grade."
+  },
+  "course.assessment.question.textResponses.grade": {
+    "defaultMessage": "Grade"
+  },
+  "course.assessment.question.textResponses.keyword": {
+    "defaultMessage": "Keyword"
+  },
+  "course.assessment.question.textResponses.mustSpecifyGrade": {
+    "defaultMessage": "You must specify a valid number for grade."
+  },
+  "course.assessment.question.textResponses.mustSpecifySolution": {
+    "defaultMessage": "You must specify a valid solution title."
+  },
+  "course.assessment.question.textResponses.mustSpecifySolutionType": {
+    "defaultMessage": "You must choose either exact match or keyword as solution type."
+  },
+  "course.assessment.question.textResponses.newSolutionCannotUndo": {
+    "defaultMessage": "This is a new solution. It will immediately disappear if you delete before saving it."
+  },
+  "course.assessment.question.textResponses.solution": {
+    "defaultMessage": "Solution"
+  },
+  "course.assessment.question.textResponses.solutionType": {
+    "defaultMessage": "Type of Solution"
+  },
+  "course.assessment.question.textResponses.solutionTypeExplanation": {
+    "defaultMessage": "If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct."
+  },
+  "course.assessment.question.textResponses.solutionWillBeDeleted": {
+    "defaultMessage": "This solution will be deleted once you save your changes."
+  },
+  "course.assessment.question.textResponses.solutions": {
+    "defaultMessage": "Solutions"
+  },
+  "course.assessment.question.textResponses.solutionsHint": {
+    "defaultMessage": "Adding solutions allows the answer to be autograded. Students can only input plain text."
+  },
+  "course.assessment.question.textResponses.textResponseNote": {
+    "defaultMessage": "Note: If no solutions are provided, the autograder will always award the maximum grade."
+  },
+  "course.assessment.question.textResponses.undoDeleteSolution": {
+    "defaultMessage": "Undo delete solution"
+  },
+  "course.assessment.question.textResponses.zeroGrade": {
+    "defaultMessage": "0.0"
+  },
+  "course.assessment.session.assessmentNotStarted": {
+    "defaultMessage": "The assessment has not started yet. Please come back after {startDate}."
+  },
+  "course.assessment.session.lockedAssessment": {
+    "defaultMessage": "The assessment is locked, please input the password to continue."
+  },
+  "course.assessment.session.lockedSessionAssessment": {
+    "defaultMessage": "The assessment is locked, please approach any course staff for assistance."
+  },
+  "course.assessment.session.password": {
+    "defaultMessage": "Password"
+  },
   "course.assessment.show assessmentDeleted": {
     "defaultMessage": "Assessment successfully deleted."
+  },
+  "course.assessment.show.allowRecordDraftAnswer": {
+    "defaultMessage": "Allow versioning of draft programming answer"
   },
   "course.assessment.show.allowSkipSteps": {
     "defaultMessage": "Allow to skip steps"
@@ -1629,16 +2007,10 @@
     "defaultMessage": "Change anyway"
   },
   "course.assessment.show.changeToMcq": {
-    "defaultMessage": "Change to MCQ"
-  },
-  "course.assessment.show.changeToMcqFull": {
-    "defaultMessage": "Change to Multiple Choice (MCQ)"
+    "defaultMessage": "Convert to MCQ"
   },
   "course.assessment.show.changeToMrq": {
-    "defaultMessage": "Change to MRQ"
-  },
-  "course.assessment.show.changeToMrqFull": {
-    "defaultMessage": "Change to Multiple Response (MRQ)"
+    "defaultMessage": "Convert to MRQ"
   },
   "course.assessment.show.changingQuestionType": {
     "defaultMessage": "Changing your question type..."
@@ -1730,9 +2102,6 @@
   "course.assessment.show.forumPostResponse": {
     "defaultMessage": "Forum Post Response"
   },
-  "course.assessment.show.goToAssessment": {
-    "defaultMessage": "Go to the assessment"
-  },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "Graded test cases"
   },
@@ -1778,11 +2147,38 @@
   "course.assessment.show.needToFulfilTheseRequirements": {
     "defaultMessage": "You will need to fulfil the following requirement(s) before you can attempt this assessment:"
   },
+  "course.assessment.show.newAudioResponse": {
+    "defaultMessage": "New Audio Response Question"
+  },
+  "course.assessment.show.newFileUpload": {
+    "defaultMessage": "New File Upload Question"
+  },
+  "course.assessment.show.newForumPostResponse": {
+    "defaultMessage": "New Forum Post Response Question"
+  },
+  "course.assessment.show.newMultipleChoice": {
+    "defaultMessage": "New Multiple Choice Question (MCQ)"
+  },
+  "course.assessment.show.newMultipleResponse": {
+    "defaultMessage": "New Multiple Response Question (MRQ)"
+  },
+  "course.assessment.show.newProgramming": {
+    "defaultMessage": "New Programming Question"
+  },
   "course.assessment.show.newQuestion": {
     "defaultMessage": "New Question"
   },
+  "course.assessment.show.newScribing": {
+    "defaultMessage": "New Scribing Question"
+  },
+  "course.assessment.show.newTextResponse": {
+    "defaultMessage": "New Text Response Question"
+  },
   "course.assessment.show.noItemsMatched": {
     "defaultMessage": "Oops, no items matched ''{keyword}''."
+  },
+  "course.assessment.show.noOptions": {
+    "defaultMessage": "This question has no options."
   },
   "course.assessment.show.notAutogradable": {
     "defaultMessage": "Not autogradable"
@@ -1797,7 +2193,7 @@
     "defaultMessage": "Question successfully deleted."
   },
   "course.assessment.show.questionDuplicated": {
-    "defaultMessage": "Your question has been duplicated."
+    "defaultMessage": "Your question has been duplicated. <link>Go to the assessment</link>"
   },
   "course.assessment.show.questionDuplicatedRefreshing": {
     "defaultMessage": "Your question has been duplicated. We are refreshing to show you the latest changes."
@@ -1944,10 +2340,10 @@
     "defaultMessage": "Skills"
   },
   "course.assessment.skills.SkillsTable.addSkill": {
-    "defaultMessage": "Add Skill"
+    "defaultMessage": "Skill"
   },
   "course.assessment.skills.SkillsTable.addSkillBranch": {
-    "defaultMessage": "Add Skill Branch"
+    "defaultMessage": "Skill Branch"
   },
   "course.assessment.skills.SkillsTable.branch": {
     "defaultMessage": "Skill Branches"
@@ -1967,6 +2363,63 @@
   "course.assessment.skills.SkillsTable.uncategorised": {
     "defaultMessage": "Uncategorised Skills"
   },
+  "course.assessment.statistics.ancestorFail": {
+    "defaultMessage": "Failed to fetch past iterations of this assessment."
+  },
+  "course.assessment.statistics.ancestorStatisticsFail": {
+    "defaultMessage": "Failed to fetch ancestor's statistics."
+  },
+  "course.assessment.statistics.fail": {
+    "defaultMessage": "Failed to fetch statistics."
+  },
+  "course.assessment.statistics.gradeDistribution": {
+    "defaultMessage": "Grade Distribution"
+  },
+  "course.assessment.statistics.gradeViolin.datasetLabel": {
+    "defaultMessage": "Distribution"
+  },
+  "course.assessment.statistics.gradeViolin.xAxisLabel": {
+    "defaultMessage": "Grades"
+  },
+  "course.assessment.statistics.gradeViolin.yAxisLabel": {
+    "defaultMessage": "Submissions"
+  },
+  "course.assessment.statistics.header": {
+    "defaultMessage": "Statistics for {title}"
+  },
+  "course.assessment.statistics.statistics": {
+    "defaultMessage": "Statistics"
+  },
+  "course.assessment.statistics.submissionDoughnut.attempting": {
+    "defaultMessage": "Attempting"
+  },
+  "course.assessment.statistics.submissionDoughnut.datasetLabel": {
+    "defaultMessage": "Student Submission Statuses"
+  },
+  "course.assessment.statistics.submissionDoughnut.submitted": {
+    "defaultMessage": "Submitted"
+  },
+  "course.assessment.statistics.submissionDoughnut.unattempted": {
+    "defaultMessage": "Unattempted"
+  },
+  "course.assessment.statistics.submissionStatuses": {
+    "defaultMessage": "Submission Statuses"
+  },
+  "course.assessment.statistics.submissionTimeAndGrade": {
+    "defaultMessage": "Submission Time and Grade"
+  },
+  "course.assessment.statistics.submissionTimeGradeChart.barDatasetLabel": {
+    "defaultMessage": "Number of Submissions"
+  },
+  "course.assessment.statistics.submissionTimeGradeChart.lineDatasetLabel": {
+    "defaultMessage": "Grade"
+  },
+  "course.assessment.statistics.submissionTimeGradeChart.xAxisLabel.withDeadline": {
+    "defaultMessage": "Submission Date Relative to Deadline (D)"
+  },
+  "course.assessment.statistics.submissionTimeGradeChart.xAxisLabel.withoutDeadline": {
+    "defaultMessage": "Submission Date"
+  },
   "course.assessment.submission.Annotations.comment": {
     "defaultMessage": "Add Comment"
   },
@@ -1974,13 +2427,19 @@
     "defaultMessage": "Codaveri Feedback Status"
   },
   "course.assessment.submission.CodaveriFeedbackStatus.failedFeedbackGeneration": {
-    "defaultMessage": "Failed to generate Feedback. Error: {error}"
+    "defaultMessage": "Failed to generate feedback. Please try again later."
   },
   "course.assessment.submission.CodaveriFeedbackStatus.loadingFeedbackGeneration": {
-    "defaultMessage": "Generating Feedback. Please wait."
+    "defaultMessage": "Generating Feedback. Please wait..."
   },
   "course.assessment.submission.CodaveriFeedbackStatus.successfulFeedbackGeneration": {
     "defaultMessage": "Feedback has been successfully generated."
+  },
+  "course.assessment.submission.EvaluatorErrorPanel.emailBody": {
+    "defaultMessage": "Dear Coursemology Admin,{nl}{nl}I encountered the following error when submitting my programming question code:{nl}{nl}{message}{nl}{nl}The page URL is: {url}"
+  },
+  "course.assessment.submission.EvaluatorErrorPanel.emailSubject": {
+    "defaultMessage": "[Bug Report] Evaluator Error"
   },
   "course.assessment.submission.FileInput.uploadDisabled": {
     "defaultMessage": "File upload disabled"
@@ -2007,7 +2466,7 @@
     "defaultMessage": "The display for this question type has not been implemented yet."
   },
   "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
-    "defaultMessage": "View Past Answers"
+    "defaultMessage": "Past Answers"
   },
   "course.assessment.submission.SubmissionsIndex.accessLogs": {
     "defaultMessage": "Access Logs"
@@ -2040,7 +2499,7 @@
     "defaultMessage": "Download Answers (Files)"
   },
   "course.assessment.submission.SubmissionsIndex.experiencePoints": {
-    "defaultMessage": "Experience Points Awarded"
+    "defaultMessage": "EXP Awarded"
   },
   "course.assessment.submission.SubmissionsIndex.forceSubmit": {
     "defaultMessage": "Force Submit Remaining"
@@ -2076,7 +2535,7 @@
     "defaultMessage": "Students"
   },
   "course.assessment.submission.SubmissionsIndex.submissionStatus": {
-    "defaultMessage": "Submission Status"
+    "defaultMessage": "Status"
   },
   "course.assessment.submission.SubmissionsIndex.unsubmitAllSubmissions": {
     "defaultMessage": "Unsubmit All Submissions"
@@ -2090,6 +2549,9 @@
   "course.assessment.submission.SubmissionsIndex.userName": {
     "defaultMessage": "Name"
   },
+  "course.assessment.submission.TestCaseView.allPassed": {
+    "defaultMessage": "All passed"
+  },
   "course.assessment.submission.TestCaseView.autogradeProgress": {
     "defaultMessage": "The answer is currently being evaluated, come back after a while to see the latest results."
   },
@@ -2102,14 +2564,11 @@
   "course.assessment.submission.TestCaseView.experession": {
     "defaultMessage": "Expression"
   },
-  "course.assessment.submission.TestCaseView.identifier": {
-    "defaultMessage": "Identifier"
+  "course.assessment.submission.TestCaseView.noOutputs": {
+    "defaultMessage": "No outputs"
   },
   "course.assessment.submission.TestCaseView.output": {
     "defaultMessage": "Output"
-  },
-  "course.assessment.submission.TestCaseView.passed": {
-    "defaultMessage": "Passed"
   },
   "course.assessment.submission.TestCaseView.privateTestCases": {
     "defaultMessage": "Private Test Cases"
@@ -2118,19 +2577,16 @@
     "defaultMessage": "Public Test Cases"
   },
   "course.assessment.submission.TestCaseView.staffOnlyOutputStream": {
-    "defaultMessage": "You can view the output streams because you are staff. Students will not be able to see them."
+    "defaultMessage": "Only staff can see this. Students can't see output streams."
   },
   "course.assessment.submission.TestCaseView.staffOnlyTestCases": {
-    "defaultMessage": "You are able to view these test cases because you are staff. Students will not be able to see them."
+    "defaultMessage": "Only staff can see this."
   },
   "course.assessment.submission.TestCaseView.standardError": {
     "defaultMessage": "Standard Error"
   },
   "course.assessment.submission.TestCaseView.standardOutput": {
     "defaultMessage": "Standard Output"
-  },
-  "course.assessment.submission.TestCaseView.testCases": {
-    "defaultMessage": "Test Cases"
   },
   "course.assessment.submission.UploadedFileView.deleteConfirmation": {
     "defaultMessage": "Are you sure you want to delete this attachment?"
@@ -2139,7 +2595,7 @@
     "defaultMessage": "No files uploaded."
   },
   "course.assessment.submission.UploadedFileView.uploadedFiles": {
-    "defaultMessage": "Uploaded Files:"
+    "defaultMessage": "Uploaded Files"
   },
   "course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain": {
     "defaultMessage": "Drag your audio file here, or click to select an audio file. Only wav and mp3 formats are supported. Alternatively, you may use the recorder below to record your response"
@@ -2289,13 +2745,10 @@
     "defaultMessage": "Oops! Unable to retrieve your selected posts. Please try refreshing this page."
   },
   "course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.selectInstructions": {
-    "defaultMessage": "Select {maxPosts} forum {maxPosts, plural, one {post} other {posts}}."
+    "defaultMessage": "<strong>Select {maxPosts} forum {maxPosts, plural, one {post} other {posts}}</strong>. You have selected {numPosts} {numPosts, plural, one {post} other {posts}}."
   },
   "course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.selectPostsButton": {
     "defaultMessage": "Select Forum {maxPosts, plural, one {Post} other {Posts}}"
-  },
-  "course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.selectedPostsInstructions": {
-    "defaultMessage": "You have selected {numPosts} {numPosts, plural, one {post} other {posts}}."
   },
   "course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.submittedInstructions": {
     "defaultMessage": "{numPosts, plural, =0 {No posts were} one {# post was} other {# posts were}} submitted."
@@ -2354,11 +2807,11 @@
   "course.assessment.submission.attempting": {
     "defaultMessage": "Attempting"
   },
+  "course.assessment.submission.attemptingAssessment": {
+    "defaultMessage": "Creating a new submission..."
+  },
   "course.assessment.submission.autograde": {
     "defaultMessage": "Evaluate Answers"
-  },
-  "course.assessment.submission.autogradeFailure": {
-    "defaultMessage": "(T_T) Sorry, the autograder is having mood swings and quit on us. Try submitting your code again in a couple of minutes."
   },
   "course.assessment.submission.autogradeSubmissionFailure": {
     "defaultMessage": "An error occurred while evaluating the answers."
@@ -2370,7 +2823,7 @@
     "defaultMessage": "Bonus End At"
   },
   "course.assessment.submission.codaveriAutogradeFailure": {
-    "defaultMessage": "(T_T) Sorry, the codaveri autograder is having mood swings and quit on us. Try submitting your code again in a couple of minutes or check the error message in the network response."
+    "defaultMessage": "There is an error while evaluating your code in Codaveri. Try submitting your code again in a couple of minutes or check the error message in the network response."
   },
   "course.assessment.submission.comment.CodaveriCommentCard.finalise": {
     "defaultMessage": "Finalise and Post Feedback"
@@ -2409,7 +2862,7 @@
     "defaultMessage": "This comment will only be visible to students after the grades for this submission are published."
   },
   "course.assessment.submission.comment.CommentField.prompt": {
-    "defaultMessage": "Enter your comment here"
+    "defaultMessage": "Add a new comment here..."
   },
   "course.assessment.submission.comments": {
     "defaultMessage": "Comments"
@@ -2419,6 +2872,12 @@
   },
   "course.assessment.submission.correct": {
     "defaultMessage": "Correct!"
+  },
+  "course.assessment.submission.createSubmissionFailed": {
+    "defaultMessage": "Submission attempt failed! {error}"
+  },
+  "course.assessment.submission.createSubmissionSuccessful": {
+    "defaultMessage": "Submission created! Redirecting now..."
   },
   "course.assessment.submission.deleteAllConfirmation": {
     "defaultMessage": "Are you sure you want to DELETE the submissions for all {users}? All answers, past attempts, and submissions will be deleted and users will need to re-attempt all questions. NOTE THAT THIS ACTION IS IRREVERSIBLE"
@@ -2447,6 +2906,9 @@
   "course.assessment.submission.downloadSubmissionsJobPending": {
     "defaultMessage": "Please wait as your request to download submission answers is being processed."
   },
+  "course.assessment.submission.draftAnswer": {
+    "defaultMessage": "- Draft"
+  },
   "course.assessment.submission.dueAt": {
     "defaultMessage": "Due At"
   },
@@ -2460,7 +2922,7 @@
     "defaultMessage": "You are entering an exam."
   },
   "course.assessment.submission.expAwarded": {
-    "defaultMessage": "Experience Points Awarded"
+    "defaultMessage": "EXP Awarded"
   },
   "course.assessment.submission.finalise": {
     "defaultMessage": "Finalise Submission"
@@ -2477,14 +2939,32 @@
   "course.assessment.submission.forceSubmitSuccess": {
     "defaultMessage": "All unsubmitted submissions above have been successfully submitted and graded."
   },
+  "course.assessment.submission.generateCodaveriFeedback": {
+    "defaultMessage": "Generate Codaveri Feedback"
+  },
+  "course.assessment.submission.generateFeedbackFailure": {
+    "defaultMessage": "Failed to generate feedback. Please try again later."
+  },
   "course.assessment.submission.getPastAnswersFailure": {
     "defaultMessage": "Failed to load past answers"
   },
   "course.assessment.submission.grade": {
     "defaultMessage": "Grade"
   },
+  "course.assessment.submission.gradePrefilled": {
+    "defaultMessage": "Pre-filled"
+  },
+  "course.assessment.submission.gradePrefilledHint": {
+    "defaultMessage": "The maximum grade has been pre-filled for you because it was deemed correct by the autograder."
+  },
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "Grade Summary"
+  },
+  "course.assessment.submission.gradeUnsaved": {
+    "defaultMessage": "Unsaved"
+  },
+  "course.assessment.submission.gradeUnsavedHint": {
+    "defaultMessage": "This grade is not yet saved. Click Save Grade at the end of the page to save all grade changes."
   },
   "course.assessment.submission.graded": {
     "defaultMessage": "Graded, unpublished"
@@ -2515,6 +2995,36 @@
   },
   "course.assessment.submission.loadingComment": {
     "defaultMessage": "Loading comment field..."
+  },
+  "course.assessment.submission.logs.accessLogs": {
+    "defaultMessage": "Access Logs"
+  },
+  "course.assessment.submission.logs.assessmentTitle": {
+    "defaultMessage": "Assessment Title"
+  },
+  "course.assessment.submission.logs.ipAddress": {
+    "defaultMessage": "IP Address"
+  },
+  "course.assessment.submission.logs.noLogs": {
+    "defaultMessage": "There is no available log"
+  },
+  "course.assessment.submission.logs.studentName": {
+    "defaultMessage": "Student Name"
+  },
+  "course.assessment.submission.logs.submissionSessionId": {
+    "defaultMessage": "Submission Session Token"
+  },
+  "course.assessment.submission.logs.submissionWorkflowState": {
+    "defaultMessage": "Submission Status"
+  },
+  "course.assessment.submission.logs.timestamp": {
+    "defaultMessage": "Timestamp"
+  },
+  "course.assessment.submission.logs.userAgent": {
+    "defaultMessage": "User Agent"
+  },
+  "course.assessment.submission.logs.userSessionId": {
+    "defaultMessage": "User Session Token"
   },
   "course.assessment.submission.mark": {
     "defaultMessage": "Submit for Publishing"
@@ -2600,6 +3110,9 @@
   "course.assessment.submission.saveGrade": {
     "defaultMessage": "Save Grade"
   },
+  "course.assessment.submission.savedAt": {
+    "defaultMessage": "Saved At"
+  },
   "course.assessment.submission.sendReminderEmailConfirmation": {
     "defaultMessage": "Send reminder emails to {unattempted} unattempted and {attempting} attempting user(s) ({selectedUsers}) who have not completed the assessment?"
   },
@@ -2630,8 +3143,14 @@
   "course.assessment.submission.studentView": {
     "defaultMessage": "Student View"
   },
+  "course.assessment.submission.submissionBlocked": {
+    "defaultMessage": "Submission for this assessment cannot be viewed once finalised."
+  },
   "course.assessment.submission.submissionBy": {
     "defaultMessage": "Submission by {name}"
+  },
+  "course.assessment.submission.submissionsHeader": {
+    "defaultMessage": "Submissions: {assessment}"
   },
   "course.assessment.submission.submitConfirmation": {
     "defaultMessage": "THIS ACTION IS IRREVERSIBLE Are you sure you want to submit? You will no longer be able to amend your submission!"
@@ -2727,7 +3246,7 @@
     "defaultMessage": "There are no submissions"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderExp": {
-    "defaultMessage": "Exp Awarded"
+    "defaultMessage": "EXP"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderName": {
     "defaultMessage": "Name"
@@ -2745,7 +3264,7 @@
     "defaultMessage": "Title"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderTotalGrade": {
-    "defaultMessage": "Total Grade"
+    "defaultMessage": "Grade"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderTutor": {
     "defaultMessage": "Tutor"
@@ -2762,6 +3281,12 @@
   "course.assessment.updateSuccess": {
     "defaultMessage": "Assessment was updated."
   },
+  "course.assessments.index.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.assessments.index.assessmentStatistics": {
+    "defaultMessage": "Assessment Statistics"
+  },
   "course.assessments.index.attempt": {
     "defaultMessage": "Attempt"
   },
@@ -2773,6 +3298,9 @@
   },
   "course.assessments.index.bonusExp": {
     "defaultMessage": "Bonus"
+  },
+  "course.assessments.index.createAssessmentToPopulate": {
+    "defaultMessage": "Create an assessment to start populating {category}."
   },
   "course.assessments.index.draft": {
     "defaultMessage": "Draft"
@@ -2799,7 +3327,7 @@
     "defaultMessage": "You will need a password to access this assessment."
   },
   "course.assessments.index.noAssessments": {
-    "defaultMessage": "Create an assessment to start populating {category}."
+    "defaultMessage": "Whoops, there's nothing to see here, yet!"
   },
   "course.assessments.index.openingSoon": {
     "defaultMessage": "This assessment will be unlocked at a later time."
@@ -2868,10 +3396,7 @@
     "defaultMessage": "Videos"
   },
   "course.courses.CourseAnnouncements.announcementHeader": {
-    "defaultMessage": "Announcements"
-  },
-  "course.courses.CourseAnnouncements.noAnnouncements": {
-    "defaultMessage": "There are currently no announcements"
+    "defaultMessage": "Latest announcements"
   },
   "course.courses.CourseDisplay.noCourse": {
     "defaultMessage": "There is no course yet..."
@@ -2907,7 +3432,7 @@
     "defaultMessage": "Register"
   },
   "course.courses.CourseNotifications.latestActivity": {
-    "defaultMessage": "Latest Activity"
+    "defaultMessage": "Latest Activities"
   },
   "course.courses.CourseShow.descriptionHeader": {
     "defaultMessage": "Description"
@@ -2917,6 +3442,36 @@
   },
   "course.courses.CourseShow.instructorsHeader": {
     "defaultMessage": "Instructors"
+  },
+  "course.courses.CourseUserItem.differentCourseNameHint": {
+    "defaultMessage": "You're seeing a name different from your account name because this course's manager invited you with this name."
+  },
+  "course.courses.CourseUserItem.goToYourProfile": {
+    "defaultMessage": "Go to your profile"
+  },
+  "course.courses.CourseUserItem.inCoursemology": {
+    "defaultMessage": "In Coursemology"
+  },
+  "course.courses.CourseUserItem.inThisCourse": {
+    "defaultMessage": "In this course"
+  },
+  "course.courses.CourseUserItem.manageEmailSubscriptions": {
+    "defaultMessage": "Manage email subscriptions"
+  },
+  "course.courses.CourseUserProgress.expCounter": {
+    "defaultMessage": "{exp} <small>EXP</small>"
+  },
+  "course.courses.CourseUserProgress.expToNextLevel": {
+    "defaultMessage": "{exp} <small>EXP</small> to next level"
+  },
+  "course.courses.CourseUserProgress.expTotal": {
+    "defaultMessage": "{exp} <small>EXP</small> total"
+  },
+  "course.courses.CourseUserProgress.max": {
+    "defaultMessage": "Max"
+  },
+  "course.courses.CourseUserProgress.seeAllAchievements": {
+    "defaultMessage": "See all achievements"
   },
   "course.courses.CoursesIndex.editRequest": {
     "defaultMessage": "Edit your request"
@@ -2973,7 +3528,7 @@
     "defaultMessage": "Attempt"
   },
   "course.courses.PendingTodosTable.accessButtonEnterPassword": {
-    "defaultMessage": "Enter Password"
+    "defaultMessage": "Unlock"
   },
   "course.courses.PendingTodosTable.accessButtonRespond": {
     "defaultMessage": "Respond"
@@ -2997,16 +3552,22 @@
     "defaultMessage": "Failed to load more pending tasks"
   },
   "course.courses.PendingTodosTable.tableHeaderEndAt": {
-    "defaultMessage": "End At"
+    "defaultMessage": "Ends at"
   },
   "course.courses.PendingTodosTable.tableHeaderStartAt": {
-    "defaultMessage": "Start At"
+    "defaultMessage": "Starts at"
   },
   "course.courses.PendingTodosTable.tableHeaderTitle": {
     "defaultMessage": "Title"
   },
   "course.courses.PendingTodosTable.tableSeeMore": {
-    "defaultMessage": "SEE MORE"
+    "defaultMessage": "See {n} more"
+  },
+  "course.courses.Sidebar.administration": {
+    "defaultMessage": "Administration"
+  },
+  "course.courses.SidebarItem.home": {
+    "defaultMessage": "Home"
   },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "Ignore"
@@ -3101,8 +3662,8 @@
   "course.discussion.topics.CommentIndex.unread": {
     "defaultMessage": "Unread"
   },
-  "course.discussion.topics.TopicCard.by": {
-    "defaultMessage": "By"
+  "course.discussion.topics.TopicCard.byCreator": {
+    "defaultMessage": "Created by <link>{creatorName}</link>"
   },
   "course.discussion.topics.TopicCard.loading": {
     "defaultMessage": "Loading..."
@@ -4149,7 +4710,7 @@
     "defaultMessage": "Zoom Out"
   },
   "course.lessonPlan.ColumnVisibilityDropdown.label": {
-    "defaultMessage": "Toggle Column Visibility"
+    "defaultMessage": "Columns"
   },
   "course.lessonPlan.LessonPlanEdit.ItemRow.updateFailed": {
     "defaultMessage": "Failed to update {title}."
@@ -4167,10 +4728,7 @@
     "defaultMessage": "Filter"
   },
   "course.lessonPlan.LessonPlanLayout.EnterEditModeButton.enterEditMode": {
-    "defaultMessage": "Enter Edit Mode"
-  },
-  "course.lessonPlan.LessonPlanLayout.ExitEditModeButton.exitEditMode": {
-    "defaultMessage": "Exit Edit Mode"
+    "defaultMessage": "Edit Mode"
   },
   "course.lessonPlan.LessonPlanLayout.NewEventButton.failure": {
     "defaultMessage": "Failed to create event."
@@ -4189,6 +4747,9 @@
   },
   "course.lessonPlan.LessonPlanLayout.NewMilestoneButton.success": {
     "defaultMessage": "Milestone created."
+  },
+  "course.lessonPlan.LessonPlanLayout.editLessonPlan": {
+    "defaultMessage": "Edit Lesson Plan"
   },
   "course.lessonPlan.LessonPlanLayout.empty": {
     "defaultMessage": "The lesson plan is empty."
@@ -4557,7 +5118,7 @@
     "defaultMessage": "Student Type"
   },
   "course.statistics.StatisticsIndex.students.tableTitle": {
-    "defaultMessage": "Student Statistics"
+    "defaultMessage": "Student Statistics ({numStudents} students, {numPhantom} phantom)"
   },
   "course.statistics.StatisticsIndex.students.tutorFilter": {
     "defaultMessage": "Tutor: {name}"
@@ -4769,6 +5330,9 @@
   "course.survey.RespondButton.view": {
     "defaultMessage": "View"
   },
+  "course.survey.ResponseEdit.response": {
+    "defaultMessage": "Response"
+  },
   "course.survey.ResponseEdit.saveFailure": {
     "defaultMessage": "Saving Failed."
   },
@@ -4831,6 +5395,9 @@
   },
   "course.survey.ResponseIndex.responseStatus": {
     "defaultMessage": "Response Status"
+  },
+  "course.survey.ResponseIndex.responses": {
+    "defaultMessage": "Responses"
   },
   "course.survey.ResponseIndex.stats": {
     "defaultMessage": "Response Statistics"
@@ -4909,6 +5476,9 @@
   },
   "course.survey.SurveyResults.responsesCount": {
     "defaultMessage": "Number of Responses: {count}"
+  },
+  "course.survey.SurveyResults.results": {
+    "defaultMessage": "Results"
   },
   "course.survey.SurveyShow.Question.deleteFailure": {
     "defaultMessage": "Failed to delete question."
@@ -5060,9 +5630,6 @@
   "course.timelines.assigningToItem": {
     "defaultMessage": "Assigning to item"
   },
-  "course.timelines.beta": {
-    "defaultMessage": "Beta"
-  },
   "course.timelines.bonusEndTimeMustAfterStart": {
     "defaultMessage": "Bonus end time must be after the start time."
   },
@@ -5200,6 +5767,18 @@
   },
   "course.timelines.unchangedSince": {
     "defaultMessage": "Unchanged since {time}"
+  },
+  "course.user.userStatistics.LearningRateRecordsChart.datasetLabel": {
+    "defaultMessage": "Learning Rate"
+  },
+  "course.user.userStatistics.LearningRateRecordsChart.note": {
+    "defaultMessage": "Note: A learning rate of 200% means that they can complete the course in half the time."
+  },
+  "course.user.userStatistics.LearningRateRecordsChart.xAxisLabel": {
+    "defaultMessage": "Date"
+  },
+  "course.user.userStatistics.LearningRateRecordsChart.yAxisLabel": {
+    "defaultMessage": "Learning Rate (%)"
   },
   "course.userInvitation.InviteUsersRegistrationCode.cancel": {
     "defaultMessage": "Cancel"
@@ -5405,23 +5984,20 @@
   "course.userNotification.LevelReachedPopup.reached": {
     "defaultMessage": "Level {levelNumber} Reached!"
   },
-  "course.users.ExperiencePointsRecords.fetch.failue": {
-    "defaultMessage": "Failed to fetch records"
+  "course.users.ExperiencePointsRecords.experiencePointsHistory": {
+    "defaultMessage": "Experience Points History"
   },
-  "course.users.ExperiencePointsRecords.header": {
-    "defaultMessage": "Experience Points History -"
+  "course.users.ExperiencePointsRecords.experiencePointsHistoryHeader": {
+    "defaultMessage": "Experience Points History: {for}"
+  },
+  "course.users.ExperiencePointsRecords.fetchUsersFailure": {
+    "defaultMessage": "Failed to fetch records"
   },
   "course.users.ExperiencePointsTable.fetchRecordsFailure": {
     "defaultMessage": "Failed to fetch records"
   },
-  "course.users.ManageStaff.manageStaffTitle": {
-    "defaultMessage": "Staff"
-  },
   "course.users.ManageStaff.noStaff": {
     "defaultMessage": "No staff in course."
-  },
-  "course.users.ManageStudents.manageStudentsTitle": {
-    "defaultMessage": "Students"
   },
   "course.users.ManageStudents.noStudents": {
     "defaultMessage": "No students in course... yet!"
@@ -5430,7 +6006,7 @@
     "defaultMessage": "There are no users"
   },
   "course.users.ManageUsersTable.ManageUsersTable.searchText": {
-    "defaultMessage": "Search by name, email, role, etc."
+    "defaultMessage": "Search by name or email"
   },
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "Assign to timeline"
@@ -5474,8 +6050,8 @@
   "course.users.ManageUsersTable.renameSuccess": {
     "defaultMessage": "{oldName} was renamed to {newName}"
   },
-  "course.users.ManageUsersTable.selectedNStudents": {
-    "defaultMessage": "Selected {n, plural, =1 {# student} other {# students}}"
+  "course.users.ManageUsersTable.selectedNUsers": {
+    "defaultMessage": "Selected {n, plural, =1 {# user} other {# users}}"
   },
   "course.users.ManageUsersTable.updateFailure": {
     "defaultMessage": "Failed to update user - {error}"
@@ -5603,6 +6179,12 @@
   "course.users.UserManagementTabs.inviteTitle": {
     "defaultMessage": "Invite Users"
   },
+  "course.users.UserManagementTabs.manageStaff": {
+    "defaultMessage": "Manage Staff"
+  },
+  "course.users.UserManagementTabs.manageStudents": {
+    "defaultMessage": "Manage Students"
+  },
   "course.users.UserManagementTabs.personalTimesTitle": {
     "defaultMessage": "Personalized Timelines"
   },
@@ -5638,6 +6220,9 @@
   },
   "course.users.UserProfileSkills.topicMasteryHeader": {
     "defaultMessage": "Skill Mastery"
+  },
+  "course.users.UserStatistics.LearningRateRecords.header": {
+    "defaultMessage": "Learning Rate"
   },
   "course.users.UsersIndex.fetchUsersFailure": {
     "defaultMessage": "Failed to retrieve course users."
@@ -5768,6 +6353,15 @@
   "course.video.submission.DiscussionElements.NewReplyContainer.reply": {
     "defaultMessage": "Reply"
   },
+  "course.video.submission.Statistics.frequencyGraph": {
+    "defaultMessage": "Frequency Graph"
+  },
+  "course.video.submission.Statistics.noWatchSessions": {
+    "defaultMessage": "There are no watch sessions for this video submission yet."
+  },
+  "course.video.submission.Statistics.progressGraph": {
+    "defaultMessage": "Progress Graph"
+  },
   "course.video.submission.VideoSubmissionEdit.fetchVideoSubmissionFailure": {
     "defaultMessage": "Failed to retrieve video submission."
   },
@@ -5792,6 +6386,9 @@
   "course.video.submission.VideoSubmissionShow.videoTitle": {
     "defaultMessage": "Video - {title}"
   },
+  "course.video.submission.VideoSubmissionShow.watch": {
+    "defaultMessage": "Watch"
+  },
   "course.video.submission.VideoSubmissionsIndex.fetchVideoSubmissionsFailure": {
     "defaultMessage": "Failed to retrieve video submissions."
   },
@@ -5806,6 +6403,9 @@
   },
   "course.video.submission.VideoSubmissionsIndex.phantomStudents": {
     "defaultMessage": "Phantom Students"
+  },
+  "course.video.submission.VideoSubmissionsIndex.submissions": {
+    "defaultMessage": "Submissions"
   },
   "course.video.submission.barGraphScalingLabel": {
     "defaultMessage": "Expand Graph"
@@ -5861,17 +6461,65 @@
   "course.videoSubmissions.UserVideoSubmissionsIndex.videoSubmissionsHeader": {
     "defaultMessage": "Video Watch History"
   },
+  "landing_page.create_an_account": {
+    "defaultMessage": "Create an account"
+  },
+  "landing_page.new_to_coursemology": {
+    "defaultMessage": "New to Coursemology?"
+  },
+  "landing_page.sign_in_to_coursemology": {
+    "defaultMessage": "Sign in to Coursemology"
+  },
+  "landing_page.subtitle": {
+    "defaultMessage": "Coursemology adds fun elements, such as experience points, levels, and achievements to your classroom. These gamification elements motivate students to power through lessons and their assignments."
+  },
+  "landing_page.title": {
+    "defaultMessage": "Making your class a world of games in a universe of fun."
+  },
+  "lib.component.navigation.UserPopupMenuList.accountSettings": {
+    "defaultMessage": "Account settings"
+  },
+  "lib.component.navigation.UserPopupMenuList.accountSettingsSubtitle": {
+    "defaultMessage": "Language, emails, and password"
+  },
+  "lib.component.navigation.UserPopupMenuList.goToYourSiteWideProfile": {
+    "defaultMessage": "Go to your site-wide profile"
+  },
+  "lib.component.navigation.UserPopupMenuList.signOut": {
+    "defaultMessage": "Sign out"
+  },
+  "lib.components.core.DescriptionCard.description": {
+    "defaultMessage": "Description"
+  },
   "lib.components.core.ErrorText.error": {
     "defaultMessage": "Failed submitting this form. Please try again."
   },
-  "lib.components.core.ExpandableText.showAll": {
-    "defaultMessage": "Show All"
+  "lib.components.core.Expandable.showLess": {
+    "defaultMessage": "Show less"
   },
-  "lib.components.core.ExpandableText.showLess": {
-    "defaultMessage": "Show Less"
+  "lib.components.core.Expandable.showMore": {
+    "defaultMessage": "Show more"
   },
   "lib.components.core.Note.noteHeader": {
     "defaultMessage": "Note"
+  },
+  "lib.components.core.banners.MasqueradeBanner.errorStoppingMasquerade": {
+    "defaultMessage": "An error occurred while stopping masquerade. Try again later."
+  },
+  "lib.components.core.banners.MasqueradeBanner.masquerading": {
+    "defaultMessage": "Masquerading as <strong>{as}</strong>."
+  },
+  "lib.components.core.banners.MasqueradeBanner.stopMasquerading": {
+    "defaultMessage": "Stop masquerading"
+  },
+  "lib.components.core.banners.ServerUnreachableBanner.refreshPage": {
+    "defaultMessage": "Refresh page"
+  },
+  "lib.components.core.banners.ServerUnreachableBanner.serverIsUnreachable": {
+    "defaultMessage": "The server is unreachable. Some actions may not work."
+  },
+  "lib.components.core.buttons.MasqueradeButton.errorMasquerading": {
+    "defaultMessage": "An error occurred while masquerading. Try again later."
   },
   "lib.components.core.buttons.MasqueradeButton.masqueradeDisabledTooltip": {
     "defaultMessage": "User not confirmed"
@@ -5884,6 +6532,21 @@
   },
   "lib.components.core.fields.DateTimePicker.invalidTime": {
     "defaultMessage": "Invalid time"
+  },
+  "lib.components.core.layouts.ContactableErrorAlert.contactCoursemology": {
+    "defaultMessage": "Contact Coursemology"
+  },
+  "lib.components.core.layouts.ContactableErrorAlert.copiedEmailBodyToClipboard": {
+    "defaultMessage": "Copied email body to clipboard! Contact Coursemology admin at {email}."
+  },
+  "lib.components.core.layouts.ContactableErrorAlert.copyEmailBodyWithErrorMessage": {
+    "defaultMessage": "Copy email body with error message"
+  },
+  "lib.components.core.layouts.ContactableErrorAlert.copyingEmailBodyToClipboard": {
+    "defaultMessage": "Copying the email body to clipboard..."
+  },
+  "lib.components.core.layouts.ContactableErrorAlert.errorCopyingEmailBodyToClipboard": {
+    "defaultMessage": "An error occurred while copying the email body to clipboard."
   },
   "lib.components.core.layouts.SummaryCard.title": {
     "defaultMessage": "Summary"
@@ -5942,6 +6605,9 @@
   "lib.components.extensions.conditions.deleteConfirm": {
     "defaultMessage": "Are you sure that you want to delete the condition?"
   },
+  "lib.components.extensions.conditions.details": {
+    "defaultMessage": "Details"
+  },
   "lib.components.extensions.conditions.empty": {
     "defaultMessage": "No conditions added"
   },
@@ -5984,11 +6650,74 @@
   "lib.components.form.fields.SingleFileInput.removeFile": {
     "defaultMessage": "Remove File"
   },
+  "lib.components.navigation.AdminPopupMenuList.adminPanel": {
+    "defaultMessage": "System Admin Panel"
+  },
+  "lib.components.navigation.AdminPopupMenuList.instanceAdminPanel": {
+    "defaultMessage": "Instance Admin Panel"
+  },
+  "lib.components.navigation.AdminPopupMenuList.jobsDashboard": {
+    "defaultMessage": "Jobs Dashboard"
+  },
+  "lib.components.navigation.AdminPopupMenuList.siteWideAnnouncements": {
+    "defaultMessage": "Site-wide Announcements"
+  },
+  "lib.components.navigation.CourseSwitcherPopupMenu.createNewCourse": {
+    "defaultMessage": "Create a new course"
+  },
+  "lib.components.navigation.CourseSwitcherPopupMenu.jumpToOtherCourses": {
+    "defaultMessage": "Jump to your other courses"
+  },
+  "lib.components.navigation.CourseSwitcherPopupMenu.noCoursesMatch": {
+    "defaultMessage": "Oops, no courses matched ''{keyword}''."
+  },
+  "lib.components.navigation.CourseSwitcherPopupMenu.searchCourses": {
+    "defaultMessage": "Search your courses"
+  },
+  "lib.components.navigation.CourseSwitcherPopupMenu.seeAllCoursesInAdmin": {
+    "defaultMessage": "See all courses in Coursemology"
+  },
+  "lib.components.navigation.CourseSwitcherPopupMenu.seeAllCoursesInInstanceAdmin": {
+    "defaultMessage": "See all courses in this instance"
+  },
+  "lib.components.navigation.CourseSwitcherPopupMenu.seeAllPublicCourses": {
+    "defaultMessage": "See all public courses"
+  },
+  "lib.components.navigation.CourseSwitcherPopupMenu.thisCourse": {
+    "defaultMessage": "This course"
+  },
+  "lib.hooks.router.usePrompt.sureYouWantToLeave": {
+    "defaultMessage": "Are you sure you want to leave this page? You will lose unsaved changes."
+  },
+  "lib.table.MuiTableAdapter.csv.downloadAsCsv": {
+    "defaultMessage": "Download as CSV"
+  },
+  "lib.table.MuiTableAdapter.filter.clearFilter": {
+    "defaultMessage": "Clear filter"
+  },
+  "lib.table.MuiTableAdapter.filter.filter": {
+    "defaultMessage": "Filter"
+  },
+  "lib.table.MuiTableAdapter.filter.filterIndex": {
+    "defaultMessage": "Filter {index}"
+  },
+  "lib.table.MuiTableAdapter.pagination.all": {
+    "defaultMessage": "All"
+  },
+  "lib.table.MuiTableAdapter.search.search": {
+    "defaultMessage": "Search"
+  },
+  "lib.translations.beta": {
+    "defaultMessage": "Beta"
+  },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "Failed to fetch users."
   },
   "lib.translations.course.users.manageUsersHeader": {
     "defaultMessage": "Manage Users"
+  },
+  "lib.translations.experimental": {
+    "defaultMessage": "Experimental"
   },
   "lib.translations.form.buttons.cancel": {
     "defaultMessage": "Cancel"
@@ -6107,9 +6836,6 @@
   "lib.translations.messages.loadImageError": {
     "defaultMessage": "An error occurred when loading your image. Please try selecting another one."
   },
-  "lib.translations.messages.passwordIsVisible": {
-    "defaultMessage": "Your password is visible! Watch out for eyes behind you..."
-  },
   "lib.translations.no": {
     "defaultMessage": "No"
   },
@@ -6122,11 +6848,11 @@
   "lib.translations.table.column.actions": {
     "defaultMessage": "Actions"
   },
-  "lib.translations.table.column.activeTotalCourses": {
-    "defaultMessage": "Active/Total Courses"
+  "lib.translations.table.column.activeCourses": {
+    "defaultMessage": "Active Courses"
   },
-  "lib.translations.table.column.activeTotalUsers": {
-    "defaultMessage": "Active/Total Users"
+  "lib.translations.table.column.activeUsers": {
+    "defaultMessage": "Active Users"
   },
   "lib.translations.table.column.approvedAt": {
     "defaultMessage": "Approved At"
@@ -6174,7 +6900,7 @@
     "defaultMessage": "Has TODO"
   },
   "lib.translations.table.column.host": {
-    "defaultMessage": "Host Name"
+    "defaultMessage": "Hostname"
   },
   "lib.translations.table.column.id": {
     "defaultMessage": "ID"
@@ -6257,6 +6983,12 @@
   "lib.translations.table.column.timelineAlgorithm": {
     "defaultMessage": "Algorithm"
   },
+  "lib.translations.table.column.totalCourses": {
+    "defaultMessage": "Total Courses"
+  },
+  "lib.translations.table.column.totalUsers": {
+    "defaultMessage": "Total Users"
+  },
   "lib.translations.table.column.updatedAt": {
     "defaultMessage": "Updated At"
   },
@@ -6272,29 +7004,38 @@
   "lib.translations.yes": {
     "defaultMessage": "Yes"
   },
-  "sysstem.admin.instance.instance.InstanceAdminSidebar.announcements": {
+  "material.attemptLoader.errorAccessingMaterial": {
+    "defaultMessage": "An error occurred while accessing this material. Try again later."
+  },
+  "sysstem.admin.instance.instance.InstanceAdminNavigator.announcements": {
     "defaultMessage": "Announcements"
   },
-  "sysstem.admin.instance.instance.InstanceAdminSidebar.collapse": {
-    "defaultMessage": "Collapse Sidebar"
-  },
-  "sysstem.admin.instance.instance.InstanceAdminSidebar.components": {
+  "sysstem.admin.instance.instance.InstanceAdminNavigator.components": {
     "defaultMessage": "Components"
   },
-  "sysstem.admin.instance.instance.InstanceAdminSidebar.courses": {
+  "sysstem.admin.instance.instance.InstanceAdminNavigator.courses": {
     "defaultMessage": "Courses"
   },
-  "sysstem.admin.instance.instance.InstanceAdminSidebar.expand": {
-    "defaultMessage": "Expand Sidebar"
-  },
-  "sysstem.admin.instance.instance.InstanceAdminSidebar.roleRequests": {
+  "sysstem.admin.instance.instance.InstanceAdminNavigator.roleRequests": {
     "defaultMessage": "Role Requests"
   },
-  "sysstem.admin.instance.instance.InstanceAdminSidebar.users": {
+  "sysstem.admin.instance.instance.InstanceAdminNavigator.users": {
     "defaultMessage": "Users"
   },
-  "system.admin.admin.AdminIndex.header": {
-    "defaultMessage": "Admin"
+  "system.admin.admin.AdminNavigator.announcements": {
+    "defaultMessage": "System Announcements"
+  },
+  "system.admin.admin.AdminNavigator.courses": {
+    "defaultMessage": "Courses"
+  },
+  "system.admin.admin.AdminNavigator.instances": {
+    "defaultMessage": "Instances"
+  },
+  "system.admin.admin.AdminNavigator.systemAdminPanel": {
+    "defaultMessage": "System Admin Panel"
+  },
+  "system.admin.admin.AdminNavigator.users": {
+    "defaultMessage": "Users"
   },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "Unable to fetch announcements"
@@ -6320,9 +7061,6 @@
   "system.admin.admin.CoursesIndex.fetchCoursesFailure": {
     "defaultMessage": "Failed to fetch courses."
   },
-  "system.admin.admin.CoursesIndex.header": {
-    "defaultMessage": "Courses"
-  },
   "system.admin.admin.CoursesIndex.title": {
     "defaultMessage": "Courses"
   },
@@ -6333,7 +7071,7 @@
     "defaultMessage": "Failed to fetch courses."
   },
   "system.admin.admin.CoursesTable.searchText": {
-    "defaultMessage": "Search course title, description or owners."
+    "defaultMessage": "Search courses by title or owner"
   },
   "system.admin.admin.InstanceButtons.deleteInstance": {
     "defaultMessage": "Delete Instance"
@@ -6374,41 +7112,14 @@
   "system.admin.admin.InstancesIndex.title": {
     "defaultMessage": "Instances ({count})"
   },
-  "system.admin.admin.InstancesTable.changeHostSuccess": {
-    "defaultMessage": "Host changed from {oldHost} to {newHost}"
-  },
-  "system.admin.admin.InstancesTable.fetchFilteredInstancesFailure": {
-    "defaultMessage": "Failed to get instances"
-  },
-  "system.admin.admin.InstancesTable.renameSuccess": {
-    "defaultMessage": "Renamed instance to {name}"
-  },
   "system.admin.admin.InstancesTable.searchText": {
-    "defaultMessage": "Search instance name or host name"
+    "defaultMessage": "Search instance by name or host"
   },
-  "system.admin.admin.InstancesTable.updateNameFailure": {
-    "defaultMessage": "Failed to rename instance to {oldName}"
+  "system.admin.admin.InstancesTable.updateFailure": {
+    "defaultMessage": "Failed to rename {field} from {prevValue} to {newValue} - {error}"
   },
-  "system.admin.admin.InstancesTable.updateRoleFailure": {
-    "defaultMessage": "Failed to change host from {oldHost} to {newHost}"
-  },
-  "system.admin.admin.SystemAdminSidebar.announcements": {
-    "defaultMessage": "System Announcements"
-  },
-  "system.admin.admin.SystemAdminSidebar.collapseSidebar": {
-    "defaultMessage": "Collapse Sidebar"
-  },
-  "system.admin.admin.SystemAdminSidebar.courses": {
-    "defaultMessage": "Courses"
-  },
-  "system.admin.admin.SystemAdminSidebar.expandSidebar": {
-    "defaultMessage": "Expand Sidebar"
-  },
-  "system.admin.admin.SystemAdminSidebar.instances": {
-    "defaultMessage": "Instances"
-  },
-  "system.admin.admin.SystemAdminSidebar.users": {
-    "defaultMessage": "Users"
+  "system.admin.admin.InstancesTable.updateSuccess": {
+    "defaultMessage": "Renamed {field} from {prevValue} to {newValue}"
   },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "Delete User"
@@ -6427,9 +7138,6 @@
   },
   "system.admin.admin.UsersIndex.fetchUsersFailure": {
     "defaultMessage": "Failed to fetch users."
-  },
-  "system.admin.admin.UsersIndex.header": {
-    "defaultMessage": "Users"
   },
   "system.admin.admin.UsersIndex.title": {
     "defaultMessage": "Users"
@@ -6470,9 +7178,6 @@
   "system.admin.instance.instance.InstanceAnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "Unable to fetch announcements"
   },
-  "system.admin.instance.instance.InstanceAnnouncementsIndex.header": {
-    "defaultMessage": "Instance Announcements"
-  },
   "system.admin.instance.instance.InstanceAnnouncementsIndex.newAnnouncement": {
     "defaultMessage": "New Announcement"
   },
@@ -6487,9 +7192,6 @@
   },
   "system.admin.instance.instance.InstanceComponentsForm.updateComponentsSuccess": {
     "defaultMessage": "Instance component setting was updated successfully."
-  },
-  "system.admin.instance.instance.InstanceComponentsIndex.header": {
-    "defaultMessage": "Components"
   },
   "system.admin.instance.instance.InstanceCoursesIndex.activeCourses": {
     "defaultMessage": "Active Courses (in the past 7 days): {count}"
@@ -6580,21 +7282,6 @@
   },
   "system.admin.instance.instance.InstanceUsersInvitations.title": {
     "defaultMessage": "Users"
-  },
-  "system.admin.instance.instance.InstanceUsersInvite.activeUsers": {
-    "defaultMessage": "Active Users: {allCount} ({adminCount} Administrators, {instructorCount} Instructors, {normalCount} Normal){br}(active in the past 7 days)"
-  },
-  "system.admin.instance.instance.InstanceUsersInvite.fetchUsersFailure": {
-    "defaultMessage": "Failed to fetch users."
-  },
-  "system.admin.instance.instance.InstanceUsersInvite.header": {
-    "defaultMessage": "Invite Users"
-  },
-  "system.admin.instance.instance.InstanceUsersInvite.title": {
-    "defaultMessage": "Users"
-  },
-  "system.admin.instance.instance.InstanceUsersInvite.totalUsers": {
-    "defaultMessage": "Total Users: {allCount} ({adminCount} Administrators, {instructorCount} Instructors, {normalCount} Normal)"
   },
   "system.admin.instance.instance.InstanceUsersTabs.invitationsTab": {
     "defaultMessage": "Invitations"
@@ -6740,6 +7427,9 @@
   "system.admin.users.UsersTable.fetchFilteredUsersFailure": {
     "defaultMessage": "Failed to fetch users."
   },
+  "user.accountSettings": {
+    "defaultMessage": "Account Settings"
+  },
   "user.addAnotherEmail": {
     "defaultMessage": "Add another email address"
   },
@@ -6883,5 +7573,161 @@
   },
   "users.UserShow.otherInstances": {
     "defaultMessage": "Other Instances"
+  },
+  "users.alreadyHaveAnAccount": {
+    "defaultMessage": "Already have an account?"
+  },
+  "users.checkSpamBeforeRequestNewConfirmationEmail": {
+    "defaultMessage": "You may want to check your spam folder for the email before requesting a new one."
+  },
+  "users.checkYourEmail": {
+    "defaultMessage": "Almost there; check your email!"
+  },
+  "users.completeSignUpToJoinCourse": {
+    "defaultMessage": "Almost there! Complete your sign up to join <strong>{course}</strong>."
+  },
+  "users.confirmEmailLinkInvalidOrExpired": {
+    "defaultMessage": "The email confirmation link you've used is either has expired or is invalid. Please use the correct one from your email or request to resend another confirmation email."
+  },
+  "users.confirmPassword": {
+    "defaultMessage": "Confirm password"
+  },
+  "users.confirmedYourEmail": {
+    "defaultMessage": "Confirmed your email?"
+  },
+  "users.createAnAccount": {
+    "defaultMessage": "Create a new account"
+  },
+  "users.createAnAccountSubtitle": {
+    "defaultMessage": "Join students and teachers in a universe of fun online education!"
+  },
+  "users.didntReceiveConfirmationEmail": {
+    "defaultMessage": "Didn't receive the email?"
+  },
+  "users.dontYetHaveAnAccount": {
+    "defaultMessage": "Don't yet have an account?"
+  },
+  "users.emailAddress": {
+    "defaultMessage": "Email address"
+  },
+  "users.emailConfirmed": {
+    "defaultMessage": "Email has been confirmed!"
+  },
+  "users.emailConfirmedSubtitle": {
+    "defaultMessage": "You can now sign in to your account with <strong>{email}</strong>."
+  },
+  "users.errorRecaptcha": {
+    "defaultMessage": "There was an error with the reCAPTCHA below, please try again."
+  },
+  "users.errorRequestingResetPassword": {
+    "defaultMessage": "An error occurred while requesting a password reset."
+  },
+  "users.errorResendConfirmationEmail": {
+    "defaultMessage": "An error occurred while requesting to resend confirmation email."
+  },
+  "users.errorResettingPassword": {
+    "defaultMessage": "An error occurred while resetting your password."
+  },
+  "users.errorSigningUp": {
+    "defaultMessage": "An error occurred while creating your account."
+  },
+  "users.forgotPassword": {
+    "defaultMessage": "Forgot password"
+  },
+  "users.forgotPasswordCheckYourEmailSubtitle": {
+    "defaultMessage": "Follow the instructions we've sent to <strong>{email}</strong> to reset your password. Until then, you can still use your old password if you still remember it."
+  },
+  "users.forgotPasswordSubtitle": {
+    "defaultMessage": "Recover access to your account by resetting your password."
+  },
+  "users.invalidEmailOrPassword": {
+    "defaultMessage": "Oops, invalid email or password. Check your email or password and try again."
+  },
+  "users.manageAllEmailsInAccountSettings": {
+    "defaultMessage": "Manage all your email addresses in <link>Account Settings</link>."
+  },
+  "users.mustSignInToAccessPage": {
+    "defaultMessage": "You'll need to sign in to access this page."
+  },
+  "users.name": {
+    "defaultMessage": "Name"
+  },
+  "users.password": {
+    "defaultMessage": "Password"
+  },
+  "users.passwordConfirmationMustMatch": {
+    "defaultMessage": "Your password confirmation does not match your password above."
+  },
+  "users.passwordConfirmationRequired": {
+    "defaultMessage": "Please confirm your password here."
+  },
+  "users.passwordMinCharacters": {
+    "defaultMessage": "Your password must be at least 8 characters long."
+  },
+  "users.passwordSuccessfullyReset": {
+    "defaultMessage": "Your password was successfully reset. You may now sign in with your new password."
+  },
+  "users.rememberMe": {
+    "defaultMessage": "Remember me on this device"
+  },
+  "users.rememberMeHint": {
+    "defaultMessage": "Only use this on your personal devices."
+  },
+  "users.requestToResetPassword": {
+    "defaultMessage": "Request to reset password"
+  },
+  "users.resendConfirmationEmail": {
+    "defaultMessage": "Resend confirmation email"
+  },
+  "users.resendConfirmationEmailCheckYourEmailSubtitle": {
+    "defaultMessage": "Follow the instructions we've sent to <strong>{email}</strong> to confirm your email. Remember to check your spam folder before requesting another one."
+  },
+  "users.resendConfirmationEmailIfIssuePersistsContactUs": {
+    "defaultMessage": "If you still consistently don't receive the email, please <link>contact us at {supportEmail}</link>."
+  },
+  "users.resendConfirmationEmailSubtitle": {
+    "defaultMessage": "If you have created an account but haven't received a confirmation email, you can request a new one here."
+  },
+  "users.resetPassword": {
+    "defaultMessage": "Reset password"
+  },
+  "users.resetPasswordSubtitle": {
+    "defaultMessage": "One more step: choose a new password for your account. Better remember it this time!"
+  },
+  "users.resetPasswordTokenInvalidOrExpired": {
+    "defaultMessage": "The password reset link you've used is either has expired or is invalid. Please use the correct one from your email or request to reset again."
+  },
+  "users.sessionExpiredSignInToContinue": {
+    "defaultMessage": "Your session has expired. Please sign in again to continue."
+  },
+  "users.signIn": {
+    "defaultMessage": "Sign in"
+  },
+  "users.signInAgain": {
+    "defaultMessage": "Try signing in again"
+  },
+  "users.signInToYourAccount": {
+    "defaultMessage": "Sign in to Coursemology"
+  },
+  "users.signUp": {
+    "defaultMessage": "Sign up"
+  },
+  "users.signUpAgreement": {
+    "defaultMessage": "By signing up, you agree to our <tos>Terms of Service</tos> and that you have read our <pp>Privacy Policy</pp>."
+  },
+  "users.signUpCheckYourEmailSubtitle": {
+    "defaultMessage": "Your account has been created, but you'll need to confirm your email before you can use it. Follow the instructions we've sent to <strong>{email}</strong> to proceed."
+  },
+  "users.signUpSuccessful": {
+    "defaultMessage": "Your account was successfully created."
+  },
+  "users.signUpWelcomeToCourse": {
+    "defaultMessage": "Welcome to {course}!"
+  },
+  "users.suddenlyRememberPassword": {
+    "defaultMessage": "Suddenly remembered?"
+  },
+  "users.troubleSigningIn": {
+    "defaultMessage": "Trouble signing in?"
   }
 }
