@@ -1388,7 +1388,7 @@ const translations = defineMessages({
   submitConfirmation: {
     id: 'course.assessment.question.programming.submitConfirmation',
     defaultMessage:
-      'There are existing submissions for this autograded submission. Updating this question will regrade all ' +
+      'There are existing submissions for this autograded question. Updating this question will regrade all ' +
       'submitted answers to this question and only system-issued EXP for the submissions will be re-calculated. ' +
       'Note that manually-issued EXP will not be updated. Are you sure you wish to continue?',
   },

@@ -22,7 +22,7 @@ const translations = defineMessages({
   updateFailure: {
     id: 'system.admin.admin.InstancesTable.updateFailure',
     defaultMessage:
-      'Failed to rename {field} from {prevValue} to {prevValue} - {error}',
+      'Failed to rename {field} from {prevValue} to {newValue} - {error}',
   },
 });
 
