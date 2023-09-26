@@ -85,15 +85,15 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(purgeSubmissionStore());
   }
 
-  handleAutogradeSubmission() {
+  handleAutogradeSubmission = () => {
     const {
       dispatch,
       match: { params },
     } = this.props;
     dispatch(autogradeSubmission(params.submissionId));
-  }
+  };
 
-  handleMark() {
+  handleMark = () => {
     const {
       dispatch,
       match: { params },
@@ -101,9 +101,9 @@ class VisibleSubmissionEditIndex extends Component {
       exp,
     } = this.props;
     dispatch(mark(params.submissionId, Object.values(grading), exp));
-  }
+  };
 
-  handlePublish() {
+  handlePublish = () => {
     const {
       dispatch,
       match: { params },
@@ -111,9 +111,9 @@ class VisibleSubmissionEditIndex extends Component {
       exp,
     } = this.props;
     dispatch(publish(params.submissionId, Object.values(grading), exp));
-  }
+  };
 
-  handleSaveAllGrades() {
+  handleSaveAllGrades = () => {
     const {
       dispatch,
       match: { params },
@@ -130,7 +130,7 @@ class VisibleSubmissionEditIndex extends Component {
         published,
       ),
     );
-  }
+  };
 
   handleSaveGrade(id) {
     const {
@@ -169,21 +169,21 @@ class VisibleSubmissionEditIndex extends Component {
     );
   };
 
-  handleUnmark() {
+  handleUnmark = () => {
     const {
       dispatch,
       match: { params },
     } = this.props;
     dispatch(unmark(params.submissionId));
-  }
+  };
 
-  handleUnsubmit() {
+  handleUnsubmit = () => {
     const {
       dispatch,
       match: { params },
     } = this.props;
     dispatch(unsubmit(params.submissionId));
-  }
+  };
 
   onReset = (answerId, setValue) => {
     const {
@@ -320,9 +320,9 @@ class VisibleSubmissionEditIndex extends Component {
           graderView={graderView}
           handleSaveAllGrades={this.handleSaveAllGrade}
           handleSaveGrade={(id) => this.handleSaveGrade(id)}
-          handleUnsubmit={() => this.handleUnsubmit()}
+          handleUnsubmit={this.handleUnsubmit}
           isSaving={isSaving}
-          onSubmit={() => this.onSubmit()}
+          onSubmit={this.onSubmit}
           published={workflowState === workflowStates.Published}
           submitted={workflowState === workflowStates.Submitted}
         />
@@ -341,7 +341,7 @@ class VisibleSubmissionEditIndex extends Component {
           handleSaveAllGrades={this.handleSaveAllGrades}
           handleSaveGrade={(id) => this.handleSaveGrade(id)}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
-          handleUnsubmit={() => this.handleUnsubmit()}
+          handleUnsubmit={this.handleUnsubmit}
           historyQuestions={historyQuestions}
           initialValues={answers.initial}
           isCodaveriEnabled={isCodaveriEnabled}
@@ -377,14 +377,14 @@ class VisibleSubmissionEditIndex extends Component {
         graded={workflowState === workflowStates.Graded}
         graderView={graderView}
         grading={grading}
-        handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
-        handleMark={() => this.handleMark()}
-        handlePublish={() => this.handlePublish()}
+        handleAutogradeSubmission={this.handleAutogradeSubmission}
+        handleMark={this.handleMark}
+        handlePublish={this.handlePublish}
         handleSaveAllGrades={this.handleSaveAllGrades}
         handleSaveGrade={(id) => this.handleSaveGrade(id)}
         handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
-        handleUnmark={() => this.handleUnmark()}
-        handleUnsubmit={() => this.handleUnsubmit()}
+        handleUnmark={this.handleUnmark}
+        handleUnsubmit={this.handleUnsubmit}
         historyQuestions={historyQuestions}
         initialValues={answers.initial}
         isAutograding={isAutograding}
