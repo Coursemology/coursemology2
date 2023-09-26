@@ -3,6 +3,7 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import { useDebounce } from 'lib/hooks/useDebounce';
 
 import actionTypes from '../constants';
 import { QuestionData, QuestionGradeData } from '../questionGrade';
@@ -38,6 +39,9 @@ const QuestionGrade: FC<Props> = (props) => {
   const question = submission.questions[questionId] as QuestionData;
   const grading = submission.grading.questions[questionId] as QuestionGradeData;
   const maxGrade = question.maximumGrade;
+
+  const HALF_SECOND = 500;
+  const debouncedSaveGrade = useDebounce(handleSaveGrade, HALF_SECOND, []);
 
   if (!grading) return null;
 
@@ -91,11 +95,11 @@ const QuestionGrade: FC<Props> = (props) => {
           className="w-40"
           hiddenLabel
           inputProps={{ className: 'grade' }}
-          onBlur={(e): void => {
-            handleSaveGrade(questionId);
-            processValue(e.target.value);
+          onBlur={(e): void => processValue(e.target.value)}
+          onChange={(e): void => {
+            processValue(e.target.value, true);
+            debouncedSaveGrade(questionId);
           }}
-          onChange={(e): void => processValue(e.target.value, true)}
           onKeyDown={(e): void => {
             if (e.key === 'ArrowUp') {
               e.preventDefault();
