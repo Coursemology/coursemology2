@@ -147,7 +147,6 @@ class VisibleSubmissionEditIndex extends Component {
         Object.values(grading),
         exp,
         false,
-        questions[id].displayTitle,
       ),
     );
   };
