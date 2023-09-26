@@ -297,7 +297,7 @@ const SubmissionEditStepForm = (props) => {
     return visible ? (
       <QuestionGrade
         editable={editable}
-        handleSaveGrade={() => handleSaveGrade(id)}
+        handleSaveGrade={handleSaveGrade}
         id={id}
       />
     ) : null;

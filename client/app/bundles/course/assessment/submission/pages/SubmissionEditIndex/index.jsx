@@ -132,7 +132,7 @@ class VisibleSubmissionEditIndex extends Component {
     );
   };
 
-  handleSaveGrade(id) {
+  handleSaveGrade = (id) => {
     const {
       dispatch,
       match: { params },
@@ -150,7 +150,7 @@ class VisibleSubmissionEditIndex extends Component {
         questions[id].displayTitle,
       ),
     );
-  }
+  };
 
   handleToggleViewHistoryMode = (
     viewHistory,
@@ -319,7 +319,7 @@ class VisibleSubmissionEditIndex extends Component {
           canUpdate={canUpdate}
           graderView={graderView}
           handleSaveAllGrades={this.handleSaveAllGrade}
-          handleSaveGrade={(id) => this.handleSaveGrade(id)}
+          handleSaveGrade={this.handleSaveGrade}
           handleUnsubmit={this.handleUnsubmit}
           isSaving={isSaving}
           onSubmit={this.onSubmit}
@@ -339,7 +339,7 @@ class VisibleSubmissionEditIndex extends Component {
           explanations={explanations}
           graderView={graderView}
           handleSaveAllGrades={this.handleSaveAllGrades}
-          handleSaveGrade={(id) => this.handleSaveGrade(id)}
+          handleSaveGrade={this.handleSaveGrade}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           handleUnsubmit={this.handleUnsubmit}
           historyQuestions={historyQuestions}
@@ -381,7 +381,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleMark={this.handleMark}
         handlePublish={this.handlePublish}
         handleSaveAllGrades={this.handleSaveAllGrades}
-        handleSaveGrade={(id) => this.handleSaveGrade(id)}
+        handleSaveGrade={this.handleSaveGrade}
         handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
         handleUnmark={this.handleUnmark}
         handleUnsubmit={this.handleUnsubmit}
