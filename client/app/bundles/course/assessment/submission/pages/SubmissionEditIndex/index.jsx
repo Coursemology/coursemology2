@@ -141,15 +141,7 @@ class VisibleSubmissionEditIndex extends Component {
       submission: { workflowState },
     } = this.props;
     const published = workflowState === workflowStates.Published;
-    dispatch(
-      saveGrade(
-        params.submissionId,
-        grading[id],
-        Object.values(grading),
-        exp,
-        published,
-      ),
-    );
+    dispatch(saveGrade(params.submissionId, grading[id], id, exp, published));
   };
 
   handleToggleViewHistoryMode = (

@@ -1,3 +1,5 @@
+import { produce } from 'immer';
+
 import actions, { questionTypes } from '../constants';
 import { arrayToObjectById } from '../utils';
 
@@ -121,11 +123,29 @@ export default function (state = initialState, action) {
         maximumGrade: maxGrade,
       };
     }
+    case actions.SAVE_GRADE_SUCCESS: {
+      const basePoints = action.payload.submission.basePoints;
+      const questionWithGrades = extractGrades(action.payload.answers);
+      const maxGrade = sum(
+        Object.values(action.payload.questions).map((q) => q.maximumGrade),
+      );
+
+      return produce(state, (draftState) => {
+        const tempDraftState = draftState;
+
+        Object.keys(questionWithGrades).forEach((id) => {
+          tempDraftState.questions[id] = questionWithGrades[id];
+        });
+
+        tempDraftState.exp = action.payload.submission.pointsAwarded;
+        tempDraftState.basePoints = basePoints;
+        tempDraftState.maximumGrade = maxGrade;
+      });
+    }
     case actions.SAVE_DRAFT_SUCCESS:
     case actions.FINALISE_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
     case actions.SAVE_ALL_GRADE_SUCCESS:
-    case actions.SAVE_GRADE_SUCCESS:
     case actions.MARK_SUCCESS:
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS: {
