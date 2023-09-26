@@ -503,11 +503,11 @@ export function saveAllGrades(submissionId, grades, exp, published) {
   };
 }
 
-export function saveGrade(submissionId, grades, allGrades, exp, published) {
+export function saveGrade(submissionId, grade, allGrades, exp, published) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
   const payload = {
     submission: {
-      answers: grades,
+      answers: [grade],
       [expParam]: exp,
     },
   };

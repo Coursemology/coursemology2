@@ -138,15 +138,16 @@ class VisibleSubmissionEditIndex extends Component {
       match: { params },
       grading,
       exp,
-      questions,
+      submission: { workflowState },
     } = this.props;
+    const published = workflowState === workflowStates.Published;
     dispatch(
       saveGrade(
         params.submissionId,
-        [grading[id]],
+        grading[id],
         Object.values(grading),
         exp,
-        false,
+        published,
       ),
     );
   };
