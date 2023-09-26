@@ -41,7 +41,7 @@ const SubmissionEmptyForm = (props) => {
     attempting,
     canUpdate,
     graderView,
-    handleSaveAllGrade,
+    handleSaveAllGrades,
     onSubmit,
     handleUnsubmit,
     intl,
@@ -74,7 +74,7 @@ const SubmissionEmptyForm = (props) => {
       <Button
         color="primary"
         disabled={isSaving}
-        onClick={() => handleSaveAllGrade()}
+        onClick={handleSaveAllGrades}
         style={styles.formButton}
         variant="contained"
       >
@@ -162,7 +162,7 @@ SubmissionEmptyForm.propTypes = {
   published: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
 
-  handleSaveAllGrade: PropTypes.func,
+  handleSaveAllGrades: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   onSubmit: PropTypes.func,
 };

@@ -475,7 +475,7 @@ export function importFiles(answerId, answerFields, language, setValue) {
   };
 }
 
-export function saveAllGrade(submissionId, grades, exp, published) {
+export function saveAllGrades(submissionId, grades, exp, published) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
   const payload = {
     submission: {

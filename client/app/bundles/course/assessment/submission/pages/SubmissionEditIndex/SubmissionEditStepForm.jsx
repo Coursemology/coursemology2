@@ -90,7 +90,7 @@ const SubmissionEditStepForm = (props) => {
     onSubmitAnswer,
     onGenerateFeedback,
     onReevaluateAnswer,
-    handleSaveAllGrade,
+    handleSaveAllGrades,
     handleSaveGrade,
     handleToggleViewHistoryMode,
     handleUnsubmit,
@@ -411,7 +411,7 @@ const SubmissionEditStepForm = (props) => {
       <Button
         color="primary"
         disabled={isSaving}
-        onClick={() => handleSaveAllGrade()}
+        onClick={handleSaveAllGrades}
         style={styles.formButton}
         variant="contained"
       >
@@ -668,7 +668,7 @@ SubmissionEditStepForm.propTypes = {
   onReevaluateAnswer: PropTypes.func,
   onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
-  handleSaveAllGrade: PropTypes.func,
+  handleSaveAllGrades: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleToggleViewHistoryMode: PropTypes.func,
 };

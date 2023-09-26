@@ -33,7 +33,7 @@ import {
   purgeSubmissionStore,
   reevaluateAnswer,
   resetAnswer,
-  saveAllGrade,
+  saveAllGrades,
   saveDraft,
   saveGrade,
   submitAnswer,
@@ -113,7 +113,7 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(publish(params.submissionId, Object.values(grading), exp));
   }
 
-  handleSaveAllGrade() {
+  handleSaveAllGrades() {
     const {
       dispatch,
       match: { params },
@@ -123,7 +123,12 @@ class VisibleSubmissionEditIndex extends Component {
     } = this.props;
     const published = workflowState === workflowStates.Published;
     dispatch(
-      saveAllGrade(params.submissionId, Object.values(grading), exp, published),
+      saveAllGrades(
+        params.submissionId,
+        Object.values(grading),
+        exp,
+        published,
+      ),
     );
   }
 
@@ -313,7 +318,7 @@ class VisibleSubmissionEditIndex extends Component {
           attempting={workflowState === workflowStates.Attempting}
           canUpdate={canUpdate}
           graderView={graderView}
-          handleSaveAllGrade={() => this.handleSaveAllGrade()}
+          handleSaveAllGrades={this.handleSaveAllGrade}
           handleSaveGrade={(id) => this.handleSaveGrade(id)}
           handleUnsubmit={() => this.handleUnsubmit()}
           isSaving={isSaving}
@@ -333,7 +338,7 @@ class VisibleSubmissionEditIndex extends Component {
           codaveriFeedbackStatus={codaveriFeedbackStatus}
           explanations={explanations}
           graderView={graderView}
-          handleSaveAllGrade={() => this.handleSaveAllGrade()}
+          handleSaveAllGrades={this.handleSaveAllGrades}
           handleSaveGrade={(id) => this.handleSaveGrade(id)}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           handleUnsubmit={() => this.handleUnsubmit()}
@@ -375,7 +380,7 @@ class VisibleSubmissionEditIndex extends Component {
         handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
         handleMark={() => this.handleMark()}
         handlePublish={() => this.handlePublish()}
-        handleSaveAllGrade={() => this.handleSaveAllGrade()}
+        handleSaveAllGrades={this.handleSaveAllGrades}
         handleSaveGrade={(id) => this.handleSaveGrade(id)}
         handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
         handleUnmark={() => this.handleUnmark()}
