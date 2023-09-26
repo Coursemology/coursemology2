@@ -135,7 +135,7 @@ const QuestionGrade: FC<Props> = (props) => {
           </Tooltip>
         )}
 
-        {dirty && (
+        {dirty ? (
           <Tooltip title={intl.formatMessage(translations.gradeUnsavedHint)}>
             <Chip
               color="warning"
@@ -143,6 +143,12 @@ const QuestionGrade: FC<Props> = (props) => {
               size="small"
             />
           </Tooltip>
+        ) : (
+          <Chip
+            color="success"
+            label={intl.formatMessage(translations.gradeSaved)}
+            size="small"
+          />
         )}
       </div>
     </div>

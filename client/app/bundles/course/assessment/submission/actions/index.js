@@ -503,14 +503,7 @@ export function saveAllGrades(submissionId, grades, exp, published) {
   };
 }
 
-export function saveGrade(
-  submissionId,
-  grades,
-  allGrades,
-  exp,
-  published,
-  questionTitle,
-) {
+export function saveGrade(submissionId, grades, allGrades, exp, published) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
   const payload = {
     submission: {
@@ -545,9 +538,6 @@ export function saveGrade(
           type: actionTypes.SAVE_GRADE_SUCCESS,
           payload: dataWithPrefilledGrades,
         });
-        dispatch(
-          setNotification(translations.updateIndividualSuccess, questionTitle),
-        );
       })
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });
