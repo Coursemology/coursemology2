@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { updateGrade } from '../actions';
 import { QuestionData, QuestionGradeData } from '../questionGrade';
@@ -21,15 +21,16 @@ const isValidDecimal = (value: string): boolean => {
   return /^\d*(\.\d?)?$/.test(value);
 };
 
-interface Props extends WrappedComponentProps {
+interface Props {
   editable: boolean;
   questionId: number;
   handleSaveGrade: (id: number) => void;
 }
 
 const QuestionGrade: FC<Props> = (props) => {
-  const { editable, questionId, handleSaveGrade, intl } = props;
+  const { editable, questionId, handleSaveGrade } = props;
 
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const submission = useAppSelector((state) => state.assessments.submission);
@@ -56,25 +57,24 @@ const QuestionGrade: FC<Props> = (props) => {
 
   const processValue = (value: string, drafting: boolean = false): void => {
     if (value.trim() === '') {
-      handleUpdateGrade(questionId, null);
-      return;
+      return handleUpdateGrade(questionId, null);
     }
 
-    if (drafting && !isValidDecimal(value)) return;
+    if (drafting && !isValidDecimal(value)) {
+      return undefined;
+    }
 
     const parsedValue = parseFloat(value);
 
     if (!drafting && (Number.isNaN(parsedValue) || parsedValue < 0)) {
-      handleUpdateGrade(questionId, null);
-      return;
+      return handleUpdateGrade(questionId, null);
     }
 
     if (parsedValue >= maxGrade) {
-      handleUpdateGrade(questionId, maxGrade);
-      return;
+      return handleUpdateGrade(questionId, maxGrade);
     }
 
-    handleUpdateGrade(questionId, drafting ? value : parsedValue);
+    return handleUpdateGrade(questionId, drafting ? value : parsedValue);
   };
 
   const stepGrade = (delta: number): void => {
@@ -83,7 +83,7 @@ const QuestionGrade: FC<Props> = (props) => {
         ? parseFloat(grading.grade)
         : grading.grade ?? 0;
     const newGrade = Math.max(Math.min(parsedValue + delta, maxGrade), 0);
-    handleUpdateGrade(questionId, newGrade);
+    return handleUpdateGrade(questionId, newGrade);
   };
 
   const renderQuestionGradeField = (): JSX.Element => (
@@ -107,6 +107,7 @@ const QuestionGrade: FC<Props> = (props) => {
               e.preventDefault();
               stepGrade(-GRADE_STEP);
             }
+            debouncedSaveGrade(questionId);
           }}
           placeholder={
             typeof grading.originalGrade === 'number'
@@ -127,10 +128,10 @@ const QuestionGrade: FC<Props> = (props) => {
 
       <div className="px-4 space-x-4">
         {grading.prefilled && (
-          <Tooltip title={intl.formatMessage(translations.gradePrefilledHint)}>
+          <Tooltip title={t(translations.gradePrefilledHint)}>
             <Chip
               className="slot-1-neutral-400 border-slot-1 text-slot-1"
-              label={intl.formatMessage(translations.gradePrefilled)}
+              label={t(translations.gradePrefilled)}
               size="small"
               variant="outlined"
             />
@@ -138,17 +139,17 @@ const QuestionGrade: FC<Props> = (props) => {
         )}
 
         {dirty ? (
-          <Tooltip title={intl.formatMessage(translations.gradeUnsavedHint)}>
+          <Tooltip title={t(translations.gradeUnsavedHint)}>
             <Chip
               color="warning"
-              label={intl.formatMessage(translations.gradeUnsaved)}
+              label={t(translations.gradeUnsaved)}
               size="small"
             />
           </Tooltip>
         ) : (
           <Chip
             color="success"
-            label={intl.formatMessage(translations.gradeSaved)}
+            label={t(translations.gradeSaved)}
             size="small"
           />
         )}
@@ -170,7 +171,7 @@ const QuestionGrade: FC<Props> = (props) => {
       variant="outlined"
     >
       <Typography color="text.secondary" variant="body1">
-        {intl.formatMessage(translations.grade)}
+        {t(translations.grade)}
       </Typography>
 
       {editable ? renderQuestionGradeField() : renderQuestionGrade()}
@@ -178,4 +179,4 @@ const QuestionGrade: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(QuestionGrade);
+export default QuestionGrade;
