@@ -66,7 +66,7 @@ class VisibleQuestionGrade extends Component {
   }
 
   renderQuestionGradeField(dirty) {
-    const { question, grading, intl, handleSaveGrade } = this.props;
+    const { question, grading, intl, handleSaveGrade, id } = this.props;
 
     const maxGrade = question.maximumGrade;
 
@@ -78,7 +78,7 @@ class VisibleQuestionGrade extends Component {
             hiddenLabel
             inputProps={{ className: 'grade' }}
             onBlur={(e) => {
-              handleSaveGrade();
+              handleSaveGrade(id);
               this.processValue(e.target.value);
             }}
             onChange={(e) => this.processValue(e.target.value, true)}
@@ -176,6 +176,7 @@ function mapStateToProps({ assessments: { submission } }, ownProps) {
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
   return {
+    id,
     question: submission.questions[id],
     grading: submission.grading.questions[id],
     bonusAwarded,
