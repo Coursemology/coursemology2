@@ -117,4 +117,4 @@ We are actively running [Coursemology](https://coursemology.org) and can provide
 
 ## Acknowledgments
 
-The Coursemology.org Project was made possible by a number of teaching development grants from the National University of Singapore over the years.
+The Coursemology.org Project was made possible by a number of teaching development grants from the National University of Singapore over the years. This project is currently supported by the [AI Centre for Educational Technologies](https://www.aicet.aisingapore.org/). 
