@@ -5,7 +5,7 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { Group } from '@mui/icons-material';
+import { Forum, Group } from '@mui/icons-material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { Tab, Tabs } from '@mui/material';
 import palette from 'theme/palette';
@@ -15,9 +15,13 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 
-import { fetchDisbursements, fetchForumDisbursements } from '../../operations';
-import ForumDisbursement from '../ForumDisbursement';
-import GeneralDisbursement from '../GeneralDisbursement';
+import {
+  fetchDisbursements,
+  fetchForumDisbursements,
+} from './disbursement/operations';
+import ForumDisbursement from './disbursement/pages/ForumDisbursement';
+import GeneralDisbursement from './disbursement/pages/GeneralDisbursement';
+import ExperiencePointsDetails from './ExperiencePointsDetails';
 
 type Props = WrappedComponentProps;
 
@@ -26,25 +30,29 @@ const translations = defineMessages({
     id: 'course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure',
     defaultMessage: 'Failed to retrieve data.',
   },
-  disbursements: {
+  experiencePoints: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.disbursements',
-    defaultMessage: 'Disburse Experience Points',
+    defaultMessage: 'Experience Points',
   },
-  forumTab: {
+  experiencePointsDetails: {
+    id: 'course.experiencePoints.disbursement.DisbursementIndex.experienceTab',
+    defaultMessage: 'Experience Point Details',
+  },
+  forumDisbursementTab: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.forumTab',
-    defaultMessage: 'Forum Participation',
+    defaultMessage: 'Forum Participation Disbursement',
   },
-  generalTab: {
+  generalDisbursementTab: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.generalTab',
     defaultMessage: 'General Disbursement',
   },
 });
 
-const DisbursementIndex: FC<Props> = (props) => {
+const ExperiencePointsIndex: FC<Props> = (props) => {
   const { intl } = props;
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
-  const [tabValue, setTabValue] = useState('forum-disbursement-tab');
+  const [tabValue, setTabValue] = useState('experience-points-tab');
 
   useEffect(() => {
     Promise.all([
@@ -57,8 +65,17 @@ const DisbursementIndex: FC<Props> = (props) => {
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
+  let componentToRender: JSX.Element;
+  if (tabValue === 'forum-disbursement-tab') {
+    componentToRender = <ForumDisbursement />;
+  } else if (tabValue === 'general-disbursement-tab') {
+    componentToRender = <GeneralDisbursement />;
+  } else {
+    componentToRender = <ExperiencePointsDetails />;
+  }
+
   return (
-    <Page title={intl.formatMessage(translations.disbursements)} unpadded>
+    <Page title={intl.formatMessage(translations.experiencePoints)} unpadded>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -76,31 +93,40 @@ const DisbursementIndex: FC<Props> = (props) => {
           >
             <Tab
               icon={<FormatListBulletedIcon />}
+              id="experience-points-tab"
+              label={
+                <FormattedMessage {...translations.experiencePointsDetails} />
+              }
+              style={{ color: palette.submissionIcon.person }}
+              value="experience-points-tab"
+            />
+            <Tab
+              icon={<Forum />}
               id="forum-disbursement-tab"
-              label={<FormattedMessage {...translations.forumTab} />}
+              label={
+                <FormattedMessage {...translations.forumDisbursementTab} />
+              }
               style={{ color: palette.submissionIcon.person }}
               value="forum-disbursement-tab"
             />
             <Tab
               icon={<Group />}
               id="general-disbursement-tab"
-              label={<FormattedMessage {...translations.generalTab} />}
+              label={
+                <FormattedMessage {...translations.generalDisbursementTab} />
+              }
               style={{ color: palette.submissionIcon.person }}
               value="general-disbursement-tab"
             />
           </Tabs>
 
-          {tabValue === 'general-disbursement-tab' ? (
-            <GeneralDisbursement />
-          ) : (
-            <ForumDisbursement />
-          )}
+          {componentToRender}
         </>
       )}
     </Page>
   );
 };
 
-const handle = translations.disbursements;
+const handle = translations.experiencePoints;
 
-export default Object.assign(injectIntl(DisbursementIndex), { handle });
+export default Object.assign(injectIntl(ExperiencePointsIndex), { handle });

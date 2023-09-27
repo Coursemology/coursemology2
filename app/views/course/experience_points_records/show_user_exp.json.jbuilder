@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 json.rowCount @experience_points_count
-json.experiencePointRecords @experience_points_records do |record|
-  json.id record.id
-  point_updater = @updater_preload_service.course_user_for(record.updater)
-  updater_user = point_updater || record.updater
+json.courseUserName @course_user.name
+
+json.experiencePointRecords @experience_points_records do |experience_points_record|
+  json.id experience_points_record.id
+  point_updater = @updater_preload_service.course_user_for(experience_points_record.updater)
+  updater_user = point_updater || experience_points_record.updater
   json.updater do
     json.id updater_user.id
     json.name updater_user.name
@@ -12,11 +14,11 @@ json.experiencePointRecords @experience_points_records do |record|
   end
 
   json.reason do
-    json.isManuallyAwarded record.manually_awarded?
-    if record.manually_awarded?
-      json.text record.reason
+    json.isManuallyAwarded experience_points_record.manually_awarded?
+    if experience_points_record.manually_awarded?
+      json.text experience_points_record.reason
     else
-      specific = record.specific
+      specific = experience_points_record.specific
       actable = specific.actable
       case actable
       when Course::Assessment::Submission
@@ -37,8 +39,10 @@ json.experiencePointRecords @experience_points_records do |record|
     end
   end
 
-  json.pointsAwarded record.points_awarded
-  json.updatedAt record.updated_at
-  json.courseUserName record.course_user.user.name
-  json.userExperienceUrl course_user_experience_points_records_path(current_course, record.course_user_id)
+  json.pointsAwarded experience_points_record.points_awarded
+  json.updatedAt experience_points_record.updated_at
+  json.permissions do
+    json.canUpdate can?(:update, experience_points_record)
+    json.canDestroy experience_points_record.manually_awarded? && can?(:destroy, experience_points_record)
+  end
 end
