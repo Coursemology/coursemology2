@@ -14,6 +14,11 @@ export interface ExperiencePointsRecordSettings {
   rowCount: number;
 }
 
+export interface AllExperiencePointsRecords {
+  rowCount: number;
+  experiencePointRecords: AllExperiencePointsRecordListData[];
+}
+
 export interface PointsReason {
   isManuallyAwarded: boolean;
   text: string;
@@ -29,6 +34,12 @@ export interface ExperiencePointsRecordListData {
   permissions: ExperiencePointsRecordPermissions;
 }
 
+export interface AllExperiencePointsRecordListData
+  extends ExperiencePointsRecordListData {
+  courseUserName: string;
+  userExperienceUrl?: string;
+}
+
 /**
  * Data types for experience points record data used in frontend that are converted from
  * received backend data.
@@ -41,6 +52,12 @@ export interface ExperiencePointsRecordMiniEntity {
   pointsAwarded: number;
   updatedAt: Date;
   permissions: ExperiencePointsRecordPermissions;
+}
+
+export interface AllExperiencePointsRecordMiniEntity
+  extends ExperiencePointsRecordMiniEntity {
+  courseUserName: string;
+  userExperienceUrl?: string;
 }
 
 /**

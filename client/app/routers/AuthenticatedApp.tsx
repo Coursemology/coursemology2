@@ -51,7 +51,7 @@ import CourseShow from 'bundles/course/courses/pages/CourseShow';
 import CommentIndex from 'bundles/course/discussion/topics/pages/CommentIndex';
 import Duplication from 'bundles/course/duplication/pages/Duplication';
 import UserRequests from 'bundles/course/enrol-requests/pages/UserRequests';
-import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
+import ExperiencePointsIndex from 'bundles/course/experience-points';
 import ForumShow from 'bundles/course/forum/pages/ForumShow';
 import ForumsIndex from 'bundles/course/forum/pages/ForumsIndex';
 import ForumTopicShow from 'bundles/course/forum/pages/ForumTopicShow';
@@ -264,8 +264,8 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             },
             {
               path: 'disburse_experience_points',
-              handle: DisbursementIndex.handle,
-              element: <DisbursementIndex />,
+              handle: ExperiencePointsIndex.handle,
+              element: <ExperiencePointsIndex />,
             },
             {
               path: ':userId',

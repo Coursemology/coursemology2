@@ -14,7 +14,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
         @submissions = @submissions.from_category(category).confirmed
         @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
         @submission_count = @submissions.count
-        @submissions = @submissions.paginated(new_page_params)
+        @submissions = @submissions.paginated(page_param)
         load_assessments
       end
     end
@@ -25,7 +25,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
       format.json do
         @submissions = pending_submissions.from_course(current_course)
         @submission_count = @submissions.count
-        @submissions = @submissions.paginated(new_page_params)
+        @submissions = @submissions.paginated(page_param)
         load_assessments
       end
     end

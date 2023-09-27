@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import {
+  AllExperiencePointsRecords,
   ExperiencePointsRecordListData,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
@@ -9,6 +10,19 @@ import BaseCourseAPI from './Base';
 export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
     return `/courses/${this.courseId}`;
+  }
+
+  /**
+   * Fetches all experience points records from all user
+   */
+  indexAll(
+    pageNum: number = 1,
+  ): Promise<AxiosResponse<AllExperiencePointsRecords>> {
+    return this.client.get(
+      `${
+        this.#urlPrefix
+      }/experience_points_records?filter[page_num]=${pageNum}`,
+    );
   }
 
   /**

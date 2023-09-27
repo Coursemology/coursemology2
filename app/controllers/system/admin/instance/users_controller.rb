@@ -43,7 +43,7 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
                             else
                               @instance_users.count
                             end
-    @instance_users = @instance_users.paginated(new_page_params)
+    @instance_users = @instance_users.paginated(page_param)
   end
 
   def load_counts
