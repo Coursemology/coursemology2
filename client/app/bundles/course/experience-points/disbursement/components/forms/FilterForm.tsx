@@ -154,7 +154,6 @@ const FilterForm: FC<Props> = (props) => {
             name="weeklyCap"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
-                className="weekly_cap"
                 disabled={isSearching}
                 disableMargins
                 field={field}

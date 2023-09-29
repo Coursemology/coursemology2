@@ -34,13 +34,12 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
           expect(find('input').value).to eq('100')
         end
 
-        start_date = 4.weeks.ago.strftime('%d/%m/%Y %I:%M')
-        end_date = 2.weeks.ago.strftime('%d/%m/%Y %I:%M')
+        start_date = (4.weeks.ago + 1.minute).strftime('%d-%m-%Y %I:%M')
+        end_date = 2.weeks.ago.strftime('%d-%m-%Y %I:%M')
 
-        find_field('startTime', visible: false).click.set(start_date)
-        find_field('endTime', visible: false).click.set(end_date)
-
-        find('div.weekly_cap').find('input').set(200)
+        fill_in_mui_datetime('Start Date', start_date)
+        fill_in_mui_datetime('End Date', end_date)
+        find_field('Weekly Cap').click.set(200)
 
         within find('.forum-participation-search-panel') do
           find('button.filter-btn-submit').click
