@@ -231,9 +231,9 @@ jobs:
 
       - terminate_rails_and_wait_for_coverage_results
 
-      - codecov/upload:
-          upload_name: playwright-client
-          file: tests/coverage/lcov.info
+      # - codecov/upload:
+      #     upload_name: playwright-client
+      #     file: tests/coverage/lcov.info
 
       - codecov/upload:
           upload_name: playwright-rails
@@ -325,10 +325,6 @@ jobs:
           name: Run Jest tests
           working_directory: client
           command: yarn testci
-
-      - codecov/upload:
-          upload_name: jest
-          file: client/coverage/lcov.info
 
   i18n_en:
     executor: ruby_with_postgres
