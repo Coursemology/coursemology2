@@ -77,6 +77,11 @@ module Capybara::TestGroupHelpers
       fill_in_summernote(selector + rails_selector, text)
     end
 
+    # Special helper to fill in MUI DateTimePicker defined by react.
+    def fill_in_mui_datetime(field_name, date)
+      find_field(field_name).send_keys([:control, 'a']).send_keys(date)
+    end
+
     # Special helper to find a react-toastify message
     #
     # Since capybara's `find` has a default timeout until the element is found, this helps
