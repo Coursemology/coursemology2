@@ -17,6 +17,7 @@ export interface ExperiencePointsRecordSettings {
 export interface AllExperiencePointsRecords {
   rowCount: number;
   experiencePointRecords: AllExperiencePointsRecordListData[];
+  filter: ExperiencePointsFilterData;
 }
 
 export interface PointsReason {
@@ -78,4 +79,16 @@ export interface UpdateExperiencePointsRecordPatchData {
     reason: string;
     points_awarded: number;
   };
+}
+
+/**
+ * Data types for filtering the experience points record
+ */
+export interface ExperiencePointsNameFilterData {
+  id: number;
+  name: string;
+}
+
+export interface ExperiencePointsFilterData {
+  names: ExperiencePointsNameFilterData[];
 }
