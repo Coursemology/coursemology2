@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { defineMessages } from 'react-intl';
 
+import DownloadButton from 'lib/components/core/buttons/DownloadButton';
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -30,6 +31,8 @@ const ExperiencePointsDetails = (): JSX.Element => {
     return fetchAllExperiencePointsRecord(pageNum);
   };
 
+  const downloadButton = <DownloadButton href="">Download CSV</DownloadButton>;
+
   return (
     <Preload
       render={<LoadingIndicator />}
@@ -37,7 +40,11 @@ const ExperiencePointsDetails = (): JSX.Element => {
       while={fetchExperienceInPage}
     >
       {(data): JSX.Element => (
-        <Page title={t(translations.experiencePointsHistory)} unpadded>
+        <Page
+          actions={downloadButton}
+          title={t(translations.experiencePointsHistory)}
+          unpadded
+        >
           <BackendPagination
             handlePageChange={setPageNum}
             pageNum={pageNum}

@@ -157,7 +157,6 @@ const SubmissionsIndex = (): JSX.Element => {
                 filter={filter}
                 handleFilterOnClick={handleFilter}
                 selectedFilter={selectedFilter}
-                setPageNum={setPageNum}
                 setSelectedFilter={setSelectedFilter}
                 setTableIsLoading={setTableIsLoading}
                 tabCategories={tabs.categories}
