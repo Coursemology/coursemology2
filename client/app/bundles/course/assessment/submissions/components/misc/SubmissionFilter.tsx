@@ -14,7 +14,6 @@ interface Props extends WrappedComponentProps {
   tabCategories: { id: number; title: string }[];
   categoryNum: number;
 
-  setPageNum: Dispatch<SetStateAction<number>>;
   setTableIsLoading: Dispatch<SetStateAction<boolean>>;
   selectedFilter: {
     assessment: SubmissionAssessmentFilterData | null;

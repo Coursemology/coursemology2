@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { defineMessages } from 'react-intl';
 
+import DownloadButton from 'lib/components/core/buttons/DownloadButton';
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import Page from 'lib/components/core/layouts/Page';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
@@ -35,8 +36,11 @@ const ExperiencePointsRecords = (): JSX.Element => {
 
   const records = useAppSelector(getExperiencePointsRecordsSettings);
 
+  const downloadButton = <DownloadButton href="">Download CSV</DownloadButton>;
+
   return (
     <Page
+      actions={downloadButton}
       backTo={getCourseUserURL(getCourseId(), getCourseUserId())}
       title={t(translations.experiencePointsHistoryHeader, {
         for: records.courseUserName,
