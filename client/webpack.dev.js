@@ -37,6 +37,7 @@ module.exports = merge(common, {
 
         const isExplicitJSON = request.query.format === 'json';
         const isAttachment =
+          request.url.startsWith('/downloads') ||
           request.url.startsWith('/uploads') ||
           request.url.startsWith('/attachments');
 
