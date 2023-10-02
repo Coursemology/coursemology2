@@ -4,6 +4,7 @@ import {
   ExperiencePointsRecordListData,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
+import { JobSubmitted } from 'types/jobs';
 
 import BaseCourseAPI from './Base';
 
@@ -16,13 +17,12 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
    * Fetches all experience points records from all user
    */
   indexAll(
+    studentId: number | null,
     pageNum: number = 1,
   ): Promise<AxiosResponse<AllExperiencePointsRecords>> {
-    return this.client.get(
-      `${
-        this.#urlPrefix
-      }/experience_points_records?filter[page_num]=${pageNum}`,
-    );
+    return this.client.get(`${this.#urlPrefix}/experience_points_records`, {
+      params: { 'filter[page_num]': pageNum, 'filter[student_id]': studentId },
+    });
   }
 
   /**
@@ -43,6 +43,12 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
         this.#urlPrefix
       }/users/${userId}/experience_points_records?filter[page_num]=${pageNum}`,
     );
+  }
+
+  download(studentId: number | null): Promise<AxiosResponse<JobSubmitted>> {
+    return this.client.get(`${this.#urlPrefix}/download_experience_points`, {
+      params: { 'filter[student_id]': studentId },
+    });
   }
 
   /**

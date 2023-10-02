@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 json.id record.id
 point_updater = @updater_preload_service.course_user_for(record.updater)
 updater_user = point_updater || record.updater
