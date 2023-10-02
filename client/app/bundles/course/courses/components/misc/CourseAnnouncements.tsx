@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Stack, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { AnnouncementEntity } from 'types/course/announcements';
 
-import AnnouncementCard from '../../../announcements/components/misc/AnnouncementCard';
+import AnnouncementsDisplay from 'course/announcements/components/misc/AnnouncementsDisplay';
 
 interface Props extends WrappedComponentProps {
   announcements: AnnouncementEntity[];
@@ -26,15 +26,10 @@ const CourseAnnouncements: FC<Props> = (props) => {
       </Typography>
 
       {announcements && (
-        <Stack spacing={1}>
-          {announcements.map((announcement) => (
-            <AnnouncementCard
-              key={announcement.id}
-              announcement={announcement}
-              showEditOptions={false}
-            />
-          ))}
-        </Stack>
+        <AnnouncementsDisplay
+          announcementPermissions={{ canCreate: false }}
+          announcements={announcements}
+        />
       )}
     </section>
   );
