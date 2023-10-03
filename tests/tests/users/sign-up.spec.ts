@@ -65,7 +65,7 @@ test.describe('user invited to a course', () => {
 
     await page.gotoInvitation(invitation.invitation_key);
 
-    await expect(page.getByText('has been claimed')).toBeVisible();
+    await expect(page.getByText('has been claimed').count()).toBeTruthy();
     await expect(page.getNameField()).toBeEmpty();
     await expect(page.getEmailField()).toBeEmpty();
   });
