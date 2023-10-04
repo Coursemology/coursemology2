@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Divider,
   FormControlLabel,
   Switch,
   Tooltip,
@@ -180,7 +181,7 @@ class SubmissionAnswer extends Component {
     return (
       <Card style={{ backgroundColor: yellow[100] }}>
         <CardContent>
-          <span>{intl.formatMessage(translations.rendererNotImplemented)}</span>
+          {intl.formatMessage(translations.rendererNotImplemented)}
         </CardContent>
       </Card>
     );
@@ -192,7 +193,7 @@ class SubmissionAnswer extends Component {
     const renderer = this.getRenderer(question);
 
     return (
-      <div>
+      <>
         <Typography className="mb-5 inline-block" variant="h6">
           {question.displayTitle}
         </Typography>
@@ -203,7 +204,7 @@ class SubmissionAnswer extends Component {
           dangerouslySetInnerHTML={{ __html: question.description }}
           variant="body2"
         />
-
+        <Divider />
         {answerId
           ? renderer({
               question,
@@ -213,7 +214,7 @@ class SubmissionAnswer extends Component {
               showMcqMrqSolution,
             })
           : this.renderMissingAnswerPanel()}
-      </div>
+      </>
     );
   }
 }
