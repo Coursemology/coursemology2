@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-import { syncSignals } from 'lib/hooks/session';
+import { syncSignals } from 'lib/hooks/unread';
 
 import {
   isInvalidCSRFTokenResponse,

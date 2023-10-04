@@ -21,6 +21,7 @@ import scribingQuestionReducer from './bundles/course/assessment/question/scribi
 import skillsReducer from './bundles/course/assessment/skills/store';
 import assessmentsReducer from './bundles/course/assessment/store';
 import submissionsReducer from './bundles/course/assessment/submissions/store';
+import unreadReducer from './bundles/course/container/unread';
 import coursesReducer from './bundles/course/courses/store';
 import commentsReducer from './bundles/course/discussion/topics/store';
 import duplicationsReducer from './bundles/course/duplication/store';
@@ -78,6 +79,7 @@ const rootReducer = combineReducers({
   users: usersReducer,
   userEmailSubscriptions: userEmailSubscriptionsReducer,
   videos: videosReducer,
+  unread: unreadReducer,
 
   // The following reducers are of outside of a course.
   admin: adminReducer,

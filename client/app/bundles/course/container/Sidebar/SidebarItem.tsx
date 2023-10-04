@@ -5,7 +5,7 @@ import { Badge, Typography } from '@mui/material';
 import { SidebarItemData } from 'types/course/courses';
 
 import { defensivelyGetIcon } from 'lib/constants/icons';
-import { useUnreadCountForItem } from 'lib/hooks/session';
+import { useUnreadCountForItem } from 'lib/hooks/unread';
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface SidebarItemProps {

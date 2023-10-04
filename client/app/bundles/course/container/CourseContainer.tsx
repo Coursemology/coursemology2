@@ -13,7 +13,7 @@ import CourseAPI from 'api/course';
 import PopupNotifier from 'course/user-notification/PopupNotifier';
 import Footer from 'lib/components/core/layouts/Footer';
 import { DataHandle, useDynamicNest } from 'lib/hooks/router/dynamicNest';
-import { syncSignals } from 'lib/hooks/session';
+import { syncSignals } from 'lib/hooks/unread';
 
 import Breadcrumbs from './Breadcrumbs';
 import Sidebar from './Sidebar';
