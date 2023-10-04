@@ -8,6 +8,12 @@ json.updater do
   json.userUrl url_to_user_or_course_user(course, updater_user)
 end
 
+json.student do
+  json.id record.course_user_id
+  json.name record.course_user.name
+  json.userUrl course_user_experience_points_records_path(current_course, record.course_user_id)
+end
+
 json.reason do
   json.isManuallyAwarded record.manually_awarded?
   if record.manually_awarded?
@@ -36,3 +42,7 @@ end
 
 json.pointsAwarded record.points_awarded
 json.updatedAt record.updated_at
+json.permissions do
+  json.canUpdate can?(:update, record)
+  json.canDestroy record.manually_awarded? && can?(:destroy, record)
+end

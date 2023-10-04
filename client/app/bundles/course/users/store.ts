@@ -6,40 +6,32 @@ import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
-import { ExperiencePointsRecordListData } from 'types/course/experiencePointsRecords';
 import { PersonalTimeListData } from 'types/course/personalTimes';
 import { TimelineData } from 'types/course/referenceTimelines';
 import {
   createEntityStore,
-  removeAllFromStore,
   removeFromStore,
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
 
 import {
-  DELETE_EXPERIENCE_POINTS_RECORD,
   DELETE_PERSONAL_TIME,
   DELETE_USER,
   DELETE_USER_OPTION,
-  DeleteExperiencePointsRecordAction,
   DeletePersonalTimeAction,
   DeleteUserAction,
   DeleteUserOptionAction,
-  SAVE_EXPERIENCE_POINTS_RECORD_LIST,
   SAVE_MANAGE_USER_LIST,
   SAVE_PERSONAL_TIME_LIST,
   SAVE_USER,
   SAVE_USER_LIST,
-  SaveExperiencePointsRecordListAction,
   SaveManageUserListAction,
   SavePersonalTimeListAction,
   SaveUserAction,
   SaveUserListAction,
-  UPDATE_EXPERIENCE_POINTS_RECORD,
   UPDATE_PERSONAL_TIME,
   UPDATE_USER_OPTION,
-  UpdateExperiencePointsRecordAction,
   UpdatePersonalTimeAction,
   UpdateUserOptionAction,
   UsersActionType,
@@ -62,11 +54,6 @@ const initialState: UsersState = {
     defaultTimelineAlgorithm: 'fixed',
   },
   personalTimes: createEntityStore(),
-  experiencePointsRecords: createEntityStore(),
-  experiencePointsRecordsSettings: {
-    courseUserName: '',
-    rowCount: 0,
-  },
   timelines: {},
 };
 
@@ -156,46 +143,6 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       }
       break;
     }
-    case SAVE_EXPERIENCE_POINTS_RECORD_LIST: {
-      removeAllFromStore(draft.experiencePointsRecords);
-      const experiencePointsRecordList = action.experiencePointRecords;
-      const entityList = experiencePointsRecordList.map((data) => ({
-        ...data,
-      }));
-      saveListToStore(draft.experiencePointsRecords, entityList);
-      draft.experiencePointsRecordsSettings.courseUserName =
-        action.courseUserName;
-      draft.experiencePointsRecordsSettings.rowCount = action.rowCount;
-      break;
-    }
-    case UPDATE_EXPERIENCE_POINTS_RECORD: {
-      if (draft.experiencePointsRecords.byId[action.data.id]) {
-        const prevExperiencePointsEntity =
-          draft.experiencePointsRecords.byId[action.data.id]!;
-        const nextExperiencePointsEntity = {
-          ...prevExperiencePointsEntity,
-          reason: {
-            ...prevExperiencePointsEntity.reason,
-            text: action.data.reason.text,
-          },
-          pointsAwarded: action.data.pointsAwarded,
-          updatedAt: action.data.updatedAt,
-          updater: action.data.updater,
-        };
-        saveEntityToStore(
-          draft.experiencePointsRecords,
-          nextExperiencePointsEntity,
-        );
-      }
-      break;
-    }
-    case DELETE_EXPERIENCE_POINTS_RECORD: {
-      const recordId = action.id;
-      if (draft.experiencePointsRecords.byId[recordId]) {
-        removeFromStore(draft.experiencePointsRecords, recordId);
-      }
-      break;
-    }
     default: {
       break;
     }
@@ -282,37 +229,6 @@ export const actions = {
   deleteUserOption: (id: number): DeleteUserOptionAction => {
     return {
       type: DELETE_USER_OPTION,
-      id,
-    };
-  },
-
-  saveExperiencePointsRecordList: (
-    courseUserName: string,
-    rowCount: number,
-    experiencePointRecords: ExperiencePointsRecordListData[],
-  ): SaveExperiencePointsRecordListAction => {
-    return {
-      type: SAVE_EXPERIENCE_POINTS_RECORD_LIST,
-      courseUserName,
-      rowCount,
-      experiencePointRecords,
-    };
-  },
-
-  updateExperiencePointsRecord: (
-    data: ExperiencePointsRecordListData,
-  ): UpdateExperiencePointsRecordAction => {
-    return {
-      type: UPDATE_EXPERIENCE_POINTS_RECORD,
-      data,
-    };
-  },
-
-  deleteExperiencePointsRecord: (
-    id: number,
-  ): DeleteExperiencePointsRecordAction => {
-    return {
-      type: DELETE_EXPERIENCE_POINTS_RECORD,
       id,
     };
   },

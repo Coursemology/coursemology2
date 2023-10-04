@@ -46,7 +46,7 @@ const translations = defineMessages({
   },
   pointsAwarded: {
     id: 'course.experiencePoints.disbursement.ForumDisbursementTable.pointsAwarded',
-    defaultMessage: 'Experience Points Awarded',
+    defaultMessage: 'EXP Awarded',
   },
   viewPosts: {
     id: 'course.experiencePoints.disbursement.ForumDisbursementForm.viewPosts',

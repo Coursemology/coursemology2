@@ -5,9 +5,8 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { Forum, Group } from '@mui/icons-material';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import { Tab, Tabs } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
+import { tabsStyle } from 'theme/mui-style';
 import palette from 'theme/palette';
 
 import Page from 'lib/components/core/layouts/Page';
@@ -34,9 +33,9 @@ const translations = defineMessages({
     id: 'course.experiencePoints.disbursement.DisbursementIndex.disbursements',
     defaultMessage: 'Experience Points',
   },
-  experiencePointsDetails: {
+  experiencePointsHistory: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.experienceTab',
-    defaultMessage: 'Experience Point Details',
+    defaultMessage: 'Experience Point History',
   },
   forumDisbursementTab: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.forumTab',
@@ -80,45 +79,49 @@ const ExperiencePointsIndex: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         <>
-          <Tabs
-            onChange={(_, value): void => {
-              setTabValue(value);
-            }}
-            style={{
-              backgroundColor: palette.background.default,
-            }}
-            TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-            value={tabValue}
-            variant="fullWidth"
-          >
-            <Tab
-              icon={<FormatListBulletedIcon />}
-              id="experience-points-tab"
-              label={
-                <FormattedMessage {...translations.experiencePointsDetails} />
-              }
-              style={{ color: palette.submissionIcon.person }}
-              value="experience-points-tab"
-            />
-            <Tab
-              icon={<Forum />}
-              id="forum-disbursement-tab"
-              label={
-                <FormattedMessage {...translations.forumDisbursementTab} />
-              }
-              style={{ color: palette.submissionIcon.person }}
-              value="forum-disbursement-tab"
-            />
-            <Tab
-              icon={<Group />}
-              id="general-disbursement-tab"
-              label={
-                <FormattedMessage {...translations.generalDisbursementTab} />
-              }
-              style={{ color: palette.submissionIcon.person }}
-              value="general-disbursement-tab"
-            />
-          </Tabs>
+          <Box className="max-w-full">
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs
+                onChange={(_, value): void => {
+                  setTabValue(value);
+                }}
+                scrollButtons="auto"
+                sx={tabsStyle}
+                TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+                value={tabValue}
+                variant="scrollable"
+              >
+                <Tab
+                  id="experience-points-tab"
+                  label={
+                    <FormattedMessage
+                      {...translations.experiencePointsHistory}
+                    />
+                  }
+                  style={{ color: palette.submissionIcon.person }}
+                  value="experience-points-tab"
+                />
+                <Tab
+                  id="forum-disbursement-tab"
+                  label={
+                    <FormattedMessage {...translations.forumDisbursementTab} />
+                  }
+                  style={{ color: palette.submissionIcon.person }}
+                  value="forum-disbursement-tab"
+                />
+                <Tab
+                  id="general-disbursement-tab"
+                  label={
+                    <FormattedMessage
+                      {...translations.generalDisbursementTab}
+                    />
+                  }
+                  style={{ color: palette.submissionIcon.person }}
+                  value="general-disbursement-tab"
+                />
+              </Tabs>
+            </Box>
+          </Box>
 
           {componentToRender}
         </>

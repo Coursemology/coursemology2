@@ -9,10 +9,6 @@ import {
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
 import {
-  ExperiencePointsRowData,
-  UpdateExperiencePointsRecordPatchData,
-} from 'types/course/experiencePointsRecords';
-import {
   PersonalTimeFormData,
   PersonalTimePostData,
 } from 'types/course/personalTimes';
@@ -22,10 +18,8 @@ import CourseAPI from 'api/course';
 
 import { actions } from './store';
 import {
-  DeleteExperiencePointsRecordAction,
   DeletePersonalTimeAction,
   SaveUserAction,
-  UpdateExperiencePointsRecordAction,
   UpdatePersonalTimeAction,
 } from './types';
 
@@ -66,17 +60,6 @@ const formatUpdatePersonalTime = (data: PersonalTimeFormData): FormData => {
     formData.append(`personal_time[${key}]`, payload.personal_time[key]);
   });
   return formData;
-};
-
-const formatUpdateExperiencePointsRecord = (
-  data: ExperiencePointsRowData,
-): UpdateExperiencePointsRecordPatchData => {
-  return {
-    experience_points_record: {
-      reason: data.reason ? data.reason.trim() : data.reason,
-      points_awarded: parseInt(data.pointsAwarded.toString(), 10),
-    },
-  };
 };
 
 export function fetchUsers(asBasicData: boolean = false): Operation {
@@ -233,46 +216,6 @@ export function deletePersonalTime(
     CourseAPI.personalTimes
       .delete(personalTimeId, userId)
       .then(() => dispatch(actions.deletePersonalTime(personalTimeId)));
-}
-
-export function fetchExperiencePointsRecord(
-  userId: number,
-  pageNum: number = 1,
-): Operation {
-  return async (dispatch) =>
-    CourseAPI.experiencePointsRecord.index(userId, pageNum).then((response) => {
-      const data = response.data;
-      dispatch(
-        actions.saveExperiencePointsRecordList(
-          data.courseUserName,
-          data.rowCount,
-          data.experiencePointRecords,
-        ),
-      );
-    });
-}
-
-export function updateExperiencePointsRecord(
-  data: ExperiencePointsRowData,
-): Operation<UpdateExperiencePointsRecordAction> {
-  const params: UpdateExperiencePointsRecordPatchData =
-    formatUpdateExperiencePointsRecord(data);
-
-  return async (dispatch) =>
-    CourseAPI.experiencePointsRecord
-      .update(params, data.id)
-      .then((response) =>
-        dispatch(actions.updateExperiencePointsRecord(response.data)),
-      );
-}
-
-export function deleteExperiencePointsRecord(
-  recordId: number,
-): Operation<DeleteExperiencePointsRecordAction> {
-  return async (dispatch) =>
-    CourseAPI.experiencePointsRecord
-      .delete(recordId)
-      .then(() => dispatch(actions.deleteExperiencePointsRecord(recordId)));
 }
 
 export const fetchCourseUserLearningRateData =

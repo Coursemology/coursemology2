@@ -22,7 +22,7 @@ class Course::ExperiencePointsDownloadService
     updater_ids = exp_points_records.active.pluck(:updater_id)
     @updater_preload_service =
       Course::CourseUserPreloadService.new(updater_ids, @current_course)
-    exp_points_records = exp_points_records.active.includes(course_user: :user).order('course_users.name ASC')
+    exp_points_records = exp_points_records.active.order(updated_at: :desc)
     CSV.open(exp_points_file_path, 'w') do |csv|
       download_exp_points_header csv
       exp_points_records.each do |record|
@@ -41,8 +41,8 @@ class Course::ExperiencePointsDownloadService
   end
 
   def download_exp_points_header(csv)
-    csv << [I18n.t('course.experience_points_records.download.name'),
-            I18n.t('course.experience_points_records.download.updated_at'),
+    csv << [I18n.t('course.experience_points_records.download.updated_at'),
+            I18n.t('course.experience_points_records.download.name'),
             I18n.t('course.experience_points_records.download.updater'),
             I18n.t('course.experience_points_records.download.reason'),
             I18n.t('course.experience_points_records.download.exp_points')]
@@ -62,8 +62,8 @@ class Course::ExperiencePointsDownloadService
                 end
               end
 
-    csv << [record.course_user.name,
-            record.updated_at,
+    csv << [record.updated_at,
+            record.course_user.name,
             point_updater.name,
             @reason,
             record.points_awarded]

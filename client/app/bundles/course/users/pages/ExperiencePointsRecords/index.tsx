@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { defineMessages } from 'react-intl';
 
+import { getExpPointsRecordsSettings } from 'course/experience-points/selectors';
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import Page from 'lib/components/core/layouts/Page';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
@@ -9,7 +10,6 @@ import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ExperiencePointsTable from '../../components/tables/ExperiencePointsTable';
-import { getExperiencePointsRecordsSettings } from '../../selectors';
 
 const ROWS_PER_PAGE = 25 as const;
 
@@ -33,13 +33,15 @@ const ExperiencePointsRecords = (): JSX.Element => {
 
   const [pageNum, setPageNum] = useState(1);
 
-  const records = useAppSelector(getExperiencePointsRecordsSettings);
+  const records = useAppSelector(getExpPointsRecordsSettings);
+  const courseId = getCourseId();
+  const userId = getCourseUserId();
 
   return (
     <Page
-      backTo={getCourseUserURL(getCourseId(), getCourseUserId())}
+      backTo={getCourseUserURL(courseId, userId)}
       title={t(translations.experiencePointsHistoryHeader, {
-        for: records.courseUserName,
+        for: records.studentName,
       })}
       unpadded
     >
