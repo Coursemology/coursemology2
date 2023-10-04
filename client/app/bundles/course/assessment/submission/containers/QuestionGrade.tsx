@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
 
+import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -25,10 +26,11 @@ interface Props {
   editable: boolean;
   questionId: number;
   handleSaveGrade: (id: number) => void;
+  isSaving: boolean;
 }
 
 const QuestionGrade: FC<Props> = (props) => {
-  const { editable, questionId, handleSaveGrade } = props;
+  const { editable, questionId, handleSaveGrade, isSaving } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -41,8 +43,11 @@ const QuestionGrade: FC<Props> = (props) => {
   const grading = submission.grading.questions[questionId] as QuestionGradeData;
   const maxGrade = question.maximumGrade;
 
-  const HALF_SECOND = 500;
-  const debouncedSaveGrade = useDebounce(handleSaveGrade, HALF_SECOND, []);
+  const debouncedSaveGrade = useDebounce(
+    handleSaveGrade,
+    FIELD_LONG_DEBOUNCE_DELAY_MS,
+    [],
+  );
 
   if (!grading) return null;
 
@@ -109,11 +114,7 @@ const QuestionGrade: FC<Props> = (props) => {
             }
             debouncedSaveGrade(questionId);
           }}
-          placeholder={
-            typeof grading.originalGrade === 'number'
-              ? grading.originalGrade.toString()
-              : grading.originalGrade
-          }
+          placeholder=""
           size="small"
           value={grading.grade ?? ''}
           variant="filled"
@@ -138,20 +139,22 @@ const QuestionGrade: FC<Props> = (props) => {
           </Tooltip>
         )}
 
-        {dirty ? (
+        {dirty && !isSaving ? (
           <Tooltip title={t(translations.gradeUnsavedHint)}>
             <Chip
               color="warning"
-              label={t(translations.gradeUnsaved)}
+              label={t(translations.isGradeUnsaved)}
               size="small"
             />
           </Tooltip>
         ) : (
-          <Chip
-            color="success"
-            label={t(translations.gradeSaved)}
-            size="small"
-          />
+          isSaving && (
+            <Chip
+              color="default"
+              label={t(translations.isGradeSaving)}
+              size="small"
+            />
+          )
         )}
       </div>
     </div>

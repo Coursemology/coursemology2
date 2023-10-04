@@ -406,6 +406,7 @@ const SubmissionEditForm = (props) => {
       <QuestionGrade
         editable={editable}
         handleSaveGrade={handleSaveGrade}
+        isSaving={isSaving}
         questionId={id}
       />
     ) : null;

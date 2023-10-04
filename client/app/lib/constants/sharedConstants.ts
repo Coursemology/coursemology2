@@ -8,6 +8,7 @@ import type { Locale, UserRoles } from 'types/users';
 // Form options
 
 export const FIELD_DEBOUNCE_DELAY_MS = 500;
+export const FIELD_LONG_DEBOUNCE_DELAY_MS = 1500;
 
 // Table options
 

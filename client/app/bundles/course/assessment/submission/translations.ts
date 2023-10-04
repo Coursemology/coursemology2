@@ -65,12 +65,12 @@ const translations = defineMessages({
     id: 'course.assessment.submission.autograde',
     defaultMessage: 'Evaluate Answers',
   },
-  gradeSaved: {
-    id: 'course.assessment.submission.gradeSaved',
-    defaultMessage: 'Saved',
+  isGradeSaving: {
+    id: 'course.assessment.submission.isGradeSaving',
+    defaultMessage: 'Saving',
   },
-  gradeUnsaved: {
-    id: 'course.assessment.submission.gradeUnsaved',
+  isGradeUnsaved: {
+    id: 'course.assessment.submission.isGradeUnsaved',
     defaultMessage: 'Unsaved',
   },
   gradeUnsavedHint: {
