@@ -1,10 +1,5 @@
 import { createSelector, Dispatch } from '@reduxjs/toolkit';
-import {
-  AppState,
-  dispatch as imperativeDispatch,
-  Selector,
-  store,
-} from 'store';
+import { AppState, dispatch as imperativeDispatch, store } from 'store';
 
 import { actions, SessionState } from 'bundles/common/store';
 
@@ -22,13 +17,7 @@ const selectI18nConfig = createSelector(selectSessionStore, (session) => ({
   timeZone: session.timeZone,
 }));
 
-const selectUnreadCountForItem = (key: string): Selector<number | undefined> =>
-  createSelector(selectSessionStore, (session) => session.unread[key]);
-
 export const useAuthState = (): boolean => useAppSelector(selectAuthState);
-
-export const useUnreadCountForItem = (key: string): number | undefined =>
-  useAppSelector(selectUnreadCountForItem(key));
 
 interface UseAuthenticatorHook {
   authenticate: () => void;
@@ -81,8 +70,4 @@ export const setI18nConfig = (config: Partial<I18nConfig>): void => {
     return;
 
   imperativeDispatch(actions.setI18nConfig(config));
-};
-
-export const syncSignals = (signals: Record<string, number>): void => {
-  imperativeDispatch(actions.updateUnread(signals));
 };
