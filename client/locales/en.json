@@ -3948,7 +3948,7 @@
     "defaultMessage": "Name"
   },
   "course.experiencePoints.disbursement.DisbursementTable.pointsAwarded": {
-    "defaultMessage": "Experience Points Awarded"
+    "defaultMessage": "EXP Awarded"
   },
   "course.experiencePoints.disbursement.DisbursementTable.remove": {
     "defaultMessage": "Remove value for all students"
@@ -3999,7 +3999,7 @@
     "defaultMessage": "Name"
   },
   "course.experiencePoints.disbursement.ForumDisbursementTable.pointsAwarded": {
-    "defaultMessage": "Experience Points Awarded"
+    "defaultMessage": "EXP Awarded"
   },
   "course.experiencePoints.disbursement.ForumDisbursementTable.postCount": {
     "defaultMessage": "Post Count"
@@ -6888,7 +6888,7 @@
     "defaultMessage": "Enrolled At"
   },
   "lib.translations.table.column.experiencePointsAwarded": {
-    "defaultMessage": "Experience Points Awarded"
+    "defaultMessage": "EXP Awarded"
   },
   "lib.translations.table.column.groups": {
     "defaultMessage": "Group(s)"

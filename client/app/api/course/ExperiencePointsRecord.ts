@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import {
-  AllExperiencePointsRecords,
   ExperiencePointsRecordListData,
+  ExperiencePointsRecords,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
 import { JobSubmitted } from 'types/jobs';
@@ -17,9 +17,9 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
    * Fetches all experience points records from all user
    */
   indexAll(
-    studentId: number | null,
+    studentId?: number,
     pageNum: number = 1,
-  ): Promise<AxiosResponse<AllExperiencePointsRecords>> {
+  ): Promise<AxiosResponse<ExperiencePointsRecords>> {
     return this.client.get(`${this.#urlPrefix}/experience_points_records`, {
       params: { 'filter[page_num]': pageNum, 'filter[student_id]': studentId },
     });
@@ -31,13 +31,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   index(
     userId: number,
     pageNum: number = 1,
-  ): Promise<
-    AxiosResponse<{
-      courseUserName: string;
-      rowCount: number;
-      experiencePointRecords: ExperiencePointsRecordListData[];
-    }>
-  > {
+  ): Promise<AxiosResponse<ExperiencePointsRecords>> {
     return this.client.get(
       `${
         this.#urlPrefix
@@ -45,7 +39,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
     );
   }
 
-  download(studentId: number | null): Promise<AxiosResponse<JobSubmitted>> {
+  download(studentId?: number): Promise<AxiosResponse<JobSubmitted>> {
     return this.client.get(`${this.#urlPrefix}/download_experience_points`, {
       params: { 'filter[student_id]': studentId },
     });

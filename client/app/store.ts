@@ -27,6 +27,7 @@ import commentsReducer from './bundles/course/discussion/topics/store';
 import duplicationsReducer from './bundles/course/duplication/store';
 import enrolRequestsReducer from './bundles/course/enrol-requests/store';
 import disbursementReducer from './bundles/course/experience-points/disbursement/store';
+import experiencePointsReducer from './bundles/course/experience-points/store';
 import forumsReducer from './bundles/course/forum/store';
 import groupsReducer from './bundles/course/group/store';
 import leaderboardReducer from './bundles/course/leaderboard/store';
@@ -59,6 +60,7 @@ const rootReducer = combineReducers({
   courses: coursesReducer,
   disbursement: disbursementReducer,
   duplication: duplicationsReducer,
+  experiencePoints: experiencePointsReducer,
   enrolRequests: enrolRequestsReducer,
   folders: foldersReducer,
   forums: forumsReducer,

@@ -5,15 +5,14 @@ import {
   ExperiencePointsRowData,
 } from 'types/course/experiencePointsRecords';
 
+import {
+  deleteExperiencePointsRecord,
+  updateExperiencePointsRecord,
+} from 'course/experience-points/operations';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import SaveButton from 'lib/components/core/buttons/SaveButton';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
-
-import {
-  deleteExperiencePointsRecord,
-  updateExperiencePointsRecord,
-} from '../../operations';
 
 interface Props extends WrappedComponentProps {
   permissions: ExperiencePointsRecordPermissions;

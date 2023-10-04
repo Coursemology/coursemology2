@@ -1,25 +1,140 @@
-import { AllExperiencePointsRecords } from 'types/course/experiencePointsRecords';
-import { JobSubmitted } from 'types/jobs';
+import { defineMessages } from 'react-intl';
+import { AxiosError } from 'axios';
+import { AppDispatch, Operation } from 'store';
+import {
+  ExperiencePointsRowData,
+  UpdateExperiencePointsRecordPatchData,
+} from 'types/course/experiencePointsRecords';
+import { JobCompleted, JobErrored } from 'types/jobs';
 
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
+import pollJob from 'lib/helpers/jobHelpers';
 
-export type ExperiencePointsData = Promise<AllExperiencePointsRecords>;
+import { actions } from './store';
+import {
+  DeleteExperiencePointsRecordAction,
+  UpdateExperiencePointsRecordAction,
+} from './types';
 
-export const fetchAllExperiencePointsRecord = async (
-  studentId: number | null,
-  pageNum: number = 1,
-): ExperiencePointsData => {
-  const response = await CourseAPI.experiencePointsRecord.indexAll(
-    studentId,
-    pageNum,
-  );
-  return response.data;
+const DOWNLOAD_JOB_POLL_INTERVAL_MS = 2000;
+
+const translations = defineMessages({
+  downloadRequestSuccess: {
+    id: 'course.experiencePoints.downloadRequestSuccess',
+    defaultMessage: 'Your request to download is successful',
+  },
+  downloadFailure: {
+    id: 'course.experiencePoints.downloadFailure',
+    defaultMessage: 'An error occurred while doing your request for download.',
+  },
+  downloadPending: {
+    id: 'course.experiencePoints.downloadPending',
+    defaultMessage:
+      'Please wait as your request to download is being processed.',
+  },
+});
+
+const formatUpdateExperiencePointsRecord = (
+  data: ExperiencePointsRowData,
+): UpdateExperiencePointsRecordPatchData => {
+  return {
+    experience_points_record: {
+      reason: data.reason ? data.reason.trim() : data.reason,
+      points_awarded: parseInt(data.pointsAwarded.toString(), 10),
+    },
+  };
 };
 
-export const downloadExperiencePoints = async (
-  studentId: number | null,
-): Promise<JobSubmitted> => {
-  const response = await CourseAPI.experiencePointsRecord.download(studentId);
+export function fetchAllExperiencePointsRecord(
+  studentId?: number,
+  pageNum: number = 1,
+): Operation {
+  return async (dispatch) =>
+    CourseAPI.experiencePointsRecord
+      .indexAll(studentId, pageNum)
+      .then((response) => {
+        const data = response.data;
+        dispatch(
+          actions.saveExperiencePointsRecordList(
+            data.rowCount,
+            data.records,
+            data.filters,
+            undefined,
+          ),
+        );
+      });
+}
 
-  return response.data;
+export function fetchUserExperiencePointsRecord(
+  studentId: number,
+  pageNum: number = 1,
+): Operation {
+  return async (dispatch) =>
+    CourseAPI.experiencePointsRecord
+      .index(studentId, pageNum)
+      .then((response) => {
+        const data = response.data;
+        dispatch(
+          actions.saveExperiencePointsRecordList(
+            data.rowCount,
+            data.records,
+            undefined,
+            data.studentName,
+          ),
+        );
+      });
+}
+
+export function updateExperiencePointsRecord(
+  data: ExperiencePointsRowData,
+): Operation<UpdateExperiencePointsRecordAction> {
+  const params: UpdateExperiencePointsRecordPatchData =
+    formatUpdateExperiencePointsRecord(data);
+
+  return async (dispatch) =>
+    CourseAPI.experiencePointsRecord
+      .update(params, data.id)
+      .then((response) =>
+        dispatch(actions.updateExperiencePointsRecord(response.data)),
+      );
+}
+
+export function deleteExperiencePointsRecord(
+  recordId: number,
+): Operation<DeleteExperiencePointsRecordAction> {
+  return async (dispatch) =>
+    CourseAPI.experiencePointsRecord
+      .delete(recordId)
+      .then(() => dispatch(actions.deleteExperiencePointsRecord(recordId)));
+}
+
+export const downloadExperiencePoints = (
+  dispatch: AppDispatch,
+  studentId?: number,
+): void => {
+  const handleSuccess = (successData: JobCompleted): void => {
+    window.location.href = successData.redirectUrl!;
+    dispatch(actions.downloadExperiencePointsSuccess);
+    dispatch(setNotification(translations.downloadRequestSuccess));
+  };
+
+  const handleFailure = (error: JobErrored | AxiosError): void => {
+    const message = error?.message || translations.downloadFailure;
+    dispatch(actions.downloadExperiencePointsFailure);
+    dispatch(setNotification(message));
+  };
+
+  CourseAPI.experiencePointsRecord
+    .download(studentId)
+    .then((response) => {
+      dispatch(setNotification(translations.downloadPending));
+      pollJob(
+        response.data.jobUrl,
+        handleSuccess,
+        handleFailure,
+        DOWNLOAD_JOB_POLL_INTERVAL_MS,
+      );
+    })
+    .catch(handleFailure);
 };

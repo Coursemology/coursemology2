@@ -135,7 +135,7 @@ Rails.application.routes.draw do
     resources :courses, except: [:new, :edit, :update] do
       get 'sidebar', on: :member
 
-      get 'experience_points_records' => 'experience_points_records#index'
+      get 'experience_points_records' => 'experience_points_records#read_all_exp'
       get 'download_experience_points' => 'experience_points_records#download'
 
       namespace :admin do

@@ -1,12 +1,21 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Autocomplete, Button, Grid, Stack, TextField } from '@mui/material';
+import { defineMessages } from 'react-intl';
+import { Download } from '@mui/icons-material';
+import {
+  Autocomplete,
+  Grid,
+  IconButton,
+  TextField,
+  Tooltip,
+} from '@mui/material';
 import {
   ExperiencePointsFilterData,
   ExperiencePointsNameFilterData,
 } from 'types/course/experiencePointsRecords';
 
-interface Props extends WrappedComponentProps {
+import useTranslation from 'lib/hooks/useTranslation';
+
+interface Props {
   filter: ExperiencePointsFilterData;
   selectedFilter: {
     name: ExperiencePointsNameFilterData | null;
@@ -17,6 +26,7 @@ interface Props extends WrappedComponentProps {
     }>
   >;
   setPageNum: Dispatch<SetStateAction<number>>;
+  onClick: () => void;
 }
 
 const translations = defineMessages({
@@ -24,9 +34,9 @@ const translations = defineMessages({
     id: 'course.experiencePoints.filterByNameButton',
     defaultMessage: 'Filter by Name',
   },
-  filterByReasonButton: {
-    id: 'course.experiencePoints.filterByReasonButton',
-    defaultMessage: 'Filter by Reason',
+  downloadCsvButton: {
+    id: 'course.experiencePoints.downloadCsvButton',
+    defaultMessage: 'Download as CSV',
   },
   applyFilterButton: {
     id: 'course.experiencePoints.applyFilterButton',
@@ -38,12 +48,14 @@ const translations = defineMessages({
   },
 });
 
-const ExperiencePointsFilter: FC<Props> = (props) => {
-  const { intl, filter, selectedFilter, setSelectedFilter, setPageNum } = props;
-  const disableButton = Object.values(selectedFilter).every((x) => x === null);
+const ExperiencePointsFilterDownload: FC<Props> = (props) => {
+  const { filter, selectedFilter, setSelectedFilter, setPageNum, onClick } =
+    props;
+
+  const { t } = useTranslation();
 
   return (
-    <Stack className="experience-points-filter" spacing={1}>
+    <div className="flex w-full justify-between">
       <Grid columns={{ xs: 1, md: 3 }} container>
         <Grid item paddingBottom={1} paddingRight={1} xs={1}>
           <Autocomplete
@@ -63,32 +75,27 @@ const ExperiencePointsFilter: FC<Props> = (props) => {
               return (
                 <TextField
                   {...params}
-                  label={intl.formatMessage(translations.filterByNameButton)}
+                  label={t(translations.filterByNameButton)}
+                  sx={{ width: 500 }}
+                  variant="filled"
                 />
               );
             }}
+            size="small"
             value={selectedFilter.name}
           />
         </Grid>
       </Grid>
-      <Grid container>
-        <Button
-          color="secondary"
-          disabled={disableButton}
-          onClick={(): void => {
-            setPageNum(1);
-            setSelectedFilter({
-              name: null,
-            });
-          }}
-          style={{ marginLeft: 10 }}
-          variant="contained"
-        >
-          {intl.formatMessage(translations.clearFilterButton)}
-        </Button>
+
+      <Grid className="justify-end items-center" container>
+        <Tooltip title={t(translations.downloadCsvButton)}>
+          <IconButton onClick={onClick} size="small">
+            <Download />
+          </IconButton>
+        </Tooltip>
       </Grid>
-    </Stack>
+    </div>
   );
 };
 
-export default injectIntl(ExperiencePointsFilter);
+export default ExperiencePointsFilterDownload;

@@ -39,7 +39,8 @@ module Course::CourseAbilityComponent
   end
 
   def allow_staff_read_all_experience_points
-    can :read_all_exp_points, Course, id: course.id
+    can :read_all_exp, Course, id: course.id
+    can :download, Course, id: course.id
   end
 
   def define_teaching_staff_course_permissions

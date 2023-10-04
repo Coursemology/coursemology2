@@ -2,8 +2,8 @@ import { FC, memo, useEffect, useState } from 'react';
 import { TableCell, TableRow, TextField } from '@mui/material';
 import equal from 'fast-deep-equal';
 import {
-  ExperiencePointsRecordMiniEntity,
   ExperiencePointsRowData,
+  UserExperiencePointsRecordMiniEntity,
 } from 'types/course/experiencePointsRecords';
 
 import Link from 'lib/components/core/Link';
@@ -13,7 +13,7 @@ import PointManagementButtons from '../buttons/PointManagementButtons';
 
 interface Props {
   id: number;
-  record: ExperiencePointsRecordMiniEntity;
+  record: UserExperiencePointsRecordMiniEntity;
 }
 
 const onlyNumberInput = (evt): void => {

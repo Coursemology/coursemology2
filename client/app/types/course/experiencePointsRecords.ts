@@ -9,15 +9,22 @@ export type ExperiencePointsRecordPermissions = Permissions<
   'canUpdate' | 'canDestroy'
 >;
 
-export interface ExperiencePointsRecordSettings {
+export interface UserExperiencePointsRecordSettings {
   courseUserName: string;
   rowCount: number;
 }
 
-export interface AllExperiencePointsRecords {
+export interface ExperiencePointsRecordSettings {
   rowCount: number;
-  experiencePointRecords: AllExperiencePointsRecordListData[];
-  filter: ExperiencePointsFilterData;
+  filters: ExperiencePointsFilterData;
+  studentName: string;
+}
+
+export interface ExperiencePointsRecords {
+  rowCount: number;
+  records: ExperiencePointsRecordListData[];
+  filters: ExperiencePointsFilterData;
+  studentName: string;
 }
 
 export interface PointsReason {
@@ -26,7 +33,7 @@ export interface PointsReason {
   link: string;
 }
 
-export interface ExperiencePointsRecordListData {
+export interface UserExperiencePointsRecordListData {
   id: number;
   updater: CourseUserBasicListData;
   reason: PointsReason;
@@ -35,8 +42,18 @@ export interface ExperiencePointsRecordListData {
   permissions: ExperiencePointsRecordPermissions;
 }
 
+export interface ExperiencePointsRecordListData {
+  id: number;
+  student: CourseUserBasicListData;
+  updater: CourseUserBasicListData;
+  reason: PointsReason;
+  pointsAwarded: number;
+  updatedAt: Date;
+  permissions: ExperiencePointsRecordPermissions;
+}
+
 export interface AllExperiencePointsRecordListData
-  extends ExperiencePointsRecordListData {
+  extends UserExperiencePointsRecordListData {
   courseUserName: string;
   userExperienceUrl?: string;
 }
@@ -46,7 +63,7 @@ export interface AllExperiencePointsRecordListData
  * received backend data.
  */
 
-export interface ExperiencePointsRecordMiniEntity {
+export interface UserExperiencePointsRecordMiniEntity {
   id: number;
   updater: CourseUserBasicMiniEntity;
   reason: PointsReason;
@@ -55,8 +72,18 @@ export interface ExperiencePointsRecordMiniEntity {
   permissions: ExperiencePointsRecordPermissions;
 }
 
+export interface ExperiencePointsRecordMiniEntity {
+  id: number;
+  student: CourseUserBasicMiniEntity;
+  updater: CourseUserBasicMiniEntity;
+  reason: PointsReason;
+  pointsAwarded: number;
+  updatedAt: Date;
+  permissions: ExperiencePointsRecordPermissions;
+}
+
 export interface AllExperiencePointsRecordMiniEntity
-  extends ExperiencePointsRecordMiniEntity {
+  extends UserExperiencePointsRecordMiniEntity {
   courseUserName: string;
   userExperienceUrl?: string;
 }

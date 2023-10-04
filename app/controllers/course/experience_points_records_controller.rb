@@ -1,39 +1,28 @@
 # frozen_string_literal: true
 class Course::ExperiencePointsRecordsController < Course::ComponentController
-  load_resource :course_user, through: :course, id_param: :user_id, except: [:index, :download]
+  load_resource :course_user, through: :course, id_param: :user_id, except: [:read_all_exp, :download]
   load_and_authorize_resource :experience_points_record, through: :course_user,
                                                          class: Course::ExperiencePointsRecord.name,
-                                                         except: [:index, :download]
+                                                         except: [:read_all_exp, :download]
 
-  def index
-    authorize!(:read_all_exp_points, @course)
-    respond_to do |format|
-      format.json do
-        if filter_and_page_params[:student_id].present?
-          @experience_points_records =
-            Course::ExperiencePointsRecord.where(course_user_id: filter_and_page_params[:student_id])
-        else
-          @experience_points_records =
-            Course::ExperiencePointsRecord.where(course_user_id: @course.course_users.pluck(:id))
-        end
-        preload_exp_points_updater
-        preload_and_count_experience_points
-      end
+  def read_all_exp
+    if filter_and_page_params[:student_id].present?
+      @experience_points_records =
+        Course::ExperiencePointsRecord.where(course_user_id: filter_and_page_params[:student_id])
+    else
+      @experience_points_records =
+        Course::ExperiencePointsRecord.where(course_user_id: @course.course_users.pluck(:id))
     end
+    preload_exp_points_updater
+    preload_and_count_experience_points
   end
 
   def show_user_exp
-    respond_to do |format|
-      format.json do
-        preload_exp_points_updater
-        preload_and_count_experience_points
-      end
-    end
+    preload_exp_points_updater
+    preload_and_count_experience_points
   end
 
   def download
-    authorize!(:read_all_exp_points, @course)
-
     @experience_points_records = fetch_experience_points_records
     experience_points_records_ids = @experience_points_records.active.pluck(:id)
 
