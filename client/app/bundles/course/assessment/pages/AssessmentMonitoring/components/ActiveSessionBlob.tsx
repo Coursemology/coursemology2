@@ -88,10 +88,7 @@ const ListeningSessionBlob = (props: ActiveSessionBlobProps): JSX.Element => {
 };
 
 const ExpiredSessionBlob = (props: ActiveSessionBlobProps): JSX.Element => (
-  <BaseActiveSessionBlob
-    {...props}
-    className="border border-solid border-neutral-200 bg-neutral-100"
-  />
+  <BaseActiveSessionBlob {...props} className="bg-neutral-200" />
 );
 
 const StoppedSessionBlob = (props: ActiveSessionBlobProps): JSX.Element => (
