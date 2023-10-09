@@ -39,10 +39,10 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
       setGroups(data.groups);
       setHasSecret(data.monitor.hasSecret);
       monitoring.initialize(data.monitor, data.snapshots);
-      monitoring.notifyConnectedAt(Date.now());
+      monitoring.notifyConnected();
     },
     disconnected: () => {
-      monitoring.notifyDisconnectedAt(Date.now());
+      monitoring.notifyDisconnected();
     },
     pulse: ({ userId, snapshot }) => {
       monitoring.refresh(userId, snapshot);
