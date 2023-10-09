@@ -1,4 +1,4 @@
-import { Chip, Typography } from '@mui/material';
+import { Chip, Tooltip, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
 import useTranslation from 'lib/hooks/useTranslation';
@@ -36,12 +36,14 @@ const HeartbeatDetailCard = (props: HeartbeatDetailCardProps): JSX.Element => {
           </Typography>
 
           {heartbeat.stale ? (
-            <Chip
-              className="text-neutral-400 border-neutral-400"
-              label={t(translations.stale)}
-              size="small"
-              variant="outlined"
-            />
+            <Tooltip title={t(translations.staleHint)}>
+              <Chip
+                className="text-neutral-400 border-neutral-400 cursor-pointer select-none"
+                label={t(translations.stale)}
+                size="small"
+                variant="outlined"
+              />
+            </Tooltip>
           ) : (
             <Chip
               className="text-neutral-800 border-neutral-800"

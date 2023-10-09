@@ -894,6 +894,12 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.stale',
     defaultMessage: 'Stale',
   },
+  staleHint: {
+    id: 'course.assessment.monitoring.staleHint',
+    defaultMessage:
+      "This heartbeat wasn't immediately received by the server because the examinee's browser was temporarily " +
+      'unreachable. It was cached in the browser, and sent to the server when the browser was reachable again.',
+  },
   live: {
     id: 'course.assessment.monitoring.live',
     defaultMessage: 'Live',
