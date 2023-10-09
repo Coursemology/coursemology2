@@ -13,8 +13,8 @@ import translations from '../../../translations';
 
 interface UseMonitoringHook {
   initialize: (monitor: MonitoringMonitorData, snapshots: Snapshots) => void;
-  notifyConnectedAt: (timestamp: number) => void;
-  notifyDisconnectedAt: (timestamp: number) => void;
+  notifyConnected: () => void;
+  notifyDisconnected: () => void;
   notifyMissingAt: (timestamp: number, userId: number, name: string) => void;
   notifyAliveAt: (timestamp: number, userId: number, name: string) => void;
   refresh: (userId: number, data: Partial<Snapshot>) => void;
@@ -51,27 +51,11 @@ const useMonitoring = (): UseMonitoringHook => {
     filter: (userIds): void => {
       dispatch(actions.filter(userIds));
     },
-    notifyConnectedAt: (timestamp): void => {
+    notifyConnected: (): void => {
       dispatch(actions.setConnected(true));
-
-      dispatch(
-        actions.pushHistory({
-          message: t(translations.connectedToLiveMonitoringChannel),
-          type: 'info',
-          timestamp,
-        }),
-      );
     },
-    notifyDisconnectedAt: (timestamp): void => {
+    notifyDisconnected: (): void => {
       dispatch(actions.setConnected(false));
-
-      dispatch(
-        actions.pushHistory({
-          message: t(translations.disconnectedFromLiveMonitoringChannel),
-          type: 'info',
-          timestamp,
-        }),
-      );
     },
     notifyMissingAt: (timestamp, userId, name): void => {
       dispatch(

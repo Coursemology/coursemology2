@@ -916,14 +916,6 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.detailsOfNHeartbeats',
     defaultMessage: 'Last {n} heartbeats',
   },
-  connectedToLiveMonitoringChannel: {
-    id: 'course.assessment.monitoring.connectedToLiveMonitoringChannel',
-    defaultMessage: 'Connected to the live monitoring channel',
-  },
-  disconnectedFromLiveMonitoringChannel: {
-    id: 'course.assessment.monitoring.disconnectedFromLiveMonitoringChannel',
-    defaultMessage: 'Disconnected from the live monitoring channel',
-  },
   userHeartbeatNotReceivedInTime: {
     id: 'course.assessment.monitoring.userHeartbeatNotReceivedInTime',
     defaultMessage: "{name}'s heartbeat wasn't received in time.",
