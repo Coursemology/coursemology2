@@ -29,7 +29,7 @@ const SessionBlobLegend = (props: SessionBlobLegendProps): JSX.Element => {
           </div>
 
           <div className="flex space-x-2">
-            <SessionBlob className="border border-solid border-neutral-200 bg-neutral-100" />
+            <SessionBlob className="bg-neutral-200" />
 
             <Typography className="mt-1" variant="body2">
               {t(translations.expiredSession)}
