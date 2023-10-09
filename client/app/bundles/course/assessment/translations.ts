@@ -904,6 +904,10 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.live',
     defaultMessage: 'Live',
   },
+  liveHint: {
+    id: 'course.assessment.monitoring.liveHint',
+    defaultMessage: 'This heartbeat was immediately received by the server.',
+  },
   ipAddress: {
     id: 'course.assessment.monitoring.ipAddress',
     defaultMessage: 'IP Address',
@@ -970,11 +974,11 @@ const translations = defineMessages({
   },
   validHeartbeat: {
     id: 'course.assessment.monitoring.validHeartbeat',
-    defaultMessage: 'Contains SUS',
+    defaultMessage: 'Valid UA',
   },
   invalidHeartbeat: {
     id: 'course.assessment.monitoring.invalidHeartbeat',
-    defaultMessage: 'Does not contain SUS',
+    defaultMessage: 'Invalid UA',
   },
   invalidBrowser: {
     id: 'course.assessment.monitoring.invalidBrowser',

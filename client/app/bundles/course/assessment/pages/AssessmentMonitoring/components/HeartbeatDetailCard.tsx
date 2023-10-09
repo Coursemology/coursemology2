@@ -45,12 +45,14 @@ const HeartbeatDetailCard = (props: HeartbeatDetailCardProps): JSX.Element => {
               />
             </Tooltip>
           ) : (
-            <Chip
-              className="text-neutral-800 border-neutral-800"
-              label={t(translations.live)}
-              size="small"
-              variant="outlined"
-            />
+            <Tooltip title={t(translations.liveHint)}>
+              <Chip
+                className="text-neutral-800 border-neutral-800 cursor-pointer select-none"
+                label={t(translations.live)}
+                size="small"
+                variant="outlined"
+              />
+            </Tooltip>
           )}
         </span>
 
