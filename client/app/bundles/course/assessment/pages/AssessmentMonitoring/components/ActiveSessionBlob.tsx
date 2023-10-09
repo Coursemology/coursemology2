@@ -94,7 +94,7 @@ const ExpiredSessionBlob = (props: ActiveSessionBlobProps): JSX.Element => (
 const StoppedSessionBlob = (props: ActiveSessionBlobProps): JSX.Element => (
   <BaseActiveSessionBlob
     {...props}
-    className="bg-neutral-200 flex items-center justify-center"
+    className="bg-sky-200 flex items-center justify-center"
   >
     <Remove color="disabled" fontSize="small" />
   </BaseActiveSessionBlob>
