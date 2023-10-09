@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { TableBody, TableCell, TableHead } from '@mui/material';
 
 import { setNotification } from 'lib/actions';
@@ -9,14 +9,18 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
-import { fetchAllExperiencePointsRecord } from '../operations';
+import {
+  fetchAllExperiencePointsRecord,
+  fetchUserExperiencePointsRecord,
+} from '../operations';
 import { getAllExpPointsRecordsEntities } from '../selectors';
 
 import ExperiencePointsTableRow from './ExperiencePointsTableRow';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   studentId?: number;
   pageNum: number;
+  isStudentPage?: boolean;
 }
 
 const translations = defineMessages({
@@ -27,7 +31,7 @@ const translations = defineMessages({
 });
 
 const ExperiencePointsTable: FC<Props> = (props) => {
-  const { intl, studentId, pageNum } = props;
+  const { studentId, pageNum, isStudentPage } = props;
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useAppDispatch();
 
@@ -35,9 +39,13 @@ const ExperiencePointsTable: FC<Props> = (props) => {
 
   const records = useAppSelector(getAllExpPointsRecordsEntities);
 
+  const fetchExperiencePoints = isStudentPage
+    ? fetchUserExperiencePointsRecord(studentId!, pageNum)
+    : fetchAllExperiencePointsRecord(studentId, pageNum);
+
   useEffect(() => {
     setIsLoading(true);
-    dispatch(fetchAllExperiencePointsRecord(studentId, pageNum))
+    dispatch(fetchExperiencePoints)
       .catch(() =>
         dispatch(setNotification(t(translations.fetchRecordsFailure))),
       )
@@ -53,22 +61,26 @@ const ExperiencePointsTable: FC<Props> = (props) => {
   return (
     <TableContainer dense variant="bare">
       <TableHead>
-        <TableCell>{intl.formatMessage(tableTranslations.updatedAt)}</TableCell>
-        <TableCell>{intl.formatMessage(tableTranslations.name)}</TableCell>
-        <TableCell>{intl.formatMessage(tableTranslations.updater)}</TableCell>
-        <TableCell>{intl.formatMessage(tableTranslations.reason)}</TableCell>
-        <TableCell className="max-md:!hidden text-right">
-          {intl.formatMessage(tableTranslations.experiencePointsAwarded)}
-        </TableCell>
+        <TableCell>{t(tableTranslations.updatedAt)}</TableCell>
+        {!isStudentPage && <TableCell>{t(tableTranslations.name)}</TableCell>}
+        <TableCell>{t(tableTranslations.updater)}</TableCell>
+        <TableCell>{t(tableTranslations.reason)}</TableCell>
+        <TableCell>{t(tableTranslations.experiencePointsAwarded)}</TableCell>
+        <TableCell />
       </TableHead>
 
       <TableBody>
         {records.map((record) => (
-          <ExperiencePointsTableRow key={record.id} record={record} />
+          <ExperiencePointsTableRow
+            key={record.id}
+            id={record.id}
+            isStudentPage={isStudentPage}
+            record={record}
+          />
         ))}
       </TableBody>
     </TableContainer>
   );
 };
 
-export default injectIntl(ExperiencePointsTable);
+export default ExperiencePointsTable;

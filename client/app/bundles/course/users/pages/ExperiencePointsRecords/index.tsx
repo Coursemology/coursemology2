@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { defineMessages } from 'react-intl';
 
+import ExperiencePointsTable from 'course/experience-points/components/ExperiencePointsTable';
 import { getExpPointsRecordsSettings } from 'course/experience-points/selectors';
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import Page from 'lib/components/core/layouts/Page';
@@ -8,8 +9,6 @@ import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId, getCourseUserId } from 'lib/helpers/url-helpers';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import ExperiencePointsTable from '../../components/tables/ExperiencePointsTable';
 
 const ROWS_PER_PAGE = 25 as const;
 
@@ -52,7 +51,11 @@ const ExperiencePointsRecords = (): JSX.Element => {
         rowsPerPage={ROWS_PER_PAGE}
       />
 
-      <ExperiencePointsTable page={pageNum} />
+      <ExperiencePointsTable
+        isStudentPage
+        pageNum={pageNum}
+        studentId={+userId!}
+      />
     </Page>
   );
 };

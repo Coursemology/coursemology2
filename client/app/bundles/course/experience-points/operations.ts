@@ -88,13 +88,14 @@ export function fetchUserExperiencePointsRecord(
 
 export function updateExperiencePointsRecord(
   data: ExperiencePointsRowData,
+  studentId?: number,
 ): Operation<UpdateExperiencePointsRecordAction> {
   const params: UpdateExperiencePointsRecordPatchData =
     formatUpdateExperiencePointsRecord(data);
 
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord
-      .update(params, data.id)
+      .update(params, data.id, studentId)
       .then((response) =>
         dispatch(actions.updateExperiencePointsRecord(response.data)),
       );
@@ -102,10 +103,11 @@ export function updateExperiencePointsRecord(
 
 export function deleteExperiencePointsRecord(
   recordId: number,
+  studentId?: number,
 ): Operation<DeleteExperiencePointsRecordAction> {
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord
-      .delete(recordId)
+      .delete(recordId, studentId)
       .then(() => dispatch(actions.deleteExperiencePointsRecord(recordId)));
 }
 

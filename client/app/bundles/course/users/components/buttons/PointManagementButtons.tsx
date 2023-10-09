@@ -20,6 +20,7 @@ interface Props extends WrappedComponentProps {
   isDirty: boolean;
   isManuallyAwarded: boolean;
   handleSave: (newData: ExperiencePointsRowData) => void;
+  studentId?: number;
 }
 
 const translations = defineMessages({
@@ -47,15 +48,22 @@ const translations = defineMessages({
 });
 
 const PointManagementButtons: FC<Props> = (props) => {
-  const { intl, permissions, data, isDirty, isManuallyAwarded, handleSave } =
-    props;
+  const {
+    intl,
+    permissions,
+    data,
+    isDirty,
+    isManuallyAwarded,
+    handleSave,
+    studentId,
+  } = props;
   const dispatch = useAppDispatch();
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onSave = (): void => {
     setIsSaving(true);
-    dispatch(updateExperiencePointsRecord(data))
+    dispatch(updateExperiencePointsRecord(data, studentId))
       .then((response) => {
         const experiencePointsRowData = {
           id: response.data.id,
@@ -80,7 +88,7 @@ const PointManagementButtons: FC<Props> = (props) => {
 
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
-    return dispatch(deleteExperiencePointsRecord(data.id))
+    return dispatch(deleteExperiencePointsRecord(data.id, studentId))
       .then(() => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })

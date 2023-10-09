@@ -9,11 +9,6 @@ export type ExperiencePointsRecordPermissions = Permissions<
   'canUpdate' | 'canDestroy'
 >;
 
-export interface UserExperiencePointsRecordSettings {
-  courseUserName: string;
-  rowCount: number;
-}
-
 export interface ExperiencePointsRecordSettings {
   rowCount: number;
   filters: ExperiencePointsFilterData;
@@ -33,15 +28,6 @@ export interface PointsReason {
   link: string;
 }
 
-export interface UserExperiencePointsRecordListData {
-  id: number;
-  updater: CourseUserBasicListData;
-  reason: PointsReason;
-  pointsAwarded: number;
-  updatedAt: Date;
-  permissions: ExperiencePointsRecordPermissions;
-}
-
 export interface ExperiencePointsRecordListData {
   id: number;
   student: CourseUserBasicListData;
@@ -52,26 +38,10 @@ export interface ExperiencePointsRecordListData {
   permissions: ExperiencePointsRecordPermissions;
 }
 
-export interface AllExperiencePointsRecordListData
-  extends UserExperiencePointsRecordListData {
-  courseUserName: string;
-  userExperienceUrl?: string;
-}
-
 /**
  * Data types for experience points record data used in frontend that are converted from
  * received backend data.
  */
-
-export interface UserExperiencePointsRecordMiniEntity {
-  id: number;
-  updater: CourseUserBasicMiniEntity;
-  reason: PointsReason;
-  pointsAwarded: number;
-  updatedAt: Date;
-  permissions: ExperiencePointsRecordPermissions;
-}
-
 export interface ExperiencePointsRecordMiniEntity {
   id: number;
   student: CourseUserBasicMiniEntity;
@@ -80,12 +50,6 @@ export interface ExperiencePointsRecordMiniEntity {
   pointsAwarded: number;
   updatedAt: Date;
   permissions: ExperiencePointsRecordPermissions;
-}
-
-export interface AllExperiencePointsRecordMiniEntity
-  extends UserExperiencePointsRecordMiniEntity {
-  courseUserName: string;
-  userExperienceUrl?: string;
 }
 
 /**
