@@ -37,7 +37,7 @@ const SessionBlobLegend = (props: SessionBlobLegendProps): JSX.Element => {
           </div>
 
           <div className="flex space-x-2">
-            <SessionBlob className="bg-neutral-200 flex items-center justify-center">
+            <SessionBlob className="bg-sky-200 flex items-center justify-center">
               <Remove color="disabled" fontSize="small" />
             </SessionBlob>
 
