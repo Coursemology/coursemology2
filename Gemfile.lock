@@ -305,8 +305,8 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    lograge-sql (2.1.0)
-      activerecord (>= 5, < 7.1)
+    lograge-sql (2.2.0)
+      activerecord (>= 5, < 7.2)
       lograge (~> 0.11)
     lol_dba (2.4.0)
       actionpack
@@ -387,7 +387,7 @@ GEM
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
       activesupport (>= 5.0.1.rc1)
-    rails-dom-testing (2.1.1)
+    rails-dom-testing (2.2.0)
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
