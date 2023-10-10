@@ -638,6 +638,7 @@ DEPENDENCIES
   rspec-rails
   rspec-retry
   rspec_junit_formatter
+  rubocop (~> 1.56)
   rubocop-rails
   ruby-oembed
   rubyzip

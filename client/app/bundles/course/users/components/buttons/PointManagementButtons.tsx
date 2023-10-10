@@ -21,6 +21,7 @@ interface Props extends WrappedComponentProps {
   isManuallyAwarded: boolean;
   handleSave: (newData: ExperiencePointsRowData) => void;
   studentId?: number;
+  isErrorInput: boolean;
 }
 
 const translations = defineMessages({
@@ -56,6 +57,7 @@ const PointManagementButtons: FC<Props> = (props) => {
     isManuallyAwarded,
     handleSave,
     studentId,
+    isErrorInput,
   } = props;
   const dispatch = useAppDispatch();
   const [isSaving, setIsSaving] = useState(false);
@@ -110,7 +112,14 @@ const PointManagementButtons: FC<Props> = (props) => {
       {permissions.canUpdate && (
         <SaveButton
           className={`record-save-${data.id}`}
-          disabled={isSaving || isDeleting || !isDirty}
+          disabled={
+            isSaving ||
+            isDeleting ||
+            !isDirty ||
+            isErrorInput ||
+            Number.isNaN(Number(data.pointsAwarded)) ||
+            !data.pointsAwarded
+          }
           onClick={onSave}
           tooltip="Save Changes"
         />

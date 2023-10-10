@@ -14,20 +14,13 @@ interface Props {
   id: number;
   isStudentPage?: boolean;
   record: ExperiencePointsRecordMiniEntity;
+  maxExp?: number;
 }
 
-const onlyNumberInput = (evt): void => {
-  if (evt.which === 8) {
-    return;
-  }
-  if (evt.which < 48 || evt.which > 57) {
-    evt.preventDefault();
-  }
-};
-
 const ExperiencePointsTableRow: FC<Props> = (props) => {
-  const { record, id, isStudentPage } = props;
+  const { record, id, isStudentPage, maxExp } = props;
   const [isDirty, setIsDirty] = useState(false);
+  const [errorHelperText, setErrorHelperText] = useState('');
   const [rowData, setRowData] = useState({
     id,
     reason: '',
@@ -59,21 +52,31 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
   };
 
   const onUpdatePoints = (value: string): void => {
-    if (!Number.isNaN(+value)) {
-      const newData: ExperiencePointsRowData = {
-        ...rowData,
-        pointsAwarded: +value,
-      };
-      setIsDirty(
-        !equal(newData, defaultRowData) && rowData.reason.trim().length > 0,
-      );
-      setRowData(newData);
-    }
+    const newData: ExperiencePointsRowData = {
+      ...rowData,
+      pointsAwarded:
+        Number.isNaN(Number(value)) || value === '' ? value : Number(value),
+    };
+
+    const defaultData: ExperiencePointsRowData = {
+      ...defaultRowData,
+      pointsAwarded: Number(defaultRowData.pointsAwarded),
+    };
+    setIsDirty(
+      !equal(newData, defaultData) && rowData.reason.trim().length > 0,
+    );
+    setRowData(newData);
   };
 
   const handleSave = (newData: ExperiencePointsRowData): void => {
-    setDefaultRowData({ ...newData });
-    setIsDirty(false);
+    if (!Number.isNaN(Number(newData.pointsAwarded))) {
+      const updateData: ExperiencePointsRowData = {
+        ...newData,
+        pointsAwarded: Number(newData.pointsAwarded),
+      };
+      setDefaultRowData({ ...updateData });
+      setIsDirty(false);
+    }
   };
 
   const renderReason = (): JSX.Element | string => {
@@ -122,11 +125,29 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
         {record.permissions.canUpdate ? (
           <TextField
             key={`points-${record.id}`}
+            error={errorHelperText !== ''}
+            helperText={errorHelperText}
             id={`points-${record.id}`}
-            onChange={(e): void => onUpdatePoints(e.target.value)}
-            onKeyPress={onlyNumberInput}
-            type="number"
-            value={rowData.pointsAwarded.toString()}
+            onChange={(e): void => {
+              const inputValue = Number(e.target.value);
+              if (Number.isNaN(Number(inputValue))) {
+                setErrorHelperText('must be a number');
+              } else if (maxExp) {
+                if (Number(inputValue) < 0) {
+                  setErrorHelperText('must not be negative');
+                } else if (Number(inputValue) > maxExp) {
+                  setErrorHelperText(`must be at most ${maxExp}`);
+                } else {
+                  setErrorHelperText('');
+                }
+              } else {
+                setErrorHelperText('');
+              }
+              onUpdatePoints(e.target.value);
+            }}
+            placeholder={record.pointsAwarded?.toString() ?? 0}
+            type="string"
+            value={rowData.pointsAwarded}
             variant="standard"
           />
         ) : (
@@ -139,6 +160,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
           data={rowData}
           handleSave={handleSave}
           isDirty={isDirty}
+          isErrorInput={errorHelperText !== ''}
           isManuallyAwarded={record.reason.isManuallyAwarded}
           permissions={record.permissions}
           studentId={record.student.id}

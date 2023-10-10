@@ -205,3 +205,5 @@ gem 'rails-html-sanitizer', '>= 1.0.4'
 
 gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'
+
+gem 'rubocop', '~> 1.56'

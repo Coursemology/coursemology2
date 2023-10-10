@@ -12,12 +12,6 @@ export const UPDATE_EXPERIENCE_POINTS_RECORD =
   'course/experience_points/UPDATE_EXPERIENCE_POINTS_RECORD';
 export const DELETE_EXPERIENCE_POINTS_RECORD =
   'course/experience_points/DELETE_EXPERIENCE_POINTS_RECORD';
-export const DOWNLOAD_EXPERIENCE_POINTS_REQUEST =
-  'course/experience_points/DOWNLOAD_EXPERIENCE_POINTS_REQUEST';
-export const DOWNLOAD_EXPERIENCE_POINTS_SUCCESS =
-  'course/experience_points/DOWNLOAD_EXPERIENCE_POINTS_SUCCESS';
-export const DOWNLOAD_EXPERIENCE_POINTS_FAILURE =
-  'course/experience_points/DOWNLOAD_EXPERIENCE_POINTS_FAILURE';
 
 export interface SaveExperiencePointsRecordListAction {
   type: typeof SAVE_EXPERIENCE_POINTS_RECORD_LIST;
@@ -37,25 +31,10 @@ export interface DeleteExperiencePointsRecordAction {
   id: number;
 }
 
-export interface DownloadExperiencePointsRequestAction {
-  type: typeof DOWNLOAD_EXPERIENCE_POINTS_REQUEST;
-}
-
-export interface DownloadExperiencePointsSuccessAction {
-  type: typeof DOWNLOAD_EXPERIENCE_POINTS_SUCCESS;
-}
-
-export interface DownloadExperiencePointsFailureAction {
-  type: typeof DOWNLOAD_EXPERIENCE_POINTS_FAILURE;
-}
-
 export type ExperiencePointsActionType =
   | SaveExperiencePointsRecordListAction
   | UpdateExperiencePointsRecordAction
-  | DeleteExperiencePointsRecordAction
-  | DownloadExperiencePointsRequestAction
-  | DownloadExperiencePointsSuccessAction
-  | DownloadExperiencePointsFailureAction;
+  | DeleteExperiencePointsRecordAction;
 
 export interface ExperiencePointsState {
   records: EntityStore<ExperiencePointsRecordMiniEntity>;
