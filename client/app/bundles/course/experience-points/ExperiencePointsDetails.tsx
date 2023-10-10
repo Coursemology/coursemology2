@@ -16,6 +16,7 @@ const ExperiencePointsDetails = (): JSX.Element => {
   const dispatch = useAppDispatch();
 
   const [pageNum, setPageNum] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   // For filtering
   const [selectedFilter, setSelectedFilter] = useState<{
@@ -31,6 +32,15 @@ const ExperiencePointsDetails = (): JSX.Element => {
     downloadExperiencePoints(dispatch, studentFilterId);
   };
 
+  const pagination = (
+    <BackendPagination
+      handlePageChange={setPageNum}
+      pageNum={pageNum}
+      rowCount={settings.rowCount}
+      rowsPerPage={ROWS_PER_PAGE}
+    />
+  );
+
   return (
     <Page unpadded>
       <Page.PaddedSection>
@@ -43,14 +53,16 @@ const ExperiencePointsDetails = (): JSX.Element => {
         />
       </Page.PaddedSection>
 
-      <BackendPagination
-        handlePageChange={setPageNum}
+      {pagination}
+
+      <ExperiencePointsTable
+        isLoading={isLoading}
         pageNum={pageNum}
-        rowCount={settings.rowCount}
-        rowsPerPage={ROWS_PER_PAGE}
+        setIsLoading={setIsLoading}
+        studentId={studentFilterId}
       />
 
-      <ExperiencePointsTable pageNum={pageNum} studentId={studentFilterId} />
+      {!isLoading && pagination}
     </Page>
   );
 };

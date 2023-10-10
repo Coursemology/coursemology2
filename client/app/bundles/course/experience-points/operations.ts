@@ -117,13 +117,11 @@ export const downloadExperiencePoints = (
 ): void => {
   const handleSuccess = (successData: JobCompleted): void => {
     window.location.href = successData.redirectUrl!;
-    dispatch(actions.downloadExperiencePointsSuccess);
     dispatch(setNotification(translations.downloadRequestSuccess));
   };
 
   const handleFailure = (error: JobErrored | AxiosError): void => {
     const message = error?.message || translations.downloadFailure;
-    dispatch(actions.downloadExperiencePointsFailure);
     dispatch(setNotification(message));
   };
 

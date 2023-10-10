@@ -26,6 +26,7 @@ export interface PointsReason {
   isManuallyAwarded: boolean;
   text: string;
   link: string;
+  maxExp?: number;
 }
 
 export interface ExperiencePointsRecordListData {
@@ -59,7 +60,7 @@ export interface ExperiencePointsRecordMiniEntity {
 export interface ExperiencePointsRowData {
   id: number;
   reason: string;
-  pointsAwarded: number;
+  pointsAwarded: number | string;
 }
 
 /**

@@ -14,12 +14,6 @@ import {
 import {
   DELETE_EXPERIENCE_POINTS_RECORD,
   DeleteExperiencePointsRecordAction,
-  DOWNLOAD_EXPERIENCE_POINTS_FAILURE,
-  DOWNLOAD_EXPERIENCE_POINTS_REQUEST,
-  DOWNLOAD_EXPERIENCE_POINTS_SUCCESS,
-  DownloadExperiencePointsFailureAction,
-  DownloadExperiencePointsRequestAction,
-  DownloadExperiencePointsSuccessAction,
   ExperiencePointsActionType,
   ExperiencePointsState,
   SAVE_EXPERIENCE_POINTS_RECORD_LIST,
@@ -115,27 +109,6 @@ export const actions = {
       id,
     };
   },
-
-  downloadExperiencePointsRequest:
-    (): DownloadExperiencePointsRequestAction => {
-      return {
-        type: DOWNLOAD_EXPERIENCE_POINTS_REQUEST,
-      };
-    },
-
-  downloadExperiencePointsSuccess:
-    (): DownloadExperiencePointsSuccessAction => {
-      return {
-        type: DOWNLOAD_EXPERIENCE_POINTS_SUCCESS,
-      };
-    },
-
-  downloadExperiencePointsFailure:
-    (): DownloadExperiencePointsFailureAction => {
-      return {
-        type: DOWNLOAD_EXPERIENCE_POINTS_FAILURE,
-      };
-    },
 };
 
 export default reducer;

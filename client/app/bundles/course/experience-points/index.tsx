@@ -1,18 +1,13 @@
 import { FC, useEffect, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
-import palette from 'theme/palette';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import {
   fetchDisbursements,
@@ -21,8 +16,6 @@ import {
 import ForumDisbursement from './disbursement/pages/ForumDisbursement';
 import GeneralDisbursement from './disbursement/pages/GeneralDisbursement';
 import ExperiencePointsDetails from './ExperiencePointsDetails';
-
-type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchDisbursementFailure: {
@@ -35,7 +28,7 @@ const translations = defineMessages({
   },
   experiencePointsHistory: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.experienceTab',
-    defaultMessage: 'Experience Point History',
+    defaultMessage: 'History',
   },
   forumDisbursementTab: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.forumTab',
@@ -47,9 +40,10 @@ const translations = defineMessages({
   },
 });
 
-const ExperiencePointsIndex: FC<Props> = (props) => {
-  const { intl } = props;
+const ExperiencePointsIndex: FC = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('experience-points-tab');
 
@@ -59,7 +53,7 @@ const ExperiencePointsIndex: FC<Props> = (props) => {
       dispatch(fetchForumDisbursements()),
     ])
       .catch(() => {
-        toast.error(intl.formatMessage(translations.fetchDisbursementFailure));
+        toast.error(t(translations.fetchDisbursementFailure));
       })
       .finally(() => setIsLoading(false));
   }, [dispatch]);
@@ -74,7 +68,7 @@ const ExperiencePointsIndex: FC<Props> = (props) => {
   }
 
   return (
-    <Page title={intl.formatMessage(translations.experiencePoints)} unpadded>
+    <Page title={t(translations.experiencePoints)} unpadded>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -98,7 +92,10 @@ const ExperiencePointsIndex: FC<Props> = (props) => {
                       {...translations.experiencePointsHistory}
                     />
                   }
-                  style={{ color: palette.submissionIcon.person }}
+                  style={{
+                    minHeight: 48,
+                    textDecoration: 'none',
+                  }}
                   value="experience-points-tab"
                 />
                 <Tab
@@ -106,7 +103,10 @@ const ExperiencePointsIndex: FC<Props> = (props) => {
                   label={
                     <FormattedMessage {...translations.forumDisbursementTab} />
                   }
-                  style={{ color: palette.submissionIcon.person }}
+                  style={{
+                    minHeight: 48,
+                    textDecoration: 'none',
+                  }}
                   value="forum-disbursement-tab"
                 />
                 <Tab
@@ -116,7 +116,10 @@ const ExperiencePointsIndex: FC<Props> = (props) => {
                       {...translations.generalDisbursementTab}
                     />
                   }
-                  style={{ color: palette.submissionIcon.person }}
+                  style={{
+                    minHeight: 48,
+                    textDecoration: 'none',
+                  }}
                   value="general-disbursement-tab"
                 />
               </Tabs>
@@ -132,4 +135,4 @@ const ExperiencePointsIndex: FC<Props> = (props) => {
 
 const handle = translations.experiencePoints;
 
-export default Object.assign(injectIntl(ExperiencePointsIndex), { handle });
+export default Object.assign(ExperiencePointsIndex, { handle });

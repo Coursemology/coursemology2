@@ -9,9 +9,9 @@ json.updater do
 end
 
 json.student do
-  json.id record.course_user_id
+  json.id record.course_user.id
   json.name record.course_user.name
-  json.userUrl course_user_experience_points_records_path(current_course, record.course_user_id)
+  json.userUrl course_user_experience_points_records_path(current_course, record.course_user.id)
 end
 
 json.reason do
@@ -25,11 +25,13 @@ json.reason do
     when Course::Assessment::Submission
       submission = specific
       assessment = submission.assessment
+      json.maxExp assessment.base_exp + assessment.time_bonus_exp
       json.text assessment.title
       json.link edit_course_assessment_submission_path(course, assessment, submission)
     when Course::Survey::Response
       response = specific
       survey = response.survey
+      json.maxExp survey.base_exp + survey.time_bonus_exp
       json.text survey.title
       if can?(:read_answers, response)
         json.link course_survey_response_path(course, survey, response)

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import { TableBody, TableCell, TableHead } from '@mui/material';
 
@@ -21,6 +21,8 @@ interface Props {
   studentId?: number;
   pageNum: number;
   isStudentPage?: boolean;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const translations = defineMessages({
@@ -31,8 +33,7 @@ const translations = defineMessages({
 });
 
 const ExperiencePointsTable: FC<Props> = (props) => {
-  const { studentId, pageNum, isStudentPage } = props;
-  const [isLoading, setIsLoading] = useState(true);
+  const { studentId, pageNum, isStudentPage, isLoading, setIsLoading } = props;
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
@@ -75,6 +76,7 @@ const ExperiencePointsTable: FC<Props> = (props) => {
             key={record.id}
             id={record.id}
             isStudentPage={isStudentPage}
+            maxExp={record.reason.maxExp}
             record={record}
           />
         ))}

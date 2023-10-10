@@ -36,15 +36,7 @@ const translations = defineMessages({
   },
   downloadCsvButton: {
     id: 'course.experiencePoints.downloadCsvButton',
-    defaultMessage: 'Download as CSV',
-  },
-  applyFilterButton: {
-    id: 'course.experiencePoints.applyFilterButton',
-    defaultMessage: 'Apply Filter',
-  },
-  clearFilterButton: {
-    id: 'course.experiencePoints.clearFilterButton',
-    defaultMessage: 'Clear Filter',
+    defaultMessage: 'Download CSV',
   },
 });
 

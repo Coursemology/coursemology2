@@ -31,10 +31,20 @@ const ExperiencePointsRecords = (): JSX.Element => {
   const { t } = useTranslation();
 
   const [pageNum, setPageNum] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const records = useAppSelector(getExpPointsRecordsSettings);
   const courseId = getCourseId();
   const userId = getCourseUserId();
+
+  const pagination = (
+    <BackendPagination
+      handlePageChange={setPageNum}
+      pageNum={pageNum}
+      rowCount={records.rowCount}
+      rowsPerPage={ROWS_PER_PAGE}
+    />
+  );
 
   return (
     <Page
@@ -44,18 +54,17 @@ const ExperiencePointsRecords = (): JSX.Element => {
       })}
       unpadded
     >
-      <BackendPagination
-        handlePageChange={setPageNum}
-        pageNum={pageNum}
-        rowCount={records.rowCount}
-        rowsPerPage={ROWS_PER_PAGE}
-      />
+      {pagination}
 
       <ExperiencePointsTable
+        isLoading={isLoading}
         isStudentPage
         pageNum={pageNum}
+        setIsLoading={setIsLoading}
         studentId={+userId!}
       />
+
+      {!isLoading && pagination}
     </Page>
   );
 };
