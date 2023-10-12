@@ -43,7 +43,6 @@ const withHeartbeatWorker = <P extends WrappedComponentProps>(
       window.addEventListener('beforeunload', terminateWorker);
 
       return () => {
-        terminateWorker();
         window.removeEventListener('beforeunload', terminateWorker);
       };
     }, [sessionId]);
