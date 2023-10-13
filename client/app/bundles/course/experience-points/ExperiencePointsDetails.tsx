@@ -18,6 +18,8 @@ const ExperiencePointsDetails = (): JSX.Element => {
   const [pageNum, setPageNum] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [isDownloading, setIsDownloading] = useState(false);
+
   // For filtering
   const [selectedFilter, setSelectedFilter] = useState<{
     name: ExperiencePointsNameFilterData | null;
@@ -29,7 +31,7 @@ const ExperiencePointsDetails = (): JSX.Element => {
   const settings = useAppSelector(getExpPointsRecordsSettings);
 
   const handleOnClick = (): void => {
-    downloadExperiencePoints(dispatch, studentFilterId);
+    downloadExperiencePoints(dispatch, setIsDownloading, studentFilterId);
   };
 
   const pagination = (
@@ -56,6 +58,7 @@ const ExperiencePointsDetails = (): JSX.Element => {
       {pagination}
 
       <ExperiencePointsTable
+        isDownloading={isDownloading}
         isLoading={isLoading}
         pageNum={pageNum}
         setIsLoading={setIsLoading}
