@@ -24,13 +24,12 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
 
       scenario 'I can view my past answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        (0..4).each do |step_number|
-          within(%([name="step#{step_number}"])) do
-            expect(page).to have_selector('.toggle-history')
-            find('.toggle-history').click
-            expect(page).to have_selector('label', text: 'Past Answers')
-          end
-        end
+        past_answers = all('span', text: 'Past Answers')
+
+        expect do
+          past_answers.each(&:click)
+          wait_for_page
+        end.to change { all('label', text: 'Past Answers').count }.by(past_answers.count)
       end
     end
 
@@ -39,13 +38,12 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
 
       scenario "I can view my student's past answers" do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        (0..4).each do |step_number|
-          within(%([name="step#{step_number}"])) do
-            expect(page).to have_selector('.toggle-history')
-            find('.toggle-history').click
-            expect(page).to have_selector('label', text: 'Past Answers')
-          end
-        end
+        past_answers = all('span', text: 'Past Answers')
+
+        expect do
+          past_answers.each(&:click)
+          wait_for_page
+        end.to change { all('label', text: 'Past Answers').count }.by(past_answers.count)
       end
     end
   end
