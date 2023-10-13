@@ -74,7 +74,7 @@ const BareFooter = (): JSX.Element => (
   </footer>
 );
 
-const getStackMessage = (error: string, component?: string): string => {
+const getStackMessage = (error: string, component?: string | null): string => {
   let message = `Page URL:\n${window.location.href}\n`;
   message += `\nError Stack:\n${error}`;
   if (component) message += `\n\nComponent Stack:${component}`;
