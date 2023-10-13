@@ -6,13 +6,8 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
                                                          except: [:read_all_exp, :download]
 
   def read_all_exp
-    if filter_and_page_params[:student_id].present?
-      @experience_points_records =
-        Course::ExperiencePointsRecord.where(course_user_id: filter_and_page_params[:student_id])
-    else
-      @experience_points_records =
-        Course::ExperiencePointsRecord.where(course_user_id: @course.course_users.pluck(:id))
-    end
+    authorize!(:read_all_exp, @course)
+    @experience_points_records = fetch_experience_points_records
     preload_exp_points_updater
     preload_and_count_experience_points
   end
@@ -23,6 +18,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
   end
 
   def download
+    authorize!(:download, @course)
     @experience_points_records = fetch_experience_points_records
     experience_points_records_ids = @experience_points_records.active.pluck(:id)
 

@@ -68,11 +68,11 @@ const PointManagementButtons: FC<Props> = (props) => {
   const onSave = (): void => {
     setIsSaving(true);
     dispatch(updateExperiencePointsRecord(data, studentId))
-      .then((response) => {
+      .then(() => {
         const experiencePointsRowData = {
-          id: response.data.id,
-          reason: response.data.reason.text,
-          pointsAwarded: response.data.pointsAwarded,
+          id: data.id,
+          reason: data.reason,
+          pointsAwarded: data.pointsAwarded,
         };
         handleSave(experiencePointsRowData);
         toast.success(intl.formatMessage(translations.updateSuccess));

@@ -13,10 +13,6 @@ import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
 import { actions } from './store';
-import {
-  DeleteExperiencePointsRecordAction,
-  UpdateExperiencePointsRecordAction,
-} from './types';
 
 const DOWNLOAD_JOB_POLL_INTERVAL_MS = 2000;
 
@@ -53,16 +49,16 @@ export function fetchAllExperiencePointsRecord(
 ): Operation {
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord
-      .indexAll(studentId, pageNum)
+      .readAllExp(studentId, pageNum)
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveExperiencePointsRecordList(
-            data.rowCount,
-            data.records,
-            data.filters,
-            undefined,
-          ),
+          actions.saveExperiencePointsRecordList({
+            rowCount: data.rowCount,
+            records: data.records,
+            filters: data.filters,
+            studentName: undefined,
+          }),
         );
       });
 }
@@ -73,16 +69,16 @@ export function fetchUserExperiencePointsRecord(
 ): Operation {
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord
-      .index(studentId, pageNum)
+      .showUserExp(studentId, pageNum)
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveExperiencePointsRecordList(
-            data.rowCount,
-            data.records,
-            undefined,
-            data.studentName,
-          ),
+          actions.saveExperiencePointsRecordList({
+            rowCount: data.rowCount,
+            records: data.records,
+            filters: undefined,
+            studentName: data.studentName,
+          }),
         );
       });
 }
@@ -90,26 +86,26 @@ export function fetchUserExperiencePointsRecord(
 export function updateExperiencePointsRecord(
   data: ExperiencePointsRowData,
   studentId?: number,
-): Operation<UpdateExperiencePointsRecordAction> {
+): Operation {
   const params: UpdateExperiencePointsRecordPatchData =
     formatUpdateExperiencePointsRecord(data);
 
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord
       .update(params, data.id, studentId)
-      .then((response) =>
-        dispatch(actions.updateExperiencePointsRecord(response.data)),
-      );
+      .then((response) => {
+        dispatch(actions.updateExperiencePointsRecord({ data: response.data }));
+      });
 }
 
 export function deleteExperiencePointsRecord(
   recordId: number,
   studentId?: number,
-): Operation<DeleteExperiencePointsRecordAction> {
+): Operation {
   return async (dispatch) =>
-    CourseAPI.experiencePointsRecord
-      .delete(recordId, studentId)
-      .then(() => dispatch(actions.deleteExperiencePointsRecord(recordId)));
+    CourseAPI.experiencePointsRecord.delete(recordId, studentId).then(() => {
+      dispatch(actions.deleteExperiencePointsRecord({ id: recordId }));
+    });
 }
 
 export const downloadExperiencePoints = (
@@ -131,7 +127,7 @@ export const downloadExperiencePoints = (
 
   setIsDownloading(true);
   CourseAPI.experiencePointsRecord
-    .download(studentId)
+    .downloadCSV(studentId)
     .then((response) => {
       dispatch(setNotification(translations.downloadPending));
       pollJob(

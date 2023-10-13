@@ -1,8 +1,11 @@
-import { produce } from 'immer';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ExperiencePointsFilterData,
   ExperiencePointsRecordListData,
+  ExperiencePointsRecordMiniEntity,
+  ExperiencePointsRecordSettings,
 } from 'types/course/experiencePointsRecords';
+import { EntityStore } from 'types/store';
 import {
   createEntityStore,
   removeAllFromStore,
@@ -11,104 +14,69 @@ import {
   saveListToStore,
 } from 'utilities/store';
 
-import {
-  DELETE_EXPERIENCE_POINTS_RECORD,
-  DeleteExperiencePointsRecordAction,
-  ExperiencePointsActionType,
-  ExperiencePointsState,
-  SAVE_EXPERIENCE_POINTS_RECORD_LIST,
-  SaveExperiencePointsRecordListAction,
-  UPDATE_EXPERIENCE_POINTS_RECORD,
-  UpdateExperiencePointsRecordAction,
-} from './types';
+export interface ExperiencePointsState {
+  records: EntityStore<ExperiencePointsRecordMiniEntity>;
+  setting: ExperiencePointsRecordSettings;
+}
 
 const initialState: ExperiencePointsState = {
   records: createEntityStore(),
   setting: { rowCount: 0, filters: { names: [] }, studentName: '' },
 };
 
-const reducer = produce(
-  (draft: ExperiencePointsState, action: ExperiencePointsActionType) => {
-    switch (action.type) {
-      case SAVE_EXPERIENCE_POINTS_RECORD_LIST: {
-        removeAllFromStore(draft.records);
-        saveListToStore(draft.records, action.records);
-
-        draft.setting.rowCount = action.rowCount;
-        draft.setting.filters = action.filters ?? { names: [] };
-        draft.setting.studentName = action.studentName ?? '';
-        break;
-      }
-
-      case UPDATE_EXPERIENCE_POINTS_RECORD: {
-        const recordId = action.data.id;
-        if (draft.records.byId[recordId]) {
-          const prevEntity = draft.records.byId[recordId]!;
-          const nextEntity = {
-            ...prevEntity,
-            reason: {
-              ...prevEntity.reason,
-              text: action.data.reason.text,
-            },
-            pointsAwarded: action.data.pointsAwarded,
-            updatedAt: action.data.updatedAt,
-            updated: action.data.updater,
-          };
-
-          saveEntityToStore(draft.records, nextEntity);
-        }
-        break;
-      }
-
-      case DELETE_EXPERIENCE_POINTS_RECORD: {
-        const recordId = action.id;
-        if (draft.records.byId[recordId]) {
-          removeFromStore(draft.records, recordId);
-        }
-        break;
-      }
-
-      default: {
-        break;
-      }
-    }
-  },
+export const experiencePointsStore = createSlice({
+  name: 'experiencePoints',
   initialState,
-);
+  reducers: {
+    saveExperiencePointsRecordList: (
+      state,
+      action: PayloadAction<{
+        rowCount: number;
+        records: ExperiencePointsRecordListData[];
+        filters?: ExperiencePointsFilterData;
+        studentName?: string;
+      }>,
+    ) => {
+      removeAllFromStore(state.records);
+      saveListToStore(state.records, action.payload.records);
 
-export const actions = {
-  saveExperiencePointsRecordList: (
-    rowCount: number,
-    records: ExperiencePointsRecordListData[],
-    filters?: ExperiencePointsFilterData,
-    studentName?: string,
-  ): SaveExperiencePointsRecordListAction => {
-    return {
-      type: SAVE_EXPERIENCE_POINTS_RECORD_LIST,
-      rowCount,
-      records,
-      filters,
-      studentName,
-    };
+      state.setting.rowCount = action.payload.rowCount;
+      state.setting.filters = action.payload.filters ?? { names: [] };
+      state.setting.studentName = action.payload.studentName ?? '';
+    },
+    updateExperiencePointsRecord: (
+      state,
+      action: PayloadAction<{ data: ExperiencePointsRecordListData }>,
+    ) => {
+      const recordId = action.payload.data.id;
+      if (state.records.byId[recordId]) {
+        const prevEntity = state.records.byId[recordId]!;
+        const nextEntity = {
+          ...prevEntity,
+          reason: {
+            ...prevEntity.reason,
+            text: action.payload.data.reason.text,
+          },
+          pointsAwarded: action.payload.data.pointsAwarded,
+          updatedAt: action.payload.data.updatedAt,
+          updated: action.payload.data.updater,
+        };
+
+        saveEntityToStore(state.records, nextEntity);
+      }
+    },
+    deleteExperiencePointsRecord: (
+      state,
+      action: PayloadAction<{ id: number }>,
+    ) => {
+      const recordId = action.payload.id;
+      if (state.records.byId[recordId]) {
+        removeFromStore(state.records, recordId);
+      }
+    },
   },
+});
 
-  updateExperiencePointsRecord: (
-    data: ExperiencePointsRecordListData,
-  ): UpdateExperiencePointsRecordAction => {
-    return {
-      type: UPDATE_EXPERIENCE_POINTS_RECORD,
-      data,
-    };
-  },
+export const actions = experiencePointsStore.actions;
 
-  deleteExperiencePointsRecord: (
-    id: number,
-  ): DeleteExperiencePointsRecordAction => {
-    return {
-      type: DELETE_EXPERIENCE_POINTS_RECORD,
-      id,
-    };
-  },
-};
-
-export default reducer;
+export default experiencePointsStore.reducer;
