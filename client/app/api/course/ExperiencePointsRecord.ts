@@ -51,21 +51,21 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   update(
     params: UpdateExperiencePointsRecordPatchData,
     recordId: number,
-    studentId?: number,
+    studentId: number,
   ): APIResponse<ExperiencePointsRecordListData> {
-    const url = `${this.#urlPrefix}/users/${
-      this.courseUserId ?? studentId
-    }/experience_points_records/${recordId}`;
+    const url = `${
+      this.#urlPrefix
+    }/users/${studentId}/experience_points_records/${recordId}`;
     return this.client.patch(url, params);
   }
 
   /**
    * Delete an experience points record for a user
    */
-  delete(recordId: number, studentId?: number): APIResponse {
-    const url = `${this.#urlPrefix}/users/${
-      this.courseUserId ?? studentId
-    }/experience_points_records/${recordId}`;
+  delete(recordId: number, studentId: number): APIResponse {
+    const url = `${
+      this.#urlPrefix
+    }/users/${studentId}/experience_points_records/${recordId}`;
     return this.client.delete(url);
   }
 }

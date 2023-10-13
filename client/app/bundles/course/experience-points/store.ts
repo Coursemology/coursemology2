@@ -21,7 +21,7 @@ export interface ExperiencePointsState {
 
 const initialState: ExperiencePointsState = {
   records: createEntityStore(),
-  setting: { rowCount: 0, filters: { names: [] }, studentName: '' },
+  setting: { rowCount: 0, filters: { courseStudents: [] }, studentName: '' },
 };
 
 export const experiencePointsStore = createSlice({
@@ -41,7 +41,7 @@ export const experiencePointsStore = createSlice({
       saveListToStore(state.records, action.payload.records);
 
       state.setting.rowCount = action.payload.rowCount;
-      state.setting.filters = action.payload.filters ?? { names: [] };
+      state.setting.filters = action.payload.filters ?? { courseStudents: [] };
       state.setting.studentName = action.payload.studentName ?? '';
     },
     updateExperiencePointsRecord: (
