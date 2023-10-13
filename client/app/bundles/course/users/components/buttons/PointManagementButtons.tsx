@@ -22,6 +22,7 @@ interface Props extends WrappedComponentProps {
   handleSave: (newData: ExperiencePointsRowData) => void;
   studentId?: number;
   isErrorInput: boolean;
+  isDownloading?: boolean;
 }
 
 const translations = defineMessages({
@@ -58,6 +59,7 @@ const PointManagementButtons: FC<Props> = (props) => {
     handleSave,
     studentId,
     isErrorInput,
+    isDownloading,
   } = props;
   const dispatch = useAppDispatch();
   const [isSaving, setIsSaving] = useState(false);
@@ -118,7 +120,8 @@ const PointManagementButtons: FC<Props> = (props) => {
             !isDirty ||
             isErrorInput ||
             Number.isNaN(Number(data.pointsAwarded)) ||
-            !data.pointsAwarded
+            !data.pointsAwarded ||
+            isDownloading
           }
           onClick={onSave}
           tooltip="Save Changes"
@@ -130,7 +133,7 @@ const PointManagementButtons: FC<Props> = (props) => {
           confirmMessage={intl.formatMessage(translations.deletionConfirm, {
             pointsAwarded: data.pointsAwarded.toString(),
           })}
-          disabled={isSaving || isDeleting}
+          disabled={isSaving || isDeleting || (isDownloading ?? false)}
           loading={isDeleting}
           onClick={onDelete}
           tooltip="Delete Experience Point"

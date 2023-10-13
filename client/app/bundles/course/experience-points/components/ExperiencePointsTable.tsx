@@ -18,6 +18,7 @@ import { getAllExpPointsRecordsEntities } from '../selectors';
 import ExperiencePointsTableRow from './ExperiencePointsTableRow';
 
 interface Props {
+  isDownloading?: boolean;
   studentId?: number;
   pageNum: number;
   isStudentPage?: boolean;
@@ -33,7 +34,14 @@ const translations = defineMessages({
 });
 
 const ExperiencePointsTable: FC<Props> = (props) => {
-  const { studentId, pageNum, isStudentPage, isLoading, setIsLoading } = props;
+  const {
+    studentId,
+    pageNum,
+    isStudentPage,
+    isLoading,
+    setIsLoading,
+    isDownloading,
+  } = props;
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
@@ -75,6 +83,7 @@ const ExperiencePointsTable: FC<Props> = (props) => {
           <ExperiencePointsTableRow
             key={record.id}
             id={record.id}
+            isDownloading={isDownloading}
             isStudentPage={isStudentPage}
             maxExp={record.reason.maxExp}
             record={record}

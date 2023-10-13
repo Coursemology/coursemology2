@@ -15,10 +15,11 @@ interface Props {
   isStudentPage?: boolean;
   record: ExperiencePointsRecordMiniEntity;
   maxExp?: number;
+  isDownloading?: boolean;
 }
 
 const ExperiencePointsTableRow: FC<Props> = (props) => {
-  const { record, id, isStudentPage, maxExp } = props;
+  const { record, id, isStudentPage, maxExp, isDownloading } = props;
   const [isDirty, setIsDirty] = useState(false);
   const [errorHelperText, setErrorHelperText] = useState('');
   const [rowData, setRowData] = useState({
@@ -160,6 +161,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
           data={rowData}
           handleSave={handleSave}
           isDirty={isDirty}
+          isDownloading={isDownloading}
           isErrorInput={errorHelperText !== ''}
           isManuallyAwarded={record.reason.isManuallyAwarded}
           permissions={record.permissions}
@@ -170,6 +172,9 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
   );
 };
 
-export default memo(ExperiencePointsTableRow, (prevProps, nextProps) =>
-  equal(prevProps.record, nextProps.record),
+export default memo(
+  ExperiencePointsTableRow,
+  (prevProps, nextProps) =>
+    equal(prevProps.record, nextProps.record) &&
+    equal(prevProps.isDownloading, nextProps.isDownloading),
 );

@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { defineMessages } from 'react-intl';
 import { AxiosError } from 'axios';
 import { AppDispatch, Operation } from 'store';
@@ -113,18 +114,22 @@ export function deleteExperiencePointsRecord(
 
 export const downloadExperiencePoints = (
   dispatch: AppDispatch,
+  setIsDownloading: Dispatch<SetStateAction<boolean>>,
   studentId?: number,
 ): void => {
   const handleSuccess = (successData: JobCompleted): void => {
     window.location.href = successData.redirectUrl!;
     dispatch(setNotification(translations.downloadRequestSuccess));
+    setIsDownloading(false);
   };
 
   const handleFailure = (error: JobErrored | AxiosError): void => {
     const message = error?.message || translations.downloadFailure;
     dispatch(setNotification(message));
+    setIsDownloading(false);
   };
 
+  setIsDownloading(true);
   CourseAPI.experiencePointsRecord
     .download(studentId)
     .then((response) => {
