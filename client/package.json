@@ -95,7 +95,7 @@
     "react-virtualized-auto-sizer": "^1.0.20",
     "react-window": "^1.8.9",
     "react-xarrows": "^2.0.2",
-    "react-zoom-pan-pinch": "^3.1.0",
+    "react-zoom-pan-pinch": "^3.2.0",
     "redux": "^4.2.1",
     "redux-immutable": "^4.0.0",
     "redux-persist": "^6.0.0",
