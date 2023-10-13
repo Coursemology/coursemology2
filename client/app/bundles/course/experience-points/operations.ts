@@ -85,7 +85,7 @@ export function fetchUserExperiencePointsRecord(
 
 export function updateExperiencePointsRecord(
   data: ExperiencePointsRowData,
-  studentId?: number,
+  studentId: number,
 ): Operation {
   const params: UpdateExperiencePointsRecordPatchData =
     formatUpdateExperiencePointsRecord(data);
@@ -100,7 +100,7 @@ export function updateExperiencePointsRecord(
 
 export function deleteExperiencePointsRecord(
   recordId: number,
-  studentId?: number,
+  studentId: number,
 ): Operation {
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord.delete(recordId, studentId).then(() => {

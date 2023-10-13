@@ -82,5 +82,5 @@ export interface ExperiencePointsNameFilterData {
 }
 
 export interface ExperiencePointsFilterData {
-  names: ExperiencePointsNameFilterData[];
+  courseStudents: ExperiencePointsNameFilterData[];
 }

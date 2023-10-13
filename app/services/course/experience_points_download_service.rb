@@ -18,7 +18,7 @@ class Course::ExperiencePointsDownloadService
                          else
                            Course::ExperiencePointsRecord.where(course_user_id: @current_course.course_users.pluck(:id))
                          end
-    exp_points_file_path = File.join(@base_dir, 'records.csv')
+    exp_points_file_path = File.join(@base_dir, "#{Pathname.normalize_filename(@current_course.title)}_exp_records.csv")
     updater_ids = exp_points_records.active.pluck(:updater_id)
     @updater_preload_service =
       Course::CourseUserPreloadService.new(updater_ids, @current_course)

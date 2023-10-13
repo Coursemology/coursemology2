@@ -20,7 +20,7 @@ interface Props extends WrappedComponentProps {
   isDirty: boolean;
   isManuallyAwarded: boolean;
   handleSave: (newData: ExperiencePointsRowData) => void;
-  studentId?: number;
+  studentId: number;
   isErrorInput: boolean;
   isDownloading?: boolean;
 }

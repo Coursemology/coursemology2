@@ -62,7 +62,7 @@ const ExperiencePointsFilterDownload: FC<Props> = (props) => {
                 name: value,
               });
             }}
-            options={filter.names}
+            options={filter.courseStudents}
             renderInput={(params): JSX.Element => {
               return (
                 <TextField
