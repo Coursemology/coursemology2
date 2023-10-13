@@ -2,7 +2,7 @@
 json.partial! 'user_list_data', course_user: course_user, should_show_timeline: should_show_timeline
 
 is_student_and_gamified = current_course.gamified? && course_user.student?
-can_read_progress = can?(:read, Course::ExperiencePointsRecord.new(course_user: course_user))
+can_read_progress = can?(:show_user_exp, Course::ExperiencePointsRecord.new(course_user: course_user))
 can_read_statistics = can?(:read_statistics, current_course)
 
 if can_read_progress && is_student_and_gamified

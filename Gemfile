@@ -97,6 +97,8 @@ group :development, :test do
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'
 
+  gem 'rubocop', '~> 1.56'
+
   # Factory Bot for factories
   gem 'factory_bot_rails'
 
@@ -205,5 +207,3 @@ gem 'rails-html-sanitizer', '>= 1.0.4'
 
 gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'
-
-gem 'rubocop', '~> 1.56'
