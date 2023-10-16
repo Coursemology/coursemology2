@@ -69,7 +69,6 @@ const IndividualInviteForm: FC<Props> = (props) => {
     handleSubmit,
     watch,
     reset,
-    formState,
     formState: { errors },
   } = useForm<IndividualInvites>({
     defaultValues: initialValues,
@@ -103,17 +102,11 @@ const IndividualInviteForm: FC<Props> = (props) => {
     }
   }, [invitationsFields.length === 0]);
 
-  // It's recommended to reset in useEffect as execution order matters
-  useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      reset(initialValues);
-    }
-  }, [formState, reset]);
-
   const onSubmit = (data: InvitationsPostData): Promise<void> => {
     setIsLoading(true);
     return dispatch(inviteUsersFromForm(data))
       .then((response) => {
+        reset(initialValues);
         openResultDialog(response);
       })
       .catch(() => {
