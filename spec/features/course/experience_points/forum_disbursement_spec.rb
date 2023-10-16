@@ -28,7 +28,8 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
                                           created_at: 3.weeks.ago, updated_at: 3.weeks.ago)
         end
         create(:course_discussion_post_vote, post: older_posts[0])
-        visit disburse_experience_points_course_users_path(course)
+        visit course_experience_points_records_path(course)
+        find('button#forum-disbursement-tab').click
 
         within find(content_tag_selector(students[0])) do
           expect(find('input').value).to eq('100')

@@ -23,10 +23,46 @@ RSpec.describe Course::ExperiencePointsRecord do
       end
 
       context 'when record is not manually awarded' do
-        subject { create(:course_assessment_submission).acting_as }
+        subject { create(:submission).acting_as }
         it 'does not set awarded attributes' do
           expect(subject.reload.awarded_at).to be_nil
           expect(subject.reload.awarder).to be_nil
+        end
+      end
+    end
+
+    describe 'validation for assessment' do
+      let!(:assessment1) { create(:assessment, time_bonus_exp: 300) }
+      subject { create(:submission, assessment: assessment1) }
+      context 'when points awarded from this assessment is more than upper bound' do
+        before { subject.points_awarded = assessment1.base_exp + assessment1.time_bonus_exp + 1 }
+        it 'is invalid' do
+          expect(subject).to be_invalid
+        end
+      end
+
+      context 'when points awarded from this assessment is negative' do
+        before { subject.points_awarded = -1 }
+        it 'is invalid' do
+          expect(subject).to be_invalid
+        end
+      end
+    end
+
+    describe 'validation for survey' do
+      let!(:survey1) { create(:survey, base_exp: 100, time_bonus_exp: 50) }
+      subject { create(:response, survey: survey1) }
+      context 'when points awarded from this survey is more than upper bound' do
+        before { subject.points_awarded = survey1.base_exp + survey1.time_bonus_exp + 1 }
+        it 'is invalid' do
+          expect(subject).to be_invalid
+        end
+      end
+
+      context 'when points awarded from this survey is negative' do
+        before { subject.points_awarded = -1 }
+        it 'is invalid' do
+          expect(subject).to be_invalid
         end
       end
     end
