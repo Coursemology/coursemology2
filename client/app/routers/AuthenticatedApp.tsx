@@ -245,6 +245,11 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
           ],
         },
         {
+          path: 'experience_points_records',
+          handle: ExperiencePointsIndex.handle,
+          element: <ExperiencePointsIndex />,
+        },
+        {
           path: 'users',
           children: [
             {
@@ -261,11 +266,6 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
               path: 'invite',
               handle: manageUserHandles.inviteUsers,
               element: <InviteUsers />,
-            },
-            {
-              path: 'disburse_experience_points',
-              handle: ExperiencePointsIndex.handle,
-              element: <ExperiencePointsIndex />,
             },
             {
               path: ':userId',
