@@ -5,9 +5,9 @@ module System::Admin::InstanceAdminAbilityComponent
   def define_permissions
     if user
       allow_instance_admin_manage_instance
-      allow_instance_admin_manage_instance_users
+      allow_instance_admin_manage_instance_users if instance_user&.administrator?
       allow_instance_admin_manage_courses
-      allow_instance_admin_manage_role_requests
+      allow_instance_admin_manage_role_requests if instance_user&.administrator?
     end
 
     super
@@ -22,7 +22,7 @@ module System::Admin::InstanceAdminAbilityComponent
   end
 
   def allow_instance_admin_manage_instance_users
-    can :manage, InstanceUser, instance_instance_user_hash(InstanceUser.roles[:administrator])
+    can :manage, InstanceUser
   end
 
   def allow_instance_admin_manage_courses
@@ -32,6 +32,6 @@ module System::Admin::InstanceAdminAbilityComponent
   end
 
   def allow_instance_admin_manage_role_requests
-    can :manage, Instance::UserRoleRequest, instance_instance_user_hash(InstanceUser.roles[:administrator])
+    can :manage, Instance::UserRoleRequest
   end
 end

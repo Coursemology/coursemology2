@@ -5,7 +5,7 @@ module System::Admin::InstanceAnnouncementsAbilityComponent
   def define_permissions
     if user
       allow_instance_users_show_announcements
-      allow_instance_admin_manage_announcements
+      allow_instance_admin_manage_announcements if instance_user&.administrator?
     end
 
     super
@@ -19,6 +19,6 @@ module System::Admin::InstanceAnnouncementsAbilityComponent
   end
 
   def allow_instance_admin_manage_announcements
-    can :manage, Instance::Announcement, instance_instance_user_hash(InstanceUser.roles[:administrator])
+    can :manage, Instance::Announcement
   end
 end
