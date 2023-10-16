@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   include ApplicationUserConcern
   include ApplicationUserTimeZoneConcern
   include ApplicationInstanceUserConcern
+  include ApplicationAbilityConcern
   include ApplicationAnnouncementsConcern
   include ApplicationPaginationConcern
   include ApplicationSignInCallbacksConcern

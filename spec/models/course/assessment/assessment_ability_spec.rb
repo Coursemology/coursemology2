@@ -110,7 +110,7 @@ RSpec.describe Course::Assessment do
         end
 
         context 'when the session is authenticated' do
-          subject { Ability.new(user, course, course_user, authenticated_session) }
+          subject { Ability.new(user, course, course_user, nil, authenticated_session) }
 
           it { is_expected.to be_able_to(:access, assessment) }
           it { is_expected.to be_able_to(:attempt, assessment) }
@@ -118,7 +118,7 @@ RSpec.describe Course::Assessment do
         end
 
         context 'when the session is not authenticated' do
-          subject { Ability.new(user, course, course_user, unauthenticated_session) }
+          subject { Ability.new(user, course, course_user, nil, unauthenticated_session) }
 
           it { is_expected.to be_able_to(:attempt, assessment) }
           it { is_expected.not_to be_able_to(:access, assessment) }
