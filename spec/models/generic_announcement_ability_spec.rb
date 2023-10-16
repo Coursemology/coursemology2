@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe GenericAnnouncement do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    subject { Ability.new(user) }
+    subject { Ability.new(user, nil, nil, instance_user) }
     let!(:not_started_system_announcement) do
       GenericAnnouncement.find(create(:system_announcement, :not_started).id)
     end
@@ -26,7 +26,8 @@ RSpec.describe GenericAnnouncement do
     end
 
     context 'when the user is an Instance User' do
-      let(:user) { create(:instance_user).user }
+      let(:instance_user) { create(:instance_user) }
+      let(:user) { instance_user.user }
 
       it { is_expected.to be_able_to(:show, valid_system_announcement) }
       it { is_expected.to be_able_to(:show, ended_system_announcement) }
@@ -38,7 +39,8 @@ RSpec.describe GenericAnnouncement do
     end
 
     context 'when the user is an Instance Administrator' do
-      let(:user) { create(:instance_administrator).user }
+      let(:instance_user) { create(:instance_administrator) }
+      let(:user) { instance_user.user }
 
       it { is_expected.not_to be_able_to(:manage, valid_system_announcement) }
       it { is_expected.not_to be_able_to(:manage, ended_system_announcement) }
@@ -51,6 +53,7 @@ RSpec.describe GenericAnnouncement do
 
     context 'when the user is an Administrator' do
       let(:user) { create(:administrator) }
+      let(:instance_user) { user.instance_users.first }
 
       it { is_expected.to be_able_to(:manage, valid_system_announcement) }
       it { is_expected.to be_able_to(:manage, ended_system_announcement) }

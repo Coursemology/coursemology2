@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe System::Admin::Instance::UserInvitationsController, type: :controller, js: true do
+RSpec.describe System::Admin::Instance::UserInvitationsController, type: :controller do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let(:instance_admin) { create(:instance_user, role: :administrator).user }
+    let(:instance_admin) { create(:instance_administrator).user }
     let(:normal_user) { create(:user) }
 
     describe '#index' do

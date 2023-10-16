@@ -7,7 +7,7 @@ module ApplicationCableAbilityConcern
   end
 
   def current_ability
-    @current_ability ||= Ability.new(current_user, current_course, current_course_user, request.session)
+    @current_ability ||= Ability.new(current_user, current_course, current_course_user, nil, request.session)
   end
 
   def can?(*args)

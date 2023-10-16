@@ -4,14 +4,15 @@ require 'rails_helper'
 RSpec.describe Instance::Announcement do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    subject { Ability.new(user) }
+    subject { Ability.new(user, nil, nil, instance_user) }
     let(:course) { create(:course) }
     let!(:not_started_announcement) { create(:instance_announcement, :not_started) }
     let!(:ended_announcement) { create(:instance_announcement, :ended) }
     let!(:valid_announcement) { create(:instance_announcement) }
 
     context 'when the user is a Instance User' do
-      let(:user) { create(:instance_user).user }
+      let(:instance_user) { create(:instance_user) }
+      let(:user) { instance_user.user }
 
       it { is_expected.to be_able_to(:show, valid_announcement) }
       it { is_expected.to be_able_to(:show, ended_announcement) }
@@ -25,7 +26,8 @@ RSpec.describe Instance::Announcement do
     end
 
     context 'when the user is a Instance Administrator' do
-      let(:user) { create(:instance_administrator).user }
+      let(:instance_user) { create(:instance_administrator) }
+      let(:user) { instance_user.user }
 
       it { is_expected.to be_able_to(:manage, valid_announcement) }
       it { is_expected.to be_able_to(:manage, ended_announcement) }
