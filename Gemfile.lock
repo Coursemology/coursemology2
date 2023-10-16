@@ -134,7 +134,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.1.1)
     bcrypt (3.1.18)
-    better_html (2.0.1)
+    better_html (2.0.2)
       actionview (>= 6.0)
       activesupport (>= 6.0)
       ast (~> 2.0)
@@ -243,7 +243,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    highline (2.0.3)
+    highline (2.1.0)
     html-pipeline (2.14.3)
       activesupport (>= 2)
       nokogiri (>= 1.4)
@@ -251,14 +251,14 @@ GEM
     http_accept_language (2.1.1)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (1.0.12)
+    i18n-tasks (1.0.13)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       better_html (>= 1.0, < 3.0)
       erubi
       highline (>= 2.0.0)
       i18n
-      parser (>= 2.2.3.0)
+      parser (>= 3.2.2.1)
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
@@ -351,7 +351,7 @@ GEM
     parallel (1.23.0)
     parallel_tests (4.3.0)
       parallel
-    parser (3.2.2.3)
+    parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
     pg (1.5.4)
@@ -394,7 +394,7 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
-    rails-i18n (7.0.5)
+    rails-i18n (7.0.8)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
     railties (6.0.6.1)
