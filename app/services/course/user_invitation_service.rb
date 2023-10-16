@@ -8,12 +8,14 @@ class Course::UserInvitationService
 
   # Constructor for the user invitation service object.
   #
-  # @param [CourseUser] current_course_user The course user performing this action.
-  def initialize(current_course_user)
+  # @param [CourseUser|nil] current_course_user The course user performing this action.
+  # @param [User] current_user The user performing this action.
+  # @param [Course] current_course The user performing this action for which course.
+  def initialize(current_course_user, current_user, current_course)
     @current_course_user = current_course_user
-    @current_user = current_course_user.user
-    @current_course = current_course_user.course
-    @current_instance = @current_course.instance
+    @current_user = current_user
+    @current_course = current_course
+    @current_instance = current_course.instance
   end
 
   # Invites users to the given course.

@@ -20,13 +20,13 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:course_user) { create(:course_manager, course: course) }
     let(:user) { course_user.user }
     let(:stubbed_user_invitation_service) do
-      Course::UserInvitationService.new(course_user).tap do |result|
+      Course::UserInvitationService.new(course_user, user, course).tap do |result|
         result.define_singleton_method(:invite_users) do |users|
           users
         end
       end
     end
-    subject { Course::UserInvitationService.new(course_user) }
+    subject { Course::UserInvitationService.new(course_user, user, course) }
 
     let(:existing_roles) { Course::UserInvitation.roles.keys.sample(3).map(&:to_sym) }
     let(:existing_timeline_algorithms) { Course::UserInvitation.timeline_algorithms.keys.sample(3).map(&:to_sym) }
