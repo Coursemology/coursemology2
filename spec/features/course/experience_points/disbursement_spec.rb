@@ -20,7 +20,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         create(:course_group_user, group: group1, course_user: group1_student)
         create(:course_group_user, group: group2, course_user: group2_student)
 
-        visit disburse_experience_points_course_users_path(course)
+        visit course_experience_points_records_path(course)
         find('button#general-disbursement-tab').click
         course_students.each do |student|
           expect(page).to have_selector("tr.course_user_#{student.id}")
@@ -51,7 +51,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
       scenario 'I can copy points awarded for first student to all students', js: true do
         course_students
-        visit disburse_experience_points_course_users_path(course)
+        visit course_experience_points_records_path(course)
         find('button#general-disbursement-tab').click
 
         first('tbody').first('tr').find('div.points_awarded').find('input').set '100'
@@ -78,7 +78,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
       scenario 'I can disburse experience points' do
         course_students
 
-        visit disburse_experience_points_course_users_path(course)
+        visit course_experience_points_records_path(course)
         find('button#general-disbursement-tab').click
 
         find('div.experience_points_disbursement_reason').find('input').set('a reason')

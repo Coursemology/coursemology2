@@ -17,7 +17,7 @@ module Course::ExperiencePointsRecordsAbilityComponent
   end
 
   def allow_read_course_experience_points_records
-    can :read, Course::ExperiencePointsRecord, course_user: { course_id: course.id }
+    can :show_user_exp, Course::ExperiencePointsRecord, course_user: { course_id: course.id }
   end
 
   def allow_read_own_experience_points_records
