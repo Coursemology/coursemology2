@@ -1,6 +1,7 @@
-import { Dispatch, FC, SetStateAction, useEffect } from 'react';
+import { Dispatch, FC, memo, SetStateAction, useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import { TableBody, TableCell, TableHead } from '@mui/material';
+import equal from 'fast-deep-equal';
 
 import { setNotification } from 'lib/actions';
 import TableContainer from 'lib/components/core/layouts/TableContainer';
@@ -94,4 +95,4 @@ const ExperiencePointsTable: FC<Props> = (props) => {
   );
 };
 
-export default ExperiencePointsTable;
+export default memo(ExperiencePointsTable, equal);

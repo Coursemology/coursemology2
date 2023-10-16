@@ -92,6 +92,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
       return (
         <TextField
           key={`reason-${record.id}`}
+          disabled={isDownloading}
           fullWidth
           id={`reason-${record.id}`}
           onChange={(e): void => onUpdateReason(e.target.value)}
@@ -126,6 +127,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
         {record.permissions.canUpdate ? (
           <TextField
             key={`points-${record.id}`}
+            disabled={isDownloading}
             error={errorHelperText !== ''}
             helperText={errorHelperText}
             id={`points-${record.id}`}
