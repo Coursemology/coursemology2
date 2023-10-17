@@ -43,12 +43,12 @@ RSpec.feature 'Course: Administration: Forums', js: true do
         valid_pagination_count = 100
 
         pagination_field = 'pagination'
-        fill_in pagination_field, with: invalid_pagination_count
-        click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
-        expect(page).
-          to have_field(pagination_field, with: invalid_pagination_count.abs)
-        expect(course.reload.settings(:course_forums_component).pagination).to eq(invalid_pagination_count.abs)
+
+        expect do
+          fill_in pagination_field, with: invalid_pagination_count
+          click_button 'Save changes'
+          expect(page).to have_text('must be greater than zero')
+        end.not_to(change { course.settings(:course_forums_component).pagination })
 
         fill_in pagination_field, with: valid_pagination_count
         click_button 'Save changes'
