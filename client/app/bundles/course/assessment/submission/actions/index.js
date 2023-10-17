@@ -530,7 +530,6 @@ export function saveGrade(submissionId, grade, questionId, exp, published) {
           type: actionTypes.SAVE_GRADE_SUCCESS,
           payload: updatedGrade,
         });
-        dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });
