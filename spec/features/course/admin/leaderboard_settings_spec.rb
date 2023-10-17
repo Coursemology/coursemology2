@@ -23,9 +23,7 @@ RSpec.feature 'Course: Administration: Leaderboard', js: true do
         user_count_field = 'displayUserCount'
         fill_in user_count_field, with: invalid_display_user_count
         click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
-        expect(page).
-          to have_field(user_count_field, with: invalid_display_user_count.abs)
+        expect(page).to have_text('must be greater than or equal to 0')
 
         fill_in user_count_field, with: valid_display_user_count
         click_button 'Save changes'
