@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
 
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
@@ -36,6 +36,13 @@ const QuestionGrade: FC<Props> = (props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
+  const [isFirstRendering, setIsFirstRendering] = useState(true);
+
+  const saveGrade = (id: number): void => {
+    handleSaveGrade(id);
+    setIsFirstRendering(false);
+  };
+
   const submission = useAppSelector((state) => state.assessments.submission);
   const { submittedAt, bonusEndAt, bonusPoints, workflowState } =
     submission.submission;
@@ -50,14 +57,39 @@ const QuestionGrade: FC<Props> = (props) => {
     workflowState !== workflowStates.Published;
 
   const debouncedSaveGrade = useDebounce(
-    handleSaveGrade,
+    saveGrade,
     FIELD_LONG_DEBOUNCE_DELAY_MS,
     [],
   );
 
   if (!grading) return null;
-
   const dirty = (grading.originalGrade ?? 0) !== (grading.grade ?? 0);
+
+  let savingIndicator: React.ReactNode | null = null;
+
+  if (dirty && !isSaving) {
+    savingIndicator = (
+      <Tooltip title={t(translations.gradeUnsavedHint)}>
+        <Chip
+          color="warning"
+          label={t(translations.isGradeUnsaved)}
+          size="small"
+        />
+      </Tooltip>
+    );
+  } else if (isSaving) {
+    savingIndicator = (
+      <Chip
+        color="default"
+        label={t(translations.isGradeSaving)}
+        size="small"
+      />
+    );
+  } else if (!isFirstRendering) {
+    savingIndicator = (
+      <Chip color="success" label={t(translations.isGradeSaved)} size="small" />
+    );
+  }
 
   const handleUpdateGrade = (
     id: number,
@@ -149,23 +181,7 @@ const QuestionGrade: FC<Props> = (props) => {
           </Tooltip>
         )}
 
-        {dirty && !isSaving ? (
-          <Tooltip title={t(translations.gradeUnsavedHint)}>
-            <Chip
-              color="warning"
-              label={t(translations.isGradeUnsaved)}
-              size="small"
-            />
-          </Tooltip>
-        ) : (
-          isSaving && (
-            <Chip
-              color="default"
-              label={t(translations.isGradeSaving)}
-              size="small"
-            />
-          )
-        )}
+        {savingIndicator}
       </div>
     </div>
   );
