@@ -20,9 +20,7 @@ RSpec.feature 'Course: Administration: Discussion:: Topics', js: true do
         pagination_field = 'pagination'
         fill_in pagination_field, with: invalid_pagination_count
         click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
-        expect(page).
-          to have_field(pagination_field, with: invalid_pagination_count.abs)
+        expect(page).to have_text('must be greater than zero')
 
         fill_in pagination_field, with: valid_pagination_count
         click_button 'Save changes'
