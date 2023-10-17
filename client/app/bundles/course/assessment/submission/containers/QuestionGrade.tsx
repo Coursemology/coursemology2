@@ -7,6 +7,7 @@ import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { updateGrade } from '../actions';
+import { workflowStates } from '../constants';
 import { QuestionData, QuestionGradeData } from '../questionGrade';
 import translations from '../translations';
 
@@ -36,12 +37,17 @@ const QuestionGrade: FC<Props> = (props) => {
   const dispatch = useAppDispatch();
 
   const submission = useAppSelector((state) => state.assessments.submission);
-  const { submittedAt, bonusEndAt, bonusPoints } = submission.submission;
+  const { submittedAt, bonusEndAt, bonusPoints, workflowState } =
+    submission.submission;
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
   const question = submission.questions[questionId] as QuestionData;
   const grading = submission.grading.questions[questionId] as QuestionGradeData;
   const maxGrade = question.maximumGrade;
+
+  const isNotGraded =
+    workflowState !== workflowStates.Graded &&
+    workflowState !== workflowStates.Published;
 
   const debouncedSaveGrade = useDebounce(
     handleSaveGrade,
@@ -101,7 +107,9 @@ const QuestionGrade: FC<Props> = (props) => {
           onBlur={(e): void => processValue(e.target.value)}
           onChange={(e): void => {
             processValue(e.target.value, true);
-            debouncedSaveGrade(questionId);
+            if (isNotGraded) {
+              debouncedSaveGrade(questionId);
+            }
           }}
           onKeyDown={(e): void => {
             if (e.key === 'ArrowUp') {
@@ -112,7 +120,9 @@ const QuestionGrade: FC<Props> = (props) => {
               e.preventDefault();
               stepGrade(-GRADE_STEP);
             }
-            debouncedSaveGrade(questionId);
+            if (isNotGraded) {
+              debouncedSaveGrade(questionId);
+            }
           }}
           placeholder=""
           size="small"
