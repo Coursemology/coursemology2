@@ -4,8 +4,8 @@ class Course::ExperiencePointsDownloadService
   include ApplicationFormattersHelper
 
   class << self
-    def download(current_course, course_user_id)
-      service = new(current_course, course_user_id)
+    def download(course, course_user_id)
+      service = new(course, course_user_id)
       ActsAsTenant.without_tenant do
         service.generate_csv_report
       end
@@ -13,18 +13,14 @@ class Course::ExperiencePointsDownloadService
   end
 
   def generate_csv_report
-    exp_points_records = fetch_experience_points_records
-    exp_points_file_path = File.join(@base_dir, "#{Pathname.normalize_filename(@current_course.title)}_exp_records.csv")
+    exp_points_file_path = File.join(@base_dir, "#{Pathname.normalize_filename(@course.title)}_exp_records.csv")
 
-    exp_points_records = preload_actable_and_include_course_user(exp_points_records)
-    updater_ids = exp_points_records.pluck(:updater_id)
-    @updater_preload_service =
-      Course::CourseUserPreloadService.new(updater_ids, @current_course)
-    exp_points_records = exp_points_records.order(updated_at: :desc)
+    exp_points_records = load_exp_points_records
+    @updater_preload_service = load_exp_record_updater_service(exp_points_records)
     CSV.open(exp_points_file_path, 'w') do |csv|
-      download_exp_points_header csv
+      download_exp_points_header(csv)
       exp_points_records.each do |record|
-        download_exp_points csv, record
+        download_exp_points(csv, record)
       end
     end
     exp_points_file_path
@@ -32,24 +28,23 @@ class Course::ExperiencePointsDownloadService
 
   private
 
-  def fetch_experience_points_records
-    if @course_user_id
-      Course::ExperiencePointsRecord.where(course_user_id: @course_user_id)
-    else
-      Course::ExperiencePointsRecord.where(course_user_id: @current_course.course_users.pluck(:id))
-    end
-  end
-
-  def preload_actable_and_include_course_user(exp_points_records)
-    exp_points_records.active.
-      preload([{ actable: [:assessment, :survey] }, :updater]).
-      includes(:course_user)
-  end
-
-  def initialize(current_course, course_user_id)
-    @course_user_id = course_user_id
-    @current_course = current_course
+  def initialize(course, course_user_id)
+    @course = course
+    @course_user_id = course_user_id || course.course_users.pluck(:id)
     @base_dir = Dir.mktmpdir('experience-points-')
+  end
+
+  def load_exp_points_records
+    Course::ExperiencePointsRecord.where(course_user_id: @course_user_id).
+      active.
+      preload([{ actable: [:assessment, :survey] }, :updater]).
+      includes(:course_user).
+      order(updated_at: :desc)
+  end
+
+  def load_exp_record_updater_service(exp_points_records)
+    updater_ids = exp_points_records.pluck(:updater_id)
+    Course::CourseUserPreloadService.new(updater_ids, @course)
   end
 
   def download_exp_points_header(csv)

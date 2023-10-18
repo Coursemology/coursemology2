@@ -1,6 +1,7 @@
 import {
   ExperiencePointsRecordListData,
   ExperiencePointsRecords,
+  ExperiencePointsRecordsForUser,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
 import { JobSubmitted } from 'types/jobs';
@@ -15,34 +16,40 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   }
 
   /**
-   * Fetches all experience points records from all user
+   * Fetches all experience points records for all users
    */
-  readAllExp(
-    studentId?: number,
-    pageNum: number = 1,
-  ): APIResponse<ExperiencePointsRecords> {
+  fetchAllExp(filter: {
+    pageNum: number;
+    studentId?: number;
+  }): APIResponse<ExperiencePointsRecords> {
     return this.client.get(`${this.#urlPrefix}/experience_points_records`, {
-      params: { 'filter[page_num]': pageNum, 'filter[student_id]': studentId },
+      params: {
+        'filter[page_num]': filter.pageNum,
+        'filter[student_id]': filter.studentId,
+      },
     });
   }
 
+  downloadCSV(studentId?: number): APIResponse<JobSubmitted> {
+    return this.client.get(
+      `${this.#urlPrefix}/experience_points_records/download`,
+      {
+        params: { 'filter[student_id]': studentId },
+      },
+    );
+  }
+
   /**
-   * Fetches all experience points records from a user
+   * Fetches all experience points records for a user
    */
-  showUserExp(
+  fetchExpForUser(
     userId: number,
     pageNum: number = 1,
-  ): APIResponse<ExperiencePointsRecords> {
+  ): APIResponse<ExperiencePointsRecordsForUser> {
     return this.client.get(
       `${this.#urlPrefix}/users/${userId}/experience_points_records`,
       { params: { 'filter[page_num]': pageNum } },
     );
-  }
-
-  downloadCSV(studentId?: number): APIResponse<JobSubmitted> {
-    return this.client.get(`${this.#urlPrefix}/download_experience_points`, {
-      params: { 'filter[student_id]': studentId },
-    });
   }
 
   /**

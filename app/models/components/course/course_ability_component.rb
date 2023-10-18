@@ -11,7 +11,6 @@ module Course::CourseAbilityComponent
     if course_user
       allow_registered_users_showing_course
       allow_staff_show_course_users if course_user.staff?
-      allow_staff_read_all_experience_points if course_user.staff?
       define_teaching_staff_course_permissions if course_user.teaching_staff?
       define_owners_course_permissions if course_user.manager_or_owner?
     end
@@ -36,11 +35,6 @@ module Course::CourseAbilityComponent
 
   def allow_staff_show_course_users
     can :show_users, Course, id: course.id
-  end
-
-  def allow_staff_read_all_experience_points
-    can :read_all_exp, Course, id: course.id
-    can :download, Course, id: course.id
   end
 
   def define_teaching_staff_course_permissions

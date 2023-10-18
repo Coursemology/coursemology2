@@ -9,16 +9,15 @@ export type ExperiencePointsRecordPermissions = Permissions<
   'canUpdate' | 'canDestroy'
 >;
 
-export interface ExperiencePointsRecordSettings {
-  rowCount: number;
-  filters: ExperiencePointsFilterData;
-  studentName: string;
-}
-
 export interface ExperiencePointsRecords {
   rowCount: number;
   records: ExperiencePointsRecordListData[];
   filters: ExperiencePointsFilterData;
+}
+
+export interface ExperiencePointsRecordsForUser {
+  rowCount: number;
+  records: ExperiencePointsRecordListData[];
   studentName: string;
 }
 

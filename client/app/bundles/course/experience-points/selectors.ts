@@ -14,5 +14,5 @@ export function getAllExpPointsRecordsEntities(state: AppState) {
 }
 
 export function getExpPointsRecordsSettings(state: AppState) {
-  return getLocalState(state).setting;
+  return getLocalState(state).settings;
 }
