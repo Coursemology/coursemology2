@@ -135,8 +135,11 @@ Rails.application.routes.draw do
     resources :courses, except: [:new, :edit, :update] do
       get 'sidebar', on: :member
 
-      get 'experience_points_records' => 'experience_points_records#read_all_exp'
-      get 'download_experience_points' => 'experience_points_records#download'
+      resources :experience_points_records, only: [:index] do
+        collection do
+          get 'download'
+        end
+      end
 
       namespace :admin do
         get '/' => 'admin#index'
@@ -349,7 +352,7 @@ Rails.application.routes.draw do
 
       resources :users, only: [:index, :show, :update, :destroy] do
         resources :experience_points_records, only: [:update, :destroy] do
-          get '/' => 'experience_points_records#show_user_exp', on: :collection
+          get '/' => 'experience_points_records#show', on: :collection
         end
         resources :video_submissions, only: [:index]
         resources :personal_times, only: [:index, :create, :destroy]

@@ -3,7 +3,6 @@ import {
   ExperiencePointsFilterData,
   ExperiencePointsRecordListData,
   ExperiencePointsRecordMiniEntity,
-  ExperiencePointsRecordSettings,
 } from 'types/course/experiencePointsRecords';
 import { EntityStore } from 'types/store';
 import {
@@ -14,14 +13,20 @@ import {
   saveListToStore,
 } from 'utilities/store';
 
+interface ExperiencePointsRecordSettings {
+  rowCount: number;
+  filters: ExperiencePointsFilterData;
+  studentName: string;
+}
+
 export interface ExperiencePointsState {
   records: EntityStore<ExperiencePointsRecordMiniEntity>;
-  setting: ExperiencePointsRecordSettings;
+  settings: ExperiencePointsRecordSettings;
 }
 
 const initialState: ExperiencePointsState = {
   records: createEntityStore(),
-  setting: { rowCount: 0, filters: { courseStudents: [] }, studentName: '' },
+  settings: { rowCount: 0, filters: { courseStudents: [] }, studentName: '' },
 };
 
 export const experiencePointsStore = createSlice({
@@ -40,9 +45,9 @@ export const experiencePointsStore = createSlice({
       removeAllFromStore(state.records);
       saveListToStore(state.records, action.payload.records);
 
-      state.setting.rowCount = action.payload.rowCount;
-      state.setting.filters = action.payload.filters ?? { courseStudents: [] };
-      state.setting.studentName = action.payload.studentName ?? '';
+      state.settings.rowCount = action.payload.rowCount;
+      state.settings.filters = action.payload.filters ?? { courseStudents: [] };
+      state.settings.studentName = action.payload.studentName ?? '';
     },
     updateExperiencePointsRecord: (
       state,

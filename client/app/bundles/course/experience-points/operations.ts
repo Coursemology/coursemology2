@@ -49,7 +49,7 @@ export function fetchAllExperiencePointsRecord(
 ): Operation {
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord
-      .readAllExp(studentId, pageNum)
+      .fetchAllExp({ pageNum, studentId })
       .then((response) => {
         const data = response.data;
         dispatch(
@@ -69,7 +69,7 @@ export function fetchUserExperiencePointsRecord(
 ): Operation {
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord
-      .showUserExp(studentId, pageNum)
+      .fetchExpForUser(studentId, pageNum)
       .then((response) => {
         const data = response.data;
         dispatch(

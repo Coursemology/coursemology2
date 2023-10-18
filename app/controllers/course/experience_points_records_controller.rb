@@ -1,39 +1,28 @@
 # frozen_string_literal: true
 class Course::ExperiencePointsRecordsController < Course::ComponentController
-  load_resource :course_user, through: :course, id_param: :user_id, except: [:read_all_exp, :download]
+  load_resource :course_user, through: :course, id_param: :user_id, except: [:index, :download]
   load_and_authorize_resource :experience_points_record, through: :course_user,
                                                          class: Course::ExperiencePointsRecord.name,
-                                                         except: [:read_all_exp, :download]
+                                                         except: [:index, :download]
 
-  def read_all_exp
-    authorize!(:read_all_exp, @course)
-    @experience_points_records = fetch_experience_points_records
+  def index
+    authorize!(:read_exp, @course)
+    load_active_experience_points_records
+    paginate_and_preload_experience_points
     preload_exp_points_updater
-    preload_and_count_experience_points
   end
 
-  def show_user_exp
+  def show
+    paginate_and_preload_experience_points
     preload_exp_points_updater
-    preload_and_count_experience_points
   end
 
   def download
-    authorize!(:download, @course)
-    @experience_points_records = fetch_experience_points_records
-    experience_points_records_ids = @experience_points_records.active.pluck(:id)
-
-    if experience_points_records_ids.empty?
-      return render json: {
-        error: I18n.t('course.experience_points_records.download.no_experience_points')
-      }, status: :bad_request
-    end
-
+    authorize!(:download_exp_csv, @course)
     job = Course::ExperiencePointsDownloadJob.
           perform_later(current_course, filter_download_params[:student_id]).job
 
-    respond_to do |format|
-      format.json { render partial: 'jobs/submitted', locals: { job: job } }
-    end
+    render partial: 'jobs/submitted', locals: { job: job }
   end
 
   def update
@@ -62,19 +51,16 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
 
   private
 
-  def fetch_experience_points_records
-    if filter_download_params[:student_id].present?
-      Course::ExperiencePointsRecord.where(course_user_id: filter_download_params[:student_id])
-    else
-      Course::ExperiencePointsRecord.where(course_user_id: @course.course_users.pluck(:id))
-    end
+  def load_active_experience_points_records
+    course_user_id = filter_download_params[:student_id] || @course.course_users.pluck(:id)
+    @experience_points_records = Course::ExperiencePointsRecord.where(course_user_id: course_user_id).active
   end
 
   def experience_points_record_params
     params.require(:experience_points_record).permit(:points_awarded, :reason)
   end
 
-  def filter_and_page_params
+  def filter_and_paginate_params
     return {} if params[:filter].blank?
 
     params[:filter].permit(:page_num, :student_id)
@@ -86,18 +72,16 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
     params[:filter].permit(:student_id)
   end
 
-  def preload_and_count_experience_points
-    @experience_points_records =
-      @experience_points_records.active.
-      preload([{ actable: [:assessment, :survey] }, :updater]).order(updated_at: :desc)
-    @experience_points_count = @experience_points_records.count
-    @experience_points_records = @experience_points_records.paginated(filter_and_page_params)
+  def paginate_and_preload_experience_points
+    @experience_points_count = @experience_points_records.active.count
+    @experience_points_records = @experience_points_records.active.
+                                 order(updated_at: :desc).paginated(filter_and_paginate_params)
+    @experience_points_records = @experience_points_records.preload([{ actable: [:assessment, :survey] }, :updater])
   end
 
   def preload_exp_points_updater
-    updater_ids = @experience_points_records.active.pluck(:updater_id)
-    @updater_preload_service =
-      Course::CourseUserPreloadService.new(updater_ids, current_course)
+    updater_ids = @experience_points_records.pluck(:updater_id)
+    @updater_preload_service = Course::CourseUserPreloadService.new(updater_ids, current_course)
   end
 
   # @return [Course::ExperiencePointsComponent]

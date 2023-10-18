@@ -83,37 +83,26 @@ class Course::ExperiencePointsRecord < ApplicationRecord
     when Course::Assessment::Submission
       return unless specific.assessment
 
-      validate_submission_points
+      submission = specific
+      assessment = submission.assessment
+
+      validate_lesson_plan_item_points(assessment)
     when Course::Survey::Response
       return unless specific.survey
 
-      validate_survey_points
+      response = specific
+      survey = response.survey
+
+      validate_lesson_plan_item_points(survey)
     end
   end
 
-  def validate_submission_points
-    submission = specific
-    assessment = submission.assessment
-
-    max_exp_points = (assessment.base_exp || 0) + (assessment.time_bonus_exp || 0)
-    add_points_error('assignment', max_exp_points) if points_awarded && points_awarded > max_exp_points
-    add_negative_points_error('assignment') if points_awarded && points_awarded < 0
-  end
-
-  def validate_survey_points
-    response = specific
-    survey = response.survey
-
-    max_exp_points = (survey.base_exp || 0) + (survey.time_bonus_exp || 0)
-    add_points_error('survey', max_exp_points) if points_awarded && points_awarded > max_exp_points
-    add_negative_points_error('assignment') if points_awarded && points_awarded < 0
-  end
-
-  def add_points_error(type, max_exp_points)
-    errors.add(:base, "Points awarded cannot exceed the upper bound for this #{type}, which is #{max_exp_points}")
-  end
-
-  def add_negative_points_error(type)
-    errors.add(:base, "Points awarded for this #{type} cannot be negative")
+  def validate_lesson_plan_item_points(lesson_plan_item_specific)
+    max_exp_points = (lesson_plan_item_specific.base_exp || 0) + (lesson_plan_item_specific.time_bonus_exp || 0)
+    if points_awarded && points_awarded > max_exp_points
+      errors.add(:base, "Points awarded cannot exceed the upper bound exp: #{max_exp_points}")
+    elsif points_awarded && points_awarded < 0
+      errors.add(:base, 'Points awarded cannot be negative')
+    end
   end
 end
