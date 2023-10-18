@@ -130,17 +130,25 @@ export default function (state = initialState, action) {
         Object.values(action.payload.questions).map((q) => q.maximumGrade),
       );
 
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
+      const questionIds = Object.keys(questionWithGrades);
+      const gradeToBeUpdated =
+        questionIds.length !== 1 ||
+        state.questions[questionIds[0]].grade.toString() ===
+          questionWithGrades[questionIds[0]].grade.toString();
 
-        Object.keys(questionWithGrades).forEach((id) => {
-          tempDraftState.questions[id] = questionWithGrades[id];
-        });
+      return gradeToBeUpdated
+        ? produce(state, (draftState) => {
+            const tempDraftState = draftState;
 
-        tempDraftState.exp = action.payload.submission.pointsAwarded;
-        tempDraftState.basePoints = basePoints;
-        tempDraftState.maximumGrade = maxGrade;
-      });
+            Object.keys(questionWithGrades).forEach((id) => {
+              tempDraftState.questions[id] = questionWithGrades[id];
+            });
+
+            tempDraftState.exp = action.payload.submission.pointsAwarded;
+            tempDraftState.basePoints = basePoints;
+            tempDraftState.maximumGrade = maxGrade;
+          })
+        : state;
     }
     case actions.SAVE_DRAFT_SUCCESS:
     case actions.FINALISE_SUCCESS:

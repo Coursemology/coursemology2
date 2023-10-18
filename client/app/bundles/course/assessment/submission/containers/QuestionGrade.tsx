@@ -52,7 +52,7 @@ const QuestionGrade: FC<Props> = (props) => {
   const grading = submission.grading.questions[questionId] as QuestionGradeData;
   const maxGrade = question.maximumGrade;
 
-  const isNotGraded =
+  const isNotGradedAndNotPublished =
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
 
@@ -139,7 +139,7 @@ const QuestionGrade: FC<Props> = (props) => {
           onBlur={(e): void => processValue(e.target.value)}
           onChange={(e): void => {
             processValue(e.target.value, true);
-            if (isNotGraded) {
+            if (isNotGradedAndNotPublished) {
               debouncedSaveGrade(questionId);
             }
           }}
@@ -152,7 +152,7 @@ const QuestionGrade: FC<Props> = (props) => {
               e.preventDefault();
               stepGrade(-GRADE_STEP);
             }
-            if (isNotGraded) {
+            if (isNotGradedAndNotPublished) {
               debouncedSaveGrade(questionId);
             }
           }}
