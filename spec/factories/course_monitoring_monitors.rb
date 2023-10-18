@@ -15,5 +15,10 @@ FactoryBot.define do
     trait :with_secret do
       sequence(:secret) { |n| "secret_#{n}" }
     end
+
+    trait :blocks do
+      with_secret
+      blocks { true }
+    end
   end
 end
