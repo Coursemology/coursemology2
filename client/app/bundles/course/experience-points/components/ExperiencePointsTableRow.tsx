@@ -1,5 +1,5 @@
 import { FC, memo, useEffect, useState } from 'react';
-import { TableCell, TableRow, TextField } from '@mui/material';
+import { TableCell, TableRow } from '@mui/material';
 import equal from 'fast-deep-equal';
 import {
   ExperiencePointsRecordMiniEntity,
@@ -7,6 +7,8 @@ import {
 } from 'types/course/experiencePointsRecords';
 
 import PointManagementButtons from 'course/users/components/buttons/PointManagementButtons';
+import NumberTextField from 'lib/components/core/fields/NumberTextField';
+import TextField from 'lib/components/core/fields/TextField';
 import Link from 'lib/components/core/Link';
 import { formatMiniDateTime } from 'lib/moment';
 
@@ -22,6 +24,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
   const { record, id, isStudentPage, maxExp, isDownloading } = props;
   const [isDirty, setIsDirty] = useState(false);
   const [errorHelperText, setErrorHelperText] = useState('');
+  const [errorReasonText, setErrorReasonText] = useState('');
   const [rowData, setRowData] = useState({
     id,
     reason: '',
@@ -32,6 +35,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
     reason: '',
     pointsAwarded: 0,
   } as ExperiencePointsRowData);
+  const isNotManuallyAwarded = maxExp;
 
   useEffect(() => {
     setRowData({
@@ -93,9 +97,18 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
         <TextField
           key={`reason-${record.id}`}
           disabled={isDownloading}
+          error={errorReasonText !== ''}
           fullWidth
+          helperText={errorReasonText}
           id={`reason-${record.id}`}
-          onChange={(e): void => onUpdateReason(e.target.value)}
+          onChange={(e): void => {
+            if (e.target.value.length === 0) {
+              setErrorReasonText('must contain at least 1 character');
+            } else {
+              setErrorReasonText('');
+            }
+            onUpdateReason(e.target.value);
+          }}
           value={rowData.reason}
           variant="standard"
         />
@@ -125,21 +138,23 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
 
       <TableCell>
         {record.permissions.canUpdate ? (
-          <TextField
+          <NumberTextField
             key={`points-${record.id}`}
             disabled={isDownloading}
             error={errorHelperText !== ''}
             helperText={errorHelperText}
             id={`points-${record.id}`}
             onChange={(e): void => {
+              // at this point, any non-integer value will be rounded down
               const inputValue = Number(e.target.value);
-              if (Number.isNaN(Number(inputValue))) {
+              if (Number.isNaN(inputValue)) {
+                // in case the input is '-' or '.'
                 setErrorHelperText('must be a number');
-              } else if (maxExp) {
-                if (Number(inputValue) < 0) {
+              } else if (isNotManuallyAwarded) {
+                if (inputValue < 0) {
                   setErrorHelperText('must not be negative');
-                } else if (Number(inputValue) > maxExp) {
-                  setErrorHelperText(`must be at most ${maxExp}`);
+                } else if (inputValue > maxExp!) {
+                  setErrorHelperText(`must be at most ${maxExp!}`);
                 } else {
                   setErrorHelperText('');
                 }
@@ -149,7 +164,6 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
               onUpdatePoints(e.target.value);
             }}
             placeholder={record.pointsAwarded?.toString() ?? 0}
-            type="string"
             value={rowData.pointsAwarded}
             variant="standard"
           />
@@ -164,7 +178,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
           handleSave={handleSave}
           isDirty={isDirty}
           isDownloading={isDownloading}
-          isErrorInput={errorHelperText !== ''}
+          isErrorInput={errorHelperText !== '' || errorReasonText !== ''}
           isManuallyAwarded={record.reason.isManuallyAwarded}
           permissions={record.permissions}
           studentId={record.student.id}
