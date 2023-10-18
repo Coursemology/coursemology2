@@ -17,6 +17,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {
   filter: ExperiencePointsFilterData;
+  disabled: boolean;
   selectedFilter: {
     name: ExperiencePointsNameFilterData | null;
   };
@@ -41,8 +42,14 @@ const translations = defineMessages({
 });
 
 const ExperiencePointsFilterDownload: FC<Props> = (props) => {
-  const { filter, selectedFilter, setSelectedFilter, setPageNum, onClick } =
-    props;
+  const {
+    filter,
+    selectedFilter,
+    setSelectedFilter,
+    setPageNum,
+    onClick,
+    disabled,
+  } = props;
 
   const { t } = useTranslation();
 
@@ -53,6 +60,7 @@ const ExperiencePointsFilterDownload: FC<Props> = (props) => {
           <Autocomplete
             key="experience-points-name-selector"
             clearOnEscape
+            disabled={disabled}
             disablePortal
             getOptionLabel={(option): string => option.name}
             onChange={(_, value: { id: number; name: string } | null): void => {
@@ -81,7 +89,7 @@ const ExperiencePointsFilterDownload: FC<Props> = (props) => {
 
       <Grid className="justify-end items-center" container>
         <Tooltip title={t(translations.downloadCsvButton)}>
-          <IconButton onClick={onClick} size="small">
+          <IconButton disabled={disabled} onClick={onClick} size="small">
             <Download />
           </IconButton>
         </Tooltip>

@@ -43,10 +43,13 @@ const ExperiencePointsDetails = (): JSX.Element => {
     />
   );
 
+  const isDisabled = isDownloading || settings.rowCount === 0;
+
   return (
     <Page unpadded>
       <Page.PaddedSection>
         <ExperiencePointsFilterDownload
+          disabled={isDisabled}
           filter={settings.filters}
           onClick={handleOnClick}
           selectedFilter={selectedFilter}
