@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
 import ExperiencePointsTable from 'course/experience-points/components/ExperiencePointsTable';
-import { getExpPointsRecordsSettings } from 'course/experience-points/selectors';
+import { fetchUserExperiencePointsRecord } from 'course/experience-points/operations';
+import {
+  getAllExpPointsRecordsEntities,
+  getExpPointsRecordsSettings,
+} from 'course/experience-points/selectors';
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import Page from 'lib/components/core/layouts/Page';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId, getCourseUserId } from 'lib/helpers/url-helpers';
-import { useAppSelector } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const ROWS_PER_PAGE = 25 as const;
@@ -25,6 +30,10 @@ const translations = defineMessages({
     id: 'course.users.ExperiencePointsRecords.fetchUsersFailure',
     defaultMessage: 'Failed to fetch records',
   },
+  fetchRecordsFailure: {
+    id: 'course.experiencePoints.fetchRecordsFailure',
+    defaultMessage: 'Failed to fetch records',
+  },
 });
 
 const ExperiencePointsRecords = (): JSX.Element => {
@@ -33,15 +42,28 @@ const ExperiencePointsRecords = (): JSX.Element => {
   const [pageNum, setPageNum] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
-  const records = useAppSelector(getExpPointsRecordsSettings);
+  const settings = useAppSelector(getExpPointsRecordsSettings);
+  const records = useAppSelector(getAllExpPointsRecordsEntities);
+
   const courseId = getCourseId();
-  const userId = getCourseUserId();
+  const userId = +getCourseUserId()!;
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(fetchUserExperiencePointsRecord(userId, pageNum))
+      .catch(() => toast.error(t(translations.fetchRecordsFailure)))
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [pageNum, userId]);
 
   const pagination = (
     <BackendPagination
       handlePageChange={setPageNum}
       pageNum={pageNum}
-      rowCount={records.rowCount}
+      rowCount={settings.rowCount}
       rowsPerPage={ROWS_PER_PAGE}
     />
   );
@@ -50,21 +72,20 @@ const ExperiencePointsRecords = (): JSX.Element => {
     <Page
       backTo={getCourseUserURL(courseId, userId)}
       title={t(translations.experiencePointsHistoryHeader, {
-        for: records.studentName,
+        for: settings.studentName,
       })}
       unpadded
     >
       {pagination}
 
       <ExperiencePointsTable
+        disabled={false}
         isLoading={isLoading}
         isStudentPage
-        pageNum={pageNum}
-        setIsLoading={setIsLoading}
-        studentId={+userId!}
+        records={records}
       />
 
-      {!isLoading && pagination}
+      {pagination}
     </Page>
   );
 };
