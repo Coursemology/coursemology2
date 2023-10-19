@@ -17,12 +17,11 @@ import toast from 'lib/hooks/toast';
 interface Props extends WrappedComponentProps {
   permissions: ExperiencePointsRecordPermissions;
   data: ExperiencePointsRowData;
-  isDirty: boolean;
   isManuallyAwarded: boolean;
   handleSave: (newData: ExperiencePointsRowData) => void;
   studentId: number;
-  isErrorInput: boolean;
-  isDownloading?: boolean;
+  saveDisabled: boolean;
+  deleteDisabled: boolean;
 }
 
 const translations = defineMessages({
@@ -54,12 +53,11 @@ const PointManagementButtons: FC<Props> = (props) => {
     intl,
     permissions,
     data,
-    isDirty,
     isManuallyAwarded,
     handleSave,
     studentId,
-    isErrorInput,
-    isDownloading,
+    saveDisabled,
+    deleteDisabled,
   } = props;
   const dispatch = useAppDispatch();
   const [isSaving, setIsSaving] = useState(false);
@@ -68,11 +66,11 @@ const PointManagementButtons: FC<Props> = (props) => {
   const onSave = (): void => {
     setIsSaving(true);
     dispatch(updateExperiencePointsRecord(data, studentId))
-      .then(() => {
+      .then((response) => {
         const experiencePointsRowData = {
-          id: data.id,
-          reason: data.reason,
-          pointsAwarded: data.pointsAwarded,
+          id: response.id,
+          reason: response.reason.text,
+          pointsAwarded: response.pointsAwarded,
         };
         handleSave(experiencePointsRowData);
         toast.success(intl.formatMessage(translations.updateSuccess));
@@ -114,15 +112,7 @@ const PointManagementButtons: FC<Props> = (props) => {
       {permissions.canUpdate && (
         <SaveButton
           className={`record-save-${data.id}`}
-          disabled={
-            isSaving ||
-            isDeleting ||
-            !isDirty ||
-            isErrorInput ||
-            Number.isNaN(Number(data.pointsAwarded)) ||
-            !data.pointsAwarded ||
-            isDownloading
-          }
+          disabled={isSaving || isDeleting || saveDisabled}
           onClick={onSave}
           tooltip="Save Changes"
         />
@@ -133,7 +123,7 @@ const PointManagementButtons: FC<Props> = (props) => {
           confirmMessage={intl.formatMessage(translations.deletionConfirm, {
             pointsAwarded: data.pointsAwarded.toString(),
           })}
-          disabled={isSaving || isDeleting || (isDownloading ?? false)}
+          disabled={isSaving || isDeleting || deleteDisabled}
           loading={isDeleting}
           onClick={onDelete}
           tooltip="Delete Experience Point"

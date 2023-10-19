@@ -1,68 +1,26 @@
-import { Dispatch, FC, memo, SetStateAction, useEffect } from 'react';
-import { defineMessages } from 'react-intl';
+import { FC, memo } from 'react';
 import { TableBody, TableCell, TableHead } from '@mui/material';
 import equal from 'fast-deep-equal';
+import { ExperiencePointsRecordMiniEntity } from 'types/course/experiencePointsRecords';
 
-import { setNotification } from 'lib/actions';
 import TableContainer from 'lib/components/core/layouts/TableContainer';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
-
-import {
-  fetchAllExperiencePointsRecord,
-  fetchUserExperiencePointsRecord,
-} from '../operations';
-import { getAllExpPointsRecordsEntities } from '../selectors';
 
 import ExperiencePointsTableRow from './ExperiencePointsTableRow';
 
 interface Props {
-  isDownloading?: boolean;
-  studentId?: number;
-  pageNum: number;
+  records: ExperiencePointsRecordMiniEntity[];
+  disabled: boolean;
   isStudentPage?: boolean;
   isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-const translations = defineMessages({
-  fetchRecordsFailure: {
-    id: 'course.experiencePoints.fetchRecordsFailure',
-    defaultMessage: 'Failed to fetch records',
-  },
-});
-
 const ExperiencePointsTable: FC<Props> = (props) => {
-  const {
-    studentId,
-    pageNum,
-    isStudentPage,
-    isLoading,
-    setIsLoading,
-    isDownloading,
-  } = props;
-  const dispatch = useAppDispatch();
+  const { isStudentPage, isLoading, disabled, records } = props;
 
   const { t } = useTranslation();
-
-  const records = useAppSelector(getAllExpPointsRecordsEntities);
-
-  const fetchExperiencePoints = isStudentPage
-    ? fetchUserExperiencePointsRecord(studentId!, pageNum)
-    : fetchAllExperiencePointsRecord(studentId, pageNum);
-
-  useEffect(() => {
-    setIsLoading(true);
-    dispatch(fetchExperiencePoints)
-      .catch(() =>
-        dispatch(setNotification(t(translations.fetchRecordsFailure))),
-      )
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [pageNum, studentId]);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -83,10 +41,8 @@ const ExperiencePointsTable: FC<Props> = (props) => {
         {records.map((record) => (
           <ExperiencePointsTableRow
             key={record.id}
-            id={record.id}
-            isDownloading={isDownloading}
+            disabled={disabled}
             isStudentPage={isStudentPage}
-            maxExp={record.reason.maxExp}
             record={record}
           />
         ))}

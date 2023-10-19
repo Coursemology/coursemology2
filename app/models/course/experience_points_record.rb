@@ -81,15 +81,11 @@ class Course::ExperiencePointsRecord < ApplicationRecord
 
     case specific.actable
     when Course::Assessment::Submission
-      return unless specific.assessment
-
       submission = specific
       assessment = submission.assessment
 
       validate_lesson_plan_item_points(assessment)
     when Course::Survey::Response
-      return unless specific.survey
-
       response = specific
       survey = response.survey
 
@@ -98,7 +94,7 @@ class Course::ExperiencePointsRecord < ApplicationRecord
   end
 
   def validate_lesson_plan_item_points(lesson_plan_item_specific)
-    max_exp_points = (lesson_plan_item_specific.base_exp || 0) + (lesson_plan_item_specific.time_bonus_exp || 0)
+    max_exp_points = lesson_plan_item_specific.base_exp + lesson_plan_item_specific.time_bonus_exp
     if points_awarded && points_awarded > max_exp_points
       errors.add(:base, "Points awarded cannot exceed the upper bound exp: #{max_exp_points}")
     elsif points_awarded && points_awarded < 0

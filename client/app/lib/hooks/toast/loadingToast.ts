@@ -4,7 +4,7 @@ import toast from './toast';
 
 type Updater = (message: string) => void;
 
-interface LoadingToast {
+export interface LoadingToast {
   update: Updater;
   success: Updater;
   error: Updater;

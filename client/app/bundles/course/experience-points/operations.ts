@@ -1,36 +1,20 @@
-import { Dispatch, SetStateAction } from 'react';
-import { defineMessages } from 'react-intl';
 import { AxiosError } from 'axios';
-import { AppDispatch, Operation } from 'store';
+import { Operation } from 'store';
 import {
+  ExperiencePointsRecordListData,
   ExperiencePointsRowData,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
 import { JobCompleted, JobErrored } from 'types/jobs';
 
 import CourseAPI from 'api/course';
-import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
+import { loadingToast } from 'lib/hooks/toast';
+import { LoadingToast } from 'lib/hooks/toast/loadingToast';
 
 import { actions } from './store';
 
 const DOWNLOAD_JOB_POLL_INTERVAL_MS = 2000;
-
-const translations = defineMessages({
-  downloadRequestSuccess: {
-    id: 'course.experiencePoints.downloadRequestSuccess',
-    defaultMessage: 'Your request to download is successful',
-  },
-  downloadFailure: {
-    id: 'course.experiencePoints.downloadFailure',
-    defaultMessage: 'An error occurred while doing your request for download.',
-  },
-  downloadPending: {
-    id: 'course.experiencePoints.downloadPending',
-    defaultMessage:
-      'Please wait as your request to download is being processed.',
-  },
-});
 
 const formatUpdateExperiencePointsRecord = (
   data: ExperiencePointsRowData,
@@ -86,7 +70,7 @@ export function fetchUserExperiencePointsRecord(
 export function updateExperiencePointsRecord(
   data: ExperiencePointsRowData,
   studentId: number,
-): Operation {
+): Operation<ExperiencePointsRecordListData> {
   const params: UpdateExperiencePointsRecordPatchData =
     formatUpdateExperiencePointsRecord(data);
 
@@ -95,6 +79,7 @@ export function updateExperiencePointsRecord(
       .update(params, data.id, studentId)
       .then((response) => {
         dispatch(actions.updateExperiencePointsRecord({ data: response.data }));
+        return response.data;
       });
 }
 
@@ -109,33 +94,27 @@ export function deleteExperiencePointsRecord(
 }
 
 export const downloadExperiencePoints = (
-  dispatch: AppDispatch,
-  setIsDownloading: Dispatch<SetStateAction<boolean>>,
+  handleSuccess: (successData: JobCompleted, toast: LoadingToast) => void,
+  handleFailure: (error: JobErrored | AxiosError, toast: LoadingToast) => void,
+  downloadPendingMessage: string,
   studentId?: number,
 ): void => {
-  const handleSuccess = (successData: JobCompleted): void => {
-    window.location.href = successData.redirectUrl!;
-    dispatch(setNotification(translations.downloadRequestSuccess));
-    setIsDownloading(false);
+  const toast = loadingToast(downloadPendingMessage);
+  const handleSuccessWithToast = (successData: JobCompleted): void => {
+    handleSuccess(successData, toast);
   };
-
-  const handleFailure = (error: JobErrored | AxiosError): void => {
-    const message = error?.message || translations.downloadFailure;
-    dispatch(setNotification(message));
-    setIsDownloading(false);
+  const handleFailureWithToast = (error: JobErrored | AxiosError): void => {
+    handleFailure(error, toast);
   };
-
-  setIsDownloading(true);
   CourseAPI.experiencePointsRecord
     .downloadCSV(studentId)
     .then((response) => {
-      dispatch(setNotification(translations.downloadPending));
       pollJob(
         response.data.jobUrl,
-        handleSuccess,
-        handleFailure,
+        handleSuccessWithToast,
+        handleFailureWithToast,
         DOWNLOAD_JOB_POLL_INTERVAL_MS,
       );
     })
-    .catch(handleFailure);
+    .catch(handleFailureWithToast);
 };
