@@ -1,17 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createEntityAdapter,
+  createSlice,
+  EntityState,
+  PayloadAction,
+} from '@reduxjs/toolkit';
 import {
   ExperiencePointsFilterData,
   ExperiencePointsRecordListData,
   ExperiencePointsRecordMiniEntity,
 } from 'types/course/experiencePointsRecords';
-import { EntityStore } from 'types/store';
-import {
-  createEntityStore,
-  removeAllFromStore,
-  removeFromStore,
-  saveEntityToStore,
-  saveListToStore,
-} from 'utilities/store';
 
 interface ExperiencePointsRecordSettings {
   rowCount: number;
@@ -20,12 +17,15 @@ interface ExperiencePointsRecordSettings {
 }
 
 export interface ExperiencePointsState {
-  records: EntityStore<ExperiencePointsRecordMiniEntity>;
+  records: EntityState<ExperiencePointsRecordMiniEntity>;
   settings: ExperiencePointsRecordSettings;
 }
 
+export const experiencePointsAdapter =
+  createEntityAdapter<ExperiencePointsRecordMiniEntity>({});
+
 const initialState: ExperiencePointsState = {
-  records: createEntityStore(),
+  records: experiencePointsAdapter.getInitialState(),
   settings: { rowCount: 0, filters: { courseStudents: [] }, studentName: '' },
 };
 
@@ -42,8 +42,8 @@ export const experiencePointsStore = createSlice({
         studentName?: string;
       }>,
     ) => {
-      removeAllFromStore(state.records);
-      saveListToStore(state.records, action.payload.records);
+      experiencePointsAdapter.removeAll(state.records);
+      experiencePointsAdapter.setAll(state.records, action.payload.records);
 
       state.settings.rowCount = action.payload.rowCount;
       state.settings.filters = action.payload.filters ?? { courseStudents: [] };
@@ -53,31 +53,21 @@ export const experiencePointsStore = createSlice({
       state,
       action: PayloadAction<{ data: ExperiencePointsRecordListData }>,
     ) => {
-      const recordId = action.payload.data.id;
-      if (state.records.byId[recordId]) {
-        const prevEntity = state.records.byId[recordId]!;
-        const nextEntity = {
-          ...prevEntity,
-          reason: {
-            ...prevEntity.reason,
-            text: action.payload.data.reason.text,
-          },
-          pointsAwarded: action.payload.data.pointsAwarded,
-          updatedAt: action.payload.data.updatedAt,
-          updated: action.payload.data.updater,
-        };
+      const record = state.records.entities[action.payload.data.id];
+      if (record) {
+        record.reason.text = action.payload.data.reason.text;
+        record.pointsAwarded = action.payload.data.pointsAwarded;
+        record.updatedAt = action.payload.data.updatedAt;
+        record.updater = action.payload.data.updater;
 
-        saveEntityToStore(state.records, nextEntity);
+        experiencePointsAdapter.upsertOne(state.records, record);
       }
     },
     deleteExperiencePointsRecord: (
       state,
       action: PayloadAction<{ id: number }>,
     ) => {
-      const recordId = action.payload.id;
-      if (state.records.byId[recordId]) {
-        removeFromStore(state.records, recordId);
-      }
+      experiencePointsAdapter.removeOne(state.records, action.payload.id);
     },
   },
 });

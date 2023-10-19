@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
 
@@ -58,14 +58,15 @@ const ExperiencePointsIndex: FC = () => {
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  let componentToRender: JSX.Element;
-  if (tabValue === 'forum-disbursement-tab') {
-    componentToRender = <ForumDisbursement />;
-  } else if (tabValue === 'general-disbursement-tab') {
-    componentToRender = <GeneralDisbursement />;
-  } else {
-    componentToRender = <ExperiencePointsDetails />;
-  }
+  const tabComponentMapping = {
+    'forum-disbursement-tab': <ForumDisbursement />,
+    'general-disbursement-tab': <GeneralDisbursement />,
+    'experience-points-tab': <ExperiencePointsDetails />,
+  };
+
+  const componentToRender = tabComponentMapping[tabValue] || (
+    <ExperiencePointsDetails />
+  );
 
   return (
     <Page title={t(translations.experiencePoints)} unpadded>
@@ -73,57 +74,36 @@ const ExperiencePointsIndex: FC = () => {
         <LoadingIndicator />
       ) : (
         <>
-          <Box className="max-w-full">
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <Tabs
-                onChange={(_, value): void => {
-                  setTabValue(value);
-                }}
-                scrollButtons="auto"
-                sx={tabsStyle}
-                TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-                value={tabValue}
-                variant="scrollable"
-              >
-                <Tab
-                  id="experience-points-tab"
-                  label={
-                    <FormattedMessage
-                      {...translations.experiencePointsHistory}
-                    />
-                  }
-                  style={{
-                    minHeight: 48,
-                    textDecoration: 'none',
-                  }}
-                  value="experience-points-tab"
-                />
-                <Tab
-                  id="forum-disbursement-tab"
-                  label={
-                    <FormattedMessage {...translations.forumDisbursementTab} />
-                  }
-                  style={{
-                    minHeight: 48,
-                    textDecoration: 'none',
-                  }}
-                  value="forum-disbursement-tab"
-                />
-                <Tab
-                  id="general-disbursement-tab"
-                  label={
-                    <FormattedMessage
-                      {...translations.generalDisbursementTab}
-                    />
-                  }
-                  style={{
-                    minHeight: 48,
-                    textDecoration: 'none',
-                  }}
-                  value="general-disbursement-tab"
-                />
-              </Tabs>
-            </Box>
+          <Box className="max-w-full border-b border-divider">
+            <Tabs
+              onChange={(_, value): void => {
+                setTabValue(value);
+              }}
+              scrollButtons="auto"
+              sx={tabsStyle}
+              TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+              value={tabValue}
+              variant="scrollable"
+            >
+              <Tab
+                className="min-h-12"
+                id="experience-points-tab"
+                label={t(translations.experiencePointsHistory)}
+                value="experience-points-tab"
+              />
+              <Tab
+                className="min-h-12"
+                id="forum-disbursement-tab"
+                label={t(translations.forumDisbursementTab)}
+                value="forum-disbursement-tab"
+              />
+              <Tab
+                className="min-h-12"
+                id="general-disbursement-tab"
+                label={t(translations.generalDisbursementTab)}
+                value="general-disbursement-tab"
+              />
+            </Tabs>
           </Box>
 
           {componentToRender}

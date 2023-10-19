@@ -51,12 +51,8 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         setCellProps: () => ({
-          style: {
-            overflowWrap: 'anywhere',
-            maxWidth: '3vw',
-            minWidth: '3vw',
-            padding: '5px 14px',
-          },
+          className:
+            'overflow-wrap-anywhere max-w-[2vw] min-w-[2vw] p-2.5 p-14',
         }),
         customBodyRenderLite: (dataIndex): number => dataIndex + 1,
       },
@@ -68,14 +64,10 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px' },
+          className: 'p-3',
         }),
         setCellProps: () => ({
-          style: {
-            overflowWrap: 'anywhere',
-            padding: '5px 14px',
-            width: '50vw',
-          },
+          className: 'overflow-wrap-anywhere p-1.5 p-14 w-[40vw]',
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <Link
@@ -94,14 +86,10 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px' },
+          className: 'p-3',
         }),
         setCellProps: () => ({
-          style: {
-            overflowWrap: 'anywhere',
-            width: '300px',
-            padding: '5px 14px',
-          },
+          className: 'overflow-wrap-anywhere w-72 p-1.5',
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <PointField
@@ -118,10 +106,10 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px' },
+          className: 'p-0',
         }),
         setCellProps: () => ({
-          style: { width: '30vw', padding: '0px' },
+          className: 'w-[45vw] p-0',
         }),
         customBodyRenderLite: (dataIndex): JSX.Element | null => {
           if (dataIndex === 0) {
