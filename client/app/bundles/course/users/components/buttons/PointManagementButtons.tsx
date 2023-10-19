@@ -110,7 +110,7 @@ const PointManagementButtons: FC<Props> = (props) => {
   };
 
   return (
-    <div key={`buttons-${data.id}`} style={{ whiteSpace: 'nowrap' }}>
+    <div key={`buttons-${data.id}`} className="whitespace-nowrap">
       {permissions.canUpdate && (
         <SaveButton
           className={`record-save-${data.id}`}

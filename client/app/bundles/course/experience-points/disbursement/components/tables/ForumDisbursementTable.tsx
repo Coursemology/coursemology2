@@ -66,12 +66,8 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         setCellProps: () => ({
-          style: {
-            overflowWrap: 'anywhere',
-            maxWidth: '3vw',
-            minWidth: '3vw',
-            padding: '5px 14px',
-          },
+          className:
+            'overflow-wrap-anywhere max-w-[3vw] min-w-[3vw] p-1.5 p-14',
         }),
         customBodyRenderLite: (dataIndex): number => dataIndex + 1,
       },
@@ -83,10 +79,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px' },
+          className: 'p-4',
         }),
         setCellProps: () => ({
-          style: { overflowWrap: 'anywhere', padding: '5px 14px' },
+          className: 'overflow-wrap-anywhere p-1.5',
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <Link
@@ -105,14 +101,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px', textAlign: 'end' },
+          className: 'p-4 text-end',
         }),
         setCellProps: () => ({
-          style: {
-            overflowWrap: 'anywhere',
-            padding: '5px 14px',
-            textAlign: 'end',
-          },
+          className: 'overflow-wrap-anywhere p-1.5 text-end',
         }),
         customBodyRenderLite: (dataIndex): string =>
           forumUsers[dataIndex].level.toString(),
@@ -125,14 +117,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px', textAlign: 'end' },
+          className: 'p-4 text-end',
         }),
         setCellProps: () => ({
-          style: {
-            overflowWrap: 'anywhere',
-            padding: '5px 14px',
-            textAlign: 'end',
-          },
+          className: 'overflow-wrap-anywhere p-1.5 text-end',
         }),
         customBodyRenderLite: (dataIndex): string =>
           forumUsers[dataIndex].exp.toString(),
@@ -145,14 +133,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px', textAlign: 'end' },
+          className: 'p-4 text-end',
         }),
         setCellProps: () => ({
-          style: {
-            overflowWrap: 'anywhere',
-            padding: '5px 14px',
-            textAlign: 'end',
-          },
+          className: 'overflow-wrap-anywhere p-1.5 text-end',
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <>
@@ -180,14 +164,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px', textAlign: 'end' },
+          className: 'p-4 text-end',
         }),
         setCellProps: () => ({
-          style: {
-            overflowWrap: 'anywhere',
-            padding: '5px 14px',
-            textAlign: 'end',
-          },
+          className: 'overflow-wrap-anywhere p-1.5 text-end',
         }),
         customBodyRenderLite: (dataIndex): string =>
           forumUsers[dataIndex].voteTally.toString(),
@@ -200,12 +180,11 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '14px' },
+          className: 'p-2',
         }),
         setCellProps: (_, rowIndex: number) => ({
-          className: 'course_user',
+          className: 'course_user overflow-wrap-anywhere p-1.5 p-8',
           id: `course_user_${forumUsers[rowIndex].id}`,
-          style: { overflowWrap: 'anywhere', padding: '5px 14px' },
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <PointField

@@ -151,6 +151,7 @@ const SubmissionFilter: FC<Props> = (props) => {
           {intl.formatMessage(translations.applyFilterButton)}
         </Button>
         <Button
+          className="ml-10"
           color="secondary"
           disabled={disableButton}
           onClick={(): void => {
@@ -160,7 +161,6 @@ const SubmissionFilter: FC<Props> = (props) => {
               user: null,
             });
           }}
-          style={{ marginLeft: 10 }}
           variant="contained"
         >
           {intl.formatMessage(translations.clearFilterButton)}
