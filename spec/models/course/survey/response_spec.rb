@@ -3,7 +3,6 @@ require 'rails_helper'
 
 RSpec.describe Course::Survey::Response do
   it { is_expected.to act_as(Course::ExperiencePointsRecord) }
-  it { is_expected.to belong_to(:survey).inverse_of(:responses) }
   it { is_expected.to have_many(:answers).inverse_of(:response).dependent(:destroy) }
 
   let!(:instance) { Instance.default }
@@ -17,6 +16,11 @@ RSpec.describe Course::Survey::Response do
       create(:course_survey_response, *response_traits, survey: survey, creator: student)
     end
     let(:response_traits) { nil }
+
+    it 'belongs to survey with inverse of responses' do
+      expect(response.survey).to eq(survey)
+      expect(survey.responses).to include(response)
+    end
 
     describe '#submitted?' do
       subject { response.submitted? }
