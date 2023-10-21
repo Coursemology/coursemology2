@@ -50,10 +50,6 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         alignCenter: true,
-        setCellProps: () => ({
-          className:
-            'overflow-wrap-anywhere max-w-[2vw] min-w-[2vw] p-2.5 p-14',
-        }),
         customBodyRenderLite: (dataIndex): number => dataIndex + 1,
       },
     },
@@ -67,7 +63,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
           className: 'p-3',
         }),
         setCellProps: () => ({
-          className: 'overflow-wrap-anywhere p-1.5 p-14 w-[40vw]',
+          className: 'overflow-wrap-anywhere p-1.5 w-[43vw]',
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <Link

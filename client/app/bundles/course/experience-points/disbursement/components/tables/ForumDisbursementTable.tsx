@@ -65,10 +65,6 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         alignCenter: true,
-        setCellProps: () => ({
-          className:
-            'overflow-wrap-anywhere max-w-[3vw] min-w-[3vw] p-1.5 p-14',
-        }),
         customBodyRenderLite: (dataIndex): number => dataIndex + 1,
       },
     },
@@ -79,10 +75,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          className: 'p-4',
+          className: 'p-2.5',
         }),
         setCellProps: () => ({
-          className: 'overflow-wrap-anywhere p-1.5',
+          className: 'overflow-wrap-anywhere p-1.5 w-[20vw]',
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <Link
@@ -101,7 +97,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          className: 'p-4 text-end',
+          className: 'p-3 text-end',
         }),
         setCellProps: () => ({
           className: 'overflow-wrap-anywhere p-1.5 text-end',
@@ -117,7 +113,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          className: 'p-4 text-end',
+          className: 'p-3 text-end',
         }),
         setCellProps: () => ({
           className: 'overflow-wrap-anywhere p-1.5 text-end',
@@ -133,7 +129,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          className: 'p-4 text-end',
+          className: 'p-3 text-end',
         }),
         setCellProps: () => ({
           className: 'overflow-wrap-anywhere p-1.5 text-end',
@@ -164,10 +160,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          className: 'p-4 text-end',
+          className: 'p-3 text-end',
         }),
         setCellProps: () => ({
-          className: 'overflow-wrap-anywhere p-1.5 text-end',
+          className: 'overflow-wrap-anywhere w-[8vw] p-1.5 p-1.5 text-end',
         }),
         customBodyRenderLite: (dataIndex): string =>
           forumUsers[dataIndex].voteTally.toString(),
@@ -180,10 +176,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          className: 'p-2',
+          className: 'ml-9',
         }),
         setCellProps: (_, rowIndex: number) => ({
-          className: 'course_user overflow-wrap-anywhere p-1.5 p-8',
+          className: 'course_user overflow-wrap-anywhere ml-5 p-1 p-0',
           id: `course_user_${forumUsers[rowIndex].id}`,
         }),
         customBodyRenderLite: (dataIndex): JSX.Element => (
