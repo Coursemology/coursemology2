@@ -230,7 +230,7 @@ const DisbursementForm: FC<Props> = (props) => {
             <Grid item>
               <Button
                 key="disbursement-form-submit-button"
-                className="general-btn-submit mb-10 mt-10"
+                className="general-btn-submit mb-3 mt-10"
                 color="primary"
                 disabled={!isDirty || isSubmitting}
                 form="disbursement-form"
