@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import {
   ExperiencePointsRecordPermissions,
   ExperiencePointsRowData,
@@ -13,8 +13,9 @@ import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import SaveButton from 'lib/components/core/buttons/SaveButton';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   permissions: ExperiencePointsRecordPermissions;
   data: ExperiencePointsRowData;
   isManuallyAwarded: boolean;
@@ -50,7 +51,6 @@ const translations = defineMessages({
 
 const PointManagementButtons: FC<Props> = (props) => {
   const {
-    intl,
     permissions,
     data,
     isManuallyAwarded,
@@ -60,6 +60,7 @@ const PointManagementButtons: FC<Props> = (props) => {
     deleteDisabled,
   } = props;
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -73,14 +74,14 @@ const PointManagementButtons: FC<Props> = (props) => {
           pointsAwarded: response.pointsAwarded,
         };
         handleSave(experiencePointsRowData);
-        toast.success(intl.formatMessage(translations.updateSuccess));
+        toast.success(t(translations.updateSuccess));
       })
       .catch((error) => {
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.updateFailure, {
+          t(translations.updateFailure, {
             error: errorMessage,
           }),
         );
@@ -92,14 +93,14 @@ const PointManagementButtons: FC<Props> = (props) => {
     setIsDeleting(true);
     return dispatch(deleteExperiencePointsRecord(data.id, studentId))
       .then(() => {
-        toast.success(intl.formatMessage(translations.deletionSuccess));
+        toast.success(t(translations.deletionSuccess));
       })
       .catch((error) => {
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.deletionFailure, {
+          t(translations.deletionFailure, {
             error: errorMessage,
           }),
         );
@@ -120,7 +121,7 @@ const PointManagementButtons: FC<Props> = (props) => {
       {permissions.canDestroy && isManuallyAwarded && (
         <DeleteButton
           className={`record-delete-${data.id}`}
-          confirmMessage={intl.formatMessage(translations.deletionConfirm, {
+          confirmMessage={t(translations.deletionConfirm, {
             pointsAwarded: data.pointsAwarded.toString(),
           })}
           disabled={isSaving || isDeleting || deleteDisabled}
@@ -133,4 +134,4 @@ const PointManagementButtons: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(PointManagementButtons);
+export default PointManagementButtons;

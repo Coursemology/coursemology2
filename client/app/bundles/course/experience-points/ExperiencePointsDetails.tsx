@@ -8,12 +8,12 @@ import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import Page from 'lib/components/core/layouts/Page';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
-import { LoadingToast } from 'lib/hooks/toast/loadingToast';
+import loadingToast, { LoadingToast } from 'lib/hooks/toast/loadingToast';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import ExperiencePointsDownload from './components/ExperiencePointsDownload';
+import ExperiencePointsFiltering from './components/ExperiencePointsFiltering';
 import ExperiencePointsTable from './components/ExperiencePointsTable';
-import ExperiencePointsDownload from './ExperiencePointsDownload';
-import ExperiencePointsFiltering from './ExperiencePointsFiltering';
 import {
   downloadExperiencePoints,
   fetchAllExperiencePointsRecord,
@@ -73,32 +73,28 @@ const ExperiencePointsDetails = (): JSX.Element => {
       });
   }, [pageNum, studentFilterId]);
 
-  const handleSuccess = (
-    successData: JobCompleted,
-    loadingToast: LoadingToast,
-  ): void => {
-    window.location.href = successData.redirectUrl!;
-    loadingToast.success(t(translations.downloadRequestSuccess));
-    setIsDownloading(false);
-  };
+  const handleSuccess =
+    (loadToast: LoadingToast) =>
+    (successData: JobCompleted): void => {
+      window.location.href = successData.redirectUrl!;
+      loadToast.success(t(translations.downloadRequestSuccess));
+      setIsDownloading(false);
+    };
 
-  const handleFailure = (
-    error: JobErrored | AxiosError,
-    loadingToast: LoadingToast,
-  ): void => {
-    const message = error?.message || t(translations.downloadFailure);
-    loadingToast.error(message);
-    setIsDownloading(false);
-  };
-
-  const downloadPendingMessage = t(translations.downloadPending);
+  const handleFailure =
+    (loadToast: LoadingToast) =>
+    (error: JobErrored | AxiosError): void => {
+      const message = error?.message || t(translations.downloadFailure);
+      loadToast.error(message);
+      setIsDownloading(false);
+    };
 
   const handleOnClick = (): void => {
     setIsDownloading(true);
+    const loadToast = loadingToast(t(translations.downloadPending));
     downloadExperiencePoints(
-      handleSuccess,
-      handleFailure,
-      downloadPendingMessage,
+      handleSuccess(loadToast),
+      handleFailure(loadToast),
       studentFilterId,
     );
   };
