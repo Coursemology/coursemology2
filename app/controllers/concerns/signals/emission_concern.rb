@@ -14,7 +14,7 @@ module Signals::EmissionConcern
         return unless response.successful?
 
         self.class.include(slice_class(slice_name))
-        headers[HEADER_KEY] = generate_sync&.to_json
+        headers[HEADER_KEY] = send(generate_sync_method_name(slice_name))&.to_json
       rescue NameError
         return if Rails.env.production?
 
@@ -31,5 +31,9 @@ module Signals::EmissionConcern
 
   def slice_class(slice_name)
     slice_class_name(slice_name).constantize
+  end
+
+  def generate_sync_method_name(slice_name)
+    "generate_sync_for_#{slice_name}".to_sym
   end
 end
