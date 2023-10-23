@@ -7,13 +7,13 @@ RSpec.describe Signals::EmissionConcern do
   class OutOfOrder < StandardError; end
 
   module Signals::Slices::DummySlice1
-    def generate_sync
+    def generate_sync_for_dummy_slice1
       (@first && @second) ? :dummy1 : raise(OutOfOrder, 'signal should be resolved after all controller callbacks')
     end
   end
 
   module Signals::Slices::DummySlice2
-    def generate_sync
+    def generate_sync_for_dummy_slice2
       (@first && @second) ? :dummy2 : raise(OutOfOrder, 'signal should be resolved after all controller callbacks')
     end
   end
