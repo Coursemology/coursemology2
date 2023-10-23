@@ -8,12 +8,14 @@ RSpec.describe Signals::EmissionConcern do
 
   module Signals::Slices::DummySlice1
     def generate_sync_for_dummy_slice1
+      access_controller_method
       (@first && @second) ? :dummy1 : raise(OutOfOrder, 'signal should be resolved after all controller callbacks')
     end
   end
 
   module Signals::Slices::DummySlice2
     def generate_sync_for_dummy_slice2
+      access_controller_method
       (@first && @second) ? :dummy2 : raise(OutOfOrder, 'signal should be resolved after all controller callbacks')
     end
   end
@@ -48,6 +50,14 @@ RSpec.describe Signals::EmissionConcern do
 
     def callback2
       @first ? (@second = true) : raise(OutOfOrder, 'callback2 should be called after callback1')
+    end
+
+    def check_if_slices_can_access_controller_method
+      @accessed_controller_method || raise(StandardError, 'slices should be able to access controller methods')
+    end
+
+    def access_controller_method
+      @accessed_controller_method = true
     end
 
     def should_emit_signal1?
