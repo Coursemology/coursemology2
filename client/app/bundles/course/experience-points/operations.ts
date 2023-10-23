@@ -9,8 +9,6 @@ import { JobCompleted, JobErrored } from 'types/jobs';
 
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/jobHelpers';
-import { loadingToast } from 'lib/hooks/toast';
-import { LoadingToast } from 'lib/hooks/toast/loadingToast';
 
 import { actions } from './store';
 
@@ -94,27 +92,19 @@ export function deleteExperiencePointsRecord(
 }
 
 export const downloadExperiencePoints = (
-  handleSuccess: (successData: JobCompleted, toast: LoadingToast) => void,
-  handleFailure: (error: JobErrored | AxiosError, toast: LoadingToast) => void,
-  downloadPendingMessage: string,
+  handleSuccess: (successData: JobCompleted) => void,
+  handleFailure: (error: JobErrored | AxiosError) => void,
   studentId?: number,
 ): void => {
-  const toast = loadingToast(downloadPendingMessage);
-  const handleSuccessWithToast = (successData: JobCompleted): void => {
-    handleSuccess(successData, toast);
-  };
-  const handleFailureWithToast = (error: JobErrored | AxiosError): void => {
-    handleFailure(error, toast);
-  };
   CourseAPI.experiencePointsRecord
     .downloadCSV(studentId)
     .then((response) => {
       pollJob(
         response.data.jobUrl,
-        handleSuccessWithToast,
-        handleFailureWithToast,
+        handleSuccess,
+        handleFailure,
         DOWNLOAD_JOB_POLL_INTERVAL_MS,
       );
     })
-    .catch(handleFailureWithToast);
+    .catch(handleFailure);
 };

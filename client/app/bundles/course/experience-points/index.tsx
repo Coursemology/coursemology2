@@ -44,10 +44,6 @@ const ExperiencePointsIndex: FC = () => {
     'experience-points-tab': <ExperiencePointsDetails />,
   };
 
-  const componentToRender = tabComponentMapping[tabValue] || (
-    <ExperiencePointsDetails />
-  );
-
   return (
     <Page title={t(translations.experiencePoints)} unpadded>
       <>
@@ -83,7 +79,7 @@ const ExperiencePointsIndex: FC = () => {
           </Tabs>
         </Box>
 
-        {componentToRender}
+        {tabComponentMapping[tabValue]}
       </>
     </Page>
   );

@@ -26,10 +26,6 @@ const translations = defineMessages({
     id: 'course.users.ExperiencePointsRecords.experiencePointsHistoryHeader',
     defaultMessage: 'Experience Points History: {for}',
   },
-  fetchUsersFailure: {
-    id: 'course.users.ExperiencePointsRecords.fetchUsersFailure',
-    defaultMessage: 'Failed to fetch records',
-  },
   fetchRecordsFailure: {
     id: 'course.experiencePoints.fetchRecordsFailure',
     defaultMessage: 'Failed to fetch records',
@@ -85,7 +81,7 @@ const ExperiencePointsRecords = (): JSX.Element => {
         records={records}
       />
 
-      {pagination}
+      {!isLoading && pagination}
     </Page>
   );
 };
