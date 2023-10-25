@@ -33,11 +33,11 @@ const useLiveMonitoringChannel = (
     };
   }, [courseId, monitorId]);
 
-  const getRecentHeartbeats = useCallback((sessionId: number): void => {
-    channelRef.current?.getRecentHeartbeats(sessionId);
-  }, []);
-
-  return { getRecentHeartbeats };
+  return {
+    getHeartbeats: useCallback((sessionId, limit?) => {
+      channelRef.current?.getHeartbeats(sessionId, limit);
+    }, []),
+  };
 };
 
 export default useLiveMonitoringChannel;

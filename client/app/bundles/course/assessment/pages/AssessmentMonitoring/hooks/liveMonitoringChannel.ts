@@ -9,7 +9,7 @@ const LIVE_MONITORING_CHANNEL_NAME =
   'Course::Monitoring::LiveMonitoringChannel' as const;
 
 export interface LiveMonitoringChannel {
-  getRecentHeartbeats: (sessionId: number) => void;
+  getHeartbeats: (sessionId: number, limit?: number) => void;
   unsubscribe: () => void;
 }
 
@@ -53,8 +53,8 @@ const subscribe = (
   );
 
   return {
-    getRecentHeartbeats: (sessionId) =>
-      channel.perform('view', { session_id: sessionId }),
+    getHeartbeats: (sessionId, limit?) =>
+      channel.perform('view', { session_id: sessionId, limit }),
 
     unsubscribe: (): void => {
       channel.unsubscribe();

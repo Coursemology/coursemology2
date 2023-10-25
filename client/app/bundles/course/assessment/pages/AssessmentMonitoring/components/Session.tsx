@@ -7,7 +7,7 @@ import SessionBlob from './SessionBlob';
 
 interface SessionProps {
   for: number;
-  onClick?: (sessionId: number) => void;
+  getHeartbeats?: (sessionId: number, limit?: number) => void;
 }
 
 const Session = (props: SessionProps): JSX.Element => {
@@ -24,7 +24,11 @@ const Session = (props: SessionProps): JSX.Element => {
     );
 
   return (
-    <ActiveSessionBlob for={userId} of={snapshot} onClick={props.onClick} />
+    <ActiveSessionBlob
+      for={userId}
+      getHeartbeats={props.getHeartbeats}
+      of={snapshot}
+    />
   );
 };
 
