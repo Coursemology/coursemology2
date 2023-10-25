@@ -4,9 +4,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     if update_submission
       load_or_create_answers if unsubmit?
       render 'edit'
-    else
-      logger.error("failed to update submission: #{@submission.errors.inspect}")
-      render json: { errors: @submission.errors }, status: :bad_request
     end
   end
 
@@ -153,7 +150,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
           answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
           if answer && !update_answer(answer, answer_params)
             logger.error("Failed to update answer #{answer.errors.inspect}")
-            raise ActiveRecord::Rollback
+            render json: { errors: answer.errors }, status: :bad_request
+            return false
           end
           attempt_draft_answer(answer) if answer
         end
@@ -161,7 +159,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
       unless @submission.update(update_submission_params)
         logger.error("Failed to update submission #{@submission.errors.inspect}")
-        raise ActiveRecord::Rollback
+        render json: { errors: @submission.errors }, status: :bad_request
+        return false
       end
 
       true
