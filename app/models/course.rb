@@ -235,6 +235,10 @@ class Course < ApplicationRecord
     settings(:course_assessments_component).programming_max_time_limit = time
   end
 
+  def codaveri_feedback_workflow
+    settings(:course_codaveri_component).feedback_workflow
+  end
+
   def codaveri_itsp_enabled?
     settings(:course_codaveri_component).is_only_itsp
   end

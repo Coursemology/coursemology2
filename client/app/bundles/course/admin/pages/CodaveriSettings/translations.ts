@@ -11,13 +11,26 @@ export default defineMessages({
       "This is currently an experimental feature. \
       Codaveri provides code evaluation and automated code feedback services for students' codes.",
   },
-  enableIsOnlyITSP: {
-    id: 'course.admin.CodaveriSettings.enableIsOnlyITSP',
-    defaultMessage: 'Enable ITSP',
+  feedbackWorkflow: {
+    id: 'course.admin.CodaveriSettings.feedbackWorkflow',
+    defaultMessage: 'Automatic Feedback Comment',
   },
-  errorOccurredWhenUpdating: {
-    id: 'course.admin.CodaveriSettings.error',
-    defaultMessage: 'An error occurred while updating the codaveri setting.',
+  feedbackWorkflowDescription: {
+    id: 'course.admin.CodaveriSettings.feedbackWorkflowDescription',
+    defaultMessage: 'When a submission with programming question is finalised,',
+  },
+  feedbackWorkflowNone: {
+    id: 'course.admin.CodaveriSettings.feedbackWorkflowNone',
+    defaultMessage: 'Generate no feedback',
+  },
+  feedbackWorkflowDraft: {
+    id: 'course.admin.CodaveriSettings.feedbackWorkflowDraft',
+    defaultMessage:
+      'Generate feedback as a draft requiring approval from staff',
+  },
+  feedbackWorkflowPublish: {
+    id: 'course.admin.CodaveriSettings.feedbackWorkflowPublish',
+    defaultMessage: 'Publish feedback directly to student',
   },
   codaveriEngine: {
     id: 'course.admin.CodaveriSettings.codaveriEngine',

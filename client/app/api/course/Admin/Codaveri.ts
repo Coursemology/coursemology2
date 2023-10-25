@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import {
   CodaveriSettingsData,
-  CodaveriSettingsPostData,
+  CodaveriSettingsPatchData,
 } from 'types/course/admin/codaveri';
 
 import BaseAdminAPI from './Base';
@@ -16,7 +16,7 @@ export default class CodaveriAdminAPI extends BaseAdminAPI {
   }
 
   update(
-    data: CodaveriSettingsPostData,
+    data: CodaveriSettingsPatchData,
   ): Promise<AxiosResponse<CodaveriSettingsData>> {
     return this.client.patch(this.urlPrefix, data);
   }

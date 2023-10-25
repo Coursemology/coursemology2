@@ -204,7 +204,10 @@ class Course::Assessment::Submission < ApplicationRecord
   #
   # @return [Course::Assessment::Submission::AutoFeedbackJob] The job instance.
   def auto_feedback!
-    AutoFeedbackJob.perform_later(self) if assessment.course.component_enabled?(Course::CodaveriComponent)
+    if assessment.course.component_enabled?(Course::CodaveriComponent) &
+       (assessment.course.codaveri_feedback_workflow != 'none')
+      AutoFeedbackJob.perform_later(self)
+    end
   end
 
   def unsubmitting?

@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   def edit
-    respond_to do |format|
-      format.json
-    end
   end
 
   def update
@@ -17,7 +14,7 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   private
 
   def codaveri_settings_params
-    params.require(:settings_codaveri_component).permit(:is_only_itsp)
+    params.require(:settings_codaveri_component).permit(:is_only_itsp, :feedback_workflow)
   end
 
   def component

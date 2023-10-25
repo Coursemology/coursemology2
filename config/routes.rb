@@ -225,7 +225,9 @@ Rails.application.routes.draw do
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
-            resources :programming, only: [:new, :create, :edit, :update, :destroy]
+            resources :programming, only: [:new, :create, :edit, :update, :destroy] do
+              patch :update_question_setting, on: :member
+            end
             resources :voice_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :scribing, only: [:show, :new, :create, :edit, :update, :destroy]
             resources :forum_post_responses, only: [:new, :create, :edit, :update, :destroy]
