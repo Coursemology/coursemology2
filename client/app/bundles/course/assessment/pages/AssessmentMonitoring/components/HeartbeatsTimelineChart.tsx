@@ -1,5 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
+import { PinchOutlined } from '@mui/icons-material';
+import { Button, Typography } from '@mui/material';
 import {
   Chart as ChartJS,
   ChartData,
@@ -7,6 +9,7 @@ import {
   Color,
   PointStyle,
 } from 'chart.js';
+import zoomPlugin from 'chartjs-plugin-zoom';
 import moment from 'moment';
 import palette from 'theme/palette';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
@@ -26,6 +29,8 @@ const SELECTED_HEARTBEAT_BORDER_COLOR = 'rgba(59, 130, 246, 0.5)';
 const ALIVE_PERIOD_COLOR = 'rgba(69, 184, 128, 0.2)';
 const LATE_PERIOD_COLOR = palette.warning.main;
 const MISSING_PERIOD_COLOR = palette.error.main;
+
+ChartJS.register(zoomPlugin);
 
 interface HeartbeatsTimelineChartProps {
   in: HeartbeatDetail[];
@@ -157,6 +162,19 @@ const HeartbeatsTimelineChart = (
       plugins: {
         legend: { display: false },
         tooltip: { displayColors: false, callbacks: { label: () => '' } },
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: 'x',
+            scaleMode: 'x',
+          },
+          zoom: {
+            wheel: { enabled: true },
+            pinch: { enabled: true },
+            mode: 'x',
+            scaleMode: 'x',
+          },
+        },
       },
       animation: false,
       maintainAspectRatio: false,
@@ -171,6 +189,20 @@ const HeartbeatsTimelineChart = (
     <div className="flex flex-col space-y-2 h-full overflow-hidden">
       <div className="w-full min-h-[15rem] h-full relative">
         <Line ref={ref} data={data} options={options} />
+      </div>
+
+      <div className="flex justify-between">
+        <div className="flex space-x-2 items-center text-neutral-400">
+          <PinchOutlined fontSize="small" />
+
+          <Typography className="mt-0.5" color="inherit" variant="caption">
+            {t(translations.zoomPanHint)}
+          </Typography>
+        </div>
+
+        <Button onClick={(): void => ref.current?.resetZoom()} size="small">
+          {t(translations.resetZoom)}
+        </Button>
       </div>
     </div>
   );
