@@ -14,8 +14,7 @@ import notificationPopupReducer from 'lib/reducers/notificationPopup';
 import globalAnnouncementReducer from './bundles/announcements/store';
 import sessionReducer from './bundles/common/store';
 import achievementsReducer from './bundles/course/achievement/store';
-import lessonPlanSettingsReducer from './bundles/course/admin/reducers/lessonPlanSettings';
-import notificationSettingsReducer from './bundles/course/admin/reducers/notificationSettings';
+import courseSettingsReducer from './bundles/course/admin/reducers';
 import announcementsReducer from './bundles/course/announcements/store';
 import scribingQuestionReducer from './bundles/course/assessment/question/scribing/store';
 import skillsReducer from './bundles/course/assessment/skills/store';
@@ -58,6 +57,7 @@ const rootReducer = combineReducers({
   assessments: assessmentsReducer,
   comments: commentsReducer,
   courses: coursesReducer,
+  courseSettings: courseSettingsReducer,
   disbursement: disbursementReducer,
   duplication: duplicationsReducer,
   experiencePoints: experiencePointsReducer,
@@ -69,9 +69,7 @@ const rootReducer = combineReducers({
   leaderboard: leaderboardReducer,
   learningMap: learningMapReducer,
   lessonPlan: lessonPlanReducer,
-  lessonPlanSettings: lessonPlanSettingsReducer,
   levels: levelsReducer,
-  notificationSettings: notificationSettingsReducer,
   scribingQuestion: scribingQuestionReducer,
   skills: skillsReducer,
   statistics: statisticsReducer,

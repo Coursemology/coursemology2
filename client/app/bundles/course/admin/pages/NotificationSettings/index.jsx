@@ -13,6 +13,7 @@ import {
 import PropTypes from 'prop-types';
 
 import adminTranslations from 'course/translations.intl';
+import Section from 'lib/components/core/layouts/Section';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import messagesTranslations from 'lib/translations/messages';
 
@@ -192,12 +193,13 @@ class NotificationSettings extends Component {
     if (this.state.isLoading) return <LoadingIndicator />;
 
     return (
-      <>
-        <h2>
-          <FormattedMessage {...translations.emailSettings} />
-        </h2>
+      <Section
+        contentClassName="flex flex-col space-y-3"
+        sticksToNavbar
+        title={<FormattedMessage {...translations.emailSettings} />}
+      >
         {this.renderEmailSettingsTable()}
-      </>
+      </Section>
     );
   }
 }
@@ -217,5 +219,5 @@ NotificationSettings.propTypes = {
 };
 
 export default connect((state) => ({
-  emailSettings: state.notificationSettings,
+  emailSettings: state.courseSettings.notificationSettings,
 }))(injectIntl(NotificationSettings));

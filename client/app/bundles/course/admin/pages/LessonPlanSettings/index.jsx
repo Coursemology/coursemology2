@@ -10,9 +10,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import Section from 'lib/components/core/layouts/Section';
+import Subsection from 'lib/components/core/layouts/Subsection';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import messagesTranslations from 'lib/translations/messages';
 
@@ -163,11 +166,11 @@ class LessonPlanSettings extends Component {
 
     return (
       <>
-        <h3>
+        <Typography>
           <FormattedMessage
             {...translations.lessonPlanAssessmentItemSettings}
           />
-        </h3>
+        </Typography>
         <Table>
           <TableHead>
             <TableRow>
@@ -214,9 +217,9 @@ class LessonPlanSettings extends Component {
 
     return (
       <>
-        <h3>
+        <Typography>
           <FormattedMessage {...translations.lessonPlanComponentItemSettings} />
-        </h3>
+        </Typography>
         <Table>
           <TableHead>
             <TableRow>
@@ -245,15 +248,19 @@ class LessonPlanSettings extends Component {
     if (this.state.isLoading) return <LoadingIndicator />;
 
     return (
-      <>
+      <Section
+        sticksToNavbar
+        title={<FormattedMessage {...translations.lessonPlanSettings} />}
+      >
         <MilestoneGroupSettings />
 
-        <h2>
-          <FormattedMessage {...translations.lessonPlanItemSettings} />
-        </h2>
-        {this.renderLessonPlanItemAssessmentSettingsTable()}
-        {this.renderLessonPlanItemSettingsForComponentsTable()}
-      </>
+        <Subsection
+          title={<FormattedMessage {...translations.lessonPlanItemSettings} />}
+        >
+          {this.renderLessonPlanItemAssessmentSettingsTable()}
+          {this.renderLessonPlanItemSettingsForComponentsTable()}
+        </Subsection>
+      </Section>
     );
   }
 }
@@ -273,5 +280,6 @@ LessonPlanSettings.propTypes = {
 };
 
 export default connect((state) => ({
-  lessonPlanItemSettings: state.lessonPlanSettings.items_settings,
+  lessonPlanItemSettings:
+    state.courseSettings.lessonPlanSettings.items_settings,
 }))(LessonPlanSettings);

@@ -1,9 +1,13 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
+  lessonPlanSettings: {
+    id: 'course.admin.LessonPlanSettings.lessonPlanSettings',
+    defaultMessage: 'Lesson Plan Settings',
+  },
   lessonPlanItemSettings: {
     id: 'course.admin.LessonPlanSettings.lessonPlanItemSettings',
-    defaultMessage: 'Lesson Plan Item Settings',
+    defaultMessage: 'Item Settings',
   },
   lessonPlanAssessmentItemSettings: {
     id: 'course.admin.LessonPlanSettings.lessonPlanAssessmentItemSettings',
