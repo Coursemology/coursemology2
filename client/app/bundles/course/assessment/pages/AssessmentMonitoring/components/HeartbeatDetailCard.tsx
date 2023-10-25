@@ -12,6 +12,7 @@ interface HeartbeatDetailCardProps {
   of: HeartbeatDetail;
   hasSecret?: boolean;
   className?: string;
+  delta?: number;
 }
 
 const HeartbeatDetailCard = (props: HeartbeatDetailCardProps): JSX.Element => {
@@ -56,9 +57,15 @@ const HeartbeatDetailCard = (props: HeartbeatDetailCardProps): JSX.Element => {
           )}
         </span>
 
-        <Typography variant="caption">
-          {moment(heartbeat.generatedAt).fromNow()}
-        </Typography>
+        {props.delta !== undefined && (
+          <Typography variant="caption">
+            {props.delta > 0
+              ? t(translations.deltaFromPreviousHeartbeat, {
+                  ms: props.delta.toLocaleString(),
+                })
+              : t(translations.firstReceivedHeartbeat)}
+          </Typography>
+        )}
       </section>
 
       <section className="space-y-2">
