@@ -158,7 +158,6 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def validate_grade
-    # errors.add(:base, 'Grade must not be empty if it\'s already graded') if graded? && !grade
     errors.add(:grade, :consistent_grade) if grade.present? && grade > question.maximum_grade
     errors.add(:grade, :non_negative_grade) if grade.present? && grade < 0
   end
