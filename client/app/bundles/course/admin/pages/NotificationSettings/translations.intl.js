@@ -19,7 +19,7 @@ const translations = defineMessages({
   },
   emailSettings: {
     id: 'course.admin.NotificationSettings.emailSettings',
-    defaultMessage: 'Email Settings',
+    defaultMessage: 'Email settings',
   },
   updateSuccess: {
     id: 'course.admin.NotificationSettings.updateSuccess',

@@ -5,6 +5,7 @@ import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { initialState as defaultSettings } from 'course/lesson-plan/reducers/flags';
+import Subsection from 'lib/components/core/layouts/Subsection';
 
 import { updateLessonPlanSettings } from './operations';
 
@@ -54,13 +55,10 @@ class MilestoneGroupSettings extends Component {
 
   render() {
     return (
-      <>
-        <h2>
-          <FormattedMessage {...translations.header} />
-        </h2>
-        <p>
-          <FormattedMessage {...translations.explanation} />
-        </p>
+      <Subsection
+        subtitle={<FormattedMessage {...translations.explanation} />}
+        title={<FormattedMessage {...translations.header} />}
+      >
         <RadioGroup
           name="milestonesExpanded"
           onChange={this.handleUpdate}
@@ -87,7 +85,7 @@ class MilestoneGroupSettings extends Component {
             value="current"
           />
         </RadioGroup>
-      </>
+      </Subsection>
     );
   }
 }
@@ -99,5 +97,6 @@ MilestoneGroupSettings.propTypes = {
 
 export default connect((state) => ({
   milestonesExpanded:
-    state.lessonPlanSettings.component_settings.milestones_expanded,
+    state.courseSettings.lessonPlanSettings.component_settings
+      .milestones_expanded,
 }))(MilestoneGroupSettings);
