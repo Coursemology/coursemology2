@@ -59,6 +59,10 @@ const BaseActiveSessionBlob = (
         for={snapshot.userName ?? ''}
         generatedAt={popupData?.[1]}
         hasSecret={hasSecret}
+        onClickShowAllHeartbeats={(): void => {
+          props.getHeartbeats?.(snapshot.sessionId, -1);
+          setPopupData((data) => [data?.[0], new Date().toISOString()]);
+        }}
         onClose={(): void => {
           setPopupData((data) => [undefined, data?.[1]]);
           monitoring.deselect();

@@ -3,6 +3,7 @@ import { Close } from '@mui/icons-material';
 import { IconButton, Popover, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
+import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatPreciseDateTime } from 'lib/moment';
 
@@ -18,6 +19,7 @@ interface SessionDetailsPopupProps {
   generatedAt?: string;
   anchorsOn?: HTMLElement;
   hasSecret?: boolean;
+  onClickShowAllHeartbeats?: () => void;
 }
 
 const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
@@ -43,7 +45,7 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
         open={props.open}
         transformOrigin={{ vertical: 'center', horizontal: 'center' }}
       >
-        <header className="handle sticky top-0 -mx-4 mb-4 cursor-move border-0 border-b border-solid border-neutral-200 bg-white p-4">
+        <header className="handle sticky top-0 -mx-4 mb-4 cursor-move border-only-b-neutral-200 bg-white p-4">
           <IconButton
             className="float-right ml-5"
             edge="end"
@@ -62,15 +64,17 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
           </Typography>
         </header>
 
-        <Typography
-          className="!-mb-1 !mt-7 ml-2"
-          color="text.secondary"
-          variant="body2"
-        >
-          {t(translations.detailsOfNHeartbeats, {
-            n: heartbeats.length,
-          })}
-        </Typography>
+        <div className="flex justify-between items-center px-2">
+          <Typography color="text.secondary" variant="body2">
+            {t(translations.detailsOfNHeartbeats, {
+              n: heartbeats.length,
+            })}
+          </Typography>
+
+          <Link onClick={props.onClickShowAllHeartbeats}>
+            {t(translations.loadAllHeartbeats)}
+          </Link>
+        </div>
 
         <HeartbeatsTimeline hasSecret={props.hasSecret} in={heartbeats} />
       </Popover>
