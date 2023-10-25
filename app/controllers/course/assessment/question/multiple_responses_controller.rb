@@ -82,6 +82,5 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   def load_question_assessment
     @question_assessment = load_question_assessment_for(@multiple_response_question)
-    @question_number = @question_assessment.question_number
   end
 end
