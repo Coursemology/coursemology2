@@ -85,6 +85,7 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
     Course::Monitoring::LiveMonitoringChannel.broadcast_pulse_to @monitor, @session, {
       sessionId: @session.id,
       status: @session.status,
+      misses: @session.misses,
       lastHeartbeatAt: heartbeat.generated_at,
       isValid: valid_heartbeat?(heartbeat)
     }.compact

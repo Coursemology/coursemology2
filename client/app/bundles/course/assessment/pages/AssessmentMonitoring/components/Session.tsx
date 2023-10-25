@@ -28,6 +28,7 @@ const Session = (props: SessionProps): JSX.Element => {
       for={userId}
       getHeartbeats={props.getHeartbeats}
       of={snapshot}
+      warns={snapshot.misses > 0}
     />
   );
 };
