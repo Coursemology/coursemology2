@@ -916,6 +916,10 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.detailsOfNHeartbeats',
     defaultMessage: 'Last {n} heartbeats',
   },
+  liveness: {
+    id: 'course.assessment.monitoring.liveness',
+    defaultMessage: 'Liveness',
+  },
   loadAllHeartbeats: {
     id: 'course.assessment.monitoring.loadAllHeartbeats',
     defaultMessage: 'Load all',

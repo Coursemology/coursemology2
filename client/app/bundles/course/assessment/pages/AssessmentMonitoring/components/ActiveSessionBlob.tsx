@@ -5,8 +5,9 @@ import { Snapshot } from 'types/channels/liveMonitoring';
 import { useAppSelector } from 'lib/hooks/store';
 
 import useMonitoring from '../hooks/useMonitoring';
-import usePresence, { Presence } from '../hooks/usePresence';
+import usePresence from '../hooks/usePresence';
 import { select } from '../selectors';
+import { Presence } from '../utils';
 
 import SessionBlob from './SessionBlob';
 import SessionDetailsPopup from './SessionDetailsPopup';

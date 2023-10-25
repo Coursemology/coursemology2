@@ -51,7 +51,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
       }.compact
     end
 
-    broadcast_viewed recent_heartbeats.reverse
+    broadcast_viewed recent_heartbeats
   end
 
   private
