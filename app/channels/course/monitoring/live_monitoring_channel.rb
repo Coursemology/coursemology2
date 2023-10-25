@@ -41,7 +41,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
     session_id, limit = data['session_id'], data['limit'] || DEFAULT_VIEW_HEARTBEATS_LIMIT
     return unless (session = @monitor.sessions.find(session_id))
 
-    recent_heartbeats = session.heartbeats.last(limit).map do |heartbeat|
+    recent_heartbeats = (limit == -1 ? session.heartbeats : session.heartbeats.last(limit)).map do |heartbeat|
       {
         stale: heartbeat.stale,
         userAgent: heartbeat.user_agent,
