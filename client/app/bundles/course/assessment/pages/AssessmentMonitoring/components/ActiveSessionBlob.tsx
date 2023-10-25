@@ -20,7 +20,7 @@ export const PRESENCE_COLORS: Record<Presence, string> = {
 export interface ActiveSessionBlobProps {
   of: Snapshot;
   for: number;
-  onClick?: (sessionId: number) => void;
+  getHeartbeats?: (sessionId: number, limit?: number) => void;
 }
 
 interface BaseActiveSessionBlobProps extends ActiveSessionBlobProps {
@@ -47,7 +47,7 @@ const BaseActiveSessionBlob = (
         of={snapshot}
         onClick={(e): void => {
           monitoring.select(userId);
-          props.onClick?.(snapshot.sessionId);
+          props.getHeartbeats?.(snapshot.sessionId);
           setPopupData([e.currentTarget, new Date().toISOString()]);
         }}
       >

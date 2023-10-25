@@ -5,16 +5,16 @@ import Session from './Session';
 
 interface SessionsGridProps {
   for?: number[];
-  onClickSession?: (sessionId: number) => void;
+  getHeartbeats?: (sessionId: number, limit?: number) => void;
 }
 
 const SessionsGrid = (props: SessionsGridProps): JSX.Element => {
-  const { for: userIds, onClickSession } = props;
+  const { for: userIds, getHeartbeats } = props;
 
   return (
     <section className="-m-1 flex h-fit w-full flex-wrap">
       {userIds?.map((userId) => (
-        <Session key={userId} for={userId} onClick={onClickSession} />
+        <Session key={userId} for={userId} getHeartbeats={getHeartbeats} />
       ))}
     </section>
   );

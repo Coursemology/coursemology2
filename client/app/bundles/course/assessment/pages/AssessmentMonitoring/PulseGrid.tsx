@@ -71,10 +71,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
 
         <SessionBlobLegend hasSecret={hasSecret} />
 
-        <SessionsGrid
-          for={userIds}
-          onClickSession={channel.getRecentHeartbeats}
-        />
+        <SessionsGrid for={userIds} getHeartbeats={channel.getHeartbeats} />
       </aside>
 
       <aside className="flex w-[30rem] flex-col space-y-5">
