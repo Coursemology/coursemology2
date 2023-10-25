@@ -1,6 +1,6 @@
 import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { workflowStates } from '../constants';
@@ -54,12 +54,15 @@ const CodaveriFeedbackStatus = (props) => {
 
   return (
     <Paper className="mb-8">
-      <div className={`${feedbackBgColor} table-cell p-8 font-bold`}>
+      <Typography
+        className={`${feedbackBgColor} table-cell p-8 font-bold`}
+        variant="body2"
+      >
         {intl.formatMessage(translations.codaveriFeedbackStatus)}
-      </div>
-      <div className="table-cell pl-5">
+      </Typography>
+      <Typography className="table-cell pl-5" variant="body2">
         {intl.formatMessage(feedbackDescription)}
-      </div>
+      </Typography>
     </Paper>
   );
 };
