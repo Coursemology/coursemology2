@@ -920,6 +920,14 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.liveness',
     defaultMessage: 'Liveness',
   },
+  resetZoom: {
+    id: 'course.assessment.monitoring.resetZoom',
+    defaultMessage: 'Reset zoom',
+  },
+  zoomPanHint: {
+    id: 'course.assessment.monitoring.zoomPanHint',
+    defaultMessage: 'Pinch or scroll to zoom. Drag to pan.',
+  },
   loadAllHeartbeats: {
     id: 'course.assessment.monitoring.loadAllHeartbeats',
     defaultMessage: 'Load all',
