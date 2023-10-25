@@ -72,12 +72,12 @@ export function update(topicId, postId, text) {
   };
 }
 
-export function destroy(fileId, topicId, postId) {
+export function destroy(fileId, topicId, postId, codaveriRating) {
   return (dispatch) => {
     dispatch({ type: actionTypes.DELETE_ANNOTATION_REQUEST });
 
     return CourseAPI.comments
-      .delete(topicId, postId)
+      .delete(topicId, postId, { codaveri_rating: codaveriRating })
       .then((response) => response.data)
       .then(() => {
         dispatch({

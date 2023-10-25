@@ -99,7 +99,7 @@ const CodaveriCommentCard: FC<Props> = (props) => {
 
   const onConfirmReject = (): void => {
     setIsRejecting(true);
-    dispatch(deletePost(post))
+    dispatch(deletePost(post, rating))
       .then(() => {
         toast.success(intl.formatMessage(translations.rejectSuccess));
       })

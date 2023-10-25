@@ -115,7 +115,7 @@ const CodaveriCommentCard = (props) => {
   const [rating, setRating] = useState(0);
 
   const onConfirmReject = () => {
-    deleteComment();
+    deleteComment(rating);
     setRejectConfirmation(false);
     setEditMode(false);
   };

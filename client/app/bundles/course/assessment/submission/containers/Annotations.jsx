@@ -88,7 +88,7 @@ class VisibleAnnotations extends Component {
               return (
                 <CodaveriCommentCard
                   key={post.id}
-                  deleteComment={() => deleteComment(post.id)}
+                  deleteComment={(rating) => deleteComment(post.id, rating)}
                   editValue={commentForms.posts[post.id]}
                   handleChange={(value) => handleUpdateChange(post.id, value)}
                   post={post}
@@ -227,8 +227,15 @@ function mapDispatchToProps(dispatch, ownProps) {
         .catch(() => toast.error('Failed to create comment.')),
     updateComment: (postId, comment) =>
       dispatch(annotationActions.update(annotation.id, postId, comment)),
-    deleteComment: (postId) =>
-      dispatch(annotationActions.destroy(fileId, annotation.id, postId)),
+    deleteComment: (postId, codaveriRating) =>
+      dispatch(
+        annotationActions.destroy(
+          fileId,
+          annotation.id,
+          postId,
+          codaveriRating,
+        ),
+      ),
     updateCodaveriFeedback: (postId, codaveriId, comment, rating, status) =>
       dispatch(
         annotationActions.updateCodaveri(
