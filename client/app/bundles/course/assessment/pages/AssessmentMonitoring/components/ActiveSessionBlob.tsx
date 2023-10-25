@@ -1,5 +1,6 @@
 import { ElementType, ReactNode, useState } from 'react';
 import { Remove } from '@mui/icons-material';
+import { Badge } from '@mui/material';
 import { Snapshot } from 'types/channels/liveMonitoring';
 
 import { useAppSelector } from 'lib/hooks/store';
@@ -21,6 +22,7 @@ export const PRESENCE_COLORS: Record<Presence, string> = {
 export interface ActiveSessionBlobProps {
   of: Snapshot;
   for: number;
+  warns?: boolean;
   getHeartbeats?: (sessionId: number, limit?: number) => void;
 }
 
@@ -43,17 +45,24 @@ const BaseActiveSessionBlob = (
 
   return (
     <>
-      <SessionBlob
-        className={props.className}
-        of={snapshot}
-        onClick={(e): void => {
-          monitoring.select(userId);
-          props.getHeartbeats?.(snapshot.sessionId);
-          setPopupData([e.currentTarget, new Date().toISOString()]);
-        }}
+      <Badge
+        badgeContent={props.warns ? undefined : 0}
+        color="error"
+        overlap="circular"
+        variant="dot"
       >
-        {props.children}
-      </SessionBlob>
+        <SessionBlob
+          className={props.className}
+          of={snapshot}
+          onClick={(e): void => {
+            monitoring.select(userId);
+            props.getHeartbeats?.(snapshot.sessionId);
+            setPopupData([e.currentTarget, new Date().toISOString()]);
+          }}
+        >
+          {props.children}
+        </SessionBlob>
+      </Badge>
 
       <SessionDetailsPopup
         anchorsOn={popupData?.[0]}

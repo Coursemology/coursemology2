@@ -15,6 +15,7 @@ export interface HeartbeatDetail {
 export interface SnapshotData {
   sessionId: number;
   status: 'expired' | 'listening' | 'stopped';
+  misses: number;
   lastHeartbeatAt: string;
   isValid: boolean;
   userName?: string;

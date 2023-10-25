@@ -64,6 +64,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
       snapshot = {
         sessionId: session.id,
         status: session.status,
+        misses: session.misses,
         lastHeartbeatAt: last_heartbeat&.generated_at,
         isValid: is_valid_secret,
         userName: session.creator.name,
