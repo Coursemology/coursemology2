@@ -916,6 +916,14 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.detailsOfNHeartbeats',
     defaultMessage: 'Last {n} heartbeats',
   },
+  deltaFromPreviousHeartbeat: {
+    id: 'course.assessment.monitoring.deltaFromPreviousHeartbeat',
+    defaultMessage: '{ms} ms from previous heartbeat',
+  },
+  firstReceivedHeartbeat: {
+    id: 'course.assessment.monitoring.firstReceivedHeartbeat',
+    defaultMessage: 'First received heartbeat',
+  },
   liveness: {
     id: 'course.assessment.monitoring.liveness',
     defaultMessage: 'Liveness',
