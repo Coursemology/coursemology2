@@ -113,7 +113,7 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def assign_params(params)
-    self.grade = params[:grade].to_f if params[:grade]
+    self.grade = params[:grade].present? ? params[:grade].to_f : nil
   end
 
   # Generates a feedback for an answer

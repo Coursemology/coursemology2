@@ -489,7 +489,7 @@ export function saveAllGrades(submissionId, grades, exp, published) {
     dispatch({ type: actionTypes.SAVE_ALL_GRADE_REQUEST });
 
     return CourseAPI.assessment.submissions
-      .update(submissionId, payload)
+      .updateGrade(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
         dispatch({ type: actionTypes.SAVE_ALL_GRADE_SUCCESS, payload: data });
@@ -516,7 +516,7 @@ export function saveGrade(submissionId, grade, questionId, exp, published) {
     dispatch({ type: actionTypes.SAVE_GRADE_REQUEST });
 
     return CourseAPI.assessment.submissions
-      .update(submissionId, payload)
+      .updateGrade(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
         const updatedGrade = produce(data, (draftData) => {

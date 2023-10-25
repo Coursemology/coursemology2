@@ -65,6 +65,13 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.client.get(`${this.#urlPrefix}/${submissionId}/edit`);
   }
 
+  updateGrade(submissionId, submissionFields) {
+    return this.client.patch(
+      `${this.#urlPrefix}/${submissionId}`,
+      submissionFields,
+    );
+  }
+
   update(submissionId, submissionFields) {
     const config = {
       headers: {
