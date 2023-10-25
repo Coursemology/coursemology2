@@ -131,9 +131,11 @@ export default function (state = initialState, action) {
       );
 
       const questionIds = Object.keys(questionWithGrades);
+
       const gradeToBeUpdated =
         questionIds.length !== 1 ||
-        !state.questions[questionIds[0]].grade ||
+        (!state.questions[questionIds[0]].grade &&
+          !questionWithGrades[questionIds[0]].grade) ||
         state.questions[questionIds[0]].grade.toString() ===
           questionWithGrades[questionIds[0]].grade.toString();
 
