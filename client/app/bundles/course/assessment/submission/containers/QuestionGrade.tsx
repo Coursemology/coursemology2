@@ -156,7 +156,7 @@ const QuestionGrade: FC<Props> = (props) => {
               debouncedSaveGrade(questionId);
             }
           }}
-          placeholder=""
+          placeholder={grading.originalGrade?.toString() ?? ''}
           size="small"
           value={grading.grade ?? ''}
           variant="filled"
