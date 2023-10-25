@@ -8,6 +8,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     let(:user) { create(:user) }
     let!(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, :published, *assessment_traits, course: course) }
+    let(:assessment2) { create(:assessment, :published, *assessment_traits, course: course) }
     let(:assessment_traits) { [:with_all_question_types] }
 
     let(:immutable_submission) do
@@ -18,6 +19,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
     let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
+    let(:graded_submission) { create(:submission, :graded, assessment: assessment2, creator: user) }
     let(:randomized_assessment) do
       create(:assessment, :published, :with_all_question_types, randomization: 'prepared', course: course).tap do |stub|
         group = stub.question_groups.create!(title: 'Test Group', weight: 1)
@@ -34,6 +36,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         )
       end
     end
+    let(:answer) { graded_submission.answers.first }
 
     before { sign_in(user) }
 
@@ -145,6 +148,25 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         it { is_expected.to have_http_status(400) }
+      end
+    end
+
+    describe '#update_grade' do
+      subject do
+        post :update, params: {
+          course_id: course, assessment_id: assessment2, id: graded_submission,
+          submission: {
+            answers: [{ id: answer.id, grade: nil }]
+          }
+        }
+      end
+
+      context 'when update fails' do
+        before do
+          subject
+        end
+
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
