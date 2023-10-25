@@ -91,17 +91,25 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     # Remove old codaveri posts in the same annotation
     # annotation.posts.where(creator_id: 0).destroy_all
 
+    if @course.codaveri_feedback_workflow == 'publish'
+      post_workflow_state = :published
+      feedback_status = :accepted
+    else
+      post_workflow_state = :draft
+      feedback_status = :pending_review
+    end
+
     new_post = annotation.posts.build(title: @assessment.title, text: feedback, creator: User.system,
-                                      updater: User.system, workflow_state: :draft)
+                                      updater: User.system, workflow_state: post_workflow_state)
 
     new_post.build_codaveri_feedback(codaveri_feedback_id: feedback_id,
-                                     original_feedback: feedback, status: :pending_review)
+                                     original_feedback: feedback, status: feedback_status)
 
     new_post.save!
     annotation.save!
 
     create_topic_subscription(new_post.topic)
-    new_post.topic.mark_as_pending
+    new_post.topic.mark_as_pending if @course.codaveri_feedback_workflow != 'publish'
   end
 
   def create_topic_subscription(discussion_topic)
