@@ -48,6 +48,7 @@ class Course::Discussion::PostsController < Course::ComponentController
   end
 
   def destroy
+    handle_codaveri_feedback(codaveri_rating_param)
     if @post.destroy
       head :ok
     else
@@ -71,6 +72,10 @@ class Course::Discussion::PostsController < Course::ComponentController
     params.permit(:topic_id)[:topic_id]
   end
 
+  def codaveri_rating_param
+    params.permit(:codaveri_rating)[:codaveri_rating]
+  end
+
   def load_topic
     @topic ||= Course::Discussion::Topic.find(topic_id_param)
     @specific_topic = @topic.specific
@@ -81,6 +86,12 @@ class Course::Discussion::PostsController < Course::ComponentController
 
     topic_actable = post.topic.actable
     topic_actable.notify(post) if topic_actable.respond_to?(:notify)
+  end
+
+  def handle_codaveri_feedback(rating)
+    return unless rating
+
+    @post.codaveri_feedback&.update(status: :rejected, rating: rating)
   end
 
   # @return [Course::Discussion::TopicsComponent]

@@ -7,6 +7,8 @@ import {
   CommentTopicData,
 } from 'types/course/comments';
 
+import { APIResponse } from 'api/types';
+
 import BaseCourseAPI from './Base';
 
 export default class CommentsAPI extends BaseCourseAPI {
@@ -32,13 +34,11 @@ export default class CommentsAPI extends BaseCourseAPI {
   /**
    * Fetches comments tab data in a course.
    */
-  index(): Promise<
-    AxiosResponse<{
-      permissions: CommentPermissions;
-      settings: CommentSettings;
-      tabs: CommentTabInfo;
-    }>
-  > {
+  index(): APIResponse<{
+    permissions: CommentPermissions;
+    settings: CommentSettings;
+    tabs: CommentTabInfo;
+  }> {
     return this.client.get(this.#urlPrefix);
   }
 
@@ -48,12 +48,10 @@ export default class CommentsAPI extends BaseCourseAPI {
   fetchCommentData(
     tabValue: string,
     pageNum: number,
-  ): Promise<
-    AxiosResponse<{
-      topicCount: number;
-      topicList: CommentTopicData[];
-    }>
-  > {
+  ): APIResponse<{
+    topicCount: number;
+    topicList: CommentTopicData[];
+  }> {
     return this.client.get(
       `${this.#urlPrefix}/${tabValue}?page_num=${pageNum}`,
     );
@@ -62,14 +60,14 @@ export default class CommentsAPI extends BaseCourseAPI {
   /**
    * Updates comment topic to be isPending.
    */
-  togglePending(topicId: number): Promise<AxiosResponse<void>> {
+  togglePending(topicId: number): APIResponse {
     return this.client.patch(`${this.#urlPrefix}/${topicId}/toggle_pending`);
   }
 
   /**
    * Updates comment topic to be marked as read.
    */
-  markAsRead(topicId: number): Promise<AxiosResponse<void>> {
+  markAsRead(topicId: number): APIResponse {
     return this.client.patch(`${this.#urlPrefix}/${topicId}/mark_as_read`);
   }
 
@@ -82,10 +80,7 @@ export default class CommentsAPI extends BaseCourseAPI {
    * @return {Promise}
    * success response: post
    */
-  create(
-    topicId: string,
-    params: object,
-  ): Promise<AxiosResponse<CommentPostListData>> {
+  create(topicId: string, params: object): APIResponse<CommentPostListData> {
     return this.client.post(`${this.#urlPrefix}/${topicId}/posts/`, params);
   }
 
@@ -118,7 +113,13 @@ export default class CommentsAPI extends BaseCourseAPI {
    * @return {Promise}
    * success response: {}
    */
-  delete(topicId: string, postId: string): Promise<AxiosResponse<void>> {
-    return this.client.delete(`${this.#urlPrefix}/${topicId}/posts/${postId}`);
+  delete(
+    topicId: string,
+    postId: string,
+    params: { codaveri_rating?: number },
+  ): APIResponse<void> {
+    return this.client.delete(`${this.#urlPrefix}/${topicId}/posts/${postId}`, {
+      data: params,
+    });
   }
 }

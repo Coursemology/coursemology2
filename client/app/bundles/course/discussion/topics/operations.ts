@@ -144,10 +144,15 @@ export function updatePostCodaveri(
       });
 }
 
-export function deletePost(post: CommentPostMiniEntity): Operation {
+export function deletePost(
+  post: CommentPostMiniEntity,
+  codaveriRating?: number,
+): Operation {
   return async (dispatch) =>
     CourseAPI.comments
-      .delete(post.topicId.toString(), post.id.toString())
+      .delete(post.topicId.toString(), post.id.toString(), {
+        codaveri_rating: codaveriRating,
+      })
       .then(() => {
         dispatch(actions.deletePost(post.id));
       });
