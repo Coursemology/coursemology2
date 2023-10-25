@@ -1,43 +1,26 @@
 import { useEffect, useState } from 'react';
-import moment from 'moment';
 import { Snapshot } from 'types/channels/liveMonitoring';
 
 import { useAppSelector } from 'lib/hooks/store';
 
 import { select } from '../selectors';
-
-export type Presence = 'alive' | 'late' | 'missing';
+import { getPresenceBetween, Presence } from '../utils';
 
 interface Callbacks {
   onMissing: (timestamp: number) => void;
   onAlive: (timestamp: number) => void;
 }
 
-const getPresenceFromNow = (
-  time: string,
-  maxIntervalMs: number,
-  offsetMs: number,
-): Presence => {
-  if (!time) throw new Error(`Encountered time with value: ${time}`);
-
-  const differenceMs = moment().diff(moment(time), 'milliseconds');
-
-  if (differenceMs <= maxIntervalMs) return 'alive';
-  if (differenceMs <= maxIntervalMs + offsetMs) return 'late';
-
-  return 'missing';
-};
-
 const usePresence = (snapshot: Snapshot, callbacks: Callbacks): Presence => {
   const { maxIntervalMs, offsetMs } = useAppSelector(select('monitor'));
 
   const [presence, setPresence] = useState<Presence>(
-    getPresenceFromNow(snapshot.lastHeartbeatAt, maxIntervalMs, offsetMs),
+    getPresenceBetween(maxIntervalMs, offsetMs, snapshot.lastHeartbeatAt),
   );
 
   useEffect(() => {
     const currentPresence = snapshot.isValid
-      ? getPresenceFromNow(snapshot.lastHeartbeatAt, maxIntervalMs, offsetMs)
+      ? getPresenceBetween(maxIntervalMs, offsetMs, snapshot.lastHeartbeatAt)
       : 'missing';
 
     let timeout: NodeJS.Timeout;

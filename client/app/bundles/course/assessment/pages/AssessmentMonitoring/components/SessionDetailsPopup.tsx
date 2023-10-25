@@ -38,7 +38,7 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
         anchorEl={anchorElement}
         classes={{
           paper:
-            'px-4 pb-4 @container w-[36rem] shadow-xl border border-solid border-neutral-200 space-y-4 resize',
+            'flex flex-col px-4 pb-4 @container w-[36rem] shadow-xl border border-solid border-neutral-200 space-y-4 resize',
         }}
         elevation={0}
         onClose={props.onClose}
