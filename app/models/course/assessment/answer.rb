@@ -38,6 +38,7 @@ class Course::Assessment::Answer < ApplicationRecord
   validate :validate_grade, unless: :attempting?
   validates :submitted_at, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
+  validates :grade, presence: { if: :graded?, message: 'Grade must not be empty if it\'s already graded' }
   validates :grader, :graded_at, presence: true, if: :graded?
   validates :actable_type, length: { maximum: 255 }, allow_nil: true
   validates :workflow_state, length: { maximum: 255 }, presence: true
@@ -157,7 +158,7 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def validate_grade
-    errors.add(:base, 'Grade must not be empty if it\'s already graded') if graded? && !grade
+    # errors.add(:base, 'Grade must not be empty if it\'s already graded') if graded? && !grade
     errors.add(:grade, :consistent_grade) if grade.present? && grade > question.maximum_grade
     errors.add(:grade, :non_negative_grade) if grade.present? && grade < 0
   end
