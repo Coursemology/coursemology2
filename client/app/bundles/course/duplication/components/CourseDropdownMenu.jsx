@@ -1,7 +1,13 @@
 import { PureComponent } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import MyLocation from '@mui/icons-material/MyLocation';
-import { IconButton, MenuItem, Select, Tooltip } from '@mui/material';
+import {
+  IconButton,
+  MenuItem,
+  Select,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { blue } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -63,7 +69,7 @@ class CourseDropdownMenu extends PureComponent {
     } = this.props;
     return (
       <>
-        <p style={styles.prompt}>{prompt}</p>
+        <Typography style={styles.prompt}>{prompt}</Typography>
         <div style={styles.dropdownRow}>
           <Select
             disabled={disabled}
