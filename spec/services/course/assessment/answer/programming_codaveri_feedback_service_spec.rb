@@ -83,7 +83,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackService do
 
       describe '#run_codaveri_feedback_service' do
         before do
-          Course::Assessment::Answer::ProgrammingCodaveriFeedbackService.class_eval do
+          CodaveriApiService.class_eval do
             prepend Course::Assessment::Answer::StubbedProgrammingCodaveriFeedbackService
           end
         end

@@ -66,7 +66,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
-          Course::Assessment::ProgrammingCodaveriEvaluationService.class_eval do
+          CodaveriApiService.class_eval do
             prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationService
           end
         end
@@ -86,7 +86,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
 
         context 'when the answer is correct' do
           before do
-            Course::Assessment::ProgrammingCodaveriEvaluationService.class_eval do
+            CodaveriApiService.class_eval do
               prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationService
             end
           end
@@ -114,7 +114,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
-          Course::Assessment::ProgrammingCodaveriEvaluationService.class_eval do
+          CodaveriApiService.class_eval do
             prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationServiceFailed
           end
         end
@@ -135,7 +135,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
-          Course::Assessment::ProgrammingCodaveriEvaluationService.class_eval do
+          CodaveriApiService.class_eval do
             prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationServiceWrongAnswer
           end
         end

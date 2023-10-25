@@ -17,7 +17,3 @@ module Course::Assessment::Question::StubbedProgrammingCodaveriServiceFailed
                         body: '{"success":false,"message":"Wrong API Key","error_code":null,"data":{}}')
   end
 end
-
-Course::Assessment::Question::ProgrammingCodaveriService.class_eval do
-  prepend Course::Assessment::Question::StubbedProgrammingCodaveriService
-end

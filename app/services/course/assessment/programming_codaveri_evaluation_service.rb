@@ -67,15 +67,15 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   class << self
     # Executes the provided answer.
     #
-    # @param [string] course_title Title of the course.
+    # @param [Course] course The course.
     # @param [Course::Assessment::Question::Programming] question The programming question being
     #   graded.
     # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
     # @return [Course::Assessment::ProgrammingCodaveriEvaluationService::Result]
     #
     # @raise [Timeout::Error] When the operation times out.
-    def execute(course_title, question, answer, timeout = nil)
-      new(course_title, question, answer, timeout).execute
+    def execute(course, question, answer, timeout = nil)
+      new(course, question, answer, timeout).execute
     end
   end
 
@@ -90,7 +90,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
   private
 
-  def initialize(course_title, question, answer, timeout)
+  def initialize(course, question, answer, timeout)
+    @course = course
     @question = question
     @answer = answer
     @language = question.language
@@ -102,7 +103,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
                        language_version: { language: '', version: '' },
                        files: [],
                        problem_id: '',
-                       course_name: course_title }
+                       course_name: @course.title,
+                       course_id: @course.id }
 
     @codaveri_evaluation_results = nil
   end
@@ -142,9 +144,9 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   end
 
   def request_codaveri_evaluation
-    post_response = connect_to_codaveri
-    response_status = post_response.status
-    response_body = valid_json(post_response.body)
+    codaveri_api_service = CodaveriApiService.new('code/evaluate', @answer_object)
+    response_status, response_body = codaveri_api_service.run_service
+
     response_success = response_body['success']
 
     unless response_status == 200 && response_success
@@ -153,23 +155,6 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     end
 
     @codaveri_evaluation_results = response_body['data']['evaluation_results']
-  end
-
-  def valid_json(json)
-    JSON.parse(json)
-  rescue JSON::ParserError => _e
-    { 'success' => false, 'message' => json }
-  end
-
-  def connect_to_codaveri
-    connection = Excon.new('https://api.codaveri.com/code/evaluate')
-    connection.post(
-      headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
-        'Content-Type' => 'application/json'
-      },
-      body: @answer_object.to_json
-    )
   end
 
   def build_evaluation_result # rubocop:disable Metrics/CyclomaticComplexity

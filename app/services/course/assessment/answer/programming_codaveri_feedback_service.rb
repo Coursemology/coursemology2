@@ -12,7 +12,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
                        language_version: { language: '', version: '' },
                        files_student: [],
                        problem_id: '',
-                       course_name: @course.title }
+                       course_name: @course.title,
+                       course_id: @course.id }
   end
 
   def run_codaveri_feedback_service
@@ -54,10 +55,9 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
   end
 
   def request_codaveri_feedback
-    post_response = connect_to_codaveri
+    codaveri_api_service = CodaveriApiService.new('feedback', @answer_object)
+    response_status, response_body = codaveri_api_service.run_service
 
-    response_status = post_response.status
-    response_body = valid_json(post_response.body)
     response_success = response_body['success']
 
     unless response_status == 200 && response_success
@@ -67,23 +67,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
 
     feedback_files = response_body['data']['feedback_files']
     @feedback_files_hash = feedback_files.to_h { |file| [file['path'], file['feedback_lines']] }
-  end
-
-  def valid_json(json)
-    JSON.parse(json)
-  rescue JSON::ParserError => _e
-    { 'success' => false, 'message' => json }
-  end
-
-  def connect_to_codaveri
-    connection = Excon.new('https://api.codaveri.com/feedback')
-    connection.post(
-      headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
-        'Content-Type' => 'application/json'
-      },
-      body: @answer_object.to_json
-    )
   end
 
   def process_codaveri_feedback

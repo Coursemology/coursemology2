@@ -8,7 +8,9 @@ class Course::Discussion::Post::CodaveriFeedbackRatingJob < ApplicationJob
   #
   # @param [Course::Discussion::Post::CodaveriFeedback] codaveri_feedback Feedback with rating to send to Codaveri
   def perform_tracked(codaveri_feedback)
-    Course::Discussion::Post::CodaveriFeedbackRatingService.
-      send_feedback(codaveri_feedback)
+    ActsAsTenant.without_tenant do
+      Course::Discussion::Post::CodaveriFeedbackRatingService.
+        send_feedback(codaveri_feedback)
+    end
   end
 end
