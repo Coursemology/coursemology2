@@ -21,24 +21,18 @@ RSpec.describe Course::Discussion::Post::CodaveriFeedbackRatingService do
 
     subject { Course::Discussion::Post::CodaveriFeedbackRatingService.send_feedback(codaveri_feedback) }
     describe '.send_feedback succeeds' do
-      before do
-        allow_any_instance_of(Course::Discussion::Post::CodaveriFeedbackRatingService).to\
-          receive(:connect_to_codaveri).and_return(stubbed_connection)
-      end
-
       it 'sends rating to codaveri' do
+        allow_any_instance_of(CodaveriApiService).to receive(:connect_to_codaveri).
+          and_return(Course::Discussion::Post::StubbedCodaveriFeedbackRatingService.connect_to_codaveri)
         expect(subject).to eq('Rating successfully sent!')
       end
     end
 
     describe '.send_feedback fails' do
-      before do
-        allow_any_instance_of(Course::Discussion::Post::CodaveriFeedbackRatingService).to\
-          receive(:connect_to_codaveri).and_return(stubbed_failed_connection)
-      end
-
       it 'does not send rating to codaveri' do
-        expect(subject).to eq(false)
+        allow_any_instance_of(CodaveriApiService).to receive(:connect_to_codaveri).
+          and_return(Course::Discussion::Post::StubbedCodaveriFeedbackRatingServiceFailed.connect_to_codaveri)
+        expect { subject }.to raise_error(CodaveriError)
       end
     end
   end

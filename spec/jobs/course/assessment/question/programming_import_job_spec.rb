@@ -62,6 +62,9 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
         Course::Assessment::StubbedProgrammingEvaluationService.class_eval do
           prepend Course::Assessment::StubbedProgrammingEvaluationServiceForCodaveriTest
         end
+        CodaveriApiService.class_eval do
+          prepend Course::Assessment::Question::StubbedProgrammingCodaveriService
+        end
       end
 
       after do

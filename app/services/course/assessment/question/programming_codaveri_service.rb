@@ -71,10 +71,9 @@ class Course::Assessment::Question::ProgrammingCodaveriService
   end
 
   def create_codaveri_problem
-    post_response = connect_to_codaveri
+    codaveri_api_service = CodaveriApiService.new('problem', @problem_object)
+    response_status, response_body = codaveri_api_service.run_service
 
-    response_status = post_response.status
-    response_body = valid_json(post_response.body)
     response_success = response_body['success']
     response_message = response_body['message']
 
@@ -87,22 +86,5 @@ class Course::Assessment::Question::ProgrammingCodaveriService
 
       raise CodaveriError, "Codevari Error: #{response_message}"
     end
-  end
-
-  def valid_json(json)
-    JSON.parse(json)
-  rescue JSON::ParserError => _e
-    { 'success' => false, 'message' => json }
-  end
-
-  def connect_to_codaveri
-    connection = Excon.new('https://api.codaveri.com/problem')
-    connection.post(
-      headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
-        'Content-Type' => 'application/json'
-      },
-      body: @problem_object.to_json
-    )
   end
 end

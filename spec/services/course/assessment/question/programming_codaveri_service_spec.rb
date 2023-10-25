@@ -19,6 +19,9 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
       Course::Assessment::StubbedProgrammingEvaluationService.class_eval do
         prepend Course::Assessment::StubbedProgrammingEvaluationServiceForCodaveriTest
       end
+      CodaveriApiService.class_eval do
+        prepend Course::Assessment::Question::StubbedProgrammingCodaveriService
+      end
       Course::Assessment::Question::ProgrammingImportService.import(question, attachment)
     end
     after do
@@ -43,7 +46,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
       context 'when an invalid API is provided' do
         before do
           # Mock failure
-          Course::Assessment::Question::ProgrammingCodaveriService.class_eval do
+          CodaveriApiService.class_eval do
             prepend Course::Assessment::Question::StubbedProgrammingCodaveriServiceFailed
           end
         end

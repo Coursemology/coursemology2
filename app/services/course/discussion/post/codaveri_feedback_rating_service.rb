@@ -22,39 +22,22 @@ class Course::Discussion::Post::CodaveriFeedbackRatingService
   # @param [Course::Discussion::Post::CodaveriFeedback] feedback Feedback to be sent to Codaveri
   def initialize(feedback)
     @feedback = feedback
+    @course = feedback.post.topic.course
     @payload = { feedback_id: feedback.codaveri_feedback_id,
                  updated_feedback: feedback.post.text,
-                 rating: feedback.rating }
+                 rating: feedback.rating,
+                 course_name: @course.title,
+                 course_id: @course.id }
   end
 
   def send_codaveri_feedback_rating
-    post_response = connect_to_codaveri
+    codaveri_api_service = CodaveriApiService.new('feedback/rating', @payload)
+    response_status, response_body = codaveri_api_service.run_service
 
-    response_status = post_response.status
-    response_body = valid_json(post_response.body)
     response_success = response_body['success']
 
     return 'Rating successfully sent!' if response_status == 200 && response_success
 
-    Rails.logger.debug(message: 'Send Feedback Rating Error',
-                       response_status: response_status)
-    false
-  end
-
-  def connect_to_codaveri
-    connection = Excon.new('https://api.codaveri.com/feedback/rating')
-    connection.post(
-      headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
-        'Content-Type' => 'application/json'
-      },
-      body: @payload.to_json
-    )
-  end
-
-  def valid_json(json)
-    JSON.parse(json)
-  rescue JSON::ParserError => _e
-    { 'success' => false, 'message' => json }
+    raise CodaveriError, { status: response_status, body: response_body }
   end
 end
