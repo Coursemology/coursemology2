@@ -5,12 +5,15 @@ RSpec.describe Course::Monitoring::Session, type: :model do
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
+    let(:default_max_session_duration) { described_class::DEFAULT_MAX_SESSION_DURATION }
 
     it { should define_enum_for(:status) }
     it { should belong_to(:monitor).inverse_of(:sessions) }
     it { should have_many(:heartbeats).inverse_of(:session) }
     it { should validate_presence_of(:monitor_id) }
     it { should validate_presence_of(:status) }
+    it { should validate_presence_of(:misses) }
+    it { should validate_numericality_of(:misses).only_integer.is_greater_than_or_equal_to(0) }
 
     describe '#status' do
       context 'when created_at is now' do
@@ -54,10 +57,7 @@ RSpec.describe Course::Monitoring::Session, type: :model do
       end
 
       context 'when created older than the default max session duration' do
-        subject do
-          created_at = Time.zone.now - Course::Monitoring::Session::DEFAULT_MAX_SESSION_DURATION
-          create(:course_monitoring_session, created_at: created_at)
-        end
+        subject { create(:course_monitoring_session, created_at: Time.zone.now - default_max_session_duration) }
 
         it 'has expired? returns true' do
           expect(subject.expired?).to be_truthy
@@ -98,11 +98,20 @@ RSpec.describe Course::Monitoring::Session, type: :model do
     end
 
     describe '#expiry' do
-      subject { create(:course_monitoring_session, created_at: Time.zone.now) }
+      let(:creation_time) { Time.zone.now }
+      subject { create(:course_monitoring_session, created_at: creation_time).expiry }
 
-      it do
-        default_max_session = Course::Monitoring::Session::DEFAULT_MAX_SESSION_DURATION
-        expect(subject.expiry).to be_within(default_max_session).of(Time.zone.now)
+      it { should be_within(default_max_session_duration).of(creation_time) }
+    end
+
+    describe '#last_live_heartbeat' do
+      let(:session) { create(:course_monitoring_session) }
+      let!(:live_heartbeat) { create(:course_monitoring_heartbeat, session: session) }
+      let!(:stale_heartbeat) { create(:course_monitoring_heartbeat, :stale, session: session) }
+
+      it 'returns the last live heartbeat' do
+        expect(session.heartbeats.count).to eq(2)
+        expect(session.last_live_heartbeat).to eq(live_heartbeat)
       end
     end
   end
