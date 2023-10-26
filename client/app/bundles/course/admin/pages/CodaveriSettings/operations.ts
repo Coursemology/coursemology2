@@ -1,11 +1,15 @@
 import { AxiosError } from 'axios';
+import { dispatch } from 'store';
 import {
   CodaveriSettingsData,
   CodaveriSettingsEntity,
   CodaveriSettingsPatchData,
+  ProgrammingEvaluator,
+  ProgrammingQuestion,
 } from 'types/course/admin/codaveri';
 
 import CourseAPI from 'api/course';
+import { saveAllAssessmentsQuestions } from 'course/admin/reducers/codaveriSettings';
 
 type Data = Promise<CodaveriSettingsEntity>;
 
@@ -28,7 +32,9 @@ const convertEntityDataToPatchData = (
 export const fetchCodaveriSettings = async (): Data => {
   try {
     const response = await CourseAPI.admin.codaveri.index();
-    return convertSettingsDataToEntity(response.data);
+    const data = convertSettingsDataToEntity(response.data);
+    dispatch(saveAllAssessmentsQuestions(data.assessments));
+    return data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
@@ -42,6 +48,42 @@ export const updateCodaveriSettings = async (
   try {
     const response = await CourseAPI.admin.codaveri.update(adaptedData);
     return convertSettingsDataToEntity(response.data);
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const updateProgrammingQuestionCodaveri = async (
+  assessmentId: number,
+  questionId: number,
+  data: ProgrammingQuestion,
+): Promise<void> => {
+  const adaptedData = {
+    question_programming: {
+      is_codaveri: data.isCodaveri,
+    },
+  };
+  try {
+    await CourseAPI.assessment.question.programming.updateQnSetting(
+      assessmentId,
+      questionId,
+      adaptedData,
+    );
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const updateEvaluatorForAllQuestions = async (
+  evaluator: ProgrammingEvaluator,
+): Promise<void> => {
+  const adaptedData = {
+    programming_evaluator: evaluator,
+  };
+  try {
+    await CourseAPI.admin.codaveri.updateEvaluatorForAllQuestions(adaptedData);
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;

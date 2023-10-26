@@ -27,4 +27,11 @@ export default class ProgrammingAPI extends BaseAPI {
   update(id: number, data: FormData): APIResponse<ProgrammingPostStatusData> {
     return this.client.patch(`${this.#urlPrefix}/${id}`, data);
   }
+
+  updateQnSetting(assessmentId: number, id: number, data: object): APIResponse {
+    return this.client.patch(
+      `/courses/${this.courseId}/assessments/${assessmentId}/question/programming/${id}/update_question_setting`,
+      data,
+    );
+  }
 }

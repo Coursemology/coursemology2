@@ -42,6 +42,7 @@ const CodaveriSettingsForm = (
 
   return (
     <Form
+      className="!pb-0"
       disabled={disabled}
       emitsVia={setForm}
       headsUp

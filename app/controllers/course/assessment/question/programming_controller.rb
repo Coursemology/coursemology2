@@ -5,7 +5,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   load_and_authorize_resource :programming_question,
                               class: Course::Assessment::Question::Programming,
                               through: :assessment, parent: false, except: [:new, :create]
-  before_action :load_question_assessment, only: [:edit, :update]
+  before_action :load_question_assessment, only: [:edit, :update, :update_question_setting]
   before_action :set_attributes_for_programming_question
 
   def new
@@ -55,6 +55,15 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     end
   end
 
+  def update_question_setting
+    if @programming_question.update(programming_question_setting_params)
+      head :ok
+    else
+      error = @programming_question.errors.full_messages.to_sentence
+      render json: { errors: error }, status: :bad_request
+    end
+  end
+
   def destroy
     if @programming_question.destroy
       head :ok
@@ -89,6 +98,10 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
       :is_low_priority, :is_codaveri, *attachment_params,
       question_assessment: { skill_ids: [] }
     )
+  end
+
+  def programming_question_setting_params
+    params.require(:question_programming).permit(:is_codaveri)
   end
 
   def render_success_json(redirect_to_edit)
