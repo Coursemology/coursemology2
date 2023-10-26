@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 class Course::Forum::Topic < ApplicationRecord
   extend FriendlyId
+
+  include SafeMarkAsReadConcern
+
   friendly_id :slug_candidates, use: :scoped, scope: :forum
 
   acts_as_readable on: :latest_post_at
