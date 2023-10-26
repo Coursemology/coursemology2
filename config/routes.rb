@@ -168,6 +168,7 @@ Rails.application.routes.draw do
 
         get 'codaveri' => 'codaveri_settings#edit'
         patch 'codaveri' => 'codaveri_settings#update'
+        patch 'codaveri/update_evaluator' => 'codaveri_settings#update_evaluator'
 
         get 'materials' => 'material_settings#edit'
         patch 'materials' => 'material_settings#update'

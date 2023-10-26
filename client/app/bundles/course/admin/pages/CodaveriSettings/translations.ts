@@ -57,4 +57,38 @@ export default defineMessages({
     id: 'course.admin.CodaveriSettings.itspEngineDescription',
     defaultMessage: 'Uses automated program repair technique',
   },
+  assessments: {
+    id: 'course.admin.CodaveriSettings.assessments',
+    defaultMessage: 'Assessments',
+  },
+  programmingQuestionSettings: {
+    id: 'course.admin.CodaveriSettings.programmingQuestionSettings',
+    defaultMessage: 'Programming Question Settings',
+  },
+  programmingQuestionSettingsSubtitle: {
+    id: 'course.admin.CodaveriSettings.programmingQuestionSettingsSubtitle',
+    defaultMessage:
+      'Enable/disable Codaveri as evaluator for programming questions in various assessments.',
+  },
+  errorOccurredWhenUpdating: {
+    id: 'course.admin.CodaveriSettings.errorOccurredWhenUpdating',
+    defaultMessage: 'An error occurred while updating the codaveri setting.',
+  },
+  enableAllCodaveri: {
+    id: 'course.admin.CodaveriSettings.enableAllCodaveri',
+    defaultMessage: 'Enable All',
+  },
+  disableAllCodaveri: {
+    id: 'course.admin.CodaveriSettings.disableAllCodaveri',
+    defaultMessage: 'Disable All',
+  },
+  succesfulUpdateAllEvaluator: {
+    id: 'course.admin.CodaveriSettings.succesfulUpdateAllEvaluator',
+    defaultMessage:
+      'Sucessfully updated all questions to use {evaluator} evaluator',
+  },
+  evaluatorUpdateSuccess: {
+    id: 'course.admin.CodaveriSettings.evaluatorUpdateSuccess',
+    defaultMessage: '{question} is now using {evaluator} evaluator',
+  },
 });

@@ -154,6 +154,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     language.name.split[1]
   end
 
+  def language_valid_for_codaveri?
+    codaveri_language_whitelist.include?(language.type.constantize)
+  end
+
   private
 
   def set_defaults
@@ -173,8 +177,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   def should_evaluate_package
     time_limit_changed? || memory_limit_changed? ||
-      language_id_changed? || is_codaveri_changed? ||
-      import_job&.status == 'errored'
+      language_id_changed? || import_job&.status == 'errored'
   end
 
   def evaluate_package
@@ -238,7 +241,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def validate_codaveri_question # rubocop:disable Metrics/AbcSize
     return if !is_codaveri || duplicating?
 
-    if !codaveri_language_whitelist.include?(language.type.constantize)
+    if !language_valid_for_codaveri?
       errors.add(:base, 'Language type must be Python 3 and above.')
     elsif !question_assessments.empty? &&
           !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
