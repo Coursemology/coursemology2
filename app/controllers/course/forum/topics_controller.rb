@@ -15,7 +15,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
 
   def show
     @topic.viewed_by(current_user)
-    @topic.mark_as_read!(for: current_user)
+    @topic.safely_mark_as_read!(for: current_user)
     @posts = @topic.posts.with_read_marks_for(current_user).
              calculated(:upvotes, :downvotes).
              with_user_votes(current_user).
