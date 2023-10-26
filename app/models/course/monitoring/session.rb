@@ -13,6 +13,7 @@ class Course::Monitoring::Session < ApplicationRecord
   validates :monitor_id, presence: true, uniqueness: { scope: :creator_id }
   validates :status, presence: true
   validates :creator, presence: true
+  validates :misses, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   def expired?
     created_at && (Time.zone.now - created_at > DEFAULT_MAX_SESSION_DURATION)
