@@ -34,4 +34,18 @@ class Course::Monitoring::Session < ApplicationRecord
   def expiry
     (created_at || 0) + DEFAULT_MAX_SESSION_DURATION
   end
+
+  def last_live_heartbeat
+    heartbeats.where(stale: false).last
+  end
+
+  def update_misses_after_heartbeat_saved!(heartbeat)
+    last_live_heartbeat_time = last_live_heartbeat&.generated_at
+    return unless last_live_heartbeat_time && !heartbeat.stale?
+
+    delta_from_last_heartbeat_ms = (heartbeat.generated_at - last_live_heartbeat_time).in_milliseconds
+    return unless delta_from_last_heartbeat_ms > monitor.max_interval_ms + monitor.offset_ms
+
+    update!(misses: misses + 1)
+  end
 end

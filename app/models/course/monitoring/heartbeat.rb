@@ -9,4 +9,12 @@ class Course::Monitoring::Heartbeat < ApplicationRecord
   validates :stale, inclusion: { in: [true, false] }
 
   default_scope { order(:generated_at) }
+
+  before_save :update_session_misses
+
+  private
+
+  def update_session_misses
+    session.update_misses_after_heartbeat_saved!(self)
+  end
 end
