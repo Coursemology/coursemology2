@@ -14,17 +14,13 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   signals :forums, after: [:show]
 
   def show
-    respond_to do |format|
-      format.json do
-        @topic.viewed_by(current_user)
-        @topic.mark_as_read!(for: current_user)
-        @posts = @topic.posts.with_read_marks_for(current_user).
-                 calculated(:upvotes, :downvotes).
-                 with_user_votes(current_user).
-                 ordered_topologically
-        @course_users_hash = preload_course_users_hash(current_course)
-      end
-    end
+    @topic.viewed_by(current_user)
+    @topic.mark_as_read!(for: current_user)
+    @posts = @topic.posts.with_read_marks_for(current_user).
+             calculated(:upvotes, :downvotes).
+             with_user_votes(current_user).
+             ordered_topologically
+    @course_users_hash = preload_course_users_hash(current_course)
   end
 
   def create
