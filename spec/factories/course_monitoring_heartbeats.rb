@@ -9,7 +9,7 @@ FactoryBot.define do
     stale { false }
 
     trait :stale do
-      is_stale { true }
+      stale { true }
     end
   end
 end
