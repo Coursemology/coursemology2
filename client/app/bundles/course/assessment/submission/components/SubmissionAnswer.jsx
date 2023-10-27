@@ -4,6 +4,7 @@ import {
   Alert,
   Card,
   CardContent,
+  Chip,
   CircularProgress,
   Divider,
   FormControlLabel,
@@ -168,7 +169,7 @@ class SubmissionAnswer extends Component {
           dangerouslySetInnerHTML={{ __html: question.description }}
           variant="body2"
         />
-        <Divider />
+        {readOnly && <Divider />}
         {answerId
           ? renderer({
               question,
