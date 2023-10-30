@@ -478,9 +478,13 @@ export function importFiles(answerId, answerFields, language, setValue) {
 
 export function saveAllGrades(submissionId, grades, exp, published) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
+  const modifiedGrades = grades.map((grade) => ({
+    id: grade.id,
+    grade: grade.grade,
+  }));
   const payload = {
     submission: {
-      answers: grades,
+      answers: modifiedGrades,
       [expParam]: exp,
     },
   };
@@ -506,12 +510,14 @@ export function saveAllGrades(submissionId, grades, exp, published) {
 
 export function saveGrade(submissionId, grade, questionId, exp, published) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
+  const modifiedGrade = { id: grade.id, grade: grade.grade };
   const payload = {
     submission: {
-      answers: [grade],
+      answers: [modifiedGrade],
       [expParam]: exp,
     },
   };
+
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_GRADE_REQUEST });
 
