@@ -36,9 +36,9 @@ class Course::Assessment::Answer < ApplicationRecord
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
   validate :validate_grade, unless: :attempting?
+  validate :validate_no_blank_grade_after_graded, if: :graded?
   validates :submitted_at, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
-  validates :grade, presence: { if: :graded?, message: 'Grade must not be empty if it\'s already graded' }
   validates :grader, :graded_at, presence: true, if: :graded?
   validates :actable_type, length: { maximum: 255 }, allow_nil: true
   validates :workflow_state, length: { maximum: 255 }, presence: true
@@ -149,6 +149,10 @@ class Course::Assessment::Answer < ApplicationRecord
     return if question.question_assessments.map(&:assessment_id).include?(submission.assessment_id)
 
     errors.add(:question, :consistent_assessment)
+  end
+
+  def validate_no_blank_grade_after_graded
+    errors.add(:grade, :no_blank_grade) unless grade.present?
   end
 
   def validate_assessment_state

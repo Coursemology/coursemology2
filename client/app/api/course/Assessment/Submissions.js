@@ -65,10 +65,11 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.client.get(`${this.#urlPrefix}/${submissionId}/edit`);
   }
 
-  updateGrade(submissionId, submissionFields) {
+  updateGrade(submissionId, updateGradeField) {
+    // updateGradeField contains list of {id, grade} of all modified grades in all answers
     return this.client.patch(
       `${this.#urlPrefix}/${submissionId}`,
-      submissionFields,
+      updateGradeField,
     );
   }
 
