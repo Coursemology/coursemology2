@@ -158,6 +158,16 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     codaveri_language_whitelist.include?(language.type.constantize)
   end
 
+  def create_codaveri_problem
+    return unless is_codaveri
+
+    execute_after_commit do
+      import_job =
+        Course::Assessment::Question::CodaveriImportJob.perform_later(self, attachment)
+      update_column(:import_job_id, import_job.job_id)
+    end
+  end
+
   private
 
   def set_defaults
@@ -172,6 +182,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     elsif should_evaluate_package
       # For non-autograded questions, the attachment is not present
       evaluate_package if attachment
+    elsif is_codaveri_changed?
+      # Only when is_codaveri changed (no other setting), we recreate the codaveri
+      # problem to avoid attachment recreation and answers regrading
+      create_codaveri_problem if attachment
     end
   end
 
@@ -238,7 +252,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     nil
   end
 
-  def validate_codaveri_question # rubocop:disable Metrics/AbcSize
+  def validate_codaveri_question
     return if !is_codaveri || duplicating?
 
     if !language_valid_for_codaveri?
