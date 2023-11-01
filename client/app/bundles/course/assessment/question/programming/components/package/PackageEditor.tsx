@@ -3,10 +3,10 @@ import { useFormContext } from 'react-hook-form';
 import { Typography } from '@mui/material';
 import { ProgrammingFormData } from 'types/course/assessment/question/programming';
 
+import Hint from 'lib/components/core/Hint';
 import Section from 'lib/components/core/layouts/Section';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import Hint from '../../../../../../../lib/components/core/Hint';
 import translations from '../../../../translations';
 
 export const CODE_INSERTS_ID = 'code-inserts';
