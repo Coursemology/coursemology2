@@ -16,7 +16,7 @@ import {
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
-import Expandable from 'lib/components/core/Expandable';
+import ExpandableCode from 'lib/components/core/ExpandableCode';
 import Accordion from 'lib/components/core/layouts/Accordion';
 
 import { workflowStates } from '../../constants';
@@ -160,28 +160,16 @@ export class VisibleTestCaseView extends Component {
 
         <TableRow style={styles.testCaseRow[testCaseResult]}>
           <TableCell className="w-full pt-1">
-            <Expandable over={40}>
-              <Typography className="h-full break-all font-mono text-[1.3rem]">
-                {testCase.expression}
-              </Typography>
-            </Expandable>
+            <ExpandableCode>{testCase.expression}</ExpandableCode>
           </TableCell>
 
           <TableCell className="w-full pt-1">
-            <Expandable over={40}>
-              <Typography className="h-full break-all font-mono text-[1.3rem]">
-                {testCase.expected || ''}
-              </Typography>
-            </Expandable>
+            <ExpandableCode>{testCase.expected || ''}</ExpandableCode>
           </TableCell>
 
           {(canReadTests || showPublicTestCasesOutput) && (
             <TableCell className="w-full pt-1">
-              <Expandable over={40}>
-                <Typography className="h-full break-all font-mono text-[1.3rem]">
-                  {testCase.output || ''}
-                </Typography>
-              </Expandable>
+              <ExpandableCode>{testCase.output || ''}</ExpandableCode>
             </TableCell>
           )}
 
