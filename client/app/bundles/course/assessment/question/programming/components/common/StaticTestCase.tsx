@@ -1,7 +1,7 @@
 import { useWatch } from 'react-hook-form';
 import { Typography } from '@mui/material';
 
-import Expandable from '../../../../../../../lib/components/core/Expandable';
+import ExpandableCode from 'lib/components/core/ExpandableCode';
 
 import { TestCaseProps } from './TestCase';
 import TestCaseCell from './TestCaseCell';
@@ -13,25 +13,11 @@ const StaticTestCase = (props: TestCaseProps): JSX.Element => {
   return (
     <TestCaseRow header={props.id}>
       <TestCaseCell.Expression className="w-1/3">
-        <Expandable over={40}>
-          <Typography
-            className="h-full break-all font-mono text-[1.3rem]"
-            variant="body2"
-          >
-            {testCase.expression}
-          </Typography>
-        </Expandable>
+        <ExpandableCode>{testCase.expression}</ExpandableCode>
       </TestCaseCell.Expression>
 
       <TestCaseCell.Expected className="w-1/3">
-        <Expandable over={40}>
-          <Typography
-            className="h-full break-all font-mono text-[1.3rem]"
-            variant="body2"
-          >
-            {testCase.expected}
-          </Typography>
-        </Expandable>
+        <ExpandableCode>{testCase.expected}</ExpandableCode>
       </TestCaseCell.Expected>
 
       <TestCaseCell.Hint className="w-1/3">
