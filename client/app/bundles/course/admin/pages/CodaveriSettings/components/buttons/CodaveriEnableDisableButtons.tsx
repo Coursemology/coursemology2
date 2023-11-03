@@ -2,20 +2,27 @@ import { FC, useState } from 'react';
 import { Button } from '@mui/material';
 import { ProgrammingEvaluator } from 'types/course/admin/codaveri';
 
-import { updateAllProgrammingQuestionCodaveriSettings } from 'course/admin/reducers/codaveriSettings';
+import { updateProgrammingQuestionCodaveriSettingsForAssessments } from 'course/admin/reducers/codaveriSettings';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateEvaluatorForAllQuestions } from '../operations';
-import { getAllProgrammingQuestions } from '../selectors';
-import translations from '../translations';
+import { updateEvaluatorForAllQuestions } from '../../operations';
+import { getProgrammingQuestionsForAssessments } from '../../selectors';
+import translations from '../../translations';
 
-const CodaveriEnableDisableButtons: FC = () => {
+interface CodaveriEnableDisableButtonsProps {
+  assessmentIds: number[];
+}
+
+const CodaveriEnableDisableButtons: FC<CodaveriEnableDisableButtonsProps> = (
+  props,
+) => {
+  const { assessmentIds } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const programmingQuestions = useAppSelector((state) =>
-    getAllProgrammingQuestions(state),
+    getProgrammingQuestionsForAssessments(state, assessmentIds),
   );
   const [isUpdating, setIsUpdating] = useState(false);
   const qnsWithDefaultEval = programmingQuestions.filter(
@@ -27,9 +34,14 @@ const CodaveriEnableDisableButtons: FC = () => {
 
   const handleEvaluatorUpdate = (evaluator: ProgrammingEvaluator): void => {
     setIsUpdating(true);
-    updateEvaluatorForAllQuestions(evaluator)
+    updateEvaluatorForAllQuestions(assessmentIds, evaluator)
       .then(() => {
-        dispatch(updateAllProgrammingQuestionCodaveriSettings({ evaluator }));
+        dispatch(
+          updateProgrammingQuestionCodaveriSettingsForAssessments({
+            evaluator,
+            assessmentIds,
+          }),
+        );
         toast.success(
           t(translations.succesfulUpdateAllEvaluator, { evaluator }),
         );

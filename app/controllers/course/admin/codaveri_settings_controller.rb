@@ -15,8 +15,9 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   end
 
   def update_evaluator
-    is_codaveri = update_evaluator_params == 'codaveri'
-    question_ids = current_course.assessments.includes(:programming_questions).flat_map do |assessment|
+    is_codaveri = update_evaluator_params[:programming_evaluator] == 'codaveri'
+    assessments = current_course.assessments.where(id: update_evaluator_params[:assessment_ids])
+    question_ids = assessments.includes(:programming_questions).flat_map do |assessment|
       assessment.programming_questions.map(&:id)
     end
     @programming_questions = Course::Assessment::Question::Programming.where(id: question_ids)
@@ -30,7 +31,7 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   end
 
   def update_evaluator_params
-    params.require(:programming_evaluator)
+    params.require(:update_evaluator).permit(:programming_evaluator, assessment_ids: [])
   end
 
   def component

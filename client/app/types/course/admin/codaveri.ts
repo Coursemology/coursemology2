@@ -2,24 +2,46 @@ export type ProgrammingEvaluator = 'default' | 'codaveri';
 
 export interface ProgrammingQuestion {
   id: number;
+  editUrl: string;
   title: string;
   isCodaveri: boolean;
   assessmentId: number;
 }
 export interface AssessmentProgrammingQuestionsData {
   id: number;
+  tabId: number;
   title: string;
+  url: string;
   programmingQuestions: ProgrammingQuestion[];
 }
+
+export interface AssessmentTabData {
+  id: number;
+  categoryId: number;
+  url: string;
+  title: string;
+}
+
+export interface AssessmentCategoryData {
+  id: number;
+  url: string;
+  title: string;
+  weight: number;
+}
+
 export interface CodaveriSettingsData {
   isOnlyITSP: boolean;
   feedbackWorkflow: 'none' | 'draft' | 'publish';
+  assessmentCategories: AssessmentCategoryData[];
+  assessmentTabs: AssessmentTabData[];
   assessments: AssessmentProgrammingQuestionsData[];
 }
 
 export interface CodaveriSettingsEntity {
   isOnlyITSP: 'itsp' | 'default';
   feedbackWorkflow: CodaveriSettingsData['feedbackWorkflow'];
+  assessmentCategories: AssessmentCategoryData[];
+  assessmentTabs: AssessmentTabData[];
   assessments: AssessmentProgrammingQuestionsData[];
 }
 
@@ -31,5 +53,8 @@ export interface CodaveriSettingsPatchData {
 }
 
 export interface CodaveriSwitchQnsEvaluatorPatchData {
-  programming_evaluator: ProgrammingEvaluator;
+  update_evaluator: {
+    assessment_ids: number[];
+    programming_evaluator: ProgrammingEvaluator;
+  };
 }

@@ -11,8 +11,8 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
-import { updateCodaveriSettings } from '../operations';
-import translations from '../translations';
+import { updateCodaveriSettings } from '../../operations';
+import translations from '../../translations';
 
 interface CodaveriSettingsFormProps {
   settings: CodaveriSettingsEntity;

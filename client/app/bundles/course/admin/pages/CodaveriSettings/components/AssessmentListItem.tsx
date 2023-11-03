@@ -1,16 +1,16 @@
-import { FC, memo, useState } from 'react';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import {
-  Collapse,
-  Divider,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import { FC, memo } from 'react';
+import { ListItemText } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { AssessmentProgrammingQuestionsData } from 'types/course/admin/codaveri';
 
+import Link from 'lib/components/core/Link';
+import { useAppSelector } from 'lib/hooks/store';
+
+import { getViewSettings } from '../selectors';
+
+import CodaveriEnableDisableButtons from './buttons/CodaveriEnableDisableButtons';
+import CollapsibleList from './lists/CollapsibleList';
+import AssessmentHeaderChip from './AssessmentHeaderChip';
 import AssessmentProgrammingQnList from './AssessmentProgrammingQnList';
 
 interface AssessmentListItemProps {
@@ -19,34 +19,44 @@ interface AssessmentListItemProps {
 
 const AssessmentListItem: FC<AssessmentListItemProps> = (props) => {
   const { assessment } = props;
-  const [isOpen, setIsOpen] = useState(true);
+  const { isAssessmentListExpanded } = useAppSelector(getViewSettings);
 
   if (assessment.programmingQuestions.length === 0) return null;
 
   return (
-    <>
-      <ListItemButton
-        className="pl-0"
-        onClick={(): void => setIsOpen((prevValue) => !prevValue)}
-      >
-        <ListItemIcon>{isOpen ? <ExpandLess /> : <ExpandMore />}</ListItemIcon>
-        <ListItemText
-          classes={{ primary: 'font-bold' }}
-          primary={assessment.title}
-        />
-      </ListItemButton>
-      <Collapse in={isOpen} timeout="auto" unmountOnExit>
-        <List dense disablePadding>
-          {assessment.programmingQuestions.map((question) => (
-            <AssessmentProgrammingQnList
-              key={question.id}
-              questionId={question.id}
+    <CollapsibleList
+      collapsedByDefault
+      forceExpand={isAssessmentListExpanded}
+      headerAction={
+        <CodaveriEnableDisableButtons assessmentIds={[assessment.id]} />
+      }
+      headerTitle={
+        <>
+          <Link
+            onClick={(e): void => e.stopPropagation()}
+            opensInNewTab
+            to={assessment.url}
+            underline="hover"
+          >
+            <ListItemText
+              classes={{ primary: 'font-bold' }}
+              primary={assessment.title}
             />
-          ))}
-        </List>
-      </Collapse>
-      <Divider className="border-neutral-300 last:border-none" />
-    </>
+          </Link>
+          <AssessmentHeaderChip assessmentId={assessment.id} />
+        </>
+      }
+      level={2}
+    >
+      <>
+        {assessment.programmingQuestions.map((question) => (
+          <AssessmentProgrammingQnList
+            key={question.id}
+            questionId={question.id}
+          />
+        ))}
+      </>
+    </CollapsibleList>
   );
 };
 
