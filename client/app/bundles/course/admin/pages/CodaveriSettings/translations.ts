@@ -91,4 +91,24 @@ export default defineMessages({
     id: 'course.admin.CodaveriSettings.evaluatorUpdateSuccess',
     defaultMessage: '{question} is now using {evaluator} evaluator',
   },
+  expandAll: {
+    id: 'course.admin.CodaveriSettings.expandAll',
+    defaultMessage: 'Expand All Questions',
+  },
+  showCodaveriOnly: {
+    id: 'course.admin.CodaveriSettings.showCodaveriOnly',
+    defaultMessage: 'Codaveri Question Only',
+  },
+  None: {
+    id: 'course.admin.CodaveriSettings.None',
+    defaultMessage: 'None',
+  },
+  Some: {
+    id: 'course.admin.CodaveriSettings.Some',
+    defaultMessage: 'Some',
+  },
+  All: {
+    id: 'course.admin.CodaveriSettings.All',
+    defaultMessage: 'All',
+  },
 });

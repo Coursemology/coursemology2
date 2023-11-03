@@ -1,38 +1,40 @@
 import { FC } from 'react';
 import { List } from '@mui/material';
-import { AssessmentProgrammingQuestionsData } from 'types/course/admin/codaveri';
+import { AssessmentCategoryData } from 'types/course/admin/codaveri';
 
 import Section from 'lib/components/core/layouts/Section';
 import useItems from 'lib/hooks/items/useItems';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { getAllAssessments } from '../selectors';
+import { getAllAssessmentCategories, getAllAssessments } from '../selectors';
 import translations from '../translations';
 
-import AssessmentListItem from './AssessmentListItem';
-import CodaveriEnableDisableButtons from './CodaveriEnableDisableButtons';
+import CodaveriEnableDisableButtons from './buttons/CodaveriEnableDisableButtons';
+import ExpandAllSwitch from './buttons/ExpandAllSwitch';
+import ShowCodaveriOnlySwitch from './buttons/ShowCodaveriOnlySwitch';
+import AssessmentCategory from './AssessmentCategory';
 
-export const sortAssessments = (
-  assessments: AssessmentProgrammingQuestionsData[],
-): AssessmentProgrammingQuestionsData[] => {
-  const sortedAssessments = [...assessments];
-  sortedAssessments.sort((a, b) =>
-    a.title.toLowerCase().trim() <= b.title.toLowerCase().trim() ? -1 : 1,
-  );
-  return sortedAssessments;
+export const sortCategories = (
+  categories: AssessmentCategoryData[],
+): AssessmentCategoryData[] => {
+  const sortedCategories = [...categories];
+  sortedCategories.sort((a, b) => a.weight - b.weight);
+  return sortedCategories;
 };
 
 const AssessmentList: FC = () => {
-  const assessmentsWithProgrammingQuestion = useAppSelector((state) =>
-    getAllAssessments(state),
+  const assessmentCategories = useAppSelector((state) =>
+    getAllAssessmentCategories(state),
   );
-  const { processedItems: sortedAssessments } = useItems(
-    assessmentsWithProgrammingQuestion,
+  const assessments = useAppSelector((state) => getAllAssessments(state));
+  const { processedItems: sortedCategories } = useItems(
+    assessmentCategories,
     [],
-    sortAssessments,
+    sortCategories,
   );
   const { t } = useTranslation();
+  const assessmentIds = assessments.map((item) => item.id);
   return (
     <Section
       contentClassName="flex flex-col space-y-3"
@@ -41,16 +43,20 @@ const AssessmentList: FC = () => {
       title={t(translations.programmingQuestionSettings)}
     >
       <section>
-        <div className="mb-4 flex flex-row justify-end">
-          <CodaveriEnableDisableButtons />
+        <div className="mb-4 flex justify-between items-center">
+          <div>
+            <ExpandAllSwitch />
+            <ShowCodaveriOnlySwitch />
+          </div>
+          <CodaveriEnableDisableButtons assessmentIds={assessmentIds} />
         </div>
         <div>
           <List
             className="p-0 w-full border border-solid border-neutral-300 rounded-lg"
             dense
           >
-            {sortedAssessments.map((assessment) => (
-              <AssessmentListItem key={assessment.id} assessment={assessment} />
+            {sortedCategories.map((category) => (
+              <AssessmentCategory key={category.id} category={category} />
             ))}
           </List>
         </div>

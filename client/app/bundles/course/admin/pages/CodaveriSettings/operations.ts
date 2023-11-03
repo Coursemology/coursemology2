@@ -33,7 +33,13 @@ export const fetchCodaveriSettings = async (): Data => {
   try {
     const response = await CourseAPI.admin.codaveri.index();
     const data = convertSettingsDataToEntity(response.data);
-    dispatch(saveAllAssessmentsQuestions(data.assessments));
+    dispatch(
+      saveAllAssessmentsQuestions({
+        assessments: data.assessments,
+        tabs: data.assessmentTabs,
+        categories: data.assessmentCategories,
+      }),
+    );
     return data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
@@ -77,10 +83,14 @@ export const updateProgrammingQuestionCodaveri = async (
 };
 
 export const updateEvaluatorForAllQuestions = async (
+  assessmentIds: number[],
   evaluator: ProgrammingEvaluator,
 ): Promise<void> => {
   const adaptedData = {
-    programming_evaluator: evaluator,
+    update_evaluator: {
+      assessment_ids: assessmentIds,
+      programming_evaluator: evaluator,
+    },
   };
   try {
     await CourseAPI.admin.codaveri.updateEvaluatorForAllQuestions(adaptedData);

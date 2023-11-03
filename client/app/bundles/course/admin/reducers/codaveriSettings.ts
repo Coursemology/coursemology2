@@ -1,24 +1,43 @@
 import type { EntityState, PayloadAction } from '@reduxjs/toolkit';
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import {
+  AssessmentCategoryData,
   AssessmentProgrammingQuestionsData,
+  AssessmentTabData,
   ProgrammingEvaluator,
   ProgrammingQuestion,
 } from 'types/course/admin/codaveri';
 
+export const assessmentCategoriesAdapter =
+  createEntityAdapter<AssessmentCategoryData>({});
+export const assessmentTabsAdapter = createEntityAdapter<AssessmentTabData>({});
 export const assessmentsAdapter =
   createEntityAdapter<AssessmentProgrammingQuestionsData>({});
 export const programmingQuestionsAdapter =
   createEntityAdapter<ProgrammingQuestion>({});
 
+export interface CodaveriSettingsPageViewSettings {
+  showCodaveriEnabled: boolean;
+  isAssessmentListExpanded: boolean;
+}
+
 export interface CodaveriSettingsState {
+  assessmentCategories: EntityState<AssessmentCategoryData>;
+  assessmentTabs: EntityState<AssessmentTabData>;
   assessments: EntityState<AssessmentProgrammingQuestionsData>;
   programmingQuestions: EntityState<ProgrammingQuestion>;
+  viewSettings: CodaveriSettingsPageViewSettings;
 }
 
 const initialState: CodaveriSettingsState = {
+  assessmentCategories: assessmentCategoriesAdapter.getInitialState(),
+  assessmentTabs: assessmentTabsAdapter.getInitialState(),
   assessments: assessmentsAdapter.getInitialState(),
   programmingQuestions: programmingQuestionsAdapter.getInitialState(),
+  viewSettings: {
+    showCodaveriEnabled: false,
+    isAssessmentListExpanded: false,
+  },
 };
 
 export const codaveriSettingsSlice = createSlice({
@@ -27,13 +46,21 @@ export const codaveriSettingsSlice = createSlice({
   reducers: {
     saveAllAssessmentsQuestions: (
       state,
-      action: PayloadAction<AssessmentProgrammingQuestionsData[]>,
+      action: PayloadAction<{
+        categories: AssessmentCategoryData[];
+        tabs: AssessmentTabData[];
+        assessments: AssessmentProgrammingQuestionsData[];
+      }>,
     ) => {
-      const assessments = action.payload;
+      const { categories, tabs, assessments } = action.payload;
       const questions = assessments.flatMap(
         (assessment) => assessment.programmingQuestions,
       );
-
+      assessmentCategoriesAdapter.setAll(
+        state.assessmentCategories,
+        categories,
+      );
+      assessmentTabsAdapter.setAll(state.assessmentTabs, tabs);
       assessmentsAdapter.setAll(state.assessments, assessments);
       programmingQuestionsAdapter.setAll(state.programmingQuestions, questions);
     },
@@ -47,18 +74,28 @@ export const codaveriSettingsSlice = createSlice({
         updatedData,
       );
     },
-    updateAllProgrammingQuestionCodaveriSettings: (
+    updateProgrammingQuestionCodaveriSettingsForAssessments: (
       state,
       action: PayloadAction<{
         evaluator: ProgrammingEvaluator;
+        assessmentIds: number[];
       }>,
     ) => {
       state.programmingQuestions.ids.forEach((qnId) => {
         const question = state.programmingQuestions.entities[qnId];
-        if (question) {
+        if (
+          question &&
+          action.payload.assessmentIds.includes(question.assessmentId)
+        ) {
           question.isCodaveri = action.payload.evaluator === 'codaveri';
         }
       });
+    },
+    updateCodaveriSettingsPageViewSettings: (
+      state,
+      action: PayloadAction<Partial<CodaveriSettingsPageViewSettings>>,
+    ) => {
+      state.viewSettings = { ...state.viewSettings, ...action.payload };
     },
   },
 });
@@ -66,7 +103,8 @@ export const codaveriSettingsSlice = createSlice({
 export const {
   saveAllAssessmentsQuestions,
   updateProgrammingQuestion,
-  updateAllProgrammingQuestionCodaveriSettings,
+  updateProgrammingQuestionCodaveriSettingsForAssessments,
+  updateCodaveriSettingsPageViewSettings,
 } = codaveriSettingsSlice.actions;
 
 export default codaveriSettingsSlice.reducer;
