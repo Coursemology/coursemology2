@@ -1,5 +1,6 @@
 import { ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
+import ResizeObserver from 'utilities/ResizeObserver';
 
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
