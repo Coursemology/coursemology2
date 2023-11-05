@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { IconButton, Slide } from '@mui/material';
+import ResizeObserver from 'utilities/ResizeObserver';
 
 interface UseSlidersHook {
   ref: RefObject<HTMLDivElement>;
