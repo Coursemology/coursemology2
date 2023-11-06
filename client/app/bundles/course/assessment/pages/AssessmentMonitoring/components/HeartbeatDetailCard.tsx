@@ -2,7 +2,7 @@ import { Chip, Tooltip, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
 import useTranslation from 'lib/hooks/useTranslation';
-import moment, { formatPreciseDateTime } from 'lib/moment';
+import { formatPreciseDateTime } from 'lib/moment';
 
 import translations from '../../../translations';
 
