@@ -63,6 +63,7 @@ import LessonPlanLayout from 'bundles/course/lesson-plan/containers/LessonPlanLa
 import LessonPlanEdit from 'bundles/course/lesson-plan/pages/LessonPlanEdit';
 import LessonPlanShow from 'bundles/course/lesson-plan/pages/LessonPlanShow';
 import LevelsIndex from 'bundles/course/level/pages/LevelsIndex';
+import DownloadingFilePage from 'bundles/course/material/files/DownloadingFilePage';
 import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import StatisticsIndex from 'bundles/course/statistics/pages/StatisticsIndex';
@@ -129,6 +130,7 @@ import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
 import { reservedRoutes } from './redirects';
 import createAppRouter from './router';
+import ErrorRetrievingFilePage from 'course/material/files/ErrorRetrievingFilePage';
 
 const authenticatedRouter: Translated<RouteObject[]> = (t) =>
   createAppRouter([
@@ -187,7 +189,9 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                 },
                 {
                   path: 'files/:materialId',
-                  loader: materialLoader(t),
+                  loader: materialLoader,
+                  errorElement: <ErrorRetrievingFilePage />,
+                  element: <DownloadingFilePage />,
                 },
               ],
             },
