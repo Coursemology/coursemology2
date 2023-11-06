@@ -28,7 +28,6 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
-import SubmissionAnswer from '../../components/SubmissionAnswer';
 import { formNames, questionTypes } from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
 import QuestionGrade from '../../containers/QuestionGrade';
@@ -41,6 +40,7 @@ import {
   topicShape,
 } from '../../propTypes';
 import translations from '../../translations';
+import SubmissionAnswer from '../../components/SubmissionAnswer';
 
 const Comments = lazy(
   () => import(/* webpackChunkName: "comment" */ '../../containers/Comments'),
