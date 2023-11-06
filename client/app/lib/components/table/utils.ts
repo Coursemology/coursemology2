@@ -1,7 +1,5 @@
 const DEFAULT_CSV_FILENAME = 'data' as const;
 
-// TODO: Remove this suppression when more exports are added.
-
 export const downloadCsv = (csvData: string, filename?: string): void => {
   const csvContent = `data:text/csv;charset=utf-8,${csvData}`;
   const encodedUri = encodeURI(csvContent);
