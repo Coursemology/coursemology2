@@ -107,6 +107,7 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
    */
   const deleteFileWithRowIndex = async (index: number): Promise<void> => {
     const { id, name } = materials[index];
+    if (!id || !name) return;
 
     setMaterials(
       (current) =>
