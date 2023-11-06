@@ -26,7 +26,6 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
-import SubmissionAnswer from '../../components/SubmissionAnswer';
 import { formNames, questionTypes } from '../../constants';
 import Comments from '../../containers/Comments';
 import GradingPanel from '../../containers/GradingPanel';
@@ -39,6 +38,7 @@ import {
   topicShape,
 } from '../../propTypes';
 import translations from '../../translations';
+import SubmissionAnswer from '../../components/SubmissionAnswer';
 
 const styles = {
   questionContainer: {

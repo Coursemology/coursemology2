@@ -28,3 +28,23 @@ export interface QuestionData {
   viewHistory: boolean;
   canViewHistory: boolean;
 }
+
+export interface SubmissionQuestionData extends QuestionData {
+  id: number;
+  submissionQuestionId: number;
+}
+
+export interface HistoryQuestion {
+  loaded: boolean;
+  isLoading: boolean;
+  answerIds: number[];
+  selected: number[];
+  pastAnswersLoaded?: boolean;
+}
+
+export interface QuestionFlags {
+  jobError: boolean;
+  jobErrorMessage: string;
+  isAutograding: boolean;
+  isResetting: boolean;
+}
