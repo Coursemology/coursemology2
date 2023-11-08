@@ -65,16 +65,16 @@ const translations = defineMessages({
     id: 'course.assessment.submission.autograde',
     defaultMessage: 'Evaluate Answers',
   },
-  isGradeSaved: {
-    id: 'course.assessment.submission.isGradeSaved',
+  isSaved: {
+    id: 'course.assessment.submission.isSaved',
     defaultMessage: 'Saved',
   },
-  isGradeSaving: {
-    id: 'course.assessment.submission.isGradeSaving',
+  isSaving: {
+    id: 'course.assessment.submission.isSaving',
     defaultMessage: 'Saving',
   },
-  isGradeUnsaved: {
-    id: 'course.assessment.submission.isGradeUnsaved',
+  isUnsaved: {
+    id: 'course.assessment.submission.isUnsaved',
     defaultMessage: 'Unsaved',
   },
   gradeUnsavedHint: {
@@ -523,6 +523,20 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submissionBlocked',
     defaultMessage:
       'Submission for this assessment cannot be viewed once finalised.',
+  },
+  missingAnswer: {
+    id: 'course.assessment.submission.answer.missingAnswer',
+    defaultMessage:
+      'There is no answer submitted for this question - this might be caused by \
+                    the addition of this question after the submission is submitted.',
+  },
+  noPastAnswers: {
+    id: 'course.assessment.submission.answer.noPastAnswers',
+    defaultMessage: 'No past answers.',
+  },
+  viewPastAnswers: {
+    id: 'course.assessment.submission.answer.viewPastAnswers',
+    defaultMessage: 'Past Answers',
   },
 });
 

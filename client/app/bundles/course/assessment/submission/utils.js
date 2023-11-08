@@ -9,25 +9,27 @@ export function capitaliseFirstLetter(word) {
   return '';
 }
 
+const parsedLanguages = {
+  'C/C++': 'c_cpp',
+  'Java 8': 'java',
+  'Java 11': 'java',
+  'Java 17': 'java',
+  Java: 'java',
+  'Python 3.12': 'python',
+  'Python 3.10': 'python',
+  'Python 3.9': 'python',
+  'Python 3.7': 'python',
+  'Python 3.6': 'python',
+  'Python 3.5': 'python',
+  'Python 3.4': 'python',
+  'Python 2.7': 'python',
+};
+
 export function parseLanguages(language) {
-  switch (language) {
-    case 'C/C++':
-      return 'c_cpp';
-    case 'Java 8':
-    case 'Java 11':
-    case 'Java 17':
-    case 'Java':
-      return 'java';
-    case 'Python 3.12':
-    case 'Python 3.10':
-    case 'Python 3.9':
-    case 'Python 3.7':
-    case 'Python 3.6':
-    case 'Python 3.5':
-    case 'Python 3.4':
-    case 'Python 2.7':
-      return 'python';
-    default:
-      return '';
+  const parsedLanguage = parsedLanguages[language];
+  if (!parsedLanguage) {
+    return '';
   }
+
+  return parsedLanguage;
 }
