@@ -1,4 +1,5 @@
 import { Tooltip } from 'react-tooltip';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 const styles = {
@@ -31,9 +32,13 @@ const BarChart = (props) => (
           data-tooltip-id={segment.color}
           style={segmentStyle}
         >
-          {segment.count > 0 ? segment.count : null}
+          {segment.count > 0 ? (
+            <Typography variant="caption">{segment.count}</Typography>
+          ) : null}
 
-          <Tooltip id={segment.color}>{segment.label}</Tooltip>
+          <Typography variant="caption">
+            <Tooltip id={segment.color}>{segment.label}</Tooltip>
+          </Typography>
         </div>
       );
     })}

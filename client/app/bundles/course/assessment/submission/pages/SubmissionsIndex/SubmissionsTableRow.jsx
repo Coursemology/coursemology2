@@ -1,6 +1,5 @@
 import { memo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
 import { Warning } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
@@ -77,8 +76,6 @@ const SubmissionsTableRow = (props) => {
     unsubmitConfirmation: false,
     deleteConfirmation: false,
   });
-
-  const navigate = useNavigate();
 
   const getGradeString = () => {
     if (submission.workflowState === workflowStates.Unstarted) return null;
@@ -172,16 +169,12 @@ const SubmissionsTableRow = (props) => {
       return null;
 
     return (
-      <span className="submission-access-logs" data-tooltip-id="access-logs">
-        <IconButton
-          onClick={() =>
-            navigate(
-              getSubmissionLogsURL(courseId, assessmentId, submission.id),
-            )
-          }
-          size="large"
-          style={styles.button}
-        >
+      <Link
+        className="submission-access-logs"
+        data-tooltip-id="access-logs"
+        to={getSubmissionLogsURL(courseId, assessmentId, submission.id)}
+      >
+        <IconButton size="large" style={styles.button}>
           <History
             htmlColor={
               palette.submissionIcon.history[
@@ -190,7 +183,7 @@ const SubmissionsTableRow = (props) => {
             }
           />
         </IconButton>
-      </span>
+      </Link>
     );
   };
 
