@@ -32,6 +32,8 @@ executors:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: coursemology_test
 
+      - image: cimg/redis:7.2.3
+
     working_directory: ~/repo
     resource_class: large
 
