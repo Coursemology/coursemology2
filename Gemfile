@@ -60,6 +60,8 @@ gem 'rexml'
 # Page profiler
 gem 'rack-mini-profiler'
 
+gem 'redis-rails'
+
 group :development do
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
@@ -141,10 +143,6 @@ end
 
 group :production, :ci do
   gem 'aws-sdk-s3'
-end
-
-group :production, :development do
-  gem 'redis-rails'
 end
 
 group :production do
