@@ -70,24 +70,16 @@ const QuestionGrade: FC<Props> = (props) => {
   if (dirty && !isSaving) {
     savingIndicator = (
       <Tooltip title={t(translations.gradeUnsavedHint)}>
-        <Chip
-          color="warning"
-          label={t(translations.isGradeUnsaved)}
-          size="small"
-        />
+        <Chip color="warning" label={t(translations.isUnsaved)} size="small" />
       </Tooltip>
     );
   } else if (isSaving) {
     savingIndicator = (
-      <Chip
-        color="default"
-        label={t(translations.isGradeSaving)}
-        size="small"
-      />
+      <Chip color="default" label={t(translations.isSaving)} size="small" />
     );
   } else if (!isFirstRendering) {
     savingIndicator = (
-      <Chip color="success" label={t(translations.isGradeSaved)} size="small" />
+      <Chip color="success" label={t(translations.isSaved)} size="small" />
     );
   }
 
