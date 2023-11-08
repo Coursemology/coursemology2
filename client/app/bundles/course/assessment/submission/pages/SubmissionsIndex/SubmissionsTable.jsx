@@ -15,6 +15,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import { pink, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -279,7 +280,9 @@ export default class SubmissionsTable extends Component {
     ];
     return tooltipIds.map((tooltipId, index) => (
       <Tooltip key={tooltipId} id={tooltipId}>
-        <FormattedMessage {...formattedMessages[index]} />
+        <Typography variant="caption">
+          <FormattedMessage {...formattedMessages[index]} />
+        </Typography>
       </Tooltip>
     ));
   };
