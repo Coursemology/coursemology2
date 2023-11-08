@@ -133,7 +133,7 @@
     "@types/react-resizable": "^3.0.6",
     "@types/react-scroll": "^1.8.9",
     "@types/react-virtualized-auto-sizer": "^1.0.2",
-    "@types/react-window": "^1.8.7",
+    "@types/react-window": "^1.8.8",
     "@types/sharedworker": "^0.0.105",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.10.0",
