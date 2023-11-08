@@ -25,10 +25,10 @@ class Course::Assessment::SessionLogService
   private
 
   def current_authentication_token
-    @session[session_key]
+    REDIS.get(session_key)
   end
 
   def session_key
-    "assessment_#{@assessment.id}_authentication_token"
+    "session_#{@session.id}_assessment_#{@assessment.id}_submission_#{@submission.id}_authentication_token"
   end
 end

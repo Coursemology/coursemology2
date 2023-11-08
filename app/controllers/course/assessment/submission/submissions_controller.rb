@@ -51,7 +51,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       success = @assessment.create_new_submission(@submission, current_user)
       raise ActiveRecord::Rollback unless success
 
-      authentication_service.save_token_to_session(@submission.session_id)
+      authentication_service.save_token_to_redis(@submission.session_id)
       log_service.log_submission_access(request) if @assessment.session_password_protected?
       monitoring_service&.create_new_session_if_not_exist! if should_monitor?
 
