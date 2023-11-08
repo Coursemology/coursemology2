@@ -29,7 +29,8 @@ class Course::Assessment::AuthenticationService
 
   # Generates a new authentication token and stores it in current session.
   def set_session_token!
-    @session[session_key] = password_token
+    token_expiry_seconds = 86_400
+    REDIS.set(session_key, password_token, ex: token_expiry_seconds)
   end
 
   # Check whether current session is the same session that created the submission or not.
@@ -38,7 +39,7 @@ class Course::Assessment::AuthenticationService
   def authenticated?
     return true unless @session
 
-    @session[session_key] == password_token
+    REDIS.get(session_key) == password_token
   end
 
   private
@@ -48,6 +49,6 @@ class Course::Assessment::AuthenticationService
   end
 
   def session_key
-    "assessment_#{@assessment.id}_access_token"
+    "session_#{@session.id}_assessment_#{@assessment.id}_access_token"
   end
 end
