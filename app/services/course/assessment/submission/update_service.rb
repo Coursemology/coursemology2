@@ -70,7 +70,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def update_answers_params
-    params.require(:submission).permit(answers: [:id] + update_answer_params)
+    params.require(:submission).permit(answers: [:id, :clientVersion] + update_answer_params)
   end
 
   private
@@ -151,7 +151,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
           next if answer_params[:id].blank?
 
           answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
-          if answer && !update_answer(answer, answer_params)
+          if answer && !update_answer(answer, answer_params.merge(session_id: session.id))
             logger.error("Failed to update answer #{answer.errors.inspect}")
             answer.errors.messages.each do |attribute, message|
               @submission.errors.add(attribute, message)
