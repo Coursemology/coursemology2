@@ -16,8 +16,8 @@ const JOB_STAGGER_DELAY_MS = 400;
  *    The data is in a format of { url, file, name }, and we only need to assign the file
  *    attribute into answer.file
  */
-const formatAnswer = (answer) => {
-  const newAnswer = { ...answer };
+const formatAnswer = (answer, currentTime) => {
+  const newAnswer = { ...answer, clientVersion: currentTime };
   // voice upload
   const fileObj = newAnswer.file;
   if (fileObj) {
@@ -30,10 +30,10 @@ const formatAnswer = (answer) => {
   return newAnswer;
 };
 
-const formatAnswers = (answers = {}) => {
+const formatAnswers = (answers = {}, currentTime) => {
   const newAnswers = [];
   Object.values(answers).forEach((answer) => {
-    const newAnswer = formatAnswer(answer);
+    const newAnswer = formatAnswer(answer, currentTime);
     newAnswers.push(newAnswer);
   });
   return newAnswers;
@@ -147,8 +147,8 @@ export function autogradeSubmission(id) {
   };
 }
 
-export function saveDraft(submissionId, rawAnswers) {
-  const answers = formatAnswers(rawAnswers);
+export function saveDraft(submissionId, rawAnswers, currentTime) {
+  const answers = formatAnswers(rawAnswers, currentTime);
   const payload = { submission: { answers, is_save_draft: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_DRAFT_REQUEST });

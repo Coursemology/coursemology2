@@ -115,6 +115,8 @@ class Course::Assessment::Answer < ApplicationRecord
 
   def assign_params(params)
     self.grade = params[:grade].present? ? params[:grade].to_f : nil
+    self.client_version = Time.at(params[:clientVersion].to_i / 1000)
+    self.last_session_id = params[:session_id]
   end
 
   # Generates a feedback for an answer

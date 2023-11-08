@@ -192,7 +192,10 @@ class VisibleSubmissionEditIndex extends Component {
       dispatch,
       match: { params },
     } = this.props;
-    dispatch(saveDraft(params.submissionId, data));
+    const currentDate = new Date();
+    const currentTime = currentDate.getTime();
+
+    dispatch(saveDraft(params.submissionId, data, currentTime));
   };
 
   onSubmit = (data) => {
