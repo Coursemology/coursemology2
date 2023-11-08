@@ -48,7 +48,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
       success = @assessment.create_new_submission(@submission, current_user)
 
       if success
-        authentication_service.save_token_to_session(@submission.session_id)
+        authentication_service.save_token_to_redis(@submission.session_id)
         log_service.log_submission_access(request) if @assessment.session_password_protected?
         @submission.create_new_answers
       end
