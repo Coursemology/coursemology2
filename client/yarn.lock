@@ -2452,10 +2452,10 @@
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
   integrity sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==
 
-"@types/rails__actioncable@^6.1.8":
-  version "6.1.8"
-  resolved "https://registry.yarnpkg.com/@types/rails__actioncable/-/rails__actioncable-6.1.8.tgz#7454b709db88f7f291607b233db102fb0a0172c8"
-  integrity sha512-nKdKS8K6asR5qdRw9M0vQjT84QCZut9SKavdxlMUERO2oz4PlC5ZPe0H15sbIURyGRwq5rVQHPpjgxEivI05qg==
+"@types/rails__actioncable@^6.1.9":
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/@types/rails__actioncable/-/rails__actioncable-6.1.9.tgz#42cba0ef6095e724968d0a5b4c307a90aed142c6"
+  integrity sha512-jgRBhXIt551LydwnT0t0NngV96hBsqF8lR1y37DtPzewlPUZCgDvv3NyZjj3gI3KpILC7i2/T/42h4mzNv52Lw==
 
 "@types/range-parser@*":
   version "1.2.4"
