@@ -1,4 +1,3 @@
-import { defineMessages } from 'react-intl';
 import {
   Alert,
   CircularProgress,
@@ -16,30 +15,9 @@ import {
   QuestionFlags,
   SubmissionQuestionData,
 } from '../questionGrade';
+import translations from '../translations';
 
 import Answer from './Answer';
-
-const translations = defineMessages({
-  missingAnswer: {
-    id: 'course.assessment.submission.SubmissionAnswer.missingAnswer',
-    defaultMessage:
-      'There is no answer submitted for this question - this might be caused by \
-                    the addition of this question after the submission is submitted.',
-  },
-  rendererNotImplemented: {
-    id: 'course.assessment.submission.SubmissionAnswer.rendererNotImplemented',
-    defaultMessage:
-      'The display for this question type has not been implemented yet.',
-  },
-  noPastAnswers: {
-    id: 'course.assessment.submission.SubmissionAnswer.noPastAnswers',
-    defaultMessage: 'No past answers.',
-  },
-  viewPastAnswers: {
-    id: 'course.assessment.submission.SubmissionAnswer.viewPastAnswers',
-    defaultMessage: 'Past Answers',
-  },
-});
 
 interface Props {
   handleToggleViewHistoryMode: (
