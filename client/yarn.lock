@@ -2483,10 +2483,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-resizable@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@types/react-resizable/-/react-resizable-3.0.6.tgz#656b6bc0ef9f0de754a3b8d3ab815d900a89bd26"
-  integrity sha512-7BHYsFJkkmkG0v7uIub8+aVrqw6jYibpsChrrMQLp1LMV/Yyb3f4gB82kjRpN4QPXy3tWPtZ/oUVeNHbs5BusA==
+"@types/react-resizable@^3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@types/react-resizable/-/react-resizable-3.0.7.tgz#004ffcb7835ef4b06a1212e3d090f34e29d9efcd"
+  integrity sha512-V4N7/xDUME+cxKya/A73MmFrHofTupVdE45boRxeA8HL4Q5pJh3AuG0FWCEy2GB84unIMSRISyEAS/GHWum9EQ==
   dependencies:
     "@types/react" "*"
 
