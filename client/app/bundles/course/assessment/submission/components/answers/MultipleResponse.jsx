@@ -14,6 +14,7 @@ const MultipleResponseOptions = ({
   graderView,
   question,
   field: { onChange, value },
+  saveAnswer,
 }) => (
   <>
     {question.options.map((option) => (
@@ -45,7 +46,8 @@ const MultipleResponseOptions = ({
           } else {
             newValue.splice(newValue.indexOf(option.id), 1);
           }
-          return onChange(newValue);
+          onChange(newValue);
+          saveAnswer();
         }}
         style={{ width: '100%' }}
         value={option.id.toString()}
@@ -63,6 +65,7 @@ MultipleResponseOptions.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
+  saveAnswer: PropTypes.func,
 };
 
 MultipleResponseOptions.defaultProps = {
@@ -87,9 +90,15 @@ const MemoMultipleResponseOptions = memo(
 );
 
 const MultipleResponse = (props) => {
-  const { question, readOnly, showMcqMrqSolution, graderView, answerId } =
-    props;
-  const { control } = useFormContext();
+  const {
+    question,
+    readOnly,
+    showMcqMrqSolution,
+    graderView,
+    answerId,
+    saveAnswer,
+  } = props;
+  const { control, getValues } = useFormContext();
 
   return (
     <Controller
@@ -99,6 +108,10 @@ const MultipleResponse = (props) => {
         <MemoMultipleResponseOptions
           field={field}
           fieldState={fieldState}
+          saveAnswer={() => {
+            const modifiedAnswer = { [answerId]: getValues()[answerId] };
+            saveAnswer(modifiedAnswer, answerId);
+          }}
           {...{ question, readOnly, showMcqMrqSolution, graderView }}
         />
       )}
@@ -112,6 +125,7 @@ MultipleResponse.propTypes = {
   showMcqMrqSolution: PropTypes.bool,
   graderView: PropTypes.bool,
   answerId: PropTypes.number,
+  saveAnswer: PropTypes.func,
 };
 
 export default MultipleResponse;

@@ -71,6 +71,7 @@ ForumPostResponse.propTypes = {
   question: questionShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
   answerId: PropTypes.number.isRequired,
+  saveAnswer: PropTypes.func,
 };
 
 export default ForumPostResponse;
