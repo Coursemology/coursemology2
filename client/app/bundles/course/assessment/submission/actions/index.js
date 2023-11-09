@@ -16,7 +16,10 @@ const JOB_STAGGER_DELAY_MS = 400;
  *    The data is in a format of { url, file, name }, and we only need to assign the file
  *    attribute into answer.file
  */
-const formatAnswer = (answer, currentTime) => {
+const formatAnswer = (answer) => {
+  const currentDate = new Date();
+  const currentTime = currentDate.getTime();
+
   const newAnswer = { ...answer, clientVersion: currentTime };
   // voice upload
   const fileObj = newAnswer.file;
@@ -30,10 +33,10 @@ const formatAnswer = (answer, currentTime) => {
   return newAnswer;
 };
 
-const formatAnswers = (answers = {}, currentTime) => {
+const formatAnswers = (answers = {}) => {
   const newAnswers = [];
   Object.values(answers).forEach((answer) => {
-    const newAnswer = formatAnswer(answer, currentTime);
+    const newAnswer = formatAnswer(answer);
     newAnswers.push(newAnswer);
   });
   return newAnswers;
@@ -147,8 +150,8 @@ export function autogradeSubmission(id) {
   };
 }
 
-export function saveDraft(submissionId, rawAnswers, currentTime) {
-  const answers = formatAnswers(rawAnswers, currentTime);
+export function saveDraft(submissionId, rawAnswers) {
+  const answers = formatAnswers(rawAnswers);
   const payload = { submission: { answers, is_save_draft: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_DRAFT_REQUEST });
@@ -165,6 +168,39 @@ export function saveDraft(submissionId, rawAnswers, currentTime) {
       })
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_DRAFT_FAILURE });
+        dispatch(
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
+        );
+      });
+  };
+}
+
+export function saveAnswer(submissionId, rawAnswers, answerId) {
+  const rawAnswer = { [answerId]: rawAnswers[answerId] };
+  const answer = formatAnswers(rawAnswer);
+  const payload = { submission: { answer, is_save_draft: true } };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.SAVE_ANSWER_REQUEST });
+
+    return CourseAPI.assessment.submissions
+      .update(submissionId, payload)
+      .then((response) => response.data)
+      .then((data) => {
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
+        }
+        const dataForAnswerId = {
+          ...data,
+          answers: data.answers.filter((ans) => ans.id === answerId),
+        };
+        dispatch({
+          type: actionTypes.SAVE_ANSWER_SUCCESS,
+          payload: dataForAnswerId,
+        });
+        dispatch(setNotification(translations.updateSuccess));
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.SAVE_ANSWER_FAILURE });
         dispatch(
           setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
