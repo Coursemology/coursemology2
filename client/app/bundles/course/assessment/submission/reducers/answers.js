@@ -28,6 +28,14 @@ export default function (state = initialState, action) {
         tempDraftState.initial[questionId] = initialValues[questionId];
       });
     }
+    case actions.SAVE_ANSWER_SUCCESS: {
+      const initialValues = buildInitialValues(action.payload.answers);
+      const answerId = Object.keys(initialValues)[0];
+      return produce(state, (draftState) => {
+        const tempDraftState = draftState;
+        tempDraftState.initial[answerId] = initialValues[answerId];
+      });
+    }
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:
     case actions.FINALISE_SUCCESS:

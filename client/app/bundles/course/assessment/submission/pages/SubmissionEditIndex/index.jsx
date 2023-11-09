@@ -35,6 +35,7 @@ import {
   resetAnswer,
   saveAllGrades,
   saveDraft,
+  saveAnswer,
   saveGrade,
   submitAnswer,
   toggleViewHistoryMode,
@@ -190,12 +191,23 @@ class VisibleSubmissionEditIndex extends Component {
   onSaveDraft = (data) => {
     const {
       dispatch,
-      match: { params },
+      match: {
+        params: { submissionId },
+      },
     } = this.props;
-    const currentDate = new Date();
-    const currentTime = currentDate.getTime();
 
-    dispatch(saveDraft(params.submissionId, data, currentTime));
+    dispatch(saveDraft(submissionId, data));
+  };
+
+  onSaveAnswer = (data, answerId) => {
+    const {
+      dispatch,
+      match: {
+        params: { submissionId },
+      },
+    } = this.props;
+
+    dispatch(saveAnswer(submissionId, data, answerId));
   };
 
   onSubmit = (data) => {
