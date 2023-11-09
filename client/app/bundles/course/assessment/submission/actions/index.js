@@ -178,7 +178,8 @@ export function saveDraft(submissionId, rawAnswers) {
 export function saveAnswer(submissionId, rawAnswers, answerId) {
   const rawAnswer = { [answerId]: rawAnswers[answerId] };
   const answer = formatAnswers(rawAnswer);
-  const payload = { submission: { answer, is_save_draft: true } };
+  const payload = { submission: { answers: answer, is_save_draft: true } };
+
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_ANSWER_REQUEST });
 

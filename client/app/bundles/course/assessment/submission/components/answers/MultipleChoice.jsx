@@ -38,9 +38,7 @@ const MultipleChoiceOptions = ({
             />
           </b>
         }
-        onChange={(event) => {
-          onChange([parseInt(event.target.value, 10)]);
-        }}
+        onChange={onChange}
         style={{ width: '100%' }}
         value={option.id.toString()}
       />
@@ -77,9 +75,15 @@ const MemoMultipleChoiceOptions = memo(
 );
 
 const MultipleChoice = (props) => {
-  const { question, readOnly, showMcqMrqSolution, graderView, answerId } =
-    props;
-  const { control } = useFormContext();
+  const {
+    question,
+    readOnly,
+    showMcqMrqSolution,
+    graderView,
+    answerId,
+    saveAnswer,
+  } = props;
+  const { control, getValues } = useFormContext();
 
   return (
     <Controller
@@ -87,7 +91,14 @@ const MultipleChoice = (props) => {
       name={`${answerId}.option_ids`}
       render={({ field, fieldState }) => (
         <MemoMultipleChoiceOptions
-          field={field}
+          field={{
+            ...field,
+            onChange: (e) => {
+              field.onChange([parseInt(e.target.value, 10)]);
+              const modifiedAnswer = { [answerId]: getValues()[answerId] };
+              saveAnswer(modifiedAnswer, answerId);
+            },
+          }}
           fieldState={fieldState}
           {...{ question, readOnly, showMcqMrqSolution, graderView }}
         />
@@ -102,6 +113,7 @@ MultipleChoice.propTypes = {
   showMcqMrqSolution: PropTypes.bool,
   graderView: PropTypes.bool,
   answerId: PropTypes.number,
+  saveAnswer: PropTypes.func,
 };
 
 export default MultipleChoice;

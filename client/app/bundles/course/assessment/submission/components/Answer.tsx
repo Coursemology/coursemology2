@@ -32,6 +32,7 @@ interface BaseAnswerProps<T> {
   question: T;
   readOnly: boolean;
   answerId: number;
+  saveAnswer: (data: unknown, answerId: number) => void;
 }
 
 interface TextResponseAnswerProps<T> extends BaseAnswerProps<T> {
@@ -46,12 +47,25 @@ interface McqMrqAnswerProps<T> extends BaseAnswerProps<T> {
 const MultipleChoice = (
   props: McqMrqAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, graderView, showMcqMrqSolution } =
-    props;
+  const {
+    question,
+    readOnly,
+    answerId,
+    graderView,
+    showMcqMrqSolution,
+    saveAnswer,
+  } = props;
   return (
     <MultipleChoiceAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId, graderView, showMcqMrqSolution }}
+      {...{
+        question,
+        readOnly,
+        answerId,
+        graderView,
+        showMcqMrqSolution,
+        saveAnswer,
+      }}
     />
   );
 };
@@ -59,12 +73,25 @@ const MultipleChoice = (
 const MultipleResponse = (
   props: McqMrqAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, graderView, showMcqMrqSolution } =
-    props;
+  const {
+    question,
+    readOnly,
+    answerId,
+    graderView,
+    showMcqMrqSolution,
+    saveAnswer,
+  } = props;
   return (
     <MultipleResponseAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId, graderView, showMcqMrqSolution }}
+      {...{
+        question,
+        readOnly,
+        answerId,
+        graderView,
+        showMcqMrqSolution,
+        saveAnswer,
+      }}
     />
   );
 };
@@ -72,11 +99,11 @@ const MultipleResponse = (
 const Programming = (
   props: BaseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId } = props;
+  const { question, readOnly, answerId, saveAnswer } = props;
   return (
     <ProgrammingAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId }}
+      {...{ question, readOnly, answerId, saveAnswer }}
     />
   );
 };
@@ -84,11 +111,11 @@ const Programming = (
 const TextResponse = (
   props: TextResponseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, graderView } = props;
+  const { question, readOnly, answerId, graderView, saveAnswer } = props;
   return (
     <TextResponseAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId, graderView }}
+      {...{ question, readOnly, answerId, graderView, saveAnswer }}
     />
   );
 };
@@ -96,11 +123,11 @@ const TextResponse = (
 const FileUpload = (
   props: BaseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId } = props;
+  const { question, readOnly, answerId, saveAnswer } = props;
   return (
     <FileUploadAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId }}
+      {...{ question, readOnly, answerId, saveAnswer }}
     />
   );
 };
@@ -108,12 +135,13 @@ const FileUpload = (
 const Scribing = (
   props: BaseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId } = props;
+  const { question, readOnly, answerId, saveAnswer } = props;
   return (
     <ScribingView
       key={`question_${question.id}`}
       answerId={answerId}
       readOnly={readOnly}
+      saveAnswer={saveAnswer}
       scribing={question}
     />
   );
@@ -122,13 +150,14 @@ const Scribing = (
 const VoiceResponse = (
   props: BaseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId } = props;
+  const { question, readOnly, answerId, saveAnswer } = props;
   return (
     <VoiceResponseAnswer
       key={`question_${question.id}`}
       answerId={answerId}
       question={question}
       readOnly={readOnly}
+      saveAnswer={saveAnswer}
     />
   );
 };
@@ -136,13 +165,14 @@ const VoiceResponse = (
 const ForumPostResponse = (
   props: BaseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId } = props;
+  const { question, readOnly, answerId, saveAnswer } = props;
   return (
     <ForumPostResponseAnswer
       key={`question_${question.id}`}
       answerId={answerId}
       question={question}
       readOnly={readOnly}
+      saveAnswer={saveAnswer}
     />
   );
 };
