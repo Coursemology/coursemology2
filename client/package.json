@@ -127,7 +127,7 @@
     "@types/papaparse": "^5.3.10",
     "@types/rails__actioncable": "^6.1.9",
     "@types/react": "^18.2.37",
-    "@types/react-beautiful-dnd": "^13.1.6",
+    "@types/react-beautiful-dnd": "^13.1.7",
     "@types/react-dom": "^18.2.15",
     "@types/react-google-recaptcha": "^2.1.7",
     "@types/react-resizable": "^3.0.7",
