@@ -77,6 +77,7 @@ const SubmissionEditForm = (props) => {
     handlePublish,
     isCodaveriEnabled,
     onReset,
+    onSaveAnswer,
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
@@ -431,6 +432,7 @@ const SubmissionEditForm = (props) => {
                   graderView,
                   showMcqMrqSolution,
                   handleToggleViewHistoryMode,
+                  onSaveAnswer,
                 }}
               />
               {question.type === questionTypes.Programming &&
@@ -593,6 +595,7 @@ const SubmissionEditForm = (props) => {
             graderView,
             showMcqMrqSolution,
             handleToggleViewHistoryMode,
+            onSaveAnswer,
           }}
         />
         {question.type === questionTypes.Programming && !viewHistory
@@ -744,6 +747,7 @@ SubmissionEditForm.propTypes = {
 
   handleAutogradeSubmission: PropTypes.func,
   onReset: PropTypes.func,
+  onSaveAnswer: PropTypes.func,
   onSaveDraft: PropTypes.func,
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,

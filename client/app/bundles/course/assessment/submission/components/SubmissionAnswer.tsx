@@ -32,6 +32,7 @@ interface Props {
   showMcqMrqSolution: boolean;
   question: SubmissionQuestionData;
   answerId: number;
+  onSaveAnswer: (data: unknown, answerId: number) => void;
 }
 
 const SubmissionAnswer = (props: Props): JSX.Element => {
@@ -44,6 +45,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     showMcqMrqSolution,
     question,
     answerId,
+    onSaveAnswer,
   } = props;
 
   const { t } = useTranslation();
@@ -112,6 +114,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           graderView={graderView}
           question={question}
           readOnly={readOnly}
+          saveAnswer={onSaveAnswer}
           showMcqMrqSolution={showMcqMrqSolution}
         />
       ) : (
