@@ -12,8 +12,8 @@ import ForumPostSelect from './ForumPostSelect';
 
 const ForumPostResponse = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { question, readOnly, answerId } = props;
-  const { control } = useFormContext();
+  const { question, readOnly, answerId, saveAnswer } = props;
+  const { control, getValues } = useFormContext();
   const renderTextField = () =>
     readOnly ? (
       <Controller
@@ -32,7 +32,14 @@ const ForumPostResponse = (props) => {
         name={`${answerId}.answer_text`}
         render={({ field, fieldState }) => (
           <FormRichTextField
-            field={field}
+            field={{
+              ...field,
+              onChange: (event, editor) => {
+                field.onChange(editor !== undefined ? editor.getData() : event);
+                const modifiedAnswer = { [answerId]: getValues()[answerId] };
+                saveAnswer(modifiedAnswer, answerId);
+              },
+            }}
             fieldState={fieldState}
             fullWidth
             InputLabelProps={{
