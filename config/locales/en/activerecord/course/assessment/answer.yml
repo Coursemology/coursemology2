@@ -14,6 +14,7 @@ en:
               consistent_assessment: "must belong to the same assessment"
             submission:
               attemptable_state: "must be in the attempting state"
+              newly_updated: "the version to be saved is not the most updated one"
             grade:
               no_blank_grade: "Grade must not be empty if it is already graded"
               consistent_grade: "must be less than question maximum grade"

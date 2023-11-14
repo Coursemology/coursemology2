@@ -93,9 +93,10 @@ class FileInput extends Component {
           <Chip
             key={f.name}
             label={f.name}
-            onDelete={() =>
-              onChange(files.filter((file) => file.name !== f.name))
-            }
+            onDelete={() => {
+              const updatedFiles = files.filter((file) => file.name !== f.name);
+              return onChange(updatedFiles);
+            }}
             style={styles.chip}
           />
         ))}
@@ -186,20 +187,18 @@ const FileInputField = ({
         <FileInput
           callback={callback}
           disabled={disabled}
-          field={
-            saveAnswer && answerId
-              ? {
-                  ...field,
-                  onChange: (event) => {
-                    field.onChange(event);
-                    const modifiedAnswer = {
-                      [answerId]: getValues()[answerId],
-                    };
-                    saveAnswer(modifiedAnswer, answerId);
-                  },
-                }
-              : field
-          }
+          field={{
+            ...field,
+            onChange: (event) => {
+              field.onChange(event);
+              if (saveAnswer) {
+                const modifiedAnswer = {
+                  [answerId]: getValues()[answerId],
+                };
+                saveAnswer(modifiedAnswer, answerId);
+              }
+            },
+          }}
           fieldState={fieldState}
           {...custom}
         />

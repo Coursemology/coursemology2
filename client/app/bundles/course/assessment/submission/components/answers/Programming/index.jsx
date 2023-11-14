@@ -64,6 +64,7 @@ const Programming = (props) => {
           question={question}
           questionId={question.id}
           readOnly={readOnly}
+          saveAnswer={saveAnswer}
         />
       ) : (
         <ProgrammingFiles
