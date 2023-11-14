@@ -8,6 +8,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
+import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import {
@@ -59,6 +61,12 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     ? questionsFlags[question.id].isAutograding
     : false;
   const disabled = noPastAnswers || isLoading || isAutograding;
+
+  const debouncedSaveAnswer = useDebounce(
+    onSaveAnswer,
+    FIELD_LONG_DEBOUNCE_DELAY_MS,
+    [],
+  );
 
   const HistoryToggle = (): JSX.Element | null => {
     return question.canViewHistory ? (
@@ -114,7 +122,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           graderView={graderView}
           question={question}
           readOnly={readOnly}
-          saveAnswer={onSaveAnswer}
+          saveAnswer={debouncedSaveAnswer}
           showMcqMrqSolution={showMcqMrqSolution}
         />
       ) : (
