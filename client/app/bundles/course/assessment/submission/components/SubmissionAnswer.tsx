@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import {
   Alert,
   CircularProgress,
@@ -7,6 +8,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import equal from 'fast-deep-equal';
 
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { useDebounce } from 'lib/hooks/useDebounce';
@@ -132,4 +134,4 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   );
 };
 
-export default SubmissionAnswer;
+export default memo(SubmissionAnswer, equal);

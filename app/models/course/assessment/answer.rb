@@ -33,6 +33,7 @@ class Course::Assessment::Answer < ApplicationRecord
     end
   end
 
+  validate :validate_session_and_client_version
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
   validate :validate_grade, unless: :attempting?
@@ -146,6 +147,14 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   private
+
+  def validate_session_and_client_version
+    existing_answer = Course::Assessment::Answer.find_by(id: id)
+    return if !existing_answer.present? || existing_answer.last_session_id.nil? || existing_answer.client_version.nil?
+    return if last_session_id != existing_answer.last_session_id || client_version >= existing_answer.client_version
+
+    errors.add(:submission, :newly_updated)
+  end
 
   def validate_consistent_assessment
     return if question.question_assessments.map(&:assessment_id).include?(submission.assessment_id)
