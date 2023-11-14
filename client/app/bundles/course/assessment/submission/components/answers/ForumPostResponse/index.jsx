@@ -60,7 +60,14 @@ const ForumPostResponse = (props) => {
         render={({ field }) => (
           <ForumPostSelect
             answerId={answerId}
-            field={field}
+            field={{
+              ...field,
+              onChange: (event) => {
+                field.onChange(event);
+                const modifiedAnswer = { [answerId]: getValues()[answerId] };
+                saveAnswer(modifiedAnswer, answerId);
+              },
+            }}
             handleNotificationMessage={toast.info}
             onErrorMessage={(message) => setErrorMessage(message)}
             question={question}
