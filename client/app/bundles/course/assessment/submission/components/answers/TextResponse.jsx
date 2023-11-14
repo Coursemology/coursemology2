@@ -10,8 +10,8 @@ import FileInput from '../FileInput';
 import TextResponseSolutions from '../TextResponseSolutions';
 
 const TextResponse = (props) => {
-  const { question, readOnly, answerId, graderView } = props;
-  const { control } = useFormContext();
+  const { question, readOnly, answerId, graderView, saveAnswer } = props;
+  const { control, getValues } = useFormContext();
   const allowUpload = question.allowAttachment;
 
   const readOnlyAnswer = (
@@ -34,7 +34,14 @@ const TextResponse = (props) => {
       render={({ field, fieldState }) => (
         <FormRichTextField
           disabled={readOnly}
-          field={field}
+          field={{
+            ...field,
+            onChange: (event, editor) => {
+              field.onChange(editor !== undefined ? editor.getData() : event);
+              const modifiedAnswer = { [answerId]: getValues()[answerId] };
+              saveAnswer(modifiedAnswer, answerId);
+            },
+          }}
           fieldState={fieldState}
           fullWidth
           InputLabelProps={{
@@ -55,7 +62,11 @@ const TextResponse = (props) => {
       render={({ field }) => (
         <textarea
           name={`${answerId}.answer_text`}
-          onChange={field.onChange}
+          onChange={(e) => {
+            field.onChange(e.target.value);
+            const modifiedAnswer = { [answerId]: getValues()[answerId] };
+            saveAnswer(modifiedAnswer, answerId);
+          }}
           rows={5}
           style={{ width: '100%' }}
           value={field.value || ''}
@@ -92,6 +103,7 @@ TextResponse.propTypes = {
   field: PropTypes.shape({
     value: PropTypes.string,
   }),
+  saveAnswer: PropTypes.func,
 };
 
 export default TextResponse;

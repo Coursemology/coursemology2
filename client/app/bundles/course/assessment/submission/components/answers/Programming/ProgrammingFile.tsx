@@ -10,17 +10,24 @@ interface ProgrammingFileProps {
   file: ProgrammingContent;
   language: string;
   readOnly: boolean;
+  saveAnswer: (data: unknown, answerId: number) => void;
 }
 
 const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
-  const { answerId, fieldName, file, language, readOnly } = props;
+  const { answerId, fieldName, file, language, readOnly, saveAnswer } = props;
 
   return (
     <div className="space-y-3">
       {readOnly ? (
         <ReadOnlyEditor answerId={answerId} file={file} />
       ) : (
-        <Editor fieldName={fieldName} file={file} language={language} />
+        <Editor
+          answerId={answerId}
+          fieldName={fieldName}
+          file={file}
+          language={language}
+          saveAnswer={saveAnswer}
+        />
       )}
     </div>
   );
