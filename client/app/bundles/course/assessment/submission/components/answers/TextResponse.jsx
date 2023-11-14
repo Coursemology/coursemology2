@@ -86,9 +86,11 @@ const TextResponse = (props) => {
       {allowUpload && <UploadedFileView questionId={question.id} />}
       {allowUpload && !readOnly && (
         <FileInput
+          answerId={answerId}
           control={control}
           disabled={readOnly}
           name={`${answerId}.files`}
+          saveAnswer={saveAnswer}
         />
       )}
     </div>

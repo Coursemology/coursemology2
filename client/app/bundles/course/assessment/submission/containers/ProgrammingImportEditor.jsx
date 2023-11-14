@@ -27,6 +27,7 @@ const SelectProgrammingFileEditor = ({
   readOnly,
   language,
   displayFileIndex,
+  saveAnswer,
 }) => {
   const { control } = useFormContext();
   const { fields } = useFieldArray({
@@ -60,9 +61,11 @@ const SelectProgrammingFileEditor = ({
           return (
             <Editor
               key={file.id}
+              answerId={answerId}
               fieldName={`${answerId}.files_attributes.${index}.content`}
               file={file}
               language={language}
+              saveAnswer={saveAnswer}
             />
           );
         }
@@ -77,6 +80,7 @@ SelectProgrammingFileEditor.propTypes = {
   readOnly: PropTypes.bool,
   language: PropTypes.string,
   displayFileIndex: PropTypes.number,
+  saveAnswer: PropTypes.func,
 };
 
 const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
@@ -139,6 +143,7 @@ const VisibleProgrammingImportEditor = (props) => {
     historyAnswers,
     isSaving,
     viewHistory,
+    saveAnswer,
   } = props;
   const currentAnswer = useWatch({ control });
   const answers = viewHistory ? historyAnswers : currentAnswer;
@@ -184,6 +189,7 @@ const VisibleProgrammingImportEditor = (props) => {
             question,
             displayFileIndex,
             viewHistory,
+            saveAnswer,
             language: parseLanguages(question.language),
           }}
         />
@@ -235,6 +241,7 @@ VisibleProgrammingImportEditor.propTypes = {
     questionId: PropTypes.number,
     files_attributes: PropTypes.arrayOf(fileShape),
   }),
+  saveAnswer: PropTypes.func,
 };
 
 function mapStateToProps(state, ownProps) {
