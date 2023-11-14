@@ -8,8 +8,8 @@ import { fileShape } from '../propTypes';
 import ProgrammingFileDownloadLink from './answers/Programming/ProgrammingFileDownloadLink';
 
 const Editor = (props) => {
-  const { file, fieldName, language } = props;
-  const { control } = useFormContext();
+  const { file, fieldName, language, answerId, saveAnswer } = props;
+  const { control, getValues } = useFormContext();
 
   return (
     <>
@@ -20,7 +20,16 @@ const Editor = (props) => {
         render={({ field }) => (
           <AceEditorField
             editorProps={{ $blockScrolling: true }}
-            field={field}
+            field={{
+              ...field,
+              onChange: (event) => {
+                field.onChange(event);
+                const modifiedAnswer = {
+                  [answerId]: getValues()[answerId],
+                };
+                saveAnswer(modifiedAnswer, answerId);
+              },
+            }}
             filename={file.filename}
             maxLines={25}
             minLines={25}
@@ -41,6 +50,8 @@ Editor.propTypes = {
   fieldName: PropTypes.string.isRequired,
   file: PropTypes.shape(fileShape).isRequired,
   language: PropTypes.string.isRequired,
+  answerId: PropTypes.number,
+  saveAnswer: PropTypes.func,
 };
 
 export default Editor;

@@ -12,7 +12,7 @@ import { parseLanguages } from '../../../utils';
 
 import ProgrammingFile from './ProgrammingFile';
 
-const ProgrammingFiles = ({ readOnly, answerId, language }) => {
+const ProgrammingFiles = ({ readOnly, answerId, language, saveAnswer }) => {
   const { control } = useFormContext();
 
   const { fields } = useFieldArray({
@@ -45,13 +45,14 @@ const ProgrammingFiles = ({ readOnly, answerId, language }) => {
         file={file}
         language={language}
         readOnly={readOnly}
+        saveAnswer={saveAnswer}
       />
     );
   });
 };
 
 const Programming = (props) => {
-  const { question, readOnly, answerId } = props;
+  const { question, readOnly, answerId, saveAnswer } = props;
   const fileSubmission = question.fileSubmission;
 
   return (
@@ -70,6 +71,7 @@ const Programming = (props) => {
           answerId={answerId}
           language={parseLanguages(question.language)}
           readOnly={readOnly}
+          saveAnswer={saveAnswer}
         />
       )}
       <TestCaseView questionId={question.id} />
@@ -82,6 +84,7 @@ Programming.propTypes = {
   question: questionShape,
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
+  saveAnswer: PropTypes.func,
 };
 
 export default Programming;
