@@ -168,8 +168,15 @@ FileInput.defaultProps = {
   callback: () => {},
 };
 
-const FileInputField = ({ name, disabled, callback, ...custom }) => {
-  const { control } = useFormContext();
+const FileInputField = ({
+  name,
+  disabled,
+  callback,
+  saveAnswer,
+  answerId,
+  ...custom
+}) => {
+  const { control, getValues } = useFormContext();
 
   return (
     <Controller
@@ -179,7 +186,20 @@ const FileInputField = ({ name, disabled, callback, ...custom }) => {
         <FileInput
           callback={callback}
           disabled={disabled}
-          field={field}
+          field={
+            saveAnswer && answerId
+              ? {
+                  ...field,
+                  onChange: (event) => {
+                    field.onChange(event);
+                    const modifiedAnswer = {
+                      [answerId]: getValues()[answerId],
+                    };
+                    saveAnswer(modifiedAnswer, answerId);
+                  },
+                }
+              : field
+          }
           fieldState={fieldState}
           {...custom}
         />
@@ -192,6 +212,8 @@ FileInputField.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   callback: PropTypes.func,
+  answerId: PropTypes.number,
+  saveAnswer: PropTypes.func,
 };
 
 export default FileInputField;
