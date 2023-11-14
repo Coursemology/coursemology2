@@ -103,7 +103,12 @@ const Programming = (
   return (
     <ProgrammingAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId, saveAnswer }}
+      {...{
+        question,
+        readOnly,
+        answerId,
+        saveAnswer,
+      }}
     />
   );
 };

@@ -222,6 +222,8 @@ class VoiceResponseAnswer extends Component {
       recordingComponentId,
       readOnly,
       answerId,
+      value,
+      saveAnswer,
       intl,
     } = this.props;
     return (
@@ -231,7 +233,16 @@ class VoiceResponseAnswer extends Component {
           name={`${answerId}.file`}
           render={({ field, fieldState }) =>
             this.renderFile({
-              field,
+              field: {
+                ...field,
+                onChange: (event) => {
+                  field.onChange(event);
+                  const modifiedAnswer = {
+                    [answerId]: value[answerId], // Make sure 'value' is defined somewhere
+                  };
+                  saveAnswer(modifiedAnswer, answerId);
+                },
+              },
               fieldState,
               readOnly,
               answerId,
@@ -258,11 +269,15 @@ VoiceResponseAnswer.propTypes = {
   recordingComponentId: PropTypes.string.isRequired,
   recording: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
+  value: PropTypes.object,
+  saveAnswer: PropTypes.func,
 };
 
 const VoiceResponseAnswerWithFormContext = (props) => {
-  const { control } = useFormContext();
-  return <VoiceResponseAnswer control={control} {...props} />;
+  const { control, getValues } = useFormContext();
+  return (
+    <VoiceResponseAnswer control={control} value={getValues()} {...props} />
+  );
 };
 
 function mapStateToProps({ assessments: { submission } }) {
