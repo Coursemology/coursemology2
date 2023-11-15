@@ -65,9 +65,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
    * @returns new personal time data
    */
   delete(personalTimeId: number, userId: number): Promise<AxiosResponse<void>> {
-    const url = `${
-      this.#urlPrefix
-    }/users/${userId}/personal_times/${personalTimeId}`;
+    const url = `${this.#urlPrefix}/users/${userId}/personal_times/${personalTimeId}`;
     return this.client.delete(url);
   }
 }
