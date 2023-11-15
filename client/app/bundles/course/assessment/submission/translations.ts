@@ -524,6 +524,11 @@ const translations = defineMessages({
     defaultMessage:
       'Submission for this assessment cannot be viewed once finalised.',
   },
+  answerUnsavedHint: {
+    id: 'course.assessment.submission.answerUnsavedHint',
+    defaultMessage:
+      'This answer is not yet saved. Click Save Draft at the end of the page to save all changes.',
+  },
   missingAnswer: {
     id: 'course.assessment.submission.answer.missingAnswer',
     defaultMessage:
