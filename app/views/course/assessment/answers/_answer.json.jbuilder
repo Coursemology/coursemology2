@@ -2,6 +2,7 @@
 json.id answer.id
 json.questionId answer.question_id
 json.createdAt answer.created_at&.iso8601
+json.clientVersion (answer.client_version.to_f * 1000).to_i
 
 specific_answer = answer.specific
 can_grade = can?(:grade, answer.submission)
