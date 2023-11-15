@@ -182,7 +182,7 @@
     "postcss": "^8.4.31",
     "postcss-loader": "^7.3.3",
     "prettier": "^3.1.0",
-    "prettier-plugin-tailwindcss": "^0.5.6",
+    "prettier-plugin-tailwindcss": "^0.5.7",
     "react-refresh": "^0.14.0",
     "redux-logger": "^3.0.6",
     "sass": "^1.69.5",
