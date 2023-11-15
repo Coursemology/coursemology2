@@ -1,6 +1,7 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import {
   Alert,
+  Chip,
   CircularProgress,
   Divider,
   FormControlLabel,
@@ -36,6 +37,8 @@ interface Props {
   showMcqMrqSolution: boolean;
   question: SubmissionQuestionData;
   answerId: number;
+  answerIds: number[];
+  isSaving: boolean;
   onSaveAnswer: (data: unknown, answerId: number) => void;
 }
 
@@ -49,10 +52,19 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     showMcqMrqSolution,
     question,
     answerId,
+    answerIds,
+    isSaving,
     onSaveAnswer,
   } = props;
 
   const { t } = useTranslation();
+  const firstRenderingStatus = answerIds.reduce(
+    (acc, element) => ({ ...acc, [element]: true }),
+    {},
+  );
+
+  const [isFirstRendering, setIsFirstRendering] =
+    useState(firstRenderingStatus);
 
   const historyQuestion = historyQuestions[question.id];
   const noPastAnswers = historyQuestion
@@ -64,42 +76,94 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     : false;
   const disabled = noPastAnswers || isLoading || isAutograding;
 
+  const saveAnswer = (data: unknown, id: number): void => {
+    onSaveAnswer(data, id);
+    setIsFirstRendering((prevIsFirstRendering) => {
+      const updatedIsFirstRendering = JSON.parse(
+        JSON.stringify(prevIsFirstRendering),
+      );
+      updatedIsFirstRendering[id.toString()] = false;
+      return updatedIsFirstRendering;
+    });
+  };
+
   const debouncedSaveAnswer = useDebounce(
-    onSaveAnswer,
+    saveAnswer,
     FIELD_LONG_DEBOUNCE_DELAY_MS,
     [],
   );
 
+  let savingIndicator: React.ReactNode | null = null;
+
+  if (!isSaving) {
+    savingIndicator = (
+      <Tooltip title={t(translations.answerUnsavedHint)}>
+        <Chip
+          className="flex items-center float-left"
+          color="warning"
+          label={t(translations.isUnsaved)}
+          size="small"
+        />
+      </Tooltip>
+    );
+  } else if (isSaving) {
+    savingIndicator = (
+      <Chip
+        className="flex items-center float-left"
+        color="default"
+        label={t(translations.isSaving)}
+        size="small"
+      />
+    );
+  } else if (!isFirstRendering[answerId.toString()]) {
+    savingIndicator = (
+      <Chip
+        className="flex items-center float-left"
+        color="success"
+        label={t(translations.isSaved)}
+        size="small"
+      />
+    );
+  }
+
   const HistoryToggle = (): JSX.Element | null => {
-    return question.canViewHistory ? (
-      <div className="inline-block float-right">
-        {isLoading ? (
-          <CircularProgress className="inline-block align-middle" size={30} />
-        ) : null}
-        <Tooltip title={noPastAnswers ? t(translations.noPastAnswers) : ''}>
-          <FormControlLabel
-            className="float-right"
-            control={
-              <Switch
-                checked={question.viewHistory || false}
-                className="toggle-history"
-                color="primary"
-                onChange={(): void =>
-                  handleToggleViewHistoryMode(
-                    !question.viewHistory,
-                    question.submissionQuestionId,
-                    question.id,
-                  )
-                }
+    return (
+      <>
+        {!readOnly && savingIndicator}
+        {question.canViewHistory && (
+          <div className="flex items-center float-right">
+            {isLoading ? (
+              <CircularProgress
+                className="inline-block align-middle"
+                size={30}
               />
-            }
-            disabled={disabled}
-            label={<b>{t(translations.viewPastAnswers)}</b>}
-            labelPlacement="start"
-          />
-        </Tooltip>
-      </div>
-    ) : null;
+            ) : null}
+            <Tooltip title={noPastAnswers ? t(translations.noPastAnswers) : ''}>
+              <FormControlLabel
+                className="float-right"
+                control={
+                  <Switch
+                    checked={question.viewHistory || false}
+                    className="toggle-history"
+                    color="primary"
+                    onChange={(): void =>
+                      handleToggleViewHistoryMode(
+                        !question.viewHistory,
+                        question.submissionQuestionId,
+                        question.id,
+                      )
+                    }
+                  />
+                }
+                disabled={disabled}
+                label={<b>{t(translations.viewPastAnswers)}</b>}
+                labelPlacement="start"
+              />
+            </Tooltip>
+          </div>
+        )}
+      </>
+    );
   };
 
   const MissingAnswer = (): JSX.Element => {
