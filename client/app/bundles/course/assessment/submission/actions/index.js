@@ -198,7 +198,6 @@ export function saveAnswer(submissionId, rawAnswers, answerId) {
           type: actionTypes.SAVE_ANSWER_SUCCESS,
           payload: dataForAnswerId,
         });
-        dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
         dispatch({ type: actionTypes.SAVE_ANSWER_FAILURE });

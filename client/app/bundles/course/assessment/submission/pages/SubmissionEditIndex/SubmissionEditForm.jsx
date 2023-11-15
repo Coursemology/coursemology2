@@ -427,11 +427,13 @@ const SubmissionEditForm = (props) => {
                 {...{
                   readOnly: !attempting,
                   answerId,
+                  answerIds: Object.keys(getValues()),
                   question,
                   historyQuestions,
                   graderView,
                   showMcqMrqSolution,
                   handleToggleViewHistoryMode,
+                  isSaving,
                   onSaveAnswer,
                 }}
               />
@@ -590,11 +592,13 @@ const SubmissionEditForm = (props) => {
           {...{
             readOnly: !attempting,
             answerId,
+            answerIds: Object.keys(getValues()),
             question,
             historyQuestions,
             graderView,
             showMcqMrqSolution,
             handleToggleViewHistoryMode,
+            isSaving,
             onSaveAnswer,
           }}
         />
