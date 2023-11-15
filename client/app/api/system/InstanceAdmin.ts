@@ -168,9 +168,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     invitationId: number,
   ): Promise<AxiosResponse<InvitationListData>> {
     return this.client.post(
-      `${
-        InstanceAdminAPI.#urlPrefix
-      }/user_invitations/${invitationId}/resend_invitation`,
+      `${InstanceAdminAPI.#urlPrefix}/user_invitations/${invitationId}/resend_invitation`,
     );
   }
 

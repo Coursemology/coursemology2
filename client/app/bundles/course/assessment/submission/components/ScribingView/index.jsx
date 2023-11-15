@@ -5,12 +5,12 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
 import { submissionShape } from '../../propTypes';
 
-const ScribingCanvas = lazy(() =>
-  import(/* webpackChunkName: "ScribingCanvas" */ './ScribingCanvas'),
+const ScribingCanvas = lazy(
+  () => import(/* webpackChunkName: "ScribingCanvas" */ './ScribingCanvas'),
 );
 
-const ScribingToolbar = lazy(() =>
-  import(/* webpackChunkName: "ScribingToolbar" */ './ScribingToolbar'),
+const ScribingToolbar = lazy(
+  () => import(/* webpackChunkName: "ScribingToolbar" */ './ScribingToolbar'),
 );
 
 const ScribingViewComponent = (props) => {

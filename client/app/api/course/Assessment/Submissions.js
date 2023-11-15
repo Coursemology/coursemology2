@@ -135,9 +135,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
-    const url = `${
-      this.#urlPrefix
-    }/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
+    const url = `${this.#urlPrefix}/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
     return this.client.post(url, params);
   }
 

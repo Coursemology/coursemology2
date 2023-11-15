@@ -42,8 +42,8 @@ import {
 } from '../../propTypes';
 import translations from '../../translations';
 
-const Comments = lazy(() =>
-  import(/* webpackChunkName: "comment" */ '../../containers/Comments'),
+const Comments = lazy(
+  () => import(/* webpackChunkName: "comment" */ '../../containers/Comments'),
 );
 
 const styles = {
