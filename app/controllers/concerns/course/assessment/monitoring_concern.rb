@@ -30,7 +30,9 @@ module Course::Assessment::MonitoringConcern
   end
 
   def upsert_monitoring!
-    monitoring_service&.upsert!(monitoring_params) if can_manage_monitor?
+    monitoring_service&.upsert!(monitoring_params.merge({
+      enabled: @assessment.view_password_protected? ? monitoring_params[:enabled] : false
+    }))
   end
 
   private
