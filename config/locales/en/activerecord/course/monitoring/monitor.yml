@@ -4,6 +4,8 @@ en:
       models:
         course/monitoring/monitor:
           attributes:
+            enabled:
+              must_be_password_protected: "assessment must be password protected to enable"
             max_interval_ms:
               greater_than_min_interval: "must be greater than min interval"
             blocks:

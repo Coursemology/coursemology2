@@ -66,6 +66,16 @@ RSpec.describe Course::Monitoring::Monitor, type: :model do
           expect(subject.errors[:blocks]).not_to be_present
         end
       end
+
+      context 'when the assessment is not password-protected' do
+        before { subject.assessment.update!(view_password: nil) }
+
+        it 'cannot be enabled' do
+          subject.assign_attributes(enabled: true)
+          expect(subject).not_to be_valid
+          expect(subject.errors[:enabled]).to be_present
+        end
+      end
     end
 
     describe '#valid_secret?' do
