@@ -52,7 +52,7 @@ module Course::Assessment::MonitoringConcern
   end
 
   def blocked_by_monitor?
-    !can_manage_monitor? && monitoring_service&.should_block?(request.user_agent)
+    cannot?(:read, monitor) && monitoring_service&.should_block?(request.user_agent)
   end
 
   def monitoring_service
