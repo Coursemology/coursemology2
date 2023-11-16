@@ -13,7 +13,6 @@ const AssessmentEdit = (): JSX.Element => {
   return (
     <Preload
       render={<LoadingIndicator />}
-      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       while={() => fetchAssessmentEditData(getAssessmentId())}
     >
       {(data): JSX.Element => {
