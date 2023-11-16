@@ -1018,6 +1018,10 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.accessGrantedForThisSessionOnly',
     defaultMessage: 'Access will be granted only for this browser session.',
   },
+  openSubmissionInNewTab: {
+    id: 'course.assessment.monitoring.openSubmissionInNewTab',
+    defaultMessage: 'Open submission in new tab',
+  },
   attemptingAssessment: {
     id: 'course.assessment.submission.attemptingAssessment',
     defaultMessage: 'Creating a new submission...',

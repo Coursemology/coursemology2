@@ -1,4 +1,5 @@
 import Draggable from 'react-draggable';
+import { useParams } from 'react-router-dom';
 import { Close } from '@mui/icons-material';
 import { IconButton, Popover, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
@@ -20,6 +21,7 @@ interface SessionDetailsPopupProps {
   anchorsOn?: HTMLElement;
   hasSecret?: boolean;
   onClickShowAllHeartbeats?: () => void;
+  submissionId?: number;
 }
 
 const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
@@ -31,6 +33,8 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
   } = props;
 
   const { t } = useTranslation();
+
+  const { courseId, assessmentId } = useParams();
 
   return (
     <Draggable handle=".handle">
@@ -63,6 +67,16 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
             })}
           </Typography>
         </header>
+
+        {props.submissionId && (
+          <Link
+            className="px-2 !mt-0 !mb-4"
+            opensInNewTab
+            to={`/courses/${courseId}/assessments/${assessmentId}/submissions/${props.submissionId}/edit`}
+          >
+            {t(translations.openSubmissionInNewTab)}
+          </Link>
+        )}
 
         <div className="flex justify-between items-center px-2">
           <Typography color="text.secondary" variant="body2">

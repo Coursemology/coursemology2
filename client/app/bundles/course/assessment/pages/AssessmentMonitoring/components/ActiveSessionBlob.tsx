@@ -79,6 +79,7 @@ const BaseActiveSessionBlob = (
         }}
         open={Boolean(snapshot.recentHeartbeats && popupData?.[0])}
         showing={snapshot.recentHeartbeats ?? []}
+        submissionId={snapshot.submissionId}
       />
     </>
   );
