@@ -31,7 +31,8 @@ module Course::Assessment::MonitoringConcern
 
   def upsert_monitoring!
     monitoring_service&.upsert!(monitoring_params.merge({
-      enabled: @assessment.view_password_protected? ? monitoring_params[:enabled] : false
+      enabled: @assessment.view_password_protected? ? monitoring_params[:enabled] : false,
+      blocks: should_disable_block? ? false : monitoring_params[:blocks]
     }))
   end
 
@@ -73,5 +74,9 @@ module Course::Assessment::MonitoringConcern
 
   def monitor
     @monitor ||= monitoring_service&.monitor
+  end
+
+  def should_disable_block?
+    !@assessment.session_password_protected? || monitor.secret.blank?
   end
 end

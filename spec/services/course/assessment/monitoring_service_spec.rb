@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::MonitoringService, type: :service do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:assessment) { create(:assessment, course: course) }
+    let(:assessment) { create(:assessment, :view_password, course: course) }
 
     let(:base_user_agent) { 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' }
     let(:browser_session) { {} }
