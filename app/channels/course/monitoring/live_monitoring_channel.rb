@@ -27,7 +27,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
 
   def watch
     active_snapshots = active_sessions_snapshots
-    students = @course.students.order(:phantom, :name)
+    students = current_course.students.order(:phantom, :name)
 
     snapshots = students.to_h do |student|
       user_id = student.user_id
@@ -76,7 +76,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
   end
 
   def groups
-    @course.groups.ordered_by_name.includes(:group_category, :course_users).map do |group|
+    current_course.groups.ordered_by_name.includes(:group_category, :course_users).map do |group|
       {
         id: group.id,
         name: group.name,
