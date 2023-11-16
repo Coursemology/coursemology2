@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Monitoring::LiveMonitoringChannel < Course::Channel
+  include Course::UsersHelper
+
   DEFAULT_VIEW_HEARTBEATS_LIMIT = 10
   ACTIONS = { pulse: :pulse, terminate: :terminate, viewed: :viewed, watch: :watch }.freeze
 
@@ -61,13 +63,15 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
       last_heartbeat = session.heartbeats.last
       is_valid_secret = @monitor.valid_secret?(last_heartbeat&.user_agent)
 
+      course_user = course_users_hash[session.creator_id]
+
       snapshot = {
         sessionId: session.id,
         status: session.status,
         misses: session.misses,
         lastHeartbeatAt: last_heartbeat&.generated_at,
         isValid: is_valid_secret,
-        userName: session.creator.name,
+        userName: course_user.name,
         stale: last_heartbeat&.stale
       }.compact
 
@@ -109,5 +113,9 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
 
   def component
     current_component_host[:course_monitoring_component]
+  end
+
+  def course_users_hash
+    @course_users_hash ||= preload_course_users_hash(current_course)
   end
 end
