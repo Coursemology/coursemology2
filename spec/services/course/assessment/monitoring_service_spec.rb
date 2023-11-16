@@ -24,7 +24,8 @@ RSpec.describe Course::Assessment::MonitoringService, type: :service do
           secret: SecureRandom.hex,
           min_interval_ms: 3000,
           max_interval_ms: 3100,
-          offset_ms: 2000
+          offset_ms: 2000,
+          assessment: assessment
         }
 
         expect { subject.upsert!(params) }.to change { subject.monitor }.from(nil)
