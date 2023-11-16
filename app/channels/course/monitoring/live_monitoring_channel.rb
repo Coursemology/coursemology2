@@ -72,6 +72,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
         lastHeartbeatAt: last_heartbeat&.generated_at,
         isValid: is_valid_secret,
         userName: course_user.name,
+        submissionId: submission_ids_hash[session.creator_id],
         stale: last_heartbeat&.stale
       }.compact
 
@@ -117,5 +118,11 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
 
   def course_users_hash
     @course_users_hash ||= preload_course_users_hash(current_course)
+  end
+
+  def submission_ids_hash
+    @submission_ids_hash ||= @monitor.assessment.submissions.to_h do |submission|
+      [submission.creator_id, submission.id]
+    end
   end
 end

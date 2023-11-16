@@ -19,6 +19,7 @@ export interface SnapshotData {
   lastHeartbeatAt: string;
   isValid: boolean;
   userName?: string;
+  submissionId?: number;
   stale?: boolean;
 }
 
