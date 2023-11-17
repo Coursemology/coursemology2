@@ -12,7 +12,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def submit_answer
     answer = @submission.answers.find(submit_answer_params[:id].to_i)
-    if update_answer(answer, submit_answer_params)
+    if update_answer(answer, submit_answer_params.merge(session_id: session.id))
       if should_auto_grade_on_submit(answer)
         auto_grade(answer)
       else
@@ -116,7 +116,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def submit_answer_params
-    params.require(:answer).permit([:id] + update_answer_type_params)
+    params.require(:answer).permit([:id, :clientVersion] + update_answer_type_params)
   end
 
   def questions_to_attempt
