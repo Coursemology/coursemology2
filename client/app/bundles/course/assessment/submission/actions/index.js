@@ -181,7 +181,10 @@ export function saveAnswer(submissionId, rawAnswers, answerId) {
   const payload = { submission: { answers: answer, is_save_draft: true } };
 
   return (dispatch) => {
-    dispatch({ type: actionTypes.SAVE_ANSWER_REQUEST });
+    dispatch({
+      type: actionTypes.SAVE_ANSWER_REQUEST,
+      payload: answer.map((ans) => ans.id),
+    });
 
     return CourseAPI.assessment.submissions
       .update(submissionId, payload)
