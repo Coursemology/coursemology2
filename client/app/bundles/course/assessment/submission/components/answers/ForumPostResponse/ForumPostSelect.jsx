@@ -38,12 +38,6 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  root: {
-    marginBottom: 16,
-  },
-};
-
 export default class ForumPostSelect extends Component {
   constructor(props) {
     super(props);
@@ -100,7 +94,7 @@ export default class ForumPostSelect extends Component {
 
   renderInstruction(postPacks, maxPosts) {
     return (
-      <Typography className="mb-5" color="text.secondary" variant="body2">
+      <Typography className="mb-5 mt-5" color="text.secondary" variant="body2">
         {this.props.readOnly ? (
           <FormattedMessage
             values={{ numPosts: postPacks.length }}
@@ -141,16 +135,15 @@ export default class ForumPostSelect extends Component {
     const maxPosts = this.props.question.maxPosts;
 
     return (
-      <div style={styles.root}>
+      <div className="mb-4">
         {this.renderInstruction(postPacks, maxPosts)}
         {!this.props.readOnly && (
-          <>
+          <div className="flex w-full items-center space-x-3 mb-4">
             <Button
               color="primary"
               disabled={this.state.hasErrorFetchingPosts || maxPosts === 0}
               onClick={() => this.setState({ isDialogVisible: true })}
               startIcon={<AttachFile aria-hidden="true" />}
-              style={{ marginBottom: 16 }}
               variant="contained"
             >
               <FormattedMessage
@@ -158,6 +151,7 @@ export default class ForumPostSelect extends Component {
                 {...translations.selectPostsButton}
               />
             </Button>
+            {!this.props.readOnly && this.props.savingIndicator}
             <ForumPostSelectDialog
               forumTopicPostPacks={this.state.forumTopicPostPacks}
               handleNotificationMessage={this.props.handleNotificationMessage}
@@ -171,7 +165,7 @@ export default class ForumPostSelect extends Component {
                 this.updatePostPackSelection(packs)
               }
             />
-          </>
+          </div>
         )}
         {this.renderSelectedPostPacks(postPacks)}
       </div>
@@ -186,4 +180,5 @@ ForumPostSelect.propTypes = {
   field: PropTypes.object.isRequired,
   onErrorMessage: PropTypes.func.isRequired,
   handleNotificationMessage: PropTypes.func.isRequired,
+  savingIndicator: PropTypes.node,
 };
