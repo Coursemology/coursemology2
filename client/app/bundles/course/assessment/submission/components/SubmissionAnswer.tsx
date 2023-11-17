@@ -37,8 +37,7 @@ interface Props {
   showMcqMrqSolution: boolean;
   question: SubmissionQuestionData;
   answerId: number;
-  answerIds: number[];
-  isSaving: boolean;
+  isSavingAnswer: Record<string, boolean>;
   onSaveAnswer: (data: unknown, answerId: number) => void;
 }
 
@@ -52,19 +51,13 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     showMcqMrqSolution,
     question,
     answerId,
-    answerIds,
-    isSaving,
+    isSavingAnswer,
     onSaveAnswer,
   } = props;
 
   const { t } = useTranslation();
-  const firstRenderingStatus = answerIds.reduce(
-    (acc, element) => ({ ...acc, [element]: true }),
-    {},
-  );
 
-  const [isFirstRendering, setIsFirstRendering] =
-    useState(firstRenderingStatus);
+  const [isFirstRendering, setIsFirstRendering] = useState({});
 
   const historyQuestion = historyQuestions[question.id];
   const noPastAnswers = historyQuestion
@@ -95,7 +88,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
 
   let savingIndicator: React.ReactNode | null = null;
 
-  if (!isSaving) {
+  if (!isSavingAnswer[answerId.toString()]) {
     savingIndicator = (
       <Tooltip title={t(translations.answerUnsavedHint)}>
         <Chip
@@ -106,7 +99,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         />
       </Tooltip>
     );
-  } else if (isSaving) {
+  } else if (isSavingAnswer[answerId.toString()]) {
     savingIndicator = (
       <Chip
         className="flex items-center align-middle"
@@ -115,7 +108,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         size="small"
       />
     );
-  } else if (!isFirstRendering[answerId.toString()]) {
+  } else if (!(isFirstRendering[answerId.toString()] ?? true)) {
     savingIndicator = (
       <Chip
         className="flex items-center align-middle"

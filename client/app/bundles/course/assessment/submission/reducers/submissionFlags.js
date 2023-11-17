@@ -3,6 +3,7 @@ import actions from '../constants';
 const initialState = {
   isLoading: true,
   isSaving: false,
+  isSavingAnswer: {},
   isAutograding: false,
   isPublishing: false,
   isForceSubmitting: false,
@@ -37,9 +38,18 @@ export default function (state = initialState, action) {
         isForceSubmitting: false,
         isReminding: false,
       };
-
-    case actions.SAVE_DRAFT_REQUEST:
     case actions.SAVE_ANSWER_REQUEST:
+      return {
+        ...state,
+        isSavingAnswer: action.payload.reduce(
+          (acc, value) => ({ ...acc, [value.toString()]: true }),
+          {},
+        ),
+      };
+    case actions.SAVE_ANSWER_SUCCESS:
+    case actions.SAVE_ANSWER_FAILURE:
+      return { ...state, isSavingAnswer: {} };
+    case actions.SAVE_DRAFT_REQUEST:
     case actions.SAVE_ALL_GRADE_REQUEST:
     case actions.SAVE_GRADE_REQUEST:
     case actions.FINALISE_REQUEST:
@@ -55,7 +65,6 @@ export default function (state = initialState, action) {
     case actions.GET_PAST_ANSWERS_REQUEST:
       return { ...state, isSaving: true };
     case actions.SAVE_DRAFT_SUCCESS:
-    case actions.SAVE_ANSWER_SUCCESS:
     case actions.SAVE_ALL_GRADE_SUCCESS:
     case actions.SAVE_GRADE_SUCCESS:
     case actions.FINALISE_SUCCESS:
@@ -70,7 +79,6 @@ export default function (state = initialState, action) {
     case actions.IMPORT_FILES_SUCCESS:
       return { ...state, isSaving: false };
     case actions.SAVE_DRAFT_FAILURE:
-    case actions.SAVE_ANSWER_FAILURE:
     case actions.SAVE_ALL_GRADE_FAILURE:
     case actions.SAVE_GRADE_FAILURE:
     case actions.FINALISE_FAILURE:
