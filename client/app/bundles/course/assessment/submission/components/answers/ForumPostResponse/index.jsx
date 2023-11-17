@@ -12,7 +12,7 @@ import ForumPostSelect from './ForumPostSelect';
 
 const ForumPostResponse = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { question, readOnly, answerId, saveAnswer } = props;
+  const { question, readOnly, answerId, saveAnswer, savingIndicator } = props;
   const { control, getValues } = useFormContext();
   const renderTextField = () =>
     readOnly ? (
@@ -72,6 +72,7 @@ const ForumPostResponse = (props) => {
             onErrorMessage={(message) => setErrorMessage(message)}
             question={question}
             readOnly={readOnly}
+            savingIndicator={savingIndicator}
           />
         )}
       />
@@ -86,6 +87,7 @@ ForumPostResponse.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   answerId: PropTypes.number.isRequired,
   saveAnswer: PropTypes.func,
+  savingIndicator: PropTypes.node,
 };
 
 export default ForumPostResponse;

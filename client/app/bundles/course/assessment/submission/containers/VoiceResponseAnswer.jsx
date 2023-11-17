@@ -41,10 +41,6 @@ const translations = defineMessages({
 });
 
 const styles = {
-  audioButtons: {
-    marginTop: 8,
-    marginBottom: 8,
-  },
   fileInputWrapper: {
     width: '60%',
   },
@@ -136,6 +132,7 @@ class VoiceResponseAnswer extends Component {
     recordingComponentId,
     field,
     fieldState,
+    savingIndicator,
   ) => {
     if (readOnly) {
       return null;
@@ -152,7 +149,7 @@ class VoiceResponseAnswer extends Component {
             previewComponent={this.renderSingleFileInputChildren}
           />
         </div>
-        <div style={styles.audioButtons}>
+        <div className="flex w-full items-center space-x-3 mb-2 mt-2">
           <Button
             color="primary"
             disabled={recording}
@@ -173,6 +170,7 @@ class VoiceResponseAnswer extends Component {
             <Stop />
             {intl.formatMessage(translations.stopRecording)}
           </Button>
+          {!readOnly && savingIndicator}
         </div>
       </div>
     );
@@ -184,6 +182,7 @@ class VoiceResponseAnswer extends Component {
     readOnly,
     recording,
     recordingComponentId,
+    savingIndicator,
   }) => {
     const error = fieldState.error;
 
@@ -195,6 +194,7 @@ class VoiceResponseAnswer extends Component {
           recordingComponentId,
           field,
           fieldState,
+          savingIndicator,
         )}
         {this.renderAudio(field)}
         {error ? <div style={styles.errorStyle}>{error.message}</div> : null}
@@ -225,6 +225,7 @@ class VoiceResponseAnswer extends Component {
       value,
       saveAnswer,
       intl,
+      savingIndicator,
     } = this.props;
     return (
       <div>
@@ -249,6 +250,7 @@ class VoiceResponseAnswer extends Component {
               recording,
               recordingComponentId,
               question,
+              savingIndicator,
             })
           }
           rules={{ validate: (v) => checkVoiceResponseRecorded(v, intl) }}
@@ -271,6 +273,7 @@ VoiceResponseAnswer.propTypes = {
   intl: PropTypes.object.isRequired,
   value: PropTypes.object,
   saveAnswer: PropTypes.func,
+  savingIndicator: PropTypes.node,
 };
 
 const VoiceResponseAnswerWithFormContext = (props) => {
