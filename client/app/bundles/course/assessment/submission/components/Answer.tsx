@@ -35,6 +35,14 @@ interface BaseAnswerProps<T> {
   saveAnswer: (data: unknown, answerId: number) => void;
 }
 
+interface ForumResponseAnswerProps<T> extends BaseAnswerProps<T> {
+  savingIndicator?: React.ReactNode | null;
+}
+
+interface VoiceResponseAnswerProps<T> extends BaseAnswerProps<T> {
+  savingIndicator?: React.ReactNode | null;
+}
+
 interface TextResponseAnswerProps<T> extends BaseAnswerProps<T> {
   graderView?: boolean;
 }
@@ -153,9 +161,9 @@ const Scribing = (
 };
 
 const VoiceResponse = (
-  props: BaseAnswerProps<SubmissionQuestionData>,
+  props: VoiceResponseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, saveAnswer } = props;
+  const { question, readOnly, answerId, saveAnswer, savingIndicator } = props;
   return (
     <VoiceResponseAnswer
       key={`question_${question.id}`}
@@ -163,14 +171,15 @@ const VoiceResponse = (
       question={question}
       readOnly={readOnly}
       saveAnswer={saveAnswer}
+      savingIndicator={savingIndicator}
     />
   );
 };
 
 const ForumPostResponse = (
-  props: BaseAnswerProps<SubmissionQuestionData>,
+  props: ForumResponseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, saveAnswer } = props;
+  const { question, readOnly, answerId, saveAnswer, savingIndicator } = props;
   return (
     <ForumPostResponseAnswer
       key={`question_${question.id}`}
@@ -178,12 +187,15 @@ const ForumPostResponse = (
       question={question}
       readOnly={readOnly}
       saveAnswer={saveAnswer}
+      savingIndicator={savingIndicator}
     />
   );
 };
 
 type AnswerProps<T> =
   | BaseAnswerProps<T>
+  | ForumResponseAnswerProps<T>
+  | VoiceResponseAnswerProps<T>
   | TextResponseAnswerProps<T>
   | McqMrqAnswerProps<T>;
 

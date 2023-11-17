@@ -100,7 +100,7 @@ class VisibleUploadedFileView extends Component {
   render() {
     const { intl, attachments } = this.props;
     return (
-      <>
+      <div className="mt-4">
         <Typography variant="h6">
           {intl.formatMessage(translations.uploadedFiles)}
         </Typography>
@@ -114,7 +114,7 @@ class VisibleUploadedFileView extends Component {
           )}
         </div>
         {this.renderDeleteDialog()}
-      </>
+      </div>
     );
   }
 }

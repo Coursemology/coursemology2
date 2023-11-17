@@ -168,7 +168,7 @@ const VisibleProgrammingImportEditor = (props) => {
 
   return (
     <>
-      {readOnly ? null : (
+      {!readOnly && (
         <ImportedFileView
           displayFileIndex={displayFileIndex}
           files={files}

@@ -99,7 +99,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     savingIndicator = (
       <Tooltip title={t(translations.answerUnsavedHint)}>
         <Chip
-          className="flex items-center float-left"
+          className="flex items-center align-middle"
           color="warning"
           label={t(translations.isUnsaved)}
           size="small"
@@ -109,7 +109,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   } else if (isSaving) {
     savingIndicator = (
       <Chip
-        className="flex items-center float-left"
+        className="flex items-center align-middle"
         color="default"
         label={t(translations.isSaving)}
         size="small"
@@ -118,7 +118,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   } else if (!isFirstRendering[answerId.toString()]) {
     savingIndicator = (
       <Chip
-        className="flex items-center float-left"
+        className="flex items-center align-middle"
         color="success"
         label={t(translations.isSaved)}
         size="small"
@@ -128,41 +128,45 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
 
   const HistoryToggle = (): JSX.Element | null => {
     return (
-      <>
-        {!readOnly && savingIndicator}
+      <div className="flex w-full flex-wrap justify-between">
         {question.canViewHistory && (
-          <div className="flex items-center float-right">
-            {isLoading ? (
-              <CircularProgress
-                className="inline-block align-middle"
-                size={30}
-              />
-            ) : null}
-            <Tooltip title={noPastAnswers ? t(translations.noPastAnswers) : ''}>
-              <FormControlLabel
-                className="float-right"
-                control={
-                  <Switch
-                    checked={question.viewHistory || false}
-                    className="toggle-history"
-                    color="primary"
-                    onChange={(): void =>
-                      handleToggleViewHistoryMode(
-                        !question.viewHistory,
-                        question.submissionQuestionId,
-                        question.id,
-                      )
-                    }
-                  />
-                }
-                disabled={disabled}
-                label={<b>{t(translations.viewPastAnswers)}</b>}
-                labelPlacement="start"
-              />
-            </Tooltip>
-          </div>
+          <>
+            {!readOnly && savingIndicator}
+            <div className="flex flex-grow justify-end">
+              {isLoading && (
+                <CircularProgress
+                  className="inline-block align-middle"
+                  size={30}
+                />
+              )}
+              <Tooltip
+                title={noPastAnswers ? t(translations.noPastAnswers) : ''}
+              >
+                <FormControlLabel
+                  className="float-right"
+                  control={
+                    <Switch
+                      checked={question.viewHistory || false}
+                      className="toggle-history"
+                      color="primary"
+                      onChange={(): void =>
+                        handleToggleViewHistoryMode(
+                          !question.viewHistory,
+                          question.submissionQuestionId,
+                          question.id,
+                        )
+                      }
+                    />
+                  }
+                  disabled={disabled}
+                  label={<b>{t(translations.viewPastAnswers)}</b>}
+                  labelPlacement="start"
+                />
+              </Tooltip>
+            </div>
+          </>
         )}
-      </>
+      </div>
     );
   };
 
@@ -189,6 +193,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           question={question}
           readOnly={readOnly}
           saveAnswer={debouncedSaveAnswer}
+          savingIndicator={savingIndicator}
           showMcqMrqSolution={showMcqMrqSolution}
         />
       ) : (
