@@ -29,8 +29,9 @@ class Course::Assessment::MonitoringService
     if monitor.present?
       monitor.update!(params)
     else
-      @monitor = Course::Monitoring::Monitor.create!(params)
-      @assessment.update!(monitor: @monitor)
+      @monitor = Course::Monitoring::Monitor.create!(params) do |monitor|
+        monitor.assessment = @assessment
+      end
     end
   end
 
