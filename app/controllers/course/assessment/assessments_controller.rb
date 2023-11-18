@@ -49,8 +49,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     # @assessment.update_randomization(randomization_params)
 
     ActiveRecord::Base.transaction do
-      upsert_monitoring! if @assessment.view_password_protected?
       @assessment.save!
+      upsert_monitoring! if can_manage_monitor?
 
       render json: { id: @assessment.id }
     end
