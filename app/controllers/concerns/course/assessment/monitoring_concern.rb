@@ -77,6 +77,6 @@ module Course::Assessment::MonitoringConcern
   end
 
   def should_disable_block?
-    !@assessment.session_password_protected? || monitor.secret.blank?
+    !@assessment.session_password_protected? || monitor&.secret.blank?
   end
 end
