@@ -68,7 +68,7 @@ submissions =
 
 json.partial! 'assessment_actions', assessment: assessment, submissions: submissions
 
-json.hasAttempts assessment.submissions.where(creator_id: current_user.id).exists?
+json.hasAttempts submissions.exists?
 
 json.permissions do
   json.canAttempt can_attempt
