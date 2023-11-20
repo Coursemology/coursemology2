@@ -55,7 +55,7 @@ module Course::Assessment::MonitoringConcern
   end
 
   def blocked_by_monitor?
-    cannot?(:read, monitor) && monitoring_service&.should_block?(request.user_agent)
+    cannot?(:read, monitor) && monitoring_service&.should_block?(request.user_agent) && !submitted_assessment?
   end
 
   def monitoring_service
@@ -78,5 +78,9 @@ module Course::Assessment::MonitoringConcern
 
   def should_disable_block?
     !@assessment.session_password_protected? || monitor&.secret.blank?
+  end
+
+  def submitted_assessment?
+    @submissions.find { |submission| !submission.attempting? }.present?
   end
 end
