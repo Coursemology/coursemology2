@@ -187,7 +187,7 @@ function generateEvent(state, type, params = {}) {
     event_type: type,
     video_time: Math.round(state.playerProgress),
     playback_rate: state.playbackRate,
-    event_time: new Date(),
+    event_time: new Date(new Date().setSeconds(0)),
     ...params,
   };
 }

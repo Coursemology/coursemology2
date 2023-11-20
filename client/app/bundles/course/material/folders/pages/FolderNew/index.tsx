@@ -35,7 +35,7 @@ const initialValues = {
   name: '',
   description: '',
   canStudentUpload: false,
-  startAt: new Date(),
+  startAt: new Date(new Date().setSeconds(0)),
   endAt: null,
 };
 

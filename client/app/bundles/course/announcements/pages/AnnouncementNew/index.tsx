@@ -39,8 +39,8 @@ const initialValues: AnnouncementFormData = {
   content: '',
   sticky: false,
   // Dates need to be initialized for endtime to change automatically when start time changes
-  startAt: new Date(),
-  endAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // + one week
+  startAt: new Date(new Date().setSeconds(0)),
+  endAt: new Date(new Date().setSeconds(0) + 7 * 24 * 60 * 60 * 1000), // + one week
 };
 
 const AnnouncementNew: FC<Props> = (props) => {
@@ -59,7 +59,10 @@ const AnnouncementNew: FC<Props> = (props) => {
   ): Promise<void> => {
     const updatedData = {
       ...data,
-      startAt: whenToPublish === 'now' ? new Date() : data.startAt,
+      startAt:
+        whenToPublish === 'now'
+          ? new Date(new Date().setSeconds(0))
+          : data.startAt,
     };
     return dispatch(createOperation(updatedData))
       .then(() => {
