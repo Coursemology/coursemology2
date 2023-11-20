@@ -1,15 +1,11 @@
 import { memo } from 'react';
-import { Checkbox } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { Checkbox, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import OptionsListItem from 'course/survey/components/OptionsListItem';
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
 const styles = {
-  errorText: {
-    color: red[500],
-  },
   grid: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -34,7 +30,11 @@ const MultipleResponseOptionsField = (props) => {
   } = props;
   return (
     <>
-      {error ? <p style={styles.errorText}>{error.message}</p> : null}
+      {error && (
+        <Typography color="error" variant="caption">
+          {error.message}
+        </Typography>
+      )}
       <div style={grid ? styles.grid : {}}>
         {options.map((option) => {
           const widget = (
