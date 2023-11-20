@@ -4,6 +4,6 @@ FactoryBot.define do
           class: Course::Condition::Achievement.name, aliases: [:achievement_condition] do
     course
     achievement
-    association :conditional, factory: :course_achievement
+    conditional { association :course_achievement, course: course }
   end
 end

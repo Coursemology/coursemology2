@@ -12,6 +12,7 @@ class Course::Condition < ApplicationRecord
                                          if: -> { actable_id? && actable_type_changed? } }
   validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
                                        if: -> { actable_type? && actable_id_changed? } }
+  validate :validate_conditional_in_the_same_course
 
   belongs_to :course, inverse_of: false
   belongs_to :conditional, polymorphic: true
@@ -83,5 +84,15 @@ class Course::Condition < ApplicationRecord
 
       mappings
     end
+  end
+
+  private
+
+  def validate_conditional_in_the_same_course
+    return unless course_id && conditional
+
+    return if conditional.course_id == course_id
+
+    errors.add(:conditional, :not_in_same_course)
   end
 end

@@ -4,6 +4,6 @@ FactoryBot.define do
           class: Course::Condition::Survey.name, aliases: [:survey_condition] do
     course
     survey
-    association :conditional, factory: :course_survey
+    conditional { association :course_survey, course: course }
   end
 end
