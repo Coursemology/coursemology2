@@ -100,9 +100,11 @@ const generateTabs = (
     allTabs.enrolRequestsTab.count = sharedData.requestsCount;
     tabs.push(allTabs.enrolRequestsTab);
   }
-  tabs.push(allTabs.inviteTab);
-  allTabs.userInvitationsTab.count = sharedData.invitationsCount;
-  tabs.push(allTabs.userInvitationsTab);
+  if (permissions.canManageCourseUsers) {
+    tabs.push(allTabs.inviteTab);
+    allTabs.userInvitationsTab.count = sharedData.invitationsCount;
+    tabs.push(allTabs.userInvitationsTab);
+  }
   if (permissions.canManagePersonalTimes) {
     tabs.push(allTabs.personalTimesTab);
   }
