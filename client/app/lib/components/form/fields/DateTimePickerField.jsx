@@ -56,7 +56,7 @@ const FormDateTimePickerField = (props) => {
           format="DD-MM-YYYY HH:mm"
           label={label}
           onCancel={() => null}
-          value={moment(field.value)}
+          value={moment(field.value).startOf('minute')}
           {...custom}
           slotProps={{
             textField: {
