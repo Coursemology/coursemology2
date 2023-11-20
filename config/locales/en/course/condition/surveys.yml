@@ -1,8 +1,0 @@
-en:
-  course:
-    condition:
-      surveys:
-        new:
-          header: 'New Survey Condition'
-        edit:
-          header: 'Edit Survey Condition'

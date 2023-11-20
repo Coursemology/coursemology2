@@ -1,8 +1,0 @@
-en:
-  course:
-    condition:
-      levels:
-        new:
-          header: 'New Level Condition'
-        edit:
-          header: 'Edit Level Condition'

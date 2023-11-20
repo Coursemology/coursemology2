@@ -1,9 +1,0 @@
-zh:
-  course:
-    condition:
-      achievements:
-        new:
-          header: '新成就解锁条件'
-        edit:
-          header: '编辑成就解锁条件'
-          

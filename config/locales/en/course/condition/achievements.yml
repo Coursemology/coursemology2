@@ -1,8 +1,0 @@
-en:
-  course:
-    condition:
-      achievements:
-        new:
-          header: 'New Achievement Condition'
-        edit:
-          header: 'Edit Achievement Condition'
