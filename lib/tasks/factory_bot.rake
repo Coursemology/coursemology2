@@ -5,9 +5,13 @@ namespace :factory_bot do
     # Don't care if mailer cannot send
     ActionMailer::Base.raise_delivery_errors = false
 
-    ActsAsTenant.with_tenant(Instance.default) do
-      User.stamper = User.first
-      FactoryBot.lint
+    conn = ActiveRecord::Base.connection
+    conn.transaction do
+      ActsAsTenant.with_tenant(Instance.default) do
+        User.stamper = User.first
+        FactoryBot.lint
+        raise ActiveRecord::Rollback
+      end
     end
   end
 end
