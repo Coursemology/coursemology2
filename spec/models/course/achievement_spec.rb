@@ -23,7 +23,7 @@ RSpec.describe Course::Achievement, type: :model do
     end
 
     describe '#manually_awarded?' do
-      let(:achievement) { create(:course_achievement) }
+      let(:achievement) { create(:course_achievement, course: course) }
       subject { achievement.manually_awarded? }
 
       context 'when achievement has no conditions' do
@@ -31,7 +31,7 @@ RSpec.describe Course::Achievement, type: :model do
       end
 
       context 'when achievement has 1 or more conditions' do
-        before { create(:course_condition_achievement, conditional: achievement) }
+        before { create(:course_condition_achievement, conditional: achievement, course: course) }
 
         it { is_expected.to be_falsey }
       end

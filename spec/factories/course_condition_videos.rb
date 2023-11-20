@@ -4,7 +4,7 @@ FactoryBot.define do
           class: Course::Condition::Video.name, aliases: [:video_condition] do
     course
     video
-    association :conditional, factory: :course_video
+    conditional { association :course_video, course: course }
     minimum_watch_percentage { nil }
   end
 end

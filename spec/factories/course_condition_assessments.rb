@@ -4,11 +4,11 @@ FactoryBot.define do
           class: Course::Condition::Assessment.name, aliases: [:assessment_condition] do
     course
     assessment
-    association :conditional, factory: :assessment
+    conditional { association :assessment, course: course }
     minimum_grade_percentage { nil }
 
     trait :achievement_conditional do
-      association :conditional, factory: :achievement
+      conditional { association :achievement, course: course }
     end
 
     trait :assessment_conditional do
