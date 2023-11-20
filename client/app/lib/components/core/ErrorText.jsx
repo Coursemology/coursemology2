@@ -1,5 +1,5 @@
 import { FormattedMessage } from 'react-intl';
-import { red } from '@mui/material/colors';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 /**
@@ -14,7 +14,11 @@ const ErrorText = ({ errors }) => {
     return null;
   }
   if (errors.constructor === String) {
-    return <div style={{ color: red[500] }}>{errors}</div>;
+    return (
+      <Typography color="error" variant="caption">
+        {errors}
+      </Typography>
+    );
   }
   if (errors.constructor === Array) {
     return (
@@ -30,12 +34,12 @@ const ErrorText = ({ errors }) => {
     return <ErrorText key={errors.base} errors={errors.base.message} />;
   }
   return (
-    <div style={{ color: red[500] }}>
+    <Typography color="error" variant="caption">
       <FormattedMessage
         defaultMessage="Failed submitting this form. Please try again."
         id="lib.components.core.ErrorText.error"
       />
-    </div>
+    </Typography>
   );
 };
 

@@ -5,22 +5,22 @@ exports[`<ErrorText /> when input is a string displays it 1`] = `
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <div
-        style="color: rgb(244, 67, 54);"
+      <span
+        class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
       >
         An error.
-      </div>
+      </span>
       <div
         class="Toastify"
       />
     </div>
   </body>,
   "container": <div>
-    <div
-      style="color: rgb(244, 67, 54);"
+    <span
+      class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
     >
       An error.
-    </div>
+    </span>
     <div
       class="Toastify"
     />
@@ -84,32 +84,32 @@ exports[`<ErrorText /> when input is an array displays each error 1`] = `
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <div
-        style="color: rgb(244, 67, 54);"
+      <span
+        class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
       >
         An error.
-      </div>
-      <div
-        style="color: rgb(244, 67, 54);"
+      </span>
+      <span
+        class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
       >
         Another error.
-      </div>
+      </span>
       <div
         class="Toastify"
       />
     </div>
   </body>,
   "container": <div>
-    <div
-      style="color: rgb(244, 67, 54);"
+    <span
+      class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
     >
       An error.
-    </div>
-    <div
-      style="color: rgb(244, 67, 54);"
+    </span>
+    <span
+      class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
     >
       Another error.
-    </div>
+    </span>
     <div
       class="Toastify"
     />
