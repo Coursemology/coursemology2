@@ -1,8 +1,0 @@
-zh:
-  course:
-    condition:
-      surveys:
-        new:
-          header: '新的调研条件'
-        edit:
-          header: '编辑调研条件'

@@ -1,8 +1,0 @@
-zh:
-  course:
-    condition:
-      assessments:
-        new:
-          header: '新测验条件'
-        edit:
-          header: '编辑测验条件'

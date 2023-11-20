@@ -1,8 +1,0 @@
-en:
-  course:
-    condition:
-      assessments:
-        new:
-          header: 'New Assessment Condition'
-        edit:
-          header: 'Edit Assessment Condition'
