@@ -14,11 +14,16 @@ class Course::Survey::Response < ApplicationRecord
   has_many :answers, inverse_of: :response, dependent: :destroy
 
   accepts_nested_attributes_for :answers, reject_if: :options_invalid
+  validates_associated :answers
 
   scope :submitted, -> { where.not(submitted_at: nil) }
 
   def submitted?
     submitted_at.present?
+  end
+
+  def just_submitted?
+    submitted_at_changed? && submitted_at.present?
   end
 
   def submit(bonus_end_time)

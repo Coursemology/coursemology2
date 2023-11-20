@@ -62,7 +62,7 @@ RSpec.describe Course::Survey::SurveyDownloadService do
 
     describe '#generate_row' do
       subject do
-        Course::Survey::SurveyDownloadService.send(:generate_row, response, questions)
+        Course::Survey::SurveyDownloadService.send(:generate_row, response.reload, questions)
       end
 
       let(:response) do

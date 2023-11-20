@@ -1,0 +1,6 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/survey/answer:
+          cannot_be_empty: 'You must be a member of this course to start the survey.'
