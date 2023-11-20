@@ -59,16 +59,9 @@ if current_course.gamified?
   end
 end
 
-submissions =
-  if assessment.submissions.loaded?
-    assessment.submissions.select { |s| s.creator_id == current_user.id }
-  else
-    assessment.submissions.where(creator_id: current_user.id)
-  end
+json.partial! 'assessment_actions', assessment: assessment, submissions: @submissions
 
-json.partial! 'assessment_actions', assessment: assessment, submissions: submissions
-
-json.hasAttempts submissions.exists?
+json.hasAttempts @submissions.exists?
 
 json.permissions do
   json.canAttempt can_attempt

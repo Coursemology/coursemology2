@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   include Course::Assessment::AssessmentsHelper
+
+  before_action :load_submissions, only: [:show]
+
   include Course::Assessment::MonitoringConcern
 
   before_action :load_question_duplication_data, only: [:show, :reorder]
@@ -308,4 +311,15 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def authentication_service
     @authentication_service ||= Course::Assessment::AuthenticationService.new(@assessment, session)
   end
+
+  def submissions
+    @submissions ||=
+      if @assessment.submissions.loaded?
+        @assessment.submissions.select { |s| s.creator_id == current_user.id }
+      else
+        @assessment.submissions.where(creator_id: current_user.id)
+      end
+  end
+
+  alias_method :load_submissions, :submissions
 end
