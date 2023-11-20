@@ -13,7 +13,8 @@ module Course::Assessment::Submission::MonitoringConcern
       current_user.id == @submission.creator_id &&
       current_course_user&.student? &&
       can?(:create, Course::Monitoring::Session.new(creator_id: current_user.id)) &&
-      @assessment&.monitor&.enabled?
+      @assessment&.monitor&.enabled? &&
+      !@submission.submitted?
   end
 
   def monitoring_service
