@@ -41,7 +41,7 @@ RSpec.describe Course, type: :model do
       it { is_expected.to be_able_to(:show, course) }
       it { is_expected.not_to be_able_to(:manage, course) }
       it { is_expected.to be_able_to(:show_users, course) }
-      it { is_expected.to be_able_to(:manage_users, course) }
+      it { is_expected.not_to be_able_to(:manage_users, course) }
       it { is_expected.to be_able_to(:manage_personal_times, course) }
     end
 

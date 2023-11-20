@@ -38,13 +38,8 @@ module Course::CourseAbilityComponent
   end
 
   def define_teaching_staff_course_permissions
-    allow_teaching_staff_manage_users
     allow_teaching_staff_manage_personal_times
     allow_teaching_staff_analyze_videos
-  end
-
-  def allow_teaching_staff_manage_users
-    can :manage_users, Course, id: course.id
   end
 
   def allow_teaching_staff_manage_personal_times
@@ -61,6 +56,7 @@ module Course::CourseAbilityComponent
 
   def allow_owners_managing_course
     can :manage, Course, id: course.id
+    can :manage_users, Course, id: course.id
     can :manage, CourseUser, course_id: course.id
     can :manage, Course::EnrolRequest, course_id: course.id
   end

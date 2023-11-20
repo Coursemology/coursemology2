@@ -19,7 +19,7 @@ module Course::UnreadCountsConcern
   end
 
   def pending_enrol_requests_count
-    return 0 unless can?(:manage, CourseUser.new(course: current_course))
+    return 0 unless can?(:manage_users, current_course)
 
     current_course.enrol_requests.pending.count
   end

@@ -32,7 +32,7 @@ class Course::UsersComponent < SimpleDelegator
   # Direct the 'Manage Users' link to the usual course_users_students_path if current course user is a manager,
   # otherwise direct it to manage personalized timelines.
   def admin_sidebar_items
-    can_manage_users = can?(:manage, CourseUser.new(course: current_course))
+    can_manage_users = can?(:manage_users, current_course)
     can_manage_personal_times =
       current_course.show_personalized_timeline_features? && can?(:manage_personal_times, current_course)
 
