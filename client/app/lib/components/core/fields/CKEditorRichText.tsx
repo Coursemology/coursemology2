@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { forwardRef, useState } from 'react';
+import { useState } from 'react';
 import CustomEditor from '@ckeditor/ckeditor5-build-custom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { FormHelperText, InputLabel } from '@mui/material';
@@ -46,7 +46,7 @@ const uploadAdapter = (loader) => {
   };
 };
 
-const CKEditorRichText = forwardRef((props: Props, ref) => {
+const CKEditorRichText = (props: Props) => {
   const {
     label,
     value,
@@ -106,7 +106,6 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
       />
       <div className="react-ck">
         <CKEditor
-          ref={ref}
           config={{
             // To format <pre> properly (summernote compatability).
             // CKEditor will change it to <pre><code> but on edit it will render properly
@@ -175,7 +174,7 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
       {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
     </div>
   );
-});
+};
 
 CKEditorRichText.displayName = 'CKEditor';
 

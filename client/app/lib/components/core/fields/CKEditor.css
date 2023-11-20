@@ -4,4 +4,7 @@ is rendered properly in MUI dialog */
 .ck-body-wrapper {
   position: absolute;
   z-index: 1500;
+  .ck-powered-by {
+    display: none;
+  }
 }
