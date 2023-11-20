@@ -58,7 +58,7 @@ const stopRecord = () => {
     recorder.exportWAV((blob) => {
       const fileName = `${Math.round(new Date().getTime() / 1000)}.wav`;
       const file = new File([blob], fileName, {
-        lastModified: new Date(),
+        lastModified: new Date(new Date().setSeconds(0)),
         type: blob.type || 'audio/wav',
       });
       resolve(file);

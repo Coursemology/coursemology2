@@ -67,7 +67,7 @@ const VideoNew: FC<Props> = (props) => {
     description: '',
     url: '',
     published: false,
-    startAt: new Date(),
+    startAt: new Date(new Date().setSeconds(0)),
     hasPersonalTimes: false,
     hasTodo: true,
   };
