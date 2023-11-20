@@ -31,13 +31,9 @@ const checkMultipleChoiceRequired = (value, question, intl) =>
     : true;
 
 const checkQuantitySelected = (options, question, intl) => {
-  const {
-    required,
-    min_options: minOptions,
-    max_options: maxOptions,
-  } = question;
+  const { required, max_options: maxOptions } = question;
+  const minOptions = question.min_options || 1;
   const optionCount = options.length;
-
   // Skip checks if question is not required and student doesn't intend to answer it.
   if (!required && optionCount === 0) {
     return true;
