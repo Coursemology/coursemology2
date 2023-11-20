@@ -4,11 +4,7 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
 
   def index
     authorize!(:manage, @survey)
-    respond_to do |format|
-      format.json do
-        @course_students = current_course.course_users.students.order_alphabetically
-      end
-    end
+    @course_students = current_course.course_users.students.order_alphabetically
   end
 
   def create
@@ -25,23 +21,17 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
 
   def show
     authorize!(:read_answers, @response)
-    respond_to do |format|
-      format.json { render_response_json }
-    end
+    render_response_json
   end
 
   def edit
     raise CanCan::AccessDenied if cannot?(:submit, @response) && cannot?(:modify, @response)
 
-    respond_to do |format|
-      format.json do
-        @response.build_missing_answers
-        if @response.save
-          render_response_json
-        else
-          head :internal_server_error
-        end
-      end
+    @response.build_missing_answers
+    if @response.save
+      render_response_json
+    else
+      head :internal_server_error
     end
   end
 
@@ -89,15 +79,14 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
   end
 
   def load_answers
-    @answers ||= @response.answers.includes(:options)
+    @response.answers.includes(:options)
   end
 
   def render_response_json
     load_sections
-    load_answers
     render partial: 'response', locals: {
       response: @response,
-      answers: @answers,
+      answers: load_answers,
       survey: @survey,
       survey_time: @survey.time_for(current_course_user)
     }
