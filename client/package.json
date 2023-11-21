@@ -124,7 +124,7 @@
     "@types/enzyme": "^3.10.16",
     "@types/jest": "^29.5.8",
     "@types/jquery": "^3.5.27",
-    "@types/papaparse": "^5.3.11",
+    "@types/papaparse": "^5.3.12",
     "@types/rails__actioncable": "^6.1.9",
     "@types/react": "^18.2.37",
     "@types/react-beautiful-dnd": "^13.1.7",
