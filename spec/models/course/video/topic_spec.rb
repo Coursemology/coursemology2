@@ -5,9 +5,9 @@ RSpec.describe Course::Video::Topic do
   it { is_expected.to act_as(Course::Discussion::Topic) }
   it { is_expected.to belong_to(:video).inverse_of(:topics) }
 
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let(:course) { create(:course, :with_video_component_enabled) }
+    let(:course) { create(:course) }
     let(:student1) { create(:course_student, course: course) }
     let(:student2) { create(:course_student, course: course) }
     let(:student3) { create(:course_student, course: course) }

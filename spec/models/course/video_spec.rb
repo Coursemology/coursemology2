@@ -6,9 +6,9 @@ RSpec.describe Course::Video, type: :model do
   it { is_expected.to belong_to(:tab).inverse_of(:videos).without_validating_presence }
   it { is_expected.to have_many(:submissions).inverse_of(:video).dependent(:destroy) }
 
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let!(:course) { create(:course, :with_video_component_enabled) }
+    let!(:course) { create(:course) }
     let(:student1) { create(:course_student, course: course) }
     let(:student2) { create(:course_student, course: course) }
     let(:video1) { create(:video, course: course, duration: 70) }

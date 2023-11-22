@@ -3,7 +3,7 @@ FactoryBot.define do
   factory :course_video_event, class: Course::Video::Event.name,
                                aliases: [:video_event] do
     transient do
-      course { build(:course, :with_video_component_enabled) }
+      course { build(:course) }
       video { create(:video, :published, course: course) }
       student { create(:course_student, course: course) }
       submission do

@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Course: Videos: Viewing', js: true do
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:course) { create(:course, :with_video_component_enabled) }
+    let!(:course) { create(:course) }
     let(:unpublished_video) { create(:video, course: course) }
     let(:published_video) { create(:video, :published, course: course) }
     let(:published_not_started_video) { create(:video, :published, :not_started, course: course) }

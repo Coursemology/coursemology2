@@ -5,9 +5,9 @@ RSpec.describe Course::Video::Submission do
   it { is_expected.to act_as(Course::ExperiencePointsRecord) }
   it { is_expected.to belong_to(:video).inverse_of(:submissions) }
 
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let(:course) { create(:course, :with_video_component_enabled) }
+    let(:course) { create(:course) }
     let!(:student) { create(:course_student, course: course) }
     let!(:other_student) { create(:course_student, course: course) }
     let(:video) { create(:video, :published, course: course, duration: 70) }

@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Course: Videos: Management', js: true do
-  let(:instance) { create(:instance, :with_video_component_enabled) }
+  let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :with_video_component_enabled) }
+    let(:course) { create(:course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Teaching Assistant' do

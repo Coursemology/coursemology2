@@ -11,10 +11,6 @@ class Course::VideosComponent < SimpleDelegator
     [Course::Video.name]
   end
 
-  def self.enabled_by_default?
-    false
-  end
-
   def sidebar_items
     main_sidebar_items + settings_sidebar_items
   end

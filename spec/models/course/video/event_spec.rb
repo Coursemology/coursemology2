@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Video::Event, type: :model do
   it { is_expected.to belong_to(:session).inverse_of(:events) }
 
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe 'validations' do
       context 'when video time is negative' do

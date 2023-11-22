@@ -2,9 +2,9 @@
 require 'rails_helper'
 
 RSpec.describe Course::VideoSubmissionsController do
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) { create(:instance) }
   with_tenant(:instance) do
-    let!(:course) { create(:course, :with_video_component_enabled) }
+    let!(:course) { create(:course) }
     let!(:course_user) { create(:course_user, course: course) }
 
     describe '#index' do
