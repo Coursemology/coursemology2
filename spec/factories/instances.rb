@@ -9,12 +9,6 @@ FactoryBot.define do
     sequence(:name) { |n| "Instance-#{base_time}-#{n}" }
     host
 
-    trait :with_video_component_enabled do
-      after(:build) do |instance|
-        instance.set_component_enabled_boolean(:course_videos_component, true)
-      end
-    end
-
     trait :with_learning_map_component_enabled do
       after(:build) do |instance|
         instance.set_component_enabled_boolean(:course_learning_map_component, true)

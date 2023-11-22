@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.describe Course::Video::Submission::SessionsController, type: :controller do
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:course) { create(:course, :with_video_component_enabled) }
+    let!(:course) { create(:course) }
     let(:student) { create(:course_student, course: course) }
     let(:video) { create(:video, :published, course: course) }
     let!(:session) do

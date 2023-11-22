@@ -2,11 +2,11 @@
 require 'rails_helper'
 
 RSpec.describe Course::Video::TopicsController do
-  let!(:instance) { create(:instance, :with_video_component_enabled) }
+  let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
     let(:user) { create(:user) }
-    let!(:course) { create(:course, :with_video_component_enabled, creator: user) }
+    let!(:course) { create(:course, creator: user) }
     let(:video) { create(:video, :published, course: course) }
 
     before { sign_in(user) }

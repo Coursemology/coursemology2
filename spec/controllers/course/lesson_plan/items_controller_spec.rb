@@ -2,13 +2,11 @@
 require 'rails_helper'
 
 RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
-  let(:instance_traits) { nil }
-  let!(:instance) { create(:instance, *instance_traits) }
+  let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
-    let(:course_traits) { nil }
-    let(:course) { create(:course, *course_traits, creator: admin) }
+    let(:course) { create(:course, creator: admin) }
     let(:student) { create(:course_student, course: course) }
 
     before { sign_in(user) }
@@ -63,8 +61,6 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
 
           context 'when the video component is enabled' do
             let!(:video) { create(:video, course: course) }
-            let(:instance_traits) { :with_video_component_enabled }
-            let(:course_traits) { :with_video_component_enabled }
 
             it 'responds with the list of videos' do
               subject
@@ -106,19 +102,10 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
           end
 
           context 'when the video component is disabled on the course' do
-            let(:instance_traits) { :with_video_component_enabled }
-            let!(:video) { create(:video, course: course) }
-
-            it 'responds with the list of items, excluding videos' do
-              subject
-
-              expect(json_response['items']).not_to be_empty
-              expect(json_response['items'].map { |i| i['lesson_plan_item_type'][0] }).
-                not_to include(I18n.t('components.video.name'))
+            before do
+              course.settings(:course_videos_component, :lesson_plan_items).enabled = false
+              course.save!
             end
-          end
-
-          context 'when the video component is disabled on the instance' do
             let!(:video) { create(:video, course: course) }
 
             it 'responds with the list of items, excluding videos' do

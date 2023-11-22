@@ -3,11 +3,11 @@ require 'rails_helper'
 
 RSpec.feature 'Course: Administration: Components', js: true do
   let!(:instance) do
-    create(:instance, :with_video_component_enabled)
+    create(:instance)
   end
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :with_video_component_enabled) }
+    let(:course) { create(:course) }
     let(:components) { course.disableable_components }
     let(:sample_component) { components.sample }
     before { login_as(user, scope: :user) }
