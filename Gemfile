@@ -34,7 +34,7 @@ gem 'active_record-acts_as', git: 'https://github.com/ekowidianto/active_record-
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
-gem 'active_record_upsert', '0.11.1'
+gem 'active_record_upsert', '0.11.2'
 # Create pretty URLs and work with human-friendly strings
 gem 'friendly_id'
 
