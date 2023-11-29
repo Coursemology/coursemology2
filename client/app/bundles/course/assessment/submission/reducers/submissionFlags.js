@@ -48,8 +48,7 @@ export default function (state = initialState, action) {
           .map((ans) => ans.id)
           .reduce((acc, value) => ({ ...acc, [value.toString()]: true }), {}),
       };
-    case actions.SAVE_ANSWER_SUCCESS:
-    case actions.SAVE_ANSWER_FAILURE: {
+    case actions.SAVE_ANSWER_SUCCESS: {
       const savedClientVersion = action.payload.answers[0].clientVersion;
       const answerId = action.payload.answers[0].id;
 
@@ -60,6 +59,11 @@ export default function (state = initialState, action) {
         }
       });
     }
+    case actions.SAVE_ANSWER_FAILURE:
+      return produce(state, (draftState) => {
+        const tempDraftState = draftState;
+        tempDraftState.isSavingAnswer = {};
+      });
     case actions.UPDATE_CURRENT_ANSWER: {
       return produce(state, (draftState) => {
         const tempDraftState = draftState;

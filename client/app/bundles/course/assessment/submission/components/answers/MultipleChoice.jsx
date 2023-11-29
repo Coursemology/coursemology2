@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
 import { questionShape } from '../../propTypes';
+import { getCurrentTime } from '../../utils';
 
 const MultipleChoiceOptions = ({
   readOnly,
@@ -96,7 +97,8 @@ const MultipleChoice = (props) => {
             onChange: (e) => {
               field.onChange([parseInt(e.target.value, 10)]);
               const modifiedAnswer = { [answerId]: getValues()[answerId] };
-              saveAnswer(modifiedAnswer, answerId);
+              const curTime = getCurrentTime();
+              saveAnswer(modifiedAnswer, answerId, curTime);
             },
           }}
           fieldState={fieldState}
