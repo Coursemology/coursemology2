@@ -132,8 +132,8 @@ const SubmissionEditForm = (props) => {
   usePrompt(!equal(initialValues, currentValues));
 
   useEffect(() => {
-    reset(initialValues);
-    reset(currentValues);
+    const combinedValues = { ...initialValues, ...currentValues };
+    reset(combinedValues);
   }, [currentValues, initialValues]);
 
   useEffect(() => {

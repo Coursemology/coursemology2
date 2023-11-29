@@ -594,7 +594,7 @@ export function updateGrade(id, grade, bonusAwarded) {
   };
 }
 
-export function updateClientVersion(data, answerId, clientVersion) {
+export function updateCurrentAnswer(data, answerId, clientVersion) {
   return (dispatch) => {
     dispatch({
       type: actionTypes.UPDATE_CURRENT_ANSWER,

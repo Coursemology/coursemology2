@@ -16,7 +16,7 @@ import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateClientVersion } from '../actions';
+import { updateCurrentAnswer } from '../actions';
 import {
   HistoryQuestion,
   QuestionFlags,
@@ -77,7 +77,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     id: number,
     clientVersion: number,
   ): void => {
-    dispatch(updateClientVersion(data, id, clientVersion));
+    dispatch(updateCurrentAnswer(data, id, clientVersion));
   };
 
   const saveAnswer = (

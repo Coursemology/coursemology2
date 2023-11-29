@@ -13,6 +13,16 @@ function buildInitialValues(answers) {
   );
 }
 
+function buildInitialClientVersion(answers) {
+  return answers.reduce(
+    (obj, answer) => ({
+      ...obj,
+      [answer.id]: answer.clientVersion,
+    }),
+    {},
+  );
+}
+
 const initialState = {
   initial: {},
   current: {},
@@ -55,13 +65,7 @@ export default function (state = initialState, action) {
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS: {
       const initialValues = buildInitialValues(action.payload.answers);
-      const clientVersion = action.payload.answers.reduce(
-        (obj, answer) => ({
-          ...obj,
-          [answer.id]: answer.clientVersion,
-        }),
-        {},
-      );
+      const clientVersion = buildInitialClientVersion(action.payload.answers);
       return produce(state, (draftState) => {
         const tempDraftState = draftState;
         tempDraftState.initial = initialValues;
