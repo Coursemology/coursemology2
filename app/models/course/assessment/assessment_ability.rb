@@ -224,6 +224,7 @@ module Course::Assessment::AssessmentAbility
     allow_manager_publish_assessment_submission_grades
     allow_manager_force_submit_assessment_submissions
     allow_manager_delete_assessment_submissions
+    allow_manager_update_assessment_submissions
   end
 
   def allow_manager_manage_tab_and_categories
