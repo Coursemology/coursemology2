@@ -199,7 +199,7 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(saveDraft(submissionId, data));
   };
 
-  onSaveAnswer = (data, answerId) => {
+  onSaveAnswer = (data, answerId, currentTime) => {
     const {
       dispatch,
       match: {
@@ -207,7 +207,7 @@ class VisibleSubmissionEditIndex extends Component {
       },
     } = this.props;
 
-    dispatch(saveAnswer(submissionId, data, answerId));
+    dispatch(saveAnswer(submissionId, data, answerId, currentTime ?? 0));
   };
 
   onSubmit = (data) => {
@@ -343,6 +343,7 @@ class VisibleSubmissionEditIndex extends Component {
           allowPartialSubmission={allowPartialSubmission}
           attempting={workflowState === workflowStates.Attempting}
           codaveriFeedbackStatus={codaveriFeedbackStatus}
+          currentValues={answers.current}
           explanations={explanations}
           graderView={graderView}
           handleSaveAllGrades={this.handleSaveAllGrades}
@@ -381,6 +382,7 @@ class VisibleSubmissionEditIndex extends Component {
         attempting={workflowState === workflowStates.Attempting}
         canUpdate={canUpdate}
         codaveriFeedbackStatus={codaveriFeedbackStatus}
+        currentValues={answers.current}
         delayedGradePublication={delayedGradePublication}
         explanations={explanations}
         graded={workflowState === workflowStates.Graded}

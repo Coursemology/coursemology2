@@ -1,3 +1,5 @@
+import { produce } from 'immer';
+
 import actions from '../constants';
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   isUnsubmitting: false,
   isDeleting: false,
   isSubmissionBlocked: false,
+  clientVersion: {},
 };
 
 export default function (state = initialState, action) {
@@ -46,8 +49,23 @@ export default function (state = initialState, action) {
           .reduce((acc, value) => ({ ...acc, [value.toString()]: true }), {}),
       };
     case actions.SAVE_ANSWER_SUCCESS:
-    case actions.SAVE_ANSWER_FAILURE:
-      return { ...state, isSavingAnswer: {} };
+    case actions.SAVE_ANSWER_FAILURE: {
+      const savedClientVersion = action.payload.answers[0].clientVersion;
+      const answerId = action.payload.answers[0].id;
+
+      return produce(state, (draftState) => {
+        const tempDraftState = draftState;
+        if (Math.abs(state.clientVersion[answerId] - savedClientVersion) <= 1) {
+          tempDraftState.isSavingAnswer = {};
+        }
+      });
+    }
+    case actions.UPDATE_CURRENT_ANSWER: {
+      return produce(state, (draftState) => {
+        const tempDraftState = draftState;
+        tempDraftState.clientVersion[action.answerId] = action.clientVersion;
+      });
+    }
     case actions.SAVE_DRAFT_REQUEST:
     case actions.SAVE_ALL_GRADE_REQUEST:
     case actions.SAVE_GRADE_REQUEST:
