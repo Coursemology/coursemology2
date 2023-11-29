@@ -12,9 +12,11 @@ import {
 import equal from 'fast-deep-equal';
 
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
+import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { updateClientVersion } from '../actions';
 import {
   HistoryQuestion,
   QuestionFlags,
@@ -38,7 +40,7 @@ interface Props {
   question: SubmissionQuestionData;
   answerId: number;
   isSavingAnswer: Record<string, boolean>;
-  onSaveAnswer: (data: unknown, answerId: number) => void;
+  onSaveAnswer: (data: unknown, answerId: number, currentTime?: number) => void;
 }
 
 const SubmissionAnswer = (props: Props): JSX.Element => {
@@ -58,6 +60,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
   const [isFirstRendering, setIsFirstRendering] = useState({});
+  const dispatch = useAppDispatch();
 
   const historyQuestion = historyQuestions[question.id];
   const noPastAnswers = historyQuestion
@@ -69,8 +72,20 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     : false;
   const disabled = noPastAnswers || isLoading || isAutograding;
 
-  const saveAnswer = (data: unknown, id: number): void => {
-    onSaveAnswer(data, id);
+  const handleUpdateClientVersion = (
+    data: unknown,
+    id: number,
+    clientVersion: number,
+  ): void => {
+    dispatch(updateClientVersion(data, id, clientVersion));
+  };
+
+  const saveAnswer = (
+    data: unknown,
+    id: number,
+    currentTime?: number,
+  ): void => {
+    onSaveAnswer(data, id, currentTime);
     setIsFirstRendering((prevIsFirstRendering) => {
       const updatedIsFirstRendering = JSON.parse(
         JSON.stringify(prevIsFirstRendering),
@@ -185,7 +200,14 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           graderView={graderView}
           question={question}
           readOnly={readOnly}
-          saveAnswer={debouncedSaveAnswer}
+          saveAnswer={(
+            data: unknown,
+            id: number,
+            currentTime?: number,
+          ): void => {
+            handleUpdateClientVersion(data, id, currentTime ?? 0);
+            debouncedSaveAnswer(data, id, currentTime);
+          }}
           savingIndicator={savingIndicator}
           showMcqMrqSolution={showMcqMrqSolution}
         />

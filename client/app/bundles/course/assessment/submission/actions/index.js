@@ -6,6 +6,7 @@ import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../constants';
 import translations from '../translations';
+import { getCurrentTime } from '../utils';
 
 const JOB_POLL_DELAY_MS = 500;
 const JOB_STAGGER_DELAY_MS = 400;
@@ -16,10 +17,7 @@ const JOB_STAGGER_DELAY_MS = 400;
  *    The data is in a format of { url, file, name }, and we only need to assign the file
  *    attribute into answer.file
  */
-const formatAnswer = (answer) => {
-  const currentDate = new Date();
-  const currentTime = currentDate.getTime();
-
+const formatAnswer = (answer, currentTime) => {
   const newAnswer = { ...answer, clientVersion: currentTime };
   // voice upload
   const fileObj = newAnswer.file;
@@ -33,10 +31,10 @@ const formatAnswer = (answer) => {
   return newAnswer;
 };
 
-const formatAnswers = (answers = {}) => {
+const formatAnswers = (answers = {}, currentTime) => {
   const newAnswers = [];
   Object.values(answers).forEach((answer) => {
-    const newAnswer = formatAnswer(answer);
+    const newAnswer = formatAnswer(answer, currentTime);
     newAnswers.push(newAnswer);
   });
   return newAnswers;
@@ -151,7 +149,7 @@ export function autogradeSubmission(id) {
 }
 
 export function saveDraft(submissionId, rawAnswers) {
-  const answers = formatAnswers(rawAnswers);
+  const answers = formatAnswers(rawAnswers, getCurrentTime());
   const payload = { submission: { answers, is_save_draft: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_DRAFT_REQUEST });
@@ -175,9 +173,9 @@ export function saveDraft(submissionId, rawAnswers) {
   };
 }
 
-export function saveAnswer(submissionId, rawAnswers, answerId) {
+export function saveAnswer(submissionId, rawAnswers, answerId, currentTime) {
   const rawAnswer = { [answerId]: rawAnswers[answerId] };
-  const answer = formatAnswers(rawAnswer);
+  const answer = formatAnswers(rawAnswer, currentTime);
   const payload = { submission: { answers: answer, is_save_draft: true } };
 
   return (dispatch) => {
@@ -212,7 +210,7 @@ export function saveAnswer(submissionId, rawAnswers, answerId) {
 }
 
 export function finalise(submissionId, rawAnswers) {
-  const answers = formatAnswers(rawAnswers);
+  const answers = formatAnswers(rawAnswers, getCurrentTime());
   const payload = { submission: { answers, finalise: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.FINALISE_REQUEST });
@@ -592,6 +590,17 @@ export function updateGrade(id, grade, bonusAwarded) {
       id,
       grade,
       bonusAwarded,
+    });
+  };
+}
+
+export function updateClientVersion(data, answerId, clientVersion) {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.UPDATE_CURRENT_ANSWER,
+      data,
+      answerId,
+      clientVersion,
     });
   };
 }
