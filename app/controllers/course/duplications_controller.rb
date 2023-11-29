@@ -17,12 +17,17 @@ class Course::DuplicationsController < Course::ComponentController
 
   def authorize_duplication
     authorize!(:duplicate_from, current_course)
+    authorize!(:duplicate_to_other_instances, current_tenant) if instance_params != current_tenant.id
   end
 
   private
 
   def create_duplication_params
-    params.require(:duplication).permit(:new_start_at, :new_title)
+    params.require(:duplication).permit(:new_start_at, :new_title, :destination_instance_id)
+  end
+
+  def instance_params
+    params.require(:duplication).permit(:destination_instance_id)
   end
 
   # Construct the options to be sent to the duplication job.

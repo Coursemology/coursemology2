@@ -11,6 +11,8 @@ const mock = createMockAdapter(client);
 
 const responseData = {
   sourceCourse: { id: 5 },
+  metadata: { canDuplicateToAnotherInstance: false, currentInstanceId: 0 },
+  destinationInstances: [{ id: 0, name: 'default', host: 'example.org' }],
   destinationCourses: [
     { id: 54, title: 'Course B', path: '/courses/54' },
     { id: 55, title: 'Course A', path: '/courses/55' },

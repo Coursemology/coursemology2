@@ -4,29 +4,22 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   helper Course::Achievement::AchievementsHelper
 
   def new
-    respond_to do |format|
-      format.json do
-        load_source_courses_data
-        load_destination_courses_data
-        load_items_data
-      end
-    end
+    load_source_courses_data
+    load_destination_courses_data
+    load_items_data
+    load_destination_instances_data
   end
 
   def create
     job = Course::ObjectDuplicationJob.perform_later(
       current_course, authorized_destination_course, objects_to_duplicate, current_user: current_user
     ).job
-    respond_to do |format|
-      format.json { render partial: 'jobs/submitted', locals: { job: job } }
-    end
+    render partial: 'jobs/submitted', locals: { job: job }
   end
 
   # Duplication data for the current course
   def data
-    respond_to do |format|
-      format.json { load_items_data }
-    end
+    load_items_data
   end
 
   protected
@@ -89,6 +82,14 @@ class Course::ObjectDuplicationsController < Course::ComponentController
 
   def load_videos_component_data
     @video_tabs = current_course.video_tabs.includes(:videos)
+  end
+
+  def load_destination_instances_data
+    @destination_instances = if can?(:duplicate_to_other_instances, current_tenant)
+                               Instance.all
+                             else
+                               Instance.where(id: current_tenant.id)
+                             end
   end
 
   def create_duplication_params

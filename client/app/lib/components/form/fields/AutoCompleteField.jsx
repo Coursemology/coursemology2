@@ -57,7 +57,12 @@ FormAutoCompleteField.propTypes = {
   fieldState: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   label: PropTypes.node,
-  options: PropTypes.arrayOf(PropTypes.string),
+  options: PropTypes.oneOfType(
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.arrayOf(PropTypes.object),
+  ),
+  getOptionLabel: PropTypes.func,
+  onChange: PropTypes.func,
   renderIf: PropTypes.bool,
 };
 

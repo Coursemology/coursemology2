@@ -66,7 +66,14 @@ class DestinationCourseSelector extends Component {
   };
 
   renderNewCourseForm = () => {
-    const { intl, dispatch, sourceCourse, isDuplicating } = this.props;
+    const {
+      intl,
+      dispatch,
+      sourceCourse,
+      currentInstanceId,
+      destinationInstances,
+      isDuplicating,
+    } = this.props;
 
     const successMessage = intl.formatMessage(translations.success);
     const pendingMessage = intl.formatMessage(translations.pending);
@@ -81,6 +88,7 @@ class DestinationCourseSelector extends Component {
     const timeNow = moment().format(SHORT_DATE_TIME_FORMAT);
     const newTitleValues = { title: sourceCourse.title, timestamp: timeNow };
     const initialValues = {
+      destination_instance_id: currentInstanceId,
       new_title: intl.formatMessage(translations.defaultTitle, newTitleValues),
       new_start_at: defaultNewCourseStartAt,
     };
@@ -93,6 +101,7 @@ class DestinationCourseSelector extends Component {
           dispatch(
             duplicateCourse(
               values,
+              destinationInstances[values.destination_instance_id]?.host,
               successMessage,
               pendingMessage,
               failureMessage,
@@ -120,6 +129,8 @@ DestinationCourseSelector.propTypes = {
   courses: PropTypes.arrayOf(courseShape),
   sourceCourse: sourceCourseShape,
   duplicationMode: PropTypes.string.isRequired,
+  currentInstanceId: PropTypes.number.isRequired,
+  destinationInstances: PropTypes.object,
   isDuplicating: PropTypes.bool.isRequired,
 
   dispatch: PropTypes.func.isRequired,
@@ -133,5 +144,7 @@ export default connect(({ duplication }) => ({
   destinationCourseId: duplication.destinationCourseId,
   duplicationMode: duplication.duplicationMode,
   sourceCourse: duplication.sourceCourse,
+  currentInstanceId: duplication.metadata.currentInstanceId,
+  destinationInstances: duplication.destinationInstances,
   isDuplicating: duplication.isDuplicating,
 }))(injectIntl(DestinationCourseSelector));

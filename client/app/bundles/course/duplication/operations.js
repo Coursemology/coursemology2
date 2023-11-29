@@ -97,6 +97,7 @@ export function duplicateItems(
 
 export function duplicateCourse(
   fields,
+  destinationHost,
   successMessage,
   pendingMessage,
   failureMessage,
@@ -111,7 +112,11 @@ export function duplicateCourse(
 
     const handleJobSuccess = (successData) => {
       toast.success(successMessage);
-      window.location.href = successData.redirectUrl;
+      const destinationUrl = `${window.location.protocol}//${
+        destinationHost ?? window.location.host
+      }${successData.redirectUrl}`;
+
+      window.location = destinationUrl;
       dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });
     };
 

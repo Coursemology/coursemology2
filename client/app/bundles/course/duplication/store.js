@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { arrayToKeyObject } from 'utilities/array';
 
 import actionTypes, { duplicationModes } from 'course/duplication/constants';
 import { getEmptySelectedItems, nestFolders } from 'course/duplication/utils';
@@ -8,8 +9,14 @@ const initialState = {
   selectedItems: getEmptySelectedItems(),
   destinationCourseId: null,
   destinationCourses: [],
+  destinationInstances: {},
   duplicationMode: duplicationModes.COURSE,
   currentItemSelectorPanel: null,
+
+  metadata: {
+    canDuplicateToAnotherInstance: false,
+    currentInstanceId: 0,
+  },
 
   currentHost: '',
   currentCourseId: null,
@@ -41,8 +48,12 @@ const reducer = produce((state, action) => {
       return { ...state, isLoading: true };
     }
     case actionTypes.LOAD_OBJECTS_LIST_SUCCESS: {
-      const { destinationCourses, materialsComponent, ...data } =
-        action.duplicationData;
+      const {
+        destinationCourses,
+        destinationInstances,
+        materialsComponent,
+        ...data
+      } = action.duplicationData;
       const sortedDestinationCourses = destinationCourses.sort((a, b) =>
         a.title.localeCompare(b.title),
       );
@@ -53,6 +64,7 @@ const reducer = produce((state, action) => {
         isLoading: false,
         currentCourseId: data.sourceCourse.id,
         destinationCourses: sortedDestinationCourses,
+        destinationInstances: arrayToKeyObject(destinationInstances, 'id'),
         materialsComponent: nestedFolders,
       };
     }

@@ -1,5 +1,11 @@
 import PropTypes from 'prop-types';
 
+export const instanceShape = PropTypes.shape({
+  id: PropTypes.number,
+  name: PropTypes.string,
+  host: PropTypes.string,
+});
+
 export const courseShape = PropTypes.shape({
   id: PropTypes.number,
   host: PropTypes.string,
