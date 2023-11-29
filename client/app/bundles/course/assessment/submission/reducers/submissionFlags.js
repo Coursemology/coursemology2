@@ -41,10 +41,9 @@ export default function (state = initialState, action) {
     case actions.SAVE_ANSWER_REQUEST:
       return {
         ...state,
-        isSavingAnswer: action.payload.reduce(
-          (acc, value) => ({ ...acc, [value.toString()]: true }),
-          {},
-        ),
+        isSavingAnswer: action.payload
+          .map((ans) => ans.id)
+          .reduce((acc, value) => ({ ...acc, [value.toString()]: true }), {}),
       };
     case actions.SAVE_ANSWER_SUCCESS:
     case actions.SAVE_ANSWER_FAILURE:
