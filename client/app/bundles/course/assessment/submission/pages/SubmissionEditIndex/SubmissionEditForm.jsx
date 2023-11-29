@@ -20,6 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import { blue, grey, red, yellow } from '@mui/material/colors';
+import equal from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
@@ -67,6 +68,7 @@ const SubmissionEditForm = (props) => {
     attempting,
     canUpdate,
     codaveriFeedbackStatus,
+    currentValues,
     explanations,
     delayedGradePublication,
     graded,
@@ -125,13 +127,14 @@ const SubmissionEditForm = (props) => {
     handleSubmit,
     reset,
     setValue,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = methods;
-  usePrompt(isDirty);
+  usePrompt(!equal(initialValues, currentValues));
 
   useEffect(() => {
     reset(initialValues);
-  }, [initialValues]);
+    reset(currentValues);
+  }, [currentValues, initialValues]);
 
   useEffect(() => {
     initialStep = props.step;
@@ -482,7 +485,7 @@ const SubmissionEditForm = (props) => {
       return (
         <Button
           color="primary"
-          disabled={!isDirty || isSaving}
+          disabled={equal(currentValues, initialValues) || isSaving}
           onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
           style={styles.formButton}
           type="submit"
@@ -720,6 +723,7 @@ const SubmissionEditForm = (props) => {
 
 SubmissionEditForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
+  currentValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,

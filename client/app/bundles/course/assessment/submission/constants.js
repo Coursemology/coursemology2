@@ -211,6 +211,7 @@ const actionTypes = mirrorCreator([
   'UPDATE_GRADING',
   'UPDATE_EXP',
   'UPDATE_MULTIPLIER',
+  'UPDATE_CURRENT_ANSWER',
   'ENTER_STUDENT_VIEW',
   'EXIT_STUDENT_VIEW',
 
