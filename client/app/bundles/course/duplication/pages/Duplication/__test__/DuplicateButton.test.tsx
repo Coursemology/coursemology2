@@ -9,6 +9,7 @@ import DuplicateButton from '../DuplicateButton';
 
 const data = {
   sourceCourse: { id: 37 },
+  metadata: { canDuplicateToAnotherInstance: false, currentInstanceId: 0 },
   destinationCourseId: 9,
   destinationCourses: [
     {
@@ -18,6 +19,7 @@ const data = {
       path: '/courses/9',
     },
   ],
+  destinationInstances: [{ id: 0, name: 'default', host: 'example.org' }],
   selectedItems: {
     [duplicableItemTypes.TAB]: { 3: true, 4: true, 5: false },
     [duplicableItemTypes.CATEGORY]: { 6: false },

@@ -21,4 +21,15 @@ json.destinationCourses @destination_courses do |course|
   end)
 end
 
+json.destinationInstances @destination_instances do |instance|
+  json.id instance.id
+  json.name instance.name
+  json.host instance.host
+end
+
+json.metadata do
+  json.canDuplicateToAnotherInstance can?(:duplicate_to_other_instances, current_tenant)
+  json.currentInstanceId current_tenant.id
+end
+
 json.partial! 'course_duplication_data'

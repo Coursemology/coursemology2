@@ -10,10 +10,12 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     # @option options [User] :current_user (+User.system+) The user triggering the duplication.
     # @option options [String] :new_title ('Duplicated') The title for the duplicated course.
     # @option options [DateTime] :new_start_at Start date and time for the duplicated course.
+    # @option options [DateTime] :destination_instance_id The destination instance of the duplicated course.
     # @param [Array] all_objects All the objects in the course.
     # @param [Array] selected_objects The objects to duplicate.
     # @return [Course] The duplicated course
     def duplicate_course(source_course, options = {}, all_objects = [], selected_objects = [])
+      destination_instance_id = options[:destination_instance_id]
       excluded_objects = all_objects - selected_objects
       options[:excluded_objects] = excluded_objects
       options[:source_course] = source_course
@@ -25,7 +27,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
         end
       options.reverse_merge!(DEFAULT_COURSE_DUPLICATION_OPTIONS)
       service = new(options)
-      service.duplicate_course(source_course)
+      service.duplicate_course(source_course, destination_instance_id)
     end
   end
 
@@ -36,10 +38,11 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
   # Do not just pass in @selected_objects or object parents could be set incorrectly.
   #
   # @return [Course] The duplicated course
-  def duplicate_course(source_course)
+  def duplicate_course(source_course, destination_instance_id)
     duplicated_course = Course.transaction do
       begin
         new_course = duplicator.duplicate(source_course)
+        new_course.instance_id = destination_instance_id if destination_instance_id
         new_course.save!
 
         duplicator.set_option(:destination_course, new_course)
