@@ -246,4 +246,8 @@ module Course::Assessment::AssessmentAbility
     can :delete_all_submissions, Course::Assessment, assessment_course_hash
     can :delete_submission, Course::Assessment::Submission, assessment: assessment_course_hash
   end
+
+  def allow_manager_update_assessment_submissions
+    can [:submit_answer], Course::Assessment::Submission, assessment: assessment_course_hash
+  end
 end
