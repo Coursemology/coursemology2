@@ -11,12 +11,12 @@ import {
 } from '@mui/material';
 import equal from 'fast-deep-equal';
 
-import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
+import { FIELD_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateCurrentAnswer } from '../actions';
+import { updateClientVersion } from '../actions';
 import {
   HistoryQuestion,
   QuestionFlags,
@@ -73,11 +73,10 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   const disabled = noPastAnswers || isLoading || isAutograding;
 
   const handleUpdateClientVersion = (
-    data: unknown,
     id: number,
     clientVersion: number,
   ): void => {
-    dispatch(updateCurrentAnswer(data, id, clientVersion));
+    dispatch(updateClientVersion(id, clientVersion));
   };
 
   const saveAnswer = (
@@ -97,7 +96,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
 
   const debouncedSaveAnswer = useDebounce(
     saveAnswer,
-    FIELD_LONG_DEBOUNCE_DELAY_MS,
+    FIELD_DEBOUNCE_DELAY_MS,
     [],
   );
 
@@ -105,14 +104,12 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
 
   if (!isSavingAnswer[answerId.toString()]) {
     savingIndicator = (
-      <Tooltip title={t(translations.answerUnsavedHint)}>
-        <Chip
-          className="flex items-center align-middle"
-          color="warning"
-          label={t(translations.isUnsaved)}
-          size="small"
-        />
-      </Tooltip>
+      <Chip
+        className="flex items-center align-middle"
+        color="warning"
+        label={t(translations.isUnsaved)}
+        size="small"
+      />
     );
   } else if (isSavingAnswer[answerId.toString()]) {
     savingIndicator = (
@@ -205,7 +202,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
             id: number,
             currentTime?: number,
           ): void => {
-            handleUpdateClientVersion(data, id, currentTime ?? 0);
+            handleUpdateClientVersion(id, currentTime ?? 0);
             debouncedSaveAnswer(data, id, currentTime);
           }}
           savingIndicator={savingIndicator}
