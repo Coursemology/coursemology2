@@ -343,7 +343,6 @@ class VisibleSubmissionEditIndex extends Component {
           allowPartialSubmission={allowPartialSubmission}
           attempting={workflowState === workflowStates.Attempting}
           codaveriFeedbackStatus={codaveriFeedbackStatus}
-          currentValues={answers.current}
           explanations={explanations}
           graderView={graderView}
           handleSaveAllGrades={this.handleSaveAllGrades}
@@ -382,7 +381,6 @@ class VisibleSubmissionEditIndex extends Component {
         attempting={workflowState === workflowStates.Attempting}
         canUpdate={canUpdate}
         codaveriFeedbackStatus={codaveriFeedbackStatus}
-        currentValues={answers.current}
         delayedGradePublication={delayedGradePublication}
         explanations={explanations}
         graded={workflowState === workflowStates.Graded}
