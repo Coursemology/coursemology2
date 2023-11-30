@@ -20,7 +20,6 @@ import {
   Typography,
 } from '@mui/material';
 import { blue, grey, red, yellow } from '@mui/material/colors';
-import equal from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
@@ -68,7 +67,6 @@ const SubmissionEditForm = (props) => {
     attempting,
     canUpdate,
     codaveriFeedbackStatus,
-    currentValues,
     explanations,
     delayedGradePublication,
     graded,
@@ -127,14 +125,13 @@ const SubmissionEditForm = (props) => {
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = methods;
-  usePrompt(!equal(initialValues, currentValues));
+  usePrompt(isDirty);
 
   useEffect(() => {
-    const combinedValues = { ...initialValues, ...currentValues };
-    reset(combinedValues);
-  }, [currentValues, initialValues]);
+    reset(initialValues);
+  }, [initialValues]);
 
   useEffect(() => {
     initialStep = props.step;
@@ -485,7 +482,7 @@ const SubmissionEditForm = (props) => {
       return (
         <Button
           color="primary"
-          disabled={equal(currentValues, initialValues) || isSaving}
+          disabled={!isDirty || isSaving}
           onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
           style={styles.formButton}
           type="submit"
