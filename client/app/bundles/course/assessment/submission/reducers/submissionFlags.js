@@ -52,24 +52,22 @@ export default function (state = initialState, action) {
       const savedClientVersion = action.payload.answers[0].clientVersion;
       const answerId = action.payload.answers[0].id;
 
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        if (Math.abs(state.clientVersion[answerId] - savedClientVersion) <= 1) {
-          tempDraftState.isSavingAnswer = {};
-        }
+      if (Math.abs(state.clientVersion[answerId] - savedClientVersion) > 1) {
+        return state;
+      }
+
+      return produce(state, (draft) => {
+        draft.isSavingAnswer[answerId.toString()] = false;
       });
     }
     case actions.SAVE_ANSWER_FAILURE:
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        tempDraftState.isSavingAnswer = {};
+      return produce(state, (draft) => {
+        draft.isSavingAnswer = {};
       });
-    case actions.UPDATE_CURRENT_ANSWER: {
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        tempDraftState.clientVersion[action.answerId] = action.clientVersion;
+    case actions.UPDATE_CLIENT_VERSION:
+      return produce(state, (draft) => {
+        draft.clientVersion[action.answerId] = action.clientVersion;
       });
-    }
     case actions.SAVE_DRAFT_REQUEST:
     case actions.SAVE_ALL_GRADE_REQUEST:
     case actions.SAVE_GRADE_REQUEST:

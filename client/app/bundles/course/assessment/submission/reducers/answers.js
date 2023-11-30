@@ -25,7 +25,6 @@ function buildInitialClientVersion(answers) {
 
 const initialState = {
   initial: {},
-  current: {},
   clientVersion: {},
 };
 
@@ -35,25 +34,8 @@ export default function (state = initialState, action) {
       const initialValues = buildInitialValues(action.payload.answers);
       const questionId = Object.keys(initialValues)[0];
 
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        tempDraftState.initial[questionId] = initialValues[questionId];
-        tempDraftState.current[questionId] = initialValues[questionId];
-      });
-    }
-    case actions.SAVE_ANSWER_SUCCESS: {
-      const initialValues = buildInitialValues(action.payload.answers);
-      const answerId = Object.keys(initialValues)[0];
-
-      const savedClientVersion = action.payload.answers[0].clientVersion;
-
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        if (savedClientVersion === state.clientVersion[answerId]) {
-          tempDraftState.initial[answerId] = initialValues[answerId];
-        } else {
-          tempDraftState.initial[answerId] = state.current[answerId];
-        }
+      return produce(state, (draft) => {
+        draft.initial[questionId] = initialValues[questionId];
       });
     }
     case actions.FETCH_SUBMISSION_SUCCESS:
@@ -66,21 +48,17 @@ export default function (state = initialState, action) {
     case actions.PUBLISH_SUCCESS: {
       const initialValues = buildInitialValues(action.payload.answers);
       const clientVersion = buildInitialClientVersion(action.payload.answers);
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        tempDraftState.initial = initialValues;
-        tempDraftState.current = initialValues;
-        tempDraftState.clientVersion = clientVersion;
+      return produce(state, (draft) => {
+        draft.initial = initialValues;
+        draft.clientVersion = clientVersion;
       });
     }
-    case actions.UPDATE_CURRENT_ANSWER: {
-      const currentData = action.data;
+    case actions.UPDATE_CLIENT_VERSION: {
+      const clientVersion = action.clientVersion;
       const answerId = action.answerId;
 
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        tempDraftState.current[answerId] = currentData[answerId];
-        tempDraftState.clientVersion[answerId] = action.clientVersion;
+      return produce(state, (draft) => {
+        draft.clientVersion[answerId] = clientVersion;
       });
     }
     case actions.IMPORT_FILES_SUCCESS:

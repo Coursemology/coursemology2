@@ -18,7 +18,6 @@ import {
   Typography,
 } from '@mui/material';
 import { blue, green, lightBlue, red } from '@mui/material/colors';
-import equal from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
@@ -82,7 +81,6 @@ const SubmissionEditStepForm = (props) => {
     allowPartialSubmission,
     attempting,
     codaveriFeedbackStatus,
-    currentValues,
     explanations,
     graderView,
     isCodaveriEnabled,
@@ -132,14 +130,13 @@ const SubmissionEditStepForm = (props) => {
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = methods;
-  usePrompt(!equal(initialValues, currentValues));
+  usePrompt(isDirty);
 
   useEffect(() => {
-    const combinedValues = { ...initialValues, ...currentValues };
-    reset(combinedValues);
-  }, [currentValues, initialValues]);
+    reset(initialValues);
+  }, [initialValues]);
 
   const handleNext = () => {
     setMaxStep(Math.max(maxStep, stepIndex + 1));
@@ -398,7 +395,7 @@ const SubmissionEditStepForm = (props) => {
     return (
       <Button
         color="primary"
-        disabled={equal(currentValues, initialValues) || isSaving}
+        disabled={!isDirty || isSaving}
         onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
         style={styles.formButton}
         variant="contained"
@@ -644,7 +641,6 @@ const SubmissionEditStepForm = (props) => {
 
 SubmissionEditStepForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
-  currentValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,
