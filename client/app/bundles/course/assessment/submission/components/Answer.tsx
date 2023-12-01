@@ -47,6 +47,10 @@ interface TextResponseAnswerProps<T> extends BaseAnswerProps<T> {
   graderView?: boolean;
 }
 
+interface FileUploadAnswerProps<T> extends BaseAnswerProps<T> {
+  isSavingAnswer?: boolean;
+}
+
 interface McqMrqAnswerProps<T> extends BaseAnswerProps<T> {
   graderView?: boolean;
   showMcqMrqSolution?: boolean;
@@ -134,13 +138,13 @@ const TextResponse = (
 };
 
 const FileUpload = (
-  props: BaseAnswerProps<SubmissionQuestionData>,
+  props: FileUploadAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, saveAnswer } = props;
+  const { question, readOnly, answerId, saveAnswer, isSavingAnswer } = props;
   return (
     <FileUploadAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId, saveAnswer }}
+      {...{ question, readOnly, answerId, saveAnswer, isSavingAnswer }}
     />
   );
 };
@@ -197,6 +201,7 @@ type AnswerProps<T> =
   | ForumResponseAnswerProps<T>
   | VoiceResponseAnswerProps<T>
   | TextResponseAnswerProps<T>
+  | FileUploadAnswerProps<T>
   | McqMrqAnswerProps<T>;
 
 type AnswerType =

@@ -38,6 +38,21 @@ export default function (state = initialState, action) {
         draft.initial[questionId] = initialValues[questionId];
       });
     }
+    case actions.SAVE_ANSWER_SUCCESS: {
+      const initialValues = buildInitialValues(action.payload.answers);
+      const answerId = Object.keys(initialValues)[0];
+
+      const savedClientVersion = action.payload.answers[0].clientVersion;
+
+      if (savedClientVersion !== state.clientVersion[answerId]) {
+        return state;
+      }
+
+      return produce(state, (draft) => {
+        draft.initial[answerId] = initialValues[answerId];
+        draft.clientVersion[answerId] = savedClientVersion;
+      });
+    }
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.SAVE_DRAFT_SUCCESS:
     case actions.FINALISE_SUCCESS:

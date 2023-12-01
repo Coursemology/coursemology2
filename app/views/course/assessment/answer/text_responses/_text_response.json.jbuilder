@@ -4,7 +4,7 @@ json.fields do
   json.id answer.acting_as.id
   question = answer.question.specific
   json.files nil # required for react-hook-form initial values
-  json.answer_text format_ckeditor_rich_text(answer.answer_text) unless question.hide_text
+  json.answer_text answer.answer_text unless question.hide_text
 end
 
 json.attachments answer.attachments do |attachment|
