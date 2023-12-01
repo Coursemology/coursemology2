@@ -150,11 +150,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
         update_answers_params[:answers]&.each do |answer_params|
           next if answer_params[:id].blank?
 
-          if answer_params[:files].present? && answer_params[:files].include?('null')
-            @submission.errors.add(:base, :no_null_files)
-            raise ActiveRecord::Rollback
-          end
-
           answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
           if answer && !update_answer(answer, answer_params.merge(session_id: session.id))
             logger.error("Failed to update answer #{answer.errors.inspect}")
