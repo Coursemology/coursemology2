@@ -17,6 +17,7 @@ import {
   setNotRecording,
   setRecording,
 } from '../actions/index';
+import { getCurrentTime } from '../utils';
 
 const translations = defineMessages({
   startRecording: {
@@ -142,7 +143,7 @@ class VoiceResponseAnswer extends Component {
       <div>
         <div style={styles.fileInputWrapper}>
           <FormSingleFileInput
-            accept={{ 'audio/mp3': [], 'audio/wav': [] }}
+            accept={['audio/mp3', 'audio/wav']}
             disabled={readOnly}
             field={field}
             fieldState={fieldState}
@@ -241,7 +242,8 @@ class VoiceResponseAnswer extends Component {
                   const modifiedAnswer = {
                     [answerId]: value[answerId], // Make sure 'value' is defined somewhere
                   };
-                  saveAnswer(modifiedAnswer, answerId);
+                  const curTime = getCurrentTime();
+                  saveAnswer(modifiedAnswer, answerId, curTime);
                 },
               },
               fieldState,
