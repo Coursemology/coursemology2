@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import equal from 'fast-deep-equal';
 
-import { FIELD_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
+import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -96,7 +96,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
 
   const debouncedSaveAnswer = useDebounce(
     saveAnswer,
-    FIELD_DEBOUNCE_DELAY_MS,
+    FIELD_LONG_DEBOUNCE_DELAY_MS,
     [],
   );
 
@@ -195,6 +195,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         <Answer
           answerId={answerId}
           graderView={graderView}
+          isSavingAnswer={isSavingAnswer[answerId.toString()]}
           question={question}
           readOnly={readOnly}
           saveAnswer={(
