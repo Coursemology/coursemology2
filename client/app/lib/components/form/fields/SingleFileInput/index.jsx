@@ -39,7 +39,6 @@ class FormSingleFileInput extends Component {
   constructor(props) {
     super(props);
     this.state = { file: null };
-    this.updateStore(undefined);
   }
 
   onCancel = (e) => {
