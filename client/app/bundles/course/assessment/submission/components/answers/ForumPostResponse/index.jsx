@@ -4,6 +4,7 @@ import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { questionShape } from 'course/assessment/submission/propTypes';
+import { getCurrentTime } from 'course/assessment/submission/utils';
 import Error from 'lib/components/core/ErrorCard';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import toast from 'lib/hooks/toast';
@@ -37,7 +38,8 @@ const ForumPostResponse = (props) => {
               onChange: (event, editor) => {
                 field.onChange(editor !== undefined ? editor.getData() : event);
                 const modifiedAnswer = { [answerId]: getValues()[answerId] };
-                saveAnswer(modifiedAnswer, answerId);
+                const curTime = getCurrentTime();
+                saveAnswer(modifiedAnswer, answerId, curTime);
               },
             }}
             fieldState={fieldState}
@@ -65,7 +67,8 @@ const ForumPostResponse = (props) => {
               onChange: (event) => {
                 field.onChange(event);
                 const modifiedAnswer = { [answerId]: getValues()[answerId] };
-                saveAnswer(modifiedAnswer, answerId);
+                const curTime = getCurrentTime();
+                saveAnswer(modifiedAnswer, answerId, curTime);
               },
             }}
             handleNotificationMessage={toast.info}
