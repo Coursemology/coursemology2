@@ -240,7 +240,7 @@ class VoiceResponseAnswer extends Component {
                 onChange: (event) => {
                   field.onChange(event);
                   const modifiedAnswer = {
-                    [answerId]: value[answerId], // Make sure 'value' is defined somewhere
+                    [answerId]: value[answerId],
                   };
                   const curTime = getCurrentTime();
                   saveAnswer(modifiedAnswer, answerId, curTime);
