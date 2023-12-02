@@ -207,7 +207,7 @@ class VisibleSubmissionEditIndex extends Component {
       },
     } = this.props;
 
-    dispatch(saveAnswer(submissionId, data, answerId, currentTime ?? 0));
+    dispatch(saveAnswer(submissionId, data, answerId, currentTime));
   };
 
   onSubmit = (data) => {
