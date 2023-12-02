@@ -32,7 +32,7 @@ interface BaseAnswerProps<T> {
   question: T;
   readOnly: boolean;
   answerId: number;
-  saveAnswer: (data: unknown, answerId: number, currentTime?: number) => void;
+  saveAnswer: (data: unknown, answerId: number, currentTime: number) => void;
 }
 
 interface ForumResponseAnswerProps<T> extends BaseAnswerProps<T> {
