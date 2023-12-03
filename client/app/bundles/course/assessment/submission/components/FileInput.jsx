@@ -70,6 +70,7 @@ class FileInput extends Component {
 
   displayFileNames(files) {
     const {
+      callback,
       disabled,
       field: { onChange },
     } = this.props;
@@ -98,7 +99,8 @@ class FileInput extends Component {
             label={f.name}
             onDelete={() => {
               const updatedFiles = files.filter((file) => file.name !== f.name);
-              return onChange(updatedFiles);
+              callback(updatedFiles);
+              return onChange(updatedFiles.length > 0 ? updatedFiles : null);
             }}
             style={styles.chip}
           />
