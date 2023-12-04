@@ -1,4 +1,5 @@
 import { ElementType } from 'react';
+import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { Card, CardContent } from '@mui/material';
 import { yellow } from '@mui/material/colors';
@@ -45,6 +46,15 @@ interface VoiceResponseAnswerProps<T> extends BaseAnswerProps<T> {
 
 interface TextResponseAnswerProps<T> extends BaseAnswerProps<T> {
   graderView?: boolean;
+}
+
+interface ProgrammingAnswerProps<T> extends BaseAnswerProps<T> {
+  importFiles?: (
+    savedAnswerId: number,
+    answerFields: unknown,
+    language: string,
+    setValue: UseFormSetValue<FieldValues>,
+  ) => void;
 }
 
 interface FileUploadAnswerProps<T> extends BaseAnswerProps<T> {
@@ -109,9 +119,9 @@ const MultipleResponse = (
 };
 
 const Programming = (
-  props: BaseAnswerProps<SubmissionQuestionData>,
+  props: ProgrammingAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, saveAnswer } = props;
+  const { question, readOnly, answerId, saveAnswer, importFiles } = props;
   return (
     <ProgrammingAnswer
       key={`question_${question.id}`}
@@ -120,6 +130,7 @@ const Programming = (
         readOnly,
         answerId,
         saveAnswer,
+        importFiles,
       }}
     />
   );
@@ -200,6 +211,7 @@ type AnswerProps<T> =
   | BaseAnswerProps<T>
   | ForumResponseAnswerProps<T>
   | VoiceResponseAnswerProps<T>
+  | ProgrammingAnswerProps<T>
   | TextResponseAnswerProps<T>
   | FileUploadAnswerProps<T>
   | McqMrqAnswerProps<T>;
