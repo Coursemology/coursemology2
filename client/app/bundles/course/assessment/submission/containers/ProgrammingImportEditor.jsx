@@ -93,7 +93,15 @@ const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
 };
 
 const stageFiles = async (props) => {
-  const { answerId, answers, filesToImport, setValue } = props;
+  const {
+    answerId,
+    answers,
+    filesToImport,
+    question,
+    setValue,
+    importProgrammingFiles,
+    getValues,
+  } = props;
 
   // Create a map of promises that will resolve all files are read
   const readerPromises = Object.keys(filesToImport).map(
@@ -121,17 +129,18 @@ const stageFiles = async (props) => {
     });
 
     // Removes previously staged files
-    const filteredFiles = answers[`${answerId}`].files_attributes.filter(
-      (file) => !file.staged,
-    );
+    const filteredFiles = answers[`${answerId}`].files_attributes
+      .filter((file) => !file.staged)
+      .concat(newFiles);
 
-    setValue(`${answerId}.files_attributes`, filteredFiles.concat(newFiles));
+    setValue(`${answerId}.files_attributes`, filteredFiles);
+    importProgrammingFiles(answerId, getValues(), question.language, setValue);
   });
 };
 
 const VisibleProgrammingImportEditor = (props) => {
   const [displayFileIndex, setDisplayFileIndex] = useState(0);
-  const { control, setValue } = useFormContext();
+  const { control, setValue, getValues } = useFormContext();
   const {
     dispatch,
     submissionId,
@@ -144,6 +153,7 @@ const VisibleProgrammingImportEditor = (props) => {
     isSaving,
     viewHistory,
     saveAnswer,
+    importProgrammingFiles,
   } = props;
   const currentAnswer = useWatch({ control });
   const answers = viewHistory ? historyAnswers : currentAnswer;
@@ -202,7 +212,10 @@ const VisibleProgrammingImportEditor = (props) => {
                 answerId,
                 answers,
                 filesToImport,
+                question,
                 setValue,
+                importProgrammingFiles,
+                getValues,
               })
             }
             disabled={isSaving}
@@ -242,6 +255,7 @@ VisibleProgrammingImportEditor.propTypes = {
     files_attributes: PropTypes.arrayOf(fileShape),
   }),
   saveAnswer: PropTypes.func,
+  importProgrammingFiles: PropTypes.func,
 };
 
 function mapStateToProps(state, ownProps) {

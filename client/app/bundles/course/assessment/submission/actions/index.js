@@ -471,7 +471,10 @@ export function importFiles(answerId, answerFields, language, setValue) {
   const payload = { answer: { id: answerId, ...answer } };
 
   return (dispatch) => {
-    dispatch({ type: actionTypes.IMPORT_FILES_REQUEST });
+    dispatch({
+      type: actionTypes.IMPORT_FILES_REQUEST,
+      payload: [payload.answer],
+    });
 
     if (!validateFiles(files)) {
       dispatch({ type: actionTypes.IMPORT_FILES_FAILURE });
@@ -484,7 +487,10 @@ export function importFiles(answerId, answerFields, language, setValue) {
         .createProgrammingFiles(answerId, payload)
         .then((response) => response.data)
         .then((data) => {
-          dispatch({ type: actionTypes.IMPORT_FILES_SUCCESS, payload: data });
+          dispatch({
+            type: actionTypes.IMPORT_FILES_SUCCESS,
+            payload: { answers: [data] },
+          });
 
           // When multiple programming files are successfully uploaded,
           // the value of that fields needs to be updated.

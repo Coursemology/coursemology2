@@ -52,7 +52,7 @@ const ProgrammingFiles = ({ readOnly, answerId, language, saveAnswer }) => {
 };
 
 const Programming = (props) => {
-  const { question, readOnly, answerId, saveAnswer } = props;
+  const { question, readOnly, answerId, saveAnswer, importFiles } = props;
   const fileSubmission = question.fileSubmission;
 
   return (
@@ -61,7 +61,7 @@ const Programming = (props) => {
         <ProgrammingImportEditor
           key={question.id}
           answerId={answerId}
-          question={question}
+          importProgrammingFiles={importFiles}
           questionId={question.id}
           readOnly={readOnly}
           saveAnswer={saveAnswer}
@@ -86,6 +86,7 @@ Programming.propTypes = {
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
   saveAnswer: PropTypes.func,
+  importFiles: PropTypes.func,
 };
 
 export default Programming;
