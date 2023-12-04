@@ -42,13 +42,16 @@ export default function (state = initialState, action) {
         isReminding: false,
       };
     case actions.SAVE_ANSWER_REQUEST:
+    case actions.IMPORT_FILES_REQUEST: {
       return {
         ...state,
         isSavingAnswer: action.payload
           .map((ans) => ans.id)
           .reduce((acc, value) => ({ ...acc, [value.toString()]: true }), {}),
       };
-    case actions.SAVE_ANSWER_SUCCESS: {
+    }
+    case actions.SAVE_ANSWER_SUCCESS:
+    case actions.IMPORT_FILES_SUCCESS: {
       const savedClientVersion = action.payload.answers[0].clientVersion;
       const answerId = action.payload.answers[0].id;
 
@@ -80,7 +83,6 @@ export default function (state = initialState, action) {
     case actions.UNMARK_REQUEST:
     case actions.PUBLISH_REQUEST:
     case actions.DELETE_FILE_REQUEST:
-    case actions.IMPORT_FILES_REQUEST:
     case actions.GET_PAST_ANSWERS_REQUEST:
       return { ...state, isSaving: true };
     case actions.SAVE_DRAFT_SUCCESS:
@@ -95,7 +97,6 @@ export default function (state = initialState, action) {
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS:
     case actions.DELETE_FILE_SUCCESS:
-    case actions.IMPORT_FILES_SUCCESS:
       return { ...state, isSaving: false };
     case actions.SAVE_DRAFT_FAILURE:
     case actions.SAVE_ALL_GRADE_FAILURE:

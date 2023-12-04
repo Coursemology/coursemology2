@@ -1,4 +1,5 @@
 import { memo, useState } from 'react';
+import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import {
   Alert,
   Chip,
@@ -16,7 +17,7 @@ import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateClientVersion } from '../actions';
+import { importFiles, updateClientVersion } from '../actions';
 import {
   HistoryQuestion,
   QuestionFlags,
@@ -93,6 +94,28 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       return updatedIsFirstRendering;
     });
   };
+
+  const handleImportFiles = (
+    savedAnswerId: number,
+    answerFields: unknown,
+    language: string,
+    setValue: UseFormSetValue<FieldValues>,
+  ): void => {
+    dispatch(importFiles(savedAnswerId, answerFields, language, setValue));
+    setIsFirstRendering((prevIsFirstRendering) => {
+      const updatedIsFirstRendering = JSON.parse(
+        JSON.stringify(prevIsFirstRendering),
+      );
+      updatedIsFirstRendering[savedAnswerId.toString()] = false;
+      return updatedIsFirstRendering;
+    });
+  };
+
+  const debouncedImportFiles = useDebounce(
+    handleImportFiles,
+    FIELD_LONG_DEBOUNCE_DELAY_MS,
+    [],
+  );
 
   const debouncedSaveAnswer = useDebounce(
     handleSaveAnswer,
@@ -204,6 +227,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         <Answer
           answerId={answerId}
           graderView={graderView}
+          importFiles={debouncedImportFiles}
           isSavingAnswer={isSavingAnswer[answerId.toString()]}
           question={question}
           readOnly={readOnly}
