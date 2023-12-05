@@ -41,6 +41,7 @@ interface Props {
   question: SubmissionQuestionData;
   answerId: number;
   isSavingAnswer: Record<string, boolean>;
+  isSavingAnswerFailed: Record<string, boolean>;
   onSaveAnswer: (data: unknown, answerId: number, currentTime: number) => void;
 }
 
@@ -55,6 +56,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     question,
     answerId,
     isSavingAnswer,
+    isSavingAnswerFailed,
     onSaveAnswer,
   } = props;
 
@@ -152,12 +154,24 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         size="small"
       />
     );
-  } else if (!(isFirstRendering[answerId.toString()] ?? true)) {
+  } else if (
+    !(isFirstRendering[answerId.toString()] ?? true) &&
+    !isSavingAnswerFailed[answerId.toString()]
+  ) {
     savingIndicator = (
       <Chip
         className="flex items-center align-middle"
         color="success"
         label={t(translations.isSaved)}
+        size="small"
+      />
+    );
+  } else if (isSavingAnswerFailed[answerId.toString()]) {
+    savingIndicator = (
+      <Chip
+        className="flex items-center align-middle"
+        color="error"
+        label={t(translations.isSavingFailed)}
         size="small"
       />
     );
