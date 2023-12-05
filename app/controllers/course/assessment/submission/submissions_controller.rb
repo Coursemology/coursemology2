@@ -10,7 +10,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   before_action :authorize_submission!, only: [:edit, :update]
   before_action :check_password, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
-  before_action :check_zombie_jobs, only: [:edit]
+  before_action :check_zombie_jobs, only: [:edit, :update, :submit_answer]
   # Questions may be added to assessments with existing submissions.
   # In these cases, new submission_questions must be created when the submission is next
   # edited or updated.
@@ -298,14 +298,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   # Check for zombie jobs, create new grading jobs if there's any zombie jobs.
   # TODO: Remove this method after found the cause of the dead jobs.
   def check_zombie_jobs # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
-    return unless @submission.attempting?
+    return unless @submission.attempting? || @submission.submitted?
 
-    submitted_answers = @submission.answers.latest_answers.select(&:submitted?)
+    submitted_answers = @submission.answers.select(&:submitted?)
     return if submitted_answers.empty?
 
     dead_answers = submitted_answers.select do |a|
       job = a.auto_grading&.job
-      job&.submitted? && job.created_at < Time.zone.now - 60.minutes
+      job&.submitted? && !job.in_queue?
     end
 
     dead_answers.each do |a|
