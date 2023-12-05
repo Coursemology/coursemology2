@@ -2,7 +2,7 @@ import { Map as makeImmutableMap } from 'immutable';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import thunkMiddleware from 'redux-thunk';
+import { thunk as thunkMiddleware } from 'redux-thunk';
 
 import rootReducer, { createInitialState, persistTransforms } from './reducers';
 
