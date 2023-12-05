@@ -2954,9 +2954,6 @@
   "course.assessment.submission.importFilesFailure": {
     "defaultMessage": "文件上传失败：{errors}"
   },
-  "course.assessment.submission.importFilesSuccess": {
-    "defaultMessage": "文件上传成功。"
-  },
   "course.assessment.submission.information": {
     "defaultMessage": "文本段落中的单词"
   },

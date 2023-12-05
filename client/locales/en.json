@@ -2981,9 +2981,6 @@
   "course.assessment.submission.importFilesFailure": {
     "defaultMessage": "File uploads failed: {errors}"
   },
-  "course.assessment.submission.importFilesSuccess": {
-    "defaultMessage": "Files uploaded successfully."
-  },
   "course.assessment.submission.information": {
     "defaultMessage": "Word from Text Passage"
   },
