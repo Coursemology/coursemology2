@@ -509,8 +509,6 @@ export function importFiles(answerId, answerFields, language, setValue) {
           setValue(`${answerId}.files_attributes`, newFilesAttributes);
           // import_files field is reset to remove files from dropbox.
           setValue(`${answerId}.import_files`, []);
-
-          dispatch(setNotification(translations.importFilesSuccess));
         })
         .catch((error) => {
           dispatch({

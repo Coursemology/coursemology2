@@ -316,10 +316,6 @@ const translations = defineMessages({
     id: 'course.assessment.submission.deleteFileFailure',
     defaultMessage: 'File deletion failed: {errors}',
   },
-  importFilesSuccess: {
-    id: 'course.assessment.submission.importFilesSuccess',
-    defaultMessage: 'Files uploaded successfully.',
-  },
   importFilesFailure: {
     id: 'course.assessment.submission.importFilesFailure',
     defaultMessage: 'File uploads failed: {errors}',
