@@ -22,12 +22,46 @@ module TrackableJob
     validates :error, absence: true, unless: :errored?
     validates :status, presence: true
 
+    def in_queue?
+      # Only check sidekiq when some time has passed since the job was created.
+      return true if created_at > Time.zone.now - 5.minutes
+
+      job_in_sidekiq?
+    end
+
     private
 
     def signal_finished
       return unless saved_change_to_status?
 
       execute_after_commit { signal }
+    end
+
+    def job_in_sidekiq?
+      return true unless Rails.env.production?
+
+      check_sidekiq_workers || check_sidekiq_queues
+    end
+
+    def check_sidekiq_workers
+      workers = Sidekiq::Workers.new
+      workers.any? do |_, _, work|
+        payload = JSON.parse(work['payload'])
+        args = payload['args']
+
+        args ? args.first['job_id'] == id : false
+      end
+    end
+
+    def check_sidekiq_queues
+      queues = Sidekiq::Queue.all
+      queues.any? do |queue|
+        queue.any? do |job|
+          args = job.args
+
+          args ? args.first['job_id'] == id : false
+        end
+      end
     end
   end
 

@@ -201,7 +201,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     return unless valid_for_grading?(answer)
 
     # Check if the last attempted answer is still being evaluated, then dont reattempt.
-    job = last_attempt_answer_submitted_job(answer) || reattempt_and_grade_answer(answer).job
+    job = last_attempt_answer_submitted_job(answer) || reattempt_and_grade_answer(answer)&.job
     if job
       render partial: 'jobs/submitted', locals: { job: job }
     else
