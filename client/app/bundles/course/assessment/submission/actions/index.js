@@ -152,7 +152,10 @@ export function saveDraft(submissionId, rawAnswers) {
   const answers = formatAnswers(rawAnswers, getCurrentTime());
   const payload = { submission: { answers, is_save_draft: true } };
   return (dispatch) => {
-    dispatch({ type: actionTypes.SAVE_DRAFT_REQUEST });
+    dispatch({
+      type: actionTypes.SAVE_DRAFT_REQUEST,
+      payload: answers.map((ans) => ans.id),
+    });
 
     return CourseAPI.assessment.submissions
       .update(submissionId, payload)
@@ -165,7 +168,10 @@ export function saveDraft(submissionId, rawAnswers) {
         dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.SAVE_DRAFT_FAILURE });
+        dispatch({
+          type: actionTypes.SAVE_DRAFT_FAILURE,
+          payload: answers.map((ans) => ans.id),
+        });
         dispatch(
           setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
@@ -201,7 +207,7 @@ export function saveAnswer(submissionId, rawAnswers, answerId, currentTime) {
         });
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.SAVE_ANSWER_FAILURE });
+        dispatch({ type: actionTypes.SAVE_ANSWER_FAILURE, payload: answerId });
         dispatch(
           setNotification(translations.updateFailure, buildErrorMessage(error)),
         );
@@ -477,10 +483,10 @@ export function importFiles(answerId, answerFields, language, setValue) {
     });
 
     if (!validateFiles(files)) {
-      dispatch({ type: actionTypes.IMPORT_FILES_FAILURE });
+      dispatch({ type: actionTypes.IMPORT_FILES_FAILURE, payload: answerId });
       dispatch(setNotification(translations.similarFileNameExists));
     } else if (language === 'Java' && !validateJavaFiles(files)) {
-      dispatch({ type: actionTypes.IMPORT_FILES_FAILURE });
+      dispatch({ type: actionTypes.IMPORT_FILES_FAILURE, payload: answerId });
       dispatch(setNotification(translations.invalidJavaFileUpload));
     } else {
       CourseAPI.assessment.answer.programming
@@ -507,7 +513,10 @@ export function importFiles(answerId, answerFields, language, setValue) {
           dispatch(setNotification(translations.importFilesSuccess));
         })
         .catch((error) => {
-          dispatch({ type: actionTypes.IMPORT_FILES_FAILURE });
+          dispatch({
+            type: actionTypes.IMPORT_FILES_FAILURE,
+            payload: answerId,
+          });
           dispatch(
             setNotification(
               translations.importFilesFailure,
