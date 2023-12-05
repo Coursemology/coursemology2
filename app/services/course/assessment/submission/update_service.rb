@@ -200,9 +200,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def auto_grade(answer)
     return unless valid_for_grading?(answer)
 
-    job = reattempt_and_grade_answer(answer)
+    # Check if the last attempted answer is still being evaluated, then dont reattempt.
+    job = last_attempt_answer_submitted_job(answer) || reattempt_and_grade_answer(answer).job
     if job
-      render partial: 'jobs/submitted', locals: { job: job.job }
+      render partial: 'jobs/submitted', locals: { job: job }
     else
       # Render the current_answer.
       render answer
@@ -227,6 +228,15 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     new_answer.finalise! if finalise
     new_answer.save!
     new_answer
+  end
+
+  def last_attempt_answer_submitted_job(answer)
+    submission = answer.submission
+
+    attempts = submission.answers.from_question(answer.question_id)
+    last_non_current_answer = attempts.reject(&:current_answer?).last
+    job = last_non_current_answer&.auto_grading&.job
+    job&.status == 'submitted' ? job : nil
   end
 
   def reattempt_and_grade_answer(answer)
