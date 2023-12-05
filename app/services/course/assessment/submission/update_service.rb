@@ -186,6 +186,12 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   def update_answer(answer, answer_params)
     specific_answer = answer.specific
     specific_answer.assign_params(answer_params)
+    unless specific_answer.save
+      specific_answer.errors.messages.each do |attribute, message|
+        answer.errors.add(attribute, message)
+      end
+      return false
+    end
     answer.save
   end
 
