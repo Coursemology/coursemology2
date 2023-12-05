@@ -318,6 +318,7 @@ class VisibleSubmissionEditIndex extends Component {
       isAutograding,
       isSaving,
       isSavingAnswer,
+      isSavingAnswerFailed,
     } = this.props;
 
     if (Object.values(questions).length === 0) {
@@ -354,6 +355,7 @@ class VisibleSubmissionEditIndex extends Component {
           isCodaveriEnabled={isCodaveriEnabled}
           isSaving={isSaving}
           isSavingAnswer={isSavingAnswer}
+          isSavingAnswerFailed={isSavingAnswerFailed}
           maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
           onGenerateFeedback={this.onGenerateFeedback}
           onReevaluateAnswer={this.onReevaluateAnswer}
@@ -400,6 +402,7 @@ class VisibleSubmissionEditIndex extends Component {
         isCodaveriEnabled={isCodaveriEnabled}
         isSaving={isSaving}
         isSavingAnswer={isSavingAnswer}
+        isSavingAnswerFailed={isSavingAnswerFailed}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
         onGenerateFeedback={this.onGenerateFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
@@ -499,6 +502,7 @@ VisibleSubmissionEditIndex.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   isSavingAnswer: PropTypes.object.isRequired,
+  isSavingAnswerFailed: PropTypes.object.isRequired,
   isSubmissionBlocked: PropTypes.bool,
   setSessionId: PropTypes.func,
 };
@@ -522,6 +526,7 @@ function mapStateToProps({ assessments: { submission } }) {
     isLoading: submission.submissionFlags.isLoading,
     isSaving: submission.submissionFlags.isSaving,
     isSavingAnswer: submission.submissionFlags.isSavingAnswer,
+    isSavingAnswerFailed: submission.submissionFlags.isSavingAnswerFailed,
     isSubmissionBlocked: submission.submissionFlags.isSubmissionBlocked,
   };
 }

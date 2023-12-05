@@ -100,6 +100,7 @@ const SubmissionEditStepForm = (props) => {
     intl,
     isSaving,
     isSavingAnswer,
+    isSavingAnswerFailed,
     maxStep: maxInitialStep,
     published,
     questionIds,
@@ -523,6 +524,7 @@ const SubmissionEditStepForm = (props) => {
             showMcqMrqSolution,
             handleToggleViewHistoryMode,
             isSavingAnswer,
+            isSavingAnswerFailed,
             onSaveAnswer,
           }}
         />
@@ -666,6 +668,7 @@ SubmissionEditStepForm.propTypes = {
   topics: PropTypes.objectOf(topicShape),
   isSaving: PropTypes.bool.isRequired,
   isSavingAnswer: PropTypes.object.isRequired,
+  isSavingAnswerFailed: PropTypes.object.isRequired,
 
   onReset: PropTypes.func,
   onSaveAnswer: PropTypes.func,
