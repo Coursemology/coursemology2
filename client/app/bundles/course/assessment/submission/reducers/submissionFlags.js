@@ -6,6 +6,7 @@ const initialState = {
   isLoading: true,
   isSaving: false,
   isSavingAnswer: {},
+  isSavingAnswerFailed: {},
   isAutograding: false,
   isPublishing: false,
   isForceSubmitting: false,
@@ -20,12 +21,20 @@ const initialState = {
 };
 
 export default function (state = initialState, action) {
+  // eslint-disable-next-line sonarjs/max-switch-cases
   switch (action.type) {
     case actions.FETCH_SUBMISSIONS_REQUEST:
       return { ...state, isLoading: true };
     case actions.FETCH_SUBMISSION_SUCCESS:
-    case actions.FETCH_SUBMISSION_FAILURE:
-      return { ...state, isLoading: false };
+    case actions.FETCH_SUBMISSION_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        isSavingAnswerFailed: action.payload.answers
+          .map((ans) => ans.id)
+          .reduce((acc, value) => ({ ...acc, [value.toString()]: false }), {}),
+      };
+    }
     case actions.SUBMISSION_BLOCKED:
       return {
         ...state,
@@ -48,6 +57,10 @@ export default function (state = initialState, action) {
         isSavingAnswer: action.payload
           .map((ans) => ans.id)
           .reduce((acc, value) => ({ ...acc, [value.toString()]: true }), {}),
+        isSavingAnswerFailed: {
+          ...state.isSavingAnswerFailed,
+          [action.payload[0].id.toString()]: false,
+        },
       };
     }
     case actions.SAVE_ANSWER_SUCCESS:
@@ -61,17 +74,28 @@ export default function (state = initialState, action) {
 
       return produce(state, (draft) => {
         draft.isSavingAnswer[answerId.toString()] = false;
+        draft.isSavingAnswerFailed[answerId.toString()] = false;
       });
     }
     case actions.SAVE_ANSWER_FAILURE:
+    case actions.IMPORT_FILES_FAILURE: {
+      const answerId = action.payload.toString();
       return produce(state, (draft) => {
         draft.isSavingAnswer = {};
+        draft.isSavingAnswerFailed[answerId] = true;
       });
+    }
     case actions.UPDATE_CLIENT_VERSION:
       return produce(state, (draft) => {
         draft.clientVersion[action.answerId] = action.clientVersion;
       });
     case actions.SAVE_DRAFT_REQUEST:
+      return produce(state, (draft) => {
+        draft.isSaving = true;
+        action.payload.forEach((id) => {
+          draft.isSavingAnswerFailed[id.toString()] = false;
+        });
+      });
     case actions.SAVE_ALL_GRADE_REQUEST:
     case actions.SAVE_GRADE_REQUEST:
     case actions.FINALISE_REQUEST:
@@ -86,6 +110,12 @@ export default function (state = initialState, action) {
     case actions.GET_PAST_ANSWERS_REQUEST:
       return { ...state, isSaving: true };
     case actions.SAVE_DRAFT_SUCCESS:
+      return produce(state, (draft) => {
+        draft.isSaving = false;
+        action.payload.answers.forEach((ans) => {
+          draft.isSavingAnswerFailed[ans.id.toString()] = false;
+        });
+      });
     case actions.SAVE_ALL_GRADE_SUCCESS:
     case actions.SAVE_GRADE_SUCCESS:
     case actions.FINALISE_SUCCESS:
@@ -99,6 +129,12 @@ export default function (state = initialState, action) {
     case actions.DELETE_FILE_SUCCESS:
       return { ...state, isSaving: false };
     case actions.SAVE_DRAFT_FAILURE:
+      return produce(state, (draft) => {
+        draft.isSaving = false;
+        action.payload.forEach((id) => {
+          draft.isSavingAnswerFailed[id.toString()] = true;
+        });
+      });
     case actions.SAVE_ALL_GRADE_FAILURE:
     case actions.SAVE_GRADE_FAILURE:
     case actions.FINALISE_FAILURE:
@@ -110,7 +146,6 @@ export default function (state = initialState, action) {
     case actions.UNMARK_FAILURE:
     case actions.PUBLISH_FAILURE:
     case actions.DELETE_FILE_FAILURE:
-    case actions.IMPORT_FILES_FAILURE:
     case actions.GET_PAST_ANSWERS_SUCCESS:
     case actions.GET_PAST_ANSWERS_FAILURE:
       return { ...state, isSaving: false };

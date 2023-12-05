@@ -69,6 +69,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.isSaved',
     defaultMessage: 'Saved',
   },
+  isSavingFailed: {
+    id: 'course.assessment.submission.isSavingFailed',
+    defaultMessage: 'Failed in Saving',
+  },
   isSaving: {
     id: 'course.assessment.submission.isSaving',
     defaultMessage: 'Saving',
