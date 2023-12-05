@@ -76,4 +76,6 @@ Rails.application.configure do
       resource '*', headers: :any, methods: [:get, :post, :patch, :put], credentials: true
     end
   end
+
+  config.factory_bot.reject_primary_key_attributes = false
 end
