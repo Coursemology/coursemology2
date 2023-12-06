@@ -136,7 +136,7 @@
     "@types/react-window": "^1.8.8",
     "@types/sharedworker": "^0.0.108",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.2",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
     "autoprefixer": "^10.4.16",
     "axios-mock-adapter": "^1.22.0",
