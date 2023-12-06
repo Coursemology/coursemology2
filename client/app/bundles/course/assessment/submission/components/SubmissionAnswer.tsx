@@ -1,8 +1,8 @@
 import { memo, useState } from 'react';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
+import { CloudDone, CloudOff, Loop } from '@mui/icons-material';
 import {
   Alert,
-  Chip,
   CircularProgress,
   Divider,
   FormControlLabel,
@@ -147,33 +147,33 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     );
   } else if (isSavingAnswer[answerId.toString()]) {
     savingIndicator = (
-      <Chip
-        className="flex items-center align-middle"
-        color="default"
-        label={t(translations.isSaving)}
-        size="small"
-      />
+      <div className="flex items-center align-middle">
+        <Loop className="mr-2" />
+        <Typography variant="body2">
+          <strong>{t(translations.isSaving)}</strong>
+        </Typography>
+      </div>
     );
   } else if (
     !(isFirstRendering[answerId.toString()] ?? true) &&
     !isSavingAnswerFailed[answerId.toString()]
   ) {
     savingIndicator = (
-      <Chip
-        className="flex items-center align-middle"
-        color="success"
-        label={t(translations.isSaved)}
-        size="small"
-      />
+      <div className="flex items-center align-middle">
+        <CloudDone className="mr-2" color="success" />
+        <Typography color="green" variant="body2">
+          <strong>{t(translations.isSaved)}</strong>
+        </Typography>
+      </div>
     );
   } else if (isSavingAnswerFailed[answerId.toString()]) {
     savingIndicator = (
-      <Chip
-        className="flex items-center align-middle"
-        color="error"
-        label={t(translations.isSavingFailed)}
-        size="small"
-      />
+      <div className="flex items-center align-middle">
+        <CloudOff className="mr-2" color="error" />
+        <Typography color="red" variant="body2">
+          <strong>{t(translations.isSavingFailed)}</strong>
+        </Typography>
+      </div>
     );
   }
 
