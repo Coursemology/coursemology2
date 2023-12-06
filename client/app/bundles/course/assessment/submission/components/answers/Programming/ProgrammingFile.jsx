@@ -62,13 +62,13 @@ class ProgrammingFile extends Component {
       return (
         <Paper style={{ backgroundColor: yellow[100], padding: 10 }}>
           <Warning data-testid="warning-icon" style={styles.warningIcon} />
-          <span>
+          <Typography>
             <FormattedMessage {...translations.sizeTooBig} />
             &nbsp;
             <Link href={downloadLink}>
               <FormattedMessage {...translations.downloadFile} />
             </Link>
-          </span>
+          </Typography>
         </Paper>
       );
     }
