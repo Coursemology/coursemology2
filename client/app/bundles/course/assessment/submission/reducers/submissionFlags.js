@@ -63,8 +63,7 @@ export default function (state = initialState, action) {
         },
       };
     }
-    case actions.SAVE_ANSWER_SUCCESS:
-    case actions.IMPORT_FILES_SUCCESS: {
+    case actions.SAVE_ANSWER_SUCCESS: {
       const savedClientVersion = action.payload.answers[0].clientVersion;
       const answerId = action.payload.answers[0].id;
 
@@ -72,6 +71,13 @@ export default function (state = initialState, action) {
         return state;
       }
 
+      return produce(state, (draft) => {
+        draft.isSavingAnswer[answerId.toString()] = false;
+        draft.isSavingAnswerFailed[answerId.toString()] = false;
+      });
+    }
+    case actions.IMPORT_FILES_SUCCESS: {
+      const answerId = action.payload;
       return produce(state, (draft) => {
         draft.isSavingAnswer[answerId.toString()] = false;
         draft.isSavingAnswerFailed[answerId.toString()] = false;
