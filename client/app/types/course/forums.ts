@@ -50,8 +50,6 @@ export enum TopicType {
   ANNOUNCEMENT = 'announcement',
 }
 
-// export type TopicType = 'normal' | 'question' | 'sticky' | 'announcement';
-
 /**
  * Data types for forum data retrieved from backend through API call.
  */
