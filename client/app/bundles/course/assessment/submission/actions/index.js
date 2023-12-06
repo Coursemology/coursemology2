@@ -495,7 +495,7 @@ export function importFiles(answerId, answerFields, language, setValue) {
         .then((data) => {
           dispatch({
             type: actionTypes.IMPORT_FILES_SUCCESS,
-            payload: { answers: [data] },
+            payload: data.id,
           });
 
           // When multiple programming files are successfully uploaded,

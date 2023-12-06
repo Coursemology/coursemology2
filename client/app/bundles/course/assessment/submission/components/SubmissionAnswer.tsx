@@ -113,12 +113,6 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     });
   };
 
-  const debouncedImportFiles = useDebounce(
-    handleImportFiles,
-    FIELD_LONG_DEBOUNCE_DELAY_MS,
-    [],
-  );
-
   const debouncedSaveAnswer = useDebounce(
     handleSaveAnswer,
     FIELD_LONG_DEBOUNCE_DELAY_MS,
@@ -241,7 +235,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         <Answer
           answerId={answerId}
           graderView={graderView}
-          importFiles={debouncedImportFiles}
+          importFiles={handleImportFiles}
           isSavingAnswer={isSavingAnswer[answerId.toString()]}
           question={question}
           readOnly={readOnly}
