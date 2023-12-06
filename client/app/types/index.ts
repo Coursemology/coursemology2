@@ -8,7 +8,15 @@ export type Permissions<T extends string> = {
 /**
  * Recursive array of type T (eg [1, 2, [1, 2]])
  */
-export type RecursiveArray<T> = (T | RecursiveArray<T>)[];
+type Increment<A extends number[]> = [...A, 0];
+
+export type RecursiveArray<
+  T,
+  Depth extends number = 10,
+  CurrentDepth extends number[] = [],
+> = Depth extends CurrentDepth['length']
+  ? T
+  : (T | RecursiveArray<T, Depth, Increment<CurrentDepth>>)[];
 
 /**
  * Declare global types below.

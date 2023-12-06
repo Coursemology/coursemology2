@@ -22,10 +22,10 @@ export interface CodaveriSettingsPageViewSettings {
 }
 
 export interface CodaveriSettingsState {
-  assessmentCategories: EntityState<AssessmentCategoryData>;
-  assessmentTabs: EntityState<AssessmentTabData>;
-  assessments: EntityState<AssessmentProgrammingQuestionsData>;
-  programmingQuestions: EntityState<ProgrammingQuestion>;
+  assessmentCategories: EntityState<AssessmentCategoryData, number>;
+  assessmentTabs: EntityState<AssessmentTabData, number>;
+  assessments: EntityState<AssessmentProgrammingQuestionsData, number>;
+  programmingQuestions: EntityState<ProgrammingQuestion, number>;
   viewSettings: CodaveriSettingsPageViewSettings;
 }
 

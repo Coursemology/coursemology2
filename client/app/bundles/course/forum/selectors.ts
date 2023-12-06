@@ -31,7 +31,7 @@ export function getAllForums(state: AppState) {
 
 export function getForum(state: AppState, id?: EntityId) {
   if (!id) return undefined;
-  return forumSelectors.selectById(state, id);
+  return forumSelectors.selectById(state, +id);
 }
 
 export function getForumPermissions(state: AppState) {
@@ -46,7 +46,7 @@ export function getForumTopics(state: AppState, topicIds?: EntityId[] | null) {
   const ForumTopicEntities: ForumTopicEntity[] = [];
   if (!topicIds) return ForumTopicEntities;
   topicIds.forEach((topicId) => {
-    const entity = forumTopicSelectors.selectById(state, topicId);
+    const entity = forumTopicSelectors.selectById(state, +topicId);
     if (entity) {
       ForumTopicEntities.push(entity);
     }
@@ -56,10 +56,10 @@ export function getForumTopics(state: AppState, topicIds?: EntityId[] | null) {
 
 export function getForumTopic(state: AppState, id?: EntityId) {
   if (!id) return undefined;
-  return forumTopicSelectors.selectById(state, id);
+  return forumTopicSelectors.selectById(state, +id);
 }
 
 export function getForumTopicPost(state: AppState, id?: EntityId) {
   if (!id) return undefined;
-  return forumTopicPostSelectors.selectById(state, id);
+  return forumTopicPostSelectors.selectById(state, +id);
 }
