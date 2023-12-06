@@ -2,6 +2,7 @@
 # Sets up a programming evaluation, queues it for execution by evaluators, then returns the results.
 class Course::Assessment::ProgrammingEvaluationService
   TEST_CASES_MULTIPLIERS = 3 # Public, Private & Evaluation
+  TIMEOUT_WITH_BUFFER_MULTIPLIER = TEST_CASES_MULTIPLIERS + 1
   # The default timeout for the job to finish.
   DEFAULT_TIMEOUT = 300.seconds
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
@@ -129,7 +130,7 @@ class Course::Assessment::ProgrammingEvaluationService
     @memory_limit = memory_limit || MEMORY_LIMIT
     @time_limit = time_limit ? [time_limit, max_time_limit].min : max_time_limit
     @package = package
-    @timeout = timeout || [DEFAULT_TIMEOUT.to_i, @time_limit.to_i * TEST_CASES_MULTIPLIERS].max
+    @timeout = timeout || [DEFAULT_TIMEOUT.to_i, @time_limit.to_i * TIMEOUT_WITH_BUFFER_MULTIPLIER].max
   end
 
   def create_container(image)
