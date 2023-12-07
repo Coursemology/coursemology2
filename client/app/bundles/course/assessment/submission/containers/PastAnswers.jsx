@@ -10,7 +10,6 @@ import {
   Select,
   Typography,
 } from '@mui/material';
-import { yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import { formatLongDateTime } from 'lib/moment';
@@ -22,13 +21,6 @@ import TextResponseSolutions from '../components/TextResponseSolutions';
 import { questionTypes } from '../constants';
 import { answerShape, questionShape } from '../propTypes';
 import translations from '../translations';
-
-const styles = {
-  horizontalRule: {
-    marginTop: 20,
-    marginBottom: 20,
-  },
-};
 
 class PastAnswers extends Component {
   getAnswersHistory(question, answer) {
@@ -51,7 +43,7 @@ class PastAnswers extends Component {
         );
       default:
         return (
-          <Card style={{ backgroundColor: yellow[100] }}>
+          <Card className="bg-yellow-100">
             <CardContent>
               <span>
                 {intl.formatMessage(translations.rendererNotImplemented)}
@@ -114,7 +106,7 @@ class PastAnswers extends Component {
           : {date}
         </Typography>
         {this.getAnswersHistory(question, answer)}
-        <hr style={styles.horizontalRule} />
+        <hr />
       </div>
     );
   };
@@ -124,9 +116,11 @@ class PastAnswers extends Component {
       return selectedAnswerIds.map(this.renderReadOnlyPastAnswer);
     }
     return (
-      <Card style={{ backgroundColor: yellow[100] }}>
+      <Card className="bg-yellow-100">
         <CardContent>
-          <FormattedMessage {...translations.noAnswerSelected} />
+          <Typography variant="body2">
+            <FormattedMessage {...translations.noAnswerSelected} />
+          </Typography>
         </CardContent>
       </Card>
     );

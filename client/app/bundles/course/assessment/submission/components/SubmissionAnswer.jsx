@@ -11,16 +11,11 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import { questionTypes } from '../constants';
 import PastAnswers from '../containers/PastAnswers';
-import {
-  historyQuestionShape,
-  questionFlagsShape,
-  questionShape,
-} from '../propTypes';
+import { historyQuestionShape, questionShape } from '../propTypes';
 
 import Answers from './Answers';
 
@@ -42,25 +37,9 @@ const translations = defineMessages({
   },
   viewPastAnswers: {
     id: 'course.assessment.submission.SubmissionAnswer.viewPastAnswers',
-    defaultMessage: 'Past Answers',
+    defaultMessage: 'Past answers',
   },
 });
-
-const styles = {
-  containerStyle: {
-    display: 'inline-block',
-    float: 'right',
-    marginTop: 20,
-    marginBottom: 0,
-  },
-  progressStyle: {
-    display: 'inline-block',
-    verticalAlign: 'middle',
-  },
-  toggleStyle: {
-    float: 'right',
-  },
-};
 
 class SubmissionAnswer extends Component {
   getRenderer(question) {
@@ -106,12 +85,7 @@ class SubmissionAnswer extends Component {
   }
 
   renderHistoryToggle(question) {
-    const {
-      handleToggleViewHistoryMode,
-      historyQuestions,
-      questionsFlags,
-      intl,
-    } = this.props;
+    const { handleToggleViewHistoryMode, historyQuestions, intl } = this.props;
     const { id, viewHistory, canViewHistory, submissionQuestionId } = question;
     const historyQuestion = historyQuestions[id];
     const noPastAnswers = historyQuestion
@@ -121,50 +95,41 @@ class SubmissionAnswer extends Component {
       ? historyQuestion.pastAnswersLoaded
       : false;
     const isLoading = historyQuestion ? historyQuestion.isLoading : false;
-    const isAutograding = questionsFlags[id]
-      ? questionsFlags[id].isAutograding
-      : false;
-    const disabled = noPastAnswers || isLoading || isAutograding;
+    const disabled = noPastAnswers || isLoading;
 
-    if (canViewHistory) {
-      return (
-        <div style={styles.containerStyle}>
-          {isLoading ? (
-            <CircularProgress size={30} style={styles.progressStyle} />
-          ) : null}
-          <Tooltip
-            title={
-              noPastAnswers
-                ? intl.formatMessage(translations.noPastAnswers)
-                : ''
+    if (!canViewHistory) return null;
+
+    return (
+      <div className="flex items-center">
+        {isLoading && <CircularProgress size={20} />}
+        <Tooltip
+          title={
+            noPastAnswers ? intl.formatMessage(translations.noPastAnswers) : ''
+          }
+        >
+          <FormControlLabel
+            className="whitespace-nowrap"
+            control={
+              <Switch
+                checked={viewHistory || false}
+                color="primary"
+                onChange={() =>
+                  handleToggleViewHistoryMode(
+                    !viewHistory,
+                    submissionQuestionId,
+                    id,
+                    answersLoaded,
+                  )
+                }
+              />
             }
-          >
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={viewHistory || false}
-                  className="toggle-history"
-                  color="primary"
-                  onChange={() =>
-                    handleToggleViewHistoryMode(
-                      !viewHistory,
-                      submissionQuestionId,
-                      id,
-                      answersLoaded,
-                    )
-                  }
-                />
-              }
-              disabled={disabled}
-              label={<b>{intl.formatMessage(translations.viewPastAnswers)}</b>}
-              labelPlacement="start"
-              style={styles.toggleStyle}
-            />
-          </Tooltip>
-        </div>
-      );
-    }
-    return null;
+            disabled={disabled}
+            label={intl.formatMessage(translations.viewPastAnswers)}
+            labelPlacement="start"
+          />
+        </Tooltip>
+      </div>
+    );
   }
 
   renderMissingAnswerPanel() {
@@ -179,7 +144,7 @@ class SubmissionAnswer extends Component {
   renderMissingRenderer() {
     const { intl } = this.props;
     return (
-      <Card style={{ backgroundColor: yellow[100] }}>
+      <Card className="color-yellow-100">
         <CardContent>
           {intl.formatMessage(translations.rendererNotImplemented)}
         </CardContent>
@@ -194,11 +159,10 @@ class SubmissionAnswer extends Component {
 
     return (
       <>
-        <Typography className="mb-5 inline-block" variant="h6">
-          {question.displayTitle}
-        </Typography>
-
-        {this.renderHistoryToggle(question)}
+        <div className="flex items-start justify-between">
+          <Typography variant="h6">{question.displayTitle}</Typography>
+          {this.renderHistoryToggle(question)}
+        </div>
 
         <Typography
           dangerouslySetInnerHTML={{ __html: question.description }}
@@ -223,7 +187,6 @@ SubmissionAnswer.propTypes = {
   intl: PropTypes.object.isRequired,
   handleToggleViewHistoryMode: PropTypes.func.isRequired,
   historyQuestions: PropTypes.objectOf(historyQuestionShape),
-  questionsFlags: PropTypes.objectOf(questionFlagsShape),
   readOnly: PropTypes.bool,
   graderView: PropTypes.bool,
   showMcqMrqSolution: PropTypes.bool,
