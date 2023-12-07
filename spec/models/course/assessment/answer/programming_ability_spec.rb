@@ -17,8 +17,6 @@ RSpec.describe Course::Assessment::Answer::Programming do
       subject { Ability.new(user, course, course_user) }
       let(:user) { course_user.user }
 
-      it { is_expected.to be_able_to(:download, answer.files.first) }
-
       context 'when the assessment is multiple_file_submission' do
         let(:multiple_file_submission) do
           create(:submission, *submission_traits,
@@ -94,7 +92,6 @@ RSpec.describe Course::Assessment::Answer::Programming do
 
           it { is_expected.not_to be_able_to(:create_programming_files, answer) }
           it { is_expected.not_to be_able_to(:destroy_programming_file, answer) }
-          it { is_expected.not_to be_able_to(:download, answer.files.first) }
         end
 
         context 'when the user is a course staff' do
@@ -102,7 +99,6 @@ RSpec.describe Course::Assessment::Answer::Programming do
 
           it { is_expected.not_to be_able_to(:create_programming_files, answer) }
           it { is_expected.not_to be_able_to(:destroy_programming_file, answer) }
-          it { is_expected.to be_able_to(:download, answer.files.first) }
         end
       end
     end

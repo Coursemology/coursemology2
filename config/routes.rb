@@ -257,7 +257,6 @@ Rails.application.routes.draw do
                     post 'create_programming_files' => 'programming#create_programming_files'
                     post 'destroy_programming_file' => 'programming#destroy_programming_file'
                     resources :files, only: [] do
-                      get :download, on: :member
                       resources :annotations, only: [:create]
                     end
                   end
