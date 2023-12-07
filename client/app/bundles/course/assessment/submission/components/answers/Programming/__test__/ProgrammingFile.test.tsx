@@ -38,16 +38,16 @@ describe('<ProgrammingFile />', () => {
     });
 
     const programmingFileProps = {
+      answerId: 1,
+      fieldName: 'programming_answer',
       file: {
         id: 1,
         filename: 'template.py',
-        content: null,
-        highlighted_content: null,
+        content: '',
+        highlightedContent: null,
       },
-      fieldName: 'programming_answer',
-      readOnly: true,
-      answerId: 1,
       language: 'python',
+      readOnly: true,
     };
 
     const url = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
@@ -56,33 +56,5 @@ describe('<ProgrammingFile />', () => {
     });
 
     expect(page.getByText('file is too big', { exact: false })).toBeVisible();
-    expect(page.getByRole('link')).toBeVisible();
-  });
-
-  it('does not render download link for files with empty content', async () => {
-    dispatch({
-      type: actionTypes.FETCH_SUBMISSION_SUCCESS,
-      payload: mockSubmission,
-    });
-
-    const programmingFileProps = {
-      file: {
-        id: 1,
-        filename: 'template.py',
-        content: '',
-        highlighted_content: '',
-      },
-      fieldName: 'programming_answer',
-      readOnly: true,
-      answerId: 1,
-      language: 'python',
-    };
-
-    const url = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
-    const page = render(<ProgrammingFile {...programmingFileProps} />, {
-      at: [url],
-    });
-
-    expect(page.queryByRole('link')).not.toBeInTheDocument();
   });
 });

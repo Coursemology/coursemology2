@@ -1,9 +1,20 @@
 import { Component } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { Warning } from '@mui/icons-material';
+import { Paper, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import ProgrammingFileDownloadLink from '../components/answers/Programming/ProgrammingFileDownloadLink';
 import ReadOnlyEditorComponent from '../components/ReadOnlyEditor';
-import { topicShape } from '../propTypes';
+import { fileShape, topicShape } from '../propTypes';
+
+const translations = defineMessages({
+  sizeTooBig: {
+    id: 'course.assessment.submission.answers.Programming.ProgrammingFile.sizeTooBig',
+    defaultMessage: 'The file is too big and cannot be displayed.',
+  },
+});
 
 class ReadOnlyEditorContainer extends Component {
   shouldComponentUpdate(nextProps) {
@@ -11,15 +22,28 @@ class ReadOnlyEditorContainer extends Component {
   }
 
   render() {
-    const { answerId, fileId, annotations, content } = this.props;
-    // content has <div> tags at first and last index, increasing line count
+    const { answerId, file, annotations } = this.props;
+
+    if (file.highlightedContent) {
+      return (
+        <ReadOnlyEditorComponent
+          annotations={Object.values(annotations)}
+          answerId={answerId}
+          file={file}
+        />
+      );
+    }
+
     return (
-      <ReadOnlyEditorComponent
-        annotations={Object.values(annotations)}
-        answerId={answerId}
-        content={content}
-        fileId={fileId}
-      />
+      <>
+        <ProgrammingFileDownloadLink file={file} />
+        <Paper className="flex items-center bg-yellow-100 p-2">
+          <Warning />
+          <Typography variant="body2">
+            <FormattedMessage {...translations.sizeTooBig} />
+          </Typography>
+        </Paper>
+      </>
     );
   }
 }
@@ -27,15 +51,14 @@ class ReadOnlyEditorContainer extends Component {
 ReadOnlyEditorContainer.propTypes = {
   annotations: PropTypes.objectOf(topicShape),
   answerId: PropTypes.number.isRequired,
-  content: PropTypes.arrayOf(PropTypes.string),
-  fileId: PropTypes.number.isRequired,
+  file: PropTypes.objectOf(fileShape),
 };
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {
-  const { fileId } = ownProps;
+  const { file } = ownProps;
 
   return {
-    annotations: submission.annotations[fileId].topics,
+    annotations: submission.annotations[file.id].topics,
   };
 }
 

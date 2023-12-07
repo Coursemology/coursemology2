@@ -36,9 +36,10 @@ export const historyQuestionShape = PropTypes.shape({
 });
 
 export const fileShape = PropTypes.shape({
-  content: PropTypes.string,
-  filename: PropTypes.string,
-  id: PropTypes.number,
+  id: PropTypes.number.isRequired,
+  filename: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  highlightedContent: PropTypes.string,
   staged: PropTypes.bool,
 });
 

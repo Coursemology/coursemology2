@@ -52,24 +52,17 @@ const SelectProgrammingFileEditor = ({
       {controlledProgrammingFields.map((field, index) => {
         const file = field;
         if (readOnly) {
-          const content = file.highlighted_content.split('\n');
           return (
-            <ReadOnlyEditor
-              key={file.id}
-              answerId={answerId}
-              content={content}
-              fileId={file.id}
-            />
+            <ReadOnlyEditor key={file.id} answerId={answerId} file={file} />
           );
         }
         if (index === displayFileIndex && !file.staged) {
           return (
             <Editor
               key={file.id}
-              control={control}
-              filename={file.filename}
+              fieldName={`${answerId}.files_attributes.${index}.content`}
+              file={file}
               language={language}
-              name={`${answerId}.files_attributes.${index}.content`}
             />
           );
         }
@@ -92,15 +85,7 @@ const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
     return null;
   }
 
-  const content = file.highlighted_content.split('\n');
-  return (
-    <ReadOnlyEditor
-      key={answer.id}
-      answerId={answer.id}
-      content={content}
-      fileId={file.id}
-    />
-  );
+  return <ReadOnlyEditor key={answer.id} answerId={answer.id} file={file} />;
 };
 
 const stageFiles = async (props) => {
