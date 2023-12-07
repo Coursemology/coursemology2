@@ -28,7 +28,8 @@ export const create = async (
     const response = await ProgrammingAPI.create(data);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    if (error instanceof AxiosError)
+      throw new Error(error.response?.data?.errors);
 
     throw error;
   }
@@ -42,7 +43,8 @@ export const update = async (
     const response = await ProgrammingAPI.update(id, data);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    if (error instanceof AxiosError)
+      throw new Error(error.response?.data?.errors);
 
     throw error;
   }
