@@ -30,19 +30,24 @@ const ProgrammingFiles = ({ readOnly, answerId, language }) => {
     ...currentField[index],
   }));
 
-  return controlledProgrammingFields.map((field, index) => (
-    <ProgrammingFile
-      key={field.id}
-      {...{
-        control,
-        file: field,
-        fieldName: `${answerId}.files_attributes.${index}`,
-        readOnly,
-        answerId,
-        language,
-      }}
-    />
-  ));
+  return controlledProgrammingFields.map((field, index) => {
+    const file = {
+      id: field.id,
+      filename: field.filename,
+      content: field.content,
+      highlightedContent: field.highlightedContent,
+    };
+    return (
+      <ProgrammingFile
+        key={field.id}
+        answerId={answerId}
+        fieldName={`${answerId}.files_attributes.${index}.content`}
+        file={file}
+        language={language}
+        readOnly={readOnly}
+      />
+    );
+  });
 };
 
 const Programming = (props) => {
@@ -55,8 +60,9 @@ const Programming = (props) => {
         <ProgrammingImportEditor
           key={question.id}
           answerId={answerId}
+          question={question}
           questionId={question.id}
-          {...{ readOnly, question }}
+          readOnly={readOnly}
         />
       ) : (
         <ProgrammingFiles

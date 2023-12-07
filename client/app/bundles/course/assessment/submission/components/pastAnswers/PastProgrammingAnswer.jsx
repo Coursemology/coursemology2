@@ -32,7 +32,6 @@ export default class PastProgrammingAnswer extends Component {
     const { question, answer } = this.props;
     const file =
       answer.files_attributes.length > 0 ? answer.files_attributes[0] : null;
-    const content = file ? file.highlighted_content.split('\n') : '';
 
     if (question.fileSubmission) {
       return this.renderFileSubmissionPastAnswer();
@@ -40,11 +39,7 @@ export default class PastProgrammingAnswer extends Component {
 
     return (
       <div>
-        <ReadOnlyEditor
-          answerId={answer.id}
-          content={content}
-          fileId={file.id}
-        />
+        {file && <ReadOnlyEditor answerId={answer.id} file={file} />}
         <TestCaseView
           answerId={answer.id}
           isDraftAnswer={answer.isDraftAnswer}

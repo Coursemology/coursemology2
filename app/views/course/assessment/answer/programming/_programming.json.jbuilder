@@ -26,7 +26,7 @@ json.fields do
   json.files_attributes answer.files do |file|
     json.(file, :id, :filename)
     json.content file.content
-    json.highlighted_content highlight_code_block(file.content, question.language)
+    json.highlightedContent highlight_code_block(file.content, question.language)
   end
 end
 
