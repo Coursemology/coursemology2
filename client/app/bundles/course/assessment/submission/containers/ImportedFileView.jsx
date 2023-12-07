@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Chip } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
@@ -75,16 +75,18 @@ class VisibleImportedFileView extends Component {
 
     const chipColor = displayFileIndex === index ? 'primary' : undefined;
     const staged = file.staged || false;
-    return staged ? null : (
-      <Chip
-        key={file.id}
-        clickable
-        color={chipColor}
-        label={file.filename}
-        onClick={() => handleFileTabbing(index)}
-        onDelete={onRequestDelete}
-        style={styles.chip}
-      />
+    return (
+      !staged && (
+        <Chip
+          key={file.id}
+          clickable
+          color={chipColor}
+          label={file.filename}
+          onClick={() => handleFileTabbing(index)}
+          onDelete={onRequestDelete}
+          style={styles.chip}
+        />
+      )
     );
   }
 
@@ -92,12 +94,16 @@ class VisibleImportedFileView extends Component {
     const { intl, files } = this.props;
     return (
       <div>
-        <strong>{intl.formatMessage(translations.uploadedFiles)}</strong>
+        <Typography variant="body2">
+          {intl.formatMessage(translations.uploadedFiles)}
+        </Typography>
         <div style={styles.wrapper}>
           {files.length ? (
             files.map(this.renderFile, this)
           ) : (
-            <span>{intl.formatMessage(translations.noFiles)}</span>
+            <Typography variant="body2">
+              {intl.formatMessage(translations.noFiles)}
+            </Typography>
           )}
         </div>
         {this.renderDeleteDialog()}

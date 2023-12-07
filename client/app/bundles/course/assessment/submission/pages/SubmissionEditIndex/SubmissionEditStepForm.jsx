@@ -515,7 +515,6 @@ const SubmissionEditStepForm = (props) => {
             readOnly: !attempting,
             answerId,
             question,
-            questionsFlags,
             historyQuestions,
             graderView,
             showMcqMrqSolution,

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Submissions: Programming File Submission Answers' do
+RSpec.describe 'Course: Assessments: Submissions: Programming File Submission Answers', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -21,10 +21,10 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         File.join(Rails.root, 'spec/fixtures/files/template_file_2')
       end
 
-      scenario 'I can only upload new programming files', js: true do
+      scenario 'I can only upload new programming files' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        file_view = find('strong', text: 'Uploaded Files:').find(:xpath, '..')
+        file_view = find('p', text: 'Uploaded Files:').find(:xpath, '..')
         dropzone = find('.dropzone-input')
         file_input = dropzone.find('input', visible: false)
 
@@ -56,10 +56,10 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         expect(file_view).to have_css('span', count: 2)
       end
 
-      scenario 'I can delete existing programming files', js: true do
+      scenario 'I can delete existing programming files' do
         visit edit_course_assessment_submission_path(course, assessment, submission2)
 
-        file_view = find('strong', text: 'Uploaded Files:').find(:xpath, '..')
+        file_view = find('p', text: 'Uploaded Files:').find(:xpath, '..')
 
         # There should be a single programming file in the submission
         expect(file_view).to have_css('span', count: 1)
@@ -72,7 +72,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
 
         # It should indicate that there are no files uploaded
         # Original programming file in the question should have been deleted
-        expect(file_view).to have_css('span', text: 'No files uploaded.')
+        expect(file_view).to have_css('p', text: 'No files uploaded.')
         expect(file_view).to have_no_css('span', text: /file_/)
       end
     end
