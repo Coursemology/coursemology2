@@ -45,11 +45,11 @@ RSpec.describe Course::UserEmailSubscriptionsController, type: :controller do
         before { subject }
 
         it 'unsubscribes from the related settings' do
-          expect(student.email_unsubscriptions.length).to eq(2)
-          expect(student.email_unsubscriptions.first.course_setting_email.component).to eq('assessments')
-          expect(student.email_unsubscriptions.first.course_setting_email.setting).to eq('opening_reminder')
-          expect(student.email_unsubscriptions.last.course_setting_email.component).to eq('surveys')
-          expect(student.email_unsubscriptions.last.course_setting_email.setting).to eq('opening_reminder')
+          expect(student.email_unsubscriptions.length).to eq(3)
+          expect(student.email_unsubscriptions.
+            map(&:course_setting_email).map(&:component)).to eq(['assessments', 'surveys', 'videos'])
+          expect(student.email_unsubscriptions.
+            map(&:course_setting_email).map(&:setting).uniq).to eq(['opening_reminder'])
           is_expected.to render_template(partial: '_subscription_setting')
         end
       end
