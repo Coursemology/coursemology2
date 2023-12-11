@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Mic from '@mui/icons-material/Mic';
 import Stop from '@mui/icons-material/Stop';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -31,8 +31,7 @@ const translations = defineMessages({
   chooseVoiceFileExplain: {
     id: 'course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain',
     defaultMessage:
-      'Drag your audio file here, or click to select an audio file. \
-                     Only wav and mp3 formats are supported. Alternatively, you may use the \
+      'Drag and drop or click to upload your wav / mp3 files. Alternatively, use the \
                      recorder below to record your response',
   },
   pleaseRecordYourVoice: {
@@ -43,7 +42,7 @@ const translations = defineMessages({
 
 const styles = {
   fileInputWrapper: {
-    width: '60%',
+    width: '100%',
   },
   singleFileInputChildrenWrapper: {
     width: '100%',
@@ -141,7 +140,7 @@ class VoiceResponseAnswer extends Component {
     const { intl } = this.props;
     return (
       <div>
-        <div style={styles.fileInputWrapper}>
+        <div className="w-full">
           <FormSingleFileInput
             accept={['audio/mp3', 'audio/wav']}
             disabled={readOnly}
@@ -207,10 +206,12 @@ class VoiceResponseAnswer extends Component {
   renderSingleFileInputChildren = (props) => (
     <div style={styles.singleFileInputChildrenWrapper}>
       <div style={styles.singleFileInputChildren}>
-        <div>
-          <FormattedMessage {...translations.chooseVoiceFileExplain} />
-        </div>
-        {props.file && props.file.name}
+        <Typography variant="body1">
+          <div>
+            <FormattedMessage {...translations.chooseVoiceFileExplain} />
+          </div>
+          {props.file && props.file.name}
+        </Typography>
       </div>
     </div>
   );

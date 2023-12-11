@@ -484,9 +484,11 @@ export function importFiles(answerId, answerFields, language, setValue) {
 
     if (!validateFiles(files)) {
       dispatch({ type: actionTypes.IMPORT_FILES_FAILURE, payload: answerId });
+      setValue(`${answerId}.import_files`, []);
       dispatch(setNotification(translations.similarFileNameExists));
     } else if (language === 'Java' && !validateJavaFiles(files)) {
       dispatch({ type: actionTypes.IMPORT_FILES_FAILURE, payload: answerId });
+      setValue(`${answerId}.import_files`, []);
       dispatch(setNotification(translations.invalidJavaFileUpload));
     } else {
       CourseAPI.assessment.answer.programming
@@ -507,7 +509,6 @@ export function importFiles(answerId, answerFields, language, setValue) {
             (file) => ({ ...file, staged: false }),
           );
           setValue(`${answerId}.files_attributes`, newFilesAttributes);
-          // import_files field is reset to remove files from dropbox.
           setValue(`${answerId}.import_files`, []);
         })
         .catch((error) => {
@@ -515,6 +516,7 @@ export function importFiles(answerId, answerFields, language, setValue) {
             type: actionTypes.IMPORT_FILES_FAILURE,
             payload: answerId,
           });
+          setValue(`${answerId}.import_files`, []);
           dispatch(
             setNotification(
               translations.importFilesFailure,
