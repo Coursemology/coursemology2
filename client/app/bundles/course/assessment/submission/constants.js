@@ -22,6 +22,13 @@ export const workflowStates = {
   Published: 'published',
 };
 
+export const saveStatus = {
+  None: 'none',
+  Saving: 'saving',
+  Saved: 'saved',
+  Failed: 'failed',
+};
+
 export const TestCaseTypes = {
   Public: 'public_test',
   Private: 'private_test',

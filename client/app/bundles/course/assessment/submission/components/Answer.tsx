@@ -1,8 +1,9 @@
-import { ElementType } from 'react';
+import { ElementType, memo } from 'react';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { Card, CardContent } from '@mui/material';
 import { yellow } from '@mui/material/colors';
+import equal from 'fast-deep-equal';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -55,6 +56,7 @@ interface ProgrammingAnswerProps<T> extends BaseAnswerProps<T> {
     language: string,
     setValue: UseFormSetValue<FieldValues>,
   ) => void;
+  isSavingAnswer?: boolean;
 }
 
 interface FileUploadAnswerProps<T> extends BaseAnswerProps<T> {
@@ -121,7 +123,14 @@ const MultipleResponse = (
 const Programming = (
   props: ProgrammingAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, saveAnswer, importFiles } = props;
+  const {
+    question,
+    readOnly,
+    answerId,
+    saveAnswer,
+    importFiles,
+    isSavingAnswer,
+  } = props;
   return (
     <ProgrammingAnswer
       key={`question_${question.id}`}
@@ -131,6 +140,7 @@ const Programming = (
         answerId,
         saveAnswer,
         importFiles,
+        isSavingAnswer,
       }}
     />
   );
@@ -261,4 +271,4 @@ const Answer = (props: AnswerProps<SubmissionQuestionData>): JSX.Element => {
   return <Component {...props} />;
 };
 
-export default Answer;
+export default memo(Answer, equal);
