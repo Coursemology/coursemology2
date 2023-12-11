@@ -93,8 +93,7 @@ const SubmissionEditForm = (props) => {
     intl,
     isAutograding,
     isSaving,
-    isSavingAnswer,
-    isSavingAnswerFailed,
+    savingStatus,
     passwordProtected,
     published,
     questionIds,
@@ -434,8 +433,7 @@ const SubmissionEditForm = (props) => {
                   graderView,
                   showMcqMrqSolution,
                   handleToggleViewHistoryMode,
-                  isSavingAnswer,
-                  isSavingAnswerFailed,
+                  savingStatus,
                   onSaveAnswer,
                 }}
               />
@@ -599,8 +597,7 @@ const SubmissionEditForm = (props) => {
             graderView,
             showMcqMrqSolution,
             handleToggleViewHistoryMode,
-            isSavingAnswer,
-            isSavingAnswerFailed,
+            savingStatus,
             onSaveAnswer,
           }}
         />
@@ -751,8 +748,7 @@ SubmissionEditForm.propTypes = {
   topics: PropTypes.objectOf(topicShape),
   isAutograding: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
-  isSavingAnswer: PropTypes.object.isRequired,
-  isSavingAnswerFailed: PropTypes.object.isRequired,
+  savingStatus: PropTypes.object.isRequired,
 
   handleAutogradeSubmission: PropTypes.func,
   onReset: PropTypes.func,

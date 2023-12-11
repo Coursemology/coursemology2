@@ -52,7 +52,14 @@ const ProgrammingFiles = ({ readOnly, answerId, language, saveAnswer }) => {
 };
 
 const Programming = (props) => {
-  const { question, readOnly, answerId, saveAnswer, importFiles } = props;
+  const {
+    question,
+    readOnly,
+    answerId,
+    saveAnswer,
+    importFiles,
+    isSavingAnswer,
+  } = props;
   const fileSubmission = question.fileSubmission;
 
   return (
@@ -62,6 +69,7 @@ const Programming = (props) => {
           key={question.id}
           answerId={answerId}
           importProgrammingFiles={importFiles}
+          isSavingAnswer={isSavingAnswer}
           questionId={question.id}
           readOnly={readOnly}
           saveAnswer={saveAnswer}
@@ -87,6 +95,7 @@ Programming.propTypes = {
   answerId: PropTypes.number,
   saveAnswer: PropTypes.func,
   importFiles: PropTypes.func,
+  isSavingAnswer: PropTypes.bool,
 };
 
 export default Programming;
