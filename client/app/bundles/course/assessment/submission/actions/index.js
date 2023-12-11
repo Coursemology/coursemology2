@@ -470,6 +470,49 @@ function validateJavaFiles(files) {
   return files.filter((file) => !regex.test(file.filename)).length === 0;
 }
 
+export function uploadFiles(answerId, answerFields, setValue) {
+  const answer = Object.values(answerFields).find((ans) => ans.id === answerId);
+  const payload = {
+    answer: {
+      id: answerId,
+      client_version: answer.client_version,
+      files: answer.files,
+    },
+  };
+
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.UPLOAD_FILES_REQUEST,
+      payload: [payload.answer],
+    });
+
+    CourseAPI.assessment.answer.textResponse
+      .uploadFiles(answerId, payload)
+      .then((response) => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.UPLOAD_FILES_SUCCESS,
+          payload: data,
+        });
+
+        setValue(`${answerId}.files`, []);
+      })
+      .catch((error) => {
+        dispatch({
+          type: actionTypes.UPLOAD_FILES_FAILURE,
+          payload: answerId,
+        });
+        setValue(`${answerId}.files`, []);
+        dispatch(
+          setNotification(
+            translations.importFilesFailure,
+            buildErrorMessage(error),
+          ),
+        );
+      });
+  };
+}
+
 // Imports staged files into the question to be evaluated
 export function importFiles(answerId, answerFields, language, setValue) {
   const answer = Object.values(answerFields).find((ans) => ans.id === answerId);
