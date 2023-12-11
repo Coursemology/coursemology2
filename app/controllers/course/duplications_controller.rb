@@ -27,7 +27,7 @@ class Course::DuplicationsController < Course::ComponentController
   end
 
   def instance_params
-    params.require(:duplication).permit(:destination_instance_id)
+    params.require(:duplication).require(:destination_instance_id)
   end
 
   # Construct the options to be sent to the duplication job.
