@@ -9,7 +9,6 @@ const FileUpload = ({
   readOnly,
   answerId,
   isSavingAnswer,
-  // saveAnswer,
   uploadFiles,
 }) => (
   <div>
@@ -30,7 +29,6 @@ FileUpload.propTypes = {
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
   isSavingAnswer: PropTypes.bool,
-  // saveAnswer: PropTypes.func,
   uploadFiles: PropTypes.func,
 };
 
