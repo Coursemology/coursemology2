@@ -17,7 +17,7 @@ import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { importFiles, updateClientVersion } from '../actions';
+import { importFiles, updateClientVersion, uploadFiles } from '../actions';
 import { saveStatus } from '../constants';
 import {
   HistoryQuestion,
@@ -196,6 +196,14 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     dispatch(importFiles(savedAnswerId, answerFields, language, setValue));
   };
 
+  const handleUploadFiles = (
+    savedAnswerId: number,
+    answerFields: unknown,
+    setValue: UseFormSetValue<FieldValues>,
+  ): void => {
+    dispatch(uploadFiles(savedAnswerId, answerFields, setValue));
+  };
+
   const debouncedSaveAnswer = useDebounce(
     handleSaveAnswer,
     FIELD_LONG_DEBOUNCE_DELAY_MS,
@@ -250,6 +258,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           saveAnswer={saveAnswerAndUpdateClientVersion}
           savingIndicator={SavingIndicator(answerId, savingStatus)}
           showMcqMrqSolution={showMcqMrqSolution}
+          uploadFiles={handleUploadFiles}
         />
       ) : (
         <MissingAnswer />

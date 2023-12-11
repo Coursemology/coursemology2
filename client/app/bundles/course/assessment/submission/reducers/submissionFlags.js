@@ -49,7 +49,8 @@ export default function (state = initialState, action) {
         isReminding: false,
       };
     case actions.SAVE_ANSWER_REQUEST:
-    case actions.IMPORT_FILES_REQUEST: {
+    case actions.IMPORT_FILES_REQUEST:
+    case actions.UPLOAD_FILES_REQUEST: {
       return produce(state, (draft) => {
         action.payload.forEach((answer) => {
           draft.savingStatus[answer.id.toString()] = saveStatus.Saving;
@@ -74,11 +75,18 @@ export default function (state = initialState, action) {
         draft.savingStatus[answerId.toString()] = saveStatus.Saved;
       });
     }
-    case actions.SAVE_ANSWER_FAILURE:
-    case actions.IMPORT_FILES_FAILURE: {
-      const answerId = action.payload.toString();
+    case actions.UPLOAD_FILES_SUCCESS: {
+      const answerId = action.payload.id;
       return produce(state, (draft) => {
-        draft.savingStatus[answerId] = saveStatus.Failed;
+        draft.savingStatus[answerId.toString()] = saveStatus.Saved;
+      });
+    }
+    case actions.SAVE_ANSWER_FAILURE:
+    case actions.IMPORT_FILES_FAILURE:
+    case actions.UPLOAD_FILES_FAILURE: {
+      const answerId = action.payload;
+      return produce(state, (draft) => {
+        draft.savingStatus[answerId.toString()] = saveStatus.Failed;
       });
     }
     case actions.UPDATE_CLIENT_VERSION:

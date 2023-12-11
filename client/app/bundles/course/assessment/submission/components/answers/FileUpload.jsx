@@ -8,8 +8,9 @@ const FileUpload = ({
   question,
   readOnly,
   answerId,
-  saveAnswer,
   isSavingAnswer,
+  // saveAnswer,
+  uploadFiles,
 }) => (
   <div>
     <UploadedFileView questionId={question.id} />
@@ -18,7 +19,7 @@ const FileUpload = ({
         answerId={answerId}
         disabled={readOnly || isSavingAnswer}
         name={`${answerId}.files`}
-        saveAnswer={saveAnswer}
+        saveAnswer={uploadFiles}
       />
     ) : null}
   </div>
@@ -28,8 +29,9 @@ FileUpload.propTypes = {
   question: questionShape,
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
-  saveAnswer: PropTypes.func,
   isSavingAnswer: PropTypes.bool,
+  // saveAnswer: PropTypes.func,
+  uploadFiles: PropTypes.func,
 };
 
 export default FileUpload;
