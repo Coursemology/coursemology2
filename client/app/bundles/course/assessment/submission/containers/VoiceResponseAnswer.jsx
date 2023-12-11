@@ -17,7 +17,6 @@ import {
   setNotRecording,
   setRecording,
 } from '../actions/index';
-import { getCurrentTime } from '../utils';
 
 const translations = defineMessages({
   startRecording: {
@@ -240,11 +239,12 @@ class VoiceResponseAnswer extends Component {
                 ...field,
                 onChange: (event) => {
                   field.onChange(event);
-                  const modifiedAnswer = {
-                    [answerId]: value[answerId],
-                  };
-                  const curTime = getCurrentTime();
-                  saveAnswer(modifiedAnswer, answerId, curTime);
+                  saveAnswer(
+                    {
+                      [answerId]: value[answerId],
+                    },
+                    answerId,
+                  );
                 },
               },
               fieldState,
