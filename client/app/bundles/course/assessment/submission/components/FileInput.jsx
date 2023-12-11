@@ -180,7 +180,7 @@ const FileInputField = ({
   answerId,
   ...custom
 }) => {
-  const { control, getValues } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
 
   return (
     <Controller
@@ -196,10 +196,11 @@ const FileInputField = ({
               field.onChange(event);
               if (saveAnswer) {
                 saveAnswer(
+                  answerId,
                   {
                     [answerId]: getValues()[answerId],
                   },
-                  answerId,
+                  setValue,
                 );
               }
             },

@@ -45,6 +45,12 @@ interface VoiceResponseAnswerProps<T> extends BaseAnswerProps<T> {
 }
 
 interface TextResponseAnswerProps<T> extends BaseAnswerProps<T> {
+  uploadFiles?: (
+    savedAnswerId: number,
+    answerFields: unknown,
+    setValue: UseFormSetValue<FieldValues>,
+  ) => void;
+  isSavingAnswer?: boolean;
   graderView?: boolean;
 }
 
@@ -59,6 +65,11 @@ interface ProgrammingAnswerProps<T> extends BaseAnswerProps<T> {
 }
 
 interface FileUploadAnswerProps<T> extends BaseAnswerProps<T> {
+  uploadFiles?: (
+    savedAnswerId: number,
+    answerFields: unknown,
+    setValue: UseFormSetValue<FieldValues>,
+  ) => void;
   isSavingAnswer?: boolean;
 }
 
@@ -148,11 +159,27 @@ const Programming = (
 const TextResponse = (
   props: TextResponseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, graderView, saveAnswer } = props;
+  const {
+    question,
+    readOnly,
+    answerId,
+    graderView,
+    saveAnswer,
+    isSavingAnswer,
+    uploadFiles,
+  } = props;
   return (
     <TextResponseAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId, graderView, saveAnswer }}
+      {...{
+        question,
+        readOnly,
+        answerId,
+        graderView,
+        saveAnswer,
+        isSavingAnswer,
+        uploadFiles,
+      }}
     />
   );
 };
@@ -160,11 +187,25 @@ const TextResponse = (
 const FileUpload = (
   props: FileUploadAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, saveAnswer, isSavingAnswer } = props;
+  const {
+    question,
+    readOnly,
+    answerId,
+    saveAnswer,
+    isSavingAnswer,
+    uploadFiles,
+  } = props;
   return (
     <FileUploadAnswer
       key={`question_${question.id}`}
-      {...{ question, readOnly, answerId, saveAnswer, isSavingAnswer }}
+      {...{
+        question,
+        readOnly,
+        answerId,
+        saveAnswer,
+        isSavingAnswer,
+        uploadFiles,
+      }}
     />
   );
 };

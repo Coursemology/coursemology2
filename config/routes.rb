@@ -253,6 +253,9 @@ Rails.application.routes.draw do
               resources :logs, only: [:index]
               scope module: :answer do
                 resources :answers, only: [:show] do
+                  namespace :text_response do
+                    post 'upload_files' => 'text_response#upload_files'
+                  end
                   namespace :programming do
                     post 'create_programming_files' => 'programming#create_programming_files'
                     post 'destroy_programming_file' => 'programming#destroy_programming_file'

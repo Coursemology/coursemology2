@@ -10,7 +10,15 @@ import FileInput from '../FileInput';
 import TextResponseSolutions from '../TextResponseSolutions';
 
 const TextResponse = (props) => {
-  const { question, readOnly, answerId, graderView, saveAnswer } = props;
+  const {
+    question,
+    readOnly,
+    answerId,
+    graderView,
+    saveAnswer,
+    isSavingAnswer,
+    uploadFiles,
+  } = props;
   const { control, getValues } = useFormContext();
   const allowUpload = question.allowAttachment;
 
@@ -86,9 +94,9 @@ const TextResponse = (props) => {
         <FileInput
           answerId={answerId}
           control={control}
-          disabled={readOnly}
+          disabled={readOnly || isSavingAnswer}
           name={`${answerId}.files`}
-          saveAnswer={saveAnswer}
+          saveAnswer={uploadFiles}
         />
       )}
     </div>
@@ -104,6 +112,8 @@ TextResponse.propTypes = {
     value: PropTypes.string,
   }),
   saveAnswer: PropTypes.func,
+  isSavingAnswer: PropTypes.bool,
+  uploadFiles: PropTypes.func,
 };
 
 export default TextResponse;
