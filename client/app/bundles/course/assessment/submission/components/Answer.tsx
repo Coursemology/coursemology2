@@ -1,9 +1,8 @@
-import { ElementType, memo } from 'react';
+import { ElementType } from 'react';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { Card, CardContent } from '@mui/material';
 import { yellow } from '@mui/material/colors';
-import equal from 'fast-deep-equal';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -34,7 +33,7 @@ interface BaseAnswerProps<T> {
   question: T;
   readOnly: boolean;
   answerId: number;
-  saveAnswer: (data: unknown, answerId: number, currentTime: number) => void;
+  saveAnswer: (data: unknown, answerId: number) => void;
 }
 
 interface ForumResponseAnswerProps<T> extends BaseAnswerProps<T> {
@@ -271,4 +270,4 @@ const Answer = (props: AnswerProps<SubmissionQuestionData>): JSX.Element => {
   return <Component {...props} />;
 };
 
-export default memo(Answer, equal);
+export default Answer;

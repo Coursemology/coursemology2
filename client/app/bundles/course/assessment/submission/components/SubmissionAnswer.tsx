@@ -45,6 +45,105 @@ interface Props {
   onSaveAnswer: (data: unknown, answerId: number, currentTime: number) => void;
 }
 
+const SavingIndicator = (
+  answerId: number,
+  savingStatus: Record<string, string>,
+): JSX.Element | null => {
+  const { t } = useTranslation();
+
+  if (savingStatus[answerId.toString()] === saveStatus.Saving) {
+    return (
+      <div className="flex items-center align-middle">
+        <Loop className="mr-2" />
+        <Typography variant="body2">
+          <strong>{t(translations.isSaving)}</strong>
+        </Typography>
+      </div>
+    );
+  }
+
+  if (savingStatus[answerId.toString()] === saveStatus.Saved) {
+    return (
+      <div className="flex items-center align-middle">
+        <CloudDone className="mr-2" color="success" />
+        <Typography color="green" variant="body2">
+          <strong>{t(translations.isSaved)}</strong>
+        </Typography>
+      </div>
+    );
+  }
+
+  if (savingStatus[answerId.toString()] === saveStatus.Failed) {
+    return (
+      <div className="flex items-center align-middle">
+        <CloudOff className="mr-2" color="error" />
+        <Typography color="red" variant="body2">
+          <strong>{t(translations.isSavingFailed)}</strong>
+        </Typography>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+const HistoryToggle = (
+  question: SubmissionQuestionData,
+  readOnly: boolean,
+  isLoading: boolean,
+  noPastAnswers: boolean,
+  savingStatus: Record<string, string>,
+  answerId: number,
+  disabled: boolean,
+  handleToggleViewHistoryMode: (
+    viewHistory: boolean,
+    submissionQuestionId: number,
+    questionId: number,
+  ) => void,
+): JSX.Element | null => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex w-full flex-wrap justify-between">
+      {question.canViewHistory && (
+        <>
+          {!readOnly && SavingIndicator(answerId, savingStatus)}
+          <div className="flex flex-grow justify-end">
+            {isLoading && (
+              <CircularProgress
+                className="inline-block align-middle"
+                size={30}
+              />
+            )}
+            <Tooltip title={noPastAnswers ? t(translations.noPastAnswers) : ''}>
+              <FormControlLabel
+                className="float-right"
+                control={
+                  <Switch
+                    checked={question.viewHistory || false}
+                    className="toggle-history"
+                    color="primary"
+                    onChange={(): void =>
+                      handleToggleViewHistoryMode(
+                        !question.viewHistory,
+                        question.submissionQuestionId,
+                        question.id,
+                      )
+                    }
+                  />
+                }
+                disabled={disabled}
+                label={<b>{t(translations.viewPastAnswers)}</b>}
+                labelPlacement="start"
+              />
+            </Tooltip>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 const SubmissionAnswer = (props: Props): JSX.Element => {
   const {
     handleToggleViewHistoryMode,
@@ -106,87 +205,10 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   const saveAnswerAndUpdateClientVersion = (
     data: unknown,
     savedAnswerId: number,
-    currentTime: number,
   ): void => {
+    const currentTime = Date.now();
     handleUpdateClientVersion(savedAnswerId, currentTime);
     debouncedSaveAnswer(data, savedAnswerId, currentTime);
-  };
-
-  let savingIndicator: React.ReactNode | null = null;
-
-  if (savingStatus[answerId.toString()] === saveStatus.Saving) {
-    savingIndicator = (
-      <div className="flex items-center align-middle">
-        <Loop className="mr-2" />
-        <Typography variant="body2">
-          <strong>{t(translations.isSaving)}</strong>
-        </Typography>
-      </div>
-    );
-  } else if (savingStatus[answerId.toString()] === saveStatus.Saved) {
-    savingIndicator = (
-      <div className="flex items-center align-middle">
-        <CloudDone className="mr-2" color="success" />
-        <Typography color="green" variant="body2">
-          <strong>{t(translations.isSaved)}</strong>
-        </Typography>
-      </div>
-    );
-  } else if (savingStatus[answerId.toString()] === saveStatus.Failed) {
-    savingIndicator = (
-      <div className="flex items-center align-middle">
-        <CloudOff className="mr-2" color="error" />
-        <Typography color="red" variant="body2">
-          <strong>{t(translations.isSavingFailed)}</strong>
-        </Typography>
-      </div>
-    );
-  } else {
-    savingIndicator = null;
-  }
-
-  const HistoryToggle = (): JSX.Element | null => {
-    return (
-      <div className="flex w-full flex-wrap justify-between">
-        {question.canViewHistory && (
-          <>
-            {!readOnly && savingIndicator}
-            <div className="flex flex-grow justify-end">
-              {isLoading && (
-                <CircularProgress
-                  className="inline-block align-middle"
-                  size={30}
-                />
-              )}
-              <Tooltip
-                title={noPastAnswers ? t(translations.noPastAnswers) : ''}
-              >
-                <FormControlLabel
-                  className="float-right"
-                  control={
-                    <Switch
-                      checked={question.viewHistory || false}
-                      className="toggle-history"
-                      color="primary"
-                      onChange={(): void =>
-                        handleToggleViewHistoryMode(
-                          !question.viewHistory,
-                          question.submissionQuestionId,
-                          question.id,
-                        )
-                      }
-                    />
-                  }
-                  disabled={disabled}
-                  label={<b>{t(translations.viewPastAnswers)}</b>}
-                  labelPlacement="start"
-                />
-              </Tooltip>
-            </div>
-          </>
-        )}
-      </div>
-    );
   };
 
   const MissingAnswer = (): JSX.Element => {
@@ -197,7 +219,17 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     <>
       <div className="flex items-start justify-between">
         <Typography variant="h6">{question.displayTitle}</Typography>
-        <HistoryToggle />
+        {SavingIndicator(answerId, savingStatus)}
+        {HistoryToggle(
+          question,
+          readOnly,
+          isLoading,
+          noPastAnswers,
+          savingStatus,
+          answerId,
+          disabled,
+          handleToggleViewHistoryMode,
+        )}
       </div>
 
       <Typography
@@ -216,7 +248,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           question={question}
           readOnly={readOnly}
           saveAnswer={saveAnswerAndUpdateClientVersion}
-          savingIndicator={savingIndicator}
+          savingIndicator={SavingIndicator(answerId, savingStatus)}
           showMcqMrqSolution={showMcqMrqSolution}
         />
       ) : (

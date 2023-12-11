@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
 import { questionShape } from '../../propTypes';
-import { getCurrentTime } from '../../utils';
 
 const MultipleResponseOptions = ({
   readOnly,
@@ -111,9 +110,7 @@ const MultipleResponse = (props) => {
           field={field}
           fieldState={fieldState}
           saveAnswer={() => {
-            const modifiedAnswer = { [answerId]: getValues()[answerId] };
-            const curTime = getCurrentTime();
-            saveAnswer(modifiedAnswer, answerId, curTime);
+            saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
           }}
           {...{ question, readOnly, showMcqMrqSolution, graderView }}
         />
