@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import { CloudDone, CloudOff, Loop } from '@mui/icons-material';
 import {
@@ -18,6 +18,7 @@ import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { importFiles, updateClientVersion } from '../actions';
+import { saveStatus } from '../constants';
 import {
   HistoryQuestion,
   QuestionFlags,
@@ -40,8 +41,7 @@ interface Props {
   showMcqMrqSolution: boolean;
   question: SubmissionQuestionData;
   answerId: number;
-  isSavingAnswer: Record<string, boolean>;
-  isSavingAnswerFailed: Record<string, boolean>;
+  savingStatus: Record<string, string>;
   onSaveAnswer: (data: unknown, answerId: number, currentTime: number) => void;
 }
 
@@ -55,14 +55,12 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     showMcqMrqSolution,
     question,
     answerId,
-    isSavingAnswer,
-    isSavingAnswerFailed,
+    savingStatus,
     onSaveAnswer,
   } = props;
 
   const { t } = useTranslation();
 
-  const [isFirstRendering, setIsFirstRendering] = useState({});
   const dispatch = useAppDispatch();
 
   const historyQuestion = historyQuestions[question.id];
@@ -88,13 +86,6 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     currentTime: number,
   ): void => {
     onSaveAnswer(data, savedAnswerId, currentTime);
-    setIsFirstRendering((prevIsFirstRendering) => {
-      const updatedIsFirstRendering = JSON.parse(
-        JSON.stringify(prevIsFirstRendering),
-      );
-      updatedIsFirstRendering[savedAnswerId.toString()] = false;
-      return updatedIsFirstRendering;
-    });
   };
 
   const handleImportFiles = (
@@ -104,13 +95,6 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     setValue: UseFormSetValue<FieldValues>,
   ): void => {
     dispatch(importFiles(savedAnswerId, answerFields, language, setValue));
-    setIsFirstRendering((prevIsFirstRendering) => {
-      const updatedIsFirstRendering = JSON.parse(
-        JSON.stringify(prevIsFirstRendering),
-      );
-      updatedIsFirstRendering[savedAnswerId.toString()] = false;
-      return updatedIsFirstRendering;
-    });
   };
 
   const debouncedSaveAnswer = useDebounce(
@@ -130,16 +114,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
 
   let savingIndicator: React.ReactNode | null = null;
 
-  if (!isSavingAnswer[answerId.toString()]) {
-    savingIndicator = (
-      <Chip
-        className="flex items-center align-middle"
-        color="warning"
-        label={t(translations.isUnsaved)}
-        size="small"
-      />
-    );
-  } else if (isSavingAnswer[answerId.toString()]) {
+  if (savingStatus[answerId.toString()] === saveStatus.Saving) {
     savingIndicator = (
       <div className="flex items-center align-middle">
         <Loop className="mr-2" />
@@ -148,10 +123,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         </Typography>
       </div>
     );
-  } else if (
-    !(isFirstRendering[answerId.toString()] ?? true) &&
-    !isSavingAnswerFailed[answerId.toString()]
-  ) {
+  } else if (savingStatus[answerId.toString()] === saveStatus.Saved) {
     savingIndicator = (
       <div className="flex items-center align-middle">
         <CloudDone className="mr-2" color="success" />
@@ -160,7 +132,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         </Typography>
       </div>
     );
-  } else if (isSavingAnswerFailed[answerId.toString()]) {
+  } else if (savingStatus[answerId.toString()] === saveStatus.Failed) {
     savingIndicator = (
       <div className="flex items-center align-middle">
         <CloudOff className="mr-2" color="error" />
@@ -169,6 +141,8 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         </Typography>
       </div>
     );
+  } else {
+    savingIndicator = null;
   }
 
   const HistoryToggle = (): JSX.Element | null => {
@@ -236,7 +210,9 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           answerId={answerId}
           graderView={graderView}
           importFiles={handleImportFiles}
-          isSavingAnswer={isSavingAnswer[answerId.toString()]}
+          isSavingAnswer={
+            savingStatus[answerId.toString()] === saveStatus.Saving
+          }
           question={question}
           readOnly={readOnly}
           saveAnswer={saveAnswerAndUpdateClientVersion}

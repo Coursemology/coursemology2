@@ -154,6 +154,7 @@ const VisibleProgrammingImportEditor = (props) => {
     viewHistory,
     saveAnswer,
     importProgrammingFiles,
+    isSavingAnswer,
   } = props;
   const currentAnswer = useWatch({ control });
   const answers = viewHistory ? historyAnswers : currentAnswer;
@@ -218,7 +219,7 @@ const VisibleProgrammingImportEditor = (props) => {
                 getValues,
               })
             }
-            disabled={isSaving}
+            disabled={isSaving || isSavingAnswer}
             name={`${answerId}.import_files`}
           />
           <Button
@@ -256,6 +257,7 @@ VisibleProgrammingImportEditor.propTypes = {
   }),
   saveAnswer: PropTypes.func,
   importProgrammingFiles: PropTypes.func,
+  isSavingAnswer: PropTypes.bool,
 };
 
 function mapStateToProps(state, ownProps) {
