@@ -33,18 +33,20 @@ interface BaseAnswerProps<T> {
   question: T;
   readOnly: boolean;
   answerId: number;
-  saveAnswer: (data: unknown, answerId: number) => void;
 }
 
 interface ForumResponseAnswerProps<T> extends BaseAnswerProps<T> {
+  saveAnswer?: (data: unknown, answerId: number) => void;
   savingIndicator?: React.ReactNode | null;
 }
 
 interface VoiceResponseAnswerProps<T> extends BaseAnswerProps<T> {
+  saveAnswer?: (data: unknown, answerId: number) => void;
   savingIndicator?: React.ReactNode | null;
 }
 
 interface TextResponseAnswerProps<T> extends BaseAnswerProps<T> {
+  saveAnswer?: (data: unknown, answerId: number) => void;
   uploadFiles?: (
     savedAnswerId: number,
     answerFields: unknown,
@@ -55,6 +57,7 @@ interface TextResponseAnswerProps<T> extends BaseAnswerProps<T> {
 }
 
 interface ProgrammingAnswerProps<T> extends BaseAnswerProps<T> {
+  saveAnswer?: (data: unknown, answerId: number) => void;
   importFiles?: (
     savedAnswerId: number,
     answerFields: unknown,
@@ -74,6 +77,7 @@ interface FileUploadAnswerProps<T> extends BaseAnswerProps<T> {
 }
 
 interface McqMrqAnswerProps<T> extends BaseAnswerProps<T> {
+  saveAnswer?: (data: unknown, answerId: number) => void;
   graderView?: boolean;
   showMcqMrqSolution?: boolean;
 }
@@ -187,14 +191,7 @@ const TextResponse = (
 const FileUpload = (
   props: FileUploadAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const {
-    question,
-    readOnly,
-    answerId,
-    saveAnswer,
-    isSavingAnswer,
-    uploadFiles,
-  } = props;
+  const { question, readOnly, answerId, isSavingAnswer, uploadFiles } = props;
   return (
     <FileUploadAnswer
       key={`question_${question.id}`}
@@ -202,7 +199,6 @@ const FileUpload = (
         question,
         readOnly,
         answerId,
-        saveAnswer,
         isSavingAnswer,
         uploadFiles,
       }}
@@ -213,13 +209,12 @@ const FileUpload = (
 const Scribing = (
   props: BaseAnswerProps<SubmissionQuestionData>,
 ): JSX.Element => {
-  const { question, readOnly, answerId, saveAnswer } = props;
+  const { question, readOnly, answerId } = props;
   return (
     <ScribingView
       key={`question_${question.id}`}
       answerId={answerId}
       readOnly={readOnly}
-      saveAnswer={saveAnswer}
       scribing={question}
     />
   );
