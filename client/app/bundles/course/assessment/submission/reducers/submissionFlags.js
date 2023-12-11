@@ -1,12 +1,10 @@
 import { produce } from 'immer';
 
-import actions from '../constants';
+import actions, { saveStatus } from '../constants';
 
 const initialState = {
   isLoading: true,
   isSaving: false,
-  isSavingAnswer: {},
-  isSavingAnswerFailed: {},
   isAutograding: false,
   isPublishing: false,
   isForceSubmitting: false,
@@ -18,6 +16,7 @@ const initialState = {
   isDeleting: false,
   isSubmissionBlocked: false,
   clientVersion: {},
+  savingStatus: {},
 };
 
 export default function (state = initialState, action) {
@@ -27,13 +26,12 @@ export default function (state = initialState, action) {
       return { ...state, isLoading: true };
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FETCH_SUBMISSION_FAILURE: {
-      return {
-        ...state,
-        isLoading: false,
-        isSavingAnswerFailed: action.payload.answers
-          .map((ans) => ans.id)
-          .reduce((acc, value) => ({ ...acc, [value.toString()]: false }), {}),
-      };
+      return produce(state, (draft) => {
+        draft.isLoading = false;
+        action.payload.answers.forEach((answer) => {
+          draft.savingStatus[answer.id.toString()] = saveStatus.None;
+        });
+      });
     }
     case actions.SUBMISSION_BLOCKED:
       return {
@@ -52,16 +50,11 @@ export default function (state = initialState, action) {
       };
     case actions.SAVE_ANSWER_REQUEST:
     case actions.IMPORT_FILES_REQUEST: {
-      return {
-        ...state,
-        isSavingAnswer: action.payload
-          .map((ans) => ans.id)
-          .reduce((acc, value) => ({ ...acc, [value.toString()]: true }), {}),
-        isSavingAnswerFailed: {
-          ...state.isSavingAnswerFailed,
-          [action.payload[0].id.toString()]: false,
-        },
-      };
+      return produce(state, (draft) => {
+        action.payload.forEach((answer) => {
+          draft.savingStatus[answer.id.toString()] = saveStatus.Saving;
+        });
+      });
     }
     case actions.SAVE_ANSWER_SUCCESS: {
       const savedClientVersion = action.payload.answers[0].clientVersion;
@@ -72,36 +65,34 @@ export default function (state = initialState, action) {
       }
 
       return produce(state, (draft) => {
-        draft.isSavingAnswer[answerId.toString()] = false;
-        draft.isSavingAnswerFailed[answerId.toString()] = false;
+        draft.savingStatus[answerId.toString()] = saveStatus.Saved;
       });
     }
     case actions.IMPORT_FILES_SUCCESS: {
       const answerId = action.payload;
       return produce(state, (draft) => {
-        draft.isSavingAnswer[answerId.toString()] = false;
-        draft.isSavingAnswerFailed[answerId.toString()] = false;
+        draft.savingStatus[answerId.toString()] = saveStatus.Saved;
       });
     }
     case actions.SAVE_ANSWER_FAILURE:
     case actions.IMPORT_FILES_FAILURE: {
       const answerId = action.payload.toString();
       return produce(state, (draft) => {
-        draft.isSavingAnswer = {};
-        draft.isSavingAnswerFailed[answerId] = true;
+        draft.savingStatus[answerId] = saveStatus.Failed;
       });
     }
     case actions.UPDATE_CLIENT_VERSION:
       return produce(state, (draft) => {
         draft.clientVersion[action.answerId] = action.clientVersion;
       });
-    case actions.SAVE_DRAFT_REQUEST:
+    case actions.SAVE_DRAFT_REQUEST: {
       return produce(state, (draft) => {
         draft.isSaving = true;
         action.payload.forEach((id) => {
-          draft.isSavingAnswerFailed[id.toString()] = false;
+          draft.savingStatus[id.toString()] = saveStatus.Saving;
         });
       });
+    }
     case actions.SAVE_ALL_GRADE_REQUEST:
     case actions.SAVE_GRADE_REQUEST:
     case actions.FINALISE_REQUEST:
@@ -119,7 +110,7 @@ export default function (state = initialState, action) {
       return produce(state, (draft) => {
         draft.isSaving = false;
         action.payload.answers.forEach((ans) => {
-          draft.isSavingAnswerFailed[ans.id.toString()] = false;
+          draft.savingStatus[ans.id.toString()] = saveStatus.Saved;
         });
       });
     case actions.SAVE_ALL_GRADE_SUCCESS:
@@ -138,7 +129,7 @@ export default function (state = initialState, action) {
       return produce(state, (draft) => {
         draft.isSaving = false;
         action.payload.forEach((id) => {
-          draft.isSavingAnswerFailed[id.toString()] = true;
+          draft.savingStatus[id.toString()] = saveStatus.Failed;
         });
       });
     case actions.SAVE_ALL_GRADE_FAILURE:
