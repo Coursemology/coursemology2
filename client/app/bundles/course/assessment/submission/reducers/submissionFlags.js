@@ -67,7 +67,7 @@ export default function (state = initialState, action) {
       const savedClientVersion = action.payload.answers[0].clientVersion;
       const answerId = action.payload.answers[0].id;
 
-      if (Math.abs(state.clientVersion[answerId] - savedClientVersion) > 1) {
+      if (state.clientVersion[answerId] !== savedClientVersion) {
         return state;
       }
 
