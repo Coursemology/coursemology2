@@ -6,8 +6,6 @@ import FileUpload from '@mui/icons-material/FileUpload';
 import { Card, CardContent, Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { getCurrentTime } from '../utils';
-
 const translations = defineMessages({
   uploadDisabled: {
     id: 'course.assessment.submission.FileInput.uploadDisabled',
@@ -197,11 +195,12 @@ const FileInputField = ({
             onChange: (event) => {
               field.onChange(event);
               if (saveAnswer) {
-                const modifiedAnswer = {
-                  [answerId]: getValues()[answerId],
-                };
-                const curTime = getCurrentTime();
-                saveAnswer(modifiedAnswer, answerId, curTime);
+                saveAnswer(
+                  {
+                    [answerId]: getValues()[answerId],
+                  },
+                  answerId,
+                );
               }
             },
           }}
