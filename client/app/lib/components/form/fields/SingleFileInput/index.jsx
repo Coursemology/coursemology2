@@ -11,13 +11,6 @@ import FilePreview from './FilePreview';
 import ImagePreview from './ImagePreview';
 
 const styles = {
-  dropzone: {
-    backgroundColor: grey[300],
-    borderRadius: 5,
-    padding: 20,
-    textAlign: 'center',
-    width: '100%',
-  },
   fileLabelError: {
     color: red[500],
     display: 'inline-block',
@@ -86,8 +79,11 @@ class FormSingleFileInput extends Component {
           {({ getRootProps, getInputProps }) => (
             <div
               {...getRootProps({
-                style: styles.dropzone,
-                className: 'select-none cursor-pointer',
+                className: `
+                dropzone-input select-none cursor-pointer
+                flex h-100 p-10 items-center justify-center text-center
+                shadow-md rounded-md
+              `,
               })}
             >
               <input {...getInputProps()} />
