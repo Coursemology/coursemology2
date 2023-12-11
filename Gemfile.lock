@@ -280,7 +280,7 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
-    json (2.7.0)
+    json (2.7.1)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.2)
@@ -429,7 +429,7 @@ GEM
       redis-store (>= 1.2, < 2)
     redis-store (1.9.1)
       redis (>= 4, < 5)
-    regexp_parser (2.8.2)
+    regexp_parser (2.8.3)
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.1.1)
@@ -467,7 +467,7 @@ GEM
     rspec-support (3.11.1)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.58.0)
+    rubocop (1.59.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -637,7 +637,7 @@ DEPENDENCIES
   rspec-rails
   rspec-retry
   rspec_junit_formatter
-  rubocop (~> 1.58)
+  rubocop (~> 1.59)
   rubocop-rails
   ruby-oembed
   rubyzip
