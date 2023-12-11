@@ -6,7 +6,6 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 
 import UploadedFileView from '../../containers/UploadedFileView';
 import { questionShape } from '../../propTypes';
-import { getCurrentTime } from '../../utils';
 import FileInput from '../FileInput';
 import TextResponseSolutions from '../TextResponseSolutions';
 
@@ -39,9 +38,7 @@ const TextResponse = (props) => {
             ...field,
             onChange: (event, editor) => {
               field.onChange(editor !== undefined ? editor.getData() : event);
-              const modifiedAnswer = { [answerId]: getValues()[answerId] };
-              const curTime = getCurrentTime();
-              saveAnswer(modifiedAnswer, answerId, curTime);
+              saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
             },
           }}
           fieldState={fieldState}
@@ -66,8 +63,7 @@ const TextResponse = (props) => {
           name={`${answerId}.answer_text`}
           onChange={(e) => {
             field.onChange(e.target.value);
-            const modifiedAnswer = { [answerId]: getValues()[answerId] };
-            saveAnswer(modifiedAnswer, answerId);
+            saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
           }}
           rows={5}
           style={{ width: '100%' }}
