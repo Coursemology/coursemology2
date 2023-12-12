@@ -239,12 +239,7 @@ class VoiceResponseAnswer extends Component {
                 ...field,
                 onChange: (event) => {
                   field.onChange(event);
-                  saveAnswer(
-                    {
-                      [answerId]: value[answerId],
-                    },
-                    answerId,
-                  );
+                  saveAnswer(value[answerId], answerId);
                 },
               },
               fieldState,

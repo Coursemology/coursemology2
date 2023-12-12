@@ -6,7 +6,6 @@ import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../constants';
 import translations from '../translations';
-import { getCurrentTime } from '../utils';
 
 const JOB_POLL_DELAY_MS = 500;
 const JOB_STAGGER_DELAY_MS = 400;
@@ -149,7 +148,7 @@ export function autogradeSubmission(id) {
 }
 
 export function saveDraft(submissionId, rawAnswers) {
-  const answers = formatAnswers(rawAnswers, getCurrentTime());
+  const answers = formatAnswers(rawAnswers, Date.now());
   const payload = { submission: { answers, is_save_draft: true } };
   return (dispatch) => {
     dispatch({
@@ -216,7 +215,7 @@ export function saveAnswer(submissionId, rawAnswers, answerId, currentTime) {
 }
 
 export function finalise(submissionId, rawAnswers) {
-  const answers = formatAnswers(rawAnswers, getCurrentTime());
+  const answers = formatAnswers(rawAnswers, Date.now());
   const payload = { submission: { answers, finalise: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.FINALISE_REQUEST });

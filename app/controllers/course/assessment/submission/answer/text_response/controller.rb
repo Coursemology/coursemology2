@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 class Course::Assessment::Submission::Answer::TextResponse::Controller < \
   Course::Assessment::Submission::Answer::Controller
   private

@@ -110,7 +110,7 @@ const MultipleResponse = (props) => {
           field={field}
           fieldState={fieldState}
           saveAnswer={() => {
-            saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
+            saveAnswer(getValues()[answerId], answerId);
           }}
           {...{ question, readOnly, showMcqMrqSolution, graderView }}
         />
