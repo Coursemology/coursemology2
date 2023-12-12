@@ -2,13 +2,6 @@ export function arrayToObjectById(array) {
   return array.reduce((obj, item) => ({ ...obj, [item.id]: item }), {});
 }
 
-export function capitaliseFirstLetter(word) {
-  if (word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  }
-  return '';
-}
-
 const parsedLanguages = {
   'C/C++': 'c_cpp',
   'Java 8': 'java',

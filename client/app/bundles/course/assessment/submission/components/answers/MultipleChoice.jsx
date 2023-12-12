@@ -95,7 +95,7 @@ const MultipleChoice = (props) => {
             ...field,
             onChange: (e) => {
               field.onChange([parseInt(e.target.value, 10)]);
-              saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
+              saveAnswer(getValues()[answerId], answerId);
             },
           }}
           fieldState={fieldState}

@@ -36,7 +36,7 @@ const ForumPostResponse = (props) => {
               ...field,
               onChange: (event, editor) => {
                 field.onChange(editor !== undefined ? editor.getData() : event);
-                saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
+                saveAnswer(getValues()[answerId], answerId);
               },
             }}
             fieldState={fieldState}
@@ -63,7 +63,7 @@ const ForumPostResponse = (props) => {
               ...field,
               onChange: (event) => {
                 field.onChange(event);
-                saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
+                saveAnswer(getValues()[answerId], answerId);
               },
             }}
             handleNotificationMessage={toast.info}
