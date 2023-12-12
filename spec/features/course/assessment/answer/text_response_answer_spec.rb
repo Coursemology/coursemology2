@@ -40,8 +40,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
 
           # The file should show in the dropzone
           expect(dropzone).to have_css('span', text: 'text.txt')
-
-          click_button('Save Draft')
+          wait_for_job
 
           expect(dropzone).to have_no_css('span', text: 'text.txt')
           expect(file_view).to have_css('span', text: 'text.txt')

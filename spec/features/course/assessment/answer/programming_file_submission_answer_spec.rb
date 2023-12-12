@@ -24,7 +24,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
       scenario 'I can only upload new programming files' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        file_view = find('p', text: 'Uploaded Files:').find(:xpath, '..')
+        file_view = find('body2', text: 'Uploaded Files:').find(:xpath, '..')
         dropzone = find('.dropzone-input')
         file_input = dropzone.find('input', visible: false)
 
@@ -35,8 +35,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         expect(file_view).to have_css('span', count: 1)
         expect(dropzone).to have_css('span', text: 'template_file')
 
-        # Upload the file
-        click_button('Upload Files')
+        wait_for_job
 
         # The upload should be successful and the staged file should not be in the dropzone
         # The newly uploaded file should show as a new file tab
@@ -47,19 +46,21 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         # Stage the same file again and attempt to upload
         # (Need to set to another file first before setting again to the first file)
         file_input.set(file_path2)
-        file_input.set(file_path)
-        click_button('Upload Files')
+        wait_for_job
 
-        # The upload should fail and the staged file should remain in the dropzone
+        file_input.set(file_path)
+        wait_for_job
+
+        # The upload should fail and the staged file should be gone from dropzone
         # There should still be only 2 files in the question
-        expect(dropzone).to have_css('span', text: 'template_file')
+        expect(dropzone).to have_no_css('span', text: 'template_file')
         expect(file_view).to have_css('span', count: 2)
       end
 
       scenario 'I can delete existing programming files' do
         visit edit_course_assessment_submission_path(course, assessment, submission2)
 
-        file_view = find('p', text: 'Uploaded Files:').find(:xpath, '..')
+        file_view = find('body2', text: 'Uploaded Files:').find(:xpath, '..')
 
         # There should be a single programming file in the submission
         expect(file_view).to have_css('span', count: 1)
@@ -72,7 +73,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
 
         # It should indicate that there are no files uploaded
         # Original programming file in the question should have been deleted
-        expect(file_view).to have_css('p', text: 'No files uploaded.')
+        expect(file_view).to have_text('No files uploaded.')
         expect(file_view).to have_no_css('span', text: /file_/)
       end
     end
