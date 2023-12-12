@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import {
   Card,
@@ -112,6 +112,7 @@ class PastAnswers extends Component {
   };
 
   renderSelectedPastAnswers(selectedAnswerIds) {
+    const { intl } = this.props;
     if (selectedAnswerIds.length > 0) {
       return selectedAnswerIds.map(this.renderReadOnlyPastAnswer);
     }
@@ -119,7 +120,7 @@ class PastAnswers extends Component {
       <Card className="bg-yellow-100">
         <CardContent>
           <Typography variant="body2">
-            <FormattedMessage {...translations.noAnswerSelected} />
+            {intl.formatMessage(translations.noAnswerSelected)}
           </Typography>
         </CardContent>
       </Card>
