@@ -26,7 +26,7 @@ import {
 } from '../questionGrade';
 import translations from '../translations';
 
-import Answer from './Answer';
+import Answer, { AnswerType } from './Answer';
 
 interface Props {
   handleToggleViewHistoryMode: (
@@ -55,9 +55,7 @@ const SavingIndicator = (
     return (
       <div className="flex items-center align-middle">
         <Loop className="mr-2" />
-        <Typography variant="body2">
-          <strong>{t(translations.isSaving)}</strong>
-        </Typography>
+        <Typography variant="body2">{t(translations.isSaving)}</Typography>
       </div>
     );
   }
@@ -67,7 +65,7 @@ const SavingIndicator = (
       <div className="flex items-center align-middle">
         <CloudDone className="mr-2" color="success" />
         <Typography color="green" variant="body2">
-          <strong>{t(translations.isSaved)}</strong>
+          {t(translations.isSaved)}
         </Typography>
       </div>
     );
@@ -78,7 +76,7 @@ const SavingIndicator = (
       <div className="flex items-center align-middle">
         <CloudOff className="mr-2" color="error" />
         <Typography color="red" variant="body2">
-          <strong>{t(translations.isSavingFailed)}</strong>
+          {t(translations.isSavingFailed)}
         </Typography>
       </div>
     );
@@ -225,6 +223,60 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     return <Alert severity="warning">{t(translations.missingAnswer)}</Alert>;
   };
 
+  const moreProps: Record<AnswerType, unknown> = {
+    MultipleChoice: {
+      readOnly,
+      saveAnswer: saveAnswerAndUpdateClientVersion,
+      graderView,
+      showMcqMrqSolution,
+    },
+    MultipleResponse: {
+      readOnly,
+      saveAnswer: saveAnswerAndUpdateClientVersion,
+      graderView,
+      showMcqMrqSolution,
+    },
+    Programming: {
+      readOnly,
+      saveAnswer: saveAnswerAndUpdateClientVersion,
+      importFiles: handleImportFiles,
+      isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
+    },
+    TextResponse: {
+      readOnly,
+      saveAnswer: saveAnswerAndUpdateClientVersion,
+      graderView,
+      isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
+      uploadFiles: handleUploadFiles,
+    },
+    Comprehension: {
+      readOnly,
+      saveAnswer: saveAnswerAndUpdateClientVersion,
+      graderView,
+      isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
+      uploadFiles: handleUploadFiles,
+    },
+    FileUpload: {
+      readOnly,
+      graderView,
+      isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
+      uploadFiles: handleUploadFiles,
+    },
+    VoiceResponse: {
+      readOnly,
+      saveAnswer: saveAnswerAndUpdateClientVersion,
+      savingIndicator: SavingIndicator(answerId, savingStatus),
+    },
+    ForumPostResponse: {
+      readOnly,
+      saveAnswer: saveAnswerAndUpdateClientVersion,
+      savingIndicator: SavingIndicator(answerId, savingStatus),
+    },
+    Scribing: {
+      readOnly,
+    },
+  };
+
   return (
     <>
       <div className="flex items-start justify-between">
@@ -250,17 +302,8 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       {answerId ? (
         <Answer
           answerId={answerId}
-          graderView={graderView}
-          importFiles={handleImportFiles}
-          isSavingAnswer={
-            savingStatus[answerId.toString()] === saveStatus.Saving
-          }
+          moreProps={moreProps[question.type]}
           question={question}
-          readOnly={readOnly}
-          saveAnswer={saveAnswerAndUpdateClientVersion}
-          savingIndicator={SavingIndicator(answerId, savingStatus)}
-          showMcqMrqSolution={showMcqMrqSolution}
-          uploadFiles={handleUploadFiles}
         />
       ) : (
         <MissingAnswer />
