@@ -201,7 +201,9 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     answerFields: unknown,
     setValue: UseFormSetValue<FieldValues>,
   ): void => {
-    dispatch(uploadFiles(savedAnswerId, answerFields, setValue));
+    dispatch(
+      uploadFiles(savedAnswerId, { [savedAnswerId]: answerFields }, setValue),
+    );
   };
 
   const debouncedSaveAnswer = useDebounce(
@@ -216,7 +218,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   ): void => {
     const currentTime = Date.now();
     handleUpdateClientVersion(savedAnswerId, currentTime);
-    debouncedSaveAnswer(data, savedAnswerId, currentTime);
+    debouncedSaveAnswer({ [savedAnswerId]: data }, savedAnswerId, currentTime);
   };
 
   const MissingAnswer = (): JSX.Element => {
