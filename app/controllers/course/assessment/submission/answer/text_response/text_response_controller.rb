@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 class Course::Assessment::Submission::Answer::TextResponse::TextResponseController < \
   Course::Assessment::Submission::Answer::TextResponse::Controller
   load_resource :actable, class: Course::Assessment::Answer::TextResponse.name,

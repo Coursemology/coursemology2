@@ -195,13 +195,7 @@ const FileInputField = ({
             onChange: (event) => {
               field.onChange(event);
               if (saveAnswer) {
-                saveAnswer(
-                  answerId,
-                  {
-                    [answerId]: getValues()[answerId],
-                  },
-                  setValue,
-                );
+                saveAnswer(answerId, getValues()[answerId], setValue);
               }
             },
           }}

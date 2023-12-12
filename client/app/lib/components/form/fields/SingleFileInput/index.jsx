@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Dropzone from 'react-dropzone';
 import { InputLabel } from '@mui/material';
-import { grey, red } from '@mui/material/colors';
+import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';

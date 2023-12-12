@@ -46,7 +46,7 @@ const TextResponse = (props) => {
             ...field,
             onChange: (event, editor) => {
               field.onChange(editor !== undefined ? editor.getData() : event);
-              saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
+              saveAnswer(getValues()[answerId], answerId);
             },
           }}
           fieldState={fieldState}
@@ -71,7 +71,7 @@ const TextResponse = (props) => {
           name={`${answerId}.answer_text`}
           onChange={(e) => {
             field.onChange(e.target.value);
-            saveAnswer({ [answerId]: getValues()[answerId] }, answerId);
+            saveAnswer(getValues()[answerId], answerId);
           }}
           rows={5}
           style={{ width: '100%' }}
