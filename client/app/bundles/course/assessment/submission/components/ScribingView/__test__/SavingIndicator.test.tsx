@@ -35,6 +35,7 @@ const mockSubmission = {
   topics: [],
   answers: [
     {
+      id: answerId,
       fields: {
         id: answerId,
         questionId: 1,
