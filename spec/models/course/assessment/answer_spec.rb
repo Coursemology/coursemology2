@@ -10,7 +10,17 @@ RSpec.describe Course::Assessment::Answer do
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
-    subject { create(:course_assessment_answer) }
+    subject { create(:course_assessment_answer, last_session_id: 'abc', client_version: 2) }
+    describe 'database validation for client version' do
+      it 'will be invalid if client version is updated to lower value' do
+        expect do
+          subject.update!(
+            last_session_id: 'abc',
+            client_version: 1
+          )
+        end.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
 
     describe 'validations' do
       subject { build_stubbed(:course_assessment_answer, workflow_state: workflow_state) }
