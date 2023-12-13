@@ -1,8 +1,9 @@
 import { memo } from 'react';
 import { FieldValues, UseFormSetValue } from 'react-hook-form';
-import { CloudDone, CloudOff, Loop } from '@mui/icons-material';
+import { Cancel, CheckCircle } from '@mui/icons-material';
 import {
   Alert,
+  Chip,
   CircularProgress,
   Divider,
   FormControlLabel,
@@ -12,6 +13,7 @@ import {
 } from '@mui/material';
 import equal from 'fast-deep-equal';
 
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
@@ -54,8 +56,13 @@ const SavingIndicator = (
   if (savingStatus[answerId.toString()] === saveStatus.Saving) {
     return (
       <div className="flex items-center align-middle">
-        <Loop className="mr-2" />
-        <Typography variant="body2">{t(translations.isSaving)}</Typography>
+        <Chip
+          color="default"
+          icon={<LoadingIndicator bare size={20} />}
+          label={t(translations.isSaving)}
+          size="medium"
+          variant="outlined"
+        />
       </div>
     );
   }
@@ -63,10 +70,13 @@ const SavingIndicator = (
   if (savingStatus[answerId.toString()] === saveStatus.Saved) {
     return (
       <div className="flex items-center align-middle">
-        <CloudDone className="mr-2" color="success" />
-        <Typography color="green" variant="body2">
-          {t(translations.isSaved)}
-        </Typography>
+        <Chip
+          color="success"
+          icon={<CheckCircle />}
+          label={t(translations.isSaved)}
+          size="medium"
+          variant="outlined"
+        />
       </div>
     );
   }
@@ -74,10 +84,13 @@ const SavingIndicator = (
   if (savingStatus[answerId.toString()] === saveStatus.Failed) {
     return (
       <div className="flex items-center align-middle">
-        <CloudOff className="mr-2" color="error" />
-        <Typography color="red" variant="body2">
-          {t(translations.isSavingFailed)}
-        </Typography>
+        <Chip
+          color="error"
+          icon={<Cancel />}
+          label={t(translations.isSavingFailed)}
+          size="medium"
+          variant="outlined"
+        />
       </div>
     );
   }

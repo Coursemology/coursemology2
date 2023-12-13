@@ -1,26 +1,16 @@
 import { useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { deleteFile, importFiles } from '../actions';
+import { deleteFile } from '../actions';
 import Editor from '../components/Editor';
 import FileInputField from '../components/FileInput';
 import { fileShape, questionShape } from '../propTypes';
-import translations from '../translations';
 import { parseLanguages } from '../utils';
 
 import ImportedFileView from './ImportedFileView';
 import ReadOnlyEditor from './ReadOnlyEditor';
-
-const styles = {
-  formButton: {
-    marginBottom: 10,
-    marginRight: 10,
-  },
-};
 
 const SelectProgrammingFileEditor = ({
   answerId,
@@ -148,7 +138,6 @@ const VisibleProgrammingImportEditor = (props) => {
     answerId,
     readOnly,
     question,
-    intl,
     historyAnswers,
     isSaving,
     viewHistory,
@@ -169,8 +158,6 @@ const VisibleProgrammingImportEditor = (props) => {
   const files =
     answers[answerId].files_attributes ||
     answers[`${answerId}`].files_attributes;
-  const stagedFiles = files.filter((file) => file.staged).length > 0;
-  const disableImport = !stagedFiles || isSaving;
 
   const handleDeleteFile = (fileId) => {
     dispatch(deleteFile(answerId, fileId, answers, setValue));
@@ -206,42 +193,27 @@ const VisibleProgrammingImportEditor = (props) => {
         />
       )}
       {readOnly || viewHistory ? null : (
-        <>
-          <FileInputField
-            callback={(filesToImport) =>
-              stageFiles({
-                answerId,
-                answers,
-                filesToImport,
-                question,
-                setValue,
-                importProgrammingFiles,
-                getValues,
-              })
-            }
-            disabled={isSaving || isSavingAnswer}
-            name={`${answerId}.import_files`}
-          />
-          <Button
-            disabled={disableImport}
-            onClick={() =>
-              dispatch(
-                importFiles(answerId, answers, question.language, setValue),
-              )
-            }
-            style={styles.formButton}
-            variant="contained"
-          >
-            {intl.formatMessage(translations.uploadFiles)}
-          </Button>
-        </>
+        <FileInputField
+          callback={(filesToImport) =>
+            stageFiles({
+              answerId,
+              answers,
+              filesToImport,
+              question,
+              setValue,
+              importProgrammingFiles,
+              getValues,
+            })
+          }
+          disabled={isSaving || isSavingAnswer}
+          name={`${answerId}.import_files`}
+        />
       )}
     </>
   );
 };
 
 VisibleProgrammingImportEditor.propTypes = {
-  intl: PropTypes.object.isRequired,
   dispatch: PropTypes.func,
   submissionId: PropTypes.number,
   questionId: PropTypes.number,
@@ -283,6 +255,6 @@ function mapStateToProps(state, ownProps) {
 }
 
 const ProgrammingImportEditor = connect(mapStateToProps)(
-  injectIntl(VisibleProgrammingImportEditor),
+  VisibleProgrammingImportEditor,
 );
 export default ProgrammingImportEditor;
