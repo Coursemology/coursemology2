@@ -224,7 +224,7 @@ class VoiceResponseAnswer extends Component {
       readOnly,
       answerId,
       value,
-      saveAnswer,
+      saveAnswerAndUpdateClientVersion,
       intl,
       savingIndicator,
     } = this.props;
@@ -239,7 +239,7 @@ class VoiceResponseAnswer extends Component {
                 ...field,
                 onChange: (event) => {
                   field.onChange(event);
-                  saveAnswer(value[answerId], answerId);
+                  saveAnswerAndUpdateClientVersion(value[answerId], answerId);
                 },
               },
               fieldState,
@@ -270,7 +270,7 @@ VoiceResponseAnswer.propTypes = {
   recording: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
   value: PropTypes.object,
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
   savingIndicator: PropTypes.node,
 };
 

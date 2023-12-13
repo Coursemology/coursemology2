@@ -15,7 +15,7 @@ const TextResponse = (props) => {
     readOnly,
     answerId,
     graderView,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
     isSavingAnswer,
     uploadFiles,
   } = props;
@@ -46,7 +46,7 @@ const TextResponse = (props) => {
             ...field,
             onChange: (event, editor) => {
               field.onChange(editor !== undefined ? editor.getData() : event);
-              saveAnswer(getValues()[answerId], answerId);
+              saveAnswerAndUpdateClientVersion(getValues()[answerId], answerId);
             },
           }}
           fieldState={fieldState}
@@ -71,7 +71,7 @@ const TextResponse = (props) => {
           name={`${answerId}.answer_text`}
           onChange={(e) => {
             field.onChange(e.target.value);
-            saveAnswer(getValues()[answerId], answerId);
+            saveAnswerAndUpdateClientVersion(getValues()[answerId], answerId);
           }}
           rows={5}
           style={{ width: '100%' }}
@@ -113,7 +113,7 @@ TextResponse.propTypes = {
   field: PropTypes.shape({
     value: PropTypes.string,
   }),
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
   isSavingAnswer: PropTypes.bool,
   uploadFiles: PropTypes.func,
 };

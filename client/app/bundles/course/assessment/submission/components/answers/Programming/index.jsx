@@ -12,7 +12,12 @@ import { parseLanguages } from '../../../utils';
 
 import ProgrammingFile from './ProgrammingFile';
 
-const ProgrammingFiles = ({ readOnly, answerId, language, saveAnswer }) => {
+const ProgrammingFiles = ({
+  readOnly,
+  answerId,
+  language,
+  saveAnswerAndUpdateClientVersion,
+}) => {
   const { control } = useFormContext();
 
   const { fields } = useFieldArray({
@@ -45,7 +50,7 @@ const ProgrammingFiles = ({ readOnly, answerId, language, saveAnswer }) => {
         file={file}
         language={language}
         readOnly={readOnly}
-        saveAnswer={saveAnswer}
+        saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
       />
     );
   });
@@ -56,7 +61,7 @@ const Programming = (props) => {
     question,
     readOnly,
     answerId,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
     importFiles,
     isSavingAnswer,
   } = props;
@@ -72,7 +77,8 @@ const Programming = (props) => {
           isSavingAnswer={isSavingAnswer}
           questionId={question.id}
           readOnly={readOnly}
-          saveAnswer={saveAnswer}
+          question={question}
+          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
       ) : (
         <ProgrammingFiles
@@ -80,7 +86,7 @@ const Programming = (props) => {
           answerId={answerId}
           language={parseLanguages(question.language)}
           readOnly={readOnly}
-          saveAnswer={saveAnswer}
+          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
       )}
       <TestCaseView questionId={question.id} />
@@ -93,7 +99,7 @@ Programming.propTypes = {
   question: questionShape,
   readOnly: PropTypes.bool,
   answerId: PropTypes.number,
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
   importFiles: PropTypes.func,
   isSavingAnswer: PropTypes.bool,
 };

@@ -8,7 +8,13 @@ import { fileShape } from '../propTypes';
 import ProgrammingFileDownloadLink from './answers/Programming/ProgrammingFileDownloadLink';
 
 const Editor = (props) => {
-  const { file, fieldName, language, answerId, saveAnswer } = props;
+  const {
+    file,
+    fieldName,
+    language,
+    answerId,
+    saveAnswerAndUpdateClientVersion,
+  } = props;
   const { control, getValues } = useFormContext();
 
   return (
@@ -27,7 +33,7 @@ const Editor = (props) => {
                 const modifiedAnswer = {
                   [answerId]: getValues()[answerId],
                 };
-                saveAnswer(modifiedAnswer, answerId);
+                saveAnswerAndUpdateClientVersion(modifiedAnswer, answerId);
               },
             }}
             filename={file.filename}
@@ -51,7 +57,7 @@ Editor.propTypes = {
   file: PropTypes.shape(fileShape).isRequired,
   language: PropTypes.string.isRequired,
   answerId: PropTypes.number,
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
 };
 
 export default Editor;

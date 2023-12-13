@@ -81,7 +81,7 @@ const MultipleChoice = (props) => {
     showMcqMrqSolution,
     graderView,
     answerId,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
   } = props;
   const { control, getValues } = useFormContext();
 
@@ -95,7 +95,7 @@ const MultipleChoice = (props) => {
             ...field,
             onChange: (e) => {
               field.onChange([parseInt(e.target.value, 10)]);
-              saveAnswer(getValues()[answerId], answerId);
+              saveAnswerAndUpdateClientVersion(getValues()[answerId], answerId);
             },
           }}
           fieldState={fieldState}
@@ -112,7 +112,7 @@ MultipleChoice.propTypes = {
   showMcqMrqSolution: PropTypes.bool,
   graderView: PropTypes.bool,
   answerId: PropTypes.number,
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
 };
 
 export default MultipleChoice;
