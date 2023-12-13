@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
 
 import destroy from '../actions/attachments';
@@ -18,7 +18,15 @@ const translations = defineMessages({
   },
   deleteConfirmation: {
     id: 'course.assessment.submission.UploadedFileView.deleteConfirmation',
-    defaultMessage: 'Are you sure you want to delete this attachment?',
+    defaultMessage: 'Are you sure you want to delete {fileName}?',
+  },
+  deleting: {
+    id: 'course.assessment.submission.UploadedFileView.deleting',
+    defaultMessage: 'Delete',
+  },
+  deleteTitle: {
+    id: 'course.assessment.submission.UploadedFileView.deleteTitle',
+    defaultMessage: 'Delete File',
   },
   noFiles: {
     id: 'course.assessment.submission.UploadedFileView.noFiles',
@@ -47,6 +55,7 @@ class VisibleUploadedFileView extends Component {
     this.state = {
       deleteConfirmation: false,
       deleteAttachmentId: null,
+      deleteAttachmentName: null,
     };
   }
 
@@ -58,6 +67,7 @@ class VisibleUploadedFileView extends Component {
           this.setState({
             deleteConfirmation: true,
             deleteAttachmentId: attachment.id,
+            deleteAttachmentName: attachment.name,
           })
       : null;
 
@@ -77,23 +87,37 @@ class VisibleUploadedFileView extends Component {
   }
 
   renderDeleteDialog() {
-    const { deleteAttachmentId, deleteConfirmation } = this.state;
+    const { deleteAttachmentName, deleteAttachmentId, deleteConfirmation } =
+      this.state;
     const { intl, deleteAttachment } = this.props;
     return (
-      <ConfirmationDialog
-        message={intl.formatMessage(translations.deleteConfirmation)}
-        onCancel={() =>
-          this.setState({ deleteConfirmation: false, deleteAttachmentId: null })
-        }
-        onConfirm={() => {
+      <Prompt
+        onClickPrimary={() => {
           deleteAttachment(deleteAttachmentId);
           this.setState({
             deleteConfirmation: false,
             deleteAttachmentId: null,
+            deleteAttachmentName: null,
           });
         }}
+        onClose={() =>
+          this.setState({
+            deleteConfirmation: false,
+            deleteAttachmentId: null,
+            deleteAttachmentName: null,
+          })
+        }
         open={deleteConfirmation}
-      />
+        primaryColor="error"
+        primaryLabel={intl.formatMessage(translations.deleting)}
+        title={intl.formatMessage(translations.deleteTitle)}
+      >
+        <PromptText>
+          {intl.formatMessage(translations.deleteConfirmation, {
+            fileName: deleteAttachmentName,
+          })}
+        </PromptText>
+      </Prompt>
     );
   }
 
@@ -142,10 +166,10 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { questionId } = ownProps;
+  const { questionId, answerId } = ownProps;
   return {
     deleteAttachment: (attachmentId) =>
-      dispatch(destroy(questionId, attachmentId)),
+      dispatch(destroy(answerId, questionId, attachmentId)),
   };
 }
 

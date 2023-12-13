@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 
 import { workflowStates } from '../constants';
 import { fileShape } from '../propTypes';
@@ -16,7 +16,15 @@ const translations = defineMessages({
   },
   deleteConfirmation: {
     id: 'course.assessment.submission.ImportedFileView.deleteConfirmation',
-    defaultMessage: 'Are you sure you want to delete this file?',
+    defaultMessage: 'Are you sure you want to delete {fileName}?',
+  },
+  deleting: {
+    id: 'course.assessment.submission.ImportedFileView.deleting',
+    defaultMessage: 'Delete',
+  },
+  deleteTitle: {
+    id: 'course.assessment.submission.ImportedFileView.deleteTitle',
+    defaultMessage: 'Delete File',
   },
   noFiles: {
     id: 'course.assessment.submission.ImportedFileView.noFiles',
@@ -41,24 +49,41 @@ class VisibleImportedFileView extends Component {
     this.state = {
       deleteConfirmation: false,
       deleteFileId: null,
+      deleteFileName: null,
     };
   }
 
   renderDeleteDialog() {
-    const { deleteFileId, deleteConfirmation } = this.state;
+    const { deleteFileName, deleteFileId, deleteConfirmation } = this.state;
     const { intl, handleDeleteFile } = this.props;
     return (
-      <ConfirmationDialog
-        message={intl.formatMessage(translations.deleteConfirmation)}
-        onCancel={() =>
-          this.setState({ deleteConfirmation: false, deleteFileId: null })
-        }
-        onConfirm={() => {
+      <Prompt
+        onClickPrimary={() => {
           handleDeleteFile(deleteFileId);
-          this.setState({ deleteConfirmation: false, deleteFileId: null });
+          this.setState({
+            deleteConfirmation: false,
+            deleteFileId: null,
+            deleteFileName: null,
+          });
         }}
+        onClose={() =>
+          this.setState({
+            deleteConfirmation: false,
+            deleteFileId: null,
+            deleteFileName: null,
+          })
+        }
         open={deleteConfirmation}
-      />
+        primaryColor="error"
+        primaryLabel={intl.formatMessage(translations.deleting)}
+        title={intl.formatMessage(translations.deleteTitle)}
+      >
+        <PromptText>
+          {intl.formatMessage(translations.deleteConfirmation, {
+            fileName: deleteFileName,
+          })}
+        </PromptText>
+      </Prompt>
     );
   }
 
@@ -70,6 +95,7 @@ class VisibleImportedFileView extends Component {
           this.setState({
             deleteConfirmation: true,
             deleteFileId: file.id,
+            deleteFileName: file.filename,
           })
       : null;
 
