@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { FieldValues, UseFormSetValue } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { Cancel, CheckCircle } from '@mui/icons-material';
 import {
   Alert,
@@ -182,6 +182,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     ? questionsFlags[question.id].isAutograding
     : false;
   const disabled = noPastAnswers || isLoading || isAutograding;
+  const { resetField } = useFormContext();
 
   const handleUpdateClientVersion = (
     savedAnswerId: number,
@@ -202,18 +203,16 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     savedAnswerId: number,
     answerFields: unknown,
     language: string,
-    setValue: UseFormSetValue<FieldValues>,
   ): void => {
-    dispatch(importFiles(savedAnswerId, answerFields, language, setValue));
+    dispatch(importFiles(savedAnswerId, answerFields, language, resetField));
   };
 
   const handleUploadFiles = (
     savedAnswerId: number,
     answerFields: unknown,
-    setValue: UseFormSetValue<FieldValues>,
   ): void => {
     dispatch(
-      uploadFiles(savedAnswerId, { [savedAnswerId]: answerFields }, setValue),
+      uploadFiles(savedAnswerId, { [savedAnswerId]: answerFields }, resetField),
     );
   };
 

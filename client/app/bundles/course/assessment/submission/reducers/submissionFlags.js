@@ -69,8 +69,9 @@ export default function (state = initialState, action) {
         draft.savingStatus[answerId.toString()] = saveStatus.Saved;
       });
     }
-    case actions.IMPORT_FILES_SUCCESS: {
-      const answerId = action.payload;
+    case actions.IMPORT_FILES_SUCCESS:
+    case actions.UPLOAD_FILES_SUCCESS: {
+      const answerId = action.payload.id;
       return produce(state, (draft) => {
         draft.savingStatus[answerId.toString()] = saveStatus.Saved;
       });
@@ -85,12 +86,6 @@ export default function (state = initialState, action) {
     case actions.DELETE_FILE_SUCCESS:
     case actions.DELETE_ATTACHMENT_SUCCESS: {
       const answerId = action.payload.answer.answerId;
-      return produce(state, (draft) => {
-        draft.savingStatus[answerId.toString()] = saveStatus.Saved;
-      });
-    }
-    case actions.UPLOAD_FILES_SUCCESS: {
-      const answerId = action.payload.id;
       return produce(state, (draft) => {
         draft.savingStatus[answerId.toString()] = saveStatus.Saved;
       });
