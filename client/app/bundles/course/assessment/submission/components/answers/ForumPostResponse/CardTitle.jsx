@@ -1,27 +1,14 @@
-import { grey } from '@mui/material/colors';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
-const styles = {
-  cardTitle: {
-    color: 'black',
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: 600,
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-  },
-  typeLabel: {
-    color: grey[600],
-    fontSize: 12,
-    marginBottom: -3,
-  },
-};
-
 const CardTitle = ({ type, title }) => (
-  <div style={styles.cardTitle}>
-    <div style={styles.typeLabel}>{type}</div>
-    <div>{title}</div>
+  <div>
+    <div className="text-gray-600 text-sm mb-[-3px]">
+      <Typography variant="body2">{type}</Typography>
+    </div>
+    <div className="flex flex-col max-w-[600px] overflow-hidden whitespace-nowrap overflow-ellipsis text-black">
+      <Typography variant="body2">{title}</Typography>
+    </div>
   </div>
 );
 
