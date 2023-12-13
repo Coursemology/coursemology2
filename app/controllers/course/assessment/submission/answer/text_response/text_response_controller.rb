@@ -18,10 +18,10 @@ class Course::Assessment::Submission::Answer::TextResponse::TextResponseControll
   private
 
   def update_answer_files(answer_params)
-    @text_response_answer.create_and_upload_files(answer_params)
+    @text_response_answer.create_and_upload_files(answer_params.merge(session_id: session.id))
   end
 
   def upload_files_params
-    params.require(:answer).permit(attachment_params)
+    params.require(:answer).permit(attachment_params, :clientVersion)
   end
 end
