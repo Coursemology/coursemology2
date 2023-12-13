@@ -2,7 +2,12 @@ import attachmentsAPI from 'api/Attachments';
 
 import actionTypes from '../constants';
 
-export default function destroy(answerId, questionId, attachmentId) {
+export default function destroy(
+  answerId,
+  questionId,
+  currentTime,
+  attachmentId,
+) {
   return (dispatch) => {
     dispatch({
       type: actionTypes.DELETE_ATTACHMENT_REQUEST,
@@ -10,7 +15,7 @@ export default function destroy(answerId, questionId, attachmentId) {
     });
 
     return attachmentsAPI
-      .delete(attachmentId)
+      .delete(answerId, currentTime, attachmentId)
       .then((response) => response.data)
       .then(() => {
         dispatch({

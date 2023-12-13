@@ -162,7 +162,8 @@ const VisibleProgrammingImportEditor = (props) => {
     answers[`${answerId}`].files_attributes;
 
   const handleDeleteFile = (fileId) => {
-    dispatch(deleteFile(answerId, fileId, answers, setValue));
+    const currentTime = Date.now();
+    dispatch(deleteFile(answerId, fileId, answers, currentTime, setValue));
     setDisplayFileIndex(0);
   };
 
