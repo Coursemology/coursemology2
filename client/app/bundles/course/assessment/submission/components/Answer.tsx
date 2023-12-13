@@ -1,8 +1,5 @@
-import { ElementType } from 'react';
-import { FieldValues, UseFormSetValue } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { Card, CardContent } from '@mui/material';
-import { yellow } from '@mui/material/colors';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -10,6 +7,16 @@ import PastAnswers from '../containers/PastAnswers';
 import ScribingView from '../containers/ScribingView';
 import VoiceResponseAnswer from '../containers/VoiceResponseAnswer';
 import { SubmissionQuestionData } from '../questionGrade';
+import {
+  AnswerProps,
+  FileUploadAnswerProps,
+  ForumResponseAnswerProps,
+  McqMrqAnswerProps,
+  ProgrammingAnswerProps,
+  ScribingAnswerProps,
+  TextAnswerProps,
+  VoiceResponseAnswerProps,
+} from '../types';
 
 import FileUploadAnswer from './answers/FileUpload';
 import ForumPostResponseAnswer from './answers/ForumPostResponse';
@@ -26,32 +33,20 @@ const translations = defineMessages({
   },
 });
 
-interface BaseAnswerProps<T> {
+interface Props {
+  type: keyof typeof AnswerMapper;
   question: SubmissionQuestionData;
-  answerId: number;
-  moreProps: T;
+  answerProps: AnswerProps;
 }
-
-interface ProgrammingAnswerData {
-  readOnly: boolean;
-  saveAnswer: (data: unknown, answerId: number) => void;
-  importFiles: (
-    savedAnswerId: number,
-    answerFields: unknown,
-    language: string,
-    setValue: UseFormSetValue<FieldValues>,
-  ) => void;
-  isSavingAnswer: boolean;
-}
-
-interface ProgrammingAnswerProps
-  extends BaseAnswerProps<ProgrammingAnswerData> {}
 
 const Programming = (props: ProgrammingAnswerProps): JSX.Element => {
   const {
     question,
     answerId,
-    moreProps: { readOnly, saveAnswer, importFiles, isSavingAnswer },
+    readOnly,
+    saveAnswer,
+    importFiles,
+    isSavingAnswer,
   } = props;
   return (
     <ProgrammingAnswer
@@ -68,20 +63,14 @@ const Programming = (props: ProgrammingAnswerProps): JSX.Element => {
   );
 };
 
-interface McqMrqAnswerData {
-  readOnly: boolean;
-  saveAnswer: (data: unknown, answerId: number) => void;
-  graderView: boolean;
-  showMcqMrqSolution: boolean;
-}
-
-interface McqMrqAnswerProps extends BaseAnswerProps<McqMrqAnswerData> {}
-
 const MultipleChoice = (props: McqMrqAnswerProps): JSX.Element => {
   const {
     question,
     answerId,
-    moreProps: { readOnly, graderView, showMcqMrqSolution, saveAnswer },
+    readOnly,
+    graderView,
+    showMcqMrqSolution,
+    saveAnswer,
   } = props;
   return (
     <MultipleChoiceAnswer
@@ -102,7 +91,10 @@ const MultipleResponse = (props: McqMrqAnswerProps): JSX.Element => {
   const {
     question,
     answerId,
-    moreProps: { readOnly, graderView, showMcqMrqSolution, saveAnswer },
+    readOnly,
+    graderView,
+    showMcqMrqSolution,
+    saveAnswer,
   } = props;
   return (
     <MultipleResponseAnswer
@@ -119,32 +111,15 @@ const MultipleResponse = (props: McqMrqAnswerProps): JSX.Element => {
   );
 };
 
-interface TextResponseAnswerData {
-  readOnly: boolean;
-  saveAnswer: (data: unknown, answerId: number) => void;
-  uploadFiles: (
-    savedAnswerId: number,
-    answerFields: unknown,
-    setValue: UseFormSetValue<FieldValues>,
-  ) => void;
-  isSavingAnswer: boolean;
-  graderView: boolean;
-}
-
-interface TextResponseAnswerProps
-  extends BaseAnswerProps<TextResponseAnswerData> {}
-
-const TextResponse = (props: TextResponseAnswerProps): JSX.Element => {
+const TextResponse = (props: TextAnswerProps): JSX.Element => {
   const {
     question,
     answerId,
-    moreProps: {
-      readOnly,
-      graderView,
-      saveAnswer,
-      isSavingAnswer,
-      uploadFiles,
-    },
+    readOnly,
+    graderView,
+    saveAnswer,
+    isSavingAnswer,
+    uploadFiles,
   } = props;
   return (
     <TextResponseAnswer
@@ -162,25 +137,8 @@ const TextResponse = (props: TextResponseAnswerProps): JSX.Element => {
   );
 };
 
-interface FileUploadAnswerData {
-  readOnly: boolean;
-  uploadFiles: (
-    savedAnswerId: number,
-    answerFields: unknown,
-    setValue: UseFormSetValue<FieldValues>,
-  ) => void;
-  isSavingAnswer: boolean;
-  graderView: boolean;
-}
-
-interface FileUploadAnswerProps extends BaseAnswerProps<FileUploadAnswerData> {}
-
 const FileUpload = (props: FileUploadAnswerProps): JSX.Element => {
-  const {
-    question,
-    answerId,
-    moreProps: { readOnly, isSavingAnswer, uploadFiles },
-  } = props;
+  const { question, answerId, readOnly, isSavingAnswer, uploadFiles } = props;
   return (
     <FileUploadAnswer
       key={`question_${question.id}`}
@@ -195,18 +153,8 @@ const FileUpload = (props: FileUploadAnswerProps): JSX.Element => {
   );
 };
 
-interface ScribingAnswerData {
-  readOnly: boolean;
-}
-
-interface ScribingAnswerProps extends BaseAnswerProps<ScribingAnswerData> {}
-
 const Scribing = (props: ScribingAnswerProps): JSX.Element => {
-  const {
-    question,
-    moreProps: { readOnly },
-    answerId,
-  } = props;
+  const { question, readOnly, answerId } = props;
   return (
     <ScribingView
       key={`question_${question.id}`}
@@ -217,21 +165,8 @@ const Scribing = (props: ScribingAnswerProps): JSX.Element => {
   );
 };
 
-interface VoiceResponseAnswerData {
-  readOnly: boolean;
-  saveAnswer: (data: unknown, answerId: number) => void;
-  savingIndicator: React.ReactNode | null;
-}
-
-interface VoiceResponseAnswerProps
-  extends BaseAnswerProps<VoiceResponseAnswerData> {}
-
 const VoiceResponse = (props: VoiceResponseAnswerProps): JSX.Element => {
-  const {
-    question,
-    answerId,
-    moreProps: { readOnly, saveAnswer, savingIndicator },
-  } = props;
+  const { question, answerId, readOnly, saveAnswer, savingIndicator } = props;
   return (
     <VoiceResponseAnswer
       key={`question_${question.id}`}
@@ -244,21 +179,8 @@ const VoiceResponse = (props: VoiceResponseAnswerProps): JSX.Element => {
   );
 };
 
-interface ForumResponseAnswerData {
-  readOnly: boolean;
-  saveAnswer: (data: unknown, answerId: number) => void;
-  savingIndicator: React.ReactNode | null;
-}
-
-interface ForumResponseAnswerProps
-  extends BaseAnswerProps<ForumResponseAnswerData> {}
-
 const ForumPostResponse = (props: ForumResponseAnswerProps): JSX.Element => {
-  const {
-    question,
-    answerId,
-    moreProps: { readOnly, saveAnswer, savingIndicator },
-  } = props;
+  const { question, answerId, readOnly, saveAnswer, savingIndicator } = props;
   return (
     <ForumPostResponseAnswer
       key={`question_${question.id}`}
@@ -282,20 +204,25 @@ export type AnswerType =
   | 'VoiceResponse'
   | 'ForumPostResponse';
 
-const answers: Record<AnswerType, ElementType<BaseAnswerProps<never>>> = {
-  MultipleChoice,
-  MultipleResponse,
-  Programming,
-  TextResponse,
-  Comprehension: TextResponse,
-  FileUpload,
-  Scribing,
-  VoiceResponse,
-  ForumPostResponse,
+export const AnswerMapper = {
+  MultipleChoice: (props: McqMrqAnswerProps): JSX.Element =>
+    MultipleChoice(props),
+  MultipleResponse: (props: McqMrqAnswerProps): JSX.Element =>
+    MultipleResponse(props),
+  Programming: (props: ProgrammingAnswerProps): JSX.Element =>
+    Programming(props),
+  TextResponse: (props: TextAnswerProps): JSX.Element => TextResponse(props),
+  Comprehension: (props: TextAnswerProps): JSX.Element => TextResponse(props),
+  FileUpload: (props: FileUploadAnswerProps): JSX.Element => FileUpload(props),
+  Scribing: (props: ScribingAnswerProps): JSX.Element => Scribing(props),
+  VoiceResponse: (props: VoiceResponseAnswerProps): JSX.Element =>
+    VoiceResponse(props),
+  ForumPostResponse: (props: ForumResponseAnswerProps): JSX.Element =>
+    ForumPostResponse(props),
 };
 
-const Answer = (props: BaseAnswerProps<unknown>): JSX.Element => {
-  const Component = answers[props.question.type];
+const Answer = (props: Props): JSX.Element => {
+  const Component = AnswerMapper[props.type];
   const { t } = useTranslation();
 
   if (props.question.viewHistory) {
@@ -304,13 +231,19 @@ const Answer = (props: BaseAnswerProps<unknown>): JSX.Element => {
 
   if (!Component) {
     return (
-      <Card style={{ backgroundColor: yellow[100] }}>
+      <Card className="bg-yellow-100">
         <CardContent>{t(translations.rendererNotImplemented)}</CardContent>
       </Card>
     );
   }
 
-  return <Component {...props} />;
+  // in order to support polymorphism (each answerProps has different attributes, and we
+  // need to support them all) and also the possibility of extending the type for future
+  // addition type of answer, we declare props.answerProps as any, since it can be
+  // any type
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return Component(props.answerProps as any);
 };
 
 export default Answer;
