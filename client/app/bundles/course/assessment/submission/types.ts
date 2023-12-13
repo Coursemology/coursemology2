@@ -16,12 +16,12 @@ export interface McqMrqAnswerProps extends AnswerCommonProps {
   type: 'MultipleChoice' | 'MultipleResponse';
   showMcqMrqSolution: boolean;
   graderView: boolean;
-  saveAnswer: (data: unknown, answerId: number) => void;
+  saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
 }
 
 export interface TextAnswerProps extends AnswerCommonProps {
   type: 'TextResponse' | 'Comprehension';
-  saveAnswer: (data: unknown, answerId: number) => void;
+  saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
   uploadFiles: (
     savedAnswerId: number,
     answerFields: unknown,
@@ -44,7 +44,7 @@ export interface FileUploadAnswerProps extends AnswerCommonProps {
 
 export interface ProgrammingAnswerProps extends AnswerCommonProps {
   type: 'Programming';
-  saveAnswer: (data: unknown, answerId: number) => void;
+  saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
   importFiles: (
     savedAnswerId: number,
     answerFields: unknown,
@@ -56,13 +56,13 @@ export interface ProgrammingAnswerProps extends AnswerCommonProps {
 
 export interface ForumResponseAnswerProps extends AnswerCommonProps {
   type: 'ForumPostResponse';
-  saveAnswer: (data: unknown, answerId: number) => void;
+  saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
   savingIndicator: React.ReactNode | null;
 }
 
 export interface VoiceResponseAnswerProps extends AnswerCommonProps {
   type: 'VoiceResponse';
-  saveAnswer: (data: unknown, answerId: number) => void;
+  saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
   savingIndicator: React.ReactNode | null;
 }
 

@@ -17,7 +17,7 @@ const SelectProgrammingFileEditor = ({
   readOnly,
   language,
   displayFileIndex,
-  saveAnswer,
+  saveAnswerAndUpdateClientVersion,
 }) => {
   const { control } = useFormContext();
   const { fields } = useFieldArray({
@@ -55,7 +55,9 @@ const SelectProgrammingFileEditor = ({
               fieldName={`${answerId}.files_attributes.${index}.content`}
               file={file}
               language={language}
-              saveAnswer={saveAnswer}
+              saveAnswerAndUpdateClientVersion={
+                saveAnswerAndUpdateClientVersion
+              }
             />
           );
         }
@@ -70,7 +72,7 @@ SelectProgrammingFileEditor.propTypes = {
   readOnly: PropTypes.bool,
   language: PropTypes.string,
   displayFileIndex: PropTypes.number,
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
 };
 
 const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
@@ -141,7 +143,7 @@ const VisibleProgrammingImportEditor = (props) => {
     historyAnswers,
     isSaving,
     viewHistory,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
     importProgrammingFiles,
     isSavingAnswer,
   } = props;
@@ -187,7 +189,7 @@ const VisibleProgrammingImportEditor = (props) => {
             question,
             displayFileIndex,
             viewHistory,
-            saveAnswer,
+            saveAnswerAndUpdateClientVersion,
             language: parseLanguages(question.language),
           }}
         />
@@ -227,7 +229,7 @@ VisibleProgrammingImportEditor.propTypes = {
     questionId: PropTypes.number,
     files_attributes: PropTypes.arrayOf(fileShape),
   }),
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
   importProgrammingFiles: PropTypes.func,
   isSavingAnswer: PropTypes.bool,
 };
