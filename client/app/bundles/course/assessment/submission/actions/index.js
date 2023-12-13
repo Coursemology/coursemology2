@@ -421,9 +421,11 @@ export function resetAnswer(submissionId, answerId, questionId, setValue) {
   };
 }
 
-export function deleteFile(answerId, fileId, answers, setValue) {
+export function deleteFile(answerId, fileId, answers, currentTime, setValue) {
   const answer = Object.values(answers).find((ans) => ans.id === answerId);
-  const payload = { answer: { id: answerId, file_id: fileId } };
+  const payload = {
+    answer: { id: answerId, file_id: fileId, clientVersion: currentTime },
+  };
 
   return (dispatch) => {
     dispatch({

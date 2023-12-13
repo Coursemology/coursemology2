@@ -13,8 +13,14 @@ class AttachmentsAPI extends BaseAPI {
     return this.client.post(this.#urlPrefix, formData);
   }
 
-  delete(attachmentId: number): APIResponse<unknown> {
-    return this.client.delete(`${this.#urlPrefix}/${attachmentId}`);
+  delete(
+    answerId: number,
+    currentTime: number,
+    attachmentId: number,
+  ): APIResponse<unknown> {
+    return this.client.delete(`${this.#urlPrefix}/${attachmentId}`, {
+      params: { answerId, clientVersion: currentTime },
+    });
   }
 }
 
