@@ -39,6 +39,22 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
           expect(answer.specific.files.count).to eq(2)
         end
       end
+
+      context 'when uploading new programming files with more than 50KB' do
+        # defining a file that has size more than 50KB
+        let(:large_file_attribute) { { filename: 'template2', content: 'a' * ((50 * 1024) + 1) } }
+
+        it 'expects to return a bad request' do
+          post :create_programming_files, as: :json, params: {
+            course_id: course, assessment_id: assessment.id, submission_id: submission.id,
+            answer_id: answer.id, answer: {
+              id: submission.answers.first.id,
+              files_attributes: [large_file_attribute]
+            }
+          }
+          expect(response).to have_http_status(:bad_request)
+        end
+      end
     end
 
     describe '#delete_programming_file' do
