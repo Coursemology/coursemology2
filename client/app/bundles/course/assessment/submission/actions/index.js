@@ -196,9 +196,14 @@ export function saveAnswer(submissionId, rawAnswers, answerId, currentTime) {
         if (data.newSessionUrl) {
           window.location = data.newSessionUrl;
         }
+        const savedAnswer = data.answers.filter((ans) => ans.id === answerId);
+        const savedQuestion = data.questions.filter(
+          (qn) => qn.id === savedAnswer[0].questionId,
+        );
         const dataForAnswerId = {
           ...data,
-          answers: data.answers.filter((ans) => ans.id === answerId),
+          answers: savedAnswer,
+          questions: savedQuestion,
         };
         dispatch({
           type: actionTypes.SAVE_ANSWER_SUCCESS,
@@ -472,7 +477,7 @@ function validateJavaFiles(files) {
   return files.filter((file) => !regex.test(file.filename)).length === 0;
 }
 
-export function uploadFiles(answerId, answerFields, setValue) {
+export function uploadFiles(answerId, answerFields, resetField) {
   const answer = Object.values(answerFields).find((ans) => ans.id === answerId);
   const payload = {
     answer: {
@@ -497,14 +502,14 @@ export function uploadFiles(answerId, answerFields, setValue) {
           payload: data,
         });
 
-        setValue(`${answerId}.files`, []);
+        resetField(`${answerId}.files`);
       })
       .catch((error) => {
         dispatch({
           type: actionTypes.UPLOAD_FILES_FAILURE,
           payload: answerId,
         });
-        setValue(`${answerId}.files`, []);
+        resetField(`${answerId}.files`);
         dispatch(
           setNotification(
             translations.importFilesFailure,
@@ -516,7 +521,7 @@ export function uploadFiles(answerId, answerFields, setValue) {
 }
 
 // Imports staged files into the question to be evaluated
-export function importFiles(answerId, answerFields, language, setValue) {
+export function importFiles(answerId, answerFields, language, resetField) {
   const answer = Object.values(answerFields).find((ans) => ans.id === answerId);
   const files = answerFields[answerId].files_attributes;
   const payload = { answer: { id: answerId, ...answer } };
@@ -529,11 +534,13 @@ export function importFiles(answerId, answerFields, language, setValue) {
 
     if (!validateFiles(files)) {
       dispatch({ type: actionTypes.IMPORT_FILES_FAILURE, payload: answerId });
-      setValue(`${answerId}.import_files`, []);
+      resetField(`${answerId}.files_attributes`);
+      resetField(`${answerId}.import_files`);
       dispatch(setNotification(translations.similarFileNameExists));
     } else if (language === 'Java' && !validateJavaFiles(files)) {
       dispatch({ type: actionTypes.IMPORT_FILES_FAILURE, payload: answerId });
-      setValue(`${answerId}.import_files`, []);
+      resetField(`${answerId}.files_attributes`);
+      resetField(`${answerId}.import_files`);
       dispatch(setNotification(translations.invalidJavaFileUpload));
     } else {
       CourseAPI.assessment.answer.programming
@@ -542,7 +549,7 @@ export function importFiles(answerId, answerFields, language, setValue) {
         .then((data) => {
           dispatch({
             type: actionTypes.IMPORT_FILES_SUCCESS,
-            payload: data.id,
+            payload: data,
           });
 
           // When multiple programming files are successfully uploaded,
@@ -553,15 +560,18 @@ export function importFiles(answerId, answerFields, language, setValue) {
           const newFilesAttributes = data.fields.files_attributes.map(
             (file) => ({ ...file, staged: false }),
           );
-          setValue(`${answerId}.files_attributes`, newFilesAttributes);
-          setValue(`${answerId}.import_files`, []);
+          resetField(`${answerId}.files_attributes`, {
+            defaultValue: newFilesAttributes,
+          });
+          resetField(`${answerId}.import_files`);
         })
         .catch((error) => {
           dispatch({
             type: actionTypes.IMPORT_FILES_FAILURE,
             payload: answerId,
           });
-          setValue(`${answerId}.import_files`, []);
+          resetField(`${answerId}.files_attributes`);
+          resetField(`${answerId}.import_files`);
           dispatch(
             setNotification(
               translations.importFilesFailure,

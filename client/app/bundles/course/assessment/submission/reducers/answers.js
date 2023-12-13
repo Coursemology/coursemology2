@@ -2,15 +2,42 @@ import { produce } from 'immer';
 
 import actions from '../constants';
 
+function setAnswerFields(answer) {
+  switch (answer.questionType) {
+    case 'TextResponse':
+    case 'FileUpload':
+    case 'Comprehension':
+      return { ...answer.fields, files: null };
+    case 'Programming':
+      return { ...answer.fields, import_files: null };
+    default:
+      return answer.fields;
+  }
+}
+
 // Extract answer values from JSON response
 function buildInitialValues(answers) {
   return answers.reduce(
     (obj, answer) => ({
       ...obj,
-      [answer.fields.id]: answer.fields,
+      [answer.fields.id]: setAnswerFields(answer),
     }),
     {},
   );
+}
+
+function extendAnswer(questions, answers) {
+  const mapAnswerToQuestionType = questions.reduce(
+    (obj, question) => ({
+      ...obj,
+      [question.id]: question.type,
+    }),
+    {},
+  );
+  return answers.map((answer) => ({
+    ...answer,
+    questionType: mapAnswerToQuestionType[answer.questionId],
+  }));
 }
 
 function buildInitialClientVersion(answers) {
@@ -31,15 +58,23 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case actions.SAVE_GRADE_SUCCESS: {
-      const initialValues = buildInitialValues(action.payload.answers);
-      const questionId = Object.keys(initialValues)[0];
+      const answers = extendAnswer(
+        action.payload.questions,
+        action.payload.answers,
+      );
+      const initialValues = buildInitialValues(answers);
+      const answerId = Object.keys(initialValues)[0];
 
       return produce(state, (draft) => {
-        draft.initial[questionId] = initialValues[questionId];
+        draft.initial[answerId] = initialValues[answerId];
       });
     }
     case actions.SAVE_ANSWER_SUCCESS: {
-      const initialValues = buildInitialValues(action.payload.answers);
+      const answers = extendAnswer(
+        action.payload.questions,
+        action.payload.answers,
+      );
+      const initialValues = buildInitialValues(answers);
       const answerId = Object.keys(initialValues)[0];
 
       const savedClientVersion = action.payload.answers[0].clientVersion;
@@ -61,7 +96,11 @@ export default function (state = initialState, action) {
     case actions.MARK_SUCCESS:
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS: {
-      const initialValues = buildInitialValues(action.payload.answers);
+      const answers = extendAnswer(
+        action.payload.questions,
+        action.payload.answers,
+      );
+      const initialValues = buildInitialValues(answers);
       const clientVersion = buildInitialClientVersion(action.payload.answers);
       return produce(state, (draft) => {
         draft.initial = initialValues;
