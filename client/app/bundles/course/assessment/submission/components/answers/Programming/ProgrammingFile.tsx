@@ -10,11 +10,18 @@ interface ProgrammingFileProps {
   file: ProgrammingContent;
   language: string;
   readOnly: boolean;
-  saveAnswer: (data: unknown, answerId: number) => void;
+  saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
 }
 
 const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
-  const { answerId, fieldName, file, language, readOnly, saveAnswer } = props;
+  const {
+    answerId,
+    fieldName,
+    file,
+    language,
+    readOnly,
+    saveAnswerAndUpdateClientVersion,
+  } = props;
 
   return (
     <div className="space-y-3">
@@ -26,7 +33,7 @@ const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
           fieldName={fieldName}
           file={file}
           language={language}
-          saveAnswer={saveAnswer}
+          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
       )}
     </div>

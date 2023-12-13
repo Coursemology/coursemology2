@@ -97,7 +97,7 @@ const MultipleResponse = (props) => {
     showMcqMrqSolution,
     graderView,
     answerId,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
   } = props;
   const { control, getValues } = useFormContext();
 
@@ -110,7 +110,7 @@ const MultipleResponse = (props) => {
           field={field}
           fieldState={fieldState}
           saveAnswer={() => {
-            saveAnswer(getValues()[answerId], answerId);
+            saveAnswerAndUpdateClientVersion(getValues()[answerId], answerId);
           }}
           {...{ question, readOnly, showMcqMrqSolution, graderView }}
         />
@@ -125,7 +125,7 @@ MultipleResponse.propTypes = {
   showMcqMrqSolution: PropTypes.bool,
   graderView: PropTypes.bool,
   answerId: PropTypes.number,
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
 };
 
 export default MultipleResponse;
