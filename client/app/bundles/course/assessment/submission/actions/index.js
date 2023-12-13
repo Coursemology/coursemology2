@@ -421,7 +421,10 @@ export function deleteFile(answerId, fileId, answers, setValue) {
   const payload = { answer: { id: answerId, file_id: fileId } };
 
   return (dispatch) => {
-    dispatch({ type: actionTypes.DELETE_FILE_REQUEST });
+    dispatch({
+      type: actionTypes.DELETE_FILE_REQUEST,
+      payload: payload.answer.id,
+    });
 
     return CourseAPI.assessment.answer.programming
       .deleteProgrammingFile(answerId, payload)
@@ -443,7 +446,7 @@ export function deleteFile(answerId, fileId, answers, setValue) {
         dispatch(setNotification(translations.deleteFileSuccess));
       })
       .catch((error) => {
-        dispatch({ type: actionTypes.DELETE_FILE_FAILURE });
+        dispatch({ type: actionTypes.DELETE_FILE_FAILURE, payload: answerId });
         dispatch(
           setNotification(
             translations.deleteFileFailure,

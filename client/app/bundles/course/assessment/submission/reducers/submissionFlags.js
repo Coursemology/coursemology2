@@ -75,6 +75,20 @@ export default function (state = initialState, action) {
         draft.savingStatus[answerId.toString()] = saveStatus.Saved;
       });
     }
+    case actions.DELETE_FILE_REQUEST:
+    case actions.DELETE_ATTACHMENT_REQUEST: {
+      const answerId = action.payload;
+      return produce(state, (draft) => {
+        draft.savingStatus[answerId.toString()] = saveStatus.Saving;
+      });
+    }
+    case actions.DELETE_FILE_SUCCESS:
+    case actions.DELETE_ATTACHMENT_SUCCESS: {
+      const answerId = action.payload.answer.answerId;
+      return produce(state, (draft) => {
+        draft.savingStatus[answerId.toString()] = saveStatus.Saved;
+      });
+    }
     case actions.UPLOAD_FILES_SUCCESS: {
       const answerId = action.payload.id;
       return produce(state, (draft) => {
@@ -83,7 +97,9 @@ export default function (state = initialState, action) {
     }
     case actions.SAVE_ANSWER_FAILURE:
     case actions.IMPORT_FILES_FAILURE:
-    case actions.UPLOAD_FILES_FAILURE: {
+    case actions.UPLOAD_FILES_FAILURE:
+    case actions.DELETE_FILE_FAILURE:
+    case actions.DELETE_ATTACHMENT_FAILURE: {
       const answerId = action.payload;
       return produce(state, (draft) => {
         draft.savingStatus[answerId.toString()] = saveStatus.Failed;
@@ -92,6 +108,7 @@ export default function (state = initialState, action) {
     case actions.UPDATE_CLIENT_VERSION:
       return produce(state, (draft) => {
         draft.clientVersion[action.answerId] = action.clientVersion;
+        draft.savingStatus[action.answerId.toString()] = saveStatus.Saving;
       });
     case actions.SAVE_DRAFT_REQUEST: {
       return produce(state, (draft) => {
@@ -111,7 +128,6 @@ export default function (state = initialState, action) {
     case actions.MARK_REQUEST:
     case actions.UNMARK_REQUEST:
     case actions.PUBLISH_REQUEST:
-    case actions.DELETE_FILE_REQUEST:
     case actions.GET_PAST_ANSWERS_REQUEST:
       return { ...state, isSaving: true };
     case actions.SAVE_DRAFT_SUCCESS:
@@ -131,7 +147,6 @@ export default function (state = initialState, action) {
     case actions.MARK_SUCCESS:
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS:
-    case actions.DELETE_FILE_SUCCESS:
       return { ...state, isSaving: false };
     case actions.SAVE_DRAFT_FAILURE:
       return produce(state, (draft) => {
@@ -150,7 +165,6 @@ export default function (state = initialState, action) {
     case actions.MARK_FAILURE:
     case actions.UNMARK_FAILURE:
     case actions.PUBLISH_FAILURE:
-    case actions.DELETE_FILE_FAILURE:
     case actions.GET_PAST_ANSWERS_SUCCESS:
     case actions.GET_PAST_ANSWERS_FAILURE:
       return { ...state, isSaving: false };

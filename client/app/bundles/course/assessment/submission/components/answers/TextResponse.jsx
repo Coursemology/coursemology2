@@ -89,7 +89,9 @@ const TextResponse = (props) => {
     <div>
       {readOnly ? readOnlyAnswer : editableAnswer}
       {graderView && <TextResponseSolutions question={question} />}
-      {allowUpload && <UploadedFileView questionId={question.id} />}
+      {allowUpload && (
+        <UploadedFileView answerId={answerId} questionId={question.id} />
+      )}
       {allowUpload && !readOnly && (
         <FileInput
           answerId={answerId}
