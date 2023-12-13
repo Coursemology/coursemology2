@@ -2,9 +2,12 @@ import attachmentsAPI from 'api/Attachments';
 
 import actionTypes from '../constants';
 
-export default function destroy(questionId, attachmentId) {
+export default function destroy(answerId, questionId, attachmentId) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.DELETE_ATTACHMENT_REQUEST });
+    dispatch({
+      type: actionTypes.DELETE_ATTACHMENT_REQUEST,
+      payload: answerId,
+    });
 
     return attachmentsAPI
       .delete(attachmentId)
@@ -12,9 +15,14 @@ export default function destroy(questionId, attachmentId) {
       .then(() => {
         dispatch({
           type: actionTypes.DELETE_ATTACHMENT_SUCCESS,
-          payload: { questionId, attachmentId },
+          payload: { answer: { answerId }, questionId, attachmentId },
         });
       })
-      .catch(() => dispatch({ type: actionTypes.DELETE_ATTACHMENT_FAILURE }));
+      .catch(() =>
+        dispatch({
+          type: actionTypes.DELETE_ATTACHMENT_FAILURE,
+          payload: answerId,
+        }),
+      );
   };
 }
