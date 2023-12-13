@@ -28,7 +28,7 @@ import {
 } from '../questionGrade';
 import translations from '../translations';
 
-import Answer, { AnswerType } from './Answer';
+import Answer, { AnswerMapper } from './Answer';
 
 interface Props {
   handleToggleViewHistoryMode: (
@@ -236,26 +236,34 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     return <Alert severity="warning">{t(translations.missingAnswer)}</Alert>;
   };
 
-  const moreProps: Record<AnswerType, unknown> = {
+  const answerProps = {
     MultipleChoice: {
+      question,
+      answerId,
       readOnly,
       saveAnswer: saveAnswerAndUpdateClientVersion,
       graderView,
       showMcqMrqSolution,
     },
     MultipleResponse: {
+      question,
+      answerId,
       readOnly,
       saveAnswer: saveAnswerAndUpdateClientVersion,
       graderView,
       showMcqMrqSolution,
     },
     Programming: {
+      question,
+      answerId,
       readOnly,
       saveAnswer: saveAnswerAndUpdateClientVersion,
       importFiles: handleImportFiles,
       isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
     },
     TextResponse: {
+      question,
+      answerId,
       readOnly,
       saveAnswer: saveAnswerAndUpdateClientVersion,
       graderView,
@@ -263,6 +271,8 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       uploadFiles: handleUploadFiles,
     },
     Comprehension: {
+      question,
+      answerId,
       readOnly,
       saveAnswer: saveAnswerAndUpdateClientVersion,
       graderView,
@@ -270,22 +280,30 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       uploadFiles: handleUploadFiles,
     },
     FileUpload: {
+      question,
+      answerId,
       readOnly,
       graderView,
       isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
       uploadFiles: handleUploadFiles,
     },
     VoiceResponse: {
+      question,
+      answerId,
       readOnly,
       saveAnswer: saveAnswerAndUpdateClientVersion,
       savingIndicator: SavingIndicator(answerId, savingStatus),
     },
     ForumPostResponse: {
+      question,
+      answerId,
       readOnly,
       saveAnswer: saveAnswerAndUpdateClientVersion,
       savingIndicator: SavingIndicator(answerId, savingStatus),
     },
     Scribing: {
+      question,
+      answerId,
       readOnly,
     },
   };
@@ -314,9 +332,9 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       {readOnly && <Divider />}
       {answerId ? (
         <Answer
-          answerId={answerId}
-          moreProps={moreProps[question.type]}
+          answerProps={answerProps[question.type]}
           question={question}
+          type={question.type as keyof typeof AnswerMapper}
         />
       ) : (
         <MissingAnswer />
