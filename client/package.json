@@ -132,7 +132,7 @@
     "@types/react-google-recaptcha": "^2.1.8",
     "@types/react-resizable": "^3.0.7",
     "@types/react-scroll": "^1.8.10",
-    "@types/react-virtualized-auto-sizer": "^1.0.3",
+    "@types/react-virtualized-auto-sizer": "^1.0.4",
     "@types/react-window": "^1.8.8",
     "@types/sharedworker": "^0.0.109",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
