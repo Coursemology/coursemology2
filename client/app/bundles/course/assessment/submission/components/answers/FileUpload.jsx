@@ -12,7 +12,7 @@ const FileUpload = ({
   uploadFiles,
 }) => (
   <div>
-    <UploadedFileView questionId={question.id} />
+    <UploadedFileView answerId={answerId} questionId={question.id} />
     {!readOnly ? (
       <FileInput
         answerId={answerId}
