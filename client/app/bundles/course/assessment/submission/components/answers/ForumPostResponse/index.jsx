@@ -12,7 +12,13 @@ import ForumPostSelect from './ForumPostSelect';
 
 const ForumPostResponse = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const { question, readOnly, answerId, saveAnswer, savingIndicator } = props;
+  const {
+    question,
+    readOnly,
+    answerId,
+    saveAnswerAndUpdateClientVersion,
+    savingIndicator,
+  } = props;
   const { control, getValues } = useFormContext();
   const renderTextField = () =>
     readOnly ? (
@@ -36,7 +42,10 @@ const ForumPostResponse = (props) => {
               ...field,
               onChange: (event, editor) => {
                 field.onChange(editor !== undefined ? editor.getData() : event);
-                saveAnswer(getValues()[answerId], answerId);
+                saveAnswerAndUpdateClientVersion(
+                  getValues()[answerId],
+                  answerId,
+                );
               },
             }}
             fieldState={fieldState}
@@ -63,7 +72,10 @@ const ForumPostResponse = (props) => {
               ...field,
               onChange: (event) => {
                 field.onChange(event);
-                saveAnswer(getValues()[answerId], answerId);
+                saveAnswerAndUpdateClientVersion(
+                  getValues()[answerId],
+                  answerId,
+                );
               },
             }}
             handleNotificationMessage={toast.info}
@@ -84,7 +96,7 @@ ForumPostResponse.propTypes = {
   question: questionShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
   answerId: PropTypes.number.isRequired,
-  saveAnswer: PropTypes.func,
+  saveAnswerAndUpdateClientVersion: PropTypes.func,
   savingIndicator: PropTypes.node,
 };
 

@@ -44,7 +44,7 @@ const Programming = (props: ProgrammingAnswerProps): JSX.Element => {
     question,
     answerId,
     readOnly,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
     importFiles,
     isSavingAnswer,
   } = props;
@@ -55,7 +55,7 @@ const Programming = (props: ProgrammingAnswerProps): JSX.Element => {
         question,
         readOnly,
         answerId,
-        saveAnswer,
+        saveAnswerAndUpdateClientVersion,
         importFiles,
         isSavingAnswer,
       }}
@@ -70,7 +70,7 @@ const MultipleChoice = (props: McqMrqAnswerProps): JSX.Element => {
     readOnly,
     graderView,
     showMcqMrqSolution,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
   } = props;
   return (
     <MultipleChoiceAnswer
@@ -81,7 +81,7 @@ const MultipleChoice = (props: McqMrqAnswerProps): JSX.Element => {
         answerId,
         graderView,
         showMcqMrqSolution,
-        saveAnswer,
+        saveAnswerAndUpdateClientVersion,
       }}
     />
   );
@@ -94,7 +94,7 @@ const MultipleResponse = (props: McqMrqAnswerProps): JSX.Element => {
     readOnly,
     graderView,
     showMcqMrqSolution,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
   } = props;
   return (
     <MultipleResponseAnswer
@@ -105,7 +105,7 @@ const MultipleResponse = (props: McqMrqAnswerProps): JSX.Element => {
         answerId,
         graderView,
         showMcqMrqSolution,
-        saveAnswer,
+        saveAnswerAndUpdateClientVersion,
       }}
     />
   );
@@ -117,7 +117,7 @@ const TextResponse = (props: TextAnswerProps): JSX.Element => {
     answerId,
     readOnly,
     graderView,
-    saveAnswer,
+    saveAnswerAndUpdateClientVersion,
     isSavingAnswer,
     uploadFiles,
   } = props;
@@ -129,7 +129,7 @@ const TextResponse = (props: TextAnswerProps): JSX.Element => {
         readOnly,
         answerId,
         graderView,
-        saveAnswer,
+        saveAnswerAndUpdateClientVersion,
         isSavingAnswer,
         uploadFiles,
       }}
@@ -166,28 +166,40 @@ const Scribing = (props: ScribingAnswerProps): JSX.Element => {
 };
 
 const VoiceResponse = (props: VoiceResponseAnswerProps): JSX.Element => {
-  const { question, answerId, readOnly, saveAnswer, savingIndicator } = props;
+  const {
+    question,
+    answerId,
+    readOnly,
+    saveAnswerAndUpdateClientVersion,
+    savingIndicator,
+  } = props;
   return (
     <VoiceResponseAnswer
       key={`question_${question.id}`}
       answerId={answerId}
       question={question}
       readOnly={readOnly}
-      saveAnswer={saveAnswer}
+      saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
       savingIndicator={savingIndicator}
     />
   );
 };
 
 const ForumPostResponse = (props: ForumResponseAnswerProps): JSX.Element => {
-  const { question, answerId, readOnly, saveAnswer, savingIndicator } = props;
+  const {
+    question,
+    answerId,
+    readOnly,
+    saveAnswerAndUpdateClientVersion,
+    savingIndicator,
+  } = props;
   return (
     <ForumPostResponseAnswer
       key={`question_${question.id}`}
       answerId={answerId}
       question={question}
       readOnly={readOnly}
-      saveAnswer={saveAnswer}
+      saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
       savingIndicator={savingIndicator}
     />
   );
