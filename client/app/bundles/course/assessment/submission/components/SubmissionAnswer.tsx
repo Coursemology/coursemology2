@@ -48,10 +48,12 @@ interface Props {
 }
 
 const SavingIndicator = (
-  answerId: number,
   savingStatus: Record<string, string>,
+  answerId?: number,
 ): JSX.Element | null => {
   const { t } = useTranslation();
+
+  if (!answerId) return null;
 
   if (savingStatus[answerId.toString()] === saveStatus.Saving) {
     return (
@@ -104,13 +106,13 @@ const HistoryToggle = (
   isLoading: boolean,
   noPastAnswers: boolean,
   savingStatus: Record<string, string>,
-  answerId: number,
   disabled: boolean,
   handleToggleViewHistoryMode: (
     viewHistory: boolean,
     submissionQuestionId: number,
     questionId: number,
   ) => void,
+  answerId?: number,
 ): JSX.Element | null => {
   const { t } = useTranslation();
 
@@ -118,7 +120,7 @@ const HistoryToggle = (
     <div className="flex w-full flex-wrap justify-between">
       {question.canViewHistory && (
         <>
-          {!readOnly && SavingIndicator(answerId, savingStatus)}
+          {!readOnly && SavingIndicator(savingStatus, answerId)}
           <div className="flex flex-grow justify-end">
             {isLoading && (
               <CircularProgress
@@ -235,6 +237,9 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     return <Alert severity="warning">{t(translations.missingAnswer)}</Alert>;
   };
 
+  const isSavingAnswer: boolean =
+    savingStatus[answerId?.toString()] === saveStatus.Saving ?? false;
+
   const answerProps = {
     MultipleChoice: {
       question,
@@ -258,7 +263,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       readOnly,
       saveAnswerAndUpdateClientVersion,
       importFiles: handleImportFiles,
-      isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
+      isSavingAnswer,
     },
     TextResponse: {
       question,
@@ -266,7 +271,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       readOnly,
       saveAnswerAndUpdateClientVersion,
       graderView,
-      isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
+      isSavingAnswer,
       uploadFiles: handleUploadFiles,
     },
     Comprehension: {
@@ -275,7 +280,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       readOnly,
       saveAnswerAndUpdateClientVersion,
       graderView,
-      isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
+      isSavingAnswer,
       uploadFiles: handleUploadFiles,
     },
     FileUpload: {
@@ -283,7 +288,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       answerId,
       readOnly,
       graderView,
-      isSavingAnswer: savingStatus[answerId.toString()] === saveStatus.Saving,
+      isSavingAnswer,
       uploadFiles: handleUploadFiles,
     },
     VoiceResponse: {
@@ -291,14 +296,14 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       answerId,
       readOnly,
       saveAnswerAndUpdateClientVersion,
-      savingIndicator: SavingIndicator(answerId, savingStatus),
+      savingIndicator: SavingIndicator(savingStatus, answerId),
     },
     ForumPostResponse: {
       question,
       answerId,
       readOnly,
       saveAnswerAndUpdateClientVersion,
-      savingIndicator: SavingIndicator(answerId, savingStatus),
+      savingIndicator: SavingIndicator(savingStatus, answerId),
     },
     Scribing: {
       question,
@@ -311,16 +316,16 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     <>
       <div className="flex items-start justify-between">
         <Typography variant="h6">{question.displayTitle}</Typography>
-        {SavingIndicator(answerId, savingStatus)}
+        {SavingIndicator(savingStatus, answerId)}
         {HistoryToggle(
           question,
           readOnly,
           isLoading,
           noPastAnswers,
           savingStatus,
-          answerId,
           disabled,
           handleToggleViewHistoryMode,
+          answerId,
         )}
       </div>
 
