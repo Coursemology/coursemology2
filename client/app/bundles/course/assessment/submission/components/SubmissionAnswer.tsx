@@ -203,18 +203,29 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
 
   const handleImportFiles = (
     savedAnswerId: number,
-    answerFields: unknown,
+    answerFields: Object,
     language: string,
   ): void => {
-    dispatch(importFiles(savedAnswerId, answerFields, language, resetField));
+    dispatch(
+      importFiles(
+        savedAnswerId,
+        { ...answerFields, clientVersion: Date.now() },
+        language,
+        resetField,
+      ),
+    );
   };
 
   const handleUploadFiles = (
     savedAnswerId: number,
-    answerFields: unknown,
+    answerFields: Object,
   ): void => {
     dispatch(
-      uploadFiles(savedAnswerId, { [savedAnswerId]: answerFields }, resetField),
+      uploadFiles(
+        savedAnswerId,
+        { [savedAnswerId]: { ...answerFields, clientVersion: Date.now() } },
+        resetField,
+      ),
     );
   };
 

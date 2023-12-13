@@ -71,6 +71,8 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   end
 
   def create_and_update_files(params)
+    acting_as.assign_params(params)
+
     params[:files_attributes]&.each do |file_attributes|
       file = files.find { |f| f.id == file_attributes[:id].to_i }
       if file.present?
@@ -82,7 +84,8 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     save
   end
 
-  def delete_file(file_id)
+  def delete_file(file_id, client_version, session_id)
+    acting_as.update(last_session_id: session_id, client_version: client_version)
     file = files.find { |f| f.id == file_id }
     file.mark_for_destruction if file.present?
     save

@@ -169,7 +169,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   const { questionId, answerId } = ownProps;
   return {
     deleteAttachment: (attachmentId) =>
-      dispatch(destroy(answerId, questionId, attachmentId)),
+      dispatch(destroy(answerId, questionId, Date.now(), attachmentId)),
   };
 }
 
