@@ -20,7 +20,12 @@ export default function destroy(
       .then(() => {
         dispatch({
           type: actionTypes.DELETE_ATTACHMENT_SUCCESS,
-          payload: { answer: { answerId }, questionId, attachmentId },
+          payload: {
+            answer: { answerId },
+            questionId,
+            attachmentId,
+            clientVersion: currentTime,
+          },
         });
       })
       .catch(() =>

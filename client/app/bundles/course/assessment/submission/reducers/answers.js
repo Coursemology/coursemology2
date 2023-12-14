@@ -8,8 +8,17 @@ function setAnswerFields(answer) {
     case 'FileUpload':
     case 'Comprehension':
       return { ...answer.fields, files: null };
-    case 'Programming':
-      return { ...answer.fields, import_files: null };
+    case 'Programming': {
+      const filesAttributes = answer.fields.files_attributes;
+      filesAttributes.sort((a, b) =>
+        a.filename.toLowerCase().localeCompare(b.filename.toLowerCase()),
+      );
+      return {
+        ...answer.fields,
+        files_attributes: filesAttributes,
+        import_files: null,
+      };
+    }
     default:
       return answer.fields;
   }
@@ -115,11 +124,44 @@ export default function (state = initialState, action) {
         draft.clientVersion[answerId] = clientVersion;
       });
     }
-    case actions.IMPORT_FILES_SUCCESS:
+    case actions.UPLOAD_FILES_SUCCESS: {
+      const clientVersion = action.payload.clientVersion;
+      const answerId = action.payload.id;
+
+      return produce(state, (draft) => {
+        draft.clientVersion[answerId] = clientVersion;
+      });
+    }
+    case actions.IMPORT_FILES_SUCCESS: {
+      const clientVersion = action.payload.clientVersion;
+      const answerId = action.payload.id;
+
+      if (state.initial[answerId].files_attributes.length === 0) {
+        return produce(state, (draft) => {
+          draft.initial[answerId] = {
+            ...action.payload.fields,
+            import_files: null,
+          };
+          draft.clientVersion[answerId] = clientVersion;
+        });
+      }
+
+      return produce(state, (draft) => {
+        draft.clientVersion[answerId] = clientVersion;
+      });
+    }
+    case actions.DELETE_ATTACHMENT_SUCCESS:
+    case actions.DELETE_FILE_SUCCESS: {
+      const clientVersion = action.payload.clientVersion;
+      const answerId = action.payload.answer.answerId;
+
+      return produce(state, (draft) => {
+        draft.clientVersion[answerId] = clientVersion;
+      });
+    }
     case actions.REEVALUATE_SUCCESS:
     case actions.AUTOGRADE_SUCCESS:
-    case actions.RESET_SUCCESS:
-    case actions.DELETE_FILE_SUCCESS: {
+    case actions.RESET_SUCCESS: {
       return state;
     }
     default:
