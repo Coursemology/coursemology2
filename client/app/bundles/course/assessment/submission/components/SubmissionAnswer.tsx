@@ -209,7 +209,13 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     dispatch(
       importFiles(
         savedAnswerId,
-        { ...answerFields, clientVersion: Date.now() },
+        {
+          ...answerFields,
+          [savedAnswerId]: {
+            ...answerFields[savedAnswerId],
+            clientVersion: Date.now(),
+          },
+        },
         language,
         resetField,
       ),
@@ -223,7 +229,12 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     dispatch(
       uploadFiles(
         savedAnswerId,
-        { [savedAnswerId]: { ...answerFields, clientVersion: Date.now() } },
+        {
+          [savedAnswerId]: {
+            ...answerFields,
+            clientVersion: Date.now(),
+          },
+        },
         resetField,
       ),
     );
