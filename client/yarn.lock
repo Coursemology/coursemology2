@@ -1821,10 +1821,10 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/x-date-pickers@^6.18.4":
-  version "6.18.4"
-  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-6.18.4.tgz#0b54634d182b5fdf6337c0915f39b606c094b64f"
-  integrity sha512-YqJ6lxZHBIt344B3bvRAVbdYSQz4dcmJQXGcfvJTn26VdKjpgzjAqwhlbQhbAt55audJOWzGB99ImuQuljDROA==
+"@mui/x-date-pickers@^6.18.5":
+  version "6.18.5"
+  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-6.18.5.tgz#a2a70ce2926f0acb8ee414b546ba1f7daf399c21"
+  integrity sha512-3jImYIWP2Xgi608yzm/Sz1v0MTjQQYdZSQOEIi3dWBfSAU9B06KXDpqlXfRSpTV+rtsnfYIIyiWlz6Ltk7sUWw==
   dependencies:
     "@babel/runtime" "^7.23.2"
     "@mui/base" "^5.0.0-beta.22"
