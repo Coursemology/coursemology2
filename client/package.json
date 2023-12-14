@@ -41,7 +41,7 @@
     "@mui/icons-material": "^5.15.0",
     "@mui/lab": "^5.0.0-alpha.156",
     "@mui/material": "^5.15.0",
-    "@mui/x-date-pickers": "^6.18.4",
+    "@mui/x-date-pickers": "^6.18.5",
     "@rails/actioncable": "^7.1.2",
     "@reduxjs/toolkit": "^1.9.7",
     "@rollbar/react": "^0.11.2",
