@@ -437,7 +437,11 @@ export function deleteFile(answerId, fileId, answers, currentTime, setValue) {
       .deleteProgrammingFile(answerId, payload)
       .then((response) => response.data)
       .then((data) => {
-        const responsePayload = { questionId: answer.questionId, answer: data };
+        const responsePayload = {
+          questionId: answer.questionId,
+          answer: data,
+          clientVersion: currentTime,
+        };
         dispatch({
           type: actionTypes.DELETE_FILE_SUCCESS,
           payload: responsePayload,
@@ -549,9 +553,17 @@ export function importFiles(answerId, answerFields, language, resetField) {
         .createProgrammingFiles(answerId, payload)
         .then((response) => response.data)
         .then((data) => {
+          const filesAttributes = data.fields.files_attributes;
+          filesAttributes.sort((a, b) =>
+            a.filename.toLowerCase().localeCompare(b.filename.toLowerCase()),
+          );
+          const arrangedData = {
+            ...data,
+            fields: { ...data.fields, files_attributes: filesAttributes },
+          };
           dispatch({
             type: actionTypes.IMPORT_FILES_SUCCESS,
-            payload: data,
+            payload: arrangedData,
           });
 
           // When multiple programming files are successfully uploaded,
@@ -559,7 +571,7 @@ export function importFiles(answerId, answerFields, language, resetField) {
           // Moreover, as the files were previously staged, we need to
           // mark the files as unstaged now so that the editors for the uploaded files
           // can appear.
-          const newFilesAttributes = data.fields.files_attributes.map(
+          const newFilesAttributes = arrangedData.fields.files_attributes.map(
             (file) => ({ ...file, staged: false }),
           );
           resetField(`${answerId}.files_attributes`, {
