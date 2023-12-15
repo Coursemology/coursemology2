@@ -189,6 +189,8 @@ GEM
     docker-api (2.2.0)
       excon (>= 0.47.0)
       multi_json
+    doorkeeper (5.6.8)
+      railties (>= 5)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
@@ -588,6 +590,7 @@ DEPENDENCIES
   devise-multi_email
   devise_masquerade
   docker-api
+  doorkeeper
   dotenv-rails
   edge
   email_spec
