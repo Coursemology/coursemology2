@@ -59,7 +59,7 @@ class VisibleImportedFileView extends Component {
     return (
       <Prompt
         onClickPrimary={() => {
-          handleDeleteFile(deleteFileId);
+          handleDeleteFile(deleteFileId, deleteFileName);
           this.setState({
             deleteConfirmation: false,
             deleteFileId: null,
@@ -87,8 +87,8 @@ class VisibleImportedFileView extends Component {
     );
   }
 
-  renderFile(file, index) {
-    const { canDestroyFiles, displayFileIndex, handleFileTabbing } = this.props;
+  renderFile(file) {
+    const { canDestroyFiles, displayFileName, handleFileTabbing } = this.props;
 
     const onRequestDelete = canDestroyFiles
       ? () =>
@@ -99,7 +99,7 @@ class VisibleImportedFileView extends Component {
           })
       : null;
 
-    const chipColor = displayFileIndex === index ? 'primary' : undefined;
+    const chipColor = displayFileName === file.filename ? 'primary' : undefined;
     const staged = file.staged || false;
     return (
       !staged && (
@@ -108,7 +108,7 @@ class VisibleImportedFileView extends Component {
           clickable
           color={chipColor}
           label={file.filename}
-          onClick={() => handleFileTabbing(index)}
+          onClick={() => handleFileTabbing(file.filename)}
           onDelete={onRequestDelete}
           style={styles.chip}
         />
@@ -141,7 +141,7 @@ class VisibleImportedFileView extends Component {
 VisibleImportedFileView.propTypes = {
   intl: PropTypes.object.isRequired,
   canDestroyFiles: PropTypes.bool,
-  displayFileIndex: PropTypes.number,
+  displayFileName: PropTypes.string,
   handleFileTabbing: PropTypes.func,
   handleDeleteFile: PropTypes.func,
   files: PropTypes.arrayOf(fileShape),
@@ -149,7 +149,7 @@ VisibleImportedFileView.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const {
-    displayFileIndex,
+    displayFileName,
     handleFileTabbing,
     handleDeleteFile,
     files,
@@ -163,7 +163,7 @@ function mapStateToProps(state, ownProps) {
 
   return {
     canDestroyFiles,
-    displayFileIndex,
+    displayFileName,
     handleFileTabbing,
     handleDeleteFile,
     files,

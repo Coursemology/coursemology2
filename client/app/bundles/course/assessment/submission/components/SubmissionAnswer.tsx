@@ -21,11 +21,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { importFiles, updateClientVersion, uploadFiles } from '../actions';
 import { saveStatus } from '../constants';
-import {
-  HistoryQuestion,
-  QuestionFlags,
-  SubmissionQuestionData,
-} from '../questionGrade';
+import { HistoryQuestion, SubmissionQuestionData } from '../questionGrade';
 import translations from '../translations';
 
 import Answer, { AnswerMapper } from './Answer';
@@ -37,7 +33,6 @@ interface Props {
     questionId: number,
   ) => void;
   historyQuestions: Record<string, HistoryQuestion>;
-  questionsFlags: Record<string, QuestionFlags>;
   readOnly?: boolean;
   graderView: boolean;
   showMcqMrqSolution: boolean;
@@ -117,41 +112,36 @@ const HistoryToggle = (
   const { t } = useTranslation();
 
   return (
-    <div className="flex w-full flex-wrap justify-between">
+    <div className="flex items-center">
+      {!readOnly && SavingIndicator(savingStatus, answerId)}
       {question.canViewHistory && (
-        <>
-          {!readOnly && SavingIndicator(savingStatus, answerId)}
-          <div className="flex flex-grow justify-end">
-            {isLoading && (
-              <CircularProgress
-                className="inline-block align-middle"
-                size={30}
-              />
-            )}
-            <Tooltip title={noPastAnswers ? t(translations.noPastAnswers) : ''}>
-              <FormControlLabel
-                className="float-right"
-                control={
-                  <Switch
-                    checked={question.viewHistory || false}
-                    className="toggle-history"
-                    color="primary"
-                    onChange={(): void =>
-                      handleToggleViewHistoryMode(
-                        !question.viewHistory,
-                        question.submissionQuestionId,
-                        question.id,
-                      )
-                    }
-                  />
-                }
-                disabled={disabled}
-                label={<b>{t(translations.viewPastAnswers)}</b>}
-                labelPlacement="start"
-              />
-            </Tooltip>
-          </div>
-        </>
+        <div className="flex flex-grow justify-end">
+          {isLoading && (
+            <CircularProgress className="inline-block align-middle" size={30} />
+          )}
+          <Tooltip title={noPastAnswers ? t(translations.noPastAnswers) : ''}>
+            <FormControlLabel
+              className="float-right"
+              control={
+                <Switch
+                  checked={question.viewHistory || false}
+                  className="toggle-history"
+                  color="primary"
+                  onChange={(): void =>
+                    handleToggleViewHistoryMode(
+                      !question.viewHistory,
+                      question.submissionQuestionId,
+                      question.id,
+                    )
+                  }
+                />
+              }
+              disabled={disabled}
+              label={<b>{t(translations.viewPastAnswers)}</b>}
+              labelPlacement="start"
+            />
+          </Tooltip>
+        </div>
       )}
     </div>
   );
@@ -161,7 +151,6 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   const {
     handleToggleViewHistoryMode,
     historyQuestions,
-    questionsFlags,
     readOnly = false,
     graderView,
     showMcqMrqSolution,
@@ -180,10 +169,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     ? historyQuestion.answerIds.length === 0
     : true;
   const isLoading = historyQuestion ? historyQuestion.isLoading : false;
-  const isAutograding = questionsFlags[question.id]
-    ? questionsFlags[question.id].isAutograding
-    : false;
-  const disabled = noPastAnswers || isLoading || isAutograding;
+  const disabled = noPastAnswers || isLoading;
   const { resetField } = useFormContext();
 
   const handleUpdateClientVersion = (
@@ -318,14 +304,12 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
       answerId,
       readOnly,
       saveAnswerAndUpdateClientVersion,
-      savingIndicator: SavingIndicator(savingStatus, answerId),
     },
     ForumPostResponse: {
       question,
       answerId,
       readOnly,
       saveAnswerAndUpdateClientVersion,
-      savingIndicator: SavingIndicator(savingStatus, answerId),
     },
     Scribing: {
       question,
@@ -338,7 +322,6 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     <>
       <div className="flex items-start justify-between">
         <Typography variant="h6">{question.displayTitle}</Typography>
-        {SavingIndicator(savingStatus, answerId)}
         {HistoryToggle(
           question,
           readOnly,

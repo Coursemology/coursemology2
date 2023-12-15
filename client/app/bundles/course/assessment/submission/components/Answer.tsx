@@ -166,13 +166,8 @@ const Scribing = (props: ScribingAnswerProps): JSX.Element => {
 };
 
 const VoiceResponse = (props: VoiceResponseAnswerProps): JSX.Element => {
-  const {
-    question,
-    answerId,
-    readOnly,
-    saveAnswerAndUpdateClientVersion,
-    savingIndicator,
-  } = props;
+  const { question, answerId, readOnly, saveAnswerAndUpdateClientVersion } =
+    props;
   return (
     <VoiceResponseAnswer
       key={`question_${question.id}`}
@@ -180,19 +175,13 @@ const VoiceResponse = (props: VoiceResponseAnswerProps): JSX.Element => {
       question={question}
       readOnly={readOnly}
       saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-      savingIndicator={savingIndicator}
     />
   );
 };
 
 const ForumPostResponse = (props: ForumResponseAnswerProps): JSX.Element => {
-  const {
-    question,
-    answerId,
-    readOnly,
-    saveAnswerAndUpdateClientVersion,
-    savingIndicator,
-  } = props;
+  const { question, answerId, readOnly, saveAnswerAndUpdateClientVersion } =
+    props;
   return (
     <ForumPostResponseAnswer
       key={`question_${question.id}`}
@@ -200,7 +189,6 @@ const ForumPostResponse = (props: ForumResponseAnswerProps): JSX.Element => {
       question={question}
       readOnly={readOnly}
       saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-      savingIndicator={savingIndicator}
     />
   );
 };
