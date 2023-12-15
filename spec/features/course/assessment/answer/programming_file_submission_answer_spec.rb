@@ -24,7 +24,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
       scenario 'I can only upload new programming files' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        file_view = find('body2', text: 'Uploaded Files:').find(:xpath, '..')
+        file_view = find('h6', text: 'Uploaded Files:').find(:xpath, '..')
         dropzone = find('.dropzone-input')
         file_input = dropzone.find('input', visible: false)
 
@@ -60,7 +60,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
       scenario 'I can delete existing programming files' do
         visit edit_course_assessment_submission_path(course, assessment, submission2)
 
-        file_view = find('body2', text: 'Uploaded Files:').find(:xpath, '..')
+        file_view = find('h6', text: 'Uploaded Files:').find(:xpath, '..')
 
         # There should be a single programming file in the submission
         expect(file_view).to have_css('span', count: 1)
