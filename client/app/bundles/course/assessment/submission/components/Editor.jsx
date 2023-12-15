@@ -30,10 +30,10 @@ const Editor = (props) => {
               ...field,
               onChange: (event) => {
                 field.onChange(event);
-                const modifiedAnswer = {
-                  [answerId]: getValues()[answerId],
-                };
-                saveAnswerAndUpdateClientVersion(modifiedAnswer, answerId);
+                saveAnswerAndUpdateClientVersion(
+                  getValues()[answerId],
+                  answerId,
+                );
               },
             }}
             filename={file.filename}

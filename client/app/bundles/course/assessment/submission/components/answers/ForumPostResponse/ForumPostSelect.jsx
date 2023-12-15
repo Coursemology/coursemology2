@@ -151,7 +151,6 @@ export default class ForumPostSelect extends Component {
                 {...translations.selectPostsButton}
               />
             </Button>
-            {!this.props.readOnly && this.props.savingIndicator}
             <ForumPostSelectDialog
               forumTopicPostPacks={this.state.forumTopicPostPacks}
               handleNotificationMessage={this.props.handleNotificationMessage}
@@ -180,5 +179,4 @@ ForumPostSelect.propTypes = {
   field: PropTypes.object.isRequired,
   onErrorMessage: PropTypes.func.isRequired,
   handleNotificationMessage: PropTypes.func.isRequired,
-  savingIndicator: PropTypes.node,
 };

@@ -3,7 +3,7 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { deleteFile } from '../actions';
+import { deleteProgrammingFile } from '../actions';
 import Editor from '../components/Editor';
 import FileInputField from '../components/FileInput';
 import { fileShape, questionShape } from '../propTypes';
@@ -16,7 +16,7 @@ const SelectProgrammingFileEditor = ({
   answerId,
   readOnly,
   language,
-  displayFileIndex,
+  displayFileName,
   saveAnswerAndUpdateClientVersion,
 }) => {
   const { control } = useFormContext();
@@ -47,7 +47,7 @@ const SelectProgrammingFileEditor = ({
             <ReadOnlyEditor key={file.id} answerId={answerId} file={file} />
           );
         }
-        if (index === displayFileIndex && !file.staged) {
+        if (file.filename === displayFileName && !file.staged) {
           return (
             <Editor
               key={file.id}
@@ -71,12 +71,14 @@ SelectProgrammingFileEditor.propTypes = {
   answerId: PropTypes.number,
   readOnly: PropTypes.bool,
   language: PropTypes.string,
-  displayFileIndex: PropTypes.number,
+  displayFileName: PropTypes.string,
   saveAnswerAndUpdateClientVersion: PropTypes.func,
 };
 
-const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
-  const file = answer.files_attributes[displayFileIndex];
+const renderProgrammingHistoryEditor = (answer, displayFileName) => {
+  const file = answer.files_attributes.find(
+    (elem) => elem.filename === displayFileName,
+  );
   if (!file) {
     return null;
   }
@@ -131,7 +133,6 @@ const stageFiles = async (props) => {
 };
 
 const VisibleProgrammingImportEditor = (props) => {
-  const [displayFileIndex, setDisplayFileIndex] = useState(0);
   const { control, setValue, getValues } = useFormContext();
   const {
     dispatch,
@@ -150,6 +151,15 @@ const VisibleProgrammingImportEditor = (props) => {
   const currentAnswer = useWatch({ control });
   const answers = viewHistory ? historyAnswers : currentAnswer;
 
+  const files = answers[answerId]
+    ? answers[answerId].files_attributes ||
+      answers[`${answerId}`].files_attributes
+    : null;
+
+  const [displayFileName, setDisplayFileName] = useState(
+    files && files.length > 0 ? files[0].filename : '',
+  );
+
   // When an assessment is submitted/unsubmitted,
   // the form is somehow not reset yet and the answers for the new answerId
   // can't be found.
@@ -157,38 +167,44 @@ const VisibleProgrammingImportEditor = (props) => {
     return null;
   }
 
-  const files =
-    answers[answerId].files_attributes ||
-    answers[`${answerId}`].files_attributes;
-
-  const handleDeleteFile = (fileId) => {
+  const handleDeleteFile = (fileId, fileName) => {
     const currentTime = Date.now();
-    dispatch(deleteFile(answerId, fileId, answers, currentTime, setValue));
-    setDisplayFileIndex(0);
+    dispatch(
+      deleteProgrammingFile(
+        answerId,
+        fileId,
+        answers,
+        currentTime,
+        setValue,
+        fileName,
+        displayFileName,
+        setDisplayFileName,
+      ),
+    );
   };
 
   return (
     <>
       {!readOnly && (
         <ImportedFileView
-          displayFileIndex={displayFileIndex}
+          displayFileName={displayFileName}
           files={files}
           handleDeleteFile={handleDeleteFile}
-          handleFileTabbing={(index) => setDisplayFileIndex(index)}
+          handleFileTabbing={(filename) => setDisplayFileName(filename)}
           questionId={questionId}
           submissionId={submissionId}
           viewHistory={viewHistory}
         />
       )}
       {viewHistory ? (
-        renderProgrammingHistoryEditor(answers[answerId], displayFileIndex)
+        renderProgrammingHistoryEditor(answers[answerId], displayFileName)
       ) : (
         <SelectProgrammingFileEditor
           {...{
             answerId,
             readOnly,
             question,
-            displayFileIndex,
+            displayFileName,
             viewHistory,
             saveAnswerAndUpdateClientVersion,
             language: parseLanguages(question.language),
