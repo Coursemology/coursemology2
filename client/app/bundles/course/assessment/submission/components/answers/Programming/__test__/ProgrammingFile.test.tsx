@@ -48,6 +48,10 @@ describe('<ProgrammingFile />', () => {
       },
       language: 'python',
       readOnly: true,
+      saveAnswerAndUpdateClientVersion: (
+        _data: unknown,
+        _answerId: number,
+      ): void => {},
     };
 
     const url = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
