@@ -163,7 +163,7 @@ class VisibleGradingPanel extends Component {
     return (
       <TableRow key={question.id}>
         <TableCell colSpan={2} style={styles.headerColumn}>
-          {question.displayTitle}
+          {`${question.questionNumber}: ${question.questionTitle}`}
         </TableCell>
         {showGrader ? (
           <TableCell style={styles.headerColumn}>{graderInfo}</TableCell>

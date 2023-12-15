@@ -15,11 +15,17 @@ import equal from 'fast-deep-equal';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
+import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { importFiles, updateClientVersion, uploadFiles } from '../actions';
+import {
+  importFiles,
+  saveAnswer,
+  updateClientVersion,
+  uploadFiles,
+} from '../actions';
 import { saveStatus } from '../constants';
 import { HistoryQuestion, SubmissionQuestionData } from '../questionGrade';
 import translations from '../translations';
@@ -39,7 +45,6 @@ interface Props {
   question: SubmissionQuestionData;
   answerId: number;
   savingStatus: Record<string, string>;
-  onSaveAnswer: (data: unknown, answerId: number, currentTime: number) => void;
 }
 
 const SavingIndicator = (
@@ -157,12 +162,12 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     question,
     answerId,
     savingStatus,
-    onSaveAnswer,
   } = props;
 
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
+  const submissionId = getSubmissionId();
 
   const historyQuestion = historyQuestions[question.id];
   const noPastAnswers = historyQuestion
@@ -184,7 +189,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     savedAnswerId: number,
     currentTime: number,
   ): void => {
-    onSaveAnswer(data, savedAnswerId, currentTime);
+    dispatch(saveAnswer(submissionId, data, savedAnswerId, currentTime));
   };
 
   const handleImportFiles = (
@@ -321,7 +326,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
   return (
     <>
       <div className="flex items-start justify-between">
-        <Typography variant="h6">{question.displayTitle}</Typography>
+        <Typography variant="h6">{question.questionNumber}</Typography>
         {HistoryToggle(
           question,
           readOnly,
@@ -333,6 +338,11 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           answerId,
         )}
       </div>
+      <Divider />
+
+      <Typography className="mt-2" variant="body1">
+        {question.questionTitle}
+      </Typography>
 
       <Typography
         dangerouslySetInnerHTML={{ __html: question.description }}

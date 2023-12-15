@@ -95,6 +95,8 @@ const stageFiles = async (props) => {
     setValue,
     importProgrammingFiles,
     getValues,
+    displayFileName,
+    setDisplayFileName,
   } = props;
 
   // Create a map of promises that will resolve all files are read
@@ -129,6 +131,9 @@ const stageFiles = async (props) => {
 
     setValue(`${answerId}.files_attributes`, filteredFiles);
     importProgrammingFiles(answerId, getValues(), question.language, setValue);
+    if (displayFileName === '') {
+      setDisplayFileName(filteredFiles[0].filename);
+    }
   });
 };
 
@@ -222,6 +227,8 @@ const VisibleProgrammingImportEditor = (props) => {
               setValue,
               importProgrammingFiles,
               getValues,
+              displayFileName,
+              setDisplayFileName,
             })
           }
           disabled={isSaving || isSavingAnswer}

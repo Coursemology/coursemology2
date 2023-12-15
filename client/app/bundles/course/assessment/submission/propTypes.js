@@ -16,7 +16,8 @@ export const testCaseShape = PropTypes.shape({
 export const questionShape = PropTypes.shape({
   allowAttachment: PropTypes.bool,
   description: PropTypes.string.isRequired,
-  displayTitle: PropTypes.string.isRequired,
+  questionNumber: PropTypes.string.isRequired,
+  questionTitle: PropTypes.string.isRequired,
   language: PropTypes.string,
   maximumGrade: PropTypes.number.isRequired,
   options: PropTypes.arrayOf(optionShape),

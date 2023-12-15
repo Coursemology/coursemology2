@@ -1,5 +1,3 @@
-import { FieldValues, UseFormSetValue } from 'react-hook-form';
-
 import { SubmissionQuestionData } from './questionGrade';
 
 interface AnswerCommonProps {
@@ -22,22 +20,14 @@ export interface McqMrqAnswerProps extends AnswerCommonProps {
 export interface TextAnswerProps extends AnswerCommonProps {
   type: 'TextResponse' | 'Comprehension';
   saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
-  uploadFiles: (
-    savedAnswerId: number,
-    answerFields: unknown,
-    setValue: UseFormSetValue<FieldValues>,
-  ) => void;
+  uploadFiles: (savedAnswerId: number, answerFields: unknown) => void;
   isSavingAnswer: boolean;
   graderView: boolean;
 }
 
 export interface FileUploadAnswerProps extends AnswerCommonProps {
   type: 'FileUpload';
-  uploadFiles: (
-    savedAnswerId: number,
-    answerFields: unknown,
-    setValue: UseFormSetValue<FieldValues>,
-  ) => void;
+  uploadFiles: (savedAnswerId: number, answerFields: unknown) => void;
   isSavingAnswer: boolean;
   graderView: boolean;
 }
@@ -49,7 +39,6 @@ export interface ProgrammingAnswerProps extends AnswerCommonProps {
     savedAnswerId: number,
     answerFields: unknown,
     language: string,
-    setValue: UseFormSetValue<FieldValues>,
   ) => void;
   isSavingAnswer: boolean;
 }

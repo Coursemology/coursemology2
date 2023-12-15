@@ -2,20 +2,23 @@ en:
   activerecord:
     attributes:
       course/assessment/answer:
-        submitted_at: "Submitted At"
-        grade: "Grade"
-        grader: "Grader"
-        graded_at: "Graded At"
+        submitted_at: 'Submitted At'
+        grade: 'Grade'
+        grader: 'Grader'
+        graded_at: 'Graded At'
     errors:
       models:
         course/assessment/answer:
           attributes:
             question:
-              consistent_assessment: "must belong to the same assessment"
+              consistent_assessment: 'must belong to the same assessment'
             submission:
-              attemptable_state: "must be in the attempting state"
-              newly_updated: "the version to be saved is not the most updated one"
+              attemptable_state: 'must be in the attempting state'
+              newly_updated: >
+                There is an error in saving your answer. 
+                Please either save by clicking the button Save Draft on the bottom of this page 
+                or try modifying your answer a little bit
             grade:
-              no_blank_grade: "Grade must not be empty if it is already graded"
-              consistent_grade: "must be less than question maximum grade"
-              non_negative_grade: "cannot be negative"
+              no_blank_grade: 'Grade must not be empty if it is already graded'
+              consistent_grade: 'must be less than question maximum grade'
+              non_negative_grade: 'cannot be negative'
