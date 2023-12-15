@@ -255,6 +255,7 @@ Rails.application.routes.draw do
                 resources :answers, only: [:show] do
                   namespace :text_response do
                     post 'upload_files' => 'text_response#upload_files'
+                    delete 'delete_file' => 'text_response#delete_file'
                   end
                   namespace :programming do
                     post 'create_programming_files' => 'programming#create_programming_files'

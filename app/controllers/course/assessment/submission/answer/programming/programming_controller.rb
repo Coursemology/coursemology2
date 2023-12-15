@@ -13,7 +13,7 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
     if update_answer_files_attributes(create_programming_files_params.merge(session_id: session.id))
       render @programming_answer.answer
     else
-      render json: { error: 'Incompatible files' }, status: :bad_request
+      render_programming_answer_errors
     end
   end
 
@@ -25,11 +25,18 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
     if delete_programming_file(file_id, client_version)
       render json: { answerId: @programming_answer.answer.id, fileId: file_id }
     else
-      render json: { errors: @programming_answer.answer.errors }, status: :bad_request
+      render_programming_answer_errors
     end
   end
 
   private
+
+  def render_programming_answer_errors
+    @programming_answer.errors.messages.each do |attribute, message|
+      @programming_answer.answer.errors.add(attribute, message)
+    end
+    render json: { errors: @programming_answer.answer.errors.messages }, status: :bad_request
+  end
 
   def create_programming_files_params
     params.require(:answer).permit([files_attributes: [:id, :filename, :content]], :clientVersion)
