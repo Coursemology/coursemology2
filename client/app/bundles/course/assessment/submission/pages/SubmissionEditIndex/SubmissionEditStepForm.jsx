@@ -85,7 +85,6 @@ const SubmissionEditStepForm = (props) => {
     graderView,
     isCodaveriEnabled,
     onReset,
-    onSaveAnswer,
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
@@ -523,7 +522,6 @@ const SubmissionEditStepForm = (props) => {
             showMcqMrqSolution,
             handleToggleViewHistoryMode,
             savingStatus,
-            onSaveAnswer,
           }}
         />
         {renderAutogradingErrorPanel(id)}
@@ -668,7 +666,6 @@ SubmissionEditStepForm.propTypes = {
   savingStatus: PropTypes.object.isRequired,
 
   onReset: PropTypes.func,
-  onSaveAnswer: PropTypes.func,
   onSaveDraft: PropTypes.func,
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,

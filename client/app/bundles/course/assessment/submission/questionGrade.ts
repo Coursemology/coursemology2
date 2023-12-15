@@ -17,7 +17,8 @@ interface OptionData {
 export interface QuestionData {
   allowAttachment?: boolean;
   description: string;
-  displayTitle: string;
+  questionNumber: string;
+  questionTitle: string;
   language?: string;
   maximumGrade: number;
   options?: OptionData[];

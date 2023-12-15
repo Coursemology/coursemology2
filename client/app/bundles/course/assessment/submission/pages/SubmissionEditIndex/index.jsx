@@ -34,7 +34,6 @@ import {
   reevaluateAnswer,
   resetAnswer,
   saveAllGrades,
-  saveAnswer,
   saveDraft,
   saveGrade,
   submitAnswer,
@@ -199,17 +198,6 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(saveDraft(submissionId, data));
   };
 
-  onSaveAnswer = (data, answerId, currentTime) => {
-    const {
-      dispatch,
-      match: {
-        params: { submissionId },
-      },
-    } = this.props;
-
-    dispatch(saveAnswer(submissionId, data, answerId, currentTime));
-  };
-
   onSubmit = (data) => {
     const {
       dispatch,
@@ -357,7 +345,6 @@ class VisibleSubmissionEditIndex extends Component {
           onGenerateFeedback={this.onGenerateFeedback}
           onReevaluateAnswer={this.onReevaluateAnswer}
           onReset={this.onReset}
-          onSaveAnswer={this.onSaveAnswer}
           onSaveDraft={this.onSaveDraft}
           onSubmit={this.onSubmit}
           onSubmitAnswer={this.onSubmitAnswer}
@@ -403,7 +390,6 @@ class VisibleSubmissionEditIndex extends Component {
         onGenerateFeedback={this.onGenerateFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
         onReset={this.onReset}
-        onSaveAnswer={this.onSaveAnswer}
         onSaveDraft={this.onSaveDraft}
         onSubmit={this.onSubmit}
         onSubmitAnswer={this.onSubmitAnswer}
