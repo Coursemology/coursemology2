@@ -55,6 +55,7 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
   def create_and_upload_files(params)
     acting_as.assign_params(params)
     self.files = params[:files].reject { |file| file == 'null' } if params[:files]
+    acting_as.save
     save
   end
 
