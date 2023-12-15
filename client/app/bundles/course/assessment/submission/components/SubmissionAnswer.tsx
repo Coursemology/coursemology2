@@ -228,7 +228,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
 
   const debouncedSaveAnswer = useDebounce(
     handleSaveAnswer,
-    FIELD_LONG_DEBOUNCE_DELAY_MS,
+    question.type === 'VoiceResponse' ? 0 : FIELD_LONG_DEBOUNCE_DELAY_MS,
     [],
   );
 

@@ -75,9 +75,9 @@ const Programming = (props) => {
           answerId={answerId}
           importProgrammingFiles={importFiles}
           isSavingAnswer={isSavingAnswer}
+          question={question}
           questionId={question.id}
           readOnly={readOnly}
-          question={question}
           saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
       ) : (
