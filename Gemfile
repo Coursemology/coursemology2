@@ -173,6 +173,9 @@ gem 'devise-multi_email'
 # Use cancancan for authorization
 gem 'cancancan'
 
+# OAuth2 provider
+gem 'doorkeeper'
+
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
 # We also want stricter sanitization.
