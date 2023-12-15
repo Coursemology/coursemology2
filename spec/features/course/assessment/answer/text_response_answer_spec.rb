@@ -13,6 +13,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
 
     context 'As a Course Student' do
       let(:file_path) { File.join(Rails.root, '/spec/fixtures/files/text.txt') }
+      let(:json) { JSON.parse(response.body) }
 
       context 'when it is a file upload question' do
         let(:assessment) { create(:assessment, :published_with_text_response_question, course: course) }
@@ -46,6 +47,20 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
           expect(file_view).to have_css('span', text: 'text.txt')
           expect(file_view).to have_css('span', count: 2)
           expect(answer.specific.attachments).not_to be_empty
+
+          # Attempting to delete the file that we have just uploaded
+          # Click on the delete button and confirm
+          delete_button = file_view.find('svg')
+          delete_button.click
+          click_button('Delete')
+
+          expect(page).to have_no_button('Delete')
+
+          # It should indicate that there are no files uploaded
+          # Original file in the question should have been deleted
+          expect(file_view).to have_text('No files uploaded.')
+          expect(file_view).to have_no_css('span', text: 'text.txt')
+          expect(answer.specific.attachments).to be_empty
         end
       end
 

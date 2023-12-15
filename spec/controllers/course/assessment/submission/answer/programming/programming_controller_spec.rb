@@ -53,6 +53,15 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
             }
           }
           expect(response).to have_http_status(:bad_request)
+
+          response_body = JSON.parse(response.body)
+          errors = response_body['errors']
+          file_content_errors = errors['files.content']
+          expected_error_message = I18n.t('activerecord.errors.models.' \
+                                          'course/assessment/answer/programming_file.' \
+                                          'attributes.content.exceed_size_limit')
+
+          expect(file_content_errors.first).to include(expected_error_message)
         end
       end
     end

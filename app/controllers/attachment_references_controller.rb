@@ -16,14 +16,7 @@ class AttachmentReferencesController < ApplicationController
   def destroy
     authorize!(:destroy_attachment, @attachment_reference.attachable)
 
-    success = @attachment_reference.class.transaction do
-      answer = Course::Assessment::Answer.find(params[:answerId])
-      answer.update(last_session_id: session.id, client_version: params[:clientVersion])
-
-      raise ActiveRecord::Rollback unless @attachment_reference.destroy
-
-      true
-    end
+    success = @attachment_reference.destroy
 
     respond_to do |format|
       format.json { render_json_response(success) }
