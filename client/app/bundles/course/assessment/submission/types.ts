@@ -57,13 +57,11 @@ export interface ProgrammingAnswerProps extends AnswerCommonProps {
 export interface ForumResponseAnswerProps extends AnswerCommonProps {
   type: 'ForumPostResponse';
   saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
-  savingIndicator: React.ReactNode | null;
 }
 
 export interface VoiceResponseAnswerProps extends AnswerCommonProps {
   type: 'VoiceResponse';
   saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
-  savingIndicator: React.ReactNode | null;
 }
 
 export type AnswerProps =

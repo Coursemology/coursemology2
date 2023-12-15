@@ -421,7 +421,51 @@ export function resetAnswer(submissionId, answerId, questionId, setValue) {
   };
 }
 
-export function deleteFile(answerId, fileId, answers, currentTime, setValue) {
+export function deleteAttachmentFile(
+  answerId,
+  questionId,
+  currentTime,
+  attachmentId,
+) {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.DELETE_ATTACHMENT_REQUEST,
+      payload: answerId,
+    });
+
+    return CourseAPI.assessment.answer.textResponse
+      .deleteFile(answerId, currentTime, attachmentId)
+      .then((response) => response.data)
+      .then(() => {
+        dispatch({
+          type: actionTypes.DELETE_ATTACHMENT_SUCCESS,
+          payload: {
+            answer: { answerId },
+            questionId,
+            attachmentId,
+            clientVersion: currentTime,
+          },
+        });
+      })
+      .catch(() =>
+        dispatch({
+          type: actionTypes.DELETE_ATTACHMENT_FAILURE,
+          payload: answerId,
+        }),
+      );
+  };
+}
+
+export function deleteProgrammingFile(
+  answerId,
+  fileId,
+  answers,
+  currentTime,
+  setValue,
+  fileName,
+  displayFileName,
+  setDisplayFileName,
+) {
   const answer = Object.values(answers).find((ans) => ans.id === answerId);
   const payload = {
     answer: { id: answerId, file_id: fileId, clientVersion: currentTime },
@@ -453,6 +497,11 @@ export function deleteFile(answerId, fileId, answers, currentTime, setValue) {
           (file) => file.id !== fileId,
         );
         setValue(`${answerId}.files_attributes`, newFilesAttributes);
+        if (fileName === displayFileName) {
+          setDisplayFileName(
+            newFilesAttributes.length > 0 ? newFilesAttributes[0].filename : '',
+          );
+        }
 
         dispatch(setNotification(translations.deleteFileSuccess));
       })
