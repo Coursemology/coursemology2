@@ -120,7 +120,7 @@ class VisibleImportedFileView extends Component {
     const { intl, files } = this.props;
     return (
       <div>
-        <Typography variant="body2">
+        <Typography variant="h6">
           {intl.formatMessage(translations.uploadedFiles)}
         </Typography>
         <div style={styles.wrapper}>

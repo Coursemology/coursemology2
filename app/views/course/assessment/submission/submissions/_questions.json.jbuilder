@@ -17,7 +17,8 @@ json.questions question_assessments.each_with_index.to_a do |(question_assessmen
   answer_id = answer&.id
   submission_question = sq_topic_ids_hash[question.id][0]
   json.partial! 'question', question: question, can_grade: can_grade, answer: answer
-  json.displayTitle question_assessment.display_title(index + 1)
+  json.questionNumber question_assessment.default_title(index + 1)
+  json.questionTitle question.title
 
   json.answerId answer_id
   json.topicId sq_topic_ids_hash[question.id][1]
