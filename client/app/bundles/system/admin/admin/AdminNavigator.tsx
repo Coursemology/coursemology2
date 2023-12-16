@@ -1,5 +1,11 @@
 import { defineMessages } from 'react-intl';
-import { AutoStories, Campaign, Category, Group } from '@mui/icons-material';
+import {
+  AutoStories,
+  Campaign,
+  Category,
+  Group,
+  Key,
+} from '@mui/icons-material';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -21,6 +27,10 @@ const translations = defineMessages({
   courses: {
     id: 'system.admin.admin.AdminNavigator.courses',
     defaultMessage: 'Courses',
+  },
+  authentications: {
+    id: 'system.admin.admin.AdminNavigator.authentications',
+    defaultMessage: 'Authentications',
   },
   systemAdminPanel: {
     id: 'system.admin.admin.AdminNavigator.systemAdminPanel',
@@ -53,6 +63,11 @@ const AdminNavigator = (): JSX.Element => {
           icon: <AutoStories />,
           title: t(translations.courses),
           path: '/admin/courses',
+        },
+        {
+          icon: <Key />,
+          title: t(translations.authentications),
+          path: '/admin/authentications',
         },
       ]}
     />
