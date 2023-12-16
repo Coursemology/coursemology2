@@ -92,6 +92,7 @@ import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSu
 import UserVideoSubmissionsIndex from 'bundles/course/video-submissions/pages/UserVideoSubmissionsIndex';
 import AdminNavigator from 'bundles/system/admin/admin/AdminNavigator';
 import AnnouncementIndex from 'bundles/system/admin/admin/pages/AnnouncementsIndex';
+import AuthenticationsIndex from 'bundles/system/admin/admin/pages/AuthenticationsIndex';
 import CourseIndex from 'bundles/system/admin/admin/pages/CoursesIndex';
 import InstancesIndex from 'bundles/system/admin/admin/pages/InstancesIndex';
 import UserIndex from 'bundles/system/admin/admin/pages/UsersIndex';
@@ -723,6 +724,10 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             {
               path: 'courses',
               element: <CourseIndex />,
+            },
+            {
+              path: 'authentications',
+              element: <AuthenticationsIndex />,
             },
           ],
         },
