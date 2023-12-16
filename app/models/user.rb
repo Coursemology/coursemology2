@@ -73,6 +73,12 @@ class User < ApplicationRecord
   has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
                                          inverse_of: :user, dependent: :destroy
 
+  has_many :access_grants, class_name: Doorkeeper::AccessGrant.name, foreign_key: :resource_owner_id,
+                           dependent: :destroy
+
+  has_many :access_tokens, class_name: Doorkeeper::AccessToken.name, foreign_key: :resource_owner_id,
+                           dependent: :destroy
+
   accepts_nested_attributes_for :emails
 
   scope :ordered_by_name, -> { order(:name) }
