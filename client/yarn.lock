@@ -5941,10 +5941,10 @@ homedir-polyfill@^1.0.1:
   dependencies:
     parse-passwd "^1.0.0"
 
-hotkeys-js@^3.8.1:
-  version "3.9.4"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.9.4.tgz#ce1aa4c3a132b6a63a9dd5644fc92b8a9b9cbfb9"
-  integrity sha512-2zuLt85Ta+gIyvs4N88pCYskNrxf1TFv3LR9t5mdAZIX8BcgQQ48F2opUptvHa6m8zsy5v/a0i9mWzTrlNWU0Q==
+hotkeys-js@^3.13.2:
+  version "3.13.2"
+  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.13.2.tgz#9f6fe48026106fa6acb1fb10f22a4b06e160bf5a"
+  integrity sha512-SXd+x90nhOdo5s+DZNPtrvXs0ZahQLXT0tWQ68bzjxCNUZ7eV4ZlNqjHLi3Kt2URpR8EBJOB2dBLdNfwIeql1A==
 
 hpack.js@^2.1.6:
   version "2.1.6"
@@ -9152,13 +9152,13 @@ react-hook-form@^7.49.2:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.49.2.tgz#6fb2742e1308020f26cb1915c7012b6c07b11ade"
   integrity sha512-TZcnSc17+LPPVpMRIDNVITY6w20deMdNi6iehTFLV1x8SqThXGwu93HjlUVU09pzFgZH7qZOvLMM7UYf2ShAHA==
 
-react-hot-keys@^2.7.2:
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/react-hot-keys/-/react-hot-keys-2.7.2.tgz#7d2b02b7e2cf69182ea71ca01885446ebfae01d2"
-  integrity sha512-Z7eSh7SU6s52+zP+vkfFoNk0x4kgEmnwqDiyACKv53crK2AZ7FUaBLnf+vxLor3dvtId9murLmKOsrJeYgeHWw==
+react-hot-keys@^2.7.3:
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/react-hot-keys/-/react-hot-keys-2.7.3.tgz#4af8ab2f8087782b09d07a3075f985b37d12dee9"
+  integrity sha512-OoX1kTookqQx/OBXBgBLQCANpw3KGUcJNOl+MNv8xJYyH/Rojv+jTjQbksDGQMIOWVfvLqOZi/ZVcVdsWUAUWg==
   dependencies:
-    hotkeys-js "^3.8.1"
-    prop-types "^15.7.2"
+    hotkeys-js "^3.13.2"
+    prop-types "^15.8.1"
 
 react-image-crop@^11.0.1:
   version "11.0.1"
