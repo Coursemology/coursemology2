@@ -346,7 +346,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    parallel (1.23.0)
+    parallel (1.24.0)
     parallel_tests (4.3.0)
       parallel
     parser (3.2.2.4)
@@ -479,7 +479,7 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
-    rubocop-rails (2.22.2)
+    rubocop-rails (2.23.0)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
