@@ -300,7 +300,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def check_zombie_jobs # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
     return unless @submission.attempting? || @submission.submitted?
 
-    submitted_answers = @submission.answers.select(&:submitted?)
+    submitted_answers = @submission.answers.where(workflow_state: 'submitted')
     return if submitted_answers.empty?
 
     dead_answers = submitted_answers.select do |a|
