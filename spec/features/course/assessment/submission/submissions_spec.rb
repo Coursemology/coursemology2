@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Submissions' do
+RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, :with_all_question_types, course: course) }
+    let(:mcq_assessment) { create(:assessment, :published, :with_mcq_question, course: course) }
     before { login_as(user, scope: :user) }
 
     let(:students) { create_list(:course_student, 5, course: course) }
@@ -34,6 +35,10 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         create(:submission, :graded, assessment: assessment, course: course,
                                      creator: course_staff.user)
       end
+      let!(:attempt_submission) do
+        create(:submission, :attempting, assessment: mcq_assessment, course: course,
+                                         creator: students[0].user)
+      end
       let(:user) { course_staff.user }
       let(:group_student) do
         # Create a group and add staff and student to group
@@ -42,7 +47,38 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         create(:course_group_student, course: course, group: group, course_user: students.sample)
       end
 
-      scenario 'I can view all submissions of an assessment', js: true do
+      context 'when student is submitting the correct answer for prefillable question' do
+        let(:options) { mcq_assessment.questions.first.specific.options }
+        let(:correct_option) { options.find(&:correct?) }
+
+        scenario 'I can directly publish prefilled grade' do
+          login_as(students[0].user, scope: :user)
+          # attempting the question in which grade is prefillable upon grading
+          visit edit_course_assessment_submission_path(course, mcq_assessment, attempt_submission)
+          find('label', text: correct_option.option).click
+
+          click_button('Finalise Submission')
+          click_button('Continue')
+          wait_for_page
+
+          # doing the login as staff now
+          login_as(user, scope: :user)
+
+          visit edit_course_assessment_submission_path(course, mcq_assessment, attempt_submission)
+
+          click_button('Publish Grade')
+          wait_for_page
+
+          expect(page).to have_selector('span', text: 'Submission updated successfully.')
+
+          # since the answer is correct, the submission's question should not have zero grade
+          attempt_submission.answers.each do |answer|
+            expect(answer.reload.grade).to eq(mcq_assessment.questions.first.maximum_grade)
+          end
+        end
+      end
+
+      scenario 'I can view all submissions of an assessment' do
         phantom_student
         group_student
         visit course_assessment_submissions_path(course, assessment)
@@ -70,7 +106,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).to have_text(staff_submission.current_points_awarded)
       end
 
-      scenario 'I can delete and unsubmit submissions of an assessment', js: true do
+      scenario 'I can delete and unsubmit submissions of an assessment' do
         phantom_student
         group_student
         visit course_assessment_submissions_path(course, assessment)
@@ -103,7 +139,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
       end
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can publish all graded exams', js: true do
+      scenario 'I can publish all graded exams' do
         visit course_assessment_submissions_path(course, assessment)
         find('#students-tab').click
 
@@ -122,7 +158,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(graded_submission.points_awarded).not_to be_nil
       end
 
-      scenario 'I can force submit all unsubmitted exams', js: true do
+      scenario 'I can force submit all unsubmitted exams' do
         visit course_assessment_submissions_path(course, assessment)
         find('#students-tab').click
 
@@ -144,7 +180,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(attempting_submission.points_awarded).to be_nil
       end
 
-      scenario 'I can unsubmit all submissions', js: true do
+      scenario 'I can unsubmit all submissions' do
         visit course_assessment_submissions_path(course, assessment)
 
         find('#students-tab').click
@@ -161,7 +197,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(page).not_to have_css('.unsubmit-submissions-enabled')
       end
 
-      scenario 'I can delete all submissions', js: true do
+      scenario 'I can delete all submissions' do
         visit course_assessment_submissions_path(course, assessment)
 
         find('#students-tab').click
@@ -206,7 +242,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         randomized_assessment.question_bundle_assignments.where(user: students[0].user).first
       end
 
-      scenario 'I can delete the submission and the question bundle assignment is reset', js: true do
+      scenario 'I can delete the submission and the question bundle assignment is reset' do
         question_bundle_assignment.update(submission_id: randomized_submission.id)
 
         visit course_assessment_submissions_path(course, randomized_assessment)
@@ -224,7 +260,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(question_bundle_assignment.reload.submission_id).to be_nil
       end
 
-      scenario 'I can delete all submissions and the question bundle assignment is reset', js: true do
+      scenario 'I can delete all submissions and the question bundle assignment is reset' do
         question_bundle_assignment.update(submission_id: randomized_submission.id)
 
         visit course_assessment_submissions_path(course, randomized_assessment)
