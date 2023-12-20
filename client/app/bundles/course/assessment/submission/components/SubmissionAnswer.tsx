@@ -204,7 +204,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
           ...answerFields,
           [savedAnswerId]: {
             ...answerFields[savedAnswerId],
-            clientVersion: Date.now(),
+            client_version: Date.now(),
           },
         },
         language,
@@ -223,7 +223,7 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
         {
           [savedAnswerId]: {
             ...answerFields,
-            clientVersion: Date.now(),
+            client_version: Date.now(),
           },
         },
         resetField,
