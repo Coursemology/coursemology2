@@ -39,7 +39,7 @@ RSpec.describe Course::Assessment::Submission::Answer::TextResponse::TextRespons
               post :delete_file, as: :json, params: {
                 course_id: course, assessment_id: assessment.id,
                 submission_id: submission.id, answer_id: answer.id,
-                attachmentId: answer.specific.attachments.first.id
+                attachment_id: answer.specific.attachments.first.id
               }
             end.to change { answer.specific.attachments.count }.by(-1)
           end
