@@ -116,7 +116,7 @@ class Course::Assessment::Answer < ApplicationRecord
 
   def assign_params(params)
     self.grade = params[:grade].present? ? params[:grade].to_f : nil
-    self.client_version = params[:clientVersion]
+    self.client_version = params[:client_version]
     self.last_session_id = params[:session_id]
   end
 

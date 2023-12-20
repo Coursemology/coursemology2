@@ -13,25 +13,7 @@ class AttachmentReferencesController < ApplicationController
     redirect_to @attachment_reference.url(filename: @attachment_reference.name)
   end
 
-  def destroy
-    authorize!(:destroy_attachment, @attachment_reference.attachable)
-
-    success = @attachment_reference.destroy
-
-    respond_to do |format|
-      format.json { render_json_response(success) }
-    end
-  end
-
   private
-
-  def render_json_response(success)
-    if success
-      head :ok
-    else
-      head :bad_request
-    end
-  end
 
   def file_params
     params.permit(:file, :name)

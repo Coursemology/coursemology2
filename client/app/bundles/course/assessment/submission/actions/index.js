@@ -17,7 +17,7 @@ const JOB_STAGGER_DELAY_MS = 400;
  *    attribute into answer.file
  */
 const formatAnswer = (answer, currentTime) => {
-  const newAnswer = { ...answer, clientVersion: currentTime };
+  const newAnswer = { ...answer, client_version: currentTime };
   // voice upload
   const fileObj = newAnswer.file;
   if (fileObj) {
@@ -468,7 +468,7 @@ export function deleteProgrammingFile(
 ) {
   const answer = Object.values(answers).find((ans) => ans.id === answerId);
   const payload = {
-    answer: { id: answerId, file_id: fileId, clientVersion: currentTime },
+    answer: { id: answerId, file_id: fileId, client_version: currentTime },
   };
 
   return (dispatch) => {

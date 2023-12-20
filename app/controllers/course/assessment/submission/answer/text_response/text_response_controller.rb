@@ -25,11 +25,11 @@ class Course::Assessment::Submission::Answer::TextResponse::TextResponseControll
   end
 
   def delete_file
-    attachment_reference = AttachmentReference.find(delete_file_params[:attachmentId])
+    attachment_reference = AttachmentReference.find(delete_file_params[:attachment_id])
     answer = @text_response_answer.acting_as
 
     success = @text_response_answer.class.transaction do
-      answer.update(last_session_id: session.id, client_version: delete_file_params[:clientVersion])
+      answer.update(last_session_id: session.id, client_version: delete_file_params[:client_version])
       raise ActiveRecord::Rollback unless attachment_reference.destroy
 
       true
@@ -51,14 +51,14 @@ class Course::Assessment::Submission::Answer::TextResponse::TextResponseControll
   end
 
   def update_answer_files(answer_params)
-    @text_response_answer.create_and_upload_files(answer_params.merge(session_id: session.id))
+    @text_response_answer.create_and_upload_files(answer_params)
   end
 
   def upload_files_params
-    params.require(:answer).permit(attachment_params, :clientVersion)
+    params.require(:answer).permit(attachment_params, :client_version).merge(session_id: session.id)
   end
 
   def delete_file_params
-    params.permit(:attachmentId, :clientVersion)
+    params.permit(:attachment_id, :client_version)
   end
 end
