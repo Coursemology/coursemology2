@@ -480,7 +480,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :attachment_references, path: 'attachments', only: [:create, :show, :destroy]
+  resources :attachment_references, path: 'attachments', only: [:create, :show]
 
   if Rails.env.test?
     namespace :test do

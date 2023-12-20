@@ -12,7 +12,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
   def submit_answer
     answer = @submission.answers.find(submit_answer_params[:id].to_i)
-    if update_answer(answer, submit_answer_params.merge(session_id: session.id))
+    if update_answer(answer, submit_answer_params)
       if should_auto_grade_on_submit(answer)
         auto_grade(answer)
       else
@@ -70,7 +70,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def update_answers_params
-    params.require(:submission).permit(answers: [:id, :clientVersion] + update_answer_params)
+    params.require(:submission).permit(answers: [:id, :client_version] + update_answer_params)
   end
 
   private
@@ -116,7 +116,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def submit_answer_params
-    params.require(:answer).permit([:id, :clientVersion] + update_answer_type_params)
+    params.require(:answer).permit([:id, :client_version] + update_answer_type_params).merge(session_id: session.id)
   end
 
   def questions_to_attempt
@@ -149,9 +149,13 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       unless unsubmit? || unmark?
         update_answers_params[:answers]&.each do |answer_params|
           next if answer_params[:id].blank?
+          answer_params_with_session_id = answer_params.merge(session_id: session.id)
 
-          answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
-          if answer && !update_answer(answer, answer_params.merge(session_id: session.id))
+          answer = @submission.answers.includes(:actable).find do |a|
+            a.id == answer_params_with_session_id[:id].to_i
+          end
+
+          if answer && !update_answer(answer, answer_params_with_session_id)
             logger.error("Failed to update answer #{answer.errors.inspect}")
             answer.errors.messages.each do |attribute, message|
               @submission.errors.add(attribute, message)

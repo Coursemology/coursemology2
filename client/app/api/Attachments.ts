@@ -12,16 +12,6 @@ class AttachmentsAPI extends BaseAPI {
 
     return this.client.post(this.#urlPrefix, formData);
   }
-
-  delete(
-    answerId: number,
-    currentTime: number,
-    attachmentId: number,
-  ): APIResponse<unknown> {
-    return this.client.delete(`${this.#urlPrefix}/${attachmentId}`, {
-      params: { answerId, clientVersion: currentTime },
-    });
-  }
 }
 
 const attachmentsAPI = new AttachmentsAPI();

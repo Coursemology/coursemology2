@@ -10,7 +10,7 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
   def create_programming_files
     authorize! :create_programming_files, @programming_answer
 
-    if update_answer_files_attributes(create_programming_files_params.merge(session_id: session.id))
+    if update_answer_files_attributes(create_programming_files_params)
       render @programming_answer.answer
     else
       render_programming_answer_errors
@@ -21,7 +21,7 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
     authorize! :destroy_programming_file, @programming_answer
 
     file_id = delete_programming_file_params[:file_id].to_i
-    client_version = delete_programming_file_params[:clientVersion]
+    client_version = delete_programming_file_params[:client_version]
     if delete_programming_file(file_id, client_version)
       render json: { answerId: @programming_answer.answer.id, fileId: file_id }
     else
@@ -39,11 +39,13 @@ class Course::Assessment::Submission::Answer::Programming::ProgrammingController
   end
 
   def create_programming_files_params
-    params.require(:answer).permit([files_attributes: [:id, :filename, :content]], :clientVersion)
+    params.require(:answer).permit(
+      [:client_version, files_attributes: [:id, :filename, :content]]
+    ).merge(session_id: session.id)
   end
 
   def delete_programming_file_params
-    params.require(:answer).permit([:id, :file_id, :clientVersion])
+    params.require(:answer).permit([:id, :file_id, :client_version])
   end
 
   def update_answer_files_attributes(answer_params)
