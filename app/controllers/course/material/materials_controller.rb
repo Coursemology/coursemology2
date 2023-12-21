@@ -10,12 +10,12 @@ class Course::Material::MaterialsController < Course::Material::Controller
 
   def update
     if @material.update(material_params)
-      course_user = @material.updater.course_users.find_by(course: current_course)
-      user = course_user || @material.updater
+      course_user = @material.attachment.updater.course_users.find_by(course: current_course)
+      user = course_user || @material.attachment.updater
       render json: { id: @material.id,
                      name: @material.name,
                      description: @material.description,
-                     updatedAt: @material.updated_at,
+                     updatedAt: @material.attachment.updated_at,
                      updater: { id: user.id, name: user.name,
                                 userUrl: url_to_user_or_course_user(current_course, user) } },
              status: :ok
