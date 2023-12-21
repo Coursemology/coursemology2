@@ -34,12 +34,11 @@ json.materials @folder.materials.includes(:updater) do |material|
   json.name material.name
   json.description format_ckeditor_rich_text(material.description)
   json.materialUrl url_to_material(current_course, @folder, material)
-  json.updatedAt material.updated_at
+  json.updatedAt material.attachment.updated_at
 
-  updater = material.updater
   json.updater do
-    course_user = updater.course_users.find_by(course: current_course)
-    user = course_user || updater
+    course_user = material.attachment.updater.course_users.find_by(course: current_course)
+    user = course_user || material.attachment.updater
     json.id user.id
     json.name user.name
     json.userUrl url_to_user_or_course_user(current_course, user)
