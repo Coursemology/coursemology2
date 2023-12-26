@@ -40,7 +40,7 @@ export interface UserMiniEntity extends UserBasicMiniEntity {
 export interface UserCourseListData {
   id: number;
   title: string;
-  createdAt: string;
+  enrolledAt: string;
   userCount: number;
   courseUserId: number;
   courseUserName: string;
@@ -53,7 +53,7 @@ export interface UserCourseListData {
 export interface UserCourseMiniEntity {
   id: number;
   title: string;
-  createdAt: string;
+  enrolledAt: string;
   userCount: number;
   courseUserId: number;
   courseUserName: string;

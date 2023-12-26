@@ -6,7 +6,7 @@ json.newInvitations new_invitations.each do |invitation|
   json.email invitation.email
   json.role invitation.role
   json.phantom invitation.phantom
-  json.sentAt format_datetime(invitation.sent_at, :short) if invitation.sent_at
+  json.sentAt invitation.sent_at
 end
 
 json.existingInvitations existing_invitations.each do |invitation|
@@ -15,7 +15,7 @@ json.existingInvitations existing_invitations.each do |invitation|
   json.email invitation.email
   json.role invitation.role
   json.phantom invitation.phantom
-  json.sentAt format_datetime(invitation.sent_at, :short) if invitation.sent_at
+  json.sentAt invitation.sent_at
 end
 
 json.newCourseUsers new_course_users.each do |course_user|

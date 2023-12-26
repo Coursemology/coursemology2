@@ -22,6 +22,7 @@ import {
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { useAppSelector } from 'lib/hooks/store';
+import { formatLongDateTime } from 'lib/moment';
 import tableTranslations from 'lib/translations/table';
 
 import {
@@ -374,7 +375,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`approvedAt-${enrolRequest.id}`} variant="body2">
-              {enrolRequest.confirmedAt}
+              {formatLongDateTime(enrolRequest.confirmedAt)}
             </Typography>
           );
         },
@@ -423,7 +424,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`rejectedAt-${enrolRequest.id}`} variant="body2">
-              {enrolRequest.confirmedAt}
+              {formatLongDateTime(enrolRequest.confirmedAt)}
             </Typography>
           );
         },

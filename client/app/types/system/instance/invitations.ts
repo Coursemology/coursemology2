@@ -25,8 +25,8 @@ export interface InvitationMiniEntity {
   confirmed: boolean;
   role: InstanceUserRoles;
   invitationKey: string;
-  sentAt?: string;
-  confirmedAt?: string;
+  sentAt: string | null;
+  confirmedAt: string | null;
 }
 
 export interface InvitationListData {
@@ -36,8 +36,8 @@ export interface InvitationListData {
   confirmed: boolean;
   role: InstanceUserRoles;
   invitationKey: string;
-  sentAt?: string;
-  confirmedAt?: string;
+  sentAt: string | null;
+  confirmedAt: string | null;
 }
 
 /**

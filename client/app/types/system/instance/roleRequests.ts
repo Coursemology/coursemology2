@@ -13,8 +13,8 @@ export interface RoleRequestListData extends RoleRequestBasicListData {
   email: string;
   status: string;
   createdAt: string;
-  confirmedBy?: string;
-  confirmedAt?: string;
+  confirmedBy: string | null;
+  confirmedAt: string | null;
   rejectionMessage?: string;
 }
 
@@ -23,8 +23,8 @@ export interface RoleRequestMiniEntity extends RoleRequestBasicListData {
   email: string;
   status: string;
   createdAt: string;
-  confirmedBy?: string;
-  confirmedAt?: string;
+  confirmedBy: string | null;
+  confirmedAt: string | null;
   rejectionMessage?: string;
 }
 

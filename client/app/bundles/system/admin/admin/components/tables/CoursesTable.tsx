@@ -8,6 +8,7 @@ import Note from 'lib/components/core/Note';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatLongDate } from 'lib/moment';
 import tableTranslations from 'lib/translations/table';
 
 interface CoursesTableProps {
@@ -70,7 +71,7 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       of: 'createdAt',
       title: t(tableTranslations.createdAt),
       sortable: true,
-      cell: (course) => course.createdAt,
+      cell: (course) => formatLongDate(course.createdAt),
       sortProps: {
         sort: (a, b): number =>
           Date.parse(a.createdAt) - Date.parse(b.createdAt),

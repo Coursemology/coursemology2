@@ -5,5 +5,5 @@ json.email invitation.email
 json.role invitation.role
 json.invitationKey invitation.invitation_key
 json.confirmed invitation.confirmed?
-json.sentAt format_datetime(invitation.sent_at, :short) if invitation.sent_at
-json.confirmedAt format_datetime(invitation.confirmed_at, :short) if invitation.confirmed_at
+json.sentAt invitation.sent_at
+json.confirmedAt invitation.confirmed_at

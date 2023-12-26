@@ -1,5 +1,7 @@
-import { Avatar } from '@mui/material';
+import { Avatar, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+
+import { formatLongDateTime } from 'lib/moment';
 
 import EditPostContainer from './EditPostContainer';
 import PostContainer from './PostContainer'; // eslint-disable-line import/no-cycle
@@ -47,13 +49,24 @@ const PostPresentation = (props) => {
           variant="rounded"
         />
         <div className={styles.contentContainer}>
-          <span dangerouslySetInnerHTML={{ __html: props.userLink }} />
+          <Typography
+            dangerouslySetInnerHTML={{ __html: props.userLink }}
+            display="inline"
+            variant="body2"
+          />
           &nbsp;
-          <div className={styles.postTimestamp}>{props.createdAt}</div>
+          <div className={styles.postTimestamp}>
+            <Typography variant="body2">
+              {formatLongDateTime(props.createdAt)}
+            </Typography>
+          </div>
           {props.editMode ? (
             <EditPostContainer postId={props.postId} />
           ) : (
-            <div dangerouslySetInnerHTML={{ __html: props.content }} />
+            <Typography
+              dangerouslySetInnerHTML={{ __html: props.content }}
+              variant="body2"
+            />
           )}
         </div>
       </div>

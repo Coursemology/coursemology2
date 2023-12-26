@@ -9,21 +9,9 @@ json.personalTimeId personal_time.id
 json.actableId item.actable_id
 json.type item.actable_type
 json.title item.title
-if item.reference_time_for(@course_user).start_at.nil?
-  json.itemStartAt nil
-else
-  json.itemStartAt format_datetime(item.reference_time_for(@course_user).start_at, :short)
-end
-if item.reference_time_for(@course_user).bonus_end_at.nil?
-  json.itemBonusEndAt nil
-else
-  json.itemBonusEndAt format_datetime(item.reference_time_for(@course_user).bonus_end_at, :short)
-end
-if item.reference_time_for(@course_user).end_at.nil?
-  json.itemEndAt nil
-else
-  json.itemEndAt format_datetime(item.reference_time_for(@course_user).end_at, :short)
-end
+json.itemStartAt item.reference_time_for(@course_user).start_at
+json.itemBonusEndAt item.reference_time_for(@course_user).bonus_end_at
+json.itemEndAt item.reference_time_for(@course_user).end_at
 
 json.personalStartAt personal_time.start_at || nil
 json.personalBonusEndAt personal_time.bonus_end_at || nil

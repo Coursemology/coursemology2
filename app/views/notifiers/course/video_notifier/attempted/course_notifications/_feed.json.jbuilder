@@ -17,4 +17,4 @@ json.actableType 'video'
 json.actableId video.id
 json.actableName video.title
 
-json.createdAt format_datetime(activity.created_at)
+json.createdAt activity.created_at

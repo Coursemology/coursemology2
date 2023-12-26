@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.partial! 'course/users/user', locals: { user: post.creator }
 
-json.createdAt format_datetime(post.created_at)
+json.createdAt post.created_at
 json.content format_ckeditor_rich_text(simple_format(post.text))
 json.rawContent post.text
 json.canUpdate can?(:update, post)
