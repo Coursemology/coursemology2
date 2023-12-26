@@ -20,4 +20,4 @@ json.actableName topic.title
 json.forumName topic.forum.slug
 json.topicName topic.slug
 
-json.createdAt format_datetime(activity.created_at)
+json.createdAt activity.created_at

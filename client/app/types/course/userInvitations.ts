@@ -59,8 +59,8 @@ export interface InvitationMiniEntity {
   timelineAlgorithm?: TimelineAlgorithm;
   invitationKey: string;
   confirmed: boolean;
-  sentAt?: string;
-  confirmedAt?: string;
+  sentAt: string | null;
+  confirmedAt: string | null;
 }
 
 export interface InvitationListData {
@@ -72,8 +72,8 @@ export interface InvitationListData {
   timelineAlgorithm?: TimelineAlgorithm;
   invitationKey: string;
   confirmed: boolean;
-  sentAt?: string;
-  confirmedAt?: string;
+  sentAt: string | null;
+  confirmedAt: string | null;
 }
 
 /**

@@ -10,8 +10,8 @@ export interface EnrolRequestMiniEntity {
   timelineAlgorithm?: TimelineAlgorithm;
   role?: CourseUserRoles;
   createdAt: string;
-  confirmedBy?: string;
-  confirmedAt?: string;
+  confirmedBy: string | null;
+  confirmedAt: string | null;
 }
 
 export interface EnrolRequestListData {
@@ -23,8 +23,8 @@ export interface EnrolRequestListData {
   role?: CourseUserRoles;
   timelineAlgorithm?: TimelineAlgorithm;
   createdAt: string;
-  confirmedBy?: string;
-  confirmedAt?: string;
+  confirmedBy: string | null;
+  confirmedAt: string | null;
 }
 
 /**

@@ -12,6 +12,7 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
 import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import { formatLongDateTime } from 'lib/moment';
 import tableTranslations from 'lib/translations/table';
 
 import ResendAllInvitationsButton from '../buttons/ResendAllInvitationsButton';
@@ -167,7 +168,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={invitation.id} variant="body2">
-              {invitation.sentAt}
+              {formatLongDateTime(invitation.sentAt)}
             </Typography>
           );
         },
@@ -185,7 +186,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={invitation.id} variant="body2">
-              {invitation.confirmedAt}
+              {formatLongDateTime(invitation.confirmedAt)}
             </Typography>
           );
         },

@@ -17,4 +17,4 @@ json.actableType 'assessment'
 json.actableId assessment.id
 json.actableName assessment.title
 
-json.createdAt format_datetime(activity.created_at)
+json.createdAt activity.created_at

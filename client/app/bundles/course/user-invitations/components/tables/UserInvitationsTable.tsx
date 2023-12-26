@@ -21,6 +21,7 @@ import {
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { useAppSelector } from 'lib/hooks/store';
+import { formatLongDateTime } from 'lib/moment';
 import tableTranslations from 'lib/translations/table';
 
 import { getManageCourseUserPermissions } from '../../selectors';
@@ -197,7 +198,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={invitation.id} variant="body2">
-              {invitation.sentAt}
+              {formatLongDateTime(invitation.sentAt)}
             </Typography>
           );
         },
@@ -235,7 +236,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={invitation.id} variant="body2">
-              {invitation.confirmedAt}
+              {formatLongDateTime(invitation.confirmedAt)}
             </Typography>
           );
         },

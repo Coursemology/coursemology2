@@ -17,6 +17,7 @@ import {
 } from 'lib/constants/icons';
 import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { formatLongDateTime } from 'lib/moment';
 import tableTranslations from 'lib/translations/table';
 
 import PersonalTimeEditor from '../misc/PersonalTimeEditor';
@@ -83,9 +84,9 @@ const PersonalTimesTable: FC<Props> = (props) => {
           {getIcon(item)}
           {getLink(item)}
         </TableCell>
-        <TableCell>{item.itemStartAt}</TableCell>
-        <TableCell>{item.itemBonusEndAt}</TableCell>
-        <TableCell>{item.itemEndAt}</TableCell>
+        <TableCell>{formatLongDateTime(item.itemStartAt)}</TableCell>
+        <TableCell>{formatLongDateTime(item.itemBonusEndAt)}</TableCell>
+        <TableCell>{formatLongDateTime(item.itemEndAt)}</TableCell>
         <PersonalTimeEditor
           key={`personal-time-editor-${item.id}`}
           item={item}

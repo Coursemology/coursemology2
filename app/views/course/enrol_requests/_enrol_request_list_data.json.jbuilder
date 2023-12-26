@@ -10,6 +10,6 @@ else
 end
 json.email enrol_request.user.email
 json.status enrol_request.workflow_state
-json.createdAt format_datetime(enrol_request.created_at, :short)
+json.createdAt enrol_request.created_at
 json.confirmedBy enrol_request.confirmer.name unless enrol_request.pending?
-json.confirmedAt format_datetime(enrol_request.confirmed_at, :short) unless enrol_request.pending?
+json.confirmedAt enrol_request.confirmed_at unless enrol_request.pending?

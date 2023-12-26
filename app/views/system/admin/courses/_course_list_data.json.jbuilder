@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.id course.id
 json.title course.title
-json.createdAt format_datetime(course.created_at, :date_only_long)
+json.createdAt course.created_at
 json.activeUserCount course.active_user_count
 json.userCount course.user_count
 json.instance do

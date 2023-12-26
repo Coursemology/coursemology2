@@ -17,4 +17,4 @@ json.actableType 'achievement'
 json.actableId achievement.id
 json.actableName achievement.title
 
-json.createdAt format_datetime(activity.created_at)
+json.createdAt activity.created_at

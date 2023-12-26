@@ -5,9 +5,9 @@ export interface PersonalTimeMiniEntity {
   personalTimeId?: number;
   actableId: number;
   title: string;
-  itemStartAt?: string;
-  itemBonusEndAt?: string;
-  itemEndAt?: string;
+  itemStartAt: string | null;
+  itemBonusEndAt: string | null;
+  itemEndAt: string | null;
   personalStartAt?: Date;
   personalBonusEndAt?: Date;
   personalEndAt?: Date;
@@ -21,9 +21,9 @@ export interface PersonalTimeListData {
   personalTimeId?: number; // id of personal_time
   actableId: number;
   title: string;
-  itemStartAt?: string;
-  itemBonusEndAt?: string;
-  itemEndAt?: string;
+  itemStartAt: string | null;
+  itemBonusEndAt: string | null;
+  itemEndAt: string | null;
   personalStartAt?: Date;
   personalBonusEndAt?: Date;
   personalEndAt?: Date;

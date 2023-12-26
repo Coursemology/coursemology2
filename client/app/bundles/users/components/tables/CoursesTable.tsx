@@ -13,6 +13,7 @@ import { UserCourseMiniEntity } from 'types/users';
 
 import Link from 'lib/components/core/Link';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
+import { formatLongDateTime } from 'lib/moment';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -47,7 +48,7 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
           {courses.map((course) => (
             <TableRow key={`course-${course.id}`} hover>
               <TableCell style={{ maxWidth: '120px' }}>
-                {course.createdAt}
+                {formatLongDateTime(course.enrolledAt)}
               </TableCell>
               <TableCell style={{ maxWidth: '400px' }}>
                 <Typography className="course_title" variant="body2">

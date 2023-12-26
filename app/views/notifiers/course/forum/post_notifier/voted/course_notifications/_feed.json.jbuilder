@@ -22,4 +22,4 @@ json.forumName topic.forum.slug
 json.topicName topic.slug
 json.anchor dom_id(post)
 
-json.createdAt format_datetime(activity.created_at)
+json.createdAt activity.created_at
