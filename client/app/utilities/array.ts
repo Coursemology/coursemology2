@@ -2,7 +2,7 @@ type StringKeys<T> = {
   [K in keyof T]: T[K] extends string | number | symbol ? K : never;
 }[keyof T];
 
-export const arrayToKeyObject = <
+export const arrayToObjectWithKey = <
   T extends Record<StringKeys<T>, string | number | symbol>,
   TKeyName extends keyof Record<StringKeys<T>, string | number | symbol>,
 >(

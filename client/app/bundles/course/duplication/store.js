@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { arrayToKeyObject } from 'utilities/array';
+import { arrayToObjectWithKey } from 'utilities/array';
 
 import actionTypes, { duplicationModes } from 'course/duplication/constants';
 import { getEmptySelectedItems, nestFolders } from 'course/duplication/utils';
@@ -64,7 +64,7 @@ const reducer = produce((state, action) => {
         isLoading: false,
         currentCourseId: data.sourceCourse.id,
         destinationCourses: sortedDestinationCourses,
-        destinationInstances: arrayToKeyObject(destinationInstances, 'id'),
+        destinationInstances: arrayToObjectWithKey(destinationInstances, 'id'),
         materialsComponent: nestedFolders,
       };
     }
