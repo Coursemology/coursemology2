@@ -1,12 +1,13 @@
+import { arrayToObjectWithKey } from 'utilities/array';
+
 import actions from '../constants';
-import { arrayToObjectById } from '../utils';
 
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
       return {
         ...state,
-        ...arrayToObjectById(action.payload.topics),
+        ...arrayToObjectWithKey(action.payload.topics, 'id'),
       };
     case actions.CREATE_COMMENT_SUCCESS: {
       const { topicId, id: postId } = action.payload;

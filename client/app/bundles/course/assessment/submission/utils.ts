@@ -1,8 +1,4 @@
-export function arrayToObjectById(array) {
-  return array.reduce((obj, item) => ({ ...obj, [item.id]: item }), {});
-}
-
-const parsedLanguages = {
+const ProgrammingLanguageMapper = {
   'C/C++': 'c_cpp',
   'Java 8': 'java',
   'Java 11': 'java',
@@ -18,11 +14,13 @@ const parsedLanguages = {
   'Python 2.7': 'python',
 };
 
-export function parseLanguages(language) {
-  const parsedLanguage = parsedLanguages[language];
+export const parseLanguages = (
+  language: keyof typeof ProgrammingLanguageMapper,
+): string => {
+  const parsedLanguage = ProgrammingLanguageMapper[language];
   if (!parsedLanguage) {
     return '';
   }
 
   return parsedLanguage;
-}
+};

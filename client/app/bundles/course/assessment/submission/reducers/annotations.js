@@ -1,5 +1,6 @@
+import { arrayToObjectWithKey } from 'utilities/array';
+
 import actions from '../constants';
-import { arrayToObjectById } from '../utils';
 
 export default function (state = {}, action) {
   switch (action.type) {
@@ -20,7 +21,7 @@ export default function (state = {}, action) {
             ...obj,
             [annotation.fileId]: {
               fileId: annotation.fileId,
-              topics: arrayToObjectById(annotation.topics),
+              topics: arrayToObjectWithKey(annotation.topics, 'id'),
             },
           }),
           {},
@@ -87,7 +88,7 @@ export default function (state = {}, action) {
               ...obj,
               [annotation.fileId]: {
                 fileId: annotation.fileId,
-                topics: arrayToObjectById(annotation.topics),
+                topics: arrayToObjectWithKey(annotation.topics, 'id'),
               },
             }),
             {},

@@ -1,5 +1,6 @@
+import { arrayToObjectWithKey } from 'utilities/array';
+
 import actions from '../constants';
-import { arrayToObjectById } from '../utils';
 
 export default function (state = {}, action) {
   switch (action.type) {
@@ -12,20 +13,22 @@ export default function (state = {}, action) {
     case actions.SAVE_GRADE_SUCCESS:
     case actions.MARK_SUCCESS:
     case actions.UNMARK_SUCCESS:
-    case actions.PUBLISH_SUCCESS:
+    case actions.PUBLISH_SUCCESS: {
+      const questionsWithAttemptsNum = action.payload.questions.map(
+        (question) => {
+          const answer = action.payload.answers.find(
+            (a) => a.questionId === question.id,
+          );
+          return answer && answer.attemptsLeft !== undefined
+            ? { ...question, attemptsLeft: answer.attemptsLeft }
+            : question;
+        },
+      );
       return {
         ...state,
-        ...arrayToObjectById(
-          action.payload.questions.map((question) => {
-            const answer = action.payload.answers.find(
-              (a) => a.questionId === question.id,
-            );
-            return answer && answer.attemptsLeft !== undefined
-              ? { ...question, attemptsLeft: answer.attemptsLeft }
-              : question;
-          }),
-        ),
+        ...arrayToObjectWithKey(questionsWithAttemptsNum, 'id'),
       };
+    }
     case actions.REEVALUATE_SUCCESS:
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS: {
