@@ -1,7 +1,7 @@
 import { produce } from 'immer';
+import { arrayToObjectWithKey } from 'utilities/array';
 
 import actions, { questionTypes } from '../constants';
-import { arrayToObjectById } from '../utils';
 
 const initialState = {
   questions: {},
@@ -71,7 +71,7 @@ const isAnswerGradePrefillable = (answer, questionType) => {
  * `explanation.correct` from the server.
  */
 const extractPrefillableGrades = (payload) => {
-  const mapQuestionIdToQuestion = arrayToObjectById(payload.questions);
+  const mapQuestionIdToQuestion = arrayToObjectWithKey(payload.questions, 'id');
 
   return payload.answers.reduce((draft, answer) => {
     const { questionId, grading } = answer;
