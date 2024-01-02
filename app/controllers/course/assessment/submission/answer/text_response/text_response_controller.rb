@@ -14,6 +14,26 @@ class Course::Assessment::Submission::Answer::TextResponse::TextResponseControll
       true
     end
 
+    render_response(success)
+  end
+
+  def delete_file
+    attachment_reference = @text_response_answer.attachments.find(delete_file_params[:attachment_id])
+    answer = @text_response_answer.acting_as
+
+    success = @text_response_answer.class.transaction do
+      answer.update!(last_session_id: session.id, client_version: delete_file_params[:client_version])
+      raise ActiveRecord::Rollback unless attachment_reference.destroy
+
+      true
+    end
+
+    render_response(success)
+  end
+
+  private
+
+  def render_response(success)
     if success
       render @text_response_answer.answer
     else
@@ -21,32 +41,6 @@ class Course::Assessment::Submission::Answer::TextResponse::TextResponseControll
         @text_response_answer.answer.errors.add(attribute, message)
       end
       render json: { errors: @text_response_answer.answer.errors.messages }, status: :bad_request
-    end
-  end
-
-  def delete_file
-    attachment_reference = AttachmentReference.find(delete_file_params[:attachment_id])
-    answer = @text_response_answer.acting_as
-
-    success = @text_response_answer.class.transaction do
-      answer.update(last_session_id: session.id, client_version: delete_file_params[:client_version])
-      raise ActiveRecord::Rollback unless attachment_reference.destroy
-
-      true
-    end
-
-    respond_to do |format|
-      format.json { render_json_response(success) }
-    end
-  end
-
-  private
-
-  def render_json_response(success)
-    if success
-      head :ok
-    else
-      head :bad_request
     end
   end
 
