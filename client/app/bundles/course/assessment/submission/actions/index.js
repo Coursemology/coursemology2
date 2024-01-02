@@ -447,12 +447,18 @@ export function deleteAttachmentFile(
           },
         });
       })
-      .catch(() =>
+      .catch((error) => {
         dispatch({
           type: actionTypes.DELETE_ATTACHMENT_FAILURE,
           payload: answerId,
-        }),
-      );
+        });
+        dispatch(
+          setNotification(
+            translations.deleteFileFailure,
+            buildErrorMessage(error),
+          ),
+        );
+      });
   };
 }
 
