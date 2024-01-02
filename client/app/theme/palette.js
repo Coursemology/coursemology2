@@ -63,6 +63,7 @@ const palette = {
     primary: '#12161B',
     secondary: '#66788A',
     disabled: '#A6B1BB',
+    white: '#FFFFFF',
   },
   background: {
     paper: white,
