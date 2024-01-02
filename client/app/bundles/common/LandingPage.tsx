@@ -50,8 +50,8 @@ const translations = defineMessages({
       'It is built for all subjects. The gamification system of Coursemology does not make any assumptions on the subject. Through Coursemology, any teacher who teaches any subject can turn his course exercises into an online game.',
   },
   iconSimpleTitle: {
-    id: 'landing_page.iconEngaging',
-    defaultMessage: 'Engaging',
+    id: 'landing_page.iconSimple',
+    defaultMessage: 'Simple',
   },
   iconSimpleSubtitle: {
     id: 'landing_page.iconEngagingSubtitle',
