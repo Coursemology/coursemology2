@@ -92,7 +92,6 @@ const SubmissionEditForm = (props) => {
     intl,
     isAutograding,
     isSaving,
-    savingStatus,
     passwordProtected,
     published,
     questionIds,
@@ -432,7 +431,6 @@ const SubmissionEditForm = (props) => {
                   graderView,
                   showMcqMrqSolution,
                   handleToggleViewHistoryMode,
-                  savingStatus,
                 }}
               />
               {question.type === questionTypes.Programming &&
@@ -595,7 +593,6 @@ const SubmissionEditForm = (props) => {
             graderView,
             showMcqMrqSolution,
             handleToggleViewHistoryMode,
-            savingStatus,
           }}
         />
         {question.type === questionTypes.Programming && !viewHistory
