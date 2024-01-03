@@ -16,7 +16,7 @@ import equal from 'fast-deep-equal';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
-import { useAppDispatch } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -28,6 +28,7 @@ import {
 } from '../actions';
 import { saveStatus } from '../constants';
 import { HistoryQuestion, SubmissionQuestionData } from '../questionGrade';
+import { getSavingStatus } from '../selectors';
 import translations from '../translations';
 
 import Answer, { AnswerMapper } from './Answer';
@@ -44,7 +45,6 @@ interface Props {
   showMcqMrqSolution: boolean;
   question: SubmissionQuestionData;
   answerId: number;
-  savingStatus: Record<string, string>;
 }
 
 const SavingIndicator = (
@@ -161,13 +161,13 @@ const SubmissionAnswer = (props: Props): JSX.Element => {
     showMcqMrqSolution,
     question,
     answerId,
-    savingStatus,
   } = props;
 
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
   const submissionId = getSubmissionId();
+  const savingStatus = useAppSelector(getSavingStatus);
 
   const historyQuestion = historyQuestions[question.id];
   const noPastAnswers = historyQuestion
