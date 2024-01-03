@@ -67,6 +67,11 @@ module TrackableJob::SpecHelpers
     sleep 0.7
   end
 
+  # Wait for autosave to be finished from BE
+  def wait_for_autosave
+    sleep 2
+  end
+
   def wait_for_field_debouncing
     sleep 0.5
   end

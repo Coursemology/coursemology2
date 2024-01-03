@@ -41,7 +41,10 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
 
           # The file should show in the dropzone
           expect(dropzone).to have_css('span', text: 'text.txt')
-          wait_for_job
+
+          # it's expected that after file's put here, autosave will be sent from FE to BE
+          # therefore, we wait for autosave to finish and then proceed accordingly
+          wait_for_autosave
 
           expect(dropzone).to have_no_css('span', text: 'text.txt')
           expect(file_view).to have_css('span', text: 'text.txt')
@@ -50,7 +53,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
 
           # Attempting to delete the file that we have just uploaded
           # Click on the delete button and confirm
-          delete_button = file_view.find('svg')
+          delete_button = file_view.find('svg[data-testId="CancelIcon"]')
           delete_button.click
           click_button('Delete')
 
