@@ -305,7 +305,6 @@ class VisibleSubmissionEditIndex extends Component {
       topics,
       isAutograding,
       isSaving,
-      savingStatus,
     } = this.props;
 
     if (Object.values(questions).length === 0) {
@@ -353,7 +352,6 @@ class VisibleSubmissionEditIndex extends Component {
           questionIds={questionIds}
           questions={questions}
           questionsFlags={questionsFlags}
-          savingStatus={savingStatus}
           showMcqAnswer={showMcqAnswer}
           showMcqMrqSolution={showMcqMrqSolution}
           skippable={skippable}
@@ -399,7 +397,6 @@ class VisibleSubmissionEditIndex extends Component {
         questionIds={questionIds}
         questions={questions}
         questionsFlags={questionsFlags}
-        savingStatus={savingStatus}
         showMcqMrqSolution={showMcqMrqSolution}
         step={step}
         submitted={workflowState === workflowStates.Submitted}
@@ -484,7 +481,6 @@ VisibleSubmissionEditIndex.propTypes = {
   isAutograding: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
-  savingStatus: PropTypes.object.isRequired,
   isSubmissionBlocked: PropTypes.bool,
   setSessionId: PropTypes.func,
 };
@@ -507,7 +503,6 @@ function mapStateToProps({ assessments: { submission } }) {
     topics: submission.topics,
     isLoading: submission.submissionFlags.isLoading,
     isSaving: submission.submissionFlags.isSaving,
-    savingStatus: submission.submissionFlags.savingStatus,
     isSubmissionBlocked: submission.submissionFlags.isSubmissionBlocked,
   };
 }
