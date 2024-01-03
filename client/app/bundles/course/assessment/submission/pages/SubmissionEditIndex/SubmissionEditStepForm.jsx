@@ -103,7 +103,6 @@ const SubmissionEditStepForm = (props) => {
     questionIds,
     questions,
     questionsFlags,
-    savingStatus,
     showMcqAnswer,
     showMcqMrqSolution,
     skippable,
@@ -521,7 +520,6 @@ const SubmissionEditStepForm = (props) => {
             graderView,
             showMcqMrqSolution,
             handleToggleViewHistoryMode,
-            savingStatus,
           }}
         />
         {renderAutogradingErrorPanel(id)}
