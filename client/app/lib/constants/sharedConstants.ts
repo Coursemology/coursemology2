@@ -4,6 +4,7 @@ import {
   RoleRequestRoles,
 } from 'types/system/instance/users';
 import type { Locale, UserRoles } from 'types/users';
+import mirrorCreator from 'utilities/mirrorCreator';
 
 // Form options
 
@@ -52,6 +53,13 @@ export const AVAILABLE_LOCALES: { [key in Locale]: string } = {
   en: 'English',
   zh: '中文',
 };
+
+export const SAVING_STATUS = mirrorCreator([
+  'None',
+  'Saving',
+  'Saved',
+  'Failed',
+]);
 
 export default {
   TIMELINE_ALGORITHMS,
