@@ -508,7 +508,6 @@ const SubmissionEditStepForm = (props) => {
     const question = questions[id];
     const { answerId, topicId } = question;
     const topic = topics[topicId];
-
     return (
       <>
         <SubmissionAnswer
@@ -661,7 +660,6 @@ SubmissionEditStepForm.propTypes = {
   questionsFlags: PropTypes.objectOf(questionFlagsShape),
   topics: PropTypes.objectOf(topicShape),
   isSaving: PropTypes.bool.isRequired,
-  savingStatus: PropTypes.object.isRequired,
 
   onReset: PropTypes.func,
   onSaveDraft: PropTypes.func,
