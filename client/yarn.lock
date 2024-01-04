@@ -9181,10 +9181,10 @@ react-hot-keys@^2.7.3:
     hotkeys-js "^3.13.2"
     prop-types "^15.8.1"
 
-react-image-crop@^11.0.2:
-  version "11.0.2"
-  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-11.0.2.tgz#ef344cd30323c04abf198b0175b5dbe5034027db"
-  integrity sha512-qKKGf47ZkE0v+uInpE7SfD6pnCje9Xa7ZcaLc0fA+VoBsAmidGOB8kBxIPZV1AS3teauLJzYtSbhYP0GjelUTg==
+react-image-crop@^11.0.4:
+  version "11.0.4"
+  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-11.0.4.tgz#044a34467fd52fde5cb03907cfb156e131cc798d"
+  integrity sha512-FO6N0oJIs+T/kw9wHZ1sjLYURUBv7BOKamjwkiQ0lI4D2Vp5OZFDNhrSJW41K0V9oCsbHtEymbOT/8eF28OOhg==
 
 react-intl@^6.5.5:
   version "6.5.5"
