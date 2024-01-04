@@ -23,7 +23,7 @@ class Course::Assessment::Submission::Answer::TextResponse::TextResponseControll
 
     success = @text_response_answer.class.transaction do
       answer.update!(last_session_id: session.id, client_version: delete_file_params[:client_version])
-      raise ActiveRecord::Rollback unless attachment_reference.destroy
+      attachment_reference.destroy!
 
       true
     end
