@@ -418,7 +418,6 @@ const SubmissionEditForm = (props) => {
         const question = questions[id];
         const { answerId, topicId, viewHistory } = question;
         const topic = topics[topicId];
-
         return (
           <Element key={id} name={`step${index}`}>
             <Paper className="mb-5 p-6" variant="outlined">
@@ -714,7 +713,6 @@ const SubmissionEditForm = (props) => {
 
 SubmissionEditForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
-  currentValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,
@@ -742,7 +740,6 @@ SubmissionEditForm.propTypes = {
   topics: PropTypes.objectOf(topicShape),
   isAutograding: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
-  savingStatus: PropTypes.object.isRequired,
 
   handleAutogradeSubmission: PropTypes.func,
   onReset: PropTypes.func,
