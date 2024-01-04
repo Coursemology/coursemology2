@@ -124,9 +124,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   # Find the questions for this submission without submission_questions.
-  # Build and save! new submission_questions.
+  # Build and save new submission_questions.
   #
-  # @raise [ActiveRecord::RecordInvalid] If the new submission_questions cannot be saved.
   # @return[Boolean] If new submission_questions were created.
   def create_missing_submission_questions
     questions_with_submission_questions = @submission.submission_questions.includes(:question).map(&:question)
@@ -137,11 +136,16 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
         Course::Assessment::SubmissionQuestion.new(submission: @submission, question: question)
     end
 
-    ActiveRecord::Base.transaction do
-      Course::Assessment::SubmissionQuestion.import! new_submission_questions, recursive: true
+    import_success = true
+    begin
+      # NOTE: "import" method from activerecord-import for some reason does not return boolean
+      #  and always raise an error even without using "import!""
+      Course::Assessment::SubmissionQuestion.import new_submission_questions, recursive: true
+    rescue StandardError
+      import_success = false
     end
 
-    new_submission_questions.any?
+    import_success && new_submission_questions.any?
   end
 
   def update_submission # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
@@ -149,6 +153,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       unless unsubmit? || unmark?
         update_answers_params[:answers]&.each do |answer_params|
           next if answer_params[:id].blank?
+
           answer_params_with_session_id = answer_params.merge(session_id: session.id)
 
           answer = @submission.answers.includes(:actable).find do |a|
