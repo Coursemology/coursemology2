@@ -25,11 +25,17 @@ export default function (state = initialState, action) {
     case actions.FETCH_SUBMISSIONS_REQUEST:
       return { ...state, isLoading: true };
     case actions.FETCH_SUBMISSION_SUCCESS:
-    case actions.FETCH_SUBMISSION_FAILURE: {
       return produce(state, (draft) => {
         draft.isLoading = false;
         action.payload.answers.forEach((answer) => {
           draft.savingStatus[answer.id.toString()] = saveStatus.None;
+        });
+      });
+    case actions.FETCH_SUBMISSION_FAILURE: {
+      return produce(state, (draft) => {
+        draft.isLoading = false;
+        Object.keys(draft.savingStatus).forEach((key) => {
+          draft.savingStatus[key] = saveStatus.None;
         });
       });
     }
