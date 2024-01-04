@@ -190,12 +190,9 @@ class VisibleSubmissionEditIndex extends Component {
   onSaveDraft = (data) => {
     const {
       dispatch,
-      match: {
-        params: { submissionId },
-      },
+      match: { params },
     } = this.props;
-
-    dispatch(saveDraft(submissionId, data));
+    dispatch(saveDraft(params.submissionId, data));
   };
 
   onSubmit = (data) => {
