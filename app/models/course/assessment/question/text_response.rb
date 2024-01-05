@@ -85,7 +85,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
   end
 
   def csv_downloadable?
-    !hide_text && !allow_attachment
+    !hide_text && attachment_type == attachment_types["no_attachment"]
   end
 
   def initialize_duplicate(duplicator, other)

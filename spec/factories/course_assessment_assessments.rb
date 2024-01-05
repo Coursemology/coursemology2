@@ -92,7 +92,7 @@ FactoryBot.define do
     trait :with_text_response_question do
       after(:build) do |assessment, evaluator|
         evaluator.question_count.downto(1).each do |i|
-          question = build(:course_assessment_question_text_response, :allow_attachment)
+          question = build(:course_assessment_question_text_response, :multiple_file_attachment)
           assessment.question_assessments.build(question: question.acting_as, weight: i)
         end
       end

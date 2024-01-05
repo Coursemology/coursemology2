@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-json.allowAttachment question.allow_attachment? unless question.hide_text?
+json.allowAttachment question.attachment_type != 'no_attachment' unless question.hide_text?
 json.comprehension question.comprehension_question?
 json.autogradable question.auto_gradable?
 json.maximumGrade question.maximum_grade.to_f
