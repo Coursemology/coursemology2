@@ -12,3 +12,5 @@ en:
           attributes:
             maximum_grade:
               invalid_grade: 'must be no less than the grade of any solution'
+            attachment_type:
+              no_attachment_required: 'cannot require file upload in question with no attachment settings'

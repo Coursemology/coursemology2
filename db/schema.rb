@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_07_114521) do
+ActiveRecord::Schema.define(version: 2024_01_05_150625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -339,9 +339,10 @@ ActiveRecord::Schema.define(version: 2023_11_07_114521) do
   end
 
   create_table "course_assessment_question_text_responses", id: :serial, force: :cascade do |t|
-    t.boolean "allow_attachment", default: false
     t.boolean "hide_text", default: false
     t.boolean "is_comprehension", default: false
+    t.boolean "require_attachment", default: false, null: false
+    t.integer "attachment_type", default: 0, null: false
   end
 
   create_table "course_assessment_question_voice_responses", id: :serial, force: :cascade do |t|
@@ -428,7 +429,7 @@ ActiveRecord::Schema.define(version: 2023_11_07_114521) do
     t.datetime "published_at"
     t.string "session_id", limit: 255
     t.datetime "submitted_at"
-    t.datetime "last_graded_time", default: "2021-10-24 14:11:56"
+    t.datetime "last_graded_time", default: "2021-11-09 00:08:09"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
@@ -495,7 +496,7 @@ ActiveRecord::Schema.define(version: 2023_11_07_114521) do
     t.integer "minimum_level", null: false
   end
 
-  create_table "course_condition_surveys", id: :serial, force: :cascade do |t|
+  create_table "course_condition_surveys", force: :cascade do |t|
     t.bigint "survey_id", null: false
     t.index ["survey_id"], name: "fk__course_condition_surveys_survey_id"
   end
@@ -525,7 +526,7 @@ ActiveRecord::Schema.define(version: 2023_11_07_114521) do
 
   create_table "course_discussion_post_codaveri_feedbacks", force: :cascade do |t|
     t.bigint "post_id", null: false
-    t.integer "status"
+    t.integer "status", default: 0
     t.text "codaveri_feedback_id", null: false
     t.text "original_feedback", null: false
     t.integer "rating"
@@ -1212,7 +1213,7 @@ ActiveRecord::Schema.define(version: 2023_11_07_114521) do
     t.boolean "enrollable", default: false, null: false
     t.string "time_zone", limit: 255
     t.boolean "show_personalized_timeline_features", default: false, null: false
-    t.datetime "conditional_satisfiability_evaluation_time", default: "2021-10-24 10:31:32"
+    t.datetime "conditional_satisfiability_evaluation_time", default: "2021-11-09 00:08:09"
     t.integer "default_timeline_algorithm", default: 0, null: false
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
@@ -1469,8 +1470,8 @@ ActiveRecord::Schema.define(version: 2023_11_07_114521) do
   add_foreign_key "course_assessments", "users", column: "updater_id", name: "fk_course_assessments_updater_id"
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
   add_foreign_key "course_condition_assessments", "course_assessments", column: "assessment_id", name: "fk_course_condition_assessments_assessment_id"
-  add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id", name: "fk_course_condition_surveys_survey_id"
-  add_foreign_key "course_condition_videos", "course_videos", column: "video_id", name: "fk_course_condition_videos_video_id"
+  add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id"
+  add_foreign_key "course_condition_videos", "course_videos", column: "video_id"
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"
   add_foreign_key "course_conditions", "users", column: "creator_id", name: "fk_course_conditions_creator_id"
   add_foreign_key "course_conditions", "users", column: "updater_id", name: "fk_course_conditions_updater_id"
@@ -1514,8 +1515,8 @@ ActiveRecord::Schema.define(version: 2023_11_07_114521) do
   add_foreign_key "course_groups", "course_group_categories", column: "group_category_id"
   add_foreign_key "course_groups", "users", column: "creator_id", name: "fk_course_groups_creator_id"
   add_foreign_key "course_groups", "users", column: "updater_id", name: "fk_course_groups_updater_id"
-  add_foreign_key "course_learning_maps", "courses", name: "fk_course_learning_maps_course_id"
-  add_foreign_key "course_learning_rate_records", "course_users", name: "fk_course_learning_rate_records_course_user_id"
+  add_foreign_key "course_learning_maps", "courses"
+  add_foreign_key "course_learning_rate_records", "course_users"
   add_foreign_key "course_lesson_plan_event_materials", "course_lesson_plan_events", column: "lesson_plan_event_id", name: "fk_course_lesson_plan_event_materials_lesson_plan_event_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_materials", column: "material_id", name: "fk_course_lesson_plan_event_materials_material_id"
   add_foreign_key "course_lesson_plan_items", "courses", name: "fk_course_lesson_plan_items_course_id"

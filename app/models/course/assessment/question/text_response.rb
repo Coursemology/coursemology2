@@ -2,7 +2,13 @@
 class Course::Assessment::Question::TextResponse < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
 
+  enum attachment_type: {no_attachment: 0, single_file_attachment: 1, multiple_file_attachment: 2}
+
+  validates :attachment_type, presence: true
+  validates :require_attachment, presence: true
+
   validate :validate_grade
+  validate :validate_attachment_settings
 
   has_many :solutions, class_name: Course::Assessment::Question::TextResponseSolution.name,
                        dependent: :destroy, foreign_key: :question_id, inverse_of: :question
@@ -103,5 +109,11 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
     return unless !comprehension_question? && solutions.any? { |s| s.grade > maximum_grade }
 
     errors.add(:maximum_grade, :invalid_grade)
+  end
+
+  def validate_attachment_settings
+    return unless attachment_type != attachment_types["no_attachment"] || !require_attachment
+
+    errors.add(:attachment_type, :no_attachment_required)
   end
 end
