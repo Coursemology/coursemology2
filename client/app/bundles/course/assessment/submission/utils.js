@@ -17,6 +17,7 @@ export function parseLanguages(language) {
     case 'Java 11':
     case 'Java':
       return 'java';
+    case 'Python 3.12':
     case 'Python 3.10':
     case 'Python 3.9':
     case 'Python 3.7':
