@@ -271,6 +271,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
      Coursemology::Polyglot::Language::Python::Python3Point6,
      Coursemology::Polyglot::Language::Python::Python3Point7,
      Coursemology::Polyglot::Language::Python::Python3Point9,
-     Coursemology::Polyglot::Language::Python::Python3Point10]
+     Coursemology::Polyglot::Language::Python::Python3Point10,
+     Coursemology::Polyglot::Language::Python::Python3Point12]
   end
 end
