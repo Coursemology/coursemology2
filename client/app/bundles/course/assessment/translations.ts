@@ -413,6 +413,11 @@ const translations = defineMessages({
     id: 'course.assessment.show.fileUpload',
     defaultMessage: 'File Upload',
   },
+  fileUploadDescription: {
+    id: 'course.assessment.show.fileUploadDescription',
+    defaultMessage:
+      'Settings for the number of attachments allowed (none, one, or multiple)',
+  },
   programming: {
     id: 'course.assessment.show.programming',
     defaultMessage: 'Programming',
@@ -845,21 +850,39 @@ const translations = defineMessages({
     defaultMessage:
       'Note: File upload question is not auto-gradable. The autograder will always award the maximum grade.',
   },
-  attachmentOptions: {
-    id: 'course.assessment.question.textResponses.attachmentOptions',
-    defaultMessage: 'Attachment Options',
+  attachmentSettings: {
+    id: 'course.assessment.question.textResponses.attachmentSettings',
+    defaultMessage: 'Attachment Settings',
+  },
+  attachmentSettingsDescription: {
+    id: 'course.assessment.question.textResponses.attachmentSettingsDescription',
+    defaultMessage: 'When students are attempting this question',
   },
   noAttachment: {
     id: 'course.assessment.question.textResponses.noAttachment',
-    defaultMessage: 'No file upload needed for this question',
+    defaultMessage: 'No Attachment Setting',
+  },
+  noAttachmentDescription: {
+    id: 'course.assessment.question.textResponses.noAttachmentDescription',
+    defaultMessage:
+      'They will not be able to upload any attachments within this question',
   },
   singleFileAttachment: {
     id: 'course.assessment.question.textResponses.singleFileAttachment',
-    defaultMessage: 'Allow only 1 file upload for this question',
+    defaultMessage: 'Single Attachment Setting',
+  },
+  singleFileAttachmentDescription: {
+    id: 'course.assessment.question.textResponses.singleFileAttachmentDescription',
+    defaultMessage:
+      'They can only upload at most one attachment within this question',
   },
   multipleFileAttachment: {
     id: 'course.assessment.question.textResponses.multipleFileAttachment',
-    defaultMessage: 'Allow multiple file upload for this question',
+    defaultMessage: 'Multiple Attachment Setting',
+  },
+  multipleFileAttachmentDescription: {
+    id: 'course.assessment.question.textResponses.multipleFileAttachmentDescription',
+    defaultMessage: 'They can upload several attachments within this question',
   },
   requireAttachment: {
     id: 'course.assessment.question.textResponses.requireAttachment',

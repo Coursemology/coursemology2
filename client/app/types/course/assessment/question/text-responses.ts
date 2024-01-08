@@ -19,17 +19,17 @@ export enum AttachmentType {
   MULTIPLE_FILE_ATTACHMENT = 'multiple_file_attachment',
 }
 
+export interface TextResponseQuestionFormData extends QuestionFormData {
+  attachmentType: AttachmentType;
+  requireAttachment: boolean;
+  hideText: boolean;
+}
+
 export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
   solutions?: SolutionEntity[] | null | OptionalIfNew<T>;
   questionType: 'file_upload' | 'text_response';
   isAssessmentAutograded: boolean;
-  question:
-    | (QuestionFormData & {
-        attachmentType: AttachmentType;
-        requireAttachment: boolean;
-        hideText: boolean;
-      })
-    | OptionalIfNew<T>;
+  question: TextResponseQuestionFormData | OptionalIfNew<T>;
 }
 
 export type TextResponseFormData<T extends 'new' | 'edit' = 'edit'> =

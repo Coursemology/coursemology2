@@ -1,23 +1,21 @@
 import { useRef, useState } from 'react';
-import { Controller } from 'react-hook-form';
-import { Alert, RadioGroup } from '@mui/material';
+import { Alert, Container } from '@mui/material';
 import {
   AttachmentType,
   TextResponseData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
 
-import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
-import Subsection from 'lib/components/core/layouts/Subsection';
-import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
 import CommonQuestionFields from '../../components/CommonQuestionFields';
 import { questionSchema, validateSolutions } from '../commons/validations';
+import { TextResponseFormDataProvider } from '../hooks/TextResponseFormDataContext';
 
+import FileUploadManager from './FileUploadManager';
 import SolutionsManager, { SolutionsManagerRef } from './SolutionsManager';
 
 export interface TextResponseFormProps<T extends 'new' | 'edit'> {
@@ -82,96 +80,61 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
   };
 
   return (
-    <Form
-      dirty={isSolutionsDirty}
-      disabled={submitting}
-      emitsVia={setForm}
-      headsUp
-      initialValues={data.question!}
-      onSubmit={handleSubmit}
-      validates={questionSchema}
-    >
-      {(control, watch): JSX.Element => {
-        const attachmentType = watch('attachmentType');
-        return (
-          <>
-            <CommonQuestionFields
-              availableSkills={data.availableSkills}
-              control={control}
-              disabled={submitting}
-              skillsUrl={data.skillsUrl}
-            />
-            {data.isAssessmentAutograded &&
-              data.questionType === 'file_upload' && (
-                <Alert severity="info">{t(translations.fileUploadNote)}</Alert>
-              )}
+    <TextResponseFormDataProvider data={data.question!}>
+      <Form
+        contextual
+        dirty={isSolutionsDirty}
+        disabled={submitting}
+        emitsVia={setForm}
+        headsUp
+        initialValues={data.question!}
+        onSubmit={handleSubmit}
+        validates={questionSchema}
+      >
+        {(control): JSX.Element => {
+          return (
+            <>
+              <CommonQuestionFields
+                availableSkills={data.availableSkills}
+                control={control}
+                disabled={submitting}
+                skillsUrl={data.skillsUrl}
+              />
 
-            <Section sticksToNavbar title={t(translations.fileUpload)}>
-              <Subsection title={t(translations.attachmentOptions)}>
-                <Controller
-                  control={control}
-                  name="attachmentType"
-                  render={({ field }): JSX.Element => (
-                    <RadioGroup className="space-y-5" {...field}>
-                      {data.questionType === 'text_response' && (
-                        <RadioButton
-                          disabled={submitting}
-                          label={t(translations.noAttachment)}
-                          value="no_attachment"
-                        />
-                      )}
-                      <RadioButton
-                        disabled={submitting}
-                        label={t(translations.singleFileAttachment)}
-                        value="single_file_attachment"
-                      />
-                      <RadioButton
-                        disabled={submitting}
-                        label={t(translations.multipleFileAttachment)}
-                        value="multiple_file_attachment"
-                      />
-                    </RadioGroup>
-                  )}
-                />
+              <FileUploadManager
+                disabled={submitting}
+                isTextResponseQuestion={data.questionType === 'text_response'}
+              />
 
-                {attachmentType !== AttachmentType.NO_ATTACHMENT && (
-                  <div className="mt-5">
-                    <Controller
-                      control={control}
-                      name="requireAttachment"
-                      render={({ field, fieldState }): JSX.Element => (
-                        <FormCheckboxField
-                          disabled={submitting}
-                          field={field}
-                          fieldState={fieldState}
-                          label={t(translations.requireAttachment)}
-                        />
-                      )}
-                    />
-                  </div>
+              {data.isAssessmentAutograded &&
+                data.questionType === 'file_upload' && (
+                  <Container className="mb-6" disableGutters>
+                    <Alert severity="info">
+                      {t(translations.fileUploadNote)}
+                    </Alert>
+                  </Container>
                 )}
-              </Subsection>
-            </Section>
 
-            {data.questionType === 'text_response' && (
-              <Section
-                sticksToNavbar
-                subtitle={t(translations.solutionsHint)}
-                title={t(translations.solutions)}
-              >
-                <SolutionsManager
-                  ref={solutionsRef}
-                  disabled={submitting}
-                  for={data.solutions ?? []}
-                  isAssessmentAutograded={data.isAssessmentAutograded}
-                  onDirtyChange={setIsSolutionsDirty}
-                />
-              </Section>
-            )}
-          </>
-        );
-      }}
-    </Form>
+              {data.questionType === 'text_response' && (
+                <Section
+                  sticksToNavbar
+                  subtitle={t(translations.solutionsHint)}
+                  title={t(translations.solutions)}
+                >
+                  <SolutionsManager
+                    ref={solutionsRef}
+                    disabled={submitting}
+                    for={data.solutions ?? []}
+                    isAssessmentAutograded={data.isAssessmentAutograded}
+                    onDirtyChange={setIsSolutionsDirty}
+                  />
+                </Section>
+              )}
+            </>
+          );
+        }}
+      </Form>
+    </TextResponseFormDataProvider>
   );
 };
 
