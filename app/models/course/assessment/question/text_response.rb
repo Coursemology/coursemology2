@@ -5,7 +5,6 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
   enum attachment_type: {no_attachment: 0, single_file_attachment: 1, multiple_file_attachment: 2}
 
   validates :attachment_type, presence: true
-  validates :require_attachment, presence: true
 
   validate :validate_grade
   validate :validate_attachment_settings
@@ -85,7 +84,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
   end
 
   def csv_downloadable?
-    !hide_text && attachment_type == attachment_types["no_attachment"]
+    !hide_text && attachment_type == 'no_attachment'
   end
 
   def initialize_duplicate(duplicator, other)
@@ -112,7 +111,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
   end
 
   def validate_attachment_settings
-    return unless attachment_type != attachment_types["no_attachment"] || !require_attachment
+    return unless attachment_type == 'no_attachment' && require_attachment
 
     errors.add(:attachment_type, :no_attachment_required)
   end

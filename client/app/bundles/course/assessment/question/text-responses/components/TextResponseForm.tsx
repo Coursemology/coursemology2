@@ -1,12 +1,15 @@
 import { useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { Alert } from '@mui/material';
+import { Alert, RadioGroup } from '@mui/material';
 import {
+  AttachmentType,
   TextResponseData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
 
+import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
+import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -58,10 +61,17 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     const solutions = await prepareSolutions(data.questionType);
     if (!solutions) return;
 
+    const newQuestion = {
+      ...question,
+      requireAttachment:
+        question.attachmentType !== AttachmentType.NO_ATTACHMENT &&
+        question.requireAttachment,
+    };
+
     const newData: TextResponseData = {
       questionType: data.questionType,
       isAssessmentAutograded: data.isAssessmentAutograded,
-      question,
+      question: newQuestion,
       solutions,
     };
     setSubmitting(true);
@@ -81,35 +91,69 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
       onSubmit={handleSubmit}
       validates={questionSchema}
     >
-      {(control): JSX.Element => (
-        <>
-          <CommonQuestionFields
-            availableSkills={data.availableSkills}
-            control={control}
-            disabled={submitting}
-            skillsUrl={data.skillsUrl}
-          />
-          {data.isAssessmentAutograded &&
-            data.questionType === 'file_upload' && (
-              <Alert severity="info">{t(translations.fileUploadNote)}</Alert>
-            )}
+      {(control, watch): JSX.Element => {
+        const attachmentType = watch('attachmentType');
+        return (
+          <>
+            <CommonQuestionFields
+              availableSkills={data.availableSkills}
+              control={control}
+              disabled={submitting}
+              skillsUrl={data.skillsUrl}
+            />
+            {data.isAssessmentAutograded &&
+              data.questionType === 'file_upload' && (
+                <Alert severity="info">{t(translations.fileUploadNote)}</Alert>
+              )}
 
-          {data.questionType === 'text_response' && (
-            <>
-              <Section sticksToNavbar title={t(translations.fileUpload)}>
+            <Section sticksToNavbar title={t(translations.fileUpload)}>
+              <Subsection title={t(translations.attachmentOptions)}>
                 <Controller
                   control={control}
-                  name="allowAttachment"
-                  render={({ field, fieldState }): JSX.Element => (
-                    <FormCheckboxField
-                      disabled={submitting}
-                      field={field}
-                      fieldState={fieldState}
-                      label={t(translations.allowFileUpload)}
-                    />
+                  name="attachmentType"
+                  render={({ field }): JSX.Element => (
+                    <RadioGroup className="space-y-5" {...field}>
+                      {data.questionType === 'text_response' && (
+                        <RadioButton
+                          disabled={submitting}
+                          label={t(translations.noAttachment)}
+                          value="no_attachment"
+                        />
+                      )}
+                      <RadioButton
+                        disabled={submitting}
+                        label={t(translations.singleFileAttachment)}
+                        value="single_file_attachment"
+                      />
+                      <RadioButton
+                        disabled={submitting}
+                        label={t(translations.multipleFileAttachment)}
+                        value="multiple_file_attachment"
+                      />
+                    </RadioGroup>
                   )}
                 />
-              </Section>
+
+                {attachmentType !== AttachmentType.NO_ATTACHMENT && (
+                  <div className="mt-5">
+                    <Controller
+                      control={control}
+                      name="requireAttachment"
+                      render={({ field, fieldState }): JSX.Element => (
+                        <FormCheckboxField
+                          disabled={submitting}
+                          field={field}
+                          fieldState={fieldState}
+                          label={t(translations.requireAttachment)}
+                        />
+                      )}
+                    />
+                  </div>
+                )}
+              </Subsection>
+            </Section>
+
+            {data.questionType === 'text_response' && (
               <Section
                 sticksToNavbar
                 subtitle={t(translations.solutionsHint)}
@@ -123,10 +167,10 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
                   onDirtyChange={setIsSolutionsDirty}
                 />
               </Section>
-            </>
-          )}
-        </>
-      )}
+            )}
+          </>
+        );
+      }}
     </Form>
   );
 };

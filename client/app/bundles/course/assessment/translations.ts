@@ -845,6 +845,26 @@ const translations = defineMessages({
     defaultMessage:
       'Note: File upload question is not auto-gradable. The autograder will always award the maximum grade.',
   },
+  attachmentOptions: {
+    id: 'course.assessment.question.textResponses.attachmentOptions',
+    defaultMessage: 'Attachment Options',
+  },
+  noAttachment: {
+    id: 'course.assessment.question.textResponses.noAttachment',
+    defaultMessage: 'No file upload needed for this question',
+  },
+  singleFileAttachment: {
+    id: 'course.assessment.question.textResponses.singleFileAttachment',
+    defaultMessage: 'Allow only 1 file upload for this question',
+  },
+  multipleFileAttachment: {
+    id: 'course.assessment.question.textResponses.multipleFileAttachment',
+    defaultMessage: 'Allow multiple file upload for this question',
+  },
+  requireAttachment: {
+    id: 'course.assessment.question.textResponses.requireAttachment',
+    defaultMessage: 'Require file upload for this question',
+  },
   mustSpecifySolutionType: {
     id: 'course.assessment.question.textResponses.mustSpecifySolutionType',
     defaultMessage:
