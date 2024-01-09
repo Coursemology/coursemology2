@@ -1,11 +1,4 @@
 GIT
-  remote: https://github.com/Coursemology/polyglot.git
-  revision: 07a3f6ddc6952572f71d9c56b8ccd9e269e0ec7e
-  specs:
-    coursemology-polyglot (0.3.7)
-      activesupport (>= 4.2)
-
-GIT
   remote: https://github.com/ekowidianto/active_record-acts_as.git
   revision: 9e01feb01438ba6736f2d4a8140d9be18464afdc
   branch: rails5.2.3
@@ -175,6 +168,8 @@ GEM
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     consistency_fail (0.3.7)
+    coursemology-polyglot (0.3.8)
+      activesupport (>= 4.2)
     crass (1.0.6)
     date (3.3.4)
     devise (4.9.3)
@@ -588,7 +583,7 @@ DEPENDENCIES
   carrierwave
   codecov
   consistency_fail
-  coursemology-polyglot!
+  coursemology-polyglot
   devise (= 4.9.3)
   devise-multi_email
   devise_masquerade
