@@ -179,7 +179,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-localstorage-mock": "^2.4.26",
     "mkdirp": "^3.0.1",
-    "postcss": "^8.4.32",
+    "postcss": "^8.4.33",
     "postcss-loader": "^7.3.4",
     "prettier": "^3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.11",
