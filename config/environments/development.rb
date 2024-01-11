@@ -54,9 +54,13 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.x.default_app_host = 'lvh.me'
-  config.x.default_host = "#{config.x.default_app_host}:5000"
+  config.x.client_port = 8080
+  config.x.default_host = "#{config.x.default_app_host}:#{config.x.client_port}"
 
-  config.action_mailer.default_url_options = { host: "#{config.x.default_app_host}:5000" }
+  # the value should be 'lvh.me:8080'
+  config.x.initial_host = config.x.default_host
+
+  config.action_mailer.default_url_options = { host: config.x.initial_host }
 
   # Rails 6.0.5.1 security patch
   # To find out more unpermitted classes and add below then uncomment

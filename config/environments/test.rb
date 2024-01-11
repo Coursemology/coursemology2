@@ -42,9 +42,6 @@ Rails.application.configure do
   # Default from address for email
   config.action_mailer.default_options = { from: 'coursemology@example.org' }
 
-  # We will assume that we are running on localhost
-  config.action_mailer.default_url_options = { host: 'lvh.me:3200' }
-
   # Use the threaded background job adapter for replicating the production environment.
   config.active_job.queue_adapter = ActiveJob::QueueAdapters::BackgroundThreadAdapter.new
 
@@ -57,7 +54,14 @@ Rails.application.configure do
   config.x.default_host = 'lvh.me'
   config.x.client_port = 3200
   config.x.server_port = 7979
+  config.x.default_app_host = "#{config.x.default_host}:#{config.x.client_port}"
   config.x.default_user_password = 'lolololol'
+
+  # the value should be 'lvh.me:3200'
+  config.x.initial_host = config.x.default_app_host
+
+  # We will assume that we are running on xxx.lvh.me:3200, where xxx is the tenant
+  config.action_mailer.default_url_options = { host: config.x.initial_host }
 
   # Raises error for missing translations.
   # config.action_view.raise_on_missing_translations = true
