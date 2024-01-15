@@ -4,4 +4,6 @@ class Course::Assessment::Submission::Answer::Controller < \
   load_resource :answer, class: Course::Assessment::Answer.name, through: :submission
   load_resource :actable, class: Course::Assessment::Answer::Scribing.name,
                           singleton: true, through: :answer
+
+  helper Course::Assessment::Submission::SubmissionsHelper.name.sub(/Helper$/, '')
 end
