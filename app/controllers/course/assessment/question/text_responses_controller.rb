@@ -93,10 +93,6 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
     params.require(:question_text_response).permit(*permitted_params)
   end
 
-  def question_type
-    @text_response_question.question_type
-  end
-
   def load_question_assessment
     @question_assessment = load_question_assessment_for(@text_response_question)
   end
