@@ -1,7 +1,8 @@
+/* eslint-disable no-param-reassign */
 import { produce } from 'immer';
 import { arrayToObjectWithKey } from 'utilities/array';
 
-import actions, { questionTypes } from '../constants';
+import actions, { questionTypes } from '../../constants';
 
 const initialState = {
   questions: {},
@@ -153,23 +154,6 @@ export default function (state = initialState, action) {
           })
         : state;
     }
-    case actions.SAVE_ANSWER_SUCCESS: {
-      const basePoints = action.payload.submission.basePoints;
-      const questionWithGrades = extractGrades(action.payload.answers);
-      const questionId = Object.keys(questionWithGrades)[0];
-      const maxGrade = sum(
-        Object.values(action.payload.questions).map((q) => q.maximumGrade),
-      );
-
-      return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        tempDraftState.questions[questionId] = questionWithGrades[questionId];
-        tempDraftState.exp = action.payload.submission.pointsAwarded;
-        tempDraftState.basePoints = basePoints;
-        tempDraftState.maximumGrade = maxGrade;
-      });
-    }
-    case actions.SAVE_DRAFT_SUCCESS:
     case actions.FINALISE_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
     case actions.SAVE_ALL_GRADE_SUCCESS:
@@ -183,11 +167,10 @@ export default function (state = initialState, action) {
       );
 
       return produce(state, (draftState) => {
-        const tempDraftState = draftState;
-        tempDraftState.questions = questionWithGrades;
-        tempDraftState.exp = action.payload.submission.pointsAwarded;
-        tempDraftState.basePoints = basePoints;
-        tempDraftState.maximumGrade = maxGrade;
+        draftState.questions = questionWithGrades;
+        draftState.exp = action.payload.submission.pointsAwarded;
+        draftState.basePoints = basePoints;
+        draftState.maximumGrade = maxGrade;
       });
     }
     case actions.UPDATE_GRADING: {
@@ -236,13 +219,13 @@ export default function (state = initialState, action) {
       };
     }
     case actions.AUTOGRADE_SUCCESS: {
-      const { grading } = action.payload;
+      const { grading, questionId } = action.payload;
       const { maximumGrade, basePoints, expMultiplier } = state;
       if (grading) {
         const questions = {
           ...state.questions,
-          [action.questionId]: {
-            ...state.questions[action.questionId],
+          [questionId]: {
+            ...state.questions[questionId],
             grade: grading.grade,
           },
         };

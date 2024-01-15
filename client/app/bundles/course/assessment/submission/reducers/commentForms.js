@@ -132,7 +132,7 @@ export default function (state = initialState, action) {
       };
     case actions.AUTOGRADE_SUCCESS: {
       const { latestAnswer } = action.payload;
-      if (latestAnswer) {
+      if (latestAnswer && latestAnswer.annotations) {
         return {
           ...state,
           annotations: {

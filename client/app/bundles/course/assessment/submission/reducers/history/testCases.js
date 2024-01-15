@@ -14,6 +14,7 @@ export default function (state = {}, action) {
         ),
       };
     }
+    case actions.SAVE_ANSWER_SUCCESS:
     case actions.REEVALUATE_SUCCESS:
     case actions.AUTOGRADE_SUCCESS: {
       const { latestAnswer } = action.payload;
