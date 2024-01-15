@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import annotations from './annotations';
+import answerFlags from './answerFlags';
 import answers from './answers';
 import assessment from './assessment';
 import attachments from './attachments';
@@ -23,6 +24,7 @@ import topics from './topics';
 const submissionReducer = combineReducers({
   annotations,
   answers,
+  answerFlags,
   attachments,
   assessment,
   codaveriFeedbackStatus,

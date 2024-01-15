@@ -18,7 +18,7 @@ export default function (state = {}, action) {
         });
       });
     }
-    case actions.UPLOAD_FILES_SUCCESS:
+    case actions.UPLOAD_TEXT_RESPONSE_FILES_SUCCESS:
       return produce(state, (draft) => {
         draft[action.payload.questionId] = action.payload.attachments;
       });
