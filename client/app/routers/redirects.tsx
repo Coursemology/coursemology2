@@ -33,5 +33,6 @@ export const protectedRoutes: RouteObject = {
     { path: 'announcements' },
     { path: 'users/:userId' },
     { path: 'user/*' },
+    { path: 'role_requests' },
   ],
 };
