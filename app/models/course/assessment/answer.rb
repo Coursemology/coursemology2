@@ -33,11 +33,11 @@ class Course::Assessment::Answer < ApplicationRecord
     end
   end
 
-  validate :validate_session_and_client_version
   validate :validate_consistent_assessment
   validate :validate_assessment_state, if: :attempting?
   validate :validate_grade, unless: :attempting?
   validate :validate_no_blank_grade_after_graded, if: :graded?
+  validate :validate_session_and_client_version, if: :attempting?, on: :update
   validates :submitted_at, presence: true, unless: :attempting?
   validates :submitted_at, :grade, :grader, :graded_at, absence: true, if: :attempting?
   validates :grader, :graded_at, presence: true, if: :graded?
@@ -117,7 +117,7 @@ class Course::Assessment::Answer < ApplicationRecord
   def assign_params(params)
     self.grade = params[:grade].present? ? params[:grade].to_f : nil
     self.client_version = params[:client_version]
-    self.last_session_id = params[:session_id]
+    self.last_session_id = params[:last_session_id]
   end
 
   # Generates a feedback for an answer
@@ -148,12 +148,13 @@ class Course::Assessment::Answer < ApplicationRecord
 
   private
 
-  def validate_session_and_client_version
-    existing_answer = Course::Assessment::Answer.find_by(id: id)
-    return if !existing_answer.present? || existing_answer.last_session_id.nil? || existing_answer.client_version.nil?
-    return if last_session_id != existing_answer.last_session_id || client_version >= existing_answer.client_version
+  def validate_session_and_client_version # rubocop:disable Metrics/CyclomaticComplexity
+    return if last_session_id.nil? || client_version.nil?
+    return if last_session_id_changed? || !client_version_changed?
+    return if client_version_change[1] >= client_version_change[0]
 
-    errors.add(:submission, :newly_updated)
+    errors.add(:answer, 'stale_answer')
+    actable&.errors&.add(:answer, 'stale_answer')
   end
 
   def validate_consistent_assessment
