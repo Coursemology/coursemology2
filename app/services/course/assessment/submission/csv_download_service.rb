@@ -69,7 +69,7 @@ class Course::Assessment::Submission::CsvDownloadService
     # Question Type
     csv << ['', '', '', '',
             I18n.t('course.assessment.submission.submissions.csv_download_service.question_type'),
-            *@question_assessments.map { |x| x.question.question_type }]
+            *@question_assessments.map { |x| x.question.question_type_readable }]
 
     # Column Header
     csv << [I18n.t('course.assessment.submission.submissions.csv_download_service.name'),

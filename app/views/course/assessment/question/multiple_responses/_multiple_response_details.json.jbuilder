@@ -5,7 +5,7 @@ json.partial! 'course/assessment/question/multiple_responses/switch_question_typ
   new_question: new_question
 }
 
-json.type question.question_type
+json.type question.question_type_readable
 json.gradingScheme question.grading_scheme
 
 json.options question.options do |option|

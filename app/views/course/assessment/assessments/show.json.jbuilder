@@ -110,42 +110,42 @@ if can_observe
   if can_manage
     json.newQuestionUrls [
       {
-        type: 'multipleChoice',
+        type: 'MultipleChoice',
         url: new_course_assessment_question_multiple_response_path(current_course, assessment, {
           multiple_choice: true
         })
       },
       {
-        type: 'multipleResponse',
+        type: 'MultipleResponse',
         url: new_course_assessment_question_multiple_response_path(current_course, assessment)
       },
       {
-        type: 'textResponse',
+        type: 'TextResponse',
         url: new_course_assessment_question_text_response_path(current_course, assessment)
       },
       {
-        type: 'audioResponse',
+        type: 'VoiceResponse',
         url: new_course_assessment_question_voice_response_path(current_course, assessment)
       },
       {
-        type: 'fileUpload',
+        type: 'FileUpload',
         url: new_course_assessment_question_text_response_path(current_course, assessment, { file_upload: true })
       },
       {
-        type: 'programming',
+        type: 'Programming',
         url: new_course_assessment_question_programming_path(current_course, assessment)
       },
       {
-        type: 'scribing',
+        type: 'Scribing',
         url: new_course_assessment_question_scribing_path(current_course, assessment)
       },
       {
-        type: 'forumPostResponse',
+        type: 'ForumPostResponse',
         url: new_course_assessment_question_forum_post_response_path(current_course, assessment)
       }
       # TODO: Uncomment when TextResponseComprehension is ready
       # {
-      #   type: 'textResponseComprehension',
+      #   type: 'Comprehension',
       #   url: new_course_assessment_question_text_response_path(current_course, assessment, { comprehension: true }),
       # }
     ]

@@ -14,8 +14,11 @@ class Course::Assessment::Question::VoiceResponse < ApplicationRecord
     copy_attributes(other)
   end
 
-  # returns the type of question i.e. Audio response
   def question_type
+    'VoiceResponse'
+  end
+
+  def question_type_readable
     I18n.t('course.assessment.question.voice_responses.question_type')
   end
 end

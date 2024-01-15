@@ -49,11 +49,11 @@ RSpec.describe Course::Assessment::Question::ForumPostResponse do
       end
     end
 
-    describe '#question_type' do
+    describe '#question_type_readable' do
       subject { build(:course_assessment_question_forum_post_response) }
 
       it 'returns forum post response' do
-        expect(subject.question_type).to(
+        expect(subject.question_type_readable).to(
           eq I18n.t('course.assessment.question.forum_post_responses.question_type')
         )
       end

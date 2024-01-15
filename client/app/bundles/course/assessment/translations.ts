@@ -405,13 +405,17 @@ const translations = defineMessages({
     id: 'course.assessment.show.textResponse',
     defaultMessage: 'Text Response',
   },
-  audioResponse: {
-    id: 'course.assessment.show.audioResponse',
+  voiceResponse: {
+    id: 'course.assessment.show.voiceResponse',
     defaultMessage: 'Audio Response',
   },
   fileUpload: {
     id: 'course.assessment.show.fileUpload',
     defaultMessage: 'File Upload',
+  },
+  comprehension: {
+    id: 'course.assessment.show.comprehension',
+    defaultMessage: 'Comprehension',
   },
   programming: {
     id: 'course.assessment.show.programming',
