@@ -22,13 +22,6 @@ export const workflowStates = {
   Published: 'published',
 };
 
-export const saveStatus = {
-  None: 'none',
-  Saving: 'saving',
-  Saved: 'saved',
-  Failed: 'failed',
-};
-
 export const TestCaseTypes = {
   Public: 'public_test',
   Private: 'private_test',
@@ -150,9 +143,6 @@ const actionTypes = mirrorCreator([
   'SAVE_ANSWER_REQUEST',
   'SAVE_ANSWER_SUCCESS',
   'SAVE_ANSWER_FAILURE',
-  'SAVE_DRAFT_REQUEST',
-  'SAVE_DRAFT_SUCCESS',
-  'SAVE_DRAFT_FAILURE',
   'FINALISE_REQUEST',
   'FINALISE_SUCCESS',
   'FINALISE_FAILURE',
@@ -162,6 +152,8 @@ const actionTypes = mirrorCreator([
   'AUTOGRADE_REQUEST',
   'AUTOGRADE_SUCCESS',
   'AUTOGRADE_FAILURE',
+  'AUTOGRADE_SAVING_SUCCESS',
+  'AUTOGRADE_SAVING_FAILURE',
   'FEEDBACK_REQUEST',
   'FEEDBACK_SUCCESS',
   'FEEDBACK_FAILURE',
@@ -218,7 +210,6 @@ const actionTypes = mirrorCreator([
   'UPDATE_GRADING',
   'UPDATE_EXP',
   'UPDATE_MULTIPLIER',
-  'UPDATE_CLIENT_VERSION',
   'ENTER_STUDENT_VIEW',
   'EXIT_STUDENT_VIEW',
 
@@ -256,6 +247,16 @@ const actionTypes = mirrorCreator([
   'DELETE_ALL_SUBMISSIONS_SUCCESS',
   'DELETE_ALL_SUBMISSIONS_FAILURE',
 
+  // View Past Answer History action types
+  'TOGGLE_VIEW_HISTORY_MODE',
+  'SELECT_PAST_ANSWERS',
+  'GET_PAST_ANSWERS_REQUEST',
+  'GET_PAST_ANSWERS_SUCCESS',
+  'GET_PAST_ANSWERS_FAILURE',
+
+  // Answer action types
+  'UPDATE_ANSWER_CLIENT_VERSION',
+
   // Scribing answer action types
   'SET_CANVAS_LOADED',
   'FETCH_SCRIBING_QUESTION_REQUEST',
@@ -268,22 +269,19 @@ const actionTypes = mirrorCreator([
   'UPDATE_SCRIBING_ANSWER_SUCCESS',
   'UPDATE_SCRIBING_ANSWER_FAILURE',
   'UPDATE_SCRIBING_ANSWER_IN_LOCAL',
-  // Multiple File Submission action types
-  'UPLOAD_FILES_REQUEST',
-  'UPLOAD_FILES_SUCCESS',
-  'UPLOAD_FILES_FAILURE',
-  'DELETE_FILE_REQUEST',
-  'DELETE_FILE_SUCCESS',
-  'DELETE_FILE_FAILURE',
-  'IMPORT_FILES_REQUEST',
-  'IMPORT_FILES_SUCCESS',
-  'IMPORT_FILES_FAILURE',
-  // View Past Answer History action types
-  'TOGGLE_VIEW_HISTORY_MODE',
-  'SELECT_PAST_ANSWERS',
-  'GET_PAST_ANSWERS_REQUEST',
-  'GET_PAST_ANSWERS_SUCCESS',
-  'GET_PAST_ANSWERS_FAILURE',
+
+  // Text Response answer action types
+  'UPLOAD_TEXT_RESPONSE_FILES_REQUEST',
+  'UPLOAD_TEXT_RESPONSE_FILES_SUCCESS',
+  'UPLOAD_TEXT_RESPONSE_FILES_FAILURE',
+
+  // Programming answer action types
+  'DELETE_PROGRAMMING_FILE_REQUEST',
+  'DELETE_PROGRAMMING_FILE_SUCCESS',
+  'DELETE_PROGRAMMING_FILE_FAILURE',
+  'UPLOAD_PROGRAMMING_FILES_REQUEST',
+  'UPLOAD_PROGRAMMING_FILES_SUCCESS',
+  'UPLOAD_PROGRAMMING_FILES_FAILURE',
 ]);
 
 export default actionTypes;
