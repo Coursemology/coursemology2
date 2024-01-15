@@ -1,14 +1,7 @@
 import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import {
-  Button,
-  CircularProgress,
-  FormControlLabel,
-  Switch,
-  Tab,
-  Tabs,
-} from '@mui/material';
+import { Button, FormControlLabel, Switch, Tab, Tabs } from '@mui/material';
 import { PropTypes } from 'prop-types';
 import palette from 'theme/palette';
 
@@ -204,7 +197,7 @@ class VisibleSubmissionsIndex extends Component {
                 disableButtons ||
                 !VisibleSubmissionsIndex.canPublish(shownSubmissions)
               }
-              endIcon={isPublishing && <CircularProgress size={24} />}
+              endIcon={isPublishing && <LoadingIndicator bare size={20} />}
               onClick={() => this.setState({ publishConfirmation: true })}
               variant="contained"
             >
@@ -222,7 +215,7 @@ class VisibleSubmissionsIndex extends Component {
                   shownSubmissions,
                 )
               }
-              endIcon={isForceSubmitting && <CircularProgress size={24} />}
+              endIcon={isForceSubmitting && <LoadingIndicator bare size={20} />}
               onClick={() => this.setState({ forceSubmitConfirmation: true })}
               variant="contained"
             >
@@ -240,7 +233,7 @@ class VisibleSubmissionsIndex extends Component {
                   shownSubmissions,
                 )
               }
-              endIcon={isReminding && <CircularProgress size={24} />}
+              endIcon={isReminding && <LoadingIndicator bare size={20} />}
               onClick={() => this.setState({ remindConfirmation: true })}
               variant="contained"
             >
