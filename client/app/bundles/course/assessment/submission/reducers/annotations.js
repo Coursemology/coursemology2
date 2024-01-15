@@ -5,8 +5,6 @@ import actions from '../constants';
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
-    case actions.SAVE_DRAFT_SUCCESS:
-    case actions.SAVE_ANSWER_SUCCESS:
     case actions.FINALISE_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
     case actions.SAVE_ALL_GRADE_SUCCESS:
@@ -78,9 +76,10 @@ export default function (state = {}, action) {
         },
       };
     }
+    case actions.SAVE_ANSWER_SUCCESS:
     case actions.AUTOGRADE_SUCCESS: {
       const { latestAnswer } = action.payload;
-      if (latestAnswer) {
+      if (latestAnswer && latestAnswer.annotations) {
         return {
           ...state,
           ...latestAnswer.annotations.reduce(
