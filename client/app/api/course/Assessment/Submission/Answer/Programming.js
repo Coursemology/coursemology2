@@ -1,4 +1,5 @@
 import BaseAssessmentAPI from '../../Base';
+import SubmissionsAPI from '../../Submissions';
 
 export default class ProgrammingAPI extends BaseAssessmentAPI {
   /**
@@ -25,7 +26,7 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
     };
 
     const formData = new FormData();
-    ProgrammingAPI.appendFormData(formData, submissionFields);
+    SubmissionsAPI.appendFormData(formData, submissionFields);
 
     const url = `${this.#urlPrefix}/${answerId}/programming/create_programming_files`;
     return this.client.post(url, formData, config);
@@ -53,28 +54,5 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
   get #urlPrefix() {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}\
 /submissions/${this.submissionId}/answers`;
-  }
-
-  static appendFormData(formData, data, name) {
-    const prefix = name || '';
-
-    if (data === undefined || data === null) {
-      return;
-    }
-
-    if (data instanceof Array) {
-      if (data.length === 0) {
-        formData.append(`${prefix}[]`, null);
-      }
-      data.forEach((item) => {
-        ProgrammingAPI.appendFormData(formData, item, `${prefix}[]`);
-      });
-    } else if (typeof data === 'object' && !(data instanceof File)) {
-      Object.keys(data).forEach((key) => {
-        ProgrammingAPI.appendFormData(formData, data[key], `${prefix}[${key}]`);
-      });
-    } else {
-      formData.append(name, data);
-    }
   }
 }
