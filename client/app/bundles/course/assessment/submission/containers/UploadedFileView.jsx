@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
 
-import { deleteAttachmentFile } from '../actions';
+import { deleteTextResponseFile } from '../actions/answers/textResponse';
 import { workflowStates } from '../constants';
 import { attachmentShape } from '../propTypes';
 
@@ -169,9 +169,7 @@ function mapDispatchToProps(dispatch, ownProps) {
   const { questionId, answerId } = ownProps;
   return {
     deleteAttachment: (attachmentId) =>
-      dispatch(
-        deleteAttachmentFile(answerId, questionId, Date.now(), attachmentId),
-      ),
+      dispatch(deleteTextResponseFile(answerId, questionId, attachmentId)),
   };
 }
 

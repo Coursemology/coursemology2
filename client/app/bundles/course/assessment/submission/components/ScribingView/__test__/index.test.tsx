@@ -3,7 +3,7 @@ import { render } from 'test-utils';
 
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
 
-import { setCanvasLoaded } from '../../../actions/scribing';
+import { setCanvasLoaded } from '../../../actions/answers/scribing';
 import actionTypes from '../../../constants';
 
 const assessmentId = 1;

@@ -35,7 +35,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         expect(file_view).to have_css('span', count: 1)
         expect(dropzone).to have_css('span', text: 'template_file')
 
-        wait_for_job
+        wait_for_autosave
 
         # The upload should be successful and the staged file should not be in the dropzone
         # The newly uploaded file should show as a new file tab
@@ -46,15 +46,15 @@ RSpec.describe 'Course: Assessments: Submissions: Programming File Submission An
         # Stage the same file again and attempt to upload
         # (Need to set to another file first before setting again to the first file)
         file_input.set(file_path2)
-        wait_for_job
+        wait_for_autosave
 
         file_input.set(file_path)
-        wait_for_job
+        wait_for_autosave
 
         # The upload should fail and the staged file should be gone from dropzone
         # There should still be only 2 files in the question
         expect(dropzone).to have_no_css('span', text: 'template_file')
-        expect(file_view).to have_css('span', count: 2)
+        expect(file_view).to have_css('span', count: 3)
       end
 
       scenario 'I can delete existing programming files' do

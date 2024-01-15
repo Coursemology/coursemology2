@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
-import { questionShape } from '../../propTypes';
+import { questionShape } from '../../../propTypes';
 
 const MultipleResponseOptions = ({
   readOnly,
@@ -14,7 +14,6 @@ const MultipleResponseOptions = ({
   graderView,
   question,
   field: { onChange, value },
-  saveAnswer,
 }) => (
   <>
     {question.options.map((option) => (
@@ -39,16 +38,17 @@ const MultipleResponseOptions = ({
             />
           </b>
         }
-        onChange={(event, isInputChecked) => {
+        onChange={(_event, isInputChecked) => {
           const newValue = [...value];
           if (isInputChecked) {
             newValue.push(option.id);
           } else {
             newValue.splice(newValue.indexOf(option.id), 1);
           }
+          // Need to ensure the options are sorted since react-hook-form would check
+          // the content of an array with the same values but different order as different
           newValue.sort((a, b) => a - b);
           onChange(newValue);
-          saveAnswer();
         }}
         style={{ width: '100%' }}
         value={option.id.toString()}
@@ -66,7 +66,6 @@ MultipleResponseOptions.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.arrayOf(PropTypes.number),
   }).isRequired,
-  saveAnswer: PropTypes.func,
 };
 
 MultipleResponseOptions.defaultProps = {
@@ -92,14 +91,14 @@ const MemoMultipleResponseOptions = memo(
 
 const MultipleResponse = (props) => {
   const {
+    answerId,
+    graderView,
     question,
     readOnly,
-    showMcqMrqSolution,
-    graderView,
-    answerId,
     saveAnswerAndUpdateClientVersion,
+    showMcqMrqSolution,
   } = props;
-  const { control, getValues } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <Controller
@@ -107,11 +106,14 @@ const MultipleResponse = (props) => {
       name={`${answerId}.option_ids`}
       render={({ field, fieldState }) => (
         <MemoMultipleResponseOptions
-          field={field}
-          fieldState={fieldState}
-          saveAnswer={() => {
-            saveAnswerAndUpdateClientVersion(getValues()[answerId], answerId);
+          field={{
+            ...field,
+            onChange: (event) => {
+              field.onChange(event);
+              saveAnswerAndUpdateClientVersion(answerId);
+            },
           }}
+          fieldState={fieldState}
           {...{ question, readOnly, showMcqMrqSolution, graderView }}
         />
       )}
@@ -120,12 +122,12 @@ const MultipleResponse = (props) => {
 };
 
 MultipleResponse.propTypes = {
-  question: questionShape,
-  readOnly: PropTypes.bool,
-  showMcqMrqSolution: PropTypes.bool,
-  graderView: PropTypes.bool,
-  answerId: PropTypes.number,
-  saveAnswerAndUpdateClientVersion: PropTypes.func,
+  answerId: PropTypes.number.isRequired,
+  graderView: PropTypes.bool.isRequired,
+  question: questionShape.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,
+  showMcqMrqSolution: PropTypes.bool.isRequired,
 };
 
 export default MultipleResponse;

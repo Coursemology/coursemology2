@@ -214,7 +214,7 @@ class ReadOnlyEditor extends Component {
 ReadOnlyEditor.propTypes = {
   annotations: PropTypes.arrayOf(annotationShape),
   answerId: PropTypes.number.isRequired,
-  file: PropTypes.shape(fileShape).isRequired,
+  file: fileShape.isRequired,
   intl: PropTypes.object.isRequired,
 };
 

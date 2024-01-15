@@ -42,13 +42,11 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
           # The file should show in the dropzone
           expect(dropzone).to have_css('span', text: 'text.txt')
 
-          # it's expected that after file's put here, autosave will be sent from FE to BE
-          # therefore, we wait for autosave to finish and then proceed accordingly
           wait_for_autosave
 
           expect(dropzone).to have_no_css('span', text: 'text.txt')
           expect(file_view).to have_css('span', text: 'text.txt')
-          expect(file_view).to have_css('span', count: 2)
+          expect(file_view).to have_css('span', count: 1)
           expect(answer.specific.attachments).not_to be_empty
 
           # Attempting to delete the file that we have just uploaded

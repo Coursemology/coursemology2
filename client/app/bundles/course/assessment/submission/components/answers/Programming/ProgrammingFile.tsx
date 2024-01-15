@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ProgrammingContent } from 'types/course/assessment/answer/programming';
+import { ProgrammingContent } from 'types/course/assessment/submission/answer/programming';
 
 import ReadOnlyEditor from '../../../containers/ReadOnlyEditor';
 import Editor from '../../Editor';
@@ -10,7 +10,7 @@ interface ProgrammingFileProps {
   file: ProgrammingContent;
   language: string;
   readOnly: boolean;
-  saveAnswerAndUpdateClientVersion: (data: unknown, answerId: number) => void;
+  saveAnswerAndUpdateClientVersion: (answerId: number) => void;
 }
 
 const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
@@ -29,11 +29,10 @@ const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
         <ReadOnlyEditor answerId={answerId} file={file} />
       ) : (
         <Editor
-          answerId={answerId}
           fieldName={fieldName}
           file={file}
           language={language}
-          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
+          onChangeCallback={() => saveAnswerAndUpdateClientVersion(answerId)}
         />
       )}
     </div>

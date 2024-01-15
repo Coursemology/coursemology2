@@ -3,6 +3,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { Tooltip } from 'react-tooltip';
 import { Send } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
@@ -89,7 +90,9 @@ class CommentField extends Component {
               </LoadingButton>
 
               <Tooltip id={`delayed-comment-button-${inputId}`}>
-                {intl.formatMessage(translations.commentDelayedDescription)}
+                <Typography variant="subtitle2">
+                  {intl.formatMessage(translations.commentDelayedDescription)}
+                </Typography>
               </Tooltip>
             </span>
           )}

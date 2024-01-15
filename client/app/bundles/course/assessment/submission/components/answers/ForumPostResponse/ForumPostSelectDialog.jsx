@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Typography,
 } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -64,10 +65,6 @@ const styles = {
     fontSize: 14,
     marginBottom: 0,
     opacity: 0.9,
-  },
-  noPostsText: {
-    marginTop: 16,
-    fontSize: 14,
   },
   dialogContent: {
     marginTop: 16,
@@ -163,9 +160,9 @@ export default class ForumPostSelectDialog extends Component {
 
     if (forumTopicPostPacks == null || forumTopicPostPacks.length === 0) {
       return (
-        <p style={styles.noPostsText}>
+        <Typography variant="subtitle1">
           <FormattedMessage {...translations.noPosts} />
-        </p>
+        </Typography>
       );
     }
 

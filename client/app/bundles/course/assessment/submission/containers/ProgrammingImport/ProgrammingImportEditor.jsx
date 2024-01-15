@@ -3,14 +3,17 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { deleteProgrammingFile } from '../actions';
-import Editor from '../components/Editor';
-import FileInputField from '../components/FileInput';
-import { fileShape, questionShape } from '../propTypes';
-import { parseLanguages } from '../utils';
+import {
+  deleteProgrammingFile,
+  importProgrammingFiles,
+} from '../../actions/answers/programming';
+import Editor from '../../components/Editor';
+import FileInputField from '../../components/FileInput';
+import { fileShape, questionShape } from '../../propTypes';
+import { parseLanguages } from '../../utils';
+import ReadOnlyEditor from '../ReadOnlyEditor';
 
 import ImportedFileView from './ImportedFileView';
-import ReadOnlyEditor from './ReadOnlyEditor';
 
 const SelectProgrammingFileEditor = ({
   answerId,
@@ -51,12 +54,11 @@ const SelectProgrammingFileEditor = ({
           return (
             <Editor
               key={file.id}
-              answerId={answerId}
               fieldName={`${answerId}.files_attributes.${index}.content`}
               file={file}
               language={language}
-              saveAnswerAndUpdateClientVersion={
-                saveAnswerAndUpdateClientVersion
+              onChangeCallback={() =>
+                saveAnswerAndUpdateClientVersion(answerId)
               }
             />
           );
@@ -86,19 +88,7 @@ const renderProgrammingHistoryEditor = (answer, displayFileName) => {
   return <ReadOnlyEditor key={answer.id} answerId={answer.id} file={file} />;
 };
 
-const stageFiles = async (props) => {
-  const {
-    answerId,
-    answers,
-    filesToImport,
-    question,
-    setValue,
-    importProgrammingFiles,
-    getValues,
-    displayFileName,
-    setDisplayFileName,
-  } = props;
-
+const handleStageFiles = async (filesToImport) => {
   // Create a map of promises that will resolve all files are read
   const readerPromises = Object.keys(filesToImport).map(
     (key) =>
@@ -111,8 +101,7 @@ const stageFiles = async (props) => {
       }),
   );
 
-  // Detects when all of the promises are fully loaded
-  Promise.all(readerPromises).then((results) => {
+  return Promise.all(readerPromises).then((results) => {
     const newFiles = [];
     Object.keys(filesToImport).forEach((key, index) => {
       const obj = filesToImport[key];
@@ -123,36 +112,22 @@ const stageFiles = async (props) => {
       };
       newFiles.push(file);
     });
-
-    // Removes previously staged files
-    const filteredFiles = answers[`${answerId}`].files_attributes
-      .filter((file) => !file.staged)
-      .concat(newFiles);
-
-    setValue(`${answerId}.files_attributes`, filteredFiles);
-    importProgrammingFiles(answerId, getValues(), question.language, setValue);
-    if (displayFileName === '') {
-      setDisplayFileName(filteredFiles[0].filename);
-    }
+    return newFiles;
   });
 };
 
 const VisibleProgrammingImportEditor = (props) => {
-  const { control, setValue, getValues } = useFormContext();
   const {
-    dispatch,
-    submissionId,
-    questionId,
     answerId,
-    readOnly,
-    question,
+    disabled,
+    dispatch,
     historyAnswers,
-    isSaving,
-    viewHistory,
+    question,
+    readOnly,
     saveAnswerAndUpdateClientVersion,
-    importProgrammingFiles,
-    isSavingAnswer,
+    viewHistory,
   } = props;
+  const { control, resetField, getValues } = useFormContext();
   const currentAnswer = useWatch({ control });
   const answers = viewHistory ? historyAnswers : currentAnswer;
 
@@ -172,20 +147,38 @@ const VisibleProgrammingImportEditor = (props) => {
     return null;
   }
 
-  const handleDeleteFile = (fileId, fileName) => {
-    const currentTime = Date.now();
+  const handleUploadFiles = (filesToUpload) => {
     dispatch(
-      deleteProgrammingFile(
+      importProgrammingFiles(
         answerId,
-        fileId,
-        answers,
-        currentTime,
-        setValue,
-        fileName,
-        displayFileName,
-        setDisplayFileName,
+        filesToUpload,
+        parseLanguages(question.language),
+        resetField,
       ),
     );
+    if (displayFileName === '') {
+      setDisplayFileName(filesToUpload[0].filename);
+    }
+  };
+
+  const handleDeleteFile = (fileId, fileName) => {
+    const answer = answers[answerId];
+    const onDeleteSuccess = () => {
+      // When an uploaded programming file is deleted, we need to update the field value
+      // excluding the deleted file.
+      const newFilesAttributes = answer.files_attributes.filter(
+        (file) => file.id !== fileId,
+      );
+      resetField(`${answerId}.files_attributes`, {
+        defaultValue: newFilesAttributes,
+      });
+      if (fileName === displayFileName) {
+        setDisplayFileName(
+          newFilesAttributes.length > 0 ? newFilesAttributes[0].filename : '',
+        );
+      }
+    };
+    dispatch(deleteProgrammingFile(answer, fileId, onDeleteSuccess));
   };
 
   return (
@@ -196,8 +189,6 @@ const VisibleProgrammingImportEditor = (props) => {
           files={files}
           handleDeleteFile={handleDeleteFile}
           handleFileTabbing={(filename) => setDisplayFileName(filename)}
-          questionId={questionId}
-          submissionId={submissionId}
           viewHistory={viewHistory}
         />
       )}
@@ -218,21 +209,16 @@ const VisibleProgrammingImportEditor = (props) => {
       )}
       {readOnly || viewHistory ? null : (
         <FileInputField
-          callback={(filesToImport) =>
-            stageFiles({
-              answerId,
-              answers,
-              filesToImport,
-              question,
-              setValue,
-              importProgrammingFiles,
-              getValues,
-              displayFileName,
-              setDisplayFileName,
-            })
-          }
-          disabled={isSaving || isSavingAnswer}
+          disabled={disabled}
           name={`${answerId}.import_files`}
+          onDropCallback={(filesToImport) => {
+            handleStageFiles(filesToImport).then((response) => {
+              const existingFiles = getValues()[answerId].files_attributes;
+              const parsedFiles = response;
+              const allFiles = existingFiles.concat(parsedFiles);
+              handleUploadFiles(allFiles);
+            });
+          }}
         />
       )}
     </>
@@ -240,47 +226,42 @@ const VisibleProgrammingImportEditor = (props) => {
 };
 
 VisibleProgrammingImportEditor.propTypes = {
+  answerId: PropTypes.number.isRequired,
+  disabled: PropTypes.bool.isRequired,
   dispatch: PropTypes.func,
-  submissionId: PropTypes.number,
-  questionId: PropTypes.number,
-  answerId: PropTypes.number,
   question: questionShape,
   readOnly: PropTypes.bool,
   viewHistory: PropTypes.bool,
-  isSaving: PropTypes.bool,
   historyAnswers: PropTypes.shape({
     id: PropTypes.number,
     questionId: PropTypes.number,
     files_attributes: PropTypes.arrayOf(fileShape),
   }),
   saveAnswerAndUpdateClientVersion: PropTypes.func,
-  importProgrammingFiles: PropTypes.func,
-  isSavingAnswer: PropTypes.bool,
 };
 
 function mapStateToProps(state, ownProps) {
-  const { questionId, answerId, question, readOnly, viewHistory } = ownProps;
-  const { submission, submissionFlags, history } = state.assessments.submission;
+  const { answerId, question, readOnly, viewHistory, isSavingAnswer } =
+    ownProps;
+  const { submissionFlags, history } = state.assessments.submission;
 
-  const submissionId = submission.id;
   let historyAnswers;
   if (viewHistory) {
     historyAnswers = history.answers;
   }
-  const isSaving = submissionFlags.isSaving;
+  const disabled = submissionFlags.isSaving || isSavingAnswer;
 
   return {
-    submissionId,
-    questionId,
     answerId,
+    disabled,
+    historyAnswers,
     question,
     readOnly,
-    isSaving,
-    historyAnswers,
   };
 }
 
 const ProgrammingImportEditor = connect(mapStateToProps)(
   VisibleProgrammingImportEditor,
 );
+
 export default ProgrammingImportEditor;

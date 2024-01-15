@@ -22,8 +22,7 @@ RSpec.describe 'Course: Assessments: Submissions: Programming Answers', js: true
 
         find('div', class: 'ace_editor').click
         send_keys answer_code
-        click_button 'Save Draft'
-        wait_for_page
+        wait_for_autosave
 
         file = submission.answers.first.specific.files.reload.first
         expect(file.content).to eq(answer_code)

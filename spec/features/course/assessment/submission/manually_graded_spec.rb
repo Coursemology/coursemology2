@@ -48,9 +48,8 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         expect(page).to have_selector('div', text: assessment.description)
 
         first(:checkbox, visible: false).set(true)
-        click_button('Save Draft')
+        wait_for_autosave
 
-        expect(page).to have_selector('span', text: 'Submission updated successfully.')
         expect(submission.current_answers.first.specific.reload.options).to include(option)
       end
 

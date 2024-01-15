@@ -1,11 +1,14 @@
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import PropTypes from 'prop-types';
 
+import { getIsSavingAnswer } from 'course/assessment/submission/selectors/answerFlags';
+import { useAppSelector } from 'lib/hooks/store';
+
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-github';
 
 import CodaveriFeedbackStatus from '../../../containers/CodaveriFeedbackStatus';
-import ProgrammingImportEditor from '../../../containers/ProgrammingImportEditor';
+import ProgrammingImportEditor from '../../../containers/ProgrammingImport/ProgrammingImportEditor';
 import TestCaseView from '../../../containers/TestCaseView';
 import { questionShape } from '../../../propTypes';
 import { parseLanguages } from '../../../utils';
@@ -57,15 +60,12 @@ const ProgrammingFiles = ({
 };
 
 const Programming = (props) => {
-  const {
-    question,
-    readOnly,
-    answerId,
-    saveAnswerAndUpdateClientVersion,
-    importFiles,
-    isSavingAnswer,
-  } = props;
+  const { question, readOnly, answerId, saveAnswerAndUpdateClientVersion } =
+    props;
   const fileSubmission = question.fileSubmission;
+  const isSavingAnswer = useAppSelector((state) =>
+    getIsSavingAnswer(state, answerId),
+  );
 
   return (
     <div className="mt-5">
@@ -73,10 +73,8 @@ const Programming = (props) => {
         <ProgrammingImportEditor
           key={question.id}
           answerId={answerId}
-          importProgrammingFiles={importFiles}
           isSavingAnswer={isSavingAnswer}
           question={question}
-          questionId={question.id}
           readOnly={readOnly}
           saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
@@ -96,12 +94,10 @@ const Programming = (props) => {
 };
 
 Programming.propTypes = {
-  question: questionShape,
-  readOnly: PropTypes.bool,
-  answerId: PropTypes.number,
-  saveAnswerAndUpdateClientVersion: PropTypes.func,
-  importFiles: PropTypes.func,
-  isSavingAnswer: PropTypes.bool,
+  question: questionShape.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  answerId: PropTypes.number.isRequired,
+  saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,
 };
 
 export default Programming;

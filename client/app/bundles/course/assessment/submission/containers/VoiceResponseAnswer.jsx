@@ -16,7 +16,7 @@ import {
   recorderComponentUnmount,
   setNotRecording,
   setRecording,
-} from '../actions/index';
+} from '../actions/answers/voiceResponse';
 
 const translations = defineMessages({
   startRecording: {
@@ -30,7 +30,7 @@ const translations = defineMessages({
   chooseVoiceFileExplain: {
     id: 'course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain',
     defaultMessage:
-      'Drag and drop or click to upload your wav / mp3 files. Alternatively, use the \
+      'Drag and drop or click to upload your WAV / MP3 files. Alternatively, use the \
                      recorder below to record your response',
   },
   pleaseRecordYourVoice: {
@@ -140,7 +140,7 @@ class VoiceResponseAnswer extends Component {
       <div>
         <div className="w-full">
           <FormSingleFileInput
-            accept={['audio/mp3', 'audio/wav']}
+            accept={{ 'audio/mp3': ['.mp3'], 'audio/wav': ['wav'] }}
             disabled={readOnly}
             field={field}
             fieldState={fieldState}
@@ -219,7 +219,6 @@ class VoiceResponseAnswer extends Component {
       recordingComponentId,
       readOnly,
       answerId,
-      value,
       saveAnswerAndUpdateClientVersion,
       intl,
     } = this.props;
@@ -234,7 +233,7 @@ class VoiceResponseAnswer extends Component {
                 ...field,
                 onChange: (event) => {
                   field.onChange(event);
-                  saveAnswerAndUpdateClientVersion(value[answerId], answerId);
+                  saveAnswerAndUpdateClientVersion(answerId);
                 },
               },
               fieldState,
@@ -263,15 +262,12 @@ VoiceResponseAnswer.propTypes = {
   recordingComponentId: PropTypes.string.isRequired,
   recording: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
-  value: PropTypes.object,
   saveAnswerAndUpdateClientVersion: PropTypes.func,
 };
 
 const VoiceResponseAnswerWithFormContext = (props) => {
-  const { control, getValues } = useFormContext();
-  return (
-    <VoiceResponseAnswer control={control} value={getValues()} {...props} />
-  );
+  const { control } = useFormContext();
+  return <VoiceResponseAnswer control={control} {...props} />;
 };
 
 function mapStateToProps({ assessments: { submission } }) {

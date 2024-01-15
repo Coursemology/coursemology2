@@ -22,15 +22,11 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         react_ck_selector = "textarea[name=\"#{answer_id}.answer_text\"]"
         expect(page).to have_selector(react_ck_selector, visible: false)
         fill_in_react_ck react_ck_selector, ''
-        fill_in_react_ck react_ck_selector, 'Testing Save Draft'
-        expect(page).to have_text('Testing Save Draft')
-        click_button('Save Draft')
-        expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, assessment, submission)
-        )
-        wait_for_page
-        expect(page).to have_selector('span', text: 'Submission updated successfully.')
-        expect(submission.current_answers.first.specific.reload.answer_text).to include('Testing Save Draft')
+        fill_in_react_ck react_ck_selector, 'Testing Autosave'
+        expect(page).to have_text('Testing Autosave')
+        wait_for_autosave
+
+        expect(submission.current_answers.first.specific.reload.answer_text).to include('Testing Autosave')
       end
 
       scenario 'I cannot update my answer text after finalising' do
@@ -103,12 +99,8 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         find('div.topic-card').click
         find('div.forum-post-option').click
         find('button.select-posts-button').click
-        click_button('Save Draft')
-        expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, assessment, submission)
-        )
-        wait_for_page
-        expect(page).to have_selector('span', text: 'Submission updated successfully.')
+        wait_for_autosave
+
         expect(submission.current_answers.first.specific.reload.post_packs.count).to eq(1)
         expect(submission.current_answers.first.specific.reload.post_packs[0].post_id).to eq(forum_post.id)
       end

@@ -6,7 +6,7 @@ import CourseAPI from 'api/course';
 import ScribingToolbar from 'course/assessment/submission/components/ScribingView/ScribingToolbar';
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
 
-import { setColoringToolColor } from '../../../actions/scribing';
+import { setColoringToolColor } from '../../../actions/answers/scribing';
 import actionTypes, {
   scribingToolColor,
   scribingToolLineStyle,
