@@ -195,7 +195,7 @@ ActiveRecord::Schema.define(version: 2023_11_07_114521) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "current_answer", default: false, null: false
-    t.string "last_session_id", default: "", null: false
+    t.string "last_session_id"
     t.bigint "client_version"
     t.index ["actable_type", "actable_id"], name: "index_course_assessment_answers_actable", unique: true
     t.index ["grader_id"], name: "fk__course_assessment_answers_grader_id"
