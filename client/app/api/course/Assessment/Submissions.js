@@ -98,24 +98,6 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
-  submitAnswer(submissionId, answerFields) {
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Accept: 'file_types',
-      },
-    };
-
-    const formData = new FormData();
-    SubmissionsAPI.appendFormData(formData, answerFields);
-
-    return this.client.patch(
-      `${this.#urlPrefix}/${submissionId}/submit_answer`,
-      formData,
-      config,
-    );
-  }
-
   autoGrade(submissionId) {
     return this.client.post(`${this.#urlPrefix}/${submissionId}/auto_grade`);
   }
