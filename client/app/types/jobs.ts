@@ -1,16 +1,22 @@
+export enum JobStatus {
+  'submitted' = 'submitted',
+  'completed' = 'completed',
+  'errored' = 'errored',
+}
+
 export interface JobSubmitted {
-  status: 'submitted';
+  status: JobStatus.submitted;
   jobUrl: string;
 }
 
 export interface JobCompleted {
-  status: 'completed';
+  status: JobStatus.completed;
   message?: string;
   redirectUrl?: string;
 }
 
 export interface JobErrored {
-  status: 'errored';
+  status: JobStatus.errored;
   message: string;
   errorMessage?: string;
 }
