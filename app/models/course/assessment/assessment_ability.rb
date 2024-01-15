@@ -12,12 +12,6 @@ module Course::Assessment::AssessmentAbility
       define_manager_assessment_permissions if course_user.manager_or_owner?
     end
 
-    # The attachment_reference controller is not inherited from the course controller,
-    # while course_user above is only initialized for controller inherited from the course controller.
-    # As such, course_user is nil when destroy_attachment is called from the attachment_references controller.
-    # Therefore, we separate the permission below and check for user instead of course_user to define the permission
-    # for destroy_attachment.
-    allow_to_destroy_own_attachments_text_response_question if user
     super
   end
 
@@ -39,7 +33,8 @@ module Course::Assessment::AssessmentAbility
     allow_attempt_assessment
     allow_read_material
     allow_create_assessment_submission
-    allow_update_own_assessment_submission
+    allow_update_own_assessment_answer
+    allow_to_destroy_own_attachments_text_response_question
   end
 
   def allow_read_assessments
@@ -78,11 +73,11 @@ module Course::Assessment::AssessmentAbility
   def allow_create_assessment_submission
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
-    can [:update, :submit_answer], Course::Assessment::Submission, assessment_submission_attempting_hash(user)
+    can :update, Course::Assessment::Submission, assessment_submission_attempting_hash(user)
   end
 
-  def allow_update_own_assessment_submission
-    can :update, Course::Assessment::Answer, submission: assessment_submission_attempting_hash(user)
+  def allow_update_own_assessment_answer
+    can [:update, :submit_answer], Course::Assessment::Answer, submission: assessment_submission_attempting_hash(user)
   end
 
   # Prevent everyone from destroying their own attachment, unless they are attempting the question.
@@ -224,7 +219,7 @@ module Course::Assessment::AssessmentAbility
     allow_manager_publish_assessment_submission_grades
     allow_manager_force_submit_assessment_submissions
     allow_manager_delete_assessment_submissions
-    allow_manager_update_assessment_submissions
+    allow_manager_update_assessment_answer
   end
 
   def allow_manager_manage_tab_and_categories
@@ -248,7 +243,7 @@ module Course::Assessment::AssessmentAbility
     can :delete_submission, Course::Assessment::Submission, assessment: assessment_course_hash
   end
 
-  def allow_manager_update_assessment_submissions
-    can [:submit_answer], Course::Assessment::Submission, assessment: assessment_course_hash
+  def allow_manager_update_assessment_answer
+    can [:update, :submit_answer], Course::Assessment::Answer, submission: { assessment: assessment_course_hash }
   end
 end

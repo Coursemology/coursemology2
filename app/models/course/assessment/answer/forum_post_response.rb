@@ -90,16 +90,16 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
 
     post_pack.forum_topic_id = selected_post_pack[:topic][:id]
 
-    post_pack.post_id = selected_post_pack[:corePost][:id]
-    post_pack.post_text = selected_post_pack[:corePost][:text]
-    post_pack.post_creator_id = selected_post_pack[:corePost][:creatorId]
-    post_pack.post_updated_at = selected_post_pack[:corePost][:updatedAt]
+    post_pack.post_id = selected_post_pack[:core_post][:id]
+    post_pack.post_text = selected_post_pack[:core_post][:text]
+    post_pack.post_creator_id = selected_post_pack[:core_post][:creatorId]
+    post_pack.post_updated_at = selected_post_pack[:core_post][:updatedAt]
 
-    if selected_post_pack[:parentPost]
-      post_pack.parent_id = selected_post_pack[:parentPost][:id]
-      post_pack.parent_text = selected_post_pack[:parentPost][:text]
-      post_pack.parent_creator_id = selected_post_pack[:parentPost][:creatorId]
-      post_pack.parent_updated_at = selected_post_pack[:parentPost][:updatedAt]
+    if selected_post_pack[:parent_post]
+      post_pack.parent_id = selected_post_pack[:parent_post][:id]
+      post_pack.parent_text = selected_post_pack[:parent_post][:text]
+      post_pack.parent_creator_id = selected_post_pack[:parent_post][:creatorId]
+      post_pack.parent_updated_at = selected_post_pack[:parent_post][:updatedAt]
     end
 
     post_pack.save!
