@@ -95,7 +95,7 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
       let(:text_response_question) { build(:course_assessment_question_text_response) }
 
       context 'when question type is file upload' do
-        subject { file_upload_question.question_type }
+        subject { file_upload_question.question_type_readable }
 
         it 'returns correct question type' do
           is_expected.to eq(
@@ -105,7 +105,7 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
       end
 
       context 'when question type is text response' do
-        subject { text_response_question.question_type }
+        subject { text_response_question.question_type_readable }
 
         it 'returns correct question type' do
           is_expected.to eq(

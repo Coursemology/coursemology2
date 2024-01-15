@@ -1,3 +1,4 @@
+import { QuestionType } from './question';
 import type { QuestionData } from './questions';
 
 export interface PersonalTimeData {
@@ -73,18 +74,8 @@ export interface AssessmentsListData {
   assessments: AssessmentListData[];
 }
 
-export type QuestionType =
-  | 'multipleChoice'
-  | 'multipleResponse'
-  | 'textResponse'
-  | 'audioResponse'
-  | 'fileUpload'
-  | 'programming'
-  | 'scribing'
-  | 'forumPostResponse';
-
 interface NewQuestionBuilderData {
-  type: QuestionType;
+  type: keyof typeof QuestionType;
   url: string;
 }
 

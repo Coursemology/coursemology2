@@ -250,20 +250,22 @@ RSpec.describe Course::Assessment::Question::Programming do
       end
     end
 
-    describe '#question_type' do
+    describe '#question_type_readable' do
       subject { build(:course_assessment_question_programming, is_codaveri: is_codaveri) }
 
       context 'when the evaluator is the default coursemology evaluator' do
         let(:is_codaveri) { false }
         it 'returns correct question type' do
-          expect(subject.question_type).to eq I18n.t('course.assessment.question.programming.question_type')
+          expect(subject.question_type_readable).to eq I18n.t('course.assessment.question.programming.question_type')
         end
       end
 
       context 'when the evaluator is codaveri evaluator' do
         let(:is_codaveri) { true }
         it 'returns correct question type' do
-          expect(subject.question_type).to eq I18n.t('course.assessment.question.programming.question_type_codaveri')
+          expect(subject.question_type_readable).to eq(
+            I18n.t('course.assessment.question.programming.question_type_codaveri')
+          )
         end
       end
     end

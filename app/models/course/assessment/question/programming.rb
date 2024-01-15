@@ -109,6 +109,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     template_files.size == 1
   end
 
+  def history_viewable?
+    true
+  end
+
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
 
@@ -131,8 +135,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     test_cases.clear
   end
 
-  # returns the type of question i.e. Programming
   def question_type
+    'Programming'
+  end
+
+  def question_type_readable
     if is_codaveri
       I18n.t('course.assessment.question.programming.question_type_codaveri')
     else

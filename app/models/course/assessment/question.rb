@@ -28,6 +28,7 @@ class Course::Assessment::Question < ApplicationRecord
 
   delegate :to_partial_path, to: :actable
   delegate :question_type, to: :actable
+  delegate :question_type_readable, to: :actable
 
   # Checks if the given question is auto gradable. This defaults to false if the specific
   # question does not implement auto grading. If this returns true, +auto_grader+ is guaranteed
@@ -93,6 +94,17 @@ class Course::Assessment::Question < ApplicationRecord
   def csv_downloadable?
     if actable.self_respond_to?(:csv_downloadable?)
       actable.csv_downloadable?
+    else
+      false
+    end
+  end
+
+  # Whether the answer history is viewable.
+  #
+  # @return [Boolean]
+  def history_viewable?
+    if actable.self_respond_to?(:history_viewable?)
+      actable.history_viewable?
     else
       false
     end

@@ -41,7 +41,7 @@ RSpec.describe Course::Assessment::Submission::CsvDownloadService do
           # 5 is the number of initial columns (e.g. name, email, role etc)
 
           # Csv header - question type
-          question_types = assessment1.questions.map(&:question_type)
+          question_types = assessment1.questions.map(&:question_type_readable)
           csv_header_question_types = csv_lines[1].slice(5..)
           expect(csv_header_question_types).to eq(question_types)
 

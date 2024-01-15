@@ -6,9 +6,9 @@ RSpec.describe Course::Assessment::Question::VoiceResponse, type: :model do
   with_tenant(:instance) do
     subject { Course::Assessment::Question::VoiceResponse.new }
 
-    describe '#question_type' do
+    describe '#question_type_readable' do
       it 'returns correct type' do
-        expect(subject.question_type).to eq I18n.t('course.assessment.question.voice_responses.question_type')
+        expect(subject.question_type_readable).to eq I18n.t('course.assessment.question.voice_responses.question_type')
       end
     end
   end
