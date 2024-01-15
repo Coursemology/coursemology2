@@ -17,6 +17,7 @@ import { Grid, IconButton, Tooltip } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
+import SavingIndicator from 'lib/components/core/indicators/SavingIndicator';
 import PointerIcon from 'lib/components/icons/PointerIcon';
 
 import {
@@ -35,7 +36,6 @@ import LinePopover from './popovers/LinePopover';
 import ShapePopover from './popovers/ShapePopover';
 import TypePopover from './popovers/TypePopover';
 import LayersComponent from './LayersComponent';
-import SavingIndicator from './SavingIndicator';
 import ToolDropdown from './ToolDropdown';
 
 const propTypes = {
@@ -266,6 +266,19 @@ class ScribingToolbar extends Component {
       lineStyle = 'solid';
     }
     return lineStyle;
+  };
+
+  getSavingStatus = () => {
+    let status = 'None';
+
+    if (this.props.scribing.isSaving) {
+      status = 'Saving';
+    } else if (this.props.scribing.isSaved) {
+      status = 'Saved';
+    } else if (this.props.scribing.hasError) {
+      status = 'Failed';
+    }
+    return status;
   };
 
   // Helpers
@@ -809,11 +822,7 @@ class ScribingToolbar extends Component {
           </Tooltip>
         </Grid>
         <Grid item xs={1}>
-          <SavingIndicator
-            hasError={this.props.scribing.hasError}
-            isSaved={this.props.scribing.isSaved}
-            isSaving={this.props.scribing.isSaving}
-          />
+          <SavingIndicator savingStatus={this.getSavingStatus()} />
         </Grid>
       </Grid>
     );
