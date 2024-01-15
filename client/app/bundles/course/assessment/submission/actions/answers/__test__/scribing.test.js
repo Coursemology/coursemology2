@@ -1,6 +1,6 @@
 import { dispatch, store } from 'store';
 
-import actionTypes from '../../constants';
+import actionTypes from '../../../constants';
 import { updateScribingAnswerInLocal } from '../scribing';
 
 const answerId = 3;
