@@ -4,13 +4,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
   include Signals::EmissionConcern
   include Course::Assessment::Submission::MonitoringConcern
+  include Course::Assessment::SubmissionConcern
 
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
   before_action :authorize_submission!, only: [:edit, :update]
   before_action :check_password, only: [:edit, :update]
   before_action :load_or_create_answers, only: [:edit, :update]
-  before_action :check_zombie_jobs, only: [:edit, :update, :submit_answer]
+  before_action :check_zombie_jobs, only: [:edit, :update]
   # Questions may be added to assessments with existing submissions.
   # In these cases, new submission_questions must be created when the submission is next
   # edited or updated.
@@ -20,7 +21,6 @@ class Course::Assessment::Submission::SubmissionsController < \
   signals :assessment_submissions, after: [:update], if: -> { @submission.saved_change_to_workflow_state? }
 
   delegate_to_service(:update)
-  delegate_to_service(:submit_answer)
   delegate_to_service(:load_or_create_answers)
   delegate_to_service(:load_or_create_submission_questions)
 
@@ -241,42 +241,8 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:attempt, @assessment)
   end
 
-  def authorize_submission!
-    if @submission.attempting?
-      authorize!(:update, @submission)
-    else
-      authorize!(:read, @submission)
-    end
-  end
-
   def reload_answer_params
     params.permit(:answer_id, :reset_answer)
-  end
-
-  def new_session_path
-    new_course_assessment_session_path(
-      current_course, @assessment, submission_id: @submission.id
-    )
-  end
-
-  def check_password
-    return unless @submission.attempting?
-    return if !@assessment.session_password_protected? || can?(:manage, @assessment)
-    return if authentication_service.authenticated?
-
-    log_service.log_submission_access(request)
-
-    render json: { newSessionUrl: new_session_path }
-  end
-
-  def authentication_service
-    @authentication_service ||=
-      Course::Assessment::SessionAuthenticationService.new(@assessment, session, @submission)
-  end
-
-  def log_service
-    @log_service ||=
-      Course::Assessment::SessionLogService.new(@assessment, session, @submission)
   end
 
   def not_downloadable

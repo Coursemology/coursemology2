@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::UpdateService < SimpleDelegator
+  include Course::Assessment::Answer::UpdateAnswerConcern
+
   def update
     if update_submission
       load_or_create_answers if unsubmit?
@@ -8,27 +10,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
       logger.error("failed to update submission: #{@submission.errors.inspect}")
       render json: { errors: @submission.errors }, status: :bad_request
     end
-  end
-
-  def submit_answer
-    answer = @submission.answers.find(submit_answer_params[:id].to_i)
-    if update_answer(answer, submit_answer_params)
-      if should_auto_grade_on_submit(answer)
-        auto_grade(answer)
-      else
-        render answer
-      end
-    else
-      logger.error("failed to save answer: #{answer.errors.inspect}")
-      render json: { errors: answer.errors }, status: :bad_request
-    end
-  end
-
-  def should_auto_grade_on_submit(answer)
-    mcq = [I18n.t('course.assessment.question.multiple_responses.question_type.multiple_response'),
-           I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')]
-
-    !mcq.include?(answer.question.question_type) || @submission.assessment.show_mcq_answer
   end
 
   def load_or_create_answers
@@ -61,16 +42,16 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
+  def update_answers_params
+    params.require(:submission)['answers']
+  end
+
   def update_submission_params
     params.require(:submission).permit(*workflow_state_params, points_awarded_param)
   end
 
   def update_submission_additional_params
     params.require(:submission).permit(:is_save_draft)
-  end
-
-  def update_answers_params
-    params.require(:submission).permit(answers: [:id, :client_version] + update_answer_params)
   end
 
   private
@@ -86,41 +67,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   # Permit the accurate points_awarded column field based on submission's workflow state.
   def points_awarded_param
     @submission.published? ? :points_awarded : :draft_points_awarded
-  end
-
-  # The permitted parameters for answers and their specific answer types.
-  #
-  # This varies depending on the permissions of the user.
-  def update_answer_params
-    [].tap do |result|
-      result.push(*update_answer_type_params) if can?(:update, @submission)
-      result.push(:grade) if can?(:grade, @submission) && !@submission.attempting?
-    end
-  end
-
-  # The permitted parameters for each kind of answer.
-  def update_answer_type_params
-    scalar_params = [].tap do |result|
-      result.push(:answer_text) # Text response answer
-      result.push(attachments_params) # Voice Response answer
-    end
-    # Parameters that must be an array of permitted values
-    array_params = {}.tap do |result|
-      result[:option_ids] = [] # MRQ answer
-      result[:files_attributes] = [:id, :_destroy, :filename, :content] # Programming answer
-      # Forum Post Response answer
-      forum_post_attributes = [:id, :text, :creatorId, :updatedAt]
-      result[:selected_post_packs] = [corePost: forum_post_attributes, parentPost: forum_post_attributes, topic: [:id]]
-    end
-    scalar_params.push(array_params)
-  end
-
-  def submit_answer_params
-    params.require(:answer).permit([:id, :client_version] + update_answer_type_params).merge(session_id: session.id)
-  end
-
-  def questions_to_attempt
-    @questions_to_attempt ||= @submission.questions
   end
 
   # Find the questions for this submission without submission_questions.
@@ -148,26 +94,25 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     import_success && new_submission_questions.any?
   end
 
+  def questions_to_attempt
+    @questions_to_attempt ||= @submission.questions
+  end
+
   def update_submission # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
     @submission.class.transaction do
       unless unsubmit? || unmark?
-        update_answers_params[:answers]&.each do |answer_params|
+        update_answers_params&.each do |answer_params|
           next if answer_params[:id].blank?
 
-          answer_params_with_session_id = answer_params.merge(session_id: session.id)
+          answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
 
-          answer = @submission.answers.includes(:actable).find do |a|
-            a.id == answer_params_with_session_id[:id].to_i
-          end
-
-          if answer && !update_answer(answer, answer_params_with_session_id)
+          if answer && !update_answer(answer, answer_params)
             logger.error("Failed to update answer #{answer.errors.inspect}")
             answer.errors.messages.each do |attribute, message|
               @submission.errors.add(attribute, message)
             end
             raise ActiveRecord::Rollback
           end
-          attempt_draft_answer(answer) if answer
         end
       end
 
@@ -181,6 +126,8 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def attempt_draft_answer(answer)
+    return unless answer
+
     reattempt_answer(answer, finalise: false) if should_attempt_draft_answer?(answer)
   end
 
@@ -192,18 +139,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     is_save_draft && is_programming && assessment_save_draft_answer
   end
 
-  def update_answer(answer, answer_params)
-    specific_answer = answer.specific
-    specific_answer.assign_params(answer_params)
-    unless specific_answer.save
-      specific_answer.errors.messages.each do |attribute, message|
-        answer.errors.add(attribute, message)
-      end
-      return false
-    end
-    answer.save
-  end
-
   def unsubmit?
     params[:submission] && params[:submission][:unsubmit].present?
   end
@@ -212,68 +147,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     params[:submission] && params[:submission][:unmark].present?
   end
 
-  def auto_grade(answer)
-    return unless valid_for_grading?(answer)
-
-    # Check if the last attempted answer is still being evaluated, then dont reattempt.
-    job = last_attempt_answer_submitted_job(answer) || reattempt_and_grade_answer(answer)&.job
-    if job
-      render partial: 'jobs/submitted', locals: { job: job }
-    else
-      # Render the current_answer.
-      render answer
-    end
-  end
-
-  # Returns all answers for the same question as `current_answer` where the
-  # autograding job has failed.
-  #
-  # @param [Course::Assessment::Answer] current_answer The Course::Assessment::Answer for a
-  #   question where current_answer is set to true.
-  # @return [Array<Course::Assessment::Answer>] An array containing answers with errored jobs.
-  def errored_answers(current_answer)
-    attempts = current_answer.submission.answers.from_question(current_answer.question_id)
-    attempts.select do |attempt|
-      attempt&.auto_grading&.job&.errored?
-    end
-  end
-
   def reattempt_answer(answer, finalise: true)
     new_answer = answer.question.attempt(answer.submission, answer)
     new_answer.finalise! if finalise
     new_answer.save!
     new_answer
-  end
-
-  def last_attempt_answer_submitted_job(answer)
-    submission = answer.submission
-
-    attempts = submission.answers.from_question(answer.question_id)
-    last_non_current_answer = attempts.reject(&:current_answer?).last
-    job = last_non_current_answer&.auto_grading&.job
-    job&.status == 'submitted' ? job : nil
-  end
-
-  def reattempt_and_grade_answer(answer)
-    # The transaction is to make sure that the new attempt, auto grading and job are present when
-    # the current answer is submitted.
-    #
-    # If the latest answer has an errored job, the user may still modify current_answer before
-    # grading again. Failed autograding jobs should not count towards their answer attempt limit,
-    # so destroy the failed job answer and re-grade the current entry.
-    answer.class.transaction do
-      last_answer = answer.submission.answers.select { |ans| ans.question_id == answer.question_id }.last
-      last_answer.destroy! if last_answer&.auto_grading&.job&.errored?
-      new_answer = reattempt_answer(answer, finalise: true)
-      new_answer.auto_grade!(redirect_to_path: nil, reduce_priority: false)
-    end
-  end
-
-  # Test whether the answer can be graded or not.
-  def valid_for_grading?(answer)
-    return true if @assessment.autograded?
-    return true unless answer.specific.is_a?(Course::Assessment::Answer::Programming)
-
-    answer.specific.attempting_times_left > 0 || can?(:manage, @assessment)
   end
 end
