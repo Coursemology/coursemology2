@@ -28,12 +28,8 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
           option = assessment.questions.first.actable.options.first
           find('label', text: option.option).click
 
-          click_button('Save Draft')
-          expect(current_path).to eq(
-            edit_course_assessment_submission_path(course, assessment, submission)
-          )
-          wait_for_page
-          expect(page).to have_selector('span', text: 'Submission updated successfully.')
+          wait_for_autosave
+
           expect(submission.current_answers.first.specific.reload.options).to include(option)
         end
       end
@@ -46,12 +42,8 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
           expect(page).to have_selector('div', text: assessment.description)
 
           first(:checkbox, visible: false).set(true)
-          click_button('Save Draft')
+          wait_for_autosave
 
-          expect(current_path).to eq(
-            edit_course_assessment_submission_path(course, assessment, submission)
-          )
-          expect(page).to have_selector('span', text: 'Submission updated successfully.')
           expect(submission.current_answers.first.specific.reload.options).to include(option)
         end
       end

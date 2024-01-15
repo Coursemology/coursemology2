@@ -1,24 +1,17 @@
 import { Component } from 'react';
 
-import ProgrammingImportEditor from '../../containers/ProgrammingImportEditor';
+import ProgrammingImportHistoryView from '../../containers/ProgrammingImport/ProgrammingImportHistoryView';
 import ReadOnlyEditor from '../../containers/ReadOnlyEditor';
 import TestCaseView from '../../containers/TestCaseView';
 import { answerShape, questionShape } from '../../propTypes';
 
 export default class PastProgrammingAnswer extends Component {
   renderFileSubmissionPastAnswer() {
-    const { question, answer } = this.props;
+    const { answer } = this.props;
 
     return (
       <div>
-        <ProgrammingImportEditor
-          answerId={answer.id}
-          questionId={answer.questionId}
-          viewHistory
-          {...{
-            question,
-          }}
-        />
+        <ProgrammingImportHistoryView historyAnswer={answer} />
         <TestCaseView
           answerId={answer.id}
           isDraftAnswer={answer.isDraftAnswer}

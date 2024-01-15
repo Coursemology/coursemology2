@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -27,8 +26,8 @@ import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
+import SubmissionAnswer from '../../components/answers';
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
-import SubmissionAnswer from '../../components/SubmissionAnswer';
 import { formNames, questionTypes } from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
 import QuestionGrade from '../../containers/QuestionGrade';
@@ -84,7 +83,6 @@ const SubmissionEditForm = (props) => {
     onReevaluateAnswer,
     handleSaveAllGrades,
     handleSaveGrade,
-    handleToggleViewHistoryMode,
     handleUnmark,
     handleUnsubmit,
     historyQuestions,
@@ -122,7 +120,7 @@ const SubmissionEditForm = (props) => {
     getValues,
     handleSubmit,
     reset,
-    setValue,
+    resetField,
     formState: { errors, isDirty },
   } = methods;
   usePrompt(isDirty);
@@ -147,17 +145,15 @@ const SubmissionEditForm = (props) => {
 
   const renderAutogradeSubmissionButton = () => {
     if (graderView && submitted) {
-      const progressIcon = <CircularProgress size={24} />;
-
       return (
         <Button
           color="primary"
           disabled={isSaving || isAutograding}
+          endIcon={isAutograding && <LoadingIndicator bare size={20} />}
           onClick={handleAutogradeSubmission}
           style={styles.formButton}
           variant="contained"
         >
-          {isAutograding && progressIcon}
           {intl.formatMessage(translations.autograde)}
         </Button>
       );
@@ -361,7 +357,7 @@ const SubmissionEditForm = (props) => {
             }
             id="run-code"
             onClick={() =>
-              onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
+              onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)
             }
             style={styles.formButton}
             variant="contained"
@@ -369,10 +365,6 @@ const SubmissionEditForm = (props) => {
             {runCodeLabel}
           </Button>
         )}
-        {isAutogradingQuestion ||
-          (isResetting && (
-            <CircularProgress size={36} style={{ position: 'absolute' }} />
-          ))}
       </>
     );
   };
@@ -426,10 +418,10 @@ const SubmissionEditForm = (props) => {
                   readOnly: !attempting,
                   answerId,
                   question,
+                  questionType: question.type,
                   historyQuestions,
                   graderView,
                   showMcqMrqSolution,
-                  handleToggleViewHistoryMode,
                 }}
               />
               {question.type === questionTypes.Programming &&
@@ -466,28 +458,29 @@ const SubmissionEditForm = (props) => {
       onConfirm={() => {
         setResetConfirmation(false);
         setResetAnswerId(null);
-        onReset(resetAnswerId, setValue);
+        onReset(resetAnswerId, resetField);
       }}
       open={resetConfirmation}
     />
   );
 
   const renderSaveDraftButton = () => {
-    if (attempting) {
-      return (
-        <Button
-          color="primary"
-          disabled={!isDirty || isSaving}
-          onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
-          style={styles.formButton}
-          type="submit"
-          variant="contained"
-        >
-          {intl.formatMessage(translations.saveDraft)}
-        </Button>
-      );
+    if (!attempting) {
+      return null;
     }
-    return null;
+
+    return (
+      <Button
+        color="primary"
+        disabled={!isDirty || isSaving}
+        onClick={handleSubmit((data) => onSaveDraft({ ...data }, resetField))}
+        style={styles.formButton}
+        type="submit"
+        variant="contained"
+      >
+        {intl.formatMessage(translations.saveDraft)}
+      </Button>
+    );
   };
 
   const renderSaveGradeButton = () => {
@@ -588,10 +581,10 @@ const SubmissionEditForm = (props) => {
             readOnly: !attempting,
             answerId,
             question,
+            questionType: question.type,
             historyQuestions,
             graderView,
             showMcqMrqSolution,
-            handleToggleViewHistoryMode,
           }}
         />
         {question.type === questionTypes.Programming && !viewHistory
@@ -754,7 +747,6 @@ SubmissionEditForm.propTypes = {
   handleMark: PropTypes.func,
   handleUnmark: PropTypes.func,
   handlePublish: PropTypes.func,
-  handleToggleViewHistoryMode: PropTypes.func,
 };
 
 export default injectIntl(SubmissionEditForm);

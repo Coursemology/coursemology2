@@ -10,15 +10,31 @@ RSpec.describe Course::Assessment::Answer do
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
-    subject { create(:course_assessment_answer, last_session_id: 'abc', client_version: 2) }
-    describe 'database validation for client version' do
-      it 'will be invalid if client version is updated to lower value' do
-        expect do
-          subject.update!(
-            last_session_id: 'abc',
-            client_version: 1
-          )
-        end.to raise_error(ActiveRecord::RecordInvalid)
+    subject { create(:course_assessment_answer) }
+
+    describe 'database validation for client_version and last_session_id' do
+      let(:answer) { create(:course_assessment_answer, last_session_id: 'abc', client_version: 1) }
+
+      it 'will replace existing record when the client_version is higher' do
+        expect { answer.update!(last_session_id: 'abc', client_version: 2) }.not_to raise_error
+        expect(answer.last_session_id).to eq('abc')
+        expect(answer.client_version).to eq(2)
+      end
+
+      it 'will be invalid if client version is lower' do
+        expect { answer.update!(last_session_id: 'abc', client_version: 0) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it 'will replace existing record when the last_session_id is different' do
+        expect { answer.update!(last_session_id: 'def', client_version: 1) }.not_to raise_error
+        expect(answer.last_session_id).to eq('def')
+        expect(answer.client_version).to eq(1)
+      end
+
+      it 'will replace existing record when both last_session_id and client_version are different' do
+        expect { answer.update!(last_session_id: 'def', client_version: 0) }.not_to raise_error
+        expect(answer.last_session_id).to eq('def')
+        expect(answer.client_version).to eq(0)
       end
     end
 

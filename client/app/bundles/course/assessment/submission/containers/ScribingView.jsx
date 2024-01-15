@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import * as actions from '../actions/scribing';
+import * as actions from '../actions/answers/scribing';
 import ScribingViewComponent from '../components/ScribingView';
 
 const ScribingViewContainer = (props) => <ScribingViewComponent {...props} />;

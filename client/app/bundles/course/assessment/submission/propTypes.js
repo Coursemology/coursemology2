@@ -14,33 +14,44 @@ export const testCaseShape = PropTypes.shape({
 });
 
 export const questionShape = PropTypes.shape({
-  allowAttachment: PropTypes.bool,
+  id: PropTypes.number.isRequired,
   description: PropTypes.string.isRequired,
+  maximumGrade: PropTypes.number.isRequired,
+  autogradable: PropTypes.bool.isRequired,
+  canViewHistory: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
+
   questionNumber: PropTypes.string.isRequired,
   questionTitle: PropTypes.string.isRequired,
-  language: PropTypes.string,
-  maximumGrade: PropTypes.number.isRequired,
-  options: PropTypes.arrayOf(optionShape),
-  type: PropTypes.string.isRequired,
-  answerId: PropTypes.number,
+  submissionQuestionId: PropTypes.number.isRequired,
   topicId: PropTypes.number.isRequired,
-  autogradable: PropTypes.bool,
+  answerId: PropTypes.number,
+
+  // Below are props of specific question type (ie MCQ, programming)
+  // The list is definitely incomplete and wont be fixed
+  // as we are moving to Typescript
+  allowAttachment: PropTypes.bool,
+  language: PropTypes.string,
+  options: PropTypes.arrayOf(optionShape),
+
+  // Below are added in Redux
+  attemptsLeft: PropTypes.number,
   viewHistory: PropTypes.bool,
-  canViewHistory: PropTypes.bool,
 });
 
 export const historyQuestionShape = PropTypes.shape({
   loaded: PropTypes.bool,
-  isLoading: PropTypes.bool,
-  answerIds: PropTypes.arrayOf(PropTypes.number),
+  isLoading: PropTypes.bool.isRequired,
+  answerIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selected: PropTypes.arrayOf(PropTypes.number),
+  pastAnswersLoaded: PropTypes.bool.isRequired,
 });
 
 export const fileShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   filename: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
-  highlightedContent: PropTypes.string,
+  highlightedContent: PropTypes.oneOfType([PropTypes.string, null]),
   staged: PropTypes.bool,
 });
 

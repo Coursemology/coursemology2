@@ -14,47 +14,43 @@ const ForumPostResponse = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
   const { question, readOnly, answerId, saveAnswerAndUpdateClientVersion } =
     props;
-  const { control, getValues } = useFormContext();
-  const renderTextField = () =>
-    readOnly ? (
-      <Controller
-        control={control}
-        name={`${answerId}.answer_text`}
-        render={({ field }) => (
-          <Typography
-            dangerouslySetInnerHTML={{ __html: field.value }}
-            variant="body2"
-          />
-        )}
-      />
-    ) : (
-      <Controller
-        control={control}
-        name={`${answerId}.answer_text`}
-        render={({ field, fieldState }) => (
-          <FormRichTextField
-            field={{
-              ...field,
-              onChange: (event, editor) => {
-                field.onChange(editor !== undefined ? editor.getData() : event);
-                saveAnswerAndUpdateClientVersion(
-                  getValues()[answerId],
-                  answerId,
-                );
-              },
-            }}
-            fieldState={fieldState}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            multiline
-            renderIf={!readOnly && question.hasTextResponse}
-            variant="standard"
-          />
-        )}
-      />
-    );
+  const { control } = useFormContext();
+  const renderTextField = readOnly ? (
+    <Controller
+      control={control}
+      name={`${answerId}.answer_text`}
+      render={({ field }) => (
+        <Typography
+          dangerouslySetInnerHTML={{ __html: field.value }}
+          variant="body2"
+        />
+      )}
+    />
+  ) : (
+    <Controller
+      control={control}
+      name={`${answerId}.answer_text`}
+      render={({ field, fieldState }) => (
+        <FormRichTextField
+          field={{
+            ...field,
+            onChange: (event) => {
+              field.onChange(event);
+              saveAnswerAndUpdateClientVersion(answerId);
+            },
+          }}
+          fieldState={fieldState}
+          fullWidth
+          InputLabelProps={{
+            shrink: true,
+          }}
+          multiline
+          renderIf={!readOnly && question.hasTextResponse}
+          variant="standard"
+        />
+      )}
+    />
+  );
   return (
     <>
       <Controller
@@ -67,10 +63,7 @@ const ForumPostResponse = (props) => {
               ...field,
               onChange: (event) => {
                 field.onChange(event);
-                saveAnswerAndUpdateClientVersion(
-                  getValues()[answerId],
-                  answerId,
-                );
+                saveAnswerAndUpdateClientVersion(answerId);
               },
             }}
             handleNotificationMessage={toast.info}
@@ -80,16 +73,16 @@ const ForumPostResponse = (props) => {
           />
         )}
       />
-      {question.hasTextResponse && renderTextField()}
+      {question.hasTextResponse && renderTextField}
       {errorMessage && <Error message={errorMessage} />}
     </>
   );
 };
 
 ForumPostResponse.propTypes = {
+  answerId: PropTypes.number.isRequired,
   question: questionShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
-  answerId: PropTypes.number.isRequired,
   saveAnswerAndUpdateClientVersion: PropTypes.func,
 };
 

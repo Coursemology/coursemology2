@@ -241,7 +241,6 @@ Rails.application.routes.draw do
               post :reload_answer, on: :member
               post :reevaluate_answer, on: :member
               post :generate_feedback, on: :member
-              patch :submit_answer, on: :member
               get :download_all, on: :collection
               get :download_statistics, on: :collection
               patch :publish_all, on: :collection
@@ -252,10 +251,11 @@ Rails.application.routes.draw do
               patch :delete_all, on: :collection
               resources :logs, only: [:index]
               scope module: :answer do
-                resources :answers, only: [:show] do
+                resources :answers, only: [:update] do
+                  patch :submit_answer, on: :member
                   namespace :text_response do
-                    post 'upload_files' => 'text_response#upload_files'
-                    post 'delete_file' => 'text_response#delete_file'
+                    post 'create_files' => 'text_response#create_files'
+                    patch 'delete_file' => 'text_response#delete_file'
                   end
                   namespace :programming do
                     post 'create_programming_files' => 'programming#create_programming_files'

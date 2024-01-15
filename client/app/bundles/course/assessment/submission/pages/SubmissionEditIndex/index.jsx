@@ -27,20 +27,21 @@ import {
   exitStudentView,
   fetchSubmission,
   finalise,
-  generateFeedback,
   mark,
   publish,
   purgeSubmissionStore,
-  reevaluateAnswer,
-  resetAnswer,
-  saveAllGrades,
-  saveDraft,
-  saveGrade,
-  submitAnswer,
-  toggleViewHistoryMode,
   unmark,
   unsubmit,
 } from '../../actions';
+import {
+  generateFeedback,
+  reevaluateAnswer,
+  resetAnswer,
+  saveAllAnswers,
+  saveAllGrades,
+  saveGrade,
+  submitAnswer,
+} from '../../actions/answers';
 import ProgressPanel from '../../components/ProgressPanel';
 import { workflowStates } from '../../constants';
 import {
@@ -49,7 +50,6 @@ import {
   explanationShape,
   gradingShape,
   historyQuestionShape,
-  postShape,
   questionFlagsShape,
   questionShape,
   submissionShape,
@@ -144,23 +144,6 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(saveGrade(params.submissionId, grading[id], id, exp, published));
   };
 
-  handleToggleViewHistoryMode = (
-    viewHistory,
-    submissionQuestionId,
-    questionId,
-  ) => {
-    const { dispatch, historyQuestions } = this.props;
-    const answersLoaded = historyQuestions[questionId].pastAnswersLoaded;
-    dispatch(
-      toggleViewHistoryMode(
-        viewHistory,
-        submissionQuestionId,
-        questionId,
-        answersLoaded,
-      ),
-    );
-  };
-
   handleUnmark = () => {
     const {
       dispatch,
@@ -187,12 +170,9 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(resetAnswer(params.submissionId, answerId, questionId, setValue));
   };
 
-  onSaveDraft = (data) => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(saveDraft(params.submissionId, data));
+  onSaveDraft = (data, resetField) => {
+    const { dispatch } = this.props;
+    dispatch(saveAllAnswers(data, resetField));
   };
 
   onSubmit = (data) => {
@@ -203,12 +183,12 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(finalise(params.submissionId, data));
   };
 
-  onSubmitAnswer = (answerId, answer, setValue) => {
+  onSubmitAnswer = (answerId, answer, resetField) => {
     const {
       dispatch,
       match: { params },
     } = this.props;
-    dispatch(submitAnswer(params.submissionId, answerId, answer, setValue));
+    dispatch(submitAnswer(params.submissionId, answerId, answer, resetField));
   };
 
   onReevaluateAnswer = (answerId, questionId) => {
@@ -295,7 +275,6 @@ class VisibleSubmissionEditIndex extends Component {
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
-      posts,
       questions,
       historyQuestions,
       questionsFlags,
@@ -331,7 +310,6 @@ class VisibleSubmissionEditIndex extends Component {
           graderView={graderView}
           handleSaveAllGrades={this.handleSaveAllGrades}
           handleSaveGrade={this.handleSaveGrade}
-          handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           handleUnsubmit={this.handleUnsubmit}
           historyQuestions={historyQuestions}
           initialValues={answers.initial}
@@ -344,7 +322,6 @@ class VisibleSubmissionEditIndex extends Component {
           onSaveDraft={this.onSaveDraft}
           onSubmit={this.onSubmit}
           onSubmitAnswer={this.onSubmitAnswer}
-          posts={posts}
           published={workflowState === workflowStates.Published}
           questionIds={questionIds}
           questions={questions}
@@ -373,7 +350,6 @@ class VisibleSubmissionEditIndex extends Component {
         handlePublish={this.handlePublish}
         handleSaveAllGrades={this.handleSaveAllGrades}
         handleSaveGrade={this.handleSaveGrade}
-        handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
         handleUnmark={this.handleUnmark}
         handleUnsubmit={this.handleUnsubmit}
         historyQuestions={historyQuestions}
@@ -389,7 +365,6 @@ class VisibleSubmissionEditIndex extends Component {
         onSubmit={this.onSubmit}
         onSubmitAnswer={this.onSubmitAnswer}
         passwordProtected={passwordProtected}
-        posts={posts}
         published={workflowState === workflowStates.Published}
         questionIds={questionIds}
         questions={questions}
@@ -468,7 +443,6 @@ VisibleSubmissionEditIndex.propTypes = {
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
   grading: gradingShape.isRequired,
-  posts: PropTypes.objectOf(postShape),
   questions: PropTypes.objectOf(questionShape),
   historyAnswers: PropTypes.objectOf(answerShape),
   historyQuestions: PropTypes.objectOf(historyQuestionShape),
@@ -490,7 +464,6 @@ function mapStateToProps({ assessments: { submission } }) {
     answers: submission.answers,
     codaveriFeedbackStatus: submission.codaveriFeedbackStatus,
     grading: submission.grading.questions,
-    posts: submission.posts,
     submission: submission.submission,
     questions: submission.questions,
     historyAnswers: submission.history.answers,

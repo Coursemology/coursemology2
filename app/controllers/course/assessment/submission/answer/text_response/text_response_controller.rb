@@ -5,54 +5,37 @@ class Course::Assessment::Submission::Answer::TextResponse::TextResponseControll
                           singleton: true, through: :answer
   before_action :set_text_response_answer
 
-  helper Course::Assessment::Submission::SubmissionsHelper.name.sub(/Helper$/, '')
+  def create_files
+    authorize! :update, @text_response_answer.answer
 
-  def upload_files
-    success = @text_response_answer.class.transaction do
-      raise ActiveRecord::Rollback unless update_answer_files(upload_files_params)
+    @text_response_answer.assign_params(create_files_params)
 
-      true
+    if @text_response_answer.answer.save
+      render @text_response_answer.answer
+    else
+      render json: { errors: @text_response_answer.errors }, status: :bad_request
     end
-
-    render_response(success)
   end
 
   def delete_file
+    authorize! :destroy_attachment, @text_response_answer
+
     attachment_reference = @text_response_answer.attachments.find(delete_file_params[:attachment_id])
-    answer = @text_response_answer.acting_as
 
-    success = @text_response_answer.class.transaction do
-      answer.update!(last_session_id: session.id, client_version: delete_file_params[:client_version])
-      attachment_reference.destroy!
-
-      true
+    if attachment_reference.destroy
+      render @text_response_answer.answer
+    else
+      render json: { errors: @text_response_answer.errors }, status: :bad_request
     end
-
-    render_response(success)
   end
 
   private
 
-  def render_response(success)
-    if success
-      render @text_response_answer.answer
-    else
-      @text_response_answer.errors.messages.each do |attribute, message|
-        @text_response_answer.answer.errors.add(attribute, message)
-      end
-      render json: { errors: @text_response_answer.answer.errors.messages }, status: :bad_request
-    end
-  end
-
-  def update_answer_files(answer_params)
-    @text_response_answer.create_and_upload_files(answer_params)
-  end
-
-  def upload_files_params
-    params.require(:answer).permit(attachment_params, :client_version).merge(session_id: session.id)
+  def create_files_params
+    params.require(:answer).permit(attachment_params)
   end
 
   def delete_file_params
-    params.permit(:attachment_id, :client_version)
+    params.permit(:attachment_id)
   end
 end

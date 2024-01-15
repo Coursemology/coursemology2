@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 
-import { workflowStates } from '../constants';
-import { fileShape } from '../propTypes';
+import { workflowStates } from '../../constants';
+import { fileShape } from '../../propTypes';
 
 const translations = defineMessages({
   uploadedFiles: {
@@ -16,10 +16,10 @@ const translations = defineMessages({
   },
   deleteConfirmation: {
     id: 'course.assessment.submission.ImportedFileView.deleteConfirmation',
-    defaultMessage: 'Are you sure you want to delete {fileName}?',
+    defaultMessage: 'Are you sure you want to delete "{fileName}"?',
   },
-  deleting: {
-    id: 'course.assessment.submission.ImportedFileView.deleting',
+  delete: {
+    id: 'course.assessment.submission.ImportedFileView.delete',
     defaultMessage: 'Delete',
   },
   deleteTitle: {
@@ -75,7 +75,7 @@ class VisibleImportedFileView extends Component {
         }
         open={deleteConfirmation}
         primaryColor="error"
-        primaryLabel={intl.formatMessage(translations.deleting)}
+        primaryLabel={intl.formatMessage(translations.delete)}
         title={intl.formatMessage(translations.deleteTitle)}
       >
         <PromptText>
@@ -118,6 +118,7 @@ class VisibleImportedFileView extends Component {
 
   render() {
     const { intl, files } = this.props;
+
     return (
       <div>
         <Typography variant="h6">
@@ -140,11 +141,11 @@ class VisibleImportedFileView extends Component {
 
 VisibleImportedFileView.propTypes = {
   intl: PropTypes.object.isRequired,
-  canDestroyFiles: PropTypes.bool,
-  displayFileName: PropTypes.string,
-  handleFileTabbing: PropTypes.func,
+  canDestroyFiles: PropTypes.bool.isRequired,
+  displayFileName: PropTypes.string.isRequired,
+  files: PropTypes.arrayOf(fileShape).isRequired,
+  handleFileTabbing: PropTypes.func.isRequired,
   handleDeleteFile: PropTypes.func,
-  files: PropTypes.arrayOf(fileShape),
 };
 
 function mapStateToProps(state, ownProps) {
