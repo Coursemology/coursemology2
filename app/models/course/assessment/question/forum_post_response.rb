@@ -6,6 +6,10 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
   validate :allowable_max_post_count
 
   def question_type
+    'ForumPostResponse'
+  end
+
+  def question_type_readable
     I18n.t('course.assessment.question.forum_post_responses.question_type')
   end
 

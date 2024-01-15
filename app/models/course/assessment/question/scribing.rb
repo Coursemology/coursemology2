@@ -21,8 +21,11 @@ class Course::Assessment::Question::Scribing < ApplicationRecord
     answer.acting_as
   end
 
-  # return the type of question i.e. Scribing
   def question_type
+    'Scribing'
+  end
+
+  def question_type_readable
     I18n.t('course.assessment.question.scribing.question_type')
   end
 end

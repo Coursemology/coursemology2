@@ -41,14 +41,21 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
     true
   end
 
+  def history_viewable?
+    true
+  end
+
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
 
     self.options = duplicator.duplicate(other.options)
   end
 
-  # returns the type of question as multiple response or multiple choice
   def question_type
+    multiple_choice? ? 'MultipleChoice' : 'MultipleResponse'
+  end
+
+  def question_type_readable
     if multiple_choice?
       I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')
     else

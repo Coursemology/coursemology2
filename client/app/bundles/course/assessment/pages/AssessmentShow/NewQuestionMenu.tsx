@@ -1,10 +1,8 @@
 import { useRef, useState } from 'react';
 import { Add } from '@mui/icons-material';
 import { Button, Menu, MenuItem } from '@mui/material';
-import {
-  AssessmentData,
-  QuestionType,
-} from 'types/course/assessment/assessments';
+import { AssessmentData } from 'types/course/assessment/assessments';
+import { QuestionType } from 'types/course/assessment/question';
 
 import Link from 'lib/components/core/Link';
 import useTranslation, { Descriptor } from 'lib/hooks/useTranslation';
@@ -15,15 +13,16 @@ interface NewQuestionMenuProps {
   with: NonNullable<AssessmentData['newQuestionUrls']>;
 }
 
-const NEW_QUESTION_LABELS: Record<QuestionType, Descriptor> = {
-  multipleChoice: translations.multipleChoice,
-  multipleResponse: translations.multipleResponse,
-  textResponse: translations.textResponse,
-  audioResponse: translations.audioResponse,
-  fileUpload: translations.fileUpload,
-  programming: translations.programming,
-  scribing: translations.scribing,
-  forumPostResponse: translations.forumPostResponse,
+const NEW_QUESTION_LABELS: Record<keyof typeof QuestionType, Descriptor> = {
+  MultipleChoice: translations.multipleChoice,
+  MultipleResponse: translations.multipleResponse,
+  TextResponse: translations.textResponse,
+  VoiceResponse: translations.voiceResponse,
+  FileUpload: translations.fileUpload,
+  Programming: translations.programming,
+  Scribing: translations.scribing,
+  ForumPostResponse: translations.forumPostResponse,
+  Comprehension: translations.comprehension,
 };
 
 const NewQuestionMenu = (props: NewQuestionMenuProps): JSX.Element => {

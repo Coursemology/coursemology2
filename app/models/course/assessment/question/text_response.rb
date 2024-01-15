@@ -46,6 +46,16 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
 
   def question_type
     if file_upload_question?
+      'FileUpload'
+    elsif comprehension_question?
+      'Comprehension'
+    else
+      'TextResponse'
+    end
+  end
+
+  def question_type_readable
+    if file_upload_question?
       I18n.t('activerecord.attributes.models.course/assessment/question/text_response.file_upload')
     elsif comprehension_question?
       I18n.t('activerecord.attributes.models.course/assessment/question/text_response.comprehension')
@@ -80,6 +90,10 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
 
   def csv_downloadable?
     !hide_text && !allow_attachment
+  end
+
+  def history_viewable?
+    true
   end
 
   def initialize_duplicate(duplicator, other)

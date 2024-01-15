@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 json.id answer.id
 json.questionId answer.question_id
+json.questionType answer.question.question_type
 json.createdAt answer.created_at&.iso8601
 json.clientVersion answer.client_version
+json.isDraftAnswer answer.draft_answer?
 
 specific_answer = answer.specific
 can_grade = can?(:grade, answer.submission)
