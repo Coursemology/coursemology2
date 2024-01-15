@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { ProgrammingContent } from 'types/course/assessment/answer/programming';
+import { ProgrammingContent } from 'types/course/assessment/submission/answer/programming';
 import { downloadFile } from 'utilities/downloadFile';
 
 import Link from 'lib/components/core/Link';

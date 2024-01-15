@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
-import { questionShape } from '../../propTypes';
+import { questionShape } from '../../../propTypes';
 
 const MultipleChoiceOptions = ({
   readOnly,
@@ -76,14 +76,14 @@ const MemoMultipleChoiceOptions = memo(
 
 const MultipleChoice = (props) => {
   const {
+    answerId,
+    graderView,
     question,
     readOnly,
-    showMcqMrqSolution,
-    graderView,
-    answerId,
     saveAnswerAndUpdateClientVersion,
+    showMcqMrqSolution,
   } = props;
-  const { control, getValues } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <Controller
@@ -95,7 +95,7 @@ const MultipleChoice = (props) => {
             ...field,
             onChange: (e) => {
               field.onChange([parseInt(e.target.value, 10)]);
-              saveAnswerAndUpdateClientVersion(getValues()[answerId], answerId);
+              saveAnswerAndUpdateClientVersion(answerId);
             },
           }}
           fieldState={fieldState}
@@ -107,12 +107,12 @@ const MultipleChoice = (props) => {
 };
 
 MultipleChoice.propTypes = {
-  question: questionShape,
-  readOnly: PropTypes.bool,
-  showMcqMrqSolution: PropTypes.bool,
-  graderView: PropTypes.bool,
-  answerId: PropTypes.number,
-  saveAnswerAndUpdateClientVersion: PropTypes.func,
+  answerId: PropTypes.number.isRequired,
+  graderView: PropTypes.bool.isRequired,
+  question: questionShape.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,
+  showMcqMrqSolution: PropTypes.bool.isRequired,
 };
 
 export default MultipleChoice;

@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  CircularProgress,
   Paper,
   Step,
   StepButton,
@@ -25,8 +24,8 @@ import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
+import SubmissionAnswer from '../../components/answers';
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
-import SubmissionAnswer from '../../components/SubmissionAnswer';
 import { formNames, questionTypes } from '../../constants';
 import Comments from '../../containers/Comments';
 import GradingPanel from '../../containers/GradingPanel';
@@ -92,7 +91,6 @@ const SubmissionEditStepForm = (props) => {
     onReevaluateAnswer,
     handleSaveAllGrades,
     handleSaveGrade,
-    handleToggleViewHistoryMode,
     handleUnsubmit,
     historyQuestions,
     initialValues,
@@ -127,7 +125,7 @@ const SubmissionEditStepForm = (props) => {
     getValues,
     handleSubmit,
     reset,
-    setValue,
+    resetField,
     formState: { errors, isDirty },
   } = methods;
   usePrompt(isDirty);
@@ -163,16 +161,6 @@ const SubmissionEditStepForm = (props) => {
 
   const shouldRenderContinueButton = () =>
     !isLastQuestion(questionIds, stepIndex);
-
-  const renderAnswerLoadingIndicator = () => {
-    const id = questionIds[stepIndex];
-    const { isAutograding, isResetting } = questionsFlags[id] || {};
-
-    if (isAutograding || isResetting) {
-      return <CircularProgress size={36} style={{ position: 'absolute' }} />;
-    }
-    return null;
-  };
 
   const renderAutogradingErrorPanel = (id) => {
     const { jobError, jobErrorMessage } = questionsFlags[id] || {};
@@ -356,6 +344,7 @@ const SubmissionEditStepForm = (props) => {
         <Button
           color="info"
           disabled={isAutograding || isResetting || isSaving}
+          endIcon={isResetting && <LoadingIndicator bare size={20} />}
           onClick={() => {
             setResetConfirmation(true);
             setResetAnswerId(answerId);
@@ -380,7 +369,7 @@ const SubmissionEditStepForm = (props) => {
       onConfirm={() => {
         setResetConfirmation(false);
         setResetAnswerId(null);
-        onReset(resetAnswerId, setValue);
+        onReset(resetAnswerId, resetField);
       }}
       open={resetConfirmation}
     />
@@ -394,7 +383,7 @@ const SubmissionEditStepForm = (props) => {
       <Button
         color="primary"
         disabled={!isDirty || isSaving}
-        onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
+        onClick={handleSubmit((data) => onSaveDraft({ ...data }, resetField))}
         style={styles.formButton}
         variant="contained"
       >
@@ -442,7 +431,7 @@ const SubmissionEditStepForm = (props) => {
           filter={() => true}
           keyName="command+enter,control+enter"
           onKeyDown={() =>
-            onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
+            onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)
           }
         />
         <Tooltip title={<FormattedMessage {...translations.submitTooltip} />}>
@@ -451,7 +440,7 @@ const SubmissionEditStepForm = (props) => {
             disabled={isAutograding || isResetting || isSaving}
             endIcon={isAutograding && <LoadingIndicator bare size={20} />}
             onClick={() =>
-              onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
+              onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)
             }
             style={styles.formButton}
             variant="contained"
@@ -515,10 +504,10 @@ const SubmissionEditStepForm = (props) => {
             readOnly: !attempting,
             answerId,
             question,
+            questionType: question.type,
             historyQuestions,
             graderView,
             showMcqMrqSolution,
-            handleToggleViewHistoryMode,
           }}
         />
         {renderAutogradingErrorPanel(id)}
@@ -526,14 +515,13 @@ const SubmissionEditStepForm = (props) => {
         {!attempting && graderView ? renderReevaluateButton() : null}
         {renderQuestionGrading(id)}
 
-        {attempting ? (
+        {attempting && (
           <div>
             {renderResetButton()}
             {renderSubmitButton()}
             {renderContinueButton()}
-            {renderAnswerLoadingIndicator()}
           </div>
-        ) : null}
+        )}
 
         <Comments topic={topic} />
       </>
@@ -670,7 +658,6 @@ SubmissionEditStepForm.propTypes = {
   handleUnsubmit: PropTypes.func,
   handleSaveAllGrades: PropTypes.func,
   handleSaveGrade: PropTypes.func,
-  handleToggleViewHistoryMode: PropTypes.func,
 };
 
 export default injectIntl(SubmissionEditStepForm);

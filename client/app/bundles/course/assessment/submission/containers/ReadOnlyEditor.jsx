@@ -51,7 +51,7 @@ class ReadOnlyEditorContainer extends Component {
 ReadOnlyEditorContainer.propTypes = {
   annotations: PropTypes.objectOf(topicShape),
   answerId: PropTypes.number.isRequired,
-  file: PropTypes.objectOf(fileShape),
+  file: fileShape.isRequired,
 };
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {

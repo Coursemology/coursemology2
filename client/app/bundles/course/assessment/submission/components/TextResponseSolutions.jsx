@@ -148,10 +148,10 @@ function renderTextResponseComprehension(question) {
 }
 
 const SolutionsTable = ({ question }) => {
-  if (question.comprehension && question.groups) {
+  if (question.type === 'Comprehension' && question.groups) {
     return renderTextResponseComprehension(question);
   }
-  if (!question.comprehension && question.solutions) {
+  if (question.type === 'Comprehension' && question.solutions) {
     return renderTextResponseSolutions(question);
   }
   return null;

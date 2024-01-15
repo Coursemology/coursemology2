@@ -45,9 +45,9 @@ class PastAnswers extends Component {
         return (
           <Card className="bg-yellow-100">
             <CardContent>
-              <span>
+              <Typography variant="body2">
                 {intl.formatMessage(translations.rendererNotImplemented)}
-              </span>
+              </Typography>
             </CardContent>
           </Card>
         );

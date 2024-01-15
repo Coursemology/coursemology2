@@ -50,13 +50,7 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
   def assign_params(params)
     acting_as.assign_params(params)
     self.answer_text = params[:answer_text] if params[:answer_text]
-  end
-
-  def create_and_upload_files(params)
-    acting_as.assign_params(params)
-    self.files = params[:files].reject { |file| file == 'null' } if params[:files]
-    acting_as.save
-    save
+    self.files = params[:files] if params[:files]
   end
 
   def compare_answer(other_answer)

@@ -54,24 +54,20 @@ class FileInput extends Component {
 
   onDrop(files) {
     const {
-      callback,
+      onDropCallback,
       disabled,
       field: { onChange },
     } = this.props;
     this.setState({ dropzoneActive: false });
     if (!disabled) {
-      callback(files);
+      onDropCallback(files);
       return onChange(files.length > 0 ? files : null);
     }
     return () => {};
   }
 
   displayFileNames(files) {
-    const {
-      callback,
-      disabled,
-      field: { onChange },
-    } = this.props;
+    const { disabled } = this.props;
     const { dropzoneActive } = this.state;
     if (dropzoneActive) {
       return <FileUpload style={{ width: 60, height: 60 }} />;
@@ -95,11 +91,6 @@ class FileInput extends Component {
             key={f.name}
             disabled={disabled}
             label={f.name}
-            onDelete={() => {
-              const updatedFiles = files.filter((file) => file.name !== f.name);
-              callback(updatedFiles);
-              return onChange(updatedFiles.length > 0 ? updatedFiles : null);
-            }}
             style={styles.chip}
           />
         ))}
@@ -109,18 +100,14 @@ class FileInput extends Component {
 
   render() {
     const {
-      name,
-      className,
-      inputOptions,
       disabled,
       fieldState: { error },
       field: { value },
     } = this.props;
 
     return (
-      <div className={className}>
+      <div>
         <Dropzone
-          {...inputOptions}
           disabled={disabled}
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
@@ -129,11 +116,13 @@ class FileInput extends Component {
           {({ getRootProps, getInputProps }) => (
             <Card
               {...getRootProps({
-                className: 'dropzone-input select-none cursor-pointer',
+                className: `dropzone-input select-none ${
+                  !disabled && 'cursor-pointer'
+                }`,
                 style: styles.paper,
               })}
             >
-              <input {...getInputProps({ name })} />
+              <input {...getInputProps()} />
               <CardContent>{this.displayFileNames(value)}</CardContent>
             </Card>
           )}
@@ -145,42 +134,25 @@ class FileInput extends Component {
 }
 
 FileInput.propTypes = {
-  name: PropTypes.string,
-  className: PropTypes.string,
-  inputOptions: PropTypes.shape({
-    multiple: PropTypes.bool,
-    accept: PropTypes.string,
-  }),
   disabled: PropTypes.bool,
   fieldState: PropTypes.shape({
     error: PropTypes.bool,
   }).isRequired,
   field: PropTypes.shape({
     onChange: PropTypes.func,
-    value: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]),
+    value: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
-  callback: PropTypes.func,
+  onDropCallback: PropTypes.func,
 };
 
 FileInput.defaultProps = {
-  className: '',
   disabled: false,
-  callback: () => {},
+  onDropCallback: () => {},
 };
 
-const FileInputField = ({
-  name,
-  disabled,
-  callback,
-  saveAnswer,
-  answerId,
-  ...custom
-}) => {
-  const { control, getValues, setValue } = useFormContext();
+const FileInputField = (props) => {
+  const { disabled, name, onChangeCallback, onDropCallback } = props;
+  const { control } = useFormContext();
 
   return (
     <Controller
@@ -188,19 +160,18 @@ const FileInputField = ({
       name={name}
       render={({ field, fieldState }) => (
         <FileInput
-          callback={callback}
           disabled={disabled}
           field={{
             ...field,
             onChange: (event) => {
               field.onChange(event);
-              if (saveAnswer) {
-                saveAnswer(answerId, getValues()[answerId], setValue);
+              if (onChangeCallback) {
+                onChangeCallback();
               }
             },
           }}
           fieldState={fieldState}
-          {...custom}
+          onDropCallback={onDropCallback}
         />
       )}
     />
@@ -208,11 +179,10 @@ const FileInputField = ({
 };
 
 FileInputField.propTypes = {
-  name: PropTypes.string,
-  disabled: PropTypes.bool,
-  callback: PropTypes.func,
-  answerId: PropTypes.number,
-  saveAnswer: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onChangeCallback: PropTypes.func,
+  onDropCallback: PropTypes.func,
 };
 
 export default FileInputField;

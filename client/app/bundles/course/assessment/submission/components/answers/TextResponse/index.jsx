@@ -3,23 +3,28 @@ import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import { useAppSelector } from 'lib/hooks/store';
 
-import UploadedFileView from '../../containers/UploadedFileView';
-import { questionShape } from '../../propTypes';
-import FileInput from '../FileInput';
-import TextResponseSolutions from '../TextResponseSolutions';
+import UploadedFileView from '../../../containers/UploadedFileView';
+import { questionShape } from '../../../propTypes';
+import { getIsSavingAnswer } from '../../../selectors/answerFlags';
+import FileInputField from '../../FileInput';
+import TextResponseSolutions from '../../TextResponseSolutions';
 
 const TextResponse = (props) => {
   const {
-    question,
-    readOnly,
     answerId,
     graderView,
+    handleUploadTextResponseFiles,
+    question,
+    readOnly,
     saveAnswerAndUpdateClientVersion,
-    isSavingAnswer,
-    uploadFiles,
   } = props;
-  const { control, getValues } = useFormContext();
+  const { control } = useFormContext();
+  const isSaving = useAppSelector((state) =>
+    getIsSavingAnswer(state, answerId),
+  );
+  const disableField = readOnly || isSaving;
   const allowUpload = question.allowAttachment;
 
   const readOnlyAnswer = (
@@ -44,9 +49,9 @@ const TextResponse = (props) => {
           disabled={readOnly}
           field={{
             ...field,
-            onChange: (event, editor) => {
-              field.onChange(editor !== undefined ? editor.getData() : event);
-              saveAnswerAndUpdateClientVersion(getValues()[answerId], answerId);
+            onChange: (event) => {
+              field.onChange(event);
+              saveAnswerAndUpdateClientVersion(answerId);
             },
           }}
           fieldState={fieldState}
@@ -71,7 +76,7 @@ const TextResponse = (props) => {
           name={`${answerId}.answer_text`}
           onChange={(e) => {
             field.onChange(e.target.value);
-            saveAnswerAndUpdateClientVersion(getValues()[answerId], answerId);
+            saveAnswerAndUpdateClientVersion(answerId);
           }}
           rows={5}
           style={{ width: '100%' }}
@@ -93,12 +98,10 @@ const TextResponse = (props) => {
         <UploadedFileView answerId={answerId} questionId={question.id} />
       )}
       {allowUpload && !readOnly && (
-        <FileInput
-          answerId={answerId}
-          control={control}
-          disabled={readOnly || isSavingAnswer}
+        <FileInputField
+          disabled={disableField}
           name={`${answerId}.files`}
-          saveAnswer={uploadFiles}
+          onChangeCallback={() => handleUploadTextResponseFiles(answerId)}
         />
       )}
     </div>
@@ -106,16 +109,12 @@ const TextResponse = (props) => {
 };
 
 TextResponse.propTypes = {
-  question: questionShape,
-  readOnly: PropTypes.bool,
-  answerId: PropTypes.number,
-  graderView: PropTypes.bool,
-  field: PropTypes.shape({
-    value: PropTypes.string,
-  }),
-  saveAnswerAndUpdateClientVersion: PropTypes.func,
-  isSavingAnswer: PropTypes.bool,
-  uploadFiles: PropTypes.func,
+  answerId: PropTypes.number.isRequired,
+  graderView: PropTypes.bool.isRequired,
+  handleUploadTextResponseFiles: PropTypes.func.isRequired,
+  question: questionShape.isRequired,
+  readOnly: PropTypes.bool.isRequired,
+  saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,
 };
 
 export default TextResponse;

@@ -1,14 +1,15 @@
 import { FC, useState } from 'react';
 import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
+import { SubmissionQuestionBaseData } from 'types/course/assessment/submission/question/types';
 
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateGrade } from '../actions';
+import { updateGrade } from '../actions/answers';
 import { workflowStates } from '../constants';
-import { QuestionData, QuestionGradeData } from '../questionGrade';
+import { QuestionGradeData } from '../reducers/grading/types';
 import translations from '../translations';
 
 const GRADE_STEP = 1;
@@ -23,14 +24,14 @@ const isValidDecimal = (value: string): boolean => {
   return /^\d*(\.\d?)?$/.test(value);
 };
 
-interface Props {
+interface QuestionGradeProps {
   editable: boolean;
   questionId: number;
   handleSaveGrade: (id: number) => void;
   isSaving: boolean;
 }
 
-const QuestionGrade: FC<Props> = (props) => {
+const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const { editable, questionId, handleSaveGrade, isSaving } = props;
 
   const { t } = useTranslation();
@@ -48,7 +49,9 @@ const QuestionGrade: FC<Props> = (props) => {
     submission.submission;
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
-  const question = submission.questions[questionId] as QuestionData;
+  const question = submission.questions[
+    questionId
+  ] as SubmissionQuestionBaseData;
   const grading = submission.grading.questions[questionId] as QuestionGradeData;
   const maxGrade = question.maximumGrade;
 

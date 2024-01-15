@@ -63,12 +63,8 @@ RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
         expect(page).to have_selector('div', text: assessment.description)
 
         first(:checkbox, visible: false).set(true)
-        click_button('Save Draft')
 
-        expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, assessment, submission)
-        )
-        expect(page).to have_selector('span', text: 'Submission updated successfully.')
+        wait_for_autosave
         expect(submission.current_answers.first.specific.reload.options).to include(option)
       end
     end
