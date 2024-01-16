@@ -119,7 +119,7 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
-  renderBarChart = (submissionBarChart) => {
+  renderBarChart = (SubmissionStatusChart) => {
     const { includePhantoms } = this.state;
     const workflowStatesArray = Object.values(workflowStates);
 
@@ -127,7 +127,7 @@ class VisibleSubmissionsIndex extends Component {
       (counts, w) => ({ ...counts, [w]: 0 }),
       {},
     );
-    const submissionStateCounts = submissionBarChart.reduce(
+    const submissionStateCounts = SubmissionStatusChart.reduce(
       (counts, submission) => {
         if (includePhantoms || !submission.courseUser.phantom) {
           return {

@@ -2363,16 +2363,16 @@
   "course.assessment.statistics.statistics": {
     "defaultMessage": "统计数据"
   },
-  "course.assessment.statistics.submissionDoughnut.attempting": {
+  "course.assessment.statistics.SubmissionStatusChart.attempting": {
     "defaultMessage": "尝试"
   },
-  "course.assessment.statistics.submissionDoughnut.datasetLabel": {
+  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
     "defaultMessage": "学生提交状态"
   },
-  "course.assessment.statistics.submissionDoughnut.submitted": {
+  "course.assessment.statistics.SubmissionStatusChart.submitted": {
     "defaultMessage": "已提交"
   },
-  "course.assessment.statistics.submissionDoughnut.unattempted": {
+  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
     "defaultMessage": "未尝试"
   },
   "course.assessment.statistics.submissionStatuses": {
