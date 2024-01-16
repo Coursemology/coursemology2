@@ -39,7 +39,7 @@ CardTitle.propTypes = {
   children: PropTypes.element.isRequired,
 };
 
-const StatisticsPanel = ({ submissions, allStudents, intl }) => (
+const StatisticsCharts = ({ submissions, allStudents, intl }) => (
   <div className="full-w space-y-4">
     <Card variant="outlined">
       <CardContent>
@@ -72,10 +72,10 @@ const StatisticsPanel = ({ submissions, allStudents, intl }) => (
   </div>
 );
 
-StatisticsPanel.propTypes = {
+StatisticsCharts.propTypes = {
   submissions: PropTypes.arrayOf(submissionRecordsShape).isRequired,
   allStudents: PropTypes.arrayOf(courseUserShape).isRequired,
   intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(StatisticsPanel);
+export default injectIntl(StatisticsCharts);

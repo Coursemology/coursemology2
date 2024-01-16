@@ -16,3 +16,9 @@ export interface SubmissionRecordShape {
   grade: number;
   dayDifference: number;
 }
+
+export interface AncestorShape {
+  id: number | string;
+  title: string;
+  courseTitle: string;
+}
