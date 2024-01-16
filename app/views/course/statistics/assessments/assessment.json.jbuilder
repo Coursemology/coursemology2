@@ -16,9 +16,10 @@ json.submissions @submission_records do |record|
     json.isPhantom record[0].phantom?
   end
 
-  json.submittedAt record[1]&.iso8601
-  json.endAt record[2]&.iso8601
-  json.grade record[3]
+  json.workflowState record[1]
+  json.submittedAt record[2]&.iso8601
+  json.endAt record[3]&.iso8601
+  json.grade record[4]
 end
 
 json.allStudents @all_students do |student|

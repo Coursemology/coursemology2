@@ -37,7 +37,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
       end_at = @assessment.lesson_plan_item.time_for(submitter_course_user).end_at
       grade = submission.grade
-      [submitter_course_user, submission.submitted_at, end_at, grade]
+      [submitter_course_user, submission.workflow_state, submission.submitted_at, end_at, grade]
     end.compact
   end
 end
