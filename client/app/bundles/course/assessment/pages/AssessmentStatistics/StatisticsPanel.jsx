@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { courseUserShape, submissionRecordsShape } from '../../propTypes';
 
 import GradeViolinChart from './GradeViolinChart';
-import SubmissionDoughnut from './SubmissionDoughnut';
+import SubmissionStatusChart from './SubmissionStatusChart';
 import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
 
 const translations = defineMessages({
@@ -40,28 +40,26 @@ CardTitle.propTypes = {
 };
 
 const StatisticsPanel = ({ submissions, allStudents, intl }) => (
-  <div className="full-w flex flex-col space-y-4">
-    <div className="full-w flex flex-1 space-x-4 max-xl:flex-col max-xl:space-y-4">
-      <Card className="flex-1" variant="outlined">
-        <CardContent>
-          <CardTitle>
-            {intl.formatMessage(translations.submissionStatuses)}
-          </CardTitle>
-          <SubmissionDoughnut
-            allStudents={allStudents}
-            submissions={submissions}
-          />
-        </CardContent>
-      </Card>
-      <Card className="flex-auto" variant="outlined">
-        <CardContent>
-          <CardTitle>
-            {intl.formatMessage(translations.gradeDistribution)}
-          </CardTitle>
-          <GradeViolinChart submissions={submissions} />
-        </CardContent>
-      </Card>
-    </div>
+  <div className="full-w space-y-4">
+    <Card variant="outlined">
+      <CardContent>
+        <CardTitle>
+          {intl.formatMessage(translations.submissionStatuses)}
+        </CardTitle>
+        <SubmissionStatusChart
+          numStudents={allStudents.length}
+          submissions={submissions}
+        />
+      </CardContent>
+    </Card>
+    <Card variant="outlined">
+      <CardContent>
+        <CardTitle>
+          {intl.formatMessage(translations.gradeDistribution)}
+        </CardTitle>
+        <GradeViolinChart submissions={submissions} />
+      </CardContent>
+    </Card>
     <Card variant="outlined">
       <CardContent>
         <CardTitle>
