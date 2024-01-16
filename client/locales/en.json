@@ -2390,16 +2390,16 @@
   "course.assessment.statistics.statistics": {
     "defaultMessage": "Statistics"
   },
-  "course.assessment.statistics.submissionDoughnut.attempting": {
+  "course.assessment.statistics.SubmissionStatusChart.attempting": {
     "defaultMessage": "Attempting"
   },
-  "course.assessment.statistics.submissionDoughnut.datasetLabel": {
+  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
     "defaultMessage": "Student Submission Statuses"
   },
-  "course.assessment.statistics.submissionDoughnut.submitted": {
+  "course.assessment.statistics.SubmissionStatusChart.submitted": {
     "defaultMessage": "Submitted"
   },
-  "course.assessment.statistics.submissionDoughnut.unattempted": {
+  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
     "defaultMessage": "Unattempted"
   },
   "course.assessment.statistics.submissionStatuses": {
