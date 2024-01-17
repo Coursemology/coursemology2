@@ -50,7 +50,7 @@
     "@tanstack/react-table": "^8.11.6",
     "ace-builds": "^1.32.3",
     "axios": "^1.6.4",
-    "babel-plugin-formatjs": "^10.5.10",
+    "babel-plugin-formatjs": "^10.5.12",
     "chart.js": "^3.8.2",
     "chartjs-adapter-moment": "^1.0.1",
     "chartjs-plugin-zoom": "^2.0.1",
