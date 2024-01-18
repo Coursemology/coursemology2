@@ -11,6 +11,7 @@ import {
 import { MonitoringRequestData } from 'types/course/assessment/monitoring';
 import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
 import { QuestionDuplicationResult } from 'types/course/assessment/questions';
+import { AssessmentMarksPerQuestionStats } from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
@@ -312,6 +313,16 @@ export function fetchAncestorStatistics(
       });
   };
 }
+
+export const fetchStudentMarkPerQuestion = async (
+  assessmentId: string | number,
+): Promise<AssessmentMarksPerQuestionStats> => {
+  const response =
+    await CourseAPI.statistics.assessment.fetchMarksPerQuestionStats(
+      assessmentId,
+    );
+  return response.data;
+};
 
 export const fetchMonitoringData = async (): Promise<MonitoringRequestData> => {
   const response = await CourseAPI.assessment.assessments.fetchMonitoringData();
