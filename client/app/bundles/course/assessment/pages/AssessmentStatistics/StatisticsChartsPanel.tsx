@@ -48,11 +48,6 @@ const StatisticsChartsPanel: FC = () => {
       dispatch(
         fetchStatistics(parsedAssessmentId, t(translations.fetchFailure)),
       );
-    }
-  }, [assessmentId]);
-
-  useEffect(() => {
-    if (assessmentId) {
       dispatch(
         fetchAncestors(
           parsedAssessmentId,
