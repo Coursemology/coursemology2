@@ -429,6 +429,7 @@ Rails.application.routes.draw do
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
         get 'assessment/:id' => 'assessments#assessment'
         get 'assessment/:id/ancestors' => 'assessments#ancestors'
+        get 'assessment/:id/marks_per_question' => 'assessments#marks_per_question'
       end
 
       scope module: :video do
