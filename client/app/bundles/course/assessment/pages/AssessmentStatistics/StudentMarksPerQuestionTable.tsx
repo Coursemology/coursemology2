@@ -12,7 +12,10 @@ import { workflowStates } from 'course/assessment/submission/constants';
 import Link from 'lib/components/core/Link';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import { getStatisticsPage } from './selectors';
 
 interface Props {
   data: AssessmentMarksPerQuestionStats;
@@ -59,6 +62,10 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.workflowState',
     defaultMessage: 'Status',
   },
+  filename: {
+    id: 'course.assessment.statistics.filename',
+    defaultMessage: 'Question-level Statistics for {assessment}',
+  },
 });
 
 const statusTranslations = {
@@ -74,9 +81,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { courseId } = useParams();
   const { data } = props;
 
-  // if (!data || data.length === 0) {
-  //   return <Note message={t(translations.noSubmission)} />;
-  // }
+  const assessment = useAppSelector(getStatisticsPage).assessment;
 
   // calculate the gradient of the color in each grade cell
   // 1. we compute the distance between the grade and the mid-grade (half the maximum)
@@ -148,6 +153,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
             : null;
         },
         sortable: true,
+        csvDownloadable: true,
         className: 'text-right',
         sortProps: {
           sort: (datum1, datum2): number => {
@@ -169,6 +175,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       cell: (datum) => (
         <Link to={`/courses/${courseId}/users/${datum.id}`}>{datum.name}</Link>
       ),
+      csvDownloadable: true,
     },
     {
       of: 'groups',
@@ -181,6 +188,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       },
       cell: (datum) =>
         datum.groups ? datum.groups.map((g) => g.name).join(', ') : '',
+      csvDownloadable: true,
     },
     {
       of: 'workflowState',
@@ -222,6 +230,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           );
         },
       },
+      csvDownloadable: true,
     },
     {
       of: 'grader',
@@ -238,6 +247,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         }
         return datum.grader ?? '';
       },
+      csvDownloadable: true,
     },
   ];
 
@@ -246,6 +256,9 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   return (
     <Table
       columns={columns}
+      csvDownload={{
+        filename: t(translations.filename, { assessment: assessment?.title }),
+      }}
       data={data.submissions}
       getRowClassName={(datum): string =>
         `data_${datum.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
