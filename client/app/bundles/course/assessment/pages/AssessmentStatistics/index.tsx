@@ -11,6 +11,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { getStatisticsPage } from './selectors';
 import StatisticsChartsPanel from './StatisticsChartsPanel';
+import StatisticsTablePanel from './StatisticsTablePanel';
 
 const translations = defineMessages({
   statistics: {
@@ -62,7 +63,7 @@ const AssessmentStatisticsPage: FC = () => {
 
   const tabComponentMapping = {
     chart: <StatisticsChartsPanel />,
-    table: <StatisticsChartsPanel />,
+    table: <StatisticsTablePanel />,
   };
 
   return (
