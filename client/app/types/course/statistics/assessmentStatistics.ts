@@ -28,7 +28,7 @@ interface Student {
   isPhantom: boolean;
 }
 
-export interface AssessmentStatistis {
+export interface AssessmentStatistics {
   assessment: Assessment;
   submissions: Submission[];
   allStudents: Student[];
@@ -42,4 +42,30 @@ export interface AssessmentAncestor {
 
 export interface AssessmentAncestors {
   assessments: AssessmentAncestor[];
+}
+
+export interface AnswerGradeStats {
+  id: number;
+  grade: number;
+  maximumGrade: number;
+}
+
+export interface SubmissionStats {
+  id: number;
+  name: string;
+  role: string;
+  isPhantom: boolean;
+  grader?: string;
+  graderId?: number;
+  groups?: { name: string }[];
+  groupCategoryId?: number;
+  totalGrade?: number | null;
+  workflowState?: string;
+  answers?: AnswerGradeStats[];
+}
+
+export interface AssessmentMarksPerQuestionStats {
+  maximumGrade: number;
+  questionCount: number;
+  submissions: SubmissionStats[];
 }
