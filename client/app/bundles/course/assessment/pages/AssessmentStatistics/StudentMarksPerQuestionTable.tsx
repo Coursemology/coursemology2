@@ -15,6 +15,10 @@ import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import {
+  higherGradeBackgroundColorClassName,
+  lowerGradeBackgroundColorClassName,
+} from './ColorGradationLevel';
 import { getStatisticsPage } from './selectors';
 
 interface Props {
@@ -91,9 +95,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     grade: number,
     halfMaxGrade: number,
   ): number => {
-    return Math.max(
-      Math.round((Math.abs(grade - halfMaxGrade) / halfMaxGrade) * 5) * 100,
-      50,
+    return (
+      Math.round((Math.abs(grade - halfMaxGrade) / halfMaxGrade) * 5) * 100
     );
   };
 
@@ -107,11 +110,15 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       return null;
     }
 
-    const colorGradientLevel = calculateColorGradientLevel(grade, maxGrade / 2);
-    const className =
-      grade >= maxGrade / 2
-        ? `bg-green-${colorGradientLevel} p-[1rem]`
-        : `bg-red-${colorGradientLevel} p-[1rem]`;
+    const gradientLevel = calculateColorGradientLevel(grade, maxGrade / 2);
+    let className = '';
+
+    if (grade >= maxGrade / 2) {
+      className = `${higherGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`;
+    } else {
+      className = `${lowerGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`;
+    }
+
     return (
       <div className={className}>
         <Box>{grade}</Box>
@@ -211,6 +218,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       ),
       className: 'center',
     },
+    ...answerColumns,
     {
       searchProps: {
         getValue: (datum) => datum.totalGrade?.toString() ?? '',
@@ -250,8 +258,6 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       csvDownloadable: true,
     },
   ];
-
-  columns.splice(3, 0, ...answerColumns);
 
   return (
     <Table
