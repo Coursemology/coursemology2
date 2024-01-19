@@ -1,5 +1,5 @@
-import { defineMessages, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import {
   BLUE_CHART_BACKGROUND,
   BLUE_CHART_BORDER,
@@ -7,9 +7,9 @@ import {
   ORANGE_CHART_BORDER,
 } from 'theme/colors';
 
+import { SubmissionRecordShape } from 'course/assessment/types';
 import GeneralChart from 'lib/components/core/charts/GeneralChart';
-
-import { submissionRecordsShape } from '../../propTypes';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { processSubmissionsIntoChartData } from './utils';
 
@@ -32,15 +32,13 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-};
+interface Props {
+  submissions: SubmissionRecordShape[];
+}
 
-const SubmissionTimeAndGradeChart = ({ submissions, intl }) => {
+const SubmissionTimeAndGradeChart: FC<Props> = (props) => {
+  const { t } = useTranslation();
+  const { submissions } = props;
   const { labels, lineData, barData } =
     processSubmissionsIntoChartData(submissions);
 
@@ -48,8 +46,8 @@ const SubmissionTimeAndGradeChart = ({ submissions, intl }) => {
     labels,
     datasets: [
       {
-        type: 'line',
-        label: intl.formatMessage(translations.lineDatasetLabel),
+        type: 'line' as const,
+        label: t(translations.lineDatasetLabel),
         backgroundColor: ORANGE_CHART_BACKGROUND,
         borderColor: ORANGE_CHART_BORDER,
         borderWidth: 2,
@@ -58,8 +56,8 @@ const SubmissionTimeAndGradeChart = ({ submissions, intl }) => {
         yAxisID: 'A',
       },
       {
-        type: 'bar',
-        label: intl.formatMessage(translations.barDatasetLabel),
+        type: 'bar' as const,
+        label: t(translations.barDatasetLabel),
         backgroundColor: BLUE_CHART_BACKGROUND,
         borderColor: BLUE_CHART_BORDER,
         borderWidth: 1,
@@ -74,20 +72,20 @@ const SubmissionTimeAndGradeChart = ({ submissions, intl }) => {
   const options = {
     scales: {
       A: {
-        type: 'linear',
-        position: 'right',
+        type: 'linear' as const,
+        position: 'right' as const,
         title: {
           display: true,
-          text: intl.formatMessage(translations.lineDatasetLabel),
+          text: t(translations.lineDatasetLabel),
           color: ORANGE_CHART_BORDER,
         },
       },
       B: {
-        type: 'linear',
-        position: 'left',
+        type: 'linear' as const,
+        position: 'left' as const,
         title: {
           display: true,
-          text: intl.formatMessage(translations.barDatasetLabel),
+          text: t(translations.barDatasetLabel),
           color: BLUE_CHART_BORDER,
         },
       },
@@ -95,23 +93,18 @@ const SubmissionTimeAndGradeChart = ({ submissions, intl }) => {
         title: {
           display: true,
           text: hasEndAt
-            ? intl.formatMessage(translations.xAxisLabelWithDeadline)
-            : intl.formatMessage(translations.xAxisLabelWithoutDeadline),
+            ? t(translations.xAxisLabelWithDeadline)
+            : t(translations.xAxisLabelWithoutDeadline),
         },
       },
     },
   };
 
   return (
-    <div style={styles.root}>
+    <div className="flex flex-col items-center">
       <GeneralChart data={data} options={options} type="bar" withZoom />
     </div>
   );
 };
 
-SubmissionTimeAndGradeChart.propTypes = {
-  submissions: PropTypes.arrayOf(submissionRecordsShape).isRequired,
-  intl: PropTypes.object.isRequired,
-};
-
-export default injectIntl(SubmissionTimeAndGradeChart);
+export default SubmissionTimeAndGradeChart;
