@@ -74,12 +74,17 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def create_student_submissions_hash
-    # initialisation
+    initialise_student_submissions_hash
+    populate_student_submissions_hash
+  end
+
+  def initialise_student_submissions_hash
     @student_submissions_hash = @course_users.to_h do |course_user|
       [course_user, nil]
     end
+  end
 
-    # populate the student submissions hash
+  def populate_student_submissions_hash
     @submissions.map do |submission|
       submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
       next unless submitter_course_user&.student?
