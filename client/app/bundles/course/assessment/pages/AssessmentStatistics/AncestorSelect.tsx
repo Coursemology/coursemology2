@@ -45,8 +45,8 @@ const AncestorSelect = (props: AncestorSelectProps): JSX.Element => {
     <AncestorOptions
       ancestors={ancestors}
       assessmentId={parsedAssessmentId}
+      fetchAncestorSubmissions={fetchAncestorSubmissions}
       selectedAncestorId={selectedAncestorId}
-      setSelectedAncestorId={fetchAncestorSubmissions}
     />
   );
 };

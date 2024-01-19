@@ -27,7 +27,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
       @assessment = @assessment.duplication_traceable.source
       break unless can?(:read_ancestor, @assessment)
 
-      @assessments << @assessment
+      @assessments.unshift(@assessment)
     end
   end
 
