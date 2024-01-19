@@ -18,7 +18,7 @@ export interface SubmissionRecordShape {
 }
 
 export interface AncestorShape {
-  id: number | string;
+  id: number;
   title: string;
   courseTitle: string;
 }
