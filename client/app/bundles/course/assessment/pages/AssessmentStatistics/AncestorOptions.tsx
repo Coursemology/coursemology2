@@ -42,42 +42,34 @@ const AncestorOptions: FC<Props> = (props) => {
   } = props;
 
   return (
-    <div className="mt-8">
-      <Typography className="font-bold mb-2" variant="h6">
-        {t(translations.title)}
-      </Typography>
-      <Typography className="mb-6 text-[1.5rem]">
-        {t(translations.subtitle)}
-      </Typography>
-      <div className="w-full overflow-x-scroll h-[20rem] px-2 py-2 bg-gray-100 my-4 flex items-center">
-        {ancestors.map((ancestor, index) => (
-          <Fragment key={ancestor.id}>
-            <Card
-              className={
-                ancestor.id === selectedAncestorId
-                  ? 'h-[17rem] w-[35rem] min-w-[30rem] mx-4 bg-green-100 cursor-pointer'
-                  : 'h-[17rem] w-[35rem] min-w-[30rem] mx-4 cursor-pointer'
-              }
-              onClick={() => fetchAncestorSubmissions(ancestor.id)}
-            >
-              <CardContent>
-                <Typography className="mb-2 text-[1.7rem] font-bold">
-                  {ancestor.title}
-                </Typography>
-                <Typography className="mb-2 text-[1.3rem]">
-                  {t(translations.fromCourse, {
-                    courseTitle: ancestor.courseTitle,
-                  })}
-                </Typography>
-                {ancestor.id === assessmentId ? (
-                  <Chip label={t(translations.current)} />
-                ) : null}
-              </CardContent>
-            </Card>
-            {index !== ancestors.length - 1 && <ArrowForward />}
-          </Fragment>
-        ))}
-      </div>
+    <div className="mt-8 w-full overflow-x-scroll h-[20rem] px-2 py-2 bg-gray-100 my-4 flex items-center">
+      {ancestors.map((ancestor, index) => (
+        <Fragment key={ancestor.id}>
+          <Card
+            className={
+              ancestor.id === selectedAncestorId
+                ? 'h-[17rem] w-[35rem] min-w-[30rem] mx-4 bg-green-100 cursor-pointer'
+                : 'h-[17rem] w-[35rem] min-w-[30rem] mx-4 cursor-pointer'
+            }
+            onClick={() => fetchAncestorSubmissions(ancestor.id)}
+          >
+            <CardContent>
+              <Typography className="mb-2 text-[1.7rem] font-bold">
+                {ancestor.title}
+              </Typography>
+              <Typography className="mb-2 text-[1.3rem]">
+                {t(translations.fromCourse, {
+                  courseTitle: ancestor.courseTitle,
+                })}
+              </Typography>
+              {ancestor.id === assessmentId ? (
+                <Chip label={t(translations.current)} />
+              ) : null}
+            </CardContent>
+          </Card>
+          {index !== ancestors.length - 1 && <ArrowForward />}
+        </Fragment>
+      ))}
     </div>
   );
 };

@@ -5,13 +5,17 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
 
 import { fetchStatistics } from 'course/assessment/operations';
+import { SubmissionRecordShape } from 'course/assessment/types';
 import Page from 'lib/components/core/layouts/Page';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import DuplicationHistoryStatistics from './DuplicationHistoryStatistics';
+import GradeDistributionChart from './GradeDistributionChart';
 import { getStatisticsPage } from './selectors';
-import StatisticsChartsPanel from './StatisticsChartsPanel';
 import StatisticsTablePanel from './StatisticsTablePanel';
+import SubmissionBarChart from './SubmissionBarChart';
+import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
 
 const translations = defineMessages({
   statistics: {
@@ -34,13 +38,25 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.ancestorStatisticsFail',
     defaultMessage: "Failed to fetch ancestor's statistics.",
   },
-  chart: {
-    id: 'course.assessment.statistics.chart',
-    defaultMessage: 'Chart',
+  duplicationHistory: {
+    id: 'course.assessment.statistics.duplicationHistory',
+    defaultMessage: 'Duplication History',
   },
   table: {
     id: 'course.assessment.statistics.table',
     defaultMessage: 'Table',
+  },
+  submissionStatus: {
+    id: 'course.assessment.statistics.submissionStatus',
+    defaultMessage: 'Submission Status',
+  },
+  gradeDistribution: {
+    id: 'course.assessment.statistics.gradeDistribution',
+    defaultMessage: 'Grade Distribution',
+  },
+  submissionTimeAndGrade: {
+    id: 'course.assessment.statistics.submissionTimeAndGrade',
+    defaultMessage: 'Submission Time and Grade',
   },
 });
 
@@ -52,6 +68,8 @@ const AssessmentStatisticsPage: FC = () => {
   const dispatch = useAppDispatch();
 
   const statisticsPage = useAppSelector(getStatisticsPage);
+  const submissions = statisticsPage.submissions as SubmissionRecordShape[];
+  const numStudents = statisticsPage.allStudents.length;
 
   useEffect(() => {
     if (assessmentId) {
@@ -62,8 +80,15 @@ const AssessmentStatisticsPage: FC = () => {
   }, [assessmentId]);
 
   const tabComponentMapping = {
-    chart: <StatisticsChartsPanel />,
     table: <StatisticsTablePanel />,
+    duplicationHistory: <DuplicationHistoryStatistics />,
+    submissionStatus: (
+      <SubmissionBarChart numStudents={numStudents} submissions={submissions} />
+    ),
+    gradeDistribution: <GradeDistributionChart submissions={submissions} />,
+    submissionTimeAndGrade: (
+      <SubmissionTimeAndGradeChart submissions={submissions} />
+    ),
   };
 
   return (
@@ -94,9 +119,27 @@ const AssessmentStatisticsPage: FC = () => {
             />
             <Tab
               className="min-h-12"
-              id="chart"
-              label={t(translations.chart)}
-              value="chart"
+              id="duplicationHistory"
+              label={t(translations.duplicationHistory)}
+              value="duplicationHistory"
+            />
+            <Tab
+              className="min-h-12"
+              id="submissionStatus"
+              label={t(translations.submissionStatus)}
+              value="submissionStatus"
+            />
+            <Tab
+              className="min-h-12"
+              id="gradeDistribution"
+              label={t(translations.gradeDistribution)}
+              value="gradeDistribution"
+            />
+            <Tab
+              className="min-h-12"
+              id="submissionTimeAndGrade"
+              label={t(translations.submissionTimeAndGrade)}
+              value="submissionTimeAndGrade"
             />
           </Tabs>
         </Box>

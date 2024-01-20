@@ -15,7 +15,6 @@ import useTranslation from 'lib/hooks/useTranslation';
 import AncestorSelect from './AncestorSelect';
 import AncestorStatistics from './AncestorStatistics';
 import { getStatisticsPage } from './selectors';
-import StatisticsCharts from './StatisticsCharts';
 
 const translations = defineMessages({
   fetchFailure: {
@@ -32,7 +31,7 @@ const translations = defineMessages({
   },
 });
 
-const StatisticsChartsPanel: FC = () => {
+const DuplicationHistoryStatistics: FC = () => {
   const { t } = useTranslation();
   const { assessmentId } = useParams();
   const dispatch = useAppDispatch();
@@ -84,10 +83,6 @@ const StatisticsChartsPanel: FC = () => {
 
   return (
     <>
-      <StatisticsCharts
-        allStudents={statisticsPage.allStudents}
-        submissions={statisticsPage.submissions}
-      />
       <AncestorSelect
         ancestors={statisticsPage.ancestors}
         fetchAncestorSubmissions={fetchAncestorSubmissions}
@@ -111,4 +106,4 @@ const StatisticsChartsPanel: FC = () => {
   );
 };
 
-export default StatisticsChartsPanel;
+export default DuplicationHistoryStatistics;
