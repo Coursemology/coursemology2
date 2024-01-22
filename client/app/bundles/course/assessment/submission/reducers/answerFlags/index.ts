@@ -23,7 +23,7 @@ const initialState: AnswerFlagsState = {
   flagsByAnswerId: answerFlagsAdapter.getInitialState(),
 };
 
-export const codaveriSettingsSlice = createSlice({
+export const answerFlagsSlice = createSlice({
   name: 'answerFlags',
   initialState,
   reducers: {
@@ -76,6 +76,6 @@ export const {
   initiateAnswerFlagsForAnswers,
   resetExistingAnswerFlags,
   updateAnswerFlagSavingStatus,
-} = codaveriSettingsSlice.actions;
+} = answerFlagsSlice.actions;
 
-export default codaveriSettingsSlice.reducer;
+export default answerFlagsSlice.reducer;
