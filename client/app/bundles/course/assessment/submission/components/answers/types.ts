@@ -50,17 +50,6 @@ export interface VoiceResponseAnswerProps
 export interface ForumPostResponseAnswerProps
   extends AnswerCommonProps<'ForumPostResponse'> {}
 
-// export type AnswerProps =
-//   | McqAnswerProps
-//   | MrqAnswerProps
-//   | ProgrammingAnswerProps
-//   | TextResponseAnswerProps
-//   | FileUploadAnswerProps
-//   | ComprehensionAnswerProps
-//   | ScribingAnswerProps
-//   | VoiceResponseAnswerProps
-//   | ForumPostResponseAnswerProps;
-
 export interface AnswerPropsMap {
   MultipleChoice: McqAnswerProps;
   MultipleResponse: MrqAnswerProps;

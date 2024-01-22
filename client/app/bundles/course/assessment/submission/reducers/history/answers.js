@@ -18,7 +18,6 @@ export default function (state = {}, action) {
         ),
       };
     }
-    case actions.SAVE_ANSWER_SUCCESS:
     case actions.AUTOGRADE_SUCCESS: {
       const { latestAnswer } = action.payload;
       if (latestAnswer) {

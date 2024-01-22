@@ -1,3 +1,6 @@
+import { AnswerData } from 'types/course/assessment/submission/answer';
+import { JobSubmitted } from 'types/jobs';
+
 import { APIResponse } from 'api/types';
 
 import BaseAPI from '../../Base';
@@ -8,7 +11,7 @@ export default class AnswersAPI extends BaseAPI {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/submissions/${this.submissionId}/answers`;
   }
 
-  saveDraft(answerId: number, answerData: unknown): APIResponse {
+  saveDraft(answerId: number, answerData: unknown): APIResponse<AnswerData> {
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -26,7 +29,10 @@ export default class AnswersAPI extends BaseAPI {
     );
   }
 
-  submitAnswer(answerId: number, answerData: unknown): APIResponse {
+  submitAnswer(
+    answerId: number,
+    answerData: unknown,
+  ): APIResponse<JobSubmitted | AnswerData> {
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',

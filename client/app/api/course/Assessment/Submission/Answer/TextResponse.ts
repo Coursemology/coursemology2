@@ -1,4 +1,5 @@
 import {
+  TextResponseAnswerData,
   TextResponseAttachmentDeleteData,
   TextResponseAttachmentPostData,
 } from 'types/course/assessment/submission/answer/textResponse';
@@ -12,7 +13,7 @@ export default class TextResponseAPI extends BaseAssessmentAPI {
   createFiles(
     answerId: number,
     data: TextResponseAttachmentPostData,
-  ): APIResponse {
+  ): APIResponse<TextResponseAnswerData> {
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
