@@ -17,7 +17,7 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
 
     if submission.workflow_state == 'published' && submission.grader_ids
       # the graders are all the same regardless of question, so we just pick the first one
-      grader = @user_id_to_course_user_hash[submission.grader_ids.first]
+      grader = @course_users_hash[submission.grader_ids.first]
       json.graderId grader&.id || 0
       json.grader grader&.name || 'System'
     end
