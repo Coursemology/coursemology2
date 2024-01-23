@@ -8,21 +8,21 @@ json.assessment do
   json.url course_assessment_path(current_course, @assessment)
 end
 
-json.submissions @submission_records do |record|
+json.submissions @student_submissions_hash.each do |course_user, (submission, end_at)|
   json.courseUser do
-    json.id record[0].id
-    json.name record[0].name
-    json.role record[0].role
-    json.isPhantom record[0].phantom?
+    json.id course_user.id
+    json.name course_user.name
+    json.role course_user.role
+    json.isPhantom course_user.phantom?
   end
 
-  json.workflowState record[1]
-  json.submittedAt record[2]&.iso8601
-  json.endAt record[3]&.iso8601
-  json.grade record[4]
+  json.workflowState submission.workflow_state
+  json.submittedAt submission.submitted_at&.iso8601
+  json.endAt end_at&.iso8601
+  json.grade submission.grade
 end
 
-json.allStudents @all_students do |student|
+json.allStudents @all_students.each do |student|
   json.id student.id
   json.name student.name
   json.role student.role

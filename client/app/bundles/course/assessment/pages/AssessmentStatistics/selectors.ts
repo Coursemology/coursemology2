@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+// TODO: define store for statistics page (in next PR)
 import { AppState } from 'store';
 
-function getLocalState(state: AppState) {
-  return state.assessments.statisticsPage;
-}
+const getLocalState = (state: AppState) => state.assessments.statisticsPage;
 
-export function getStatisticsPage(state: AppState) {
-  return getLocalState(state);
-}
+export const getStatisticsPage = (state: AppState) => getLocalState(state);
