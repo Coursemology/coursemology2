@@ -15,10 +15,7 @@ import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import {
-  higherGradeBackgroundColorClassName,
-  lowerGradeBackgroundColorClassName,
-} from './ColorGradationLevel';
+import { getClassNameForMarkCell } from './ColorGradationLevel';
 import { getStatisticsPage } from './selectors';
 
 interface Props {
@@ -86,19 +83,9 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { data } = props;
 
   const assessment = useAppSelector(getStatisticsPage).assessment;
-
-  // calculate the gradient of the color in each grade cell
-  // 1. we compute the distance between the grade and the mid-grade (half the maximum)
-  // 2. then, we compute the fraction of it -> range becomes [0,1]
-  // 3. then we convert it into range [0,3] so that the shades will become [100, 200, 300]
-  const calculateColorGradientLevel = (
-    grade: number,
-    halfMaxGrade: number,
-  ): number => {
-    return (
-      Math.round((Math.abs(grade - halfMaxGrade) / halfMaxGrade) * 5) * 100
-    );
-  };
+  const sortedSubmission = data.submissions.sort((datum1, datum2) =>
+    datum1.name.localeCompare(datum2.name),
+  );
 
   // the case where the grade is null is handled separately inside the column
   // (refer to the definition of answerColumns below)
@@ -110,15 +97,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       return null;
     }
 
-    const gradientLevel = calculateColorGradientLevel(grade, maxGrade / 2);
-    let className = '';
-
-    if (grade >= maxGrade / 2) {
-      className = `${higherGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`;
-    } else {
-      className = `${lowerGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`;
-    }
-
+    const className = getClassNameForMarkCell(grade, maxGrade);
     return (
       <div className={className}>
         <Box>{grade}</Box>
@@ -174,6 +153,9 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     },
   );
 
+  const jointGroupsName = (datum: SubmissionStats): string =>
+    datum.groups ? datum.groups.map((g) => g.name).join(', ') : '';
+
   const columns: ColumnTemplate<SubmissionStats>[] = [
     {
       of: 'name',
@@ -190,11 +172,9 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       sortable: true,
       searchable: true,
       searchProps: {
-        getValue: (datum) =>
-          datum.groups ? datum.groups.map((g) => g.name).join(', ') : '',
+        getValue: (datum) => jointGroupsName(datum),
       },
-      cell: (datum) =>
-        datum.groups ? datum.groups.map((g) => g.name).join(', ') : '',
+      cell: (datum) => jointGroupsName(datum),
       csvDownloadable: true,
     },
     {
@@ -265,7 +245,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       csvDownload={{
         filename: t(translations.filename, { assessment: assessment?.title }),
       }}
-      data={data.submissions}
+      data={sortedSubmission}
       getRowClassName={(datum): string =>
         `data_${datum.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
       }
