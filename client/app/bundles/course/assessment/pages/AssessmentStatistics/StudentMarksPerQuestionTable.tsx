@@ -12,11 +12,9 @@ import { workflowStates } from 'course/assessment/submission/constants';
 import Link from 'lib/components/core/Link';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
-import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { getClassNameForMarkCell } from './ColorGradationLevel';
-import { getStatisticsPage } from './selectors';
 
 interface Props {
   data: AssessmentMarksPerQuestionStats;
@@ -82,7 +80,6 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { courseId } = useParams();
   const { data } = props;
 
-  const assessment = useAppSelector(getStatisticsPage).assessment;
   const sortedSubmission = data.submissions.sort((datum1, datum2) =>
     datum1.name.localeCompare(datum2.name),
   );
@@ -243,7 +240,9 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     <Table
       columns={columns}
       csvDownload={{
-        filename: t(translations.filename, { assessment: assessment?.title }),
+        filename: t(translations.filename, {
+          assessment: data.assessmentTitle,
+        }),
       }}
       data={sortedSubmission}
       getRowClassName={(datum): string =>
