@@ -16,6 +16,7 @@ import Answer from './Answer';
 import AnswerHeader from './AnswerHeader';
 import { AnswerPropsMap } from './types';
 import { QuestionHistory } from '../../reducers/history/types';
+import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
 
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number;
@@ -61,6 +62,12 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     const answer = getValues()[saveAnswerId];
     const currentTime = Date.now();
     dispatch(updateClientVersion(saveAnswerId, currentTime));
+    dispatch(
+      updateAnswerFlagSavingStatus({
+        answer: { id: saveAnswerId },
+        savingStatus: 'None',
+      }),
+    );
     debouncedSaveAnswer(answer, saveAnswerId, currentTime);
   };
 
