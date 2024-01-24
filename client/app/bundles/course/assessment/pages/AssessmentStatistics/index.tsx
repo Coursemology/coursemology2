@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { Box, Tab, Tabs } from '@mui/material';
-import { tabsStyle } from 'theme/mui-style';
+import { Box, FormControlLabel, Switch, Tab, Tabs } from '@mui/material';
 
 import { fetchStatistics } from 'course/assessment/operations';
 import { SubmissionRecordShape } from 'course/assessment/types';
@@ -13,8 +12,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import DuplicationHistoryStatistics from './DuplicationHistoryStatistics';
 import GradeDistributionChart from './GradeDistributionChart';
 import { getStatisticsPage } from './selectors';
-import StatisticsTablePanel from './StatisticsTablePanel';
-import SubmissionBarChart from './SubmissionBarChart';
+import StudentMarksPerQuestionPage from './StudentMarksPerQuestionPage';
+import SubmissionStatusChart from './SubmissionStatusChart';
 import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
 
 const translations = defineMessages({
@@ -42,13 +41,9 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.duplicationHistory',
     defaultMessage: 'Duplication History',
   },
-  table: {
-    id: 'course.assessment.statistics.table',
-    defaultMessage: 'Table',
-  },
-  submissionStatus: {
-    id: 'course.assessment.statistics.submissionStatus',
-    defaultMessage: 'Submission Status',
+  marksPerQuestion: {
+    id: 'course.assessment.statistics.marksPerQuestion',
+    defaultMessage: 'Marks Per Question',
   },
   gradeDistribution: {
     id: 'course.assessment.statistics.gradeDistribution',
@@ -58,18 +53,25 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.submissionTimeAndGrade',
     defaultMessage: 'Submission Time and Grade',
   },
+  includePhantom: {
+    id: 'course.assessment.statistics.includePhantom',
+    defaultMessage: 'Include Phantom Student',
+  },
 });
 
 const AssessmentStatisticsPage: FC = () => {
   const { t } = useTranslation();
-  const [tabValue, setTabValue] = useState('table');
+  const [tabValue, setTabValue] = useState('marksPerQuestion');
+  const [includePhantom, setIncludePhantom] = useState(false);
+
   const { assessmentId } = useParams();
   const parsedAssessmentId = parseInt(assessmentId!, 10);
   const dispatch = useAppDispatch();
 
   const statisticsPage = useAppSelector(getStatisticsPage);
-  const submissions = statisticsPage.submissions as SubmissionRecordShape[];
-  const numStudents = statisticsPage.allStudents.length;
+  const numStudents = includePhantom
+    ? statisticsPage.allStudents.length
+    : statisticsPage.allStudents.filter((student) => !student.isPhantom).length;
 
   useEffect(() => {
     if (assessmentId) {
@@ -79,16 +81,25 @@ const AssessmentStatisticsPage: FC = () => {
     }
   }, [assessmentId]);
 
+  const submissions = statisticsPage.submissions as SubmissionRecordShape[];
+  const noPhantomStudentSubmissions = submissions.filter(
+    (submission) => !submission.courseUser.isPhantom,
+  );
+  const displayedSubmissions = includePhantom
+    ? submissions
+    : noPhantomStudentSubmissions;
+
   const tabComponentMapping = {
-    table: <StatisticsTablePanel />,
-    duplicationHistory: <DuplicationHistoryStatistics />,
-    submissionStatus: (
-      <SubmissionBarChart numStudents={numStudents} submissions={submissions} />
+    marksPerQuestion: (
+      <StudentMarksPerQuestionPage includePhantom={includePhantom} />
     ),
-    gradeDistribution: <GradeDistributionChart submissions={submissions} />,
+    gradeDistribution: (
+      <GradeDistributionChart submissions={displayedSubmissions} />
+    ),
     submissionTimeAndGrade: (
-      <SubmissionTimeAndGradeChart submissions={submissions} />
+      <SubmissionTimeAndGradeChart submissions={displayedSubmissions} />
     ),
+    duplicationHistory: <DuplicationHistoryStatistics />,
   };
 
   return (
@@ -101,33 +112,41 @@ const AssessmentStatisticsPage: FC = () => {
     >
       <>
         <Box className="max-w-full border-b border-divider">
+          <SubmissionStatusChart
+            numStudents={numStudents}
+            submissions={displayedSubmissions}
+          />
+          <FormControlLabel
+            className="mt-2"
+            control={
+              <Switch
+                checked={includePhantom}
+                className="toggle-phantom"
+                color="primary"
+                onChange={() => setIncludePhantom(!includePhantom)}
+              />
+            }
+            label={
+              <b>
+                <FormattedMessage {...translations.includePhantom} />
+              </b>
+            }
+            labelPlacement="end"
+          />
           <Tabs
+            className="sticky top-0 z-20 h-20 mt-2 bg-white border-only-b-neutral-200"
             onChange={(_, value): void => {
               setTabValue(value);
             }}
             scrollButtons="auto"
-            sx={tabsStyle}
-            TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
             value={tabValue}
             variant="scrollable"
           >
             <Tab
               className="min-h-12"
-              id="table"
-              label={t(translations.table)}
-              value="table"
-            />
-            <Tab
-              className="min-h-12"
-              id="duplicationHistory"
-              label={t(translations.duplicationHistory)}
-              value="duplicationHistory"
-            />
-            <Tab
-              className="min-h-12"
-              id="submissionStatus"
-              label={t(translations.submissionStatus)}
-              value="submissionStatus"
+              id="marksPerQuestion"
+              label={t(translations.marksPerQuestion)}
+              value="marksPerQuestion"
             />
             <Tab
               className="min-h-12"
@@ -140,6 +159,12 @@ const AssessmentStatisticsPage: FC = () => {
               id="submissionTimeAndGrade"
               label={t(translations.submissionTimeAndGrade)}
               value="submissionTimeAndGrade"
+            />
+            <Tab
+              className="min-h-12"
+              id="duplicationHistory"
+              label={t(translations.duplicationHistory)}
+              value="duplicationHistory"
             />
           </Tabs>
         </Box>
