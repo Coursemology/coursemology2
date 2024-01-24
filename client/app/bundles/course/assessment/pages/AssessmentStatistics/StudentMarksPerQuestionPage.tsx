@@ -8,7 +8,12 @@ import Preload from 'lib/components/wrappers/Preload';
 
 import StudentMarksPerQuestionTable from './StudentMarksPerQuestionTable';
 
-const StatisticsTablePanel: FC = () => {
+interface Props {
+  includePhantom: boolean;
+}
+
+const StudentMarksPerQuestionPage: FC<Props> = (props) => {
+  const { includePhantom } = props;
   const { assessmentId } = useParams();
 
   const fetchStudentMarks = (): Promise<AssessmentMarksPerQuestionStats> =>
@@ -17,10 +22,17 @@ const StatisticsTablePanel: FC = () => {
   return (
     <Preload render={<LoadingIndicator />} while={fetchStudentMarks}>
       {(data): JSX.Element => {
-        return <StudentMarksPerQuestionTable data={data} />;
+        const noPhantomStudentSubmissionsData = {
+          ...data,
+          submissions: data.submissions.filter((datum) => !datum.isPhantom),
+        };
+        const displayedData = includePhantom
+          ? data
+          : noPhantomStudentSubmissionsData;
+        return <StudentMarksPerQuestionTable data={displayedData} />;
       }}
     </Preload>
   );
 };
 
-export default StatisticsTablePanel;
+export default StudentMarksPerQuestionPage;
