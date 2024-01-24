@@ -9,7 +9,7 @@ import {
 import useTranslation from 'lib/hooks/useTranslation';
 
 import GradeDistributionChart from './GradeDistributionChart';
-import SubmissionBarChart from './SubmissionBarChart';
+import SubmissionStatusChart from './SubmissionStatusChart';
 import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
 
 const translations = defineMessages({
@@ -47,7 +47,7 @@ const StatisticsCharts: FC<Props> = (props) => {
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.submissionStatuses)}</CardTitle>
-          <SubmissionBarChart
+          <SubmissionStatusChart
             numStudents={allStudents.length}
             submissions={submissions}
           />
