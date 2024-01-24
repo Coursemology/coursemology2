@@ -48,8 +48,8 @@ export function processSubmissionsIntoChartData(submissions) {
       previousDisplayValue = sub.displayValue;
     }
     numSubmissions += 1;
-    if (sub.grade != null) {
-      totalGrade += sub.grade;
+    if (sub.totalGrade != null) {
+      totalGrade += sub.totalGrade;
       numGrades += 1;
     }
   });

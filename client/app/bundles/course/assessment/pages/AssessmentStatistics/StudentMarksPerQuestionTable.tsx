@@ -5,7 +5,7 @@ import { Box, Chip } from '@mui/material';
 import palette from 'theme/palette';
 import {
   AssessmentMarksPerQuestionStats,
-  SubmissionStats,
+  SubmissionMarksPerQuestionStats,
 } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
@@ -81,7 +81,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { data } = props;
 
   const sortedSubmission = data.submissions.sort((datum1, datum2) =>
-    datum1.name.localeCompare(datum2.name),
+    datum1.courseUser.name.localeCompare(datum2.courseUser.name),
   );
 
   // the case where the grade is null is handled separately inside the column
@@ -119,9 +119,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     return grade1 - grade2;
   };
 
-  const answerColumns: ColumnTemplate<SubmissionStats>[] = Array.from(
-    { length: data.questionCount },
-    (_, index) => {
+  const answerColumns: ColumnTemplate<SubmissionMarksPerQuestionStats>[] =
+    Array.from({ length: data.questionCount }, (_, index) => {
       return {
         searchProps: {
           getValue: (datum) => datum.answers?.[index]?.grade?.toString() ?? '',
@@ -147,19 +146,22 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           },
         },
       };
-    },
-  );
+    });
 
-  const jointGroupsName = (datum: SubmissionStats): string =>
+  const jointGroupsName = (datum: SubmissionMarksPerQuestionStats): string =>
     datum.groups ? datum.groups.map((g) => g.name).join(', ') : '';
 
-  const columns: ColumnTemplate<SubmissionStats>[] = [
+  const columns: ColumnTemplate<SubmissionMarksPerQuestionStats>[] = [
     {
-      of: 'name',
+      searchProps: {
+        getValue: (datum) => datum.courseUser.name,
+      },
       title: t(translations.name),
       sortable: true,
       cell: (datum) => (
-        <Link to={`/courses/${courseId}/users/${datum.id}`}>{datum.name}</Link>
+        <Link to={`/courses/${courseId}/users/${datum.courseUser.id}`}>
+          {datum.courseUser.name}
+        </Link>
       ),
       csvDownloadable: true,
     },
@@ -218,19 +220,21 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       csvDownloadable: true,
     },
     {
-      of: 'grader',
+      searchProps: {
+        getValue: (datum) => datum.grader?.name ?? '',
+      },
       title: t(translations.grader),
       sortable: true,
       searchable: true,
       cell: (datum): JSX.Element | string => {
-        if (datum.grader && datum.graderId !== 0) {
+        if (datum.grader && datum.grader.id !== 0) {
           return (
-            <Link to={`/courses/${courseId}/users/${datum.graderId}`}>
-              {datum.grader}
+            <Link to={`/courses/${courseId}/users/${datum.grader.id}`}>
+              {datum.grader.name}
             </Link>
           );
         }
-        return datum.grader ?? '';
+        return datum.grader?.name ?? '';
       },
       csvDownloadable: true,
     },
@@ -246,10 +250,10 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       }}
       data={sortedSubmission}
       getRowClassName={(datum): string =>
-        `data_${datum.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
+        `data_${datum.courseUser.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
       }
-      getRowEqualityData={(datum): SubmissionStats => datum}
-      getRowId={(datum): string => datum.id.toString()}
+      getRowEqualityData={(datum): SubmissionMarksPerQuestionStats => datum}
+      getRowId={(datum): string => datum.courseUser.id.toString()}
       indexing={{ indices: true }}
       pagination={{
         rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],

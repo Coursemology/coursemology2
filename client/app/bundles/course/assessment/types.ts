@@ -1,5 +1,6 @@
 import { WorkflowState } from 'types/course/assessment/submission/submission';
 import { CourseUserRoles } from 'types/course/courseUsers';
+import { SubmissionWithTimeInfo } from 'types/course/statistics/assessmentStatistics';
 
 export interface CourseUserShape {
   id: number;
@@ -8,12 +9,8 @@ export interface CourseUserShape {
   isPhantom: boolean;
 }
 
-export interface SubmissionRecordShape {
-  courseUser: CourseUserShape;
+export interface SubmissionRecordShape extends SubmissionWithTimeInfo {
   workflowState: WorkflowState;
-  submittedAt: string;
-  endAt: string;
-  grade: number;
   dayDifference: number;
 }
 

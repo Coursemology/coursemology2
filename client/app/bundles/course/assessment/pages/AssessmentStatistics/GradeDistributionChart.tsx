@@ -29,7 +29,8 @@ const GradeDistributionChart: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { submissions } = props;
 
-  const grades = submissions?.filter((s) => s.grade)?.map((s) => s.grade) ?? [];
+  const totalGrades =
+    submissions?.filter((s) => s.totalGrade)?.map((s) => s.totalGrade) ?? [];
   const data = {
     labels: [t(translations.yAxisLabel)],
     datasets: [
@@ -38,7 +39,7 @@ const GradeDistributionChart: FC<Props> = (props) => {
         backgroundColor: GREEN_CHART_BACKGROUND,
         borderColor: GREEN_CHART_BORDER,
         borderWidth: 1,
-        data: [grades],
+        data: [totalGrades],
       },
     ],
   };
