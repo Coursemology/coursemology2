@@ -1,5 +1,3 @@
-import { CourseUserRoles } from '../courseUsers';
-
 interface Assessment {
   id: number | string;
   title: string;
@@ -9,29 +7,30 @@ interface Assessment {
   url: string;
 }
 
-interface Submission {
-  courseUser: {
-    id: number | string;
-    name: string;
-    role: CourseUserRoles;
-    isPhantom: boolean;
-  };
-  submittedAt: string;
-  endAt: string;
-  grade: number;
+interface SubmissionInfo {
+  courseUser: StudentInfo;
+  totalGrade?: number | null;
 }
 
-interface Student {
+export interface SubmissionWithTimeInfo extends SubmissionInfo {
+  submittedAt: string;
+  endAt: string;
+}
+
+interface UserInfo {
   id: number | string;
   name: string;
-  role: CourseUserRoles;
+}
+
+interface StudentInfo extends UserInfo {
+  role: 'student';
   isPhantom: boolean;
 }
 
 export interface AssessmentStatistics {
   assessment: Assessment;
-  submissions: Submission[];
-  allStudents: Student[];
+  submissions: SubmissionWithTimeInfo[];
+  allStudents: StudentInfo[];
 }
 
 export interface AssessmentAncestor {
@@ -50,16 +49,9 @@ export interface AnswerGradeStats {
   maximumGrade: number;
 }
 
-export interface SubmissionStats {
-  id: number;
-  name: string;
-  role: string;
-  isPhantom: boolean;
-  grader?: string;
-  graderId?: number;
+export interface SubmissionMarksPerQuestionStats extends SubmissionInfo {
+  grader?: UserInfo;
   groups?: { name: string }[];
-  groupCategoryId?: number;
-  totalGrade?: number | null;
   workflowState?: string;
   answers?: AnswerGradeStats[];
 }
@@ -68,5 +60,5 @@ export interface AssessmentMarksPerQuestionStats {
   maximumGrade: number;
   questionCount: number;
   assessmentTitle: string;
-  submissions: SubmissionStats[];
+  submissions: SubmissionMarksPerQuestionStats[];
 }

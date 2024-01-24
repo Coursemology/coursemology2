@@ -3,10 +3,12 @@ json.questionCount @question_order_hash.size
 json.maximumGrade @question_maximum_grade_hash.values.sum
 json.assessmentTitle @assessment.title
 json.submissions @student_submissions_hash.each do |course_user, (submission, answers)|
-  json.id course_user.id
-  json.name course_user.name
-  json.role course_user.role
-  json.isPhantom course_user.phantom?
+  json.courseUser do
+    json.id course_user.id
+    json.name course_user.name
+    json.role course_user.role
+    json.isPhantom course_user.phantom?
+  end
 
   json.groups course_user.groups do |group|
     json.name group.name
@@ -19,8 +21,10 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
     if submission.workflow_state == 'published' && submission.grader_ids
       # the graders are all the same regardless of question, so we just pick the first one
       grader = @course_users_hash[submission.grader_ids.first]
-      json.graderId grader&.id || 0
-      json.grader grader&.name || 'System'
+      json.grader do
+        json.id grader&.id || 0
+        json.name grader&.name || 'System'
+      end
     end
 
     json.answers answers.each do |answer|

@@ -24,7 +24,9 @@ const StudentMarksPerQuestionPage: FC<Props> = (props) => {
       {(data): JSX.Element => {
         const noPhantomStudentSubmissionsData = {
           ...data,
-          submissions: data.submissions.filter((datum) => !datum.isPhantom),
+          submissions: data.submissions.filter(
+            (datum) => !datum.courseUser.isPhantom,
+          ),
         };
         const displayedData = includePhantom
           ? data

@@ -4,10 +4,10 @@ export const processCourseUser = (courseUser) => ({
 });
 
 export const processSubmission = (submission) => {
-  const grade =
-    submission.grade != null && typeof submission.grade === 'string'
-      ? parseFloat(submission.grade)
-      : submission.grade;
+  const totalGrade =
+    submission.totalGrade != null
+      ? parseFloat(submission.totalGrade)
+      : submission.totalGrade;
   const submittedAt =
     submission.submittedAt != null
       ? new Date(submission.submittedAt)
@@ -21,7 +21,7 @@ export const processSubmission = (submission) => {
 
   return {
     ...submission,
-    grade,
+    totalGrade,
     submittedAt,
     endAt,
     dayDifference,
