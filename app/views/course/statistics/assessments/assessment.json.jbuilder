@@ -19,7 +19,7 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, en
   json.workflowState submission.workflow_state
   json.submittedAt submission.submitted_at&.iso8601
   json.endAt end_at&.iso8601
-  json.grade submission.grade
+  json.totalGrade submission.grade
 end
 
 json.allStudents @all_students.each do |student|
