@@ -344,7 +344,7 @@ GEM
     parallel (1.24.0)
     parallel_tests (4.4.0)
       parallel
-    parser (3.3.0.4)
+    parser (3.3.0.5)
       ast (~> 2.4.1)
       racc
     pg (1.5.4)
@@ -461,7 +461,7 @@ GEM
     rspec-support (3.11.1)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.60.1)
+    rubocop (1.60.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
