@@ -42,4 +42,7 @@ en:
     multiple_reference_timelines:
       name: 'Multiple Reference Timelines'
     monitoring:
-      name: 'Monitoring'
+      name: 'Heartbeat Monitoring for Exams'
+    stories:
+      name: 'Stories'
+

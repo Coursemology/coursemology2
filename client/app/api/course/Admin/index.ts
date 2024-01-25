@@ -11,6 +11,7 @@ import LessonPlanSettingsAPI from './LessonPlan';
 import MaterialsAdminAPI from './Materials';
 import NotificationsSettingsAPI from './Notifications';
 import SidebarAPI from './Sidebar';
+import StoriesAdminAPI from './Stories';
 import VideosAdminAPI from './Videos';
 
 const AdminAPI = {
@@ -28,6 +29,7 @@ const AdminAPI = {
   videos: new VideosAdminAPI(),
   notifications: new NotificationsSettingsAPI(),
   codaveri: new CodaveriAdminAPI(),
+  stories: new StoriesAdminAPI(),
 };
 
 Object.freeze(AdminAPI);

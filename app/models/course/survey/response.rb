@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Survey::Response < ApplicationRecord
   include Course::Survey::Response::TodoConcern
+  include Course::Survey::Response::GenieTaskCompletionConcern
 
   acts_as_experience_points_record
 

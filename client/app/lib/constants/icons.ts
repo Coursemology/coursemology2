@@ -1,4 +1,6 @@
 import {
+  Assistant,
+  AssistantOutlined,
   Book,
   BookOutlined,
   Campaign,
@@ -79,6 +81,7 @@ export const COURSE_COMPONENT_ICONS = {
   settings: { outlined: SettingsOutlined, filled: Settings },
   home: { outlined: HomeOutlined, filled: Home },
   map: { outlined: MapOutlined, filled: MapIcon },
+  stories: { outlined: AssistantOutlined, filled: Assistant },
 } satisfies Record<string, IconTuple>;
 
 export type CourseComponentIconName = keyof typeof COURSE_COMPONENT_ICONS;

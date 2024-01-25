@@ -2,6 +2,7 @@
 class Course::LessonPlan::Item < ApplicationRecord
   include Course::LessonPlan::ItemTodoConcern
   include Course::SanitizeDescriptionConcern
+  include Course::LessonPlan::Item::GeniePushConcern
 
   has_many :personal_times,
            foreign_key: :lesson_plan_item_id, class_name: Course::PersonalTime.name,

@@ -2,6 +2,7 @@
 module Course::Assessment::Submission::WorkflowEventConcern
   extend ActiveSupport::Concern
   include Course::LessonPlan::PersonalizationConcern
+  include Course::Assessment::Submission::GenieTaskCompletionConcern
 
   included do
     before_validation :assign_experience_points, if: :workflow_state_changed?

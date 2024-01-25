@@ -22,6 +22,7 @@ import MaterialsAPI from './Materials';
 import PersonalTimesAPI from './PersonalTimes';
 import ReferenceTimelinesAPI from './ReferenceTimelines';
 import StatisticsAPI from './Statistics';
+import StoryAPI from './Story';
 import SurveyAPI from './Survey';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
 import UserInvitationsAPI from './UserInvitations';
@@ -62,6 +63,7 @@ const CourseAPI = {
   videoSubmissions: new VideoSubmissionsAPI(),
   userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
   userNotifications: new UserNotificationsAPI(),
+  stories: StoryAPI,
 };
 
 Object.freeze(CourseAPI);
