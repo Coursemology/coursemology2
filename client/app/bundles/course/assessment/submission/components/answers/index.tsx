@@ -28,6 +28,18 @@ interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   showMcqMrqSolution: boolean;
 }
 
+const DebounceDelayMap = {
+  MultipleChoice: FIELD_LONG_DEBOUNCE_DELAY_MS,
+  MultipleResponse: FIELD_LONG_DEBOUNCE_DELAY_MS,
+  Programming: FIELD_LONG_DEBOUNCE_DELAY_MS,
+  TextResponse: FIELD_LONG_DEBOUNCE_DELAY_MS,
+  FileUpload: 0,
+  Comprehension: FIELD_LONG_DEBOUNCE_DELAY_MS,
+  VoiceResponse: 0,
+  ForumPostResponse: FIELD_LONG_DEBOUNCE_DELAY_MS,
+  Scribing: 0,
+};
+
 const SubmissionAnswer = <T extends keyof typeof QuestionType>(
   props: SubmissionAnswerProps<T>,
 ): JSX.Element => {
@@ -54,7 +66,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
 
   const debouncedSaveAnswer = useDebounce(
     handleSaveAnswer,
-    questionType === 'VoiceResponse' ? 0 : FIELD_LONG_DEBOUNCE_DELAY_MS,
+    DebounceDelayMap[questionType],
     [],
   );
 
