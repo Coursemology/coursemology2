@@ -10,6 +10,7 @@ import {
 
 import { workflowStates } from 'course/assessment/submission/constants';
 import Link from 'lib/components/core/Link';
+import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -80,9 +81,15 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { courseId } = useParams();
   const { data } = props;
 
-  const sortedSubmission = data.submissions.sort((datum1, datum2) =>
-    datum1.courseUser.name.localeCompare(datum2.courseUser.name),
-  );
+  const sortedSubmission = data.submissions
+    .sort((datum1, datum2) =>
+      datum1.courseUser.name.localeCompare(datum2.courseUser.name),
+    )
+    .sort(
+      (datum1, datum2) =>
+        Number(datum1.courseUser.isPhantom) -
+        Number(datum2.courseUser.isPhantom),
+    );
 
   // the case where the grade is null is handled separately inside the column
   // (refer to the definition of answerColumns below)
@@ -159,9 +166,14 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       title: t(translations.name),
       sortable: true,
       cell: (datum) => (
-        <Link to={`/courses/${courseId}/users/${datum.courseUser.id}`}>
-          {datum.courseUser.name}
-        </Link>
+        <div className="flex grow items-center">
+          <Link to={`/courses/${courseId}/users/${datum.courseUser.id}`}>
+            {datum.courseUser.name}
+          </Link>
+          {datum.courseUser.isPhantom && (
+            <GhostIcon className="ml-2" fontSize="small" />
+          )}
+        </div>
       ),
       csvDownloadable: true,
     },

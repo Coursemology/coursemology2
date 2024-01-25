@@ -34,13 +34,17 @@ const translations = defineMessages({
 
 interface Props {
   submissions: SubmissionRecordShape[];
+  includePhantom: boolean;
 }
 
 const SubmissionTimeAndGradeChart: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { submissions } = props;
+  const { submissions, includePhantom } = props;
+  const includedSubmissions = includePhantom
+    ? submissions
+    : submissions.filter((s) => !s.courseUser.isPhantom);
   const { labels, lineData, barData } =
-    processSubmissionsIntoChartData(submissions);
+    processSubmissionsIntoChartData(includedSubmissions);
 
   const data = {
     labels,

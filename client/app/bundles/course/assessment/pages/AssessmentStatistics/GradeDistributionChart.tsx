@@ -23,14 +23,21 @@ const translations = defineMessages({
 
 interface Props {
   submissions: SubmissionRecordShape[];
+  includePhantom: boolean;
 }
 
 const GradeDistributionChart: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { submissions } = props;
+  const { submissions, includePhantom } = props;
+
+  const includedSubmissions = includePhantom
+    ? submissions
+    : submissions.filter((s) => !s.courseUser.isPhantom);
 
   const totalGrades =
-    submissions?.filter((s) => s.totalGrade)?.map((s) => s.totalGrade) ?? [];
+    includedSubmissions
+      ?.filter((s) => s.totalGrade)
+      ?.map((s) => s.totalGrade) ?? [];
   const data = {
     labels: [t(translations.yAxisLabel)],
     datasets: [

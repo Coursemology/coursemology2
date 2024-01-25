@@ -2,7 +2,10 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import palette from 'theme/palette';
 
 import { workflowStates } from 'course/assessment/submission/constants';
-import { SubmissionRecordShape } from 'course/assessment/types';
+import {
+  CourseUserShape,
+  SubmissionRecordShape,
+} from 'course/assessment/types';
 import BarChart from 'lib/components/core/BarChart';
 
 const translations = defineMessages({
@@ -34,23 +37,31 @@ const translations = defineMessages({
 
 interface Props {
   submissions: SubmissionRecordShape[];
-  numStudents: number;
+  allStudents: CourseUserShape[];
+  includePhantom: boolean;
 }
 
 const SubmissionStatusChart = (props: Props): JSX.Element => {
-  const { submissions, numStudents } = props;
+  const { submissions, allStudents, includePhantom } = props;
 
-  const numUnstarted = numStudents - submissions.length;
-  const numAttempting = submissions.filter(
+  const numStudents = includePhantom
+    ? allStudents.length
+    : allStudents.filter((s) => !s.isPhantom).length;
+  const includedSubmissions = includePhantom
+    ? submissions
+    : submissions.filter((s) => !s.courseUser.isPhantom);
+
+  const numUnstarted = numStudents - includedSubmissions.length;
+  const numAttempting = includedSubmissions.filter(
     (s) => s.workflowState === workflowStates.Attempting,
   ).length;
-  const numSubmitted = submissions.filter(
+  const numSubmitted = includedSubmissions.filter(
     (s) => s.workflowState === workflowStates.Submitted,
   ).length;
-  const numGraded = submissions.filter(
+  const numGraded = includedSubmissions.filter(
     (s) => s.workflowState === workflowStates.Graded,
   ).length;
-  const numPublished = submissions.filter(
+  const numPublished = includedSubmissions.filter(
     (s) => s.workflowState === workflowStates.Published,
   ).length;
 

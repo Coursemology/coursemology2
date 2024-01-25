@@ -69,9 +69,7 @@ const AssessmentStatisticsPage: FC = () => {
   const dispatch = useAppDispatch();
 
   const statisticsPage = useAppSelector(getStatisticsPage);
-  const numStudents = includePhantom
-    ? statisticsPage.allStudents.length
-    : statisticsPage.allStudents.filter((student) => !student.isPhantom).length;
+  const allStudents = statisticsPage.allStudents;
 
   useEffect(() => {
     if (assessmentId) {
@@ -82,22 +80,22 @@ const AssessmentStatisticsPage: FC = () => {
   }, [assessmentId]);
 
   const submissions = statisticsPage.submissions as SubmissionRecordShape[];
-  const noPhantomStudentSubmissions = submissions.filter(
-    (submission) => !submission.courseUser.isPhantom,
-  );
-  const displayedSubmissions = includePhantom
-    ? submissions
-    : noPhantomStudentSubmissions;
 
   const tabComponentMapping = {
     marksPerQuestion: (
       <StudentMarksPerQuestionPage includePhantom={includePhantom} />
     ),
     gradeDistribution: (
-      <GradeDistributionChart submissions={displayedSubmissions} />
+      <GradeDistributionChart
+        includePhantom={includePhantom}
+        submissions={submissions}
+      />
     ),
     submissionTimeAndGrade: (
-      <SubmissionTimeAndGradeChart submissions={displayedSubmissions} />
+      <SubmissionTimeAndGradeChart
+        includePhantom={includePhantom}
+        submissions={submissions}
+      />
     ),
     duplicationHistory: <DuplicationHistoryStatistics />,
   };
@@ -113,8 +111,9 @@ const AssessmentStatisticsPage: FC = () => {
       <>
         <Box className="max-w-full border-b border-divider">
           <SubmissionStatusChart
-            numStudents={numStudents}
-            submissions={displayedSubmissions}
+            allStudents={allStudents}
+            includePhantom={includePhantom}
+            submissions={submissions}
           />
           <FormControlLabel
             className="mt-2"
