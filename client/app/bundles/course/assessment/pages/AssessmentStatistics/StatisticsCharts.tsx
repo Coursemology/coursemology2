@@ -48,7 +48,8 @@ const StatisticsCharts: FC<Props> = (props) => {
         <CardContent>
           <CardTitle>{t(translations.submissionStatuses)}</CardTitle>
           <SubmissionStatusChart
-            numStudents={allStudents.length}
+            allStudents={allStudents}
+            includePhantom
             submissions={submissions}
           />
         </CardContent>
@@ -56,13 +57,16 @@ const StatisticsCharts: FC<Props> = (props) => {
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.gradeDistribution)}</CardTitle>
-          <GradeDistributionChart submissions={submissions} />
+          <GradeDistributionChart includePhantom submissions={submissions} />
         </CardContent>
       </Card>
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.submissionTimeAndGrade)}</CardTitle>
-          <SubmissionTimeAndGradeChart submissions={submissions} />
+          <SubmissionTimeAndGradeChart
+            includePhantom
+            submissions={submissions}
+          />
         </CardContent>
       </Card>
       {/* TODO: Add section on hardest questions */}
