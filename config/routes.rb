@@ -101,7 +101,7 @@ Rails.application.routes.draw do
       post 'send_confirmation', on: :member
     end
 
-    resource :profile, only: [:edit, :update] do
+    resource :profile, only: [:show, :edit, :update] do
       get 'time_zones'
     end
   end
@@ -189,6 +189,9 @@ Rails.application.routes.draw do
 
         get 'lesson_plan' => 'lesson_plan_settings#edit'
         patch 'lesson_plan' => 'lesson_plan_settings#update'
+
+        get 'stories' => 'stories_settings#edit'
+        patch 'stories' => 'stories_settings#update'
 
         namespace 'assessments' do
           resources :categories, only: [:create, :destroy] do
@@ -457,6 +460,14 @@ Rails.application.routes.draw do
             post 'unsubmit', on: :member
           end
           resources :sections, only: [:create, :update, :destroy]
+        end
+      end
+
+      scope module: :story do
+        resources :stories, only: [:index, :show, :create, :update, :destroy] do
+          resources :rooms, only: [:index, :show, :create, :update, :destroy] do
+            patch 'sync', on: :member
+          end
         end
       end
 

@@ -81,3 +81,5 @@ Rails.application.configure do
     end
   end
 end
+
+Rails.application.routes.default_url_options[:host] = Rails.configuration.x.default_host

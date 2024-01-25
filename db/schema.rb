@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_15_074458) do
+ActiveRecord::Schema.define(version: 2024_01_19_185812) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -935,6 +935,30 @@ ActiveRecord::Schema.define(version: 2023_12_15_074458) do
     t.index ["course_id"], name: "index_course_settings_emails_on_course_id"
   end
 
+  create_table "course_stories", force: :cascade do |t|
+    t.string "provider_id", null: false
+    t.integer "satisfiability_type", default: 0
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "fk__course_stories_creator_id"
+    t.index ["updater_id"], name: "fk__course_stories_updater_id"
+  end
+
+  create_table "course_story_rooms", force: :cascade do |t|
+    t.bigint "story_id", null: false
+    t.datetime "completed_at"
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "provided_room_id"
+    t.index ["creator_id"], name: "fk__course_story_rooms_creator_id"
+    t.index ["story_id"], name: "index_course_story_rooms_on_story_id"
+    t.index ["updater_id"], name: "fk__course_story_rooms_updater_id"
+  end
+
   create_table "course_survey_answer_options", id: :serial, force: :cascade do |t|
     t.integer "answer_id", null: false
     t.integer "question_option_id", null: false
@@ -1255,6 +1279,12 @@ ActiveRecord::Schema.define(version: 2023_12_15_074458) do
     t.index ["creator_id"], name: "fk__generic_announcements_creator_id"
     t.index ["instance_id"], name: "fk__generic_announcements_instance_id"
     t.index ["updater_id"], name: "fk__generic_announcements_updater_id"
+  end
+
+  create_table "genie_users", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "provided_user_id", null: false
+    t.index ["user_id"], name: "index_genie_users_on_user_id"
   end
 
   create_table "instance_user_invitations", force: :cascade do |t|
@@ -1587,6 +1617,11 @@ ActiveRecord::Schema.define(version: 2023_12_15_074458) do
   add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
   add_foreign_key "course_settings_emails", "course_assessment_categories"
   add_foreign_key "course_settings_emails", "courses"
+  add_foreign_key "course_stories", "users", column: "creator_id"
+  add_foreign_key "course_stories", "users", column: "updater_id"
+  add_foreign_key "course_story_rooms", "course_stories", column: "story_id"
+  add_foreign_key "course_story_rooms", "users", column: "creator_id"
+  add_foreign_key "course_story_rooms", "users", column: "updater_id"
   add_foreign_key "course_survey_answer_options", "course_survey_answers", column: "answer_id", name: "fk_course_survey_answer_options_answer_id"
   add_foreign_key "course_survey_answer_options", "course_survey_question_options", column: "question_option_id", name: "fk_course_survey_answer_options_question_option_id"
   add_foreign_key "course_survey_answers", "course_survey_questions", column: "question_id", name: "fk_course_survey_answers_question_id"
@@ -1648,6 +1683,7 @@ ActiveRecord::Schema.define(version: 2023_12_15_074458) do
   add_foreign_key "generic_announcements", "instances", name: "fk_generic_announcements_instance_id"
   add_foreign_key "generic_announcements", "users", column: "creator_id", name: "fk_generic_announcements_creator_id"
   add_foreign_key "generic_announcements", "users", column: "updater_id", name: "fk_generic_announcements_updater_id"
+  add_foreign_key "genie_users", "users"
   add_foreign_key "instance_user_role_requests", "instances", name: "fk_instance_user_role_requests_instance_id"
   add_foreign_key "instance_user_role_requests", "users", column: "confirmer_id"
   add_foreign_key "instance_user_role_requests", "users", column: "creator_id"

@@ -68,6 +68,7 @@ class Course < ApplicationRecord
   has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: Course::Survey.name
   has_many :videos, through: :lesson_plan_items, source: :actable, source_type: Course::Video.name
   has_many :video_tabs, class_name: Course::Video::Tab.name, inverse_of: :course, dependent: :destroy
+  has_many :stories, through: :lesson_plan_items, source: :actable, source_type: Course::Story.name
 
   has_many :reference_timelines, class_name: Course::ReferenceTimeline.name, inverse_of: :course, dependent: :destroy
   has_one :default_reference_timeline, -> { where(default: true) },

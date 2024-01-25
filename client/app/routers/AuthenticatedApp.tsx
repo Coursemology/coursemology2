@@ -107,6 +107,7 @@ import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/In
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
 import { achievementHandle } from 'course/achievement/handles';
+import StoriesSettings from 'course/admin/pages/StoriesSettings';
 import assessmentAttemptLoader from 'course/assessment/attemptLoader';
 import {
   assessmentHandle,
@@ -119,6 +120,9 @@ import { forumHandle, forumTopicHandle } from 'course/forum/handles';
 import { folderHandle } from 'course/material/folders/handles';
 import materialLoader from 'course/material/materialLoader';
 import { videoWatchHistoryHandle } from 'course/statistics/handles';
+import { storyHandle } from 'course/story/handles';
+import RoomShow from 'course/story/pages/RoomShow';
+import StoriesIndex from 'course/story/pages/StoriesIndex';
 import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
 import {
   courseUserHandle,
@@ -361,6 +365,10 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             {
               path: 'codaveri',
               element: <CodaveriSettings />,
+            },
+            {
+              path: 'stories',
+              element: <StoriesSettings />,
             },
           ],
         },
@@ -676,6 +684,38 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                           element: <EditProgrammingQuestionPage />,
                         },
                       ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          path: 'stories',
+          handle: StoriesIndex.handle,
+          children: [
+            {
+              index: true,
+              element: <StoriesIndex />,
+            },
+            {
+              path: ':storyId',
+              handle: storyHandle,
+              children: [
+                {
+                  index: true,
+                },
+                {
+                  path: 'rooms',
+                  children: [
+                    {
+                      index: true,
+                    },
+                    {
+                      path: ':roomId',
+                      handle: RoomShow.handle,
+                      element: <RoomShow />,
                     },
                   ],
                 },
