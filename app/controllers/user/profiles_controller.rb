@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 class User::ProfilesController < ApplicationController
+  accessible_in_oauth_scopes :read, only: [:show]
+
+  def show
+  end
+
   def edit
   end
 
