@@ -169,7 +169,6 @@ commands:
   setup_docker_layer_cache:
     steps:
       - setup_remote_docker:
-          version: 20.10.18
           docker_layer_caching: true
 
   # Install Ghostscript so `identify` in ImageMagick works with PDF files.
