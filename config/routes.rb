@@ -101,7 +101,7 @@ Rails.application.routes.draw do
       post 'send_confirmation', on: :member
     end
 
-    resource :profile, only: [:edit, :update] do
+    resource :profile, only: [:show, :edit, :update] do
       get 'time_zones'
     end
   end
