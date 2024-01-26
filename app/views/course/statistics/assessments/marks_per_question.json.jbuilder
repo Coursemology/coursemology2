@@ -25,12 +25,12 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
         json.id grader&.id || 0
         json.name grader&.name || 'System'
       end
-    end
 
-    json.answers answers.each do |answer|
-      json.id answer.id
-      json.grade answer.grade
-      json.maximumGrade @question_maximum_grade_hash[answer.question_id]
+      json.answers answers.each do |answer|
+        json.id answer.id
+        json.grade answer.grade
+        json.maximumGrade @question_maximum_grade_hash[answer.question_id]
+      end
     end
   end
 end
