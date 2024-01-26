@@ -23,9 +23,10 @@ module ApplicationFormattersHelper
   # Return the given user's image url.
   #
   # @param [User] user The user to display
+  # @param [Boolean] url Whether to return a URL or path
   # @return [String] A url for the image.
-  def user_image(user)
-    image_path(user.profile_photo.medium.url) if user&.profile_photo&.medium&.url
+  def user_image(user, url: false)
+    send("image_#{url ? 'url' : 'path'}", user.profile_photo.medium.url) if user&.profile_photo&.medium&.url
   end
 
   # Links to the given User.
