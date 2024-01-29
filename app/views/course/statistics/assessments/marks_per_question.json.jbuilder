@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 json.questionCount @question_order_hash.size
-json.maximumGrade @question_maximum_grade_hash.values.sum
-json.assessmentTitle @assessment.title
 json.submissions @student_submissions_hash.each do |course_user, (submission, answers)|
   json.courseUser do
     json.id course_user.id
