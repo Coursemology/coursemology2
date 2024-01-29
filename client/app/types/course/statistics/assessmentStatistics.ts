@@ -44,6 +44,7 @@ export interface AttemptInfo {
 }
 
 interface SubmissionInfo {
+  id: number;
   courseUser: StudentInfo;
   workflowState?: WorkflowState;
   submittedAt?: string;
@@ -95,7 +96,26 @@ interface QuestionBasicDetails<T extends keyof typeof QuestionType> {
 export type QuestionDetails<T extends keyof typeof QuestionType> =
   QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
 
+export type AllAnswerDetails<T extends keyof typeof QuestionType> =
+  AnswerDetailsMap[T] & { createdAt: Date; currentAnswer: boolean };
+
 export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
   question: QuestionDetails<T>;
   answer: AnswerDetailsMap[T];
+  allAnswers: AllAnswerDetails<T>[];
+  submissionQuestionId: number;
+}
+
+export interface QuestionAnswerDisplayDetails<
+  T extends keyof typeof QuestionType,
+> {
+  question: QuestionDetails<T>;
+  answer: AnswerDetailsMap[T];
+}
+
+export interface QuestionAllAnswerDisplayDetails<
+  T extends keyof typeof QuestionType,
+> {
+  question: QuestionDetails<T>;
+  allAnswers: AllAnswerDetails<T>[];
 }
