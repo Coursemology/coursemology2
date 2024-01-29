@@ -2,24 +2,26 @@ zh:
   helpers:
     buttons:
       assessment:
-        new: "新测验"
+        new: '新测验'
   course:
     assessment:
       assessments:
-        invalid_questions_order: "测验问题的权重无效"
+        invalid_questions_order: '测验问题的权重无效'
         sidebar_title: :'course.assessment.assessments.index.header'
         index:
-          header: "测验"
+          header: '测验'
         show:
-          public_test: "公开"
-          private_test: "私有"
-          evaluation_test: "评估"
+          public_test: '公开'
+          private_test: '私有'
+          evaluation_test: '评估'
         new:
-          header: "新测验"
+          header: '新测验'
         edit:
-          header: "编辑测验"
+          header: '编辑测验'
         assessment_question_bundle_buttons:
-          question_groups: "组"
-          question_bundles: "绑定项"
-          question_bundle_questions: "绑定问题"
-          question_bundle_assignments: "绑定作业"
+          question_groups: '组'
+          question_bundles: '绑定项'
+          question_bundle_questions: '绑定问题'
+          question_bundle_assignments: '绑定作业'
+        unblock_monitor:
+          invalid_password: '您输入的密码无效。 请再试一次。'

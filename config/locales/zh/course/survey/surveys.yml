@@ -2,9 +2,9 @@ zh:
   course:
     surveys:
       survey_download_service:
-        created_at: "创建时间戳"
-        updated_at: "上一次更新时间戳"
-        course_user_id: "课程用户ID"
-        name: "姓名"
-        role: "身份变更"
-        unknown_question_type: "未知问题类型"
+        created_at: '创建时间戳'
+        updated_at: '上一次更新时间戳'
+        course_user_id: '课程用户ID'
+        name: '姓名'
+        role: '身份变更'
+        unknown_question_type: '未知问题类型'

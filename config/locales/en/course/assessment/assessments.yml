@@ -2,26 +2,26 @@ en:
   helpers:
     buttons:
       assessment:
-        new: "New Assessment"
+        new: 'New Assessment'
   course:
     assessment:
       assessments:
-        invalid_questions_order: "Invalid ordering for assessment questions"
+        invalid_questions_order: 'Invalid ordering for assessment questions'
         sidebar_title: :'course.assessment.assessments.index.header'
         index:
-          header: "Assessments"
+          header: 'Assessments'
         show:
-          public_test: "Public"
-          private_test: "Private"
-          evaluation_test: "Evaluation"
+          public_test: 'Public'
+          private_test: 'Private'
+          evaluation_test: 'Evaluation'
         new:
-          header: "New Assessment"
+          header: 'New Assessment'
         edit:
-          header: "Edit Assessment"
+          header: 'Edit Assessment'
         assessment_question_bundle_buttons:
-          question_groups: "Groups"
-          question_bundles: "Bundles"
-          question_bundle_questions: "Bundle Questions"
-          question_bundle_assignments: "Bundle Assignments"
+          question_groups: 'Groups'
+          question_bundles: 'Bundles'
+          question_bundle_questions: 'Bundle Questions'
+          question_bundle_assignments: 'Bundle Assignments'
         unblock_monitor:
-          invalid_password: "The password you entered was invalid. Please try again."
+          invalid_password: 'The password you entered was invalid. Please try again.'

@@ -15,5 +15,6 @@ zh:
             submission:
               attemptable_state: '必须处于练习状态'
             grade:
+              no_blank_grade: '如果之前已评分，则成绩不能为空'
               consistent_grade: '不能超过问题分数上限'
               non_negative_grade: '不能为负'

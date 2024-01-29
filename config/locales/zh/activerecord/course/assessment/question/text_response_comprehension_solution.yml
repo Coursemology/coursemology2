@@ -5,7 +5,7 @@ zh:
         course/assessment/question/text_response_comprehension_solution:
           attributes:
             solution_lemma:
-              solution_lemma_empty: "无法生成任何词条形式：请检查你的拼写。"
+              solution_lemma_empty: '无法生成任何词条形式：请检查你的拼写。'
             information:
-              information_empty: "关键字不能为空"
+              information_empty: '关键字不能为空'
 

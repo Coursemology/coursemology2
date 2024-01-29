@@ -4,5 +4,9 @@ zh:
       models:
         course/monitoring/monitor:
           attributes:
+            enabled:
+              must_be_password_protected: '评估必须受密码保护才能启用'
             max_interval_ms:
               greater_than_min_interval: '必须大于最小间隔'
+            blocks:
+              must_have_secret_and_session_protection: '必须启用秘密和会话保护'
