@@ -1339,10 +1339,27 @@
     "@formatjs/icu-skeleton-parser" "1.7.2"
     tslib "^2.4.0"
 
+"@formatjs/icu-messageformat-parser@2.7.6":
+  version "2.7.6"
+  resolved "https://registry.yarnpkg.com/@formatjs/icu-messageformat-parser/-/icu-messageformat-parser-2.7.6.tgz#3d69806de056d2919d53dad895a5ff4851e4e9ff"
+  integrity sha512-etVau26po9+eewJKYoiBKP6743I1br0/Ie00Pb/S/PtmYfmjTcOn2YCh2yNkSZI12h6Rg+BOgQYborXk46BvkA==
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.18.2"
+    "@formatjs/icu-skeleton-parser" "1.8.0"
+    tslib "^2.4.0"
+
 "@formatjs/icu-skeleton-parser@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.7.2.tgz#ffbdd535c33249635ad0e54a34813194287a1567"
   integrity sha512-nlIXVv280bjGW3ail5Np1+xgGKBnMhwQQIivgbk9xX0af8ESQO+y2VW9TOY7mCrs3WH786uVpZlLimXAlXH7SA==
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.18.2"
+    tslib "^2.4.0"
+
+"@formatjs/icu-skeleton-parser@1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.8.0.tgz#5f3d3a620c687d6f8c180d80d1241e8f213acf79"
+  integrity sha512-QWLAYvM0n8hv7Nq5BEs4LKIjevpVpbGLAJgOaYzg9wABEoX1j0JO1q2/jVkO6CVlq0dbsxZCngS5aXbysYueqA==
   dependencies:
     "@formatjs/ecma402-abstract" "1.18.2"
     tslib "^2.4.0"
@@ -1385,12 +1402,12 @@
     intl-messageformat "10.5.10"
     tslib "^2.4.0"
 
-"@formatjs/ts-transformer@3.13.11":
-  version "3.13.11"
-  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-3.13.11.tgz#c3603ff59c4b3e54535a26b8e204f6ccdacd5a91"
-  integrity sha512-qOAGGUQC7GSMMaAFy2MAlC8REM58lUNi8W+VlRb57cDUpge46x2hP33Mzu5N1xmm6OCqDQTRXws5jEOcRI3C8Q==
+"@formatjs/ts-transformer@3.13.12":
+  version "3.13.12"
+  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-3.13.12.tgz#5984b7b92492580bfd09deb09a5b57589b757c5f"
+  integrity sha512-uf1+DgbsCrzHAg7uIf0QlzpIkHYxRSRig5iJa9FaoUNIDZzNEE2oW/uLLLq7I9Z2FLIPhbmgq8hbW40FoQv+Fg==
   dependencies:
-    "@formatjs/icu-messageformat-parser" "2.7.5"
+    "@formatjs/icu-messageformat-parser" "2.7.6"
     "@types/json-stable-stringify" "^1.0.32"
     "@types/node" "14 || 16 || 17"
     chalk "^4.0.0"
@@ -3385,18 +3402,18 @@ babel-loader@^9.0.0:
     find-cache-dir "^3.3.2"
     schema-utils "^4.0.0"
 
-babel-plugin-formatjs@^10.5.12:
-  version "10.5.12"
-  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.5.12.tgz#d7af7e1d224bc5fc1581371d3a9b55da38fdacfa"
-  integrity sha512-pOkJoD5nURdes/6NpL5JeEoF8Nz18yAUmbjhc0jyWtK26QDPUDLsXk2kas5jbu5TFMFI+GFUQ9cSVCewbuvC7g==
+babel-plugin-formatjs@^10.5.13:
+  version "10.5.13"
+  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.5.13.tgz#2856143aae4b7fb0376765e96053d79baadea2f1"
+  integrity sha512-0dtMhoa6q0P5lUHBphLd8/y+CRlh5IG3Rq+Wk64kOEDwUVZF8xq1qMSjC3iw1wH4tmP2qTzBL+Bz1xEjyBd/ew==
   dependencies:
     "@babel/core" "^7.10.4"
     "@babel/helper-plugin-utils" "^7.10.4"
     "@babel/plugin-syntax-jsx" "7"
     "@babel/traverse" "7"
     "@babel/types" "^7.12.11"
-    "@formatjs/icu-messageformat-parser" "2.7.5"
-    "@formatjs/ts-transformer" "3.13.11"
+    "@formatjs/icu-messageformat-parser" "2.7.6"
+    "@formatjs/ts-transformer" "3.13.12"
     "@types/babel__core" "^7.1.7"
     "@types/babel__helper-plugin-utils" "^7.10.0"
     "@types/babel__traverse" "^7.1.7"
