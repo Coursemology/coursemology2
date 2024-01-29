@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
 import palette from 'theme/palette';
-import { SubmissionMarksPerQuestionStats } from 'types/course/statistics/assessmentStatistics';
+import { SubmissionDetailsStats } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
 import Link from 'lib/components/core/Link';
@@ -15,10 +15,6 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { getClassNameForMarkCell } from './ColorGradationLevel';
 import { getAssessmentStatistics } from './selectors';
-
-interface Props {
-  includePhantom: boolean;
-}
 
 const translations = defineMessages({
   name: {
@@ -66,6 +62,10 @@ const translations = defineMessages({
     defaultMessage: 'Question-level Statistics for {assessment}',
   },
 });
+
+interface Props {
+  includePhantom: boolean;
+}
 
 const statusTranslations = {
   attempting: 'Attempting',
@@ -130,8 +130,9 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     return grade1 - grade2;
   };
 
-  const answerColumns: ColumnTemplate<SubmissionMarksPerQuestionStats>[] =
-    Array.from({ length: assessment?.questionCount ?? 0 }, (_, index) => {
+  const answerColumns: ColumnTemplate<SubmissionDetailsStats>[] = Array.from(
+    { length: assessment?.questionCount ?? 0 },
+    (_, index) => {
       return {
         searchProps: {
           getValue: (datum) => datum.answers?.[index]?.grade?.toString() ?? '',
@@ -157,12 +158,13 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           },
         },
       };
-    });
+    },
+  );
 
-  const jointGroupsName = (datum: SubmissionMarksPerQuestionStats): string =>
+  const jointGroupsName = (datum: SubmissionDetailsStats): string =>
     datum.groups ? datum.groups.map((g) => g.name).join(', ') : '';
 
-  const columns: ColumnTemplate<SubmissionMarksPerQuestionStats>[] = [
+  const columns: ColumnTemplate<SubmissionDetailsStats>[] = [
     {
       searchProps: {
         getValue: (datum) => datum.courseUser.name,
@@ -271,7 +273,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       getRowClassName={(datum): string =>
         `data_${datum.courseUser.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
       }
-      getRowEqualityData={(datum): SubmissionMarksPerQuestionStats => datum}
+      getRowEqualityData={(datum): SubmissionDetailsStats => datum}
       getRowId={(datum): string => datum.courseUser.id.toString()}
       indexing={{ indices: true }}
       pagination={{

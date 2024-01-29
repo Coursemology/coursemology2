@@ -1,5 +1,4 @@
 import { Operation } from 'store';
-import { AssessmentMarksPerQuestionStats } from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
@@ -7,7 +6,6 @@ import { setNotification } from 'lib/actions';
 import actionTypes from '../constants';
 import { statisticsActions as actions } from '../reducers/statistics';
 import {
-  processAncestor,
   processAssessment,
   processCourseUser,
   processSubmission,
@@ -55,27 +53,6 @@ export function fetchAssessmentStatistics(assessmentId: number): Operation {
   };
 }
 
-export function fetchAncestors(
-  assessmentId: number,
-  failureMessage: string,
-): Operation {
-  return async (dispatch) => {
-    dispatch({ type: actionTypes.FETCH_ANCESTORS_REQUEST });
-    return CourseAPI.statistics.assessment
-      .fetchAncestors(assessmentId)
-      .then((response) => {
-        dispatch({
-          type: actionTypes.FETCH_ANCESTORS_SUCCESS,
-          ancestors: response.data.assessments.map(processAncestor),
-        });
-      })
-      .catch(() => {
-        dispatch({ type: actionTypes.FETCH_ANCESTORS_FAILURE });
-        dispatch(setNotification(failureMessage));
-      });
-  };
-}
-
 export function fetchAncestorStatistics(
   ancestorId: number,
   failureMessage: string,
@@ -98,13 +75,3 @@ export function fetchAncestorStatistics(
       });
   };
 }
-
-export const fetchStudentMarkPerQuestion = async (
-  assessmentId: string | number,
-): Promise<AssessmentMarksPerQuestionStats> => {
-  const response =
-    await CourseAPI.statistics.assessment.fetchMarksPerQuestionStats(
-      assessmentId,
-    );
-  return response.data;
-};
