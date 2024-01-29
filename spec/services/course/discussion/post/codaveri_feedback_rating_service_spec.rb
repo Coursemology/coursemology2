@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Discussion::Post::CodaveriFeedbackRatingService do
-  let!(:instance) { create(:instance, :with_codaveri_component_enabled) }
+  let!(:instance) { create(:instance) }
   let!(:stubbed_connection) do
     Course::Discussion::Post::StubbedCodaveriFeedbackRatingService.connect_to_codaveri
   end

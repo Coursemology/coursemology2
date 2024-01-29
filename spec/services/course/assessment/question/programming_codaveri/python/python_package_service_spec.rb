@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageService do
-  let!(:instance) { create(:instance, :with_codaveri_component_enabled) }
+  let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :with_codaveri_component_enabled) }
+    let(:course) { create(:course) }
     let(:assessment) { create(:assessment, :with_programming_question, course: course) }
     let(:question) do
       create(:course_assessment_question_programming, template_file_count: 0, package_type: :zip_upload,

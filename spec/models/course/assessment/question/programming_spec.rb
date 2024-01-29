@@ -301,7 +301,7 @@ RSpec.describe Course::Assessment::Question::Programming do
 
       context 'when the codaveri component is disabled' do
         it 'returns correct validation' do
-          # assessment.course.set_component_enabled_boolean!(Course::CodaveriComponent, false)
+          assessment.course.set_component_enabled_boolean!(:course_codaveri_component, false)
           expect(subject).to_not be_valid
           expect(subject.errors.messages[:base]).to include('Codaveri component is deactivated.'\
                                                             'Activate it in the course setting or '\

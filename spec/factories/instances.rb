@@ -14,11 +14,5 @@ FactoryBot.define do
         instance.set_component_enabled_boolean(:course_learning_map_component, true)
       end
     end
-
-    trait :with_codaveri_component_enabled do
-      after(:build) do |instance|
-        instance.set_component_enabled_boolean(:course_codaveri_component, true)
-      end
-    end
   end
 end

@@ -2,8 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
-  let(:instance_traits) { nil }
-  let!(:instance) { create(:instance, *instance_traits) }
+  let!(:instance) { create(:instance) }
   let(:time_limit) { 30.seconds }
 
   with_tenant(:instance) do
@@ -42,7 +41,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
     end
 
     context 'when the codaveri component is enabled' do
-      let(:course) { create(:course, *course_traits) }
+      let(:course) { create(:course) }
       let(:assessment) { create(:assessment, :with_programming_question, course: course) }
       let(:question) do
         create(:course_assessment_question_programming, template_file_count: 0, assessment: assessment,
@@ -54,9 +53,6 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
                  File.join(Rails.root, 'spec/fixtures/course/programming_question_template_codaveri.zip'),
                binary: true)
       end
-
-      let(:instance_traits) { :with_codaveri_component_enabled }
-      let(:course_traits) { :with_codaveri_component_enabled }
 
       before do
         Course::Assessment::StubbedProgrammingEvaluationService.class_eval do

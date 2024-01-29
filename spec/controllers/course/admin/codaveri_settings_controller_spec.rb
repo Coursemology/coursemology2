@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
-  let!(:instance) { create(:instance, :with_codaveri_component_enabled) }
+  let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:user) { create(:user) }
-    let(:course) { create(:course, :with_codaveri_component_enabled, creator: user) }
+    let(:course) { create(:course, creator: user) }
     before { sign_in(user) }
 
     describe '#edit' do
