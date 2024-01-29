@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.feature 'Course: Administration: Codaveri', js: true do
-  let!(:instance) { create(:instance, :with_codaveri_component_enabled) }
+  let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :with_codaveri_component_enabled) }
+    let(:course) { create(:course) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do

@@ -2,10 +2,10 @@
 require 'rails_helper'
 
 RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
-  let!(:instance) { create(:instance, :with_codaveri_component_enabled) }
+  let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
-    let!(:course) { create(:course, :with_codaveri_component_enabled) }
+    let!(:course) { create(:course) }
     let!(:assessment) { create(:assessment, course: course) }
     let!(:submission) { create(:submission, auto_grade: false, assessment: assessment, creator: course.creator) }
     let(:question) do

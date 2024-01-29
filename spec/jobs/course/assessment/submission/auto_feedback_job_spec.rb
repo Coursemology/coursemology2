@@ -5,7 +5,7 @@ RSpec.describe Course::Assessment::Submission::AutoFeedbackJob do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { Course::Assessment::Submission::AutoFeedbackJob }
-    let!(:course) { create(:course, :with_codaveri_component_enabled) }
+    let!(:course) { create(:course) }
     let!(:assessment) { create(:assessment, course: course) }
     let!(:submission) { create(:submission, auto_grade: false, assessment: assessment, creator: course.creator) }
     let(:question) do
