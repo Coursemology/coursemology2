@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { AssessmentMarksPerQuestionStats } from 'types/course/statistics/assessmentStatistics';
 
-import { fetchStudentMarkPerQuestion } from 'course/assessment/operations';
+import { fetchStudentMarkPerQuestion } from 'course/assessment/operations/statistics';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 

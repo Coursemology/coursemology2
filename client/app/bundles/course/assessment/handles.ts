@@ -3,7 +3,7 @@ import { getIdFromUnknown } from 'utilities';
 
 import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
 
-import { fetchAssessment, fetchAssessments } from './operations';
+import { fetchAssessment, fetchAssessments } from './operations/assessments';
 
 const getTabTitle = async (
   categoryId?: number,

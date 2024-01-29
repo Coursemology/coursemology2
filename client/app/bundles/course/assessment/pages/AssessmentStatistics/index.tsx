@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, FormControlLabel, Switch, Tab, Tabs } from '@mui/material';
 
-import { fetchStatistics } from 'course/assessment/operations';
+import { fetchStatistics } from 'course/assessment/operations/statistics';
 import { SubmissionRecordShape } from 'course/assessment/types';
 import Page from 'lib/components/core/layouts/Page';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';

@@ -10,7 +10,7 @@ import Page from 'lib/components/core/layouts/Page';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { unblockAssessment } from '../operations';
+import { unblockAssessment } from '../operations/assessments';
 import translations from '../translations';
 
 interface AssessmentBlockedByMonitorPageProps {
