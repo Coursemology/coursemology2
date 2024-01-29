@@ -60,10 +60,7 @@ export function submitAnswer(submissionId, answerId, rawAnswer, resetField) {
     dispatch(updateClientVersion(answerId, currentTime));
     dispatch({
       type: actionTypes.AUTOGRADE_REQUEST,
-      payload: {
-        questionId,
-        answer: { id: answerId, clientVersion: currentTime },
-      },
+      payload: { questionId },
     });
     dispatch(
       dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Saving),
@@ -224,7 +221,10 @@ export function generateFeedback(submissionId, answerId, questionId) {
 
 export function reevaluateAnswer(submissionId, answerId, questionId) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.REEVALUATE_REQUEST, questionId });
+    dispatch({
+      type: actionTypes.REEVALUATE_REQUEST,
+      payload: { questionId },
+    });
 
     return CourseAPI.assessment.submissions
       .reevaluateAnswer(submissionId, { answer_id: answerId })
@@ -250,8 +250,7 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
         } else {
           dispatch({
             type: actionTypes.REEVALUATE_SUCCESS,
-            payload: data,
-            questionId,
+            payload: { ...data, questionId },
           });
         }
       })
