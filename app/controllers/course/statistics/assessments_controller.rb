@@ -56,6 +56,17 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     end
   end
 
+  def fetch_all_ancestor_assessments
+    current_assessment = Course::Assessment.preload(:duplication_traceable).find(assessment_params[:id])
+    @ancestors = [current_assessment]
+    while current_assessment.duplication_traceable.present? && current_assessment.duplication_traceable.source_id.present?
+      current_assessment = current_assessment.duplication_traceable.source
+      break unless can?(:read_ancestor, current_assessment)
+
+      @ancestors.unshift(current_assessment)
+    end
+  end
+
   def create_question_related_hash
     @question_order_hash = @assessment.question_assessments.to_h do |q|
       [q.question_id, q.weight]
