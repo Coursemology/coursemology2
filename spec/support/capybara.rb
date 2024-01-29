@@ -146,6 +146,7 @@ module Capybara::TestGroupHelpers
     end
 
     def expect_forbidden
+      sleep 1 # wait for the page to load
       expect(page).to have_content("You don't have permission to access")
     end
 
