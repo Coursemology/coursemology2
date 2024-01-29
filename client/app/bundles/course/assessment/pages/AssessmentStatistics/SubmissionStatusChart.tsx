@@ -7,6 +7,9 @@ import {
   SubmissionRecordShape,
 } from 'course/assessment/types';
 import BarChart from 'lib/components/core/BarChart';
+import { useAppSelector } from 'lib/hooks/store';
+
+import { getAssessmentStatistics } from './selectors';
 
 const translations = defineMessages({
   datasetLabel: {
@@ -36,20 +39,26 @@ const translations = defineMessages({
 });
 
 interface Props {
-  submissions: SubmissionRecordShape[];
-  allStudents: CourseUserShape[];
+  ancestorSubmissions?: SubmissionRecordShape[];
+  ancestorAllStudents?: CourseUserShape[];
   includePhantom: boolean;
 }
 
 const SubmissionStatusChart = (props: Props): JSX.Element => {
-  const { submissions, allStudents, includePhantom } = props;
+  const { ancestorSubmissions, includePhantom, ancestorAllStudents } = props;
+  const statistics = useAppSelector(getAssessmentStatistics);
+
+  const submissions = statistics.submissions.slice();
+  const allStudents = statistics.allStudents.slice();
+
+  const nonNullSubmissions = submissions.filter((s) => s.submissionExists);
 
   const numStudents = includePhantom
     ? allStudents.length
     : allStudents.filter((s) => !s.isPhantom).length;
   const includedSubmissions = includePhantom
-    ? submissions
-    : submissions.filter((s) => !s.courseUser.isPhantom);
+    ? nonNullSubmissions
+    : nonNullSubmissions.filter((s) => !s.courseUser.isPhantom);
 
   const numUnstarted = numStudents - includedSubmissions.length;
   const numAttempting = includedSubmissions.filter(

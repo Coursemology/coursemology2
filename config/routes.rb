@@ -439,6 +439,7 @@ Rails.application.routes.draw do
         get 'staff' => 'aggregate#all_staff'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
         get 'assessment/:id/marks_per_question' => 'assessments#marks_per_question'
+        get 'assessment/:id/assessment_statistics' => 'assessments#assessment_statistics'
       end
 
       scope module: :video do

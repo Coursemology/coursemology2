@@ -1,9 +1,10 @@
 interface Assessment {
-  id: number | string;
+  id: number;
   title: string;
   startAt: string | null;
   endAt: string | null;
   maximumGrade: number;
+  questionCount?: number;
   url: string;
 }
 
@@ -13,8 +14,9 @@ interface SubmissionInfo {
 }
 
 export interface SubmissionWithTimeInfo extends SubmissionInfo {
-  submittedAt: string;
-  endAt: string;
+  submittedAt: Date;
+  endAt: Date;
+  dayDifference?: number;
 }
 
 interface UserInfo {
@@ -34,7 +36,7 @@ export interface AssessmentStatistics {
 }
 
 export interface AssessmentAncestor {
-  id: number | string;
+  id: number;
   title: string;
   courseTitle: string;
 }
@@ -56,7 +58,26 @@ export interface SubmissionMarksPerQuestionStats extends SubmissionInfo {
   answers?: AnswerGradeStats[];
 }
 
+export interface SubmissionDetailsStats extends SubmissionWithTimeInfo {
+  submissionExists: boolean;
+  grader?: UserInfo;
+  groups?: { name: string }[];
+  workflowState?: string;
+  answers?: AnswerGradeStats[];
+}
+
 export interface AssessmentMarksPerQuestionStats {
   questionCount: number;
   submissions: SubmissionMarksPerQuestionStats[];
+}
+
+export interface AssessmentStatisticsStats {
+  assessment: Assessment | null;
+  allStudents: StudentInfo[];
+  submissions: SubmissionDetailsStats[];
+  ancestors: AssessmentAncestor[];
+}
+
+export interface AssessmentStatisticsStore extends AssessmentStatisticsStats {
+  isLoading: boolean;
 }
