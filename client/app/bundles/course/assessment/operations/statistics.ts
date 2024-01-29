@@ -1,9 +1,6 @@
 import { AxiosError } from 'axios';
 import { dispatch } from 'store';
-import {
-  AncestorAssessmentStats,
-  MainAssessmentStats,
-} from 'types/course/statistics/assessmentStatistics';
+import { AncestorAssessmentStats } from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 
@@ -11,7 +8,7 @@ import { statisticsActions as actions } from '../reducers/statistics';
 
 export const fetchAssessmentStatistics = async (
   assessmentId: number,
-): Promise<MainAssessmentStats> => {
+): Promise<void> => {
   try {
     dispatch(actions.reset());
     const response =
@@ -24,7 +21,6 @@ export const fetchAssessmentStatistics = async (
         ancestors: data.ancestors,
       }),
     );
-    return data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
