@@ -1,5 +1,7 @@
+import { memo } from 'react';
 import { Tooltip } from 'react-tooltip';
 import { Typography } from '@mui/material';
+import { equal } from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 
 const styles = {
@@ -55,4 +57,4 @@ BarChart.propTypes = {
   ).isRequired,
 };
 
-export default BarChart;
+export default memo(BarChart, equal);

@@ -439,6 +439,7 @@ Rails.application.routes.draw do
         get 'assessment/:id' => 'assessments#assessment'
         get 'assessment/:id/ancestors' => 'assessments#ancestors'
         get 'assessment/:id/marks_per_question' => 'assessments#marks_per_question'
+        get 'assessment/:id/assessment_statistics' => 'assessments#assessment_statistics'
       end
 
       scope module: :video do

@@ -48,24 +48,27 @@ const StatisticsCharts: FC<Props> = (props) => {
         <CardContent>
           <CardTitle>{t(translations.submissionStatuses)}</CardTitle>
           <SubmissionStatusChart
-            allStudents={allStudents}
+            ancestorAllStudents={allStudents}
+            ancestorSubmissions={submissions}
             includePhantom
-            submissions={submissions}
           />
         </CardContent>
       </Card>
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.gradeDistribution)}</CardTitle>
-          <GradeDistributionChart includePhantom submissions={submissions} />
+          <GradeDistributionChart
+            ancestorSubmissions={submissions}
+            includePhantom
+          />
         </CardContent>
       </Card>
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.submissionTimeAndGrade)}</CardTitle>
           <SubmissionTimeAndGradeChart
+            ancestorSubmissions={submissions}
             includePhantom
-            submissions={submissions}
           />
         </CardContent>
       </Card>

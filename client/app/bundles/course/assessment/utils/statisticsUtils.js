@@ -3,11 +3,19 @@ export const processCourseUser = (courseUser) => ({
   id: parseInt(courseUser.id, 10),
 });
 
+const processAnswer = (answer) => ({
+  ...answer,
+  grade: parseFloat(answer.grade),
+  maximumGrade: parseFloat(answer.maximumGrade),
+});
+
 export const processSubmission = (submission) => {
   const totalGrade =
     submission.totalGrade != null
       ? parseFloat(submission.totalGrade)
       : submission.totalGrade;
+  const answers =
+    submission.answers != null ? submission.answers.map(processAnswer) : null;
   const submittedAt =
     submission.submittedAt != null
       ? new Date(submission.submittedAt)
@@ -21,6 +29,7 @@ export const processSubmission = (submission) => {
 
   return {
     ...submission,
+    answers,
     totalGrade,
     submittedAt,
     endAt,

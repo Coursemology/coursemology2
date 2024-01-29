@@ -9,8 +9,10 @@ import {
 
 import { SubmissionRecordShape } from 'course/assessment/types';
 import GeneralChart from 'lib/components/core/charts/GeneralChart';
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { getAssessmentStatistics } from './selectors';
 import { processSubmissionsIntoChartData } from './utils';
 
 const translations = defineMessages({
@@ -33,16 +35,21 @@ const translations = defineMessages({
 });
 
 interface Props {
-  submissions: SubmissionRecordShape[];
+  ancestorSubmissions?: SubmissionRecordShape[];
   includePhantom: boolean;
 }
 
 const SubmissionTimeAndGradeChart: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { submissions, includePhantom } = props;
+  const { ancestorSubmissions, includePhantom } = props;
+  const statistics = useAppSelector(getAssessmentStatistics);
+
+  const submissions = statistics.submissions;
+
+  const nonNullSubmissions = submissions.filter((s) => s.answers);
   const includedSubmissions = includePhantom
-    ? submissions
-    : submissions.filter((s) => !s.courseUser.isPhantom);
+    ? nonNullSubmissions
+    : nonNullSubmissions.filter((s) => !s.courseUser.isPhantom);
   const { labels, lineData, barData } =
     processSubmissionsIntoChartData(includedSubmissions);
 

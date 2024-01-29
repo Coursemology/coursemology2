@@ -5,6 +5,7 @@ import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 
 import actionTypes from '../constants';
+import { statisticsActions as actions } from '../reducers/statistics';
 import {
   processAncestor,
   processAssessment,
@@ -31,6 +32,25 @@ export function fetchStatistics(
       .catch(() => {
         dispatch({ type: actionTypes.FETCH_STATISTICS_FAILURE });
         dispatch(setNotification(failureMessage));
+      });
+  };
+}
+
+export function fetchAssessmentStatistics(assessmentId: number): Operation {
+  return async (dispatch) => {
+    CourseAPI.statistics.assessment
+      .fetchAssessmentStatistics(assessmentId)
+      .then((response) => {
+        const data = response.data;
+        dispatch(
+          actions.initialize({
+            assessment: data.assessment,
+            allStudents: data.allStudents,
+            submissions: data.submissions,
+            ancestors: data.ancestors,
+            isLoading: false,
+          }),
+        );
       });
   };
 }

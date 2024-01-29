@@ -2,6 +2,7 @@ import {
   AssessmentAncestors,
   AssessmentMarksPerQuestionStats,
   AssessmentStatistics,
+  AssessmentStatisticsStats,
 } from 'types/course/statistics/assessmentStatistics';
 
 import { APIResponse } from 'api/types';
@@ -39,6 +40,14 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
   ): APIResponse<AssessmentMarksPerQuestionStats> {
     return this.client.get(
       `${this.#urlPrefix}/${assessmentId}/marks_per_question`,
+    );
+  }
+
+  fetchAssessmentStatistics(
+    assessmentId: string | number,
+  ): APIResponse<AssessmentStatisticsStats> {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/assessment_statistics`,
     );
   }
 }

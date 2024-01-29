@@ -3,16 +3,18 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, FormControlLabel, Switch, Tab, Tabs } from '@mui/material';
 
-import { fetchStatistics } from 'course/assessment/operations/statistics';
-import { SubmissionRecordShape } from 'course/assessment/types';
+import { fetchAssessmentStatistics } from 'course/assessment/operations/statistics';
+import { statisticsActions as actions } from 'course/assessment/reducers/statistics';
 import Page from 'lib/components/core/layouts/Page';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import DuplicationHistoryStatistics from './DuplicationHistoryStatistics';
 import GradeDistributionChart from './GradeDistributionChart';
-import { getStatisticsPage } from './selectors';
-import StudentMarksPerQuestionPage from './StudentMarksPerQuestionPage';
+import { getAssessmentStatistics } from './selectors';
+import StudentMarksPerQuestionTable from './StudentMarksPerQuestionTable';
 import SubmissionStatusChart from './SubmissionStatusChart';
 import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
 
@@ -68,53 +70,43 @@ const AssessmentStatisticsPage: FC = () => {
   const parsedAssessmentId = parseInt(assessmentId!, 10);
   const dispatch = useAppDispatch();
 
-  const statisticsPage = useAppSelector(getStatisticsPage);
-  const allStudents = statisticsPage.allStudents;
+  const statistics = useAppSelector(getAssessmentStatistics);
 
   useEffect(() => {
-    if (assessmentId) {
-      dispatch(
-        fetchStatistics(parsedAssessmentId, t(translations.fetchFailure)),
-      );
-    }
-  }, [assessmentId]);
-
-  const submissions = statisticsPage.submissions as SubmissionRecordShape[];
+    dispatch(actions.reset());
+    dispatch(fetchAssessmentStatistics(parsedAssessmentId)).catch(() =>
+      toast.error(t(translations.fetchFailure)),
+    );
+  }, [dispatch, parsedAssessmentId]);
 
   const tabComponentMapping = {
     marksPerQuestion: (
-      <StudentMarksPerQuestionPage includePhantom={includePhantom} />
+      <StudentMarksPerQuestionTable includePhantom={includePhantom} />
     ),
     gradeDistribution: (
-      <GradeDistributionChart
-        includePhantom={includePhantom}
-        submissions={submissions}
-      />
+      <GradeDistributionChart includePhantom={includePhantom} />
     ),
     submissionTimeAndGrade: (
-      <SubmissionTimeAndGradeChart
-        includePhantom={includePhantom}
-        submissions={submissions}
-      />
+      <SubmissionTimeAndGradeChart includePhantom={includePhantom} />
     ),
     duplicationHistory: <DuplicationHistoryStatistics />,
   };
 
+  if (statistics.isLoading) {
+    return <LoadingIndicator />;
+  }
+
   return (
     <Page
-      backTo={statisticsPage.assessment?.url}
+      backTo={statistics.assessment?.url}
       className="space-y-5"
       title={t(translations.header, {
-        title: statisticsPage.assessment?.title,
+        title: statistics.assessment?.title ?? '',
       })}
     >
       <>
         <Box className="max-w-full border-b border-divider">
-          <SubmissionStatusChart
-            allStudents={allStudents}
-            includePhantom={includePhantom}
-            submissions={submissions}
-          />
+          <SubmissionStatusChart includePhantom={includePhantom} />
           <FormControlLabel
             className="mt-2"
             control={

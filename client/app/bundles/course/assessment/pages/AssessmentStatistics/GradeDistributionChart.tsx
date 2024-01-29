@@ -4,7 +4,10 @@ import { GREEN_CHART_BACKGROUND, GREEN_CHART_BORDER } from 'theme/colors';
 
 import { SubmissionRecordShape } from 'course/assessment/types';
 import ViolinChart from 'lib/components/core/charts/ViolinChart';
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import { getAssessmentStatistics } from './selectors';
 
 const translations = defineMessages({
   yAxisLabel: {
@@ -22,17 +25,21 @@ const translations = defineMessages({
 });
 
 interface Props {
-  submissions: SubmissionRecordShape[];
+  ancestorSubmissions?: SubmissionRecordShape[];
   includePhantom: boolean;
 }
 
 const GradeDistributionChart: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { submissions, includePhantom } = props;
+  const { includePhantom, ancestorSubmissions } = props;
+
+  const statistics = useAppSelector(getAssessmentStatistics);
+  const submissions = statistics.submissions;
+  const nonNullSubmissions = submissions.filter((s) => s.answers);
 
   const includedSubmissions = includePhantom
-    ? submissions
-    : submissions.filter((s) => !s.courseUser.isPhantom);
+    ? nonNullSubmissions
+    : nonNullSubmissions.filter((s) => !s.courseUser.isPhantom);
 
   const totalGrades =
     includedSubmissions
