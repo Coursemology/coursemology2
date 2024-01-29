@@ -3,10 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
 import palette from 'theme/palette';
-import {
-  AssessmentMarksPerQuestionStats,
-  SubmissionMarksPerQuestionStats,
-} from 'types/course/statistics/assessmentStatistics';
+import { SubmissionMarksPerQuestionStats } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
 import Link from 'lib/components/core/Link';
@@ -17,10 +14,10 @@ import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { getClassNameForMarkCell } from './ColorGradationLevel';
-import { getStatisticsPage } from './selectors';
+import { getAssessmentStatistics } from './selectors';
 
 interface Props {
-  data: AssessmentMarksPerQuestionStats;
+  includePhantom: boolean;
 }
 
 const translations = defineMessages({
@@ -81,11 +78,18 @@ const statusTranslations = {
 const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId } = useParams();
-  const { data } = props;
+  const { includePhantom } = props;
 
-  const { assessment } = useAppSelector(getStatisticsPage);
+  const statistics = useAppSelector(getAssessmentStatistics);
+  const assessment = statistics.assessment;
 
-  const sortedSubmission = data.submissions
+  const submissions = statistics.submissions.slice();
+
+  const filteredSubmissions = includePhantom
+    ? submissions
+    : submissions.filter((s) => !s.courseUser.isPhantom);
+
+  const sortedSubmission = filteredSubmissions
     .sort((datum1, datum2) =>
       datum1.courseUser.name.localeCompare(datum2.courseUser.name),
     )
@@ -98,17 +102,13 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   // the case where the grade is null is handled separately inside the column
   // (refer to the definition of answerColumns below)
   const renderNonNullGradeCell = (
-    grade: number | null,
-    maxGrade: number | null,
+    grade: number,
+    maxGrade: number,
   ): ReactNode => {
-    if (!grade || !maxGrade) {
-      return null;
-    }
-
     const className = getClassNameForMarkCell(grade, maxGrade);
     return (
       <div className={className}>
-        <Box>{grade}</Box>
+        <Box>{grade.toFixed(1)}</Box>
       </div>
     );
   };
@@ -131,17 +131,17 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   };
 
   const answerColumns: ColumnTemplate<SubmissionMarksPerQuestionStats>[] =
-    Array.from({ length: data.questionCount }, (_, index) => {
+    Array.from({ length: assessment?.questionCount ?? 0 }, (_, index) => {
       return {
         searchProps: {
           getValue: (datum) => datum.answers?.[index]?.grade?.toString() ?? '',
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return datum.answers?.[index].grade
+          return typeof datum.answers?.[index].grade === 'number'
             ? renderNonNullGradeCell(
-                datum.answers?.[index].grade ?? null,
-                datum.answers?.[index].maximumGrade ?? null,
+                datum.answers?.[index].grade,
+                datum.answers?.[index].maximumGrade,
               )
             : null;
         },
@@ -224,7 +224,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         datum.totalGrade
           ? renderNonNullGradeCell(
               datum.totalGrade ?? null,
-              assessment.maximumGrade,
+              assessment!.maximumGrade,
             )
           : null,
       className: 'text-right',
@@ -264,7 +264,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       columns={columns}
       csvDownload={{
         filename: t(translations.filename, {
-          assessment: assessment.title,
+          assessment: assessment?.title ?? '',
         }),
       }}
       data={sortedSubmission}

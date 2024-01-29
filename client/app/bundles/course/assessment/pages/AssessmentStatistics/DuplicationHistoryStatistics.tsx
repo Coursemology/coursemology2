@@ -1,20 +1,16 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
 import {
   fetchAncestors,
-  fetchAncestorStatistics,
   fetchStatistics,
 } from 'course/assessment/operations/statistics';
-import ErrorCard from 'lib/components/core/ErrorCard';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AncestorSelect from './AncestorSelect';
-import AncestorStatistics from './AncestorStatistics';
-import { getStatisticsPage } from './selectors';
+import { getAssessmentStatistics } from './selectors';
 
 const translations = defineMessages({
   fetchFailure: {
@@ -33,6 +29,8 @@ const translations = defineMessages({
 
 const DuplicationHistoryStatistics: FC = () => {
   const { t } = useTranslation();
+  const ancestors = useAppSelector(getAssessmentStatistics).ancestors;
+
   const { assessmentId } = useParams();
   const dispatch = useAppDispatch();
 
@@ -40,7 +38,6 @@ const DuplicationHistoryStatistics: FC = () => {
 
   const [selectedAncestorId, setSelectedAncestorId] =
     useState(parsedAssessmentId);
-  const statisticsPage = useAppSelector(getStatisticsPage);
 
   useEffect(() => {
     if (assessmentId) {
@@ -56,42 +53,30 @@ const DuplicationHistoryStatistics: FC = () => {
     }
   }, [assessmentId]);
 
-  if (statisticsPage.isFetching) {
-    return <LoadingIndicator />;
-  }
-
-  if (statisticsPage.isError) {
-    return (
-      <ErrorCard
-        message={<FormattedMessage {...translations.fetchFailure} />}
-      />
-    );
-  }
-
   const fetchAncestorSubmissions = (id: number): void => {
     if (id === selectedAncestorId) {
       return;
     }
-    dispatch(
-      fetchAncestorStatistics(
-        id,
-        t(translations.fetchAncestorStatisticsFailure),
-      ),
-    );
+    // dispatch(
+    //   fetchAncestorStatistics(
+    //     id,
+    //     t(translations.fetchAncestorStatisticsFailure),
+    //   ),
+    // );
     setSelectedAncestorId(id);
   };
 
   return (
     <>
       <AncestorSelect
-        ancestors={statisticsPage.ancestors}
+        ancestors={ancestors}
         fetchAncestorSubmissions={fetchAncestorSubmissions}
-        isErrorAncestors={statisticsPage.isErrorAncestors}
-        isFetchingAncestors={statisticsPage.isFetchingAncestors}
+        isErrorAncestors={false}
+        isFetchingAncestors={false}
         parsedAssessmentId={parsedAssessmentId}
         selectedAncestorId={selectedAncestorId}
       />
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <AncestorStatistics
           ancestorAllStudents={statisticsPage.ancestorAllStudents}
           ancestorSubmissions={statisticsPage.ancestorSubmissions}
@@ -101,7 +86,7 @@ const DuplicationHistoryStatistics: FC = () => {
             statisticsPage.isFetchingAncestorStatistics
           }
         />
-      </div>
+      </div> */}
     </>
   );
 };

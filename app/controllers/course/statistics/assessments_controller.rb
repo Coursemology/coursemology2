@@ -5,6 +5,21 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
   before_action :load_course_user_students, except: [:ancestors]
 
+  def assessment_statistics
+    @assessment = Course::Assessment.where(id: assessment_params[:id]).
+                  calculated(:maximum_grade, :question_count).
+                  preload(lesson_plan_item: [:reference_times, personal_times: :course_user],
+                          course: :course_users).first
+    submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
+                  calculated(:grade, :grader_ids).
+                  preload(:answers, creator: :course_users)
+    @course_users_hash = preload_course_users_hash(current_course)
+
+    fetch_all_ancestor_assessments
+    create_question_related_hash
+    @student_submissions_hash = student_submission_hash(submissions, @all_students)
+  end
+
   def assessment
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
                   calculated(:maximum_grade).
@@ -51,6 +66,17 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
   def load_course_user_students
     @all_students = current_course.course_users.students
+  end
+
+  def fetch_all_ancestor_assessments
+    current_assessment = Course::Assessment.preload(:duplication_traceable).find(assessment_params[:id])
+    @ancestors = [current_assessment]
+    while current_assessment.duplication_traceable.present? && current_assessment.duplication_traceable.source_id.present?
+      current_assessment = current_assessment.duplication_traceable.source
+      break unless can?(:read_ancestor, current_assessment)
+
+      @ancestors.unshift(current_assessment)
+    end
   end
 
   def create_question_related_hash
