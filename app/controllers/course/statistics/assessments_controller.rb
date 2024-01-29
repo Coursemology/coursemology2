@@ -3,7 +3,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   include Course::UsersHelper
   include Course::Statistics::SubmissionsConcern
 
-  before_action :load_course_user_students, except: [:ancestors]
+  before_action :load_course_user_students
 
   def assessment_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
@@ -33,29 +33,6 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     # we do not need the nil value for this hash, since we aim only
     # to display the statistics charts
     @student_submissions_hash = student_submission_end_time_hash(submissions, @all_students).compact
-  end
-
-  def ancestors
-    @assessment = Course::Assessment.preload(:duplication_traceable).find(assessment_params[:id])
-    @assessments = [@assessment]
-    while @assessment.duplication_traceable.present? && @assessment.duplication_traceable.source_id.present?
-      @assessment = @assessment.duplication_traceable.source
-      break unless can?(:read_ancestor, @assessment)
-
-      @assessments.unshift(@assessment)
-    end
-  end
-
-  def marks_per_question
-    @assessment = Course::Assessment.where(id: assessment_params[:id]).
-                  preload(course: :course_users).first
-    submissions = Course::Assessment::Submission.preload(:answers, creator: :course_users).
-                  where(assessment_id: assessment_params[:id]).
-                  calculated(:grade, :grader_ids)
-    @course_users_hash = preload_course_users_hash(current_course)
-
-    create_question_related_hash
-    @student_submissions_hash = student_submission_marks_hash(submissions, @all_students)
   end
 
   private

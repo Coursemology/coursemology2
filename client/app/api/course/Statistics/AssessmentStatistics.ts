@@ -1,6 +1,4 @@
 import {
-  AssessmentAncestors,
-  AssessmentMarksPerQuestionStats,
   AssessmentStatistics,
   AssessmentStatisticsStats,
 } from 'types/course/statistics/assessmentStatistics';
@@ -24,23 +22,6 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
     assessmentId: string | number,
   ): APIResponse<AssessmentStatistics> {
     return this.client.get(`${this.#urlPrefix}/${assessmentId}`);
-  }
-
-  /**
-   * Fetches the ancestors for a specific individual assessment.
-   */
-  fetchAncestors(
-    assessmentId: string | number,
-  ): APIResponse<AssessmentAncestors> {
-    return this.client.get(`${this.#urlPrefix}/${assessmentId}/ancestors`);
-  }
-
-  fetchMarksPerQuestionStats(
-    assessmentId: string | number,
-  ): APIResponse<AssessmentMarksPerQuestionStats> {
-    return this.client.get(
-      `${this.#urlPrefix}/${assessmentId}/marks_per_question`,
-    );
   }
 
   fetchAssessmentStatistics(

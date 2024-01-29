@@ -8,19 +8,8 @@ interface Assessment {
   url: string;
 }
 
-interface SubmissionInfo {
-  courseUser: StudentInfo;
-  totalGrade?: number | null;
-}
-
-export interface SubmissionWithTimeInfo extends SubmissionInfo {
-  submittedAt: Date;
-  endAt: Date;
-  dayDifference?: number;
-}
-
 interface UserInfo {
-  id: number | string;
+  id: number;
   name: string;
 }
 
@@ -29,53 +18,45 @@ interface StudentInfo extends UserInfo {
   isPhantom: boolean;
 }
 
-export interface AssessmentStatistics {
-  assessment: Assessment;
-  submissions: SubmissionWithTimeInfo[];
-  allStudents: StudentInfo[];
-}
-
-export interface AssessmentAncestor {
-  id: number;
-  title: string;
-  courseTitle: string;
-}
-
-export interface AssessmentAncestors {
-  assessments: AssessmentAncestor[];
-}
-
-export interface AnswerGradeStats {
+interface AnswerStats {
   id: number;
   grade: number;
   maximumGrade: number;
 }
 
-export interface SubmissionMarksPerQuestionStats extends SubmissionInfo {
-  grader?: UserInfo;
-  groups?: { name: string }[];
-  workflowState?: string;
-  answers?: AnswerGradeStats[];
+export interface SubmissionInfo {
+  courseUser: StudentInfo;
+  totalGrade?: number | null;
+  submittedAt: Date;
+  endAt: Date;
+  dayDifference?: number;
 }
 
-export interface SubmissionDetailsStats extends SubmissionWithTimeInfo {
+export interface SubmissionDetailsStats extends SubmissionInfo {
   submissionExists: boolean;
   grader?: UserInfo;
   groups?: { name: string }[];
   workflowState?: string;
-  answers?: AnswerGradeStats[];
+  answers?: AnswerStats[];
 }
 
-export interface AssessmentMarksPerQuestionStats {
-  questionCount: number;
-  submissions: SubmissionMarksPerQuestionStats[];
+export interface AssessmentStatistics {
+  assessment: Assessment;
+  submissions: SubmissionInfo[];
+  allStudents: StudentInfo[];
+}
+
+export interface AncestorInfo {
+  id: number;
+  title: string;
+  courseTitle: string;
 }
 
 export interface AssessmentStatisticsStats {
   assessment: Assessment | null;
   allStudents: StudentInfo[];
   submissions: SubmissionDetailsStats[];
-  ancestors: AssessmentAncestor[];
+  ancestors: AncestorInfo[];
 }
 
 export interface AssessmentStatisticsStore extends AssessmentStatisticsStats {

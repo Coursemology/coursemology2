@@ -1,12 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AssessmentStatisticsStore } from 'types/course/statistics/assessmentStatistics';
 
-import {
-  processAncestor,
-  processAssessment,
-  processCourseUser,
-  processSubmission,
-} from '../utils/statisticsUtils';
+import { processAssessment, processSubmission } from '../utils/statisticsUtils';
 
 const initialState: AssessmentStatisticsStore = {
   assessment: null,
@@ -22,9 +17,9 @@ export const statisticsSlice = createSlice({
   reducers: {
     initialize: (state, action: PayloadAction<AssessmentStatisticsStore>) => {
       state.assessment = processAssessment(action.payload.assessment);
-      state.allStudents = action.payload.allStudents.map(processCourseUser);
+      state.allStudents = action.payload.allStudents;
       state.submissions = action.payload.submissions.map(processSubmission);
-      state.ancestors = action.payload.ancestors.map(processAncestor);
+      state.ancestors = action.payload.ancestors;
       state.isLoading = action.payload.isLoading;
     },
     reset: () => {
