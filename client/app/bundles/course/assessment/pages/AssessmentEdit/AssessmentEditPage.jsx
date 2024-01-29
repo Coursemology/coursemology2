@@ -9,7 +9,7 @@ import Page from 'lib/components/core/layouts/Page';
 import { achievementTypesConditionAttributes } from 'lib/types';
 
 import AssessmentForm from '../../components/AssessmentForm';
-import { updateAssessment } from '../../operations';
+import { updateAssessment } from '../../operations/assessments';
 import translations from '../../translations';
 
 class AssessmentEditPage extends Component {

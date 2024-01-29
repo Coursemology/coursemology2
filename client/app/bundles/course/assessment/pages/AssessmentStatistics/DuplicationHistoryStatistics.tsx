@@ -6,7 +6,7 @@ import {
   fetchAncestors,
   fetchAncestorStatistics,
   fetchStatistics,
-} from 'course/assessment/operations';
+} from 'course/assessment/operations/statistics';
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';

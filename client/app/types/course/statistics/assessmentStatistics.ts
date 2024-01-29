@@ -57,8 +57,6 @@ export interface SubmissionMarksPerQuestionStats extends SubmissionInfo {
 }
 
 export interface AssessmentMarksPerQuestionStats {
-  maximumGrade: number;
   questionCount: number;
-  assessmentTitle: string;
   submissions: SubmissionMarksPerQuestionStats[];
 }

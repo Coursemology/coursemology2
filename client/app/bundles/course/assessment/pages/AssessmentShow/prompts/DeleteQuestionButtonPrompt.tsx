@@ -6,7 +6,7 @@ import { PromptText } from 'lib/components/core/dialogs/Prompt';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { deleteQuestion } from '../../../operations';
+import { deleteQuestion } from '../../../operations/questions';
 import translations from '../../../translations';
 
 interface DeleteQuestionButtonPromptProps {
