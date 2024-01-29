@@ -13,9 +13,11 @@ import Link from 'lib/components/core/Link';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { getClassNameForMarkCell } from './ColorGradationLevel';
+import { getStatisticsPage } from './selectors';
 
 interface Props {
   data: AssessmentMarksPerQuestionStats;
@@ -80,6 +82,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId } = useParams();
   const { data } = props;
+
+  const { assessment } = useAppSelector(getStatisticsPage);
 
   const sortedSubmission = data.submissions
     .sort((datum1, datum2) =>
@@ -218,7 +222,10 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       sortable: true,
       cell: (datum): ReactNode =>
         datum.totalGrade
-          ? renderNonNullGradeCell(datum.totalGrade ?? null, data.maximumGrade)
+          ? renderNonNullGradeCell(
+              datum.totalGrade ?? null,
+              assessment.maximumGrade,
+            )
           : null,
       className: 'text-right',
       sortProps: {
@@ -257,7 +264,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       columns={columns}
       csvDownload={{
         filename: t(translations.filename, {
-          assessment: data.assessmentTitle,
+          assessment: assessment.title,
         }),
       }}
       data={sortedSubmission}
