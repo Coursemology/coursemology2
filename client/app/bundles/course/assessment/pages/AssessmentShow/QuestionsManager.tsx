@@ -8,7 +8,7 @@ import { QuestionData } from 'types/course/assessment/questions';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { reorderQuestions } from '../../operations';
+import { reorderQuestions } from '../../operations/questions';
 import translations from '../../translations';
 
 import Question from './Question';

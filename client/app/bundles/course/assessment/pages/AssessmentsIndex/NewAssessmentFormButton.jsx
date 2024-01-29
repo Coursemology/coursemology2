@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { createAssessment } from 'course/assessment/operations';
+import { createAssessment } from 'course/assessment/operations/assessments';
 import AddButton from 'lib/components/core/buttons/AddButton';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';

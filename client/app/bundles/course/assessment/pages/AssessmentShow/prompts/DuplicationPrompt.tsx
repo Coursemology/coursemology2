@@ -19,7 +19,7 @@ import Link from 'lib/components/core/Link';
 import { loadingToast } from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { duplicateQuestion } from '../../../operations';
+import { duplicateQuestion } from '../../../operations/questions';
 import translations from '../../../translations';
 
 interface DuplicationPromptProps {

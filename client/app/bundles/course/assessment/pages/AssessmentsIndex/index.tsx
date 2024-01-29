@@ -2,11 +2,10 @@ import { useSearchParams } from 'react-router-dom';
 import { Tab, Tabs } from '@mui/material';
 import { AssessmentsListData } from 'types/course/assessment/assessments';
 
+import { fetchAssessments } from 'course/assessment/operations/assessments';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
-
-import { fetchAssessments } from '../../operations';
 
 import AssessmentsTable from './AssessmentsTable';
 import NewAssessmentFormButton from './NewAssessmentFormButton';

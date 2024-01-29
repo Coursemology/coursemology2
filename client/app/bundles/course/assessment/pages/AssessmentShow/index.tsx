@@ -5,10 +5,10 @@ import {
   isUnauthenticatedAssessmentData,
 } from 'types/course/assessment/assessments';
 
+import { fetchAssessment } from 'course/assessment/operations/assessments';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
-import { fetchAssessment } from '../../operations';
 import AssessmentAuthenticate from '../AssessmentAuthenticate';
 import AssessmentBlockedByMonitorPage from '../AssessmentBlockedByMonitorPage';
 
