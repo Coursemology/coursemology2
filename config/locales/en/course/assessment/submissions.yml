@@ -4,6 +4,6 @@ en:
       submissions:
         sidebar_title: :'course.assessment.submissions.index.header'
         index:
-          header: "Submissions"
+          header: 'Submissions'
         pending:
-          header: "Pending Submissions"
+          header: 'Pending Submissions'

@@ -1,0 +1,6 @@
+zh:
+  activerecord:
+    errors:
+      models:
+        course/survey/answer:
+          cannot_be_empty: '这个问题的答案不能为空。'

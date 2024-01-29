@@ -3,4 +3,4 @@ en:
     errors:
       models:
         course/survey/answer:
-          cannot_be_empty: 'You must be a member of this course to start the survey.'
+          cannot_be_empty: 'The answer to this question must not be empty.'

@@ -4,4 +4,4 @@ en:
       videos:
         sidebar_title: :'course.video.videos.index.header'
         index:
-          header: "Videos"
+          header: 'Videos'

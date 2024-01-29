@@ -5,8 +5,8 @@ en:
         course/monitoring/monitor:
           attributes:
             enabled:
-              must_be_password_protected: "assessment must be password protected to enable"
+              must_be_password_protected: 'assessment must be password protected to enable'
             max_interval_ms:
-              greater_than_min_interval: "must be greater than min interval"
+              greater_than_min_interval: 'must be greater than min interval'
             blocks:
-              must_have_secret_and_session_protection: "must have secret and session protection enabled"
+              must_have_secret_and_session_protection: 'must have secret and session protection enabled'

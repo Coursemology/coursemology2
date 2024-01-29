@@ -2,10 +2,10 @@ en:
   course:
     experience_points_records:
       index:
-        header: "Experience Points History for %{name}"
+        header: 'Experience Points History for %{name}'
       download:
-        name: "Name"
-        updated_at: "Updated At"
-        updater: "Updater"
-        reason: "Reason"
-        exp_points: "EXP Awarded"
+        name: 'Name'
+        updated_at: 'Updated At'
+        updater: 'Updater'
+        reason: 'Reason'
+        exp_points: 'EXP Awarded'

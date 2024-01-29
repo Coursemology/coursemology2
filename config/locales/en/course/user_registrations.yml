@@ -2,7 +2,7 @@ en:
   course:
     user_registrations:
       create:
-        invalid_code: "You have entered an invalid invitation code."
+        invalid_code: 'You have entered an invalid invitation code.'
         code_taken: >
           The provided invitation code has been claimed by another account,
           please use that account the to access the course instead.

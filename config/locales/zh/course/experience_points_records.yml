@@ -3,3 +3,9 @@ zh:
     experience_points_records:
       index:
         header: '用户%{name}：经验值历史记录'
+      download:
+        name: '姓名'
+        updated_at: '更新于'
+        updater: '更新者'
+        reason: '理由'
+        exp_points: '经验值奖励已获取'

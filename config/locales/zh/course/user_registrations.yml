@@ -2,7 +2,7 @@ zh:
   course:
     user_registrations:
       create:
-        invalid_code: "你输入了一个无效的邀请码。"
+        invalid_code: '你输入了一个无效的邀请码。'
         code_taken: >
           所提供的邀请码已被另一个账户所使用，
           请使用该账户来访问该课程。

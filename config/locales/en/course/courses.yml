@@ -2,6 +2,6 @@ en:
   course:
     courses:
       index:
-        header: "Courses"
+        header: 'Courses'
       new:
-        header: "New Course"
+        header: 'New Course'

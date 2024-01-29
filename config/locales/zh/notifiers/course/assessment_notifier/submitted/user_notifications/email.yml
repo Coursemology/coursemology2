@@ -5,7 +5,7 @@ zh:
         submitted:
           user_notifications:
             email:
-              subject: "%{course} 新提交于 : %{assessment}"
+              subject: '%{course} 新提交于 : %{assessment}'
               message: >
                 %{user} 有一个新的提交 
 

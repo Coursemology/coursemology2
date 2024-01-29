@@ -2,6 +2,6 @@ zh:
   course:
     courses:
       index:
-        header: "课程"
+        header: '课程'
       new:
-        header: "新课程"
+        header: '新课程'
