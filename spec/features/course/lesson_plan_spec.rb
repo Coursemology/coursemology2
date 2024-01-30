@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Lesson Plan' do
+RSpec.feature 'Course: Lesson Plan', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -41,7 +41,7 @@ RSpec.feature 'Course: Lesson Plan' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can view all lesson plan items and milestones', js: true do
+      scenario 'I can view all lesson plan items and milestones' do
         visit course_lesson_plan_path(course)
 
         milestones.each { |milestone| expect(page).to have_text(milestone.title) }
@@ -52,13 +52,13 @@ RSpec.feature 'Course: Lesson Plan' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view the LessonPlan Sidebar item', js: true do
+      scenario 'I can view the LessonPlan Sidebar item' do
         visit course_path(course)
 
         expect(find_sidebar).to have_text(I18n.t('course.lesson_plan.items.sidebar_title'))
       end
 
-      scenario 'I can view all lesson plan items and milestones', js: true do
+      scenario 'I can view all lesson plan items and milestones' do
         visit course_lesson_plan_path(course)
 
         milestones.each { |milestone| expect(page).to have_text(milestone.title) }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Courses: Students' do
+RSpec.feature 'Courses: Students', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -10,7 +10,7 @@ RSpec.feature 'Courses: Students' do
     let!(:course_students) { create_list(:course_student, 3, course: course) }
     before { login_as(user, scope: :user) }
 
-    scenario 'Course staff can view the list of students registered', js: true do
+    scenario 'Course staff can view the list of students registered' do
       visit course_users_students_path(course)
 
       course_students.each do |course_user|
@@ -18,7 +18,7 @@ RSpec.feature 'Courses: Students' do
       end
     end
 
-    scenario "Course staff can update students' records", js: true do
+    scenario "Course staff can update students' records" do
       student_to_update = course_students.sample
       new_name = 'new student name'
 
@@ -43,7 +43,7 @@ RSpec.feature 'Courses: Students' do
       expect(student_to_update.name).to eq(new_name)
     end
 
-    scenario 'Course staff can delete students', js: true do
+    scenario 'Course staff can delete students' do
       user_to_delete = course_students.first
       visit course_users_students_path(course)
 

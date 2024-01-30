@@ -27,7 +27,7 @@ RSpec.feature 'Courses: Experience Points Records: Management', js: true do
     context 'As a Course manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario "I can view a course student's active experience points records", js: true do
+      scenario "I can view a course student's active experience points records" do
         visit course_user_experience_points_records_path(course, course_student)
 
         expect(page).to have_selector("#record-#{record.id}")
@@ -38,7 +38,7 @@ RSpec.feature 'Courses: Experience Points Records: Management', js: true do
         expect(page).to have_link(submission.assessment.title, href: submission_path)
       end
 
-      scenario "I can update a course student's active manually-awarded points records", js: true do
+      scenario "I can update a course student's active manually-awarded points records" do
         visit course_user_experience_points_records_path(course, course_student)
 
         within find("#record-#{record.id}") do
@@ -61,7 +61,7 @@ RSpec.feature 'Courses: Experience Points Records: Management', js: true do
         expect(manual_record.points_awarded).to eq(updated_points)
       end
 
-      scenario "I can delete a course student's active manually-awarded points records", js: true do
+      scenario "I can delete a course student's active manually-awarded points records" do
         visit course_user_experience_points_records_path(course, course_student)
 
         expect(page).not_to have_selector(".record-delete-#{record.id}")
@@ -76,7 +76,7 @@ RSpec.feature 'Courses: Experience Points Records: Management', js: true do
     context 'As a Course student' do
       let(:user) { course_student.user }
 
-      scenario 'I can view my active experience points records', js: true do
+      scenario 'I can view my active experience points records' do
         visit course_user_experience_points_records_path(course, course_student)
 
         expect(page).to have_selector("#record-#{record.id}")

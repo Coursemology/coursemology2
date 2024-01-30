@@ -42,7 +42,7 @@ RSpec.feature 'Courses: Groups', js: true do
         end
       end
 
-      # scenario 'I can create a group category', js: true do
+      # scenario 'I can create a group category' do
       #   visit course_group_category_path(course, group_category1)
       #   expect(page).to have_text('NEW CATEGORY')
 

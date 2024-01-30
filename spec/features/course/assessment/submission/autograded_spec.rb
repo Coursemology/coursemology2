@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Autograded' do
+RSpec.describe 'Course: Assessment: Submissions: Autograded', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -70,7 +70,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
 
-      pending 'I can continue to the next question when current answer is correct', js: true do
+      pending 'I can continue to the next question when current answer is correct' do
         extra_mrq_question
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
@@ -99,7 +99,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         expect(page).to have_selector('h3', text: mrq_questions.second.display_title)
       end
 
-      pending 'I can resubmit the question when submission is not finalised', js: true do
+      pending 'I can resubmit the question when submission is not finalised' do
         visit edit_course_assessment_submission_path(assessment.course, assessment, submission)
 
         wrong_option = mrq_questions.first.options.where(correct: false).first.option
@@ -131,7 +131,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         expect(page).to have_selector('.btn', text: I18n.t('common.submit'))
       end
 
-      pending 'I can resubmit the answer when job is errored', js: true do
+      pending 'I can resubmit the answer when job is errored' do
         # Build an answer with a failing job
         errored_grading =
           build(:course_assessment_answer_auto_grading, job: create(:trackable_job, :errored))
@@ -180,7 +180,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         expect(page).not_to have_selector('.btn.finalise')
       end
 
-      pending 'I can reset my answer to a programming question', js: true do
+      pending 'I can reset my answer to a programming question' do
         programming_question = programming_assessment.questions.first
         programming_answer = create(:course_assessment_answer_programming,
                                     assessment: programming_assessment,
@@ -206,7 +206,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
           to eq(programming_question.specific.template_files.first.content)
       end
 
-      pending 'I can add an attachment to a file upload question', js: true do
+      pending 'I can add an attachment to a file upload question' do
         visit edit_course_assessment_submission_path(course, text_response_assessment,
                                                      text_response_assessment_submission)
 
@@ -225,7 +225,7 @@ RSpec.describe 'Course: Assessment: Submissions: Autograded' do
         expect(answer.specific.attachments).not_to be_empty
       end
 
-      pending 'I can continue to the next question when question is non-autograded', js: true do
+      pending 'I can continue to the next question when question is non-autograded' do
         text_response_assessment.questions.first.specific.solutions = []
         create(:course_assessment_question_multiple_response, assessment: text_response_assessment)
 

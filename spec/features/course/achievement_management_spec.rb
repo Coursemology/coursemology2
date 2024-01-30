@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Achievements' do
+RSpec.feature 'Course: Achievements', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -14,7 +14,7 @@ RSpec.feature 'Course: Achievements' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create and edit an achievement', js: true do
+      scenario 'I can create and edit an achievement' do
         visit course_achievements_path(course)
 
         # Open new achievement modal and fill up fields.
@@ -45,7 +45,7 @@ RSpec.feature 'Course: Achievements' do
         expect(page).to have_text(new_achievement[:title])
       end
 
-      scenario 'I can delete an achievement', js: true do
+      scenario 'I can delete an achievement' do
         achievement = create(:course_achievement, course: course)
         visit course_achievements_path(course)
 
@@ -55,7 +55,7 @@ RSpec.feature 'Course: Achievements' do
         end.to change { course.achievements.count }.by(-1)
       end
 
-      scenario 'I can award a manually-awarded achievement to a student', js: true do
+      scenario 'I can award a manually-awarded achievement to a student' do
         manual_achievement = create(:course_achievement, course: course)
         auto_achievement = create(:course_achievement, course: course)
         create(:course_condition_achievement, course: course, conditional: auto_achievement)

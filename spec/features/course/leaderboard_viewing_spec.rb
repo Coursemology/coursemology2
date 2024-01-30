@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Leaderboard: View' do
+RSpec.describe 'Course: Leaderboard: View', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -10,7 +10,7 @@ RSpec.describe 'Course: Leaderboard: View' do
       login_as(user, scope: :user)
     end
 
-    context 'As a student', js: true do
+    context 'As a student' do
       let!(:students) { create_list(:course_student, 2, course: course) }
       let!(:phantom_user) { create(:course_student, :phantom, course: course) }
       let(:user) { students[0].user }
@@ -57,7 +57,7 @@ RSpec.describe 'Course: Leaderboard: View' do
         expect(page).to have_no_content_tag_for(phantom_user)
       end
 
-      context 'when the group leaderboard is enabled for the course', js: true do
+      context 'when the group leaderboard is enabled for the course' do
         let!(:groups) { create_list(:course_group, 2, course: course) }
         let!(:group_user1) do
           create(:course_group_user, course: course, course_user: students[0], group: groups[0])

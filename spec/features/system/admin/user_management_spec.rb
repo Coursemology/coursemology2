@@ -41,7 +41,7 @@ RSpec.feature 'System: Administration: Users', js: true do
       end
 
       # Flaky test
-      xscenario "I can change a user's record", js: true do
+      xscenario "I can change a user's record" do
         visit admin_users_path
 
         user_to_change = users.sample

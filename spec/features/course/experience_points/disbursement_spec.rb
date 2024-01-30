@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Experience Points: Disbursement' do
+RSpec.feature 'Course: Experience Points: Disbursement', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -11,7 +11,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
     before { login_as(user, scope: :user) }
 
-    context 'As a Course Teaching Assistant', js: true do
+    context 'As a Course Teaching Assistant' do
       let(:user) { course_teaching_assistant.user }
 
       scenario 'I can filter students by group' do
@@ -49,7 +49,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         expect(ungrouped_student.experience_points_records.size).to eq(0)
       end
 
-      scenario 'I can copy points awarded for first student to all students', js: true do
+      scenario 'I can copy points awarded for first student to all students' do
         course_students
         visit course_experience_points_records_path(course)
         find('button', text: 'General Disbursement').click

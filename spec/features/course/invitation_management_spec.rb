@@ -83,7 +83,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         expect(course.registration_key).to be_nil
       end
 
-      scenario 'I can track the status of invites, resend invites and delete invites', js: true do
+      scenario 'I can track the status of invites, resend invites and delete invites' do
         visit course_user_invitations_path(course)
 
         old_time = 1.day.ago
@@ -134,7 +134,7 @@ RSpec.feature 'Courses: Invitations', js: true do
       context 'when I have an invitation code for another email address' do
         let!(:invitation) { create(:course_user_invitation, course: course) }
 
-        scenario 'I can accept invitations', js: true do
+        scenario 'I can accept invitations' do
           visit course_path(course)
           fill_in 'registration-code', with: invitation.invitation_key
           find('#register-button').click
@@ -152,7 +152,7 @@ RSpec.feature 'Courses: Invitations', js: true do
           course.save!
         end
 
-        scenario 'I can register for courses using the course registration code', js: true do
+        scenario 'I can register for courses using the course registration code' do
           visit course_path(course)
           fill_in 'registration-code', with: course.registration_key
           find('#register-button').click

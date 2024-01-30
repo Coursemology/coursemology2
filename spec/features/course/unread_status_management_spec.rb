@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Announcements', type: :feature do
+RSpec.describe 'Course: Announcements', type: :feature, js: true do
   describe 'Read/Unread' do
     subject { page }
 
@@ -27,7 +27,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
             end
           end
 
-          context 'after visiting', js: true do
+          context 'after visiting' do
             before do
               login_as(first_user)
               visit course_announcements_path(course)
@@ -51,7 +51,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
           visit course_path(course)
         end
 
-        it 'shows the correct number of unread items', js: true do
+        it 'shows the correct number of unread items' do
           expect(course.announcements.unread_by(first_user).count).to eq(1)
           expect(find_sidebar.find_link(I18n.t('course.announcements.sidebar_title'))).to have_text 1
         end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: EnrolRequests' do
+RSpec.feature 'Course: EnrolRequests', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -10,7 +10,7 @@ RSpec.feature 'Course: EnrolRequests' do
     let!(:enrol_request) { create(:course_enrol_request, course: course) }
     before { login_as(user, scope: :user) }
 
-    scenario 'Course staff can approve requests', js: true do
+    scenario 'Course staff can approve requests' do
       visit course_enrol_requests_path(course)
 
       within find("tr.pending_enrol_request_#{enrol_request.id}") do
@@ -32,7 +32,7 @@ RSpec.feature 'Course: EnrolRequests' do
       expect(page).to have_selector("tr.course_user_#{course_user.id}")
     end
 
-    scenario 'Course staff can reject request', js: true do
+    scenario 'Course staff can reject request' do
       visit course_enrol_requests_path(course)
 
       expect(page).to have_selector("tr.pending_enrol_request_#{enrol_request.id}")

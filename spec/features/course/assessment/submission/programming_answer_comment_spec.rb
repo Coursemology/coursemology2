@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting' do
+RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -26,7 +26,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         file.annotations.build(line: 1)
       end
 
-      pending 'I can annotate my answer after submitting', js: true do
+      pending 'I can annotate my answer after submitting' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         code = <<-PYTHON
@@ -84,7 +84,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         expect(page).to have_content_tag_for(answer_discussion_topic.posts.first)
       end
 
-      pending 'I can reply to an existing annotation topic', js: true do
+      pending 'I can reply to an existing annotation topic' do
         create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
@@ -105,7 +105,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         end
       end
 
-      pending 'I can edit my annotations', js: true do
+      pending 'I can edit my annotations' do
         post = create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
@@ -122,7 +122,7 @@ RSpec.describe 'Course: Assessment: Submissions: Programming Answers: Commenting
         expect(updated_post.text).to have_tag('*', text: annotation_text)
       end
 
-      pending 'I can delete my annotations', js: true do
+      pending 'I can delete my annotations' do
         post = create(:course_discussion_post, topic: annotation.discussion_topic, creator: user)
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
