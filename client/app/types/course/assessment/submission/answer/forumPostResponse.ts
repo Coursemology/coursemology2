@@ -6,7 +6,7 @@ import {
   AnswerFieldBaseEntity,
 } from './answer';
 
-interface PostPack {
+export interface PostPack {
   id: number;
   text: string;
   creatorId: number;
@@ -19,19 +19,21 @@ interface PostPack {
 
 // BE Data Type
 
-interface ForumPostResponseFieldData extends AnswerFieldBaseData {
+export interface SelectedPostPack {
+  forum: { id: string; name: string };
+  topic: { id: number; title: string; isDeleted: boolean };
+  corePost: PostPack;
+  parentPost?: PostPack;
+}
+
+export interface ForumPostResponseFieldData extends AnswerFieldBaseData {
   answer_text: string;
+  selected_post_packs: SelectedPostPack[];
 }
 
 export interface ForumPostResponseAnswerData extends AnswerBaseData {
   questionType: QuestionType.ForumPostResponse;
   fields: ForumPostResponseFieldData;
-  selected_post_packs: {
-    forum: { id: string; name: string };
-    topic: { id: number; title: string; isDeleted: boolean };
-    corePost: PostPack;
-    parentPost?: PostPack;
-  };
   explanation: {
     correct: boolean | null;
     explanations: string[];
