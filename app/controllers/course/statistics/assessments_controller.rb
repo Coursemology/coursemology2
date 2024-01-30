@@ -68,5 +68,8 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     @question_auto_gradable_status_hash = @assessment.questions.to_h do |q|
       [q.id, q.auto_gradable?]
     end
+    @question_type_hash = @assessment.questions.to_h do |q|
+      [q.id, q.question_type]
+    end
   end
 end

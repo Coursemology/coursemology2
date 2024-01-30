@@ -121,7 +121,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
   const renderNonNullAttemptCountCell = (attempt: AttemptInfo): ReactNode => {
     const className = getClassNameForAttemptCountCell(attempt);
     return (
-      <div className={className}>
+      <div className={`cursor-pointer ${className}`}>
         <Box>{attempt.attemptCount}</Box>
       </div>
     );
