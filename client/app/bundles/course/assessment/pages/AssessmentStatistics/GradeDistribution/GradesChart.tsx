@@ -2,12 +2,8 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { GREEN_CHART_BACKGROUND, GREEN_CHART_BORDER } from 'theme/colors';
 
-import { SubmissionRecordShape } from 'course/assessment/types';
 import ViolinChart from 'lib/components/core/charts/ViolinChart';
-import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import { getAssessmentStatistics } from './selectors';
 
 const translations = defineMessages({
   yAxisLabel: {
@@ -25,27 +21,14 @@ const translations = defineMessages({
 });
 
 interface Props {
-  ancestorSubmissions?: SubmissionRecordShape[];
-  includePhantom: boolean;
+  totalGrades: (number | null | undefined)[];
 }
 
-const GradeDistributionChart: FC<Props> = (props) => {
+const GradesChart: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { includePhantom, ancestorSubmissions } = props;
+  const { totalGrades } = props;
 
-  const statistics = useAppSelector(getAssessmentStatistics);
-  const submissions = statistics.submissions;
-  const nonNullSubmissions = submissions.filter((s) => s.answers);
-
-  const includedSubmissions = includePhantom
-    ? nonNullSubmissions
-    : nonNullSubmissions.filter((s) => !s.courseUser.isPhantom);
-
-  const totalGrades =
-    includedSubmissions
-      ?.filter((s) => s.totalGrade)
-      ?.map((s) => s.totalGrade) ?? [];
-  const data = {
+  const transformedData = {
     labels: [t(translations.yAxisLabel)],
     datasets: [
       {
@@ -76,9 +59,9 @@ const GradeDistributionChart: FC<Props> = (props) => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <ViolinChart data={data} options={options} />
+      <ViolinChart data={transformedData} options={options} />
     </div>
   );
 };
 
-export default GradeDistributionChart;
+export default GradesChart;
