@@ -34,6 +34,7 @@ export const answerFlagsSlice = createSlice({
       }>,
     ) => {
       const { answers } = action.payload;
+      answerFlagsAdapter.removeAll(state.flagsByAnswerId);
       answers.forEach((answer) => {
         answerFlagsAdapter.setOne(state.flagsByAnswerId, {
           id: answer.id,
