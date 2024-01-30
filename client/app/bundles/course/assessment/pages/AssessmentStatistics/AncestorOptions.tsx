@@ -1,9 +1,9 @@
-import { FC, Fragment } from 'react';
+import { Dispatch, FC, Fragment, SetStateAction } from 'react';
 import { defineMessages } from 'react-intl';
 import { ArrowForward } from '@mui/icons-material';
 import { Card, CardContent, Chip, Typography } from '@mui/material';
+import { AncestorInfo } from 'types/course/statistics/assessmentStatistics';
 
-import { AncestorShape } from 'course/assessment/types';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
@@ -26,19 +26,19 @@ const translations = defineMessages({
 });
 
 interface Props {
-  assessmentId: number;
-  ancestors: AncestorShape[];
+  ancestors: AncestorInfo[];
+  parsedAssessmentId: number;
   selectedAncestorId: number;
-  fetchAncestorSubmissions: (id: number) => void;
+  setSelectedAncestorId: Dispatch<SetStateAction<number>>;
 }
 
 const AncestorOptions: FC<Props> = (props) => {
   const { t } = useTranslation();
   const {
-    assessmentId,
     ancestors,
+    parsedAssessmentId,
     selectedAncestorId,
-    fetchAncestorSubmissions,
+    setSelectedAncestorId,
   } = props;
 
   return (
@@ -51,7 +51,7 @@ const AncestorOptions: FC<Props> = (props) => {
                 ? 'h-[17rem] w-[35rem] min-w-[30rem] mx-4 bg-green-100 cursor-pointer'
                 : 'h-[17rem] w-[35rem] min-w-[30rem] mx-4 cursor-pointer'
             }
-            onClick={() => fetchAncestorSubmissions(ancestor.id)}
+            onClick={() => setSelectedAncestorId(ancestor.id)}
           >
             <CardContent>
               <Typography className="mb-2 text-[1.7rem] font-bold">
@@ -62,7 +62,7 @@ const AncestorOptions: FC<Props> = (props) => {
                   courseTitle: ancestor.courseTitle,
                 })}
               </Typography>
-              {ancestor.id === assessmentId ? (
+              {ancestor.id === parsedAssessmentId ? (
                 <Chip label={t(translations.current)} />
               ) : null}
             </CardContent>
