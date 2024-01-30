@@ -65,6 +65,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
           login_as(user, scope: :user)
 
           visit edit_course_assessment_submission_path(course, mcq_assessment, attempt_submission)
+          wait_for_page
 
           click_button('Publish Grade')
           wait_for_page
