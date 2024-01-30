@@ -11,17 +11,12 @@ const processAnswer = (answer) => ({
 
 export const processSubmission = (submission) => {
   const totalGrade =
-    submission.totalGrade != null
-      ? parseFloat(submission.totalGrade)
-      : submission.totalGrade;
+    submission.totalGrade != null ? parseFloat(submission.totalGrade) : null;
   const answers =
     submission.answers != null ? submission.answers.map(processAnswer) : null;
   const submittedAt =
-    submission.submittedAt != null
-      ? new Date(submission.submittedAt)
-      : submission.submittedAt;
-  const endAt =
-    submission.endAt != null ? new Date(submission.endAt) : submission.endAt;
+    submission.submittedAt != null ? new Date(submission.submittedAt) : null;
+  const endAt = submission.endAt != null ? new Date(submission.endAt) : null;
   const dayDifference =
     submittedAt != null && endAt != null
       ? Math.floor((submittedAt - endAt) / 86400000)
