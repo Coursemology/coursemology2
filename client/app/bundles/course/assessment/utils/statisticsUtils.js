@@ -29,7 +29,6 @@ export const processSubmission = (submission) => {
     submittedAt,
     endAt,
     dayDifference,
-    courseUser: processCourseUser(submission.courseUser),
   };
 };
 
