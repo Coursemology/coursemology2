@@ -1,15 +1,9 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import palette from 'theme/palette';
+import { WorkflowState } from 'types/course/assessment/submission/submission';
 
 import { workflowStates } from 'course/assessment/submission/constants';
-import {
-  CourseUserShape,
-  SubmissionRecordShape,
-} from 'course/assessment/types';
 import BarChart from 'lib/components/core/BarChart';
-import { useAppSelector } from 'lib/hooks/store';
-
-import { getAssessmentStatistics } from './selectors';
 
 const translations = defineMessages({
   datasetLabel: {
@@ -39,39 +33,25 @@ const translations = defineMessages({
 });
 
 interface Props {
-  ancestorSubmissions?: SubmissionRecordShape[];
-  ancestorAllStudents?: CourseUserShape[];
-  includePhantom: boolean;
+  numStudents: number;
+  submissionWorkflowStates: WorkflowState[];
 }
 
 const SubmissionStatusChart = (props: Props): JSX.Element => {
-  const { ancestorSubmissions, includePhantom, ancestorAllStudents } = props;
-  const statistics = useAppSelector(getAssessmentStatistics);
+  const { numStudents, submissionWorkflowStates } = props;
 
-  const submissions = statistics.submissions.slice();
-  const allStudents = statistics.allStudents.slice();
-
-  const nonNullSubmissions = submissions.filter((s) => s.submissionExists);
-
-  const numStudents = includePhantom
-    ? allStudents.length
-    : allStudents.filter((s) => !s.isPhantom).length;
-  const includedSubmissions = includePhantom
-    ? nonNullSubmissions
-    : nonNullSubmissions.filter((s) => !s.courseUser.isPhantom);
-
-  const numUnstarted = numStudents - includedSubmissions.length;
-  const numAttempting = includedSubmissions.filter(
-    (s) => s.workflowState === workflowStates.Attempting,
+  const numUnstarted = numStudents - submissionWorkflowStates.length;
+  const numAttempting = submissionWorkflowStates.filter(
+    (workflow) => workflow === workflowStates.Attempting,
   ).length;
-  const numSubmitted = includedSubmissions.filter(
-    (s) => s.workflowState === workflowStates.Submitted,
+  const numSubmitted = submissionWorkflowStates.filter(
+    (workflow) => workflow === workflowStates.Submitted,
   ).length;
-  const numGraded = includedSubmissions.filter(
-    (s) => s.workflowState === workflowStates.Graded,
+  const numGraded = submissionWorkflowStates.filter(
+    (workflow) => workflow === workflowStates.Graded,
   ).length;
-  const numPublished = includedSubmissions.filter(
-    (s) => s.workflowState === workflowStates.Published,
+  const numPublished = submissionWorkflowStates.filter(
+    (workflow) => workflow === workflowStates.Published,
   ).length;
 
   const data = [

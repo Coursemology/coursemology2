@@ -7,13 +7,8 @@ import {
   ORANGE_CHART_BORDER,
 } from 'theme/colors';
 
-import { SubmissionRecordShape } from 'course/assessment/types';
 import GeneralChart from 'lib/components/core/charts/GeneralChart';
-import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import { getAssessmentStatistics } from './selectors';
-import { processSubmissionsIntoChartData } from './utils';
 
 const translations = defineMessages({
   lineDatasetLabel: {
@@ -35,23 +30,15 @@ const translations = defineMessages({
 });
 
 interface Props {
-  ancestorSubmissions?: SubmissionRecordShape[];
-  includePhantom: boolean;
+  barData: number[];
+  hasEndAt: boolean;
+  labels: string[];
+  lineData: number[];
 }
 
 const SubmissionTimeAndGradeChart: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { ancestorSubmissions, includePhantom } = props;
-  const statistics = useAppSelector(getAssessmentStatistics);
-
-  const submissions = statistics.submissions;
-
-  const nonNullSubmissions = submissions.filter((s) => s.answers);
-  const includedSubmissions = includePhantom
-    ? nonNullSubmissions
-    : nonNullSubmissions.filter((s) => !s.courseUser.isPhantom);
-  const { labels, lineData, barData } =
-    processSubmissionsIntoChartData(includedSubmissions);
+  const { barData, hasEndAt, labels, lineData } = props;
 
   const data = {
     labels,
@@ -77,8 +64,6 @@ const SubmissionTimeAndGradeChart: FC<Props> = (props) => {
       },
     ],
   };
-
-  const hasEndAt = submissions.every((s) => s.endAt != null);
 
   const options = {
     scales: {
