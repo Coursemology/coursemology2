@@ -3,9 +3,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   include Course::UsersHelper
   include Course::Statistics::SubmissionsConcern
 
-  before_action :load_course_user_students
-
-  def assessment_statistics
+  def main_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
                   calculated(:maximum_grade, :question_count).
                   preload(lesson_plan_item: [:reference_times, personal_times: :course_user],
@@ -15,12 +13,13 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   preload(:answers, creator: :course_users)
     @course_users_hash = preload_course_users_hash(current_course)
 
+    load_course_user_students
     fetch_all_ancestor_assessments
     create_question_related_hash
-    @student_submissions_hash = student_submission_hash(submissions, @all_students)
+    @student_submissions_hash = fetch_hash_for_main_assessment(submissions, @all_students)
   end
 
-  def assessment
+  def ancestor_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
                   calculated(:maximum_grade).
                   preload(lesson_plan_item: [:reference_times, personal_times: :course_user],
@@ -29,10 +28,12 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     submissions = Course::Assessment::Submission.preload(creator: :course_users).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade)
+              
+    load_course_user_students
 
     # we do not need the nil value for this hash, since we aim only
     # to display the statistics charts
-    @student_submissions_hash = student_submission_end_time_hash(submissions, @all_students).compact
+    @student_submissions_hash = fetch_hash_for_ancestor_assessment(submissions, @all_students).compact
   end
 
   private
@@ -42,7 +43,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def load_course_user_students
-    @all_students = current_course.course_users.students
+    @all_students = @assessment.course.course_users.students
   end
 
   def fetch_all_ancestor_assessments

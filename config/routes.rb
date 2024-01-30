@@ -436,8 +436,8 @@ Rails.application.routes.draw do
         get 'course/course/progression' => 'aggregate#course_progression'
         get 'course/course/performance' => 'aggregate#course_performance'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
-        get 'assessment/:id' => 'assessments#assessment'
-        get 'assessment/:id/assessment_statistics' => 'assessments#assessment_statistics'
+        get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
+        get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
       end
 
       scope module: :video do
