@@ -270,21 +270,11 @@ jobs:
           name: Run RSpec tests
           no_output_timeout: 10m
           command: |
-            mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-
-            bundle exec rspec \
-              --format progress \
-              --format RspecJunitFormatter \
-              --out /tmp/test-results/rspec.xml \
-              -- ${TEST_FILES}
+            mkdir ~/rspec
+            circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml" --verbose --split-by=timings
 
       - store_test_results:
-          path: /tmp/test-results
-
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
+          path: ~/rspec
 
   factorybot_lint:
     executor: ruby_with_postgres
