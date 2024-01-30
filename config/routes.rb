@@ -431,13 +431,13 @@ Rails.application.routes.draw do
 
       namespace :statistics do
         get '/' => 'statistics#index'
-        get 'assessment/:id' => 'assessments#assessment'
         get 'course/progression' => 'aggregate#course_progression'
         get 'course/performance' => 'aggregate#course_performance'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
-        get 'assessment/:id/assessment_statistics' => 'assessments#assessment_statistics'
+        get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
+        get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
       end
 
       scope module: :video do

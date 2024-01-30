@@ -6,14 +6,21 @@ module Course::Statistics::SubmissionsConcern
     students.to_h { |student| [student, nil] }
   end
 
-  def student_submission_hash(submissions, students)
+  def fetch_hash_for_main_assessment(submissions, students)
     student_hash = initialize_student_hash(students)
 
-    populate_with_submission_info(student_hash, submissions)
+    populate_hash_including_answers(student_hash, submissions)
     student_hash
   end
 
-  def populate_with_submission_info(student_hash, submissions)
+  def fetch_hash_for_ancestor_assessment(submissions, students)
+    student_hash = initialize_student_hash(students)
+
+    populate_hash_without_answers(student_hash, submissions)
+    student_hash
+  end
+
+  def populate_hash_including_answers(student_hash, submissions)
     submissions.map do |submission|
       submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
       next unless submitter_course_user&.student?
@@ -24,6 +31,17 @@ module Course::Statistics::SubmissionsConcern
       end_at = @assessment.lesson_plan_item.time_for(submitter_course_user).end_at
 
       student_hash[submitter_course_user] = [submission, answers, end_at]
+    end
+  end
+
+  def populate_hash_without_answers(student_hash, submissions)
+    submissions.map do |submission|
+      submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
+      next unless submitter_course_user&.student?
+
+      end_at = @assessment.lesson_plan_item.time_for(submitter_course_user).end_at
+
+      student_hash[submitter_course_user] = [submission, end_at]
     end
   end
 end
