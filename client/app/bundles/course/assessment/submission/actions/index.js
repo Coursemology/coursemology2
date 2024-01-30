@@ -146,6 +146,7 @@ export function unsubmit(submissionId) {
       .then((response) => response.data)
       .then((data) => {
         dispatch({ type: actionTypes.UNSUBMIT_SUCCESS, payload: data });
+        dispatch(initiateAnswerFlagsForAnswers({ answers: data.answers }));
         dispatch(setNotification(translations.updateSuccess));
       })
       .catch((error) => {
