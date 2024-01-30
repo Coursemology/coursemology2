@@ -28,7 +28,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     submissions = Course::Assessment::Submission.preload(creator: :course_users).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade)
-
+              
     load_course_user_students
 
     @student_submissions_hash = fetch_hash_for_ancestor_assessment(submissions, @all_students)
