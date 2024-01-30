@@ -1,9 +1,11 @@
 import { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { FormControlLabel, Switch, Tooltip, Typography } from '@mui/material';
 import { SubmissionQuestionBaseData } from 'types/course/assessment/submission/question/types';
 
 import SavingIndicator from 'lib/components/core/indicators/SavingIndicator';
+import { SAVING_STATUS } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -82,13 +84,27 @@ const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
   const answerFlag = useAppSelector((state) =>
     getFlagForAnswerId(state, answerId),
   );
+  const {
+    formState: { dirtyFields },
+  } = useFormContext();
+  const isAnswerDirty = !!dirtyFields[answerId];
+
+  // to mitigate the issue when, during saving, user modify the answer and hence
+  // the saving status will be None for a while, then Saved (ongoing Saving is finished),
+  // then None again (user keep on modifying answer). We decided to keep it consistent by
+  // having saving Status to be None if answer is Dirty, since the Saved indicator is not
+  // right here (answer has been modified)
+  const savingStatus =
+    isAnswerDirty && answerFlag?.savingStatus === SAVING_STATUS.Saved
+      ? SAVING_STATUS.None
+      : answerFlag?.savingStatus;
 
   return (
     <div className="flex items-start justify-between">
       <Typography variant="h6">{question.questionNumber}</Typography>
 
       <div className="flex items-center">
-        <SavingIndicator savingStatus={answerFlag?.savingStatus} />
+        <SavingIndicator savingStatus={savingStatus} />
 
         <HistoryToggle
           historyQuestions={historyQuestions}

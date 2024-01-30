@@ -410,6 +410,7 @@ const SubmissionEditForm = (props) => {
         const question = questions[id];
         const { answerId, topicId, viewHistory } = question;
         const topic = topics[topicId];
+
         return (
           <Element key={id} name={`step${index}`}>
             <Paper className="mb-5 p-6" variant="outlined">
