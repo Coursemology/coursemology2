@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import { useAppSelector } from 'lib/hooks/store';
 
-import AncestorSelect from './AncestorSelect';
+import AncestorOptions from './AncestorOptions';
+import AncestorStatistics from './AncestorStatistics';
 import { getAssessmentStatistics } from './selectors';
 
 const DuplicationHistoryStatistics: FC = () => {
@@ -15,34 +16,20 @@ const DuplicationHistoryStatistics: FC = () => {
   const [selectedAncestorId, setSelectedAncestorId] =
     useState(parsedAssessmentId);
 
-  const fetchAncestorSubmissions = (id: number): void => {
-    if (id === selectedAncestorId) {
-      return;
-    }
-    setSelectedAncestorId(id);
-  };
-
   return (
     <>
-      <AncestorSelect
+      <AncestorOptions
         ancestors={ancestors}
-        fetchAncestorSubmissions={fetchAncestorSubmissions}
-        isErrorAncestors={false}
-        isFetchingAncestors={false}
         parsedAssessmentId={parsedAssessmentId}
         selectedAncestorId={selectedAncestorId}
+        setSelectedAncestorId={setSelectedAncestorId}
       />
-      {/* <div className="mb-8">
+      <div className="mb-8">
         <AncestorStatistics
-          ancestorAllStudents={statisticsPage.ancestorAllStudents}
-          ancestorSubmissions={statisticsPage.ancestorSubmissions}
           currentAssessmentSelected={selectedAncestorId === parsedAssessmentId}
-          isErrorAncestorStatistics={statisticsPage.isErrorAncestorStatistics}
-          isFetchingAncestorStatistics={
-            statisticsPage.isFetchingAncestorStatistics
-          }
+          selectedAssessmentId={selectedAncestorId}
         />
-      </div> */}
+      </div>
     </>
   );
 };

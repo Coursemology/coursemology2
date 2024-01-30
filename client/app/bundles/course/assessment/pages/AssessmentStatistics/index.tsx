@@ -11,12 +11,12 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import MainGradesChart from './GradeDistribution/MainGradesChart';
+import SubmissionStatusMainAssessment from './SubmissionStatus/MainSubmissionChart';
+import MainSubmissionTimeAndGradeStatistics from './SubmissionTimeAndGradeStatistics/MainSubmissionTimeAndGradeStatistics';
 import DuplicationHistoryStatistics from './DuplicationHistoryStatistics';
-import GradeDistributionChart from './GradeDistributionChart';
 import { getAssessmentStatistics } from './selectors';
 import StudentMarksPerQuestionTable from './StudentMarksPerQuestionTable';
-import SubmissionStatusChart from './SubmissionStatusChart';
-import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
 
 const translations = defineMessages({
   statistics: {
@@ -77,17 +77,15 @@ const AssessmentStatisticsPage: FC = () => {
     dispatch(fetchAssessmentStatistics(parsedAssessmentId)).catch(() =>
       toast.error(t(translations.fetchFailure)),
     );
-  }, [dispatch, parsedAssessmentId]);
+  }, [dispatch]);
 
   const tabComponentMapping = {
     marksPerQuestion: (
       <StudentMarksPerQuestionTable includePhantom={includePhantom} />
     ),
-    gradeDistribution: (
-      <GradeDistributionChart includePhantom={includePhantom} />
-    ),
+    gradeDistribution: <MainGradesChart includePhantom={includePhantom} />,
     submissionTimeAndGrade: (
-      <SubmissionTimeAndGradeChart includePhantom={includePhantom} />
+      <MainSubmissionTimeAndGradeStatistics includePhantom={includePhantom} />
     ),
     duplicationHistory: <DuplicationHistoryStatistics />,
   };
@@ -106,7 +104,7 @@ const AssessmentStatisticsPage: FC = () => {
     >
       <>
         <Box className="max-w-full border-b border-divider">
-          <SubmissionStatusChart includePhantom={includePhantom} />
+          <SubmissionStatusMainAssessment includePhantom={includePhantom} />
           <FormControlLabel
             className="mt-2"
             control={

@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
 import palette from 'theme/palette';
-import { SubmissionDetailsStats } from 'types/course/statistics/assessmentStatistics';
+import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
 import Link from 'lib/components/core/Link';
@@ -130,7 +130,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     return grade1 - grade2;
   };
 
-  const answerColumns: ColumnTemplate<SubmissionDetailsStats>[] = Array.from(
+  const answerColumns: ColumnTemplate<MainSubmissionInfo>[] = Array.from(
     { length: assessment?.questionCount ?? 0 },
     (_, index) => {
       return {
@@ -161,10 +161,10 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     },
   );
 
-  const jointGroupsName = (datum: SubmissionDetailsStats): string =>
+  const jointGroupsName = (datum: MainSubmissionInfo): string =>
     datum.groups ? datum.groups.map((g) => g.name).join(', ') : '';
 
-  const columns: ColumnTemplate<SubmissionDetailsStats>[] = [
+  const columns: ColumnTemplate<MainSubmissionInfo>[] = [
     {
       searchProps: {
         getValue: (datum) => datum.courseUser.name,
@@ -273,7 +273,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       getRowClassName={(datum): string =>
         `data_${datum.courseUser.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
       }
-      getRowEqualityData={(datum): SubmissionDetailsStats => datum}
+      getRowEqualityData={(datum): MainSubmissionInfo => datum}
       getRowId={(datum): string => datum.courseUser.id.toString()}
       indexing={{ indices: true }}
       pagination={{

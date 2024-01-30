@@ -1,16 +1,16 @@
 import { FC, ReactNode } from 'react';
 import { defineMessages } from 'react-intl';
 import { Card, CardContent, Typography } from '@mui/material';
-
 import {
-  CourseUserShape,
-  SubmissionRecordShape,
-} from 'course/assessment/types';
+  AncestorSubmissionInfo,
+  StudentInfo,
+} from 'types/course/statistics/assessmentStatistics';
+
 import useTranslation from 'lib/hooks/useTranslation';
 
-import GradeDistributionChart from './GradeDistributionChart';
-import SubmissionStatusChart from './SubmissionStatusChart';
-import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
+import AncestorGradesChart from './GradeDistribution/AncestorGradesChart';
+import AncestorSubmissionChart from './SubmissionStatus/AncestorSubmissionChart';
+import AncestorSubmissionTimeAndGradeStatistics from './SubmissionTimeAndGradeStatistics/AncestorSubmissionTimeAndGradeStatistics';
 
 const translations = defineMessages({
   submissionStatuses: {
@@ -28,8 +28,8 @@ const translations = defineMessages({
 });
 
 interface Props {
-  submissions: SubmissionRecordShape[];
-  allStudents: CourseUserShape[];
+  submissions: AncestorSubmissionInfo[];
+  allStudents: StudentInfo[];
 }
 
 const CardTitle: FC<{ children: ReactNode }> = ({ children }) => (
@@ -47,28 +47,23 @@ const StatisticsCharts: FC<Props> = (props) => {
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.submissionStatuses)}</CardTitle>
-          <SubmissionStatusChart
+          <AncestorSubmissionChart
             ancestorAllStudents={allStudents}
             ancestorSubmissions={submissions}
-            includePhantom
           />
         </CardContent>
       </Card>
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.gradeDistribution)}</CardTitle>
-          <GradeDistributionChart
-            ancestorSubmissions={submissions}
-            includePhantom
-          />
+          <AncestorGradesChart ancestorSubmissions={submissions} />
         </CardContent>
       </Card>
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.submissionTimeAndGrade)}</CardTitle>
-          <SubmissionTimeAndGradeChart
+          <AncestorSubmissionTimeAndGradeStatistics
             ancestorSubmissions={submissions}
-            includePhantom
           />
         </CardContent>
       </Card>
