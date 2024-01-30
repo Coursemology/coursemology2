@@ -11,7 +11,7 @@ RSpec.feature 'Course: Administration: Leaderboard', js: true do
     let!(:groups) { create_list(:course_group, 3, group_category: group_category1) }
     before { login_as(user, scope: :user) }
 
-    context 'As a Course Manager', js: true do
+    context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can change the leaderboard display user count setting' do

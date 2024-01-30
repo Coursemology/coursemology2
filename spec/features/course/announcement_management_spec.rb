@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Announcements' do
+RSpec.feature 'Course: Announcements', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -17,7 +17,7 @@ RSpec.feature 'Course: Announcements' do
     context 'As an Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create new announcements', js: true do
+      scenario 'I can create new announcements' do
         visit course_announcements_path(course)
         find('#new-announcement-button').click
         expect(page).to have_text('New Announcement')
@@ -33,7 +33,7 @@ RSpec.feature 'Course: Announcements' do
         expect(current_path).to eq(course_announcements_path(course))
       end
 
-      scenario 'I can edit announcements', js: true do
+      scenario 'I can edit announcements' do
         announcement = create(:course_announcement, course: course)
         visit course_announcements_path(course)
 
@@ -54,7 +54,7 @@ RSpec.feature 'Course: Announcements' do
         end
       end
 
-      scenario 'I can see all existing announcements', js: true do
+      scenario 'I can see all existing announcements' do
         visit course_announcements_path(course)
         expect(page).to have_selector('#new-announcement-button')
 
@@ -65,7 +65,7 @@ RSpec.feature 'Course: Announcements' do
         end
       end
 
-      scenario 'I can delete an existing announcement', js: true do
+      scenario 'I can delete an existing announcement' do
         announcement = create(:course_announcement, course: course)
         visit course_announcements_path(course)
 
@@ -83,13 +83,13 @@ RSpec.feature 'Course: Announcements' do
     context 'As an Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view the Announcement Sidebar item', js: true do
+      scenario 'I can view the Announcement Sidebar item' do
         visit course_path(course)
 
         expect(find_sidebar).to have_text(I18n.t('course.announcements.sidebar_title'))
       end
 
-      scenario 'I can see the started announcements', js: true do
+      scenario 'I can see the started announcements' do
         visit course_announcements_path(course)
 
         # Cannot create new announcement

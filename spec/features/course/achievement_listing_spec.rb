@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Achievements' do
+RSpec.feature 'Course: Achievements', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -16,7 +16,7 @@ RSpec.feature 'Course: Achievements' do
       visit course_achievements_path(course)
     end
 
-    context 'As a Course Manager', js: true do
+    context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can view all achievements' do
@@ -29,7 +29,7 @@ RSpec.feature 'Course: Achievements' do
       end
     end
 
-    context 'As a Course Student', js: true do
+    context 'As a Course Student' do
       let!(:course_student1) { create(:course_student, course: course) }
       let!(:course_student2) { create(:course_student, course: course) }
       let!(:phantom_user) { create(:course_student, :phantom, course: course) }

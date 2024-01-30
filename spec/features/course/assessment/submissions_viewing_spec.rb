@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Submissions Viewing' do
+RSpec.describe 'Course: Submissions Viewing', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -16,7 +16,7 @@ RSpec.describe 'Course: Submissions Viewing' do
       let(:course_manager) { create(:course_manager, course: course) }
       let(:user) { course_manager.user }
 
-      scenario 'I can view all submitted and published submissions', js: true do
+      scenario 'I can view all submitted and published submissions' do
         students = create_list(:course_student, 4, course: course)
         attempting_submission, submitted_submission, graded_submission, published_submission =
           students.zip([:attempting, :submitted, :graded, :published]).map do |student, trait|
@@ -44,7 +44,7 @@ RSpec.describe 'Course: Submissions Viewing' do
         end
       end
 
-      scenario 'I can view pending submissions from all non-autograded assessments', js: true do
+      scenario 'I can view pending submissions from all non-autograded assessments' do
         students = create_list(:course_student, 4, course: course)
         attempting_submission, submitted_submission1, submitted_submission2, published_submission =
           students.zip([:attempting, :submitted, :submitted, :published]).map do |student, trait|
@@ -93,7 +93,7 @@ RSpec.describe 'Course: Submissions Viewing' do
 
       # COMMENTED OUT as it is not possible to select the options for filtering
       # Reimplement when switching test suite
-      # scenario 'I can filter submissions', js: true do
+      # scenario 'I can filter submissions' do
       #   # Create student, group and submission
       #   student = create(:course_student, course: course)
       #   group = create(:course_group, course: course)
@@ -129,7 +129,7 @@ RSpec.describe 'Course: Submissions Viewing' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view my submitted, graded and published submissions', js: true do
+      scenario 'I can view my submitted, graded and published submissions' do
         # Attach a submission of each trait to a unique assessment
         assessments = create_list(:course_assessment_assessment, 4, :with_mcq_question,
                                   course: course)

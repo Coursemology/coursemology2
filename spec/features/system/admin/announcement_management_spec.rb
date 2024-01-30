@@ -13,6 +13,7 @@ RSpec.feature 'System: Administration: Announcements' do
 
       scenario 'I can create announcements' do
         visit admin_announcements_path
+        wait_for_page
 
         find('button#new-announcement-button').click
 
@@ -31,6 +32,8 @@ RSpec.feature 'System: Administration: Announcements' do
       scenario 'I can edit announcements' do
         announcement = create(:system_announcement)
         visit admin_announcements_path
+        wait_for_page
+
         find("#announcement-edit-button-#{announcement.id}").click
 
         fill_in 'title', with: 'long string' * 100
@@ -58,6 +61,7 @@ RSpec.feature 'System: Administration: Announcements' do
         announcements = System::Announcement.first(2)
         visit admin_announcements_path
         expect(page).to have_selector('#new-announcement-button')
+        wait_for_page
 
         announcements.each do |announcement|
           expect(page).to have_selector("#announcement-#{announcement.id}")
@@ -70,6 +74,7 @@ RSpec.feature 'System: Administration: Announcements' do
         create(:system_announcement)
         announcement = System::Announcement.first
         visit admin_announcements_path
+        wait_for_page
 
         find("#announcement-delete-button-#{announcement.id}").click
         click_button('Delete')

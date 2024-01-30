@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Download' do
+RSpec.describe 'Course: Assessment: Submissions: Download', js: true do
   let(:instance) { Instance.default }
   let(:types) { Course::Assessment::Submission::ZipDownloadService::STUDENTS }
 
@@ -19,7 +19,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
       let(:course_user) { create(:course_teaching_assistant, course: course) }
       let(:user) { course_user.user }
 
-      scenario 'I can download all submissions by non-phantom students', js: true do
+      scenario 'I can download all submissions by non-phantom students' do
         submission
         visit course_assessment_submissions_path(course, assessment)
 
@@ -35,7 +35,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
                                        creator: course_staff.user)
         end
 
-        scenario 'I can download all submissions by phantom students', js: true do
+        scenario 'I can download all submissions by phantom students' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
@@ -56,7 +56,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
           create(:course_group_student, course: course, group: group, course_user: course_student)
         end
 
-        scenario 'I can download all submissions by students in my group', js: true do
+        scenario 'I can download all submissions by students in my group' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 
@@ -68,7 +68,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
       end
 
       context 'when there are no confirmed submissions' do
-        scenario 'The download button should be disabled', js: true do
+        scenario 'The download button should be disabled' do
           visit course_assessment_submissions_path(course, assessment)
 
           expect(page).not_to have_css('.download-zip-submissions-enabled')
@@ -79,7 +79,7 @@ RSpec.describe 'Course: Assessment: Submissions: Download' do
       context 'when the assessment has no downloadable answers' do
         let(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
 
-        scenario 'The download button should be disabled', js: true do
+        scenario 'The download button should be disabled' do
           submission
           visit course_assessment_submissions_path(course, assessment)
 

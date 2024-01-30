@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Topics: Management' do
+RSpec.feature 'Course: Topics: Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -31,7 +31,7 @@ RSpec.feature 'Course: Topics: Management' do
     context 'As a Course Teaching Assistant' do
       let(:user) { course_teaching_assistant.user }
 
-      scenario 'I can see all the comments', js: true do
+      scenario 'I can see all the comments' do
         comment
         code_annotation
         video_comment
@@ -47,7 +47,7 @@ RSpec.feature 'Course: Topics: Management' do
         )
       end
 
-      scenario 'I can reply to a comment topic', js: true do
+      scenario 'I can reply to a comment topic' do
         # Randomly create a topic, either code_annotation, comment, or video_comment.
         choices = [proc { code_annotation }, proc { comment }, proc { video_comment }]
         topic = choices.sample[]
@@ -71,7 +71,7 @@ RSpec.feature 'Course: Topics: Management' do
         end
       end
 
-      scenario 'I can mark a topic as pending', js: true do
+      scenario 'I can mark a topic as pending' do
         choices = [proc { code_annotation }, proc { comment }, proc { video_comment }]
         topic = choices.sample[].acting_as
         visit course_topics_path(course)
@@ -128,7 +128,7 @@ RSpec.feature 'Course: Topics: Management' do
                topic: student_video_comment.acting_as, creator: course.creator)
       end
 
-      scenario 'I can see all my comments', js: true do
+      scenario 'I can see all my comments' do
         other_comments = [comment, code_annotation, video_comment].map(&:acting_as)
         my_comments = [student_comment, student_annotation, student_video_comment].map(&:acting_as)
         visit course_topics_path(course)
@@ -147,7 +147,7 @@ RSpec.feature 'Course: Topics: Management' do
         end
       end
 
-      scenario 'I can see my pending comments and mark as read', js: true do
+      scenario 'I can see my pending comments and mark as read' do
         other_comments = [
           staff_response_to_comment, staff_response_to_annotation, staff_response_to_video
         ].map(&:topic)
@@ -167,7 +167,7 @@ RSpec.feature 'Course: Topics: Management' do
         expect(mark_as_read.unread?(user)).to be_falsey
       end
 
-      scenario 'I can reply to and delete a comment topic', js: true do
+      scenario 'I can reply to and delete a comment topic' do
         # Randomly create a topic, either code_annotation, comment, or video_comment.
         choices = [proc { student_annotation },
                    proc { student_comment },
@@ -210,7 +210,7 @@ RSpec.feature 'Course: Topics: Management' do
         end
       end
 
-      scenario 'I can edit my comment post', js: true do
+      scenario 'I can edit my comment post' do
         choices = [proc { student_reply }, proc { student_video_reply }]
         my_comment_post = choices.sample[]
         visit course_topics_path(course)
@@ -240,7 +240,7 @@ RSpec.feature 'Course: Topics: Management' do
     context 'As a system administrator' do
       let(:user) { create(:administrator) }
 
-      scenario 'I can visit the comments page', js: true do
+      scenario 'I can visit the comments page' do
         comment
         video_comment
         visit course_topics_path(course)
