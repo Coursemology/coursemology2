@@ -4,7 +4,6 @@ import editPageReducer from './reducers/editPage';
 import formDialogReducer from './reducers/formDialog';
 import monitoringReducer from './reducers/monitoring';
 import statisticsReducer from './reducers/statistics';
-import statisticsPageReducer from './reducers/statisticsPage';
 import submissionReducer from './submission/reducers';
 
 const reducer = combineReducers({
@@ -12,7 +11,6 @@ const reducer = combineReducers({
   editPage: editPageReducer,
   monitoring: monitoringReducer,
   statistics: statisticsReducer,
-  statisticsPage: statisticsPageReducer,
   submission: submissionReducer,
 });
 
