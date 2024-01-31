@@ -3,20 +3,28 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
 import palette from 'theme/palette';
-import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
+import {
+  AttemptInfo,
+  MainSubmissionInfo,
+} from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
 import Link from 'lib/components/core/Link';
+import Note from 'lib/components/core/Note';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { getClassNameForMarkCell } from './classNameUtils';
+import { getClassNameForAttemptCountCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 
 const translations = defineMessages({
+  onlyForAutogradedAssessment: {
+    id: 'course.assessment.statistics.onlyForAutogradedAssessment',
+    defaultMessage: 'This table is only displayed for Autograded Assessment',
+  },
   name: {
     id: 'course.assessment.statistics.name',
     defaultMessage: 'Name',
@@ -25,17 +33,9 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.group',
     defaultMessage: 'Group',
   },
-  totalGrade: {
-    id: 'course.assessment.statistics.totalGrade',
-    defaultMessage: 'Total',
-  },
-  grader: {
-    id: 'course.assessment.statistics.grader',
-    defaultMessage: 'Grader',
-  },
   searchText: {
     id: 'course.assessment.statistics.searchText',
-    defaultMessage: 'Search by Student Name, Group or Grader Name',
+    defaultMessage: 'Search by Name or Groups',
   },
   answers: {
     id: 'course.assessment.statistics.answers',
@@ -44,10 +44,6 @@ const translations = defineMessages({
   questionIndex: {
     id: 'course.assessment.statistics.questionIndex',
     defaultMessage: 'Q{index}',
-  },
-  questionDisplayTitle: {
-    id: 'course.assessment.statistics.questionDisplayTitle',
-    defaultMessage: 'Q{index} for {student}',
   },
   noSubmission: {
     id: 'course.assessment.statistics.noSubmission',
@@ -59,7 +55,7 @@ const translations = defineMessages({
   },
   filename: {
     id: 'course.assessment.statistics.filename',
-    defaultMessage: 'Question-level Marks Statistics for {assessment}',
+    defaultMessage: 'Question-level Attempt Statistics for {assessment}',
   },
 });
 
@@ -75,7 +71,7 @@ const statusTranslations = {
   unstarted: 'Not Started',
 };
 
-const StudentMarksPerQuestionTable: FC<Props> = (props) => {
+const StudentAttemptCountTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId } = useParams();
   const { includePhantom } = props;
@@ -83,6 +79,10 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const statistics = useAppSelector(getAssessmentStatistics);
   const assessment = statistics.assessment;
   const submissions = statistics.submissions;
+
+  if (assessment?.isAutograded) {
+    return <Note message={t(translations.onlyForAutogradedAssessment)} />;
+  }
 
   // since submissions come from Redux store, it is immutable, and hence
   // toggling between includePhantom status will render typeError if we
@@ -102,35 +102,37 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         Number(datum2.courseUser.isPhantom),
     );
 
-  // the case where the grade is null is handled separately inside the column
+  // the case where the attempt count is null is handled separately inside the column
   // (refer to the definition of answerColumns below)
-  const renderNonNullGradeCell = (
-    grade: number,
-    maxGrade: number,
-  ): ReactNode => {
-    const className = getClassNameForMarkCell(grade, maxGrade);
+  const renderNonNullAttemptCountCell = (attempt: AttemptInfo): ReactNode => {
+    const className = getClassNameForAttemptCountCell(attempt);
     return (
       <div className={className}>
-        <Box>{grade.toFixed(1)}</Box>
+        <Box>{attempt.attemptCount}</Box>
       </div>
     );
   };
 
   // the customised sorting for grades to ensure null always is less than any non-null grade
-  const sortNullableGrade = (
-    grade1: number | null,
-    grade2: number | null,
+  const sortNullableAttemptCount = (
+    attempt1: AttemptInfo | null,
+    attempt2: AttemptInfo | null,
   ): number => {
-    if (!grade1 && !grade2) {
+    if (!attempt1 && !attempt2) {
       return 0;
     }
-    if (!grade1) {
+    if (!attempt1) {
       return -1;
     }
-    if (!grade2) {
+    if (!attempt2) {
       return 1;
     }
-    return grade1 - grade2;
+
+    const convertedAttempt1 =
+      attempt1.attemptCount * (attempt1.correct ? 1 : -1);
+    const convertedAttempt2 =
+      attempt2.attemptCount * (attempt2.correct ? 1 : -1);
+    return convertedAttempt1 - convertedAttempt2;
   };
 
   const answerColumns: ColumnTemplate<MainSubmissionInfo>[] = Array.from(
@@ -138,15 +140,13 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     (_, index) => {
       return {
         searchProps: {
-          getValue: (datum) => datum.answers?.[index]?.grade?.toString() ?? '',
+          getValue: (datum) =>
+            datum.attemptStatus?.[index]?.attemptCount?.toString() ?? '',
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.answers?.[index].grade === 'number'
-            ? renderNonNullGradeCell(
-                datum.answers?.[index].grade,
-                datum.answers?.[index].maximumGrade,
-              )
+          return typeof datum.attemptStatus?.[index].attemptCount === 'number'
+            ? renderNonNullAttemptCountCell(datum.attemptStatus?.[index])
             : null;
         },
         sortable: true,
@@ -154,9 +154,9 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         className: 'text-right',
         sortProps: {
           sort: (datum1, datum2): number => {
-            return sortNullableGrade(
-              datum1.answers?.[index].grade ?? null,
-              datum2.answers?.[index].grade ?? null,
+            return sortNullableAttemptCount(
+              datum1.attemptStatus?.[index] ?? null,
+              datum2.attemptStatus?.[index] ?? null,
             );
           },
         },
@@ -220,49 +220,6 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       className: 'center',
     },
     ...answerColumns,
-    {
-      searchProps: {
-        getValue: (datum) => datum.totalGrade?.toString() ?? '',
-      },
-      title: t(translations.totalGrade),
-      sortable: true,
-      cell: (datum): ReactNode =>
-        datum.totalGrade
-          ? renderNonNullGradeCell(
-              datum.totalGrade ?? null,
-              assessment!.maximumGrade,
-            )
-          : null,
-      className: 'text-right',
-      sortProps: {
-        sort: (datum1, datum2): number => {
-          return sortNullableGrade(
-            datum1.totalGrade ?? null,
-            datum2.totalGrade ?? null,
-          );
-        },
-      },
-      csvDownloadable: true,
-    },
-    {
-      searchProps: {
-        getValue: (datum) => datum.grader?.name ?? '',
-      },
-      title: t(translations.grader),
-      sortable: true,
-      searchable: true,
-      cell: (datum): JSX.Element | string => {
-        if (datum.grader && datum.grader.id !== 0) {
-          return (
-            <Link to={`/courses/${courseId}/users/${datum.grader.id}`}>
-              {datum.grader.name}
-            </Link>
-          );
-        }
-        return datum.grader?.name ?? '';
-      },
-      csvDownloadable: true,
-    },
   ];
 
   return (
@@ -290,4 +247,4 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   );
 };
 
-export default StudentMarksPerQuestionTable;
+export default StudentAttemptCountTable;
