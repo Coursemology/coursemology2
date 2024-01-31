@@ -5,8 +5,17 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :enrollable) }
-    let(:assessment) { create(:assessment, :published, :with_all_question_types, course: course) }
+    let(:original_course) { create(:course) }
+    let(:course) { create(:course) }
+    let(:original_assessment) { create(:assessment, :published, :with_all_question_types, course: original_course) }
+
+    let!(:duplicate_objects) do
+      Course::Duplication::ObjectDuplicationService.
+        duplicate_objects(original_course, course, [original_assessment], {})
+    end
+
+    let(:assessment) { course.assessments.first }
+
     let(:students) { create_list(:course_student, 3, course: course) }
     let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
 
@@ -23,124 +32,139 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
              assessment: assessment, course: course, creator: teaching_assistant.user)
     end
 
-    describe '#assessment' do
+    describe '#main_statistics' do
       render_views
-      subject { get :assessment, as: :json, params: { course_id: course, id: assessment.id } }
+      subject { get :main_statistics, as: :json, params: { course_id: course, id: assessment.id } }
 
-      context 'when the Normal User get the submission data for chart display' do
+      context 'when the Normal User get the main statistics data' do
         let(:user) { create(:user) }
         before { sign_in(user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
-      context 'when the Course Student get the submission data for chart display' do
+      context 'when the Course Student get the main statistics data' do
         let(:user) { create(:course_student, course: course).user }
         before { sign_in(user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
-      context 'when the Course Manager get the submission data for chart display' do
+      context 'when the Course Manager get the main statistics data' do
         let(:user) { create(:course_manager, course: course).user }
         before { sign_in(user) }
 
-        it 'returns OK with right number of submissions being displayed' do
+        it 'returns OK with right number of submissions and ancestor being displayed' do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
 
-          # only the students starting the assessment will have their data recorded here
-          expect(json_result['submissions'].count).to eq(2)
-
-          # only published submissions' answers will be included in the stats
-          expect(json_result['submissions'][0]['courseUser']['role']).to eq('student')
-          expect(json_result['submissions'][1]['courseUser']['role']).to eq('student')
+          # all the students data will be included here, including the non-existing submission one
+          expect(json_result['submissions'].count).to eq(3)
+          expect(json_result['allStudents'].count).to eq(3)
 
           # showing the correct workflow state
           expect(json_result['submissions'][0]['workflowState']).to eq('published')
           expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
+          expect(json_result['submissions'][2]['workflowState']).to be_nil
 
-          # however, all the students information will be sent to frontend
-          expect(json_result['allStudents'].count).to eq(3)
-        end
-      end
-    end
-
-    describe '#ancestors' do
-      let(:destination_course) { create(:course) }
-      let!(:duplicate_objects) do
-        Course::Duplication::ObjectDuplicationService.
-          duplicate_objects(course, destination_course, [assessment], {})
-      end
-
-      context 'after the assessment is being duplicated' do
-        render_views
-        subject do
-          get :ancestors, as: :json, params: { course_id: destination_course,
-                                               id: destination_course.assessments[0].id }
-        end
-
-        context 'when the administrator wants to get ancestors' do
-          let(:administrator) { create(:administrator) }
-          before { sign_in(administrator) }
-
-          it 'gives both the assessment information' do
-            expect(subject).to have_http_status(:success)
-            json_result = JSON.parse(response.body)
-
-            expect(json_result['assessments'].count).to eq(2)
-          end
-        end
-
-        context 'when the course manager of the destination course wants to get ancestors' do
-          let(:course_manager) { create(:course_manager, course: destination_course) }
-          before { sign_in(course_manager.user) }
-
-          it 'gives only the information regarding current destination as no authorization for parent course' do
-            expect(subject).to have_http_status(:success)
-            json_result = JSON.parse(response.body)
-
-            expect(json_result['assessments'].count).to eq(1)
-          end
-        end
-      end
-    end
-
-    describe '#marks_per_question' do
-      render_views
-      subject { get :marks_per_question, as: :json, params: { course_id: course, id: assessment.id } }
-
-      context 'when the Normal User fetch marks per question statistics' do
-        let(:user) { create(:user) }
-        before { sign_in(user) }
-        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
-      end
-
-      context 'when the Course Student fetch marks per question statistics' do
-        let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
-        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
-      end
-
-      context 'when the Course Manager fetch marks per question statistics' do
-        let(:user) { create(:course_manager, course: course).user }
-        before { sign_in(user) }
-
-        it 'returns OK with right number of submissions being displayed' do
-          expect(subject).to have_http_status(:success)
-          json_result = JSON.parse(response.body)
-
-          # all the students data will be included here, including the non-published one
-          expect(json_result['submissions'].count).to eq(3)
+          # checking if the submission exists
+          expect(json_result['submissions'][0]['submissionExists']).to be_truthy
+          expect(json_result['submissions'][1]['submissionExists']).to be_truthy
+          expect(json_result['submissions'][2]['submissionExists']).to be_falsey
 
           # only published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['answers']).not_to be_nil
           expect(json_result['submissions'][1]['answers']).to be_nil
           expect(json_result['submissions'][2]['answers']).to be_nil
 
+          # only published submissions' answers will be included in the stats
+          expect(json_result['submissions'][0]['courseUser']['role']).to eq('student')
+          expect(json_result['submissions'][1]['courseUser']['role']).to eq('student')
+          expect(json_result['submissions'][2]['courseUser']['role']).to eq('student')
+
+          # only 1 ancestor will be returned (current) as no permission for ancestor assessment
+          expect(json_result['ancestors'].count).to eq(1)
+        end
+      end
+
+      context 'when the administrator get the main statistics data' do
+        let(:administrator) { create(:administrator) }
+        before { sign_in(administrator) }
+
+        it 'returns OK with right information and 2 ancestors (both current and its predecassors)' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          # all the students data will be included here, including the non-existing submission one
+          expect(json_result['submissions'].count).to eq(3)
+          expect(json_result['allStudents'].count).to eq(3)
+
           # showing the correct workflow state
           expect(json_result['submissions'][0]['workflowState']).to eq('published')
           expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
           expect(json_result['submissions'][2]['workflowState']).to be_nil
+
+          # checking if the submission exists
+          expect(json_result['submissions'][0]['submissionExists']).to be_truthy
+          expect(json_result['submissions'][1]['submissionExists']).to be_truthy
+          expect(json_result['submissions'][2]['submissionExists']).to be_falsey
+
+          # only published submissions' answers will be included in the stats
+          expect(json_result['submissions'][0]['answers']).not_to be_nil
+          expect(json_result['submissions'][1]['answers']).to be_nil
+          expect(json_result['submissions'][2]['answers']).to be_nil
+
+          # only published submissions' answers will be included in the stats
+          expect(json_result['submissions'][0]['courseUser']['role']).to eq('student')
+          expect(json_result['submissions'][1]['courseUser']['role']).to eq('student')
+          expect(json_result['submissions'][2]['courseUser']['role']).to eq('student')
+
+          expect(json_result['ancestors'].count).to eq(2)
         end
+      end
+    end
+
+    describe '#ancestor_statistics' do
+      let(:original_students) { create_list(:course_student, 3, course: original_course) }
+      let(:original_teaching_assistant) { create(:course_teaching_assistant, course: original_course) }
+
+      let!(:original_submission1) do
+        create(:submission, :published,
+               assessment: original_assessment, course: original_course, creator: original_students[0].user)
+      end
+      let!(:original_submission2) do
+        create(:submission, :attempting,
+               assessment: original_assessment, course: original_course, creator: original_students[1].user)
+      end
+      let!(:original_submission_teaching_assistant) do
+        create(:submission, :published,
+               assessment: original_assessment, course: original_course, creator: original_teaching_assistant.user)
+      end
+
+      render_views
+      subject do
+        get :ancestor_statistics, as: :json, params: { course_id: original_course,
+                                                       id: original_assessment }
+      end
+
+      context 'when the course manager of the original course wants to get statistics' do
+        let(:course_manager) { create(:course_manager, course: original_course) }
+        before { sign_in(course_manager.user) }
+
+        it 'gives only the information regarding current destination as no authorization for parent course' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          # all the students data will be included here, including the non-existing submission one
+          expect(json_result['allStudents'].count).to eq(3)
+
+          # however, only the existing submissions will be shown
+          expect(json_result['submissions'].count).to eq(2)
+        end
+      end
+
+      context 'when the course manager of the current course wants to get statistics' do
+        let(:course_manager) { create(:course_manager, course: course) }
+        before { sign_in(course_manager.user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
     end
   end
