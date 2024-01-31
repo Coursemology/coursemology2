@@ -10,6 +10,7 @@ interface AssessmentInfo {
 }
 
 interface MainAssessmentInfo extends AssessmentInfo {
+  isAutograded: boolean;
   questionCount: number;
 }
 
@@ -31,6 +32,13 @@ interface AnswerInfo {
   maximumGrade: number;
 }
 
+export interface AttemptInfo {
+  isAutograded: boolean;
+  answerId: number;
+  attemptCount: number;
+  correct: boolean | null;
+}
+
 interface SubmissionInfo {
   courseUser: StudentInfo;
   workflowState?: WorkflowState;
@@ -40,6 +48,7 @@ interface SubmissionInfo {
 }
 
 export interface MainSubmissionInfo extends SubmissionInfo {
+  attemptStatus?: AttemptInfo[];
   answers?: AnswerInfo[];
   grader?: UserInfo;
   groups: { name: string }[];

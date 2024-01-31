@@ -7,11 +7,11 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
                   calculated(:maximum_grade, :question_count).
                   preload(lesson_plan_item: [:reference_times, personal_times: :course_user],
-                          course: :course_users).first
+                          course: [course_users: :groups]).first
     submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
                   calculated(:grade, :grader_ids).
-                  preload(:answers, creator: :course_users)
-    @course_users_hash = preload_course_users_hash(current_course)
+                  preload(answers: :question, creator: :course_users)
+    @course_users_hash = preload_course_users_hash(@assessment.course)
 
     load_course_user_students
     fetch_all_ancestor_assessments
@@ -31,8 +31,6 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
     load_course_user_students
 
-    # we do not need the nil value for this hash, since we aim only
-    # to display the statistics charts
     @student_submissions_hash = fetch_hash_for_ancestor_assessment(submissions, @all_students).compact
   end
 
@@ -64,6 +62,9 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     end
     @question_maximum_grade_hash = @assessment.questions.to_h do |q|
       [q.id, q.maximum_grade]
+    end
+    @question_auto_gradable_status_hash = @assessment.questions.to_h do |q|
+      [q.id, q.auto_gradable?]
     end
   end
 end
