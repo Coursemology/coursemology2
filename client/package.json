@@ -47,7 +47,7 @@
     "@rollbar/react": "^0.11.2",
     "@sgratzl/chartjs-chart-boxplot": "^3.8.0",
     "@tailwindcss/container-queries": "^0.1.1",
-    "@tanstack/react-table": "^8.11.6",
+    "@tanstack/react-table": "^8.11.7",
     "ace-builds": "^1.32.5",
     "axios": "^1.6.7",
     "babel-plugin-formatjs": "^10.5.13",
