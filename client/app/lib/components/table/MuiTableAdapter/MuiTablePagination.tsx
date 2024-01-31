@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { TablePagination, TablePaginationProps } from '@mui/material';
+import { TablePagination } from '@mui/material';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -7,12 +7,19 @@ import { PaginationProps } from '../adapters';
 
 import translations from './translations';
 
+type RowsPerPageOptions = (
+  | number
+  | {
+      value: number;
+      label: string;
+    }
+)[];
+
 const MuiTablePagination = (props: PaginationProps): JSX.Element => {
   const { t } = useTranslation();
 
   const rowsPerPageOptions = useMemo(() => {
-    const options: TablePaginationProps['rowsPerPageOptions'] =
-      props.pages?.slice() ?? [];
+    const options: RowsPerPageOptions = props.pages?.slice() ?? [];
 
     if (props.allowShowAll)
       options.push({
