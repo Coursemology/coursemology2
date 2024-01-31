@@ -581,7 +581,6 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                 {
                   path: 'statistics',
                   handle: AssessmentStatisticsPage.handle,
-                  // @ts-ignore `connect` throws error when cannot find `store` as direct parent
                   element: <AssessmentStatisticsPage />,
                 },
                 {

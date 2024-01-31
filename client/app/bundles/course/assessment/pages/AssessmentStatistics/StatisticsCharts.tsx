@@ -25,6 +25,11 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.submissionTimeAndGrade',
     defaultMessage: 'Submission Time and Grade',
   },
+  noIncludePhantom: {
+    id: 'course.assessment.statistics.noIncludePhantom',
+    defaultMessage:
+      '*All statistics in this duplicated assessments does not include Phantom Students',
+  },
 });
 
 interface Props {
@@ -42,28 +47,36 @@ const StatisticsCharts: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { submissions, allStudents } = props;
 
+  const noPhantomStudents = allStudents.filter((student) => !student.isPhantom);
+  const noPhantomSubmissions = submissions.filter(
+    (s) => !s.courseUser.isPhantom,
+  );
+
   return (
     <div className="full-w space-y-4">
+      <Typography className="mt-2 italic" variant="body2">
+        {t(translations.noIncludePhantom)}
+      </Typography>
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.submissionStatuses)}</CardTitle>
           <AncestorSubmissionChart
-            ancestorAllStudents={allStudents}
-            ancestorSubmissions={submissions}
+            ancestorAllStudents={noPhantomStudents}
+            ancestorSubmissions={noPhantomSubmissions}
           />
         </CardContent>
       </Card>
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.gradeDistribution)}</CardTitle>
-          <AncestorGradesChart ancestorSubmissions={submissions} />
+          <AncestorGradesChart ancestorSubmissions={noPhantomSubmissions} />
         </CardContent>
       </Card>
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.submissionTimeAndGrade)}</CardTitle>
           <AncestorSubmissionTimeAndGradeStatistics
-            ancestorSubmissions={submissions}
+            ancestorSubmissions={noPhantomSubmissions}
           />
         </CardContent>
       </Card>

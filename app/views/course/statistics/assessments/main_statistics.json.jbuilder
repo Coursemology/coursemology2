@@ -23,7 +23,7 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
 
   json.submissionExists !submission.nil?
 
-  if !submission.nil?
+  unless submission.nil?
     json.workflowState submission.workflow_state
     json.submittedAt submission.submitted_at&.iso8601
     json.endAt end_at&.iso8601
