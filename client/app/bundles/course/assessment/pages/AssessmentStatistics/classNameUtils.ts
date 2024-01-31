@@ -1,3 +1,5 @@
+import { AttemptInfo } from 'types/course/statistics/assessmentStatistics';
+
 const lowerGradeBackgroundColorClassName = {
   0: 'bg-red-50',
   100: 'bg-red-100',
@@ -35,4 +37,14 @@ export const getClassNameForMarkCell = (
   return grade >= maxGrade / 2
     ? `${higherGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`
     : `${lowerGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`;
+};
+
+export const getClassNameForAttemptCountCell = (
+  attempt: AttemptInfo,
+): string => {
+  if (!attempt.isAutograded || attempt.correct === null) {
+    return 'bg-gray-300 p-[1rem]';
+  }
+
+  return attempt.correct ? 'bg-green-300 p-[1rem]' : 'bg-red-300 p-[1rem]';
 };
