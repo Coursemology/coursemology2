@@ -122,7 +122,7 @@
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.2",
     "@types/enzyme": "^3.10.18",
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.12",
     "@types/jquery": "^3.5.29",
     "@types/papaparse": "^5.3.14",
     "@types/rails__actioncable": "^6.1.10",
