@@ -28,14 +28,12 @@ export interface StudentInfo extends UserInfo {
 }
 
 interface AnswerInfo {
-  id: number;
   grade: number;
   maximumGrade: number;
 }
 
 export interface AttemptInfo {
   isAutograded: boolean;
-  answerId: number;
   attemptCount: number;
   correct: boolean | null;
 }
