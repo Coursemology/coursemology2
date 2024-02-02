@@ -21,9 +21,10 @@ import { getClassNameForAttemptCountCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 
 const translations = defineMessages({
-  onlyForAutogradedAssessment: {
-    id: 'course.assessment.statistics.onlyForAutogradedAssessment',
-    defaultMessage: 'This table is only displayed for Autograded Assessment',
+  onlyForAutogradableAssessment: {
+    id: 'course.assessment.statistics.onlyForAutogradableAssessment',
+    defaultMessage:
+      'This table is only displayed for Assessment with at least one Autograded Questions',
   },
   name: {
     id: 'course.assessment.statistics.name',
@@ -80,8 +81,8 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
   const assessment = statistics.assessment;
   const submissions = statistics.submissions;
 
-  if (assessment?.isAutograded) {
-    return <Note message={t(translations.onlyForAutogradedAssessment)} />;
+  if (!assessment?.isAutograded) {
+    return <Note message={t(translations.onlyForAutogradableAssessment)} />;
   }
 
   // since submissions come from Redux store, it is immutable, and hence
