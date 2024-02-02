@@ -165,7 +165,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   );
 
   const jointGroupsName = (datum: MainSubmissionInfo): string =>
-    datum.groups ? datum.groups.map((g) => g.name).join(', ') : '';
+    datum.groups ? datum.groups.join(', ') : '';
 
   const columns: ColumnTemplate<MainSubmissionInfo>[] = [
     {

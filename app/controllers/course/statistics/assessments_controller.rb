@@ -2,6 +2,7 @@
 class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   include Course::UsersHelper
   include Course::Statistics::SubmissionsConcern
+  include Course::Statistics::UsersConcern
 
   def main_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
@@ -13,11 +14,11 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   preload(creator: :course_users)
     @course_users_hash = preload_course_users_hash(@assessment.course)
 
-    load_course_user_students
+    load_course_user_students_info
     fetch_all_ancestor_assessments
     create_question_related_hash
 
-    @assessment_autograded = @question_auto_gradable_status_hash.any? { |key, value| value }
+    @assessment_autograded = @question_auto_gradable_status_hash.any? { |_, value| value }
     @student_submissions_hash = fetch_hash_for_main_assessment(submissions, @all_students)
   end
 
@@ -31,8 +32,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade)
 
-    load_course_user_students
-
+    @all_students = @assessment.course.course_users.students
     @student_submissions_hash = fetch_hash_for_ancestor_assessment(submissions, @all_students).compact
   end
 
@@ -42,8 +42,9 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     params.permit(:id)
   end
 
-  def load_course_user_students
-    @all_students = @assessment.course.course_users.students
+  def load_course_user_students_info
+    @all_students = current_course.course_users.students
+    @group_names_hash = group_names_hash
   end
 
   def fetch_all_ancestor_assessments

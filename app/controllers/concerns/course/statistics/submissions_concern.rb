@@ -72,7 +72,7 @@ module Course::Statistics::SubmissionsConcern
     SQL
                                                                          )
 
-    submission_answer_statistics.group_by { |answer| answer.submission_id }.
+    submission_answer_statistics.group_by(&:submission_id).
       transform_values do |grouped_answers|
         grouped_answers.sort_by { |answer| @question_order_hash[answer.question_id] }
       end

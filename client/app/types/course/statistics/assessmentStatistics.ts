@@ -49,7 +49,7 @@ export interface MainSubmissionInfo extends SubmissionInfo {
   attemptStatus?: AttemptInfo[];
   answers?: AnswerInfo[];
   grader?: UserInfo;
-  groups: { name: string }[];
+  groups: string[];
   submissionExists: boolean;
 }
 

@@ -18,10 +18,7 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
     json.isPhantom course_user.phantom?
   end
 
-  json.groups course_user.groups do |group|
-    json.name group.name
-  end
-
+  json.groups @group_names_hash[course_user.id]
   json.submissionExists !submission.nil?
 
   unless submission.nil?
