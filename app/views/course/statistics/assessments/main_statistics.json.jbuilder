@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.assessment do
   json.id @assessment.id
-  json.isAutograded @assessment.autograded
+  json.isAutograded @assessment_autograded
   json.title @assessment.title
   json.startAt @assessment.start_at&.iso8601
   json.endAt @assessment.end_at&.iso8601
@@ -31,11 +31,9 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
     json.totalGrade submission.grade
 
     json.attemptStatus answers.each do |answer|
-      num_attempts, correct = attempt_status(submission, answer.question_id)
       json.isAutograded @question_auto_gradable_status_hash[answer.question_id]
-      json.answerId answer.id
-      json.attemptCount num_attempts
-      json.correct correct
+      json.attemptCount answer.attempt_count
+      json.correct answer.correct
     end
 
     if submission.workflow_state == 'published' && submission.grader_ids
@@ -47,7 +45,6 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
       end
 
       json.answers answers.each do |answer|
-        json.id answer.id
         json.grade answer.grade
         json.maximumGrade @question_maximum_grade_hash[answer.question_id]
       end
