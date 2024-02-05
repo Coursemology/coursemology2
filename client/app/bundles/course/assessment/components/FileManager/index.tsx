@@ -109,9 +109,8 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
     const { id, name } = materials[index];
     if (!id || !name) return;
 
-    setMaterials(
-      (current) =>
-        current?.map((m) => (m.id === id ? { ...m, deleting: true } : m)),
+    setMaterials((current) =>
+      current?.map((m) => (m.id === id ? { ...m, deleting: true } : m)),
     );
 
     try {
@@ -119,9 +118,8 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
       setMaterials((current) => current?.filter((m) => m.id !== id));
       toast.success(intl.formatMessage(t.deleteSuccess, { name }));
     } catch (error) {
-      setMaterials(
-        (current) =>
-          current?.map((m) => (m.id === id ? { ...m, deleting: false } : m)),
+      setMaterials((current) =>
+        current?.map((m) => (m.id === id ? { ...m, deleting: false } : m)),
       );
       toast.error(intl.formatMessage(t.deleteFail, { name }));
     }

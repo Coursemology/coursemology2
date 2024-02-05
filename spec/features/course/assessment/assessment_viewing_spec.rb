@@ -15,6 +15,7 @@ RSpec.describe 'Course: Assessments: Viewing', js: true do
       scenario 'I can access all submissions of an assessment' do
         assessment
         visit course_assessments_path(course)
+        wait_for_page
 
         submissions_button = find_link('Submissions', visible: false)
         hover_then_click submissions_button
