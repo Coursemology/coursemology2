@@ -207,6 +207,6 @@
   "main": "app/index.js",
   "devServer": {
     "appHost": "lvh.me",
-    "serverPort": 5000
+    "serverPort": 3000
   }
 }
