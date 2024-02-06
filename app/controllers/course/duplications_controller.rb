@@ -17,7 +17,10 @@ class Course::DuplicationsController < Course::ComponentController
 
   def authorize_duplication
     authorize!(:duplicate_from, current_course)
-    authorize!(:duplicate_to_other_instances, current_tenant) if instance_params != current_tenant.id
+    return unless instance_params != current_tenant.id
+
+    authorize!(:duplicate_across_instances, current_tenant)
+    authorize!(:duplicate_across_instances, Instance.find(instance_params))
   end
 
   private

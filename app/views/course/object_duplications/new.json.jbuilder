@@ -28,7 +28,8 @@ json.destinationInstances @destination_instances do |instance|
 end
 
 json.metadata do
-  json.canDuplicateToAnotherInstance can?(:duplicate_to_other_instances, current_tenant)
+  json.canDuplicateToAnotherInstance can?(:duplicate_across_instances, current_tenant) &&
+                                     @destination_instances.length > 1
   json.currentInstanceId current_tenant.id
 end
 

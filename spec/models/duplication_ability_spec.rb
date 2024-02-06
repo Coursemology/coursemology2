@@ -12,14 +12,21 @@ RSpec.describe Course, type: :model do
       let(:user) { create(:user, :administrator) }
       let(:course_user) { nil }
 
-      it { is_expected.to be_able_to(:duplicate_to_other_instances, instance) }
+      it { is_expected.to be_able_to(:duplicate_across_instances, instance) }
     end
 
     context 'when the user is an instance administrator but not an admin' do
       let(:user) { create(:instance_administrator).user }
       let(:course_user) { nil }
 
-      it { is_expected.not_to be_able_to(:duplicate_to_other_instances, instance) }
+      it { is_expected.to be_able_to(:duplicate_across_instances, instance) }
+    end
+
+    context 'when the user is an instance instructor but not an admin' do
+      let(:user) { create(:instance_user, :instructor).user }
+      let(:course_user) { nil }
+
+      it { is_expected.to be_able_to(:duplicate_across_instances, instance) }
     end
 
     context 'when the user is a Normal User' do
@@ -28,7 +35,7 @@ RSpec.describe Course, type: :model do
 
       it { is_expected.not_to be_able_to(:duplicate_from, course) }
       it { is_expected.not_to be_able_to(:duplicate_to, course) }
-      it { is_expected.not_to be_able_to(:duplicate_to_other_instances, instance) }
+      it { is_expected.not_to be_able_to(:duplicate_across_instances, instance) }
     end
 
     context 'when the user is a Course Student' do
@@ -37,7 +44,7 @@ RSpec.describe Course, type: :model do
 
       it { is_expected.not_to be_able_to(:duplicate_from, course) }
       it { is_expected.not_to be_able_to(:duplicate_to, course) }
-      it { is_expected.not_to be_able_to(:duplicate_to_other_instances, instance) }
+      it { is_expected.not_to be_able_to(:duplicate_across_instances, instance) }
     end
 
     context 'when the user is a Course Teaching Assistant' do
@@ -46,7 +53,7 @@ RSpec.describe Course, type: :model do
 
       it { is_expected.not_to be_able_to(:duplicate_from, course) }
       it { is_expected.not_to be_able_to(:duplicate_to, course) }
-      it { is_expected.not_to be_able_to(:duplicate_to_other_instances, instance) }
+      it { is_expected.not_to be_able_to(:duplicate_across_instances, instance) }
     end
 
     context 'when the user is a Course Manager' do
@@ -55,7 +62,7 @@ RSpec.describe Course, type: :model do
 
       it { is_expected.to be_able_to(:duplicate_from, course) }
       it { is_expected.to be_able_to(:duplicate_to, course) }
-      it { is_expected.not_to be_able_to(:duplicate_to_other_instances, instance) }
+      it { is_expected.not_to be_able_to(:duplicate_across_instances, instance) }
     end
 
     context 'when the user is a Course Observer' do
@@ -64,7 +71,7 @@ RSpec.describe Course, type: :model do
 
       it { is_expected.to be_able_to(:duplicate_from, course) }
       it { is_expected.not_to be_able_to(:duplicate_to, course) }
-      it { is_expected.not_to be_able_to(:duplicate_to_other_instances, instance) }
+      it { is_expected.not_to be_able_to(:duplicate_across_instances, instance) }
     end
   end
 end
