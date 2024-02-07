@@ -28,9 +28,14 @@ const translations = defineMessages({
 const UserPopupMenuList = (): JSX.Element | null => {
   const { user } = useAppContext();
   const auth = useAuth();
-
   const { t } = useTranslation();
+
   if (!user) return null;
+
+  const handleLogout = (): void => {
+    auth.removeUser();
+    auth.signoutRedirect();
+  };
 
   return (
     <PopupMenu.List>
@@ -45,10 +50,7 @@ const UserPopupMenuList = (): JSX.Element | null => {
         {t(translations.accountSettings)}
       </PopupMenu.Button>
 
-      <PopupMenu.Button
-        onClick={() => auth.signoutRedirect()}
-        textProps={{ color: 'error' }}
-      >
+      <PopupMenu.Button onClick={handleLogout} textProps={{ color: 'error' }}>
         {t(translations.signOut)}
       </PopupMenu.Button>
     </PopupMenu.List>

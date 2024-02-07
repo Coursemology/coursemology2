@@ -63,14 +63,9 @@ const UserMenuButton = (): JSX.Element | null => {
 
   if (!user)
     return (
-      <>
-        <Button onClick={() => auth.signinRedirect()} variant="contained">
-          {t(translations.signIn)}
-        </Button>
-        <Button onClick={() => auth.signoutRedirect()} variant="contained">
-          Sign Out
-        </Button>
-      </>
+      <Button onClick={() => auth.signinRedirect()} variant="contained">
+        {t(translations.signIn)}
+      </Button>
     );
 
   return (

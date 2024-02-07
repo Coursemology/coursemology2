@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
-class Authentication::JwtVerificationService
+class Authentication::JwtVerificationService < Authentication::VerificationService
   JWKS_CACHE_KEY = 'auth/jwks'
   JWKS_URL = ENV['KEYCLOAK_AUTH_JWKS_URL'].freeze
-  Error = Struct.new(:message, :status)
-  Response = Struct.new(:decoded_token, :error)
 
-  def self.validate_token(access_token)
+  class << self
+    delegate :validate_token, to: :new
+  end
+
+  def validate_token(access_token)
     decoded_token = decode_token(access_token)
     Response.new(decoded_token, nil)
   rescue JWT::VerificationError, JWT::DecodeError => e
@@ -14,26 +16,28 @@ class Authentication::JwtVerificationService
     Response.new(nil, error)
   end
 
-  def self.jwk_loader
+  private
+
+  def jwk_loader
     lambda do |options|
       jwks(force: options[:invalidate]) || {}
     end
   end
 
-  def self.jwks(force: false)
+  def jwks(force: false)
     Rails.cache.fetch(JWKS_CACHE_KEY, force: force, skip_nil: true) do
       fetch_jwks
     end&.deep_symbolize_keys
   end
 
-  def self.fetch_jwks
+  def fetch_jwks
     jwks_uri = URI(JWKS_URL)
-    jwks_response = Net::HTTP.get_response jwks_uri
+    jwks_response = Net::HTTP.get_response(jwks_uri)
 
     JSON.parse(jwks_response.body.to_s) if jwks_response.is_a? Net::HTTPSuccess
   end
 
-  def self.decode_token(access_token)
+  def decode_token(access_token)
     JWT.decode(access_token, nil, true, {
       algorithms: 'RS256',
       iss: ENV['KEYCLOAK_ISS'],

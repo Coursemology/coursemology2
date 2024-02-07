@@ -24,7 +24,7 @@ module ApplicationAuthenticationConcern
 
     return if performed?
 
-    @decoded_token ||= Authentication::AuthenticationService.validate_token(access_token, :local)
+    @decoded_token ||= Authentication::AuthenticationService.validate_token(access_token, :external)
 
     if @decoded_token.error
       # render json: { message: @decoded_token.error.message }, status: error.status and return

@@ -12,11 +12,11 @@ class Authentication::AuthenticationService
     }
   end
 
-  def self.external_validation(_access_token)
-    puts 'external'
+  def self.external_validation(access_token)
+    Authentication::KeycloakVerificationService.validate_token(access_token)
   end
 
   def self.local_validation(access_token)
-    decoded_token = Authentication::JwtVerificationService.validate_token(access_token)
+    Authentication::JwtVerificationService.validate_token(access_token)
   end
 end
