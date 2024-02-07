@@ -72,7 +72,7 @@ module Course::Statistics::SubmissionsConcern
       JOIN attempt_info
       ON attempt_count.question_id = attempt_info.question_id AND attempt_count.submission_id = attempt_info.submission_id
     SQL
-                                                                          )
+                                                                         )
 
     submission_answer_statistics.group_by(&:submission_id).
       transform_values do |grouped_answers|

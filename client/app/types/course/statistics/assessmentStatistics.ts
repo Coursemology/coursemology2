@@ -6,7 +6,6 @@ interface AssessmentInfo {
   startAt: string | null;
   endAt: string | null;
   maximumGrade: number;
-  questionCount?: number;
   url: string;
 }
 
