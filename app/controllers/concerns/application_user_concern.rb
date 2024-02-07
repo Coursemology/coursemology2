@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 module ApplicationUserConcern
   extend ActiveSupport::Concern
+  include ApplicationAuthenticationConcern
   include ApplicationUserMasqueradeConcern
   include ApplicationUserOauthConcern
 
@@ -20,7 +21,7 @@ module ApplicationUserConcern
   end
 
   def current_user
-    @current_user ||= current_user_from_devise || current_user_from_doorkeeper
+    @current_user ||= current_user_from_devise || current_user_from_doorkeeper || current_user_from_token
   end
 
   protected

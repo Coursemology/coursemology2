@@ -1,3 +1,4 @@
+import { withAuthenticationRequired } from 'react-oidc-context';
 import { Navigate, useSearchParams } from 'react-router-dom';
 
 const NEXT_URL_SEARCH_PARAM = 'next';
@@ -23,13 +24,6 @@ const defensivelyParseURL = (rawURL: string): string | null => {
 const getCurrentURL = (): string =>
   window.location.pathname + window.location.search;
 
-const getAuthenticatableURL = (nextURL?: string, expired?: boolean): string => {
-  const url = new URL('/users/sign_in', window.location.origin);
-  if (nextURL) url.searchParams.append(NEXT_URL_SEARCH_PARAM, nextURL);
-  if (expired) url.searchParams.append(EXPIRED_SESSION_SEARCH_PARAM, 'true');
-  return url.pathname + url.search;
-};
-
 const getForbiddenURL = (): string => {
   const url = new URL('/forbidden', window.location.origin);
   url.searchParams.append(FORBIDDEN_SOURCE_URL_SEARCH_PARAM, getCurrentURL());
@@ -45,18 +39,6 @@ const useNextURL = (): { nextURL: string | null; expired: boolean } => {
     nextURL: nextRawURL && defensivelyParseURL(nextRawURL),
     expired: Boolean(expired),
   };
-};
-
-/**
- * Redirects to the sign in page with the current URL as the next URL. To be used
- * in scopes outside React and/or React Router, e.g., Axios interceptors.
- * Do not redirect to the same /users/sign_in url.
- *
- * @param expired Whether this redirect is caused by an expired session.
- */
-export const redirectToSignIn = (expired?: boolean): void => {
-  if (!window.location.pathname.startsWith('/users/sign_in'))
-    window.location.href = getAuthenticatableURL(getCurrentURL(), expired);
 };
 
 export const redirectToForbidden = (): void => {
@@ -83,10 +65,10 @@ export const Redirectable = (): JSX.Element => {
 /**
  * Redirects to the sign in page with the current intercepted URL as the next URL.
  */
-export const Authenticatable = (): JSX.Element => {
-  const redirectURL = getAuthenticatableURL(getCurrentURL());
-  return <Navigate to={redirectURL} />;
-};
+const AuthenticatableComponent = (): JSX.Element => <div />;
+export const Authenticatable = withAuthenticationRequired(
+  AuthenticatableComponent,
+);
 
 export const useRedirectable = (): {
   redirectable: boolean;

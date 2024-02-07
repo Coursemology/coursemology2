@@ -47,6 +47,7 @@ module.exports = merge(common, {
         }),
         bypass: (request) => {
           const target = `${request.headers.host.split(':')[0]}:${SERVER_PORT}`;
+          logProxy(request.url, request.url);
 
           if (bypassProxyIf.some((shouldBypass) => shouldBypass(request))) {
             logProxy(request.url, `${target}${request.url}`);

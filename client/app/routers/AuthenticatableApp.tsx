@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react';
+import { useAuth } from 'react-oidc-context';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { useAuthState } from 'lib/hooks/session';
+// import { useAuthState } from 'lib/hooks/session';
 
 const AuthenticatedApp = lazy(
   () => import(/* webpackChunkName: "AuthenticatedApp" */ './AuthenticatedApp'),
@@ -13,7 +14,11 @@ const UnauthenticatedApp = lazy(
 );
 
 const AuthenticatableApp = (): JSX.Element => {
-  const authenticated = useAuthState();
+  const auth = useAuth();
+
+  if (auth.error) {
+    return <div>Something is wrong</div>;
+  }
 
   return (
     <Suspense
@@ -25,7 +30,7 @@ const AuthenticatableApp = (): JSX.Element => {
         />
       }
     >
-      {authenticated ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      {auth.isAuthenticated ? <AuthenticatedApp /> : <UnauthenticatedApp />}
     </Suspense>
   );
 };

@@ -189,6 +189,7 @@ GEM
     docker-api (2.2.0)
       excon (>= 0.47.0)
       multi_json
+    domain_name (0.6.20240107)
     doorkeeper (5.6.9)
       railties (>= 5)
     dotenv (2.8.1)
@@ -243,6 +244,9 @@ GEM
       activesupport (>= 2)
       nokogiri (>= 1.4)
     htmlentities (4.3.4)
+    http-accept (1.7.0)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
     http_accept_language (2.1.1)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
@@ -277,6 +281,7 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.7.1)
+    jwt (2.7.1)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.2)
@@ -289,6 +294,10 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
+    keycloak (3.0.0)
+      json
+      jwt
+      rest-client
     language_server-protocol (3.17.0.3)
     launchy (2.5.2)
       addressable (~> 2.8)
@@ -338,6 +347,7 @@ GEM
       timeout
     net-smtp (0.4.0)
       net-protocol
+    netrc (0.11.0)
     nio4r (2.7.0)
     nokogiri (1.16.3)
       mini_portile2 (~> 2.8.2)
@@ -431,6 +441,11 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rexml (3.2.6)
     rinku (2.0.6)
     rollbar (3.5.2)
@@ -606,7 +621,9 @@ DEPENDENCIES
   i18n-tasks
   image_optim_rails
   jbuilder
+  jwt
   kaminari
+  keycloak
   listen
   lograge
   lograge-sql

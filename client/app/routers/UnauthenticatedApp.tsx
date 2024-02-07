@@ -7,7 +7,6 @@ import ForgotPasswordPage from 'bundles/users/pages/ForgotPasswordPage';
 import ResendConfirmationEmailLandingPage from 'bundles/users/pages/ResendConfirmationEmailLandingPage';
 import ResendConfirmationEmailPage from 'bundles/users/pages/ResendConfirmationEmailPage';
 import ResetPasswordPage from 'bundles/users/pages/ResetPasswordPage';
-import SignInPage from 'bundles/users/pages/SignInPage';
 import SignUpLandingPage from 'bundles/users/pages/SignUpLandingPage';
 import SignUpPage from 'bundles/users/pages/SignUpPage';
 import AuthPagesContainer from 'lib/containers/AuthPagesContainer';
@@ -30,10 +29,6 @@ const unauthenticatedRouter = createAppRouter([
         path: 'users',
         element: <AuthPagesContainer />,
         children: [
-          {
-            path: 'sign_in',
-            element: <SignInPage />,
-          },
           {
             path: 'sign_up',
             children: [

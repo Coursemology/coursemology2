@@ -169,6 +169,8 @@ gem 'http_accept_language'
 gem 'devise', '4.9.3'
 gem 'devise_masquerade'
 gem 'devise-multi_email'
+gem 'keycloak'
+gem 'jwt'
 
 # Use cancancan for authorization
 gem 'cancancan'

@@ -1,4 +1,5 @@
 import { defineMessages } from 'react-intl';
+import { useAuth } from 'react-oidc-context';
 import { Button, Typography } from '@mui/material';
 import iconEngaging from 'assets/images/home/icon-engaging.png?url';
 import iconGeneral from 'assets/images/home/icon-general.png?url';
@@ -80,6 +81,7 @@ const keyFeatures = {
 
 const LandingPage = (): JSX.Element => {
   const { t } = useTranslation();
+  const auth = useAuth();
 
   return (
     <Page unpadded>
@@ -100,11 +102,14 @@ const LandingPage = (): JSX.Element => {
           {t(translations.subtitle)}
         </Typography>
 
-        <Link to="/users/sign_in">
-          <Button color="info" size="large" variant="contained">
-            {t(translations.signInToCoursemology)}
-          </Button>
-        </Link>
+        <Button
+          color="info"
+          onClick={() => auth.signinRedirect()}
+          size="large"
+          variant="contained"
+        >
+          {t(translations.signInToCoursemology)}
+        </Button>
 
         <Typography className="mt-12" color="text.white" variant="body1">
           {t(translations.newToCoursemology)}

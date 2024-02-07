@@ -1,5 +1,6 @@
 import { ComponentRef, ReactNode, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
+import { useAuth } from 'react-oidc-context';
 import { useLocation } from 'react-router-dom';
 import { ChevronRight, KeyboardArrowDown } from '@mui/icons-material';
 import { Avatar, Button, Typography } from '@mui/material';
@@ -54,6 +55,7 @@ const Brand = (): JSX.Element => {
 
 const UserMenuButton = (): JSX.Element | null => {
   const { user } = useAppContext();
+  const auth = useAuth();
 
   const { t } = useTranslation();
 
@@ -61,9 +63,14 @@ const UserMenuButton = (): JSX.Element | null => {
 
   if (!user)
     return (
-      <Link to="/users/sign_in">
-        <Button variant="contained">{t(translations.signIn)}</Button>
-      </Link>
+      <>
+        <Button onClick={() => auth.signinRedirect()} variant="contained">
+          {t(translations.signIn)}
+        </Button>
+        <Button onClick={() => auth.signoutRedirect()} variant="contained">
+          Sign Out
+        </Button>
+      </>
     );
 
   return (

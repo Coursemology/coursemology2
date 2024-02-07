@@ -1,4 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import { withAuthenticationRequired } from 'react-oidc-context';
 import {
   createBrowserRouter,
   Navigate,
@@ -822,4 +823,4 @@ const AuthenticatedApp = (): JSX.Element => {
   );
 };
 
-export default AuthenticatedApp;
+export default withAuthenticationRequired(AuthenticatedApp);
