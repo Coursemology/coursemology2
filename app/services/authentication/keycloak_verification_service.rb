@@ -7,21 +7,27 @@ class Authentication::KeycloakVerificationService < Authentication::Verification
   end
 
   def validate_token(access_token)
-    decoded_token = introspect_token(access_token)
+    decoded_token = introspect_token(access_token)&.deep_symbolize_keys
+
+    if decoded_token[:active] == false
+      error = Error.new('Verification failed')
+      Response.new(nil, error)
+    else
+      Response.new(decoded_token, nil)
+    end
+  rescue StandardError => e
+    Response.new(nil, e)
   end
 
   private
 
   def introspect_token(access_token)
-    keycloak_instropection_uri = URI(KEYCLOAK_INSTROPECTION_URL)
-    payload = { clientId: ENV['KEYCLOAK_CLIENT_ID'],
-                client_secret: ENV['KEYCLOAK_CLIENT_SECRET'],
-                token: access_token }
+    instropection_response = \
+      Keycloak::Client.get_token_introspection(access_token,
+                                               ENV['KEYCLOAK_CLIENT_ID'],
+                                               ENV['KEYCLOAK_CLIENT_SECRET'],
+                                               KEYCLOAK_INSTROPECTION_URL)
 
-    # Seems like payload is not included
-    instropection_response = Net::HTTP.post(keycloak_instropection_uri, payload.to_json,
-                                            'Content-Type' => 'application/x-www-form-urlencoded')
-
-    JSON.parse(instropection_response.body.to_s) if instropection_response.is_a? Net::HTTPSuccess
+    JSON.parse(instropection_response.to_s)
   end
 end

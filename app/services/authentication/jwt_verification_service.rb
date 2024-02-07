@@ -9,7 +9,7 @@ class Authentication::JwtVerificationService < Authentication::VerificationServi
   end
 
   def validate_token(access_token)
-    decoded_token = decode_token(access_token)
+    decoded_token = decode_token(access_token)&.deep_symbolize_keys
     Response.new(decoded_token, nil)
   rescue JWT::VerificationError, JWT::DecodeError => e
     error = Error.new(e.message, :unauthorized)
