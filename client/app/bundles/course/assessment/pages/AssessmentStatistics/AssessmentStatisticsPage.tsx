@@ -18,6 +18,7 @@ import MainSubmissionChart from './SubmissionStatus/MainSubmissionChart';
 import MainSubmissionTimeAndGradeStatistics from './SubmissionTimeAndGradeStatistics/MainSubmissionTimeAndGradeStatistics';
 import DuplicationHistoryStatistics from './DuplicationHistoryStatistics';
 import { getAssessmentStatistics } from './selectors';
+import StudentAttemptCountTable from './StudentAttemptCountTable';
 import StudentMarksPerQuestionTable from './StudentMarksPerQuestionTable';
 
 const translations = defineMessages({
@@ -45,6 +46,10 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.marksPerQuestion',
     defaultMessage: 'Marks Per Question',
   },
+  attemptCount: {
+    id: 'course.assessment.statistics.attemptCount',
+    defaultMessage: 'Attempt Count',
+  },
   gradeDistribution: {
     id: 'course.assessment.statistics.gradeDistribution',
     defaultMessage: 'Grade Distribution',
@@ -64,6 +69,7 @@ const tabMapping = (includePhantom: boolean): Record<string, JSX.Element> => {
     marksPerQuestion: (
       <StudentMarksPerQuestionTable includePhantom={includePhantom} />
     ),
+    attemptCount: <StudentAttemptCountTable includePhantom={includePhantom} />,
     gradeDistribution: <MainGradesChart includePhantom={includePhantom} />,
     submissionTimeAndGrade: (
       <MainSubmissionTimeAndGradeStatistics includePhantom={includePhantom} />
@@ -123,6 +129,12 @@ const AssessmentStatisticsPage: FC = () => {
               id="marksPerQuestion"
               label={t(translations.marksPerQuestion)}
               value="marksPerQuestion"
+            />
+            <Tab
+              className="min-h-12"
+              id="attemptCount"
+              label={t(translations.attemptCount)}
+              value="attemptCount"
             />
             <Tab
               className="min-h-12"
