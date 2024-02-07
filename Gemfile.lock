@@ -202,6 +202,8 @@ GEM
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.7)
+    email_validator (2.2.4)
+      activemodel
     erubi (1.12.0)
     et-orbi (1.2.7)
       tzinfo
@@ -609,6 +611,7 @@ DEPENDENCIES
   dotenv-rails
   edge
   email_spec
+  email_validator
   factory_bot_rails
   ffi (>= 1.14.2)
   filename

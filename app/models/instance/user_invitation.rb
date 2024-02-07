@@ -5,7 +5,7 @@ class Instance::UserInvitation < ApplicationRecord
   after_initialize :generate_invitation_key, if: :new_record?
   after_initialize :set_defaults, if: :new_record?
 
-  validates :email, format: { with: Devise.email_regexp }, if: :email_changed?
+  validates :email, email: { mode: :rfc }, if: :email_changed?
   validates :name, presence: true
   validates :role, presence: true
   validates :generate_invitation_key, presence: true

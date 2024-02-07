@@ -4,7 +4,7 @@ class Course::UserInvitation < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
 
-  validates :email, format: { with: Devise.email_regexp }, if: :email_changed?
+  validates :email, email: { mode: :rfc }, if: :email_changed?
   validates :name, presence: true
   validates :role, presence: true
   validates :phantom, inclusion: [true, false]
