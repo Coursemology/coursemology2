@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 module Course::Statistics::SubmissionsConcern
+  include Course::Statistics::ReferenceTimesConcern
+
   private
 
   def initialize_student_hash(students)
@@ -80,26 +82,34 @@ module Course::Statistics::SubmissionsConcern
 
   def populate_hash_including_answers(student_hash, submissions)
     answers_hash = answer_statistics_hash
+    fetch_personal_and_reference_timeline_hash
 
     submissions.map do |submission|
       submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
       next unless submitter_course_user&.student?
 
       answers = answers_hash[submission.id]
-      end_at = @assessment.lesson_plan_item.time_for(submitter_course_user).end_at
+      end_at = @personal_end_at_hash[submitter_course_user.id] || @reference_times_hash[@assessment.id]
 
       student_hash[submitter_course_user] = [submission, answers, end_at]
     end
   end
 
   def populate_hash_without_answers(student_hash, submissions)
+    fetch_personal_and_reference_timeline_hash
+
     submissions.map do |submission|
       submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
       next unless submitter_course_user&.student?
 
-      end_at = @assessment.lesson_plan_item.time_for(submitter_course_user).end_at
+      end_at = @personal_end_at_hash[submitter_course_user.id] || @reference_times_hash[@assessment.id]
 
       student_hash[submitter_course_user] = [submission, end_at]
     end
+  end
+
+  def fetch_personal_and_reference_timeline_hash
+    @personal_end_at_hash = personal_end_at_hash
+    @reference_times_hash = reference_times_hash
   end
 end

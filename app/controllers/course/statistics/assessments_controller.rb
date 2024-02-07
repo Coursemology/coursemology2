@@ -7,8 +7,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def main_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
                   calculated(:maximum_grade, :question_count).
-                  preload(lesson_plan_item: [:reference_times, personal_times: :course_user],
-                          course: :course_users).first
+                  preload(course: :course_users).first
     submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
                   calculated(:grade, :grader_ids).
                   preload(creator: :course_users)
