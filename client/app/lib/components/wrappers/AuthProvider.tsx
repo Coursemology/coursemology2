@@ -15,6 +15,8 @@ const oidcConfig = {
   client_id: process.env.OIDC_CLIENT_ID,
   redirect_uri: process.env.OIDC_REDIRECT_URI,
   userStore: new WebStorageStateStore({ store: window.localStorage }), // To persist login information across different sessions
+  post_logout_redirect_uri: process.env.OIDC_REDIRECT_URI,
+  automaticSilentRenew: true,
   onSigninCallback,
 };
 

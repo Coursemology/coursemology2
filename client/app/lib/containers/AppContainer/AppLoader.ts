@@ -8,7 +8,7 @@ import {
   DEFAULT_LOCALE,
   DEFAULT_TIME_ZONE,
 } from 'lib/constants/sharedConstants';
-import { imperativeAuthenticator, setI18nConfig } from 'lib/hooks/session';
+import { setI18nConfig } from 'lib/hooks/session';
 
 interface AppLoaderData {
   home: HomeLayoutData;
@@ -25,12 +25,6 @@ export const loader = async (): Promise<AppLoaderData> => {
       locale: home.locale,
       timeZone: home.timeZone ?? undefined,
     });
-
-    if (home.user) {
-      imperativeAuthenticator.authenticate();
-    } else {
-      imperativeAuthenticator.deauthenticate();
-    }
 
     return { home, announcements: announcements.announcements };
   } catch (error) {
