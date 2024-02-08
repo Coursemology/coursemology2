@@ -14,7 +14,7 @@ module ApplicationAuthenticationConcern
 
   def current_user_from_token
     token = authenticate_token
-    User.with_email_addresses(token['email']).first if token
+    User.with_email_addresses(token[:email]).first if token
   end
 
   private
@@ -24,14 +24,14 @@ module ApplicationAuthenticationConcern
 
     return if performed?
 
-    @decoded_token ||= Authentication::AuthenticationService.validate_token(access_token, :external)
+    @decoded_token ||= Authentication::AuthenticationService.validate_token(access_token, :local)
 
     if @decoded_token.error
       # render json: { message: @decoded_token.error.message }, status: error.status and return
       return nil
     end
 
-    @decoded_token.decoded_token[0]
+    @decoded_token.decoded_token
   end
 
   def token_from_request
