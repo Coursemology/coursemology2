@@ -17,17 +17,47 @@ RSpec.describe Course::ObjectDuplicationsController do
     let(:unenrolled_course_assessment) { create(:course_assessment_assessment, course: unenrolled_course) }
 
     let(:user) { admin }
+    let(:instance_admin_user) { create(:instance_administrator).user }
+    let(:instance_admin_course_user) { create(:course_manager, user: instance_admin_user, course: course).user }
     before { sign_in(user) }
 
     describe '#new' do
       render_views
 
       subject { get :new, format: :json, params: { course_id: course.id } }
-      before { subject }
 
-      it "includes user's courses from other instances in destinationCourses" do
-        course_ids = json_response['destinationCourses'].map { |course| course['id'] }
-        expect(course_ids).to contain_exactly(course.id, other_instance_course.id)
+      context 'when admin fetches the possible destination courses and instances' do
+        before do
+          sign_in(user)
+          subject
+        end
+
+        it "includes user's courses from other instances in destinationCourses" do
+          course_ids = json_response['destinationCourses'].map { |course| course['id'] }
+          expect(course_ids).to contain_exactly(course.id, other_instance_course.id)
+        end
+
+        it 'includes all the existing instances' do
+          instance_ids = json_response['destinationInstances'].map { |instance| instance['id'] }
+          expect(instance_ids).to contain_exactly(*Instance.all.map(&:id))
+        end
+      end
+
+      context 'when instance admin fetches the possible destination courses and instances' do
+        before do
+          sign_in(instance_admin_course_user)
+          subject
+        end
+
+        it 'includes only course within the current instance in which they are manager' do
+          course_ids = json_response['destinationCourses'].map { |course| course['id'] }
+          expect(course_ids).to contain_exactly(course.id)
+        end
+
+        it 'includes only the current instance in which they are either instructor or administrator' do
+          instance_ids = json_response['destinationInstances'].map { |instance| instance['id'] }
+          expect(instance_ids).to contain_exactly(instance.id)
+        end
       end
     end
 
