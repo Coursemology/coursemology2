@@ -5,7 +5,8 @@ json.grader do
 end
 
 json.answers answers.each do |answer|
-  json.id answer.id
+  json.lastAttemptAnswerId answer.last_attempt_answer_id
   json.grade answer.grade
   json.maximumGrade @question_maximum_grade_hash[answer.question_id]
+  json.questionType @question_type_hash[answer.question_id]
 end
