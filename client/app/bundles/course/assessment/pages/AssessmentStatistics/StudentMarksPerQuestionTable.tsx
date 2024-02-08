@@ -104,13 +104,16 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
 
   // the case where the grade is null is handled separately inside the column
   // (refer to the definition of answerColumns below)
-  const renderNonNullGradeCell = (
+  const renderAnswerGradeCell = (
+    currentAnswerId: number | null,
     grade: number,
     maxGrade: number,
   ): ReactNode => {
     const className = getClassNameForMarkCell(grade, maxGrade);
     return (
-      <div className={className}>
+      <div
+        className={currentAnswerId ? `cursor-pointer ${className}` : className}
+      >
         <Box>{grade.toFixed(1)}</Box>
       </div>
     );
@@ -143,7 +146,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
           return typeof datum.answers?.[index].grade === 'number'
-            ? renderNonNullGradeCell(
+            ? renderAnswerGradeCell(
+                datum.answers?.[index].currentAnswerId,
                 datum.answers?.[index].grade,
                 datum.answers?.[index].maximumGrade,
               )
@@ -228,7 +232,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       sortable: true,
       cell: (datum): ReactNode =>
         datum.totalGrade
-          ? renderNonNullGradeCell(
+          ? renderAnswerGradeCell(
+              null,
               datum.totalGrade ?? null,
               assessment!.maximumGrade,
             )
