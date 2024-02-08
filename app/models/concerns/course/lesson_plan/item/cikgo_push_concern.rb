@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Course::LessonPlan::Item::GeniePushConcern
+module Course::LessonPlan::Item::CikgoPushConcern
   extend ActiveSupport::Concern
   include Rails.application.routes.url_helpers
 
@@ -38,7 +38,7 @@ module Course::LessonPlan::Item::GeniePushConcern
   end
 
   def push_item(method, item = {})
-    GenieApiService.push_item(push_key, {
+    CikgoApiService.push_item(push_key, {
       id: repository_id,
       resources: [{ method: method, id: id.to_s }.merge(item)]
     })

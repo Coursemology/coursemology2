@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Course::Survey::Response::GenieTaskCompletionConcern
+module Course::Survey::Response::CikgoTaskCompletionConcern
   extend ActiveSupport::Concern
 
   included do
@@ -15,20 +15,20 @@ module Course::Survey::Response::GenieTaskCompletionConcern
   delegate :edit_course_survey_response_url, to: 'Rails.application.routes.url_helpers'
 
   def publish_task_completion
-    return unless creator_id_on_genie
+    return unless creator_id_on_cikgo
 
     lesson_plan_item = survey.acting_as
     status = submitted? ? :completed : :ongoing
 
-    GenieApiService.mark_task(status, {
+    CikgoApiService.mark_task(status, {
       item_id: lesson_plan_item.id,
       course_id: lesson_plan_item.course_id,
-      user_id: creator_id_on_genie,
+      user_id: creator_id_on_cikgo,
       url: edit_course_survey_response_url(lesson_plan_item.course_id, survey_id, id)
     })
   end
 
-  def creator_id_on_genie
-    @creator_id_on_genie ||= creator.genie_user.provided_user_id
+  def creator_id_on_cikgo
+    @creator_id_on_cikgo ||= creator.cikgo_user.provided_user_id
   end
 end

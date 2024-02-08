@@ -11,20 +11,20 @@ class Course::Story::RoomsController < Course::Story::Controller
 
   def show
     @creator_course_user = current_course.course_users.for_user(@room.creator).first
-    provided_user_id = create_genie_user(@room.creator)
+    provided_user_id = create_cikgo_user(@room.creator)
 
     # TODO: To move to #create
     unless @room.provided_room_id.present?
-      provided_room_id = GenieApiService.create_chat_room(@story.id, provided_user_id)
+      provided_room_id = CikgoApiService.create_chat_room(@story.id, provided_user_id)
       @room.update!(provided_room_id: provided_room_id)
     end
   end
 
-  def create_genie_user(user)
+  def create_cikgo_user(user)
     image = "http://lvh.me:8080/#{user.profile_photo.medium.url}"
-    provided_user_id = GenieApiService.authenticate(user, image)
-    (user.genie_user || user.build_genie_user).provided_user_id = provided_user_id
-    user.genie_user.save!
+    provided_user_id = CikgoApiService.authenticate(user, image)
+    (user.cikgo_user || user.build_cikgo_user).provided_user_id = provided_user_id
+    user.cikgo_user.save!
 
     provided_user_id
   end
@@ -34,7 +34,7 @@ class Course::Story::RoomsController < Course::Story::Controller
   end
 
   def sync
-    result = GenieApiService.sync_chat_room(@room.provided_room_id)
+    result = CikgoApiService.sync_chat_room(@room.provided_room_id)
     @room.update!(completed: result[:completed])
 
     render json: { completed: @room.completed? }

@@ -22,7 +22,7 @@ Doorkeeper.configure do
   end
 
   # skip_authorization do |_resource_owner, _client|
-  #   # TODO: Whitelist Genie (working title) here
+  #   # TODO: Whitelist Cikgo (working title) here
   #   # client.superapp? or resource_owner.admin?
   #   true
   # end

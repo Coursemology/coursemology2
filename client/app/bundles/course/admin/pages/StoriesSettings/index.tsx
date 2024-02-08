@@ -28,17 +28,17 @@ const translations = defineMessages({
   },
   pushKeyPointsToCourse: {
     id: 'course.admin.storiesSettings.pushKeyPointsToCourse',
-    defaultMessage: 'This push key points to <link>{course}</link> on Genie.',
+    defaultMessage: 'This push key points to <link>{course}</link> on Cikgo.',
   },
   pushKeyError: {
     id: 'course.admin.storiesSettings.pushKeyError',
     defaultMessage:
-      "This push key doesn't point to a valid course on Genie. Please check your settings on Genie and try again.",
+      "This push key doesn't point to a valid course on Cikgo. Please check your settings on Cikgo and try again.",
   },
   pingError: {
     id: 'course.admin.storiesSettings.pingError',
     defaultMessage:
-      'There was a problem connecting to Genie. You may try again at a later time.',
+      'There was a problem connecting to Cikgo. You may try again at a later time.',
   },
 });
 
@@ -102,7 +102,7 @@ const StoriesSettings = (): JSX.Element => {
             return (
               <Section sticksToNavbar title={t(translations.storiesSettings)}>
                 <Subsection
-                  subtitle="Coursemology can push resources from this course to Genie that you can later embed in the stories created in Genie. Coursemology will also automatically keep them up to date."
+                  subtitle="Coursemology can push resources from this course to Cikgo that you can later embed in the stories created in Cikgo. Coursemology will also automatically keep them up to date."
                   title="Embeddable resources"
                 >
                   <Controller

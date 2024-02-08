@@ -79,7 +79,7 @@ class User < ApplicationRecord
   has_many :access_tokens, class_name: Doorkeeper::AccessToken.name, foreign_key: :resource_owner_id,
                            dependent: :delete_all
 
-  has_one :genie_user, dependent: :destroy, inverse_of: :user
+  has_one :cikgo_user, dependent: :destroy, inverse_of: :user
 
   accepts_nested_attributes_for :emails
 

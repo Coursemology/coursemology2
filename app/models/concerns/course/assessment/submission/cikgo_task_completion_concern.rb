@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Course::Assessment::Submission::GenieTaskCompletionConcern
+module Course::Assessment::Submission::CikgoTaskCompletionConcern
   WORKFLOW_STATE_TO_TASK_COMPLETION_STATUS = {
     attempting: :ongoing,
     submitted: :ongoing,
@@ -17,22 +17,22 @@ module Course::Assessment::Submission::GenieTaskCompletionConcern
   delegate :edit_course_assessment_submission_url, to: 'Rails.application.routes.url_helpers'
 
   def publish_task_completion
-    return unless creator_id_on_genie
+    return unless creator_id_on_cikgo
 
     status = WORKFLOW_STATE_TO_TASK_COMPLETION_STATUS[workflow_state.to_sym]
     return unless status
 
     lesson_plan_item = assessment.acting_as
 
-    GenieApiService.mark_task(status, {
+    CikgoApiService.mark_task(status, {
       item_id: lesson_plan_item.id,
       course_id: lesson_plan_item.course_id,
-      user_id: creator_id_on_genie,
+      user_id: creator_id_on_cikgo,
       url: edit_course_assessment_submission_url(lesson_plan_item.course_id, assessment_id, id)
     })
   end
 
-  def creator_id_on_genie
-    @creator_id_on_genie ||= creator.genie_user.provided_user_id
+  def creator_id_on_cikgo
+    @creator_id_on_cikgo ||= creator.cikgo_user.provided_user_id
   end
 end

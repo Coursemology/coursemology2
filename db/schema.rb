@@ -1283,10 +1283,10 @@ ActiveRecord::Schema.define(version: 2024_01_19_185812) do
     t.index ["updater_id"], name: "fk__generic_announcements_updater_id"
   end
 
-  create_table "genie_users", force: :cascade do |t|
+  create_table "cikgo_users", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "provided_user_id", null: false
-    t.index ["user_id"], name: "index_genie_users_on_user_id"
+    t.index ["user_id"], name: "index_cikgo_users_on_user_id"
   end
 
   create_table "instance_user_invitations", force: :cascade do |t|
@@ -1685,7 +1685,7 @@ ActiveRecord::Schema.define(version: 2024_01_19_185812) do
   add_foreign_key "generic_announcements", "instances", name: "fk_generic_announcements_instance_id"
   add_foreign_key "generic_announcements", "users", column: "creator_id", name: "fk_generic_announcements_creator_id"
   add_foreign_key "generic_announcements", "users", column: "updater_id", name: "fk_generic_announcements_updater_id"
-  add_foreign_key "genie_users", "users"
+  add_foreign_key "cikgo_users", "users"
   add_foreign_key "instance_user_role_requests", "instances", name: "fk_instance_user_role_requests_instance_id"
   add_foreign_key "instance_user_role_requests", "users", column: "confirmer_id"
   add_foreign_key "instance_user_role_requests", "users", column: "creator_id"

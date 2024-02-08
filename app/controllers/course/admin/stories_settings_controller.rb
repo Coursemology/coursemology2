@@ -49,11 +49,11 @@ class Course::Admin::StoriesSettingsController < Course::Admin::Controller
       }
     end
 
-    GenieApiService.push(@settings.push_key, repository)
+    CikgoApiService.push(@settings.push_key, repository)
   end
 
   def ping_remote_course
-    result = GenieApiService.ping(@settings.push_key)
+    result = CikgoApiService.ping(@settings.push_key)
     @ping_status = result[:status]
     @remote_course_name = result[:name]
     @remote_course_url = result[:url]

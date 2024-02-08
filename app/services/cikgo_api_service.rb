@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-class GenieApiService
-  GENIE_ENDPOINT = 'http://localhost:3000/api/v1'
+class CikgoApiService
+  CIKGO_ENDPOINT = 'http://localhost:3000/api/v1'
 
   class << self
     def ping(push_key)
@@ -74,8 +74,8 @@ class GenieApiService
 
     def connection(path, options = {})
       Excon.new(
-        "#{GENIE_ENDPOINT}/#{path}",
-        headers: { Authorization: "Bearer #{ENV.fetch('GENIE_API_KEY')}" },
+        "#{CIKGO_ENDPOINT}/#{path}",
+        headers: { Authorization: "Bearer #{ENV.fetch('CIKGO_API_KEY')}" },
         **options
       )
     end
