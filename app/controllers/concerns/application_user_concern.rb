@@ -2,8 +2,6 @@
 module ApplicationUserConcern
   extend ActiveSupport::Concern
   include ApplicationAuthenticationConcern
-  include ApplicationUserMasqueradeConcern
-  include ApplicationUserOauthConcern
 
   included do
     before_action :authenticate!, unless: :publicly_accessible?
@@ -21,7 +19,7 @@ module ApplicationUserConcern
   end
 
   def current_user
-    @current_user ||= current_user_from_devise || current_user_from_doorkeeper || current_user_from_token
+    @current_user ||= current_user_from_token
   end
 
   protected
@@ -36,18 +34,7 @@ module ApplicationUserConcern
 
   private
 
-  # This method is more or less a copy of Devise's `authenticate_user!`. Devise responds
-  # to `:warden` throws via `Devise::FailureApp`. This way, we keep the error message and
-  # status code consistent with Devise (as at before Doorkeeper was used).
-  #
-  # https://github.com/heartcombo/devise/blob/e2242a95f3bb2e68ec0e9a064238ff7af6429545/lib/devise/controllers/helpers.rb#L153
-  # https://github.com/heartcombo/devise/blob/e2242a95f3bb2e68ec0e9a064238ff7af6429545/lib/devise/controllers/helpers.rb#L120
-  # https://github.com/wardencommunity/warden/blob/88d2f59adf5d650238c1e93072635196aea432dc/lib/warden/proxy.rb#L134
   def authenticate!
-    throw :warden unless devise_controller? || current_user
-  end
-
-  def current_user_from_devise
-    warden.authenticate(scope: :user)
+    current_user
   end
 end

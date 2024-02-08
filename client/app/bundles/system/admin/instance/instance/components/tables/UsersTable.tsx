@@ -211,24 +211,6 @@ const UsersTable: FC<Props> = (props) => {
       },
     },
     {
-      name: 'masqueradePath',
-      label: '',
-      options: {
-        display: false,
-        filter: false,
-        sort: false,
-      },
-    },
-    {
-      name: 'canMasquerade',
-      label: '',
-      options: {
-        display: false,
-        filter: false,
-        sort: false,
-      },
-    },
-    {
       name: 'name',
       label: intl.formatMessage(tableTranslations.name),
       options: {

@@ -16,8 +16,6 @@ export interface UserListData {
     host: string;
   }[];
   role: UserRoles;
-  canMasquerade?: boolean;
-  masqueradePath?: string;
 }
 
 export interface UserBasicMiniEntity {
@@ -33,8 +31,6 @@ export interface UserMiniEntity extends UserBasicMiniEntity {
     host: string;
   }[];
   role: UserRoles;
-  canMasquerade?: boolean;
-  masqueradePath?: string;
 }
 
 export interface UserCourseListData {

@@ -79,14 +79,6 @@ export default class UsersAPI extends BaseAPI {
     return this.client.post(url);
   }
 
-  masquerade(url: string): APIResponse {
-    return this.client.get(url);
-  }
-
-  stopMasquerade(url: string): APIResponse {
-    return this.client.get(url);
-  }
-
   signOut(): APIResponse {
     return this.client.delete(`${this.#urlPrefix}/sign_out`);
   }

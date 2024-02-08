@@ -7,8 +7,7 @@ import {
 
 /**
  * For now, we store a boolean instead of `userId?: number` because there
- * isn't a need to store the `userId` at time of writing. Storing `userId`
- * would mean that we have to also update it when the user masquerades.
+ * isn't a need to store the `userId` at time of writing.
  *
  * A boolean is kept here to prevent future developers from trying to use
  * `userId` when its state update isn't fully thought out. If we ever

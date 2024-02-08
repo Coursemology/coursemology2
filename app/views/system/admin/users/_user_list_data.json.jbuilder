@@ -8,5 +8,3 @@ json.instances @instances_preload_service.instances_for(user.id)&.each do |insta
   json.host instance.host
 end
 json.role user.role
-json.canMasquerade user.can_masquerade?
-json.masqueradePath masquerade_path(user) if user.can_masquerade?

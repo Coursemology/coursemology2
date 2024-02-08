@@ -157,7 +157,6 @@ spec/features/system/admin/instance/instance_announcement_management_spec.rb:1.3
 spec/features/system/admin/instance/instance_announcement_pagination_spec.rb:4.935371
 spec/features/system/admin/instance/user_management_spec.rb:4.364058
 spec/features/system/admin/instance_management_spec.rb:1.993044
-spec/features/system/admin/masquerades_spec.rb:0.618992
 spec/features/system/admin/user_management_spec.rb:3.881104
 spec/features/user/email_management_spec.rb:1.302749
 spec/features/user/omniauth_spec.rb:0.227643

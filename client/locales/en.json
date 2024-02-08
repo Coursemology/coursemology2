@@ -6500,29 +6500,11 @@
   "lib.components.core.Note.noteHeader": {
     "defaultMessage": "Note"
   },
-  "lib.components.core.banners.MasqueradeBanner.errorStoppingMasquerade": {
-    "defaultMessage": "An error occurred while stopping masquerade. Try again later."
-  },
-  "lib.components.core.banners.MasqueradeBanner.masquerading": {
-    "defaultMessage": "Masquerading as <strong>{as}</strong>."
-  },
-  "lib.components.core.banners.MasqueradeBanner.stopMasquerading": {
-    "defaultMessage": "Stop masquerading"
-  },
   "lib.components.core.banners.ServerUnreachableBanner.refreshPage": {
     "defaultMessage": "Refresh page"
   },
   "lib.components.core.banners.ServerUnreachableBanner.serverIsUnreachable": {
     "defaultMessage": "The server is unreachable. Some actions may not work."
-  },
-  "lib.components.core.buttons.MasqueradeButton.errorMasquerading": {
-    "defaultMessage": "An error occurred while masquerading. Try again later."
-  },
-  "lib.components.core.buttons.MasqueradeButton.masqueradeDisabledTooltip": {
-    "defaultMessage": "User not confirmed"
-  },
-  "lib.components.core.buttons.MasqueradeButton.masqueradeTooltip": {
-    "defaultMessage": "Masquerade"
   },
   "lib.components.core.fields.DateTimePicker.invalidDate": {
     "defaultMessage": "Invalid date"

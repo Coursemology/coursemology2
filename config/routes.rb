@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 Rails.application.routes.draw do
-  use_doorkeeper
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -75,7 +73,6 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     registrations: 'user/registrations',
     sessions: 'user/sessions',
-    masquerades: 'user/masquerades',
     passwords: 'user/passwords',
     confirmations: 'user/confirmations'
   }

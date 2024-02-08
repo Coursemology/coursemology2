@@ -167,16 +167,12 @@ gem 'http_accept_language'
 
 # User authentication
 gem 'devise', '4.9.3'
-gem 'devise_masquerade'
 gem 'devise-multi_email'
 gem 'keycloak'
 gem 'jwt'
 
 # Use cancancan for authorization
 gem 'cancancan'
-
-# OAuth2 provider
-gem 'doorkeeper'
 
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
