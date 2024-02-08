@@ -91,7 +91,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
                                                     role: [InstanceUser.roles[:instructor],
                                                            InstanceUser.roles[:administrator]]).
                                               pluck(:instance_id)
-                               Instance.where(id: instance_ids)
+                               current_user.administrator? ? Instance.all : Instance.where(id: instance_ids)
                              else
                                Instance.where(id: current_tenant.id)
                              end
