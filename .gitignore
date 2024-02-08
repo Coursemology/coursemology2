@@ -72,3 +72,5 @@ playwright-report/
 playwright/.cache/
 .nyc_output
 coverage/
+
+dump.rdb
