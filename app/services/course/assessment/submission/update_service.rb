@@ -102,7 +102,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     @submission.class.transaction do
       unless unsubmit? || unmark?
         update_answers_params&.each do |answer_params|
-          next if answer_params[:id].blank?
+          next if !answer_params.is_a?(ActionController::Parameters) || answer_params[:id].blank?
 
           answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
 
