@@ -1,6 +1,8 @@
 import { withAuthenticationRequired } from 'react-oidc-context';
 import { Navigate, useSearchParams } from 'react-router-dom';
 
+import { onBeforeSignin } from 'lib/components/wrappers/AuthProvider';
+
 const NEXT_URL_SEARCH_PARAM = 'next';
 const EXPIRED_SESSION_SEARCH_PARAM = 'expired';
 const FORBIDDEN_SOURCE_URL_SEARCH_PARAM = 'from';
@@ -68,6 +70,7 @@ export const Redirectable = (): JSX.Element => {
 const AuthenticatableComponent = (): JSX.Element => <div />;
 export const Authenticatable = withAuthenticationRequired(
   AuthenticatableComponent,
+  { onBeforeSignin },
 );
 
 export const useRedirectable = (): {

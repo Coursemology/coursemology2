@@ -6,8 +6,24 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+const PREVIOUS_PATH_KEY = 'POST_AUTH_REDIRECTION_HREF' as const;
+
+export const onBeforeSignin = (): void => {
+  const currentPath = window.location.href;
+  window.sessionStorage.setItem(PREVIOUS_PATH_KEY, currentPath);
+};
+
+const getPreviousPath = (): string | null => {
+  return window.sessionStorage.getItem(PREVIOUS_PATH_KEY);
+};
+
 const onSigninCallback = (_user: User | void): void => {
   window.history.replaceState({}, document.title, window.location.pathname);
+  const previousPath = getPreviousPath();
+  if (previousPath) {
+    window.location.replace(previousPath);
+    window.sessionStorage.removeItem(PREVIOUS_PATH_KEY);
+  }
 };
 
 const oidcConfig = {

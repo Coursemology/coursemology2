@@ -131,6 +131,7 @@ import {
 } from 'course/users/handles';
 import videoAttemptLoader from 'course/video/attemptLoader';
 import { videoHandle, videosHandle } from 'course/video/handles';
+import { onBeforeSignin } from 'lib/components/wrappers/AuthProvider';
 import CourselessContainer from 'lib/containers/CourselessContainer';
 import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
@@ -823,4 +824,4 @@ const AuthenticatedApp = (): JSX.Element => {
   );
 };
 
-export default withAuthenticationRequired(AuthenticatedApp);
+export default withAuthenticationRequired(AuthenticatedApp, { onBeforeSignin });
