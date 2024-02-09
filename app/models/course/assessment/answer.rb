@@ -151,6 +151,7 @@ class Course::Assessment::Answer < ApplicationRecord
   def validate_session_and_client_version # rubocop:disable Metrics/CyclomaticComplexity
     return if last_session_id.nil? || client_version.nil?
     return if last_session_id_changed? || !client_version_changed?
+    return if client_version_change[0].nil?
     return if client_version_change[1] >= client_version_change[0]
 
     errors.add(:answer, 'stale_answer')

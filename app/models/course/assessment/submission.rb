@@ -215,7 +215,7 @@ class Course::Assessment::Submission < ApplicationRecord
   end
 
   def submission_view_blocked?(course_user)
-    !attempting? && !published? && assessment.block_student_viewing_after_submitted? && course_user.student?
+    !attempting? && !published? && assessment.block_student_viewing_after_submitted? && course_user&.student?
   end
 
   def questions
