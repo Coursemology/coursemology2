@@ -9354,10 +9354,10 @@ react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-virtualized-auto-sizer@^1.0.21:
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.21.tgz#c840bbc80a691aee030d090785b98142102013c5"
-  integrity sha512-RedZxj452+ITLfqIrR02BjvCaXV63YVIcVrvmruDZXFpJGazg4gHNs1AShPGVLvEuLGZdZ9AtkGKhWvzEujL8g==
+react-virtualized-auto-sizer@^1.0.22:
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.22.tgz#5aca94a45c91c9fe6ec57d711a65e6a55d0da71b"
+  integrity sha512-2CGT/4rZ6jvVkKqzJGnZlyQxj4rWPKAwZR80vMlmpYToN18xaB0yIODOoBltWZLbSgpHBpIk0Ae1nrVO9hVClA==
 
 react-virtualized@^9.21.2:
   version "9.22.3"
