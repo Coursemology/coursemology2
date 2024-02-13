@@ -26,7 +26,7 @@ export interface StudentInfo extends UserInfo {
   role: 'student';
 }
 
-interface AnswerInfo {
+export interface AnswerInfo {
   currentAnswerId: number;
   grade: number;
   maximumGrade: number;
@@ -83,4 +83,14 @@ export interface AncestorAssessmentStats {
 
 export interface AssessmentStatisticsStore extends MainAssessmentStats {
   isLoading: boolean;
+}
+
+interface QuestionDetails {
+  id: number;
+  title: string;
+  description: string;
+}
+
+export interface AnswerDetails {
+  question: QuestionDetails;
 }

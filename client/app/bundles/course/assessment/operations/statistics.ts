@@ -1,5 +1,8 @@
 import { Operation } from 'store';
-import { AncestorAssessmentStats } from 'types/course/statistics/assessmentStatistics';
+import {
+  AncestorAssessmentStats,
+  AnswerDetails,
+} from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 
@@ -29,6 +32,15 @@ export const fetchAncestorStatistics = async (
 ): Promise<AncestorAssessmentStats> => {
   const response =
     await CourseAPI.statistics.assessment.fetchAncestorStatistics(ancestorId);
+
+  return response.data;
+};
+
+export const fetchAnswerDetails = async (
+  answerId: number,
+): Promise<AnswerDetails> => {
+  const response =
+    await CourseAPI.statistics.answer.fetchAnswerDetails(answerId);
 
   return response.data;
 };
