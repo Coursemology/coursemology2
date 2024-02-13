@@ -30,7 +30,7 @@ export interface StudentInfo extends UserInfo {
   role: 'student';
 }
 
-interface AnswerInfo {
+export interface AnswerInfo {
   currentAnswerId: number;
   grade: number;
   maximumGrade: number;
