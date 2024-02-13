@@ -30,7 +30,7 @@ export interface StudentInfo extends UserInfo {
   role: 'student';
 }
 
-interface AnswerInfo {
+export interface AnswerInfo {
   currentAnswerId: number;
   grade: number;
   maximumGrade: number;
@@ -98,4 +98,14 @@ export type QuestionDetails<T extends keyof typeof QuestionType> =
 export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
   question: QuestionDetails<T>;
   answer: AnswerDetailsMap[T];
+}
+
+interface QuestionDetails {
+  id: number;
+  title: string;
+  description: string;
+}
+
+export interface AnswerDetails {
+  question: QuestionDetails;
 }
