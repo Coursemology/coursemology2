@@ -85,13 +85,15 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   end
 
   def load_destination_instances_data
-    @destination_instances = if can?(:duplicate_across_instances, current_tenant)
+    @destination_instances = if current_user.administrator?
+                               Instance.all
+                             elsif can?(:duplicate_across_instances, current_tenant)
                                instance_ids = InstanceUser.unscope(where: :instance_id).
                                               where(user_id: current_user.id,
                                                     role: [InstanceUser.roles[:instructor],
                                                            InstanceUser.roles[:administrator]]).
                                               pluck(:instance_id)
-                               current_user.administrator? ? Instance.all : Instance.where(id: instance_ids)
+                               Instance.where(id: instance_ids)
                              else
                                Instance.where(id: current_tenant.id)
                              end

@@ -29,7 +29,11 @@ const InstanceDropdown: FC<InstanceDropdownProps> = (props) => {
   return (
     <Autocomplete
       {...field}
-      disabled={disabled || !metadata.canDuplicateToAnotherInstance}
+      disabled={
+        disabled ||
+        !metadata.canDuplicateToAnotherInstance ||
+        instances.length > 1
+      }
       fullWidth
       getOptionLabel={(instanceId): string => instances[instanceId]?.name ?? ''}
       onChange={(_, instanceId): void =>
