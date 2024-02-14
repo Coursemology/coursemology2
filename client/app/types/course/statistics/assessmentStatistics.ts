@@ -90,7 +90,7 @@ interface QuestionDetails {
   id: number;
   title: string;
   description: string;
-  questionType: QuestionType;
+  type: QuestionType;
   maximumGrade: number;
 }
 
