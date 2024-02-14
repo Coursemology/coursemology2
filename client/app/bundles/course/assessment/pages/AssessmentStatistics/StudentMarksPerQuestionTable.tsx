@@ -47,10 +47,6 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.questionIndex',
     defaultMessage: 'Q{index}',
   },
-  questionDisplayTitle: {
-    id: 'course.assessment.statistics.questionDisplayTitle',
-    defaultMessage: 'Q{index} for {studentName}',
-  },
   noSubmission: {
     id: 'course.assessment.statistics.noSubmission',
     defaultMessage: 'No Submission yet',
@@ -319,12 +315,12 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       <Prompt
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}
-        title={t(translations.questionDisplayTitle, {
-          index: answerInfo.index,
-          studentName: answerInfo.studentName,
-        })}
+        title={answerInfo.studentName}
       >
-        <AnswerDisplay curAnswerId={answerInfo.answerId} />
+        <AnswerDisplay
+          curAnswerId={answerInfo.answerId}
+          index={answerInfo.index}
+        />
       </Prompt>
     </>
   );

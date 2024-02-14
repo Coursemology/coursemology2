@@ -1,3 +1,4 @@
+import { QuestionType } from '../assessment/question';
 import { WorkflowState } from '../assessment/submission/submission';
 
 interface AssessmentInfo {
@@ -89,8 +90,15 @@ interface QuestionDetails {
   id: number;
   title: string;
   description: string;
+  questionType: QuestionType;
+  maximumGrade: number;
 }
 
-export interface AnswerDetails {
+interface AnswerDetails {
+  grade: number;
+}
+
+export interface QuestionAnswerDetails {
   question: QuestionDetails;
+  answer: AnswerDetails;
 }
