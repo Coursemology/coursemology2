@@ -6,7 +6,7 @@ json.question do
   json.title question.title
   json.maximumGrade question.maximum_grade
   json.description format_ckeditor_rich_text(question.description)
-  json.questionType question.question_type
+  json.type question.question_type
 
   json.partial! question, question: question.specific, can_grade: false, answer: @answer
 end
