@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { Alert, Card, CardContent } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
+import { SubmissionQuestionMiniData } from 'types/course/assessment/submission/question/types';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -210,7 +210,7 @@ export const AnswerMapper = {
 interface AnswerComponentProps<T extends keyof typeof QuestionType> {
   answerId: number | null;
   questionType: T;
-  question: SubmissionQuestionData<T>;
+  question: SubmissionQuestionMiniData<T>;
   answerProps: AnswerPropsMap[T];
 }
 

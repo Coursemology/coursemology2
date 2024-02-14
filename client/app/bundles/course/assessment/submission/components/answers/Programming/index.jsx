@@ -10,7 +10,7 @@ import 'ace-builds/src-noconflict/theme-github';
 import CodaveriFeedbackStatus from '../../../containers/CodaveriFeedbackStatus';
 import ProgrammingImportEditor from '../../../containers/ProgrammingImport/ProgrammingImportEditor';
 import TestCaseView from '../../../containers/TestCaseView';
-import { questionShape } from '../../../propTypes';
+import { questionMiniShape } from '../../../propTypes';
 import { parseLanguages } from '../../../utils';
 
 import ProgrammingFile from './ProgrammingFile';
@@ -94,7 +94,7 @@ const Programming = (props) => {
 };
 
 Programming.propTypes = {
-  question: questionShape.isRequired,
+  question: questionMiniShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
   answerId: PropTypes.number.isRequired,
   saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,

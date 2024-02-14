@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useAppSelector } from 'lib/hooks/store';
 
 import UploadedFileView from '../../../containers/UploadedFileView';
-import { questionShape } from '../../../propTypes';
+import { questionMiniShape } from '../../../propTypes';
 import { getIsSavingAnswer } from '../../../selectors/answerFlags';
 import FileInputField from '../../FileInput';
 import { attachmentRequirementMessage } from '../utils';
@@ -50,7 +50,7 @@ FileUpload.propTypes = {
   answerId: PropTypes.number.isRequired,
   handleUploadTextResponseFiles: PropTypes.func.isRequired,
   numAttachments: PropTypes.number,
-  question: questionShape.isRequired,
+  question: questionMiniShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
 };
 

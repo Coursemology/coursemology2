@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
-import { questionShape } from '../../../propTypes';
+import { questionMiniShape } from '../../../propTypes';
 
 const MultipleChoiceOptions = ({
   readOnly,
@@ -47,7 +47,7 @@ const MultipleChoiceOptions = ({
 );
 
 MultipleChoiceOptions.propTypes = {
-  question: questionShape,
+  question: questionMiniShape,
   readOnly: PropTypes.bool,
   showMcqMrqSolution: PropTypes.bool,
   graderView: PropTypes.bool,
@@ -109,7 +109,7 @@ const MultipleChoice = (props) => {
 MultipleChoice.propTypes = {
   answerId: PropTypes.number.isRequired,
   graderView: PropTypes.bool.isRequired,
-  question: questionShape.isRequired,
+  question: questionMiniShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
   saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,
   showMcqMrqSolution: PropTypes.bool.isRequired,
