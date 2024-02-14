@@ -99,13 +99,3 @@ export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
   question: QuestionDetails<T>;
   answer: AnswerDetailsMap[T];
 }
-
-interface QuestionDetails {
-  id: number;
-  title: string;
-  description: string;
-}
-
-export interface AnswerDetails {
-  question: QuestionDetails;
-}

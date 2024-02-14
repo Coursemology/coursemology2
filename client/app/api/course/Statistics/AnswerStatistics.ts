@@ -1,4 +1,4 @@
-import { AnswerDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
 
 import { APIResponse } from 'api/types';
 
@@ -9,7 +9,9 @@ export default class AnswerStatisticsAPI extends BaseCourseAPI {
     return `/courses/${this.courseId}/statistics/answer`;
   }
 
-  fetchAnswerDetails(answerId: number): APIResponse<AnswerDetails> {
+  fetchQuestionAnswerDetails(
+    answerId: number,
+  ): APIResponse<QuestionAnswerDetails> {
     return this.client.get(`${this.#urlPrefix}/${answerId}`);
   }
 }
