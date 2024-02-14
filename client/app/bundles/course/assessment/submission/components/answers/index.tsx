@@ -6,7 +6,10 @@ import equal from 'fast-deep-equal';
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
-import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
+import {
+  SubmissionQuestionData,
+  SubmissionQuestionMiniData,
+} from 'types/course/assessment/submission/question/types';
 
 import { QuestionType } from 'types/course/assessment/question';
 import { saveAnswer, updateClientVersion } from '../../actions/answers';
@@ -92,7 +95,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
   const answerPropsMap: AnswerPropsMap = {
     MultipleChoice: {
       answerId,
-      question: question as SubmissionQuestionData<'MultipleChoice'>,
+      question: question as SubmissionQuestionMiniData<'MultipleChoice'>,
       readOnly,
       saveAnswerAndUpdateClientVersion,
       graderView,
@@ -100,7 +103,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     },
     MultipleResponse: {
       answerId,
-      question: question as SubmissionQuestionData<'MultipleResponse'>,
+      question: question as SubmissionQuestionMiniData<'MultipleResponse'>,
       readOnly,
       saveAnswerAndUpdateClientVersion,
       graderView,
@@ -108,13 +111,13 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     },
     Programming: {
       answerId,
-      question: question as SubmissionQuestionData<'Programming'>,
+      question: question as SubmissionQuestionMiniData<'Programming'>,
       readOnly,
       saveAnswerAndUpdateClientVersion,
     },
     TextResponse: {
       answerId,
-      question: question as SubmissionQuestionData<'TextResponse'>,
+      question: question as SubmissionQuestionMiniData<'TextResponse'>,
       readOnly,
       saveAnswerAndUpdateClientVersion,
       graderView,
@@ -122,7 +125,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     },
     FileUpload: {
       answerId,
-      question: question as SubmissionQuestionData<'FileUpload'>,
+      question: question as SubmissionQuestionMiniData<'FileUpload'>,
       readOnly,
       graderView,
       handleUploadTextResponseFiles,
@@ -130,19 +133,19 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     Comprehension: {},
     VoiceResponse: {
       answerId,
-      question: question as SubmissionQuestionData<'VoiceResponse'>,
+      question: question as SubmissionQuestionMiniData<'VoiceResponse'>,
       readOnly,
       saveAnswerAndUpdateClientVersion,
     },
     ForumPostResponse: {
       answerId,
-      question: question as SubmissionQuestionData<'ForumPostResponse'>,
+      question: question as SubmissionQuestionMiniData<'ForumPostResponse'>,
       readOnly,
       saveAnswerAndUpdateClientVersion,
     },
     Scribing: {
       answerId,
-      question: question as SubmissionQuestionData<'Scribing'>,
+      question: question as SubmissionQuestionMiniData<'Scribing'>,
     },
   };
 

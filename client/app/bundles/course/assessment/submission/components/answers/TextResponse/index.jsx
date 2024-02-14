@@ -6,7 +6,7 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import { useAppSelector } from 'lib/hooks/store';
 
 import UploadedFileView from '../../../containers/UploadedFileView';
-import { questionShape } from '../../../propTypes';
+import { questionMiniShape } from '../../../propTypes';
 import { getIsSavingAnswer } from '../../../selectors/answerFlags';
 import FileInputField from '../../FileInput';
 import TextResponseSolutions from '../../TextResponseSolutions';
@@ -112,7 +112,7 @@ TextResponse.propTypes = {
   answerId: PropTypes.number.isRequired,
   graderView: PropTypes.bool.isRequired,
   handleUploadTextResponseFiles: PropTypes.func.isRequired,
-  question: questionShape.isRequired,
+  question: questionMiniShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
   saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,
 };

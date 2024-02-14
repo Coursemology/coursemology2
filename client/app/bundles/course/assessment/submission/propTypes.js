@@ -39,6 +39,12 @@ export const questionShape = PropTypes.shape({
   viewHistory: PropTypes.bool,
 });
 
+export const questionMiniShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  viewHistory: PropTypes.bool,
+  type: PropTypes.string.isRequired,
+});
+
 export const historyQuestionShape = PropTypes.shape({
   loaded: PropTypes.bool,
   isLoading: PropTypes.bool.isRequired,
