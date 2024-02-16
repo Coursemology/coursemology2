@@ -25,12 +25,11 @@ module Course::Statistics::SubmissionsConcern
   def answer_statistics_hash
     submission_answer_statistics = Course::Assessment::Answer.find_by_sql(<<-SQL.squish
       WITH
-        statistics_info AS (
+        attempt_count AS (
           SELECT
             caa.question_id,
             caa.submission_id,
-            COUNT(*) AS attempt_count,
-            MAX(CASE WHEN caa.current_answer = true THEN caa.grade END) AS grade
+            COUNT(*) AS attempt_count
           FROM course_assessment_answers caa
           JOIN course_assessment_submissions cas ON caa.submission_id = cas.id
           WHERE cas.assessment_id = #{assessment_params[:id]}
@@ -41,12 +40,13 @@ module Course::Statistics::SubmissionsConcern
           SELECT
             caa_ranked.question_id,
             caa_ranked.submission_id,
-            jsonb_agg(jsonb_build_array(caa_ranked.correct, caa_ranked.workflow_state)) AS submission_info
+            jsonb_agg(jsonb_build_array(caa_ranked.grade, caa_ranked.correct, caa_ranked.workflow_state)) AS submission_info
           FROM (
             SELECT
               caa_inner.question_id,
               caa_inner.submission_id,
               caa_inner.correct,
+              caa_inner.grade,
               cas_inner.workflow_state,
               ROW_NUMBER() OVER (PARTITION BY caa_inner.question_id, caa_inner.submission_id ORDER BY caa_inner.created_at DESC) AS row_num
             FROM
@@ -61,16 +61,18 @@ module Course::Statistics::SubmissionsConcern
         )
 
       SELECT
-        statistics_info.question_id,
-        statistics_info.submission_id,
-        statistics_info.attempt_count,
-        statistics_info.grade,
-        CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>1 != 'attempting'
+        attempt_count.question_id,
+        attempt_count.submission_id,
+        attempt_count.attempt_count,
+        CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>2 != 'attempting'
             THEN attempt_info.submission_info->0->>0 ELSE attempt_info.submission_info->1->>0
+        END AS grade,
+        CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>2 != 'attempting'
+            THEN attempt_info.submission_info->0->>1 ELSE attempt_info.submission_info->1->>1
         END AS correct
-      FROM statistics_info
+      FROM attempt_count
       JOIN attempt_info
-      ON statistics_info.question_id = attempt_info.question_id AND statistics_info.submission_id = attempt_info.submission_id
+      ON attempt_count.question_id = attempt_info.question_id AND attempt_count.submission_id = attempt_info.submission_id
     SQL
                                                                          )
 
