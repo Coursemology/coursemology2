@@ -132,7 +132,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           setOpenAnswer(true);
           setAnswerDisplayInfo({
             index: index + 1,
-            answerId: datum.answers![index].currentAnswerId,
+            answerId: datum.answers![index].lastAttemptAnswerId,
             studentName: datum.courseUser.name,
           });
         }}
