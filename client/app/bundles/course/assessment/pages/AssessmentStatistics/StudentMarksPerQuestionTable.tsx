@@ -89,7 +89,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
 
   const statistics = useAppSelector(getAssessmentStatistics);
   const [openAnswer, setOpenAnswer] = useState(false);
-  const [answerInfo, setAnswerInfo] = useState({
+  const [answerDisplayInfo, setAnswerDisplayInfo] = useState({
     index: 0,
     answerId: 0,
     studentName: '',
@@ -130,9 +130,9 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         className={`cursor-pointer ${className}`}
         onClick={(): void => {
           setOpenAnswer(true);
-          setAnswerInfo({
+          setAnswerDisplayInfo({
             index: index + 1,
-            answerId: datum.answers![index].currentAnswerId,
+            answerId: datum.answers![index].lastAttemptAnswerId,
             studentName: datum.courseUser.name,
           });
         }}
@@ -337,11 +337,11 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       <Prompt
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}
-        title={answerInfo.studentName}
+        title={answerDisplayInfo.studentName}
       >
         <AnswerDisplay
-          curAnswerId={answerInfo.answerId}
-          index={answerInfo.index}
+          curAnswerId={answerDisplayInfo.answerId}
+          index={answerDisplayInfo.index}
         />
       </Prompt>
     </>
