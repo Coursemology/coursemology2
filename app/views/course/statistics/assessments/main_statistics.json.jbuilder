@@ -28,8 +28,10 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
     json.totalGrade submission.grade
 
     json.attemptStatus answers.each do |answer|
+      _, _, auto_gradable = @question_hash[answer.question_id]
+
       json.currentAnswerId answer.current_answer_id
-      json.isAutograded @question_auto_gradable_status_hash[answer.question_id]
+      json.isAutograded auto_gradable
       json.attemptCount answer.attempt_count
       json.correct answer.correct
     end
@@ -43,9 +45,12 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
       end
 
       json.answers answers.each do |answer|
+        maximum_grade, question_type, _ = @question_hash[answer.question_id]
+
         json.currentAnswerId answer.current_answer_id
         json.grade answer.grade
-        json.maximumGrade @question_maximum_grade_hash[answer.question_id]
+        json.maximumGrade maximum_grade
+        json.questionType question_type
       end
     end
   end
