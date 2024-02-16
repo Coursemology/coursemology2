@@ -128,7 +128,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
           setOpenPastAnswers(true);
           setAnswerInfo({
             index: index + 1,
-            answerId: datum.answers![index].currentAnswerId,
+            answerId: datum.answers![index].lastAttemptAnswerId,
             studentName: datum.courseUser.name,
           });
         }}
