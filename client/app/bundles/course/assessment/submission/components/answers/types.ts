@@ -1,9 +1,9 @@
 import { QuestionType } from 'types/course/assessment/question';
-import { SubmissionQuestionMiniData } from 'types/course/assessment/submission/question/types';
+import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 interface AnswerCommonProps<T extends keyof typeof QuestionType> {
   answerId: number;
-  question: SubmissionQuestionMiniData<T>;
+  question: SubmissionQuestionData<T>;
   readOnly: boolean;
   saveAnswerAndUpdateClientVersion: (answerId: number) => void;
 }
