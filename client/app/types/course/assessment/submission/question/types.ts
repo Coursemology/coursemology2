@@ -61,7 +61,7 @@ interface ForumPostResponseQuestionData {
   maxPosts: boolean;
 }
 
-interface SpecificQuestionDataMap {
+export interface SpecificQuestionDataMap {
   MultipleChoice: MultipleResponseQuestionData;
   MultipleResponse: MultipleResponseQuestionData;
   Programming: ProgrammingQuestionData;
@@ -84,14 +84,5 @@ export interface SubmissionQuestionBaseData extends QuestionData {
   viewHistory?: boolean;
 }
 
-interface SubmissionQuestionMiniBaseData {
-  id: number;
-  viewHistory?: boolean;
-  type: QuestionType;
-}
-
 export type SubmissionQuestionData<T extends keyof typeof QuestionType> =
   SubmissionQuestionBaseData & SpecificQuestionDataMap[T];
-
-export type SubmissionQuestionMiniData<T extends keyof typeof QuestionType> =
-  SubmissionQuestionMiniBaseData & SpecificQuestionDataMap[T];

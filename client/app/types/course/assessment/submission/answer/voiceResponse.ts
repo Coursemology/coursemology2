@@ -8,7 +8,7 @@ import {
 
 // BE Data Type
 
-interface VoiceResponseFieldData extends AnswerFieldBaseData {
+export interface VoiceResponseFieldData extends AnswerFieldBaseData {
   file: { url: string | null; name: string };
 }
 

@@ -1,5 +1,8 @@
 import { QuestionType } from '../assessment/question';
+import { SpecificQuestionDataMap } from '../assessment/submission/question/types';
 import { WorkflowState } from '../assessment/submission/submission';
+
+import { AnswerDetailsMap } from './answer';
 
 interface AssessmentInfo {
   id: number;
@@ -86,19 +89,18 @@ export interface AssessmentStatisticsStore extends MainAssessmentStats {
   isLoading: boolean;
 }
 
-interface QuestionDetails {
+interface QuestionBasicDetails<T extends keyof typeof QuestionType> {
   id: number;
   title: string;
   description: string;
-  type: QuestionType;
+  type: T;
   maximumGrade: number;
 }
 
-interface AnswerDetails {
-  grade: number;
-}
+export type QuestionDetails<T extends keyof typeof QuestionType> =
+  QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
 
-export interface QuestionAnswerDetails {
-  question: QuestionDetails;
-  answer: AnswerDetails;
+export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
+  question: QuestionDetails<T>;
+  answer: AnswerDetailsMap[T];
 }

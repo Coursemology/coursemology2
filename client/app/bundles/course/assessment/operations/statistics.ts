@@ -1,4 +1,5 @@
 import { Operation } from 'store';
+import { QuestionType } from 'types/course/assessment/question';
 import {
   AncestorAssessmentStats,
   QuestionAnswerDetails,
@@ -38,7 +39,7 @@ export const fetchAncestorStatistics = async (
 
 export const fetchQuestionAnswerDetails = async (
   answerId: number,
-): Promise<QuestionAnswerDetails> => {
+): Promise<QuestionAnswerDetails<keyof typeof QuestionType>> => {
   const response =
     await CourseAPI.statistics.answer.fetchQuestionAnswerDetails(answerId);
 

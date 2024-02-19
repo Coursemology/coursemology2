@@ -1,3 +1,4 @@
+import { QuestionType } from 'types/course/assessment/question';
 import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
 
 import { APIResponse } from 'api/types';
@@ -11,7 +12,7 @@ export default class AnswerStatisticsAPI extends BaseCourseAPI {
 
   fetchQuestionAnswerDetails(
     answerId: number,
-  ): APIResponse<QuestionAnswerDetails> {
+  ): APIResponse<QuestionAnswerDetails<keyof typeof QuestionType>> {
     return this.client.get(`${this.#urlPrefix}/${answerId}`);
   }
 }

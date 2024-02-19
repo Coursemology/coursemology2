@@ -8,7 +8,7 @@ import {
 
 // BE Data Type
 
-interface ScribingFieldData extends AnswerFieldBaseData {}
+export interface ScribingFieldData extends AnswerFieldBaseData {}
 
 export interface ScribingAnswerData extends AnswerBaseData {
   questionType: QuestionType.Scribing;
