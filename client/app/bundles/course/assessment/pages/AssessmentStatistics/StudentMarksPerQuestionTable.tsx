@@ -68,6 +68,10 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.filename',
     defaultMessage: 'Question-level Marks Statistics for {assessment}',
   },
+  close: {
+    id: 'course.assessment.statistics.close',
+    defaultMessage: 'Close',
+  },
 });
 
 interface Props {
@@ -335,6 +339,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         toolbar={{ show: true }}
       />
       <Prompt
+        cancelLabel={t(translations.close)}
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}
         title={answerDisplayInfo.studentName}
