@@ -45,7 +45,7 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
       end
 
       json.answers answers.each do |answer|
-        maximum_grade, question_type, _ = @question_hash[answer.question_id]
+        maximum_grade, question_type, = @question_hash[answer.question_id]
 
         json.lastAttemptAnswerId answer.last_attempt_answer_id
         json.grade answer.grade

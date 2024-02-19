@@ -60,6 +60,10 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.filename',
     defaultMessage: 'Question-level Attempt Statistics for {assessment}',
   },
+  close: {
+    id: 'course.assessment.statistics.close',
+    defaultMessage: 'Close',
+  },
 });
 
 interface Props {
@@ -272,6 +276,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
       />
 
       <Prompt
+        cancelLabel={t(translations.close)}
         onClose={(): void => setOpenPastAnswers(false)}
         open={openPastAnswers}
         title={answerInfo.studentName}
