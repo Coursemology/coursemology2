@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { Chip, Typography } from '@mui/material';
+import { QuestionType } from 'types/course/assessment/question';
 import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
 
 import { fetchQuestionAnswerDetails } from 'course/assessment/operations/statistics';
@@ -9,6 +10,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import AnswerDetails from './AnswerDetails/AnswerDetails';
 import { getClassNameForMarkCell } from './classNameUtils';
 
 const translations = defineMessages({
@@ -31,10 +33,11 @@ const AnswerDisplay: FC<Props> = (props) => {
   const { curAnswerId, index } = props;
   const { t } = useTranslation();
 
-  const fetchQuestionAndCurrentAnswerDetails =
-    (): Promise<QuestionAnswerDetails> => {
-      return fetchQuestionAnswerDetails(curAnswerId);
-    };
+  const fetchQuestionAndCurrentAnswerDetails = (): Promise<
+    QuestionAnswerDetails<keyof typeof QuestionType>
+  > => {
+    return fetchQuestionAnswerDetails(curAnswerId);
+  };
 
   return (
     <Preload
@@ -62,6 +65,7 @@ const AnswerDisplay: FC<Props> = (props) => {
                 />
               </div>
             </Accordion>
+            <AnswerDetails answer={data.answer} question={data.question} />
             <Chip
               className={`w-100 mt-3 ${gradeCellColor}`}
               label={t(translations.gradeDisplay, {
