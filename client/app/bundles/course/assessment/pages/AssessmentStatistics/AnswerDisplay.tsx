@@ -10,6 +10,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import AnswerDetails from './AnswerDetails/AnswerDetails';
 import { getClassNameForMarkCell } from './classNameUtils';
 
 const translations = defineMessages({
@@ -64,6 +65,7 @@ const AnswerDisplay: FC<Props> = (props) => {
                 />
               </div>
             </Accordion>
+            <AnswerDetails answer={data.answer} question={data.question} />
             <Chip
               className={`w-100 mt-3 ${gradeCellColor}`}
               label={t(translations.gradeDisplay, {
