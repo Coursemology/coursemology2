@@ -13,6 +13,7 @@ end
 
 specific_answer = @answer.specific
 json.answer do
+  json.id @answer.id
   json.grade @answer.grade
   json.questionType question.question_type
   json.partial! specific_answer, answer: specific_answer, can_grade: false
