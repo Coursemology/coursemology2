@@ -13,31 +13,6 @@ import ParentPostPack from './ParentPostPack';
 import PostContent from './PostContent';
 
 const translations = defineMessages({
-  cannotRetrieveForumPosts: {
-    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.cannotRetrieveForumPosts',
-    defaultMessage:
-      'Oops! Unable to retrieve your forum posts. Please try refreshing this page.',
-  },
-  cannotRetrieveSelectedPostPacks: {
-    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.cannotRetrieveSelectedPostPacks',
-    defaultMessage:
-      'Oops! Unable to retrieve your selected posts. Please try refreshing this page.',
-  },
-  submittedInstructions: {
-    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.submittedInstructions',
-    defaultMessage:
-      '{numPosts, plural, =0 {No posts were} one {# post was} other {# posts were}} submitted.',
-  },
-  selectInstructions: {
-    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.selectInstructions',
-    defaultMessage:
-      '<strong>Select {maxPosts} forum {maxPosts, plural, one {post} other {posts}}</strong>. ' +
-      'You have selected {numPosts} {numPosts, plural, one {post} other {posts}}.',
-  },
-  selectPostsButton: {
-    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelect.selectPostsButton',
-    defaultMessage: 'Select Forum {maxPosts, plural, one {Post} other {Posts}}',
-  },
   topicDeleted: {
     id: 'course.assessment.submission.answers.ForumPostResponse.SelectedPostCard.topicDeleted',
     defaultMessage: 'Post made under a topic that was subsequently deleted.',

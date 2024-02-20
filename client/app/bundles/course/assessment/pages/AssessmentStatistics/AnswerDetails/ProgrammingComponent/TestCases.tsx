@@ -46,15 +46,6 @@ const translations = defineMessages({
     id: 'course.assessment.submission.TestCaseView.evaluationTestCases',
     defaultMessage: 'Evaluation Test Cases',
   },
-  staffOnlyTestCases: {
-    id: 'course.assessment.submission.TestCaseView.staffOnlyTestCases',
-    defaultMessage: 'Only staff can see this.',
-  },
-  staffOnlyOutputStream: {
-    id: 'course.assessment.submission.TestCaseView.staffOnlyOutputStream',
-    defaultMessage:
-      "Only staff can see this. Students can't see output streams.",
-  },
   standardOutput: {
     id: 'course.assessment.submission.TestCaseView.standardOutput',
     defaultMessage: 'Standard Output',
@@ -62,12 +53,6 @@ const translations = defineMessages({
   standardError: {
     id: 'course.assessment.submission.TestCaseView.standardError',
     defaultMessage: 'Standard Error',
-  },
-  autogradeProgress: {
-    id: 'course.assessment.submission.TestCaseView.autogradeProgress',
-    defaultMessage:
-      'The answer is currently being evaluated, come back after a while \
-                    to see the latest results.',
   },
   noOutputs: {
     id: 'course.assessment.submission.TestCaseView.noOutputs',
