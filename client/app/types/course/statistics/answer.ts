@@ -19,6 +19,7 @@ import {
 import { VoiceResponseFieldData } from '../assessment/submission/answer/voiceResponse';
 
 interface AnswerCommonDetails<T extends keyof typeof QuestionType> {
+  id: number;
   grade: number;
   questionType: T;
 }
@@ -43,6 +44,33 @@ export interface MrqAnswerDetails
   latestAnswer?: MrqAnswerDetails;
 }
 
+export interface AnnotationTopic {
+  id: number;
+  postIds: number[];
+  line: string;
+}
+
+export interface Annotation {
+  fileId: number;
+  topics: AnnotationTopic[];
+}
+
+export interface TestCase {
+  canReadTests: boolean;
+  public_test?: TestCaseResult[];
+  private_test?: TestCaseResult[];
+  evaluation_test?: TestCaseResult[];
+  stdout?: string;
+  stderr?: string;
+}
+
+export interface CodaveriFeedback {
+  jobId: string;
+  jobStatus: keyof typeof JobStatus;
+  jobUrl?: string;
+  errorMessage?: string;
+}
+
 export interface ProgrammingAnswerDetails
   extends AnswerCommonDetails<'Programming'> {
   fields: ProgrammingFieldData;
@@ -51,33 +79,14 @@ export interface ProgrammingAnswerDetails
     explanation: string[];
     failureType: TestCaseType;
   };
-  testCases: {
-    canReadTests: boolean;
-    public_test?: TestCaseResult[];
-    private_test?: TestCaseResult[];
-    evaluation_test?: TestCaseResult[];
-    stdout?: string;
-    stderr?: string;
-  };
+  testCases: TestCase;
   attemptsLeft?: number;
   autograding?: JobStatusResponse & {
     path?: string;
   };
-  codaveriFeedback?: {
-    jobId: string;
-    jobStatus: keyof typeof JobStatus;
-    jobUrl?: string;
-    errorMessage?: string;
-  };
+  codaveriFeedback?: CodaveriFeedback;
   latestAnswer?: ProgrammingAnswerDetails & {
-    annotations: {
-      fileId: number;
-      topics: {
-        id: number;
-        postIds: number[];
-        line: string;
-      }[];
-    };
+    annotations: Annotation[];
   };
 }
 
