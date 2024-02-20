@@ -10,6 +10,7 @@ import FileUploadDetails from './FileUploadDetails';
 import ForumPostResponseDetails from './ForumPostResponseDetails';
 import MultipleChoiceDetails from './MultipleChoiceDetails';
 import MultipleResponseDetails from './MultipleResponseDetails';
+import ProgrammingAnswerDetails from './ProgrammingAnswerDetails';
 import TextResponseDetails from './TextResponseDetails';
 
 const translations = defineMessages({
@@ -51,10 +52,10 @@ export const AnswerDetailsMapper = {
   ForumPostResponse: (
     props: AnswerDetailsProps<'ForumPostResponse'>,
   ): JSX.Element => <ForumPostResponseDetails {...props} />,
-  // TODO: define component for Programming, Voice Response, Scribing
-  Programming: (_props: AnswerDetailsProps<'Programming'>): JSX.Element => (
-    <AnswerNotImplemented />
+  Programming: (props: AnswerDetailsProps<'Programming'>): JSX.Element => (
+    <ProgrammingAnswerDetails {...props} />
   ),
+  // TODO: define component for Voice Response, Scribing
   VoiceResponse: (_props: AnswerDetailsProps<'VoiceResponse'>): JSX.Element => (
     <AnswerNotImplemented />
   ),
