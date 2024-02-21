@@ -22,6 +22,7 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
   json.submissionExists !submission.nil?
 
   unless submission.nil?
+    json.id submission.id
     json.workflowState submission.workflow_state
     json.submittedAt submission.submitted_at&.iso8601
     json.endAt end_at&.iso8601
@@ -32,7 +33,7 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
 
       json.lastAttemptAnswerId answer.last_attempt_answer_id
       json.isAutograded auto_gradable
-      json.attemptCount answer.attempt_count
+      json.attemptCount answer.attempt_count || 0
       json.correct answer.correct
     end
 
