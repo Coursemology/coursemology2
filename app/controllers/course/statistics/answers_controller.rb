@@ -13,7 +13,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
                            where(submission_id: @answer.submission_id, question_id: @answer.question_id).
                            includes(actable: { files: { annotations:
                                              { discussion_topic: { posts: :codaveri_feedback } } } },
-                                    discussion_topic: :posts).first
+                                    discussion_topic: { posts: :codaveri_feedback }).first
 
     fetch_all_answers(@answer.submission_id, @answer.question_id)
   end
@@ -29,11 +29,11 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
 
     @submission_question = Course::Assessment::SubmissionQuestion.
                            where(submission_id: submission_id, question_id: question_id).
-                           includes({ discussion_topic: :posts }).first
+                           includes({ discussion_topic: { posts: :codaveri_feedback } }).first
     @question_index = question_index(question_id)
     @all_answers = Course::Assessment::Answer.
                    unscope(:order).
-                   order(:created_at).
+                   order(:created_at: :desc).
                    where(submission_id: submission_id, question_id: question_id)
   end
 
