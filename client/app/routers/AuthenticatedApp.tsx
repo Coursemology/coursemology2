@@ -116,6 +116,7 @@ import {
   questionHandle,
 } from 'course/assessment/handles';
 import QuestionFormOutlet from 'course/assessment/question/components/QuestionFormOutlet';
+import PastAnswers from 'course/assessment/submission/pages/QuestionIndex/PastAnswers';
 import { CourseContainer } from 'course/container';
 import { forumHandle, forumTopicHandle } from 'course/forum/handles';
 import { folderHandle } from 'course/material/folders/handles';
@@ -625,6 +626,20 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                           path: 'logs',
                           handle: LogsIndex.handle,
                           element: <LogsIndex />,
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  path: 'submission_questions',
+                  children: [
+                    {
+                      path: ':submissionQuestionId',
+                      children: [
+                        {
+                          path: 'past_answers',
+                          element: <PastAnswers />,
                         },
                       ],
                     },
