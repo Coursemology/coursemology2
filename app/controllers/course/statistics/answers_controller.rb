@@ -2,15 +2,48 @@
 class Course::Statistics::AnswersController < Course::Statistics::Controller
   helper Course::Assessment::Submission::SubmissionsHelper.name.sub(/Helper$/, '')
 
+  MAX_ANSWERS_COUNT = 10
+
   def question_answer_details
     @answer = Course::Assessment::Answer.find(answer_params[:id])
     @submission = @answer.submission
     @assessment = @submission.assessment
+
+    @submission_question = Course::Assessment::SubmissionQuestion.where(submission_id: @answer.submission_id,
+                                                                        question_id: @answer.question_id).first
+    answers = Course::Assessment::Answer.
+                unscope(:order).
+                order(created_at: :desc).
+                where(submission_id: @answer.submission_id, question_id: @answer.question_id)
+    current_answer = answers.find(&:current_answer?)
+    past_answers = answers.where(current_answer: false).limit(MAX_ANSWERS_COUNT - 1).to_a
+    past_answers.unshift(current_answer)
+
+    @all_answers = past_answers
+  end
+
+  def all_answers
+    @submission_question = Course::Assessment::SubmissionQuestion.find(submission_question_params[:id])
+    submission_id = @submission_question.submission_id
+    question_id = @submission_question.question_id
+
+    @question = Course::Assessment::Question.find(question_id)
+    @submission = Course::Assessment::Submission.find(submission_id)
+    @assessment = @submission.assessment
+
+    @all_answers = Course::Assessment::Answer.
+                    unscope(:order).
+                    order(created_at: :desc).
+                    where(submission_id: submission_id, question_id: question_id)
   end
 
   private
 
   def answer_params
+    params.permit(:id)
+  end
+
+  def submission_question_params
     params.permit(:id)
   end
 end

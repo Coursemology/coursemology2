@@ -11,10 +11,14 @@ json.question do
   json.partial! question, question: question.specific, can_grade: false, answer: @answer
 end
 
-specific_answer = @answer.specific
 json.answer do
-  json.id @answer.id
-  json.grade @answer.grade
-  json.questionType question.question_type
-  json.partial! specific_answer, answer: specific_answer, can_grade: false
+  json.partial! 'answer', answer: @answer, question: question
 end
+
+json.allAnswers @all_answers do |answer|
+  json.partial! 'answer', answer: answer, question: question
+  json.createdAt answer.created_at&.iso8601
+  json.currentAnswer answer.current_answer
+end
+
+json.submissionQuestionId @submission_question.id
