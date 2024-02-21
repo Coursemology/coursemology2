@@ -1,12 +1,12 @@
 import { Annotation } from 'types/course/statistics/answer';
-import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
 
 import CodaveriFeedbackStatus from './ProgrammingComponent/CodaveriFeedbackStatus';
 import FileContent from './ProgrammingComponent/FileContent';
 import TestCases from './ProgrammingComponent/TestCases';
 
 const ProgrammingAnswerDetails = (
-  props: QuestionAnswerDetails<'Programming'>,
+  props: QuestionAnswerDisplayDetails<'Programming'>,
 ): JSX.Element => {
   const { answer } = props;
   const annotations = answer.latestAnswer?.annotations ?? ([] as Annotation[]);

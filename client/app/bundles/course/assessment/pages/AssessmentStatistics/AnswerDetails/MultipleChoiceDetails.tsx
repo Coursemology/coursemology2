@@ -1,9 +1,9 @@
 import { FormControlLabel, Radio, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
-import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
 
 const MultipleChoiceDetails = (
-  props: QuestionAnswerDetails<'MultipleChoice'>,
+  props: QuestionAnswerDisplayDetails<'MultipleChoice'>,
 ): JSX.Element => {
   const { question, answer } = props;
   return (
