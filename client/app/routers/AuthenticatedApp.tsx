@@ -118,6 +118,7 @@ import {
 } from 'course/assessment/handles';
 import GenerateProgrammingQuestionPage from 'course/assessment/pages/AssessmentGenerate/GenerateProgrammingQuestionPage';
 import QuestionFormOutlet from 'course/assessment/question/components/QuestionFormOutlet';
+import PastAnswers from 'course/assessment/submission/pages/QuestionIndex/PastAnswers';
 import { CourseContainer } from 'course/container';
 import { commentHandle } from 'course/discussion/topics/handles';
 import {
@@ -633,6 +634,20 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                           path: 'logs',
                           handle: LogsIndex.handle,
                           element: <LogsIndex />,
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  path: 'submission_questions',
+                  children: [
+                    {
+                      path: ':submissionQuestionId',
+                      children: [
+                        {
+                          path: 'past_answers',
+                          element: <PastAnswers />,
                         },
                       ],
                     },
