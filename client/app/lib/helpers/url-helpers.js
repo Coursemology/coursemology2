@@ -113,6 +113,13 @@ function getCourseUserId() {
   return match && match[1];
 }
 
+function getSubmissionQuestionId() {
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/assessments\/\d+\/submission_questions\/(\d+)/,
+  );
+  return match && match[1];
+}
+
 /**
  * Get the video submission id from URL.
  *
@@ -144,6 +151,7 @@ export {
   getCurrentPath,
   getScribingId,
   getSubmissionId,
+  getSubmissionQuestionId,
   getSurveyId,
   getUrlParameter,
   getVideoId,
