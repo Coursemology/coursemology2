@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
+import { useParams } from 'react-router-dom';
 import { QuestionType } from 'types/course/assessment/question';
 import { QuestionAllAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
 
@@ -8,7 +9,6 @@ import AnswerDetails from 'course/assessment/pages/AssessmentStatistics/AnswerDe
 import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
-import { getSubmissionQuestionId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -36,7 +36,7 @@ const translations = defineMessages({
 });
 
 const PastAnswers: FC = () => {
-  const submissionQuestionId = getSubmissionQuestionId();
+  const { submissionQuestionId } = useParams();
   const { t } = useTranslation();
   if (!submissionQuestionId) {
     return null;
