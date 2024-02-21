@@ -25,16 +25,6 @@ module Course::Statistics::SubmissionsConcern
   def answer_statistics_hash
     submission_answer_statistics = Course::Assessment::Answer.find_by_sql(<<-SQL.squish
       WITH
-        attempt_count AS (
-          SELECT
-            caa.question_id,
-            caa.submission_id,
-            COUNT(*) AS attempt_count
-          FROM course_assessment_answers caa
-          JOIN course_assessment_submissions cas ON caa.submission_id = cas.id
-          WHERE cas.assessment_id = #{assessment_params[:id]}
-          GROUP BY caa.question_id, caa.submission_id
-        ),
         attempt_info AS (
           SELECT
             caa_ranked.question_id,
@@ -58,13 +48,24 @@ module Course::Statistics::SubmissionsConcern
           ) AS caa_ranked
           WHERE caa_ranked.row_num <= 2
           GROUP BY caa_ranked.question_id, caa_ranked.submission_id
+        ),
+
+        attempt_count AS (
+          SELECT
+            caa.question_id,
+            caa.submission_id,
+            COUNT(*) AS attempt_count
+          FROM course_assessment_answers caa
+          JOIN course_assessment_submissions cas ON caa.submission_id = cas.id
+          WHERE cas.assessment_id = #{assessment_params[:id]} AND caa.workflow_state != 'attempting'
+          GROUP BY caa.question_id, caa.submission_id
         )
       SELECT
         CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>3 != 'attempting'
             THEN attempt_info.submission_info->0->>0 ELSE attempt_info.submission_info->1->>0
         END AS last_attempt_answer_id,
-        attempt_count.question_id,
-        attempt_count.submission_id,
+        attempt_info.question_id,
+        attempt_info.submission_id,
         attempt_count.attempt_count,
         CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>3 != 'attempting'
             THEN attempt_info.submission_info->0->>1 ELSE attempt_info.submission_info->1->>1
@@ -72,8 +73,8 @@ module Course::Statistics::SubmissionsConcern
         CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>3 != 'attempting'
             THEN attempt_info.submission_info->0->>2 ELSE attempt_info.submission_info->1->>2
         END AS correct
-      FROM attempt_count
-      JOIN attempt_info
+      FROM attempt_info
+      LEFT JOIN attempt_count
       ON attempt_count.question_id = attempt_info.question_id AND attempt_count.submission_id = attempt_info.submission_id
     SQL
                                                                          )
