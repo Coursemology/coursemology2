@@ -10,8 +10,8 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import AnswerDetails from './AnswerDetails/AnswerDetails';
-import { getClassNameForMarkCell } from './classNameUtils';
+import AnswerDetails from '../AnswerDetails/AnswerDetails';
+import { getClassNameForMarkCell } from '../classNameUtils';
 
 const translations = defineMessages({
   questionTitle: {
@@ -22,6 +22,10 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.gradeDisplay',
     defaultMessage: 'Grade: {grade} / {maxGrade}',
   },
+  morePastAnswers: {
+    id: 'course.assessment.statistics.morePastAnswers',
+    defaultMessage: 'View All Past Answers',
+  },
 });
 
 interface Props {
@@ -29,7 +33,7 @@ interface Props {
   index: number;
 }
 
-const AnswerDisplay: FC<Props> = (props) => {
+const LastAttemptIndex: FC<Props> = (props) => {
   const { curAnswerId, index } = props;
   const { t } = useTranslation();
 
@@ -81,4 +85,4 @@ const AnswerDisplay: FC<Props> = (props) => {
   );
 };
 
-export default AnswerDisplay;
+export default LastAttemptIndex;
