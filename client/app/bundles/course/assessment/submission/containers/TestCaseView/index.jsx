@@ -1,7 +1,7 @@
 import { Component, Fragment } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { Done } from '@mui/icons-material';
+import { Close, Done } from '@mui/icons-material';
 import Clear from '@mui/icons-material/Clear';
 import {
   Alert,
@@ -46,6 +46,14 @@ const translations = defineMessages({
   allPassed: {
     id: 'course.assessment.submission.TestCaseView.allPassed',
     defaultMessage: 'All passed',
+  },
+  allFailed: {
+    id: 'course.assessment.submission.TestCaseView.allFailed',
+    defaultMessage: 'All failed',
+  },
+  testCasesPassed: {
+    id: 'course.assessment.submission.TestCaseView.testCasesPassed',
+    defaultMessage: '{numPassed}/{numTestCases} passed',
   },
   publicTestCases: {
     id: 'course.assessment.submission.TestCaseView.publicTestCases',
@@ -191,29 +199,88 @@ export class VisibleTestCaseView extends Component {
       return null;
     }
 
-    const passedTestCases = testCases.reduce(
-      (passed, testCase) => passed && testCase?.passed,
-      true,
+    const isProgrammingAnswerEvaluated =
+      testCases.filter((testCase) => !!testCase.output).length > 0;
+
+    const numPassedTestCases = testCases.filter(
+      (testCase) => testCase.passed,
+    ).length;
+
+    const AllTestCasesPassedChip = () => (
+      <Chip
+        color="success"
+        icon={<Done />}
+        label={<FormattedMessage {...translations.allPassed} />}
+        size="small"
+        variant="outlined"
+      />
     );
 
-    const shouldShowAllPassed = !isDraftAnswer && passedTestCases;
+    const SomeTestCasesPassedChip = () => (
+      <Chip
+        color="warning"
+        label={
+          <FormattedMessage
+            {...translations.testCasesPassed}
+            values={{
+              numPassed: numPassedTestCases,
+              numTestCases: testCases.length,
+            }}
+          />
+        }
+        size="small"
+        variant="outlined"
+      />
+    );
+
+    const NoTestCasesPassedChip = () => (
+      <Chip
+        color="error"
+        icon={<Close />}
+        label={<FormattedMessage {...translations.allFailed} />}
+        size="small"
+        variant="outlined"
+      />
+    );
+
+    const TestCasesIndicatorChip = () => {
+      if (!isProgrammingAnswerEvaluated) {
+        return <div />;
+      }
+
+      if (numPassedTestCases === testCases.length) {
+        return <AllTestCasesPassedChip />;
+      }
+
+      if (numPassedTestCases > 0) {
+        return <SomeTestCasesPassedChip />;
+      }
+
+      return <NoTestCasesPassedChip />;
+    };
+
+    const testCaseComponentClassName = () => {
+      if (!isProgrammingAnswerEvaluated) {
+        return '';
+      }
+
+      if (numPassedTestCases === testCases.length) {
+        return 'border-success';
+      }
+
+      if (numPassedTestCases > 0) {
+        return 'border-warning';
+      }
+
+      return 'border-error';
+    };
 
     return (
       <Accordion
-        className={shouldShowAllPassed && 'border-success'}
+        className={!isDraftAnswer && testCaseComponentClassName()}
         defaultExpanded={!collapsible}
         disableGutters
-        icon={
-          shouldShowAllPassed && (
-            <Chip
-              color="success"
-              icon={<Done />}
-              label={<FormattedMessage {...translations.allPassed} />}
-              size="small"
-              variant="outlined"
-            />
-          )
-        }
+        icon={!isDraftAnswer && <TestCasesIndicatorChip />}
         id={testCaseType}
         subtitle={
           warn && <FormattedMessage {...translations.staffOnlyTestCases} />
