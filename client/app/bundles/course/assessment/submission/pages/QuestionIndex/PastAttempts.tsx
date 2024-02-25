@@ -9,11 +9,9 @@ import Comment from 'course/assessment/pages/AssessmentStatistics/AnswerDisplay/
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import { getEditSubmissionQuestionURL } from 'lib/helpers/url-builders';
-import { getSubmissionQuestionId } from 'lib/helpers/url-helpers';
 
 const PastAnswers: FC = () => {
-  const submissionQuestionId = getSubmissionQuestionId();
-  const { courseId, assessmentId } = useParams();
+  const { courseId, assessmentId, submissionQuestionId } = useParams();
   if (!submissionQuestionId) {
     return null;
   }
