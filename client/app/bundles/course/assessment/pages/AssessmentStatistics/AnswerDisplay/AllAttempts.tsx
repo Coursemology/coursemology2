@@ -6,15 +6,17 @@ import { QuestionType } from 'types/course/assessment/question';
 import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
 
 import { fetchQuestionAnswerDetails } from 'course/assessment/operations/statistics';
-import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
-import { getPastAnswersURL } from 'lib/helpers/url-builders';
+import {
+  getEditSubmissionQuestionURL,
+  getPastAnswersURL,
+} from 'lib/helpers/url-builders';
 import useTranslation from 'lib/hooks/useTranslation';
-import { formatLongDateTime } from 'lib/moment';
 
-import AnswerDetails from '../AnswerDetails/AnswerDetails';
+import AllAttemptsDisplay from './AllAttemptsDisplay';
+import Comment from './Comment';
 
 const translations = defineMessages({
   questionTitle: {
@@ -35,7 +37,11 @@ const translations = defineMessages({
   },
   pastAnswerTitle: {
     id: 'course.assessment.statistics.pastAnswerTitle',
-    defaultMessage: '#{index}) Submitted At: {submittedAt}',
+    defaultMessage: 'Submitted At: {submittedAt}',
+  },
+  submissionPage: {
+    id: 'course.assessment.statistics.submissionPage',
+    defaultMessage: 'Go to Answer Page',
   },
 });
 
@@ -43,8 +49,6 @@ interface Props {
   curAnswerId: number;
   index: number;
 }
-
-const MAX_DISPLAYED_ANSWERS = 10;
 
 const AllAttemptsIndex: FC<Props> = (props) => {
   const { curAnswerId, index } = props;
@@ -69,55 +73,27 @@ const AllAttemptsIndex: FC<Props> = (props) => {
           data.submissionQuestionId,
         );
 
-        const currentAnswer = data.allAnswers.find(
-          (answer) => answer.currentAnswer,
-        );
-        const displayedAnswers = data.allAnswers
-          .filter((answer) => !answer.currentAnswer)
-          .slice(0, MAX_DISPLAYED_ANSWERS - 1);
-
         return (
           <>
-            <Accordion
-              defaultExpanded={false}
-              title={t(translations.questionTitle, { index })}
-            >
-              <div className="ml-4 mt-4">
-                <Typography variant="body1">{data.question.title}</Typography>
-                <Typography
-                  dangerouslySetInnerHTML={{
-                    __html: data.question.description,
-                  }}
-                  variant="body2"
-                />
-              </div>
-            </Accordion>
-            <Accordion
-              className="mt-2"
-              defaultExpanded
-              title={t(translations.currentAnswer)}
-            >
-              <AnswerDetails answer={currentAnswer!} question={data.question} />
-            </Accordion>
-            {displayedAnswers.length > 0 &&
-              displayedAnswers.map((answer, answerIndex) => (
-                <Accordion
-                  key={`past-answer-${answer.id}`}
-                  className="mt-2"
-                  defaultExpanded={false}
-                  title={t(translations.pastAnswerTitle, {
-                    index: answerIndex + 1,
-                    submittedAt: formatLongDateTime(answer.createdAt),
-                  })}
-                >
-                  <AnswerDetails answer={answer} question={data.question} />
-                </Accordion>
-              ))}
+            <AllAttemptsDisplay
+              allAnswers={data.allAnswers}
+              question={data.question}
+              questionNumber={index}
+              submissionEditUrl={getEditSubmissionQuestionURL(
+                courseId,
+                assessmentId,
+                data.submissionId,
+                index,
+              )}
+            />
+
             <Link opensInNewTab to={pastAnswersURL}>
               <Typography className="mt-4" variant="body2">
                 {t(translations.morePastAnswers)}
               </Typography>
             </Link>
+
+            {data.comments.length > 0 && <Comment comments={data.comments} />}
           </>
         );
       }}
