@@ -118,7 +118,7 @@ import {
 } from 'course/assessment/handles';
 import GenerateProgrammingQuestionPage from 'course/assessment/pages/AssessmentGenerate/GenerateProgrammingQuestionPage';
 import QuestionFormOutlet from 'course/assessment/question/components/QuestionFormOutlet';
-import PastAnswers from 'course/assessment/submission/pages/QuestionIndex/PastAnswers';
+import PastAttempts from 'course/assessment/submission/pages/QuestionIndex/PastAttempts';
 import { CourseContainer } from 'course/container';
 import { commentHandle } from 'course/discussion/topics/handles';
 import {
@@ -646,8 +646,8 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                       path: ':submissionQuestionId',
                       children: [
                         {
-                          path: 'past_answers',
-                          element: <PastAnswers />,
+                          path: 'past_attempts',
+                          element: <PastAttempts />,
                         },
                       ],
                     },
