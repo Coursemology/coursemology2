@@ -7,7 +7,6 @@ import {
   QuestionDetails,
 } from 'types/course/statistics/assessmentStatistics';
 
-import { workflowStates } from 'course/assessment/submission/constants';
 import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -31,41 +30,19 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.pastAnswerTitle',
     defaultMessage: 'Submitted At: {submittedAt}',
   },
-  mostRecentAnswer: {
-    id: 'course.assessment.statistics.mostRecentAnswer',
-    defaultMessage: 'Current Answer (Attempting)',
-  },
   submissionPage: {
     id: 'course.assessment.statistics.submissionPage',
     defaultMessage: 'Go to Answer Page',
   },
 });
 
-// only used as a dummy buffer time if the submission's state is attempting
-// this is due to the time record for attempting answer being lower than any other
-// states' answer, while it's actually the latest version.
-const BUFFER_TIME = 100;
-
 const AllAttemptsDisplay: FC<Props> = (props) => {
   const { allAnswers, question, questionNumber, submissionEditUrl } = props;
 
   const { t } = useTranslation();
 
-  let currentAnswer = allAnswers.find((answer) => answer.currentAnswer);
+  const currentAnswer = allAnswers.find((answer) => answer.currentAnswer);
   const sortedAnswers = allAnswers.filter((answer) => !answer.currentAnswer);
-
-  if (
-    sortedAnswers.length > 0 &&
-    currentAnswer?.workflowState === workflowStates.Attempting
-  ) {
-    currentAnswer = {
-      ...currentAnswer,
-      createdAt: new Date(
-        sortedAnswers[sortedAnswers.length - 1].createdAt.getTime() +
-          BUFFER_TIME,
-      ),
-    };
-  }
 
   sortedAnswers.push(currentAnswer!);
 
@@ -86,10 +63,6 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
   const [displayedIndex, setDisplayedIndex] = useState(
     currentAnswerMarker.value,
   );
-
-  const isCurrentAnswerStillAttempting =
-    sortedAnswers[answerSubmittedTimes.length - 1].workflowState ===
-    workflowStates.Attempting;
 
   return (
     <>
@@ -131,16 +104,12 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
       )}
 
       <Typography variant="h6">
-        {(!displayedIndex ||
-          displayedIndex === answerSubmittedTimes.length - 1) &&
-        isCurrentAnswerStillAttempting
-          ? t(translations.mostRecentAnswer)
-          : t(translations.pastAnswerTitle, {
-              submittedAt: formatLongDateTime(
-                sortedAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]
-                  .createdAt,
-              ),
-            })}
+        {t(translations.pastAnswerTitle, {
+          submittedAt: formatLongDateTime(
+            sortedAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]
+              .createdAt,
+          ),
+        })}
       </Typography>
       <AnswerDetails
         answer={
