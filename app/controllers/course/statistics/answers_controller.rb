@@ -9,18 +9,11 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
     @submission = @answer.submission
     @assessment = @submission.assessment
 
-    @submission_question = Course::Assessment::SubmissionQuestion.where(submission_id: @answer.submission_id,
-                                                                        question_id: @answer.question_id).
-                                                                  includes({ discussion_topic: :posts }).first
-    answers = Course::Assessment::Answer.
-                unscope(:order).
-                order(created_at: :desc).
-                where(submission_id: @answer.submission_id, question_id: @answer.question_id)
-    current_answer = answers.find(&:current_answer?)
-    past_answers = answers.where(current_answer: false).limit(MAX_ANSWERS_COUNT - 1).to_a
-    past_answers.unshift(current_answer)
+    @submission_question = Course::Assessment::SubmissionQuestion.
+                           where(submission_id: @answer.submission_id, question_id: @answer.question_id).
+                           includes({ discussion_topic: :posts }).first
 
-    @all_answers = past_answers
+    @all_answers = fetch_all_answers(@answer.submission_id, @answer.question_id)
   end
 
   def all_answers
@@ -32,17 +25,14 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
     @submission = Course::Assessment::Submission.find(submission_id)
     @assessment = @submission.assessment
 
-    @submission_question = Course::Assessment::SubmissionQuestion.where(submission_id: submission_id,
-                                                                        question_id: question_id).
-                                                                  includes({ discussion_topic: :posts }).first
-    question_ids = Course::QuestionAssessment.where(assessment_id: @assessment.id).
-                                              order(:weight).
-                                              pluck(:question_id)
-    @question_index = question_ids.index(question_id)
+    @submission_question = Course::Assessment::SubmissionQuestion.
+                           where(submission_id: submission_id, question_id: question_id).
+                           includes({ discussion_topic: :posts }).first
+    @question_index = question_index(question_id)
     @all_answers = Course::Assessment::Answer.
-                    unscope(:order).
-                    order(:created_at).
-                    where(submission_id: submission_id, question_id: question_id)
+                   unscope(:order).
+                   order(:created_at).
+                   where(submission_id: submission_id, question_id: question_id)
   end
 
   private
@@ -53,5 +43,27 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
 
   def submission_question_params
     params.permit(:id)
+  end
+
+  def question_index(question_id)
+    question_ids = Course::QuestionAssessment.
+                   where(assessment_id: @assessment.id).
+                   order(:weight).
+                   pluck(:question_id)
+
+    question_ids.index(question_id)
+  end
+
+  def fetch_all_answers(submission_id, question_id)
+    answers = Course::Assessment::Answer.
+              unscope(:order).
+              order(created_at: :desc).
+              where(submission_id: submission_id, question_id: question_id)
+
+    current_answer = answers.find(&:current_answer?)
+    past_answers = answers.where(current_answer: false).limit(MAX_ANSWERS_COUNT - 1).to_a.reverse
+    past_answers.unshift(current_answer)
+
+    past_answers
   end
 end
