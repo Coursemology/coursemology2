@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Done } from '@mui/icons-material';
+import { Close, Done } from '@mui/icons-material';
 import {
   Chip,
   Table,
@@ -34,6 +34,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.TestCaseView.allPassed',
     defaultMessage: 'All passed',
   },
+  allFailed: {
+    id: 'course.assessment.submission.TestCaseView.allFailed',
+    defaultMessage: 'All failed',
+  },
+  testCasesPassed: {
+    id: 'course.assessment.submission.TestCaseView.testCasesPassed',
+    defaultMessage: '{numPassed}/{numTestCases} passed',
+  },
   publicTestCases: {
     id: 'course.assessment.submission.TestCaseView.publicTestCases',
     defaultMessage: 'Public Test Cases',
@@ -64,32 +72,98 @@ interface Props {
   testCase: TestCase;
 }
 
-const TestCaseComponent = (
-  testCaseResults: TestCaseResult[],
-  testCaseType: string,
-): JSX.Element => {
+interface TestCaseComponentProps {
+  testCaseResults: TestCaseResult[];
+  testCaseType: string;
+}
+
+interface OutputStreamProps {
+  outputStreamType: 'standardOutput' | 'standardError';
+  output?: string;
+}
+
+const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
+  const { testCaseResults, testCaseType } = props;
   const { t } = useTranslation();
-  const passedTestCases = testCaseResults.reduce(
-    (passed, testCase) => passed && testCase?.passed,
-    true,
+
+  const isProgrammingAnswerEvaluated =
+    testCaseResults.filter((result) => !!result.output).length > 0;
+
+  const numPassedTestCases = testCaseResults.filter(
+    (result) => result.passed,
+  ).length;
+  const numTestCases = testCaseResults.length;
+
+  const AllTestCasesPassedChip: FC = () => (
+    <Chip
+      color="success"
+      icon={<Done />}
+      label={t(translations.allPassed)}
+      size="small"
+      variant="outlined"
+    />
   );
+
+  const SomeTestCasesPassedChip: FC = () => (
+    <Chip
+      color="warning"
+      label={t(translations.testCasesPassed, {
+        numPassed: numPassedTestCases,
+        numTestCases,
+      })}
+      size="small"
+      variant="outlined"
+    />
+  );
+
+  const NoTestCasesPassedChip: FC = () => (
+    <Chip
+      color="error"
+      icon={<Close />}
+      label={t(translations.allFailed)}
+      size="small"
+      variant="outlined"
+    />
+  );
+
+  const TestCasesIndicatorChip: FC = () => {
+    if (!isProgrammingAnswerEvaluated) {
+      return <div />;
+    }
+
+    if (numPassedTestCases === numTestCases) {
+      return <AllTestCasesPassedChip />;
+    }
+
+    if (numPassedTestCases > 0) {
+      return <SomeTestCasesPassedChip />;
+    }
+
+    return <NoTestCasesPassedChip />;
+  };
+
+  const testCaseComponentClassName = (): string => {
+    if (!isProgrammingAnswerEvaluated) {
+      return '';
+    }
+
+    if (numPassedTestCases === numTestCases) {
+      return 'border-success';
+    }
+
+    if (numPassedTestCases > 0) {
+      return 'border-warning';
+    }
+
+    return 'border-error';
+  };
 
   return (
     <Accordion
-      className={passedTestCases ? 'border-success' : ''}
+      className={testCaseComponentClassName()}
       defaultExpanded={false}
       disableGutters
-      icon={
-        passedTestCases && (
-          <Chip
-            color="success"
-            icon={<Done />}
-            label={t(translations.allPassed)}
-            size="small"
-            variant="outlined"
-          />
-        )
-      }
+      icon={<TestCasesIndicatorChip />}
       id={testCaseType}
       title={t(translations[testCaseType])}
     >
@@ -122,10 +196,8 @@ const TestCaseComponent = (
   );
 };
 
-const OutputStream = (
-  outputStreamType: 'standardOutput' | 'standardError',
-  output?: string,
-): JSX.Element => {
+const OutputStream: FC<OutputStreamProps> = (props) => {
+  const { outputStreamType, output } = props;
   const { t } = useTranslation();
   return (
     <Accordion
@@ -154,20 +226,33 @@ const TestCases: FC<Props> = (props) => {
 
   return (
     <div className="my-5 space-y-5">
-      {testCase.public_test &&
-        testCase.public_test.length > 0 &&
-        TestCaseComponent(testCase.public_test, 'publicTestCases')}
+      {testCase.public_test && testCase.public_test.length > 0 && (
+        <TestCaseComponent
+          testCaseResults={testCase.public_test}
+          testCaseType="publicTestCases"
+        />
+      )}
 
-      {testCase.private_test &&
-        testCase.private_test.length > 0 &&
-        TestCaseComponent(testCase.private_test, 'privateTestCases')}
+      {testCase.private_test && testCase.private_test.length > 0 && (
+        <TestCaseComponent
+          testCaseResults={testCase.private_test}
+          testCaseType="privateTestCases"
+        />
+      )}
 
-      {testCase.evaluation_test &&
-        testCase.evaluation_test.length > 0 &&
-        TestCaseComponent(testCase.evaluation_test, 'evaluationTestCases')}
+      {testCase.evaluation_test && testCase.evaluation_test.length > 0 && (
+        <TestCaseComponent
+          testCaseResults={testCase.evaluation_test}
+          testCaseType="evaluationTestCases"
+        />
+      )}
 
-      {OutputStream('standardOutput', testCase.stdout)}
-      {OutputStream('standardError', testCase.stderr)}
+      <OutputStream
+        output={testCase.stdout}
+        outputStreamType="standardOutput"
+      />
+
+      <OutputStream output={testCase.stderr} outputStreamType="standardError" />
     </div>
   );
 };
