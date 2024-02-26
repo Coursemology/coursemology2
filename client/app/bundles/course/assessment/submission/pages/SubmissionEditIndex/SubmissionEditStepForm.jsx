@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Hotkeys from 'react-hot-keys';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   Button,
   Card,
@@ -31,6 +32,7 @@ import Comments from '../../containers/Comments';
 import GradingPanel from '../../containers/GradingPanel';
 import QuestionGrade from '../../containers/QuestionGrade';
 import {
+  attachmentShape,
   explanationShape,
   historyQuestionShape,
   questionFlagsShape,
@@ -76,6 +78,7 @@ const isLastQuestion = (questionIds, stepIndex) =>
 
 const SubmissionEditStepForm = (props) => {
   const {
+    attachments,
     allConsideredCorrect,
     allowPartialSubmission,
     attempting,
@@ -119,6 +122,21 @@ const SubmissionEditStepForm = (props) => {
 
   const methods = useForm({
     defaultValues: initialValues,
+    resolver: async (data) => {
+      const errors = {};
+      Object.entries(data).forEach(([answerId, answer]) => {
+        const questionId = answer.questionId;
+        const requireAttachment =
+          questions[questionId]?.requireAttachment ?? false;
+        if (requireAttachment && attachments[questionId].length === 0) {
+          errors[answerId] = 'attachment required';
+        }
+      });
+      return {
+        values: {},
+        errors,
+      };
+    },
   });
 
   const {
@@ -497,12 +515,15 @@ const SubmissionEditStepForm = (props) => {
     const question = questions[id];
     const { answerId, topicId } = question;
     const topic = topics[topicId];
+    const error = errors[answerId];
+
     return (
       <>
         <SubmissionAnswer
           {...{
             readOnly: !attempting,
             answerId,
+            error,
             question,
             questionType: question.type,
             historyQuestions,
@@ -626,6 +647,7 @@ SubmissionEditStepForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 
+  attachments: PropTypes.arrayOf(attachmentShape),
   graderView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
   step: PropTypes.number,
@@ -660,4 +682,10 @@ SubmissionEditStepForm.propTypes = {
   handleSaveGrade: PropTypes.func,
 };
 
-export default injectIntl(SubmissionEditStepForm);
+function mapStateToProps(state) {
+  return {
+    attachments: state.assessments.submission.attachments,
+  };
+}
+
+export default connect(mapStateToProps)(injectIntl(SubmissionEditStepForm));

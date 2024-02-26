@@ -16,6 +16,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.FileInput.onlyOneFileUploadAllowed',
     defaultMessage: '*You can only upload at most one file in this question',
   },
+  attachmentRequired: {
+    id: 'course.assessment.submission.FileInput.attachmentRequired',
+    defaultMessage: '*Attachment is required for this question',
+  },
 });
 
 const FileUpload = ({
@@ -31,6 +35,7 @@ const FileUpload = ({
   const disableField = readOnly || isSaving;
   const attachmentType = question.attachmentType;
   const attachmentExists = numAttachments > 0;
+  const requireAttachment = question.requireAttachment;
 
   return (
     <div>
@@ -47,6 +52,11 @@ const FileUpload = ({
       {attachmentType === AttachmentType.SINGLE_FILE_ATTACHMENT && (
         <Typography variant="body2">
           <FormattedMessage {...translations.onlyOneFileUploadAllowed} />
+        </Typography>
+      )}
+      {requireAttachment && (
+        <Typography variant="body2">
+          <FormattedMessage {...translations.attachmentRequired} />
         </Typography>
       )}
     </div>

@@ -499,6 +499,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.pointGrade',
     defaultMessage: 'Grade for this Point',
   },
+  attachmentRequired: {
+    id: 'course.assessment.submission.attachmentRequired',
+    defaultMessage: '*please upload at least one file in this question',
+  },
   solutionLemma: {
     id: 'course.assessment.submission.solutionLemma',
     defaultMessage: 'Solution (lemma form for autograding)',
