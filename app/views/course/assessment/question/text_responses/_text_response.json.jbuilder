@@ -5,7 +5,8 @@ case question.question_type_sym
 when :file_upload
 
 when :text_response
-  json.allowAttachment question.allow_attachment? unless question.file_upload_question?
+  json.attachmentType question.attachment_type
+  json.requireAttachment question.require_attachment
 
   if can_grade && question.auto_gradable?
     json.solutions question.solutions.each do |solution|

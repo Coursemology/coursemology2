@@ -41,7 +41,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
           expect(question_created.description).to include(question_attributes[:description])
           expect(question_created.staff_only_comments).to include(question_attributes[:staff_only_comments])
           expect(question_created.maximum_grade).to eq(question_attributes[:maximum_grade])
-          expect(question_created.allow_attachment).to be_truthy
+          expect(question_created.attachment_type).not_to eq(0)
           expect(question_created.hide_text).to be_truthy
         end
       end
@@ -72,7 +72,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
           expect(question_created.description).to include(question_attributes[:description])
           expect(question_created.staff_only_comments).to include(question_attributes[:staff_only_comments])
           expect(question_created.maximum_grade).to eq(question_attributes[:maximum_grade])
-          expect(question_created.allow_attachment).to be_truthy
+          expect(question_created.attachment_type).not_to eq(0)
           expect(question_created.hide_text).not_to be_truthy
         end
       end
@@ -107,7 +107,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         expect(question.reload.description).to include(description)
         expect(question.reload.staff_only_comments).to include(staff_only_comments)
         expect(question.reload.maximum_grade).to eq(maximum_grade)
-        expect(question.reload.allow_attachment).to be_falsy
+        expect(question.reload.attachment_type).to eq(0)
 
         visit edit_path
 
@@ -132,7 +132,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         wait_for_page
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(question.reload.allow_attachment).to be_falsy
+        expect(question.reload.attachment_type).to eq(0)
         expect(question.reload.solutions.count).to eq(solutions.count)
 
         # Delete all solutions from question

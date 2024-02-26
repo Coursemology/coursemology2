@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_15_074458) do
+ActiveRecord::Schema.define(version: 2024_02_26_104135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -339,9 +339,10 @@ ActiveRecord::Schema.define(version: 2023_12_15_074458) do
   end
 
   create_table "course_assessment_question_text_responses", id: :serial, force: :cascade do |t|
-    t.boolean "allow_attachment", default: false
     t.boolean "hide_text", default: false
     t.boolean "is_comprehension", default: false
+    t.boolean "require_attachment", default: false, null: false
+    t.integer "attachment_type", default: 0, null: false
   end
 
   create_table "course_assessment_question_voice_responses", id: :serial, force: :cascade do |t|
