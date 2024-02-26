@@ -1,6 +1,7 @@
 import { ElementType } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
+  AttachmentType,
   TextResponseData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
@@ -22,13 +23,15 @@ import { create, fetchNewFileUpload, fetchNewTextResponse } from './operations';
 const NEW_TEXT_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: false,
-  allowAttachment: false,
+  attachmentType: AttachmentType.NO_ATTACHMENT,
+  requireAttachment: false,
 };
 
 const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: true,
-  allowAttachment: true,
+  attachmentType: AttachmentType.MULTIPLE_FILE_ATTACHMENT,
+  requireAttachment: false,
 };
 
 type Fetcher = () => Promise<TextResponseFormData<'new'>>;
