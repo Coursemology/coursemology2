@@ -13,16 +13,23 @@ export interface SolutionEntity extends SolutionData {
   draft?: boolean;
 }
 
+export enum AttachmentType {
+  NO_ATTACHMENT = 'no_attachment',
+  SINGLE_FILE_ATTACHMENT = 'single_file_attachment',
+  MULTIPLE_FILE_ATTACHMENT = 'multiple_file_attachment',
+}
+
+export interface TextResponseQuestionFormData extends QuestionFormData {
+  attachmentType: AttachmentType;
+  requireAttachment: boolean;
+  hideText: boolean;
+}
+
 export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
   solutions?: SolutionEntity[] | null | OptionalIfNew<T>;
   questionType: 'file_upload' | 'text_response';
   isAssessmentAutograded: boolean;
-  question:
-    | (QuestionFormData & {
-        allowAttachment: boolean;
-        hideText: boolean;
-      })
-    | OptionalIfNew<T>;
+  question: TextResponseQuestionFormData | OptionalIfNew<T>;
 }
 
 export type TextResponseFormData<T extends 'new' | 'edit' = 'edit'> =
@@ -36,7 +43,8 @@ export interface TextResponsePostData {
     description?: TextResponseFormDataQuestion['description'];
     staff_only_comments?: TextResponseFormDataQuestion['staffOnlyComments'];
     maximum_grade: TextResponseFormDataQuestion['maximumGrade'];
-    allow_attachment: TextResponseFormDataQuestion['allowAttachment'];
+    attachment_type: TextResponseFormDataQuestion['attachmentType'];
+    require_attachment: TextResponseFormDataQuestion['requireAttachment'];
     hide_text: TextResponseFormDataQuestion['hideText'];
     question_assessment?: {
       skill_ids: TextResponseFormDataQuestion['skillIds'];
