@@ -9,6 +9,7 @@ import { useDebounce } from 'lib/hooks/useDebounce';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import { QuestionType } from 'types/course/assessment/question';
+import useTranslation from 'lib/hooks/useTranslation';
 import { saveAnswer, updateClientVersion } from '../../actions/answers';
 import { uploadTextResponseFiles } from '../../actions/answers/textResponse';
 
@@ -17,10 +18,12 @@ import AnswerHeader from './AnswerHeader';
 import { AnswerPropsMap } from './types';
 import { QuestionHistory } from '../../reducers/history/types';
 import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
+import translations from '../../translations';
 
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number;
   graderView: boolean;
+  error: string;
   historyQuestions: Record<number, QuestionHistory>;
   question: SubmissionQuestionData<T>;
   questionType: T;
@@ -45,6 +48,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
 ): JSX.Element => {
   const {
     answerId,
+    error,
     graderView,
     historyQuestions,
     question,
@@ -55,6 +59,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
   const dispatch = useAppDispatch();
 
   const { getValues, resetField } = useFormContext();
+  const { t } = useTranslation();
 
   const handleSaveAnswer = (
     answerData: unknown,
@@ -155,6 +160,12 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
       />
 
       <Divider />
+
+      {error && (
+        <Typography className="text-error" variant="body2">
+          {t(translations.attachmentRequired)}
+        </Typography>
+      )}
 
       <Typography className="mt-2" variant="body1">
         {question.questionTitle}
