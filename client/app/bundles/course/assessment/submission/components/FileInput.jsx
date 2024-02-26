@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import FileUpload from '@mui/icons-material/FileUpload';
 import { Card, CardContent, Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 const translations = defineMessages({
   uploadDisabled: {
@@ -103,12 +104,14 @@ class FileInput extends Component {
       disabled,
       fieldState: { error },
       field: { value },
+      isMultipleUploadAllowed,
     } = this.props;
 
     return (
       <div>
         <Dropzone
           disabled={disabled}
+          multiple={isMultipleUploadAllowed}
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
           onDrop={(files) => this.onDrop(files)}
@@ -135,6 +138,7 @@ class FileInput extends Component {
 
 FileInput.propTypes = {
   disabled: PropTypes.bool,
+  isMultipleUploadAllowed: PropTypes.bool,
   fieldState: PropTypes.shape({
     error: PropTypes.bool,
   }).isRequired,
@@ -151,8 +155,22 @@ FileInput.defaultProps = {
 };
 
 const FileInputField = (props) => {
-  const { disabled, name, onChangeCallback, onDropCallback } = props;
+  const {
+    attachmentExists,
+    attachmentType,
+    disabled,
+    isProgrammingQuestion,
+    name,
+    onChangeCallback,
+    onDropCallback,
+  } = props;
   const { control } = useFormContext();
+  const isMultipleUploadAllowed =
+    isProgrammingQuestion ||
+    attachmentType === AttachmentType.MULTIPLE_FILE_ATTACHMENT;
+  const isFileUploadStillAllowed =
+    attachmentType === AttachmentType.MULTIPLE_FILE_ATTACHMENT ||
+    !attachmentExists;
 
   return (
     <Controller
@@ -160,7 +178,7 @@ const FileInputField = (props) => {
       name={name}
       render={({ field, fieldState }) => (
         <FileInput
-          disabled={disabled}
+          disabled={disabled || !isFileUploadStillAllowed}
           field={{
             ...field,
             onChange: (event) => {
@@ -171,6 +189,7 @@ const FileInputField = (props) => {
             },
           }}
           fieldState={fieldState}
+          isMultipleUploadAllowed={isMultipleUploadAllowed}
           onDropCallback={onDropCallback}
         />
       )}
@@ -179,7 +198,10 @@ const FileInputField = (props) => {
 };
 
 FileInputField.propTypes = {
+  attachmentExists: PropTypes.bool,
+  attachmentType: PropTypes.oneOf(Object.values(AttachmentType)),
   name: PropTypes.string.isRequired,
+  isProgrammingQuestion: PropTypes.bool,
   disabled: PropTypes.bool.isRequired,
   onChangeCallback: PropTypes.func,
   onDropCallback: PropTypes.func,

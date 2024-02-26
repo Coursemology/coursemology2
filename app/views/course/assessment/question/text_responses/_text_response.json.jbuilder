@@ -3,6 +3,8 @@ json.autogradable question.auto_gradable?
 
 case question.question_type_sym
 when :file_upload
+  json.attachmentType question.attachment_type
+  json.requireAttachment question.require_attachment
 
 when :text_response
   json.attachmentType question.attachment_type

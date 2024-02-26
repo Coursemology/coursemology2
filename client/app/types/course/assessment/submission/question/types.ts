@@ -1,4 +1,5 @@
 import { QuestionType } from '../../question';
+import { AttachmentType } from '../../question/text-responses';
 
 interface QuestionData {
   id: number;
@@ -23,7 +24,8 @@ interface ProgrammingQuestionData {
 interface TextResponseParentQuestionData {}
 
 interface TextResponseQuestionData extends TextResponseParentQuestionData {
-  allowAttachment: boolean;
+  attachmentType: AttachmentType;
+  requireAttachment: boolean;
   solutions?: {
     id: number;
     solutionType: 'exact_match' | 'keyword';
@@ -32,7 +34,9 @@ interface TextResponseQuestionData extends TextResponseParentQuestionData {
   };
 }
 
-interface FileUploadQuestionData extends TextResponseParentQuestionData {}
+interface FileUploadQuestionData extends TextResponseParentQuestionData {
+  attachmentType: AttachmentType;
+}
 
 interface ComprehensionQuestionData extends TextResponseParentQuestionData {
   groups?: {
