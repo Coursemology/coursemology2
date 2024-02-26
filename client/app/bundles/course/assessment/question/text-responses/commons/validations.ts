@@ -1,4 +1,7 @@
-import { SolutionData } from 'types/course/assessment/question/text-responses';
+import {
+  AttachmentType,
+  SolutionData,
+} from 'types/course/assessment/question/text-responses';
 import { array, bool, number, object, string, ValidationError } from 'yup';
 
 import translations from '../../../translations';
@@ -6,7 +9,13 @@ import getIndexAndKeyPath from '../../commons/utils';
 import { commonQuestionFieldsValidation } from '../../components/CommonQuestionFields';
 
 export const questionSchema = commonQuestionFieldsValidation.shape({
-  allowAttachment: bool(),
+  attachmentType: string()
+    .oneOf(
+      Object.values(AttachmentType),
+      'Attachment Settings should be either no attachment, single file attachment, or multiple file attachment',
+    )
+    .required('Attachment Setting should be defined in this question'),
+  requireAttachment: bool(),
 });
 
 const solutionSchema = object({

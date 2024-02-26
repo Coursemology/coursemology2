@@ -1,13 +1,12 @@
 import { useRef, useState } from 'react';
-import { Controller } from 'react-hook-form';
 import { Alert } from '@mui/material';
 import {
+  AttachmentType,
   TextResponseData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
 
 import Section from 'lib/components/core/layouts/Section';
-import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -15,6 +14,7 @@ import translations from '../../../translations';
 import CommonQuestionFields from '../../components/CommonQuestionFields';
 import { questionSchema, validateSolutions } from '../commons/validations';
 
+import FileUploadManager from './FileUploadManager';
 import SolutionsManager, { SolutionsManagerRef } from './SolutionsManager';
 
 export interface TextResponseFormProps<T extends 'new' | 'edit'> {
@@ -61,7 +61,13 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     const newData: TextResponseData = {
       questionType: data.questionType,
       isAssessmentAutograded: data.isAssessmentAutograded,
-      question,
+      question: {
+        ...question,
+        requireAttachment:
+          question.attachmentType === AttachmentType.NO_ATTACHMENT
+            ? false
+            : question.requireAttachment,
+      },
       solutions,
     };
     setSubmitting(true);
@@ -81,7 +87,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
       onSubmit={handleSubmit}
       validates={questionSchema}
     >
-      {(control): JSX.Element => (
+      {(control, watch): JSX.Element => (
         <>
           <CommonQuestionFields
             availableSkills={data.availableSkills}
@@ -94,36 +100,27 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
               <Alert severity="info">{t(translations.fileUploadNote)}</Alert>
             )}
 
+          <FileUploadManager
+            control={control}
+            disabled={submitting}
+            isTextResponseQuestion={data.questionType === 'text_response'}
+            watch={watch}
+          />
+
           {data.questionType === 'text_response' && (
-            <>
-              <Section sticksToNavbar title={t(translations.fileUpload)}>
-                <Controller
-                  control={control}
-                  name="allowAttachment"
-                  render={({ field, fieldState }): JSX.Element => (
-                    <FormCheckboxField
-                      disabled={submitting}
-                      field={field}
-                      fieldState={fieldState}
-                      label={t(translations.allowFileUpload)}
-                    />
-                  )}
-                />
-              </Section>
-              <Section
-                sticksToNavbar
-                subtitle={t(translations.solutionsHint)}
-                title={t(translations.solutions)}
-              >
-                <SolutionsManager
-                  ref={solutionsRef}
-                  disabled={submitting}
-                  for={data.solutions ?? []}
-                  isAssessmentAutograded={data.isAssessmentAutograded}
-                  onDirtyChange={setIsSolutionsDirty}
-                />
-              </Section>
-            </>
+            <Section
+              sticksToNavbar
+              subtitle={t(translations.solutionsHint)}
+              title={t(translations.solutions)}
+            >
+              <SolutionsManager
+                ref={solutionsRef}
+                disabled={submitting}
+                for={data.solutions ?? []}
+                isAssessmentAutograded={data.isAssessmentAutograded}
+                onDirtyChange={setIsSolutionsDirty}
+              />
+            </Section>
           )}
         </>
       )}

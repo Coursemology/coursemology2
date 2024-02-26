@@ -413,6 +413,49 @@ const translations = defineMessages({
     id: 'course.assessment.show.fileUpload',
     defaultMessage: 'File Upload',
   },
+  fileUploadDescription: {
+    id: 'course.assessment.show.fileUploadDescription',
+    defaultMessage:
+      'Settings for the number of attachments allowed (none, one, or multiple)',
+  },
+  attachmentSettingsDescription: {
+    id: 'course.assessment.question.textResponses.attachmentSettingsDescription',
+    defaultMessage: 'When students are attempting this question',
+  },
+  attachmentSettings: {
+    id: 'course.assessment.question.textResponses.attachmentSettings',
+    defaultMessage: 'Attachment Settings',
+  },
+  noAttachment: {
+    id: 'course.assessment.question.textResponses.noAttachment',
+    defaultMessage: 'No Attachment Setting',
+  },
+  noAttachmentDescription: {
+    id: 'course.assessment.question.textResponses.noAttachmentDescription',
+    defaultMessage:
+      'They will not be able to upload any attachments within this question',
+  },
+  singleFileAttachment: {
+    id: 'course.assessment.question.textResponses.singleFileAttachment',
+    defaultMessage: 'Single Attachment Setting',
+  },
+  singleFileAttachmentDescription: {
+    id: 'course.assessment.question.textResponses.singleFileAttachmentDescription',
+    defaultMessage:
+      'They can only upload at most one attachment within this question',
+  },
+  multipleFileAttachment: {
+    id: 'course.assessment.question.textResponses.multipleFileAttachment',
+    defaultMessage: 'Multiple Attachment Setting',
+  },
+  multipleFileAttachmentDescription: {
+    id: 'course.assessment.question.textResponses.multipleFileAttachmentDescription',
+    defaultMessage: 'They can upload several attachments within this question',
+  },
+  requireAttachment: {
+    id: 'course.assessment.question.textResponses.requireAttachment',
+    defaultMessage: 'Require file upload for this question',
+  },
   comprehension: {
     id: 'course.assessment.show.comprehension',
     defaultMessage: 'Comprehension',
@@ -771,10 +814,6 @@ const translations = defineMessages({
     id: 'course.assessment.question.forumPostResponses.enableTextResponse',
     defaultMessage:
       'Include a text field for students to provide further inputs',
-  },
-  allowFileUpload: {
-    id: 'course.assessment.question.textResponses.allowFileUpload',
-    defaultMessage: 'Allow file upload in the answer',
   },
   solutions: {
     id: 'course.assessment.question.textResponses.solutions',
