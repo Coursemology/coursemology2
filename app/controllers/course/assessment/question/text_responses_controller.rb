@@ -10,7 +10,6 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   def new
     if params[:file_upload] == 'true'
       @text_response_question.hide_text = true
-      @text_response_question.allow_attachment = true
     end
     return unless params[:comprehension] == 'true'
 
@@ -64,8 +63,8 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
 
   def text_response_question_params
     permitted_params = [
-      :title, :description, :staff_only_comments, :maximum_grade, :allow_attachment,
-      :hide_text, :is_comprehension,
+      :title, :description, :staff_only_comments, :maximum_grade, :attachment_type,
+      :hide_text, :is_comprehension, :require_attachment,
       question_assessment: { skill_ids: [] }
     ]
     if params[:question_text_response][:is_comprehension] == 'true'

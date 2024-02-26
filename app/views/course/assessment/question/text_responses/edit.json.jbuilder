@@ -14,6 +14,7 @@ json.question do
     question: question,
     question_assessment: question_assessment
   }
-  json.allowAttachment @text_response_question.allow_attachment
+  json.attachmentType @text_response_question.attachment_type
+  json.requireAttachment @text_response_question.require_attachment
   json.hideText @text_response_question.hide_text
 end
