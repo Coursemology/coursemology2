@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import { Element, scroller } from 'react-scroll';
 import {
   Button,
@@ -32,6 +33,7 @@ import { formNames, questionTypes } from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
 import QuestionGrade from '../../containers/QuestionGrade';
 import {
+  attachmentShape,
   explanationShape,
   historyQuestionShape,
   questionFlagsShape,
@@ -63,6 +65,7 @@ const styles = {
 
 const SubmissionEditForm = (props) => {
   const {
+    attachments,
     attempting,
     canUpdate,
     codaveriFeedbackStatus,
@@ -114,6 +117,21 @@ const SubmissionEditForm = (props) => {
 
   const methods = useForm({
     defaultValues: initialValues,
+    resolver: async (data) => {
+      const errors = {};
+      Object.entries(data).forEach(([answerId, answer]) => {
+        const questionId = answer.questionId;
+        const requireAttachment =
+          questions[questionId]?.requireAttachment ?? false;
+        if (requireAttachment && attachments[questionId].length === 0) {
+          errors[answerId] = 'attachment required';
+        }
+      });
+      return {
+        values: {},
+        errors,
+      };
+    },
   });
 
   const {
@@ -410,6 +428,7 @@ const SubmissionEditForm = (props) => {
         const question = questions[id];
         const { answerId, topicId, viewHistory } = question;
         const topic = topics[topicId];
+        const error = errors[answerId];
 
         return (
           <Element key={id} name={`step${index}`}>
@@ -418,6 +437,7 @@ const SubmissionEditForm = (props) => {
                 {...{
                   readOnly: !attempting,
                   answerId,
+                  error,
                   question,
                   questionType: question.type,
                   historyQuestions,
@@ -574,6 +594,7 @@ const SubmissionEditForm = (props) => {
     const question = questions[questionId];
     const { answerId, topicId, viewHistory } = question;
     const topic = topics[topicId];
+    const error = errors[answerId];
 
     return (
       <>
@@ -581,6 +602,7 @@ const SubmissionEditForm = (props) => {
           {...{
             readOnly: !attempting,
             answerId,
+            error,
             question,
             questionType: question.type,
             historyQuestions,
@@ -709,6 +731,7 @@ SubmissionEditForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 
+  attachments: PropTypes.arrayOf(attachmentShape),
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   delayedGradePublication: PropTypes.bool.isRequired,
@@ -750,4 +773,10 @@ SubmissionEditForm.propTypes = {
   handlePublish: PropTypes.func,
 };
 
-export default injectIntl(SubmissionEditForm);
+function mapStateToProps(state) {
+  return {
+    attachments: state.assessments.submission.attachments,
+  };
+}
+
+export default connect(mapStateToProps)(injectIntl(SubmissionEditForm));
