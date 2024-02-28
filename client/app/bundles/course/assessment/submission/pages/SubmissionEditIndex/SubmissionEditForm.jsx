@@ -124,7 +124,7 @@ const SubmissionEditForm = (props) => {
         const requireAttachment =
           questions[questionId]?.requireAttachment ?? false;
         if (requireAttachment && attachments[questionId].length === 0) {
-          errors[answerId] = 'attachment required';
+          errors[answerId] = questions[questionId].questionNumber;
         }
       });
       return {
@@ -682,6 +682,19 @@ const SubmissionEditForm = (props) => {
     />
   );
 
+  const renderErrorMessages = () => (
+    <div className="flex flex-col text-right">
+      <ErrorText
+        errors={
+          Object.keys(errors).length > 0 &&
+          intl.formatMessage(translations.submissionError, {
+            questions: Object.values(errors).join(', '),
+          })
+        }
+      />
+    </div>
+  );
+
   return (
     <>
       <FormProvider {...methods}>
@@ -691,8 +704,6 @@ const SubmissionEditForm = (props) => {
           noValidate
           onSubmit={handleSubmit((data) => onSubmit({ ...data }))}
         >
-          <ErrorText errors={errors} />
-
           {tabbedView ? (
             <>
               {renderSteppedQuestions()}
@@ -715,6 +726,7 @@ const SubmissionEditForm = (props) => {
           {renderMarkButton()}
           {renderUnmarkButton()}
           {renderPublishButton()}
+          {renderErrorMessages()}
 
           {renderSubmitDialog()}
         </form>
