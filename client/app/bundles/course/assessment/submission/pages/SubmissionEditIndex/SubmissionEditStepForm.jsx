@@ -135,16 +135,16 @@ const SubmissionEditStepForm = (props) => {
           questions[questionId]?.attachmentType ===
           AttachmentType.SINGLE_FILE_ATTACHMENT;
         if (requireAttachment && attachments[questionId].length === 0) {
-          errors[answerId] = [
-            questions[questionId].questionNumber,
-            AttachmentErrorType.AttachmentRequired,
-          ];
+          errors[answerId] = {
+            questionNumber: questions[questionId].questionNumber,
+            errorCode: AttachmentErrorType.AttachmentRequired,
+          };
         }
         if (onlyOneAttachmentAllowed && attachments[questionId].length > 1) {
-          errors[answerId] = [
-            questions[questionId].questionNumber,
-            AttachmentErrorType.AtMostOneAttachmentAllowed,
-          ];
+          errors[answerId] = {
+            questionNumber: questions[questionId].questionNumber,
+            errorCode: AttachmentErrorType.AtMostOneAttachmentAllowed,
+          };
         }
       });
       return {
@@ -530,7 +530,7 @@ const SubmissionEditStepForm = (props) => {
     const question = questions[id];
     const { answerId, topicId } = question;
     const topic = topics[topicId];
-    const error = errors[answerId]?.[1] ?? null;
+    const error = errors[answerId]?.errorCode ?? null;
 
     return (
       <>
@@ -625,7 +625,7 @@ const SubmissionEditStepForm = (props) => {
           Object.keys(errors).length > 0 &&
           intl.formatMessage(translations.submissionError, {
             questions: Object.values(errors)
-              .map((error) => error[0])
+              .map((error) => error.questionNumber)
               .join(', '),
           })
         }
