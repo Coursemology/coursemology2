@@ -65,6 +65,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.autograde',
     defaultMessage: 'Evaluate Answers',
   },
+  submissionError: {
+    id: 'course.assessment.submission.submissionError',
+    defaultMessage: 'There is a problem in submitting question for {questions}',
+  },
   isSaved: {
     id: 'course.assessment.submission.isSaved',
     defaultMessage: 'Saved',
