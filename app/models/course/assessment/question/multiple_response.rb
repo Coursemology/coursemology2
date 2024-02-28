@@ -4,7 +4,8 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
 
   enum grading_scheme: [:all_correct, :any_correct]
 
-  validate :validate_multiple_choice_has_solution, if: :multiple_choice?
+  validate :validate_has_option
+  validate :validate_multiple_choice_has_correct_solution, if: :multiple_choice?
   validates :grading_scheme, presence: true
 
   has_many :options, class_name: Course::Assessment::Question::MultipleResponseOption.name,
@@ -86,7 +87,13 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
 
   private
 
-  def validate_multiple_choice_has_solution
+  def validate_has_option
+    return unless options.empty?
+
+    errors.add(:options, :no_option)
+  end
+
+  def validate_multiple_choice_has_correct_solution
     return true if skip_grading
 
     errors.add(:options, :no_correct_option) if options.select(&:correct?).empty?

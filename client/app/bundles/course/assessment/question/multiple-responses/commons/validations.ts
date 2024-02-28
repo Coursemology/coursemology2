@@ -1,6 +1,7 @@
 import {
   McqMrqFormData,
   OptionData,
+  OptionEntity,
 } from 'types/course/assessment/question/multiple-responses';
 import {
   AnySchema,
@@ -40,9 +41,16 @@ const optionSchema = object({
   toBeDeleted: bool(),
 });
 
-const responsesSchema = array().of(optionSchema);
-
 const AT_LEAST_ONE_CORRECT_CHOICE_ERROR_NAME = 'at-least-one-correct-choice';
+const AT_LEAST_ONE_CHOICE_ERROR_NAME = 'at-least-one-choice';
+
+const responsesSchema = array()
+  .of(optionSchema)
+  .test(
+    AT_LEAST_ONE_CHOICE_ERROR_NAME,
+    translations.mustHaveAtLeastOneChoice,
+    (options) => (options?.length ?? 0) > 0,
+  );
 
 const choicesSchema = responsesSchema.when('$skipGrading', {
   is: false,
@@ -67,12 +75,13 @@ export interface OptionsErrors {
 }
 
 export const validateOptions = async (
-  options: OptionData[],
+  options: OptionEntity[],
   type: McqMrqFormData['mcqMrqType'],
   skipGrading: boolean,
 ): Promise<OptionsErrors | undefined> => {
   try {
-    await optionsSchema[type].validate(options, {
+    const existingOptions = options.filter((option) => !option.toBeDeleted);
+    await optionsSchema[type].validate(existingOptions, {
       abortEarly: false,
       context: { type, skipGrading },
     });
@@ -84,7 +93,10 @@ export const validateOptions = async (
     return validationErrors.inner.reduce<OptionsErrors>((errors, error) => {
       const { path, type: name, message } = error;
 
-      if (name === AT_LEAST_ONE_CORRECT_CHOICE_ERROR_NAME) {
+      if (
+        name === AT_LEAST_ONE_CHOICE_ERROR_NAME ||
+        name === AT_LEAST_ONE_CORRECT_CHOICE_ERROR_NAME
+      ) {
         errors.error = message;
       } else if (path) {
         const [index, key] = getIndexAndKeyPath<keyof OptionData>(path);
