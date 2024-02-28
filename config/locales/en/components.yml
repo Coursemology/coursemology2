@@ -43,3 +43,6 @@ en:
       name: 'Multiple Reference Timelines'
     monitoring:
       name: 'Heartbeat Monitoring for Exams'
+    stories:
+      name: 'Stories'
+

@@ -190,6 +190,9 @@ Rails.application.routes.draw do
         get 'lesson_plan' => 'lesson_plan_settings#edit'
         patch 'lesson_plan' => 'lesson_plan_settings#update'
 
+        get 'stories' => 'stories_settings#edit'
+        patch 'stories' => 'stories_settings#update'
+
         namespace 'assessments' do
           resources :categories, only: [:create, :destroy] do
             resources :tabs, only: [:create, :destroy]
