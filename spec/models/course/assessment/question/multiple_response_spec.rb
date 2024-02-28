@@ -12,6 +12,19 @@ RSpec.describe Course::Assessment::Question::MultipleResponse do
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
+    describe '#create' do
+      let(:course) { create(:course) }
+      let(:assessment) { create(:assessment, course: course) }
+
+      context 'when creating the mcq/mrq with no options' do
+        it 'is invalid due to absence of options' do
+          question = build(:course_assessment_question_multiple_response, assessment: assessment, options: [])
+
+          expect(question).not_to be_valid
+        end
+      end
+    end
+
     describe '#auto_gradable?' do
       subject { create(:course_assessment_question_multiple_response) }
       it 'returns true' do

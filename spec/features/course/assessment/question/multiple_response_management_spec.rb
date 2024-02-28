@@ -118,12 +118,12 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
       end
 
       scenario 'I can edit a question, change MRQ to MCQ and back to MRQ, and delete an option' do
-        mrq = create(:course_assessment_question_multiple_response, assessment: assessment,
-                                                                    options: [])
+        mrq = create(:course_assessment_question_multiple_response, assessment: assessment)
         options = [
           attributes_for(:course_assessment_question_multiple_response_option, :wrong),
           attributes_for(:course_assessment_question_multiple_response_option, :correct)
         ]
+        initial_options_count = mrq.options.count
         visit course_assessment_path(course, assessment)
 
         edit_path = edit_course_assessment_question_multiple_response_path(course, assessment, mrq)
@@ -158,7 +158,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         wait_for_page
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(mrq.reload.options.count).to eq(options.count)
+        expect(mrq.reload.options.count).to eq(initial_options_count + options.count)
 
         # Switching in edit page
         # Switch MRQ to MCQ
