@@ -19,11 +19,12 @@ import { AnswerPropsMap } from './types';
 import { QuestionHistory } from '../../reducers/history/types';
 import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
 import translations from '../../translations';
+import { AttachmentErrorType } from '../../pages/SubmissionEditIndex/AttachmentErrorType';
 
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number;
   graderView: boolean;
-  error: string;
+  error: AttachmentErrorType;
   historyQuestions: Record<number, QuestionHistory>;
   question: SubmissionQuestionData<T>;
   questionType: T;
@@ -151,6 +152,15 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     },
   };
 
+  const ErrorComponentMap = {
+    [AttachmentErrorType.AttachmentRequired]: t(
+      translations.attachmentRequired,
+    ),
+    [AttachmentErrorType.AtMostOneAttachmentAllowed]: t(
+      translations.onlyOneAttachmentAllowed,
+    ),
+  };
+
   return (
     <>
       <AnswerHeader
@@ -161,9 +171,9 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
 
       <Divider />
 
-      {error && (
+      {Object.values(AttachmentErrorType).includes(error) && (
         <Typography className="text-error" variant="body2">
-          {t(translations.attachmentRequired)}
+          {ErrorComponentMap[error]}
         </Typography>
       )}
 
