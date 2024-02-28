@@ -63,23 +63,22 @@ const FileUploadManager = (props: Props): JSX.Element => {
           )}
         />
 
-        {watch('attachmentType') !== AttachmentType.NO_ATTACHMENT &&
-          isTextResponseQuestion && (
-            <div className="mt-5">
-              <Controller
-                control={control}
-                name="requireAttachment"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormCheckboxField
-                    disabled={disabled}
-                    field={field}
-                    fieldState={fieldState}
-                    label={t(translations.requireAttachment)}
-                  />
-                )}
-              />
-            </div>
-          )}
+        {watch('attachmentType') !== AttachmentType.NO_ATTACHMENT && (
+          <div className="mt-5">
+            <Controller
+              control={control}
+              name="requireAttachment"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  disabled={disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.requireAttachment)}
+                />
+              )}
+            />
+          </div>
+        )}
       </Subsection>
     </Section>
   );

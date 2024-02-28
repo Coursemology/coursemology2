@@ -428,7 +428,7 @@ const translations = defineMessages({
   },
   noAttachment: {
     id: 'course.assessment.question.textResponses.noAttachment',
-    defaultMessage: 'No Attachment Setting',
+    defaultMessage: 'No Attachment',
   },
   noAttachmentDescription: {
     id: 'course.assessment.question.textResponses.noAttachmentDescription',
@@ -437,7 +437,7 @@ const translations = defineMessages({
   },
   singleFileAttachment: {
     id: 'course.assessment.question.textResponses.singleFileAttachment',
-    defaultMessage: 'Single Attachment Setting',
+    defaultMessage: 'Single Attachment',
   },
   singleFileAttachmentDescription: {
     id: 'course.assessment.question.textResponses.singleFileAttachmentDescription',
@@ -446,7 +446,7 @@ const translations = defineMessages({
   },
   multipleFileAttachment: {
     id: 'course.assessment.question.textResponses.multipleFileAttachment',
-    defaultMessage: 'Multiple Attachment Setting',
+    defaultMessage: 'Multiple Attachment',
   },
   multipleFileAttachmentDescription: {
     id: 'course.assessment.question.textResponses.multipleFileAttachmentDescription',

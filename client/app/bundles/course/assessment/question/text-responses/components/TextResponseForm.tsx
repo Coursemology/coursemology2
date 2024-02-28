@@ -58,24 +58,15 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     const solutions = await prepareSolutions(data.questionType);
     if (!solutions) return;
 
-    const isAttachmentRequired = (): boolean => {
-      if (question.attachmentType === AttachmentType.NO_ATTACHMENT) {
-        return false;
-      }
-
-      if (question.hideText) {
-        return true;
-      }
-
-      return question.requireAttachment;
-    };
-
     const newData: TextResponseData = {
       questionType: data.questionType,
       isAssessmentAutograded: data.isAssessmentAutograded,
       question: {
         ...question,
-        requireAttachment: isAttachmentRequired(),
+        requireAttachment:
+          question.attachmentType === AttachmentType.NO_ATTACHMENT
+            ? false
+            : question.requireAttachment,
       },
       solutions,
     };

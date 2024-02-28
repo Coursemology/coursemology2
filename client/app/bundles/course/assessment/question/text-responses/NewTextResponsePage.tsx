@@ -30,8 +30,8 @@ const NEW_TEXT_RESPONSE_VALUE = {
 const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: true,
-  attachmentType: AttachmentType.MULTIPLE_FILE_ATTACHMENT,
-  requireAttachment: false,
+  attachmentType: AttachmentType.SINGLE_FILE_ATTACHMENT,
+  requireAttachment: true,
 };
 
 type Fetcher = () => Promise<TextResponseFormData<'new'>>;
