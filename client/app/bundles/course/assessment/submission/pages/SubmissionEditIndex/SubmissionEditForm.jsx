@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import { blue, grey, red, yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
+import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
@@ -42,6 +43,8 @@ import {
   topicShape,
 } from '../../propTypes';
 import translations from '../../translations';
+
+import { AttachmentErrorType } from './AttachmentErrorType';
 
 const Comments = lazy(
   () => import(/* webpackChunkName: "comment" */ '../../containers/Comments'),
@@ -123,8 +126,20 @@ const SubmissionEditForm = (props) => {
         const questionId = answer.questionId;
         const requireAttachment =
           questions[questionId]?.requireAttachment ?? false;
+        const onlyOneAttachmentAllowed =
+          questions[questionId]?.attachmentType ===
+          AttachmentType.SINGLE_FILE_ATTACHMENT;
         if (requireAttachment && attachments[questionId].length === 0) {
-          errors[answerId] = questions[questionId].questionNumber;
+          errors[answerId] = [
+            questions[questionId].questionNumber,
+            AttachmentErrorType.AttachmentRequired,
+          ];
+        }
+        if (onlyOneAttachmentAllowed && attachments[questionId].length > 1) {
+          errors[answerId] = [
+            questions[questionId].questionNumber,
+            AttachmentErrorType.AtMostOneAttachmentAllowed,
+          ];
         }
       });
       return {
@@ -594,7 +609,7 @@ const SubmissionEditForm = (props) => {
     const question = questions[questionId];
     const { answerId, topicId, viewHistory } = question;
     const topic = topics[topicId];
-    const error = errors[answerId];
+    const error = errors[answerId]?.[1] ?? null;
 
     return (
       <>
@@ -688,7 +703,9 @@ const SubmissionEditForm = (props) => {
         errors={
           Object.keys(errors).length > 0 &&
           intl.formatMessage(translations.submissionError, {
-            questions: Object.values(errors).join(', '),
+            questions: Object.values(errors)
+              .map((error) => error[0])
+              .join(', '),
           })
         }
       />

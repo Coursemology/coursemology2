@@ -897,6 +897,15 @@ const translations = defineMessages({
     defaultMessage:
       'You must choose either exact match or keyword as solution type.',
   },
+  validAttachmentSettingValues: {
+    id: 'course.assessment.question.textResponses.validAttachmentSettingValues',
+    defaultMessage:
+      'Attachment Settings should be either no attachment, single file attachment, or multiple file attachment',
+  },
+  attachmentSettingRequired: {
+    id: 'course.assessment.question.textResponses.attachmentSettingRequired',
+    defaultMessage: 'Attachment Setting should be defined in this question',
+  },
   recentActivities: {
     id: 'course.assessment.monitoring.recentActivities',
     defaultMessage: 'Recent activities',

@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { blue, green, lightBlue, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
+import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
@@ -40,6 +41,8 @@ import {
   topicShape,
 } from '../../propTypes';
 import translations from '../../translations';
+
+import { AttachmentErrorType } from './AttachmentErrorType';
 
 const styles = {
   questionContainer: {
@@ -128,8 +131,20 @@ const SubmissionEditStepForm = (props) => {
         const questionId = answer.questionId;
         const requireAttachment =
           questions[questionId]?.requireAttachment ?? false;
+        const onlyOneAttachmentAllowed =
+          questions[questionId]?.attachmentType ===
+          AttachmentType.SINGLE_FILE_ATTACHMENT;
         if (requireAttachment && attachments[questionId].length === 0) {
-          errors[answerId] = questions[questionId].questionNumber;
+          errors[answerId] = [
+            questions[questionId].questionNumber,
+            AttachmentErrorType.AttachmentRequired,
+          ];
+        }
+        if (onlyOneAttachmentAllowed && attachments[questionId].length > 1) {
+          errors[answerId] = [
+            questions[questionId].questionNumber,
+            AttachmentErrorType.AtMostOneAttachmentAllowed,
+          ];
         }
       });
       return {
@@ -515,7 +530,7 @@ const SubmissionEditStepForm = (props) => {
     const question = questions[id];
     const { answerId, topicId } = question;
     const topic = topics[topicId];
-    const error = errors[answerId];
+    const error = errors[answerId]?.[1] ?? null;
 
     return (
       <>
@@ -609,7 +624,9 @@ const SubmissionEditStepForm = (props) => {
         errors={
           Object.keys(errors).length > 0 &&
           intl.formatMessage(translations.submissionError, {
-            questions: Object.values(errors).join(', '),
+            questions: Object.values(errors)
+              .map((error) => error[0])
+              .join(', '),
           })
         }
       />

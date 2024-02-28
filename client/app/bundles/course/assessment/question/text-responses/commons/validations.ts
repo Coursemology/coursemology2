@@ -12,9 +12,9 @@ export const questionSchema = commonQuestionFieldsValidation.shape({
   attachmentType: string()
     .oneOf(
       Object.values(AttachmentType),
-      'Attachment Settings should be either no attachment, single file attachment, or multiple file attachment',
+      translations.validAttachmentSettingValues,
     )
-    .required('Attachment Setting should be defined in this question'),
+    .required(translations.attachmentSettingRequired),
   requireAttachment: bool(),
 });
 
