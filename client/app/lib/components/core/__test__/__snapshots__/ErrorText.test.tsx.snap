@@ -6,7 +6,7 @@ exports[`<ErrorText /> when input is a string displays it 1`] = `
   "baseElement": <body>
     <div>
       <span
-        class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
       >
         An error.
       </span>
@@ -17,7 +17,7 @@ exports[`<ErrorText /> when input is a string displays it 1`] = `
   </body>,
   "container": <div>
     <span
-      class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
     >
       An error.
     </span>
@@ -85,12 +85,12 @@ exports[`<ErrorText /> when input is an array displays each error 1`] = `
   "baseElement": <body>
     <div>
       <span
-        class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
       >
         An error.
       </span>
       <span
-        class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
+        class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
       >
         Another error.
       </span>
@@ -101,12 +101,12 @@ exports[`<ErrorText /> when input is an array displays each error 1`] = `
   </body>,
   "container": <div>
     <span
-      class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
     >
       An error.
     </span>
     <span
-      class="MuiTypography-root MuiTypography-caption css-11qcgwi-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
     >
       Another error.
     </span>
