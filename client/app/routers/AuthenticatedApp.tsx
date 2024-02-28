@@ -106,6 +106,7 @@ import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/In
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
 import { achievementHandle } from 'course/achievement/handles';
+import StoriesSettings from 'course/admin/pages/StoriesSettings';
 import assessmentAttemptLoader from 'course/assessment/attemptLoader';
 import {
   assessmentHandle,
@@ -360,6 +361,10 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             {
               path: 'codaveri',
               element: <CodaveriSettings />,
+            },
+            {
+              path: 'stories',
+              element: <StoriesSettings />,
             },
           ],
         },
