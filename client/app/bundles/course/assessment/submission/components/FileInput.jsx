@@ -7,6 +7,8 @@ import { Card, CardContent, Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+
 const translations = defineMessages({
   uploadDisabled: {
     id: 'course.assessment.submission.FileInput.uploadDisabled',
@@ -15,6 +17,15 @@ const translations = defineMessages({
   uploadLabel: {
     id: 'course.assessment.submission.FileInput.uploadLabel',
     defaultMessage: 'Drag and drop or click to upload files',
+  },
+  fileUploadErrorTitle: {
+    id: 'course.assessment.submission.FileInput.fileUploadErrorTitle',
+    defaultMessage: 'Error in Uploading Files',
+  },
+  fileUploadErrorMessage: {
+    id: 'course.assessment.submission.FileInput.fileUploadErrorMessage',
+    defaultMessage:
+      'You attempted to upload {numFiles} files, but only one file can be uploaded for this question',
   },
 });
 
@@ -42,6 +53,7 @@ class FileInput extends Component {
     super(props);
     this.state = {
       dropzoneActive: false,
+      numFilesRejected: 0,
     };
   }
 
@@ -65,6 +77,15 @@ class FileInput extends Component {
       return onChange(files.length > 0 ? files : null);
     }
     return () => {};
+  }
+
+  onDropRejected(filesRejected) {
+    const { isMultipleUploadAllowed } = this.props;
+    if (!isMultipleUploadAllowed && filesRejected.length > 1) {
+      this.setState({
+        numFilesRejected: filesRejected.length,
+      });
+    }
   }
 
   displayFileNames(files) {
@@ -106,6 +127,7 @@ class FileInput extends Component {
       field: { value },
       isMultipleUploadAllowed,
     } = this.props;
+    const { numFilesRejected } = this.state;
 
     return (
       <div>
@@ -115,6 +137,7 @@ class FileInput extends Component {
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
           onDrop={(files) => this.onDrop(files)}
+          onDropRejected={(filesRejected) => this.onDropRejected(filesRejected)}
         >
           {({ getRootProps, getInputProps }) => (
             <Card
@@ -130,6 +153,19 @@ class FileInput extends Component {
             </Card>
           )}
         </Dropzone>
+        <Prompt
+          onClose={() => this.setState({ numFilesRejected: 0 })}
+          open={numFilesRejected > 0}
+          title={<FormattedMessage {...translations.fileUploadErrorTitle} />}
+        >
+          <PromptText>
+            <FormattedMessage
+              {...translations.fileUploadErrorMessage}
+              values={{ numFiles: numFilesRejected }}
+            />
+          </PromptText>
+        </Prompt>
+
         {error || ''}
       </div>
     );
