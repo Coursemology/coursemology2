@@ -507,6 +507,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.attachmentRequired',
     defaultMessage: '*please upload at least one file in this question',
   },
+  onlyOneAttachmentAllowed: {
+    id: 'course.assessment.submission.onlyOneAttachmentAllowed',
+    defaultMessage: '*ONLY 1 file is allowed in this question',
+  },
   solutionLemma: {
     id: 'course.assessment.submission.solutionLemma',
     defaultMessage: 'Solution (lemma form for autograding)',
