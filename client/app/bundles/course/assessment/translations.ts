@@ -728,6 +728,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.mustSpecifyChoice',
     defaultMessage: 'You must specify a valid choice title.',
   },
+  mustHaveAtLeastOneChoice: {
+    id: 'course.assessment.question.multipleResponses.mustHaveAtLeastOneChoice',
+    defaultMessage: 'You must specify at least one choice.',
+  },
   mustSpecifyAtLeastOneCorrectChoice: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice',
     defaultMessage: 'You must specify at least one correct choice.',

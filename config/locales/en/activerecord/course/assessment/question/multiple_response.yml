@@ -5,4 +5,5 @@ en:
         course/assessment/question/multiple_response:
           attributes:
             options:
-              no_correct_option: 'must contain at least one correct option.'
+              no_option: "must contain at least one option"
+              no_correct_option: "must contain at least one correct option."
