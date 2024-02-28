@@ -15,7 +15,7 @@ const ErrorText = ({ errors }) => {
   }
   if (errors.constructor === String) {
     return (
-      <Typography color="error" variant="caption">
+      <Typography color="error" variant="body2">
         {errors}
       </Typography>
     );
@@ -34,7 +34,7 @@ const ErrorText = ({ errors }) => {
     return <ErrorText key={errors.base} errors={errors.base.message} />;
   }
   return (
-    <Typography color="error" variant="caption">
+    <Typography color="error" variant="body2">
       <FormattedMessage
         defaultMessage="Failed submitting this form. Please try again."
         id="lib.components.core.ErrorText.error"
