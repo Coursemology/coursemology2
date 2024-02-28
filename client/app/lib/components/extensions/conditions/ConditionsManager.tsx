@@ -42,8 +42,9 @@ import translations from './translations';
 
 interface ConditionsManagerProps {
   title: string;
-  description?: string;
   conditionsData: ConditionsData;
+  description?: string;
+  disabled?: boolean;
 }
 
 const Outlined = (props: ComponentProps<typeof Paper>): JSX.Element => (
@@ -55,7 +56,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
   const [conditions, setConditions] = useState(props.conditionsData.conditions);
   const [conditionToCreate, setConditionToCreate] =
     useState<ConditionAbility>();
-  const [adding, setAdding] = useState(false);
+  const [open, setOpen] = useState(false);
   const addConditionButton = useRef<HTMLButtonElement>(null);
 
   const conditionsByType = useMemo(
@@ -135,8 +136,8 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
       <div className="flex h-16 items-center space-x-4">
         <Button
           ref={addConditionButton}
-          disabled={adding}
-          onClick={(): void => setAdding(true)}
+          disabled={props.disabled}
+          onClick={(): void => setOpen(true)}
           size="small"
           startIcon={<Add />}
           variant="outlined"
@@ -180,15 +181,15 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
 
       <Menu
         anchorEl={addConditionButton.current}
-        onClose={(): void => setAdding(false)}
-        open={adding}
+        onClose={(): void => setOpen(false)}
+        open={!props.disabled && open}
       >
         {props.conditionsData.enabledConditions.map((ability) => (
           <MenuItem
             key={ability.type}
             onClick={(): void => {
               setConditionToCreate(ability);
-              setAdding(false);
+              setOpen(false);
             }}
           >
             {ability.type}

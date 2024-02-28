@@ -10,7 +10,7 @@ export const storyHandle: DataHandle = (match) => {
   return {
     getData: async (): Promise<string> => {
       const response = await CourseAPI.stories.stories.fetch(storyId);
-      return response.data.title;
+      return response.data.story.title;
     },
   };
 };

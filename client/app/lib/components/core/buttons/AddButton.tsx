@@ -4,7 +4,7 @@ import { Button, IconButton, Tooltip } from '@mui/material';
 import useMedia from 'lib/hooks/useMedia';
 
 interface AddButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   id?: string;
   className?: string;
   disabled?: boolean;

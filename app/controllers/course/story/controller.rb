@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Story::Controller < Course::ComponentController
-  load_and_authorize_resource :story, through: :course, class: Course::Story.name
+  load_and_authorize_resource :story, through: :course, class: Course::Story.name, except: [:new]
 
   private
 

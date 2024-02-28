@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Story < ApplicationRecord
-  acts_as_lesson_plan_item has_todo: true
-  acts_as_conditional
+  acts_as_lesson_plan_item
 
   validates :provider_id, presence: true
   validates :creator, presence: true

@@ -21,15 +21,6 @@ const translations = defineMessages({
   },
 });
 
-const useStoryParams = (): { storyId: number; roomId: number } => {
-  const params = useParams<{ storyId: string; roomId: string }>();
-  const storyId = getIdFromUnknown(params.storyId);
-  const roomId = getIdFromUnknown(params.roomId);
-  if (!storyId || !roomId) throw new Error('Invalid params');
-
-  return { storyId, roomId };
-};
-
 const getFrameUrl = (providedRoomId?: string): string => {
   const url = new URL(`http://localhost:3000/chats/${providedRoomId}`);
   url.searchParams.append('origin', window.location.origin);
@@ -37,9 +28,15 @@ const getFrameUrl = (providedRoomId?: string): string => {
   return url.toString();
 };
 
-const RoomShowPage = ({ data }: RoomShowPageProps): JSX.Element => {
-  const { storyId, roomId } = useStoryParams();
-
+const RoomShowPage = ({
+  data,
+  storyId,
+  roomId,
+}: {
+  data;
+  storyId: number;
+  roomId: number;
+}): JSX.Element => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -70,7 +67,10 @@ const RoomShowPage = ({ data }: RoomShowPageProps): JSX.Element => {
 };
 
 const RoomShow = (): JSX.Element => {
-  const { storyId, roomId } = useStoryParams();
+  const params = useParams<{ storyId: string; roomId: string }>();
+  const storyId = getIdFromUnknown(params.storyId);
+  const roomId = getIdFromUnknown(params.roomId);
+  if (!storyId || !roomId) throw new Error('Invalid params');
 
   return (
     <Preload
@@ -81,7 +81,7 @@ const RoomShow = (): JSX.Element => {
           .then((response) => response.data)
       }
     >
-      {(data): JSX.Element => <RoomShowPage data={data} />}
+      {(data) => <RoomShowPage data={data} roomId={roomId} storyId={storyId} />}
     </Preload>
   );
 };

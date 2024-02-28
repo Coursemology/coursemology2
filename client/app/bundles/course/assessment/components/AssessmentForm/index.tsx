@@ -2,10 +2,8 @@ import { useEffect } from 'react';
 import useEmitterFactory from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
 import {
-  Block as DraftIcon,
   CheckCircle as AutogradedIcon,
   Create as ManualIcon,
-  Public as PublishedIcon,
 } from '@mui/icons-material';
 import { Grid, InputAdornment, RadioGroup, Typography } from '@mui/material';
 
@@ -15,10 +13,13 @@ import ErrorText from 'lib/components/core/ErrorText';
 import InfoLabel from 'lib/components/core/InfoLabel';
 import Section from 'lib/components/core/layouts/Section';
 import Link from 'lib/components/core/Link';
-import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
+import DescriptionField from 'lib/components/extensions/forms/DescriptionField';
+import GamificationFields from 'lib/components/extensions/forms/GamificationFields';
+import HasAffectsPersonalTimesFields from 'lib/components/extensions/forms/HasAffectsPersonalTimesFields';
+import TimeFields from 'lib/components/extensions/forms/TimeFields';
+import TitleField from 'lib/components/extensions/forms/TitleField';
+import VisibilityField from 'lib/components/extensions/forms/VisibilityField';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
-import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
-import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { useAppDispatch } from 'lib/hooks/store';
@@ -186,132 +187,29 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         sticksToNavbar={editing}
         title={t(translations.assessmentDetails)}
       >
-        <Controller
+        <TitleField control={control} disabled={disabled} name="title" />
+
+        <TimeFields
+          bonusEndTimeFieldName="bonus_end_at"
           control={control}
-          name="title"
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              disabled={disabled}
-              disableMargins
-              field={field}
-              fieldState={fieldState}
-              fullWidth
-              label={t(translations.title)}
-              required
-              variant="filled"
-            />
-          )}
+          disabled={disabled}
+          endTimeFieldName="end_at"
+          hasBonusEndTime
+          startTimeFieldName="start_at"
         />
 
-        <Grid columnSpacing={2} container direction="row">
-          <Grid item xs>
-            <Controller
-              control={control}
-              name="start_at"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormDateTimePickerField
-                  disabled={disabled}
-                  disableMargins
-                  disableShrinkingLabel
-                  field={field}
-                  fieldState={fieldState}
-                  label={t(translations.startAt)}
-                  required
-                  variant="filled"
-                />
-              )}
-            />
-          </Grid>
-
-          <Grid item xs>
-            <Controller
-              control={control}
-              name="end_at"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormDateTimePickerField
-                  disabled={disabled}
-                  disableMargins
-                  disableShrinkingLabel
-                  field={field}
-                  fieldState={fieldState}
-                  label={t(translations.endAt)}
-                  variant="filled"
-                />
-              )}
-            />
-          </Grid>
-
-          {gamified && (
-            <Grid item xs>
-              <Controller
-                control={control}
-                name="bonus_end_at"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormDateTimePickerField
-                    disabled={disabled}
-                    disableMargins
-                    disableShrinkingLabel
-                    field={field}
-                    fieldState={fieldState}
-                    label={t(translations.bonusEndAt)}
-                    variant="filled"
-                  />
-                )}
-              />
-            </Grid>
-          )}
-        </Grid>
-
-        <Typography>{t(translations.description)}</Typography>
-
-        <Controller
+        <DescriptionField
           control={control}
+          disabled={disabled}
           name="description"
-          render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
-              disabled={disabled}
-              disableMargins
-              field={field}
-              fieldState={fieldState}
-              fullWidth
-              variant="standard"
-            />
-          )}
         />
 
         {editing && (
-          <>
-            <Typography>{t(translations.visibility)}</Typography>
-
-            <Controller
-              control={control}
-              name="published"
-              render={({ field }): JSX.Element => (
-                <RadioGroup
-                  {...field}
-                  onChange={(e): void => {
-                    const isPublished = e.target.value === 'published';
-                    field.onChange(isPublished);
-                  }}
-                  value={field.value === true ? 'published' : 'draft'}
-                >
-                  <IconRadio
-                    description={t(translations.publishedHint)}
-                    icon={PublishedIcon}
-                    label={t(translations.published)}
-                    value="published"
-                  />
-
-                  <IconRadio
-                    description={t(translations.draftHint)}
-                    icon={DraftIcon}
-                    label={t(translations.draft)}
-                    value="draft"
-                  />
-                </RadioGroup>
-              )}
-            />
-          </>
+          <VisibilityField
+            control={control}
+            disabled={disabled}
+            name="published"
+          />
         )}
 
         <Controller
@@ -342,57 +240,15 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       </Section>
 
       {gamified && (
-        <Section sticksToNavbar={editing} title={t(translations.gamification)}>
-          <Grid container direction="row" spacing={2}>
-            <Grid item xs>
-              <Controller
-                control={control}
-                name="base_exp"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormTextField
-                    disabled={disabled}
-                    disableMargins
-                    field={field}
-                    fieldState={fieldState}
-                    fullWidth
-                    label={t(translations.baseExp)}
-                    onWheel={(event): void => event.currentTarget.blur()}
-                    type="number"
-                    variant="filled"
-                  />
-                )}
-              />
-            </Grid>
-
-            <Grid item xs>
-              <Controller
-                control={control}
-                name="time_bonus_exp"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormTextField
-                    disabled={disabled}
-                    disableMargins
-                    field={field}
-                    fieldState={fieldState}
-                    fullWidth
-                    label={t(translations.timeBonusExp)}
-                    onWheel={(event): void => event.currentTarget.blur()}
-                    type="number"
-                    variant="filled"
-                  />
-                )}
-              />
-            </Grid>
-          </Grid>
-
-          {editing && conditionAttributes && (
-            <ConditionsManager
-              conditionsData={conditionAttributes}
-              description={t(translations.unlockConditionsHint)}
-              title={t(translations.unlockConditions)}
-            />
-          )}
-        </Section>
+        <GamificationFields.Section sticksToNavbar={editing}>
+          <GamificationFields
+            baseExpFieldName="base_exp"
+            conditionsData={editing ? conditionAttributes : undefined}
+            control={control}
+            disabled={disabled}
+            timeBonusExpFieldName="time_bonus_exp"
+          />
+        </GamificationFields.Section>
       )}
 
       <Section sticksToNavbar={editing} title={t(translations.grading)}>
@@ -863,38 +719,14 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       </Section>
 
       {showPersonalizedTimelineFeatures && (
-        <Section
-          sticksToNavbar={editing}
-          title={t(translations.personalisedTimelines)}
-        >
-          <Controller
+        <HasAffectsPersonalTimesFields.Section sticksToNavbar={editing}>
+          <HasAffectsPersonalTimesFields
+            affectsPersonalTimesFieldName="affects_personal_times"
             control={control}
-            name="has_personal_times"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormCheckboxField
-                description={t(translations.hasPersonalTimesHint)}
-                disabled={disabled}
-                field={field}
-                fieldState={fieldState}
-                label={t(translations.hasPersonalTimes)}
-              />
-            )}
+            disabled={disabled}
+            hasPersonalTimesFieldName="has_personal_times"
           />
-
-          <Controller
-            control={control}
-            name="affects_personal_times"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormCheckboxField
-                description={t(translations.affectsPersonalTimesHint)}
-                disabled={disabled}
-                field={field}
-                fieldState={fieldState}
-                label={t(translations.affectsPersonalTimes)}
-              />
-            )}
-          />
-        </Section>
+        </HasAffectsPersonalTimesFields.Section>
       )}
     </form>
   );

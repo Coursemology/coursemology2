@@ -1,0 +1,3 @@
+# frozen_string_literal: true
+json.gamified current_course.gamified?
+json.showPersonalizedTimelineFeatures current_course.show_personalized_timeline_features?

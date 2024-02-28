@@ -1,14 +1,10 @@
 # frozen_string_literal: true
-class CikgoApiService
+class Cikgo::Service
   class << self
-    def ping(push_key)
-      response = connection(:get, 'repositories', query: { pushKey: push_key })
-      { status: :ok, **response }
-    rescue StandardError
-      { status: :error }
-    end
-
     private
+
+    CIKGO_ENDPOINT = 'http://localhost:3000/api/v1'
+    CIKGO_OAUTH_APPLICATION_NAME = 'Cikgo'
 
     def connection(method, path, options = {})
       connection = Excon.new(

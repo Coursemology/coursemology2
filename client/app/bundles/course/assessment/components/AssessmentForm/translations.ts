@@ -1,34 +1,6 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
-  title: {
-    id: 'course.assessment.AssessmentForm.title',
-    defaultMessage: 'Title',
-  },
-  description: {
-    id: 'course.assessment.AssessmentForm.description',
-    defaultMessage: 'Description',
-  },
-  startAt: {
-    id: 'course.assessment.AssessmentForm.startAt',
-    defaultMessage: 'Starts at',
-  },
-  endAt: {
-    id: 'course.assessment.AssessmentForm.endAt',
-    defaultMessage: 'Ends at',
-  },
-  bonusEndAt: {
-    id: 'course.assessment.AssessmentForm.bonusEndAt',
-    defaultMessage: 'Bonus ends at',
-  },
-  baseExp: {
-    id: 'course.assessment.AssessmentForm.baseExp',
-    defaultMessage: 'Base EXP',
-  },
-  timeBonusExp: {
-    id: 'course.assessment.AssessmentForm.timeBonusExp',
-    defaultMessage: 'Time Bonus EXP',
-  },
   blockStudentViewingAfterSubmitted: {
     id: 'course.assessment.AssessmentForm.blockStudentViewingAfterSubmitted',
     defaultMessage: 'Block students from viewing finalized submissions',
@@ -75,45 +47,6 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.forProgrammingQuestions',
     defaultMessage: 'for programming questions.',
   },
-  hasPersonalTimes: {
-    id: 'course.assessment.AssessmentForm.hasPersonalTimes',
-    defaultMessage: 'Has personal times',
-  },
-  hasPersonalTimesHint: {
-    id: 'course.assessment.AssessmentForm.hasPersonalTimesHint',
-    defaultMessage:
-      'Timings for this item will be automatically adjusted for users based on learning rate.',
-  },
-  affectsPersonalTimes: {
-    id: 'course.assessment.AssessmentForm.affectsPersonalTimes',
-    defaultMessage: 'Affects personal times',
-  },
-  affectsPersonalTimesHint: {
-    id: 'course.assessment.AssessmentForm.affectsPersonalTimesHint',
-    defaultMessage:
-      "Student's submission time for this item will be taken into account \
-      when updating personal times for other items.",
-  },
-  visibility: {
-    id: 'course.assessment.AssessmentForm.visibility',
-    defaultMessage: 'Visibility',
-  },
-  published: {
-    id: 'course.assessment.AssessmentForm.published',
-    defaultMessage: 'Published',
-  },
-  draft: {
-    id: 'course.assessment.AssessmentForm.draft',
-    defaultMessage: 'Draft',
-  },
-  publishedHint: {
-    id: 'course.assessment.AssessmentForm.publishedHint',
-    defaultMessage: 'Everyone can see this assessment.',
-  },
-  draftHint: {
-    id: 'course.assessment.AssessmentForm.draftHint',
-    defaultMessage: 'Only you and staff can see this assessment.',
-  },
   hasTodo: {
     id: 'course.assessment.AssessmentForm.hasTodo',
     defaultMessage: 'Has TODO',
@@ -155,15 +88,6 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.skippableManualHint',
     defaultMessage:
       'Students can already move between questions in manually graded assessments.',
-  },
-  unlockConditions: {
-    id: 'course.assessment.AssessmentForm.unlockConditions',
-    defaultMessage: 'Unlock conditions',
-  },
-  unlockConditionsHint: {
-    id: 'course.assessment.AssessmentForm.unlockConditionsHint',
-    defaultMessage:
-      'This assessment will be unlocked if a student meets the following conditions.',
   },
   displayAssessmentAs: {
     id: 'course.assessment.AssessmentForm.displayAssessmentAs',
@@ -251,10 +175,6 @@ const translations = defineMessages({
   assessmentDetails: {
     id: 'course.assessment.AssessmentForm.assessmentDetails',
     defaultMessage: 'Assessment details',
-  },
-  gamification: {
-    id: 'course.assessment.AssessmentForm.gamification',
-    defaultMessage: 'Gamification',
   },
   grading: {
     id: 'course.assessment.AssessmentForm.grading',

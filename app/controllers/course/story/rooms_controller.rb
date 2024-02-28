@@ -34,9 +34,7 @@ class Course::Story::RoomsController < Course::Story::Controller
   end
 
   def sync
-    result = CikgoApiService.sync_chat_room(@room.provided_room_id)
-    @room.update!(completed: result[:completed])
-
+    @room.update!(completed: Cikgo::RoomsService.completed?(@room.provided_room_id))
     render json: { completed: @room.completed? }
   end
 end

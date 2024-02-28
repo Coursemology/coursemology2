@@ -3,10 +3,9 @@ class Course::Admin::StoriesSettingsController < Course::Admin::Controller
   EXPORTABLE_LESSON_PLAN_ITEM_TYPES = ['Assessment', 'Video', 'Survey'].to_set
 
   before_action :ping_remote_course, only: [:edit]
+  after_action :push_lesson_plan_items_to_remote_course, only: [:update], if: -> { @settings.push_key }
 
   def edit
-    # TODO: Remove this
-    push_lesson_plan_items_to_remote_course
   end
 
   def update
@@ -29,18 +28,12 @@ class Course::Admin::StoriesSettingsController < Course::Admin::Controller
   end
 
   def push_lesson_plan_items_to_remote_course
-    repository = {}
-    repository[:id] = "coursemology##{current_course.id}"
-    repository[:name] = current_course.title
-    repository[:sourceUrl] = course_url(current_course)
-    repository[:resources] = []
-
-    current_course.lesson_plan_items.includes(:actable).each do |item|
+    resources = current_course.lesson_plan_items.includes(:actable).filter_map do |item|
       actable = item.actable
       kind = actable.class.name.demodulize
       next unless should_push_lesson_plan_item?(item)
 
-      repository[:resources] << {
+      {
         id: item.id.to_s,
         kind: kind,
         name: item.title,
@@ -49,11 +42,13 @@ class Course::Admin::StoriesSettingsController < Course::Admin::Controller
       }
     end
 
-    CikgoApiService.push(@settings.push_key, repository)
+    Cikgo::ResourcesService.push_repository(current_course, course_url(current_course), resources)
   end
 
   def ping_remote_course
-    result = CikgoApiService.ping(@settings.push_key)
+    return unless @settings.push_key
+
+    result = Cikgo::ResourcesService.ping(@settings.push_key)
     @ping_status = result[:status]
     @remote_course_name = result[:name]
     @remote_course_url = result[:url]

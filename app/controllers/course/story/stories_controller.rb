@@ -6,6 +6,10 @@ class Course::Story::StoriesController < Course::Story::Controller
   end
 
   def show
+    @has_rooms = @story.rooms.exists?
+  end
+
+  def new
   end
 
   private

@@ -18,11 +18,15 @@ module Course::Video::Submission::Statistic::CikgoTaskCompletionConcern
     lesson_plan_item = submission.video.acting_as
     status = (percent_watched >= COMPLETED_MINIMUM_WATCH_PERCENTAGE) ? :completed : :ongoing
 
-    CikgoApiService.mark_task(status, {
-      item_id: lesson_plan_item.id,
-      course_id: lesson_plan_item.course_id,
+    Cikgo::ResourcesService.mark_task(status, lesson_plan_item, {
       user_id: creator_id_on_cikgo,
-      url: edit_course_video_submission_url(lesson_plan_item.course_id, submission.video_id, submission_id)
+      url: edit_course_video_submission_url(
+        lesson_plan_item.course_id,
+        submission.video_id,
+        submission_id,
+        host: lesson_plan_item.course.instance.host,
+        protocol: :https
+      )
     })
   end
 

@@ -44,29 +44,31 @@ const translations = defineMessages({
 
 const PingResultAlert = (
   props: StoriesSettingsData['pingResult'],
-): JSX.Element => {
+): JSX.Element | null => {
   const { status, remoteCourseName, remoteCourseUrl } = props;
 
   const { t } = useTranslation();
 
+  if (!status) return null;
+
   if (status === 'error')
     return <Alert severity="error">{t(translations.pingError)}</Alert>;
 
-  if (remoteCourseName && remoteCourseUrl)
-    return (
-      <Alert severity="success">
-        {t(translations.pushKeyPointsToCourse, {
-          course: remoteCourseName,
-          link: (chunk) => (
-            <Link external href={remoteCourseUrl} opensInNewTab>
-              {chunk}
-            </Link>
-          ),
-        })}
-      </Alert>
-    );
+  if (!(remoteCourseName && remoteCourseUrl))
+    return <Alert severity="error">{t(translations.pushKeyError)}</Alert>;
 
-  return <Alert severity="error">{t(translations.pushKeyError)}</Alert>;
+  return (
+    <Alert severity="success">
+      {t(translations.pushKeyPointsToCourse, {
+        course: remoteCourseName,
+        link: (chunk) => (
+          <Link external href={remoteCourseUrl} opensInNewTab>
+            {chunk}
+          </Link>
+        ),
+      })}
+    </Alert>
+  );
 };
 
 const StoriesSettings = (): JSX.Element => {

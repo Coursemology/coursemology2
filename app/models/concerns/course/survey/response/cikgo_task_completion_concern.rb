@@ -20,11 +20,15 @@ module Course::Survey::Response::CikgoTaskCompletionConcern
     lesson_plan_item = survey.acting_as
     status = submitted? ? :completed : :ongoing
 
-    CikgoApiService.mark_task(status, {
-      item_id: lesson_plan_item.id,
-      course_id: lesson_plan_item.course_id,
+    Cikgo::ResourcesService.mark_task(status, lesson_plan_item, {
       user_id: creator_id_on_cikgo,
-      url: edit_course_survey_response_url(lesson_plan_item.course_id, survey_id, id)
+      url: edit_course_survey_response_url(
+        lesson_plan_item.course_id,
+        survey_id,
+        id,
+        host: lesson_plan_item.course.instance.host,
+        protocol: :https
+      )
     })
   end
 

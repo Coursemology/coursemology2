@@ -24,11 +24,15 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
 
     lesson_plan_item = assessment.acting_as
 
-    CikgoApiService.mark_task(status, {
-      item_id: lesson_plan_item.id,
-      course_id: lesson_plan_item.course_id,
+    Cikgo::ResourcesService.mark_task(status, lesson_plan_item, {
       user_id: creator_id_on_cikgo,
-      url: edit_course_assessment_submission_url(lesson_plan_item.course_id, assessment_id, id)
+      url: edit_course_assessment_submission_url(
+        lesson_plan_item.course_id,
+        assessment_id,
+        id,
+        host: lesson_plan_item.course.instance.host,
+        protocol: :https
+      )
     })
   end
 

@@ -468,7 +468,7 @@ Rails.application.routes.draw do
       end
 
       scope module: :story do
-        resources :stories, only: [:index, :show, :create, :update, :destroy] do
+        resources :stories, except: [:edit] do
           resources :rooms, only: [:index, :show, :create, :update, :destroy] do
             patch 'sync', on: :member
           end

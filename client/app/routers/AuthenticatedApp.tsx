@@ -92,7 +92,6 @@ import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSu
 import UserVideoSubmissionsIndex from 'bundles/course/video-submissions/pages/UserVideoSubmissionsIndex';
 import AdminNavigator from 'bundles/system/admin/admin/AdminNavigator';
 import AnnouncementIndex from 'bundles/system/admin/admin/pages/AnnouncementsIndex';
-import AuthenticationsIndex from 'bundles/system/admin/admin/pages/AuthenticationsIndex';
 import CourseIndex from 'bundles/system/admin/admin/pages/CoursesIndex';
 import InstancesIndex from 'bundles/system/admin/admin/pages/InstancesIndex';
 import UserIndex from 'bundles/system/admin/admin/pages/UsersIndex';
@@ -123,6 +122,8 @@ import { videoWatchHistoryHandle } from 'course/statistics/handles';
 import { storyHandle } from 'course/story/handles';
 import RoomShow from 'course/story/pages/RoomShow';
 import StoriesIndex from 'course/story/pages/StoriesIndex';
+import StoryEdit from 'course/story/pages/StoryEdit';
+import StoryNew from 'course/story/pages/StoryNew';
 import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
 import {
   courseUserHandle,
@@ -700,11 +701,17 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
               element: <StoriesIndex />,
             },
             {
+              path: 'new',
+              handle: StoryNew.handle,
+              element: <StoryNew />,
+            },
+            {
               path: ':storyId',
               handle: storyHandle,
               children: [
                 {
                   index: true,
+                  element: <StoryEdit />,
                 },
                 {
                   path: 'rooms',
@@ -764,10 +771,6 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             {
               path: 'courses',
               element: <CourseIndex />,
-            },
-            {
-              path: 'authentications',
-              element: <AuthenticationsIndex />,
             },
           ],
         },

@@ -8,6 +8,6 @@ export interface RoomData {
 }
 
 export interface RoomsIndexData {
-  story: Pick<StoryData, 'id' | 'title'>;
+  story: { id: number } & Pick<StoryData, 'title'>;
   rooms: RoomData[];
 }
