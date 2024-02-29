@@ -3,11 +3,7 @@ import { Operation } from 'store';
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 
-import {
-  processAssessment,
-  processStudentPerformance,
-  processSubmissions,
-} from './utils/parseCourseResponse';
+import { processStudentPerformance } from './utils/parseCourseResponse';
 import { processStaff } from './utils/parseStaffResponse';
 import { processStudent } from './utils/parseStudentsResponse';
 import actionTypes from './constants';
@@ -70,8 +66,8 @@ export const fetchCourseProgressionStatistics =
       .then((response) => {
         dispatch({
           type: actionTypes.FETCH_COURSE_PROGRESSION_STATISTICS_SUCCESS,
-          assessments: response.data.assessments.map(processAssessment),
-          submissions: response.data.submissions.map(processSubmissions),
+          assessments: response.data.assessments,
+          submissions: response.data.submissions,
         });
       })
       .catch(() => {
