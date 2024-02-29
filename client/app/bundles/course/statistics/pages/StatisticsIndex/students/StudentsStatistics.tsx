@@ -1,11 +1,13 @@
+import { FC, useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 
+import { fetchStudentsStatistics } from 'course/statistics/operations';
+import { getStudentStatistics } from 'course/statistics/selectors';
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import { studentsIndexShape } from '../../../propTypes/students';
 
 import StudentsStatisticsTable from './StudentsStatisticsTable';
 
@@ -19,24 +21,37 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.students.noStudents',
     defaultMessage: 'There is no student in this course, yet...',
   },
+  studentsFailure: {
+    id: 'course.statistics.StatisticsIndex.studentsFailure',
+    defaultMessage: 'Failed to fetch student data!',
+  },
 });
 
-const StudentsStatistics = ({ metadata, students, isFetching, isError }) => {
+const StudentsStatistics: FC = () => {
   const { t } = useTranslation();
+  const statistics = useAppSelector(getStudentStatistics);
+  const dispatch = useAppDispatch();
 
-  if (isFetching) {
+  useEffect(() => {
+    dispatch(fetchStudentsStatistics(t(translations.studentsFailure)));
+  }, [dispatch]);
+
+  if (statistics.isFetching) {
     return <LoadingIndicator />;
   }
-  if (isError) {
+  if (statistics.isError) {
     return <ErrorCard message={t(translations.error)} />;
   }
-  if (students.length === 0) {
+  if (statistics.students.length === 0) {
     return <Note message={t(translations.noStudents)} />;
   }
 
-  return <StudentsStatisticsTable metadata={metadata} students={students} />;
+  return (
+    <StudentsStatisticsTable
+      metadata={statistics.metadata}
+      students={statistics.students}
+    />
+  );
 };
-
-StudentsStatistics.propTypes = studentsIndexShape;
 
 export default StudentsStatistics;
