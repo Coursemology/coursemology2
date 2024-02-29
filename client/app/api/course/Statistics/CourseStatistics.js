@@ -42,6 +42,6 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.courseId}/statistics/course`;
+    return `/courses/${this.courseId}/statistics`;
   }
 }
