@@ -17,6 +17,10 @@ import {
   RED_CHART_BORDER,
 } from 'theme/colors';
 
+import {
+  processAssessment,
+  processSubmissions,
+} from 'course/statistics/utils/parseCourseResponse';
 import GeneralChart from 'lib/components/core/charts/GeneralChart';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -111,6 +115,9 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
   const [showOpeningTimes, setShowOpeningTimes] = useState(true);
   const [showPhantoms, setShowPhantoms] = useState(false);
 
+  const formattedAssessments = assessments.map(processAssessment);
+  const formattedSubmissions = submissions.map(processSubmissions);
+
   const onClick = useCallback(
     (_, elements) => {
       const relevantPoints = elements.filter((e) => e.datasetIndex === 0);
@@ -124,13 +131,17 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
 
   const studentData = useMemo(
     () =>
-      processSubmissionsIntoChartData(assessments, submissions, showPhantoms),
-    [assessments, submissions, showPhantoms],
+      processSubmissionsIntoChartData(
+        formattedAssessments,
+        formattedSubmissions,
+        showPhantoms,
+      ),
+    [formattedAssessments, formattedSubmissions, showPhantoms],
   );
 
   const limits = useMemo(
-    () => computeLimits(assessments, submissions),
-    [assessments, submissions],
+    () => computeLimits(formattedAssessments, formattedSubmissions),
+    [formattedAssessments, formattedSubmissions],
   );
 
   const data = useMemo(
@@ -146,7 +157,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
               x: latestPoint.submittedAt,
               y: s.submissions.length - 1,
               name: s.name,
-              title: assessments[latestPoint.key].title,
+              title: formattedAssessments[latestPoint.key].title,
             };
           }),
           backgroundColor: RED_CHART_BORDER,
@@ -165,7 +176,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
                     x: s?.submittedAt,
                     y: index,
                     name: studentData[selectedStudentIndex].name,
-                    title: assessments[index].title,
+                    title: formattedAssessments[index].title,
                   }),
                 ),
                 spanGaps: true,
@@ -179,7 +190,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
         {
           type: 'line',
           label: t(translations.deadlines),
-          data: assessments.map((a, index) => ({
+          data: formattedAssessments.map((a, index) => ({
             x: a.endAt,
             y: index,
             title: a.title,
@@ -196,7 +207,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
               {
                 type: 'line',
                 label: t(translations.openingTimes),
-                data: assessments.map((a, index) => ({
+                data: formattedAssessments.map((a, index) => ({
                   x: a.startAt,
                   y: index,
                   title: a.title,
@@ -214,7 +225,13 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
           : []),
       ],
     }),
-    [assessments, studentData, selectedStudentIndex, showOpeningTimes, t],
+    [
+      formattedAssessments,
+      studentData,
+      selectedStudentIndex,
+      showOpeningTimes,
+      t,
+    ],
   );
 
   const options = useMemo(

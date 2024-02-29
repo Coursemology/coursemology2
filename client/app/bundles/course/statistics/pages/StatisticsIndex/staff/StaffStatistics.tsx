@@ -1,12 +1,13 @@
-import { useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { defineMessages } from 'react-intl';
 
+import { fetchStaffStatistics } from 'course/statistics/operations';
+import { getStaffStatistics } from 'course/statistics/selectors';
 import ErrorCard from 'lib/components/core/ErrorCard';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import { staffIndexShape } from '../../../propTypes/staff';
 
 const options = {
   downloadOptions: {
@@ -52,10 +53,21 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.staff.tableTitle',
     defaultMessage: 'Staff Statistics',
   },
+  staffFailure: {
+    id: 'course.statistics.StatisticsIndex.staffFailure',
+    defaultMessage: 'Failed to fetch staff data!',
+  },
 });
 
-const StaffStatistics = ({ staff, isFetching, isError }) => {
+const StaffStatistics: FC = () => {
   const { t } = useTranslation();
+  const statistics = useAppSelector(getStaffStatistics);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchStaffStatistics(t(translations.staffFailure)));
+  }, [dispatch]);
+
   const columns = useMemo(
     () => [
       {
@@ -104,17 +116,17 @@ const StaffStatistics = ({ staff, isFetching, isError }) => {
     [t],
   );
 
-  if (isFetching) {
+  if (statistics.isFetching) {
     return <LoadingIndicator />;
   }
-  if (isError) {
+  if (statistics.isError) {
     return <ErrorCard message={t(translations.error)} />;
   }
 
   return (
     <DataTable
       columns={columns}
-      data={staff}
+      data={statistics.staff}
       height="30px"
       includeRowNumber
       options={options}
@@ -122,7 +134,5 @@ const StaffStatistics = ({ staff, isFetching, isError }) => {
     />
   );
 };
-
-StaffStatistics.propTypes = staffIndexShape;
 
 export default StaffStatistics;
