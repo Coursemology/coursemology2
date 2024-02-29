@@ -64,7 +64,7 @@ module TrackableJob::SpecHelpers
 
   # Wait for page/react lifecycle to finish loading/end
   def wait_for_page
-    sleep 1.7
+    sleep 2.5
   end
 
   # Wait for autosave to be completed

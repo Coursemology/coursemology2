@@ -190,6 +190,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         visit edit_path
 
         find_all('button[aria-label="Delete choice"]').each(&:click)
+        expect(page).to have_button('Save Changes')
         click_button 'Save changes'
         wait_for_page
 
