@@ -24,10 +24,12 @@ class System::Admin::UsersController < System::Admin::Controller
   end
 
   def destroy
-    if @user.destroy
-      head :ok
-    else
-      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
+    ActsAsTenant.without_tenant do
+      if @user.destroy
+        head :ok
+      else
+        render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
+      end
     end
   end
 
