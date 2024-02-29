@@ -9,6 +9,8 @@ import Note from 'lib/components/core/Note';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import StatisticsTabs from '../StatisticsTabs';
+
 import StudentsStatisticsTable from './StudentsStatisticsTable';
 
 const translations = defineMessages({
@@ -47,10 +49,13 @@ const StudentsStatistics: FC = () => {
   }
 
   return (
-    <StudentsStatisticsTable
-      metadata={statistics.metadata}
-      students={statistics.students}
-    />
+    <>
+      <StatisticsTabs />
+      <StudentsStatisticsTable
+        metadata={statistics.metadata}
+        students={statistics.students}
+      />
+    </>
   );
 };
 

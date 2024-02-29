@@ -1,5 +1,8 @@
 export const getCourseURL = (courseId) => `/courses/${courseId}`;
 
+export const getCourseStatisticsURL = (courseId) =>
+  `/courses/${courseId}/statistics`;
+
 export const getCourseAnnouncementURL = (courseId, announcementId) =>
   `/courses/${courseId}/announcements/${announcementId}`;
 

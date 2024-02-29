@@ -67,7 +67,6 @@ import DownloadingFilePage from 'bundles/course/material/files/DownloadingFilePa
 import ErrorRetrievingFilePage from 'bundles/course/material/files/ErrorRetrievingFilePage';
 import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
-import StatisticsIndex from 'bundles/course/statistics/pages/StatisticsIndex';
 import ResponseEdit from 'bundles/course/survey/pages/ResponseEdit';
 import ResponseIndex from 'bundles/course/survey/pages/ResponseIndex';
 import ResponseShow from 'bundles/course/survey/pages/ResponseShow';
@@ -119,6 +118,9 @@ import { forumHandle, forumTopicHandle } from 'course/forum/handles';
 import { folderHandle } from 'course/material/folders/handles';
 import materialLoader from 'course/material/materialLoader';
 import { videoWatchHistoryHandle } from 'course/statistics/handles';
+import CourseStatistics from 'course/statistics/pages/StatisticsIndex/course/CourseStatistics';
+import StaffStatistics from 'course/statistics/pages/StatisticsIndex/staff/StaffStatistics';
+import StudentsStatistics from 'course/statistics/pages/StatisticsIndex/students/StudentsStatistics';
 import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
 import {
   courseUserHandle,
@@ -205,8 +207,20 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'statistics',
-          handle: StatisticsIndex.handle,
-          element: <StatisticsIndex />,
+          children: [
+            {
+              path: 'students',
+              element: <StudentsStatistics />,
+            },
+            {
+              path: 'staff',
+              element: <StaffStatistics />,
+            },
+            {
+              path: 'course',
+              element: <CourseStatistics />,
+            },
+          ],
         },
         {
           path: 'duplication',
