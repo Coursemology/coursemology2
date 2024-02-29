@@ -14,6 +14,8 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import StatisticsTabs from '../StatisticsTabs';
+
 import CoursePerformanceStatistics from './CoursePerformanceStatistics';
 import CourseProgressionStatistics from './CourseProgressionStatistics';
 
@@ -81,6 +83,7 @@ const CourseStatistics: FC = () => {
 
   return (
     <>
+      <StatisticsTabs />
       <CourseProgressionStatistics statistics={progressionStats} />
       <CoursePerformanceStatistics statistics={performanceStats} />
     </>

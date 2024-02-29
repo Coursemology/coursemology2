@@ -9,6 +9,8 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import StatisticsTabs from '../StatisticsTabs';
+
 const options = {
   downloadOptions: {
     filename: 'staff_statistics',
@@ -124,14 +126,17 @@ const StaffStatistics: FC = () => {
   }
 
   return (
-    <DataTable
-      columns={columns}
-      data={statistics.staff}
-      height="30px"
-      includeRowNumber
-      options={options}
-      title={t(translations.tableTitle)}
-    />
+    <>
+      <StatisticsTabs />
+      <DataTable
+        columns={columns}
+        data={statistics.staff}
+        height="30px"
+        includeRowNumber
+        options={options}
+        title={t(translations.tableTitle)}
+      />
+    </>
   );
 };
 
