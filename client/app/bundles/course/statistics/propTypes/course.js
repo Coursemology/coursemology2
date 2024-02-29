@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 export const assessmentShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  startAt: PropTypes.object.isRequired,
-  endAt: PropTypes.object,
+  startAt: PropTypes.string.isRequired,
+  endAt: PropTypes.string,
 });
 
 export const submissionShape = PropTypes.shape({
@@ -14,7 +14,7 @@ export const submissionShape = PropTypes.shape({
   submissions: PropTypes.arrayOf(
     PropTypes.shape({
       assessmentId: PropTypes.number.isRequired,
-      submittedAt: PropTypes.object.isRequired,
+      submittedAt: PropTypes.string.isRequired,
     }),
   ),
 });
