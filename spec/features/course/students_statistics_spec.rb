@@ -28,7 +28,7 @@ RSpec.feature 'Course: Student Statistics', js: true do
       end
 
       scenario 'I can only view all student statistics when I am not a group manager' do
-        visit course_statistics_path(course)
+        visit course_statistics_students_path(course)
 
         students.each { |student| expect(page).to have_text(student.name) }
         expect(page).not_to have_text('Show My Students Only')
@@ -39,7 +39,7 @@ RSpec.feature 'Course: Student Statistics', js: true do
         phantom_student.phantom = true
         phantom_student.save
 
-        visit course_statistics_path(course)
+        visit course_statistics_students_path(course)
 
         students.each { |student| expect(page).to have_text(student.name) }
         expect(page).to have_text('Phantom')
@@ -56,7 +56,7 @@ RSpec.feature 'Course: Student Statistics', js: true do
       end
 
       scenario 'I cannot access the statistics page' do
-        visit course_statistics_path(course)
+        visit course_statistics_students_path(course)
 
         expect_forbidden
       end
