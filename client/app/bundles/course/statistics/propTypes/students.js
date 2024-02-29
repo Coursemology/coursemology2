@@ -20,18 +20,6 @@ export const studentShape = PropTypes.shape({
   videoPercentWatched: PropTypes.number,
 });
 
-export const studentsIndexShape = {
-  students: PropTypes.arrayOf(studentShape).isRequired,
-  metadata: PropTypes.shape({
-    isCourseGamified: PropTypes.bool.isRequired,
-    showVideo: PropTypes.bool.isRequired,
-    courseVideoCount: PropTypes.number.isRequired,
-    hasGroupManagers: PropTypes.bool.isRequired,
-  }),
-  isFetching: PropTypes.bool.isRequired,
-  isError: PropTypes.bool.isRequired,
-};
-
 export const studentsStatisticsTableShape = {
   students: PropTypes.arrayOf(studentShape).isRequired,
   metadata: PropTypes.shape({

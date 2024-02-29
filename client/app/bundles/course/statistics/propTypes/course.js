@@ -34,25 +34,3 @@ export const studentShape = PropTypes.shape({
   videoSubmissionLink: PropTypes.string,
   videoPercentWatched: PropTypes.number,
 });
-
-export const courseIndexShape = {
-  assessments: PropTypes.arrayOf(assessmentShape),
-  submissions: PropTypes.arrayOf(submissionShape),
-  students: PropTypes.arrayOf(studentShape),
-
-  metadata: PropTypes.shape({
-    hasPersonalizedTimeline: PropTypes.bool.isRequired,
-    isCourseGamified: PropTypes.bool.isRequired,
-    showVideo: PropTypes.bool.isRequired,
-    courseVideoCount: PropTypes.number.isRequired,
-    courseAchievementCount: PropTypes.number.isRequired,
-    courseAssessmentCount: PropTypes.number.isRequired,
-    maxLevel: PropTypes.number.isRequired,
-    hasGroupManagers: PropTypes.bool.isRequired,
-  }),
-
-  isFetchingProgression: PropTypes.bool.isRequired,
-  isErrorProgression: PropTypes.bool.isRequired,
-  isFetchingPerformance: PropTypes.bool.isRequired,
-  isErrorPerformance: PropTypes.bool.isRequired,
-};
