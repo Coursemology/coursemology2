@@ -79,8 +79,7 @@ RSpec.feature 'Course: Statistics: Staff', js: true do
       end
 
       scenario 'I can view staff summary' do
-        visit course_statistics_students_path(course)
-        click_button 'Staff'
+        visit course_statistics_staff_path(course)
 
         within find('tr', text: tutor1.name) do |row|
           expect(row).to have_selector('td', text: '1') # S/N

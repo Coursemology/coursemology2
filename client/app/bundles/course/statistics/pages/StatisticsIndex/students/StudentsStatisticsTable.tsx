@@ -1,13 +1,13 @@
-import { useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { FormControlLabel, Switch } from '@mui/material';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 
+import { Metadata, Student } from 'course/statistics/types';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import { studentsStatisticsTableShape } from '../../../propTypes/students';
 
 const translations = defineMessages({
   name: {
@@ -38,6 +38,10 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.students.videoPercentWatched',
     defaultMessage: 'Average % Watched',
   },
+  csvFileTitle: {
+    id: 'course.statistics.StatisticsIndex.students.csvFileTitle',
+    defaultMessage: 'Student Statistics',
+  },
   tableTitle: {
     id: 'course.statistics.StatisticsIndex.students.tableTitle',
     defaultMessage:
@@ -51,16 +55,30 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.students.showMyStudentsOnly',
     defaultMessage: 'Show My Students Only',
   },
+  searchBar: {
+    id: 'course.statistics.StatisticsIndex.students.searchBar',
+    defaultMessage: 'Search by Students Name',
+  },
 });
 
-const StudentsStatisticsTable = ({ metadata, students }) => {
+interface Props {
+  metadata: Metadata;
+  students: Student[];
+}
+
+const StudentsStatisticsTable: FC<Props> = (props) => {
   const {
-    isCourseGamified,
-    showVideo,
-    courseVideoCount,
-    hasGroupManagers,
-    hasMyStudents,
-  } = metadata;
+    metadata: {
+      isCourseGamified,
+      showVideo,
+      courseVideoCount,
+      hasGroupManagers,
+      hasMyStudents,
+    },
+    students,
+  } = props;
+  const { t } = useTranslation();
+
   const [showMyStudentsOnly, setShowMyStudentsOnly] = useState(hasMyStudents);
   const filteredStudents = useMemo(() => {
     if (showMyStudentsOnly) {
@@ -79,11 +97,9 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
     return { numStudents, numPhantom };
   }, [filteredStudents]);
 
-  const { t } = useTranslation();
-
-  const options = useMemo(
+  const options: TableOptions = useMemo(
     () => ({
-      customToolbar: () => {
+      customToolbar: (): JSX.Element => {
         if (hasMyStudents)
           return (
             <FormControlLabel
@@ -94,7 +110,8 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
               onChange={(_, checked) => setShowMyStudentsOnly(checked)}
             />
           );
-        return undefined;
+        // eslint-disable-next-line react/jsx-no-useless-fragment
+        return <></>;
       },
       downloadOptions: {
         filename: 'students_statistics',
@@ -110,7 +127,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
     [hasMyStudents, showMyStudentsOnly, setShowMyStudentsOnly],
   );
 
-  const columns = [
+  const columns: TableColumns[] = [
     {
       name: 'name',
       label: t(translations.name),
@@ -137,13 +154,6 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
         filter: true,
         filterType: 'multiselect',
         filterOptions: {
-          names: [
-            ...new Set(
-              filteredStudents.flatMap((s) =>
-                s.groupManagers.map((m) => m.name),
-              ),
-            ),
-          ],
           logic: (managers, filters) => {
             if (filters) {
               const filterSet = new Set(filters);
@@ -256,7 +266,5 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
     />
   );
 };
-
-StudentsStatisticsTable.propTypes = studentsStatisticsTableShape;
 
 export default StudentsStatisticsTable;

@@ -5,6 +5,7 @@ export interface GroupManager {
 }
 
 export interface Student {
+  id: number;
   name: string;
   nameLink: string;
   studentType: 'Phantom' | 'Normal';
@@ -21,10 +22,12 @@ export interface Student {
 export interface CourseStudent {
   id: number;
   name: string;
+  nameLink: string;
   isPhantom: boolean;
   numSubmissions: number;
   correctness?: number;
   learningRate?: number;
+  groupManagers?: GroupManager[];
   achievementCount?: number;
   level?: number;
   experiencePoints?: number;

@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import {
   Card,
@@ -10,15 +10,13 @@ import {
   Typography,
 } from '@mui/material';
 import { green, red } from '@mui/material/colors';
-import equal from 'fast-deep-equal';
-import PropTypes from 'prop-types';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 
+import { CourseStudent } from 'course/statistics/types';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import { studentShape } from '../../../propTypes/course';
 
 const translations = defineMessages({
   title: {
@@ -125,13 +123,24 @@ const translations = defineMessages({
   },
 });
 
+interface Props {
+  courseAchievementCount: number;
+  courseAssessmentCount: number;
+  courseVideoCount: number;
+  hasGroupManagers: boolean;
+  hasPersonalizedTimeline: boolean;
+  isCourseGamified: boolean;
+  maxLevel: number;
+  showVideo: boolean;
+  students: CourseStudent[];
+}
+
 const styles = {
   sliderRoot: {
     display: 'flex',
     alignItems: 'center',
     maxWidth: '500px',
     minWidth: '300px',
-    flexWrap: 'no-wrap',
     flex: 1,
     marginBottom: '5px',
   },
@@ -141,17 +150,19 @@ const styles = {
   },
 };
 
-const StudentPerformanceTable = ({
-  students,
-  hasPersonalizedTimeline,
-  isCourseGamified,
-  showVideo,
-  courseVideoCount,
-  courseAchievementCount,
-  courseAssessmentCount,
-  maxLevel,
-  hasGroupManagers,
-}) => {
+const StudentPerformanceTable: FC<Props> = (props) => {
+  const {
+    students,
+    hasPersonalizedTimeline,
+    isCourseGamified,
+    showVideo,
+    courseVideoCount,
+    courseAchievementCount,
+    courseAssessmentCount,
+    maxLevel,
+    hasGroupManagers,
+  } = props;
+
   const { t } = useTranslation();
   const [showPhantoms, setShowPhantoms] = useState(false);
   const [sortedColumn, setSortedColumn] = useState('experiencePoints');
@@ -176,19 +187,19 @@ const StudentPerformanceTable = ({
     [t, sortDirection, sortedColumn],
   );
 
-  const options = useMemo(
+  const options: TableOptions = useMemo(
     () => ({
       filter: true,
       jumpToPage: true,
       print: false,
       viewColumns: false,
       selectableRows: 'none',
-      onColumnSortChange: (column, direction) => {
+      onColumnSortChange: (column, direction): void => {
         setSortedColumn(column);
         setSortDirection(direction);
       },
       onChangePage: (currentPage) => setPage(currentPage),
-      onChangeRowsPerPage: (numberOfRows) => {
+      onChangeRowsPerPage: (numberOfRows): void => {
         setRowsPerPage(numberOfRows);
         if (numberOfRows * page > length) {
           setPage(Math.floor(length / numberOfRows));
@@ -198,7 +209,7 @@ const StudentPerformanceTable = ({
         name: sortedColumn,
         direction: sortDirection,
       },
-      setRowProps: (_row, _dataIndex, rowIndex) => {
+      setRowProps: (_row, _dataIndex, rowIndex): object => {
         const highlightRange = Math.floor((length * highlightPercentage) / 100);
         const index = page * rowsPerPage + rowIndex;
         if (index <= highlightRange) {
@@ -235,14 +246,14 @@ const StudentPerformanceTable = ({
     ],
   );
 
-  const columns = [
+  const columns: TableColumns[] = [
     {
       name: 'name',
       label: t(translations.name),
       options: {
         filter: false,
         sort: true,
-        customBodyRenderLite: (dataIndex) => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const student = displayedStudents[dataIndex];
           return (
             <Link key={student.id} opensInNewTab to={student.nameLink}>
@@ -274,11 +285,6 @@ const StudentPerformanceTable = ({
         filter: true,
         filterType: 'multiselect',
         filterOptions: {
-          names: [
-            ...new Set(
-              students.flatMap((s) => s.groupManagers.map((m) => m.name)),
-            ),
-          ],
           logic: (managers, filters) => {
             if (filters) {
               const filterSet = new Set(filters);
@@ -390,7 +396,7 @@ const StudentPerformanceTable = ({
       sort: true,
       sortDescFirst: true,
       hint: t(translations.correctnessHint),
-      customBodyRender: (value) =>
+      customBodyRenderLite: (value): string =>
         value != null ? `${value}%` : t(translations.noData),
       alignCenter: true,
     },
@@ -405,7 +411,7 @@ const StudentPerformanceTable = ({
         sort: true,
         sortDescFirst: true,
         hint: t(translations.learningRateHint),
-        customBodyRender: (value) =>
+        customBodyRenderLite: (value) =>
           value != null ? `${value}%` : t(translations.noData),
         alignCenter: true,
       },
@@ -485,7 +491,7 @@ const StudentPerformanceTable = ({
               marks
               max={20}
               min={1}
-              onChange={(_, value) => setHighlightPercentage(value)}
+              onChange={(_, value) => setHighlightPercentage(value as number)}
               step={1}
               valueLabelDisplay="auto"
             />
@@ -502,16 +508,4 @@ const StudentPerformanceTable = ({
   );
 };
 
-StudentPerformanceTable.propTypes = {
-  students: PropTypes.arrayOf(studentShape),
-  hasPersonalizedTimeline: PropTypes.bool.isRequired,
-  isCourseGamified: PropTypes.bool.isRequired,
-  showVideo: PropTypes.bool.isRequired,
-  courseVideoCount: PropTypes.number.isRequired,
-  courseAssessmentCount: PropTypes.number.isRequired,
-  courseAchievementCount: PropTypes.number.isRequired,
-  maxLevel: PropTypes.number.isRequired,
-  hasGroupManagers: PropTypes.bool.isRequired,
-};
-
-export default memo(StudentPerformanceTable, equal);
+export default StudentPerformanceTable;

@@ -34,6 +34,7 @@ export interface TableColumns {
     customFilterListOptions?: {
       render?: (value: string) => string;
     };
+    hint?: string;
     hideInSmallScreen?: boolean;
     justifyCenter?: boolean;
     justifyLeft?: boolean;
@@ -46,6 +47,7 @@ export interface TableColumns {
     ) => { className?: string; style?: CSSProperties };
     setCellHeaderProps?: () => { className?: string; style?: CSSProperties };
     sort?: boolean;
+    sortDescFirst?: boolean;
     sortCompare?: (order: string) => (value1, value2) => number;
   };
 }
