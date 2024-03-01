@@ -9,6 +9,7 @@ has_my_students = false
 
 json.students @all_students do |student|
   is_my_student = false
+  json.id student.id
   json.name student.name
   json.nameLink course_user_path(current_course, student)
   json.studentType student.phantom? ? 'Phantom' : 'Normal'

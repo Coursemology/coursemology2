@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import {
   Card,
@@ -8,8 +8,8 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
-import equal from 'fast-deep-equal';
-import PropTypes from 'prop-types';
+import { ChartData, ChartTypeRegistry } from 'chart.js';
+import { LimitOptions } from 'chartjs-plugin-zoom/types/options';
 import {
   GREEN_CHART_BACKGROUND,
   GREEN_CHART_BORDER,
@@ -17,14 +17,13 @@ import {
   RED_CHART_BORDER,
 } from 'theme/colors';
 
+import { Assessment, Submission } from 'course/statistics/types';
 import {
   processAssessment,
   processSubmissions,
 } from 'course/statistics/utils/parseCourseResponse';
 import GeneralChart from 'lib/components/core/charts/GeneralChart';
 import useTranslation from 'lib/hooks/useTranslation';
-
-import { assessmentShape, submissionShape } from '../../../propTypes/course';
 
 import {
   computeLimits,
@@ -78,7 +77,12 @@ const translations = defineMessages({
   },
 });
 
-const chartGlobalOptions = (t) => ({
+interface Props {
+  assessments: Assessment[];
+  submissions: Submission[];
+}
+
+const chartGlobalOptions = (t): object => ({
   scales: {
     x: {
       type: 'time',
@@ -109,7 +113,8 @@ const chartGlobalOptions = (t) => ({
   },
 });
 
-const StudentProgressionChart = ({ assessments, submissions }) => {
+const StudentProgressionChart: FC<Props> = (props) => {
+  const { assessments, submissions } = props;
   const { t } = useTranslation();
   const [selectedStudentIndex, setSelectedStudentIndex] = useState(null);
   const [showOpeningTimes, setShowOpeningTimes] = useState(true);
@@ -149,7 +154,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
       datasets: [
         // All students
         {
-          type: 'scatter',
+          type: 'scatter' as const,
           label: t(translations.latestSubmission),
           data: studentData.map((s) => {
             const latestPoint = s.submissions[s.submissions.length - 1];
@@ -167,17 +172,12 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
         ...(selectedStudentIndex
           ? [
               {
-                type: 'line',
+                type: 'line' as const,
                 label: t(translations.studentSubmissions, {
                   name: studentData[selectedStudentIndex].name,
                 }),
                 data: studentData[selectedStudentIndex].submissions.map(
-                  (s, index) => ({
-                    x: s?.submittedAt,
-                    y: index,
-                    name: studentData[selectedStudentIndex].name,
-                    title: formattedAssessments[index].title,
-                  }),
+                  (s) => s?.submittedAt,
                 ),
                 spanGaps: true,
                 backgroundColor: ORANGE_CHART_BORDER,
@@ -188,7 +188,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
 
         // Deadlines
         {
-          type: 'line',
+          type: 'line' as const,
           label: t(translations.deadlines),
           data: formattedAssessments.map((a, index) => ({
             x: a.endAt,
@@ -205,7 +205,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
         ...(showOpeningTimes
           ? [
               {
-                type: 'line',
+                type: 'line' as const,
                 label: t(translations.openingTimes),
                 data: formattedAssessments.map((a, index) => ({
                   x: a.startAt,
@@ -281,8 +281,8 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
           </FormGroup>
         </div>
         <GeneralChart
-          data={data}
-          limits={limits}
+          data={data as ChartData<keyof ChartTypeRegistry>}
+          limits={limits as LimitOptions}
           options={options}
           type="scatter"
           withZoom={studentData.length > 0}
@@ -295,9 +295,4 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
   );
 };
 
-StudentProgressionChart.propTypes = {
-  assessments: PropTypes.arrayOf(assessmentShape),
-  submissions: PropTypes.arrayOf(submissionShape),
-};
-
-export default memo(StudentProgressionChart, equal);
+export default StudentProgressionChart;
