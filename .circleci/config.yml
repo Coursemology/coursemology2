@@ -18,7 +18,7 @@ executors:
         default: false
 
     docker:
-      - image: cimg/ruby:3.0.5-browsers
+      - image: cimg/ruby:3.0.6-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -51,8 +51,8 @@ commands:
       - restore_cache:
           name: Restore Ruby dependencies cache
           keys:
-            - v3.0.5-ruby-{{ checksum "Gemfile.lock" }}
-            - v3.0.5-ruby-
+            - v3.0.6-ruby-{{ checksum "Gemfile.lock" }}
+            - v3.0.6-ruby-
 
       - run:
           name: Install Bundler
@@ -66,7 +66,7 @@ commands:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: v3.0.5-ruby-{{ checksum "Gemfile.lock" }}
+          key: v3.0.6-ruby-{{ checksum "Gemfile.lock" }}
 
   rehydrate_node_deps:
     steps:
