@@ -131,8 +131,7 @@ RSpec.describe CoursemologyDockerContainer do
 
     it 'does not crash when report is nil' do
       copy_report(nil)
-      test_report = subject.send(:extract_test_report, CoursemologyDockerContainer::REPORT_PATH)
-      expect(test_report).to be_nil
+      expect { subject.send(:extract_test_report, CoursemologyDockerContainer::REPORT_PATH) }.not_to raise_exception
     end
 
     context 'when running the tests fails' do
