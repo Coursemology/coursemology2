@@ -301,20 +301,12 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@playwright/test@^1.36.1":
-  version "1.36.1"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.36.1.tgz#0b1247d279f142ac0876ce25e7daf15439d5367b"
-  integrity sha512-YK7yGWK0N3C2QInPU6iaf/L3N95dlGdbsezLya4n0ZCh3IL7VgPGxC6Gnznh9ApWdOmkJeleT2kMTcWPRZvzqg==
+"@playwright/test@^1.42.1":
+  version "1.42.1"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.42.1.tgz#9eff7417bcaa770e9e9a00439e078284b301f31c"
+  integrity sha512-Gq9rmS54mjBL/7/MvBaNOBwbfnh7beHvS6oS4srqXFcQHpQCV1+c8JXWE8VLPyRDhgS3H8x8A7hztqI9VnwrAQ==
   dependencies:
-    "@types/node" "*"
-    playwright-core "1.36.1"
-  optionalDependencies:
-    fsevents "2.3.2"
-
-"@types/node@*":
-  version "20.4.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.4.tgz#c79c7cc22c9d0e97a7944954c9e663bcbd92b0cb"
-  integrity sha512-CukZhumInROvLq3+b5gLev+vgpsIqC2D0deQr/yS1WnxvmYLlJXZpaQrQiseMY+6xusl79E04UjWoqyr+t1/Ew==
+    playwright "1.42.1"
 
 "@types/node@^20.4.5":
   version "20.4.5"
@@ -928,10 +920,19 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.36.1:
-  version "1.36.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.36.1.tgz#f5f275d70548768ca892583519c89b237a381c77"
-  integrity sha512-7+tmPuMcEW4xeCL9cp9KxmYpQYHKkyjwoXRnoeTowaeNat8PoBMk/HwCYhqkH2fRkshfKEOiVus/IhID2Pg8kg==
+playwright-core@1.42.1:
+  version "1.42.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.42.1.tgz#13c150b93c940a3280ab1d3fbc945bc855c9459e"
+  integrity sha512-mxz6zclokgrke9p1vtdy/COWBH+eOZgYUVVU34C73M+4j4HLlQJHtfcqiqqxpP0o8HhMkflvfbquLX5dg6wlfA==
+
+playwright@1.42.1:
+  version "1.42.1"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.42.1.tgz#79c828b51fe3830211137550542426111dc8239f"
+  integrity sha512-PgwB03s2DZBcNRoW+1w9E+VkLBxweib6KTXM0M3tkiT4jVxKSi6PmVJ591J+0u10LUrgxB7dLRbiJqO5s2QPMg==
+  dependencies:
+    playwright-core "1.42.1"
+  optionalDependencies:
+    fsevents "2.3.2"
 
 process-on-spawn@^1.0.0:
   version "1.0.0"
