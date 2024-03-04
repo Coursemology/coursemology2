@@ -245,13 +245,7 @@ const StudentProgressionChart: FC<Props> = (props) => {
   return (
     <Card variant="outlined">
       <CardContent>
-        <Typography
-          component="div"
-          fontWeight="bold"
-          gutterBottom
-          marginBottom="1rem"
-          variant="h6"
-        >
+        <Typography gutterBottom variant="h6">
           {t(translations.title)}
         </Typography>
         <div>

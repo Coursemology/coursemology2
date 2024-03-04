@@ -25,6 +25,8 @@ export interface CourseStudent {
   nameLink: string;
   isPhantom: boolean;
   numSubmissions: number;
+  isTopStudent?: boolean;
+  isBottomStudent?: boolean;
   correctness?: number;
   learningRate?: number;
   groupManagers?: GroupManager[];
