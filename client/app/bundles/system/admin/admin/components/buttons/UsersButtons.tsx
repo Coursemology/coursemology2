@@ -28,12 +28,12 @@ const translations = defineMessages({
   },
   deletionConfirmTitle: {
     id: 'system.admin.admin.UsersButton.deletionConfirmTitle',
-    defaultMessage: 'Deleting {role} {name} ({email})?',
+    defaultMessage: 'Deleting {role} {name} ({email})',
   },
   deletionPromptContent: {
     id: 'system.admin.admin.UsersButton.deletionPromptContent',
     defaultMessage:
-      'After deleting this user, all the associated instance users in the following instances will be deleted',
+      'After deleting this user, all associated instance users in the following instances will be deleted.',
   },
   associatedInstances: {
     id: 'system.admin.admin.UsersButton.associatedInstances',
