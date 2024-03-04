@@ -35,7 +35,6 @@ import lessonPlanReducer from './bundles/course/lesson-plan/store';
 import levelsReducer from './bundles/course/level/store';
 import foldersReducer from './bundles/course/material/folders/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
-import statisticsReducer from './bundles/course/statistics/store';
 import surveysReducer from './bundles/course/survey/store';
 import userEmailSubscriptionsReducer from './bundles/course/user-email-subscriptions/store';
 import invitationsReducer from './bundles/course/user-invitations/store';
@@ -72,7 +71,6 @@ const rootReducer = combineReducers({
   levels: levelsReducer,
   scribingQuestion: scribingQuestionReducer,
   skills: skillsReducer,
-  statistics: statisticsReducer,
   submissions: submissionsReducer,
   surveys: surveysReducer,
   timelines: timelinesReducer,

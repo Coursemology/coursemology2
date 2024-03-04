@@ -14,6 +14,7 @@ export const FIELD_LONG_DEBOUNCE_DELAY_MS = 1500;
 // Table options
 
 export const DEFAULT_TABLE_ROWS_PER_PAGE = 100;
+export const DEFAULT_MINI_TABLE_ROWS_PER_PAGE = 10;
 
 export const TIMELINE_ALGORITHMS = [
   { value: 'fixed', label: 'Fixed' },
@@ -78,3 +79,5 @@ export const DEFAULT_LOCALE = process.env.DEFAULT_LOCALE ?? 'en';
 
 export const DEFAULT_TIME_ZONE =
   process.env.DEFAULT_TIME_ZONE ?? 'Asia/Singapore';
+
+export const NUM_CELL_CLASS_NAME = 'text-right';

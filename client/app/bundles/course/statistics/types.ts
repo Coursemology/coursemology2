@@ -45,19 +45,13 @@ export interface Metadata {
   hasMyStudents: boolean;
 }
 
-export interface StudentIndex {
-  students: Student[];
-  metadata: Metadata;
-  isFetching: boolean;
-  isError: boolean;
-}
-
-export interface StudentsStatisticsTable {
+export interface StudentsStatistics {
   students: Student[];
   metadata: Metadata;
 }
 
 export interface Staff {
+  id: number;
   name: string;
   numGraded: number;
   numStudents: number;
@@ -65,10 +59,8 @@ export interface Staff {
   stddev: string;
 }
 
-export interface StaffIndex {
+export interface StaffStatistics {
   staff: Staff[];
-  isFetching: boolean;
-  isError: boolean;
 }
 
 export interface Assessment {
@@ -96,24 +88,12 @@ interface CourseMetadata extends Omit<Metadata, 'hasMyStudents'> {
   courseAssessmentCount: number;
   maxLevel: number;
 }
-
-export interface CourseProgressionIndex {
+export interface CourseProgressionStatistics {
   assessments: Assessment[];
   submissions: Submission[];
-  isFetchingProgression: boolean;
-  isErrorProgression: boolean;
 }
 
-export interface CoursePerformanceIndex {
+export interface CoursePerformanceStatistics {
   students: CourseStudent[];
   metadata: CourseMetadata;
-  isFetchingPerformance: boolean;
-  isErrorPerformance: boolean;
-}
-
-export interface StatisticsState {
-  studentsStatistics: StudentIndex;
-  staffStatistics: StaffIndex;
-  courseProgressionStatistics: CourseProgressionIndex;
-  coursePerformanceStatistics: CoursePerformanceIndex;
 }
