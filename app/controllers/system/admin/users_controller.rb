@@ -24,6 +24,13 @@ class System::Admin::UsersController < System::Admin::Controller
   end
 
   def destroy
+    # in deleting user, we also need to subsequently delete all of its associated instance users, and everything
+    # that needs to be destroyed as a result. Since the relation between instance_user and its corresponding
+    # user is dictated by acts_as_tenant, doing the destroy operation will automatically scope the instance_user
+    # to be only those inside the current tenant, and hence unexpected error will occur.
+
+    # hence, we need to remove the scope for this so that the deletion of users will also delete all of its
+    # associated instance_users.
     ActsAsTenant.without_tenant do
       if @user.destroy
         head :ok
