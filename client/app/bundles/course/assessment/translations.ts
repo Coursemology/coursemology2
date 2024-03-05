@@ -420,7 +420,7 @@ const translations = defineMessages({
   },
   attachmentSettingsDescription: {
     id: 'course.assessment.question.textResponses.attachmentSettingsDescription',
-    defaultMessage: 'When students are attempting this question',
+    defaultMessage: 'When students are attempting this question,',
   },
   attachmentSettings: {
     id: 'course.assessment.question.textResponses.attachmentSettings',
@@ -432,8 +432,7 @@ const translations = defineMessages({
   },
   noAttachmentDescription: {
     id: 'course.assessment.question.textResponses.noAttachmentDescription',
-    defaultMessage:
-      'They will not be able to upload any attachments within this question',
+    defaultMessage: 'They will not be able to upload any attachment.',
   },
   singleFileAttachment: {
     id: 'course.assessment.question.textResponses.singleFileAttachment',
@@ -441,16 +440,15 @@ const translations = defineMessages({
   },
   singleFileAttachmentDescription: {
     id: 'course.assessment.question.textResponses.singleFileAttachmentDescription',
-    defaultMessage:
-      'They can only upload at most one attachment within this question',
+    defaultMessage: 'They can only upload one attachment.',
   },
   multipleFileAttachment: {
     id: 'course.assessment.question.textResponses.multipleFileAttachment',
-    defaultMessage: 'Multiple Attachment',
+    defaultMessage: 'Multiple Attachments',
   },
   multipleFileAttachmentDescription: {
     id: 'course.assessment.question.textResponses.multipleFileAttachmentDescription',
-    defaultMessage: 'They can upload several attachments within this question',
+    defaultMessage: 'They can upload several attachments.',
   },
   isAttachmentRequired: {
     id: 'course.assessment.question.textResponses.isAttachmentRequired',

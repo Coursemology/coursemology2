@@ -505,11 +505,11 @@ const translations = defineMessages({
   },
   attachmentRequired: {
     id: 'course.assessment.submission.attachmentRequired',
-    defaultMessage: '*please upload at least one file in this question',
+    defaultMessage: '*please upload AT LEAST 1 file for this question',
   },
   onlyOneAttachmentAllowed: {
     id: 'course.assessment.submission.onlyOneAttachmentAllowed',
-    defaultMessage: '*ONLY 1 file is allowed in this question',
+    defaultMessage: '*ONLY 1 file is allowed for this question',
   },
   errorUnknown: {
     id: 'course.assessment.submission.errorUnknown',
