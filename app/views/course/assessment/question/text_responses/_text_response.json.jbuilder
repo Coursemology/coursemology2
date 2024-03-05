@@ -4,11 +4,11 @@ json.autogradable question.auto_gradable?
 case question.question_type_sym
 when :file_upload
   json.attachmentType question.attachment_type
-  json.requireAttachment question.require_attachment
+  json.isAttachmentRequired question.is_attachment_required
 
 when :text_response
   json.attachmentType question.attachment_type
-  json.requireAttachment question.require_attachment
+  json.isAttachmentRequired question.is_attachment_required
 
   if can_grade && question.auto_gradable?
     json.solutions question.solutions.each do |solution|

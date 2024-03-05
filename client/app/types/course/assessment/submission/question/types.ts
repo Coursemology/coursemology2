@@ -25,7 +25,7 @@ interface TextResponseParentQuestionData {}
 
 interface TextResponseQuestionData extends TextResponseParentQuestionData {
   attachmentType: AttachmentType;
-  requireAttachment: boolean;
+  isAttachmentRequired: boolean;
   solutions?: {
     id: number;
     solutionType: 'exact_match' | 'keyword';
@@ -36,6 +36,7 @@ interface TextResponseQuestionData extends TextResponseParentQuestionData {
 
 interface FileUploadQuestionData extends TextResponseParentQuestionData {
   attachmentType: AttachmentType;
+  isAttachmentRequired: boolean;
 }
 
 interface ComprehensionQuestionData extends TextResponseParentQuestionData {

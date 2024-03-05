@@ -1,6 +1,6 @@
 class AddSupportToAttachmentTypeQuestion < ActiveRecord::Migration[6.0]
   def up
-    add_column :course_assessment_question_text_responses, :require_attachment, :boolean, null: false, default: false
+    add_column :course_assessment_question_text_responses, :is_attachment_required, :boolean, null: false, default: false
     add_column :course_assessment_question_text_responses, :attachment_type, :integer, null: false, default: 0
 
     # migrate all values inside allow_attachment into attachment_type
@@ -14,7 +14,7 @@ class AddSupportToAttachmentTypeQuestion < ActiveRecord::Migration[6.0]
   end
 
   def down
-    remove_column :course_assessment_question_text_responses, :require_attachment
+    remove_column :course_assessment_question_text_responses, :is_attachment_required
     add_column :course_assessment_question_text_responses, :allow_attachment, :boolean, null: false, default: false
 
     # migrate all values inside attachment_type into allow_attachment
