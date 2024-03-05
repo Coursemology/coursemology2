@@ -42,13 +42,13 @@ const optionSchema = object({
 });
 
 const AT_LEAST_ONE_CORRECT_CHOICE_ERROR_NAME = 'at-least-one-correct-choice';
-const AT_LEAST_ONE_CHOICE_ERROR_NAME = 'at-least-one-choice';
+const AT_LEAST_ONE_RESPONSE_ERROR_NAME = 'at-least-one-response';
 
 const responsesSchema = array()
   .of(optionSchema)
   .test(
-    AT_LEAST_ONE_CHOICE_ERROR_NAME,
-    translations.mustHaveAtLeastOneChoice,
+    AT_LEAST_ONE_RESPONSE_ERROR_NAME,
+    translations.mustHaveAtLeastOneResponse,
     (options) => (options?.length ?? 0) > 0,
   );
 
@@ -94,7 +94,7 @@ export const validateOptions = async (
       const { path, type: name, message } = error;
 
       if (
-        name === AT_LEAST_ONE_CHOICE_ERROR_NAME ||
+        name === AT_LEAST_ONE_RESPONSE_ERROR_NAME ||
         name === AT_LEAST_ONE_CORRECT_CHOICE_ERROR_NAME
       ) {
         errors.error = message;
