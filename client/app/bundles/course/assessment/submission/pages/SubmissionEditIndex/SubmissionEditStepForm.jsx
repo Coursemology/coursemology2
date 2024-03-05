@@ -129,12 +129,12 @@ const SubmissionEditStepForm = (props) => {
       const errors = {};
       Object.entries(data).forEach(([answerId, answer]) => {
         const questionId = answer.questionId;
-        const requireAttachment =
-          questions[questionId]?.requireAttachment ?? false;
+        const isAttachmentRequired =
+          questions[questionId]?.isAttachmentRequired ?? false;
         const onlyOneAttachmentAllowed =
           questions[questionId]?.attachmentType ===
           AttachmentType.SINGLE_FILE_ATTACHMENT;
-        if (requireAttachment && attachments[questionId].length === 0) {
+        if (isAttachmentRequired && attachments[questionId].length === 0) {
           errors[answerId] = {
             questionNumber: questions[questionId].questionNumber,
             errorCode: AttachmentErrorType.AttachmentRequired,

@@ -15,6 +15,6 @@ json.question do
     question_assessment: question_assessment
   }
   json.attachmentType @text_response_question.attachment_type
-  json.requireAttachment @text_response_question.require_attachment
+  json.isAttachmentRequired @text_response_question.is_attachment_required
   json.hideText @text_response_question.hide_text
 end

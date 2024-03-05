@@ -67,13 +67,13 @@ const FileUploadManager = (props: Props): JSX.Element => {
           <div className="mt-5">
             <Controller
               control={control}
-              name="requireAttachment"
+              name="isAttachmentRequired"
               render={({ field, fieldState }): JSX.Element => (
                 <FormCheckboxField
                   disabled={disabled}
                   field={field}
                   fieldState={fieldState}
-                  label={t(translations.requireAttachment)}
+                  label={t(translations.isAttachmentRequired)}
                 />
               )}
             />

@@ -22,11 +22,11 @@ const translations = defineMessages({
 
 export const attachmentRequirementMessage = (
   attachmentType: AttachmentType,
-  requireAttachment: boolean,
+  isAttachmentRequired: boolean,
 ): JSX.Element | null => {
   if (
     attachmentType === AttachmentType.SINGLE_FILE_ATTACHMENT &&
-    requireAttachment
+    isAttachmentRequired
   ) {
     return <FormattedMessage {...translations.exactlyOneFileUploadAllowed} />;
   }
@@ -35,7 +35,7 @@ export const attachmentRequirementMessage = (
     return <FormattedMessage {...translations.onlyOneFileUploadAllowed} />;
   }
 
-  if (requireAttachment) {
+  if (isAttachmentRequired) {
     return <FormattedMessage {...translations.atLeastOneFileUploadAllowed} />;
   }
 

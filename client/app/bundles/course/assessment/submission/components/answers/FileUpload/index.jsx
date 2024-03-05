@@ -23,7 +23,7 @@ const FileUpload = ({
   const disableField = readOnly || isSaving;
   const attachmentType = question.attachmentType;
   const attachmentExists = numAttachments > 0;
-  const requireAttachment = question.requireAttachment;
+  const isAttachmentRequired = question.isAttachmentRequired;
 
   return (
     <div>
@@ -38,7 +38,7 @@ const FileUpload = ({
         />
       )}
       <Typography variant="body2">
-        {attachmentRequirementMessage(attachmentType, requireAttachment)}
+        {attachmentRequirementMessage(attachmentType, isAttachmentRequired)}
       </Typography>
     </div>
   );

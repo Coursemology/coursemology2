@@ -15,7 +15,7 @@ export const questionSchema = commonQuestionFieldsValidation.shape({
       translations.validAttachmentSettingValues,
     )
     .required(translations.attachmentSettingRequired),
-  requireAttachment: bool(),
+  isAttachmentRequired: bool(),
 });
 
 const solutionSchema = object({

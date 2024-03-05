@@ -31,7 +31,7 @@ const TextResponse = (props) => {
   const disableField = readOnly || isSaving;
   const attachmentType = question.attachmentType;
   const allowUpload = attachmentType !== AttachmentType.NO_ATTACHMENT;
-  const requireAttachment = question.requireAttachment;
+  const isAttachmentRequired = question.isAttachmentRequired;
   const attachmentExists = numAttachments > 0;
 
   const readOnlyAnswer = (
@@ -115,7 +115,7 @@ const TextResponse = (props) => {
       )}
       {allowUpload && (
         <Typography variant="body2">
-          {attachmentRequirementMessage(attachmentType, requireAttachment)}
+          {attachmentRequirementMessage(attachmentType, isAttachmentRequired)}
         </Typography>
       )}
     </div>

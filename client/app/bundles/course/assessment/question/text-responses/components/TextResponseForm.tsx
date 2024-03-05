@@ -63,10 +63,10 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
       isAssessmentAutograded: data.isAssessmentAutograded,
       question: {
         ...question,
-        requireAttachment:
+        isAttachmentRequired:
           question.attachmentType === AttachmentType.NO_ATTACHMENT
             ? false
-            : question.requireAttachment,
+            : question.isAttachmentRequired,
       },
       solutions,
     };
