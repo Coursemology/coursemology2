@@ -5,22 +5,22 @@ exports[`<ErrorText /> when input is a string displays it 1`] = `
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <span
+      <p
         class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
       >
         An error.
-      </span>
+      </p>
       <div
         class="Toastify"
       />
     </div>
   </body>,
   "container": <div>
-    <span
+    <p
       class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
     >
       An error.
-    </span>
+    </p>
     <div
       class="Toastify"
     />
@@ -84,32 +84,32 @@ exports[`<ErrorText /> when input is an array displays each error 1`] = `
   "asFragment": [Function],
   "baseElement": <body>
     <div>
-      <span
+      <p
         class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
       >
         An error.
-      </span>
-      <span
+      </p>
+      <p
         class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
       >
         Another error.
-      </span>
+      </p>
       <div
         class="Toastify"
       />
     </div>
   </body>,
   "container": <div>
-    <span
+    <p
       class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
     >
       An error.
-    </span>
-    <span
+    </p>
+    <p
       class="MuiTypography-root MuiTypography-body2 css-1y6lcnr-MuiTypography-root"
     >
       Another error.
-    </span>
+    </p>
     <div
       class="Toastify"
     />
