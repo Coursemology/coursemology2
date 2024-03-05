@@ -511,6 +511,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.onlyOneAttachmentAllowed',
     defaultMessage: '*ONLY 1 file is allowed in this question',
   },
+  errorUnknown: {
+    id: 'course.assessment.submission.errorUnknown',
+    defaultMessage: 'Error is Unknown',
+  },
   solutionLemma: {
     id: 'course.assessment.submission.solutionLemma',
     defaultMessage: 'Solution (lemma form for autograding)',

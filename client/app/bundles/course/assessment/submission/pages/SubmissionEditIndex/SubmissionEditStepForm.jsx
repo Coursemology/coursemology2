@@ -42,7 +42,7 @@ import {
 } from '../../propTypes';
 import translations from '../../translations';
 
-import { AttachmentErrorType } from './AttachmentErrorType';
+import { ErrorType } from './ErrorType';
 
 const styles = {
   questionContainer: {
@@ -137,13 +137,13 @@ const SubmissionEditStepForm = (props) => {
         if (isAttachmentRequired && attachments[questionId].length === 0) {
           errors[answerId] = {
             questionNumber: questions[questionId].questionNumber,
-            errorCode: AttachmentErrorType.AttachmentRequired,
+            errorCode: ErrorType.AttachmentRequired,
           };
         }
         if (onlyOneAttachmentAllowed && attachments[questionId].length > 1) {
           errors[answerId] = {
             questionNumber: questions[questionId].questionNumber,
-            errorCode: AttachmentErrorType.AtMostOneAttachmentAllowed,
+            errorCode: ErrorType.AtMostOneAttachmentAllowed,
           };
         }
       });
