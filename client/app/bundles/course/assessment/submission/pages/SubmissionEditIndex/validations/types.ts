@@ -1,4 +1,4 @@
-import translations from '../../translations';
+import translations from '../../../translations';
 
 export enum ErrorType {
   AttachmentRequired = 'ATTACHMENT_REQUIRED',
@@ -9,3 +9,8 @@ export const ErrorTranslation = {
   [ErrorType.AttachmentRequired]: translations.attachmentRequired,
   [ErrorType.AtMostOneAttachmentAllowed]: translations.onlyOneAttachmentAllowed,
 };
+
+export interface ErrorStruct {
+  questionNumber: string;
+  errorCode: ErrorType;
+}

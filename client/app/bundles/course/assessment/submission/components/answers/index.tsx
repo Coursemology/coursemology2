@@ -17,8 +17,8 @@ import AnswerHeader from './AnswerHeader';
 import { AnswerPropsMap } from './types';
 import { QuestionHistory } from '../../reducers/history/types';
 import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
-import { ErrorType } from '../../pages/SubmissionEditIndex/ErrorType';
 import useErrorTranslation from '../../pages/SubmissionEditIndex/useErrorTranslation';
+import { ErrorType } from '../../pages/SubmissionEditIndex/validations/types';
 
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number;
