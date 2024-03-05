@@ -2,7 +2,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
-import { ErrorTranslation, ErrorType } from './ErrorType';
+import { ErrorTranslation, ErrorType } from './validations/types';
 
 const useErrorTranslation = (errorType: ErrorType): string => {
   const { t } = useTranslation();

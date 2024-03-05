@@ -21,7 +21,6 @@ import {
 } from '@mui/material';
 import { blue, grey, red, yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
@@ -44,7 +43,7 @@ import {
 } from '../../propTypes';
 import translations from '../../translations';
 
-import { ErrorType } from './ErrorType';
+import { errorResolver } from './ErrorHelper';
 
 const Comments = lazy(
   () => import(/* webpackChunkName: "comment" */ '../../containers/Comments'),
@@ -120,33 +119,7 @@ const SubmissionEditForm = (props) => {
 
   const methods = useForm({
     defaultValues: initialValues,
-    resolver: async (data) => {
-      const errors = {};
-      Object.entries(data).forEach(([answerId, answer]) => {
-        const questionId = answer.questionId;
-        const isAttachmentRequired =
-          questions[questionId]?.isAttachmentRequired ?? false;
-        const onlyOneAttachmentAllowed =
-          questions[questionId]?.attachmentType ===
-          AttachmentType.SINGLE_FILE_ATTACHMENT;
-        if (isAttachmentRequired && attachments[questionId].length === 0) {
-          errors[answerId] = {
-            questionNumber: questions[questionId].questionNumber,
-            errorCode: ErrorType.AttachmentRequired,
-          };
-        }
-        if (onlyOneAttachmentAllowed && attachments[questionId].length > 1) {
-          errors[answerId] = {
-            questionNumber: questions[questionId].questionNumber,
-            errorCode: ErrorType.AtMostOneAttachmentAllowed,
-          };
-        }
-      });
-      return {
-        values: {},
-        errors,
-      };
-    },
+    resolver: errorResolver(questions, attachments),
   });
 
   const {
