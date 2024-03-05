@@ -61,3 +61,8 @@ export interface AnswerPropsMap {
   VoiceResponse: VoiceResponseAnswerProps;
   ForumPostResponse: ForumPostResponseAnswerProps;
 }
+
+export interface Attachment {
+  name: string;
+  id: string;
+}
