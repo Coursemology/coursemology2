@@ -47,7 +47,7 @@ const FileUploadManager = (props: Props): JSX.Element => {
               description={t(translations.multipleFileAttachmentDescription)}
               disabled={disabled}
               label={t(translations.multipleFileAttachment)}
-              value="multiple_file_attachment"
+              value="multiple_file_attachments"
             />
           </RadioGroup>
         )}

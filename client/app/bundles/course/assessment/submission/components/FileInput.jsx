@@ -25,7 +25,7 @@ const translations = defineMessages({
   fileUploadErrorMessage: {
     id: 'course.assessment.submission.FileInput.fileUploadErrorMessage',
     defaultMessage:
-      'You attempted to upload {numFiles} files, but only 1 file can be uploaded for this question',
+      'You have attempted to upload {numFiles} files, but only 1 file can be uploaded for this question',
   },
 });
 

@@ -4,15 +4,15 @@ import { AttachmentType } from 'types/course/assessment/question/text-responses'
 const translations = defineMessages({
   onlyOneFileUploadAllowed: {
     id: 'course.assessment.submission.FileInput.onlyOneFileUploadAllowed',
-    defaultMessage: '*You can only upload at most 1 file in this question',
+    defaultMessage: '*You can only upload AT MOST 1 file for this question',
   },
   exactlyOneFileUploadAllowed: {
     id: 'course.assessment.submission.FileInput.exactlyOneFileUploadAllowed',
-    defaultMessage: '*You must upload EXACTLY one file in this question',
+    defaultMessage: '*You must upload EXACTLY 1 file for this question',
   },
   atLeastOneFileUploadAllowed: {
     id: 'course.assessment.submission.FileInput.atLeastOneFileUploadAllowed',
-    defaultMessage: '*You must upload AT LEAST one file in this question',
+    defaultMessage: '*You must upload AT LEAST 1 file for this question',
   },
   attachmentRequired: {
     id: 'course.assessment.submission.FileInput.attachmentRequired',
