@@ -92,7 +92,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
   end
 
   def csv_downloadable?
-    !hide_text && attachment_type == attachment_type[:multiple_file_attachment]
+    !hide_text && attachment_type == 'no_attachment'
   end
 
   def history_viewable?

@@ -341,7 +341,7 @@ ActiveRecord::Schema.define(version: 2024_02_26_104135) do
   create_table "course_assessment_question_text_responses", id: :serial, force: :cascade do |t|
     t.boolean "hide_text", default: false
     t.boolean "is_comprehension", default: false
-    t.boolean "require_attachment", default: false, null: false
+    t.boolean "is_attachment_required", default: false, null: false
     t.integer "attachment_type", default: 0, null: false
   end
 
