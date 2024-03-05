@@ -29,10 +29,9 @@ const TextResponse = (props) => {
     getIsSavingAnswer(state, answerId),
   );
   const disableField = readOnly || isSaving;
-  const attachmentType = question.attachmentType;
+  const { attachmentType, isAttachmentRequired } = question;
   const allowUpload = attachmentType !== AttachmentType.NO_ATTACHMENT;
-  const isAttachmentRequired = question.isAttachmentRequired;
-  const attachmentExists = numAttachments > 0;
+  const isAttachmentExists = numAttachments > 0;
 
   const readOnlyAnswer = (
     <Controller
@@ -97,6 +96,11 @@ const TextResponse = (props) => {
     ? plaintextAnswer
     : richtextAnswer;
 
+  const isMultipleAttachmentsAllowed =
+    attachmentType === AttachmentType.MULTIPLE_FILE_ATTACHMENT;
+  const isFileUploadStillAllowed =
+    isMultipleAttachmentsAllowed || !isAttachmentExists;
+
   return (
     <div>
       {readOnly ? readOnlyAnswer : editableAnswer}
@@ -106,9 +110,8 @@ const TextResponse = (props) => {
       )}
       {allowUpload && !readOnly && (
         <FileInputField
-          attachmentExists={attachmentExists}
-          attachmentType={attachmentType}
-          disabled={disableField}
+          disabled={disableField || !isFileUploadStillAllowed}
+          isMultipleAttachmentsAllowed={isMultipleAttachmentsAllowed}
           name={`${answerId}.files`}
           onChangeCallback={() => handleUploadTextResponseFiles(answerId)}
         />
