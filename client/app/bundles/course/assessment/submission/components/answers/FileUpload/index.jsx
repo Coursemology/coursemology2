@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 import { useAppSelector } from 'lib/hooks/store';
 
@@ -21,18 +22,20 @@ const FileUpload = ({
     getIsSavingAnswer(state, answerId),
   );
   const disableField = readOnly || isSaving;
-  const attachmentType = question.attachmentType;
-  const attachmentExists = numAttachments > 0;
-  const isAttachmentRequired = question.isAttachmentRequired;
+  const { attachmentType, isAttachmentRequired } = question;
+  const isAttachmentExists = numAttachments > 0;
+  const isMultipleAttachmentsAllowed =
+    attachmentType === AttachmentType.MULTIPLE_FILE_ATTACHMENT;
+  const isFileUploadStillAllowed =
+    isMultipleAttachmentsAllowed || !isAttachmentExists;
 
   return (
     <div>
       <UploadedFileView answerId={answerId} questionId={question.id} />
       {!readOnly && (
         <FileInputField
-          attachmentExists={attachmentExists}
-          attachmentType={attachmentType}
-          disabled={disableField}
+          disabled={disableField || !isFileUploadStillAllowed}
+          isMultipleAttachmentsAllowed={isMultipleAttachmentsAllowed}
           name={`${answerId}.files`}
           onChangeCallback={() => handleUploadTextResponseFiles(answerId)}
         />

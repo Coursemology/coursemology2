@@ -210,7 +210,7 @@ const VisibleProgrammingImportEditor = (props) => {
       {readOnly || viewHistory ? null : (
         <FileInputField
           disabled={disabled}
-          isProgrammingQuestion
+          isMultipleAttachmentsAllowed
           name={`${answerId}.import_files`}
           onDropCallback={(filesToImport) => {
             handleStageFiles(filesToImport).then((response) => {

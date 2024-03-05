@@ -31,7 +31,10 @@ export const attachmentRequirementMessage = (
     return <FormattedMessage {...translations.exactlyOneFileUploadAllowed} />;
   }
 
-  if (attachmentType === AttachmentType.SINGLE_FILE_ATTACHMENT) {
+  if (
+    attachmentType === AttachmentType.SINGLE_FILE_ATTACHMENT &&
+    !isAttachmentRequired
+  ) {
     return <FormattedMessage {...translations.onlyOneFileUploadAllowed} />;
   }
 
