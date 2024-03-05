@@ -190,12 +190,51 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         visit edit_path
 
         find_all('button[aria-label="Delete choice"]').each(&:click)
-        expect(page).to have_button('Save Changes')
+        expect(page).to have_button('Save changes')
+        click_button 'Save changes'
+
+        expect(page).to have_text('You must specify at least one correct choice.')
+
+        find_all('button[aria-label="Undo delete choice"]').last.click
+        expect(page).to have_button('Save changes')
         click_button 'Save changes'
         wait_for_page
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(mrq.reload.options.count).to eq(0)
+        expect(mrq.reload.options.count).to eq(1)
+      end
+
+      scenario 'I cannot delete all answers in mrq question' do
+        mrq = create(:course_assessment_question_multiple_response, assessment: assessment)
+
+        visit course_assessment_path(course, assessment)
+
+        edit_path = edit_course_assessment_question_multiple_response_path(course, assessment, mrq)
+        find_link(nil, href: edit_path).click
+
+        maximum_grade = 999.9
+        fill_in 'maximumGrade', with: maximum_grade
+        click_button 'Save changes'
+
+        wait_for_page
+        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(mrq.reload.maximum_grade).to eq(maximum_grade)
+
+        visit edit_path
+
+        find_all('button[aria-label="Delete response"]').each(&:click)
+        expect(page).to have_button('Save changes')
+        click_button 'Save changes'
+
+        expect(page).to have_text('You must specify at least one response.')
+
+        find_all('button[aria-label="Undo delete response"]').last.click
+        expect(page).to have_button('Save changes')
+        click_button 'Save changes'
+        wait_for_page
+
+        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(mrq.reload.options.count).to eq(1)
       end
 
       scenario 'I can delete a question' do
