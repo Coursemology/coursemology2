@@ -5,9 +5,9 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import FileUpload from '@mui/icons-material/FileUpload';
 import { Card, CardContent, Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import formTranslations from 'lib/translations/form';
 
 const translations = defineMessages({
   uploadDisabled: {
@@ -25,7 +25,7 @@ const translations = defineMessages({
   fileUploadErrorMessage: {
     id: 'course.assessment.submission.FileInput.fileUploadErrorMessage',
     defaultMessage:
-      'You attempted to upload {numFiles} files, but only one file can be uploaded for this question',
+      'You attempted to upload {numFiles} files, but only 1 file can be uploaded for this question',
   },
 });
 
@@ -80,8 +80,8 @@ class FileInput extends Component {
   }
 
   onDropRejected(filesRejected) {
-    const { isMultipleUploadAllowed } = this.props;
-    if (!isMultipleUploadAllowed && filesRejected.length > 1) {
+    const { isMultipleAttachmentsAllowed } = this.props;
+    if (!isMultipleAttachmentsAllowed && filesRejected.length > 1) {
       this.setState({
         numFilesRejected: filesRejected.length,
       });
@@ -125,7 +125,7 @@ class FileInput extends Component {
       disabled,
       fieldState: { error },
       field: { value },
-      isMultipleUploadAllowed,
+      isMultipleAttachmentsAllowed,
     } = this.props;
     const { numFilesRejected } = this.state;
 
@@ -133,7 +133,7 @@ class FileInput extends Component {
       <div>
         <Dropzone
           disabled={disabled}
-          multiple={isMultipleUploadAllowed}
+          multiple={isMultipleAttachmentsAllowed}
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
           onDrop={(files) => this.onDrop(files)}
@@ -154,6 +154,7 @@ class FileInput extends Component {
           )}
         </Dropzone>
         <Prompt
+          cancelLabel={<FormattedMessage {...formTranslations.close} />}
           onClose={() => this.setState({ numFilesRejected: 0 })}
           open={numFilesRejected > 0}
           title={<FormattedMessage {...translations.fileUploadErrorTitle} />}
@@ -174,7 +175,7 @@ class FileInput extends Component {
 
 FileInput.propTypes = {
   disabled: PropTypes.bool,
-  isMultipleUploadAllowed: PropTypes.bool,
+  isMultipleAttachmentsAllowed: PropTypes.bool,
   fieldState: PropTypes.shape({
     error: PropTypes.bool,
   }).isRequired,
@@ -192,21 +193,13 @@ FileInput.defaultProps = {
 
 const FileInputField = (props) => {
   const {
-    attachmentExists,
-    attachmentType,
     disabled,
-    isProgrammingQuestion,
+    isMultipleAttachmentsAllowed,
     name,
     onChangeCallback,
     onDropCallback,
   } = props;
   const { control } = useFormContext();
-  const isMultipleUploadAllowed =
-    isProgrammingQuestion ||
-    attachmentType === AttachmentType.MULTIPLE_FILE_ATTACHMENT;
-  const isFileUploadStillAllowed =
-    attachmentType === AttachmentType.MULTIPLE_FILE_ATTACHMENT ||
-    !attachmentExists;
 
   return (
     <Controller
@@ -214,7 +207,7 @@ const FileInputField = (props) => {
       name={name}
       render={({ field, fieldState }) => (
         <FileInput
-          disabled={disabled || !isFileUploadStillAllowed}
+          disabled={disabled}
           field={{
             ...field,
             onChange: (event) => {
@@ -225,7 +218,7 @@ const FileInputField = (props) => {
             },
           }}
           fieldState={fieldState}
-          isMultipleUploadAllowed={isMultipleUploadAllowed}
+          isMultipleAttachmentsAllowed={isMultipleAttachmentsAllowed}
           onDropCallback={onDropCallback}
         />
       )}
@@ -234,10 +227,8 @@ const FileInputField = (props) => {
 };
 
 FileInputField.propTypes = {
-  attachmentExists: PropTypes.bool,
-  attachmentType: PropTypes.oneOf(Object.values(AttachmentType)),
   name: PropTypes.string.isRequired,
-  isProgrammingQuestion: PropTypes.bool,
+  isMultipleAttachmentsAllowed: PropTypes.bool,
   disabled: PropTypes.bool.isRequired,
   onChangeCallback: PropTypes.func,
   onDropCallback: PropTypes.func,

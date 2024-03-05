@@ -7,6 +7,7 @@ import {
 } from 'types/course/assessment/question/text-responses';
 
 import Section from 'lib/components/core/layouts/Section';
+import Subsection from 'lib/components/core/layouts/Subsection';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -79,6 +80,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
 
   return (
     <Form
+      contextual
       dirty={isSolutionsDirty}
       disabled={submitting}
       emitsVia={setForm}
@@ -87,7 +89,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
       onSubmit={handleSubmit}
       validates={questionSchema}
     >
-      {(control, watch): JSX.Element => (
+      {(control): JSX.Element => (
         <>
           <CommonQuestionFields
             availableSkills={data.availableSkills}
@@ -100,12 +102,21 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
               <Alert severity="info">{t(translations.fileUploadNote)}</Alert>
             )}
 
-          <FileUploadManager
-            control={control}
-            disabled={submitting}
-            isTextResponseQuestion={data.questionType === 'text_response'}
-            watch={watch}
-          />
+          <Section
+            sticksToNavbar
+            subtitle={t(translations.fileUploadDescription)}
+            title={t(translations.fileUpload)}
+          >
+            <Subsection
+              subtitle={t(translations.attachmentSettingsDescription)}
+              title={t(translations.attachmentSettings)}
+            >
+              <FileUploadManager
+                disabled={submitting}
+                isTextResponseQuestion={data.questionType === 'text_response'}
+              />
+            </Subsection>
+          </Section>
 
           {data.questionType === 'text_response' && (
             <Section
