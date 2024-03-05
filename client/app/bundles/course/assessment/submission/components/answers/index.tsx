@@ -9,7 +9,6 @@ import { useDebounce } from 'lib/hooks/useDebounce';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import { QuestionType } from 'types/course/assessment/question';
-import useTranslation from 'lib/hooks/useTranslation';
 import { saveAnswer, updateClientVersion } from '../../actions/answers';
 import { uploadTextResponseFiles } from '../../actions/answers/textResponse';
 
@@ -18,13 +17,13 @@ import AnswerHeader from './AnswerHeader';
 import { AnswerPropsMap } from './types';
 import { QuestionHistory } from '../../reducers/history/types';
 import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
-import translations from '../../translations';
-import { AttachmentErrorType } from '../../pages/SubmissionEditIndex/AttachmentErrorType';
+import { ErrorType } from '../../pages/SubmissionEditIndex/ErrorType';
+import useErrorTranslation from '../../pages/SubmissionEditIndex/useErrorTranslation';
 
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number;
   graderView: boolean;
-  error: AttachmentErrorType;
+  error: ErrorType;
   historyQuestions: Record<number, QuestionHistory>;
   question: SubmissionQuestionData<T>;
   questionType: T;
@@ -60,7 +59,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
   const dispatch = useAppDispatch();
 
   const { getValues, resetField } = useFormContext();
-  const { t } = useTranslation();
+  const errorMessage = useErrorTranslation(error);
 
   const handleSaveAnswer = (
     answerData: unknown,
@@ -152,15 +151,6 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     },
   };
 
-  const ErrorComponentMap = {
-    [AttachmentErrorType.AttachmentRequired]: t(
-      translations.attachmentRequired,
-    ),
-    [AttachmentErrorType.AtMostOneAttachmentAllowed]: t(
-      translations.onlyOneAttachmentAllowed,
-    ),
-  };
-
   return (
     <>
       <AnswerHeader
@@ -171,9 +161,9 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
 
       <Divider />
 
-      {Object.values(AttachmentErrorType).includes(error) && (
+      {Object.values(ErrorType).includes(error) && (
         <Typography className="text-error" variant="body2">
-          {ErrorComponentMap[error]}
+          {errorMessage}
         </Typography>
       )}
 
