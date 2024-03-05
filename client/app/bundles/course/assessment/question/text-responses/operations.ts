@@ -39,7 +39,7 @@ const adaptPostData = (data: TextResponseData): TextResponsePostData => ({
     staff_only_comments: data.question.staffOnlyComments,
     maximum_grade: data.question.maximumGrade,
     attachment_type: data.question.attachmentType,
-    require_attachment: data.question.requireAttachment,
+    is_attachment_required: data.question.isAttachmentRequired,
     hide_text: data.question.hideText,
     question_assessment: { skill_ids: data.question.skillIds },
     solutions_attributes: data.solutions?.map((solution, _) => ({

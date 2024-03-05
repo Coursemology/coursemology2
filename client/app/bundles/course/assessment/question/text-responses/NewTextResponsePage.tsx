@@ -24,14 +24,14 @@ const NEW_TEXT_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: false,
   attachmentType: AttachmentType.NO_ATTACHMENT,
-  requireAttachment: false,
+  isAttachmentRequired: false,
 };
 
 const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: true,
   attachmentType: AttachmentType.SINGLE_FILE_ATTACHMENT,
-  requireAttachment: true,
+  isAttachmentRequired: true,
 };
 
 type Fetcher = () => Promise<TextResponseFormData<'new'>>;

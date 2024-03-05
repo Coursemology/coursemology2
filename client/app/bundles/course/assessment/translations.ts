@@ -452,8 +452,8 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.multipleFileAttachmentDescription',
     defaultMessage: 'They can upload several attachments within this question',
   },
-  requireAttachment: {
-    id: 'course.assessment.question.textResponses.requireAttachment',
+  isAttachmentRequired: {
+    id: 'course.assessment.question.textResponses.isAttachmentRequired',
     defaultMessage: 'Require file upload for this question',
   },
   comprehension: {
