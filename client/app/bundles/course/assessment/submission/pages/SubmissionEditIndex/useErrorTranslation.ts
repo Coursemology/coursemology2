@@ -2,15 +2,28 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
-import { ErrorTranslation, ErrorType } from './validations/types';
+import { ErrorType } from './validations/types';
 
-const useErrorTranslation = (errorType: ErrorType): string => {
+export const ErrorTranslation = {
+  [ErrorType.AttachmentRequired]: translations.attachmentRequired,
+  [ErrorType.AtMostOneAttachmentAllowed]: translations.onlyOneAttachmentAllowed,
+};
+
+const useErrorTranslation = (errorTypes: ErrorType[]): string[] => {
   const { t } = useTranslation();
-  if (!errorType) {
-    return t(translations.errorUnknown);
+  if (errorTypes.length === 0) {
+    return [];
   }
 
-  return t(ErrorTranslation[errorType]);
+  if (
+    errorTypes.some(
+      (errorType) => !Object.values(ErrorType).includes(errorType),
+    )
+  ) {
+    throw new Error('Error is invalid');
+  }
+
+  return errorTypes.map((errorType) => t(ErrorTranslation[errorType]));
 };
 
 export default useErrorTranslation;

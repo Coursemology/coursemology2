@@ -416,7 +416,7 @@ const SubmissionEditForm = (props) => {
         const question = questions[id];
         const { answerId, topicId, viewHistory } = question;
         const topic = topics[topicId];
-        const error = errors[answerId]?.errorCode ?? null;
+        const allErrors = errors[answerId]?.errorTypes ?? [];
 
         return (
           <Element key={id} name={`step${index}`}>
@@ -425,7 +425,7 @@ const SubmissionEditForm = (props) => {
                 {...{
                   readOnly: !attempting,
                   answerId,
-                  error,
+                  allErrors,
                   question,
                   questionType: question.type,
                   historyQuestions,
@@ -582,7 +582,7 @@ const SubmissionEditForm = (props) => {
     const question = questions[questionId];
     const { answerId, topicId, viewHistory } = question;
     const topic = topics[topicId];
-    const error = errors[answerId]?.errorCode ?? null;
+    const allErrors = errors[answerId]?.errorTypes ?? [];
 
     return (
       <>
@@ -590,7 +590,7 @@ const SubmissionEditForm = (props) => {
           {...{
             readOnly: !attempting,
             answerId,
-            error,
+            allErrors,
             question,
             questionType: question.type,
             historyQuestions,
