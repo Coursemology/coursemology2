@@ -63,6 +63,6 @@ export interface AnswerPropsMap {
 }
 
 export interface Attachment {
-  name: string;
   id: string;
+  name: string;
 }

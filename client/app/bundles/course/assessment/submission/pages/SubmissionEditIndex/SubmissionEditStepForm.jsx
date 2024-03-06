@@ -503,7 +503,7 @@ const SubmissionEditStepForm = (props) => {
     const question = questions[id];
     const { answerId, topicId } = question;
     const topic = topics[topicId];
-    const error = errors[answerId]?.errorCode ?? null;
+    const allErrors = errors[answerId]?.errorTypes ?? [];
 
     return (
       <>
@@ -511,7 +511,7 @@ const SubmissionEditStepForm = (props) => {
           {...{
             readOnly: !attempting,
             answerId,
-            error,
+            allErrors,
             question,
             questionType: question.type,
             historyQuestions,
