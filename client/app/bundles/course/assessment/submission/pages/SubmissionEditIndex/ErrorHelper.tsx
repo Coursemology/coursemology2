@@ -12,18 +12,21 @@ export const errorResolver = (
   questionAttachments: Record<number, Attachment[]>,
 ): Resolver<Record<number, AnswerData>> => {
   return async (data) => {
-    const errors = {};
-    Object.entries(data).forEach(([_answerId, answer]) => {
-      validateBasedOnQuestionType(
-        errors,
-        answer,
-        questions,
-        questionAttachments[answer.questionId],
+    const allErrors = {};
+    Object.entries(data).forEach(([answerId, answer]) => {
+      const { questionId } = answer;
+      const errors = validateBasedOnQuestionType(
+        questions[questionId],
+        questionAttachments[questionId],
       );
+
+      if (errors.errorTypes.length > 0) {
+        allErrors[answerId] = errors;
+      }
     });
     return {
       values: {},
-      errors,
+      errors: allErrors,
     };
   };
 };

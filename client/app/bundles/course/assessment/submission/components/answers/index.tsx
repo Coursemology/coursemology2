@@ -23,7 +23,7 @@ import { ErrorType } from '../../pages/SubmissionEditIndex/validations/types';
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number;
   graderView: boolean;
-  error: ErrorType;
+  allErrors: ErrorType[];
   historyQuestions: Record<number, QuestionHistory>;
   question: SubmissionQuestionData<T>;
   questionType: T;
@@ -48,7 +48,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
 ): JSX.Element => {
   const {
     answerId,
-    error,
+    allErrors,
     graderView,
     historyQuestions,
     question,
@@ -59,7 +59,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
   const dispatch = useAppDispatch();
 
   const { getValues, resetField } = useFormContext();
-  const errorMessage = useErrorTranslation(error);
+  const errorMessages = useErrorTranslation(allErrors);
 
   const handleSaveAnswer = (
     answerData: unknown,
@@ -161,11 +161,11 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
 
       <Divider />
 
-      {Object.values(ErrorType).includes(error) && (
-        <Typography className="text-error" variant="body2">
-          {errorMessage}
+      {errorMessages.map((message) => (
+        <Typography key={message} className="text-error" variant="body2">
+          {message}
         </Typography>
-      )}
+      ))}
 
       <Typography className="mt-2" variant="body1">
         {question.questionTitle}

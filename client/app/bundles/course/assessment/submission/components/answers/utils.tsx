@@ -14,10 +14,6 @@ const translations = defineMessages({
     id: 'course.assessment.submission.FileInput.atLeastOneFileUploadAllowed',
     defaultMessage: '*You must upload AT LEAST 1 file for this question',
   },
-  attachmentRequired: {
-    id: 'course.assessment.submission.FileInput.attachmentRequired',
-    defaultMessage: '*Attachment is required for this question',
-  },
 });
 
 export const attachmentRequirementMessage = (
