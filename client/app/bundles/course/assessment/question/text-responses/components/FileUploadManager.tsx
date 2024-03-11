@@ -7,6 +7,7 @@ import {
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
@@ -64,6 +65,27 @@ const FileUploadManager = (props: Props): JSX.Element => {
                 field={field}
                 fieldState={fieldState}
                 label={t(translations.isAttachmentRequired)}
+              />
+            )}
+          />
+        </div>
+      )}
+
+      {watch('attachmentType') === AttachmentType.MULTIPLE_FILE_ATTACHMENTS && (
+        <div className="mt-5">
+          <Controller
+            control={control}
+            name="maxAttachments"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                className="w-1/2"
+                disabled={disabled}
+                disableMargins
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.maxAttachment)}
+                type="number"
+                variant="filled"
               />
             )}
           />

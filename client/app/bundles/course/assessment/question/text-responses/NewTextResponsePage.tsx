@@ -20,10 +20,13 @@ import TextResponseForm, {
 } from './components/TextResponseForm';
 import { create, fetchNewFileUpload, fetchNewTextResponse } from './operations';
 
+const INITIAL_MAX_ATTACHMENTS = 3;
+
 const NEW_TEXT_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: false,
   attachmentType: AttachmentType.NO_ATTACHMENT,
+  maxAttachments: INITIAL_MAX_ATTACHMENTS,
   isAttachmentRequired: false,
 };
 
@@ -31,6 +34,7 @@ const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: true,
   attachmentType: AttachmentType.SINGLE_FILE_ATTACHMENT,
+  maxAttachments: INITIAL_MAX_ATTACHMENTS,
   isAttachmentRequired: true,
 };
 

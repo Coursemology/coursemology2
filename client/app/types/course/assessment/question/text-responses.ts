@@ -21,6 +21,7 @@ export enum AttachmentType {
 
 export interface TextResponseQuestionFormData extends QuestionFormData {
   attachmentType: AttachmentType;
+  maxAttachments: number;
   isAttachmentRequired: boolean;
   hideText: boolean;
 }
@@ -43,7 +44,7 @@ export interface TextResponsePostData {
     description?: TextResponseFormDataQuestion['description'];
     staff_only_comments?: TextResponseFormDataQuestion['staffOnlyComments'];
     maximum_grade: TextResponseFormDataQuestion['maximumGrade'];
-    attachment_type: TextResponseFormDataQuestion['attachmentType'];
+    max_attachments: TextResponseFormDataQuestion['maxAttachments'];
     is_attachment_required: TextResponseFormDataQuestion['isAttachmentRequired'];
     hide_text: TextResponseFormDataQuestion['hideText'];
     question_assessment?: {

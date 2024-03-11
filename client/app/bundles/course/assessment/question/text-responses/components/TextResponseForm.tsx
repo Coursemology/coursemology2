@@ -14,6 +14,10 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../../translations';
 import CommonQuestionFields from '../../components/CommonQuestionFields';
 import { questionSchema, validateSolutions } from '../commons/validations';
+import {
+  getAttachmentTypeFromMaxAttachment,
+  getMaxAttachmentFromAttachmentType,
+} from '../utils';
 
 import FileUploadManager from './FileUploadManager';
 import SolutionsManager, { SolutionsManagerRef } from './SolutionsManager';
@@ -27,6 +31,16 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
   props: TextResponseFormProps<T>,
 ): JSX.Element => {
   const { with: data } = props;
+
+  const formattedData = {
+    ...data,
+    question: {
+      ...data.question,
+      attachmentType:
+        data.question?.attachmentType ??
+        getAttachmentTypeFromMaxAttachment(data.question?.maxAttachments),
+    },
+  };
 
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<FormEmitter>();
@@ -68,6 +82,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
           question.attachmentType === AttachmentType.NO_ATTACHMENT
             ? false
             : question.isAttachmentRequired,
+        maxAttachments: getMaxAttachmentFromAttachmentType(question),
       },
       solutions,
     };
@@ -85,7 +100,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
       disabled={submitting}
       emitsVia={setForm}
       headsUp
-      initialValues={data.question!}
+      initialValues={formattedData.question!}
       onSubmit={handleSubmit}
       validates={questionSchema}
     >
