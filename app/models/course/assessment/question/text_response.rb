@@ -2,9 +2,9 @@
 class Course::Assessment::Question::TextResponse < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
 
-  enum attachment_type: { no_attachment: 0, single_file_attachment: 1, multiple_file_attachments: 2 }
-  validates :attachment_type, presence: true
-
+  validates :max_attachments, numericality: { only_integer: true, greater_than_or_equal_to: 0,
+                                              less_than_or_equal_to: 50 },
+                              presence: true
   validate :validate_grade
 
   has_many :solutions, class_name: Course::Assessment::Question::TextResponseSolution.name,
@@ -92,7 +92,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
   end
 
   def csv_downloadable?
-    !hide_text && attachment_type == 'no_attachment'
+    !hide_text && max_attachments == 0
   end
 
   def history_viewable?

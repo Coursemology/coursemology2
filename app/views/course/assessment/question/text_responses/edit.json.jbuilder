@@ -14,7 +14,7 @@ json.question do
     question: question,
     question_assessment: question_assessment
   }
-  json.attachmentType @text_response_question.attachment_type
+  json.maxAttachments @text_response_question.max_attachments
   json.isAttachmentRequired @text_response_question.is_attachment_required
   json.hideText @text_response_question.hide_text
 end
