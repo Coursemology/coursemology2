@@ -3,7 +3,7 @@ FactoryBot.define do
   factory :course_assessment_question_text_response,
           class: Course::Assessment::Question::TextResponse,
           parent: :course_assessment_question do
-    attachment_type { 0 }
+    max_attachments { 0 }
     is_attachment_required { false }
     hide_text { false }
     is_comprehension { false }
@@ -28,11 +28,11 @@ FactoryBot.define do
     end
 
     trait :allow_multiple_attachments do
-      attachment_type { 2 }
+      max_attachments { 50 }
     end
 
     trait :file_upload_question do
-      attachment_type { 2 }
+      max_attachments { 50 }
       is_attachment_required { false }
       hide_text { true }
     end
