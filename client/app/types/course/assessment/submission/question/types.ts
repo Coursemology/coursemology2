@@ -25,6 +25,7 @@ interface TextResponseParentQuestionData {}
 
 interface TextResponseQuestionData extends TextResponseParentQuestionData {
   attachmentType: AttachmentType;
+  maxAttachments: number;
   isAttachmentRequired: boolean;
   solutions?: {
     id: number;
@@ -36,6 +37,7 @@ interface TextResponseQuestionData extends TextResponseParentQuestionData {
 
 interface FileUploadQuestionData extends TextResponseParentQuestionData {
   attachmentType: AttachmentType;
+  maxAttachments: number;
   isAttachmentRequired: boolean;
 }
 

@@ -8,6 +8,8 @@ import translations from '../../../translations';
 import getIndexAndKeyPath from '../../commons/utils';
 import { commonQuestionFieldsValidation } from '../../components/CommonQuestionFields';
 
+const MAX_ATTACHMENT_UPPER_LIMIT = 50;
+
 export const questionSchema = commonQuestionFieldsValidation.shape({
   attachmentType: string()
     .oneOf(
@@ -15,6 +17,7 @@ export const questionSchema = commonQuestionFieldsValidation.shape({
       translations.validAttachmentSettingValues,
     )
     .required(translations.attachmentSettingRequired),
+  maxAttachments: number().required().min(0).max(MAX_ATTACHMENT_UPPER_LIMIT),
   isAttachmentRequired: bool(),
 });
 
