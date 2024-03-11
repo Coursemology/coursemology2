@@ -63,7 +63,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
 
   def text_response_question_params
     permitted_params = [
-      :title, :description, :staff_only_comments, :maximum_grade, :attachment_type,
+      :title, :description, :staff_only_comments, :maximum_grade, :max_attachments,
       :hide_text, :is_comprehension, :is_attachment_required,
       question_assessment: { skill_ids: [] }
     ]
