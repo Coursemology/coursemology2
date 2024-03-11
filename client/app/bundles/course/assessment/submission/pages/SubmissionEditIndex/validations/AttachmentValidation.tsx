@@ -10,7 +10,7 @@ export const validateAttachmentInAnswer = (
     | SubmissionQuestionData<'TextResponse'>
     | SubmissionQuestionData<'FileUpload'>,
   attachments: Attachment[],
-): ErrorType | null => {
+): ErrorType => {
   const isAttachmentRequired = question.isAttachmentRequired;
   const onlyOneAttachmentAllowed =
     question.attachmentType === AttachmentType.SINGLE_FILE_ATTACHMENT;
@@ -23,5 +23,5 @@ export const validateAttachmentInAnswer = (
     return ErrorType.AtMostOneAttachmentAllowed;
   }
 
-  return null;
+  return ErrorType.NoError;
 };

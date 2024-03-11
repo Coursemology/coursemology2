@@ -10,7 +10,7 @@ export const validateBasedOnQuestionType = (
   question: SubmissionQuestionData<keyof typeof QuestionType>,
   attachments: Attachment[],
 ): ErrorStruct => {
-  const errors: (ErrorType | null)[] = [];
+  const errors: ErrorType[] = [];
 
   switch (question.type) {
     case QuestionType.TextResponse: {
@@ -36,9 +36,7 @@ export const validateBasedOnQuestionType = (
     }
   }
 
-  const filteredErrors = errors.filter(
-    (error) => error !== null,
-  ) as ErrorType[];
+  const filteredErrors = errors.filter((error) => error !== ErrorType.NoError);
 
   return {
     questionNumber: question.questionNumber,
