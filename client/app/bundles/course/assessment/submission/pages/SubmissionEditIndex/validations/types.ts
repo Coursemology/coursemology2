@@ -1,6 +1,6 @@
 export enum ErrorType {
   AttachmentRequired = 'ATTACHMENT_REQUIRED',
-  AtMostOneAttachmentAllowed = 'AT_MOST_ONE_ATTACHMENT_ALLOWED',
+  AttachmentNumberExceedLimit = 'ATTACHMENT_NUMBER_EXCEED_LIMIT',
   NoError = 'NO_ERROR',
 }
 
