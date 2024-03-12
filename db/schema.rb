@@ -343,6 +343,7 @@ ActiveRecord::Schema.define(version: 2024_02_26_104135) do
     t.boolean "is_comprehension", default: false
     t.boolean "is_attachment_required", default: false, null: false
     t.integer "max_attachments", default: 0, null: false
+    t.integer "max_attachment_size"
   end
 
   create_table "course_assessment_question_voice_responses", id: :serial, force: :cascade do |t|
