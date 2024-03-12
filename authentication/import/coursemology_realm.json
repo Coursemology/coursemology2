@@ -1,16 +1,18 @@
 {
   "id": "b1b20c4a-43d3-482e-8e33-683e28979238",
   "realm": "coursemology",
+  "displayName": "",
+  "displayNameHtml": "",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
   "accessTokenLifespan": 300,
   "accessTokenLifespanForImplicitFlow": 900,
-  "ssoSessionIdleTimeout": 1800,
-  "ssoSessionMaxLifespan": 36000,
-  "ssoSessionIdleTimeoutRememberMe": 0,
-  "ssoSessionMaxLifespanRememberMe": 0,
+  "ssoSessionIdleTimeout": 86400,
+  "ssoSessionMaxLifespan": 86400,
+  "ssoSessionIdleTimeoutRememberMe": 604800,
+  "ssoSessionMaxLifespanRememberMe": 604800,
   "offlineSessionIdleTimeout": 2592000,
   "offlineSessionMaxLifespanEnabled": false,
   "offlineSessionMaxLifespan": 5184000,
@@ -26,7 +28,7 @@
   "oauth2DeviceCodeLifespan": 600,
   "oauth2DevicePollingInterval": 5,
   "enabled": true,
-  "sslRequired": "external",
+  "sslRequired": "none",
   "registrationAllowed": true,
   "registrationEmailAsUsername": true,
   "rememberMe": true,
@@ -35,7 +37,7 @@
   "duplicateEmailsAllowed": false,
   "resetPasswordAllowed": true,
   "editUsernameAllowed": false,
-  "bruteForceProtected": false,
+  "bruteForceProtected": true,
   "permanentLockout": false,
   "maxFailureWaitSeconds": 900,
   "minimumQuickLoginWaitSeconds": 60,
@@ -86,7 +88,6 @@
       }
     ],
     "client": {
-      "coursemology": [],
       "realm-management": [
         {
           "id": "481f2cf1-0fdd-44e9-b63d-c0a1b9c6e99e",
@@ -299,6 +300,8 @@
           "attributes": {}
         }
       ],
+      "24054e55-dcab-4ffb-939d-eaef438ec66a": [],
+      "5b1af0e1-0dc5-44f6-8b69-13015fd318f5": [],
       "security-admin-console": [],
       "admin-cli": [],
       "account-console": [],
@@ -455,6 +458,120 @@
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
   "clients": [
+    {
+      "id": "308875ca-cc1a-4c15-921f-893faa1f1156",
+      "clientId": "24054e55-dcab-4ffb-939d-eaef438ec66a",
+      "name": "coursemology-frontend",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "http://lvh.me:8080/",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "redirectUris": [
+        "http://lvh.me:8080/*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "client.secret.creation.time": "1707213807",
+        "post.logout.redirect.uris": "http://lvh.me:8080/*",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "true",
+        "client_credentials.use_refresh_token": "false",
+        "acr.loa.map": "{}",
+        "require.pushed.authorization.requests": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "display.on.consent.screen": "false",
+        "pkce.code.challenge.method": "S256",
+        "token.response.type.bearer.lower-case": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "70c0a174-63f4-4aeb-9149-d33c2ee644e4",
+      "clientId": "5b1af0e1-0dc5-44f6-8b69-13015fd318f5",
+      "name": "coursemology-backend",
+      "description": "",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "/*"
+      ],
+      "webOrigins": [
+        "/*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "oidc.ciba.grant.enabled": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "client.secret.creation.time": "1707274683",
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
     {
       "id": "522f183d-84c0-42ef-a03b-747f60aef23d",
       "clientId": "account",
@@ -616,66 +733,6 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "acr",
-        "roles",
-        "profile",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "offline_access",
-        "microprofile-jwt"
-      ]
-    },
-    {
-      "id": "308875ca-cc1a-4c15-921f-893faa1f1156",
-      "clientId": "coursemology",
-      "name": "",
-      "description": "",
-      "rootUrl": "",
-      "adminUrl": "",
-      "baseUrl": "http://lvh.me:8080/",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "http://lvh.me:8080/"
-      ],
-      "webOrigins": [
-        "http://lvh.me:8080/"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": true,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
-      "publicClient": true,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "post.logout.redirect.uris": "http://lvh.me:8080/",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "backchannel.logout.revoke.offline.tokens": "false",
-        "use.refresh.tokens": "true",
-        "oidc.ciba.grant.enabled": "false",
-        "backchannel.logout.session.required": "true",
-        "client_credentials.use_refresh_token": "false",
-        "acr.loa.map": "{}",
-        "require.pushed.authorization.requests": "false",
-        "tls.client.certificate.bound.access.tokens": "false",
-        "display.on.consent.screen": "false",
-        "pkce.code.challenge.method": "S256",
-        "token.response.type.bearer.lower-case": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -2153,17 +2210,19 @@
   "dockerAuthenticationFlow": "docker auth",
   "attributes": {
     "cibaBackchannelTokenDeliveryMode": "poll",
-    "cibaExpiresIn": "120",
     "cibaAuthRequestedUserHint": "login_hint",
-    "oauth2DeviceCodeLifespan": "600",
     "oauth2DevicePollingInterval": "5",
     "clientOfflineSessionMaxLifespan": "0",
     "clientSessionIdleTimeout": "0",
-    "parRequestUriLifespan": "60",
-    "clientSessionMaxLifespan": "0",
     "clientOfflineSessionIdleTimeout": "0",
     "cibaInterval": "5",
-    "realmReusableOtpCode": "false"
+    "realmReusableOtpCode": "false",
+    "cibaExpiresIn": "120",
+    "oauth2DeviceCodeLifespan": "600",
+    "parRequestUriLifespan": "60",
+    "clientSessionMaxLifespan": "0",
+    "frontendUrl": "",
+    "acr.loa.map": "{}"
   },
   "keycloakVersion": "23.0.6",
   "userManagedAccessAllowed": false,

@@ -1,5 +1,4 @@
 import { defineMessages } from 'react-intl';
-import { useAuth } from 'react-oidc-context';
 import { Button, Typography } from '@mui/material';
 import iconEngaging from 'assets/images/home/icon-engaging.png?url';
 import iconGeneral from 'assets/images/home/icon-general.png?url';
@@ -7,6 +6,7 @@ import iconSimple from 'assets/images/home/icon-simple.png?url';
 
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
+import { useAuthAdapter } from 'lib/components/wrappers/AuthProvider';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
@@ -81,7 +81,7 @@ const keyFeatures = {
 
 const LandingPage = (): JSX.Element => {
   const { t } = useTranslation();
-  const auth = useAuth();
+  const auth = useAuthAdapter();
 
   return (
     <Page unpadded>

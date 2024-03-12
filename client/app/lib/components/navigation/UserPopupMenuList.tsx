@@ -1,10 +1,10 @@
 import { defineMessages } from 'react-intl';
-import { useAuth } from 'react-oidc-context';
 
 import { useAppContext } from 'lib/containers/AppContainer';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import PopupMenu from '../core/PopupMenu';
+import { useAuthAdapter } from '../wrappers/AuthProvider';
 
 const translations = defineMessages({
   accountSettings: {
@@ -27,7 +27,7 @@ const translations = defineMessages({
 
 const UserPopupMenuList = (): JSX.Element | null => {
   const { user } = useAppContext();
-  const auth = useAuth();
+  const auth = useAuthAdapter();
   const { t } = useTranslation();
 
   if (!user) return null;

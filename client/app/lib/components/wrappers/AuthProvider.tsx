@@ -1,6 +1,15 @@
 import { ReactNode } from 'react';
-import { AuthProvider as OIDCAuthProvider } from 'react-oidc-context';
-import { type User, WebStorageStateStore } from 'oidc-client-ts';
+import {
+  type AuthContextProps,
+  AuthProvider as OIDCAuthProvider,
+  useAuth,
+} from 'react-oidc-context';
+import {
+  type SigninRedirectArgs,
+  type SignoutRedirectArgs,
+  type User,
+  WebStorageStateStore,
+} from 'oidc-client-ts';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -38,6 +47,22 @@ const oidcConfig = {
 
 const AuthProvider = (props: AuthProviderProps): JSX.Element => {
   return <OIDCAuthProvider {...oidcConfig}>{props.children}</OIDCAuthProvider>;
+};
+
+export const useAuthAdapter = (): AuthContextProps => {
+  const { signinRedirect, signoutRedirect, ...otherProps } = useAuth();
+
+  const adaptedSignInRedirect = (args?: SigninRedirectArgs): Promise<void> =>
+    signinRedirect({ redirect_uri: window.origin, ...args });
+
+  const adaptedSignOutRedirect = (args?: SignoutRedirectArgs): Promise<void> =>
+    signoutRedirect({ post_logout_redirect_uri: window.origin, ...args });
+
+  return {
+    signinRedirect: adaptedSignInRedirect,
+    signoutRedirect: adaptedSignOutRedirect,
+    ...otherProps,
+  };
 };
 
 export default AuthProvider;

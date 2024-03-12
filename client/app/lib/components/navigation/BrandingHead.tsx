@@ -1,6 +1,5 @@
 import { ComponentRef, ReactNode, useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useAuth } from 'react-oidc-context';
 import { useLocation } from 'react-router-dom';
 import { ChevronRight, KeyboardArrowDown } from '@mui/icons-material';
 import { Avatar, Button, Typography } from '@mui/material';
@@ -9,6 +8,8 @@ import Link from 'lib/components/core/Link';
 import PopupMenu from 'lib/components/core/PopupMenu';
 import { useAppContext } from 'lib/containers/AppContainer';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import { useAuthAdapter } from '../wrappers/AuthProvider';
 
 import AdminPopupMenuList from './AdminPopupMenuList';
 import CourseSwitcherPopupMenu from './CourseSwitcherPopupMenu';
@@ -55,7 +56,7 @@ const Brand = (): JSX.Element => {
 
 const UserMenuButton = (): JSX.Element | null => {
   const { user } = useAppContext();
-  const auth = useAuth();
+  const auth = useAuthAdapter();
 
   const { t } = useTranslation();
 

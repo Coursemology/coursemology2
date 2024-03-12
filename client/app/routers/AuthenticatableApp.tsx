@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
-import { useAuth } from 'react-oidc-context';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { useAuthAdapter } from 'lib/components/wrappers/AuthProvider';
 
 const AuthenticatedApp = lazy(
   () => import(/* webpackChunkName: "AuthenticatedApp" */ './AuthenticatedApp'),
@@ -13,7 +13,7 @@ const UnauthenticatedApp = lazy(
 );
 
 const AuthenticatableApp = (): JSX.Element => {
-  const auth = useAuth();
+  const auth = useAuthAdapter();
 
   if (auth.error) return <div>Something is wrong</div>;
 
