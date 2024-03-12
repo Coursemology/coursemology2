@@ -39,6 +39,7 @@ const adaptPostData = (data: TextResponseData): TextResponsePostData => ({
     staff_only_comments: data.question.staffOnlyComments,
     maximum_grade: data.question.maximumGrade,
     max_attachments: data.question.maxAttachments,
+    max_attachment_size: data.question.maxAttachmentSize,
     is_attachment_required: data.question.isAttachmentRequired,
     hide_text: data.question.hideText,
     question_assessment: { skill_ids: data.question.skillIds },

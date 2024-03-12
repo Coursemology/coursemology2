@@ -9,6 +9,7 @@ import getIndexAndKeyPath from '../../commons/utils';
 import { commonQuestionFieldsValidation } from '../../components/CommonQuestionFields';
 
 const MAX_ATTACHMENT_UPPER_LIMIT = 50;
+const MAX_ATTACHMENT_SIZE_UPPER_LIMIT = 1024;
 
 export const questionSchema = commonQuestionFieldsValidation.shape({
   attachmentType: string()
@@ -28,6 +29,7 @@ export const questionSchema = commonQuestionFieldsValidation.shape({
       )
       .typeError(translations.mustSpecifyMaxAttachment),
   }),
+  maxAttachmentSize: number().min(0).max(MAX_ATTACHMENT_SIZE_UPPER_LIMIT),
   isAttachmentRequired: bool(),
 });
 

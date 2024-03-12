@@ -17,6 +17,7 @@ import { questionSchema, validateSolutions } from '../commons/validations';
 import {
   getAttachmentTypeFromMaxAttachment,
   getMaxAttachmentFromAttachmentType,
+  getMaxAttachmentSize,
 } from '../utils';
 
 import FileUploadManager from './FileUploadManager';
@@ -83,6 +84,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
             ? false
             : question.isAttachmentRequired,
         maxAttachments: getMaxAttachmentFromAttachmentType(question),
+        maxAttachmentSize: getMaxAttachmentSize(question),
       },
       solutions,
     };
