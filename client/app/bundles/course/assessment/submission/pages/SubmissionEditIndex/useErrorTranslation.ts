@@ -6,7 +6,12 @@ import { ErrorType } from './validations/types';
 
 export const ErrorTranslation = {
   [ErrorType.AttachmentRequired]: translations.attachmentRequired,
-  [ErrorType.AtMostOneAttachmentAllowed]: translations.onlyOneAttachmentAllowed,
+};
+
+const isSomeErrorTypeInvalid = (errorTypes: ErrorType[]): boolean => {
+  return errorTypes.some(
+    (errorType) => !Object.values(ErrorType).includes(errorType),
+  );
 };
 
 const useErrorTranslation = (errorTypes: ErrorType[]): string[] => {
@@ -15,12 +20,8 @@ const useErrorTranslation = (errorTypes: ErrorType[]): string[] => {
     return [];
   }
 
-  if (
-    errorTypes.some(
-      (errorType) => !Object.values(ErrorType).includes(errorType),
-    )
-  ) {
-    throw new Error('Error is invalid');
+  if (isSomeErrorTypeInvalid(errorTypes)) {
+    throw new Error('ErrorType is invalid');
   }
 
   return errorTypes.map((errorType) => t(ErrorTranslation[errorType]));

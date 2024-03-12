@@ -1,5 +1,4 @@
 import { QuestionType } from '../../question';
-import { AttachmentType } from '../../question/text-responses';
 
 interface QuestionData {
   id: number;
@@ -24,7 +23,6 @@ interface ProgrammingQuestionData {
 interface TextResponseParentQuestionData {}
 
 interface TextResponseQuestionData extends TextResponseParentQuestionData {
-  attachmentType: AttachmentType;
   maxAttachments: number;
   isAttachmentRequired: boolean;
   solutions?: {
@@ -36,7 +34,6 @@ interface TextResponseQuestionData extends TextResponseParentQuestionData {
 }
 
 interface FileUploadQuestionData extends TextResponseParentQuestionData {
-  attachmentType: AttachmentType;
   maxAttachments: number;
   isAttachmentRequired: boolean;
 }
