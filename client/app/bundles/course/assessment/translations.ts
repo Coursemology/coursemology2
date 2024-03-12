@@ -458,6 +458,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.maxAttachment',
     defaultMessage: 'Max Number of Attachments',
   },
+  maxAttachmentSize: {
+    id: 'course.assessment.question.textResponses.maxAttachmentSize',
+    defaultMessage: 'Max Attachment Size (in MB)',
+  },
   comprehension: {
     id: 'course.assessment.show.comprehension',
     defaultMessage: 'Comprehension',
