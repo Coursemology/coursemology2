@@ -7,6 +7,8 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
 
+  DEFAULT_MAX_ATTACHMENT_SIZE = 1024
+
   def new
     if params[:file_upload] == 'true'
       @text_response_question.hide_text = true
@@ -64,7 +66,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   def text_response_question_params
     permitted_params = [
       :title, :description, :staff_only_comments, :maximum_grade, :max_attachments,
-      :hide_text, :is_comprehension, :is_attachment_required,
+      :hide_text, :is_comprehension, :is_attachment_required, :max_attachment_size,
       question_assessment: { skill_ids: [] }
     ]
     if params[:question_text_response][:is_comprehension] == 'true'
