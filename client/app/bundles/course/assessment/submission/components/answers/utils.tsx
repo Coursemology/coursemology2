@@ -1,41 +1,46 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 const translations = defineMessages({
-  onlyOneFileUploadAllowed: {
+  requiredUploadLimitedNumberOfFiles: {
+    id: 'course.assessment.submission.FileInput.requiredUploadLimitedNumberOfFiles',
+    defaultMessage:
+      '*You can upload AT LEAST 1 and AT MOST {maxAttachments} files for this question',
+  },
+  limitedNumberOfFileUploadAllowed: {
     id: 'course.assessment.submission.FileInput.onlyOneFileUploadAllowed',
-    defaultMessage: '*You can only upload AT MOST 1 file for this question',
+    defaultMessage:
+      '*You can only upload AT MOST {maxAttachment} file for this question',
   },
   exactlyOneFileUploadAllowed: {
     id: 'course.assessment.submission.FileInput.exactlyOneFileUploadAllowed',
     defaultMessage: '*You must upload EXACTLY 1 file for this question',
   },
-  atLeastOneFileUploadAllowed: {
-    id: 'course.assessment.submission.FileInput.atLeastOneFileUploadAllowed',
-    defaultMessage: '*You must upload AT LEAST 1 file for this question',
-  },
 });
 
 export const attachmentRequirementMessage = (
-  attachmentType: AttachmentType,
+  maxAttachments: number,
   isAttachmentRequired: boolean,
 ): JSX.Element | null => {
-  if (
-    attachmentType === AttachmentType.SINGLE_FILE_ATTACHMENT &&
-    isAttachmentRequired
-  ) {
+  if (maxAttachments > 1 && isAttachmentRequired) {
+    return (
+      <FormattedMessage
+        {...translations.requiredUploadLimitedNumberOfFiles}
+        values={{ maxAttachments }}
+      />
+    );
+  }
+
+  if (maxAttachments === 1 && isAttachmentRequired) {
     return <FormattedMessage {...translations.exactlyOneFileUploadAllowed} />;
   }
 
-  if (
-    attachmentType === AttachmentType.SINGLE_FILE_ATTACHMENT &&
-    !isAttachmentRequired
-  ) {
-    return <FormattedMessage {...translations.onlyOneFileUploadAllowed} />;
-  }
-
-  if (isAttachmentRequired) {
-    return <FormattedMessage {...translations.atLeastOneFileUploadAllowed} />;
+  if (!isAttachmentRequired) {
+    return (
+      <FormattedMessage
+        {...translations.limitedNumberOfFileUploadAllowed}
+        values={{ maxAttachments }}
+      />
+    );
   }
 
   return null;

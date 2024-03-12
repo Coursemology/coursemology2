@@ -2,7 +2,6 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import { useAppSelector } from 'lib/hooks/store';
@@ -29,9 +28,8 @@ const TextResponse = (props) => {
     getIsSavingAnswer(state, answerId),
   );
   const disableField = readOnly || isSaving;
-  const { attachmentType, isAttachmentRequired } = question;
-  const allowUpload = attachmentType !== AttachmentType.NO_ATTACHMENT;
-  const isAttachmentExists = numAttachments > 0;
+  const { maxAttachments, isAttachmentRequired } = question;
+  const allowUpload = maxAttachments !== 0;
 
   const readOnlyAnswer = (
     <Controller
@@ -96,10 +94,8 @@ const TextResponse = (props) => {
     ? plaintextAnswer
     : richtextAnswer;
 
-  const isMultipleAttachmentsAllowed =
-    attachmentType === AttachmentType.MULTIPLE_FILE_ATTACHMENT;
-  const isFileUploadStillAllowed =
-    isMultipleAttachmentsAllowed || !isAttachmentExists;
+  const isMultipleAttachmentsAllowed = maxAttachments - numAttachments > 1;
+  const isFileUploadStillAllowed = maxAttachments > numAttachments;
 
   return (
     <div>
@@ -112,13 +108,15 @@ const TextResponse = (props) => {
         <FileInputField
           disabled={disableField || !isFileUploadStillAllowed}
           isMultipleAttachmentsAllowed={isMultipleAttachmentsAllowed}
+          maxAttachmentsAllowed={maxAttachments - numAttachments}
           name={`${answerId}.files`}
+          numAttachments={numAttachments}
           onChangeCallback={() => handleUploadTextResponseFiles(answerId)}
         />
       )}
       {allowUpload && (
         <Typography variant="body2">
-          {attachmentRequirementMessage(attachmentType, isAttachmentRequired)}
+          {attachmentRequirementMessage(maxAttachments, isAttachmentRequired)}
         </Typography>
       )}
     </div>

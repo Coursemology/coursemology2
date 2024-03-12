@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import { AttachmentType } from 'types/course/assessment/question/text-responses';
 
 import { useAppSelector } from 'lib/hooks/store';
 
@@ -22,12 +21,9 @@ const FileUpload = ({
     getIsSavingAnswer(state, answerId),
   );
   const disableField = readOnly || isSaving;
-  const { attachmentType, isAttachmentRequired } = question;
-  const isAttachmentExists = numAttachments > 0;
-  const isMultipleAttachmentsAllowed =
-    attachmentType === AttachmentType.MULTIPLE_FILE_ATTACHMENT;
-  const isFileUploadStillAllowed =
-    isMultipleAttachmentsAllowed || !isAttachmentExists;
+  const { maxAttachments, isAttachmentRequired } = question;
+  const isMultipleAttachmentsAllowed = maxAttachments - numAttachments > 1;
+  const isFileUploadStillAllowed = maxAttachments > numAttachments;
 
   return (
     <div>
@@ -36,12 +32,14 @@ const FileUpload = ({
         <FileInputField
           disabled={disableField || !isFileUploadStillAllowed}
           isMultipleAttachmentsAllowed={isMultipleAttachmentsAllowed}
+          maxAttachmentsAllowed={maxAttachments - numAttachments}
           name={`${answerId}.files`}
+          numAttachments={numAttachments}
           onChangeCallback={() => handleUploadTextResponseFiles(answerId)}
         />
       )}
       <Typography variant="body2">
-        {attachmentRequirementMessage(attachmentType, isAttachmentRequired)}
+        {attachmentRequirementMessage(maxAttachments, isAttachmentRequired)}
       </Typography>
     </div>
   );
