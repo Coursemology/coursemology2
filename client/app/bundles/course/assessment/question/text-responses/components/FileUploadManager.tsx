@@ -55,20 +55,39 @@ const FileUploadManager = (props: Props): JSX.Element => {
       />
 
       {watch('attachmentType') !== AttachmentType.NO_ATTACHMENT && (
-        <div className="mt-5">
-          <Controller
-            control={control}
-            name="isAttachmentRequired"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormCheckboxField
-                disabled={disabled}
-                field={field}
-                fieldState={fieldState}
-                label={t(translations.isAttachmentRequired)}
-              />
-            )}
-          />
-        </div>
+        <>
+          <div className="mt-5">
+            <Controller
+              control={control}
+              name="isAttachmentRequired"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  disabled={disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.isAttachmentRequired)}
+                />
+              )}
+            />
+          </div>
+          <div className="mt-5">
+            <Controller
+              control={control}
+              name="maxAttachmentSize"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  className="w-1/2"
+                  disabled={disabled}
+                  disableMargins
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.maxAttachmentSize)}
+                  variant="filled"
+                />
+              )}
+            />
+          </div>
+        </>
       )}
 
       {watch('attachmentType') === AttachmentType.MULTIPLE_FILE_ATTACHMENTS && (

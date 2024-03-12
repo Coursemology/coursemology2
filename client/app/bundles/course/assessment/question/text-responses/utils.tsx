@@ -30,3 +30,13 @@ export const getMaxAttachmentFromAttachmentType = (
 
   return question.maxAttachments;
 };
+
+export const getMaxAttachmentSize = (
+  question: TextResponseQuestionFormData,
+): number | null => {
+  if (question.attachmentType === AttachmentType.NO_ATTACHMENT) {
+    return null;
+  }
+
+  return question.maxAttachmentSize;
+};

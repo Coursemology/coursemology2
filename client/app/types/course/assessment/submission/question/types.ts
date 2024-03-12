@@ -22,9 +22,13 @@ interface ProgrammingQuestionData {
 
 interface TextResponseParentQuestionData {}
 
-interface TextResponseQuestionData extends TextResponseParentQuestionData {
+interface TextResponseAttachmentData extends TextResponseParentQuestionData {
   maxAttachments: number;
+  maxAttachmentSize: number | null;
   isAttachmentRequired: boolean;
+}
+
+interface TextResponseQuestionData extends TextResponseAttachmentData {
   solutions?: {
     id: number;
     solutionType: 'exact_match' | 'keyword';
@@ -33,10 +37,7 @@ interface TextResponseQuestionData extends TextResponseParentQuestionData {
   };
 }
 
-interface FileUploadQuestionData extends TextResponseParentQuestionData {
-  maxAttachments: number;
-  isAttachmentRequired: boolean;
-}
+interface FileUploadQuestionData extends TextResponseAttachmentData {}
 
 interface ComprehensionQuestionData extends TextResponseParentQuestionData {
   groups?: {
