@@ -25,7 +25,9 @@ const translations = defineMessages({
   fileUploadErrorMessage: {
     id: 'course.assessment.submission.FileInput.fileUploadErrorMessage',
     defaultMessage:
-      'You have attempted to upload {numFiles} files, but only 1 file can be uploaded',
+      'You have attempted to upload {numFiles} files, but ONLY {maxAttachments} \
+      {maxAttachments, plural, one {file} other {files}} can be uploaded since {numAttachments} \
+      {maxAttachments, plural, one {file} other {files}} has been uploaded before',
   },
 });
 
@@ -80,12 +82,9 @@ class FileInput extends Component {
   }
 
   onDropRejected(filesRejected) {
-    const { isMultipleAttachmentsAllowed } = this.props;
-    if (!isMultipleAttachmentsAllowed && filesRejected.length > 1) {
-      this.setState({
-        numFilesRejected: filesRejected.length,
-      });
-    }
+    this.setState({
+      numFilesRejected: filesRejected.length,
+    });
   }
 
   displayFileNames(files) {
@@ -126,6 +125,8 @@ class FileInput extends Component {
       fieldState: { error },
       field: { value },
       isMultipleAttachmentsAllowed,
+      maxAttachmentsAllowed,
+      numAttachments,
     } = this.props;
     const { numFilesRejected } = this.state;
 
@@ -133,6 +134,7 @@ class FileInput extends Component {
       <div>
         <Dropzone
           disabled={disabled}
+          maxFiles={maxAttachmentsAllowed ?? 0}
           multiple={isMultipleAttachmentsAllowed}
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
@@ -162,7 +164,11 @@ class FileInput extends Component {
           <PromptText>
             <FormattedMessage
               {...translations.fileUploadErrorMessage}
-              values={{ numFiles: numFilesRejected }}
+              values={{
+                maxAttachments: maxAttachmentsAllowed,
+                numFiles: numFilesRejected,
+                numAttachments,
+              }}
             />
           </PromptText>
         </Prompt>
@@ -176,6 +182,8 @@ class FileInput extends Component {
 FileInput.propTypes = {
   disabled: PropTypes.bool,
   isMultipleAttachmentsAllowed: PropTypes.bool,
+  maxAttachmentsAllowed: PropTypes.number,
+  numAttachments: PropTypes.number,
   fieldState: PropTypes.shape({
     error: PropTypes.bool,
   }).isRequired,
@@ -195,7 +203,9 @@ const FileInputField = (props) => {
   const {
     disabled,
     isMultipleAttachmentsAllowed,
+    maxAttachmentsAllowed,
     name,
+    numAttachments,
     onChangeCallback,
     onDropCallback,
   } = props;
@@ -219,6 +229,8 @@ const FileInputField = (props) => {
           }}
           fieldState={fieldState}
           isMultipleAttachmentsAllowed={isMultipleAttachmentsAllowed}
+          maxAttachmentsAllowed={maxAttachmentsAllowed}
+          numAttachments={numAttachments}
           onDropCallback={onDropCallback}
         />
       )}
@@ -229,6 +241,8 @@ const FileInputField = (props) => {
 FileInputField.propTypes = {
   name: PropTypes.string.isRequired,
   isMultipleAttachmentsAllowed: PropTypes.bool,
+  maxAttachmentsAllowed: PropTypes.number,
+  numAttachments: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
   onChangeCallback: PropTypes.func,
   onDropCallback: PropTypes.func,
