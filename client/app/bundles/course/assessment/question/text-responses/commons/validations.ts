@@ -29,7 +29,18 @@ export const questionSchema = commonQuestionFieldsValidation.shape({
       )
       .typeError(translations.mustSpecifyMaxAttachment),
   }),
-  maxAttachmentSize: number().min(0).max(MAX_ATTACHMENT_SIZE_UPPER_LIMIT),
+  maxAttachmentSize: number().when('attachmentType', {
+    is: AttachmentType.NO_ATTACHMENT,
+    then: number(),
+    otherwise: number()
+      .required()
+      .min(1, translations.mustSpecifyPositiveMaxAttachmentSize)
+      .max(
+        MAX_ATTACHMENT_SIZE_UPPER_LIMIT,
+        translations.mustBeLessThanMaxAttachmentSize,
+      )
+      .typeError(translations.mustSpecifyMaxAttachmentSize),
+  }),
   isAttachmentRequired: bool(),
 });
 

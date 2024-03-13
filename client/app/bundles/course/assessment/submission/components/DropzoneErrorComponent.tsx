@@ -15,7 +15,7 @@ const translations = defineMessages({
   fileTooLargeErrorMessage: {
     id: 'course.assessment.submission.FileInput.fileTooLargeErrorMessage',
     defaultMessage:
-      'The following files have size larger than allowed ({maxAttachmentSize} MiB)',
+      'The following files have size larger than allowed ({maxAttachmentSize} MB)',
   },
   fileName: {
     id: 'course.assessment.submission.FileInput.fileName',
