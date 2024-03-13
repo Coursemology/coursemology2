@@ -14,6 +14,8 @@ export const questionTypes = mirrorCreator([
   'ForumPostResponse',
 ]);
 
+export const MEGABYTES_TO_BYTES = 1024 * 1024;
+
 export const workflowStates = {
   Unstarted: 'unstarted',
   Attempting: 'attempting',
