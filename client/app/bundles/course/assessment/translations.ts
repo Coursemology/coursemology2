@@ -460,7 +460,7 @@ const translations = defineMessages({
   },
   maxAttachmentSize: {
     id: 'course.assessment.question.textResponses.maxAttachmentSize',
-    defaultMessage: 'Max Attachment Size (in MB)',
+    defaultMessage: 'Max Size per Attachment',
   },
   comprehension: {
     id: 'course.assessment.show.comprehension',
@@ -781,7 +781,7 @@ const translations = defineMessages({
   },
   mustSpecifyPositiveMaxAttachmentSize: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachmentSize',
-    defaultMessage: 'Max Attachment Size has to be positive.',
+    defaultMessage: 'Max Size has to be positive.',
   },
   mustBeLessThanMaxMaximumGrade: {
     id: 'course.assessment.question.multipleResponses.mustBeLessThanMaxMaximumGrade',
