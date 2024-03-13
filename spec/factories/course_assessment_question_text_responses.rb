@@ -4,6 +4,7 @@ FactoryBot.define do
           class: Course::Assessment::Question::TextResponse,
           parent: :course_assessment_question do
     max_attachments { 0 }
+    max_attachment_size { 1024 }
     is_attachment_required { false }
     hide_text { false }
     is_comprehension { false }
