@@ -26,7 +26,7 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
       subject do
         question_text_response_attributes =
           attributes_for(:course_assessment_question_text_response).
-          slice(:description, :maximum_grade)
+          slice(:description, :maximum_grade, :max_attachments)
         post :create, params: {
           course_id: course, assessment_id: assessment,
           question_text_response: question_text_response_attributes
