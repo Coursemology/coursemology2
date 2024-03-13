@@ -766,6 +766,11 @@ const translations = defineMessages({
     defaultMessage:
       'You must specify a valid, positive maximum attachment number to be set.',
   },
+  mustSpecifyMaxAttachmentSize: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyMaxAttachmentSize',
+    defaultMessage:
+      'You must specify a valid, positive maximum attachment size to be set.',
+  },
   mustSpecifyPositiveMaximumGrade: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade',
     defaultMessage: 'Maximum grade has to be non-negative.',
@@ -774,6 +779,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachment',
     defaultMessage: 'Maximum Number of Attachments has to be positive.',
   },
+  mustSpecifyPositiveMaxAttachmentSize: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachmentSize',
+    defaultMessage: 'Max Attachment Size has to be positive.',
+  },
   mustBeLessThanMaxMaximumGrade: {
     id: 'course.assessment.question.multipleResponses.mustBeLessThanMaxMaximumGrade',
     defaultMessage: 'Must be less than 1000.',
@@ -781,6 +790,10 @@ const translations = defineMessages({
   mustBeLessThanMaxAttachments: {
     id: 'course.assessment.question.multipleResponses.mustBeLessThanMaxAttachments',
     defaultMessage: 'Must be at most 50.',
+  },
+  mustBeLessThanMaxAttachmentSize: {
+    id: 'course.assessment.question.multipleResponses.mustBeLessThanMaxAttachmentSize',
+    defaultMessage: 'Must be at most 1024MB.',
   },
   mustSpecifyResponse: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyResponse',
