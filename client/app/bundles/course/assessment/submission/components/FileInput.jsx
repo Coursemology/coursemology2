@@ -6,8 +6,16 @@ import FileUpload from '@mui/icons-material/FileUpload';
 import { Card, CardContent, Chip, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import formTranslations from 'lib/translations/form';
+
+import { MEGABYTES_TO_BYTES } from '../constants';
+
+import {
+  ErrorCodes,
+  FileTooLargeErrorPromptContent,
+  TooManyFilesErrorPromptContent,
+} from './DropzoneErrorComponent';
 
 const translations = defineMessages({
   uploadDisabled: {
@@ -21,13 +29,6 @@ const translations = defineMessages({
   fileUploadErrorTitle: {
     id: 'course.assessment.submission.FileInput.fileUploadErrorTitle',
     defaultMessage: 'Error in Uploading Files',
-  },
-  fileUploadErrorMessage: {
-    id: 'course.assessment.submission.FileInput.fileUploadErrorMessage',
-    defaultMessage:
-      'You have attempted to upload {numFiles} files, but ONLY {maxAttachments} \
-      {maxAttachments, plural, one {file} other {files}} can be uploaded since {numAttachments} \
-      {maxAttachments, plural, one {file} other {files}} has been uploaded before',
   },
 });
 
@@ -50,12 +51,17 @@ const styles = {
   },
 };
 
+const isFileTooLarge = (file) =>
+  file.errors.some((error) => error.code === ErrorCodes.FileTooLarge);
+
+const initialErrorState = { 'file-too-large': [], 'too-many-files': 0 };
+
 class FileInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dropzoneActive: false,
-      numFilesRejected: 0,
+      errors: initialErrorState,
     };
   }
 
@@ -82,9 +88,27 @@ class FileInput extends Component {
   }
 
   onDropRejected(filesRejected) {
+    const { maxAttachmentsAllowed } = this.props;
+    const tooLargeFiles = filesRejected
+      .filter((file) => isFileTooLarge(file))
+      .map((file) => file.file.name);
     this.setState({
-      numFilesRejected: filesRejected.length,
+      errors: {
+        [ErrorCodes.FileTooLarge]: tooLargeFiles,
+        [ErrorCodes.TooManyFiles]:
+          filesRejected.length > maxAttachmentsAllowed
+            ? filesRejected.length
+            : 0,
+      },
     });
+  }
+
+  errorExists() {
+    const { errors } = this.state;
+    return (
+      errors[ErrorCodes.FileTooLarge].length > 0 ||
+      errors[ErrorCodes.TooManyFiles] > 0
+    );
   }
 
   displayFileNames(files) {
@@ -126,15 +150,17 @@ class FileInput extends Component {
       field: { value },
       isMultipleAttachmentsAllowed,
       maxAttachmentsAllowed,
+      maxAttachmentSize,
       numAttachments,
     } = this.props;
-    const { numFilesRejected } = this.state;
+    const { errors } = this.state;
 
     return (
       <div>
         <Dropzone
           disabled={disabled}
           maxFiles={maxAttachmentsAllowed ?? 0}
+          maxSize={maxAttachmentSize * MEGABYTES_TO_BYTES}
           multiple={isMultipleAttachmentsAllowed}
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
@@ -157,20 +183,24 @@ class FileInput extends Component {
         </Dropzone>
         <Prompt
           cancelLabel={<FormattedMessage {...formTranslations.close} />}
-          onClose={() => this.setState({ numFilesRejected: 0 })}
-          open={numFilesRejected > 0}
+          onClose={() => this.setState({ errors: initialErrorState })}
+          open={this.errorExists()}
           title={<FormattedMessage {...translations.fileUploadErrorTitle} />}
         >
-          <PromptText>
-            <FormattedMessage
-              {...translations.fileUploadErrorMessage}
-              values={{
-                maxAttachments: maxAttachmentsAllowed,
-                numFiles: numFilesRejected,
-                numAttachments,
-              }}
+          {errors[ErrorCodes.TooManyFiles] > 0 && (
+            <TooManyFilesErrorPromptContent
+              maxAttachmentsAllowed={maxAttachmentsAllowed}
+              needBottomMargin={errors[ErrorCodes.FileTooLarge].length > 0}
+              numAttachments={numAttachments}
+              numFiles={errors[ErrorCodes.TooManyFiles]}
             />
-          </PromptText>
+          )}
+          {errors[ErrorCodes.FileTooLarge].length > 0 && (
+            <FileTooLargeErrorPromptContent
+              maxAttachmentSize={maxAttachmentSize}
+              tooLargeFiles={errors[ErrorCodes.FileTooLarge]}
+            />
+          )}
         </Prompt>
 
         {error || ''}
@@ -183,6 +213,7 @@ FileInput.propTypes = {
   disabled: PropTypes.bool,
   isMultipleAttachmentsAllowed: PropTypes.bool,
   maxAttachmentsAllowed: PropTypes.number,
+  maxAttachmentSize: PropTypes.number,
   numAttachments: PropTypes.number,
   fieldState: PropTypes.shape({
     error: PropTypes.bool,
@@ -204,6 +235,7 @@ const FileInputField = (props) => {
     disabled,
     isMultipleAttachmentsAllowed,
     maxAttachmentsAllowed,
+    maxAttachmentSize,
     name,
     numAttachments,
     onChangeCallback,
@@ -230,6 +262,7 @@ const FileInputField = (props) => {
           fieldState={fieldState}
           isMultipleAttachmentsAllowed={isMultipleAttachmentsAllowed}
           maxAttachmentsAllowed={maxAttachmentsAllowed}
+          maxAttachmentSize={maxAttachmentSize}
           numAttachments={numAttachments}
           onDropCallback={onDropCallback}
         />
@@ -242,6 +275,7 @@ FileInputField.propTypes = {
   name: PropTypes.string.isRequired,
   isMultipleAttachmentsAllowed: PropTypes.bool,
   maxAttachmentsAllowed: PropTypes.number,
+  maxAttachmentSize: PropTypes.number,
   numAttachments: PropTypes.number,
   disabled: PropTypes.bool.isRequired,
   onChangeCallback: PropTypes.func,
