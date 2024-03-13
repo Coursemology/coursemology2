@@ -757,13 +757,26 @@ const translations = defineMessages({
     defaultMessage:
       'You must specify a valid, non-negative maximum grade to award.',
   },
+  mustSpecifyMaxAttachment: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyMaxAttachment',
+    defaultMessage:
+      'You must specify a valid, positive maximum attachment number to be set.',
+  },
   mustSpecifyPositiveMaximumGrade: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade',
     defaultMessage: 'Maximum grade has to be non-negative.',
   },
+  mustSpecifyPositiveMaxAttachment: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachment',
+    defaultMessage: 'Maximum Number of Attachments has to be positive.',
+  },
   mustBeLessThanMaxMaximumGrade: {
     id: 'course.assessment.question.multipleResponses.mustBeLessThanMaxMaximumGrade',
     defaultMessage: 'Must be less than 1000.',
+  },
+  mustBeLessThanMaxAttachments: {
+    id: 'course.assessment.question.multipleResponses.mustBeLessThanMaxAttachments',
+    defaultMessage: 'Must be at most 50.',
   },
   mustSpecifyResponse: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyResponse',
