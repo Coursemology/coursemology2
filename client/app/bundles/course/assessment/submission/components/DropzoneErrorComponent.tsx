@@ -30,7 +30,6 @@ export const ErrorCodes = {
 
 interface TooManyFilesPrompt {
   maxAttachmentsAllowed: number;
-  needBottomMargin: boolean;
   numAttachments: number;
   numFiles: number;
 }
@@ -38,10 +37,9 @@ interface TooManyFilesPrompt {
 export const TooManyFilesErrorPromptContent: FC<TooManyFilesPrompt> = (
   props,
 ) => {
-  const { maxAttachmentsAllowed, needBottomMargin, numAttachments, numFiles } =
-    props;
+  const { maxAttachmentsAllowed, numAttachments, numFiles } = props;
   return (
-    <PromptText className={`${needBottomMargin ? 'mb-4' : ''}`}>
+    <PromptText>
       <FormattedMessage
         {...translations.tooManyFilesErrorMessage}
         values={{

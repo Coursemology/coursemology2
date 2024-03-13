@@ -19,7 +19,7 @@ export const questionSchema = commonQuestionFieldsValidation.shape({
     )
     .required(translations.attachmentSettingRequired),
   maxAttachments: number().when('attachmentType', {
-    is: AttachmentType.MULTIPLE_FILE_ATTACHMENTS,
+    is: AttachmentType.MULTIPLE_ATTACHMENT,
     then: number()
       .required()
       .min(1, translations.mustSpecifyPositiveMaxAttachment)

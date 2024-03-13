@@ -54,7 +54,10 @@ const styles = {
 const isFileTooLarge = (file) =>
   file.errors.some((error) => error.code === ErrorCodes.FileTooLarge);
 
-const initialErrorState = { 'file-too-large': [], 'too-many-files': 0 };
+const initialErrorState = {
+  [ErrorCodes.FileTooLarge]: [],
+  [ErrorCodes.TooManyFiles]: 0,
+};
 
 class FileInput extends Component {
   constructor(props) {
@@ -159,6 +162,8 @@ class FileInput extends Component {
       <div>
         <Dropzone
           disabled={disabled}
+          // 0 means no limit to the maxFiles
+          // ref: https://github.com/react-dropzone/react-dropzone/blob/master/examples/maxFiles/README.md
           maxFiles={maxAttachmentsAllowed ?? 0}
           maxSize={maxAttachmentSize * MEGABYTES_TO_BYTES}
           multiple={isMultipleAttachmentsAllowed}
@@ -187,20 +192,21 @@ class FileInput extends Component {
           open={this.errorExists()}
           title={<FormattedMessage {...translations.fileUploadErrorTitle} />}
         >
-          {errors[ErrorCodes.TooManyFiles] > 0 && (
-            <TooManyFilesErrorPromptContent
-              maxAttachmentsAllowed={maxAttachmentsAllowed}
-              needBottomMargin={errors[ErrorCodes.FileTooLarge].length > 0}
-              numAttachments={numAttachments}
-              numFiles={errors[ErrorCodes.TooManyFiles]}
-            />
-          )}
-          {errors[ErrorCodes.FileTooLarge].length > 0 && (
-            <FileTooLargeErrorPromptContent
-              maxAttachmentSize={maxAttachmentSize}
-              tooLargeFiles={errors[ErrorCodes.FileTooLarge]}
-            />
-          )}
+          <div className="space-y-4">
+            {errors[ErrorCodes.TooManyFiles] > 0 && (
+              <TooManyFilesErrorPromptContent
+                maxAttachmentsAllowed={maxAttachmentsAllowed}
+                numAttachments={numAttachments}
+                numFiles={errors[ErrorCodes.TooManyFiles]}
+              />
+            )}
+            {errors[ErrorCodes.FileTooLarge].length > 0 && (
+              <FileTooLargeErrorPromptContent
+                maxAttachmentSize={maxAttachmentSize}
+                tooLargeFiles={errors[ErrorCodes.FileTooLarge]}
+              />
+            )}
+          </div>
         </Prompt>
 
         {error || ''}
