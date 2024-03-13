@@ -41,14 +41,14 @@ const FileUploadManager = (props: Props): JSX.Element => {
             <RadioButton
               description={t(translations.singleFileAttachmentDescription)}
               disabled={disabled}
-              label={t(translations.singleFileAttachment)}
-              value="single_file_attachment"
+              label={t(translations.singleAttachment)}
+              value="single_attachment"
             />
             <RadioButton
               description={t(translations.multipleFileAttachmentDescription)}
               disabled={disabled}
-              label={t(translations.multipleFileAttachment)}
-              value="multiple_file_attachments"
+              label={t(translations.multipleAttachment)}
+              value="multiple_attachment"
             />
           </RadioGroup>
         )}
@@ -90,7 +90,7 @@ const FileUploadManager = (props: Props): JSX.Element => {
         </>
       )}
 
-      {watch('attachmentType') === AttachmentType.MULTIPLE_FILE_ATTACHMENTS && (
+      {watch('attachmentType') === AttachmentType.MULTIPLE_ATTACHMENT && (
         <div className="mt-5">
           <Controller
             control={control}
@@ -103,7 +103,6 @@ const FileUploadManager = (props: Props): JSX.Element => {
                 field={field}
                 fieldState={fieldState}
                 label={t(translations.maxAttachment)}
-                type="number"
                 variant="filled"
               />
             )}

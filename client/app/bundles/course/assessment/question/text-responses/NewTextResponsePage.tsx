@@ -35,7 +35,7 @@ const NEW_TEXT_RESPONSE_VALUE = {
 const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: true,
-  attachmentType: AttachmentType.SINGLE_FILE_ATTACHMENT,
+  attachmentType: AttachmentType.SINGLE_ATTACHMENT,
   maxAttachments: INITIAL_MAX_ATTACHMENTS,
   maxAttachmentSize: INITIAL_MAX_ATTACHMENT_SIZE,
   isAttachmentRequired: true,

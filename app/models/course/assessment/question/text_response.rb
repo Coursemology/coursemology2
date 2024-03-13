@@ -2,13 +2,13 @@
 class Course::Assessment::Question::TextResponse < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
 
-  DEFAULT_MAX_ATTACHMENT_SIZE = 1024
+  DEFAULT_MAX_ATTACHMENT_SIZE_MB = 1024
 
   validates :max_attachments, numericality: { only_integer: true, greater_than_or_equal_to: 1,
                                               less_than_or_equal_to: 50 },
                               presence: true
   validates :max_attachment_size, numericality: { only_integer: true, greater_than_or_equal_to: 1,
-                                                  less_than_or_equal_to: DEFAULT_MAX_ATTACHMENT_SIZE },
+                                                  less_than_or_equal_to: DEFAULT_MAX_ATTACHMENT_SIZE_MB },
                                   presence: true
   validate :max_attachment_size_defined_if_max_attachments_is_nonzero
   validate :validate_grade
