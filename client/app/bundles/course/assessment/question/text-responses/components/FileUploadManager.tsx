@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import { RadioGroup } from '@mui/material';
+import { InputAdornment, RadioGroup } from '@mui/material';
 import {
   AttachmentType,
   TextResponseQuestionFormData,
@@ -81,6 +81,13 @@ const FileUploadManager = (props: Props): JSX.Element => {
                   disableMargins
                   field={field}
                   fieldState={fieldState}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {t(translations.megabytes)}
+                      </InputAdornment>
+                    ),
+                  }}
                   label={t(translations.maxAttachmentSize)}
                   variant="filled"
                 />
