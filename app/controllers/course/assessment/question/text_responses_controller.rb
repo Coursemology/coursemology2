@@ -7,8 +7,6 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
 
-  DEFAULT_MAX_ATTACHMENT_SIZE = 1024
-
   def new
     if params[:file_upload] == 'true'
       @text_response_question.hide_text = true

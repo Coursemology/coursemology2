@@ -4,17 +4,17 @@ import {
 } from 'types/course/assessment/question/text-responses';
 
 export const getAttachmentTypeFromMaxAttachment = (
-  maxAttachment: number | undefined,
+  maxAttachments: number | undefined,
 ): AttachmentType => {
-  if (!maxAttachment || maxAttachment === 0) {
+  if (!maxAttachments || maxAttachments === 0) {
     return AttachmentType.NO_ATTACHMENT;
   }
 
-  if (maxAttachment === 1) {
-    return AttachmentType.SINGLE_FILE_ATTACHMENT;
+  if (maxAttachments === 1) {
+    return AttachmentType.SINGLE_ATTACHMENT;
   }
 
-  return AttachmentType.MULTIPLE_FILE_ATTACHMENTS;
+  return AttachmentType.MULTIPLE_ATTACHMENT;
 };
 
 export const getMaxAttachmentFromAttachmentType = (
@@ -24,7 +24,7 @@ export const getMaxAttachmentFromAttachmentType = (
     return 0;
   }
 
-  if (question.attachmentType === AttachmentType.SINGLE_FILE_ATTACHMENT) {
+  if (question.attachmentType === AttachmentType.SINGLE_ATTACHMENT) {
     return 1;
   }
 

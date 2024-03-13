@@ -434,7 +434,7 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.noAttachmentDescription',
     defaultMessage: 'They will not be able to upload any attachment.',
   },
-  singleFileAttachment: {
+  singleAttachment: {
     id: 'course.assessment.question.textResponses.singleFileAttachment',
     defaultMessage: 'Single Attachment',
   },
@@ -442,8 +442,8 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.singleFileAttachmentDescription',
     defaultMessage: 'They can only upload one attachment.',
   },
-  multipleFileAttachment: {
-    id: 'course.assessment.question.textResponses.multipleFileAttachment',
+  multipleAttachment: {
+    id: 'course.assessment.question.textResponses.multipleAttachments',
     defaultMessage: 'Multiple Attachments',
   },
   multipleFileAttachmentDescription: {
@@ -764,12 +764,12 @@ const translations = defineMessages({
   mustSpecifyMaxAttachment: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyMaxAttachment',
     defaultMessage:
-      'You must specify a valid, positive maximum attachment number to be set.',
+      'You must specify a valid, positive maximum attachment number.',
   },
   mustSpecifyMaxAttachmentSize: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyMaxAttachmentSize',
     defaultMessage:
-      'You must specify a valid, positive maximum attachment size to be set.',
+      'You must specify a valid, positive maximum attachment size.',
   },
   mustSpecifyPositiveMaximumGrade: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade',

@@ -15,8 +15,8 @@ export interface SolutionEntity extends SolutionData {
 
 export enum AttachmentType {
   NO_ATTACHMENT = 'no_attachment',
-  SINGLE_FILE_ATTACHMENT = 'single_file_attachment',
-  MULTIPLE_FILE_ATTACHMENTS = 'multiple_file_attachments',
+  SINGLE_ATTACHMENT = 'single_attachment',
+  MULTIPLE_ATTACHMENT = 'multiple_attachment',
 }
 
 export interface TextResponseQuestionFormData extends QuestionFormData {
