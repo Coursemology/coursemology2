@@ -21,7 +21,7 @@ const FileUpload = ({
     getIsSavingAnswer(state, answerId),
   );
   const disableField = readOnly || isSaving;
-  const { maxAttachments, isAttachmentRequired } = question;
+  const { maxAttachments, isAttachmentRequired, maxAttachmentSize } = question;
   const isMultipleAttachmentsAllowed = maxAttachments - numAttachments > 1;
   const isFileUploadStillAllowed = maxAttachments > numAttachments;
 
@@ -33,6 +33,7 @@ const FileUpload = ({
           disabled={disableField || !isFileUploadStillAllowed}
           isMultipleAttachmentsAllowed={isMultipleAttachmentsAllowed}
           maxAttachmentsAllowed={maxAttachments - numAttachments}
+          maxAttachmentSize={maxAttachmentSize}
           name={`${answerId}.files`}
           numAttachments={numAttachments}
           onChangeCallback={() => handleUploadTextResponseFiles(answerId)}
