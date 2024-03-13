@@ -128,7 +128,7 @@
     "@types/rails__actioncable": "^6.1.10",
     "@types/react": "^18.2.55",
     "@types/react-beautiful-dnd": "^13.1.8",
-    "@types/react-dom": "^18.2.18",
+    "@types/react-dom": "^18.2.22",
     "@types/react-google-recaptcha": "^2.1.9",
     "@types/react-resizable": "^3.0.7",
     "@types/react-scroll": "^1.8.10",
