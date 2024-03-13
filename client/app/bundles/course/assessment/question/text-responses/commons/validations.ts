@@ -17,7 +17,17 @@ export const questionSchema = commonQuestionFieldsValidation.shape({
       translations.validAttachmentSettingValues,
     )
     .required(translations.attachmentSettingRequired),
-  maxAttachments: number().required().min(0).max(MAX_ATTACHMENT_UPPER_LIMIT),
+  maxAttachments: number().when('attachmentType', {
+    is: AttachmentType.MULTIPLE_FILE_ATTACHMENTS,
+    then: number()
+      .required()
+      .min(1, translations.mustSpecifyPositiveMaxAttachment)
+      .max(
+        MAX_ATTACHMENT_UPPER_LIMIT,
+        translations.mustBeLessThanMaxAttachments,
+      )
+      .typeError(translations.mustSpecifyMaxAttachment),
+  }),
   isAttachmentRequired: bool(),
 });
 
