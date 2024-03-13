@@ -25,6 +25,7 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
         subject { create(:course_assessment_question_text_response) }
         it 'returns true' do
           expect(subject.auto_gradable?).to be(true)
+          expect(subject.csv_downloadable?).to be(true)
         end
       end
 
