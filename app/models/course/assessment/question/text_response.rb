@@ -2,7 +2,7 @@
 class Course::Assessment::Question::TextResponse < ApplicationRecord
   acts_as :question, class_name: Course::Assessment::Question.name
 
-  validates :max_attachments, numericality: { only_integer: true, greater_than_or_equal_to: 0,
+  validates :max_attachments, numericality: { only_integer: true, greater_than_or_equal_to: 1,
                                               less_than_or_equal_to: 50 },
                               presence: true
   validate :validate_grade
