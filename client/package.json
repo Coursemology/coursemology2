@@ -38,7 +38,7 @@
     "@emotion/styled": "^11.11.0",
     "@hello-pangea/dnd": "^16.5.0",
     "@hookform/resolvers": "^2.9.11",
-    "@mui/icons-material": "^5.15.3",
+    "@mui/icons-material": "^5.15.13",
     "@mui/lab": "^5.0.0-alpha.167",
     "@mui/material": "^5.15.10",
     "@mui/x-date-pickers": "^6.19.6",
