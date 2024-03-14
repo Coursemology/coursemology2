@@ -430,6 +430,7 @@ Rails.application.routes.draw do
 
       namespace :statistics do
         get '/' => 'statistics#index'
+        get 'assessments' => 'aggregate#all_assessments'
         get 'course/progression' => 'aggregate#course_progression'
         get 'course/performance' => 'aggregate#course_performance'
         get 'students' => 'aggregate#all_students'

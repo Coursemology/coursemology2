@@ -100,3 +100,33 @@ export interface CoursePerformanceStatistics {
   students: CourseStudent[];
   metadata: CourseMetadata;
 }
+
+interface TabInfo {
+  id: number;
+  title: string;
+}
+
+interface CategoryInfo {
+  id: number;
+  title: string;
+}
+
+export interface CourseAssessment {
+  id: number;
+  title: string;
+  tab: TabInfo;
+  category: CategoryInfo;
+  maximumGrade: number;
+  averageGrade: number;
+  stdevGrade: number;
+  averageTimeTaken: string;
+  stdevTimeTaken: string;
+  numSubmitted: number;
+  numAttempting: number;
+  numLate: number;
+}
+
+export interface AssessmentsStatistics {
+  numStudents: number;
+  assessments: CourseAssessment[];
+}
