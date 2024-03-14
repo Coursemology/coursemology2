@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { User } from 'oidc-client-ts';
+import { getUserToken } from 'utilities/authentication';
 
 import { syncSignals } from 'lib/hooks/unread';
 
@@ -17,19 +17,6 @@ const updateSignalsIfPresentIn = (response: AxiosResponse): void => {
   if (!signals) return;
 
   syncSignals(JSON.parse(signals));
-};
-
-const OIDC_STORAGE_KEY =
-  `oidc.user:${process.env.OIDC_AUTHORITY}:${process.env.OIDC_CLIENT_ID}` as const;
-
-const getUserToken = (): string => {
-  const oidcStorage = localStorage.getItem(OIDC_STORAGE_KEY);
-
-  if (!oidcStorage) {
-    return '';
-  }
-  const user = User.fromStorageString(oidcStorage);
-  return user.access_token;
 };
 
 export default class BaseAPI {
