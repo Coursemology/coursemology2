@@ -11,10 +11,11 @@ import Link from 'lib/components/core/Link';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { getEditSubmissionURL } from 'lib/helpers/url-builders';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import AnswerDisplay from './AnswerDisplay';
+import LastAttemptIndex from './AnswerDisplay/LastAttempt';
 import { getClassNameForMarkCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 
@@ -79,7 +80,7 @@ const statusTranslations = {
 
 const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { courseId } = useParams();
+  const { courseId, assessmentId } = useParams();
   const { includePhantom } = props;
 
   const statistics = useAppSelector(getAssessmentStatistics);
@@ -233,19 +234,20 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       title: t(translations.workflowState),
       sortable: true,
       cell: (datum) => (
-        <Chip
-          className="w-100"
-          label={
-            statusTranslations[datum.workflowState ?? workflowStates.Unstarted]
-          }
-          style={{
-            backgroundColor:
-              palette.submissionStatus[
+        <Link
+          opensInNewTab
+          to={getEditSubmissionURL(courseId, assessmentId, datum.id)}
+        >
+          <Chip
+            className={`text-blue-800 ${palette.submissionStatusClassName[datum.workflowState ?? workflowStates.Unstarted]} w-full`}
+            label={
+              statusTranslations[
                 datum.workflowState ?? workflowStates.Unstarted
-              ],
-          }}
-          variant="filled"
-        />
+              ]
+            }
+            variant="filled"
+          />
+        </Link>
       ),
       className: 'center',
     },
@@ -322,7 +324,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         open={openAnswer}
         title={answerDisplayInfo.studentName}
       >
-        <AnswerDisplay
+        <LastAttemptIndex
           curAnswerId={answerDisplayInfo.answerId}
           index={answerDisplayInfo.index}
         />

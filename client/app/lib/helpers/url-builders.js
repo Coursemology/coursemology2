@@ -12,6 +12,14 @@ export const getAchievementURL = (courseId, achievementId) =>
 export const getEditSubmissionURL = (courseId, assessmentId, submissionId) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
 
+export const getEditSubmissionQuestionURL = (
+  courseId,
+  assessmentId,
+  submissionId,
+  questionNumber,
+) =>
+  `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit?step=${questionNumber}`;
+
 export const getSubmissionLogsURL = (courseId, assessmentId, submissionId) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/logs`;
 
@@ -31,6 +39,13 @@ export const getSurveyResponseURL = (courseId, surveyId, responseId) =>
 
 export const getAssessmentURL = (courseId, assessmentId) =>
   `/courses/${courseId}/assessments/${assessmentId}`;
+
+export const getPastAnswersURL = (
+  courseId,
+  assessmentId,
+  submissionQuestionId,
+) =>
+  `/courses/${courseId}/assessments/${assessmentId}/submission_questions/${submissionQuestionId}/past_attempts`;
 
 export const getAssessmentSubmissionURL = (courseId, assessmentId) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions`;

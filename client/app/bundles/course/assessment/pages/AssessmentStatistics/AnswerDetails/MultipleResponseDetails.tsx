@@ -1,9 +1,9 @@
 import { Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
-import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
 
 const MultipleResponseDetails = (
-  props: QuestionAnswerDetails<'MultipleResponse'>,
+  props: QuestionAnswerDisplayDetails<'MultipleResponse'>,
 ): JSX.Element => {
   const { question, answer } = props;
   return (
