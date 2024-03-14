@@ -15,7 +15,7 @@ const UnauthenticatedApp = lazy(
 const AuthenticatableApp = (): JSX.Element => {
   const auth = useAuthAdapter();
 
-  if (auth.error) return <div>Something is wrong</div>;
+  if (auth.error) return <div>Something is wrong: {auth.error.message}</div>;
 
   if (auth.isLoading)
     return (

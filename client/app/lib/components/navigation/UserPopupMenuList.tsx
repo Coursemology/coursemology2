@@ -34,7 +34,7 @@ const UserPopupMenuList = (): JSX.Element | null => {
 
   const handleLogout = async (): Promise<void> => {
     await auth.removeUser();
-    auth.signoutRedirect();
+    await auth.signoutRedirect();
     localStorage.clear();
   };
 
