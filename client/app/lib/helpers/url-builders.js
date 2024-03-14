@@ -49,6 +49,14 @@ export const getPastAnswersURL = (
   submissionQuestionId,
 ) =>
   `/courses/${courseId}/assessments/${assessmentId}/submission_questions/${submissionQuestionId}/past_attempts`;
+export const getAssessmentStatisticsURL = (courseId, assessmentId) =>
+  `/courses/${courseId}/assessments/${assessmentId}/statistics`;
+
+export const getAssessmentWithTabURL = (courseId, categoryId, tabId) =>
+  `/courses/${courseId}/assessments?category=${categoryId}&tab=${tabId}`;
+
+export const getAssessmentWithCategoryURL = (courseId, categoryId) =>
+  `/courses/${courseId}/assessments?category=${categoryId}`;
 
 export const getAssessmentSubmissionURL = (courseId, assessmentId) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions`;

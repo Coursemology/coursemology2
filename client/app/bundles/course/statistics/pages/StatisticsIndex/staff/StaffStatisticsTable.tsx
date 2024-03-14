@@ -31,7 +31,7 @@ const translations = defineMessages({
   },
   stddev: {
     id: 'course.statistics.StatisticsIndex.staff.stddev',
-    defaultMessage: 'Standard Deviation',
+    defaultMessage: 'Stdev Time / Assessment',
   },
   tableTitle: {
     id: 'course.statistics.StatisticsIndex.staff.tableTitle',

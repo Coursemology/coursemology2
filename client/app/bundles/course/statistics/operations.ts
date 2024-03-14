@@ -1,6 +1,7 @@
 import CourseAPI from 'api/course';
 
 import {
+  AssessmentsStatistics,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
   StaffStatistics,
@@ -30,5 +31,12 @@ export const fetchCoursePerformanceStatistics =
   async (): Promise<CoursePerformanceStatistics> => {
     const response =
       await CourseAPI.statistics.course.fetchCoursePerformanceStatistics();
+    return response.data;
+  };
+
+export const fetchAssessmentsStatistics =
+  async (): Promise<AssessmentsStatistics> => {
+    const response =
+      await CourseAPI.statistics.course.fetchAssessmentsStatistics();
     return response.data;
   };

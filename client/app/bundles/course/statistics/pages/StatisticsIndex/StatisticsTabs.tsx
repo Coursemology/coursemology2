@@ -11,20 +11,24 @@ import { getCourseId, getCurrentPath } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 
 export const translations = defineMessages({
+  assessments: {
+    id: 'course.statistics.StatisticsIndex.header.assessments',
+    defaultMessage: 'Assessments',
+  },
   statistics: {
     id: 'course.statistics.StatisticsIndex.header.statistics',
     defaultMessage: 'Statistics',
   },
   courseProgression: {
-    id: 'course.statistics.tabs.courseProgression',
+    id: 'course.statistics.StatisticsIndex.header.courseProgression',
     defaultMessage: 'Course Progression',
   },
   coursePerformance: {
-    id: 'course.statistics.tabs.coursePerformance',
+    id: 'course.statistics.StatisticsIndex.header.coursePerformance',
     defaultMessage: 'Course Performance',
   },
   course: {
-    id: 'course.statistics.tabs.course',
+    id: 'course.statistics.StatisticsIndex.header.course',
     defaultMessage: 'Course',
   },
   students: {
@@ -60,6 +64,10 @@ const allTabs = {
     label: translations.course,
     href: 'course',
   },
+  assessmentTab: {
+    label: translations.assessments,
+    href: 'assessments',
+  },
 };
 
 const StatisticsTabs: FC = () => {
@@ -70,11 +78,15 @@ const StatisticsTabs: FC = () => {
     allTabs.studentsTab,
     allTabs.staffTab,
     allTabs.courseTab,
+    allTabs.assessmentTab,
   ];
 
   const getCurrentTabIndex = (): number => {
     const path = getCurrentPath();
-    const res = tabs.findIndex((tab) => path?.includes(tab.href));
+    const pathComponents = path!.split('/');
+
+    const lastPath = pathComponents[pathComponents.length - 1];
+    const res = tabs.findIndex((tab) => lastPath === tab.href);
     return res === -1 ? 0 : res;
   };
 
