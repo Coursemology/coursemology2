@@ -7,8 +7,10 @@ import { QuestionDetails } from 'types/course/statistics/assessmentStatistics';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileUploadDetails from './FileUploadDetails';
+import ForumPostResponseDetails from './ForumPostResponseDetails';
 import MultipleChoiceDetails from './MultipleChoiceDetails';
 import MultipleResponseDetails from './MultipleResponseDetails';
+import ProgrammingAnswerDetails from './ProgrammingAnswerDetails';
 import TextResponseDetails from './TextResponseDetails';
 
 const translations = defineMessages({
@@ -47,13 +49,13 @@ export const AnswerDetailsMapper = {
   FileUpload: (props: AnswerDetailsProps<'FileUpload'>): JSX.Element => (
     <FileUploadDetails {...props} />
   ),
-  // TODO: define component for Forum Post, Programming, Voice Response, Scribing
   ForumPostResponse: (
-    _props: AnswerDetailsProps<'ForumPostResponse'>,
-  ): JSX.Element => <AnswerNotImplemented />,
-  Programming: (_props: AnswerDetailsProps<'Programming'>): JSX.Element => (
-    <AnswerNotImplemented />
+    props: AnswerDetailsProps<'ForumPostResponse'>,
+  ): JSX.Element => <ForumPostResponseDetails {...props} />,
+  Programming: (props: AnswerDetailsProps<'Programming'>): JSX.Element => (
+    <ProgrammingAnswerDetails {...props} />
   ),
+  // TODO: define component for Voice Response, Scribing
   VoiceResponse: (_props: AnswerDetailsProps<'VoiceResponse'>): JSX.Element => (
     <AnswerNotImplemented />
   ),
