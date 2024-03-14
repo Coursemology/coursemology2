@@ -119,6 +119,7 @@ import { folderHandle } from 'course/material/folders/handles';
 import materialLoader from 'course/material/materialLoader';
 import { videoWatchHistoryHandle } from 'course/statistics/handles';
 import StatisticsIndex from 'course/statistics/pages/StatisticsIndex';
+import AssessmentsStatistics from 'course/statistics/pages/StatisticsIndex/assessments/AssessmentsStatistics';
 import CourseStatistics from 'course/statistics/pages/StatisticsIndex/course/CourseStatistics';
 import StaffStatistics from 'course/statistics/pages/StatisticsIndex/staff/StaffStatistics';
 import StudentsStatistics from 'course/statistics/pages/StatisticsIndex/students/StudentsStatistics';
@@ -222,6 +223,10 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             {
               path: 'course',
               element: <CourseStatistics />,
+            },
+            {
+              path: 'assessments',
+              element: <AssessmentsStatistics />,
             },
           ],
         },

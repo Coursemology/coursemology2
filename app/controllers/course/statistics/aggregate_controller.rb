@@ -24,6 +24,11 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     @service = group_manager_preload_service
   end
 
+  def all_assessments
+    @mock_num_students = 0
+    @mock_assessments = 1
+  end
+
   private
 
   def assessment_info_array
