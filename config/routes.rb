@@ -435,6 +435,7 @@ Rails.application.routes.draw do
         get 'answer/:id' => 'answers#question_answer_details'
         get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
         get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
+        get 'assessments' => 'aggregate#all_assessments'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
         get 'course/progression' => 'aggregate#course_progression'
