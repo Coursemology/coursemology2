@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 json.assessment do
   json.id @assessment.id
+  json.isAutograded @assessment_autograded
   json.title @assessment.title
   json.startAt @assessment.start_at&.iso8601
   json.endAt @assessment.end_at&.iso8601
@@ -17,10 +18,7 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
     json.isPhantom course_user.phantom?
   end
 
-  json.groups course_user.groups do |group|
-    json.name group.name
-  end
-
+  json.groups @group_names_hash[course_user.id]
   json.submissionExists !submission.nil?
 
   unless submission.nil?
@@ -28,6 +26,12 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
     json.submittedAt submission.submitted_at&.iso8601
     json.endAt end_at&.iso8601
     json.totalGrade submission.grade
+
+    json.attemptStatus answers.each do |answer|
+      json.isAutograded @question_auto_gradable_status_hash[answer.question_id]
+      json.attemptCount answer.attempt_count
+      json.correct answer.correct
+    end
 
     if submission.workflow_state == 'published' && submission.grader_ids
       # the graders are all the same regardless of question, so we just pick the first one
@@ -38,7 +42,6 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
       end
 
       json.answers answers.each do |answer|
-        json.id answer.id
         json.grade answer.grade
         json.maximumGrade @question_maximum_grade_hash[answer.question_id]
       end
