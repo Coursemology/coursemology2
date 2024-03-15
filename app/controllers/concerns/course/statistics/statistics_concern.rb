@@ -6,10 +6,10 @@ module Course::Statistics::StatisticsConcern
   def average_and_stdev_each_assessment(assessment_hash)
     stats_array = assessment_hash.map do |assessment_id, values|
       average_value = values.sum(0.0) / values.size
-      
-      sum_of_squared_differences = values.sum(0.0) { |value| (value - average_value) ** 2 }
+
+      sum_of_squared_differences = values.sum(0.0) { |value| (value - average_value)**2 }
       stdev_value = Math.sqrt(sum_of_squared_differences / values.size)
-    
+
       [assessment_id, average_value, stdev_value]
     end
 
