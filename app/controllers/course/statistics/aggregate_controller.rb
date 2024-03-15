@@ -2,6 +2,9 @@
 # This is named aggregate controller as naming this as course controller leads to name conflict issues
 class Course::Statistics::AggregateController < Course::Statistics::Controller
   before_action :preload_levels, only: [:all_students, :course_performance]
+  include Course::Statistics::TimesConcern
+  include Course::Statistics::GradesConcern
+  include Course::Statistics::CountsConcern
 
   def course_progression
     @assessment_info_array = assessment_info_array
@@ -25,11 +28,36 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def all_assessments
-    @mock_num_students = 0
-    @mock_assessments = 1
+    @assessments = current_course.assessments.published.includes(tab: :category).calculated(:maximum_grade)
+    @all_students = current_course.course_users.students
+    @submissions = all_submissions_info
+
+    get_all_assessment_related_statistics_hash
   end
 
   private
+
+  def all_submissions_info
+    @submissions ||= ActiveRecord::Base.connection.execute("
+      SELECT 
+        cas.id, 
+        cas.workflow_state, 
+        cas.creator_id, 
+        cas.created_at,
+        cas.submitted_at, 
+        cas.assessment_id,
+        SUM(caa.grade) AS grade
+      FROM course_assessment_submissions cas
+      JOIN course_assessment_answers caa
+      ON cas.id = caa.submission_id
+      WHERE 
+        cas.creator_id IN (#{@all_students.map { |student| student.user_id }.join(', ')})
+        AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
+        AND caa.current_answer = TRUE
+      GROUP BY cas.id, cas.workflow_state, cas.creator_id, cas.created_at, cas.submitted_at,
+        cas.assessment_id
+                                                          ")
+  end
 
   def assessment_info_array
     @assessment_info_array ||= Course::Assessment.published.with_default_reference_time.
@@ -100,6 +128,14 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     SQL
                                   )
     query.map { |u| [u.id, u.correctness] }.to_h
+  end
+
+  def get_all_assessment_related_statistics_hash
+    @grades_hash = grade_statistics_hash
+    @durations_hash = duration_statistics_hash
+    @num_attempting_students_hash = num_attempting_students_hash
+    @num_submitted_students_hash = num_submitted_students_hash
+    @num_late_students_hash = num_late_students_hash
   end
 
   def course_users
