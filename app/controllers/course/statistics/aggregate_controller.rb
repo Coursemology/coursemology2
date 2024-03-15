@@ -30,28 +30,24 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   def all_assessments
     @assessments = current_course.assessments.published.includes(tab: :category).calculated(:maximum_grade)
     @all_students = current_course.course_users.students
-    @submissions = all_submissions_info
+    @all_submissions_info = all_submissions_info
 
-    get_all_assessment_related_statistics_hash
+    fetch_all_assessment_related_statistics_hash
   end
 
   private
 
   def all_submissions_info
-    @submissions ||= ActiveRecord::Base.connection.execute("
-      SELECT 
-        cas.id, 
-        cas.workflow_state, 
-        cas.creator_id, 
-        cas.created_at,
-        cas.submitted_at, 
-        cas.assessment_id,
+    @all_submissions_info ||= ActiveRecord::Base.connection.execute("
+      SELECT
+        cas.id, cas.workflow_state, cas.creator_id,
+        cas.created_at, cas.submitted_at, cas.assessment_id,
         SUM(caa.grade) AS grade
       FROM course_assessment_submissions cas
       JOIN course_assessment_answers caa
       ON cas.id = caa.submission_id
-      WHERE 
-        cas.creator_id IN (#{@all_students.map { |student| student.user_id }.join(', ')})
+      WHERE
+        cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
         AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
         AND caa.current_answer = TRUE
       GROUP BY cas.id, cas.workflow_state, cas.creator_id, cas.created_at, cas.submitted_at,
@@ -130,7 +126,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     query.map { |u| [u.id, u.correctness] }.to_h
   end
 
-  def get_all_assessment_related_statistics_hash
+  def fetch_all_assessment_related_statistics_hash
     @grades_hash = grade_statistics_hash
     @durations_hash = duration_statistics_hash
     @num_attempting_students_hash = num_attempting_students_hash
