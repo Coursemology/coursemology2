@@ -147,22 +147,22 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       csvDownloadable: true,
     },
     {
-      of: 'numAttempting',
-      title: t(translations.numAttempting),
-      sortable: true,
-      className: 'text-right',
-      cell: (assessment) => (
-        <div className="text-right">{assessment.numAttempting}</div>
-      ),
-      csvDownloadable: true,
-    },
-    {
       of: 'numLate',
       title: t(translations.numLate),
       sortable: true,
       className: 'text-right',
       cell: (assessment) => (
         <div className="text-right">{assessment.numLate}</div>
+      ),
+      csvDownloadable: true,
+    },
+    {
+      of: 'numAttempting',
+      title: t(translations.numAttempting),
+      sortable: true,
+      className: 'text-right',
+      cell: (assessment) => (
+        <div className="text-right">{assessment.numAttempting}</div>
       ),
       csvDownloadable: true,
     },

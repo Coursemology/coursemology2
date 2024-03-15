@@ -5,11 +5,12 @@ module Course::Statistics::GradesConcern
   private
 
   def grade_statistics_hash
-    grades_hash = @submissions.to_a
-                              .reject { |submission| submission["workflow_state"] == "attempting" }
-                              .map { |submission| [submission["assessment_id"], submission["grade"].to_f] }
-                              .group_by { |assessment_id, grade| assessment_id }
-                              .transform_values { |pairs| pairs.map { |_, grade| grade } }
+    grades_hash = @all_submissions_info.
+                  to_a.
+                  reject { |submission| submission['workflow_state'] == 'attempting' }.
+                  map { |submission| [submission['assessment_id'], submission['grade'].to_f] }.
+                  group_by { |assessment_id, _| assessment_id }.
+                  transform_values { |pairs| pairs.map { |_, grade| grade } }
 
     average_and_stdev_each_assessment(grades_hash)
   end

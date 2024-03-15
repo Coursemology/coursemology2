@@ -2,8 +2,8 @@
 json.numStudents @all_students.size
 
 json.assessments @assessments do |assessment|
-  grade_stats = @grades_hash[assessment.id]
-  duration_stats = @durations_hash[assessment.id]
+  grade_stats = @grades_hash[assessment.id] || [0, 0]
+  duration_stats = @durations_hash[assessment.id] || [0, 0]
 
   json.id assessment.id
   json.title assessment.title
