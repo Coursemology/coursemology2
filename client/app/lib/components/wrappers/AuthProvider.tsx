@@ -16,27 +16,13 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const PREVIOUS_PATH_KEY = 'POST_AUTH_REDIRECTION_HREF' as const;
-
-export const onBeforeSignin = (): void => {
-  const currentPath = window.location.href;
-  window.sessionStorage.setItem(PREVIOUS_PATH_KEY, currentPath);
-};
-
-const getPreviousPath = (): string | null => {
-  return window.sessionStorage.getItem(PREVIOUS_PATH_KEY);
-};
+export const INVALID_GRANT_ERROR = 'invalid_grant';
 
 const onSigninCallback = (_user: User | void): void => {
   window.history.replaceState({}, document.title, window.location.pathname);
-  const previousPath = getPreviousPath();
-  if (previousPath) {
-    window.location.replace(previousPath);
-    window.sessionStorage.removeItem(PREVIOUS_PATH_KEY);
-  }
 };
 
-const oidcConfig = {
+export const oidcConfig = {
   authority: process.env.OIDC_AUTHORITY,
   client_id: process.env.OIDC_CLIENT_ID,
   redirect_uri: process.env.OIDC_REDIRECT_URI,
@@ -61,6 +47,7 @@ export const useAuthAdapter = (): AuthContextProps => {
 
   const adaptedSignOutSilent = (args?: SignoutSilentArgs): Promise<void> =>
     signoutSilent(args);
+
   // Not supported yet as signoutCallback from oidc-client-ts is not called in react-oidc-context.
   // Has been fixed in v3.1.0 in react-oidc-context but not released yet.
 

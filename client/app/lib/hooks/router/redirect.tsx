@@ -1,8 +1,6 @@
 import { withAuthenticationRequired } from 'react-oidc-context';
 import { Navigate, useSearchParams } from 'react-router-dom';
 
-import { onBeforeSignin } from 'lib/components/wrappers/AuthProvider';
-
 const NEXT_URL_SEARCH_PARAM = 'next';
 const EXPIRED_SESSION_SEARCH_PARAM = 'expired';
 const FORBIDDEN_SOURCE_URL_SEARCH_PARAM = 'from';
@@ -26,13 +24,20 @@ const defensivelyParseURL = (rawURL: string): string | null => {
 const getCurrentURL = (): string =>
   window.location.pathname + window.location.search;
 
+const getAuthenticatableURL = (nextURL?: string, expired?: boolean): string => {
+  const url = new URL('/authentication', window.location.origin);
+  if (nextURL) url.searchParams.append(NEXT_URL_SEARCH_PARAM, nextURL);
+  if (expired) url.searchParams.append(EXPIRED_SESSION_SEARCH_PARAM, 'true');
+  return url.pathname + url.search;
+};
+
 const getForbiddenURL = (): string => {
   const url = new URL('/forbidden', window.location.origin);
   url.searchParams.append(FORBIDDEN_SOURCE_URL_SEARCH_PARAM, getCurrentURL());
   return url.pathname + url.search;
 };
 
-const useNextURL = (): { nextURL: string | null; expired: boolean } => {
+export const useNextURL = (): { nextURL: string | null; expired: boolean } => {
   const [searchParams] = useSearchParams();
   const nextRawURL = searchParams.get(NEXT_URL_SEARCH_PARAM);
   const expired = searchParams.get(EXPIRED_SESSION_SEARCH_PARAM);
@@ -41,6 +46,18 @@ const useNextURL = (): { nextURL: string | null; expired: boolean } => {
     nextURL: nextRawURL && defensivelyParseURL(nextRawURL),
     expired: Boolean(expired),
   };
+};
+
+/**
+ * Redirects to the sign in page with the current URL as the next URL. To be used
+ * in scopes outside React and/or React Router, e.g., Axios interceptors.
+ * Do not redirect to the same /authentication url.
+ *
+ * @param expired Whether this redirect is caused by an expired session.
+ */
+export const redirectToAuthPage = (expired?: boolean): void => {
+  if (!window.location.pathname.startsWith('/authentication'))
+    window.location.href = getAuthenticatableURL(getCurrentURL(), expired);
 };
 
 export const redirectToForbidden = (): void => {
@@ -70,7 +87,7 @@ export const Redirectable = (): JSX.Element => {
 const AuthenticatableComponent = (): JSX.Element => <div />;
 export const Authenticatable = withAuthenticationRequired(
   AuthenticatableComponent,
-  { onBeforeSignin },
+  { signinRedirectArgs: { redirect_uri: window.location.href } },
 );
 
 export const useRedirectable = (): {

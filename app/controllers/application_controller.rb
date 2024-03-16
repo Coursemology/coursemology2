@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery(prepend: true, with: :exception)
 
   include ApplicationControllerMultitenancyConcern
+  include ApplicationAuthenticationConcern
   include ApplicationComponentsConcern
   include ApplicationInternationalizationConcern
   include ApplicationUserConcern
@@ -15,6 +16,7 @@ class ApplicationController < ActionController::Base
   include ApplicationPaginationConcern
   include ApplicationSignInCallbacksConcern
 
+  rescue_from AuthenticationError, with: :handle_authentication_error
   rescue_from IllegalStateError, with: :handle_illegal_state_error
   rescue_from ActionController::InvalidAuthenticityToken, with: :handle_csrf_error
 
@@ -46,6 +48,11 @@ class ApplicationController < ActionController::Base
   def handle_csrf_error(exception)
     @exception = exception
     render json: { error: "Can't verify CSRF token authenticity - #{exception.message}" }, status: :forbidden
+  end
+
+  def handle_authentication_error(exception)
+    @exception = exception
+    render json: { error: exception.message }, status: :unauthorized
   end
 
   # lograge

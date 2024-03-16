@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import AuthenticationRedirection from 'bundles/authentication/pages/AuthenticationRedirection';
 import LandingPage from 'bundles/common/LandingPage';
 import ConfirmEmailPage from 'bundles/users/pages/ConfirmEmailPage';
 import ForgotPasswordLandingPage from 'bundles/users/pages/ForgotPasswordLandingPage';
@@ -24,6 +25,11 @@ const unauthenticatedRouter = createAppRouter([
       {
         index: true,
         element: <LandingPage />,
+      },
+      {
+        index: true,
+        path: 'AuthenticationRedirection',
+        element: <AuthenticationRedirection />,
       },
       {
         path: 'users',

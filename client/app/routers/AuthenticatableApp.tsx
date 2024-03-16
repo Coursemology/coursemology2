@@ -1,7 +1,10 @@
 import { lazy, Suspense } from 'react';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { useAuthAdapter } from 'lib/components/wrappers/AuthProvider';
+import {
+  INVALID_GRANT_ERROR,
+  useAuthAdapter,
+} from 'lib/components/wrappers/AuthProvider';
 
 const AuthenticatedApp = lazy(
   () => import(/* webpackChunkName: "AuthenticatedApp" */ './AuthenticatedApp'),
@@ -14,6 +17,14 @@ const UnauthenticatedApp = lazy(
 
 const AuthenticatableApp = (): JSX.Element => {
   const auth = useAuthAdapter();
+
+  // type definition for auth.error depends on the auth server error response
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const error = auth.error as any | undefined;
+
+  if (error?.error === INVALID_GRANT_ERROR) {
+    auth.signinRedirect({ redirect_uri: window.location.href });
+  }
 
   if (auth.error) return <div>Something is wrong: {auth.error.message}</div>;
 

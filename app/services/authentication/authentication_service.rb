@@ -7,7 +7,7 @@ class Authentication::AuthenticationService
 
   def self.validation_map
     {
-      external: ->(access_token) { external_validation(access_token) },
+      auth_server: ->(access_token) { external_validation(access_token) },
       local: ->(access_token) { local_validation(access_token) }
     }
   end

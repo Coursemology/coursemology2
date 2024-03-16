@@ -5,10 +5,12 @@ import { syncSignals } from 'lib/hooks/unread';
 
 import {
   isInvalidCSRFTokenResponse,
+  isUnauthenticatedResponse,
   redirectIfMatchesErrorIn,
 } from './ErrorHandling';
 
 const MAX_CSRF_RETRIES = 3 as const;
+const MAX_AUTH_RETRIES = 5 as const;
 
 const SIGNALS_HEADER_KEY = 'Signals-Sync' as const;
 
@@ -19,10 +21,17 @@ const updateSignalsIfPresentIn = (response: AxiosResponse): void => {
   syncSignals(JSON.parse(signals));
 };
 
+const getAuthorizationToken = (): string => {
+  const userToken = getUserToken();
+  return `Bearer ${userToken}`;
+};
+
 export default class BaseAPI {
   #client: AxiosInstance | null = null;
 
-  #retries = 0;
+  #authentication_retries = 0;
+
+  #csrf_retries = 0;
 
   /** Returns the API client */
   get client(): AxiosInstance {
@@ -31,11 +40,10 @@ export default class BaseAPI {
   }
 
   #createAxiosInstance(): AxiosInstance {
-    const userToken = getUserToken();
     const client = axios.create({
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${userToken}`,
+        Authorization: getAuthorizationToken(),
       },
       params: { format: 'json' },
     });
@@ -50,7 +58,10 @@ export default class BaseAPI {
 
     client.interceptors.response.use(
       (response) => {
-        if (response.config.method !== 'get') this.#retries = 0;
+        if (response.config.method !== 'get') {
+          this.#csrf_retries = 0;
+          this.#authentication_retries = 0;
+        }
 
         updateSignalsIfPresentIn(response);
 
@@ -59,11 +70,24 @@ export default class BaseAPI {
       async (error) => {
         if (
           isInvalidCSRFTokenResponse(error.response) &&
-          this.#retries < MAX_CSRF_RETRIES
+          this.#csrf_retries < MAX_CSRF_RETRIES
         ) {
           BaseAPI.#clearCSRFToken();
-          this.#retries += 1;
+          this.#csrf_retries += 1;
           return client.request(error.config);
+        }
+
+        // When backend returns unauthenticated, it could be the case that the token has just expired
+        // before the FE is able to refresh the token. Retry a few times to ensure the latest token
+        // is used. Otherwise, redirect to sign in page.
+        if (
+          isUnauthenticatedResponse(error.response) &&
+          this.#authentication_retries < MAX_AUTH_RETRIES
+        ) {
+          const config = error.config;
+          config.headers.Authorization = getAuthorizationToken();
+          this.#authentication_retries += 1;
+          return client.request(config);
         }
 
         redirectIfMatchesErrorIn(error.response);
