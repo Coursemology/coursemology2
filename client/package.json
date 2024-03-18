@@ -101,7 +101,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "resize-observer-polyfill": "^1.5.1",
-    "rollbar": "^2.26.2",
+    "rollbar": "^2.26.3",
     "webfontloader": "^1.6.28",
     "yup": "^0.32.11"
   },
