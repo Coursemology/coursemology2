@@ -9699,10 +9699,10 @@ rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
-rollbar@^2.26.2:
-  version "2.26.2"
-  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.26.2.tgz#58627dce65233e7433facb6366fd6e8817f396d3"
-  integrity sha512-7ASvrlal87ek2vhTmpu2LPvkdlcnala1qeMT2Ra76s0KjWkQ8d1fTl6dk7AqHx1Qa/puahg3tYw7EPB7wYx9RQ==
+rollbar@^2.26.3:
+  version "2.26.3"
+  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.26.3.tgz#a8b7fde0cc7590b1dc4f4f56ad773b8c72bfb5a8"
+  integrity sha512-Pf6PVH0zFi0dK4Yhj4MBEZX0QwIiHPZRgBHNHkhiujarhT5xunkJZ1T1QaJD0g8ML22f3zA7kKsly1tZZE7cdg==
   dependencies:
     async "~3.2.3"
     console-polyfill "0.3.0"
