@@ -214,7 +214,7 @@ GEM
     ffi (1.16.3)
     filename (0.1.2)
     flamegraph (0.9.5)
-    fog-aws (3.21.1)
+    fog-aws (3.22.0)
       fog-core (~> 2.1)
       fog-json (~> 1.1)
       fog-xml (~> 0.1)
@@ -598,7 +598,7 @@ DEPENDENCIES
   ffi (>= 1.14.2)
   filename
   flamegraph
-  fog-aws (= 3.21.1)
+  fog-aws (= 3.22.0)
   friendly_id
   html-pipeline
   html-pipeline-rouge_filter!
