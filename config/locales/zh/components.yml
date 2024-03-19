@@ -43,3 +43,5 @@ zh:
       name: '多重参考时间线'
     monitoring:
       name: '监听'
+    stories:
+      name: '故事'
