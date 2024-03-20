@@ -1,5 +1,9 @@
 import { Operation } from 'store';
-import { AncestorAssessmentStats } from 'types/course/statistics/assessmentStatistics';
+import { QuestionType } from 'types/course/assessment/question';
+import {
+  AncestorAssessmentStats,
+  QuestionAnswerDetails,
+} from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 
@@ -29,6 +33,15 @@ export const fetchAncestorStatistics = async (
 ): Promise<AncestorAssessmentStats> => {
   const response =
     await CourseAPI.statistics.assessment.fetchAncestorStatistics(ancestorId);
+
+  return response.data;
+};
+
+export const fetchQuestionAnswerDetails = async (
+  answerId: number,
+): Promise<QuestionAnswerDetails<keyof typeof QuestionType>> => {
+  const response =
+    await CourseAPI.statistics.answer.fetchQuestionAnswerDetails(answerId);
 
   return response.data;
 };

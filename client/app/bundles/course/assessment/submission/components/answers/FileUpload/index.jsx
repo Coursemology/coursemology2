@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useAppSelector } from 'lib/hooks/store';
 
 import UploadedFileView from '../../../containers/UploadedFileView';
-import { questionShape } from '../../../propTypes';
+import { questionMiniShape } from '../../../propTypes';
 import { getIsSavingAnswer } from '../../../selectors/answerFlags';
 import FileInputField from '../../FileInput';
 
@@ -35,7 +35,7 @@ const FileUpload = ({
 FileUpload.propTypes = {
   answerId: PropTypes.number.isRequired,
   handleUploadTextResponseFiles: PropTypes.func.isRequired,
-  question: questionShape.isRequired,
+  question: questionMiniShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
 };
 

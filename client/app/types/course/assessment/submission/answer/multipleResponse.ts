@@ -8,7 +8,7 @@ import {
 
 // BE Data Type
 
-interface MultipleResponseFieldData extends AnswerFieldBaseData {
+export interface MultipleResponseFieldData extends AnswerFieldBaseData {
   option_ids: number[];
 }
 
@@ -22,7 +22,7 @@ export interface MultipleResponseAnswerData extends AnswerBaseData {
   latestAnswer?: MultipleResponseAnswerData;
 }
 
-interface MultipleChoiceFieldData extends AnswerFieldBaseData {
+export interface MultipleChoiceFieldData extends AnswerFieldBaseData {
   option_ids: number[];
 }
 

@@ -1,4 +1,8 @@
+import { QuestionType } from '../assessment/question';
+import { SpecificQuestionDataMap } from '../assessment/submission/question/types';
 import { WorkflowState } from '../assessment/submission/submission';
+
+import { AnswerDetailsMap } from './answer';
 
 interface AssessmentInfo {
   id: number;
@@ -26,12 +30,14 @@ export interface StudentInfo extends UserInfo {
   role: 'student';
 }
 
-interface AnswerInfo {
+export interface AnswerInfo {
+  lastAttemptAnswerId: number;
   grade: number;
   maximumGrade: number;
 }
 
 export interface AttemptInfo {
+  lastAttemptAnswerId: number;
   isAutograded: boolean;
   attemptCount: number;
   correct: boolean | null;
@@ -81,4 +87,20 @@ export interface AncestorAssessmentStats {
 
 export interface AssessmentStatisticsStore extends MainAssessmentStats {
   isLoading: boolean;
+}
+
+interface QuestionBasicDetails<T extends keyof typeof QuestionType> {
+  id: number;
+  title: string;
+  description: string;
+  type: T;
+  maximumGrade: number;
+}
+
+export type QuestionDetails<T extends keyof typeof QuestionType> =
+  QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
+
+export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
+  question: QuestionDetails<T>;
+  answer: AnswerDetailsMap[T];
 }
