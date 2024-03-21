@@ -122,7 +122,7 @@ export interface CourseAssessment {
   averageTimeTaken: string;
   stdevTimeTaken: string;
   numSubmitted: number;
-  numAttempting: number;
+  numAttempted: number;
   numLate: number;
 }
 
