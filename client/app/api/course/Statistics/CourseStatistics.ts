@@ -1,5 +1,6 @@
 import { APIResponse } from 'api/types';
 import {
+  AssessmentsStatistics,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
   StaffStatistics,
@@ -27,5 +28,9 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
 
   fetchCoursePerformanceStatistics(): APIResponse<CoursePerformanceStatistics> {
     return this.client.get(`${this.#urlPrefix}/course/performance`);
+  }
+
+  fetchAssessmentsStatistics(): APIResponse<AssessmentsStatistics> {
+    return this.client.get(`${this.#urlPrefix}/assessments`);
   }
 }
