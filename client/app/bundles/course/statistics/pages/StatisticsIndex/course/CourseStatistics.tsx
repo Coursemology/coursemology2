@@ -7,15 +7,12 @@ import {
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
-import StatisticsTabs from '../StatisticsTabs';
-
 import StudentPerformanceTable from './StudentPerformanceTable';
 import StudentProgressionChart from './StudentProgressionChart';
 
 const CourseStatistics: FC = () => {
   return (
     <>
-      <StatisticsTabs />
       <Preload
         render={<LoadingIndicator />}
         while={fetchCourseProgressionStatistics}
