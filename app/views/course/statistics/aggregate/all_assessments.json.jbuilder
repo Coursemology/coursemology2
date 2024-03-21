@@ -18,7 +18,7 @@ json.assessments @assessments do |assessment|
     json.title assessment.tab.category.title
   end
 
-  json.maximumGrade assessment.maximum_grade
+  json.maximumGrade @max_grades_hash[assessment.id] || 0
 
   json.averageGrade grade_stats ? grade_stats[0] : 0
   json.stdevGrade grade_stats ? grade_stats[1] : 0
@@ -27,6 +27,6 @@ json.assessments @assessments do |assessment|
   json.stdevTimeTaken seconds_to_str(duration_stats[1])
 
   json.numSubmitted @num_submitted_students_hash[assessment.id] || 0
-  json.numAttempting @num_attempting_students_hash[assessment.id] || 0
+  json.numAttempted @num_attempted_students_hash[assessment.id] || 0
   json.numLate @num_late_students_hash[assessment.id] || 0
 end

@@ -4,17 +4,16 @@ module Course::Statistics::CountsConcern
 
   private
 
-  def num_attempting_students_hash
+  def num_attempted_students_hash
     attempting_submissions = @all_submissions_info.
                              to_a.
-                             select { |submission| submission['workflow_state'] == 'attempting' }.
                              map { |submission| submission['assessment_id'] }
 
-    attempting_submissions_count = attempting_submissions.each_with_object(Hash.new(0)) do |assessment_id, counts|
+    attempted_submissions_count = attempting_submissions.each_with_object(Hash.new(0)) do |assessment_id, counts|
       counts[assessment_id] += 1
     end
 
-    attempting_submissions_count.to_h { |assessment_id, count| [assessment_id, count] }
+    attempted_submissions_count.to_h { |assessment_id, count| [assessment_id, count] }
   end
 
   def num_submitted_students_hash
