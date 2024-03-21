@@ -14,4 +14,23 @@ module Course::Statistics::GradesConcern
 
     average_and_stdev_each_assessment(grades_hash)
   end
+
+  def max_grade_statistics_hash
+    max_grades = Course::Assessment.find_by_sql(<<-SQL.squish
+      SELECT
+        assessment_id,
+        SUM(maximum_grade) AS maximum_grade
+      FROM (
+        SELECT cqa.assessment_id, caq.maximum_grade
+        FROM course_assessment_questions caq
+        JOIN course_question_assessments cqa
+        ON caq.id = cqa.question_id
+        WHERE cqa.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
+      ) assessment_grade_table
+      GROUP BY assessment_id
+    SQL
+                                               )
+
+    max_grades.map { |mg| [mg.assessment_id, mg.maximum_grade] }.to_h
+  end
 end
