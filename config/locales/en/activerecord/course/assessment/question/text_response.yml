@@ -3,14 +3,14 @@ en:
     attributes:
       models:
         course/assessment/question/text_response:
-          text_response: "Text Response Question"
-          file_upload: "File Upload Question"
-          comprehension: "Comprehension Question"
+          text_response: 'Text Response Question'
+          file_upload: 'File Upload Question'
+          comprehension: 'Comprehension Question'
     errors:
       models:
         course/assessment/question/text_response:
           attributes:
             maximum_grade:
-              invalid_grade: "must be no less than the grade of any solution"
+              invalid_grade: 'must be no less than the grade of any solution'
             max_attachment_size:
-              size_must_be_defined: "max attachment size must be defined if max attachments is nonzero"
+              size_must_be_defined: 'max attachment size must be defined if max attachments is non-zero'
