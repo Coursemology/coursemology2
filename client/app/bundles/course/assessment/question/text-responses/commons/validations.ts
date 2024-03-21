@@ -2,47 +2,63 @@ import {
   AttachmentType,
   SolutionData,
 } from 'types/course/assessment/question/text-responses';
-import { array, bool, number, object, string, ValidationError } from 'yup';
+import {
+  AnyObjectSchema,
+  array,
+  bool,
+  number,
+  object,
+  string,
+  ValidationError,
+} from 'yup';
+
+import { MessageTranslator } from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
 import getIndexAndKeyPath from '../../commons/utils';
 import { commonQuestionFieldsValidation } from '../../components/CommonQuestionFields';
 
-const MAX_ATTACHMENT_UPPER_LIMIT = 50;
-const MAX_ATTACHMENT_SIZE_UPPER_LIMIT = 1024;
-
-export const questionSchema = commonQuestionFieldsValidation.shape({
-  attachmentType: string()
-    .oneOf(
-      Object.values(AttachmentType),
-      translations.validAttachmentSettingValues,
-    )
-    .required(translations.attachmentSettingRequired),
-  maxAttachments: number().when('attachmentType', {
-    is: AttachmentType.MULTIPLE_ATTACHMENT,
-    then: number()
-      .required()
-      .min(1, translations.mustSpecifyPositiveMaxAttachment)
-      .max(
-        MAX_ATTACHMENT_UPPER_LIMIT,
-        translations.mustBeLessThanMaxAttachments,
+export const questionSchema = (
+  t: MessageTranslator,
+  defaultMaxAttachmentSize: number,
+  defaultMaxAttachments: number,
+): AnyObjectSchema =>
+  commonQuestionFieldsValidation.shape({
+    attachmentType: string()
+      .oneOf(
+        Object.values(AttachmentType),
+        translations.validAttachmentSettingValues,
       )
-      .typeError(translations.mustSpecifyMaxAttachment),
-  }),
-  maxAttachmentSize: number().when('attachmentType', {
-    is: AttachmentType.NO_ATTACHMENT,
-    then: number(),
-    otherwise: number()
-      .required()
-      .min(1, translations.mustSpecifyPositiveMaxAttachmentSize)
-      .max(
-        MAX_ATTACHMENT_SIZE_UPPER_LIMIT,
-        translations.mustBeLessThanMaxAttachmentSize,
-      )
-      .typeError(translations.mustSpecifyMaxAttachmentSize),
-  }),
-  isAttachmentRequired: bool(),
-});
+      .required(translations.attachmentSettingRequired),
+    maxAttachments: number().when('attachmentType', {
+      is: AttachmentType.MULTIPLE_ATTACHMENT,
+      then: number()
+        .required()
+        .min(1, translations.mustSpecifyPositiveMaxAttachment)
+        .max(
+          defaultMaxAttachments,
+          t(translations.mustBeLessThanMaxAttachments, {
+            defaultMax: defaultMaxAttachments,
+          }),
+        )
+        .typeError(translations.mustSpecifyMaxAttachment),
+    }),
+    maxAttachmentSize: number().when('attachmentType', {
+      is: AttachmentType.NO_ATTACHMENT,
+      then: number(),
+      otherwise: number()
+        .required()
+        .min(1, translations.mustSpecifyPositiveMaxAttachmentSize)
+        .max(
+          defaultMaxAttachmentSize,
+          t(translations.mustBeLessThanMaxAttachmentSize, {
+            defaultMax: defaultMaxAttachmentSize,
+          }),
+        )
+        .typeError(translations.mustSpecifyMaxAttachmentSize),
+    }),
+    isAttachmentRequired: bool(),
+  });
 
 const solutionSchema = object({
   solutionType: string().required(translations.mustSpecifySolutionType),

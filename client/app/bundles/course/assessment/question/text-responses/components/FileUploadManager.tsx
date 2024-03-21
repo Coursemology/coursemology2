@@ -109,7 +109,7 @@ const FileUploadManager = (props: Props): JSX.Element => {
                 disableMargins
                 field={field}
                 fieldState={fieldState}
-                label={t(translations.maxAttachment)}
+                label={t(translations.maxAttachments)}
                 variant="filled"
               />
             )}
