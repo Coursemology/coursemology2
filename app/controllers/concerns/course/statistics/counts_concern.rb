@@ -5,11 +5,11 @@ module Course::Statistics::CountsConcern
   private
 
   def num_attempted_students_hash
-    attempting_submissions = @all_submissions_info.
-                             to_a.
-                             map { |submission| submission['assessment_id'] }
+    attempted_submissions = @all_submissions_info.
+                            to_a.
+                            map { |submission| submission['assessment_id'] }
 
-    attempted_submissions_count = attempting_submissions.each_with_object(Hash.new(0)) do |assessment_id, counts|
+    attempted_submissions_count = attempted_submissions.each_with_object(Hash.new(0)) do |assessment_id, counts|
       counts[assessment_id] += 1
     end
 
