@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 json.autogradable question.auto_gradable?
-default_max_attachment_size_mb = Course::Assessment::Question::TextResponse::DEFAULT_MAX_ATTACHMENT_SIZE_MB
 
 case question.question_type_sym
 when :file_upload
   json.maxAttachments question.max_attachments
-  json.maxAttachmentSize question.max_attachment_size || default_max_attachment_size_mb
+  json.maxAttachmentSize question.computed_max_attachment_size
   json.isAttachmentRequired question.is_attachment_required
 
 when :text_response
   json.maxAttachments question.max_attachments
-  json.maxAttachmentSize question.max_attachment_size || default_max_attachment_size_mb if question.max_attachments > 0
+  json.maxAttachmentSize question.computed_max_attachment_size if question.max_attachments > 0
   json.isAttachmentRequired question.is_attachment_required
 
   if can_grade && question.auto_gradable?

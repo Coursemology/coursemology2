@@ -9,7 +9,7 @@ const translations = defineMessages({
   limitedNumberOfFileUploadAllowed: {
     id: 'course.assessment.submission.FileInput.onlyOneFileUploadAllowed',
     defaultMessage:
-      '*You can only upload AT MOST {maxAttachment} file for this question',
+      '*You can only upload AT MOST {maxAttachments} file for this question',
   },
   exactlyOneFileUploadAllowed: {
     id: 'course.assessment.submission.FileInput.exactlyOneFileUploadAllowed',
