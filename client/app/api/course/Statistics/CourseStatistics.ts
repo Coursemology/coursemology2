@@ -1,0 +1,31 @@
+import { APIResponse } from 'api/types';
+import {
+  CoursePerformanceStatistics,
+  CourseProgressionStatistics,
+  StaffStatistics,
+  StudentsStatistics,
+} from 'course/statistics/types';
+
+import BaseCourseAPI from '../Base';
+
+export default class CourseStatisticsAPI extends BaseCourseAPI {
+  get #urlPrefix(): string {
+    return `/courses/${this.courseId}/statistics`;
+  }
+
+  fetchAllStudentStatistics(): APIResponse<StudentsStatistics> {
+    return this.client.get(`${this.#urlPrefix}/students`);
+  }
+
+  fetchAllStaffStatistics(): APIResponse<StaffStatistics> {
+    return this.client.get(`${this.#urlPrefix}/staff`);
+  }
+
+  fetchCourseProgressionStatistics(): APIResponse<CourseProgressionStatistics> {
+    return this.client.get(`${this.#urlPrefix}/course/progression`);
+  }
+
+  fetchCoursePerformanceStatistics(): APIResponse<CoursePerformanceStatistics> {
+    return this.client.get(`${this.#urlPrefix}/course/performance`);
+  }
+}

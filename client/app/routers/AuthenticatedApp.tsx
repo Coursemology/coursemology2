@@ -118,6 +118,7 @@ import { forumHandle, forumTopicHandle } from 'course/forum/handles';
 import { folderHandle } from 'course/material/folders/handles';
 import materialLoader from 'course/material/materialLoader';
 import { videoWatchHistoryHandle } from 'course/statistics/handles';
+import StatisticsIndex from 'course/statistics/pages/StatisticsIndex';
 import CourseStatistics from 'course/statistics/pages/StatisticsIndex/course/CourseStatistics';
 import StaffStatistics from 'course/statistics/pages/StatisticsIndex/staff/StaffStatistics';
 import StudentsStatistics from 'course/statistics/pages/StatisticsIndex/students/StudentsStatistics';
@@ -207,6 +208,8 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'statistics',
+          handle: StatisticsIndex.handle,
+          element: <StatisticsIndex />,
           children: [
             {
               path: 'students',

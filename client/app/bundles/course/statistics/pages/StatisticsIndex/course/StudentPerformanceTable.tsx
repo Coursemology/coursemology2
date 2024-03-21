@@ -99,6 +99,18 @@ interface Props {
   students: CourseStudent[];
 }
 
+const getStudentHighlightColor = (student: CourseStudent): string => {
+  if (student.isTopStudent) {
+    return 'bg-green-100';
+  }
+
+  if (student.isBottomStudent) {
+    return 'bg-red-100';
+  }
+
+  return '';
+};
+
 const StudentPerformanceTable: FC<Props> = (props) => {
   const {
     students,
@@ -132,18 +144,6 @@ const StudentPerformanceTable: FC<Props> = (props) => {
     isTopStudent: index <= numHighlightedStudents,
     isBottomStudent: index >= students.length - numHighlightedStudents,
   }));
-
-  const getStudentHighlightColor = (student: CourseStudent): string => {
-    if (student.isTopStudent) {
-      return 'bg-green-100';
-    }
-
-    if (student.isBottomStudent) {
-      return 'bg-red-100';
-    }
-
-    return '';
-  };
 
   const columns: ColumnTemplate<CourseStudent>[] = [
     {
