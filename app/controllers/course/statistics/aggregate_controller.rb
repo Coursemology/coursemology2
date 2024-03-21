@@ -28,7 +28,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def all_assessments
-    @assessments = current_course.assessments.published.includes(tab: :category).calculated(:maximum_grade)
+    @assessments = current_course.assessments.published.includes(tab: :category)
     @all_students = current_course.course_users.students
     @all_submissions_info = all_submissions_info
 
@@ -52,7 +52,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
         AND caa.current_answer = TRUE
       GROUP BY cas.id, cas.workflow_state, cas.creator_id, cas.created_at, cas.submitted_at,
         cas.assessment_id
-                                                          ")
+                                                                   ")
   end
 
   def assessment_info_array
@@ -128,8 +128,9 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
 
   def fetch_all_assessment_related_statistics_hash
     @grades_hash = grade_statistics_hash
+    @max_grades_hash = max_grade_statistics_hash
     @durations_hash = duration_statistics_hash
-    @num_attempting_students_hash = num_attempting_students_hash
+    @num_attempted_students_hash = num_attempted_students_hash
     @num_submitted_students_hash = num_submitted_students_hash
     @num_late_students_hash = num_late_students_hash
   end
