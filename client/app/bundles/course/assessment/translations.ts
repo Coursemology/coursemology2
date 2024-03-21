@@ -454,8 +454,8 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.isAttachmentRequired',
     defaultMessage: 'Require file upload for this question',
   },
-  maxAttachment: {
-    id: 'course.assessment.question.textResponses.maxAttachment',
+  maxAttachments: {
+    id: 'course.assessment.question.textResponses.maxAttachments',
     defaultMessage: 'Max Number of Attachments',
   },
   maxAttachmentSize: {
@@ -789,11 +789,11 @@ const translations = defineMessages({
   },
   mustBeLessThanMaxAttachments: {
     id: 'course.assessment.question.multipleResponses.mustBeLessThanMaxAttachments',
-    defaultMessage: 'Must be at most 50.',
+    defaultMessage: 'Must be at most {defaultMax}.',
   },
   mustBeLessThanMaxAttachmentSize: {
     id: 'course.assessment.question.multipleResponses.mustBeLessThanMaxAttachmentSize',
-    defaultMessage: 'Must be at most 1024MB.',
+    defaultMessage: 'Must be at most {defaultMax}MB.',
   },
   mustSpecifyResponse: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyResponse',

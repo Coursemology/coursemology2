@@ -104,7 +104,11 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
       headsUp
       initialValues={formattedData.question!}
       onSubmit={handleSubmit}
-      validates={questionSchema}
+      validates={questionSchema(
+        t,
+        data.defaultMaxAttachmentSize!,
+        data.defaultMaxAttachments!,
+      )}
     >
       {(control): JSX.Element => (
         <>
