@@ -156,17 +156,17 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
       let!(:students) { create_list(:course_student, 3, course: course) }
 
       let!(:attempting_submission) do
-        create(:submission, :attempting, assesment: assesment, creator: students[0].user)
+        create(:submission, :attempting, assessment: assessment, creator: students[0].user)
       end
 
       let!(:submitted_submission) do
         create(:submission, :submitted,
-               assesment: assesment, creator: students[1].user, submitted_at: Time.now)
+               assessment: assessment, creator: students[1].user, submitted_at: Time.now)
       end
 
       let!(:late_submission) do
         create(:submission, :submitted,
-               assessment: assesment, creator: students[2].user, submitted_at: 2.hours.from_now)
+               assessment: assessment, creator: students[2].user, submitted_at: 2.hours.from_now)
       end
 
       subject { get :all_assessments, format: :json, params: { course_id: course, user_id: course_user } }
