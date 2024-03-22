@@ -12,6 +12,10 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 
 export const translations = defineMessages({
+  assessments: {
+    id: 'course.statistics.StatisticsIndex.header.assessments',
+    defaultMessage: 'Assessments',
+  },
   statistics: {
     id: 'course.statistics.StatisticsIndex.header.statistics',
     defaultMessage: 'Statistics',
@@ -61,6 +65,10 @@ const allTabs = {
     label: translations.course,
     href: 'course',
   },
+  assessmentTab: {
+    label: translations.assessments,
+    href: 'assessments',
+  },
 };
 
 const StatisticsIndex: FC = () => {
@@ -72,6 +80,7 @@ const StatisticsIndex: FC = () => {
     allTabs.studentsTab,
     allTabs.staffTab,
     allTabs.courseTab,
+    allTabs.assessmentTab,
   ];
 
   return (
