@@ -22,11 +22,16 @@ export default class UsersAPI extends BaseCourseAPI {
    * Fetches a list of users in a course.
    * Note that GET /users returns only students if asBasicData is false.
    * Otherwise, GET /users will return BasicListData of all course users when asBasicData is true.
+   * unless the option onlyStudents is also set as true, then GET /users will return BasicListData
+   * of only students
    *
    * param asBasicData: bool - whether to return users: CourseUserListData[] or
    *                           as userOptions: CourseUserBasicListData[]
    */
-  index(asBasicData: boolean = false): Promise<
+  index(
+    asBasicData: boolean = false,
+    onlyStudents: boolean = false,
+  ): Promise<
     AxiosResponse<{
       users: CourseUserListData[];
       userOptions?: CourseUserBasicListData[];
@@ -35,7 +40,7 @@ export default class UsersAPI extends BaseCourseAPI {
     }>
   > {
     return this.client.get(`${this.#urlPrefix}/users`, {
-      params: { as_basic_data: asBasicData },
+      params: { as_basic_data: asBasicData, only_students: onlyStudents },
     });
   }
 

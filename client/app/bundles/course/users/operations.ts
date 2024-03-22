@@ -3,8 +3,11 @@ import {
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,
   CourseUserEntity,
+  CourseUserListData,
   CourseUserMiniEntity,
   LearningRateRecordsEntity,
+  ManageCourseUsersPermissions,
+  ManageCourseUsersSharedData,
   StaffRoles,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
@@ -80,6 +83,19 @@ export function fetchUsers(asBasicData: boolean = false): Operation {
       }
     });
 }
+
+export const fetchStudentsBasicInfo = async (
+  asBasicData: boolean = false,
+  onlyStudents: boolean = false,
+): Promise<{
+  users: CourseUserListData[];
+  userOptions?: CourseUserBasicListData[];
+  permissions?: ManageCourseUsersPermissions;
+  manageCourseUsersData?: ManageCourseUsersSharedData;
+}> => {
+  const response = await CourseAPI.users.index(asBasicData, onlyStudents);
+  return response.data;
+};
 
 export function fetchStudents(): Operation {
   return async (dispatch) =>
