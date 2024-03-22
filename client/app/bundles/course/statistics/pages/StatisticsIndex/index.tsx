@@ -80,6 +80,7 @@ const allTabs = {
 };
 
 const StatisticsIndex: FC = () => {
+  const lastPartOfCurrentPath = getLastPartOfCurrentPath();
   const { t } = useTranslation();
   const statisticsUrl = getCourseStatisticsURL(getCourseId());
 
@@ -91,7 +92,6 @@ const StatisticsIndex: FC = () => {
     allTabs.submissionTimeTab,
   ];
 
-  const lastPartOfCurrentPath = getLastPartOfCurrentPath();
   const defaultTabIndex = tabs.findIndex(
     (tab) => tab.href === lastPartOfCurrentPath,
   );

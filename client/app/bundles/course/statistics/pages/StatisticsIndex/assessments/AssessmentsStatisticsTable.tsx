@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { Typography } from '@mui/material';
 
-import { CourseAssessment } from 'course/statistics/types';
+import { CourseAssessmentStatistics } from 'course/statistics/types';
 import Link from 'lib/components/core/Link';
 import { ColumnTemplate } from 'lib/components/table';
 import Table from 'lib/components/table/Table';
@@ -75,7 +75,7 @@ const translations = defineMessages({
 
 interface Props {
   numStudents: number;
-  assessments: CourseAssessment[];
+  assessments: CourseAssessmentStatistics[];
 }
 
 const AssessmentsStatisticsTable: FC<Props> = (props) => {
@@ -85,7 +85,7 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
 
   assessments.sort((a1, a2) => a1.title.localeCompare(a2.title));
 
-  const columns: ColumnTemplate<CourseAssessment>[] = [
+  const columns: ColumnTemplate<CourseAssessmentStatistics>[] = [
     {
       of: 'title',
       title: t(translations.title),
@@ -226,7 +226,9 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
         getRowClassName={(assessment): string =>
           `assessment_statistics_${assessment.id}`
         }
-        getRowEqualityData={(assessment): CourseAssessment => assessment}
+        getRowEqualityData={(assessment): CourseAssessmentStatistics =>
+          assessment
+        }
         getRowId={(assessment): string => assessment.id.toString()}
         indexing={{ indices: true }}
         pagination={{

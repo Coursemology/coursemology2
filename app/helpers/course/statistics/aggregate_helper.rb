@@ -11,4 +11,10 @@ module Course::Statistics::AggregateHelper
 
     format("%2d #{t('time.day')} %02d:%02d:%02d", days, hours, minutes, seconds)
   end
+
+  def submission_status(workflow_state, start_at)
+    return 'not_released' if !workflow_state && start_at > Time.now
+
+    workflow_state
+  end
 end
