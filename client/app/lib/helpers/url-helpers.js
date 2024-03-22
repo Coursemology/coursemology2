@@ -136,12 +136,20 @@ function getCurrentPath() {
   return match && match[1];
 }
 
+function getLastPartOfCurrentPath() {
+  const currentPath = getCurrentPath();
+  const currentPathParts = currentPath.split('/');
+
+  return currentPathParts[currentPathParts.length - 1];
+}
+
 export {
   getAchievementId,
   getAssessmentId,
   getCourseId,
   getCourseUserId,
   getCurrentPath,
+  getLastPartOfCurrentPath,
   getScribingId,
   getSubmissionId,
   getSurveyId,
