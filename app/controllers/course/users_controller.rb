@@ -22,7 +22,9 @@ class Course::UsersController < Course::ComponentController
     course_users = current_course.course_users
     case params[:action]
     when 'index'
-      if params[:as_basic_data] == 'true'
+      if params[:as_basic_data] == 'true' && params[:only_students] == 'true'
+        @user_options = course_users.students.order_alphabetically.pluck(:id, :name, :role)
+      elsif params[:as_basic_data] == 'true'
         @user_options = course_users.order_alphabetically.pluck(:id, :name, :role)
       else
         @course_users ||= course_users.without_phantom_users.students.
