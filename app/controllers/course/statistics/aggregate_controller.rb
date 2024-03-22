@@ -35,7 +35,16 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     fetch_all_assessment_related_statistics_hash
   end
 
+  def submission_time
+    @assessments = current_course.assessments.includes(tab: :category)
+    @student_info = CourseUser.where(id: submission_time_params[:student_id]).first
+  end
+
   private
+
+  def submission_time_params
+    params.permit(:student_id)
+  end
 
   def all_submissions_info
     @all_submissions_info ||= ActiveRecord::Base.connection.execute("

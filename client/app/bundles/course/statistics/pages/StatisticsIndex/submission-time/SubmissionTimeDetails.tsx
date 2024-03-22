@@ -5,6 +5,8 @@ import { CourseUserBasicListData } from 'types/course/courseUsers';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
+import SubmissionTimeTable from './SubmissionTimeTable';
+
 interface Props {
   students: CourseUserBasicListData[];
 }
@@ -56,9 +58,9 @@ const SubmissionTimeDetails: FC<Props> = (props) => {
         )}
         value={null}
       />
-      <Typography className="mt-6" variant="h6">
-        {selectedStudent?.name ?? ''}
-      </Typography>
+      {selectedStudent && (
+        <SubmissionTimeTable studentId={selectedStudent.id} />
+      )}
     </div>
   );
 };

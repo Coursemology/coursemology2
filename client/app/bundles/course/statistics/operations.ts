@@ -6,6 +6,7 @@ import {
   CourseProgressionStatistics,
   StaffStatistics,
   StudentsStatistics,
+  SubmissionTimeStatistics,
 } from './types';
 
 export const fetchStudentStatistics = async (): Promise<StudentsStatistics> => {
@@ -40,3 +41,12 @@ export const fetchAssessmentsStatistics =
       await CourseAPI.statistics.course.fetchAssessmentsStatistics();
     return response.data;
   };
+
+export const fetchSubmissionTimeStatistics = async (
+  studentId: number,
+): Promise<SubmissionTimeStatistics> => {
+  const response =
+    await CourseAPI.statistics.course.fetchSubmissionTimeStatistics(studentId);
+
+  return response.data;
+};
