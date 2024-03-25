@@ -36,7 +36,7 @@
     "@ckeditor/ckeditor5-react": "^6.2.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@hello-pangea/dnd": "^16.5.0",
+    "@hello-pangea/dnd": "^16.6.0",
     "@hookform/resolvers": "^2.9.11",
     "@mui/icons-material": "^5.15.3",
     "@mui/lab": "^5.0.0-alpha.167",
