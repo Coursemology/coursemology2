@@ -97,8 +97,7 @@ class Course::Assessment < ApplicationRecord
   calculated :question_count, (lambda do
     Course::QuestionAssessment.unscope(:order).
       select('coalesce(count(DISTINCT cqa.question_id), 0)').
-      joins('INNER JOIN course_question_assessments cqa ON cqa.assessment_id = course_assessments.id').
-      group('course_assessments.id')
+      joins('INNER JOIN course_question_assessments cqa ON cqa.assessment_id = course_assessments.id')
   end)
 
   # @!method self.ordered_by_date_and_title

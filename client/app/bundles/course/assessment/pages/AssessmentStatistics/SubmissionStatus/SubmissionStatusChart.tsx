@@ -1,6 +1,9 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import palette from 'theme/palette';
-import { WorkflowState } from 'types/course/assessment/submission/submission';
+import {
+  AncestorSubmissionInfo,
+  MainSubmissionInfo,
+} from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
 import BarChart from 'lib/components/core/BarChart';
@@ -33,54 +36,35 @@ const translations = defineMessages({
 });
 
 interface Props {
-  numStudents: number;
-  submissionWorkflowStates: WorkflowState[];
+  submissions: MainSubmissionInfo[] | AncestorSubmissionInfo[];
 }
 
 const SubmissionStatusChart = (props: Props): JSX.Element => {
-  const { numStudents, submissionWorkflowStates } = props;
+  const { submissions } = props;
+  const workflowStatesArray = Object.values(workflowStates);
 
-  const numUnstarted = numStudents - submissionWorkflowStates.length;
-  const numAttempting = submissionWorkflowStates.filter(
-    (workflow) => workflow === workflowStates.Attempting,
-  ).length;
-  const numSubmitted = submissionWorkflowStates.filter(
-    (workflow) => workflow === workflowStates.Submitted,
-  ).length;
-  const numGraded = submissionWorkflowStates.filter(
-    (workflow) => workflow === workflowStates.Graded,
-  ).length;
-  const numPublished = submissionWorkflowStates.filter(
-    (workflow) => workflow === workflowStates.Published,
-  ).length;
+  const initialCounts = workflowStatesArray.reduce(
+    (counts, w) => ({ ...counts, [w]: 0 }),
+    {},
+  );
+  const submissionStateCounts = submissions.reduce((counts, submission) => {
+    return {
+      ...counts,
+      [submission.workflowState ?? workflowStates.Unstarted]:
+        counts[submission.workflowState ?? workflowStates.Unstarted] + 1,
+    };
+  }, initialCounts);
 
-  const data = [
-    {
-      color: palette.submissionStatus[workflowStates.Unstarted],
-      count: numUnstarted,
-      label: <FormattedMessage {...translations.unattempted} />,
-    },
-    {
-      color: palette.submissionStatus[workflowStates.Attempting],
-      count: numAttempting,
-      label: <FormattedMessage {...translations.attempting} />,
-    },
-    {
-      color: palette.submissionStatus[workflowStates.Submitted],
-      count: numSubmitted,
-      label: <FormattedMessage {...translations.submitted} />,
-    },
-    {
-      color: palette.submissionStatus[workflowStates.Graded],
-      count: numGraded,
-      label: <FormattedMessage {...translations.graded} />,
-    },
-    {
-      color: palette.submissionStatus[workflowStates.Published],
-      count: numPublished,
-      label: <FormattedMessage {...translations.published} />,
-    },
-  ];
+  const data = workflowStatesArray
+    .map((w) => {
+      const count = submissionStateCounts[w];
+      return {
+        count,
+        color: palette.submissionStatus[w],
+        label: <FormattedMessage {...translations[w]} />,
+      };
+    })
+    .filter((seg) => seg.count > 0);
 
   return <BarChart data={data} />;
 };

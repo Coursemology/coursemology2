@@ -31,9 +31,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
     load_course_user_students
 
-    # we do not need the nil value for this hash, since we aim only
-    # to display the statistics charts
-    @student_submissions_hash = fetch_hash_for_ancestor_assessment(submissions, @all_students).compact
+    @student_submissions_hash = fetch_hash_for_ancestor_assessment(submissions, @all_students)
   end
 
   private

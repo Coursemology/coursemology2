@@ -23,12 +23,13 @@ const AncestorStatistics = (props: AncestorStatisticsProps): JSX.Element => {
   };
 
   return (
-    <Preload render={<LoadingIndicator />} while={fetchAncestorStatisticsInfo}>
+    <Preload
+      render={<LoadingIndicator />}
+      syncsWith={[selectedAssessmentId]}
+      while={fetchAncestorStatisticsInfo}
+    >
       {(data): JSX.Element => (
-        <StatisticsCharts
-          allStudents={data.allStudents}
-          submissions={data.submissions}
-        />
+        <StatisticsCharts submissions={data.submissions} />
       )}
     </Preload>
   );

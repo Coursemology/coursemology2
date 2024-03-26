@@ -5,7 +5,6 @@ import { processAssessment, processSubmission } from '../utils/statisticsUtils';
 
 const initialState: AssessmentStatisticsState = {
   assessment: null,
-  allStudents: [],
   submissions: [],
   ancestors: [],
 };
@@ -16,7 +15,6 @@ export const statisticsSlice = createSlice({
   reducers: {
     initialize: (state, action: PayloadAction<AssessmentStatisticsState>) => {
       state.assessment = processAssessment(action.payload.assessment);
-      state.allStudents = action.payload.allStudents;
       state.submissions = action.payload.submissions.map(processSubmission);
       state.ancestors = action.payload.ancestors;
     },

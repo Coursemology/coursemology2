@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   searchText: {
     id: 'course.assessment.statistics.searchText',
-    defaultMessage: 'Search by Group or Grader Name',
+    defaultMessage: 'Search by Student Name, Group or Grader Name',
   },
   answers: {
     id: 'course.assessment.statistics.answers',
@@ -171,6 +171,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       },
       title: t(translations.name),
       sortable: true,
+      searchable: true,
       cell: (datum) => (
         <div className="flex grow items-center">
           <Link to={`/courses/${courseId}/users/${datum.courseUser.id}`}>
