@@ -9,6 +9,7 @@ export type SubmissionListDataPermissions = Permissions<
 >;
 
 export type SubmissionStatus =
+  | 'unreleased'
   | 'attempting'
   | 'submitted'
   | 'graded'

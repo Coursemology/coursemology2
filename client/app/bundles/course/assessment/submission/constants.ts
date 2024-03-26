@@ -22,6 +22,7 @@ export const workflowStates = {
   Submitted: 'submitted' as const,
   Graded: 'graded' as const,
   Published: 'published' as const,
+  Unreleased: 'unreleased' as const,
 };
 
 export const TestCaseTypes = {

@@ -74,6 +74,7 @@ const palette = {
 
   // Add custom colors below
   submissionStatus: {
+    [workflowStates.Unreleased]: colors.orange[100],
     [workflowStates.Unstarted]: colors.red[100],
     [workflowStates.Attempting]: colors.yellow[100],
     [workflowStates.Submitted]: colors.grey[100],
