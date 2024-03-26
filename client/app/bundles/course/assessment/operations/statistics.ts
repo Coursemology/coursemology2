@@ -7,6 +7,7 @@ import { statisticsActions as actions } from '../reducers/statistics';
 
 export function fetchAssessmentStatistics(assessmentId: number): Operation {
   return async (dispatch) => {
+    dispatch(actions.reset());
     CourseAPI.statistics.assessment
       .fetchMainStatistics(assessmentId)
       .then((response) => {
@@ -17,7 +18,6 @@ export function fetchAssessmentStatistics(assessmentId: number): Operation {
             allStudents: data.allStudents,
             submissions: data.submissions,
             ancestors: data.ancestors,
-            isLoading: false,
           }),
         );
       });

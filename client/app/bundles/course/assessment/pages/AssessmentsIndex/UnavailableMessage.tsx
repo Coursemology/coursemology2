@@ -6,11 +6,11 @@ import {
   AssessmentUnlockRequirements,
 } from 'types/course/assessment/assessments';
 
-import { fetchAssessmentUnlockRequirements } from 'course/assessment/operations/assessments';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { fetchAssessmentUnlockRequirements } from '../../operations/assessments';
 import translations from '../../translations';
 
 interface UnavailableMessageProps {

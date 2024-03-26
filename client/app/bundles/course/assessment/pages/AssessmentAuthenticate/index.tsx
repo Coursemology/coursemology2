@@ -10,7 +10,6 @@ import {
 } from 'types/course/assessment/assessments';
 import { object, string } from 'yup';
 
-import { authenticateAssessment } from 'course/assessment/operations/assessments';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getAssessmentURL } from 'lib/helpers/url-builders';
@@ -19,6 +18,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { formatFullDateTime } from 'lib/moment';
 import formTranslations from 'lib/translations/form';
 
+import { authenticateAssessment } from '../../operations/assessments';
 import translations from '../../translations';
 
 interface AssessmentAuthenticateProps {
