@@ -23,7 +23,9 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
 
   json.submissionExists !submission.nil?
 
-  unless submission.nil?
+  if submission.nil?
+    json.workflowState 'unstarted'
+  else
     json.workflowState submission.workflow_state
     json.submittedAt submission.submitted_at&.iso8601
     json.endAt end_at&.iso8601
@@ -44,13 +46,6 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
       end
     end
   end
-end
-
-json.allStudents @all_students.each do |student|
-  json.id student.id
-  json.name student.name
-  json.role student.role
-  json.isPhantom student.phantom?
 end
 
 json.ancestors @ancestors do |ancestor|

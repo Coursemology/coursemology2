@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { useAppSelector } from 'lib/hooks/store';
 
 import { getAssessmentStatistics } from '../selectors';
-import { processSubmissionsIntoChartData } from '../utils';
 
 import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
 
@@ -21,18 +20,8 @@ const MainSubmissionTimeAndGradeStatistics: FC<Props> = (props) => {
   const includedSubmissions = includePhantom
     ? nonNullSubmissions
     : nonNullSubmissions.filter((s) => !s.courseUser.isPhantom);
-  const { labels, lineData, barData } =
-    processSubmissionsIntoChartData(includedSubmissions);
-  const hasEndAt = includedSubmissions.every((s) => s.endAt);
 
-  return (
-    <SubmissionTimeAndGradeChart
-      barData={barData}
-      hasEndAt={hasEndAt}
-      labels={labels}
-      lineData={lineData}
-    />
-  );
+  return <SubmissionTimeAndGradeChart submissions={includedSubmissions} />;
 };
 
 export default MainSubmissionTimeAndGradeStatistics;

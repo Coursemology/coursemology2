@@ -48,9 +48,9 @@ export interface MainSubmissionInfo extends SubmissionInfo {
 
 export interface AncestorSubmissionInfo extends SubmissionInfo {
   workflowState: WorkflowState;
-  submittedAt: string;
-  endAt: string;
-  totalGrade: number | null;
+  submittedAt?: string;
+  endAt?: string;
+  totalGrade?: number | null;
 }
 
 export interface AncestorInfo {
@@ -62,14 +62,12 @@ export interface AncestorInfo {
 export interface MainAssessmentStats {
   assessment: MainAssessmentInfo | null;
   submissions: MainSubmissionInfo[];
-  allStudents: StudentInfo[];
   ancestors: AncestorInfo[];
 }
 
 export interface AncestorAssessmentStats {
   assessment: AncestorAssessmentInfo;
   submissions: AncestorSubmissionInfo[];
-  allStudents: StudentInfo[];
 }
 
 export interface AssessmentStatisticsState extends MainAssessmentStats {}

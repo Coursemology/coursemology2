@@ -1,10 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { defineMessages } from 'react-intl';
 import { Card, CardContent, Typography } from '@mui/material';
-import {
-  AncestorSubmissionInfo,
-  StudentInfo,
-} from 'types/course/statistics/assessmentStatistics';
+import { AncestorSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -34,7 +31,6 @@ const translations = defineMessages({
 
 interface Props {
   submissions: AncestorSubmissionInfo[];
-  allStudents: StudentInfo[];
 }
 
 const CardTitle: FC<{ children: ReactNode }> = ({ children }) => (
@@ -45,9 +41,8 @@ const CardTitle: FC<{ children: ReactNode }> = ({ children }) => (
 
 const StatisticsCharts: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { submissions, allStudents } = props;
+  const { submissions } = props;
 
-  const noPhantomStudents = allStudents.filter((student) => !student.isPhantom);
   const noPhantomSubmissions = submissions.filter(
     (s) => !s.courseUser.isPhantom,
   );
@@ -60,10 +55,7 @@ const StatisticsCharts: FC<Props> = (props) => {
       <Card variant="outlined">
         <CardContent>
           <CardTitle>{t(translations.submissionStatuses)}</CardTitle>
-          <AncestorSubmissionChart
-            ancestorAllStudents={noPhantomStudents}
-            ancestorSubmissions={noPhantomSubmissions}
-          />
+          <AncestorSubmissionChart ancestorSubmissions={noPhantomSubmissions} />
         </CardContent>
       </Card>
       <Card variant="outlined">

@@ -15,7 +15,6 @@ export function fetchAssessmentStatistics(assessmentId: number): Operation {
         dispatch(
           actions.initialize({
             assessment: data.assessment,
-            allStudents: data.allStudents,
             submissions: data.submissions,
             ancestors: data.ancestors,
           }),

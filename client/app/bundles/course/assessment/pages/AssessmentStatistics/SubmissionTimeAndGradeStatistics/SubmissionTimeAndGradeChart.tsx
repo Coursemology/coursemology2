@@ -6,9 +6,16 @@ import {
   ORANGE_CHART_BACKGROUND,
   ORANGE_CHART_BORDER,
 } from 'theme/colors';
+import {
+  AncestorSubmissionInfo,
+  MainSubmissionInfo,
+} from 'types/course/statistics/assessmentStatistics';
 
+import { processSubmission } from 'course/assessment/utils/statisticsUtils';
 import GeneralChart from 'lib/components/core/charts/GeneralChart';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import { processSubmissionsIntoChartData } from '../utils';
 
 const translations = defineMessages({
   lineDatasetLabel: {
@@ -30,15 +37,16 @@ const translations = defineMessages({
 });
 
 interface Props {
-  barData: number[];
-  hasEndAt: boolean;
-  labels: string[];
-  lineData: number[];
+  submissions: MainSubmissionInfo[] | AncestorSubmissionInfo[];
 }
 
 const SubmissionTimeAndGradeChart: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { barData, hasEndAt, labels, lineData } = props;
+  const { submissions } = props;
+  const { labels, lineData, barData } = processSubmissionsIntoChartData(
+    submissions.map(processSubmission),
+  );
+  const hasEndAt = submissions.every((s) => s.endAt);
 
   const data = {
     labels,
