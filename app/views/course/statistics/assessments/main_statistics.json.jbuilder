@@ -1,50 +1,20 @@
 # frozen_string_literal: true
 json.assessment do
-  json.id @assessment.id
-  json.title @assessment.title
-  json.startAt @assessment.start_at&.iso8601
-  json.endAt @assessment.end_at&.iso8601
-  json.maximumGrade @assessment.maximum_grade
+  json.partial! 'assessment', assessment: @assessment, course: current_course
   json.questionCount @assessment.question_count
-  json.url course_assessment_path(current_course, @assessment)
 end
 
 json.submissions @student_submissions_hash.each do |course_user, (submission, answers, end_at)|
-  json.courseUser do
-    json.id course_user.id
-    json.name course_user.name
-    json.role course_user.role
-    json.isPhantom course_user.phantom?
-  end
+  json.partial! 'course_user', course_user: course_user
+  json.partial! 'submission', submission: submission, end_at: end_at
 
   json.groups course_user.groups do |group|
     json.name group.name
   end
 
-  json.submissionExists !submission.nil?
-
-  if submission.nil?
-    json.workflowState 'unstarted'
-  else
-    json.workflowState submission.workflow_state
-    json.submittedAt submission.submitted_at&.iso8601
-    json.endAt end_at&.iso8601
-    json.totalGrade submission.grade
-
-    if submission.workflow_state == 'published' && submission.grader_ids
-      # the graders are all the same regardless of question, so we just pick the first one
-      grader = @course_users_hash[submission.grader_ids.first]
-      json.grader do
-        json.id grader&.id || 0
-        json.name grader&.name || 'System'
-      end
-
-      json.answers answers.each do |answer|
-        json.id answer.id
-        json.grade answer.grade
-        json.maximumGrade @question_maximum_grade_hash[answer.question_id]
-      end
-    end
+  if !submission.nil? && submission.workflow_state == 'published' && submission.grader_ids
+    # the graders are all the same regardless of question, so we just pick the first one
+    json.partial! 'answer', grader: @course_users_hash[submission.grader_ids.first], answers: answers
   end
 end
 

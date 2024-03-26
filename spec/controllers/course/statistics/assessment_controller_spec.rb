@@ -58,17 +58,11 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
 
           # all the students data will be included here, including the non-existing submission one
           expect(json_result['submissions'].count).to eq(3)
-          expect(json_result['allStudents'].count).to eq(3)
 
           # showing the correct workflow state
           expect(json_result['submissions'][0]['workflowState']).to eq('published')
           expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
           expect(json_result['submissions'][2]['workflowState']).to be_nil
-
-          # checking if the submission exists
-          expect(json_result['submissions'][0]['submissionExists']).to be_truthy
-          expect(json_result['submissions'][1]['submissionExists']).to be_truthy
-          expect(json_result['submissions'][2]['submissionExists']).to be_falsey
 
           # only published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['answers']).not_to be_nil
@@ -95,17 +89,11 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
 
           # all the students data will be included here, including the non-existing submission one
           expect(json_result['submissions'].count).to eq(3)
-          expect(json_result['allStudents'].count).to eq(3)
 
           # showing the correct workflow state
           expect(json_result['submissions'][0]['workflowState']).to eq('published')
           expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
           expect(json_result['submissions'][2]['workflowState']).to be_nil
-
-          # checking if the submission exists
-          expect(json_result['submissions'][0]['submissionExists']).to be_truthy
-          expect(json_result['submissions'][1]['submissionExists']).to be_truthy
-          expect(json_result['submissions'][2]['submissionExists']).to be_falsey
 
           # only published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['answers']).not_to be_nil
@@ -152,9 +140,6 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
         it 'gives only the information regarding current destination as no authorization for parent course' do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
-
-          # all the students data will be included here, including the non-existing submission one
-          expect(json_result['allStudents'].count).to eq(3)
 
           # however, only the existing submissions will be shown
           expect(json_result['submissions'].count).to eq(2)

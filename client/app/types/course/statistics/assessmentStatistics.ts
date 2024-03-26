@@ -43,7 +43,6 @@ export interface MainSubmissionInfo extends SubmissionInfo {
   answers?: AnswerInfo[];
   grader?: UserInfo;
   groups: { name: string }[];
-  submissionExists: boolean;
 }
 
 export interface AncestorSubmissionInfo extends SubmissionInfo {

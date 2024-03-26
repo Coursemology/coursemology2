@@ -1,27 +1,9 @@
 # frozen_string_literal: true
 json.assessment do
-  json.id @assessment.id
-  json.title @assessment.title
-  json.startAt @assessment.start_at&.iso8601
-  json.endAt @assessment.end_at&.iso8601
-  json.maximumGrade @assessment.maximum_grade
-  json.url course_assessment_path(current_course, @assessment)
+  json.partial! 'assessment', assessment: @assessment, course: current_course
 end
 
 json.submissions @student_submissions_hash.each do |course_user, (submission, end_at)|
-  json.courseUser do
-    json.id course_user.id
-    json.name course_user.name
-    json.role course_user.role
-    json.isPhantom course_user.phantom?
-  end
-
-  if submission.nil?
-    json.workflowState 'unstarted'
-  else
-    json.workflowState submission.workflow_state
-    json.submittedAt submission.submitted_at&.iso8601
-    json.endAt end_at&.iso8601
-    json.totalGrade submission.grade
-  end
+  json.partial! 'course_user', course_user: course_user
+  json.partial! 'submission', submission: submission, end_at: end_at
 end
