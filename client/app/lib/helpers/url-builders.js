@@ -35,6 +35,15 @@ export const getSurveyResponseURL = (courseId, surveyId, responseId) =>
 export const getAssessmentURL = (courseId, assessmentId) =>
   `/courses/${courseId}/assessments/${assessmentId}`;
 
+export const getAssessmentStatisticsURL = (courseId, assessmentId) =>
+  `/courses/${courseId}/assessments/${assessmentId}/statistics`;
+
+export const getAssessmentWithTabURL = (courseId, categoryId, tabId) =>
+  `/courses/${courseId}/assessments?category=${categoryId}&tab=${tabId}`;
+
+export const getAssessmentWithCategoryURL = (courseId, categoryId) =>
+  `/courses/${courseId}/assessments?category=${categoryId}`;
+
 export const getAssessmentSubmissionURL = (courseId, assessmentId) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions`;
 

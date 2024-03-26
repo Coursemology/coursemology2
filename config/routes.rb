@@ -431,6 +431,7 @@ Rails.application.routes.draw do
 
       namespace :statistics do
         get '/' => 'statistics#index'
+        get 'assessments' => 'aggregate#all_assessments'
         get 'assessment/:id' => 'assessments#assessment'
         get 'assessment/:id/ancestors' => 'assessments#ancestors'
         get 'course/progression' => 'aggregate#course_progression'
