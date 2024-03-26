@@ -112,7 +112,7 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
-  renderBarChart = (SubmissionStatusChart) => {
+  renderStatusChart = (SubmissionStatusChart) => {
     const { includePhantoms } = this.state;
     const workflowStatesArray = Object.values(workflowStates);
 
@@ -167,7 +167,7 @@ class VisibleSubmissionsIndex extends Component {
 
     return (
       <>
-        {this.renderBarChart(shownSubmissions)}
+        {this.renderStatusChart(shownSubmissions)}
 
         <FormControlLabel
           control={

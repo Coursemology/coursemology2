@@ -27,6 +27,13 @@ export type CourseUserRoles =
 
 export type StaffRoles = Exclude<CourseUserRoles, 'student'>;
 
+export interface CourseUserShape {
+  id: number;
+  name: string;
+  role: CourseUserRoles;
+  isPhantom: boolean;
+}
+
 export interface CourseUserBasicListData {
   id: number;
   name: string;

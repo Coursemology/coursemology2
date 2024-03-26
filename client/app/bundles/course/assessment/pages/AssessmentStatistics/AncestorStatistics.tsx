@@ -1,8 +1,9 @@
 import { AncestorAssessmentStats } from 'types/course/statistics/assessmentStatistics';
 
-import { fetchAncestorStatistics } from 'course/assessment/operations/statistics';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+
+import { fetchAncestorStatistics } from '../../operations/statistics';
 
 import StatisticsCharts from './StatisticsCharts';
 

@@ -12,12 +12,12 @@ import {
   AssessmentDeleteResult,
 } from 'types/course/assessment/assessments';
 
-import { deleteAssessment } from 'course/assessment/operations/assessments';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { deleteAssessment } from '../../operations/assessments';
 import translations from '../../translations';
 import { ACTION_LABELS } from '../AssessmentsIndex/ActionButtons';
 

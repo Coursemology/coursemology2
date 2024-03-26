@@ -1,6 +1,4 @@
-import { CourseUserRoles } from 'types/course/courseUsers';
-
-import { CourseUserShape } from 'course/assessment/types';
+import { CourseUserRoles, CourseUserShape } from 'types/course/courseUsers';
 
 interface GroupMember {
   id: number;

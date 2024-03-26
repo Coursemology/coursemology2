@@ -72,6 +72,4 @@ export interface AncestorAssessmentStats {
   allStudents: StudentInfo[];
 }
 
-export interface AssessmentStatisticsStore extends MainAssessmentStats {
-  isLoading: boolean;
-}
+export interface AssessmentStatisticsState extends MainAssessmentStats {}

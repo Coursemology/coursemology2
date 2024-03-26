@@ -1,18 +1,25 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { Box, FormControlLabel, Switch, Tab, Tabs } from '@mui/material';
+import {
+  Box,
+  FormControlLabel,
+  Switch,
+  Tab,
+  Tabs,
+  Typography,
+} from '@mui/material';
 
-import { fetchAssessmentStatistics } from 'course/assessment/operations/statistics';
-import { statisticsActions as actions } from 'course/assessment/reducers/statistics';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { fetchAssessmentStatistics } from '../../operations/statistics';
+
 import MainGradesChart from './GradeDistribution/MainGradesChart';
-import SubmissionStatusMainAssessment from './SubmissionStatus/MainSubmissionChart';
+import MainSubmissionChart from './SubmissionStatus/MainSubmissionChart';
 import MainSubmissionTimeAndGradeStatistics from './SubmissionTimeAndGradeStatistics/MainSubmissionTimeAndGradeStatistics';
 import DuplicationHistoryStatistics from './DuplicationHistoryStatistics';
 import { getAssessmentStatistics } from './selectors';
@@ -61,25 +68,8 @@ const translations = defineMessages({
   },
 });
 
-const AssessmentStatisticsPage: FC = () => {
-  const { t } = useTranslation();
-  const [tabValue, setTabValue] = useState('marksPerQuestion');
-  const [includePhantom, setIncludePhantom] = useState(false);
-
-  const { assessmentId } = useParams();
-  const parsedAssessmentId = parseInt(assessmentId!, 10);
-  const dispatch = useAppDispatch();
-
-  const statistics = useAppSelector(getAssessmentStatistics);
-
-  useEffect(() => {
-    dispatch(actions.reset());
-    dispatch(fetchAssessmentStatistics(parsedAssessmentId)).catch(() =>
-      toast.error(t(translations.fetchFailure)),
-    );
-  }, [dispatch]);
-
-  const tabComponentMapping = {
+const tabMapping = (includePhantom: boolean): Record<string, JSX.Element> => {
+  return {
     marksPerQuestion: (
       <StudentMarksPerQuestionTable includePhantom={includePhantom} />
     ),
@@ -89,8 +79,29 @@ const AssessmentStatisticsPage: FC = () => {
     ),
     duplicationHistory: <DuplicationHistoryStatistics />,
   };
+};
 
-  if (statistics.isLoading) {
+const AssessmentStatisticsPage: FC = () => {
+  const { t } = useTranslation();
+  const [tabValue, setTabValue] = useState('marksPerQuestion');
+  const [includePhantom, setIncludePhantom] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { assessmentId } = useParams();
+  const parsedAssessmentId = parseInt(assessmentId!, 10);
+  const dispatch = useAppDispatch();
+
+  const statistics = useAppSelector(getAssessmentStatistics);
+
+  useEffect(() => {
+    dispatch(fetchAssessmentStatistics(parsedAssessmentId))
+      .finally(() => setIsLoading(false))
+      .catch(() => toast.error(t(translations.fetchFailure)));
+  }, [dispatch]);
+
+  const tabComponentMapping = tabMapping(includePhantom);
+
+  if (isLoading) {
     return <LoadingIndicator />;
   }
 
@@ -104,7 +115,7 @@ const AssessmentStatisticsPage: FC = () => {
     >
       <>
         <Box className="max-w-full border-b border-divider">
-          <SubmissionStatusMainAssessment includePhantom={includePhantom} />
+          <MainSubmissionChart includePhantom={includePhantom} />
           <FormControlLabel
             className="mt-2"
             control={
@@ -116,9 +127,9 @@ const AssessmentStatisticsPage: FC = () => {
               />
             }
             label={
-              <b>
-                <FormattedMessage {...translations.includePhantom} />
-              </b>
+              <Typography className="font-bold">
+                {t(translations.includePhantom)}
+              </Typography>
             }
             labelPlacement="end"
           />

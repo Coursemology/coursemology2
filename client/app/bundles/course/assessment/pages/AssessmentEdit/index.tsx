@@ -1,9 +1,9 @@
-import { fetchAssessmentEditData } from 'course/assessment/operations/assessments';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
 
 import { DEFAULT_MONITORING_OPTIONS } from '../../constants';
+import { fetchAssessmentEditData } from '../../operations/assessments';
 import translations from '../../translations';
 import { categoryAndTabTitle } from '../../utils';
 
