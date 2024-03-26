@@ -50,7 +50,9 @@ module Course::Statistics::CountsConcern
 
   def late_submissions_count_for_assessment(assessment, current_time)
     @all_students.count do |student|
-      personal_time = @personal_timeline_hash[[assessment.id, student.id]] ? @personal_timeline_hash[[assessment.id, student.id]][1] : nil
+      personal_timeline = @personal_timeline_hash[[assessment.id, student.id]]
+
+      personal_time = personal_timeline ? personal_timeline[1] : nil
       reference_time = @reference_times_hash[assessment.id] ? @reference_times_hash[assessment.id][1] : nil
       end_at = personal_time || reference_time
       submitted_at = @submitted_times[[student.user_id, assessment.id]]

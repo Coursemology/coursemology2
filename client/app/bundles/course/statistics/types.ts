@@ -131,8 +131,9 @@ export interface CourseAssessmentStatistics extends CourseAssessmentBasicInfo {
 }
 
 export interface CourseAssessmentTime extends CourseAssessmentBasicInfo {
-  grade: number;
-  submissionStatus: SubmissionStatus | 'not_released';
+  grade?: number;
+  submissionId?: number;
+  workflowState: SubmissionStatus;
   timeOverdue: string;
   timeTaken: string;
 }
@@ -143,7 +144,6 @@ export interface AssessmentsStatistics {
 }
 
 export interface SubmissionTimeStatistics {
-  id: number;
   name: string;
   assessments: CourseAssessmentTime[];
 }
