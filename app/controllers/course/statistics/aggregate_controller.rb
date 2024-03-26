@@ -69,6 +69,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
       WHERE
         cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
         AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
+        AND cu.course_id = #{current_course.id}
         AND caa.current_answer = TRUE
       GROUP BY cu.id, cas.id, cas.workflow_state, cas.creator_id, cas.created_at, cas.submitted_at,
         cas.assessment_id

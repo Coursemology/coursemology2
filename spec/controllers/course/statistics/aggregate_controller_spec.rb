@@ -210,5 +210,66 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
         it { expect(subject).to be_successful }
       end
     end
+
+    describe '#submission_time' do
+      render_views
+      let!(:published_assessment) do
+        create(:assessment, :published, :with_all_question_types, course: course, end_at: Time.now)
+      end
+
+      let!(:unpublished_assessment) { create(:assessment, :with_all_question_types, course: course) }
+      let!(:student) { create(:course_student, course: course) }
+
+      let!(:late_submission) do
+        create(:submission, :submitted,
+               assessment: published_assessment, creator: student.user,
+               created_at: 1.hour.from_now, submitted_at: 2.hours.from_now)
+      end
+
+      subject do
+        get :submission_time, format: :json,
+                              params: { course_id: course, user_id: course_user, student_id: student.id }
+      end
+
+      context 'when a Normal User pings the endpoint' do
+        let(:user) { create(:user) }
+        before { sign_in(user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when a Course Student pings the endpoint' do
+        let(:user) { create(:course_student, course: course).user }
+        before { sign_in(user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when a Course Teaching Assistant pings the endpoint' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+        before { sign_in(user) }
+        it { expect(subject).to be_successful }
+      end
+
+      context 'when a Course Manager pings the endpoint' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { sign_in(user) }
+
+        it 'expects to render all published assessments' do
+          expect(subject).to be_successful
+          json_result = JSON.parse(response.body)
+          expect(json_result['assessments'].count).to eq(1)
+
+          expect(json_result['assessments'][0]['grade']).to eq(late_submission.grade)
+          expect(json_result['assessments'][0]['workflowState']).to eq('submitted')
+          expect(json_result['assessments'][0]['timeOverdue']).to eq(' 0 time.day 02:00:00')
+          expect(json_result['assessments'][0]['timeTaken']).to eq(' 0 time.day 01:00:00')
+        end
+      end
+
+      context 'when a Course Observer pings the endpoint' do
+        let(:user) { create(:course_observer, course: course).user }
+        before { sign_in(user) }
+        it { expect(subject).to be_successful }
+      end
+    end
   end
 end
