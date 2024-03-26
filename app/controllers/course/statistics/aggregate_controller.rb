@@ -78,9 +78,12 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   def all_submissions_for_student_info
     all_submissions = all_submissions_info
 
-    all_submissions.to_a.map { |s| [[s['assessment_id'], s['course_user_id']], 
-                                    [s['id'], s['workflow_state'], time_taken(s), 
-                                     s['submitted_at'], s['grade']]] }.to_h
+    all_submissions.to_a.map do |s|
+      key = [s['assessment_id'], s['course_user_id']]
+      value = [s['id'], s['workflow_state'], time_taken(s), s['submitted_at'], s['grade']]
+
+      [key, value]
+    end.to_h
   end
 
   def time_taken(submission)
@@ -88,7 +91,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
 
     submission['submitted_at'].to_i - submission['created_at'].to_i
   end
-  
+
   def assessment_info_array
     @assessment_info_array ||= Course::Assessment.published.with_default_reference_time.
                                where.not(course_reference_times: { end_at: nil }).

@@ -1,8 +1,12 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Autocomplete, Box, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, TextField } from '@mui/material';
 import { CourseUserBasicListData } from 'types/course/courseUsers';
 
+import { fetchSubmissionTimeStatistics } from 'course/statistics/operations';
+import { SubmissionTimeStatistics } from 'course/statistics/types';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import SubmissionTimeTable from './SubmissionTimeTable';
@@ -14,11 +18,7 @@ interface Props {
 const translations = defineMessages({
   placeholder: {
     id: 'course.statistics.SubmissionTime.placeholder',
-    defaultMessage: 'No students selected',
-  },
-  autocompleteTitle: {
-    id: 'course.statistics.SubmissionTime.autocompleteTitle',
-    defaultMessage: 'Student Name',
+    defaultMessage: 'Please put the student name here',
   },
 });
 
@@ -32,9 +32,11 @@ const SubmissionTimeDetails: FC<Props> = (props) => {
     setSelectedStudent(value);
   };
 
+  const fetchSubmissionTime = (): Promise<SubmissionTimeStatistics> =>
+    fetchSubmissionTimeStatistics(selectedStudent!.id);
+
   return (
     <div className="m-2 p-2">
-      <Typography variant="h6">{t(translations.autocompleteTitle)}</Typography>
       <Autocomplete
         className="mr-3 min-w-[300px] mt-3"
         getOptionLabel={(option): string => option.name}
@@ -59,7 +61,15 @@ const SubmissionTimeDetails: FC<Props> = (props) => {
         value={null}
       />
       {selectedStudent && (
-        <SubmissionTimeTable studentId={selectedStudent.id} />
+        <Preload
+          render={<LoadingIndicator />}
+          syncsWith={[selectedStudent]}
+          while={fetchSubmissionTime}
+        >
+          {(data) => {
+            return <SubmissionTimeTable data={data} />;
+          }}
+        </Preload>
       )}
     </div>
   );
