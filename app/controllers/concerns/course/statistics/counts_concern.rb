@@ -30,7 +30,7 @@ module Course::Statistics::CountsConcern
   end
 
   def num_late_students_hash
-    @personal_end_at_hash = personal_end_at_hash(@assessments.pluck(:id), current_course.id)
+    @personal_timeline_hash = personal_timeline_hash(@assessments.pluck(:id), current_course.id)
     @reference_times_hash = reference_times_hash(@assessments.pluck(:id), current_course.id)
 
     @submitted_times = @all_submissions_info.
@@ -50,7 +50,11 @@ module Course::Statistics::CountsConcern
 
   def late_submissions_count_for_assessment(assessment, current_time)
     @all_students.count do |student|
-      end_at = @personal_end_at_hash[[assessment.id, student.id]] || @reference_times_hash[assessment.id]
+      personal_timeline = @personal_timeline_hash[[assessment.id, student.id]]
+
+      personal_time = personal_timeline ? personal_timeline[1] : nil
+      reference_time = @reference_times_hash[assessment.id] ? @reference_times_hash[assessment.id][1] : nil
+      end_at = personal_time || reference_time
       submitted_at = @submitted_times[[student.user_id, assessment.id]]
 
       end_at && (submitted_at.nil? ? end_at < current_time : submitted_at > end_at)
