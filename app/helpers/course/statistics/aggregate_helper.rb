@@ -12,9 +12,10 @@ module Course::Statistics::AggregateHelper
     format("%2d #{t('time.day')} %02d:%02d:%02d", days, hours, minutes, seconds)
   end
 
-  def submission_status(workflow_state, start_at)
-    return 'not_released' if !workflow_state && start_at > Time.now
+  def time_overdue(submitted_at, end_at)
+    expected_submission_time = submitted_at || Time.now
+    return nil if !end_at || expected_submission_time.to_i < end_at.to_i
 
-    workflow_state
+    expected_submission_time.to_i - end_at.to_i
   end
 end

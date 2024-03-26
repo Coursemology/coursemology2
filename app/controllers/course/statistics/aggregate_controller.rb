@@ -2,9 +2,11 @@
 # This is named aggregate controller as naming this as course controller leads to name conflict issues
 class Course::Statistics::AggregateController < Course::Statistics::Controller
   before_action :preload_levels, only: [:all_students, :course_performance]
+  before_action :fetch_published_assessments, only: [:all_assessments, :submission_time]
   include Course::Statistics::TimesConcern
   include Course::Statistics::GradesConcern
   include Course::Statistics::CountsConcern
+  include Course::Statistics::ReferenceTimesConcern
 
   def course_progression
     @assessment_info_array = assessment_info_array
@@ -28,7 +30,6 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def all_assessments
-    @assessments = current_course.assessments.published.includes(tab: :category)
     @all_students = current_course.course_users.students
     @all_submissions_info = all_submissions_info
 
@@ -36,8 +37,11 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def submission_time
-    @assessments = current_course.assessments.includes(tab: :category)
-    @student_info = CourseUser.where(id: submission_time_params[:student_id]).first
+    @all_students = [CourseUser.where(id: submission_time_params[:student_id]).first]
+    @submissions = all_submissions_for_student_info
+    @maximum_grade_hash = max_grade_statistics_hash
+
+    fetch_assessment_timeline_hash
   end
 
   private
@@ -46,24 +50,45 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     params.permit(:student_id)
   end
 
+  def fetch_published_assessments
+    @assessments = current_course.assessments.published.includes(tab: :category)
+  end
+
   def all_submissions_info
     @all_submissions_info ||= ActiveRecord::Base.connection.execute("
       SELECT
+        cu.id AS course_user_id,
         cas.id, cas.workflow_state, cas.creator_id,
         cas.created_at, cas.submitted_at, cas.assessment_id,
         SUM(caa.grade) AS grade
       FROM course_assessment_submissions cas
+      JOIN course_users cu
+      ON cas.creator_id = cu.user_id
       JOIN course_assessment_answers caa
       ON cas.id = caa.submission_id
       WHERE
         cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
         AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
         AND caa.current_answer = TRUE
-      GROUP BY cas.id, cas.workflow_state, cas.creator_id, cas.created_at, cas.submitted_at,
+      GROUP BY cu.id, cas.id, cas.workflow_state, cas.creator_id, cas.created_at, cas.submitted_at,
         cas.assessment_id
                                                                    ")
   end
 
+  def all_submissions_for_student_info
+    all_submissions = all_submissions_info
+
+    all_submissions.to_a.map { |s| [[s['assessment_id'], s['course_user_id']], 
+                                    [s['id'], s['workflow_state'], time_taken(s), 
+                                     s['submitted_at'], s['grade']]] }.to_h
+  end
+
+  def time_taken(submission)
+    return nil if !submission['submitted_at'] || !submission['created_at']
+
+    submission['submitted_at'].to_i - submission['created_at'].to_i
+  end
+  
   def assessment_info_array
     @assessment_info_array ||= Course::Assessment.published.with_default_reference_time.
                                where.not(course_reference_times: { end_at: nil }).
@@ -142,6 +167,11 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     @num_attempted_students_hash = num_attempted_students_hash
     @num_submitted_students_hash = num_submitted_students_hash
     @num_late_students_hash = num_late_students_hash
+  end
+
+  def fetch_assessment_timeline_hash
+    @personal_timeline = personal_timeline_hash(@assessments.pluck(:id), current_course.id)
+    @reference_timeline = reference_times_hash(@assessments.pluck(:id), current_course.id)
   end
 
   def course_users
