@@ -1411,10 +1411,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@formatjs/intl@2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl/-/intl-2.10.0.tgz#d7bb557e172ceb0bb0be9298b61e9de957119985"
-  integrity sha512-X3xT9guVkKDS86EKV80lS0KxoazUglkJTGZO66sKY7otgl0VeStPA8B3u8UkKT47PexVV98fUzjpkchYmbe9nw==
+"@formatjs/intl@2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl/-/intl-2.10.1.tgz#75ae637070553bf7dfd213847ba8219f5ddae2b6"
+  integrity sha512-dsLG15U7xDi8yzKf4hcAWSsCaez3XrjTO2oaRHPyHtXLm1aEzYbDw6bClo/HMHu+iwS5GbDqT3DV+hYP2ylScg==
   dependencies:
     "@formatjs/ecma402-abstract" "1.18.2"
     "@formatjs/fast-memoize" "2.2.0"
@@ -9307,14 +9307,14 @@ react-image-crop@^11.0.5:
   resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-11.0.5.tgz#c7abcf9cae28305d253d55d481158a594a937867"
   integrity sha512-A/Y/kspOzki1zDL/bSgwWIY1X3CQ9F1QwpdnncWLBVAktnKfAZDIQnWmjXzuzEjZHDMsBlArytIcPBVi6DNklg==
 
-react-intl@^6.6.2:
-  version "6.6.2"
-  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-6.6.2.tgz#97a044afa9cac65ae62f404c8bb9cbd3aec52d41"
-  integrity sha512-IpW2IkLtGENSFlX3vfH11rjuCIsW0VyjT0Q1pPKMZPtT2z1FxLt4weFT5Ezti2TScT1xiyb3aQBFth9EB7jzAg==
+react-intl@^6.6.4:
+  version "6.6.4"
+  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-6.6.4.tgz#4322942dbaf4f6edd3a227dc5e20d768ef071541"
+  integrity sha512-bD+7hVTX3zBFI3z/ffIVZrNkCVK0/sQguQ/DqW5uZ6JFWsuiwOieVcLnmtFiUgMQZLdmwNl2Ur5c10RaO7NWBQ==
   dependencies:
     "@formatjs/ecma402-abstract" "1.18.2"
     "@formatjs/icu-messageformat-parser" "2.7.6"
-    "@formatjs/intl" "2.10.0"
+    "@formatjs/intl" "2.10.1"
     "@formatjs/intl-displaynames" "6.6.6"
     "@formatjs/intl-listformat" "7.5.5"
     "@types/hoist-non-react-statics" "^3.3.1"
