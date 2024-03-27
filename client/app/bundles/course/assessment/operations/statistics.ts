@@ -1,27 +1,35 @@
-import { Operation } from 'store';
-import { AncestorAssessmentStats } from 'types/course/statistics/assessmentStatistics';
+import { AxiosError } from 'axios';
+import { dispatch } from 'store';
+import {
+  AncestorAssessmentStats,
+  MainAssessmentStats,
+} from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 
 import { statisticsActions as actions } from '../reducers/statistics';
 
-export function fetchAssessmentStatistics(assessmentId: number): Operation {
-  return async (dispatch) => {
+export const fetchAssessmentStatistics = async (
+  assessmentId: number,
+): Promise<MainAssessmentStats> => {
+  try {
     dispatch(actions.reset());
-    CourseAPI.statistics.assessment
-      .fetchMainStatistics(assessmentId)
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.initialize({
-            assessment: data.assessment,
-            submissions: data.submissions,
-            ancestors: data.ancestors,
-          }),
-        );
-      });
-  };
-}
+    const response =
+      await CourseAPI.statistics.assessment.fetchMainStatistics(assessmentId);
+    const data = response.data;
+    dispatch(
+      actions.initialize({
+        assessment: data.assessment,
+        submissions: data.submissions,
+        ancestors: data.ancestors,
+      }),
+    );
+    return data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
 
 export const fetchAncestorStatistics = async (
   ancestorId: number,
