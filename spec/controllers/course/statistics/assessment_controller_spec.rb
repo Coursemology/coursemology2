@@ -62,7 +62,7 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           # showing the correct workflow state
           expect(json_result['submissions'][0]['workflowState']).to eq('published')
           expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
-          expect(json_result['submissions'][2]['workflowState']).to be_nil
+          expect(json_result['submissions'][2]['workflowState']).to eq('unstarted')
 
           # only published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['answers']).not_to be_nil
@@ -93,7 +93,7 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           # showing the correct workflow state
           expect(json_result['submissions'][0]['workflowState']).to eq('published')
           expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
-          expect(json_result['submissions'][2]['workflowState']).to be_nil
+          expect(json_result['submissions'][2]['workflowState']).to eq('unstarted')
 
           # only published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['answers']).not_to be_nil
