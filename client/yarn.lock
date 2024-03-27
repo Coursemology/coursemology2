@@ -3444,10 +3444,10 @@ babel-loader@^9.0.0:
     find-cache-dir "^3.3.2"
     schema-utils "^4.0.0"
 
-babel-plugin-formatjs@^10.5.13:
-  version "10.5.13"
-  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.5.13.tgz#2856143aae4b7fb0376765e96053d79baadea2f1"
-  integrity sha512-0dtMhoa6q0P5lUHBphLd8/y+CRlh5IG3Rq+Wk64kOEDwUVZF8xq1qMSjC3iw1wH4tmP2qTzBL+Bz1xEjyBd/ew==
+babel-plugin-formatjs@^10.5.14:
+  version "10.5.14"
+  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.5.14.tgz#a8db0fac0d35e98bdb99ad2d04d0b06665b43186"
+  integrity sha512-F++4Txa2bxrjbvspLxIXBDwcbKOftUvGgBDlz0hGe/fp7eXSPBJcu49xWj0/5VyMgSad4gKmBzWE5bfC27x19Q==
   dependencies:
     "@babel/core" "^7.10.4"
     "@babel/helper-plugin-utils" "^7.10.4"
