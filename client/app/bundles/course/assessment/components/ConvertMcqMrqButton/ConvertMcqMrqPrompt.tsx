@@ -7,7 +7,7 @@ import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { convertMcqMrq } from '../../operations';
+import { convertMcqMrq } from '../../operations/questions';
 import translations from '../../translations';
 
 export interface ConvertMcqMrqData {

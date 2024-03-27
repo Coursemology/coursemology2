@@ -56,6 +56,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
           # attempting the question in which grade is prefillable upon grading
           visit edit_course_assessment_submission_path(course, mcq_assessment, attempt_submission)
           find('label', text: correct_option.option).click
+          wait_for_autosave
 
           click_button('Finalise Submission')
           click_button('Continue')

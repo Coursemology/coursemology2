@@ -1,7 +1,7 @@
-import { CourseUserRoles } from '../courseUsers';
+import { WorkflowState } from '../assessment/submission/submission';
 
-interface Assessment {
-  id: number | string;
+interface AssessmentInfo {
+  id: number;
   title: string;
   startAt: string | null;
   endAt: string | null;
@@ -9,37 +9,64 @@ interface Assessment {
   url: string;
 }
 
-interface Submission {
-  courseUser: {
-    id: number | string;
-    name: string;
-    role: CourseUserRoles;
-    isPhantom: boolean;
-  };
-  submittedAt: string;
-  endAt: string;
-  grade: number;
+interface MainAssessmentInfo extends AssessmentInfo {
+  questionCount: number;
 }
 
-interface Student {
-  id: number | string;
+interface AncestorAssessmentInfo extends AssessmentInfo {}
+
+interface UserInfo {
+  id: number;
   name: string;
-  role: CourseUserRoles;
+}
+
+export interface StudentInfo extends UserInfo {
   isPhantom: boolean;
+  role: 'student';
 }
 
-export interface AssessmentStatistis {
-  assessment: Assessment;
-  submissions: Submission[];
-  allStudents: Student[];
+interface AnswerInfo {
+  id: number;
+  grade: number;
+  maximumGrade: number;
 }
 
-export interface AssessmentAncestor {
-  id: number | string;
+interface SubmissionInfo {
+  courseUser: StudentInfo;
+  workflowState?: WorkflowState;
+  submittedAt?: string;
+  endAt?: string;
+  totalGrade?: number | null;
+}
+
+export interface MainSubmissionInfo extends SubmissionInfo {
+  answers?: AnswerInfo[];
+  grader?: UserInfo;
+  groups: { name: string }[];
+}
+
+export interface AncestorSubmissionInfo extends SubmissionInfo {
+  workflowState: WorkflowState;
+  submittedAt?: string;
+  endAt?: string;
+  totalGrade?: number | null;
+}
+
+export interface AncestorInfo {
+  id: number;
   title: string;
   courseTitle: string;
 }
 
-export interface AssessmentAncestors {
-  assessments: AssessmentAncestor[];
+export interface MainAssessmentStats {
+  assessment: MainAssessmentInfo | null;
+  submissions: MainSubmissionInfo[];
+  ancestors: AncestorInfo[];
 }
+
+export interface AncestorAssessmentStats {
+  assessment: AncestorAssessmentInfo;
+  submissions: AncestorSubmissionInfo[];
+}
+
+export interface AssessmentStatisticsState extends MainAssessmentStats {}

@@ -1,11 +1,4 @@
-import { CourseUserRoles } from 'types/course/courseUsers';
-
-interface GroupCourseUser {
-  id: number;
-  name: string;
-  role: CourseUserRoles;
-  isPhantom: boolean;
-}
+import { CourseUserRoles, CourseUserShape } from 'types/course/courseUsers';
 
 interface GroupMember {
   id: number;
@@ -46,7 +39,7 @@ export interface GroupsFetchState {
 export interface GroupsManageState {
   isManagingGroups: boolean;
   hasFetchUserError: boolean;
-  courseUsers: GroupCourseUser[];
+  courseUsers: CourseUserShape[];
   selectedGroupId: number;
   modifiedGroups: Group[];
   isUpdating: boolean;

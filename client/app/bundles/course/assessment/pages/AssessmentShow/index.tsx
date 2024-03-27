@@ -8,7 +8,7 @@ import {
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
-import { fetchAssessment } from '../../operations';
+import { fetchAssessment } from '../../operations/assessments';
 import AssessmentAuthenticate from '../AssessmentAuthenticate';
 import AssessmentBlockedByMonitorPage from '../AssessmentBlockedByMonitorPage';
 

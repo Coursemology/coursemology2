@@ -16,7 +16,9 @@ export function processSubmissionsIntoChartData(submissions) {
       displayValue:
         s.dayDifference != null
           ? processDayDifference(s.dayDifference)
-          : `${s.submittedAt.getFullYear()}-${s.submittedAt.getMonth()}-${s.submittedAt.getDate()}`,
+          : `${new Date(s.submittedAt).getFullYear()}-${new Date(
+              s.submittedAt,
+            ).getMonth()}-${new Date(s.submittedAt).getDate()}`,
     }))
     .sort((a, b) => {
       if (a.dayDifference != null) {
@@ -48,8 +50,8 @@ export function processSubmissionsIntoChartData(submissions) {
       previousDisplayValue = sub.displayValue;
     }
     numSubmissions += 1;
-    if (sub.grade != null) {
-      totalGrade += sub.grade;
+    if (sub.totalGrade != null) {
+      totalGrade += sub.totalGrade;
       numGrades += 1;
     }
   });

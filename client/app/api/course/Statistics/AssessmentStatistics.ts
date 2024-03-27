@@ -1,6 +1,6 @@
 import {
-  AssessmentAncestors,
-  AssessmentStatistis,
+  AncestorAssessmentStats,
+  MainAssessmentStats,
 } from 'types/course/statistics/assessmentStatistics';
 
 import { APIResponse } from 'api/types';
@@ -18,18 +18,19 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
    *
    * This is used both for an assessment and for its ancestors.
    */
-  fetchStatistics(
-    assessmentId: string | number,
-  ): APIResponse<AssessmentStatistis> {
-    return this.client.get(`${this.#urlPrefix}/${assessmentId}`);
+  fetchAncestorStatistics(
+    ancestorId: string | number,
+  ): APIResponse<AncestorAssessmentStats> {
+    return this.client.get(
+      `${this.#urlPrefix}/${ancestorId}/ancestor_statistics/`,
+    );
   }
 
-  /**
-   * Fetches the ancestors for a specific individual assessment.
-   */
-  fetchAncestors(
+  fetchMainStatistics(
     assessmentId: string | number,
-  ): APIResponse<AssessmentAncestors> {
-    return this.client.get(`${this.#urlPrefix}/${assessmentId}/ancestors`);
+  ): APIResponse<MainAssessmentStats> {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/main_statistics`,
+    );
   }
 }

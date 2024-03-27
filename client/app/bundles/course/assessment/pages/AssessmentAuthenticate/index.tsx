@@ -18,7 +18,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { formatFullDateTime } from 'lib/moment';
 import formTranslations from 'lib/translations/form';
 
-import { authenticateAssessment } from '../../operations';
+import { authenticateAssessment } from '../../operations/assessments';
 import translations from '../../translations';
 
 interface AssessmentAuthenticateProps {

@@ -5,7 +5,7 @@ import { Button, FormControlLabel, Switch, Tab, Tabs } from '@mui/material';
 import { PropTypes } from 'prop-types';
 import palette from 'theme/palette';
 
-import BarChart from 'lib/components/core/BarChart';
+import SubmissionStatusChart from 'course/assessment/pages/AssessmentStatistics/SubmissionStatus/SubmissionStatusChart';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -112,39 +112,13 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
-  renderBarChart = (submissionBarChart) => {
+  renderStatusChart = (submissions) => {
     const { includePhantoms } = this.state;
-    const workflowStatesArray = Object.values(workflowStates);
+    const filteredSubmissions = includePhantoms
+      ? submissions
+      : submissions.filter((s) => !s.courseUser.isPhantom);
 
-    const initialCounts = workflowStatesArray.reduce(
-      (counts, w) => ({ ...counts, [w]: 0 }),
-      {},
-    );
-    const submissionStateCounts = submissionBarChart.reduce(
-      (counts, submission) => {
-        if (includePhantoms || !submission.courseUser.phantom) {
-          return {
-            ...counts,
-            [submission.workflowState]: counts[submission.workflowState] + 1,
-          };
-        }
-        return counts;
-      },
-      initialCounts,
-    );
-
-    const data = workflowStatesArray
-      .map((w) => {
-        const count = submissionStateCounts[w];
-        return {
-          count,
-          color: palette.submissionStatus[w],
-          label: <FormattedMessage {...translations[w]} />,
-        };
-      })
-      .filter((seg) => seg.count > 0);
-
-    return <BarChart data={data} />;
+    return <SubmissionStatusChart submissions={filteredSubmissions} />;
   };
 
   renderHeader(shownSubmissions) {
@@ -167,7 +141,7 @@ class VisibleSubmissionsIndex extends Component {
 
     return (
       <>
-        {this.renderBarChart(shownSubmissions)}
+        {this.renderStatusChart(shownSubmissions)}
 
         <FormControlLabel
           control={

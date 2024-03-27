@@ -6,7 +6,7 @@ import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
-import { fetchAssessments } from '../../operations';
+import { fetchAssessments } from '../../operations/assessments';
 
 import AssessmentsTable from './AssessmentsTable';
 import NewAssessmentFormButton from './NewAssessmentFormButton';
