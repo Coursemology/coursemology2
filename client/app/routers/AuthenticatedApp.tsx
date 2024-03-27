@@ -29,7 +29,7 @@ import AssessmentEdit from 'bundles/course/assessment/pages/AssessmentEdit';
 import AssessmentMonitoring from 'bundles/course/assessment/pages/AssessmentMonitoring';
 import AssessmentShow from 'bundles/course/assessment/pages/AssessmentShow';
 import AssessmentsIndex from 'bundles/course/assessment/pages/AssessmentsIndex';
-import AssessmentStatisticsPage from 'bundles/course/assessment/pages/AssessmentStatistics';
+import AssessmentStatistics from 'bundles/course/assessment/pages/AssessmentStatistics';
 import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/EditForumPostResponsePage';
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
 import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
@@ -580,8 +580,8 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                 },
                 {
                   path: 'statistics',
-                  handle: AssessmentStatisticsPage.handle,
-                  element: <AssessmentStatisticsPage />,
+                  handle: AssessmentStatistics.handle,
+                  element: <AssessmentStatistics />,
                 },
                 {
                   path: 'submissions',
