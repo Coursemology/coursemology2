@@ -32,10 +32,6 @@ const MuiTablePagination = (props: PaginationProps): JSX.Element => {
 
   return (
     <TablePagination
-      classes={{
-        displayedRows: 'mb-1',
-        selectLabel: 'mb-1',
-      }}
       component="div"
       count={props.total}
       onPageChange={(_, newPage): void => props.onPageChange?.(newPage)}
