@@ -14,6 +14,7 @@ import Note from 'lib/components/core/Note';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import TableLegends from 'lib/containers/TableLegends';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -25,6 +26,18 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.onlyForAutogradableAssessment',
     defaultMessage:
       'This table is only displayed for Assessment with at least one Autograded Questions',
+  },
+  greenCellLegend: {
+    id: 'course.assessment.statistics.greenCellLegend',
+    defaultMessage: 'Correct',
+  },
+  redCellLegend: {
+    id: 'course.assessment.statistics.redCellLegend',
+    defaultMessage: 'Incorrect',
+  },
+  grayCellLegend: {
+    id: 'course.assessment.statistics.grayCellLegend',
+    defaultMessage: 'Undecided (question is Non-autogradable)',
   },
   name: {
     id: 'course.assessment.statistics.name',
@@ -224,27 +237,48 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Table
-      columns={columns}
-      csvDownload={{
-        filename: t(translations.filename, {
-          assessment: assessment?.title ?? '',
-        }),
-      }}
-      data={sortedSubmission}
-      getRowClassName={(datum): string =>
-        `data_${datum.courseUser.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
-      }
-      getRowEqualityData={(datum): MainSubmissionInfo => datum}
-      getRowId={(datum): string => datum.courseUser.id.toString()}
-      indexing={{ indices: true }}
-      pagination={{
-        rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
-        showAllRows: true,
-      }}
-      search={{ searchPlaceholder: t(translations.searchText) }}
-      toolbar={{ show: true }}
-    />
+    <>
+      <TableLegends
+        legends={[
+          {
+            key: 'correct',
+            backgroundColor: 'bg-green-300',
+            description: t(translations.greenCellLegend),
+          },
+          {
+            key: 'incorrect',
+            backgroundColor: 'bg-red-300',
+            description: t(translations.redCellLegend),
+          },
+          {
+            key: 'undecided',
+            backgroundColor: 'bg-gray-300',
+            description: t(translations.grayCellLegend),
+          },
+        ]}
+      />
+      <Table
+        columns={columns}
+        csvDownload={{
+          filename: t(translations.filename, {
+            assessment: assessment?.title ?? '',
+          }),
+        }}
+        data={sortedSubmission}
+        getRowClassName={(datum): string =>
+          `data_${datum.courseUser.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
+        }
+        getRowEqualityData={(datum): MainSubmissionInfo => datum}
+        getRowId={(datum): string => datum.courseUser.id.toString()}
+        indexing={{ indices: true }}
+        pagination={{
+          rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+          showAllRows: true,
+        }}
+        search={{ searchPlaceholder: t(translations.searchText) }}
+        toolbar={{ show: true }}
+      />
+    </>
   );
 };
 
