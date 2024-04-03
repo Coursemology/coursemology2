@@ -13,11 +13,11 @@ import {
   ProgrammingFormData,
 } from 'types/course/assessment/question/programming';
 
+import EditorField from 'lib/components/core/fields/EditorField';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
 
-import Editor from './Editor';
 import ExpressionField from './ExpressionField';
 import { TestCaseProps } from './TestCase';
 import TestCaseCell from './TestCaseCell';
@@ -129,7 +129,7 @@ const JavaTestCase = (props: TestCaseProps): JSX.Element => {
                 control={props.control}
                 name={`${props.name}.inlineCode` as JavaTestCaseFieldPath}
                 render={({ field }): JSX.Element => (
-                  <Editor
+                  <EditorField
                     disabled={props.disabled}
                     height="7rem"
                     language="java"

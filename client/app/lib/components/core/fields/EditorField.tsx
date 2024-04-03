@@ -11,7 +11,7 @@ interface EditorProps extends ComponentProps<typeof AceEditor> {
   disabled?: boolean;
 }
 
-const Editor = (props: EditorProps): JSX.Element => {
+const EditorField = (props: EditorProps): JSX.Element => {
   const { language, value, disabled, onChange, ...otherProps } = props;
 
   return (
@@ -24,7 +24,10 @@ const Editor = (props: EditorProps): JSX.Element => {
       value={value}
       width="100%"
       {...otherProps}
-      editorProps={{ ...otherProps.editorProps, $blockScrolling: true }}
+      editorProps={{
+        ...otherProps.editorProps,
+        $blockScrolling: true,
+      }}
       setOptions={{
         ...otherProps.setOptions,
         useSoftTabs: true,
@@ -35,4 +38,4 @@ const Editor = (props: EditorProps): JSX.Element => {
   );
 };
 
-export default Editor;
+export default EditorField;
