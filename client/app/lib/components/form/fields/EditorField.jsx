@@ -1,5 +1,6 @@
-import AceEditor from 'react-ace';
 import PropTypes from 'prop-types';
+
+import EditorField from 'lib/components/core/fields/EditorField';
 
 const FormEditorField = (props) => {
   const {
@@ -8,7 +9,7 @@ const FormEditorField = (props) => {
   } = props;
 
   return (
-    <AceEditor name={name} onChange={onChange} value={value} {...custom} />
+    <EditorField name={name} onChange={onChange} value={value} {...custom} />
   );
 };
 

@@ -19,7 +19,6 @@ const Editor = (props) => {
         name={fieldName}
         render={({ field }) => (
           <FormEditorField
-            editorProps={{ $blockScrolling: true }}
             field={{
               ...field,
               onChange: (event) => {
@@ -28,14 +27,11 @@ const Editor = (props) => {
               },
             }}
             filename={file.filename}
+            language={language}
             maxLines={25}
             minLines={25}
-            mode={language}
             readOnly={false}
-            setOptions={{ useSoftTabs: true }}
             style={{ marginBottom: 10 }}
-            theme="github"
-            width="100%"
           />
         )}
       />
