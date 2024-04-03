@@ -1,10 +1,9 @@
 import { ComponentProps } from 'react';
 
+import EditorField from 'lib/components/core/fields/EditorField';
 import Accordion from 'lib/components/core/layouts/Accordion';
 
-import Editor from './Editor';
-
-interface EditorAccordionProps extends ComponentProps<typeof Editor> {
+interface EditorAccordionProps extends ComponentProps<typeof EditorField> {
   title: string;
   disabled?: boolean;
   subtitle?: string;
@@ -15,7 +14,7 @@ const EditorAccordion = (props: EditorAccordionProps): JSX.Element => {
 
   return (
     <Accordion disabled={props.disabled} subtitle={subtitle} title={title}>
-      <Editor {...editorProps} />
+      <EditorField {...editorProps} />
     </Accordion>
   );
 };
