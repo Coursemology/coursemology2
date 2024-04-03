@@ -11,6 +11,22 @@ interface EditorProps extends ComponentProps<typeof AceEditor> {
   disabled?: boolean;
 }
 
+/**
+ * Font family for our Ace Editor, in descending order of priority.
+ *
+ * For some reasons, Monaco bold (font-weight: 700) renders narrower text widths in
+ * Safari, causing the cursor after the bolded texts to be misaligned. The fonts here are
+ * what Ace Editor renders by default, minus 'Monaco', which was first in line.
+ */
+const DEFAULT_FONT_FAMILY = [
+  'Menlo',
+  'Ubuntu Mono',
+  'Consolas',
+  'Source Code Pro',
+  'source-code-pro',
+  'monospace',
+].join(',');
+
 const EditorField = (props: EditorProps): JSX.Element => {
   const { language, value, disabled, onChange, ...otherProps } = props;
 
@@ -33,6 +49,7 @@ const EditorField = (props: EditorProps): JSX.Element => {
         useSoftTabs: true,
         readOnly: disabled,
         useWorker: false,
+        fontFamily: DEFAULT_FONT_FAMILY,
       }}
     />
   );
