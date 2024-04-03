@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import PropTypes from 'prop-types';
 
-import AceEditorField from 'lib/components/form/fields/AceEditorField';
+import FormEditorField from 'lib/components/form/fields/EditorField';
 
 import { fileShape } from '../propTypes';
 
@@ -18,7 +18,7 @@ const Editor = (props) => {
         control={control}
         name={fieldName}
         render={({ field }) => (
-          <AceEditorField
+          <FormEditorField
             editorProps={{ $blockScrolling: true }}
             field={{
               ...field,

@@ -1,7 +1,7 @@
 import AceEditor from 'react-ace';
 import PropTypes from 'prop-types';
 
-const AceEditorField = (props) => {
+const FormEditorField = (props) => {
   const {
     field: { name, onChange, value },
     ...custom
@@ -12,8 +12,8 @@ const AceEditorField = (props) => {
   );
 };
 
-AceEditorField.propTypes = {
+FormEditorField.propTypes = {
   field: PropTypes.object.isRequired,
 };
 
-export default AceEditorField;
+export default FormEditorField;
