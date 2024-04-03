@@ -146,7 +146,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.attemptStatus?.[index].attemptCount === 'number'
+          return typeof datum.attemptStatus?.[index]?.attemptCount === 'number'
             ? renderNonNullAttemptCountCell(datum.attemptStatus?.[index])
             : null;
         },

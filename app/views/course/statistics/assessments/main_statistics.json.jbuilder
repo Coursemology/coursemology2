@@ -9,8 +9,8 @@ json.submissions @student_submissions_hash.each do |course_user, (submission, an
   json.partial! 'course_user', course_user: course_user
   json.partial! 'submission', submission: submission, end_at: end_at
 
-  json.groups course_user.groups do |group|
-    json.name group.name
+  json.groups @group_names_hash[course_user.id] do |name|
+    json.name name
   end
 
   if !submission.nil? && submission.workflow_state == 'published' && submission.grader_ids
