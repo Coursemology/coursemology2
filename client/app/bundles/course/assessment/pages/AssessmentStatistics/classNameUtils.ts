@@ -1,5 +1,6 @@
 import { AttemptInfo } from 'types/course/statistics/assessmentStatistics';
 
+// lower grade means obtaining the grade less than half the maximum possible grade
 const lowerGradeBackgroundColorClassName = {
   0: 'bg-red-50',
   100: 'bg-red-100',
@@ -9,6 +10,7 @@ const lowerGradeBackgroundColorClassName = {
   500: 'bg-red-500',
 };
 
+// higher grade means obtaining the grade at least half the maximum possible grade
 const higherGradeBackgroundColorClassName = {
   0: 'bg-green-50',
   100: 'bg-green-100',
@@ -29,6 +31,9 @@ const calculateColorGradientLevel = (
   return Math.round((Math.abs(grade - halfMaxGrade) / halfMaxGrade) * 5) * 100;
 };
 
+// for marks per question cell, the difference in color means the following:
+// 1. Green : the grade obtained is at least half the maximum possible grade
+// 2. Red : the grade obtained is less than half the maximum possible grade
 export const getClassNameForMarkCell = (
   grade: number,
   maxGrade: number,
@@ -39,6 +44,10 @@ export const getClassNameForMarkCell = (
     : `${lowerGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`;
 };
 
+// for attempt count cell, the difference in color means the following:
+// 1. Gray : the final attempt by user has no judgment result (whether it's correct or not)
+// 2. Green : the final attempt by user is rendered correct
+// 3. Red : the final attempt by user is rendered wrong / incorrect
 export const getClassNameForAttemptCountCell = (
   attempt: AttemptInfo,
 ): string => {

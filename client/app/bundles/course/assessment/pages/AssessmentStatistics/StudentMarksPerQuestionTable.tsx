@@ -142,10 +142,10 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.answers?.[index].grade === 'number'
+          return typeof datum.answers?.[index]?.grade === 'number'
             ? renderNonNullGradeCell(
-                datum.answers?.[index].grade,
-                datum.answers?.[index].maximumGrade,
+                datum.answers?.[index]?.grade,
+                datum.answers?.[index]?.maximumGrade,
               )
             : null;
         },
@@ -155,8 +155,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         sortProps: {
           sort: (datum1, datum2): number => {
             return sortNullableGrade(
-              datum1.answers?.[index].grade ?? null,
-              datum2.answers?.[index].grade ?? null,
+              datum1.answers?.[index]?.grade ?? null,
+              datum2.answers?.[index]?.grade ?? null,
             );
           },
         },
