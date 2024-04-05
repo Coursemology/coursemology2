@@ -6,7 +6,7 @@ orbs:
 executors:
   node:
     docker:
-      - image: cimg/node:21.7.1
+      - image: cimg/node:21.7.2
 
     working_directory: ~/repo
     resource_class: large
@@ -38,6 +38,15 @@ executors:
     resource_class: large
 
 commands:
+  refresh_local_package_index:
+    steps:
+      - run:
+          name: Refresh local package index
+          command: sudo apt update
+      - run:
+          name: Install required deps
+          command: sudo apt install -y libpixman-1-dev libcairo2-dev libpango1.0-dev libjpeg8-dev libgif-dev
+
   checkout_with_submodules:
     steps:
       - checkout
@@ -80,8 +89,13 @@ commands:
           name: Install client Yarn v4
           working_directory: client
           command: |
-            npm install --global --force yarn 4
-            corepack enable
+            sudo npm install --global --force yarn 4
+            sudo corepack enable
+
+      - run:
+          name: Remove submodules yarn config
+          working_directory: client/vendor/recorderjs
+          command: rm package.json
 
       - run:
           name: Install client Yarn dependencies
@@ -196,6 +210,7 @@ jobs:
     executor: node
 
     steps:
+      - refresh_local_package_index
       - checkout_with_submodules
       - rehydrate_node_deps
       - build_and_cache_client
@@ -208,6 +223,7 @@ jobs:
     parallelism: 10
 
     steps:
+      - refresh_local_package_index
       - checkout_with_submodules
       - setup_docker_layer_cache
 
@@ -264,6 +280,7 @@ jobs:
     parallelism: 30
 
     steps:
+      - refresh_local_package_index
       - checkout_with_submodules
       - setup_docker_layer_cache
 
@@ -299,6 +316,7 @@ jobs:
     executor: node
 
     steps:
+      - refresh_local_package_index
       - checkout_with_submodules
       - rehydrate_node_deps
 
@@ -311,6 +329,7 @@ jobs:
     executor: node
 
     steps:
+      - refresh_local_package_index
       - checkout_with_submodules
       - rehydrate_node_deps
 
