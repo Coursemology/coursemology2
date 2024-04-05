@@ -9,7 +9,8 @@ class Course::Survey::SurveyDownloadService
     def download(survey)
       survey_csv = generate_csv(survey)
       base_dir = Dir.mktmpdir('coursemology-survey-')
-      dst_path = File.join(base_dir, "#{survey.title}.csv")
+      normalized_filename = "#{Pathname.normalize_filename(survey.title)}.csv"
+      dst_path = File.join(base_dir, normalized_filename)
       File.open(dst_path, 'w') do |dst_file|
         dst_file.write(survey_csv)
       end
