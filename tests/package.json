@@ -20,5 +20,6 @@
   "coverage": {
     "outputDir": ".nyc_output",
     "fileNamePrefix": "playwright_coverage_"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }

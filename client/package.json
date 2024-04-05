@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "description": "Coursemology Frontend",
   "engines": {
-    "node": ">=18.17.0",
-    "yarn": "^1.0.0"
+    "node": ">=21.7.1",
+    "yarn": "^4.1.1"
   },
   "scripts": {
     "test": "TZ=Asia/Singapore yarn run jest",
@@ -208,5 +208,6 @@
   "devServer": {
     "appHost": "lvh.me",
     "serverPort": 5000
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }
