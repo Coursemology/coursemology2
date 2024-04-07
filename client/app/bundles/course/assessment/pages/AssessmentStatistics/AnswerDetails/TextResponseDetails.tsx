@@ -14,7 +14,7 @@ const TextResponseDetails = (
         dangerouslySetInnerHTML={{ __html: answer.fields.answer_text }}
         variant="body2"
       />
-      {question.allowAttachment && (
+      {question.maxAttachments > 0 && (
         <div className="w-full mt-4 mb-4">
           <AttachmentDetails attachments={answer.attachments} />
         </div>
