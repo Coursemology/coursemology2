@@ -29,7 +29,7 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.SubmissionStatusChart.attempting',
     defaultMessage: 'Attempting',
   },
-  unattempted: {
+  unstarted: {
     id: 'course.assessment.statistics.SubmissionStatusChart.unattempted',
     defaultMessage: 'Not Started',
   },
