@@ -17,11 +17,11 @@ export const questionTypes = mirrorCreator([
 export const MEGABYTES_TO_BYTES = 1024 * 1024;
 
 export const workflowStates = {
-  Unstarted: 'unstarted',
-  Attempting: 'attempting',
-  Submitted: 'submitted',
-  Graded: 'graded',
-  Published: 'published',
+  Unstarted: 'unstarted' as const,
+  Attempting: 'attempting' as const,
+  Submitted: 'submitted' as const,
+  Graded: 'graded' as const,
+  Published: 'published' as const,
 };
 
 export const TestCaseTypes = {
