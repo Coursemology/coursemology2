@@ -30,7 +30,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     submissions = Course::Assessment::Submission.preload(creator: :course_users).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade)
-              
+
     load_course_user_students
 
     @all_students = @assessment.course.course_users.students
