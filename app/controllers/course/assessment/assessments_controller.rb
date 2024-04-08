@@ -19,7 +19,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     @items_hash = @course.lesson_plan_items.where(actable_id: @assessments.pluck(:id),
                                                   actable_type: Course::Assessment.name).
                   preload(actable: :conditions).
-                  with_reference_times_for(current_course_user).
+                  with_reference_times_for(current_course_user, current_course).
                   with_personal_times_for(current_course_user).
                   to_h do |item|
       [item.actable_id, item]
