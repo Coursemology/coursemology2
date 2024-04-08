@@ -81,7 +81,7 @@ class Course::CoursesController < Course::Controller
                 *@assessment_todos&.map { |todo| todo.item.id },
                 *@survey_todos&.map { |todo| todo.item.id }]
     @todo_items_with_timeline_hash = @course.lesson_plan_items.where(id: item_ids).
-                                     with_reference_times_for(current_course_user).
+                                     with_reference_times_for(current_course_user, current_course).
                                      with_personal_times_for(current_course_user).
                                      to_h do |item|
                                        [item.id, item]

@@ -16,7 +16,7 @@ class Course::PersonalTimesController < Course::ComponentController
         # Only show for assessments and videos
         @items = @course.lesson_plan_items.where(actable_type: [Course::Assessment.name, Course::Video.name]).
                  ordered_by_date_and_title.
-                 with_reference_times_for(@course_user).
+                 with_reference_times_for(@course_user, @course).
                  with_personal_times_for(@course_user)
 
         render 'index'

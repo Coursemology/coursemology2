@@ -79,7 +79,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   # Loads the reference times for `course_user`. If `course_user` is nil, then we load the default reference time for
   # `course`.
   scope :with_reference_times_for, (lambda do |course_user, course = nil|
-    # Can't eager-load if we have no idea who we are eager-loading for
+    # Even if there's no course user, we can eager load if the course is known.
     return if course_user.nil? && course.nil?
 
     default_reference_timeline_id = course_user&.course&.default_reference_timeline&.id ||

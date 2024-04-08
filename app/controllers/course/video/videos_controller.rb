@@ -88,7 +88,7 @@ class Course::Video::VideosController < Course::Video::Controller
     @video_items_hash = @course.lesson_plan_items.where(actable_id: @videos.pluck(:id),
                                                         actable_type: Course::Video.name).
                         preload(actable: :conditions).
-                        with_reference_times_for(current_course_user).
+                        with_reference_times_for(current_course_user, current_course).
                         with_personal_times_for(current_course_user).
                         to_h do |item|
       [item.actable_id, item]
