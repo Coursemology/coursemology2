@@ -11,7 +11,6 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
   validates :max_attachment_size, numericality: { only_integer: true, greater_than_or_equal_to: 1,
                                                   less_than_or_equal_to: DEFAULT_MAX_ATTACHMENT_SIZE_MB },
                                   allow_nil: true
-  validate :max_attachment_size_defined_if_max_attachments_is_nonzero
   validate :validate_grade
 
   has_many :solutions, class_name: Course::Assessment::Question::TextResponseSolution.name,
@@ -139,11 +138,5 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
     return if comprehension_question? || solutions.all? { |s| s.grade <= maximum_grade }
 
     errors.add(:maximum_grade, :invalid_grade)
-  end
-
-  def max_attachment_size_defined_if_max_attachments_is_nonzero
-    return if max_attachments == 0 || max_attachment_size
-
-    errors.add(:max_attachment_size, :size_must_be_defined)
   end
 end
