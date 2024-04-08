@@ -12,5 +12,4 @@ en:
           attributes:
             maximum_grade:
               invalid_grade: 'must be no less than the grade of any solution'
-            max_attachment_size:
-              size_must_be_defined: 'max attachment size must be defined if max attachments is non-zero'
+

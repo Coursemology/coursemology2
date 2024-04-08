@@ -12,5 +12,3 @@ zh:
           attributes:
             maximum_grade:
               invalid_grade: '不能低于答案的最低分数'
-            max_attachment_size:
-              size_must_be_defined: '如果最大附件不为零，则必须定义最大附件大小'

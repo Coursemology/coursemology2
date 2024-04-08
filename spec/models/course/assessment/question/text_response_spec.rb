@@ -37,16 +37,6 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
       end
     end
 
-    describe '#max_attachment_size' do
-      context 'when the input max_attachment_size is null and max_attachments is nonzero' do
-        subject { create(:course_assessment_question_text_response, max_attachments: 1, max_attachment_size: nil) }
-
-        it 'will return error' do
-          expect { subject }.to raise_error
-        end
-      end
-    end
-
     describe '#attempt' do
       let(:course) { create(:course) }
       let(:student_user) { create(:course_student, course: course).user }
