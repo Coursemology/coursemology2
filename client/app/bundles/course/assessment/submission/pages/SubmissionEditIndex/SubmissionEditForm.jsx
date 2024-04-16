@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { SAVING_STATUS } from 'lib/constants/sharedConstants';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 import SubmissionAnswer from '../../components/answers';
@@ -69,6 +70,7 @@ const SubmissionEditForm = (props) => {
   const {
     assessment,
     attachments,
+    answerFlags,
     attempting,
     canUpdate,
     liveFeedback,
@@ -131,7 +133,7 @@ const SubmissionEditForm = (props) => {
     handleSubmit,
     reset,
     resetField,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, dirtyFields },
   } = methods;
   usePrompt(isDirty);
 
@@ -188,11 +190,17 @@ const SubmissionEditForm = (props) => {
     };
   });
 
-  const getCurrentlySavingAnswerId = () => {
-    const id = questionIds[stepIndex];
-    const question = questions[id];
+  const saveCurrentlyDisplayedAnswer = () => {
+    const answerId = questions[questionIds[stepIndex]].answerId;
+    const isAnswerUnsaved =
+      answerFlags[answerId].savingStatus !== SAVING_STATUS.Saved;
+    const isAnswerDirty = !!dirtyFields[answerId];
 
-    return question.answerId;
+    if (isAnswerUnsaved && isAnswerDirty) {
+      handleSubmit((data) => {
+        onSaveDraft({ answerId: data[answerId] }, resetField);
+      })();
+    }
   };
 
   const renderAutogradeSubmissionButton = () => {
@@ -625,52 +633,46 @@ const SubmissionEditForm = (props) => {
     </div>
   );
 
-  const renderSteppedQuestions = () => {
-    const answerId = getCurrentlySavingAnswerId();
+  const renderSteppedQuestions = () => (
+    <Stepper
+      activeStep={stepIndex}
+      connector={<div />}
+      nonLinear
+      style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 10 }}
+    >
+      {questionIds.map((id, index) => {
+        let stepButtonColor = '';
+        const isCurrentQuestion = index === stepIndex;
+        stepButtonColor = isCurrentQuestion ? blue[800] : blue[400];
 
-    return (
-      <Stepper
-        activeStep={stepIndex}
-        connector={<div />}
-        nonLinear
-        style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 10 }}
-      >
-        {questionIds.map((id, index) => {
-          let stepButtonColor = '';
-          const isCurrentQuestion = index === stepIndex;
-          stepButtonColor = isCurrentQuestion ? blue[800] : blue[400];
-          return (
-            <Step key={id} sx={{ width: 55, height: 50 }}>
-              <StepButton
-                icon={
-                  <SvgIcon htmlColor={stepButtonColor}>
-                    <circle cx="12" cy="12" r="12" />
-                    <text
-                      fill="#fff"
-                      fontSize="12"
-                      textAnchor="middle"
-                      x="12"
-                      y="16"
-                    >
-                      {index + 1}
-                    </text>
-                  </SvgIcon>
-                }
-                onClick={() => {
-                  handleSubmit((data) =>
-                    onSaveDraft({ answerId: data[answerId] }, resetField),
-                  )();
-                  setStepIndex(index);
-                }}
-                style={styles.stepButton}
-              />
-            </Step>
-          );
-        })}
-      </Stepper>
-    );
-  };
-
+        return (
+          <Step key={id} sx={{ width: 55, height: 50 }}>
+            <StepButton
+              icon={
+                <SvgIcon htmlColor={stepButtonColor}>
+                  <circle cx="12" cy="12" r="12" />
+                  <text
+                    fill="#fff"
+                    fontSize="12"
+                    textAnchor="middle"
+                    x="12"
+                    y="16"
+                  >
+                    {index + 1}
+                  </text>
+                </SvgIcon>
+              }
+              onClick={() => {
+                saveCurrentlyDisplayedAnswer();
+                setStepIndex(index);
+              }}
+              style={styles.stepButton}
+            />
+          </Step>
+        );
+      })}
+    </Stepper>
+  );
   const renderSteppedQuestionsContent = () => {
     const questionId = questionIds[stepIndex];
     const question = questions[questionId];
@@ -843,6 +845,7 @@ SubmissionEditForm.propTypes = {
 
   assessment: PropTypes.object,
   attachments: PropTypes.arrayOf(attachmentShape),
+  answerFlags: PropTypes.object,
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   submissionTimeLimitAt: PropTypes.number,
@@ -893,6 +896,8 @@ function mapStateToProps(state) {
     assessment: state.assessments.submission.assessment,
     attachments: state.assessments.submission.attachments,
     liveFeedback: state.assessments.submission.liveFeedback,
+    answerFlags:
+      state.assessments.submission.answerFlags.flagsByAnswerId.entities,
   };
 }
 
