@@ -25,7 +25,7 @@ export const errorResolver = (
       }
     });
     return {
-      values: {},
+      values: data,
       errors: allErrors,
     };
   };
