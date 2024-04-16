@@ -166,7 +166,6 @@ export function saveAnswer(answerData, answerId, currentTime, resetField) {
 export function saveAllAnswers(rawAnswers, resetField) {
   const currentTime = Date.now();
 
-  // const payload = { submission: { answers, is_save_draft: true } };
   return (dispatch) => {
     Object.values(rawAnswers).forEach((rawAnswer) =>
       dispatch(saveAnswer(rawAnswer, rawAnswer.id, currentTime, resetField)),
