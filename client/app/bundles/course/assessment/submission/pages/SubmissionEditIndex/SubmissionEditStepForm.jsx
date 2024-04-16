@@ -184,13 +184,30 @@ const SubmissionEditStepForm = (props) => {
     };
   });
 
+  const getCurrentlySavingAnswerId = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+
+    return question.answerId;
+  };
+
   const handleNext = () => {
+    const answerId = getCurrentlySavingAnswerId();
+
+    handleSubmit((data) => {
+      onSaveDraft({ answerId: data[answerId] }, resetField);
+    })();
     setMaxStep(Math.max(maxStep, stepIndex + 1));
     setStepIndex(stepIndex + 1);
   };
 
   const handleStepClick = (index) => {
+    const answerId = getCurrentlySavingAnswerId();
+
     if (published || skippable || graderView || index <= maxStep) {
+      handleSubmit((data) => {
+        onSaveDraft({ answerId: data[answerId] }, resetField);
+      })();
       setStepIndex(index);
     }
   };

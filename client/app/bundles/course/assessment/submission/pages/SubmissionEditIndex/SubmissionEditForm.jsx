@@ -188,6 +188,13 @@ const SubmissionEditForm = (props) => {
     };
   });
 
+  const getCurrentlySavingAnswerId = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+
+    return question.answerId;
+  };
+
   const renderAutogradeSubmissionButton = () => {
     if (graderView && submitted) {
       return (
@@ -618,44 +625,51 @@ const SubmissionEditForm = (props) => {
     </div>
   );
 
-  const renderSteppedQuestions = () => (
-    <Stepper
-      activeStep={stepIndex}
-      connector={<div />}
-      nonLinear
-      style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 10 }}
-    >
-      {questionIds.map((id, index) => {
-        let stepButtonColor = '';
-        const isCurrentQuestion = index === stepIndex;
-        stepButtonColor = isCurrentQuestion ? blue[800] : blue[400];
-        return (
-          <Step key={id} sx={{ width: 55, height: 50 }}>
-            <StepButton
-              icon={
-                <SvgIcon htmlColor={stepButtonColor}>
-                  <circle cx="12" cy="12" r="12" />
-                  <text
-                    fill="#fff"
-                    fontSize="12"
-                    textAnchor="middle"
-                    x="12"
-                    y="16"
-                  >
-                    {index + 1}
-                  </text>
-                </SvgIcon>
-              }
-              onClick={() => {
-                setStepIndex(index);
-              }}
-              style={styles.stepButton}
-            />
-          </Step>
-        );
-      })}
-    </Stepper>
-  );
+  const renderSteppedQuestions = () => {
+    const answerId = getCurrentlySavingAnswerId();
+
+    return (
+      <Stepper
+        activeStep={stepIndex}
+        connector={<div />}
+        nonLinear
+        style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 10 }}
+      >
+        {questionIds.map((id, index) => {
+          let stepButtonColor = '';
+          const isCurrentQuestion = index === stepIndex;
+          stepButtonColor = isCurrentQuestion ? blue[800] : blue[400];
+          return (
+            <Step key={id} sx={{ width: 55, height: 50 }}>
+              <StepButton
+                icon={
+                  <SvgIcon htmlColor={stepButtonColor}>
+                    <circle cx="12" cy="12" r="12" />
+                    <text
+                      fill="#fff"
+                      fontSize="12"
+                      textAnchor="middle"
+                      x="12"
+                      y="16"
+                    >
+                      {index + 1}
+                    </text>
+                  </SvgIcon>
+                }
+                onClick={() => {
+                  handleSubmit((data) =>
+                    onSaveDraft({ answerId: data[answerId] }, resetField),
+                  )();
+                  setStepIndex(index);
+                }}
+                style={styles.stepButton}
+              />
+            </Step>
+          );
+        })}
+      </Stepper>
+    );
+  };
 
   const renderSteppedQuestionsContent = () => {
     const questionId = questionIds[stepIndex];
