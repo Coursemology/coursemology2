@@ -10,10 +10,7 @@ import {
 } from 'course/statistics/types';
 import Link from 'lib/components/core/Link';
 import Table, { ColumnTemplate } from 'lib/components/table';
-import {
-  DEFAULT_TABLE_ROWS_PER_PAGE,
-  NUM_CELL_CLASS_NAME,
-} from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import {
   getAssessmentURL,
   getAssessmentWithCategoryURL,
@@ -48,9 +45,9 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.SubmissionTime.grade',
     defaultMessage: 'Grade',
   },
-  timeOverdue: {
+  dueIn: {
     id: 'course.statistics.StatisticsIndex.SubmissionTime.timeOverdue',
-    defaultMessage: 'Time Overdue',
+    defaultMessage: 'Due In',
   },
   timeTaken: {
     id: 'course.statistics.StatisticsIndex.SubmissionTime.timeTaken',
@@ -131,22 +128,6 @@ const SubmissionTimeTable: FC<Props> = (props) => {
       csvDownloadable: true,
     },
     {
-      of: 'grade',
-      title: t(translations.grade),
-      sortable: true,
-      className: NUM_CELL_CLASS_NAME,
-      cell: (assessment): JSX.Element | string => {
-        return assessment.grade ? (
-          <div className={NUM_CELL_CLASS_NAME}>
-            {`${assessment.grade} / ${assessment.maximumGrade}`}
-          </div>
-        ) : (
-          ''
-        );
-      },
-      csvDownloadable: true,
-    },
-    {
       of: 'workflowState',
       title: t(translations.status),
       sortable: true,
@@ -177,17 +158,10 @@ const SubmissionTimeTable: FC<Props> = (props) => {
       csvDownloadable: true,
     },
     {
-      of: 'timeOverdue',
-      title: t(translations.timeOverdue),
+      of: 'dueIn',
+      title: t(translations.dueIn),
       sortable: true,
-      cell: (assessment) => assessment.timeOverdue,
-      csvDownloadable: true,
-    },
-    {
-      of: 'timeTaken',
-      title: t(translations.timeTaken),
-      sortable: true,
-      cell: (assessment) => assessment.timeTaken,
+      cell: (assessment) => assessment.dueIn,
       csvDownloadable: true,
     },
   ];

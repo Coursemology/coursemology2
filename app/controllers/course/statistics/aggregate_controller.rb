@@ -37,7 +37,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def submission_time
-    @all_students = [CourseUser.where(id: submission_time_params[:student_id]).first]
+    @all_students = [CourseUser.where(id: params[:student_id]).first]
     @submissions = all_submissions_for_student_info
     @maximum_grade_hash = max_grade_statistics_hash
 
@@ -45,10 +45,6 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   private
-
-  def submission_time_params
-    params.permit(:student_id)
-  end
 
   def fetch_published_assessments
     @assessments = current_course.assessments.published.includes(tab: :category)

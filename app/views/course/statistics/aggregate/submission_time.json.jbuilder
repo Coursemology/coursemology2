@@ -2,6 +2,30 @@
 json.name @all_students.first.name
 
 json.assessments @assessments do |assessment|
+  student_id = @all_students.first.id
+  submission_info = @submissions[[assessment.id, student_id]]
+  timeline = @personal_timeline[[assessment.id, student_id]] || @reference_timeline[assessment.id]
+  _, reference_end_at, _ = @reference_timeline[assessment.id]
+
+  start_at, end_at, is_fixed = timeline
+
+  if submission_info
+    submission_id, workflow_state, time_taken, submitted_at, grade = submission_info
+
+    next if workflow_state != 'attempting'
+
+    json.submissionId submission_id
+    json.workflowState workflow_state
+    json.dueIn time_until_due(submitted_at, end_at)
+  else
+    is_not_released_to_student = Time.now.to_i < start_at.to_i
+
+    next if is_not_released_to_student
+
+    json.workflowState 'unstarted'
+    json.dueIn time_until_due(Time.now, end_at)
+  end
+
   json.id assessment.id
   json.title assessment.title
 
@@ -17,30 +41,8 @@ json.assessments @assessments do |assessment|
 
   json.maximumGrade @maximum_grade_hash[assessment.id]
 
-  student_id = @all_students.first.id
-  submission_info = @submissions[[assessment.id, student_id]]
-  timeline = @personal_timeline[[assessment.id, student_id]] || @reference_timeline[assessment.id]
-
-  start_at, end_at = timeline
-  if submission_info
-    submission_id, workflow_state, time_taken, submitted_at, grade = submission_info
-
-    json.grade grade
-    json.submissionId submission_id
-    json.workflowState workflow_state
-    json.timeTaken seconds_to_str(time_taken)
-    json.timeOverdue seconds_to_str(time_overdue(submitted_at, end_at))
-  else
-    json.timeTaken seconds_to_str(nil)
-
-    is_not_released_to_student = Time.now.to_i < start_at.to_i
-
-    if is_not_released_to_student
-      json.workflowState 'unreleased'
-      json.timeOverdue seconds_to_str(nil)
-    else
-      json.workflowState 'unstarted'
-      json.timeOverdue seconds_to_str(time_overdue(Time.now, end_at))
-    end
-  end
+  json.isPersonalizedTimeline !!@personal_timeline[[assessment.id, student_id]]
+  json.endAt end_at
+  json.referenceEndAt reference_end_at
+  json.isTimelineFixed is_fixed || false
 end

@@ -131,11 +131,9 @@ export interface CourseAssessmentStatistics extends CourseAssessmentBasicInfo {
 }
 
 export interface CourseAssessmentTime extends CourseAssessmentBasicInfo {
-  grade?: number;
   submissionId?: number;
   workflowState: SubmissionStatus;
-  timeOverdue: string;
-  timeTaken: string;
+  dueIn: string;
 }
 
 export interface AssessmentsStatistics {

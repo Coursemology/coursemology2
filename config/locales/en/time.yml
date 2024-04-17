@@ -1,5 +1,9 @@
 en:
   time:
     day: 'day'
+    hour: 'hour'
+    minute: 'minute'
+    second: 'second'
+    ago: 'ago'
     formats:
       default: '%a, %d %b %Y %I:%M:%S %p'
