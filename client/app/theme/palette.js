@@ -1,6 +1,9 @@
 import * as colors from '@mui/material/colors';
 
-import { workflowStates } from '../bundles/course/assessment/submission/constants';
+import {
+  dueInStates,
+  workflowStates,
+} from '../bundles/course/assessment/submission/constants';
 import { groupRole } from '../bundles/course/group/constants';
 
 import { black, white } from './colors';
@@ -80,6 +83,12 @@ const palette = {
     [workflowStates.Submitted]: colors.grey[100],
     [workflowStates.Graded]: colors.blue[100],
     [workflowStates.Published]: colors.green[100],
+  },
+
+  dueInStatus: {
+    [dueInStates.Safe]: colors.green[100],
+    [dueInStates.AlmostLate]: colors.orange[100],
+    [dueInStates.Overdue]: colors.red[100],
   },
 
   groupRole: {

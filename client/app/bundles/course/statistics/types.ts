@@ -133,7 +133,11 @@ export interface CourseAssessmentStatistics extends CourseAssessmentBasicInfo {
 export interface CourseAssessmentTime extends CourseAssessmentBasicInfo {
   submissionId?: number;
   workflowState: SubmissionStatus;
-  dueIn: string;
+  dueIn: number | null;
+  endAt: Date;
+  referenceEndAt: Date;
+  isPersonalizedTimeline: boolean;
+  isTimelineFixed: boolean;
 }
 
 export interface AssessmentsStatistics {

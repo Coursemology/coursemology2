@@ -12,6 +12,8 @@ import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
   NUM_CELL_CLASS_NAME,
 } from 'lib/constants/sharedConstants';
+import { getStudentSubmissionDueURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
@@ -73,8 +75,10 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
     },
     students,
   } = props;
+
   const { t } = useTranslation();
   const formattedStudents: Student[] = students.map(processStudent);
+  const courseId = getCourseId();
 
   const numStudentType = useMemo(() => {
     const numStudents = formattedStudents.filter(
@@ -93,7 +97,14 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       title: t(translations.name),
       sortable: true,
       searchable: true,
-      cell: (student) => student.name,
+      cell: (student) => (
+        <Link
+          opensInNewTab
+          to={getStudentSubmissionDueURL(courseId!, student.id)}
+        >
+          {student.name}
+        </Link>
+      ),
       csvDownloadable: true,
     },
     {

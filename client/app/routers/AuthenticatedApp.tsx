@@ -123,7 +123,7 @@ import AssessmentsStatistics from 'course/statistics/pages/StatisticsIndex/asses
 import CourseStatistics from 'course/statistics/pages/StatisticsIndex/course/CourseStatistics';
 import StaffStatistics from 'course/statistics/pages/StatisticsIndex/staff/StaffStatistics';
 import StudentsStatistics from 'course/statistics/pages/StatisticsIndex/students/StudentsStatistics';
-import SubmissionTimeStatistics from 'course/statistics/pages/StatisticsIndex/submission-time/SubmissionTimeStatistics';
+import SubmissionTimeDetails from 'course/statistics/pages/StatisticsIndex/submission-time/SubmissionTimeDetails';
 import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
 import {
   courseUserHandle,
@@ -229,11 +229,12 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
               path: 'assessments',
               element: <AssessmentsStatistics />,
             },
-            {
-              path: 'submission_time',
-              element: <SubmissionTimeStatistics />,
-            },
           ],
+        },
+        {
+          path: 'statistics/submission_time/:studentId',
+          handle: StatisticsIndex.handle,
+          element: <SubmissionTimeDetails />,
         },
         {
           path: 'duplication',

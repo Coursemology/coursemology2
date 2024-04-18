@@ -73,10 +73,6 @@ const allTabs = {
     label: translations.assessments,
     href: 'assessments',
   },
-  submissionTimeTab: {
-    label: translations.submissionTime,
-    href: 'submission_time',
-  },
 };
 
 const StatisticsIndex: FC = () => {
@@ -89,7 +85,6 @@ const StatisticsIndex: FC = () => {
     allTabs.staffTab,
     allTabs.courseTab,
     allTabs.assessmentTab,
-    allTabs.submissionTimeTab,
   ];
 
   const defaultTabIndex = tabs.findIndex(

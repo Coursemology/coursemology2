@@ -25,6 +25,12 @@ export const workflowStates = {
   Unreleased: 'unreleased' as const,
 };
 
+export const dueInStates = {
+  Safe: 'safe' as const,
+  AlmostLate: 'almostLate' as const,
+  Overdue: 'overdue' as const,
+};
+
 export const TestCaseTypes = {
   Public: 'public_test',
   Private: 'private_test',
