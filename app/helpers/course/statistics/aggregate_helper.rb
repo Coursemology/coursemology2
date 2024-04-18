@@ -20,7 +20,7 @@ module Course::Statistics::AggregateHelper
   end
 
   def time_until_due(submitted_at, end_at)
-    return nil if !end_at
+    return nil unless end_at
 
     expected_submission_time = submitted_at || Time.now
     end_at.to_i - expected_submission_time.to_i

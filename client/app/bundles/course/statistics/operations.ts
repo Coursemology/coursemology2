@@ -42,11 +42,11 @@ export const fetchAssessmentsStatistics =
     return response.data;
   };
 
-export const fetchSubmissionTimeStatistics = async (
+export const fetchSubmissionDueStatistics = async (
   studentId: number,
 ): Promise<SubmissionTimeStatistics> => {
   const response =
-    await CourseAPI.statistics.course.fetchSubmissionTimeStatistics(studentId);
+    await CourseAPI.statistics.course.fetchSubmissionDueStatistics(studentId);
 
   return response.data;
 };

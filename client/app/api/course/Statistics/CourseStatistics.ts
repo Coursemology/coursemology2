@@ -35,9 +35,9 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
     return this.client.get(`${this.#urlPrefix}/assessments`);
   }
 
-  fetchSubmissionTimeStatistics(
+  fetchSubmissionDueStatistics(
     studentId: number,
   ): APIResponse<SubmissionTimeStatistics> {
-    return this.client.get(`${this.#urlPrefix}/submission_time/${studentId}`);
+    return this.client.get(`${this.#urlPrefix}/submission_due/${studentId}`);
   }
 }

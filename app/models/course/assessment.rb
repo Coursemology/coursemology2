@@ -141,10 +141,6 @@ class Course::Assessment < ApplicationRecord
     joins(lesson_plan_item: :default_reference_time)
   end)
 
-  scope :with_tab_and_category_info, (lambda do
-    joins(tab: :category)
-  end)
-
   delegate :source, :source=, to: :duplication_traceable, allow_nil: true
 
   def self.use_relative_model_naming?

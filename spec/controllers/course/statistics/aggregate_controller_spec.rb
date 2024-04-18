@@ -211,24 +211,25 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
       end
     end
 
-    describe '#submission_time' do
+    describe '#submission_due' do
       render_views
+      let!(:deadline) { 1.day.from_now }
       let!(:published_assessment) do
-        create(:assessment, :published, :with_all_question_types, course: course, end_at: Time.now)
+        create(:assessment, :published, :with_all_question_types, course: course, end_at: deadline)
       end
 
       let!(:unpublished_assessment) { create(:assessment, :with_all_question_types, course: course) }
       let!(:student) { create(:course_student, course: course) }
 
-      let!(:late_submission) do
-        create(:submission, :submitted,
+      let!(:non_submitted_submission) do
+        create(:submission, :attempting,
                assessment: published_assessment, creator: student.user,
-               created_at: 1.hour.from_now, submitted_at: 2.hours.from_now)
+               created_at: 1.hour.from_now)
       end
 
       subject do
-        get :submission_time, format: :json,
-                              params: { course_id: course, user_id: course_user, student_id: student.id }
+        get :submission_due, format: :json,
+                             params: { course_id: course, user_id: course_user, student_id: student.id }
       end
 
       context 'when a Normal User pings the endpoint' do
@@ -258,10 +259,20 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
           json_result = JSON.parse(response.body)
           expect(json_result['assessments'].count).to eq(1)
 
-          expect(json_result['assessments'][0]['grade']).to eq(late_submission.grade)
-          expect(json_result['assessments'][0]['workflowState']).to eq('submitted')
-          expect(json_result['assessments'][0]['timeOverdue']).to eq(' 0 time.day 02:00:00')
-          expect(json_result['assessments'][0]['timeTaken']).to eq(' 0 time.day 01:00:00')
+          expected_end_at = published_assessment.end_at.change(usec: published_assessment.end_at.usec / 1000 * 1000)
+          parsed_end_at = DateTime.parse(json_result['assessments'][0]['endAt']).
+                          change(usec: DateTime.parse(json_result['assessments'][0]['endAt']).
+                                       usec / 1000 * 1000)
+          parsed_reference_end_at = DateTime.parse(json_result['assessments'][0]['referenceEndAt']).
+                                    change(usec: DateTime.parse(json_result['assessments'][0]['referenceEndAt']).
+                                                 usec / 1000 * 1000)
+
+          expect(json_result['assessments'][0]['workflowState']).to eq('attempting')
+          expect(parsed_end_at).to eq(expected_end_at)
+          expect(parsed_reference_end_at).to eq(expected_end_at)
+          expect(json_result['assessments'][0]['dueIn']).to eq(deadline.to_i - Time.now.to_i)
+          expect(json_result['assessments'][0]['isPersonalizedTimeline']).to be_falsey
+          expect(json_result['assessments'][0]['isTimelineFixed']).to be_falsey
         end
       end
 
