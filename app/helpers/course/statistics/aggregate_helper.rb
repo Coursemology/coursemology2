@@ -19,10 +19,9 @@ module Course::Statistics::AggregateHelper
     format("%2d #{t('time.day')} %02d:%02d:%02d", days, hours, minutes, seconds)
   end
 
-  def time_until_due(submitted_at, end_at)
-    return nil unless end_at
+  def calculate_time_interval(from, optional_to)
+    return nil unless optional_to
 
-    expected_submission_time = submitted_at || Time.now
-    end_at.to_i - expected_submission_time.to_i
+    optional_to.to_i - from.to_i
   end
 end

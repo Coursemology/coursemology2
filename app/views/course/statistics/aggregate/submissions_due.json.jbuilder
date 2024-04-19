@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 json.name @all_students.first.name
+student_id = @all_students.first.id
 
 json.assessments @assessments do |assessment|
-  student_id = @all_students.first.id
   submission_info = @submissions[[assessment.id, student_id]]
   timeline = @personal_timeline[[assessment.id, student_id]] || @reference_timeline[assessment.id]
   _, reference_end_at, = @reference_timeline[assessment.id]
@@ -17,14 +17,14 @@ json.assessments @assessments do |assessment|
     json.submissionId submission_id
     json.workflowState workflow_state
   else
-    is_not_released_to_student = Time.now.to_i < start_at.to_i
+    is_not_released_to_student = Time.now < start_at
 
     next if is_not_released_to_student
 
     json.workflowState 'unstarted'
   end
 
-  json.dueIn time_until_due(Time.now, end_at)
+  json.dueIn calculate_time_interval(Time.now, end_at)
 
   json.id assessment.id
   json.title assessment.title

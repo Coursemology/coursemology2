@@ -7,48 +7,32 @@ module Course::Statistics::ReferenceTimesConcern
       WITH course_user_personal_end_at AS (
         SELECT cpt.course_user_id, cpt.start_at, cpt.end_at, cpt.fixed, clpi.actable_id AS assessment_id
         FROM course_personal_times cpt
-        JOIN (
-          SELECT course_lesson_plan_items.id, course_lesson_plan_items.actable_id
-          FROM course_lesson_plan_items
-          WHERE course_lesson_plan_items.actable_type = 'Course::Assessment'
-            AND course_lesson_plan_items.actable_id IN (#{assessment_id_array.join(', ')})
-        ) clpi
+        JOIN course_lesson_plan_items clpi
         ON cpt.lesson_plan_item_id = clpi.id
+        WHERE clpi.actable_type = 'Course::Assessment'
+        AND clpi.actable_id IN (#{assessment_id_array.join(', ')})
       ),
 
       personal_times AS (
         SELECT cu.id AS course_user_id, pt.start_at, pt.end_at, pt.fixed, pt.assessment_id
-        FROM (
-          SELECT course_users.id
-          FROM course_users
-          WHERE course_users.course_id = #{course_id}
-        ) cu
-        LEFT JOIN (
-          SELECT course_user_id, start_at, end_at, fixed, assessment_id
-          FROM course_user_personal_end_at
-        ) pt
+        FROM course_users cu
+        LEFT JOIN course_user_personal_end_at pt
         ON cu.id = pt.course_user_id
+        WHERE cu.course_id = #{course_id}
       ),
 
       personal_reference_times AS (
-        SELECT cu.id AS course_user_id, crt.start_at, crt.end_at, clpi.assessment_id
-        FROM (
-          SELECT course_users.id, course_users.reference_timeline_id
-          FROM course_users
-          WHERE course_users.course_id = #{course_id} AND course_users.role = #{CourseUser.roles[:student]}
-        ) cu
-        LEFT JOIN (
-          SELECT reference_timeline_id, lesson_plan_item_id, start_at, end_at
-          FROM course_reference_times
-        ) crt
+        SELECT cu.id AS course_user_id, crt.start_at, crt.end_at, clpi.actable_id AS assessment_id
+        FROM course_users cu
+        LEFT JOIN course_reference_times crt
         ON crt.reference_timeline_id = cu.reference_timeline_id
-        LEFT JOIN (
-          SELECT id, actable_id AS assessment_id
-          FROM course_lesson_plan_items
-          WHERE course_lesson_plan_items.actable_type = 'Course::Assessment'
-            AND course_lesson_plan_items.actable_id IN (#{assessment_id_array.join(', ')})
-        ) clpi
+        LEFT JOIN course_lesson_plan_items clpi
         ON crt.lesson_plan_item_id = clpi.id
+        WHERE
+          cu.course_id = #{course_id}
+          AND cu.role = #{CourseUser.roles[:student]}
+          AND clpi.actable_type = 'Course::Assessment'
+          AND clpi.actable_id IN (#{assessment_id_array.join(', ')})
       )
 
       SELECT
@@ -71,19 +55,15 @@ module Course::Statistics::ReferenceTimesConcern
     reference_times = Course::ReferenceTime.find_by_sql(<<-SQL.squish
       SELECT clpi.actable_id AS assessment_id, crt.start_at, crt.end_at
       FROM course_reference_times crt
-      JOIN (
-        SELECT id
-        FROM course_reference_timelines
-        WHERE course_id = #{course_id} AND "default" = TRUE
-      ) crtl
+      JOIN course_reference_timelines crtl
       ON crt.reference_timeline_id = crtl.id
-      JOIN (
-        SELECT id, actable_id
-        FROM course_lesson_plan_items
-        WHERE course_lesson_plan_items.actable_type = 'Course::Assessment'
-          AND course_lesson_plan_items.actable_id IN (#{assessment_id_array.join(', ')})
-      ) clpi
+      JOIN course_lesson_plan_items clpi
       ON crt.lesson_plan_item_id = clpi.id
+      WHERE
+        crtl.course_id = #{course_id}
+        AND crtl.default = TRUE
+        AND clpi.actable_type = 'Course::Assessment'
+        AND clpi.actable_id IN (#{assessment_id_array.join(', ')})
     SQL
                                                        )
     reference_times.map { |rt| [rt.assessment_id, [rt.start_at, rt.end_at, nil]] }.to_h

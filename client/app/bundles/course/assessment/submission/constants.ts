@@ -26,10 +26,12 @@ export const workflowStates = {
 };
 
 export const dueInStates = {
-  Safe: 'safe' as const,
-  AlmostLate: 'almostLate' as const,
-  Overdue: 'overdue' as const,
+  NotDue: 'notDue' as const,
+  AlmostDue: 'almostDue' as const,
+  OverDue: 'overDue' as const,
 };
+
+export const ALMOST_DUE_THRESHOLD = 3 * 24 * 60 * 60; // 3 days
 
 export const TestCaseTypes = {
   Public: 'public_test',

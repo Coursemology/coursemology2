@@ -86,9 +86,9 @@ const palette = {
   },
 
   dueInStatus: {
-    [dueInStates.Safe]: colors.green[100],
-    [dueInStates.AlmostLate]: colors.orange[100],
-    [dueInStates.Overdue]: colors.red[100],
+    [dueInStates.NotDue]: colors.green[100],
+    [dueInStates.AlmostDue]: colors.orange[100],
+    [dueInStates.OverDue]: colors.red[100],
   },
 
   groupRole: {

@@ -436,7 +436,7 @@ Rails.application.routes.draw do
         get 'course/performance' => 'aggregate#course_performance'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
-        get 'submission_due/:student_id' => 'aggregate#submission_due'
+        get 'submissions_due/:student_id' => 'aggregate#submissions_due'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
         get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
         get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'

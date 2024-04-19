@@ -38,6 +38,6 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
   fetchSubmissionDueStatistics(
     studentId: number,
   ): APIResponse<SubmissionTimeStatistics> {
-    return this.client.get(`${this.#urlPrefix}/submission_due/${studentId}`);
+    return this.client.get(`${this.#urlPrefix}/submissions_due/${studentId}`);
   }
 }

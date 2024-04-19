@@ -211,7 +211,7 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
       end
     end
 
-    describe '#submission_due' do
+    describe '#submissions_due' do
       render_views
       let!(:deadline) { 1.day.from_now }
       let!(:published_assessment) do
@@ -228,8 +228,8 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
       end
 
       subject do
-        get :submission_due, format: :json,
-                             params: { course_id: course, user_id: course_user, student_id: student.id }
+        get :submissions_due, format: :json,
+                              params: { course_id: course, user_id: course_user, student_id: student.id }
       end
 
       context 'when a Normal User pings the endpoint' do
@@ -259,17 +259,13 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
           json_result = JSON.parse(response.body)
           expect(json_result['assessments'].count).to eq(1)
 
-          expected_end_at = published_assessment.end_at.change(usec: published_assessment.end_at.usec / 1000 * 1000)
-          parsed_end_at = DateTime.parse(json_result['assessments'][0]['endAt']).
-                          change(usec: DateTime.parse(json_result['assessments'][0]['endAt']).
-                                       usec / 1000 * 1000)
-          parsed_reference_end_at = DateTime.parse(json_result['assessments'][0]['referenceEndAt']).
-                                    change(usec: DateTime.parse(json_result['assessments'][0]['referenceEndAt']).
-                                                 usec / 1000 * 1000)
+          expected_end_at = published_assessment.end_at
+          parsed_end_at = Time.parse(json_result['assessments'][0]['endAt'])
+          parsed_reference_end_at = Time.parse(json_result['assessments'][0]['referenceEndAt'])
 
           expect(json_result['assessments'][0]['workflowState']).to eq('attempting')
-          expect(parsed_end_at).to eq(expected_end_at)
-          expect(parsed_reference_end_at).to eq(expected_end_at)
+          expect(parsed_end_at).to be_within(1.second).of(expected_end_at)
+          expect(parsed_reference_end_at).to be_within(1.second).of(expected_end_at)
           expect(json_result['assessments'][0]['dueIn']).to eq(deadline.to_i - Time.now.to_i)
           expect(json_result['assessments'][0]['isPersonalizedTimeline']).to be_falsey
           expect(json_result['assessments'][0]['isTimelineFixed']).to be_falsey

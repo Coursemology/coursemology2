@@ -1,4 +1,7 @@
-import { dueInStates } from 'course/assessment/submission/constants';
+import {
+  ALMOST_DUE_THRESHOLD,
+  dueInStates,
+} from 'course/assessment/submission/constants';
 
 import { CourseAssessmentTime } from '../types';
 
@@ -33,10 +36,10 @@ export const fetchDueInTimeAndStates = (
 
   let dueStates = '';
 
-  if (days >= 3 && rawTime >= 0) {
-    dueStates = dueInStates.Safe;
+  if (rawTime >= ALMOST_DUE_THRESHOLD) {
+    dueStates = dueInStates.NotDue;
   } else {
-    dueStates = rawTime >= 0 ? dueInStates.AlmostLate : dueInStates.Overdue;
+    dueStates = rawTime >= 0 ? dueInStates.AlmostDue : dueInStates.OverDue;
   }
 
   return {

@@ -2,7 +2,7 @@
 # This is named aggregate controller as naming this as course controller leads to name conflict issues
 class Course::Statistics::AggregateController < Course::Statistics::Controller
   before_action :preload_levels, only: [:all_students, :course_performance]
-  before_action :fetch_published_assessments, only: [:all_assessments, :submission_due]
+  before_action :preload_published_assessments, only: [:all_assessments, :submissions_due]
   include Course::Statistics::TimesConcern
   include Course::Statistics::GradesConcern
   include Course::Statistics::CountsConcern
@@ -36,7 +36,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     fetch_all_assessment_related_statistics_hash
   end
 
-  def submission_due
+  def submissions_due
     @all_students = [CourseUser.where(id: params[:student_id]).first]
     @submissions = all_submissions_for_student_info
     @maximum_grade_hash = max_grade_statistics_hash
@@ -46,7 +46,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
 
   private
 
-  def fetch_published_assessments
+  def preload_published_assessments
     @assessments = current_course.assessments.published.includes(tab: :category)
   end
 
