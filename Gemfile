@@ -184,7 +184,7 @@ gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git',
                    branch: 'bivan/upgrade-rails-7-ruby-3'
 
 # Using CarrierWave for file uploads
-gem 'carrierwave'
+gem 'carrierwave', '2.2.6'
 # Generate sequential filenames
 gem 'filename'
 # Required by CarrierWave, for image resizing
