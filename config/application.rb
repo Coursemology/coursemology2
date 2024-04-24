@@ -29,6 +29,17 @@ module Application # rubocop:disable Style/ClassAndModuleChildren
     # Action Controller default settings
     config.action_controller.include_all_helpers = false
 
+    # Upgrading into Rails 6.1 causes the issue inside FactoryBot, in which
+    # all course-related model got relation with course_assessment_categories in which
+    # the way handling it is somewhat changed in this upgrade, and mainly is due to this
+    # config being set as true. We probably need to look into the migration files or
+    # the has_many and belongs_to relation, but for now we set it false
+    # to still comply with the previous, bug-free- version.
+    #
+    # Default setting is true, and the reference is the following link
+    # https://lilyreile.medium.com/rails-6-1-new-framework-defaults-what-they-do-and-how-to-safely-uncomment-them-c546b70f0c5e
+    config.active_record.has_many_inversing = false
+
     # Action Mailer default settings
     config.action_mailer.default_options = { from: ENV['RAILS_MAILER_DEFAULT_FROM_ADDRESS'] }
 
