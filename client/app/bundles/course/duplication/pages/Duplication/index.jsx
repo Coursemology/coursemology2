@@ -11,18 +11,13 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 import { duplicationModes } from 'course/duplication/constants';
-import {
-  changeSourceCourse,
-  fetchObjectsList,
-} from 'course/duplication/operations';
+import { fetchObjectsList } from 'course/duplication/operations';
 import {
   courseListingShape,
   sourceCourseShape,
 } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
-import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
@@ -34,7 +29,7 @@ import ItemsSelectorMenu from './ItemsSelectorMenu';
 const translations = defineMessages({
   duplicateData: {
     id: 'course.duplication.Duplication.duplicateData',
-    defaultMessage: 'Duplicate Data',
+    defaultMessage: 'Duplicate Data from {courseTitle}',
   },
   fromCourse: {
     id: 'course.duplication.Duplication.fromCourse',
@@ -131,14 +126,6 @@ class Duplication extends Component {
 
     return (
       <div style={styles.bodyGrid}>
-        <div>
-          <Typography variant="h6">
-            <FormattedMessage {...translations.fromCourse} />
-          </Typography>
-        </div>
-
-        <Paper style={styles.mainPanel}>{this.renderFromCourseMain()}</Paper>
-
         <div>{this.renderToCourseSidebar()}</div>
 
         <Paper style={styles.mainPanel}>
@@ -155,40 +142,6 @@ class Duplication extends Component {
           <div />
         )}
       </div>
-    );
-  }
-
-  renderFromCourseMain() {
-    const {
-      currentHost,
-      currentCourseId,
-      sourceCourse,
-      sourceCourses,
-      isChangingCourse,
-      intl,
-      dispatch,
-    } = this.props;
-
-    return (
-      <>
-        <CourseDropdownMenu
-          courses={sourceCourses}
-          currentCourseId={currentCourseId}
-          currentHost={currentHost}
-          disabled={isChangingCourse}
-          dropDownMenuProps={{ className: 'source-course-dropdown' }}
-          onChange={(event) => dispatch(changeSourceCourse(event.target.value))}
-          onHome={() => dispatch(changeSourceCourse(currentCourseId))}
-          prompt={intl.formatMessage(translations.selectSourceCourse)}
-          selectedCourseId={sourceCourse.id}
-        />
-        <DateTimePicker
-          disabled
-          label={intl.formatMessage(translations.startAt)}
-          name="start_at"
-          value={sourceCourse.start_at}
-        />
-      </>
     );
   }
 
@@ -262,8 +215,16 @@ class Duplication extends Component {
   }
 
   render() {
+    const { sourceCourse } = this.props;
     return (
-      <Page title={<FormattedMessage {...translations.duplicateData} />}>
+      <Page
+        title={
+          <FormattedMessage
+            {...translations.duplicateData}
+            values={{ courseTitle: sourceCourse.title }}
+          />
+        }
+      >
         {this.renderBody()}
       </Page>
     );

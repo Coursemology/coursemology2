@@ -17,11 +17,6 @@ class Course::ObjectDuplicationsController < Course::ComponentController
     render partial: 'jobs/submitted', locals: { job: job }
   end
 
-  # Duplication data for the current course
-  def data
-    load_items_data
-  end
-
   protected
 
   def authorize_duplication
