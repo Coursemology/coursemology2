@@ -1705,7 +1705,7 @@
   },
   "course.assessment.question.programming.expected": {
     "defaultMessage": "Expected"
-  }, 
+  },
   "course.assessment.question.programming.expression": {
     "defaultMessage": "Expression"
   },
@@ -3764,6 +3764,9 @@
   "course.duplication.CourseDropdownMenu.currentCourse": {
     "defaultMessage": "Select Current Course"
   },
+  "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.destinationInstance": {
+    "defaultMessage": "Destination Instance"
+  },
   "course.duplication.Duplication.DestinationCourseSelector.NewCourseForm.newStartAt": {
     "defaultMessage": "New Start Date *"
   },
@@ -3863,14 +3866,14 @@
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "Duplicate Data"
   },
+  "course.duplication.Duplication.fromCourse": {
+    "defaultMessage": "Duplicate Data from {courseTitle}"
+  },
   "course.duplication.Duplication.duplicationDisabled": {
     "defaultMessage": "Duplication is disabled for this course."
   },
   "course.duplication.Duplication.existingCourse": {
     "defaultMessage": "Existing Course"
-  },
-  "course.duplication.Duplication.fromCourse": {
-    "defaultMessage": "From"
   },
   "course.duplication.Duplication.items": {
     "defaultMessage": "Selected Items"
@@ -3880,12 +3883,6 @@
   },
   "course.duplication.Duplication.noComponentsEnabled": {
     "defaultMessage": "All components with duplicable items are disabled. You may enable them under course settings."
-  },
-  "course.duplication.Duplication.selectSourceCourse": {
-    "defaultMessage": "Select course to duplicate from:"
-  },
-  "course.duplication.Duplication.startAt": {
-    "defaultMessage": "Start Date"
   },
   "course.duplication.Duplication.toCourse": {
     "defaultMessage": "To"

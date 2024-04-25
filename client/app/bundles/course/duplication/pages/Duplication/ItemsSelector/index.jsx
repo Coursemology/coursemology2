@@ -1,5 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { itemSelectorPanels } from 'course/duplication/constants';
@@ -23,28 +24,22 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  message: {
-    marginTop: 25,
-  },
-};
-
 const ItemsSelector = (props) => {
   const { currentPanel, destinationCourse } = props;
 
   if (!currentPanel) {
     return (
-      <div style={styles.message}>
+      <Typography className="mt-5" variant="body2">
         <FormattedMessage {...translations.pleaseSelectItems} />
-      </div>
+      </Typography>
     );
   }
 
   if (!destinationCourse.enabledComponents.includes(currentPanel)) {
     return (
-      <div style={styles.message}>
+      <Typography className="mt-5" variant="body2">
         <FormattedMessage {...translations.componentDisabled} />
-      </div>
+      </Typography>
     );
   }
 

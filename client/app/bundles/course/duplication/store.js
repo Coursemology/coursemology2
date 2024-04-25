@@ -72,25 +72,6 @@ const reducer = produce((state, action) => {
       return { ...state, isLoading: false };
     }
 
-    case actionTypes.CHANGE_SOURCE_COURSE_REQUEST: {
-      return { ...state, isChangingCourse: true };
-    }
-    case actionTypes.CHANGE_SOURCE_COURSE_SUCCESS: {
-      const { materialsComponent, ...data } = action.courseData;
-      const nestedFolders = nestFolders(materialsComponent);
-      return {
-        ...state,
-        ...data,
-        materialsComponent: nestedFolders,
-        selectedItems: getEmptySelectedItems(),
-        currentItemSelectorPanel: null,
-        isChangingCourse: false,
-      };
-    }
-    case actionTypes.CHANGE_SOURCE_COURSE_FAILURE: {
-      return { ...state, isChangingCourse: false };
-    }
-
     case actionTypes.SET_DESTINATION_COURSE_ID: {
       return {
         ...state,

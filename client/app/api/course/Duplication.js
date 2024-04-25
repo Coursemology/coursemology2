@@ -25,26 +25,6 @@ export default class DuplicationAPI extends BaseCourseAPI {
   }
 
   /**
-   * Fetches a list of all duplicable objects for the given course.
-   *
-   * @param {string} courseId
-   * @return {Promise}
-   * success response: {
-   *   sourceCourse: sourceCourseShape,
-   *   assessmentComponent: Array.<categoryShape>,
-   *   surveyComponent: Array.<surveyShape>,
-   *   achievementsComponent: Array.<achievementShape>,
-   *   materialsComponent: Array.<folderShape>,
-   *   videosComponent: Array.<videoTabShape>,
-   * }
-   *
-   * See course/duplication/propTypes.js for custom propTypes.
-   */
-  data(courseId) {
-    return this.client.get(`/courses/${courseId}/object_duplication/data`);
-  }
-
-  /**
    * Duplicates selected items to the target course.
    *
    * @param {number} sourceCourseId

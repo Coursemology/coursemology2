@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { ListSubheader } from '@mui/material';
+import { ListSubheader, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
@@ -132,11 +132,11 @@ class AssessmentsSelector extends Component {
 
     return (
       <>
-        <h2>
+        <Typography className="mt-5 mb-5" variant="h2">
           <FormattedMessage
             {...defaultComponentTitles.course_assessments_component}
           />
-        </h2>
+        </Typography>
         {categories.length > 0 ? (
           categories.map((category) => this.renderCategoryTree(category))
         ) : (
