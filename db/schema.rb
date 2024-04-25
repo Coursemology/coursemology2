@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_03_12_104135) do
+ActiveRecord::Schema.define(version: 2024_04_22_100451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,12 @@ ActiveRecord::Schema.define(version: 2024_03_12_104135) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_attachments_on_name", unique: true
+  end
+
+  create_table "cikgo_users", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "provided_user_id", null: false
+    t.index ["user_id"], name: "index_cikgo_users_on_user_id"
   end
 
   create_table "course_achievements", id: :serial, force: :cascade do |t|
@@ -1445,6 +1451,7 @@ ActiveRecord::Schema.define(version: 2024_03_12_104135) do
   add_foreign_key "attachment_references", "attachments", name: "fk_attachment_references_attachment_id"
   add_foreign_key "attachment_references", "users", column: "creator_id", name: "fk_attachment_references_creator_id"
   add_foreign_key "attachment_references", "users", column: "updater_id", name: "fk_attachment_references_updater_id"
+  add_foreign_key "cikgo_users", "users"
   add_foreign_key "course_achievements", "courses", name: "fk_course_achievements_course_id"
   add_foreign_key "course_achievements", "users", column: "creator_id", name: "fk_course_achievements_creator_id"
   add_foreign_key "course_achievements", "users", column: "updater_id", name: "fk_course_achievements_updater_id"
