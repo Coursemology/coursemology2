@@ -11,18 +11,13 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 import { duplicationModes } from 'course/duplication/constants';
-import {
-  changeSourceCourse,
-  fetchObjectsList,
-} from 'course/duplication/operations';
+import { fetchObjectsList } from 'course/duplication/operations';
 import {
   courseListingShape,
   sourceCourseShape,
 } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
-import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
@@ -38,7 +33,7 @@ const translations = defineMessages({
   },
   fromCourse: {
     id: 'course.duplication.Duplication.fromCourse',
-    defaultMessage: 'From',
+    defaultMessage: 'Duplicate data from {courseTitle}',
   },
   toCourse: {
     id: 'course.duplication.Duplication.toCourse',
@@ -47,10 +42,6 @@ const translations = defineMessages({
   items: {
     id: 'course.duplication.Duplication.items',
     defaultMessage: 'Selected Items',
-  },
-  startAt: {
-    id: 'course.duplication.Duplication.startAt',
-    defaultMessage: 'Start Date',
   },
   newCourse: {
     id: 'course.duplication.Duplication.newCourse',
@@ -69,10 +60,6 @@ const translations = defineMessages({
     defaultMessage:
       'All components with duplicable items are disabled. \
       You may enable them under course settings.',
-  },
-  selectSourceCourse: {
-    id: 'course.duplication.Duplication.selectSourceCourse',
-    defaultMessage: 'Select course to duplicate from:',
   },
 });
 
@@ -131,14 +118,6 @@ class Duplication extends Component {
 
     return (
       <div style={styles.bodyGrid}>
-        <div>
-          <Typography variant="h6">
-            <FormattedMessage {...translations.fromCourse} />
-          </Typography>
-        </div>
-
-        <Paper style={styles.mainPanel}>{this.renderFromCourseMain()}</Paper>
-
         <div>{this.renderToCourseSidebar()}</div>
 
         <Paper style={styles.mainPanel}>
@@ -158,40 +137,6 @@ class Duplication extends Component {
     );
   }
 
-  renderFromCourseMain() {
-    const {
-      currentHost,
-      currentCourseId,
-      sourceCourse,
-      sourceCourses,
-      isChangingCourse,
-      intl,
-      dispatch,
-    } = this.props;
-
-    return (
-      <>
-        <CourseDropdownMenu
-          courses={sourceCourses}
-          currentCourseId={currentCourseId}
-          currentHost={currentHost}
-          disabled={isChangingCourse}
-          dropDownMenuProps={{ className: 'source-course-dropdown' }}
-          onChange={(event) => dispatch(changeSourceCourse(event.target.value))}
-          onHome={() => dispatch(changeSourceCourse(currentCourseId))}
-          prompt={intl.formatMessage(translations.selectSourceCourse)}
-          selectedCourseId={sourceCourse.id}
-        />
-        <DateTimePicker
-          disabled
-          label={intl.formatMessage(translations.startAt)}
-          name="start_at"
-          value={sourceCourse.start_at}
-        />
-      </>
-    );
-  }
-
   renderItemsSelectorSidebar() {
     const { duplicationMode, isCourseSelected } = this.props;
 
@@ -201,9 +146,9 @@ class Duplication extends Component {
     if (isCourseSelected) {
       return (
         <div>
-          <h3 style={styles.itemsSidebarHeader}>
+          <Typography style={styles.itemsSidebarHeader} variant="h6">
             <FormattedMessage {...translations.items} />
-          </h3>
+          </Typography>
           <ItemsSelectorMenu />
         </div>
       );
@@ -262,8 +207,16 @@ class Duplication extends Component {
   }
 
   render() {
+    const { sourceCourse } = this.props;
     return (
-      <Page title={<FormattedMessage {...translations.duplicateData} />}>
+      <Page
+        title={
+          <FormattedMessage
+            {...translations.fromCourse}
+            values={{ courseTitle: sourceCourse.title }}
+          />
+        }
+      >
         {this.renderBody()}
       </Page>
     );

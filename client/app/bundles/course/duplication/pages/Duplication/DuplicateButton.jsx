@@ -22,12 +22,6 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  button: {
-    marginTop: 20,
-  },
-};
-
 const DuplicateButton = (props) => {
   const { dispatch, isCourseSelected, isItemSelected, isChangingCourse } =
     props;
@@ -44,10 +38,10 @@ const DuplicateButton = (props) => {
   return (
     <>
       <Button
+        className="mt-4"
         color="secondary"
         disabled={!isCourseSelected || !isItemSelected || isChangingCourse}
         onClick={() => dispatch(actions.showDuplicateItemsConfirmation())}
-        style={styles.button}
         variant="contained"
       >
         <FormattedMessage {...translations[label]} />

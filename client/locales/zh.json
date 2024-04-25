@@ -3701,6 +3701,9 @@
   "course.duplication.CourseDropdownMenu.currentCourse": {
     "defaultMessage": "选择当前课程"
   },
+  "course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.destinationInstance": {
+    "defaultMessage": "目标实例"
+  },
   "course.duplication.Duplication.DestinationCourseSelector.NewCourseForm.newStartAt": {
     "defaultMessage": "新开始日期 *"
   },
@@ -3800,14 +3803,14 @@
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "复制数据"
   },
+  "course.duplication.Duplication.fromCourse": {
+    "defaultMessage": "复制数据从{courseTitle}"
+  },
   "course.duplication.Duplication.duplicationDisabled": {
     "defaultMessage": "本课程禁止复制。"
   },
   "course.duplication.Duplication.existingCourse": {
     "defaultMessage": "现有课程"
-  },
-  "course.duplication.Duplication.fromCourse": {
-    "defaultMessage": "从"
   },
   "course.duplication.Duplication.items": {
     "defaultMessage": "已选项目"
@@ -3817,12 +3820,6 @@
   },
   "course.duplication.Duplication.noComponentsEnabled": {
     "defaultMessage": "所有包含重复项目的组件都被禁用。你可以在课程设置下启用它们。"
-  },
-  "course.duplication.Duplication.selectSourceCourse": {
-    "defaultMessage": "选择要复制的课程："
-  },
-  "course.duplication.Duplication.startAt": {
-    "defaultMessage": "开始日期"
   },
   "course.duplication.Duplication.toCourse": {
     "defaultMessage": "到"

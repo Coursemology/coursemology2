@@ -4,6 +4,7 @@ import {
   ControllerRenderProps,
   FieldValues,
 } from 'react-hook-form';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Autocomplete, Box } from '@mui/material';
 
 import {
@@ -19,6 +20,13 @@ interface InstanceDropdownProps {
   field: ControllerRenderProps<FieldValues, 'destination_instance_id'>;
   fieldState: ControllerFieldState;
 }
+
+const translations = defineMessages({
+  destinationInstance: {
+    id: 'course.duplication.Duplication.DestinationCourseSelector.InstanceDropdown.destinationInstance',
+    defaultMessage: 'Destination Instance',
+  },
+});
 
 const InstanceDropdown: FC<InstanceDropdownProps> = (props) => {
   const { disabled, field, fieldState } = props;
@@ -47,7 +55,7 @@ const InstanceDropdown: FC<InstanceDropdownProps> = (props) => {
           helperText={
             fieldState.error && formatErrorMessage(fieldState.error.message)
           }
-          label="Destination Instance"
+          label={<FormattedMessage {...translations.destinationInstance} />}
           required
           variant="standard"
         />
