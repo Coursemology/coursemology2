@@ -8,8 +8,8 @@ module Course::LessonPlan::Item::CikgoPushConcern
     after_create_commit -> { push(:create) }, if: -> { published? }
     after_update_commit -> { push(:create) }, if: -> { saved_change_to_published? && published? }
 
-    after_update_commit -> { push(:destroy) }, if: -> { saved_change_to_published? && !published? }
-    after_destroy_commit -> { push(:destroy) }, if: -> { published? }
+    after_update_commit -> { push(:delete) }, if: -> { saved_change_to_published? && !published? }
+    after_destroy_commit -> { push(:delete) }, if: -> { published? }
 
     after_update_commit -> { push(:update) }, if: (lambda do
       published? && (saved_change_to_title? || saved_change_to_description?)
@@ -29,7 +29,7 @@ module Course::LessonPlan::Item::CikgoPushConcern
     }
   end
 
-  def destroy_payload
+  def delete_payload
     {}
   end
 
