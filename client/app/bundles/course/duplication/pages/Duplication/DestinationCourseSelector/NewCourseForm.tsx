@@ -1,12 +1,18 @@
-import { Controller, useForm } from 'react-hook-form';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FC } from 'react';
+import {
+  Controller,
+  FieldValues,
+  useForm,
+  UseFormSetError,
+} from 'react-hook-form';
+import { defineMessages } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
-import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormTextField from 'lib/components/form/fields/TextField';
+import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
 import InstanceDropdown from './InstanceDropdown';
@@ -31,8 +37,15 @@ const validationSchema = yup.object({
   new_start_at: yup.string().nullable().required(formTranslations.required),
 });
 
-const NewCourseForm = (props) => {
+interface Props {
+  initialValues?;
+  onSubmit: (data: FieldValues, setError: UseFormSetError<FieldValues>) => void;
+  disabled: boolean;
+}
+
+const NewCourseForm: FC<Props> = (props) => {
   const { onSubmit, initialValues, disabled } = props;
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -74,7 +87,7 @@ const NewCourseForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={<FormattedMessage {...translations.newTitle} />}
+            label={t(translations.newTitle)}
             required
             variant="standard"
           />
@@ -88,18 +101,12 @@ const NewCourseForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            label={<FormattedMessage {...translations.newStartAt} />}
+            label={t(translations.newStartAt)}
           />
         )}
       />
     </form>
   );
-};
-
-NewCourseForm.propTypes = {
-  disabled: PropTypes.bool.isRequired,
-  initialValues: PropTypes.object,
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default NewCourseForm;

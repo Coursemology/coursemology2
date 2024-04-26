@@ -1,18 +1,8 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 
 import { duplicableItemTypes } from 'course/duplication/constants';
-
-const styles = {
-  badge: {
-    padding: '2px 5px',
-    marginRight: 10,
-    borderStyle: 'solid',
-    borderRadius: 5,
-    borderWidth: 1,
-    fontSize: 12,
-  },
-};
+import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
   [duplicableItemTypes.ASSESSMENT]: {
@@ -53,15 +43,24 @@ const translations = defineMessages({
   },
 });
 
-const TypeBadge = ({ text, itemType }) => (
-  <span style={styles.badge}>
-    {text || <FormattedMessage {...translations[itemType]} />}
-  </span>
-);
+interface Props {
+  text?: string;
+  itemType?: string;
+}
 
-TypeBadge.propTypes = {
-  text: PropTypes.string,
-  itemType: PropTypes.string,
+const TypeBadge: FC<Props> = (props) => {
+  const { t } = useTranslation();
+  const { text, itemType } = props;
+
+  if (!text && !itemType) {
+    return null;
+  }
+
+  return (
+    <span className="px-[5px] py-[2px] mr-3 border border-solid rounded-lg text-xl justify-center font-bold">
+      {text || t(translations[itemType!])}
+    </span>
+  );
 };
 
 export default TypeBadge;

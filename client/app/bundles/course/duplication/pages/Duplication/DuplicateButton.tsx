@@ -1,9 +1,11 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
-import { Button } from '@mui/material';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
+import { Button, Typography } from '@mui/material';
 
+import { selectDuplicationStore } from 'course/duplication/selectors/destinationInstance';
 import { actions } from 'course/duplication/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import DuplicateItemsConfirmation from './DuplicateItemsConfirmation';
 
@@ -22,17 +24,19 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  button: {
-    marginTop: 20,
-  },
-};
+const DuplicateButton: FC = () => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
-const DuplicateButton = (props) => {
-  const { dispatch, isCourseSelected, isItemSelected, isChangingCourse } =
-    props;
+  const duplication = useAppSelector(selectDuplicationStore);
 
-  let label;
+  const { destinationCourseId, isChangingCourse, selectedItems } = duplication;
+  const isCourseSelected = !!destinationCourseId;
+  const isItemSelected = Object.values(selectedItems).some((hash) =>
+    Object.values(hash as Record<string, unknown>).some((value) => value),
+  );
+
+  let label: string;
   if (!isCourseSelected) {
     label = 'selectCourse';
   } else if (!isItemSelected) {
@@ -44,31 +48,17 @@ const DuplicateButton = (props) => {
   return (
     <>
       <Button
+        className="mt-4 w-full"
         color="secondary"
         disabled={!isCourseSelected || !isItemSelected || isChangingCourse}
         onClick={() => dispatch(actions.showDuplicateItemsConfirmation())}
-        style={styles.button}
         variant="contained"
       >
-        <FormattedMessage {...translations[label]} />
+        <Typography variant="body2">{t(translations[label])}</Typography>
       </Button>
       <DuplicateItemsConfirmation />
     </>
   );
 };
 
-DuplicateButton.propTypes = {
-  isChangingCourse: PropTypes.bool,
-  isCourseSelected: PropTypes.bool,
-  isItemSelected: PropTypes.bool,
-
-  dispatch: PropTypes.func.isRequired,
-};
-
-export default connect(({ duplication }) => ({
-  isChangingCourse: duplication.isChangingCourse,
-  isCourseSelected: !!duplication.destinationCourseId,
-  isItemSelected: Object.values(duplication.selectedItems).some((hash) =>
-    Object.values(hash).some((value) => value),
-  ),
-}))(DuplicateButton);
+export default DuplicateButton;

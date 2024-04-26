@@ -26,6 +26,12 @@ export const itemSelectorPanels = mirrorCreator([
 
 export const formNames = mirrorCreator(['NEW_COURSE']);
 
+export const indentClassName = {
+  0: 'ml-0',
+  1: 'ml-8',
+  2: 'ml-16',
+};
+
 const actionTypes = mirrorCreator([
   'LOAD_OBJECTS_LIST_REQUEST',
   'LOAD_OBJECTS_LIST_SUCCESS',
