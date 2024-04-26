@@ -3,11 +3,9 @@ import { store } from 'store';
 import { render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
+import { DuplicationState } from 'course/duplication/types';
 
 import ObjectDuplication from '../index';
-
-const client = CourseAPI.duplication.client;
-const mock = createMockAdapter(client);
 
 const responseData = {
   sourceCourse: { id: 5 },
@@ -25,6 +23,8 @@ const responseData = {
   ],
 };
 
+const mock = createMockAdapter(CourseAPI.duplication.client);
+
 beforeEach(() => {
   mock.reset();
 });
@@ -39,7 +39,7 @@ describe('<ObjectDuplication />', () => {
 
     await waitFor(() => expect(spy).toHaveBeenCalled());
 
-    const data = store.getState().duplication;
+    const data = store.getState().duplication as DuplicationState;
     const courseTitles = data.destinationCourses.map((course) => course.title);
     const rootFolder = data.materialsComponent[0];
 
