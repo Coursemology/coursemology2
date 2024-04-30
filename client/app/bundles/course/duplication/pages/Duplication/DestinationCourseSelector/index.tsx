@@ -94,6 +94,7 @@ const DestinationCourseSelector: FC = () => {
   const ExistingCourseDestinationForm = (): JSX.Element => {
     return (
       <CourseDropdownMenu
+        additionalClassName="destination-course-dropdown"
         courses={destinationCourses}
         currentCourseId={currentCourseId}
         currentHost={currentHost}

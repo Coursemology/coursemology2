@@ -25,6 +25,7 @@ const translations = defineMessages({
 });
 
 interface CourseDropdownMenuProps {
+  additionalClassName: string;
   prompt: string;
   currentHost: string;
   selectedCourseId: number;
@@ -33,8 +34,14 @@ interface CourseDropdownMenuProps {
 }
 
 const CourseDropdownMenu: FC<CourseDropdownMenuProps> = (props) => {
-  const { prompt, currentHost, courses, currentCourseId, selectedCourseId } =
-    props;
+  const {
+    additionalClassName,
+    prompt,
+    currentHost,
+    courses,
+    currentCourseId,
+    selectedCourseId,
+  } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -44,7 +51,7 @@ const CourseDropdownMenu: FC<CourseDropdownMenuProps> = (props) => {
       <Typography className="mt-6">{prompt}</Typography>
       <div className="flex flex-row">
         <Select
-          className="w-full shadow-md m-1 rounded-md"
+          className={`w-full shadow-md m-1 rounded-md ${additionalClassName}`}
           onChange={(event) => {
             dispatch(
               actions.setDestinationCourseId(event.target.value as number),

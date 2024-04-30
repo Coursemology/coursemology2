@@ -32,13 +32,14 @@ const {
 } = duplicableItemTypes;
 
 interface SidebarItemsProps {
+  className: string;
   panelKey: string;
   titleKey: string;
   count: number;
 }
 
 const SidebarItem: FC<SidebarItemsProps> = (props) => {
-  const { panelKey, titleKey, count } = props;
+  const { className, panelKey, titleKey, count } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const duplication = useAppSelector(selectDuplicationStore);
@@ -57,6 +58,7 @@ const SidebarItem: FC<SidebarItemsProps> = (props) => {
   return (
     <ListItem
       button
+      className={className}
       onClick={() => dispatch(actions.setItemSelectorPanel(panelKey))}
     >
       <ListItemAvatar className="h-[50px] flex items-center">
@@ -97,6 +99,7 @@ const ItemsSelectorMenu: FC = () => {
     <List className="items-selector-menu">
       {!unduplicableObjectTypes.includes('ASSESSMENT') && (
         <SidebarItem
+          className="items-selector-menu-assessment"
           count={assessmentsComponentCount}
           panelKey={panels.ASSESSMENTS}
           titleKey="course_assessments_component"
@@ -104,6 +107,7 @@ const ItemsSelectorMenu: FC = () => {
       )}
       {!unduplicableObjectTypes.includes('SURVEY') && (
         <SidebarItem
+          className="items-selector-menu-survey"
           count={counts[SURVEY]}
           panelKey={panels.SURVEYS}
           titleKey="course_survey_component"
@@ -111,6 +115,7 @@ const ItemsSelectorMenu: FC = () => {
       )}
       {!unduplicableObjectTypes.includes('ACHIEVEMENT') && (
         <SidebarItem
+          className="items-selector-menu-achievement"
           count={counts[ACHIEVEMENT]}
           panelKey={panels.ACHIEVEMENTS}
           titleKey="course_achievements_component"
@@ -118,6 +123,7 @@ const ItemsSelectorMenu: FC = () => {
       )}
       {!unduplicableObjectTypes.includes('MATERIAL') && (
         <SidebarItem
+          className="items-selector-menu-material"
           count={counts[FOLDER] + counts[MATERIAL]}
           panelKey={panels.MATERIALS}
           titleKey="course_materials_component"
@@ -125,6 +131,7 @@ const ItemsSelectorMenu: FC = () => {
       )}
       {!unduplicableObjectTypes.includes('VIDEO') && (
         <SidebarItem
+          className="items-selector-menu-video"
           count={videosComponentCount}
           panelKey={panels.VIDEOS}
           titleKey="course_videos_component"
