@@ -9,6 +9,10 @@ import { useAppDispatch } from 'lib/hooks/store';
 import DuplicationIndex from './DuplicationIndex';
 
 const translations = defineMessages({
+  duplicationHandle: {
+    id: 'course.duplication.Duplication.duplicationHandle',
+    defaultMessage: 'Duplicate Data',
+  },
   duplicateData: {
     id: 'course.duplication.Duplication.duplicateData',
     defaultMessage: 'Duplicate Data from {courseTitle}',
@@ -26,6 +30,6 @@ const Duplication: FC = () => {
   );
 };
 
-const handle = translations.duplicateData;
+const handle = translations.duplicationHandle;
 
 export default Object.assign(Duplication, { handle });

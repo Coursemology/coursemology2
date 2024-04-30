@@ -1,16 +1,18 @@
-import { itemSelectorPanels } from 'course/duplication/constants';
-import { defineMessages } from 'react-intl';
-import AssessmentsSelector from './AssessmentsSelector';
-import SurveysSelector from './SurveysSelector';
-import AchievementsSelector from './AchievementsSelector';
-import MaterialsSelector from './MaterialsSelector';
-import VideosSelector from './VideosSelector';
 import { FC } from 'react';
-import useTranslation from 'lib/hooks/useTranslation';
-import { useAppSelector } from 'lib/hooks/store';
-import { selectDuplicationStore } from 'course/duplication/selectors/destinationInstance';
-import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
+import { defineMessages } from 'react-intl';
 import { Typography } from '@mui/material';
+
+import { itemSelectorPanels } from 'course/duplication/constants';
+import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
+import { selectDuplicationStore } from 'course/duplication/selectors/destinationInstance';
+import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
+
+import AchievementsSelector from './Achievements';
+import AssessmentsSelector from './Assessments';
+import MaterialsSelector from './Materials';
+import SurveysSelector from './Surveys';
+import VideosSelector from './Videos';
 
 const translations = defineMessages({
   pleaseSelectItems: {

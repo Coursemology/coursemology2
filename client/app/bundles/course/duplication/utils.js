@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { duplicableItemTypes } from './constants';
 
+export const flatten = (arr) => arr.reduce((a, b) => a.concat(b), []);
+
 export const nestFolders = (folders) => {
   const rootFolders = [];
 

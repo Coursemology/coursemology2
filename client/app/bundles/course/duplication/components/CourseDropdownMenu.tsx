@@ -68,13 +68,12 @@ const CourseDropdownMenu: FC<CourseDropdownMenuProps> = (props) => {
         </Select>
         <Tooltip title={t(translations.currentCourse)}>
           <IconButton
+            color={`${currentCourseId === selectedCourseId ? 'info' : 'default'}`}
             onClick={() =>
               dispatch(actions.setDestinationCourseId(currentCourseId))
             }
           >
-            <MyLocation
-              className={`${currentCourseId === selectedCourseId && 'bg-blue-300'}`}
-            />
+            <MyLocation />
           </IconButton>
         </Tooltip>
       </div>
