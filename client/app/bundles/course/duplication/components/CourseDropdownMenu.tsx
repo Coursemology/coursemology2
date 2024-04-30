@@ -73,7 +73,7 @@ const CourseDropdownMenu: FC<CourseDropdownMenuProps> = (props) => {
             }
           >
             <MyLocation
-              className={`${currentCourseId === selectedCourseId && 'bg-blue-300'}`}
+              className={`${currentCourseId === selectedCourseId && 'fill-blue-500'}`}
             />
           </IconButton>
         </Tooltip>

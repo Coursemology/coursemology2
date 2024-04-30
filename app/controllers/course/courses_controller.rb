@@ -9,9 +9,13 @@ class Course::CoursesController < Course::Controller
 
   def show
     @currently_active_announcements = current_course.announcements.
-                                          currently_active.includes(:creator)
-    @activity_feeds = recent_activity_feeds.limit(20).preload(activity: [{ object: { topic: { actable: :forum } } },
-                                                                          :actor])
+                                      currently_active.includes(:creator)
+    @activity_feeds = recent_activity_feeds.limit(20).preload(
+      activity: [
+        { object: { topic: { actable: :forum } } },
+        :actor
+      ]
+    )
     load_activity_course_users
     load_todos
     load_items_with_timeline

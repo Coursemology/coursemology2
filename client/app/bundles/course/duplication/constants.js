@@ -30,6 +30,7 @@ export const indentClassName = {
   0: 'ml-0',
   1: 'ml-8',
   2: 'ml-16',
+  3: 'ml-24',
 };
 
 const actionTypes = mirrorCreator([

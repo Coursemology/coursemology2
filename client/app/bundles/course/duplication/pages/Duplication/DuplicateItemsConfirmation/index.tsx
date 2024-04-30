@@ -12,11 +12,11 @@ import Link from 'lib/components/core/Link';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import AchievementsListing from './AchievementsListing';
-import AssessmentsListing from './AssessmentsListing';
-import MaterialsListing from './MaterialsListing';
-import SurveyListing from './SurveyListing';
-import VideosListing from './VideosListing';
+import AchievementsListing from './Achievements';
+import AssessmentsListing from './Assessments';
+import MaterialsListing from './Materials';
+import SurveyListing from './Surveys';
+import VideosListing from './Videos';
 
 const translations = defineMessages({
   confirmationQuestion: {

@@ -1,9 +1,8 @@
 import { createMockAdapter } from 'mocks/axiosMock';
+import { store } from 'store';
 import { render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import { selectDuplicationStore } from 'course/duplication/selectors/destinationInstance';
-import { useAppSelector } from 'lib/hooks/store';
 
 import ObjectDuplication from '../index';
 
@@ -40,7 +39,7 @@ describe('<ObjectDuplication />', () => {
 
     await waitFor(() => expect(spy).toHaveBeenCalled());
 
-    const data = useAppSelector(selectDuplicationStore);
+    const data = store.getState().duplication;
     const courseTitles = data.destinationCourses.map((course) => course.title);
     const rootFolder = data.materialsComponent[0];
 
