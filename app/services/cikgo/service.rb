@@ -21,5 +21,12 @@ class Cikgo::Service
     rescue JSON::ParserError
       nil
     end
+
+    def push_key(course)
+      stories_settings = course.settings.course_stories_component
+      return unless stories_settings
+
+      stories_settings[:push_key]
+    end
   end
 end

@@ -14,6 +14,7 @@ module Course::LessonPlan::LearningRateConcern
     # Extend this if more lesson plan items to personalize are added in the future.
     merge_course_assessments(lesson_plan_items_submission_time_hash, course_user)
     merge_course_videos(lesson_plan_items_submission_time_hash, course_user)
+    merge_course_stories(lesson_plan_items_submission_time_hash, course_user)
   end
 
   # Computes the learning rate exponential moving average for the given course user.
@@ -88,6 +89,7 @@ module Course::LessonPlan::LearningRateConcern
     course_user.course.lesson_plan_items.published.
       with_reference_times_for(course_user).
       with_personal_times_for(course_user).
+      concat(stories_for(course_user)).
       sort_by { |item| item.time_for(course_user).start_at }
   end
 
@@ -125,5 +127,13 @@ module Course::LessonPlan::LearningRateConcern
       select { |x| x.submissions.present? }.
       to_h { |x| [x.lesson_plan_item.id, nil] }
     )
+  end
+
+  def stories_for(course_user)
+    @stories_for ||= Course::Story.for_course_user(course_user) || []
+  end
+
+  def merge_course_stories(hash, course_user)
+    hash.merge!(stories_for(course_user).filter(&:submitted_at).to_h { |s| [s.id, s.submitted_at] })
   end
 end
