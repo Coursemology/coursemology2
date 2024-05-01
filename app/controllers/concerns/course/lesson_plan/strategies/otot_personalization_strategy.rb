@@ -23,8 +23,9 @@ class Course::LessonPlan::Strategies::OtotPersonalizationStrategy <
       effective_min, effective_max = compute_learning_rate_effective_limits(course_user, items, submitted_items,
                                                                             strategy::MIN_LEARNING_RATE,
                                                                             strategy::MAX_LEARNING_RATE)
-      bounded_learning_rate_ema = [strategy::HARD_MIN_LEARNING_RATE, effective_min,
-                                   [learning_rate_ema, effective_max].min].max
+      effective_min = [effective_min, strategy::HARD_MIN_LEARNING_RATE].max
+      effective_max = [effective_max, strategy::HARD_MIN_LEARNING_RATE].max
+      bounded_learning_rate_ema = learning_rate_ema.clamp(effective_min, effective_max)
     end
 
     { submitted_items: submitted_items, items: items, learning_rate_ema: bounded_learning_rate_ema,

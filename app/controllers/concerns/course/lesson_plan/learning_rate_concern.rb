@@ -74,6 +74,8 @@ module Course::LessonPlan::LearningRateConcern
     return [min_learning_rate, max_learning_rate] if last_submitted_item.nil?
 
     reference_remaining_time = items.last.start_at - last_submitted_item.reference_time_for(course_user).start_at
+    reference_remaining_time += 1e-99 # Prevent division by zero.
+
     min_remaining_time = course_start + (min_learning_rate * (course_end - course_start)) -
                          last_submitted_item.time_for(course_user).start_at
     max_remaining_time = course_start + (max_learning_rate * (course_end - course_start)) -

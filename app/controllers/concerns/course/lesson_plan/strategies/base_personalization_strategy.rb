@@ -38,8 +38,10 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
       effective_min, effective_max = compute_learning_rate_effective_limits(course_user, items, submitted_items,
                                                                             self.class::MIN_LEARNING_RATE,
                                                                             self.class::MAX_LEARNING_RATE)
-      learning_rate_ema = [self.class::HARD_MIN_LEARNING_RATE, effective_min,
-                           [learning_rate_ema, effective_max].min].max
+
+      effective_min = [effective_min, self.class::HARD_MIN_LEARNING_RATE].max
+      effective_max = [effective_max, self.class::HARD_MIN_LEARNING_RATE].max
+      learning_rate_ema = learning_rate_ema.clamp(effective_min, effective_max)
     end
 
     { submitted_items: submitted_items, items: items, learning_rate_ema: learning_rate_ema,
