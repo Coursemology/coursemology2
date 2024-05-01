@@ -82,6 +82,13 @@ module Course::LessonPlan::LearningRateConcern
     [min_remaining_time / reference_remaining_time, max_remaining_time / reference_remaining_time]
   end
 
+  def lesson_plan_items_with_sorted_times_for(course_user)
+    course_user.course.lesson_plan_items.published.
+      with_reference_times_for(course_user).
+      with_personal_times_for(course_user).
+      sort_by { |item| item.time_for(course_user).start_at }
+  end
+
   private
 
   # Merges course assessment submissions into the given hash, with the following format:
