@@ -1,21 +1,20 @@
 GIT
-  remote: https://github.com/ekowidianto/active_record-acts_as.git
-  revision: 9e01feb01438ba6736f2d4a8140d9be18464afdc
-  branch: rails5.2.3
+  remote: https://github.com/Coursemology/active_record-acts_as.git
+  revision: b853dd4aee7a218367411a3ba26fb8477ff2cda9
   specs:
     active_record-acts_as (3.0.1)
       activerecord (>= 4.2)
       activesupport (>= 4.2)
 
 GIT
-  remote: https://github.com/ekowidianto/activerecord-userstamp.git
+  remote: https://github.com/Coursemology/activerecord-userstamp.git
   revision: 1170233e314466630e3a545ae3fdee16a0bb4a19
   specs:
     activerecord-userstamp (3.0.5)
       rails (>= 6)
 
 GIT
-  remote: https://github.com/ekowidianto/html-pipeline-rouge_filter.git
+  remote: https://github.com/Coursemology/html-pipeline-rouge_filter.git
   revision: 4d43afb07930cbf78a8c6a6f9debd5c426ad490c
   specs:
     html-pipeline-rouge_filter (1.0.7)
