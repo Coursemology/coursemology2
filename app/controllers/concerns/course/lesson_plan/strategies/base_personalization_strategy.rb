@@ -29,11 +29,7 @@ class Course::LessonPlan::Strategies::BasePersonalizationStrategy
   # @return [Hash] Precomputed data to aid execution.
   def precompute_data(course_user) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     submitted_items = lesson_plan_items_submission_time_hash(course_user)
-    items = course_user.course.lesson_plan_items.published.
-            with_reference_times_for(course_user).
-            with_personal_times_for(course_user).
-            to_a
-    items = items.sort_by { |x| x.time_for(course_user).start_at }
+    items = lesson_plan_items_with_sorted_times_for(course_user)
     items_affecting_personal_times = items.select(&:affects_personal_times?)
     learning_rate_ema = compute_learning_rate_ema(
       course_user, items_affecting_personal_times, submitted_items, self.class::LEARNING_RATE_ALPHA
