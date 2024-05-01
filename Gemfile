@@ -179,7 +179,7 @@ gem 'doorkeeper'
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
 # We also want stricter sanitization.
-gem 'rails_utils', git: 'https://github.com/raymondtangsc/rails_utils.git', branch: 'full-sanitize-flash'
+gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave'
@@ -202,7 +202,7 @@ gem 'record_tag_helper'
 gem 'rails-controller-testing'
 
 # WordNet corpus to obtain lemma form of words, for comprehension questions.
-gem 'rwordnet', git: 'https://github.com/makqien/rwordnet'
+gem 'rwordnet', git: 'https://github.com/Coursemology/rwordnet'
 gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
 

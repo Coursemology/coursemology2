@@ -23,18 +23,17 @@ GIT
       rouge (>= 2.0.0, < 4)
 
 GIT
-  remote: https://github.com/makqien/rwordnet
-  revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
-  specs:
-    rwordnet (2.0.0)
-
-GIT
-  remote: https://github.com/raymondtangsc/rails_utils.git
-  revision: 5c8c0caacf08985ae14c5d007529a09d5f284da0
-  branch: full-sanitize-flash
+  remote: https://github.com/Coursemology/rails_utils.git
+  revision: a78a20ce522e83f23725759598105ccb0d4a6d6a
   specs:
     rails_utils (4.0.0)
       rails (>= 3.2)
+
+GIT
+  remote: https://github.com/Coursemology/rwordnet
+  revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
+  specs:
+    rwordnet (2.0.0)
 
 GEM
   remote: https://rubygems.org/
