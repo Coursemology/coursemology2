@@ -19,9 +19,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   protected
 
   def authorize_duplication
-    unless can?(:duplicate_from, current_course) || can?(:duplicate_across_instances, current_tenant)
-      raise CanCan::AccessDenied
-    end
+    authorize!(:duplicate_from, current_course)
   end
 
   private
