@@ -17,7 +17,7 @@ interface ExperiencePointsRecordSettings {
 }
 
 export interface ExperiencePointsState {
-  records: EntityState<ExperiencePointsRecordMiniEntity>;
+  records: EntityState<ExperiencePointsRecordMiniEntity, number>;
   settings: ExperiencePointsRecordSettings;
 }
 

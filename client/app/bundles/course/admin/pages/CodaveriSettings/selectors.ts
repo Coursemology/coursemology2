@@ -64,7 +64,7 @@ export const getAssessment = (
   state: AppState,
   assessmentId: EntityId,
 ): AssessmentProgrammingQuestionsData | undefined => {
-  return assessmentSelector.selectById(state, assessmentId);
+  return assessmentSelector.selectById(state, +assessmentId);
 };
 
 export const getAssessments = (
@@ -99,7 +99,7 @@ export const getProgrammingQuestion = (
   state: AppState,
   id: EntityId,
 ): ProgrammingQuestion | undefined => {
-  return programmingQuestionsSelector.selectById(state, id);
+  return programmingQuestionsSelector.selectById(state, +id);
 };
 
 export const getProgrammingQuestions = (
