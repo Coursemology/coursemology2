@@ -675,5 +675,8 @@ DEPENDENCIES
   workflow-activerecord (>= 4.1, < 7.0)
   yard
 
+RUBY VERSION
+   ruby 3.1.4p223
+
 BUNDLED WITH
-   2.2.33
+   2.5.9
