@@ -8,7 +8,7 @@ require 'rails/all'
 Bundler.require(*Rails.groups)
 
 # Load dotenv only in development environment
-Dotenv::Railtie.load if ['development', 'test'].include? ENV['RAILS_ENV']
+Dotenv::Rails.load if ['development'].include? ENV['RAILS_ENV']
 
 module Application # rubocop:disable Style/ClassAndModuleChildren
   class Application < Rails::Application
