@@ -20,7 +20,7 @@ class Course::DuplicationsController < Course::ComponentController
     return if instance_params == current_tenant.id
 
     destination_tenant = Instance.find(instance_params)
-    
+
     authorize!(:duplicate_across_instances, destination_tenant)
   end
 
