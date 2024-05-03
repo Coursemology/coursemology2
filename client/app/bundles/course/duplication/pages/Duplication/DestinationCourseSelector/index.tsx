@@ -44,7 +44,10 @@ const DestinationCourseSelector: FC = () => {
 
   const duplication = useAppSelector(selectDuplicationStore);
   const {
+    destinationInstanceId,
     destinationCourses,
+    destinationCourseTitle,
+    destinationCourseStartAt,
     currentHost,
     currentCourseId,
     destinationCourseId,
@@ -66,9 +69,12 @@ const DestinationCourseSelector: FC = () => {
     const timeNow = moment().format(SHORT_DATE_TIME_FORMAT);
     const newTitleValues = { title: sourceCourse.title, timestamp: timeNow };
     const initialValues = {
-      destination_instance_id: currentInstanceId,
-      new_title: t(translations.defaultTitle, newTitleValues),
-      new_start_at: defaultNewCourseStartAt,
+      destination_instance_id: destinationInstanceId ?? currentInstanceId,
+      new_title:
+        destinationCourseTitle ?? t(translations.defaultTitle, newTitleValues),
+      new_start_at: destinationCourseStartAt
+        ? moment(destinationCourseStartAt)
+        : defaultNewCourseStartAt,
     };
 
     return (
