@@ -221,7 +221,6 @@ jobs:
           working_directory: tests
           command: |
             SHARD="$((${CIRCLE_NODE_INDEX}+1))"; npx playwright test --shard=${SHARD}/${CIRCLE_NODE_TOTAL} --reporter=junit
-            zip -r test-results.zip playright-report test-results
           environment:
             PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
 
@@ -231,6 +230,13 @@ jobs:
           command: yarn coverage
 
       - terminate_rails_and_wait_for_coverage_results
+
+      - run:
+          name: Zip test results
+          when: always
+          working_directory: tests
+          command: |
+            zip -r test-results.zip test-results
 
       # - codecov/upload:
       #     upload_name: playwright-client
