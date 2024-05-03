@@ -106,7 +106,7 @@ export function duplicateCourse(
       toast.error(failureMessage);
     };
 
-    dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST });
+    dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST, payload });
     return CourseAPI.duplication
       .duplicateCourse(sourceCourseId, payload)
       .then((response) => response.data)
