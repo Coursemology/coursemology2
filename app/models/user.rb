@@ -5,7 +5,6 @@ class User < ApplicationRecord
   DELETED_USER_ID = -1
 
   include UserSearchConcern
-  include UserMasqueradeConcern
   include TimeZoneConcern
   include Generic::CollectionConcern
   model_stamper
@@ -72,12 +71,6 @@ class User < ApplicationRecord
   has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :user, dependent: :destroy
   has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
                                          inverse_of: :user, dependent: :destroy
-
-  has_many :access_grants, class_name: Doorkeeper::AccessGrant.name, foreign_key: :resource_owner_id,
-                           dependent: :delete_all
-
-  has_many :access_tokens, class_name: Doorkeeper::AccessToken.name, foreign_key: :resource_owner_id,
-                           dependent: :delete_all
 
   has_one :cikgo_user, dependent: :destroy, inverse_of: :user
 

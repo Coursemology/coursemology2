@@ -9,7 +9,7 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
     let(:course) { create(:course, creator: admin) }
     let(:student) { create(:course_student, course: course) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       subject { get :index, params: { course_id: course.id } }

@@ -20,7 +20,7 @@ RSpec.describe Course::Discussion::PostsController do
       end
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#update' do
       let(:post_text) { 'updated post text' }

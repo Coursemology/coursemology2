@@ -18,7 +18,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
       stub
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#show' do
       subject { get :show, params: { course_id: course, forum_id: forum, id: topic }, format: :json }

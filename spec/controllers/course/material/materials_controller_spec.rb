@@ -15,7 +15,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
     let(:folder) { material_stub.folder }
     let(:course) { folder.course }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#show' do
       let(:material) { create(:material, folder: folder) }

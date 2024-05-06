@@ -12,9 +12,8 @@ export const reservedRoutes: RouteObject = {
   path: 'users',
   element: <Redirectable />,
   children: [
-    { path: 'sign_in/*' },
     { path: 'sign_up/*' },
-    { path: 'confirmation/*' },
+    { path: 'confirmation/new/*' },
     { path: 'password/*' },
   ],
 };

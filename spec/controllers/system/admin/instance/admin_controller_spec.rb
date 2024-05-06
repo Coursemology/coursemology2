@@ -6,7 +6,7 @@ RSpec.describe System::Admin::Instance::AdminController do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       subject { get :index, as: :json }

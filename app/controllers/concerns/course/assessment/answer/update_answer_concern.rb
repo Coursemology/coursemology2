@@ -17,7 +17,7 @@ module Course::Assessment::Answer::UpdateAnswerConcern
   def update_answer_params(answer, update_params)
     update_params.
       permit([:id, :client_version] + additional_answer_params(answer)).
-      merge(last_session_id: session.id)
+      merge(last_session_id: current_session_id)
   end
 
   def additional_answer_params(answer)

@@ -15,7 +15,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
       end
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       context 'when a category is given' do

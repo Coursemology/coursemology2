@@ -79,26 +79,8 @@ export default class UsersAPI extends BaseAPI {
     return this.client.post(url);
   }
 
-  masquerade(url: string): APIResponse {
-    return this.client.get(url);
-  }
-
-  stopMasquerade(url: string): APIResponse {
-    return this.client.get(url);
-  }
-
   signOut(): APIResponse {
     return this.client.delete(`${this.#urlPrefix}/sign_out`);
-  }
-
-  signIn(email: string, password: string, rememberMe: boolean): APIResponse {
-    const formData = new FormData();
-
-    formData.append('user[email]', email);
-    formData.append('user[password]', password);
-    formData.append('user[remember_me]', rememberMe ? '1' : '0');
-
-    return this.client.post(`${this.#urlPrefix}/sign_in`, formData);
   }
 
   signUp(

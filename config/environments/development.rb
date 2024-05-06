@@ -53,7 +53,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.x.default_app_host = 'lvh.me'
+  config.x.default_app_host = 'localhost'
   config.x.default_host = "#{config.x.default_app_host}:3000"
 
   config.action_mailer.default_url_options = { host: "#{config.x.default_app_host}:3000" }
@@ -80,7 +80,7 @@ Rails.application.configure do
 
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins(/lvh\.me:([0-9]+)/, /(.*?)\.lvh\.me:([0-9]+)/)
+      origins(/localhost:([0-9]+)/, /(.*?)\.localhost:([0-9]+)/)
       resource '*', headers: :any, methods: [:get, :post, :patch, :put], credentials: true
     end
   end

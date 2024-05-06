@@ -43,7 +43,7 @@ Rails.application.configure do
   config.action_mailer.default_options = { from: 'coursemology@example.org' }
 
   # We will assume that we are running on localhost
-  config.action_mailer.default_url_options = { host: 'lvh.me:3200' }
+  config.action_mailer.default_url_options = { host: 'localhost:3200' }
 
   # Use the threaded background job adapter for replicating the production environment.
   config.active_job.queue_adapter = ActiveJob::QueueAdapters::BackgroundThreadAdapter.new
@@ -54,7 +54,7 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
-  config.x.default_host = 'lvh.me'
+  config.x.default_host = 'localhost'
   config.x.client_port = 3200
   config.x.server_port = 7979
   config.x.default_user_password = 'lolololol'
@@ -72,7 +72,7 @@ Rails.application.configure do
 
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins(/lvh\.me:([0-9]+)/, /(.*?)\.lvh\.me:([0-9]+)/)
+      origins(/localhost:([0-9]+)/, /(.*?)\.localhost:([0-9]+)/)
       resource '*', headers: :any, methods: [:get, :post, :patch, :put], credentials: true
     end
   end

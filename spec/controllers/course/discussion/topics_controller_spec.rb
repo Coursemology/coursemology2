@@ -22,7 +22,7 @@ RSpec.describe Course::Discussion::TopicsController do
       subject { get :index, as: :json, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
-        before { sign_in(staff) }
+        before { controller_sign_in(controller, staff) }
 
         it { is_expected.to render_template(:index) }
 
@@ -43,7 +43,7 @@ RSpec.describe Course::Discussion::TopicsController do
       end
 
       context 'when a course student visits the page' do
-        before { sign_in(student) }
+        before { controller_sign_in(controller, student) }
 
         it { is_expected.to render_template(:index) }
 
@@ -58,7 +58,7 @@ RSpec.describe Course::Discussion::TopicsController do
       subject { get :pending, format: :json, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
-        before { sign_in(staff) }
+        before { controller_sign_in(controller, staff) }
 
         it { is_expected.to render_template(:discussion_topic_list_data) }
 
@@ -69,7 +69,7 @@ RSpec.describe Course::Discussion::TopicsController do
       end
 
       context 'when a course student visits the page' do
-        before { sign_in(student) }
+        before { controller_sign_in(controller, student) }
 
         it { is_expected.to render_template(:discussion_topic_list_data) }
 
@@ -84,7 +84,7 @@ RSpec.describe Course::Discussion::TopicsController do
       subject { get :my_students, format: :json, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
-        before { sign_in(staff) }
+        before { controller_sign_in(controller, staff) }
 
         it { is_expected.to render_template(:discussion_topic_list_data) }
 
@@ -113,7 +113,7 @@ RSpec.describe Course::Discussion::TopicsController do
       end
 
       context 'when a course student visits the page' do
-        before { sign_in(student) }
+        before { controller_sign_in(controller, student) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -123,7 +123,7 @@ RSpec.describe Course::Discussion::TopicsController do
       subject { get :my_students_pending, format: :json, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
-        before { sign_in(staff) }
+        before { controller_sign_in(controller, staff) }
 
         it { is_expected.to render_template(:discussion_topic_list_data) }
 
@@ -152,7 +152,7 @@ RSpec.describe Course::Discussion::TopicsController do
       end
 
       context 'when a course student visits the page' do
-        before { sign_in(student) }
+        before { controller_sign_in(controller, student) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end

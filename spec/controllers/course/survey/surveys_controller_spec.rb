@@ -28,7 +28,7 @@ RSpec.describe Course::Survey::SurveysController do
     end
     let(:json_response) { JSON.parse(response.body) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       let!(:published_survey) { create(:survey, :published, course: course) }

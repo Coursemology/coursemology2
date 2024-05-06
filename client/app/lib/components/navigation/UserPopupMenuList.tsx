@@ -1,11 +1,10 @@
 import { defineMessages } from 'react-intl';
 
-import GlobalAPI from 'api';
 import { useAppContext } from 'lib/containers/AppContainer';
-import { useAuthenticator } from 'lib/hooks/session';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import PopupMenu from '../core/PopupMenu';
+import { useAuthAdapter } from '../wrappers/AuthProvider';
 
 const translations = defineMessages({
   accountSettings: {
@@ -28,18 +27,15 @@ const translations = defineMessages({
 
 const UserPopupMenuList = (): JSX.Element | null => {
   const { user } = useAppContext();
-
+  const auth = useAuthAdapter();
   const { t } = useTranslation();
-
-  const { deauthenticate } = useAuthenticator();
 
   if (!user) return null;
 
-  const signOut = async (): Promise<void> => {
-    await GlobalAPI.users.signOut();
-
-    deauthenticate();
-    window.location.href = '/users/sign_in';
+  const handleLogout = async (): Promise<void> => {
+    await auth.removeUser();
+    await auth.signoutRedirect();
+    localStorage.clear();
   };
 
   return (
@@ -55,7 +51,7 @@ const UserPopupMenuList = (): JSX.Element | null => {
         {t(translations.accountSettings)}
       </PopupMenu.Button>
 
-      <PopupMenu.Button onClick={signOut} textProps={{ color: 'error' }}>
+      <PopupMenu.Button onClick={handleLogout} textProps={{ color: 'error' }}>
         {t(translations.signOut)}
       </PopupMenu.Button>
     </PopupMenu.List>

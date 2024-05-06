@@ -6,7 +6,7 @@ RSpec.describe User::EmailsController, type: :controller do
 
   with_tenant(:instance) do
     let!(:user) { create(:administrator) }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#destroy' do
       subject { delete :destroy, as: :json, params: { id: user.send(:default_email_record) } }
@@ -20,6 +20,8 @@ RSpec.describe User::EmailsController, type: :controller do
 
       context 'when destroying a primary email' do
         let!(:non_primary_email) { create(:user_email, user: user, primary: false) }
+        before { controller_sign_in(controller, user) }
+
         it 'deletes the primary email' do
           expect { subject }.to change { user.emails.count }.by(-1)
         end

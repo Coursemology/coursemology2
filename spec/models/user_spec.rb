@@ -15,7 +15,7 @@ RSpec.describe User do
   it { is_expected.to have_many(:course_users).dependent(:destroy) }
   it { is_expected.to have_many(:courses).through(:course_users) }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     describe '.system' do
@@ -65,7 +65,7 @@ RSpec.describe User do
     end
 
     describe '#destroy' do
-      let(:instance) { create(:instance) }
+      let(:instance) { Instance.default }
       with_tenant(:instance) do
         let(:user) { create(:user) }
         subject { user.destroy }

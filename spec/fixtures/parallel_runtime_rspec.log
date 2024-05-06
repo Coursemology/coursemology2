@@ -73,7 +73,7 @@ spec/controllers/system/admin/users_controller_spec.rb:1.842213
 spec/controllers/user/emails_controller_spec.rb:1.172354
 spec/controllers/user/omniauth_callbacks_controller_spec.rb:0.216858
 spec/controllers/user/profiles_controller_spec.rb:0.25494
-spec/controllers/user_login_spec.rb:0.276351
+spec/controllers/controller_sign_in_spec.rb:0.276351
 spec/features/course/achievement_condition_management_spec.rb:10.459178
 spec/features/course/achievement_listing_spec.rb:2.885066
 spec/features/course/achievement_management_spec.rb:5.746835
@@ -157,7 +157,6 @@ spec/features/system/admin/instance/instance_announcement_management_spec.rb:1.3
 spec/features/system/admin/instance/instance_announcement_pagination_spec.rb:4.935371
 spec/features/system/admin/instance/user_management_spec.rb:4.364058
 spec/features/system/admin/instance_management_spec.rb:1.993044
-spec/features/system/admin/masquerades_spec.rb:0.618992
 spec/features/system/admin/user_management_spec.rb:3.881104
 spec/features/user/email_management_spec.rb:1.302749
 spec/features/user/omniauth_spec.rb:0.227643

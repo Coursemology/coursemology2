@@ -7,7 +7,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
     let(:user) { create(:user) }
     let(:course) { create(:course, :enrollable) }
     describe '#create' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject { post :create, params: { course_id: course, registration: registration_params } }
 
       context 'when no registration code is specified' do

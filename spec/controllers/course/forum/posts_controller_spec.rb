@@ -9,7 +9,7 @@ RSpec.describe Course::Forum::PostsController, type: :controller do
     let(:course) { create(:course) }
     let(:forum) { create(:forum, course: course) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#destroy' do
       subject do

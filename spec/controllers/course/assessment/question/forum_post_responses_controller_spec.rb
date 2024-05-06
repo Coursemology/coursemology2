@@ -16,7 +16,7 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController, type:
     end
 
     before do
-      sign_in(user)
+      controller_sign_in(controller, user)
       return unless forum_post_response
 
       controller.instance_variable_set(:@forum_post_response_question, forum_post_response)

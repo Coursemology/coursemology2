@@ -20,7 +20,7 @@ RSpec.describe Course::DuplicationsController, type: :controller do
       context 'when instance admin of only one instance wants to duplicate course to another instance' do
         let(:instance_admin_user) { create(:instance_administrator).user }
         let(:instance_admin_course_user) { create(:course_manager, user: instance_admin_user, course: course).user }
-        before { sign_in(instance_admin_course_user) }
+        before { controller_sign_in(controller, instance_admin_course_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -28,7 +28,7 @@ RSpec.describe Course::DuplicationsController, type: :controller do
       context 'when admin user wants to duplicate course to another instance' do
         let(:admin) { create(:administrator) }
         let(:admin_course_user) { create(:course_manager, user: admin, course: course).user }
-        before { sign_in(admin_course_user) }
+        before { controller_sign_in(controller, admin_course_user) }
 
         it 'expects the duplication to be successful' do
           subject

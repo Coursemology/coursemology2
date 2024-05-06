@@ -10,7 +10,7 @@ RSpec.describe Course::ReferenceTimelinesController, type: :controller do
     let(:new_weight) { 6 }
     let!(:timeline) { create(:course_reference_timeline, course: course) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       subject { get :index, as: :json, params: { course_id: course } }

@@ -112,9 +112,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
 
         visit course_material_folder_path(course, parent_folder)
         find('#upload-files-button').click
-        attach_file [file1, file2] do
-          find_all('div', text: 'upload files').last.click
-        end
+        find('input[type="file"]', visible: false).attach_file([file1, file2], make_visible: true)
 
         expect do
           click_button 'Upload'
@@ -175,9 +173,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
 
         visit course_material_folder_path(course, folder)
         find('#upload-files-button').click
-        attach_file [file1, file2] do
-          find_all('div', text: 'upload files').last.click
-        end
+        find('input[type="file"]', visible: false).attach_file([file1, file2], make_visible: true)
 
         expect do
           click_button 'Upload'

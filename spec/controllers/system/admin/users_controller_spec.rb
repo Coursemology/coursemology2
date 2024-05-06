@@ -13,19 +13,19 @@ RSpec.describe System::Admin::UsersController, type: :controller do
       subject { get :index, as: :json }
 
       context 'when a system administrator visits the page' do
-        before { sign_in(admin) }
+        before { controller_sign_in(controller, admin) }
 
         it { is_expected.to render_template(:index) }
       end
 
       context 'when an instance administrator visits the page' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when a normal user visits the page' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -37,7 +37,7 @@ RSpec.describe System::Admin::UsersController, type: :controller do
       subject { patch :update, as: :json, params: { id: user_to_update, user: { role: :administrator } } }
 
       context 'when the user is a system administrator' do
-        before { sign_in(admin) }
+        before { controller_sign_in(controller, admin) }
 
         it 'updates the Course User' do
           expect { subject }.to change { user_to_update.reload.role }.to('administrator')
@@ -49,13 +49,13 @@ RSpec.describe System::Admin::UsersController, type: :controller do
       end
 
       context 'when the user is an instance administrator' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when the user is a normal user' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -72,7 +72,7 @@ RSpec.describe System::Admin::UsersController, type: :controller do
       subject { delete :destroy, params: { id: user_to_delete } }
 
       context 'when the user is a system administrator' do
-        before { sign_in(admin) }
+        before { controller_sign_in(controller, admin) }
 
         it 'destroys the user' do
           subject
@@ -96,13 +96,13 @@ RSpec.describe System::Admin::UsersController, type: :controller do
       end
 
       context 'when the user is an instance administrator' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when the user is a normal user' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end

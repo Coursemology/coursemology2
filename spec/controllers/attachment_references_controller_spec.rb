@@ -6,7 +6,7 @@ RSpec.describe AttachmentReferencesController, type: :controller do
 
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       render_views

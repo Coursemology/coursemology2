@@ -1,4 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import { memo } from 'react';
+import { withAuthenticationRequired } from 'react-oidc-context';
 import {
   createBrowserRouter,
   Navigate,
@@ -103,6 +105,7 @@ import InstanceUsersIndex from 'bundles/system/admin/instance/instance/pages/Ins
 import InstanceUsersInvitations from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvitations';
 import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvite';
 import AccountSettings from 'bundles/user/AccountSettings';
+import ConfirmEmailPage from 'bundles/users/pages/ConfirmEmailPage';
 import UserShow from 'bundles/users/pages/UserShow';
 import { achievementHandle } from 'course/achievement/handles';
 import StoriesSettings from 'course/admin/pages/StoriesSettings';
@@ -817,6 +820,17 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
               path: ':userId',
               element: <UserShow />,
             },
+            {
+              path: 'confirmation',
+              children: [
+                {
+                  index: true,
+                  loader: ConfirmEmailPage.loader,
+                  element: <Navigate to="/" />,
+                  errorElement: <ConfirmEmailPage.InvalidRedirect />,
+                },
+              ],
+            },
           ],
         },
         {
@@ -840,4 +854,12 @@ const AuthenticatedApp = (): JSX.Element => {
   );
 };
 
-export default AuthenticatedApp;
+// Memoized App is needed here due to auth token renewal.
+// When an access token is being renewed, react-oidc-context triggers re-render.
+// We dont want the page to be refreshed since the desired behavior is that
+// the access token in the local storage is updated
+const MemoizedAuthenticatedApp = memo(AuthenticatedApp);
+
+export default withAuthenticationRequired(MemoizedAuthenticatedApp, {
+  signinRedirectArgs: { redirect_uri: window.location.href },
+});

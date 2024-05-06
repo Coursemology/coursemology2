@@ -7,7 +7,7 @@ RSpec.describe Course::Admin::LessonPlanSettingsController, type: :controller do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
     let(:json_response) { JSON.parse(response.body) }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#edit' do
       subject { get :edit, params: { course_id: course, format: :json } }

@@ -12,7 +12,7 @@ RSpec.describe Course::UserEmailSubscriptionsController, type: :controller do
     let(:json_response) { JSON.parse(response.body) }
 
     describe '#edit json' do
-      before { sign_in(student.user) }
+      before { controller_sign_in(controller, student.user) }
       context 'when an unsubscription link for surveys closing reminder is clicked' do
         subject do
           get :edit, format: :json, params: {
@@ -56,7 +56,7 @@ RSpec.describe Course::UserEmailSubscriptionsController, type: :controller do
     end
 
     describe '#update' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject do
         patch :update, format: :json,
                        params: { course_id: course,

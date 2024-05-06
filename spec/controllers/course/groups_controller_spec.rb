@@ -8,7 +8,7 @@ RSpec.describe Course::Group::GroupsController, type: :controller do
     let(:course) { create(:course, creator: admin) }
     let(:group_category) { create(:course_group_category, course: course) }
     let(:group) { create(:course_group, group_category: group_category) }
-    before { sign_in(admin) }
+    before { controller_sign_in(controller, admin) }
 
     describe '#update' do
       subject do

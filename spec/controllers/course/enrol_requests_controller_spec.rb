@@ -13,7 +13,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
       end
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       subject { post :create, params: { course_id: course } }
@@ -79,7 +79,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
     end
 
     describe '#approve' do
-      before { sign_in(admin) }
+      before { controller_sign_in(controller, admin) }
       let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
 
       subject do
@@ -122,7 +122,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
     end
 
     describe '#reject' do
-      before { sign_in(admin) }
+      before { controller_sign_in(controller, admin) }
       let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
 
       subject do

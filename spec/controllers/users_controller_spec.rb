@@ -8,7 +8,7 @@ RSpec.describe UsersController, type: :controller do
     let!(:user) { create(:user) }
 
     describe '#show' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject { get :show, params: { id: user_id } }
 
       context 'When user is system user' do

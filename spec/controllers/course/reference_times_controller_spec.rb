@@ -10,7 +10,7 @@ RSpec.describe Course::ReferenceTimesController, type: :controller do
     let!(:timeline) { create(:course_reference_timeline, course: course) }
     let!(:time) { create(:course_reference_time, reference_timeline: timeline, lesson_plan_item: assigned_item) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       # Convert Ruby Time to string because of differences in micro/nano-second precision between

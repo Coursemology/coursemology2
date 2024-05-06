@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
 
 import {
+  redirectToAuthPage,
   redirectToForbidden,
   redirectToNotFound,
-  redirectToSignIn,
 } from 'lib/hooks/router/redirect';
 
 export const isInvalidCSRFTokenResponse = (response?: AxiosResponse): boolean =>
@@ -12,7 +12,7 @@ export const isInvalidCSRFTokenResponse = (response?: AxiosResponse): boolean =>
     ?.toLowerCase()
     .includes("can't verify csrf token authenticity"); // NOTE: This string is taken from BE's handle_csrf_error
 
-const isUnauthenticatedResponse = (response?: AxiosResponse): boolean =>
+export const isUnauthenticatedResponse = (response?: AxiosResponse): boolean =>
   response?.status === 401;
 
 const isUnauthorizedResponse = (response?: AxiosResponse): boolean =>
@@ -24,7 +24,12 @@ const isComponentNotFoundResponse = (response?: AxiosResponse): boolean =>
   response.data?.error?.toLowerCase().includes('component not found'); // NOTE: This string is taken from BE's handle_component_not_found
 
 export const redirectIfMatchesErrorIn = (response?: AxiosResponse): void => {
-  if (isUnauthenticatedResponse(response)) redirectToSignIn(true);
-  if (isUnauthorizedResponse(response)) redirectToForbidden();
+  if (isUnauthenticatedResponse(response)) {
+    localStorage.clear();
+    redirectToAuthPage();
+  }
+  if (isUnauthorizedResponse(response))
+    // Should open a new window and login
+    redirectToForbidden();
   if (isComponentNotFoundResponse(response)) redirectToNotFound();
 };

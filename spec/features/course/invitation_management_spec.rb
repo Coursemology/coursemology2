@@ -41,9 +41,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         click_button 'Invite from file'
 
         within find('#invite-users-file-upload-form') do
-          attach_file invitation_file.path do
-            find_all('div', text: 'select file').last.click
-          end
+          find('.dropzone-input').attach_file(invitation_file.path, make_visible: true)
         end
         click_button 'Invite Users from File'
         expect(find('h6', text: 'New Invitations (2)')).to be_present

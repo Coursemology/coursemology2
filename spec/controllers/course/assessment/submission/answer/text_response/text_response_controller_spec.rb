@@ -7,7 +7,7 @@ RSpec.describe Course::Assessment::Submission::Answer::TextResponse::TextRespons
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let!(:course) { create(:course, creator: user) }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create_and_delete_files' do
       let(:assessment) { create(:assessment, :published, :with_file_upload_question, course: course) }

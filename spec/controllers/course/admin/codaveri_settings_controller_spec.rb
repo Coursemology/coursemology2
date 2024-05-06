@@ -6,7 +6,7 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
   with_tenant(:instance) do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#edit' do
       subject { get :edit, params: { course_id: course, format: :json } }

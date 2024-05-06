@@ -3,6 +3,7 @@ import {
   Locator,
   Page as BasePage,
   test as base,
+  expect,
 } from '@playwright/test';
 
 import packageJSON from './package.json';
@@ -19,6 +20,7 @@ interface User {
 interface Page extends BasePage {
   getReCAPTCHA: () => Locator;
   getUserMenuButton: () => Locator;
+  signIn: (email: string, password: string) => Promise<void>;
 }
 
 interface SignInPage extends Page {
@@ -71,6 +73,12 @@ export const test = base.extend<TestFixtures>({
       getReCAPTCHA: () =>
         page.frameLocator('[title="reCAPTCHA"]').getByLabel("I'm not a robot"),
       getUserMenuButton: () => page.getByTestId('user-menu-button'),
+      signIn: async (email: string, password: string) => {
+        await page.goto('/users/sign_in');
+        await page.getByPlaceholder('Email').fill(email);
+        await page.getByPlaceholder('Password').fill(password);
+        await page.getByRole('button', { name: 'Sign in' }).click();
+      },
     } satisfies Omit<Page, keyof BasePage>);
   },
   signInPage: async ({ page }, use, testInfo) => {
@@ -78,9 +86,9 @@ export const test = base.extend<TestFixtures>({
 
     await extend(use, page, {
       originalPage: page,
-      getEmailField: () => page.getByLabel('Email address'),
-      getPasswordField: () => page.getByLabel('Password'),
-      getSignInButton: () => page.getByRole('button', { name: 'Sign in' }),
+      getEmailField: () => page.getByPlaceholder('Email'),
+      getPasswordField: () => page.getByPlaceholder('Password'),
+      getSignInButton: () => page.getByRole('button', { name: 'Sign In' }),
       manufactureUser: async () => {
         const email = getEmail(testInfo.workerIndex);
         const password = 'lolololol';
@@ -123,7 +131,7 @@ export const test = base.extend<TestFixtures>({
       signOut: async () => {
         await page.getUserMenuButton().click();
         await page.getByRole('button', { name: 'Sign out' }).click();
-        await page.waitForURL('/users/sign_in');
+        await page.getByRole('button', { name: 'Logout' }).click()
       },
     });
   },
