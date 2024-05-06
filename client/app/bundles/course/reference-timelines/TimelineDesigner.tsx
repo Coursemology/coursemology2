@@ -1,4 +1,5 @@
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { useSetFooter } from 'lib/components/wrappers/FooterProvider';
 import Preload from 'lib/components/wrappers/Preload';
 import { useAppDispatch } from 'lib/hooks/store';
 
@@ -8,6 +9,8 @@ import { fetchTimelines } from './operations';
 import translations from './translations';
 
 const TimelineDesigner = (): JSX.Element => {
+  useSetFooter(false);
+
   const dispatch = useAppDispatch();
 
   return (
