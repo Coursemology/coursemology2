@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Cikgo::TimelinesService < Cikgo::Service
   class << self
+    include Cikgo::CourseConcern
+
     def items(course_user)
       connection(:get, 'timelines', query: {
         pushKey: push_key(course_user.course),
@@ -17,12 +19,6 @@ class Cikgo::TimelinesService < Cikgo::Service
           startAt: start_at
         }]
       })
-    end
-
-    private
-
-    def cikgo_user_id(course_user)
-      course_user.user.cikgo_user.provided_user_id
     end
   end
 end
