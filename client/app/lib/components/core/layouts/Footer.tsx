@@ -4,6 +4,7 @@ import { Typography } from '@mui/material';
 
 import Link from 'lib/components/core/Link';
 import { useAttributions } from 'lib/components/wrappers/AttributionsProvider';
+import { useFooter } from 'lib/components/wrappers/FooterProvider';
 import { SUPPORT_EMAIL } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -34,10 +35,13 @@ const translations = defineMessages({
   },
 });
 
-const Footer = (): JSX.Element => {
+const Footer = (): JSX.Element | null => {
   const { t } = useTranslation();
 
+  const enabled = useFooter();
   const attributions = useAttributions();
+
+  if (!enabled) return null;
 
   return (
     <footer className="bg-neutral-50 p-5 border-only-t-neutral-200">

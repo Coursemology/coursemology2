@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import AttributionsProvider from './AttributionsProvider';
 import ErrorBoundary from './ErrorBoundary';
+import FooterProvider from './FooterProvider';
 import I18nProvider from './I18nProvider';
 import RollbarProvider from './RollbarWrapper';
 import StoreProvider, { StoreProviderProps } from './StoreProvider';
@@ -19,7 +20,9 @@ const Providers = (props: ProvidersProps): JSX.Element => (
         <I18nProvider>
           <ThemeProvider>
             <ToastProvider>
-              <AttributionsProvider>{props.children}</AttributionsProvider>
+              <AttributionsProvider>
+                <FooterProvider>{props.children}</FooterProvider>
+              </AttributionsProvider>
             </ToastProvider>
           </ThemeProvider>
         </I18nProvider>
