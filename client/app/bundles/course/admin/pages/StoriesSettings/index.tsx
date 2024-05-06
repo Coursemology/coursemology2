@@ -5,7 +5,6 @@ import { Alert } from '@mui/material';
 import { StoriesSettingsData } from 'types/course/admin/stories';
 
 import Section from 'lib/components/core/layouts/Section';
-import Subsection from 'lib/components/core/layouts/Subsection';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import FormTextField from 'lib/components/form/fields/TextField';
@@ -15,6 +14,7 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
+import Introduction from './components/Introduction';
 import { fetchStoriesSettings, updateStoriesSettings } from './operations';
 
 const translations = defineMessages({
@@ -24,32 +24,22 @@ const translations = defineMessages({
   },
   pushKey: {
     id: 'course.admin.storiesSettings.pushKey',
-    defaultMessage: 'Push key',
+    defaultMessage: 'Integration key',
   },
   pushKeyPointsToCourse: {
     id: 'course.admin.storiesSettings.pushKeyPointsToCourse',
-    defaultMessage: 'This push key points to <link>{course}</link> on Cikgo.',
+    defaultMessage:
+      'This integration key points to <link>{course}</link> on Cikgo.',
   },
   pushKeyError: {
     id: 'course.admin.storiesSettings.pushKeyError',
     defaultMessage:
-      "This push key doesn't point to a valid course on Cikgo. Please check your settings on Cikgo and try again.",
+      "This integration key doesn't point to a valid course on Cikgo. Please check your settings on Cikgo and try again.",
   },
   pingError: {
     id: 'course.admin.storiesSettings.pingError',
     defaultMessage:
       'There was a problem connecting to Cikgo. You may try again at a later time.',
-  },
-  embeddableResources: {
-    id: 'course.admin.storiesSettings.embeddableResources',
-    defaultMessage: 'Push resources to Cikgo',
-  },
-  embeddableResourcesHint: {
-    id: 'course.admin.storiesSettings.embeddableResourcesHint',
-    defaultMessage:
-      'Push published assessments, videos, and surveys from this course to Cikgo that you can later embed in the ' +
-      "stories created in Cikgo. Coursemology will also automatically keep them up to date. Your students' submission " +
-      'statuses will also be reflected in their chat rooms in Cikgo.',
   },
 });
 
@@ -113,27 +103,26 @@ const StoriesSettings = (): JSX.Element => {
         >
           {(control, watch, { isDirty }) => (
             <Section sticksToNavbar title={t(translations.storiesSettings)}>
-              <Subsection
-                subtitle={t(translations.embeddableResourcesHint)}
-                title={t(translations.embeddableResources)}
-              >
-                <Controller
-                  control={control}
-                  name="pushKey"
-                  render={({ field, fieldState }): JSX.Element => (
-                    <FormTextField
-                      disabled={submitting}
-                      field={field}
-                      fieldState={fieldState}
-                      fullWidth
-                      label={t(translations.pushKey)}
-                      variant="filled"
-                    />
-                  )}
-                />
+              <Introduction className="mb-2" />
 
-                {!isDirty && <PingResultAlert {...watch('pingResult')} />}
-              </Subsection>
+              <Controller
+                control={control}
+                name="pushKey"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormTextField
+                    disabled={submitting}
+                    disableMargins
+                    field={field}
+                    fieldState={fieldState}
+                    fullWidth
+                    helperText="Integration keys aren't strictly secretive, but should be handled in confidence."
+                    label={t(translations.pushKey)}
+                    variant="filled"
+                  />
+                )}
+              />
+
+              {!isDirty && <PingResultAlert {...watch('pingResult')} />}
             </Section>
           )}
         </Form>
