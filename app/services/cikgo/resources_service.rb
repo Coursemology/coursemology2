@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Cikgo::ResourcesService < Cikgo::Service
   class << self
+    include Cikgo::CourseConcern
+
     def ping(push_key)
       response = connection(:get, 'repositories', query: { pushKey: push_key })
       { status: :ok, **response }
@@ -9,8 +11,11 @@ class Cikgo::ResourcesService < Cikgo::Service
     end
 
     def push_repository(course, url, resources)
+      course_push_key = push_key(course)
+      return unless course_push_key
+
       connection(:post, 'repositories', body: {
-        pushKeys: [push_key(course)],
+        pushKeys: [course_push_key],
         repository: {
           id: repository_id(course.id),
           name: course.title,
@@ -21,8 +26,11 @@ class Cikgo::ResourcesService < Cikgo::Service
     end
 
     def push_resources(course, resources)
+      course_push_key = push_key(course)
+      return unless course_push_key
+
       connection(:patch, 'repositories', body: {
-        pushKeys: [push_key(course)],
+        pushKeys: [course_push_key],
         repository: { id: repository_id(course.id), resources: resources }
       })
     end
