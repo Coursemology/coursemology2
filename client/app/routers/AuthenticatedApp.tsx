@@ -122,6 +122,7 @@ import StatisticsIndex from 'course/statistics/pages/StatisticsIndex';
 import CourseStatistics from 'course/statistics/pages/StatisticsIndex/course/CourseStatistics';
 import StaffStatistics from 'course/statistics/pages/StatisticsIndex/staff/StaffStatistics';
 import StudentsStatistics from 'course/statistics/pages/StatisticsIndex/students/StudentsStatistics';
+import LearnRedirect from 'course/stories/components/LearnRedirect';
 import LearnPage from 'course/stories/pages/LearnPage';
 import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
 import {
@@ -150,6 +151,12 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
       children: [
         {
           index: true,
+          element: (
+            <LearnRedirect otherwiseRender={<CourseShow />} to="learn" />
+          ),
+        },
+        {
+          path: 'home',
           element: <CourseShow />,
         },
         {
