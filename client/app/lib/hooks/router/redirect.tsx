@@ -1,3 +1,4 @@
+import { withAuthenticationRequired } from 'react-oidc-context';
 import { Navigate, useSearchParams } from 'react-router-dom';
 
 const NEXT_URL_SEARCH_PARAM = 'next';
@@ -23,10 +24,8 @@ const defensivelyParseURL = (rawURL: string): string | null => {
 const getCurrentURL = (): string =>
   window.location.pathname + window.location.search;
 
-const getAuthenticatableURL = (nextURL?: string, expired?: boolean): string => {
-  const url = new URL('/users/sign_in', window.location.origin);
-  if (nextURL) url.searchParams.append(NEXT_URL_SEARCH_PARAM, nextURL);
-  if (expired) url.searchParams.append(EXPIRED_SESSION_SEARCH_PARAM, 'true');
+const getAuthenticatableURL = (): string => {
+  const url = new URL('/authentication', window.location.origin);
   return url.pathname + url.search;
 };
 
@@ -36,7 +35,7 @@ const getForbiddenURL = (): string => {
   return url.pathname + url.search;
 };
 
-const useNextURL = (): { nextURL: string | null; expired: boolean } => {
+export const useNextURL = (): { nextURL: string | null; expired: boolean } => {
   const [searchParams] = useSearchParams();
   const nextRawURL = searchParams.get(NEXT_URL_SEARCH_PARAM);
   const expired = searchParams.get(EXPIRED_SESSION_SEARCH_PARAM);
@@ -50,13 +49,13 @@ const useNextURL = (): { nextURL: string | null; expired: boolean } => {
 /**
  * Redirects to the sign in page with the current URL as the next URL. To be used
  * in scopes outside React and/or React Router, e.g., Axios interceptors.
- * Do not redirect to the same /users/sign_in url.
+ * Do not redirect to the same /authentication url.
  *
  * @param expired Whether this redirect is caused by an expired session.
  */
-export const redirectToSignIn = (expired?: boolean): void => {
-  if (!window.location.pathname.startsWith('/users/sign_in'))
-    window.location.href = getAuthenticatableURL(getCurrentURL(), expired);
+export const redirectToAuthPage = (): void => {
+  if (!window.location.pathname.startsWith('/auth'))
+    window.location.href = getAuthenticatableURL();
 };
 
 export const redirectToForbidden = (): void => {
@@ -83,10 +82,11 @@ export const Redirectable = (): JSX.Element => {
 /**
  * Redirects to the sign in page with the current intercepted URL as the next URL.
  */
-export const Authenticatable = (): JSX.Element => {
-  const redirectURL = getAuthenticatableURL(getCurrentURL());
-  return <Navigate to={redirectURL} />;
-};
+const AuthenticatableComponent = (): JSX.Element => <div />;
+export const Authenticatable = withAuthenticationRequired(
+  AuthenticatableComponent,
+  { signinRedirectArgs: { redirect_uri: window.location.href } },
+);
 
 export const useRedirectable = (): {
   redirectable: boolean;

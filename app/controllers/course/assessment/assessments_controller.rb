@@ -154,7 +154,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   private
 
   def question_order_ids
-    @order_from_user ||= begin
+    @question_order_ids ||= begin
       integer_type = ActiveModel::Type::Integer.new
       params.require(:question_order).map { |id| integer_type.cast(id) }
     end
@@ -264,7 +264,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
         flat_map do |category_id, tabs|
           category_title = category_titles[category_id]
           tabs.map do |id, _, title|
-            [id, tabs.length > 1 ? "#{category_title} - #{title}" : category_title]
+            [id, (tabs.length > 1) ? "#{category_title} - #{title}" : category_title]
           end
         end.to_h
     end
@@ -309,7 +309,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def authentication_service
-    @authentication_service ||= Course::Assessment::AuthenticationService.new(@assessment, session)
+    @authentication_service ||= Course::Assessment::AuthenticationService.new(@assessment, current_session_id)
   end
 
   def submissions

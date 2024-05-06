@@ -11,20 +11,20 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
       subject { get :index, as: :json }
 
       context 'when a system administrator visits the page' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it { is_expected.to render_template(:index) }
       end
 
       context 'when a normal user visits the page' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
     end
 
     describe '#create' do
-      before { sign_in(normal_user) }
+      before { controller_sign_in(controller, normal_user) }
       let(:invite_params) do
         invitation = { name: generate(:name), email: generate(:email) }
         invitations = { generate(:nested_attribute_new_id) => invitation }
@@ -34,7 +34,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
       subject { post :create, format: :json, params: { instance: invite_params } }
 
       context 'when an instance administrator visits the page' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
         it { is_expected.to have_http_status(:ok) }
 
         context 'when the invitations do not get created successfully' do
@@ -58,7 +58,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
 
     describe '#resend_invitation' do
       before do
-        sign_in(instance_admin)
+        controller_sign_in(controller, instance_admin)
       end
       let!(:invitation) { create(:instance_user_invitation, instance: instance) }
       subject { post :resend_invitations, format: :json, params: { user_invitation_id: invitation.id } }
@@ -79,7 +79,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
 
     describe '#resend_invitations' do
       before do
-        sign_in(instance_admin)
+        controller_sign_in(controller, instance_admin)
       end
       let!(:pending_invitations) { create_list(:instance_user_invitation, 3, instance: instance) }
       subject { post :resend_invitations, format: :json, params: {} }

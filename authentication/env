@@ -1,0 +1,8 @@
+KC_NETWORK_MODE="bridge"
+KC_DB= "postgres"
+KC_DB_URL="jdbc:postgresql://host.docker.internal/coursemology_keycloak"
+KC_DB_USERNAME="postgres"
+KC_DB_PASSWORD=""
+KC_HOSTNAME="localhost"
+KEYCLOAK_ADMIN="admin"
+KEYCLOAK_ADMIN_PASSWORD="password"

@@ -55,6 +55,8 @@ test.describe('user invited to a course', () => {
 
     await page.getSignUpButton().click();
 
+    await page.signIn(invitation.email, password)
+
     await expect(page).toHaveURL(new RegExp(course.id));
   });
 
@@ -94,7 +96,8 @@ test.describe('user invited to 2 courses', () => {
     await page.getConfirmPasswordField().fill(password);
     await page.getReCAPTCHA().click();
     await page.getSignUpButton().click();
-    await expect(page.getByText('Welcome')).toBeVisible();
+
+    await page.signIn(invitation1.email, password)
 
     await page.goto(`/courses/${course1.id}`);
     await expect(page).toHaveURL(new RegExp(course1.id));
@@ -139,11 +142,7 @@ test.describe('user invited to 2 courses', () => {
     await expect.soft(page.getByText(email)).toBeVisible();
     await expect(page.getByText('confirmed')).toBeVisible();
 
-    await page.goto('/users/sign_in');
-    await page.getByLabel('Email address').fill(email);
-    await page.getByLabel('Password').fill(password);
-    await page.getByRole('button', { name: 'Sign in' }).click();
-    await page.waitForURL('/');
+    await page.signIn(email, password)
 
     await page.goto(`/courses/${course.id}`);
     await expect(page).toHaveURL(new RegExp(course.id));

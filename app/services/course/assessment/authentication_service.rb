@@ -5,10 +5,10 @@
 #   the token automatically becomes invalid.
 class Course::Assessment::AuthenticationService
   # @param [Course::Assessment] assessment The password protected assessment.
-  # @param [ActionDispatch::Request::Session] session The current session.
-  def initialize(assessment, session)
+  # @param [string] session_id The current session ID.
+  def initialize(assessment, session_id)
     @assessment = assessment
-    @session = session
+    @session_id = session_id
   end
 
   # Check if the password from user input matches the assessment password.
@@ -37,7 +37,7 @@ class Course::Assessment::AuthenticationService
   #
   # @return [Boolean]
   def authenticated?
-    return true unless @session
+    return true unless @session_id
 
     REDIS.get(session_key) == password_token
   end
@@ -49,6 +49,6 @@ class Course::Assessment::AuthenticationService
   end
 
   def session_key
-    "session_#{@session.id}_assessment_#{@assessment.id}_access_token"
+    "session_#{@session_id}_assessment_#{@assessment.id}_access_token"
   end
 end

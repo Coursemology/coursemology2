@@ -9,7 +9,7 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
     let!(:course) { create(:course, creator: user) }
     let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     context 'when the assessment is autograded' do
       let(:assessment) { create(:assessment, :autograded, :with_mrq_question, course: course) }

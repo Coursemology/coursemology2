@@ -8,7 +8,7 @@ RSpec.describe Course::LeaderboardsController, type: :controller do
     let!(:user) { create(:administrator) }
     let!(:course) { create(:course) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       subject { get :index, params: { course_id: course } }

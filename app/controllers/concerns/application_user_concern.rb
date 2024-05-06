@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 module ApplicationUserConcern
   extend ActiveSupport::Concern
-  include ApplicationUserMasqueradeConcern
-  include ApplicationUserOauthConcern
+  include ApplicationAuthenticationConcern
 
   included do
     before_action :authenticate!, unless: :publicly_accessible?
@@ -13,20 +12,22 @@ module ApplicationUserConcern
   # URL to the profile page of the given +CourseUser+ or +User+ in the current course
   #
   # @param [CourseUser|User] course_user The CourseUser/User to link to
-  # @return [String] A URL that points to the +CourseUser+ or +User+ profile page
+  # @return [String | nil] A URL that points to the +CourseUser+ or +User+ profile page
   def url_to_user_or_course_user(course, user)
     return course_user_path(course, user) if user.is_a?(CourseUser)
     return user_path(user) if user.is_a?(User)
+
+    nil
   end
 
   def current_user
-    @current_user ||= current_user_from_devise || current_user_from_doorkeeper
+    @current_user ||= current_user_from_token
   end
 
   protected
 
   def publicly_accessible?
-    action_name.to_sym == :index
+    action_name.to_sym == :index && controller_name == 'application'
   end
 
   def handle_access_denied(exception)
@@ -35,18 +36,31 @@ module ApplicationUserConcern
 
   private
 
-  # This method is more or less a copy of Devise's `authenticate_user!`. Devise responds
-  # to `:warden` throws via `Devise::FailureApp`. This way, we keep the error message and
-  # status code consistent with Devise (as at before Doorkeeper was used).
-  #
-  # https://github.com/heartcombo/devise/blob/e2242a95f3bb2e68ec0e9a064238ff7af6429545/lib/devise/controllers/helpers.rb#L153
-  # https://github.com/heartcombo/devise/blob/e2242a95f3bb2e68ec0e9a064238ff7af6429545/lib/devise/controllers/helpers.rb#L120
-  # https://github.com/wardencommunity/warden/blob/88d2f59adf5d650238c1e93072635196aea432dc/lib/warden/proxy.rb#L134
   def authenticate!
-    throw :warden unless devise_controller? || current_user
+    raise AuthenticationError unless devise_controller? || current_user
+
+    update_user_tracked_fields
   end
 
-  def current_user_from_devise
-    warden.authenticate(scope: :user)
+  def update_user_tracked_fields
+    return if !current_user || current_user.session_id == current_session_id
+
+    update_tracked_fields
+  end
+
+  def update_tracked_fields
+    old_current, new_current = current_user.current_sign_in_at, Time.now.utc
+    current_user.last_sign_in_at     = old_current || new_current
+    current_user.current_sign_in_at  = new_current
+
+    old_current, new_current = current_user.current_sign_in_ip, request.remote_ip
+    current_user.last_sign_in_ip     = old_current || new_current
+    current_user.current_sign_in_ip  = new_current
+
+    current_user.sign_in_count ||= 0
+    current_user.sign_in_count += 1
+
+    current_user.session_id = current_session_id
+    current_user.save
   end
 end

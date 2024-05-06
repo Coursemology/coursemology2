@@ -5,7 +5,7 @@ RSpec.describe System::Admin::Instance::ComponentsController, type: :controller 
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
-    before { sign_in(admin) }
+    before { controller_sign_in(controller, admin) }
 
     describe '#update' do
       let(:ids_to_enable) do

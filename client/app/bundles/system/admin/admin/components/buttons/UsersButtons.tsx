@@ -4,7 +4,6 @@ import equal from 'fast-deep-equal';
 import { UserMiniEntity } from 'types/users';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import MasqueradeButton from 'lib/components/core/buttons/MasqueradeButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
 import { USER_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
@@ -104,11 +103,6 @@ const UserManagementButtons: FC<Props> = (props) => {
         )}
         <PromptText>{t(translations.deletionConfirm)}</PromptText>
       </DeleteButton>
-      <MasqueradeButton
-        canMasquerade={Boolean(user.canMasquerade)}
-        className={`user-masquerade-${user.id} ml-4 p-0`}
-        href={user.masqueradePath}
-      />
     </div>
   );
 };

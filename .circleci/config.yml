@@ -27,7 +27,7 @@ executors:
           DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
           COLLECT_COVERAGE: << parameters.collects_rails_coverage >>
 
-      - image: cimg/postgres:14.5
+      - image: cimg/postgres:16.1
         environment:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: coursemology_test
@@ -102,12 +102,15 @@ commands:
           name: Add env file to client folder
           working_directory: client
           command: |
-            touch .env
-            echo GOOGLE_RECAPTCHA_SITE_KEY="${GOOGLE_RECAPTCHA_SITE_KEY}" >> .env
-            echo ROLLBAR_POST_CLIENT_ITEM_KEY="${ROLLBAR_POST_CLIENT_ITEM_KEY}" >> .env
-            echo SUPPORT_EMAIL="${SUPPORT_EMAIL}" >> .env
-            echo DEFAULT_LOCALE="${DEFAULT_LOCALE}" >> .env
-            echo DEFAULT_TIME_ZONE="${DEFAULT_TIME_ZONE}" >> .env
+            touch .env.test
+            echo GOOGLE_RECAPTCHA_SITE_KEY="${GOOGLE_RECAPTCHA_SITE_KEY}" >> .env.test
+            echo ROLLBAR_POST_CLIENT_ITEM_KEY="${ROLLBAR_POST_CLIENT_ITEM_KEY}" >> .env.test
+            echo SUPPORT_EMAIL="${SUPPORT_EMAIL}" >> .env.test
+            echo DEFAULT_LOCALE="${DEFAULT_LOCALE}" >> .env.test
+            echo DEFAULT_TIME_ZONE="${DEFAULT_TIME_ZONE}" >> .env.test
+            echo OIDC_AUTHORITY="${OIDC_AUTHORITY}" >> .env.test
+            echo OIDC_CLIENT_ID="${OIDC_CLIENT_ID}" >> .env.test
+            echo OIDC_REDIRECT_URI="${OIDC_REDIRECT_URI}" >> .env.test
 
       - run:
           name: Build client
@@ -120,6 +123,52 @@ commands:
           paths:
             - ./client/build
           key: v1-yarn-build-{{ .Revision }}
+
+  build_and_run_auth_server:
+    steps:
+      - run:
+          name: Create coursemology_keycloak db
+          command: |
+            DB_CONTAINER_ID=$(docker ps -q --filter ancestor=cimg/postgres:16.1)
+            docker exec $DB_CONTAINER_ID psql -c "CREATE DATABASE coursemology_keycloak OWNER ubuntu;" -U ubuntu -d postgres
+            docker exec $DB_CONTAINER_ID psql -c "CREATE DATABASE coursemology OWNER ubuntu;" -U ubuntu -d postgres
+      - run:
+          name: Update docker compose file
+          working_directory: authentication
+          command: |
+            sed -i '/ports:/,+1d' docker-compose.yml
+      - run:
+          name: Update realm config files
+          working_directory: authentication/import
+          command: |
+            sed -i 's/host.docker.internal/localhost/g' coursemology_realm.json
+            sed -i 's/\"postgres\"/\"ubuntu\"/g' coursemology_realm.json
+      - run:
+          name: Add env file to authentication folder
+          working_directory: authentication
+          command: |
+            touch .env
+            echo KC_NETWORK_MODE="container:$(docker ps -q --filter ancestor=cimg/postgres:16.1)" >> .env
+            echo KC_DB="postgres" >> .env
+            echo KC_DB_URL="jdbc:postgresql://localhost:5432/coursemology_keycloak" >> .env
+            echo KC_DB_USERNAME="ubuntu" >> .env
+            echo KC_DB_PASSWORD="" >> .env
+            echo KC_HOSTNAME="localhost" >> .env
+            echo KEYCLOAK_ADMIN="admin" >> .env
+            echo KEYCLOAK_ADMIN_PASSWORD="password" >> .env
+      - run:
+          name: Build authentication image
+          working_directory: authentication
+          command: docker build -t coursemology_auth .
+      - run:
+          name: Run authentication server
+          working_directory: authentication
+          command: docker compose up
+          background: true
+      - run:
+          name: Wait for Auth server
+          command: |
+            curl -s --retry 1000 --retry-delay 1 --retry-connrefused -4 http://localhost:8443
 
   setup_db:
     steps:
@@ -147,13 +196,26 @@ commands:
   serve_rails_server:
     steps:
       - run:
+          name: Add env file to main folder
+          command: |
+            touch .env
+            echo RAILS_HOSTNAME="localhost:3000" >> .env
+            echo KEYCLOAK_AUTH_SERVER_URL="http://localhost:8443/" >> .env
+            echo KEYCLOAK_AUTH_JWKS_URL="http://localhost:8443/realms/coursemology_test/protocol/openid-connect/certs" >> .env
+            echo KEYCLOAK_AUTH_INSTROPECTION_URL="http://localhost:8443/realms/coursemology_test/protocol/openid-connect/token/introspect" >> .env
+            echo KEYCLOAK_ISS="http://localhost:8443/realms/coursemology_test" >> .env
+            echo KEYCLOAK_AUD="account" >> .env
+            echo KEYCLOAK_REALM="coursemology_test" >> .env
+
+      - run:
           name: Serve Rails server
           command: bundle exec rails s -p 7979
           background: true
 
       - run:
           name: Wait for Rails server
-          command: curl -s --retry 1000 --retry-delay 1 --retry-connrefused http://lvh.me:7979
+          command: |
+            curl -s --retry 1000 --retry-delay 1 --retry-connrefused -4 http://localhost:7979
 
   terminate_rails_and_wait_for_coverage_results:
     steps:
@@ -210,6 +272,7 @@ jobs:
       - setup_db
       - serve_static_site
       - serve_rails_server
+      - build_and_run_auth_server
 
       - run:
           name: Install Playwright dependencies
@@ -236,7 +299,7 @@ jobs:
           when: always
           working_directory: tests
           command: |
-            zip -r test-results.zip test-results
+            zip -r test-results.zip test-results playright-report
 
       # - codecov/upload:
       #     upload_name: playwright-client
@@ -271,6 +334,7 @@ jobs:
 
       - setup_db
       - serve_static_site
+      - build_and_run_auth_server
 
       - run:
           name: Run RSpec tests

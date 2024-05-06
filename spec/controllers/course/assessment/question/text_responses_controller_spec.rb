@@ -16,7 +16,7 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
     end
 
     before do
-      sign_in(user)
+      controller_sign_in(controller, user)
       return unless text_response
 
       controller.instance_variable_set(:@text_response_question, text_response)

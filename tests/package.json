@@ -14,8 +14,8 @@
     "coverage": "npx nyc report --reporter=lcovonly --exclude-after-remap false"
   },
   "servers": {
-    "clientURL": "http://lvh.me:3200",
-    "serverURL": "http://lvh.me:7979"
+    "clientURL": "http://localhost:3200",
+    "serverURL": "http://localhost:7979"
   },
   "coverage": {
     "outputDir": ".nyc_output",

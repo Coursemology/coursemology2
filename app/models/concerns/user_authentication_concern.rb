@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 module UserAuthenticationConcern
   extend ActiveSupport::Concern
-  include Devise::SignInCallbacks
 
   included do
     # Include default devise modules. Others available are:
     # :validatable, :confirmable, :lockable, :timeoutable and :omniauthable
+    # Devise is now only used to manage user registration.
+    # Authentication workflow is handled by external authenticator (ie keycloak)
     devise :multi_email_authenticatable, :multi_email_confirmable, :multi_email_validatable,
-           :registerable, :recoverable, :rememberable, :trackable, :masqueradable
+           :registerable, :recoverable, :rememberable, :trackable
 
-    before_sign_in :create_instance_user, unless: :administrator?
     after_create :create_instance_user
     after_create :delete_unused_instance_invitation
 

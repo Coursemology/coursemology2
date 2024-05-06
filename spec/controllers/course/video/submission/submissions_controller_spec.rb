@@ -9,7 +9,7 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
     let!(:course) { create(:course, creator: user) }
     let(:video) { create(:video, :published, course: course) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       subject do
@@ -55,7 +55,7 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
         let(:student2) { create(:course_student, course: course) }
         let(:submission) { create(:video_submission, video: video, creator: student2.user) }
 
-        before { sign_in(student1.user) }
+        before { controller_sign_in(controller, student1.user) }
 
         it 'raises an error' do
           expect { subject }.to raise_exception(CanCan::AccessDenied)

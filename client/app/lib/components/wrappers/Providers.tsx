@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import AttributionsProvider from './AttributionsProvider';
+import AuthProvider from './AuthProvider';
 import ErrorBoundary from './ErrorBoundary';
 import I18nProvider from './I18nProvider';
 import RollbarProvider from './RollbarWrapper';
@@ -19,7 +20,9 @@ const Providers = (props: ProvidersProps): JSX.Element => (
         <I18nProvider>
           <ThemeProvider>
             <ToastProvider>
-              <AttributionsProvider>{props.children}</AttributionsProvider>
+              <AuthProvider>
+                <AttributionsProvider>{props.children}</AttributionsProvider>
+              </AuthProvider>
             </ToastProvider>
           </ThemeProvider>
         </I18nProvider>

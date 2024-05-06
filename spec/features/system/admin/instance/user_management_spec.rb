@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'System: Administration: Instance: Users', js: true do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:instance_admin) { create(:instance_user, role: :administrator).user }

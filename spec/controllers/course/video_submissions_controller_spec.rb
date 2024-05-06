@@ -9,7 +9,7 @@ RSpec.describe Course::VideoSubmissionsController do
 
     describe '#index' do
       subject { get :index, as: :json, params: { course_id: course, user_id: course_user } }
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
 
       context 'when a Normal User visits the page' do
         let!(:user) { create(:user) }

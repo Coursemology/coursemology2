@@ -1,0 +1,17 @@
+name: coursemology_authentication
+services:
+  coursemology_auth:
+    container_name: coursemology_authentication
+    network_mode: ${KC_NETWORK_MODE}
+    ports: 
+      - 8443:8443
+    environment:
+      - KC_DB=${KC_DB}
+      - KC_DB_URL=${KC_DB_URL}
+      - KC_DB_USERNAME=${KC_DB_USERNAME}
+      - KC_DB_PASSWORD=${KC_DB_PASSWORD}
+      - KC_HOSTNAME=${KC_HOSTNAME}
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+    image: coursemology_auth
+    command: start-dev --import-realm --http-port=8443 #--log-level=ALL

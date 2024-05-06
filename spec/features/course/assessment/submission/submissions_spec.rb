@@ -52,6 +52,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
         let(:correct_option) { options.find(&:correct?) }
 
         scenario 'I can directly publish prefilled grade' do
+          logout
           login_as(students[0].user, scope: :user)
           # attempting the question in which grade is prefillable upon grading
           visit edit_course_assessment_submission_path(course, mcq_assessment, attempt_submission)
@@ -63,6 +64,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
           wait_for_page
 
           # doing the login as staff now
+          logout
           login_as(user, scope: :user)
 
           visit edit_course_assessment_submission_path(course, mcq_assessment, attempt_submission)

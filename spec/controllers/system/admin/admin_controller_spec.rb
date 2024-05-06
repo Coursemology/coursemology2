@@ -6,7 +6,7 @@ RSpec.describe System::Admin::AdminController do
 
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       before { get :index, as: :json }

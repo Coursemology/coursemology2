@@ -7236,6 +7236,11 @@ jsonify@~0.0.0:
     object.assign "^4.1.4"
     object.values "^1.1.6"
 
+jwt-decode@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
+  integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
+
 kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
@@ -8234,6 +8239,13 @@ obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
+
+oidc-client-ts@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-3.0.0.tgz#910b27193b54730dbabd93709ca000f8b1e5bdf2"
+  integrity sha512-YUcel/+C4AmXXhM/geNWc1jBsBVYzd+xhvSl1NMkxKpzZXqhLKmtj1ttSdxtDYm3P2YelnAr4zS4c96+p02iFQ==
+  dependencies:
+    jwt-decode "^4.0.0"
 
 on-finished@2.4.1, on-finished@^2.4.1:
   version "2.4.1"
@@ -9282,6 +9294,11 @@ react-markdown@^9.0.1:
     unified "^11.0.0"
     unist-util-visit "^5.0.0"
     vfile "^6.0.0"
+
+react-oidc-context@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-oidc-context/-/react-oidc-context-3.0.0.tgz#53de2ce751b975fdce9ae5fb406f9b2b9a452129"
+  integrity sha512-VmSnEGWl3pTMO5zT94pGAwoK58njg6VPVFXbrepUGsLhSM0IVEKN0DtzNJvTtDSUOPA4xnJ6+jiq1fgdrWtHSQ==
 
 react-player@^2.15.1:
   version "2.15.1"

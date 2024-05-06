@@ -2,12 +2,12 @@
 # Authenticate the assessment and update the session_id in submission.
 class Course::Assessment::SessionAuthenticationService
   # @param [Course::Assessment] assessment The password protected assessment.
-  # @param [ActionDispatch::Request::Session] session The current session.
+  # @param [string] session_id The current session id.
   # @param [Course::Assessment::Submission|nil] submission The session id will be stored if the
   #   submission is given.
-  def initialize(assessment, session, submission = nil)
+  def initialize(assessment, session_id, submission = nil)
     @assessment = assessment
-    @session = session
+    @session_id = session_id
     @submission = submission
   end
 
@@ -64,6 +64,6 @@ class Course::Assessment::SessionAuthenticationService
   end
 
   def session_key
-    "session_#{@session.id}_assessment_#{@assessment.id}_submission_#{@submission.id}_authentication_token"
+    "session_#{@session_id}_assessment_#{@assessment.id}_submission_#{@submission.id}_authentication_token"
   end
 end

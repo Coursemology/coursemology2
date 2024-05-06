@@ -16,7 +16,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
       end
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       let(:post_text) { 'test post text' }

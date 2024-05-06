@@ -16,7 +16,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
       stub
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     context 'when current user is not enrolled in the course' do
       let(:user) { create(:user) }

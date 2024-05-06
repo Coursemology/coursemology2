@@ -12,6 +12,8 @@ const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const packageJSON = require('./package.json');
 
+const ENV_DIR = process.env.BABEL_ENV === 'e2e-test' ? './.env.test' : './.env';
+
 module.exports = {
   entry: {
     coursemology: [
@@ -70,7 +72,7 @@ module.exports = {
     moduleIds: 'deterministic',
   },
   plugins: [
-    new DotenvPlugin(),
+    new DotenvPlugin({ path: ENV_DIR }),
     new IgnorePlugin({ resourceRegExp: /__test__/ }),
     new WebpackManifestPlugin({
       publicPath: '/webpack/',

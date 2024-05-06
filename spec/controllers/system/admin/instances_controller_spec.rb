@@ -6,7 +6,7 @@ RSpec.describe System::Admin::InstancesController do
 
   with_tenant(:instance) do
     let(:admin) { create(:administrator) }
-    before { sign_in(admin) }
+    before { controller_sign_in(controller, admin) }
 
     describe '#destroy' do
       let!(:instance_to_delete) { create(:instance) }

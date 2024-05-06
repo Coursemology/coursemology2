@@ -14,7 +14,7 @@ RSpec.describe Course::UsersController, type: :controller do
     end
 
     describe '#students' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject { get :students, as: :json, params: { course_id: course } }
 
       context 'when a course manager visits the page' do
@@ -34,7 +34,7 @@ RSpec.describe Course::UsersController, type: :controller do
     end
 
     describe '#staff' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject { get :staff, as: :json, params: { course_id: course } }
 
       context 'when a course manager visits the page' do
@@ -54,7 +54,7 @@ RSpec.describe Course::UsersController, type: :controller do
     end
 
     describe '#update' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject do
         put :update, as: :json, params: { course_id: course, id: course_user, course_user: updated_course_user }
       end
@@ -157,7 +157,7 @@ RSpec.describe Course::UsersController, type: :controller do
     end
 
     describe '#destroy' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject { delete :destroy, as: :json, params: { course_id: course, id: course_user_to_delete } }
 
       let!(:course_user_to_delete) { create(:course_user, course: course) }
@@ -191,7 +191,7 @@ RSpec.describe Course::UsersController, type: :controller do
     end
 
     describe '#upgrade_to_staff' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject do
         put :upgrade_to_staff, params: {
           course_id: course,

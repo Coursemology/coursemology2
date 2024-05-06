@@ -61,10 +61,8 @@ node_modules
 .node-version
 
 # Ignore env files
-/.env
-/.env.*
-/client/.env
-/client/.env.*
+.env
+.env.*
 
 # Ignore Playwright results
 test-results/

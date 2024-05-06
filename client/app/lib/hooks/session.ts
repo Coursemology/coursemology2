@@ -7,17 +7,10 @@ import { useAppDispatch, useAppSelector } from './store';
 
 const selectSessionStore = (state: AppState): SessionState => state.session;
 
-const selectAuthState = createSelector(
-  selectSessionStore,
-  (session) => session.authenticated,
-);
-
 const selectI18nConfig = createSelector(selectSessionStore, (session) => ({
   locale: session.locale,
   timeZone: session.timeZone,
 }));
-
-export const useAuthState = (): boolean => useAppSelector(selectAuthState);
 
 interface UseAuthenticatorHook {
   authenticate: () => void;
@@ -47,13 +40,6 @@ export const useAuthenticator = (): UseAuthenticatorHook => {
 
   return createAuthenticator(dispatch);
 };
-
-/**
- * Ideally, developers should seek to use `useAuthenticator` where possible. This
- * authenticator is only used for internal logic outside React, e.g., Axios requests,
- * React Router loaders, etc.
- */
-export const imperativeAuthenticator = createAuthenticator(imperativeDispatch);
 
 interface I18nConfig {
   locale: string;

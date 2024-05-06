@@ -11,7 +11,7 @@ RSpec.describe Course::LevelsController, type: :controller do
 
     describe '#create' do
       context 'when user is allowed to edit levels' do
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
 
         it 'is expected to create new levels' do
           post :create, params: { course_id: course.id, levels: [0, 100, 200, 400] }, format: :json
@@ -22,7 +22,7 @@ RSpec.describe Course::LevelsController, type: :controller do
       end
 
       context 'when user cannot change levels' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it 'is expected to deny access' do
           original_levels = course.levels.map(&:experience_points_threshold)

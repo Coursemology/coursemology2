@@ -25,6 +25,4 @@ export interface HomeLayoutData {
   timeZone: string | null;
   courses?: HomeLayoutCourseData[];
   user?: HomeLayoutUserData;
-  masqueradeUserName?: string;
-  stopMasqueradingUrl?: string;
 }

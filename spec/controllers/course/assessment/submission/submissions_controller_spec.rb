@@ -38,7 +38,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     end
     let(:answer) { graded_submission.answers.first }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       subject do

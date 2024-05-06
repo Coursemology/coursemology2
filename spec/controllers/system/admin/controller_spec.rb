@@ -14,13 +14,13 @@ RSpec.describe System::Admin::Controller, type: :controller do
 
   with_tenant(:instance) do
     it 'allows instance administrators to access the page' do
-      sign_in(create(:administrator))
+      controller_sign_in(controller, create(:administrator))
       get :index
       expect(response.status).to eq(200)
     end
 
     it 'does not allow users to access the page' do
-      sign_in(create(:user))
+      controller_sign_in(controller, create(:user))
       expect { get :index }.to raise_exception(CanCan::AccessDenied)
     end
   end

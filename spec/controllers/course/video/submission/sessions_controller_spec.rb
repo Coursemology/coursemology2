@@ -15,7 +15,7 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
                                                   session_end: Time.zone.now - 5.seconds)
     end
 
-    before { sign_in(student.user) }
+    before { controller_sign_in(controller, student.user) }
 
     describe 'POST #create' do
       subject do
@@ -30,7 +30,7 @@ RSpec.describe Course::Video::Submission::SessionsController, type: :controller 
 
       context "when student creates under another student's submission" do
         let(:other_student) { create(:course_student, course: course) }
-        before { sign_in(other_student.user) }
+        before { controller_sign_in(controller, other_student.user) }
 
         it 'denies access' do
           expect { subject }.to raise_error(CanCan::AccessDenied)

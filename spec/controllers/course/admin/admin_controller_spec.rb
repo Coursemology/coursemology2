@@ -5,7 +5,7 @@ RSpec.describe Course::Admin::AdminController do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       subject { get :index, as: :json, params: { course_id: course } }

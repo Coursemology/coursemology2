@@ -13,7 +13,7 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
       end
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       subject do
@@ -87,7 +87,7 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
     end
 
     describe '#approve' do
-      before { sign_in(admin) }
+      before { controller_sign_in(controller, admin) }
       let!(:request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
 
       subject do
@@ -118,7 +118,7 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
     end
 
     describe '#reject (without message)' do
-      before { sign_in(admin) }
+      before { controller_sign_in(controller, admin) }
       let!(:request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
 
       subject do
@@ -151,7 +151,7 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
     end
 
     describe '#reject (with message)' do
-      before { sign_in(admin) }
+      before { controller_sign_in(controller, admin) }
       let!(:request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
       let(:message) { 'Please provide reason for role request' }
 

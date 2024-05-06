@@ -24,7 +24,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
     end
 
     before do
-      sign_in(user)
+      controller_sign_in(controller, user)
       controller.instance_variable_set(:@programming_question, programming_question)
     end
 

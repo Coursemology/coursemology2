@@ -18,7 +18,6 @@ const bypassProxyIf = [
   (request) => request.url.startsWith('/uploads'),
   (request) => request.url.startsWith('/attachments'),
   (request) => request.url.startsWith('/oauth'),
-  (request) => request.url.startsWith('/assets/doorkeeper'),
 ];
 
 module.exports = merge(common, {

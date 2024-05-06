@@ -11,7 +11,7 @@ RSpec.describe User::ProfilesController, type: :controller do
       subject { get :edit, as: :json }
 
       context 'when user is signed in' do
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
 
         it { is_expected.to render_template(:edit) }
       end
@@ -22,7 +22,7 @@ RSpec.describe User::ProfilesController, type: :controller do
       subject { patch :update, as: :json, params: { user: { name: new_name } } }
 
       context 'when user is signed in' do
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
 
         it 'changes the user name' do
           subject

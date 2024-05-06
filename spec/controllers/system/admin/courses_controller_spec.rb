@@ -13,19 +13,19 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
       subject { get :index, as: :json }
 
       context 'when a system administrator visits the page' do
-        before { sign_in(admin) }
+        before { controller_sign_in(controller, admin) }
 
         it { is_expected.to render_template(:index) }
       end
 
       context 'when an instance administrator visits the page' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when a normal user visits the page' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -42,7 +42,7 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
       subject { delete :destroy, params: { id: course_to_delete } }
 
       context 'when the user is a system administrator' do
-        before { sign_in(admin) }
+        before { controller_sign_in(controller, admin) }
 
         it 'destroys the course' do
           subject
@@ -66,13 +66,13 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
       end
 
       context 'when the user is an instance administrator' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when the user is a normal user' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end

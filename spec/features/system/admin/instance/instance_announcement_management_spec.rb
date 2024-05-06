@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.feature 'System: Administration: Instance Announcements', js: true do
   subject { page }
 
-  let!(:instance) { create(:instance) }
+  let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:user) { create(:instance_administrator, instance: instance).user }

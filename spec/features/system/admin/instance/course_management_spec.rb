@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.feature 'System: Administration: Instance: Courses', js: true do
-  let(:instance) { create(:instance) }
+  let(:instance) { Instance.default }
 
   with_tenant(:instance) do
     let(:last_page) { Course.unscoped.page.total_pages }

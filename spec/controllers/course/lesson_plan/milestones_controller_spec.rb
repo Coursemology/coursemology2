@@ -15,7 +15,7 @@ RSpec.describe Course::LessonPlan::MilestonesController, type: :controller do
       stub
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       subject do

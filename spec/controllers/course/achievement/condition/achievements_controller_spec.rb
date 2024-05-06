@@ -8,7 +8,7 @@ RSpec.describe Course::Achievement::Condition::AchievementsController, type: :co
     let(:user) { create(:administrator) }
     let(:course) { create(:course) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#destroy' do
       let(:other_achievement) { create(:course_achievement, course: course) }

@@ -8,13 +8,13 @@ module AuthenticationPerformersTestHelpers
     # For some reasons, sometimes new scenarios are automatically logged in as the previous user.
     # Clearing cookies isn't enough and subsequent requests still carries over an old, authenticated
     # session cookie. We force the server to log out all remaining sessions before logging in.
-    warden_logout
+    # warden_logout
 
     visit new_user_session_path
 
-    fill_in 'Email address', with: user.email
+    fill_in 'Email', with: user.email
     fill_in 'Password', with: password_for(user)
-    click_button 'Sign in'
+    click_button 'Sign In'
 
     wait_for_page
   end
@@ -23,8 +23,8 @@ module AuthenticationPerformersTestHelpers
     # We expect all pages should have a user menu button.
     find('div[data-testid="user-menu-button"]').click
     find('li', text: 'Sign out').click
+    click_button 'Logout'
 
-    super
     wait_for_page
   end
 

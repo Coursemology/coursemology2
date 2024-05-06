@@ -9,6 +9,8 @@ import PopupMenu from 'lib/components/core/PopupMenu';
 import { useAppContext } from 'lib/containers/AppContainer';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { useAuthAdapter } from '../wrappers/AuthProvider';
+
 import AdminPopupMenuList from './AdminPopupMenuList';
 import CourseSwitcherPopupMenu from './CourseSwitcherPopupMenu';
 import UserPopupMenuList from './UserPopupMenuList';
@@ -54,16 +56,17 @@ const Brand = (): JSX.Element => {
 
 const UserMenuButton = (): JSX.Element | null => {
   const { user } = useAppContext();
+  const auth = useAuthAdapter();
 
   const { t } = useTranslation();
 
   const [anchorElement, setAnchorElement] = useState<HTMLElement>();
 
-  if (!user)
+  if (!auth.isAuthenticated || !user)
     return (
-      <Link to="/users/sign_in">
-        <Button variant="contained">{t(translations.signIn)}</Button>
-      </Link>
+      <Button onClick={() => auth.signinRedirect()} variant="contained">
+        {t(translations.signIn)}
+      </Button>
     );
 
   return (

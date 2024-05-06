@@ -17,7 +17,7 @@ RSpec.describe Course::Controller, type: :controller do
     let(:admin) { create(:administrator) }
     let(:user) { admin }
     let(:course) { create(:course, :published) }
-    before { sign_in(user) if user }
+    before { controller_sign_in(controller, user) if user }
 
     describe '#current_course' do
       it 'returns the current course' do

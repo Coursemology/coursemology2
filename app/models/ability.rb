@@ -12,14 +12,14 @@ class Ability
   # @param [InstanceUser|nil] user The current instance user. This can be nil if the no user is logged in.
   # @param [Course|nil] course The current course. This can be nil if not inside a course.
   # @param [CourseUser|nil] course_user The current course_user. This can be nil if not inside a course
-  # @param [ActionDispatch::Request::Session] session The browser session
+  # @param [string|nil] session_id The session_id of the current user.
   # or user is not part of the course
-  def initialize(user, course = nil, course_user = nil, instance_user = nil, session = nil)
+  def initialize(user, course = nil, course_user = nil, instance_user = nil, session_id = nil)
     @user = user
     @instance_user = instance_user
     @course = course
     @course_user = course_user
-    @session = session
+    @session_id = session_id
     can :manage, :all if user&.administrator?
 
     define_permissions

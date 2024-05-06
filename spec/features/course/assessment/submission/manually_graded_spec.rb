@@ -180,7 +180,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        expect(page).to have_css('#missing-answer', text: /There is no answer submitted */)
+        expect(page).to have_selector('div', text: /There is no answer submitted for this question */)
 
         first('input.grade').set(0)
         click_button 'Publish Grade'
