@@ -101,6 +101,7 @@ export interface CourseLayoutData {
   courseUserName?: string;
   courseUserRole?: CourseUserRoles;
   userAvatarUrl?: string;
+  homeRedirectsToLearn?: boolean;
   sidebar?: SidebarItemData[];
   adminSidebar?: SidebarItemData[];
   manageEmailSubscriptionUrl?: string;

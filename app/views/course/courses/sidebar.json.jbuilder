@@ -19,6 +19,8 @@ if current_course_user.present? && can?(:read, current_course)
       json.partial! 'course_user_progress', course_user: current_course_user
     end
   end
+
+  json.homeRedirectsToLearn @home_redirects_to_learn
 end
 
 if can?(:read, current_course)

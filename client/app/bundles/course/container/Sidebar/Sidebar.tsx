@@ -47,7 +47,13 @@ const Sidebar = forwardRef<ComponentRef<typeof SidebarContainer>, SidebarProps>(
         <section className="h-full space-y-4 overflow-y-scroll px-3 py-4">
           {data.sidebar && (
             <div>
-              <SidebarItem.Home to={data.courseUrl} />
+              <SidebarItem.Home
+                to={
+                  data.homeRedirectsToLearn
+                    ? `${data.courseUrl}/home`
+                    : data.courseUrl
+                }
+              />
 
               {data.sidebar.map((item) => (
                 <SidebarItem key={item.key} activePath={activePath} of={item} />
