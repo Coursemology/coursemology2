@@ -77,8 +77,6 @@ group :development do
   # bundle exec yardoc generates the API under doc/.
   # Use yard stats --list-undoc to find what needs documenting.
   gem 'yard', group: :doc
-
-  gem 'dotenv-rails'
 end
 
 group :test do
@@ -121,6 +119,8 @@ group :development, :test do
   # Code Coverage reporters
   gem 'simplecov'
   gem 'codecov', require: false
+
+  gem 'dotenv-rails'
 end
 
 group :ci do
@@ -167,14 +167,12 @@ gem 'http_accept_language'
 
 # User authentication
 gem 'devise', '4.9.4'
-gem 'devise_masquerade'
 gem 'devise-multi_email'
+gem 'keycloak'
+gem 'jwt'
 
 # Use cancancan for authorization
 gem 'cancancan'
-
-# OAuth2 provider
-gem 'doorkeeper'
 
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.

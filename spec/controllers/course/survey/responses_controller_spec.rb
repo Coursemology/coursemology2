@@ -27,7 +27,7 @@ RSpec.describe Course::Survey::ResponsesController do
     let(:response_traits) { nil }
     let(:json_response) { JSON.parse(response.body) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       let(:user) { create(:administrator) }

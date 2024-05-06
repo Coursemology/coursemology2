@@ -12,31 +12,31 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
       context 'when a Normal User visits the page' do
         let(:user) { create(:user) }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when a Course Student visits the page' do
         let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when a Course Teaching Assistant visits the page' do
         let(:user) { create(:course_teaching_assistant, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it { expect(subject).to be_successful }
       end
 
       context 'when a Course Manager visits the page' do
         let(:user) { create(:course_manager, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it { expect(subject).to be_successful }
       end
 
       context 'when a Course Observer visits the page' do
         let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
     end
@@ -60,7 +60,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
       context 'when a Normal User creates a personal time' do
         before { assessment.personal_times.reload.delete_all }
         let(:user) { create(:user) }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is unsuccessful' do
           expect { subject }.to raise_exception(CanCan::AccessDenied)
           expect(assessment.personal_times.reload.count).to eq(0)
@@ -70,7 +70,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
       context 'when a Course Student creates a personal time' do
         before { assessment.personal_times.reload.delete_all }
         let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is unsuccessful' do
           expect { subject }.to raise_exception(CanCan::AccessDenied)
           expect(assessment.personal_times.reload.count).to eq(0)
@@ -80,7 +80,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
       context 'when a Course Teaching Assistant creates a personal time' do
         before { assessment.personal_times.reload.delete_all }
         let(:user) { create(:course_teaching_assistant, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is successfully created' do
           subject
           expect(subject).to have_http_status(:ok)
@@ -91,7 +91,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
       context 'when a Course Manager creates a personal time' do
         before { assessment.personal_times.reload.delete_all }
         let(:user) { create(:course_manager, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is successfully created' do
           subject
           expect(subject).to have_http_status(:ok)
@@ -102,7 +102,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
       context 'when a Course Observer creates a personal time' do
         before { assessment.personal_times.reload.delete_all }
         let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is unsuccessful' do
           expect { subject }.to raise_exception(CanCan::AccessDenied)
           expect(assessment.personal_times.reload.count).to eq(0)
@@ -127,7 +127,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
       context 'when a Normal User destroys a personal time' do
         let(:user) { create(:user) }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is unsuccessful' do
           expect { subject }.to raise_exception(CanCan::AccessDenied)
           expect(assessment.personal_times.reload.count).to eq(1)
@@ -136,7 +136,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
       context 'when a Course Student destroys a personal time' do
         let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is unsuccessful' do
           expect { subject }.to raise_exception(CanCan::AccessDenied)
           expect(assessment.personal_times.reload.count).to eq(1)
@@ -145,7 +145,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
       context 'when a Course Teaching Assistant destroys a personal time' do
         let(:user) { create(:course_teaching_assistant, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is successfully destroyed' do
           subject
           expect(subject).to have_http_status(:ok)
@@ -155,7 +155,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
       context 'when a Course Manager destroys a personal time' do
         let(:user) { create(:course_manager, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is successfully destroyed' do
           subject
           expect(subject).to have_http_status(:ok)
@@ -165,7 +165,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
       context 'when a Course Observer destroys a personal time' do
         let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is unsuccessful' do
           expect { subject }.to raise_exception(CanCan::AccessDenied)
           expect(assessment.personal_times.reload.count).to eq(1)
@@ -180,7 +180,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
       context 'when a normal user recomputes a personal timeline' do
         let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is unsuccessful' do
           expect { subject }.to raise_exception(CanCan::AccessDenied)
         end
@@ -188,7 +188,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
       context 'when a course admin recomputes a personal timeline' do
         let(:user) { create(:course_teaching_assistant, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it 'is successful' do
           subject
           expect(subject).to have_http_status(:ok)

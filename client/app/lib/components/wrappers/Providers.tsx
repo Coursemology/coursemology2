@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import AttributionsProvider from './AttributionsProvider';
+import AuthProvider from './AuthProvider';
 import ErrorBoundary from './ErrorBoundary';
 import FooterProvider from './FooterProvider';
 import I18nProvider from './I18nProvider';
@@ -20,9 +21,11 @@ const Providers = (props: ProvidersProps): JSX.Element => (
         <I18nProvider>
           <ThemeProvider>
             <ToastProvider>
-              <AttributionsProvider>
-                <FooterProvider>{props.children}</FooterProvider>
-              </AttributionsProvider>
+              <AuthProvider>
+                <AttributionsProvider>
+                  <FooterProvider>{props.children}</FooterProvider>
+                </AttributionsProvider>
+              </AuthProvider>
             </ToastProvider>
           </ThemeProvider>
         </I18nProvider>

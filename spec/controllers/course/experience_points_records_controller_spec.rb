@@ -18,7 +18,7 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
       stub
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#update' do
       subject do

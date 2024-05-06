@@ -15,7 +15,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
       stub
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#destroy' do
       subject { delete :destroy, params: { course_id: course, id: folder_stub } }

@@ -18,7 +18,7 @@ RSpec.describe Course::Assessment::Submission::Answer::ForumPostResponse::PostsC
     end
 
     before do
-      sign_in(user)
+      controller_sign_in(controller, user)
     end
 
     describe '#selected' do

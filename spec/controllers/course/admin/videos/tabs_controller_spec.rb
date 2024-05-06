@@ -13,7 +13,7 @@ RSpec.describe Course::Admin::Videos::TabsController, type: :controller do
       stub
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       subject { post :create, params: { course_id: course } }

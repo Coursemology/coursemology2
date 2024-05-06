@@ -65,7 +65,7 @@ RSpec.describe Course::ControllerComponentHost, type: :controller do
   let!(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
     let(:course) { create(:course, instance: instance) }
     before { controller.instance_variable_set(:@course, course) }
 

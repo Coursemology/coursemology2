@@ -25,7 +25,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
     end
 
     describe '#create' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       let(:invite_params) do
         invitation = { name: generate(:name), email: generate(:email) }
         invitations = { generate(:nested_attribute_new_id) => invitation }
@@ -101,7 +101,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
 
     describe '#aggregate_errors' do
       let!(:course_lecturer) { create(:course_manager, course: course, user: user) }
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
 
       subject { post :create, params: { course_id: course, course: invite_params } }
 
@@ -121,7 +121,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
     describe '#resend_invitation' do
       before do
         create(:course_manager, course: course, user: user)
-        sign_in(user)
+        controller_sign_in(controller, user)
       end
       let!(:invitation) { create(:course_user_invitation, course: course) }
       subject do
@@ -145,7 +145,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
     describe '#resend_invitations' do
       before do
         create(:course_manager, course: course, user: user)
-        sign_in(user)
+        controller_sign_in(controller, user)
       end
       let!(:pending_invitations) { create_list(:course_user_invitation, 3, course: course) }
       subject { post :resend_invitations, params: { course_id: course }, format: :json }
@@ -158,7 +158,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
     end
 
     describe '#toggle_registration' do
-      before { sign_in(user) }
+      before { controller_sign_in(controller, user) }
       subject do
         post :toggle_registration, as: :json, params: { course_id: course, course: { registration_key: param } }
       end

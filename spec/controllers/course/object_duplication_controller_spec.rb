@@ -19,7 +19,7 @@ RSpec.describe Course::ObjectDuplicationsController do
     let(:user) { admin }
     let(:instance_admin_user) { create(:instance_administrator).user }
     let(:instance_admin_course_user) { create(:course_manager, user: instance_admin_user, course: course).user }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#new' do
       render_views
@@ -28,7 +28,7 @@ RSpec.describe Course::ObjectDuplicationsController do
 
       context 'when admin fetches the possible destination courses and instances' do
         before do
-          sign_in(user)
+          controller_sign_in(controller, user)
           subject
         end
 
@@ -45,7 +45,7 @@ RSpec.describe Course::ObjectDuplicationsController do
 
       context 'when instance admin fetches the possible destination courses and instances' do
         before do
-          sign_in(instance_admin_course_user)
+          controller_sign_in(controller, instance_admin_course_user)
           subject
         end
 

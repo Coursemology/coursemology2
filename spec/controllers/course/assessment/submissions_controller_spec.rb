@@ -9,7 +9,7 @@ RSpec.describe Course::Assessment::SubmissionsController do
     let!(:course) { create(:course, creator: user) }
     let(:categories) { create_list(:course_assessment_category, 2, course: course) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       context 'when no category is specified' do

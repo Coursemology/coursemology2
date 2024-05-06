@@ -46,7 +46,7 @@ const ResendConfirmationEmailPage = (): JSX.Element => {
 
       if (error instanceof AxiosError) {
         setErrorMessage(error.response?.data?.errors?.email);
-        toast.error(t(translations.errorRequestingResetPassword));
+        toast.error(t(translations.errorResendConfirmationEmail));
         return;
       }
 

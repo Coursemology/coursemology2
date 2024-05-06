@@ -16,7 +16,7 @@ RSpec.describe Course::Assessment::Question::VoiceResponsesController, type: :co
     end
 
     before do
-      sign_in(user)
+      controller_sign_in(controller, user)
       return unless voice_response
 
       controller.instance_variable_set(:@voice_response_question, voice_response)

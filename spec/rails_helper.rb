@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 # This file is copied to spec/ when you run 'rails generate rspec:install'
+
+# Env variables for rspec
 ENV['RAILS_ENV'] ||= 'test'
+ENV['KEYCLOAK_AUTH_SERVER_URL'] ||= 'http://localhost:8443/'
+ENV['KEYCLOAK_AUTH_JWKS_URL'] ||= 'http://localhost:8443/realms/coursemology_test/protocol/openid-connect/certs'
+ENV['KEYCLOAK_AUTH_INSTROPECTION_URL'] ||= 'http://localhost:8443/realms/coursemology_test/protocol/openid-connect/token/introspect'
+ENV['KEYCLOAK_ISS'] ||= 'http://localhost:8443/realms/coursemology_test'
+ENV['KEYCLOAK_AUD'] ||= 'account'
+ENV['KEYCLOAK_REALM'] ||= 'coursemology_test'
 
 require 'spec_helper'
 require 'rspec/rails'

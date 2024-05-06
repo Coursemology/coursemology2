@@ -13,7 +13,7 @@ RSpec.describe Course::UserNotificationsController, type: :controller do
       render_views
       let(:admin) { create(:administrator) }
 
-      before { sign_in(user) if user }
+      before { controller_sign_in(controller, user) if user }
       subject do
         get :fetch, params: { course_id: course.id }, format: :json
         json_response
@@ -88,7 +88,7 @@ RSpec.describe Course::UserNotificationsController, type: :controller do
                format: :json
         end
         before do
-          sign_in(user)
+          controller_sign_in(controller, user)
           subject
         end
 

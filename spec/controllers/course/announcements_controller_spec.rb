@@ -14,7 +14,7 @@ RSpec.describe Course::AnnouncementsController, type: :controller do
       stub
     end
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#index' do
       context 'when announcements component is disabled' do

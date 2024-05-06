@@ -6,6 +6,7 @@ import iconSimple from 'assets/images/home/icon-simple.png?url';
 
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
+import { useAuthAdapter } from 'lib/components/wrappers/AuthProvider';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
@@ -80,6 +81,7 @@ const keyFeatures = {
 
 const LandingPage = (): JSX.Element => {
   const { t } = useTranslation();
+  const auth = useAuthAdapter();
 
   return (
     <Page unpadded>
@@ -100,11 +102,14 @@ const LandingPage = (): JSX.Element => {
           {t(translations.subtitle)}
         </Typography>
 
-        <Link to="/users/sign_in">
-          <Button color="info" size="large" variant="contained">
-            {t(translations.signInToCoursemology)}
-          </Button>
-        </Link>
+        <Button
+          color="info"
+          onClick={() => auth.signinRedirect()}
+          size="large"
+          variant="contained"
+        >
+          {t(translations.signInToCoursemology)}
+        </Button>
 
         <Typography className="mt-12" color="text.white" variant="body1">
           {t(translations.newToCoursemology)}

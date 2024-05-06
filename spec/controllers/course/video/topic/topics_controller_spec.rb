@@ -9,7 +9,7 @@ RSpec.describe Course::Video::TopicsController do
     let!(:course) { create(:course, creator: user) }
     let(:video) { create(:video, :published, course: course) }
 
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       let(:topic_id) { nil }

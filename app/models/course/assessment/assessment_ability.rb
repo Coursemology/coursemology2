@@ -49,7 +49,7 @@ module Course::Assessment::AssessmentAbility
   def allow_access_assessment
     can :access, Course::Assessment do |assessment|
       if assessment.view_password_protected?
-        Course::Assessment::AuthenticationService.new(assessment, session).authenticated? ||
+        Course::Assessment::AuthenticationService.new(assessment, @session_id).authenticated? ||
           assessment.submissions.by_user(user).count > 0
       else
         true

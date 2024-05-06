@@ -8,7 +8,7 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
     let!(:user) { submission_question.submission.creator }
     let(:assessment) { submission_question.submission.assessment }
     let(:course) { assessment.course }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create' do
       let(:workflow_state) { 'published' }

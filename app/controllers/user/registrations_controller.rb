@@ -107,4 +107,10 @@ class User::RegistrationsController < Devise::RegistrationsController
   def invitation_param
     params.permit(:invitation)[:invitation]
   end
+
+  def authenticate_scope!
+    raise AuthenticationError unless current_user
+
+    self.resource = send(:"current_#{resource_name}")
+  end
 end

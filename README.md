@@ -16,13 +16,13 @@ Coursemology is an open source gamified learning platform that enables educators
 ### System Requirements
 
 1. Ruby (= 3.0.6)
-1. Ruby on Rails (= 6.0.6.1)
-1. PostgreSQL (>= 9.5)
-1. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick) - if PDF processing doesn't work for the import of scribing questions, download Ghostscript)
-1. Node.js (v18 LTS)
-1. Yarn
-1. Redis
-1. Docker
+2. Ruby on Rails (= 6.0.6.1)
+3. PostgreSQL (>= 9.5)
+4. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick) - if PDF processing doesn't work for the import of scribing questions, download Ghostscript)
+5. Node.js (v18 LTS)
+6. Yarn
+7. Installed docker
+8. Redis
 
 Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some front-end components use [React.js](https://facebook.github.io/react/). This [guide](https://gorails.com/setup/) written by the awesome people at GoRails should help you to get started on Ruby on Rails (however, be careful about the Rails version that you are going to install here. Please refer to the system requirements for the version of Rails you need to have for your system)
 
@@ -59,32 +59,33 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    $ bundle exec rake db:setup
    ```
 
-6. Bind the IP address `127.0.0.1` to `lvh.me` by running the following command
-   ```
-   host lvh.me
-   ```
-
 7. Initialize .env files for Frontend and Backend
    ```sh
    $ cp env .env; cp client/env client/.env
    ```
    You may need to add specific API keys (such as the [GOOGLE_RECAPTCHA_SITE_KEY](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do)) to the .env files for testing specific features.
 
-8. Open up 2 different terminals, each to run the Frontend and Backend. On the terminal for Frontend, run
+8. Open up 3 different terminals. On the terminal for Frontend in the `client` directory, run
 
    ```
    yarn build:development
    ```
 
-   and on the terminal for Backend, run
+   , on the terminal for authentication service in the `authentication` directory, run
 
    ```
-   bundle exec rails s -p 5000
+   docker compose up
    ```
 
-9. Access the App by visiting `http://lvh.me:8080`
+   , and on the terminal for Backend, run
 
-10. You're all set! Simply login with the default username and password:
+   ```
+   bundle exec rails s
+   ```
+
+7. Access the App by visiting `http://localhost:8080`
+
+8. You're all set! Simply login with the default username and password:
 
 > Email: `test@example.org`
 >

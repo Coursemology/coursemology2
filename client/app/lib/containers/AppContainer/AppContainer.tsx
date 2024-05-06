@@ -4,7 +4,6 @@ import NotificationPopup from 'lib/containers/NotificationPopup';
 
 import { loader, useAppLoader } from './AppLoader';
 import GlobalAnnouncements from './GlobalAnnouncements';
-import MasqueradeBanner from './MasqueradeBanner';
 import ServerUnreachableBanner from './ServerUnreachableBanner';
 
 const AppContainer = (): JSX.Element => {
@@ -14,13 +13,6 @@ const AppContainer = (): JSX.Element => {
   return (
     <div className="flex h-screen flex-col">
       {data.serverErroring && <ServerUnreachableBanner />}
-
-      {homeData.stopMasqueradingUrl && homeData.masqueradeUserName && (
-        <MasqueradeBanner
-          as={homeData.masqueradeUserName}
-          stopMasqueradingUrl={homeData.stopMasqueradingUrl}
-        />
-      )}
 
       {Boolean(data.announcements?.length) && (
         <GlobalAnnouncements in={data.announcements!} />

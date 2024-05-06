@@ -9,7 +9,7 @@ module ApplicationInstanceUserConcern
   def current_instance_user
     return nil unless current_user
 
-    @current_instance_user ||= current_tenant.instance_users.find_by(user: current_user)
+    @current_instance_user ||= current_tenant.instance_users.find_or_create_by(user: current_user)
   end
 
   private

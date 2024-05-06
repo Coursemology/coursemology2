@@ -12,13 +12,13 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
       subject { get :index, as: :json }
 
       context 'when an instance administrator visits the page' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it { is_expected.to render_template(:index) }
       end
 
       context 'when a normal user visits the page' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -32,7 +32,7 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
       end
 
       context 'when the user is an instance administrator' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it 'updates the Instance User' do
           expect { subject }.to change { instance_user.reload.role }.to('administrator')
@@ -44,7 +44,7 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
       end
 
       context 'when the user is a normal user' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
@@ -61,7 +61,7 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
       subject { delete :destroy, params: { id: instance_user } }
 
       context 'when the user is an instance administrator' do
-        before { sign_in(instance_admin) }
+        before { controller_sign_in(controller, instance_admin) }
 
         it 'destroys the user' do
           subject
@@ -85,7 +85,7 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
       end
 
       context 'when the user is a normal user' do
-        before { sign_in(normal_user) }
+        before { controller_sign_in(controller, normal_user) }
 
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end

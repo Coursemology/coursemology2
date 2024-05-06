@@ -6473,29 +6473,11 @@
   "lib.components.core.Note.noteHeader": {
     "defaultMessage": "提示"
   },
-  "lib.components.core.banners.MasqueradeBanner.errorStoppingMasquerade": {
-    "defaultMessage": "回到自己视角时发生错误，请稍后再试。"
-  },
-  "lib.components.core.banners.MasqueradeBanner.masquerading": {
-    "defaultMessage": "以 <strong>{as}</strong> 的视角浏览"
-  },
-  "lib.components.core.banners.MasqueradeBanner.stopMasquerading": {
-    "defaultMessage": "回到自己的视角"
-  },
   "lib.components.core.banners.ServerUnreachableBanner.refreshPage": {
     "defaultMessage": "刷新页面"
   },
   "lib.components.core.banners.ServerUnreachableBanner.serverIsUnreachable": {
     "defaultMessage": "服务器无法访问，某些操作可能无法生效。"
-  },
-  "lib.components.core.buttons.MasqueradeButton.errorMasquerading": {
-    "defaultMessage": "切换视角时发生错误。稍后再试。"
-  },
-  "lib.components.core.buttons.MasqueradeButton.masqueradeDisabledTooltip": {
-    "defaultMessage": "用户未确认注册邮件"
-  },
-  "lib.components.core.buttons.MasqueradeButton.masqueradeTooltip": {
-    "defaultMessage": "伪装为该用户"
   },
   "lib.components.core.fields.DateTimePicker.invalidDate": {
     "defaultMessage": "无效日期"

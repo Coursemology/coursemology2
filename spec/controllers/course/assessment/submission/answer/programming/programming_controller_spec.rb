@@ -12,7 +12,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
     let(:submission2) { create(:submission, :attempting, assessment: assessment, creator: user) }
     let(:answer) { submission.answers.first }
     let(:answer2) { submission2.answers.first }
-    before { sign_in(user) }
+    before { controller_sign_in(controller, user) }
 
     describe '#create_programming_files' do
       let(:existing_file_attribute) { { id: answer.specific.files.first.id, content: 'code' } }

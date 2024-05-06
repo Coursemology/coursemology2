@@ -38,19 +38,19 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
 
       context 'when the Normal User get the main statistics data' do
         let(:user) { create(:user) }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when the Course Student get the main statistics data' do
         let(:user) { create(:course_student, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
       context 'when the Course Manager get the main statistics data' do
         let(:user) { create(:course_manager, course: course).user }
-        before { sign_in(user) }
+        before { controller_sign_in(controller, user) }
 
         it 'returns OK with right number of submissions and ancestor being displayed' do
           expect(subject).to have_http_status(:success)
@@ -81,7 +81,7 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
 
       context 'when the administrator get the main statistics data' do
         let(:administrator) { create(:administrator) }
-        before { sign_in(administrator) }
+        before { controller_sign_in(controller, administrator) }
 
         it 'returns OK with right information and 2 ancestors (both current and its predecassors)' do
           expect(subject).to have_http_status(:success)
@@ -135,7 +135,7 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
 
       context 'when the course manager of the original course wants to get statistics' do
         let(:course_manager) { create(:course_manager, course: original_course) }
-        before { sign_in(course_manager.user) }
+        before { controller_sign_in(controller, course_manager.user) }
 
         it 'gives only the information regarding current destination as no authorization for parent course' do
           expect(subject).to have_http_status(:success)
@@ -148,7 +148,7 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
 
       context 'when the course manager of the current course wants to get statistics' do
         let(:course_manager) { create(:course_manager, course: course) }
-        before { sign_in(course_manager.user) }
+        before { controller_sign_in(controller, course_manager.user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
     end

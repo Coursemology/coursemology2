@@ -44,6 +44,8 @@ class Instance < ApplicationRecord
     end
   end
 
+  after_commit :push_redirect_uris_to_keycloak
+
   validates :host, hostname: true, if: :should_validate_host?
   validates :name, length: { maximum: 255 }, presence: true
   validates :host, length: { maximum: 255 }, presence: true, uniqueness: { case_sensitive: false, if: :host_changed? }
@@ -137,6 +139,31 @@ class Instance < ApplicationRecord
   end
 
   private
+
+  def push_redirect_uris_to_keycloak
+    return if ENV['RAILS_ENV'] == 'test'
+
+    client_id = ENV.fetch('KEYCLOAK_BE_CLIENT_ID', nil)
+    client_secret = ENV.fetch('KEYCLOAK_BE_CLIENT_SECRET', nil)
+    credentials = Keycloak::Client.get_token_by_client_credentials(client_id, client_secret)
+    access_token = JSON.parse(credentials)['access_token']
+    service = "clients/#{ENV.fetch('KEYCLOAK_FE_CLIENT_UUID', nil)}"
+
+    hosts = Instance.all.pluck(:host)
+    redirect_uris = hosts.map { |h| convert_host_to_redirect_uri(h) }
+    Keycloak::Admin.generic_put(service, nil, { redirectUris: redirect_uris }, access_token)
+  end
+
+  def convert_host_to_redirect_uri(host)
+    default_host = (ENV['RAILS_ENV'] == 'development') ? 'localhost:8080' : ENV.fetch('RAILS_HOSTNAME', nil)
+
+    host = if host == '*'
+             default_host
+           else
+             host.gsub('coursemology.org', default_host)
+           end
+    (ENV['RACK_ENV'] == 'development') ? "http://#{host}/*" : "https://#{host}/*"
+  end
 
   def should_validate_host?
     new_record? || changed_attributes.keys.include?('host')

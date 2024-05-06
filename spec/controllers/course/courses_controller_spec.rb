@@ -32,7 +32,7 @@ RSpec.describe Course::CoursesController, type: :controller do
         let(:user) { create(:administrator) }
 
         it 'allows access' do
-          sign_in(user)
+          controller_sign_in(controller, user)
           get :index, as: :json
           expect(response).to be_successful
         end

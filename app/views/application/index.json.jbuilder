@@ -26,9 +26,4 @@ if user_signed_in?
     json.instanceRole controller.current_instance_user&.role
     json.canCreateNewCourse can?(:create, Course.new)
   end
-
-  if user_masquerade?
-    json.masqueradeUserName current_user.name
-    json.stopMasqueradingUrl back_masquerade_path(current_user)
-  end
 end

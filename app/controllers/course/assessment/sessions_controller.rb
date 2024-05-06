@@ -46,11 +46,11 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
 
   def authentication_service
     @authentication_service ||=
-      Course::Assessment::SessionAuthenticationService.new(@assessment, session, @submission)
+      Course::Assessment::SessionAuthenticationService.new(@assessment, current_session_id, @submission)
   end
 
   def log_service
     @log_service ||=
-      Course::Assessment::SessionLogService.new(@assessment, session, @submission)
+      Course::Assessment::SessionLogService.new(@assessment, current_session_id, @submission)
   end
 end
