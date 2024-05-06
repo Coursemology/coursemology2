@@ -122,6 +122,7 @@ import StatisticsIndex from 'course/statistics/pages/StatisticsIndex';
 import CourseStatistics from 'course/statistics/pages/StatisticsIndex/course/CourseStatistics';
 import StaffStatistics from 'course/statistics/pages/StatisticsIndex/staff/StaffStatistics';
 import StudentsStatistics from 'course/statistics/pages/StatisticsIndex/students/StudentsStatistics';
+import LearnPage from 'course/stories/pages/LearnPage';
 import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
 import {
   courseUserHandle,
@@ -150,6 +151,11 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         {
           index: true,
           element: <CourseShow />,
+        },
+        {
+          path: 'learn',
+          handle: LearnPage.handle,
+          element: <LearnPage />,
         },
         {
           path: 'timelines',
