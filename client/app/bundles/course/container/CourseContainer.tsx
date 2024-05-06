@@ -43,10 +43,7 @@ const CourseContainer = (): JSX.Element => {
         onChangeVisibility={setSidebarOpen}
       />
 
-      <div
-        ref={ref}
-        className="flex min-h-full w-full flex-col overflow-scroll"
-      >
+      <div ref={ref} className="flex min-h-full w-full flex-col overflow-auto">
         <div className="flex h-[4rem] w-full items-center">
           {!sidebarOpen && (
             <IconButton onClick={(): void => sidebarRef.current?.show()}>
