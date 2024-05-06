@@ -3,6 +3,8 @@ class Cikgo::Service
   class << self
     private
 
+    CIKGO_OAUTH_APPLICATION_NAME = 'Cikgo'
+
     def connection(method, path, options = {})
       connection = Excon.new(
         "#{ENV.fetch('CIKGO_ENDPOINT')}/#{path}",

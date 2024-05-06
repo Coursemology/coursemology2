@@ -482,6 +482,10 @@ Rails.application.routes.draw do
       resources :reference_timelines, path: 'timelines', except: [:new, :edit, :show] do
         resources :reference_times, path: 'times', only: [:create, :update, :destroy]
       end
+
+      scope module: :stories do
+        get 'learn', to: 'stories#learn'
+      end
     end
   end
 
