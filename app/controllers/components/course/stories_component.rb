@@ -19,6 +19,7 @@ class Course::StoriesComponent < SimpleDelegator
 
   def main_sidebar_items
     return [] unless
+      current_course_user.present? &&
       current_component_host[:course_stories_component] &&
       current_course.settings(:course_stories_component).push_key.present?
 

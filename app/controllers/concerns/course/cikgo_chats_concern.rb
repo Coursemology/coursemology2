@@ -3,6 +3,8 @@ module Course::CikgoChatsConcern
   extend ActiveSupport::Concern
 
   def find_or_create_room(course_user)
+    return unless course_user.present?
+
     user = course_user.user
     create_cikgo_user(user) if user.cikgo_user.nil?
     Cikgo::ChatsService.find_or_create_room(course_user)
