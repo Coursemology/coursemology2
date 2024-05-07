@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_group, class: Course::Group.name do
+  factory :course_group, class: 'Course::Group' do
     transient do
       course { build(:course) }
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_lesson_plan_milestone, class: Course::LessonPlan::Milestone.name,
+  factory :course_lesson_plan_milestone, class: 'Course::LessonPlan::Milestone',
                                          parent: :course_lesson_plan_item do
     sequence(:title) { |n| "Example Milestone #{n}" }
     description { 'Coolest description.' }

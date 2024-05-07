@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_monitoring_monitor, class: Course::Monitoring::Monitor.name do
+  factory :course_monitoring_monitor, class: 'Course::Monitoring::Monitor' do
     association :assessment, :view_password
 
     enabled { true }

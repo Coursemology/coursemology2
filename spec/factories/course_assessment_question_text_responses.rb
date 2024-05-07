@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :course_assessment_question_text_response,
-          class: Course::Assessment::Question::TextResponse,
+          class: 'Course::Assessment::Question::TextResponse',
           parent: :course_assessment_question do
     max_attachments { 0 }
     max_attachment_size { 1024 }

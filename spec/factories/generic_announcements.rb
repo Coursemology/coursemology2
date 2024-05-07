@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :generic_announcement, class: System::Announcement.name do
+  factory :generic_announcement, class: 'System::Announcement' do
     sequence(:title) { |n| "Announcement #{n}" }
     sequence(:content) { |n| "Content #{n}" }
 

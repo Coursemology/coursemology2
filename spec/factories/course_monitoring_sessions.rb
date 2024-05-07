@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_monitoring_session, class: Course::Monitoring::Session.name do
+  factory :course_monitoring_session, class: 'Course::Monitoring::Session' do
     monitor factory: :course_monitoring_monitor
 
     status { :listening }

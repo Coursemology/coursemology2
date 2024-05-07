@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_user_achievement, class: Course::UserAchievement.name do
+  factory :course_user_achievement, class: 'Course::UserAchievement' do
     transient do
       course { create(:course) }
     end

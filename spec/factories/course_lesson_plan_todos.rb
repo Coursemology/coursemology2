@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_lesson_plan_todo, class: Course::LessonPlan::Todo.name, aliases: [:todo] do
+  factory :course_lesson_plan_todo, class: 'Course::LessonPlan::Todo', aliases: [:todo] do
     transient do
       course { create(:course) }
       published { false }

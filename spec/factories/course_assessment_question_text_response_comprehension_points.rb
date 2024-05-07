@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :course_assessment_question_text_response_comprehension_point,
-          class: Course::Assessment::Question::TextResponseComprehensionPoint do
+          class: 'Course::Assessment::Question::TextResponseComprehensionPoint' do
     group { build(:course_assessment_question_text_response_comprehension_group) }
     point_grade { 2 }
 

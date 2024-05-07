@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_reference_timeline, class: Course::ReferenceTimeline.name do
+  factory :course_reference_timeline, class: 'Course::ReferenceTimeline' do
     course
     default { false }
     sequence(:title) { |n| "Timeline #{n}" }

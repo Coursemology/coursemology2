@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   sequence(:course_survey_question_option_text) { |n| "Option #{n}" }
-  factory :course_survey_question_option, class: Course::Survey::QuestionOption.name do
+  factory :course_survey_question_option, class: 'Course::Survey::QuestionOption' do
     transient do
       last_weight { question.options.maximum(:weight) }
     end

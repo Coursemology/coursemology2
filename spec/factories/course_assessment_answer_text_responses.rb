@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :course_assessment_answer_text_response,
-          class: Course::Assessment::Answer::TextResponse,
+          class: 'Course::Assessment::Answer::TextResponse',
           parent: :course_assessment_answer do
     transient do
       question_traits { nil }

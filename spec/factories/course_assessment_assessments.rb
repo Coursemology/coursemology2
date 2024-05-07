@@ -2,7 +2,7 @@
 FactoryBot.define do
   sequence(:course_assessment_assessment_name) { |n| "Assessment #{n}" }
   sequence(:course_assessment_assessment_description) { |n| "Awesome description #{n}" }
-  factory :course_assessment_assessment, class: Course::Assessment, aliases: [:assessment],
+  factory :course_assessment_assessment, class: 'Course::Assessment', aliases: [:assessment],
                                          parent: :course_lesson_plan_item do
     transient do
       question_count { 1 }

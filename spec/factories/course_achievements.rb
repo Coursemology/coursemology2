@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_achievement, class: Course::Achievement.name, aliases: [:achievement] do
+  factory :course_achievement, class: 'Course::Achievement', aliases: [:achievement] do
     course
     sequence(:title) { |n| "Achievement #{n}" }
     sequence(:description) { |n| "Awesome achievement #{n}" }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_experience_points_record, class: Course::ExperiencePointsRecord.name do
+  factory :course_experience_points_record, class: 'Course::ExperiencePointsRecord' do
     transient do
       course { create(:course) }
       creator

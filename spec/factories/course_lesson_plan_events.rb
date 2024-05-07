@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_lesson_plan_event, class: Course::LessonPlan::Event.name,
+  factory :course_lesson_plan_event, class: 'Course::LessonPlan::Event',
                                      parent: :course_lesson_plan_item do
     sequence(:title) { |n| "Example Course Event #{n}" }
     description { 'Funky description' }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :course_condition_assessment,
-          class: Course::Condition::Assessment.name, aliases: [:assessment_condition] do
+          class: 'Course::Condition::Assessment', aliases: [:assessment_condition] do
     course
     assessment
     conditional { association :assessment, course: course }

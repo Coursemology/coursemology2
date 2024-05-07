@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   sequence(:course_survey_name) { |n| "Survey #{n}" }
-  factory :course_survey, class: Course::Survey.name,
+  factory :course_survey, class: 'Course::Survey',
                           aliases: [:survey], parent: :course_lesson_plan_item do
     transient do
       section_count { 1 }
