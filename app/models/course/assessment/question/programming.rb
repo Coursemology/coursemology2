@@ -20,6 +20,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   acts_as :question, class_name: Course::Assessment::Question.name
 
   after_initialize :set_defaults
+  after_save :create_codaveri_problem, if: :duplicating?
   before_save :process_package, unless: :skip_process_package?
   before_validation :assign_template_attributes
   before_validation :assign_test_case_attributes
