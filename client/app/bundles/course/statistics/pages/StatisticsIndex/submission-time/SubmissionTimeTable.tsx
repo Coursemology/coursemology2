@@ -15,6 +15,7 @@ import {
 } from 'course/statistics/utils/dueTimeHelper';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import Link from 'lib/components/core/Link';
+import Note from 'lib/components/core/Note';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import {
@@ -30,7 +31,7 @@ import { formatMiniDateTime } from 'lib/moment';
 const translations = defineMessages({
   tableTitle: {
     id: 'course.statistics.StatisticsIndex.SubmissionTime.tableTitle',
-    defaultMessage: 'Submission Time for {studentName}',
+    defaultMessage: 'Overdue Assessments by {studentName}',
   },
   title: {
     id: 'course.statistics.StatisticsIndex.SubmissionTime.title',
@@ -82,6 +83,10 @@ const translations = defineMessages({
     defaultMessage:
       'The timeline for this is fixed and will not be automatically modified.',
   },
+  noLateSubmission: {
+    id: 'lib.components.extensions.PersonalStartEndTime.noLateSubmission',
+    defaultMessage: '{name} does not have overdue assessments',
+  },
 });
 
 interface Props {
@@ -95,6 +100,15 @@ const SubmissionTimeTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const courseId = getCourseId();
   const filteredAssessments = assessments.filter((a) => !!a.dueIn);
+
+  if (filteredAssessments.length < 1) {
+    return (
+      <Note
+        color="success"
+        message={t(translations.noLateSubmission, { name })}
+      />
+    );
+  }
 
   filteredAssessments.sort(sortByDueIn);
 

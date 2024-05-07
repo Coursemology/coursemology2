@@ -1,6 +1,7 @@
 import { FC, useMemo } from 'react';
 import { defineMessages } from 'react-intl';
-import { Typography } from '@mui/material';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Tooltip, Typography } from '@mui/material';
 
 import { GroupManager, Metadata, Student } from 'course/statistics/types';
 import { processStudent } from 'course/statistics/utils/parseStudentsResponse';
@@ -12,7 +13,10 @@ import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
   NUM_CELL_CLASS_NAME,
 } from 'lib/constants/sharedConstants';
-import { getStudentSubmissionDueURL } from 'lib/helpers/url-builders';
+import {
+  getCourseUserURL,
+  getStudentSubmissionDueURL,
+} from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -58,6 +62,14 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.students.searchBar',
     defaultMessage: 'Search by Students Name or Student Type',
   },
+  lateAssessmentClick: {
+    id: 'course.statistics.StatisticsIndex.students.lateAssessmentClick',
+    defaultMessage: 'Click to see all Late Assessments by {name}',
+  },
+  lateAssessment: {
+    id: 'course.statistics.StatisticsIndex.students.lateAssessment',
+    defaultMessage: ' ',
+  },
 });
 
 interface Props {
@@ -98,10 +110,7 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       sortable: true,
       searchable: true,
       cell: (student) => (
-        <Link
-          opensInNewTab
-          to={getStudentSubmissionDueURL(courseId!, student.id)}
-        >
+        <Link opensInNewTab to={getCourseUserURL(courseId!, student.id)}>
           {student.name}
         </Link>
       ),
@@ -237,6 +246,24 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       csvDownloadable: true,
     });
   }
+
+  columns.push({
+    id: 'actions',
+    title: t(translations.lateAssessment),
+    searchable: false,
+    cell: (student) => (
+      <Tooltip
+        title={t(translations.lateAssessmentClick, { name: student.name })}
+      >
+        <Link
+          opensInNewTab
+          to={getStudentSubmissionDueURL(courseId!, student.id)}
+        >
+          <AssignmentIcon className="fill-red-500" />
+        </Link>
+      </Tooltip>
+    ),
+  });
 
   return (
     <>

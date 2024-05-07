@@ -4,7 +4,7 @@ import { fetchStudentStatistics } from 'course/statistics/operations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
-import StudentsStatisticsTable from './StudentStatisticsTable';
+import StudentsStatisticsTable from './StudentsStatisticsTable';
 
 const StudentsStatistics: FC = () => {
   return (
