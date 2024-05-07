@@ -6,7 +6,7 @@ class Course::Stories::StoriesController < Course::ComponentController
   signals :cikgo_open_threads_count, after: [:learn]
 
   def learn
-    head :not_found and return unless push_key
+    head :not_found and return unless current_course_user.present? && push_key
 
     url, @open_threads_count = find_or_create_room(current_course_user)
 
