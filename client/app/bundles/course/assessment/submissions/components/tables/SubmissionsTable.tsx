@@ -23,6 +23,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatMiniDateTime } from 'lib/moment';
 
 import SubmissionsTableButton from '../buttons/SubmissionsTableButton';
+import { translateStatus } from '../misc/SubmissionStatus';
 
 interface Props extends WrappedComponentProps {
   isGamified: boolean;
@@ -76,29 +77,6 @@ const translations = defineMessages({
       "These grades can't be seen by the student until they are published",
   },
 });
-
-const statusTranslations = {
-  attempting: 'Attempting',
-  submitted: 'Submitted',
-  graded: 'Graded, unpublished',
-  published: 'Graded',
-  unknown: 'Unknown status, please contact administrator',
-};
-
-const translateStatus: (var1: string) => string = (oldStatus) => {
-  switch (oldStatus) {
-    case 'attempting':
-      return statusTranslations.attempting;
-    case 'submitted':
-      return statusTranslations.submitted;
-    case 'graded':
-      return statusTranslations.graded;
-    case 'published':
-      return statusTranslations.published;
-    default:
-      return statusTranslations.unknown;
-  }
-};
 
 const SubmissionsTable: FC<Props> = (props) => {
   const {

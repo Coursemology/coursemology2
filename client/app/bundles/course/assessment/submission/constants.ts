@@ -22,7 +22,16 @@ export const workflowStates = {
   Submitted: 'submitted' as const,
   Graded: 'graded' as const,
   Published: 'published' as const,
+  Unreleased: 'unreleased' as const,
 };
+
+export const dueInStates = {
+  NotDue: 'notDue' as const,
+  AlmostDue: 'almostDue' as const,
+  OverDue: 'overDue' as const,
+};
+
+export const ALMOST_DUE_THRESHOLD = 3 * 24 * 60 * 60; // 3 days
 
 export const TestCaseTypes = {
   Public: 'public_test',

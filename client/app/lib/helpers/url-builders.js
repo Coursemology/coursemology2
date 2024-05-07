@@ -47,6 +47,9 @@ export const getAssessmentWithCategoryURL = (courseId, categoryId) =>
 export const getAssessmentSubmissionURL = (courseId, assessmentId) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions`;
 
+export const getStudentSubmissionDueURL = (courseId, studentId) =>
+  `/courses/${courseId}/statistics/submission_time/${studentId}`;
+
 export const getAssessmentAttemptURL = (courseId, assessmentId) =>
   `/courses/${courseId}/assessments/${assessmentId}/attempt`;
 

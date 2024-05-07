@@ -89,8 +89,8 @@ module Course::Statistics::SubmissionsConcern
       next unless submitter_course_user&.student?
 
       answers = answers_hash[submission.id]
-      end_at = @personal_end_at_hash[[@assessment.id, submitter_course_user.id]] ||
-               @reference_times_hash[@assessment.id]
+      _, end_at, = @personal_timeline_hash[[@assessment.id, submitter_course_user.id]] ||
+                   @reference_times_hash[@assessment.id]
 
       student_hash[submitter_course_user] = [submission, answers, end_at]
     end
@@ -103,15 +103,15 @@ module Course::Statistics::SubmissionsConcern
       submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
       next unless submitter_course_user&.student?
 
-      end_at = @personal_end_at_hash[[@assessment.id, submitter_course_user.id]] ||
-               @reference_times_hash[@assessment.id]
+      _, end_at, = @personal_timeline_hash[[@assessment.id, submitter_course_user.id]] ||
+                   @reference_times_hash[@assessment.id]
 
       student_hash[submitter_course_user] = [submission, end_at]
     end
   end
 
   def fetch_personal_and_reference_timeline_hash
-    @personal_end_at_hash = personal_end_at_hash([@assessment.id], @assessment.course.id)
+    @personal_timeline_hash = personal_timeline_hash([@assessment.id], @assessment.course.id)
     @reference_times_hash = reference_times_hash([@assessment.id], @assessment.course.id)
   end
 end

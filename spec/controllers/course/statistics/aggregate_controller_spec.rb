@@ -210,5 +210,73 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
         it { expect(subject).to be_successful }
       end
     end
+
+    describe '#submissions_due' do
+      render_views
+      let!(:deadline) { 1.day.from_now }
+      let!(:published_assessment) do
+        create(:assessment, :published, :with_all_question_types, course: course, end_at: deadline)
+      end
+
+      let!(:unpublished_assessment) { create(:assessment, :with_all_question_types, course: course) }
+      let!(:student) { create(:course_student, course: course) }
+
+      let!(:non_submitted_submission) do
+        create(:submission, :attempting,
+               assessment: published_assessment, creator: student.user,
+               created_at: 1.hour.from_now)
+      end
+
+      subject do
+        get :submissions_due, format: :json,
+                              params: { course_id: course, user_id: course_user, student_id: student.id }
+      end
+
+      context 'when a Normal User pings the endpoint' do
+        let(:user) { create(:user) }
+        before { sign_in(user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when a Course Student pings the endpoint' do
+        let(:user) { create(:course_student, course: course).user }
+        before { sign_in(user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when a Course Teaching Assistant pings the endpoint' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+        before { sign_in(user) }
+        it { expect(subject).to be_successful }
+      end
+
+      context 'when a Course Manager pings the endpoint' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { sign_in(user) }
+
+        it 'expects to render all published assessments' do
+          expect(subject).to be_successful
+          json_result = JSON.parse(response.body)
+          expect(json_result['assessments'].count).to eq(1)
+
+          expected_end_at = published_assessment.end_at
+          parsed_end_at = Time.parse(json_result['assessments'][0]['endAt'])
+          parsed_reference_end_at = Time.parse(json_result['assessments'][0]['referenceEndAt'])
+
+          expect(json_result['assessments'][0]['workflowState']).to eq('attempting')
+          expect(parsed_end_at).to be_within(1.second).of(expected_end_at)
+          expect(parsed_reference_end_at).to be_within(1.second).of(expected_end_at)
+          expect(json_result['assessments'][0]['dueIn']).to eq(deadline.to_i - Time.now.to_i)
+          expect(json_result['assessments'][0]['isPersonalizedTimeline']).to be_falsey
+          expect(json_result['assessments'][0]['isTimelineFixed']).to be_falsey
+        end
+      end
+
+      context 'when a Course Observer pings the endpoint' do
+        let(:user) { create(:course_observer, course: course).user }
+        before { sign_in(user) }
+        it { expect(subject).to be_successful }
+      end
+    end
   end
 end

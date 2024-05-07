@@ -1,3 +1,5 @@
+import { SubmissionStatus } from 'types/course/assessment/submissions';
+
 export interface GroupManager {
   id: number;
   name: string;
@@ -110,12 +112,15 @@ interface CategoryInfo {
   title: string;
 }
 
-export interface CourseAssessment {
+interface CourseAssessmentBasicInfo {
   id: number;
   title: string;
   tab: TabInfo;
   category: CategoryInfo;
   maximumGrade: number;
+}
+
+export interface CourseAssessmentStatistics extends CourseAssessmentBasicInfo {
   averageGrade: number;
   stdevGrade: number;
   averageTimeTaken: string;
@@ -125,7 +130,22 @@ export interface CourseAssessment {
   numLate: number;
 }
 
+export interface CourseAssessmentTime extends CourseAssessmentBasicInfo {
+  submissionId?: number;
+  workflowState: SubmissionStatus;
+  dueIn: number | null;
+  endAt: Date;
+  referenceEndAt: Date;
+  isPersonalizedTimeline: boolean;
+  isTimelineFixed: boolean;
+}
+
 export interface AssessmentsStatistics {
   numStudents: number;
-  assessments: CourseAssessment[];
+  assessments: CourseAssessmentStatistics[];
+}
+
+export interface SubmissionTimeStatistics {
+  name: string;
+  assessments: CourseAssessmentTime[];
 }

@@ -5,6 +5,7 @@ import {
   CourseProgressionStatistics,
   StaffStatistics,
   StudentsStatistics,
+  SubmissionTimeStatistics,
 } from 'course/statistics/types';
 
 import BaseCourseAPI from '../Base';
@@ -32,5 +33,11 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
 
   fetchAssessmentsStatistics(): APIResponse<AssessmentsStatistics> {
     return this.client.get(`${this.#urlPrefix}/assessments`);
+  }
+
+  fetchSubmissionDueStatistics(
+    studentId: number,
+  ): APIResponse<SubmissionTimeStatistics> {
+    return this.client.get(`${this.#urlPrefix}/submissions_due/${studentId}`);
   }
 }

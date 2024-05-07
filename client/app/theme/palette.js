@@ -1,6 +1,9 @@
 import * as colors from '@mui/material/colors';
 
-import { workflowStates } from '../bundles/course/assessment/submission/constants';
+import {
+  dueInStates,
+  workflowStates,
+} from '../bundles/course/assessment/submission/constants';
 import { groupRole } from '../bundles/course/group/constants';
 
 import { black, white } from './colors';
@@ -74,11 +77,18 @@ const palette = {
 
   // Add custom colors below
   submissionStatus: {
+    [workflowStates.Unreleased]: colors.orange[100],
     [workflowStates.Unstarted]: colors.red[100],
     [workflowStates.Attempting]: colors.yellow[100],
     [workflowStates.Submitted]: colors.grey[100],
     [workflowStates.Graded]: colors.blue[100],
     [workflowStates.Published]: colors.green[100],
+  },
+
+  dueInStatus: {
+    [dueInStates.NotDue]: colors.green[100],
+    [dueInStates.AlmostDue]: colors.orange[100],
+    [dueInStates.OverDue]: colors.red[100],
   },
 
   groupRole: {
