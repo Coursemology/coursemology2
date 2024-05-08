@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { Alert } from '@mui/material';
+import { Alert, Typography } from '@mui/material';
 import { StoriesSettingsData } from 'types/course/admin/stories';
 
 import Section from 'lib/components/core/layouts/Section';
@@ -22,6 +22,10 @@ const translations = defineMessages({
     id: 'course.admin.storiesSettings.storiesSettings',
     defaultMessage: 'Stories settings',
   },
+  integrationSettings: {
+    id: 'course.admin.storiesSettings.integrationSettings',
+    defaultMessage: 'Integration settings',
+  },
   pushKey: {
     id: 'course.admin.storiesSettings.pushKey',
     defaultMessage: 'Integration key',
@@ -36,10 +40,23 @@ const translations = defineMessages({
     defaultMessage:
       "This integration key doesn't point to a valid course on Cikgo. Please check your settings on Cikgo and try again.",
   },
+  pushKeyHint: {
+    id: 'course.admin.storiesSettings.pushKeyHint',
+    defaultMessage:
+      "Integration keys aren't strictly secretive, but should be handled in confidence.",
+  },
   pingError: {
     id: 'course.admin.storiesSettings.pingError',
     defaultMessage:
       'There was a problem connecting to Cikgo. You may try again at a later time.',
+  },
+  learnTitle: {
+    id: 'course.admin.storiesSettings.learnTitle',
+    defaultMessage: 'Learn page title',
+  },
+  leaveEmptyToUseDefaultTitle: {
+    id: 'course.admin.storiesSettings.leaveEmptyToUseDefaultTitle',
+    defaultMessage: 'Leave empty to use the default "Learn" title.',
   },
 });
 
@@ -102,28 +119,51 @@ const StoriesSettings = (): JSX.Element => {
           onSubmit={handleSubmit}
         >
           {(control, watch, { isDirty }) => (
-            <Section sticksToNavbar title={t(translations.storiesSettings)}>
-              <Introduction className="mb-2" />
+            <>
+              <Section sticksToNavbar title={t(translations.storiesSettings)}>
+                <Controller
+                  control={control}
+                  name="title"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormTextField
+                      disabled={submitting}
+                      field={field}
+                      fieldState={fieldState}
+                      fullWidth
+                      helperText={t(translations.leaveEmptyToUseDefaultTitle)}
+                      label={t(translations.learnTitle)}
+                      variant="filled"
+                    />
+                  )}
+                />
+              </Section>
 
-              <Controller
-                control={control}
-                name="pushKey"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormTextField
-                    disabled={submitting}
-                    disableMargins
-                    field={field}
-                    fieldState={fieldState}
-                    fullWidth
-                    helperText="Integration keys aren't strictly secretive, but should be handled in confidence."
-                    label={t(translations.pushKey)}
-                    variant="filled"
-                  />
-                )}
-              />
+              <Section
+                sticksToNavbar
+                title={t(translations.integrationSettings)}
+              >
+                <Introduction className="mb-2" />
 
-              {!isDirty && <PingResultAlert {...watch('pingResult')} />}
-            </Section>
+                <Controller
+                  control={control}
+                  name="pushKey"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormTextField
+                      disabled={submitting}
+                      disableMargins
+                      field={field}
+                      fieldState={fieldState}
+                      fullWidth
+                      helperText={t(translations.pushKeyHint)}
+                      label={t(translations.pushKey)}
+                      variant="filled"
+                    />
+                  )}
+                />
+
+                {!isDirty && <PingResultAlert {...watch('pingResult')} />}
+              </Section>
+            </>
           )}
         </Form>
       )}

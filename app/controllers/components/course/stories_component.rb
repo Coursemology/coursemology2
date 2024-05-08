@@ -29,7 +29,7 @@ class Course::StoriesComponent < SimpleDelegator
       {
         key: :learn,
         icon: :learn,
-        title: I18n.t('course.stories.learn'),
+        title: settings.title || I18n.t('course.stories.learn'),
         weight: 0,
         path: course_learn_path(current_course),
         unread: open_threads_count

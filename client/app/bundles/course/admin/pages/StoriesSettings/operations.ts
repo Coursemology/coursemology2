@@ -17,6 +17,7 @@ export const updateStoriesSettings = async (
   const adaptedData: StoriesSettingsPostData = {
     settings_stories_component: {
       push_key: data.pushKey,
+      title: data.title,
     },
   };
 

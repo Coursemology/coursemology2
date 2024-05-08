@@ -31,7 +31,7 @@ class Course::Admin::StoriesSettingsController < Course::Admin::Controller
   end
 
   def stories_settings_params
-    params.require(:settings_stories_component).permit(:push_key)
+    params.require(:settings_stories_component).permit(:push_key, :title)
   end
 
   def component
