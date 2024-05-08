@@ -10,4 +10,13 @@ class Course::Settings::StoriesComponent < Course::Settings::Component
     push_key = push_key.presence
     settings.push_key = push_key
   end
+
+  def title
+    settings.title
+  end
+
+  def title=(title)
+    title = nil if title.blank?
+    settings.title = title
+  end
 end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 json.ignore_nil!
 
+json.title @settings.title || ''
 json.pushKey @settings.push_key || ''
 
 json.pingResult do
