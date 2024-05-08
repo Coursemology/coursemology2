@@ -4,10 +4,7 @@
 # When enqueueing jobs with the Background Thread adapter the job will be executed in a
 # background thread. This is a good balance between the hassle of setting up a full backend
 # and having some asynchrony.
-#
-# To use the Inline set the queue_adapter config to +:background_thread+.
-#
-#   Rails.application.config.active_job.queue_adapter = :background_thread
+
 class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapters::InlineAdapter
   # The ActiveSupport::Notification instrumentation event when a new job is enqueued.
   ENQUEUE_EVENT = 'enqueue.background_thread_adapter.active_job'

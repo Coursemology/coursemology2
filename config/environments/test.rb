@@ -15,7 +15,7 @@ Rails.application.configure do
   # just for the purpose of running a single test. If you are using a tool that
   # preloads Rails for running tests, you may have to set it to true.
   # NOTE: set it to false would result in CI tests to timeout
-  config.eager_load = true
+  config.eager_load = false
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
@@ -49,9 +49,6 @@ Rails.application.configure do
 
   # We will assume that we are running on localhost
   config.action_mailer.default_url_options = { host: 'lvh.me:3200' }
-
-  # Use the threaded background job adapter for replicating the production environment.
-  config.active_job.queue_adapter = :background_thread
 
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
