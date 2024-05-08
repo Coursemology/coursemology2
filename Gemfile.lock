@@ -1,15 +1,6 @@
 GIT
-  remote: https://github.com/aha-app/calculated_attributes
-  revision: d2f69a1acefd5646ce1908fed3785a63d8399374
-  ref: d2f69a1acefd5646ce1908fed3785a63d8399374
-  specs:
-    calculated_attributes (1.0.0)
-      activerecord (>= 6.0.0, < 8)
-
-GIT
-  remote: https://github.com/ekowidianto/active_record-acts_as.git
-  revision: 9e01feb01438ba6736f2d4a8140d9be18464afdc
-  branch: rails5.2.3
+  remote: https://github.com/Coursemology/active_record-acts_as.git
+  revision: b853dd4aee7a218367411a3ba26fb8477ff2cda9
   specs:
     active_record-acts_as (3.0.1)
       activerecord (>= 4.2)
@@ -43,6 +34,14 @@ GIT
   revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
   specs:
     rwordnet (2.0.0)
+
+GIT
+  remote: https://github.com/aha-app/calculated_attributes
+  revision: d2f69a1acefd5646ce1908fed3785a63d8399374
+  ref: d2f69a1acefd5646ce1908fed3785a63d8399374
+  specs:
+    calculated_attributes (1.0.0)
+      activerecord (>= 6.0.0, < 8)
 
 GEM
   remote: http://rubygems.org/
