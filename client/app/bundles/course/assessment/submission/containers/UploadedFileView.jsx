@@ -46,10 +46,6 @@ const styles = {
 };
 
 class VisibleUploadedFileView extends Component {
-  static buildAttachmentUrl(attachment) {
-    return `/attachments/${attachment.id}`;
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -76,7 +72,7 @@ class VisibleUploadedFileView extends Component {
         key={attachment.id}
         clickable
         label={
-          <Link href={VisibleUploadedFileView.buildAttachmentUrl(attachment)}>
+          <Link href={attachment.url} opensInNewTab>
             {attachment.name}
           </Link>
         }

@@ -29,6 +29,8 @@ const getAuthorizationToken = (): string => {
 export default class BaseAPI {
   #client: AxiosInstance | null = null;
 
+  #externalClient: AxiosInstance | null = null;
+
   #authentication_retries = 0;
 
   #csrf_retries = 0;
@@ -37,6 +39,11 @@ export default class BaseAPI {
   get client(): AxiosInstance {
     this.#client ??= this.#createAxiosInstance();
     return this.#client;
+  }
+
+  get externalClient(): AxiosInstance {
+    this.#externalClient = axios.create();
+    return this.#externalClient;
   }
 
   #createAxiosInstance(): AxiosInstance {
