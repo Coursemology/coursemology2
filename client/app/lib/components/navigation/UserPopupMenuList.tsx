@@ -32,12 +32,6 @@ const UserPopupMenuList = (): JSX.Element | null => {
 
   if (!user) return null;
 
-  const handleLogout = async (): Promise<void> => {
-    await auth.removeUser();
-    await auth.signoutRedirect();
-    localStorage.clear();
-  };
-
   return (
     <PopupMenu.List>
       <PopupMenu.Button linkProps={{ to: `/users/${user.id}` }}>
@@ -51,7 +45,10 @@ const UserPopupMenuList = (): JSX.Element | null => {
         {t(translations.accountSettings)}
       </PopupMenu.Button>
 
-      <PopupMenu.Button onClick={handleLogout} textProps={{ color: 'error' }}>
+      <PopupMenu.Button
+        onClick={auth.handleLogout}
+        textProps={{ color: 'error' }}
+      >
         {t(translations.signOut)}
       </PopupMenu.Button>
     </PopupMenu.List>

@@ -40,6 +40,12 @@ module ApplicationUserConcern
     raise AuthenticationError unless devise_controller? || current_user
 
     update_user_tracked_fields
+    add_token_to_cookie
+  end
+
+  def add_token_to_cookie
+    cookies.encrypted[:access_token] =
+      { value: token_from_request, httponly: true, expires: 1.hour.from_now }
   end
 
   def update_user_tracked_fields

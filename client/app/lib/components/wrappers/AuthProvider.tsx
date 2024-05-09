@@ -4,6 +4,7 @@ import {
   AuthProvider as OIDCAuthProvider,
   useAuth,
 } from 'react-oidc-context';
+import Cookies from 'js-cookie';
 import {
   type SigninRedirectArgs,
   type SignoutRedirectArgs,
@@ -35,7 +36,11 @@ const AuthProvider = (props: AuthProviderProps): JSX.Element => {
   return <OIDCAuthProvider {...oidcConfig}>{props.children}</OIDCAuthProvider>;
 };
 
-export const useAuthAdapter = (): AuthContextProps => {
+interface AuthAdapterProps extends AuthContextProps {
+  handleLogout: () => Promise<void>;
+}
+
+export const useAuthAdapter = (): AuthAdapterProps => {
   const { signinRedirect, signoutRedirect, signoutSilent, ...otherProps } =
     useAuth();
 
@@ -51,7 +56,15 @@ export const useAuthAdapter = (): AuthContextProps => {
   // Not supported yet as signoutCallback from oidc-client-ts is not called in react-oidc-context.
   // Has been fixed in v3.1.0 in react-oidc-context but not released yet.
 
+  const handleLogout = async (): Promise<void> => {
+    await otherProps.removeUser();
+    await adaptedSignOutRedirect();
+    localStorage.clear();
+    Cookies.remove('access_token');
+  };
+
   return {
+    handleLogout,
     signinRedirect: adaptedSignInRedirect,
     signoutRedirect: adaptedSignOutRedirect,
     signoutSilent: adaptedSignOutSilent,
