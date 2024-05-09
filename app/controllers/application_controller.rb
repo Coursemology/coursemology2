@@ -50,6 +50,7 @@ class ApplicationController < ActionController::Base
   end
 
   def handle_authentication_error(exception)
+    cookies.delete(:access_token)
     @exception = exception
     render json: { error: exception.message }, status: :unauthorized
   end
