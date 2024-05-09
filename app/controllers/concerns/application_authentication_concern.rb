@@ -21,6 +21,10 @@ module ApplicationAuthenticationConcern
     @current_session_id ||= @decoded_token&.decoded_token&.[](:session_state)
   end
 
+  def token_from_request
+    @token_from_request ||= get_token_from_bearer || get_token_from_cookies
+  end
+
   private
 
   def authenticate_token
@@ -38,7 +42,7 @@ module ApplicationAuthenticationConcern
     @decoded_token.decoded_token
   end
 
-  def token_from_request
+  def get_token_from_bearer
     authorization_header_elements = request.headers['Authorization']&.split
 
     # render json: REQUIRES_AUTHENTICATION, status: :unauthorized and return unless authorization_header_elements
@@ -55,5 +59,9 @@ module ApplicationAuthenticationConcern
     return nil unless scheme.downcase == 'bearer'
 
     token
+  end
+
+  def get_token_from_cookies
+    cookies.encrypted[:access_token]
   end
 end
