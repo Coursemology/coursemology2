@@ -1,6 +1,6 @@
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
@@ -203,9 +203,9 @@ const ScribingQuestionForm = (props) => {
               />
             )}
           />
-          <div className={styles.warningText}>
+          <Typography variant="body2">
             {t(translations.scribingQuestionWarning)}
-          </div>
+          </Typography>
         </>
       )}
 
