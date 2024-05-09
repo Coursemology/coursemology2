@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FileUpload as FileUploadIcon } from '@mui/icons-material';
-import { Chip } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 
 import toast from 'lib/hooks/toast';
 
@@ -34,9 +34,9 @@ const MultipleFileInput: FC<Props> = (props) => {
 
     if (files.length === 0)
       return (
-        <p className="m-0 whitespace-normal break-all">
+        <Typography variant="body1">
           {intl.formatMessage(translations.uploadLabel)}
-        </p>
+        </Typography>
       );
 
     return files.map((file) => (
