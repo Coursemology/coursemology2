@@ -7,7 +7,9 @@ json.fields do
 end
 
 json.attachments answer.attachments do |attachment|
-  json.(attachment, :name, :id)
+  json.id attachment.id
+  json.name attachment.name
+  json.url attachment.url
 end
 
 last_attempt = last_attempt(answer)

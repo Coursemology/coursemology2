@@ -111,6 +111,7 @@ export const explanationShape = PropTypes.shape({
 export const attachmentShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 });
 
 export const assessmentShape = PropTypes.shape({

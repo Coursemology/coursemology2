@@ -45,7 +45,7 @@ export default class MaterialsAPI extends BaseCourseAPI {
     shouldDownload: boolean;
     revoke: () => void;
   }> {
-    const { data, headers } = await this.client.get(directDownloadURL, {
+    const { data, headers } = await this.externalClient.get(directDownloadURL, {
       responseType: 'blob',
       params: { format: undefined },
     });

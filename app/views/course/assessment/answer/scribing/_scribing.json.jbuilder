@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 json.scribing_answer do
-  json.image_url attachment_reference_url(answer.question.actable.attachment_references[0])
+  json.image_url answer.question.actable.attachment_reference.generate_public_url
   json.user_id current_user.id
   json.answer_id answer.id
   json.scribbles answer.actable.scribbles do |scribble|

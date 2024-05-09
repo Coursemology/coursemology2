@@ -28,7 +28,7 @@ json.question do
     json.package do
       package = @programming_question.attachment
       json.name package.name
-      json.path attachment_reference_path(package)
+      json.path package.generate_public_url
       json.updaterName package.updater.name
       json.updatedAt package.updated_at
     end
