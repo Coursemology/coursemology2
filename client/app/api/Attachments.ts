@@ -4,7 +4,9 @@ import { APIResponse } from './types';
 class AttachmentsAPI extends BaseAPI {
   #urlPrefix = '/attachments';
 
-  create(file: File): APIResponse<{ success: boolean; id?: number }> {
+  create(
+    file: File,
+  ): APIResponse<{ success: boolean; id?: number; attachmentUrl?: string }> {
     const formData = new FormData();
 
     formData.append('file', file);

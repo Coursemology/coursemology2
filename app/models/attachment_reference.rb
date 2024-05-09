@@ -37,6 +37,10 @@ class AttachmentReference < ApplicationRecord
     set_duplication_flag
   end
 
+  def generate_public_url
+    url(filename: name)
+  end
+
   private
 
   # Infer the name of the file.
