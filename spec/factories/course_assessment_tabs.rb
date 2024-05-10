@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   sequence(:course_assessment_tab_weight) { |n| n }
-  factory :course_assessment_tab, class: Course::Assessment::Tab do
+  factory :course_assessment_tab, class: 'Course::Assessment::Tab' do
     transient do
       course { nil }
     end

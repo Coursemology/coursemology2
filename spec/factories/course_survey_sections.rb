@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   sequence(:course_survey_section_title) { |n| "Survey Section #{n}" }
-  factory :course_survey_section, class: Course::Survey::Section.name, aliases: [:section] do
+  factory :course_survey_section, class: 'Course::Survey::Section', aliases: [:section] do
     transient do
       last_weight { survey.sections.maximum(:weight) }
       question_count { 1 }

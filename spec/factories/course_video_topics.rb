@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_video_topic, class: Course::Video::Topic.name,
+  factory :course_video_topic, class: 'Course::Video::Topic',
                                parent: :course_discussion_topic,
                                aliases: [:video_topic] do
     course { create(:course) }

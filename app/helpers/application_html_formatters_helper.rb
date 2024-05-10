@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module ApplicationHTMLFormattersHelper
+module ApplicationHtmlFormattersHelper
   # Constants that defines the size/lines limit of the code
   MAX_CODE_SIZE = 50 * 1024 # 50 KB
   MAX_CODE_LINES = 1000

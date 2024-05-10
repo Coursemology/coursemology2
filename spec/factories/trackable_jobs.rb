@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :trackable_job, class: TrackableJob::Job do
+  factory :trackable_job, class: 'TrackableJob::Job' do
     id { SecureRandom.uuid }
     redirect_to { nil }
 

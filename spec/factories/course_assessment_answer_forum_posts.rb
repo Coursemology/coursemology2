@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_assessment_answer_forum_post, class: Course::Assessment::Answer::ForumPost do
+  factory :course_assessment_answer_forum_post, class: 'Course::Assessment::Answer::ForumPost' do
     # TODO: Look into streamlining some of these closely knitted relationships among the
     # transient objects. It might be a bit too complex, making it hard to use while testing
     # without some inconsistencies, e.g. parent post and child post end up in different courses, etc.

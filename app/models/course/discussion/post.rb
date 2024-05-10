@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 class Course::Discussion::Post < ApplicationRecord
   include Workflow
-  extend Course::Discussion::Post::OrderingConcern
-  include Course::Discussion::Post::RetrievalConcern
-  include Course::ForumParticipationConcern
+  extend CourseConcern::Discussion::Post::OrderingConcern
+  include CourseConcern::Discussion::Post::RetrievalConcern
+  include CourseConcern::ForumParticipationConcern
 
   workflow do
     state :draft do

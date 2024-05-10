@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_lesson_plan_item, class: Course::LessonPlan::Item.name do
+  factory :course_lesson_plan_item, class: 'Course::LessonPlan::Item' do
     course
     base_exp          { rand(1..10) * 100 }
     time_bonus_exp    { rand(1..10) * 100 }

@@ -4,7 +4,7 @@ FactoryBot.define do
     Time.zone.now.to_i.to_s + n.to_s
   end
 
-  factory :identity, class: User::Identity.name do
+  factory :identity, class: 'User::Identity' do
     user
     uid
     provider { 'facebook' }

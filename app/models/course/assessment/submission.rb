@@ -2,10 +2,10 @@
 class Course::Assessment::Submission < ApplicationRecord
   include Workflow
   include Generic::CollectionConcern
-  include Course::Assessment::Submission::WorkflowEventConcern
-  include Course::Assessment::Submission::TodoConcern
-  include Course::Assessment::Submission::NotificationConcern
-  include Course::Assessment::Submission::AnswersConcern
+  include CourseConcern::Assessment::Submission::WorkflowEventConcern
+  include CourseConcern::Assessment::Submission::TodoConcern
+  include CourseConcern::Assessment::Submission::NotificationConcern
+  include CourseConcern::Assessment::Submission::AnswersConcern
 
   attr_accessor :has_unsubmitted_or_draft_answer
 
@@ -229,7 +229,7 @@ class Course::Assessment::Submission < ApplicationRecord
       merge(Course::Assessment::Submission.where(id: self)).
       merge(Course::Assessment::QuestionGroup.order(:weight)).
       merge(Course::Assessment::QuestionBundleQuestion.order(:weight)).
-      extending(Course::Assessment::QuestionsConcern)
+      extending(CourseConcern::Assessment::QuestionsConcern)
   end
 
   # The answers with current_answer flag set to true, filtering out orphaned answers to questions which are no longer

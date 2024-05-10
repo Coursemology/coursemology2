@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_discussion_post, class: Course::Discussion::Post.name do
+  factory :course_discussion_post, class: 'Course::Discussion::Post' do
     transient do
       upvoted_by { [] }
       downvoted_by { [] }

@@ -376,7 +376,7 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
-    describe 'CourseUser::TodoConcern' do
+    describe 'CourseUserConcern::TodoConcern' do
       let(:user) { create(:user) }
       let(:new_course_user) { create(:course_user, course: course, user: user) }
 

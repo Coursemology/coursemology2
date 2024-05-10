@@ -51,8 +51,7 @@ class Course::Video < ApplicationRecord
   # @!method self.ordered_by_date_and_title
   #   Orders the videos by the starting date and title.
   scope :ordered_by_date_and_title, (lambda do
-    select('course_videos.*, course_reference_times.start_at, course_lesson_plan_items.title').
-      joins(:lesson_plan_item).
+    joins(:lesson_plan_item).
       includes(:statistic).references(:all).
       merge(Course::LessonPlan::Item.ordered_by_date_and_title)
   end)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_discussion_topic, class: Course::Discussion::Topic.name do
+  factory :course_discussion_topic, class: 'Course::Discussion::Topic' do
     course
     pending_staff_reply { false }
 

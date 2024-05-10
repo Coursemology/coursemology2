@@ -3,7 +3,7 @@
 Doorkeeper.configure do
   orm :active_record
 
-  base_controller ApplicationController.name
+  base_controller 'ApplicationController'
 
   default_scopes :read
   optional_scopes :write

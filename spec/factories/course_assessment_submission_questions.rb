@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_assessment_submission_question, class: Course::Assessment::SubmissionQuestion,
+  factory :course_assessment_submission_question, class: 'Course::Assessment::SubmissionQuestion',
                                                   parent: :course_discussion_topic,
                                                   aliases: [:submission_question] do
     transient do

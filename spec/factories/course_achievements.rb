@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_achievement, class: Course::Achievement.name, aliases: [:achievement] do
+  factory :course_achievement, class: 'Course::Achievement', aliases: [:achievement] do
     course
     sequence(:title) { |n| "Achievement #{n}" }
     sequence(:description) { |n| "Awesome achievement #{n}" }
@@ -22,7 +22,7 @@ FactoryBot.define do
 
     trait :with_level_condition do
       after(:build) do |achievement|
-        achievement.conditions = [build(:level_condition, course: achievement.course, conditional: achievement)]
+        create(:level_condition, course: achievement.course, conditional: achievement)
       end
     end
   end

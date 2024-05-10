@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :course_assessment_question_programming,
-          class: Course::Assessment::Question::Programming,
+          class: 'Course::Assessment::Question::Programming',
           parent: :course_assessment_question do
     transient do
       template_package { false }

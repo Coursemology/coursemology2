@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 FactoryBot.define do
-  factory :course_assessment_question, class: Course::Assessment::Question do
+  factory :course_assessment_question, class: 'Course::Assessment::Question' do
     sequence(:title) { |n| "The awesome question #{n}" }
     description { 'Look at this awesome question' }
     staff_only_comments { 'Deep pedagogical insight.' }

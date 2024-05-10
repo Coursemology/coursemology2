@@ -2,7 +2,7 @@
 FactoryBot.define do
   sequence(:course_video_title) { |n| "Video #{n}" }
   sequence(:course_video_description) { |n| "Video Description #{n}" }
-  factory :course_video, class: Course::Video.name, aliases: [:video],
+  factory :course_video, class: 'Course::Video', aliases: [:video],
                          parent: :course_lesson_plan_item do
     course
     tab { course.default_video_tab }

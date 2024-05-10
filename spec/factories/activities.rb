@@ -9,25 +9,25 @@ FactoryBot.define do
     trait :achievement_gained do
       object { create(:course_achievement) }
       event { :gained }
-      notifier_type { Course::AchievementNotifier.name }
+      notifier_type { 'Course::AchievementNotifier' }
     end
 
     trait :assessment_attempted do
       object { create(:assessment) }
       event { :attempted }
-      notifier_type { Course::AssessmentNotifier.name }
+      notifier_type { 'Course::AssessmentNotifier' }
     end
 
     trait :level_reached do
       object { create(:course_level) }
       event { :reached }
-      notifier_type { Course::LevelNotifier.name }
+      notifier_type { 'Course::LevelNotifier' }
     end
 
     trait :forum_topic_created do
       object { create(:forum_topic) }
       event { :created }
-      notifier_type { Course::Forum::TopicNotifier.name }
+      notifier_type { 'Course::Forum::TopicNotifier' }
     end
 
     trait :forum_post_replied do
@@ -36,13 +36,13 @@ FactoryBot.define do
         create(:course_discussion_post, topic: topic.acting_as)
       end
       event { :replied }
-      notifier_type { Course::Forum::PostNotifier.name }
+      notifier_type { 'Course::Forum::PostNotifier' }
     end
 
     trait :video_attempted do
       object { create(:video) }
       event { :attempted }
-      notifier_type { Course::VideoNotifier.name }
+      notifier_type { 'Course::VideoNotifier' }
     end
   end
 end

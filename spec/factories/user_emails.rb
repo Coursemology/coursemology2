@@ -5,7 +5,7 @@ FactoryBot.define do
     "user_#{n}@domain-#{base_time}-name.com"
   end
 
-  factory :user_email, class: User::Email.name do
+  factory :user_email, class: 'User::Email' do
     primary { true }
     email
     confirmed
