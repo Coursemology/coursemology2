@@ -817,7 +817,7 @@ RSpec.describe Course::Assessment::Submission do
       end
     end
 
-    describe 'callbacks from Course::Assessment::Submission::TodoConcern' do
+    describe 'callbacks from CourseConcern::Assessment::Submission::TodoConcern' do
       let(:assessment_traits) { [:published_with_mcq_question] }
       subject do
         Course::LessonPlan::Todo.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Instance < ApplicationRecord
-  include Instance::CourseComponentsConcern
+  include InstanceConcern::CourseComponentsConcern
   include Generic::CollectionConcern
 
   DEFAULT_INSTANCE_ID = 0

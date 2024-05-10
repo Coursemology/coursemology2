@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course < ApplicationRecord
-  include Course::SearchConcern
-  include Course::DuplicationConcern
-  include Course::CourseComponentsConcern
+  include CourseConcern::SearchConcern
+  include CourseConcern::DuplicationConcern
+  include CourseConcern::CourseComponentsConcern
   include TimeZoneConcern
   include Generic::CollectionConcern
 
@@ -40,7 +40,7 @@ class Course < ApplicationRecord
   # The order needs to be preserved, this makes sure that the root_folder will be saved first
   has_many :material_folders, class_name: 'Course::Material::Folder', inverse_of: :course,
                               dependent: :destroy do
-    include Course::MaterialConcern
+    include CourseConcern::MaterialConcern
   end
   has_many :materials, through: :material_folders
   has_many :assessment_categories, class_name: 'Course::Assessment::Category',
@@ -52,7 +52,7 @@ class Course < ApplicationRecord
   has_many :assessment_skill_branches, class_name: 'Course::Assessment::SkillBranch',
                                        dependent: :destroy
   has_many :levels, dependent: :destroy, inverse_of: :course do
-    include Course::LevelsConcern
+    include CourseConcern::LevelsConcern
   end
   has_many :group_categories, dependent: :destroy, class_name: 'Course::GroupCategory'
   has_many :groups, through: :group_categories

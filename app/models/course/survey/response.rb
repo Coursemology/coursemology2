@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Survey::Response < ApplicationRecord
-  include Course::Survey::Response::TodoConcern
-  include Course::Survey::Response::CikgoTaskCompletionConcern
+  include CourseConcern::Survey::Response::TodoConcern
+  include CourseConcern::Survey::Response::CikgoTaskCompletionConcern
 
   acts_as_experience_points_record
 

@@ -8,10 +8,10 @@ class Course::Assessment < ApplicationRecord
   has_one_folder
 
   # Concern must be included below acts_as_lesson_plan_item to override #can_user_start?
-  include Course::Assessment::TodoConcern
-  include Course::ClosingReminderConcern
+  include CourseConcern::Assessment::TodoConcern
+  include CourseConcern::ClosingReminderConcern
   include DuplicationStateTrackingConcern
-  include Course::Assessment::NewSubmissionConcern
+  include CourseConcern::Assessment::NewSubmissionConcern
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :propagate_course, if: :new_record?
@@ -41,7 +41,7 @@ class Course::Assessment < ApplicationRecord
   has_many :question_assessments, class_name: Course::QuestionAssessment.name,
                                   inverse_of: :assessment, dependent: :destroy
   has_many :questions, through: :question_assessments do
-    include Course::Assessment::QuestionsConcern
+    include CourseConcern::Assessment::QuestionsConcern
   end
   has_many :multiple_response_questions,
            through: :questions, inverse_through: :question, source: :actable,

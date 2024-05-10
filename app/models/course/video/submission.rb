@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::Video::Submission < ApplicationRecord
-  include Course::Video::Submission::TodoConcern
-  include Course::Video::Submission::NotificationConcern
-  include Course::Video::WatchStatisticsConcern
+  include CourseConcern::Video::Submission::TodoConcern
+  include CourseConcern::Video::Submission::NotificationConcern
+  include CourseConcern::Video::WatchStatisticsConcern
 
   acts_as_experience_points_record
 
