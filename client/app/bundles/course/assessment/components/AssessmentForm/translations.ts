@@ -25,6 +25,10 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.baseExp',
     defaultMessage: 'Base EXP',
   },
+  timeLimit: {
+    id: 'course.assessment.AssessmentForm.timeLimit',
+    defaultMessage: 'Time Limit',
+  },
   timeBonusExp: {
     id: 'course.assessment.AssessmentForm.timeBonusExp',
     defaultMessage: 'Time Bonus EXP',
@@ -118,10 +122,24 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.hasTodo',
     defaultMessage: 'Has TODO',
   },
+  hasTimeLimit: {
+    id: 'course.assessment.AssessmentForm.hasTimeLimit',
+    defaultMessage: 'Enable Timed Assessment',
+  },
+  editAssessmentTimeLimitWarning: {
+    id: 'course.assessment.AssessmentForm.editAssessmentTimeLimitWarning',
+    defaultMessage:
+      'Changing Time Limit will NOT affect already existing attempts',
+  },
   hasTodoHint: {
     id: 'course.assessment.AssessmentForm.hasTodoHint',
     defaultMessage:
       'When enabled, students will see this assessment in their TODO list.',
+  },
+  hasTimeLimitHint: {
+    id: 'course.assessment.AssessmentForm.hasTimeLimitHint',
+    defaultMessage:
+      'When enabled, students will be timed after starting their attempt. After the time limit has passed, force-submission will take place',
   },
   gradingMode: {
     id: 'course.assessment.AssessmentForm.gradingMode',
@@ -335,6 +353,10 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.offsetHint',
     defaultMessage:
       'Controls how long PulseGrid should wait after the frequency interval before flagging a session as late.',
+  },
+  minutes: {
+    id: 'course.assessment.AssessmentForm.minutes',
+    defaultMessage: 'mins',
   },
   milliseconds: {
     id: 'course.assessment.AssessmentForm.milliseconds',

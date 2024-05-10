@@ -50,13 +50,18 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     monitoringEnabled,
   } = props;
 
+  const defaultValues = {
+    ...initialValues,
+    has_time_limit: !!initialValues.time_limit,
+  };
+
   const {
     control,
     handleSubmit,
     setError,
     watch,
     formState: { errors, isDirty },
-  } = useFormValidation(initialValues);
+  } = useFormValidation(defaultValues);
 
   const { t } = useTranslation();
 
@@ -65,6 +70,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const autograded = watch('autograded');
   const passwordProtected = watch('password_protected');
   const sessionProtected = watch('session_protected');
+  const hasTimeLimit = watch('has_time_limit');
 
   const monitoring = watch('monitoring.enabled');
   const hasMonitoringSecret = watch('monitoring.secret');
@@ -178,7 +184,12 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       encType="multipart/form-data"
       id="assessment-form"
       noValidate
-      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+      onSubmit={handleSubmit((data) =>
+        onSubmit(
+          { ...data, time_limit: data.has_time_limit ? data.time_limit : null },
+          setError,
+        ),
+      )}
     >
       <ErrorText errors={errors} />
 
@@ -327,6 +338,54 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             />
           )}
         />
+
+        <Controller
+          control={control}
+          name="has_time_limit"
+          render={({ field, fieldState }): JSX.Element => (
+            <FormCheckboxField
+              description={t(translations.hasTimeLimitHint)}
+              disabled={disabled}
+              field={field}
+              fieldState={fieldState}
+              label={t(translations.hasTimeLimit)}
+            />
+          )}
+        />
+
+        {hasTimeLimit && (
+          <Controller
+            control={control}
+            name="time_limit"
+            render={({ field, fieldState }): JSX.Element => (
+              <>
+                <FormTextField
+                  disabled={disabled}
+                  disableMargins
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {t(translations.minutes)}
+                      </InputAdornment>
+                    ),
+                  }}
+                  label={t(translations.timeLimit)}
+                  type="number"
+                  variant="filled"
+                />
+                {editing && (
+                  <InfoLabel
+                    label={t(translations.editAssessmentTimeLimitWarning)}
+                    warning
+                  />
+                )}
+              </>
+            )}
+          />
+        )}
 
         {editing && folderAttributes && (
           <>

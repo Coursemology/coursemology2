@@ -482,6 +482,7 @@ ActiveRecord::Schema.define(version: 2024_04_22_100451) do
     t.integer "satisfiability_type", default: 0
     t.bigint "monitor_id"
     t.boolean "allow_record_draft_answer", default: false
+    t.integer "time_limit"
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
