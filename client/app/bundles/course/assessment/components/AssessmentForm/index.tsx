@@ -358,31 +358,23 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             control={control}
             name="time_limit"
             render={({ field, fieldState }): JSX.Element => (
-              <>
-                <FormTextField
-                  disabled={disabled}
-                  disableMargins
-                  field={field}
-                  fieldState={fieldState}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {t(translations.minutes)}
-                      </InputAdornment>
-                    ),
-                  }}
-                  label={t(translations.timeLimit)}
-                  type="number"
-                  variant="filled"
-                />
-                {editing && (
-                  <InfoLabel
-                    label={t(translations.editAssessmentTimeLimitWarning)}
-                    warning
-                  />
-                )}
-              </>
+              <FormTextField
+                disabled={disabled}
+                disableMargins
+                field={field}
+                fieldState={fieldState}
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      {t(translations.minutes)}
+                    </InputAdornment>
+                  ),
+                }}
+                label={t(translations.timeLimit)}
+                type="number"
+                variant="filled"
+              />
             )}
           />
         )}

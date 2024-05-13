@@ -89,6 +89,16 @@ const validationSchema = yup.object({
   randomization: yup.bool(),
   has_personal_times: yup.bool(),
   affects_personal_times: yup.bool(),
+  time_limit: yup
+    .number()
+    .typeError(t.hasToBeNumber)
+    .when('has_time_limit', {
+      is: true,
+      then: yup
+        .number(t.hasToBeNumber)
+        .positive(t.hasToBePositive)
+        .required(ft.required),
+    }),
   monitoring: yup.object({
     enabled: yup.bool(),
     secret: yup.string().nullable(),

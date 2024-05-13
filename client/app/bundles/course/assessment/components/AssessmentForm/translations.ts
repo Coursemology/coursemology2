@@ -126,11 +126,6 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.hasTimeLimit',
     defaultMessage: 'Enable Timed Assessment',
   },
-  editAssessmentTimeLimitWarning: {
-    id: 'course.assessment.AssessmentForm.editAssessmentTimeLimitWarning',
-    defaultMessage:
-      'Changing Time Limit will NOT affect already existing attempts',
-  },
   hasTodoHint: {
     id: 'course.assessment.AssessmentForm.hasTodoHint',
     defaultMessage:
@@ -139,7 +134,7 @@ const translations = defineMessages({
   hasTimeLimitHint: {
     id: 'course.assessment.AssessmentForm.hasTimeLimitHint',
     defaultMessage:
-      'When enabled, students will be timed after starting their attempt. After the time limit has passed, force-submission will take place',
+      'When enabled, submissions will automatically be finalised when the time limit is reached.',
   },
   gradingMode: {
     id: 'course.assessment.AssessmentForm.gradingMode',
@@ -389,6 +384,14 @@ const translations = defineMessages({
   hasToBeMoreThanValueMs: {
     id: 'course.assessment.AssessmentForm.hasToBeMoreThanValueMs',
     defaultMessage: 'Has to be at least 3000 ms.',
+  },
+  hasToBePositive: {
+    id: 'course.assessment.AssessmentForm.hasToBePositive',
+    defaultMessage: 'Has to be positive.',
+  },
+  hasToBeNumber: {
+    id: 'course.assessment.AssessmentForm.hasToBeNumber',
+    defaultMessage: 'Has to be valid number.',
   },
   onlyManagersOwnersCanEdit: {
     id: 'course.assessment.AssessmentForm.onlyManagersOwnersCanEdit',
