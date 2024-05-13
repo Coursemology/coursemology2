@@ -15,6 +15,7 @@ json.partial! 'assessment_list_data', assessment: @assessment, category: @catego
 json.description assessment.description unless @assessment.description.blank?
 json.autograded assessment.autograded?
 json.hasTodo assessment.has_todo if can_manage
+json.timeLimit assessment.time_limit
 json.indexUrl course_assessments_path(current_course, category: assessment.tab.category_id, tab: assessment.tab)
 
 json.startAt do

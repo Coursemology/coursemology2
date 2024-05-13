@@ -34,6 +34,7 @@ export interface AssessmentListData extends AssessmentActionsData {
   url: string;
   conditionSatisfied: boolean;
   startAt: PersonalTimeData;
+  timeLimit?: number;
   isStartTimeBegin: boolean;
 
   baseExp?: number;
@@ -101,6 +102,7 @@ export interface AssessmentData extends AssessmentActionsData {
 
   endAt?: PersonalTimeData;
   hasTodo?: boolean;
+  timeLimit?: number;
   unlocks?: {
     description: string;
     title: string;

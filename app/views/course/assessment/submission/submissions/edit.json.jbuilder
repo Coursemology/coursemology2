@@ -10,6 +10,7 @@ json.assessment do
   json.tabId @assessment.tab_id
   json.(@assessment, :title, :description, :autograded, :skippable)
   json.showMcqMrqSolution @assessment.show_mcq_mrq_solution
+  json.timeLimit @assessment.time_limit
   json.delayedGradePublication @assessment.delayed_grade_publication
   json.tabbedView @assessment.tabbed_view
   json.showPrivate @assessment.show_private

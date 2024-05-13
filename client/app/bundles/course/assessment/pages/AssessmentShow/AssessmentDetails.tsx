@@ -49,6 +49,17 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
           </TableCell>
         </TableRow>
 
+        {assessment.timeLimit && (
+          <TableRow>
+            <TableCell variant="head">{t(translations.timeLimit)}</TableCell>
+            <TableCell>
+              {t(translations.timeLimitDetail, {
+                timeLimit: assessment.timeLimit,
+              })}
+            </TableCell>
+          </TableRow>
+        )}
+
         {assessment.bonusEndAt && (
           <TableRow>
             <TableCell variant="head">{t(translations.bonusEndsAt)}</TableCell>

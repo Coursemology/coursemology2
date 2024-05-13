@@ -53,6 +53,11 @@ const translations = defineMessages({
     id: 'course.assessments.index.autograded',
     defaultMessage: 'Autograded',
   },
+  timeLimitIcon: {
+    id: 'course.assessments.index.timeLimitIcon',
+    defaultMessage:
+      'Time Limit: {timeLimit} {timeLimit, plural, one {# minute} other {# minutes}}',
+  },
   passwordProtected: {
     id: 'course.assessments.index.passwordProtected',
     defaultMessage: 'Password-protected',
@@ -1305,7 +1310,12 @@ const translations = defineMessages({
   },
   timeLimit: {
     id: 'course.assessment.question.programming.timeLimit',
-    defaultMessage: 'Time limit',
+    defaultMessage: 'Time Limit',
+  },
+  timeLimitDetail: {
+    id: 'course.assessment.question.programming.timeLimitDetail',
+    defaultMessage:
+      '{timeLimit} {timeLimit, plural, one {# minute} other {# minutes}}',
   },
   attemptLimit: {
     id: 'course.assessment.question.programming.attemptLimit',
