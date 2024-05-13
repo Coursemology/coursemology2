@@ -40,6 +40,7 @@ import {
   topicShape,
 } from '../../propTypes';
 import translations from '../../translations';
+import { setTimerForForceSubmission } from '../../utils/timer';
 
 import { errorResolver } from './ErrorHelper';
 
@@ -85,6 +86,7 @@ const SubmissionEditStepForm = (props) => {
     allowPartialSubmission,
     attempting,
     codaveriFeedbackStatus,
+    deadline,
     explanations,
     graderView,
     isCodaveriEnabled,
@@ -139,6 +141,15 @@ const SubmissionEditStepForm = (props) => {
   useEffect(() => {
     reset(initialValues);
   }, [initialValues]);
+
+  useEffect(
+    setTimerForForceSubmission(
+      deadline,
+      attempting,
+      handleSubmit((data) => onSubmit({ ...data })),
+    ),
+    [deadline],
+  );
 
   const handleNext = () => {
     setMaxStep(Math.max(maxStep, stepIndex + 1));
@@ -649,6 +660,7 @@ SubmissionEditStepForm.propTypes = {
   intl: PropTypes.object.isRequired,
 
   attachments: PropTypes.arrayOf(attachmentShape),
+  deadline: PropTypes.number,
   graderView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
   step: PropTypes.number,

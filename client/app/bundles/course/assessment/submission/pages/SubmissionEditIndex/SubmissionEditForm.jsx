@@ -42,6 +42,7 @@ import {
   topicShape,
 } from '../../propTypes';
 import translations from '../../translations';
+import { setTimerForForceSubmission } from '../../utils/timer';
 
 import { errorResolver } from './ErrorHelper';
 
@@ -72,6 +73,7 @@ const SubmissionEditForm = (props) => {
     canUpdate,
     codaveriFeedbackStatus,
     explanations,
+    deadline,
     delayedGradePublication,
     graded,
     graderView,
@@ -148,6 +150,15 @@ const SubmissionEditForm = (props) => {
       scroller.scrollTo(`step${initialStep}`, { offset: -60 });
     }
   }, []);
+
+  useEffect(
+    setTimerForForceSubmission(
+      deadline,
+      attempting,
+      handleSubmit((data) => onSubmit({ ...data })),
+    ),
+    [deadline],
+  );
 
   const renderAutogradeSubmissionButton = () => {
     if (graderView && submitted) {
@@ -736,6 +747,7 @@ SubmissionEditForm.propTypes = {
   attachments: PropTypes.arrayOf(attachmentShape),
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
+  deadline: PropTypes.number,
   delayedGradePublication: PropTypes.bool.isRequired,
   passwordProtected: PropTypes.bool.isRequired,
   tabbedView: PropTypes.bool.isRequired,

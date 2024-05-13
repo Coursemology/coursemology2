@@ -256,6 +256,14 @@ const translations = defineMessages({
       Submissions to this assessment will be auto-graded. \
       NOTE THAT THIS ACTION IS IRREVERSIBLE!',
   },
+  remainingTime: {
+    id: 'course.assessment.submission.remainingTime',
+    defaultMessage: 'Time Remaining: {timeLimit}',
+  },
+  timeIsUp: {
+    id: 'course.assessment.submission.timeIsUp',
+    defaultMessage: 'Time is Up',
+  },
   sendReminderEmailConfirmation: {
     id: 'course.assessment.submission.sendReminderEmailConfirmation',
     defaultMessage:

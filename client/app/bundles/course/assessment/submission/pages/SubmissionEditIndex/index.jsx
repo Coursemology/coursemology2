@@ -61,6 +61,7 @@ import BlockedSubmission from './BlockedSubmission';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
+import TimeLimitBanner from './TimeLimitBanner';
 
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
@@ -219,6 +220,14 @@ class VisibleSubmissionEditIndex extends Component {
     return numIncorrect === 0;
   }
 
+  renderTimeLimitBanner() {
+    const { assessment, submission, deadline } = this.props;
+
+    return assessment.timeLimit && submission.workflowState === 'attempting' ? (
+      <TimeLimitBanner deadline={deadline} />
+    ) : null;
+  }
+
   renderAssessment() {
     const { assessment, submission } = this.props;
 
@@ -272,6 +281,7 @@ class VisibleSubmissionEditIndex extends Component {
         isCodaveriEnabled,
       },
       codaveriFeedbackStatus,
+      deadline,
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
@@ -306,6 +316,7 @@ class VisibleSubmissionEditIndex extends Component {
           allowPartialSubmission={allowPartialSubmission}
           attempting={workflowState === workflowStates.Attempting}
           codaveriFeedbackStatus={codaveriFeedbackStatus}
+          deadline={deadline}
           explanations={explanations}
           graderView={graderView}
           handleSaveAllGrades={this.handleSaveAllGrades}
@@ -340,6 +351,7 @@ class VisibleSubmissionEditIndex extends Component {
         attempting={workflowState === workflowStates.Attempting}
         canUpdate={canUpdate}
         codaveriFeedbackStatus={codaveriFeedbackStatus}
+        deadline={deadline}
         delayedGradePublication={delayedGradePublication}
         explanations={explanations}
         graded={workflowState === workflowStates.Graded}
@@ -420,6 +432,7 @@ class VisibleSubmissionEditIndex extends Component {
     if (isSubmissionBlocked) return <BlockedSubmission />;
     return (
       <Page className="space-y-5">
+        {this.renderTimeLimitBanner()}
         {this.renderAssessment()}
         {this.renderProgress()}
         {this.renderContent()}
@@ -440,6 +453,7 @@ VisibleSubmissionEditIndex.propTypes = {
   answers: PropTypes.object,
   assessment: assessmentShape,
   codaveriFeedbackStatus: PropTypes.object,
+  deadline: PropTypes.number,
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
   grading: gradingShape.isRequired,
@@ -457,8 +471,12 @@ VisibleSubmissionEditIndex.propTypes = {
 };
 
 function mapStateToProps({ assessments: { submission } }) {
+  const deadline =
+    new Date(submission.submission.attemptedAt).getTime() +
+    submission.assessment.timeLimit * 60 * 1000;
   return {
     assessment: submission.assessment,
+    deadline,
     exp: submission.grading.exp,
     explanations: submission.explanations,
     answers: submission.answers,
