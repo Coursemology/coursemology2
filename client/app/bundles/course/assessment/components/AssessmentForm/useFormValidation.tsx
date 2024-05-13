@@ -91,6 +91,7 @@ const validationSchema = yup.object({
   affects_personal_times: yup.bool(),
   time_limit: yup
     .number()
+    .nullable()
     .typeError(t.hasToBeNumber)
     .when('has_time_limit', {
       is: true,

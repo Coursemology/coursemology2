@@ -21,6 +21,8 @@ const INITIAL_VALUES = {
   tabbed_view: false,
   published: false,
   has_todo: false,
+  has_time_limit: false,
+  time_limit: null,
   allow_partial_submission: false,
   block_student_viewing_after_submitted: false,
   allow_record_draft_answer: false,

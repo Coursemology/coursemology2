@@ -544,6 +544,23 @@ const translations = defineMessages({
     defaultMessage:
       'Submission for this assessment cannot be viewed once finalised.',
   },
+  hoursMinutesSeconds: {
+    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds',
+    defaultMessage:
+      '{hrs, plural, one {# hour} other {# hours}} \
+    {mins, plural, one {# minute} other {# minutes}} \
+    {secs, plural, one {# second} other {# seconds}}',
+  },
+  minutesSeconds: {
+    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
+    defaultMessage:
+      '{mins, plural, one {# minute} other {# minutes}} \
+    {secs, plural, one {# second} other {# seconds}}',
+  },
+  seconds: {
+    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
+    defaultMessage: '{secs, plural, one {# second} other {# seconds}}',
+  },
 });
 
 export const scribingTranslations = defineMessages({
