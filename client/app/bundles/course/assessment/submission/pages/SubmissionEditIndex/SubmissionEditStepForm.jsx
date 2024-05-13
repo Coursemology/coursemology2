@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { SAVING_STATUS } from 'lib/constants/sharedConstants';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 import SubmissionAnswer from '../../components/answers';
@@ -81,6 +82,7 @@ const isLastQuestion = (questionIds, stepIndex) =>
 const SubmissionEditStepForm = (props) => {
   const {
     attachments,
+    answerFlags,
     allConsideredCorrect,
     allowPartialSubmission,
     attempting,
@@ -132,7 +134,7 @@ const SubmissionEditStepForm = (props) => {
     handleSubmit,
     reset,
     resetField,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, dirtyFields },
   } = methods;
   usePrompt(isDirty);
 
@@ -140,13 +142,41 @@ const SubmissionEditStepForm = (props) => {
     reset(initialValues);
   }, [initialValues]);
 
+  const getCurrentlySavingAnswerId = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+
+    return question.answerId;
+  };
+
   const handleNext = () => {
+    const answerId = getCurrentlySavingAnswerId();
+    const isAnswerUnsaved =
+      answerFlags[answerId].savingStatus !== SAVING_STATUS.Saved;
+    const isAnswerDirty = !!dirtyFields[answerId];
+
+    if (isAnswerUnsaved && isAnswerDirty) {
+      handleSubmit((data) => {
+        onSaveDraft({ answerId: data[answerId] }, resetField);
+      })();
+    }
+
     setMaxStep(Math.max(maxStep, stepIndex + 1));
     setStepIndex(stepIndex + 1);
   };
 
   const handleStepClick = (index) => {
+    const answerId = getCurrentlySavingAnswerId();
+    const isAnswerUnsaved =
+      answerFlags[answerId].savingStatus !== SAVING_STATUS.Saved;
+    const isAnswerDirty = !!dirtyFields[answerId];
+
     if (published || skippable || graderView || index <= maxStep) {
+      if (isAnswerUnsaved && isAnswerDirty) {
+        handleSubmit((data) => {
+          onSaveDraft({ answerId: data[answerId] }, resetField);
+        })();
+      }
       setStepIndex(index);
     }
   };
@@ -649,6 +679,7 @@ SubmissionEditStepForm.propTypes = {
   intl: PropTypes.object.isRequired,
 
   attachments: PropTypes.arrayOf(attachmentShape),
+  answerFlags: PropTypes.object,
   graderView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
   step: PropTypes.number,
@@ -686,6 +717,8 @@ SubmissionEditStepForm.propTypes = {
 function mapStateToProps(state) {
   return {
     attachments: state.assessments.submission.attachments,
+    answerFlags:
+      state.assessments.submission.answerFlags.flagsByAnswerId.entities,
   };
 }
 
