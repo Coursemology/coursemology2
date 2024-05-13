@@ -13,6 +13,7 @@ class Course::Assessment::Submission < ApplicationRecord
 
   after_save :auto_grade_submission, if: :submitted?
   after_save :retrieve_codaveri_feedback, if: :submitted?
+  after_create :create_force_submission_job, if: :attempting?
 
   workflow do
     state :attempting do
@@ -230,6 +231,13 @@ class Course::Assessment::Submission < ApplicationRecord
       merge(Course::Assessment::QuestionGroup.order(:weight)).
       merge(Course::Assessment::QuestionBundleQuestion.order(:weight)).
       extending(Course::Assessment::QuestionsConcern)
+  end
+
+  def create_force_submission_job
+    return unless assessment.time_limit
+
+    Course::Assessment::Submission::ForceSubmittingJob.set(wait_until: created_at + assessment.time_limit.minutes + 5.minutes).
+      perform_later(assessment, [creator_id], [], creator)
   end
 
   # The answers with current_answer flag set to true, filtering out orphaned answers to questions which are no longer
