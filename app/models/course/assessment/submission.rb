@@ -236,7 +236,8 @@ class Course::Assessment::Submission < ApplicationRecord
   def create_force_submission_job
     return unless assessment.time_limit
 
-    Course::Assessment::Submission::ForceSubmittingJob.set(wait_until: created_at + assessment.time_limit.minutes + 5.minutes).
+    Course::Assessment::Submission::ForceSubmittingJob.
+      set(wait_until: created_at + assessment.time_limit.minutes + 5.minutes).
       perform_later(assessment, [creator_id], [], creator)
   end
 

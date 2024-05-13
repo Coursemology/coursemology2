@@ -10,24 +10,48 @@ interface Props {
   deadline: Date;
 }
 
-const remainingTimeDisplay = (remainingTime: number): string => {
+const remainingTimeDisplay = (remainingTime: number): JSX.Element | null => {
   const hours = Math.floor(remainingTime / 1000 / 60 / 60) % 24;
   const minutes = Math.floor(remainingTime / 1000 / 60) % 60;
   const seconds = Math.floor(remainingTime / 1000) % 60;
 
   if (hours > 0) {
-    return `${hours} hours ${minutes} minutes ${seconds} seconds`;
+    return (
+      <FormattedMessage
+        {...translations.hoursMinutesSeconds}
+        values={{
+          hrs: hours,
+          mins: minutes,
+          secs: seconds,
+        }}
+      />
+    );
   }
 
   if (minutes > 0) {
-    return `${minutes} minutes ${seconds} seconds`;
+    return (
+      <FormattedMessage
+        {...translations.minutesSeconds}
+        values={{
+          mins: minutes,
+          secs: seconds,
+        }}
+      />
+    );
   }
 
   if (seconds >= 0) {
-    return `${seconds} seconds`;
+    return (
+      <FormattedMessage
+        {...translations.seconds}
+        values={{
+          secs: seconds,
+        }}
+      />
+    );
   }
 
-  return '';
+  return null;
 };
 
 const TimeLimitBanner: FC<Props> = (props) => {

@@ -56,7 +56,7 @@ const translations = defineMessages({
   timeLimitIcon: {
     id: 'course.assessments.index.timeLimitIcon',
     defaultMessage:
-      'Time Limit: {timeLimit} {timeLimit, plural, one {# minute} other {# minutes}}',
+      'Time Limit: {timeLimit, plural, one {# minute} other {# minutes}}',
   },
   passwordProtected: {
     id: 'course.assessments.index.passwordProtected',
@@ -1314,8 +1314,7 @@ const translations = defineMessages({
   },
   timeLimitDetail: {
     id: 'course.assessment.question.programming.timeLimitDetail',
-    defaultMessage:
-      '{timeLimit} {timeLimit, plural, one {# minute} other {# minutes}}',
+    defaultMessage: '{timeLimit, plural, one {# minute} other {# minutes}}',
   },
   attemptLimit: {
     id: 'course.assessment.question.programming.attemptLimit',

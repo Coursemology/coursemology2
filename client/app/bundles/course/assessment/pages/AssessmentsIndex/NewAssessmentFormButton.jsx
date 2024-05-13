@@ -110,6 +110,8 @@ class NewAssessmentFormButton extends Component {
       start_at: null,
       end_at: null,
       bonus_end_at: null,
+      has_time_limit: false,
+      time_limit: 0,
       base_exp: 0,
       time_bonus_exp: 0,
       published: false,
