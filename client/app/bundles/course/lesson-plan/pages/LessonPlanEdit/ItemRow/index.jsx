@@ -14,7 +14,7 @@ import PublishedCell from './PublishedCell';
 const translations = defineMessages({
   updateSuccess: {
     id: 'course.lessonPlan.LessonPlanEdit.ItemRow.updateSuccess',
-    defaultMessage: "'{title}' was updated.",
+    defaultMessage: '"{title}" was updated.',
   },
   updateFailed: {
     id: 'course.lessonPlan.LessonPlanEdit.ItemRow.updateFailed',
