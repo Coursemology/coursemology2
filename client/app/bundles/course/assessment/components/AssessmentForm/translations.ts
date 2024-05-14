@@ -351,7 +351,7 @@ const translations = defineMessages({
   },
   minutes: {
     id: 'course.assessment.AssessmentForm.minutes',
-    defaultMessage: 'mins',
+    defaultMessage: 'minute(s)',
   },
   milliseconds: {
     id: 'course.assessment.AssessmentForm.milliseconds',

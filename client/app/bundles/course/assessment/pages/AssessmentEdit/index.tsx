@@ -40,6 +40,7 @@ const AssessmentEdit = (): JSX.Element => {
                 data.attributes.view_password ||
                 data.attributes.session_password
               ),
+              has_time_limit: !!data.attributes.time_limit,
               monitoring:
                 data.attributes.monitoring ||
                 (data.can_manage_monitor

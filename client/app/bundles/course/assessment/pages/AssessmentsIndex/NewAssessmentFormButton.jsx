@@ -32,9 +32,13 @@ class NewAssessmentFormButton extends Component {
   onFormSubmit = (data, setError) => {
     const { categoryId, dispatch, intl, tabId } = this.props;
 
+    const timeLimit = data.has_time_limit ? data.time_limit : null;
+    const timeBonusExp = data.time_bonus_exp ? data.time_bonus_exp : 0;
+
     const attributes = {
       ...data,
-      time_bonus_exp: data.time_bonus_exp ? data.time_bonus_exp : 0,
+      time_bonus_exp: timeBonusExp,
+      time_limit: timeLimit,
     };
 
     return dispatch(

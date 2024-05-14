@@ -50,18 +50,13 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     monitoringEnabled,
   } = props;
 
-  const defaultValues = {
-    ...initialValues,
-    has_time_limit: !!initialValues.time_limit,
-  };
-
   const {
     control,
     handleSubmit,
     setError,
     watch,
     formState: { errors, isDirty },
-  } = useFormValidation(defaultValues);
+  } = useFormValidation(initialValues);
 
   const { t } = useTranslation();
 
@@ -184,12 +179,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       encType="multipart/form-data"
       id="assessment-form"
       noValidate
-      onSubmit={handleSubmit((data) =>
-        onSubmit(
-          { ...data, time_limit: data.has_time_limit ? data.time_limit : null },
-          setError,
-        ),
-      )}
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
 

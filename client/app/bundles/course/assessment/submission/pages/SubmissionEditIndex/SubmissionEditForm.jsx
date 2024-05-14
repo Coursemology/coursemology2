@@ -8,10 +8,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Paper,
   Step,
   StepButton,
@@ -29,6 +25,7 @@ import usePrompt from 'lib/hooks/router/usePrompt';
 
 import SubmissionAnswer from '../../components/answers';
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
+import WarningDialog from '../../components/WarningDialog';
 import { formNames, questionTypes } from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
 import QuestionGrade from '../../containers/QuestionGrade';
@@ -113,9 +110,6 @@ const SubmissionEditForm = (props) => {
 
   let initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
-  const [examNotice, setExamNotice] = useState(passwordProtected);
-  const [timedAssessmentNotice, setTimedAssessmentNotice] =
-    useState(!!deadline);
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
@@ -181,44 +175,6 @@ const SubmissionEditForm = (props) => {
     }
     return null;
   };
-
-  const renderExamDialog = () => (
-    <Dialog maxWidth="lg" open={attempting && examNotice}>
-      <DialogTitle>
-        {intl.formatMessage(translations.examDialogTitle)}
-      </DialogTitle>
-      <DialogContent>
-        <Typography color="text.secondary" variant="body2">
-          {intl.formatMessage(translations.examDialogMessage)}
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button color="primary" onClick={() => setExamNotice(false)}>
-          {intl.formatMessage(translations.ok)}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-
-  const renderTimedAssessmentDialog = () => (
-    <Dialog maxWidth="lg" open={attempting && timedAssessmentNotice}>
-      <DialogTitle>
-        {intl.formatMessage(translations.timedAssessmentDialogTitle)}
-      </DialogTitle>
-      <DialogContent>
-        <Typography color="text.secondary" variant="body2">
-          {intl.formatMessage(translations.timedAssessmentDialogMessage, {
-            timeLimit,
-          })}
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button color="primary" onClick={() => setTimedAssessmentNotice(false)}>
-          {intl.formatMessage(translations.ok)}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
 
   const renderExplanationPanel = (questionId) => {
     const explanation = explanations[questionId];
@@ -759,8 +715,12 @@ const SubmissionEditForm = (props) => {
 
       {renderUnsubmitDialog()}
       {renderResetDialog()}
-      {renderExamDialog()}
-      {renderTimedAssessmentDialog()}
+      <WarningDialog
+        isAttempting={attempting}
+        isExamMode={passwordProtected}
+        isTimedMode={!!deadline}
+        timeLimit={timeLimit}
+      />
     </>
   );
 };

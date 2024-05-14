@@ -16,7 +16,7 @@ export const questionTypes = mirrorCreator([
 
 export const MEGABYTES_TO_BYTES = 1024 * 1024;
 
-export const BUFFER_TIME_TO_FORCE_SUBMIT = 2 * 60 * 1000;
+export const BUFFER_TIME_TO_FORCE_SUBMIT_MS = 2 * 60 * 1000;
 
 export const workflowStates = {
   Unstarted: 'unstarted' as const,

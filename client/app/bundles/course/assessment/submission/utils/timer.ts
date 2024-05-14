@@ -1,4 +1,4 @@
-import { BUFFER_TIME_TO_FORCE_SUBMIT } from '../constants';
+import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../constants';
 
 export const setTimerForForceSubmission = (
   deadline: number,
@@ -9,7 +9,7 @@ export const setTimerForForceSubmission = (
     const currentTime = new Date();
     const remainingSeconds =
       new Date(deadline).getTime() +
-      BUFFER_TIME_TO_FORCE_SUBMIT -
+      BUFFER_TIME_TO_FORCE_SUBMIT_MS -
       currentTime.getTime();
 
     if (remainingSeconds < 0) {
