@@ -5,28 +5,28 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useSetFooter } from 'lib/components/wrappers/FooterProvider';
 import Preload from 'lib/components/wrappers/Preload';
 
-import CikgoChatsPage from '../components/CikgoChatsPage';
 import CikgoErrorPage from '../components/CikgoErrorPage';
+import CikgoFramePage from '../components/CikgoFramePage';
 
-const LearnPage = (): JSX.Element => {
+const MissionControlPage = (): JSX.Element => {
   useSetFooter(false);
 
   return (
     <Preload
       render={<LoadingIndicator />}
       while={async () => {
-        const response = await CourseAPI.stories.learn();
+        const response = await CourseAPI.stories.missionControl();
         return response.data.redirectUrl;
       }}
     >
-      {(url) => (url ? <CikgoChatsPage url={url} /> : <CikgoErrorPage />)}
+      {(url) => (url ? <CikgoFramePage url={url} /> : <CikgoErrorPage />)}
     </Preload>
   );
 };
 
-export default Object.assign(LearnPage, {
+export default Object.assign(MissionControlPage, {
   handle: defineMessage({
-    id: 'course.stories.pages.LearnPage',
-    defaultMessage: 'Learn',
+    id: 'course.stories.pages.MissionControlPage',
+    defaultMessage: 'Mission Control',
   }),
 });

@@ -39,6 +39,8 @@ import {
   SendOutlined,
   Settings,
   SettingsOutlined,
+  Speed,
+  SpeedOutlined,
   Stairs,
   StairsOutlined,
   Star,
@@ -82,6 +84,7 @@ export const COURSE_COMPONENT_ICONS = {
   home: { outlined: HomeOutlined, filled: Home },
   map: { outlined: MapOutlined, filled: MapIcon },
   learn: { outlined: AssistantOutlined, filled: Assistant },
+  mission_control: { outlined: SpeedOutlined, filled: Speed },
 } satisfies Record<string, IconTuple>;
 
 export type CourseComponentIconName = keyof typeof COURSE_COMPONENT_ICONS;

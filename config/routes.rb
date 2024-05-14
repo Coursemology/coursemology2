@@ -485,6 +485,7 @@ Rails.application.routes.draw do
 
       scope module: :stories do
         get 'learn', to: 'stories#learn'
+        get 'mission_control', to: 'stories#mission_control'
       end
     end
   end

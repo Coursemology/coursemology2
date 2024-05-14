@@ -10,6 +10,10 @@ module Course::CikgoChatsConcern
     Cikgo::ChatsService.find_or_create_room(course_user)
   end
 
+  def get_mission_control_url(course_user)
+    Cikgo::ChatsService.mission_control(course_user)
+  end
+
   private
 
   def create_cikgo_user(user)

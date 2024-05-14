@@ -8,18 +8,18 @@ import { SUPPORT_EMAIL } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 const translations = defineMessages({
-  errorFetchingRoom: {
-    id: 'course.stories.CikgoNoChatsPage.errorFetchingRoom',
+  errorFetching: {
+    id: 'course.stories.CikgoErrorPage.errorFetching',
     defaultMessage: 'There was a problem getting your stuff from Cikgo.',
   },
-  errorFetchingRoomDescription: {
-    id: 'course.stories.CikgoNoChatsPage.errorFetchingRoomDescription',
+  errorFetchingDescription: {
+    id: 'course.stories.CikgoErrorPage.errorFetchingDescription',
     defaultMessage:
       '<cikgo>Cikgo</cikgo> is our partner that powers this experience. They were contactable, but did not give us any resources for this request just now Please try again later, and if this persists, <link>contact us</link>.',
   },
 });
 
-const CikgoNoChatsPage = (): JSX.Element => {
+const CikgoErrorPage = (): JSX.Element => {
   const { t } = useTranslation();
 
   return (
@@ -34,7 +34,7 @@ const CikgoNoChatsPage = (): JSX.Element => {
       </div>
 
       <Typography className="mt-5" variant="h6">
-        {t(translations.errorFetchingRoom)}
+        {t(translations.errorFetching)}
       </Typography>
 
       <Typography
@@ -42,7 +42,7 @@ const CikgoNoChatsPage = (): JSX.Element => {
         color="text.secondary"
         variant="body2"
       >
-        {t(translations.errorFetchingRoomDescription, {
+        {t(translations.errorFetchingDescription, {
           cikgo: (chunk) => (
             <Link external href="https://cikgo.com" opensInNewTab>
               {chunk}
@@ -59,4 +59,4 @@ const CikgoNoChatsPage = (): JSX.Element => {
   );
 };
 
-export default CikgoNoChatsPage;
+export default CikgoErrorPage;

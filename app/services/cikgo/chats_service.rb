@@ -11,5 +11,14 @@ class Cikgo::ChatsService < Cikgo::Service
 
       [result[:url], result[:openThreadsCount]]
     end
+
+    def mission_control(course_user)
+      result = connection(:post, 'chats/manage', body: {
+        pushKey: push_key(course_user.course),
+        userId: cikgo_user_id(course_user)
+      })
+
+      [result[:url], result[:pendingThreadsCount]]
+    end
   end
 end

@@ -124,6 +124,7 @@ import StaffStatistics from 'course/statistics/pages/StatisticsIndex/staff/Staff
 import StudentsStatistics from 'course/statistics/pages/StatisticsIndex/students/StudentsStatistics';
 import LearnRedirect from 'course/stories/components/LearnRedirect';
 import LearnPage from 'course/stories/pages/LearnPage';
+import MissionControlPage from 'course/stories/pages/MissionControlPage';
 import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
 import {
   courseUserHandle,
@@ -163,6 +164,11 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
           path: 'learn',
           handle: LearnPage.handle,
           element: <LearnPage />,
+        },
+        {
+          path: 'mission_control',
+          handle: MissionControlPage.handle,
+          element: <MissionControlPage />,
         },
         {
           path: 'timelines',
