@@ -349,7 +349,7 @@ const translations = defineMessages({
   },
   noItemsMatched: {
     id: 'course.assessment.show.noItemsMatched',
-    defaultMessage: "Oops, no items matched ''{keyword}''.",
+    defaultMessage: 'Oops, no items matched "{keyword}".',
   },
   tryAgain: {
     id: 'course.assessment.show.tryAgain',

@@ -6639,7 +6639,7 @@
     "defaultMessage": "跳转到你的其他课程"
   },
   "lib.components.navigation.CourseSwitcherPopupMenu.noCoursesMatch": {
-    "defaultMessage": "未找到 {keyword} 关键词的课程"
+    "defaultMessage": "未找到 \"{keyword}\" 关键词的课程"
   },
   "lib.components.navigation.CourseSwitcherPopupMenu.searchCourses": {
     "defaultMessage": "在你的课程中搜索"
