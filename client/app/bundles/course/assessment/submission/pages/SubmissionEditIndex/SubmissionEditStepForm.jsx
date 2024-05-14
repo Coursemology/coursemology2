@@ -8,10 +8,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Paper,
   Step,
   StepButton,
@@ -31,6 +27,7 @@ import usePrompt from 'lib/hooks/router/usePrompt';
 
 import SubmissionAnswer from '../../components/answers';
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
+import WarningDialog from '../../components/WarningDialog';
 import { formNames, questionTypes } from '../../constants';
 import Comments from '../../containers/Comments';
 import GradingPanel from '../../containers/GradingPanel';
@@ -125,8 +122,6 @@ const SubmissionEditStepForm = (props) => {
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
-  const [timedAssessmentNotice, setTimedAssessmentNotice] =
-    useState(!!deadline);
   const [resetAnswerId, setResetAnswerId] = useState(null);
   const [maxStep, setMaxStep] = useState(maxInitialStep);
   const [stepIndex, setStepIndex] = useState(initialStep);
@@ -399,26 +394,6 @@ const SubmissionEditStepForm = (props) => {
     />
   );
 
-  const renderTimedAssessmentDialog = () => (
-    <Dialog maxWidth="lg" open={attempting && timedAssessmentNotice}>
-      <DialogTitle>
-        {intl.formatMessage(translations.timedAssessmentDialogTitle)}
-      </DialogTitle>
-      <DialogContent>
-        <Typography color="text.secondary" variant="body2">
-          {intl.formatMessage(translations.timedAssessmentDialogMessage, {
-            timeLimit,
-          })}
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button color="primary" onClick={() => setTimedAssessmentNotice(false)}>
-          {intl.formatMessage(translations.ok)}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-
   const renderSaveDraftButton = () => {
     if (!attempting) {
       return null;
@@ -678,7 +653,12 @@ const SubmissionEditStepForm = (props) => {
 
       {renderUnsubmitDialog()}
       {renderResetDialog()}
-      {renderTimedAssessmentDialog()}
+      <WarningDialog
+        isAttempting={attempting}
+        isExamMode={false}
+        isTimedMode={!!deadline}
+        timeLimit={timeLimit}
+      />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { HourglassTop } from '@mui/icons-material';
 
 import Banner from 'lib/components/core/layouts/Banner';
 
-import { BUFFER_TIME_TO_FORCE_SUBMIT } from '../../constants';
+import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../../constants';
 import translations from '../../translations';
 
 interface Props {
@@ -63,7 +63,7 @@ const TimeLimitBanner: FC<Props> = (props) => {
   const [currentRemainingTime, setCurrentRemainingTime] =
     useState(initialRemainingTime);
   const [currentBufferTime, setCurrentBufferTime] = useState(
-    BUFFER_TIME_TO_FORCE_SUBMIT,
+    BUFFER_TIME_TO_FORCE_SUBMIT_MS,
   );
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const TimeLimitBanner: FC<Props> = (props) => {
         new Date(deadline).getTime() - currentTime.getTime();
       const remainingBufferSeconds =
         new Date(deadline).getTime() +
-        BUFFER_TIME_TO_FORCE_SUBMIT -
+        BUFFER_TIME_TO_FORCE_SUBMIT_MS -
         currentTime.getTime();
 
       setCurrentRemainingTime(remainingSeconds);
