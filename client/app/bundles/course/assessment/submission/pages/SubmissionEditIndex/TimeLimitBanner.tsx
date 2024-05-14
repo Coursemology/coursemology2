@@ -11,7 +11,7 @@ interface Props {
   deadline: Date;
 }
 
-const remainingTimeDisplay = (remainingTime: number): JSX.Element | null => {
+export const remainingTimeDisplay = (remainingTime: number): JSX.Element => {
   const hours = Math.floor(remainingTime / 1000 / 60 / 60) % 24;
   const minutes = Math.floor(remainingTime / 1000 / 60) % 60;
   const seconds = Math.floor(remainingTime / 1000) % 60;
@@ -52,7 +52,7 @@ const remainingTimeDisplay = (remainingTime: number): JSX.Element | null => {
     );
   }
 
-  return null;
+  return <div />;
 };
 
 const TimeLimitBanner: FC<Props> = (props) => {

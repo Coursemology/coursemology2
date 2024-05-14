@@ -2,6 +2,7 @@ import {
   Block,
   CheckCircle,
   FormatListBulleted,
+  HourglassTop,
   Key,
 } from '@mui/icons-material';
 import { Chip, Tooltip } from '@mui/material';
@@ -12,16 +13,22 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
-interface StatusBadgesProps {
+interface NonStudentStatusBadgesProps {
   for: AssessmentListData;
 }
 
-const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
+interface StatusBadgesProps extends NonStudentStatusBadgesProps {
+  isStudent: boolean;
+}
+
+const NonStudentStatusBadges = (
+  props: NonStudentStatusBadgesProps,
+): JSX.Element => {
   const { for: assessment } = props;
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center space-x-2 max-xl:mt-2 xl:ml-2">
+    <>
       {!assessment.published && (
         <Tooltip disableInteractive title={t(translations.draftHint)}>
           <Chip
@@ -56,6 +63,28 @@ const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
         affectsPersonalTimes={assessment.affectsPersonalTimes}
         hasPersonalTimes={assessment.hasPersonalTimes}
       />
+    </>
+  );
+};
+
+const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
+  const { for: assessment, isStudent } = props;
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex items-center space-x-2 max-xl:mt-2 xl:ml-2">
+      {assessment.timeLimit && (
+        <Tooltip
+          disableInteractive
+          title={t(translations.timeLimitIcon, {
+            timeLimit: assessment.timeLimit,
+          })}
+        >
+          <HourglassTop className="text-3xl text-neutral-500 hover?:text-neutral-600" />
+        </Tooltip>
+      )}
+
+      {!isStudent && <NonStudentStatusBadges for={assessment} />}
     </div>
   );
 };

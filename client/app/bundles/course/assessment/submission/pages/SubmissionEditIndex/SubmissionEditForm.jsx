@@ -104,7 +104,6 @@ const SubmissionEditForm = (props) => {
     tabbedView,
     maxStep: maxInitialStep,
     step,
-    timeLimit,
     topics,
   } = props;
 
@@ -716,10 +715,10 @@ const SubmissionEditForm = (props) => {
       {renderUnsubmitDialog()}
       {renderResetDialog()}
       <WarningDialog
+        deadline={deadline}
         isAttempting={attempting}
         isExamMode={passwordProtected}
         isTimedMode={!!deadline}
-        timeLimit={timeLimit}
       />
     </>
   );
@@ -756,7 +755,6 @@ SubmissionEditForm.propTypes = {
   topics: PropTypes.objectOf(topicShape),
   isAutograding: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
-  timeLimit: PropTypes.number,
 
   handleAutogradeSubmission: PropTypes.func,
   onReset: PropTypes.func,

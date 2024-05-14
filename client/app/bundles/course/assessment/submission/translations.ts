@@ -436,8 +436,9 @@ const translations = defineMessages({
   timedAssessmentDialogMessage: {
     id: 'course.assessment.submission.timedAssessmentDialogMessage',
     defaultMessage:
-      'You have {timeLimit, plural, one {# minute} other {# minutes}} in total to complete \
-      this assessment. Once the time is up, the assessment will be automatically submitted.',
+      'You have {remainingTime} to complete this assessment. \
+    {stillSomeTimeRemaining, select, true {Once the time is up, \
+    the assessment will be automatically submitted.} other {}}',
   },
   timedExamDialogTitle: {
     id: 'course.assessment.submission.timedExamDialogTitle',
@@ -446,9 +447,10 @@ const translations = defineMessages({
   timedExamDialogMessage: {
     id: 'course.assessment.submission.timedExamDialogMessage',
     defaultMessage:
-      'You have {timeLimit, plural, one {# minute} other {# minutes}} in total to complete \
-      this assessment. Once the time is up, the assessment will be automatically submitted. Please \
-      do not sign out or close the browser while attempting this exam.',
+      'You have {remainingTime} to complete this assessment. \
+      {stillSomeTimeRemaining, select, true {Once the time is up, \
+      the assessment will be automatically submitted. Please \
+      do not sign out or close the browser while attempting this exam.} other {}}',
   },
   emptyAssessment: {
     id: 'course.assessment.submission.emptyAssessment',

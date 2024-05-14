@@ -113,7 +113,6 @@ const SubmissionEditStepForm = (props) => {
     showMcqMrqSolution,
     skippable,
     step,
-    timeLimit,
     topics,
   } = props;
 
@@ -654,10 +653,10 @@ const SubmissionEditStepForm = (props) => {
       {renderUnsubmitDialog()}
       {renderResetDialog()}
       <WarningDialog
+        deadline={deadline}
         isAttempting={attempting}
         isExamMode={false}
         isTimedMode={!!deadline}
-        timeLimit={timeLimit}
       />
     </div>
   );
@@ -691,7 +690,6 @@ SubmissionEditStepForm.propTypes = {
   questionsFlags: PropTypes.objectOf(questionFlagsShape),
   topics: PropTypes.objectOf(topicShape),
   isSaving: PropTypes.bool.isRequired,
-  timeLimit: PropTypes.number,
 
   onReset: PropTypes.func,
   onSaveDraft: PropTypes.func,
