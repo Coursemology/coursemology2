@@ -4713,7 +4713,7 @@
     "defaultMessage": "Failed to update {title}."
   },
   "course.lessonPlan.LessonPlanEdit.ItemRow.updateSuccess": {
-    "defaultMessage": "'{title}' was updated."
+    "defaultMessage": "\"{title}\" was updated."
   },
   "course.lessonPlan.LessonPlanEdit.MilestoneRow.updateFailed": {
     "defaultMessage": "Failed to update milestone date."
