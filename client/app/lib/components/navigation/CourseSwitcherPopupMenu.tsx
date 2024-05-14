@@ -30,7 +30,7 @@ const translations = defineMessages({
   },
   noCoursesMatch: {
     id: 'lib.components.navigation.CourseSwitcherPopupMenu.noCoursesMatch',
-    defaultMessage: "Oops, no courses matched ''{keyword}''.",
+    defaultMessage: 'Oops, no courses matched "{keyword}".',
   },
   seeAllPublicCourses: {
     id: 'lib.components.navigation.CourseSwitcherPopupMenu.seeAllPublicCourses',
