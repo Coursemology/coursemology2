@@ -1310,7 +1310,7 @@ const translations = defineMessages({
   },
   timeLimit: {
     id: 'course.assessment.question.programming.timeLimit',
-    defaultMessage: 'Time Limit',
+    defaultMessage: 'Time limit',
   },
   timeLimitDetail: {
     id: 'course.assessment.question.programming.timeLimitDetail',

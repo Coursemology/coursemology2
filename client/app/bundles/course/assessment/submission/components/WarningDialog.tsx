@@ -10,21 +10,29 @@ import {
 
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { remainingTimeDisplay } from '../pages/SubmissionEditIndex/TimeLimitBanner';
 import translations from '../translations';
 
 interface Props {
+  deadline: Date;
   isExamMode: boolean;
   isTimedMode: boolean;
   isAttempting: boolean;
-  timeLimit?: number;
 }
+
+const NO_TIME_REMAINING = 'no time';
 
 const WarningDialog: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { isExamMode, isTimedMode, isAttempting, timeLimit } = props;
+  const { isExamMode, isTimedMode, isAttempting, deadline } = props;
 
   const [examNotice, setExamNotice] = useState(isExamMode);
   const [timedNotice, setTimedNotice] = useState(isTimedMode);
+
+  const remainingTime =
+    deadline && new Date(deadline) > new Date()
+      ? new Date(deadline).getTime() - new Date().getTime()
+      : null;
 
   let dialogTitle: string = '';
   let dialogMessage: string = '';
@@ -32,7 +40,10 @@ const WarningDialog: FC<Props> = (props) => {
   if (examNotice && timedNotice) {
     dialogTitle = t(translations.timedExamDialogTitle);
     dialogMessage = t(translations.timedExamDialogMessage, {
-      timeLimit: timeLimit ?? 0,
+      remainingTime: remainingTime
+        ? remainingTimeDisplay(remainingTime)
+        : NO_TIME_REMAINING,
+      stillSomeTimeRemaining: !!remainingTime,
     });
   } else if (examNotice) {
     dialogTitle = t(translations.examDialogTitle);
@@ -40,7 +51,10 @@ const WarningDialog: FC<Props> = (props) => {
   } else if (timedNotice) {
     dialogTitle = t(translations.timedAssessmentDialogTitle);
     dialogMessage = t(translations.timedAssessmentDialogMessage, {
-      timeLimit: timeLimit ?? 0,
+      remainingTime: remainingTime
+        ? remainingTimeDisplay(remainingTime)
+        : NO_TIME_REMAINING,
+      stillSomeTimeRemaining: !!remainingTime,
     });
   }
 

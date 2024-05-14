@@ -1,5 +1,3 @@
-import { HourglassTop } from '@mui/icons-material';
-import { Tooltip } from '@mui/material';
 import {
   AssessmentListData,
   AssessmentsListData,
@@ -41,19 +39,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
             </Link>
           </label>
 
-          <div className="flex items-center">
-            {assessment.timeLimit && (
-              <Tooltip
-                disableInteractive
-                title={t(translations.timeLimitIcon, {
-                  timeLimit: assessment.timeLimit,
-                })}
-              >
-                <HourglassTop className="text-3xl text-neutral-500 hover?:text-neutral-600" />
-              </Tooltip>
-            )}
-            {!display.isStudent && <StatusBadges for={assessment} />}
-          </div>
+          <StatusBadges for={assessment} isStudent={display.isStudent} />
         </div>
       ),
     },
