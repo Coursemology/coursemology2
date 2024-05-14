@@ -72,6 +72,10 @@ Rails.application.configure do
 
   config.action_cable.disable_request_forgery_protection = true
 
+  config.action_dispatch.default_headers = {
+    'X-Frame-Options' => 'ALLOWALL'
+  }
+
   config.hosts << ".#{config.x.default_app_host}"
 
   config.middleware.insert_before 0, Rack::Cors do
