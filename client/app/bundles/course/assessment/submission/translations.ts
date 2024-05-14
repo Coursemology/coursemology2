@@ -260,6 +260,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.remainingTime',
     defaultMessage: 'Time Remaining: {timeLimit}',
   },
+  remainingBufferTime: {
+    id: 'course.assessment.submission.remainingBufferTime',
+    defaultMessage: 'Submitting in: {timeLimit}',
+  },
   timeIsUp: {
     id: 'course.assessment.submission.timeIsUp',
     defaultMessage: 'Time is Up',
@@ -424,6 +428,16 @@ const translations = defineMessages({
     defaultMessage:
       'Please do not sign out or close the browser, otherwise \
                     you may have trouble continuing the exam.',
+  },
+  timedAssessmentDialogTitle: {
+    id: 'course.assessment.submission.timedAssessmentDialogTitle',
+    defaultMessage: 'You are entering a timed assessment.',
+  },
+  timedAssessmentDialogMessage: {
+    id: 'course.assessment.submission.timedAssessmentDialogMessage',
+    defaultMessage:
+      'You will have {timeLimit, plural, one {# minute} other {# minutes}} in total to finish \
+      this assessment. Once the time is up, force submission will take place.',
   },
   emptyAssessment: {
     id: 'course.assessment.submission.emptyAssessment',

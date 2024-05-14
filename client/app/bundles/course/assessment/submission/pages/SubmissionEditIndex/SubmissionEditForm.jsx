@@ -107,12 +107,15 @@ const SubmissionEditForm = (props) => {
     tabbedView,
     maxStep: maxInitialStep,
     step,
+    timeLimit,
     topics,
   } = props;
 
   let initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
   const [examNotice, setExamNotice] = useState(passwordProtected);
+  const [timedAssessmentNotice, setTimedAssessmentNotice] =
+    useState(!!deadline);
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
@@ -151,14 +154,15 @@ const SubmissionEditForm = (props) => {
     }
   }, []);
 
-  useEffect(
-    setTimerForForceSubmission(
-      deadline,
-      attempting,
-      handleSubmit((data) => onSubmit({ ...data })),
-    ),
-    [deadline],
-  );
+  useEffect(() => {
+    if (deadline) {
+      setTimerForForceSubmission(
+        deadline,
+        attempting,
+        handleSubmit((data) => onSubmit({ ...data })),
+      );
+    }
+  }, [deadline]);
 
   const renderAutogradeSubmissionButton = () => {
     if (graderView && submitted) {
@@ -190,6 +194,26 @@ const SubmissionEditForm = (props) => {
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={() => setExamNotice(false)}>
+          {intl.formatMessage(translations.ok)}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
+  const renderTimedAssessmentDialog = () => (
+    <Dialog maxWidth="lg" open={attempting && timedAssessmentNotice}>
+      <DialogTitle>
+        {intl.formatMessage(translations.timedAssessmentDialogTitle)}
+      </DialogTitle>
+      <DialogContent>
+        <Typography color="text.secondary" variant="body2">
+          {intl.formatMessage(translations.timedAssessmentDialogMessage, {
+            timeLimit,
+          })}
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button color="primary" onClick={() => setTimedAssessmentNotice(false)}>
           {intl.formatMessage(translations.ok)}
         </Button>
       </DialogActions>
@@ -736,6 +760,7 @@ const SubmissionEditForm = (props) => {
       {renderUnsubmitDialog()}
       {renderResetDialog()}
       {renderExamDialog()}
+      {renderTimedAssessmentDialog()}
     </>
   );
 };
@@ -771,6 +796,7 @@ SubmissionEditForm.propTypes = {
   topics: PropTypes.objectOf(topicShape),
   isAutograding: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
+  timeLimit: PropTypes.number,
 
   handleAutogradeSubmission: PropTypes.func,
   onReset: PropTypes.func,

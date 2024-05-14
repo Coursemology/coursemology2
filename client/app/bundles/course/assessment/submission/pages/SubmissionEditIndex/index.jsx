@@ -289,6 +289,7 @@ class VisibleSubmissionEditIndex extends Component {
       historyQuestions,
       questionsFlags,
       topics,
+      timeLimit,
       isAutograding,
       isSaving,
     } = this.props;
@@ -342,6 +343,7 @@ class VisibleSubmissionEditIndex extends Component {
           skippable={skippable}
           step={step}
           submitted={workflowState === workflowStates.Submitted}
+          timeLimit={timeLimit}
           topics={topics}
         />
       );
@@ -385,6 +387,7 @@ class VisibleSubmissionEditIndex extends Component {
         step={step}
         submitted={workflowState === workflowStates.Submitted}
         tabbedView={tabbedView}
+        timeLimit={timeLimit}
         topics={topics}
       />
     );
@@ -468,12 +471,15 @@ VisibleSubmissionEditIndex.propTypes = {
   isSaving: PropTypes.bool.isRequired,
   isSubmissionBlocked: PropTypes.bool,
   setSessionId: PropTypes.func,
+  timeLimit: PropTypes.number,
 };
 
 function mapStateToProps({ assessments: { submission } }) {
-  const deadline =
-    new Date(submission.submission.attemptedAt).getTime() +
-    submission.assessment.timeLimit * 60 * 1000;
+  const deadline = submission.assessment.timeLimit
+    ? new Date(submission.submission.attemptedAt).getTime() +
+      submission.assessment.timeLimit * 60 * 1000
+    : null;
+
   return {
     assessment: submission.assessment,
     deadline,
@@ -488,6 +494,7 @@ function mapStateToProps({ assessments: { submission } }) {
     historyQuestions: submission.history.questions,
     questionsFlags: submission.questionsFlags,
     isAutograding: submission.submissionFlags.isAutograding,
+    timeLimit: submission.assessment.timeLimit,
     topics: submission.topics,
     isLoading: submission.submissionFlags.isLoading,
     isSaving: submission.submissionFlags.isSaving,
