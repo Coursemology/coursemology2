@@ -1,22 +1,24 @@
+import { BUFFER_TIME_TO_FORCE_SUBMIT } from '../constants';
+
 export const setTimerForForceSubmission = (
   deadline: number,
   attempting: boolean,
   submitAnswer: () => Promise<void>,
-) => {
-  return (): (() => void) => {
-    const interval = setInterval(() => {
-      const currentTime = new Date();
-      const remainingSeconds =
-        new Date(deadline).getTime() - currentTime.getTime();
+): (() => void) => {
+  const interval = setInterval(() => {
+    const currentTime = new Date();
+    const remainingSeconds =
+      new Date(deadline).getTime() +
+      BUFFER_TIME_TO_FORCE_SUBMIT -
+      currentTime.getTime();
 
-      if (remainingSeconds < 0) {
-        if (attempting) {
-          submitAnswer();
-        }
-        clearInterval(interval);
+    if (remainingSeconds < 0) {
+      if (attempting) {
+        submitAnswer();
       }
-    }, 1000);
+      clearInterval(interval);
+    }
+  }, 1000);
 
-    return (): void => clearInterval(interval);
-  };
+  return (): void => clearInterval(interval);
 };

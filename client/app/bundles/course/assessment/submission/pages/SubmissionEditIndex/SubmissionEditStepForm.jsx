@@ -8,6 +8,10 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Paper,
   Step,
   StepButton,
@@ -112,6 +116,7 @@ const SubmissionEditStepForm = (props) => {
     showMcqMrqSolution,
     skippable,
     step,
+    timeLimit,
     topics,
   } = props;
 
@@ -120,6 +125,8 @@ const SubmissionEditStepForm = (props) => {
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
+  const [timedAssessmentNotice, setTimedAssessmentNotice] =
+    useState(!!deadline);
   const [resetAnswerId, setResetAnswerId] = useState(null);
   const [maxStep, setMaxStep] = useState(maxInitialStep);
   const [stepIndex, setStepIndex] = useState(initialStep);
@@ -392,6 +399,26 @@ const SubmissionEditStepForm = (props) => {
     />
   );
 
+  const renderTimedAssessmentDialog = () => (
+    <Dialog maxWidth="lg" open={attempting && timedAssessmentNotice}>
+      <DialogTitle>
+        {intl.formatMessage(translations.timedAssessmentDialogTitle)}
+      </DialogTitle>
+      <DialogContent>
+        <Typography color="text.secondary" variant="body2">
+          {intl.formatMessage(translations.timedAssessmentDialogMessage, {
+            timeLimit,
+          })}
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button color="primary" onClick={() => setTimedAssessmentNotice(false)}>
+          {intl.formatMessage(translations.ok)}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   const renderSaveDraftButton = () => {
     if (!attempting) {
       return null;
@@ -651,6 +678,7 @@ const SubmissionEditStepForm = (props) => {
 
       {renderUnsubmitDialog()}
       {renderResetDialog()}
+      {renderTimedAssessmentDialog()}
     </div>
   );
 };
@@ -683,6 +711,7 @@ SubmissionEditStepForm.propTypes = {
   questionsFlags: PropTypes.objectOf(questionFlagsShape),
   topics: PropTypes.objectOf(topicShape),
   isSaving: PropTypes.bool.isRequired,
+  timeLimit: PropTypes.number,
 
   onReset: PropTypes.func,
   onSaveDraft: PropTypes.func,

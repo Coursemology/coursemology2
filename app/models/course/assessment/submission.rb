@@ -11,6 +11,8 @@ class Course::Assessment::Submission < ApplicationRecord
 
   acts_as_experience_points_record
 
+  BUFFER_TIME_TO_FORCE_SUBMIT = 5.minutes
+
   after_save :auto_grade_submission, if: :submitted?
   after_save :retrieve_codaveri_feedback, if: :submitted?
   after_create :create_force_submission_job, if: :attempting?
@@ -237,7 +239,7 @@ class Course::Assessment::Submission < ApplicationRecord
     return unless assessment.time_limit
 
     Course::Assessment::Submission::ForceSubmittingJob.
-      set(wait_until: created_at + assessment.time_limit.minutes + 5.minutes).
+      set(wait_until: created_at + assessment.time_limit.minutes + BUFFER_TIME_TO_FORCE_SUBMIT).
       perform_later(assessment, [creator_id], [], creator)
   end
 
