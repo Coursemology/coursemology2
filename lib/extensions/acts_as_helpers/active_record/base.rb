@@ -13,7 +13,7 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     #
     # Todo acts as reminders for students to act on. Todos are also automatically created
     #   when the lesson_plan_item transits from draft to non-draft, and destroyed in the
-    #   reverse case (see Course::LessonPlan::ItemTodoConcern).
+    #   reverse case (see CourseConcern::LessonPlan::ItemTodoConcern).
     #
     # has_todo is now an instance variable (added as a column in the course_lesson_plan_items),
     # instead of class variable.

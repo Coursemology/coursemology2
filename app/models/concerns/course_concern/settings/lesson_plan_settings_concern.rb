@@ -22,40 +22,38 @@
 #   - Include the concern in the settings model for the component.
 #   - Implement `#lesson_plan_setting_items` if additional attributes are needed in the hash.
 #
-module CourseConcern
-  module Settings::LessonPlanSettingsConcern
-    extend ActiveSupport::Concern
+module CourseConcern::Settings::LessonPlanSettingsConcern
+  extend ActiveSupport::Concern
 
-    # A hash of concrete lesson plan settings for the component. This is used by
-    # {Course::Settings::LessonPlanItems} for the lesson plan settings page.
-    # See {Course::Settings::LessonPlanItems#lesson_plan_item_settings} for details of the hash shape.
-    #
-    # @return [Hash] Setting hash for a component.
-    def lesson_plan_item_settings
-      enabled_setting = settings.settings(:lesson_plan_items).enabled
-      visible_setting = settings.settings(:lesson_plan_items).visible
-      {
-        component: key,
-        enabled: enabled_setting.nil? ? true : enabled_setting,
-        visible: visible_setting.nil? ? true : visible_setting
-      }
-    end
+  # A hash of concrete lesson plan settings for the component. This is used by
+  # {Course::Settings::LessonPlanItems} for the lesson plan settings page.
+  # See {Course::Settings::LessonPlanItems#lesson_plan_item_settings} for details of the hash shape.
+  #
+  # @return [Hash] Setting hash for a component.
+  def lesson_plan_item_settings
+    enabled_setting = settings.settings(:lesson_plan_items).enabled
+    visible_setting = settings.settings(:lesson_plan_items).visible
+    {
+      component: key,
+      enabled: enabled_setting.nil? ? true : enabled_setting,
+      visible: visible_setting.nil? ? true : visible_setting
+    }
+  end
 
-    # Updates a lesson plan item setting.
-    #
-    # @param [Hash] attributes New setting represented by a hash with
-    #  `'component'`, `'enabled'` and `'visible'` keys,
-    #  e.g. { 'component' => 'course_survey_component', 'enabled' => true, 'visible' => true }
-    def update_lesson_plan_item_setting(attributes)
-      settings.settings(:lesson_plan_items).enabled = ActiveRecord::Type::Boolean.new.
-                                                      cast(attributes['enabled'])
-      settings.settings(:lesson_plan_items).visible = ActiveRecord::Type::Boolean.new.
-                                                      cast(attributes['visible'])
-      true
-    end
+  # Updates a lesson plan item setting.
+  #
+  # @param [Hash] attributes New setting represented by a hash with
+  #  `'component'`, `'enabled'` and `'visible'` keys,
+  #  e.g. { 'component' => 'course_survey_component', 'enabled' => true, 'visible' => true }
+  def update_lesson_plan_item_setting(attributes)
+    settings.settings(:lesson_plan_items).enabled = ActiveRecord::Type::Boolean.new.
+                                                    cast(attributes['enabled'])
+    settings.settings(:lesson_plan_items).visible = ActiveRecord::Type::Boolean.new.
+                                                    cast(attributes['visible'])
+    true
+  end
 
-    def showable_in_lesson_plan?
-      settings.lesson_plan_items ? settings.lesson_plan_items['enabled'] : true
-    end
+  def showable_in_lesson_plan?
+    settings.lesson_plan_items ? settings.lesson_plan_items['enabled'] : true
   end
 end

@@ -68,7 +68,7 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
     end
 
     context 'when actable object is declared to have a todo' do
-      describe 'callbacks from Course::LessonPlan::ItemTodoConcern' do
+      describe 'callbacks from CourseConcern::LessonPlan::ItemTodoConcern' do
         let(:course) { create(:course) }
         let!(:students) { create_list(:course_student, 5, course: course) }
         let(:actable) { create(:assessment, :with_mcq_question, course: course) }
@@ -125,7 +125,7 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
     end
 
     context 'when actable object is declared to not have a todo' do
-      describe 'callbacks from Course::LessonPlan::ItemTodoConcern' do
+      describe 'callbacks from CourseConcern::LessonPlan::ItemTodoConcern' do
         let(:course) { create(:course) }
         let!(:students) { create_list(:course_student, 3, course: course) }
         let(:actable) { create(:assessment, :with_mcq_question, :without_todo, course: course) }

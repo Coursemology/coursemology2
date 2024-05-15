@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Video::Event < ApplicationRecord
-  include Course::Video::IntervalQueryConcern
+  include CourseConcern::Video::IntervalQueryConcern
 
   validates :session, presence: true
   validates :sequence_num, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than: 2_147_483_648 },

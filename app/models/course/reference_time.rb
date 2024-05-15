@@ -45,7 +45,7 @@ class Course::ReferenceTime < ApplicationRecord
     actable = lesson_plan_item.actable
 
     # When `duplicating?`, `end_at` change is emitted from the associated `Course::LessonPlan::Item`.
-    # If the `Course::LessonPlan::Item` includes `Course::ClosingReminderConcern`, `end_at_changed?`
+    # If the `Course::LessonPlan::Item` includes `CourseConcern::ClosingReminderConcern`, `end_at_changed?`
     # will be true on `before_save`, so the closing reminder token and job will be reset there. So,
     # there is no need for reference time to trigger the reset at all.
     #
@@ -65,7 +65,7 @@ class Course::ReferenceTime < ApplicationRecord
     return if duplicating?
 
     # This check prevents `create_closing_reminders_at` from creating another `*ClosingReminderJob` if
-    # `end_at` was changed from the `actable` (that includes `Course::ClosingReminderConcern`).
+    # `end_at` was changed from the `actable` (that includes `CourseConcern::ClosingReminderConcern`).
     actable_end_at_already_updated = actable&.end_at == end_at
     return unless !actable_end_at_already_updated && actable.respond_to?(:create_closing_reminders_at)
 

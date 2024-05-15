@@ -64,7 +64,7 @@ class Course::Assessment::Submission < ApplicationRecord
   #   only the latest answer for each question is desired.
   has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
                      inverse_of: :submission do
-    include Course::Assessment::Submission::AnswersConcern
+    include CourseConcern::Assessment::Submission::AnswersConcern
   end
   has_many :multiple_response_answers,
            through: :answers, inverse_through: :answer, source: :actable,

@@ -5,9 +5,9 @@ class Course::Video < ApplicationRecord
   acts_as_conditional
   acts_as_lesson_plan_item has_todo: true
 
-  include Course::ClosingReminderConcern
-  include Course::Video::UrlConcern
-  include Course::Video::WatchStatisticsConcern
+  include CourseConcern::ClosingReminderConcern
+  include CourseConcern::Video::UrlConcern
+  include CourseConcern::Video::WatchStatisticsConcern
   include DuplicationStateTrackingConcern
 
   before_update :destroy_children, if: :changing_used_url?

@@ -1,18 +1,16 @@
 # frozen_string_literal: true
-module CourseConcern
-  module Video::Submission::NotificationConcern
-    extend ActiveSupport::Concern
+module CourseConcern::Video::Submission::NotificationConcern
+  extend ActiveSupport::Concern
 
-    included do
-      after_create :send_attempt_notification
-    end
+  included do
+    after_create :send_attempt_notification
+  end
 
-    private
+  private
 
-    def send_attempt_notification
-      return unless course_user.real_student?
+  def send_attempt_notification
+    return unless course_user.real_student?
 
-      Course::VideoNotifier.video_attempted(creator, video)
-    end
+    Course::VideoNotifier.video_attempted(creator, video)
   end
 end

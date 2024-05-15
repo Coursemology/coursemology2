@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Achievement < ApplicationRecord
-  include Course::SanitizeDescriptionConcern
+  include CourseConcern::SanitizeDescriptionConcern
 
   acts_as_conditional
   mount_uploader :badge, ImageUploader

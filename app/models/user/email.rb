@@ -27,7 +27,6 @@ class User::Email < ApplicationRecord
   def accept_all_pending_invitations
     return unless confirmed?
 
-    byebug
     all_unconfirmed_invitations = Course::UserInvitation.where(email: email).unconfirmed
 
     all_unconfirmed_invitations.each do |unconfirmed_invitation|

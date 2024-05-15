@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Settings::VideosComponent < Course::Settings::Component
   include ActiveModel::Conversion
-  include Course::Settings::LessonPlanSettingsConcern
+  include CourseConcern::Settings::LessonPlanSettingsConcern
 
   def self.component_class
     Course::VideosComponent

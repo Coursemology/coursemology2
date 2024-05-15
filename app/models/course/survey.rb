@@ -3,7 +3,7 @@ class Course::Survey < ApplicationRecord
   acts_as_conditional
   acts_as_lesson_plan_item has_todo: true
 
-  include Course::ClosingReminderConcern
+  include CourseConcern::ClosingReminderConcern
 
   enum question_type: { text_response: 0, multiple_choice: 1, multiple_response: 2 }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Settings::SurveyComponent < Course::Settings::Component
-  include Course::Settings::LessonPlanSettingsConcern
+  include CourseConcern::Settings::LessonPlanSettingsConcern
 
   def lesson_plan_item_settings
     super.merge(component_title: I18n.t('components.surveys.name'))

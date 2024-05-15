@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::LessonPlan::Item < ApplicationRecord
-  include Course::LessonPlan::ItemTodoConcern
-  include Course::SanitizeDescriptionConcern
-  include Course::LessonPlan::Item::CikgoPushConcern
+  include CourseConcern::LessonPlan::ItemTodoConcern
+  include CourseConcern::SanitizeDescriptionConcern
+  include CourseConcern::LessonPlan::Item::CikgoPushConcern
 
   has_many :personal_times,
            foreign_key: :lesson_plan_item_id, class_name: Course::PersonalTime.name,
