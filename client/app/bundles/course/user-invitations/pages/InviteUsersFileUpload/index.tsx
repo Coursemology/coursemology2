@@ -161,11 +161,11 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
       </Typography>
       {permissions.canManagePersonalTimes ? (
         <pre>
-          {t(translations.fileUploadExamplePersonalTimeline, { br: <br/> })}
+          {t(translations.fileUploadExamplePersonalTimeline, { br: '\n' })}
         </pre>
       ) : (
         <pre>
-          {t(translations.fileUploadExample, { br: <br/> })}
+          {t(translations.fileUploadExample, { br: '\n' })}
         </pre>
       )}
     </>
