@@ -5868,10 +5868,10 @@
     "defaultMessage": "邀请用户失败。请确保你的数据格式正确 - {error}"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "姓名，电子邮件[,Role,Phantom] John,test1@example.org[,student,y] Mary,test2@example.org[,teaching_assistant,n]"
+    "defaultMessage": "姓名，电子邮件[,Role,Phantom]{br}John,test1@example.org[,student,y]{br}Mary,test2@example.org[,teaching_assistant,n]"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "姓名，电子邮件[,Role,Phantom,PersonalTimeline] John,test1@example.org[,student,y,otot] Mary,test2@example.org[,teaching_assistant,n,fixed]"
+    "defaultMessage": "姓名，电子邮件[,Role,Phantom,PersonalTimeline]{br}John,test1@example.org[,student,y,otot]{br}Mary,test2@example.org[,teaching_assistant,n,fixed]"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "上传具有以下格式的 .csv 文件："

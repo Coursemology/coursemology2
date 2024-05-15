@@ -5871,7 +5871,7 @@
     "defaultMessage": "Failed to fetch all invitations"
   },
   "course.userInvitations.InvitationsIndex.invitationsInfo": {
-    "defaultMessage": "The page lists all invitations which have been sent out to date. Users can key in their invitation code into the course registration page to manually register into this course."
+    "defaultMessage": "The page lists all invitations which have been sent out to date.{br}Users can key in their invitation code into the course registration page to manually register into this course."
   },
   "course.userInvitations.InvitationsIndex.manageUsersHeader": {
     "defaultMessage": "Manage Users"
@@ -5895,10 +5895,10 @@
     "defaultMessage": "Failed to invite users. Please ensure your data is formatted correctly - {error}"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExample": {
-    "defaultMessage": "Name,Email[,Role,Phantom] John,test1@example.org[,student,y] Mary,test2@example.org[,teaching_assistant,n]"
+    "defaultMessage": "Name,Email[,Role,Phantom]{br}John,test1@example.org[,student,y]{br}Mary,test2@example.org[,teaching_assistant,n]"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline": {
-    "defaultMessage": "Name,Email[,Role,Phantom,PersonalTimeline] John,test1@example.org[,student,y,otot] Mary,test2@example.org[,teaching_assistant,n,fixed]"
+    "defaultMessage": "Name,Email[,Role,Phantom,PersonalTimeline]{br}John,test1@example.org[,student,y,otot]{br}Mary,test2@example.org[,teaching_assistant,n,fixed]"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfo": {
     "defaultMessage": "Upload a .csv file with the following format:"
