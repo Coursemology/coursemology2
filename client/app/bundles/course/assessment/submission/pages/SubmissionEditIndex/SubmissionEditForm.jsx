@@ -151,7 +151,6 @@ const SubmissionEditForm = (props) => {
     if (deadline) {
       setTimerForForceSubmission(
         deadline,
-        attempting,
         handleSubmit((data) => onSubmit({ ...data })),
       );
     }

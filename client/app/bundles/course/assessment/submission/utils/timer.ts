@@ -2,8 +2,7 @@ import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../constants';
 
 export const setTimerForForceSubmission = (
   deadline: number,
-  attempting: boolean,
-  submitAnswer: () => Promise<void>,
+  handleSubmit: () => Promise<void>,
 ): (() => void) => {
   const interval = setInterval(() => {
     const currentTime = new Date();
@@ -13,9 +12,7 @@ export const setTimerForForceSubmission = (
       currentTime.getTime();
 
     if (remainingSeconds < 0) {
-      if (attempting) {
-        submitAnswer();
-      }
+      handleSubmit();
       clearInterval(interval);
     }
   }, 1000);

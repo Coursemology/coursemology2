@@ -223,9 +223,12 @@ class VisibleSubmissionEditIndex extends Component {
   renderTimeLimitBanner() {
     const { assessment, submission, deadline } = this.props;
 
-    return assessment.timeLimit && submission.workflowState === 'attempting' ? (
-      <TimeLimitBanner deadline={deadline} />
-    ) : null;
+    return (
+      assessment.timeLimit &&
+      submission.workflowState === 'attempting' && (
+        <TimeLimitBanner deadline={deadline} />
+      )
+    );
   }
 
   renderAssessment() {
@@ -243,14 +246,14 @@ class VisibleSubmissionEditIndex extends Component {
     return (
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={assessment.title} />
-        {assessment.description ? (
+        {assessment.description && (
           <CardContent>
             <Typography
               dangerouslySetInnerHTML={{ __html: assessment.description }}
               variant="body2"
             />
           </CardContent>
-        ) : null}
+        )}
         {assessment.files?.length > 0 && (
           <CardContent>
             <Typography variant="h6">Files</Typography>
@@ -471,7 +474,10 @@ VisibleSubmissionEditIndex.propTypes = {
 };
 
 function mapStateToProps({ assessments: { submission } }) {
-  const deadline = submission.assessment.timeLimit
+  const hasDeadline =
+    submission.submission.workflowState === workflowStates.Attempting &&
+    submission.assessment.timeLimit;
+  const deadline = hasDeadline
     ? new Date(submission.submission.attemptedAt).getTime() +
       submission.assessment.timeLimit * 60 * 1000
     : null;
