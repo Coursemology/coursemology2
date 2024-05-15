@@ -88,7 +88,7 @@ const InviteUsers: FC<Props> = (props) => {
             </Box>
 
             <Typography style={{ whiteSpace: 'pre-line' }} variant="body2">
-              {intl.formatMessage(translations.invitationsInfo, { br: <br/> })}
+              {intl.formatMessage(translations.invitationsInfo, { br: <br /> })}
             </Typography>
           </Page.PaddedSection>
 
