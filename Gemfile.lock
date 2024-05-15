@@ -547,13 +547,13 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     workflow (3.0.0)
-    workflow-activerecord (6.0.0)
+    workflow-activerecord (6.0.1)
       activerecord (>= 6.0)
       workflow (~> 3.0)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.36)
-    zeitwerk (2.6.13)
+    zeitwerk (2.6.14)
 
 PLATFORMS
   ruby
