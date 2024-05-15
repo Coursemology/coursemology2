@@ -10,17 +10,16 @@ import {
 
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../constants';
 import { remainingTimeDisplay } from '../pages/SubmissionEditIndex/TimeLimitBanner';
 import translations from '../translations';
 
 interface Props {
-  deadline: Date;
+  deadline: number;
   isExamMode: boolean;
   isTimedMode: boolean;
   isAttempting: boolean;
 }
-
-const NO_TIME_REMAINING = 'no time';
 
 const WarningDialog: FC<Props> = (props) => {
   const { t } = useTranslation();
@@ -34,27 +33,38 @@ const WarningDialog: FC<Props> = (props) => {
       ? new Date(deadline).getTime() - new Date().getTime()
       : null;
 
+  const remainingBufferTime =
+    deadline &&
+    new Date(deadline) <= new Date() &&
+    new Date(deadline + BUFFER_TIME_TO_FORCE_SUBMIT_MS) > new Date()
+      ? new Date(deadline).getTime() +
+        BUFFER_TIME_TO_FORCE_SUBMIT_MS -
+        new Date().getTime()
+      : null;
+
   let dialogTitle: string = '';
   let dialogMessage: string = '';
 
   if (examNotice && timedNotice) {
-    dialogTitle = t(translations.timedExamDialogTitle);
-    dialogMessage = t(translations.timedExamDialogMessage, {
-      remainingTime: remainingTime
-        ? remainingTimeDisplay(remainingTime)
-        : NO_TIME_REMAINING,
+    dialogTitle = t(translations.timedExamDialogTitle, {
+      remainingTime: remainingTimeDisplay(remainingTime ?? 0),
       stillSomeTimeRemaining: !!remainingTime,
+    });
+    dialogMessage = t(translations.timedExamDialogMessage, {
+      stillSomeTimeRemaining: !!remainingTime,
+      remainingBufferTime: remainingTimeDisplay(remainingBufferTime ?? 0),
     });
   } else if (examNotice) {
     dialogTitle = t(translations.examDialogTitle);
     dialogMessage = t(translations.examDialogMessage);
   } else if (timedNotice) {
-    dialogTitle = t(translations.timedAssessmentDialogTitle);
-    dialogMessage = t(translations.timedAssessmentDialogMessage, {
-      remainingTime: remainingTime
-        ? remainingTimeDisplay(remainingTime)
-        : NO_TIME_REMAINING,
+    dialogTitle = t(translations.timedAssessmentDialogTitle, {
+      remainingTime: remainingTimeDisplay(remainingTime ?? 0),
       stillSomeTimeRemaining: !!remainingTime,
+    });
+    dialogMessage = t(translations.timedAssessmentDialogMessage, {
+      stillSomeTimeRemaining: !!remainingTime,
+      remainingBufferTime: remainingTimeDisplay(remainingBufferTime ?? 0),
     });
   }
 

@@ -8,7 +8,7 @@ import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../../constants';
 import translations from '../../translations';
 
 interface Props {
-  deadline: Date;
+  deadline: number;
 }
 
 export const remainingTimeDisplay = (remainingTime: number): JSX.Element => {
@@ -63,7 +63,7 @@ const TimeLimitBanner: FC<Props> = (props) => {
   const [currentRemainingTime, setCurrentRemainingTime] =
     useState(initialRemainingTime);
   const [currentBufferTime, setCurrentBufferTime] = useState(
-    BUFFER_TIME_TO_FORCE_SUBMIT_MS,
+    initialRemainingTime + BUFFER_TIME_TO_FORCE_SUBMIT_MS,
   );
 
   useEffect(() => {
