@@ -143,14 +143,15 @@ const SubmissionEditStepForm = (props) => {
     reset(initialValues);
   }, [initialValues]);
 
-  useEffect(
-    setTimerForForceSubmission(
-      deadline,
-      attempting,
-      handleSubmit((data) => onSubmit({ ...data })),
-    ),
-    [deadline],
-  );
+  useEffect(() => {
+    if (deadline) {
+      setTimerForForceSubmission(
+        deadline,
+        attempting,
+        handleSubmit((data) => onSubmit({ ...data })),
+      );
+    }
+  }, [deadline]);
 
   const handleNext = () => {
     setMaxStep(Math.max(maxStep, stepIndex + 1));
