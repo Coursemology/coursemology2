@@ -64,15 +64,15 @@ const translations = defineMessages({
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExample',
     defaultMessage:
       'Name,Email[,Role,Phantom]' +
-      '\nJohn,test1@example.org[,student,y]' +
-      '\nMary,test2@example.org[,teaching_assistant,n]',
+      '{br}John,test1@example.org[,student,y]' +
+      '{br}Mary,test2@example.org[,teaching_assistant,n]',
   },
   fileUploadExamplePersonalTimeline: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline',
     defaultMessage:
       'Name,Email[,Role,Phantom,PersonalTimeline]' +
-      '\nJohn,test1@example.org[,student,y,otot]' +
-      '\nMary,test2@example.org[,teaching_assistant,n,fixed]',
+      '{br}John,test1@example.org[,student,y,otot]' +
+      '{br}Mary,test2@example.org[,teaching_assistant,n,fixed]',
   },
   failure: {
     id: 'course.userInvitations.InviteUsersFileUpload.failure',
@@ -160,17 +160,13 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         </Link>
       </Typography>
       {permissions.canManagePersonalTimes ? (
-        <pre
-          dangerouslySetInnerHTML={{
-            __html: t(translations.fileUploadExamplePersonalTimeline),
-          }}
-        />
+        <pre>
+          {t(translations.fileUploadExamplePersonalTimeline, { br: <br/> })}
+        </pre>
       ) : (
-        <pre
-          dangerouslySetInnerHTML={{
-            __html: t(translations.fileUploadExample),
-          }}
-        />
+        <pre>
+          {t(translations.fileUploadExample, { br: <br/> })}
+        </pre>
       )}
     </>
   );

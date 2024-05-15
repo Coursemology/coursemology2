@@ -40,7 +40,7 @@ const translations = defineMessages({
   invitationsInfo: {
     id: 'course.userInvitations.InvitationsIndex.invitationsInfo',
     defaultMessage:
-      'The page lists all invitations which have been sent out to date.\nUsers can key in their invitation code into the course registration page to manually register into this course.',
+      'The page lists all invitations which have been sent out to date.{br}Users can key in their invitation code into the course registration page to manually register into this course.',
   },
 });
 
@@ -88,7 +88,7 @@ const InviteUsers: FC<Props> = (props) => {
             </Box>
 
             <Typography style={{ whiteSpace: 'pre-line' }} variant="body2">
-              {intl.formatMessage(translations.invitationsInfo)}
+              {intl.formatMessage(translations.invitationsInfo, { br: <br/> })}
             </Typography>
           </Page.PaddedSection>
 
