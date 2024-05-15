@@ -21,6 +21,8 @@ Coursemology is an open source gamified learning platform that enables educators
 1. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick) - if PDF processing doesn't work for the import of scribing questions, download Ghostscript)
 1. Node.js (v18 LTS)
 1. Yarn
+1. Redis
+1. Docker
 
 Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some front-end components use [React.js](https://facebook.github.io/react/). This [guide](https://gorails.com/setup/) written by the awesome people at GoRails should help you to get started on Ruby on Rails (however, be careful about the Rails version that you are going to install here. Please refer to the system requirements for the version of Rails you need to have for your system)
 
@@ -61,7 +63,13 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    ```
    host lvh.me
    ```
-7. Open up 2 different terminals, each to run the Frontend and Backend. On the terminal for Frontend, run
+
+7. Initialize .env files for Frontend and Backend
+   ```sh
+   $ cp env .env; cp client/env client/.env
+   ```
+
+8. Open up 2 different terminals, each to run the Frontend and Backend. On the terminal for Frontend, run
 
    ```
    yarn build:development
@@ -73,9 +81,9 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    bundle exec rails s -p 5000
    ```
 
-8. Access the App by visiting `http://lvh.me:8080`
+9. Access the App by visiting `http://lvh.me:8080`
 
-9. You're all set! Simply login with the default username and password:
+10. You're all set! Simply login with the default username and password:
 
 > Email: `test@example.org`
 >
