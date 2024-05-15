@@ -164,9 +164,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
           {t(translations.fileUploadExamplePersonalTimeline, { br: '\n' })}
         </pre>
       ) : (
-        <pre>
-          {t(translations.fileUploadExample, { br: '\n' })}
-        </pre>
+        <pre>{t(translations.fileUploadExample, { br: '\n' })}</pre>
       )}
     </>
   );
