@@ -33,7 +33,7 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/runtime": "^7.24.0",
     "@ckeditor/ckeditor5-build-custom": "github:Coursemology/CKEditor5-build-coursemology#0.3.0",
-    "@ckeditor/ckeditor5-react": "^6.2.0",
+    "@ckeditor/ckeditor5-react": "^6.3.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@hello-pangea/dnd": "^16.6.0",
