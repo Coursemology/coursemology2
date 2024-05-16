@@ -68,6 +68,7 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    ```sh
    $ cp env .env; cp client/env client/.env
    ```
+   You may need to add specific API keys (such as the [GOOGLE_RECAPTCHA_SITE_KEY](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do)) to the .env files for testing specific features.
 
 8. Open up 2 different terminals, each to run the Frontend and Backend. On the terminal for Frontend, run
 
