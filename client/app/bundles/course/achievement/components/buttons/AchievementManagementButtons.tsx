@@ -82,6 +82,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
             <AchievementEdit
               achievementId={achievement.id}
               onClose={(): void => setIsEditing(false)}
+              onSubmit={(): void => setIsEditing(false)}
               open={isEditing}
             />
           )}
