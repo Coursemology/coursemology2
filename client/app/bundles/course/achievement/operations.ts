@@ -77,9 +77,14 @@ export function createAchievement(data: AchievementFormData): Operation<
 export function updateAchievement(
   achievementId: number,
   data: AchievementFormData,
-): Operation<AxiosResponse<unknown, unknown>> {
+): Operation {
   const attributes = formatAttributes(data);
-  return async () => CourseAPI.achievements.update(achievementId, attributes);
+  return async (dispatch) =>
+    CourseAPI.achievements
+      .update(achievementId, attributes)
+      .then((response) => {
+        dispatch(actions.saveAchievement(response.data.achievement));
+      });
 }
 
 export function deleteAchievement(achievementId: number): Operation {

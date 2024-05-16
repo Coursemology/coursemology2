@@ -15,6 +15,7 @@ interface Props {
   achievementId: number;
   open: boolean;
   onClose: () => void;
+  onSubmit: () => void;
 }
 
 const translations = defineMessages({
@@ -33,7 +34,7 @@ const translations = defineMessages({
 });
 
 const AchievementEdit: FC<Props> = (props) => {
-  const { achievementId, open, onClose } = props;
+  const { achievementId, open, onClose, onSubmit } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const achievement = useAppSelector((state) =>
@@ -48,13 +49,11 @@ const AchievementEdit: FC<Props> = (props) => {
     return null;
   }
 
-  const onSubmit = (data, setError): Promise<void> =>
+  const onSubmitWrapped = (data, setError): Promise<void> =>
     dispatch(updateAchievement(data.id, data))
       .then(() => {
         toast.success(t(translations.updateSuccess));
-        setTimeout(() => {
-          window.location.href = `/courses/${getCourseId()}/achievements`;
-        }, 500);
+        onSubmit();
       })
       .catch((error) => {
         toast.error(t(translations.updateFailure));
@@ -81,7 +80,7 @@ const AchievementEdit: FC<Props> = (props) => {
       editing
       initialValues={initialValues}
       onClose={onClose}
-      onSubmit={onSubmit}
+      onSubmit={onSubmitWrapped}
       open={open}
       title={t(translations.editAchievement)}
     />

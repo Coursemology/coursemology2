@@ -79,6 +79,14 @@ const AchievementForm: FC<Props> = (props) => {
   } = props;
   const { t } = useTranslation();
 
+  // known issues:
+
+  // - users cannot click "update" after adding / removing conditions without other changes
+  // - if user cancels after adding / removing conditions, conditions will change,
+  //   but achievement row doesn't update until page refresh or edit menu reopened
+
+  // TODO: work should be done to unify data from ConditionsManager with main form,
+  // which will solve both issues
   return (
     <FormDialog
       editing={editing}
