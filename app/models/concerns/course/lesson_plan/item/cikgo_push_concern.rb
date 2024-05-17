@@ -44,7 +44,8 @@ module Course::LessonPlan::Item::CikgoPushConcern
     return unless pushable?(actable) && course.component_enabled?(Course::StoriesComponent)
 
     Cikgo::ResourcesService.push_resources!(course, [{ method: method, id: id.to_s }.merge(send("#{method}_payload"))])
-  rescue StandardError
+  rescue StandardError => e
+    Rails.logger.error("Cikgo: Cannot push lesson plan item #{id}: #{e}")
     Rails.env.production? ? return : raise
   end
 end
