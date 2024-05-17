@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Cikgo::UsersService < Cikgo::Service
   class << self
-    def authenticate(user, image)
+    def authenticate!(user, image)
       access_token = find_or_create_oauth_tokens_for(user)
 
       response = connection(:post, 'auth', body: {

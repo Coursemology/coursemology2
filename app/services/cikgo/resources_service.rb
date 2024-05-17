@@ -10,7 +10,7 @@ class Cikgo::ResourcesService < Cikgo::Service
       { status: :error }
     end
 
-    def push_repository(course, url, resources)
+    def push_repository!(course, url, resources)
       course_push_key = push_key(course)
       return unless course_push_key
 
@@ -25,7 +25,7 @@ class Cikgo::ResourcesService < Cikgo::Service
       })
     end
 
-    def push_resources(course, resources)
+    def push_resources!(course, resources)
       course_push_key = push_key(course)
       return unless course_push_key
 
@@ -35,7 +35,7 @@ class Cikgo::ResourcesService < Cikgo::Service
       })
     end
 
-    def mark_task(status, lesson_plan_item, data)
+    def mark_task!(status, lesson_plan_item, data)
       connection(:patch, 'tasks', body: {
         resourceId: lesson_plan_item.id.to_s,
         repositoryId: repository_id(lesson_plan_item.course_id),

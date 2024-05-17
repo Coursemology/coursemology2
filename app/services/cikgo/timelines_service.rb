@@ -3,14 +3,14 @@ class Cikgo::TimelinesService < Cikgo::Service
   class << self
     include Cikgo::CourseConcern
 
-    def items(course_user)
+    def items!(course_user)
       connection(:get, 'timelines', query: {
         pushKey: push_key(course_user.course),
         userId: cikgo_user_id(course_user)
       })
     end
 
-    def update_time(course_user, story_id, start_at)
+    def update_time!(course_user, story_id, start_at)
       connection(:patch, 'timelines', body: {
         pushKey: push_key(course_user.course),
         userId: cikgo_user_id(course_user),
@@ -21,7 +21,7 @@ class Cikgo::TimelinesService < Cikgo::Service
       })
     end
 
-    def delete_times(course_user, story_ids)
+    def delete_times!(course_user, story_ids)
       connection(:delete, 'timelines', body: {
         pushKey: push_key(course_user.course),
         userId: cikgo_user_id(course_user),
