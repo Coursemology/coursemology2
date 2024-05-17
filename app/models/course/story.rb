@@ -4,7 +4,7 @@ class Course::Story
     def for_course_user(course_user)
       return nil unless course_user.course.component_enabled?(Course::StoriesComponent)
 
-      Cikgo::TimelinesService.items(course_user).map do |item|
+      Cikgo::TimelinesService.items!(course_user).map do |item|
         new(item, course_user)
       end
     end
@@ -19,7 +19,7 @@ class Course::Story
     end
 
     def save
-      Cikgo::TimelinesService.update_time(course_user, @story_id, start_at)
+      Cikgo::TimelinesService.update_time!(course_user, @story_id, start_at)
     end
 
     alias_method :save!, :save

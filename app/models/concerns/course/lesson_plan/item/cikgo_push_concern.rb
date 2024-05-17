@@ -43,7 +43,7 @@ module Course::LessonPlan::Item::CikgoPushConcern
   def push(method)
     return unless pushable?(actable) && course.component_enabled?(Course::StoriesComponent)
 
-    Cikgo::ResourcesService.push_resources(course, [{ method: method, id: id.to_s }.merge(send("#{method}_payload"))])
+    Cikgo::ResourcesService.push_resources!(course, [{ method: method, id: id.to_s }.merge(send("#{method}_payload"))])
   rescue StandardError
     Rails.env.production? ? return : raise
   end

@@ -15,7 +15,7 @@ module Course::Survey::Response::CikgoTaskCompletionConcern
   delegate :edit_course_survey_response_url, to: 'Rails.application.routes.url_helpers'
 
   def publish_task_completion
-    Cikgo::ResourcesService.mark_task(status, lesson_plan_item, { user_id: creator_id_on_cikgo, url: response_url })
+    Cikgo::ResourcesService.mark_task!(status, lesson_plan_item, { user_id: creator_id_on_cikgo, url: response_url })
   end
 
   def status

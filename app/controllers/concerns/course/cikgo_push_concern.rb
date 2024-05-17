@@ -8,7 +8,7 @@ module Course::CikgoPushConcern
   def push_lesson_plan_items_to_remote_course
     return unless current_course.component_enabled?(Course::StoriesComponent)
 
-    Cikgo::ResourcesService.push_repository(
+    Cikgo::ResourcesService.push_repository!(
       current_course,
       course_url(current_course),
       pushable_lesson_plan_items.filter_map do |item|

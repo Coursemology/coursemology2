@@ -9,7 +9,7 @@ module Course::LessonPlan::StoriesConcern
 
     return if future_story_ids.blank?
 
-    Cikgo::TimelinesService.delete_times(course_user, future_story_ids)
+    Cikgo::TimelinesService.delete_times!(course_user, future_story_ids)
   rescue StandardError => e
     raise e unless Rails.env.production?
   end
