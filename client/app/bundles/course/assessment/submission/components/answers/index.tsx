@@ -168,7 +168,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
       ))}
 
       <Typography className="mt-2" variant="body1">
-        {question.questionTitle}
+        {question.questionTitle ?? ''}
       </Typography>
 
       <Typography
