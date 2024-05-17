@@ -9,7 +9,7 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
   extend ActiveSupport::Concern
 
   included do
-    after_save :publish_task_completion, if: :saved_change_to_workflow_state?
+    after_save :publish_task_completion, if: -> { should_publish_task_completion? && saved_change_to_workflow_state? }
   end
 
   private
@@ -17,23 +17,26 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
   delegate :edit_course_assessment_submission_url, to: 'Rails.application.routes.url_helpers'
 
   def publish_task_completion
-    return unless creator_id_on_cikgo
+    Cikgo::ResourcesService.mark_task(status, lesson_plan_item, { user_id: creator_id_on_cikgo, url: submission_url })
+  end
 
-    status = WORKFLOW_STATE_TO_TASK_COMPLETION_STATUS[workflow_state.to_sym]
-    return unless status
+  def status
+    WORKFLOW_STATE_TO_TASK_COMPLETION_STATUS[workflow_state.to_sym]
+  end
 
-    lesson_plan_item = assessment.acting_as
+  def submission_url
+    edit_course_assessment_submission_url(
+      lesson_plan_item.course_id, assessment_id, id, host: lesson_plan_item.course.instance.host, protocol: :https
+    )
+  end
 
-    Cikgo::ResourcesService.mark_task(status, lesson_plan_item, {
-      user_id: creator_id_on_cikgo,
-      url: edit_course_assessment_submission_url(
-        lesson_plan_item.course_id,
-        assessment_id,
-        id,
-        host: lesson_plan_item.course.instance.host,
-        protocol: :https
-      )
-    })
+  def should_publish_task_completion?
+    lesson_plan_item.course.component_enabled?(Course::StoriesComponent) &&
+      creator_id_on_cikgo.present? && status.present?
+  end
+
+  def lesson_plan_item
+    @lesson_plan_item ||= assessment.acting_as
   end
 
   def creator_id_on_cikgo

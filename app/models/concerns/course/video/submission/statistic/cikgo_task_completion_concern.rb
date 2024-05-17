@@ -3,7 +3,7 @@ module Course::Video::Submission::Statistic::CikgoTaskCompletionConcern
   extend ActiveSupport::Concern
 
   included do
-    after_save :publish_task_completion
+    after_save :publish_task_completion, if: :should_publish_task_completion?
   end
 
   private
@@ -13,21 +13,24 @@ module Course::Video::Submission::Statistic::CikgoTaskCompletionConcern
   delegate :edit_course_video_submission_url, to: 'Rails.application.routes.url_helpers'
 
   def publish_task_completion
-    return unless creator_id_on_cikgo
+    Cikgo::ResourcesService.mark_task(status, lesson_plan_item, { user_id: creator_id_on_cikgo, url: submission_url })
+  end
 
-    lesson_plan_item = submission.video.acting_as
-    status = (percent_watched >= COMPLETED_MINIMUM_WATCH_PERCENTAGE) ? :completed : :ongoing
+  def status
+    (percent_watched >= COMPLETED_MINIMUM_WATCH_PERCENTAGE) ? :completed : :ongoing
+  end
 
-    Cikgo::ResourcesService.mark_task(status, lesson_plan_item, {
-      user_id: creator_id_on_cikgo,
-      url: edit_course_video_submission_url(
-        lesson_plan_item.course_id,
-        submission.video_id,
-        submission_id,
-        host: lesson_plan_item.course.instance.host,
-        protocol: :https
-      )
-    })
+  def submission_url
+    edit_course_video_submission_url(lesson_plan_item.course_id, submission.video_id, submission_id,
+                                     host: lesson_plan_item.course.instance.host, protocol: :https)
+  end
+
+  def should_publish_task_completion?
+    lesson_plan_item.course.component_enabled?(Course::StoriesComponent) && creator_id_on_cikgo.present?
+  end
+
+  def lesson_plan_item
+    @lesson_plan_item ||= submission.video.acting_as
   end
 
   def creator_id_on_cikgo
