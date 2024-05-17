@@ -18,6 +18,9 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
 
   def publish_task_completion
     Cikgo::ResourcesService.mark_task!(status, lesson_plan_item, { user_id: creator_id_on_cikgo, url: submission_url })
+  rescue StandardError => e
+    Rails.logger.error("Cikgo: Cannot publish task completion for submission #{id}: #{e}")
+    raise e unless Rails.env.production?
   end
 
   def status
