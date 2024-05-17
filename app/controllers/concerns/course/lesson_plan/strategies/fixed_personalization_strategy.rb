@@ -20,5 +20,7 @@ class Course::LessonPlan::Strategies::FixedPersonalizationStrategy <
   def execute(course_user, precompute_data, _items_to_shift)
     course_user.personal_times.where(fixed: false).
       where.not(lesson_plan_item_id: precompute_data.keys).delete_all
+
+    delete_all_future_stories_personal_times(course_user)
   end
 end
