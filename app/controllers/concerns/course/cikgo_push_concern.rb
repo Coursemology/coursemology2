@@ -6,6 +6,8 @@ module Course::CikgoPushConcern
   private
 
   def push_lesson_plan_items_to_remote_course
+    return unless current_course.component_enabled?(Course::StoriesComponent)
+
     Cikgo::ResourcesService.push_repository(
       current_course,
       course_url(current_course),
