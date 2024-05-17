@@ -20,5 +20,13 @@ class Cikgo::TimelinesService < Cikgo::Service
         }]
       })
     end
+
+    def delete_times(course_user, story_ids)
+      connection(:delete, 'timelines', body: {
+        pushKey: push_key(course_user.course),
+        userId: cikgo_user_id(course_user),
+        storyIds: story_ids
+      })
+    end
   end
 end

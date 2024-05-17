@@ -2,6 +2,8 @@
 module Course::LessonPlan::LearningRateConcern
   extend ActiveSupport::Concern
 
+  include Course::LessonPlan::StoriesConcern
+
   # Returns { lesson_plan_item_id => submitted_time or nil }.
   # If the lesson plan item is a key in this hash then we consider the item "submitted" regardless of whether we have a
   # submission time for it.
@@ -127,10 +129,6 @@ module Course::LessonPlan::LearningRateConcern
       select { |x| x.submissions.present? }.
       to_h { |x| [x.lesson_plan_item.id, nil] }
     )
-  end
-
-  def stories_for(course_user)
-    @stories_for ||= Course::Story.for_course_user(course_user) || []
   end
 
   def merge_course_stories(hash, course_user)
