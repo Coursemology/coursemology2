@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Story
   class << self
-    def for_course_user(course_user)
+    def for_course_user!(course_user)
       return nil unless course_user.course.component_enabled?(Course::StoriesComponent)
 
       Cikgo::TimelinesService.items!(course_user).map do |item|
@@ -20,6 +20,9 @@ class Course::Story
 
     def save
       Cikgo::TimelinesService.update_time!(course_user, @story_id, start_at)
+    rescue StandardError => e
+      Rails.logger.error("Cikgo: Cannot update personal time for story ID #{@story_id}: #{e}")
+      raise e unless Rails.env.production?
     end
 
     alias_method :save!, :save
