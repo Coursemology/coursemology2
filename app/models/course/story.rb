@@ -65,7 +65,10 @@ class Course::Story
     true
   end
 
+  # Since stories on Cikgo have no end times, they effectively do not affect personal times,
+  # i.e., `compute_learning_rate_ema` filters them out. Setting this to `false` reduces the
+  # number of items that the personalisation strategies have to iterate.
   def affects_personal_times?
-    true
+    false
   end
 end
