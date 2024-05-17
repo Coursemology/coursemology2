@@ -53,12 +53,15 @@ class Course::StoriesComponent < SimpleDelegator
       {
         key: :mission_control,
         icon: :mission_control,
+        type: :admin,
         title: I18n.t('course.stories.mission_control'),
-        weight: 5,
+        weight: 0,
         path: course_mission_control_path(current_course),
         unread: pending_threads_count
       }
     ]
+  rescue Excon::Error::Socket
+    []
   end
 
   def settings_sidebar_items
