@@ -18,7 +18,7 @@ class Course::MultipleReferenceTimelinesComponent < SimpleDelegator
         key: :reference_timelines,
         icon: :timelines,
         type: :admin,
-        weight: 8,
+        weight: 9,
         title: t('layouts.multiple_reference_timelines.timeline_designer'),
         path: course_reference_timelines_path(current_course)
       }

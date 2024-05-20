@@ -15,7 +15,7 @@ class Course::StatisticsComponent < SimpleDelegator
         icon: :statistics,
         title: t('course.statistics.header'),
         type: :admin,
-        weight: 2,
+        weight: 3,
         path: course_statistics_students_path(current_course)
       }
     ]

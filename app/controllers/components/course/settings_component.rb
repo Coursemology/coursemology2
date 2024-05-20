@@ -26,7 +26,7 @@ class Course::SettingsComponent < SimpleDelegator
         icon: :settings,
         title: t('layouts.course_admin.title'),
         type: :admin,
-        weight: 9,
+        weight: 100,
         path: course_admin_path(current_course)
       }
     ]

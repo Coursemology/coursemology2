@@ -44,7 +44,7 @@ class Course::UsersComponent < SimpleDelegator
         icon: :manageUsers,
         title: t('layouts.course_users.title'),
         type: :admin,
-        weight: 1,
+        weight: 2,
         path:
           if can_manage_users
             course_users_students_path(current_course)
