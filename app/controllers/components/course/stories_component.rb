@@ -55,7 +55,7 @@ class Course::StoriesComponent < SimpleDelegator
         icon: :mission_control,
         type: :admin,
         title: I18n.t('course.stories.mission_control'),
-        weight: 0,
+        weight: 1,
         path: course_mission_control_path(current_course),
         unread: pending_threads_count
       }
