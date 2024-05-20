@@ -4,7 +4,7 @@ module CourseConcern::ForumParticipationConcern
 
   module ClassMethods
     def forum_posts
-      joins(:topic).where('course_discussion_topics.actable_type = ?', Course::Forum::Topic.name)
+      joins(:topic).where('course_discussion_topics.actable_type = ?', 'Course::Forum::Topic')
     end
 
     def from_course(course)

@@ -53,9 +53,9 @@ class Course::Assessment::Answer < ApplicationRecord
                                        if: -> { actable_type? && actable_id_changed? } }
 
   belongs_to :submission, inverse_of: :answers
-  belongs_to :question, class_name: Course::Assessment::Question.name, inverse_of: nil
-  belongs_to :grader, class_name: User.name, inverse_of: nil, optional: true
-  has_one :auto_grading, class_name: Course::Assessment::Answer::AutoGrading.name,
+  belongs_to :question, class_name: 'Course::Assessment::Question', inverse_of: nil
+  belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
+  has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
                          dependent: :destroy, inverse_of: :answer, autosave: true
 
   accepts_nested_attributes_for :actable

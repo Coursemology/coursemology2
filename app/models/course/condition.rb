@@ -20,11 +20,11 @@ class Course::Condition < ApplicationRecord
   delegate :satisfied_by?, to: :actable
 
   ALL_CONDITIONS = [
-    { name: Course::Condition::Achievement.name, active: true },
-    { name: Course::Condition::Assessment.name, active: true },
-    { name: Course::Condition::Level.name, active: true },
-    { name: Course::Condition::Survey.name, active: true },
-    { name: Course::Condition::Video.name, active: false }
+    { name: 'Course::Condition::Achievement', active: true },
+    { name: 'Course::Condition::Assessment', active: true },
+    { name: 'Course::Condition::Level', active: true },
+    { name: 'Course::Condition::Survey', active: true },
+    { name: 'Course::Condition::Video', active: false }
   ].freeze
 
   class << self

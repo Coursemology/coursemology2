@@ -14,7 +14,7 @@ class Course::Condition::Video < ApplicationRecord
   validates :minimum_watch_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 },
                                        allow_nil: true
 
-  belongs_to :video, class_name: Course::Video.name, inverse_of: :video_conditions
+  belongs_to :video, class_name: 'Course::Video', inverse_of: :video_conditions
 
   default_scope { includes(:video) }
 
@@ -49,7 +49,7 @@ class Course::Condition::Video < ApplicationRecord
 
   # Class that the condition depends on
   def self.dependent_class
-    Course::Video.name
+    'Course::Video'
   end
 
   def self.on_dependent_status_change(submission)

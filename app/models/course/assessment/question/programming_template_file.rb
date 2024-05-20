@@ -10,7 +10,7 @@ class Course::Assessment::Question::ProgrammingTemplateFile < ApplicationRecord
   validates :question_id, uniqueness: { scope: [:filename], case_sensitive: false,
                                         if: -> { filename? && question_id_changed? } }
 
-  belongs_to :question, class_name: Course::Assessment::Question::Programming.name,
+  belongs_to :question, class_name: 'Course::Assessment::Question::Programming',
                         inverse_of: :template_files
 
   # Copies the current template into the provided answer.

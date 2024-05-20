@@ -10,7 +10,7 @@ class Course::Material::Folder < ApplicationRecord
   before_validation :assign_valid_name
 
   has_many :materials, inverse_of: :folder, dependent: :destroy, foreign_key: :folder_id,
-                       class_name: Course::Material.name, autosave: true
+                       class_name: 'Course::Material', autosave: true
   belongs_to :course, inverse_of: :material_folders
   belongs_to :owner, polymorphic: true, inverse_of: :folder, optional: true
 
@@ -58,11 +58,11 @@ class Course::Material::Folder < ApplicationRecord
     end
   end
 
-  def self.after_course_initialize(course)
-    return if course.persisted? || course.root_folder?
+  # def self.after_course_initialize(course)
+  #   return if course.persisted? || course.root_folder?
 
-    course.material_folders.build(name: 'Root')
-  end
+  #   course.material_folders.build(name: 'Root')
+  # end
 
   def build_materials(files)
     files.map do |file|

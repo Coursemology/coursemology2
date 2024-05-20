@@ -10,7 +10,7 @@ class Course::Condition::Survey < ApplicationRecord
 
   validate :validate_survey_condition, if: :survey_id_changed?
   validates :survey, presence: true
-  belongs_to :survey, class_name: Course::Survey.name, inverse_of: :survey_conditions
+  belongs_to :survey, class_name: 'Course::Survey', inverse_of: :survey_conditions
 
   default_scope { includes(:survey) }
 
@@ -35,7 +35,7 @@ class Course::Condition::Survey < ApplicationRecord
 
   # Class that the condition depends on.
   def self.dependent_class
-    Course::Survey.name
+    'Course::Survey'
   end
 
   def self.on_dependent_status_change(response)

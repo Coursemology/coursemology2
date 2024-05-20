@@ -16,15 +16,15 @@ class Course::Achievement < ApplicationRecord
   validates :course, presence: true
 
   belongs_to :course, inverse_of: :achievements
-  has_many :course_user_achievements, class_name: Course::UserAchievement.name,
+  has_many :course_user_achievements, class_name: 'Course::UserAchievement',
                                       inverse_of: :achievement, dependent: :destroy
-  has_many :achievement_conditions, class_name: Course::Condition::Achievement.name,
+  has_many :achievement_conditions, class_name: 'Course::Condition::Achievement',
                                     inverse_of: :achievement, dependent: :destroy
   # Due to the through relationship, destroy dependent had to be added for course users in order for
   # UserAchievement's destroy callbacks to be called, However, this destroy dependent will not
   # actually remove the course users when the Achievement object is destroyed.
   # http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html
-  has_many :course_users, through: :course_user_achievements, class_name: CourseUser.name,
+  has_many :course_users, through: :course_user_achievements, class_name: 'CourseUser',
                           dependent: :destroy
 
   default_scope { order(weight: :asc) }
@@ -65,16 +65,16 @@ class Course::Achievement < ApplicationRecord
   end
 
   def initialize_duplicate(duplicator, other)
-    duplicate_badge(other)
-    self.course = duplicator.options[:destination_course]
-    self.published = false if duplicator.options[:unpublish_all]
-    duplicate_conditions(duplicator, other)
-    achievement_conditions << other.achievement_conditions.
-                              select { |condition| duplicator.duplicated?(condition.conditional) }.
-                              map { |condition| duplicator.duplicate(condition) }
+    # duplicate_badge(other)
+    # self.course = duplicator.options[:destination_course]
+    # self.published = false if duplicator.options[:unpublish_all]
+    # duplicate_conditions(duplicator, other)
+    # achievement_conditions << other.achievement_conditions.
+    #                           select { |condition| duplicator.duplicated?(condition.conditional) }.
+    #                           map { |condition| duplicator.duplicate(condition) }
   end
 
   def duplicate_badge(other)
-    self.badge = nil if other.badge_url && !badge.duplicate_from(other.badge)
+    # self.badge = nil if other.badge_url && !badge.duplicate_from(other.badge)
   end
 end

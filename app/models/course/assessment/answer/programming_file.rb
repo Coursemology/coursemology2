@@ -13,8 +13,8 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   validates :answer_id, uniqueness: { scope: [:filename],
                                       case_sensitive: false, if: -> { filename? && answer_id_changed? } }
 
-  belongs_to :answer, class_name: Course::Assessment::Answer::Programming.name, inverse_of: :files
-  has_many :annotations, class_name: Course::Assessment::Answer::ProgrammingFileAnnotation.name,
+  belongs_to :answer, class_name: 'Course::Assessment::Answer::Programming', inverse_of: :files
+  has_many :annotations, class_name: 'Course::Assessment::Answer::ProgrammingFileAnnotation',
                          dependent: :destroy, foreign_key: :file_id, inverse_of: :file
 
   # Separate the lines by `\r` `\n` or `\r\n`

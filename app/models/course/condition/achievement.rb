@@ -15,7 +15,7 @@ class Course::Condition::Achievement < ApplicationRecord
   validate :validate_achievement_condition, if: :achievement_id_changed?
   validates :achievement, presence: true
 
-  belongs_to :achievement, class_name: Course::Achievement.name, inverse_of: :achievement_conditions
+  belongs_to :achievement, class_name: 'Course::Achievement', inverse_of: :achievement_conditions
 
   default_scope { includes(:achievement) }
 
@@ -37,7 +37,7 @@ class Course::Condition::Achievement < ApplicationRecord
 
   # Class that the condition depends on.
   def self.dependent_class
-    Course::Achievement.name
+    'Course::Achievement'
   end
 
   def self.on_dependent_status_change(achievement)

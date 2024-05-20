@@ -7,7 +7,7 @@ class Course::LessonPlanComponent < SimpleDelegator
   end
 
   def self.lesson_plan_item_actable_names
-    [Course::LessonPlan::Event.name]
+    ['Course::LessonPlan::Event']
   end
 
   def sidebar_items

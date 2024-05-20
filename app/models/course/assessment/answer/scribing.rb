@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::Scribing < ApplicationRecord
-  acts_as :answer, class_name: Course::Assessment::Answer.name
-  has_many :scribbles, class_name: Course::Assessment::Answer::ScribingScribble.name,
+  acts_as :answer, class_name: 'Course::Assessment::Answer'
+  has_many :scribbles, class_name: 'Course::Assessment::Answer::ScribingScribble',
                        dependent: :destroy, foreign_key: :answer_id, inverse_of: :answer
 
   accepts_nested_attributes_for :scribbles, allow_destroy: true

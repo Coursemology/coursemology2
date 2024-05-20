@@ -16,18 +16,18 @@ class Course::Video < ApplicationRecord
   validates :updater, presence: true
   validates :tab, presence: true
 
-  belongs_to :tab, class_name: Course::Video::Tab.name, inverse_of: :videos
-  has_many :submissions, class_name: Course::Video::Submission.name,
+  belongs_to :tab, class_name: 'Course::Video::Tab', inverse_of: :videos
+  has_many :submissions, class_name: 'Course::Video::Submission',
                          inverse_of: :video, dependent: :destroy
-  has_many :topics, class_name: Course::Video::Topic.name,
+  has_many :topics, class_name: 'Course::Video::Topic',
                     dependent: :destroy, foreign_key: :video_id, inverse_of: :video
-  has_many :discussion_topics, through: :topics, class_name: Course::Discussion::Topic.name
-  has_many :posts, through: :discussion_topics, class_name: Course::Discussion::Post.name
-  has_many :sessions, through: :submissions, class_name: Course::Video::Session.name
-  has_many :events, through: :sessions, class_name: Course::Video::Event.name
-  has_one :statistic, class_name: Course::Video::Statistic.name, dependent: :destroy,
+  has_many :discussion_topics, through: :topics, class_name: 'Course::Discussion::Topic'
+  has_many :posts, through: :discussion_topics, class_name: 'Course::Discussion::Post'
+  has_many :sessions, through: :submissions, class_name: 'Course::Video::Session'
+  has_many :events, through: :sessions, class_name: 'Course::Video::Event'
+  has_one :statistic, class_name: 'Course::Video::Statistic', dependent: :destroy,
                       foreign_key: :video_id, inverse_of: :video, autosave: true
-  has_many :video_conditions, class_name: Course::Condition::Video.name,
+  has_many :video_conditions, class_name: 'Course::Condition::Video',
                               inverse_of: :video, dependent: :destroy
 
   # @!attribute [r] student_submission_count
@@ -64,8 +64,7 @@ class Course::Video < ApplicationRecord
       where(video: distinct(false).pluck(:id))
 
     all.to_a.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, :submissions, submissions)
+      ActiveRecord::Associations::Preloader::ManualPreloader.new(records: result, associations: submissions)
     end
   end)
 

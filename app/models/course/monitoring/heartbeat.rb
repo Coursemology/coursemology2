@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Monitoring::Heartbeat < ApplicationRecord
-  belongs_to :session, class_name: Course::Monitoring::Session.name, inverse_of: :heartbeats
+  belongs_to :session, class_name: 'Course::Monitoring::Session', inverse_of: :heartbeats
 
   validates :session, presence: true
   validates :user_agent, presence: true

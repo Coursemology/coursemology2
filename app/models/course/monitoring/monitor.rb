@@ -2,8 +2,8 @@
 class Course::Monitoring::Monitor < ApplicationRecord
   DEFAULT_MIN_INTERVAL_MS = 3000
 
-  has_one :assessment, class_name: Course::Assessment.name, inverse_of: :monitor
-  has_many :sessions, class_name: Course::Monitoring::Session.name, inverse_of: :monitor
+  has_one :assessment, class_name: 'Course::Assessment', inverse_of: :monitor
+  has_many :sessions, class_name: 'Course::Monitoring::Session', inverse_of: :monitor
 
   validates :enabled, inclusion: { in: [true, false] }
   validates :min_interval_ms, numericality: { only_integer: true, greater_than_or_equal_to: DEFAULT_MIN_INTERVAL_MS }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::TextResponse < ApplicationRecord
-  acts_as :answer, class_name: Course::Assessment::Answer.name
+  acts_as :answer, class_name: 'Course::Assessment::Answer'
   has_many_attachments
 
   after_initialize :set_default

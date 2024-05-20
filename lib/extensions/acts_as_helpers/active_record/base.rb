@@ -27,7 +27,7 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     #   - Implement two view partials for the actable model for display in the course landing page.
     #     app/views/course/lesson_plan/todos/_todo.json.jbuilder
     def acts_as_lesson_plan_item(has_todo: false)
-      acts_as :lesson_plan_item, class_name: Course::LessonPlan::Item.name, autosave: true
+      acts_as :lesson_plan_item, class_name: 'Course::LessonPlan::Item', autosave: true
 
       after_initialize do
         handle_todo_default(has_todo) if new_record?

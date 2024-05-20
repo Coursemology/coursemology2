@@ -7,7 +7,7 @@ class Course::SurveyComponent < SimpleDelegator
   end
 
   def self.lesson_plan_item_actable_names
-    [Course::Survey.name]
+    ['Course::Survey']
   end
 
   def sidebar_items

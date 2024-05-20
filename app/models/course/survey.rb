@@ -14,13 +14,13 @@ class Course::Survey < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
 
-  # To call Course::Survey::Response.name to force it to load. Otherwise, there might be issues
+  # To call 'Course::Survey::Response' to force it to load. Otherwise, there might be issues
   # with autoloading of files in production where eager_load is enabled.
   has_many :responses, inverse_of: :survey, dependent: :destroy,
-                       class_name: Course::Survey::Response.name
+                       class_name: 'Course::Survey::Response'
   has_many :sections, inverse_of: :survey, dependent: :destroy
   has_many :questions, through: :sections
-  has_many :survey_conditions, class_name: Course::Condition::Survey.name,
+  has_many :survey_conditions, class_name: 'Course::Condition::Survey',
                                inverse_of: :survey, dependent: :destroy
 
   # Used by the with_actable_types scope in Course::LessonPlan::Item.

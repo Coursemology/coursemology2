@@ -8,8 +8,8 @@ class Course::Video::Tab < ApplicationRecord
   validates :updater, presence: true
   validates :course, presence: true
 
-  belongs_to :course, class_name: Course.name, inverse_of: :video_tabs
-  has_many :videos, class_name: Course::Video.name, inverse_of: :tab, dependent: :destroy
+  belongs_to :course, class_name: 'Course', inverse_of: :video_tabs
+  has_many :videos, class_name: 'Course::Video', inverse_of: :tab, dependent: :destroy
 
   before_destroy :validate_before_destroy
 

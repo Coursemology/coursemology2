@@ -78,15 +78,15 @@ class Course::Settings::LessonPlanItems < Course::Settings::PanComponent
   # @return [Array<String> or nil]
   def actable_hash_data(actable_name)
     case actable_name
-    when Course::Assessment.name
+    when 'Course::Assessment'
       [actable_name, settings_interfaces_hash['course_assessments_component'].disabled_tab_ids_for_lesson_plan]
-    when Course::Survey.name
+    when 'Course::Survey'
       [actable_name, nil] if settings_interfaces_hash['course_survey_component'].showable_in_lesson_plan?
-    when Course::Video.name
+    when 'Course::Video'
       [actable_name, nil] if settings_interfaces_hash['course_videos_component'].showable_in_lesson_plan?
-    when Course::LessonPlan::Event.name
+    when 'Course::LessonPlan::Event'
       [actable_name, nil]
-    when Course::LessonPlan::Milestone.name
+    when 'Course::LessonPlan::Milestone'
       [actable_name, nil]
     end
   end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Settings::Email < ApplicationRecord
+  puts 'entering course settings email'
   self.table_name = 'course_settings_emails'
 
   Course.after_initialize do
@@ -55,12 +56,12 @@ class Course::Settings::Email < ApplicationRecord
   validates :regular, inclusion: { in: [true, false] }
   validates :phantom, inclusion: { in: [true, false] }
 
-  belongs_to :course, class_name: Course.name, inverse_of: :setting_emails
-  belongs_to :assessment_category, class_name: Course::Assessment::Category.name,
+  belongs_to :course, class_name: "Course", inverse_of: :setting_emails
+  belongs_to :assessment_category, class_name: "Course::Assessment::Category",
                                    foreign_key: :course_assessment_category_id,
                                    inverse_of: :setting_emails, optional: true
 
-  has_many :email_unsubscriptions, class_name: Course::UserEmailUnsubscription.name,
+  has_many :email_unsubscriptions, class_name: "Course::UserEmailUnsubscription",
                                    foreign_key: :course_settings_email_id,
                                    dependent: :destroy
 

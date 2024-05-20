@@ -37,7 +37,7 @@ class Course::Forum::Topic < ApplicationRecord
   calculated :vote_count, (lambda do
     Course::Discussion::Post::Vote.joins(post: :topic).
       where('course_forum_topics.id = course_discussion_topics.actable_id').
-      where('course_discussion_topics.actable_type = ?', Course::Forum::Topic.name).
+      where('course_discussion_topics.actable_type = ?', 'Course::Forum::Topic').
       select("count('*')")
   end)
 
@@ -46,7 +46,7 @@ class Course::Forum::Topic < ApplicationRecord
   calculated :post_count, (lambda do
     Course::Discussion::Topic.joins(:posts).
       where('actable_id = course_forum_topics.id').
-      where(actable_type: Course::Forum::Topic.name).
+      where(actable_type: 'Course::Forum::Topic').
       select("count('*')")
   end)
 
@@ -82,8 +82,7 @@ class Course::Forum::Topic < ApplicationRecord
     last_posts = Course::Discussion::Post.with_creator.where('id in (?) or id in (?)', min_ids, max_ids)
 
     all.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, { discussion_topic: :posts }, last_posts)
+      ActiveRecord::Associations::Preloader::ManualPreloader.new(records: result, associations: last_posts)
     end
   end)
 

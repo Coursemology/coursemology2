@@ -11,7 +11,7 @@ class Course::UserAchievement < ApplicationRecord
                                            if: -> { course_user_id? && achievement_id_changed? } }
 
   belongs_to :course_user, inverse_of: :course_user_achievements
-  belongs_to :achievement, class_name: Course::Achievement.name,
+  belongs_to :achievement, class_name: 'Course::Achievement',
                            inverse_of: :course_user_achievements
 
   private

@@ -14,7 +14,7 @@ class Course::Condition::Assessment < ApplicationRecord
   validates :minimum_grade_percentage, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100 },
                                        allow_nil: true
 
-  belongs_to :assessment, class_name: Course::Assessment.name, inverse_of: :assessment_conditions
+  belongs_to :assessment, class_name: 'Course::Assessment', inverse_of: :assessment_conditions
 
   default_scope { includes(:assessment) }
 
@@ -49,7 +49,7 @@ class Course::Condition::Assessment < ApplicationRecord
 
   # Class that the condition depends on.
   def self.dependent_class
-    Course::Assessment.name
+    'Course::Assessment'
   end
 
   def self.on_dependent_status_change(submission)
