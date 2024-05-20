@@ -41,12 +41,6 @@ const styles = {
 };
 
 class VisibleGradingPanel extends Component {
-  static calculateTotalGrade(grades) {
-    return Object.values(grades)
-      .filter((grade) => grade !== null)
-      .reduce((acc, b) => acc + (parseFloat(b.grade) || 0), 0);
-  }
-
   static renderCourseUserLink(courseUser) {
     const courseId = getCourseId();
     if (courseUser && courseUser.id) {
@@ -320,14 +314,9 @@ class VisibleGradingPanel extends Component {
   }
 
   renderTotalGrade() {
-    const {
-      grading: { questions },
-      submission: { maximumGrade },
-    } = this.props;
+    const { submission } = this.props;
     return (
-      <div>{`${VisibleGradingPanel.calculateTotalGrade(
-        questions,
-      )} / ${maximumGrade}`}</div>
+      <div>{`${submission.grade ?? '--'} / ${submission.maximumGrade}`}</div>
     );
   }
 
