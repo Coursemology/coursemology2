@@ -45,5 +45,7 @@ module Application # rubocop:disable Style/ClassAndModuleChildren
     config.x.default_user_time_zone = 'Singapore'
     config.x.public_download_folder = 'downloads'
     config.x.temp_folder = config.root.join('tmp')
+
+    config.active_record.has_many_inversing = false
   end
 end
