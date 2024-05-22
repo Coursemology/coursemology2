@@ -16,9 +16,9 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
                          dependent: :destroy, foreign_key: :file_id, inverse_of: :file
 
   # Separate the lines by `\r` `\n` or `\r\n`
-  LINE_SEPARATOR = /\r\n|\r|\n/
-  MAX_LINES = ApplicationHTMLFormattersHelper::MAX_CODE_LINES
-  MAX_SIZE = ApplicationHTMLFormattersHelper::MAX_CODE_SIZE
+  LINE_SEPARATOR ||= /\r\n|\r|\n/
+  MAX_LINES ||= ApplicationHtmlFormattersHelper::MAX_CODE_LINES
+  MAX_SIZE ||= ApplicationHtmlFormattersHelper::MAX_CODE_SIZE
 
   # Returns the code at lines.
   #

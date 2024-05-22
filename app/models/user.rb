@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 # Represents a user in the application. Users are shared across all instances.
 class User < ApplicationRecord
-  SYSTEM_USER_ID = 0
-  DELETED_USER_ID = -1
+  SYSTEM_USER_ID ||= 0
+  DELETED_USER_ID ||= -1
 
   include UserSearchConcern
   include UserMasqueradeConcern
@@ -14,7 +14,7 @@ class User < ApplicationRecord
 
   enum role: { normal: 0, administrator: 1 }
 
-  AVAILABLE_LOCALES = I18n.available_locales.map(&:to_s)
+  AVAILABLE_LOCALES ||= I18n.available_locales.map(&:to_s)
 
   class << self
     # Finds the System user.
@@ -24,7 +24,7 @@ class User < ApplicationRecord
     #
     # @return [User]
     def system
-      @system ||= find(User::SYSTEM_USER_ID)
+      @system ||= find(SYSTEM_USER_ID)
       raise 'No system user. Did you run rake db:seed?' unless @system
 
       @system
@@ -36,7 +36,7 @@ class User < ApplicationRecord
     #
     # @return [User]
     def deleted
-      @deleted ||= find(User::DELETED_USER_ID)
+      @deleted ||= find(DELETED_USER_ID)
       raise 'No deleted user. Did you run rake db:seed?' unless @deleted
 
       @deleted
@@ -84,7 +84,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :emails
 
   scope :ordered_by_name, -> { order(:name) }
-  scope :human_users, -> { where.not(id: [User::SYSTEM_USER_ID, User::DELETED_USER_ID]) }
+  scope :human_users, -> { where.not(id: [SYSTEM_USER_ID, DELETED_USER_ID]) }
   scope :active_in_past_7_days, (lambda do
     where(id: InstanceUser.unscoped.active_in_past_7_days.select(:user_id).distinct)
   end)
@@ -98,7 +98,7 @@ class User < ApplicationRecord
   #
   # @return [Boolean]
   def built_in?
-    id == User::SYSTEM_USER_ID || id == User::DELETED_USER_ID
+    id == SYSTEM_USER_ID || id == DELETED_USER_ID
   end
 
   # Pick the default email and set it as primary email. This method would immediately set the

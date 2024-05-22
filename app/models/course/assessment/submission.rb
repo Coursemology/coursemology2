@@ -11,7 +11,7 @@ class Course::Assessment::Submission < ApplicationRecord
 
   acts_as_experience_points_record
 
-  BUFFER_TIME_TO_FORCE_SUBMIT_MINUTES = 5.minutes
+  BUFFER_TIME_TO_FORCE_SUBMIT_MINUTES ||= 5.minutes
 
   after_save :auto_grade_submission, if: :submitted?
   after_save :retrieve_codaveri_feedback, if: :submitted?
