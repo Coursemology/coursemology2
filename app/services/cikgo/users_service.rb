@@ -25,14 +25,21 @@ class Cikgo::UsersService < Cikgo::Service
 
     private
 
-    def find_or_create_oauth_tokens_for(user)
-      Doorkeeper::AccessToken.find_or_create_for(
-        application: Doorkeeper::Application.find_by(name: CIKGO_OAUTH_APPLICATION_NAME),
-        resource_owner: user,
-        scopes: StringThatRespondsToSort.new('read'),
-        expires_in: Doorkeeper.configuration.access_token_expires_in,
-        use_refresh_token: true
-      )
+    def find_or_create_oauth_tokens_for(_user)
+      # Doorkeeper::AccessToken.find_or_create_for(
+      #   application: Doorkeeper::Application.find_by(name: CIKGO_OAUTH_APPLICATION_NAME),
+      #   resource_owner: user,
+      #   scopes: StringThatRespondsToSort.new('read'),
+      #   expires_in: Doorkeeper.configuration.access_token_expires_in,
+      #   use_refresh_token: true
+      # )
+      # TODO: update from live token
+      {
+        token: 'access_token',
+        refresh_token: 'refresh_token',
+        expires_in: '15 minutes',
+        scope: 'some scope'
+      }
     end
 
     # `Doorkeeper::AccessToken.find_or_create_for`'s documentation says that `scopes` can be any object that responds to
