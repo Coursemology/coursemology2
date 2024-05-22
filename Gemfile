@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 source 'https://rubygems.org'
 
+ruby '3.1.4'
+
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.6.1'
+gem 'rails', '~> 6.1.7.7'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -27,7 +29,8 @@ gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
-gem 'calculated_attributes'
+gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes',
+                             ref: 'af4e503a3a739501c6e74d6ac7690e8c84349b86'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git'
@@ -117,6 +120,7 @@ group :development, :test do
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'debug'
 
   # Code Coverage reporters
   gem 'simplecov'
@@ -208,3 +212,15 @@ gem 'rails-html-sanitizer', '>= 1.0.4'
 
 gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'
+
+# net-smtp has been removed from the default gems in ruby 3.1.
+# As Action Mailbox depends on net/smtp temporarily add to your gemfile until the mail gem includes it as a dependancy.
+gem 'net-smtp'
+gem 'net-ftp'
+gem 'net-imap'
+gem 'net-pop'
+gem 'matrix'
+gem 'prime'
+
+# Ruby 3.1 uses Psych 4.0.0 makes Psych.load refuse to load untrusted data. This is only fixed in rails 7.0.2.4
+gem 'psych', '< 4.0.0'
