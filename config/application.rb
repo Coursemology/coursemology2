@@ -14,7 +14,7 @@ module Application # rubocop:disable Style/ClassAndModuleChildren
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
-    config.autoloader = :classic
+    config.autoloader = :zeitwerk
 
     config.assets.enabled = false
 

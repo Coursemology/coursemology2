@@ -12,7 +12,6 @@ class User < ApplicationRecord
   acts_as_reader
   mount_uploader :profile_photo, ImageUploader
 
-  enum role: { normal: 0, administrator: 1 }
 
   AVAILABLE_LOCALES ||= I18n.available_locales.map(&:to_s)
 
@@ -82,6 +81,13 @@ class User < ApplicationRecord
   has_one :cikgo_user, dependent: :destroy, inverse_of: :user
 
   accepts_nested_attributes_for :emails
+
+  # This order also needs to be preserved in rails 6's zeitwerk mode
+  # When the enum is placed above `has_many course_enrol_requests`,
+  # the error appears:
+  # ArgumentError: You tried to define an enum named "role" on the model "User",
+  # but this will generate a instance method "normal?", which is already defined by another enum.
+  enum role: { normal: 0, administrator: 1 }
 
   scope :ordered_by_name, -> { order(:name) }
   scope :human_users, -> { where.not(id: [SYSTEM_USER_ID, DELETED_USER_ID]) }
