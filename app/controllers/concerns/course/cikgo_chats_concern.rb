@@ -17,7 +17,10 @@ module Course::CikgoChatsConcern
   private
 
   def create_cikgo_user(user)
-    provided_user_id = Cikgo::UsersService.authenticate!(user, helpers.user_image(user, url: true))
+    provider_user_id = current_decoded_token[:sub]
+    image_url = helpers.user_image(user, url: true)
+    provided_user_id = Cikgo::UsersService.authenticate!(user, provider_user_id, image_url)
+
     (user.cikgo_user || user.build_cikgo_user).provided_user_id = provided_user_id
     user.cikgo_user.save!
   end
