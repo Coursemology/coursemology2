@@ -18,11 +18,15 @@ module ApplicationAuthenticationConcern
   end
 
   def current_session_id
-    @current_session_id ||= @decoded_token&.decoded_token&.[](:session_state)
+    @current_session_id ||= current_decoded_token&.[](:session_state)
   end
 
   def token_from_request
     @token_from_request ||= get_token_from_bearer || get_token_from_cookies
+  end
+
+  def current_decoded_token
+    @current_decoded_token ||= @decoded_token&.decoded_token
   end
 
   private
