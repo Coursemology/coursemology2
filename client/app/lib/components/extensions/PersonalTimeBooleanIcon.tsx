@@ -4,10 +4,13 @@ import { Schedule, Shuffle } from '@mui/icons-material';
 import { Tooltip, Typography } from '@mui/material';
 
 import useTranslation from 'lib/hooks/useTranslation';
+import { TimelineAlgorithm } from 'types/course/personalTimes';
 
 interface Props {
   hasPersonalTimes: boolean;
   affectsPersonalTimes: boolean;
+  isStudent: boolean;
+  timelineAlgorithm: TimelineAlgorithm | undefined;
 }
 
 const translations = defineMessages({
@@ -32,12 +35,17 @@ const translations = defineMessages({
 });
 
 const PersonalTimeBooleanIcons: FC<Props> = (props) => {
-  const { hasPersonalTimes, affectsPersonalTimes } = props;
+  const { hasPersonalTimes, affectsPersonalTimes, isStudent, timelineAlgorithm } = props;
   const { t } = useTranslation();
+
+  // If student is NOT on fixed timeline algorithm, then show, otherwise can hide
+  const isFixedStudent = isStudent && (timelineAlgorithm == 'fixed' || !timelineAlgorithm); 
+  const hasPersonalTimesCondition = hasPersonalTimes && !isFixedStudent;
+  const affectsPersonalTimesCondition = affectsPersonalTimes && !isFixedStudent;
 
   return (
     <>
-      {hasPersonalTimes && (
+      {hasPersonalTimesCondition && (
         <Tooltip
           disableInteractive
           title={
@@ -56,7 +64,7 @@ const PersonalTimeBooleanIcons: FC<Props> = (props) => {
         </Tooltip>
       )}
 
-      {affectsPersonalTimes && (
+      {affectsPersonalTimesCondition && (
         <Tooltip
           disableInteractive
           title={

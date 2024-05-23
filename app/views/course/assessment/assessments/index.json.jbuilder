@@ -5,6 +5,7 @@ submissions_hash = @assessments.to_h { |assessment| [assessment.id, assessment.s
 json.display do
   json.isStudent current_course_user&.student? || false
   json.isGamified current_course.gamified?
+  json.timelineAlgorithm current_course_user&.timeline_algorithm
   json.allowRandomization current_course.allow_randomization
   json.isAchievementsEnabled achievements_enabled
   json.isMonitoringEnabled @monitoring_component_enabled

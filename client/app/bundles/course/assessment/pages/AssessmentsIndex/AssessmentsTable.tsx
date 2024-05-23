@@ -39,7 +39,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
             </Link>
           </label>
 
-          <StatusBadges for={assessment} isStudent={display.isStudent} />
+          <StatusBadges for={assessment} isStudent={display.isStudent} timelineAlgorithm={display.timelineAlgorithm}/>
         </div>
       ),
     },
