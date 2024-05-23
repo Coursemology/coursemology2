@@ -6,7 +6,11 @@ module ApplicationCableAuthenticationConcern
   end
 
   def retrieve_current_session_id
-    @current_session_id ||= @decoded_token&.decoded_token&.[](:session_state)
+    @current_session_id ||= current_decoded_token&.[](:session_state)
+  end
+
+  def current_decoded_token
+    @current_decoded_token ||= @decoded_token&.decoded_token
   end
 
   private
