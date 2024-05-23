@@ -99,7 +99,7 @@ group :development, :test do
   # Use RSpec for Behaviour testing
   gem 'rspec-rails'
 
-  gem 'rubocop', '~> 1.63'
+  gem 'rubocop', '~> 1.64'
 
   # Factory Bot for factories
   gem 'factory_bot_rails'
