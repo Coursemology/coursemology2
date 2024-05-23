@@ -32,16 +32,9 @@ const VideoBadges = (props: Props): JSX.Element => {
       <PersonalTimeBooleanIcon
         affectsPersonalTimes={video.affectsPersonalTimes}
         hasPersonalTimes={video.hasPersonalTimes}
+        isStudent={videoMetadata.isStudent}
+        timelineAlgorithm={videoMetadata.timelineAlgorithm}
       />
-
-      {(videoMetadata.isCurrentCourseUser && !videoMetadata.isStudent) ||
-        (videoMetadata.timelineAlgorithm &&
-          videoMetadata.timelineAlgorithm !== 'fixed' && (
-            <PersonalTimeBooleanIcon
-              affectsPersonalTimes={video.affectsPersonalTimes}
-              hasPersonalTimes={video.hasPersonalTimes}
-            />
-          ))}
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { TimelineAlgorithm } from '../personalTimes';
 import { QuestionType } from './question';
 import type { QuestionData } from './questions';
 
@@ -52,6 +53,7 @@ export interface AssessmentsListData {
   display: {
     isStudent: boolean;
     isGamified: boolean;
+    timelineAlgorithm: TimelineAlgorithm;
     allowRandomization: boolean;
     isAchievementsEnabled: boolean;
     isMonitoringEnabled: boolean;

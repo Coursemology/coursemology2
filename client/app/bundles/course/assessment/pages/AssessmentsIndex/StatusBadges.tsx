@@ -12,6 +12,7 @@ import PersonalTimeBooleanIcons from 'lib/components/extensions/PersonalTimeBool
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
+import { TimelineAlgorithm } from 'types/course/personalTimes';
 
 interface NonStudentStatusBadgesProps {
   for: AssessmentListData;
@@ -19,6 +20,7 @@ interface NonStudentStatusBadgesProps {
 
 interface StatusBadgesProps extends NonStudentStatusBadgesProps {
   isStudent: boolean;
+  timelineAlgorithm: TimelineAlgorithm | undefined;
 }
 
 const NonStudentStatusBadges = (
@@ -58,17 +60,12 @@ const NonStudentStatusBadges = (
           <Key className="text-3xl text-neutral-500 hover?:text-neutral-600" />
         </Tooltip>
       )}
-
-      <PersonalTimeBooleanIcons
-        affectsPersonalTimes={assessment.affectsPersonalTimes}
-        hasPersonalTimes={assessment.hasPersonalTimes}
-      />
     </>
   );
 };
 
 const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
-  const { for: assessment, isStudent } = props;
+  const { for: assessment, isStudent, timelineAlgorithm } = props;
   const { t } = useTranslation();
 
   return (
@@ -85,6 +82,13 @@ const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
       )}
 
       {!isStudent && <NonStudentStatusBadges for={assessment} />}
+
+      <PersonalTimeBooleanIcons
+        affectsPersonalTimes={assessment.affectsPersonalTimes}
+        hasPersonalTimes={assessment.hasPersonalTimes}
+        isStudent={isStudent}
+        timelineAlgorithm={timelineAlgorithm}
+      />
     </div>
   );
 };
