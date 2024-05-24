@@ -89,7 +89,7 @@ const SubmissionEditStepForm = (props) => {
     allowPartialSubmission,
     attempting,
     codaveriFeedbackStatus,
-    deadline,
+    submissionTimeLimitAt,
     explanations,
     graderView,
     isCodaveriEnabled,
@@ -149,13 +149,13 @@ const SubmissionEditStepForm = (props) => {
   }, [initialValues]);
 
   useEffect(() => {
-    if (deadline) {
+    if (submissionTimeLimitAt) {
       setTimerForForceSubmission(
-        deadline,
+        submissionTimeLimitAt,
         handleSubmit((data) => onSubmit({ ...data })),
       );
     }
-  }, [deadline]);
+  }, [submissionTimeLimitAt]);
 
   const POLL_INTERVAL_MILLISECONDS = 2000;
   const pollerRef = useRef(null);
@@ -741,10 +741,10 @@ const SubmissionEditStepForm = (props) => {
       {renderUnsubmitDialog()}
       {renderResetDialog()}
       <WarningDialog
-        deadline={deadline}
         isAttempting={attempting}
         isExamMode={false}
-        isTimedMode={!!deadline}
+        isTimedMode={!!submissionTimeLimitAt}
+        submissionTimeLimitAt={submissionTimeLimitAt}
       />
     </div>
   );
@@ -755,7 +755,7 @@ SubmissionEditStepForm.propTypes = {
   intl: PropTypes.object.isRequired,
 
   attachments: PropTypes.arrayOf(attachmentShape),
-  deadline: PropTypes.number,
+  submissionTimeLimitAt: PropTypes.number,
   graderView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
   step: PropTypes.number,

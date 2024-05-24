@@ -73,7 +73,7 @@ const SubmissionEditForm = (props) => {
     liveFeedback,
     codaveriFeedbackStatus,
     explanations,
-    deadline,
+    submissionTimeLimitAt,
     delayedGradePublication,
     graded,
     graderView,
@@ -153,13 +153,13 @@ const SubmissionEditForm = (props) => {
   }, []);
 
   useEffect(() => {
-    if (deadline) {
+    if (submissionTimeLimitAt) {
       setTimerForForceSubmission(
-        deadline,
+        submissionTimeLimitAt,
         handleSubmit((data) => onSubmit({ ...data })),
       );
     }
-  }, [deadline]);
+  }, [submissionTimeLimitAt]);
 
   const POLL_INTERVAL_MILLISECONDS = 2000;
   const pollerRef = useRef(null);
@@ -810,10 +810,10 @@ const SubmissionEditForm = (props) => {
       {renderUnsubmitDialog()}
       {renderResetDialog()}
       <WarningDialog
-        deadline={deadline}
         isAttempting={attempting}
         isExamMode={passwordProtected}
-        isTimedMode={!!deadline}
+        isTimedMode={!!submissionTimeLimitAt}
+        submissionTimeLimitAt={submissionTimeLimitAt}
       />
     </>
   );
@@ -826,7 +826,7 @@ SubmissionEditForm.propTypes = {
   attachments: PropTypes.arrayOf(attachmentShape),
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
-  deadline: PropTypes.number,
+  submissionTimeLimitAt: PropTypes.number,
   delayedGradePublication: PropTypes.bool.isRequired,
   passwordProtected: PropTypes.bool.isRequired,
   tabbedView: PropTypes.bool.isRequired,
