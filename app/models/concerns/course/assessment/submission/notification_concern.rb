@@ -25,7 +25,7 @@ module Course::Assessment::Submission::NotificationConcern
     # a new submission to be graded since it was submitted by the course staff anyway.
     return unless creator == updater
     return if assessment.autograded?
-    return unless course_user.real_student?
+    return unless course_user.student?
 
     Course::AssessmentNotifier.assessment_submitted(creator, course_user, self)
   end
