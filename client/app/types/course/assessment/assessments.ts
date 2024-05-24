@@ -1,4 +1,5 @@
 import { TimelineAlgorithm } from '../personalTimes';
+
 import { QuestionType } from './question';
 import type { QuestionData } from './questions';
 
