@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { Schedule, Shuffle } from '@mui/icons-material';
 import { Tooltip, Typography } from '@mui/material';
+import { TimelineAlgorithm } from 'types/course/personalTimes';
 
 import useTranslation from 'lib/hooks/useTranslation';
-import { TimelineAlgorithm } from 'types/course/personalTimes';
 
 interface Props {
   hasPersonalTimes: boolean;
@@ -35,11 +35,17 @@ const translations = defineMessages({
 });
 
 const PersonalTimeBooleanIcons: FC<Props> = (props) => {
-  const { hasPersonalTimes, affectsPersonalTimes, isStudent, timelineAlgorithm } = props;
+  const {
+    hasPersonalTimes,
+    affectsPersonalTimes,
+    isStudent,
+    timelineAlgorithm,
+  } = props;
   const { t } = useTranslation();
 
   // If student is NOT on fixed timeline algorithm, then show, otherwise can hide
-  const isFixedStudent = isStudent && (timelineAlgorithm == 'fixed' || !timelineAlgorithm); 
+  const isFixedStudent =
+    isStudent && (timelineAlgorithm == 'fixed' || !timelineAlgorithm);
   const hasPersonalTimesCondition = hasPersonalTimes && !isFixedStudent;
   const affectsPersonalTimesCondition = affectsPersonalTimes && !isFixedStudent;
 

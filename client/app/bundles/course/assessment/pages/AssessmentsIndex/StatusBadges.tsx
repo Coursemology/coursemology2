@@ -7,12 +7,12 @@ import {
 } from '@mui/icons-material';
 import { Chip, Tooltip } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
+import { TimelineAlgorithm } from 'types/course/personalTimes';
 
 import PersonalTimeBooleanIcons from 'lib/components/extensions/PersonalTimeBooleanIcon';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
-import { TimelineAlgorithm } from 'types/course/personalTimes';
 
 interface NonStudentStatusBadgesProps {
   for: AssessmentListData;
