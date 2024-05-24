@@ -45,7 +45,7 @@ const PersonalTimeBooleanIcons: FC<Props> = (props) => {
 
   // If student is NOT on fixed timeline algorithm, then show, otherwise can hide
   const isFixedStudent =
-    isStudent && (timelineAlgorithm == 'fixed' || !timelineAlgorithm);
+    isStudent && (timelineAlgorithm === 'fixed' || !timelineAlgorithm);
   const hasPersonalTimesCondition = hasPersonalTimes && !isFixedStudent;
   const affectsPersonalTimesCondition = affectsPersonalTimes && !isFixedStudent;
 
