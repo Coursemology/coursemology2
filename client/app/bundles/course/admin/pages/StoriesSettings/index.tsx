@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { Alert, Typography } from '@mui/material';
+import { Alert } from '@mui/material';
 import { StoriesSettingsData } from 'types/course/admin/stories';
 
 import Section from 'lib/components/core/layouts/Section';

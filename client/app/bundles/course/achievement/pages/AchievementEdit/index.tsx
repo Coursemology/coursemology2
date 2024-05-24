@@ -2,7 +2,6 @@ import { FC, useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
