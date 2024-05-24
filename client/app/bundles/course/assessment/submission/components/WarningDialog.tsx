@@ -15,7 +15,7 @@ import { remainingTimeDisplay } from '../pages/SubmissionEditIndex/TimeLimitBann
 import translations from '../translations';
 
 interface Props {
-  deadline: number;
+  submissionTimeLimitAt: number;
   isExamMode: boolean;
   isTimedMode: boolean;
   isAttempting: boolean;
@@ -23,23 +23,24 @@ interface Props {
 
 const WarningDialog: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { isExamMode, isTimedMode, isAttempting, deadline } = props;
+  const { isExamMode, isTimedMode, isAttempting, submissionTimeLimitAt } =
+    props;
 
   const [examNotice, setExamNotice] = useState(isExamMode);
   const [timedNotice, setTimedNotice] = useState(isTimedMode);
 
+  const currentTime = new Date().getTime();
+
   const remainingTime =
-    deadline && new Date(deadline) > new Date()
-      ? new Date(deadline).getTime() - new Date().getTime()
+    submissionTimeLimitAt && submissionTimeLimitAt > currentTime
+      ? submissionTimeLimitAt - currentTime
       : null;
 
   const remainingBufferTime =
-    deadline &&
-    new Date(deadline) <= new Date() &&
-    new Date(deadline + BUFFER_TIME_TO_FORCE_SUBMIT_MS) > new Date()
-      ? new Date(deadline).getTime() +
-        BUFFER_TIME_TO_FORCE_SUBMIT_MS -
-        new Date().getTime()
+    submissionTimeLimitAt &&
+    submissionTimeLimitAt <= currentTime &&
+    currentTime < submissionTimeLimitAt + BUFFER_TIME_TO_FORCE_SUBMIT_MS
+      ? submissionTimeLimitAt + BUFFER_TIME_TO_FORCE_SUBMIT_MS - currentTime
       : null;
 
   let dialogTitle: string = '';
