@@ -18,7 +18,9 @@ gem 'rack-cors'
 # Instance/Course settings
 gem 'settings_on_rails'
 # Manage read/unread status
-gem 'unread'
+gem 'unread', '0.13.1'
+
+gem 'globalid', '1.2.0'
 # Extension for validating hostnames and domain names
 gem 'validates_hostname'
 # A Ruby state machine library
@@ -29,8 +31,7 @@ gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
-gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes',
-                             ref: 'af4e503a3a739501c6e74d6ac7690e8c84349b86'
+gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git'
@@ -49,7 +50,7 @@ gem 'html-pipeline-rouge_filter', git: 'https://github.com/Coursemology/html-pip
 gem 'ruby-oembed'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder'
+gem 'jbuilder', '2.12.0'
 # Slim as the templating language
 gem 'slim-rails'
 # Paginator for Rails
@@ -100,7 +101,7 @@ end
 
 group :development, :test do
   # Use RSpec for Behaviour testing
-  gem 'rspec-rails'
+  gem 'rspec-rails', '6.1.2'
 
   gem 'rubocop', '~> 1.63'
 
