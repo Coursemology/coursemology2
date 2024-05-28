@@ -14,7 +14,6 @@ module Application # rubocop:disable Style/ClassAndModuleChildren
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
-    config.autoloader = :classic
 
     config.assets.enabled = false
 
@@ -38,6 +37,7 @@ module Application # rubocop:disable Style/ClassAndModuleChildren
     config.eager_load_paths << "#{Rails.root}/app/services"
     config.eager_load_paths << "#{Rails.root}/app/services/concerns"
     config.eager_load_paths << "#{Rails.root}/app/notifiers"
+    config.eager_load_paths << "#{Rails.root}/spec/mailers/previews"
 
     config.action_mailer.delivery_job = 'ActionMailer::MailDeliveryJob'
     config.action_mailer.deliver_later_queue_name = :mailers

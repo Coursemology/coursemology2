@@ -24,7 +24,7 @@ executors:
           PG_USER: ubuntu
           RAILS_ENV: test
           BUNDLE_APP_CONFIG: ~/repo/.bundle
-          DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+          DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
           COLLECT_COVERAGE: << parameters.collects_rails_coverage >>
 
       - image: cimg/postgres:14.5
@@ -293,6 +293,18 @@ jobs:
       - run:
           name: Run FactoryBot lint
           command: bundle exec rake factory_bot:lint
+
+  check_zeitwerk:
+    executor: ruby_with_postgres
+
+    steps:
+      - checkout
+      - rehydrate_ruby_deps
+      - setup_db
+
+      - run:
+          name: Run Zeitwerk check
+          command: bundle exec rake zeitwerk:check
 
   jslint:
     executor: node
