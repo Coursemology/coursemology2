@@ -33,23 +33,23 @@ class CourseUser < ApplicationRecord
 
   belongs_to :user, inverse_of: :course_users
   belongs_to :course, inverse_of: :course_users
-  has_many :experience_points_records, class_name: Course::ExperiencePointsRecord.name,
+  has_many :experience_points_records, class_name: 'Course::ExperiencePointsRecord',
                                        inverse_of: :course_user, dependent: :destroy
-  has_many :learning_rate_records, class_name: Course::LearningRateRecord.name,
+  has_many :learning_rate_records, class_name: 'Course::LearningRateRecord',
                                    inverse_of: :course_user, dependent: :destroy
-  has_many :course_user_achievements, class_name: Course::UserAchievement.name,
+  has_many :course_user_achievements, class_name: 'Course::UserAchievement',
                                       inverse_of: :course_user, dependent: :destroy
   has_many :achievements, through: :course_user_achievements,
-                          class_name: Course::Achievement.name do
+                          class_name: 'Course::Achievement' do
     include CourseUser::AchievementsConcern
   end
-  has_many :email_unsubscriptions, class_name: Course::UserEmailUnsubscription.name,
+  has_many :email_unsubscriptions, class_name: 'Course::UserEmailUnsubscription',
                                    inverse_of: :course_user, dependent: :destroy
-  has_many :group_users, class_name: Course::GroupUser.name,
+  has_many :group_users, class_name: 'Course::GroupUser',
                          inverse_of: :course_user, dependent: :destroy
-  has_many :groups, through: :group_users, class_name: Course::Group.name, source: :group
-  has_many :personal_times, class_name: Course::PersonalTime.name, inverse_of: :course_user, dependent: :destroy
-  belongs_to :reference_timeline, class_name: Course::ReferenceTimeline.name, inverse_of: :course_users, optional: true
+  has_many :groups, through: :group_users, class_name: 'Course::Group', source: :group
+  has_many :personal_times, class_name: 'Course::PersonalTime', inverse_of: :course_user, dependent: :destroy
+  belongs_to :reference_timeline, class_name: 'Course::ReferenceTimeline', inverse_of: :course_users, optional: true
 
   validate :validate_reference_timeline_belongs_to_course
 
