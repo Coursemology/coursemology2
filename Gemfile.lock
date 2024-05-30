@@ -8,10 +8,10 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/activerecord-userstamp.git
-  revision: 1170233e314466630e3a545ae3fdee16a0bb4a19
+  revision: 185a5a928dab293840a18ee777d82bb0551ca0d4
   specs:
-    activerecord-userstamp (3.0.5)
-      rails (>= 6)
+    activerecord-userstamp (3.0.6)
+      rails (>= 6.0.0)
 
 GIT
   remote: https://github.com/Coursemology/html-pipeline-rouge_filter.git
@@ -157,7 +157,7 @@ GEM
       ssrf_filter (~> 1.0)
     codecov (0.6.0)
       simplecov (>= 0.15, < 0.22)
-    concurrent-ruby (1.2.3)
+    concurrent-ruby (1.3.1)
     connection_pool (2.4.1)
     consistency_fail (0.3.7)
     coursemology-polyglot (0.3.8)
@@ -321,9 +321,9 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.6)
-    minitest (5.23.0)
+    minitest (5.23.1)
     multi_json (1.15.0)
-    net-imap (0.4.10)
+    net-imap (0.4.11)
       date
       net-protocol
     net-pop (0.1.2)
@@ -333,7 +333,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     netrc (0.11.0)
-    nio4r (2.7.1)
+    nio4r (2.7.3)
     nokogiri (1.16.5)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -564,7 +564,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.36)
-    zeitwerk (2.6.14)
+    zeitwerk (2.6.15)
 
 PLATFORMS
   ruby
