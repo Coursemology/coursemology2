@@ -59,10 +59,14 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    $ bundle exec rake db:setup
    ```
 
+6. We are using [Keycloak](https://www.keycloak.org/) as our Identity and Access Management (IAM) solution. Before proceeding to the next step, please navigate to `./authentication` folder, follow the instruction provided over the [README](https://github.com/Coursemology/coursemology2/blob/master/authentication/README.md), and then ensure that the Docker for Coursemology Authentication is running and that you are able to access the Keycloak site as mentioned in the very last step of that instruction
+
 7. Initialize .env files for Frontend and Backend
+
    ```sh
    $ cp env .env; cp client/env client/.env
    ```
+
    You may need to add specific API keys (such as the [GOOGLE_RECAPTCHA_SITE_KEY](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do)) to the .env files for testing specific features.
 
 8. Open up 3 different terminals. On the terminal for Frontend in the `client` directory, run
@@ -71,21 +75,27 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    yarn build:development
    ```
 
-   , on the terminal for authentication service in the `authentication` directory, run
+   on the terminal for authentication service in the `authentication` directory, if you have not yet started Keycloak, run
 
    ```
    docker compose up
    ```
 
-   , and on the terminal for Backend, run
+   or
 
    ```
-   bundle exec rails s
+   docker-compose up
    ```
 
-7. Access the App by visiting `http://localhost:8080`
+   and on the terminal for Backend, run
 
-8. You're all set! Simply login with the default username and password:
+   ```
+   bundle exec rails s -p 3000
+   ```
+
+9. Access the App by visiting `http://localhost:8080`
+
+10. You're all set! Simply login with the default username and password:
 
 > Email: `test@example.org`
 >
