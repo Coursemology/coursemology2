@@ -15,7 +15,8 @@ class Course::Stories::StoriesController < Course::ComponentController
   end
 
   def mission_control
-    url, @pending_threads_count = get_mission_control_url(current_course_user)
+    target_course_user = current_course.course_users.find_by(id: params[:course_user_id]) || current_course_user
+    url, @pending_threads_count = get_mission_control_url(target_course_user)
 
     render json: { redirectUrl: url }
   end

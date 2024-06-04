@@ -7,7 +7,9 @@ export default class StoriesAPI extends BaseCourseAPI {
     return this.client.get(`/courses/${this.courseId}/learn`);
   }
 
-  missionControl(): APIResponse<JustRedirect> {
-    return this.client.get(`/courses/${this.courseId}/mission_control`);
+  missionControl(courseUserId?: string): APIResponse<JustRedirect> {
+    return this.client.get(`/courses/${this.courseId}/mission_control`, {
+      params: { course_user_id: courseUserId },
+    });
   }
 }

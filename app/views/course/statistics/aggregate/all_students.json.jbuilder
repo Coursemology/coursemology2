@@ -47,4 +47,6 @@ json.metadata do
   json.courseVideoCount course_video_count
   json.hasGroupManagers !no_group_managers
   json.hasMyStudents has_my_students
+  json.showRedirectToMissionControl current_course.component_enabled?(Course::StoriesComponent) &&
+                                    can?(:access_mission_control, current_course)
 end

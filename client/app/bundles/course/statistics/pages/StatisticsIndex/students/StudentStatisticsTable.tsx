@@ -1,6 +1,8 @@
 import { FC, useMemo } from 'react';
 import { defineMessages } from 'react-intl';
-import { Typography } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { AssistantOutlined } from '@mui/icons-material';
+import { IconButton, Tooltip, Typography } from '@mui/material';
 
 import { GroupManager, Metadata, Student } from 'course/statistics/types';
 import { processStudent } from 'course/statistics/utils/parseStudentsResponse';
@@ -70,10 +72,14 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       showVideo,
       courseVideoCount,
       hasGroupManagers,
+      showRedirectToMissionControl,
     },
     students,
   } = props;
   const { t } = useTranslation();
+
+  const { courseId } = useParams();
+
   const formattedStudents: Student[] = students.map(processStudent);
 
   const numStudentType = useMemo(() => {
@@ -226,6 +232,25 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       csvDownloadable: true,
     });
   }
+
+  if (showRedirectToMissionControl)
+    columns.push({
+      id: 'missionControl',
+      title: '',
+      className: 'p-0',
+      cell: (student) => (
+        <Link
+          opensInNewTab
+          to={`/courses/${courseId}/mission_control?for=${student.id}`}
+        >
+          <Tooltip title="Open in Mission Control">
+            <IconButton>
+              <AssistantOutlined />
+            </IconButton>
+          </Tooltip>
+        </Link>
+      ),
+    });
 
   return (
     <>
