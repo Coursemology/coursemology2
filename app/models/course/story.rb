@@ -4,7 +4,7 @@ class Course::Story
     def for_course_user!(course_user)
       return nil unless course_user.course.component_enabled?(Course::StoriesComponent)
 
-      Cikgo::TimelinesService.items!(course_user).map do |item|
+      Cikgo::TimelinesService.items!(course_user)&.map do |item|
         new(item, course_user)
       end
     end

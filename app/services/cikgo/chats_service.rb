@@ -10,7 +10,7 @@ class Cikgo::ChatsService < Cikgo::Service
         role: cikgo_role(course_user)
       })
 
-      [result[:url], result[:openThreadsCount]]
+      [result&.[](:url), result&.[](:openThreadsCount)]
     end
 
     def mission_control!(course_user)
@@ -19,7 +19,7 @@ class Cikgo::ChatsService < Cikgo::Service
         userId: cikgo_user_id(course_user)
       })
 
-      [result[:url], result[:pendingThreadsCount]]
+      [result&.[](:url), result&.[](:pendingThreadsCount)]
     end
   end
 end
