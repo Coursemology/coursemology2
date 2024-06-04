@@ -45,6 +45,7 @@ export interface Metadata {
   courseVideoCount: number;
   hasGroupManagers: boolean;
   hasMyStudents: boolean;
+  showRedirectToMissionControl: boolean;
 }
 
 export interface StudentsStatistics {

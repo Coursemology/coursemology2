@@ -1,4 +1,5 @@
 import { defineMessage } from 'react-intl';
+import { useSearchParams } from 'react-router-dom';
 
 import CourseAPI from 'api/course';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -11,11 +12,14 @@ import CikgoFramePage from '../components/CikgoFramePage';
 const MissionControlPage = (): JSX.Element => {
   useSetFooter(false);
 
+  const [searchParams] = useSearchParams();
+  const courseUserId = searchParams.get('for') ?? undefined;
+
   return (
     <Preload
       render={<LoadingIndicator />}
       while={async () => {
-        const response = await CourseAPI.stories.missionControl();
+        const response = await CourseAPI.stories.missionControl(courseUserId);
         return response.data.redirectUrl;
       }}
     >
