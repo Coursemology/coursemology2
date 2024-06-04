@@ -10,12 +10,13 @@ import useTranslation from 'lib/hooks/useTranslation';
 const translations = defineMessages({
   errorFetching: {
     id: 'course.stories.CikgoErrorPage.errorFetching',
-    defaultMessage: 'There was a problem getting your stuff from Cikgo.',
+    defaultMessage: `Either it's supposed to be naught, or something went wrong.`,
   },
   errorFetchingDescription: {
     id: 'course.stories.CikgoErrorPage.errorFetchingDescription',
     defaultMessage:
-      '<cikgo>Cikgo</cikgo> is our partner that powers this experience. They were contactable, but did not give us any resources for this request just now Please try again later, and if this persists, <link>contact us</link>.',
+      '<cikgo>Cikgo</cikgo> is our partner that powers this experience. They were contactable, but did not give us any ' +
+      'resources for this request just now. Please try again later, and if this persists, <link>contact us</link>.',
   },
 });
 
