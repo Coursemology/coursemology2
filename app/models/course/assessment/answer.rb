@@ -74,21 +74,24 @@ class Course::Assessment::Answer < ApplicationRecord
   #   finished.
   # @param [Boolean] reduce_priority Whether this answer should be queued at a lower priority.
   #   Used for regrading answers when question is changed, and for submission answers.
+  # @param [Boolean] prevent_regrade When there is an existing auto_grading job, dont create a new one.
   # @return [Course::Assessment::Answer::AutoGradingJob|nil] The autograding job instance will be
   #   returned if the answer is graded using a job, nil will be returned if answer is graded inline.
   # @raise [IllegalStateError] When the answer has not been submitted.
-  def auto_grade!(redirect_to_path: nil, reduce_priority: false)
+  def auto_grade!(redirect_to_path: nil, reduce_priority: false, prevent_regrade: false)
     raise IllegalStateError if attempting?
 
     ensure_auto_grading!
     if grade_inline?
       Course::Assessment::Answer::AutoGradingService.grade(self)
       nil
+    elsif prevent_regrade && auto_grading&.job.present?
+      auto_grading.job
     else
       auto_grading_job_class(reduce_priority).
         perform_later(self, redirect_to_path).tap do |job|
           auto_grading.update_column(:job_id, job.job_id)
-        end
+        end.job
     end
   end
 

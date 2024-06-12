@@ -351,10 +351,6 @@ const translations = defineMessages({
         Try submitting your code again in a couple of minutes \
         or check the error message in the network response.',
   },
-  autogradeSubmissionSuccess: {
-    id: 'course.assessment.submission.autogradeSubmissionSuccess',
-    defaultMessage: 'All answers have been evaluated.',
-  },
   autogradeSubmissionFailure: {
     id: 'course.assessment.submission.autogradeSubmissionFailure',
     defaultMessage: 'An error occurred while evaluating the answers.',

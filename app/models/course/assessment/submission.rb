@@ -195,12 +195,9 @@ class Course::Assessment::Submission < ApplicationRecord
   # Creates an Auto Grading job for this submission. This saves the submission if there are pending
   # changes.
   #
-  # @param [Boolean] only_ungraded Whether grading should be done ONLY for
-  #   ungraded_answers, or for all answers regardless of workflow state
-  #
   # @return [Course::Assessment::Submission::AutoGradingJob] The job instance.
-  def auto_grade!(only_ungraded: false)
-    AutoGradingJob.perform_later(self, only_ungraded)
+  def auto_grade!
+    AutoGradingJob.perform_later(self)
   end
 
   # Creates an Auto Feedback job for this submission.
@@ -304,8 +301,7 @@ class Course::Assessment::Submission < ApplicationRecord
     return unless saved_change_to_workflow_state?
 
     execute_after_commit do
-      # Grade only ungraded answers regardless of state as we dont want to regrade graded/evaluated answers.
-      auto_grade!(only_ungraded: true)
+      auto_grade!
     end
   end
 
