@@ -116,6 +116,26 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
+  generateLiveFeedback(submissionId, params) {
+    return this.client.post(
+      `${this.#urlPrefix}/${submissionId}/generate_live_feedback`,
+      params,
+    );
+  }
+
+  fetchLiveFeedback(feedbackToken) {
+    return this.externalClient.get(
+      `/signed/v2/feedback/llm`,
+      {
+        // TODO parameterize as environment variable
+        baseURL: 'https://1b3e-38-255-65-73.ngrok-free.app',
+        // TODO remove this when we cutover to live CV instance
+        headers: { 'ngrok-skip-browser-warning': '1' },
+        params: { token: feedbackToken },
+      },
+    );
+  }
+
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
     const url = `${this.#urlPrefix}/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
     return this.client.post(url, params);

@@ -130,6 +130,16 @@ class Course::Assessment::Answer < ApplicationRecord
     actable.generate_feedback
   end
 
+  # Pull feedback from Codaveri for an in-progress answer
+  #
+  # @return [[int, Hash]] The response status code and body of the feedback request
+  # @raise [NotImplementedError] answer#generate_live_feedback was not implemented.
+  def generate_live_feedback
+    raise NotImplementedError unless actable.self_respond_to?(:generate_live_feedback)
+
+    actable.generate_live_feedback
+  end
+
   def draft_answer?
     attempting? && !current_answer?
   end

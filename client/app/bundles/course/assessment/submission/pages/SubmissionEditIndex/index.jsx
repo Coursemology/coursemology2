@@ -34,7 +34,10 @@ import {
   unsubmit,
 } from '../../actions';
 import {
+  fetchLiveFeedback,
   generateFeedback,
+  generateLiveFeedback,
+  initializeLiveFeedback,
   reevaluateAnswer,
   resetAnswer,
   saveAllAnswers,
@@ -200,12 +203,32 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(reevaluateAnswer(params.submissionId, answerId, questionId));
   };
 
+  onFetchLiveFeedback = (answerId, questionId) => {
+    const {
+      dispatch,
+      liveFeedback,
+      match: { params },
+    } = this.props;
+
+    const feedbackRequestToken = liveFeedback?.[questionId].pendingFeedbackToken;
+    dispatch(fetchLiveFeedback(params.submissionId, answerId, questionId, feedbackRequestToken));
+  }
+
   onGenerateFeedback = (answerId, questionId) => {
     const {
       dispatch,
       match: { params },
     } = this.props;
     dispatch(generateFeedback(params.submissionId, answerId, questionId));
+  };
+
+  onGenerateLiveFeedback = (answerId, questionId) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(initializeLiveFeedback(questionId));
+    dispatch(generateLiveFeedback(params.submissionId, answerId, questionId));
   };
 
   allConsideredCorrect() {
@@ -330,7 +353,9 @@ class VisibleSubmissionEditIndex extends Component {
           isCodaveriEnabled={isCodaveriEnabled}
           isSaving={isSaving}
           maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
+          onFetchLiveFeedback={this.onFetchLiveFeedback}
           onGenerateFeedback={this.onGenerateFeedback}
+          onGenerateLiveFeedback={this.onGenerateLiveFeedback}
           onReevaluateAnswer={this.onReevaluateAnswer}
           onReset={this.onReset}
           onSaveDraft={this.onSaveDraft}
@@ -373,7 +398,9 @@ class VisibleSubmissionEditIndex extends Component {
         isCodaveriEnabled={isCodaveriEnabled}
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
+        onFetchLiveFeedback={this.onFetchLiveFeedback}
         onGenerateFeedback={this.onGenerateFeedback}
+        onGenerateLiveFeedback={this.onGenerateLiveFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
         onReset={this.onReset}
         onSaveDraft={this.onSaveDraft}
@@ -459,6 +486,7 @@ VisibleSubmissionEditIndex.propTypes = {
   deadline: PropTypes.number,
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
+  liveFeedback: PropTypes.object,
   grading: gradingShape.isRequired,
   questions: PropTypes.objectOf(questionShape),
   historyAnswers: PropTypes.objectOf(answerShape),
@@ -491,6 +519,7 @@ function mapStateToProps({ assessments: { submission } }) {
     codaveriFeedbackStatus: submission.codaveriFeedbackStatus,
     grading: submission.grading.questions,
     submission: submission.submission,
+    liveFeedback: submission.liveFeedback,
     questions: submission.questions,
     historyAnswers: submission.history.answers,
     historyQuestions: submission.history.questions,

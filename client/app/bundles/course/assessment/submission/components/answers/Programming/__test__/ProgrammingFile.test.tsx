@@ -3,6 +3,7 @@ import { render } from 'test-utils';
 
 import actionTypes from '../../../../constants';
 import ProgrammingFile from '../ProgrammingFile';
+import { useRef } from 'react';
 
 const courseId = 1;
 const assessmentId = 2;
@@ -48,7 +49,9 @@ describe('<ProgrammingFile />', () => {
       },
       language: 'python',
       readOnly: true,
+      editorRef: useRef(null),
       saveAnswerAndUpdateClientVersion: (_answerId: number): void => {},
+      onSelectionChange: () => {},
     };
 
     const url = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;

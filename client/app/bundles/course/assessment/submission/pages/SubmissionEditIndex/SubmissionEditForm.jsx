@@ -1,9 +1,10 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Element, scroller } from 'react-scroll';
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -22,6 +23,8 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
+
+import TestCaseView from '../../containers/TestCaseView';
 
 import SubmissionAnswer from '../../components/answers';
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
@@ -68,6 +71,7 @@ const SubmissionEditForm = (props) => {
     attachments,
     attempting,
     canUpdate,
+    liveFeedback,
     codaveriFeedbackStatus,
     explanations,
     deadline,
@@ -83,6 +87,8 @@ const SubmissionEditForm = (props) => {
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
+    onFetchLiveFeedback,
+    onGenerateLiveFeedback,
     onGenerateFeedback,
     onReevaluateAnswer,
     handleSaveAllGrades,
@@ -155,6 +161,27 @@ const SubmissionEditForm = (props) => {
       );
     }
   }, [deadline]);
+
+  const POLL_INTERVAL_MILLISECONDS = 1000;
+  const pollerRef = useRef(null);
+  const pollAllFeedback = () => {
+    for(const question of Object.values(questions)) {
+      const feedbackRequestToken = liveFeedback?.[question.id]?.pendingFeedbackToken; 
+      if (feedbackRequestToken) {
+        onFetchLiveFeedback(question.answerId, question.id);
+      }
+    }
+  }
+
+  useEffect(() => {
+    // check for feedback from Codaveri on page load for each question
+    pollerRef.current = setInterval(pollAllFeedback, POLL_INTERVAL_MILLISECONDS);
+
+    // clean up poller on unmount
+    return () => {
+      clearInterval(pollerRef.current);
+    }
+  });
 
   const renderAutogradeSubmissionButton = () => {
     if (graderView && submitted) {
@@ -325,41 +352,66 @@ const SubmissionEditForm = (props) => {
       ? intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft })
       : intl.formatMessage(translations.runCode);
 
+    const isRequestingLiveFeedback = liveFeedback?.[question.id]?.isRequestingLiveFeedback ?? false;
+    const isPollingLiveFeedback = (liveFeedback?.[question.id]?.pendingFeedbackToken ?? false) !== false;
+
     return (
       <>
-        <Button
-          disabled={isAutogradingQuestion || isResetting || isSaving}
-          onClick={() => {
-            setResetConfirmation(true);
-            setResetAnswerId(answerId);
-          }}
-          style={styles.formButton}
-          variant="contained"
-        >
-          {intl.formatMessage(translations.reset)}
-        </Button>
-        {autogradable && (
+        <div class="flex flex-nowrap">
           <Button
-            color="secondary"
-            disabled={
-              isAutogradingQuestion ||
-              isResetting ||
-              isSaving ||
-              (!graderView && attemptsLeft === 0)
-            }
-            endIcon={
-              isAutogradingQuestion && <LoadingIndicator bare size={20} />
-            }
-            id="run-code"
-            onClick={() =>
-              onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)
-            }
+            disabled={isAutogradingQuestion || isResetting || isSaving}
+            onClick={() => {
+              setResetConfirmation(true);
+              setResetAnswerId(answerId);
+            }}
             style={styles.formButton}
             variant="contained"
           >
-            {runCodeLabel}
+            {intl.formatMessage(translations.reset)}
           </Button>
-        )}
+          {autogradable && (
+            <Button
+              color="secondary"
+              disabled={
+                isAutogradingQuestion ||
+                isResetting ||
+                isSaving ||
+                (!graderView && attemptsLeft === 0)
+              }
+              endIcon={
+                isAutogradingQuestion && <LoadingIndicator bare size={20} />
+              }
+              id="run-code"
+              onClick={() =>
+                onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)
+              }
+              style={styles.formButton}
+              variant="contained"
+            >
+              {runCodeLabel}
+            </Button>
+          )}
+          <Box sx={{ flex: "1", width: "100%" }}/>
+          <Button
+            color="info"
+            disabled={
+              isResetting ||
+              isRequestingLiveFeedback ||
+              isPollingLiveFeedback ||
+              (!graderView && attemptsLeft === 0)
+            }
+            startIcon= {
+              (isRequestingLiveFeedback || isPollingLiveFeedback) && 
+                <LoadingIndicator bare size={20} />
+            }
+            id="get-live-feedback"
+            onClick={() => onGenerateLiveFeedback(answerId, question.id)}
+            style={styles.formButton}
+            variant="contained"
+          >
+            Get Help
+          </Button>
+        </div>
       </>
     );
   };
@@ -422,12 +474,12 @@ const SubmissionEditForm = (props) => {
                   showMcqMrqSolution,
                 }}
               />
+              {!viewHistory && renderProgrammingQuestionActions(id)}
               {question.type === questionTypes.Programming &&
                 !viewHistory &&
                 renderExplanationPanel(id)}
-
               {!viewHistory && renderAutogradingErrorPanel(id)}
-              {!viewHistory && renderProgrammingQuestionActions(id)}
+              <TestCaseView questionId={question.id} />
               {!viewHistory && renderQuestionGrading(id)}
 
               <Suspense
@@ -587,11 +639,12 @@ const SubmissionEditForm = (props) => {
             showMcqMrqSolution,
           }}
         />
+        {viewHistory ? null : renderProgrammingQuestionActions(questionId)}
         {question.type === questionTypes.Programming && !viewHistory
           ? renderExplanationPanel(questionId)
           : null}
         {viewHistory ? null : renderAutogradingErrorPanel(questionId)}
-        {viewHistory ? null : renderProgrammingQuestionActions(questionId)}
+        <TestCaseView questionId={question.id} />
         {viewHistory ? null : renderQuestionGrading(questionId)}
         <Suspense
           fallback={
@@ -746,6 +799,7 @@ SubmissionEditForm.propTypes = {
 
   codaveriFeedbackStatus: PropTypes.object,
   explanations: PropTypes.objectOf(explanationShape),
+  liveFeedback: PropTypes.object,
   grading: PropTypes.objectOf(questionGradeShape),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
@@ -761,6 +815,8 @@ SubmissionEditForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
+  onFetchLiveFeedback: PropTypes.func,
+  onGenerateLiveFeedback: PropTypes.func,
   onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveAllGrades: PropTypes.func,
@@ -773,6 +829,7 @@ SubmissionEditForm.propTypes = {
 function mapStateToProps(state) {
   return {
     attachments: state.assessments.submission.attachments,
+    liveFeedback: state.assessments.submission.liveFeedback,
   };
 }
 
