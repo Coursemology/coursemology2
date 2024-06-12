@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Element, scroller } from 'react-scroll';
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -22,6 +23,8 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
+
+import TestCaseView from '../../containers/TestCaseView';
 
 import SubmissionAnswer from '../../components/answers';
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
@@ -313,6 +316,7 @@ const SubmissionEditForm = (props) => {
           >
             {intl.formatMessage(translations.reevaluate)}
           </Button>
+          <TestCaseView questionId={question.id} />
         </>
       );
     }
@@ -326,7 +330,7 @@ const SubmissionEditForm = (props) => {
       : intl.formatMessage(translations.runCode);
 
     return (
-      <>
+      <div class="d-flex">
         <Button
           disabled={isAutogradingQuestion || isResetting || isSaving}
           onClick={() => {
@@ -357,10 +361,29 @@ const SubmissionEditForm = (props) => {
             style={styles.formButton}
             variant="contained"
           >
-            {runCodeLabel}
+            {`${runCodeLabel}`}
           </Button>
         )}
-      </>
+        <Box width="820px" height="100%" sx={{ display: 'inline-flex' }}/>
+        <Button
+          color="info"
+          disabled={
+            isResetting ||
+            isSaving ||
+            (!graderView && attemptsLeft === 0)
+          }
+          endIcon={
+            isAutogradingQuestion && <LoadingIndicator bare size={20} />
+          }
+          id="get-live-help"
+          onClick={() => { console.log("You asked for help..."); }}
+          style={styles.formButton}
+          variant="contained"
+        >
+          Get Help
+        </Button>
+        <TestCaseView questionId={question.id} />
+      </div>
     );
   };
 
@@ -422,12 +445,11 @@ const SubmissionEditForm = (props) => {
                   showMcqMrqSolution,
                 }}
               />
+              {!viewHistory && renderProgrammingQuestionActions(id)}
               {question.type === questionTypes.Programming &&
                 !viewHistory &&
                 renderExplanationPanel(id)}
-
               {!viewHistory && renderAutogradingErrorPanel(id)}
-              {!viewHistory && renderProgrammingQuestionActions(id)}
               {!viewHistory && renderQuestionGrading(id)}
 
               <Suspense
@@ -587,11 +609,11 @@ const SubmissionEditForm = (props) => {
             showMcqMrqSolution,
           }}
         />
+        {viewHistory ? null : renderProgrammingQuestionActions(questionId)}
         {question.type === questionTypes.Programming && !viewHistory
           ? renderExplanationPanel(questionId)
           : null}
         {viewHistory ? null : renderAutogradingErrorPanel(questionId)}
-        {viewHistory ? null : renderProgrammingQuestionActions(questionId)}
         {viewHistory ? null : renderQuestionGrading(questionId)}
         <Suspense
           fallback={
