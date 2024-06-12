@@ -50,7 +50,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   # @return [Hash]
   def default_codaveri_test_case_template
     {
-      id: '',
+      index: '',
       type: 'expression',
       timeout: '',
       prefix: '',

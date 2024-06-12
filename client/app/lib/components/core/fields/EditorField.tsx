@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, ForwardedRef, forwardRef } from 'react';
 import AceEditor from 'react-ace';
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
@@ -27,7 +27,7 @@ const DEFAULT_FONT_FAMILY = [
   'monospace',
 ].join(',');
 
-const EditorField = (props: EditorProps): JSX.Element => {
+const EditorField = forwardRef((props: EditorProps, ref: ForwardedRef<AceEditor>): JSX.Element => {
   const { language, value, disabled, onChange, ...otherProps } = props;
 
   return (
@@ -38,6 +38,7 @@ const EditorField = (props: EditorProps): JSX.Element => {
       onChange={onChange}
       theme="github"
       value={value}
+      ref={ref}
       width="100%"
       {...otherProps}
       editorProps={{
@@ -53,6 +54,6 @@ const EditorField = (props: EditorProps): JSX.Element => {
       }}
     />
   );
-};
+});
 
 export default EditorField;

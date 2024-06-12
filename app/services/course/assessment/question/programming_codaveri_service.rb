@@ -37,10 +37,28 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     @question = question
     @is_update_problem = @question.codaveri_id.present?
     @attachment = attachment
-    @problem_object = { api_version: 'latest',
-                        language_version: { language: '', version: '' },
-                        files_solution: [],
-                        testcases: [] }
+    @problem_object = {
+      title: @question.title,
+      description: @question.description,
+      resources: [
+        {
+          languageVersions: { language: '', versions: [] },
+          templates: [],
+          solutions: [
+            {
+              tag: "default",
+              files: []
+            }
+          ],
+          exprTestcases: []
+        }
+      ]
+    }
+
+    # @problem_object = { api_version: 'latest',
+    #                     language_version: { language: '', version: '' },
+    #                     files_solution: [],
+    #                     testcases: [] }
   end
 
   # Constructs codaveri question problem object and send an API request to Codaveri to create/update the question.
@@ -51,19 +69,33 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     create_codaveri_problem
   end
 
+  # Check if any object in the array has the :path attribute set to "main.py"
+  # If none do, coerce the first element to do so
+  # def ensure_main_path!(objects, main_path)
+  #   has_main_path = objects.any? { |obj| obj[:path] == main_path }
+  
+  #   unless has_main_path
+  #     objects.first[:path] = main_path if objects.any?
+  #   end
+  # end
+
   # Constructs codaveri question problem object.
   #
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
   def construct_problem_object(package)
-    @problem_object[:language_version][:language] = @question.polyglot_language_name
-    @problem_object[:language_version][:version] = @question.polyglot_language_version
+
+    @problem_object[:title] = @question.title
+    @problem_object[:description] = @question.description
+    resources_object = @problem_object[:resources][0]
+    resources_object[:languageVersions][:language] = @question.polyglot_language_name
+    resources_object[:languageVersions][:versions] = [ @question.polyglot_language_version ]
 
     codaveri_package = Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService.new(
       @question, package
     )
 
-    @problem_object[:files_solution] = codaveri_package.process_solutions
-    @problem_object[:testcases] = codaveri_package.process_test_cases
+    resources_object[:solutions][0][:files] = codaveri_package.process_solutions
+    resources_object[:exprTestcases] = codaveri_package.process_test_cases
 
     @problem_object
     # For debugging purpose
@@ -71,14 +103,14 @@ class Course::Assessment::Question::ProgrammingCodaveriService
   end
 
   def create_codaveri_problem
-    codaveri_api_service = CodaveriApiService.new('problem', @problem_object)
-    response_status, response_body = codaveri_api_service.run_service
+    codaveri_api_service = CodaveriAsyncApiService.new('v2/problem', @problem_object)
+    response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
     response_message = response_body['message']
 
     if response_status == 200 && response_success
-      response_problem_id = response_body['data']['problem_id']
+      response_problem_id = response_body['data']['id']
       @question.update!(codaveri_id: response_problem_id, codaveri_status: response_status,
                         codaveri_message: response_message)
     else

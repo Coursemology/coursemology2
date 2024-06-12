@@ -23,16 +23,14 @@ class Course::Discussion::Post::CodaveriFeedbackRatingService
   def initialize(feedback)
     @feedback = feedback
     @course = feedback.post.topic.course
-    @payload = { feedback_id: feedback.codaveri_feedback_id,
-                 updated_feedback: feedback.post.text,
-                 rating: feedback.rating,
-                 course_name: @course.title,
-                 course_id: @course.id }
+    @payload = { id: feedback.codaveri_feedback_id,
+                 updatedFeedback: feedback.post.text,
+                 rating: feedback.rating }
   end
 
   def send_codaveri_feedback_rating
-    codaveri_api_service = CodaveriApiService.new('feedback/rating', @payload)
-    response_status, response_body = codaveri_api_service.run_service
+    codaveri_api_service = CodaveriAsyncApiService.new('v2/feedback/rating', @payload)
+    response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
 

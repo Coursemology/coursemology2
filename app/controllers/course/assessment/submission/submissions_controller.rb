@@ -94,6 +94,15 @@ class Course::Assessment::Submission::SubmissionsController < \
     render partial: 'jobs/submitted', locals: { job: job }
   end
 
+  def generate_live_feedback
+    @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
+
+    return head :bad_request if @answer.nil?
+
+    response_status, response_body = @answer.generate_live_feedback
+    render :json => response_body, status: response_status
+  end
+
   # Reload the current answer or reset it, depending on parameters.
   # current_answer has the most recent copy of the answer.
   def reload_answer

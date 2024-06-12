@@ -73,7 +73,7 @@ module Course::Assessment::AssessmentAbility
   def allow_create_assessment_submission
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
-    can :update, Course::Assessment::Submission, assessment_submission_attempting_hash(user)
+    can [:update, :generate_live_feedback], Course::Assessment::Submission, assessment_submission_attempting_hash(user)
   end
 
   def allow_update_own_assessment_answer
@@ -188,7 +188,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_teaching_staff_grade_assessment_submissions
-    can [:update, :reload_answer, :grade, :reevaluate_answer, :generate_feedback],
+    can [:update, :reload_answer, :grade, :reevaluate_answer, :generate_feedback, :fetch_submitted_feedback],
         Course::Assessment::Submission, assessment: assessment_course_hash
     can :grade, Course::Assessment::Answer,
         submission: { assessment: assessment_course_hash }
