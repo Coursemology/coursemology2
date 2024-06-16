@@ -79,9 +79,10 @@ class Course::Assessment::ProgrammingPackage
 
   # Closes the package.
   def close
-    ensure_file_open!
-    @file.close
-    @file = nil
+    unless @file.nil?
+      @file.close
+      @file = nil
+    end
   end
 
   # Commits the package changes to disk
