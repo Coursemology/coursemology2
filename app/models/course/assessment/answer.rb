@@ -130,6 +130,12 @@ class Course::Assessment::Answer < ApplicationRecord
     actable.generate_feedback
   end
 
+  def fetch_and_save_submitted_codaveri_feedback
+    raise NotImplementedError unless actable.self_respond_to?(:fetch_and_save_submitted_codaveri_feedback)
+
+    actable.fetch_and_save_submitted_codaveri_feedback
+  end
+
   def draft_answer?
     attempting? && !current_answer?
   end

@@ -34,6 +34,7 @@ import {
   unsubmit,
 } from '../../actions';
 import {
+  fetchSubmittedFeedback,
   generateFeedback,
   reevaluateAnswer,
   resetAnswer,
@@ -199,6 +200,15 @@ class VisibleSubmissionEditIndex extends Component {
     } = this.props;
     dispatch(reevaluateAnswer(params.submissionId, answerId, questionId));
   };
+
+  onFetchSubmittedFeedback = (answerId, questionId) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    console.log(`FSF ${answerId} ${questionId}`);
+    dispatch(fetchSubmittedFeedback(params.submissionId, answerId, questionId));
+  }
 
   onGenerateFeedback = (answerId, questionId) => {
     const {
@@ -374,6 +384,7 @@ class VisibleSubmissionEditIndex extends Component {
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
         onGenerateFeedback={this.onGenerateFeedback}
+        onFetchSubmittedFeedback={this.onFetchSubmittedFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
         onReset={this.onReset}
         onSaveDraft={this.onSaveDraft}

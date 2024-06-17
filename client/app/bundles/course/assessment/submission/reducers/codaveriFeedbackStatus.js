@@ -38,6 +38,17 @@ export default function (state = initialState, action) {
         };
       });
     }
+    case actions.FETCH_V2_SUBMITTED_FEEDBACK: {
+      // const { answerId } = action;
+      console.log(action);
+      return state;
+      // return produce(state, (draft) => {
+      //   draft.answers[answerId] = {
+      //     ...draft.answers[answerId],
+      //     jobStatus: 'errored',
+      //   };
+      // });
+    }
     default:
       return state;
   }

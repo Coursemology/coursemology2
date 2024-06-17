@@ -69,6 +69,16 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     create_codaveri_problem
   end
 
+  # Check if any object in the array has the :path attribute set to "main.py"
+  # If none do, coerce the first element to do so
+  def ensure_main_path!(objects, main_path)
+    has_main_path = objects.any? { |obj| obj[:path] == main_path }
+  
+    unless has_main_path
+      objects.first[:path] = main_path if objects.any?
+    end
+  end
+
   # Constructs codaveri question problem object.
   #
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
@@ -90,6 +100,8 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     @question.template_files.each do |file|
       resources_object[:templates].append({ path: file.filename, content: file.content })
     end
+    # TODO how to coerce main path correctly for languages other than python?
+    ensure_main_path!(resources_object[:templates], "main.py")
 
     # unpack test cases
     question_test_cases = @question.test_cases
@@ -97,7 +109,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
       resources_object[:exprTestcases].append({
         index: i,
         timeout: 2000,
-        expression: test.expression.inspect + " == " + test.expected.inspect,
+        expression: test.expression.to_s + " == " + test.expected.to_s,
         display: test.expression
       })
     end

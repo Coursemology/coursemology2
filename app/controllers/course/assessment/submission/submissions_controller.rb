@@ -90,8 +90,78 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     return head :bad_request if @answer.nil?
 
-    job = @answer.generate_feedback
-    render partial: 'jobs/submitted', locals: { job: job }
+    @answer.generate_feedback
+    return head :created
+  end
+
+  def fetch_submitted_feedback
+    @answer = @submission.answers.find_by(id: params[:answerId])
+
+    return head :bad_request if @answer.nil?
+
+    response_status, response_body = @answer.fetch_and_save_submitted_codaveri_feedback
+    render :json => response_body, status: response_status
+  end
+
+  def generate_feedback_v2_post
+    @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
+    p(@answer)
+
+    return head :bad_request if @answer.nil?
+    render :json => { 
+      :request => {
+        :userId => @submission.creator_id.to_s,
+        :toolName => "default",
+        :config => {
+          :properties => "studentStillAttempting",
+          :tone => "helpful",
+          :style => "direct",
+          :language => "english",
+          :userPrompt => "Hello World!"
+        },
+        :languageVersion => {
+          :language => @answer.question.actable.polyglot_language_name,
+          :version => @answer.question.actable.polyglot_language_version
+        },
+        :studentFiles => [ 
+          :path => "main.py",
+          :content => "def is_prime(x):\n\tprint(21)\n\treturn x"
+        ],
+        :problemId => @answer.question.actable.codaveri_id
+      },
+      :response => {
+        :success => true,
+        :jobId => (0..15).to_a.map{ |a| rand(16).to_s(16) }.join,
+        :transactionId => (0..15).to_a.map{ |a| rand(16).to_s(16) }.join
+      }
+    }, status: 201
+  end
+
+  def generate_feedback_v2_get
+    random_number = rand(1..3)
+    
+    if random_number == 1
+      render json: {
+        :success => true,
+        :message => "Feedback successfully generated.",
+        :data => {
+          :path => "main.py",
+          :feedbackLines => [{
+            :id => (0..15).to_a.map{ |a| rand(16).to_s(16) }.join,
+            :linenum => rand(1..32),
+            :feedback => "Here is an example feedback item. This was generated using a mock endpoint.",
+            :category => ["syntax", "functionality", "style", "performance", "robustness", "design"].sample
+          }]
+        },
+        :transactionId => (0..15).to_a.map{ |a| rand(16).to_s(16) }.join
+      }, status: 200
+    else
+      render json: {
+        :success => true,
+        :jobId => params['jobId'],
+        :transactionId => (0..15).to_a.map{ |a| rand(16).to_s(16) }.join
+      }, status: 202
+    end
   end
 
   # Reload the current answer or reset it, depending on parameters.

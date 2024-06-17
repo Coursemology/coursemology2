@@ -116,6 +116,27 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
+  fetchSubmittedFeedback(submissionId, answerId) {
+    return this.client.get(
+      `${this.#urlPrefix}/${submissionId}/fetch_submitted_feedback`,
+      { params: { answerId }, validateStatus: null },
+    );
+  }
+
+  generateFeedbackV2Post(submissionId, params) {
+    return this.client.post(
+      `${this.#urlPrefix}/${submissionId}/generate_feedback_v2`,
+      params,
+    );
+  }
+
+  generateFeedbackV2Get(submissionId, jobId) {
+    return this.client.get(
+      `${this.#urlPrefix}/${submissionId}/generate_feedback_v2`,
+      { params: { jobId }},
+    );
+  }
+
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
     const url = `${this.#urlPrefix}/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
     return this.client.post(url, params);

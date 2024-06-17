@@ -200,14 +200,29 @@ export function generateFeedback(submissionId, answerId, questionId) {
 
     return CourseAPI.assessment.submissions
       .generateFeedback(submissionId, { answer_id: answerId })
-      .then((response) => {
-        pollFeedbackJob(
-          response.data.jobUrl,
-          submissionId,
-          questionId,
-          answerId,
-        )(dispatch);
-      })
+      // .then((postResponse) => {
+      //   const poller = setInterval(() => {
+      //     CourseAPI.assessment.submissions
+      //       .generateFeedbackV2Get(submissionId, postResponse.data.response.jobId)
+      //       .then((response) => {
+      //         switch (response.status) {
+      //           case 202:
+      //             break;
+      //           case 200:
+      //             clearInterval(poller);
+      //             console.log(response.data);
+      //             break;
+      //           default:
+      //             clearInterval(poller);
+      //             console.error(response.data);
+      //         }
+      //       })
+      //       .catch((error) => {
+      //         clearInterval(poller);
+      //         onFailure(error);
+      //       });
+      //   }, 1000);
+      // })
       .catch(() => {
         dispatch({
           type: actionTypes.FEEDBACK_FAILURE,
@@ -217,6 +232,17 @@ export function generateFeedback(submissionId, answerId, questionId) {
         dispatch(setNotification(translations.requestFailure));
       });
   };
+}
+
+export function fetchSubmittedFeedback(submissionId, answerId, questionId) {
+  return (dispatch) => {
+    CourseAPI.assessment.submissions
+      .fetchSubmittedFeedback(submissionId, answerId)
+      .then((response) => {
+        console.log(response);
+        dispatch({ type: actionTypes.FETCH_V2_SUBMITTED_FEEDBACK, questionId, answerId });
+      });
+  }
 }
 
 export function reevaluateAnswer(submissionId, answerId, questionId) {

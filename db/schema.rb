@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_12_092424) do
+ActiveRecord::Schema.define(version: 2024_06_17_183746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,9 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
 
   create_table "course_assessment_answer_programming", id: :serial, force: :cascade do |t|
     t.uuid "codaveri_feedback_job_id", comment: "The ID of the codaveri code feedback job"
+    t.string "v2_codaveri_submitted_feedback_job_id"
+    t.boolean "v2_codaveri_submitted_feedback_saved", default: false, null: false
+    t.string "v2_codaveri_live_feedback_job_id"
   end
 
   create_table "course_assessment_answer_programming_auto_gradings", id: :serial, force: :cascade do |t|

@@ -44,7 +44,42 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
     # process_codaveri_feedback
   end
 
+  def fetch_codaveri_feedback(id)
+    api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM'
+    codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, { id: id })
+    response_status, response_body = codaveri_api_service.get
+
+    unless response_status >= 200 && response_status < 300
+      raise CodaveriError,
+            { status: response_status, body: response_body }
+    end
+
+    [response_status, response_body]
+  end
+
+  def fetch_and_save_codaveri_feedback(id)
+    response_status, response_body = fetch_codaveri_feedback(id)
+    response_success = response_body['success']
+    if response_status == 200 && response_success
+      feedback_files = response_body['data']['feedbackFiles']
+      @feedback_files_hash = feedback_files.to_h { |file| [file['path'], file['feedbackLines']] }
+
+      process_codaveri_feedback
+    end
+    [response_status, response_body]
+  end
+
   private
+
+  # Check if any object in the array has the :path attribute set to "main.py"
+  # If none do, coerce the first element to do so
+  def ensure_main_path!(objects, main_path)
+    has_main_path = objects.any? { |obj| obj[:path] == main_path }
+  
+    unless has_main_path
+      objects.first[:path] = main_path if objects.any?
+    end
+  end
 
   # Grades into the given +Course::Assessment::Answer::AutoGrading+ object. This assigns the grade
   # and makes sure answer is in the correct state.
@@ -53,7 +88,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
   # @return [Course::Assessment::Answer] The graded answer. Note that this answer is not persisted
   #   yet.
   def construct_feedback_object # rubocop:disable Metrics/AbcSize
-    p(@question)
     return unless @question.codaveri_id
 
     @answer_object[:problemId] = @question.codaveri_id
@@ -70,9 +104,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
 
       @answer_object[:files].append(file_template)
     end
-
-    # For debugging purpose
-    # File.write('codaveri_feedback_test.json', @answer_object.to_json)
+    ensure_main_path!(@answer_object[:files], "main.py")
 
     @answer_object
   end
@@ -81,7 +113,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
     p(@answer_object)
     api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM'
     codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, @answer_object)
-    response_status, response_body = codaveri_api_service.run_service
+    response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
 
@@ -90,22 +122,38 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
             { status: response_status, body: response_body }
     end
 
-    [response_status, response_body]
+    response_body['data']['id']
   end
 
+  # We do inverse of name coercion logic:
+  # if main.py does not exist in answer_files but it does in feedback_files_hash,
+  # run save_annotation for the first file in the array with feedback_lines taken from feedback_files_hash['main.py'] 
   def process_codaveri_feedback
+    main_path_parsed = false
     @answer_files.each do |file|
       feedback_lines = @feedback_files_hash[file.filename]
+      if file.filename == "main.py"
+        main_path_parsed = true
+      end
       next if feedback_lines.nil?
 
       feedback_lines.each do |line|
         save_annotation(file, line)
       end
     end
+
+    if !main_path_parsed && @answer_files.any? && @feedback_files_hash.key?('main.py')
+      p(@feedback_files_hash)
+      p(@feedback_files_hash['main.py'])
+      feedback_lines = @feedback_files_hash['main.py']
+      feedback_lines.each do |line|
+        save_annotation(@answer_files[0], line)
+      end
+    end 
   end
 
   def save_annotation(file, feedback_line)
-    feedback_id = feedback_line['feedback_id']
+    feedback_id = feedback_line['id']
     # linenum is added by 1 as an empty line is added to the code content at the client side.
     linenum = feedback_line['linenum'].to_i + 1
     feedback = feedback_line['feedback']

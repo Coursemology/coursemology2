@@ -86,6 +86,7 @@ const SubmissionEditForm = (props) => {
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
+    onFetchSubmittedFeedback,
     onGenerateFeedback,
     onReevaluateAnswer,
     handleSaveAllGrades,
@@ -158,6 +159,14 @@ const SubmissionEditForm = (props) => {
       );
     }
   }, [deadline]);
+
+  useEffect(() => {
+    // check for feedback from BE on page load for each question
+
+    for(const question of Object.values(questions)) {
+      onFetchSubmittedFeedback(question.answerId, question.id);
+    }
+  });
 
   const renderAutogradeSubmissionButton = () => {
     if (graderView && submitted) {
@@ -376,7 +385,7 @@ const SubmissionEditForm = (props) => {
             isAutogradingQuestion && <LoadingIndicator bare size={20} />
           }
           id="get-live-help"
-          onClick={() => { console.log("You asked for help..."); }}
+          onClick={() => onGenerateFeedback(answerId, question.id)}
           style={styles.formButton}
           variant="contained"
         >
@@ -783,6 +792,7 @@ SubmissionEditForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
+  onFetchSubmittedFeedback: PropTypes.func,
   onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveAllGrades: PropTypes.func,
