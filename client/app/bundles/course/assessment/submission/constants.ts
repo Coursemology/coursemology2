@@ -286,8 +286,6 @@ const actionTypes = mirrorCreator([
   'UPLOAD_PROGRAMMING_FILES_REQUEST',
   'UPLOAD_PROGRAMMING_FILES_SUCCESS',
   'UPLOAD_PROGRAMMING_FILES_FAILURE',
-
-  'FETCH_V2_SUBMITTED_FEEDBACK'
 ]);
 
 export default actionTypes;

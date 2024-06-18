@@ -89,7 +89,7 @@ export default class WideComments extends Component {
       const filtered = annotations.filter(
         (annotation) => annotation.line === i,
       );
-      if (filtered.length > 0 || expanded[i - 1]) {
+      if (filtered.length > 0) {
         comments.push(this.renderComments(i, filtered[0]));
       } else {
         comments.push(<div key={i} style={styles.collapsed} />);

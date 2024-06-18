@@ -90,8 +90,8 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     return head :bad_request if @answer.nil?
 
-    @answer.generate_feedback
-    return head :created
+    job = @answer.generate_feedback
+    render partial: 'jobs/submitted', locals: { job: job }
   end
 
   def fetch_submitted_feedback

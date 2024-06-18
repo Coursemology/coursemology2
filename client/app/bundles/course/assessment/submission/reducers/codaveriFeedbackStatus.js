@@ -20,6 +20,16 @@ export default function (state = initialState, action) {
         );
       });
     }
+    // this change makes feedback show up automatically on completion
+    case actions.FEEDBACK_SUCCESS: {
+      const { answerId } = action;
+      return produce(state, (draft) => {
+        draft.answers[answerId] = {
+          ...draft.answers[answerId],
+          jobStatus: 'completed',
+        };
+      });
+    }
     case actions.FEEDBACK_REQUEST: {
       const { answerId } = action;
       return produce(state, (draft) => {
@@ -37,17 +47,6 @@ export default function (state = initialState, action) {
           jobStatus: 'errored',
         };
       });
-    }
-    case actions.FETCH_V2_SUBMITTED_FEEDBACK: {
-      // const { answerId } = action;
-      console.log(action);
-      return state;
-      // return produce(state, (draft) => {
-      //   draft.answers[answerId] = {
-      //     ...draft.answers[answerId],
-      //     jobStatus: 'errored',
-      //   };
-      // });
     }
     default:
       return state;

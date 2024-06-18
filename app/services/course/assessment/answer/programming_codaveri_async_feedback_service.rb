@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
-  def initialize(assessment, question, answer)
+  def initialize(assessment, question, answer, revealLevel)
     @course = assessment.course
     @assessment = assessment
     @question = question
@@ -15,7 +15,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
           "syntax",
           "functionality"
         ],
-        revealLevel: "solution",
+        revealLevel: revealLevel,
         tone: "encouraging",
         language: "english",
         customPrompt: ""
@@ -47,30 +47,19 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
   def fetch_codaveri_feedback(id)
     api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM'
     codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, { id: id })
-    response_status, response_body = codaveri_api_service.get
-
-    unless response_status >= 200 && response_status < 300
-      raise CodaveriError,
-            { status: response_status, body: response_body }
-    end
-
-    [response_status, response_body]
+    codaveri_api_service.get
   end
 
-  def fetch_and_save_codaveri_feedback(id)
-    response_status, response_body = fetch_codaveri_feedback(id)
-    response_success = response_body['success']
-    if response_status == 200 && response_success
-      feedback_files = response_body['data']['feedbackFiles']
-      @feedback_files_hash = feedback_files.to_h { |file| [file['path'], file['feedbackLines']] }
+  def save_codaveri_feedback(response_body)
+    feedback_files = response_body['data']['feedbackFiles']
+    @feedback_files_hash = feedback_files.to_h { |file| [file['path'], file['feedbackLines']] }
 
-      process_codaveri_feedback
-    end
-    [response_status, response_body]
+    process_codaveri_feedback
   end
 
   private
 
+  # TODO: revert adapter when Codaveri no longer requires file path coercion
   # Check if any object in the array has the :path attribute set to "main.py"
   # If none do, coerce the first element to do so
   def ensure_main_path!(objects, main_path)
@@ -117,12 +106,14 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
 
     response_success = response_body['success']
 
-    unless response_status == 201 && response_success
+    if response_status == 201 && response_success
+      return [response_status, response_body, response_body['data']['id']]
+    elsif response_status == 200 && response_success
+      return [response_status, response_body, nil]
+    else
       raise CodaveriError,
             { status: response_status, body: response_body }
     end
-
-    response_body['data']['id']
   end
 
   # We do inverse of name coercion logic:

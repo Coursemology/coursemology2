@@ -87,8 +87,8 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   end
 
   def generate_feedback
-    retrieve_codaveri_code_feedback
-  end 
+    codaveri_feedback_job&.status == 'submitted' ? codaveri_feedback_job : retrieve_codaveri_code_feedback&.job
+  end
 
   def retrieve_codaveri_code_feedback
     question = self.question.actable
@@ -97,12 +97,15 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     should_retrieve_feedback = question.is_codaveri && !submission.attempting? && current_answer?
     return unless should_retrieve_feedback
 
-    feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.new(assessment, question, self)
-    feedback_job_id = feedback_service.run_codaveri_feedback_service
+    feedback_job = Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob.perform_later(assessment, question, self)
+    update_column(:codaveri_feedback_job_id, feedback_job.job_id)
+    feedback_job
+    # feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.new(assessment, question, self)
+    # feedback_job_id = feedback_service.run_codaveri_feedback_service
 
-    update_column(:v2_codaveri_submitted_feedback_job_id, feedback_job_id)
-    # New feedback job renders old feedback items invalid?
-    update_column(:v2_codaveri_submitted_feedback_saved, false)
+    # update_column(:v2_codaveri_submitted_feedback_job_id, feedback_job_id)
+    # # New feedback job renders old feedback items invalid?
+    # update_column(:v2_codaveri_submitted_feedback_saved, false)
   end
 
   def fetch_and_save_submitted_codaveri_feedback

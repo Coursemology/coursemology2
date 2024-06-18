@@ -207,7 +207,7 @@ class VisibleSubmissionEditIndex extends Component {
       match: { params },
     } = this.props;
     console.log(`FSF ${answerId} ${questionId}`);
-    dispatch(fetchSubmittedFeedback(params.submissionId, answerId, questionId));
+    return dispatch(fetchSubmittedFeedback(params.submissionId, answerId, questionId));
   }
 
   onGenerateFeedback = (answerId, questionId) => {
