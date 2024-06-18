@@ -18,9 +18,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob < ApplicationJo
         sleep(POLL_INTERVAL_SECONDS)
         response_status, response_body = feedback_service.fetch_codaveri_feedback(id)
         poll_count += 1
-
-        p({ poll_count: poll_count })
-        p(response_body)
       end
 
       response_success = response_body['success']

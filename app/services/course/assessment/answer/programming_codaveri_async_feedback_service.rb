@@ -99,7 +99,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
   end
 
   def request_codaveri_feedback
-    p(@answer_object)
     api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM'
     codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, @answer_object)
     response_status, response_body = codaveri_api_service.post
@@ -134,8 +133,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
     end
 
     if !main_path_parsed && @answer_files.any? && @feedback_files_hash.key?('main.py')
-      p(@feedback_files_hash)
-      p(@feedback_files_hash['main.py'])
       feedback_lines = @feedback_files_hash['main.py']
       feedback_lines.each do |line|
         save_annotation(@answer_files[0], line)
