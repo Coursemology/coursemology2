@@ -201,6 +201,15 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(reevaluateAnswer(params.submissionId, answerId, questionId));
   };
 
+  onFetchLiveFeedback = (answerId, questionId) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    console.log(`FLF ${answerId} ${questionId}`);
+    dispatch(fetchLiveFeedback(params.submissionId, answerId, questionId));
+  }
+
   onGenerateFeedback = (answerId, questionId) => {
     const {
       dispatch,
@@ -382,6 +391,7 @@ class VisibleSubmissionEditIndex extends Component {
         isCodaveriEnabled={isCodaveriEnabled}
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
+        onFetchLiveFeedback={this.onFetchLiveFeedback}
         onGenerateFeedback={this.onGenerateFeedback}
         onGenerateLiveFeedback={this.onGenerateLiveFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}

@@ -126,7 +126,11 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   fetchLiveFeedback(feedbackToken) {
     return this.client.get(
       `/signed/v2/feedback/llm`,
-      { params: { token: feedbackToken }, validateStatus: null },
+      // TODO parameterize as environment variable
+      {
+        baseURL: 'https://1b3e-38-255-65-73.ngrok-free.app',
+        params: { token: feedbackToken }
+      },
     );
   }
 

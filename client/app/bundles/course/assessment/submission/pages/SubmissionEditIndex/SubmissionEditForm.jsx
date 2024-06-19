@@ -75,6 +75,7 @@ const SubmissionEditForm = (props) => {
     explanations,
     deadline,
     delayedGradePublication,
+    feedbackRequestToken,
     graded,
     graderView,
     grading,
@@ -86,6 +87,7 @@ const SubmissionEditForm = (props) => {
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
+    onFetchLiveFeedback,
     onGenerateLiveFeedback,
     onGenerateFeedback,
     onReevaluateAnswer,
@@ -160,15 +162,24 @@ const SubmissionEditForm = (props) => {
     }
   }, [deadline]);
 
-  const JOB_POLL_DELAY_MS = 5000;
+  const POLL_INTERVAL_SECONDS = 5000;
   const pollerRef = useRef(null);
   const pollAllFeedback = () => {
     // TODO poll for live feedback (for attempting students)
+    for(const question of Object.values(questions)) {
+      if (feedbackRequestToken) {
+        console.log(`Polling for ${feedbackRequestToken}`);
+  
+        onFetchLiveFeedback(question.answerId, question.id);
+      } else {
+        console.log("Not polling");
+      }
+    }
   }
 
   useEffect(() => {
     // check for feedback from Codaveri on page load for each question
-    pollerRef.current = setInterval(pollAllFeedback, JOB_POLL_DELAY_MS);
+    pollerRef.current = setInterval(pollAllFeedback, POLL_INTERVAL_SECONDS);
 
     // clean up poller on unmount
     return () => {
@@ -785,6 +796,7 @@ SubmissionEditForm.propTypes = {
 
   codaveriFeedbackStatus: PropTypes.object,
   explanations: PropTypes.objectOf(explanationShape),
+  feedbackRequestToken: PropTypes.string,
   grading: PropTypes.objectOf(questionGradeShape),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
@@ -800,6 +812,7 @@ SubmissionEditForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
+  onFetchLiveFeedback: PropTypes.func,
   onGenerateLiveFeedback: PropTypes.func,
   onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
@@ -813,6 +826,7 @@ SubmissionEditForm.propTypes = {
 function mapStateToProps(state) {
   return {
     attachments: state.assessments.submission.attachments,
+    feedbackRequestToken: state.assessments.submission.liveFeedback.feedbackRequestToken,
   };
 }
 

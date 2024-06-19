@@ -20,6 +20,7 @@ import submissionFlags from './submissionFlags';
 import submissions from './submissions';
 import testCases from './testCases';
 import topics from './topics';
+import liveFeedback from './liveFeedback';
 
 const submissionReducer = combineReducers({
   annotations,
@@ -30,6 +31,7 @@ const submissionReducer = combineReducers({
   codaveriFeedbackStatus,
   commentForms,
   explanations,
+  liveFeedback,
   posts,
   questions,
   questionsFlags,
