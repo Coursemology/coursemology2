@@ -177,7 +177,7 @@ module ApplicationHTMLFormattersHelper
   end.freeze
 
   DEFAULT_PIPELINE_OPTIONS = {
-    css_class: 'codehilite',
+    scope: 'codehilite',
     replace_br: true
   }.freeze
 
@@ -185,7 +185,7 @@ module ApplicationHTMLFormattersHelper
 
   # The default pipeline, used by both text and HTML pipelines.
   DEFAULT_PIPELINE = HTML::Pipeline.new(
-    [HTML::Pipeline::AutolinkFilter, HTML::Pipeline::RougeFilter],
+    [HTML::Pipeline::AutolinkFilter, HTML::Pipeline::SyntaxHighlightFilter],
     DEFAULT_PIPELINE_OPTIONS
   )
 
