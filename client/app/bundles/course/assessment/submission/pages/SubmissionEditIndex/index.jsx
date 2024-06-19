@@ -205,9 +205,11 @@ class VisibleSubmissionEditIndex extends Component {
   onFetchLiveFeedback = (answerId, questionId) => {
     const {
       dispatch,
-      feedbackRequestToken,
+      liveFeedback,
       match: { params },
     } = this.props;
+
+    const feedbackRequestToken = liveFeedback?.[questionId].pendingFeedbackToken;
     console.log(`FLF ${answerId} ${questionId} ${feedbackRequestToken}`);
     dispatch(fetchLiveFeedback(params.submissionId, answerId, questionId, feedbackRequestToken));
   }
@@ -481,7 +483,7 @@ VisibleSubmissionEditIndex.propTypes = {
   deadline: PropTypes.number,
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
-  feedbackRequestToken: PropTypes.string,
+  liveFeedback: PropTypes.object,
   grading: gradingShape.isRequired,
   questions: PropTypes.objectOf(questionShape),
   historyAnswers: PropTypes.objectOf(answerShape),
@@ -514,7 +516,7 @@ function mapStateToProps({ assessments: { submission } }) {
     codaveriFeedbackStatus: submission.codaveriFeedbackStatus,
     grading: submission.grading.questions,
     submission: submission.submission,
-    feedbackRequestToken: submission.liveFeedback.feedbackRequestToken,
+    liveFeedback: submission.liveFeedback,
     questions: submission.questions,
     historyAnswers: submission.history.answers,
     historyQuestions: submission.history.questions,

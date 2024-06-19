@@ -71,11 +71,11 @@ const SubmissionEditForm = (props) => {
     attachments,
     attempting,
     canUpdate,
+    liveFeedback,
     codaveriFeedbackStatus,
     explanations,
     deadline,
     delayedGradePublication,
-    feedbackRequestToken,
     graded,
     graderView,
     grading,
@@ -167,6 +167,7 @@ const SubmissionEditForm = (props) => {
   const pollAllFeedback = () => {
     // TODO poll for live feedback (for attempting students)
     for(const question of Object.values(questions)) {
+      const feedbackRequestToken = liveFeedback?.[question.id]?.pendingFeedbackToken; 
       if (feedbackRequestToken) {
         console.log(`Polling for ${feedbackRequestToken}`);
   
@@ -796,7 +797,7 @@ SubmissionEditForm.propTypes = {
 
   codaveriFeedbackStatus: PropTypes.object,
   explanations: PropTypes.objectOf(explanationShape),
-  feedbackRequestToken: PropTypes.string,
+  liveFeedback: PropTypes.object,
   grading: PropTypes.objectOf(questionGradeShape),
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
@@ -826,7 +827,7 @@ SubmissionEditForm.propTypes = {
 function mapStateToProps(state) {
   return {
     attachments: state.assessments.submission.attachments,
-    feedbackRequestToken: state.assessments.submission.liveFeedback.feedbackRequestToken,
+    liveFeedback: state.assessments.submission.liveFeedback,
   };
 }
 
