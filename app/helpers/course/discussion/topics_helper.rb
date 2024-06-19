@@ -7,8 +7,7 @@ module Course::Discussion::TopicsHelper
   # @param [Integer] line_end The one based end line line number.
   # @return [String] A HTML fragment containing the code lines.
   def display_code_lines(file, line_start, line_end)
-    # Line added to fix alignment issue in ReadOnlyEditor adding one empty line
-    code = file.add_line.lines((line_start - 1)..(line_end - 1)).join("\n")
+    code = file.lines((line_start - 1)..(line_end - 1)).join("\n")
 
     format_code_block(code, file.answer.question.actable.language, [line_start, 1].max)
   end
