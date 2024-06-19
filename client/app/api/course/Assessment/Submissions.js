@@ -116,24 +116,17 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
-  fetchSubmittedFeedback(submissionId, answerId) {
-    return this.client.get(
-      `${this.#urlPrefix}/${submissionId}/fetch_submitted_feedback`,
-      { params: { answerId }, validateStatus: null },
-    );
-  }
-
-  generateFeedbackV2Post(submissionId, params) {
+  generateLiveFeedback(submissionId, params) {
     return this.client.post(
-      `${this.#urlPrefix}/${submissionId}/generate_feedback_v2`,
+      `${this.#urlPrefix}/${submissionId}/generate_live_feedback`,
       params,
     );
   }
 
-  generateFeedbackV2Get(submissionId, jobId) {
+  fetchLiveFeedback(feedbackToken) {
     return this.client.get(
-      `${this.#urlPrefix}/${submissionId}/generate_feedback_v2`,
-      { params: { jobId }},
+      `/signed/v2/feedback/llm`,
+      { params: { token: feedbackToken }, validateStatus: null },
     );
   }
 

@@ -73,7 +73,7 @@ module Course::Assessment::AssessmentAbility
   def allow_create_assessment_submission
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
-    can [:update, :generate_feedback_v2_post, :generate_feedback_v2_get], Course::Assessment::Submission, assessment_submission_attempting_hash(user)
+    can [:update, :generate_live_feedback], Course::Assessment::Submission, assessment_submission_attempting_hash(user)
   end
 
   def allow_update_own_assessment_answer

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -86,7 +86,7 @@ const SubmissionEditForm = (props) => {
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
-    onFetchSubmittedFeedback,
+    onGenerateLiveFeedback,
     onGenerateFeedback,
     onReevaluateAnswer,
     handleSaveAllGrades,
@@ -160,11 +160,19 @@ const SubmissionEditForm = (props) => {
     }
   }, [deadline]);
 
-  useEffect(() => {
-    // check for feedback from BE on page load for each question
+  const JOB_POLL_DELAY_MS = 5000;
+  const pollerRef = useRef(null);
+  const pollAllFeedback = () => {
+    // TODO poll for live feedback (for attempting students)
+  }
 
-    for(const question of Object.values(questions)) {
-      onFetchSubmittedFeedback(question.answerId, question.id);
+  useEffect(() => {
+    // check for feedback from Codaveri on page load for each question
+    pollerRef.current = setInterval(pollAllFeedback, JOB_POLL_DELAY_MS);
+
+    // clean up poller on unmount
+    return () => {
+      clearInterval(pollerRef.current);
     }
   });
 
@@ -370,7 +378,7 @@ const SubmissionEditForm = (props) => {
             style={styles.formButton}
             variant="contained"
           >
-            {`${runCodeLabel}`}
+            {runCodeLabel}
           </Button>
         )}
         <Box width="820px" height="100%" sx={{ display: 'inline-flex' }}/>
@@ -385,7 +393,7 @@ const SubmissionEditForm = (props) => {
             isAutogradingQuestion && <LoadingIndicator bare size={20} />
           }
           id="get-live-help"
-          onClick={() => onGenerateFeedback(answerId, question.id)}
+          onClick={() => onGenerateLiveFeedback(answerId, question.id)}
           style={styles.formButton}
           variant="contained"
         >
@@ -792,7 +800,7 @@ SubmissionEditForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
-  onFetchSubmittedFeedback: PropTypes.func,
+  onGenerateLiveFeedback: PropTypes.func,
   onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveAllGrades: PropTypes.func,

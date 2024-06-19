@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
-  def initialize(assessment, question, answer, revealLevel)
+  def initialize(assessment, question, answer, revealLevel, requireToken)
     @course = assessment.course
     @assessment = assessment
     @question = question
@@ -26,6 +26,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
       },
       files: [],
       applyVerification: true,
+      requireToken: requireToken,
       problemId: ''
     }
 

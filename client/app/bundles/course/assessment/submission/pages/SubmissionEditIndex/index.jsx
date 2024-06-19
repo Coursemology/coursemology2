@@ -34,8 +34,8 @@ import {
   unsubmit,
 } from '../../actions';
 import {
-  fetchSubmittedFeedback,
   generateFeedback,
+  generateLiveFeedback,
   reevaluateAnswer,
   resetAnswer,
   saveAllAnswers,
@@ -201,21 +201,20 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(reevaluateAnswer(params.submissionId, answerId, questionId));
   };
 
-  onFetchSubmittedFeedback = (answerId, questionId) => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    console.log(`FSF ${answerId} ${questionId}`);
-    return dispatch(fetchSubmittedFeedback(params.submissionId, answerId, questionId));
-  }
-
   onGenerateFeedback = (answerId, questionId) => {
     const {
       dispatch,
       match: { params },
     } = this.props;
     dispatch(generateFeedback(params.submissionId, answerId, questionId));
+  };
+
+  onGenerateLiveFeedback = (answerId, questionId) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(generateLiveFeedback(params.submissionId, answerId, questionId));
   };
 
   allConsideredCorrect() {
@@ -384,7 +383,7 @@ class VisibleSubmissionEditIndex extends Component {
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
         onGenerateFeedback={this.onGenerateFeedback}
-        onFetchSubmittedFeedback={this.onFetchSubmittedFeedback}
+        onGenerateLiveFeedback={this.onGenerateLiveFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
         onReset={this.onReset}
         onSaveDraft={this.onSaveDraft}

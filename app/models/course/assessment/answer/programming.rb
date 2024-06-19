@@ -90,6 +90,24 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     codaveri_feedback_job&.status == 'submitted' ? codaveri_feedback_job : retrieve_codaveri_code_feedback&.job
   end
 
+  def generate_live_feedback
+    question = self.question.actable
+    assessment = submission.assessment
+
+    should_retrieve_feedback = question.is_codaveri && submission.attempting? && current_answer?
+    return unless should_retrieve_feedback
+
+    feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.
+                       new(assessment, question, self, 'guidance', true)
+    response_status, response_body, feedback_job_id = feedback_service.run_codaveri_feedback_service
+    unless [200, 201].include?(response_status) && response_body['success']
+      raise CodaveriError,
+            { status: response_status, body: response_body }
+    end
+
+    [response_status, response_body]
+  end
+
   def retrieve_codaveri_code_feedback
     question = self.question.actable
     assessment = submission.assessment
@@ -106,27 +124,6 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     # update_column(:v2_codaveri_submitted_feedback_job_id, feedback_job_id)
     # # New feedback job renders old feedback items invalid?
     # update_column(:v2_codaveri_submitted_feedback_saved, false)
-  end
-
-  def fetch_and_save_submitted_codaveri_feedback
-    question = self.question.actable
-    assessment = submission.assessment
-
-    should_retrieve_feedback = question.is_codaveri && !submission.attempting? && current_answer?
-    return unless should_retrieve_feedback
-
-    feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.new(assessment, question, self)
-    if self.v2_codaveri_submitted_feedback_saved
-      feedback_service.fetch_codaveri_feedback(self.v2_codaveri_submitted_feedback_job_id)
-    else
-      response_status, response_body = feedback_service.fetch_and_save_codaveri_feedback(self.v2_codaveri_submitted_feedback_job_id)
-      # TODO update this flag and save annotations in a single transaction?
-      response_success = response_body['success']
-      if response_status == 200 && response_success
-        update_column(:v2_codaveri_submitted_feedback_saved, true)
-      end
-      [response_status, response_body]
-    end
   end
 
   def compare_answer(other_answer)

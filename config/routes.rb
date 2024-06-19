@@ -244,8 +244,7 @@ Rails.application.routes.draw do
               post :reevaluate_answer, on: :member
               post :generate_feedback, on: :member
               get :fetch_submitted_feedback, on: :member
-              post 'generate_feedback_v2' => 'submissions#generate_feedback_v2_post', on: :member
-              get 'generate_feedback_v2' => 'submissions#generate_feedback_v2_get', on: :member
+              post :generate_live_feedback, on: :member
               get :download_all, on: :collection
               get :download_statistics, on: :collection
               patch :publish_all, on: :collection

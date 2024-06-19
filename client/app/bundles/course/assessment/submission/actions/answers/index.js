@@ -219,15 +219,14 @@ export function generateFeedback(submissionId, answerId, questionId) {
   };
 }
 
-export function fetchSubmittedFeedback(submissionId, answerId, questionId) {
+export function generateLiveFeedback(submissionId, answerId, questionId) {
   return (dispatch) => {
-    CourseAPI.assessment.submissions
-      .fetchSubmittedFeedback(submissionId, answerId)
+    return CourseAPI.assessment.submissions
+      .generateLiveFeedback(submissionId, { answer_id: answerId })
       .then((response) => {
         console.log(response);
-        dispatch({ type: actionTypes.FETCH_V2_SUBMITTED_FEEDBACK, questionId, answerId });
       });
-  }
+  };
 }
 
 export function reevaluateAnswer(submissionId, answerId, questionId) {
