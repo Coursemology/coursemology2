@@ -14,15 +14,6 @@ GIT
       rails (>= 6)
 
 GIT
-  remote: https://github.com/Coursemology/html-pipeline-rouge_filter.git
-  revision: 4d43afb07930cbf78a8c6a6f9debd5c426ad490c
-  specs:
-    html-pipeline-rouge_filter (1.0.7)
-      activesupport
-      html-pipeline (>= 1.11)
-      rouge (>= 2.0.0, < 4)
-
-GIT
   remote: https://github.com/Coursemology/rails_utils.git
   revision: a78a20ce522e83f23725759598105ccb0d4a6d6a
   specs:
@@ -602,7 +593,6 @@ DEPENDENCIES
   fog-aws (= 3.22.0)
   friendly_id
   html-pipeline
-  html-pipeline-rouge_filter!
   http_accept_language
   i18n-tasks
   image_optim_rails
@@ -633,6 +623,7 @@ DEPENDENCIES
   rexml
   rinku
   rollbar (>= 1.5.3)
+  rouge (~> 3)
   rspec-html-matchers
   rspec-rails
   rspec-retry
