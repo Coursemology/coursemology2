@@ -27,8 +27,18 @@ namespace :db do
     ActsAsTenant.without_tenant do
       conn = ActiveRecord::Base.connection
       annotations_with_file_content = conn.exec_query(<<-SQL)
-        SELECT annotations.*, files.content, questions.actable_id
+        SELECT
+          DISTINCT(annotations.id),
+          annotations.file_id,
+          annotations.line,
+          files.content,
+          questions.actable_id
         FROM course_assessment_answer_programming_file_annotations AS annotations
+        JOIN course_discussion_topics AS topics
+          ON annotations.id = topics.actable_id
+          AND topics.actable_type = 'Course::Assessment::Answer::ProgrammingFileAnnotation'
+        JOIN course_discussion_posts AS posts
+          ON posts.topic_id = topics.id
         JOIN course_assessment_answer_programming_files AS files
           ON annotations.file_id = files.id
         JOIN course_assessment_answers AS answers
@@ -42,9 +52,14 @@ namespace :db do
       end_time = Time.now
       puts "Extract all annotations with file content = #{end_time - start_time} seconds"
 
+      start_time = Time.now
+
       annotations_grouped = annotations_with_file_content.group_by do |row|
         [row['content'], row['actable_id'], row['file_id']]
       end
+
+      end_time = Time.now
+      puts "Grouping annotations based on file_id = #{end_time - start_time} seconds"
 
       start_time = Time.now
 
@@ -57,7 +72,7 @@ namespace :db do
         highlighted_code = helper.highlight_code_block(content, language)
 
         if !annotations_present_on_line_one_and_two(lines) && lines_are_added(highlighted_code)
-          decrement_annotation_line_number(file_id)
+          safe_decrement_annotation_line_number(file_id)
         end
       end
 
@@ -80,7 +95,9 @@ def annotations_present_on_line_one_and_two(lines)
   lines.include?(1) && lines.include?(2)
 end
 
-def decrement_annotation_line_number(file_id)
+# if the line number is 1, we do not wish to decrement that as doing so will render annotation to be out-of-bound
+# therefore, we only update the annotation if the line_number is bigger than 1
+def safe_decrement_annotation_line_number(file_id)
   annotations = Course::Assessment::Answer::ProgrammingFileAnnotation.where(file_id: file_id)
 
   annotations.find_each do |annotation|
