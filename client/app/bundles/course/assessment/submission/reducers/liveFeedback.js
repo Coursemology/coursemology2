@@ -16,7 +16,7 @@ export default function (state = initialState, action) {
     case actions.LIVE_FEEDBACK_SUCCESS: {
       return {
         ...state,
-        //feedbackRequestToken: null,
+        feedbackRequestToken: null,
         feedbackFiles: action.payload.feedbackFiles.reduce((feedbackObj, feedbackFile) => ({
           ...feedbackObj,
           [feedbackFile.path]: feedbackFile.feedbackLines.map((line) => 

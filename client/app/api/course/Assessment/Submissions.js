@@ -124,12 +124,14 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   fetchLiveFeedback(feedbackToken) {
-    return this.client.get(
+    return this.externalClient.get(
       `/signed/v2/feedback/llm`,
-      // TODO parameterize as environment variable
       {
+        // TODO parameterize as environment variable
         baseURL: 'https://1b3e-38-255-65-73.ngrok-free.app',
-        params: { token: feedbackToken }
+        // TODO remove this when we cutover to live CV instance
+        headers: { 'ngrok-skip-browser-warning': '1' },
+        params: { token: feedbackToken },
       },
     );
   }

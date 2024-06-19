@@ -34,6 +34,7 @@ import {
   unsubmit,
 } from '../../actions';
 import {
+  fetchLiveFeedback,
   generateFeedback,
   generateLiveFeedback,
   reevaluateAnswer,
@@ -204,10 +205,11 @@ class VisibleSubmissionEditIndex extends Component {
   onFetchLiveFeedback = (answerId, questionId) => {
     const {
       dispatch,
+      feedbackRequestToken,
       match: { params },
     } = this.props;
-    console.log(`FLF ${answerId} ${questionId}`);
-    dispatch(fetchLiveFeedback(params.submissionId, answerId, questionId));
+    console.log(`FLF ${answerId} ${questionId} ${feedbackRequestToken}`);
+    dispatch(fetchLiveFeedback(params.submissionId, answerId, questionId, feedbackRequestToken));
   }
 
   onGenerateFeedback = (answerId, questionId) => {
@@ -479,6 +481,7 @@ VisibleSubmissionEditIndex.propTypes = {
   deadline: PropTypes.number,
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
+  feedbackRequestToken: PropTypes.string,
   grading: gradingShape.isRequired,
   questions: PropTypes.objectOf(questionShape),
   historyAnswers: PropTypes.objectOf(answerShape),
@@ -511,6 +514,7 @@ function mapStateToProps({ assessments: { submission } }) {
     codaveriFeedbackStatus: submission.codaveriFeedbackStatus,
     grading: submission.grading.questions,
     submission: submission.submission,
+    feedbackRequestToken: submission.liveFeedback.feedbackRequestToken,
     questions: submission.questions,
     historyAnswers: submission.history.answers,
     historyQuestions: submission.history.questions,
