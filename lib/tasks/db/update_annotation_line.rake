@@ -22,62 +22,103 @@ namespace :db do
       exit
     end
 
-    start_time = Time.now
-
     ActsAsTenant.without_tenant do
       conn = ActiveRecord::Base.connection
-      annotations_with_file_content = conn.exec_query(<<-SQL)
+      start_time = Time.now
+
+      annotation_id__file_id__line_num = conn.exec_query(<<-SQL)
         SELECT
           DISTINCT(annotations.id),
           annotations.file_id,
-          annotations.line,
-          files.content,
-          questions.actable_id
+          annotations.line
         FROM course_assessment_answer_programming_file_annotations AS annotations
         JOIN course_discussion_topics AS topics
           ON annotations.id = topics.actable_id
           AND topics.actable_type = 'Course::Assessment::Answer::ProgrammingFileAnnotation'
+          AND CAST(topics.created_at AS DATE) BETWEEN '#{start_date}' AND '#{end_date}'
         JOIN course_discussion_posts AS posts
           ON posts.topic_id = topics.id
-        JOIN course_assessment_answer_programming_files AS files
-          ON annotations.file_id = files.id
-        JOIN course_assessment_answers AS answers
-          ON files.answer_id = answers.actable_id
-          AND answers.actable_type = 'Course::Assessment::Answer::Programming'
-          AND CAST(answers.created_at AS DATE) BETWEEN '#{start_date}' AND '#{end_date}'
-        JOIN course_assessment_questions AS questions
-          ON answers.question_id = questions.id
       SQL
 
       end_time = Time.now
-      puts "Extract all annotations with file content = #{end_time - start_time} seconds"
-
+      puts "1st sql for #{annotation_id__file_id__line_num.rows.length} annotations = #{end_time - start_time} seconds"
       start_time = Time.now
 
-      annotations_grouped = annotations_with_file_content.group_by do |row|
-        [row['content'], row['actable_id'], row['file_id']]
+      file_annotation_lines = Hash.new { |hash, key| hash[key] = [] }
+      file_annotation_ids = Hash.new { |hash, key| hash[key] = [] }
+
+      annotation_id__file_id__line_num.rows.each do |row|
+        annotation_id, file_id, line_num = row
+        file_annotation_lines[file_id] << line_num
+        file_annotation_ids[file_id] << annotation_id
       end
 
+      # Extract distinct file_id values from the file_annotation_lines hash
+      file_ids = file_annotation_lines.keys
+
       end_time = Time.now
-      puts "Grouping annotations based on file_id = #{end_time - start_time} seconds"
+      puts "extract file info = #{end_time - start_time} seconds"
+      start_time = Time.now
+
+      files = conn.exec_query(<<-SQL)
+        SELECT files.id, files.content, programming_questions.language_id
+        FROM course_assessment_answer_programming_files AS files
+        JOIN course_assessment_answers AS answers
+          ON files.answer_id = answers.actable_id
+          AND answers.actable_type = 'Course::Assessment::Answer::Programming'
+        JOIN course_assessment_questions AS questions
+          ON answers.question_id = questions.id
+        JOIN course_assessment_question_programming as programming_questions
+          ON questions.actable_id = programming_questions.id
+        WHERE files.id IN (#{file_ids.join(', ')})
+      SQL
+
+      end_time = Time.now
+      puts "2nd sql for #{file_ids.length} file contents = #{end_time - start_time} seconds"
 
       start_time = Time.now
 
-      annotations_grouped.map do |key, values|
-        content, actable_id, file_id = key
-        programming_question = Course::Assessment::Question::Programming.find(actable_id)
-        language = programming_question.language
+      files_hash = files.rows.map { |row| { id: row[0], content: row[1], language_id: row[2] } }
 
-        lines = values.map { |value| value['line'] }
+      language_ids = files_hash.map { |file| file[:language_id] }.uniq
+      languages = Coursemology::Polyglot::Language.where(id: language_ids).index_by(&:id)
+
+      annotation_ids_to_update = []
+
+      files_hash.each do |file|
+        content = file[:content]
+        language = languages[file[:language_id]]
+
         highlighted_code = helper.highlight_code_block(content, language)
 
-        if !annotations_present_on_line_one_and_two(lines) && lines_are_added(highlighted_code)
-          safe_decrement_annotation_line_number(file_id)
+        # skip to next unless new lines were inserted by application
+        next unless lines_are_added(highlighted_code)
+
+        annotation_lines = file_annotation_lines[file[:id]]
+        # if file has annotations on lines 1 and 2, skip to next
+        next if annotations_present_on_line_one_and_two(annotation_lines)
+
+        annotation_ids = file_annotation_ids[file[:id]]
+        annotation_line_to_annotation_id = annotation_lines.zip(annotation_ids).to_h
+        annotation_lines.each do |line|
+          # if the line number is 1, do not decrement as line number 0 is out-of-bounds
+          next if line == 1
+          annotation_id = annotation_line_to_annotation_id[line]
+          annotation_ids_to_update << annotation_id unless line == 1
         end
       end
 
       end_time = Time.now
-      puts "Update annotation lines = #{end_time - start_time} seconds"
+      puts "processing = #{end_time - start_time} seconds"
+
+      start_time = Time.now
+      # rewrite to not so long
+      Course::Assessment::Answer::ProgrammingFileAnnotation.
+        where(id: annotation_ids_to_update).
+        update_all('line = line - 1')
+      puts "updating = #{end_time - start_time} seconds"
+
+      puts annotation_ids_to_update.length
     end
   end
 end
@@ -93,18 +134,6 @@ end
 # we do not want to decrease the line number if line 1 and line 2 was having the annotation in that file
 def annotations_present_on_line_one_and_two(lines)
   lines.include?(1) && lines.include?(2)
-end
-
-# if the line number is 1, we do not wish to decrement that as doing so will render annotation to be out-of-bound
-# therefore, we only update the annotation if the line_number is bigger than 1
-def safe_decrement_annotation_line_number(file_id)
-  annotations = Course::Assessment::Answer::ProgrammingFileAnnotation.where(file_id: file_id)
-
-  annotations.find_each do |annotation|
-    line_number = annotation.line
-
-    annotation.update(line: line_number - 1) unless line_number == 1
-  end
 end
 
 class HelperContext
