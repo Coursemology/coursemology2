@@ -33,6 +33,10 @@ export interface UserMiniEntity extends UserBasicMiniEntity {
   role: UserRoles;
 }
 
+export interface UserData extends UserBasicMiniEntity {
+  userUrl?: string;
+}
+
 export interface UserCourseListData {
   id: number;
   title: string;
