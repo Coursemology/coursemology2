@@ -219,6 +219,17 @@ export function generateFeedback(submissionId, answerId, questionId) {
   };
 }
 
+// Immediately disable "Get Help" button to prevent user prematurely retrying.
+export function initializeLiveFeedback(questionId) {
+  return (dispatch) => 
+    dispatch({
+      type: actionTypes.LIVE_FEEDBACK_INITIAL,
+      payload: {
+        questionId,
+      }
+    });
+}
+
 export function generateLiveFeedback(submissionId, answerId, questionId) {
   return (dispatch) => {
     return CourseAPI.assessment.submissions

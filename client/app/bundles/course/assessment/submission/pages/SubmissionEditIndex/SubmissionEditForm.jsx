@@ -162,7 +162,7 @@ const SubmissionEditForm = (props) => {
     }
   }, [deadline]);
 
-  const POLL_INTERVAL_SECONDS = 5000;
+  const POLL_INTERVAL_MILLISECONDS = 1000;
   const pollerRef = useRef(null);
   const pollAllFeedback = () => {
     for(const question of Object.values(questions)) {
@@ -175,7 +175,7 @@ const SubmissionEditForm = (props) => {
 
   useEffect(() => {
     // check for feedback from Codaveri on page load for each question
-    pollerRef.current = setInterval(pollAllFeedback, POLL_INTERVAL_SECONDS);
+    pollerRef.current = setInterval(pollAllFeedback, POLL_INTERVAL_MILLISECONDS);
 
     // clean up poller on unmount
     return () => {
@@ -352,6 +352,9 @@ const SubmissionEditForm = (props) => {
       ? intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft })
       : intl.formatMessage(translations.runCode);
 
+    const isRequestingLiveFeedback = liveFeedback?.[question.id]?.isRequestingLiveFeedback ?? false;
+    const isPollingLiveFeedback = (liveFeedback?.[question.id]?.pendingFeedbackToken ?? false) !== false;
+
     return (
       <>
         <div class="flex flex-nowrap">
@@ -393,13 +396,15 @@ const SubmissionEditForm = (props) => {
             color="info"
             disabled={
               isResetting ||
-              isSaving ||
+              isRequestingLiveFeedback ||
+              isPollingLiveFeedback ||
               (!graderView && attemptsLeft === 0)
             }
-            endIcon={
-              isAutogradingQuestion && <LoadingIndicator bare size={20} />
+            startIcon= {
+              (isRequestingLiveFeedback || isPollingLiveFeedback) && 
+                <LoadingIndicator bare size={20} />
             }
-            id="get-live-help"
+            id="get-live-feedback"
             onClick={() => onGenerateLiveFeedback(answerId, question.id)}
             style={styles.formButton}
             variant="contained"

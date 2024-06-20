@@ -37,6 +37,7 @@ import {
   fetchLiveFeedback,
   generateFeedback,
   generateLiveFeedback,
+  initializeLiveFeedback,
   reevaluateAnswer,
   resetAnswer,
   saveAllAnswers,
@@ -226,6 +227,7 @@ class VisibleSubmissionEditIndex extends Component {
       dispatch,
       match: { params },
     } = this.props;
+    dispatch(initializeLiveFeedback(questionId));
     dispatch(generateLiveFeedback(params.submissionId, answerId, questionId));
   };
 

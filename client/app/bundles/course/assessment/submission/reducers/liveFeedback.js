@@ -4,17 +4,37 @@ import actions from '../constants';
   
 export default function (state = {}, action) {
   switch (action.type) {
+    case actions.LIVE_FEEDBACK_INITIAL: {
+      const { questionId } = action.payload;
+      return produce(state, (draft) => {
+        if (!(questionId in draft)) {
+          draft[questionId] = {
+            isRequestingLiveFeedback: true,
+            pendingFeedbackToken: null,
+            answerId: null,
+            feedbackFiles: {}
+          };
+        } else {
+          draft[questionId] = {
+            ...draft[questionId],
+            isRequestingLiveFeedback: true,
+          };
+        }
+      });
+    }
     case actions.LIVE_FEEDBACK_REQUEST: {
       const { token, questionId } = action.payload;
       return produce(state, (draft) => {
         if (!(questionId in draft)) {
           draft[questionId] = {
-            pendingFeedbackToken: token
+            isRequestingLiveFeedback: false,
+            pendingFeedbackToken: token,
           };
-        } else if (draft[questionId].pendingFeedbackToken === null) {
+        } else {
           draft[questionId] = {
+            isRequestingLiveFeedback: false,
             ...draft[questionId],
-            pendingFeedbackToken: token
+            pendingFeedbackToken: token,
           };
         }
       });
@@ -23,6 +43,7 @@ export default function (state = {}, action) {
       const { questionId, answerId, feedbackFiles } = action.payload;
       return produce(state, (draft) => {
         draft[questionId] = {
+          isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
           answerId: answerId,
           feedbackFiles: feedbackFiles.reduce((feedbackObj, feedbackFile) => ({
@@ -38,7 +59,8 @@ export default function (state = {}, action) {
       return produce(state, (draft) => {
         draft[questionId] = {
           ...draft[questionId],
-          pendingFeedbackToken: null
+          isRequestingLiveFeedback: false,
+          pendingFeedbackToken: null,
         }
       });
     }

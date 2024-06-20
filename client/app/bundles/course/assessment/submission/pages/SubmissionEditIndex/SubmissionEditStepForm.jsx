@@ -158,10 +158,9 @@ const SubmissionEditStepForm = (props) => {
     }
   }, [deadline]);
 
-  const POLL_INTERVAL_SECONDS = 5000;
+  const POLL_INTERVAL_MILLISECONDS = 1000;
   const pollerRef = useRef(null);
   const pollAllFeedback = () => {
-    // TODO poll for live feedback (for attempting students)
     for(const question of Object.values(questions)) {
       const feedbackRequestToken = liveFeedback?.[question.id]?.pendingFeedbackToken; 
       if (feedbackRequestToken) {
@@ -172,7 +171,7 @@ const SubmissionEditStepForm = (props) => {
 
   useEffect(() => {
     // check for feedback from Codaveri on page load for each question
-    pollerRef.current = setInterval(pollAllFeedback, POLL_INTERVAL_SECONDS);
+    pollerRef.current = setInterval(pollAllFeedback, POLL_INTERVAL_MILLISECONDS);
 
     // clean up poller on unmount
     return () => {
@@ -512,7 +511,7 @@ const SubmissionEditStepForm = (props) => {
           isSaving ||
           (!graderView && attemptsLeft === 0)
         }
-        id="get-live-help"
+        id="get-live-feedback"
         onClick={() => onGenerateLiveFeedback(answerId, question.id)}
         style={styles.formButton}
         variant="contained"
