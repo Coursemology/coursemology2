@@ -12,14 +12,15 @@ import 'ace-builds/src-noconflict/theme-github';
 
 import CodaveriFeedbackStatus from '../../../containers/CodaveriFeedbackStatus';
 import ProgrammingImportEditor from '../../../containers/ProgrammingImport/ProgrammingImportEditor';
-import TestCaseView from '../../../containers/TestCaseView';
+
 import { questionShape } from '../../../propTypes';
 import { parseLanguages } from '../../../utils';
 
 import ProgrammingFile from './ProgrammingFile';
-import { Drawer, IconButton, Tooltip, Card, CardContent, CardHeader, CardActions, Typography } from '@mui/material';
+import { 
+  Box, Drawer, IconButton, Tooltip, Card, CardContent, CardHeader, CardActions, Typography } from '@mui/material';
 
-import { grey, orange, yellow } from '@mui/material/colors';
+import { grey, orange, yellow, red, green } from '@mui/material/colors';
 import actionTypes from '../../../constants';
 
 const styles = {
@@ -47,10 +48,12 @@ const styles = {
     backgroundColor: orange['A100']
   },
   cardResolved: {
-    opacity: 0.6
+    opacity: 0.6,
+    backgroundColor: green['100']
   },
   cardDismissed: {
-    opacity: 0.6
+    opacity: 0.6,
+    backgroundColor: red['100']
   }
 };
 
@@ -181,7 +184,17 @@ const Programming = (props) => {
                     {ann.feedback}
                   </Typography>
                 </CardContent>
-                <CardActions sx={{ p: 0 }}>
+                <CardActions sx={{ p: 0, display: 'flex' }}>
+                  <Typography variant="subtitle1" fontWeight="bold" sx={{ ml: 1 }}>
+                    L{ann.linenum}
+                  </Typography>
+                  {(ann.state === 'resolved') && <Typography variant="caption">
+                    Item resolved.
+                  </Typography>}
+                  {(ann.state === 'dismissed') && <Typography variant="caption">
+                    Item dismissed.
+                  </Typography>}
+                  <Box sx={{ flex: "1", width: "100%" }}/>
                   <IconButton
                     className="p-1 ml-1"
                     onClick={() => {
@@ -208,12 +221,19 @@ const Programming = (props) => {
                   >
                     <ThumbDown />
                   </IconButton>
-                  {(ann.state === 'resolved') && <Typography variant="caption">
-                    You resolved this comment.
-                  </Typography>}
-                  {(ann.state === 'dismissed') && <Typography variant="caption">
-                    You dismissed this comment.
-                  </Typography>}
+                  <IconButton
+                    className="p-1 ml-1"
+                    onClick={() => {
+                      dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_DELETE, payload: {
+                        questionId: question.id,
+                        path: 'main.py',
+                        lineId: ann.id,
+                      }});
+                    }}
+                    size="small"
+                  >
+                    <Close />
+                  </IconButton>
                 </CardActions>
               </Card>
             })}

@@ -170,7 +170,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
     response_success = response_body['success']
     if response_status == 200 && response_success
-      @codaveri_evaluation_results = response_body['data']['IOResults']
+      @codaveri_evaluation_results = response_body['data']['exprResults']
     else
       raise CodaveriError,
             { status: response_status, body: response_body }

@@ -355,23 +355,45 @@ const SubmissionEditForm = (props) => {
       : intl.formatMessage(translations.runCode);
 
     return (
-      <div class="d-flex">
-        <Button
-          disabled={isAutogradingQuestion || isResetting || isSaving}
-          onClick={() => {
-            setResetConfirmation(true);
-            setResetAnswerId(answerId);
-          }}
-          style={styles.formButton}
-          variant="contained"
-        >
-          {intl.formatMessage(translations.reset)}
-        </Button>
-        {autogradable && (
+      <>
+        <div class="flex flex-nowrap">
           <Button
-            color="secondary"
+            disabled={isAutogradingQuestion || isResetting || isSaving}
+            onClick={() => {
+              setResetConfirmation(true);
+              setResetAnswerId(answerId);
+            }}
+            style={styles.formButton}
+            variant="contained"
+          >
+            {intl.formatMessage(translations.reset)}
+          </Button>
+          {autogradable && (
+            <Button
+              color="secondary"
+              disabled={
+                isAutogradingQuestion ||
+                isResetting ||
+                isSaving ||
+                (!graderView && attemptsLeft === 0)
+              }
+              endIcon={
+                isAutogradingQuestion && <LoadingIndicator bare size={20} />
+              }
+              id="run-code"
+              onClick={() =>
+                onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)
+              }
+              style={styles.formButton}
+              variant="contained"
+            >
+              {runCodeLabel}
+            </Button>
+          )}
+          <Box sx={{ flex: "1", width: "100%" }}/>
+          <Button
+            color="info"
             disabled={
-              isAutogradingQuestion ||
               isResetting ||
               isSaving ||
               (!graderView && attemptsLeft === 0)
@@ -379,36 +401,16 @@ const SubmissionEditForm = (props) => {
             endIcon={
               isAutogradingQuestion && <LoadingIndicator bare size={20} />
             }
-            id="run-code"
-            onClick={() =>
-              onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)
-            }
+            id="get-live-help"
+            onClick={() => onGenerateLiveFeedback(answerId, question.id)}
             style={styles.formButton}
             variant="contained"
           >
-            {runCodeLabel}
+            Get Help
           </Button>
-        )}
-        <Box width="820px" height="100%" sx={{ display: 'inline-flex' }}/>
-        <Button
-          color="info"
-          disabled={
-            isResetting ||
-            isSaving ||
-            (!graderView && attemptsLeft === 0)
-          }
-          endIcon={
-            isAutogradingQuestion && <LoadingIndicator bare size={20} />
-          }
-          id="get-live-help"
-          onClick={() => onGenerateLiveFeedback(answerId, question.id)}
-          style={styles.formButton}
-          variant="contained"
-        >
-          Get Help
-        </Button>
+        </div>
         <TestCaseView questionId={question.id} />
-      </div>
+      </>
     );
   };
 
