@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
@@ -9,6 +9,7 @@ import {
 } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import GhostIcon from 'lib/components/icons/GhostIcon';
@@ -18,6 +19,7 @@ import TableLegends from 'lib/containers/TableLegends';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import AnswerDisplay from './AnswerDisplay';
 import { getClassNameForAttemptCountCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 
@@ -71,6 +73,10 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.filename',
     defaultMessage: 'Question-level Attempt Statistics for {assessment}',
   },
+  close: {
+    id: 'course.assessment.statistics.close',
+    defaultMessage: 'Close',
+  },
 });
 
 interface Props {
@@ -91,6 +97,12 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
   const { includePhantom } = props;
 
   const statistics = useAppSelector(getAssessmentStatistics);
+  const [openPastAnswers, setOpenPastAnswers] = useState(false);
+  const [answerInfo, setAnswerInfo] = useState({
+    index: 0,
+    answerId: 0,
+    studentName: '',
+  });
   const assessment = statistics.assessment;
   const submissions = statistics.submissions;
 
@@ -118,11 +130,27 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
 
   // the case where the attempt count is null is handled separately inside the column
   // (refer to the definition of answerColumns below)
-  const renderNonNullAttemptCountCell = (attempt: AttemptInfo): ReactNode => {
-    const className = getClassNameForAttemptCountCell(attempt);
+  const renderAttemptCountClickableCell = (
+    index: number,
+    datum: MainSubmissionInfo,
+  ): ReactNode => {
+    const className = getClassNameForAttemptCountCell(
+      datum.attemptStatus![index],
+    );
+
     return (
-      <div className={className}>
-        <Box>{attempt.attemptCount}</Box>
+      <div
+        className={`cursor-pointer ${className}`}
+        onClick={(): void => {
+          setOpenPastAnswers(true);
+          setAnswerInfo({
+            index: index + 1,
+            answerId: datum.answers![index].lastAttemptAnswerId,
+            studentName: datum.courseUser.name,
+          });
+        }}
+      >
+        <Box>{datum.attemptStatus![index].attemptCount}</Box>
       </div>
     );
   };
@@ -159,8 +187,8 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.attemptStatus?.[index]?.attemptCount === 'number'
-            ? renderNonNullAttemptCountCell(datum.attemptStatus?.[index])
+          return typeof datum.attemptStatus?.[index].attemptCount === 'number'
+            ? renderAttemptCountClickableCell(index, datum)
             : null;
         },
         sortable: true,
@@ -278,6 +306,17 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         search={{ searchPlaceholder: t(translations.searchText) }}
         toolbar={{ show: true }}
       />
+      <Prompt
+        cancelLabel={t(translations.close)}
+        onClose={(): void => setOpenPastAnswers(false)}
+        open={openPastAnswers}
+        title={answerInfo.studentName}
+      >
+        <AnswerDisplay
+          curAnswerId={answerInfo.answerId}
+          index={answerInfo.index}
+        />
+      </Prompt>
     </>
   );
 };

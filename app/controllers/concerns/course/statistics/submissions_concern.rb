@@ -39,9 +39,10 @@ module Course::Statistics::SubmissionsConcern
           SELECT
             caa_ranked.question_id,
             caa_ranked.submission_id,
-            jsonb_agg(jsonb_build_array(caa_ranked.grade, caa_ranked.correct, caa_ranked.workflow_state)) AS submission_info
+            jsonb_agg(jsonb_build_array(caa_ranked.id, caa_ranked.grade, caa_ranked.correct, caa_ranked.workflow_state)) AS submission_info
           FROM (
             SELECT
+              caa_inner.id,
               caa_inner.question_id,
               caa_inner.submission_id,
               caa_inner.correct,
@@ -59,14 +60,17 @@ module Course::Statistics::SubmissionsConcern
           GROUP BY caa_ranked.question_id, caa_ranked.submission_id
         )
       SELECT
+        CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>3 != 'attempting'
+            THEN attempt_info.submission_info->0->>0 ELSE attempt_info.submission_info->1->>0
+        END AS last_attempt_answer_id,
         attempt_count.question_id,
         attempt_count.submission_id,
         attempt_count.attempt_count,
-        CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>2 != 'attempting'
-            THEN attempt_info.submission_info->0->>0 ELSE attempt_info.submission_info->1->>0
-        END AS grade,
-        CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>2 != 'attempting'
+        CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>3 != 'attempting'
             THEN attempt_info.submission_info->0->>1 ELSE attempt_info.submission_info->1->>1
+        END AS grade,
+        CASE WHEN jsonb_array_length(attempt_info.submission_info) = 1 OR attempt_info.submission_info->0->>3 != 'attempting'
+            THEN attempt_info.submission_info->0->>2 ELSE attempt_info.submission_info->1->>2
         END AS correct
       FROM attempt_count
       JOIN attempt_info

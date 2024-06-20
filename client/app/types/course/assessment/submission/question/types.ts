@@ -66,7 +66,7 @@ interface ForumPostResponseQuestionData {
   maxPosts: boolean;
 }
 
-interface SpecificQuestionDataMap {
+export interface SpecificQuestionDataMap {
   MultipleChoice: MultipleResponseQuestionData;
   MultipleResponse: MultipleResponseQuestionData;
   Programming: ProgrammingQuestionData;
