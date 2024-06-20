@@ -60,11 +60,11 @@ const styles = {
 
 const ProgrammingFiles = ({
   readOnly,
+  questionId,
   answerId,
   language,
+  feedbackFiles,
   saveAnswerAndUpdateClientVersion,
-  onSelectionChange,
-  editorRef,
 }) => {
   const { control } = useFormContext();
 
@@ -78,6 +78,86 @@ const ProgrammingFiles = ({
     name: `${answerId}.files_attributes`,
   });
 
+  const containerRef = useRef();
+  const editorRef = useRef(null);
+  const [selectedLine, setSelectedLine] = useState(null);
+
+  const dispatch = useAppDispatch();
+
+  const renderFeedbackCard = (feedbackItem) => {
+    let cardStyle = styles.card;
+    if (feedbackItem.state === 'resolved') {
+      cardStyle = { ...styles.card, ...styles.cardResolved };
+    } else if (feedbackItem.state === 'dismissed') {
+      cardStyle = { ...styles.card, ...styles.cardDismissed };
+    } else if (selectedLine === feedbackItem.linenum) {
+      cardStyle = { ...styles.card, ...styles.cardSelected };
+    }
+
+    return <Card sx={cardStyle}>
+      <CardContent sx={{ p: 1 }} onClick={() => {
+        editorRef.current?.editor?.selection?.setAnchor(feedbackItem.linenum - 1, 0);
+        editorRef.current?.editor?.selection?.moveCursorTo(feedbackItem.linenum - 1, 0);
+        editorRef.current?.editor?.focus();
+      }}>
+        <Typography variant="body2">
+          {feedbackItem.feedback}
+        </Typography>
+      </CardContent>
+      <CardActions sx={{ p: 0, display: 'flex' }}>
+        <Typography variant="subtitle1" fontWeight="bold" sx={{ ml: 1 }}>
+          L{feedbackItem.linenum}
+        </Typography>
+        {(feedbackItem.state === 'resolved') && <Typography variant="caption">
+          Item resolved.
+        </Typography>}
+        {(feedbackItem.state === 'dismissed') && <Typography variant="caption">
+          Item dismissed.
+        </Typography>}
+        <Box sx={{ flex: "1", width: "100%" }}/>
+        <IconButton
+          className="p-1 ml-1"
+          onClick={() => {
+            dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED, payload: {
+              questionId,
+              path: 'main.py',
+              lineId: feedbackItem.id,
+            }});
+          }}
+          size="small"
+        >
+          <ThumbUp />
+        </IconButton>
+        <IconButton
+          className="p-1 ml-1"
+          onClick={() => {
+            dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_DISMISSED, payload: {
+              questionId,
+              path: 'main.py',
+              lineId: feedbackItem.id,
+            }});
+          }}
+          size="small"
+        >
+          <ThumbDown />
+        </IconButton>
+        <IconButton
+          className="p-1 ml-1"
+          onClick={() => {
+            dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_DELETE, payload: {
+              questionId,
+              path: 'main.py',
+              lineId: feedbackItem.id,
+            }});
+          }}
+          size="small"
+        >
+          <Close />
+        </IconButton>
+      </CardActions>
+    </Card>
+  }
+
   const controlledProgrammingFields = fields.map((field, index) => ({
     ...field,
     ...currentField[index],
@@ -90,18 +170,45 @@ const ProgrammingFiles = ({
       content: field.content,
       highlightedContent: field.highlightedContent,
     };
+
+    let annotations = feedbackFiles[field.filename] ?? [];
+    // TODO: remove special casing around Codaveri name coercion issue
+    if (index === 0 && !controlledProgrammingFields.some(field => field.filename === "main.py")) {
+      annotations = feedbackFiles['main.py'];
+    }
     return (
-      <ProgrammingFile
-        key={field.id}
-        answerId={answerId}
-        fieldName={`${answerId}.files_attributes.${index}.content`}
-        file={file}
-        language={language}
-        readOnly={readOnly}
-        editorRef={editorRef}
-        onSelectionChange={onSelectionChange}
-        saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-      />
+      <div id="editor-container" ref={containerRef} style={{ position: "relative" }}>
+        <ProgrammingFile
+          key={field.id}
+          answerId={answerId}
+          fieldName={`${answerId}.files_attributes.${index}.content`}
+          file={file}
+          language={language}
+          readOnly={readOnly}
+          editorRef={editorRef}
+          onSelectionChange={(selection, event) => {
+            const selectedRow = selection?.cursor?.row;
+            if (selectedRow || selectedRow === 0) {
+              setSelectedLine(selectedRow + 1);
+            }
+          }}
+          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
+        />
+        <Drawer
+          variant="persistent"
+          anchor="right"
+          open={annotations?.filter(feedbackItem => feedbackItem.state === 'pending')?.length > 0}
+          PaperProps={{ style: { position: 'absolute' } }}
+          ModalProps={{
+            container: document.getElementById('editor-container'),
+            style: { position: 'absolute' }
+          }}
+        >
+          <div>
+            {annotations.map(renderFeedbackCard)}
+          </div>
+        </Drawer>
+      </div>
     );
   });
 };
@@ -116,14 +223,6 @@ const Programming = (props) => {
 
   const feedbackFiles = useAppSelector((state) => 
     state.assessments.submission.liveFeedback?.[question.id]?.feedbackFiles ?? []);
-  // TODO move all the code to ProgrammingFiles, so we can add filename filtering logic
-  const annotations = Object.values(feedbackFiles).flat();
-  const containerRef = useRef();
-  const editorRef = useRef(null);
-  const [selectedLine, setSelectedLine] = useState(null);
-  const [open, setOpen] = useState(true);
-
-  const dispatch = useAppDispatch();
 
   return (
     <div className="mt-5">
@@ -137,110 +236,15 @@ const Programming = (props) => {
           saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
       ) : (
-        <>
-          <div id="editor-container" ref={containerRef} style={{ position: "relative" }}>
-            <ProgrammingFiles 
-              key={question.id}
-              answerId={answerId}
-              language={parseLanguages(question.language)}
-              readOnly={readOnly}
-              saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-              onSelectionChange={(selection, event) => {
-                const selectedRow = selection?.cursor?.row;
-                if (selectedRow || selectedRow === 0) {
-                  setSelectedLine(selectedRow + 1);
-                }
-              }}
-              editorRef={editorRef}
-            />
-            <Drawer
-              variant="persistent"
-              anchor="right"
-              open={annotations?.filter(ann => ann.state === 'pending')?.length > 0}
-              PaperProps={{ style: { position: 'absolute' } }}
-              ModalProps={{
-                container: document.getElementById('editor-container'),
-                style: { position: 'absolute' }
-              }}
-            >
-            <div>
-              {annotations.map(ann => {
-                let cardStyle = styles.card;
-                if (ann.state === 'resolved') {
-                  cardStyle = { ...styles.card, ...styles.cardResolved };
-                } else if (ann.state === 'dismissed') {
-                  cardStyle = { ...styles.card, ...styles.cardDismissed };
-                } else if (selectedLine === ann.linenum) {
-                  cardStyle = { ...styles.card, ...styles.cardSelected };
-                }
-
-                return <Card sx={cardStyle}>
-                <CardContent sx={{ p: 1 }} onClick={() => {
-                  editorRef.current?.editor?.selection?.setAnchor(ann.linenum - 1, 0);
-                  editorRef.current?.editor?.selection?.moveCursorTo(ann.linenum - 1, 0);
-                  editorRef.current?.editor?.focus();
-                }}>
-                  <Typography variant="body2">
-                    {ann.feedback}
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ p: 0, display: 'flex' }}>
-                  <Typography variant="subtitle1" fontWeight="bold" sx={{ ml: 1 }}>
-                    L{ann.linenum}
-                  </Typography>
-                  {(ann.state === 'resolved') && <Typography variant="caption">
-                    Item resolved.
-                  </Typography>}
-                  {(ann.state === 'dismissed') && <Typography variant="caption">
-                    Item dismissed.
-                  </Typography>}
-                  <Box sx={{ flex: "1", width: "100%" }}/>
-                  <IconButton
-                    className="p-1 ml-1"
-                    onClick={() => {
-                      dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED, payload: {
-                        questionId: question.id,
-                        path: 'main.py',
-                        lineId: ann.id,
-                      }});
-                    }}
-                    size="small"
-                  >
-                    <ThumbUp />
-                  </IconButton>
-                  <IconButton
-                    className="p-1 ml-1"
-                    onClick={() => {
-                      dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_DISMISSED, payload: {
-                        questionId: question.id,
-                        path: 'main.py',
-                        lineId: ann.id,
-                      }});
-                    }}
-                    size="small"
-                  >
-                    <ThumbDown />
-                  </IconButton>
-                  <IconButton
-                    className="p-1 ml-1"
-                    onClick={() => {
-                      dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_DELETE, payload: {
-                        questionId: question.id,
-                        path: 'main.py',
-                        lineId: ann.id,
-                      }});
-                    }}
-                    size="small"
-                  >
-                    <Close />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            })}
-            </div>
-            </Drawer>
-          </div>
-        </>
+        <ProgrammingFiles 
+          key={question.id}
+          questionId={question.id}
+          answerId={answerId}
+          language={parseLanguages(question.language)}
+          feedbackFiles={feedbackFiles}
+          readOnly={readOnly}
+          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
+        />
       )}
       {/* <TestCaseView questionId={question.id} /> */}
       <CodaveriFeedbackStatus answerId={answerId} questionId={question.id} />
