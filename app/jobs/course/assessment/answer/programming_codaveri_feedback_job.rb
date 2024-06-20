@@ -11,12 +11,12 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob < ApplicationJo
     ActsAsTenant.without_tenant do
       feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.
                          new(assessment, question, answer, 'solution', false)
-      response_status, response_body, _feedback_job_id = feedback_service.run_codaveri_feedback_service
+      response_status, response_body, feedback_id = feedback_service.run_codaveri_feedback_service
       
       poll_count = 0
       until ![201, 202].include?(response_status) || poll_count >= MAX_POLL_RETRIES do
         sleep(POLL_INTERVAL_SECONDS)
-        response_status, response_body = feedback_service.fetch_codaveri_feedback(id)
+        response_status, response_body = feedback_service.fetch_codaveri_feedback(feedback_id)
         poll_count += 1
       end
 
