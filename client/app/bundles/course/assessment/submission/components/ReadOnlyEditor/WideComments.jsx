@@ -17,11 +17,6 @@ const styles = {
     position: 'relative',
     zIndex: 5,
   },
-  postPreview: {
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
   minimiseButton: {
     height: 20,
     width: '100%',
@@ -77,7 +72,7 @@ export default class WideComments extends Component {
         onClick={() => expandLine(lineNumber)}
         style={styles.collapsed}
       >
-        <PostPreview annotation={annotation} style={styles.postPreview} />
+        <PostPreview annotation={annotation} />
       </Paper>
     );
   }
