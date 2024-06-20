@@ -224,24 +224,28 @@ export function generateLiveFeedback(submissionId, answerId, questionId) {
     return CourseAPI.assessment.submissions
       .generateLiveFeedback(submissionId, { answer_id: answerId })
       .then((response) => {
-        console.log(response);
         if (response.status === 200) {
           dispatch({
             type: actionTypes.LIVE_FEEDBACK_SUCCESS,
             payload: {
+              questionId,
+              answerId,
               feedbackFiles: response.data?.data?.feedbackFiles ?? {}
             }
           });
         } else {
           // 201, save feedback signed token
           dispatch({ type: actionTypes.LIVE_FEEDBACK_REQUEST, payload: {
+            questionId,
             token: response.data?.data?.token 
           }});
         }
       })
       .catch(() => {
         dispatch({
-          type: actionTypes.LIVE_FEEDBACK_FAILURE
+          type: actionTypes.LIVE_FEEDBACK_FAILURE, payload: {
+            questionId,
+          }
         });
         dispatch(setNotification(translations.requestFailure));
       });
@@ -259,15 +263,19 @@ export function fetchLiveFeedback(submissionId, answerId, questionId, feedbackTo
           dispatch({
             type: actionTypes.LIVE_FEEDBACK_SUCCESS,
             payload: {
+              questionId,
+              answerId,
               feedbackFiles: response.data?.data?.feedbackFiles ?? {}
             }
           });
         }
       })
       .catch((reason) => {
-        console.log(reason);
         dispatch({
-          type: actionTypes.LIVE_FEEDBACK_FAILURE
+          type: actionTypes.LIVE_FEEDBACK_FAILURE,
+          payload: {
+            questionId,
+          }
         });
         dispatch(setNotification(translations.requestFailure));
       });

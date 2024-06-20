@@ -5,6 +5,9 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
+  POLL_INTERVAL_SECONDS = 10
+  MAX_POLL_RETRIES = 40
+
   # Represents a result of evaluating an answer.
   Result = Struct.new(:stdout, :stderr, :evaluation_results, :exit_code, :evaluation_id) do
     # Checks if the evaluation errored.
@@ -99,12 +102,9 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     @time_limit = question.time_limit ? [question.time_limit, question.max_time_limit].min : question.max_time_limit
     @timeout = timeout || DEFAULT_TIMEOUT
 
-    @answer_object = { api_version: 'latest',
-                       language_version: { language: '', version: '' },
+    @answer_object = { languageVersion: { language: '', version: '' },
                        files: [],
-                       problem_id: '',
-                       course_name: @course.title,
-                       course_id: @course.id }
+                       problemId: ''}
 
     @codaveri_evaluation_results = nil
   end
@@ -116,7 +116,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   #   code.
   def evaluate_in_codaveri
     construct_grading_object
-    request_codaveri_evaluation
+    response_status, response_body, evaluation_id = request_codaveri_evaluation
+    poll_codaveri_evaluation_results(response_status, response_body, evaluation_id)
     build_evaluation_result
   end
 
@@ -124,10 +125,10 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   def construct_grading_object
     return unless @question.codaveri_id
 
-    @answer_object[:problem_id] = @question.codaveri_id
+    @answer_object[:problemId] = @question.codaveri_id
 
-    @answer_object[:language_version][:language] = @question.polyglot_language_name
-    @answer_object[:language_version][:version] = @question.polyglot_language_version
+    @answer_object[:languageVersion][:language] = @question.polyglot_language_name
+    @answer_object[:languageVersion][:version] = @question.polyglot_language_version
 
     @answer.files.each do |file|
       file_template = default_codaveri_student_file_template
@@ -144,17 +145,36 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   end
 
   def request_codaveri_evaluation
-    codaveri_api_service = CodaveriApiService.new('code/evaluate', @answer_object)
-    response_status, response_body = codaveri_api_service.run_service
+    codaveri_api_service = CodaveriAsyncApiService.new('v2/evaluate', @answer_object)
+    response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
 
-    unless response_status == 200 && response_success
+    if response_status == 201 && response_success
+      return [response_status, response_body, response_body['data']['id']]
+    elsif response_status == 200 && response_success
+      return [response_status, response_body, nil]
+    else
       raise CodaveriError,
             { status: response_status, body: response_body }
     end
+  end
 
-    @codaveri_evaluation_results = response_body['data']['evaluation_results']
+  def poll_codaveri_evaluation_results(response_status, response_body, evaluation_id)
+    poll_count = 0
+    until ![201, 202].include?(response_status) || poll_count >= MAX_POLL_RETRIES do
+      sleep(POLL_INTERVAL_SECONDS)
+      response_status, response_body = feedback_service.fetch_codaveri_feedback(evaluation_id)
+      poll_count += 1
+    end
+
+    response_success = response_body['success']
+    if response_status == 200 && response_success
+      @codaveri_evaluation_results = response_body['data']['IOResults']
+    else
+      raise CodaveriError,
+            { status: response_status, body: response_body }
+    end
   end
 
   def build_evaluation_result # rubocop:disable Metrics/CyclomaticComplexity

@@ -210,7 +210,6 @@ class VisibleSubmissionEditIndex extends Component {
     } = this.props;
 
     const feedbackRequestToken = liveFeedback?.[questionId].pendingFeedbackToken;
-    console.log(`FLF ${answerId} ${questionId} ${feedbackRequestToken}`);
     dispatch(fetchLiveFeedback(params.submissionId, answerId, questionId, feedbackRequestToken));
   }
 

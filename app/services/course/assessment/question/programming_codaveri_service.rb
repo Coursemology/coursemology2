@@ -128,7 +128,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
 
   def create_codaveri_problem
     codaveri_api_service = CodaveriAsyncApiService.new('v2/problem', @problem_object)
-    response_status, response_body = codaveri_api_service.run_service
+    response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
     response_message = response_body['message']

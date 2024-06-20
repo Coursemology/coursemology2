@@ -122,7 +122,6 @@ const Programming = (props) => {
 
   const dispatch = useAppDispatch();
 
-  console.log({ feedbackFiles });
   return (
     <div className="mt-5">
       {fileSubmission ? (

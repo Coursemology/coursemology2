@@ -54,11 +54,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   def auto_grader
     # TODO (re)-integrate codaveri evaluator?
-    # if is_codaveri
-    #   Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService.new
-    # else
-    Course::Assessment::Answer::ProgrammingAutoGradingService.new
-    # end
+    if is_codaveri
+      Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService.new
+    else
+      Course::Assessment::Answer::ProgrammingAutoGradingService.new
+    end
   end
 
   def attempt(submission, last_attempt = nil)

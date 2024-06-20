@@ -169,11 +169,7 @@ const SubmissionEditForm = (props) => {
     for(const question of Object.values(questions)) {
       const feedbackRequestToken = liveFeedback?.[question.id]?.pendingFeedbackToken; 
       if (feedbackRequestToken) {
-        console.log(`Polling for ${feedbackRequestToken}`);
-  
         onFetchLiveFeedback(question.answerId, question.id);
-      } else {
-        console.log("Not polling");
       }
     }
   }
