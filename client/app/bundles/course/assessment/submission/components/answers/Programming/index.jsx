@@ -84,6 +84,34 @@ const ProgrammingFiles = ({
 
   const dispatch = useAppDispatch();
 
+  const onEditorSelectionChange = (selection) => {
+    const selectedRow = selection?.cursor?.row;
+    if (selectedRow || selectedRow === 0) {
+      setSelectedLine(selectedRow + 1);
+    }
+  };
+
+  const editorKeyboardHandler = {
+    handleKeyboard: (data, hash, keyString) => {
+      const selectedRow = editorRef.current?.editor?.selection?.cursor?.row;
+      const lastRow = (editorRef.current?.editor?.session?.getLength() ?? 1) - 1;
+      if (selectedRow || selectedRow === 0) {
+        if (keyString === 'up') {
+          setSelectedLine(Math.max(selectedRow - 1, 0) + 1);
+        } else if (keyString === 'down') {
+          setSelectedLine(Math.min(selectedRow + 1, lastRow) + 1);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    editorRef.current?.editor?.keyBinding?.addKeyboardHandler(editorKeyboardHandler);
+    return () => {
+      editorRef.current?.editor?.keyBinding?.removeKeyboardHandler(editorKeyboardHandler);
+    };
+  });
+
   const renderFeedbackCard = (feedbackItem) => {
     let cardStyle = styles.card;
     if (feedbackItem.state === 'resolved') {
@@ -96,6 +124,7 @@ const ProgrammingFiles = ({
 
     return <Card sx={cardStyle}>
       <CardContent sx={{ p: 1 }} onClick={() => {
+        editorRef.current?.editor?.gotoLine(feedbackItem.linenum, 0);
         editorRef.current?.editor?.selection?.setAnchor(feedbackItem.linenum - 1, 0);
         editorRef.current?.editor?.selection?.moveCursorTo(feedbackItem.linenum - 1, 0);
         editorRef.current?.editor?.focus();
@@ -186,12 +215,7 @@ const ProgrammingFiles = ({
           language={language}
           readOnly={readOnly}
           editorRef={editorRef}
-          onSelectionChange={(selection, event) => {
-            const selectedRow = selection?.cursor?.row;
-            if (selectedRow || selectedRow === 0) {
-              setSelectedLine(selectedRow + 1);
-            }
-          }}
+          onSelectionChange={onEditorSelectionChange}
           saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
         <Drawer
