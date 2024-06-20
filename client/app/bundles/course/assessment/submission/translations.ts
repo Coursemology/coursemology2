@@ -120,6 +120,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.generateCodaveriFeedback',
     defaultMessage: 'Generate Codaveri Feedback',
   },
+  generateCodaveriLiveFeedback: {
+    id: 'course.assessment.submission.generateCodaveriLiveFeedback',
+    defaultMessage: 'Get Help',
+  },
   reset: {
     id: 'course.assessment.submission.reset',
     defaultMessage: 'Reset Answer',

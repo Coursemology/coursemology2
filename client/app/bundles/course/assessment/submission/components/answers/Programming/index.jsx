@@ -1,11 +1,12 @@
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import PropTypes from 'prop-types';
-import { FC, useEffect, useState, useRef } from 'react';
-import { Check, Close, QuestionMark, ChevronRight, ThumbUp, ThumbDown } from '@mui/icons-material';
+import { useEffect, useState, useRef } from 'react';
+import { Close, ThumbUp, ThumbDown } from '@mui/icons-material';
 
 import { getIsSavingAnswer } from 'course/assessment/submission/selectors/answerFlags';
 import { useAppSelector } from 'lib/hooks/store';
 import { useAppDispatch } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-github';
@@ -18,7 +19,14 @@ import { parseLanguages } from '../../../utils';
 
 import ProgrammingFile from './ProgrammingFile';
 import { 
-  Box, Drawer, IconButton, Tooltip, Card, CardContent, CardHeader, CardActions, Typography } from '@mui/material';
+  Box,
+  Drawer,
+  IconButton,
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+} from '@mui/material';
 
 import { grey, orange, yellow, red, green } from '@mui/material/colors';
 import actionTypes from '../../../constants';
@@ -83,6 +91,7 @@ const ProgrammingFiles = ({
   const [selectedLine, setSelectedLine] = useState(null);
 
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const onEditorSelectionChange = (selection) => {
     const selectedRow = selection?.cursor?.row;
@@ -138,15 +147,22 @@ const ProgrammingFiles = ({
           L{feedbackItem.linenum}
         </Typography>
         {(feedbackItem.state === 'resolved') && <Typography variant="caption">
-          Item resolved.
+          {t({
+            id: 'course.assessment.submission.answers.Programming.liveFeedbackItemResolved',
+            defaultMessage: 'Item resolved.',
+          })}
         </Typography>}
         {(feedbackItem.state === 'dismissed') && <Typography variant="caption">
-          Item dismissed.
+          {t({
+            id: 'course.assessment.submission.answers.Programming.liveFeedbackItemDismissed',
+            defaultMessage: 'Item dismissed.',
+          })}
         </Typography>}
         <Box sx={{ flex: "1", width: "100%" }}/>
         <IconButton
           className="p-1 ml-1"
           onClick={() => {
+            // TODO: expose BE route to Codaveri feedback rating endpoint and call here
             dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED, payload: {
               questionId,
               path: 'main.py',

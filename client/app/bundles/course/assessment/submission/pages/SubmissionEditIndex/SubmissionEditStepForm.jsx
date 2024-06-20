@@ -316,12 +316,47 @@ const SubmissionEditStepForm = (props) => {
     return null;
   };
 
+  const renderGetLiveFeedbackButton = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+    const { answerId, attemptsLeft } = question;
+    const { isResetting } = questionsFlags[id] || {};
+    const isRequestingLiveFeedback = liveFeedback?.[question.id]?.isRequestingLiveFeedback ?? false;
+    const isPollingLiveFeedback = (liveFeedback?.[question.id]?.pendingFeedbackToken ?? false) !== false;
+
+    return <Button
+      color="info"
+      disabled={isResetting ||
+        isRequestingLiveFeedback ||
+        isPollingLiveFeedback ||
+        (!graderView && attemptsLeft === 0)}
+      startIcon={(isRequestingLiveFeedback || isPollingLiveFeedback) &&
+        <LoadingIndicator bare size={20} />}
+      id="get-live-feedback"
+      onClick={() => onGenerateLiveFeedback(answerId, question.id)}
+      style={styles.formButton}
+      variant="contained"
+    >
+      {intl.formatMessage(translations.generateCodaveriLiveFeedback)}
+    </Button>;
+  }
+
   const renderGradingPanel = () => {
     if (attempting) {
       return null;
     }
     return <GradingPanel />;
   };
+
+  const renderProgrammingQuestionActions = () => {
+    return <div class="flex flex-nowrap">
+      {renderResetButton()}
+      {renderSubmitButton()}
+      {renderContinueButton()}
+      <Box sx={{ flex: "1", width: "100%" }} />
+      {renderGetLiveFeedbackButton()}
+    </div>;
+  }
 
   const renderQuestionGrading = (id) => {
     const editable = !attempting && graderView;
@@ -497,30 +532,6 @@ const SubmissionEditStepForm = (props) => {
     );
   };
 
-  const renderGetLiveFeedbackButton = () => {
-    const id = questionIds[stepIndex];
-    const question = questions[id];
-    const { answerId } = question;
-    const { isAutograding, isResetting } = questionsFlags[id] || {};
-    return (
-      <Button
-        color="info"
-        disabled={
-          isAutograding ||
-          isResetting ||
-          isSaving ||
-          (!graderView && attemptsLeft === 0)
-        }
-        id="get-live-feedback"
-        onClick={() => onGenerateLiveFeedback(answerId, question.id)}
-        style={styles.formButton}
-        variant="contained"
-      >
-        Get Help
-      </Button>
-    )
-  }
-
   const renderSubmitDialog = () => (
     <ConfirmationDialog
       form={formNames.SUBMISSION}
@@ -582,20 +593,14 @@ const SubmissionEditStepForm = (props) => {
             showMcqMrqSolution,
           }}
         />
-        {attempting && (
-          <div class="flex flex-nowrap">
-            {renderResetButton()}
-            {renderSubmitButton()}
-            {renderContinueButton()}
-            <Box sx={{ flex: "1", width: "100%" }}/>
-            {renderGetLiveFeedbackButton()}
-          </div>
-        )}
+        {attempting && question.type === questionTypes.Programming && 
+          renderProgrammingQuestionActions()}
 
         {renderAutogradingErrorPanel(id)}
         {renderExplanationPanel(question)}
-        <TestCaseView questionId={question.id} />
-        {!attempting && graderView ? renderReevaluateButton() : null}
+        <TestCaseView questionId={id} />
+        {!attempting && graderView && question.type === questionTypes.Programming &&
+          renderReevaluateButton()}
         {renderQuestionGrading(id)}
 
         <Comments topic={topic} />

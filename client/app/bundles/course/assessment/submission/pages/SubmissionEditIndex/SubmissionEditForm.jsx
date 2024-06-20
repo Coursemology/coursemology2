@@ -249,6 +249,30 @@ const SubmissionEditForm = (props) => {
     );
   };
 
+  const renderGetLiveFeedbackButton = (id) => {
+    const question = questions[id];
+    const { answerId, attemptsLeft } = question;
+    const { isResetting } = questionsFlags[id] || {};
+    const isRequestingLiveFeedback = liveFeedback?.[question.id]?.isRequestingLiveFeedback ?? false;
+    const isPollingLiveFeedback = (liveFeedback?.[question.id]?.pendingFeedbackToken ?? false) !== false;
+
+    return <Button
+      color="info"
+      disabled={isResetting ||
+        isRequestingLiveFeedback ||
+        isPollingLiveFeedback ||
+        (!graderView && attemptsLeft === 0)}
+      startIcon={(isRequestingLiveFeedback || isPollingLiveFeedback) &&
+        <LoadingIndicator bare size={20} />}
+      id="get-live-feedback"
+      onClick={() => onGenerateLiveFeedback(answerId, question.id)}
+      style={styles.formButton}
+      variant="contained"
+    >
+      {intl.formatMessage(translations.generateCodaveriLiveFeedback)}
+    </Button>;
+  }
+
   const renderGradingPanel = () => {
     if (attempting) {
       return null;
@@ -301,118 +325,15 @@ const SubmissionEditForm = (props) => {
 
   const renderProgrammingQuestionActions = (id) => {
     const question = questions[id];
-    const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
-    const { isAutograding: isAutogradingQuestion, isResetting } =
-      questionsFlags[id] || {};
-
-    if (question.type !== questionTypes.Programming) {
-      return null;
-    }
-
-    if (!attempting && graderView) {
-      return (
-        <>
-          {isCodaveriEnabled && question.isCodaveri && (
-            <Button
-              color="secondary"
-              disabled={
-                codaveriFeedbackStatus?.answers[answerId]?.jobStatus ===
-                  'submitted' || isSaving
-              }
-              id="retrieve-code-feedback"
-              onClick={() => onGenerateFeedback(answerId, question.id)}
-              style={styles.formButton}
-              variant="contained"
-            >
-              {intl.formatMessage(translations.generateCodaveriFeedback)}
-            </Button>
-          )}
-          <Button
-            color="secondary"
-            disabled={isAutogradingQuestion || isSaving}
-            endIcon={
-              isAutogradingQuestion && <LoadingIndicator bare size={20} />
-            }
-            id="re-evaluate-code"
-            onClick={() => onReevaluateAnswer(answerId, question.id)}
-            style={styles.formButton}
-            variant="contained"
-          >
-            {intl.formatMessage(translations.reevaluate)}
-          </Button>
-        </>
-      );
-    }
-
-    if (!attempting) {
-      return null;
-    }
-
-    const runCodeLabel = attemptLimit
-      ? intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft })
-      : intl.formatMessage(translations.runCode);
-
-    const isRequestingLiveFeedback = liveFeedback?.[question.id]?.isRequestingLiveFeedback ?? false;
-    const isPollingLiveFeedback = (liveFeedback?.[question.id]?.pendingFeedbackToken ?? false) !== false;
+    const { autogradable } = question;
 
     return (
-      <>
-        <div class="flex flex-nowrap">
-          <Button
-            disabled={isAutogradingQuestion || isResetting || isSaving}
-            onClick={() => {
-              setResetConfirmation(true);
-              setResetAnswerId(answerId);
-            }}
-            style={styles.formButton}
-            variant="contained"
-          >
-            {intl.formatMessage(translations.reset)}
-          </Button>
-          {autogradable && (
-            <Button
-              color="secondary"
-              disabled={
-                isAutogradingQuestion ||
-                isResetting ||
-                isSaving ||
-                (!graderView && attemptsLeft === 0)
-              }
-              endIcon={
-                isAutogradingQuestion && <LoadingIndicator bare size={20} />
-              }
-              id="run-code"
-              onClick={() =>
-                onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)
-              }
-              style={styles.formButton}
-              variant="contained"
-            >
-              {runCodeLabel}
-            </Button>
-          )}
-          <Box sx={{ flex: "1", width: "100%" }}/>
-          <Button
-            color="info"
-            disabled={
-              isResetting ||
-              isRequestingLiveFeedback ||
-              isPollingLiveFeedback ||
-              (!graderView && attemptsLeft === 0)
-            }
-            startIcon= {
-              (isRequestingLiveFeedback || isPollingLiveFeedback) && 
-                <LoadingIndicator bare size={20} />
-            }
-            id="get-live-feedback"
-            onClick={() => onGenerateLiveFeedback(answerId, question.id)}
-            style={styles.formButton}
-            variant="contained"
-          >
-            Get Help
-          </Button>
-        </div>
-      </>
+      <div class="flex flex-nowrap">
+        {renderResetButton(id)}
+        {autogradable && renderRunCodeButton(id)}
+        <Box sx={{ flex: "1", width: "100%" }}/>
+        {renderGetLiveFeedbackButton(id)}
+      </div>
     );
   };
 
@@ -474,12 +395,15 @@ const SubmissionEditForm = (props) => {
                   showMcqMrqSolution,
                 }}
               />
-              {!viewHistory && renderProgrammingQuestionActions(id)}
+              {!viewHistory && attempting && question.type === questionTypes.Programming && 
+                renderProgrammingQuestionActions(id)}
               {question.type === questionTypes.Programming &&
                 !viewHistory &&
                 renderExplanationPanel(id)}
               {!viewHistory && renderAutogradingErrorPanel(id)}
               <TestCaseView questionId={question.id} />
+              {!viewHistory && !attempting && graderView && question.type === questionTypes.Programming &&
+                renderReevaluateButton()}
               {!viewHistory && renderQuestionGrading(id)}
 
               <Suspense
@@ -498,6 +422,57 @@ const SubmissionEditForm = (props) => {
     </div>
   );
 
+  const renderReevaluateButton = (id) => {
+    const question = questions[id];
+    const { answerId } = question;
+    const { isAutograding: isAutogradingQuestion } = questionsFlags[id] || {};
+    return <>
+      {isCodaveriEnabled && question.isCodaveri && (
+        <Button
+          color="secondary"
+          disabled={codaveriFeedbackStatus?.answers[answerId]?.jobStatus ===
+            'submitted' || isSaving}
+          id="retrieve-code-feedback"
+          onClick={() => onGenerateFeedback(answerId, question.id)}
+          style={styles.formButton}
+          variant="contained"
+        >
+          {intl.formatMessage(translations.generateCodaveriFeedback)}
+        </Button>
+      )}
+      <Button
+        color="secondary"
+        disabled={isAutogradingQuestion || isSaving}
+        endIcon={isAutogradingQuestion && <LoadingIndicator bare size={20} />}
+        id="re-evaluate-code"
+        onClick={() => onReevaluateAnswer(answerId, question.id)}
+        style={styles.formButton}
+        variant="contained"
+      >
+        {intl.formatMessage(translations.reevaluate)}
+      </Button>
+    </>;
+  }
+
+  const renderResetButton = (id) => {
+    const question = questions[id];
+    const { answerId } = question;
+    const { isAutograding: isAutogradingQuestion, isResetting } =
+      questionsFlags[id] || {};
+
+    return <Button
+      disabled={isAutogradingQuestion || isResetting || isSaving}
+      onClick={() => {
+        setResetConfirmation(true);
+        setResetAnswerId(answerId);
+      } }
+      style={styles.formButton}
+      variant="contained"
+    >
+      {intl.formatMessage(translations.reset)}
+    </Button>;
+  };
+
   const renderResetDialog = () => (
     <ConfirmationDialog
       message={intl.formatMessage(translations.resetConfirmation)}
@@ -513,6 +488,34 @@ const SubmissionEditForm = (props) => {
       open={resetConfirmation}
     />
   );
+
+  const renderRunCodeButton = (id) => {
+    const question = questions[id];
+    const { answerId, attemptsLeft, attemptLimit } = question;
+    const { isAutograding: isAutogradingQuestion, isResetting } =
+      questionsFlags[id] || {};
+
+    const runCodeLabel = attemptLimit
+      ? intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft })
+      : intl.formatMessage(translations.runCode);
+
+    return (
+      <Button
+        color="secondary"
+        disabled={isAutogradingQuestion ||
+          isResetting ||
+          isSaving ||
+          (!graderView && attemptsLeft === 0)}
+        endIcon={isAutogradingQuestion && <LoadingIndicator bare size={20} />}
+        id="run-code"
+        onClick={() => onSubmitAnswer(answerId, getValues(`${answerId}`), resetField)}
+        style={styles.formButton}
+        variant="contained"
+      >
+        {runCodeLabel}
+      </Button>
+    );
+  }
 
   const renderSaveDraftButton = () => {
     if (!attempting) {
@@ -639,13 +642,16 @@ const SubmissionEditForm = (props) => {
             showMcqMrqSolution,
           }}
         />
-        {viewHistory ? null : renderProgrammingQuestionActions(questionId)}
+        {!viewHistory && attempting && question.type === questionTypes.Programming && 
+          renderProgrammingQuestionActions(questionId)}
         {question.type === questionTypes.Programming && !viewHistory
           ? renderExplanationPanel(questionId)
           : null}
-        {viewHistory ? null : renderAutogradingErrorPanel(questionId)}
-        <TestCaseView questionId={question.id} />
-        {viewHistory ? null : renderQuestionGrading(questionId)}
+        {!viewHistory && renderAutogradingErrorPanel(questionId)}
+        <TestCaseView questionId={questionId} />
+        {!viewHistory && !attempting && graderView && question.type === questionTypes.Programming
+          && renderReevaluateButton(questionId)}
+        {!viewHistory && renderQuestionGrading(questionId)}
         <Suspense
           fallback={
             <>
