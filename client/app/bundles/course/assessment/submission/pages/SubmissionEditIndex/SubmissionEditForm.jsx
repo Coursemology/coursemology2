@@ -165,7 +165,6 @@ const SubmissionEditForm = (props) => {
   const POLL_INTERVAL_SECONDS = 5000;
   const pollerRef = useRef(null);
   const pollAllFeedback = () => {
-    // TODO poll for live feedback (for attempting students)
     for(const question of Object.values(questions)) {
       const feedbackRequestToken = liveFeedback?.[question.id]?.pendingFeedbackToken; 
       if (feedbackRequestToken) {

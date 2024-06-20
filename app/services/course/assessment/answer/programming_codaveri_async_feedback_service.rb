@@ -45,9 +45,9 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
     # process_codaveri_feedback
   end
 
-  def fetch_codaveri_feedback(id)
+  def fetch_codaveri_feedback(feedback_id)
     api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM'
-    codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, { id: id })
+    codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, { id: feedback_id })
     codaveri_api_service.get
   end
 

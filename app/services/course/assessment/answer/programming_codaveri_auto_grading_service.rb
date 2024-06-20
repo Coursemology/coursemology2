@@ -124,7 +124,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   def build_test_case_records_from_test_results(question, auto_grading, evaluation_results) # rubocop:disable Metrics/AbcSize
     test_cases = question.test_cases.to_h { |test_case| [test_case.id, test_case] }
     evaluation_results.map do |result|
-      test_case = find_test_case(test_cases, result['id'].to_i)
+      test_case = find_test_case(test_cases, result['testcase']['index'].to_i)
       result_run = result['run']
 
       error_message_sigkill = I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')

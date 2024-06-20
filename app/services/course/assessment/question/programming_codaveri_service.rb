@@ -71,13 +71,13 @@ class Course::Assessment::Question::ProgrammingCodaveriService
 
   # Check if any object in the array has the :path attribute set to "main.py"
   # If none do, coerce the first element to do so
-  def ensure_main_path!(objects, main_path)
-    has_main_path = objects.any? { |obj| obj[:path] == main_path }
+  # def ensure_main_path!(objects, main_path)
+  #   has_main_path = objects.any? { |obj| obj[:path] == main_path }
   
-    unless has_main_path
-      objects.first[:path] = main_path if objects.any?
-    end
-  end
+  #   unless has_main_path
+  #     objects.first[:path] = main_path if objects.any?
+  #   end
+  # end
 
   # Constructs codaveri question problem object.
   #
@@ -89,37 +89,13 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     resources_object = @problem_object[:resources][0]
     resources_object[:languageVersions][:language] = @question.polyglot_language_name
     resources_object[:languageVersions][:versions] = [ @question.polyglot_language_version ]
-    
-    # unpack solution
-    solution_files_object = resources_object[:solutions][0][:files]
-    package.solution_files.each do |key, value|
-      solution_files_object.append({ path: key, content: value })
-    end
-
-    # unpack template
-    @question.template_files.each do |file|
-      resources_object[:templates].append({ path: file.filename, content: file.content })
-    end
-    # TODO how to coerce main path correctly for languages other than python?
-    ensure_main_path!(resources_object[:templates], "main.py")
-
-    # unpack test cases
-    question_test_cases = @question.test_cases
-    question_test_cases.each.with_index do |test, i|
-      resources_object[:exprTestcases].append({
-        index: i,
-        timeout: 2000,
-        expression: test.expression.to_s + " == " + test.expected.to_s,
-        display: test.expression
-      })
-    end
 
     codaveri_package = Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService.new(
       @question, package
     )
 
-    # @problem_object[:files_solution] = codaveri_package.process_solutions
-    # @problem_object[:testcases] = codaveri_package.process_test_cases
+    resources_object[:solutions][0][:files] = codaveri_package.process_solutions
+    resources_object[:exprTestcases] = codaveri_package.process_test_cases
 
     @problem_object
     # For debugging purpose

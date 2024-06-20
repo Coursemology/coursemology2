@@ -104,7 +104,9 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
     @answer_object = { languageVersion: { language: '', version: '' },
                        files: [],
-                       problemId: ''}
+                       problemId: '',
+                       # TODO: discuss if we should expose CM database ID
+                       userId: '-1' }
 
     @codaveri_evaluation_results = nil
   end
@@ -160,11 +162,16 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     end
   end
 
+  def fetch_codaveri_evaluation(evaluation_id)
+    codaveri_api_service = CodaveriAsyncApiService.new('v2/evaluate', { id: evaluation_id })
+    codaveri_api_service.get
+  end
+
   def poll_codaveri_evaluation_results(response_status, response_body, evaluation_id)
     poll_count = 0
     until ![201, 202].include?(response_status) || poll_count >= MAX_POLL_RETRIES do
       sleep(POLL_INTERVAL_SECONDS)
-      response_status, response_body = feedback_service.fetch_codaveri_feedback(evaluation_id)
+      response_status, response_body = fetch_codaveri_evaluation(evaluation_id)
       poll_count += 1
     end
 

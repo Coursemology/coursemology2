@@ -174,7 +174,7 @@ const ProgrammingFiles = ({
     let annotations = feedbackFiles[field.filename] ?? [];
     // TODO: remove special casing around Codaveri name coercion issue
     if (index === 0 && !controlledProgrammingFields.some(field => field.filename === "main.py")) {
-      annotations = feedbackFiles['main.py'];
+      annotations = feedbackFiles['main.py'] ?? [];
     }
     return (
       <div id="editor-container" ref={containerRef} style={{ position: "relative" }}>
