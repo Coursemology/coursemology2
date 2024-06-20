@@ -340,7 +340,6 @@ const SubmissionEditForm = (props) => {
           >
             {intl.formatMessage(translations.reevaluate)}
           </Button>
-          <TestCaseView questionId={question.id} />
         </>
       );
     }
@@ -408,7 +407,6 @@ const SubmissionEditForm = (props) => {
             Get Help
           </Button>
         </div>
-        <TestCaseView questionId={question.id} />
       </>
     );
   };
@@ -476,6 +474,7 @@ const SubmissionEditForm = (props) => {
                 !viewHistory &&
                 renderExplanationPanel(id)}
               {!viewHistory && renderAutogradingErrorPanel(id)}
+              <TestCaseView questionId={question.id} />
               {!viewHistory && renderQuestionGrading(id)}
 
               <Suspense
@@ -640,6 +639,7 @@ const SubmissionEditForm = (props) => {
           ? renderExplanationPanel(questionId)
           : null}
         {viewHistory ? null : renderAutogradingErrorPanel(questionId)}
+        <TestCaseView questionId={question.id} />
         {viewHistory ? null : renderQuestionGrading(questionId)}
         <Suspense
           fallback={

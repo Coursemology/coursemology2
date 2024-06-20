@@ -351,7 +351,9 @@ class VisibleSubmissionEditIndex extends Component {
           isCodaveriEnabled={isCodaveriEnabled}
           isSaving={isSaving}
           maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
+          onFetchLiveFeedback={this.onFetchLiveFeedback}
           onGenerateFeedback={this.onGenerateFeedback}
+          onGenerateLiveFeedback={this.onGenerateLiveFeedback}
           onReevaluateAnswer={this.onReevaluateAnswer}
           onReset={this.onReset}
           onSaveDraft={this.onSaveDraft}

@@ -23,7 +23,7 @@ class Course::Discussion::Post::CodaveriFeedbackRatingService
   def initialize(feedback)
     @feedback = feedback
     @course = feedback.post.topic.course
-    @payload = { feedbackId: feedback.codaveri_feedback_id,
+    @payload = { id: feedback.codaveri_feedback_id,
                  updatedFeedback: feedback.post.text,
                  rating: feedback.rating }
   end
