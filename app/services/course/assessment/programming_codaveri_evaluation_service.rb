@@ -5,8 +5,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
-  POLL_INTERVAL_SECONDS = 10
-  MAX_POLL_RETRIES = 40
+  POLL_INTERVAL_SECONDS = 2
+  MAX_POLL_RETRIES = 1000
 
   # Represents a result of evaluating an answer.
   Result = Struct.new(:stdout, :stderr, :evaluation_results, :exit_code, :evaluation_id) do

@@ -1,3 +1,4 @@
+CODAVERI_URL                      = ""
 CODAVERI_API_KEY                  = ""
 ROLLBAR_ACCESS_TOKEN              = ""
 RAILS_HOSTNAME                    = "localhost:3000"

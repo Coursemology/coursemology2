@@ -4,8 +4,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob < ApplicationJo
 
   protected
 
-  POLL_INTERVAL_SECONDS = 5
-  MAX_POLL_RETRIES = 20
+  POLL_INTERVAL_SECONDS = 2
+  MAX_POLL_RETRIES = 1000
 
   def perform_tracked(assessment, question, answer)
     ActsAsTenant.without_tenant do

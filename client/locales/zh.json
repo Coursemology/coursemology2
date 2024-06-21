@@ -2768,6 +2768,12 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "查看主题"
   },
+  "course.assessment.submission.answers.Programming.liveFeedbackItemDismissed": {
+    "defaultMessage": "TODO"
+  },
+  "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
+    "defaultMessage": "TODO"
+  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "下载文件"
   },
@@ -2914,6 +2920,9 @@
   },
   "course.assessment.submission.generateCodaveriFeedback": {
     "defaultMessage": "生成 Codaveri 反馈"
+  },
+  "course.assessment.submission.generateCodaveriLiveFeedback": {
+    "defaultMessage": "TODO"
   },
   "course.assessment.submission.generateFeedbackFailure": {
     "defaultMessage": "无法生成反馈，请稍后重试。"

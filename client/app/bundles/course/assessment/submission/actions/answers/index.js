@@ -221,18 +221,18 @@ export function generateFeedback(submissionId, answerId, questionId) {
 
 // Immediately disable "Get Help" button to prevent user prematurely retrying.
 export function initializeLiveFeedback(questionId) {
-  return (dispatch) => 
+  return (dispatch) =>
     dispatch({
       type: actionTypes.LIVE_FEEDBACK_INITIAL,
       payload: {
         questionId,
-      }
+      },
     });
 }
 
 export function generateLiveFeedback(submissionId, answerId, questionId) {
-  return (dispatch) => {
-    return CourseAPI.assessment.submissions
+  return (dispatch) =>
+    CourseAPI.assessment.submissions
       .generateLiveFeedback(submissionId, { answer_id: answerId })
       .then((response) => {
         if (response.status === 200) {
@@ -241,33 +241,42 @@ export function generateLiveFeedback(submissionId, answerId, questionId) {
             payload: {
               questionId,
               answerId,
-              feedbackFiles: response.data?.data?.feedbackFiles ?? {}
-            }
+              feedbackFiles: response.data?.data?.feedbackFiles ?? {},
+            },
           });
         } else {
           // 201, save feedback signed token
-          dispatch({ type: actionTypes.LIVE_FEEDBACK_REQUEST, payload: {
-            questionId,
-            token: response.data?.data?.token 
-          }});
+          dispatch({
+            type: actionTypes.LIVE_FEEDBACK_REQUEST,
+            payload: {
+              questionId,
+              feedbackUrl: response.data?.feedbackUrl,
+              token: response.data?.data?.token,
+            },
+          });
         }
       })
       .catch(() => {
         dispatch({
-          type: actionTypes.LIVE_FEEDBACK_FAILURE, payload: {
+          type: actionTypes.LIVE_FEEDBACK_FAILURE,
+          payload: {
             questionId,
-          }
+          },
         });
         dispatch(setNotification(translations.requestFailure));
       });
-  };
 }
 
 // TODO should each answer/question store its own feedback array?
-export function fetchLiveFeedback(submissionId, answerId, questionId, feedbackToken) {
-  return (dispatch) => {
-    return CourseAPI.assessment.submissions
-      .fetchLiveFeedback(feedbackToken)
+export function fetchLiveFeedback(
+  answerId,
+  questionId,
+  feedbackUrl,
+  feedbackToken,
+) {
+  return (dispatch) =>
+    CourseAPI.assessment.submissions
+      .fetchLiveFeedback(feedbackUrl, feedbackToken)
       .then((response) => {
         // if 200, go straight to LIVE_FEEDBACK_SUCCESS
         if (response.status === 200) {
@@ -276,21 +285,20 @@ export function fetchLiveFeedback(submissionId, answerId, questionId, feedbackTo
             payload: {
               questionId,
               answerId,
-              feedbackFiles: response.data?.data?.feedbackFiles ?? {}
-            }
+              feedbackFiles: response.data?.data?.feedbackFiles ?? {},
+            },
           });
         }
       })
-      .catch((reason) => {
+      .catch(() => {
         dispatch({
           type: actionTypes.LIVE_FEEDBACK_FAILURE,
           payload: {
             questionId,
-          }
+          },
         });
         dispatch(setNotification(translations.requestFailure));
       });
-  };
 }
 
 export function reevaluateAnswer(submissionId, answerId, questionId) {
