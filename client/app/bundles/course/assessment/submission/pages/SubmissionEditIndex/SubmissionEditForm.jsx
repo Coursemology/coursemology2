@@ -166,7 +166,7 @@ const SubmissionEditForm = (props) => {
   const pollerRef = useRef(null);
   const pollAllFeedback = () => {
     for(const question of Object.values(questions)) {
-      const feedbackRequestToken = liveFeedback?.[question.id]?.pendingFeedbackToken; 
+      const feedbackRequestToken = liveFeedback?.feedbackByQuestion?.[question.id]?.pendingFeedbackToken; 
       if (feedbackRequestToken) {
         onFetchLiveFeedback(question.answerId, question.id);
       }
@@ -253,8 +253,8 @@ const SubmissionEditForm = (props) => {
     const question = questions[id];
     const { answerId, attemptsLeft } = question;
     const { isResetting } = questionsFlags[id] || {};
-    const isRequestingLiveFeedback = liveFeedback?.[question.id]?.isRequestingLiveFeedback ?? false;
-    const isPollingLiveFeedback = (liveFeedback?.[question.id]?.pendingFeedbackToken ?? false) !== false;
+    const isRequestingLiveFeedback = liveFeedback?.feedbackByQuestion?.[question.id]?.isRequestingLiveFeedback ?? false;
+    const isPollingLiveFeedback = (liveFeedback?.feedbackByQuestion?.[question.id]?.pendingFeedbackToken ?? false) !== false;
 
     return <Button
       color="info"

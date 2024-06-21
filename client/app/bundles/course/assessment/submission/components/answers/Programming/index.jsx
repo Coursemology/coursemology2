@@ -262,7 +262,7 @@ const Programming = (props) => {
   );
 
   const feedbackFiles = useAppSelector((state) => 
-    state.assessments.submission.liveFeedback?.[question.id]?.feedbackFiles ?? []);
+    state.assessments.submission.liveFeedback?.feedbackByQuestion?.[question.id]?.feedbackFiles ?? []);
 
   return (
     <div className="mt-5">

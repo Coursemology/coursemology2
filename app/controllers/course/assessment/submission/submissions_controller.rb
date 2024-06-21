@@ -100,6 +100,8 @@ class Course::Assessment::Submission::SubmissionsController < \
     return head :bad_request if @answer.nil?
 
     response_status, response_body = @answer.generate_live_feedback
+    response_body['feedbackUrl'] = ENV.fetch('CODAVERI_URL')
+
     render :json => response_body, status: response_status
   end
 

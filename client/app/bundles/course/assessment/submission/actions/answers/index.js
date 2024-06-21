@@ -248,6 +248,7 @@ export function generateLiveFeedback(submissionId, answerId, questionId) {
           // 201, save feedback signed token
           dispatch({ type: actionTypes.LIVE_FEEDBACK_REQUEST, payload: {
             questionId,
+            feedbackUrl: response.data?.feedbackUrl,
             token: response.data?.data?.token 
           }});
         }
@@ -264,10 +265,10 @@ export function generateLiveFeedback(submissionId, answerId, questionId) {
 }
 
 // TODO should each answer/question store its own feedback array?
-export function fetchLiveFeedback(submissionId, answerId, questionId, feedbackToken) {
+export function fetchLiveFeedback(answerId, questionId, feedbackUrl, feedbackToken) {
   return (dispatch) => {
     return CourseAPI.assessment.submissions
-      .fetchLiveFeedback(feedbackToken)
+      .fetchLiveFeedback(feedbackUrl, feedbackToken)
       .then((response) => {
         // if 200, go straight to LIVE_FEEDBACK_SUCCESS
         if (response.status === 200) {
