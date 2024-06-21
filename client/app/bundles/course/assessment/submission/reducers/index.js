@@ -10,6 +10,7 @@ import commentForms from './commentForms';
 import explanations from './explanations';
 import grading from './grading';
 import history from './history';
+import liveFeedback from './liveFeedback';
 import posts from './posts';
 import questions from './questions';
 import questionsFlags from './questionsFlags';
@@ -20,7 +21,6 @@ import submissionFlags from './submissionFlags';
 import submissions from './submissions';
 import testCases from './testCases';
 import topics from './topics';
-import liveFeedback from './liveFeedback';
 
 const submissionReducer = combineReducers({
   annotations,

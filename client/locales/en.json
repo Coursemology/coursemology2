@@ -2795,6 +2795,12 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "View Topic"
   },
+  "course.assessment.submission.answers.Programming.liveFeedbackItemDismissed": {
+    "defaultMessage": "Item dismissed."
+  },
+  "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
+    "defaultMessage": "Item resolved."
+  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "Download File"
   },
@@ -2941,6 +2947,9 @@
   },
   "course.assessment.submission.generateCodaveriFeedback": {
     "defaultMessage": "Generate Codaveri Feedback"
+  },
+  "course.assessment.submission.generateCodaveriLiveFeedback": {
+    "defaultMessage": "Get Help"
   },
   "course.assessment.submission.generateFeedbackFailure": {
     "defaultMessage": "Failed to generate feedback. Please try again later."

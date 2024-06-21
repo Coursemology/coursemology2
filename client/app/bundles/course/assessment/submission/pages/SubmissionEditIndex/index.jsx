@@ -204,15 +204,19 @@ class VisibleSubmissionEditIndex extends Component {
   };
 
   onFetchLiveFeedback = (answerId, questionId) => {
-    const {
-      dispatch,
-      liveFeedback,
-      match: { params },
-    } = this.props;
+    const { dispatch, liveFeedback } = this.props;
 
-    const feedbackRequestToken = liveFeedback?.[questionId].pendingFeedbackToken;
-    dispatch(fetchLiveFeedback(params.submissionId, answerId, questionId, feedbackRequestToken));
-  }
+    const feedbackRequestToken =
+      liveFeedback?.feedbackByQuestion?.[questionId].pendingFeedbackToken;
+    dispatch(
+      fetchLiveFeedback(
+        answerId,
+        questionId,
+        liveFeedback?.feedbackUrl,
+        feedbackRequestToken,
+      ),
+    );
+  };
 
   onGenerateFeedback = (answerId, questionId) => {
     const {

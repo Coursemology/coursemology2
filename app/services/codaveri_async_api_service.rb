@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 class CodaveriAsyncApiService
-  CODAVERI_ENDPOINT = 'https://1b3e-38-255-65-73.ngrok-free.app'
+  def config
+    url = ENV.fetch('CODAVERI_URL')
+  end
+
   def initialize(api_namespace, payload)
-    @api_endpoint = "#{CODAVERI_ENDPOINT}/#{api_namespace}"
+    url = config
+    @api_endpoint = "#{url}/#{api_namespace}"
     @payload = payload
   end
 

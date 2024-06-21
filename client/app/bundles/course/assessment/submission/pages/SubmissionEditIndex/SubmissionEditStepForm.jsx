@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Hotkeys from 'react-hot-keys';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -26,8 +26,6 @@ import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
-import TestCaseView from '../../containers/TestCaseView';
-
 import SubmissionAnswer from '../../components/answers';
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
 import WarningDialog from '../../components/WarningDialog';
@@ -35,6 +33,7 @@ import { formNames, questionTypes } from '../../constants';
 import Comments from '../../containers/Comments';
 import GradingPanel from '../../containers/GradingPanel';
 import QuestionGrade from '../../containers/QuestionGrade';
+import TestCaseView from '../../containers/TestCaseView';
 import {
   attachmentShape,
   explanationShape,
@@ -158,25 +157,30 @@ const SubmissionEditStepForm = (props) => {
     }
   }, [deadline]);
 
-  const POLL_INTERVAL_MILLISECONDS = 1000;
+  const POLL_INTERVAL_MILLISECONDS = 2000;
   const pollerRef = useRef(null);
   const pollAllFeedback = () => {
-    for(const question of Object.values(questions)) {
-      const feedbackRequestToken = liveFeedback?.[question.id]?.pendingFeedbackToken; 
+    questionIds.forEach((id) => {
+      const question = questions[id];
+      const feedbackRequestToken =
+        liveFeedback?.feedbackByQuestion?.[question.id]?.pendingFeedbackToken;
       if (feedbackRequestToken) {
         onFetchLiveFeedback(question.answerId, question.id);
       }
-    }
-  }
+    });
+  };
 
   useEffect(() => {
     // check for feedback from Codaveri on page load for each question
-    pollerRef.current = setInterval(pollAllFeedback, POLL_INTERVAL_MILLISECONDS);
+    pollerRef.current = setInterval(
+      pollAllFeedback,
+      POLL_INTERVAL_MILLISECONDS,
+    );
 
     // clean up poller on unmount
     return () => {
       clearInterval(pollerRef.current);
-    }
+    };
   });
 
   const handleNext = () => {
@@ -314,6 +318,42 @@ const SubmissionEditStepForm = (props) => {
       );
     }
     return null;
+  };
+
+  const renderGetLiveFeedbackButton = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+    const { answerId, attemptsLeft } = question;
+    const { isResetting } = questionsFlags[id] || {};
+    const isRequestingLiveFeedback =
+      liveFeedback?.feedbackByQuestion?.[question.id]
+        ?.isRequestingLiveFeedback ?? false;
+    const isPollingLiveFeedback =
+      (liveFeedback?.feedbackByQuestion?.[question.id]?.pendingFeedbackToken ??
+        false) !== false;
+
+    return (
+      <Button
+        color="info"
+        disabled={
+          isResetting ||
+          isRequestingLiveFeedback ||
+          isPollingLiveFeedback ||
+          (!graderView && attemptsLeft === 0)
+        }
+        id="get-live-feedback"
+        onClick={() => onGenerateLiveFeedback(answerId, question.id)}
+        startIcon={
+          (isRequestingLiveFeedback || isPollingLiveFeedback) && (
+            <LoadingIndicator bare size={20} />
+          )
+        }
+        style={styles.formButton}
+        variant="contained"
+      >
+        {intl.formatMessage(translations.generateCodaveriLiveFeedback)}
+      </Button>
+    );
   };
 
   const renderGradingPanel = () => {
@@ -497,30 +537,6 @@ const SubmissionEditStepForm = (props) => {
     );
   };
 
-  const renderGetLiveFeedbackButton = () => {
-    const id = questionIds[stepIndex];
-    const question = questions[id];
-    const { answerId } = question;
-    const { isAutograding, isResetting } = questionsFlags[id] || {};
-    return (
-      <Button
-        color="info"
-        disabled={
-          isAutograding ||
-          isResetting ||
-          isSaving ||
-          (!graderView && attemptsLeft === 0)
-        }
-        id="get-live-feedback"
-        onClick={() => onGenerateLiveFeedback(answerId, question.id)}
-        style={styles.formButton}
-        variant="contained"
-      >
-        Get Help
-      </Button>
-    )
-  }
-
   const renderSubmitDialog = () => (
     <ConfirmationDialog
       form={formNames.SUBMISSION}
@@ -561,6 +577,23 @@ const SubmissionEditStepForm = (props) => {
     />
   );
 
+  const renderProgrammingQuestionActions = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+
+    return (
+      <div className="flex flex-nowrap">
+        {renderResetButton()}
+        {renderSubmitButton()}
+        {renderContinueButton()}
+        <Box sx={{ flex: '1', width: '100%' }} />
+        {isCodaveriEnabled &&
+          question.isCodaveri &&
+          renderGetLiveFeedbackButton()}
+      </div>
+    );
+  };
+
   const renderStepQuestion = () => {
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -582,20 +615,17 @@ const SubmissionEditStepForm = (props) => {
             showMcqMrqSolution,
           }}
         />
-        {attempting && (
-          <div class="flex flex-nowrap">
-            {renderResetButton()}
-            {renderSubmitButton()}
-            {renderContinueButton()}
-            <Box sx={{ flex: "1", width: "100%" }}/>
-            {renderGetLiveFeedbackButton()}
-          </div>
-        )}
+        {attempting &&
+          question.type === questionTypes.Programming &&
+          renderProgrammingQuestionActions()}
 
         {renderAutogradingErrorPanel(id)}
         {renderExplanationPanel(question)}
-        <TestCaseView questionId={question.id} />
-        {!attempting && graderView ? renderReevaluateButton() : null}
+        <TestCaseView questionId={id} />
+        {!attempting &&
+          graderView &&
+          question.type === questionTypes.Programming &&
+          renderReevaluateButton()}
         {renderQuestionGrading(id)}
 
         <Comments topic={topic} />

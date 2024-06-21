@@ -27,33 +27,36 @@ const DEFAULT_FONT_FAMILY = [
   'monospace',
 ].join(',');
 
-const EditorField = forwardRef((props: EditorProps, ref: ForwardedRef<AceEditor>): JSX.Element => {
-  const { language, value, disabled, onChange, ...otherProps } = props;
+const EditorField = forwardRef(
+  (props: EditorProps, ref: ForwardedRef<AceEditor>): JSX.Element => {
+    const { language, value, disabled, onChange, ...otherProps } = props;
 
-  return (
-    <AceEditor
-      // Short-circuit this because during build time, `mode` can be `undefined` and
-      // `AceEditor` will request for `/webpack/mode-mode.js`, which doesn't exist.
-      mode={language || 'python'}
-      onChange={onChange}
-      theme="github"
-      value={value}
-      ref={ref}
-      width="100%"
-      {...otherProps}
-      editorProps={{
-        ...otherProps.editorProps,
-        $blockScrolling: true,
-      }}
-      setOptions={{
-        ...otherProps.setOptions,
-        useSoftTabs: true,
-        readOnly: disabled,
-        useWorker: false,
-        fontFamily: DEFAULT_FONT_FAMILY,
-      }}
-    />
-  );
-});
+    return (
+      <AceEditor
+        // Short-circuit this because during build time, `mode` can be `undefined` and
+        // `AceEditor` will request for `/webpack/mode-mode.js`, which doesn't exist.
+        ref={ref}
+        mode={language || 'python'}
+        onChange={onChange}
+        theme="github"
+        value={value}
+        width="100%"
+        {...otherProps}
+        editorProps={{
+          ...otherProps.editorProps,
+          $blockScrolling: true,
+        }}
+        setOptions={{
+          ...otherProps.setOptions,
+          useSoftTabs: true,
+          readOnly: disabled,
+          useWorker: false,
+          fontFamily: DEFAULT_FONT_FAMILY,
+        }}
+      />
+    );
+  },
+);
+EditorField.displayName = 'EditorField';
 
 export default EditorField;

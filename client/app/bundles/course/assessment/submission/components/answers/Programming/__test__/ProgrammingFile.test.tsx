@@ -1,9 +1,9 @@
+import { useRef } from 'react';
 import { dispatch } from 'store';
 import { render } from 'test-utils';
 
 import actionTypes from '../../../../constants';
 import ProgrammingFile from '../ProgrammingFile';
-import { useRef } from 'react';
 
 const courseId = 1;
 const assessmentId = 2;
@@ -51,7 +51,7 @@ describe('<ProgrammingFile />', () => {
       readOnly: true,
       editorRef: useRef(null),
       saveAnswerAndUpdateClientVersion: (_answerId: number): void => {},
-      onSelectionChange: () => {},
+      onCursorChange: (): void => {},
     };
 
     const url = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;

@@ -1,27 +1,32 @@
+import { useRef, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { Close, ThumbDown, ThumbUp } from '@mui/icons-material';
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  Drawer,
+  IconButton,
+  Typography,
+} from '@mui/material';
+import { green, grey, orange, red, yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { FC, useEffect, useState, useRef } from 'react';
-import { Check, Close, QuestionMark, ChevronRight, ThumbUp, ThumbDown } from '@mui/icons-material';
 
 import { getIsSavingAnswer } from 'course/assessment/submission/selectors/answerFlags';
-import { useAppSelector } from 'lib/hooks/store';
-import { useAppDispatch } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-github';
 
+import actionTypes from '../../../constants';
 import CodaveriFeedbackStatus from '../../../containers/CodaveriFeedbackStatus';
 import ProgrammingImportEditor from '../../../containers/ProgrammingImport/ProgrammingImportEditor';
-
 import { questionShape } from '../../../propTypes';
 import { parseLanguages } from '../../../utils';
 
 import ProgrammingFile from './ProgrammingFile';
-import { 
-  Box, Drawer, IconButton, Tooltip, Card, CardContent, CardHeader, CardActions, Typography } from '@mui/material';
-
-import { grey, orange, yellow, red, green } from '@mui/material/colors';
-import actionTypes from '../../../constants';
 
 const styles = {
   card: {
@@ -30,8 +35,8 @@ const styles = {
     borderWidth: 0.2,
     borderColor: grey[400],
     borderRadius: 2,
-    minWidth: 300,
-    maxWidth: 300,
+    minWidth: '300px',
+    maxWidth: '300px',
   },
   header: {
     display: 'flex',
@@ -45,18 +50,17 @@ const styles = {
     backgroundColor: yellow[100],
   },
   headerSelected: {
-    backgroundColor: orange['A100']
+    backgroundColor: orange.A100,
   },
   cardResolved: {
     opacity: 0.6,
-    backgroundColor: green['100']
+    backgroundColor: green['100'],
   },
   cardDismissed: {
     opacity: 0.6,
-    backgroundColor: red['100']
-  }
+    backgroundColor: red['100'],
+  },
 };
-
 
 const ProgrammingFiles = ({
   readOnly,
@@ -78,39 +82,44 @@ const ProgrammingFiles = ({
     name: `${answerId}.files_attributes`,
   });
 
-  const containerRef = useRef();
   const editorRef = useRef(null);
   const [selectedLine, setSelectedLine] = useState(null);
 
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
-  const onEditorSelectionChange = (selection) => {
+  const onEditorCursorChange = (selection) => {
     const selectedRow = selection?.cursor?.row;
     if (selectedRow || selectedRow === 0) {
       setSelectedLine(selectedRow + 1);
     }
   };
 
-  const editorKeyboardHandler = {
-    handleKeyboard: (data, hash, keyString) => {
-      const selectedRow = editorRef.current?.editor?.selection?.cursor?.row;
-      const lastRow = (editorRef.current?.editor?.session?.getLength() ?? 1) - 1;
-      if (selectedRow || selectedRow === 0) {
-        if (keyString === 'up') {
-          setSelectedLine(Math.max(selectedRow - 1, 0) + 1);
-        } else if (keyString === 'down') {
-          setSelectedLine(Math.min(selectedRow + 1, lastRow) + 1);
-        }
-      }
-    }
-  };
+  // const editorKeyboardHandler = {
+  //   handleKeyboard: (data, hash, keyString) => {
+  //     const selectedRow = editorRef.current?.editor?.selection?.cursor?.row;
+  //     const lastRow =
+  //       (editorRef.current?.editor?.session?.getLength() ?? 1) - 1;
+  //     if (selectedRow || selectedRow === 0) {
+  //       if (keyString === 'up') {
+  //         setSelectedLine(Math.max(selectedRow - 1, 0) + 1);
+  //       } else if (keyString === 'down') {
+  //         setSelectedLine(Math.min(selectedRow + 1, lastRow) + 1);
+  //       }
+  //     }
+  //   },
+  // };
 
-  useEffect(() => {
-    editorRef.current?.editor?.keyBinding?.addKeyboardHandler(editorKeyboardHandler);
-    return () => {
-      editorRef.current?.editor?.keyBinding?.removeKeyboardHandler(editorKeyboardHandler);
-    };
-  });
+  // useEffect(() => {
+  //   editorRef.current?.editor?.keyBinding?.addKeyboardHandler(
+  //     editorKeyboardHandler,
+  //   );
+  //   return () => {
+  //     editorRef.current?.editor?.keyBinding?.removeKeyboardHandler(
+  //       editorKeyboardHandler,
+  //     );
+  //   };
+  // });
 
   const renderFeedbackCard = (feedbackItem) => {
     let cardStyle = styles.card;
@@ -122,70 +131,99 @@ const ProgrammingFiles = ({
       cardStyle = { ...styles.card, ...styles.cardSelected };
     }
 
-    return <Card sx={cardStyle}>
-      <CardContent sx={{ p: 1 }} onClick={() => {
-        editorRef.current?.editor?.gotoLine(feedbackItem.linenum, 0);
-        editorRef.current?.editor?.selection?.setAnchor(feedbackItem.linenum - 1, 0);
-        editorRef.current?.editor?.selection?.moveCursorTo(feedbackItem.linenum - 1, 0);
-        editorRef.current?.editor?.focus();
-      }}>
-        <Typography variant="body2">
-          {feedbackItem.feedback}
-        </Typography>
-      </CardContent>
-      <CardActions sx={{ p: 0, display: 'flex' }}>
-        <Typography variant="subtitle1" fontWeight="bold" sx={{ ml: 1 }}>
-          L{feedbackItem.linenum}
-        </Typography>
-        {(feedbackItem.state === 'resolved') && <Typography variant="caption">
-          Item resolved.
-        </Typography>}
-        {(feedbackItem.state === 'dismissed') && <Typography variant="caption">
-          Item dismissed.
-        </Typography>}
-        <Box sx={{ flex: "1", width: "100%" }}/>
-        <IconButton
-          className="p-1 ml-1"
+    return (
+      <Card sx={cardStyle}>
+        <CardContent
           onClick={() => {
-            dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED, payload: {
-              questionId,
-              path: 'main.py',
-              lineId: feedbackItem.id,
-            }});
+            editorRef.current?.editor?.gotoLine(feedbackItem.linenum, 0);
+            editorRef.current?.editor?.selection?.setAnchor(
+              feedbackItem.linenum - 1,
+              0,
+            );
+            editorRef.current?.editor?.selection?.moveCursorTo(
+              feedbackItem.linenum - 1,
+              0,
+            );
+            editorRef.current?.editor?.focus();
           }}
-          size="small"
+          sx={{ p: 1 }}
         >
-          <ThumbUp />
-        </IconButton>
-        <IconButton
-          className="p-1 ml-1"
-          onClick={() => {
-            dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_DISMISSED, payload: {
-              questionId,
-              path: 'main.py',
-              lineId: feedbackItem.id,
-            }});
-          }}
-          size="small"
-        >
-          <ThumbDown />
-        </IconButton>
-        <IconButton
-          className="p-1 ml-1"
-          onClick={() => {
-            dispatch({ type: actionTypes.LIVE_FEEDBACK_ITEM_DELETE, payload: {
-              questionId,
-              path: 'main.py',
-              lineId: feedbackItem.id,
-            }});
-          }}
-          size="small"
-        >
-          <Close />
-        </IconButton>
-      </CardActions>
-    </Card>
-  }
+          <Typography variant="body2">{feedbackItem.feedback}</Typography>
+        </CardContent>
+        <CardActions sx={{ p: 0, display: 'flex' }}>
+          <Typography fontWeight="bold" sx={{ ml: 1 }} variant="subtitle1">
+            L{feedbackItem.linenum}
+          </Typography>
+          {feedbackItem.state === 'resolved' && (
+            <Typography variant="caption">
+              {t({
+                id: 'course.assessment.submission.answers.Programming.liveFeedbackItemResolved',
+                defaultMessage: 'Item resolved.',
+              })}
+            </Typography>
+          )}
+          {feedbackItem.state === 'dismissed' && (
+            <Typography variant="caption">
+              {t({
+                id: 'course.assessment.submission.answers.Programming.liveFeedbackItemDismissed',
+                defaultMessage: 'Item dismissed.',
+              })}
+            </Typography>
+          )}
+          <Box sx={{ flex: '1', width: '100%' }} />
+          <IconButton
+            className="p-1 ml-1"
+            onClick={() => {
+              // TODO: expose BE route to Codaveri feedback rating endpoint and call here
+              dispatch({
+                type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED,
+                payload: {
+                  questionId,
+                  path: 'main.py',
+                  lineId: feedbackItem.id,
+                },
+              });
+            }}
+            size="small"
+          >
+            <ThumbUp />
+          </IconButton>
+          <IconButton
+            className="p-1 ml-1"
+            onClick={() => {
+              dispatch({
+                type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_DISMISSED,
+                payload: {
+                  questionId,
+                  path: 'main.py',
+                  lineId: feedbackItem.id,
+                },
+              });
+            }}
+            size="small"
+          >
+            <ThumbDown />
+          </IconButton>
+          <IconButton
+            className="p-1 ml-1"
+            onClick={() => {
+              dispatch({
+                type: actionTypes.LIVE_FEEDBACK_ITEM_DELETE,
+                payload: {
+                  questionId,
+                  path: 'main.py',
+                  lineId: feedbackItem.id,
+                },
+              });
+            }}
+            size="small"
+          >
+            <Close />
+          </IconButton>
+        </CardActions>
+      </Card>
+    );
+  };
 
   const controlledProgrammingFields = fields.map((field, index) => ({
     ...field,
@@ -202,35 +240,43 @@ const ProgrammingFiles = ({
 
     let annotations = feedbackFiles[field.filename] ?? [];
     // TODO: remove special casing around Codaveri name coercion issue
-    if (index === 0 && !controlledProgrammingFields.some(field => field.filename === "main.py")) {
+    if (
+      index === 0 &&
+      !controlledProgrammingFields.some((elem) => elem.filename === 'main.py')
+    ) {
       annotations = feedbackFiles['main.py'] ?? [];
     }
+    const keyString = `editor-container-${index}`;
+    const shouldOpenDrawer = annotations?.some(
+      (feedbackItem) => feedbackItem.state === 'pending',
+    );
+
     return (
-      <div id="editor-container" ref={containerRef} style={{ position: "relative" }}>
-        <ProgrammingFile
-          key={field.id}
-          answerId={answerId}
-          fieldName={`${answerId}.files_attributes.${index}.content`}
-          file={file}
-          language={language}
-          readOnly={readOnly}
-          editorRef={editorRef}
-          onSelectionChange={onEditorSelectionChange}
-          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-        />
+      <div key={keyString} id={keyString} style={{ position: 'relative' }}>
+        <Box marginRight={shouldOpenDrawer ? '315px' : '0px'}>
+          <ProgrammingFile
+            key={field.id}
+            answerId={answerId}
+            editorRef={editorRef}
+            fieldName={`${answerId}.files_attributes.${index}.content`}
+            file={file}
+            language={language}
+            onCursorChange={onEditorCursorChange}
+            readOnly={readOnly}
+            saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
+          />
+        </Box>
         <Drawer
-          variant="persistent"
           anchor="right"
-          open={annotations?.filter(feedbackItem => feedbackItem.state === 'pending')?.length > 0}
-          PaperProps={{ style: { position: 'absolute' } }}
           ModalProps={{
-            container: document.getElementById('editor-container'),
-            style: { position: 'absolute' }
+            container: document.getElementById(keyString),
+            style: { alignContent: 'start', position: 'absolute' },
           }}
+          open={shouldOpenDrawer}
+          PaperProps={{ style: { position: 'absolute' } }}
+          variant="persistent"
         >
-          <div>
-            {annotations.map(renderFeedbackCard)}
-          </div>
+          <div>{annotations.map(renderFeedbackCard)}</div>
         </Drawer>
       </div>
     );
@@ -245,8 +291,12 @@ const Programming = (props) => {
     getIsSavingAnswer(state, answerId),
   );
 
-  const feedbackFiles = useAppSelector((state) => 
-    state.assessments.submission.liveFeedback?.[question.id]?.feedbackFiles ?? []);
+  const feedbackFiles = useAppSelector(
+    (state) =>
+      state.assessments.submission.liveFeedback?.feedbackByQuestion?.[
+        question.id
+      ]?.feedbackFiles ?? [],
+  );
 
   return (
     <div className="mt-5">
@@ -260,12 +310,12 @@ const Programming = (props) => {
           saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
       ) : (
-        <ProgrammingFiles 
+        <ProgrammingFiles
           key={question.id}
-          questionId={question.id}
           answerId={answerId}
-          language={parseLanguages(question.language)}
           feedbackFiles={feedbackFiles}
+          language={parseLanguages(question.language)}
+          questionId={question.id}
           readOnly={readOnly}
           saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
