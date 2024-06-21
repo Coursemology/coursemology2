@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { Close, ThumbDown, ThumbUp } from '@mui/icons-material';
 import {
@@ -88,8 +88,7 @@ const ProgrammingFiles = ({
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  const onEditorSelectionChange = (selection) => {
-    console.log({ selection });
+  const onEditorCursorChange = (selection) => {
     const selectedRow = selection?.cursor?.row;
     if (selectedRow || selectedRow === 0) {
       setSelectedLine(selectedRow + 1);
@@ -248,12 +247,13 @@ const ProgrammingFiles = ({
       annotations = feedbackFiles['main.py'] ?? [];
     }
     const keyString = `editor-container-${index}`;
-    const shouldOpenDrawer = annotations
-      ?.some((feedbackItem) => feedbackItem.state === 'pending');
+    const shouldOpenDrawer = annotations?.some(
+      (feedbackItem) => feedbackItem.state === 'pending',
+    );
 
     return (
       <div key={keyString} id={keyString} style={{ position: 'relative' }}>
-        <Box marginRight={shouldOpenDrawer ? '315px' : '0px' }>
+        <Box marginRight={shouldOpenDrawer ? '315px' : '0px'}>
           <ProgrammingFile
             key={field.id}
             answerId={answerId}
@@ -261,7 +261,7 @@ const ProgrammingFiles = ({
             fieldName={`${answerId}.files_attributes.${index}.content`}
             file={file}
             language={language}
-            onCursorChange={onEditorSelectionChange}
+            onCursorChange={onEditorCursorChange}
             readOnly={readOnly}
             saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
           />
@@ -270,7 +270,7 @@ const ProgrammingFiles = ({
           anchor="right"
           ModalProps={{
             container: document.getElementById(keyString),
-            style: { position: 'absolute' },
+            style: { alignContent: 'start', position: 'absolute' },
           }}
           open={shouldOpenDrawer}
           PaperProps={{ style: { position: 'absolute' } }}

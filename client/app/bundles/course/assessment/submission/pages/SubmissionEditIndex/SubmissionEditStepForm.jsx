@@ -577,15 +577,22 @@ const SubmissionEditStepForm = (props) => {
     />
   );
 
-  const renderProgrammingQuestionActions = () => (
-    <div className="flex flex-nowrap">
-      {renderResetButton()}
-      {renderSubmitButton()}
-      {renderContinueButton()}
-      <Box sx={{ flex: '1', width: '100%' }} />
-      {isCodaveriEnabled && question.isCodaveri && renderGetLiveFeedbackButton()}
-    </div>
-  );
+  const renderProgrammingQuestionActions = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+
+    return (
+      <div className="flex flex-nowrap">
+        {renderResetButton()}
+        {renderSubmitButton()}
+        {renderContinueButton()}
+        <Box sx={{ flex: '1', width: '100%' }} />
+        {isCodaveriEnabled &&
+          question.isCodaveri &&
+          renderGetLiveFeedbackButton()}
+      </div>
+    );
+  };
 
   const renderStepQuestion = () => {
     const id = questionIds[stepIndex];
