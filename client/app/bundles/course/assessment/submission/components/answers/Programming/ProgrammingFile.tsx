@@ -11,7 +11,7 @@ interface ProgrammingFileProps {
   language: string;
   readOnly: boolean;
   editorRef: MutableRefObject<null>;
-  onSelectionChange: (...args: any[]) => any;
+  onSelectionChange: (selection: { cursor: { row: number } }) => void;
   saveAnswerAndUpdateClientVersion: (answerId: number) => void;
 }
 
@@ -33,9 +33,9 @@ const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
         <ReadOnlyEditor answerId={answerId} file={file} />
       ) : (
         <Editor
+          editorRef={editorRef}
           fieldName={fieldName}
           file={file}
-          editorRef={editorRef}
           language={language}
           onChangeCallback={() => saveAnswerAndUpdateClientVersion(answerId)}
           onSelectionChange={onSelectionChange}

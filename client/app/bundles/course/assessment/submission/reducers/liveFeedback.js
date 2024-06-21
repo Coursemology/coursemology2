@@ -5,7 +5,7 @@ import actions from '../constants';
 const initialState = {
   feedbackUrl: null,
   feedbackByQuestion: {},
-}
+};
 export default function (state = initialState, action) {
   switch (action.type) {
     case actions.LIVE_FEEDBACK_INITIAL: {
@@ -16,7 +16,7 @@ export default function (state = initialState, action) {
             isRequestingLiveFeedback: true,
             pendingFeedbackToken: null,
             answerId: null,
-            feedbackFiles: {}
+            feedbackFiles: {},
           };
         } else {
           draft.feedbackByQuestion[questionId] = {
@@ -50,12 +50,17 @@ export default function (state = initialState, action) {
         draft.feedbackByQuestion[questionId] = {
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
-          answerId: answerId,
-          feedbackFiles: feedbackFiles.reduce((feedbackObj, feedbackFile) => ({
-            ...feedbackObj,
-            [feedbackFile.path]: feedbackFile.feedbackLines.map((line) => 
-              ({ ...line, state: 'pending' })) // 'pending' | 'resolved' | 'dismissed'
-          }), {})
+          answerId,
+          feedbackFiles: feedbackFiles.reduce(
+            (feedbackObj, feedbackFile) => ({
+              ...feedbackObj,
+              [feedbackFile.path]: feedbackFile.feedbackLines.map((line) => ({
+                ...line,
+                state: 'pending',
+              })), // 'pending' | 'resolved' | 'dismissed'
+            }),
+            {},
+          ),
         };
       });
     }
@@ -66,15 +71,18 @@ export default function (state = initialState, action) {
           ...draft.feedbackByQuestion[questionId],
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
-        }
+        };
       });
     }
     case actions.LIVE_FEEDBACK_ITEM_MARK_RESOLVED: {
       const { questionId, lineId, path } = action.payload;
       return produce(state, (draft) => {
         if (path in draft.feedbackByQuestion[questionId].feedbackFiles) {
-          draft.feedbackByQuestion[questionId].feedbackFiles[path] = draft.feedbackByQuestion[questionId].feedbackFiles[path].map((line) => 
-            (line.id === lineId ? { ...line, state: 'resolved' }: line));
+          draft.feedbackByQuestion[questionId].feedbackFiles[path] =
+            draft.feedbackByQuestion[questionId].feedbackFiles[path].map(
+              (line) =>
+                line.id === lineId ? { ...line, state: 'resolved' } : line,
+            );
         }
       });
     }
@@ -82,8 +90,11 @@ export default function (state = initialState, action) {
       const { questionId, lineId, path } = action.payload;
       return produce(state, (draft) => {
         if (path in draft.feedbackByQuestion[questionId].feedbackFiles) {
-          draft.feedbackByQuestion[questionId].feedbackFiles[path] = draft.feedbackByQuestion[questionId].feedbackFiles[path].map((line) => 
-            (line.id === lineId ? { ...line, state: 'dismissed' }: line));
+          draft.feedbackByQuestion[questionId].feedbackFiles[path] =
+            draft.feedbackByQuestion[questionId].feedbackFiles[path].map(
+              (line) =>
+                line.id === lineId ? { ...line, state: 'dismissed' } : line,
+            );
         }
       });
     }
@@ -91,8 +102,15 @@ export default function (state = initialState, action) {
       const { questionId, lineId, path } = action.payload;
       return produce(state, (draft) => {
         if (path in draft.feedbackByQuestion[questionId].feedbackFiles) {
-          draft.feedbackByQuestion[questionId].feedbackFiles[path] = draft.feedbackByQuestion[questionId].feedbackFiles[path].filter((line) => line.id !== lineId);
-          if (!draft.feedbackByQuestion[questionId].feedbackFiles[path] || draft.feedbackByQuestion[questionId].feedbackFiles[path].length === 0) {
+          draft.feedbackByQuestion[questionId].feedbackFiles[path] =
+            draft.feedbackByQuestion[questionId].feedbackFiles[path].filter(
+              (line) => line.id !== lineId,
+            );
+          if (
+            !draft.feedbackByQuestion[questionId].feedbackFiles[path] ||
+            draft.feedbackByQuestion[questionId].feedbackFiles[path].length ===
+              0
+          ) {
             delete draft.feedbackByQuestion[questionId].feedbackFiles[path];
           }
         }

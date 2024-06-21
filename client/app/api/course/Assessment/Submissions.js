@@ -124,15 +124,12 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   fetchLiveFeedback(feedbackUrl, feedbackToken) {
-    return this.externalClient.get(
-      `/signed/v2/feedback/llm`,
-      {
-        baseURL: feedbackUrl,
-        // TODO remove this when we cutover to live CV instance
-        headers: { 'ngrok-skip-browser-warning': '1' },
-        params: { token: feedbackToken },
-      },
-    );
+    return this.externalClient.get(`/signed/v2/feedback/llm`, {
+      baseURL: feedbackUrl,
+      // TODO remove this when we cutover to live CV instance
+      headers: { 'ngrok-skip-browser-warning': '1' },
+      params: { token: feedbackToken },
+    });
   }
 
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
