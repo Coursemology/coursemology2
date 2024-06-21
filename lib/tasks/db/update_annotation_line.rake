@@ -32,10 +32,15 @@ namespace :db do
           annotations.file_id,
           annotations.line
         FROM course_assessment_answer_programming_file_annotations AS annotations
+        JOIN course_assessment_answer_programming_files AS files
+          ON annotations.file_id = files.id
+        JOIN course_assessment_answers AS answers
+          ON files.answer_id = answers.actable_id
+          AND answers.actable_type = 'Course::Assessment::Answer::Programming'
+          AND CAST(answers.created_at AS DATE) BETWEEN '#{start_date}' AND '#{end_date}'
         JOIN course_discussion_topics AS topics
           ON annotations.id = topics.actable_id
           AND topics.actable_type = 'Course::Assessment::Answer::ProgrammingFileAnnotation'
-          AND CAST(topics.created_at AS DATE) BETWEEN '#{start_date}' AND '#{end_date}'
         JOIN course_discussion_posts AS posts
           ON posts.topic_id = topics.id
       SQL
@@ -95,16 +100,20 @@ namespace :db do
         next unless lines_are_added(highlighted_code)
 
         annotation_lines = file_annotation_lines[file[:id]]
-        # if file has annotations on lines 1 and 2, skip to next
-        next if annotations_present_on_line_one_and_two(annotation_lines)
+        smallest_decrementable_number = smallest_decrementable_line_number(annotation_lines)
+
+        # if all the annotations in the file is consecutive from line 1, skip this file
+        next if smallest_decrementable_number == annotation_lines.length + 1
 
         annotation_ids = file_annotation_ids[file[:id]]
         annotation_line_to_annotation_id = annotation_lines.zip(annotation_ids).to_h
         annotation_lines.each do |line|
-          # if the line number is 1, do not decrement as line number 0 is out-of-bounds
-          next if line == 1
+          # only decrement line that is after the smallest decrementable number
+          # and also if there is no annotation in the line directly preceding that
+          next if line <= smallest_decrementable_number
+
           annotation_id = annotation_line_to_annotation_id[line]
-          annotation_ids_to_update << annotation_id unless line == 1
+          annotation_ids_to_update << annotation_id
         end
       end
 
@@ -131,9 +140,19 @@ def lines_are_added(highlighted_code)
   highlighted_code.match?(pattern)
 end
 
-# we do not want to decrease the line number if line 1 and line 2 was having the annotation in that file
-def annotations_present_on_line_one_and_two(lines)
-  lines.include?(1) && lines.include?(2)
+# if we have annotations on line [1, 2, 3, 7, 8, 9], for example, we need to still decrement
+# the line 7-9. Therefore, we need to find the smallest line number in which decrement can
+# occur. The result should be inside the range of 1 and the length of the array
+# if the result is more than that, it means no annotation line numbers can be decremented.
+def smallest_decrementable_line_number(line_numbers)
+  max_smallest = line_numbers.length + 1
+  number_exist_in_array = {}
+
+  line_numbers.each do |num|
+    number_exist_in_array[num] = true
+  end
+
+  (1..max_smallest).find { |num| !number_exist_in_array.key?(num) }
 end
 
 class HelperContext
