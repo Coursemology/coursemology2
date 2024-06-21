@@ -131,26 +131,28 @@ const ProgrammingFiles = ({
       cardStyle = { ...styles.card, ...styles.cardSelected };
     }
 
+    const focusEditorOnFeedbackLine = () => {
+      editorRef.current?.editor?.gotoLine(feedbackItem.linenum, 0);
+      editorRef.current?.editor?.selection?.setAnchor(
+        feedbackItem.linenum - 1,
+        0,
+      );
+      editorRef.current?.editor?.selection?.moveCursorTo(
+        feedbackItem.linenum - 1,
+        0,
+      );
+      editorRef.current?.editor?.focus();
+    };
+
     return (
       <Card sx={cardStyle}>
-        <CardContent
-          onClick={() => {
-            editorRef.current?.editor?.gotoLine(feedbackItem.linenum, 0);
-            editorRef.current?.editor?.selection?.setAnchor(
-              feedbackItem.linenum - 1,
-              0,
-            );
-            editorRef.current?.editor?.selection?.moveCursorTo(
-              feedbackItem.linenum - 1,
-              0,
-            );
-            editorRef.current?.editor?.focus();
-          }}
-          sx={{ p: 1 }}
-        >
+        <CardContent onClick={focusEditorOnFeedbackLine} sx={{ p: 1 }}>
           <Typography variant="body2">{feedbackItem.feedback}</Typography>
         </CardContent>
-        <CardActions sx={{ p: 0, display: 'flex' }}>
+        <CardActions
+          onClick={focusEditorOnFeedbackLine}
+          sx={{ p: 0, display: 'flex' }}
+        >
           <Typography fontWeight="bold" sx={{ ml: 1 }} variant="subtitle1">
             L{feedbackItem.linenum}
           </Typography>
