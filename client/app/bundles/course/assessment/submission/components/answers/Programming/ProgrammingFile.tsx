@@ -11,7 +11,7 @@ interface ProgrammingFileProps {
   language: string;
   readOnly: boolean;
   editorRef: MutableRefObject<null>;
-  onSelectionChange: (selection: { cursor: { row: number } }) => void;
+  onCursorChange: (selection: { cursor: { row: number } }) => void;
   saveAnswerAndUpdateClientVersion: (answerId: number) => void;
 }
 
@@ -23,7 +23,7 @@ const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
     language,
     readOnly,
     editorRef,
-    onSelectionChange,
+    onCursorChange,
     saveAnswerAndUpdateClientVersion,
   } = props;
 
@@ -38,7 +38,7 @@ const ProgrammingFile: FC<ProgrammingFileProps> = (props) => {
           file={file}
           language={language}
           onChangeCallback={() => saveAnswerAndUpdateClientVersion(answerId)}
-          onSelectionChange={onSelectionChange}
+          onCursorChange={onCursorChange}
         />
       )}
     </div>

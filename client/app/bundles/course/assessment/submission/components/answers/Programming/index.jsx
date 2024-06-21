@@ -35,8 +35,8 @@ const styles = {
     borderWidth: 0.2,
     borderColor: grey[400],
     borderRadius: 2,
-    minWidth: 300,
-    maxWidth: 300,
+    minWidth: '300px',
+    maxWidth: '300px',
   },
   header: {
     display: 'flex',
@@ -89,37 +89,38 @@ const ProgrammingFiles = ({
   const { t } = useTranslation();
 
   const onEditorSelectionChange = (selection) => {
+    console.log({ selection });
     const selectedRow = selection?.cursor?.row;
     if (selectedRow || selectedRow === 0) {
       setSelectedLine(selectedRow + 1);
     }
   };
 
-  const editorKeyboardHandler = {
-    handleKeyboard: (data, hash, keyString) => {
-      const selectedRow = editorRef.current?.editor?.selection?.cursor?.row;
-      const lastRow =
-        (editorRef.current?.editor?.session?.getLength() ?? 1) - 1;
-      if (selectedRow || selectedRow === 0) {
-        if (keyString === 'up') {
-          setSelectedLine(Math.max(selectedRow - 1, 0) + 1);
-        } else if (keyString === 'down') {
-          setSelectedLine(Math.min(selectedRow + 1, lastRow) + 1);
-        }
-      }
-    },
-  };
+  // const editorKeyboardHandler = {
+  //   handleKeyboard: (data, hash, keyString) => {
+  //     const selectedRow = editorRef.current?.editor?.selection?.cursor?.row;
+  //     const lastRow =
+  //       (editorRef.current?.editor?.session?.getLength() ?? 1) - 1;
+  //     if (selectedRow || selectedRow === 0) {
+  //       if (keyString === 'up') {
+  //         setSelectedLine(Math.max(selectedRow - 1, 0) + 1);
+  //       } else if (keyString === 'down') {
+  //         setSelectedLine(Math.min(selectedRow + 1, lastRow) + 1);
+  //       }
+  //     }
+  //   },
+  // };
 
-  useEffect(() => {
-    editorRef.current?.editor?.keyBinding?.addKeyboardHandler(
-      editorKeyboardHandler,
-    );
-    return () => {
-      editorRef.current?.editor?.keyBinding?.removeKeyboardHandler(
-        editorKeyboardHandler,
-      );
-    };
-  });
+  // useEffect(() => {
+  //   editorRef.current?.editor?.keyBinding?.addKeyboardHandler(
+  //     editorKeyboardHandler,
+  //   );
+  //   return () => {
+  //     editorRef.current?.editor?.keyBinding?.removeKeyboardHandler(
+  //       editorKeyboardHandler,
+  //     );
+  //   };
+  // });
 
   const renderFeedbackCard = (feedbackItem) => {
     let cardStyle = styles.card;
@@ -247,30 +248,31 @@ const ProgrammingFiles = ({
       annotations = feedbackFiles['main.py'] ?? [];
     }
     const keyString = `editor-container-${index}`;
+    const shouldOpenDrawer = annotations
+      ?.some((feedbackItem) => feedbackItem.state === 'pending');
+
     return (
       <div key={keyString} id={keyString} style={{ position: 'relative' }}>
-        <ProgrammingFile
-          key={field.id}
-          answerId={answerId}
-          editorRef={editorRef}
-          fieldName={`${answerId}.files_attributes.${index}.content`}
-          file={file}
-          language={language}
-          onSelectionChange={onEditorSelectionChange}
-          readOnly={readOnly}
-          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-        />
+        <Box marginRight={shouldOpenDrawer ? '315px' : '0px' }>
+          <ProgrammingFile
+            key={field.id}
+            answerId={answerId}
+            editorRef={editorRef}
+            fieldName={`${answerId}.files_attributes.${index}.content`}
+            file={file}
+            language={language}
+            onCursorChange={onEditorSelectionChange}
+            readOnly={readOnly}
+            saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
+          />
+        </Box>
         <Drawer
           anchor="right"
           ModalProps={{
             container: document.getElementById(keyString),
             style: { position: 'absolute' },
           }}
-          open={
-            annotations?.filter(
-              (feedbackItem) => feedbackItem.state === 'pending',
-            )?.length > 0
-          }
+          open={shouldOpenDrawer}
           PaperProps={{ style: { position: 'absolute' } }}
           variant="persistent"
         >

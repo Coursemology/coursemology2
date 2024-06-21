@@ -14,7 +14,7 @@ const Editor = (props) => {
     fieldName,
     language,
     onChangeCallback,
-    onSelectionChange,
+    onCursorChange,
     editorRef,
   } = props;
   const { control } = useFormContext();
@@ -39,7 +39,7 @@ const Editor = (props) => {
             language={language}
             maxLines={25}
             minLines={25}
-            onSelectionChange={onSelectionChange ?? (() => {})}
+            onCursorChange={onCursorChange ?? (() => {})}
             readOnly={false}
             style={{ marginBottom: 10 }}
           />
@@ -54,7 +54,7 @@ Editor.propTypes = {
   file: fileShape.isRequired,
   language: PropTypes.string.isRequired,
   onChangeCallback: PropTypes.func.isRequired,
-  onSelectionChange: PropTypes.func,
+  onCursorChange: PropTypes.func,
   editorRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Component) }),

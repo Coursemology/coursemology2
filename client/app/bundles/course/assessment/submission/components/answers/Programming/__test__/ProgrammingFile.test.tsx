@@ -51,7 +51,7 @@ describe('<ProgrammingFile />', () => {
       readOnly: true,
       editorRef: useRef(null),
       saveAnswerAndUpdateClientVersion: (_answerId: number): void => {},
-      onSelectionChange: (): void => {},
+      onCursorChange: (): void => {},
     };
 
     const url = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
