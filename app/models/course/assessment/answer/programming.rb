@@ -99,7 +99,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
     feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.
                        new(assessment, question, self, 'guidance', true)
-    response_status, response_body, feedback_job_id = feedback_service.run_codaveri_feedback_service
+    response_status, response_body, _feedback_job_id = feedback_service.run_codaveri_feedback_service
     unless [200, 201].include?(response_status) && response_body['success']
       raise CodaveriError,
             { status: response_status, body: response_body }
@@ -115,15 +115,11 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     should_retrieve_feedback = question.is_codaveri && !submission.attempting? && current_answer?
     return unless should_retrieve_feedback
 
-    feedback_job = Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob.perform_later(assessment, question, self)
+    feedback_job = Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob.perform_later(
+      assessment, question, self
+    )
     update_column(:codaveri_feedback_job_id, feedback_job.job_id)
     feedback_job
-    # feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.new(assessment, question, self)
-    # feedback_job_id = feedback_service.run_codaveri_feedback_service
-
-    # update_column(:v2_codaveri_submitted_feedback_job_id, feedback_job_id)
-    # # New feedback job renders old feedback items invalid?
-    # update_column(:v2_codaveri_submitted_feedback_saved, false)
   end
 
   def compare_answer(other_answer)

@@ -153,9 +153,9 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     response_success = response_body['success']
 
     if response_status == 201 && response_success
-      return [response_status, response_body, response_body['data']['id']]
+      [response_status, response_body, response_body['data']['id']]
     elsif response_status == 200 && response_success
-      return [response_status, response_body, nil]
+      [response_status, response_body, nil]
     else
       raise CodaveriError,
             { status: response_status, body: response_body }
@@ -169,7 +169,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
   def poll_codaveri_evaluation_results(response_status, response_body, evaluation_id)
     poll_count = 0
-    until ![201, 202].include?(response_status) || poll_count >= MAX_POLL_RETRIES do
+    until ![201, 202].include?(response_status) || poll_count >= MAX_POLL_RETRIES
       sleep(POLL_INTERVAL_SECONDS)
       response_status, response_body = fetch_codaveri_evaluation(evaluation_id)
       poll_count += 1

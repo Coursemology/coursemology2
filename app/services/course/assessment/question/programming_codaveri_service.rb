@@ -46,7 +46,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
           templates: [],
           solutions: [
             {
-              tag: "default",
+              tag: 'default',
               files: []
             }
           ],
@@ -69,26 +69,15 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     create_codaveri_problem
   end
 
-  # Check if any object in the array has the :path attribute set to "main.py"
-  # If none do, coerce the first element to do so
-  # def ensure_main_path!(objects, main_path)
-  #   has_main_path = objects.any? { |obj| obj[:path] == main_path }
-  
-  #   unless has_main_path
-  #     objects.first[:path] = main_path if objects.any?
-  #   end
-  # end
-
   # Constructs codaveri question problem object.
   #
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
   def construct_problem_object(package)
-
     @problem_object[:title] = @question.title
     @problem_object[:description] = @question.description
     resources_object = @problem_object[:resources][0]
     resources_object[:languageVersions][:language] = @question.polyglot_language_name
-    resources_object[:languageVersions][:versions] = [ @question.polyglot_language_version ]
+    resources_object[:languageVersions][:versions] = [@question.polyglot_language_version]
 
     codaveri_package = Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService.new(
       @question, package

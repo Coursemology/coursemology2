@@ -2,7 +2,7 @@
 
 class CodaveriAsyncApiService
   def config
-    url = ENV.fetch('CODAVERI_URL')
+    ENV.fetch('CODAVERI_URL')
   end
 
   def initialize(api_namespace, payload)
