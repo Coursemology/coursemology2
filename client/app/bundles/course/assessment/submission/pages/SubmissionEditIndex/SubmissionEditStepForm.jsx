@@ -157,7 +157,7 @@ const SubmissionEditStepForm = (props) => {
     }
   }, [deadline]);
 
-  const POLL_INTERVAL_MILLISECONDS = 1000;
+  const POLL_INTERVAL_MILLISECONDS = 2000;
   const pollerRef = useRef(null);
   const pollAllFeedback = () => {
     questionIds.forEach((id) => {
