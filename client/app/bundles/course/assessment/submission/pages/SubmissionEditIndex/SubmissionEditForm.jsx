@@ -552,7 +552,7 @@ const SubmissionEditForm = (props) => {
         {renderResetButton(id)}
         {autogradable && renderRunCodeButton(id)}
         <Box sx={{ flex: '1', width: '100%' }} />
-        {renderGetLiveFeedbackButton(id)}
+        {isCodaveriEnabled && question.isCodaveri && renderGetLiveFeedbackButton(id)}
       </div>
     );
   };

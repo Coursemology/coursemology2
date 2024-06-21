@@ -583,7 +583,7 @@ const SubmissionEditStepForm = (props) => {
       {renderSubmitButton()}
       {renderContinueButton()}
       <Box sx={{ flex: '1', width: '100%' }} />
-      {renderGetLiveFeedbackButton()}
+      {isCodaveriEnabled && question.isCodaveri && renderGetLiveFeedbackButton()}
     </div>
   );
 
