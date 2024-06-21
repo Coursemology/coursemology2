@@ -32,21 +32,17 @@ namespace :db do
           annotations.file_id,
           annotations.line
         FROM course_assessment_answer_programming_file_annotations AS annotations
-        JOIN course_assessment_answer_programming_files AS files
-          ON annotations.file_id = files.id
-        JOIN course_assessment_answers AS answers
-          ON files.answer_id = answers.actable_id
-          AND answers.actable_type = 'Course::Assessment::Answer::Programming'
-          AND CAST(answers.created_at AS DATE) BETWEEN '#{start_date}' AND '#{end_date}'
         JOIN course_discussion_topics AS topics
           ON annotations.id = topics.actable_id
           AND topics.actable_type = 'Course::Assessment::Answer::ProgrammingFileAnnotation'
+          AND CAST(topics.created_at AS DATE) BETWEEN '#{start_date}' AND '#{end_date}'
         JOIN course_discussion_posts AS posts
           ON posts.topic_id = topics.id
       SQL
 
       end_time = Time.now
       puts "1st sql for #{annotation_id__file_id__line_num.rows.length} annotations = #{end_time - start_time} seconds"
+
       start_time = Time.now
 
       file_annotation_lines = Hash.new { |hash, key| hash[key] = [] }
@@ -88,6 +84,9 @@ namespace :db do
       language_ids = files_hash.map { |file| file[:language_id] }.uniq
       languages = Coursemology::Polyglot::Language.where(id: language_ids).index_by(&:id)
 
+    ensure
+      ActiveRecord::Base.clear_active_connections!
+
       annotation_ids_to_update = []
 
       files_hash.each do |file|
@@ -120,11 +119,23 @@ namespace :db do
       end_time = Time.now
       puts "processing = #{end_time - start_time} seconds"
 
+      # write annotation_ids_to_update to a file annotation_ids_to_update_#{start_date_input}_#{end_date_input}.txt
+      filename = "annotation_ids_to_update_prod_#{start_date_input}_#{end_date_input}.txt"
+      File.open(filename, 'w') do |f|
+        f.puts annotation_ids_to_update.sort
+      end
+
+      # read in file to variable annotation_ids_to_update, note that file has an empty newline at the bottom to ignore
+      puts "opening file #{filename}"
+      annotation_ids_to_update = File.readlines(filename).
+                                      map(&:to_i)
+      puts annotation_ids_to_update.length
+
       start_time = Time.now
-      # rewrite to not so long
       Course::Assessment::Answer::ProgrammingFileAnnotation.
         where(id: annotation_ids_to_update).
         update_all('line = line - 1')
+      end_time = Time.now
       puts "updating = #{end_time - start_time} seconds"
 
       puts annotation_ids_to_update.length
