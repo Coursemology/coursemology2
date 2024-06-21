@@ -79,10 +79,10 @@ class Course::Assessment::ProgrammingPackage
 
   # Closes the package.
   def close
-    unless @file.nil?
-      @file.close
-      @file = nil
-    end
+    return if @file.nil?
+
+    @file.close
+    @file = nil
   end
 
   # Commits the package changes to disk

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
-  def initialize(assessment, question, answer, revealLevel, requireToken)
+  def initialize(assessment, question, answer, reveal_level, require_token)
     @course = assessment.course
     @assessment = assessment
     @question = question
@@ -10,33 +10,25 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
     @answer_object = {
       userId: answer.submission.creator_id.to_s,
       config: {
-        persona: "novice",
+        persona: 'novice',
         categories: [
-          "syntax",
-          "functionality"
+          'syntax',
+          'functionality'
         ],
-        revealLevel: revealLevel,
-        tone: "encouraging",
-        language: "english",
-        customPrompt: ""
+        revealLevel: reveal_level,
+        tone: 'encouraging',
+        language: 'english',
+        customPrompt: ''
       },
       languageVersion: {
-        language: "",
-        version: ""
+        language: '',
+        version: ''
       },
       files: [],
       applyVerification: true,
-      requireToken: requireToken,
+      requireToken: require_token,
       problemId: ''
     }
-
-    # @answer_object =  { api_version: 'latest',
-    #                    user_id: answer.submission.creator_id.to_s,
-    #                    language_version: { language: '', version: '' },
-    #                    files_student: [],
-    #                    problem_id: '',
-    #                    course_name: @course.title,
-    #                    course_id: @course.id }
   end
 
   def run_codaveri_feedback_service
@@ -64,11 +56,9 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
   # Check if any object in the array has the :path attribute set to "main.py"
   # If none do, coerce the first element to do so
   def ensure_main_path!(objects, main_path)
-    has_main_path = objects.any? { |obj| obj[:path] == main_path }
-  
-    unless has_main_path
-      objects.first[:path] = main_path if objects.any?
-    end
+    return unless objects.any? && objects.none? { |obj| obj[:path] == main_path }
+
+    objects.first[:path] = main_path
   end
 
   # Grades into the given +Course::Assessment::Answer::AutoGrading+ object. This assigns the grade
@@ -94,7 +84,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
 
       @answer_object[:files].append(file_template)
     end
-    ensure_main_path!(@answer_object[:files], "main.py")
+    ensure_main_path!(@answer_object[:files], 'main.py')
 
     @answer_object
   end
@@ -107,38 +97,41 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
     response_success = response_body['success']
 
     if response_status == 201 && response_success
-      return [response_status, response_body, response_body['data']['id']]
+      [response_status, response_body, response_body['data']['id']]
     elsif response_status == 200 && response_success
-      return [response_status, response_body, nil]
+      [response_status, response_body, nil]
     else
       raise CodaveriError,
             { status: response_status, body: response_body }
     end
   end
 
-  # We do inverse of name coercion logic:
-  # if main.py does not exist in answer_files but it does in feedback_files_hash,
-  # run save_annotation for the first file in the array with feedback_lines taken from feedback_files_hash['main.py'] 
   def process_codaveri_feedback
     main_path_parsed = false
     @answer_files.each do |file|
       feedback_lines = @feedback_files_hash[file.filename]
-      if file.filename == "main.py"
-        main_path_parsed = true
-      end
+      main_path_parsed = true if file.filename == 'main.py'
       next if feedback_lines.nil?
 
       feedback_lines.each do |line|
         save_annotation(file, line)
       end
     end
+    return if main_path_parsed
 
-    if !main_path_parsed && @answer_files.any? && @feedback_files_hash.key?('main.py')
-      feedback_lines = @feedback_files_hash['main.py']
-      feedback_lines.each do |line|
-        save_annotation(@answer_files[0], line)
-      end
-    end 
+    process_main_file_codaveri_feedback
+  end
+
+  # We do inverse of name coercion logic:
+  # if main.py does not exist in answer_files but it does in feedback_files_hash,
+  # run save_annotation for the first file in the array with feedback_lines taken from feedback_files_hash['main.py']
+  def process_main_file_codaveri_feedback
+    return unless @answer_files.any? && @feedback_files_hash.key?('main.py')
+
+    feedback_lines = @feedback_files_hash['main.py']
+    feedback_lines.each do |line|
+      save_annotation(@answer_files[0], line)
+    end
   end
 
   def save_annotation(file, feedback_line)

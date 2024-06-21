@@ -102,7 +102,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     response_status, response_body = @answer.generate_live_feedback
     response_body['feedbackUrl'] = ENV.fetch('CODAVERI_URL')
 
-    render :json => response_body, status: response_status
+    render json: response_body, status: response_status
   end
 
   # Reload the current answer or reset it, depending on parameters.
