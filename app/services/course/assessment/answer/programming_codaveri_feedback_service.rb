@@ -82,8 +82,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
 
   def save_annotation(file, feedback_line)
     feedback_id = feedback_line['feedback_id']
-    # linenum is added by 1 as an empty line is added to the code content at the client side.
-    linenum = feedback_line['linenum'].to_i + 1
+    linenum = feedback_line['linenum'].to_i
     feedback = feedback_line['feedback']
 
     annotation = file.annotations.find_or_initialize_by(line: linenum)
