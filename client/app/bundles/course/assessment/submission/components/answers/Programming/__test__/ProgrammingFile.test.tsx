@@ -38,6 +38,8 @@ describe('<ProgrammingFile />', () => {
       payload: mockSubmission,
     });
 
+    const editorRef = useRef(null);
+
     const programmingFileProps = {
       answerId: 1,
       fieldName: 'programming_answer',
@@ -49,7 +51,7 @@ describe('<ProgrammingFile />', () => {
       },
       language: 'python',
       readOnly: true,
-      editorRef: useRef(null),
+      editorRef,
       saveAnswerAndUpdateClientVersion: (_answerId: number): void => {},
       onCursorChange: (): void => {},
     };
