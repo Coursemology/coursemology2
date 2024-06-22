@@ -5,25 +5,24 @@ export default function (state = {}, action) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
     case actions.FINALISE_SUCCESS:
-      return action.payload.questions.reduce(
-        (obj, question) => {
-          const answer = action.payload.answers.find((ans) => ans.questionId === question.id);
-          return {
-            ...obj,
-            [question.id]: {
-              isResetting: false,
-              isAutograding:
-                Boolean(answer?.autograding) &&
-                answer?.autograding?.status === 'submitted',
-              jobError:
-                Boolean(answer?.autograding) &&
-                answer?.autograding?.status === 'errored',
-              jobErrorMessage: answer?.autograding?.errorMessage,
-            },
-          };
-        },
-        {},
-      );
+      return action.payload.questions.reduce((obj, question) => {
+        const answer = action.payload.answers.find(
+          (ans) => ans.questionId === question.id,
+        );
+        return {
+          ...obj,
+          [question.id]: {
+            isResetting: false,
+            isAutograding:
+              Boolean(answer?.autograding) &&
+              answer?.autograding?.status === 'submitted',
+            jobError:
+              Boolean(answer?.autograding) &&
+              answer?.autograding?.status === 'errored',
+            jobErrorMessage: answer?.autograding?.errorMessage,
+          },
+        };
+      }, {});
     case actions.REEVALUATE_REQUEST:
     case actions.AUTOGRADE_REQUEST: {
       const { questionId } = action.payload;

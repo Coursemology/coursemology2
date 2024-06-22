@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
+class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubocop:disable Metrics/ClassLength
   def initialize(assessment, question, answer, reveal_level, require_token)
     @course = assessment.course
     @assessment = assessment
@@ -134,7 +134,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService
     end
   end
 
-  def save_annotation(file, feedback_line)
+  def save_annotation(file, feedback_line) # rubocop:disable Metrics/AbcSize
     feedback_id = feedback_line['id']
     # linenum is added by 1 as an empty line is added to the code content at the client side.
     linenum = feedback_line['linenum'].to_i + 1
