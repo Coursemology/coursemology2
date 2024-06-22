@@ -2769,10 +2769,10 @@
     "defaultMessage": "查看主题"
   },
   "course.assessment.submission.answers.Programming.liveFeedbackItemDismissed": {
-    "defaultMessage": "TODO"
+    "defaultMessage": "项目已忽略。"
   },
   "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
-    "defaultMessage": "TODO"
+    "defaultMessage": "项目已解决。"
   },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "下载文件"
@@ -2922,7 +2922,7 @@
     "defaultMessage": "生成 Codaveri 反馈"
   },
   "course.assessment.submission.generateCodaveriLiveFeedback": {
-    "defaultMessage": "TODO"
+    "defaultMessage": "获取帮助"
   },
   "course.assessment.submission.generateFeedbackFailure": {
     "defaultMessage": "无法生成反馈，请稍后重试。"
