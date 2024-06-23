@@ -583,9 +583,6 @@ const SubmissionEditStepForm = (props) => {
 
     return (
       <div className="flex flex-nowrap">
-        {renderResetButton()}
-        {renderSubmitButton()}
-        {renderContinueButton()}
         <Box sx={{ flex: '1', width: '100%' }} />
         {isCodaveriEnabled &&
           question.isCodaveri &&
@@ -615,6 +612,13 @@ const SubmissionEditStepForm = (props) => {
             showMcqMrqSolution,
           }}
         />
+        {attempting && (
+          <>
+            {renderResetButton()}
+            {renderSubmitButton()}
+            {renderContinueButton()}
+          </>
+        )}
         {attempting &&
           question.type === questionTypes.Programming &&
           renderProgrammingQuestionActions()}
