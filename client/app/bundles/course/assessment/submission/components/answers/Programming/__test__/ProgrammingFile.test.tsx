@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { MutableRefObject } from 'react';
 import { dispatch } from 'store';
 import { render } from 'test-utils';
 
@@ -38,8 +38,6 @@ describe('<ProgrammingFile />', () => {
       payload: mockSubmission,
     });
 
-    const editorRef = useRef(null);
-
     const programmingFileProps = {
       answerId: 1,
       fieldName: 'programming_answer',
@@ -51,7 +49,7 @@ describe('<ProgrammingFile />', () => {
       },
       language: 'python',
       readOnly: true,
-      editorRef,
+      editorRef: { current: jest.fn() } as unknown as MutableRefObject<null>,
       saveAnswerAndUpdateClientVersion: (_answerId: number): void => {},
       onCursorChange: (): void => {},
     };
