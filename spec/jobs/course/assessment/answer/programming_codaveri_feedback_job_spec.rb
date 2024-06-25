@@ -57,14 +57,43 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob do
       "def to_rna(tagged_data):\r\n    tag_type = get_tag_type(tagged_data)\r\n    data     = get_data(tagged_data)\r\n    op       = get_op(\"to_rna\", (tag_type,))\r\n    return tag(\"rna\", op(data))\r\n\r\ndef is_same_dogma(tagged_data1, tagged_data2):\r\n    tag_type1 = get_tag_type(tagged_data1)\r\n    tag_type2 = get_tag_type(tagged_data2)\r\n    op        = get_op(\"is_same_dogma\", (tag_type1, tag_type2))\r\n    data1     = get_data(tagged_data1)\r\n    data2     = get_data(tagged_data2)\r\n    return op(data1, data2)"
     end
     # rubocop:enable Layout/LineLength
+    before do
+      Excon.defaults[:mock] = true
+    end
 
     it 'can be queued' do
       expect { subject.perform_later(assessment, question, answer.actable) }.to \
         have_enqueued_job(subject).exactly(:once)
     end
 
-    it 'can be run' do
-      subject.perform_now(assessment, question, answer.actable)
+    context 'when feedback request succeeds immediately' do
+      before do
+        Excon.stub({ method: 'POST' }, Codaveri::FeedbackApiStubs::FEEDBACK_SUCCESS_FINAL_RESULT)
+      end
+      after do
+        Excon.stubs.clear
+      end
+      it 'retrieves the feedback successfully' do
+        subject.perform_now(assessment, question, answer.actable)
+
+        annotation = answer.actable.files.first.annotations.first
+        expect(annotation).not_to be_nil
+        expect(annotation.line).to eq(5)
+
+        post = annotation.posts.first
+        expect(post.workflow_state).to eq('draft')
+        expect(post.text).to eq('This is a test feedback')
+        expect(post.creator_id).to eq(0)
+        expect(post.topic.pending_staff_reply).to eq(true)
+
+        codaveri_feedback = post.codaveri_feedback
+        expect(codaveri_feedback.codaveri_feedback_id).to eq(
+          '6311a0548c57aae93d260927:main.py:63141b108c57aae93d260a00'
+        )
+        expect(codaveri_feedback.status).to eq('pending_review')
+        expect(codaveri_feedback.original_feedback).to eq('This is a test feedback')
+        expect(codaveri_feedback.rating).to be_nil
+      end
     end
   end
 end

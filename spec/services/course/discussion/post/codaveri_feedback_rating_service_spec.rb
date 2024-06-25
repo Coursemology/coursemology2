@@ -3,12 +3,6 @@ require 'rails_helper'
 
 RSpec.describe Course::Discussion::Post::CodaveriFeedbackRatingService do
   let!(:instance) { create(:instance) }
-  let!(:stubbed_connection) do
-    Course::Discussion::Post::StubbedCodaveriFeedbackRatingService.connect_to_codaveri
-  end
-  let!(:stubbed_failed_connection) do
-    Course::Discussion::Post::StubbedCodaveriFeedbackRatingServiceFailed.connect_to_codaveri
-  end
 
   with_tenant(:instance) do
     let(:user) { create(:user) }
@@ -20,19 +14,24 @@ RSpec.describe Course::Discussion::Post::CodaveriFeedbackRatingService do
     let(:rating) { 5 }
 
     subject { Course::Discussion::Post::CodaveriFeedbackRatingService.send_feedback(codaveri_feedback) }
+
+    before do
+      Excon.defaults[:mock] = true
+    end
+
     describe '.send_feedback succeeds' do
       it 'sends rating to codaveri' do
-        allow_any_instance_of(CodaveriApiService).to receive(:connect_to_codaveri).
-          and_return(Course::Discussion::Post::StubbedCodaveriFeedbackRatingService.connect_to_codaveri)
+        Excon.stub({ method: 'POST' }, Codaveri::FeedbackRatingApiStubs::FEEDBACK_RATING_SUCCESS)
         expect(subject).to eq('Rating successfully sent!')
+        Excon.stubs.clear
       end
     end
 
     describe '.send_feedback fails' do
       it 'does not send rating to codaveri' do
-        allow_any_instance_of(CodaveriApiService).to receive(:connect_to_codaveri).
-          and_return(Course::Discussion::Post::StubbedCodaveriFeedbackRatingServiceFailed.connect_to_codaveri)
+        Excon.stub({ method: 'POST' }, Codaveri::FeedbackRatingApiStubs::FEEDBACK_RATING_FAILURE)
         expect { subject }.to raise_error(CodaveriError)
+        Excon.stubs.clear
       end
     end
   end

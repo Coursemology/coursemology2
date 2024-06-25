@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackService do
+RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService do
   let!(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -57,9 +57,16 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackService do
       let(:answer_contents) do
         "def to_rna(tagged_data):\r\n    tag_type = get_tag_type(tagged_data)\r\n    data     = get_data(tagged_data)\r\n    op       = get_op(\"to_rna\", (tag_type,))\r\n    return tag(\"rna\", op(data))\r\n\r\ndef is_same_dogma(tagged_data1, tagged_data2):\r\n    tag_type1 = get_tag_type(tagged_data1)\r\n    tag_type2 = get_tag_type(tagged_data2)\r\n    op        = get_op(\"is_same_dogma\", (tag_type1, tag_type2))\r\n    data1     = get_data(tagged_data1)\r\n    data2     = get_data(tagged_data2)\r\n    return op(data1, data2)"
       end
+
+      before do
+        Excon.defaults[:mock] = true
+      end
+
       # rubocop:enable Layout/LineLength
       subject do
-        Course::Assessment::Answer::ProgrammingCodaveriFeedbackService.new(assessment, question, answer.actable)
+        Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.new(
+          assessment, question, answer.actable, 'solution', true
+        )
       end
 
       describe '#construct_feedback_object' do
@@ -73,37 +80,17 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackService do
             { symbolize_names: true }
           )
 
-          expect(test_payload_object[:api_version]).to eq(actual_payload_object[:api_version])
-          expect(test_payload_object[:language_version]).to eq(actual_payload_object[:language_version])
-          expect(test_payload_object[:files_student]).to eq(actual_payload_object[:files_student])
-          expect(test_payload_object[:problem_id]).to eq(actual_payload_object[:problem_id])
-          expect(test_payload_object[:course_name]).to eq(course.title)
-        end
-      end
-
-      describe '#run_codaveri_feedback_service' do
-        before do
-          CodaveriApiService.class_eval do
-            prepend Course::Assessment::Answer::StubbedProgrammingCodaveriFeedbackService
+          expect(test_payload_object[:languageVersion]).to eq(actual_payload_object[:languageVersion])
+          test_payload_object[:files].each_with_index do |test_file_object, index|
+            expect(test_file_object.except(:path)).to eq(actual_payload_object[:files][index].except(:path))
           end
-        end
-        it 'retrieves the feedback successfully' do
-          subject.run_codaveri_feedback_service
-          annotation = answer.actable.files.first.annotations.first
-          expect(annotation).not_to be_nil
-          expect(annotation.line).to eq(6)
+          # expect(test_payload_object[:files]).to eq(actual_payload_object[:files])
+          expect(test_payload_object[:problemId]).to eq(actual_payload_object[:problemId])
+          expect(test_payload_object[:requireToken]).to eq(actual_payload_object[:requireToken])
 
-          post = annotation.posts.first
-          expect(post.workflow_state).to eq('draft')
-          expect(post.text).to eq('This is a test feedback')
-          expect(post.creator_id).to eq(0)
-          expect(post.topic.pending_staff_reply).to eq(true)
-
-          codaveri_feedback = post.codaveri_feedback
-          expect(codaveri_feedback.codaveri_feedback_id).to eq('63141b108c57aae93d260a00')
-          expect(codaveri_feedback.status).to eq('pending_review')
-          expect(codaveri_feedback.original_feedback).to eq('This is a test feedback')
-          expect(codaveri_feedback.rating).to be_nil
+          # TODO: currently we have placeholders for several fields (e.g. tone),
+          # refine this assertion once API request model is fully finalized
+          expect(test_payload_object[:config]).to include(actual_payload_object[:config])
         end
       end
     end

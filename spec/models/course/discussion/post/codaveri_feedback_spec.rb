@@ -20,6 +20,13 @@ RSpec.describe Course::Discussion::Post::CodaveriFeedback do
     end
 
     describe '.send_rating_to_codaveri' do
+      before do
+        Excon.defaults[:mock] = true
+        Excon.stub({ method: 'POST' }, Codaveri::FeedbackRatingApiStubs::FEEDBACK_RATING_SUCCESS)
+      end
+      after do
+        Excon.stubs.clear
+      end
       it 'sends rating to codaveri' do
         expect(subject).to be_a(ActiveJob::Base)
       end

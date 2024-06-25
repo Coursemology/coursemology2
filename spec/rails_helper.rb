@@ -9,6 +9,10 @@ ENV['KEYCLOAK_AUTH_INSTROPECTION_URL'] ||= 'http://localhost:8443/realms/coursem
 ENV['KEYCLOAK_ISS'] ||= 'http://localhost:8443/realms/coursemology_test'
 ENV['KEYCLOAK_AUD'] ||= 'account'
 ENV['KEYCLOAK_REALM'] ||= 'coursemology_test'
+# All the codaveri endpoints are mocked, so this URL should never be called
+# We use a dummy value since leaving it as null raises an error, and potentially
+# in the future we can use it in stub logic to differentiate from other external APIs.
+ENV['CODAVERI_URL'] ||= 'http://localhost:53896'
 
 require 'spec_helper'
 require 'rspec/rails'
