@@ -9,6 +9,11 @@ RSpec.describe CoursemologyDockerContainer do
   end
   subject { CoursemologyDockerContainer.create(image) }
 
+  before do
+    # These tests need access to the real docker API
+    Excon.defaults[:mock] = false
+  end
+
   describe '#wait' do
     it 'retries until the container finishes' do
       subject.start!

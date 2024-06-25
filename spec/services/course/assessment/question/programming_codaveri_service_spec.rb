@@ -19,44 +19,52 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
       Course::Assessment::StubbedProgrammingEvaluationService.class_eval do
         prepend Course::Assessment::StubbedProgrammingEvaluationServiceForCodaveriTest
       end
-      CodaveriApiService.class_eval do
-        prepend Course::Assessment::Question::StubbedProgrammingCodaveriService
-      end
+      Excon.defaults[:mock] = true
+      Excon.stub({ method: 'POST' }, Codaveri::CreateProblemApiStubs::CREATE_PROBLEM_SUCCESS)
       Course::Assessment::Question::ProgrammingImportService.import(question, attachment)
     end
     after do
       Course::Assessment::ProgrammingEvaluationService.class_eval do
         prepend Course::Assessment::StubbedProgrammingEvaluationService
       end
+      Excon.stubs.clear
     end
     subject { Course::Assessment::Question::ProgrammingCodaveriService.new(question, attachment) }
 
     describe '.create_or_update_question' do
       subject { Course::Assessment::Question::ProgrammingCodaveriService }
-      it 'creates codaveri question' do
-        expect(subject).to receive(:new).
-          with(question, instance_of(AttachmentReference)).
-          and_call_original
-        subject.create_or_update_question(question, attachment)
-        expect(question.codaveri_id).to eq('6311a0548c57aae93d260927')
-        expect(question.codaveri_status).to eq(200)
-        expect(question.codaveri_message).to eq('Problem successfully created')
+
+      context 'when the API request is successful' do
+        before do
+          Excon.stub({ method: 'POST' }, Codaveri::CreateProblemApiStubs::CREATE_PROBLEM_SUCCESS)
+        end
+        after do
+          Excon.stubs.clear
+        end
+        it 'creates codaveri question' do
+          expect(subject).to receive(:new).
+            with(question, instance_of(AttachmentReference)).
+            and_call_original
+          subject.create_or_update_question(question, attachment)
+          expect(question.codaveri_id).to eq('6311a0548c57aae93d260927')
+          expect(question.codaveri_status).to eq(200)
+          expect(question.codaveri_message).to eq('Problem successfully created')
+        end
       end
 
-      context 'when an invalid API is provided' do
+      context 'when the API request fails' do
         before do
-          # Mock failure
-          CodaveriApiService.class_eval do
-            prepend Course::Assessment::Question::StubbedProgrammingCodaveriServiceFailed
-          end
+          Excon.stub({ method: 'POST' }, Codaveri::CreateProblemApiStubs::CREATE_PROBLEM_FAILURE)
+        end
+        after do
+          Excon.stubs.clear
         end
 
         it 'raises a CodaveriError' do
           expect { subject.create_or_update_question(question, attachment) }.to raise_error(CodaveriError)
-
           expect(question.codaveri_id).to eq(nil)
-          expect(question.codaveri_status).to eq(200)
-          expect(question.codaveri_message).to eq('Wrong API Key')
+          expect(question.codaveri_status).to eq(500)
+          expect(question.codaveri_message).to eq('Problem could not be created')
         end
       end
     end
@@ -72,12 +80,13 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
           { symbolize_names: true }
         )
 
-        expect(test_payload_object[:api_version]).to eq(actual_payload_object[:api_version])
-        expect(test_payload_object[:language_version]).to eq(actual_payload_object[:language_version])
-        expect(test_payload_object[:files_solution]).to eq(actual_payload_object[:files_solution])
+        expect(test_payload_object[:languageVersion]).to eq(actual_payload_object[:languageVersion])
+        expect(test_payload_object[:resources][0][:solutions]).to eq(actual_payload_object[:resources][0][:solutions])
 
-        test_payload_object[:testcases].each_with_index do |test_case, index|
-          expect(test_case.except(:id)).to eq(actual_payload_object[:testcases][index].except(:id))
+        test_payload_object[:resources][0][:exprTestcases].each_with_index do |test_case, index|
+          expect(test_case.except(:index)).to eq(
+            actual_payload_object[:resources][0][:exprTestcases][index].except(:index)
+          )
         end
       end
     end

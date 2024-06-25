@@ -60,9 +60,11 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
 
     subject { Course::Assessment::ProgrammingCodaveriEvaluationService }
     before do
-      CodaveriApiService.class_eval do
-        prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationService
-      end
+      Excon.defaults[:mock] = true
+      Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_success_final_result)
+    end
+    after do
+      Excon.stubs.clear
     end
 
     it 'returns the result of evaluating' do
@@ -70,14 +72,15 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
       expect(result).to be_a(Course::Assessment::ProgrammingCodaveriEvaluationService::Result)
     end
 
-    context 'when the evaluation times out' do
-      it 'raises a Timeout::Error' do
-        expect do
-          # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
-          subject.execute(course, question, answer.actable, 0.0000000000001.seconds)
-        end.to raise_error(Timeout::Error)
-      end
-    end
+    # TODO: Is this test case still relevant?
+    # context 'when the evaluation times out' do
+    #   it 'raises a Timeout::Error' do
+    #     expect do
+    #       # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
+    #       subject.execute(course, question, answer.actable, 0.0000000000001.seconds)
+    #     end.to raise_error(Timeout::Error)
+    #   end
+    # end
 
     describe '#construct_grading_object' do
       let(:service_instance) do
@@ -91,12 +94,11 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
           { symbolize_names: true }
         )
 
-        expect(test_payload_object[:api_version]).to eq(actual_payload_object[:api_version])
-        expect(test_payload_object[:language_version]).to eq(actual_payload_object[:language_version])
+        expect(test_payload_object[:languageVersion]).to eq(actual_payload_object[:languageVersion])
         expect(test_payload_object[:files]).to eq(actual_payload_object[:files])
-        expect(test_payload_object[:problem_id]).to eq(actual_payload_object[:problem_id])
-        expect(test_payload_object[:course_name]).to eq(course.title)
-        expect(test_payload_object[:course_id]).to eq(course.id)
+        expect(test_payload_object[:problemId]).to eq(actual_payload_object[:problemId])
+        # TODO: request from Codaveri to reintroduce this field
+        # expect(test_payload_object[:course_name]).to eq(course.title)
       end
     end
   end

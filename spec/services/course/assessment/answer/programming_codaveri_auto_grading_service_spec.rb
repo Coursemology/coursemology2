@@ -61,14 +61,16 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
 
       let!(:grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
-      describe '#grade and succeeded' do
+      describe '#grade and succeeded immediately' do
         subject { super().grade(answer) }
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
-          CodaveriApiService.class_eval do
-            prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationService
-          end
+          Excon.defaults[:mock] = true
+          Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_success_final_result)
+        end
+        after do
+          Excon.stubs.clear
         end
 
         it 'creates a new package with the correct file contents' do
@@ -85,11 +87,6 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
         end
 
         context 'when the answer is correct' do
-          before do
-            CodaveriApiService.class_eval do
-              prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationService
-            end
-          end
           it 'marks the answer correct' do
             subject
             expect(answer).to be_correct
@@ -109,14 +106,16 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
         end
       end
 
-      describe '#grade but failed' do
+      describe '#grade but failed immediately' do
         subject { super().grade(answer) }
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
-          CodaveriApiService.class_eval do
-            prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationServiceFailed
-          end
+          Excon.defaults[:mock] = true
+          Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_failure_final_result)
+        end
+        after do
+          Excon.stubs.clear
         end
 
         context 'when an invalid API is provided' do
@@ -130,14 +129,18 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
         end
       end
 
+      # TODO: Add tests for API success/failure after some polling attempts
+
       describe '#grade but wrong' do
         subject { super().grade(answer) }
 
         before do
           allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
-          CodaveriApiService.class_eval do
-            prepend Course::Assessment::StubbedProgrammingCodaveriEvaluationServiceWrongAnswer
-          end
+          Excon.defaults[:mock] = true
+          Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_wrong_answer_final_result)
+        end
+        after do
+          Excon.stubs.clear
         end
 
         context 'when the answer is wrong' do

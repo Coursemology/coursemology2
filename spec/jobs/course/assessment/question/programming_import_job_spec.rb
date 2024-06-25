@@ -58,15 +58,15 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
         Course::Assessment::StubbedProgrammingEvaluationService.class_eval do
           prepend Course::Assessment::StubbedProgrammingEvaluationServiceForCodaveriTest
         end
-        CodaveriApiService.class_eval do
-          prepend Course::Assessment::Question::StubbedProgrammingCodaveriService
-        end
+        Excon.defaults[:mock] = true
+        Excon.stub({ method: 'POST' }, Codaveri::CreateProblemApiStubs::CREATE_PROBLEM_SUCCESS)
       end
 
       after do
         Course::Assessment::ProgrammingEvaluationService.class_eval do
           prepend Course::Assessment::StubbedProgrammingEvaluationService
         end
+        Excon.stubs.clear
       end
 
       it 'creates codaveri question' do
