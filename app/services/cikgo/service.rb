@@ -4,6 +4,7 @@ class Cikgo::Service
     private
 
     CIKGO_OAUTH_APPLICATION_NAME = 'Cikgo'
+    DEFAULT_REQUEST_TIMEOUT_SECONDS = 5
 
     def connection(method, path, options = {})
       endpoint, api_key = config
@@ -12,6 +13,7 @@ class Cikgo::Service
         "#{endpoint}/#{path}",
         headers: { Authorization: "Bearer #{api_key}" },
         method: method,
+        timeout: DEFAULT_REQUEST_TIMEOUT_SECONDS,
         **options,
         body: options[:body]&.to_json
       )
