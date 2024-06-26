@@ -1,30 +1,40 @@
 GIT
   remote: https://github.com/Coursemology/active_record-acts_as.git
-  revision: b853dd4aee7a218367411a3ba26fb8477ff2cda9
+  revision: f2e6845852b3eefb2afad0bdee890ba4bafa8216
+  branch: bivan/support-rails-7-ruby-3
   specs:
-    active_record-acts_as (3.0.1)
-      activerecord (>= 4.2)
-      activesupport (>= 4.2)
+    active_record-acts_as (4.0.0)
+      activerecord (>= 6.0)
+      activesupport (>= 6.0)
 
 GIT
   remote: https://github.com/Coursemology/activerecord-userstamp.git
-  revision: 1170233e314466630e3a545ae3fdee16a0bb4a19
+  revision: b037b0ec260af1e0f68ebe964e9e3a9602405aa0
+  branch: bivan/upgrade-rails-7-ruby-3
   specs:
     activerecord-userstamp (3.0.5)
       rails (>= 6)
 
 GIT
   remote: https://github.com/Coursemology/rails_utils.git
-  revision: a78a20ce522e83f23725759598105ccb0d4a6d6a
+  revision: 4f9eeb311b1aaffed0d254863bbbebd96a95340a
+  branch: bivan/upgrade-rails-7-ruby-3
   specs:
-    rails_utils (4.0.0)
-      rails (>= 3.2)
+    rails_utils (6.1.0)
+      rails (>= 6)
 
 GIT
   remote: https://github.com/Coursemology/rwordnet
   revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
   specs:
     rwordnet (2.0.0)
+
+GIT
+  remote: https://github.com/bivanalhar/settings_on_rails
+  revision: 2ef629b94dffc019789649ebabf45d7035f66513
+  specs:
+    settings_on_rails (0.4.0)
+      rails (>= 6)
 
 GEM
   remote: https://rubygems.org/
@@ -487,8 +497,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    settings_on_rails (0.3.1)
-      activerecord (>= 3.1)
     should_not (1.1.0)
     shoulda-matchers (6.2.0)
       activesupport (>= 5.2.0)
@@ -634,7 +642,7 @@ DEPENDENCIES
   rubyzip
   rwordnet!
   sanitize (>= 4.6.3)
-  settings_on_rails
+  settings_on_rails!
   should_not
   shoulda-matchers
   sidekiq

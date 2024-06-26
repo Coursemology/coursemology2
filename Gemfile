@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+ruby '3.1.0'
+
 source 'https://rubygems.org'
 
 # For Windows devs
@@ -14,7 +16,7 @@ gem 'pg'
 gem 'rack-cors'
 
 # Instance/Course settings
-gem 'settings_on_rails'
+gem 'settings_on_rails', git: 'https://github.com/bivanalhar/settings_on_rails'
 # Manage read/unread status
 gem 'unread'
 # Extension for validating hostnames and domain names
@@ -23,14 +25,14 @@ gem 'validates_hostname'
 gem 'workflow'
 gem 'workflow-activerecord', '>= 4.1', '< 7.0'
 # Add creator_id and updater_id attributes to models
-gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord-userstamp.git'
+gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord-userstamp.git', branch: 'bivan/upgrade-rails-7-ruby-3'
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
 gem 'calculated_attributes'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git'
+gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git', branch: 'bivan/support-rails-7-ruby-3'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
@@ -177,7 +179,7 @@ gem 'cancancan'
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
 # We also want stricter sanitization.
-gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git'
+gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git', branch: 'bivan/upgrade-rails-7-ruby-3'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave'
