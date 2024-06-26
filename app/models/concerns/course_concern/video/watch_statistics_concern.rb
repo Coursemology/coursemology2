@@ -55,7 +55,7 @@ module CourseConcern::Video::WatchStatisticsConcern
   def elements_till(stack, start_index)
     advance_count = 0
     advance_count += 1 while (start_index + advance_count) < stack.size &&
-                            (yield stack[start_index + advance_count])
+                             (yield stack[start_index + advance_count])
     advance_count
   end
 

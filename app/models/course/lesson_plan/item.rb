@@ -5,14 +5,14 @@ class Course::LessonPlan::Item < ApplicationRecord
   include CourseConcern::LessonPlan::Item::CikgoPushConcern
 
   has_many :personal_times,
-           foreign_key: :lesson_plan_item_id, class_name: "Course::PersonalTime",
+           foreign_key: :lesson_plan_item_id, class_name: 'Course::PersonalTime',
            inverse_of: :lesson_plan_item, dependent: :destroy, autosave: true
   has_many :reference_times,
-           foreign_key: :lesson_plan_item_id, class_name: "Course::ReferenceTime", inverse_of: :lesson_plan_item,
+           foreign_key: :lesson_plan_item_id, class_name: 'Course::ReferenceTime', inverse_of: :lesson_plan_item,
            dependent: :destroy, autosave: true
   has_one :default_reference_time,
           -> { joins(:reference_timeline).where(course_reference_timelines: { default: true }) },
-          foreign_key: :lesson_plan_item_id, class_name: "Course::ReferenceTime", inverse_of: :lesson_plan_item,
+          foreign_key: :lesson_plan_item_id, class_name: 'Course::ReferenceTime', inverse_of: :lesson_plan_item,
           autosave: true
   validates :default_reference_time, presence: true
   validate :validate_only_one_default_reference_time
@@ -107,7 +107,7 @@ class Course::LessonPlan::Item < ApplicationRecord
   }
 
   belongs_to :course, inverse_of: :lesson_plan_items
-  has_many :todos, class_name: "Course::LessonPlan::Todo", inverse_of: :item, dependent: :destroy
+  has_many :todos, class_name: 'Course::LessonPlan::Todo', inverse_of: :item, dependent: :destroy
 
   delegate :start_at, :start_at=, :start_at_changed?, :bonus_end_at, :bonus_end_at=, :bonus_end_at_changed?,
            :end_at, :end_at=, :end_at_changed?,

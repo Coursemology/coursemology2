@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module CourseConcern::Assessment::Submission::WorkflowEventConcern
+module CourseConcern::Assessment::Submission::WorkflowEventConcern # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include Course::LessonPlan::PersonalizationConcern
   include CourseConcern::Assessment::Submission::CikgoTaskCompletionConcern
@@ -211,7 +211,7 @@ module CourseConcern::Assessment::Submission::WorkflowEventConcern
   def assign_experience_points
     # publish event (from grade) - Deduce points awarded from draft or updated attribute.
     if workflow_state == 'published' &&
-      (workflow_state_was == 'graded' || workflow_state_was == 'submitted')
+       (workflow_state_was == 'graded' || workflow_state_was == 'submitted')
       self.points_awarded ||= draft_points_awarded
       self.draft_points_awarded = nil
     end

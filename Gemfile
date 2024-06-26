@@ -27,7 +27,8 @@ gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
-gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes', ref: 'd2f69a1acefd5646ce1908fed3785a63d8399374'
+gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes',
+                             ref: 'd2f69a1acefd5646ce1908fed3785a63d8399374'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git'

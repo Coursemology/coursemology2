@@ -51,26 +51,26 @@ class Course::Assessment < ApplicationRecord
            source_type: 'Course::Assessment::Question::TextResponse'
   has_many :programming_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: "Course::Assessment::Question::Programming"
+           source_type: 'Course::Assessment::Question::Programming'
   has_many :scribing_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: "Course::Assessment::Question::Scribing"
+           source_type: 'Course::Assessment::Question::Scribing'
   has_many :voice_response_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: "Course::Assessment::Question::VoiceResponse"
+           source_type: 'Course::Assessment::Question::VoiceResponse'
   has_many :forum_post_response_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: "Course::Assessment::Question::ForumPostResponse"
-  has_many :assessment_conditions, class_name: "Course::Condition::Assessment",
+           source_type: 'Course::Assessment::Question::ForumPostResponse'
+  has_many :assessment_conditions, class_name: 'Course::Condition::Assessment',
                                    inverse_of: :assessment, dependent: :destroy
-  has_many :question_groups, class_name: "Course::Assessment::QuestionGroup",
+  has_many :question_groups, class_name: 'Course::Assessment::QuestionGroup',
                              inverse_of: :assessment, dependent: :destroy
-  has_many :question_bundles, class_name: "Course::Assessment::QuestionBundle", through: :question_groups
-  has_many :question_bundle_questions, class_name: "Course::Assessment::QuestionBundleQuestion",
+  has_many :question_bundles, class_name: 'Course::Assessment::QuestionBundle', through: :question_groups
+  has_many :question_bundle_questions, class_name: 'Course::Assessment::QuestionBundleQuestion',
                                        through: :question_bundles
-  has_many :question_bundle_assignments, class_name: "Course::Assessment::QuestionBundleAssignment",
+  has_many :question_bundle_assignments, class_name: 'Course::Assessment::QuestionBundleAssignment',
                                          inverse_of: :assessment, dependent: :destroy
-  has_one :duplication_traceable, class_name: "DuplicationTraceable::Assessment",
+  has_one :duplication_traceable, class_name: 'DuplicationTraceable::Assessment',
                                   inverse_of: :assessment, dependent: :destroy
 
   validate :tab_in_same_course
