@@ -4,6 +4,7 @@ class Course::Stories::StoriesController < Course::ComponentController
   include Course::CikgoChatsConcern
 
   signals :cikgo_open_threads_count, after: [:learn]
+  signals :cikgo_mission_control, after: [:mission_control]
 
   before_action :check_course_user_and_push_key
   before_action -> { authorize!(:access_mission_control, current_course) }, only: [:mission_control]
