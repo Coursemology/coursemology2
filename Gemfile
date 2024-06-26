@@ -16,7 +16,7 @@ gem 'pg'
 gem 'rack-cors'
 
 # Instance/Course settings
-gem 'settings_on_rails', git: 'https://github.com/bivanalhar/settings_on_rails'
+gem 'settings_on_rails'
 # Manage read/unread status
 gem 'unread'
 # Extension for validating hostnames and domain names
