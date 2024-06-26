@@ -4,6 +4,7 @@ import { MenuOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { CourseLayoutData } from 'types/course/courses';
 
+import CikgoSidebarItems from 'course/stories/components/CikgoSidebarItems';
 import PopupNotifier from 'course/user-notification/PopupNotifier';
 import Footer from 'lib/components/core/layouts/Footer';
 import { DataHandle, useDynamicNest } from 'lib/hooks/router/dynamicNest';
@@ -60,6 +61,8 @@ const CourseContainer = (): JSX.Element => {
       </div>
 
       <PopupNotifier />
+
+      <CikgoSidebarItems sidebarData={data} />
     </main>
   );
 };

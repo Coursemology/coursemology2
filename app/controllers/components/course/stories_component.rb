@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::StoriesComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
-  include Course::CikgoChatsConcern
 
   def self.display_name
     I18n.t('components.stories.name')
@@ -27,27 +26,19 @@ class Course::StoriesComponent < SimpleDelegator
   end
 
   def student_sidebar_items
-    _, open_threads_count = find_or_create_room(current_course_user)
-
     [
       {
         key: :learn,
         icon: :learn,
         title: settings.title || I18n.t('course.stories.learn'),
         weight: 0,
-        path: course_learn_path(current_course),
-        unread: open_threads_count
+        path: course_learn_path(current_course)
       }
     ]
-  rescue Excon::Error::Socket
-    []
   end
 
   def staff_sidebar_items
     return [] unless can?(:access_mission_control, current_course)
-
-    remote_url, pending_threads_count = get_mission_control_url(current_course_user)
-    return [] unless remote_url.present?
 
     [
       {
@@ -56,12 +47,9 @@ class Course::StoriesComponent < SimpleDelegator
         type: :admin,
         title: I18n.t('course.stories.mission_control'),
         weight: 1,
-        path: course_mission_control_path(current_course),
-        unread: pending_threads_count
+        path: course_mission_control_path(current_course)
       }
     ]
-  rescue Excon::Error::Socket
-    []
   end
 
   def settings_sidebar_items
