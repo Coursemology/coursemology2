@@ -22,7 +22,7 @@ FactoryBot.define do
 
     trait :with_level_condition do
       after(:build) do |achievement|
-        achievement.conditions = [build(:level_condition, course: achievement.course, conditional: achievement)]
+        create(:level_condition, course: achievement.course, conditional: achievement)
       end
     end
   end
