@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-module Extensions::RenderCollectionWithPrefixSuffix::ActionView::PartialRenderer
+module Extensions::RenderCollectionWithPrefixSuffix::ActionView::AbstractRenderer::ObjectRendering # rubocop:disable Style/ClassAndModuleChildren
   module PrependMethods
     # Adds support for the +prefix+ and +suffix+ options to {render partial:}.
     #

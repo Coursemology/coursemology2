@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.6.1'
+gem 'rails', '~> 6.1.7.7'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -14,7 +14,7 @@ gem 'pg'
 gem 'rack-cors'
 
 # Instance/Course settings
-gem 'settings_on_rails'
+gem 'settings_on_rails', git: 'https://github.com/bivanalhar/settings_on_rails'
 # Manage read/unread status
 gem 'unread'
 # Extension for validating hostnames and domain names
@@ -23,14 +23,17 @@ gem 'validates_hostname'
 gem 'workflow'
 gem 'workflow-activerecord', '>= 4.1', '< 7.0'
 # Add creator_id and updater_id attributes to models
-gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord-userstamp.git'
+gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord-userstamp.git',
+                              branch: 'bivan/upgrade-rails-7-ruby-3'
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
-gem 'calculated_attributes'
+gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes',
+                             ref: 'af4e503a3a739501c6e74d6ac7690e8c84349b86'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
-gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git'
+gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git',
+                             branch: 'bivan/support-rails-7-ruby-3'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
 # Upsert action for Postgres
@@ -44,6 +47,10 @@ gem 'sanitize', '>= 4.6.3'
 gem 'rinku'
 gem 'rouge', '~> 3'
 gem 'ruby-oembed'
+
+# to help obtaining app wide URI that uniquely identifies model instance
+# (used in notify_identifier for NOTIFY/LISTEN to jobs)
+gem 'globalid'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
@@ -95,7 +102,7 @@ end
 
 group :development, :test do
   # Use RSpec for Behaviour testing
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 6'
 
   gem 'rubocop', '~> 1.64'
 
@@ -177,10 +184,11 @@ gem 'cancancan'
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
 # We also want stricter sanitization.
-gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git'
+gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git',
+                   branch: 'bivan/upgrade-rails-7-ruby-3'
 
 # Using CarrierWave for file uploads
-gem 'carrierwave'
+gem 'carrierwave', '2.2.6'
 # Generate sequential filenames
 gem 'filename'
 # Required by CarrierWave, for image resizing

@@ -410,11 +410,8 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
 
         it 'duplicates achievement with attached badge' do
           new_achievement_with_badge = new_course.achievements.select(&:badge_url).first
-          new_achievement_id = new_achievement_with_badge.id
-          badge_folder = Rails.root.join('public', 'uploads', 'images', 'course',
-                                         'achievement', new_achievement_id.to_s, 'badge')
-          badge_file = badge_folder.join('minion.png')
-          expect(File.directory?(badge_folder)).to be true
+          badge_file = File.join(Rails.root, 'public', new_achievement_with_badge.badge.url)
+
           expect(File.exist?(badge_file)).to be true
         end
 
