@@ -106,6 +106,52 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
         end
       end
 
+      describe '#grade and succeeded after polling' do
+        subject { super().grade(answer) }
+
+        # dummy URL
+        let!(:connection) { Excon.new('http://localhost:53896') }
+
+        before do
+          allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
+
+          allow(Excon).to receive(:new).and_return(connection)
+          allow(connection).to receive(:post).and_call_original
+
+          Excon.defaults[:mock] = true
+          Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs::EVALUATE_ID_CREATED)
+          Excon.stub({ method: 'GET' }, Codaveri::EvaluateApiStubs.evaluate_success_final_result)
+          Excon.stub({ method: 'GET' }, Codaveri::EvaluateApiStubs::EVALUATE_RESULTS_PENDING)
+          Excon.stub({ method: 'GET' }, Codaveri::EvaluateApiStubs::EVALUATE_RESULTS_PENDING)
+          Excon.stub({ method: 'GET' }, Codaveri::EvaluateApiStubs::EVALUATE_RESULTS_PENDING)
+          allow(connection).to receive(:get).and_wrap_original do |method, *args|
+            # After each time connection.get is called, we remove 1 stub from the above list (LIFO)
+            # so api will be polled a total of 4 times
+            response = method.call(*args)
+            Excon.unstub({ method: 'GET' })
+            response
+          end
+
+          stub_const('Course::Assessment::ProgrammingCodaveriEvaluationService::POLL_INTERVAL_SECONDS', 0.001)
+        end
+        after do
+          Excon.stubs.clear
+        end
+
+        it 'polls as long as results still pending' do
+          expect(connection).to receive(:get).exactly(4).times
+          subject
+        end
+
+        context 'when the answer is correct' do
+          it 'marks the answer correct' do
+            subject
+            expect(answer).to be_correct
+            expect(answer.grade).to eq(question.maximum_grade)
+          end
+        end
+      end
+
       describe '#grade but failed immediately' do
         subject { super().grade(answer) }
 
@@ -118,7 +164,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
           Excon.stubs.clear
         end
 
-        context 'when an invalid API is provided' do
+        context 'when the API call fails' do
           it 'raises a CodaveriError' do
             expect { subject }.to raise_error(CodaveriError)
             expect(answer.grade).to eq(nil)
@@ -129,7 +175,38 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
         end
       end
 
-      # TODO: Add tests for API success/failure after some polling attempts
+      describe '#grade and failed after polling' do
+        subject { super().grade(answer) }
+
+        let!(:connection) { Excon.new('http://localhost:53896') }
+
+        before do
+          allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
+
+          allow(Excon).to receive(:new).and_return(connection)
+          allow(connection).to receive(:post).and_call_original
+
+          Excon.defaults[:mock] = true
+          Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs::EVALUATE_ID_CREATED)
+          Excon.stub({ method: 'GET' }, Codaveri::EvaluateApiStubs.evaluate_failure_final_result)
+          Excon.stub({ method: 'GET' }, Codaveri::EvaluateApiStubs::EVALUATE_RESULTS_PENDING)
+          allow(connection).to receive(:get).and_wrap_original do |method, *args|
+            response = method.call(*args)
+            Excon.unstub({ method: 'GET' })
+            response
+          end
+
+          stub_const('Course::Assessment::ProgrammingCodaveriEvaluationService::POLL_INTERVAL_SECONDS', 0.01)
+        end
+        after do
+          Excon.stubs.clear
+        end
+
+        it 'polls as long as results still pending, then throw error' do
+          expect(connection).to receive(:get).exactly(2).times
+          expect { subject }.to raise_error(CodaveriError)
+        end
+      end
 
       describe '#grade but wrong' do
         subject { super().grade(answer) }
