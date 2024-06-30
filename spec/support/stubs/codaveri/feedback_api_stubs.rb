@@ -25,6 +25,28 @@ module Codaveri::FeedbackApiStubs
     }.to_json
   }.freeze
 
+  FEEDBACK_ID_CREATED = {
+    status: 201,
+    body: {
+      success: true,
+      message: 'Feedback request received',
+      data: {
+        id: '6659878d3ad73c7a4aac96f0'
+      },
+      transactionId: '66598c55fac28dd29e968853'
+    }.to_json
+  }.freeze
+
+  FEEDBACK_RESULTS_PENDING = {
+    status: 202,
+    body: {
+      success: true,
+      message: 'Feedback results not ready yet',
+      data: {},
+      transactionId: '6659878d3ad73c7a4aac96f0'
+    }.to_json
+  }.freeze
+
   FEEDBACK_FAILURE_FINAL_RESULT = {
     status: 400,
     body: {
