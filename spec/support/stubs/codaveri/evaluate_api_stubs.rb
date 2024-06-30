@@ -9,6 +9,7 @@ module Codaveri::EvaluateApiStubs
         success: true,
         message: 'Evaluation successfully generated',
         data: {
+          id: '6659878d3ad73c7a4aac96f0',
           exprResults: [
             {
               run: {
@@ -106,7 +107,8 @@ module Codaveri::EvaluateApiStubs
               }
             }
           ]
-        }
+        },
+        transactionId: '66598c55fac28dd29e968852'
       }.to_json
     }
   end
@@ -123,6 +125,28 @@ module Codaveri::EvaluateApiStubs
       }.to_json
     }
   end
+
+  EVALUATE_ID_CREATED = {
+    status: 201,
+    body: {
+      success: true,
+      message: 'Evaluation request received',
+      data: {
+        id: '6659878d3ad73c7a4aac96f0'
+      },
+      transactionId: '66598c55fac28dd29e968853'
+    }.to_json
+  }.freeze
+
+  EVALUATE_RESULTS_PENDING = {
+    status: 202,
+    body: {
+      success: true,
+      message: 'Evaluation results not ready yet',
+      data: {},
+      transactionId: '6659878d3ad73c7a4aac96f0'
+    }.to_json
+  }.freeze
 
   def evaluate_wrong_answer_final_result
     ids = test_cases_id_from_factory.map(&:to_s)
