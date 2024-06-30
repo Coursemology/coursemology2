@@ -68,11 +68,68 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob do
 
     context 'when feedback request succeeds immediately' do
       before do
+        Excon.defaults[:mock] = true
         Excon.stub({ method: 'POST' }, Codaveri::FeedbackApiStubs::FEEDBACK_SUCCESS_FINAL_RESULT)
       end
       after do
         Excon.stubs.clear
       end
+      it 'retrieves the feedback successfully' do
+        subject.perform_now(assessment, question, answer.actable)
+
+        annotation = answer.actable.files.first.annotations.first
+        expect(annotation).not_to be_nil
+        expect(annotation.line).to eq(5)
+
+        post = annotation.posts.first
+        expect(post.workflow_state).to eq('draft')
+        expect(post.text).to eq('This is a test feedback')
+        expect(post.creator_id).to eq(0)
+        expect(post.topic.pending_staff_reply).to eq(true)
+
+        codaveri_feedback = post.codaveri_feedback
+        expect(codaveri_feedback.codaveri_feedback_id).to eq(
+          '6311a0548c57aae93d260927:main.py:63141b108c57aae93d260a00'
+        )
+        expect(codaveri_feedback.status).to eq('pending_review')
+        expect(codaveri_feedback.original_feedback).to eq('This is a test feedback')
+        expect(codaveri_feedback.rating).to be_nil
+      end
+    end
+
+    context 'when feedback request succeeds after polling' do
+      # dummy URL
+      let!(:connection) { Excon.new('http://localhost:53896') }
+
+      before do
+        allow(Excon).to receive(:new).and_return(connection)
+        allow(connection).to receive(:post).and_call_original
+
+        Excon.defaults[:mock] = true
+        Excon.stub({ method: 'POST' }, Codaveri::FeedbackApiStubs::FEEDBACK_ID_CREATED)
+        Excon.stub({ method: 'GET' }, Codaveri::FeedbackApiStubs::FEEDBACK_SUCCESS_FINAL_RESULT)
+        Excon.stub({ method: 'GET' }, Codaveri::FeedbackApiStubs::FEEDBACK_RESULTS_PENDING)
+        Excon.stub({ method: 'GET' }, Codaveri::FeedbackApiStubs::FEEDBACK_RESULTS_PENDING)
+        Excon.stub({ method: 'GET' }, Codaveri::FeedbackApiStubs::FEEDBACK_RESULTS_PENDING)
+        allow(connection).to receive(:get).and_wrap_original do |method, *args|
+          # After each time connection.get is called, we remove 1 stub from the above list (LIFO)
+          # so api will be polled a total of 4 times
+          response = method.call(*args)
+          Excon.unstub({ method: 'GET' })
+          response
+        end
+
+        stub_const('Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob::POLL_INTERVAL_SECONDS', 0.001)
+      end
+      after do
+        Excon.stubs.clear
+      end
+
+      it 'polls as long as results still pending' do
+        expect(connection).to receive(:get).exactly(4).times
+        subject.perform_now(assessment, question, answer.actable)
+      end
+
       it 'retrieves the feedback successfully' do
         subject.perform_now(assessment, question, answer.actable)
 
