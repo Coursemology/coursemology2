@@ -7,7 +7,10 @@ import { getEmptySelectedItems, nestFolders } from 'course/duplication/utils';
 const initialState = {
   confirmationOpen: false,
   selectedItems: getEmptySelectedItems(),
+  destinationInstanceId: null,
   destinationCourseId: null,
+  destinationCourseTitle: null,
+  destinationCourseStartAt: null,
   destinationCourses: [],
   destinationInstances: {},
   duplicationMode: duplicationModes.COURSE,
@@ -72,25 +75,6 @@ const reducer = produce((state, action) => {
       return { ...state, isLoading: false };
     }
 
-    case actionTypes.CHANGE_SOURCE_COURSE_REQUEST: {
-      return { ...state, isChangingCourse: true };
-    }
-    case actionTypes.CHANGE_SOURCE_COURSE_SUCCESS: {
-      const { materialsComponent, ...data } = action.courseData;
-      const nestedFolders = nestFolders(materialsComponent);
-      return {
-        ...state,
-        ...data,
-        materialsComponent: nestedFolders,
-        selectedItems: getEmptySelectedItems(),
-        currentItemSelectorPanel: null,
-        isChangingCourse: false,
-      };
-    }
-    case actionTypes.CHANGE_SOURCE_COURSE_FAILURE: {
-      return { ...state, isChangingCourse: false };
-    }
-
     case actionTypes.SET_DESTINATION_COURSE_ID: {
       return {
         ...state,
@@ -117,7 +101,16 @@ const reducer = produce((state, action) => {
       return { ...state, confirmationOpen: false };
     }
 
-    case actionTypes.DUPLICATE_COURSE_REQUEST:
+    case actionTypes.DUPLICATE_COURSE_REQUEST: {
+      return produce(state, (draft) => {
+        draft.isDuplicating = true;
+        draft.destinationInstanceId =
+          action.payload.duplication.destination_instance_id;
+        draft.destinationCourseTitle = action.payload.duplication.new_title;
+        draft.destinationCourseStartAt =
+          action.payload.duplication.new_start_at;
+      });
+    }
     case actionTypes.DUPLICATE_ITEMS_REQUEST: {
       return { ...state, isDuplicating: true };
     }

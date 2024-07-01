@@ -26,28 +26,6 @@ export function fetchObjectsList() {
   };
 }
 
-export function changeSourceCourse(courseId) {
-  return (dispatch, getState) => {
-    const currentSourceCourseId = getState().duplication.sourceCourse.id;
-    if (courseId === currentSourceCourseId) {
-      return null;
-    }
-
-    dispatch({ type: actionTypes.CHANGE_SOURCE_COURSE_REQUEST });
-    return CourseAPI.duplication
-      .data(courseId)
-      .then((response) => {
-        dispatch({
-          type: actionTypes.CHANGE_SOURCE_COURSE_SUCCESS,
-          courseData: response.data,
-        });
-      })
-      .catch(() => {
-        dispatch({ type: actionTypes.CHANGE_SOURCE_COURSE_FAILURE });
-      });
-  };
-}
-
 export function duplicateItems(
   destinationCourseId,
   selectedItems,
@@ -128,7 +106,7 @@ export function duplicateCourse(
       toast.error(failureMessage);
     };
 
-    dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST });
+    dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST, payload });
     return CourseAPI.duplication
       .duplicateCourse(sourceCourseId, payload)
       .then((response) => response.data)

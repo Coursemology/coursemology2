@@ -21,7 +21,6 @@ class Course::DuplicationsController < Course::ComponentController
 
     destination_tenant = Instance.find(instance_params)
 
-    authorize!(:duplicate_across_instances, current_tenant)
     authorize!(:duplicate_across_instances, destination_tenant)
   end
 

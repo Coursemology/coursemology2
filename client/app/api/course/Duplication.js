@@ -9,8 +9,6 @@ export default class DuplicationAPI extends BaseCourseAPI {
    *   currentHost: string,
    *   destinationCourses: Array.<courseShape>,
    *   destinationInstances: Array.<instanceShape>,
-   *   sourceCourses: courseListingShape,
-   *   sourceCourse: sourceCourseShape,
    *   assessmentComponent: Array.<categoryShape>,
    *   surveyComponent: Array.<surveyShape>,
    *   achievementsComponent: Array.<achievementShape>,
@@ -22,26 +20,6 @@ export default class DuplicationAPI extends BaseCourseAPI {
    */
   fetch() {
     return this.client.get(`${this.#urlPrefix}/new`);
-  }
-
-  /**
-   * Fetches a list of all duplicable objects for the given course.
-   *
-   * @param {string} courseId
-   * @return {Promise}
-   * success response: {
-   *   sourceCourse: sourceCourseShape,
-   *   assessmentComponent: Array.<categoryShape>,
-   *   surveyComponent: Array.<surveyShape>,
-   *   achievementsComponent: Array.<achievementShape>,
-   *   materialsComponent: Array.<folderShape>,
-   *   videosComponent: Array.<videoTabShape>,
-   * }
-   *
-   * See course/duplication/propTypes.js for custom propTypes.
-   */
-  data(courseId) {
-    return this.client.get(`/courses/${courseId}/object_duplication/data`);
   }
 
   /**
