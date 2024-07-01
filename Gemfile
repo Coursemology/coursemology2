@@ -42,7 +42,7 @@ gem 'friendly_id'
 gem 'html-pipeline'
 gem 'sanitize', '>= 4.6.3'
 gem 'rinku'
-gem 'rouge', '~> 3'
+gem 'rouge', '~> 4'
 gem 'ruby-oembed'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
