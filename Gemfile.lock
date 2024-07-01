@@ -612,11 +612,12 @@ DEPENDENCIES
   flamegraph
   fog-aws (= 3.22.0)
   friendly_id
+  globalid
   html-pipeline
   http_accept_language
   i18n-tasks
   image_optim_rails
-  jbuilder
+  jbuilder (= 2.12.0)
   jwt
   kaminari
   keycloak
@@ -645,7 +646,7 @@ DEPENDENCIES
   rollbar (>= 1.5.3)
   rouge (~> 3)
   rspec-html-matchers
-  rspec-rails
+  rspec-rails (= 6.1.2)
   rspec-retry
   rspec_junit_formatter
   rubocop (~> 1.64)
@@ -665,7 +666,7 @@ DEPENDENCIES
   stackprof
   traceroute
   tzinfo-data
-  unread
+  unread (= 0.13.1)
   validates_hostname
   workflow
   workflow-activerecord (>= 4.1, < 7.0)

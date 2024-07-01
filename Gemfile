@@ -18,7 +18,7 @@ gem 'rack-cors'
 # Instance/Course settings
 gem 'settings_on_rails', git: 'https://github.com/bivanalhar/settings_on_rails'
 # Manage read/unread status
-gem 'unread'
+gem 'unread', '0.13.1'
 # Extension for validating hostnames and domain names
 gem 'validates_hostname'
 # A Ruby state machine library
@@ -50,8 +50,12 @@ gem 'rinku'
 gem 'rouge', '~> 3'
 gem 'ruby-oembed'
 
+# to help obtaining app wide URI that uniquely identifies model instance
+# (used in notify_identifier for NOTIFY/LISTEN to jobs)
+gem 'globalid'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder'
+gem 'jbuilder', '2.12.0'
 # Slim as the templating language
 gem 'slim-rails'
 # Paginator for Rails
@@ -100,7 +104,7 @@ end
 
 group :development, :test do
   # Use RSpec for Behaviour testing
-  gem 'rspec-rails'
+  gem 'rspec-rails', '6.1.2'
 
   gem 'rubocop', '~> 1.64'
 
