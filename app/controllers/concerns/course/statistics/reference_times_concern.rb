@@ -15,6 +15,7 @@ module Course::Statistics::ReferenceTimesConcern
         ) clpi
         ON cpt.lesson_plan_item_id = clpi.id
       ),
+
       personal_times AS (
         SELECT cu.id AS course_user_id, pt.end_at, pt.assessment_id
         FROM (
@@ -28,6 +29,7 @@ module Course::Statistics::ReferenceTimesConcern
         ) pt
         ON cu.id = pt.course_user_id
       ),
+
       personal_reference_times AS (
         SELECT cu.id AS course_user_id, crt.end_at, clpi.assessment_id
         FROM (
@@ -48,6 +50,7 @@ module Course::Statistics::ReferenceTimesConcern
         ) clpi
         ON crt.lesson_plan_item_id = clpi.id
       )
+
       SELECT
         pt.assessment_id,
         pt.course_user_id,
