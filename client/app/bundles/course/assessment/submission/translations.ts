@@ -266,7 +266,7 @@ const translations = defineMessages({
   },
   remainingBufferTime: {
     id: 'course.assessment.submission.remainingBufferTime',
-    defaultMessage: 'Submitting in: {timeLimit}',
+    defaultMessage: 'Finalising in: {timeLimit}',
   },
   timeIsUp: {
     id: 'course.assessment.submission.timeIsUp',
@@ -435,26 +435,32 @@ const translations = defineMessages({
   },
   timedAssessmentDialogTitle: {
     id: 'course.assessment.submission.timedAssessmentDialogTitle',
-    defaultMessage: 'You are entering a timed assessment.',
+    defaultMessage:
+      '{stillSomeTimeRemaining, select, true {{remainingTime} remaining to \
+      complete this assessment.} other {The assessment has ended!}}',
   },
   timedAssessmentDialogMessage: {
     id: 'course.assessment.submission.timedAssessmentDialogMessage',
     defaultMessage:
-      'You have {remainingTime} to complete this assessment. \
-    {stillSomeTimeRemaining, select, true {Once the time is up, \
-    the assessment will be automatically submitted.} other {}}',
+      '{stillSomeTimeRemaining, select, true {Once the time is up, \
+      the assessment will be automatically finalised.} other {You have \
+      {remainingBufferTime} before your submission is automatically finalised by the system. \
+      Alternatively, you may choose to finalise it on your own within this time.}}',
   },
   timedExamDialogTitle: {
     id: 'course.assessment.submission.timedExamDialogTitle',
-    defaultMessage: 'You are entering a timed exam.',
+    defaultMessage:
+      '{stillSomeTimeRemaining, select, true {{remainingTime} remaining to \
+      complete this exam.} other {The exam has ended!}}',
   },
   timedExamDialogMessage: {
     id: 'course.assessment.submission.timedExamDialogMessage',
     defaultMessage:
-      'You have {remainingTime} to complete this assessment. \
-      {stillSomeTimeRemaining, select, true {Once the time is up, \
-      the assessment will be automatically submitted. Please \
-      do not sign out or close the browser while attempting this exam.} other {}}',
+      '{stillSomeTimeRemaining, select, true {Please \
+      do not sign out or close the browser while attempting this exam. Once the time is up, \
+      the assessment will be automatically finalised.} other {You have \
+      {remainingBufferTime} before your submission is automatically finalised by the system. \
+      Alternatively, you may choose to finalise it on your own within this time.}}',
   },
   emptyAssessment: {
     id: 'course.assessment.submission.emptyAssessment',

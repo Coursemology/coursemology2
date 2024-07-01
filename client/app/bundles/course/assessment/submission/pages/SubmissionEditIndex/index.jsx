@@ -248,12 +248,12 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderTimeLimitBanner() {
-    const { assessment, submission, deadline } = this.props;
+    const { assessment, submission, submissionTimeLimitAt } = this.props;
 
     return (
       assessment.timeLimit &&
       submission.workflowState === 'attempting' && (
-        <TimeLimitBanner deadline={deadline} />
+        <TimeLimitBanner submissionTimeLimitAt={submissionTimeLimitAt} />
       )
     );
   }
@@ -311,7 +311,7 @@ class VisibleSubmissionEditIndex extends Component {
         isCodaveriEnabled,
       },
       codaveriFeedbackStatus,
-      deadline,
+      submissionTimeLimitAt,
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
@@ -346,7 +346,6 @@ class VisibleSubmissionEditIndex extends Component {
           allowPartialSubmission={allowPartialSubmission}
           attempting={workflowState === workflowStates.Attempting}
           codaveriFeedbackStatus={codaveriFeedbackStatus}
-          deadline={deadline}
           explanations={explanations}
           graderView={graderView}
           handleSaveAllGrades={this.handleSaveAllGrades}
@@ -373,6 +372,7 @@ class VisibleSubmissionEditIndex extends Component {
           showMcqMrqSolution={showMcqMrqSolution}
           skippable={skippable}
           step={step}
+          submissionTimeLimitAt={submissionTimeLimitAt}
           submitted={workflowState === workflowStates.Submitted}
           topics={topics}
         />
@@ -383,7 +383,6 @@ class VisibleSubmissionEditIndex extends Component {
         attempting={workflowState === workflowStates.Attempting}
         canUpdate={canUpdate}
         codaveriFeedbackStatus={codaveriFeedbackStatus}
-        deadline={deadline}
         delayedGradePublication={delayedGradePublication}
         explanations={explanations}
         graded={workflowState === workflowStates.Graded}
@@ -417,6 +416,7 @@ class VisibleSubmissionEditIndex extends Component {
         questionsFlags={questionsFlags}
         showMcqMrqSolution={showMcqMrqSolution}
         step={step}
+        submissionTimeLimitAt={submissionTimeLimitAt}
         submitted={workflowState === workflowStates.Submitted}
         tabbedView={tabbedView}
         topics={topics}
@@ -487,7 +487,7 @@ VisibleSubmissionEditIndex.propTypes = {
   answers: PropTypes.object,
   assessment: assessmentShape,
   codaveriFeedbackStatus: PropTypes.object,
-  deadline: PropTypes.number,
+  submissionTimeLimitAt: PropTypes.number,
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
   liveFeedback: PropTypes.object,
@@ -506,17 +506,17 @@ VisibleSubmissionEditIndex.propTypes = {
 };
 
 function mapStateToProps({ assessments: { submission } }) {
-  const hasDeadline =
+  const hasSubmissionTimeLimit =
     submission.submission.workflowState === workflowStates.Attempting &&
     submission.assessment.timeLimit;
-  const deadline = hasDeadline
+  const submissionTimeLimitAt = hasSubmissionTimeLimit
     ? new Date(submission.submission.attemptedAt).getTime() +
       submission.assessment.timeLimit * 60 * 1000
     : null;
 
   return {
     assessment: submission.assessment,
-    deadline,
+    submissionTimeLimitAt,
     exp: submission.grading.exp,
     explanations: submission.explanations,
     answers: submission.answers,
