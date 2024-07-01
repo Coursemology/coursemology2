@@ -138,13 +138,12 @@ GEM
     capybara-selenium (0.0.6)
       capybara
       selenium-webdriver
-    carrierwave (2.2.6)
-      activemodel (>= 5.0.0)
-      activesupport (>= 5.0.0)
+    carrierwave (3.0.7)
+      activemodel (>= 6.0.0)
+      activesupport (>= 6.0.0)
       addressable (~> 2.6)
       image_processing (~> 1.1)
       marcel (~> 1.0.0)
-      mini_mime (>= 0.1.3)
       ssrf_filter (~> 1.0)
     codecov (0.6.0)
       simplecov (>= 0.15, < 0.22)
