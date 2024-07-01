@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 # Helpers for formatting objects/values on the application.
 module ApplicationFormattersHelper
-  include ApplicationHTMLFormattersHelper
+  include ApplicationHtmlFormattersHelper
 
   # Formats the given user-input string. The string is assumed not to contain HTML markup.
   #

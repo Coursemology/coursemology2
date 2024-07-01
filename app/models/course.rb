@@ -32,54 +32,54 @@ class Course < ApplicationRecord
   has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy
   has_many :users, through: :course_users
-  has_many :invitations, class_name: Course::UserInvitation.name, dependent: :destroy,
+  has_many :invitations, class_name: 'Course::UserInvitation', dependent: :destroy,
                          inverse_of: :course
   has_many :notifications, dependent: :destroy
 
   has_many :announcements, dependent: :destroy
   # The order needs to be preserved, this makes sure that the root_folder will be saved first
-  has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
+  has_many :material_folders, class_name: 'Course::Material::Folder', inverse_of: :course,
                               dependent: :destroy do
     include Course::MaterialConcern
   end
   has_many :materials, through: :material_folders
-  has_many :assessment_categories, class_name: Course::Assessment::Category.name,
+  has_many :assessment_categories, class_name: 'Course::Assessment::Category',
                                    dependent: :destroy, inverse_of: :course
   has_many :assessment_tabs, source: :tabs, through: :assessment_categories
   has_many :assessments, through: :assessment_categories
-  has_many :assessment_skills, class_name: Course::Assessment::Skill.name,
+  has_many :assessment_skills, class_name: 'Course::Assessment::Skill',
                                dependent: :destroy
-  has_many :assessment_skill_branches, class_name: Course::Assessment::SkillBranch.name,
+  has_many :assessment_skill_branches, class_name: 'Course::Assessment::SkillBranch',
                                        dependent: :destroy
   has_many :levels, dependent: :destroy, inverse_of: :course do
     include Course::LevelsConcern
   end
-  has_many :group_categories, dependent: :destroy, class_name: Course::GroupCategory.name
+  has_many :group_categories, dependent: :destroy, class_name: 'Course::GroupCategory'
   has_many :groups, through: :group_categories
-  has_many :lesson_plan_items, class_name: Course::LessonPlan::Item.name, dependent: :destroy
+  has_many :lesson_plan_items, class_name: 'Course::LessonPlan::Item', dependent: :destroy
   has_many :lesson_plan_milestones, through: :lesson_plan_items,
-                                    source: :actable, source_type: Course::LessonPlan::Milestone.name
+                                    source: :actable, source_type: 'Course::LessonPlan::Milestone'
   has_many :lesson_plan_events, through: :lesson_plan_items,
-                                source: :actable, source_type: Course::LessonPlan::Event.name
+                                source: :actable, source_type: 'Course::LessonPlan::Event'
   # Achievements must be declared after material_folders or duplication will fail.
   has_many :achievements, dependent: :destroy
-  has_many :discussion_topics, class_name: Course::Discussion::Topic.name, inverse_of: :course
+  has_many :discussion_topics, class_name: 'Course::Discussion::Topic', inverse_of: :course
   has_many :forums, dependent: :destroy, inverse_of: :course
-  has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: Course::Survey.name
-  has_many :videos, through: :lesson_plan_items, source: :actable, source_type: Course::Video.name
-  has_many :video_tabs, class_name: Course::Video::Tab.name, inverse_of: :course, dependent: :destroy
+  has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: 'Course::Survey'
+  has_many :videos, through: :lesson_plan_items, source: :actable, source_type: 'Course::Video'
+  has_many :video_tabs, class_name: 'Course::Video::Tab', inverse_of: :course, dependent: :destroy
 
-  has_many :reference_timelines, class_name: Course::ReferenceTimeline.name, inverse_of: :course, dependent: :destroy
+  has_many :reference_timelines, class_name: 'Course::ReferenceTimeline', inverse_of: :course, dependent: :destroy
   has_one :default_reference_timeline, -> { where(default: true) },
-          class_name: Course::ReferenceTimeline.name, inverse_of: :course
-  has_many :reference_times, through: :reference_timelines, class_name: Course::ReferenceTime.name
+          class_name: 'Course::ReferenceTimeline', inverse_of: :course
+  has_many :reference_times, through: :reference_timelines, class_name: 'Course::ReferenceTime'
 
   validates :default_reference_timeline, presence: true
   validate :validate_only_one_default_reference_timeline
 
   has_one :learning_map, dependent: :destroy
-  has_many :setting_emails, class_name: Course::Settings::Email.name, inverse_of: :course, dependent: :destroy
-  has_one :duplication_traceable, class_name: DuplicationTraceable::Course.name,
+  has_many :setting_emails, class_name: 'Course::Settings::Email', inverse_of: :course, dependent: :destroy
+  has_one :duplication_traceable, class_name: 'DuplicationTraceable::Course',
                                   inverse_of: :course, dependent: :destroy
 
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs

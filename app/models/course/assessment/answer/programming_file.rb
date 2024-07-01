@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   before_validation :normalize_filename
 
@@ -17,8 +18,8 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
 
   # Separate the lines by `\r` `\n` or `\r\n`
   LINE_SEPARATOR = /\r\n|\r|\n/
-  MAX_LINES = ApplicationHTMLFormattersHelper::MAX_CODE_LINES
-  MAX_SIZE = ApplicationHTMLFormattersHelper::MAX_CODE_SIZE
+  MAX_LINES = ApplicationHtmlFormattersHelper::MAX_CODE_LINES
+  MAX_SIZE = ApplicationHtmlFormattersHelper::MAX_CODE_SIZE
 
   # Returns the code at lines.
   #
