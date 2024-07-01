@@ -24,7 +24,7 @@ class Instance::UserRoleRequest < ApplicationRecord
 
   belongs_to :instance, inverse_of: :user_role_requests
   belongs_to :user, inverse_of: nil
-  belongs_to :confirmer, class_name: User.name, inverse_of: nil, optional: true
+  belongs_to :confirmer, class_name: 'User', inverse_of: nil, optional: true
 
   alias_method :approve=, :approve!
   alias_method :reject=, :reject!

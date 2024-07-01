@@ -5,8 +5,8 @@ class Course::Assessment::Answer::ProgrammingAutoGradingTestResult < Application
   validates :passed, inclusion: { in: [true, false] }
   validates :auto_grading, presence: true
 
-  belongs_to :auto_grading, class_name: Course::Assessment::Answer::ProgrammingAutoGrading.name,
+  belongs_to :auto_grading, class_name: 'Course::Assessment::Answer::ProgrammingAutoGrading',
                             inverse_of: :test_results
-  belongs_to :test_case, class_name: Course::Assessment::Question::ProgrammingTestCase.name,
+  belongs_to :test_case, class_name: 'Course::Assessment::Question::ProgrammingTestCase',
                          inverse_of: :test_results, optional: true
 end

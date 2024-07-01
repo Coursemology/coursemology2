@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingAutoGrading < ApplicationRecord
-  acts_as :auto_grading, class_name: Course::Assessment::Answer::AutoGrading.name,
+  acts_as :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
                          inverse_of: :actable
 
   before_save :strip_null_byte
@@ -9,9 +9,9 @@ class Course::Assessment::Answer::ProgrammingAutoGrading < ApplicationRecord
 
   has_one :programming_answer, through: :answer,
                                source: :actable,
-                               source_type: Course::Assessment::Answer::Programming.name
+                               source_type: 'Course::Assessment::Answer::Programming'
   has_many :test_results,
-           class_name: Course::Assessment::Answer::ProgrammingAutoGradingTestResult.name,
+           class_name: 'Course::Assessment::Answer::ProgrammingAutoGradingTestResult',
            foreign_key: :auto_grading_id, inverse_of: :auto_grading,
            dependent: :destroy
 

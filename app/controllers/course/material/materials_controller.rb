@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Material::MaterialsController < Course::Material::Controller
-  load_and_authorize_resource :material, through: :folder, class: Course::Material.name
+  load_and_authorize_resource :material, through: :folder, class: 'Course::Material'
 
   def show
     authorize!(:read_owner, @material.folder)

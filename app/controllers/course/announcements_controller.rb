@@ -3,7 +3,7 @@ class Course::AnnouncementsController < Course::ComponentController
   include Course::UsersHelper
   include Signals::EmissionConcern
 
-  load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
+  load_and_authorize_resource :announcement, through: :course, class: 'Course::Announcement'
 
   after_action :mark_announcements_as_read, only: [:index]
 

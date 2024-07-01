@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class System::Admin::InstancesController < System::Admin::Controller
-  load_and_authorize_resource :instance, class: ::Instance.name
+  load_and_authorize_resource :instance, class: '::Instance'
 
   def index
     respond_to do |format|

@@ -28,7 +28,7 @@ class Course::Assessment::Controller < Course::ComponentController
 
   def load_and_authorize_assessment
     options = load_assessment_options.reverse_merge(through: :course,
-                                                    class: Course::Assessment.name)
+                                                    class: 'Course::Assessment')
     self.class.cancan_resource_class.new(self, :assessment, options).load_and_authorize_resource
   end
 

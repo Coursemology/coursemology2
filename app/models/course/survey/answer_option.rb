@@ -4,6 +4,6 @@ class Course::Survey::AnswerOption < ApplicationRecord
   validates :question_option, presence: true
 
   belongs_to :answer, inverse_of: :options
-  belongs_to :question_option, class_name: Course::Survey::QuestionOption.name,
+  belongs_to :question_option, class_name: 'Course::Survey::QuestionOption',
                                inverse_of: :answer_options
 end

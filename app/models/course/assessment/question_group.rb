@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::QuestionGroup < ApplicationRecord
-  belongs_to :assessment, class_name: Course::Assessment.name, inverse_of: :question_groups
-  has_many :question_bundles, class_name: Course::Assessment::QuestionBundle.name,
+  belongs_to :assessment, class_name: 'Course::Assessment', inverse_of: :question_groups
+  has_many :question_bundles, class_name: 'Course::Assessment::QuestionBundle',
                               foreign_key: :group_id, inverse_of: :question_group, dependent: :destroy
 
   validates :title, presence: true

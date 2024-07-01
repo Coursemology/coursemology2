@@ -3,10 +3,10 @@ class Course::Assessment::CategoriesController < Course::ComponentController
   load_and_authorize_resource :category,
                               through: :course,
                               through_association: :assessment_categories,
-                              class: Course::Assessment::Category.name
+                              class: 'Course::Assessment::Category'
   load_and_authorize_resource :tab,
                               through: :category,
-                              class: Course::Assessment::Tab.name
+                              class: 'Course::Assessment::Tab'
 
   def index; end
 

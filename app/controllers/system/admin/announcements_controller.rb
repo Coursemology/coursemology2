@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class System::Admin::AnnouncementsController < System::Admin::Controller
-  load_and_authorize_resource :announcement, class: System::Announcement.name
+  load_and_authorize_resource :announcement, class: 'System::Announcement'
 
   def index
     respond_to do |format|

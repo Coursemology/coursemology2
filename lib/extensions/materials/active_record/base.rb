@@ -5,9 +5,9 @@ module Extensions::Materials::ActiveRecord::Base
     def has_one_folder # rubocop:disable Naming/PredicateName
       after_initialize :build_new_record_folder, if: :new_record?
 
-      has_one :folder, as: :owner, class_name: Course::Material::Folder.name,
+      has_one :folder, as: :owner, class_name: 'Course::Material::Folder',
                        inverse_of: :owner, dependent: :destroy, autosave: true
-      has_many :materials, through: :folder, class_name: Course::Material.name
+      has_many :materials, through: :folder, class_name: 'Course::Material'
 
       include Extensions::Materials::ActiveRecord::Base::InstanceMethods
     end

@@ -58,38 +58,38 @@ class Course::Assessment::Submission < ApplicationRecord
 
   belongs_to :assessment, inverse_of: :submissions
 
-  has_many :submission_questions, class_name: Course::Assessment::SubmissionQuestion.name,
+  has_many :submission_questions, class_name: 'Course::Assessment::SubmissionQuestion',
                                   dependent: :destroy, inverse_of: :submission
 
   # @!attribute [r] answers
   #   The answers associated with this submission. There can be more than one answer per submission,
   #   this is because every answer is saved over time. Use the {.latest} scope of the answers if
   #   only the latest answer for each question is desired.
-  has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
+  has_many :answers, class_name: 'Course::Assessment::Answer', dependent: :destroy,
                      inverse_of: :submission do
     include Course::Assessment::Submission::AnswersConcern
   end
   has_many :multiple_response_answers,
            through: :answers, inverse_through: :answer, source: :actable,
-           source_type: Course::Assessment::Answer::MultipleResponse.name
+           source_type: 'Course::Assessment::Answer::MultipleResponse'
   has_many :text_response_answers,
            through: :answers, inverse_through: :answer, source: :actable,
-           source_type: Course::Assessment::Answer::TextResponse.name
+           source_type: 'Course::Assessment::Answer::TextResponse'
   has_many :programming_answers,
            through: :answers, inverse_through: :answer, source: :actable,
-           source_type: Course::Assessment::Answer::Programming.name
+           source_type: 'Course::Assessment::Answer::Programming'
   has_many :scribing_answers,
            through: :answers, inverse_through: :answer, source: :actable,
-           source_type: Course::Assessment::Answer::Scribing.name
+           source_type: 'Course::Assessment::Answer::Scribing'
   has_many :forum_post_response_answers,
            through: :answers, inverse_through: :answer, source: :actable,
-           source_type: Course::Assessment::Answer::ForumPostResponse.name
-  has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
+           source_type: 'Course::Assessment::Answer::ForumPostResponse'
+  has_many :question_bundle_assignments, class_name: 'Course::Assessment::QuestionBundleAssignment',
                                          inverse_of: :submission, dependent: :destroy
 
-  belongs_to :publisher, class_name: User.name, inverse_of: nil, optional: true
+  belongs_to :publisher, class_name: 'User', inverse_of: nil, optional: true
 
-  has_many :logs, class_name: Course::Assessment::Submission::Log.name,
+  has_many :logs, class_name: 'Course::Assessment::Submission::Log',
                   inverse_of: :submission, dependent: :destroy
 
   accepts_nested_attributes_for :answers

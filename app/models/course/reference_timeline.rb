@@ -2,7 +2,7 @@
 class Course::ReferenceTimeline < ApplicationRecord
   belongs_to :course, inverse_of: :reference_timelines
   has_many :reference_times,
-           class_name: Course::ReferenceTime.name, inverse_of: :reference_timeline, dependent: :destroy
+           class_name: 'Course::ReferenceTime', inverse_of: :reference_timeline, dependent: :destroy
   has_many :course_users, foreign_key: :reference_timeline_id, inverse_of: :reference_timeline,
                           dependent: :restrict_with_error
 

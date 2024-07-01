@@ -5,7 +5,7 @@ class Course::Assessment::Answer::ProgrammingFileAnnotation < ApplicationRecord
   validates :line, numericality: { only_integer: true }, presence: true
   validates :file, presence: true
 
-  belongs_to :file, class_name: Course::Assessment::Answer::ProgrammingFile.name,
+  belongs_to :file, class_name: 'Course::Assessment::Answer::ProgrammingFile',
                     inverse_of: :annotations
 
   after_initialize :set_course, if: :new_record?

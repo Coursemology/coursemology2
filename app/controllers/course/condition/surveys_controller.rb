@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::Condition::SurveysController < Course::ConditionsController
-  load_resource :survey_condition, class: Course::Condition::Survey.name, parent: false
+  load_resource :survey_condition, class: 'Course::Condition::Survey', parent: false
   before_action :set_course_and_conditional, only: [:create]
-  authorize_resource :survey_condition, class: Course::Condition::Survey.name
+  authorize_resource :survey_condition, class: 'Course::Condition::Survey'
 
   def index
     render_available_surveys

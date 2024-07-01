@@ -3,7 +3,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
   include Course::UsersHelper
   include Signals::EmissionConcern
 
-  load_resource :forum, class: Course::Forum.name, through: :course, only: [:index, :new, :create]
+  load_resource :forum, class: 'Course::Forum', through: :course, only: [:index, :new, :create]
 
   signals :forums, after: [:mark_all_as_read, :mark_as_read]
 

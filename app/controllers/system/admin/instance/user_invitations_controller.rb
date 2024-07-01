@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class System::Admin::Instance::UserInvitationsController < System::Admin::Instance::Controller
-  load_and_authorize_resource :instance_user, class: InstanceUser.name,
+  load_and_authorize_resource :instance_user, class: 'InstanceUser',
                                               parent: false,
                                               except: [:new, :create, :destroy]
 
