@@ -50,7 +50,7 @@ class User < ApplicationRecord
                                    uniqueness: { if: :reset_password_token_changed? }
   validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true
 
-  has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
+  has_many :emails, -> { order('primary' => :desc) }, class_name: 'User::Email',
                                                       inverse_of: :user, dependent: :destroy
   # This order need to be preserved, so that :emails association can be detected by
   # devise-multi_email correctly.
@@ -58,18 +58,18 @@ class User < ApplicationRecord
 
   has_many :instance_users, dependent: :destroy
   has_many :instances, through: :instance_users
-  has_many :identities, dependent: :destroy, class_name: User::Identity.name
+  has_many :identities, dependent: :destroy, class_name: 'User::Identity'
   has_many :activities, inverse_of: :actor, dependent: :destroy, foreign_key: 'actor_id'
-  has_many :notifications, dependent: :destroy, class_name: UserNotification.name,
+  has_many :notifications, dependent: :destroy, class_name: 'UserNotification',
                            inverse_of: :user do
     include UserNotificationsConcern
   end
-  has_many :course_enrol_requests, dependent: :destroy, class_name: Course::EnrolRequest.name,
+  has_many :course_enrol_requests, dependent: :destroy, class_name: 'Course::EnrolRequest',
                                    inverse_of: :user
   has_many :course_users, dependent: :destroy
   has_many :courses, through: :course_users
-  has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :user, dependent: :destroy
-  has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
+  has_many :todos, class_name: 'Course::LessonPlan::Todo', inverse_of: :user, dependent: :destroy
+  has_many :question_bundle_assignments, class_name: 'Course::Assessment::QuestionBundleAssignment',
                                          inverse_of: :user, dependent: :destroy
 
   has_one :cikgo_user, dependent: :destroy, inverse_of: :user

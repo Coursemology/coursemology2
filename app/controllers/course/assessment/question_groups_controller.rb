@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::QuestionGroupsController < Course::Assessment::Controller
-  load_and_authorize_resource :question_group, class: Course::Assessment::QuestionGroup, through: :assessment
+  load_and_authorize_resource :question_group, class: 'Course::Assessment::QuestionGroup', through: :assessment
 
   def index
     @question_groups = @question_groups.order(:weight)

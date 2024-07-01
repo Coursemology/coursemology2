@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class System::Admin::UsersController < System::Admin::Controller
-  load_and_authorize_resource :user, class: User.name
+  load_and_authorize_resource :user, class: 'User'
 
   def index
     respond_to do |format|

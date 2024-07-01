@@ -2,7 +2,7 @@
 class Course::ExperiencePointsRecordsController < Course::ComponentController
   load_resource :course_user, through: :course, id_param: :user_id, except: [:index, :download]
   load_and_authorize_resource :experience_points_record, through: :course_user,
-                                                         class: Course::ExperiencePointsRecord.name,
+                                                         class: 'Course::ExperiencePointsRecord',
                                                          except: [:index, :download]
 
   def index

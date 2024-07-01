@@ -8,9 +8,9 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
   validates :submission_id, uniqueness: { scope: [:question_id], if: -> { question_id? && submission_id_changed? } }
   validates :question_id, uniqueness: { scope: [:submission_id], if: -> { submission_id? && question_id_changed? } }
 
-  belongs_to :submission, class_name: Course::Assessment::Submission.name,
+  belongs_to :submission, class_name: 'Course::Assessment::Submission',
                           inverse_of: :submission_questions
-  belongs_to :question, class_name: Course::Assessment::Question.name,
+  belongs_to :question, class_name: 'Course::Assessment::Question',
                         inverse_of: :submission_questions
 
   after_initialize :set_course, if: :new_record?

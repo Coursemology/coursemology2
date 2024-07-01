@@ -6,9 +6,5 @@ FactoryBot.define do
     course
     title { generate(:course_assessment_category_title) }
     weight { generate(:course_assessment_category_weight) }
-
-    after(:build) do |category|
-      Course::Settings::Email.after_assessment_category_initialize(category)
-    end
   end
 end

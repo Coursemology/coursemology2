@@ -2,7 +2,7 @@
 class Course::Video::Controller < Course::ComponentController
   include Course::LessonPlan::ActsAsLessonPlanItemConcern
 
-  load_and_authorize_resource :video, through: :course, class: Course::Video.name
+  load_and_authorize_resource :video, through: :course, class: 'Course::Video'
 
   private
 

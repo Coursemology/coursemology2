@@ -3,7 +3,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   build_and_authorize_new_question :programming_question,
                                    class: Course::Assessment::Question::Programming, only: [:new, :create]
   load_and_authorize_resource :programming_question,
-                              class: Course::Assessment::Question::Programming,
+                              class: 'Course::Assessment::Question::Programming',
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update, :update_question_setting]
   before_action :set_attributes_for_programming_question

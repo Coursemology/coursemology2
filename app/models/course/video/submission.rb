@@ -15,10 +15,10 @@ class Course::Video::Submission < ApplicationRecord
 
   belongs_to :video, inverse_of: :submissions
 
-  has_many :sessions, class_name: Course::Video::Session.name,
+  has_many :sessions, class_name: 'Course::Video::Session',
                       inverse_of: :submission, dependent: :destroy
-  has_many :events, through: :sessions, class_name: Course::Video::Event.name
-  has_one :statistic, class_name: Course::Video::Submission::Statistic.name, dependent: :destroy,
+  has_many :events, through: :sessions, class_name: 'Course::Video::Event'
+  has_one :statistic, class_name: 'Course::Video::Submission::Statistic', dependent: :destroy,
                       foreign_key: :submission_id, inverse_of: :submission, autosave: true
 
   # @!method self.ordered_by_date

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::MultipleResponse < ApplicationRecord
-  acts_as :question, class_name: Course::Assessment::Question.name
+  acts_as :question, class_name: 'Course::Assessment::Question'
 
   enum grading_scheme: [:all_correct, :any_correct]
 
@@ -8,7 +8,7 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
   validate :validate_multiple_choice_has_correct_solution, if: :multiple_choice?
   validates :grading_scheme, presence: true
 
-  has_many :options, class_name: Course::Assessment::Question::MultipleResponseOption.name,
+  has_many :options, class_name: 'Course::Assessment::Question::MultipleResponseOption',
                      dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
   accepts_nested_attributes_for :options, allow_destroy: true

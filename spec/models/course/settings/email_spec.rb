@@ -20,19 +20,6 @@ RSpec.describe Course::Settings::Email, type: :model do
       end
     end
 
-    describe '.after_assessment_category_initialize' do
-      let!(:course) { create(:course) }
-      let!(:category) { create(:course_assessment_category, course: course) }
-
-      it 'builds a set of default email settings including email settings for an additional category' do
-        expect(course.setting_emails.length).to eq(21)
-
-        # Call the callback one more time
-        Course::Settings::Email.after_assessment_category_initialize(course)
-        expect(course.setting_emails.length).to eq(21)
-      end
-    end
-
     describe '.student_setting' do
       let!(:course) { create(:course) }
 

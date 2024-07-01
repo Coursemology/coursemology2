@@ -11,11 +11,11 @@ class Course::Assessment::Category < ApplicationRecord
   validates :course, presence: true
 
   belongs_to :course, inverse_of: :assessment_categories
-  has_many :tabs, class_name: Course::Assessment::Tab.name,
+  has_many :tabs, class_name: 'Course::Assessment::Tab',
                   inverse_of: :category,
                   dependent: :destroy
   has_many :assessments, through: :tabs
-  has_many :setting_emails, class_name: Course::Settings::Email.name,
+  has_many :setting_emails, class_name: 'Course::Settings::Email',
                             foreign_key: :course_assessment_category_id,
                             inverse_of: :assessment_category,
                             dependent: :destroy

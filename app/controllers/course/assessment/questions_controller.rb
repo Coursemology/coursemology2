@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::QuestionsController < Course::Assessment::Controller
-  load_and_authorize_resource :question, class: Course::Assessment::Question, through: :assessment
+  load_and_authorize_resource :question, class: 'Course::Assessment::Question', through: :assessment
   before_action :load_and_authorize_assessments, only: :duplicate
 
   # The current assumption is that the destination assessment's course is the same as the current
