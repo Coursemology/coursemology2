@@ -197,7 +197,7 @@ gem 'rubyzip', require: 'zip'
 gem 'nokogiri', '>= 1.8.1'
 
 # Polyglot support
-gem 'coursemology-polyglot'
+gem 'coursemology-polyglot', '0.3.8'
 
 # To assist with bulk inserts into database
 gem 'activerecord-import', '>= 0.2.0'
