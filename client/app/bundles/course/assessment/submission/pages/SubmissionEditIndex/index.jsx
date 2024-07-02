@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
@@ -27,6 +27,8 @@ import {
   exitStudentView,
   fetchSubmission,
   finalise,
+  getEvaluationResult,
+  getJobStatus,
   mark,
   publish,
   purgeSubmissionStore,
@@ -66,6 +68,9 @@ import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
 import TimeLimitBanner from './TimeLimitBanner';
 
+const EVALUATE_POLL_INTERVAL_MILLISECONDS = 500;
+const FEEDBACK_POLL_INTERVAL_MILLISECONDS = 2000;
+
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
     super(props);
@@ -76,16 +81,72 @@ class VisibleSubmissionEditIndex extends Component {
         ? null
         : parseInt(stepString, 10) - 1;
 
-    this.state = { step };
+    this.state = {
+      feedbackPollerTimer: createRef(null),
+      evaluatePollerTimer: createRef(null),
+    };
+  }
+
+  handleLiveFeedbackPolling = () => {
+    const { questions, liveFeedback } = this.props;
+    const { assessment, submission } = this.props;
+
+    Object.values(questions).forEach((question) => {
+      const feedbackRequestToken =
+        liveFeedback?.feedbackByQuestion?.[question.id]?.pendingFeedbackToken;
+      if (feedbackRequestToken) {
+        this.onFetchLiveFeedback(question.answerId, question.id);
+      }
+    });
+  }
+
+  handleEvaluationPolling = () => {
+    const { answers, dispatch, submission } = this.props;
+    Object.values(answers.initial)
+      .filter((a) => a.autograding && a.autograding.path)
+      .forEach((answer) => {
+        getJobStatus(answer.autograding.path)
+          .then((response) => {
+            switch (response.data.status) {
+              case 'submitted':
+                break;
+              case 'completed':
+                dispatch(
+                  getEvaluationResult(
+                    submission.id,
+                    answer.id,
+                    answer.questionId,
+                  ),
+                );
+                break;
+              case 'errored':
+                dispatch({
+                  type: actionTypes.AUTOGRADE_FAILURE,
+                  questionId: answer.questionId,
+                });
+                break;
+              default:
+                throw new Error('Unknown job status');
+            }
+          });
+      });
   }
 
   componentDidMount() {
     const { dispatch, match, setSessionId } = this.props;
     dispatch(fetchSubmission(match.params.submissionId, setSessionId));
+
+    this.state.feedbackPollerTimer.current = 
+      setInterval(this.handleLiveFeedbackPolling, FEEDBACK_POLL_INTERVAL_MILLISECONDS);
+    this.state.evaluatePollerTimer.current = 
+      setInterval(this.handleEvaluationPolling, EVALUATE_POLL_INTERVAL_MILLISECONDS);
   }
 
   componentWillUnmount() {
     const { dispatch } = this.props;
+
+    clearInterval(this.state.feedbackPollerTimer.current);
+    clearInterval(this.state.evaluatePollerTimer.current);
     dispatch(purgeSubmissionStore());
   }
 
