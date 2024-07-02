@@ -20,7 +20,7 @@ class Course::LessonPlan::Todo < ApplicationRecord
   validates :item_id, uniqueness: { scope: [:user_id], if: -> { user_id? && item_id_changed? } }
 
   belongs_to :user, inverse_of: :todos
-  belongs_to :item, class_name: Course::LessonPlan::Item.name, inverse_of: :todos
+  belongs_to :item, class_name: 'Course::LessonPlan::Item', inverse_of: :todos
 
   # Started is not used as it is defined in Extensions::TimeBoundedRecord::ActiveRecord::Base
   scope :opened, (lambda do

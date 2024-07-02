@@ -13,7 +13,7 @@ class Course::Assessment::Question::TextResponseComprehensionSolution < Applicat
   validates :solution_lemma, presence: true
   validates :point, presence: true
 
-  belongs_to :point, class_name: Course::Assessment::Question::TextResponseComprehensionPoint.name,
+  belongs_to :point, class_name: 'Course::Assessment::Question::TextResponseComprehensionPoint',
                      inverse_of: :solutions
 
   def auto_gradable_solution?

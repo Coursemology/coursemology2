@@ -8,9 +8,9 @@ class Course::QuestionAssessment < ApplicationRecord
   validates :assessment_id, uniqueness: { scope: [:question_id], if: -> { question_id? && assessment_id_changed? } }
   validates :question_id, uniqueness: { scope: [:assessment_id], if: -> { assessment_id? && question_id_changed? } }
 
-  belongs_to :assessment, inverse_of: :question_assessments, class_name: Course::Assessment.name
-  belongs_to :question, inverse_of: :question_assessments, class_name: Course::Assessment::Question.name
-  has_and_belongs_to_many :skills, inverse_of: :question_assessments, class_name: Course::Assessment::Skill.name
+  belongs_to :assessment, inverse_of: :question_assessments, class_name: 'Course::Assessment'
+  belongs_to :question, inverse_of: :question_assessments, class_name: 'Course::Assessment::Question'
+  has_and_belongs_to_many :skills, inverse_of: :question_assessments, class_name: 'Course::Assessment::Skill'
 
   default_scope { order(weight: :asc) }
 

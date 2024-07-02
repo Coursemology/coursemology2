@@ -53,10 +53,10 @@ class Course::Assessment::Question::TextResponseComprehensionGroup < Application
   validates :maximum_group_grade, numericality: { greater_than: -1000, less_than: 1000 }, presence: true
   validates :question, presence: true
 
-  has_many :points, class_name: Course::Assessment::Question::TextResponseComprehensionPoint.name,
+  has_many :points, class_name: 'Course::Assessment::Question::TextResponseComprehensionPoint',
                     dependent: :destroy, foreign_key: :group_id, inverse_of: :group
 
-  belongs_to :question, class_name: Course::Assessment::Question::TextResponse.name,
+  belongs_to :question, class_name: 'Course::Assessment::Question::TextResponse',
                         inverse_of: :groups
 
   accepts_nested_attributes_for :points, allow_destroy: true

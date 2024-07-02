@@ -7,7 +7,7 @@ class Course::LessonPlan::MilestonesController < Course::LessonPlan::Controller
                                            class: Course::LessonPlan::Milestone, only: [:new, :create]
   load_and_authorize_resource :milestone,
                               through: :course, through_association: :lesson_plan_milestones,
-                              class: Course::LessonPlan::Milestone.name, except: [:new, :create]
+                              class: 'Course::LessonPlan::Milestone', except: [:new, :create]
 
   def create
     if @milestone.save

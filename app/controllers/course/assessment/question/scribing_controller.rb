@@ -3,7 +3,7 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
   build_and_authorize_new_question :scribing_question,
                                    class: Course::Assessment::Question::Scribing, only: [:new, :create]
   load_and_authorize_resource :scribing_question,
-                              class: Course::Assessment::Question::Scribing,
+                              class: 'Course::Assessment::Question::Scribing',
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:show, :edit, :update]
 

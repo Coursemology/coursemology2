@@ -24,7 +24,7 @@ class Course::ExperiencePointsRecord < ApplicationRecord
   validate :validate_limit_exp_points_on_association
 
   belongs_to :course_user, inverse_of: :experience_points_records
-  belongs_to :awarder, class_name: User.name, inverse_of: nil, optional: true
+  belongs_to :awarder, class_name: 'User', inverse_of: nil, optional: true
 
   scope :active, -> { where.not(points_awarded: nil) }
 

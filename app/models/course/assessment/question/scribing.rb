@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Scribing < ApplicationRecord
-  acts_as :question, class_name: Course::Assessment::Question.name
+  acts_as :question, class_name: 'Course::Assessment::Question'
   has_one_attachment
 
   def to_partial_path

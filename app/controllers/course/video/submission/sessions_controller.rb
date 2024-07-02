@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Video::Submission::SessionsController < Course::Video::Submission::Controller
-  load_and_authorize_resource :session, class: Course::Video::Session.name, through: :submission
+  load_and_authorize_resource :session, class: 'Course::Video::Session', through: :submission
 
   def create
     head :bad_request unless @session.save

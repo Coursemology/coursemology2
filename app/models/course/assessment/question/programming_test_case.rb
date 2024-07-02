@@ -10,10 +10,10 @@ class Course::Assessment::Question::ProgrammingTestCase < ApplicationRecord
   validates :question_id, uniqueness: { scope: [:identifier],
                                         if: -> { identifier? && question_id_changed? } }
 
-  belongs_to :question, class_name: Course::Assessment::Question::Programming.name,
+  belongs_to :question, class_name: 'Course::Assessment::Question::Programming',
                         inverse_of: :test_cases
   has_many :test_results,
-           class_name: Course::Assessment::Answer::ProgrammingAutoGradingTestResult.name,
+           class_name: 'Course::Assessment::Answer::ProgrammingAutoGradingTestResult',
            inverse_of: :test_case,
            dependent: :destroy,
            foreign_key: :test_case_id

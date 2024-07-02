@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Video::TopicsController < Course::Video::Controller
-  load_and_authorize_resource :topic, through: :video, class: Course::Video::Topic.name
+  load_and_authorize_resource :topic, through: :video, class: 'Course::Video::Topic'
 
   include Course::Discussion::PostsConcern
   skip_load_and_authorize_resource :post, except: :create

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
-  acts_as :question, class_name: Course::Assessment::Question.name
+  acts_as :question, class_name: 'Course::Assessment::Question'
 
   validates :max_posts, presence: true, numericality: { only_integer: true }
   validate :allowable_max_post_count

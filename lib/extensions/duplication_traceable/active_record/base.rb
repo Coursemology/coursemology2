@@ -2,7 +2,7 @@
 module Extensions::DuplicationTraceable::ActiveRecord::Base
   module ClassMethods
     def acts_as_duplication_traceable
-      acts_as :duplication_traceable, class_name: DuplicationTraceable.name
+      acts_as :duplication_traceable, class_name: 'DuplicationTraceable'
 
       extend DuplicationTraceableClassMethods
       include DuplicationTraceableInstanceMethods

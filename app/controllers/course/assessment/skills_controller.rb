@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::SkillsController < Course::ComponentController
-  load_and_authorize_resource :skill, class: Course::Assessment::Skill.name, through: :course,
+  load_and_authorize_resource :skill, class: 'Course::Assessment::Skill', through: :course,
                                       through_association: :assessment_skills
   before_action :load_skill_branches
 

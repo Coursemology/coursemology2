@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::TextResponse < ApplicationRecord
-  acts_as :question, class_name: Course::Assessment::Question.name
+  acts_as :question, class_name: 'Course::Assessment::Question'
 
   DEFAULT_MAX_ATTACHMENTS = 50
   DEFAULT_MAX_ATTACHMENT_SIZE_MB = 1024
@@ -13,10 +13,10 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
                                   allow_nil: true
   validate :validate_grade
 
-  has_many :solutions, class_name: Course::Assessment::Question::TextResponseSolution.name,
+  has_many :solutions, class_name: 'Course::Assessment::Question::TextResponseSolution',
                        dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
-  has_many :groups, class_name: Course::Assessment::Question::TextResponseComprehensionGroup.name,
+  has_many :groups, class_name: 'Course::Assessment::Question::TextResponseComprehensionGroup',
                     dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
   accepts_nested_attributes_for :solutions, allow_destroy: true

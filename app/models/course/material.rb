@@ -3,7 +3,7 @@ class Course::Material < ApplicationRecord
   has_one_attachment
   include DuplicationStateTrackingConcern
 
-  belongs_to :folder, inverse_of: :materials, class_name: Course::Material::Folder.name
+  belongs_to :folder, inverse_of: :materials, class_name: 'Course::Material::Folder'
 
   before_save :touch_folder
 

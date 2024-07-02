@@ -16,15 +16,15 @@ class Course::Assessment::Question < ApplicationRecord
                                        if: -> { actable_type? && actable_id_changed? } }
   validates :is_low_priority, inclusion: { in: [true, false] }
 
-  has_many :question_assessments, class_name: Course::QuestionAssessment.name, inverse_of: :question,
+  has_many :question_assessments, class_name: 'Course::QuestionAssessment', inverse_of: :question,
                                   dependent: :destroy
-  has_many :answers, class_name: Course::Assessment::Answer.name, dependent: :destroy,
+  has_many :answers, class_name: 'Course::Assessment::Answer', dependent: :destroy,
                      inverse_of: :question
-  has_many :submission_questions, class_name: Course::Assessment::SubmissionQuestion.name,
+  has_many :submission_questions, class_name: 'Course::Assessment::SubmissionQuestion',
                                   dependent: :destroy, inverse_of: :question
-  has_many :question_bundle_questions, class_name: Course::Assessment::QuestionBundleQuestion.name,
+  has_many :question_bundle_questions, class_name: 'Course::Assessment::QuestionBundleQuestion',
                                        foreign_key: :question_id, dependent: :destroy, inverse_of: :question
-  has_many :question_bundles, through: :question_bundle_questions, class_name: Course::Assessment::QuestionBundle.name
+  has_many :question_bundles, through: :question_bundle_questions, class_name: 'Course::Assessment::QuestionBundle'
 
   delegate :to_partial_path, to: :actable
   delegate :question_type, to: :actable

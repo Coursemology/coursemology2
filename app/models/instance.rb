@@ -54,7 +54,7 @@ class Instance < ApplicationRecord
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :instance_users, dependent: :destroy
 
-  has_many :user_role_requests, class_name: Instance::UserRoleRequest.name, dependent: :destroy,
+  has_many :user_role_requests, class_name: 'Instance::UserRoleRequest', dependent: :destroy,
                                 inverse_of: :instance
 
   # @!attribute [r] users
@@ -63,13 +63,13 @@ class Instance < ApplicationRecord
 
   # @!attribute [r] invitations
   #   @note You are scoped by the current tenant, you might not see all.
-  has_many :invitations, class_name: Instance::UserInvitation.name,
+  has_many :invitations, class_name: 'Instance::UserInvitation',
                          dependent: :destroy,
                          inverse_of: :instance
 
   # @!attribute [r] announcements
   #   @note You are scoped by the current tenant, you might not see all.
-  has_many :announcements, class_name: Instance::Announcement.name, dependent: :destroy
+  has_many :announcements, class_name: 'Instance::Announcement', dependent: :destroy
   # @!attribute [r] courses
   #   @note You are scoped by the current tenant, you might not see all.
   has_many :courses, dependent: :destroy

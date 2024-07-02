@@ -10,7 +10,7 @@ class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
   validates :grade, numericality: { greater_than: -1000, less_than: 1000 }, presence: true
   validates :question, presence: true
 
-  belongs_to :question, class_name: Course::Assessment::Question::TextResponse.name,
+  belongs_to :question, class_name: 'Course::Assessment::Question::TextResponse',
                         inverse_of: :solutions
 
   def initialize_duplicate(duplicator, other)

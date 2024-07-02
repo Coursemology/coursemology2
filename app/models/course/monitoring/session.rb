@@ -4,11 +4,11 @@ class Course::Monitoring::Session < ApplicationRecord
 
   enum status: { stopped: 0, listening: 1 }
 
-  belongs_to :monitor, class_name: Course::Monitoring::Monitor.name, inverse_of: :sessions
+  belongs_to :monitor, class_name: 'Course::Monitoring::Monitor', inverse_of: :sessions
 
   # `:heartbeats` are not `dependent: :destroy` for now due to performance concerns when deleting
   # a `Course::Monitoring::Session` through `Course::Assessment::Submission`.
-  has_many :heartbeats, class_name: Course::Monitoring::Heartbeat.name, inverse_of: :session
+  has_many :heartbeats, class_name: 'Course::Monitoring::Heartbeat', inverse_of: :session
 
   validates :monitor_id, presence: true, uniqueness: { scope: :creator_id }
   validates :status, presence: true

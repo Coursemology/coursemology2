@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessment::Controller
   include Course::Assessment::QuestionBundleAssignmentConcern
-  load_and_authorize_resource :question_bundle_assignment, class: Course::Assessment::QuestionBundleAssignment,
+  load_and_authorize_resource :question_bundle_assignment, class: 'Course::Assessment::QuestionBundleAssignment',
                                                            through: :assessment
 
   def index
