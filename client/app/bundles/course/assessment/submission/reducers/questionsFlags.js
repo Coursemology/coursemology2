@@ -16,6 +16,7 @@ export default function (state = {}, action) {
             isAutograding:
               Boolean(answer?.autograding) &&
               answer?.autograding?.status === 'submitted',
+            jobUrl: answer?.autograding?.jobUrl,
             jobError:
               Boolean(answer?.autograding) &&
               answer?.autograding?.status === 'errored',
@@ -34,6 +35,17 @@ export default function (state = {}, action) {
         },
       };
     }
+    case actions.AUTOGRADE_SUBMITTED: {
+      const { questionId, jobUrl } = action.payload;
+      return {
+        ...state,
+        [questionId]: {
+          ...state[questionId],
+          isAutograding: true,
+          jobUrl,
+        },
+      };
+    }
     case actions.REEVALUATE_SUCCESS:
     case actions.AUTOGRADE_SUCCESS: {
       const { questionId } = action.payload;
@@ -43,6 +55,7 @@ export default function (state = {}, action) {
           ...state[questionId],
           isAutograding: false,
           jobError: false,
+          jobErrorMessage: null,
         },
       };
     }

@@ -33,28 +33,27 @@ export const updateClientVersion = (answerId, clientVersion) => (dispatch) =>
     payload: { answer: { id: answerId, clientVersion } },
   });
 
-const pollAutogradingJob =
-  (jobUrl, submissionId, questionId, answerId) => (dispatch) => {
-    pollJob(
-      jobUrl,
-      () => dispatch(getEvaluationResult(submissionId, answerId, questionId)),
-      (errorData) => {
-        dispatch({
-          type: actionTypes.AUTOGRADE_FAILURE,
-          questionId,
-          payload: errorData,
-        });
-        dispatch(setNotification(translations.requestFailure));
-      },
-      JOB_POLL_DELAY_MS,
-    );
-  };
+// const pollAutogradingJob =
+//   (jobUrl, submissionId, questionId, answerId) => (dispatch) => {
+//     pollJob(
+//       jobUrl,
+//       () => dispatch(getEvaluationResult(submissionId, answerId, questionId)),
+//       (errorData) => {
+//         dispatch({
+//           type: actionTypes.AUTOGRADE_FAILURE,
+//           questionId,
+//           payload: errorData,
+//         });
+//         dispatch(setNotification(translations.requestFailure));
+//       },
+//       JOB_POLL_DELAY_MS,
+//     );
+//   };
 
-export function submitAnswer(submissionId, answerId, rawAnswer, resetField) {
+export function submitAnswer(questionId, answerId, rawAnswer, resetField) {
   const currentTime = Date.now();
   const answer = formatAnswer(rawAnswer, currentTime);
   const payload = { answer };
-  const questionId = answer.questionId;
 
   return (dispatch) => {
     dispatch(updateClientVersion(answerId, currentTime));
@@ -73,16 +72,14 @@ export function submitAnswer(submissionId, answerId, rawAnswer, resetField) {
         if (data.newSessionUrl) {
           window.location = data.newSessionUrl;
         } else if (data.jobUrl) {
-          pollAutogradingJob(
-            data.jobUrl,
-            submissionId,
-            questionId,
-            answerId,
-          )(dispatch);
+          dispatch({
+            type: actionTypes.AUTOGRADE_SUBMITTED,
+            payload: { questionId, jobUrl: data.jobUrl },
+          });
         } else {
           dispatch({
             type: actionTypes.AUTOGRADE_SUCCESS,
-            payload: data,
+            payload: { ...data, answerId },
           });
           // When an answer is submitted, the value of that field needs to be updated.
           resetField(`${answerId}`, {
