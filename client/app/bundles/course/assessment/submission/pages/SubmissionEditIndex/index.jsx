@@ -89,7 +89,6 @@ class VisibleSubmissionEditIndex extends Component {
 
   handleLiveFeedbackPolling = () => {
     const { questions, liveFeedback } = this.props;
-    const { assessment, submission } = this.props;
 
     Object.values(questions).forEach((question) => {
       const feedbackRequestToken =
@@ -101,34 +100,37 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   handleEvaluationPolling = () => {
-    const { answers, dispatch, submission } = this.props;
+    const { answers, questionsFlags, dispatch, submission } = this.props;
     Object.values(answers.initial)
-      .filter((a) => a.autograding && a.autograding.path)
       .forEach((answer) => {
-        getJobStatus(answer.autograding.path)
-          .then((response) => {
-            switch (response.data.status) {
-              case 'submitted':
-                break;
-              case 'completed':
-                dispatch(
-                  getEvaluationResult(
-                    submission.id,
-                    answer.id,
-                    answer.questionId,
-                  ),
-                );
-                break;
-              case 'errored':
-                dispatch({
-                  type: actionTypes.AUTOGRADE_FAILURE,
-                  questionId: answer.questionId,
-                });
-                break;
-              default:
-                throw new Error('Unknown job status');
-            }
-          });
+        if (questionsFlags[answer.questionId]?.isAutograding &&
+          questionsFlags[answer.questionId]?.jobUrl) {
+          getJobStatus(questionsFlags[answer.questionId].jobUrl)
+            .then((response) => {
+              switch (response.data.status) {
+                case 'submitted':
+                  break;
+                case 'completed':
+                  dispatch(
+                    getEvaluationResult(
+                      submission.id,
+                      answer.id,
+                      answer.questionId,
+                    ),
+                  );
+                  break;
+                case 'errored':
+                  dispatch({
+                    type: actionTypes.AUTOGRADE_FAILURE,
+                    answerId: answer.id,
+                    questionId: answer.questionId,
+                  });
+                  break;
+                default:
+                  throw new Error('Unknown job status');
+              }
+            });
+        }
       });
   }
 
@@ -249,11 +251,8 @@ class VisibleSubmissionEditIndex extends Component {
   };
 
   onSubmitAnswer = (answerId, answer, resetField) => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(submitAnswer(params.submissionId, answerId, answer, resetField));
+    const { dispatch } = this.props;
+    dispatch(submitAnswer(answer.questionId, answerId, answer, resetField));
   };
 
   onReevaluateAnswer = (answerId, questionId) => {
