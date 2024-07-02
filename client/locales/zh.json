@@ -2774,6 +2774,9 @@
   "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
     "defaultMessage": "项目已解决。"
   },
+  "course.assessment.submission.answers.Programming.liveFeedbackLineHeader": {
+    "defaultMessage": "线 {linenum}"
+  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "下载文件"
   },

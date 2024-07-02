@@ -2796,10 +2796,13 @@
     "defaultMessage": "View Topic"
   },
   "course.assessment.submission.answers.Programming.liveFeedbackItemDismissed": {
-    "defaultMessage": "Item dismissed."
+    "defaultMessage": "Feedback disliked."
   },
   "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
-    "defaultMessage": "Item resolved."
+    "defaultMessage": "Feedback liked."
+  },
+  "course.assessment.submission.answers.Programming.liveFeedbackLineHeader": {
+    "defaultMessage": "Line {linenum}"
   },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "Download File"

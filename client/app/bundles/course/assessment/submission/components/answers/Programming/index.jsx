@@ -8,6 +8,7 @@ import {
   CardContent,
   Drawer,
   IconButton,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { green, grey, orange, red, yellow } from '@mui/material/colors';
@@ -27,14 +28,16 @@ import { questionShape } from '../../../propTypes';
 import { parseLanguages } from '../../../utils';
 
 import ProgrammingFile from './ProgrammingFile';
+import { defineMessages } from 'react-intl';
 
 const styles = {
   card: {
     marginBottom: 1,
     borderStyle: 'solid',
-    borderWidth: 0.2,
+    borderWidth: 1.0,
     borderColor: grey[400],
     borderRadius: 2,
+    boxShadow: 'none',
     minWidth: '300px',
     maxWidth: '300px',
   },
@@ -61,6 +64,21 @@ const styles = {
     backgroundColor: red['100'],
   },
 };
+
+const translations = defineMessages({
+  lineHeader: {
+    id: 'course.assessment.submission.answers.Programming.liveFeedbackLineHeader',
+    defaultMessage: 'Line {linenum}',
+  },
+  itemResolved: {
+    id: 'course.assessment.submission.answers.Programming.liveFeedbackItemResolved',
+    defaultMessage: 'Feedback liked.',
+  },
+  itemDismissed: {
+    id: 'course.assessment.submission.answers.Programming.liveFeedbackItemDismissed',
+    defaultMessage: 'Feedback disliked.',
+  },
+});
 
 const ProgrammingFiles = ({
   readOnly,
@@ -95,32 +113,6 @@ const ProgrammingFiles = ({
     }
   };
 
-  // const editorKeyboardHandler = {
-  //   handleKeyboard: (data, hash, keyString) => {
-  //     const selectedRow = editorRef.current?.editor?.selection?.cursor?.row;
-  //     const lastRow =
-  //       (editorRef.current?.editor?.session?.getLength() ?? 1) - 1;
-  //     if (selectedRow || selectedRow === 0) {
-  //       if (keyString === 'up') {
-  //         setSelectedLine(Math.max(selectedRow - 1, 0) + 1);
-  //       } else if (keyString === 'down') {
-  //         setSelectedLine(Math.min(selectedRow + 1, lastRow) + 1);
-  //       }
-  //     }
-  //   },
-  // };
-
-  // useEffect(() => {
-  //   editorRef.current?.editor?.keyBinding?.addKeyboardHandler(
-  //     editorKeyboardHandler,
-  //   );
-  //   return () => {
-  //     editorRef.current?.editor?.keyBinding?.removeKeyboardHandler(
-  //       editorKeyboardHandler,
-  //     );
-  //   };
-  // });
-
   const renderFeedbackCard = (feedbackItem) => {
     let cardStyle = styles.card;
     if (feedbackItem.state === 'resolved') {
@@ -130,6 +122,22 @@ const ProgrammingFiles = ({
     } else if (selectedLine === feedbackItem.linenum) {
       cardStyle = { ...styles.card, ...styles.cardSelected };
     }
+
+    const feedbackTooltipProps = {
+      placement: 'top',
+      slotProps: {
+        popper: {
+          modifiers: [
+            {
+              name: 'offset',
+              options: {
+                offset: [0, -12],
+              },
+            },
+          ],
+        },
+      }
+    };
 
     const focusEditorOnFeedbackLine = () => {
       editorRef.current?.editor?.gotoLine(feedbackItem.linenum, 0);
@@ -146,37 +154,29 @@ const ProgrammingFiles = ({
 
     return (
       <Card sx={cardStyle}>
-        <CardContent onClick={focusEditorOnFeedbackLine} sx={{ p: 1 }}>
-          <Typography variant="body2">{feedbackItem.feedback}</Typography>
-        </CardContent>
         <CardActions
           onClick={focusEditorOnFeedbackLine}
-          sx={{ p: 0, display: 'flex' }}
+          sx={{ px: 0, paddingTop: 0.5, paddingBottom: 0, display: 'flex' }}
         >
           <Typography fontWeight="bold" sx={{ ml: 1 }} variant="subtitle1">
-            L{feedbackItem.linenum}
+            {t(translations.lineHeader, { linenum: feedbackItem.linenum })}
           </Typography>
           {feedbackItem.state === 'resolved' && (
             <Typography variant="caption">
-              {t({
-                id: 'course.assessment.submission.answers.Programming.liveFeedbackItemResolved',
-                defaultMessage: 'Item resolved.',
-              })}
+              {t(translations.itemResolved)}
             </Typography>
           )}
           {feedbackItem.state === 'dismissed' && (
             <Typography variant="caption">
-              {t({
-                id: 'course.assessment.submission.answers.Programming.liveFeedbackItemDismissed',
-                defaultMessage: 'Item dismissed.',
-              })}
+              {t(translations.itemDismissed)}
             </Typography>
           )}
           <Box sx={{ flex: '1', width: '100%' }} />
+          <Tooltip title='Like' {...feedbackTooltipProps}>
           <IconButton
             className="p-1 ml-1"
+            disabled={feedbackItem.state !== 'pending'}
             onClick={() => {
-              // TODO: expose BE route to Codaveri feedback rating endpoint and call here
               dispatch({
                 type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED,
                 payload: {
@@ -190,8 +190,11 @@ const ProgrammingFiles = ({
           >
             <ThumbUp />
           </IconButton>
+          </Tooltip>
+          <Tooltip title='Dislike' {...feedbackTooltipProps}>
           <IconButton
             className="p-1 ml-1"
+            disabled={feedbackItem.state !== 'pending'}
             onClick={() => {
               dispatch({
                 type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_DISMISSED,
@@ -206,6 +209,8 @@ const ProgrammingFiles = ({
           >
             <ThumbDown />
           </IconButton>
+          </Tooltip>
+          <Tooltip title='Dismiss' {...feedbackTooltipProps}>
           <IconButton
             className="p-1 ml-1"
             onClick={() => {
@@ -217,12 +222,20 @@ const ProgrammingFiles = ({
                   lineId: feedbackItem.id,
                 },
               });
+              // TODO: expose BE route to Codaveri feedback rating endpoint and call here
             }}
             size="small"
           >
             <Close />
           </IconButton>
+          </Tooltip>
         </CardActions>
+        <CardContent onClick={focusEditorOnFeedbackLine} sx={{ px: 1, paddingTop: 0, 
+    "&:last-child": {
+      paddingBottom: 1
+    } }}>
+          <Typography variant="body2">{feedbackItem.feedback}</Typography>
+        </CardContent>
       </Card>
     );
   };
@@ -249,9 +262,7 @@ const ProgrammingFiles = ({
       annotations = feedbackFiles['main.py'] ?? [];
     }
     const keyString = `editor-container-${index}`;
-    const shouldOpenDrawer = annotations?.some(
-      (feedbackItem) => feedbackItem.state === 'pending',
-    );
+    const shouldOpenDrawer = annotations.length > 0;
 
     return (
       <div key={keyString} id={keyString} style={{ position: 'relative' }}>
@@ -275,7 +286,7 @@ const ProgrammingFiles = ({
             style: { alignContent: 'start', position: 'absolute' },
           }}
           open={shouldOpenDrawer}
-          PaperProps={{ style: { position: 'absolute' } }}
+          PaperProps={{ style: { position: 'absolute', width: '315px', alignContent: 'start', border: 0 } }}
           variant="persistent"
         >
           <div>{annotations.map(renderFeedbackCard)}</div>
