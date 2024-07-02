@@ -1,4 +1,5 @@
 import CourseAPI from 'api/course';
+import GlobalAPI from 'api';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
@@ -32,6 +33,10 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
   };
 }
 
+export function getJobStatus(jobUrl) {
+  return GlobalAPI.jobs.get(jobUrl);
+}
+
 export function fetchSubmission(id, onGetMonitoringSessionId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSION_REQUEST });
@@ -48,29 +53,29 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
           window.location = data.newSessionUrl;
           return;
         }
-        data.answers
-          .filter((a) => a.autograding && a.autograding.path)
-          .forEach((answer, index) => {
-            setTimeout(() => {
-              pollJob(
-                answer.autograding.path,
-                () =>
-                  dispatch(
-                    getEvaluationResult(
-                      id,
-                      answer.fields.id,
-                      answer.questionId,
-                    ),
-                  ),
-                () =>
-                  dispatch({
-                    type: actionTypes.AUTOGRADE_FAILURE,
-                    questionId: answer.questionId,
-                  }),
-                JOB_POLL_DELAY_MS,
-              );
-            }, JOB_STAGGER_DELAY_MS * index);
-          });
+        // data.answers
+        //   .filter((a) => a.autograding && a.autograding.path)
+        //   .forEach((answer, index) => {
+        //     setTimeout(() => {
+        //       pollJob(
+        //         answer.autograding.path,
+        //         () =>
+        //           dispatch(
+        //             getEvaluationResult(
+        //               id,
+        //               answer.fields.id,
+        //               answer.questionId,
+        //             ),
+        //           ),
+        //         () =>
+        //           dispatch({
+        //             type: actionTypes.AUTOGRADE_FAILURE,
+        //             questionId: answer.questionId,
+        //           }),
+        //         JOB_POLL_DELAY_MS,
+        //       );
+        //     }, JOB_STAGGER_DELAY_MS * index);
+        //   });
         if (data.monitoringSessionId !== undefined)
           onGetMonitoringSessionId?.(data.monitoringSessionId);
         dispatch({

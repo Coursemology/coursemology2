@@ -157,32 +157,6 @@ const SubmissionEditStepForm = (props) => {
     }
   }, [submissionTimeLimitAt]);
 
-  const POLL_INTERVAL_MILLISECONDS = 2000;
-  const pollerRef = useRef(null);
-  const pollAllFeedback = () => {
-    questionIds.forEach((id) => {
-      const question = questions[id];
-      const feedbackRequestToken =
-        liveFeedback?.feedbackByQuestion?.[question.id]?.pendingFeedbackToken;
-      if (feedbackRequestToken) {
-        onFetchLiveFeedback(question.answerId, question.id);
-      }
-    });
-  };
-
-  useEffect(() => {
-    // check for feedback from Codaveri on page load for each question
-    pollerRef.current = setInterval(
-      pollAllFeedback,
-      POLL_INTERVAL_MILLISECONDS,
-    );
-
-    // clean up poller on unmount
-    return () => {
-      clearInterval(pollerRef.current);
-    };
-  });
-
   const handleNext = () => {
     setMaxStep(Math.max(maxStep, stepIndex + 1));
     setStepIndex(stepIndex + 1);
