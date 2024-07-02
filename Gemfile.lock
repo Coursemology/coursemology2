@@ -189,7 +189,7 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    ffi (1.17.0-x86_64-linux-gnu)
+    ffi (1.17.0)
     filename (0.1.2)
     flamegraph (0.9.5)
     fog-aws (3.22.0)
@@ -312,6 +312,7 @@ GEM
       rake
     mini_magick (4.12.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.6)
     minitest (5.23.0)
     multi_json (1.15.0)
     net-imap (0.4.10)
@@ -325,7 +326,8 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.1)
-    nokogiri (1.16.5-x86_64-linux)
+    nokogiri (1.16.5)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.24.0)
@@ -557,7 +559,7 @@ GEM
     zeitwerk (2.6.14)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   active_record-acts_as!
