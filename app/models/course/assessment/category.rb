@@ -11,7 +11,7 @@ class Course::Assessment::Category < ApplicationRecord
   validates :course, presence: true
 
   belongs_to :course, inverse_of: :assessment_categories
-  has_many :tabs, class_name: Course::Assessment::Tab.name,
+  has_many :tabs, class_name: 'Course::Assessment::Tab',
                   inverse_of: :category,
                   dependent: :destroy
   has_many :assessments, through: :tabs

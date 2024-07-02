@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class InstanceUserRoleRequestsController < ApplicationController
   load_and_authorize_resource :user_role_request, through: :current_tenant, parent: false,
-                                                  class: ::Instance::UserRoleRequest.name
+                                                  class: '::Instance::UserRoleRequest'
   def index
     @user_role_requests = @user_role_requests.includes(:confirmer, :user)
 

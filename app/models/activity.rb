@@ -11,8 +11,8 @@ class Activity < ApplicationRecord
   validates :actor, presence: true
 
   belongs_to :object, polymorphic: true
-  belongs_to :actor, inverse_of: :activities, class_name: User.name
-  has_many :course_notifications, class_name: Course::Notification.name, dependent: :destroy
+  belongs_to :actor, inverse_of: :activities, class_name: 'User'
+  has_many :course_notifications, class_name: 'Course::Notification', dependent: :destroy
   has_many :user_notifications, dependent: :destroy
 
   USER_NOTIFICATION_TYPES = [:email, :popup].freeze

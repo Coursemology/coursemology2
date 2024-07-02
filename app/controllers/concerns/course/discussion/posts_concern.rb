@@ -5,7 +5,7 @@ module Course::Discussion::PostsConcern
   included do
     before_action :set_topic
     load_and_authorize_resource :post, through: :discussion_topic,
-                                       class: Course::Discussion::Post.name, parent: false
+                                       class: 'Course::Discussion::Post', parent: false
   end
 
   protected

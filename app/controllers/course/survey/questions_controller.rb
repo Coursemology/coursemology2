@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Survey::QuestionsController < Course::Survey::Controller
-  load_and_authorize_resource :question, through: :survey, class: Course::Survey::Question.name
+  load_and_authorize_resource :question, through: :survey, class: 'Course::Survey::Question'
 
   def create
     last_weight = @survey.questions.maximum(:weight)

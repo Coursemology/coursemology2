@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::Answer::TextResponse::TextResponseController < \
   Course::Assessment::Submission::Answer::TextResponse::Controller
-  load_resource :actable, class: Course::Assessment::Answer::TextResponse.name,
+  load_resource :actable, class: 'Course::Assessment::Answer::TextResponse',
                           singleton: true, through: :answer
   before_action :set_text_response_answer
 

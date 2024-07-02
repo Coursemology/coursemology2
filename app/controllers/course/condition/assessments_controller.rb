@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::Condition::AssessmentsController < Course::ConditionsController
-  load_resource :assessment_condition, class: Course::Condition::Assessment.name, parent: false
+  load_resource :assessment_condition, class: 'Course::Condition::Assessment', parent: false
   before_action :set_course_and_conditional, only: [:create]
-  authorize_resource :assessment_condition, class: Course::Condition::Assessment.name
+  authorize_resource :assessment_condition, class: 'Course::Condition::Assessment'
 
   def index
     render_available_assessments

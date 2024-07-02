@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Material::Controller < Course::ComponentController
   load_and_authorize_resource :folder, through: :course, through_association: :material_folders,
-                                       class: Course::Material::Folder.name
+                                       class: 'Course::Material::Folder'
 
   private
 

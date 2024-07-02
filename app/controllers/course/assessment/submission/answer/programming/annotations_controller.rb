@@ -3,13 +3,13 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
   Course::Assessment::Submission::Answer::Programming::Controller
   include Signals::EmissionConcern
 
-  load_resource :actable, class: Course::Assessment::Answer::Programming.name,
+  load_resource :actable, class: 'Course::Assessment::Answer::Programming',
                           singleton: true, through: :answer
   before_action :set_programming_answer
-  load_resource :file, class: Course::Assessment::Answer::ProgrammingFile.name,
+  load_resource :file, class: 'Course::Assessment::Answer::ProgrammingFile',
                        through: :programming_answer
   before_action :load_existing_annotation
-  load_resource :annotation, class: Course::Assessment::Answer::ProgrammingFileAnnotation.name,
+  load_resource :annotation, class: 'Course::Assessment::Answer::ProgrammingFileAnnotation',
                              through: :file
 
   include Course::Discussion::PostsConcern

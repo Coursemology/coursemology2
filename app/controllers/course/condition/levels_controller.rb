@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::Condition::LevelsController < Course::ConditionsController
-  load_resource :level_condition, class: Course::Condition::Level.name, parent: false
+  load_resource :level_condition, class: 'Course::Condition::Level', parent: false
   before_action :set_course, only: [:new, :create]
-  authorize_resource :level_condition, class: Course::Condition::Level.name
+  authorize_resource :level_condition, class: 'Course::Condition::Level'
 
   def create
     @level_condition.conditional = @conditional

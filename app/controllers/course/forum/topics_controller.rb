@@ -7,8 +7,8 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   include Signals::EmissionConcern
 
   before_action :load_topic, except: [:create]
-  load_resource :topic, class: Course::Forum::Topic.name, through: :forum, only: [:create]
-  authorize_resource :topic, class: Course::Forum::Topic.name, except: [:set_resolved]
+  load_resource :topic, class: 'Course::Forum::Topic', through: :forum, only: [:create]
+  authorize_resource :topic, class: 'Course::Forum::Topic', except: [:set_resolved]
   after_action :mark_posts_read, only: [:show]
 
   signals :forums, after: [:show]

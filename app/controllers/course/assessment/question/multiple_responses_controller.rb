@@ -4,7 +4,7 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   build_and_authorize_new_question :multiple_response_question,
                                    class: Course::Assessment::Question::MultipleResponse, only: [:new, :create]
   load_and_authorize_resource :multiple_response_question,
-                              class: Course::Assessment::Question::MultipleResponse,
+                              class: 'Course::Assessment::Question::MultipleResponse',
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
 

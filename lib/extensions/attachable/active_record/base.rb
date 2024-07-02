@@ -74,7 +74,7 @@ module Extensions::Attachable::ActiveRecord::Base
       class_attribute :attachable_columns
       self.attachable_columns ||= []
 
-      has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
+      has_many :attachment_references, as: :attachable, class_name: '::AttachmentReference',
                                        inverse_of: :attachable, dependent: :destroy, autosave: true,
                                        after_add: :mark_attachments_as_changed
       # Attachment references can substitute attachments, so allow access using the `attachments`
@@ -279,7 +279,7 @@ module Extensions::Attachable::ActiveRecord::Base
       after_commit :clear_attachment_change
       validates :attachment_references, length: { maximum: 1 }
 
-      has_many :attachment_references, as: :attachable, class_name: "::#{AttachmentReference.name}",
+      has_many :attachment_references, as: :attachable, class_name: '::AttachmentReference',
                                        inverse_of: :attachable, dependent: :destroy, autosave: true
     end
 

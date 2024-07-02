@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::MultipleResponse < ApplicationRecord
-  acts_as :answer, class_name: Course::Assessment::Answer.name
+  acts_as :answer, class_name: 'Course::Assessment::Answer'
 
-  has_many :answer_options, class_name: Course::Assessment::Answer::MultipleResponseOption.name,
+  has_many :answer_options, class_name: 'Course::Assessment::Answer::MultipleResponseOption',
                             dependent: :destroy, foreign_key: :answer_id, inverse_of: :answer
   has_many :options, through: :answer_options
 

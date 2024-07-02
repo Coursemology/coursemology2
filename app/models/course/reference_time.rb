@@ -2,8 +2,8 @@
 class Course::ReferenceTime < ApplicationRecord
   include DuplicationStateTrackingConcern
 
-  belongs_to :reference_timeline, class_name: Course::ReferenceTimeline.name, inverse_of: :reference_times
-  belongs_to :lesson_plan_item, class_name: Course::LessonPlan::Item.name, inverse_of: :reference_times
+  belongs_to :reference_timeline, class_name: 'Course::ReferenceTimeline', inverse_of: :reference_times
+  belongs_to :lesson_plan_item, class_name: 'Course::LessonPlan::Item', inverse_of: :reference_times
 
   validates :start_at, presence: true
   validates :reference_timeline, presence: true, uniqueness: { scope: :lesson_plan_item }

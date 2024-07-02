@@ -7,8 +7,8 @@ class Course::Assessment::Answer::MultipleResponseOption < ApplicationRecord
   validates :option_id, uniqueness: { scope: [:answer_id], allow_nil: true,
                                       if: -> { answer_id? && option_id_changed? } }
 
-  belongs_to :answer, class_name: Course::Assessment::Answer::MultipleResponse.name,
+  belongs_to :answer, class_name: 'Course::Assessment::Answer::MultipleResponse',
                       inverse_of: :options
-  belongs_to :option, class_name: Course::Assessment::Question::MultipleResponseOption.name,
+  belongs_to :option, class_name: 'Course::Assessment::Question::MultipleResponseOption',
                       inverse_of: :answer_options
 end

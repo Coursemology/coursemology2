@@ -8,7 +8,7 @@ class Course::GroupCategory < ApplicationRecord
   validates :course_id, uniqueness: { scope: [:name], if: -> { name? && course_id_changed? } }
 
   belongs_to :course, inverse_of: :group_categories
-  has_many :groups, dependent: :destroy, class_name: Course::Group.name, foreign_key: :group_category_id
+  has_many :groups, dependent: :destroy, class_name: 'Course::Group', foreign_key: :group_category_id
 
   scope :ordered_by_name, -> { order(name: :asc) }
 end

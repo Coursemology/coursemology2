@@ -2,7 +2,7 @@
 class Course::Survey::Controller < Course::ComponentController
   include Course::LessonPlan::ActsAsLessonPlanItemConcern
 
-  load_and_authorize_resource :survey, through: :course, class: Course::Survey.name
+  load_and_authorize_resource :survey, through: :course, class: 'Course::Survey'
 
   private
 

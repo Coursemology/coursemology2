@@ -7,7 +7,7 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   load_and_authorize_resource :item,
                               through: :course,
                               through_association: :lesson_plan_items,
-                              class: Course::LessonPlan::Item.name,
+                              class: 'Course::LessonPlan::Item',
                               parent: false
 
   def index

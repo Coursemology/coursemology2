@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Achievement::Controller < Course::ComponentController
-  load_and_authorize_resource :achievement, through: :course, class: Course::Achievement.name
+  load_and_authorize_resource :achievement, through: :course, class: 'Course::Achievement'
 
   helper name
 

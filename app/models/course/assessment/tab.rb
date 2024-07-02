@@ -6,9 +6,9 @@ class Course::Assessment::Tab < ApplicationRecord
   validates :updater, presence: true
   validates :category, presence: true
 
-  belongs_to :category, class_name: Course::Assessment::Category.name, inverse_of: :tabs
-  has_many :assessments, class_name: Course::Assessment.name, dependent: :destroy, inverse_of: :tab
-  has_many :folders, class_name: Course::Material::Folder.name, through: :assessments,
+  belongs_to :category, class_name: 'Course::Assessment::Category', inverse_of: :tabs
+  has_many :assessments, class_name: 'Course::Assessment', dependent: :destroy, inverse_of: :tab
+  has_many :folders, class_name: 'Course::Material::Folder', through: :assessments,
                      inverse_of: nil
 
   before_save :reassign_folders, if: :category_id_changed?
