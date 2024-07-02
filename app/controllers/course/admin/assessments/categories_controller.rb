@@ -3,7 +3,7 @@ class Course::Admin::Assessments::CategoriesController < Course::Admin::Controll
   load_and_authorize_resource :category,
                               through: :course,
                               through_association: :assessment_categories,
-                              class: Course::Assessment::Category.name
+                              class: 'Course::Assessment::Category'
 
   def new
   end

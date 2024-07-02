@@ -6,7 +6,7 @@ class Course::Assessment::Answer::ForumPost < ApplicationRecord
   validates :post_creator_id, presence: true
   validates :post_updated_at, presence: true
 
-  belongs_to :answer, class_name: Course::Assessment::Answer::ForumPostResponse.name
+  belongs_to :answer, class_name: 'Course::Assessment::Answer::ForumPostResponse'
 
   attr_accessor :forum_id, :forum_name, :topic_title, :is_topic_deleted, :post_creator, :is_post_updated,
                 :is_post_deleted, :parent_creator, :is_parent_updated, :is_parent_deleted

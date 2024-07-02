@@ -4,7 +4,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
   include Signals::EmissionConcern
 
   load_and_authorize_resource :discussion_topic, through: :course, instance_name: :topic,
-                                                 class: Course::Discussion::Topic.name,
+                                                 class: 'Course::Discussion::Topic',
                                                  parent: false
 
   signals :comments, after: [:index, :toggle_pending, :mark_as_read]

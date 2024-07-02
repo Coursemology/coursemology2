@@ -3,7 +3,7 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
   build_and_authorize_new_question :voice_response_question,
                                    class: Course::Assessment::Question::VoiceResponse, only: [:new, :create]
   load_and_authorize_resource :voice_response_question,
-                              class: Course::Assessment::Question::VoiceResponse,
+                              class: 'Course::Assessment::Question::VoiceResponse',
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
 

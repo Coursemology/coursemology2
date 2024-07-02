@@ -3,7 +3,7 @@ class Course::Admin::Videos::TabsController < Course::Admin::Controller
   load_and_authorize_resource :tab,
                               through: :course,
                               through_association: :video_tabs,
-                              class: Course::Video::Tab.name
+                              class: 'Course::Video::Tab'
 
   def new
   end

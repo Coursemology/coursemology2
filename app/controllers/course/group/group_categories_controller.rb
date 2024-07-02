@@ -2,7 +2,7 @@
 class Course::Group::GroupCategoriesController < Course::ComponentController
   include Course::Group::GroupManagerConcern
 
-  load_and_authorize_resource :group_category, class: Course::GroupCategory
+  load_and_authorize_resource :group_category, class: 'Course::GroupCategory'
 
   def index
     respond_to do |format|

@@ -4,7 +4,7 @@ class Course::LessonPlan::EventsController < Course::LessonPlan::Controller
 
   build_and_authorize_new_lesson_plan_item :event, class: Course::LessonPlan::Event, through: :course,
                                                    through_association: :lesson_plan_events, only: [:new, :create]
-  load_and_authorize_resource :event, class: Course::LessonPlan::Event.name, through: :course,
+  load_and_authorize_resource :event, class: 'Course::LessonPlan::Event', through: :course,
                                       through_association: :lesson_plan_events, except: [:new, :create]
 
   def create

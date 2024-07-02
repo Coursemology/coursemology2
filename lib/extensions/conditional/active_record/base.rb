@@ -7,7 +7,7 @@ module Extensions::Conditional::ActiveRecord::Base
       enum satisfiability_type: [:all_conditions, :at_least_one_condition]
 
       has_many :conditions, -> { includes :actable },
-               class_name: Course::Condition.name, as: :conditional, dependent: :destroy,
+               class_name: 'Course::Condition', as: :conditional, dependent: :destroy,
                inverse_of: :conditional
       validates :satisfiability_type, presence: true
       after_save :evaluate_coursewide_conditional_satisfiabilities
@@ -17,7 +17,7 @@ module Extensions::Conditional::ActiveRecord::Base
 
     # Declare this function in the condition model
     def acts_as_condition
-      acts_as :condition, class_name: Course::Condition.name
+      acts_as :condition, class_name: 'Course::Condition'
 
       include ConditionInstanceMethods
       extend ConditionClassMethods

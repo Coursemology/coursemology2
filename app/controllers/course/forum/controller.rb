@@ -2,7 +2,7 @@
 class Course::Forum::Controller < Course::ComponentController
   helper Course::Forum::ControllerHelper
   before_action :load_forum, unless: :skip_load_forum?
-  authorize_resource :forum, class: Course::Forum.name
+  authorize_resource :forum, class: 'Course::Forum'
 
   private
 

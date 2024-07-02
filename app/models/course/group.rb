@@ -9,7 +9,7 @@ class Course::Group < ApplicationRecord
 
   belongs_to :group_category, inverse_of: :groups
   has_many :group_users, -> { order_by_course_user_name },
-           inverse_of: :group, dependent: :destroy, class_name: Course::GroupUser.name,
+           inverse_of: :group, dependent: :destroy, class_name: 'Course::GroupUser',
            foreign_key: :group_id
   has_many :course_users, through: :group_users
 

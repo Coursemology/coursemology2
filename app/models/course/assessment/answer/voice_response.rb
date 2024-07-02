@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::VoiceResponse < ApplicationRecord
-  acts_as :answer, class_name: Course::Assessment::Answer.name
+  acts_as :answer, class_name: 'Course::Assessment::Answer'
   has_one_attachment
 
   def assign_params(params)

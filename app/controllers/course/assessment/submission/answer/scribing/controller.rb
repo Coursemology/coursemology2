@@ -2,7 +2,7 @@
 class Course::Assessment::Submission::Answer::Scribing::Controller < \
   Course::Assessment::Submission::Answer::Controller
   before_action :set_scribing_answer
-  load_resource :scribbles, class: Course::Assessment::Answer::ScribingScribble.name,
+  load_resource :scribbles, class: 'Course::Assessment::Answer::ScribingScribble',
                             through: :scribing_answer
 
   private

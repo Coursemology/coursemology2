@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::UserInvitationsController < Course::ComponentController
   before_action :authorize_invitation!
-  load_resource :invitation, through: :course, class: Course::UserInvitation, parent: false,
+  load_resource :invitation, through: :course, class: 'Course::UserInvitation', parent: false,
                              only: :destroy
 
   def index

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::QuestionBundlesController < Course::Assessment::Controller
-  load_and_authorize_resource :question_bundle, class: Course::Assessment::QuestionBundle, through: :assessment
+  load_and_authorize_resource :question_bundle, class: 'Course::Assessment::QuestionBundle', through: :assessment
 
   def index
   end

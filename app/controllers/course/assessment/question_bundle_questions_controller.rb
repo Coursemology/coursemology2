@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::QuestionBundleQuestionsController < Course::Assessment::Controller
-  load_and_authorize_resource :question_bundle_question, class: Course::Assessment::QuestionBundleQuestion,
+  load_and_authorize_resource :question_bundle_question, class: 'Course::Assessment::QuestionBundleQuestion',
                                                          through: :assessment
   skip_load_resource :question_bundle_question, only: [:new, :create]
 

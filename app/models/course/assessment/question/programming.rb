@@ -17,7 +17,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   include DuplicationStateTrackingConcern
   attr_accessor :max_time_limit, :skip_process_package
 
-  acts_as :question, class_name: Course::Assessment::Question.name
+  acts_as :question, class_name: 'Course::Assessment::Question'
 
   after_initialize :set_defaults
   after_save :create_codaveri_problem, if: :duplicating?
@@ -36,12 +36,12 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   validate -> { validate_time_limit }
   validate :validate_codaveri_question
 
-  belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
-  belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil
+  belongs_to :import_job, class_name: 'TrackableJob::Job', inverse_of: nil, optional: true
+  belongs_to :language, class_name: 'Coursemology::Polyglot::Language', inverse_of: nil
   has_one_attachment
-  has_many :template_files, class_name: Course::Assessment::Question::ProgrammingTemplateFile.name,
+  has_many :template_files, class_name: 'Course::Assessment::Question::ProgrammingTemplateFile',
                             dependent: :destroy, foreign_key: :question_id, inverse_of: :question
-  has_many :test_cases, class_name: Course::Assessment::Question::ProgrammingTestCase.name,
+  has_many :test_cases, class_name: 'Course::Assessment::Question::ProgrammingTestCase',
                         dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
   def auto_gradable?

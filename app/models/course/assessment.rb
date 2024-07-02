@@ -31,46 +31,46 @@ class Course::Assessment < ApplicationRecord
 
   belongs_to :tab, inverse_of: :assessments
 
-  belongs_to :monitor, class_name: Course::Monitoring::Monitor.name, optional: true
+  belongs_to :monitor, class_name: 'Course::Monitoring::Monitor', optional: true
 
   # `submissions` association must be put before `questions`, so that all answers will be deleted
   # first when deleting the course. Otherwise due to the foreign key `question_id` in answers table,
   # questions cannot be deleted.
   has_many :submissions, inverse_of: :assessment, dependent: :destroy
 
-  has_many :question_assessments, class_name: Course::QuestionAssessment.name,
+  has_many :question_assessments, class_name: 'Course::QuestionAssessment',
                                   inverse_of: :assessment, dependent: :destroy
   has_many :questions, through: :question_assessments do
     include Course::Assessment::QuestionsConcern
   end
   has_many :multiple_response_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: Course::Assessment::Question::MultipleResponse.name
+           source_type: 'Course::Assessment::Question::MultipleResponse'
   has_many :text_response_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: Course::Assessment::Question::TextResponse.name
+           source_type: 'Course::Assessment::Question::TextResponse'
   has_many :programming_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: Course::Assessment::Question::Programming.name
+           source_type: 'Course::Assessment::Question::Programming'
   has_many :scribing_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: Course::Assessment::Question::Scribing.name
+           source_type: 'Course::Assessment::Question::Scribing'
   has_many :voice_response_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: Course::Assessment::Question::VoiceResponse.name
+           source_type: 'Course::Assessment::Question::VoiceResponse'
   has_many :forum_post_response_questions,
            through: :questions, inverse_through: :question, source: :actable,
-           source_type: Course::Assessment::Question::ForumPostResponse.name
-  has_many :assessment_conditions, class_name: Course::Condition::Assessment.name,
+           source_type: 'Course::Assessment::Question::ForumPostResponse'
+  has_many :assessment_conditions, class_name: 'Course::Condition::Assessment',
                                    inverse_of: :assessment, dependent: :destroy
-  has_many :question_groups, class_name: Course::Assessment::QuestionGroup.name,
+  has_many :question_groups, class_name: 'Course::Assessment::QuestionGroup',
                              inverse_of: :assessment, dependent: :destroy
-  has_many :question_bundles, class_name: Course::Assessment::QuestionBundle.name, through: :question_groups
-  has_many :question_bundle_questions, class_name: Course::Assessment::QuestionBundleQuestion.name,
+  has_many :question_bundles, class_name: 'Course::Assessment::QuestionBundle', through: :question_groups
+  has_many :question_bundle_questions, class_name: 'Course::Assessment::QuestionBundleQuestion',
                                        through: :question_bundles
-  has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
+  has_many :question_bundle_assignments, class_name: 'Course::Assessment::QuestionBundleAssignment',
                                          inverse_of: :assessment, dependent: :destroy
-  has_one :duplication_traceable, class_name: DuplicationTraceable::Assessment.name,
+  has_one :duplication_traceable, class_name: 'DuplicationTraceable::Assessment',
                                   inverse_of: :assessment, dependent: :destroy
 
   validate :tab_in_same_course

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Group::GroupsController < Course::ComponentController
-  load_and_authorize_resource :group, class: Course::Group
+  load_and_authorize_resource :group, class: 'Course::Group'
 
   def update
     unless @group.update(group_params)

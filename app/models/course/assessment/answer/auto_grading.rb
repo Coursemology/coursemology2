@@ -11,8 +11,8 @@ class Course::Assessment::Answer::AutoGrading < ApplicationRecord
   validates :actable_id, uniqueness: { scope: [:actable_type], allow_nil: true,
                                        if: -> { actable_type? && actable_id_changed? } }
 
-  belongs_to :answer, class_name: Course::Assessment::Answer.name, inverse_of: :auto_grading
+  belongs_to :answer, class_name: 'Course::Assessment::Answer', inverse_of: :auto_grading
   # @!attribute [r] job
   #   This might be null if the job has been cleared.
-  belongs_to :job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
+  belongs_to :job, class_name: 'TrackableJob::Job', inverse_of: nil, optional: true
 end

@@ -3,7 +3,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   build_and_authorize_new_question :text_response_question,
                                    class: Course::Assessment::Question::TextResponse, only: [:new, :create]
   load_and_authorize_resource :text_response_question,
-                              class: Course::Assessment::Question::TextResponse,
+                              class: 'Course::Assessment::Question::TextResponse',
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
 

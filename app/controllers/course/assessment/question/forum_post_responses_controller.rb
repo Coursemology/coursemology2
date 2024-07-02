@@ -3,7 +3,7 @@ class Course::Assessment::Question::ForumPostResponsesController < Course::Asses
   build_and_authorize_new_question :forum_post_response_question,
                                    class: Course::Assessment::Question::ForumPostResponse, only: [:new, :create]
   load_and_authorize_resource :forum_post_response_question,
-                              class: Course::Assessment::Question::ForumPostResponse,
+                              class: 'Course::Assessment::Question::ForumPostResponse',
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
 

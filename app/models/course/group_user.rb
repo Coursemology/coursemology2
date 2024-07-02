@@ -14,7 +14,7 @@ class Course::GroupUser < ApplicationRecord
   validates :group_id, uniqueness: { scope: [:course_user_id], if: -> { course_user_id? && group_id_changed? } }
 
   belongs_to :course_user, inverse_of: :group_users
-  belongs_to :group, class_name: Course::Group.name, inverse_of: :group_users
+  belongs_to :group, class_name: 'Course::Group', inverse_of: :group_users
 
   scope :order_by_course_user_name, lambda {
                                       joins('LEFT OUTER JOIN course_users ON '\
