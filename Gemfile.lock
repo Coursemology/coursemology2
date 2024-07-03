@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/activerecord-userstamp.git
-  revision: 1170233e314466630e3a545ae3fdee16a0bb4a19
+  revision: bed0a21da4dc848ca965b646f0ddd762f4cd62d1
   specs:
     activerecord-userstamp (3.0.5)
       rails (>= 6)
@@ -115,7 +115,7 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.2.0)
     bcrypt (3.1.20)
-    builder (3.2.4)
+    builder (3.3.0)
     bullet (7.1.6)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
@@ -148,7 +148,7 @@ GEM
       ssrf_filter (~> 1.0)
     codecov (0.6.0)
       simplecov (>= 0.15, < 0.22)
-    concurrent-ruby (1.2.3)
+    concurrent-ruby (1.3.3)
     connection_pool (2.4.1)
     consistency_fail (0.3.7)
     coursemology-polyglot (0.3.8)
@@ -179,7 +179,7 @@ GEM
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.7)
-    erubi (1.12.0)
+    erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
     excon (0.110.0)
@@ -189,7 +189,7 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    ffi (1.17.0)
+    ffi (1.17.0-x86_64-linux-gnu)
     filename (0.1.2)
     flamegraph (0.9.5)
     fog-aws (3.22.0)
@@ -312,10 +312,9 @@ GEM
       rake
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.6)
-    minitest (5.23.0)
+    minitest (5.24.1)
     multi_json (1.15.0)
-    net-imap (0.4.10)
+    net-imap (0.4.14)
       date
       net-protocol
     net-pop (0.1.2)
@@ -325,9 +324,8 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     netrc (0.11.0)
-    nio4r (2.7.1)
-    nokogiri (1.16.5)
-      mini_portile2 (~> 2.8.2)
+    nio4r (2.7.3)
+    nokogiri (1.16.5-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.24.0)
@@ -556,10 +554,10 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yard (0.9.36)
-    zeitwerk (2.6.14)
+    zeitwerk (2.6.16)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   active_record-acts_as!
