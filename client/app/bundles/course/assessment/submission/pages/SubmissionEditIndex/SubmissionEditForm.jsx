@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -86,7 +86,6 @@ const SubmissionEditForm = (props) => {
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
-    onFetchLiveFeedback,
     onGenerateLiveFeedback,
     onGenerateFeedback,
     onReevaluateAnswer,
@@ -832,7 +831,6 @@ SubmissionEditForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
-  onFetchLiveFeedback: PropTypes.func,
   onGenerateLiveFeedback: PropTypes.func,
   onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,

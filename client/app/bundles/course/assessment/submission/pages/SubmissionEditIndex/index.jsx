@@ -48,7 +48,7 @@ import {
   submitAnswer,
 } from '../../actions/answers';
 import ProgressPanel from '../../components/ProgressPanel';
-import { workflowStates } from '../../constants';
+import actionTypes, { workflowStates } from '../../constants';
 import {
   answerShape,
   assessmentShape,
@@ -81,11 +81,77 @@ class VisibleSubmissionEditIndex extends Component {
         ? null
         : parseInt(stepString, 10) - 1;
 
-    this.state = {
-      feedbackPollerTimer: createRef(null),
-      evaluatePollerTimer: createRef(null),
-    };
+    this.state = { step };
+    this.evaluatePollerTimer = createRef(null);
+    this.feedbackPollerTimer = createRef(null);
   }
+
+  componentDidMount() {
+    const { dispatch, match, setSessionId } = this.props;
+    dispatch(fetchSubmission(match.params.submissionId, setSessionId));
+
+    this.feedbackPollerTimer.current = setInterval(
+      this.handleLiveFeedbackPolling,
+      FEEDBACK_POLL_INTERVAL_MILLISECONDS,
+    );
+    this.evaluatePollerTimer.current = setInterval(
+      this.handleEvaluationPolling,
+      EVALUATE_POLL_INTERVAL_MILLISECONDS,
+    );
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+
+    clearInterval(this.feedbackPollerTimer.current);
+    clearInterval(this.evaluatePollerTimer.current);
+    dispatch(purgeSubmissionStore());
+  }
+
+  handleAutogradeSubmission = () => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(autogradeSubmission(params.submissionId));
+  };
+
+  handleEvaluationPolling = () => {
+    const { answers, questionsFlags, dispatch, submission } = this.props;
+    Object.values(answers.initial).forEach((answer) => {
+      if (
+        questionsFlags[answer.questionId]?.isAutograding &&
+        questionsFlags[answer.questionId]?.jobUrl
+      ) {
+        getJobStatus(questionsFlags[answer.questionId].jobUrl).then(
+          (response) => {
+            switch (response.data.status) {
+              case 'submitted':
+                break;
+              case 'completed':
+                dispatch(
+                  getEvaluationResult(
+                    submission.id,
+                    answer.id,
+                    answer.questionId,
+                  ),
+                );
+                break;
+              case 'errored':
+                dispatch({
+                  type: actionTypes.AUTOGRADE_FAILURE,
+                  answerId: answer.id,
+                  questionId: answer.questionId,
+                });
+                break;
+              default:
+                throw new Error('Unknown job status');
+            }
+          },
+        );
+      }
+    });
+  };
 
   handleLiveFeedbackPolling = () => {
     const { questions, liveFeedback } = this.props;
@@ -97,67 +163,6 @@ class VisibleSubmissionEditIndex extends Component {
         this.onFetchLiveFeedback(question.answerId, question.id);
       }
     });
-  }
-
-  handleEvaluationPolling = () => {
-    const { answers, questionsFlags, dispatch, submission } = this.props;
-    Object.values(answers.initial)
-      .forEach((answer) => {
-        if (questionsFlags[answer.questionId]?.isAutograding &&
-          questionsFlags[answer.questionId]?.jobUrl) {
-          getJobStatus(questionsFlags[answer.questionId].jobUrl)
-            .then((response) => {
-              switch (response.data.status) {
-                case 'submitted':
-                  break;
-                case 'completed':
-                  dispatch(
-                    getEvaluationResult(
-                      submission.id,
-                      answer.id,
-                      answer.questionId,
-                    ),
-                  );
-                  break;
-                case 'errored':
-                  dispatch({
-                    type: actionTypes.AUTOGRADE_FAILURE,
-                    answerId: answer.id,
-                    questionId: answer.questionId,
-                  });
-                  break;
-                default:
-                  throw new Error('Unknown job status');
-              }
-            });
-        }
-      });
-  }
-
-  componentDidMount() {
-    const { dispatch, match, setSessionId } = this.props;
-    dispatch(fetchSubmission(match.params.submissionId, setSessionId));
-
-    this.state.feedbackPollerTimer.current = 
-      setInterval(this.handleLiveFeedbackPolling, FEEDBACK_POLL_INTERVAL_MILLISECONDS);
-    this.state.evaluatePollerTimer.current = 
-      setInterval(this.handleEvaluationPolling, EVALUATE_POLL_INTERVAL_MILLISECONDS);
-  }
-
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-
-    clearInterval(this.state.feedbackPollerTimer.current);
-    clearInterval(this.state.evaluatePollerTimer.current);
-    dispatch(purgeSubmissionStore());
-  }
-
-  handleAutogradeSubmission = () => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(autogradeSubmission(params.submissionId));
   };
 
   handleMark = () => {
@@ -416,7 +421,6 @@ class VisibleSubmissionEditIndex extends Component {
           isCodaveriEnabled={isCodaveriEnabled}
           isSaving={isSaving}
           maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
-          onFetchLiveFeedback={this.onFetchLiveFeedback}
           onGenerateFeedback={this.onGenerateFeedback}
           onGenerateLiveFeedback={this.onGenerateLiveFeedback}
           onReevaluateAnswer={this.onReevaluateAnswer}
@@ -461,7 +465,6 @@ class VisibleSubmissionEditIndex extends Component {
         isCodaveriEnabled={isCodaveriEnabled}
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
-        onFetchLiveFeedback={this.onFetchLiveFeedback}
         onGenerateFeedback={this.onGenerateFeedback}
         onGenerateLiveFeedback={this.onGenerateLiveFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}

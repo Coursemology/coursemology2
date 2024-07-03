@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Hotkeys from 'react-hot-keys';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -98,7 +98,6 @@ const SubmissionEditStepForm = (props) => {
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
-    onFetchLiveFeedback,
     onGenerateLiveFeedback,
     onGenerateFeedback,
     onReevaluateAnswer,
@@ -759,7 +758,6 @@ SubmissionEditStepForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
-  onFetchLiveFeedback: PropTypes.func,
   onGenerateLiveFeedback: PropTypes.func,
   onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,

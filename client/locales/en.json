@@ -2795,15 +2795,6 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "View Topic"
   },
-  "course.assessment.submission.answers.Programming.liveFeedbackItemDismissed": {
-    "defaultMessage": "Feedback disliked."
-  },
-  "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
-    "defaultMessage": "Feedback liked."
-  },
-  "course.assessment.submission.answers.Programming.liveFeedbackLineHeader": {
-    "defaultMessage": "Line {linenum}"
-  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "Download File"
   },
@@ -2875,6 +2866,18 @@
   },
   "course.assessment.submission.comments": {
     "defaultMessage": "Comments"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete": {
+    "defaultMessage": "Dismiss"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike": {
+    "defaultMessage": "Dislike"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike": {
+    "defaultMessage": "Like"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
+    "defaultMessage": "Line {linenum}"
   },
   "course.assessment.submission.continue": {
     "defaultMessage": "Continue"

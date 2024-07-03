@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
 import { Close, ThumbDown, ThumbUp } from '@mui/icons-material';
 import {
   Box,
@@ -28,7 +29,6 @@ import { questionShape } from '../../../propTypes';
 import { parseLanguages } from '../../../utils';
 
 import ProgrammingFile from './ProgrammingFile';
-import { defineMessages } from 'react-intl';
 
 const styles = {
   card: {
@@ -41,13 +41,18 @@ const styles = {
     minWidth: '300px',
     maxWidth: '300px',
   },
-  header: {
+  cardActions: {
+    px: 0,
+    paddingTop: 0.5,
+    paddingBottom: 0,
     display: 'flex',
-    backgroundColor: orange[100],
-    borderRadius: 2,
-    padding: 1,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
+  },
+  cardContent: {
+    px: 1,
+    paddingTop: 0,
+    '&:last-child': {
+      paddingBottom: 1,
+    },
   },
   cardSelected: {
     backgroundColor: yellow[100],
@@ -56,27 +61,50 @@ const styles = {
     backgroundColor: orange.A100,
   },
   cardResolved: {
-    opacity: 0.6,
-    backgroundColor: green['100'],
+    borderColor: '#cecece',
+    backgroundColor: green[100],
+    color: grey[600],
   },
   cardDismissed: {
-    opacity: 0.6,
-    backgroundColor: red['100'],
+    borderColor: '#cecece',
+    backgroundColor: red[100],
+    color: grey[600],
+  },
+  cardActionButton: {
+    opacity: 1.0,
+    marginX: -0.5,
+    padding: 0.4,
+    transform: 'scale(0.86)',
+    transformOrigin: 'right',
+  },
+  cardActionButtonHighlightOnResolve: {
+    '&:disabled': {
+      color: green.A700,
+    },
+  },
+  cardActionButtonHighlightOnDismiss: {
+    '&:disabled': {
+      color: red.A700,
+    },
   },
 };
 
 const translations = defineMessages({
   lineHeader: {
-    id: 'course.assessment.submission.answers.Programming.liveFeedbackLineHeader',
+    id: 'course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading',
     defaultMessage: 'Line {linenum}',
   },
-  itemResolved: {
-    id: 'course.assessment.submission.answers.Programming.liveFeedbackItemResolved',
-    defaultMessage: 'Feedback liked.',
+  likeItem: {
+    id: 'course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike',
+    defaultMessage: 'Like',
   },
-  itemDismissed: {
-    id: 'course.assessment.submission.answers.Programming.liveFeedbackItemDismissed',
-    defaultMessage: 'Feedback disliked.',
+  dislikeItem: {
+    id: 'course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike',
+    defaultMessage: 'Dislike',
+  },
+  deleteItem: {
+    id: 'course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete',
+    defaultMessage: 'Dismiss',
   },
 });
 
@@ -136,7 +164,7 @@ const ProgrammingFiles = ({
             },
           ],
         },
-      }
+      },
     };
 
     const focusEditorOnFeedbackLine = () => {
@@ -152,88 +180,92 @@ const ProgrammingFiles = ({
       editorRef.current?.editor?.focus();
     };
 
+    const renderLikeButton = () => (
+      <Tooltip title={t(translations.likeItem)} {...feedbackTooltipProps}>
+        <IconButton
+          disabled={feedbackItem.state === 'resolved'}
+          onClick={() => {
+            dispatch({
+              type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED,
+              payload: {
+                questionId,
+                path: 'main.py',
+                lineId: feedbackItem.id,
+              },
+            });
+          }}
+          sx={{
+            ...styles.cardActionButton,
+            ...styles.cardActionButtonHighlightOnResolve,
+          }}
+        >
+          <ThumbUp />
+        </IconButton>
+      </Tooltip>
+    );
+
+    const renderDislikeButton = () => (
+      <Tooltip title={t(translations.dislikeItem)} {...feedbackTooltipProps}>
+        <IconButton
+          disabled={feedbackItem.state === 'dismissed'}
+          onClick={() => {
+            dispatch({
+              type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_DISMISSED,
+              payload: {
+                questionId,
+                path: 'main.py',
+                lineId: feedbackItem.id,
+              },
+            });
+          }}
+          sx={{
+            ...styles.cardActionButton,
+            ...styles.cardActionButtonHighlightOnDismiss,
+          }}
+        >
+          <ThumbDown />
+        </IconButton>
+      </Tooltip>
+    );
+
+    const renderDeleteButton = () => (
+      <Tooltip title={t(translations.deleteItem)} {...feedbackTooltipProps}>
+        <IconButton
+          onClick={() => {
+            dispatch({
+              type: actionTypes.LIVE_FEEDBACK_ITEM_DELETE,
+              payload: {
+                questionId,
+                path: 'main.py',
+                lineId: feedbackItem.id,
+              },
+            });
+          }}
+          sx={{ ...styles.cardActionButton, marginRight: 1 }}
+        >
+          <Close />
+        </IconButton>
+      </Tooltip>
+    );
+
     return (
       <Card sx={cardStyle}>
         <CardActions
           onClick={focusEditorOnFeedbackLine}
-          sx={{ px: 0, paddingTop: 0.5, paddingBottom: 0, display: 'flex' }}
+          sx={styles.cardActions}
         >
           <Typography fontWeight="bold" sx={{ ml: 1 }} variant="subtitle1">
             {t(translations.lineHeader, { linenum: feedbackItem.linenum })}
           </Typography>
-          {feedbackItem.state === 'resolved' && (
-            <Typography variant="caption">
-              {t(translations.itemResolved)}
-            </Typography>
-          )}
-          {feedbackItem.state === 'dismissed' && (
-            <Typography variant="caption">
-              {t(translations.itemDismissed)}
-            </Typography>
-          )}
           <Box sx={{ flex: '1', width: '100%' }} />
-          <Tooltip title='Like' {...feedbackTooltipProps}>
-          <IconButton
-            className="p-1 ml-1"
-            disabled={feedbackItem.state !== 'pending'}
-            onClick={() => {
-              dispatch({
-                type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED,
-                payload: {
-                  questionId,
-                  path: 'main.py',
-                  lineId: feedbackItem.id,
-                },
-              });
-            }}
-            size="small"
-          >
-            <ThumbUp />
-          </IconButton>
-          </Tooltip>
-          <Tooltip title='Dislike' {...feedbackTooltipProps}>
-          <IconButton
-            className="p-1 ml-1"
-            disabled={feedbackItem.state !== 'pending'}
-            onClick={() => {
-              dispatch({
-                type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_DISMISSED,
-                payload: {
-                  questionId,
-                  path: 'main.py',
-                  lineId: feedbackItem.id,
-                },
-              });
-            }}
-            size="small"
-          >
-            <ThumbDown />
-          </IconButton>
-          </Tooltip>
-          <Tooltip title='Dismiss' {...feedbackTooltipProps}>
-          <IconButton
-            className="p-1 ml-1"
-            onClick={() => {
-              dispatch({
-                type: actionTypes.LIVE_FEEDBACK_ITEM_DELETE,
-                payload: {
-                  questionId,
-                  path: 'main.py',
-                  lineId: feedbackItem.id,
-                },
-              });
-              // TODO: expose BE route to Codaveri feedback rating endpoint and call here
-            }}
-            size="small"
-          >
-            <Close />
-          </IconButton>
-          </Tooltip>
+          {renderLikeButton()}
+          {renderDislikeButton()}
+          {renderDeleteButton()}
         </CardActions>
-        <CardContent onClick={focusEditorOnFeedbackLine} sx={{ px: 1, paddingTop: 0, 
-    "&:last-child": {
-      paddingBottom: 1
-    } }}>
+        <CardContent
+          onClick={focusEditorOnFeedbackLine}
+          sx={styles.cardContent}
+        >
           <Typography variant="body2">{feedbackItem.feedback}</Typography>
         </CardContent>
       </Card>
@@ -286,7 +318,14 @@ const ProgrammingFiles = ({
             style: { alignContent: 'start', position: 'absolute' },
           }}
           open={shouldOpenDrawer}
-          PaperProps={{ style: { position: 'absolute', width: '315px', alignContent: 'start', border: 0 } }}
+          PaperProps={{
+            style: {
+              position: 'absolute',
+              width: '315px',
+              alignContent: 'start',
+              border: 0,
+            },
+          }}
           variant="persistent"
         >
           <div>{annotations.map(renderFeedbackCard)}</div>
@@ -333,7 +372,6 @@ const Programming = (props) => {
           saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
         />
       )}
-      {/* <TestCaseView questionId={question.id} /> */}
       <CodaveriFeedbackStatus answerId={answerId} questionId={question.id} />
     </div>
   );

@@ -2768,15 +2768,6 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "查看主题"
   },
-  "course.assessment.submission.answers.Programming.liveFeedbackItemDismissed": {
-    "defaultMessage": "项目已忽略。"
-  },
-  "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
-    "defaultMessage": "项目已解决。"
-  },
-  "course.assessment.submission.answers.Programming.liveFeedbackLineHeader": {
-    "defaultMessage": "线 {linenum}"
-  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "下载文件"
   },
@@ -2848,6 +2839,18 @@
   },
   "course.assessment.submission.comments": {
     "defaultMessage": "注释"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete": {
+    "defaultMessage": "忽略"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike": {
+    "defaultMessage": "不喜欢"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike": {
+    "defaultMessage": "喜欢"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
+    "defaultMessage": "线 {linenum}"
   },
   "course.assessment.submission.continue": {
     "defaultMessage": "继续"

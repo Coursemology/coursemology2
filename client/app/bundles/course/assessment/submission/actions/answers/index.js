@@ -264,7 +264,6 @@ export function generateLiveFeedback(submissionId, answerId, questionId) {
       });
 }
 
-// TODO should each answer/question store its own feedback array?
 export function fetchLiveFeedback(
   answerId,
   questionId,

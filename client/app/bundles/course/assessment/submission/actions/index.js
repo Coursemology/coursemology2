@@ -1,5 +1,5 @@
-import CourseAPI from 'api/course';
 import GlobalAPI from 'api';
+import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
@@ -13,7 +13,6 @@ import translations from '../translations';
 import { buildErrorMessage, formatAnswers } from './utils';
 
 const JOB_POLL_DELAY_MS = 500;
-const JOB_STAGGER_DELAY_MS = 400;
 
 export function getEvaluationResult(submissionId, answerId, questionId) {
   return (dispatch) => {
