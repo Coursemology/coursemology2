@@ -56,7 +56,7 @@ commands:
 
       - run:
           name: Install Bundler
-          command: gem install bundler:2.2.33
+          command: gem install bundler:2.5.9
 
       - run:
           name: Install Ruby dependencies
