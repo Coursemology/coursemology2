@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 ruby '3.1.4'
 
@@ -44,7 +44,7 @@ gem 'active_record_upsert', '0.11.2'
 gem 'friendly_id'
 
 # HTML Pipeline and dependencies
-gem 'html-pipeline'
+gem 'html-pipeline', '2.14.3'
 gem 'sanitize', '>= 4.6.3'
 gem 'rinku'
 gem 'rouge', '~> 3'
