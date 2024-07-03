@@ -44,10 +44,8 @@ class Course::Forum::Topic < ApplicationRecord
   # @!attribute [r] post_count
   #   The number of posts in this topic.
   calculated :post_count, (lambda do
-    Course::Discussion::Topic.joins(:posts).
-      where('actable_id = course_forum_topics.id').
-      where(actable_type: Course::Forum::Topic.name).
-      select("count('*')")
+    Course::Discussion::Topic.joins(:posts).where('actable_id = course_forum_topics.id').
+      where(actable_type: Course::Forum::Topic.name).select("count('*')")
   end)
 
   # @!attribute [r] view_count
@@ -79,11 +77,14 @@ class Course::Forum::Topic < ApplicationRecord
           group('course_discussion_posts.topic_id').
           where(topic_id: topic_ids)
 
-    last_posts = Course::Discussion::Post.with_creator.where('id in (?) or id in (?)', min_ids, max_ids)
+    last_posts = Course::Discussion::Post.with_creator.
+          where('course_discussion_posts.id in (?) or course_discussion_posts.id in (?)', min_ids, max_ids)
 
     all.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, { discussion_topic: :posts }, last_posts)
+      preloader = ActiveRecord::Associations::Preloader.new(records: result,
+                                                            associations: { discussion_topic: :posts },
+                                                            scope: last_posts)
+      preloader.call
     end
   end)
 

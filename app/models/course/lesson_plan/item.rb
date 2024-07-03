@@ -65,14 +65,16 @@ class Course::LessonPlan::Item < ApplicationRecord
   scope :with_personal_times_for, (lambda do |course_user|
     personal_times =
       if course_user.nil?
-        []
+        nil
       else
-        Course::PersonalTime.where(course_user_id: course_user.id, lesson_plan_item_id: all).to_a
+        Course::PersonalTime.where(course_user_id: course_user.id, lesson_plan_item_id: all)
       end
 
-    all.to_a.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, :personal_times, personal_times)
+    all.tap do |result|
+      preloader = ActiveRecord::Associations::Preloader.new(records: result,
+                                                            associations: :personal_times,
+                                                            scope: personal_times)
+      preloader.call
     end
   end)
 
