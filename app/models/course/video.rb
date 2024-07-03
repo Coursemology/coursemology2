@@ -61,11 +61,13 @@ class Course::Video < ApplicationRecord
   #   @param [User] user The user to preload submissions for.
   scope :with_submissions_by, (lambda do |user|
     submissions = Course::Video::Submission.by_user(user).
-      where(video: distinct(false).pluck(:id))
+                  where(video: distinct(false).pluck(:id))
 
     all.to_a.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, :submissions, submissions)
+      preloader = ActiveRecord::Associations::Preloader.new(records: result,
+                                                            associations: :submissions,
+                                                            scope: submissions)
+      preloader.call
     end
   end)
 

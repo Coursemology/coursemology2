@@ -115,8 +115,10 @@ class Course::Assessment < ApplicationRecord
                   where(assessment: distinct(false).pluck(:id)).ordered_by_date
 
     all.to_a.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, :submissions, submissions)
+      preloader = ActiveRecord::Associations::Preloader.new(records: result,
+                                                            associations: :submissions,
+                                                            scope: submissions)
+      preloader.call
     end
   end)
 

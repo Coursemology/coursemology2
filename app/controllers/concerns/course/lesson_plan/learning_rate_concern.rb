@@ -91,6 +91,7 @@ module Course::LessonPlan::LearningRateConcern
     course_user.course.lesson_plan_items.published.
       with_reference_times_for(course_user).
       with_personal_times_for(course_user).
+      to_a.
       concat(stories_for(course_user)).
       sort_by { |item| item.time_for(course_user).start_at }
   end
