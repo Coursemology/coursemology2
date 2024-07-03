@@ -61,8 +61,10 @@ class Course::Discussion::Post < ApplicationRecord
       where('course_discussion_post_votes.creator_id = ?', user.id)
 
     all.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, :votes, votes)
+      preloader = ActiveRecord::Associations::Preloader.new(records: result,
+                                                            associations: :votes,
+                                                            scope: votes)
+      preloader.call
     end
   end)
 

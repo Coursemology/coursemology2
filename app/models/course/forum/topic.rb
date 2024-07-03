@@ -82,8 +82,10 @@ class Course::Forum::Topic < ApplicationRecord
     last_posts = Course::Discussion::Post.with_creator.where('id in (?) or id in (?)', min_ids, max_ids)
 
     all.tap do |result|
-      preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
-      preloader.preload(result, { discussion_topic: :posts }, last_posts)
+      preloader = ActiveRecord::Associations::Preloader.new(records: result,
+                                                            associations: { discussion_topic: :posts },
+                                                            scope: last_posts)
+      preloader.call
     end
   end)
 
