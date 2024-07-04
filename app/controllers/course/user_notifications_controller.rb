@@ -23,7 +23,7 @@ class Course::UserNotificationsController < Course::Controller
     return unless current_course_user
 
     notification = UserNotification.next_unread_popup_for(current_course_user)
-    notification && render_to_string("#{helpers.notification_view_path(notification)}.json",
+    notification && render_to_string(helpers.notification_view_path(notification),
                                      locals: { notification: notification })
   end
 end

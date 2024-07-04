@@ -3,7 +3,7 @@ module Course::AssessmentConditionalConcern
   extend ActiveSupport::Concern
 
   def success_action
-    render partial: 'course/condition/conditions.json', locals: { conditional: @conditional }
+    render partial: 'course/condition/conditions', locals: { conditional: @conditional }
   end
 
   def set_conditional

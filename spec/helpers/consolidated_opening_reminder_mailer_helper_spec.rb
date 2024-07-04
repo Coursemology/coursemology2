@@ -17,7 +17,7 @@ RSpec.describe ConsolidatedOpeningReminderMailerHelper, type: :helper do
         subject { helper.actable_type_partial_path(stub_notification, 'Course::Assessment') }
 
         it 'returns the correct partial path' do
-          is_expected.to eq('/notifiers/user_notifier/tested/open_structs/course/assessment')
+          is_expected.to eq('notifiers/user_notifier/tested/open_structs/course/assessment')
         end
       end
     end
