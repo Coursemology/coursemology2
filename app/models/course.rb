@@ -247,7 +247,7 @@ class Course < ApplicationRecord
     opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
     opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.any? do |item|
       course_users.any? do |course_user|
-        item.time_for(course_user).start_at.in?((Time.zone.now)..(1.day.from_now))
+        item.time_for(course_user).start_at.between?(Time.zone.now, 1.day.from_now)
       end
     end
   end

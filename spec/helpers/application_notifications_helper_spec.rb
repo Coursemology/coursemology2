@@ -17,7 +17,7 @@ RSpec.describe ApplicationNotificationsHelper, type: :helper do
         subject { helper.notification_view_path(stub_notification) }
 
         it 'returns the correct view path' do
-          is_expected.to eq('/notifiers/user_notifier/tested/open_structs/test_type')
+          is_expected.to eq('notifiers/user_notifier/tested/open_structs/test_type')
         end
       end
     end

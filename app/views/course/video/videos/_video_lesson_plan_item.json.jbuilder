@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-json.partial! 'course/lesson_plan/items/item.json.jbuilder', item: item
+json.partial! 'course/lesson_plan/items/item', item: item
 
 json.item_path course_video_path(current_course, item)
 json.description format_ckeditor_rich_text(item.description)

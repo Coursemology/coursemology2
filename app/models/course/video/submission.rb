@@ -70,8 +70,8 @@ class Course::Video::Submission < ApplicationRecord
     return unless existing_submission
 
     errors.clear
-    errors[:base] << I18n.t('activerecord.errors.models.course/video/submission.'\
-                            'submission_already_exists')
+    errors.add(:base, I18n.t('activerecord.errors.models.course/video/submission.'\
+                             'submission_already_exists'))
   end
 
   # Initialize statistic when submission is created by course student

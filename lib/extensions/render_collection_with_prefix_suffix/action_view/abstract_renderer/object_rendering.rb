@@ -18,7 +18,18 @@ module Extensions::RenderCollectionWithPrefixSuffix::ActionView::AbstractRendere
       dirname, basename = File.split(result)
       basename.prepend("#{@options[:prefix]}_") if @options.key?(:prefix)
       basename.concat("_#{@options[:suffix]}") if @options.key?(:suffix)
-      File.join(dirname, basename)
+
+      generate_partial_path(dirname, basename)
+    end
+
+    private
+
+    def generate_partial_path(dirname, basename)
+      if dirname == '.'
+        basename
+      else
+        File.join(dirname, basename)
+      end
     end
   end
 end

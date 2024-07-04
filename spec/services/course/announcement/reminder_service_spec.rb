@@ -9,7 +9,7 @@ RSpec.describe Course::Announcement::ReminderService do
     describe '#opening_reminder' do
       let!(:now) { Time.zone.now }
       let(:user) { create(:course_user, course: course).user }
-      let!(:announcement) { create(:course_announcement, start_at: now) }
+      let(:announcement) { create(:course_announcement, start_at: now) }
 
       context 'when announcement is created' do
         it 'notify the users' do

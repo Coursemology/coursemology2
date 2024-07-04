@@ -57,7 +57,7 @@ RSpec.describe ConsolidatedOpeningReminderMailer, type: :mailer do
     end
 
     it 'sets the correct subject' do
-      expect(mail.subject).to eq(I18n.t('.notifiers.course.'\
+      expect(mail.subject).to eq(I18n.t('notifiers.course.'\
                                         'consolidated_opening_reminder_notifier.'\
                                         'opening_reminder.course_notifications.email.subject'))
     end

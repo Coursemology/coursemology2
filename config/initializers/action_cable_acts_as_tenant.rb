@@ -7,6 +7,7 @@ module ActionCable::ActsAsTenantFilterConcern
   # rubocop:disable Naming/AccessorMethodName
   def set_current_tenant(current_tenant_object)
     ActsAsTenant.current_tenant = current_tenant_object
+    ActsAsTenant.test_tenant = current_tenant_object
   end
   # rubocop:enable Naming/AccessorMethodName
 end

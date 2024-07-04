@@ -7,4 +7,4 @@ json.attributes do
   end
 end
 
-json.partial! 'course/condition/condition_data.json', conditional: @achievement
+json.partial! 'course/condition/condition_data', conditional: @achievement
