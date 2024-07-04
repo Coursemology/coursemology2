@@ -253,6 +253,7 @@ const SubmissionEditForm = (props) => {
     );
   };
 
+  // TODO: update logic pending #7418: allow [Get Help] on all programming questions
   const renderGetLiveFeedbackButton = (id) => {
     const question = questions[id];
     const { answerId, attemptsLeft } = question;

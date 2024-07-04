@@ -355,6 +355,15 @@ const translations = defineMessages({
         Try submitting your code again in a couple of minutes \
         or check the error message in the network response.',
   },
+  liveFeedbackNoneGenerated: {
+    id: 'course.assessment.submission.liveFeedbackNoneGenerated',
+    defaultMessage: 'Question {questionIndex}: No feedback generated.',
+  },
+  liveFeedbackSuccess: {
+    id: 'course.assessment.submission.liveFeedbackSuccess',
+    defaultMessage:
+      'Question {questionIndex}: Feedback successfully generated.',
+  },
   autogradeSubmissionSuccess: {
     id: 'course.assessment.submission.autogradeSubmissionSuccess',
     defaultMessage: 'All answers have been evaluated.',
