@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_12_092424) do
-
+ActiveRecord::Schema[7.0].define(version: 2024_05_12_092424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -538,8 +537,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.text "codaveri_feedback_id", null: false
     t.text "original_feedback", null: false
     t.integer "rating"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["post_id"], name: "fk__codaveri_feedback_discussion_post_id", unique: true
     t.index ["status"], name: "index_course_discussion_post_codaveri_feedbacks_on_status"
   end
@@ -692,8 +691,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.text "description"
     t.bigint "creator_id", null: false
     t.bigint "updater_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["course_id", "name"], name: "index_course_group_categories_on_course_id_and_name", unique: true
     t.index ["course_id"], name: "fk__course_group_categories_course_id"
     t.index ["creator_id"], name: "fk__course_group_categories_creator_id"
@@ -731,8 +730,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
 
   create_table "course_learning_maps", force: :cascade do |t|
     t.bigint "course_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["course_id"], name: "fk__course_learning_maps_course_id"
   end
 
@@ -741,8 +740,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.float "learning_rate", null: false
     t.float "effective_min", null: false
     t.float "effective_max", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["course_user_id"], name: "fk__course_learning_rate_records_course_user_id"
   end
 
@@ -854,8 +853,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.string "ip_address"
     t.datetime "generated_at", null: false
     t.boolean "stale", default: false, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["generated_at"], name: "index_course_monitoring_heartbeats_on_generated_at"
     t.index ["session_id"], name: "index_course_monitoring_heartbeats_on_session_id"
   end
@@ -866,8 +865,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.integer "min_interval_ms", null: false
     t.integer "max_interval_ms", null: false
     t.integer "offset_ms", default: 0, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.boolean "blocks", default: false, null: false
   end
 
@@ -875,8 +874,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.bigint "monitor_id", null: false
     t.integer "status", default: 0, null: false
     t.bigint "creator_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "misses", default: 0, null: false
     t.index ["creator_id"], name: "fk__course_monitoring_sessions_creator_id"
     t.index ["monitor_id"], name: "index_course_monitoring_sessions_on_monitor_id"
@@ -1245,8 +1244,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.integer "source_id"
     t.bigint "creator_id", null: false
     t.bigint "updater_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["actable_type", "actable_id"], name: "index_duplication_traceables_actable", unique: true
     t.index ["creator_id"], name: "fk__duplication_traceables_creator_id"
     t.index ["updater_id"], name: "fk__duplication_traceables_updater_id"
@@ -1372,8 +1371,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.text "redirect_uri", null: false
     t.string "scopes", default: "", null: false
     t.boolean "confidential", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 

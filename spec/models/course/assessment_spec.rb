@@ -137,7 +137,7 @@ RSpec.describe Course::Assessment do
           subject.save
 
           expect(subject.folder.name).to eq(new_title)
-          expect(subject.folder.start_at).to eq(new_start_at)
+          expect(subject.folder.start_at).to be_within(1.second).of(new_start_at)
         end
       end
     end
