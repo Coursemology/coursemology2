@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
 import {
@@ -204,17 +204,33 @@ class VisibleSubmissionEditIndex extends Component {
   };
 
   onFetchLiveFeedback = (answerId, questionId) => {
-    const { dispatch, liveFeedback } = this.props;
+    const {
+      intl,
+      dispatch,
+      liveFeedback,
+      assessment: { questionIds },
+    } = this.props;
 
-    const feedbackRequestToken =
+    const feedbackToken =
       liveFeedback?.feedbackByQuestion?.[questionId].pendingFeedbackToken;
+    const questionIndex = questionIds.findIndex((id) => id === questionId) + 1;
+    const successMessage = intl.formatMessage(
+      translations.liveFeedbackSuccess,
+      { questionIndex },
+    );
+    const noFeedbackMessage = intl.formatMessage(
+      translations.liveFeedbackNoneGenerated,
+      { questionIndex },
+    );
     dispatch(
-      fetchLiveFeedback(
+      fetchLiveFeedback({
         answerId,
         questionId,
-        liveFeedback?.feedbackUrl,
-        feedbackRequestToken,
-      ),
+        feedbackUrl: liveFeedback?.feedbackUrl,
+        feedbackToken,
+        successMessage,
+        noFeedbackMessage,
+      }),
     );
   };
 
@@ -229,10 +245,30 @@ class VisibleSubmissionEditIndex extends Component {
   onGenerateLiveFeedback = (answerId, questionId) => {
     const {
       dispatch,
+      intl,
+      assessment: { questionIds },
       match: { params },
     } = this.props;
+    const questionIndex = questionIds.findIndex((id) => id === questionId) + 1;
+    const successMessage = intl.formatMessage(
+      translations.liveFeedbackSuccess,
+      { questionIndex },
+    );
+    const noFeedbackMessage = intl.formatMessage(
+      translations.liveFeedbackNoneGenerated,
+      { questionIndex },
+    );
+
     dispatch(initializeLiveFeedback(questionId));
-    dispatch(generateLiveFeedback(params.submissionId, answerId, questionId));
+    dispatch(
+      generateLiveFeedback({
+        submissionId: params.submissionId,
+        answerId,
+        questionId,
+        successMessage,
+        noFeedbackMessage,
+      }),
+    );
   };
 
   allConsideredCorrect() {
@@ -495,6 +531,7 @@ VisibleSubmissionEditIndex.propTypes = {
   questions: PropTypes.objectOf(questionShape),
   historyAnswers: PropTypes.objectOf(answerShape),
   historyQuestions: PropTypes.objectOf(historyQuestionShape),
+  intl: PropTypes.object.isRequired,
   questionsFlags: PropTypes.objectOf(questionFlagsShape),
   submission: submissionShape,
   topics: PropTypes.objectOf(topicShape),
@@ -539,7 +576,9 @@ function mapStateToProps({ assessments: { submission } }) {
 const handle = assessmentsTranslations.attempt;
 
 const SubmissionEditIndex = withRouter(
-  withHeartbeatWorker(connect(mapStateToProps)(VisibleSubmissionEditIndex)),
+  withHeartbeatWorker(
+    connect(mapStateToProps)(injectIntl(VisibleSubmissionEditIndex)),
+  ),
 );
 
 export default Object.assign(SubmissionEditIndex, { handle });

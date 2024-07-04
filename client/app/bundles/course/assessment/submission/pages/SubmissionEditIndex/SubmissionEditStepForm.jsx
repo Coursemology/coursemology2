@@ -320,6 +320,7 @@ const SubmissionEditStepForm = (props) => {
     return null;
   };
 
+  // TODO: update logic pending #7418: allow [Get Help] on all programming questions
   const renderGetLiveFeedbackButton = () => {
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -577,20 +578,6 @@ const SubmissionEditStepForm = (props) => {
     />
   );
 
-  const renderProgrammingQuestionActions = () => {
-    const id = questionIds[stepIndex];
-    const question = questions[id];
-
-    return (
-      <div className="flex flex-nowrap">
-        <Box sx={{ flex: '1', width: '100%' }} />
-        {isCodaveriEnabled &&
-          question.isCodaveri &&
-          renderGetLiveFeedbackButton()}
-      </div>
-    );
-  };
-
   const renderStepQuestion = () => {
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -613,15 +600,17 @@ const SubmissionEditStepForm = (props) => {
           }}
         />
         {attempting && (
-          <>
+          <div className="flex flex-nowrap">
             {renderResetButton()}
             {renderSubmitButton()}
             {renderContinueButton()}
-          </>
+            <Box sx={{ flex: '1', width: '100%' }} />
+            {question.type === questionTypes.Programming &&
+              isCodaveriEnabled &&
+              question.isCodaveri &&
+              renderGetLiveFeedbackButton()}
+          </div>
         )}
-        {attempting &&
-          question.type === questionTypes.Programming &&
-          renderProgrammingQuestionActions()}
 
         {renderAutogradingErrorPanel(id)}
         {renderExplanationPanel(question)}

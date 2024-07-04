@@ -2768,12 +2768,6 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "查看主题"
   },
-  "course.assessment.submission.answers.Programming.liveFeedbackItemDismissed": {
-    "defaultMessage": "项目已忽略。"
-  },
-  "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
-    "defaultMessage": "项目已解决。"
-  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "下载文件"
   },
@@ -2803,6 +2797,12 @@
   },
   "course.assessment.submission.codaveriAutogradeFailure": {
     "defaultMessage": "(T_T) 抱歉，codaveri 自动打分气罢工了。尝试在几分钟后再次提交你的代码或检查网络响应中的错误消息。"
+  },
+  "course.assessment.submission.liveFeedbackNoneGenerated": {
+    "defaultMessage": "问题 {questionIndex}：未生成反馈。"
+  },
+  "course.assessment.submission.liveFeedbackSuccess": {
+    "defaultMessage": "问题 {questionIndex}：反馈生成成功。"
   },
   "course.assessment.submission.comment.CodaveriCommentCard.finalise": {
     "defaultMessage": "完成并发布反馈"
@@ -2845,6 +2845,18 @@
   },
   "course.assessment.submission.comments": {
     "defaultMessage": "注释"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete": {
+    "defaultMessage": "忽略"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike": {
+    "defaultMessage": "不喜欢"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike": {
+    "defaultMessage": "喜欢"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
+    "defaultMessage": "线 {linenum}"
   },
   "course.assessment.submission.continue": {
     "defaultMessage": "继续"

@@ -2795,12 +2795,6 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "View Topic"
   },
-  "course.assessment.submission.answers.Programming.liveFeedbackItemDismissed": {
-    "defaultMessage": "Item dismissed."
-  },
-  "course.assessment.submission.answers.Programming.liveFeedbackItemResolved": {
-    "defaultMessage": "Item resolved."
-  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
     "defaultMessage": "Download File"
   },
@@ -2830,6 +2824,12 @@
   },
   "course.assessment.submission.codaveriAutogradeFailure": {
     "defaultMessage": "There is an error while evaluating your code in Codaveri. Try submitting your code again in a couple of minutes or check the error message in the network response."
+  },
+  "course.assessment.submission.liveFeedbackNoneGenerated": {
+    "defaultMessage": "Question {questionIndex}: No feedback generated."
+  },
+  "course.assessment.submission.liveFeedbackSuccess": {
+    "defaultMessage": "Question {questionIndex}: Feedback successfully generated."
   },
   "course.assessment.submission.comment.CodaveriCommentCard.finalise": {
     "defaultMessage": "Finalise and Post Feedback"
@@ -2872,6 +2872,18 @@
   },
   "course.assessment.submission.comments": {
     "defaultMessage": "Comments"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete": {
+    "defaultMessage": "Dismiss"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike": {
+    "defaultMessage": "Dislike"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike": {
+    "defaultMessage": "Like"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
+    "defaultMessage": "Line {linenum}"
   },
   "course.assessment.submission.continue": {
     "defaultMessage": "Continue"

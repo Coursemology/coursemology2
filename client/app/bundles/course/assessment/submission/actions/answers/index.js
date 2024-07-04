@@ -230,19 +230,57 @@ export function initializeLiveFeedback(questionId) {
     });
 }
 
-export function generateLiveFeedback(submissionId, answerId, questionId) {
+// if status returned 200, populate feedback array if has feedback, otherwise return error
+const handleFeedbackOKResponse = ({
+  dispatch,
+  response,
+  answerId,
+  questionId,
+  successMessage,
+  noFeedbackMessage,
+}) => {
+  const feedbackFiles = response.data?.data?.feedbackFiles ?? [];
+  const success = response.data?.success;
+  if (success && feedbackFiles.length) {
+    dispatch({
+      type: actionTypes.LIVE_FEEDBACK_SUCCESS,
+      payload: {
+        questionId,
+        answerId,
+        feedbackFiles,
+      },
+    });
+    dispatch(setNotification(successMessage));
+  } else {
+    dispatch({
+      type: actionTypes.LIVE_FEEDBACK_FAILURE,
+      payload: {
+        questionId,
+      },
+    });
+    dispatch(setNotification(noFeedbackMessage));
+  }
+};
+
+export function generateLiveFeedback({
+  submissionId,
+  answerId,
+  questionId,
+  successMessage,
+  noFeedbackMessage,
+}) {
   return (dispatch) =>
     CourseAPI.assessment.submissions
       .generateLiveFeedback(submissionId, { answer_id: answerId })
       .then((response) => {
         if (response.status === 200) {
-          dispatch({
-            type: actionTypes.LIVE_FEEDBACK_SUCCESS,
-            payload: {
-              questionId,
-              answerId,
-              feedbackFiles: response.data?.data?.feedbackFiles ?? {},
-            },
+          handleFeedbackOKResponse({
+            dispatch,
+            response,
+            answerId,
+            questionId,
+            successMessage,
+            noFeedbackMessage,
           });
         } else {
           // 201, save feedback signed token
@@ -267,26 +305,26 @@ export function generateLiveFeedback(submissionId, answerId, questionId) {
       });
 }
 
-// TODO should each answer/question store its own feedback array?
-export function fetchLiveFeedback(
+export function fetchLiveFeedback({
   answerId,
   questionId,
   feedbackUrl,
   feedbackToken,
-) {
+  successMessage,
+  noFeedbackMessage,
+}) {
   return (dispatch) =>
     CourseAPI.assessment.submissions
       .fetchLiveFeedback(feedbackUrl, feedbackToken)
       .then((response) => {
-        // if 200, go straight to LIVE_FEEDBACK_SUCCESS
         if (response.status === 200) {
-          dispatch({
-            type: actionTypes.LIVE_FEEDBACK_SUCCESS,
-            payload: {
-              questionId,
-              answerId,
-              feedbackFiles: response.data?.data?.feedbackFiles ?? {},
-            },
+          handleFeedbackOKResponse({
+            dispatch,
+            response,
+            answerId,
+            questionId,
+            successMessage,
+            noFeedbackMessage,
           });
         }
       })
