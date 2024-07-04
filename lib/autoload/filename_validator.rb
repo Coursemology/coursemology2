@@ -1,18 +1,17 @@
 # frozen_string_literal: true
 class FilenameValidator < ActiveModel::Validator
   def validate(record)
-    errors = record.errors[:name]
+    errors = record.errors
     # \ : * ? " < > | are not allowed
     if record.name =~ /[\/\\:*?"<>|]/
-      errors <<
-        I18n.t('activerecord.errors.messages.filename_validator.invalid_characters',
-               characters: '\ : * ? " < > |')
+      errors.add(:name, I18n.t('activerecord.errors.messages.filename_validator.invalid_characters',
+                               characters: '\ : * ? " < > |'))
     # Tailing dots are not allowed
     elsif record.name =~ /\.+\z/
-      errors << I18n.t('activerecord.errors.messages.filename_validator.tailing_dots')
+      errors.add(:name, I18n.t('activerecord.errors.messages.filename_validator.tailing_dots'))
     # Leading or tailing whitespaces are not allowed
     elsif record.name =~ /(\A\s+.*)|(.*\s+\z)/
-      errors << I18n.t('activerecord.errors.messages.filename_validator.whitespaces')
+      errors.add(:name, I18n.t('activerecord.errors.messages.filename_validator.whitespaces'))
     end
   end
 end

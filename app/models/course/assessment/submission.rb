@@ -334,8 +334,8 @@ class Course::Assessment::Submission < ApplicationRecord
     return unless existing
 
     errors.clear
-    errors[:base] << I18n.t('activerecord.errors.models.course/assessment/'\
-                            'submission.submission_already_exists')
+    errors.add(:base, I18n.t('activerecord.errors.models.course/assessment/'\
+                             'submission.submission_already_exists'))
   end
 
   # Validate that the awarder and awarded_at is present for published submissions
