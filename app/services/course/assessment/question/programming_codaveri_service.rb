@@ -53,7 +53,8 @@ class Course::Assessment::Question::ProgrammingCodaveriService
           ],
           exprTestcases: []
         }
-      ]
+      ],
+      additionalFiles: []
     }
   end
 
@@ -68,7 +69,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
   # Constructs codaveri question problem object.
   #
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
-  def construct_problem_object(package)
+  def construct_problem_object(package) # rubocop:disable Metrics/AbcSize
     @problem_object[:title] = @question.title
     @problem_object[:description] = @question.description
     resources_object = @problem_object[:resources][0]
@@ -81,6 +82,8 @@ class Course::Assessment::Question::ProgrammingCodaveriService
 
     resources_object[:solutions][0][:files] = codaveri_package.process_solutions
     resources_object[:exprTestcases] = codaveri_package.process_test_cases
+    resources_object[:templates] = codaveri_package.process_templates
+    @problem_object[:additionalFiles] = codaveri_package.process_data
 
     @problem_object
     # For debugging purpose

@@ -24,6 +24,16 @@ class Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPack
     @language_codaveri_package_service.test_case_files
   end
 
+  def process_templates
+    @language_codaveri_package_service.process_templates
+    @language_codaveri_package_service.template_files
+  end
+
+  def process_data
+    @language_codaveri_package_service.process_data
+    @language_codaveri_package_service.data_files
+  end
+
   private
 
   # @param [Course::Assessment::Question::Programming] question The programming question with the

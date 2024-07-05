@@ -11,11 +11,16 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   def initialize(question, package)
     @question = question
     @package = package
+    # currently codebase only supports one solution for now
+    # but in the future, we may consider supporting multiple solutions
+    # e.g. iterative/recursive solutions, naive/optimal solutions
     @solution_files = []
     @test_case_files = []
+    @template_files = []
+    @data_files = []
   end
 
-  attr_reader :solution_files, :test_case_files
+  attr_reader :solution_files, :test_case_files, :template_files, :data_files
 
   # Returns an array containing the solution files for Codaveri problem object.
   #
@@ -31,6 +36,20 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
     raise NotImplementedError, 'You must implement this'
   end
 
+  # Returns an array containing the template files for Codaveri problem object.
+  #
+  # @return [Array]
+  def process_templates
+    raise NotImplementedError, 'You must implement this'
+  end
+
+  # Returns an array containing the additional data files for Codaveri problem object.
+  #
+  # @return [Array]
+  def process_data
+    raise NotImplementedError, 'You must implement this'
+  end
+
   private
 
   # Defines the default solution template as indicated in the Codevari API problem management spec.
@@ -39,9 +58,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   def default_codaveri_solution_template
     {
       path: '',
-      prefix: '',
-      content: '',
-      suffix: ''
+      content: ''
     }
   end
 
@@ -56,6 +73,29 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
       prefix: '',
       expression: '',
       display: 'str(out)'
+    }
+  end
+
+  # Defines the default template file template as indicated in the Codevari API problem management spec.
+  #
+  # @return [Hash]
+  def default_codaveri_template_template
+    {
+      path: '',
+      prefix: '',
+      content: '',
+      suffix: ''
+    }
+  end
+
+  # Defines the default data / additional file template as indicated in the Codevari API problem management spec.
+  #
+  # @return [Hash]
+  def default_codaveri_data_file_template
+    {
+      type: '',
+      path: '',
+      content: ''
     }
   end
 end

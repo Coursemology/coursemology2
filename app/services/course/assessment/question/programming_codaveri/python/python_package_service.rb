@@ -4,34 +4,38 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
   Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   def process_solutions
     extract_main_solution
-    extract_supporting_files
   end
 
   def process_test_cases
     extract_test_cases
   end
 
+  def process_data
+    extract_supporting_files
+  end
+
+  def process_templates
+    extract_template
+  end
+
   private
 
-  # Extracts the main solution of a programing question problem and appends it
-  # the "files_solution" array for the problem management API request body.
+  # Extracts the main solution of a programing question problem and append it to the
+  # [:resources][0][:solutions] array array for the problem management API request body.
   def extract_main_solution
     main_solution_object = default_codaveri_solution_template
 
     solution_files = @package.solution_files
-    test_files = @package.test_files
 
     main_solution_object[:path] = 'template.py'
-    main_solution_object[:content] = solution_files[Pathname.new('template.py')].gsub('import xmlrunner', '')
-
-    main_solution_object[:prefix] = test_files[Pathname.new('prepend.py')].gsub('import xmlrunner', '')
-    main_solution_object[:suffix] = test_files[Pathname.new('append.py')].gsub('import xmlrunner', '')
+    main_solution_object[:content] = solution_files[Pathname.new('template.py')]
+    return if main_solution_object[:content].blank?
 
     @solution_files.append(main_solution_object)
   end
 
-  # In a programming question package, there may be external files that are included in the package
-  # The contents of these files are appended to the "files_solution" array in the API Request body.
+  # In a programming question package, there may be data files that are included in the package
+  # The contents of these files are appended to the "additionalFiles" array in the API Request main body.
   def extract_supporting_files
     extract_supporting_main_files
     extract_supporting_tests_files
@@ -91,22 +95,23 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
     end
   end
 
-  # Extracts filename and content of a file and append it to the
-  # default codaveri files_solution for the problem management API request body.
+  # Extracts filename and content of a data file and append it to the
+  # [:additionalFiles] array for the problem management API request body.
   #
   # @param [Pathname] pathname The pathname of the file.
   # @param [String] content The content of the file.
   def extract_supporting_file(filename, content)
-    supporting_solution_object = default_codaveri_solution_template
+    supporting_solution_object = default_codaveri_data_file_template
 
+    supporting_solution_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
     supporting_solution_object[:path] = filename.to_s
     supporting_solution_object[:content] = content
 
-    @solution_files.append(supporting_solution_object)
+    @data_files.append(supporting_solution_object)
   end
 
   # Extracts test cases from 'autograde.py' and append all the test cases to the
-  # default codaveri test_cases array for the problem management API request body.
+  # [:resources][0][:exprTestcases] array for the problem management API request body.
   def extract_test_cases
     autograde_content = @package.test_files[Pathname.new('autograde.py')]
     test_cases_with_id = preload_question_test_cases
@@ -146,6 +151,23 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
 
       @test_case_files.append(test_case_object)
     end
+  end
+
+  # Extracts template file from submissions folder and append it to the
+  # [:resources][0][:templates] array for the problem management API request body.
+  def extract_template
+    main_template_object = default_codaveri_template_template
+
+    submission_files = @package.submission_files
+    test_files = @package.test_files
+
+    main_template_object[:path] = 'template.py'
+    main_template_object[:content] = submission_files[Pathname.new('template.py')].gsub('import xmlrunner', '')
+
+    main_template_object[:prefix] = test_files[Pathname.new('prepend.py')].gsub('import xmlrunner', '')
+    main_template_object[:suffix] = test_files[Pathname.new('append.py')].gsub('import xmlrunner', '')
+
+    @template_files.append(main_template_object)
   end
 
   def preload_question_test_cases
