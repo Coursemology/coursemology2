@@ -152,6 +152,33 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
         end
       end
 
+      describe '#when the evaluation times out' do
+        subject { super().grade(answer) }
+
+        # dummy URL
+        let!(:connection) { Excon.new('http://localhost:53896') }
+
+        before do
+          allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
+
+          allow(Excon).to receive(:new).and_return(connection)
+          Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs::EVALUATE_ID_CREATED)
+          Excon.stub({ method: 'GET' }, Codaveri::EvaluateApiStubs::EVALUATE_RESULTS_PENDING)
+
+          # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
+          stub_const(
+            'Course::Assessment::ProgrammingCodaveriEvaluationService::DEFAULT_TIMEOUT',
+            0.0000000000001.seconds
+          )
+        end
+        after do
+          Excon.stubs.clear
+        end
+        it 'raises a Timeout::Error' do
+          expect { subject }.to raise_error(Timeout::Error)
+        end
+      end
+
       describe '#grade but failed immediately' do
         subject { super().grade(answer) }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 # Sets up a programming evaluation, queues it for execution by codaveri evaluators, then returns the results.
-class Course::Assessment::ProgrammingCodaveriEvaluationService
+class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable Metrics/ClassLength
   # The default timeout for the job to finish.
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
@@ -98,15 +98,18 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     @question = question
     @answer = answer
     @language = question.language
-    @memory_limit = question.memory_limit || MEMORY_LIMIT
-    @time_limit = question.time_limit ? [question.time_limit, question.max_time_limit].min : question.max_time_limit
+    # below fields not used by Codaveri during evaluation, these are set during question creation
+    # @memory_limit = question.memory_limit || MEMORY_LIMIT
+    # @time_limit = question.time_limit ? [question.time_limit, question.max_time_limit].min : question.max_time_limit
     @timeout = timeout || DEFAULT_TIMEOUT
 
-    @answer_object = { languageVersion: { language: '', version: '' },
-                       files: [],
-                       problemId: '',
-                       # TODO: discuss if we should expose CM database ID
-                       userId: '-1' }
+    @answer_object = {
+      userId: answer.submission.creator_id.to_s,
+      courseName: @course.title,
+      languageVersion: { language: '', version: '' },
+      files: [],
+      problemId: ''
+    }
 
     @codaveri_evaluation_results = nil
   end
@@ -187,7 +190,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   def build_evaluation_result # rubocop:disable Metrics/CyclomaticComplexity
     stdout = @codaveri_evaluation_results.map { |result| result['run']['stdout'] }.reject(&:empty?).join('\n')
     stderr = @codaveri_evaluation_results.map { |result| result['run']['stderr'] }.reject(&:empty?).join('\n')
-    exit_code = @codaveri_evaluation_results.map { |result| result['run']['success'] }.all? { |n| n == 1 } ? 0 : 2
+    exit_code = (@codaveri_evaluation_results.map { |result| result['run']['success'] }.all? { |n| n == 1 }) ? 0 : 2
     [stdout, stderr, @codaveri_evaluation_results, exit_code]
   end
 

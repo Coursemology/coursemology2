@@ -72,16 +72,6 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
       expect(result).to be_a(Course::Assessment::ProgrammingCodaveriEvaluationService::Result)
     end
 
-    # TODO: Is this test case still relevant?
-    # context 'when the evaluation times out' do
-    #   it 'raises a Timeout::Error' do
-    #     expect do
-    #       # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
-    #       subject.execute(course, question, answer.actable, 0.0000000000001.seconds)
-    #     end.to raise_error(Timeout::Error)
-    #   end
-    # end
-
     describe '#construct_grading_object' do
       let(:service_instance) do
         subject.new(course, question, answer.actable, 1)
@@ -97,8 +87,7 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
         expect(test_payload_object[:languageVersion]).to eq(actual_payload_object[:languageVersion])
         expect(test_payload_object[:files]).to eq(actual_payload_object[:files])
         expect(test_payload_object[:problemId]).to eq(actual_payload_object[:problemId])
-        # TODO: request from Codaveri to reintroduce this field
-        # expect(test_payload_object[:course_name]).to eq(course.title)
+        expect(test_payload_object[:courseName]).to eq(course.title)
       end
     end
   end

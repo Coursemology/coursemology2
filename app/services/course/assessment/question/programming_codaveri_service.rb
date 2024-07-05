@@ -38,6 +38,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     @is_update_problem = @question.codaveri_id.present?
     @attachment = attachment
     @problem_object = {
+      courseName: question.question_assessments.first.assessment.course.title,
       title: @question.title,
       description: @question.description,
       resources: [
@@ -54,11 +55,6 @@ class Course::Assessment::Question::ProgrammingCodaveriService
         }
       ]
     }
-
-    # @problem_object = { api_version: 'latest',
-    #                     language_version: { language: '', version: '' },
-    #                     files_solution: [],
-    #                     testcases: [] }
   end
 
   # Constructs codaveri question problem object and send an API request to Codaveri to create/update the question.
