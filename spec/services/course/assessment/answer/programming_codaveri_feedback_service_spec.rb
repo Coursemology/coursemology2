@@ -80,6 +80,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackServi
             { symbolize_names: true }
           )
 
+          expect(test_payload_object[:courseName]).to eq(course.title)
           expect(test_payload_object[:languageVersion]).to eq(actual_payload_object[:languageVersion])
           test_payload_object[:files].each_with_index do |test_file_object, index|
             expect(test_file_object.except(:path)).to eq(actual_payload_object[:files][index].except(:path))

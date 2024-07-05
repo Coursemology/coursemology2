@@ -81,6 +81,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
         )
 
         expect(test_payload_object[:languageVersion]).to eq(actual_payload_object[:languageVersion])
+        expect(test_payload_object[:courseName]).to eq(course.title)
         expect(test_payload_object[:resources][0][:solutions]).to eq(actual_payload_object[:resources][0][:solutions])
 
         test_payload_object[:resources][0][:exprTestcases].each_with_index do |test_case, index|

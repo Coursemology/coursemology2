@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubocop:disable Metrics/ClassLength
+  CODAVERI_LANGUAGE_MAPPING = {
+    en: 'english',
+    zh: 'chinese'
+  }.freeze
+  DEFAULT_CODAVERI_LANGUAGE = 'english'
+
   def initialize(assessment, question, answer, reveal_level, require_token)
     @course = assessment.course
     @assessment = assessment
@@ -9,6 +15,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
 
     @answer_object = {
       userId: answer.submission.creator_id.to_s,
+      courseName: @course.title,
       config: {
         persona: 'novice',
         categories: [
@@ -17,7 +24,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
         ],
         revealLevel: reveal_level,
         tone: 'encouraging',
-        language: 'english',
+        language: CODAVERI_LANGUAGE_MAPPING.fetch(answer.submission.creator.locale.to_sym, DEFAULT_CODAVERI_LANGUAGE),
         customPrompt: ''
       },
       languageVersion: {
@@ -34,7 +41,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   def run_codaveri_feedback_service
     construct_feedback_object
     request_codaveri_feedback
-    # process_codaveri_feedback
   end
 
   def fetch_codaveri_feedback(feedback_id)
