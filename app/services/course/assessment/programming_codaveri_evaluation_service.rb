@@ -188,8 +188,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
   end
 
   def build_evaluation_result # rubocop:disable Metrics/CyclomaticComplexity
-    stdout = @codaveri_evaluation_results.map { |result| result['run']['stdout'] }.reject(&:empty?).join('\n')
-    stderr = @codaveri_evaluation_results.map { |result| result['run']['stderr'] }.reject(&:empty?).join('\n')
+    stdout = @codaveri_evaluation_results.map { |result| result['run']['stdout'] }.reject(&:empty?).join("\n")
+    stderr = @codaveri_evaluation_results.map { |result| result['run']['stderr'] }.reject(&:empty?).join("\n")
     exit_code = (@codaveri_evaluation_results.map { |result| result['run']['success'] }.all? { |n| n == 1 }) ? 0 : 2
     [stdout, stderr, @codaveri_evaluation_results, exit_code]
   end
