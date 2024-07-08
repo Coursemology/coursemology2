@@ -176,7 +176,7 @@ class Course::LessonPlan::Item < ApplicationRecord
                     to_a
     opening_items_hash = Hash.new { |hash, actable_type| hash[actable_type] = [] }
     opening_items.
-      select { |item| item.time_for(course_user).start_at.in?((Time.zone.now)..(1.day.from_now)) }.
+      select { |item| item.time_for(course_user).start_at.between?(Time.zone.now, 1.day.from_now) }.
       select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.
       each { |item| opening_items_hash[item.actable_type].push(item.actable) }
 
