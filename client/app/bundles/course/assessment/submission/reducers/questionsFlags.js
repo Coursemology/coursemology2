@@ -1,28 +1,33 @@
 import actions from '../constants';
 
+function initQuestionsFlagsFromSubmissionPayload(payload) {
+  return payload.questions.reduce((obj, question) => {
+    const answer = payload.answers.find(
+      (ans) => ans.questionId === question.id,
+    );
+    return {
+      ...obj,
+      [question.id]: {
+        isResetting: false,
+        isAutograding:
+          Boolean(answer?.autograding) &&
+          answer?.autograding?.status === 'submitted',
+        jobUrl: answer?.autograding?.jobUrl,
+        jobError:
+          Boolean(answer?.autograding) &&
+          answer?.autograding?.status === 'errored',
+        jobErrorMessage: answer?.autograding?.errorMessage,
+      },
+    };
+  }, {});
+}
+
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
     case actions.FINALISE_SUCCESS:
-      return action.payload.questions.reduce((obj, question) => {
-        const answer = action.payload.answers.find(
-          (ans) => ans.questionId === question.id,
-        );
-        return {
-          ...obj,
-          [question.id]: {
-            isResetting: false,
-            isAutograding:
-              Boolean(answer?.autograding) &&
-              answer?.autograding?.status === 'submitted',
-            jobError:
-              Boolean(answer?.autograding) &&
-              answer?.autograding?.status === 'errored',
-            jobErrorMessage: answer?.autograding?.errorMessage,
-          },
-        };
-      }, {});
+      return initQuestionsFlagsFromSubmissionPayload(action.payload);
     case actions.REEVALUATE_REQUEST:
     case actions.AUTOGRADE_REQUEST: {
       const { questionId } = action.payload;
@@ -31,6 +36,19 @@ export default function (state = {}, action) {
         [questionId]: {
           ...state[questionId],
           isAutograding: true,
+          jobUrl: null,
+        },
+      };
+    }
+    case actions.REEVALUATE_SUBMITTED:
+    case actions.AUTOGRADE_SUBMITTED: {
+      const { questionId, jobUrl } = action.payload;
+      return {
+        ...state,
+        [questionId]: {
+          ...state[questionId],
+          isAutograding: true,
+          jobUrl,
         },
       };
     }
@@ -42,7 +60,9 @@ export default function (state = {}, action) {
         [questionId]: {
           ...state[questionId],
           isAutograding: false,
+          jobUrl: null,
           jobError: false,
+          jobErrorMessage: null,
         },
       };
     }
@@ -55,6 +75,7 @@ export default function (state = {}, action) {
         [questionId]: {
           ...state[questionId],
           isAutograding: false,
+          jobUrl: null,
           jobError: Boolean(jobError),
           jobErrorMessage: payload?.errorMessage,
         },

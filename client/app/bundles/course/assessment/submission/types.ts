@@ -127,6 +127,7 @@ export interface SubmissionFlagsState {
 export interface QuestionFlag {
   isAutograding: boolean;
   isResetting: boolean;
+  jobUrl: string | null;
   jobError: boolean;
   jobErrorMessage?: string;
 }
