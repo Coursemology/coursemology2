@@ -7,12 +7,13 @@ import usePrompt from 'lib/hooks/router/usePrompt';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { finalise } from '../../actions';
+import { finalise, getEvaluationResult, getJobStatus } from '../../actions';
 import { fetchLiveFeedback } from '../../actions/answers';
 import WarningDialog from '../../components/WarningDialog';
-import {
+import actionTypes, {
+  EVALUATE_POLL_INTERVAL_MILLISECONDS,
+  FEEDBACK_POLL_INTERVAL_MILLISECONDS,
   formNames,
-  POLL_INTERVAL_MILLISECONDS,
   workflowStates,
 } from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
@@ -20,6 +21,7 @@ import { getInitialAnswer } from '../../selectors/answers';
 import { getAssessment } from '../../selectors/assessments';
 import { getAttachments } from '../../selectors/attachments';
 import { getLiveFeedbacks } from '../../selectors/liveFeedbacks';
+import { getQuestionFlags } from '../../selectors/questionFlags';
 import { getQuestions } from '../../selectors/questions';
 import { getSubmission } from '../../selectors/submissions';
 import translations from '../../translations';
@@ -51,6 +53,7 @@ const SubmissionForm: FC<Props> = (props) => {
   const assessment = useAppSelector(getAssessment);
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
+  const questionFlags = useAppSelector(getQuestionFlags);
   const attachments = useAppSelector(getAttachments);
   const liveFeedbacks = useAppSelector(getLiveFeedbacks);
   const initialValues = useAppSelector(getInitialAnswer);
@@ -147,7 +150,8 @@ const SubmissionForm: FC<Props> = (props) => {
     }
   });
 
-  const pollerRef = useRef<NodeJS.Timeout | null>(null);
+  const feedbackPollerRef = useRef<NodeJS.Timeout | null>(null);
+  const evaluatePollerRef = useRef<NodeJS.Timeout | null>(null);
   const pollAllFeedback = (): void => {
     questionIds.forEach((id) => {
       const question = questions[id];
@@ -159,17 +163,59 @@ const SubmissionForm: FC<Props> = (props) => {
     });
   };
 
+  const handleEvaluationPolling = (): void => {
+    Object.values(questions).forEach((question) => {
+      if (
+        questionFlags[question.id]?.isAutograding &&
+        questionFlags[question.id]?.jobUrl
+      ) {
+        getJobStatus(questionFlags[question.id].jobUrl).then((response) => {
+          switch (response.data.status) {
+            case 'submitted':
+              break;
+            case 'completed':
+              dispatch(
+                getEvaluationResult(
+                  submissionId,
+                  question.answerId,
+                  question.id,
+                ),
+              );
+              break;
+            case 'errored':
+              dispatch({
+                type: actionTypes.AUTOGRADE_FAILURE,
+                answerId: question.answerId,
+                questionId: question.id,
+              });
+              break;
+            default:
+              throw new Error('Unknown job status');
+          }
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     // check for feedback from Codaveri on page load for each question
-    pollerRef.current = setInterval(
+    feedbackPollerRef.current = setInterval(
       pollAllFeedback,
-      POLL_INTERVAL_MILLISECONDS,
+      FEEDBACK_POLL_INTERVAL_MILLISECONDS,
+    );
+
+    evaluatePollerRef.current = setInterval(
+      handleEvaluationPolling,
+      EVALUATE_POLL_INTERVAL_MILLISECONDS,
     );
 
     // clean up poller on unmount
     return () => {
-      if (pollerRef.current) {
-        clearInterval(pollerRef.current);
+      if (feedbackPollerRef.current) {
+        clearInterval(feedbackPollerRef.current);
+      }
+      if (evaluatePollerRef.current) {
+        clearInterval(evaluatePollerRef.current);
       }
     };
   });

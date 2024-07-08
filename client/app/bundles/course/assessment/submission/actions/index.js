@@ -1,3 +1,4 @@
+import GlobalAPI from 'api';
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
@@ -12,7 +13,6 @@ import translations from '../translations';
 import { buildErrorMessage, formatAnswers } from './utils';
 
 const JOB_POLL_DELAY_MS = 500;
-const JOB_STAGGER_DELAY_MS = 400;
 
 export function getEvaluationResult(submissionId, answerId, questionId) {
   return (dispatch) => {
@@ -22,14 +22,18 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
       .then((data) => {
         dispatch({
           type: actionTypes.AUTOGRADE_SUCCESS,
-          payload: data,
+          payload: { ...data, answerId },
         });
       })
       .catch(() => {
         dispatch(setNotification(translations.requestFailure));
-        dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId });
+        dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId, answerId });
       });
   };
+}
+
+export function getJobStatus(jobUrl) {
+  return GlobalAPI.jobs.get(jobUrl);
 }
 
 export function fetchSubmission(id, onGetMonitoringSessionId) {
@@ -48,29 +52,6 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
           window.location = data.newSessionUrl;
           return;
         }
-        data.answers
-          .filter((a) => a.autograding && a.autograding.path)
-          .forEach((answer, index) => {
-            setTimeout(() => {
-              pollJob(
-                answer.autograding.path,
-                () =>
-                  dispatch(
-                    getEvaluationResult(
-                      id,
-                      answer.fields.id,
-                      answer.questionId,
-                    ),
-                  ),
-                () =>
-                  dispatch({
-                    type: actionTypes.AUTOGRADE_FAILURE,
-                    questionId: answer.questionId,
-                  }),
-                JOB_POLL_DELAY_MS,
-              );
-            }, JOB_STAGGER_DELAY_MS * index);
-          });
         if (data.monitoringSessionId !== undefined)
           onGetMonitoringSessionId?.(data.monitoringSessionId);
         dispatch({
