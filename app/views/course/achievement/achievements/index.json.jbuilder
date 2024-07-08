@@ -3,7 +3,7 @@
 json.achievements @achievements do |achievement|
   json.partial! 'achievement_list_data', achievement: achievement
   json.conditions achievement.specific_conditions do |condition|
-    json.partial! 'course/condition/condition_list_data.json', condition: condition
+    json.partial! 'course/condition/condition_list_data', condition: condition
   end
 end
 

@@ -1,8 +1,10 @@
 # frozen_string_literal: true
-json.milestones @milestones, partial: 'course/lesson_plan/milestones/milestone.json.jbuilder', as: :milestone
+json.milestones @milestones do |milestone|
+  json.partial! 'course/lesson_plan/milestones/milestone', milestone: milestone
+end
 
 json.items @items.map(&:specific) do |actable|
-  json.partial! "#{actable.to_partial_path}_lesson_plan_item.json.jbuilder", item: actable
+  json.partial! "#{actable.to_partial_path}_lesson_plan_item", item: actable
 end
 
 json.visibilitySettings @visibility_hash do |setting_key, visible|

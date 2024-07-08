@@ -4,7 +4,7 @@ json.question do
   json.description format_ckeditor_rich_text(@scribing_question.description)
   if @scribing_question.attachment_reference
     json.attachment_reference do
-      json.partial! 'attachments/attachment_reference.json',
+      json.partial! 'attachments/attachment_reference',
                     attachment_reference: @scribing_question.attachment_reference
       json.image_url @scribing_question.attachment_reference.generate_public_url
     end

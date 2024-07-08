@@ -38,8 +38,8 @@ json.folder_attributes do
   json.folder_id @assessment.folder.id
   json.enable_materials_action !current_component_host[:course_materials_component].nil?
   json.materials @assessment.materials.order(:name) do |material|
-    json.partial! '/course/material/material.json', material: material, folder: @assessment.folder
+    json.partial! '/course/material/material', material: material, folder: @assessment.folder
   end
 end
 
-json.partial! 'course/condition/condition_data.json', conditional: @assessment
+json.partial! 'course/condition/condition_data', conditional: @assessment
