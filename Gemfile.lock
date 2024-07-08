@@ -189,7 +189,7 @@ GEM
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
       railties (>= 5.0.0)
-    ffi (1.17.0)
+    ffi (1.17.0-x86_64-linux-gnu)
     filename (0.1.2)
     flamegraph (0.9.5)
     fog-aws (3.23.0)
@@ -222,7 +222,7 @@ GEM
       nokogiri (>= 1.4)
     htmlentities (4.3.4)
     http-accept (1.7.0)
-    http-cookie (1.0.5)
+    http-cookie (1.0.6)
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
     i18n (1.14.5)
@@ -271,10 +271,10 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    keycloak (3.0.0)
-      json
-      jwt
-      rest-client
+    keycloak (3.3.0)
+      json (~> 2.6)
+      jwt (~> 2.4)
+      rest-client (~> 2.1)
     language_server-protocol (3.17.0.3)
     launchy (2.5.2)
       addressable (~> 2.8)
@@ -313,7 +313,6 @@ GEM
       rake
     mini_magick (4.13.1)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.7)
     minitest (5.23.0)
     multi_json (1.15.0)
     net-imap (0.4.10)
@@ -327,8 +326,7 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.1)
-    nokogiri (1.16.6)
-      mini_portile2 (~> 2.8.2)
+    nokogiri (1.16.6-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.24.0)
@@ -561,7 +559,7 @@ GEM
     zeitwerk (2.6.14)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   active_record-acts_as!
