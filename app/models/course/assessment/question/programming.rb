@@ -263,6 +263,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def validate_codaveri_question
     return if !is_codaveri || duplicating?
 
+    # TODO: Move this validation logic to frontend, to prevent user from submitting in the first place.
     if !language_valid_for_codaveri?
       errors.add(:base, 'Language type must be Python 3 and above.')
     elsif !question_assessments.empty? &&

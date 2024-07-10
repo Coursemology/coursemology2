@@ -555,6 +555,7 @@ const SubmissionEditForm = (props) => {
         <Box sx={{ flex: '1', width: '100%' }} />
         {isCodaveriEnabled &&
           question.isCodaveri &&
+          question.liveFeedbackEnabled &&
           renderGetLiveFeedbackButton(id)}
       </div>
     );
