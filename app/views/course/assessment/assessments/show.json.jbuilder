@@ -153,5 +153,6 @@ if can_observe
       #   url: new_course_assessment_question_text_response_path(current_course, assessment, { comprehension: true }),
       # }
     ]
+    json.generateQuestionUrl generate_course_assessment_question_programming_index_path(current_course, assessment)
   end
 end

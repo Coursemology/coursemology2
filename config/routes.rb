@@ -229,6 +229,8 @@ Rails.application.routes.draw do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :programming, only: [:new, :create, :edit, :update, :destroy] do
+              post :generate, on: :collection
+              get :codaveri_languages, on: :collection
               patch :update_question_setting, on: :member
             end
             resources :voice_responses, only: [:new, :create, :edit, :update, :destroy]

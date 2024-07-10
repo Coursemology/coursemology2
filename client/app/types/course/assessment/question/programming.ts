@@ -136,6 +136,15 @@ export interface ProgrammingFormData extends AvailableSkills {
   };
 }
 
+export interface ProgrammingFormRequestData {
+  question: Partial<ProgrammingQuestionData>;
+
+  testUi?: {
+    mode: LanguageMode;
+    metadata: PolyglotMetadata;
+  };
+}
+
 export interface ProgrammingResponseData extends ProgrammingFormData {
   assessmentLiveFeedbackEnabled: boolean;
   courseLiveFeedbackEnabled: boolean;
