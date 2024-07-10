@@ -134,6 +134,7 @@ export interface AssessmentData extends AssessmentActionsData {
   hasUnautogradableQuestions?: boolean;
   questions?: QuestionData[];
   newQuestionUrls?: NewQuestionBuilderData[];
+  generateQuestionUrl?: string;
 }
 
 export interface UnauthenticatedAssessmentData {

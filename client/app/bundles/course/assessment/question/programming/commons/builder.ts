@@ -5,7 +5,7 @@ import {
   JavaMetadataTestCase,
   LanguageMode,
   MetadataTestCase,
-  ProgrammingFormData,
+  ProgrammingFormRequestData,
 } from 'types/course/assessment/question/programming';
 
 import {
@@ -15,8 +15,15 @@ import {
 } from '../components/common/DataFileRow';
 import { attachment, isAttached } from '../components/common/PackageUploader';
 
-const buildKey = (path: string[]): string =>
-  path.reduce((key, subkey) => `${key}[${subkey}]`, 'question_programming');
+const buildKey = (
+  path: string[],
+  root: string | undefined = undefined,
+): string => {
+  if (root) {
+    return path.reduce((key, subkey) => `${key}[${subkey}]`, root);
+  }
+  return path.reduce((key, subkey) => `${key}[${subkey}]`);
+};
 
 const shouldBeRaw = (
   value: unknown,
@@ -32,7 +39,10 @@ const appendInto = <T>(
   path: string | string[],
   value: T,
 ): void => {
-  const key = buildKey(Array.isArray(path) ? path : [path]);
+  const key = buildKey(
+    Array.isArray(path) ? path : [path],
+    'question_programming',
+  );
   data.append(key, shouldBeRaw(value) ? value ?? '' : JSON.stringify(value));
 };
 
@@ -50,7 +60,9 @@ const appendFilesInto = (
     }
   });
 
-const getNewPackageIn = (draft: ProgrammingFormData): File | undefined => {
+const getNewPackageIn = (
+  draft: ProgrammingFormRequestData,
+): File | undefined => {
   const maybeAttachedPackage = draft.question.package;
   if (!maybeAttachedPackage || !isAttached(maybeAttachedPackage))
     return undefined;
@@ -73,9 +85,9 @@ const appendTestCasesInto = <M extends BasicMetadata>(
   metadata: M,
   appender = appendTestCaseInto,
 ): void =>
-  Object.entries(metadata.testCases).forEach(([type, testCases]) =>
-    testCases.forEach((testCase) => appender(data, type, testCase)),
-  );
+  Object.entries(metadata.testCases).forEach(([type, testCases]) => {
+    testCases.forEach((testCase) => appender(data, type, testCase));
+  });
 
 const appendInsertsInto = <M extends BasicMetadata>(
   data: FormData,
@@ -140,7 +152,7 @@ const appendSkillIdsInto = (data: FormData, skillIds: number[]): void =>
     appendInto(data, ['question_assessment', 'skill_ids', ''], skillId),
   );
 
-const buildFormData = (draft: ProgrammingFormData): FormData => {
+const buildFormData = (draft: ProgrammingFormRequestData): FormData => {
   const data = new FormData();
 
   appendInto(data, 'title', draft.question.title);
@@ -148,7 +160,7 @@ const buildFormData = (draft: ProgrammingFormData): FormData => {
   appendInto(data, 'staff_only_comments', draft.question.staffOnlyComments);
   appendInto(data, 'maximum_grade', draft.question.maximumGrade);
   appendInto(data, 'language_id', draft.question.languageId);
-  appendSkillIdsInto(data, draft.question.skillIds);
+  appendSkillIdsInto(data, draft.question.skillIds ?? []);
 
   if (draft.question.autograded) appendInto(data, 'autograded', 'on');
   appendInto(data, 'autograded', draft.question.autograded);
@@ -168,8 +180,9 @@ const buildFormData = (draft: ProgrammingFormData): FormData => {
   if (!draft.question.autogradedAssessment)
     appendInto(data, 'attempt_limit', draft.question.attemptLimit);
 
-  if (draft.question.autograded && draft.question.editOnline)
+  if (draft.question.autograded && draft.question.editOnline) {
     POLYGLOT_BUILDER[draft.testUi?.mode ?? '']?.(data, draft.testUi?.metadata);
+  }
 
   if (draft.question.autograded && !draft.question.editOnline) {
     const newPackage = getNewPackageIn(draft);

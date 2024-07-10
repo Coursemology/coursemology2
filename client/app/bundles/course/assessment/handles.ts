@@ -69,7 +69,11 @@ export const assessmentHandle: DataHandle = (match) => {
 };
 
 export const questionHandle: DataHandle = (match, location) => {
-  if (location.pathname.endsWith('new')) return null;
+  if (
+    location.pathname.endsWith('new') ||
+    location.pathname.endsWith('generate')
+  )
+    return null;
 
   const assessmentId = getIdFromUnknown(match.params?.assessmentId);
   if (!assessmentId) throw new Error(`Invalid assessment id: ${assessmentId}`);

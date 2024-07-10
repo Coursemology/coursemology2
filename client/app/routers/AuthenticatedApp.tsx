@@ -116,6 +116,7 @@ import {
   assessmentsHandle,
   questionHandle,
 } from 'course/assessment/handles';
+import GenerateProgrammingQuestionPage from 'course/assessment/pages/AssessmentGenerate/GenerateProgrammingQuestionPage';
 import QuestionFormOutlet from 'course/assessment/question/components/QuestionFormOutlet';
 import { CourseContainer } from 'course/container';
 import { commentHandle } from 'course/discussion/topics/handles';
@@ -719,6 +720,11 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                           path: 'new',
                           handle: NewProgrammingQuestionPage.handle,
                           element: <NewProgrammingQuestionPage />,
+                        },
+                        {
+                          path: 'generate',
+                          handle: GenerateProgrammingQuestionPage.handle,
+                          element: <GenerateProgrammingQuestionPage />,
                         },
                         {
                           path: ':questionId/edit',
