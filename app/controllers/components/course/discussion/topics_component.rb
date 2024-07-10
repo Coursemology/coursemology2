@@ -29,7 +29,7 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
   def settings_sidebar_items
     [
       {
-        title: t('course.discussion.topics.sidebar_title'),
+        title: settings.title || t('course.discussion.topics.sidebar_title'),
         type: :settings,
         weight: 7,
         path: course_admin_topics_path(current_course)
