@@ -3,7 +3,9 @@ module ApplicationMultitenancy
   private
 
   def deduce_and_set_current_tenant
-    set_current_tenant(deduce_tenant)
+    tenant = deduce_tenant
+    ActsAsTenant.current_tenant = tenant
+    ActsAsTenant.test_tenant = tenant
   end
 
   # Deduces the tenant from the host specified in the HTTP Request.

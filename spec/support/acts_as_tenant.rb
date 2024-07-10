@@ -19,9 +19,15 @@ module ActsAsTenant::TestGroupHelpers
       context "with tenant #{tenant.inspect}" do |*params|
         before(:each) do
           ActsAsTenant.current_tenant = send(tenant)
+
+          # it's recommended to use test_tenant as it's thread-safe for
+          # testing in parallel settings, which we do.
+          # Please refer to https://github.com/ErwinM/acts_as_tenant/issues/277
+          ActsAsTenant.test_tenant = send(tenant)
         end
         after(:each) do
           ActsAsTenant.current_tenant = nil
+          ActsAsTenant.test_tenant = nil
         end
         module_exec(*params, &proc)
       end
