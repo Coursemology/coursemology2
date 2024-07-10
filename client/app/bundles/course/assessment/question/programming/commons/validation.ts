@@ -133,7 +133,9 @@ export const isPackageFieldsDirty = (
   before.question.autograded !== after.question.autograded ||
   before.question.editOnline !== after.question.editOnline ||
   before.question.isCodaveri !== after.question.isCodaveri ||
-  before.question.isCodaveri !== after.question.isCodaveri ||
+  before.question.liveFeedbackEnabled !== after.question.liveFeedbackEnabled ||
+  before.question.liveFeedbackCustomPrompt !==
+    after.question.liveFeedbackCustomPrompt ||
   !equal(before.question.package, after.question.package) ||
   !equal(before.testUi?.metadata, after.testUi?.metadata);
 

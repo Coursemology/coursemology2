@@ -83,6 +83,9 @@ interface ProgrammingQuestionData extends QuestionFormData {
   editOnline: boolean;
   isCodaveri: boolean;
   codaveriEnabled: boolean;
+  liveFeedbackEnabled: boolean;
+  liveFeedbackCustomPrompt: string;
+  liveFeedbackCategories: [];
 
   hasAutoGradings: boolean;
   hasSubmissions: boolean;

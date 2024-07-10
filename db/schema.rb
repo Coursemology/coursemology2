@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_05_12_092424) do
+ActiveRecord::Schema.define(version: 2024_07_09_020208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -288,6 +288,8 @@ ActiveRecord::Schema.define(version: 2024_05_12_092424) do
     t.text "codaveri_id"
     t.integer "codaveri_status"
     t.text "codaveri_message"
+    t.boolean "live_feedback_enabled", default: false, null: false
+    t.string "live_feedback_custom_prompt", default: "", null: false
     t.index ["import_job_id"], name: "index_course_assessment_question_programming_on_import_job_id", unique: true
     t.index ["language_id"], name: "fk__course_assessment_question_programming_language_id"
   end

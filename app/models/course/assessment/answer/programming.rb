@@ -94,7 +94,10 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     question = self.question.actable
     assessment = submission.assessment
 
-    should_retrieve_feedback = question.is_codaveri && submission.attempting? && current_answer?
+    should_retrieve_feedback = question.is_codaveri &&
+                               submission.attempting? &&
+                               current_answer? &&
+                               question.live_feedback_enabled
     return unless should_retrieve_feedback
 
     feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.

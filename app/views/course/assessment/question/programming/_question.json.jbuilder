@@ -23,6 +23,8 @@ json.question do
 
   json.isCodaveri @programming_question.is_codaveri
   json.codaveriEnabled current_course.component_enabled?(Course::CodaveriComponent)
+  json.liveFeedbackEnabled @programming_question.live_feedback_enabled
+  json.liveFeedbackCustomPrompt @programming_question.live_feedback_custom_prompt
 
   if @programming_question.attachment.present? && @programming_question.attachment.persisted?
     json.package do

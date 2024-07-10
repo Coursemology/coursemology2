@@ -15,6 +15,7 @@ import translations from '../../translations';
 import schema, { isPackageFieldsDirty } from './commons/validation';
 import BuildLog from './components/sections/BuildLog';
 import EvaluatorFields from './components/sections/EvaluatorFields';
+import FeedbackFields from './components/sections/FeedbackFields';
 import LanguageFields from './components/sections/LanguageFields';
 import PackageFields, {
   PACKAGE_SECTION_ID,
@@ -144,6 +145,8 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
         </Section>
 
         <PackageFields disabled={submitting} getModeFromId={getModeFromId} />
+
+        <FeedbackFields disabled={submitting} />
 
         <BuildLog />
       </Form>

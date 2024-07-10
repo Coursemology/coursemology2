@@ -25,7 +25,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
         revealLevel: reveal_level,
         tone: 'encouraging',
         language: CODAVERI_LANGUAGE_MAPPING.fetch(answer.submission.creator.locale.to_sym, DEFAULT_CODAVERI_LANGUAGE),
-        customPrompt: ''
+        customPrompt: question.live_feedback_custom_prompt
       },
       languageVersion: {
         language: '',

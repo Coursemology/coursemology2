@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 
 interface SectionProps {
-  title: string;
+  title: string | JSX.Element;
   subtitle?: string;
   children?: ReactNode;
   sticksToNavbar?: boolean;
