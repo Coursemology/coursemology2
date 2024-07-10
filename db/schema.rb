@@ -287,6 +287,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_12_092424) do
     t.text "codaveri_id"
     t.integer "codaveri_status"
     t.text "codaveri_message"
+    t.boolean "live_feedback_enabled", default: false, null: false
+    t.string "live_feedback_custom_prompt", default: "", null: false
     t.index ["import_job_id"], name: "index_course_assessment_question_programming_on_import_job_id", unique: true
     t.index ["language_id"], name: "fk__course_assessment_question_programming_language_id"
   end

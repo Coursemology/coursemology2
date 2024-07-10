@@ -9,8 +9,14 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob < ApplicationJo
 
   def perform_tracked(assessment, question, answer)
     ActsAsTenant.without_tenant do
+      feedback_config = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.default_config.merge(
+        revealLevel: 'solution',
+        language: Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.language_from_locale(
+          answer.submission.creator.locale
+        )
+      )
       feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.
-                         new(assessment, question, answer, 'solution', false)
+                         new(assessment, question, answer, false, feedback_config)
       response_status, response_body, feedback_id = feedback_service.run_codaveri_feedback_service
 
       poll_count = 0

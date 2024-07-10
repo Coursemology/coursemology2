@@ -1568,6 +1568,9 @@
   "course.assessment.question.programming.autogradedAssessmentButNoEvaluationWarning": {
     "defaultMessage": "此批改为自动评分。如果代码评测被禁用，该问题的提交会直接获得上述最高分，因为自动评分器无需测试和评分。"
   },
+  "course.assessment.question.programming.automatedFeedback": {
+    "defaultMessage": "自动化反馈"
+  },
   "course.assessment.question.programming.buildLog": {
     "defaultMessage": "包构建日志"
   },
@@ -1618,6 +1621,12 @@
   },
   "course.assessment.question.programming.editOnlineHint": {
     "defaultMessage": "在此页面上完成所有操作。对于快速编辑（尤其是考试），或与其他导师合作非常有用。"
+  },
+  "course.assessment.question.programming.enableLiveFeedback": {
+    "defaultMessage": "允许实时反馈生成"
+  },
+  "course.assessment.question.programming.enableLiveFeedbackDescription": {
+    "defaultMessage": "允许学生在提交尝试期间请求代码反馈。(AI 生成的反馈可能并不总是准确。)"
   },
   "course.assessment.question.programming.errorWhenSavingQuestion": {
     "defaultMessage": "保存更改时发生错误。"
@@ -1693,6 +1702,12 @@
   },
   "course.assessment.question.programming.lastUpdated": {
     "defaultMessage": "上次由 {by} 于 {on} 更新."
+  },
+  "course.assessment.question.programming.liveFeedbackCustomPrompt": {
+    "defaultMessage": "自定义提示"
+  },
+  "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
+    "defaultMessage": "在此添加指导实时反馈生成的说明。如果不确定，可以留空。"
   },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "最低评分优先级"

@@ -157,6 +157,13 @@ const buildFormData = (draft: ProgrammingFormData): FormData => {
   appendInto(data, 'memory_limit', draft.question.memoryLimit);
   appendInto(data, 'time_limit', draft.question.timeLimit);
   appendInto(data, 'is_low_priority', draft.question.isLowPriority);
+  appendInto(data, 'live_feedback_enabled', draft.question.liveFeedbackEnabled);
+  if (draft.question.liveFeedbackEnabled)
+    appendInto(
+      data,
+      'live_feedback_custom_prompt',
+      draft.question.liveFeedbackCustomPrompt,
+    );
 
   if (!draft.question.autogradedAssessment)
     appendInto(data, 'attempt_limit', draft.question.attemptLimit);

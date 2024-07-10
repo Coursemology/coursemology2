@@ -94,11 +94,21 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     question = self.question.actable
     assessment = submission.assessment
 
-    should_retrieve_feedback = question.is_codaveri && submission.attempting? && current_answer?
+    should_retrieve_feedback = question.is_codaveri &&
+                               submission.attempting? &&
+                               current_answer? &&
+                               question.live_feedback_enabled
     return unless should_retrieve_feedback
 
+    feedback_config = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.default_config.merge(
+      revealLevel: 'guidance',
+      language: Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.language_from_locale(
+        answer.submission.creator.locale
+      ),
+      customPrompt: question.live_feedback_custom_prompt
+    )
     feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.
-                       new(assessment, question, self, 'guidance', true)
+                       new(assessment, question, self, true, feedback_config)
     response_status, response_body, _feedback_job_id = feedback_service.run_codaveri_feedback_service
     unless [200, 201].include?(response_status) && response_body['success']
       raise CodaveriError,

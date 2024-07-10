@@ -1544,6 +1544,28 @@ const translations = defineMessages({
     id: 'course.assessment.question.programming.cannotBeMoreThanMaxLimit',
     defaultMessage: 'Cannot be more than {max} s.',
   },
+  automatedFeedback: {
+    id: 'course.assessment.question.programming.automatedFeedback',
+    defaultMessage: 'Automated Feedback',
+  },
+  enableLiveFeedback: {
+    id: 'course.assessment.question.programming.enableLiveFeedback',
+    defaultMessage: 'Allow live feedback generation',
+  },
+  enableLiveFeedbackDescription: {
+    id: 'course.assessment.question.programming.enableLiveFeedbackDescription',
+    defaultMessage:
+      'Allow students to request code feedback during submission attempts. (AI-generated feedback may not always be accurate.)',
+  },
+  liveFeedbackCustomPrompt: {
+    id: 'course.assessment.question.programming.liveFeedbackCustomPrompt',
+    defaultMessage: 'Custom Prompt',
+  },
+  liveFeedbackCustomPromptDescription: {
+    id: 'course.assessment.question.programming.liveFeedbackCustomPromptDescription',
+    defaultMessage:
+      'Add instructions to guide the generation of live feedback here. If unsure, just leave this blank.',
+  },
   savingChanges: {
     id: 'course.assessment.question.programming.savingChanges',
     defaultMessage: 'Saving your changes...',

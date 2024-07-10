@@ -1586,6 +1586,9 @@
   "course.assessment.question.programming.autogradedAssessmentButNoEvaluationWarning": {
     "defaultMessage": "This assessment is autograded. If code evaluation and testing is disabled, this question's submissions will always receive the maximum grade above since there are nothing for the autograder to test and grade."
   },
+  "course.assessment.question.programming.automatedFeedback": {
+    "defaultMessage": "Automated Feedback"
+  },
   "course.assessment.question.programming.buildLog": {
     "defaultMessage": "Package build log"
   },
@@ -1636,6 +1639,12 @@
   },
   "course.assessment.question.programming.editOnlineHint": {
     "defaultMessage": "Do everything right here in this page. Useful for quick edits (especially exams) or collaborating with other instructors."
+  },
+  "course.assessment.question.programming.enableLiveFeedback": {
+    "defaultMessage": "Allow live feedback generation"
+  },
+  "course.assessment.question.programming.enableLiveFeedbackDescription": {
+    "defaultMessage": "Allow students to request code feedback during submission attempts. (AI-generated feedback may not always be accurate.)"
   },
   "course.assessment.question.programming.errorWhenSavingQuestion": {
     "defaultMessage": "An error occurred when saving your changes."
@@ -1711,6 +1720,12 @@
   },
   "course.assessment.question.programming.lastUpdated": {
     "defaultMessage": "Last updated by {by} on {on}."
+  },
+  "course.assessment.question.programming.liveFeedbackCustomPrompt": {
+    "defaultMessage": "Custom Prompt"
+  },
+  "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
+    "defaultMessage": "Add instructions to guide the generation of live feedback here. If unsure, just leave this blank."
   },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "Lowest grading priority"

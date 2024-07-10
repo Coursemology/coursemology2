@@ -95,6 +95,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     params.require(:question_programming).permit(
       :title, :description, :staff_only_comments, :maximum_grade,
       :language_id, :memory_limit, :time_limit, :attempt_limit,
+      :live_feedback_enabled, :live_feedback_custom_prompt,
       :is_low_priority, :is_codaveri, *attachment_params,
       question_assessment: { skill_ids: [] }
     )

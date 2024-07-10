@@ -6,7 +6,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   }.freeze
   DEFAULT_CODAVERI_LANGUAGE = 'english'
 
-  def initialize(assessment, question, answer, reveal_level, require_token)
+  def initialize(assessment, question, answer, require_token, feedback_config)
     @course = assessment.course
     @assessment = assessment
     @question = question
@@ -16,17 +16,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
     @answer_object = {
       userId: answer.submission.creator_id.to_s,
       courseName: @course.title,
-      config: {
-        persona: 'novice',
-        categories: [
-          'syntax',
-          'functionality'
-        ],
-        revealLevel: reveal_level,
-        tone: 'encouraging',
-        language: CODAVERI_LANGUAGE_MAPPING.fetch(answer.submission.creator.locale.to_sym, DEFAULT_CODAVERI_LANGUAGE),
-        customPrompt: ''
-      },
+      config: feedback_config.nil? ? self.class.default_config : feedback_config,
       languageVersion: {
         language: '',
         version: ''
@@ -54,6 +44,24 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
     @feedback_files_hash = feedback_files.to_h { |file| [file['path'], file['feedbackLines']] }
 
     process_codaveri_feedback
+  end
+
+  def self.default_config
+    {
+      persona: 'novice',
+      categories: [
+        'syntax',
+        'functionality'
+      ],
+      revealLevel: 'solution',
+      tone: 'encouraging',
+      language: 'english',
+      customPrompt: ''
+    }
+  end
+
+  def self.language_from_locale(locale)
+    CODAVERI_LANGUAGE_MAPPING.fetch(locale.to_sym, DEFAULT_CODAVERI_LANGUAGE)
   end
 
   private

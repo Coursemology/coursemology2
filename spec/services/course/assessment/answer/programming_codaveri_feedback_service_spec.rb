@@ -65,7 +65,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackServi
       # rubocop:enable Layout/LineLength
       subject do
         Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.new(
-          assessment, question, answer.actable, 'solution', true
+          assessment, question, answer.actable, true, nil
         )
       end
 
