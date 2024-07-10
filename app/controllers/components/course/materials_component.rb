@@ -27,7 +27,7 @@ class Course::MaterialsComponent < SimpleDelegator
   def settings_sidebar_items
     [
       {
-        title: t('course.material.sidebar_title'),
+        title: settings.title || t('course.material.sidebar_title'),
         type: :settings,
         weight: 10,
         path: course_admin_materials_path(current_course)
