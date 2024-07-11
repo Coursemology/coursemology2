@@ -14,6 +14,7 @@ export const DELETE_ANNOUNCEMENT = 'course/announcement/DELETE_ANNOUNCEMENT';
 // Action Types
 export interface SaveAnnouncementListAction {
   type: typeof SAVE_ANNOUNCEMENT_LIST;
+  announcementTitle: string;
   announcementList: AnnouncementData[];
   announcementPermissions: AnnouncementPermissions;
 }
@@ -34,6 +35,7 @@ export type AnnouncementsActionType =
 
 // State Types
 export interface AnnouncementsState {
+  announcementTitle: string;
   announcements: EntityStore<AnnouncementEntity>;
   permissions: AnnouncementPermissions;
 }

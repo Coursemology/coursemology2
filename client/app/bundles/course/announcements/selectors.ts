@@ -18,6 +18,10 @@ export function getAllAnnouncementMiniEntities(state: AppState) {
   );
 }
 
+export function getAnnouncementTitle(state: AppState) {
+  return getLocalState(state).announcementTitle;
+}
+
 export function getAnnouncementPermissions(state: AppState) {
   return getLocalState(state).permissions;
 }

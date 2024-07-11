@@ -10,6 +10,7 @@ import {
 // State Types
 
 export interface ForumsState {
+  forumTitle: string;
   forums: EntityState<ForumEntity>;
   topics: EntityState<ForumTopicEntity>;
   posts: EntityState<ForumTopicPostEntity>;

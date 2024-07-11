@@ -10,6 +10,7 @@ import {
 import { VideosState } from './types';
 
 const initialState: VideosState = {
+  videoTitle: '',
   videoTabs: [],
   videos: [],
   metadata: {
@@ -30,12 +31,14 @@ export const videoSlice = createSlice({
     saveVideoList: (
       state,
       action: PayloadAction<{
+        videoTitle: string;
         videoTabs: VideoTab[];
         videos: VideoListData[] | VideoData[];
         metadata: VideoMetadata;
         permissions: VideoPermissions;
       }>,
     ) => {
+      state.videoTitle = action.payload.videoTitle;
       state.videoTabs = action.payload.videoTabs;
       state.videos = action.payload.videos;
       state.metadata = action.payload.metadata;

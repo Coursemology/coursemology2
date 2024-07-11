@@ -22,6 +22,7 @@ import {
 } from './types';
 
 const initialState: AnnouncementsState = {
+  announcementTitle: '',
   announcements: createEntityStore(),
   permissions: { canCreate: false },
 };
@@ -34,6 +35,7 @@ const reducer = produce(
         const entityList = announcementList.map((data) => ({ ...data }));
 
         saveListToStore(draft.announcements, entityList);
+        draft.announcementTitle = action.announcementTitle;
         draft.permissions = action.announcementPermissions;
         break;
       }
@@ -62,11 +64,13 @@ const reducer = produce(
 
 export const actions = {
   saveAnnouncementList: (
+    announcementTitle: string,
     announcementList: AnnouncementData[],
     announcementPermissions: AnnouncementPermissions,
   ): SaveAnnouncementListAction => {
     return {
       type: SAVE_ANNOUNCEMENT_LIST,
+      announcementTitle,
       announcementList,
       announcementPermissions,
     };

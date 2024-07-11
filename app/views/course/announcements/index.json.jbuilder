@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+json.announcementTitle @settings.title || ''
+
 json.announcements @announcements do |announcement|
   json.partial! 'announcements/announcement_data',
                 announcement: announcement,

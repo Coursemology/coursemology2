@@ -19,6 +19,7 @@ import {
 import {
   getAllAnnouncementMiniEntities,
   getAnnouncementPermissions,
+  getAnnouncementTitle,
 } from '../../selectors';
 import AnnouncementNew from '../AnnouncementNew';
 
@@ -50,6 +51,7 @@ const AnnouncementsIndex = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
 
   const announcements = useAppSelector(getAllAnnouncementMiniEntities);
+  const announcementTitle = useAppSelector(getAnnouncementTitle);
   const announcementPermissions = useAppSelector(getAnnouncementPermissions);
   const dispatch = useAppDispatch();
 
@@ -69,7 +71,7 @@ const AnnouncementsIndex = (): JSX.Element => {
           />
         )
       }
-      title={t(translations.header)}
+      title={announcementTitle || t(translations.header)}
     >
       {isLoading ? (
         <LoadingIndicator />

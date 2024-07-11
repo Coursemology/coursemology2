@@ -25,6 +25,10 @@ function getLocalState(state: AppState) {
   return state.forums;
 }
 
+export function getForumTitle(state: AppState) {
+  return getLocalState(state).forumTitle;
+}
+
 export function getAllForums(state: AppState) {
   return forumSelectors.selectAll(state);
 }

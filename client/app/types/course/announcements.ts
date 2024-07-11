@@ -29,6 +29,7 @@ export interface AnnouncementData extends AnnouncementListData {
 }
 
 export interface FetchAnnouncementsData {
+  announcementTitle: string;
   announcements: AnnouncementData[];
   permissions: AnnouncementPermissions;
 }

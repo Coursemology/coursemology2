@@ -16,6 +16,7 @@ import {
   getAllForums,
   getForumMetadata,
   getForumPermissions,
+  getForumTitle,
 } from '../../selectors';
 import ForumNew from '../ForumNew';
 
@@ -50,6 +51,7 @@ const ForumsIndex: FC = () => {
   const [isMarking, setIsMarking] = useState(false);
 
   const dispatch = useAppDispatch();
+  const forumTitle = useAppSelector(getForumTitle);
   const forums = useAppSelector(getAllForums);
   const forumPermissions = useAppSelector(getForumPermissions);
   const forumMetadata = useAppSelector(getForumMetadata);
@@ -95,7 +97,11 @@ const ForumsIndex: FC = () => {
   );
 
   return (
-    <Page actions={headerToolbars} title={t(translations.header)} unpadded>
+    <Page
+      actions={headerToolbars}
+      title={forumTitle || t(translations.header)}
+      unpadded
+    >
       {!isLoading && isForumNewDialogOpen && (
         <ForumNew
           onClose={(): void => setIsForumNewDialogOpen(false)}
