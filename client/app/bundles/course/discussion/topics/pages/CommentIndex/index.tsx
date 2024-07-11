@@ -200,11 +200,7 @@ const CommentIndex: FC<Props> = (props) => {
 
   return (
     <Page
-      title={
-        settings.title
-          ? settings.title
-          : intl.formatMessage(translations.comments)
-      }
+      title={settings.title || intl.formatMessage(translations.comments)}
       unpadded
     >
       {isLoading ? (

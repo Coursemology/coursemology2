@@ -22,6 +22,7 @@ export default class VideosAPI extends BaseVideoAPI {
    */
   index(currentTabId?: number): Promise<
     AxiosResponse<{
+      videoTitle: string;
       videoTabs: VideoTab[];
       videos: VideoListData[];
       metadata: VideoMetadata;

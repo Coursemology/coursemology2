@@ -20,6 +20,10 @@ export function getVideo(state: AppState, videoId: number) {
   )[0] as VideoData;
 }
 
+export function getVideoTitle(state: AppState) {
+  return getLocalState(state).videoTitle;
+}
+
 export function getVideoPermissions(state: AppState) {
   return getLocalState(state).permissions;
 }

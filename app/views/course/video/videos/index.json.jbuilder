@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+json.videoTitle @settings.title || ''
+
 json.videoTabs @video_tabs do |video_tab|
   json.id video_tab.id
   json.title video_tab.title

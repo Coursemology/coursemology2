@@ -16,6 +16,7 @@ import {
   getAllVideos,
   getVideoMetadata,
   getVideoPermissions,
+  getVideoTitle,
 } from '../../selectors';
 import VideoNew from '../VideoNew';
 
@@ -60,6 +61,7 @@ const VideosIndex: FC = () => {
   const videos = useAppSelector((state) => getAllVideos(state)).filter(
     (video) => video.tabId === tabId,
   );
+  const videoTitle = useAppSelector(getVideoTitle);
   const videoPermissions = useAppSelector(getVideoPermissions);
   const dispatch = useAppDispatch();
 
@@ -90,7 +92,11 @@ const VideosIndex: FC = () => {
       });
 
   return (
-    <Page actions={headerToolbars} title={t(translations.header)} unpadded>
+    <Page
+      actions={headerToolbars}
+      title={videoTitle || t(translations.header)}
+      unpadded
+    >
       {!isLoading && isOpen && (
         <VideoNew
           currentTab={tabId}

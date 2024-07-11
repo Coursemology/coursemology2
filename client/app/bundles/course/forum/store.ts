@@ -26,6 +26,7 @@ export const forumTopicPostAdapter = createEntityAdapter<ForumTopicPostEntity>(
 );
 
 const initialState: ForumsState = {
+  forumTitle: '',
   forums: forumAdapter.getInitialState(),
   topics: forumTopicAdapter.getInitialState(),
   posts: forumTopicPostAdapter.getInitialState(),
@@ -43,6 +44,7 @@ export const forumSlice = createSlice({
     saveAllForumListData: (
       state,
       action: PayloadAction<{
+        forumTitle: string;
         forums: ForumListData[];
         metadata: ForumMetadata;
         permissions: ForumPermissions;
@@ -55,6 +57,7 @@ export const forumSlice = createSlice({
       }));
       forumAdapter.removeAll(state.forums);
       forumAdapter.setAll(state.forums, forumEntities);
+      state.forumTitle = action.payload.forumTitle;
       state.metadata = action.payload.metadata;
       state.permissions = action.payload.permissions;
     },

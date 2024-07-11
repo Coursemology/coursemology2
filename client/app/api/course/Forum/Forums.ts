@@ -23,6 +23,7 @@ export default class ForumsAPI extends BaseCourseAPI {
    * Fetches an array of forums.
    */
   index(): APIResponse<{
+    forumTitle: string;
     forums: ForumListData[];
     metadata: ForumMetadata;
     permissions: ForumPermissions;

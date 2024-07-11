@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-json.leaderboardTitle @settings.title
+json.leaderboardTitle @settings.title || ''
 json.leaderboardByExpPoints @course_users_points do |course_user|
   json.partial! 'leaderboard_list_data', course_user: course_user
   json.level course_user.level_number
@@ -18,7 +18,7 @@ if @course_users_count.present?
 end
 
 if @groups_points.present?
-  json.groupleaderboardTitle @settings.group_leaderboard_title
+  json.groupleaderboardTitle @settings.group_leaderboard_title || ''
   json.groupleaderboardByExpPoints @groups_points do |group|
     json.partial! 'leaderboard_group_list_data', group: group
     json.averageExperiencePoints group.average_experience_points

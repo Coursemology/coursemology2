@@ -34,7 +34,11 @@ export function fetchAnnouncements(): Operation {
     CourseAPI.announcements.index().then((response) => {
       const data = response.data;
       dispatch(
-        actions.saveAnnouncementList(data.announcements, data.permissions),
+        actions.saveAnnouncementList(
+          data.announcementTitle,
+          data.announcements,
+          data.permissions,
+        ),
       );
     });
 }

@@ -80,9 +80,8 @@ const LeaderboardIndex: FC<Props> = (props) => {
   return (
     <Page
       title={
-        settings.groupleaderboardTitle
-          ? settings.groupleaderboardTitle
-          : intl.formatMessage(translations.leaderboard)
+        settings.leaderboardTitle ||
+        intl.formatMessage(translations.leaderboard)
       }
       unpadded
     >
@@ -107,7 +106,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
                 icon={<Person />}
                 id="leaderboard-tab"
                 label={
-                  settings.leaderboardTitle ?? (
+                  settings.leaderboardTitle || (
                     <FormattedMessage {...translations.leaderboard} />
                   )
                 }
@@ -118,7 +117,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
                 icon={<Group />}
                 id="group-leaderboard-tab"
                 label={
-                  settings.groupleaderboardTitle ?? (
+                  settings.groupleaderboardTitle || (
                     <FormattedMessage {...translations.groupLeaderboard} />
                   )
                 }
@@ -143,22 +142,14 @@ const LeaderboardIndex: FC<Props> = (props) => {
               <Tab
                 icon={<AutoFixHigh />}
                 id="points-tab"
-                label={
-                  settings.leaderboardTitle ?? (
-                    <FormattedMessage {...translations.experience} />
-                  )
-                }
+                label={<FormattedMessage {...translations.experience} />}
                 style={{ color: palette.submissionIcon.person }}
                 value="points-tab"
               />
               <Tab
                 icon={<EmojiEvents />}
                 id="achievement-tab"
-                label={
-                  settings.groupleaderboardTitle ?? (
-                    <FormattedMessage {...translations.achievement} />
-                  )
-                }
+                label={<FormattedMessage {...translations.achievement} />}
                 style={{ color: palette.submissionIcon.person }}
                 value="achievement-tab"
               />

@@ -7,7 +7,7 @@ json.permissions do
 end
 
 json.settings do
-  json.title @settings.title
+  json.title @settings.title || ''
   json.topicsPerPage @settings.pagination
 end
 
