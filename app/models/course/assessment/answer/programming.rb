@@ -101,7 +101,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     return unless should_retrieve_feedback
 
     feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.
-                       new(assessment, question, self, 'guidance', true)
+                       new(assessment, question, self, 'guidance', true, question.live_feedback_custom_prompt)
     response_status, response_body, _feedback_job_id = feedback_service.run_codaveri_feedback_service
     unless [200, 201].include?(response_status) && response_body['success']
       raise CodaveriError,

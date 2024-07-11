@@ -578,21 +578,6 @@ const SubmissionEditStepForm = (props) => {
     />
   );
 
-  const renderProgrammingQuestionActions = () => {
-    const id = questionIds[stepIndex];
-    const question = questions[id];
-
-    return (
-      <div className="flex flex-nowrap">
-        <Box sx={{ flex: '1', width: '100%' }} />
-        {isCodaveriEnabled &&
-          question.isCodaveri &&
-          question.liveFeedbackEnabled &&
-          renderGetLiveFeedbackButton()}
-      </div>
-    );
-  };
-
   const renderStepQuestion = () => {
     const id = questionIds[stepIndex];
     const question = questions[id];

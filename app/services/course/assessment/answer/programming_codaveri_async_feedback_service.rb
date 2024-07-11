@@ -6,7 +6,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   }.freeze
   DEFAULT_CODAVERI_LANGUAGE = 'english'
 
-  def initialize(assessment, question, answer, reveal_level, require_token)
+  def initialize(assessment, question, answer, reveal_level, require_token, custom_prompt)
     @course = assessment.course
     @assessment = assessment
     @question = question
@@ -25,7 +25,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
         revealLevel: reveal_level,
         tone: 'encouraging',
         language: CODAVERI_LANGUAGE_MAPPING.fetch(answer.submission.creator.locale.to_sym, DEFAULT_CODAVERI_LANGUAGE),
-        customPrompt: question.live_feedback_custom_prompt
+        customPrompt: custom_prompt
       },
       languageVersion: {
         language: '',

@@ -5,7 +5,6 @@ import ExperimentalChip from 'lib/components/core/ExperimentalChip';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
-import FormMultiSelectField from 'lib/components/form/fields/MultiSelectField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -70,29 +69,6 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
           )}
         />
       </Subsection>
-      <Controller
-        control={control}
-        name="question.liveFeedbackCategories"
-        render={({ field, fieldState }) => (
-          <FormMultiSelectField
-            disabled={props.disabled || !liveFeedbackEnabled}
-            field={field}
-            fieldState={fieldState}
-            label="Categories"
-            options={[
-              'syntax',
-              'functionality',
-              'style',
-              'performance',
-              'robustness',
-              'design',
-            ].map((s, i) => ({
-              id: i,
-              title: s.charAt(0).toUpperCase() + s.slice(1),
-            }))}
-          />
-        )}
-      />
     </Section>
   );
 };
