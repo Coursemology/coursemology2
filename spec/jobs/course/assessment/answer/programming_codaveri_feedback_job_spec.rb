@@ -89,7 +89,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob do
 
         codaveri_feedback = post.codaveri_feedback
         expect(codaveri_feedback.codaveri_feedback_id).to eq(
-          '6311a0548c57aae93d260927:main.py:63141b108c57aae93d260a00'
+          '6311a0548c57aae93d260927:template.py:63141b108c57aae93d260a00'
         )
         expect(codaveri_feedback.status).to eq('pending_review')
         expect(codaveri_feedback.original_feedback).to eq('This is a test feedback')
@@ -145,7 +145,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob do
 
         codaveri_feedback = post.codaveri_feedback
         expect(codaveri_feedback.codaveri_feedback_id).to eq(
-          '6311a0548c57aae93d260927:main.py:63141b108c57aae93d260a00'
+          '6311a0548c57aae93d260927:template.py:63141b108c57aae93d260a00'
         )
         expect(codaveri_feedback.status).to eq('pending_review')
         expect(codaveri_feedback.original_feedback).to eq('This is a test feedback')
