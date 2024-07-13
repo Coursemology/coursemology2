@@ -151,7 +151,7 @@ const ProgrammingFiles = ({
     }
   };
 
-  const renderFeedbackCard = (feedbackItem) => {
+  const renderFeedbackCard = (filename, feedbackItem) => {
     let cardStyle = styles.card;
     if (feedbackItem.state === 'resolved') {
       cardStyle = { ...styles.card, ...styles.cardResolved };
@@ -199,7 +199,7 @@ const ProgrammingFiles = ({
               type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_RESOLVED,
               payload: {
                 questionId,
-                path: 'main.py',
+                path: filename,
                 lineId: feedbackItem.id,
               },
             });
@@ -223,7 +223,7 @@ const ProgrammingFiles = ({
               type: actionTypes.LIVE_FEEDBACK_ITEM_MARK_DISMISSED,
               payload: {
                 questionId,
-                path: 'main.py',
+                path: filename,
                 lineId: feedbackItem.id,
               },
             });
@@ -246,7 +246,7 @@ const ProgrammingFiles = ({
               type: actionTypes.LIVE_FEEDBACK_ITEM_DELETE,
               payload: {
                 questionId,
-                path: 'main.py',
+                path: filename,
                 lineId: feedbackItem.id,
               },
             });
@@ -282,7 +282,7 @@ const ProgrammingFiles = ({
     );
   };
 
-  const renderFeedbackDrawer = (keyString, annotations) => (
+  const renderFeedbackDrawer = (keyString, annotations, filename) => (
     <Drawer
       anchor="right"
       ModalProps={{
@@ -294,7 +294,11 @@ const ProgrammingFiles = ({
       PaperProps={{ style: styles.drawerPaper }}
       variant="persistent"
     >
-      <div>{annotations.map(renderFeedbackCard)}</div>
+      <div>
+        {annotations.map((feedbackItem) =>
+          renderFeedbackCard(filename, feedbackItem),
+        )}
+      </div>
     </Drawer>
   );
 
@@ -311,14 +315,7 @@ const ProgrammingFiles = ({
       highlightedContent: field.highlightedContent,
     };
 
-    let annotations = feedbackFiles[field.filename] ?? [];
-    // TODO: remove special casing around Codaveri name coercion issue
-    if (
-      index === 0 &&
-      !controlledProgrammingFields.some((elem) => elem.filename === 'main.py')
-    ) {
-      annotations = feedbackFiles['main.py'] ?? [];
-    }
+    const annotations = feedbackFiles[field.filename] ?? [];
     const keyString = `editor-container-${index}`;
     const shouldRenderDrawer = annotations.length > 0;
 
@@ -337,7 +334,8 @@ const ProgrammingFiles = ({
             saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
           />
         </Box>
-        {shouldRenderDrawer && renderFeedbackDrawer(keyString, annotations)}
+        {shouldRenderDrawer &&
+          renderFeedbackDrawer(keyString, annotations, field.filename)}
       </div>
     );
   });

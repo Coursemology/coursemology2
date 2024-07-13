@@ -58,15 +58,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
 
   private
 
-  # TODO: revert adapter when Codaveri no longer requires file path coercion
-  # Check if any object in the array has the :path attribute set to "main.py"
-  # If none do, coerce the first element to do so
-  def ensure_main_path!(objects, main_path)
-    return unless objects.any? && objects.none? { |obj| obj[:path] == main_path }
-
-    objects.first[:path] = main_path
-  end
-
   # Grades into the given +Course::Assessment::Answer::AutoGrading+ object. This assigns the grade
   # and makes sure answer is in the correct state.
   #
@@ -90,7 +81,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
 
       @answer_object[:files].append(file_template)
     end
-    ensure_main_path!(@answer_object[:files], 'main.py')
 
     @answer_object
   end
@@ -113,30 +103,13 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   end
 
   def process_codaveri_feedback
-    main_path_parsed = false
     @answer_files.each do |file|
       feedback_lines = @feedback_files_hash[file.filename]
-      main_path_parsed = true if file.filename == 'main.py'
       next if feedback_lines.nil?
 
       feedback_lines.each do |line|
         save_annotation(file, line)
       end
-    end
-    return if main_path_parsed
-
-    process_main_file_codaveri_feedback
-  end
-
-  # We do inverse of name coercion logic:
-  # if main.py does not exist in answer_files but it does in feedback_files_hash,
-  # run save_annotation for the first file in the array with feedback_lines taken from feedback_files_hash['main.py']
-  def process_main_file_codaveri_feedback
-    return unless @answer_files.any? && @feedback_files_hash.key?('main.py')
-
-    feedback_lines = @feedback_files_hash['main.py']
-    feedback_lines.each do |line|
-      save_annotation(@answer_files[0], line)
     end
   end
 

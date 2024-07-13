@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 module Codaveri::FeedbackApiStubs
-  # TODO: update this fixture when name coercion logic is removed
   FEEDBACK_SUCCESS_FINAL_RESULT = {
     status: 200,
     body: {
@@ -9,10 +8,10 @@ module Codaveri::FeedbackApiStubs
       data: {
         feedbackFiles: [
           {
-            path: 'main.py',
+            path: 'template.py',
             feedbackLines: [
               {
-                id: '6311a0548c57aae93d260927:main.py:63141b108c57aae93d260a00',
+                id: '6311a0548c57aae93d260927:template.py:63141b108c57aae93d260a00',
                 linenum: 5,
                 feedback: 'This is a test feedback',
                 category: 'syntax',
