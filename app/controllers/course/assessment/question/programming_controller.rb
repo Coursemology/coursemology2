@@ -6,7 +6,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
                               class: Course::Assessment::Question::Programming,
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update, :update_question_setting]
-  before_action :set_attributes_for_programming_question
+  before_action :set_attributes_for_programming_question, except: :generate
 
   def new
     respond_to do |format|
@@ -53,6 +53,19 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     else
       render_failure_json
     end
+  end
+
+  def generate
+    language = Coursemology::Polyglot::Language.where(id: params[:language_id]).first
+
+    render json: { success: false, message: 'Language not supported' }, status: :bad_request if !CodaveriAsyncApiService.language_valid_for_codaveri?(language)
+
+    polyglot_language_name = language.name.split[0].downcase
+    polyglot_language_version = language.name.split[1]
+
+    generation_service = Course::Assessment::Question::CodaveriProblemGenerationService.new(@assessment, params[:custom_prompt], polyglot_language_name, polyglot_language_version, params[:difficulty])
+    generated_problem = generation_service.codaveri_generate_problem
+    render json: generated_problem, status: :ok
   end
 
   def update_question_setting

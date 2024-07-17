@@ -162,10 +162,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     language.name.split[1]
   end
 
-  def language_valid_for_codaveri?
-    codaveri_language_whitelist.include?(language.type.constantize)
-  end
-
   def create_codaveri_problem
     return unless is_codaveri
 
@@ -264,7 +260,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     return if !is_codaveri || duplicating?
 
     # TODO: Move this validation logic to frontend, to prevent user from submitting in the first place.
-    if !language_valid_for_codaveri?
+    if !CodaveriAsyncApiService.language_valid_for_codaveri?(language)
       errors.add(:base, 'Language type must be Python 3 and above.')
     elsif !question_assessments.empty? &&
           !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
@@ -272,15 +268,5 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
                  'Codaveri component is deactivated.'\
                  'Activate it in the course setting or switch this question into a non-codaveri type.')
     end
-  end
-
-  def codaveri_language_whitelist
-    [Coursemology::Polyglot::Language::Python::Python3Point4,
-     Coursemology::Polyglot::Language::Python::Python3Point5,
-     Coursemology::Polyglot::Language::Python::Python3Point6,
-     Coursemology::Polyglot::Language::Python::Python3Point7,
-     Coursemology::Polyglot::Language::Python::Python3Point9,
-     Coursemology::Polyglot::Language::Python::Python3Point10,
-     Coursemology::Polyglot::Language::Python::Python3Point12]
   end
 end

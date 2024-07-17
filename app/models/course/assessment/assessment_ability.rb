@@ -185,6 +185,7 @@ module Course::Assessment::AssessmentAbility
       can :manage, question_class, question: question_assessments_current_course
     end
     can :duplicate, Course::Assessment::Question, question_assessments_current_course
+    can :generate, Course::Assessment::Question::Programming
   end
 
   def allow_teaching_staff_grade_assessment_submissions
