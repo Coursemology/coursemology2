@@ -190,8 +190,8 @@ GEM
       devise
     diff-lcs (1.5.1)
     docile (1.4.0)
-    docker-api (2.2.0)
-      excon (>= 0.47.0)
+    docker-api (2.3.0)
+      excon (>= 0.64.0)
       multi_json
     domain_name (0.6.20240107)
     dotenv (3.1.2)
@@ -207,7 +207,7 @@ GEM
     erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
-    excon (0.110.0)
+    excon (0.111.0)
     exifr (1.4.0)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
@@ -217,7 +217,7 @@ GEM
     ffi (1.17.0)
     filename (0.1.2)
     flamegraph (0.9.5)
-    fog-aws (3.23.0)
+    fog-aws (3.24.0)
       fog-core (~> 2.1)
       fog-json (~> 1.1)
       fog-xml (~> 0.1)
