@@ -10,7 +10,7 @@ class AttachmentReferencesController < ApplicationController
   end
 
   def show
-    redirect_to @attachment_reference.url(filename: @attachment_reference.name)
+    redirect_to @attachment_reference.url(filename: @attachment_reference.name), allow_other_host: true
   end
 
   private
