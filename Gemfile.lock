@@ -38,7 +38,7 @@ GIT
 
 GIT
   remote: https://github.com/bivanalhar/settings_on_rails
-  revision: 8d3bd56a78842e030c585f8ed5bd39508da85064
+  revision: 7239810e9f20767b2ccf277a7b7b4e0c84f16f55
   specs:
     settings_on_rails (0.4.0)
       rails (>= 6)
