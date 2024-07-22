@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/activerecord-userstamp.git
-  revision: 5de7cc00f9fd24d505d97ada870600175b357248
+  revision: 7df1b53222f084aa7793f131499bbe46669d6f4e
   branch: bivan/upgrade-rails-7-ruby-3
   specs:
     activerecord-userstamp (3.0.5)
