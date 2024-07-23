@@ -116,6 +116,7 @@ import {
   questionHandle,
 } from 'course/assessment/handles';
 import QuestionFormOutlet from 'course/assessment/question/components/QuestionFormOutlet';
+import GenerateProgrammingQuestionPage from 'course/assessment/question/programming/GenerateProgrammingQuestionPage';
 import { CourseContainer } from 'course/container';
 import { forumHandle, forumTopicHandle } from 'course/forum/handles';
 import { folderHandle } from 'course/material/folders/handles';
@@ -141,7 +142,6 @@ import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
 import { reservedRoutes } from './redirects';
 import createAppRouter from './router';
-import GenerateProgrammingQuestionPage from 'course/assessment/question/programming/GenerateProgrammingQuestionPage';
 
 const authenticatedRouter: Translated<RouteObject[]> = (t) =>
   createAppRouter([
