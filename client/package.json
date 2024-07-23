@@ -59,7 +59,7 @@
     "history": "^5.2.0",
     "idb": "^8.0.0",
     "immer": "^10.0.4",
-    "immutable": "^3.8.2",
+    "immutable": "^4.3.7",
     "intl": "^1.2.5",
     "jquery": "^3.7.1",
     "jquery-ui": "^1.13.3",
