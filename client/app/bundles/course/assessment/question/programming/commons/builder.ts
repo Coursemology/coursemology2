@@ -202,7 +202,7 @@ const buildFormData = (draft: ProgrammingFormData): FormData => {
 };
 
 export const buildGenerateFormData = (
-  codaveriData: object,
+  codaveriData: any,
   questionData: ProgrammingFormData,
 ): FormData => {
   const data = new FormData();

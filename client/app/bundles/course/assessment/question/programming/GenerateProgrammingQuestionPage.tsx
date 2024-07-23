@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
   Controller,
-  FieldArrayPath,
   FormProvider,
   useForm,
 } from 'react-hook-form';
@@ -13,6 +12,7 @@ import {
   Undo,
 } from '@mui/icons-material';
 import {
+  Badge,
   Box,
   Container,
   Divider,
@@ -25,7 +25,7 @@ import {
   FetchAssessmentData,
   isAuthenticatedAssessmentData,
 } from 'types/course/assessment/assessments';
-import { ProgrammingFormData } from 'types/course/assessment/question/programming';
+import { MetadataTestCase, ProgrammingFormData } from 'types/course/assessment/question/programming';
 
 import { fetchAssessment } from 'course/assessment/operations/assessments';
 import IconRadio from 'lib/components/core/buttons/IconRadio';
@@ -49,6 +49,45 @@ export type PublishTime = 'now' | 'later';
 const CODAVERI_DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 export type Difficulty = (typeof CODAVERI_DIFFICULTIES)[number];
 
+type PrimitiveField = 'question.title' | 'question.description' | 'testUi.metadata.solution' | 'testUi.metadata.submission';
+type ArrayField = 'testUi.metadata.testCases.public' | 'testUi.metadata.testCases.private' | 'testUi.metadata.testCases.evaluation';
+
+const areObjectArraysEqual = <T extends object>(array1?: T[], array2?: T[]) =>
+  (array1 === undefined && array2 === undefined) ||
+  (array1 !== undefined && array2 !== undefined && array1.length === array2.length &&
+  // compare each element to see if any are different
+  array1.map((_, index) => 
+    Object.keys(array1[index])?.every(key => array1[index][key] === array2[index][key])
+  ).every(p => p));
+
+const defaultQuestionFormData = {
+  question: {
+    title: '',
+    description: '',
+  },
+  testUi: {
+    metadata: {
+      solution: '',
+      submission: '',
+      testCases: {
+        public: [] as MetadataTestCase[],
+        private: [] as MetadataTestCase[],
+        evaluation: [] as MetadataTestCase[],
+      },
+    },
+  },
+};
+
+const compareFormData = (oldState, newState): { [name: string]: boolean } => ({
+  'question.title': oldState.question.title !== newState.question.title,
+  'question.description': oldState.question.description !== newState.question.description,
+  'testUi.metadata.solution': oldState.testUi.metadata.solution !== newState.testUi.metadata.solution,
+  'testUi.metadata.submission': oldState.testUi.metadata.submission !== newState.testUi.metadata.submission,
+  'testUi.metadata.testCases.public': !areObjectArraysEqual(oldState.testUi.metadata.testCases.public, newState.testUi.metadata.testCases.public),
+  'testUi.metadata.testCases.private': !areObjectArraysEqual(oldState.testUi.metadata.testCases.private, newState.testUi.metadata.testCases.private),
+  'testUi.metadata.testCases.evaluation': !areObjectArraysEqual(oldState.testUi.metadata.testCases.evaluation, newState.testUi.metadata.testCases.evaluation),
+});
+
 const GenerateProgrammingQuestionPage = (): JSX.Element => {
   const params = useParams();
   const id = parseInt(params?.assessmentId ?? '', 10) || undefined;
@@ -68,29 +107,18 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   // lower form (populate to new programming question page)
   // TODO: We reuse ProgrammingFormData object here because test case UI mandates it.
   // Consider reworking type declarations in TestCases.tsx to enable creating an independent model class here.
-  const methods = useForm<ProgrammingFormData>({
-    defaultValues: {
-      question: {
-        title: '',
-        description: '',
-      },
-      testUi: {
-        metadata: {
-          solution: '',
-          submission: '',
-          testCases: {
-            public: [],
-            private: [],
-            evaluation: [],
-          },
-        },
-      },
-    },
-  });
+  const methods = useForm({ defaultValues: defaultQuestionFormData });
   const questionFormData = methods.watch();
   const questionFormTouched =
     Object.keys(methods.formState.touchedFields).length > 0 ||
     methods.formState.isDirty;
+
+  const [undoStack, setUndoStack] = useState([JSON.parse(JSON.stringify(defaultQuestionFormData))]);
+  const [undoPointer, setUndoPointer] = useState<number>(0);
+
+  const questionFormDataEqual = () =>
+    // if all false, return true
+    Object.values(compareFormData(undoStack[undoPointer], questionFormData)).every(p => !p);
 
   const [lockStates, setLockStates] = useState<{ [name: string]: boolean }>({
     'question.title': false,
@@ -102,17 +130,48 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
     'testUi.metadata.testCases.evaluation': false,
   });
 
-  const setQuestionFieldIfUnlocked = (lockStateKey: string, newValue): void => {
+  const [updatedStates, setUpdatedStates] = useState<{ [name: string]: boolean }>({
+    'question.title': false,
+    'question.description': false,
+    'testUi.metadata.solution': false,
+    'testUi.metadata.submission': false,
+    'testUi.metadata.testCases.public': false,
+    'testUi.metadata.testCases.private': false,
+    'testUi.metadata.testCases.evaluation': false,
+  });
+
+  const setQuestionPrimitiveFieldIfUnlocked = (lockStateKey: PrimitiveField, oldValue?: string | null, newValue?: string | null): boolean => {
     if (
       !lockStates[lockStateKey] &&
       newValue !== null &&
       newValue !== undefined
     ) {
-      methods.setValue(
-        lockStateKey as FieldArrayPath<ProgrammingFormData>,
-        newValue,
-      );
+      if (newValue !== oldValue) {
+        methods.setValue<PrimitiveField>(
+          lockStateKey,
+          newValue,
+        );
+        return true;
+      }
     }
+    return false;
+  };
+
+  const setQuestionArrayFieldIfUnlocked = (lockStateKey: ArrayField, oldValue?: MetadataTestCase[], newValue?: MetadataTestCase[]): boolean => {
+    if (
+      !lockStates[lockStateKey] &&
+      newValue !== null &&
+      newValue !== undefined
+    ) {
+      if (!areObjectArraysEqual(oldValue, newValue)) {
+        methods.setValue(
+          lockStateKey,
+          newValue,
+        );
+        return true;
+      }
+    }
+    return false;
   };
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -125,30 +184,38 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
         onClick={handleSubmit((codaveriFormData) => {
           setIsGenerating(true);
           return generate(
-            buildGenerateFormData(codaveriFormData, questionFormData),
+            buildGenerateFormData(codaveriFormData, questionFormData as ProgrammingFormData),
           )
             .then((response: any) => {
-              setQuestionFieldIfUnlocked('question.title', response?.title);
-              setQuestionFieldIfUnlocked(
+              const titleUpdated = setQuestionPrimitiveFieldIfUnlocked(
+                'question.title',
+                questionFormData.question.title,
+                response?.title,
+              );
+              const descriptionUpdated = setQuestionPrimitiveFieldIfUnlocked(
                 'question.description',
+                questionFormData.question.description,
                 response?.description,
               );
               const prefix = response?.resources?.[0]?.templates[0]?.prefix;
-              setQuestionFieldIfUnlocked(
+              const templateUpdated = setQuestionPrimitiveFieldIfUnlocked(
                 'testUi.metadata.submission',
+                questionFormData.testUi?.metadata.submission,
                 [prefix, response?.resources?.[0]?.templates[0]?.content].join(
                   '\n',
                 ),
               );
-              setQuestionFieldIfUnlocked(
+              const solutionUpdated = setQuestionPrimitiveFieldIfUnlocked(
                 'testUi.metadata.solution',
+                questionFormData.testUi?.metadata.solution,
                 [
                   prefix,
                   response?.resources?.[0]?.solutions?.[0]?.files?.[0]?.content,
                 ].join('\n'),
               );
-              setQuestionFieldIfUnlocked(
+              const publicTestCasesUpdated = setQuestionArrayFieldIfUnlocked(
                 'testUi.metadata.testCases.public',
+                questionFormData.testUi?.metadata.testCases.public,
                 response?.resources?.[0]?.exprTestcases
                   ?.filter((testCase) => testCase?.visibility === 'public')
                   ?.map((testCase) => ({
@@ -157,8 +224,9 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                     hint: testCase.hint,
                   })),
               );
-              setQuestionFieldIfUnlocked(
+              const privateTestCasesUpdated = setQuestionArrayFieldIfUnlocked(
                 'testUi.metadata.testCases.private',
+                questionFormData.testUi?.metadata.testCases.private,
                 response?.resources?.[0]?.exprTestcases
                   ?.filter((testCase) => testCase?.visibility === 'private')
                   ?.map((testCase) => ({
@@ -167,8 +235,9 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                     hint: testCase.hint,
                   })),
               );
-              setQuestionFieldIfUnlocked(
+              const evaluationTestCasesUpdated = setQuestionArrayFieldIfUnlocked(
                 'testUi.metadata.testCases.evaluation',
+                questionFormData.testUi?.metadata.testCases.evaluation,
                 response?.resources?.[0]?.exprTestcases
                   ?.filter((testCase) => testCase?.visibility === 'evaluation')
                   ?.map((testCase) => ({
@@ -177,6 +246,22 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                     hint: testCase.hint,
                   })),
               );
+              // if any fields are different after all set operations, create a new undo stack item
+              if (!questionFormDataEqual()) {
+                setUpdatedStates({
+                  'question.title': titleUpdated,
+                  'question.description': descriptionUpdated,
+                  'testUi.metadata.solution': solutionUpdated,
+                  'testUi.metadata.submission': templateUpdated,
+                  'testUi.metadata.testCases.public': publicTestCasesUpdated,
+                  'testUi.metadata.testCases.private': privateTestCasesUpdated,
+                  'testUi.metadata.testCases.evaluation': evaluationTestCasesUpdated,
+                });
+                setTimeout(() => {
+                  setUndoStack([...undoStack.slice(0, undoPointer + 1), JSON.parse(JSON.stringify(questionFormData))]);
+                  setUndoPointer(undoPointer + 1);
+                }, 1);
+              }
               setIsGenerating(false);
             })
             .catch((response) => {
@@ -190,11 +275,24 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
         {questionFormTouched ? 'Refine' : 'Generate'}
       </Button>
 
-      <IconButton className="ml-4" disabled={false}>
+      <IconButton className="ml-4" disabled={questionFormDataEqual() && undoPointer === 0} onClick={() => {
+        let undoCurrent = undoStack[undoPointer];
+        if (questionFormDataEqual()) {
+          undoCurrent = undoStack[undoPointer - 1];
+          setUndoPointer(undoPointer - 1);
+        }
+        setUpdatedStates(compareFormData(questionFormData, undoCurrent));
+        methods.reset(undoCurrent, { keepDirty: true, keepTouched: true });
+      }}>
         <Undo />
       </IconButton>
 
-      <IconButton className="ml-2" disabled={false}>
+      <IconButton className="ml-2" disabled={undoPointer === undoStack.length - 1} onClick={() => {
+        const undoCurrent = undoStack[undoPointer + 1];
+        setUndoPointer(undoPointer + 1);
+        setUpdatedStates(compareFormData(questionFormData, undoCurrent));
+        methods.reset(undoCurrent, { keepDirty: true, keepTouched: true });
+      }}>
         <Redo />
       </IconButton>
       <Box sx={{ flex: '1', width: '100%' }} />
@@ -216,11 +314,16 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
       <div className="flex flex-nowrap">
         <IconButton
           centerRipple={false}
-          onClick={() =>
-            setLockStates({
-              ...lockStates,
-              [lockStateKey]: !lockStates[lockStateKey],
-            })
+          onClick={() => {
+              setLockStates({
+                ...lockStates,
+                [lockStateKey]: !lockStates[lockStateKey],
+              });
+              setUpdatedStates({
+                ...updatedStates,
+                [lockStateKey]: false,
+              });
+            }
           }
           sx={{
             margin: 1,
@@ -228,7 +331,14 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
             alignItems: 'start',
           }}
         >
-          {lockStates[lockStateKey] ? <LockOutlined /> : <LockOpenOutlined />}
+          <Badge
+            badgeContent={' '}
+            variant='dot'
+            color="success"
+            invisible={!updatedStates[lockStateKey]}
+          >
+            {lockStates[lockStateKey] ? <LockOutlined/> : <LockOpenOutlined />}
+          </Badge>
         </IconButton>
         {content}
       </div>
@@ -343,6 +453,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                     fullWidth
                     label="Title"
                     variant="filled"
+                    onFocus={() => setUpdatedStates({ ...updatedStates, 'question.title': false })}
                   />
                 )}
               />,
@@ -376,14 +487,14 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
             )}
 
             {renderLockableSection(
-              'question.metadata.submission',
+              'testUi.metadata.submission',
               <Container disableGutters maxWidth={false}>
                 <Controller
                   control={methods.control}
                   name="testUi.metadata.submission"
                   render={({ field }): JSX.Element => (
                     <EditorAccordion
-                      disabled={lockStates['question.metadata.submission']}
+                      disabled={lockStates['testUi.metadata.submission']}
                       language="python"
                       name={field.name}
                       onChange={field.onChange}
@@ -397,14 +508,14 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
             )}
 
             {renderLockableSection(
-              'question.metadata.solution',
+              'testUi.metadata.solution',
               <Container disableGutters maxWidth={false}>
                 <Controller
                   control={methods.control}
                   name="testUi.metadata.solution"
                   render={({ field }): JSX.Element => (
                     <EditorAccordion
-                      disabled={lockStates['question.metadata.solution']}
+                      disabled={lockStates['testUi.metadata.solution']}
                       language="python"
                       name={field.name}
                       onChange={field.onChange}
