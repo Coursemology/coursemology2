@@ -405,13 +405,24 @@ RSpec.describe Duplicator, type: :model do
       end
     end
 
-    temporary_table(:complex_active_records) do |t|
-      t.integer :data
+    temporary_table(:complex_active_records) do
+      ActiveRecord::Schema.define do
+        create_table :complex_active_records, temporary: true do |t|
+          t.integer :data
+        end
+      end
     end
 
-    temporary_table(:children_parents) do |t|
-      t.integer :children_id, foreign_key: { references: :complex_active_records, primary_key: :id }
-      t.integer :parent_id, foreign_key: { references: :complex_active_records, primary_key: :id }
+    temporary_table(:children_parents) do
+      ActiveRecord::Schema.define do
+        create_table :children_parents, temporary: true do |t|
+          t.integer :children_id
+          t.integer :parent_id
+        end
+
+        add_foreign_key :children_parents, :complex_active_records, column: :children_id, primary_key: :id
+        add_foreign_key :children_parents, :complex_active_records, column: :parent_id, primary_key: :id
+      end
     end
 
     class DuplicationTraceableActiveRecordWithSource < ApplicationRecord
