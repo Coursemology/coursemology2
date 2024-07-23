@@ -50,6 +50,18 @@ export const update = async (
   }
 };
 
+export const generate = async (data: FormData): Promise<object> => {
+  try {
+    const response = await ProgrammingAPI.generate(data);
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError)
+      throw new Error(error.response?.data?.errors);
+
+    throw error;
+  }
+};
+
 export const watchEvaluation = (
   url: string,
   onSuccess: () => void,

@@ -33,7 +33,7 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
       courseName: assessment.course.title,
       config: {
         difficulty: difficulty,
-        customPrompt: custom_prompt,
+        customPrompt: custom_prompt.length >= 500 ? "#{custom_prompt[0...495]}..." : custom_prompt,
         testcasesType: "expression",
         languageVersion: {
           language: language,

@@ -141,6 +141,7 @@ import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
 import { reservedRoutes } from './redirects';
 import createAppRouter from './router';
+import GenerateProgrammingQuestionPage from 'course/assessment/question/programming/GenerateProgrammingQuestionPage';
 
 const authenticatedRouter: Translated<RouteObject[]> = (t) =>
   createAppRouter([
@@ -712,6 +713,11 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                           path: 'new',
                           handle: NewProgrammingQuestionPage.handle,
                           element: <NewProgrammingQuestionPage />,
+                        },
+                        {
+                          path: 'generate',
+                          handle: GenerateProgrammingQuestionPage.handle,
+                          element: <GenerateProgrammingQuestionPage />,
                         },
                         {
                           path: ':questionId/edit',

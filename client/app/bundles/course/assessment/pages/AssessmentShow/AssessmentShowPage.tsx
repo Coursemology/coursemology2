@@ -1,6 +1,7 @@
-import { InsertDriveFile } from '@mui/icons-material';
+import { AutoFixHigh, InsertDriveFile } from '@mui/icons-material';
 import {
   Alert,
+  Button,
   Chip,
   List,
   ListItem,
@@ -149,6 +150,17 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
           {assessment.newQuestionUrls && (
             <NewQuestionMenu with={assessment.newQuestionUrls} />
           )}
+          {assessment.generateQuestionUrl && (<Link opensInNewTab to={assessment.generateQuestionUrl} underline="none">
+                  <Button
+                    size="small"
+                    startIcon={<AutoFixHigh />}
+                    color='info'
+                    variant="outlined"
+                    sx={{ marginTop: '0 !important', marginLeft: 1 }}
+                  >
+                    Generate Programming Question (Experimental)
+                  </Button>
+          </Link>)}
 
           {assessment.hasUnautogradableQuestions && (
             <Alert severity="warning">
