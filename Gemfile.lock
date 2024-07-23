@@ -17,10 +17,10 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/rails_utils.git
-  revision: 3f427c4e017c813729c844ee2b3afb178fcc485a
+  revision: 8c47abd08ab5258d0377b4766731762973f6594e
   branch: bivan/upgrade-rails-7-ruby-3
   specs:
-    rails_utils (6.1.0)
+    rails_utils (6.0.0)
       rails (>= 6)
 
 GIT
