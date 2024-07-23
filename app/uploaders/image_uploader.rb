@@ -50,7 +50,7 @@ class ImageUploader < CarrierWave::Uploader::Base
     case other_uploader.send(:storage).class.name
     when 'CarrierWave::Storage::File'
       begin
-        cache!(File.new(other_uploader.file.path))
+        store!(File.new(other_uploader.file.path))
       rescue Errno::ENOENT
         return false
       end
