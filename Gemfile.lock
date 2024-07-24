@@ -1,7 +1,6 @@
 GIT
   remote: https://github.com/Coursemology/active_record-acts_as.git
-  revision: 0825ab465d1c7ecaf6fea8e4bbb5889fd9279a45
-  branch: bivan/support-rails-7-ruby-3
+  revision: 39cdc27af5649fd140fccda56a701d87ef85730a
   specs:
     active_record-acts_as (4.0.0)
       activerecord (>= 6.0)
@@ -9,18 +8,16 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/activerecord-userstamp.git
-  revision: 5de7cc00f9fd24d505d97ada870600175b357248
-  branch: bivan/upgrade-rails-7-ruby-3
+  revision: 3e9a184a61246acae8f8fcbf01d040a166f539b1
   specs:
     activerecord-userstamp (3.0.5)
       rails (>= 6)
 
 GIT
   remote: https://github.com/Coursemology/rails_utils.git
-  revision: 3f427c4e017c813729c844ee2b3afb178fcc485a
-  branch: bivan/upgrade-rails-7-ruby-3
+  revision: 1a72571368da0e4172e155428813749b2b134f3c
   specs:
-    rails_utils (6.1.0)
+    rails_utils (6.0.0)
       rails (>= 6)
 
 GIT
@@ -30,18 +27,18 @@ GIT
     rwordnet (2.0.0)
 
 GIT
+  remote: https://github.com/Coursemology/settings_on_rails
+  revision: 789e8fe1706da9c0e0c04aaa338afa7eb867e007
+  specs:
+    settings_on_rails (0.4.0)
+      rails (>= 6)
+
+GIT
   remote: https://github.com/aha-app/calculated_attributes
   revision: d2f69a1acefd5646ce1908fed3785a63d8399374
   specs:
     calculated_attributes (1.0.0)
       activerecord (>= 6.0.0, < 8)
-
-GIT
-  remote: https://github.com/bivanalhar/settings_on_rails
-  revision: 8d3bd56a78842e030c585f8ed5bd39508da85064
-  specs:
-    settings_on_rails (0.4.0)
-      rails (>= 6)
 
 GEM
   remote: https://rubygems.org/
