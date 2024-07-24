@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/Coursemology/active_record-acts_as.git
-  revision: 0825ab465d1c7ecaf6fea8e4bbb5889fd9279a45
+  revision: e4bb822f212473083c2ea888f814dd8994fc3e4a
   branch: bivan/support-rails-7-ruby-3
   specs:
     active_record-acts_as (4.0.0)
