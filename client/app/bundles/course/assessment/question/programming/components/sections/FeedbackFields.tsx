@@ -12,6 +12,8 @@ import translations from '../../../../translations';
 
 interface FeedbackFieldsProps {
   disabled?: boolean;
+  assessmentLiveFeedbackEnabled: boolean;
+  courseLiveFeedbackEnabled: boolean;
 }
 
 export const FEEDBACK_SECTION_ID = 'feedback-fields' as const;
@@ -27,6 +29,18 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
 
   const liveFeedbackEnabled = watch('question.liveFeedbackEnabled');
 
+  let disabledHint;
+  if (
+    !props.assessmentLiveFeedbackEnabled &&
+    !props.courseLiveFeedbackEnabled
+  ) {
+    disabledHint = t(translations.liveFeedbackAssessmentAndCourseDisabled);
+  } else if (!props.assessmentLiveFeedbackEnabled) {
+    disabledHint = t(translations.liveFeedbackAssessmentDisabled);
+  } else if (!props.courseLiveFeedbackEnabled) {
+    disabledHint = t(translations.liveFeedbackCourseDisabled);
+  }
+
   return (
     <Section
       id={FEEDBACK_SECTION_ID}
@@ -34,7 +48,7 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
       title={
         <>
           {t(translations.automatedFeedback)}
-          <ExperimentalChip disabled={props.disabled} />
+          <ExperimentalChip className="ml-2" disabled={props.disabled} />
         </>
       }
     >
@@ -44,7 +58,12 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
         render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField
             description={t(translations.enableLiveFeedbackDescription)}
-            disabled={props.disabled}
+            disabled={
+              props.disabled ||
+              !props.assessmentLiveFeedbackEnabled ||
+              !props.courseLiveFeedbackEnabled
+            }
+            disabledHint={disabledHint}
             field={field}
             fieldState={fieldState}
             label={t(translations.enableLiveFeedback)}
@@ -61,7 +80,12 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
           name="question.liveFeedbackCustomPrompt"
           render={({ field, fieldState }): JSX.Element => (
             <FormRichTextField
-              disabled={props.disabled || !liveFeedbackEnabled}
+              disabled={
+                props.disabled ||
+                !liveFeedbackEnabled ||
+                !props.assessmentLiveFeedbackEnabled ||
+                !props.courseLiveFeedbackEnabled
+              }
               field={field}
               fieldState={fieldState}
               fullWidth

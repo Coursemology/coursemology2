@@ -136,6 +136,11 @@ export interface ProgrammingFormData extends AvailableSkills {
   };
 }
 
+export interface ProgrammingResponseData extends ProgrammingFormData {
+  assessmentLiveFeedbackEnabled: boolean;
+  courseLiveFeedbackEnabled: boolean;
+}
+
 export interface ProgrammingPostStatusData {
   redirectAssessmentUrl: string;
   message: string;

@@ -58,6 +58,7 @@ class AssessmentEditPage extends Component {
       folderAttributes,
       gamified,
       initialValues,
+      courseLiveFeedbackEnabled,
       modeSwitching,
       canManageMonitor,
       pulsegridUrl,
@@ -87,6 +88,7 @@ class AssessmentEditPage extends Component {
         <AssessmentForm
           canManageMonitor={canManageMonitor}
           conditionAttributes={conditionAttributes}
+          courseLiveFeedbackEnabled={courseLiveFeedbackEnabled}
           disabled={disabled}
           editing
           folderAttributes={folderAttributes}
@@ -122,6 +124,8 @@ AssessmentEditPage.propTypes = {
   conditionAttributes: achievementTypesConditionAttributes,
   // A set of assessment attributes: {:id , :title, etc}.
   initialValues: PropTypes.shape({}),
+
+  courseLiveFeedbackEnabled: PropTypes.bool,
   // Whether to disable the inner form.
   disabled: PropTypes.bool,
   pulsegridUrl: PropTypes.string,

@@ -488,6 +488,21 @@
   "course.admin.CodaveriSettings.enableIsOnlyITSP": {
     "defaultMessage": "Enable ITSP"
   },
+  "course.admin.CodaveriSettings.feedbackWorkflow": {
+    "defaultMessage": "Automatic Post-Submission Comments"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowDescription": {
+    "defaultMessage": "When a submission with programming question is finalised,"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowNone": {
+    "defaultMessage": "Generate no feedback"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowDraft": {
+    "defaultMessage": "Generate feedback as a draft requiring approval from staff"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowPublish": {
+    "defaultMessage": "Publish feedback directly to student"
+  },
   "course.admin.CodaveriSettings.error": {
     "defaultMessage": "An error occurred while updating the codaveri setting."
   },
@@ -496,6 +511,15 @@
   },
   "course.admin.CodaveriSettings.itspEngineDescription": {
     "defaultMessage": "Uses automated program repair technique"
+  },
+  "course.admin.CodaveriSettings.liveFeedbackEnabled": {
+    "defaultMessage": "Enable live programming help generation"
+  },
+  "course.admin.CodaveriSettings.liveFeedbackEnabledDescription": {
+    "defaultMessage": "Individual assessments and programming questions may allow students to get live help."
+  },
+  "course.admin.CodaveriSettings.liveFeedbackDisabledDescription": {
+    "defaultMessage": "Live help is disabled for all assessments and programming questions."
   },
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "Comments settings"
@@ -1070,6 +1094,15 @@
   "course.assessment.AssessmentForm.delayedGradePublicationHint": {
     "defaultMessage": "If enabled, gradings will not be immediately shown to students. To publish all gradings, you may click Publish Grades in the Submissions page."
   },
+  "course.assessment.AssessmentForm.canEnableCodaveriInComponents": {
+    "defaultMessage": "Contact the course manager or owner to enable this feature in Components in the Course Settings."
+  },
+  "course.assessment.AssessmentForm.enableLiveFeedback": {
+    "defaultMessage": "Allow live help generation for programming questions"
+  },
+  "course.assessment.AssessmentForm.enableLiveFeedbackDescription": {
+    "defaultMessage": "Allow students to request live help for programming questions during submission attempts. Can be enabled/disabled separately for each question."
+  },
   "course.assessment.AssessmentForm.description": {
     "defaultMessage": "Description"
   },
@@ -1587,7 +1620,7 @@
     "defaultMessage": "This assessment is autograded. If code evaluation and testing is disabled, this question's submissions will always receive the maximum grade above since there are nothing for the autograder to test and grade."
   },
   "course.assessment.question.programming.automatedFeedback": {
-    "defaultMessage": "Automated Feedback"
+    "defaultMessage": "Get Help"
   },
   "course.assessment.question.programming.buildLog": {
     "defaultMessage": "Package build log"
@@ -1641,10 +1674,10 @@
     "defaultMessage": "Do everything right here in this page. Useful for quick edits (especially exams) or collaborating with other instructors."
   },
   "course.assessment.question.programming.enableLiveFeedback": {
-    "defaultMessage": "Allow live feedback generation"
+    "defaultMessage": "Allow live help generation"
   },
   "course.assessment.question.programming.enableLiveFeedbackDescription": {
-    "defaultMessage": "Allow students to request code feedback during submission attempts. (AI-generated feedback may not always be accurate.)"
+    "defaultMessage": "Allow students to request live programming help during submission attempts. (AI-generated feedback may not always be accurate.)"
   },
   "course.assessment.question.programming.errorWhenSavingQuestion": {
     "defaultMessage": "An error occurred when saving your changes."
@@ -1659,7 +1692,7 @@
     "defaultMessage": "Hold tight, evaluating all submissions with the new package..."
   },
   "course.assessment.question.programming.evaluationLimits": {
-    "defaultMessage": "Evaluation limits"
+    "defaultMessage": "Evaluationlimits"
   },
   "course.assessment.question.programming.evaluationTestCases": {
     "defaultMessage": "Evaluation test cases"
@@ -1672,7 +1705,7 @@
   },
   "course.assessment.question.programming.expected": {
     "defaultMessage": "Expected"
-  },
+  }, 
   "course.assessment.question.programming.expression": {
     "defaultMessage": "Expression"
   },
@@ -1725,7 +1758,7 @@
     "defaultMessage": "Custom Prompt"
   },
   "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
-    "defaultMessage": "Add instructions to guide the generation of live feedback here. If unsure, just leave this blank."
+    "defaultMessage": "Add instructions to guide the generation of live help here. If unsure, just leave this blank."
   },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "Lowest grading priority"
@@ -3352,6 +3385,9 @@
   },
   "course.assessments.index.hasTodo": {
     "defaultMessage": "Has TODO"
+  },
+  "course.assessments.index.liveFeedbackEnabled": {
+    "defaultMessage": "Allow live help generation for programming questions"
   },
   "course.assessments.index.neededFor": {
     "defaultMessage": "Needed for"

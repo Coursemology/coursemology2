@@ -74,6 +74,10 @@ const translations = defineMessages({
     id: 'course.assessments.index.hasTodo',
     defaultMessage: 'Has TODO',
   },
+  liveFeedbackEnabled: {
+    id: 'course.assessments.index.liveFeedbackEnabled',
+    defaultMessage: 'Allow live help generation for programming questions',
+  },
   neededFor: {
     id: 'course.assessments.index.neededFor',
     defaultMessage: 'Needed for',
@@ -1546,16 +1550,30 @@ const translations = defineMessages({
   },
   automatedFeedback: {
     id: 'course.assessment.question.programming.automatedFeedback',
-    defaultMessage: 'Automated Feedback',
+    defaultMessage: 'Get Help',
   },
   enableLiveFeedback: {
     id: 'course.assessment.question.programming.enableLiveFeedback',
-    defaultMessage: 'Allow live feedback generation',
+    defaultMessage: 'Allow live help generation',
+  },
+  liveFeedbackAssessmentAndCourseDisabled: {
+    id: 'course.assessment.question.programming.liveFeedbackAssessmentAndCourseDisabled',
+    defaultMessage:
+      'Contact the course manager or owner to enable this feature in "Codaveri Evaluation and Feedback" in the Course Settings.\n Then, edit this assessment to allow generating live help.',
+  },
+  liveFeedbackAssessmentDisabled: {
+    id: 'course.assessment.question.programming.liveFeedbackAssessmentDisabled',
+    defaultMessage: 'Live help generation is disabled for this assessment.',
+  },
+  liveFeedbackCourseDisabled: {
+    id: 'course.assessment.question.programming.liveFeedbackCourseDisabled',
+    defaultMessage:
+      'Contact the course manager or owner to enable this feature in "Codaveri Evaluation and Feedback" in the Course Settings.',
   },
   enableLiveFeedbackDescription: {
     id: 'course.assessment.question.programming.enableLiveFeedbackDescription',
     defaultMessage:
-      'Allow students to request code feedback during submission attempts. (AI-generated feedback may not always be accurate.)',
+      'Allow students to request live programming help during submission attempts. (AI-generated feedback may not always be accurate.)',
   },
   liveFeedbackCustomPrompt: {
     id: 'course.assessment.question.programming.liveFeedbackCustomPrompt',
@@ -1564,7 +1582,7 @@ const translations = defineMessages({
   liveFeedbackCustomPromptDescription: {
     id: 'course.assessment.question.programming.liveFeedbackCustomPromptDescription',
     defaultMessage:
-      'Add instructions to guide the generation of live feedback here. If unsure, just leave this blank.',
+      'Add instructions to guide the generation of live help here. If unsure, just leave this blank.',
   },
   savingChanges: {
     id: 'course.assessment.question.programming.savingChanges',

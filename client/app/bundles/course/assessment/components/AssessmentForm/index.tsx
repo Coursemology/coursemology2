@@ -12,6 +12,7 @@ import { Grid, InputAdornment, RadioGroup, Typography } from '@mui/material';
 import BetaChip from 'lib/components/core/BetaChip';
 import IconRadio from 'lib/components/core/buttons/IconRadio';
 import ErrorText from 'lib/components/core/ErrorText';
+import ExperimentalChip from 'lib/components/core/ExperimentalChip';
 import InfoLabel from 'lib/components/core/InfoLabel';
 import Section from 'lib/components/core/layouts/Section';
 import Link from 'lib/components/core/Link';
@@ -39,6 +40,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     gamified,
     folderAttributes,
     initialValues,
+    courseLiveFeedbackEnabled,
     modeSwitching,
     onSubmit,
     pulsegridUrl,
@@ -937,6 +939,35 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           />
         </Section>
       )}
+
+      <Section
+        sticksToNavbar
+        title={
+          <>
+            {t(translations.liveFeedback)}
+            <ExperimentalChip className="ml-2" disabled={disabled} />
+          </>
+        }
+      >
+        <Controller
+          control={control}
+          name="live_feedback_enabled"
+          render={({ field, fieldState }): JSX.Element => (
+            <FormCheckboxField
+              description={t(translations.enableLiveFeedbackDescription)}
+              disabled={!courseLiveFeedbackEnabled || disabled}
+              disabledHint={
+                courseLiveFeedbackEnabled
+                  ? undefined
+                  : t(translations.liveFeedbackCourseDisabled)
+              }
+              field={field}
+              fieldState={fieldState}
+              label={t(translations.enableLiveFeedback)}
+            />
+          )}
+        />
+      </Section>
     </form>
   );
 };
