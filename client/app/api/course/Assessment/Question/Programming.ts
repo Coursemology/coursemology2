@@ -1,6 +1,6 @@
 import {
-  ProgrammingFormData,
   ProgrammingPostStatusData,
+  ProgrammingResponseData,
 } from 'types/course/assessment/question/programming';
 
 import { APIResponse } from 'api/types';
@@ -12,11 +12,11 @@ export default class ProgrammingAPI extends BaseAPI {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/question/programming`;
   }
 
-  fetchNew(): APIResponse<ProgrammingFormData> {
+  fetchNew(): APIResponse<ProgrammingResponseData> {
     return this.client.get(`${this.#urlPrefix}/new`);
   }
 
-  fetchEdit(id: number): APIResponse<ProgrammingFormData> {
+  fetchEdit(id: number): APIResponse<ProgrammingResponseData> {
     return this.client.get(`${this.#urlPrefix}/${id}/edit`);
   }
 

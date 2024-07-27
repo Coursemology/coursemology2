@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 json.feedbackWorkflow @settings.feedback_workflow
 json.isOnlyITSP @settings.is_only_itsp
+json.liveFeedbackEnabled @settings.live_feedback_enabled
 
 json.assessmentCategories current_course.assessment_categories do |cat|
   json.id cat.id

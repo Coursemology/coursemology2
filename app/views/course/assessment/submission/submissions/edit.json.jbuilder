@@ -25,6 +25,7 @@ json.assessment do
     json.name format_inline_text(material.name)
   end
   json.isCodaveriEnabled current_course.component_enabled?(Course::CodaveriComponent)
+  json.liveFeedbackEnabled current_course.codaveri_live_feedback_enabled? && @assessment.live_feedback_enabled
 end
 
 current_answer_ids = @submission.current_answers.pluck(:id)

@@ -67,6 +67,7 @@ const styles = {
 
 const SubmissionEditForm = (props) => {
   const {
+    assessment,
     attachments,
     attempting,
     canUpdate,
@@ -556,6 +557,7 @@ const SubmissionEditForm = (props) => {
         {isCodaveriEnabled &&
           question.isCodaveri &&
           question.liveFeedbackEnabled &&
+          assessment.liveFeedbackEnabled &&
           renderGetLiveFeedbackButton(id)}
       </div>
     );
@@ -825,6 +827,7 @@ SubmissionEditForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 
+  assessment: PropTypes.object,
   attachments: PropTypes.arrayOf(attachmentShape),
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
@@ -873,6 +876,7 @@ SubmissionEditForm.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    assessment: state.assessments.submission.assessment,
     attachments: state.assessments.submission.attachments,
     liveFeedback: state.assessments.submission.liveFeedback,
   };

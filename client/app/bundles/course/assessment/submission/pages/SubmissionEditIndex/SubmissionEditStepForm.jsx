@@ -84,6 +84,7 @@ const isLastQuestion = (questionIds, stepIndex) =>
 
 const SubmissionEditStepForm = (props) => {
   const {
+    assessment,
     attachments,
     allConsideredCorrect,
     allowPartialSubmission,
@@ -608,6 +609,8 @@ const SubmissionEditStepForm = (props) => {
             {question.type === questionTypes.Programming &&
               isCodaveriEnabled &&
               question.isCodaveri &&
+              question.liveFeedbackEnabled &&
+              assessment.liveFeedbackEnabled &&
               renderGetLiveFeedbackButton()}
           </div>
         )}
@@ -743,6 +746,7 @@ SubmissionEditStepForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
 
+  assessment: PropTypes.object,
   attachments: PropTypes.arrayOf(attachmentShape),
   submissionTimeLimitAt: PropTypes.number,
   graderView: PropTypes.bool.isRequired,
@@ -784,6 +788,7 @@ SubmissionEditStepForm.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    assessment: state.assessments.submission.assessment,
     attachments: state.assessments.submission.attachments,
     liveFeedback: state.assessments.submission.liveFeedback,
   };

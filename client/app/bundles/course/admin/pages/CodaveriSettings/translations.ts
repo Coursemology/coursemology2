@@ -1,6 +1,20 @@
 import { defineMessages } from 'react-intl';
 
 export default defineMessages({
+  liveFeedbackEnabled: {
+    id: 'course.admin.CodaveriSettings.liveFeedbackEnabled',
+    defaultMessage: 'Enable live programming help generation',
+  },
+  liveFeedbackEnabledDescription: {
+    id: 'course.admin.CodaveriSettings.liveFeedbackEnabledDescription',
+    defaultMessage:
+      'Individual assessments and programming questions may allow students to get live help.',
+  },
+  liveFeedbackDisabledDescription: {
+    id: 'course.admin.CodaveriSettings.liveFeedbackDisabledDescription',
+    defaultMessage:
+      'Live help is disabled for all assessments and programming questions.',
+  },
   codaveriSettings: {
     id: 'course.admin.CodaveriSettings.codaveriSettings',
     defaultMessage: 'Codaveri settings',
@@ -13,7 +27,7 @@ export default defineMessages({
   },
   feedbackWorkflow: {
     id: 'course.admin.CodaveriSettings.feedbackWorkflow',
-    defaultMessage: 'Automatic Feedback Comment',
+    defaultMessage: 'Automatic Post-Submission Comments',
   },
   feedbackWorkflowDescription: {
     id: 'course.admin.CodaveriSettings.feedbackWorkflowDescription',

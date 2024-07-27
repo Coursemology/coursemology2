@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import {
-  ProgrammingFormData,
   ProgrammingPostStatusData,
+  ProgrammingResponseData,
 } from 'types/course/assessment/question/programming';
 
 import CourseAPI from 'api/course';
@@ -11,12 +11,14 @@ const EVALUATION_INTERVAL_MS = 500 as const;
 
 const ProgrammingAPI = CourseAPI.assessment.question.programming;
 
-export const fetchNew = async (): Promise<ProgrammingFormData> => {
+export const fetchNew = async (): Promise<ProgrammingResponseData> => {
   const response = await ProgrammingAPI.fetchNew();
   return response.data;
 };
 
-export const fetchEdit = async (id: number): Promise<ProgrammingFormData> => {
+export const fetchEdit = async (
+  id: number,
+): Promise<ProgrammingResponseData> => {
   const response = await ProgrammingAPI.fetchEdit(id);
   return response.data;
 };

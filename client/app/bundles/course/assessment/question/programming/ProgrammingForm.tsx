@@ -29,6 +29,8 @@ import { watchEvaluation } from './operations';
 interface ProgrammingFormProps {
   with: ProgrammingFormData;
   dirty?: boolean;
+  assessmentLiveFeedbackEnabled: boolean;
+  courseLiveFeedbackEnabled: boolean;
   onSubmit?: (data: ProgrammingFormData) => Promise<ProgrammingPostStatusData>;
   revalidate?: (
     response: ProgrammingPostStatusData,
@@ -146,7 +148,11 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
 
         <PackageFields disabled={submitting} getModeFromId={getModeFromId} />
 
-        <FeedbackFields disabled={submitting} />
+        <FeedbackFields
+          assessmentLiveFeedbackEnabled={props.assessmentLiveFeedbackEnabled}
+          courseLiveFeedbackEnabled={props.courseLiveFeedbackEnabled}
+          disabled={submitting}
+        />
 
         <BuildLog />
       </Form>

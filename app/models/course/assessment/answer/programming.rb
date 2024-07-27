@@ -97,7 +97,9 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     should_retrieve_feedback = question.is_codaveri &&
                                submission.attempting? &&
                                current_answer? &&
-                               question.live_feedback_enabled
+                               question.live_feedback_enabled &&
+                               assessment.live_feedback_enabled &&
+                               assessment.course.codaveri_live_feedback_enabled?
     return unless should_retrieve_feedback
 
     feedback_config = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.default_config.merge(

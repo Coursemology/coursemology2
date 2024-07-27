@@ -104,6 +104,9 @@ if can_observe
   is_all_questions_autogradable = questions.map(&:specific).all?(&:auto_gradable?)
   json.hasUnautogradableQuestions assessment.autograded? && !is_all_questions_autogradable
 
+  json.liveFeedbackEnabled assessment.live_feedback_enabled
+  json.courseLiveFeedbackEnabled current_course.codaveri_live_feedback_enabled?
+
   json.questions question_assessments do |question_assessment|
     json.partial! 'course/question_assessments/question_assessment', question_assessment: question_assessment
   end

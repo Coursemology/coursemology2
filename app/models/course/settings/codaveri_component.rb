@@ -20,6 +20,13 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
     settings.is_only_itsp
   end
 
+  # Returns whether automated live feedback generation is enabled for this course
+  #
+  # @return [false|true] The feedback generation setting in a course
+  def live_feedback_enabled
+    settings.live_feedback_enabled.nil? ? false : settings.live_feedback_enabled
+  end
+
   # Sets the feedback workflow of codaveri feedback component
   #
   # @param [String] title The new ITSP requirement
@@ -34,5 +41,13 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
   def is_only_itsp=(is_only_itsp)
     is_only_itsp = nil if is_only_itsp.nil?
     settings.is_only_itsp = is_only_itsp
+  end
+
+  # Sets the live feedback setting of codaveri component
+  #
+  # @param [boolean] title The new live feedback setting
+  def live_feedback_enabled=(live_feedback_enabled)
+    live_feedback_enabled = true if live_feedback_enabled.nil?
+    settings.live_feedback_enabled = live_feedback_enabled
   end
 end
