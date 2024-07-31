@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
@@ -27,6 +27,8 @@ import {
   exitStudentView,
   fetchSubmission,
   finalise,
+  getEvaluationResult,
+  getJobStatus,
   mark,
   publish,
   purgeSubmissionStore,
@@ -46,7 +48,7 @@ import {
   submitAnswer,
 } from '../../actions/answers';
 import ProgressPanel from '../../components/ProgressPanel';
-import { workflowStates } from '../../constants';
+import actionTypes, { workflowStates } from '../../constants';
 import {
   answerShape,
   assessmentShape,
@@ -66,6 +68,9 @@ import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
 import TimeLimitBanner from './TimeLimitBanner';
 
+const EVALUATE_POLL_INTERVAL_MILLISECONDS = 500;
+const FEEDBACK_POLL_INTERVAL_MILLISECONDS = 2000;
+
 class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
     super(props);
@@ -77,15 +82,29 @@ class VisibleSubmissionEditIndex extends Component {
         : parseInt(stepString, 10) - 1;
 
     this.state = { step };
+    this.evaluatePollerTimer = createRef(null);
+    this.feedbackPollerTimer = createRef(null);
   }
 
   componentDidMount() {
     const { dispatch, match, setSessionId } = this.props;
     dispatch(fetchSubmission(match.params.submissionId, setSessionId));
+
+    this.feedbackPollerTimer.current = setInterval(
+      this.handleLiveFeedbackPolling,
+      FEEDBACK_POLL_INTERVAL_MILLISECONDS,
+    );
+    this.evaluatePollerTimer.current = setInterval(
+      this.handleEvaluationPolling,
+      EVALUATE_POLL_INTERVAL_MILLISECONDS,
+    );
   }
 
   componentWillUnmount() {
     const { dispatch } = this.props;
+
+    clearInterval(this.feedbackPollerTimer.current);
+    clearInterval(this.evaluatePollerTimer.current);
     dispatch(purgeSubmissionStore());
   }
 
@@ -95,6 +114,55 @@ class VisibleSubmissionEditIndex extends Component {
       match: { params },
     } = this.props;
     dispatch(autogradeSubmission(params.submissionId));
+  };
+
+  handleEvaluationPolling = () => {
+    const { answers, questionsFlags, dispatch, submission } = this.props;
+    Object.values(answers.initial).forEach((answer) => {
+      if (
+        questionsFlags[answer.questionId]?.isAutograding &&
+        questionsFlags[answer.questionId]?.jobUrl
+      ) {
+        getJobStatus(questionsFlags[answer.questionId].jobUrl).then(
+          (response) => {
+            switch (response.data.status) {
+              case 'submitted':
+                break;
+              case 'completed':
+                dispatch(
+                  getEvaluationResult(
+                    submission.id,
+                    answer.id,
+                    answer.questionId,
+                  ),
+                );
+                break;
+              case 'errored':
+                dispatch({
+                  type: actionTypes.AUTOGRADE_FAILURE,
+                  answerId: answer.id,
+                  questionId: answer.questionId,
+                });
+                break;
+              default:
+                throw new Error('Unknown job status');
+            }
+          },
+        );
+      }
+    });
+  };
+
+  handleLiveFeedbackPolling = () => {
+    const { questions, liveFeedback } = this.props;
+
+    Object.values(questions).forEach((question) => {
+      const feedbackRequestToken =
+        liveFeedback?.feedbackByQuestion?.[question.id]?.pendingFeedbackToken;
+      if (feedbackRequestToken) {
+        this.onFetchLiveFeedback(question.answerId, question.id);
+      }
+    });
   };
 
   handleMark = () => {
@@ -188,11 +256,8 @@ class VisibleSubmissionEditIndex extends Component {
   };
 
   onSubmitAnswer = (answerId, answer, resetField) => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(submitAnswer(params.submissionId, answerId, answer, resetField));
+    const { dispatch } = this.props;
+    dispatch(submitAnswer(answer.questionId, answerId, answer, resetField));
   };
 
   onReevaluateAnswer = (answerId, questionId) => {
@@ -392,7 +457,6 @@ class VisibleSubmissionEditIndex extends Component {
           isCodaveriEnabled={isCodaveriEnabled}
           isSaving={isSaving}
           maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
-          onFetchLiveFeedback={this.onFetchLiveFeedback}
           onGenerateFeedback={this.onGenerateFeedback}
           onGenerateLiveFeedback={this.onGenerateLiveFeedback}
           onReevaluateAnswer={this.onReevaluateAnswer}
@@ -437,7 +501,6 @@ class VisibleSubmissionEditIndex extends Component {
         isCodaveriEnabled={isCodaveriEnabled}
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
-        onFetchLiveFeedback={this.onFetchLiveFeedback}
         onGenerateFeedback={this.onGenerateFeedback}
         onGenerateLiveFeedback={this.onGenerateLiveFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
