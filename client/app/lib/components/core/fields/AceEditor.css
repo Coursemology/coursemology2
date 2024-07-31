@@ -1,0 +1,7 @@
+.ace_invisible {
+    opacity: 0;
+}
+
+.ace_invisible.ace_invisible_tab {
+    opacity: 1;
+}
