@@ -4,6 +4,8 @@ import { LanguageMode } from 'types/course/assessment/question/programming';
 
 import 'ace-builds/src-noconflict/theme-github';
 
+import './AceEditor.css';
+
 interface EditorProps extends ComponentProps<typeof AceEditor> {
   language: LanguageMode;
   value?: string;
@@ -52,6 +54,7 @@ const EditorField = forwardRef(
           readOnly: disabled,
           useWorker: false,
           fontFamily: DEFAULT_FONT_FAMILY,
+          showInvisibles: true,
         }}
       />
     );

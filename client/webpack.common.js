@@ -112,6 +112,7 @@ module.exports = {
             'node_modules/react-tooltip/dist/react-tooltip.min.css',
           ),
           resolve(__dirname, 'app/lib/components/core/fields/CKEditor.css'),
+          resolve(__dirname, 'app/lib/components/core/fields/AceEditor.css'),
         ],
       },
       {
