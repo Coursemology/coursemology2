@@ -3,6 +3,7 @@ import { dispatch } from 'store';
 import { QuestionType } from 'types/course/assessment/question';
 import {
   AncestorAssessmentStats,
+  QuestionAllAnswerDisplayDetails,
   QuestionAnswerDetails,
 } from 'types/course/statistics/assessmentStatistics';
 
@@ -45,6 +46,15 @@ export const fetchQuestionAnswerDetails = async (
 ): Promise<QuestionAnswerDetails<keyof typeof QuestionType>> => {
   const response =
     await CourseAPI.statistics.answer.fetchQuestionAnswerDetails(answerId);
+
+  return response.data;
+};
+
+export const fetchAllAnswers = async (
+  submissionQuestionId: number,
+): Promise<QuestionAllAnswerDisplayDetails<keyof typeof QuestionType>> => {
+  const response =
+    await CourseAPI.statistics.allAnswer.fetchAllAnswers(submissionQuestionId);
 
   return response.data;
 };

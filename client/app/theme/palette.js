@@ -81,6 +81,14 @@ const palette = {
     [workflowStates.Published]: colors.green[100],
   },
 
+  submissionStatusClassName: {
+    [workflowStates.Unstarted]: 'bg-red-200',
+    [workflowStates.Attempting]: 'bg-yellow-200',
+    [workflowStates.Submitted]: 'bg-grey-200',
+    [workflowStates.Graded]: 'bg-blue-200',
+    [workflowStates.Published]: 'bg-green-200',
+  },
+
   groupRole: {
     [groupRole.Normal]: colors.green[100],
     [groupRole.Manager]: colors.red[100],
