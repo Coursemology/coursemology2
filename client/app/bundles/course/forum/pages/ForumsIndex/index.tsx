@@ -114,6 +114,4 @@ const ForumsIndex: FC = () => {
   );
 };
 
-const handle = translations.header;
-
-export default Object.assign(ForumsIndex, { handle });
+export default ForumsIndex;

@@ -211,6 +211,4 @@ const LeaderboardIndex: FC<Props> = (props) => {
   );
 };
 
-const handle = translations.leaderboard;
-
-export default Object.assign(injectIntl(LeaderboardIndex), { handle });
+export default injectIntl(LeaderboardIndex);
