@@ -1,4 +1,9 @@
-import { ComponentProps, ForwardedRef, forwardRef } from 'react';
+import {
+  ComponentProps,
+  ForwardedRef,
+  forwardRef,
+  MutableRefObject,
+} from 'react';
 import AceEditor from 'react-ace';
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
@@ -40,6 +45,17 @@ const EditorField = forwardRef(
         ref={ref}
         mode={language || 'python'}
         onChange={onChange}
+        onPaste={() => {
+          const editor = (ref as MutableRefObject<AceEditor>)?.current?.editor;
+          if (editor && language === 'python') {
+            // delay this until next tick, so replacement function also affects pasted code
+            setTimeout(() =>
+              editor.replaceAll(' '.repeat(editor.getOption('tabSize') ?? 4), {
+                needle: '\t',
+              }),
+            );
+          }
+        }}
         theme="github"
         value={value}
         width="100%"
