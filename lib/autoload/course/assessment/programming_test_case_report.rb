@@ -246,7 +246,8 @@ class Course::Assessment::ProgrammingTestCaseReport
   #
   # @param [String] report The report XML to parse.
   def initialize(report)
-    @report = Nokogiri::XML::Document.parse(report)
+    report = report.gsub("\n", '&#10;') if report
+    @report = Nokogiri::XML::DocumentFragment.parse(report)
   end
 
   # Gets the set of test suites found in this report.
