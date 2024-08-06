@@ -30,30 +30,11 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   def all_assessments
     @assessments = current_course.assessments.published.includes(tab: :category)
     @all_students = current_course.course_users.students
-    @all_submissions_info = all_submissions_info
 
     fetch_all_assessment_related_statistics_hash
   end
 
   private
-
-  def all_submissions_info
-    @all_submissions_info ||= ActiveRecord::Base.connection.execute("
-      SELECT
-        cas.id, cas.workflow_state, cas.creator_id,
-        cas.created_at, cas.submitted_at, cas.assessment_id,
-        SUM(caa.grade) AS grade
-      FROM course_assessment_submissions cas
-      JOIN course_assessment_answers caa
-      ON cas.id = caa.submission_id
-      WHERE
-        cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
-        AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
-        AND caa.current_answer = TRUE
-      GROUP BY cas.id, cas.workflow_state, cas.creator_id, cas.created_at, cas.submitted_at,
-        cas.assessment_id
-                                                                   ")
-  end
 
   def assessment_info_array
     @assessment_info_array ||= Course::Assessment.published.with_default_reference_time.
