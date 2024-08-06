@@ -234,7 +234,8 @@ class Course::Assessment::Java::JavaProgrammingTestCaseReport <
   # @param [String] report The report XML to parse.
   # rubocop: disable Lint/MissingSuper
   def initialize(report)
-    @report = Nokogiri::XML::Document.parse(report)
+    report = report.gsub("\n", '&#10;') if report
+    @report = Nokogiri::XML::DocumentFragment.parse(report)
   end
   # rubocop: enable Lint/MissingSuper
 
