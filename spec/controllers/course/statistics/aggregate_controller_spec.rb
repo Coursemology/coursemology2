@@ -6,7 +6,7 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
 
   with_tenant(:instance) do
     let(:course) { create(:course, :enrollable) }
-    let(:course_user) { create(:course_user, course: course) }
+    let(:course_user) { create(:course_user, role: :teaching_assistant, course: course) }
 
     describe '#all_staff' do
       subject { get :all_staff, format: :json, params: { course_id: course, user_id: course_user } }
@@ -196,6 +196,7 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
         it 'expects to render all published assessments' do
           expect(subject).to be_successful
           json_result = JSON.parse(response.body)
+
           expect(json_result['assessments'].count).to eq(1)
 
           expect(json_result['assessments'][0]['numAttempted']).to eq(3)

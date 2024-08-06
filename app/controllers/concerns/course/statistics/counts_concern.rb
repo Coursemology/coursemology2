@@ -5,55 +5,84 @@ module Course::Statistics::CountsConcern
   private
 
   def num_attempted_students_hash
-    attempted_submissions = @all_submissions_info.
-                            to_a.
-                            map { |submission| submission['assessment_id'] }
+    attempted_submissions_count = ActiveRecord::Base.connection.execute("
+      SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
+      FROM course_assessment_submissions cas
+      JOIN course_assessment_answers caa
+      ON cas.id = caa.submission_id
+      WHERE
+        cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
+        AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
+        AND caa.current_answer = TRUE
+      GROUP BY cas.assessment_id
+                                                                       ")
 
-    attempted_submissions_count = attempted_submissions.each_with_object(Hash.new(0)) do |assessment_id, counts|
-      counts[assessment_id] += 1
-    end
-
-    attempted_submissions_count.to_h { |assessment_id, count| [assessment_id, count] }
+    attempted_submissions_count.to_h { |assessment| [assessment['id'], assessment['count']] }
   end
 
   def num_submitted_students_hash
-    submitted_submissions = @all_submissions_info.
-                            to_a.
-                            reject { |submission| submission['workflow_state'] == 'attempting' }.
-                            map { |submission| submission['assessment_id'] }
+    submitted_submissions_count = ActiveRecord::Base.connection.execute("
+      SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
+      FROM course_assessment_submissions cas
+      JOIN course_assessment_answers caa
+      ON cas.id = caa.submission_id
+      WHERE
+        cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
+        AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
+        AND cas.workflow_state != 'attempting'
+        AND caa.current_answer = TRUE
+      GROUP BY cas.assessment_id
+                                                                       ")
 
-    submitted_submissions_count = submitted_submissions.each_with_object(Hash.new(0)) do |assessment_id, counts|
-      counts[assessment_id] += 1
-    end
-
-    submitted_submissions_count.to_h { |assessment_id, count| [assessment_id, count] }
+    submitted_submissions_count.to_h { |assessment| [assessment['id'], assessment['count']] }
   end
 
   def num_late_students_hash
     @personal_end_at_hash = personal_end_at_hash(@assessments.pluck(:id), current_course.id)
     @reference_times_hash = reference_times_hash(@assessments.pluck(:id), current_course.id)
+    all_submissions = ActiveRecord::Base.connection.execute("
+      SELECT cu.id AS course_user_id, cas.assessment_id, MAX(cas.submitted_at) as submitted_at
+      FROM course_assessment_submissions cas
+      JOIN course_users cu
+      ON cu.user_id = cas.creator_id
+      WHERE
+        cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
+        AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
+        AND cu.course_id = #{current_course.id}
+      GROUP BY cu.id, cas.assessment_id
+                                                           ")
 
-    @submitted_times = @all_submissions_info.
-                       to_a.
-                       to_h { |s| [[s['creator_id'], s['assessment_id']], s['submitted_at']] }
-
-    late_students_count_in_each_assessment
+    not_late_submission_hash(@assessments, not_late_count(all_submissions))
   end
 
-  def late_students_count_in_each_assessment
+  def not_late_hash(submissions)
     current_time = Time.now
 
-    @assessments.each_with_object({}) do |assessment, counts|
-      counts[assessment.id] = late_submissions_count_for_assessment(assessment, current_time)
+    submissions.map do |s|
+      personal_end_at = @personal_end_at_hash[[s['assessment_id'], s['course_user_id']]]
+      reference_end_at = @reference_times_hash[s['assessment_id']]
+      end_at = personal_end_at || reference_end_at
+
+      if end_at
+        is_not_late = s['submitted_at'].nil? ? end_at >= current_time : s['submitted_at'] <= end_at
+        [[s['assessment_id'], s['course_user_id']], is_not_late]
+      else
+        [[s['assessment_id'], s['course_user_id']], true]
+      end
+    end.compact.to_h
+  end
+
+  def not_late_count(submissions)
+    not_late_hash(submissions).each_with_object(Hash.new(0)) do |value, counts|
+      (assessment_id,), is_not_late = value
+      counts[assessment_id] += 1 if is_not_late
     end
   end
 
-  def late_submissions_count_for_assessment(assessment, current_time)
-    @all_students.count do |student|
-      end_at = @personal_end_at_hash[[assessment.id, student.id]] || @reference_times_hash[assessment.id]
-      submitted_at = @submitted_times[[student.user_id, assessment.id]]
-
-      end_at && (submitted_at.nil? ? end_at < current_time : submitted_at > end_at)
+  def not_late_submission_hash(assessments, not_late_count)
+    assessments.each_with_object({}) do |assessment, counts|
+      num_late_student = not_late_count[assessment.id] ? @all_students.length - not_late_count[assessment.id] : 0
+      counts[assessment.id] = @reference_times_hash[assessment.id] ? num_late_student : 0
     end
   end
 end
