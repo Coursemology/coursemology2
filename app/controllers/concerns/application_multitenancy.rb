@@ -16,7 +16,7 @@ module ApplicationMultitenancy
     instance = Instance.find_tenant_by_host_or_default(tenant_host)
 
     if Rails.env.production? && instance.default? && instance.host.casecmp(tenant_host) != 0
-      raise ActionController::RoutingError, 'Instance Not Found'
+      raise InstanceNotFoundError
     end
 
     instance
