@@ -4,7 +4,6 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   helper Course::Achievement::AchievementsHelper
 
   def new
-    load_source_courses_data
     load_destination_courses_data
     load_items_data
     load_destination_instances_data
@@ -24,18 +23,6 @@ class Course::ObjectDuplicationsController < Course::ComponentController
   end
 
   private
-
-  def load_source_courses_data
-    ActsAsTenant.without_tenant do
-      # Workaround to get Courses where current user is allowed to duplicate contents from
-      # without having to use accessible_by, which can take up to 5 minutes with includes
-      course_copiers = CourseUser.where(user: current_user).
-                       where(role: CourseUser::MANAGER_ROLES.to_a) +
-                       CourseUser.where(user: current_user).
-                       where(role: :observer)
-      @source_courses = Course.includes(:instance).find(course_copiers.map(&:course_id))
-    end
-  end
 
   def load_destination_courses_data
     ActsAsTenant.without_tenant do

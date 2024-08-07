@@ -13,10 +13,7 @@ import PropTypes from 'prop-types';
 
 import { duplicationModes } from 'course/duplication/constants';
 import { fetchObjectsList } from 'course/duplication/operations';
-import {
-  courseListingShape,
-  sourceCourseShape,
-} from 'course/duplication/propTypes';
+import { sourceCourseShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -233,7 +230,6 @@ Duplication.propTypes = {
   currentHost: PropTypes.string.isRequired,
   currentCourseId: PropTypes.number,
   sourceCourse: sourceCourseShape.isRequired,
-  sourceCourses: courseListingShape,
 
   dispatch: PropTypes.func.isRequired,
   intl: PropTypes.object,
@@ -252,7 +248,6 @@ export default Object.assign(
     currentHost: duplication.currentHost,
     currentCourseId: duplication.currentCourseId,
     sourceCourse: duplication.sourceCourse,
-    sourceCourses: duplication.sourceCourses,
   }))(injectIntl(Duplication)),
   { handle },
 );

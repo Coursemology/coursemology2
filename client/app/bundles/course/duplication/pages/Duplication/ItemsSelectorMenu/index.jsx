@@ -46,7 +46,7 @@ const styles = {
 };
 
 class ItemsSelectorMenu extends Component {
-  renderSidebarItem(panelKey, titleKey, count) {
+  renderSidebarItem(panelKey, titleKey, count, className) {
     const { dispatch, enabledComponents } = this.props;
     if (!enabledComponents.includes(panelKey)) {
       return null;
@@ -58,6 +58,7 @@ class ItemsSelectorMenu extends Component {
     return (
       <ListItem
         button
+        className={className}
         onClick={() => dispatch(actions.setItemSelectorPanel(panelKey))}
       >
         <ListItemAvatar>
@@ -105,6 +106,7 @@ class ItemsSelectorMenu extends Component {
               panels.ASSESSMENTS,
               'course_assessments_component',
               assessmentsComponentCount,
+              'items-selector-menu-assessment',
             )}
         {unduplicableObjectTypes.includes('SURVEY')
           ? null
@@ -112,6 +114,7 @@ class ItemsSelectorMenu extends Component {
               panels.SURVEYS,
               'course_survey_component',
               counts[SURVEY],
+              'items-selector-menu-survey',
             )}
         {unduplicableObjectTypes.includes('ACHIEVEMENT')
           ? null
@@ -119,6 +122,7 @@ class ItemsSelectorMenu extends Component {
               panels.ACHIEVEMENTS,
               'course_achievements_component',
               counts[ACHIEVEMENT],
+              'items-selector-menu-achievement',
             )}
         {unduplicableObjectTypes.includes('MATERIAL')
           ? null
@@ -126,6 +130,7 @@ class ItemsSelectorMenu extends Component {
               panels.MATERIALS,
               'course_materials_component',
               counts[FOLDER] + counts[MATERIAL],
+              'items-selector-menu-material',
             )}
         {unduplicableObjectTypes.includes('VIDEO')
           ? null
@@ -133,6 +138,7 @@ class ItemsSelectorMenu extends Component {
               panels.VIDEOS,
               'course_videos_component',
               videosComponentCount,
+              'items-selector-menu-video',
             )}
         <ListItem style={styles.duplicateButton}>
           <DuplicateButton />
