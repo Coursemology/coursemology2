@@ -9,7 +9,6 @@ export default class DuplicationAPI extends BaseCourseAPI {
    *   currentHost: string,
    *   destinationCourses: Array.<courseShape>,
    *   destinationInstances: Array.<instanceShape>,
-   *   sourceCourses: courseListingShape,
    *   sourceCourse: sourceCourseShape,
    *   assessmentComponent: Array.<categoryShape>,
    *   surveyComponent: Array.<surveyShape>,

@@ -42,7 +42,7 @@ RSpec.feature 'Course: Duplication', js: true do
         expect(find_sidebar).to have_text(I18n.t('layouts.duplication.title'))
       end
 
-      context 'when I am a manager in another course' do
+      context 'when I am a manager in one specific course' do
         let(:source_course) { create(:course) }
         let!(:course_user) { create(:course_manager, course: source_course, user: user) }
         let(:assessment_title1) { SecureRandom.hex }
@@ -58,17 +58,14 @@ RSpec.feature 'Course: Duplication', js: true do
         end
 
         scenario 'I can duplicate objects from that course' do
-          visit course_duplication_path(course)
-
-          find('.source-course-dropdown').click
-          find("[role='option']", text: source_course.title).click
+          visit course_duplication_path(source_course)
 
           find("input[value='OBJECT']", visible: false).click
 
           find('.destination-course-dropdown').click
           find("[role='option']", text: course.title).click
 
-          find('.items-selector-menu span span', text: 'Assessments').click
+          find('.items-selector-menu-assessment', text: 'Assessments').click
           find('label', text: assessment_title1).click
           click_on 'Duplicate Items'
           click_on 'Duplicate'
@@ -78,10 +75,7 @@ RSpec.feature 'Course: Duplication', js: true do
         end
 
         scenario 'I can duplicate the whole course' do
-          visit course_duplication_path(course)
-
-          find('.source-course-dropdown').click
-          find("[role='option']", text: source_course.title).click
+          visit course_duplication_path(source_course)
 
           fill_in 'new_title', with: ''
           fill_in 'new_title', with: new_course_title
@@ -89,7 +83,6 @@ RSpec.feature 'Course: Duplication', js: true do
           click_on 'Duplicate Course'
           click_on 'Continue'
 
-          expect(page).not_to have_css('.source-course-dropdown')
           wait_for_job
           duplicated_course = Course.find_by(title: new_course_title)
           expect(duplicated_course).to be_present
