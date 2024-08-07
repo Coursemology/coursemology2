@@ -2,6 +2,9 @@
 # This is named aggregate controller as naming this as course controller leads to name conflict issues
 class Course::Statistics::AggregateController < Course::Statistics::Controller
   before_action :preload_levels, only: [:all_students, :course_performance]
+  include Course::Statistics::TimesConcern
+  include Course::Statistics::GradesConcern
+  include Course::Statistics::CountsConcern
 
   def course_progression
     @assessment_info_array = assessment_info_array
@@ -22,6 +25,13 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   def all_students
     @all_students = course_users.students.ordered_by_experience_points.with_video_statistics
     @service = group_manager_preload_service
+  end
+
+  def all_assessments
+    @assessments = current_course.assessments.published.includes(tab: :category)
+    @all_students = current_course.course_users.students
+
+    fetch_all_assessment_related_statistics_hash
   end
 
   private
@@ -95,6 +105,15 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     SQL
                                   )
     query.map { |u| [u.id, u.correctness] }.to_h
+  end
+
+  def fetch_all_assessment_related_statistics_hash
+    @grades_hash = grade_statistics_hash
+    @max_grades_hash = max_grade_statistics_hash
+    @durations_hash = duration_statistics_hash
+    @num_attempted_students_hash = num_attempted_students_hash
+    @num_submitted_students_hash = num_submitted_students_hash
+    @num_late_students_hash = num_late_students_hash
   end
 
   def course_users
