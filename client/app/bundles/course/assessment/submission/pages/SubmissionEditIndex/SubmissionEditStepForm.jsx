@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { SAVING_STATUS } from 'lib/constants/sharedConstants';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 import SubmissionAnswer from '../../components/answers';
@@ -86,6 +87,7 @@ const SubmissionEditStepForm = (props) => {
   const {
     assessment,
     attachments,
+    answerFlags,
     allConsideredCorrect,
     allowPartialSubmission,
     attempting,
@@ -141,7 +143,7 @@ const SubmissionEditStepForm = (props) => {
     handleSubmit,
     reset,
     resetField,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, dirtyFields },
   } = methods;
   usePrompt(isDirty);
 
@@ -184,13 +186,41 @@ const SubmissionEditStepForm = (props) => {
     };
   });
 
+  const getCurrentlySavingAnswerId = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+
+    return question.answerId;
+  };
+
   const handleNext = () => {
+    const answerId = getCurrentlySavingAnswerId();
+    const isAnswerUnsaved =
+      answerFlags[answerId].savingStatus !== SAVING_STATUS.Saved;
+    const isAnswerDirty = !!dirtyFields[answerId];
+
+    if (isAnswerUnsaved && isAnswerDirty) {
+      handleSubmit((data) => {
+        onSaveDraft({ answerId: data[answerId] }, resetField);
+      })();
+    }
+
     setMaxStep(Math.max(maxStep, stepIndex + 1));
     setStepIndex(stepIndex + 1);
   };
 
   const handleStepClick = (index) => {
+    const answerId = getCurrentlySavingAnswerId();
+    const isAnswerUnsaved =
+      answerFlags[answerId].savingStatus !== SAVING_STATUS.Saved;
+    const isAnswerDirty = !!dirtyFields[answerId];
+
     if (published || skippable || graderView || index <= maxStep) {
+      if (isAnswerUnsaved && isAnswerDirty) {
+        handleSubmit((data) => {
+          onSaveDraft({ answerId: data[answerId] }, resetField);
+        })();
+      }
       setStepIndex(index);
     }
   };
@@ -749,6 +779,7 @@ SubmissionEditStepForm.propTypes = {
   assessment: PropTypes.object,
   attachments: PropTypes.arrayOf(attachmentShape),
   submissionTimeLimitAt: PropTypes.number,
+  answerFlags: PropTypes.object,
   graderView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
   step: PropTypes.number,
@@ -791,6 +822,8 @@ function mapStateToProps(state) {
     assessment: state.assessments.submission.assessment,
     attachments: state.assessments.submission.attachments,
     liveFeedback: state.assessments.submission.liveFeedback,
+    answerFlags:
+      state.assessments.submission.answerFlags.flagsByAnswerId.entities,
   };
 }
 
