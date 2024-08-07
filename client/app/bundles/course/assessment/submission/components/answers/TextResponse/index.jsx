@@ -128,8 +128,8 @@ TextResponse.propTypes = {
   answerId: PropTypes.number.isRequired,
   graderView: PropTypes.bool.isRequired,
   handleUploadTextResponseFiles: PropTypes.func.isRequired,
-  question: questionShape.isRequired,
   numAttachments: PropTypes.number,
+  question: questionShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
   saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,
 };

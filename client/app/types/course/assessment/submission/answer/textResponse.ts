@@ -8,7 +8,7 @@ import {
 
 // BE Data Type
 
-interface TextResponseFieldData extends AnswerFieldBaseData {
+export interface TextResponseFieldData extends AnswerFieldBaseData {
   answer_text: string;
 }
 
@@ -23,7 +23,7 @@ export interface TextResponseAnswerData extends AnswerBaseData {
   latestAnswer?: TextResponseAnswerData;
 }
 
-interface FileUploadFieldData extends AnswerFieldBaseData {}
+export interface FileUploadFieldData extends AnswerFieldBaseData {}
 
 export interface FileUploadAnswerData extends AnswerBaseData {
   questionType: QuestionType.FileUpload;
