@@ -98,6 +98,4 @@ const AnnouncementsIndex = (): JSX.Element => {
   );
 };
 
-const handle = translations.header;
-
-export default Object.assign(AnnouncementsIndex, { handle });
+export default AnnouncementsIndex;

@@ -109,6 +109,7 @@ import ConfirmEmailPage from 'bundles/users/pages/ConfirmEmailPage';
 import UserShow from 'bundles/users/pages/UserShow';
 import { achievementHandle } from 'course/achievement/handles';
 import StoriesSettings from 'course/admin/pages/StoriesSettings';
+import { announcementsHandle } from 'course/announcements/handles';
 import assessmentAttemptLoader from 'course/assessment/attemptLoader';
 import {
   assessmentHandle,
@@ -117,7 +118,13 @@ import {
 } from 'course/assessment/handles';
 import QuestionFormOutlet from 'course/assessment/question/components/QuestionFormOutlet';
 import { CourseContainer } from 'course/container';
-import { forumHandle, forumTopicHandle } from 'course/forum/handles';
+import { commentHandle } from 'course/discussion/topics/handles';
+import {
+  forumHandle,
+  forumNameHandle,
+  forumTopicHandle,
+} from 'course/forum/handles';
+import { leaderboardHandle } from 'course/leaderboard/handles';
 import { folderHandle } from 'course/material/folders/handles';
 import materialLoader from 'course/material/materialLoader';
 import { videoWatchHistoryHandle } from 'course/statistics/handles';
@@ -180,17 +187,17 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'announcements',
-          handle: AnnouncementsIndex.handle,
+          handle: announcementsHandle,
           element: <AnnouncementsIndex />,
         },
         {
           path: 'comments',
-          handle: CommentIndex.handle,
+          handle: commentHandle,
           element: <CommentIndex />,
         },
         {
           path: 'leaderboard',
-          handle: LeaderboardIndex.handle,
+          handle: leaderboardHandle,
           element: <LeaderboardIndex />,
         },
         {
@@ -518,7 +525,7 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'forums',
-          handle: ForumsIndex.handle,
+          handle: forumHandle,
           children: [
             {
               index: true,
@@ -526,7 +533,7 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             },
             {
               path: ':forumId',
-              handle: forumHandle,
+              handle: forumNameHandle,
               children: [
                 {
                   index: true,

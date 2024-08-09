@@ -218,6 +218,4 @@ const CommentIndex: FC<Props> = (props) => {
   );
 };
 
-const handle = translations.comments;
-
-export default Object.assign(injectIntl(CommentIndex), { handle });
+export default injectIntl(CommentIndex);
