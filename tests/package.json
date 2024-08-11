@@ -6,7 +6,7 @@
   "devDependencies": {
     "@playwright/test": "^1.46.0",
     "@types/node": "^20.14.12",
-    "nyc": "^15.1.0"
+    "nyc": "^17.0.0"
   },
   "scripts": {
     "prepare": "npx playwright install --with-deps",
