@@ -84,6 +84,7 @@ export interface SubmissionQuestionBaseData extends QuestionData {
   submissionQuestionId: number;
   topicId: number;
   answerId?: number;
+  isCodaveri?: boolean;
   // Derived within redux reducer
   attemptsLeft?: number;
   viewHistory?: boolean;
