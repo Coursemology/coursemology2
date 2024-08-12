@@ -7,6 +7,9 @@ import actions, { questionTypes } from '../../constants';
 const initialState = {
   questions: {},
   expMultiplier: 1,
+  exp: 0,
+  basePoints: 0,
+  maximumGrade: 0,
 };
 
 const sum = (array) => array.filter((i) => i).reduce((acc, i) => acc + i, 0);
