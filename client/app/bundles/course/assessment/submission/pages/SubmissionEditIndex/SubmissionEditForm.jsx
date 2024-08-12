@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Element, scroller } from 'react-scroll';
 import {
   Box,
   Button,
@@ -139,6 +138,8 @@ const SubmissionEditForm = (props) => {
     reset(initialValues);
   }, [initialValues]);
 
+  const scrollToRef = useRef(null);
+
   useEffect(() => {
     initialStep = props.step;
 
@@ -148,8 +149,10 @@ const SubmissionEditForm = (props) => {
         initialStep >= questionIds.length - 1
           ? questionIds.length - 1
           : initialStep;
+      if (scrollToRef.current) {
+        setImmediate(() => scrollToRef.current.scrollIntoView());
+      }
       setStepIndex(initialStep);
-      scroller.scrollTo(`step${initialStep}`, { offset: -60 });
     }
   }, []);
 
@@ -572,47 +575,50 @@ const SubmissionEditForm = (props) => {
         const allErrors = errors[answerId]?.errorTypes ?? [];
 
         return (
-          <Element key={id} name={`step${index}`}>
-            <Paper className="mb-5 p-6" variant="outlined">
-              <SubmissionAnswer
-                {...{
-                  readOnly: !attempting,
-                  answerId,
-                  allErrors,
-                  question,
-                  questionType: question.type,
-                  historyQuestions,
-                  graderView,
-                  showMcqMrqSolution,
-                }}
-              />
-              {!viewHistory &&
-                attempting &&
-                question.type === questionTypes.Programming &&
-                renderProgrammingQuestionActions(id)}
-              {question.type === questionTypes.Programming &&
-                !viewHistory &&
-                renderExplanationPanel(id)}
-              {!viewHistory && renderAutogradingErrorPanel(id)}
-              <TestCaseView questionId={question.id} />
-              {!viewHistory &&
-                !attempting &&
-                graderView &&
-                question.type === questionTypes.Programming &&
-                renderReevaluateButton(id)}
-              {!viewHistory && renderQuestionGrading(id)}
+          <Paper
+            key={id}
+            ref={stepIndex === index ? scrollToRef : undefined}
+            className="mb-5 p-6"
+            variant="outlined"
+          >
+            <SubmissionAnswer
+              {...{
+                readOnly: !attempting,
+                answerId,
+                allErrors,
+                question,
+                questionType: question.type,
+                historyQuestions,
+                graderView,
+                showMcqMrqSolution,
+              }}
+            />
+            {!viewHistory &&
+              attempting &&
+              question.type === questionTypes.Programming &&
+              renderProgrammingQuestionActions(id)}
+            {question.type === questionTypes.Programming &&
+              !viewHistory &&
+              renderExplanationPanel(id)}
+            {!viewHistory && renderAutogradingErrorPanel(id)}
+            <TestCaseView questionId={question.id} />
+            {!viewHistory &&
+              !attempting &&
+              graderView &&
+              question.type === questionTypes.Programming &&
+              renderReevaluateButton(id)}
+            {!viewHistory && renderQuestionGrading(id)}
 
-              <Suspense
-                fallback={
-                  <Typography style={styles.loadingComment} variant="body2">
-                    {intl.formatMessage(translations.loadingComment)}
-                  </Typography>
-                }
-              >
-                <Comments topic={topic} />
-              </Suspense>
-            </Paper>
-          </Element>
+            <Suspense
+              fallback={
+                <Typography style={styles.loadingComment} variant="body2">
+                  {intl.formatMessage(translations.loadingComment)}
+                </Typography>
+              }
+            >
+              <Comments topic={topic} />
+            </Suspense>
+          </Paper>
         );
       })}
     </div>
