@@ -1,6 +1,7 @@
 import { AppState } from 'store';
 
-import { HistoryAnswer, HistoryQuestion, HistoryState } from '../types';
+import { AnswerHistory, QuestionHistory } from '../reducers/history/types';
+import { HistoryState } from '../types';
 
 const getLocalState = (state: AppState): HistoryState => {
   return state.assessments.submission.history;
@@ -8,12 +9,12 @@ const getLocalState = (state: AppState): HistoryState => {
 
 export const getHistoryAnswers = (
   state: AppState,
-): Record<number, HistoryAnswer> => {
+): Record<number, AnswerHistory> => {
   return getLocalState(state).answers;
 };
 
 export const getHistoryQuestions = (
   state: AppState,
-): Record<number, HistoryQuestion> => {
+): Record<number, QuestionHistory> => {
   return getLocalState(state).questions;
 };

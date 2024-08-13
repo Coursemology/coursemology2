@@ -3,13 +3,20 @@ import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import { SubmissionQuestionBaseData } from 'types/course/assessment/submission/question/types';
 
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
+import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateGrade } from '../actions/answers';
+import { saveGrade, updateGrade } from '../actions/answers';
 import { workflowStates } from '../constants';
 import { QuestionGradeData } from '../reducers/grading/types';
+import {
+  getExperiencePoints,
+  getQuestionWithGrades,
+} from '../selectors/grading';
+import { getQuestions } from '../selectors/questions';
+import { getSubmission } from '../selectors/submissions';
 import translations from '../translations';
 
 const GRADE_STEP = 1;
@@ -25,47 +32,57 @@ const isValidDecimal = (value: string): boolean => {
 };
 
 interface QuestionGradeProps {
-  editable: boolean;
   questionId: number;
-  handleSaveGrade: (id: number) => void;
   isSaving: boolean;
 }
 
 const QuestionGrade: FC<QuestionGradeProps> = (props) => {
-  const { editable, questionId, handleSaveGrade, isSaving } = props;
+  const { questionId, isSaving } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [isFirstRendering, setIsFirstRendering] = useState(true);
 
-  const saveGrade = (id: number): void => {
-    handleSaveGrade(id);
-    setIsFirstRendering(false);
-  };
+  const submissionId = getSubmissionId();
 
-  const submission = useAppSelector((state) => state.assessments.submission);
-  const { submittedAt, bonusEndAt, bonusPoints, workflowState } =
-    submission.submission;
+  const submission = useAppSelector(getSubmission);
+  const questions = useAppSelector(getQuestions);
+  const questionWithGrades = useAppSelector(getQuestionWithGrades);
+  const expPoints = useAppSelector(getExperiencePoints);
+
+  const { submittedAt, bonusEndAt, graderView, bonusPoints, workflowState } =
+    submission;
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
-  const question = submission.questions[
-    questionId
-  ] as SubmissionQuestionBaseData;
-  const grading = submission.grading.questions[questionId] as QuestionGradeData;
+  const question = questions[questionId] as SubmissionQuestionBaseData;
+  const grading = questionWithGrades[questionId] as QuestionGradeData;
   const maxGrade = question.maximumGrade;
+
+  const attempting = workflowState === workflowStates.Attempting;
+  const published = workflowState === workflowStates.Published;
+
+  const editable = !attempting && graderView;
 
   const isNotGradedAndNotPublished =
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
 
+  const handleSaveGrade = (id: number): void => {
+    dispatch(
+      saveGrade(submissionId, questionWithGrades[id], id, expPoints, published),
+    );
+    setIsFirstRendering(false);
+  };
+
   const debouncedSaveGrade = useDebounce(
-    saveGrade,
+    handleSaveGrade,
     FIELD_LONG_DEBOUNCE_DELAY_MS,
     [],
   );
 
   if (!grading) return null;
+
   const dirty = (grading.originalGrade ?? 0) !== (grading.grade ?? 0);
 
   let savingIndicator: React.ReactNode | null = null;
@@ -188,18 +205,20 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   );
 
   return (
-    <Paper
-      className={`transition-none flex items-center space-x-5 px-5 py-4 ring-2 ${
-        dirty ? 'ring-2 ring-warning border-transparent' : 'ring-transparent'
-      }`}
-      variant="outlined"
-    >
-      <Typography color="text.secondary" variant="body1">
-        {t(translations.grade)}
-      </Typography>
+    (editable || published) && (
+      <Paper
+        className={`transition-none flex items-center space-x-5 px-5 py-4 ring-2 ${
+          dirty ? 'ring-2 ring-warning border-transparent' : 'ring-transparent'
+        }`}
+        variant="outlined"
+      >
+        <Typography color="text.secondary" variant="body1">
+          {t(translations.grade)}
+        </Typography>
 
-      {editable ? renderQuestionGradeField() : renderQuestionGrade()}
-    </Paper>
+        {editable ? renderQuestionGradeField() : renderQuestionGrade()}
+      </Paper>
+    )
   );
 };
 

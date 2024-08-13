@@ -1,3 +1,5 @@
+import { AnswerData } from 'types/course/assessment/submission/answer';
+
 export interface QuestionHistory {
   answerIds: number[];
   isLoading: boolean;
@@ -5,3 +7,8 @@ export interface QuestionHistory {
   pastAnswersLoaded: boolean;
   selected?: number[];
 }
+
+export type AnswerHistory = AnswerData & {
+  isDraftAnswer: boolean;
+  createdAt: Date;
+};
