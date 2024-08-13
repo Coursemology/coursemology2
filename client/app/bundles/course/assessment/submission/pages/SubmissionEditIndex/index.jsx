@@ -22,29 +22,13 @@ import { getUrlParameter } from 'lib/helpers/url-helpers';
 
 import assessmentsTranslations from '../../../translations';
 import {
-  autogradeSubmission,
   enterStudentView,
   exitStudentView,
   fetchSubmission,
   finalise,
-  mark,
-  publish,
   purgeSubmissionStore,
-  unmark,
   unsubmit,
 } from '../../actions';
-import {
-  fetchLiveFeedback,
-  generateFeedback,
-  generateLiveFeedback,
-  initializeLiveFeedback,
-  reevaluateAnswer,
-  resetAnswer,
-  saveAllAnswers,
-  saveAllGrades,
-  saveGrade,
-  submitAnswer,
-} from '../../actions/answers';
 import ProgressPanel from '../../components/ProgressPanel';
 import { workflowStates } from '../../constants';
 import {
@@ -61,9 +45,8 @@ import {
 import translations from '../../translations';
 
 import BlockedSubmission from './BlockedSubmission';
-import SubmissionEditForm from './SubmissionEditForm';
-import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
+import SubmissionForm from './SubmissionForm';
 import TimeLimitBanner from './TimeLimitBanner';
 
 class VisibleSubmissionEditIndex extends Component {
@@ -89,94 +72,12 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(purgeSubmissionStore());
   }
 
-  handleAutogradeSubmission = () => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(autogradeSubmission(params.submissionId));
-  };
-
-  handleMark = () => {
-    const {
-      dispatch,
-      match: { params },
-      grading,
-      exp,
-    } = this.props;
-    dispatch(mark(params.submissionId, Object.values(grading), exp));
-  };
-
-  handlePublish = () => {
-    const {
-      dispatch,
-      match: { params },
-      grading,
-      exp,
-    } = this.props;
-    dispatch(publish(params.submissionId, Object.values(grading), exp));
-  };
-
-  handleSaveAllGrades = () => {
-    const {
-      dispatch,
-      match: { params },
-      grading,
-      exp,
-      submission: { workflowState },
-    } = this.props;
-    const published = workflowState === workflowStates.Published;
-    dispatch(
-      saveAllGrades(
-        params.submissionId,
-        Object.values(grading),
-        exp,
-        published,
-      ),
-    );
-  };
-
-  handleSaveGrade = (id) => {
-    const {
-      dispatch,
-      match: { params },
-      grading,
-      exp,
-      submission: { workflowState },
-    } = this.props;
-    const published = workflowState === workflowStates.Published;
-    dispatch(saveGrade(params.submissionId, grading[id], id, exp, published));
-  };
-
-  handleUnmark = () => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(unmark(params.submissionId));
-  };
-
   handleUnsubmit = () => {
     const {
       dispatch,
       match: { params },
     } = this.props;
     dispatch(unsubmit(params.submissionId));
-  };
-
-  onReset = (answerId, setValue) => {
-    const {
-      answers,
-      dispatch,
-      match: { params },
-    } = this.props;
-    const questionId = answers.initial[answerId].questionId;
-    dispatch(resetAnswer(params.submissionId, answerId, questionId, setValue));
-  };
-
-  onSaveDraft = (data, resetField) => {
-    const { dispatch } = this.props;
-    dispatch(saveAllAnswers(data, resetField));
   };
 
   onSubmit = (data) => {
@@ -186,102 +87,6 @@ class VisibleSubmissionEditIndex extends Component {
     } = this.props;
     dispatch(finalise(params.submissionId, data));
   };
-
-  onSubmitAnswer = (answerId, answer, resetField) => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(submitAnswer(params.submissionId, answerId, answer, resetField));
-  };
-
-  onReevaluateAnswer = (answerId, questionId) => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(reevaluateAnswer(params.submissionId, answerId, questionId));
-  };
-
-  onFetchLiveFeedback = (answerId, questionId) => {
-    const {
-      intl,
-      dispatch,
-      liveFeedback,
-      assessment: { questionIds },
-    } = this.props;
-
-    const feedbackToken =
-      liveFeedback?.feedbackByQuestion?.[questionId].pendingFeedbackToken;
-    const questionIndex = questionIds.findIndex((id) => id === questionId) + 1;
-    const successMessage = intl.formatMessage(
-      translations.liveFeedbackSuccess,
-      { questionIndex },
-    );
-    const noFeedbackMessage = intl.formatMessage(
-      translations.liveFeedbackNoneGenerated,
-      { questionIndex },
-    );
-    dispatch(
-      fetchLiveFeedback({
-        answerId,
-        questionId,
-        feedbackUrl: liveFeedback?.feedbackUrl,
-        feedbackToken,
-        successMessage,
-        noFeedbackMessage,
-      }),
-    );
-  };
-
-  onGenerateFeedback = (answerId, questionId) => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(generateFeedback(params.submissionId, answerId, questionId));
-  };
-
-  onGenerateLiveFeedback = (answerId, questionId) => {
-    const {
-      dispatch,
-      intl,
-      assessment: { questionIds },
-      match: { params },
-    } = this.props;
-    const questionIndex = questionIds.findIndex((id) => id === questionId) + 1;
-    const successMessage = intl.formatMessage(
-      translations.liveFeedbackSuccess,
-      { questionIndex },
-    );
-    const noFeedbackMessage = intl.formatMessage(
-      translations.liveFeedbackNoneGenerated,
-      { questionIndex },
-    );
-
-    dispatch(initializeLiveFeedback(questionId));
-    dispatch(
-      generateLiveFeedback({
-        submissionId: params.submissionId,
-        answerId,
-        questionId,
-        successMessage,
-        noFeedbackMessage,
-      }),
-    );
-  };
-
-  allConsideredCorrect() {
-    const { explanations, questions } = this.props;
-    if (Object.keys(explanations).length !== Object.keys(questions).length) {
-      return false;
-    }
-
-    const numIncorrect = Object.keys(explanations).filter(
-      (qid) => !explanations[qid] || !explanations[qid].correct,
-    ).length;
-    return numIncorrect === 0;
-  }
 
   renderTimeLimitBanner() {
     const { assessment, submission, submissionTimeLimitAt } = this.props;
@@ -333,29 +138,8 @@ class VisibleSubmissionEditIndex extends Component {
   renderContent() {
     const { step } = this.state;
     const {
-      answers,
-      assessment: {
-        autograded,
-        delayedGradePublication,
-        tabbedView,
-        skippable,
-        questionIds,
-        passwordProtected,
-        allowPartialSubmission,
-        showMcqAnswer,
-        showMcqMrqSolution,
-        isCodaveriEnabled,
-      },
-      codaveriFeedbackStatus,
-      submissionTimeLimitAt,
-      submission: { graderView, canUpdate, maxStep, workflowState },
-      explanations,
-      grading,
+      submission: { graderView, canUpdate, workflowState },
       questions,
-      historyQuestions,
-      questionsFlags,
-      topics,
-      isAutograding,
       isSaving,
     } = this.props;
 
@@ -375,89 +159,7 @@ class VisibleSubmissionEditIndex extends Component {
       );
     }
 
-    if (autograded) {
-      return (
-        <SubmissionEditStepForm
-          allConsideredCorrect={this.allConsideredCorrect()}
-          allowPartialSubmission={allowPartialSubmission}
-          attempting={workflowState === workflowStates.Attempting}
-          codaveriFeedbackStatus={codaveriFeedbackStatus}
-          explanations={explanations}
-          graderView={graderView}
-          handleSaveAllGrades={this.handleSaveAllGrades}
-          handleSaveGrade={this.handleSaveGrade}
-          handleUnsubmit={this.handleUnsubmit}
-          historyQuestions={historyQuestions}
-          initialValues={answers.initial}
-          isCodaveriEnabled={isCodaveriEnabled}
-          isSaving={isSaving}
-          maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
-          onFetchLiveFeedback={this.onFetchLiveFeedback}
-          onGenerateFeedback={this.onGenerateFeedback}
-          onGenerateLiveFeedback={this.onGenerateLiveFeedback}
-          onReevaluateAnswer={this.onReevaluateAnswer}
-          onReset={this.onReset}
-          onSaveDraft={this.onSaveDraft}
-          onSubmit={this.onSubmit}
-          onSubmitAnswer={this.onSubmitAnswer}
-          published={workflowState === workflowStates.Published}
-          questionIds={questionIds}
-          questions={questions}
-          questionsFlags={questionsFlags}
-          showMcqAnswer={showMcqAnswer}
-          showMcqMrqSolution={showMcqMrqSolution}
-          skippable={skippable}
-          step={step}
-          submissionTimeLimitAt={submissionTimeLimitAt}
-          submitted={workflowState === workflowStates.Submitted}
-          topics={topics}
-        />
-      );
-    }
-    return (
-      <SubmissionEditForm
-        attempting={workflowState === workflowStates.Attempting}
-        canUpdate={canUpdate}
-        codaveriFeedbackStatus={codaveriFeedbackStatus}
-        delayedGradePublication={delayedGradePublication}
-        explanations={explanations}
-        graded={workflowState === workflowStates.Graded}
-        graderView={graderView}
-        grading={grading}
-        handleAutogradeSubmission={this.handleAutogradeSubmission}
-        handleMark={this.handleMark}
-        handlePublish={this.handlePublish}
-        handleSaveAllGrades={this.handleSaveAllGrades}
-        handleSaveGrade={this.handleSaveGrade}
-        handleUnmark={this.handleUnmark}
-        handleUnsubmit={this.handleUnsubmit}
-        historyQuestions={historyQuestions}
-        initialValues={answers.initial}
-        isAutograding={isAutograding}
-        isCodaveriEnabled={isCodaveriEnabled}
-        isSaving={isSaving}
-        maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
-        onFetchLiveFeedback={this.onFetchLiveFeedback}
-        onGenerateFeedback={this.onGenerateFeedback}
-        onGenerateLiveFeedback={this.onGenerateLiveFeedback}
-        onReevaluateAnswer={this.onReevaluateAnswer}
-        onReset={this.onReset}
-        onSaveDraft={this.onSaveDraft}
-        onSubmit={this.onSubmit}
-        onSubmitAnswer={this.onSubmitAnswer}
-        passwordProtected={passwordProtected}
-        published={workflowState === workflowStates.Published}
-        questionIds={questionIds}
-        questions={questions}
-        questionsFlags={questionsFlags}
-        showMcqMrqSolution={showMcqMrqSolution}
-        step={step}
-        submissionTimeLimitAt={submissionTimeLimitAt}
-        submitted={workflowState === workflowStates.Submitted}
-        tabbedView={tabbedView}
-        topics={topics}
-      />
-    );
+    return <SubmissionForm step={step} />;
   }
 
   renderProgress() {

@@ -39,14 +39,6 @@ export const questionShape = PropTypes.shape({
   viewHistory: PropTypes.bool,
 });
 
-export const historyQuestionShape = PropTypes.shape({
-  loaded: PropTypes.bool,
-  isLoading: PropTypes.bool.isRequired,
-  answerIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selected: PropTypes.arrayOf(PropTypes.number),
-  pastAnswersLoaded: PropTypes.bool.isRequired,
-});
-
 export const fileShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   filename: PropTypes.string.isRequired,
@@ -101,11 +93,6 @@ export const answerShape = PropTypes.shape({
   option_ids: PropTypes.arrayOf(PropTypes.number),
   isDraftAnswer: PropTypes.bool,
   createdAt: PropTypes.string,
-});
-
-export const explanationShape = PropTypes.shape({
-  correct: PropTypes.bool,
-  explanations: PropTypes.arrayOf(PropTypes.string),
 });
 
 export const attachmentShape = PropTypes.shape({
@@ -170,13 +157,6 @@ export const annotationShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   line: PropTypes.number.isRequired,
   postIds: PropTypes.arrayOf(PropTypes.number),
-});
-
-export const questionFlagsShape = PropTypes.shape({
-  jobError: PropTypes.bool.isRequired,
-  jobErrorMessage: PropTypes.string,
-  isAutograding: PropTypes.bool.isRequired,
-  isResetting: PropTypes.bool.isRequired,
 });
 
 export const scribbleShape = PropTypes.shape({
