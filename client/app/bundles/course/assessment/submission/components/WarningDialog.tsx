@@ -15,7 +15,7 @@ import { remainingTimeDisplay } from '../pages/SubmissionEditIndex/TimeLimitBann
 import translations from '../translations';
 
 interface Props {
-  submissionTimeLimitAt: number;
+  submissionTimeLimitAt: number | null;
   isExamMode: boolean;
   isTimedMode: boolean;
   isAttempting: boolean;

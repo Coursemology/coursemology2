@@ -321,13 +321,17 @@ class VisibleGradingPanel extends Component {
   }
 
   render() {
+    const { submission } = this.props;
+    const attempting = submission.workflowState === workflowStates.Attempting;
     return (
-      <div style={styles.panel}>
-        <Card>
-          <CardContent>{this.renderSubmissionTable()}</CardContent>
-          <CardContent>{this.renderGradeTable()}</CardContent>
-        </Card>
-      </div>
+      !attempting && (
+        <div style={styles.panel}>
+          <Card>
+            <CardContent>{this.renderSubmissionTable()}</CardContent>
+            <CardContent>{this.renderGradeTable()}</CardContent>
+          </Card>
+        </div>
+      )
     );
   }
 }

@@ -4,6 +4,7 @@ import { SubmissionQuestionData } from 'types/course/assessment/submission/quest
 import { WorkflowState } from 'types/course/assessment/submission/submission';
 
 import { Attachment } from './components/answers/types';
+import { AnswerHistory, QuestionHistory } from './reducers/history/types';
 
 type FeedbackLineState = 'pending' | 'resolved' | 'dismissed';
 
@@ -170,9 +171,10 @@ export interface HistoryQuestion {
   isLoading: boolean;
   answerIds: number[];
   selected: number[];
+  loaded: boolean;
 }
 
 export interface HistoryState {
-  answers: Record<number, HistoryAnswer>;
-  questions: Record<number, HistoryQuestion>;
+  answers: Record<number, AnswerHistory>;
+  questions: Record<number, QuestionHistory>;
 }
