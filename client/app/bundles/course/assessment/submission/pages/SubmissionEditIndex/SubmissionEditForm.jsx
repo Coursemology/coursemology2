@@ -26,7 +26,11 @@ import usePrompt from 'lib/hooks/router/usePrompt';
 import SubmissionAnswer from '../../components/answers';
 import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
 import WarningDialog from '../../components/WarningDialog';
-import { formNames, questionTypes } from '../../constants';
+import {
+  formNames,
+  POLL_INTERVAL_MILLISECONDS,
+  questionTypes,
+} from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
 import QuestionGrade from '../../containers/QuestionGrade';
 import TestCaseView from '../../containers/TestCaseView';
@@ -165,7 +169,6 @@ const SubmissionEditForm = (props) => {
     }
   }, [submissionTimeLimitAt]);
 
-  const POLL_INTERVAL_MILLISECONDS = 2000;
   const pollerRef = useRef(null);
   const pollAllFeedback = () => {
     questionIds.forEach((id) => {
