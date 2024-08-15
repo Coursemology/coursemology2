@@ -171,7 +171,7 @@ GEM
     childprocess (5.0.0)
     codecov (0.6.0)
       simplecov (>= 0.15, < 0.22)
-    concurrent-ruby (1.3.3)
+    concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     consistency_fail (0.3.7)
     coursemology-polyglot (0.3.8)
@@ -519,7 +519,7 @@ GEM
     should_not (1.1.0)
     shoulda-matchers (6.2.0)
       activesupport (>= 5.2.0)
-    sidekiq (7.3.0)
+    sidekiq (7.3.1)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       logger
