@@ -1,9 +1,4 @@
-import {
-  ComponentProps,
-  ForwardedRef,
-  forwardRef,
-  MutableRefObject,
-} from 'react';
+import { ComponentProps, ForwardedRef, forwardRef } from 'react';
 import AceEditor from 'react-ace';
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
@@ -40,22 +35,11 @@ const EditorField = forwardRef(
 
     return (
       <AceEditor
+        ref={ref}
         // Short-circuit this because during build time, `mode` can be `undefined` and
         // `AceEditor` will request for `/webpack/mode-mode.js`, which doesn't exist.
-        ref={ref}
         mode={language || 'python'}
         onChange={onChange}
-        onPaste={() => {
-          const editor = (ref as MutableRefObject<AceEditor>)?.current?.editor;
-          if (editor && language === 'python') {
-            // delay this until next tick, so replacement function also affects pasted code
-            setTimeout(() =>
-              editor.replaceAll(' '.repeat(editor.getOption('tabSize') ?? 4), {
-                needle: '\t',
-              }),
-            );
-          }
-        }}
         theme="github"
         value={value}
         width="100%"
@@ -63,6 +47,16 @@ const EditorField = forwardRef(
         editorProps={{
           ...otherProps.editorProps,
           $blockScrolling: true,
+        }}
+        onLoad={(editor) => {
+          if (language === 'python')
+            editor.onPaste = (originalText, event: ClipboardEvent): void => {
+              event.preventDefault();
+
+              const spaces = ' '.repeat(editor.getOption('tabSize') ?? 4);
+              const text = originalText.replaceAll('\t', spaces);
+              editor.commands.exec('paste', editor, { text, event });
+            };
         }}
         setOptions={{
           ...otherProps.setOptions,
@@ -76,6 +70,7 @@ const EditorField = forwardRef(
     );
   },
 );
+
 EditorField.displayName = 'EditorField';
 
 export default EditorField;
