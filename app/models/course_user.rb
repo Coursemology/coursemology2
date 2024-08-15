@@ -50,6 +50,8 @@ class CourseUser < ApplicationRecord
   has_many :groups, through: :group_users, class_name: 'Course::Group', source: :group
   has_many :personal_times, class_name: 'Course::PersonalTime', inverse_of: :course_user, dependent: :destroy
   belongs_to :reference_timeline, class_name: 'Course::ReferenceTimeline', inverse_of: :course_users, optional: true
+  has_many :live_feedback_code, class_name: 'Course::Assessment::LiveFeedbackCode',
+                                inverse_of: :course_user, dependent: :destroy
 
   validate :validate_reference_timeline_belongs_to_course
 

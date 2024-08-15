@@ -72,6 +72,8 @@ class Course::Assessment < ApplicationRecord
                                          inverse_of: :assessment, dependent: :destroy
   has_one :duplication_traceable, class_name: 'DuplicationTraceable::Assessment',
                                   inverse_of: :assessment, dependent: :destroy
+  has_many :live_feedback_code, class_name: 'Course::Assessment::LiveFeedbackCode',
+                                inverse_of: :assessment, dependent: :destroy
 
   validate :tab_in_same_course
   validate :selected_test_type_for_grading
