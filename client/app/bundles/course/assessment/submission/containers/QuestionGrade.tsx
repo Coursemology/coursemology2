@@ -44,12 +44,12 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
 
   const [isFirstRendering, setIsFirstRendering] = useState(true);
 
-  const submissionId = getSubmissionId();
-
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
   const questionWithGrades = useAppSelector(getQuestionWithGrades);
   const expPoints = useAppSelector(getExperiencePoints);
+
+  const submissionId = getSubmissionId();
 
   const { submittedAt, bonusEndAt, graderView, bonusPoints, workflowState } =
     submission;
@@ -68,9 +68,9 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
 
-  const handleSaveGrade = (id: number): void => {
+  const handleSaveGrade = (): void => {
     dispatch(
-      saveGrade(submissionId, questionWithGrades[id], id, expPoints, published),
+      saveGrade(submissionId, grading, questionId, expPoints, published),
     );
     setIsFirstRendering(false);
   };
@@ -152,7 +152,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           onChange={(e): void => {
             processValue(e.target.value, true);
             if (isNotGradedAndNotPublished) {
-              debouncedSaveGrade(questionId);
+              debouncedSaveGrade();
             }
           }}
           onKeyDown={(e): void => {
@@ -165,7 +165,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
               stepGrade(-GRADE_STEP);
             }
             if (isNotGradedAndNotPublished) {
-              debouncedSaveGrade(questionId);
+              debouncedSaveGrade();
             }
           }}
           placeholder={grading.originalGrade?.toString() ?? ''}

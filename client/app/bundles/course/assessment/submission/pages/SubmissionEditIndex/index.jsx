@@ -25,22 +25,15 @@ import {
   enterStudentView,
   exitStudentView,
   fetchSubmission,
-  finalise,
   purgeSubmissionStore,
-  unsubmit,
 } from '../../actions';
 import ProgressPanel from '../../components/ProgressPanel';
 import { workflowStates } from '../../constants';
 import {
-  answerShape,
   assessmentShape,
-  explanationShape,
   gradingShape,
-  historyQuestionShape,
-  questionFlagsShape,
   questionShape,
   submissionShape,
-  topicShape,
 } from '../../propTypes';
 import translations from '../../translations';
 
@@ -71,22 +64,6 @@ class VisibleSubmissionEditIndex extends Component {
     const { dispatch } = this.props;
     dispatch(purgeSubmissionStore());
   }
-
-  handleUnsubmit = () => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(unsubmit(params.submissionId));
-  };
-
-  onSubmit = (data) => {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(finalise(params.submissionId, data));
-  };
 
   renderTimeLimitBanner() {
     const { assessment, submission, submissionTimeLimitAt } = this.props;
@@ -137,29 +114,13 @@ class VisibleSubmissionEditIndex extends Component {
 
   renderContent() {
     const { step } = this.state;
-    const {
-      submission: { graderView, canUpdate, workflowState },
-      questions,
-      isSaving,
-    } = this.props;
+    const { questions } = this.props;
 
-    if (Object.values(questions).length === 0) {
-      return (
-        <SubmissionEmptyForm
-          attempting={workflowState === workflowStates.Attempting}
-          canUpdate={canUpdate}
-          graderView={graderView}
-          handleSaveAllGrades={this.handleSaveAllGrade}
-          handleUnsubmit={this.handleUnsubmit}
-          isSaving={isSaving}
-          onSubmit={this.onSubmit}
-          published={workflowState === workflowStates.Published}
-          submitted={workflowState === workflowStates.Submitted}
-        />
-      );
-    }
-
-    return <SubmissionForm step={step} />;
+    return Object.values(questions).length === 0 ? (
+      <SubmissionEmptyForm />
+    ) : (
+      <SubmissionForm step={step} />
+    );
   }
 
   renderProgress() {
@@ -222,26 +183,17 @@ VisibleSubmissionEditIndex.propTypes = {
       submissionId: PropTypes.string,
     }),
   }),
-  answers: PropTypes.object,
   assessment: assessmentShape,
-  codaveriFeedbackStatus: PropTypes.object,
   submissionTimeLimitAt: PropTypes.number,
-  exp: PropTypes.number,
-  explanations: PropTypes.objectOf(explanationShape),
-  liveFeedback: PropTypes.object,
-  grading: gradingShape.isRequired,
-  questions: PropTypes.objectOf(questionShape),
-  historyAnswers: PropTypes.objectOf(answerShape),
-  historyQuestions: PropTypes.objectOf(historyQuestionShape),
   intl: PropTypes.object.isRequired,
-  questionsFlags: PropTypes.objectOf(questionFlagsShape),
   submission: submissionShape,
-  topics: PropTypes.objectOf(topicShape),
-  isAutograding: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   isSubmissionBlocked: PropTypes.bool,
   setSessionId: PropTypes.func,
+  questions: PropTypes.objectOf(questionShape),
+  grading: gradingShape.isRequired,
+  exp: PropTypes.number,
 };
 
 function mapStateToProps({ assessments: { submission } }) {
@@ -256,22 +208,13 @@ function mapStateToProps({ assessments: { submission } }) {
   return {
     assessment: submission.assessment,
     submissionTimeLimitAt,
-    exp: submission.grading.exp,
-    explanations: submission.explanations,
-    answers: submission.answers,
-    codaveriFeedbackStatus: submission.codaveriFeedbackStatus,
-    grading: submission.grading.questions,
     submission: submission.submission,
-    liveFeedback: submission.liveFeedback,
-    questions: submission.questions,
-    historyAnswers: submission.history.answers,
-    historyQuestions: submission.history.questions,
-    questionsFlags: submission.questionsFlags,
-    isAutograding: submission.submissionFlags.isAutograding,
-    topics: submission.topics,
     isLoading: submission.submissionFlags.isLoading,
     isSaving: submission.submissionFlags.isSaving,
     isSubmissionBlocked: submission.submissionFlags.isSubmissionBlocked,
+    questions: submission.questions,
+    grading: submission.grading.questions,
+    exp: submission.grading.exp,
   };
 }
 
