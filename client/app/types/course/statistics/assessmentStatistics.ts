@@ -12,6 +12,7 @@ interface AssessmentInfo {
 interface MainAssessmentInfo extends AssessmentInfo {
   isAutograded: boolean;
   questionCount: number;
+  isLiveFeedbackEnabled: boolean;
 }
 
 interface AncestorAssessmentInfo extends AssessmentInfo {}
@@ -77,3 +78,10 @@ export interface AncestorAssessmentStats {
 }
 
 export interface AssessmentStatisticsState extends MainAssessmentStats {}
+
+export interface AssessmentLiveFeedbackStatistics {
+  courseUser: StudentInfo;
+  groups: { name: string }[];
+  workflowState?: WorkflowState;
+  liveFeedbackCount: number[]; // Will already be ordered by question
+}
