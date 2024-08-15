@@ -53,7 +53,7 @@ const MultipleChoice = (props: McqAnswerProps): JSX.Element => {
   return (
     <MultipleChoiceAnswer
       key={`question_${question.id}`}
-      answerId={answerId}
+      answerId={answerId!}
       graderView={graderView}
       question={question}
       readOnly={readOnly}
@@ -75,7 +75,7 @@ const MultipleResponse = (props: MrqAnswerProps): JSX.Element => {
   return (
     <MultipleResponseAnswer
       key={`question_${question.id}`}
-      answerId={answerId}
+      answerId={answerId!}
       graderView={graderView}
       question={question}
       readOnly={readOnly}
@@ -91,7 +91,7 @@ const Programming = (props: ProgrammingAnswerProps): JSX.Element => {
   return (
     <ProgrammingAnswer
       key={`question_${question.id}`}
-      answerId={answerId}
+      answerId={answerId!}
       question={question}
       readOnly={readOnly}
       saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
@@ -111,7 +111,7 @@ const TextResponse = (props: TextResponseAnswerProps): JSX.Element => {
   return (
     <TextResponseAnswer
       key={`question_${question.id}`}
-      answerId={answerId}
+      answerId={answerId!}
       graderView={graderView}
       handleUploadTextResponseFiles={handleUploadTextResponseFiles}
       question={question}
@@ -126,7 +126,7 @@ const FileUpload = (props: FileUploadAnswerProps): JSX.Element => {
   return (
     <FileUploadAnswer
       key={`question_${question.id}`}
-      answerId={answerId}
+      answerId={answerId!}
       handleUploadTextResponseFiles={handleUploadTextResponseFiles}
       question={question}
       readOnly={readOnly}
@@ -136,7 +136,7 @@ const FileUpload = (props: FileUploadAnswerProps): JSX.Element => {
 
 const Scribing = (props: ScribingAnswerProps): JSX.Element => {
   const { question, answerId } = props;
-  return <ScribingView key={`question_${question.id}`} answerId={answerId} />;
+  return <ScribingView key={`question_${question.id}`} answerId={answerId!} />;
 };
 
 const VoiceResponse = (props: VoiceResponseAnswerProps): JSX.Element => {
@@ -145,7 +145,7 @@ const VoiceResponse = (props: VoiceResponseAnswerProps): JSX.Element => {
   return (
     <VoiceResponseAnswer
       key={`question_${question.id}`}
-      answerId={answerId}
+      answerId={answerId!}
       question={question}
       readOnly={readOnly}
       saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
@@ -161,7 +161,7 @@ const ForumPostResponse = (
   return (
     <ForumPostResponseAnswer
       key={`question_${question.id}`}
-      answerId={answerId}
+      answerId={answerId!}
       question={question}
       readOnly={readOnly}
       saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}

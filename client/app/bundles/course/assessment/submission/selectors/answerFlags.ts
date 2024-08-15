@@ -14,9 +14,9 @@ const answerFlagsSelector =
 
 export const getFlagForAnswerId = (
   state: AppState,
-  answerId: number,
+  answerId: number | null,
 ): AnswerFlagData | undefined => {
-  return answerFlagsSelector.selectById(state, answerId);
+  return answerId ? answerFlagsSelector.selectById(state, answerId) : undefined;
 };
 
 export const getIsSavingAnswer = (

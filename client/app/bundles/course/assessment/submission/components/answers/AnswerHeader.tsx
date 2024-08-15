@@ -74,7 +74,7 @@ const HistoryToggle: FC<HistoryToggleProps> = (props) => {
 };
 
 interface AnswerHeaderProps {
-  answerId: number;
+  answerId: number | null;
   historyQuestions: Record<number, QuestionHistory>;
   question: SubmissionQuestionBaseData;
 }
@@ -87,7 +87,7 @@ const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
   const {
     formState: { dirtyFields },
   } = useFormContext();
-  const isAnswerDirty = !!dirtyFields[answerId];
+  const isAnswerDirty = answerId ? !!dirtyFields[answerId] : false;
 
   // to mitigate the issue when, during saving, user modify the answer and hence
   // the saving status will be None for a while, then Saved (ongoing Saving is finished),
