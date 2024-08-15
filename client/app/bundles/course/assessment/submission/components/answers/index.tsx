@@ -21,7 +21,7 @@ import useErrorTranslation from '../../pages/SubmissionEditIndex/useErrorTransla
 import { ErrorType } from '../../pages/SubmissionEditIndex/validations/types';
 
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
-  answerId: number;
+  answerId: number | null;
   graderView: boolean;
   allErrors: ErrorType[];
   historyQuestions: Record<number, QuestionHistory>;

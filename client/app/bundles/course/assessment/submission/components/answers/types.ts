@@ -2,7 +2,7 @@ import { QuestionType } from 'types/course/assessment/question';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 interface AnswerCommonProps<T extends keyof typeof QuestionType> {
-  answerId: number;
+  answerId: number | null;
   question: SubmissionQuestionData<T>;
   readOnly: boolean;
   saveAnswerAndUpdateClientVersion: (answerId: number) => void;
