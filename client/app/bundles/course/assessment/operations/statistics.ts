@@ -1,6 +1,9 @@
 import { AxiosError } from 'axios';
 import { dispatch } from 'store';
-import { AncestorAssessmentStats } from 'types/course/statistics/assessmentStatistics';
+import {
+  AncestorAssessmentStats,
+  AssessmentLiveFeedbackStatistics,
+} from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 
@@ -33,5 +36,15 @@ export const fetchAncestorStatistics = async (
   const response =
     await CourseAPI.statistics.assessment.fetchAncestorStatistics(ancestorId);
 
+  return response.data;
+};
+
+export const fetchLiveFeedbackStatistics = async (
+  assessmentId: number,
+): Promise<AssessmentLiveFeedbackStatistics[]> => {
+  const response =
+    await CourseAPI.statistics.assessment.fetchLiveFeedbackStatistics(
+      assessmentId,
+    );
   return response.data;
 };
