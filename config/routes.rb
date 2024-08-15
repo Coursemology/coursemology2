@@ -435,6 +435,7 @@ Rails.application.routes.draw do
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
         get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
         get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
+        get 'assessment/:id/live_feedback_statistics' => 'assessments#live_feedback_statistics'
       end
 
       scope module: :video do

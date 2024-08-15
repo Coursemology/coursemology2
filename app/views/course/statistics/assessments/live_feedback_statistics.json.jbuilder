@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+json.array! @student_live_feedback_hash.each do |course_user, (submission, live_feedback_count)|
+  json.partial! 'course_user', course_user: course_user
+  if submission.nil?
+    json.workflowState 'unstarted'
+  else
+    json.workflowState submission.workflow_state
+  end
+
+  json.groups @group_names_hash[course_user.id] do |name|
+    json.name name
+  end
+  json.liveFeedbackCount live_feedback_count
+end

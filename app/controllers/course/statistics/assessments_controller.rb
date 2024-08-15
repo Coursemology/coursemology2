@@ -3,6 +3,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   include Course::UsersHelper
   include Course::Statistics::SubmissionsConcern
   include Course::Statistics::UsersConcern
+  include Course::Statistics::LiveFeedbackConcern
 
   def main_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
@@ -35,6 +36,24 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     @student_submissions_hash = fetch_hash_for_ancestor_assessment(submissions, @all_students).compact
   end
 
+  def live_feedback_statistics
+    @assessment = Course::Assessment.where(id: assessment_params[:id]).
+                  calculated(:question_count).
+                  preload(course: :course_users).first
+    submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
+                  preload(creator: :course_users)
+    live_feedback_codes = Course::Assessment::LiveFeedbackCode.where(assessment_id: assessment_params[:id])
+
+    @course_users_hash = preload_course_users_hash(@assessment.course)
+
+    load_course_user_students_info
+    create_question_order_hash
+
+    @student_live_feedback_hash = fetch_hash_for_live_feedback_assessment(submissions,
+                                                                          live_feedback_codes,
+                                                                          @all_students)
+  end
+
   private
 
   def assessment_params
@@ -59,14 +78,18 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def create_question_related_hash
-    @question_order_hash = @assessment.question_assessments.to_h do |q|
-      [q.question_id, q.weight]
-    end
+    create_question_order_hash
     @question_maximum_grade_hash = @assessment.questions.to_h do |q|
       [q.id, q.maximum_grade]
     end
     @question_auto_gradable_status_hash = @assessment.questions.to_h do |q|
       [q.id, q.auto_gradable?]
+    end
+  end
+
+  def create_question_order_hash
+    @question_order_hash = @assessment.question_assessments.to_h do |q|
+      [q.question_id, q.weight]
     end
   end
 end
