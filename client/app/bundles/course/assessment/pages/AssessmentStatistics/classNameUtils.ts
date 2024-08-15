@@ -1,7 +1,7 @@
+import { green } from 'theme/colors';
 import { AttemptInfo } from 'types/course/statistics/assessmentStatistics';
 
-// lower grade means obtaining the grade less than half the maximum possible grade
-const lowerGradeBackgroundColorClassName = {
+const redBackgroundColorClassName = {
   0: 'bg-red-50',
   100: 'bg-red-100',
   200: 'bg-red-200',
@@ -10,8 +10,7 @@ const lowerGradeBackgroundColorClassName = {
   500: 'bg-red-500',
 };
 
-// higher grade means obtaining the grade at least half the maximum possible grade
-const higherGradeBackgroundColorClassName = {
+const greenBackgroundColorClassName = {
   0: 'bg-green-50',
   100: 'bg-green-100',
   200: 'bg-green-200',
@@ -20,15 +19,21 @@ const higherGradeBackgroundColorClassName = {
   500: 'bg-green-500',
 };
 
-// calculate the gradient of the color in each grade cell
-// 1. we compute the distance between the grade and the mid-grade (half the maximum)
+// 1. we compute the distance between the value and the halfMaxValue
 // 2. then, we compute the fraction of it -> range becomes [0,1]
-// 3. then we convert it into range [0,3] so that the shades will become [100, 200, 300]
-const calculateColorGradientLevel = (
-  grade: number,
-  halfMaxGrade: number,
+// 3. then we convert it into range [0,5] so that the shades will become [100, 200, 300, 400, 500]
+const calculateTwoSidedColorGradientLevel = (
+  value: number,
+  halfMaxValue: number,
 ): number => {
-  return Math.round((Math.abs(grade - halfMaxGrade) / halfMaxGrade) * 5) * 100;
+  return Math.round((Math.abs(value - halfMaxValue) / halfMaxValue) * 5) * 100;
+};
+
+const calculateOneSidedColorGradientLevel = (
+  value: number,
+  maxValue: number,
+): number => {
+  return Math.round((value / maxValue) * 5) * 100;
 };
 
 // for marks per question cell, the difference in color means the following:
@@ -38,10 +43,13 @@ export const getClassNameForMarkCell = (
   grade: number,
   maxGrade: number,
 ): string => {
-  const gradientLevel = calculateColorGradientLevel(grade, maxGrade / 2);
+  const gradientLevel = calculateTwoSidedColorGradientLevel(
+    grade,
+    maxGrade / 2,
+  );
   return grade >= maxGrade / 2
-    ? `${higherGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`
-    : `${lowerGradeBackgroundColorClassName[gradientLevel]} p-[1rem]`;
+    ? `${greenBackgroundColorClassName[gradientLevel]} p-[1rem]`
+    : `${redBackgroundColorClassName[gradientLevel]} p-[1rem]`;
 };
 
 // for attempt count cell, the difference in color means the following:
@@ -56,4 +64,12 @@ export const getClassNameForAttemptCountCell = (
   }
 
   return attempt.correct ? 'bg-green-300 p-[1rem]' : 'bg-red-300 p-[1rem]';
+};
+
+export const getClassnameForLiveFeedbackCell = (
+  count: number,
+  maxCount: number,
+): string => {
+  const gradientLevel = calculateOneSidedColorGradientLevel(count, maxCount);
+  return `${redBackgroundColorClassName[gradientLevel]} p-[1rem]`;
 };
