@@ -50,7 +50,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
     {
       persona: 'novice',
       categories: [
-        'syntax',
         'functionality'
       ],
       revealLevel: 'solution',
@@ -72,7 +71,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   # @param [Course::Assessment::Answer] answer The answer to be graded.
   # @return [Course::Assessment::Answer] The graded answer. Note that this answer is not persisted
   #   yet.
-  def construct_feedback_object # rubocop:disable Metrics/AbcSize
+  def construct_feedback_object
     return unless @question.codaveri_id
 
     @answer_object[:problemId] = @question.codaveri_id
