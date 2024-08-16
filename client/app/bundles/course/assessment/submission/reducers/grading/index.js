@@ -14,7 +14,7 @@ const initialState = {
 
 const sum = (array) => array.filter((i) => i).reduce((acc, i) => acc + i, 0);
 
-const computeExp = (
+export const computeExp = (
   questions,
   maximumGrade,
   basePoints,
