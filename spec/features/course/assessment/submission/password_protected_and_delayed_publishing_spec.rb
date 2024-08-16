@@ -84,6 +84,8 @@ RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
         # Grade the submission with empty answer grade
         expect(page).to have_button('Submit for Publishing', disabled: true)
         find_field(class: 'grade').set(0)
+        wait_for_autosave
+
         find_field(class: 'exp').set(50)
 
         click_button('Save')
