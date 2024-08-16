@@ -10,9 +10,12 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { saveGrade, updateGrade } from '../actions/answers';
 import { workflowStates } from '../constants';
+import { computeExp } from '../reducers/grading';
 import { QuestionGradeData } from '../reducers/grading/types';
 import {
-  getExperiencePoints,
+  getBasePoints,
+  getExpMultiplier,
+  getMaximumGrade,
   getQuestionWithGrades,
 } from '../selectors/grading';
 import { getQuestions } from '../selectors/questions';
@@ -47,7 +50,6 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
   const questionWithGrades = useAppSelector(getQuestionWithGrades);
-  const expPoints = useAppSelector(getExperiencePoints);
 
   const submissionId = getSubmissionId();
 
@@ -59,6 +61,10 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const grading = questionWithGrades[questionId] as QuestionGradeData;
   const maxGrade = question.maximumGrade;
 
+  const basePoints = useAppSelector(getBasePoints);
+  const expMultiplier = useAppSelector(getExpMultiplier);
+  const maximumGrade = useAppSelector(getMaximumGrade);
+
   const attempting = workflowState === workflowStates.Attempting;
   const published = workflowState === workflowStates.Published;
 
@@ -68,9 +74,32 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
 
-  const handleSaveGrade = (): void => {
+  const handleSaveGrade = (newGrade: string | number | null): void => {
+    const newQuestionWithGrades = {
+      ...questionWithGrades,
+      [questionId]: {
+        ...questionWithGrades[questionId],
+        grade: newGrade,
+        autofilled: false,
+      },
+    };
+
+    const newExpPoints = computeExp(
+      newQuestionWithGrades,
+      maximumGrade,
+      basePoints,
+      expMultiplier,
+      bonusAwarded,
+    );
+
     dispatch(
-      saveGrade(submissionId, grading, questionId, expPoints, published),
+      saveGrade(
+        submissionId,
+        newQuestionWithGrades[questionId],
+        questionId,
+        newExpPoints,
+        published,
+      ),
     );
     setIsFirstRendering(false);
   };
@@ -110,35 +139,49 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     dispatch(updateGrade(id, grade, bonusAwarded));
   };
 
-  const processValue = (value: string, drafting: boolean = false): void => {
+  const updatedGrade = (
+    value: string,
+    drafting: boolean = false,
+  ): string | number | null => {
     if (value.trim() === '') {
-      return handleUpdateGrade(questionId, null);
+      return null;
     }
 
     if (drafting && !isValidDecimal(value)) {
-      return undefined;
+      return null;
     }
 
     const parsedValue = parseFloat(value);
 
     if (!drafting && (Number.isNaN(parsedValue) || parsedValue < 0)) {
-      return handleUpdateGrade(questionId, null);
+      return null;
     }
 
     if (parsedValue >= maxGrade) {
-      return handleUpdateGrade(questionId, maxGrade);
+      return maxGrade;
     }
 
-    return handleUpdateGrade(questionId, drafting ? value : parsedValue);
+    return drafting ? value : parsedValue;
   };
 
-  const stepGrade = (delta: number): void => {
+  const processValue = (value: string, drafting: boolean = false): void => {
+    if (drafting && !isValidDecimal(value)) {
+      return undefined;
+    }
+
+    return handleUpdateGrade(questionId, updatedGrade(value, drafting));
+  };
+
+  const newGradeAfterStep = (delta: number): number => {
     const parsedValue =
       typeof grading.grade === 'string'
         ? parseFloat(grading.grade)
         : grading.grade ?? 0;
-    const newGrade = Math.max(Math.min(parsedValue + delta, maxGrade), 0);
-    return handleUpdateGrade(questionId, newGrade);
+    return Math.max(Math.min(parsedValue + delta, maxGrade), 0);
+  };
+
+  const stepGrade = (delta: number): void => {
+    return handleUpdateGrade(questionId, newGradeAfterStep(delta));
   };
 
   const renderQuestionGradeField = (): JSX.Element => (
@@ -152,20 +195,23 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           onChange={(e): void => {
             processValue(e.target.value, true);
             if (isNotGradedAndNotPublished) {
-              debouncedSaveGrade();
+              debouncedSaveGrade(updatedGrade(e.target.value, true));
             }
           }}
           onKeyDown={(e): void => {
             if (e.key === 'ArrowUp') {
               e.preventDefault();
               stepGrade(GRADE_STEP);
+              if (isNotGradedAndNotPublished) {
+                debouncedSaveGrade(newGradeAfterStep(GRADE_STEP));
+              }
             }
             if (e.key === 'ArrowDown') {
               e.preventDefault();
               stepGrade(-GRADE_STEP);
-            }
-            if (isNotGradedAndNotPublished) {
-              debouncedSaveGrade();
+              if (isNotGradedAndNotPublished) {
+                debouncedSaveGrade(newGradeAfterStep(-GRADE_STEP));
+              }
             }
           }}
           placeholder={grading.originalGrade?.toString() ?? ''}
