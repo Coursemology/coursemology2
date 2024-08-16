@@ -69,15 +69,13 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   # @param [Course::Assessment::Answer] answer The answer to be graded.
   # @return [Course::Assessment::Answer] The graded answer. Note that this answer is not persisted
   #   yet.
-  def construct_feedback_object # rubocop:disable Metrics/AbcSize
+  def construct_feedback_object
     return unless @question.codaveri_id
 
     @answer_object[:problemId] = @question.codaveri_id
 
     @answer_object[:languageVersion][:language] = @question.polyglot_language_name
     @answer_object[:languageVersion][:version] = @question.polyglot_language_version
-
-    # @answer_object[:is_only_itsp] = true if @course.codaveri_itsp_enabled?
 
     @answer_files.each do |file|
       file_template = default_codaveri_student_file_template
