@@ -42,7 +42,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   preload(course: :course_users).first
     submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
                   preload(creator: :course_users)
-    live_feedback_codes = Course::Assessment::LiveFeedbackCode.where(assessment_id: assessment_params[:id])
+    assessment_live_feedbacks = Course::Assessment::LiveFeedback.where(assessment_id: assessment_params[:id])
 
     @course_users_hash = preload_course_users_hash(@assessment.course)
 
@@ -50,7 +50,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     create_question_order_hash
 
     @student_live_feedback_hash = fetch_hash_for_live_feedback_assessment(submissions,
-                                                                          live_feedback_codes,
+                                                                          assessment_live_feedbacks,
                                                                           @all_students)
   end
 

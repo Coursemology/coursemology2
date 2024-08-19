@@ -111,8 +111,14 @@ const LiveHelpStatisticsTable: FC<Props> = (props) => {
         .sort((a, b) => a.courseUser.name.localeCompare(b.courseUser.name))
         .sort(
           (a, b) =>
-            b.liveFeedbackCount.reduce((sum, count) => sum + (count || 0), 0) -
-            a.liveFeedbackCount.reduce((sum, count) => sum + (count || 0), 0),
+            (b.liveFeedbackCount?.reduce(
+              (sum, count) => sum + (typeof count === 'number' ? count : 0),
+              0,
+            ) ?? 0) -
+            (a.liveFeedbackCount?.reduce(
+              (sum, count) => sum + (typeof count === 'number' ? count : 0),
+              0,
+            ) ?? 0),
         )
         .sort(
           (a, b) =>
@@ -161,13 +167,9 @@ const LiveHelpStatisticsTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.liveFeedbackCount?.[index] === 'number' ? (
-            renderNonNullAttemptCountCell(datum.liveFeedbackCount?.[index])
-          ) : (
-            <div className="bg-gray-300 p-[1rem]">
-              <Box>-</Box>
-            </div>
-          );
+          return typeof datum.liveFeedbackCount?.[index] === 'number'
+            ? renderNonNullAttemptCountCell(datum.liveFeedbackCount?.[index])
+            : null;
         },
         sortable: true,
         csvDownloadable: true,
@@ -196,7 +198,7 @@ const LiveHelpStatisticsTable: FC<Props> = (props) => {
     cell: (datum): ReactNode => {
       const totalFeedbackCount = datum.liveFeedbackCount
         ? datum.liveFeedbackCount.reduce((sum, count) => sum + (count || 0), 0)
-        : 0;
+        : null;
       return (
         <div className="p-[1rem]">
           <Box>{totalFeedbackCount}</Box>

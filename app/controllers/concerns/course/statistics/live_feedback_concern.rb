@@ -6,10 +6,10 @@ module Course::Statistics::LiveFeedbackConcern
     students.to_h { |student| [student, nil] }
   end
 
-  def fetch_hash_for_live_feedback_assessment(submissions, live_feedback_codes, students)
+  def fetch_hash_for_live_feedback_assessment(submissions, assessment_live_feedbacks, students)
     student_hash = initialize_student_hash(students)
 
-    populate_hash(submissions, student_hash, live_feedback_codes)
+    populate_hash(submissions, student_hash, assessment_live_feedbacks)
     student_hash
   end
 

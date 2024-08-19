@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::SubmissionsController < \
+class Course::Assessment::Submission::SubmissionsController <
   Course::Assessment::Submission::Controller
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
   include Signals::EmissionConcern
@@ -102,7 +102,40 @@ class Course::Assessment::Submission::SubmissionsController < \
     response_status, response_body = @answer.generate_live_feedback
     response_body['feedbackUrl'] = ENV.fetch('CODAVERI_URL')
 
+    course_user = CourseUser.find_by(course_id: @assessment.course_id, user_id: @submission.creator_id)
+    live_feedback = Course::Assessment::LiveFeedback.create_with_codes(
+      @submission.assessment_id,
+      @answer.question_id,
+      course_user.id,
+      response_body['transactionId'],
+      @answer.actable.files
+    )
+
+    if response_status == 200
+      params[:live_feedback_id] = live_feedback.id
+      params[:feedback_files] = response_body['data']['feedbackFiles']
+      save_live_feedback
+    end
+
+    response_body['liveFeedbackId'] = live_feedback.id
     render json: response_body, status: response_status
+  end
+
+  def save_live_feedback
+    live_feedback = Course::Assessment::LiveFeedback.find_by(id: params[:live_feedback_id])
+    return head :bad_request if live_feedback.nil?
+
+    feedback_files = params[:feedback_files]
+    feedback_files.each do |file|
+      filename = file[:path]
+      file[:feedbackLines].each do |feedback_line|
+        Course::Assessment::LiveFeedbackComment.create(
+          code_id: live_feedback.code.find_by(filename: filename).id,
+          line_number: feedback_line[:linenum],
+          comment: feedback_line[:feedback]
+        )
+      end
+    end
   end
 
   # Reload the current answer or reset it, depending on parameters.

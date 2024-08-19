@@ -132,6 +132,16 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     });
   }
 
+  saveLiveFeedback(submissionId, liveFeedbackId, feedbackFiles) {
+    return this.client.post(
+      `${this.#urlPrefix}/${submissionId}/save_live_feedback`,
+      {
+        live_feedback_id: liveFeedbackId,
+        feedback_files: feedbackFiles,
+      },
+    );
+  }
+
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
     const url = `${this.#urlPrefix}/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
     return this.client.post(url, params);

@@ -209,8 +209,11 @@ class VisibleSubmissionEditIndex extends Component {
       dispatch,
       liveFeedback,
       assessment: { questionIds },
+      match: { params },
     } = this.props;
 
+    const liveFeedbackId =
+      liveFeedback?.feedbackByQuestion?.[questionId].liveFeedbackId;
     const feedbackToken =
       liveFeedback?.feedbackByQuestion?.[questionId].pendingFeedbackToken;
     const questionIndex = questionIds.findIndex((id) => id === questionId) + 1;
@@ -224,9 +227,11 @@ class VisibleSubmissionEditIndex extends Component {
     );
     dispatch(
       fetchLiveFeedback({
+        submissionId: params.submissionId,
         answerId,
         questionId,
         feedbackUrl: liveFeedback?.feedbackUrl,
+        liveFeedbackId,
         feedbackToken,
         successMessage,
         noFeedbackMessage,
