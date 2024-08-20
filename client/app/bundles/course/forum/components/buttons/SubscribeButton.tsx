@@ -34,13 +34,13 @@ const commonTranslations = {
 };
 
 const forumTranslations = defineMessages({
-  subscribeTag: {
-    id: 'course.forum.SubscribeButton.forumTranslations.subscribeTag',
+  subscribeTooltip: {
+    id: 'course.forum.SubscribeButton.forumTranslations.subscribeTooltip',
     defaultMessage:
       'Subscribe to receive an email notification when a new topic is created.',
   },
-  unsubscribeTag: {
-    id: 'course.forum.SubscribeButton.forumTranslations.unsubscribeTag',
+  unsubscribeTooltip: {
+    id: 'course.forum.SubscribeButton.forumTranslations.unsubscribeTooltip',
     defaultMessage:
       'Unsubscribe to stop receiving email notifications when a new topic is created.',
   },
@@ -65,13 +65,13 @@ const forumTranslations = defineMessages({
 });
 
 const forumTopicTranslations = defineMessages({
-  subscribeTag: {
-    id: 'course.forum.SubscribeButton.forumTopicTranslations.subscribeTag',
+  subscribeTooltip: {
+    id: 'course.forum.SubscribeButton.forumTopicTranslations.subscribeTooltip',
     defaultMessage:
       'Subscribe to receive email notifications when someone replies in this forum topic.',
   },
-  unsubscribeTag: {
-    id: 'course.forum.SubscribeButton.forumTopicTranslations.unsubscribeTag',
+  unsubscribeTooltip: {
+    id: 'course.forum.SubscribeButton.forumTopicTranslations.unsubscribeTooltip',
     defaultMessage:
       'Unsubscribe to stop receiving email notifications when someone replies in this forum topic.',
   },
@@ -130,8 +130,8 @@ const SubscribeButton: FC<Props> = ({
     isUpdating ||
     disableButton;
 
-  let subscribedTooltip = t(translations.unsubscribeTag);
-  let unsubscribedTooltip = t(translations.subscribeTag);
+  let subscribedTooltip = t(translations.unsubscribeTooltip);
+  let unsubscribedTooltip = t(translations.subscribeTooltip);
 
   if (!emailSubscription.isUserEmailSettingEnabled) {
     subscribedTooltip = t(translations.userSettingSubscribed, {

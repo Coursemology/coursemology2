@@ -4256,6 +4256,9 @@
   "course.forum.HideButton.hide": {
     "defaultMessage": "隐藏"
   },
+  "course.forum.HideButton.hideTooltip": {
+    "defaultMessage": "对学生隐藏主题"
+  },
   "course.forum.HideButton.hideFailure": {
     "defaultMessage": "未能隐藏主题\"{title}\"- {error}"
   },
@@ -4264,6 +4267,9 @@
   },
   "course.forum.HideButton.unhide": {
     "defaultMessage": "取消隐藏"
+  },
+  "course.forum.HideButton.unhideTooltip": {
+    "defaultMessage": "向学生显示主题"
   },
   "course.forum.HideButton.unhideFailure": {
     "defaultMessage": "未能取消隐藏主题\"{title}\"- {error}"
@@ -4274,6 +4280,9 @@
   "course.forum.LockButton.locked": {
     "defaultMessage": "锁定"
   },
+  "course.forum.LockButton.lockTooltip": {
+    "defaultMessage": "锁定以禁止学生在此主题中发帖"
+  },
   "course.forum.LockButton.lockedFailure": {
     "defaultMessage": "无法锁定主题\"{title}\"- {error}"
   },
@@ -4282,6 +4291,9 @@
   },
   "course.forum.LockButton.unlocked": {
     "defaultMessage": "解锁"
+  },
+  "course.forum.LockButton.unlockTooltip": {
+    "defaultMessage": "解锁以允许学生在此主题中发帖"
   },
   "course.forum.LockButton.unlockedFailure": {
     "defaultMessage": "无法解锁主题\"{title}\" - {error}"
@@ -4352,13 +4364,13 @@
   "course.forum.SubscribeButton.forumTopicTranslations.subscribeSuccess": {
     "defaultMessage": "你已成功订阅论坛主题{title}。"
   },
-  "course.forum.SubscribeButton.forumTopicTranslations.subscribeTag": {
+  "course.forum.SubscribeButton.forumTopicTranslations.subscribeTooltip": {
     "defaultMessage": "订阅以在有人回复此论坛主题时接收电子邮件通知。"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.unsubscribeSuccess": {
     "defaultMessage": "你已成功取消订阅论坛主题 {title}。"
   },
-  "course.forum.SubscribeButton.forumTopicTranslations.unsubscribeTag": {
+  "course.forum.SubscribeButton.forumTopicTranslations.unsubscribeTooltip": {
     "defaultMessage": "取消订阅电邮通知，不再接收论坛主题的回复。"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.userSettingSubscribed": {
@@ -4370,13 +4382,13 @@
   "course.forum.SubscribeButton.forumTranslations.subscribeSuccess": {
     "defaultMessage": "你已成功订阅{title}。"
   },
-  "course.forum.SubscribeButton.forumTranslations.subscribeTag": {
+  "course.forum.SubscribeButton.forumTranslations.subscribeTooltip": {
     "defaultMessage": "订阅以在创建新主题时接收电子邮件通知。"
   },
   "course.forum.SubscribeButton.forumTranslations.unsubscribeSuccess": {
     "defaultMessage": "你已成功取消订阅{title}。"
   },
-  "course.forum.SubscribeButton.forumTranslations.unsubscribeTag": {
+  "course.forum.SubscribeButton.forumTranslations.unsubscribeTooltip": {
     "defaultMessage": "取消订阅电邮通知，不再接收新主题被创建的通知。"
   },
   "course.forum.SubscribeButton.forumTranslations.userSettingSubscribed": {

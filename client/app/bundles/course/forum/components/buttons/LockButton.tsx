@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { ForumTopicEntity } from 'types/course/forums';
 
 import { useAppDispatch } from 'lib/hooks/store';
@@ -17,6 +17,14 @@ const translations = defineMessages({
   unlocked: {
     id: 'course.forum.LockButton.unlocked',
     defaultMessage: 'Unlock',
+  },
+  lockTooltip: {
+    id: 'course.forum.LockButton.lockTooltip',
+    defaultMessage: 'Lock to stop students from posting in this topic',
+  },
+  unlockTooltip: {
+    id: 'course.forum.LockButton.unlockTooltip',
+    defaultMessage: 'Unlock to allow students to post within this topic',
   },
   lockedSuccess: {
     id: 'course.forum.LockButton.lockedSuccess',
@@ -88,15 +96,23 @@ const LockButton: FC<Props> = ({
   };
 
   return (
-    <Button
-      className={`topic-lock-${topic.id} ${className ?? ''}`}
-      color="inherit"
-      disabled={disabled}
-      onClick={handleLock}
-      variant="outlined"
+    <Tooltip
+      title={
+        topic.isLocked
+          ? t(translations.unlockTooltip)
+          : t(translations.lockTooltip)
+      }
     >
-      {topic.isLocked ? t(translations.unlocked) : t(translations.locked)}
-    </Button>
+      <Button
+        className={`topic-lock-${topic.id} ${className ?? ''}`}
+        color="inherit"
+        disabled={disabled}
+        onClick={handleLock}
+        variant="outlined"
+      >
+        {topic.isLocked ? t(translations.unlocked) : t(translations.locked)}
+      </Button>
+    </Tooltip>
   );
 };
 
