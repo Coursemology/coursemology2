@@ -75,7 +75,9 @@ const LeaderboardIndex: FC<Props> = (props) => {
   }, [dispatch]);
 
   const isAchievementHidden = leaderboardAchievements.length === 0;
-  const isGroupHidden = groupLeaderboardPoints.length === 0;
+  const isGroupHidden =
+    settings.groupleaderboardTitle === undefined ||
+    groupLeaderboardPoints.length === 0;
 
   return (
     <Page
