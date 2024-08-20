@@ -72,6 +72,7 @@ const PostCard: FC<Props> = (props) => {
                 }}
                 isEditing={isEditing}
                 post={post}
+                topicId={topic.id}
               />
             }
             avatar={postCreatorObject.avatar}

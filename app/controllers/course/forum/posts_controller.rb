@@ -51,7 +51,10 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
       render json: { isTopicDeleted: true }
     elsif @post.destroy
       @topic.update_column(:latest_post_at, @topic.posts.last&.created_at || @topic.created_at)
-      render json: { topicId: @topic.id, postTreeIds: @topic.posts.ordered_topologically.sorted_ids }
+      @topic.specific.update_resolve_status if @topic.topic_type == 'question' && @post.answer
+      render json: { topicId: @topic.id,
+                     postTreeIds: @topic.posts.ordered_topologically.sorted_ids,
+                     isTopicResolved: @topic.reload.resolved? }
     else
       render json: { errors: @post.errors.full_messages.to_sentence }, status: :bad_request
     end

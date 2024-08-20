@@ -277,11 +277,22 @@ export function updateForumTopicPost(
 export function deleteForumTopicPost(
   postUrl: string,
   postId: number,
+  topicId: number,
 ): Operation<{ isTopicDeleted: boolean }> {
   return async (dispatch) =>
     CourseAPI.forum.posts.delete(postUrl).then((response) => {
       dispatch(removeForumTopicPost({ postId }));
       if (response.data?.isTopicDeleted) return { isTopicDeleted: true };
+      if (response.data.isTopicResolved === false) {
+        dispatch(
+          updatePostAsAnswer({
+            topicId,
+            postId,
+            isTopicResolved: response.data.isTopicResolved,
+          }),
+        );
+      }
+
       dispatch(
         updateForumTopicPostIds({
           topicId: response.data.topicId,

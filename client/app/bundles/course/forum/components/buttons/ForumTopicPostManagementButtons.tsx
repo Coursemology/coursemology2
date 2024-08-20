@@ -16,6 +16,7 @@ import ReplyButton from './ReplyButton';
 
 interface Props {
   post: ForumTopicPostEntity;
+  topicId: number;
   handleEdit: () => void;
   handleReply: () => void;
   isEditing: boolean;
@@ -38,7 +39,7 @@ const translations = defineMessages({
 });
 
 const ForumTopicPostManagementButtons: FC<Props> = (props) => {
-  const { post, handleEdit, handleReply, isEditing, disabled } = props;
+  const { post, topicId, handleEdit, handleReply, isEditing, disabled } = props;
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const ForumTopicPostManagementButtons: FC<Props> = (props) => {
 
   const handleDelete = (): Promise<void> => {
     setIsDeleting(true);
-    return dispatch(deleteForumTopicPost(post.postUrl, post.id))
+    return dispatch(deleteForumTopicPost(post.postUrl, post.id, topicId))
       .then((response) => {
         toast.success(t(translations.deletionSuccess));
         if (response.isTopicDeleted) {
