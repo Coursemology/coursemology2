@@ -46,6 +46,7 @@ export default class PostsAPI extends BaseCourseAPI {
    * Deletes an existing post.
    */
   delete(urlSlug: string): APIResponse<{
+    isTopicResolved?: boolean;
     isTopicDeleted?: boolean;
     topicId: number;
     postTreeIds: RecursiveArray<number>;
