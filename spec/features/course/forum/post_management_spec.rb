@@ -7,7 +7,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:forum) { create(:forum, course: course) }
-    let(:topic) { create(:forum_topic, forum: forum, course: course, topic_type: :question) }
+    let(:topic) { create(:forum_topic, forum: forum, course: course) }
+    let(:question_topic) { create(:forum_topic, forum: forum, course: course, topic_type: :question) }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
@@ -155,8 +156,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
       end
 
       scenario 'I can mark/unmark post as answer' do
-        post = create(:course_discussion_post, topic: topic.acting_as)
-        visit course_forum_topic_path(course, forum, topic)
+        post = create(:course_discussion_post, topic: question_topic.acting_as)
+        visit course_forum_topic_path(course, forum, question_topic)
         wait_for_page
         # Mark as answer
         within find("div.post_#{post.id}") do
@@ -164,7 +165,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           expect(page).to have_text('Unmark as answer')
         end
         expect(post.reload).to be_answer
-        expect(topic.reload).to be_resolved
+        expect(question_topic.reload).to be_resolved
         wait_for_page
         # Unmark as answer
         within find("div.post_#{post.id}") do
@@ -172,7 +173,18 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           expect(page).to have_text('Mark as answer')
         end
         expect(post.reload).not_to be_answer
-        expect(topic.reload).not_to be_resolved
+        expect(question_topic.reload).not_to be_resolved
+
+        # Mark as answer and then delete the answer
+        within find("div.post_#{post.id}") do
+          click_button 'Mark as answer'
+        end
+
+        find("button.post-delete-#{post.id}").click
+        accept_prompt
+
+        wait_for_page
+        expect(question_topic.reload).not_to be_resolved
       end
 
       scenario 'When anonymous post is not allowed and there are anonymous posts, I can see the authors' do
