@@ -4319,6 +4319,9 @@
   "course.forum.HideButton.hide": {
     "defaultMessage": "Hide"
   },
+  "course.forum.HideButton.hideTooltip": {
+    "defaultMessage": "Hide topic from students"
+  },
   "course.forum.HideButton.hideFailure": {
     "defaultMessage": "Failed to hide the topic \"{title}\" - {error}"
   },
@@ -4327,6 +4330,9 @@
   },
   "course.forum.HideButton.unhide": {
     "defaultMessage": "Unhide"
+  },
+  "course.forum.HideButton.unhideTooltip": {
+    "defaultMessage": "Show topic to students"
   },
   "course.forum.HideButton.unhideFailure": {
     "defaultMessage": "Failed to unhide the topic \"{title}\" - {error}"
@@ -4337,6 +4343,9 @@
   "course.forum.LockButton.locked": {
     "defaultMessage": "Lock"
   },
+  "course.forum.LockButton.lockTooltip": {
+    "defaultMessage": "Lock to stop students from posting in this topic"
+  },
   "course.forum.LockButton.lockedFailure": {
     "defaultMessage": "Failed to locked the topic \"{title}\" - {error}"
   },
@@ -4345,6 +4354,9 @@
   },
   "course.forum.LockButton.unlocked": {
     "defaultMessage": "Unlock"
+  },
+  "course.forum.LockButton.unlockTooltip": {
+    "defaultMessage": "Unlock to allow students to post within this topic"
   },
   "course.forum.LockButton.unlockedFailure": {
     "defaultMessage": "Failed to unlocked the topic \"{title}\" - {error}"
@@ -4415,13 +4427,13 @@
   "course.forum.SubscribeButton.forumTopicTranslations.subscribeSuccess": {
     "defaultMessage": "You have successfully been subscribed to the forum topic {title}."
   },
-  "course.forum.SubscribeButton.forumTopicTranslations.subscribeTag": {
+  "course.forum.SubscribeButton.forumTopicTranslations.subscribeTooltip": {
     "defaultMessage": "Subscribe to receive email notifications when someone replies in this forum topic."
   },
   "course.forum.SubscribeButton.forumTopicTranslations.unsubscribeSuccess": {
     "defaultMessage": "You have successfully been unsubscribed from the forum topic {title}."
   },
-  "course.forum.SubscribeButton.forumTopicTranslations.unsubscribeTag": {
+  "course.forum.SubscribeButton.forumTopicTranslations.unsubscribeTooltip": {
     "defaultMessage": "Unsubscribe to stop receiving email notifications when someone replies in this forum topic."
   },
   "course.forum.SubscribeButton.forumTopicTranslations.userSettingSubscribed": {
@@ -4433,13 +4445,13 @@
   "course.forum.SubscribeButton.forumTranslations.subscribeSuccess": {
     "defaultMessage": "You have successfully been subscribed to {title}."
   },
-  "course.forum.SubscribeButton.forumTranslations.subscribeTag": {
+  "course.forum.SubscribeButton.forumTranslations.subscribeTooltip": {
     "defaultMessage": "Subscribe to receive an email notification when a new topic is created."
   },
   "course.forum.SubscribeButton.forumTranslations.unsubscribeSuccess": {
     "defaultMessage": "You have successfully been unsubscribed from {title}."
   },
-  "course.forum.SubscribeButton.forumTranslations.unsubscribeTag": {
+  "course.forum.SubscribeButton.forumTranslations.unsubscribeTooltip": {
     "defaultMessage": "Unsubscribe to stop receiving email notifications when a new topic is created."
   },
   "course.forum.SubscribeButton.forumTranslations.userSettingSubscribed": {

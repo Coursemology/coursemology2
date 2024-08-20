@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import { ForumTopicEntity } from 'types/course/forums';
 
 import { useAppDispatch } from 'lib/hooks/store';
@@ -17,6 +17,14 @@ const translations = defineMessages({
   unhide: {
     id: 'course.forum.HideButton.unhide',
     defaultMessage: 'Unhide',
+  },
+  hideTooltip: {
+    id: 'course.forum.HideButton.hideTooltip',
+    defaultMessage: 'Hide topic from students',
+  },
+  unhideTooltip: {
+    id: 'course.forum.HideButton.unhideTooltip',
+    defaultMessage: 'Show topic to students',
   },
   hideSuccess: {
     id: 'course.forum.HideButton.hideSuccess',
@@ -88,15 +96,23 @@ const HideButton: FC<Props> = ({
   };
 
   return (
-    <Button
-      className={`topic-hide-${topic.id}  ${className ?? ''}`}
-      color="inherit"
-      disabled={disabled}
-      onClick={handleHide}
-      variant="outlined"
+    <Tooltip
+      title={
+        topic.isHidden
+          ? t(translations.unhideTooltip)
+          : t(translations.hideTooltip)
+      }
     >
-      {topic.isHidden ? t(translations.unhide) : t(translations.hide)}
-    </Button>
+      <Button
+        className={`topic-hide-${topic.id}  ${className ?? ''}`}
+        color="inherit"
+        disabled={disabled}
+        onClick={handleHide}
+        variant="outlined"
+      >
+        {topic.isHidden ? t(translations.unhide) : t(translations.hide)}
+      </Button>
+    </Tooltip>
   );
 };
 
