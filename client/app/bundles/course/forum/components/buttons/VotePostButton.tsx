@@ -47,7 +47,7 @@ const VotePostButton: FC<Props> = ({ post }) => {
     return (
       <div className="flex items-center">
         <IconButton
-          color="info"
+          color="success"
           onClick={(): void => handleVotePost(1)}
           title="Upvote"
         >
@@ -55,7 +55,7 @@ const VotePostButton: FC<Props> = ({ post }) => {
         </IconButton>
         <div className="vote-tally font-bold">{post.voteTally}</div>
         <IconButton
-          color="info"
+          color="error"
           onClick={(): void => handleVotePost(-1)}
           title="Downvote"
         >
@@ -68,7 +68,7 @@ const VotePostButton: FC<Props> = ({ post }) => {
   return (
     <div className="flex items-center">
       <IconButton
-        color="info"
+        color="success"
         onClick={(): void => handleVotePost(post.userVoteFlag ? 0 : 1)}
         title="Upvote"
       >
@@ -77,7 +77,7 @@ const VotePostButton: FC<Props> = ({ post }) => {
       <div className="vote-tally font-bold">{post.voteTally}</div>
 
       <IconButton
-        color="info"
+        color="error"
         onClick={(): void => handleVotePost(!post.userVoteFlag ? 0 : -1)}
         title="Downvote"
       >
