@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::SubmissionsController <
+class Course::Assessment::Submission::SubmissionsController < # rubocop:disable Metrics/ClassLength
   Course::Assessment::Submission::Controller
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
   include Signals::EmissionConcern
