@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
@@ -6,14 +6,17 @@ import palette from 'theme/palette';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import TableLegends from 'lib/containers/TableLegends';
+import { getEditSubmissionURL } from 'lib/helpers/url-builders';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import LastAttemptIndex from './AnswerDisplay/LastAttempt';
 import { getClassNameForMarkCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 
@@ -54,10 +57,6 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.questionIndex',
     defaultMessage: 'Q{index}',
   },
-  questionDisplayTitle: {
-    id: 'course.assessment.statistics.questionDisplayTitle',
-    defaultMessage: 'Q{index} for {student}',
-  },
   noSubmission: {
     id: 'course.assessment.statistics.noSubmission',
     defaultMessage: 'No Submission yet',
@@ -69,6 +68,10 @@ const translations = defineMessages({
   filename: {
     id: 'course.assessment.statistics.filename',
     defaultMessage: 'Question-level Marks Statistics for {assessment}',
+  },
+  close: {
+    id: 'course.assessment.statistics.close',
+    defaultMessage: 'Close',
   },
 });
 
@@ -86,10 +89,16 @@ const statusTranslations = {
 
 const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { courseId } = useParams();
+  const { courseId, assessmentId } = useParams();
   const { includePhantom } = props;
 
   const statistics = useAppSelector(getAssessmentStatistics);
+  const [openAnswer, setOpenAnswer] = useState(false);
+  const [answerDisplayInfo, setAnswerDisplayInfo] = useState({
+    index: 0,
+    answerId: 0,
+    studentName: '',
+  });
   const assessment = statistics.assessment;
   const submissions = statistics.submissions;
 
@@ -113,14 +122,39 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
 
   // the case where the grade is null is handled separately inside the column
   // (refer to the definition of answerColumns below)
-  const renderNonNullGradeCell = (
-    grade: number,
+  const renderAnswerGradeClickableCell = (
+    index: number,
+    datum: MainSubmissionInfo,
+  ): ReactNode => {
+    const className = getClassNameForMarkCell(
+      datum.answers![index].grade,
+      datum.answers![index].maximumGrade,
+    );
+    return (
+      <div
+        className={`cursor-pointer ${className}`}
+        onClick={(): void => {
+          setOpenAnswer(true);
+          setAnswerDisplayInfo({
+            index: index + 1,
+            answerId: datum.answers![index].lastAttemptAnswerId,
+            studentName: datum.courseUser.name,
+          });
+        }}
+      >
+        <Box>{datum.answers![index].grade.toFixed(1)}</Box>
+      </div>
+    );
+  };
+
+  const renderTotalGradeCell = (
+    totalGrade: number,
     maxGrade: number,
   ): ReactNode => {
-    const className = getClassNameForMarkCell(grade, maxGrade);
+    const className = getClassNameForMarkCell(totalGrade, maxGrade);
     return (
       <div className={className}>
-        <Box>{grade.toFixed(1)}</Box>
+        <Box>{totalGrade.toFixed(1)}</Box>
       </div>
     );
   };
@@ -151,11 +185,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.answers?.[index]?.grade === 'number'
-            ? renderNonNullGradeCell(
-                datum.answers?.[index]?.grade,
-                datum.answers?.[index]?.maximumGrade,
-              )
+          return typeof datum.answers?.[index].grade === 'number'
+            ? renderAnswerGradeClickableCell(index, datum)
             : null;
         },
         sortable: true,
@@ -212,19 +243,20 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       title: t(translations.workflowState),
       sortable: true,
       cell: (datum) => (
-        <Chip
-          className="w-100"
-          label={
-            statusTranslations[datum.workflowState ?? workflowStates.Unstarted]
-          }
-          style={{
-            backgroundColor:
-              palette.submissionStatus[
+        <Link
+          opensInNewTab
+          to={getEditSubmissionURL(courseId, assessmentId, datum.id)}
+        >
+          <Chip
+            className={`text-blue-800 ${palette.submissionStatusClassName[datum.workflowState ?? workflowStates.Unstarted]} w-full`}
+            label={
+              statusTranslations[
                 datum.workflowState ?? workflowStates.Unstarted
-              ],
-          }}
-          variant="filled"
-        />
+              ]
+            }
+            variant="filled"
+          />
+        </Link>
       ),
       className: 'center',
     },
@@ -237,10 +269,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       sortable: true,
       cell: (datum): ReactNode =>
         datum.totalGrade
-          ? renderNonNullGradeCell(
-              datum.totalGrade ?? null,
-              assessment!.maximumGrade,
-            )
+          ? renderTotalGradeCell(datum.totalGrade, assessment!.maximumGrade)
           : null,
       className: 'text-right',
       sortProps: {
@@ -311,6 +340,17 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         search={{ searchPlaceholder: t(translations.searchText) }}
         toolbar={{ show: true }}
       />
+      <Prompt
+        cancelLabel={t(translations.close)}
+        onClose={(): void => setOpenAnswer(false)}
+        open={openAnswer}
+        title={answerDisplayInfo.studentName}
+      >
+        <LastAttemptIndex
+          curAnswerId={answerDisplayInfo.answerId}
+          index={answerDisplayInfo.index}
+        />
+      </Prompt>
     </>
   );
 };

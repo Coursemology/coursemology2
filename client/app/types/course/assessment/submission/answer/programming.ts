@@ -15,9 +15,9 @@ export interface ProgrammingContent {
   highlightedContent: string | null;
 }
 
-type TestCaseType = 'public_test' | 'private_test' | 'evaluation_test';
+export type TestCaseType = 'public_test' | 'private_test' | 'evaluation_test';
 
-interface TestCaseResult {
+export interface TestCaseResult {
   identifier?: string;
   expression: string;
   expected: string;
@@ -27,7 +27,7 @@ interface TestCaseResult {
 
 // BE Data Type
 
-interface ProgrammingFieldData extends AnswerFieldBaseData {
+export interface ProgrammingFieldData extends AnswerFieldBaseData {
   files_attributes: ProgrammingContent[];
 }
 

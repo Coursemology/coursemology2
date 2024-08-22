@@ -18,7 +18,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     fetch_all_ancestor_assessments
     create_question_related_hash
 
-    @assessment_autograded = @question_auto_gradable_status_hash.any? { |_, value| value }
+    @assessment_autograded = @question_hash.any? { |_, (_, _, auto_gradable)| auto_gradable }
     @student_submissions_hash = fetch_hash_for_main_assessment(submissions, @all_students)
   end
 
@@ -79,11 +79,8 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
   def create_question_related_hash
     create_question_order_hash
-    @question_maximum_grade_hash = @assessment.questions.to_h do |q|
-      [q.id, q.maximum_grade]
-    end
-    @question_auto_gradable_status_hash = @assessment.questions.to_h do |q|
-      [q.id, q.auto_gradable?]
+    @question_hash = @assessment.questions.to_h do |q|
+      [q.id, [q.maximum_grade, q.question_type, q.auto_gradable?]]
     end
   end
 
