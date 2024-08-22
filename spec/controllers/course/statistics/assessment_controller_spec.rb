@@ -16,7 +16,7 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
 
     let(:assessment) { course.assessments.first }
 
-    let(:students) { create_list(:course_student, 3, course: course) }
+    let(:students) { create_list(:course_student, 4, course: course) }
     let(:teaching_assistant) { create(:course_teaching_assistant, course: course) }
 
     let!(:submission1) do
@@ -26,6 +26,10 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
     let!(:submission2) do
       create(:submission, :attempting,
              assessment: assessment, course: course, creator: students[1].user)
+    end
+    let!(:submission3) do
+      create(:submission, :graded,
+             assessment: assessment, course: course, creator: students[2].user)
     end
     let!(:submission_teaching_assistant) do
       create(:submission, :published,
@@ -57,22 +61,25 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           json_result = JSON.parse(response.body)
 
           # all the students data will be included here, including the non-existing submission one
-          expect(json_result['submissions'].count).to eq(3)
+          expect(json_result['submissions'].count).to eq(4)
 
           # showing the correct workflow state
           expect(json_result['submissions'][0]['workflowState']).to eq('published')
           expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
-          expect(json_result['submissions'][2]['workflowState']).to eq('unstarted')
+          expect(json_result['submissions'][2]['workflowState']).to eq('graded')
+          expect(json_result['submissions'][3]['workflowState']).to eq('unstarted')
 
-          # only published submissions' answers will be included in the stats
+          # only graded and published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['answers']).not_to be_nil
           expect(json_result['submissions'][1]['answers']).to be_nil
-          expect(json_result['submissions'][2]['answers']).to be_nil
+          expect(json_result['submissions'][2]['answers']).not_to be_nil
+          expect(json_result['submissions'][3]['answers']).to be_nil
 
-          # only published submissions' answers will be included in the stats
+          # only graded and published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['courseUser']['role']).to eq('student')
           expect(json_result['submissions'][1]['courseUser']['role']).to eq('student')
           expect(json_result['submissions'][2]['courseUser']['role']).to eq('student')
+          expect(json_result['submissions'][3]['courseUser']['role']).to eq('student')
 
           # only 1 ancestor will be returned (current) as no permission for ancestor assessment
           expect(json_result['ancestors'].count).to eq(1)
@@ -88,22 +95,25 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           json_result = JSON.parse(response.body)
 
           # all the students data will be included here, including the non-existing submission one
-          expect(json_result['submissions'].count).to eq(3)
+          expect(json_result['submissions'].count).to eq(4)
 
           # showing the correct workflow state
           expect(json_result['submissions'][0]['workflowState']).to eq('published')
           expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
-          expect(json_result['submissions'][2]['workflowState']).to eq('unstarted')
+          expect(json_result['submissions'][2]['workflowState']).to eq('graded')
+          expect(json_result['submissions'][3]['workflowState']).to eq('unstarted')
 
-          # only published submissions' answers will be included in the stats
+          # only graded and published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['answers']).not_to be_nil
           expect(json_result['submissions'][1]['answers']).to be_nil
-          expect(json_result['submissions'][2]['answers']).to be_nil
+          expect(json_result['submissions'][2]['answers']).not_to be_nil
+          expect(json_result['submissions'][3]['answers']).to be_nil
 
-          # only published submissions' answers will be included in the stats
+          # only graded and published submissions' answers will be included in the stats
           expect(json_result['submissions'][0]['courseUser']['role']).to eq('student')
           expect(json_result['submissions'][1]['courseUser']['role']).to eq('student')
           expect(json_result['submissions'][2]['courseUser']['role']).to eq('student')
+          expect(json_result['submissions'][3]['courseUser']['role']).to eq('student')
 
           expect(json_result['ancestors'].count).to eq(2)
         end
