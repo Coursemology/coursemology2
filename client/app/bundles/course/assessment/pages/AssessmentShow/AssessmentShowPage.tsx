@@ -162,7 +162,7 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
                 sx={{ marginTop: '0 !important', marginLeft: 1 }}
                 variant="outlined"
               >
-                Generate Programming Question
+                {t(translations.generate)}
               </Button>
             </Link>
           )}
