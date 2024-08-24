@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Control, Controller } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
 import DoneAll from '@mui/icons-material/DoneAll';
 import {
   Box,
@@ -8,7 +9,6 @@ import {
   TextareaAutosize,
   Typography,
 } from '@mui/material';
-import { green, grey, yellow } from '@mui/material/colors';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -16,6 +16,49 @@ import FormSelectField from 'lib/components/form/fields/SelectField';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { CodaveriGenerateFormData, SnapshotState } from './types';
+
+const translations = defineMessages({
+  languageField: {
+    id: 'course.assessment.generation.languageField',
+    defaultMessage: 'Language',
+  },
+  promptPlaceholder: {
+    id: 'course.assessment.generation.promptPlaceholder',
+    defaultMessage: 'Type something here...',
+  },
+  generateQuestion: {
+    id: 'course.assessment.generation.generateQuestion',
+    defaultMessage: 'Generate',
+  },
+  showInactive: {
+    id: 'course.assessment.generation.showInactive',
+    defaultMessage: 'Show inactive items',
+  },
+});
+
+const MAX_PROMPT_LENGTH = 500;
+
+const ConversationSnapshot: FC<{
+  snapshot: SnapshotState;
+  className: string;
+  onClickSnapshot: (snapshot: SnapshotState) => void;
+}> = (props) => {
+  const { snapshot, className, onClickSnapshot } = props;
+
+  return (
+    <div className={className} onClick={() => onClickSnapshot(snapshot)}>
+      <Typography className="line-clamp-4">
+        {snapshot.state === 'generating' && (
+          <LoadingIndicator bare className="mr-2 text-gray-600" size={15} />
+        )}
+        {snapshot.state === 'success' && (
+          <DoneAll className="mr-1 text-gray-600" fontSize="small" />
+        )}
+        {snapshot?.codaveriData?.customPrompt}
+      </Typography>
+    </div>
+  );
+};
 
 interface Props {
   onGenerate: () => Promise<void>;
@@ -26,29 +69,8 @@ interface Props {
   activeSnapshotId: string;
   latestSnapshotId: string;
   onClickSnapshot: (snapshot: SnapshotState) => void;
+  customPrompt: string;
 }
-
-const itemStyles = {
-  common: {
-    borderStyle: 'solid',
-    borderWidth: 1.0,
-    borderColor: grey[400],
-    borderRadius: 2,
-    boxShadow: 'none',
-    marginY: 1,
-    padding: 1,
-    width: '100%',
-  },
-  success: {
-    backgroundColor: green[50],
-  },
-  active: {
-    backgroundColor: yellow[100],
-  },
-  inactive: {
-    opacity: 0.5,
-  },
-};
 
 const GenerateConversation: FC<Props> = (props) => {
   const { t } = useTranslation();
@@ -61,6 +83,7 @@ const GenerateConversation: FC<Props> = (props) => {
     activeSnapshotId,
     latestSnapshotId,
     onClickSnapshot,
+    customPrompt,
   } = props;
 
   const isGenerating = Object.values(snapshots).some(
@@ -108,73 +131,43 @@ const GenerateConversation: FC<Props> = (props) => {
         }}
       >
         {mainlineSnapshotsToRender.map((snapshot) => {
-          let itemStyle = itemStyles.common;
-          if (
-            snapshot.state === 'success' &&
-            snapshot.id === activeSnapshotId
-          ) {
-            itemStyle = { ...itemStyles.common, ...itemStyles.active };
-          }
+          const active =
+            snapshot.state === 'success' && snapshot.id === activeSnapshotId;
           return (
-            <Paper
+            <ConversationSnapshot
               key={snapshot.id}
-              onClick={() => onClickSnapshot(snapshot)}
-              sx={itemStyle}
-            >
-              <Typography className="line-clamp-4">
-                {snapshot.state === 'generating' && (
-                  <LoadingIndicator
-                    bare
-                    className="mr-2 text-gray-600"
-                    size={15}
-                  />
-                )}
-                {snapshot.state === 'success' && (
-                  <DoneAll className="mr-1 text-gray-600" fontSize="small" />
-                )}
-                {snapshot.codaveriData?.customPrompt}
-              </Typography>
-            </Paper>
+              className={`py-1 px-2 my-1 w-full shadow-none border border-solid border-gray-400 rounded-lg${
+                active ? ' bg-yellow-100' : ''
+              }`}
+              onClickSnapshot={onClickSnapshot}
+              snapshot={snapshot}
+            />
           );
         })}
         {inactiveSnapshotsToRender.length > 0 && (
           <Accordion
+            defaultExpanded={false}
             sx={{
               '& .MuiAccordionSummary-root': {
                 paddingX: '1rem !important',
                 paddingY: '0.5rem !important',
               },
             }}
-            title="Show inactive items"
+            title={t(translations.showInactive)}
           >
             {inactiveSnapshotsToRender.map((snapshot) => {
-              const itemStyle = {
-                ...itemStyles.common,
-                ...itemStyles.inactive,
-              };
+              const active =
+                snapshot.state === 'success' &&
+                snapshot.id === activeSnapshotId;
               return (
-                <Paper
+                <ConversationSnapshot
                   key={snapshot.id}
-                  onClick={() => onClickSnapshot(snapshot)}
-                  sx={itemStyle}
-                >
-                  <Typography className="line-clamp-4">
-                    {snapshot.state === 'generating' && (
-                      <LoadingIndicator
-                        bare
-                        className="mr-2 text-gray-600"
-                        size={15}
-                      />
-                    )}
-                    {snapshot.state === 'success' && (
-                      <DoneAll
-                        className="mr-1 text-gray-600"
-                        fontSize="small"
-                      />
-                    )}
-                    {snapshot?.codaveriData?.customPrompt}
-                  </Typography>
-                </Paper>
+                  className={`opacity-50 py-1 px-2 my-1 w-full shadow-none border border-solid border-gray-300 rounded-lg${
+                    active ? ' bg-yellow-100' : ''
+                  }`}
+                  onClickSnapshot={onClickSnapshot}
+                  snapshot={snapshot}
+                />
               );
             })}
           </Accordion>
@@ -189,18 +182,20 @@ const GenerateConversation: FC<Props> = (props) => {
             maxRows={4}
             minRows={4}
             onChange={onChange}
-            placeholder="Type something here..."
+            placeholder={t(translations.promptPlaceholder)}
             style={{
               resize: 'none',
               padding: '8px',
               fontSize: '16px',
-              marginBottom: '8px',
               width: '100%',
             }}
             value={value}
           />
         )}
       />
+      <Typography className="mb-1 mt-0.5 mr-2 text-right" variant="caption">
+        {customPrompt.length} / {MAX_PROMPT_LENGTH}
+      </Typography>
       <div className="flex flex-nowrap">
         <Controller
           control={control}
@@ -211,7 +206,7 @@ const GenerateConversation: FC<Props> = (props) => {
               disabled={isGenerating}
               field={field}
               fieldState={fieldState}
-              label="Language"
+              label={t(translations.languageField)}
               options={languages}
               required
               variant="outlined"
@@ -226,7 +221,7 @@ const GenerateConversation: FC<Props> = (props) => {
           sx={{ maxHeight: '40px', marginTop: '25px', width: '140px' }}
           variant="contained"
         >
-          Generate
+          {t(translations.generateQuestion)}
         </Button>
       </div>
     </Paper>

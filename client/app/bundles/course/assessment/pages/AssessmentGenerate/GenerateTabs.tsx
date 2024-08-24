@@ -1,13 +1,36 @@
 import { FC, MouseEventHandler, useState } from 'react';
+import { defineMessages } from 'react-intl';
 import { Add, Close, ContentCopy } from '@mui/icons-material';
 import { Box, Button, IconButton, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { getAssessmentGenerateQuestionsData } from './selectors';
 import { ConversationState } from './types';
+
+const translations = defineMessages({
+  newTab: {
+    id: 'course.assessment.generation.newTab',
+    defaultMessage: 'New',
+  },
+  resetConversation: {
+    id: 'course.assessment.generation.resetConversation',
+    defaultMessage: 'Reset',
+  },
+  openExportDialog: {
+    id: 'course.assessment.generation.openExportDialog',
+    defaultMessage: 'Export',
+  },
+  confirmDeleteConversation: {
+    id: 'course.assessment.generation.confirmDeleteConversation',
+    defaultMessage:
+      'Are you sure you want to delete &quot;{title}&quot; and all its history items? THIS ACTION IS IRREVERSIBLE!',
+  },
+});
 
 interface Props {
   canReset: boolean;
@@ -29,6 +52,7 @@ const GenerateTabs: FC<Props> = (props) => {
     switchToConversation,
     canReset,
   } = props;
+  const { t } = useTranslation();
   const [conversationToDeleteId, setConversationToDeleteId] =
     useState<string>();
   const {
@@ -57,9 +81,9 @@ const GenerateTabs: FC<Props> = (props) => {
         primaryLabel="Yes"
       >
         <PromptText>
-          Are you sure you want to delete &quot;
-          {conversation.title ?? 'Untitled Question'}&quot; and all its history
-          items? THIS ACTION IS IRREVERSIBLE!
+          {t(translations.confirmDeleteConversation, {
+            title: conversation.title ?? 'Untitled Question',
+          })}
         </PromptText>
       </Prompt>
     );
@@ -90,6 +114,13 @@ const GenerateTabs: FC<Props> = (props) => {
                   id={metadata.id}
                   label={
                     <span>
+                      {metadata.isGenerating && (
+                        <LoadingIndicator
+                          bare
+                          className={`mr-2${metadata.id === activeConversationId ? '' : ' text-gray-600'}`}
+                          size={15}
+                        />
+                      )}
                       {metadata.title ?? 'Untitled Question'}
                       <IconButton
                         color="inherit"
@@ -158,7 +189,7 @@ const GenerateTabs: FC<Props> = (props) => {
           sx={{ marginY: 1, marginX: 1, maxHeight: '34px' }}
           variant="outlined"
         >
-          New
+          {t(translations.newTab)}
         </Button>
 
         <Box sx={{ flex: '1', width: '100%' }} />
@@ -168,7 +199,7 @@ const GenerateTabs: FC<Props> = (props) => {
             sx={{ marginY: 1, maxHeight: '34px', marginRight: 1 }}
             variant="outlined"
           >
-            Reset
+            {t(translations.resetConversation)}
           </Button>
         )}
         <Button
@@ -177,7 +208,7 @@ const GenerateTabs: FC<Props> = (props) => {
           sx={{ marginY: 1, maxHeight: '34px' }}
           variant="contained"
         >
-          Export
+          {t(translations.openExportDialog)}
         </Button>
       </Box>
     </Box>

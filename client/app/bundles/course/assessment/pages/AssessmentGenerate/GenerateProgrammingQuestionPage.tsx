@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Container, Divider, Grid } from '@mui/material';
 import {
@@ -36,6 +37,25 @@ import {
 } from '../../question/programming/operations';
 
 import GenerateExportDialog from './GenerateExportDialog';
+
+const translations = defineMessages({
+  generatePage: {
+    id: 'course.assessment.generation.generatePage',
+    defaultMessage: 'Generate Programming Question',
+  },
+  generateSuccess: {
+    id: 'course.assessment.generation.generateSuccess',
+    defaultMessage: 'Generation for "{title}" successful.',
+  },
+  generateError: {
+    id: 'course.assessment.generation.generateError',
+    defaultMessage: 'Export Questions ({exportCount} selected)',
+  },
+  allFieldsLocked: {
+    id: 'course.assessment.generation.allFieldsLocked',
+    defaultMessage: 'All fields are locked, so nothing can be generated.',
+  },
+});
 
 const areObjectArraysEqual = <T extends object>(
   array1?: T[],
@@ -321,6 +341,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                       <GenerateConversation
                         activeSnapshotId={activeSnapshotId}
                         control={codaveriForm.control}
+                        customPrompt={codaveriForm.watch('customPrompt')}
                         languageId={languageId}
                         languages={data.languages.map((l) => ({
                           label: l.name,
@@ -360,7 +381,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                             ) {
                               dispatch(
                                 setNotification(
-                                  'All current fields are locked, so nothing can be generated.',
+                                  t(translations.allFieldsLocked),
                                 ),
                               );
                               return Promise.resolve();
@@ -454,7 +475,10 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                                   } else {
                                     dispatch(
                                       setNotification(
-                                        `Generation for "${newQuestionFormData.question.title}" successful.`,
+                                        t(translations.generateSuccess, {
+                                          title:
+                                            newQuestionFormData.question.title,
+                                        }),
                                       ),
                                     );
                                   }
@@ -480,6 +504,16 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                                     snapshotId: newSnapshotId,
                                     conversationId,
                                   }),
+                                );
+                                dispatch(
+                                  setNotification(
+                                    t(translations.generateError, {
+                                      title:
+                                        generatePageData.conversationMetadata[
+                                          conversationId
+                                        ].title ?? 'Untitled Question',
+                                    }),
+                                  ),
                                 );
                                 setNotification(
                                   'An error occured in generating the question.',
@@ -522,6 +556,6 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   );
 };
 
-const handle = 'Generate Programming Question';
+const handle = translations.generatePage;
 
 export default Object.assign(GenerateProgrammingQuestionPage, { handle });

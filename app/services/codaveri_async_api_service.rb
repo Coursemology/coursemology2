@@ -38,8 +38,6 @@ class CodaveriAsyncApiService
     codaveri_language_whitelist.include?(language.type.constantize)
   end
 
-  private
-
   def self.codaveri_language_whitelist
     [Coursemology::Polyglot::Language::Python::Python3Point4,
      Coursemology::Polyglot::Language::Python::Python3Point5,
@@ -49,6 +47,10 @@ class CodaveriAsyncApiService
      Coursemology::Polyglot::Language::Python::Python3Point10,
      Coursemology::Polyglot::Language::Python::Python3Point12]
   end
+
+  private_class_method :codaveri_language_whitelist
+
+  private
 
   def parse_response(response)
     response_status = response.status

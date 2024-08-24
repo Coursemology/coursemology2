@@ -164,6 +164,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.questions',
     defaultMessage: 'Questions',
   },
+  generate: {
+    id: 'course.assessment.show.generate',
+    defaultMessage: 'Generate Programming Question',
+  },
   questionsReorderHint: {
     id: 'course.assessment.show.questionsReorderHint',
     defaultMessage: 'Drag and drop the questions to rearrange them.',

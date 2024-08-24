@@ -75,7 +75,7 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
               field={field}
               fieldState={fieldState}
               fullWidth
-              label="Title"
+              label={t(translations.title)}
               onChange={onChange}
               variant="filled"
             />
@@ -104,7 +104,7 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                label="Description"
+                label={t(translations.description)}
                 variant="standard"
               />
             )}

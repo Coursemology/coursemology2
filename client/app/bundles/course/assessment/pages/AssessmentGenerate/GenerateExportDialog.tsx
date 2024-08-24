@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef,
 } from 'react';
+import { defineMessages } from 'react-intl';
 import { Done, Launch } from '@mui/icons-material';
 import {
   Box,
@@ -44,6 +45,25 @@ interface Props {
   assessmentAutograded: boolean;
   saveActiveFormData: () => void;
 }
+
+const translations = defineMessages({
+  exportDialogHeader: {
+    id: 'course.assessment.generation.exportDialogHeader',
+    defaultMessage: 'Export Questions ({exportCount} selected)',
+  },
+  exportAction: {
+    id: 'course.assessment.generation.exportAction',
+    defaultMessage: 'Export',
+  },
+  exportClose: {
+    id: 'course.assessment.generation.exportClose',
+    defaultMessage: 'Close',
+  },
+  exportError: {
+    id: 'course.assessment.generation.exportError',
+    defaultMessage: 'An error occured in exporting this question.',
+  },
+});
 
 const GenerateExportDialog: FC<Props> = (props) => {
   const { open, setOpen, saveActiveFormData, assessmentAutograded, languages } =
@@ -119,7 +139,9 @@ const GenerateExportDialog: FC<Props> = (props) => {
       open={open}
     >
       <DialogTitle>
-        Export Questions ({generatePageData.exportCount} selected)
+        {t(translations.exportDialogHeader, {
+          exportCount: generatePageData.exportCount,
+        })}
       </DialogTitle>
       <DialogContent>
         {generatePageData.conversationIds.map((conversationId, index) => {
@@ -143,8 +165,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
                   className={conversation.toExport ? '' : 'line-through'}
                   color={conversation.toExport ? 'default' : 'gray'}
                 >
-                  {' '}
-                  {questionData.title}{' '}
+                  {questionData.title}
                 </Typography>
 
                 <Box sx={{ flex: '1', width: '100%' }} />
@@ -182,7 +203,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
                 />
                 {conversation.exportStatus === 'error' && (
                   <Typography color={red[700]} variant="caption">
-                    An error occured in exporting this question.
+                    {t(translations.exportError)}
                   </Typography>
                 )}
               </section>
@@ -197,7 +218,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
           color="secondary"
           onClick={() => setOpen(false)}
         >
-          Close
+          {t(translations.exportClose)}
         </Button>
         <Button
           className="btn-submit"
@@ -274,7 +295,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
           }}
           variant="contained"
         >
-          Export
+          {t(translations.exportAction)}
         </Button>
       </DialogActions>
     </Dialog>

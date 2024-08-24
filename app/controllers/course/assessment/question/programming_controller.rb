@@ -4,7 +4,8 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
                                    class: Course::Assessment::Question::Programming, only: [:new, :create]
   load_and_authorize_resource :programming_question,
                               class: 'Course::Assessment::Question::Programming',
-                              through: :assessment, parent: false, except: [:new, :create, :generate, :codaveri_languages]
+                              through: :assessment, parent: false,
+                              except: [:new, :create, :generate, :codaveri_languages]
   before_action :load_question_assessment, only: [:edit, :update, :update_question_setting]
   before_action :set_attributes_for_programming_question, except: [:generate, :codaveri_languages]
 
@@ -57,20 +58,38 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def codaveri_languages
     render json: {
-      languages: Coursemology::Polyglot::Language.all.order(:name)
-        .filter_map {|language| { id: language.id, name: language.name, editorMode: language.ace_mode } if CodaveriAsyncApiService.language_valid_for_codaveri?(language)}
+      languages: Coursemology::Polyglot::Language.
+        all.order(:name).
+        filter_map do |language|
+          if CodaveriAsyncApiService.language_valid_for_codaveri?(language)
+            {
+              id: language.id,
+              name: language.name,
+              editorMode: language.ace_mode
+            }
+          end
+        end
     }, status: :ok
   end
 
-  def generate
+  def generate # rubocop:disable Metrics/AbcSize
     language = Coursemology::Polyglot::Language.where(id: params[:language_id]).first
 
-    render json: { success: false, message: 'Language not supported' }, status: :bad_request if !CodaveriAsyncApiService.language_valid_for_codaveri?(language)
+    unless CodaveriAsyncApiService.language_valid_for_codaveri?(language)
+      render json: {
+        success: false,
+        message: 'Language not supported'
+      }, status: :bad_request
+    end
 
-    polyglot_language_name = language.name.split[0].downcase
-    polyglot_language_version = language.name.split[1]
-
-    generation_service = Course::Assessment::Question::CodaveriProblemGenerationService.new(@assessment, params[:custom_prompt], polyglot_language_name, polyglot_language_version, params[:difficulty])
+    generation_service = Course::Assessment::Question::CodaveriProblemGenerationService.new(
+      @assessment,
+      params[:custom_prompt],
+      # TODO: move these declarations (polyglot_language_name and _version) to polyglot repo
+      language.name.split[0].downcase,
+      language.name.split[1],
+      params[:difficulty]
+    )
     generated_problem = generation_service.codaveri_generate_problem
     render json: generated_problem, status: :ok
   end
