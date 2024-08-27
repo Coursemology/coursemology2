@@ -20,6 +20,7 @@ end
 json.assessments @assessments_with_programming_qns do |assessment|
   json.id assessment.id
   json.tabId assessment.tab_id
+  json.categoryId assessment.tab.category_id
   json.title assessment.title
   json.url course_assessment_path(current_course, assessment)
 

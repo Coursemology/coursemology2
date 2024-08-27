@@ -10,8 +10,12 @@ import Link from 'lib/components/core/Link';
 import useItems from 'lib/hooks/items/useItems';
 import { useAppSelector } from 'lib/hooks/store';
 
-import { getAllAssessmentTabsFor } from '../selectors';
+import {
+  getAllAssessmentTabsFor,
+  getAssessmentForCategory,
+} from '../selectors';
 
+import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import CollapsibleList from './lists/CollapsibleList';
 import AssessmentTab from './AssessmentTab';
 
@@ -30,10 +34,16 @@ const AssessmentCategory: FC<AssessmentCategoryProps> = (props) => {
   const tabs = useAppSelector((state) =>
     getAllAssessmentTabsFor(state, category.id),
   );
+  const assessments = useAppSelector((state) =>
+    getAssessmentForCategory(state, category.id),
+  );
+
+  const assessmentIds = assessments.map((assessment) => assessment.id);
   const { processedItems: sortedTabs } = useItems(tabs, [], sortTabs);
 
   return (
     <CollapsibleList
+      headerAction={<CodaveriToggleButtons assessmentIds={assessmentIds} />}
       headerTitle={
         <Link
           onClick={(e): void => e.stopPropagation()}

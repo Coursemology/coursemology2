@@ -12,6 +12,7 @@ export interface ProgrammingQuestion {
 export interface AssessmentProgrammingQuestionsData {
   id: number;
   tabId: number;
+  categoryId: number;
   title: string;
   url: string;
   programmingQuestions: ProgrammingQuestion[];
