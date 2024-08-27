@@ -146,4 +146,5 @@ export interface AssessmentLiveFeedbackStatistics {
   workflowState?: WorkflowState;
   liveFeedbackCount?: number[]; // Will already be ordered by question
   totalFeedbackCount?: number;
+  questionIds: number[];
 }
