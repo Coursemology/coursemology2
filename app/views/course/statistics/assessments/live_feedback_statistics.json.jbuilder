@@ -10,5 +10,7 @@ json.array! @student_live_feedback_hash.each do |course_user, (submission, live_
   json.groups @group_names_hash[course_user.id] do |name|
     json.name name
   end
+
   json.liveFeedbackCount live_feedback_count
+  json.questionIds(@question_order_hash.keys.sort_by { |key| @question_order_hash[key] })
 end
