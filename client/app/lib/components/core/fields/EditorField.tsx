@@ -11,6 +11,7 @@ interface EditorProps extends ComponentProps<typeof AceEditor> {
   value?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
+  cursorStart?: number;
 }
 
 /**
@@ -31,7 +32,8 @@ const DEFAULT_FONT_FAMILY = [
 
 const EditorField = forwardRef(
   (props: EditorProps, ref: ForwardedRef<AceEditor>): JSX.Element => {
-    const { language, value, disabled, onChange, ...otherProps } = props;
+    const { language, value, disabled, onChange, cursorStart, ...otherProps } =
+      props;
 
     return (
       <AceEditor
@@ -49,6 +51,9 @@ const EditorField = forwardRef(
           $blockScrolling: true,
         }}
         onLoad={(editor) => {
+          if (cursorStart !== undefined) {
+            editor.getSession().getSelection().moveCursorTo(cursorStart, 0);
+          }
           if (language === 'python')
             editor.onPaste = (originalText, event: ClipboardEvent): void => {
               event.preventDefault();
