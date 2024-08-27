@@ -8,7 +8,7 @@ import { useAppSelector } from 'lib/hooks/store';
 
 import { getViewSettings } from '../selectors';
 
-import CodaveriEnableDisableButtons from './buttons/CodaveriEnableDisableButtons';
+import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import CollapsibleList from './lists/CollapsibleList';
 import AssessmentHeaderChip from './AssessmentHeaderChip';
 import AssessmentProgrammingQnList from './AssessmentProgrammingQnList';
@@ -27,9 +27,7 @@ const AssessmentListItem: FC<AssessmentListItemProps> = (props) => {
     <CollapsibleList
       collapsedByDefault
       forceExpand={isAssessmentListExpanded}
-      headerAction={
-        <CodaveriEnableDisableButtons assessmentIds={[assessment.id]} />
-      }
+      headerAction={<CodaveriToggleButtons assessmentIds={[assessment.id]} />}
       headerTitle={
         <>
           <Link
@@ -43,7 +41,7 @@ const AssessmentListItem: FC<AssessmentListItemProps> = (props) => {
               primary={assessment.title}
             />
           </Link>
-          <AssessmentHeaderChip assessmentId={assessment.id} />
+          <AssessmentHeaderChip assessmentIds={[assessment.id]} />
         </>
       }
       level={2}

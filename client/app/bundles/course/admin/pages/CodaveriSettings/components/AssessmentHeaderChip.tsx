@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Chip, ChipProps } from '@mui/material';
+import { Chip } from '@mui/material';
 import { ProgrammingQuestion } from 'types/course/admin/codaveri';
 
 import { useAppSelector } from 'lib/hooks/store';
@@ -11,19 +11,19 @@ import translations from '../translations';
 const AssessmentCodaveriQuestionMap = {
   None: {
     text: translations.None,
-    color: 'warning',
+    color: 'text-red-600 border-red-600',
   },
   Some: {
     text: translations.Some,
-    color: 'info',
+    color: 'text-blue-600 border-blue-600',
   },
   All: {
     text: translations.All,
-    color: 'success',
+    color: 'text-green-600 border-green-600',
   },
 } satisfies Record<
   'None' | 'Some' | 'All',
-  { text: Descriptor; color: ChipProps['color'] }
+  { text: Descriptor; color: string }
 >;
 
 const checkCodaveriExist = (
@@ -39,22 +39,22 @@ const checkCodaveriExist = (
 };
 
 interface AssessmentHeaderChipProps {
-  assessmentId: number;
+  assessmentIds: number[];
 }
 
 const AssessmentHeaderChip: FC<AssessmentHeaderChipProps> = (props) => {
-  const { assessmentId } = props;
+  const { assessmentIds } = props;
   const { t } = useTranslation();
 
   const questions = useAppSelector((state) =>
-    getProgrammingQuestionsForAssessments(state, [assessmentId]),
+    getProgrammingQuestionsForAssessments(state, assessmentIds),
   );
+
   const codaveriQuestionsExist = checkCodaveriExist(questions);
 
   return (
     <Chip
-      className="ml-2"
-      color={AssessmentCodaveriQuestionMap[codaveriQuestionsExist].color}
+      className={`ml-2 ${AssessmentCodaveriQuestionMap[codaveriQuestionsExist].color}`}
       label={t(AssessmentCodaveriQuestionMap[codaveriQuestionsExist].text)}
       size="small"
       variant="outlined"
