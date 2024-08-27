@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { Button } from '@mui/material';
+import { Switch } from '@mui/material';
 import { ProgrammingEvaluator } from 'types/course/admin/codaveri';
 
 import { updateProgrammingQuestionCodaveriSettingsForAssessments } from 'course/admin/reducers/codaveriSettings';
@@ -15,7 +15,7 @@ interface CodaveriEnableDisableButtonsProps {
   assessmentIds: number[];
 }
 
-const CodaveriEnableDisableButtons: FC<CodaveriEnableDisableButtonsProps> = (
+const CodaveriToggleButtons: FC<CodaveriEnableDisableButtonsProps> = (
   props,
 ) => {
   const { assessmentIds } = props;
@@ -25,12 +25,11 @@ const CodaveriEnableDisableButtons: FC<CodaveriEnableDisableButtonsProps> = (
     getProgrammingQuestionsForAssessments(state, assessmentIds),
   );
   const [isUpdating, setIsUpdating] = useState(false);
-  const qnsWithDefaultEval = programmingQuestions.filter(
-    (question) => !question.isCodaveri,
-  );
   const qnsWithCodaveriEval = programmingQuestions.filter(
     (question) => question.isCodaveri,
   );
+
+  const hasNoProgrammingQuestions = programmingQuestions.length === 0;
 
   const handleEvaluatorUpdate = (evaluator: ProgrammingEvaluator): void => {
     setIsUpdating(true);
@@ -53,31 +52,23 @@ const CodaveriEnableDisableButtons: FC<CodaveriEnableDisableButtonsProps> = (
   };
 
   return (
-    <div className="flex space-x-2">
-      <Button
-        disabled={
-          qnsWithDefaultEval.length === programmingQuestions.length ||
-          isUpdating
+    <div className="pr-6 flex justify-between">
+      <Switch
+        checked={
+          hasNoProgrammingQuestions
+            ? false
+            : qnsWithCodaveriEval.length === programmingQuestions.length
         }
-        onClick={(): void => handleEvaluatorUpdate('default')}
-        size="small"
-        variant="contained"
-      >
-        {t(translations.disableAllCodaveri)}
-      </Button>
-      <Button
-        disabled={
-          qnsWithCodaveriEval.length === programmingQuestions.length ||
-          isUpdating
-        }
-        onClick={(): void => handleEvaluatorUpdate('codaveri')}
-        size="small"
-        variant="contained"
-      >
-        {t(translations.enableAllCodaveri)}
-      </Button>
+        color="primary"
+        disabled={hasNoProgrammingQuestions || isUpdating}
+        onChange={(_, isChecked): void => {
+          return isChecked
+            ? handleEvaluatorUpdate('codaveri')
+            : handleEvaluatorUpdate('default');
+        }}
+      />
     </div>
   );
 };
 
-export default CodaveriEnableDisableButtons;
+export default CodaveriToggleButtons;

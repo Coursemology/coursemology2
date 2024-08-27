@@ -12,8 +12,9 @@ import { useAppSelector } from 'lib/hooks/store';
 
 import { getAssessmentsFor } from '../selectors';
 
-import CodaveriEnableDisableButtons from './buttons/CodaveriEnableDisableButtons';
+import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import CollapsibleList from './lists/CollapsibleList';
+import AssessmentHeaderChip from './AssessmentHeaderChip';
 import AssessmentListItem from './AssessmentListItem';
 
 interface AssessmentTabProps {
@@ -44,21 +45,22 @@ const AssessmentTab: FC<AssessmentTabProps> = (props) => {
 
   return (
     <CollapsibleList
-      headerAction={
-        <CodaveriEnableDisableButtons assessmentIds={assessmentIds} />
-      }
+      headerAction={<CodaveriToggleButtons assessmentIds={assessmentIds} />}
       headerTitle={
-        <Link
-          onClick={(e): void => e.stopPropagation()}
-          opensInNewTab
-          to={tab.url}
-          underline="hover"
-        >
-          <ListItemText
-            classes={{ primary: 'font-bold' }}
-            primary={tab.title}
-          />
-        </Link>
+        <>
+          <Link
+            onClick={(e): void => e.stopPropagation()}
+            opensInNewTab
+            to={tab.url}
+            underline="hover"
+          >
+            <ListItemText
+              classes={{ primary: 'font-bold' }}
+              primary={tab.title}
+            />
+          </Link>
+          <AssessmentHeaderChip assessmentIds={assessmentIds} />
+        </>
       }
       level={1}
     >

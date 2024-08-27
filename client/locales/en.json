@@ -521,6 +521,15 @@
   "course.admin.CodaveriSettings.liveFeedbackDisabledDescription": {
     "defaultMessage": "Live help is disabled for all assessments and programming questions."
   },
+  "course.admin.CodaveriSettings.None": {
+    "defaultMessage": "None"
+  },
+  "course.admin.CodaveriSettings.Some": {
+    "defaultMessage": "Some"
+  },
+  "course.admin.CodaveriSettings.All": {
+    "defaultMessage": "All"
+  },
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "Comments settings"
   },

@@ -10,7 +10,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { getAllAssessmentCategories, getAllAssessments } from '../selectors';
 import translations from '../translations';
 
-import CodaveriEnableDisableButtons from './buttons/CodaveriEnableDisableButtons';
+import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import ExpandAllSwitch from './buttons/ExpandAllSwitch';
 import ShowCodaveriOnlySwitch from './buttons/ShowCodaveriOnlySwitch';
 import AssessmentCategory from './AssessmentCategory';
@@ -48,7 +48,7 @@ const AssessmentList: FC = () => {
             <ExpandAllSwitch />
             <ShowCodaveriOnlySwitch />
           </div>
-          <CodaveriEnableDisableButtons assessmentIds={assessmentIds} />
+          <CodaveriToggleButtons assessmentIds={assessmentIds} />
         </div>
         <div>
           <List

@@ -479,6 +479,15 @@
   "course.admin.CodaveriSettings.error": {
     "defaultMessage": "更新 codaveri 设置时出错。"
   },
+  "course.admin.CodaveriSettings.None": {
+    "defaultMessage": "无"
+  },
+  "course.admin.CodaveriSettings.Some": {
+    "defaultMessage": "一些"
+  },
+  "course.admin.CodaveriSettings.All": {
+    "defaultMessage": "全部"
+  },
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "评论设置"
   },
