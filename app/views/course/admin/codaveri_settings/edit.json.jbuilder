@@ -40,5 +40,6 @@ json.assessments @assessments_with_programming_qns do |assessment|
     json.assessmentId assessment.id
     json.title question_title
     json.isCodaveri programming_qn.is_codaveri
+    json.liveFeedbackEnabled programming_qn.live_feedback_enabled
   end
 end

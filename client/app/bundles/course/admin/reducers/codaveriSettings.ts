@@ -91,6 +91,23 @@ export const codaveriSettingsSlice = createSlice({
         }
       });
     },
+    updateProgrammingQuestionLiveFeedbackEnabledForAssessments: (
+      state,
+      action: PayloadAction<{
+        liveFeedbackEnabled: boolean;
+        assessmentIds: number[];
+      }>,
+    ) => {
+      state.programmingQuestions.ids.forEach((qnId) => {
+        const question = state.programmingQuestions.entities[qnId];
+        if (
+          question &&
+          action.payload.assessmentIds.includes(question.assessmentId)
+        ) {
+          question.liveFeedbackEnabled = action.payload.liveFeedbackEnabled;
+        }
+      });
+    },
     updateCodaveriSettingsPageViewSettings: (
       state,
       action: PayloadAction<Partial<CodaveriSettingsPageViewSettings>>,
@@ -104,6 +121,7 @@ export const {
   saveAllAssessmentsQuestions,
   updateProgrammingQuestion,
   updateProgrammingQuestionCodaveriSettingsForAssessments,
+  updateProgrammingQuestionLiveFeedbackEnabledForAssessments,
   updateCodaveriSettingsPageViewSettings,
 } = codaveriSettingsSlice.actions;
 

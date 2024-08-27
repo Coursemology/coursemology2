@@ -10,7 +10,6 @@ import { getViewSettings } from '../selectors';
 
 import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import CollapsibleList from './lists/CollapsibleList';
-import AssessmentHeaderChip from './AssessmentHeaderChip';
 import AssessmentProgrammingQnList from './AssessmentProgrammingQnList';
 
 interface AssessmentListItemProps {
@@ -29,20 +28,18 @@ const AssessmentListItem: FC<AssessmentListItemProps> = (props) => {
       forceExpand={isAssessmentListExpanded}
       headerAction={<CodaveriToggleButtons assessmentIds={[assessment.id]} />}
       headerTitle={
-        <>
-          <Link
-            onClick={(e): void => e.stopPropagation()}
-            opensInNewTab
-            to={assessment.url}
-            underline="hover"
-          >
-            <ListItemText
-              classes={{ primary: 'font-bold' }}
-              primary={assessment.title}
-            />
-          </Link>
-          <AssessmentHeaderChip assessmentIds={[assessment.id]} />
-        </>
+        <Link
+          className="max-w-2xl"
+          onClick={(e): void => e.stopPropagation()}
+          opensInNewTab
+          to={assessment.url}
+          underline="hover"
+        >
+          <ListItemText
+            classes={{ primary: 'font-bold' }}
+            primary={assessment.title}
+          />
+        </Link>
       }
       level={2}
     >

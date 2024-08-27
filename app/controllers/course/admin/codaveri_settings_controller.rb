@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
-  after_action :create_codaveri_problem, only: [:update_evaluator]
+  after_action :create_codaveri_problem, only: [:update_evaluator, :update_live_feedback_enabled]
 
   def edit
     load_course_assessments_data
@@ -24,6 +24,16 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
     raise ActiveRecord::Rollback unless @programming_questions.update_all(is_codaveri: is_codaveri)
   end
 
+  def update_live_feedback_enabled
+    live_feedback_enabled = update_live_feedback_enabled_params[:live_feedback_enabled]
+    assessments = current_course.assessments.where(id: update_live_feedback_enabled_params[:assessment_ids])
+    question_ids = assessments.includes(:programming_questions).flat_map do |assessment|
+      assessment.programming_questions.map(&:id)
+    end
+    @programming_questions = Course::Assessment::Question::Programming.where(id: question_ids)
+    raise ActiveRecord::Rollback unless @programming_questions.update_all(live_feedback_enabled: live_feedback_enabled)
+  end
+
   private
 
   def codaveri_settings_params
@@ -34,12 +44,16 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
     params.require(:update_evaluator).permit(:programming_evaluator, assessment_ids: [])
   end
 
+  def update_live_feedback_enabled_params
+    params.require(:update_live_feedback_enabled).permit(:live_feedback_enabled, assessment_ids: [])
+  end
+
   def component
     current_component_host[:course_codaveri_component]
   end
 
   def load_course_assessments_data
-    @assessments_with_programming_qns = current_course.assessments.includes(programming_questions: [:language])
+    @assessments_with_programming_qns = current_course.assessments.includes(:tab, programming_questions: [:language])
   end
 
   def create_codaveri_problem

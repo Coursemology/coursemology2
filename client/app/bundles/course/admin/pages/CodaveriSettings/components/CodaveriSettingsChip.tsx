@@ -1,6 +1,9 @@
 import { FC } from 'react';
 import { Chip } from '@mui/material';
-import { ProgrammingQuestion } from 'types/course/admin/codaveri';
+import {
+  CodaveriSettings,
+  ProgrammingQuestion,
+} from 'types/course/admin/codaveri';
 
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation, { Descriptor } from 'lib/hooks/useTranslation';
@@ -38,12 +41,25 @@ const checkCodaveriExist = (
   return 'None';
 };
 
-interface AssessmentHeaderChipProps {
+const checkLiveFeedbackExist = (
+  questions: ProgrammingQuestion[],
+): keyof typeof AssessmentCodaveriQuestionMap => {
+  if (questions.every((qn) => qn.liveFeedbackEnabled)) {
+    return 'All';
+  }
+  if (questions.some((qn) => qn.liveFeedbackEnabled)) {
+    return 'Some';
+  }
+  return 'None';
+};
+
+interface CodaveriSettingsChipProps {
   assessmentIds: number[];
+  for: CodaveriSettings;
 }
 
-const AssessmentHeaderChip: FC<AssessmentHeaderChipProps> = (props) => {
-  const { assessmentIds } = props;
+const CodaveriSettingsChip: FC<CodaveriSettingsChipProps> = (props) => {
+  const { assessmentIds, for: settings } = props;
   const { t } = useTranslation();
 
   const questions = useAppSelector((state) =>
@@ -51,15 +67,21 @@ const AssessmentHeaderChip: FC<AssessmentHeaderChipProps> = (props) => {
   );
 
   const codaveriQuestionsExist = checkCodaveriExist(questions);
+  const liveFeedbackExist = checkLiveFeedbackExist(questions);
+
+  const questionsExist =
+    settings === 'codaveri_evaluator'
+      ? codaveriQuestionsExist
+      : liveFeedbackExist;
 
   return (
     <Chip
-      className={`ml-2 ${AssessmentCodaveriQuestionMap[codaveriQuestionsExist].color}`}
-      label={t(AssessmentCodaveriQuestionMap[codaveriQuestionsExist].text)}
+      className={`${AssessmentCodaveriQuestionMap[questionsExist].color} w-24`}
+      label={t(AssessmentCodaveriQuestionMap[questionsExist].text)}
       size="small"
       variant="outlined"
     />
   );
 };
 
-export default AssessmentHeaderChip;
+export default CodaveriSettingsChip;

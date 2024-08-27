@@ -3,6 +3,7 @@ import {
   CodaveriSettingsData,
   CodaveriSettingsPatchData,
   CodaveriSwitchQnsEvaluatorPatchData,
+  CodaveriSwitchQnsLiveFeedbackEnabledPatchData,
 } from 'types/course/admin/codaveri';
 
 import BaseAdminAPI from './Base';
@@ -26,5 +27,14 @@ export default class CodaveriAdminAPI extends BaseAdminAPI {
     data: CodaveriSwitchQnsEvaluatorPatchData,
   ): Promise<AxiosResponse<CodaveriSettingsData>> {
     return this.client.patch(`${this.urlPrefix}/update_evaluator`, data);
+  }
+
+  updateLiveFeedbackEnabledForAllQuestions(
+    data: CodaveriSwitchQnsLiveFeedbackEnabledPatchData,
+  ): Promise<AxiosResponse<CodaveriSettingsData>> {
+    return this.client.patch(
+      `${this.urlPrefix}/update_live_feedback_enabled`,
+      data,
+    );
   }
 }

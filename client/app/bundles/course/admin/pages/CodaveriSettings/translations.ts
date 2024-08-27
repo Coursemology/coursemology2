@@ -84,9 +84,22 @@ export default defineMessages({
     defaultMessage:
       'Enable/disable Codaveri as evaluator for programming questions in various assessments.',
   },
-  errorOccurredWhenUpdating: {
-    id: 'course.admin.CodaveriSettings.errorOccurredWhenUpdating',
-    defaultMessage: 'An error occurred while updating the codaveri setting.',
+  errorOccurredWhenUpdatingCodaveriEvaluatorSettings: {
+    id: 'course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings',
+    defaultMessage:
+      'An error occurred while updating the codaveri evaluator settings.',
+  },
+  codaveriEvaluatorSettings: {
+    id: 'course.admin.CodaveriSettings.codaveriEvaluatorSettings',
+    defaultMessage: 'Codaveri Evaluator',
+  },
+  liveFeedbackSettings: {
+    id: 'course.admin.CodaveriSettings.liveFeedbackSettings',
+    defaultMessage: 'Live Help',
+  },
+  errorOccurredWhenUpdatingLiveFeedbackSettings: {
+    id: 'course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings',
+    defaultMessage: 'An error occurred while updating the live help settings.',
   },
   enableAllCodaveri: {
     id: 'course.admin.CodaveriSettings.enableAllCodaveri',
@@ -101,9 +114,19 @@ export default defineMessages({
     defaultMessage:
       'Sucessfully updated all questions to use {evaluator} evaluator',
   },
+  successfulUpdateAllLiveFeedbackEnabled: {
+    id: 'course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled',
+    defaultMessage:
+      'Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} live help for all questions',
+  },
   evaluatorUpdateSuccess: {
     id: 'course.admin.CodaveriSettings.evaluatorUpdateSuccess',
     defaultMessage: '{question} is now using {evaluator} evaluator',
+  },
+  liveFeedbackEnabledUpdateSuccess: {
+    id: 'course.admin.CodaveriSettings.evaluatorUpdateSuccess',
+    defaultMessage:
+      'Live Help for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}',
   },
   expandAll: {
     id: 'course.admin.CodaveriSettings.expandAll',
