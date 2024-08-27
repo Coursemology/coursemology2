@@ -10,11 +10,10 @@ import Link from 'lib/components/core/Link';
 import useItems from 'lib/hooks/items/useItems';
 import { useAppSelector } from 'lib/hooks/store';
 
-import { getAssessmentsFor } from '../selectors';
+import { getAssessmentsForTab } from '../selectors';
 
 import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import CollapsibleList from './lists/CollapsibleList';
-import AssessmentHeaderChip from './AssessmentHeaderChip';
 import AssessmentListItem from './AssessmentListItem';
 
 interface AssessmentTabProps {
@@ -34,7 +33,7 @@ export const sortAssessments = (
 const AssessmentTab: FC<AssessmentTabProps> = (props) => {
   const { tab } = props;
   const assessments = useAppSelector((state) =>
-    getAssessmentsFor(state, tab.id),
+    getAssessmentsForTab(state, tab.id),
   );
   const { processedItems: sortedAssessments } = useItems(
     assessments,
@@ -42,25 +41,27 @@ const AssessmentTab: FC<AssessmentTabProps> = (props) => {
     sortAssessments,
   );
   const assessmentIds = assessments.map((item) => item.id);
+  const assessmentWithProgrammingQns = assessments.filter(
+    (assessment) => assessment.programmingQuestions.length > 0,
+  );
+
+  if (assessmentWithProgrammingQns.length === 0) return null;
 
   return (
     <CollapsibleList
       headerAction={<CodaveriToggleButtons assessmentIds={assessmentIds} />}
       headerTitle={
-        <>
-          <Link
-            onClick={(e): void => e.stopPropagation()}
-            opensInNewTab
-            to={tab.url}
-            underline="hover"
-          >
-            <ListItemText
-              classes={{ primary: 'font-bold' }}
-              primary={tab.title}
-            />
-          </Link>
-          <AssessmentHeaderChip assessmentIds={assessmentIds} />
-        </>
+        <Link
+          onClick={(e): void => e.stopPropagation()}
+          opensInNewTab
+          to={tab.url}
+          underline="hover"
+        >
+          <ListItemText
+            classes={{ primary: 'font-bold' }}
+            primary={tab.title}
+          />
+        </Link>
       }
       level={1}
     >

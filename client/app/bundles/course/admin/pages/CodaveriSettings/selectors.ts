@@ -81,12 +81,22 @@ export const getAssessments = (
   );
 };
 
-export const getAssessmentsFor = (
+export const getAssessmentsForTab = (
   state: AppState,
   tabId: EntityId,
 ): AssessmentProgrammingQuestionsData[] => {
   const assessments = getAllAssessments(state);
   return assessments.filter((assessment) => assessment.tabId === tabId);
+};
+
+export const getAssessmentForCategory = (
+  state: AppState,
+  categoryId: EntityId,
+): AssessmentProgrammingQuestionsData[] => {
+  const assessments = getAllAssessments(state);
+  return assessments.filter(
+    (assessment) => assessment.categoryId === categoryId,
+  );
 };
 
 export const getAllProgrammingQuestions = (
