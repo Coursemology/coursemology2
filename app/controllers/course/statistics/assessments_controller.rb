@@ -54,6 +54,12 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                                                                           @all_students)
   end
 
+  def live_feedback_history
+    @live_feedbacks = fetch_live_feedbacks
+    @live_feedback_details_hash = build_live_feedback_details_hash(@live_feedbacks)
+    @question = Course::Assessment::Question.find(params[:question_id])
+  end
+
   private
 
   def assessment_params
@@ -87,6 +93,34 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def create_question_order_hash
     @question_order_hash = @assessment.question_assessments.to_h do |q|
       [q.question_id, q.weight]
+    end
+  end
+
+  def fetch_live_feedbacks
+    Course::Assessment::LiveFeedback.where(assessment_id: assessment_params[:id],
+                                           creator_course_id: params[:course_user_id],
+                                           question_id: params[:question_id]).
+      order(created_at: :asc).includes(:code, code: :comments)
+  end
+
+  def build_live_feedback_details_hash(live_feedbacks)
+    live_feedbacks.each_with_object({}) do |lf, hash|
+      hash[lf.id] = lf.code.map do |code|
+        {
+          code: {
+            id: code.id,
+            filename: code.filename,
+            content: code.content
+          },
+          comments: code.comments.map do |comment|
+            {
+              id: comment.id,
+              line_number: comment.line_number,
+              comment: comment.comment
+            }
+          end
+        }
+      end
     end
   end
 end

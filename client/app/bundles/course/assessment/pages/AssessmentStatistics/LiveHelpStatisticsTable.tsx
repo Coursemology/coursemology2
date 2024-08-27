@@ -3,13 +3,11 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip, Typography } from '@mui/material';
 import palette from 'theme/palette';
-import {
-  AssessmentLiveFeedbackStatistics,
-  MainSubmissionInfo,
-} from 'types/course/statistics/assessmentStatistics';
+import { AssessmentLiveFeedbackStatistics } from 'types/course/statistics/assessmentStatistics';
 
 import { fetchLiveFeedbackStatistics } from 'course/assessment/operations/statistics';
 import { workflowStates } from 'course/assessment/submission/constants';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import GhostIcon from 'lib/components/icons/GhostIcon';
@@ -19,6 +17,7 @@ import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
+import LiveFeedbackHistoryIndex from './LiveFeedbackHistory';
 import { getAssessmentStatistics } from './selectors';
 
 const translations = defineMessages({
@@ -58,6 +57,14 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.filename',
     defaultMessage: 'Question-level Live Feedback Statistics for {assessment}',
   },
+  closePrompt: {
+    id: 'course.assessment.statistics.closePrompt',
+    defaultMessage: 'Close',
+  },
+  liveFeedbackHistoryPromptTitle: {
+    id: 'course.assessment.statistics.liveFeedbackHistoryPromptTitle',
+    defaultMessage: 'Live Feedback History',
+  },
 });
 
 const statusTranslations = {
@@ -88,6 +95,13 @@ const LiveHelpStatisticsTable: FC<Props> = (props) => {
     AssessmentLiveFeedbackStatistics[]
   >([]);
   const [maxFeedbackCount, setMaxFeedbackCount] = useState<number>(0);
+
+  const [openLiveFeedbackHistory, setOpenLiveFeedbackHistory] = useState(false);
+  const [liveFeedbackInfo, setLiveFeedbackInfo] = useState({
+    courseUserId: 0,
+    questionId: 0,
+    questionNumber: 0,
+  });
 
   useEffect(() => {
     fetchLiveFeedbackStatistics(parsedAssessmentId).then(
@@ -132,10 +146,24 @@ const LiveHelpStatisticsTable: FC<Props> = (props) => {
   }
   // the case where the live feedback count is null is handled separately inside the column
   // (refer to the definition of statColumns below)
-  const renderNonNullAttemptCountCell = (count: number): ReactNode => {
+  const renderNonNullClickableLiveFeedbackCountCell = (
+    count: number,
+    courseUserId: number,
+    questionId: number,
+    questionNumber: number,
+  ): ReactNode => {
     const classname = getClassnameForLiveFeedbackCell(count, maxFeedbackCount);
+    if (count === 0) {
+      return <Box>{count}</Box>;
+    }
     return (
-      <div className={classname}>
+      <div
+        className={`cursor-pointer ${classname}`}
+        onClick={(): void => {
+          setOpenLiveFeedbackHistory(true);
+          setLiveFeedbackInfo({ courseUserId, questionId, questionNumber });
+        }}
+      >
         <Box>{count}</Box>
       </div>
     );
@@ -168,7 +196,12 @@ const LiveHelpStatisticsTable: FC<Props> = (props) => {
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
           return typeof datum.liveFeedbackCount?.[index] === 'number'
-            ? renderNonNullAttemptCountCell(datum.liveFeedbackCount?.[index])
+            ? renderNonNullClickableLiveFeedbackCountCell(
+                datum.liveFeedbackCount?.[index],
+                datum.courseUser.id,
+                datum.questionIds[index],
+                index + 1,
+              )
             : null;
         },
         sortable: true,
@@ -221,7 +254,7 @@ const LiveHelpStatisticsTable: FC<Props> = (props) => {
     },
   });
 
-  const jointGroupsName = (datum: MainSubmissionInfo): string =>
+  const jointGroupsName = (datum: AssessmentLiveFeedbackStatistics): string =>
     datum.groups ? datum.groups.map((g) => g.name).join(', ') : '';
 
   const columns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] = [
@@ -317,6 +350,19 @@ const LiveHelpStatisticsTable: FC<Props> = (props) => {
         search={{ searchPlaceholder: t(translations.searchText) }}
         toolbar={{ show: true }}
       />
+      <Prompt
+        cancelLabel={t(translations.closePrompt)}
+        maxWidth="lg"
+        onClose={(): void => setOpenLiveFeedbackHistory(false)}
+        open={openLiveFeedbackHistory}
+        title={t(translations.liveFeedbackHistoryPromptTitle)}
+      >
+        <LiveFeedbackHistoryIndex
+          courseUserId={liveFeedbackInfo.courseUserId}
+          questionId={liveFeedbackInfo.questionId}
+          questionNumber={liveFeedbackInfo.questionNumber}
+        />
+      </Prompt>
     </>
   );
 };

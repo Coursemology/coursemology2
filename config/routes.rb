@@ -441,6 +441,7 @@ Rails.application.routes.draw do
         get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
         get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
         get 'assessment/:id/live_feedback_statistics' => 'assessments#live_feedback_statistics'
+        get 'assessment/:id/live_feedback_history' => 'assessments#live_feedback_history'
       end
 
       scope module: :video do
