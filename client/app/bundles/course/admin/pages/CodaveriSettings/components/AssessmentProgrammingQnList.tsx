@@ -29,7 +29,7 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
   if (!programmingQn || (showCodaveriEnabled && !programmingQn.isCodaveri))
     return null;
 
-  const handleChange = (isChecked: boolean): void => {
+  const handleCodaveriEvaluatorChange = (isChecked: boolean): void => {
     const updatedQn = produce(programmingQn, (draft) => {
       draft.isCodaveri = isChecked;
     });
@@ -48,7 +48,34 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
         );
       })
       .catch(() => {
-        toast.error(t(translations.errorOccurredWhenUpdating));
+        toast.error(
+          t(translations.errorOccurredWhenUpdatingCodaveriEvaluatorSettings),
+        );
+      });
+  };
+
+  const handleLiveFeedbackEnabledChange = (isChecked: boolean): void => {
+    const updatedQn = produce(programmingQn, (draft) => {
+      draft.liveFeedbackEnabled = isChecked;
+    });
+    updateProgrammingQuestionCodaveri(
+      programmingQn.assessmentId,
+      programmingQn.id,
+      updatedQn,
+    )
+      .then(() => {
+        dispatch(updateProgrammingQuestion(updatedQn));
+        toast.success(
+          t(translations.liveFeedbackEnabledUpdateSuccess, {
+            question: programmingQn.title,
+            liveFeedbackEnabled: isChecked,
+          }),
+        );
+      })
+      .catch(() => {
+        toast.error(
+          t(translations.errorOccurredWhenUpdatingCodaveriEvaluatorSettings),
+        );
       });
   };
 
@@ -63,11 +90,23 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
         >
           <ListItemText primary={programmingQn.title} />
         </Link>
-        <Switch
-          checked={programmingQn.isCodaveri}
-          color="primary"
-          onChange={(_, isChecked): void => handleChange(isChecked)}
-        />
+        <div className="mr-24 space-x-32">
+          <Switch
+            checked={programmingQn.isCodaveri}
+            className="mr-1"
+            color="primary"
+            onChange={(_, isChecked): void =>
+              handleCodaveriEvaluatorChange(isChecked)
+            }
+          />
+          <Switch
+            checked={programmingQn.liveFeedbackEnabled}
+            color="primary"
+            onChange={(_, isChecked): void =>
+              handleLiveFeedbackEnabledChange(isChecked)
+            }
+          />
+        </div>
       </ListItem>
       <Divider className="border-neutral-200 last:border-none" />
     </>

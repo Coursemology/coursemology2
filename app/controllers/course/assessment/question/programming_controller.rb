@@ -141,7 +141,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   end
 
   def programming_question_setting_params
-    params.require(:question_programming).permit(:is_codaveri)
+    params.require(:question_programming).permit(:is_codaveri, :live_feedback_enabled)
   end
 
   def render_success_json(redirect_to_edit)

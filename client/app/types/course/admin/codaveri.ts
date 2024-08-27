@@ -1,10 +1,12 @@
 export type ProgrammingEvaluator = 'default' | 'codaveri';
+export type CodaveriSettings = 'codaveri_evaluator' | 'live_feedback';
 
 export interface ProgrammingQuestion {
   id: number;
   editUrl: string;
   title: string;
   isCodaveri: boolean;
+  liveFeedbackEnabled: boolean;
   assessmentId: number;
 }
 export interface AssessmentProgrammingQuestionsData {
@@ -59,5 +61,12 @@ export interface CodaveriSwitchQnsEvaluatorPatchData {
   update_evaluator: {
     assessment_ids: number[];
     programming_evaluator: ProgrammingEvaluator;
+  };
+}
+
+export interface CodaveriSwitchQnsLiveFeedbackEnabledPatchData {
+  update_live_feedback_enabled: {
+    assessment_ids: number[];
+    live_feedback_enabled: boolean;
   };
 }

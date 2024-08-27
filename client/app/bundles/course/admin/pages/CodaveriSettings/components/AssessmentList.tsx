@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { List } from '@mui/material';
+import { List, Typography } from '@mui/material';
 import { AssessmentCategoryData } from 'types/course/admin/codaveri';
 
 import Section from 'lib/components/core/layouts/Section';
@@ -12,7 +12,6 @@ import translations from '../translations';
 
 import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import ExpandAllSwitch from './buttons/ExpandAllSwitch';
-import ShowCodaveriOnlySwitch from './buttons/ShowCodaveriOnlySwitch';
 import AssessmentCategory from './AssessmentCategory';
 
 export const sortCategories = (
@@ -43,11 +42,30 @@ const AssessmentList: FC = () => {
       title={t(translations.programmingQuestionSettings)}
     >
       <section>
-        <div className="mb-4 flex justify-between items-center">
+        <div className="flex justify-between items-center">
           <div>
             <ExpandAllSwitch />
-            <ShowCodaveriOnlySwitch />
           </div>
+          <div className="pr-28 space-x-48 flex justify-end">
+            <Typography
+              align="center"
+              className="max-w-[10px] mr-2"
+              variant="body2"
+            >
+              {t(translations.codaveriEvaluatorSettings)}
+            </Typography>
+            <div className="text-center">
+              <Typography
+                align="center"
+                className="max-w-[10px] pr-24"
+                variant="body2"
+              >
+                {t(translations.liveFeedbackSettings)}
+              </Typography>
+            </div>
+          </div>
+        </div>
+        <div className="mb-4 pr-1 flex justify-end">
           <CodaveriToggleButtons assessmentIds={assessmentIds} />
         </div>
         <div>

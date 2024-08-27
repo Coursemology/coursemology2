@@ -285,17 +285,33 @@ RSpec.describe Course::Assessment::Question::Programming do
     end
 
     describe '#validate_codaveri_question' do
-      subject do
+      let(:subject_evaluator) do
         build(:course_assessment_question_programming, is_codaveri: true, assessment: assessment, language: language)
+      end
+      let(:subject_feedback) do
+        build(:course_assessment_question_programming, live_feedback_enabled: true,
+                                                       assessment: assessment, language: language)
       end
       let(:assessment) { create(:assessment, :published_with_programming_question) }
       let(:language) { Coursemology::Polyglot::Language::Python::Python3Point10.instance }
 
-      context 'when the language chosen is not whitelisted' do
+      context 'when the language chosen is not whitelisted for evaluator' do
         let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
         it 'returns correct validation' do
-          expect(subject).to_not be_valid
-          expect(subject.errors.messages[:base]).to include('Language type must be Python 3 and above.')
+          expect(subject_evaluator).to_not be_valid
+          expect(subject_evaluator.errors.messages[:base]).to include('Language type must be Python 3 and above '\
+                                                                      'to activate either codaveri '\
+                                                                      'evaluator or live feedback')
+        end
+      end
+
+      context 'when the language chosen is not whitelisted for live feedback' do
+        let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
+        it 'returns correct validation' do
+          expect(subject_feedback).to_not be_valid
+          expect(subject_feedback.errors.messages[:base]).to include('Language type must be Python 3 and above '\
+                                                                     'to activate either codaveri '\
+                                                                     'evaluator or live feedback')
         end
       end
 

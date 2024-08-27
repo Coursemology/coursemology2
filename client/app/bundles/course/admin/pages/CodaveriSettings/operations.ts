@@ -83,6 +83,28 @@ export const updateProgrammingQuestionCodaveri = async (
   }
 };
 
+export const updateProgrammingQuestionLiveFeedback = async (
+  assessmentId: number,
+  questionId: number,
+  data: ProgrammingQuestion,
+): Promise<void> => {
+  const adaptedData = {
+    question_programming: {
+      live_feedback_enabled: data.liveFeedbackEnabled,
+    },
+  };
+  try {
+    await CourseAPI.assessment.question.programming.updateQnSetting(
+      assessmentId,
+      questionId,
+      adaptedData,
+    );
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
 export const updateEvaluatorForAllQuestions = async (
   assessmentIds: number[],
   evaluator: ProgrammingEvaluator,
@@ -95,6 +117,26 @@ export const updateEvaluatorForAllQuestions = async (
   };
   try {
     await CourseAPI.admin.codaveri.updateEvaluatorForAllQuestions(adaptedData);
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const updateLiveFeedbackEnabledForAllQuestions = async (
+  assessmentIds: number[],
+  liveFeedbackEnabled: boolean,
+): Promise<void> => {
+  const adaptedData = {
+    update_live_feedback_enabled: {
+      assessment_ids: assessmentIds,
+      live_feedback_enabled: liveFeedbackEnabled,
+    },
+  };
+  try {
+    await CourseAPI.admin.codaveri.updateLiveFeedbackEnabledForAllQuestions(
+      adaptedData,
+    );
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;

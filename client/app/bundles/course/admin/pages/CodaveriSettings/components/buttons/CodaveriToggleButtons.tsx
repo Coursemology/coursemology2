@@ -2,14 +2,21 @@ import { FC, useState } from 'react';
 import { Switch } from '@mui/material';
 import { ProgrammingEvaluator } from 'types/course/admin/codaveri';
 
-import { updateProgrammingQuestionCodaveriSettingsForAssessments } from 'course/admin/reducers/codaveriSettings';
+import {
+  updateProgrammingQuestionCodaveriSettingsForAssessments,
+  updateProgrammingQuestionLiveFeedbackEnabledForAssessments,
+} from 'course/admin/reducers/codaveriSettings';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateEvaluatorForAllQuestions } from '../../operations';
+import {
+  updateEvaluatorForAllQuestions,
+  updateLiveFeedbackEnabledForAllQuestions,
+} from '../../operations';
 import { getProgrammingQuestionsForAssessments } from '../../selectors';
 import translations from '../../translations';
+import CodaveriSettingsChip from '../CodaveriSettingsChip';
 
 interface CodaveriEnableDisableButtonsProps {
   assessmentIds: number[];
@@ -24,15 +31,21 @@ const CodaveriToggleButtons: FC<CodaveriEnableDisableButtonsProps> = (
   const programmingQuestions = useAppSelector((state) =>
     getProgrammingQuestionsForAssessments(state, assessmentIds),
   );
-  const [isUpdating, setIsUpdating] = useState(false);
+
+  const [isEvaluatorUpdating, setIsEvaluatorUpdating] = useState(false);
+  const [isLiveFeedbackUpdating, setIsLiveFeedbackUpdating] = useState(false);
+
   const qnsWithCodaveriEval = programmingQuestions.filter(
     (question) => question.isCodaveri,
+  );
+  const qnsWithLiveFeedbackEnabled = programmingQuestions.filter(
+    (question) => question.liveFeedbackEnabled,
   );
 
   const hasNoProgrammingQuestions = programmingQuestions.length === 0;
 
   const handleEvaluatorUpdate = (evaluator: ProgrammingEvaluator): void => {
-    setIsUpdating(true);
+    setIsEvaluatorUpdating(true);
     updateEvaluatorForAllQuestions(assessmentIds, evaluator)
       .then(() => {
         dispatch(
@@ -46,27 +59,77 @@ const CodaveriToggleButtons: FC<CodaveriEnableDisableButtonsProps> = (
         );
       })
       .catch(() => {
-        toast.error(t(translations.errorOccurredWhenUpdating));
+        toast.error(
+          t(translations.errorOccurredWhenUpdatingCodaveriEvaluatorSettings),
+        );
       })
-      .finally(() => setIsUpdating(false));
+      .finally(() => setIsEvaluatorUpdating(false));
+  };
+
+  const handleLiveFeedbackUpdate = (liveFeedbackEnabled: boolean): void => {
+    setIsLiveFeedbackUpdating(true);
+    updateLiveFeedbackEnabledForAllQuestions(assessmentIds, liveFeedbackEnabled)
+      .then(() => {
+        dispatch(
+          updateProgrammingQuestionLiveFeedbackEnabledForAssessments({
+            liveFeedbackEnabled,
+            assessmentIds,
+          }),
+        );
+        toast.success(
+          t(translations.successfulUpdateAllLiveFeedbackEnabled, {
+            liveFeedbackEnabled,
+          }),
+        );
+      })
+      .catch(() => {
+        toast.error(
+          t(translations.errorOccurredWhenUpdatingLiveFeedbackSettings),
+        );
+      })
+      .finally(() => setIsLiveFeedbackUpdating(false));
   };
 
   return (
-    <div className="pr-6 flex justify-between">
-      <Switch
-        checked={
-          hasNoProgrammingQuestions
-            ? false
-            : qnsWithCodaveriEval.length === programmingQuestions.length
-        }
-        color="primary"
-        disabled={hasNoProgrammingQuestions || isUpdating}
-        onChange={(_, isChecked): void => {
-          return isChecked
-            ? handleEvaluatorUpdate('codaveri')
-            : handleEvaluatorUpdate('default');
-        }}
-      />
+    <div className="pr-7 space-x-8 flex justify-between">
+      <div>
+        <Switch
+          checked={
+            hasNoProgrammingQuestions
+              ? false
+              : qnsWithCodaveriEval.length === programmingQuestions.length
+          }
+          color="primary"
+          disabled={hasNoProgrammingQuestions || isEvaluatorUpdating}
+          onChange={(_, isChecked): void => {
+            return isChecked
+              ? handleEvaluatorUpdate('codaveri')
+              : handleEvaluatorUpdate('default');
+          }}
+        />
+        <CodaveriSettingsChip
+          assessmentIds={assessmentIds}
+          for="codaveri_evaluator"
+        />
+      </div>
+
+      <div>
+        <Switch
+          checked={
+            hasNoProgrammingQuestions
+              ? false
+              : qnsWithLiveFeedbackEnabled.length ===
+                programmingQuestions.length
+          }
+          color="primary"
+          disabled={hasNoProgrammingQuestions || isLiveFeedbackUpdating}
+          onChange={(_, isChecked): void => handleLiveFeedbackUpdate(isChecked)}
+        />
+        <CodaveriSettingsChip
+          assessmentIds={assessmentIds}
+          for="live_feedback"
+        />
+      </div>
     </div>
   );
 };
