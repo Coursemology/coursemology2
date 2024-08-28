@@ -162,5 +162,102 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
     end
+
+    describe '#live_feedback_history' do
+      let(:question) do
+        create(:course_assessment_question_programming, assessment: assessment).acting_as
+      end
+      let(:user) { create(:user) }
+
+      let!(:course_student) { create(:course_student, course: course, user: user) }
+      let!(:live_feedback) do
+        create(:course_assessment_live_feedback, assessment: assessment,
+                                                 question: question,
+                                                 creator: course_student)
+      end
+      let!(:code) { create(:course_assessment_live_feedback_code, feedback: live_feedback) }
+      let!(:comment) do
+        create(:course_assessment_live_feedback_comment, code: code, line_number: 1,
+                                                         comment: 'This is a test comment')
+      end
+      render_views
+      subject do
+        get :live_feedback_history, as: :json,
+                                    params: {
+                                      course_id: course,
+                                      id: assessment.id,
+                                      question_id: question.id,
+                                      course_user_id: course_student.id
+                                    }
+      end
+
+      context 'when the Normal User wants to get live feedback history' do
+        before { controller_sign_in(controller, user) }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the Course Manager wants to get live feedback history' do
+        let(:course_manager) { create(:course_manager, course: course) }
+
+        before { controller_sign_in(controller, course_manager.user) }
+
+        it 'returns the live feedback history successfully' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          feedback_history = json_result['liveFeedbackHistory']
+          question = json_result['question']
+
+          expect(feedback_history).not_to be_empty
+          expect(feedback_history.first).to have_key('files')
+
+          file = feedback_history.first['files'].first
+          expect(file).to have_key('filename')
+          expect(file).to have_key('content')
+          expect(file).to have_key('language')
+          expect(file).to have_key('comments')
+
+          comment = file['comments'].first
+          expect(comment).to have_key('lineNumber')
+          expect(comment).to have_key('comment')
+
+          expect(question).not_to be_empty
+          expect(question).to have_key('title')
+          expect(question).to have_key('description')
+        end
+      end
+
+      context 'when the Administrator wants to get live feedback history' do
+        let(:administrator) { create(:administrator) }
+
+        before { controller_sign_in(controller, administrator) }
+
+        it 'returns the live feedback history successfully' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          feedback_history = json_result['liveFeedbackHistory']
+          question = json_result['question']
+
+          expect(feedback_history).not_to be_empty
+          expect(feedback_history.first).to have_key('files')
+
+          file = feedback_history.first['files'].first
+          expect(file).to have_key('filename')
+          expect(file).to have_key('content')
+          expect(file).to have_key('language')
+          expect(file).to have_key('comments')
+
+          comment = file['comments'].first
+          expect(comment).to have_key('lineNumber')
+          expect(comment).to have_key('comment')
+
+          expect(question).not_to be_empty
+          expect(question).to have_key('title')
+          expect(question).to have_key('description')
+        end
+      end
+    end
   end
 end
