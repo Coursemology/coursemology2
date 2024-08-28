@@ -2,6 +2,7 @@
 FactoryBot.define do
   sequence(:course_assessment_assessment_name) { |n| "Assessment #{n}" }
   sequence(:course_assessment_assessment_description) { |n| "Awesome description #{n}" }
+  sequence(:question_weight)
   factory :course_assessment_assessment, class: Course::Assessment, aliases: [:assessment],
                                          parent: :course_lesson_plan_item do
     transient do
@@ -44,74 +45,74 @@ FactoryBot.define do
 
     trait :with_mcq_question do
       after(:build) do |assessment, evaluator|
-        evaluator.question_count.downto(1).each do |i|
+        evaluator.question_count.times do
           question = build(:course_assessment_question_multiple_response, :multiple_choice)
-          assessment.question_assessments.build(question: question.acting_as, weight: i)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
     end
 
     trait :with_mrq_question do
       after(:build) do |assessment, evaluator|
-        evaluator.question_count.downto(1).each do |i|
+        evaluator.question_count.times do
           question = build(:course_assessment_question_multiple_response)
-          assessment.question_assessments.build(question: question.acting_as, weight: i)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
     end
 
     trait :with_programming_question do
       after(:build) do |assessment, evaluator|
-        evaluator.question_count.downto(1).each do |i|
+        evaluator.question_count.times do
           question = build(:course_assessment_question_programming, :auto_gradable, template_package: true)
-          assessment.question_assessments.build(question: question.acting_as, weight: i)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
     end
 
     trait :with_programming_codaveri_question do
       after(:build) do |assessment, evaluator|
-        evaluator.question_count.downto(1).each do |i|
+        evaluator.question_count.times do
           question = build(:course_assessment_question_programming, :auto_gradable, template_package: true,
                                                                                     is_codaveri: true)
-          assessment.question_assessments.build(question: question.acting_as, weight: i)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
     end
 
     trait :with_programming_file_submission_question do
       after(:build) do |assessment, evaluator|
-        evaluator.question_count.downto(1).each do |i|
+        evaluator.question_count.times do
           question = build(:course_assessment_question_programming,
                            :auto_gradable, :multiple_file_submission)
-          assessment.question_assessments.build(question: question.acting_as, weight: i)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
     end
 
     trait :with_text_response_question do
       after(:build) do |assessment, evaluator|
-        evaluator.question_count.downto(1).each do |i|
+        evaluator.question_count.times do
           question = build(:course_assessment_question_text_response, :allow_multiple_attachments)
-          assessment.question_assessments.build(question: question.acting_as, weight: i)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
     end
 
     trait :with_file_upload_question do
       after(:build) do |assessment, evaluator|
-        evaluator.question_count.downto(1).each do |i|
+        evaluator.question_count.times do
           question = build(:course_assessment_question_text_response, :file_upload_question)
-          assessment.question_assessments.build(question: question.acting_as, weight: i)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
     end
 
     trait :with_forum_post_response_question do
       after(:build) do |assessment, evaluator|
-        evaluator.question_count.downto(1).each do |i|
+        evaluator.question_count.times do
           question = build(:course_assessment_question_forum_post_response)
-          assessment.question_assessments.build(question: question.acting_as, weight: i)
+          assessment.question_assessments.build(question: question.acting_as, weight: generate(:question_weight))
         end
       end
     end
