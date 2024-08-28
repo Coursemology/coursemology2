@@ -163,6 +163,118 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
       end
     end
 
+    describe '#live_feedback_statistics' do
+      render_views
+
+      let(:question1) { create(:course_assessment_question_programming, assessment: assessment).acting_as }
+      let(:question2) { create(:course_assessment_question_multiple_response, assessment: assessment).acting_as }
+      let!(:course_student) { students[0] }
+
+      before do
+        create_list(:course_assessment_live_feedback, 3,
+                    assessment: assessment,
+                    question: question1,
+                    creator: course_student.user,
+                    with_comment: true)
+        create(:course_assessment_live_feedback, assessment: assessment, question: question2,
+                                                 creator: course_student.user)
+      end
+
+      subject do
+        get :live_feedback_statistics, as: :json, params: { course_id: course, id: assessment.id }
+      end
+
+      context 'when the Normal User tries to get live feedback statistics' do
+        let(:user) { create(:user) }
+        before { controller_sign_in(controller, user) }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the Course Student tries to get live feedback statistics' do
+        let(:user) { create(:course_student, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the Course Manager gets live feedback statistics' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'returns OK with the correct live feedback statistics' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          first_result = json_result.first
+
+          # Check the general structure
+          expect(first_result).to have_key('courseUser')
+          expect(first_result['courseUser']).to have_key('id')
+          expect(first_result['courseUser']).to have_key('name')
+          expect(first_result['courseUser']).to have_key('role')
+          expect(first_result['courseUser']).to have_key('isPhantom')
+
+          expect(first_result).to have_key('workflowState')
+          expect(first_result).to have_key('groups')
+          expect(first_result).to have_key('liveFeedbackCount')
+          expect(first_result).to have_key('questionIds')
+
+          # Ensure that the feedback count is correct for the specific questions
+          question_index = first_result['questionIds'].index(question1.id)
+          if first_result['courseUser']['id'] == course_student.id
+            expect(first_result['liveFeedbackCount'][question_index]).to eq(3)
+          else
+            expect(first_result['liveFeedbackCount'][question_index]).to eq(0)
+          end
+
+          # No feedback for the second question, since there is no comment
+          question_index = first_result['questionIds'].index(question2.id)
+          if first_result['courseUser']['id'] == course_student.id
+            expect(first_result['liveFeedbackCount'][question_index]).to eq(0)
+          end
+        end
+      end
+
+      context 'when the Administrator gets live feedback statistics' do
+        let(:administrator) { create(:administrator) }
+        before { controller_sign_in(controller, administrator) }
+
+        it 'returns OK with the correct live feedback statistics' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          first_result = json_result.first
+
+          # Check the general structure
+          expect(first_result).to have_key('courseUser')
+          expect(first_result['courseUser']).to have_key('id')
+          expect(first_result['courseUser']).to have_key('name')
+          expect(first_result['courseUser']).to have_key('role')
+          expect(first_result['courseUser']).to have_key('isPhantom')
+
+          expect(first_result).to have_key('workflowState')
+          expect(first_result).to have_key('groups')
+          expect(first_result).to have_key('liveFeedbackCount')
+          expect(first_result).to have_key('questionIds')
+
+          # Ensure that the feedback count is correct for the specific questions
+          question_index = first_result['questionIds'].index(question1.id)
+          if first_result['courseUser']['id'] == course_student.id
+            expect(first_result['liveFeedbackCount'][question_index]).to eq(3)
+          else
+            expect(first_result['liveFeedbackCount'][question_index]).to eq(0)
+          end
+
+          # No feedback for the second question, since there is no comment
+          question_index = first_result['questionIds'].index(question2.id)
+          if first_result['courseUser']['id'] == course_student.id
+            expect(first_result['liveFeedbackCount'][question_index]).to eq(0)
+          end
+        end
+      end
+    end
+
     describe '#live_feedback_history' do
       let(:question) do
         create(:course_assessment_question_programming, assessment: assessment).acting_as
@@ -173,13 +285,10 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
       let!(:live_feedback) do
         create(:course_assessment_live_feedback, assessment: assessment,
                                                  question: question,
-                                                 creator: course_student)
+                                                 creator: user,
+                                                 with_comment: true)
       end
-      let!(:code) { create(:course_assessment_live_feedback_code, feedback: live_feedback) }
-      let!(:comment) do
-        create(:course_assessment_live_feedback_comment, code: code, line_number: 1,
-                                                         comment: 'This is a test comment')
-      end
+
       render_views
       subject do
         get :live_feedback_history, as: :json,
