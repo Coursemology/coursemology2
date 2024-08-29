@@ -512,15 +512,6 @@
   "course.admin.CodaveriSettings.itspEngineDescription": {
     "defaultMessage": "Uses automated program repair technique"
   },
-  "course.admin.CodaveriSettings.liveFeedbackEnabled": {
-    "defaultMessage": "Enable live programming help generation"
-  },
-  "course.admin.CodaveriSettings.liveFeedbackEnabledDescription": {
-    "defaultMessage": "Individual assessments and programming questions may allow students to get live help."
-  },
-  "course.admin.CodaveriSettings.liveFeedbackDisabledDescription": {
-    "defaultMessage": "Live help is disabled for all assessments and programming questions."
-  },
   "course.admin.CodaveriSettings.None": {
     "defaultMessage": "None"
   },
@@ -1105,12 +1096,6 @@
   },
   "course.assessment.AssessmentForm.canEnableCodaveriInComponents": {
     "defaultMessage": "Contact the course manager or owner to enable this feature in Components in the Course Settings."
-  },
-  "course.assessment.AssessmentForm.enableLiveFeedback": {
-    "defaultMessage": "Allow live help generation for programming questions"
-  },
-  "course.assessment.AssessmentForm.enableLiveFeedbackDescription": {
-    "defaultMessage": "Allow students to request live help for programming questions during submission attempts. Can be enabled/disabled separately for each question."
   },
   "course.assessment.AssessmentForm.description": {
     "defaultMessage": "Description"

@@ -12,8 +12,6 @@ import translations from '../../../../translations';
 
 interface FeedbackFieldsProps {
   disabled?: boolean;
-  assessmentLiveFeedbackEnabled: boolean;
-  courseLiveFeedbackEnabled: boolean;
 }
 
 export const FEEDBACK_SECTION_ID = 'feedback-fields' as const;
@@ -28,18 +26,6 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
   if (!isCodaveri) return null;
 
   const liveFeedbackEnabled = watch('question.liveFeedbackEnabled');
-
-  let disabledHint;
-  if (
-    !props.assessmentLiveFeedbackEnabled &&
-    !props.courseLiveFeedbackEnabled
-  ) {
-    disabledHint = t(translations.liveFeedbackAssessmentAndCourseDisabled);
-  } else if (!props.assessmentLiveFeedbackEnabled) {
-    disabledHint = t(translations.liveFeedbackAssessmentDisabled);
-  } else if (!props.courseLiveFeedbackEnabled) {
-    disabledHint = t(translations.liveFeedbackCourseDisabled);
-  }
 
   return (
     <Section
@@ -58,12 +44,7 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
         render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField
             description={t(translations.enableLiveFeedbackDescription)}
-            disabled={
-              props.disabled ||
-              !props.assessmentLiveFeedbackEnabled ||
-              !props.courseLiveFeedbackEnabled
-            }
-            disabledHint={disabledHint}
+            disabled={props.disabled}
             field={field}
             fieldState={fieldState}
             label={t(translations.enableLiveFeedback)}
@@ -80,12 +61,7 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
           name="question.liveFeedbackCustomPrompt"
           render={({ field, fieldState }): JSX.Element => (
             <FormRichTextField
-              disabled={
-                props.disabled ||
-                !liveFeedbackEnabled ||
-                !props.assessmentLiveFeedbackEnabled ||
-                !props.courseLiveFeedbackEnabled
-              }
+              disabled={props.disabled || !liveFeedbackEnabled}
               field={field}
               fieldState={fieldState}
               fullWidth

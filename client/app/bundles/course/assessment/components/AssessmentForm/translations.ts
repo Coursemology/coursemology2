@@ -25,24 +25,6 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.baseExp',
     defaultMessage: 'Base EXP',
   },
-  liveFeedback: {
-    id: 'course.assessment.AssessmentForm.liveFeedback',
-    defaultMessage: 'Get Help',
-  },
-  liveFeedbackCourseDisabled: {
-    id: 'course.assessment.AssessmentForm.liveFeedbackCourseDisabled',
-    defaultMessage:
-      'Contact the course manager or owner to enable this feature in "Codaveri Evaluation and Feedback" in the Course Settings.',
-  },
-  enableLiveFeedback: {
-    id: 'course.assessment.AssessmentForm.enableLiveFeedback',
-    defaultMessage: 'Allow live help generation for programming questions',
-  },
-  enableLiveFeedbackDescription: {
-    id: 'course.assessment.AssessmentForm.enableLiveFeedbackDescription',
-    defaultMessage:
-      'Allow students to request live help for programming questions during submission attempts. Can be enabled/disabled separately for each question.',
-  },
   timeLimit: {
     id: 'course.assessment.AssessmentForm.timeLimit',
     defaultMessage: 'Time Limit',

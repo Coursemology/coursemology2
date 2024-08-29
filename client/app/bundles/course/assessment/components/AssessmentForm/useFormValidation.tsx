@@ -88,7 +88,6 @@ const validationSchema = yup.object({
   show_evaluation: yup.bool(),
   randomization: yup.bool(),
   has_personal_times: yup.bool(),
-  live_feedback_enabled: yup.bool(),
   affects_personal_times: yup.bool(),
   time_limit: yup
     .number()

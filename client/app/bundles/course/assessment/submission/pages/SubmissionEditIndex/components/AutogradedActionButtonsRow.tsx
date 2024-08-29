@@ -45,8 +45,7 @@ const AutogradedActionButtonsRow: FC<Props> = (props) => {
         {question.type === questionTypes.Programming &&
           isCodaveriEnabled &&
           question.isCodaveri &&
-          question.liveFeedbackEnabled &&
-          assessment.liveFeedbackEnabled && (
+          question.liveFeedbackEnabled && (
             <LiveFeedbackButton questionId={questionId} />
           )}
       </div>

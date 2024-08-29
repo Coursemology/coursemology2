@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios';
 import {
   LanguageData,
+  ProgrammingFormData,
   ProgrammingPostStatusData,
-  ProgrammingResponseData,
 } from 'types/course/assessment/question/programming';
 import { CodaveriGenerateResponse } from 'types/course/assessment/question-generation';
 
@@ -20,14 +20,12 @@ export const fetchCodaveriLanguages = async (): Promise<{
   return response.data;
 };
 
-export const fetchNew = async (): Promise<ProgrammingResponseData> => {
+export const fetchNew = async (): Promise<ProgrammingFormData> => {
   const response = await ProgrammingAPI.fetchNew();
   return response.data;
 };
 
-export const fetchEdit = async (
-  id: number,
-): Promise<ProgrammingResponseData> => {
+export const fetchEdit = async (id: number): Promise<ProgrammingFormData> => {
   const response = await ProgrammingAPI.fetchEdit(id);
   return response.data;
 };

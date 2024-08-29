@@ -9,7 +9,10 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateProgrammingQuestionCodaveri } from '../operations';
+import {
+  updateProgrammingQuestionCodaveri,
+  updateProgrammingQuestionLiveFeedback,
+} from '../operations';
 import { getProgrammingQuestion, getViewSettings } from '../selectors';
 import translations from '../translations';
 
@@ -58,7 +61,7 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
     const updatedQn = produce(programmingQn, (draft) => {
       draft.liveFeedbackEnabled = isChecked;
     });
-    updateProgrammingQuestionCodaveri(
+    updateProgrammingQuestionLiveFeedback(
       programmingQn.assessmentId,
       programmingQn.id,
       updatedQn,

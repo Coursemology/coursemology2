@@ -44,7 +44,6 @@ export interface AssessmentFormProps
   pulsegridUrl?: string;
   canManageMonitor?: boolean;
   monitoringEnabled?: boolean;
-  courseLiveFeedbackEnabled?: boolean;
 
   /**
    * If `true`, this component is displayed on Edit Assessment page
