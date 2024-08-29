@@ -49,7 +49,11 @@ const AssessmentTab: FC<AssessmentTabProps> = (props) => {
 
   return (
     <CollapsibleList
-      headerAction={<CodaveriToggleButtons assessmentIds={assessmentIds} />}
+      headerAction={
+        <div className="pr-2">
+          <CodaveriToggleButtons assessmentIds={assessmentIds} />
+        </div>
+      }
       headerTitle={
         <Link
           onClick={(e): void => e.stopPropagation()}

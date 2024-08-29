@@ -65,7 +65,7 @@ const AssessmentList: FC = () => {
             </div>
           </div>
         </div>
-        <div className="mb-4 pr-1 flex justify-end">
+        <div className="mb-4 pr-2 flex justify-end">
           <CodaveriToggleButtons assessmentIds={assessmentIds} />
         </div>
         <div>
