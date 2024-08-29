@@ -21,10 +21,6 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
 
   const { control, watch } = useFormContext<ProgrammingFormData>();
 
-  // TODO: remove this check, once live feedback generation for non-codaveri questions is supported.
-  const isCodaveri = watch('question.isCodaveri');
-  if (!isCodaveri) return null;
-
   const liveFeedbackEnabled = watch('question.liveFeedbackEnabled');
 
   return (
