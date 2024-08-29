@@ -94,8 +94,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     question = self.question.actable
     assessment = submission.assessment
 
-    should_retrieve_feedback = question.is_codaveri &&
-                               submission.attempting? &&
+    should_retrieve_feedback = submission.attempting? &&
                                current_answer? &&
                                question.live_feedback_enabled
     return unless should_retrieve_feedback

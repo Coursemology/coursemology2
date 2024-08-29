@@ -49,10 +49,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   def self.default_config
     {
       persona: 'novice',
-      categories: [
-        'syntax',
-        'functionality'
-      ],
+      categories: ['functionality'],
       revealLevel: 'solution',
       tone: 'encouraging',
       language: 'english',
