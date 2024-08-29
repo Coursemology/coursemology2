@@ -146,10 +146,7 @@ export interface ProgrammingFormRequestData {
   };
 }
 
-export interface ProgrammingResponseData extends ProgrammingFormData {
-  assessmentLiveFeedbackEnabled: boolean;
-  courseLiveFeedbackEnabled: boolean;
-}
+export interface ProgrammingResponseData extends ProgrammingFormData {}
 
 export interface ProgrammingPostStatusData {
   redirectAssessmentUrl: string;

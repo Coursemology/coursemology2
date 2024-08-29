@@ -124,7 +124,6 @@ export interface AssessmentData extends AssessmentActionsData {
   }[];
 
   liveFeedbackEnabled?: boolean;
-  courseLiveFeedbackEnabled?: boolean;
   allowRecordDraftAnswer?: boolean;
   showMcqMrqSolution?: boolean;
   gradedTestCases?: string;

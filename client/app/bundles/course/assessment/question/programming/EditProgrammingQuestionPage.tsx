@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import {
+  ProgrammingFormData,
   ProgrammingPostStatusData,
-  ProgrammingResponseData,
 } from 'types/course/assessment/question/programming';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -17,14 +17,12 @@ const EditProgrammingQuestionPage = (): JSX.Element => {
   if (!id)
     throw new Error(`EditProgrammingQuestionPage was loaded with ID: ${id}.`);
 
-  const fetchData = (): Promise<ProgrammingResponseData> => fetchEdit(id);
+  const fetchData = (): Promise<ProgrammingFormData> => fetchEdit(id);
 
   return (
     <Preload render={<LoadingIndicator />} while={fetchData}>
       {(data): JSX.Element => (
         <ProgrammingForm
-          assessmentLiveFeedbackEnabled={data.assessmentLiveFeedbackEnabled}
-          courseLiveFeedbackEnabled={data.courseLiveFeedbackEnabled}
           onSubmit={(rawData): Promise<ProgrammingPostStatusData> =>
             update(id, buildFormData(rawData))
           }

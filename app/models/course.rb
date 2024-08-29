@@ -243,13 +243,6 @@ class Course < ApplicationRecord
     settings(:course_codaveri_component).is_only_itsp
   end
 
-  def codaveri_live_feedback_enabled?
-    component_enabled?(Course::CodaveriComponent) &&
-      # defaults to false if never set before
-      !settings(:course_codaveri_component).live_feedback_enabled.nil? &&
-      settings(:course_codaveri_component).live_feedback_enabled
-  end
-
   def upcoming_lesson_plan_items_exist?
     opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
     opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.any? do |item|

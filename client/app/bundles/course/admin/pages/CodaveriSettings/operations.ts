@@ -26,7 +26,6 @@ const convertEntityDataToPatchData = (
   settings_codaveri_component: {
     feedback_workflow: data.feedbackWorkflow,
     is_only_itsp: data.isOnlyITSP === 'itsp',
-    live_feedback_enabled: data.liveFeedbackEnabled,
   },
 });
 

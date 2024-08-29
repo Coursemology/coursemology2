@@ -139,7 +139,6 @@ class NewAssessmentFormButton extends Component {
       show_evaluation: false,
       randomization: false,
       has_personal_times: false,
-      live_feedback_enabled: false,
       affects_personal_times: false,
       monitoring: canManageMonitor ? DEFAULT_MONITORING_OPTIONS : undefined,
     };

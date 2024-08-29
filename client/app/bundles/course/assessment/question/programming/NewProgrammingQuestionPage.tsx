@@ -3,7 +3,6 @@ import { produce } from 'immer';
 import {
   ProgrammingFormData,
   ProgrammingPostStatusData,
-  ProgrammingResponseData,
 } from 'types/course/assessment/question/programming';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -58,10 +57,8 @@ const NewProgrammingQuestionPage = (): JSX.Element => {
 
   return (
     <Preload render={<LoadingIndicator />} while={fetchNew}>
-      {(data: ProgrammingResponseData): JSX.Element => (
+      {(data: ProgrammingFormData): JSX.Element => (
         <ProgrammingForm
-          assessmentLiveFeedbackEnabled={data.assessmentLiveFeedbackEnabled}
-          courseLiveFeedbackEnabled={data.courseLiveFeedbackEnabled}
           dirty={!persisted}
           onSubmit={createOrUpdate}
           revalidate={mergeNewImportResult}

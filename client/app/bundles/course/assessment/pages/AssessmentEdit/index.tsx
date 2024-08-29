@@ -30,9 +30,6 @@ const AssessmentEdit = (): JSX.Element => {
             // @ts-ignore: component is still written in JSX
             canManageMonitor={data.can_manage_monitor}
             conditionAttributes={data.conditionsData}
-            courseLiveFeedbackEnabled={
-              data.attributes.course_live_feedback_enabled
-            }
             folderAttributes={data.folder_attributes}
             gamified={data.gamified}
             initialValues={{

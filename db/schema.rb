@@ -484,7 +484,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_30_090759) do
     t.bigint "monitor_id"
     t.boolean "allow_record_draft_answer", default: false
     t.integer "time_limit"
-    t.boolean "live_feedback_enabled", default: false, null: false
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"

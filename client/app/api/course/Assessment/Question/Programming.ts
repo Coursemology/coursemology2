@@ -1,7 +1,7 @@
 import {
   LanguageData,
+  ProgrammingFormData,
   ProgrammingPostStatusData,
-  ProgrammingResponseData,
 } from 'types/course/assessment/question/programming';
 import { CodaveriGenerateResponse } from 'types/course/assessment/question-generation';
 
@@ -14,11 +14,11 @@ export default class ProgrammingAPI extends BaseAPI {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/question/programming`;
   }
 
-  fetchNew(): APIResponse<ProgrammingResponseData> {
+  fetchNew(): APIResponse<ProgrammingFormData> {
     return this.client.get(`${this.#urlPrefix}/new`);
   }
 
-  fetchEdit(id: number): APIResponse<ProgrammingResponseData> {
+  fetchEdit(id: number): APIResponse<ProgrammingFormData> {
     return this.client.get(`${this.#urlPrefix}/${id}/edit`);
   }
 

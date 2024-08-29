@@ -15,11 +15,6 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
   const { for: assessment } = props;
   const { t } = useTranslation();
 
-  let liveFeedbackEnabledChar = '-';
-  if (assessment.courseLiveFeedbackEnabled) {
-    liveFeedbackEnabledChar = assessment.liveFeedbackEnabled ? '✅' : '❌';
-  }
-
   return (
     <TableContainer dense variant="outlined">
       <TableBody>
@@ -149,13 +144,6 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
                 </TableRow>
               </>
             )}
-
-            <TableRow>
-              <TableCell variant="head">
-                {t(translations.liveFeedbackEnabled)}
-              </TableCell>
-              <TableCell>{liveFeedbackEnabledChar}</TableCell>
-            </TableRow>
           </>
         )}
       </TableBody>
