@@ -90,10 +90,9 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
         >
           <ListItemText primary={programmingQn.title} />
         </Link>
-        <div className="mr-24 space-x-32">
+        <div className="mr-[6.6rem] space-x-32">
           <Switch
             checked={programmingQn.isCodaveri}
-            className="mr-1"
             color="primary"
             onChange={(_, isChecked): void =>
               handleCodaveriEvaluatorChange(isChecked)

@@ -26,7 +26,11 @@ const AssessmentListItem: FC<AssessmentListItemProps> = (props) => {
     <CollapsibleList
       collapsedByDefault
       forceExpand={isAssessmentListExpanded}
-      headerAction={<CodaveriToggleButtons assessmentIds={[assessment.id]} />}
+      headerAction={
+        <div className="pr-2">
+          <CodaveriToggleButtons assessmentIds={[assessment.id]} />
+        </div>
+      }
       headerTitle={
         <Link
           className="max-w-2xl"
