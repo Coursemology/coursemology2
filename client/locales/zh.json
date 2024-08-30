@@ -2444,13 +2444,13 @@
   "course.assessment.submission.ImportedFileView.uploadedFiles": {
     "defaultMessage": "上传的文件："
   },
-  "course.assessment.submission.SubmissionAnswer.missingAnswer": {
+  "course.assessment.submission.Answer.missingAnswer": {
     "defaultMessage": "此问题没有已提交的答案——可能是因为提交之后又添加了新问题。"
   },
-  "course.assessment.submission.SubmissionAnswer.noPastAnswers": {
+  "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
     "defaultMessage": "没有过去的答案。"
   },
-  "course.assessment.submission.SubmissionAnswer.rendererNotImplemented": {
+  "course.assessment.submission.Answer.rendererNotImplemented": {
     "defaultMessage": "此问题类型的显示尚未实现。"
   },
   "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
