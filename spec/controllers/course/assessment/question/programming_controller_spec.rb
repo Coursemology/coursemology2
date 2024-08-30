@@ -188,6 +188,29 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
       end
     end
 
+    describe '#update_question_setting' do
+      let!(:programming_question) do
+        programming_question = create(:course_assessment_question_programming, assessment: assessment)
+        programming_question.question.update_column(:description, "<script>alert('boo');</script>")
+        programming_question
+      end
+
+      subject do
+        patch :update_question_setting, params: {
+          course_id: course, assessment_id: assessment, id: programming_question,
+          question_programming: { is_codaveri: false, live_feedback_enabled: true }
+        }
+      end
+
+      context 'when codaveri evaluator is disabled and live feedback is enabled' do
+        it 'will have codaveri evaluator turned off and live feedback turned on' do
+          subject
+          expect(programming_question.reload.live_feedback_enabled).to be_truthy
+          expect(programming_question.reload.is_codaveri).to be_falsey
+        end
+      end
+    end
+
     describe '#destroy' do
       let(:programming_question) { immutable_programming_question }
       subject do

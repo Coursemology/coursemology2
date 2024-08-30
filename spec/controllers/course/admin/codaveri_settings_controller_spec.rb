@@ -16,6 +16,15 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
              assessment: assessment, language: lang_invalid_for_codaveri, template_package: true)
       course
     end
+    let(:course2) do
+      course = create(:course, creator: user)
+      assessment = create(:assessment, course: course)
+      create(:course_assessment_question_programming,
+             assessment: assessment, language: lang_valid_for_codaveri, template_package: true)
+      create(:course_assessment_question_programming,
+             assessment: assessment, language: lang_valid_for_codaveri, template_package: true)
+      course
+    end
     before { controller_sign_in(controller, user) }
 
     describe '#edit' do
@@ -40,6 +49,30 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
         it 'returns bad_request with errors' do
           expect(subject).to have_http_status(:bad_request)
           expect(JSON.parse(subject.body)['errors']).not_to be_nil
+        end
+      end
+    end
+
+    describe '#update_live_feedback_enabled' do
+      context 'when the live feedback is enabled for all assessments within course' do
+        subject do
+          patch :update_live_feedback_enabled, params: {
+            course_id: course2,
+            update_live_feedback_enabled: {
+              live_feedback_enabled: true,
+              assessment_ids: course2.assessments.map(&:id)
+            }
+          }
+        end
+
+        it 'will activate live feedback for all questions within those assessments' do
+          subject
+
+          question1 = course2.assessments.first.questions.first
+          question2 = course2.assessments.first.questions.second
+
+          expect(question1.specific.live_feedback_enabled).to eq(true)
+          expect(question2.specific.live_feedback_enabled).to eq(true)
         end
       end
     end
