@@ -2504,13 +2504,13 @@
   "course.assessment.submission.ImportedFileView.uploadedFiles": {
     "defaultMessage": "Uploaded Files:"
   },
-  "course.assessment.submission.SubmissionAnswer.missingAnswer": {
+  "course.assessment.submission.Answer.missingAnswer": {
     "defaultMessage": "There is no answer submitted for this question - this might be caused by the addition of this question after the submission is submitted."
   },
-  "course.assessment.submission.SubmissionAnswer.noPastAnswers": {
+  "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
     "defaultMessage": "No past answers."
   },
-  "course.assessment.submission.SubmissionAnswer.rendererNotImplemented": {
+  "course.assessment.submission.Answer.rendererNotImplemented": {
     "defaultMessage": "The display for this question type has not been implemented yet."
   },
   "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
