@@ -14,13 +14,6 @@ GIT
       rails (>= 6)
 
 GIT
-  remote: https://github.com/Coursemology/rails_utils.git
-  revision: 1a72571368da0e4172e155428813749b2b134f3c
-  specs:
-    rails_utils (6.0.0)
-      rails (>= 6)
-
-GIT
   remote: https://github.com/Coursemology/rwordnet
   revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
   specs:
@@ -638,7 +631,6 @@ DEPENDENCIES
   rails (~> 7.0.8.4)
   rails-controller-testing
   rails-html-sanitizer (>= 1.0.4)
-  rails_utils!
   recaptcha
   record_tag_helper
   redis-rails

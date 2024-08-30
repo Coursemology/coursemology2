@@ -183,7 +183,7 @@ gem 'cancancan'
 # Some helpers for structuring CSS/JavaScript
 # Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
 # We also want stricter sanitization.
-gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git'
+# gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave', '2.2.6'
