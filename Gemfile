@@ -7,7 +7,7 @@ ruby '3.1.4'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.0.8.4'
+gem 'rails', '~> 7.1.4'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -179,11 +179,6 @@ gem 'jwt'
 
 # Use cancancan for authorization
 gem 'cancancan'
-
-# Some helpers for structuring CSS/JavaScript
-# Official version https://github.com/winston/rails_utils/pull/30 is no longer maintained.
-# We also want stricter sanitization.
-gem 'rails_utils', git: 'https://github.com/Coursemology/rails_utils.git'
 
 # Using CarrierWave for file uploads
 gem 'carrierwave', '2.2.6'

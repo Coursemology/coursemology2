@@ -58,7 +58,7 @@ module Extensions::DatabaseEvent::ActiveRecord::Base
     def wait_until(deadline, while_callback, &block)
       while deadline.nil? || Time.zone.now < deadline
         wait_timeout = deadline ? deadline - Time.zone.now : nil
-        result = connection.instance_variable_get(:@connection).
+        result = connection.instance_variable_get(:@raw_connection).
                  wait_for_notify(wait_timeout, &block)
         return result if while_callback.nil? || !while_callback.call
       end
