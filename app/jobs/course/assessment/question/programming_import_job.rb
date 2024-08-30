@@ -25,7 +25,7 @@ class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
   def perform_import(question, attachment)
     Course::Assessment::Question::ProgrammingImportService.import(question, attachment)
     # Make an API call to Codaveri to create/update question if the import above is succesful.
-    if question.is_codaveri
+    if question.is_codaveri || question.live_feedback_enabled
       Course::Assessment::Question::ProgrammingCodaveriService.create_or_update_question(question, attachment)
     end
     # Re-run the tests since the test results are deleted with the old package.
