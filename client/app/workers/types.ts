@@ -1,4 +1,5 @@
 interface StartPayload {
+  url: string;
   sessionId: number;
   courseId: number;
 }

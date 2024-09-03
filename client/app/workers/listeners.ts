@@ -1,5 +1,3 @@
-import { getWebSocketURL } from 'utilities/socket';
-
 import subscribe, { HeartbeatChannel } from './heartbeatChannel';
 import setUpDatabase, { MonitoringDBActions } from './monitoringDatabase';
 import type {
@@ -26,11 +24,10 @@ const terminateWorker = async (): Promise<void> => {
 const createListeners = (
   host: HeartbeatWorkerListenerHost,
 ): HeartbeatWorkerListener => ({
-  start: async (payload): Promise<void> => {
-    const { sessionId, courseId } = payload;
+  start: async ({ url, sessionId, courseId }): Promise<void> => {
     storage ??= await setUpDatabase();
 
-    channel ??= subscribe(getWebSocketURL(), sessionId, courseId, {
+    channel ??= subscribe(url, sessionId, courseId, {
       resetInterval,
       onPulse: storage?.cacheHeartbeat,
       onPulsed: (timestamp: number) => {
