@@ -1,5 +1,4 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip, Typography } from '@mui/material';
 import palette from 'theme/palette';
@@ -17,54 +16,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
 import LiveFeedbackHistoryIndex from './LiveFeedbackHistory';
 import { getAssessmentStatistics } from './selectors';
+import translations from './translations';
 import { getJointGroupsName, translateStatus } from './utils';
-
-const translations = defineMessages({
-  name: {
-    id: 'course.assessment.statistics.name',
-    defaultMessage: 'Name',
-  },
-  group: {
-    id: 'course.assessment.statistics.group',
-    defaultMessage: 'Group',
-  },
-  workflowState: {
-    id: 'course.assessment.statistics.workflowState',
-    defaultMessage: 'Status',
-  },
-  questionIndex: {
-    id: 'course.assessment.statistics.questionIndex',
-    defaultMessage: 'Q{index}',
-  },
-  totalFeedbackCount: {
-    id: 'course.assessment.statistics.totalFeedbackCount',
-    defaultMessage: 'Total',
-  },
-  searchText: {
-    id: 'course.assessment.statistics.searchText',
-    defaultMessage: 'Search by Name or Groups',
-  },
-  filename: {
-    id: 'course.assessment.statistics.filename',
-    defaultMessage: 'Question-level Live Feedback Statistics for {assessment}',
-  },
-  closePrompt: {
-    id: 'course.assessment.statistics.closePrompt',
-    defaultMessage: 'Close',
-  },
-  liveFeedbackHistoryPromptTitle: {
-    id: 'course.assessment.statistics.liveFeedbackHistoryPromptTitle',
-    defaultMessage: 'Live Feedback History',
-  },
-  legendLowerUsage: {
-    id: 'course.assessment.statistics.legendLowerUsage',
-    defaultMessage: 'Lower Usage',
-  },
-  legendHigherusage: {
-    id: 'course.assessment.statistics.legendHigherusage',
-    defaultMessage: 'Higher Usage',
-  },
-});
 
 interface Props {
   includePhantom: boolean;
@@ -254,7 +207,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
                 .toString()
             : '',
       },
-      title: t(translations.totalFeedbackCount),
+      title: t(translations.total),
       cell: (datum): ReactNode => {
         const totalFeedbackCount = datum.liveFeedbackCount
           ? datum.liveFeedbackCount.reduce(
@@ -299,7 +252,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       <Table
         columns={columns}
         csvDownload={{
-          filename: t(translations.filename, {
+          filename: t(translations.liveFeedbackFilename, {
             assessment: assessment?.title ?? '',
           }),
         }}
@@ -314,7 +267,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
           rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
           showAllRows: true,
         }}
-        search={{ searchPlaceholder: t(translations.searchText) }}
+        search={{ searchPlaceholder: t(translations.nameGroupsSearchText) }}
         toolbar={{ show: true }}
       />
       <Prompt

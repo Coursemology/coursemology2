@@ -2435,6 +2435,93 @@
   "course.assessment.skills.SkillsTable.uncategorised": {
     "defaultMessage": "Uncategorised Skills"
   },
+  "course.assessment.liveFeedback.questionTitle": {
+    "defaultMessage": "Question {index}"
+  },
+  "course.assessment.liveFeedback.feedbackTimingTitle": {
+    "defaultMessage": "Used at: {usedAt}"
+  },
+  "course.assessment.liveFeedback.liveFeedbackName": {
+    "defaultMessage": "Live Feedback"
+  },
+  "course.assessment.liveFeedback.comments": {
+    "defaultMessage": "Comments"
+  },
+  "course.assessment.liveFeedback.lineHeader": {
+    "defaultMessage": "Line {lineNumber}"
+  },
+  "course.assessment.statistics.answers": {
+    "defaultMessage": "Answers"
+  },
+  "course.assessment.statistics.attempts.filename": {
+    "defaultMessage": "Question-level Attempt Statistics for {assessment}"
+  },
+  "course.assessment.statistics.attempts.greenCellLegend": {
+    "defaultMessage": "Correct"
+  },
+  "course.assessment.statistics.attempts.redCellLegend": {
+    "defaultMessage": "Incorrect"
+  },
+  "course.assessment.statistics.closePrompt": {
+    "defaultMessage": "Close"
+  },
+  "course.assessment.statistics.grader": {
+    "defaultMessage": "Grader"
+  },
+  "course.assessment.statistics.grayCellLegend": {
+    "defaultMessage": "Undecided (question is Non-autogradable)"
+  },
+  "course.assessment.statistics.group": {
+    "defaultMessage": "Group"
+  },
+  "course.assessment.statistics.legendHigherusage": {
+    "defaultMessage": "Higher Usage"
+  },
+  "course.assessment.statistics.legendLowerUsage": {
+    "defaultMessage": "Lower Usage"
+  },
+  "course.assessment.statistics.liveFeedback.filename": {
+    "defaultMessage": "Question-level Live Feedback Statistics for {assessment}"
+  },
+  "course.assessment.statistics.liveFeedbackHistoryPromptTitle": {
+    "defaultMessage": "Live Feedback History"
+  },
+  "course.assessment.statistics.marks.filename": {
+    "defaultMessage": "Question-level Marks Statistics for {assessment}"
+  },
+  "course.assessment.statistics.marks.greenCellLegend": {
+    "defaultMessage": ">= 0.5 * Maximum Grade"
+  },
+  "course.assessment.statistics.marks.redCellLegend": {
+    "defaultMessage": "< 0.5 * Maximum Grade"
+  },
+  "course.assessment.statistics.name": {
+    "defaultMessage": "Name"
+  },
+  "course.assessment.statistics.nameGroupsGraderSearchText": {
+    "defaultMessage": "Search by Student Name, Group or Grader Name"
+  },
+  "course.assessment.statistics.nameGroupsSearchText": {
+    "defaultMessage": "Search by Name or Groups"
+  },
+  "course.assessment.statistics.noSubmission": {
+    "defaultMessage": "No submission yet"
+  },
+  "course.assessment.statistics.onlyForAutogradableAssessment": {
+    "defaultMessage": "This table is only displayed for Assessment with at least one Autograded Questions"
+  },
+  "course.assessment.statistics.questionDisplayTitle": {
+    "defaultMessage": "Q{index} for {student}"
+  },
+  "course.assessment.statistics.questionIndex": {
+    "defaultMessage": "Q{index}"
+  },
+  "course.assessment.statistics.total": {
+    "defaultMessage": "Total"
+  },
+  "course.assessment.statistics.workflowState": {
+    "defaultMessage": "Status"
+  },
   "course.assessment.statistics.ancestorFail": {
     "defaultMessage": "Failed to fetch past iterations of this assessment."
   },
