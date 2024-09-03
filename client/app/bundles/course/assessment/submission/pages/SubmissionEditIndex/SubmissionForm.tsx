@@ -55,13 +55,10 @@ const SubmissionForm: FC<Props> = (props) => {
   const liveFeedbacks = useAppSelector(getLiveFeedbacks);
   const initialValues = useAppSelector(getInitialAnswer);
 
-  const { autograded, timeLimit, tabbedView, questionIds, passwordProtected } =
-    assessment;
+  const { autograded, timeLimit, tabbedView, questionIds } = assessment;
   const { workflowState, attemptedAt } = submission;
 
   const maxInitialStep = submission.maxStep ?? questionIds.length - 1;
-
-  const attempting = workflowState === workflowStates.Attempting;
 
   const submissionId = getSubmissionId();
 
@@ -218,12 +215,7 @@ const SubmissionForm: FC<Props> = (props) => {
         </form>
       </FormProvider>
 
-      <WarningDialog
-        isAttempting={attempting}
-        isExamMode={passwordProtected}
-        isTimedMode={!!submissionTimeLimitAt}
-        submissionTimeLimitAt={submissionTimeLimitAt}
-      />
+      <WarningDialog />
     </div>
   );
 };
