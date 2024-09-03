@@ -445,21 +445,19 @@ const translations = defineMessages({
   timedAssessmentDialogTitle: {
     id: 'course.assessment.submission.timedAssessmentDialogTitle',
     defaultMessage:
-      '{stillSomeTimeRemaining, select, true {{remainingTime} remaining to \
+      '{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {remaining}} to \
       complete this assessment.} other {The assessment has ended!}}',
   },
   timedAssessmentDialogMessage: {
     id: 'course.assessment.submission.timedAssessmentDialogMessage',
     defaultMessage:
       '{stillSomeTimeRemaining, select, true {Once the time is up, \
-      the assessment will be automatically finalised.} other {You have \
-      {remainingBufferTime} before your submission is automatically finalised by the system. \
-      Alternatively, you may choose to finalise it on your own within this time.}}',
+      the assessment will be automatically finalised.} other {Finalising the submission now!}}',
   },
   timedExamDialogTitle: {
     id: 'course.assessment.submission.timedExamDialogTitle',
     defaultMessage:
-      '{stillSomeTimeRemaining, select, true {{remainingTime} remaining to \
+      '{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {remaining}} to \
       complete this exam.} other {The exam has ended!}}',
   },
   timedExamDialogMessage: {
@@ -467,9 +465,7 @@ const translations = defineMessages({
     defaultMessage:
       '{stillSomeTimeRemaining, select, true {Please \
       do not sign out or close the browser while attempting this exam. Once the time is up, \
-      the assessment will be automatically finalised.} other {You have \
-      {remainingBufferTime} before your submission is automatically finalised by the system. \
-      Alternatively, you may choose to finalise it on your own within this time.}}',
+      the assessment will be automatically finalised.} other {Finalising the submission now!}}',
   },
   emptyAssessment: {
     id: 'course.assessment.submission.emptyAssessment',
@@ -594,14 +590,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds',
     defaultMessage:
       '{hrs, plural, one {# hour} other {# hours}} \
-    {mins, plural, one {# minute} other {# minutes}} \
-    {secs, plural, one {# second} other {# seconds}}',
+    {mins, plural, =0 {} one {# minute} other {# minutes}} \
+    {secs, plural, =0 {} one {# second} other {# seconds}}',
   },
   minutesSeconds: {
     id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
     defaultMessage:
       '{mins, plural, one {# minute} other {# minutes}} \
-    {secs, plural, one {# second} other {# seconds}}',
+    {secs, plural, =0 {} one {# second} other {# seconds}}',
   },
   seconds: {
     id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
