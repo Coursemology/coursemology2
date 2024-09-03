@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Submission::SubmissionsController < \
+class Course::Assessment::Submission::SubmissionsController <
   Course::Assessment::Submission::Controller
   include Course::Assessment::Submission::SubmissionsControllerServiceConcern
   include Signals::EmissionConcern
@@ -103,6 +103,21 @@ class Course::Assessment::Submission::SubmissionsController < \
     response_status, response_body = @answer.generate_live_feedback
     response_body['feedbackUrl'] = ENV.fetch('CODAVERI_URL')
 
+    live_feedback = Course::Assessment::LiveFeedback.create_with_codes(
+      @submission.assessment_id,
+      @answer.question_id,
+      @submission.creator,
+      response_body['transactionId'],
+      @answer.actable.files
+    )
+
+    if response_status == 200
+      params[:live_feedback_id] = live_feedback.id
+      params[:feedback_files] = response_body['data']['feedbackFiles']
+      save_live_feedback
+    end
+
+    response_body['liveFeedbackId'] = live_feedback.id
     render json: response_body, status: response_status
   end
 
