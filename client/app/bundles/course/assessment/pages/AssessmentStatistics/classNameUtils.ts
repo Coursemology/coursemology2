@@ -1,4 +1,3 @@
-import { green } from 'theme/colors';
 import { AttemptInfo } from 'types/course/statistics/assessmentStatistics';
 
 const redBackgroundColorClassName = {
