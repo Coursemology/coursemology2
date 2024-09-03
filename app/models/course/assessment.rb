@@ -222,6 +222,8 @@ class Course::Assessment < ApplicationRecord
     folder.parent = target_tab.category.folder
     self.question_assessments = duplicator.duplicate(other.question_assessments)
     initialize_duplicate_conditions(duplicator, other)
+    self.monitor = duplicator.duplicate(other.monitor)
+
     set_duplication_flag
   end
 
