@@ -11,7 +11,7 @@ import { Activity, MonitoringState } from '../pages/AssessmentMonitoring/types';
 const initialState: MonitoringState = {
   snapshots: {},
   history: [],
-  connected: false,
+  status: 'connecting',
   monitor: { maxIntervalMs: 0, offsetMs: 0, hasSecret: false },
 };
 
@@ -53,8 +53,8 @@ export const monitoringSlice = createSlice({
       state.selectedUserId = undefined;
       delete state.snapshots[userId].selected;
     },
-    setConnected: (state, action: PayloadAction<boolean>) => {
-      state.connected = action.payload;
+    setStatus: (state, action: PayloadAction<MonitoringState['status']>) => {
+      state.status = action.payload;
     },
     terminate: (state, action: PayloadAction<number>) => {
       const userId = action.payload;
