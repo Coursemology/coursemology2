@@ -288,6 +288,7 @@ export function generateLiveFeedback({
             type: actionTypes.LIVE_FEEDBACK_REQUEST,
             payload: {
               questionId,
+              liveFeedbackId: response.data?.liveFeedbackId,
               feedbackUrl: response.data?.feedbackUrl,
               token: response.data?.data?.token,
             },
@@ -309,6 +310,7 @@ export function fetchLiveFeedback({
   answerId,
   questionId,
   feedbackUrl,
+  liveFeedbackId,
   feedbackToken,
   successMessage,
   noFeedbackMessage,
@@ -318,6 +320,10 @@ export function fetchLiveFeedback({
       .fetchLiveFeedback(feedbackUrl, feedbackToken)
       .then((response) => {
         if (response.status === 200) {
+          CourseAPI.assessment.submissions.saveLiveFeedback(
+            liveFeedbackId,
+            response.data?.data?.feedbackFiles ?? [],
+          );
           handleFeedbackOKResponse({
             dispatch,
             response,

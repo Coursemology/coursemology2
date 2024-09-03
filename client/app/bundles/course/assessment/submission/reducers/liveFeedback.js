@@ -16,6 +16,7 @@ export default function (state = initialState, action) {
             isRequestingLiveFeedback: true,
             pendingFeedbackToken: null,
             answerId: null,
+            liveFeedbackId: null,
             feedbackFiles: {},
           };
         } else {
@@ -27,18 +28,20 @@ export default function (state = initialState, action) {
       });
     }
     case actions.LIVE_FEEDBACK_REQUEST: {
-      const { token, questionId, feedbackUrl } = action.payload;
+      const { token, questionId, liveFeedbackId, feedbackUrl } = action.payload;
       return produce(state, (draft) => {
         draft.feedbackUrl ??= feedbackUrl;
         if (!(questionId in draft)) {
           draft.feedbackByQuestion[questionId] = {
             isRequestingLiveFeedback: false,
+            liveFeedbackId,
             pendingFeedbackToken: token,
           };
         } else {
           draft.feedbackByQuestion[questionId] = {
             isRequestingLiveFeedback: false,
             ...draft.feedbackByQuestion[questionId],
+            liveFeedbackId,
             pendingFeedbackToken: token,
           };
         }
