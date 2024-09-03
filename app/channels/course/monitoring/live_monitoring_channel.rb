@@ -64,6 +64,9 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
       is_valid_secret = @monitor.valid_secret?(last_heartbeat&.user_agent)
 
       course_user = course_users_hash[session.creator_id]
+      # This technically shouldn't happen, but can happen if someone is removed from
+      # the course after they finish a monitored assessment.
+      next [nil, nil] unless course_user
 
       snapshot = {
         sessionId: session.id,
@@ -77,7 +80,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
       }.compact
 
       [session.creator_id, snapshot]
-    end
+    end.compact
   end
 
   def groups
