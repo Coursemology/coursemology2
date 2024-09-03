@@ -959,6 +959,10 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.recentActivitiesHint',
     defaultMessage: 'These logs will disappear if you close this tab!',
   },
+  connecting: {
+    id: 'course.assessment.monitoring.connecting',
+    defaultMessage: 'Connecting',
+  },
   connected: {
     id: 'course.assessment.monitoring.connected',
     defaultMessage: 'Connected',

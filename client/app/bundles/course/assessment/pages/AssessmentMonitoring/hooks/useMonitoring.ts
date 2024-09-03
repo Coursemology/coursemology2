@@ -52,10 +52,10 @@ const useMonitoring = (): UseMonitoringHook => {
       dispatch(actions.filter(userIds));
     },
     notifyConnected: (): void => {
-      dispatch(actions.setConnected(true));
+      dispatch(actions.setStatus('connected'));
     },
     notifyDisconnected: (): void => {
-      dispatch(actions.setConnected(false));
+      dispatch(actions.setStatus('disconnected'));
     },
     notifyMissingAt: (timestamp, userId, name): void => {
       dispatch(

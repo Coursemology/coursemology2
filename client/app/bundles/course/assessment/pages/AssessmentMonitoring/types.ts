@@ -13,7 +13,7 @@ export interface Activity {
 export interface MonitoringState {
   snapshots: Snapshots;
   history: Activity[];
-  connected: boolean;
+  status: 'connecting' | 'connected' | 'disconnected';
   monitor: MonitoringMonitorData;
   selectedUserId?: number;
 }
