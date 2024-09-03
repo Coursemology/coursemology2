@@ -7,6 +7,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def main_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
                   calculated(:maximum_grade, :question_count).
+                  includes(programming_questions: [:language]).
                   preload(course: :course_users).first
     submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
                   calculated(:grade, :grader_ids).
