@@ -1,6 +1,7 @@
 import { ComponentType, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getIdFromUnknown } from 'utilities';
+import { getWebSocketURL } from 'utilities/socket';
 
 import usePrompt from 'lib/hooks/router/usePrompt';
 
@@ -33,7 +34,10 @@ const withHeartbeatWorker = <P extends WrappedComponentProps>(
       const worker = setUpWorker(workerType);
       workerRef.current = worker;
 
-      worker.postMessage({ type: 'start', payload: { sessionId, courseId } });
+      worker.postMessage({
+        type: 'start',
+        payload: { url: getWebSocketURL(), sessionId, courseId },
+      });
 
       const terminateWorker = (): void => {
         worker.terminate();
