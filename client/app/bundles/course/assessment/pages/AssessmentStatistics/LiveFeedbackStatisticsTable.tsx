@@ -6,6 +6,7 @@ import palette from 'theme/palette';
 import { AssessmentLiveFeedbackStatistics } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
@@ -14,6 +15,7 @@ import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
+import LiveFeedbackHistoryIndex from './LiveFeedbackHistory';
 import { getAssessmentStatistics } from './selectors';
 import { getJointGroupsName, translateStatus } from './utils';
 
@@ -46,6 +48,14 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.filename',
     defaultMessage: 'Question-level Live Feedback Statistics for {assessment}',
   },
+  closePrompt: {
+    id: 'course.assessment.statistics.closePrompt',
+    defaultMessage: 'Close',
+  },
+  liveFeedbackHistoryPromptTitle: {
+    id: 'course.assessment.statistics.liveFeedbackHistoryPromptTitle',
+    defaultMessage: 'Live Feedback History',
+  },
   legendLowerUsage: {
     id: 'course.assessment.statistics.legendLowerUsage',
     defaultMessage: 'Lower Usage',
@@ -74,6 +84,13 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
   >([]);
   const [upperQuartileFeedbackCount, setUpperQuartileFeedbackCount] =
     useState<number>(0);
+
+  const [openLiveFeedbackHistory, setOpenLiveFeedbackHistory] = useState(false);
+  const [liveFeedbackInfo, setLiveFeedbackInfo] = useState({
+    courseUserId: 0,
+    questionId: 0,
+    questionNumber: 0,
+  });
 
   useEffect(() => {
     const feedbackCounts = liveFeedbackStatistics
@@ -115,13 +132,27 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
 
   // the case where the live feedback count is null is handled separately inside the column
   // (refer to the definition of statColumns below)
-  const renderNonNullAttemptCountCell = (count: number): ReactNode => {
+  const renderNonNullClickableLiveFeedbackCountCell = (
+    count: number,
+    courseUserId: number,
+    questionId: number,
+    questionNumber: number,
+  ): ReactNode => {
     const classname = getClassnameForLiveFeedbackCell(
       count,
       upperQuartileFeedbackCount,
     );
+    if (count === 0) {
+      return <Box>{count}</Box>;
+    }
     return (
-      <div className={classname}>
+      <div
+        className={`cursor-pointer ${classname}`}
+        onClick={(): void => {
+          setOpenLiveFeedbackHistory(true);
+          setLiveFeedbackInfo({ courseUserId, questionId, questionNumber });
+        }}
+      >
         <Box>{count}</Box>
       </div>
     );
@@ -137,7 +168,12 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
           return typeof datum.liveFeedbackCount?.[index] === 'number'
-            ? renderNonNullAttemptCountCell(datum.liveFeedbackCount?.[index])
+            ? renderNonNullClickableLiveFeedbackCountCell(
+                datum.liveFeedbackCount?.[index],
+                datum.courseUser.id,
+                datum.questionIds[index],
+                index + 1,
+              )
             : null;
         },
         sortable: true,
@@ -281,6 +317,19 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         search={{ searchPlaceholder: t(translations.searchText) }}
         toolbar={{ show: true }}
       />
+      <Prompt
+        cancelLabel={t(translations.closePrompt)}
+        maxWidth="lg"
+        onClose={(): void => setOpenLiveFeedbackHistory(false)}
+        open={openLiveFeedbackHistory}
+        title={t(translations.liveFeedbackHistoryPromptTitle)}
+      >
+        <LiveFeedbackHistoryIndex
+          courseUserId={liveFeedbackInfo.courseUserId}
+          questionId={liveFeedbackInfo.questionId}
+          questionNumber={liveFeedbackInfo.questionNumber}
+        />
+      </Prompt>
     </>
   );
 };
