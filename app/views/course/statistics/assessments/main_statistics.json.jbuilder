@@ -3,6 +3,7 @@ json.assessment do
   json.partial! 'assessment', assessment: @assessment, course: current_course
   json.isAutograded @assessment_autograded
   json.questionCount @assessment.question_count
+  json.liveFeedbackEnabled @assessment.programming_questions.any?(&:live_feedback_enabled)
 end
 
 json.submissions @student_submissions_hash.each do |course_user, (submission, answers, end_at)|

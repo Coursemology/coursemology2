@@ -17,6 +17,7 @@ interface AssessmentInfo {
 interface MainAssessmentInfo extends AssessmentInfo {
   isAutograded: boolean;
   questionCount: number;
+  liveFeedbackEnabled: boolean;
 }
 
 interface AncestorAssessmentInfo extends AssessmentInfo {}
