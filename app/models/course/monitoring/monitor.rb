@@ -19,6 +19,11 @@ class Course::Monitoring::Monitor < ApplicationRecord
     secret? ? (string&.include?(secret) || false) : true
   end
 
+  # `Duplicator` already performed a shallow duplicate of the `other` monitor.
+  # There's no need to duplicate `other`'s sessions and heartbeats.
+  def initialize_duplicate(duplicator, other)
+  end
+
   private
 
   def max_interval_greater_than_min
