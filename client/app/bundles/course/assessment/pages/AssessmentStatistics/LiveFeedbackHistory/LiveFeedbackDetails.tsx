@@ -1,6 +1,5 @@
 import { FC, useRef, useState } from 'react';
 import ReactAce from 'react-ace';
-import { defineMessages } from 'react-intl';
 import { Box, Card, CardContent, Drawer, Typography } from '@mui/material';
 import { LiveFeedbackCodeAndComments } from 'types/course/assessment/submission/liveFeedback';
 
@@ -8,20 +7,7 @@ import { parseLanguages } from 'course/assessment/submission/utils';
 import EditorField from 'lib/components/core/fields/EditorField';
 import useTranslation from 'lib/hooks/useTranslation';
 
-const translations = defineMessages({
-  liveFeedbackName: {
-    id: 'course.assessment.liveFeedback.comments',
-    defaultMessage: 'Live Feedback',
-  },
-  comments: {
-    id: 'course.assessment.liveFeedback.comments',
-    defaultMessage: 'Comments',
-  },
-  lineHeader: {
-    id: 'course.assessment.liveFeedback.lineHeader',
-    defaultMessage: 'Line {lineNumber}',
-  },
-});
+import translations from '../translations';
 
 interface Props {
   file: LiveFeedbackCodeAndComments;

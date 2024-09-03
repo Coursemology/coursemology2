@@ -1,5 +1,4 @@
 import { FC, ReactNode, useState } from 'react';
-import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
 import palette from 'theme/palette';
@@ -19,62 +18,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import LastAttemptIndex from './AnswerDisplay/LastAttempt';
 import { getClassNameForMarkCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
+import translations from './translations';
 import { getJointGroupsName, translateStatus } from './utils';
-
-const translations = defineMessages({
-  name: {
-    id: 'course.assessment.statistics.name',
-    defaultMessage: 'Name',
-  },
-  greenCellLegend: {
-    id: 'course.assessment.statistics.greenCellLegend',
-    defaultMessage: '>= 0.5 * Maximum Grade',
-  },
-  redCellLegend: {
-    id: 'course.assessment.statistics.redCellLegend',
-    defaultMessage: '< 0.5 * Maximum Grade',
-  },
-  group: {
-    id: 'course.assessment.statistics.group',
-    defaultMessage: 'Group',
-  },
-  totalGrade: {
-    id: 'course.assessment.statistics.totalGrade',
-    defaultMessage: 'Total',
-  },
-  grader: {
-    id: 'course.assessment.statistics.grader',
-    defaultMessage: 'Grader',
-  },
-  searchText: {
-    id: 'course.assessment.statistics.searchText',
-    defaultMessage: 'Search by Student Name, Group or Grader Name',
-  },
-  answers: {
-    id: 'course.assessment.statistics.answers',
-    defaultMessage: 'Answers',
-  },
-  questionIndex: {
-    id: 'course.assessment.statistics.questionIndex',
-    defaultMessage: 'Q{index}',
-  },
-  noSubmission: {
-    id: 'course.assessment.statistics.noSubmission',
-    defaultMessage: 'No Submission yet',
-  },
-  workflowState: {
-    id: 'course.assessment.statistics.workflowState',
-    defaultMessage: 'Status',
-  },
-  filename: {
-    id: 'course.assessment.statistics.filename',
-    defaultMessage: 'Question-level Marks Statistics for {assessment}',
-  },
-  close: {
-    id: 'course.assessment.statistics.close',
-    defaultMessage: 'Close',
-  },
-});
 
 interface Props {
   includePhantom: boolean;
@@ -234,7 +179,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       searchProps: {
         getValue: (datum) => datum.totalGrade?.toString() ?? undefined,
       },
-      title: t(translations.totalGrade),
+      title: t(translations.total),
       sortable: true,
       cell: (datum): ReactNode => {
         const isGradedOrPublished =
@@ -281,19 +226,19 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           {
             key: 'correct',
             backgroundColor: 'bg-green-500',
-            description: t(translations.greenCellLegend),
+            description: t(translations.marksGreenCellLegend),
           },
           {
             key: 'incorrect',
             backgroundColor: 'bg-red-500',
-            description: t(translations.redCellLegend),
+            description: t(translations.marksRedCellLegend),
           },
         ]}
       />
       <Table
         columns={columns}
         csvDownload={{
-          filename: t(translations.filename, {
+          filename: t(translations.marksFilename, {
             assessment: assessment?.title ?? '',
           }),
         }}
@@ -308,11 +253,13 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
           showAllRows: true,
         }}
-        search={{ searchPlaceholder: t(translations.searchText) }}
+        search={{
+          searchPlaceholder: t(translations.nameGroupsGraderSearchText),
+        }}
         toolbar={{ show: true }}
       />
       <Prompt
-        cancelLabel={t(translations.close)}
+        cancelLabel={t(translations.closePrompt)}
         maxWidth="lg"
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}

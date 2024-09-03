@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { defineMessages } from 'react-intl';
 import { Slider, Typography } from '@mui/material';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
@@ -11,19 +10,9 @@ import {
   getLiveFeedbackHistory,
   getLiveFeedbadkQuestionInfo,
 } from '../selectors';
+import translations from '../translations';
 
 import LiveFeedbackDetails from './LiveFeedbackDetails';
-
-const translations = defineMessages({
-  questionTitle: {
-    id: 'course.assessment.liveFeedback.questionTitle',
-    defaultMessage: 'Question {index}',
-  },
-  feedbackTimingTitle: {
-    id: 'course.assessment.liveFeedback.feedbackTimingTitle',
-    defaultMessage: 'Used at: {usedAt}',
-  },
-});
 
 interface Props {
   questionNumber: number;
