@@ -1,5 +1,4 @@
 import { FC, ReactNode, useState } from 'react';
-import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
 import palette from 'theme/palette';
@@ -20,63 +19,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import AllAttemptsIndex from './AnswerDisplay/AllAttempts';
 import { getClassNameForAttemptCountCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
+import translations from './translations';
 import { getJointGroupsName, translateStatus } from './utils';
-
-const translations = defineMessages({
-  onlyForAutogradableAssessment: {
-    id: 'course.assessment.statistics.onlyForAutogradableAssessment',
-    defaultMessage:
-      'This table is only displayed for Assessment with at least one Autograded Questions',
-  },
-  greenCellLegend: {
-    id: 'course.assessment.statistics.greenCellLegend',
-    defaultMessage: 'Correct',
-  },
-  redCellLegend: {
-    id: 'course.assessment.statistics.redCellLegend',
-    defaultMessage: 'Incorrect',
-  },
-  grayCellLegend: {
-    id: 'course.assessment.statistics.grayCellLegend',
-    defaultMessage: 'Undecided (question is Non-autogradable)',
-  },
-  name: {
-    id: 'course.assessment.statistics.name',
-    defaultMessage: 'Name',
-  },
-  group: {
-    id: 'course.assessment.statistics.group',
-    defaultMessage: 'Group',
-  },
-  searchText: {
-    id: 'course.assessment.statistics.searchText',
-    defaultMessage: 'Search by Name or Groups',
-  },
-  answers: {
-    id: 'course.assessment.statistics.answers',
-    defaultMessage: 'Answers',
-  },
-  questionIndex: {
-    id: 'course.assessment.statistics.questionIndex',
-    defaultMessage: 'Q{index}',
-  },
-  noSubmission: {
-    id: 'course.assessment.statistics.noSubmission',
-    defaultMessage: 'No Submission yet',
-  },
-  workflowState: {
-    id: 'course.assessment.statistics.workflowState',
-    defaultMessage: 'Status',
-  },
-  filename: {
-    id: 'course.assessment.statistics.filename',
-    defaultMessage: 'Question-level Attempt Statistics for {assessment}',
-  },
-  close: {
-    id: 'course.assessment.statistics.close',
-    defaultMessage: 'Close',
-  },
-});
 
 interface Props {
   includePhantom: boolean;
@@ -234,12 +178,12 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
           {
             key: 'correct',
             backgroundColor: 'bg-green-300',
-            description: t(translations.greenCellLegend),
+            description: t(translations.attemptsGreenCellLegend),
           },
           {
             key: 'incorrect',
             backgroundColor: 'bg-red-300',
-            description: t(translations.redCellLegend),
+            description: t(translations.attemptsRedCellLegend),
           },
           {
             key: 'undecided',
@@ -251,7 +195,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
       <Table
         columns={columns}
         csvDownload={{
-          filename: t(translations.filename, {
+          filename: t(translations.attemptsFilename, {
             assessment: assessment?.title ?? '',
           }),
         }}
@@ -266,11 +210,11 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
           rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
           showAllRows: true,
         }}
-        search={{ searchPlaceholder: t(translations.searchText) }}
+        search={{ searchPlaceholder: t(translations.nameGroupsSearchText) }}
         toolbar={{ show: true }}
       />
       <Prompt
-        cancelLabel={t(translations.close)}
+        cancelLabel={t(translations.closePrompt)}
         maxWidth="lg"
         onClose={(): void => setOpenPastAnswers(false)}
         open={openPastAnswers}
