@@ -33,6 +33,7 @@ export default class WideComments extends Component {
       expandLine,
       collapseLine,
       onClick,
+      isUpdatingAnnotationAllowed,
     } = this.props;
 
     if (expanded[lineNumber - 1]) {
@@ -60,6 +61,7 @@ export default class WideComments extends Component {
             annotation={annotation}
             answerId={answerId}
             fileId={fileId}
+            isUpdatingAnnotationAllowed={isUpdatingAnnotationAllowed}
             lineNumber={lineNumber}
           />
         </div>
@@ -103,6 +105,7 @@ WideComments.propTypes = {
   expandLine: PropTypes.func,
   collapseLine: PropTypes.func,
   onClick: PropTypes.func,
+  isUpdatingAnnotationAllowed: PropTypes.bool,
 };
 
 WideComments.defaultProps = {

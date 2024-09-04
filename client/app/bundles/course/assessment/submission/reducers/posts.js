@@ -5,6 +5,7 @@ import actions from '../constants';
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
+    case actions.FETCH_ANNOTATION_SUCCESS:
       return {
         ...state,
         ...arrayToObjectWithKey(action.payload.posts, 'id'),

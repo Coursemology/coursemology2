@@ -294,6 +294,9 @@ const actionTypes = mirrorCreator([
   'LIVE_FEEDBACK_ITEM_MARK_RESOLVED',
   'LIVE_FEEDBACK_ITEM_MARK_DISMISSED',
   'LIVE_FEEDBACK_ITEM_DELETE',
+
+  // Fetch annotations for single answer
+  'FETCH_ANNOTATION_SUCCESS',
 ]);
 
 export default actionTypes;

@@ -46,6 +46,7 @@ class VisibleComments extends Component {
                 deleteComment={() => deleteComment(post.id)}
                 editValue={commentForms.posts[post.id]}
                 handleChange={(value) => handleUpdateChange(post.id, value)}
+                isUpdatingAnnotationAllowed
                 post={post}
                 updateComment={(value) => updateComment(post.id, value)}
               />
