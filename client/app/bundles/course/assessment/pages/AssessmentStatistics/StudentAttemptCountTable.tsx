@@ -310,6 +310,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
       />
       <Prompt
         cancelLabel={t(translations.close)}
+        maxWidth="lg"
         onClose={(): void => setOpenPastAnswers(false)}
         open={openPastAnswers}
         title={answerInfo.studentName}
