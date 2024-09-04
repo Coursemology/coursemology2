@@ -17,6 +17,7 @@ import MainGradesChart from './GradeDistribution/MainGradesChart';
 import MainSubmissionChart from './SubmissionStatus/MainSubmissionChart';
 import MainSubmissionTimeAndGradeStatistics from './SubmissionTimeAndGradeStatistics/MainSubmissionTimeAndGradeStatistics';
 import DuplicationHistoryStatistics from './DuplicationHistoryStatistics';
+import LiveFeedbackStatistics from './LiveFeedbackStatistics';
 import { getAssessmentStatistics } from './selectors';
 import StudentAttemptCountTable from './StudentAttemptCountTable';
 import StudentMarksPerQuestionTable from './StudentMarksPerQuestionTable';
@@ -41,6 +42,10 @@ const translations = defineMessages({
   duplicationHistory: {
     id: 'course.assessment.statistics.duplicationHistory',
     defaultMessage: 'Duplication History',
+  },
+  liveFeedback: {
+    id: 'course.assessment.statistics.liveFeedback',
+    defaultMessage: 'Live Feedback',
   },
   marksPerQuestion: {
     id: 'course.assessment.statistics.marksPerQuestion',
@@ -75,6 +80,7 @@ const tabMapping = (includePhantom: boolean): Record<string, JSX.Element> => {
       <MainSubmissionTimeAndGradeStatistics includePhantom={includePhantom} />
     ),
     duplicationHistory: <DuplicationHistoryStatistics />,
+    liveHelp: <LiveFeedbackStatistics includePhantom={includePhantom} />,
   };
 };
 
@@ -154,6 +160,14 @@ const AssessmentStatisticsPage: FC = () => {
               label={t(translations.duplicationHistory)}
               value="duplicationHistory"
             />
+            {statistics.assessment?.liveFeedbackEnabled && (
+              <Tab
+                className="min-h-12"
+                id="liveHelp"
+                label={t(translations.liveHelp)}
+                value="liveHelp"
+              />
+            )}
           </Tabs>
         </Box>
 

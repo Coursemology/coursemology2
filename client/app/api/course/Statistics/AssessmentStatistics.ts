@@ -1,5 +1,6 @@
 import {
   AncestorAssessmentStats,
+  AssessmentLiveFeedbackStatistics,
   MainAssessmentStats,
 } from 'types/course/statistics/assessmentStatistics';
 
@@ -31,6 +32,14 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
   ): APIResponse<MainAssessmentStats> {
     return this.client.get(
       `${this.#urlPrefix}/${assessmentId}/main_statistics`,
+    );
+  }
+
+  fetchLiveFeedbackStatistics(
+    assessmentId: number,
+  ): APIResponse<AssessmentLiveFeedbackStatistics[]> {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/live_feedback_statistics`,
     );
   }
 }
