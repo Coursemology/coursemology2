@@ -342,6 +342,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       />
       <Prompt
         cancelLabel={t(translations.close)}
+        maxWidth="lg"
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}
         title={answerDisplayInfo.studentName}

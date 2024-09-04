@@ -19,6 +19,7 @@ interface BasePromptProps {
   onClosed?: () => void;
   disabled?: boolean;
   contentClassName?: string;
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 type DefaultActionProps<Action extends string> = {
@@ -66,6 +67,7 @@ const Prompt = (props: PromptProps): JSX.Element => {
   return (
     <Dialog
       fullWidth
+      maxWidth={props.maxWidth ?? 'sm'}
       onClose={handleClose}
       open={props.open ?? false}
       TransitionProps={{ onExited: props.onClosed }}
