@@ -171,6 +171,8 @@ export default class CommentCard extends Component {
       isDelayed,
     } = this.props.post;
 
+    const { isUpdatingAnnotationAllowed } = this.props;
+
     return (
       <div id={CommentCard.postIdentifier(id)} style={styles.card}>
         <div style={isDelayed ? styles.delayedHeader : styles.header}>
@@ -185,7 +187,7 @@ export default class CommentCard extends Component {
             titleTypographyProps={{ display: 'block', marginright: 20 }}
           />
           <div style={styles.buttonContainer}>
-            {canUpdate ? (
+            {canUpdate && isUpdatingAnnotationAllowed ? (
               <Button
                 className="edit-comment"
                 onClick={() => this.toggleEditMode()}
@@ -194,7 +196,7 @@ export default class CommentCard extends Component {
                 <Edit htmlColor="black" />
               </Button>
             ) : null}
-            {canDestroy ? (
+            {canDestroy && isUpdatingAnnotationAllowed ? (
               <Button
                 className="delete-comment"
                 onClick={() => this.onDelete()}
@@ -225,4 +227,5 @@ CommentCard.propTypes = {
   handleChange: PropTypes.func,
   updateComment: PropTypes.func,
   deleteComment: PropTypes.func,
+  isUpdatingAnnotationAllowed: PropTypes.bool,
 };

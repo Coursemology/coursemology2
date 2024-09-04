@@ -1,5 +1,9 @@
+import { useEffect } from 'react';
 import { Annotation } from 'types/course/statistics/answer';
 import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+
+import actionTypes from 'course/assessment/submission/constants';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import CodaveriFeedbackStatus from './ProgrammingComponent/CodaveriFeedbackStatus';
 import FileContent from './ProgrammingComponent/FileContent';
@@ -9,7 +13,16 @@ const ProgrammingAnswerDetails = (
   props: QuestionAnswerDisplayDetails<'Programming'>,
 ): JSX.Element => {
   const { answer } = props;
-  const annotations = answer.latestAnswer?.annotations ?? ([] as Annotation[]);
+  const annotations = answer.annotations ?? ([] as Annotation[]);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch({
+      type: actionTypes.FETCH_ANNOTATION_SUCCESS,
+      payload: { posts: answer.posts },
+    });
+  });
 
   return (
     <>

@@ -99,6 +99,7 @@ const LineNumberColumn = (props) => {
                 annotation={annotation}
                 answerId={answerId}
                 fileId={fileId}
+                isUpdatingAnnotationAllowed={isUpdatingAnnotationAllowed}
                 lineNumber={lineNumber}
               />
             </div>
@@ -111,34 +112,28 @@ const LineNumberColumn = (props) => {
 
   return (
     <>
-      {isUpdatingAnnotationAllowed ? (
-        <div
-          onClick={() => toggleComment(lineNumber)}
-          onMouseOut={() => setLineHovered(0)}
-          onMouseOver={() => setLineHovered(lineNumber)}
-          style={
-            annotation
-              ? styles.editorLineNumberWithComments
-              : styles.editorLineNumber
+      <div
+        onClick={() => {
+          if (annotation || isUpdatingAnnotationAllowed) {
+            toggleComment(lineNumber);
           }
-        >
-          <div>{lineNumber}</div>
+        }}
+        onMouseOut={() => setLineHovered(0)}
+        onMouseOver={() => setLineHovered(lineNumber)}
+        style={
+          annotation
+            ? styles.editorLineNumberWithComments
+            : styles.editorLineNumber
+        }
+      >
+        <div>{lineNumber}</div>
+        {(annotation || isUpdatingAnnotationAllowed) && (
           <AddCommentIcon
             hovered={lineHovered === lineNumber}
             onClick={() => expandComment(lineNumber)}
           />
-        </div>
-      ) : (
-        <div
-          style={
-            annotation
-              ? styles.editorLineNumberWithComments
-              : styles.editorLineNumber
-          }
-        >
-          <div>{lineNumber}</div>
-        </div>
-      )}
+        )}
+      </div>
 
       {renderComments()}
     </>

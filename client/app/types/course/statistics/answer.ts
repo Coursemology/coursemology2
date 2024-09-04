@@ -1,4 +1,5 @@
 import { JobStatus, JobStatusResponse } from 'types/jobs';
+import { UserBasicListData } from 'types/users';
 
 import { QuestionType } from '../assessment/question';
 import { ForumPostResponseFieldData } from '../assessment/submission/answer/forumPostResponse';
@@ -55,6 +56,19 @@ export interface Annotation {
   topics: AnnotationTopic[];
 }
 
+export interface Post {
+  id: number;
+  topicId: number;
+  title: string;
+  text: string;
+  creator: UserBasicListData;
+  createdAt: string;
+  canUpdate: boolean;
+  canDestroy: boolean;
+  isDelayed: boolean;
+  codaveriFeedback: CodaveriFeedback;
+}
+
 export interface TestCase {
   canReadTests: boolean;
   public_test?: TestCaseResult[];
@@ -88,6 +102,8 @@ export interface ProgrammingAnswerDetails
   latestAnswer?: ProgrammingAnswerDetails & {
     annotations: Annotation[];
   };
+  annotations: Annotation[];
+  posts: Post[];
 }
 
 export interface TextResponseAnswerDetails

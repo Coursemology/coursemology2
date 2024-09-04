@@ -11,7 +11,9 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
 
     @submission_question = Course::Assessment::SubmissionQuestion.
                            where(submission_id: @answer.submission_id, question_id: @answer.question_id).
-                           includes({ discussion_topic: :posts }).first
+                           includes(actable: { files: { annotations:
+                                             { discussion_topic: { posts: :codaveri_feedback } } } },
+                                    discussion_topic: :posts).first
 
     fetch_all_answers(@answer.submission_id, @answer.question_id)
   end

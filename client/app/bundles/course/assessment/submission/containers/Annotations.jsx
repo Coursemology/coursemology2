@@ -49,6 +49,7 @@ class VisibleAnnotations extends Component {
       graderView,
       renderDelayedCommentButton,
       updateCodaveriFeedback,
+      isUpdatingAnnotationAllowed,
     } = this.props;
 
     const shouldRenderCommentButton =
@@ -103,6 +104,7 @@ class VisibleAnnotations extends Component {
                   deleteComment={() => deleteComment(post.id)}
                   editValue={commentForms.posts[post.id]}
                   handleChange={(value) => handleUpdateChange(post.id, value)}
+                  isUpdatingAnnotationAllowed={isUpdatingAnnotationAllowed}
                   post={post}
                   updateComment={(value) => updateComment(post.id, value)}
                 />
@@ -110,7 +112,9 @@ class VisibleAnnotations extends Component {
             }
             return null;
           })}
-          {shouldRenderCommentButton && renderCommentField()}
+          {shouldRenderCommentButton &&
+            isUpdatingAnnotationAllowed &&
+            renderCommentField()}
         </CardContent>
       </Card>
     );
@@ -129,6 +133,7 @@ VisibleAnnotations.propTypes = {
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,
   posts: PropTypes.arrayOf(postShape),
+  isUpdatingAnnotationAllowed: PropTypes.bool,
 
   match: PropTypes.shape({
     params: PropTypes.shape({

@@ -75,8 +75,14 @@ export default class WideEditor extends Component {
 
   renderComments() {
     const { activeComment } = this.state;
-    const { answerId, fileId, expanded, annotations, collapseLine } =
-      this.props;
+    const {
+      answerId,
+      fileId,
+      expanded,
+      annotations,
+      collapseLine,
+      isUpdatingAnnotationAllowed,
+    } = this.props;
     return (
       <WideComments
         activeComment={activeComment}
@@ -86,6 +92,7 @@ export default class WideEditor extends Component {
         expanded={expanded}
         expandLine={(lineNumber) => this.expandComment(lineNumber)}
         fileId={fileId}
+        isUpdatingAnnotationAllowed={isUpdatingAnnotationAllowed}
         onClick={(lineNumber) => this.setState({ activeComment: lineNumber })}
       />
     );
@@ -143,7 +150,7 @@ export default class WideEditor extends Component {
 
   renderLineNumberColumn(lineNumber) {
     const { lineHovered } = this.state;
-    const { annotations, isUpdatingAnnotationAllowed } = this.props;
+    const { annotations } = this.props;
     const annotation = annotations.find((a) => a.line === lineNumber);
 
     return (
@@ -158,12 +165,10 @@ export default class WideEditor extends Component {
         }
       >
         {lineNumber}
-        {isUpdatingAnnotationAllowed && (
-          <AddCommentIcon
-            hovered={lineHovered === lineNumber}
-            onClick={() => this.expandComment(lineNumber)}
-          />
-        )}
+        <AddCommentIcon
+          hovered={lineHovered === lineNumber}
+          onClick={() => this.expandComment(lineNumber)}
+        />
       </div>
     );
   }
