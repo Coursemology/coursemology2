@@ -139,3 +139,10 @@ export interface QuestionAllAnswerDisplayDetails<
   submissionId: number;
   comments: CommentItem[];
 }
+
+export interface AssessmentLiveFeedbackStatistics {
+  courseUser: StudentInfo;
+  groups: { name: string }[];
+  workflowState?: WorkflowState;
+  liveFeedbackCount?: number[]; // Will already be ordered by question
+}

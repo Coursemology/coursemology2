@@ -20,6 +20,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import AllAttemptsIndex from './AnswerDisplay/AllAttempts';
 import { getClassNameForAttemptCountCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
+import { getJointGroupsName, translateStatus } from './utils';
 
 const translations = defineMessages({
   onlyForAutogradableAssessment: {
@@ -80,14 +81,6 @@ const translations = defineMessages({
 interface Props {
   includePhantom: boolean;
 }
-
-const statusTranslations = {
-  attempting: 'Attempting',
-  submitted: 'Submitted',
-  graded: 'Graded, unpublished',
-  published: 'Graded',
-  unstarted: 'Not Started',
-};
 
 const StudentAttemptCountTable: FC<Props> = (props) => {
   const { t } = useTranslation();
@@ -180,14 +173,6 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
     },
   );
 
-  const jointGroupsName = (datum: MainSubmissionInfo): string =>
-    datum.groups
-      ? datum.groups
-          .map((g) => g.name)
-          .sort()
-          .join(', ')
-      : '';
-
   const columns: ColumnTemplate<MainSubmissionInfo>[] = [
     {
       searchProps: {
@@ -214,9 +199,9 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
       sortable: true,
       searchable: true,
       searchProps: {
-        getValue: (datum) => jointGroupsName(datum),
+        getValue: (datum) => getJointGroupsName(datum.groups),
       },
-      cell: (datum) => jointGroupsName(datum),
+      cell: (datum) => getJointGroupsName(datum.groups),
       csvDownloadable: true,
     },
     {
@@ -230,11 +215,9 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         >
           <Chip
             className={`text-blue-800 ${palette.submissionStatusClassName[datum.workflowState ?? workflowStates.Unstarted]} w-full`}
-            label={
-              statusTranslations[
-                datum.workflowState ?? workflowStates.Unstarted
-              ]
-            }
+            label={translateStatus(
+              datum.workflowState ?? workflowStates.Unstarted,
+            )}
             variant="filled"
           />
         </Link>
