@@ -30,6 +30,7 @@ class ReadOnlyEditorContainer extends Component {
           annotations={Object.values(annotations)}
           answerId={answerId}
           file={file}
+          isUpdatingAnnotationAllowed
         />
       );
     }

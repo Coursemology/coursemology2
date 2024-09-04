@@ -74,6 +74,7 @@ const LineNumberColumn = (props) => {
     collapseComment,
     annotations,
     editorWidth,
+    isUpdatingAnnotationAllowed,
   } = props;
 
   const annotation = annotations.find((a) => a.line === lineNumber);
@@ -110,22 +111,35 @@ const LineNumberColumn = (props) => {
 
   return (
     <>
-      <div
-        onClick={() => toggleComment(lineNumber)}
-        onMouseOut={() => setLineHovered(0)}
-        onMouseOver={() => setLineHovered(lineNumber)}
-        style={
-          annotation
-            ? styles.editorLineNumberWithComments
-            : styles.editorLineNumber
-        }
-      >
-        <div>{lineNumber}</div>
-        <AddCommentIcon
-          hovered={lineHovered === lineNumber}
-          onClick={() => expandComment(lineNumber)}
-        />
-      </div>
+      {isUpdatingAnnotationAllowed ? (
+        <div
+          onClick={() => toggleComment(lineNumber)}
+          onMouseOut={() => setLineHovered(0)}
+          onMouseOver={() => setLineHovered(lineNumber)}
+          style={
+            annotation
+              ? styles.editorLineNumberWithComments
+              : styles.editorLineNumber
+          }
+        >
+          <div>{lineNumber}</div>
+          <AddCommentIcon
+            hovered={lineHovered === lineNumber}
+            onClick={() => expandComment(lineNumber)}
+          />
+        </div>
+      ) : (
+        <div
+          style={
+            annotation
+              ? styles.editorLineNumberWithComments
+              : styles.editorLineNumber
+          }
+        >
+          <div>{lineNumber}</div>
+        </div>
+      )}
+
       {renderComments()}
     </>
   );
@@ -144,6 +158,7 @@ LineNumberColumn.propTypes = {
   answerId: PropTypes.number.isRequired,
   fileId: PropTypes.number.isRequired,
   annotations: PropTypes.arrayOf(annotationShape),
+  isUpdatingAnnotationAllowed: PropTypes.bool.isRequired,
 };
 
 const NarrowEditor = (props) => {
@@ -191,6 +206,7 @@ const NarrowEditor = (props) => {
       collapseComment={collapseComment}
       editorWidth={editorWidth}
       expandComment={expandComment}
+      isUpdatingAnnotationAllowed={props.isUpdatingAnnotationAllowed}
       lineHovered={lineHovered}
       lineNumber={lineNumber}
       setLineHovered={setLineHovered}
@@ -251,6 +267,7 @@ NarrowEditor.propTypes = {
   answerId: PropTypes.number.isRequired,
   fileId: PropTypes.number.isRequired,
   annotations: PropTypes.arrayOf(annotationShape),
+  isUpdatingAnnotationAllowed: PropTypes.bool.isRequired,
   content: PropTypes.arrayOf(PropTypes.string).isRequired,
   expandLine: PropTypes.func,
   collapseLine: PropTypes.func,

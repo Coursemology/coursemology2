@@ -143,7 +143,7 @@ export default class WideEditor extends Component {
 
   renderLineNumberColumn(lineNumber) {
     const { lineHovered } = this.state;
-    const { annotations } = this.props;
+    const { annotations, isUpdatingAnnotationAllowed } = this.props;
     const annotation = annotations.find((a) => a.line === lineNumber);
 
     return (
@@ -158,10 +158,12 @@ export default class WideEditor extends Component {
         }
       >
         {lineNumber}
-        <AddCommentIcon
-          hovered={lineHovered === lineNumber}
-          onClick={() => this.expandComment(lineNumber)}
-        />
+        {isUpdatingAnnotationAllowed && (
+          <AddCommentIcon
+            hovered={lineHovered === lineNumber}
+            onClick={() => this.expandComment(lineNumber)}
+          />
+        )}
       </div>
     );
   }
@@ -189,6 +191,7 @@ WideEditor.propTypes = {
   expandLine: PropTypes.func,
   collapseLine: PropTypes.func,
   toggleLine: PropTypes.func,
+  isUpdatingAnnotationAllowed: PropTypes.bool.isRequired,
 };
 
 WideEditor.defaultProps = {

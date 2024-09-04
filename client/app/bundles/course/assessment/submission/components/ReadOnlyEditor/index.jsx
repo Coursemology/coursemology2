@@ -185,13 +185,15 @@ class ReadOnlyEditor extends Component {
 
   render() {
     const { expanded } = this.state;
-    const { answerId, annotations, file } = this.props;
+    const { answerId, annotations, file, isUpdatingAnnotationAllowed } =
+      this.props;
     const editorProps = {
       expanded,
       answerId,
       fileId: file.id,
       annotations,
       content: file.highlightedContent.split('\n'),
+      isUpdatingAnnotationAllowed,
       expandLine: (lineNumber) => this.setExpandedLine(lineNumber),
       collapseLine: (lineNumber) => this.setCollapsedLine(lineNumber),
       toggleLine: (lineNumber) => this.toggleCommentLine(lineNumber),
@@ -215,6 +217,7 @@ ReadOnlyEditor.propTypes = {
   annotations: PropTypes.arrayOf(annotationShape),
   answerId: PropTypes.number.isRequired,
   file: fileShape.isRequired,
+  isUpdatingAnnotationAllowed: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
 };
 
