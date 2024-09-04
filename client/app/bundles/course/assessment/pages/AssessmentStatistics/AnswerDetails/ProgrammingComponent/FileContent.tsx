@@ -30,6 +30,7 @@ const FileContent: FC<Props> = (props) => {
       annotations={fileAnnotation?.topics ?? ([] as AnnotationTopic[])}
       answerId={answerId}
       file={file}
+      isUpdatingAnnotationAllowed={false}
     />
   ) : (
     <>
