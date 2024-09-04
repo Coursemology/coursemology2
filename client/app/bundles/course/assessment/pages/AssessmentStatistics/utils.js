@@ -61,3 +61,33 @@ export function processSubmissionsIntoChartData(submissions) {
   }
   return { labels, lineData, barData };
 }
+
+// Change to this function when file is converted to TypeScript
+// const getJointGroupsName = (groups: {name: string}[]): string =>
+//   groups
+//     ? groups
+//         .map((group) => group.name)
+//         .sort()
+//         .join(', ')
+//     : '';
+
+export const getJointGroupsName = (groups) =>
+  groups
+    ? groups
+        .map((group) => group.name)
+        .sort()
+        .join(', ')
+    : '';
+
+const statusTranslations = {
+  attempting: 'Attempting',
+  submitted: 'Submitted',
+  graded: 'Graded, unpublished',
+  published: 'Graded',
+  unstarted: 'Not Started',
+};
+
+// Change to this function when file is converted to TypeScript
+// export const translateStatus = (status: WorkflowState): string => statusTranslations[status];
+
+export const translateStatus = (status) => statusTranslations[status];
