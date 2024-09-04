@@ -18,13 +18,11 @@ import {
 // import AssessmentProgrammingQnList from 'course/admin/pages/CodaveriSettings/components/AssessmentProgrammingQnList';
 // import LiveFeedbackToggleButton from 'course/admin/pages/CodaveriSettings/components/buttons/LiveFeedbackToggleButton';
 // import { getProgrammingQuestionsForAssessments } from 'course/admin/pages/CodaveriSettings/selectors';
-import BetaChip from 'lib/components/core/BetaChip';
 import IconRadio from 'lib/components/core/buttons/IconRadio';
 import ErrorText from 'lib/components/core/ErrorText';
 // import ExperimentalChip from 'lib/components/core/ExperimentalChip';
 import InfoLabel from 'lib/components/core/InfoLabel';
 import Section from 'lib/components/core/layouts/Section';
-import Link from 'lib/components/core/Link';
 import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
@@ -35,6 +33,9 @@ import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileManager from '../FileManager';
+import BlocksInvalidBrowserFormField from '../monitoring/BlocksInvalidBrowserFormField';
+import EnableMonitoringFormField from '../monitoring/EnableMonitoringFormField';
+import MonitoringOptionsFormFields from '../monitoring/MonitoringOptionsFormFields';
 
 import { fetchTabs } from './operations';
 import translations from './translations';
@@ -78,7 +79,6 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const hasTimeLimit = watch('has_time_limit');
 
   const monitoring = watch('monitoring.enabled');
-  const hasMonitoringSecret = watch('monitoring.secret');
 
   // const assessmentId = initialValues.id;
   // const title = initialValues.title;
@@ -744,191 +744,27 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           {!autograded && passwordProtected && renderPasswordFields()}
 
           {passwordProtected && monitoring && (
-            <Controller
+            <BlocksInvalidBrowserFormField
               control={control}
-              name="monitoring.blocks"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormCheckboxField
-                  description={t(translations.blocksAccessesFromInvalidSUSHint)}
-                  disabled={
-                    !canManageMonitor ||
-                    !sessionProtected ||
-                    !hasMonitoringSecret ||
-                    disabled
-                  }
-                  disabledHint={
-                    !sessionProtected || !hasMonitoringSecret
-                      ? t(translations.needSUSAndSessionUnlockPassword)
-                      : undefined
-                  }
-                  field={field}
-                  fieldState={fieldState}
-                  label={t(translations.blocksAccessesFromInvalidSUS)}
-                />
-              )}
+              disabled={!canManageMonitor || disabled}
             />
           )}
 
           {passwordProtected && monitoringEnabled && (
-            <Controller
+            <EnableMonitoringFormField
               control={control}
-              name="monitoring.enabled"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormCheckboxField
-                  description={t(translations.examMonitoringHint, {
-                    pulsegrid: (chunk) => (
-                      <Link opensInNewTab to={pulsegridUrl}>
-                        {chunk}
-                      </Link>
-                    ),
-                  })}
-                  disabled={!canManageMonitor || disabled}
-                  disabledHint={t(translations.onlyManagersOwnersCanEdit)}
-                  field={field}
-                  fieldState={fieldState}
-                  label={
-                    <span className="flex items-center space-x-2">
-                      <span>{t(translations.examMonitoring)}</span>
-                      <BetaChip disabled={!canManageMonitor || disabled} />
-                    </span>
-                  }
-                  labelClassName="mt-10"
-                />
-              )}
+              disabled={!canManageMonitor || disabled}
+              labelClassName="mt-10"
+              pulsegridUrl={pulsegridUrl}
             />
           )}
 
           {passwordProtected && monitoring && (
-            <>
-              <Controller
-                control={control}
-                name="monitoring.secret"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormTextField
-                    disabled={!canManageMonitor || disabled}
-                    field={field}
-                    fieldState={fieldState}
-                    fullWidth
-                    label={t(translations.secret)}
-                    variant="filled"
-                  />
-                )}
-              />
-
-              <Typography
-                className="!mt-0"
-                color="text.secondary"
-                variant="body2"
-              >
-                {t(translations.secretHint, {
-                  pulsegrid: (chunk) => (
-                    <Link opensInNewTab to={pulsegridUrl}>
-                      {chunk}
-                    </Link>
-                  ),
-                })}
-              </Typography>
-
-              <Grid container direction="row" spacing={2}>
-                <Grid item xs>
-                  <Grid container direction="row" spacing={2}>
-                    <Grid item xs>
-                      <Controller
-                        control={control}
-                        name="monitoring.min_interval_ms"
-                        render={({ field, fieldState }): JSX.Element => (
-                          <FormTextField
-                            disabled={!canManageMonitor || disabled}
-                            field={field}
-                            fieldState={fieldState}
-                            fullWidth
-                            InputProps={{
-                              endAdornment: (
-                                <InputAdornment position="end">
-                                  {t(translations.milliseconds)}
-                                </InputAdornment>
-                              ),
-                            }}
-                            label={t(translations.minInterval)}
-                            required
-                            type="number"
-                            variant="filled"
-                          />
-                        )}
-                      />
-                    </Grid>
-
-                    <Grid item xs>
-                      <Controller
-                        control={control}
-                        name="monitoring.max_interval_ms"
-                        render={({ field, fieldState }): JSX.Element => (
-                          <FormTextField
-                            disabled={!canManageMonitor || disabled}
-                            field={field}
-                            fieldState={fieldState}
-                            fullWidth
-                            InputProps={{
-                              endAdornment: (
-                                <InputAdornment position="end">
-                                  {t(translations.milliseconds)}
-                                </InputAdornment>
-                              ),
-                            }}
-                            label={t(translations.maxInterval)}
-                            required
-                            type="number"
-                            variant="filled"
-                          />
-                        )}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <Typography
-                    className="!mt-0"
-                    color="text.secondary"
-                    variant="body2"
-                  >
-                    {t(translations.intervalHint)}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs>
-                  <Controller
-                    control={control}
-                    name="monitoring.offset_ms"
-                    render={({ field, fieldState }): JSX.Element => (
-                      <FormTextField
-                        disabled={!canManageMonitor || disabled}
-                        field={field}
-                        fieldState={fieldState}
-                        fullWidth
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              {t(translations.milliseconds)}
-                            </InputAdornment>
-                          ),
-                        }}
-                        label={t(translations.offset)}
-                        required
-                        type="number"
-                        variant="filled"
-                      />
-                    )}
-                  />
-
-                  <Typography
-                    className="!mt-0"
-                    color="text.secondary"
-                    variant="body2"
-                  >
-                    {t(translations.offsetHint)}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </>
+            <MonitoringOptionsFormFields
+              control={control}
+              disabled={!canManageMonitor || disabled}
+              pulsegridUrl={pulsegridUrl}
+            />
           )}
         </Section>
 
@@ -966,7 +802,8 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             />
           </Section>
         )}
-        {/* 
+
+        {/*
         {editing && (
           <Section
             sticksToNavbar
