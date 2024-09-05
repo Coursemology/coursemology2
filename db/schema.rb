@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_30_090759) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_04_091136) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -857,6 +857,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_30_090759) do
     t.boolean "stale", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "seb_payload"
     t.index ["generated_at"], name: "index_course_monitoring_heartbeats_on_generated_at"
     t.index ["session_id"], name: "index_course_monitoring_heartbeats_on_session_id"
   end
@@ -870,6 +871,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_30_090759) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "blocks", default: false, null: false
+    t.boolean "browser_authorization", default: true, null: false
+    t.integer "browser_authorization_method", default: 0, null: false
+    t.string "seb_config_key"
   end
 
   create_table "course_monitoring_sessions", force: :cascade do |t|
