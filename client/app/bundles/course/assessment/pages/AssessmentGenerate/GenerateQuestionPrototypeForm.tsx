@@ -27,12 +27,8 @@ const LockableSection: FC<LockableSectionProps> = (props) => (
     <div className="flex flex-nowrap">
       <IconButton
         centerRipple={false}
+        className="m-1 rounded-lg items-start"
         onClick={() => props.onToggleLock(props.lockStateKey)}
-        sx={{
-          margin: 1,
-          borderRadius: 1,
-          alignItems: 'start',
-        }}
       >
         {props.lockState ? <LockOutlined /> : <LockOpenOutlined />}
       </IconButton>
@@ -88,9 +84,9 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
         onToggleLock={onToggleLock}
       >
         <Container
+          className="w-[calc(100%_-_4rem)]"
           disableGutters
           maxWidth={false}
-          sx={{ width: 'calc(100% - 50px)' }}
         >
           <Controller
             control={prototypeForm.control}

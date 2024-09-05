@@ -151,14 +151,15 @@ const GenerateExportDialog: FC<Props> = (props) => {
             generatePageData.conversationMetadata[conversationId];
           if (!conversation || !questionData || !metadata?.hasData) return null;
           return (
-            <Paper key={conversationId} variant="outlined">
+            <Paper
+              key={conversationId}
+              onClick={() => setToExport(conversation, !conversation.toExport)}
+              variant="outlined"
+            >
               <div className="flex flex-nowrap px-6 py-3 items-center">
                 <Checkbox
                   checked={conversation.toExport}
                   className="py-0 pr-2 pl-0"
-                  onChange={(_event, toExport) =>
-                    setToExport(conversation, toExport)
-                  }
                 />
 
                 <Typography
@@ -168,7 +169,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
                   {questionData.title}
                 </Typography>
 
-                <Box sx={{ flex: '1', width: '100%' }} />
+                <Box className="flex-1 full-width" />
                 {(conversation.exportStatus === 'importing' ||
                   conversation.exportStatus === 'pending') && (
                   <LoadingIndicator
@@ -183,6 +184,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
                 {conversation.exportStatus === 'exported' &&
                   conversation.redirectEditUrl && (
                     <Link
+                      onClick={(e) => e.stopPropagation()}
                       opensInNewTab
                       to={conversation.redirectEditUrl}
                       variant="subtitle1"

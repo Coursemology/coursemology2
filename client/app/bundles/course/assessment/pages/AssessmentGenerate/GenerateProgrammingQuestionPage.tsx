@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Container, Divider, Grid } from '@mui/material';
 import {
   FetchAssessmentData,
   isAuthenticatedAssessmentData,
 } from 'types/course/assessment/assessments';
 import { MetadataTestCase } from 'types/course/assessment/question/programming';
+import * as yup from 'yup';
 
 import { fetchAssessment } from 'course/assessment/operations/assessments';
 import GenerateConversation from 'course/assessment/pages/AssessmentGenerate/GenerateConversation';
@@ -49,7 +51,7 @@ const translations = defineMessages({
   },
   generateError: {
     id: 'course.assessment.generation.generateError',
-    defaultMessage: 'Export Questions ({exportCount} selected)',
+    defaultMessage: 'An error occured generating question "{title}".',
   },
   allFieldsLocked: {
     id: 'course.assessment.generation.allFieldsLocked',
@@ -147,6 +149,11 @@ const compareFormData = (
   };
 };
 
+const codaveriValidationSchema = yup.object({
+  customPrompt: yup.string().min(1).max(500),
+  languageId: yup.number().positive(),
+});
+
 const GenerateProgrammingQuestionPage = (): JSX.Element => {
   const params = useParams();
   const id = parseInt(params?.assessmentId ?? '', 10) || undefined;
@@ -164,11 +171,11 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
 
   const { t } = useTranslation();
   // upper form (submit to Codaveri)
-  const codaveriForm = useForm({
+  const codaveriForm = useForm<CodaveriGenerateFormData>({
     defaultValues: defaultCodaveriFormData,
+    resolver: yupResolver(codaveriValidationSchema),
   });
 
-  const languageId = codaveriForm.watch('languageId');
   // lower form (populate to new programming question page)
   // TODO: We reuse ProgrammingFormData object here because test case UI mandates it.
   // Consider reworking type declarations in TestCases.tsx to enable creating an independent model class here.
@@ -212,10 +219,13 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
     return comp === null || Object.values(comp).every((p) => p);
   };
 
-  // calling prototypeForm.getValues() directly returns a "readonly" reference, which can lead to errors
+  // calling getValues() directly returns a "readonly" reference, which can lead to errors
   // as the object is propagated across various state / handler functions
-  // so instead, this helper function returns a deep copy
-  const getActiveFormData = (): QuestionPrototypeFormData =>
+  // so instead, these helper functions return a deep copy
+  const getActiveCodaveriFormData = (): CodaveriGenerateFormData =>
+    JSON.parse(JSON.stringify(codaveriForm.getValues()));
+
+  const getActivePrototypeFormData = (): QuestionPrototypeFormData =>
     JSON.parse(JSON.stringify(prototypeForm.getValues()));
 
   const saveActiveFormData = (): void => {
@@ -223,7 +233,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
       actions.saveActiveData({
         conversationId: generatePageData.activeConversationId,
         snapshotId: activeSnapshotId,
-        questionData: getActiveFormData(),
+        questionData: getActivePrototypeFormData(),
       }),
     );
   };
@@ -231,11 +241,15 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   const switchToConversation = (conversation: ConversationState): void => {
     saveActiveFormData();
     const snapshot = conversation.snapshots?.[conversation.activeSnapshotId];
+    let languageId = snapshot.codaveriData?.languageId ?? 0;
+    if (languageId === 0) {
+      languageId = codaveriForm.getValues('languageId');
+    }
     if (snapshot) {
       dispatch(
         actions.setActiveConversationId({ conversationId: conversation.id }),
       );
-      codaveriForm.reset(snapshot.codaveriData ?? defaultCodaveriFormData);
+      codaveriForm.reset({ languageId, customPrompt: '' });
       prototypeForm.reset(conversation.activeSnapshotEditedData);
       setLockStates(snapshot.lockStates);
     }
@@ -268,7 +282,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
             actions.saveActiveData({
               conversationId: newConversation.id,
               snapshotId: newConversation.activeSnapshotId,
-              questionData: getActiveFormData(),
+              questionData: getActivePrototypeFormData(),
             }),
           );
         }
@@ -308,6 +322,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
               deleteConversation={deleteConversation}
               duplicateConversation={duplicateConversation}
               onExport={() => {
+                saveActiveFormData();
                 dispatch(actions.clearErroredConversationData());
                 setExportDialogOpen(true);
               }}
@@ -317,22 +332,17 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
               switchToConversation={switchToConversation}
             />
 
-            <Container disableGutters maxWidth={false} sx={{ height: '100%' }}>
+            <Container className="full-height" disableGutters maxWidth={false}>
               <Grid
                 alignItems="stretch"
+                className="full-height"
                 container
                 spacing={2}
-                sx={{ height: '100%' }}
               >
                 <Grid
-                  className="lg:self-start lg:sticky lg:top-0"
+                  className="lg:self-start lg:sticky lg:top-0 lg:h-[calc(100vh_-_3rem)] flex flex-col"
                   item
                   lg={4}
-                  sx={{
-                    height: { lg: '700px' },
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
                   xs={12}
                 >
                   {activeConversationSnapshots &&
@@ -340,9 +350,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                     latestSnapshotId && (
                       <GenerateConversation
                         activeSnapshotId={activeSnapshotId}
-                        control={codaveriForm.control}
-                        customPrompt={codaveriForm.watch('customPrompt')}
-                        languageId={languageId}
+                        codaveriForm={codaveriForm}
                         languages={data.languages.map((l) => ({
                           label: l.name,
                           value: l.id,
@@ -355,7 +363,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                                 conversationId:
                                   generatePageData.activeConversationId,
                                 snapshotId: snapshot.id,
-                                questionData: getActiveFormData(),
+                                questionData: getActivePrototypeFormData(),
                               }),
                             );
                             if (snapshot.codaveriData) {
@@ -393,7 +401,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                               actions.createSnapshot({
                                 snapshotId: newSnapshotId,
                                 parentId: activeSnapshotId,
-                                codaveriData: codaveriFormData,
+                                codaveriData: getActiveCodaveriFormData(),
                                 conversationId,
                                 lockStates,
                               }),

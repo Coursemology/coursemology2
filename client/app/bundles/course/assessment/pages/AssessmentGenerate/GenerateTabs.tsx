@@ -28,7 +28,7 @@ const translations = defineMessages({
   confirmDeleteConversation: {
     id: 'course.assessment.generation.confirmDeleteConversation',
     defaultMessage:
-      'Are you sure you want to delete &quot;{title}&quot; and all its history items? THIS ACTION IS IRREVERSIBLE!',
+      'Are you sure you want to delete "{title}" and all its history items? THIS ACTION IS IRREVERSIBLE!',
   },
 });
 
@@ -91,16 +91,14 @@ const GenerateTabs: FC<Props> = (props) => {
 
   return (
     <Box className="max-w-full">
-      <Box
-        className="flex flex-nowrap"
-        sx={{ borderBottom: 1, borderColor: 'divider' }}
-      >
+      <Box className="flex flex-nowrap border-b border-divider">
         <Tabs
+          className="h-17 overflow-y-clip"
           onChange={(_, newConversationId) =>
             switchToConversation(conversations[newConversationId])
           }
           scrollButtons="auto"
-          sx={{ ...tabsStyle, height: '50px', overflowY: 'clip' }}
+          sx={tabsStyle}
           TabIndicatorProps={{ style: { transition: 'none' } }}
           value={activeConversationId}
           variant="scrollable"
@@ -111,6 +109,7 @@ const GenerateTabs: FC<Props> = (props) => {
               return (
                 <Tab
                   key={metadata.id}
+                  className="min-h-17 p-2"
                   id={metadata.id}
                   label={
                     <span>
@@ -123,6 +122,7 @@ const GenerateTabs: FC<Props> = (props) => {
                       )}
                       {metadata.title ?? 'Untitled Question'}
                       <IconButton
+                        className="-ml-0.25 -mr-0.25 py-0 px-0.5 scale-[0.86] origin-right"
                         color="inherit"
                         component="span"
                         onClick={(e) => {
@@ -133,17 +133,11 @@ const GenerateTabs: FC<Props> = (props) => {
                           e.stopPropagation();
                         }}
                         size="small"
-                        sx={{
-                          marginLeft: -0.2,
-                          marginRight: -0.25,
-                          padding: 0.4,
-                          transform: 'scale(0.86)',
-                          transformOrigin: 'right',
-                        }}
                       >
                         <ContentCopy />
                       </IconButton>
                       <IconButton
+                        className="-ml-0.25 -mr-0.25 py-0 px-0.5 scale-[0.86] origin-right"
                         color="inherit"
                         component="span"
                         disabled={conversationIds.length <= 1}
@@ -159,23 +153,11 @@ const GenerateTabs: FC<Props> = (props) => {
                           e.stopPropagation();
                         }}
                         size="small"
-                        sx={{
-                          marginLeft: -0.2,
-                          marginRight: -0.25,
-                          padding: 0.4,
-                          transform: 'scale(0.86)',
-                          transformOrigin: 'right',
-                        }}
                       >
                         <Close />
                       </IconButton>
                     </span>
                   }
-                  style={{
-                    minHeight: 48,
-                    padding: 8,
-                    textDecoration: 'none',
-                  }}
                   value={metadata.id}
                 />
               );
@@ -183,29 +165,29 @@ const GenerateTabs: FC<Props> = (props) => {
         </Tabs>
         {renderConversationDeletePrompt()}
         <Button
+          className="m-3 max-h-11"
           disabled={false}
           onClick={createConversation}
           startIcon={<Add />}
-          sx={{ marginY: 1, marginX: 1, maxHeight: '34px' }}
           variant="outlined"
         >
           {t(translations.newTab)}
         </Button>
 
-        <Box sx={{ flex: '1', width: '100%' }} />
+        <Box className="flex-1 full-width" />
         {canReset && (
           <Button
+            className="my-3 mr-3 max-h-11"
             onClick={resetConversation}
-            sx={{ marginY: 1, maxHeight: '34px', marginRight: 1 }}
             variant="outlined"
           >
             {t(translations.resetConversation)}
           </Button>
         )}
         <Button
+          className="my-3 max-h-11"
           disabled={canExportCount === 0}
           onClick={onExport}
-          sx={{ marginY: 1, maxHeight: '34px' }}
           variant="contained"
         >
           {t(translations.openExportDialog)}

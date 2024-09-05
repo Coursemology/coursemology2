@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Controller, UseFormReturn } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import DoneAll from '@mui/icons-material/DoneAll';
 import {
@@ -62,14 +62,12 @@ const ConversationSnapshot: FC<{
 
 interface Props {
   onGenerate: () => Promise<void>;
-  languageId: number;
-  control: Control<CodaveriGenerateFormData>;
+  codaveriForm: UseFormReturn<CodaveriGenerateFormData>;
   languages: object[];
   snapshots: { [id: string]: SnapshotState };
   activeSnapshotId: string;
   latestSnapshotId: string;
   onClickSnapshot: (snapshot: SnapshotState) => void;
-  customPrompt: string;
 }
 
 const GenerateConversation: FC<Props> = (props) => {
@@ -77,14 +75,14 @@ const GenerateConversation: FC<Props> = (props) => {
   const {
     languages,
     onGenerate,
-    languageId,
-    control,
+    codaveriForm,
     snapshots,
     activeSnapshotId,
     latestSnapshotId,
     onClickSnapshot,
-    customPrompt,
   } = props;
+
+  const customPrompt = codaveriForm.watch('customPrompt');
 
   const isGenerating = Object.values(snapshots).some(
     (snapshot) => snapshot.state === 'generating',
@@ -120,23 +118,14 @@ const GenerateConversation: FC<Props> = (props) => {
       sx={{ height: { lg: 'calc(100% - 100px)' } }}
       variant="outlined"
     >
-      <Box
-        sx={{
-          flex: '1',
-          width: '100%',
-          height: '100%',
-          overflowY: 'scroll',
-          marginY: 1,
-          boxSizing: 'border-box',
-        }}
-      >
+      <Box className="my-1 flex-1 full-width full-height overflow-y-scroll box-border">
         {mainlineSnapshotsToRender.map((snapshot) => {
           const active =
             snapshot.state === 'success' && snapshot.id === activeSnapshotId;
           return (
             <ConversationSnapshot
               key={snapshot.id}
-              className={`py-1 px-2 my-1 w-full shadow-none border border-solid border-gray-400 rounded-lg${
+              className={`py-1 px-2 my-2 w-full shadow-none border border-solid border-gray-400 rounded-lg${
                 active ? ' bg-yellow-100' : ''
               }`}
               onClickSnapshot={onClickSnapshot}
@@ -162,7 +151,7 @@ const GenerateConversation: FC<Props> = (props) => {
               return (
                 <ConversationSnapshot
                   key={snapshot.id}
-                  className={`opacity-50 py-1 px-2 my-1 w-full shadow-none border border-solid border-gray-300 rounded-lg${
+                  className={`opacity-50 py-1 px-2 my-2 w-full shadow-none border border-solid border-gray-300 rounded-lg${
                     active ? ' bg-yellow-100' : ''
                   }`}
                   onClickSnapshot={onClickSnapshot}
@@ -174,21 +163,16 @@ const GenerateConversation: FC<Props> = (props) => {
         )}
       </Box>
       <Controller
-        control={control}
+        control={codaveriForm.control}
         name="customPrompt"
         render={({ field: { onChange, value } }): JSX.Element => (
           <TextareaAutosize
+            className="full-width font-sans resize-none p-2 text-2xl"
             disabled={isGenerating}
             maxRows={4}
             minRows={4}
             onChange={onChange}
             placeholder={t(translations.promptPlaceholder)}
-            style={{
-              resize: 'none',
-              padding: '8px',
-              fontSize: '16px',
-              width: '100%',
-            }}
             value={value}
           />
         )}
@@ -198,7 +182,7 @@ const GenerateConversation: FC<Props> = (props) => {
       </Typography>
       <div className="flex flex-nowrap">
         <Controller
-          control={control}
+          control={codaveriForm.control}
           name="languageId"
           render={({ field, fieldState }): JSX.Element => (
             <FormSelectField
@@ -215,10 +199,10 @@ const GenerateConversation: FC<Props> = (props) => {
         />
 
         <Button
-          disabled={isGenerating || languageId === 0}
+          className="w-48 max-h-14 mt-8"
+          disabled={isGenerating || !codaveriForm.formState.isValid}
           onClick={onGenerate}
           startIcon={isGenerating && <LoadingIndicator bare size={20} />}
-          sx={{ maxHeight: '40px', marginTop: '25px', width: '140px' }}
           variant="contained"
         >
           {t(translations.generateQuestion)}
