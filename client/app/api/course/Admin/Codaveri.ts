@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import {
+  AssessmentProgrammingQuestionsData,
   CodaveriSettingsData,
   CodaveriSettingsPatchData,
   CodaveriSwitchQnsEvaluatorPatchData,
@@ -15,6 +16,16 @@ export default class CodaveriAdminAPI extends BaseAdminAPI {
 
   index(): Promise<AxiosResponse<CodaveriSettingsData>> {
     return this.client.get(this.urlPrefix);
+  }
+
+  assessment(
+    id: number,
+  ): Promise<
+    AxiosResponse<{ assessments: AssessmentProgrammingQuestionsData[] }>
+  > {
+    return this.client.get(`${this.urlPrefix}/assessment`, {
+      params: { id },
+    });
   }
 
   update(

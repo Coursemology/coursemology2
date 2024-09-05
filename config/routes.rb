@@ -166,6 +166,7 @@ Rails.application.routes.draw do
         patch 'assessments' => 'assessment_settings#update'
 
         get 'codaveri' => 'codaveri_settings#edit'
+        get 'codaveri/assessment' => 'codaveri_settings#assessment'
         patch 'codaveri' => 'codaveri_settings#update'
         patch 'codaveri/update_evaluator' => 'codaveri_settings#update_evaluator'
         patch 'codaveri/update_live_feedback_enabled' => 'codaveri_settings#update_live_feedback_enabled'

@@ -6,6 +6,11 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
     load_course_assessments_data
   end
 
+  def assessment
+    id = assessment_params[:id]
+    @assessment_with_programming_qns = current_course.assessments.includes(programming_questions: [:language]).find(id)
+  end
+
   def update
     if @settings.update(codaveri_settings_params) && current_course.save
       render 'edit'
@@ -35,6 +40,10 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   end
 
   private
+
+  def assessment_params
+    params.permit(:id)
+  end
 
   def codaveri_settings_params
     params.require(:settings_codaveri_component).permit(:is_only_itsp, :feedback_workflow, :live_feedback_enabled)

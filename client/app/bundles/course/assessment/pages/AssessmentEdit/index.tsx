@@ -1,3 +1,4 @@
+import { fetchCodaveriSettingsForAssessment } from 'course/admin/pages/CodaveriSettings/operations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
@@ -10,12 +11,24 @@ import { categoryAndTabTitle } from '../../utils';
 import AssessmentEditPage from './AssessmentEditPage';
 
 const AssessmentEdit = (): JSX.Element => {
+  const assessmentId = getAssessmentId();
+  if (!assessmentId) {
+    return <div />;
+  }
+
+  const parsedAssessmentId = parseInt(assessmentId, 10);
+
   return (
     <Preload
       render={<LoadingIndicator />}
-      while={() => fetchAssessmentEditData(getAssessmentId())}
+      while={() =>
+        Promise.all([
+          fetchAssessmentEditData(parsedAssessmentId),
+          fetchCodaveriSettingsForAssessment(parsedAssessmentId),
+        ])
+      }
     >
-      {(data): JSX.Element => {
+      {([data, _]): JSX.Element => {
         const tabAttr = data.tab_attributes;
         const currentTab = {
           tab_id: data.attributes.tab_id,
