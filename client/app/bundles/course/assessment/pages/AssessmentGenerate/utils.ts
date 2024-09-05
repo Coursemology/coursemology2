@@ -1,5 +1,6 @@
 import {
   BasicMetadata,
+  LanguageData,
   LanguageMode,
   ProgrammingFormRequestData,
 } from 'types/course/assessment/question/programming';
@@ -149,7 +150,7 @@ export const buildGenerateRequestPayload = (
 
 export const buildQuestionDataFromPrototype = (
   prefilledData: QuestionPrototypeFormData,
-  languageId: number,
+  languageId: LanguageData['id'],
   languageMode: LanguageMode,
   assessmentAutograded: boolean,
 ): ProgrammingFormRequestData => {
@@ -173,6 +174,7 @@ export const buildQuestionDataFromPrototype = (
       maximumGrade: '10.0',
       editOnline: true,
       isLowPriority: false,
+      isCodaveri: false,
       liveFeedbackEnabled: false,
       // set question to autograded if it includes at least one test case
       autograded:

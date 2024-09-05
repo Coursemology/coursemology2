@@ -1,11 +1,14 @@
-import { MetadataTestCase } from 'types/course/assessment/question/programming';
+import {
+  LanguageData,
+  MetadataTestCase,
+} from 'types/course/assessment/question/programming';
 
 const CODAVERI_DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 type Difficulty = (typeof CODAVERI_DIFFICULTIES)[number];
 
 export interface CodaveriGenerateFormData {
   difficulty: Difficulty;
-  languageId: number;
+  languageId: LanguageData['id'];
   customPrompt: string;
 }
 
