@@ -15,10 +15,11 @@ import CodaveriSettingsChip from '../CodaveriSettingsChip';
 interface LiveFeedbackToggleButtonProps {
   assessmentIds: number[];
   for: string;
+  hideChipIndicator?: boolean;
 }
 
 const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
-  const { assessmentIds, for: title } = props;
+  const { assessmentIds, for: title, hideChipIndicator } = props;
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
@@ -83,10 +84,12 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
             setLiveFeedbackSettingsConfirmation(true);
           }}
         />
-        <CodaveriSettingsChip
-          assessmentIds={assessmentIds}
-          for="live_feedback"
-        />
+        {!hideChipIndicator && (
+          <CodaveriSettingsChip
+            assessmentIds={assessmentIds}
+            for="live_feedback"
+          />
+        )}
       </div>
 
       <Prompt

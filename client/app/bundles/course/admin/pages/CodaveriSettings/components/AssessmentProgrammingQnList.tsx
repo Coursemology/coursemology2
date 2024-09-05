@@ -18,10 +18,11 @@ import translations from '../translations';
 
 interface ProgrammingQnListProps {
   questionId: number;
+  isOnlyForLiveFeedbackSetting?: boolean;
 }
 
 const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
-  const { questionId } = props;
+  const { questionId, isOnlyForLiveFeedbackSetting } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const programmingQn = useAppSelector((state) =>
@@ -82,6 +83,26 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
       });
   };
 
+  const CodaveriEvaluatorToggle = (): JSX.Element => (
+    <Switch
+      checked={programmingQn.isCodaveri}
+      color="primary"
+      onChange={(_, isChecked): void =>
+        handleCodaveriEvaluatorChange(isChecked)
+      }
+    />
+  );
+
+  const LiveFeedbackToggle = (): JSX.Element => (
+    <Switch
+      checked={programmingQn.liveFeedbackEnabled}
+      color="primary"
+      onChange={(_, isChecked): void =>
+        handleLiveFeedbackEnabledChange(isChecked)
+      }
+    />
+  );
+
   return (
     <>
       <ListItem className="pl-20 flex justify-between">
@@ -93,22 +114,16 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
         >
           <ListItemText primary={programmingQn.title} />
         </Link>
-        <div className="mr-[6.6rem] space-x-32">
-          <Switch
-            checked={programmingQn.isCodaveri}
-            color="primary"
-            onChange={(_, isChecked): void =>
-              handleCodaveriEvaluatorChange(isChecked)
-            }
-          />
-          <Switch
-            checked={programmingQn.liveFeedbackEnabled}
-            color="primary"
-            onChange={(_, isChecked): void =>
-              handleLiveFeedbackEnabledChange(isChecked)
-            }
-          />
-        </div>
+        {isOnlyForLiveFeedbackSetting ? (
+          <div className="mr-1">
+            <LiveFeedbackToggle />
+          </div>
+        ) : (
+          <div className="mr-[6.6rem] space-x-32">
+            <CodaveriEvaluatorToggle />
+            <LiveFeedbackToggle />
+          </div>
+        )}
       </ListItem>
       <Divider className="border-neutral-200 last:border-none" />
     </>

@@ -25,6 +25,21 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.baseExp',
     defaultMessage: 'Base EXP',
   },
+  liveFeedback: {
+    id: 'course.assessment.AssessmentForm.liveFeedback',
+    defaultMessage: 'Get Help',
+  },
+  toggleLiveFeedbackDescription: {
+    id: 'course.assessment.AssessmentForm.toggleLiveFeedbackDescription',
+    defaultMessage:
+      '{enabled, select, true {Enable} other {Disable}} Get Help feature for all Codaveri questions',
+  },
+  noProgrammingQuestion: {
+    id: 'course.assessment.AssessmentForm.noProgrammingQuestion',
+    defaultMessage:
+      'You need to add at least one programming question that can be \
+      supported by Codaveri to allow enabling Get Help for this Assessment',
+  },
   timeLimit: {
     id: 'course.assessment.AssessmentForm.timeLimit',
     defaultMessage: 'Time Limit',

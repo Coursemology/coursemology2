@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { dispatch } from 'store';
 import {
+  AssessmentProgrammingQuestionsData,
   CodaveriSettingsData,
   CodaveriSettingsEntity,
   CodaveriSettingsPatchData,
@@ -41,6 +42,25 @@ export const fetchCodaveriSettings = async (): Data => {
       }),
     );
     return data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const fetchCodaveriSettingsForAssessment = async (
+  assessmentId: number,
+): Promise<{ assessments: AssessmentProgrammingQuestionsData[] }> => {
+  try {
+    const response = await CourseAPI.admin.codaveri.assessment(assessmentId);
+    dispatch(
+      saveAllAssessmentsQuestions({
+        assessments: response.data.assessments,
+        tabs: [],
+        categories: [],
+      }),
+    );
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;

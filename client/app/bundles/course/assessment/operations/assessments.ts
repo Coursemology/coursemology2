@@ -44,7 +44,7 @@ export const fetchAssessmentUnlockRequirements = async (
 };
 
 export const fetchAssessmentEditData = async (
-  assessmentId: string | null,
+  assessmentId: number,
 ): Promise<any> => {
   const response =
     await CourseAPI.assessment.assessments.fetchEditData(assessmentId);
