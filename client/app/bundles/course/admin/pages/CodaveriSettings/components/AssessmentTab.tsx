@@ -51,7 +51,11 @@ const AssessmentTab: FC<AssessmentTabProps> = (props) => {
     <CollapsibleList
       headerAction={
         <div className="pr-2">
-          <CodaveriToggleButtons assessmentIds={assessmentIds} />
+          <CodaveriToggleButtons
+            assessmentIds={assessmentIds}
+            for={tab.title}
+            type="tab"
+          />
         </div>
       }
       headerTitle={

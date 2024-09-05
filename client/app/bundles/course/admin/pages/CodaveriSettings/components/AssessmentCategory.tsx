@@ -45,7 +45,11 @@ const AssessmentCategory: FC<AssessmentCategoryProps> = (props) => {
     <CollapsibleList
       headerAction={
         <div className="pr-2">
-          <CodaveriToggleButtons assessmentIds={assessmentIds} />
+          <CodaveriToggleButtons
+            assessmentIds={assessmentIds}
+            for={category.title}
+            type="category"
+          />
         </div>
       }
       headerTitle={

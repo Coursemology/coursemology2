@@ -22,7 +22,12 @@ export const sortCategories = (
   return sortedCategories;
 };
 
-const AssessmentList: FC = () => {
+interface Props {
+  courseTitle: string;
+}
+
+const AssessmentList: FC<Props> = (props) => {
+  const { courseTitle } = props;
   const assessmentCategories = useAppSelector((state) =>
     getAllAssessmentCategories(state),
   );
@@ -66,7 +71,11 @@ const AssessmentList: FC = () => {
           </div>
         </div>
         <div className="mb-4 pr-2 flex justify-end">
-          <CodaveriToggleButtons assessmentIds={assessmentIds} />
+          <CodaveriToggleButtons
+            assessmentIds={assessmentIds}
+            for={courseTitle}
+            type="course"
+          />
         </div>
         <div>
           <List
