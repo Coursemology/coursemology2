@@ -28,7 +28,11 @@ const AssessmentListItem: FC<AssessmentListItemProps> = (props) => {
       forceExpand={isAssessmentListExpanded}
       headerAction={
         <div className="pr-2">
-          <CodaveriToggleButtons assessmentIds={[assessment.id]} />
+          <CodaveriToggleButtons
+            assessmentIds={[assessment.id]}
+            for={assessment.title}
+            type="assessment"
+          />
         </div>
       }
       headerTitle={

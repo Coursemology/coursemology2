@@ -87,6 +87,27 @@ export default defineMessages({
     id: 'course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings',
     defaultMessage: 'An error occurred while updating the live help settings.',
   },
+  enableDisableButton: {
+    id: 'course.admin.CodaveriSettings.enableDisableButton',
+    defaultMessage: '{enabled, select, true {Enable} other {Disable}}',
+  },
+  enableDisableEvaluator: {
+    id: 'course.admin.CodaveriSettings.enableDisableEvaluator',
+    defaultMessage:
+      '{enabled, select, true {Enable } other {Disable }} Codaveri Evaluator for {questionCount} \
+      programming questions in {title}?',
+  },
+  enableDisableLiveFeedback: {
+    id: 'course.admin.CodaveriSettings.enableDisableLiveFeedback',
+    defaultMessage:
+      '{enabled, select, true {Enable } other {Disable }} Live Help for {questionCount} \
+      programming questions in {title}?',
+  },
+  enableDisableEvaluatorDescription: {
+    id: 'course.admin.CodaveriSettings.enableDisableEvaluatorDescription',
+    defaultMessage:
+      '{questionCount} programming questions in this {type} will use {enabled, select, true {Codaveri } other {Default }} evaluator',
+  },
   enableAllCodaveri: {
     id: 'course.admin.CodaveriSettings.enableAllCodaveri',
     defaultMessage: 'Enable All',
