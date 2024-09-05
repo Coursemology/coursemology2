@@ -15,7 +15,11 @@ const BlocksInvalidBrowserFormField = ({
   const { t } = useTranslation();
 
   const sessionProtected = useWatch({ name: 'session_protected', control });
-  const hasMonitoringSecret = useWatch({ name: 'monitoring.secret', control });
+
+  const enableBrowserAuthorization = useWatch({
+    name: 'monitoring.browser_authorization',
+    control,
+  });
 
   return (
     <Controller
@@ -24,9 +28,11 @@ const BlocksInvalidBrowserFormField = ({
       render={({ field, fieldState }): JSX.Element => (
         <FormCheckboxField
           description={t(translations.blocksAccessesFromInvalidSUSHint)}
-          disabled={!sessionProtected || !hasMonitoringSecret || disabled}
+          disabled={
+            !sessionProtected || !enableBrowserAuthorization || disabled
+          }
           disabledHint={
-            !sessionProtected || !hasMonitoringSecret
+            !sessionProtected || !enableBrowserAuthorization
               ? t(translations.needSUSAndSessionUnlockPassword)
               : undefined
           }

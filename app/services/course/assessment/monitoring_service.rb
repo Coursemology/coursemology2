@@ -2,7 +2,17 @@
 class Course::Assessment::MonitoringService
   class << self
     def params
-      [:enabled, :secret, :min_interval_ms, :max_interval_ms, :offset_ms, :blocks]
+      [
+        :enabled,
+        :min_interval_ms,
+        :max_interval_ms,
+        :offset_ms,
+        :blocks,
+        :browser_authorization,
+        :browser_authorization_method,
+        :secret,
+        :seb_config_key
+      ]
     end
 
     def unblocked_browser_session_key(assessment_id)

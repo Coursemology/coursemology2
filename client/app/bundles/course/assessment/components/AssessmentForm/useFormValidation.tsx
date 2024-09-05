@@ -16,6 +16,11 @@ import * as yup from 'yup';
 
 import ft from 'lib/translations/form';
 
+import {
+  BROWSER_AUTHORIZATION_METHODS,
+  BrowserAuthorizationMethod,
+} from '../monitoring/BrowserAuthorizationMethodOptionsFormFields/common';
+
 import t from './translations';
 
 const validationSchema = yup.object({
@@ -103,6 +108,15 @@ const validationSchema = yup.object({
   monitoring: yup.object({
     enabled: yup.bool(),
     secret: yup.string().nullable(),
+    browser_authorization: yup.boolean(),
+    browser_authorization_method: yup
+      .string()
+      .oneOf(BROWSER_AUTHORIZATION_METHODS),
+    seb_config_key: yup.string().when('browser_authorization_method', {
+      is: 'seb_config_key' satisfies BrowserAuthorizationMethod,
+      then: yup.string().required(ft.required),
+      otherwise: yup.string().nullable(),
+    }),
     min_interval_ms: yup.number().when('enabled', {
       is: true,
       then: yup
@@ -156,11 +170,11 @@ const useFormValidation = (
     handleSubmit: (onValid, onInvalid): SubmitHandler<FieldValues> => {
       const postProcessor = (rawData): SubmitHandler<FieldValues> => {
         if (!rawData.session_protected) rawData.session_password = null;
-
         delete rawData.session_protected;
 
         if (
-          (!rawData.session_password || !rawData.monitoring?.secret) &&
+          (!rawData.session_password ||
+            !rawData.monitoring?.browser_authorization) &&
           rawData.monitoring?.blocks !== undefined
         )
           rawData.monitoring.blocks = false;
@@ -173,6 +187,10 @@ const useFormValidation = (
           delete rawData.monitoring.max_interval_ms;
           delete rawData.monitoring.offset_ms;
           delete rawData.monitoring.blocks;
+          delete rawData.monitoring.secret;
+          delete rawData.monitoring.browser_authorization;
+          delete rawData.monitoring.browser_authorization_method;
+          delete rawData.monitoring.seb_config_key;
         }
 
         return onValid(rawData);

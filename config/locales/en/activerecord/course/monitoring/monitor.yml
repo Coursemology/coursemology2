@@ -10,3 +10,5 @@ en:
               greater_than_min_interval: 'must be greater than min interval'
             blocks:
               must_have_secret_and_session_protection: 'must have secret and session protection enabled'
+            seb_config_key:
+              required_if_using_seb_config_key_browser_authorization: 'must have seb config key if using seb config key browser authorization method'
