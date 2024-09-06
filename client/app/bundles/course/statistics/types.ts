@@ -114,6 +114,7 @@ interface CategoryInfo {
 export interface CourseAssessment {
   id: number;
   title: string;
+  startAt: Date;
   tab: TabInfo;
   category: CategoryInfo;
   maximumGrade: number;

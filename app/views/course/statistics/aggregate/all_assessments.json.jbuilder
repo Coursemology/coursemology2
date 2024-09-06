@@ -7,6 +7,7 @@ json.assessments @assessments do |assessment|
 
   json.id assessment.id
   json.title assessment.title
+  json.startAt assessment.start_at&.iso8601
 
   json.tab do
     json.id assessment.tab_id
