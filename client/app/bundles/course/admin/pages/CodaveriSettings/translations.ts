@@ -81,11 +81,11 @@ export default defineMessages({
   },
   liveFeedbackSettings: {
     id: 'course.admin.CodaveriSettings.liveFeedbackSettings',
-    defaultMessage: 'Live Help',
+    defaultMessage: 'Get Help',
   },
   errorOccurredWhenUpdatingLiveFeedbackSettings: {
     id: 'course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings',
-    defaultMessage: 'An error occurred while updating the live help settings.',
+    defaultMessage: 'An error occurred while updating the get help settings.',
   },
   enableDisableButton: {
     id: 'course.admin.CodaveriSettings.enableDisableButton',
@@ -100,21 +100,13 @@ export default defineMessages({
   enableDisableLiveFeedback: {
     id: 'course.admin.CodaveriSettings.enableDisableLiveFeedback',
     defaultMessage:
-      '{enabled, select, true {Enable } other {Disable }} Live Help for {questionCount} \
+      '{enabled, select, true {Enable } other {Disable }} Get Help for {questionCount} \
       programming questions in {title}?',
   },
   enableDisableEvaluatorDescription: {
     id: 'course.admin.CodaveriSettings.enableDisableEvaluatorDescription',
     defaultMessage:
       '{questionCount} programming questions in this {type} will use {enabled, select, true {Codaveri } other {Default }} evaluator',
-  },
-  enableAllCodaveri: {
-    id: 'course.admin.CodaveriSettings.enableAllCodaveri',
-    defaultMessage: 'Enable All',
-  },
-  disableAllCodaveri: {
-    id: 'course.admin.CodaveriSettings.disableAllCodaveri',
-    defaultMessage: 'Disable All',
   },
   succesfulUpdateAllEvaluator: {
     id: 'course.admin.CodaveriSettings.succesfulUpdateAllEvaluator',
@@ -124,35 +116,23 @@ export default defineMessages({
   successfulUpdateAllLiveFeedbackEnabled: {
     id: 'course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled',
     defaultMessage:
-      'Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} live help for all questions',
+      'Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} get help for all questions',
   },
   evaluatorUpdateSuccess: {
     id: 'course.admin.CodaveriSettings.evaluatorUpdateSuccess',
     defaultMessage: '{question} is now using {evaluator} evaluator',
   },
   liveFeedbackEnabledUpdateSuccess: {
-    id: 'course.admin.CodaveriSettings.evaluatorUpdateSuccess',
+    id: 'course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess',
     defaultMessage:
-      'Live Help for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}',
+      'Get Help for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}',
   },
   expandAll: {
     id: 'course.admin.CodaveriSettings.expandAll',
     defaultMessage: 'Expand All Questions',
   },
-  showCodaveriOnly: {
-    id: 'course.admin.CodaveriSettings.showCodaveriOnly',
-    defaultMessage: 'Codaveri Question Only',
-  },
-  None: {
-    id: 'course.admin.CodaveriSettings.None',
-    defaultMessage: 'None',
-  },
   Some: {
     id: 'course.admin.CodaveriSettings.Some',
     defaultMessage: 'Some',
-  },
-  All: {
-    id: 'course.admin.CodaveriSettings.All',
-    defaultMessage: 'All',
   },
 });

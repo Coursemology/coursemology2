@@ -512,14 +512,38 @@
   "course.admin.CodaveriSettings.itspEngineDescription": {
     "defaultMessage": "Uses automated program repair technique"
   },
-  "course.admin.CodaveriSettings.None": {
-    "defaultMessage": "None"
-  },
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "Some"
   },
-  "course.admin.CodaveriSettings.All": {
-    "defaultMessage": "All"
+  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
+    "defaultMessage": "An error occurred while updating the codaveri evaluator settings."
+  },
+  "course.admin.CodaveriSettings.codaveriEvaluatorSettings": {
+    "defaultMessage": "Codaveri Evaluator"
+  },
+  "course.admin.CodaveriSettings.liveFeedbackSettings": {
+    "defaultMessage": "Get Help"
+  },
+  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
+    "defaultMessage": "An error occurred while updating the get help settings."
+  },
+  "course.admin.CodaveriSettings.enableDisableButton": {
+    "defaultMessage": "{enabled, select, true {Enable} other {Disable}}"
+  },
+  "course.admin.CodaveriSettings.enableDisableEvaluator": {
+    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Codaveri Evaluator for {questionCount} programming questions in {title}?"
+  },
+  "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
+    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Get Help for {questionCount} programming questions in {title}?"
+  },
+  "course.admin.CodaveriSettings.enableDisableEvaluatorDescription": {
+    "defaultMessage": "{questionCount} programming questions in this {type} will use {enabled, select, true {Codaveri } other {Default }} evaluator"
+  },
+  "course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess": {
+    "defaultMessage": "Get Help for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}"
+  },
+  "course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled": {
+    "defaultMessage": "Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} get help for all questions"
   },
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "Comments settings"
@@ -1301,6 +1325,12 @@
   "course.assessment.AssessmentForm.visibility": {
     "defaultMessage": "Visibility"
   },
+  "course.assessment.AssessmentForm.toggleLiveFeedbackDescription": {
+    "defaultMessage": "{enabled, select, true {Enable} other {Disable}} Get Help feature for all programming questions"
+  },
+  "course.assessment.AssessmentForm.noProgrammingQuestion": {
+    "defaultMessage": "You need to add at least one programming question that can be supported by Codaveri to allow enabling Get Help for this Assessment"
+  },
   "course.assessment.FileManager.addFiles": {
     "defaultMessage": "Add Files"
   },
@@ -1668,7 +1698,7 @@
     "defaultMessage": "Do everything right here in this page. Useful for quick edits (especially exams) or collaborating with other instructors."
   },
   "course.assessment.question.programming.enableLiveFeedback": {
-    "defaultMessage": "Allow live help generation"
+    "defaultMessage": "Allow get help generation"
   },
   "course.assessment.question.programming.enableLiveFeedbackDescription": {
     "defaultMessage": "Allow students to request live programming help during submission attempts. (AI-generated feedback may not always be accurate.)"
@@ -1752,7 +1782,7 @@
     "defaultMessage": "Custom Prompt"
   },
   "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
-    "defaultMessage": "Add instructions to guide the generation of live help here. If unsure, just leave this blank."
+    "defaultMessage": "Add instructions to guide the generation of get help here. If unsure, just leave this blank."
   },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "Lowest grading priority"
@@ -3379,9 +3409,6 @@
   },
   "course.assessments.index.hasTodo": {
     "defaultMessage": "Has TODO"
-  },
-  "course.assessments.index.liveFeedbackEnabled": {
-    "defaultMessage": "Allow live help generation for programming questions"
   },
   "course.assessments.index.neededFor": {
     "defaultMessage": "Needed for"
