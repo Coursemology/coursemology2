@@ -7,7 +7,10 @@ import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../../constants';
 import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
-import { getClientVersionForAnswerId } from '../../selectors/answers';
+import {
+  getClientVersionForAnswerId,
+  getSavingStatusForAnswerId,
+} from '../../selectors/answers';
 import translations from '../../translations';
 import { convertAnswerDataToInitialValue } from '../../utils/answers';
 import { buildErrorMessage, formatAnswer } from '../utils';
@@ -17,13 +20,11 @@ const JOB_POLL_DELAY_MS = 500;
 export const STALE_ANSWER_ERR = 'stale_answer';
 
 export const dispatchUpdateAnswerFlagSavingStatus =
-  (answerId, savingStatus, isStaleAnswer = false) =>
-  (dispatch) =>
+  (answerId, savingStatus) => (dispatch) =>
     dispatch(
       updateAnswerFlagSavingStatus({
         answer: { id: answerId },
         savingStatus,
-        isStaleAnswer,
       }),
     );
 
@@ -114,6 +115,11 @@ export function saveAnswer(answerData, answerId, currentTime, resetField) {
       getClientVersionForAnswerId(getState(), answerId) > currentTime;
     if (isAnswerStale) return {};
 
+    const currentSavingStatus = getSavingStatusForAnswerId(
+      getState(),
+      answerId,
+    );
+
     dispatch({
       type: actionTypes.SAVE_ANSWER_REQUEST,
       payload: { answer: { id: answerId, clientVersion: currentTime } },
@@ -152,11 +158,13 @@ export function saveAnswer(answerData, answerId, currentTime, resetField) {
           payload: { answerId },
         });
         const isStaleAnswer = buildErrorMessage(e).includes(STALE_ANSWER_ERR);
+        if (isStaleAnswer) {
+          resetField(`${answerId}`, { defaultValue: answerData });
+        }
         dispatch(
           dispatchUpdateAnswerFlagSavingStatus(
             answerId,
-            SAVING_STATUS.Failed,
-            isStaleAnswer,
+            isStaleAnswer ? currentSavingStatus : SAVING_STATUS.Failed,
           ),
         );
       });
@@ -166,7 +174,6 @@ export function saveAnswer(answerData, answerId, currentTime, resetField) {
 export function saveAllAnswers(rawAnswers, resetField) {
   const currentTime = Date.now();
 
-  // const payload = { submission: { answers, is_save_draft: true } };
   return (dispatch) => {
     Object.values(rawAnswers).forEach((rawAnswer) =>
       dispatch(saveAnswer(rawAnswer, rawAnswer.id, currentTime, resetField)),

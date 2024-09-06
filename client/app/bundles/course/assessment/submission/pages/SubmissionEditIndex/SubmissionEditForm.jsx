@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { SAVING_STATUS } from 'lib/constants/sharedConstants';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 import SubmissionAnswer from '../../components/answers';
@@ -69,6 +70,7 @@ const SubmissionEditForm = (props) => {
   const {
     assessment,
     attachments,
+    answerFlags,
     attempting,
     canUpdate,
     liveFeedback,
@@ -131,7 +133,7 @@ const SubmissionEditForm = (props) => {
     handleSubmit,
     reset,
     resetField,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, dirtyFields },
   } = methods;
   usePrompt(isDirty);
 
@@ -187,6 +189,19 @@ const SubmissionEditForm = (props) => {
       clearInterval(pollerRef.current);
     };
   });
+
+  const saveCurrentlyDisplayedAnswer = () => {
+    const answerId = questions[questionIds[stepIndex]].answerId;
+    const isAnswerUnsaved =
+      answerFlags[answerId].savingStatus !== SAVING_STATUS.Saved;
+    const isAnswerDirty = !!dirtyFields[answerId];
+
+    if (isAnswerUnsaved && isAnswerDirty) {
+      handleSubmit((data) => {
+        onSaveDraft({ answerId: data[answerId] }, resetField);
+      })();
+    }
+  };
 
   const renderAutogradeSubmissionButton = () => {
     if (graderView && submitted) {
@@ -629,6 +644,7 @@ const SubmissionEditForm = (props) => {
         let stepButtonColor = '';
         const isCurrentQuestion = index === stepIndex;
         stepButtonColor = isCurrentQuestion ? blue[800] : blue[400];
+
         return (
           <Step key={id} sx={{ width: 55, height: 50 }}>
             <StepButton
@@ -647,6 +663,7 @@ const SubmissionEditForm = (props) => {
                 </SvgIcon>
               }
               onClick={() => {
+                saveCurrentlyDisplayedAnswer();
                 setStepIndex(index);
               }}
               style={styles.stepButton}
@@ -656,7 +673,6 @@ const SubmissionEditForm = (props) => {
       })}
     </Stepper>
   );
-
   const renderSteppedQuestionsContent = () => {
     const questionId = questionIds[stepIndex];
     const question = questions[questionId];
@@ -829,6 +845,7 @@ SubmissionEditForm.propTypes = {
 
   assessment: PropTypes.object,
   attachments: PropTypes.arrayOf(attachmentShape),
+  answerFlags: PropTypes.object,
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   submissionTimeLimitAt: PropTypes.number,
@@ -879,6 +896,8 @@ function mapStateToProps(state) {
     assessment: state.assessments.submission.assessment,
     attachments: state.assessments.submission.attachments,
     liveFeedback: state.assessments.submission.liveFeedback,
+    answerFlags:
+      state.assessments.submission.answerFlags.flagsByAnswerId.entities,
   };
 }
 

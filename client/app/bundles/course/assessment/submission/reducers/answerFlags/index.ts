@@ -58,11 +58,8 @@ export const answerFlagsSlice = createSlice({
       action: PayloadAction<{
         answer: { id: number | string };
         savingStatus: AnswerFlagData['savingStatus'];
-        isStaleAnswer?: boolean;
       }>,
     ) => {
-      if (action.payload.isStaleAnswer) return;
-
       answerFlagsAdapter.updateOne(state.flagsByAnswerId, {
         id: action.payload.answer.id,
         changes: {
