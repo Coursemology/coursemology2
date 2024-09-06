@@ -20,11 +20,11 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
 
   def all_answers
     @submission_question = Course::Assessment::SubmissionQuestion.find(submission_question_params[:id])
-    question_id = @submission_question.question_id
     submission_id = @submission_question.submission_id
-
-    @question = Course::Assessment::Question.find(question_id)
     @submission = Course::Assessment::Submission.find(submission_id)
+
+    question_id = @submission_question.question_id
+    @question = Course::Assessment::Question.find(question_id)
     @assessment = @submission.assessment
 
     @submission_question = Course::Assessment::SubmissionQuestion.
@@ -33,7 +33,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
     @question_index = question_index(question_id)
     @all_answers = Course::Assessment::Answer.
                    unscope(:order).
-                   order(:created_at: :desc).
+                   order(:created_at).
                    where(submission_id: submission_id, question_id: question_id)
   end
 

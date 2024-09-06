@@ -26,22 +26,26 @@ const PastAnswers: FC = () => {
 
   return (
     <Preload render={<LoadingIndicator />} while={fetchAnswers}>
-      {(data): JSX.Element => (
-        <>
-          <AllAttemptsDisplay
-            allAnswers={data.allAnswers}
-            question={data.question}
-            questionNumber={data.question.questionNumber!}
-            submissionEditUrl={getEditSubmissionQuestionURL(
-              courseId,
-              assessmentId,
-              data.submissionId,
-              data.question.questionNumber,
-            )}
-          />
-          {data.comments.length > 0 && <Comment comments={data.comments} />}
-        </>
-      )}
+      {(data): JSX.Element => {
+        return data.isAnswersDisplayed ? (
+          <>
+            <AllAttemptsDisplay
+              allAnswers={data.allAnswers}
+              question={data.question}
+              questionNumber={data.question.questionNumber!}
+              submissionEditUrl={getEditSubmissionQuestionURL(
+                courseId,
+                assessmentId,
+                data.submissionId,
+                data.question.questionNumber,
+              )}
+            />
+            {data.comments.length > 0 && <Comment comments={data.comments} />}
+          </>
+        ) : (
+          <div />
+        );
+      }}
     </Preload>
   );
 };
