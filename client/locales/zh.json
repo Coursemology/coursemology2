@@ -479,14 +479,38 @@
   "course.admin.CodaveriSettings.error": {
     "defaultMessage": "更新 codaveri 设置时出错。"
   },
-  "course.admin.CodaveriSettings.None": {
-    "defaultMessage": "无"
-  },
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "一些"
   },
-  "course.admin.CodaveriSettings.All": {
-    "defaultMessage": "全部"
+  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
+    "defaultMessage": "更新 Codaveri 评估器设置时发生了错误。"
+  },
+  "course.admin.CodaveriSettings.codaveriEvaluatorSettings": {
+    "defaultMessage": "Codaveri 评估器"
+  },
+  "course.admin.CodaveriSettings.liveFeedbackSettings": {
+    "defaultMessage": "实时帮助"
+  },
+  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
+    "defaultMessage": "更新实时帮助设置时发生了错误。"
+  },
+  "course.admin.CodaveriSettings.enableDisableButton": {
+    "defaultMessage": "{enabled, select, true {启用} other {禁用}}"
+  },
+  "course.admin.CodaveriSettings.enableDisableEvaluator": {
+    "defaultMessage": "{enabled, select, true {启用} other {禁用}} Codaveri 评估器 对 {questionCount} 道编程题目在 {title} 中?"
+  },
+  "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
+    "defaultMessage": "{enabled, select, true {启用} other {禁用}} 实时帮助 对 {questionCount} 道编程题目在 {title} 中?"
+  },
+  "course.admin.CodaveriSettings.enableDisableEvaluatorDescription": {
+    "defaultMessage": "这 {type} 中的 {questionCount} 道编程题目将使用 {enabled, select, true {Codaveri} other {默认}} 评估器"
+  },
+  "course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess": {
+    "defaultMessage": "对于 {question}，实时帮助现在已 {liveFeedbackEnabled, select, true {启用} other {禁用}}"
+  },
+  "course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled": {
+    "defaultMessage": "成功地将所有问题的实时帮助设置为 {liveFeedbackEnabled, select, true {启用} other {禁用}}"
   },
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "评论设置"

@@ -31,8 +31,7 @@ const translations = defineMessages({
   },
   toggleLiveFeedbackDescription: {
     id: 'course.assessment.AssessmentForm.toggleLiveFeedbackDescription',
-    defaultMessage:
-      '{enabled, select, true {Enable} other {Disable}} Get Help feature for all Codaveri questions',
+    defaultMessage: 'Enable Get Help feature for all programming questions',
   },
   noProgrammingQuestion: {
     id: 'course.assessment.AssessmentForm.noProgrammingQuestion',

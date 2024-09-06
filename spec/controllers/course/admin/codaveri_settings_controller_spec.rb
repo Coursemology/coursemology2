@@ -54,7 +54,7 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
     end
 
     describe '#update_live_feedback_enabled' do
-      context 'when the live feedback is enabled for all assessments within course' do
+      context 'when the get help is enabled for all assessments within course' do
         subject do
           patch :update_live_feedback_enabled, params: {
             course_id: course2,
@@ -65,7 +65,7 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
           }
         end
 
-        it 'will activate live feedback for all questions within those assessments' do
+        it 'will activate get help for all questions within those assessments' do
           subject
 
           question1 = course2.assessments.first.questions.first

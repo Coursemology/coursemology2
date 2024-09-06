@@ -301,17 +301,17 @@ RSpec.describe Course::Assessment::Question::Programming do
           expect(subject_evaluator).to_not be_valid
           expect(subject_evaluator.errors.messages[:base]).to include('Language type must be Python 3 and above '\
                                                                       'to activate either codaveri '\
-                                                                      'evaluator or live feedback')
+                                                                      'evaluator or get help')
         end
       end
 
-      context 'when the language chosen is not whitelisted for live feedback' do
+      context 'when the language chosen is not whitelisted for get help' do
         let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
         it 'returns correct validation' do
           expect(subject_feedback).to_not be_valid
           expect(subject_feedback.errors.messages[:base]).to include('Language type must be Python 3 and above '\
                                                                      'to activate either codaveri '\
-                                                                     'evaluator or live feedback')
+                                                                     'evaluator or get help')
         end
       end
 

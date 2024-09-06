@@ -7,7 +7,7 @@ json.assessments [@assessment_with_programming_qns] do |assessment|
   json.url course_assessment_path(current_course, assessment)
 
   json.programmingQuestions assessment.programming_questions do |programming_qn|
-    next unless programming_qn.language_valid_for_codaveri?
+    next unless CodaveriAsyncApiService.language_valid_for_codaveri?(programming_qn.language)
 
     if programming_qn.title.blank?
       question_assessment = assessment.question_assessments.select do |qa|
