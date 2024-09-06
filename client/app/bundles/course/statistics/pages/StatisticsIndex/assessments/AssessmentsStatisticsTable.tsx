@@ -17,11 +17,16 @@ import {
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatMiniDateTime } from 'lib/moment';
 
 const translations = defineMessages({
   title: {
     id: 'course.statistics.StatisticsIndex.assessments.title',
     defaultMessage: 'Title',
+  },
+  startAt: {
+    id: 'course.statistics.StatisticsIndex.assessments.startAt',
+    defaultMessage: 'Starts At',
   },
   tab: {
     id: 'course.statistics.StatisticsIndex.assessments.tab',
@@ -83,7 +88,12 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
   const courseId = getCourseId();
   const { t } = useTranslation();
 
-  assessments.sort((a1, a2) => a1.title.localeCompare(a2.title));
+  assessments
+    .sort((a1, a2) => a1.title.localeCompare(a2.title))
+    .sort(
+      (a1, a2) =>
+        new Date(a1.startAt).getTime() - new Date(a2.startAt).getTime(),
+    );
 
   const columns: ColumnTemplate<CourseAssessment>[] = [
     {
@@ -99,6 +109,14 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
           {assessment.title}
         </Link>
       ),
+      csvDownloadable: true,
+    },
+    {
+      of: 'startAt',
+      title: t(translations.startAt),
+      sortable: true,
+      searchable: true,
+      cell: (assessment) => formatMiniDateTime(assessment.startAt),
       csvDownloadable: true,
     },
     {
@@ -143,9 +161,10 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       of: 'numAttempted',
       title: t(translations.numAttempted),
       sortable: true,
-      className: NUM_CELL_CLASS_NAME,
       cell: (assessment) => (
-        <div className={NUM_CELL_CLASS_NAME}>{assessment.numAttempted}</div>
+        <div className="text-center align-center">
+          {assessment.numAttempted}
+        </div>
       ),
       csvDownloadable: true,
     },
@@ -153,9 +172,10 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       of: 'numSubmitted',
       title: t(translations.numSubmitted),
       sortable: true,
-      className: NUM_CELL_CLASS_NAME,
       cell: (assessment) => (
-        <div className={NUM_CELL_CLASS_NAME}>{assessment.numSubmitted}</div>
+        <div className="text-center align-center">
+          {assessment.numSubmitted}
+        </div>
       ),
       csvDownloadable: true,
     },
@@ -163,9 +183,8 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       of: 'numLate',
       title: t(translations.numLate),
       sortable: true,
-      className: NUM_CELL_CLASS_NAME,
       cell: (assessment) => (
-        <div className={NUM_CELL_CLASS_NAME}>{assessment.numLate}</div>
+        <div className="text-center align-center">{assessment.numLate}</div>
       ),
       csvDownloadable: true,
     },
@@ -175,8 +194,12 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       sortable: true,
       className: NUM_CELL_CLASS_NAME,
       cell: (assessment): JSX.Element => {
-        const averageGrade = Number(assessment.averageGrade).toFixed(2);
-        const maximumGrade = Number(assessment.maximumGrade).toFixed(2);
+        const averageGrade = parseFloat(
+          Number(assessment.averageGrade).toFixed(1),
+        );
+        const maximumGrade = parseFloat(
+          Number(assessment.maximumGrade).toFixed(1),
+        );
         return (
           <div className={NUM_CELL_CLASS_NAME}>
             {`${averageGrade} / ${maximumGrade}`}
@@ -192,7 +215,7 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       className: NUM_CELL_CLASS_NAME,
       cell: (assessment) => (
         <div className={NUM_CELL_CLASS_NAME}>
-          {Number(assessment.stdevGrade).toFixed(2)}
+          {parseFloat(Number(assessment.stdevGrade).toFixed(1))}
         </div>
       ),
       csvDownloadable: true,
