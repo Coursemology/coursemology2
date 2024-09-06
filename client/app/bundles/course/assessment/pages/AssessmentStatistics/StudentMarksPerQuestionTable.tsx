@@ -267,10 +267,15 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       },
       title: t(translations.totalGrade),
       sortable: true,
-      cell: (datum): ReactNode =>
-        datum.totalGrade
+      cell: (datum): ReactNode => {
+        const isGradedOrPublished =
+          datum.workflowState === workflowStates.Graded ||
+          datum.workflowState === workflowStates.Published;
+        return datum.totalGrade && isGradedOrPublished
           ? renderTotalGradeCell(datum.totalGrade, assessment!.maximumGrade)
-          : null,
+          : null;
+      },
+
       className: 'text-right',
       sortProps: {
         sort: (datum1, datum2): number => {

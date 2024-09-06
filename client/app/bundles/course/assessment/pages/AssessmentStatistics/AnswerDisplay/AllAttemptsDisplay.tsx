@@ -46,6 +46,8 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
 
   sortedAnswers.push(currentAnswer!);
 
+  // TODO: distance between points inside Slider to be reflective towards the time distance
+  // (for example, the distance between 1:00PM to 1:01PM should not be equal to 1:00PM to 2:00PM)
   const answerSubmittedTimes = sortedAnswers.map((answer, idx) => {
     return {
       value: idx,

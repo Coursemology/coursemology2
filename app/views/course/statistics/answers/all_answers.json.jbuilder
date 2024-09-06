@@ -1,26 +1,32 @@
 # frozen_string_literal: true
-json.question do
-  json.id @question.id
-  json.title @question.title
-  json.maximumGrade @question.maximum_grade
-  json.description format_ckeditor_rich_text(@question.description)
-  json.type @question.question_type
-  json.questionNumber @question_index + 1
+is_displayed = @submission.graded? || @submission.published?
 
-  json.partial! @question, question: @question.specific, can_grade: false, answer: @all_answers.first
-end
+json.isAnswersDisplayed is_displayed
 
-json.allAnswers @all_answers do |answer|
-  json.partial! 'answer', answer: answer, question: @question
-  json.createdAt answer.created_at&.iso8601
-  json.currentAnswer answer.current_answer
-  json.workflowState answer.workflow_state
-end
+if is_displayed
+  json.question do
+    json.id @question.id
+    json.title @question.title
+    json.maximumGrade @question.maximum_grade
+    json.description format_ckeditor_rich_text(@question.description)
+    json.type @question.question_type
+    json.questionNumber @question_index + 1
 
-json.submissionId @submission.id
+    json.partial! @question, question: @question.specific, can_grade: false, answer: @all_answers.first
+  end
 
-posts = @submission_question.discussion_topic.posts
+  json.allAnswers @all_answers do |answer|
+    json.partial! 'answer', answer: answer, question: @question
+    json.createdAt answer.created_at&.iso8601
+    json.currentAnswer answer.current_answer
+    json.workflowState answer.workflow_state
+  end
 
-json.comments posts do |post|
-  json.partial! post, post: post if post.published?
+  json.submissionId @submission.id
+
+  posts = @submission_question.discussion_topic.posts
+
+  json.comments posts do |post|
+    json.partial! post, post: post if post.published?
+  end
 end
