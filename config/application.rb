@@ -13,7 +13,7 @@ Dotenv::Rails.load if ['development'].include? ENV['RAILS_ENV']
 module Application # rubocop:disable Style/ClassAndModuleChildren
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

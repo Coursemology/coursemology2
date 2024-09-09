@@ -410,8 +410,11 @@ RSpec.describe Duplicator, type: :model do
     end
 
     temporary_table(:children_parents) do |t|
-      t.integer :children_id, foreign_key: { references: :complex_active_records, primary_key: :id }
-      t.integer :parent_id, foreign_key: { references: :complex_active_records, primary_key: :id }
+      # Something in Rails 7.1 upgrade broke the one-line declarations here.
+      t.integer :children_id
+      t.foreign_key :complex_active_records, column: :children_id, primary_key: :id
+      t.integer :parent_id
+      t.foreign_key :complex_active_records, column: :parent_id, primary_key: :id
     end
 
     class DuplicationTraceableActiveRecordWithSource < ApplicationRecord

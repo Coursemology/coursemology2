@@ -119,8 +119,8 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         question = create(:course_assessment_question_programming,
                           assessment: assessment, template_file_count: 0, package_type: :zip_upload)
 
-        empty_package = File.join(fixture_path, 'course/empty_programming_question_template.zip')
-        valid_package = File.join(fixture_path, 'course/programming_question_template.zip')
+        empty_package = File.join(file_fixture_path, 'course/empty_programming_question_template.zip')
+        valid_package = File.join(file_fixture_path, 'course/programming_question_template.zip')
 
         visit edit_course_assessment_question_programming_path(course, assessment, question)
         find('span', text: 'Evaluate and test code').click
