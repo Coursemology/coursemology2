@@ -76,24 +76,6 @@ const areObjectArraysEqual = <T extends object>(
       )
       .every((p) => p));
 
-interface GeneratedQuestionData {
-  question: {
-    title: string;
-    description: string;
-  };
-  testUi: {
-    metadata: {
-      solution: string;
-      submission: string;
-      testCases: {
-        public: MetadataTestCase[];
-        private: MetadataTestCase[];
-        evaluation: MetadataTestCase[];
-      };
-    };
-  };
-}
-
 const defaultCodaveriFormData: CodaveriGenerateFormData = {
   languageId: 0,
   customPrompt: '',
@@ -241,7 +223,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   const switchToConversation = (conversation: ConversationState): void => {
     saveActiveFormData();
     const snapshot = conversation.snapshots?.[conversation.activeSnapshotId];
-    let languageId = snapshot.codaveriData?.languageId ?? 0;
+    let languageId = snapshot?.codaveriData?.languageId ?? 0;
     if (languageId === 0) {
       languageId = codaveriForm.getValues('languageId');
     }
@@ -249,7 +231,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
       dispatch(
         actions.setActiveConversationId({ conversationId: conversation.id }),
       );
-      codaveriForm.reset({ languageId, customPrompt: '' });
+      codaveriForm.reset({ ...defaultCodaveriFormData, languageId });
       prototypeForm.reset(conversation.activeSnapshotEditedData);
       setLockStates(snapshot.lockStates);
     }
@@ -370,9 +352,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                               codaveriForm.reset(snapshot.codaveriData);
                             }
                             if (snapshot.questionData) {
-                              prototypeForm.reset(
-                                snapshot.questionData as GeneratedQuestionData,
-                              );
+                              prototypeForm.reset(snapshot.questionData);
                             }
                             if (snapshot.lockStates) {
                               setLockStates(snapshot.lockStates);
@@ -478,7 +458,9 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                                     conversationId ===
                                     currentActiveConversationId
                                   ) {
-                                    codaveriForm.resetField('customPrompt');
+                                    codaveriForm.resetField('customPrompt', {
+                                      defaultValue: '',
+                                    });
                                     prototypeForm.reset(newQuestionFormData);
                                   } else {
                                     dispatch(
