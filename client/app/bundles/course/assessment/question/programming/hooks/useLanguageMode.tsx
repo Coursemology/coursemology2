@@ -7,6 +7,7 @@ import {
 export interface LanguageOption {
   label: string;
   value: number;
+  disabled: boolean;
 }
 
 type LanguageIdMap = Record<number, LanguageMode>;
@@ -24,6 +25,7 @@ const useLanguageMode = (languages: LanguageData[]): UseLanguageModeHook => {
           options.push({
             label: language.name,
             value: language.id,
+            disabled: language.disabled,
           });
 
           map[language.id] = language.editorMode;
