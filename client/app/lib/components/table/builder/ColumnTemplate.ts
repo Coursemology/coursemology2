@@ -10,11 +10,12 @@ interface FilteringProps<D> {
 }
 
 interface SearchingProps<D> {
-  getValue?: (datum: D) => string;
+  getValue?: (datum: D) => string | undefined;
 }
 
 interface SortingProps<D> {
   sort?: (datumA: D, datumB: D) => number;
+  undefinedPriority?: false | 'first' | 'last';
 }
 
 interface ColumnTemplate<D extends Data> {
