@@ -5,6 +5,7 @@ export type LanguageMode = 'c_cpp' | 'java' | 'javascript' | 'python';
 export interface LanguageData {
   id: number;
   name: string;
+  disabled: boolean;
   editorMode: LanguageMode;
 }
 

@@ -1614,6 +1614,11 @@ const translations = defineMessages({
       'submissions will always receive the maximum grade above since there are nothing for the autograder to test ' +
       'and grade.',
   },
+  languageDeprecatedWarning: {
+    id: 'course.assessment.question.programming.languageDeprecatedWarning',
+    defaultMessage:
+      'Your selected language is deprecated. Please change it to another language.',
+  },
 });
 
 export default translations;

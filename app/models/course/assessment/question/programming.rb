@@ -31,7 +31,9 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   validates :package_type, presence: true
   validates :multiple_file_submission, inclusion: { in: [true, false] }
   validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
+
   validates :language, presence: true
+  validate :validate_language_enabled
 
   validate -> { validate_time_limit }
   validate :validate_codaveri_question
@@ -265,8 +267,16 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     elsif !question_assessments.empty? &&
           !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
       errors.add(:base,
-                 'Codaveri component is deactivated.'\
+                 'Codaveri component is deactivated.' \
                  'Activate it in the course setting or switch this question into a non-codaveri type.')
     end
   end
+end
+
+def validate_language_enabled
+  return unless language && !language.enabled
+
+  errors.add(:base,
+             'The selected programming language has been deprecated and cannot be used. ' \
+             'Please select another language.')
 end

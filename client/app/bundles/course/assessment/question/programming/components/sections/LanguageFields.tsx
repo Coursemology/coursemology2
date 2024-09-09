@@ -50,17 +50,25 @@ const LanguageFields = (props: LanguageFieldsProps): JSX.Element => {
               setValue('question.autograded', false);
             }
           };
-
           return (
-            <FormSelectField
-              disabled={props.disabled}
-              field={{ ...field, onChange }}
-              fieldState={fieldState}
-              label={t(translations.language)}
-              options={props.languageOptions}
-              required
-              variant="filled"
-            />
+            <>
+              <FormSelectField
+                disabled={props.disabled}
+                field={{ ...field, onChange }}
+                fieldState={fieldState}
+                label={t(translations.language)}
+                options={props.languageOptions}
+                required
+                variant="filled"
+              />
+              {props.languageOptions.find(
+                (option) => option.value === field.value && option.disabled,
+              ) && (
+                <Alert severity="warning">
+                  {t(translations.languageDeprecatedWarning)}
+                </Alert>
+              )}
+            </>
           );
         }}
       />

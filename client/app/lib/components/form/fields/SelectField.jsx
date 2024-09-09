@@ -82,6 +82,7 @@ const FormSelectField = (props) => {
           options.map((option) => (
             <Option
               key={option.value}
+              disabled={option.disabled ?? false}
               id={`select-${option.value}`}
               value={option.value}
             >
