@@ -97,6 +97,65 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         }
       end
 
+      let!(:existing_language) { Coursemology::Polyglot::Language.find_by(name: 'Python 3.10') }
+
+      context 'when the selected language is enabled' do
+        let!(:programming_question) do
+          create(:course_assessment_question_programming, assessment: assessment, language: existing_language)
+        end
+        let(:question_programming_attributes) do
+          attributes_for(:course_assessment_question_programming).
+            slice(:title, :description, :maximum_grade, :memory_limit,
+                  :time_limit).tap do |result|
+            result[:language_id] = existing_language.id
+          end
+        end
+
+        it 'updates the question successfully' do
+          subject
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'when the selected language is disabled' do
+        let!(:programming_question) do
+          create(:course_assessment_question_programming, assessment: assessment, language: existing_language)
+        end
+        let(:question_programming_attributes) do
+          attributes_for(:course_assessment_question_programming).
+            slice(:title, :description, :maximum_grade, :memory_limit,
+                  :time_limit).tap do |result|
+            result[:language_id] = existing_language.id
+          end
+        end
+
+        # Disable the language before the test, and enable it after the test
+        # Direct SQL is used to avoid the readonly limitations
+        before do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE polyglot_languages SET enabled = false WHERE id = #{existing_language.id}"
+          )
+          # Not too sure why an explicit reload is needed, but without it
+          # the changes do not seem to be reflected inthe database
+          programming_question.reload
+        end
+
+        after do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE polyglot_languages SET enabled = true WHERE id = #{existing_language.id}"
+          )
+        end
+
+        it 'returns bad request with an appropriate error message' do
+          subject
+          expect(response).to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)['errors']).to include(
+            'The selected programming language has been deprecated and cannot be used. ' \
+            'Please select another language.'
+          )
+        end
+      end
+
       context 'when the question cannot be saved' do
         let(:programming_question) { immutable_programming_question }
 
