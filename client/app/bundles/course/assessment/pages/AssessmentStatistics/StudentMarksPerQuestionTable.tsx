@@ -159,53 +159,39 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     );
   };
 
-  // the customised sorting for grades to ensure null always is less than any non-null grade
-  const sortNullableGrade = (
-    grade1: number | null,
-    grade2: number | null,
-  ): number => {
-    if (!grade1 && !grade2) {
-      return 0;
-    }
-    if (!grade1) {
-      return -1;
-    }
-    if (!grade2) {
-      return 1;
-    }
-    return grade1 - grade2;
-  };
-
   const answerColumns: ColumnTemplate<MainSubmissionInfo>[] = Array.from(
     { length: assessment?.questionCount ?? 0 },
     (_, index) => {
       return {
         searchProps: {
-          getValue: (datum) => datum.answers?.[index]?.grade?.toString() ?? '',
+          getValue: (datum) =>
+            datum.answers?.[index]?.grade?.toString() ?? undefined,
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.answers?.[index].grade === 'number'
-            ? renderAnswerGradeClickableCell(index, datum)
-            : null;
+          return typeof datum.answers?.[index].grade === 'number' ? (
+            renderAnswerGradeClickableCell(index, datum)
+          ) : (
+            <div />
+          );
         },
         sortable: true,
         csvDownloadable: true,
         className: 'text-right',
         sortProps: {
-          sort: (datum1, datum2): number => {
-            return sortNullableGrade(
-              datum1.answers?.[index]?.grade ?? null,
-              datum2.answers?.[index]?.grade ?? null,
-            );
-          },
+          undefinedPriority: 'last',
         },
       };
     },
   );
 
   const jointGroupsName = (datum: MainSubmissionInfo): string =>
-    datum.groups ? datum.groups.map((g) => g.name).join(', ') : '';
+    datum.groups
+      ? datum.groups
+          .map((g) => g.name)
+          .sort()
+          .join(', ')
+      : '';
 
   const columns: ColumnTemplate<MainSubmissionInfo>[] = [
     {
@@ -263,7 +249,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     ...answerColumns,
     {
       searchProps: {
-        getValue: (datum) => datum.totalGrade?.toString() ?? '',
+        getValue: (datum) => datum.totalGrade?.toString() ?? undefined,
       },
       title: t(translations.totalGrade),
       sortable: true,
@@ -271,19 +257,16 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         const isGradedOrPublished =
           datum.workflowState === workflowStates.Graded ||
           datum.workflowState === workflowStates.Published;
-        return datum.totalGrade && isGradedOrPublished
-          ? renderTotalGradeCell(datum.totalGrade, assessment!.maximumGrade)
-          : null;
+        return datum.totalGrade && isGradedOrPublished ? (
+          renderTotalGradeCell(datum.totalGrade, assessment!.maximumGrade)
+        ) : (
+          <div />
+        );
       },
 
       className: 'text-right',
       sortProps: {
-        sort: (datum1, datum2): number => {
-          return sortNullableGrade(
-            datum1.totalGrade ?? null,
-            datum2.totalGrade ?? null,
-          );
-        },
+        undefinedPriority: 'last',
       },
       csvDownloadable: true,
     },

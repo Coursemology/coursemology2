@@ -55,6 +55,7 @@ const buildTanStackColumns = <D extends Data>(
         ? (rowA, rowB): number =>
             column.sortProps!.sort!(rowA.original, rowB.original)
         : 'alphanumeric',
+      sortUndefined: column.sortProps?.undefinedPriority ?? false,
       filterFn:
         column.filterProps?.shouldInclude &&
         Object.assign(

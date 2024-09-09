@@ -3,10 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Box, Chip } from '@mui/material';
 import palette from 'theme/palette';
-import {
-  AttemptInfo,
-  MainSubmissionInfo,
-} from 'types/course/statistics/assessmentStatistics';
+import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
 import Prompt from 'lib/components/core/dialogs/Prompt';
@@ -156,59 +153,40 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
     );
   };
 
-  // the customised sorting for grades to ensure null always is less than any non-null grade
-  const sortNullableAttemptCount = (
-    attempt1: AttemptInfo | null,
-    attempt2: AttemptInfo | null,
-  ): number => {
-    if (!attempt1 && !attempt2) {
-      return 0;
-    }
-    if (!attempt1) {
-      return -1;
-    }
-    if (!attempt2) {
-      return 1;
-    }
-
-    const convertedAttempt1 =
-      attempt1.attemptCount * (attempt1.correct ? 1 : -1);
-    const convertedAttempt2 =
-      attempt2.attemptCount * (attempt2.correct ? 1 : -1);
-    return convertedAttempt1 - convertedAttempt2;
-  };
-
   const answerColumns: ColumnTemplate<MainSubmissionInfo>[] = Array.from(
     { length: assessment?.questionCount ?? 0 },
     (_, index) => {
       return {
         searchProps: {
           getValue: (datum) =>
-            datum.attemptStatus?.[index]?.attemptCount?.toString() ?? '',
+            datum.attemptStatus?.[index]?.attemptCount?.toString() ?? undefined,
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.attemptStatus?.[index].attemptCount === 'number'
-            ? renderAttemptCountClickableCell(index, datum)
-            : null;
+          return typeof datum.attemptStatus?.[index].attemptCount ===
+            'number' ? (
+            renderAttemptCountClickableCell(index, datum)
+          ) : (
+            <div />
+          );
         },
         sortable: true,
         csvDownloadable: true,
         className: 'text-right',
         sortProps: {
-          sort: (datum1, datum2): number => {
-            return sortNullableAttemptCount(
-              datum1.attemptStatus?.[index] ?? null,
-              datum2.attemptStatus?.[index] ?? null,
-            );
-          },
+          undefinedPriority: 'last',
         },
       };
     },
   );
 
   const jointGroupsName = (datum: MainSubmissionInfo): string =>
-    datum.groups ? datum.groups.map((g) => g.name).join(', ') : '';
+    datum.groups
+      ? datum.groups
+          .map((g) => g.name)
+          .sort()
+          .join(', ')
+      : '';
 
   const columns: ColumnTemplate<MainSubmissionInfo>[] = [
     {
