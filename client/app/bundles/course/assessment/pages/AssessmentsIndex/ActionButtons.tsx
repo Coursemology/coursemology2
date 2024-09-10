@@ -1,4 +1,9 @@
-import { Create, Inventory, QuestionMark } from '@mui/icons-material';
+import {
+  Assessment,
+  Create,
+  Inventory,
+  QuestionMark,
+} from '@mui/icons-material';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
 
@@ -48,6 +53,19 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
           <Link to={assessment.editUrl}>
             <IconButton className="max-sm:!hidden">
               <Create />
+            </IconButton>
+          </Link>
+        </Tooltip>
+      )}
+
+      {assessment.statisticsUrl && (
+        <Tooltip
+          disableInteractive
+          title={t(translations.assessmentStatistics)}
+        >
+          <Link to={assessment.statisticsUrl}>
+            <IconButton>
+              <Assessment />
             </IconButton>
           </Link>
         </Tooltip>
