@@ -59,7 +59,8 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   def codaveri_languages
     render json: {
       languages: Coursemology::Polyglot::Language.
-        all.order(:name).
+        where(enabled: true).
+        order(weight: :desc).
         filter_map do |language|
           if CodaveriAsyncApiService.language_valid_for_codaveri?(language)
             {
