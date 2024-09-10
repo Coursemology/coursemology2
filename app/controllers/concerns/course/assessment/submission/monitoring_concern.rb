@@ -42,6 +42,6 @@ module Course::Assessment::Submission::MonitoringConcern
   end
 
   def blocked_by_monitor?
-    should_monitor? && monitoring_service&.should_block?(request.user_agent)
+    should_monitor? && monitoring_service&.should_block?(request)
   end
 end

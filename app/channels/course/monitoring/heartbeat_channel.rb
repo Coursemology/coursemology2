@@ -29,7 +29,8 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
       session: @session,
       user_agent: user_agent,
       ip_address: ip_address,
-      generated_at: time_from(timestamp)
+      generated_at: time_from(timestamp),
+      seb_payload: data['sebPayload']
     )
 
     return unless heartbeat.save
@@ -128,7 +129,6 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
   end
 
   def valid_heartbeat?(heartbeat)
-    @monitor.valid_secret?(heartbeat.user_agent) ||
-      Course::Assessment::MonitoringService.unblocked?(assessment_id, session)
+    heartbeat.valid_heartbeat? || Course::Assessment::MonitoringService.unblocked?(assessment_id, session)
   end
 end

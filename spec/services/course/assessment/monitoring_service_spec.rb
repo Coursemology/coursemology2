@@ -32,7 +32,8 @@ RSpec.describe Course::Assessment::MonitoringService, type: :service do
       end
 
       it 'never blocks' do
-        expect(subject.should_block?(SecureRandom.hex)).to be_falsey
+        request = ActionDispatch::Request.new({ 'HTTP_USER_AGENT' => base_user_agent })
+        expect(subject.should_block?(request)).to be_falsey
       end
     end
 
@@ -63,8 +64,13 @@ RSpec.describe Course::Assessment::MonitoringService, type: :service do
       end
 
       context 'when the monitor blocks' do
-        let(:valid_user_agent) { "#{base_user_agent} #{monitor.secret}" }
-        let(:invalid_user_agent) { "#{base_user_agent} #{SecureRandom.hex}" }
+        let(:valid_request) do
+          ActionDispatch::Request.new({ 'HTTP_USER_AGENT' => "#{base_user_agent} #{monitor.secret}" })
+        end
+
+        let(:invalid_request) do
+          ActionDispatch::Request.new({ 'HTTP_USER_AGENT' => "#{base_user_agent} #{SecureRandom.hex}" })
+        end
 
         before do
           assessment.update!(session_password: SecureRandom.hex)
@@ -72,24 +78,22 @@ RSpec.describe Course::Assessment::MonitoringService, type: :service do
         end
 
         it 'blocks when the user agent is invalid' do
-          expect(subject.should_block?(invalid_user_agent)).to be_truthy
+          expect(subject.should_block?(invalid_request)).to be_truthy
         end
 
         it 'does not block when the user agent is valid' do
-          expect(subject.should_block?(valid_user_agent)).to be_falsey
+          expect(subject.should_block?(valid_request)).to be_falsey
         end
 
         it 'does not block when the user agent is invalid but the browser session is unblocked' do
           browser_session[described_class.unblocked_browser_session_key(assessment.id)] = true
 
-          expect(subject.should_block?(invalid_user_agent)).to be_falsey
+          expect(subject.should_block?(invalid_request)).to be_falsey
         end
 
         it 'can unblock a browser with an invalid user agent' do
-          invalid_user_agent = "#{base_user_agent} #{SecureRandom.hex}"
-
           expect { subject.unblock(assessment.session_password) }.
-            to change { subject.should_block?(invalid_user_agent) }.from(true).to(false).
+            to change { subject.should_block?(invalid_request) }.from(true).to(false).
             and change { browser_session }.from({})
         end
       end
@@ -102,8 +106,8 @@ RSpec.describe Course::Assessment::MonitoringService, type: :service do
           expect { subject.upsert!(blocks: true) }.to raise_error(ActiveRecord::RecordInvalid)
         end
 
-        it 'cannot be set to block if the monitor does not have a secret' do
-          monitor.update!(secret: nil)
+        it 'cannot be set to block if browser authorisation is disabled' do
+          monitor.update!(browser_authorization: false)
           assessment.update!(session_password: SecureRandom.hex)
 
           expect { subject.upsert!(blocks: true) }.to raise_error(ActiveRecord::RecordInvalid)

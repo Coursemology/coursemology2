@@ -10,7 +10,7 @@ import { PRESENCE_COLORS } from './ActiveSessionBlob';
 import SessionBlob from './SessionBlob';
 
 interface SessionBlobLegendProps {
-  hasSecret: boolean;
+  validates: boolean;
 }
 
 const SessionBlobLegend = (props: SessionBlobLegendProps): JSX.Element => {
@@ -50,7 +50,7 @@ const SessionBlobLegend = (props: SessionBlobLegendProps): JSX.Element => {
             <SessionBlob className={PRESENCE_COLORS.alive} />
 
             <Typography className="mt-1" variant="body2">
-              {props.hasSecret
+              {props.validates
                 ? t(translations.alivePresenceHintSUSMatches)
                 : t(translations.alivePresenceHint)}
             </Typography>

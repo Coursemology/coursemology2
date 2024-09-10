@@ -36,7 +36,9 @@ const BaseActiveSessionBlob = (
 ): JSX.Element => {
   const { of: snapshot, for: userId } = props;
 
-  const { hasSecret } = useAppSelector(select('monitor'));
+  const { validates, browserAuthorizationMethod } = useAppSelector(
+    select('monitor'),
+  );
 
   const monitoring = useMonitoring();
 
@@ -66,9 +68,9 @@ const BaseActiveSessionBlob = (
 
       <SessionDetailsPopup
         anchorsOn={popupData?.[0]}
+        browserAuthorizationMethod={browserAuthorizationMethod}
         for={snapshot.userName ?? ''}
         generatedAt={popupData?.[1]}
-        hasSecret={hasSecret}
         onClickShowAllHeartbeats={(): void => {
           props.getHeartbeats?.(snapshot.sessionId, -1);
           setPopupData((data) => [data?.[0], new Date().toISOString()]);
@@ -80,6 +82,7 @@ const BaseActiveSessionBlob = (
         open={Boolean(snapshot.recentHeartbeats && popupData?.[0])}
         showing={snapshot.recentHeartbeats ?? []}
         submissionId={snapshot.submissionId}
+        validates={validates}
       />
     </>
   );

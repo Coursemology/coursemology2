@@ -49,7 +49,8 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
         userAgent: heartbeat.user_agent,
         ipAddress: heartbeat.ip_address,
         generatedAt: heartbeat.generated_at,
-        isValid: @monitor.valid_secret?(heartbeat.user_agent)
+        isValid: heartbeat.valid_heartbeat?,
+        sebPayload: heartbeat.seb_payload
       }.compact
     end
 
@@ -61,7 +62,6 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
   def active_sessions_snapshots
     @monitor.sessions.includes(:heartbeats, :creator).to_h do |session|
       last_heartbeat = session.heartbeats.last
-      is_valid_secret = @monitor.valid_secret?(last_heartbeat&.user_agent)
 
       course_user = course_users_hash[session.creator_id]
       # This technically shouldn't happen, but can happen if someone is removed from
@@ -73,7 +73,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
         status: session.status,
         misses: session.misses,
         lastHeartbeatAt: last_heartbeat&.generated_at,
-        isValid: is_valid_secret,
+        isValid: last_heartbeat&.valid_heartbeat?,
         userName: course_user.name,
         submissionId: submission_ids_hash[session.creator_id],
         stale: last_heartbeat&.stale
@@ -106,7 +106,8 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
       monitor: {
         maxIntervalMs: @monitor.max_interval_ms,
         offsetMs: @monitor.offset_ms,
-        hasSecret: @monitor.secret?
+        validates: @monitor.browser_authorization?,
+        browserAuthorizationMethod: @monitor.browser_authorization_method
       }
     }
   end

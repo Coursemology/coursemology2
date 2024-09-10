@@ -28,7 +28,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
   const { t } = useTranslation();
   const [userIds, setUserIds] = useState<number[]>([]);
   const [groups, setGroups] = useState<WatchGroup[]>([]);
-  const [hasSecret, setHasSecret] = useState(false);
+  const [validates, setValidates] = useState(false);
   const monitoring = useMonitoring();
 
   const [rejected, setRejected] = useState(false);
@@ -37,7 +37,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
     watch: (data) => {
       setUserIds(data.userIds);
       setGroups(data.groups);
-      setHasSecret(data.monitor.hasSecret);
+      setValidates(data.monitor.validates);
       monitoring.initialize(data.monitor, data.snapshots);
       monitoring.notifyConnected();
     },
@@ -69,7 +69,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
 
         <FilterAutocomplete filters={groups} />
 
-        <SessionBlobLegend hasSecret={hasSecret} />
+        <SessionBlobLegend validates={validates} />
 
         <SessionsGrid for={userIds} getHeartbeats={channel.getHeartbeats} />
       </aside>

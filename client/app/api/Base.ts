@@ -1,4 +1,8 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import { getUserToken } from 'utilities/authentication';
 
 import { syncSignals } from 'lib/hooks/unread';
@@ -19,6 +23,37 @@ const updateSignalsIfPresentIn = (response: AxiosResponse): void => {
   if (!signals) return;
 
   syncSignals(JSON.parse(signals));
+};
+
+const getAbsoluteURLWithoutHashFromAxiosRequestConfig = (
+  config: InternalAxiosRequestConfig,
+): string => {
+  const url = new URL(window.location.href);
+  url.pathname = config.url!;
+  url.hash = '';
+
+  Object.entries(config.params).forEach(([key, value]) =>
+    url.searchParams.set(key, value as string),
+  );
+
+  return url.toString();
+};
+
+/**
+ * We need this because Safe Exam Browser (SEB) only appends the config key hash in the
+ * request headers as `X-SafeExamBrowser-ConfigKeyHash` without the original URL used
+ * to hash it.
+ *
+ * The server shouldn't simply take the received request's URL because it's possible
+ * that the server sits behind a reverse proxy and only receives the request via a
+ * proxied internal URL. The safest way to ensure the server can correctly verify the
+ * config key hash is to also include the request URL at request time.
+ */
+const appendRequestURLIfOnSEB = (config: InternalAxiosRequestConfig): void => {
+  if (!navigator.userAgent.includes('SEB/')) return;
+
+  config.headers['X-SafeExamBrowser-Url'] =
+    getAbsoluteURLWithoutHashFromAxiosRequestConfig(config);
 };
 
 const getAuthorizationToken = (): string => {
@@ -57,9 +92,11 @@ export default class BaseAPI {
 
     client.interceptors.request.use(async (config) => {
       config.withCredentials = true;
+      appendRequestURLIfOnSEB(config);
       if (config.method === 'get') return config;
 
       config.headers['X-CSRF-Token'] = await this.#getAndSaveCSRFToken();
+
       return config;
     });
 

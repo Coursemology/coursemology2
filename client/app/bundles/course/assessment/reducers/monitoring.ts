@@ -12,7 +12,12 @@ const initialState: MonitoringState = {
   snapshots: {},
   history: [],
   status: 'connecting',
-  monitor: { maxIntervalMs: 0, offsetMs: 0, hasSecret: false },
+  monitor: {
+    maxIntervalMs: 0,
+    offsetMs: 0,
+    validates: false,
+    browserAuthorizationMethod: 'user_agent',
+  },
 };
 
 export const monitoringSlice = createSlice({

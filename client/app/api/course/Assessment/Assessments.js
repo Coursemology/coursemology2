@@ -42,6 +42,16 @@ export default class AssessmentsAPI extends BaseCourseAPI {
   }
 
   /**
+   *
+   * @returns {import('api/types').APIResponse<import('types/course/assessment/monitoring').SebPayload | null>}
+   */
+  fetchSebPayload() {
+    return this.client.get(
+      `${this.#urlPrefix}/${this.assessmentId}/seb_payload`,
+    );
+  }
+
+  /**
    * Create an assessment.
    *
    * @param {object} params - params in the format of:

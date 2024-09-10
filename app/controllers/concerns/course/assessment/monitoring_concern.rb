@@ -2,6 +2,8 @@
 module Course::Assessment::MonitoringConcern
   extend ActiveSupport::Concern
 
+  include Course::Assessment::Monitoring::SebPayloadConcern
+
   included do
     alias_method :load_monitor, :monitor
     alias_method :load_can_manage_monitor?, :can_manage_monitor?
@@ -11,12 +13,21 @@ module Course::Assessment::MonitoringConcern
     before_action :load_can_manage_monitor?, only: [:index, :edit]
     before_action :load_monitoring_component_enabled?, only: [:index, :edit]
 
-    before_action :raise_if_no_monitor, only: [:monitoring, :unblock_monitor]
+    before_action :raise_if_no_monitor, only: [:monitoring, :unblock_monitor, :seb_payload]
     before_action :check_blocked_by_monitor, only: [:show]
   end
 
   def monitoring
     authorize! :read, @monitor
+  end
+
+  # We need this endpoint because Safe Exam Browser (SEB) doesn't append keys in request headers
+  # of WebSocket connections.
+  def seb_payload
+    payload = seb_payload_from_request(request)
+    return head(:ok) unless payload
+
+    render json: payload
   end
 
   def unblock_monitor
@@ -55,7 +66,7 @@ module Course::Assessment::MonitoringConcern
   end
 
   def blocked_by_monitor?
-    cannot?(:read, monitor) && monitoring_service&.should_block?(request.user_agent) && !submitted_assessment?
+    cannot?(:read, monitor) && monitoring_service&.should_block?(request) && !submitted_assessment?
   end
 
   def monitoring_service
@@ -77,7 +88,7 @@ module Course::Assessment::MonitoringConcern
   end
 
   def should_disable_block?
-    !@assessment.session_password_protected? || monitor&.secret.blank?
+    !@assessment.session_password_protected? || !monitor&.browser_authorization?
   end
 
   def submitted_assessment?

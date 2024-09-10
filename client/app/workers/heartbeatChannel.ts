@@ -9,6 +9,7 @@ interface HeartbeatChannelCallbacks {
   resetInterval: (action: () => void, interval: number) => void;
   onPulse?: (heartbeat: HeartbeatPostData) => void;
   onPulsed?: (timestamp: number) => void;
+  getHeartbeatData: () => HeartbeatPostData;
   getFlushData?: () => Promise<HeartbeatPostData[]>;
   onFlushed?: (from: number, to: number) => void;
   onTerminate?: () => void;
@@ -27,7 +28,7 @@ const flushThenPulseOn = async (
   const flushData = await callbacks.getFlushData?.();
   if (flushData?.length) channel.perform('flush', { heartbeats: flushData });
 
-  const heartbeat: HeartbeatPostData = { timestamp: Date.now() };
+  const heartbeat = callbacks.getHeartbeatData();
 
   callbacks.onPulse?.(heartbeat);
   channel.perform('pulse', heartbeat);

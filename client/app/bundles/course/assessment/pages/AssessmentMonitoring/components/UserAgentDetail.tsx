@@ -1,92 +1,55 @@
-import { Apple, Cancel, CheckCircle, WindowSharp } from '@mui/icons-material';
-import { Chip, Typography } from '@mui/material';
+import { ComponentProps } from 'react';
+import { Apple, Public, WindowSharp } from '@mui/icons-material';
+import { SvgIcon, Typography } from '@mui/material';
 
-import useTranslation, {
-  Descriptor,
-  MessageTranslator,
-} from 'lib/hooks/useTranslation';
-import commonTranslations from 'lib/translations';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
 
-interface UserAgentDetailProps {
-  of?: string;
-  className?: string;
-  validate?: boolean;
-  valid?: boolean;
-}
+import ValidChip from './ValidChip';
 
-const platforms = {
-  windows: {
-    icon: <WindowSharp className="text-[#2A78D4]" />,
-    label: commonTranslations.windows,
-  },
-  macos: {
-    icon: <Apple />,
-    label: commonTranslations.macos,
-  },
-} satisfies Record<string, { icon: JSX.Element; label: Descriptor }>;
+const PlatformIcon = ({
+  userAgent,
+  ...iconProps
+}: { userAgent: string } & ComponentProps<typeof SvgIcon>): JSX.Element => {
+  if (userAgent.includes('Mac')) return <Apple {...iconProps} />;
 
-const getPlatformChipFromUserAgent = (
-  userAgent: string,
-  t: MessageTranslator,
-): JSX.Element | null => {
-  let platform: keyof typeof platforms | undefined;
-
-  if (userAgent.includes('Windows')) {
-    platform = 'windows';
-  } else if (userAgent.includes('Mac')) {
-    platform = 'macos';
-  }
-
-  if (!platform) return null;
-
-  const { icon, label } = platforms[platform];
-
-  return <Chip icon={icon} label={t(label)} size="small" variant="outlined" />;
-};
-
-const UserAgentDetail = (props: UserAgentDetailProps): JSX.Element => {
-  const { of: userAgent, className } = props;
-
-  const { t } = useTranslation();
-
-  if (userAgent === undefined)
+  if (userAgent.includes('Windows'))
     return (
-      <Typography
-        className={`italic ${className ?? ''}`}
-        color="text.disabled"
-        variant="body2"
-      >
-        {t(translations.blankField)}
-      </Typography>
+      <WindowSharp
+        {...iconProps}
+        className={`text-[#2A78D4] ${iconProps.className ?? ''}`}
+      />
     );
 
-  const platformChip = getPlatformChipFromUserAgent(userAgent, t);
+  return <Public color="disabled" {...iconProps} />;
+};
+
+const UserAgentDetail = ({
+  of: userAgent,
+  validates,
+  valid,
+}: {
+  of?: string;
+  validates?: boolean;
+  valid?: boolean;
+}): JSX.Element => {
+  const { t } = useTranslation();
 
   return (
     <section className="flex flex-col space-y-2">
-      <div className="flex space-x-2 items-center">
-        {props.validate && (
-          <Chip
-            color={props.valid ? 'success' : 'error'}
-            icon={props.valid ? <CheckCircle /> : <Cancel />}
-            label={
-              props.valid
-                ? t(translations.validHeartbeat)
-                : t(translations.invalidHeartbeat)
-            }
-            size="small"
-            variant="outlined"
-          />
-        )}
+      {validates && <ValidChip className="w-fit" valid={valid} />}
 
-        {platformChip}
-      </div>
-
-      <Typography className={className} variant="body2">
-        {userAgent}
-      </Typography>
+      {userAgent ? (
+        <section className="flex gap-2">
+          <PlatformIcon fontSize="small" userAgent={userAgent} />
+          <Typography variant="body2">{userAgent}</Typography>
+        </section>
+      ) : (
+        <Typography className="italic" color="text.disabled" variant="body2">
+          {t(translations.blankField)}
+        </Typography>
+      )}
     </section>
   );
 };

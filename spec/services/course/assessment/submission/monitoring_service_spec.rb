@@ -61,8 +61,13 @@ RSpec.describe Course::Assessment::Submission::MonitoringService, type: :service
       end
 
       describe '#should_block?' do
-        let(:valid_user_agent) { "#{base_user_agent} #{monitor.secret}" }
-        let(:invalid_user_agent) { "#{base_user_agent} #{SecureRandom.hex}" }
+        let(:valid_request) do
+          ActionDispatch::Request.new({ 'HTTP_USER_AGENT' => "#{base_user_agent} #{monitor.secret}" })
+        end
+
+        let(:invalid_request) do
+          ActionDispatch::Request.new({ 'HTTP_USER_AGENT' => "#{base_user_agent} #{SecureRandom.hex}" })
+        end
 
         before { monitor.update!(secret: SecureRandom.hex) }
 
@@ -73,17 +78,17 @@ RSpec.describe Course::Assessment::Submission::MonitoringService, type: :service
           end
 
           it 'blocks when the user agent is invalid' do
-            expect(subject.should_block?(invalid_user_agent)).to be_truthy
+            expect(subject.should_block?(invalid_request)).to be_truthy
           end
 
           it 'does not block when the user agent is valid' do
-            expect(subject.should_block?(valid_user_agent)).to be_falsey
+            expect(subject.should_block?(valid_request)).to be_falsey
           end
 
           it 'does not block when the user agent is invalid but the browser session is unblocked' do
             Course::Assessment::MonitoringService.new(assessment, browser_session).unblock(assessment.session_password)
 
-            expect(subject.should_block?(invalid_user_agent)).to be_falsey
+            expect(subject.should_block?(invalid_request)).to be_falsey
           end
         end
 
@@ -91,11 +96,11 @@ RSpec.describe Course::Assessment::Submission::MonitoringService, type: :service
           before { monitor.update!(blocks: false) }
 
           it 'does not block when the user agent is invalid' do
-            expect(subject.should_block?(invalid_user_agent)).to be_falsey
+            expect(subject.should_block?(invalid_request)).to be_falsey
           end
 
           it 'does not block when the user agent is valid' do
-            expect(subject.should_block?(valid_user_agent)).to be_falsey
+            expect(subject.should_block?(valid_request)).to be_falsey
           end
         end
       end
