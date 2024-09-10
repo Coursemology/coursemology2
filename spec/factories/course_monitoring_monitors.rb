@@ -20,5 +20,9 @@ FactoryBot.define do
       with_secret
       blocks { true }
     end
+
+    trait :with_seb_config_key do
+      browser_authorization_method { :seb_config_key }
+    end
   end
 end

@@ -21,14 +21,6 @@ const translations = defineMessages({
     id: 'lib.translations.experimental',
     defaultMessage: 'Experimental',
   },
-  windows: {
-    id: 'lib.translations.windows',
-    defaultMessage: 'Windows',
-  },
-  macos: {
-    id: 'lib.translations.macos',
-    defaultMessage: 'macOS',
-  },
 });
 
 export default translations;

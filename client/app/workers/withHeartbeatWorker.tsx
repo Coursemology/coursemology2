@@ -1,8 +1,10 @@
 import { ComponentType, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import type { SebPayload } from 'types/course/assessment/monitoring';
 import { getIdFromUnknown } from 'utilities';
 import { getWebSocketURL } from 'utilities/socket';
 
+import CourseAPI from 'api/course';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 import { getWorkerType, setUpWorker } from './constructors';
@@ -11,6 +13,31 @@ import { HeartbeatWorker } from './types';
 interface WrappedComponentProps {
   setSessionId?: (sessionId: number) => void;
 }
+
+const stripHashFromURL = (string: string): string => {
+  const url = new URL(string);
+  url.hash = '';
+  return url.toString();
+};
+
+const fetchSebPayloadFromServer = async (): Promise<SebPayload | undefined> => {
+  const response = await CourseAPI.assessment.assessments.fetchSebPayload();
+  const payload = response.data;
+  if (!payload) return undefined;
+
+  payload.url = stripHashFromURL(payload.url);
+  return payload;
+};
+
+const getSebPayload = async (): Promise<SebPayload | undefined> => {
+  const configKeyHash = window.SafeExamBrowser?.security.configKey;
+  if (!configKeyHash) return fetchSebPayloadFromServer();
+
+  return {
+    config_key_hash: configKeyHash,
+    url: stripHashFromURL(window.location.href),
+  };
+};
 
 const withHeartbeatWorker = <P extends WrappedComponentProps>(
   Component: ComponentType<P>,
@@ -34,10 +61,16 @@ const withHeartbeatWorker = <P extends WrappedComponentProps>(
       const worker = setUpWorker(workerType);
       workerRef.current = worker;
 
-      worker.postMessage({
-        type: 'start',
-        payload: { url: getWebSocketURL(), sessionId, courseId },
-      });
+      (async (): Promise<void> =>
+        worker.postMessage({
+          type: 'start',
+          payload: {
+            url: getWebSocketURL(),
+            sessionId,
+            courseId,
+            sebPayload: await getSebPayload(),
+          },
+        }))();
 
       const terminateWorker = (): void => {
         worker.terminate();

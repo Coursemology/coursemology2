@@ -1,16 +1,19 @@
 import { Chip, Tooltip, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
+import { BrowserAuthorizationMethod } from 'course/assessment/components/monitoring/BrowserAuthorizationMethodOptionsFormFields/common';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatPreciseDateTime } from 'lib/moment';
 
 import translations from '../../../translations';
 
+import SebPayloadDetail from './SebPayloadDetail';
 import UserAgentDetail from './UserAgentDetail';
 
 interface HeartbeatDetailCardProps {
   of: HeartbeatDetail;
-  hasSecret?: boolean;
+  validates?: boolean;
+  browserAuthorizationMethod?: BrowserAuthorizationMethod;
   className?: string;
   delta?: number;
 }
@@ -76,7 +79,24 @@ const HeartbeatDetailCard = (props: HeartbeatDetailCardProps): JSX.Element => {
         <UserAgentDetail
           of={heartbeat.userAgent}
           valid={heartbeat.isValid}
-          validate={props.hasSecret}
+          validates={
+            props.validates && props.browserAuthorizationMethod === 'user_agent'
+          }
+        />
+      </section>
+
+      <section className="space-y-2">
+        <Typography color="text.secondary" variant="caption">
+          {t(translations.sebPayload)}
+        </Typography>
+
+        <SebPayloadDetail
+          of={heartbeat.sebPayload}
+          valid={heartbeat.isValid}
+          validates={
+            props.validates &&
+            props.browserAuthorizationMethod === 'seb_config_key'
+          }
         />
       </section>
     </section>

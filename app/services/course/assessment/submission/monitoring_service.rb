@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::MonitoringService
+  include Course::Assessment::Monitoring::SebPayloadConcern
+
   class << self
     def for(submission, assessment, browser_session)
       new(submission, assessment, browser_session) if assessment.monitor_id?
@@ -55,8 +57,8 @@ class Course::Assessment::Submission::MonitoringService
     @monitor.enabled? && session.listening?
   end
 
-  def should_block?(string)
-    !unblocked? && @monitor&.blocks? && !@monitor&.valid_secret?(string)
+  def should_block?(request)
+    !unblocked? && @monitor&.blocks? && !@monitor&.valid_heartbeat?(stub_heartbeat_from_request(request))
   end
 
   private

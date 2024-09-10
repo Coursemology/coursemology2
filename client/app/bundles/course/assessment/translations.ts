@@ -987,6 +987,10 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.userAgent',
     defaultMessage: 'User Agent',
   },
+  sebPayload: {
+    id: 'course.assessment.monitoring.sebPayload',
+    defaultMessage: 'Safe Exam Browser (SEB) Config Key Hash & URL',
+  },
   type: {
     id: 'course.assessment.monitoring.type',
     defaultMessage: 'Type',
@@ -1078,7 +1082,8 @@ const translations = defineMessages({
   },
   alivePresenceHintSUSMatches: {
     id: 'course.assessment.monitoring.alivePresenceHintSUSMatches',
-    defaultMessage: 'Last heartbeat was received in time and the SUS matches.',
+    defaultMessage:
+      'Last heartbeat was received in time and came from an authorised browser, if browser authorisation is enabled.',
   },
   latePresenceHint: {
     id: 'course.assessment.monitoring.latePresenceHint',
@@ -1087,15 +1092,17 @@ const translations = defineMessages({
   },
   missingPresenceHint: {
     id: 'course.assessment.monitoring.missingPresenceHint',
-    defaultMessage: "Next heartbeat hasn't been received in time.",
+    defaultMessage:
+      "Next heartbeat hasn't been received in time, or the last heartbeat came from an unauthorised browser, " +
+      'if browser authorisation is enabled.',
   },
   validHeartbeat: {
     id: 'course.assessment.monitoring.validHeartbeat',
-    defaultMessage: 'Valid UA',
+    defaultMessage: 'Valid',
   },
   invalidHeartbeat: {
     id: 'course.assessment.monitoring.invalidHeartbeat',
-    defaultMessage: 'Invalid UA',
+    defaultMessage: 'Invalid',
   },
   invalidBrowser: {
     id: 'course.assessment.monitoring.invalidBrowser',

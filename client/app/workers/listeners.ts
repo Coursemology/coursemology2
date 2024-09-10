@@ -24,7 +24,7 @@ const terminateWorker = async (): Promise<void> => {
 const createListeners = (
   host: HeartbeatWorkerListenerHost,
 ): HeartbeatWorkerListener => ({
-  start: async ({ url, sessionId, courseId }): Promise<void> => {
+  start: async ({ url, sessionId, courseId, sebPayload }): Promise<void> => {
     storage ??= await setUpDatabase();
 
     channel ??= subscribe(url, sessionId, courseId, {
@@ -34,6 +34,7 @@ const createListeners = (
         storage?.updateLastSuccessfulPulse(timestamp);
         storage?.removeHeartbeat(timestamp);
       },
+      getHeartbeatData: () => ({ timestamp: Date.now(), sebPayload }),
       getFlushData: storage?.getHeartbeats,
       onFlushed: storage?.removeHeartbeats,
       onTerminate: terminateWorker,

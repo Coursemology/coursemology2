@@ -17,11 +17,12 @@ class Course::Monitoring::Monitor < ApplicationRecord
 
   validate :max_interval_greater_than_min
   validate :can_enable_only_when_password_protected
-  validate :can_block_only_when_has_secret_and_session_protected
+  validate :can_block_only_when_has_browser_authorization_and_session_protected
   validate :seb_config_key_required_if_using_seb_config_key_browser_authorization
 
-  def valid_secret?(string)
-    secret? ? (string&.include?(secret) || false) : true
+  def valid_heartbeat?(heartbeat)
+    validator = "Course::Monitoring::BrowserAuthorization::#{browser_authorization_method.to_s.camelize}".constantize
+    validator.new(self).valid_heartbeat?(heartbeat)
   end
 
   # `Duplicator` already performed a shallow duplicate of the `other` monitor.
@@ -43,10 +44,10 @@ class Course::Monitoring::Monitor < ApplicationRecord
     errors.add(:enabled, :must_be_password_protected)
   end
 
-  def can_block_only_when_has_secret_and_session_protected
-    return unless blocks? && (secret.blank? || !assessment.session_password_protected?)
+  def can_block_only_when_has_browser_authorization_and_session_protected
+    return unless blocks? && (!browser_authorization? || !assessment.session_password_protected?)
 
-    errors.add(:blocks, :must_have_secret_and_session_protection)
+    errors.add(:blocks, :must_have_browser_authorization_and_session_protection)
   end
 
   def seb_config_key_required_if_using_seb_config_key_browser_authorization

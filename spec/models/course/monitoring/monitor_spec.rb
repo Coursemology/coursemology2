@@ -78,32 +78,66 @@ RSpec.describe Course::Monitoring::Monitor, type: :model do
       end
     end
 
-    describe '#valid_secret?' do
-      context 'when secret is not set' do
-        subject { create(:course_monitoring_monitor, secret: nil) }
+    describe '#valid_heartbeat?' do
+      context 'when browser_authorization_method is user_agent' do
+        context 'when secret is not set' do
+          subject { create(:course_monitoring_monitor, secret: nil) }
 
-        it 'always returns true' do
-          expect(subject.valid_secret?('anything')).to be_truthy
+          it 'always returns true' do
+            heartbeat = create(:course_monitoring_heartbeat)
+            expect(subject.valid_heartbeat?(heartbeat)).to be_truthy
+          end
+        end
+
+        context 'when secret is set' do
+          subject { create(:course_monitoring_monitor, secret: 'something') }
+
+          it 'returns true if the given substring matches' do
+            heartbeat = create(:course_monitoring_heartbeat, user_agent: subject.secret)
+            expect(subject.valid_heartbeat?(heartbeat)).to be(true)
+          end
+
+          it 'returns true if the given substring includes' do
+            heartbeat = create(:course_monitoring_heartbeat, user_agent: "#{subject.secret} weird")
+            expect(subject.valid_heartbeat?(heartbeat)).to be(true)
+          end
+
+          it 'returns false if the given substring does not include' do
+            heartbeat = create(:course_monitoring_heartbeat)
+            expect(subject.valid_heartbeat?(heartbeat)).to be(false)
+          end
         end
       end
 
-      context 'when secret is set' do
-        subject { create(:course_monitoring_monitor, secret: 'something') }
-
-        it 'returns true if the given substring matches' do
-          expect(subject.valid_secret?('something')).to be(true)
+      context 'when browser_authorization_method is seb_config_key' do
+        subject do
+          create(
+            :course_monitoring_monitor,
+            :with_seb_config_key,
+            seb_config_key: '5521fd207deab9de034f67869d429ae97585b85cf977a0bed298c03cb9027995'
+          )
         end
 
-        it 'returns true if the given substring includes' do
-          expect(subject.valid_secret?('something weird')).to be(true)
+        context 'when the given payload is valid' do
+          let(:heartbeat) do
+            create(:course_monitoring_heartbeat, seb_payload: {
+              config_key_hash: '5d0b0ab4ae35649b60ad45b2e6c3520b5b7a3367b03207ebcd986c79fc002f6f',
+              url: 'http://192.168.1.25:8080/AuthenticatedApp.js'
+            })
+          end
+
+          it { expect(subject.valid_heartbeat?(heartbeat)).to be(true) }
         end
 
-        it 'returns false if the given substring does not include' do
-          expect(subject.valid_secret?('anything')).to be(false)
-        end
+        context 'when the given payload is invalid' do
+          let(:heartbeat) do
+            create(:course_monitoring_heartbeat, seb_payload: {
+              config_key_hash: SecureRandom.hex,
+              url: SecureRandom.hex
+            })
+          end
 
-        it 'returns false if the given substring is nil' do
-          expect(subject.valid_secret?(nil)).to be(false)
+          it { expect(subject.valid_heartbeat?(heartbeat)).to be(false) }
         end
       end
     end

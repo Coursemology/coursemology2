@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::MonitoringService
+  include Course::Assessment::Monitoring::SebPayloadConcern
+
   class << self
     def params
       [
@@ -45,8 +47,8 @@ class Course::Assessment::MonitoringService
     end
   end
 
-  def should_block?(string)
-    !unblocked? && monitor&.blocks? && !monitor&.valid_secret?(string)
+  def should_block?(request)
+    !unblocked? && monitor&.blocks? && !monitor&.valid_heartbeat?(stub_heartbeat_from_request(request))
   end
 
   def unblock(session_password)

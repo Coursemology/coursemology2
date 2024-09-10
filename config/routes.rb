@@ -222,6 +222,7 @@ Rails.application.routes.draw do
           get :requirements, on: :member
           get :statistics, on: :member
           get :monitoring, on: :member
+          get :seb_payload, on: :member
 
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate

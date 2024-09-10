@@ -4,6 +4,7 @@ import { Close } from '@mui/icons-material';
 import { IconButton, Popover, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
+import { BrowserAuthorizationMethod } from 'course/assessment/components/monitoring/BrowserAuthorizationMethodOptionsFormFields/common';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatPreciseDateTime } from 'lib/moment';
@@ -19,7 +20,8 @@ interface SessionDetailsPopupProps {
   onClose: () => void;
   generatedAt?: string;
   anchorsOn?: HTMLElement;
-  hasSecret?: boolean;
+  validates?: boolean;
+  browserAuthorizationMethod?: BrowserAuthorizationMethod;
   onClickShowAllHeartbeats?: () => void;
   submissionId?: number;
 }
@@ -90,7 +92,11 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
           </Link>
         </div>
 
-        <HeartbeatsTimeline hasSecret={props.hasSecret} in={heartbeats} />
+        <HeartbeatsTimeline
+          browserAuthorizationMethod={props.browserAuthorizationMethod}
+          in={heartbeats}
+          validates={props.validates}
+        />
       </Popover>
     </Draggable>
   );

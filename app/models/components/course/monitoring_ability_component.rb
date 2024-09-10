@@ -42,5 +42,6 @@ module Course::MonitoringAbilityComponent
 
     can [:create, :read, :update], Course::Monitoring::Session, creator_id: user.id
     can :create, Course::Monitoring::Heartbeat, session: { creator_id: user.id }
+    can :seb_payload, Course::Assessment, course_id: course.id
   end
 end

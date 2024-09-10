@@ -1,15 +1,21 @@
+import { SebPayload } from 'types/course/assessment/monitoring';
+
+import { BrowserAuthorizationMethod } from 'course/assessment/components/monitoring/BrowserAuthorizationMethodOptionsFormFields/common';
+
 export interface MonitoringMonitorData {
   maxIntervalMs: number;
   offsetMs: number;
-  hasSecret: boolean;
+  validates: boolean;
+  browserAuthorizationMethod: BrowserAuthorizationMethod;
 }
 
 export interface HeartbeatDetail {
-  isValid: boolean;
   stale: boolean;
   userAgent: string;
   ipAddress: string;
   generatedAt: string;
+  isValid: boolean;
+  sebPayload?: SebPayload;
 }
 
 export interface SnapshotData {

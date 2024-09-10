@@ -1,7 +1,10 @@
+import type { SebPayload } from 'types/course/assessment/monitoring';
+
 interface StartPayload {
   url: string;
   sessionId: number;
   courseId: number;
+  sebPayload?: SebPayload;
 }
 
 export interface HeartbeatWorkerListener {

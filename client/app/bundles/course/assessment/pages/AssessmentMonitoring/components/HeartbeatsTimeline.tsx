@@ -2,12 +2,15 @@ import { useState } from 'react';
 import moment from 'moment';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
+import { BrowserAuthorizationMethod } from 'course/assessment/components/monitoring/BrowserAuthorizationMethodOptionsFormFields/common';
+
 import HeartbeatDetailCard from './HeartbeatDetailCard';
 import HeartbeatsTimelineChart from './HeartbeatsTimelineChart';
 
 interface HeartbeatsTimelineProps {
   in: HeartbeatDetail[];
-  hasSecret?: boolean;
+  validates?: boolean;
+  browserAuthorizationMethod?: BrowserAuthorizationMethod;
 }
 
 /**
@@ -48,10 +51,11 @@ const HeartbeatsTimeline = (props: HeartbeatsTimelineProps): JSX.Element => {
 
       {heartbeats[hoveredIndex] && (
         <HeartbeatDetailCard
+          browserAuthorizationMethod={props.browserAuthorizationMethod}
           className="ring-2 ring-offset-0"
           delta={getHeartbeatDelta(heartbeats, hoveredIndex)}
-          hasSecret={props.hasSecret}
           of={heartbeats[hoveredIndex]}
+          validates={props.validates}
         />
       )}
     </>
