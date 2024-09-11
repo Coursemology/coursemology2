@@ -251,6 +251,7 @@ Rails.application.routes.draw do
               post :generate_live_feedback, on: :member
               get :download_all, on: :collection
               get :download_statistics, on: :collection
+              patch :set_timer_started_at, on: :member
               patch :publish_all, on: :collection
               patch :force_submit_all, on: :collection
               patch :unsubmit, on: :collection

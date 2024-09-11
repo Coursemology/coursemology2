@@ -306,6 +306,13 @@ const SubmissionsTableRow = (props) => {
               : null}
           </TableCell>
         ) : null}
+        {assessment.hasTimeLimit ? (
+          <TableCell style={tableCenterCellStyle}>
+            {submission.timerStartedAt
+              ? formatDate(submission.timerStartedAt)
+              : null}
+          </TableCell>
+        ) : null}
         <TableCell style={tableCenterCellStyle}>
           {formatDate(submission.dateSubmitted)}
         </TableCell>

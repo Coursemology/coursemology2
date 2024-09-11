@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_30_090759) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_11_133816) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -438,6 +438,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_30_090759) do
     t.string "session_id", limit: 255
     t.datetime "submitted_at", precision: nil
     t.datetime "last_graded_time", precision: nil, default: "2021-10-24 14:11:56"
+    t.datetime "timer_started_at"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"

@@ -23,6 +23,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.SubmissionsIndex.experiencePoints',
     defaultMessage: 'EXP Awarded',
   },
+  timerStartedAt: {
+    id: 'course.assessment.submission.SubmissionsIndex.timerStartedAt',
+    defaultMessage: 'Timer Started At',
+  },
   dateSubmitted: {
     id: 'course.assessment.submission.SubmissionsIndex.dateSubmitted',
     defaultMessage: 'Submitted At',
