@@ -263,8 +263,8 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
     # TODO: Move this validation logic to frontend, to prevent user from submitting in the first place.
     if !CodaveriAsyncApiService.language_valid_for_codaveri?(language)
-      errors.add(:base, 'Language type must be Python 3 and above to activate either codaveri '\
-                        'evaluator or get help')
+      errors.add(:base, 'Language type must be Python 3 and above to activate either codaveri ' \
+                        'evaluator or live feedback')
     elsif !question_assessments.empty? &&
           !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
       errors.add(:base,
