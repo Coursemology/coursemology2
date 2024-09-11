@@ -7,53 +7,11 @@ import Banner from 'lib/components/core/layouts/Banner';
 import { BUFFER_TIME_TO_FORCE_SUBMIT_MS } from '../../constants';
 import translations from '../../translations';
 
+import RemainingTimeTranslations from './components/RemainingTimeTranslations';
+
 interface Props {
   submissionTimeLimitAt: number;
 }
-
-export const remainingTimeDisplay = (remainingTime: number): JSX.Element => {
-  const hours = Math.floor(remainingTime / 1000 / 60 / 60) % 24;
-  const minutes = Math.floor(remainingTime / 1000 / 60) % 60;
-  const seconds = Math.floor(remainingTime / 1000) % 60;
-
-  if (hours > 0) {
-    return (
-      <FormattedMessage
-        {...translations.hoursMinutesSeconds}
-        values={{
-          hrs: hours,
-          mins: minutes,
-          secs: seconds,
-        }}
-      />
-    );
-  }
-
-  if (minutes > 0) {
-    return (
-      <FormattedMessage
-        {...translations.minutesSeconds}
-        values={{
-          mins: minutes,
-          secs: seconds,
-        }}
-      />
-    );
-  }
-
-  if (seconds >= 0) {
-    return (
-      <FormattedMessage
-        {...translations.seconds}
-        values={{
-          secs: seconds,
-        }}
-      />
-    );
-  }
-
-  return <div />;
-};
 
 const TimeLimitBanner: FC<Props> = (props) => {
   const { submissionTimeLimitAt } = props;
@@ -93,7 +51,11 @@ const TimeLimitBanner: FC<Props> = (props) => {
       >
         <FormattedMessage
           {...translations.remainingTime}
-          values={{ timeLimit: remainingTimeDisplay(currentRemainingTime) }}
+          values={{
+            timeLimit: (
+              <RemainingTimeTranslations remainingTime={currentRemainingTime} />
+            ),
+          }}
         />
       </Banner>
     );
@@ -106,7 +68,11 @@ const TimeLimitBanner: FC<Props> = (props) => {
         {currentBufferTime > 0 ? (
           <FormattedMessage
             {...translations.remainingBufferTime}
-            values={{ timeLimit: remainingTimeDisplay(currentBufferTime) }}
+            values={{
+              timeLimit: (
+                <RemainingTimeTranslations remainingTime={currentBufferTime} />
+              ),
+            }}
           />
         ) : (
           <FormattedMessage {...translations.timeIsUp} />

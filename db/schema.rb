@@ -466,6 +466,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
     t.string "session_id", limit: 255
     t.datetime "submitted_at", precision: nil
     t.datetime "last_graded_time", precision: nil, default: "2021-10-24 14:11:56"
+    t.datetime "timer_started_at"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"

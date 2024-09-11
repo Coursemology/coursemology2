@@ -1,4 +1,7 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-case-declarations */
+import { produce } from 'immer';
+
 import actions from '../constants';
 
 /**
@@ -29,6 +32,12 @@ export default function (state = {}, action) {
         isGrader: canGrade,
         graderView: calculateGraderView(state, canGrade),
       };
+    case actions.SET_TIMER_STARTED_AT_SUCCESS: {
+      const timerStartedAt = action.payload.timerStartedAt;
+      return produce(state, (draftState) => {
+        draftState.timerStartedAt = timerStartedAt;
+      });
+    }
     case actions.ENTER_STUDENT_VIEW:
       return { ...state, graderView: false };
     case actions.EXIT_STUDENT_VIEW:

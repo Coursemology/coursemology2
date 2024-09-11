@@ -60,7 +60,7 @@ const SubmissionForm: FC<Props> = (props) => {
   const initialValues = useAppSelector(getInitialAnswer);
 
   const { autograded, timeLimit, tabbedView, questionIds } = assessment;
-  const { workflowState, attemptedAt } = submission;
+  const { workflowState, timerStartedAt } = submission;
 
   const answerIds = Object.values(questions).map(
     (question) => question.answerId,
@@ -71,10 +71,13 @@ const SubmissionForm: FC<Props> = (props) => {
   const submissionId = getSubmissionId();
 
   const hasSubmissionTimeLimit =
-    workflowState === workflowStates.Attempting && timeLimit;
+    workflowState === workflowStates.Attempting && timeLimit && timerStartedAt;
   const submissionTimeLimitAt = hasSubmissionTimeLimit
-    ? new Date(attemptedAt).getTime() + timeLimit * 60 * 1000
+    ? new Date(timerStartedAt).getTime() + timeLimit * 60 * 1000
     : null;
+
+  const isNewSubmission =
+    workflowState === workflowStates.Attempting && timeLimit && !timerStartedAt;
 
   const initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
@@ -223,7 +226,7 @@ const SubmissionForm: FC<Props> = (props) => {
   });
 
   return (
-    <div className="mt-4">
+    <div className={`mt-4 ${isNewSubmission && 'blur-xl'}`}>
       <FormProvider {...methods}>
         <form
           encType="multipart/form-data"

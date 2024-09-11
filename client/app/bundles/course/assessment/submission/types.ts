@@ -77,6 +77,7 @@ export interface SubmissionState {
     name: string;
   };
   submittedAt: Date;
+  timerStartedAt: Date;
   workflowState: WorkflowState;
 }
 

@@ -75,8 +75,8 @@ module Course::Assessment::AssessmentAbility
   def allow_create_assessment_submission
     can :create, Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
-    can [:update, :generate_live_feedback, :save_live_feedback,
-         :create_live_feedback_chat, :fetch_live_feedback_status],
+    can [:update, :generate_live_feedback, :save_live_feedback, :set_timer_started_at, :create_live_feedback_chat,
+         :fetch_live_feedback_status],
         Course::Assessment::Submission, assessment_submission_attempting_hash(user)
   end
 

@@ -11,6 +11,7 @@ json.assessment do
   json.filesDownloadable @assessment.files_downloadable?
   json.csvDownloadable @assessment.csv_downloadable?
   json.passwordProtected @assessment.session_password_protected?
+  json.hasTimeLimit @assessment.time_limit
   json.canViewLogs can? :manage, @assessment
   json.canPublishGrades can? :publish_grades, @assessment
   json.canForceSubmit can? :force_submit_assessment_submission, @assessment
@@ -38,6 +39,7 @@ json.submissions @course_users do |course_user|
     json.workflowState submission.workflow_state
     json.grade submission.grade.to_f
     json.pointsAwarded submission.current_points_awarded
+    json.timerStartedAt submission.timer_started_at if @assessment.time_limit
     json.dateSubmitted submission.submitted_at&.iso8601
     json.dateGraded submission.graded_at&.iso8601
     json.logCount submission.log_count

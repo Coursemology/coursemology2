@@ -24,6 +24,8 @@ json.submission do
     json.id submission.course_user.id
   end
 
+  json.timerStartedAt submission.timer_started_at if assessment.time_limit
+
   submitter_course_user = submission.creator.course_users.find_by(course: submission.assessment.course)
   end_at = assessment.time_for(submitter_course_user).end_at
   bonus_end_at = assessment.time_for(submitter_course_user).bonus_end_at

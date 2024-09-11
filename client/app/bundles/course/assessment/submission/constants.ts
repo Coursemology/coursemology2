@@ -18,10 +18,6 @@ export const MEGABYTES_TO_BYTES = 1024 * 1024;
 
 export const BUFFER_TIME_TO_FORCE_SUBMIT_MS = 5 * 1000;
 
-// calculate how long has it passed since the student starts the submission
-// to still be considered a "newly created" submission
-export const TIME_LAPSE_NEW_SUBMISSION_MS = 10 * 1000;
-
 export const EVALUATE_POLL_INTERVAL_MILLISECONDS = 500;
 export const FEEDBACK_POLL_INTERVAL_MILLISECONDS = 2000;
 
@@ -301,6 +297,11 @@ const actionTypes = mirrorCreator([
 
   // Fetch annotations for single answer
   'FETCH_ANNOTATION_SUCCESS',
+
+  // Set timer upon starting timed assessment
+  'SET_TIMER_STARTED_AT_REQUEST',
+  'SET_TIMER_STARTED_AT_SUCCESS',
+  'SET_TIMER_STARTED_AT_FAILURE',
 ]);
 
 export default actionTypes;
