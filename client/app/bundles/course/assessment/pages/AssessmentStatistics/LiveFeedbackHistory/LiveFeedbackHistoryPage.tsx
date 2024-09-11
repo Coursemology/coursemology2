@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
-import { Slider, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
+import CustomSlider from 'lib/components/extensions/CustomSlider';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
@@ -36,7 +37,7 @@ const LiveFeedbackHistoryPage: FC<Props> = (props) => {
   const sliderMarks = nonEmptyLiveFeedbackHistory.map(
     (liveFeedbackHistory, idx) => {
       return {
-        value: idx,
+        value: idx + 1,
         label:
           idx === 0 || idx === nonEmptyLiveFeedbackHistory.length - 1
             ? formatLongDateTime(liveFeedbackHistory.createdAt)
@@ -69,16 +70,18 @@ const LiveFeedbackHistoryPage: FC<Props> = (props) => {
 
       {nonEmptyLiveFeedbackHistory.length > 1 && (
         <div className="w-[calc(100%_-_17rem)] mx-auto">
-          <Slider
-            defaultValue={nonEmptyLiveFeedbackHistory.length - 1}
+          <CustomSlider
+            defaultValue={nonEmptyLiveFeedbackHistory.length}
             marks={sliderMarks}
-            max={nonEmptyLiveFeedbackHistory.length - 1}
-            min={0}
+            max={nonEmptyLiveFeedbackHistory.length}
+            min={1}
             onChange={(_, value) => {
-              setDisplayedIndex(Array.isArray(value) ? value[0] : value);
+              setDisplayedIndex(
+                Array.isArray(value) ? value[0] - 1 : value - 1,
+              );
             }}
             step={null}
-            valueLabelDisplay="off"
+            valueLabelDisplay="auto"
           />
         </div>
       )}
