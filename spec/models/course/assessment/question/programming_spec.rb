@@ -299,19 +299,19 @@ RSpec.describe Course::Assessment::Question::Programming do
         let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
         it 'returns correct validation' do
           expect(subject_evaluator).to_not be_valid
-          expect(subject_evaluator.errors.messages[:base]).to include('Language type must be Python 3 and above '\
-                                                                      'to activate either codaveri '\
-                                                                      'evaluator or get help')
+          expect(subject_evaluator.errors.messages[:base]).to include('Language type must be Python 3 and above ' \
+                                                                      'to activate either codaveri ' \
+                                                                      'evaluator or live feedback')
         end
       end
 
-      context 'when the language chosen is not whitelisted for get help' do
+      context 'when the language chosen is not whitelisted for live feedback' do
         let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
         it 'returns correct validation' do
           expect(subject_feedback).to_not be_valid
-          expect(subject_feedback.errors.messages[:base]).to include('Language type must be Python 3 and above '\
-                                                                     'to activate either codaveri '\
-                                                                     'evaluator or get help')
+          expect(subject_feedback.errors.messages[:base]).to include('Language type must be Python 3 and above ' \
+                                                                     'to activate either codaveri ' \
+                                                                     'evaluator or live feedback')
         end
       end
 
@@ -321,8 +321,8 @@ RSpec.describe Course::Assessment::Question::Programming do
         it 'returns correct validation' do
           skip
           expect(subject).to_not be_valid
-          expect(subject.errors.messages[:base]).to include('Codaveri component is deactivated.'\
-                                                            'Activate it in the course setting or '\
+          expect(subject.errors.messages[:base]).to include('Codaveri component is deactivated.' \
+                                                            'Activate it in the course setting or ' \
                                                             'switch this question into a non-codaveri type.')
         end
       end

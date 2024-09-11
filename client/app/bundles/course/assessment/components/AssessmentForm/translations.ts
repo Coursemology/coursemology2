@@ -31,13 +31,14 @@ const translations = defineMessages({
   },
   toggleLiveFeedbackDescription: {
     id: 'course.assessment.AssessmentForm.toggleLiveFeedbackDescription',
-    defaultMessage: 'Enable Get Help feature for all programming questions',
+    defaultMessage:
+      'Enable live feedback feature for all programming questions',
   },
   noProgrammingQuestion: {
     id: 'course.assessment.AssessmentForm.noProgrammingQuestion',
     defaultMessage:
       'You need to add at least one programming question that can be \
-      supported by Codaveri to allow enabling Get Help for this Assessment',
+      supported by Codaveri to allow enabling live feedback for this Assessment',
   },
   timeLimit: {
     id: 'course.assessment.AssessmentForm.timeLimit',
