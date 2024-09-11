@@ -97,6 +97,12 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
+  setTimerStartAt(submissionId) {
+    return this.client.patch(
+      `${this.#urlPrefix}/${submissionId}/set_timer_started_at`,
+    );
+  }
+
   reloadAnswer(submissionId, params) {
     return this.client.post(
       `${this.#urlPrefix}/${submissionId}/reload_answer`,
