@@ -80,7 +80,7 @@ const tabMapping = (includePhantom: boolean): Record<string, JSX.Element> => {
       <MainSubmissionTimeAndGradeStatistics includePhantom={includePhantom} />
     ),
     duplicationHistory: <DuplicationHistoryStatistics />,
-    liveHelp: <LiveFeedbackStatistics includePhantom={includePhantom} />,
+    liveFeedback: <LiveFeedbackStatistics includePhantom={includePhantom} />,
   };
 };
 
@@ -163,9 +163,9 @@ const AssessmentStatisticsPage: FC = () => {
             {statistics.assessment?.liveFeedbackEnabled && (
               <Tab
                 className="min-h-12"
-                id="liveHelp"
-                label={t(translations.liveHelp)}
-                value="liveHelp"
+                id="liveFeedback"
+                label={t(translations.liveFeedback)}
+                value="liveFeedback"
               />
             )}
           </Tabs>

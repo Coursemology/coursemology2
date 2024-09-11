@@ -70,7 +70,7 @@ const LiveFeedbackButton: FC<Props> = (props) => {
     );
   };
 
-  // TODO: update logic pending #7418: allow [Get Help] on all programming questions
+  // TODO: update logic pending #7418: allow [Live feedback] on all programming questions
 
   return (
     <Button
