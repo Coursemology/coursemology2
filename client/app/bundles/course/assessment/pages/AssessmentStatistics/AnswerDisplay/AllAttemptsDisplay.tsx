@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Slider, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
 import {
   AllAnswerDetails,
@@ -9,6 +9,7 @@ import {
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
+import CustomSlider from 'lib/components/extensions/CustomSlider';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -91,7 +92,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
       </Accordion>
       {answerSubmittedTimes.length > 1 && (
         <div className="w-[calc(100%_-_17rem)] mx-auto">
-          <Slider
+          <CustomSlider
             defaultValue={currentAnswerMarker.value}
             marks={answerSubmittedTimes}
             max={currentAnswerMarker.value}
