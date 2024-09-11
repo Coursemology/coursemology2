@@ -85,7 +85,8 @@ export default defineMessages({
   },
   errorOccurredWhenUpdatingLiveFeedbackSettings: {
     id: 'course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings',
-    defaultMessage: 'An error occurred while updating the get help settings.',
+    defaultMessage:
+      'An error occurred while updating the live feedback settings.',
   },
   enableDisableButton: {
     id: 'course.admin.CodaveriSettings.enableDisableButton',
@@ -100,7 +101,7 @@ export default defineMessages({
   enableDisableLiveFeedback: {
     id: 'course.admin.CodaveriSettings.enableDisableLiveFeedback',
     defaultMessage:
-      '{enabled, select, true {Enable } other {Disable }} Get Help for {questionCount} \
+      '{enabled, select, true {Enable } other {Disable }} live feedback for {questionCount} \
       programming questions in {title}?',
   },
   enableDisableEvaluatorDescription: {
@@ -116,7 +117,7 @@ export default defineMessages({
   successfulUpdateAllLiveFeedbackEnabled: {
     id: 'course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled',
     defaultMessage:
-      'Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} get help for all questions',
+      'Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} live feedback for all questions',
   },
   evaluatorUpdateSuccess: {
     id: 'course.admin.CodaveriSettings.evaluatorUpdateSuccess',
@@ -125,7 +126,7 @@ export default defineMessages({
   liveFeedbackEnabledUpdateSuccess: {
     id: 'course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess',
     defaultMessage:
-      'Get Help for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}',
+      'Live feedback for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}',
   },
   expandAll: {
     id: 'course.admin.CodaveriSettings.expandAll',

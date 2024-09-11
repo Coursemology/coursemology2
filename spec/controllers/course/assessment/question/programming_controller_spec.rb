@@ -200,8 +200,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         }
       end
 
-      context 'when codaveri evaluator is disabled and get help is enabled' do
-        it 'will have codaveri evaluator turned off and get help turned on' do
+      context 'when codaveri evaluator is disabled and live feedback is enabled' do
+        it 'will have codaveri evaluator turned off and live feedback turned on' do
           subject
           expect(programming_question.reload.live_feedback_enabled).to be_truthy
           expect(programming_question.reload.is_codaveri).to be_falsey
