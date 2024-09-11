@@ -47,7 +47,7 @@ const LiveFeedbackDetails: FC<Props> = (props) => {
           focus
           // This height matches the prompt height exactly so there is no awkward scroll bar
           // and the prompt does not expand weirdly when description is opened
-          height="44rem"
+          height="43.6rem"
           language={parseLanguages[file.language]}
           onCursorChange={handleCursorChange}
           value={file.content}
