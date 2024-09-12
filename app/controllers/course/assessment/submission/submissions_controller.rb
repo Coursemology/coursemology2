@@ -132,17 +132,17 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   end
 
   def set_timer_started_at
-    timer_started_at = Time.zone.now
+    unless @submission.timer_started_at
+      @submission.timer_started_at = Time.zone.now
 
-    @submission.timer_started_at = timer_started_at
+      raise ActiveRecord::Rollback unless @submission.save
 
-    raise ActiveRecord::Rollback unless @submission.save
+      Course::Assessment::Submission::ForceSubmitTimedSubmissionJob.
+        set(wait_until: @submission.timer_started_at + @assessment.time_limit.minutes + FORCE_SUBMIT_DELAY).
+        perform_later(@assessment, @submission_id, @submission.creator)
+    end
 
-    Course::Assessment::Submission::ForceSubmitTimedSubmissionJob.
-      set(wait_until: timer_started_at + @assessment.time_limit.minutes + FORCE_SUBMIT_DELAY).
-      perform_later(@assessment, @submission_id, @submission.creator)
-
-    render json: { timerStartedAt: timer_started_at }
+    render json: { timerStartedAt: @submission.timer_started_at }
   end
 
   # Reload the current answer or reset it, depending on parameters.
