@@ -43,7 +43,8 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                   preload(course: :course_users).first
     submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
                   preload(creator: :course_users)
-    assessment_live_feedbacks = Course::Assessment::LiveFeedback.where(assessment_id: assessment_params[:id])
+    assessment_live_feedbacks = Course::Assessment::LiveFeedback.where(assessment_id: assessment_params[:id]).
+                                preload(:creator, creator: :course_users, code: :comments)
 
     @course_users_hash = preload_course_users_hash(@assessment.course)
 
