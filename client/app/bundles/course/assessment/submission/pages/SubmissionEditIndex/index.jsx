@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { HourglassTop } from '@mui/icons-material';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
 import {
   Card,
@@ -15,7 +14,6 @@ import {
 import PropTypes from 'prop-types';
 import withHeartbeatWorker from 'workers/withHeartbeatWorker';
 
-import Banner from 'lib/components/core/layouts/Banner';
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -30,7 +28,6 @@ import {
   purgeSubmissionStore,
 } from '../../actions';
 import ProgressPanel from '../../components/ProgressPanel';
-import { workflowStates } from '../../constants';
 import {
   assessmentShape,
   gradingShape,
@@ -39,7 +36,6 @@ import {
 } from '../../propTypes';
 import translations from '../../translations';
 
-import RemainingTimeTranslations from './components/RemainingTimeTranslation';
 import BlockedSubmission from './BlockedSubmission';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
 import SubmissionForm from './SubmissionForm';
@@ -69,31 +65,12 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderTimeLimitBanner() {
-    const { assessment, submission, submissionTimeLimitAt } = this.props;
+    const { assessment, submission } = this.props;
 
     return (
       assessment.timeLimit &&
       !assessment.isKoditsuEnabled &&
-      submission.workflowState === 'attempting' &&
-      (submission.timerStartedAt ? (
-        <TimeLimitBanner submissionTimeLimitAt={submissionTimeLimitAt} />
-      ) : (
-        <Banner
-          className="bg-red-700 text-white border-only-b-fuchsia-200 fixed top-0 right-0"
-          icon={<HourglassTop />}
-        >
-          <FormattedMessage
-            {...translations.remainingTime}
-            values={{
-              timeLimit: (
-                <RemainingTimeTranslations
-                  remainingTime={assessment.timeLimit * 60 * 1000}
-                />
-              ),
-            }}
-          />
-        </Banner>
-      ))
+      submission.workflowState === 'attempting' && <TimeLimitBanner />
     );
   }
 
@@ -205,7 +182,6 @@ VisibleSubmissionEditIndex.propTypes = {
     }),
   }),
   assessment: assessmentShape,
-  submissionTimeLimitAt: PropTypes.number,
   intl: PropTypes.object.isRequired,
   submission: submissionShape,
   isLoading: PropTypes.bool.isRequired,
@@ -218,18 +194,8 @@ VisibleSubmissionEditIndex.propTypes = {
 };
 
 function mapStateToProps({ assessments: { submission } }) {
-  const hasSubmissionTimeLimit =
-    submission.submission.workflowState === workflowStates.Attempting &&
-    submission.assessment.timeLimit &&
-    submission.submission.timerStartedAt;
-  const submissionTimeLimitAt = hasSubmissionTimeLimit
-    ? new Date(submission.submission.timerStartedAt).getTime() +
-      submission.assessment.timeLimit * 60 * 1000
-    : null;
-
   return {
     assessment: submission.assessment,
-    submissionTimeLimitAt,
     submission: submission.submission,
     isLoading: submission.submissionFlags.isLoading,
     isSaving: submission.submissionFlags.isSaving,
