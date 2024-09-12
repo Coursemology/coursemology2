@@ -65,7 +65,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     handleSubmit,
     setError,
     watch,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, dirtyFields },
   } = useFormValidation(initialValues);
 
   const { t } = useTranslation();

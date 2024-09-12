@@ -150,6 +150,12 @@ const translations = defineMessages({
     defaultMessage:
       'When enabled, each submission will have its own timer and will automatically be finalised when its timer ends.',
   },
+  changingTimeLimitWarning: {
+    id: 'course.assessment.AssessmentForm.changingTimeLimitWarning',
+    defaultMessage:
+      'Changing the Time Limit will create inconsistencies for the submissions \
+      in progress',
+  },
   gradingMode: {
     id: 'course.assessment.AssessmentForm.gradingMode',
     defaultMessage: 'Grading mode',
