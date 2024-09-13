@@ -5,7 +5,7 @@ import { Paper, Typography } from '@mui/material';
 import { ProgrammingContent } from 'types/course/assessment/submission/answer/programming';
 import { Annotation, AnnotationTopic } from 'types/course/statistics/answer';
 
-import ProgrammingFileDownloadLink from 'course/assessment/submission/components/answers/Programming/ProgrammingFileDownloadLink';
+import ProgrammingFileDownloadChip from 'course/assessment/submission/components/answers/Programming/ProgrammingFileDownloadChip';
 import ReadOnlyEditor from 'course/assessment/submission/components/ReadOnlyEditor';
 
 const translations = defineMessages({
@@ -34,7 +34,7 @@ const FileContent: FC<Props> = (props) => {
     />
   ) : (
     <>
-      <ProgrammingFileDownloadLink file={file} />
+      <ProgrammingFileDownloadChip file={file} />
       <Paper className="flex items-center bg-yellow-100 p-2">
         <Warning />
         <Typography variant="body2">

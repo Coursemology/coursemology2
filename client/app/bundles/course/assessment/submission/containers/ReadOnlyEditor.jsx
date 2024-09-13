@@ -5,7 +5,7 @@ import { Warning } from '@mui/icons-material';
 import { Paper, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import ProgrammingFileDownloadLink from '../components/answers/Programming/ProgrammingFileDownloadLink';
+import ProgrammingFileDownloadChip from '../components/answers/Programming/ProgrammingFileDownloadChip';
 import ReadOnlyEditorComponent from '../components/ReadOnlyEditor';
 import { fileShape, topicShape } from '../propTypes';
 
@@ -37,7 +37,7 @@ class ReadOnlyEditorContainer extends Component {
 
     return (
       <>
-        <ProgrammingFileDownloadLink file={file} />
+        <ProgrammingFileDownloadChip file={file} />
         <Paper className="flex items-center bg-yellow-100 p-2">
           <Warning />
           <Typography variant="body2">
