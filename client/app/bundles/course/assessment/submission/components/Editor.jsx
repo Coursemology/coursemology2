@@ -1,12 +1,13 @@
 import { Component } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { Stack } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import FormEditorField from 'lib/components/form/fields/EditorField';
 
 import { fileShape } from '../propTypes';
 
-import ProgrammingFileDownloadLink from './answers/Programming/ProgrammingFileDownloadLink';
+import ProgrammingFileDownloadChip from './answers/Programming/ProgrammingFileDownloadChip';
 
 const Editor = (props) => {
   const {
@@ -20,8 +21,10 @@ const Editor = (props) => {
   const { control } = useFormContext();
 
   return (
-    <>
-      <ProgrammingFileDownloadLink file={file} />
+    <Stack spacing={0.5}>
+      <div>
+        <ProgrammingFileDownloadChip file={file} />
+      </div>
       <Controller
         control={control}
         name={fieldName}
@@ -45,7 +48,7 @@ const Editor = (props) => {
           />
         )}
       />
-    </>
+    </Stack>
   );
 };
 
