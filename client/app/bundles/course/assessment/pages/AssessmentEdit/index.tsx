@@ -1,4 +1,4 @@
-import { fetchCodaveriSettingsForAssessment } from 'course/admin/pages/CodaveriSettings/operations';
+// import { fetchCodaveriSettingsForAssessment } from 'course/admin/pages/CodaveriSettings/operations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
@@ -24,11 +24,11 @@ const AssessmentEdit = (): JSX.Element => {
       while={() =>
         Promise.all([
           fetchAssessmentEditData(parsedAssessmentId),
-          fetchCodaveriSettingsForAssessment(parsedAssessmentId),
+          // fetchCodaveriSettingsForAssessment(parsedAssessmentId),
         ])
       }
     >
-      {([data, _]): JSX.Element => {
+      {([data]): JSX.Element => {
         const tabAttr = data.tab_attributes;
         const currentTab = {
           tab_id: data.attributes.tab_id,
