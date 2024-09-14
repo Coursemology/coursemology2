@@ -19,7 +19,11 @@ const CodaveriToggleButtons: FC<CodaveriToggleButtonsProps> = (props) => {
         for={title}
         type={type}
       />
-      <LiveFeedbackToggleButton assessmentIds={assessmentIds} for={title} />
+      <LiveFeedbackToggleButton
+        assessmentIds={assessmentIds}
+        for={title}
+        isCourseCodaveriEnabled
+      />
     </div>
   );
 };

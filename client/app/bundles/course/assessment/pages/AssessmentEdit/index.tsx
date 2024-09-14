@@ -63,6 +63,7 @@ const AssessmentEdit = (): JSX.Element => {
                   ? DEFAULT_MONITORING_OPTIONS
                   : undefined),
             }}
+            isCourseCodaveriEnabled={data.isCourseCodaveriEnabled}
             isKoditsuExamEnabled={data.isKoditsuExamEnabled}
             isQuestionsValidForKoditsu={data.isQuestionsValidForKoditsu}
             modeSwitching={data.mode_switching}

@@ -38,6 +38,7 @@ export interface AssessmentFormProps
   initialValues?;
   isKoditsuExamEnabled: boolean;
   isQuestionsValidForKoditsu: boolean;
+  isCourseCodaveriEnabled?: boolean;
   disabled?: boolean;
   showPersonalizedTimelineFeatures?: boolean;
   randomizationAllowed?: boolean;

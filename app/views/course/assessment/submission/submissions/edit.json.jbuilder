@@ -27,7 +27,7 @@ json.assessment do
     json.url url_to_material(@assessment.course, @assessment.folder, material)
     json.name format_inline_text(material.name)
   end
-  json.isCodaveriEnabled current_course.component_enabled?(Course::CodaveriComponent)
+  json.isCourseCodaveriEnabled current_course.component_enabled?(Course::CodaveriComponent)
 end
 
 current_answer_ids = @submission.current_answers.pluck(:id)

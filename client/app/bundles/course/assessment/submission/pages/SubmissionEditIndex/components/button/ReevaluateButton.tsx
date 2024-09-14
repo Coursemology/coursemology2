@@ -35,7 +35,7 @@ const ReevaluateButton: FC<Props> = (props) => {
 
   const dispatch = useAppDispatch();
 
-  const { isCodaveriEnabled } = assessment;
+  const { isCourseCodaveriEnabled } = assessment;
 
   const question = questions[questionId];
   const { answerId } = question;
@@ -46,7 +46,7 @@ const ReevaluateButton: FC<Props> = (props) => {
 
   const shouldRender =
     question.type === questionTypes.Programming &&
-    isCodaveriEnabled &&
+    isCourseCodaveriEnabled &&
     question.isCodaveri;
 
   const onGenerateFeedback = (): void => {

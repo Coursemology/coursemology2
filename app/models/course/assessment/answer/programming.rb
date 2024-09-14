@@ -96,6 +96,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
     should_retrieve_feedback = submission.attempting? &&
                                current_answer? &&
+                               current_course.component_enabled?(Course::CodaveriComponent) &&
                                question.live_feedback_enabled
     return unless should_retrieve_feedback
 

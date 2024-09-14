@@ -52,6 +52,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     initialValues,
     isKoditsuExamEnabled,
     isQuestionsValidForKoditsu,
+    isCourseCodaveriEnabled,
     modeSwitching,
     onSubmit,
     pulsegridUrl,
@@ -100,13 +101,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     getProgrammingQuestionsForAssessments(state, [assessmentId]),
   );
 
-  const qnsWithLiveFeedbackEnabled = programmingQuestions.filter(
-    (question) => question.liveFeedbackEnabled,
-  );
-
   const hasNoProgrammingQuestions = programmingQuestions.length === 0;
-  const isSomeLiveFeedbackEnabled =
-    qnsWithLiveFeedbackEnabled.length < programmingQuestions.length;
 
   // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
   const loadedTabs = tabs ?? watch('tabs');
@@ -848,17 +843,21 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               <LiveFeedbackToggleButton
                 assessmentIds={[assessmentId]}
                 for={title}
-                forSpecificAssessment
+                isCourseCodaveriEnabled={isCourseCodaveriEnabled}
+                isSpecificAssessment
               />
               <div>
                 <Typography className="mt-3" variant="body1">
-                  {t(translations.toggleLiveFeedbackDescription, {
-                    enabled:
-                      hasNoProgrammingQuestions || isSomeLiveFeedbackEnabled,
-                  })}
+                  {t(translations.toggleLiveFeedbackDescription)}
                 </Typography>
-                {hasNoProgrammingQuestions && (
-                  <InfoLabel label={t(translations.noProgrammingQuestion)} />
+                {(hasNoProgrammingQuestions || !isCourseCodaveriEnabled) && (
+                  <InfoLabel
+                    label={
+                      !isCourseCodaveriEnabled
+                        ? t(translations.isCourseCodaveriDisabled)
+                        : t(translations.noProgrammingQuestion)
+                    }
+                  />
                 )}
               </div>
             </div>
