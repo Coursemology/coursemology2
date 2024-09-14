@@ -223,6 +223,11 @@ Rails.application.routes.draw do
           get :statistics, on: :member
           get :monitoring, on: :member
 
+          namespace :live_feedback_settings do
+            get '/' => 'settings#index'
+            patch '/' => 'settings#edit'
+          end
+
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
           end

@@ -35,6 +35,19 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     return this.client.get(`${this.#urlPrefix}/${assessmentId}/edit`);
   }
 
+  liveFeedbackSettings(assessmentId) {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/live_feedback_settings`,
+    );
+  }
+
+  updateLiveFeedbackSettings(assessmentId, params) {
+    return this.client.patch(
+      `${this.#urlPrefix}/${assessmentId}/live_feedback_settings`,
+      params,
+    );
+  }
+
   fetchMonitoringData() {
     return this.client.get(
       `${this.#urlPrefix}/${this.assessmentId}/monitoring`,
