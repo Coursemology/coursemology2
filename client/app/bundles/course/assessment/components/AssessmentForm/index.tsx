@@ -10,17 +10,17 @@ import {
 import {
   Grid,
   InputAdornment,
-  // List,
+  List,
   RadioGroup,
   Typography,
 } from '@mui/material';
 
-// import AssessmentProgrammingQnList from 'course/admin/pages/CodaveriSettings/components/AssessmentProgrammingQnList';
-// import LiveFeedbackToggleButton from 'course/admin/pages/CodaveriSettings/components/buttons/LiveFeedbackToggleButton';
-// import { getProgrammingQuestionsForAssessments } from 'course/admin/pages/CodaveriSettings/selectors';
+import AssessmentProgrammingQnList from 'course/admin/pages/CodaveriSettings/components/AssessmentProgrammingQnList';
+import LiveFeedbackToggleButton from 'course/admin/pages/CodaveriSettings/components/buttons/LiveFeedbackToggleButton';
+import { getProgrammingQuestionsForAssessments } from 'course/admin/pages/CodaveriSettings/selectors';
 import IconRadio from 'lib/components/core/buttons/IconRadio';
 import ErrorText from 'lib/components/core/ErrorText';
-// import ExperimentalChip from 'lib/components/core/ExperimentalChip';
+import ExperimentalChip from 'lib/components/core/ExperimentalChip';
 import InfoLabel from 'lib/components/core/InfoLabel';
 import Section from 'lib/components/core/layouts/Section';
 import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
@@ -29,7 +29,7 @@ import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerFi
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import { useAppDispatch } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileManager from '../FileManager';
@@ -93,20 +93,20 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       : t(translations.questionsIncompatibleWithKoditsu);
   };
 
-  // const assessmentId = initialValues.id;
-  // const title = initialValues.title;
+  const assessmentId = initialValues.id;
+  const title = initialValues.title;
 
-  // const programmingQuestions = useAppSelector((state) =>
-  //   getProgrammingQuestionsForAssessments(state, [assessmentId]),
-  // );
+  const programmingQuestions = useAppSelector((state) =>
+    getProgrammingQuestionsForAssessments(state, [assessmentId]),
+  );
 
-  // const qnsWithLiveFeedbackEnabled = programmingQuestions.filter(
-  //   (question) => question.liveFeedbackEnabled,
-  // );
+  const qnsWithLiveFeedbackEnabled = programmingQuestions.filter(
+    (question) => question.liveFeedbackEnabled,
+  );
 
-  // const hasNoProgrammingQuestions = programmingQuestions.length === 0;
-  // const isSomeLiveFeedbackEnabled =
-  //   qnsWithLiveFeedbackEnabled.length < programmingQuestions.length;
+  const hasNoProgrammingQuestions = programmingQuestions.length === 0;
+  const isSomeLiveFeedbackEnabled =
+    qnsWithLiveFeedbackEnabled.length < programmingQuestions.length;
 
   // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
   const loadedTabs = tabs ?? watch('tabs');
@@ -834,7 +834,6 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           </Section>
         )}
 
-        {/*
         {editing && (
           <Section
             sticksToNavbar
@@ -849,7 +848,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               <LiveFeedbackToggleButton
                 assessmentIds={[assessmentId]}
                 for={title}
-                hideChipIndicator
+                forSpecificAssessment
               />
               <div>
                 <Typography className="mt-3" variant="body1">
@@ -880,7 +879,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               </List>
             )}
           </Section>
-        )} */}
+        )}
       </form>
     </div>
   );

@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { Switch } from '@mui/material';
 
 import { updateProgrammingQuestionLiveFeedbackEnabledForAssessments } from 'course/admin/reducers/codaveriSettings';
+import { updateLiveFeedbackForAllQuestionsInAssessment } from 'course/assessment/operations/assessments';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -15,11 +16,11 @@ import CodaveriSettingsChip from '../CodaveriSettingsChip';
 interface LiveFeedbackToggleButtonProps {
   assessmentIds: number[];
   for: string;
-  hideChipIndicator?: boolean;
+  forSpecificAssessment?: boolean;
 }
 
 const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
-  const { assessmentIds, for: title, hideChipIndicator } = props;
+  const { assessmentIds, for: title, forSpecificAssessment } = props;
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
@@ -40,9 +41,22 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
 
   const hasNoProgrammingQuestions = programmingQuestions.length === 0;
 
+  const updateLiveFeedbackEnabled = (
+    liveFeedbackEnabled: boolean,
+  ): Promise<void> =>
+    forSpecificAssessment
+      ? updateLiveFeedbackForAllQuestionsInAssessment(
+          assessmentIds[0],
+          liveFeedbackEnabled,
+        )
+      : updateLiveFeedbackEnabledForAllQuestions(
+          assessmentIds,
+          liveFeedbackEnabled,
+        );
+
   const handleLiveFeedbackUpdate = (liveFeedbackEnabled: boolean): void => {
     setIsLiveFeedbackUpdating(true);
-    updateLiveFeedbackEnabledForAllQuestions(assessmentIds, liveFeedbackEnabled)
+    updateLiveFeedbackEnabled(liveFeedbackEnabled)
       .then(() => {
         dispatch(
           updateProgrammingQuestionLiveFeedbackEnabledForAssessments({
@@ -84,7 +98,7 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
             setLiveFeedbackSettingsConfirmation(true);
           }}
         />
-        {!hideChipIndicator && (
+        {!forSpecificAssessment && (
           <CodaveriSettingsChip
             assessmentIds={assessmentIds}
             for="live_feedback"

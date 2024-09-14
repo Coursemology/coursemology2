@@ -34,6 +34,12 @@ const translations = defineMessages({
     defaultMessage:
       'Enable live feedback feature for all programming questions',
   },
+  isCourseCodaveriDisabled: {
+    id: 'course.assessment.AssessmentForm.isCourseCodaveriDisabled',
+    defaultMessage:
+      'Please contact the course manager or owner to enable Codaveri Evaluator\
+      Component in Course Settings',
+  },
   noProgrammingQuestion: {
     id: 'course.assessment.AssessmentForm.noProgrammingQuestion',
     defaultMessage:
