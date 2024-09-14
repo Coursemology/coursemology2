@@ -63,6 +63,7 @@ const AssessmentEdit = (): JSX.Element => {
                   ? DEFAULT_MONITORING_OPTIONS
                   : undefined),
             }}
+            isCourseCodaveriEnabled={data.isCourseCodaveriEnabled}
             modeSwitching={data.mode_switching}
             monitoringEnabled={data.monitoring_component_enabled}
             pulsegridUrl={data.monitoring_url}

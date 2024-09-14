@@ -23,7 +23,7 @@ export interface AssessmentState {
     url: string;
   }[];
   gamified: boolean;
-  isCodaveriEnabled: boolean;
+  isCourseCodaveriEnabled: boolean;
   liveFeedbackEnabled: boolean;
   passwordProtected: boolean;
   questionIds: number[];

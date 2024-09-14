@@ -53,6 +53,7 @@ class AssessmentEditPage extends Component {
   render() {
     const {
       intl,
+      isCourseCodaveriEnabled,
       conditionAttributes,
       disabled,
       folderAttributes,
@@ -92,6 +93,7 @@ class AssessmentEditPage extends Component {
           folderAttributes={folderAttributes}
           gamified={gamified}
           initialValues={initialValues}
+          isCourseCodaveriEnabled={isCourseCodaveriEnabled}
           modeSwitching={modeSwitching}
           monitoringEnabled={monitoringEnabled}
           onSubmit={this.onFormSubmit}
@@ -122,6 +124,7 @@ AssessmentEditPage.propTypes = {
   conditionAttributes: achievementTypesConditionAttributes,
   // A set of assessment attributes: {:id , :title, etc}.
   initialValues: PropTypes.shape({}),
+  isCourseCodaveriEnabled: PropTypes.bool,
 
   // Whether to disable the inner form.
   disabled: PropTypes.bool,

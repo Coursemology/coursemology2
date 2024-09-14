@@ -27,6 +27,7 @@ end
 
 json.mode_switching @assessment.allow_mode_switching?
 json.gamified current_course.gamified?
+json.isCourseCodaveriEnabled current_course.component_enabled?(Course::CodaveriComponent)
 json.show_personalized_timeline_features current_course.show_personalized_timeline_features?
 json.randomization_allowed current_course.allow_randomization
 
