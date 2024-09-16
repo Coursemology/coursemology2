@@ -19,7 +19,7 @@ class Course::Assessment < ApplicationRecord
   after_commit :grade_with_new_test_cases, on: :update
   before_save :save_tab
 
-  enum randomization: { prepared: 0 }
+  enum :randomization, { prepared: 0 }
 
   validates :autograded, inclusion: { in: [true, false] }
   validates :session_password, length: { maximum: 255 }, allow_nil: true

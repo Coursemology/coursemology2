@@ -2,7 +2,7 @@
 class Course::Assessment::Question::TextResponseComprehensionSolution < ApplicationRecord
   self.table_name = 'course_assessment_question_text_response_compre_solutions'
 
-  enum solution_type: [:compre_keyword, :compre_lifted_word]
+  enum :solution_type, [:compre_keyword, :compre_lifted_word]
 
   before_validation :sanitise_solution_and_derive_lemma
 

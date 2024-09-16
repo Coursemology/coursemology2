@@ -5,7 +5,7 @@ class InstanceUser < ApplicationRecord
   acts_as_tenant :instance, inverse_of: :instance_users
   after_initialize :set_defaults, if: :new_record?
 
-  enum role: { normal: 0, instructor: 1, administrator: 2 }
+  enum :role, { normal: 0, instructor: 1, administrator: 2 }
 
   validates :role, presence: true
   validates :instance, presence: true

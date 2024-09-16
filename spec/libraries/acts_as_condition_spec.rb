@@ -9,6 +9,10 @@ RSpec.describe 'Extension: Acts as Condition', type: :model do
 
     def self.load_schema!; end
 
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
+
     acts_as_condition
   end
 

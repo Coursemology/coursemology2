@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 class Course::Survey::Question < ApplicationRecord
-  attribute :question_type, :integer
-  enum question_type: { text: 0, multiple_choice: 1, multiple_response: 2 }
+  enum :question_type, { text: 0, multiple_choice: 1, multiple_response: 2 }
 
   validates :description, presence: true
   validates :required, inclusion: { in: [true, false] }

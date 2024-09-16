@@ -2,7 +2,7 @@
 class Course::GroupUser < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
 
-  enum role: { normal: 0, manager: 1 }
+  enum :role, { normal: 0, manager: 1 }
 
   validate :course_user_and_group_in_same_course
   validates :role, presence: true

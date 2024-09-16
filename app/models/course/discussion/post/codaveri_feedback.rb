@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Discussion::Post::CodaveriFeedback < ApplicationRecord
-  enum status: { pending_review: 0, accepted: 1, rejected: 2 }
+  enum :status, { pending_review: 0, accepted: 1, rejected: 2 }
   validates :codaveri_feedback_id, presence: true
   validates :original_feedback, presence: true
 

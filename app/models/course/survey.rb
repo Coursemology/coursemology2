@@ -5,9 +5,6 @@ class Course::Survey < ApplicationRecord
 
   include Course::ClosingReminderConcern
 
-  attribute :question_type, :integer
-  enum question_type: { text_response: 0, multiple_choice: 1, multiple_response: 2 }
-
   validates :end_at, presence: true, if: :allow_response_after_end
   validates :anonymous, inclusion: { in: [true, false] }
   validates :allow_modify_after_submit, inclusion: { in: [true, false] }

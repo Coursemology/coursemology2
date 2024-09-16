@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:disable Metrics/ClassLength
-  enum package_type: { zip_upload: 0, online_editor: 1 }
+  enum :package_type, { zip_upload: 0, online_editor: 1 }
 
   # The table name for this model is singular.
   self.table_name = table_name.singularize

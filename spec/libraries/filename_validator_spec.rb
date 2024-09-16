@@ -9,6 +9,10 @@ RSpec.describe FilenameValidator do
 
     def self.load_schema!; end
 
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
+
     attr_accessor :name
 
     validates_with FilenameValidator

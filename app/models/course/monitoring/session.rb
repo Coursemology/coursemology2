@@ -2,7 +2,7 @@
 class Course::Monitoring::Session < ApplicationRecord
   DEFAULT_MAX_SESSION_DURATION = 1.day
 
-  enum status: { stopped: 0, listening: 1 }
+  enum :status, { stopped: 0, listening: 1 }
 
   belongs_to :monitor, class_name: 'Course::Monitoring::Monitor', inverse_of: :sessions
 

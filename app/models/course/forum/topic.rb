@@ -15,7 +15,7 @@ class Course::Forum::Topic < ApplicationRecord
   after_create :mark_as_read_for_creator
   after_update :mark_as_read_for_updater
 
-  enum topic_type: { normal: 0, question: 1, sticky: 2, announcement: 3 }
+  enum :topic_type, { normal: 0, question: 1, sticky: 2, announcement: 3 }
 
   validates :title, length: { maximum: 255 }, presence: true
   validates :slug, length: { maximum: 255 }, allow_nil: true

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::ProgrammingTestCase < ApplicationRecord
-  enum test_case_type: { private_test: 0, public_test: 1, evaluation_test: 2 }
+  enum :test_case_type, { private_test: 0, public_test: 1, evaluation_test: 2 }
 
   validates :identifier, length: { maximum: 255 }, presence: true
   validates :test_case_type, presence: true

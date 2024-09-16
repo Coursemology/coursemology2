@@ -11,7 +11,7 @@ class User < ApplicationRecord
   acts_as_reader
   mount_uploader :profile_photo, ImageUploader
 
-  enum role: { normal: 0, administrator: 1 }
+  enum :role, { normal: 0, administrator: 1 }
 
   AVAILABLE_LOCALES = I18n.available_locales.map(&:to_s)
 

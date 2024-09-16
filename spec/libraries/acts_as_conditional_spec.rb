@@ -9,6 +9,10 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
 
     def self.load_schema!; end
 
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
+
     attr_accessor :satisfiability_type
 
     acts_as_conditional
@@ -20,6 +24,10 @@ RSpec.describe 'Extension: Acts as Conditional', type: :model do
     end
 
     def self.load_schema!; end
+
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
 
     acts_as_condition
   end

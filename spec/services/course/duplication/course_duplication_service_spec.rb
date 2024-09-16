@@ -21,7 +21,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
 
     describe '#duplicate_course' do
       it 'duplicates the logo' do
-        expect(File.exist?(File.join(Rails.root, 'public', new_course.logo.url))).to be true
+        expect(File.exist?(File.join(Rails.root, 'public', new_course.logo.store_path))).to be true
       end
 
       context 'when saving fails' do

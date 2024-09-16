@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Instance::UserRoleRequest < ApplicationRecord
   include Workflow
-  enum role: InstanceUser.roles.except(:normal)
+  enum :role, InstanceUser.roles.except(:normal)
 
   after_initialize :set_default_role, if: :new_record?
 
