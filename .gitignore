@@ -72,3 +72,5 @@ playwright/.cache/
 coverage/
 
 dump.rdb
+
+/config/credentials/*.key
