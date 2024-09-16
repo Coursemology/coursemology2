@@ -7,7 +7,7 @@ ruby '3.1.4'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.1.4'
+gem 'rails', '~> 7.2.1'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -18,7 +18,7 @@ gem 'rack-cors'
 # Instance/Course settings
 gem 'settings_on_rails', git: 'https://github.com/Coursemology/settings_on_rails'
 # Manage read/unread status
-gem 'unread'
+gem 'unread', '~> 0.14.0'
 # Extension for validating hostnames and domain names
 gem 'validates_hostname'
 # A Ruby state machine library
@@ -29,14 +29,14 @@ gem 'activerecord-userstamp', git: 'https://github.com/Coursemology/activerecord
 # Allow actions to be deferred until after a record is committed.
 gem 'after_commit_action'
 # Allow declaring the calculated attributes of a record
-gem 'calculated_attributes', git: 'https://github.com/aha-app/calculated_attributes'
+gem 'calculated_attributes', git: 'https://github.com/Coursemology/calculated_attributes.git'
 # For multiple table inheritance
 # TODO: Figure out breaking changes in v2 as polymorphism is not working correctly.
 gem 'active_record-acts_as', git: 'https://github.com/Coursemology/active_record-acts_as.git'
 # Organise ActiveRecord model into a tree structure
 gem 'edge'
-# Upsert action for Postgres
-gem 'active_record_upsert', '0.11.2'
+# Upsert action for Postgres with validations
+gem 'active_record_upsert', git: 'https://github.com/jesjos/active_record_upsert', ref: 'c3e07ae'
 # Create pretty URLs and work with human-friendly strings
 gem 'friendly_id'
 
@@ -106,6 +106,8 @@ group :development, :test do
   gem 'rubocop', '~> 1.66'
 
   # Factory Bot for factories
+  # fix for https://github.com/thoughtbot/factory_bot/issues/1690
+  gem 'factory_bot', '~> 6.5.0'
   gem 'factory_bot_rails'
 
   # Checks that all translations are used and defined
@@ -181,7 +183,7 @@ gem 'jwt'
 gem 'cancancan'
 
 # Using CarrierWave for file uploads
-gem 'carrierwave', '2.2.6'
+gem 'carrierwave', '~> 3'
 # Generate sequential filenames
 gem 'filename'
 # Required by CarrierWave, for image resizing

@@ -9,6 +9,10 @@ RSpec.describe 'Extension: Acts as Attachable' do
 
     def self.load_schema!; end
 
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
+
     has_many_attachments
   end
 
@@ -18,6 +22,10 @@ RSpec.describe 'Extension: Acts as Attachable' do
     end
 
     def self.load_schema!; end
+
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
 
     has_one_attachment
 

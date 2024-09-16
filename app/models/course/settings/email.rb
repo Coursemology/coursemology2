@@ -10,8 +10,8 @@ class Course::Settings::Email < ApplicationRecord
     Course::Settings::Email.send(:after_assessment_category_initialize, self)
   end
 
-  enum component: { announcements: 0, assessments: 1, forums: 2, surveys: 3, users: 4, videos: 5 }
-  enum setting: { new_announcement: 0,
+  enum :component, { announcements: 0, assessments: 1, forums: 2, surveys: 3, users: 4, videos: 5 }
+  enum :setting, { new_announcement: 0,
                   opening_reminder: 1,
                   closing_reminder: 2,
                   closing_reminder_summary: 3,

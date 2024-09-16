@@ -2,7 +2,7 @@
 class Course::Assessment::Question::MultipleResponse < ApplicationRecord
   acts_as :question, class_name: 'Course::Assessment::Question'
 
-  enum grading_scheme: [:all_correct, :any_correct]
+  enum :grading_scheme, [:all_correct, :any_correct]
 
   validate :validate_has_option
   validate :validate_multiple_choice_has_correct_solution, if: :multiple_choice?

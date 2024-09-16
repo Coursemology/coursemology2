@@ -3,7 +3,7 @@
 #
 # @api notifications
 class Course::Notification < ApplicationRecord
-  enum notification_type: { feed: 0, email: 1 }
+  enum :notification_type, { feed: 0, email: 1 }
 
   validates :activity, presence: true
   validates :course, presence: true

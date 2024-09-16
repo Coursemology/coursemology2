@@ -230,7 +230,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     update_delayed_topics_and_posts(submission_question_topics)
 
     # Publish delayed annotations for each programming question of a submission
-    programming_answers = answers.where('actable_type = ?', Course::Assessment::Answer::Programming)
+    programming_answers = answers.where('actable_type = ?', Course::Assessment::Answer::Programming.name)
     annotation_topics = programming_answers.flat_map(&:specific).
                         flat_map(&:files).flat_map(&:annotations).map(&:discussion_topic)
     update_delayed_topics_and_posts(annotation_topics)

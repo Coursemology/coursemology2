@@ -4,7 +4,7 @@ module Extensions::Conditional::ActiveRecord::Base
     # Functions from conditional-and-condition framework.
     # Declare this function in the conditional model that requires conditions.
     def acts_as_conditional
-      enum satisfiability_type: [:all_conditions, :at_least_one_condition]
+      enum :satisfiability_type, [:all_conditions, :at_least_one_condition]
 
       has_many :conditions, -> { includes :actable },
                class_name: 'Course::Condition', as: :conditional, dependent: :destroy,

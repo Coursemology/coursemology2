@@ -46,8 +46,7 @@ Rake::Task['db:seed'].invoke
 
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  # config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
-  config.file_fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.file_fixture_path = "#{Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -76,11 +75,11 @@ RSpec.configure do |config|
   if ENV['CI']
     Capybara::Screenshot.s3_configuration = {
       s3_client_credentials: {
-        access_key_id: ENV['CAPYBARA_SCREENSHOT_ACCESS_KEY_ID'],
-        secret_access_key: ENV['CAPYBARA_SCREENSHOT_SECRET_ACCESS_KEY'],
-        region: ENV['CAPYBARA_SCREENSHOT_REGION']
+        access_key_id: ENV.fetch('CAPYBARA_SCREENSHOT_ACCESS_KEY_ID', nil),
+        secret_access_key: ENV.fetch('CAPYBARA_SCREENSHOT_SECRET_ACCESS_KEY', nil),
+        region: ENV.fetch('CAPYBARA_SCREENSHOT_REGION', nil)
       },
-      bucket_name: ENV['CAPYBARA_SCREENSHOT_BUCKET_NAME']
+      bucket_name: ENV.fetch('CAPYBARA_SCREENSHOT_BUCKET_NAME', nil)
     }
 
     Capybara::Screenshot.s3_object_configuration = {

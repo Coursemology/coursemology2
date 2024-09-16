@@ -2,7 +2,7 @@
 class Course::Monitoring::Monitor < ApplicationRecord
   DEFAULT_MIN_INTERVAL_MS = 3000
 
-  enum browser_authorization_method: { user_agent: 0, seb_config_key: 1 }
+  enum :browser_authorization_method, { user_agent: 0, seb_config_key: 1 }
 
   has_one :assessment, class_name: 'Course::Assessment', inverse_of: :monitor
   has_many :sessions, class_name: 'Course::Monitoring::Session', inverse_of: :monitor

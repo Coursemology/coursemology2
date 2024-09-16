@@ -10,8 +10,8 @@ class Course::UserInvitation < ApplicationRecord
   validates :phantom, inclusion: [true, false]
   validate :no_existing_unconfirmed_invitation
 
-  enum role: CourseUser.roles
-  enum timeline_algorithm: CourseUser.timeline_algorithms
+  enum :role, CourseUser.roles
+  enum :timeline_algorithm, CourseUser.timeline_algorithms
 
   belongs_to :course, inverse_of: :invitations
   belongs_to :confirmer, class_name: 'User', inverse_of: nil, optional: true

@@ -11,7 +11,7 @@ class Instance::UserInvitation < ApplicationRecord
   validates :generate_invitation_key, presence: true
   validate :no_existing_unconfirmed_invitation
 
-  enum role: InstanceUser.roles
+  enum :role, InstanceUser.roles
 
   belongs_to :confirmer, class_name: 'User', inverse_of: nil, optional: true
 

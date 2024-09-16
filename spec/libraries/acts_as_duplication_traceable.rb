@@ -9,6 +9,10 @@ RSpec.describe 'Extension: Acts as Duplication Traceable', type: :model do
 
     def self.load_schema!; end
 
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
+
     acts_as_duplication_traceable
   end
 
@@ -32,6 +36,10 @@ RSpec.describe 'Extension: Acts as Duplication Traceable', type: :model do
     end
 
     def self.load_schema!; end
+
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
 
     acts_as_duplication_traceable
 

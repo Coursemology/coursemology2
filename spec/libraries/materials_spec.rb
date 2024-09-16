@@ -9,6 +9,10 @@ RSpec.describe 'Extension: Materials' do
 
     def self.load_schema!; end
 
+    def self._default_attributes
+      ActiveModel::AttributeSet.new({})
+    end
+
     has_one_folder
   end
 

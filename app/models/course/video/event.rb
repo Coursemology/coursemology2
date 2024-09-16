@@ -16,5 +16,5 @@ class Course::Video::Event < ApplicationRecord
 
   upsert_keys [:session_id, :sequence_num]
 
-  enum event_type: [:play, :pause, :speed_change, :seek_start, :seek_end, :buffer, :end]
+  enum :event_type, [:play, :pause, :speed_change, :seek_start, :seek_end, :buffer, :end]
 end

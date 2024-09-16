@@ -27,7 +27,7 @@ class Course < ApplicationRecord
   validates :instance, presence: true
   validates :conditional_satisfiability_evaluation_time, presence: true
 
-  enum default_timeline_algorithm: CourseUser.timeline_algorithms
+  enum :default_timeline_algorithm, CourseUser.timeline_algorithms
 
   has_many :enrol_requests, inverse_of: :course, dependent: :destroy
   has_many :course_users, inverse_of: :course, dependent: :destroy
