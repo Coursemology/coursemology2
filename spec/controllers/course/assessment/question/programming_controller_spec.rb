@@ -227,5 +227,39 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         end
       end
     end
+
+    describe '#codaveri_languages' do
+      subject do
+        get :codaveri_languages, params: { course_id: course, assessment_id: assessment }, format: :json
+      end
+
+      let!(:language) { Coursemology::Polyglot::Language.find_by(name: 'Python 3.10') }
+
+      context 'when the language is enabled' do
+        it 'returns the enabled languages' do
+          subject
+          expect(response).to have_http_status(:ok)
+          expect(JSON.parse(response.body)['languages'].map { |language| language['name'] }).to include('Python 3.10')
+        end
+      end
+
+      context 'when the language is disabled' do
+        before do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE polyglot_languages SET enabled = false WHERE id = #{language.id}"
+          )
+        end
+        after do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE polyglot_languages SET enabled = true WHERE id = #{language.id}"
+          )
+        end
+
+        it 'does not return the disabled language' do
+          subject
+          expect(JSON.parse(response.body)['languages'].map { |l| l['name'] }).not_to include('Python 3.10')
+        end
+      end
+    end
   end
 end
