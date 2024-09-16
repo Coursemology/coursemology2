@@ -54,5 +54,7 @@ module Application # rubocop:disable Style/ClassAndModuleChildren
     config.x.default_user_time_zone = 'Singapore'
     config.x.public_download_folder = 'downloads'
     config.x.temp_folder = config.root.join('tmp')
+
+    p({ env: Rails.env, secret_key_base: Rails.application.secret_key_base})
   end
 end
