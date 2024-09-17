@@ -58,6 +58,8 @@ class AssessmentEditPage extends Component {
       folderAttributes,
       gamified,
       initialValues,
+      isKoditsuExamEnabled,
+      isQuestionsValidForKoditsu,
       modeSwitching,
       canManageMonitor,
       pulsegridUrl,
@@ -92,6 +94,8 @@ class AssessmentEditPage extends Component {
           folderAttributes={folderAttributes}
           gamified={gamified}
           initialValues={initialValues}
+          isKoditsuExamEnabled={isKoditsuExamEnabled}
+          isQuestionsValidForKoditsu={isQuestionsValidForKoditsu}
           modeSwitching={modeSwitching}
           monitoringEnabled={monitoringEnabled}
           onSubmit={this.onFormSubmit}
@@ -122,6 +126,8 @@ AssessmentEditPage.propTypes = {
   conditionAttributes: achievementTypesConditionAttributes,
   // A set of assessment attributes: {:id , :title, etc}.
   initialValues: PropTypes.shape({}),
+  isKoditsuExamEnabled: PropTypes.bool,
+  isQuestionsValidForKoditsu: PropTypes.bool,
 
   // Whether to disable the inner form.
   disabled: PropTypes.bool,

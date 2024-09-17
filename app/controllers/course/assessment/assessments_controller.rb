@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::AssessmentsController < Course::Assessment::Controller
+class Course::Assessment::AssessmentsController < Course::Assessment::Controller # rubocop:disable Metrics/ClassLength
   include Course::Assessment::AssessmentsHelper
 
   before_action :load_submissions, only: [:show]
@@ -63,6 +63,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def edit
     @assessment.description = helpers.format_ckeditor_rich_text(@assessment.description)
+    @programming_questions = @assessment.programming_questions
+
+    @programming_qns_invalid_for_koditsu = @programming_questions.reject do |question|
+      KoditsuAsyncApiService.language_valid_for_koditsu?(question.language)
+    end
   end
 
   def update
@@ -165,7 +170,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
                    :bonus_end_at, :published, :autograded, :show_mcq_mrq_solution, :show_private,
                    :show_evaluation, :use_public, :use_private, :use_evaluation, :has_personal_times,
                    :affects_personal_times, :block_student_viewing_after_submitted, :has_todo,
-                   :allow_record_draft_answer, :time_limit]
+                   :allow_record_draft_answer, :time_limit, :is_koditsu_enabled]
     base_params += if autograded?
                      [:skippable, :allow_partial_submission, :show_mcq_answer]
                    else

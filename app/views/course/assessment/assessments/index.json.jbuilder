@@ -26,6 +26,7 @@ json.display do
   json.tabId @tab.id
   json.tabTitle "#{@category.title}: #{@tab.title}"
   json.tabUrl course_assessments_path(course_id: current_course, category: @category, tab: @tab)
+  json.isKoditsuExamEnabled current_course.component_enabled?(Course::KoditsuPlatformComponent)
 end
 
 json.assessments @assessments do |assessment|

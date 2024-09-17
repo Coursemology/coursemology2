@@ -77,6 +77,7 @@ class NewAssessmentFormButton extends Component {
       dispatch,
       gamified,
       intl,
+      isKoditsuExamEnabled,
       visible,
       randomizationAllowed,
       canManageMonitor,
@@ -121,6 +122,7 @@ class NewAssessmentFormButton extends Component {
       published: false,
       has_todo: true,
       autograded: false,
+      is_koditsu_enabled: false,
       block_student_viewing_after_submitted: false,
       allow_record_draft_answer: false,
       skippable: false,
@@ -168,6 +170,7 @@ class NewAssessmentFormButton extends Component {
               emitsVia={(assessmentForm) => this.setState({ assessmentForm })}
               gamified={gamified}
               initialValues={initialValues}
+              isKoditsuExamEnabled={isKoditsuExamEnabled}
               modeSwitching
               monitoringEnabled={monitoringEnabled}
               onSubmit={this.onFormSubmit}
@@ -198,6 +201,7 @@ NewAssessmentFormButton.propTypes = {
   categoryId: PropTypes.number.isRequired,
   tabId: PropTypes.number.isRequired,
   gamified: PropTypes.bool,
+  isKoditsuExamEnabled: PropTypes.bool,
   randomizationAllowed: PropTypes.bool,
   canManageMonitor: PropTypes.bool,
   monitoringEnabled: PropTypes.bool,

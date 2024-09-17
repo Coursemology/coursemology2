@@ -29,6 +29,8 @@ beforeEach(() => {
   props = {
     initialValues: INITIAL_VALUES,
     gamified: false,
+    isKoditsuExamEnabled: false,
+    isQuestionsValidForKoditsu: false,
     modeSwitching: true,
     showPersonalizedTimelineFeatures: false,
     randomizationAllowed: false,

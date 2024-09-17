@@ -47,6 +47,10 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.timeBonusExp',
     defaultMessage: 'Time Bonus EXP',
   },
+  proctorWithKoditsu: {
+    id: 'course.assessment.AssessmentForm.proctorWithKoditsu',
+    defaultMessage: 'Proctor Exam using Koditsu',
+  },
   blockStudentViewingAfterSubmitted: {
     id: 'course.assessment.AssessmentForm.blockStudentViewingAfterSubmitted',
     defaultMessage: 'Block students from viewing finalized submissions',
@@ -302,6 +306,18 @@ const translations = defineMessages({
   personalisedTimelines: {
     id: 'course.assessment.AssessmentForm.personalisedTimelines',
     defaultMessage: 'Personalised timelines',
+  },
+  koditsuDisabledInCourse: {
+    id: 'course.assessment.AssessmentForm.koditsuDisabledInCourse',
+    defaultMessage:
+      'Please contact the Course Administrator to enable Koditsu \
+      Exam in Course Settings.',
+  },
+  questionsIncompatibleWithKoditsu: {
+    id: 'course.assessment.AssessmentForm.questionsIncompatibleWithKoditsu',
+    defaultMessage:
+      'Please make sure that all questions in this assessment is compatible with \
+      Koditsu before activating proctoring in Koditsu',
   },
   unavailableInAutograded: {
     id: 'course.assessment.AssessmentForm.unavailableInAutograded',

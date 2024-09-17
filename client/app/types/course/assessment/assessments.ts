@@ -54,6 +54,7 @@ export interface AssessmentsListData {
   display: {
     isStudent: boolean;
     isGamified: boolean;
+    isKoditsuExamEnabled: boolean;
     timelineAlgorithm: TimelineAlgorithm;
     allowRandomization: boolean;
     isAchievementsEnabled: boolean;

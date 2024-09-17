@@ -50,6 +50,8 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     gamified,
     folderAttributes,
     initialValues,
+    isKoditsuExamEnabled,
+    isQuestionsValidForKoditsu,
     modeSwitching,
     onSubmit,
     pulsegridUrl,
@@ -79,6 +81,16 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const hasTimeLimit = watch('has_time_limit');
 
   const monitoring = watch('monitoring.enabled');
+
+  const proctorWithKoditsuDisabledHint = (): string | undefined => {
+    if (disabled) {
+      return undefined;
+    }
+
+    return !isKoditsuExamEnabled
+      ? t(translations.koditsuDisabledInCourse)
+      : t(translations.questionsIncompatibleWithKoditsu);
+  };
 
   // const assessmentId = initialValues.id;
   // const title = initialValues.title;
@@ -677,6 +689,23 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           sticksToNavbar={editing}
           title={t(translations.examsAndAccessControl)}
         >
+          <Controller
+            control={control}
+            name="is_koditsu_enabled"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                disabled={
+                  !isKoditsuExamEnabled ||
+                  (editing && !isQuestionsValidForKoditsu) ||
+                  disabled
+                }
+                disabledHint={proctorWithKoditsuDisabledHint()}
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.proctorWithKoditsu)}
+              />
+            )}
+          />
           <Controller
             control={control}
             name="block_student_viewing_after_submitted"
