@@ -2,7 +2,10 @@
 can_attempt = can?(:attempt, assessment)
 can_view_submissions = can?(:view_all_submissions, assessment)
 can_manage = can?(:manage, assessment)
-can_read_statistics = can?(:read_statistics, current_course)
+
+can_read_statistics = can?(:read_statistics, current_course) &&
+                      current_component_host[:course_statistics_component].present?
+
 can_read_monitor = can?(:read, Course::Monitoring::Monitor.new) && @monitor.present?
 
 attempting_submission = submissions.find(&:attempting?)
