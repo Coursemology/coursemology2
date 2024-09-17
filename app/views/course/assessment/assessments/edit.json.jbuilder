@@ -5,7 +5,7 @@ json.attributes do
             :skippable, :tabbed_view, :view_password, :session_password, :delayed_grade_publication, :tab_id,
             :use_public, :use_private, :use_evaluation, :allow_partial_submission, :has_personal_times,
             :affects_personal_times, :show_mcq_answer, :block_student_viewing_after_submitted, :has_todo,
-            :allow_record_draft_answer, :time_limit)
+            :allow_record_draft_answer, :time_limit, :is_koditsu_enabled)
 
   # TODO: [PR#5491] Edit Assessment only changes time in the Default Timeline
   json.start_at @assessment.start_at&.iso8601
@@ -25,8 +25,12 @@ json.tab_attributes do
   json.only_tab @category.tabs.count == 1
 end
 
+is_all_questions_programming_type = @assessment.questions.length == @programming_questions.length
+
 json.mode_switching @assessment.allow_mode_switching?
 json.gamified current_course.gamified?
+json.isQuestionsValidForKoditsu is_all_questions_programming_type && @programming_qns_invalid_for_koditsu.empty?
+json.isKoditsuExamEnabled current_course.component_enabled?(Course::KoditsuPlatformComponent)
 json.show_personalized_timeline_features current_course.show_personalized_timeline_features?
 json.randomization_allowed current_course.allow_randomization
 

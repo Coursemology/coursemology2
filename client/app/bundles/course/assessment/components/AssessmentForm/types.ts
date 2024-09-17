@@ -36,6 +36,8 @@ export interface AssessmentFormProps
   onSubmit: (data: FieldValues, setError: UseFormSetError<FieldValues>) => void;
 
   initialValues?;
+  isKoditsuExamEnabled: boolean;
+  isQuestionsValidForKoditsu: boolean;
   disabled?: boolean;
   showPersonalizedTimelineFeatures?: boolean;
   randomizationAllowed?: boolean;

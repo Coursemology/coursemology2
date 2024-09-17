@@ -45,3 +45,5 @@ zh:
       name: '监听'
     stories:
       name: '故事'
+    koditsu_platform:
+      name: 'Koditsu 考试'

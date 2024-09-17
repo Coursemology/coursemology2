@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_09_04_091136) do
+ActiveRecord::Schema[7.0].define(version: 2024_09_17_170847) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -368,6 +368,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_091136) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "is_low_priority", default: false
+    t.string "koditsu_question_id"
+    t.boolean "is_synced_with_koditsu", default: false, null: false
     t.index ["actable_type", "actable_id"], name: "index_course_assessment_questions_actable", unique: true
     t.index ["creator_id"], name: "fk__course_assessment_questions_creator_id"
     t.index ["updater_id"], name: "fk__course_assessment_questions_updater_id"
@@ -484,6 +486,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_091136) do
     t.bigint "monitor_id"
     t.boolean "allow_record_draft_answer", default: false
     t.integer "time_limit"
+    t.string "koditsu_assessment_id"
+    t.boolean "is_koditsu_enabled"
+    t.boolean "is_synced_with_koditsu", default: false, null: false
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
@@ -1228,6 +1233,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_09_04_091136) do
     t.boolean "show_personalized_timeline_features", default: false, null: false
     t.datetime "conditional_satisfiability_evaluation_time", precision: nil, default: "2021-10-24 10:31:32"
     t.integer "default_timeline_algorithm", default: 0, null: false
+    t.string "koditsu_workspace_id"
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
