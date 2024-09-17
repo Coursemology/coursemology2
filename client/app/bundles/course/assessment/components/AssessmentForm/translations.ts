@@ -138,7 +138,7 @@ const translations = defineMessages({
   },
   hasTimeLimit: {
     id: 'course.assessment.AssessmentForm.hasTimeLimit',
-    defaultMessage: 'Enable Timed Assessment',
+    defaultMessage: 'Automatically submit when timer ends',
   },
   hasTodoHint: {
     id: 'course.assessment.AssessmentForm.hasTodoHint',
@@ -148,7 +148,7 @@ const translations = defineMessages({
   hasTimeLimitHint: {
     id: 'course.assessment.AssessmentForm.hasTimeLimitHint',
     defaultMessage:
-      'When enabled, submissions will automatically be finalised when the time limit is reached.',
+      'When enabled, each submission will have its own timer and will automatically be finalised when its timer ends.',
   },
   gradingMode: {
     id: 'course.assessment.AssessmentForm.gradingMode',
