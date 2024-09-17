@@ -289,6 +289,46 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             )}
           </Grid>
 
+          <Controller
+            control={control}
+            name="has_time_limit"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                description={t(translations.hasTimeLimitHint)}
+                disabled={disabled}
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.hasTimeLimit)}
+              />
+            )}
+          />
+
+          {hasTimeLimit && (
+            <Controller
+              control={control}
+              name="time_limit"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  disabled={disabled}
+                  disableMargins
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {t(translations.minutes)}
+                      </InputAdornment>
+                    ),
+                  }}
+                  label={t(translations.timeLimit)}
+                  type="number"
+                  variant="filled"
+                />
+              )}
+            />
+          )}
+
           <Typography>{t(translations.description)}</Typography>
 
           <Controller
@@ -354,46 +394,6 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               />
             )}
           />
-
-          <Controller
-            control={control}
-            name="has_time_limit"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormCheckboxField
-                description={t(translations.hasTimeLimitHint)}
-                disabled={disabled}
-                field={field}
-                fieldState={fieldState}
-                label={t(translations.hasTimeLimit)}
-              />
-            )}
-          />
-
-          {hasTimeLimit && (
-            <Controller
-              control={control}
-              name="time_limit"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormTextField
-                  disabled={disabled}
-                  disableMargins
-                  field={field}
-                  fieldState={fieldState}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {t(translations.minutes)}
-                      </InputAdornment>
-                    ),
-                  }}
-                  label={t(translations.timeLimit)}
-                  type="number"
-                  variant="filled"
-                />
-              )}
-            />
-          )}
 
           {editing && folderAttributes && (
             <>
