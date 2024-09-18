@@ -8,9 +8,11 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Typography,
 } from '@mui/material';
 import { AssessmentData } from 'types/course/assessment/assessments';
 
+import KoditsuChipButton from 'course/assessment/components/KoditsuChipButton';
 import DescriptionCard from 'lib/components/core/DescriptionCard';
 import Page from 'lib/components/core/layouts/Page';
 import Subsection from 'lib/components/core/layouts/Subsection';
@@ -33,12 +35,20 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
   const { for: assessment } = props;
   const { t } = useTranslation();
 
+  const isKoditsu = assessment.isKoditsuAssessmentEnabled;
+  const isKoditsuIndicatorShown = isKoditsu && !assessment.isStudent;
+
   return (
     <Page
       actions={<AssessmentShowHeader with={assessment} />}
       backTo={assessment.indexUrl}
       className="space-y-5"
-      title={assessment.title}
+      title={
+        <div className="flex flex-row space-x-5 align-middle">
+          <Typography variant="h5">{assessment.title}</Typography>
+          {isKoditsuIndicatorShown && <KoditsuChipButton />}
+        </div>
+      }
     >
       {assessment.status === 'unavailable' && (
         <UnavailableAlert for={assessment} />

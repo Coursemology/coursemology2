@@ -160,6 +160,14 @@ const translations = defineMessages({
     id: 'course.assessment.show.questions',
     defaultMessage: 'Questions',
   },
+  syncedWithKoditsu: {
+    id: 'course.assessment.show.syncedWithKoditsu',
+    defaultMessage: 'Synced with Koditsu',
+  },
+  koditsuMode: {
+    id: 'course.assessment.show.koditsuMode',
+    defaultMessage: 'Koditsu',
+  },
   generate: {
     id: 'course.assessment.show.generate',
     defaultMessage: 'Generate Programming Question',

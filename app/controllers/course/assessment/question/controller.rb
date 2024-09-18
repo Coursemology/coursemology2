@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::Controller < Course::Assessment::ComponentController
   before_action :authorize_assessment
+  before_action :authorize_create_question_in_koditsu, only: [:new, :create]
 
   # Use method to build new questions.
   #
@@ -19,6 +20,13 @@ class Course::Assessment::Question::Controller < Course::Assessment::ComponentCo
       authorize!(action_name.to_sym, question)
       instance_variable_set("@#{question_name}", question) unless instance_variable_get("@#{question_name}")
     end
+  end
+
+  def authorize_create_question_in_koditsu
+    return if instance_of?(Course::Assessment::Question::ProgrammingController)
+
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    raise CanCan::AccessDenied if @assessment.is_koditsu_enabled && is_course_koditsu_enabled
   end
 
   def load_question_assessment_for(question)

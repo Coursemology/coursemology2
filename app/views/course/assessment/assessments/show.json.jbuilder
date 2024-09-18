@@ -13,10 +13,15 @@ can_manage = can?(:manage, assessment)
 json.partial! 'assessment_list_data', assessment: @assessment, category: @category, tab: @tab, course: current_course
 
 json.description assessment.description unless @assessment.description.blank?
+json.isStudent current_course_user&.student? || false
 json.autograded assessment.autograded?
 json.hasTodo assessment.has_todo if can_manage
 json.timeLimit assessment.time_limit
 json.indexUrl course_assessments_path(current_course, category: assessment.tab.category_id, tab: assessment.tab)
+
+if current_course.component_enabled?(Course::KoditsuPlatformComponent)
+  json.isKoditsuAssessmentEnabled assessment.is_koditsu_enabled
+end
 
 json.startAt do
   json.partial! 'course/lesson_plan/items/personal_or_ref_time', locals: {
@@ -109,47 +114,57 @@ if can_observe
   end
 
   if can_manage
-    json.newQuestionUrls [
-      {
-        type: 'MultipleChoice',
-        url: new_course_assessment_question_multiple_response_path(current_course, assessment, {
-          multiple_choice: true
-        })
-      },
-      {
-        type: 'MultipleResponse',
-        url: new_course_assessment_question_multiple_response_path(current_course, assessment)
-      },
-      {
-        type: 'TextResponse',
-        url: new_course_assessment_question_text_response_path(current_course, assessment)
-      },
-      {
-        type: 'VoiceResponse',
-        url: new_course_assessment_question_voice_response_path(current_course, assessment)
-      },
-      {
-        type: 'FileUpload',
-        url: new_course_assessment_question_text_response_path(current_course, assessment, { file_upload: true })
-      },
-      {
-        type: 'Programming',
-        url: new_course_assessment_question_programming_path(current_course, assessment)
-      },
-      {
-        type: 'Scribing',
-        url: new_course_assessment_question_scribing_path(current_course, assessment)
-      },
-      {
-        type: 'ForumPostResponse',
-        url: new_course_assessment_question_forum_post_response_path(current_course, assessment)
-      }
-      # TODO: Uncomment when TextResponseComprehension is ready
-      # {
-      #   type: 'Comprehension',
-      #   url: new_course_assessment_question_text_response_path(current_course, assessment, { comprehension: true }),
-      # }
-    ]
+    if assessment.is_koditsu_enabled && current_course.component_enabled?(Course::KoditsuPlatformComponent)
+      json.newQuestionUrls [
+        {
+          type: 'Programming',
+          url: new_course_assessment_question_programming_path(current_course, assessment)
+        },
+      ]
+    else
+      json.newQuestionUrls [
+        {
+          type: 'MultipleChoice',
+          url: new_course_assessment_question_multiple_response_path(current_course, assessment, {
+            multiple_choice: true
+          })
+        },
+        {
+          type: 'MultipleResponse',
+          url: new_course_assessment_question_multiple_response_path(current_course, assessment)
+        },
+        {
+          type: 'TextResponse',
+          url: new_course_assessment_question_text_response_path(current_course, assessment)
+        },
+        {
+          type: 'VoiceResponse',
+          url: new_course_assessment_question_voice_response_path(current_course, assessment)
+        },
+        {
+          type: 'FileUpload',
+          url: new_course_assessment_question_text_response_path(current_course, assessment, { file_upload: true })
+        },
+        {
+          type: 'Programming',
+          url: new_course_assessment_question_programming_path(current_course, assessment)
+        },
+        {
+          type: 'Scribing',
+          url: new_course_assessment_question_scribing_path(current_course, assessment)
+        },
+        {
+          type: 'ForumPostResponse',
+          url: new_course_assessment_question_forum_post_response_path(current_course, assessment)
+        }
+        # TODO: Uncomment when TextResponseComprehension is ready
+        # {
+        #   type: 'Comprehension',
+        #   url: new_course_assessment_question_text_response_path(current_course, assessment, { comprehension: true }),
+        # }
+      ]
+    end
+
     json.generateQuestionUrl generate_course_assessment_question_programming_index_path(current_course, assessment)
   end
 end

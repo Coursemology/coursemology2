@@ -60,6 +60,15 @@ const NonStudentStatusBadges = (
           <Key className="text-3xl text-neutral-500 hover?:text-neutral-600" />
         </Tooltip>
       )}
+
+      {assessment.isKoditsuAssessmentEnabled && (
+        <Chip
+          color="info"
+          label={t(translations.koditsuMode)}
+          size="small"
+          variant="outlined"
+        />
+      )}
     </>
   );
 };

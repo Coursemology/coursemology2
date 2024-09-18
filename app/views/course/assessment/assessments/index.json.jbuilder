@@ -42,6 +42,10 @@ json.assessments @assessments do |assessment|
   json.url course_assessment_path(current_course, assessment)
   json.timeLimit assessment.time_limit
 
+  if current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    json.isKoditsuAssessmentEnabled assessment.is_koditsu_enabled
+  end
+
   assessment_with_loaded_timeline = @items_hash[assessment.id].actable
   # assessment_with_loaded_timeline is passed below since the timeline is already preloaded and will be checked
   can_attempt_assessment = can?(:attempt, assessment_with_loaded_timeline)
