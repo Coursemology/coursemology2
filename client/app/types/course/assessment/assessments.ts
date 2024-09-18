@@ -38,6 +38,7 @@ export interface AssessmentListData extends AssessmentActionsData {
   startAt: PersonalTimeData;
   timeLimit?: number;
   isStartTimeBegin: boolean;
+  isKoditsuAssessmentEnabled?: boolean;
 
   baseExp?: number;
   timeBonusExp?: number;
@@ -125,6 +126,8 @@ export interface AssessmentData extends AssessmentActionsData {
   }[];
 
   liveFeedbackEnabled?: boolean;
+  isKoditsuAssessmentEnabled?: boolean;
+  isStudent: boolean;
   allowRecordDraftAnswer?: boolean;
   showMcqMrqSolution?: boolean;
   gradedTestCases?: string;
