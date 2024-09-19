@@ -12,7 +12,7 @@ json.assessment do
   json.showMcqMrqSolution @assessment.show_mcq_mrq_solution
   json.timeLimit @assessment.time_limit
   json.delayedGradePublication @assessment.delayed_grade_publication
-  json.tabbedView @assessment.tabbed_view
+  json.tabbedView @assessment.tabbed_view || @assessment.autograded
   json.showPrivate @assessment.show_private
   json.allowPartialSubmission @assessment.allow_partial_submission
   json.showMcqAnswer @assessment.show_mcq_answer
