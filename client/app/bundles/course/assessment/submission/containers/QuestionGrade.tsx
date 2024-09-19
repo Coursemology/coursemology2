@@ -74,11 +74,15 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
 
-  const handleSaveGrade = (newGrade: string | number | null): void => {
+  const handleSaveGrade = (
+    newGrade: string | number | null,
+    id,
+    oldQuestions,
+  ): void => {
     const newQuestionWithGrades = {
-      ...questionWithGrades,
+      ...oldQuestions,
       [questionId]: {
-        ...questionWithGrades[questionId],
+        ...oldQuestions[id],
         grade: newGrade,
         autofilled: false,
       },
@@ -95,8 +99,8 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     dispatch(
       saveGrade(
         submissionId,
-        newQuestionWithGrades[questionId],
-        questionId,
+        newQuestionWithGrades[id],
+        id,
         newExpPoints,
         published,
       ),
@@ -195,7 +199,11 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           onChange={(e): void => {
             processValue(e.target.value, true);
             if (isNotGradedAndNotPublished) {
-              debouncedSaveGrade(updatedGrade(e.target.value, true));
+              debouncedSaveGrade(
+                updatedGrade(e.target.value, true),
+                questionId,
+                questionWithGrades,
+              );
             }
           }}
           onKeyDown={(e): void => {
@@ -203,14 +211,22 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
               e.preventDefault();
               stepGrade(GRADE_STEP);
               if (isNotGradedAndNotPublished) {
-                debouncedSaveGrade(newGradeAfterStep(GRADE_STEP));
+                debouncedSaveGrade(
+                  newGradeAfterStep(GRADE_STEP),
+                  questionId,
+                  questionWithGrades,
+                );
               }
             }
             if (e.key === 'ArrowDown') {
               e.preventDefault();
               stepGrade(-GRADE_STEP);
               if (isNotGradedAndNotPublished) {
-                debouncedSaveGrade(newGradeAfterStep(-GRADE_STEP));
+                debouncedSaveGrade(
+                  newGradeAfterStep(-GRADE_STEP),
+                  questionId,
+                  questionWithGrades,
+                );
               }
             }
           }}
