@@ -36,7 +36,16 @@ const validationSchema = yup.object({
     .date()
     .nullable()
     .typeError(ft.invalidDate)
-    .min(yup.ref('start_at'), t.startEndValidationError),
+    .min(yup.ref('start_at'), t.startEndValidationError)
+    .when('is_koditsu_enabled', {
+      is: true,
+      then: yup
+        .date()
+        .nullable()
+        .typeError(ft.invalidDate)
+        .min(yup.ref('start_at'), t.startEndValidationError)
+        .required(ft.required),
+    }),
   bonus_end_at: yup
     .date()
     .nullable()
