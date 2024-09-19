@@ -180,7 +180,7 @@ const SubmissionForm: FC<Props> = (props) => {
           noValidate
           onSubmit={handleSubmit((data) => onSubmit({ ...data }))}
         >
-          {autograded || tabbedView ? (
+          {tabbedView ? (
             <TabbedViewQuestions
               handleNext={onContinueToNextQuestion}
               maxStep={maxStep}
