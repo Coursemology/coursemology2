@@ -81,6 +81,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const hasTimeLimit = watch('has_time_limit');
 
   const monitoring = watch('monitoring.enabled');
+  const isKoditsuAssessmentEnabled = watch('is_koditsu_enabled');
 
   const proctorWithKoditsuDisabledHint = (): string | undefined => {
     if (disabled) {
@@ -274,6 +275,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.endAt)}
+                    required={isKoditsuAssessmentEnabled}
                     variant="filled"
                   />
                 )}
