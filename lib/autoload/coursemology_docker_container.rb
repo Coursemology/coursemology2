@@ -202,7 +202,8 @@ class CoursemologyDockerContainer < Docker::Container
     tar_file = Gem::Package::TarReader.new(stream)
     tar_file.each do |file|
       test_report = file.read
-      return test_report.force_encoding(Encoding::UTF_8) if test_report
+      # this string must be mutable for force_encoding to work
+      return (+test_report).force_encoding(Encoding::UTF_8) if test_report
     end
   rescue Docker::Error::NotFoundError
     nil

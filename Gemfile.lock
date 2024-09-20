@@ -181,6 +181,7 @@ GEM
     coursemology-polyglot (0.3.8)
       activesupport (>= 4.2)
     crass (1.0.6)
+    csv (3.2.8)
     date (3.3.4)
     devise (4.9.4)
       bcrypt (~> 3.0)
@@ -364,6 +365,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    ostruct (0.6.0)
     parallel (1.26.3)
     parallel_tests (4.7.1)
       parallel
@@ -624,6 +626,7 @@ DEPENDENCIES
   codecov
   consistency_fail
   coursemology-polyglot
+  csv
   devise (= 4.9.4)
   devise-multi_email
   docker-api
@@ -654,6 +657,7 @@ DEPENDENCIES
   mimemagic (= 0.4.3)
   mini_magick
   nokogiri (>= 1.8.1)
+  ostruct
   parallel_tests
   pg
   puma
@@ -697,7 +701,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 3.1.4p223
+   ruby 3.3.5p100
 
 BUNDLED WITH
    2.5.9
