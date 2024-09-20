@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 source 'https://rubygems.org'
 
-ruby '3.1.4'
+ruby '3.3.5'
+
+# These gems are included in Ruby defaults for now,
+# but they will have to be included separately in future versions.
+gem 'ostruct'
+gem 'csv'
 
 # For Windows devs
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
