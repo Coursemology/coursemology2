@@ -2,6 +2,7 @@ import { Fragment, useDeferredValue, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowForwardRounded, SearchOffRounded } from '@mui/icons-material';
 import {
+  Chip,
   List,
   ListItem,
   ListItemButton,
@@ -92,12 +93,29 @@ const TargetsList = (props: TargetsListProps): JSX.Element => {
               disablePadding
             >
               <ListItemButton
-                disabled={props.disabled}
+                // TODO: enable duplication to koditsu assessment if question is compatible
+                // once we properly implement how to duplicate to Koditsu Assessment
+                disabled={props.disabled || assessment.isKoditsu}
                 onClick={(): void =>
                   props.onSelectTarget(assessment.duplicationUrl)
                 }
               >
-                <ListItemText>{assessment.title}</ListItemText>
+                <ListItemText>
+                  {assessment.isKoditsu ? (
+                    <div>
+                      {assessment.title}
+                      <Chip
+                        className="ml-2"
+                        color="info"
+                        label={t(translations.koditsuMode)}
+                        size="small"
+                        variant="outlined"
+                      />
+                    </div>
+                  ) : (
+                    assessment.title
+                  )}
+                </ListItemText>
 
                 <ListItemIcon
                   className={`min-w-fit ${

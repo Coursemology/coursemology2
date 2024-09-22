@@ -12,6 +12,14 @@ json.unautogradable !question.auto_gradable? && assessment.autograded?
 json.type question_assessment.question.question_type_readable
 json.description format_ckeditor_rich_text(question.description) unless question.description.blank?
 
+is_programming_question = question.actable_type == Course::Assessment::Question::Programming.name
+is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+
+if is_course_koditsu_enabled && is_programming_question
+  is_language_supportable_by_koditsu = KoditsuAsyncApiService.language_valid_for_koditsu?(question.actable.language)
+  json.isCompatibleWithKoditsu is_programming_question && is_language_supportable_by_koditsu
+end
+
 if can?(:manage, assessment)
   json.editUrl url_for([:edit, current_course, assessment, question.specific])
   json.deleteUrl url_for([current_course, assessment, question.specific])
@@ -23,6 +31,7 @@ if can?(:manage, assessment)
 
       id = assessment_hash[:id]
       json.duplicationUrl duplicate_course_assessment_question_path(current_course, assessment, question, id)
+      json.isKoditsu assessment_hash[:is_koditsu] && is_course_koditsu_enabled
     end
   end
 end
