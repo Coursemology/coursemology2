@@ -281,12 +281,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # @return [Array<Hash{title: String, assessments: Array}>] Array containing one hash per tab.
   def ordered_assessments_by_tab
     tabs = current_course.assessments.ordered_by_date_and_title.
-           pluck(:id, :tab_id, 'course_lesson_plan_items.title').
-           group_by { |_, tab_id, _| tab_id }.
+           pluck(:id, :tab_id, 'course_lesson_plan_items.title', :is_koditsu_enabled).
+           group_by { |_, tab_id, _, _| tab_id }.
            map do |tab_id, assessments|
              {
                title: compound_tab_titles[tab_id],
-               assessments: assessments.map { |id, _, title| { id: id, title: title } }
+               assessments: assessments.map do |id, _, title, is_koditsu|
+                 { id: id, title: title, is_koditsu: is_koditsu }
+               end
              }
            end
     tabs.sort_by { |tab_hash| tab_hash[:title] }

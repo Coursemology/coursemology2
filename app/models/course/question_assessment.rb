@@ -16,7 +16,13 @@ class Course::QuestionAssessment < ApplicationRecord
 
   default_scope { order(weight: :asc) }
 
-  scope :with_question_actables, -> { includes({ question: { actable: [:options, :test_cases, :solutions] } }) }
+  scope :with_question_actables, (lambda do
+    includes(
+      question: {
+        actable: [:language, :options, :test_cases, :solutions]
+      }
+    )
+  end)
 
   def default_title(num = nil)
     idx = num.present? ? num : question_number

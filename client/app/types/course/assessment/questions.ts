@@ -9,6 +9,7 @@ export interface QuestionData {
   title: string | null;
   unautogradable: boolean;
   type: string;
+  isCompatibleWithKoditsu?: boolean;
 
   description?: string;
   editUrl?: string;
@@ -18,6 +19,7 @@ export interface QuestionData {
     destinations: {
       title: string;
       duplicationUrl: string;
+      isKoditsu: boolean;
     }[];
   }[];
 }
