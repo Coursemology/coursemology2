@@ -160,9 +160,17 @@ const translations = defineMessages({
     id: 'course.assessment.show.questions',
     defaultMessage: 'Questions',
   },
+  syncingWithKoditsu: {
+    id: 'course.assessment.show.syncingWithKoditsu',
+    defaultMessage: 'Synchronizing',
+  },
   syncedWithKoditsu: {
     id: 'course.assessment.show.syncedWithKoditsu',
     defaultMessage: 'Synced with Koditsu',
+  },
+  failedSyncingWithKoditsu: {
+    id: 'course.assessment.show.failedSyncingWithKoditsu',
+    defaultMessage: 'Sync Failed',
   },
   koditsuMode: {
     id: 'course.assessment.show.koditsuMode',

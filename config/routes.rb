@@ -219,6 +219,7 @@ Rails.application.routes.draw do
           post 'authenticate', on: :member
           post 'remind', on: :member
           post 'unblock_monitor', on: :member
+          put 'sync_with_koditsu', on: :member
           get :requirements, on: :member
           get :statistics, on: :member
           get :monitoring, on: :member

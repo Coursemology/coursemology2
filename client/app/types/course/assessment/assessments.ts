@@ -127,6 +127,7 @@ export interface AssessmentData extends AssessmentActionsData {
 
   liveFeedbackEnabled?: boolean;
   isKoditsuAssessmentEnabled?: boolean;
+  isSyncedWithKoditsu?: boolean;
   isStudent: boolean;
   allowRecordDraftAnswer?: boolean;
   showMcqMrqSolution?: boolean;

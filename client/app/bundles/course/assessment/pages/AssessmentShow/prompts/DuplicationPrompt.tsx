@@ -2,7 +2,6 @@ import { Fragment, useDeferredValue, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowForwardRounded, SearchOffRounded } from '@mui/icons-material';
 import {
-  Chip,
   List,
   ListItem,
   ListItemButton,
@@ -14,6 +13,7 @@ import {
 } from '@mui/material';
 import { QuestionData } from 'types/course/assessment/questions';
 
+import KoditsuChip from 'course/assessment/components/Koditsu/KoditsuChip';
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import Link from 'lib/components/core/Link';
@@ -102,16 +102,10 @@ const TargetsList = (props: TargetsListProps): JSX.Element => {
               >
                 <ListItemText>
                   {assessment.isKoditsu ? (
-                    <div>
+                    <>
                       {assessment.title}
-                      <Chip
-                        className="ml-2"
-                        color="info"
-                        label={t(translations.koditsuMode)}
-                        size="small"
-                        variant="outlined"
-                      />
-                    </div>
+                      <KoditsuChip />
+                    </>
                   ) : (
                     assessment.title
                   )}

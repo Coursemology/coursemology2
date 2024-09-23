@@ -9,6 +9,7 @@ import { Chip, Tooltip } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
 
+import KoditsuChip from 'course/assessment/components/Koditsu/KoditsuChip';
 import PersonalTimeBooleanIcons from 'lib/components/extensions/PersonalTimeBooleanIcon';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -43,6 +44,8 @@ const NonStudentStatusBadges = (
         </Tooltip>
       )}
 
+      {assessment.isKoditsuAssessmentEnabled && <KoditsuChip />}
+
       {assessment.autograded && (
         <Tooltip disableInteractive title={t(translations.autograded)}>
           <CheckCircle className="text-3xl text-neutral-500 hover?:text-neutral-600" />
@@ -59,15 +62,6 @@ const NonStudentStatusBadges = (
         <Tooltip disableInteractive title={t(translations.passwordProtected)}>
           <Key className="text-3xl text-neutral-500 hover?:text-neutral-600" />
         </Tooltip>
-      )}
-
-      {assessment.isKoditsuAssessmentEnabled && (
-        <Chip
-          color="info"
-          label={t(translations.koditsuMode)}
-          size="small"
-          variant="outlined"
-        />
       )}
     </>
   );
