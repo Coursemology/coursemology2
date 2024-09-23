@@ -1,5 +1,7 @@
 CODAVERI_URL                      = ""
 CODAVERI_API_KEY                  = ""
+KODITSU_URL                       = ""
+KODITSU_API_KEY                   = ""
 ROLLBAR_ACCESS_TOKEN              = ""
 RAILS_HOSTNAME                    = "localhost:3000"
 KEYCLOAK_AUTH_SERVER_URL          = "http://localhost:8443/"

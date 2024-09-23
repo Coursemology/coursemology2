@@ -46,6 +46,7 @@ const KoditsuChipButton = (
 
   return (
     <Chip
+      clickable={syncStatus === 'Failed'}
       color={chipProps.color}
       icon={chipProps.icon}
       label={t(chipProps.label)}

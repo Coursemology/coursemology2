@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AutoFixHigh, InsertDriveFile } from '@mui/icons-material';
 import {
   Alert,
@@ -14,6 +14,7 @@ import {
 import { AssessmentData } from 'types/course/assessment/assessments';
 
 import KoditsuChipButton from 'course/assessment/components/Koditsu/KoditsuChipButton';
+import { syncWithKoditsu } from 'course/assessment/operations/assessments';
 import DescriptionCard from 'lib/components/core/DescriptionCard';
 import Page from 'lib/components/core/layouts/Page';
 import Subsection from 'lib/components/core/layouts/Subsection';
@@ -43,6 +44,14 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
   const [syncStatus, setSyncStatus] = useState<
     keyof typeof KODITSU_SYNC_STATUS
   >(assessment.isSyncedWithKoditsu ? 'Synced' : 'Syncing');
+
+  useEffect(() => {
+    if (isKoditsuIndicatorShown && syncStatus === KODITSU_SYNC_STATUS.Syncing) {
+      syncWithKoditsu(assessment.id)
+        .then(() => setSyncStatus('Synced'))
+        .catch(() => setSyncStatus('Failed'));
+    }
+  }, []);
 
   return (
     <Page
