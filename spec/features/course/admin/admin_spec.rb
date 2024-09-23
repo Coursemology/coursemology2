@@ -47,9 +47,8 @@ RSpec.feature 'Course: Administration: Administration', js: true do
           find('label', text: 'Change', visible: false).click
         end
 
-        click_button 'Done'
+        find("[role='dialog']").find('button', text: 'Done').click
         click_button 'Save changes'
-        wait_for_page
         expect_toastify('The new course logo was successfully uploaded.')
 
         visit current_path

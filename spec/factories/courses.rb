@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :course do
+    transient do
+      prefix { 'Course ' }
+    end
     sequence(:title) do |n|
-      timestamp = Time.zone.now.to_i.to_s
-      "Course #{timestamp + n.to_s}"
+      timestamp = Time.zone.now.to_i.to_s(36)
+      "#{prefix}#{timestamp}#{n}"
     end
     description { 'example course' }
     start_at { Time.zone.now }

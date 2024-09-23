@@ -17,13 +17,11 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
 
       scenario 'I can create a new file upload question' do
         skill = create(:course_assessment_skill, course: course)
-        visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_page = window_opened_by { click_link 'File Upload' }
+        new_page = test_new_assessment_question_flow(course, assessment, 'File Upload')
 
         within_window new_page do
-          expect(current_path).to eq(
-            new_course_assessment_question_text_response_path(course, assessment)
+          expect(page).to have_current_path(
+            new_course_assessment_question_text_response_path(course, assessment, { file_upload: true })
           )
           question_attributes = attributes_for(:course_assessment_question_text_response)
           fill_in 'title', with: question_attributes[:title]
@@ -36,7 +34,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
           find('li', text: skill.title).click
 
           click_button 'Save changes'
-          wait_for_page
+          expect(page).to have_current_path(course_assessment_path(course, assessment))
 
           question_created = assessment.questions.first.specific
           expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
@@ -51,12 +49,11 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
 
       scenario 'I can create a new text response question' do
         visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_page = window_opened_by { click_link 'Text Response' }
+        new_page = test_new_assessment_question_flow(course, assessment, 'Text Response')
 
         within_window new_page do
           file_upload_path = new_course_assessment_question_text_response_path(course, assessment)
-          expect(current_path).to eq(file_upload_path)
+          expect(page).to have_current_path(file_upload_path)
 
           question_attributes = attributes_for(:course_assessment_question_text_response)
           fill_in 'title', with: question_attributes[:title]
@@ -65,7 +62,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
           fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
 
           click_button 'Save changes'
-          wait_for_page
+          expect(page).to have_current_path(course_assessment_path(course, assessment))
 
           question_created = assessment.questions.first.specific
           expect(question_created.title).to eq(question_attributes[:title])
@@ -100,9 +97,8 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         fill_in 'maximumGrade', with: maximum_grade
 
         click_button 'Save changes'
-        wait_for_page
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(question.reload.title).to eq(title)
         expect(question.reload.description).to include(description)
         expect(question.reload.staff_only_comments).to include(staff_only_comments)
@@ -129,9 +125,8 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         end
 
         click_button 'Save changes'
-        wait_for_page
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(question.reload.max_attachments).to eq(max_attachment_default_text_response)
         expect(question.reload.solutions.count).to eq(solutions.count)
 
@@ -140,17 +135,14 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
 
         find_all('button[aria-label="Delete solution"]').each(&:click)
         click_button 'Save changes'
-        wait_for_page
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(question.reload.solutions.count).to eq(0)
       end
 
       scenario 'I can delete a text response question' do
-        skip 'Flaky tests'
         question = create(:course_assessment_question_text_response, assessment: assessment)
         visit course_assessment_path(course, assessment)
-        wait_for_page
 
         within find('section', text: question.title) { click_button 'Delete' }
         click_button 'Delete question'

@@ -14,9 +14,7 @@ RSpec.describe 'Course: Assessments: Questions: Voice Response Management', js: 
 
       scenario 'I can create a new voice response question' do
         skill = create(:course_assessment_skill, course: course)
-        visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_voice_page = window_opened_by { click_link 'Audio Response' }
+        new_voice_page = test_new_assessment_question_flow(course, assessment, 'Audio Response')
 
         within_window new_voice_page do
           question_attributes = attributes_for(:course_assessment_question_voice_response)
@@ -29,7 +27,7 @@ RSpec.describe 'Course: Assessments: Questions: Voice Response Management', js: 
           find('li', text: skill.title).click
 
           click_button 'Save changes'
-          wait_for_page
+          expect(page).to have_current_path(course_assessment_path(course, assessment))
 
           question_created = assessment.questions.first.specific
           expect(question_created.title).to eq(question_attributes[:title])
@@ -57,9 +55,7 @@ RSpec.describe 'Course: Assessments: Questions: Voice Response Management', js: 
         fill_in 'maximumGrade', with: maximum_grade
 
         click_button 'Save changes'
-        wait_for_page
-
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(voice.reload.title).to eq(title)
         expect(voice.reload.description).to include(description)
         expect(voice.reload.staff_only_comments).to include(staff_only_comments)
@@ -69,7 +65,6 @@ RSpec.describe 'Course: Assessments: Questions: Voice Response Management', js: 
       scenario 'I can delete a question' do
         voice = create(:course_assessment_question_voice_response, assessment: assessment)
         visit course_assessment_path(course, assessment)
-        wait_for_page
         within find('section', text: voice.title) { click_button 'Delete' }
         click_button 'Delete question'
 

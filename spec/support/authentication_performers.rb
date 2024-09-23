@@ -16,16 +16,15 @@ module AuthenticationPerformersTestHelpers
     fill_in 'Password', with: password_for(user)
     click_button 'Sign In'
 
-    wait_for_page
+    # We expect all authenticated pages should have a user menu button.
+    expect(page).to have_css('div[data-testid="user-menu-button"]')
   end
 
   def logout(*_)
-    # We expect all pages should have a user menu button.
     find('div[data-testid="user-menu-button"]').click
     find('li', text: 'Sign out').click
-    click_button 'Logout'
-
-    wait_for_page
+    click_button('Logout')
+    expect(page).to_not have_css('div[data-testid="user-menu-button"]')
   end
 
   private

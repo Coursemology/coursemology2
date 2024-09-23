@@ -62,6 +62,10 @@ module TrackableJob::SpecHelpers
     end
   end
 
+  # TODO: Whenever possible, rewrite tests currently using these functions to use alternative solutions.
+  # Sleeping for a preset time is inherently flaky as the page may not always behave the same way.
+  # https://thoughtbot.com/blog/write-reliable-asynchronous-integration-tests-with-capybara
+
   # Wait for page/react lifecycle to finish loading/end
   def wait_for_page
     sleep 2.5
@@ -74,6 +78,13 @@ module TrackableJob::SpecHelpers
 
   def wait_for_field_debouncing
     sleep 0.5
+  end
+
+  # Wait for certain animations to finish before performing further actions (e.g. clicking a list element)
+  # The animation may cause tests to click the wrong element if it happens at an unexpected time.
+  # As with all the wait_for_* methods above, we should stop using this when a better solution is found.
+  def wait_for_animation
+    sleep 1
   end
 
   def visit_current_path

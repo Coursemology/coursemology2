@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 FactoryBot.define do
   factory :generic_announcement, class: System::Announcement.name do
-    sequence(:title) { |n| "Announcement #{n}" }
+    transient do
+      prefix { 'Announcement ' }
+    end
+    sequence(:title) { |n| "#{prefix}#{n}" }
     sequence(:content) { |n| "Content #{n}" }
 
     start_at { Time.zone.now }

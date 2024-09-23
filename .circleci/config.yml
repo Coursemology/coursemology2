@@ -221,7 +221,7 @@ commands:
     steps:
       - run:
           name: Terminate Rails server
-          command: pkill -SIGTERM -f puma
+          command: pkill -SIGINT -f puma
 
       - run:
           name: Wait for Rails coverage results

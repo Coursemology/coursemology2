@@ -106,6 +106,8 @@ RSpec.feature 'Course: Homepage', js: true do
       scenario 'I can visit the course homepage' do
         visit course_path(course)
 
+        # we have at least one FE assertion to ensure below check is performed after record is updated
+        expect(page).to have_text(course.title)
         expect(course_user.reload.last_active_at).to be_within(1.hour).of(Time.zone.now)
       end
 
