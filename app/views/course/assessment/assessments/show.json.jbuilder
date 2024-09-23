@@ -21,6 +21,9 @@ json.indexUrl course_assessments_path(current_course, category: assessment.tab.c
 
 if current_course.component_enabled?(Course::KoditsuPlatformComponent)
   json.isKoditsuAssessmentEnabled assessment.is_koditsu_enabled
+
+  json.isSyncedWithKoditsu assessment.is_synced_with_koditsu &&
+                           assessment.questions.all?(&:is_synced_with_koditsu)
 end
 
 json.startAt do
@@ -119,7 +122,7 @@ if can_observe
         {
           type: 'Programming',
           url: new_course_assessment_question_programming_path(current_course, assessment)
-        },
+        }
       ]
     else
       json.newQuestionUrls [

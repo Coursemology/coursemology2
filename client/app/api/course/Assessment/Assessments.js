@@ -108,6 +108,12 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     return this.client.get(`${this.#urlPrefix}/skills/options`);
   }
 
+  syncWithKoditsu(assessmentId) {
+    return this.client.put(
+      `${this.#urlPrefix}/${assessmentId}/sync_with_koditsu`,
+    );
+  }
+
   /**
    * Sends emails to remind students to complete the assessment.
    *

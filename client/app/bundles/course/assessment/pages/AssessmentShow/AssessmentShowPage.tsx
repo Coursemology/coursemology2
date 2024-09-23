@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { AutoFixHigh, InsertDriveFile } from '@mui/icons-material';
 import {
   Alert,
@@ -12,11 +13,12 @@ import {
 } from '@mui/material';
 import { AssessmentData } from 'types/course/assessment/assessments';
 
-import KoditsuChipButton from 'course/assessment/components/KoditsuChipButton';
+import KoditsuChipButton from 'course/assessment/components/Koditsu/KoditsuChipButton';
 import DescriptionCard from 'lib/components/core/DescriptionCard';
 import Page from 'lib/components/core/layouts/Page';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import Link from 'lib/components/core/Link';
+import { KODITSU_SYNC_STATUS } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -38,6 +40,10 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
   const isKoditsu = assessment.isKoditsuAssessmentEnabled;
   const isKoditsuIndicatorShown = isKoditsu && !assessment.isStudent;
 
+  const [syncStatus, setSyncStatus] = useState<
+    keyof typeof KODITSU_SYNC_STATUS
+  >(assessment.isSyncedWithKoditsu ? 'Synced' : 'Syncing');
+
   return (
     <Page
       actions={<AssessmentShowHeader with={assessment} />}
@@ -46,7 +52,13 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
       title={
         <div className="flex flex-row space-x-5 align-middle">
           <Typography variant="h5">{assessment.title}</Typography>
-          {isKoditsuIndicatorShown && <KoditsuChipButton />}
+          {isKoditsuIndicatorShown && (
+            <KoditsuChipButton
+              assessmentId={assessment.id}
+              setSyncStatus={setSyncStatus}
+              syncStatus={syncStatus}
+            />
+          )}
         </div>
       }
     >
