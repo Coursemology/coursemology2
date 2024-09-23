@@ -257,7 +257,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         const isGradedOrPublished =
           datum.workflowState === workflowStates.Graded ||
           datum.workflowState === workflowStates.Published;
-        return datum.totalGrade && isGradedOrPublished ? (
+        return typeof datum.totalGrade === 'number' && isGradedOrPublished ? (
           renderTotalGradeCell(datum.totalGrade, assessment!.maximumGrade)
         ) : (
           <div />
