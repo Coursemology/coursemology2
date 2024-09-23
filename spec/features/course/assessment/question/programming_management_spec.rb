@@ -14,9 +14,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
 
       scenario 'I can create a new question' do
         skill = create(:course_assessment_skill, course: course)
-        visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_page = window_opened_by { click_link 'Programming' }
+        new_page = test_new_assessment_question_flow(course, assessment, 'Programming')
 
         within_window new_page do
           expect(current_path).to eq(new_course_assessment_question_programming_path(course, assessment))
@@ -34,17 +32,19 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           find('li', text: skill.title).click
 
           find_all('div', text: 'Language').last.click
-          find('li', text: attributes[:language].name).click
+          wait_for_animation
+          find('li', exact_text: attributes[:language].name).click
 
           find('div', id: 'testUi.metadata.submission').click
           send_keys template
 
           click_button 'Save changes'
-          wait_for_page
+          expect_toastify('Question saved.')
 
           expect(page).to have_current_path(course_assessment_path(course, assessment))
 
           new_question = assessment.questions.first.specific.reload
+          expect(assessment.questions.count).to eq(1)
           expect(new_question.title).to eq(attributes[:title])
           expect(new_question.maximum_grade).to eq(attributes[:maximum_grade])
           expect(new_question.description).to include(attributes[:description])
@@ -77,7 +77,8 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         expect(page).not_to have_field('Attempt limit')
 
         find_all('div', text: 'Language').last.click
-        find('li', text: attributes[:language].name).click
+        wait_for_animation
+        find('li', exact_text: attributes[:language].name).click
 
         find('span', text: 'Evaluate and test code').click
         expect(page).to have_text('submissions will always receive the maximum grade')
@@ -101,11 +102,12 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         end
 
         click_button 'Save changes'
-        wait_for_page
+        expect_toastify('Question saved.')
 
         expect(page).to have_current_path(course_assessment_path(course, assessment))
 
         new_question = assessment.questions.first.specific.reload
+        expect(assessment.questions.count).to eq(1)
         expect(new_question.title).to eq(attributes[:title])
         expect(new_question.maximum_grade).to eq(attributes[:maximum_grade])
         expect(new_question.description).to include(attributes[:description])
@@ -130,17 +132,22 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         end
 
         click_button 'Save changes'
-        wait_for_page
-
+        expect_toastify("package wasn't successfully imported")
         expect(page).to have_text('error')
-        expect_toastify "package wasn't successfully imported"
+        find('.Toastify').find('svg[data-testid="CloseIcon"]').click
 
         attach_file(valid_package) do
           click_button 'Upload a new package'
         end
 
+        # TODO: close button on toastify messages doesn't work,
+        # but scrolling the page causes it to close eventually
+        page.scroll_to(find('footer'))
+        page.scroll_to(find('button', text: 'Upload a new package'))
+        expect(page).to_not have_css('.Toastify', text: "package wasn't successfully imported", wait: 60)
+
         click_button 'Save changes'
-        wait_for_page
+        expect_toastify('Question saved.')
 
         expect(page).to have_current_path(course_assessment_path(course, assessment))
 
@@ -169,7 +176,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
 
         fill_in 'Maximum grade', with: maximum_grade
         click_button 'Save changes'
-        wait_for_page
+        expect_toastify('Question saved.')
 
         expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(question.reload.maximum_grade).to eq(maximum_grade)
@@ -193,6 +200,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         fill_in 'Maximum grade', with: attributes[:maximum_grade]
 
         find_all('div', text: 'Language').last.click
+        wait_for_animation
         find('li', text: attributes[:language].name).click
 
         find('span', text: 'Evaluate and test code').click
@@ -208,9 +216,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         end
 
         click_button 'Save changes'
-        wait_for_page
+        expect_toastify('Question saved.')
 
-        new_question = assessment.questions.first.specific
+        new_question = assessment.questions.first.specific.reload
         expect(new_question.memory_limit).to eq(attributes[:memory_limit])
         expect(new_question.time_limit).to eq(attributes[:time_limit])
         expect(new_question.attempt_limit).to eq(attributes[:attempt_limit])

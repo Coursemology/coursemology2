@@ -13,9 +13,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can switch MCQ to MRQ, and back to MCQ, for a new question' do
-        visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_mcq_page = window_opened_by { click_link 'Multiple Choice (MCQ)' }
+        new_mcq_page = test_new_assessment_question_flow(course, assessment, 'Multiple Choice (MCQ)')
 
         within_window new_mcq_page do
           click_on 'Convert to MRQ'
@@ -27,9 +25,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
       end
 
       scenario 'I can switch MRQ to MCQ, and back to MRQ, for a new question' do
-        visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_mrq_page = window_opened_by { click_link 'Multiple Response (MRQ)' }
+        new_mrq_page = test_new_assessment_question_flow(course, assessment, 'Multiple Response (MRQ)')
 
         within_window new_mrq_page do
           click_on 'Convert to MCQ'
@@ -42,9 +38,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
 
       scenario 'I can create a new multiple response question' do
         skill = create(:course_assessment_skill, course: course)
-        visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_mrq_page = window_opened_by { click_link 'Multiple Response (MRQ)' }
+        new_mrq_page = test_new_assessment_question_flow(course, assessment, 'Multiple Response (MRQ)')
 
         within_window new_mrq_page do
           question_attributes = attributes_for(:course_assessment_question_multiple_response)
@@ -67,7 +61,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
           end
 
           click_button 'Save changes'
-          wait_for_page
+          expect(page).to have_current_path(course_assessment_path(course, assessment))
 
           question_created = assessment.questions.first.specific
           expect(question_created).not_to be_multiple_choice
@@ -77,9 +71,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
       end
 
       scenario 'I can create a new multiple choice question' do
-        visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_mcq_page = window_opened_by { click_link 'Multiple Choice (MCQ)' }
+        new_mcq_page = test_new_assessment_question_flow(course, assessment, 'Multiple Choice (MCQ)')
 
         within_window new_mcq_page do
           question_attributes = attributes_for(:course_assessment_question_multiple_response)
@@ -99,8 +91,6 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
           end
 
           click_button 'Save changes'
-          wait_for_page
-
           expect(page).to have_text('You must specify at least one correct choice.')
 
           within choice_section do
@@ -109,7 +99,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
           end
 
           click_button 'Save changes'
-          wait_for_page
+          expect(page).to have_current_path(course_assessment_path(course, assessment))
 
           question_created = assessment.questions.first.specific
           expect(question_created).to be_multiple_choice
@@ -132,9 +122,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         maximum_grade = 999.9
         fill_in 'maximumGrade', with: maximum_grade
         click_button 'Save changes'
-
-        wait_for_page
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(mrq.reload.maximum_grade).to eq(maximum_grade)
 
         visit edit_path
@@ -155,9 +143,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         end
 
         click_button 'Save changes'
-        wait_for_page
-
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(initial_options_count + options.count)
 
         # Switching in edit page
@@ -165,17 +151,16 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         visit edit_path
         click_button 'Convert to MCQ'
         find_all('button', text: 'Convert to MCQ').last.click
-
-        wait_for_page
+        expect(page).to have_text('Choices')
 
         # Switch MCQ to MRQ
         click_button 'Convert to MRQ'
         find_all('button', text: 'Convert to MRQ').last.click
-
-        wait_for_page
+        expect(page).to have_text('Responses')
 
         # Switching in assessment show page
         visit course_assessment_path(course, assessment)
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
 
         # Switch MRQ to MCQ
         click_button 'Convert to MCQ'
@@ -192,15 +177,12 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         find_all('button[aria-label="Delete choice"]').each(&:click)
         expect(page).to have_button('Save changes')
         click_button 'Save changes'
-
         expect(page).to have_text('You must specify at least one correct choice.')
 
         find_all('button[aria-label="Undo delete choice"]').last.click
         expect(page).to have_button('Save changes')
         click_button 'Save changes'
-        wait_for_page
-
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(1)
       end
 
@@ -215,9 +197,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         maximum_grade = 999.9
         fill_in 'maximumGrade', with: maximum_grade
         click_button 'Save changes'
-
-        wait_for_page
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(mrq.reload.maximum_grade).to eq(maximum_grade)
 
         visit edit_path
@@ -225,22 +205,18 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         find_all('button[aria-label="Delete response"]').each(&:click)
         expect(page).to have_button('Save changes')
         click_button 'Save changes'
-
         expect(page).to have_text('You must specify at least one response.')
 
         find_all('button[aria-label="Undo delete response"]').last.click
         expect(page).to have_button('Save changes')
         click_button 'Save changes'
-        wait_for_page
-
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(1)
       end
 
       scenario 'I can delete a question' do
         mrq = create(:course_assessment_question_multiple_response, assessment: assessment)
         visit course_assessment_path(course, assessment)
-        wait_for_page
         within find('section', text: mrq.title) { click_button 'Delete' }
         click_button 'Delete question'
 

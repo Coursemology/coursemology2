@@ -87,10 +87,10 @@ module Capybara::TestGroupHelpers
     # Since capybara's `find` has a default timeout until the element is found, this helps
     # to ensure certain changes are made before continuing with the tests.
     def expect_toastify(message)
-      wait_for_page # To ensure toast is open
+      expect(page).to have_css('.Toastify', visible: true)
       container = find_all('.Toastify').first
       expect(container).to have_text(message)
-      find('p', text: message).click
+      container.find('p', text: message).click
     end
 
     # Finds a react-beautiful-dnd draggable element

@@ -14,12 +14,10 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
 
       scenario 'I can create a new forum post response question' do
         skill = create(:course_assessment_skill, course: course)
-        visit course_assessment_path(course, assessment)
-        click_on 'New Question'
-        new_page = window_opened_by { click_link 'Forum Post Response' }
+        new_page = test_new_assessment_question_flow(course, assessment, 'Forum Post Response')
 
         within_window new_page do
-          expect(current_path).to eq(
+          expect(page).to have_current_path(
             new_course_assessment_question_forum_post_response_path(course, assessment)
           )
           question_attributes = attributes_for(:course_assessment_question_forum_post_response)
@@ -36,7 +34,7 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
           find('li', text: skill.title).click
 
           click_button 'Save changes'
-          wait_for_page
+          expect(page).to have_current_path(course_assessment_path(course, assessment))
 
           question_created = assessment.questions.first.specific
           expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
@@ -71,9 +69,7 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
         correct_checkbox.check
 
         click_button 'Save changes'
-        wait_for_page
-
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(forum_post.reload.title).to eq(title)
         expect(forum_post.reload.description).to include(description)
         expect(forum_post.reload.staff_only_comments).to include(staff_only_comments)
@@ -86,7 +82,7 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
         correct_checkbox.uncheck
 
         click_button 'Save changes'
-        wait_for_page
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
 
         expect(forum_post.reload.has_text_response).to eq(false)
       end

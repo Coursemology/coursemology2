@@ -81,10 +81,10 @@ RSpec.describe Course::Assessment::Question::ScribingController do
             result[:file] = fixture_file_upload(file_path, 'application/pdf')
           end
         end
+        let(:file_path) { 'files/one-page-document.pdf' }
 
         # "CircleCI's imagemagick installation is flaky"
         pending 'when the pdf is one page' do
-          let(:file_path) { 'files/one-page-document.pdf' }
           it 'creates one scribing question with a png attachment' do
             expect { subject }.to change { Course::Assessment::Question::Scribing.count }.by(1)
 
@@ -99,7 +99,6 @@ RSpec.describe Course::Assessment::Question::ScribingController do
 
         # "CircleCI's imagemagick installation is flaky"
         pending 'when the pdf is two pages' do
-          let(:file_path) { 'files/two-page-document.pdf' }
           it 'creates one scribing question with a png attachment for each pdf page' do
             expect { subject }.to change { Course::Assessment::Question::Scribing.count }.by(2)
 

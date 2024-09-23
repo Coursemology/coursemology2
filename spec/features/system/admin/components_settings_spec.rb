@@ -21,11 +21,10 @@ RSpec.feature 'System: Administration: Components', type: :feature, js: true do
         expect(page).to have_selector('tr', text: component.display_name)
 
         within find("tr#component_#{component.key}") do
-          checkbox = find('input', visible: false)
           if enabled_components.include?(component.key.to_s)
-            expect(checkbox).to be_checked
+            expect(page).to have_selector('input:checked', visible: false)
           else
-            expect(checkbox).not_to be_checked
+            expect(page).to have_selector('input:not(:checked)', visible: false)
           end
         end
       end
@@ -36,22 +35,15 @@ RSpec.feature 'System: Administration: Components', type: :feature, js: true do
       settings = Instance::Settings::Components.new(instance)
       enabled_components = settings.enabled_component_ids
       component_to_modify = enabled_components.sample
+      element_to_modify = find("tr#component_#{component_to_modify}")
 
-      within find("tr#component_#{component_to_modify}") do
-        find('input', visible: false).click
-      end
+      element_to_modify.find('input', visible: false).click
       expect_toastify('Instance component setting was updated successfully.')
+      expect(element_to_modify).to have_selector('input:not(:checked)', visible: false)
 
-      within find("tr#component_#{component_to_modify}") do
-        expect(find('input', visible: false)).not_to be_checked
-        find('input', visible: false).click
-      end
-
+      element_to_modify.find('input', visible: false).click
       expect_toastify('Instance component setting was updated successfully.')
-
-      within find("tr#component_#{component_to_modify}") do
-        expect(find('input', visible: false)).to be_checked
-      end
+      expect(element_to_modify).to have_selector('input:checked', visible: false)
     end
   end
 end

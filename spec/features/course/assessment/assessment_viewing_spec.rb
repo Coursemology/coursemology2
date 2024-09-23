@@ -14,17 +14,14 @@ RSpec.describe 'Course: Assessments: Viewing', js: true do
 
       scenario 'I can access all submissions of an assessment' do
         assessment
+
         visit course_assessments_path(course)
-        wait_for_page
-
-        submissions_button = find_link('Submissions', visible: false)
-        hover_then_click submissions_button
-
+        hover_then_click find('a[aria-label="Submissions"]')
         expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
 
         # Access submissions from the show assessment page
         visit course_assessment_path(course, assessment)
-        click_link 'Submissions'
+        hover_then_click find('a[aria-label="Submissions"]')
         expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
       end
 

@@ -1821,7 +1821,7 @@
             "postgres"
           ],
           "allowDatabaseToOverwriteKeycloak": [
-            "false"
+            "true"
           ]
         }
       }
@@ -4210,7 +4210,7 @@
             "postgres"
           ],
           "allowDatabaseToOverwriteKeycloak": [
-            "false"
+            "true"
           ]
         }
       }
