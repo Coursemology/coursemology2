@@ -36,6 +36,7 @@ export interface AssessmentFormProps
   onSubmit: (data: FieldValues, setError: UseFormSetError<FieldValues>) => void;
 
   initialValues?;
+  isCourseCodaveriEnabled?: boolean;
   disabled?: boolean;
   showPersonalizedTimelineFeatures?: boolean;
   randomizationAllowed?: boolean;

@@ -27,7 +27,7 @@ const AutogradedActionButtonsRow: FC<Props> = (props) => {
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
 
-  const { questionIds } = assessment;
+  const { questionIds, isCourseCodaveriEnabled } = assessment;
   const { workflowState } = submission;
 
   const attempting = workflowState === workflowStates.Attempting;
@@ -43,7 +43,8 @@ const AutogradedActionButtonsRow: FC<Props> = (props) => {
         <ContinueButton onContinue={handleNext} stepIndex={stepIndex} />
         <Box sx={{ flex: '1', width: '100%' }} />
         {question.type === questionTypes.Programming &&
-          question.liveFeedbackEnabled && (
+          question.liveFeedbackEnabled &&
+          isCourseCodaveriEnabled && (
             <LiveFeedbackButton questionId={questionId} />
           )}
       </div>
