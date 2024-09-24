@@ -81,7 +81,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   ): void => {
     const newQuestionWithGrades = {
       ...oldQuestions,
-      [questionId]: {
+      [id]: {
         ...oldQuestions[id],
         grade: newGrade,
         autofilled: false,
