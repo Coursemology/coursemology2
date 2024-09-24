@@ -316,6 +316,12 @@ const translations = defineMessages({
     id: 'course.assessment.submission.updateFailure',
     defaultMessage: 'Submission update failed: {errors}',
   },
+  startTimedExamAssessmentFailed: {
+    id: 'course.assessment.submission.startTimedExamAssessmentFailed',
+    defaultMessage:
+      'There is an error in starting the exam / assessment. Please check your \
+      internet connection and try again',
+  },
   downloadRequestSuccess: {
     id: 'course.assessment.submission.downloadRequestSuccess',
     defaultMessage: 'Your download request is successful.',
@@ -454,11 +460,19 @@ const translations = defineMessages({
       '{stillSomeTimeRemaining, select, true {Once the time is up, \
       the assessment will be automatically finalised.} other {Finalising the submission now!}}',
   },
+  timedAssessmentStartDialogMessage: {
+    id: 'course.assessment.submission.timedExamStartDialogMessage',
+    defaultMessage: 'Click to start the assessment and the timer',
+  },
   timedExamDialogTitle: {
     id: 'course.assessment.submission.timedExamDialogTitle',
     defaultMessage:
       '{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {remaining}} to \
       complete this exam.} other {The exam has ended!}}',
+  },
+  timedExamStartDialogMessage: {
+    id: 'course.assessment.submission.timedExamStartDialogMessage',
+    defaultMessage: 'Click to start the exam and the timer',
   },
   timedExamDialogMessage: {
     id: 'course.assessment.submission.timedExamDialogMessage',
@@ -478,6 +492,10 @@ const translations = defineMessages({
   ok: {
     id: 'course.assessment.submission.ok',
     defaultMessage: 'OK',
+  },
+  start: {
+    id: 'course.assessment.submission.start',
+    defaultMessage: '{isNewSubmission, select, true {Start} other {OK}}',
   },
   answerSubmitted: {
     id: 'course.assessment.submission.answerSubmitted',

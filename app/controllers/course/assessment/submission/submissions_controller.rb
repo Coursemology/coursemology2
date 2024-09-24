@@ -31,6 +31,8 @@ class Course::Assessment::Submission::SubmissionsController < \
                    staff: 'staff',
                    staff_w_phantom: 'staff_w_phantom' }.freeze
 
+  FORCE_SUBMIT_DELAY = 5.minutes
+
   def index
     authorize!(:view_all_submissions, @assessment)
 
@@ -103,6 +105,20 @@ class Course::Assessment::Submission::SubmissionsController < \
     response_body['feedbackUrl'] = ENV.fetch('CODAVERI_URL')
 
     render json: response_body, status: response_status
+  end
+
+  def set_timer_started_at
+    unless @submission.timer_started_at
+      @submission.timer_started_at = Time.zone.now
+
+      raise ActiveRecord::Rollback unless @submission.save
+
+      Course::Assessment::Submission::ForceSubmitTimedSubmissionJob.
+        set(wait_until: @submission.timer_started_at + @assessment.time_limit.minutes + FORCE_SUBMIT_DELAY).
+        perform_later(@assessment, @submission_id, @submission.creator)
+    end
+
+    render json: { timerStartedAt: @submission.timer_started_at }
   end
 
   # Reload the current answer or reset it, depending on parameters.

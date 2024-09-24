@@ -22,7 +22,7 @@ class Course::Assessment::Submission::ForceSubmitTimedSubmissionJob < Applicatio
   def force_submit(submission, submitter)
     User.with_stamper(submitter) do
       ActiveRecord::Base.transaction do
-        submission.update!('finalise' => 'true')
+        submission.update!('finalise' => 'true') if submission.attempting?
       end
     end
   end
