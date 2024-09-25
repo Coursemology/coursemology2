@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller # rubocop:disable Metrics/ClassLength
   include Course::Assessment::AssessmentsHelper
+  include Course::Assessment::KoditsuAssessmentConcern
+  include Course::Assessment::Question::KoditsuQuestionConcern
 
   before_action :load_submissions, only: [:show]
 
@@ -51,9 +53,13 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     # Randomized Assessment is temporarily hidden (PR#5406)
     # @assessment.update_randomization(randomization_params)
 
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+
     ActiveRecord::Base.transaction do
       @assessment.save!
       upsert_monitoring! if can_manage_monitor?
+
+      create_assessment_in_koditsu if is_course_koditsu_enabled && @assessment.is_koditsu_enabled
 
       render json: { id: @assessment.id }
     end
@@ -76,9 +82,13 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     # Randomized Assessment is temporarily hidden (PR#5406)
     # @assessment.update_randomization(randomization_params)
 
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+
     ActiveRecord::Base.transaction do
       @assessment.update!(assessment_params)
       upsert_monitoring! if can_manage_monitor?
+
+      sync_assessment_and_question_in_koditsu if is_course_koditsu_enabled && @assessment.is_koditsu_enabled
 
       head :ok
     end
@@ -95,6 +105,19 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       }
     else
       render json: { errors: @assessment.errors.full_messages.to_sentence }, status: :bad_request
+    end
+  end
+
+  def sync_with_koditsu
+    create_or_update_assessment_in_koditsu
+
+    @assessment.questions.each do |question|
+      next if question.is_synced_with_koditsu
+
+      @question = question
+      @programming_question = question.specific
+
+      create_or_edit_question_in_koditsu
     end
   end
 
@@ -329,4 +352,5 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   alias_method :load_submissions, :submissions
+  alias_method :sync_assessment_and_question_in_koditsu, :sync_with_koditsu
 end
