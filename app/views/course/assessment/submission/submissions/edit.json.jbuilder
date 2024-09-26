@@ -20,6 +20,9 @@ json.assessment do
   json.questionIds @submission.questions.pluck(:id)
   json.passwordProtected @assessment.session_password_protected?
   json.gamified @assessment.course.gamified?
+  json.isKoditsuEnabled current_course.component_enabled?(Course::KoditsuPlatformComponent) &&
+                        @assessment.is_koditsu_enabled &&
+                        @assessment.koditsu_assessment_id
   json.files @assessment.folder.materials do |material|
     json.url url_to_material(@assessment.course, @assessment.folder, material)
     json.name format_inline_text(material.name)
