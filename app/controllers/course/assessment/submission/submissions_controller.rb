@@ -244,7 +244,15 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def create_success_response(submission)
-    redirect_url = edit_course_assessment_submission_path(current_course, @assessment, submission)
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
+
+    if is_course_koditsu_enabled && is_assessment_koditsu_enabled
+      redirect_url = "https://code.codaveri.com?assessment=#{@assessment.koditsu_assessment_id}"
+    else
+      redirect_url = edit_course_assessment_submission_path(current_course, @assessment, submission)
+    end
+
     render json: { redirectUrl: redirect_url }
   end
 

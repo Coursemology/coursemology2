@@ -48,7 +48,9 @@ module Course::Assessment::AssessmentAbility
   # 'access' refers to the ability to access password-protected assessments.
   def allow_access_assessment
     can :access, Course::Assessment do |assessment|
-      if assessment.view_password_protected?
+      if assessment.is_koditsu_enabled
+        true # for Koditsu assessment, the password will be inputted by students in Koditsu platform, not in CM
+      elsif assessment.view_password_protected?
         Course::Assessment::AuthenticationService.new(assessment, @session_id).authenticated? ||
           assessment.submissions.by_user(user).count > 0
       else

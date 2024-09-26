@@ -11,6 +11,9 @@ can_read_monitor = can?(:read, Course::Monitoring::Monitor.new) && @monitor.pres
 attempting_submission = submissions.find(&:attempting?)
 submitted_submission = submissions.find { |submission| !submission.attempting? }
 
+is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+is_assessment_koditsu_enabled = assessment.koditsu_assessment_id && assessment.is_koditsu_enabled
+
 action_url = nil
 if !current_course_user || !can_attempt
   status = 'unavailable'
@@ -19,7 +22,11 @@ elsif cannot?(:access, assessment) && can_attempt
   action_url = course_assessment_path(current_course, assessment)
 elsif attempting_submission.present?
   status = 'attempting'
-  action_url = edit_course_assessment_submission_path(current_course, assessment, attempting_submission)
+  action_url = if is_course_koditsu_enabled && is_assessment_koditsu_enabled
+                 "https://code.codaveri.com?assessment=#{assessment.koditsu_assessment_id}"
+               else
+                 edit_course_assessment_submission_path(current_course, assessment, attempting_submission)
+               end
 elsif submitted_submission.present?
   status = 'submitted'
   action_url = edit_course_assessment_submission_path(current_course, assessment, submitted_submission)

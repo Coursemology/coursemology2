@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Assessment,
   Create,
@@ -14,6 +14,7 @@ import {
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
+import Link from 'lib/components/core/Link';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -116,7 +117,10 @@ const AssessmentShowHeader = (
       )}
 
       {assessment.actionButtonUrl && (
-        <Link to={assessment.actionButtonUrl}>
+        <Link
+          opensInNewTab={assessment.isKoditsuAssessmentEnabled}
+          to={assessment.actionButtonUrl}
+        >
           <Button
             aria-label={t(ACTION_LABELS[assessment.status])}
             className="ml-4"

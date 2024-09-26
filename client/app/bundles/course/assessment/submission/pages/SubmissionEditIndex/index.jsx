@@ -70,6 +70,7 @@ class VisibleSubmissionEditIndex extends Component {
 
     return (
       assessment.timeLimit &&
+      !assessment.isKoditsuEnabled &&
       submission.workflowState === 'attempting' && (
         <TimeLimitBanner submissionTimeLimitAt={submissionTimeLimitAt} />
       )

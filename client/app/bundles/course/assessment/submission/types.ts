@@ -24,6 +24,7 @@ export interface AssessmentState {
   }[];
   gamified: boolean;
   isCodaveriEnabled: boolean;
+  isKoditsuEnabled: boolean;
   liveFeedbackEnabled: boolean;
   passwordProtected: boolean;
   questionIds: number[];
