@@ -44,6 +44,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   end
 
   def update
+    duplicate_and_replace_programming_question
     result = @programming_question.class.transaction do
       @question_assessment.skill_ids = programming_question_params[:question_assessment].
                                        try(:[], :skill_ids)
@@ -145,6 +146,44 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   end
 
   private
+
+  def duplicate_and_replace_programming_question
+    # Duplicate the programming question without affecting the parent question
+    duplicated_programming_question = @programming_question.dup
+
+    # Unique field that needs to be reset
+    duplicated_programming_question.import_job_id = nil
+
+    # Preserve the original question's actable ID (linking to the new programming question)
+    duplicated_programming_question.question = @programming_question.question
+
+    # Duplicate associated template files and test cases
+    duplicated_programming_question.template_files = @programming_question.template_files.map do |template_file|
+      duplicated_template_file = template_file.dup
+      duplicated_template_file.question = duplicated_programming_question
+      duplicated_template_file
+    end
+
+    duplicated_programming_question.test_cases = @programming_question.test_cases.map do |test_case|
+      duplicated_test_case = test_case.dup
+      duplicated_test_case.question = duplicated_programming_question
+      duplicated_test_case
+    end
+
+    # Save the duplicated programming question and its associations
+    duplicated_programming_question.save!(validate: false)
+    duplicated_programming_question.template_files.each(&:save!)
+    duplicated_programming_question.test_cases.each(&:save!)
+
+    # Link the duplicated programming question to the original question's actable
+    @programming_question.question.actable = duplicated_programming_question
+
+    # Update the original programming question's parent_id to link to the new duplicated question
+    duplicated_programming_question.update!(parent_id: @programming_question.id)
+
+    # Set the current programming question to the duplicated one for further processing
+    @programming_question = duplicated_programming_question
+  end
 
   def format_test_cases
     @public_test_cases = []
