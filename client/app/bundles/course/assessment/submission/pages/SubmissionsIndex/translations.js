@@ -75,6 +75,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.SubmissionsIndex.forceSubmit',
     defaultMessage: 'Force Submit Remaining',
   },
+  fetchFromKoditsu: {
+    id: 'course.assessment.submission.SubmissionsIndex.fetchFromKoditsu',
+    defaultMessage: 'Fetch Submissions from Koditsu',
+  },
   remind: {
     id: 'course.assessment.submission.SubmissionsIndex.remind',
     defaultMessage: 'Send Reminder Emails',

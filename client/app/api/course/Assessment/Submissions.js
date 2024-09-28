@@ -29,6 +29,12 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     });
   }
 
+  fetchSubmissionsFromKoditsu() {
+    return this.client.patch(
+      `${this.#urlPrefix}/fetch_submissions_from_koditsu`,
+    );
+  }
+
   unsubmit(submissionId) {
     return this.client.patch(`${this.#urlPrefix}/${submissionId}/unsubmit`);
   }

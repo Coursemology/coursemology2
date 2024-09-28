@@ -16,6 +16,8 @@ json.assessment do
   json.canForceSubmit can? :force_submit_assessment_submission, @assessment
   json.canUnsubmitSubmission can? :update, @assessment
   json.canDeleteAllSubmissions can? :delete_all_submissions, @assessment
+  json.isKoditsuEnabled current_course.component_enabled?(Course::KoditsuPlatformComponent) &&
+                        @assessment.is_koditsu_enabled && @assessment.koditsu_assessment_id
 end
 
 my_students_set = Set.new(@my_students.map(&:id))

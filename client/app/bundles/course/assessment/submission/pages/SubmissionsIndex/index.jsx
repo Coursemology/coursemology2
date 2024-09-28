@@ -18,6 +18,7 @@ import {
   downloadStatistics,
   downloadSubmissions,
   fetchSubmissions,
+  fetchSubmissionsFromKoditsu,
   forceSubmitSubmissions,
   publishSubmissions,
   sendAssessmentReminderEmail,
@@ -54,6 +55,7 @@ class VisibleSubmissionsIndex extends Component {
     this.state = {
       publishConfirmation: false,
       forceSubmitConfirmation: false,
+      fetchFromKoditsuConfirmation: false,
       includePhantoms: false,
       remindConfirmation: false,
       tab: 'my-students-tab',
@@ -112,6 +114,27 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
+  renderFetchFromKoditsuConfirmation() {
+    const { dispatch } = this.props;
+    const { fetchFromKoditsuConfirmation } = this.state;
+
+    return (
+      <ConfirmationDialog
+        message={
+          <FormattedMessage
+            {...translations.fetchSubmissionsFromKoditsuConfirmation}
+          />
+        }
+        onCancel={() => this.setState({ fetchFromKoditsuConfirmation: false })}
+        onConfirm={() => {
+          dispatch(fetchSubmissionsFromKoditsu());
+          this.setState({ fetchFromKoditsuConfirmation: false });
+        }}
+        open={fetchFromKoditsuConfirmation}
+      />
+    );
+  }
+
   renderStatusChart = (submissions) => {
     const { includePhantoms } = this.state;
     const filteredSubmissions = includePhantoms
@@ -123,7 +146,7 @@ class VisibleSubmissionsIndex extends Component {
 
   renderHeader(shownSubmissions) {
     const {
-      assessment: { canPublishGrades, canForceSubmit },
+      assessment: { canPublishGrades, canForceSubmit, isKoditsuEnabled },
       isPublishing,
       isForceSubmitting,
       isDeleting,
@@ -179,23 +202,43 @@ class VisibleSubmissionsIndex extends Component {
             </Button>
           )}
 
-          {canForceSubmit && (
-            <Button
-              className="m-2"
-              color="primary"
-              disabled={
-                disableButtons ||
-                !VisibleSubmissionsIndex.canForceSubmitOrRemind(
-                  shownSubmissions,
-                )
-              }
-              endIcon={isForceSubmitting && <LoadingIndicator bare size={20} />}
-              onClick={() => this.setState({ forceSubmitConfirmation: true })}
-              variant="contained"
-            >
-              <FormattedMessage {...submissionsTranslations.forceSubmit} />
-            </Button>
-          )}
+          {canForceSubmit &&
+            (isKoditsuEnabled ? (
+              <Button
+                className="m-2"
+                color="primary"
+                disabled={disableButtons}
+                endIcon={
+                  isForceSubmitting && <LoadingIndicator bare size={20} />
+                }
+                onClick={() =>
+                  this.setState({ fetchFromKoditsuConfirmation: true })
+                }
+                variant="contained"
+              >
+                <FormattedMessage
+                  {...submissionsTranslations.fetchFromKoditsu}
+                />
+              </Button>
+            ) : (
+              <Button
+                className="m-2"
+                color="primary"
+                disabled={
+                  disableButtons ||
+                  !VisibleSubmissionsIndex.canForceSubmitOrRemind(
+                    shownSubmissions,
+                  )
+                }
+                endIcon={
+                  isForceSubmitting && <LoadingIndicator bare size={20} />
+                }
+                onClick={() => this.setState({ forceSubmitConfirmation: true })}
+                variant="contained"
+              >
+                <FormattedMessage {...submissionsTranslations.forceSubmit} />
+              </Button>
+            ))}
 
           {showRemindButton && (
             <Button
@@ -371,6 +414,7 @@ class VisibleSubmissionsIndex extends Component {
       publishConfirmation,
       forceSubmitConfirmation,
       remindConfirmation,
+      fetchFromKoditsuConfirmation,
     } = this.state;
     if (isLoading) {
       return <LoadingIndicator />;
@@ -470,6 +514,9 @@ class VisibleSubmissionsIndex extends Component {
             shownSubmissions,
             handleActionParams,
           )}
+
+        {fetchFromKoditsuConfirmation &&
+          this.renderFetchFromKoditsuConfirmation()}
 
         {remindConfirmation &&
           this.renderReminderConfirmation(shownSubmissions, handleActionParams)}

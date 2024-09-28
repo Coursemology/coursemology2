@@ -7,6 +7,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   before_action :load_submissions, only: [:show]
   after_action :create_koditsu_invitation_job, only: [:create, :update]
+  after_action :create_fetch_koditsu_submissions_job, only: [:create, :update]
 
   include Course::Assessment::MonitoringConcern
 

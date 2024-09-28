@@ -260,6 +260,13 @@ const translations = defineMessages({
       Submissions to this assessment will be auto-graded. \
       NOTE THAT THIS ACTION IS IRREVERSIBLE!',
   },
+  fetchSubmissionsFromKoditsuConfirmation: {
+    id: 'course.assessment.submission.fetchSubmissionsFromKoditsuConfirmation',
+    defaultMessage:
+      'Are you sure you want to fetch all submissions from Koditsu? \
+      all the existing answers here will be overwritten by the newer one.\
+      NOTE THAT THIS ACTION IS IRREVERSIBLE!',
+  },
   remainingTime: {
     id: 'course.assessment.submission.remainingTime',
     defaultMessage: 'Time Remaining: {timeLimit}',
@@ -386,10 +393,20 @@ const translations = defineMessages({
     defaultMessage:
       'Please wait as the submissions are currently being created and/or submitted.',
   },
+  fetchSubmissionsFromKoditsuPending: {
+    id: 'course.assessment.submission.fetchSubmissionsFromKoditsuPending',
+    defaultMessage:
+      'Please wait as the submissions are currently being fetched from Koditsu.',
+  },
   forceSubmitSuccess: {
     id: 'course.assessment.submission.forceSubmitSuccess',
     defaultMessage:
       'All unsubmitted submissions above have been successfully submitted and graded.',
+  },
+  fetchSubmissionsFromKoditsuSuccess: {
+    id: 'course.assessment.submission.fetchSubmissionsFromKoditsuSuccess',
+    defaultMessage:
+      'All submissions have been fetched successfully from Koditsu',
   },
   sendReminderEmailSuccess: {
     id: 'course.assessment.assessments.sendReminderEmailSuccess',
