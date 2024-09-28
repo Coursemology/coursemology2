@@ -114,6 +114,12 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     );
   }
 
+  inviteToKoditsu(assessmentId) {
+    return this.client.post(
+      `${this.#urlPrefix}/${assessmentId}/invite_to_koditsu`,
+    );
+  }
+
   /**
    * Sends emails to remind students to complete the assessment.
    *

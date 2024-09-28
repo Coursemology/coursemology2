@@ -221,6 +221,7 @@ module Course::Assessment::AssessmentAbility
   def define_manager_assessment_permissions
     allow_manager_manage_tab_and_categories
     allow_manager_publish_assessment_submission_grades
+    allow_manager_invite_users_to_koditsu
     allow_manager_force_submit_assessment_submissions
     allow_manager_delete_assessment_submissions
     allow_manager_update_assessment_answer
@@ -234,6 +235,10 @@ module Course::Assessment::AssessmentAbility
   # Only managers are allowed to publish assessment submission grades
   def allow_manager_publish_assessment_submission_grades
     can :publish_grades, Course::Assessment, assessment_course_hash
+  end
+
+  def allow_manager_invite_users_to_koditsu
+    can :invite_to_koditsu, Course::Assessment, assessment_course_hash
   end
 
   # Only managers are allowed to force submit assessment submissions

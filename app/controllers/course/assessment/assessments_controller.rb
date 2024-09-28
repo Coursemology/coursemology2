@@ -3,8 +3,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   include Course::Assessment::AssessmentsHelper
   include Course::Assessment::KoditsuAssessmentConcern
   include Course::Assessment::Question::KoditsuQuestionConcern
+  include Course::Assessment::KoditsuAssessmentInvitationConcern
 
   before_action :load_submissions, only: [:show]
+  after_action :create_koditsu_invitation_job, only: [:create, :update]
 
   include Course::Assessment::MonitoringConcern
 
@@ -109,6 +111,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def sync_with_koditsu
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    is_koditsu_enabled = is_course_koditsu_enabled && @assessment.is_koditsu_enabled
+
+    return head(:bad_request) unless is_koditsu_enabled
+
     create_or_update_assessment_in_koditsu
 
     @assessment.questions.each do |question|
@@ -118,6 +125,32 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       @programming_question = question.specific
 
       create_or_edit_question_in_koditsu
+    end
+  end
+
+  def invite_to_koditsu
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
+    is_koditsu_enabled = is_course_koditsu_enabled && is_assessment_koditsu_enabled
+
+    return head(:bad_request) unless is_koditsu_enabled
+
+    status, response = send_invitation_for_koditsu_assessment(@assessment)
+
+    return head(:bad_request) unless [201, 207].include?(status)
+
+    render_koditsu_invitation_response(response)
+  end
+
+  def render_koditsu_invitation_response(invitation_response)
+    failure_count = invitation_response.filter do |invitation|
+      invitation['status'] == 'errorOther'
+    end.length
+
+    if failure_count == 0
+      head :ok
+    else
+      head :bad_request
     end
   end
 
@@ -278,6 +311,40 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # @return [Boolean]
   def valid_ordering?(proposed_ordering)
     question_assessments_hash.keys.sort == proposed_ordering.sort
+  end
+
+  def create_koditsu_invitation_job
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
+
+    return unless is_course_koditsu_enabled && is_assessment_koditsu_enabled
+
+    return if Time.zone.now > @assessment.end_at
+
+    if Time.zone.now > @assessment.start_at - 12.hours
+      Course::Assessment::InviteToKoditsuJob.perform_later(@assessment.id, @assessment.updated_at)
+    else
+      execute_koditsu_invitation_job_later
+    end
+  end
+
+  def execute_koditsu_invitation_job_later
+    Course::Assessment::InviteToKoditsuJob.
+      set(wait_until: @assessment.start_at - 12.hours).
+      perform_later(@assessment.id, @assessment.updated_at)
+  end
+
+  def create_fetch_koditsu_submissions_job
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
+
+    return unless is_course_koditsu_enabled && is_assessment_koditsu_enabled
+
+    return if Time.zone.now > @assessment.end_at
+
+    Course::Assessment::Submission::FetchSubmissionsFromKoditsuJob.
+      set(wait_until: @assessment.end_at).
+      perform_later(@assessment.id, @assessment.updated_at, current_user)
   end
 
   # Mapping of `tab_id`s to their compound titles. If the tab is the only one in its category,
