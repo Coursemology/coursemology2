@@ -76,6 +76,7 @@ json.permissions do
   json.canAttempt can_attempt
   json.canManage can_manage
   json.canObserve can_observe
+  json.canInviteToKoditsu can?(:invite_to_koditsu, assessment)
 end
 
 unless can_attempt

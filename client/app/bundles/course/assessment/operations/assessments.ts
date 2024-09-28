@@ -133,6 +133,15 @@ export const syncWithKoditsu = async (assessmentId: number): Promise<void> => {
   }
 };
 
+export const inviteToKoditsu = async (assessmentId: number): Promise<void> => {
+  try {
+    await CourseAPI.assessment.assessments.inviteToKoditsu(assessmentId);
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
 export const deleteAssessment = async (
   deleteUrl: string,
 ): Promise<AssessmentDeleteResult> => {

@@ -98,6 +98,7 @@ export interface AssessmentData extends AssessmentActionsData {
     canAttempt: boolean;
     canManage: boolean;
     canObserve: boolean;
+    canInviteToKoditsu: boolean;
   };
   requirements: {
     title: string;

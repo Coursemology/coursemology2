@@ -5,6 +5,7 @@ import {
   Create,
   Inventory,
   MonitorHeart,
+  PersonAdd,
 } from '@mui/icons-material';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import {
@@ -18,7 +19,10 @@ import Link from 'lib/components/core/Link';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { deleteAssessment } from '../../operations/assessments';
+import {
+  deleteAssessment,
+  inviteToKoditsu,
+} from '../../operations/assessments';
 import translations from '../../translations';
 import { ACTION_LABELS } from '../AssessmentsIndex/ActionButtons';
 
@@ -32,6 +36,7 @@ const AssessmentShowHeader = (
   const { with: assessment } = props;
   const { t } = useTranslation();
   const [deleting, setDeleting] = useState(false);
+  const [inviting, setInviting] = useState(false);
   const navigate = useNavigate();
 
   const handleDelete = (): Promise<void> => {
@@ -115,6 +120,31 @@ const AssessmentShowHeader = (
           </Link>
         </Tooltip>
       )}
+
+      {assessment.permissions.canInviteToKoditsu &&
+        assessment.isKoditsuAssessmentEnabled && (
+          <Tooltip disableInteractive title={t(translations.inviteToKoditsu)}>
+            <IconButton
+              aria-label={t(translations.inviteToKoditsu)}
+              disabled={inviting}
+              onClick={() => {
+                setInviting(true);
+
+                return toast
+                  .promise(inviteToKoditsu(assessment.id), {
+                    pending: t(translations.invitingUserToKoditsu),
+                    success: t(translations.invitingUserToKoditsuSuccess),
+                  })
+                  .catch(() => {
+                    toast.error(t(translations.invitingUserToKoditsuFailure));
+                  })
+                  .finally(() => setInviting(false));
+              }}
+            >
+              <PersonAdd />
+            </IconButton>
+          </Tooltip>
+        )}
 
       {assessment.actionButtonUrl && (
         <Link

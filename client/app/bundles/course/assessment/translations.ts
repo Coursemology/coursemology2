@@ -122,6 +122,24 @@ const translations = defineMessages({
     id: 'course.assessments.index.submissions',
     defaultMessage: 'Submissions',
   },
+  inviteToKoditsu: {
+    id: 'course.assessments.index.inviteToKoditsu',
+    defaultMessage: 'Invite users to Koditsu Exam',
+  },
+  invitingUserToKoditsu: {
+    id: 'course.assessments.index.invitingUserToKoditsu',
+    defaultMessage: 'Inviting users to Koditsu Exam',
+  },
+  invitingUserToKoditsuSuccess: {
+    id: 'course.assessments.index.invitingUserToKoditsuSuccess',
+    defaultMessage: 'Successful in inviting users to Koditsu Exam',
+  },
+  invitingUserToKoditsuFailure: {
+    id: 'course.assessments.index.invitingUserToKoditsuFailure',
+    defaultMessage:
+      'There is a problem in inviting users to Koditsu. \
+    Please try again later',
+  },
   needsPasswordToAccess: {
     id: 'course.assessments.index.needsPasswordToAccess',
     defaultMessage: 'You will need a password to access this assessment.',
@@ -162,7 +180,7 @@ const translations = defineMessages({
   },
   syncingWithKoditsu: {
     id: 'course.assessment.show.syncingWithKoditsu',
-    defaultMessage: 'Synchronizing',
+    defaultMessage: 'Syncing',
   },
   syncedWithKoditsu: {
     id: 'course.assessment.show.syncedWithKoditsu',
