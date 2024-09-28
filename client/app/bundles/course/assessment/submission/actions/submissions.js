@@ -9,6 +9,7 @@ const DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 2000;
 const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL_MS = 2000;
 const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
 const FORCE_SUBMIT_JOB_POLL_INTERVAL_MS = 1000;
+const FETCH_SUBMISSIONS_FROM_KODITSU_JOB_POLL_INTERVAL_MS = 1000;
 const PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
 const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
 
@@ -88,6 +89,44 @@ export function forceSubmitSubmissions(type) {
             handleSuccess,
             handleFailure,
             FORCE_SUBMIT_JOB_POLL_INTERVAL_MS,
+          );
+        } else {
+          handleSuccess();
+        }
+      })
+      .catch(handleFailure);
+  };
+}
+
+export function fetchSubmissionsFromKoditsu() {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.FETCH_SUBMISSIONS_FROM_KODITSU_REQUEST });
+
+    const handleSuccess = () => {
+      dispatch({ type: actionTypes.FETCH_SUBMISSIONS_FROM_KODITSU_SUCCESS });
+      dispatch(
+        setNotification(translations.fetchSubmissionsFromKoditsuSuccess),
+      );
+      fetchSubmissions()(dispatch);
+    };
+
+    const handleFailure = () => {
+      dispatch({ type: actionTypes.FETCH_SUBMISSIONS_FROM_KODITSU_FAILURE });
+      dispatch(setNotification(translations.requestFailure));
+    };
+
+    return CourseAPI.assessment.submissions
+      .fetchSubmissionsFromKoditsu()
+      .then((response) => {
+        dispatch(
+          setNotification(translations.fetchSubmissionsFromKoditsuPending),
+        );
+        if (response.data.jobUrl) {
+          pollJob(
+            response.data.jobUrl,
+            handleSuccess,
+            handleFailure,
+            FETCH_SUBMISSIONS_FROM_KODITSU_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();

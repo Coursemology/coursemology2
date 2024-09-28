@@ -102,8 +102,10 @@ export default function (state = initialState, action) {
     case actions.PUBLISH_SUBMISSIONS_FAILURE:
       return { ...state, isPublishing: false };
 
+    case actions.FETCH_SUBMISSIONS_FROM_KODITSU_REQUEST:
     case actions.FORCE_SUBMIT_SUBMISSIONS_REQUEST:
       return { ...state, isForceSubmitting: true };
+    case actions.FETCH_SUBMISSIONS_FROM_KODITSU_FAILURE:
     case actions.FORCE_SUBMIT_SUBMISSIONS_FAILURE:
       return { ...state, isForceSubmitting: false };
 

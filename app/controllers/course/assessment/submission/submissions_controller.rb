@@ -5,6 +5,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   include Signals::EmissionConcern
   include Course::Assessment::Submission::MonitoringConcern
   include Course::Assessment::SubmissionConcern
+  include Course::Assessment::Submission::KoditsuSubmissionsConcern
 
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
@@ -151,6 +152,18 @@ class Course::Assessment::Submission::SubmissionsController < \
     end
   end
 
+  def fetch_submissions_from_koditsu
+    authorize!(:fetch_submissions_from_koditsu, @assessment)
+
+    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
+    is_koditsu_enabled = is_course_koditsu_enabled && is_assessment_koditsu_enabled
+
+    fetch_all_submissions_from_koditsu(@assessment, current_user) if is_koditsu_enabled
+
+    head :ok
+  end
+
   # Download either all of or a subset of submissions for an assessment.
   def download_all
     authorize!(:manage, @assessment)
@@ -248,7 +261,8 @@ class Course::Assessment::Submission::SubmissionsController < \
     is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
 
     if is_course_koditsu_enabled && is_assessment_koditsu_enabled
-      redirect_url = "https://code.codaveri.com?assessment=#{@assessment.koditsu_assessment_id}"
+      submission.create_new_answers
+      redirect_url = KoditsuAsyncApiService.assessment_url(@assessment.koditsu_assessment_id)
     else
       redirect_url = edit_course_assessment_submission_path(current_course, @assessment, submission)
     end

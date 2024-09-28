@@ -223,6 +223,7 @@ module Course::Assessment::AssessmentAbility
     allow_manager_publish_assessment_submission_grades
     allow_manager_invite_users_to_koditsu
     allow_manager_force_submit_assessment_submissions
+    allow_manager_fetch_submissions_from_koditsu
     allow_manager_delete_assessment_submissions
     allow_manager_update_assessment_answer
   end
@@ -244,6 +245,10 @@ module Course::Assessment::AssessmentAbility
   # Only managers are allowed to force submit assessment submissions
   def allow_manager_force_submit_assessment_submissions
     can :force_submit_assessment_submission, Course::Assessment, assessment_course_hash
+  end
+
+  def allow_manager_fetch_submissions_from_koditsu
+    can :fetch_submissions_from_koditsu, Course::Assessment, assessment_course_hash
   end
 
   # Only managers and above are allowed to delete assessment submissions

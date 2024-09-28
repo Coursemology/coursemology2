@@ -23,7 +23,7 @@ elsif cannot?(:access, assessment) && can_attempt
 elsif attempting_submission.present?
   status = 'attempting'
   action_url = if is_course_koditsu_enabled && is_assessment_koditsu_enabled
-                 "https://code.codaveri.com?assessment=#{assessment.koditsu_assessment_id}"
+                 KoditsuAsyncApiService.assessment_url(assessment.koditsu_assessment_id)
                else
                  edit_course_assessment_submission_path(current_course, assessment, attempting_submission)
                end

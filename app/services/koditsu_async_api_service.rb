@@ -2,7 +2,7 @@
 
 class KoditsuAsyncApiService
   def config
-    ENV.fetch('KODITSU_URL')
+    ENV.fetch('KODITSU_API_URL')
   end
 
   def initialize(api_namespace, payload)
@@ -76,6 +76,12 @@ class KoditsuAsyncApiService
      Coursemology::Polyglot::Language::Python::Python3Point9,
      Coursemology::Polyglot::Language::Python::Python3Point10,
      Coursemology::Polyglot::Language::Python::Python3Point12]
+  end
+
+  def self.assessment_url(assessment_id)
+    url = ENV['KODITSU_WEB_URL']
+
+    "#{url}?assessment=#{assessment_id}"
   end
 
   private
