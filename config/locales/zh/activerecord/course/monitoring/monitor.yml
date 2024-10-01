@@ -8,3 +8,7 @@ zh:
               must_be_password_protected: '评估必须受密码保护才能启用'
             max_interval_ms:
               greater_than_min_interval: '必须大于最小间隔'
+            blocks:
+              must_have_browser_authorization_and_session_protection: '必须启用浏览器授权和会话保护'
+            seb_config_key:
+              required_if_using_seb_config_key_browser_authorization: '使用 seb 配置密钥浏览器授权方法时必须提供 seb 配置密钥'

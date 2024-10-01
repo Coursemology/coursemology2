@@ -131,7 +131,7 @@ group :development, :test do
 
   # Code Coverage reporters
   gem 'simplecov'
-  gem 'codecov', require: false
+  gem 'simplecov-cobertura'
 
   gem 'dotenv-rails'
 end

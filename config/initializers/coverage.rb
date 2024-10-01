@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 if Rails.env.test? && ENV['COLLECT_COVERAGE'] == 'true'
   require 'simplecov'
-  require 'codecov'
+  require 'simplecov-cobertura'
 
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 
   SimpleCov.start('rails') do
     add_filter '/lib/extensions/legacy/active_record/connection_adapters/table_definition.rb'
