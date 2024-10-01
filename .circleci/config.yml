@@ -226,7 +226,7 @@ commands:
       - run:
           name: Wait for Rails coverage results
           no_output_timeout: 5m
-          command: until [ -f coverage/codecov-result.json ]; do sleep 1; done
+          command: until [ -f coverage/coverage.xml ]; do sleep 1; done
 
   setup_docker_layer_cache:
     steps:
@@ -301,13 +301,9 @@ jobs:
           command: |
             zip -r test-results.zip test-results playright-report
 
-      # - codecov/upload:
-      #     upload_name: playwright-client
-      #     file: tests/coverage/lcov.info
-
       - codecov/upload:
           upload_name: playwright-rails
-          file: coverage/codecov-result.json
+          file: coverage/coverage.xml
 
       - store_test_results:
           path: ~/repo/tests/results.xml
@@ -342,6 +338,10 @@ jobs:
           command: |
             mkdir ~/rspec
             circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml" --verbose --split-by=timings
+
+      - codecov/upload:
+          upload_name: rspec-rails
+          file: coverage/coverage.xml
 
       - store_test_results:
           path: ~/rspec
