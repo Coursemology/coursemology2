@@ -34,6 +34,8 @@ export const DEFAULT_MONITORING_OPTIONS = {
   max_interval_ms: 30000,
   offset_ms: 3000,
   blocks: false,
+  browser_authorization: true,
+  browser_authorization_method: 'user_agent',
 };
 
 export default actionTypes;

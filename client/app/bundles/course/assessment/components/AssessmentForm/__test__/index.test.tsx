@@ -16,6 +16,16 @@ const INITIAL_VALUES = {
   use_evaluation: false,
   tabbed_view: false,
   published: false,
+  monitoring: {
+    enabled: true,
+    secret: '',
+    min_interval_ms: 20000,
+    max_interval_ms: 30000,
+    offset_ms: 3000,
+    blocks: false,
+    browser_authorization: false,
+    browser_authorization_method: 'user_agent',
+  },
 };
 
 let props: ComponentProps<typeof AssessmentForm>;
@@ -45,6 +55,8 @@ beforeEach(() => {
     },
     onSubmit: (): void => {},
     disabled: false,
+    monitoringEnabled: true,
+    canManageMonitor: true,
   };
 });
 
@@ -234,6 +246,18 @@ describe('<AssessmentForm />', () => {
     fireEvent.click(sessionProtectionCheckbox);
 
     expect(form.getByLabelText('Session unlock password *')).toBeVisible();
+    expect(form.getByText('Enable exam monitoring')).toBeVisible();
+
+    expect(
+      form.getByLabelText('Authorise browsers that access this assessment'),
+    ).not.toBeChecked();
+
+    const browserAuthorizationCheckbox = form.getByLabelText(
+      'Authorise browsers that access this assessment',
+    );
+
+    fireEvent.click(browserAuthorizationCheckbox);
+    expect(browserAuthorizationCheckbox).toBeChecked();
   });
 
   it('renders personalised timelines options when enabled', () => {
