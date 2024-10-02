@@ -34,14 +34,15 @@ const LiveFeedbackHistoryPage: FC<Props> = (props) => {
   const [displayedIndex, setDisplayedIndex] = useState(
     nonEmptyLiveFeedbackHistory.length - 1,
   );
-  const sliderMarks = nonEmptyLiveFeedbackHistory.map(
+  const sliderPoints = nonEmptyLiveFeedbackHistory.map(
     (liveFeedbackHistory, idx) => {
       return {
-        value: idx + 1,
+        value: idx,
         label:
           idx === 0 || idx === nonEmptyLiveFeedbackHistory.length - 1
             ? formatLongDateTime(liveFeedbackHistory.createdAt)
             : '',
+        tooltip: `${idx + 1}`,
       };
     },
   );
@@ -72,15 +73,10 @@ const LiveFeedbackHistoryPage: FC<Props> = (props) => {
         <div className="w-[calc(100%_-_17rem)] mx-auto">
           <CustomSlider
             defaultValue={nonEmptyLiveFeedbackHistory.length}
-            marks={sliderMarks}
-            max={nonEmptyLiveFeedbackHistory.length}
-            min={1}
             onChange={(_, value) => {
-              setDisplayedIndex(
-                Array.isArray(value) ? value[0] - 1 : value - 1,
-              );
+              setDisplayedIndex(Array.isArray(value) ? value[0] : value);
             }}
-            step={null}
+            points={sliderPoints}
             valueLabelDisplay="auto"
           />
         </div>
