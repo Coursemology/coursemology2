@@ -1,11 +1,10 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Slider, Typography } from '@mui/material';
 
 import { CourseStudent, GroupManager } from 'course/statistics/types';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Link from 'lib/components/core/Link';
-import CustomSlider from 'lib/components/extensions/CustomSlider';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import {
   DEFAULT_MINI_TABLE_ROWS_PER_PAGE,
@@ -366,7 +365,7 @@ const StudentPerformanceTable: FC<Props> = (props) => {
               : t(translations.correctness),
           })}
         </Typography>
-        <CustomSlider
+        <Slider
           aria-label="Highlight Percentage"
           className="flex flex-row align-right max-w-[500px] min-w-[300px] mb-2"
           defaultValue={highlightPercentage}
