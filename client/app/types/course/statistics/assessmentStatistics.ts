@@ -103,10 +103,10 @@ export interface CommentItem {
   text: string;
 }
 
-export type QuestionDetails<T extends keyof typeof QuestionType> =
+export type Question<T extends keyof typeof QuestionType> =
   QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
 
-export type AllAnswerDetails<T extends keyof typeof QuestionType> =
+export type Answer<T extends keyof typeof QuestionType> =
   AnswerDetailsMap[T] & {
     createdAt: Date;
     currentAnswer: boolean;
@@ -114,9 +114,9 @@ export type AllAnswerDetails<T extends keyof typeof QuestionType> =
   };
 
 export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
-  question: QuestionDetails<T>;
+  question: Question<T>;
   answer: AnswerDetailsMap[T];
-  allAnswers: AllAnswerDetails<T>[];
+  allAnswers: Answer<T>[];
   comments: CommentItem[];
   submissionId: number;
   submissionQuestionId: number;
@@ -125,7 +125,7 @@ export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
 export interface QuestionAnswerDisplayDetails<
   T extends keyof typeof QuestionType,
 > {
-  question: QuestionDetails<T>;
+  question: Question<T>;
   answer: AnswerDetailsMap[T];
 }
 
@@ -134,8 +134,8 @@ export interface QuestionAllAnswerDisplayDetails<
 > {
   isAnswersDisplayed: boolean;
   user: UserInfo;
-  question: QuestionDetails<T>;
-  allAnswers: AllAnswerDetails<T>[];
+  question: Question<T>;
+  allAnswers: Answer<T>[];
   submissionId: number;
   comments: CommentItem[];
 }

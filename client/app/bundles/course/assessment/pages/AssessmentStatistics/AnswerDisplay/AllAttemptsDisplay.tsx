@@ -10,10 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import {
-  AllAnswerDetails,
-  QuestionDetails,
-} from 'types/course/statistics/assessmentStatistics';
+import { Answer, Question } from 'types/course/statistics/assessmentStatistics';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
@@ -23,8 +20,8 @@ import { formatLongDateTime } from 'lib/moment';
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
 
 interface Props {
-  allAnswers: AllAnswerDetails<keyof typeof QuestionType>[];
-  question: QuestionDetails<keyof typeof QuestionType>;
+  allAnswers: Answer<keyof typeof QuestionType>[];
+  question: Question<keyof typeof QuestionType>;
   questionNumber: number;
   submissionEditUrl: string;
   pastAnswersURL?: string;
