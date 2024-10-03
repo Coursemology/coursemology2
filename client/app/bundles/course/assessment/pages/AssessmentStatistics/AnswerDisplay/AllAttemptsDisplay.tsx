@@ -11,7 +11,7 @@ import {
 import { fetchAnswer } from 'course/assessment/operations/statistics';
 import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import CustomSlider from 'lib/components/extensions/CustomSlider';
+import Slider from 'lib/components/extensions/CustomSlider';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 import messagesTranslations from 'lib/translations/messages';
@@ -109,8 +109,6 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
   const currentAnswerMarker =
     answerSubmittedTimes[answerSubmittedTimes.length - 1];
 
-  const earliestAnswerMarker = answerSubmittedTimes[0];
-
   const renderQuestionComponent = (): JSX.Element => {
     if (question) {
       return (
@@ -186,12 +184,9 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
     <>
       {renderQuestionComponent()}
       {answerSubmittedTimes.length > 1 && (
-        <div className="w-[calc(100%_-_17rem)] mx-auto pt-8">
-          <CustomSlider
+        <div className="w-[calc(100%_-_17rem)] mx-auto mb-4">
+          <Slider
             defaultValue={currentAnswerMarker.value}
-            marks={answerSubmittedTimes}
-            max={currentAnswerMarker.value}
-            min={earliestAnswerMarker.value}
             onChange={(event, value) => {
               // The component specs mention that value can either be number or Array,
               // but since there is only a single slider value it will always be a number
@@ -209,11 +204,8 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
               const newIndex = value as number;
               changeDisplayedIndex(newIndex);
             }}
-            step={null}
-            valueLabelDisplay="on"
-            valueLabelFormat={(value) =>
-              `${formatLongDateTime(allAnswers[value].createdAt)} (${value + 1} of ${allAnswers.length})`
-            }
+            points={answerSubmittedTimes}
+            valueLabelDisplay="auto"
           />
         </div>
       )}
