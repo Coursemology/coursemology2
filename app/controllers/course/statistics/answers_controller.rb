@@ -59,11 +59,9 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
   def fetch_all_answers(submission_id, question_id)
     answers = Course::Assessment::Answer.
               unscope(:order).
-              order(submitted_at: :desc).
+              order(:submitted_at).
               where(submission_id: submission_id, question_id: question_id)
 
-    current_answer = answers.find(&:current_answer?)
-    @all_answers = answers.where(current_answer: false).limit(MAX_ANSWERS_COUNT - 1).to_a.reverse
-    @all_answers.unshift(current_answer)
+    @all_answers = answers.limit(MAX_ANSWERS_COUNT)
   end
 end
