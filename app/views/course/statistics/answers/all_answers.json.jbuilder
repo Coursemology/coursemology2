@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.allAnswers @all_answers do |answer|
   json.id answer.id
-  json.createdAt answer.created_at&.iso8601
+  json.submittedAt answer.created_at&.iso8601
   json.currentAnswer answer.current_answer
   json.workflowState answer.workflow_state
 end

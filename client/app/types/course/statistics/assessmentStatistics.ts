@@ -108,7 +108,7 @@ export interface CommentItem {
 
 export interface AllAnswerItem {
   id: number;
-  createdAt: Date;
+  submittedAt: Date;
   currentAnswer: boolean;
   workflowState: WorkflowState;
 }
@@ -123,7 +123,7 @@ export type Question<T extends keyof typeof QuestionType> =
 
 export type Answer<T extends keyof typeof QuestionType> =
   AnswerDetailsMap[T] & {
-    createdAt: Date;
+    submittedAt: Date;
     question: Question<T>;
   };
 

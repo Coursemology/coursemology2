@@ -101,7 +101,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
       value: idx,
       label:
         idx === 0 || idx === allAnswers.length - 1
-          ? formatLongDateTime(answer.createdAt)
+          ? formatLongDateTime(answer.submittedAt)
           : '',
     };
   });
@@ -151,7 +151,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
         <>
           <Typography variant="body1">
             {t(translations.pastAnswerTitle, {
-              submittedAt: formatLongDateTime(answerDetails!.createdAt),
+              submittedAt: formatLongDateTime(answerDetails!.submittedAt),
             })}
           </Typography>
           <AnswerDetails answer={answerDetails!} question={question!} />
