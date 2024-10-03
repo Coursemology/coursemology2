@@ -4,8 +4,8 @@ import { Alert, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
 import {
   AllAnswerItem,
-  AnswerStatisticsData,
-  QuestionDetails,
+  Answer,
+  Question,
 } from 'types/course/statistics/assessmentStatistics';
 
 import { fetchAnswer } from 'course/assessment/operations/statistics';
@@ -41,7 +41,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
 
   const [answersCache, setAnswersCache] = useState<{
     [id: number]: {
-      details: AnswerStatisticsData<keyof typeof QuestionType> | null;
+      details: Answer<keyof typeof QuestionType> | null;
       status: 'pending' | 'completed' | 'errored';
     };
   }>({});
@@ -56,7 +56,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
   // (e.g. option randomization for mcq/mrq questions). However, we can take advantage of the fact that
   // the question should remain the same across all answers.
   const [question, setQuestion] =
-    useState<QuestionDetails<keyof typeof QuestionType>>();
+    useState<Question<keyof typeof QuestionType>>();
 
   const tryFetchAnswerById = (answerId: number): Promise<void> => {
     setAnswersCache({

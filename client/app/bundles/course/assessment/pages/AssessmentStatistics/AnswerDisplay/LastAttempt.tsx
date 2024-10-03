@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 import { Chip, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
 import {
-  AnswerStatisticsData,
+  Answer,
   CommentItem,
 } from 'types/course/statistics/assessmentStatistics';
 
@@ -48,7 +48,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
   const { t } = useTranslation();
 
   const fetchAnswerDetailsAndComments = async (): Promise<{
-    answer: AnswerStatisticsData<keyof typeof QuestionType>;
+    answer: Answer<keyof typeof QuestionType>;
     comments: CommentItem[];
   }> => {
     const [answer, submissionQuestion] = await Promise.all([

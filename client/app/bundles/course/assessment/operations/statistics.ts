@@ -3,7 +3,7 @@ import { dispatch } from 'store';
 import { QuestionType } from 'types/course/assessment/question';
 import {
   AncestorAssessmentStats,
-  AnswerStatisticsData,
+  Answer,
   AssessmentLiveFeedbackStatistics,
   SubmissionQuestionDetails,
 } from 'types/course/statistics/assessmentStatistics';
@@ -57,7 +57,7 @@ export const fetchSubmissionQuestionDetails = async (
 
 export const fetchAnswer = async (
   answerId: number,
-): Promise<AnswerStatisticsData<keyof typeof QuestionType>> => {
+): Promise<Answer<keyof typeof QuestionType>> => {
   const response = await CourseAPI.statistics.answer.fetch(answerId);
 
   return response.data;

@@ -118,19 +118,19 @@ export interface SubmissionQuestionDetails {
   comments: CommentItem[];
 }
 
-export type QuestionDetails<T extends keyof typeof QuestionType> =
+export type Question<T extends keyof typeof QuestionType> =
   QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
 
-export type AnswerStatisticsData<T extends keyof typeof QuestionType> =
+export type Answer<T extends keyof typeof QuestionType> =
   AnswerDetailsMap[T] & {
     createdAt: Date;
-    question: QuestionDetails<T>;
+    question: Question<T>;
   };
 
 export interface QuestionAnswerDisplayDetails<
   T extends keyof typeof QuestionType,
 > {
-  question: QuestionDetails<T>;
+  question: Question<T>;
   answer: AnswerDetailsMap[T];
 }
 
