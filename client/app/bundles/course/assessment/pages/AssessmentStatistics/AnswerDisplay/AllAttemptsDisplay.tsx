@@ -80,7 +80,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
       value: idx,
       label:
         idx === 0 || idx === sortedAnswers.length - 1
-          ? formatLongDateTime(answer.createdAt)
+          ? formatLongDateTime(answer.submittedAt)
           : '',
     };
   });
@@ -139,7 +139,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
               <TableCell>
                 {formatLongDateTime(
                   allAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]
-                    .createdAt,
+                    .submittedAt,
                 )}
               </TableCell>
             </TableRow>
