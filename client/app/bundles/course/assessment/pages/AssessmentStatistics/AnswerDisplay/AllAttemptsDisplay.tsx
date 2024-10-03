@@ -75,6 +75,8 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
       </Link>
       <Accordion
         defaultExpanded={false}
+        disableGutters
+        displayDotIndicator
         title={t(translations.questionTitle, {
           index: questionNumber,
         })}
