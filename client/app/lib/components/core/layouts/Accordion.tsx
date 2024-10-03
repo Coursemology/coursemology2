@@ -23,7 +23,7 @@ const Accordion = (props: AccordionProps): JSX.Element => {
     subtitle,
     disabled,
     icon,
-    displayDotIndicator,
+    displayDotIndicator = false,
     ...accordionProps
   } = props;
   const [isExpanded, setIsExpanded] = useState(props.defaultExpanded ?? false);
@@ -37,11 +37,6 @@ const Accordion = (props: AccordionProps): JSX.Element => {
       {...accordionProps}
       className={`overflow-clip rounded-lg ${props.className ?? ''}`}
       onChange={(_, expanded) => setIsExpanded(expanded)}
-      slotProps={{
-        transition: {
-          className: 'overflow-clip',
-        },
-      }}
     >
       <MuiAccordionSummary
         classes={{

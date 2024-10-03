@@ -117,6 +117,8 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
         <Accordion
           defaultExpanded={false}
           disabled={false}
+          disableGutters
+          displayDotIndicator
           title={t(translations.questionTitle, {
             index: questionNumber,
           })}
