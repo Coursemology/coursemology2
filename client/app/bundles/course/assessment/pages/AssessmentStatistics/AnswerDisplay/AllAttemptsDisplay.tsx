@@ -63,18 +63,13 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
 
   const { t } = useTranslation();
 
-  const currentAnswer = allAnswers.find((answer) => answer.currentAnswer);
-  const sortedAnswers = allAnswers.filter((answer) => !answer.currentAnswer);
-
-  sortedAnswers.push(currentAnswer!);
-
   // TODO: distance between points inside Slider to be reflective towards the time distance
   // (for example, the distance between 1:00PM to 1:01PM should not be equal to 1:00PM to 2:00PM)
-  const answerSubmittedTimes = sortedAnswers.map((answer, idx) => {
+  const answerSubmittedTimes = allAnswers.map((answer, idx) => {
     return {
       value: idx,
       label:
-        idx === 0 || idx === sortedAnswers.length - 1
+        idx === 0 || idx === allAnswers.length - 1
           ? formatLongDateTime(answer.submittedAt)
           : '',
     };
@@ -158,9 +153,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
       </Accordion>
 
       <AnswerDetails
-        answer={
-          sortedAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]
-        }
+        answer={allAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]}
         question={question}
       />
     </>
