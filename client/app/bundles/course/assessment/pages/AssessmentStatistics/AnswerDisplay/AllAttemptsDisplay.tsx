@@ -1,6 +1,14 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Slider, Typography } from '@mui/material';
+import { History, OpenInNew } from '@mui/icons-material';
+import {
+  Card,
+  CardHeader,
+  IconButton,
+  Slider,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
 import {
   AllAnswerDetails,
@@ -19,6 +27,8 @@ interface Props {
   question: QuestionDetails<keyof typeof QuestionType>;
   questionNumber: number;
   submissionEditUrl: string;
+  pastAnswersURL?: string;
+  name: string;
 }
 
 const translations = defineMessages({
@@ -34,10 +44,25 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.submissionPage',
     defaultMessage: 'Go to Answer Page',
   },
+  submittedAt: {
+    id: 'course.assessment.statistics.submittedAt',
+    defaultMessage: 'Submitted At',
+  },
+  pastAnswers: {
+    id: 'course.assessment.statistics.pastAnswers',
+    defaultMessage: 'See All Past Answers',
+  },
 });
 
 const AllAttemptsDisplay: FC<Props> = (props) => {
-  const { allAnswers, question, questionNumber, submissionEditUrl } = props;
+  const {
+    allAnswers,
+    question,
+    questionNumber,
+    submissionEditUrl,
+    name,
+    pastAnswersURL,
+  } = props;
 
   const { t } = useTranslation();
 
@@ -68,11 +93,42 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
 
   return (
     <>
-      <Link opensInNewTab to={submissionEditUrl}>
-        <Typography className="mb-4" variant="body2">
-          {t(translations.submissionPage)}
-        </Typography>
-      </Link>
+      <Card className="mb-4" variant="outlined">
+        <CardHeader
+          action={
+            <div className="space-x-2">
+              {pastAnswersURL && (
+                <Tooltip placement="top" title={t(translations.pastAnswers)}>
+                  <IconButton
+                    className="p-2"
+                    component={Link}
+                    rel="noopener noreferrer"
+                    size="small"
+                    target="_blank"
+                    to={pastAnswersURL}
+                  >
+                    <History />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Tooltip placement="top" title={t(translations.submissionPage)}>
+                <IconButton
+                  className="p-2"
+                  component={Link}
+                  rel="noopener noreferrer"
+                  size="small"
+                  target="_blank"
+                  to={submissionEditUrl}
+                >
+                  <OpenInNew />
+                </IconButton>
+              </Tooltip>
+            </div>
+          }
+          title={<Typography variant="h6">{name}</Typography>}
+        />
+      </Card>
+
       <Accordion
         defaultExpanded={false}
         disableGutters
@@ -107,14 +163,6 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
         </div>
       )}
 
-      <Typography variant="h6">
-        {t(translations.pastAnswerTitle, {
-          submittedAt: formatLongDateTime(
-            sortedAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]
-              .createdAt,
-          ),
-        })}
-      </Typography>
       <AnswerDetails
         answer={
           sortedAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]
