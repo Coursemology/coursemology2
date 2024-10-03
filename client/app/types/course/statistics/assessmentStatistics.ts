@@ -108,7 +108,7 @@ export type Question<T extends keyof typeof QuestionType> =
 
 export type Answer<T extends keyof typeof QuestionType> =
   AnswerDetailsMap[T] & {
-    createdAt: Date;
+    submittedAt: Date;
     currentAnswer: boolean;
     workflowState: WorkflowState;
   };
