@@ -33,7 +33,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
     @question_index = question_index(question_id)
     @all_answers = Course::Assessment::Answer.
                    unscope(:order).
-                   order(:created_at).
+                   order(:submitted_at).
                    where(submission_id: submission_id, question_id: question_id)
   end
 
@@ -59,7 +59,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
   def fetch_all_answers(submission_id, question_id)
     answers = Course::Assessment::Answer.
               unscope(:order).
-              order(created_at: :desc).
+              order(submitted_at: :desc).
               where(submission_id: submission_id, question_id: question_id)
 
     current_answer = answers.find(&:current_answer?)

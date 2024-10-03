@@ -75,7 +75,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
       value: idx,
       label:
         idx === 0 || idx === sortedAnswers.length - 1
-          ? formatLongDateTime(answer.createdAt)
+          ? formatLongDateTime(answer.submittedAt)
           : '',
     };
   });
@@ -124,6 +124,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
           title={<Typography variant="h6">{name}</Typography>}
         />
       </Card>
+
       {answerSubmittedTimes.length > 1 && (
         <div className="w-[calc(100%_-_17rem)] mx-auto mb-4">
           <Slider
