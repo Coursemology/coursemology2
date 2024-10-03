@@ -5,7 +5,6 @@ import {
   Card,
   CardHeader,
   IconButton,
-  Slider,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -14,6 +13,7 @@ import { Answer, Question } from 'types/course/statistics/assessmentStatistics';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
+import Slider from 'lib/components/extensions/CustomSlider';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -83,7 +83,6 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
   const currentAnswerMarker =
     answerSubmittedTimes[answerSubmittedTimes.length - 1];
 
-  const earliestAnswerMarker = answerSubmittedTimes[0];
   const [displayedIndex, setDisplayedIndex] = useState(
     currentAnswerMarker.value,
   );
@@ -125,6 +124,18 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
           title={<Typography variant="h6">{name}</Typography>}
         />
       </Card>
+      {answerSubmittedTimes.length > 1 && (
+        <div className="w-[calc(100%_-_17rem)] mx-auto mb-4">
+          <Slider
+            defaultValue={currentAnswerMarker.value}
+            onChange={(_, value) => {
+              setDisplayedIndex(Array.isArray(value) ? value[0] : value);
+            }}
+            points={answerSubmittedTimes}
+            valueLabelDisplay="auto"
+          />
+        </div>
+      )}
 
       <Accordion
         defaultExpanded={false}
@@ -144,21 +155,6 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
           />
         </div>
       </Accordion>
-      {answerSubmittedTimes.length > 1 && (
-        <div className="w-[calc(100%_-_17rem)] mx-auto">
-          <Slider
-            defaultValue={currentAnswerMarker.value}
-            marks={answerSubmittedTimes}
-            max={currentAnswerMarker.value}
-            min={earliestAnswerMarker.value}
-            onChange={(_, value) => {
-              setDisplayedIndex(Array.isArray(value) ? value[0] : value);
-            }}
-            step={null}
-            valueLabelDisplay="off"
-          />
-        </div>
-      )}
 
       <AnswerDetails
         answer={
