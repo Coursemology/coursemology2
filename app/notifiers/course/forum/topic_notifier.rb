@@ -7,7 +7,8 @@ class Course::Forum::TopicNotifier < Notifier::Base
     return unless email_enabled.regular || email_enabled.phantom
 
     activity = create_activity(actor: user, object: topic, event: :created)
-    activity.notify(course, :feed) unless course_user.phantom?
+    activity.notify(course, :feed) if course_user && !course_user.phantom? &&
+                                      !topic.posts.first.is_anonymous
 
     topic.forum.subscriptions.includes(:user).each do |subscription|
       course_user = course.course_users.find_by(user: subscription.user)
