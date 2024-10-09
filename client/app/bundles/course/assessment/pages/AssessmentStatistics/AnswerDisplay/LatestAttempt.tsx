@@ -3,9 +3,9 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Chip, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
+import { LatestAttempt } from 'types/course/statistics/assessmentStatistics';
 
-import { fetchQuestionAnswerDetails } from 'course/assessment/operations/statistics';
+import { fetchLatestAttempt } from 'course/assessment/operations/statistics';
 import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -38,26 +38,23 @@ const translations = defineMessages({
 });
 
 interface Props {
-  curAnswerId: number;
+  currAnswerId: number;
   index: number;
 }
 
-const LastAttemptIndex: FC<Props> = (props) => {
-  const { curAnswerId, index } = props;
+const LastestAttempt: FC<Props> = (props) => {
+  const { currAnswerId, index } = props;
   const { courseId, assessmentId } = useParams();
   const { t } = useTranslation();
 
-  const fetchQuestionAndCurrentAnswerDetails = (): Promise<
-    QuestionAnswerDetails<keyof typeof QuestionType>
+  const fetchLatestAttemptDetails = (): Promise<
+    LatestAttempt<keyof typeof QuestionType>
   > => {
-    return fetchQuestionAnswerDetails(curAnswerId);
+    return fetchLatestAttempt(currAnswerId);
   };
 
   return (
-    <Preload
-      render={<LoadingIndicator />}
-      while={fetchQuestionAndCurrentAnswerDetails}
-    >
+    <Preload render={<LoadingIndicator />} while={fetchLatestAttemptDetails}>
       {(data): JSX.Element => {
         const gradeCellColor = getClassNameForMarkCell(
           data.answer.grade,
@@ -109,4 +106,4 @@ const LastAttemptIndex: FC<Props> = (props) => {
   );
 };
 
-export default LastAttemptIndex;
+export default LastestAttempt;

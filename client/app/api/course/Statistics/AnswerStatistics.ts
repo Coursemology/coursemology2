@@ -15,4 +15,10 @@ export default class AnswerStatisticsAPI extends BaseCourseAPI {
   ): APIResponse<QuestionAnswerDetails<keyof typeof QuestionType>> {
     return this.client.get(`${this.#urlPrefix}/${answerId}`);
   }
+
+  fetchLatestAttempt(
+    answerId: number,
+  ): APIResponse<LatestAttempt<keyof typeof QuestionType>> {
+    return this.client.get(`${this.#urlPrefix}/${answerId}/latest_attempt`);
+  }
 }

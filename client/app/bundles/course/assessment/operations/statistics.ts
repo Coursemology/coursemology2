@@ -41,6 +41,15 @@ export const fetchAncestorStatistics = async (
   return response.data;
 };
 
+export const fetchLatestAttempt = async (
+  answerId: number,
+): Promise<LatestAttempt<keyof typeof QuestionType>> => {
+  const response =
+    await CourseAPI.statistics.answer.fetchLatestAttempt(answerId);
+
+  return response.data;
+};
+
 export const fetchQuestionAnswerDetails = async (
   answerId: number,
 ): Promise<QuestionAnswerDetails<keyof typeof QuestionType>> => {
