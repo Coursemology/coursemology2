@@ -10,7 +10,7 @@ export default class AllAnswerStatisticsAPI extends BaseCourseAPI {
     return `/courses/${this.courseId}/statistics/submission_question`;
   }
 
-  fetchAllAnswers(
+  fetchAllAttempts(
     submissionQuestionId: number,
   ): APIResponse<QuestionAllAnswerDisplayDetails<keyof typeof QuestionType>> {
     return this.client.get(`${this.#urlPrefix}/${submissionQuestionId}`);

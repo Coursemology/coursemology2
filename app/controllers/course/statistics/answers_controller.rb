@@ -22,7 +22,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
                                     discussion_topic: { posts: :codaveri_feedback }).first
   end
 
-  def question_answer_details
+  def attempts
     answer = Course::Assessment::Answer.find(answer_params[:id])
     @submission = answer.submission
     @question = answer.question
@@ -39,10 +39,10 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
                                              { discussion_topic: { posts: :codaveri_feedback } } } },
                                     discussion_topic: { posts: :codaveri_feedback }).first
 
-    fetch_all_answers(submission_id, question_id, true)
+    fetch_all_answers(submission_id, question_id, answer_params[:limit])
   end
 
-  def all_answers
+  def all_attempts
     @submission_question = Course::Assessment::SubmissionQuestion.find(submission_question_params[:id])
     @submission = @submission_question.submission
     @question = @submission_question.question
@@ -59,7 +59,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
   private
 
   def answer_params
-    params.permit(:id)
+    params.permit(:id, :limit)
   end
 
   def submission_question_params
@@ -76,17 +76,17 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
   end
 
   def fetch_all_answers(submission_id, question_id, limit)
-    @all_answers = if limit
-                     Course::Assessment::Answer.
-                       unscope(:order).
-                       order(:submitted_at).
-                       where(submission_id: submission_id, question_id: question_id).
-                       limit(MAX_ANSWERS_COUNT)
-                   else
+    @all_answers = if limit == -1
                      Course::Assessment::Answer.
                        unscope(:order).
                        order(:submitted_at).
                        where(submission_id: submission_id, question_id: question_id)
+                   else
+                     Course::Assessment::Answer.
+                       unscope(:order).
+                       order(:submitted_at).
+                       where(submission_id: submission_id, question_id: question_id).
+                       limit(limit)
                    end
   end
 end
