@@ -9,6 +9,9 @@ gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.0.8.4'
 
+# Soft delete
+gem 'paranoia', '~> 2.4'
+
 # Use PostgreSQL for the backend
 gem 'pg'
 

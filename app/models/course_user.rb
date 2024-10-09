@@ -3,6 +3,7 @@ class CourseUser < ApplicationRecord
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
   include CourseUser::TodoConcern
+  acts_as_paranoid
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
