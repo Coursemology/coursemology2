@@ -40,6 +40,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   belongs_to :import_job, class_name: 'TrackableJob::Job', inverse_of: nil, optional: true
   belongs_to :language, class_name: 'Coursemology::Polyglot::Language', inverse_of: nil
+  belongs_to :parent, class_name: 'Course::Assessment::Question::Programming', optional: true
   has_one_attachment
   has_many :template_files, class_name: 'Course::Assessment::Question::ProgrammingTemplateFile',
                             dependent: :destroy, foreign_key: :question_id, inverse_of: :question
@@ -263,7 +264,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
     # TODO: Move this validation logic to frontend, to prevent user from submitting in the first place.
     if !CodaveriAsyncApiService.language_valid_for_codaveri?(language)
-      errors.add(:base, 'Language type must be Python 3 and above to activate either codaveri '\
+      errors.add(:base, 'Language type must be Python 3 and above to activate either codaveri ' \
                         'evaluator or get help')
     elsif !question_assessments.empty? &&
           !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
