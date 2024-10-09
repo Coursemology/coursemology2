@@ -21,13 +21,13 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
   end
 
   def attempts
-    answer = Course::Assessment::Answer.find(answer_params[:id])
-    @submission = answer.submission
-    @question = answer.question
+    @answer = Course::Assessment::Answer.find(answer_params[:id])
+    @submission = @answer.submission
+    @question = @answer.question
     @assessment = @submission.assessment
 
-    submission_id = answer.submission_id
-    question_id = answer.question_id
+    submission_id = @answer.submission_id
+    question_id = @answer.question_id
 
     @question_index = question_index(question_id)
 
@@ -38,6 +38,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
                                     discussion_topic: { posts: :codaveri_feedback }).first
 
     fetch_all_answers(submission_id, question_id, answer_params[:limit].to_i)
+    fetch_all_actable_questions(@question)
   end
 
   def all_attempts
@@ -52,6 +53,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
     @question_index = question_index(question_id)
 
     fetch_all_answers(submission_id, question_id, -1)
+    fetch_all_actable_questions(@question)
   end
 
   private
@@ -86,5 +88,23 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
                        where(submission_id: submission_id, question_id: question_id).
                        limit(limit)
                    end
+  end
+
+  def fetch_all_actable_questions(question)
+    unless versioned_question?(question)
+      @all_actable_questions = [question.actable]
+      return
+    end
+
+    question = question.actable
+    @all_actable_questions = [question]
+    while question.parent
+      @all_actable_questions << question.parent
+      question = question.parent
+    end
+  end
+
+  def versioned_question?(question)
+    question.actable.is_a?(Course::Assessment::Question::Programming)
   end
 end
