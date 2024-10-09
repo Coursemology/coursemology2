@@ -14,6 +14,8 @@ import {
 import AllAttemptsDisplay from './AllAttemptsDisplay';
 import Comment from './Comment';
 
+const LIMIT = 10;
+
 interface Props {
   curAnswerId: number;
   index: number;
@@ -24,10 +26,10 @@ const AllAttemptsIndex: FC<Props> = (props) => {
   const { curAnswerId, index, name } = props;
   const { courseId, assessmentId } = useParams();
 
-  const fetchQuestionAndCurrentAnswerDetails = (): Promise<
+  const fetchAttemptDetails = (): Promise<
     QuestionAnswerDetails<keyof typeof QuestionType>
   > => {
-    return fetchQuestionAnswerDetails(curAnswerId);
+    return fetchAttempts(curAnswerId, LIMIT);
   };
 
   return (
