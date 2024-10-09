@@ -21,7 +21,7 @@ const PastAnswers: FC = () => {
   const fetchAnswers = (): Promise<
     QuestionAllAnswerDisplayDetails<keyof typeof QuestionType>
   > => {
-    return fetchAllAnswers(parsedSubmissionQuestionId);
+    return fetchAllAttempts(parsedSubmissionQuestionId);
   };
 
   return (

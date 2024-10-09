@@ -2,8 +2,6 @@
 class Course::Statistics::AnswersController < Course::Statistics::Controller
   helper Course::Assessment::Submission::SubmissionsHelper.name.sub(/Helper$/, '')
 
-  MAX_ANSWERS_COUNT = 10
-
   def latest_answer
     @answer = Course::Assessment::Answer.find(answer_params[:id])
     @submission = @answer.submission
@@ -22,7 +20,8 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
                                     discussion_topic: { posts: :codaveri_feedback }).first
   end
 
-  def question_answer_details
+  # Attempt here refers to a submitted answer
+  def attempts
     answer = Course::Assessment::Answer.find(answer_params[:id])
     @submission = answer.submission
     @question = answer.question
@@ -39,10 +38,10 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
                                              { discussion_topic: { posts: :codaveri_feedback } } } },
                                     discussion_topic: { posts: :codaveri_feedback }).first
 
-    fetch_all_answers(submission_id, question_id, MAX_ANSWERS_COUNT)
+    fetch_all_answers(submission_id, question_id, answer_params[:limit].to_i)
   end
 
-  def all_answers
+  def all_attempts
     @submission_question = Course::Assessment::SubmissionQuestion.find(submission_question_params[:id])
     @submission = @submission_question.submission
     @question = @submission_question.question
@@ -59,7 +58,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
   private
 
   def answer_params
-    params.permit(:id)
+    params.permit(:id, :limit)
   end
 
   def submission_question_params

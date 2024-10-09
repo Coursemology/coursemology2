@@ -13,10 +13,21 @@ export default class AnswerStatisticsAPI extends BaseCourseAPI {
     return `/courses/${this.courseId}/statistics/answer`;
   }
 
-  fetchQuestionAnswerDetails(
+  fetchAllAttempts(
+    submissionQuestionId: number,
+  ): APIResponse<QuestionAllAnswerDetails<keyof typeof QuestionType>> {
+    return this.client.get(`${this.#urlPrefix}/${submissionQuestionId}`);
+  }
+
+  fetchAttempts(
     answerId: number,
+    limit: number,
   ): APIResponse<QuestionAnswerDetails<keyof typeof QuestionType>> {
-    return this.client.get(`${this.#urlPrefix}/${answerId}`);
+    return this.client.get(`${this.#urlPrefix}/${answerId}`, {
+      params: {
+        limit,
+      },
+    });
   }
 
   fetchLatestAnswer(
