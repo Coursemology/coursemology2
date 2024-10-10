@@ -32,7 +32,7 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
         find('button', text: 'Forum Participation Disbursement').click
 
         within find(content_tag_selector(students[0])) do
-          expect(find('input').value).to eq('100')
+          expect(page).to have_field(type: 'text', with: '100')
         end
 
         start_date = (4.weeks.ago + 1.minute).strftime('%d-%m-%Y %I:%M')
@@ -45,26 +45,25 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
         within find('.forum-participation-search-panel') do
           find('button.filter-btn-submit').click
         end
-        wait_for_page
 
         # The first student gets 400 (2 * weekly_cap) for the 2-week span since his
         # participation score is higher than the rest due to the additional upvote.
         within find(content_tag_selector(students[0])) do
-          expect(find('input').value).to eq('400')
+          expect(page).to have_field(type: 'text', with: '400')
         end
         # The other two students get the same experience points because they have the
         # same participation score.
         within find(content_tag_selector(students[1])) do
-          expect(find('input').value).to eq('200')
+          expect(page).to have_field(type: 'text', with: '200')
         end
         within find(content_tag_selector(students[2])) do
-          expect(find('input').value).to eq('200')
+          expect(page).to have_field(type: 'text', with: '200')
         end
 
         expect do
           find('button.forum-btn-submit').click
-          wait_for_page
-        end.to change(Course::ExperiencePointsRecord, :count).by(3)
+          expect_toastify("Experience points disbursed to #{students.count} recipients.")
+        end.to change(Course::ExperiencePointsRecord, :count).by(students.count)
       end
     end
   end

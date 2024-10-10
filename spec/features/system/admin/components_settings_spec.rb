@@ -22,9 +22,9 @@ RSpec.feature 'System: Administration: Components', type: :feature, js: true do
 
         within find("tr#component_#{component.key}") do
           if enabled_components.include?(component.key.to_s)
-            expect(page).to have_selector('input:checked', visible: false)
+            expect(page).to have_field(type: 'checkbox', checked: true, visible: false)
           else
-            expect(page).to have_selector('input:not(:checked)', visible: false)
+            expect(page).to have_field(type: 'checkbox', checked: false, visible: false)
           end
         end
       end
@@ -39,11 +39,11 @@ RSpec.feature 'System: Administration: Components', type: :feature, js: true do
 
       element_to_modify.find('input', visible: false).click
       expect_toastify('Instance component setting was updated successfully.')
-      expect(element_to_modify).to have_selector('input:not(:checked)', visible: false)
+      expect(element_to_modify).to have_field(type: 'checkbox', checked: false, visible: false)
 
       element_to_modify.find('input', visible: false).click
       expect_toastify('Instance component setting was updated successfully.')
-      expect(element_to_modify).to have_selector('input:checked', visible: false)
+      expect(element_to_modify).to have_field(type: 'checkbox', checked: true, visible: false)
     end
   end
 end
