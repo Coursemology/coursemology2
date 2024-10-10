@@ -25,6 +25,8 @@ class Course::Assessment::Question < ApplicationRecord
   has_many :question_bundle_questions, class_name: 'Course::Assessment::QuestionBundleQuestion',
                                        foreign_key: :question_id, dependent: :destroy, inverse_of: :question
   has_many :question_bundles, through: :question_bundle_questions, class_name: 'Course::Assessment::QuestionBundle'
+  has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
+                            dependent: :destroy, inverse_of: :question
 
   delegate :to_partial_path, to: :actable
   delegate :question_type, to: :actable
@@ -38,7 +40,7 @@ class Course::Assessment::Question < ApplicationRecord
   #
   # @return [Boolean] True if the question supports auto grading.
   def auto_gradable?
-    actable.present? && actable.self_respond_to?(:auto_gradable?) ? actable.auto_gradable? : false
+    (actable.present? && actable.self_respond_to?(:auto_gradable?)) ? actable.auto_gradable? : false
   end
 
   # Gets an instance of the auto grader suitable for use with this question.

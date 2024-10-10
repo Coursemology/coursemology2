@@ -17,6 +17,7 @@ interface AssessmentInfo {
 interface MainAssessmentInfo extends AssessmentInfo {
   isAutograded: boolean;
   questionCount: number;
+  liveFeedbackEnabled: boolean;
 }
 
 interface AncestorAssessmentInfo extends AssessmentInfo {}
@@ -137,4 +138,12 @@ export interface QuestionAllAnswerDisplayDetails<
   allAnswers: AllAnswerDetails<T>[];
   submissionId: number;
   comments: CommentItem[];
+}
+
+export interface AssessmentLiveFeedbackStatistics {
+  courseUser: StudentInfo;
+  groups: { name: string }[];
+  workflowState?: WorkflowState;
+  liveFeedbackCount?: number[]; // Will already be ordered by question
+  questionIds: number[];
 }

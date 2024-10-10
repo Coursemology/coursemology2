@@ -1599,7 +1599,7 @@ const translations = defineMessages({
   },
   enableLiveFeedback: {
     id: 'course.assessment.question.programming.enableLiveFeedback',
-    defaultMessage: 'Allow get help generation',
+    defaultMessage: 'Allow live feedback generation',
   },
   enableLiveFeedbackDescription: {
     id: 'course.assessment.question.programming.enableLiveFeedbackDescription',
@@ -1613,7 +1613,7 @@ const translations = defineMessages({
   liveFeedbackCustomPromptDescription: {
     id: 'course.assessment.question.programming.liveFeedbackCustomPromptDescription',
     defaultMessage:
-      'Add instructions to guide the generation of get help here. If unsure, just leave this blank.',
+      'Add instructions to guide the generation of live feedback here. If unsure, just leave this blank.',
   },
   savingChanges: {
     id: 'course.assessment.question.programming.savingChanges',

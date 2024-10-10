@@ -79,6 +79,8 @@ const SubmissionForm: FC<Props> = (props) => {
   });
 
   const onFetchLiveFeedback = (answerId: number, questionId: number): void => {
+    const liveFeedbackId =
+      liveFeedbacks?.feedbackByQuestion?.[questionId].liveFeedbackId;
     const feedbackToken =
       liveFeedbacks?.feedbackByQuestion?.[questionId].pendingFeedbackToken;
     const questionIndex = questionIds.findIndex((id) => id === questionId) + 1;
@@ -90,9 +92,11 @@ const SubmissionForm: FC<Props> = (props) => {
     });
     dispatch(
       fetchLiveFeedback({
+        submissionId,
         answerId,
         questionId,
         feedbackUrl: liveFeedbacks?.feedbackUrl,
+        liveFeedbackId,
         feedbackToken,
         successMessage,
         noFeedbackMessage,

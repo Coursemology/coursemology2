@@ -2384,6 +2384,96 @@
   "course.assessment.skills.SkillsTable.uncategorised": {
     "defaultMessage": "未分类技能"
   },
+  "course.assessment.liveFeedback.questionTitle": {
+    "defaultMessage": "题目 {index}"
+  },
+  "course.assessment.liveFeedback.feedbackTimingTitle": {
+    "defaultMessage": "使用时间：{usedAt}"
+  },
+  "course.assessment.liveFeedback.liveFeedbackName": {
+    "defaultMessage": "实时反馈"
+  },
+  "course.assessment.liveFeedback.comments": {
+    "defaultMessage": "评论"
+  },
+  "course.assessment.liveFeedback.lineHeader": {
+    "defaultMessage": "第 {lineNumber} 行"
+  },
+  "course.assessment.statistics.answers": {
+    "defaultMessage": "答案"
+  },
+  "course.assessment.statistics.attempts.filename": {
+    "defaultMessage": "{assessment} 的题目尝试统计"
+  },
+  "course.assessment.statistics.attempts.greenCellLegend": {
+    "defaultMessage": "正确"
+  },
+  "course.assessment.statistics.attempts.redCellLegend": {
+    "defaultMessage": "错误"
+  },
+  "course.assessment.statistics.closePrompt": {
+    "defaultMessage": "关闭"
+  },
+  "course.assessment.statistics.grader": {
+    "defaultMessage": "评分者"
+  },
+  "course.assessment.statistics.grayCellLegend": {
+    "defaultMessage": "未决定 (问题无法自动评分)"
+  },
+  "course.assessment.statistics.group": {
+    "defaultMessage": "组别"
+  },
+  "course.assessment.statistics.legendHigherusage": {
+    "defaultMessage": "使用较多"
+  },
+  "course.assessment.statistics.legendLowerUsage": {
+    "defaultMessage": "使用较少"
+  },
+  "course.assessment.statistics.liveFeedback.filename": {
+    "defaultMessage": "{assessment} 的题目实时反馈统计"
+  },
+  "course.assessment.statistics.liveFeedbackHistoryPromptTitle": {
+    "defaultMessage": "实时反馈历史"
+  },
+  "course.assessment.statistics.marks.filename": {
+    "defaultMessage": "{assessment} 的题目分数统计"
+  },
+  "course.assessment.statistics.marks.greenCellLegend": {
+    "defaultMessage": ">= 0.5 * 最高分"
+  },
+  "course.assessment.statistics.marks.redCellLegend": {
+    "defaultMessage": "< 0.5 * 最高分"
+  },
+  "course.assessment.statistics.name": {
+    "defaultMessage": "姓名"
+  },
+  "course.assessment.statistics.nameGroupsGraderSearchText": {
+    "defaultMessage": "按学生姓名、组别或评分者姓名搜索"
+  },
+  "course.assessment.statistics.nameGroupsSearchText": {
+    "defaultMessage": "按姓名或组别搜索"
+  },
+  "course.assessment.statistics.noSubmission": {
+    "defaultMessage": "尚未提交"
+  },
+  "course.assessment.statistics.onlyForAutogradableAssessment": {
+    "defaultMessage": "此表仅适用于包含至少一个自动评分问题的评估"
+  },
+  "course.assessment.statistics.questionDisplayTitle": {
+    "defaultMessage": "{student} 的题目 {index}"
+  },
+  "course.assessment.statistics.questionIndex": {
+    "defaultMessage": "题目 {index}"
+  },
+  "course.assessment.statistics.totalFeedbackCount": {
+    "defaultMessage": "总计"
+  },
+  "course.assessment.statistics.totalGrade": {
+    "defaultMessage": "总分"
+  },
+  "course.assessment.statistics.workflowState": {
+    "defaultMessage": "状态"
+  },
   "course.assessment.statistics.ancestorFail": {
     "defaultMessage": "无法获取此测试的过去结果。"
   },
