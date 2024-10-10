@@ -18,18 +18,24 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
              assessment: assessment,
              creator: student)
     end
+    # Forum post response questions currently don't show 'Past Answers' element
+    let(:past_answer_count) do
+      submission.assessment.questions.reject do |q|
+        q.question_type == 'ForumPostResponse'
+      end.count
+    end
 
     context 'As a Course Student' do
       let(:user) { student }
 
       scenario 'I can view my past answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        past_answers = all('span', text: 'Past Answers')
+        # Ensure all 'Past Answers' labels are rendered before continuing
+        expect(page).to have_selector('span', text: 'Past Answers', count: past_answer_count)
 
-        expect do
-          past_answers.each(&:click)
-          wait_for_page
-        end.to change { all('label', text: 'Past Answers').count }.by(past_answers.count)
+        all('span', text: 'Past Answers').each(&:click)
+        # Label selector matches both the expanded 'Past Answers' section and the labels we clicked
+        expect(page).to have_selector('label', text: 'Past Answers', count: past_answer_count * 2)
       end
     end
 
@@ -38,12 +44,10 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
 
       scenario "I can view my student's past answers" do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        past_answers = all('span', text: 'Past Answers')
+        expect(page).to have_selector('span', text: 'Past Answers', count: past_answer_count)
 
-        expect do
-          past_answers.each(&:click)
-          wait_for_page
-        end.to change { all('label', text: 'Past Answers').count }.by(past_answers.count)
+        all('span', text: 'Past Answers').each(&:click)
+        expect(page).to have_selector('label', text: 'Past Answers', count: past_answer_count * 2)
       end
     end
   end

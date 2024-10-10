@@ -19,8 +19,13 @@ RSpec.feature 'Course: Administration: Components', js: true do
         enabled_components = course.enabled_components
         components.each do |component|
           expect(page).to have_selector('label', text: component.display_name)
-          option = find('label', text: component.display_name).find('input', visible: false)
-          expect(option.checked?).to be(enabled_components.include?(component))
+          within find('label', text: component.display_name) do
+            if enabled_components.include?(component)
+              expect(page).to have_field(type: 'checkbox', checked: true, visible: false)
+            else
+              expect(page).to have_field(type: 'checkbox', checked: false, visible: false)
+            end
+          end
         end
       end
 
@@ -31,13 +36,12 @@ RSpec.feature 'Course: Administration: Components', js: true do
         control.click
         expect_toastify('Your changes have been saved. Refresh to see the new changes.')
 
-        option = control.find('input', visible: false)
-        expect(option).not_to be_checked
+        expect(control).to have_field(type: 'checkbox', checked: false, visible: false)
 
         control.click
         expect_toastify('Your changes have been saved. Refresh to see the new changes.')
 
-        expect(option).to be_checked
+        expect(control).to have_field(type: 'checkbox', checked: true, visible: false)
       end
     end
   end
