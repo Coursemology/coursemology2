@@ -152,7 +152,6 @@ export const buildQuestionDataFromPrototype = (
   prefilledData: QuestionPrototypeFormData,
   languageId: LanguageData['id'],
   languageMode: LanguageMode,
-  assessmentAutograded: boolean,
 ): ProgrammingFormRequestData => {
   const metadata: BasicMetadata = {
     solution: prefilledData?.testUi?.metadata?.solution,
@@ -178,10 +177,9 @@ export const buildQuestionDataFromPrototype = (
       liveFeedbackEnabled: false,
       // set question to autograded if it includes at least one test case
       autograded:
-        assessmentAutograded &&
-        (prefilledData?.testUi?.metadata?.testCases?.public?.length > 0 ||
-          prefilledData?.testUi?.metadata?.testCases?.private?.length > 0 ||
-          prefilledData?.testUi?.metadata?.testCases?.evaluation?.length > 0),
+        prefilledData?.testUi?.metadata?.testCases?.public?.length > 0 ||
+        prefilledData?.testUi?.metadata?.testCases?.private?.length > 0 ||
+        prefilledData?.testUi?.metadata?.testCases?.evaluation?.length > 0,
     },
     testUi: {
       mode: languageMode,
