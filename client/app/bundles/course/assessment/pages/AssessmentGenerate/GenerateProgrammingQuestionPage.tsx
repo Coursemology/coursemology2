@@ -4,10 +4,7 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Container, Divider, Grid } from '@mui/material';
-import {
-  FetchAssessmentData,
-  isAuthenticatedAssessmentData,
-} from 'types/course/assessment/assessments';
+import { FetchAssessmentData } from 'types/course/assessment/assessments';
 import { MetadataTestCase } from 'types/course/assessment/question/programming';
 import * as yup from 'yup';
 
@@ -287,15 +284,8 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
 
   return (
     // TODO: Update these queries to return only data needed for this page, instead of the full objects.
-    <Preload
-      render={<LoadingIndicator />}
-      while={() =>
-        Promise.all([fetchAssessmentWithId(), fetchCodaveriLanguages()])
-      }
-    >
-      {([assessment, data]): JSX.Element => {
-        const assessmentAutograded =
-          isAuthenticatedAssessmentData(assessment) && assessment.autograded;
+    <Preload render={<LoadingIndicator />} while={fetchCodaveriLanguages}>
+      {(data): JSX.Element => {
         return (
           <>
             <GenerateTabs
@@ -533,7 +523,6 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
               <Divider className="mt-8" />
             </Container>
             <GenerateExportDialog
-              assessmentAutograded={assessmentAutograded}
               languages={data.languages}
               open={exportDialogOpen}
               saveActiveFormData={saveActiveFormData}

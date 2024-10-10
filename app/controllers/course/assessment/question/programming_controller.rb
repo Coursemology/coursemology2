@@ -80,6 +80,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
             {
               id: language.id,
               name: language.name,
+              disabled: !language.enabled,
               editorMode: language.ace_mode
             }
           end

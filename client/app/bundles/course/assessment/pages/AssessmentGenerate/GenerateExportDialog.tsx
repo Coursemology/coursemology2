@@ -42,7 +42,6 @@ interface Props {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   languages: LanguageData[];
-  assessmentAutograded: boolean;
   saveActiveFormData: () => void;
 }
 
@@ -66,8 +65,7 @@ const translations = defineMessages({
 });
 
 const GenerateExportDialog: FC<Props> = (props) => {
-  const { open, setOpen, saveActiveFormData, assessmentAutograded, languages } =
-    props;
+  const { open, setOpen, saveActiveFormData, languages } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const generatePageData = useAppSelector(getAssessmentGenerateQuestionsData);
@@ -227,6 +225,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
           color="primary"
           disabled={generatePageData.exportCount === 0}
           onClick={() => {
+            saveActiveFormData();
             generatePageData.conversationIds
               .map((id) => {
                 const conversation = generatePageData.conversations[id];
@@ -240,10 +239,11 @@ const GenerateExportDialog: FC<Props> = (props) => {
               })
               .filter(
                 ({ conversation, snapshot }) =>
-                  conversation?.toExport && snapshot,
+                  conversation?.toExport &&
+                  snapshot &&
+                  snapshot.state !== 'sentinel',
               )
-              .forEach(({ conversation }) => {
-                saveActiveFormData();
+              .forEach(({ conversation }, index) => {
                 const questionData = conversation.activeSnapshotEditedData;
                 const { codaveriData } =
                   conversation.snapshots[conversation.activeSnapshotId];
@@ -256,7 +256,6 @@ const GenerateExportDialog: FC<Props> = (props) => {
                     questionData!,
                     languageId,
                     languageMode,
-                    assessmentAutograded,
                   ),
                 );
                 dispatch(
