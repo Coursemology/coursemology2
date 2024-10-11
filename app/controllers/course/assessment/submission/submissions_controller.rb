@@ -5,7 +5,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   include Signals::EmissionConcern
   include Course::Assessment::Submission::MonitoringConcern
   include Course::Assessment::SubmissionConcern
-  include Course::Assessment::Submission::KoditsuSubmissionsConcern
+  include Course::Assessment::Submission::Koditsu::SubmissionsConcern
 
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
