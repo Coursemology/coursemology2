@@ -3,7 +3,7 @@ class Course::Assessment::Submission::FetchSubmissionsFromKoditsuJob <
   ApplicationJob
   include TrackableJob
   include Rails.application.routes.url_helpers
-  include Course::Assessment::Submission::KoditsuSubmissionsConcern
+  include Course::Assessment::Submission::Koditsu::SubmissionsConcern
 
   protected
 
