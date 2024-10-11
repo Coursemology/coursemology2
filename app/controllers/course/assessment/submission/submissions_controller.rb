@@ -5,7 +5,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   include Signals::EmissionConcern
   include Course::Assessment::Submission::MonitoringConcern
   include Course::Assessment::SubmissionConcern
-  include Course::Assessment::Submission::KoditsuSubmissionsConcern
+  include Course::Assessment::Submission::Koditsu::SubmissionsConcern
 
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
@@ -174,9 +174,14 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
     is_koditsu_enabled = is_course_koditsu_enabled && is_assessment_koditsu_enabled
 
-    fetch_all_submissions_from_koditsu(@assessment, current_user) if is_koditsu_enabled
+    if is_koditsu_enabled
+      job = Course::Assessment::Submission::FetchSubmissionsFromKoditsuJob.
+            perform_later(@assessment.id, @assessment.updated_at, current_user).job
 
-    head :ok
+      render partial: 'jobs/submitted', locals: { job: job }
+    else
+      head :ok
+    end
   end
 
   # Download either all of or a subset of submissions for an assessment.
