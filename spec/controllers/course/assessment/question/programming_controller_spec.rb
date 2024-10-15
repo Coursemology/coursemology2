@@ -135,8 +135,6 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
           ActiveRecord::Base.connection.execute(
             "UPDATE polyglot_languages SET enabled = false WHERE id = #{existing_language.id}"
           )
-          # Not too sure why an explicit reload is needed, but without it
-          # the changes do not seem to be reflected inthe database
           programming_question.reload
         end
 

@@ -6,42 +6,97 @@ RSpec.describe 'Course: Assessments: Questions: Duplication Spec', js: true do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:source_assessment) do
+    let(:skill) { build(:course_assessment_skill, course: course) }
+    let(:mcq_source_assessment) do
       create(:assessment, :with_mcq_question, course: course).tap do |assessment|
         mcq_question = assessment.questions.first
-        mcq_question.question_assessments.first.skills <<
-          build(:course_assessment_skill, course: course)
+        mcq_question.question_assessments.first.skills << skill
       end
     end
-    let(:destination_assessment) { create(:assessment, :with_programming_question, course: course) }
+    let(:second_source_assessment) do
+      create(:assessment, :with_programming_question, course: course).tap do |assessment|
+        programming_question =
+          assessment.questions.where(actable_type: 'Course::Assessment::Question::Programming').first
+        programming_question.question_assessments.first.skills << skill
+      end
+    end
 
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
+      let!(:question) { mcq_source_assessment.questions.first }
+      let!(:programming_question) do
+        questions = second_source_assessment.questions
 
-      scenario 'I can duplicate a question from one assessment to another' do
-        destination_assessment
-        visit course_assessment_path(course, source_assessment)
+        questions.where(actable_type: 'Course::Assessment::Question::Programming').first
+      end
 
-        expect(destination_assessment.questions.count).to be(1)
+      context 'upon duplicating a question' do
+        let!(:first_destination_assessment) { create(:assessment, course: course) }
 
-        within all('section', text: source_assessment.questions.first.title).first do
-          click_button 'Duplicate'
+        scenario 'I can duplicate that question from one assessment to another' do
+          visit course_assessment_path(course, mcq_source_assessment)
+
+          expect(first_destination_assessment.questions.count).to be(0)
+
+          within all('section', text: question.title).first do
+            click_button 'Duplicate'
+          end
+
+          find('li', text: first_destination_assessment.title).click
+          expect_toastify('Your question has been duplicated.')
+
+          expect(first_destination_assessment.questions.reload.count).to eq(1)
+
+          duplicated_question = first_destination_assessment.questions.last
+          expect(duplicated_question.title).to eq(question.title)
+          expect(duplicated_question.question_assessments.first.skills.first.id).
+            to eq(question.question_assessments.first.skills.first.id)
+        end
+      end
+
+      context 'upon duplicating deprecated programming language question' do
+        let!(:second_destination_assessment) { create(:assessment, course: course) }
+        let!(:language) { programming_question.specific.language }
+
+        # Disable the language before the test, and enable it after the test
+        # Direct SQL is used to avoid the readonly limitations
+        before do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE polyglot_languages SET enabled = false WHERE id = #{language.id}"
+          )
+          programming_question.reload
         end
 
-        wait_for_job
+        after do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE polyglot_languages SET enabled = true WHERE id = #{language.id}"
+          )
+        end
 
-        expect do
-          find('li', text: destination_assessment.title).click
+        scenario 'I can also duplicate that question from one assessment to another' do
+          visit course_assessment_path(course, second_source_assessment)
+
+          expect(second_destination_assessment.questions.count).to be(0)
+
+          within all('section', text: programming_question.title).first do
+            click_button 'Duplicate'
+          end
+
+          find('li', text: second_destination_assessment.title).click
           expect_toastify('Your question has been duplicated.')
-        end.to change { destination_assessment.questions.count }.by(1)
 
-        original_mcq_question = source_assessment.questions.last
-        duplicated_mcq_question = destination_assessment.questions.last
-        expect(duplicated_mcq_question.title).to eq(original_mcq_question.title)
-        expect(duplicated_mcq_question.question_assessments.first.skills.first.id).
-          to eq(original_mcq_question.question_assessments.first.skills.first.id)
+          expect(second_destination_assessment.questions.reload.count).to eq(1)
+          duplicated_question = second_destination_assessment.questions.last
+          expect(duplicated_question.title).to eq(programming_question.title)
+          expect(duplicated_question.question_assessments.first.skills.first.id).
+            to eq(programming_question.question_assessments.first.skills.first.id)
+
+          visit course_assessment_path(course, second_destination_assessment)
+
+          expect(page).to have_text(second_destination_assessment.title)
+        end
       end
     end
   end
