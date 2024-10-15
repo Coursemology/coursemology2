@@ -1,5 +1,5 @@
 import { QuestionType } from 'types/course/assessment/question';
-import { QuestionAllAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionAllAnswerDetails } from 'types/course/statistics/assessmentStatistics';
 
 import { APIResponse } from 'api/types';
 
@@ -12,7 +12,7 @@ export default class AllAnswerStatisticsAPI extends BaseCourseAPI {
 
   fetchAllAttempts(
     submissionQuestionId: number,
-  ): APIResponse<QuestionAllAnswerDisplayDetails<keyof typeof QuestionType>> {
+  ): APIResponse<QuestionAllAnswerDetails<keyof typeof QuestionType>> {
     return this.client.get(`${this.#urlPrefix}/${submissionQuestionId}`);
   }
 }

@@ -5,7 +5,7 @@ import {
   AncestorAssessmentStats,
   AssessmentLiveFeedbackStatistics,
   LatestAnswer,
-  QuestionAllAnswerDisplayDetails,
+  QuestionAllAnswerDetails,
   QuestionAnswerDetails,
 } from 'types/course/statistics/assessmentStatistics';
 
@@ -66,7 +66,7 @@ export const fetchAttempts = async (
 
 export const fetchAllAttempts = async (
   submissionQuestionId: number,
-): Promise<QuestionAllAnswerDisplayDetails<keyof typeof QuestionType>> => {
+): Promise<QuestionAllAnswerDetails<keyof typeof QuestionType>> => {
   const response =
     await CourseAPI.statistics.allAnswer.fetchAllAttempts(submissionQuestionId);
 

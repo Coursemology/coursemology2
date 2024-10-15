@@ -1,4 +1,4 @@
-import { JobStatus, JobStatusResponse } from 'types/jobs';
+import { JobStatus } from 'types/jobs';
 import { UserBasicListData } from 'types/users';
 
 import { QuestionType } from '../assessment/question';
@@ -10,7 +10,6 @@ import {
 import {
   ProgrammingFieldData,
   TestCaseResult,
-  TestCaseType,
 } from '../assessment/submission/answer/programming';
 import { ScribingFieldData } from '../assessment/submission/answer/scribing';
 import {
@@ -70,7 +69,7 @@ export interface Post {
 }
 
 export interface TestCase {
-  canReadTests: boolean;
+  questionId?: number;
   public_test?: TestCaseResult[];
   private_test?: TestCaseResult[];
   evaluation_test?: TestCaseResult[];
@@ -88,20 +87,17 @@ export interface CodaveriFeedback {
 export interface ProgrammingAnswerDetails
   extends AnswerCommonDetails<'Programming'> {
   fields: ProgrammingFieldData;
-  explanation: {
-    correct?: boolean;
-    explanation: string[];
-    failureType: TestCaseType;
-  };
-  testCases: TestCase;
-  attemptsLeft?: number;
-  autograding?: JobStatusResponse & {
-    path?: string;
-  };
+  // Tests might not be present (e.g. no autograding)
+  testCases: TestCase[];
   codaveriFeedback?: CodaveriFeedback;
-  latestAnswer?: ProgrammingAnswerDetails & {
-    annotations: Annotation[];
-  };
+  annotations: Annotation[];
+  posts: Post[];
+}
+export interface ProcessedProgrammingAnswerDetails
+  extends AnswerCommonDetails<'Programming'> {
+  fields: ProgrammingFieldData;
+  testCases: TestCase;
+  codaveriFeedback?: CodaveriFeedback;
   annotations: Annotation[];
   posts: Post[];
 }
@@ -167,6 +163,19 @@ export interface AnswerDetailsMap {
   MultipleChoice: McqAnswerDetails;
   MultipleResponse: MrqAnswerDetails;
   Programming: ProgrammingAnswerDetails;
+  TextResponse: TextResponseAnswerDetails;
+  FileUpload: FileUploadAnswerDetails;
+  Comprehension: ComprehensionAnswerDetails;
+  Scribing: ScribingAnswerDetails;
+  VoiceResponse: VoiceResponseAnswerDetails;
+  ForumPostResponse: ForumPostResponseAnswerDetails;
+}
+
+// Currently, only ProgrammingAnswerDetails is processed
+export interface ProcessedAnswerDetailsMap {
+  MultipleChoice: McqAnswerDetails;
+  MultipleResponse: MrqAnswerDetails;
+  Programming: ProcessedProgrammingAnswerDetails;
   TextResponse: TextResponseAnswerDetails;
   FileUpload: FileUploadAnswerDetails;
   Comprehension: ComprehensionAnswerDetails;

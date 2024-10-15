@@ -15,14 +15,15 @@ import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
 import Slider from 'lib/components/extensions/CustomSlider';
 import useTranslation from 'lib/hooks/useTranslation';
-import { formatLongDateTime } from 'lib/moment';
 
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
 import QuestionDetails from '../QuestionDetails/QuestionDetails';
 
+import { processAttempts } from './utils';
+
 interface Props {
   allAnswers: Answer<keyof typeof QuestionType>[];
-  question: Question<keyof typeof QuestionType>;
+  allQuestions: Question<keyof typeof QuestionType>[];
   questionNumber: number;
   submissionEditUrl: string;
   pastAnswersURL?: string;
@@ -59,7 +60,7 @@ const translations = defineMessages({
 const AllAttemptsDisplay: FC<Props> = (props) => {
   const {
     allAnswers,
-    question,
+    allQuestions,
     questionNumber,
     submissionEditUrl,
     name,
@@ -68,24 +69,20 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
 
   const { t } = useTranslation();
 
-  // TODO: distance between points inside Slider to be reflective towards the time distance
-  // (for example, the distance between 1:00PM to 1:01PM should not be equal to 1:00PM to 2:00PM)
-  const answerSubmittedTimes = allAnswers.map((answer, idx) => {
-    return {
-      value: idx,
-      label:
-        idx === 0 || idx === allAnswers.length - 1
-          ? formatLongDateTime(answer.submittedAt)
-          : '',
-    };
-  });
+  const { questionMap, allProcessedAnswers, sliderPoints, maxIndex } =
+    processAttempts(allQuestions, allAnswers);
 
-  const currentAnswerMarker =
-    answerSubmittedTimes[answerSubmittedTimes.length - 1];
+  const [currAnswer, setCurrAnswer] = useState(allProcessedAnswers[maxIndex]);
+  const [currQuestion, setCurrQuestion] = useState<
+    Question<keyof typeof QuestionType>
+  >(questionMap.get(maxIndex) ?? ({} as Question<keyof typeof QuestionType>));
 
-  const [displayedIndex, setDisplayedIndex] = useState(
-    currentAnswerMarker.value,
-  );
+  const updateDisplayedIndex = (index: number): void => {
+    setCurrAnswer(allProcessedAnswers[index]);
+    setCurrQuestion(
+      questionMap.get(index) ?? ({} as Question<keyof typeof QuestionType>),
+    );
+  };
 
   return (
     <>
@@ -125,14 +122,14 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
         />
       </Card>
 
-      {answerSubmittedTimes.length > 1 && (
+      {maxIndex > 0 && (
         <div className="w-[calc(100%_-_17rem)] mx-auto mb-4">
           <Slider
-            defaultValue={currentAnswerMarker.value}
+            defaultValue={maxIndex}
             onChange={(_, value) => {
-              setDisplayedIndex(Array.isArray(value) ? value[0] : value);
+              updateDisplayedIndex(Array.isArray(value) ? value[0] : value);
             }}
-            points={answerSubmittedTimes}
+            points={sliderPoints}
             valueLabelDisplay="auto"
           />
         </div>
@@ -147,10 +144,10 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
         })}
       >
         <div className="m-4">
-          <Typography variant="body1">{question.title}</Typography>
+          <Typography variant="body1">{currQuestion.title}</Typography>
           <Typography
             dangerouslySetInnerHTML={{
-              __html: question.description,
+              __html: currQuestion.description,
             }}
             variant="body2"
           />
@@ -159,14 +156,11 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
           <Typography variant="body1">
             {t(translations.questionDetailsTitle)}
           </Typography>
-          <QuestionDetails question={question} />
+          <QuestionDetails question={currQuestion} />
         </div>
       </Accordion>
 
-      <AnswerDetails
-        answer={allAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]}
-        question={question}
-      />
+      <AnswerDetails answer={currAnswer} question={currQuestion} />
     </>
   );
 };

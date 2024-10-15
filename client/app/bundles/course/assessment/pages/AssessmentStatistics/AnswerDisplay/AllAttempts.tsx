@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { QuestionType } from 'types/course/assessment/question';
 import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
 
-import { fetchQuestionAnswerDetails } from 'course/assessment/operations/statistics';
+import { fetchAttempts } from 'course/assessment/operations/statistics';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import {
@@ -33,10 +33,7 @@ const AllAttemptsIndex: FC<Props> = (props) => {
   };
 
   return (
-    <Preload
-      render={<LoadingIndicator />}
-      while={fetchQuestionAndCurrentAnswerDetails}
-    >
+    <Preload render={<LoadingIndicator />} while={fetchAttemptDetails}>
       {(data): JSX.Element => {
         const pastAnswersURL = getPastAnswersURL(
           courseId,
@@ -48,9 +45,9 @@ const AllAttemptsIndex: FC<Props> = (props) => {
           <>
             <AllAttemptsDisplay
               allAnswers={data.allAnswers}
+              allQuestions={data.allQuestions}
               name={name}
               pastAnswersURL={pastAnswersURL}
-              question={data.question}
               questionNumber={index}
               submissionEditUrl={getEditSubmissionQuestionURL(
                 courseId,
