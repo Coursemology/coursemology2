@@ -19,6 +19,7 @@ interface ProgrammingQuestionData {
   timeLimit?: number;
   attemptLimit?: number;
   fileSubmission: boolean;
+  autoGradable: boolean;
   isCodaveri: boolean;
   liveFeedbackEnabled: boolean;
 }
