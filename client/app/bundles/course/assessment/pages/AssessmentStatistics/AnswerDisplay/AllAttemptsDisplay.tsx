@@ -18,6 +18,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
+import QuestionDetails from '../QuestionDetails/QuestionDetails';
 
 interface Props {
   allAnswers: Answer<keyof typeof QuestionType>[];
@@ -48,6 +49,10 @@ const translations = defineMessages({
   pastAnswers: {
     id: 'course.assessment.statistics.pastAnswers',
     defaultMessage: 'See All Past Answers',
+  },
+  questionDetailsTitle: {
+    id: 'course.assessment.statistics.questionDetailsTitle',
+    defaultMessage: 'More Details',
   },
 });
 
@@ -141,7 +146,7 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
           index: questionNumber,
         })}
       >
-        <div className="ml-4 mt-4">
+        <div className="m-4">
           <Typography variant="body1">{question.title}</Typography>
           <Typography
             dangerouslySetInnerHTML={{
@@ -149,6 +154,12 @@ const AllAttemptsDisplay: FC<Props> = (props) => {
             }}
             variant="body2"
           />
+        </div>
+        <div className="m-4 mt-8">
+          <Typography variant="body1">
+            {t(translations.questionDetailsTitle)}
+          </Typography>
+          <QuestionDetails question={question} />
         </div>
       </Accordion>
 
