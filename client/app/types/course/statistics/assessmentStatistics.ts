@@ -3,7 +3,7 @@ import { SpecificQuestionDataMap } from '../assessment/submission/question/types
 import { WorkflowState } from '../assessment/submission/submission';
 import { CourseUserBasicListData } from '../courseUsers';
 
-import { AnswerDetailsMap } from './answer';
+import { AnswerDetailsMap, ProcessedAnswerDetailsMap } from './answer';
 
 interface AssessmentInfo {
   id: number;
@@ -113,8 +113,15 @@ export interface AllAnswerItem {
   workflowState: WorkflowState;
 }
 
+export type ProcessedAnswer<T extends keyof typeof QuestionType> =
+  ProcessedAnswerDetailsMap[T] & {
+    submittedAt: Date;
+    question: Question<T>;
+  };
+
 export interface SubmissionQuestionDetails {
-  allAnswers: AllAnswerItem[];
+  allAnswers: Answer<keyof typeof QuestionType>[];
+  allQuestions: Question<keyof typeof QuestionType>[];
   comments: CommentItem[];
 }
 
@@ -131,7 +138,7 @@ export interface QuestionAnswerDisplayDetails<
   T extends keyof typeof QuestionType,
 > {
   question: Question<T>;
-  answer: AnswerDetailsMap[T];
+  answer: ProcessedAnswer<T>;
 }
 
 export interface AssessmentLiveFeedbackStatistics {

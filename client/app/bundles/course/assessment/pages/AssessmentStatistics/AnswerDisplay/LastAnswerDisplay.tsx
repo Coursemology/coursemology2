@@ -28,6 +28,7 @@ import AnswerDetails from '../AnswerDetails/AnswerDetails';
 import { getClassNameForMarkCell } from '../classNameUtils';
 
 import Comment from './Comment';
+import { processLastAttempt } from './utils';
 
 const translations = defineMessages({
   questionTitle: {
@@ -80,6 +81,12 @@ const LastAnswerDisplay: FC<Props> = (props) => {
           answer.grade,
           answer.question.maximumGrade,
         );
+
+        const { allProcessedAnswers } = processLastAttempt(
+          answer.question,
+          answer,
+        );
+
         return (
           <>
             <Table>
@@ -110,7 +117,10 @@ const LastAnswerDisplay: FC<Props> = (props) => {
                 />
               </div>
             </Accordion>
-            <AnswerDetails answer={answer} question={answer.question} />
+            <AnswerDetails
+              answer={allProcessedAnswers}
+              question={answer.question}
+            />
             <Chip
               className={`w-100 mt-3 ${gradeCellColor}`}
               label={t(translations.gradeDisplay, {

@@ -1,8 +1,10 @@
 import { defineMessages } from 'react-intl';
 import { Card, CardContent } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import { AnswerDetailsMap } from 'types/course/statistics/answer';
-import { Question } from 'types/course/statistics/assessmentStatistics';
+import {
+  ProcessedAnswer,
+  Question,
+} from 'types/course/statistics/assessmentStatistics';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -23,7 +25,7 @@ const translations = defineMessages({
 
 interface AnswerDetailsProps<T extends keyof typeof QuestionType> {
   question: Question<T>;
-  answer: AnswerDetailsMap[T];
+  answer: ProcessedAnswer<T>;
 }
 
 const AnswerNotImplemented = (): JSX.Element => {
