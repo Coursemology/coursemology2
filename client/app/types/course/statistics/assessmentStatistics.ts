@@ -3,7 +3,7 @@ import { SpecificQuestionDataMap } from '../assessment/submission/question/types
 import { WorkflowState } from '../assessment/submission/submission';
 import { CourseUserBasicListData } from '../courseUsers';
 
-import { AnswerDetailsMap } from './answer';
+import { AnswerDetailsMap, ProcessedAnswerDetailsMap } from './answer';
 
 interface AssessmentInfo {
   id: number;
@@ -113,36 +113,37 @@ export type Answer<T extends keyof typeof QuestionType> =
     workflowState: WorkflowState;
   };
 
+export type ProcessedAnswer<T extends keyof typeof QuestionType> =
+  ProcessedAnswerDetailsMap[T] & {
+    submittedAt: Date;
+    currentAnswer: boolean;
+    workflowState: WorkflowState;
+  };
+
 export interface LatestAttempt<T extends keyof typeof QuestionType> {
   question: Question<T>;
-  answer: Answer<T>;
+  answer: ProcessedAnswer<T>;
   comments: CommentItem[];
   submissionId: number;
 }
 
 export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
-  question: Question<T>;
-  answer: AnswerDetailsMap[T];
+  allQuestions: Question<T>[];
   allAnswers: Answer<T>[];
   comments: CommentItem[];
   submissionId: number;
-  submissionQuestionId: number;
+  submissionQuestionId?: number;
+}
+
+export interface QuestionAllAnswerDetails<T extends keyof typeof QuestionType>
+  extends QuestionAnswerDetails<T> {
+  isAnswersDisplayed: boolean;
+  user: UserInfo;
 }
 
 export interface QuestionAnswerDisplayDetails<
   T extends keyof typeof QuestionType,
 > {
   question: Question<T>;
-  answer: AnswerDetailsMap[T];
-}
-
-export interface QuestionAllAnswerDisplayDetails<
-  T extends keyof typeof QuestionType,
-> {
-  isAnswersDisplayed: boolean;
-  user: UserInfo;
-  question: Question<T>;
-  allAnswers: Answer<T>[];
-  submissionId: number;
-  comments: CommentItem[];
+  answer: ProcessedAnswer<T>;
 }

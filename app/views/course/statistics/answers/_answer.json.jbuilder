@@ -5,7 +5,7 @@ json.id answer.id
 json.grade answer.grade
 json.questionType question.question_type
 
-if answer.actable_type == Course::Assessment::Answer::Programming.name && question.auto_gradable?
+if answer.actable_type == Course::Assessment::Answer::Programming.name
   json.partial! 'programming_answer', answer: specific_answer, can_grade: false
 else
   json.partial! specific_answer, answer: specific_answer, can_grade: false
