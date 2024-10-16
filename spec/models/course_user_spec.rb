@@ -164,6 +164,57 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe 'soft delete behavior' do
+      let!(:course_user) { create(:course_user) }
+
+      it 'soft deletes the user' do
+        # Store initial counts
+        initial_active_count = CourseUser.count
+        initial_total_count = CourseUser.with_deleted.count
+
+        # Perform the soft delete
+        course_user.destroy
+
+        # Reload the record to get updated attributes
+        course_user.reload
+
+        # Expectations
+        expect(course_user.deleted_at).not_to be_nil
+        expect(CourseUser.count).to eq(initial_active_count - 1)
+        expect(CourseUser.with_deleted.count).to eq(initial_total_count)
+
+        # Check associated models
+        CourseUser::ASSOCIATED_MODELS.each do |association|
+          expect(course_user.send(association)).to be_empty
+        end
+      end
+
+      it 'restores the user' do
+        # Soft-delete the user
+        course_user.destroy
+
+        # Store counts after deletion
+        initial_active_count = CourseUser.count
+        initial_total_count = CourseUser.with_deleted.count
+
+        # Restore the user
+        course_user.restore
+
+        # Reload the record to get updated attributes
+        course_user.reload
+
+        # Expectations
+        expect(course_user.deleted_at).to be_nil
+        expect(CourseUser.count).to eq(initial_active_count + 1)
+        expect(CourseUser.with_deleted.count).to eq(initial_total_count)
+
+        # Check associated models
+        CourseUser::ASSOCIATED_MODELS.each do |association|
+          expect(course_user.send(association).only_deleted).to be_empty
+        end
+      end
+    end
+
     describe '#staff?' do
       it 'returns true if the role is observer, teaching assistant, manager or owner' do
         expect(student.staff?).to be_falsey
