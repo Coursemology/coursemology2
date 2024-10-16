@@ -367,6 +367,8 @@ GEM
     parallel (1.26.3)
     parallel_tests (4.7.1)
       parallel
+    paranoia (3.0.0)
+      activerecord (>= 6, < 8.1)
     parser (3.3.5.0)
       ast (~> 2.4.1)
       racc
@@ -659,6 +661,7 @@ DEPENDENCIES
   nokogiri (>= 1.8.1)
   ostruct
   parallel_tests
+  paranoia
   pg
   puma
   rack-cors

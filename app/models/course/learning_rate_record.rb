@@ -6,6 +6,7 @@ class Course::LearningRateRecord < ApplicationRecord
   validates :effective_max, presence: true, numericality: true
   validates :course_user, presence: true
   validate :learning_rate_between_effective_min_and_max
+  acts_as_paranoid
 
   belongs_to :course_user, inverse_of: :learning_rate_records
 
