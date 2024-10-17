@@ -166,8 +166,14 @@ RSpec.describe CourseUser, type: :model do
 
     describe 'soft delete behavior' do
       let!(:course_user) { create(:course_user) }
+      let!(:experience_points_record) { create(:course_experience_points_record, course_user: course_user) }
+      let!(:learning_rate_record) { create(:learning_rate_record, course_user: course_user) }
+      let!(:course_user_achievement) { create(:course_user_achievement, course_user: course_user) }
+      let!(:email_unsubscription) { create(:user_email_unsubscription, course_user: course_user) }
+      let!(:group) { create(:course_group, course: course_user.course) }
+      let!(:group_user) { create(:course_group_user, course_user: course_user, group: group, creator: course_user.creator, updater: course_user.updater) }
 
-      it 'soft deletes the user' do
+      it 'soft deletes the user and its associated models' do
         # Store initial counts
         initial_active_count = CourseUser.count
         initial_total_count = CourseUser.with_deleted.count
@@ -187,9 +193,13 @@ RSpec.describe CourseUser, type: :model do
         CourseUser::ASSOCIATED_MODELS.each do |association|
           expect(course_user.send(association)).to be_empty
         end
+
+        # Check if associated models are soft deleted
+        expect(experience_points_record.reload.deleted_at).not_to be_nil
+        expect(learning_rate_record.reload.deleted_at).not_to be_nil
       end
 
-      it 'restores the user' do
+      it 'restores the user and its associated models' do
         # Soft-delete the user
         course_user.destroy
 
@@ -211,6 +221,9 @@ RSpec.describe CourseUser, type: :model do
         # Check associated models
         CourseUser::ASSOCIATED_MODELS.each do |association|
           expect(course_user.send(association).only_deleted).to be_empty
+          course_user.send(association).each do |associated_record|
+            expect(associated_record.deleted_at).to be_nil
+          end
         end
       end
     end
