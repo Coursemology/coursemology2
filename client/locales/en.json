@@ -522,10 +522,10 @@
     "defaultMessage": "Codaveri Evaluator"
   },
   "course.admin.CodaveriSettings.liveFeedbackSettings": {
-    "defaultMessage": "Get Help"
+    "defaultMessage": "Live Feedback"
   },
   "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
-    "defaultMessage": "An error occurred while updating the get help settings."
+    "defaultMessage": "An error occurred while updating the live feedback settings."
   },
   "course.admin.CodaveriSettings.enableDisableButton": {
     "defaultMessage": "{enabled, select, true {Enable} other {Disable}}"
@@ -534,16 +534,16 @@
     "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Codaveri Evaluator for {questionCount} programming questions in {title}?"
   },
   "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
-    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Get Help for {questionCount} programming questions in {title}?"
+    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Live feedback for {questionCount} programming questions in {title}?"
   },
   "course.admin.CodaveriSettings.enableDisableEvaluatorDescription": {
     "defaultMessage": "{questionCount} programming questions in this {type} will use {enabled, select, true {Codaveri } other {Default }} evaluator"
   },
   "course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess": {
-    "defaultMessage": "Get Help for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}"
+    "defaultMessage": "Live feedback for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}"
   },
   "course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled": {
-    "defaultMessage": "Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} get help for all questions"
+    "defaultMessage": "Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} live feedback for all questions"
   },
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "Comments settings"
@@ -1326,10 +1326,10 @@
     "defaultMessage": "Visibility"
   },
   "course.assessment.AssessmentForm.toggleLiveFeedbackDescription": {
-    "defaultMessage": "{enabled, select, true {Enable} other {Disable}} Get Help feature for all programming questions"
+    "defaultMessage": "{enabled, select, true {Enable} other {Disable}} live feedback feature for all programming questions"
   },
   "course.assessment.AssessmentForm.noProgrammingQuestion": {
-    "defaultMessage": "You need to add at least one programming question that can be supported by Codaveri to allow enabling Get Help for this Assessment"
+    "defaultMessage": "You need to add at least one programming question that can be supported by Codaveri to allow enabling live feedback for this Assessment"
   },
   "course.assessment.FileManager.addFiles": {
     "defaultMessage": "Add Files"
@@ -1698,7 +1698,7 @@
     "defaultMessage": "Do everything right here in this page. Useful for quick edits (especially exams) or collaborating with other instructors."
   },
   "course.assessment.question.programming.enableLiveFeedback": {
-    "defaultMessage": "Allow get help generation"
+    "defaultMessage": "Allow live feedback generation"
   },
   "course.assessment.question.programming.enableLiveFeedbackDescription": {
     "defaultMessage": "Allow students to request live programming help during submission attempts. (AI-generated feedback may not always be accurate.)"
@@ -1782,7 +1782,7 @@
     "defaultMessage": "Custom Prompt"
   },
   "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
-    "defaultMessage": "Add instructions to guide the generation of get help here. If unsure, just leave this blank."
+    "defaultMessage": "Add instructions to guide the generation of live feedback here. If unsure, just leave this blank."
   },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "Lowest grading priority"
@@ -2434,6 +2434,93 @@
   },
   "course.assessment.skills.SkillsTable.uncategorised": {
     "defaultMessage": "Uncategorised Skills"
+  },
+  "course.assessment.liveFeedback.questionTitle": {
+    "defaultMessage": "Question {index}"
+  },
+  "course.assessment.liveFeedback.feedbackTimingTitle": {
+    "defaultMessage": "Used at: {usedAt}"
+  },
+  "course.assessment.liveFeedback.liveFeedbackName": {
+    "defaultMessage": "Live Feedback"
+  },
+  "course.assessment.liveFeedback.comments": {
+    "defaultMessage": "Comments"
+  },
+  "course.assessment.liveFeedback.lineHeader": {
+    "defaultMessage": "Line {lineNumber}"
+  },
+  "course.assessment.statistics.answers": {
+    "defaultMessage": "Answers"
+  },
+  "course.assessment.statistics.attempts.filename": {
+    "defaultMessage": "Question-level Attempt Statistics for {assessment}"
+  },
+  "course.assessment.statistics.attempts.greenCellLegend": {
+    "defaultMessage": "Correct"
+  },
+  "course.assessment.statistics.attempts.redCellLegend": {
+    "defaultMessage": "Incorrect"
+  },
+  "course.assessment.statistics.closePrompt": {
+    "defaultMessage": "Close"
+  },
+  "course.assessment.statistics.grader": {
+    "defaultMessage": "Grader"
+  },
+  "course.assessment.statistics.grayCellLegend": {
+    "defaultMessage": "Undecided (question is Non-autogradable)"
+  },
+  "course.assessment.statistics.group": {
+    "defaultMessage": "Group"
+  },
+  "course.assessment.statistics.legendHigherusage": {
+    "defaultMessage": "Higher Usage"
+  },
+  "course.assessment.statistics.legendLowerUsage": {
+    "defaultMessage": "Lower Usage"
+  },
+  "course.assessment.statistics.liveFeedback.filename": {
+    "defaultMessage": "Question-level Live Feedback Statistics for {assessment}"
+  },
+  "course.assessment.statistics.liveFeedbackHistoryPromptTitle": {
+    "defaultMessage": "Live Feedback History"
+  },
+  "course.assessment.statistics.marks.filename": {
+    "defaultMessage": "Question-level Marks Statistics for {assessment}"
+  },
+  "course.assessment.statistics.marks.greenCellLegend": {
+    "defaultMessage": ">= 0.5 * Maximum Grade"
+  },
+  "course.assessment.statistics.marks.redCellLegend": {
+    "defaultMessage": "< 0.5 * Maximum Grade"
+  },
+  "course.assessment.statistics.name": {
+    "defaultMessage": "Name"
+  },
+  "course.assessment.statistics.nameGroupsGraderSearchText": {
+    "defaultMessage": "Search by Student Name, Group or Grader Name"
+  },
+  "course.assessment.statistics.nameGroupsSearchText": {
+    "defaultMessage": "Search by Name or Groups"
+  },
+  "course.assessment.statistics.noSubmission": {
+    "defaultMessage": "No submission yet"
+  },
+  "course.assessment.statistics.onlyForAutogradableAssessment": {
+    "defaultMessage": "This table is only displayed for Assessment with at least one Autograded Questions"
+  },
+  "course.assessment.statistics.questionDisplayTitle": {
+    "defaultMessage": "Q{index} for {student}"
+  },
+  "course.assessment.statistics.questionIndex": {
+    "defaultMessage": "Q{index}"
+  },
+  "course.assessment.statistics.total": {
+    "defaultMessage": "Total"
+  },
+  "course.assessment.statistics.workflowState": {
+    "defaultMessage": "Status"
   },
   "course.assessment.statistics.ancestorFail": {
     "defaultMessage": "Failed to fetch past iterations of this assessment."

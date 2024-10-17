@@ -65,6 +65,7 @@ interface LiveFeedback {
   pendingFeedbackToken: string | null;
   answerId: number;
   feedbackFiles: Record<string, FeedbackLine[]>;
+  liveFeedbackId: number;
 }
 
 export interface LiveFeedbackState {

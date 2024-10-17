@@ -221,6 +221,31 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.index ["updater_id"], name: "fk__course_assessment_categories_updater_id"
   end
 
+  create_table "course_assessment_live_feedback_code", force: :cascade do |t|
+    t.bigint "feedback_id", null: false
+    t.string "filename", null: false
+    t.text "content", null: false
+    t.index ["feedback_id"], name: "index_course_assessment_live_feedback_code_on_feedback_id"
+  end
+
+  create_table "course_assessment_live_feedback_comments", force: :cascade do |t|
+    t.bigint "code_id", null: false
+    t.integer "line_number", null: false
+    t.text "comment", null: false
+    t.index ["code_id"], name: "index_course_assessment_live_feedback_comments_on_code_id"
+  end
+
+  create_table "course_assessment_live_feedbacks", force: :cascade do |t|
+    t.bigint "assessment_id", null: false
+    t.bigint "question_id", null: false
+    t.bigint "creator_id", null: false
+    t.datetime "created_at", null: false
+    t.string "feedback_id"
+    t.index ["assessment_id"], name: "index_course_assessment_live_feedbacks_on_assessment_id"
+    t.index ["creator_id"], name: "index_course_assessment_live_feedbacks_on_creator_id"
+    t.index ["question_id"], name: "index_course_assessment_live_feedbacks_on_question_id"
+  end
+
   create_table "course_assessment_question_bundle_assignments", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "assessment_id", null: false
@@ -1491,6 +1516,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
   add_foreign_key "course_assessment_categories", "courses", name: "fk_course_assessment_categories_course_id"
   add_foreign_key "course_assessment_categories", "users", column: "creator_id", name: "fk_course_assessment_categories_creator_id"
   add_foreign_key "course_assessment_categories", "users", column: "updater_id", name: "fk_course_assessment_categories_updater_id"
+  add_foreign_key "course_assessment_live_feedback_code", "course_assessment_live_feedbacks", column: "feedback_id"
+  add_foreign_key "course_assessment_live_feedback_comments", "course_assessment_live_feedback_code", column: "code_id"
+  add_foreign_key "course_assessment_live_feedbacks", "course_assessment_questions", column: "question_id"
+  add_foreign_key "course_assessment_live_feedbacks", "course_assessments", column: "assessment_id"
+  add_foreign_key "course_assessment_live_feedbacks", "users", column: "creator_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_question_bundles", column: "bundle_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_submissions", column: "submission_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessments", column: "assessment_id"

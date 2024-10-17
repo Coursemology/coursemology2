@@ -252,6 +252,7 @@ Rails.application.routes.draw do
               post :generate_feedback, on: :member
               get :fetch_submitted_feedback, on: :member
               post :generate_live_feedback, on: :member
+              post :save_live_feedback, on: :member
               get :download_all, on: :collection
               get :download_statistics, on: :collection
               patch :publish_all, on: :collection
@@ -446,6 +447,10 @@ Rails.application.routes.draw do
         get 'course/performance' => 'aggregate#course_performance'
         get 'submission_question/:id' => 'answers#all_answers'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
+        get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
+        get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
+        get 'assessment/:id/live_feedback_statistics' => 'assessments#live_feedback_statistics'
+        get 'assessment/:id/live_feedback_history' => 'assessments#live_feedback_history'
       end
 
       scope module: :video do

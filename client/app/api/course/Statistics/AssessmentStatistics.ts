@@ -1,5 +1,7 @@
+import { LiveFeedbackHistoryState } from 'types/course/assessment/submission/liveFeedback';
 import {
   AncestorAssessmentStats,
+  AssessmentLiveFeedbackStatistics,
   MainAssessmentStats,
 } from 'types/course/statistics/assessmentStatistics';
 
@@ -31,6 +33,25 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
   ): APIResponse<MainAssessmentStats> {
     return this.client.get(
       `${this.#urlPrefix}/${assessmentId}/main_statistics`,
+    );
+  }
+
+  fetchLiveFeedbackStatistics(
+    assessmentId: string | number,
+  ): APIResponse<AssessmentLiveFeedbackStatistics[]> {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/live_feedback_statistics`,
+    );
+  }
+
+  fetchLiveFeedbackHistory(
+    assessmentId: string | number,
+    questionId: string | number,
+    courseUserId: string | number,
+  ): APIResponse<LiveFeedbackHistoryState> {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/live_feedback_history`,
+      { params: { question_id: questionId, course_user_id: courseUserId } },
     );
   }
 }
