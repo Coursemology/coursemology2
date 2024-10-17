@@ -66,6 +66,13 @@ export const redirectToNotFound = (): void => {
   window.location.href = '/404';
 };
 
+export const redirectToBaseNotFound = (): void => {
+  const url = new URL(window.location.href);
+  url.host = window.location.hostname.split('.').slice(-2).join('.');
+  url.pathname = '/404';
+  window.location.href = url.toString();
+};
+
 export const getForbiddenSourceURL = (rawURL: string): string | null => {
   const url = new URL(rawURL);
   return url.searchParams.get(FORBIDDEN_SOURCE_URL_SEARCH_PARAM);
