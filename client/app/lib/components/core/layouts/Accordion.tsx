@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ComponentProps, ReactNode, useState } from 'react';
 import { ExpandMore } from '@mui/icons-material';
 import {
   Accordion as MuiAccordion,
@@ -13,11 +13,20 @@ interface AccordionProps extends ComponentProps<typeof MuiAccordion> {
   subtitle?: string;
   disabled?: boolean;
   icon?: ReactNode;
+  displayDotIndicator?: boolean;
 }
 
 const Accordion = (props: AccordionProps): JSX.Element => {
-  const { title, children, subtitle, disabled, icon, ...accordionProps } =
-    props;
+  const {
+    title,
+    children,
+    subtitle,
+    disabled,
+    icon,
+    displayDotIndicator,
+    ...accordionProps
+  } = props;
+  const [isExpanded, setIsExpanded] = useState(props.defaultExpanded ?? false);
 
   return (
     <MuiAccordion
@@ -27,8 +36,11 @@ const Accordion = (props: AccordionProps): JSX.Element => {
       variant="outlined"
       {...accordionProps}
       className={`overflow-clip rounded-lg ${props.className ?? ''}`}
-      TransitionProps={{
-        className: 'overflow-clip',
+      onChange={(_, expanded) => setIsExpanded(expanded)}
+      slotProps={{
+        transition: {
+          className: 'overflow-clip',
+        },
       }}
     >
       <MuiAccordionSummary
@@ -39,7 +51,12 @@ const Accordion = (props: AccordionProps): JSX.Element => {
         className="space-x-2 px-9 py-6 hover:bg-neutral-100"
         expandIcon={icon || <ExpandMore />}
       >
-        <Typography>{title}</Typography>
+        <div className="flex items-center">
+          <Typography>{title}</Typography>
+          {!isExpanded && displayDotIndicator && (
+            <Typography className="ml-2 text-gray-400">...</Typography>
+          )}
+        </div>
 
         {subtitle && (
           <Typography color="text.secondary" variant="body2">

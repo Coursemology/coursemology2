@@ -16,32 +16,29 @@ RSpec.describe Course::Statistics::AnswersController, type: :controller do
       create(:submission_question, :with_post, submission_id: answer.submission_id, question_id: answer.question_id)
     end
 
-    describe '#question_answer_details' do
+    describe '#attempts' do
       render_views
-      subject { get :question_answer_details, format: :json, params: { course_id: course, id: answer.id } }
+      subject { get :attempts, format: :json, params: { course_id: course, id: answer.id, limit: -1 } }
 
-      context 'when the Normal User get the question answer details for the statistics' do
+      context 'when the Normal User get the attempts for the statistics' do
         let(:user) { create(:user) }
         before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
-      context 'when the Course Student get the question answer details for the statistics' do
+      context 'when the Course Student get the attempts for the statistics' do
         let(:user) { create(:course_student, course: course).user }
         before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
-      context 'when the Course Manager get the question answer details for the statistics' do
+      context 'when the Course Manager get the attempts for the statistics' do
         let(:user) { create(:course_manager, course: course).user }
         before { controller_sign_in(controller, user) }
 
         it 'returns OK with right question id and answer grade being displayed' do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
-
-          expect(json_result['question']['id']).to eq(answer.question.id)
-          expect(json_result['answer']['grade'].to_f).to eq(answer.grade)
 
           # expect only one allAnswers
           expect(json_result['allAnswers'].count).to eq(1)
@@ -59,9 +56,6 @@ RSpec.describe Course::Statistics::AnswersController, type: :controller do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
 
-          expect(json_result['question']['id']).to eq(answer.question.id)
-          expect(json_result['answer']['grade'].to_f).to eq(answer.grade)
-
           # expect only one allAnswers
           expect(json_result['allAnswers'].count).to eq(1)
 
@@ -71,9 +65,9 @@ RSpec.describe Course::Statistics::AnswersController, type: :controller do
       end
     end
 
-    describe '#all_answers' do
+    describe '#all_attempts' do
       render_views
-      subject { get :all_answers, format: :json, params: { course_id: course, id: submission_question.id } }
+      subject { get :all_attempts, format: :json, params: { course_id: course, id: submission_question.id } }
 
       context 'when the Normal User get the question answer details for the statistics' do
         let(:user) { create(:user) }
