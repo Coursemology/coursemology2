@@ -78,11 +78,98 @@ class Course::Assessment::Question::KoditsuQuestionService
         templates: [{
           path: koditsu_programming_language_map[@type][:filename],
           content: @metadata['submission'],
-          prefix: @metadata['prepend'],
-          suffix: koditsu_programming_language_map[@type][:language] == 'cpp' ? '' : @metadata['append']
+          prefix: truncate_google_test_framework(@metadata['prepend']),
+          suffix: truncate_google_test_framework(@metadata['append'])
         }],
         exprTestcases: @test_cases
       }]
     }
+  end
+
+  def truncate_google_test_framework(snippet)
+    return snippet unless koditsu_programming_language_map[@type][:language] == 'cpp'
+
+    truncate_google_test_framework_for_cpp(snippet)
+  end
+
+  # The evaluation mechanism for C/C++ question in Coursemology is dependent on the Google
+  # Test framework, and hence user needs to include the code snippet that complies with how
+  # Google Test framework should be used, either in prepend or append. However, Koditsu
+  # does not use it, and the inclusion of that mentioned code snippet will result in the
+  # runtime error inside Koditsu evaluator. Hence, we should strip the code snippet that
+  # corresponds to Google Test framework before sending our data to Koditsu.
+  def truncate_google_test_framework_for_cpp(snippet)
+    start_pattern = /class\s+GlobalEnv\s*:\s*public\s+testing::Environment\s*{/
+
+    if snippet =~ start_pattern
+      start_index = snippet.index(start_pattern)
+      current_index = start_index + snippet.match(start_pattern)[0].length
+
+      current_index = find_truncation_point(snippet, current_index)
+
+      snippet[0...start_index] + snippet[current_index..]
+    else
+      snippet
+    end
+  end
+
+  def find_truncation_point(snippet, current_index)
+    open_braces = 1
+    comment_state = {
+      in_single_line_comment: false,
+      in_multi_line_comment: false
+    }
+
+    while current_index < snippet.length && open_braces > 0
+      char = snippet[current_index]
+      next_char = snippet[current_index + 1]
+
+      update_comment_state(comment_state, char, next_char)
+      current_index = handle_comment_end(comment_state, char, next_char, current_index)
+
+      unless comment_state[:in_single_line_comment] || comment_state[:in_multi_line_comment]
+        open_braces = update_brace_count(char, open_braces)
+      end
+
+      current_index += 1
+    end
+
+    current_index + 1
+  end
+
+  def update_comment_state(comment_state, char, next_char)
+    if starting_single_line_comment?(comment_state, char, next_char)
+      comment_state[:in_single_line_comment] = true
+    elsif ending_single_line_comment?(comment_state, char)
+      comment_state[:in_single_line_comment] = false
+    elsif starting_multi_line_comment?(comment_state, char, next_char)
+      comment_state[:in_multi_line_comment] = true
+    end
+  end
+
+  def starting_single_line_comment?(comment_state, char, next_char)
+    !comment_state[:in_multi_line_comment] && char == '/' && next_char == '/'
+  end
+
+  def ending_single_line_comment?(comment_state, char)
+    comment_state[:in_single_line_comment] && char == "\n"
+  end
+
+  def starting_multi_line_comment?(comment_state, char, next_char)
+    !comment_state[:in_single_line_comment] && char == '/' && next_char == '*'
+  end
+
+  def handle_comment_end(comment_state, char, next_char, current_index)
+    if comment_state[:in_multi_line_comment] && char == '*' && next_char == '/'
+      comment_state[:in_multi_line_comment] = false
+      return current_index + 1
+    end
+    current_index
+  end
+
+  def update_brace_count(char, open_braces)
+    open_braces += 1 if char == '{'
+    open_braces -= 1 if char == '}'
+    open_braces
   end
 end
