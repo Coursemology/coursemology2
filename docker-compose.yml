@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  # Database Service (PostgreSQL)
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - coursemology_net
+
+  # Redis Service
+  redis:
+    image: redis:6.2
+    ports:
+      - "6379:6379"
+    networks:
+      - coursemology_net
+
+  # Backend (Rails app) Service
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgres://postgres:@postgres:5432/coursemology
+      REDIS_URL: redis://redis:6379/1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - coursemology_net
+
+  # Client (React app) Service
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    command: yarn build:development
+    volumes:
+      - ./client:/usr/src/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    networks:
+      - coursemology_net
+
+networks:
+  coursemology_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
