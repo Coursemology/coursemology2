@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_16_104511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -633,10 +633,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.integer "draft_points_awarded"
     t.datetime "awarded_at", precision: nil
     t.integer "awarder_id"
+    t.datetime "deleted_at"
     t.index ["actable_type", "actable_id"], name: "index_course_experience_points_records_on_actable", unique: true
     t.index ["awarder_id"], name: "fk__course_experience_points_records_awarder_id"
     t.index ["course_user_id"], name: "fk__course_experience_points_records_course_user_id"
     t.index ["creator_id"], name: "fk__course_experience_points_records_creator_id"
+    t.index ["deleted_at"], name: "index_course_experience_points_records_on_deleted_at"
     t.index ["updater_id"], name: "fk__course_experience_points_records_updater_id"
   end
 
@@ -714,9 +716,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.integer "updater_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.datetime "deleted_at"
     t.index ["course_user_id", "group_id"], name: "index_course_group_users_on_course_user_id_and_course_group_id", unique: true
     t.index ["course_user_id"], name: "fk__course_group_users_course_user_id"
     t.index ["creator_id"], name: "fk__course_group_users_creator_id"
+    t.index ["deleted_at"], name: "index_course_group_users_on_deleted_at"
     t.index ["group_id"], name: "fk__course_group_users_course_group_id"
     t.index ["updater_id"], name: "fk__course_group_users_updater_id"
   end
@@ -749,7 +753,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.float "effective_max", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
     t.index ["course_user_id"], name: "fk__course_learning_rate_records_course_user_id"
+    t.index ["deleted_at"], name: "index_course_learning_rate_records_on_deleted_at"
   end
 
   create_table "course_lesson_plan_event_materials", id: :serial, force: :cascade do |t|
@@ -909,7 +915,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.datetime "bonus_end_at", precision: nil
     t.datetime "end_at", precision: nil
     t.boolean "fixed", default: false, null: false
+    t.datetime "deleted_at"
     t.index ["course_user_id"], name: "index_course_personal_times_on_course_user_id"
+    t.index ["deleted_at"], name: "index_course_personal_times_on_deleted_at"
     t.index ["lesson_plan_item_id"], name: "index_course_personal_times_on_lesson_plan_item_id"
   end
 
@@ -1043,17 +1051,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.datetime "obtained_at", precision: nil, null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.datetime "deleted_at"
     t.index ["achievement_id"], name: "fk__course_user_achievements_achievement_id"
     t.index ["course_user_id", "achievement_id"], name: "index_user_achievements_on_course_user_id_and_achievement_id", unique: true
     t.index ["course_user_id"], name: "fk__course_user_achievements_course_user_id"
+    t.index ["deleted_at"], name: "index_course_user_achievements_on_deleted_at"
   end
 
   create_table "course_user_email_unsubscriptions", force: :cascade do |t|
     t.bigint "course_user_id", null: false
     t.bigint "course_settings_email_id", null: false
+    t.datetime "deleted_at"
     t.index ["course_settings_email_id"], name: "index_email_unsubscriptions_on_course_settings_email_id"
     t.index ["course_user_id", "course_settings_email_id"], name: "index_course_user_email_unsubscriptions_composite", unique: true
     t.index ["course_user_id"], name: "index_email_unsubscriptions_on_course_user_id"
+    t.index ["deleted_at"], name: "index_course_user_email_unsubscriptions_on_deleted_at"
   end
 
   create_table "course_user_invitations", id: :serial, force: :cascade do |t|
@@ -1093,9 +1105,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.integer "updater_id", null: false
     t.bigint "reference_timeline_id"
     t.integer "timeline_algorithm", default: 0, null: false
+    t.datetime "deleted_at"
     t.index ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
     t.index ["course_id"], name: "fk__course_users_course_id"
     t.index ["creator_id"], name: "fk__course_users_creator_id"
+    t.index ["deleted_at"], name: "index_course_users_on_deleted_at"
     t.index ["reference_timeline_id"], name: "index_course_users_on_reference_timeline_id"
     t.index ["updater_id"], name: "fk__course_users_updater_id"
     t.index ["user_id"], name: "fk__course_users_user_id"
