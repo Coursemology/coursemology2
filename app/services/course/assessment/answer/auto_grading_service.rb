@@ -6,12 +6,15 @@ class Course::Assessment::Answer::AutoGradingService
     #
     # @param [Course::Assessment::Answer] answer The answer to be graded.
     def grade(answer)
+      old_auto_grading_actable = answer.auto_grading&.actable
       answer = if answer.question.auto_gradable?
                  pick_grader(answer.question).grade(answer)
                else
                  assign_maximum_grade(answer)
                end
+
       answer.save!
+      answer.auto_grading.actable.update!(parent_id: old_auto_grading_actable.id) if old_auto_grading_actable
     end
 
     private

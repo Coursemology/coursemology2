@@ -16,7 +16,7 @@ import { getEditSubmissionURL } from 'lib/helpers/url-builders';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import LastAttemptIndex from './AnswerDisplay/LastAttempt';
+import LastestAttempt from './AnswerDisplay/LatestAttempt';
 import { getClassNameForMarkCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 
@@ -333,11 +333,11 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         maxWidth="lg"
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}
-        title={answerDisplayInfo.studentName}
       >
-        <LastAttemptIndex
-          curAnswerId={answerDisplayInfo.answerId}
+        <LastestAttempt
+          currAnswerId={answerDisplayInfo.answerId}
           index={answerDisplayInfo.index}
+          name={answerDisplayInfo.studentName}
         />
       </Prompt>
     </>

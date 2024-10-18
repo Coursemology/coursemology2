@@ -154,14 +154,18 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         end
       end
 
-      context 'when the question cannot be saved' do
-        let(:programming_question) { immutable_programming_question }
+      # Test case commented out as it is not relevant
+      # Updating will duplicate the question.
+      # Any restrictions (such as an auto grading taking place) will not block execution
 
-        it 'returns bad request' do
-          subject
-          expect(response).to have_http_status(:bad_request)
-        end
-      end
+      # context 'when the question cannot be saved' do
+      #   let(:programming_question) { immutable_programming_question }
+
+      #   it 'returns bad request' do
+      #     subject
+      #     expect(response).to have_http_status(:bad_request)
+      #   end
+      # end
 
       context 'when attaching a template package' do
         include Rails.application.routes.url_helpers

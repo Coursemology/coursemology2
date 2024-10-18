@@ -3,7 +3,7 @@ import { SpecificQuestionDataMap } from '../assessment/submission/question/types
 import { WorkflowState } from '../assessment/submission/submission';
 import { CourseUserBasicListData } from '../courseUsers';
 
-import { AnswerDetailsMap } from './answer';
+import { AnswerDetailsMap, ProcessedAnswerDetailsMap } from './answer';
 
 interface AssessmentInfo {
   id: number;
@@ -103,38 +103,47 @@ export interface CommentItem {
   text: string;
 }
 
-export type QuestionDetails<T extends keyof typeof QuestionType> =
+export type Question<T extends keyof typeof QuestionType> =
   QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
 
-export type AllAnswerDetails<T extends keyof typeof QuestionType> =
+export type Answer<T extends keyof typeof QuestionType> =
   AnswerDetailsMap[T] & {
-    createdAt: Date;
+    submittedAt: Date;
     currentAnswer: boolean;
     workflowState: WorkflowState;
   };
 
-export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
-  question: QuestionDetails<T>;
-  answer: AnswerDetailsMap[T];
-  allAnswers: AllAnswerDetails<T>[];
+export type ProcessedAnswer<T extends keyof typeof QuestionType> =
+  ProcessedAnswerDetailsMap[T] & {
+    submittedAt: Date;
+    currentAnswer: boolean;
+    workflowState: WorkflowState;
+  };
+
+export interface LatestAttempt<T extends keyof typeof QuestionType> {
+  question: Question<T>;
+  answer: ProcessedAnswer<T>;
   comments: CommentItem[];
   submissionId: number;
-  submissionQuestionId: number;
+}
+
+export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
+  allQuestions: Question<T>[];
+  allAnswers: Answer<T>[];
+  comments: CommentItem[];
+  submissionId: number;
+  submissionQuestionId?: number;
+}
+
+export interface QuestionAllAnswerDetails<T extends keyof typeof QuestionType>
+  extends QuestionAnswerDetails<T> {
+  isAnswersDisplayed: boolean;
+  user: UserInfo;
 }
 
 export interface QuestionAnswerDisplayDetails<
   T extends keyof typeof QuestionType,
 > {
-  question: QuestionDetails<T>;
-  answer: AnswerDetailsMap[T];
-}
-
-export interface QuestionAllAnswerDisplayDetails<
-  T extends keyof typeof QuestionType,
-> {
-  isAnswersDisplayed: boolean;
-  question: QuestionDetails<T>;
-  allAnswers: AllAnswerDetails<T>[];
-  submissionId: number;
-  comments: CommentItem[];
+  question: Question<T>;
+  answer: ProcessedAnswer<T>;
 }

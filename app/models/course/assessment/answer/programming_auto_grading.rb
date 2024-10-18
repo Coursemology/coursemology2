@@ -7,6 +7,8 @@ class Course::Assessment::Answer::ProgrammingAutoGrading < ApplicationRecord
 
   validates :exit_code, numericality: { only_integer: true }, allow_nil: true
 
+  belongs_to :parent, class_name: 'Course::Assessment::Answer::ProgrammingAutoGrading', optional: true
+
   has_one :programming_answer, through: :answer,
                                source: :actable,
                                source_type: 'Course::Assessment::Answer::Programming'

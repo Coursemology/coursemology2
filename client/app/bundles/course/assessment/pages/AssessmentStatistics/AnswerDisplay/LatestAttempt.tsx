@@ -1,17 +1,31 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { Chip, Typography } from '@mui/material';
+import { OpenInNew } from '@mui/icons-material';
+import {
+  Card,
+  CardHeader,
+  Chip,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { green } from '@mui/material/colors';
 import { QuestionType } from 'types/course/assessment/question';
-import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
+import { LatestAttempt } from 'types/course/statistics/assessmentStatistics';
 
-import { fetchQuestionAnswerDetails } from 'course/assessment/operations/statistics';
+import { fetchLatestAttempt } from 'course/assessment/operations/statistics';
 import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import { getEditSubmissionQuestionURL } from 'lib/helpers/url-builders';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatLongDateTime } from 'lib/moment';
 
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
 import { getClassNameForMarkCell } from '../classNameUtils';
@@ -35,51 +49,86 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.submissionPage',
     defaultMessage: 'Go to Answer Page',
   },
+  submittedAt: {
+    id: 'course.assessment.statistics.submittedAt',
+    defaultMessage: 'Submitted At',
+  },
 });
 
 interface Props {
-  curAnswerId: number;
+  currAnswerId: number;
   index: number;
+  name: string;
 }
 
-const LastAttemptIndex: FC<Props> = (props) => {
-  const { curAnswerId, index } = props;
+const LastestAttempt: FC<Props> = (props) => {
+  const { currAnswerId, index, name } = props;
   const { courseId, assessmentId } = useParams();
   const { t } = useTranslation();
 
-  const fetchQuestionAndCurrentAnswerDetails = (): Promise<
-    QuestionAnswerDetails<keyof typeof QuestionType>
+  const fetchLatestAttemptDetails = (): Promise<
+    LatestAttempt<keyof typeof QuestionType>
   > => {
-    return fetchQuestionAnswerDetails(curAnswerId);
+    return fetchLatestAttempt(currAnswerId);
   };
 
   return (
-    <Preload
-      render={<LoadingIndicator />}
-      while={fetchQuestionAndCurrentAnswerDetails}
-    >
+    <Preload render={<LoadingIndicator />} while={fetchLatestAttemptDetails}>
       {(data): JSX.Element => {
         const gradeCellColor = getClassNameForMarkCell(
           data.answer.grade,
           data.question.maximumGrade,
         );
+        const submissionEditUrl = getEditSubmissionQuestionURL(
+          courseId,
+          assessmentId,
+          data.submissionId,
+          index,
+        );
+
         return (
           <>
-            <Link
-              opensInNewTab
-              to={getEditSubmissionQuestionURL(
-                courseId,
-                assessmentId,
-                data.submissionId,
-                index,
-              )}
-            >
-              <Typography className="mb-4" variant="body2">
-                {t(translations.submissionPage)}
-              </Typography>
-            </Link>
+            <Card className="mb-4" variant="outlined">
+              <CardHeader
+                action={
+                  <div className="space-x-2">
+                    <Tooltip
+                      placement="top"
+                      title={t(translations.submissionPage)}
+                    >
+                      <IconButton
+                        className="p-2"
+                        component={Link}
+                        rel="noopener noreferrer"
+                        size="small"
+                        target="_blank"
+                        to={submissionEditUrl}
+                      >
+                        <OpenInNew />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                }
+                style={{ backgroundColor: green[100] }}
+                title={<Typography variant="h6">{name}</Typography>}
+              />
+
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="w-1/4">
+                      {t(translations.submittedAt)}
+                    </TableCell>
+                    <TableCell>
+                      {formatLongDateTime(data.answer.submittedAt)}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Card>
             <Accordion
               defaultExpanded={false}
+              disableGutters
               title={t(translations.questionTitle, { index })}
             >
               <div className="ml-4 mt-4">
@@ -109,4 +158,4 @@ const LastAttemptIndex: FC<Props> = (props) => {
   );
 };
 
-export default LastAttemptIndex;
+export default LastestAttempt;
