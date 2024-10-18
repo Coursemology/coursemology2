@@ -3,6 +3,7 @@ class CourseUser < ApplicationRecord
   include CourseUser::StaffConcern
   include CourseUser::LevelProgressConcern
   include CourseUser::TodoConcern
+  acts_as_paranoid
 
   after_initialize :set_defaults, if: :new_record?
   before_validation :set_defaults, if: :new_record?
@@ -22,6 +23,15 @@ class CourseUser < ApplicationRecord
 
   # A set of roles which comprise the managers of a course.
   MANAGER_ROLES = Set[:manager, :owner].map { |v| roles[v] }.freeze
+
+  ASSOCIATED_MODELS = %i[
+    experience_points_records
+    learning_rate_records
+    course_user_achievements
+    email_unsubscriptions
+    group_users
+    personal_times
+  ].freeze
 
   validates :role, presence: true
   validates :name, length: { maximum: 255 }, presence: true
@@ -174,6 +184,22 @@ class CourseUser < ApplicationRecord
   # @return [Boolean] True if the user exists in the current context
   def self.user?(user)
     all.exists?(user: user)
+  end
+
+  # Soft delete the course user.
+  def destroy
+    ASSOCIATED_MODELS.each do |association|
+      send(association).destroy_all
+    end
+    super
+  end
+
+  # Restore the course user.
+  def restore
+    super
+    ASSOCIATED_MODELS.each do |association|
+      send(association).only_deleted.each(&:restore)
+    end
   end
 
   # Test whether this course_user is a manager (i.e. manager or owner)
