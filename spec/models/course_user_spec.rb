@@ -171,9 +171,15 @@ RSpec.describe CourseUser, type: :model do
       let!(:course_user_achievement) { create(:course_user_achievement, course_user: course_user) }
       let!(:email_unsubscription) { create(:user_email_unsubscription, course_user: course_user) }
       let!(:group) { create(:course_group, course: course_user.course) }
-      let!(:group_user) { create(:course_group_user, course_user: course_user, group: group,
-                                 creator: course_user.creator,
-                                 updater: course_user.updater) }
+      let!(:group_user) do
+        create(
+          :course_group_user,
+          course_user: course_user,
+          group: group,
+          creator: course_user.creator,
+          updater: course_user.updater
+        )
+      end
 
       it 'soft deletes the user and its associated models' do
         # Store initial counts

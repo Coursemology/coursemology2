@@ -1,4 +1,4 @@
-# spec/factories/personal_times.rb
+# frozen_string_literal: true
 FactoryBot.define do
   factory :personal_time, class: 'Course::PersonalTime' do
     association :course_user, factory: :course_user

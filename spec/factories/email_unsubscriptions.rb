@@ -1,4 +1,4 @@
-# spec/factories/email_unsubscriptions.rb
+# frozen_string_literal: true
 FactoryBot.define do
   factory :user_email_unsubscription, class: 'Course::UserEmailUnsubscription' do
     association :course_user, factory: :course_user

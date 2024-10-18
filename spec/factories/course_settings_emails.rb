@@ -1,4 +1,4 @@
-# spec/factories/course_settings_emails.rb
+# frozen_string_literal: true
 FactoryBot.define do
   factory :course_settings_email, class: 'Course::Settings::Email' do
     association :course, factory: :course
