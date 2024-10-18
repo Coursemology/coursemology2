@@ -156,7 +156,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   def link_to_original_question(duplicated_programming_question)
     @programming_question.question.actable = duplicated_programming_question
     # Update the original programming question's parent_id to link to the new duplicated question
-    duplicated_programming_question.update!(parent_id: @programming_question.id)
+    duplicated_programming_question.update_column(:parent_id, @programming_question.id)
   end
 
   def format_test_cases
