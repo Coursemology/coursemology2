@@ -54,9 +54,26 @@ class Course::EnrolRequestsController < Course::ComponentController
   private
 
   def create_course_user
-    course_user = CourseUser.new(course_user_params.
-      reverse_merge(course: current_course, user_id: @enrol_request.user_id,
-                    timeline_algorithm: current_course.default_timeline_algorithm))
+    existing_course_user = CourseUser.only_deleted.find_by(course_id: current_course, user_id: @enrol_request.user_id)
+    return restore_existing_course_user(existing_course_user) if existing_course_user
+
+    create_new_course_user
+  end
+
+  def restore_existing_course_user(existing_course_user)
+    existing_course_user.restore
+    @enrol_request.update(approve: true)
+    existing_course_user
+  end
+
+  def create_new_course_user
+    course_user = CourseUser.new(
+      course_user_params.reverse_merge(
+        course: current_course,
+        user_id: @enrol_request.user_id,
+        timeline_algorithm: current_course.default_timeline_algorithm
+      )
+    )
 
     CourseUser.transaction do
       raise ActiveRecord::Rollback unless course_user.save && @enrol_request.update(approve: true)

@@ -5,7 +5,7 @@ class Course < ApplicationRecord
   include Course::CourseComponentsConcern
   include TimeZoneConcern
   include Generic::CollectionConcern
-
+  acts_as_paranoid
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
   mount_uploader :logo, ImageUploader
