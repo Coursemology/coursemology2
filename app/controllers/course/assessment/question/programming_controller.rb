@@ -55,7 +55,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     end
 
     if result
-      render_success_json false
+      render_success_json true
     else
       render_failure_json
     end
