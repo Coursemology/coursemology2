@@ -145,6 +145,18 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           expect(email_subjects).to include('course.mailer.user_added_email.subject')
         end
       end
+
+      context 'when the course user creation fails' do
+        before do
+          allow_any_instance_of(CourseUser).to receive(:save).and_return(false)
+        end
+
+        it 'returns bad_request with errors' do
+          subject
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
+        end
+      end
     end
 
     describe '#reject' do
@@ -189,6 +201,18 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
         it 'fails to reject the request' do
           subject
 
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
+        end
+      end
+
+      context 'when the enrol request update fails' do
+        before do
+          allow_any_instance_of(Course::EnrolRequest).to receive(:update).and_return(false)
+        end
+
+        it 'returns bad_request with errors' do
+          subject
           expect(subject).to have_http_status(:bad_request)
           expect(JSON.parse(subject.body)['errors']).not_to be_nil
         end

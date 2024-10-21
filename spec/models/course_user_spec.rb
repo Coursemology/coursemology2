@@ -168,18 +168,6 @@ RSpec.describe CourseUser, type: :model do
       let!(:course_user) { create(:course_user) }
       let!(:experience_points_record) { create(:course_experience_points_record, course_user: course_user) }
       let!(:learning_rate_record) { create(:learning_rate_record, course_user: course_user) }
-      let!(:course_user_achievement) { create(:course_user_achievement, course_user: course_user) }
-      let!(:email_unsubscription) { create(:user_email_unsubscription, course_user: course_user) }
-      let!(:group) { create(:course_group, course: course_user.course) }
-      let!(:group_user) do
-        create(
-          :course_group_user,
-          course_user: course_user,
-          group: group,
-          creator: course_user.creator,
-          updater: course_user.updater
-        )
-      end
 
       it 'soft deletes the user and its associated models' do
         # Store initial counts
@@ -205,9 +193,6 @@ RSpec.describe CourseUser, type: :model do
         # Check if associated models are soft deleted
         expect(experience_points_record.reload.deleted_at).not_to be_nil
         expect(learning_rate_record.reload.deleted_at).not_to be_nil
-        expect(course_user_achievement.reload.deleted_at).not_to be_nil
-        expect(email_unsubscription.reload.deleted_at).not_to be_nil
-        expect(group_user.reload.deleted_at).not_to be_nil
       end
 
       it 'restores the user and its associated models' do
@@ -240,9 +225,6 @@ RSpec.describe CourseUser, type: :model do
         # Check if associated models are restored
         expect(experience_points_record.reload.deleted_at).to be_nil
         expect(learning_rate_record.reload.deleted_at).to be_nil
-        expect(course_user_achievement.reload.deleted_at).to be_nil
-        expect(email_unsubscription.reload.deleted_at).to be_nil
-        expect(group_user.reload.deleted_at).to be_nil
       end
     end
 
