@@ -2,7 +2,7 @@
 class Course::UserAchievement < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   after_create :send_notification
-
+  acts_as_paranoid
   validate :validate_course_user_in_course, on: :create
   validates :obtained_at, presence: true
   validates :course_user_id, uniqueness: { scope: [:achievement_id], allow_nil: true,
