@@ -83,7 +83,7 @@ RSpec.describe Course::Achievement, type: :model do
       context 'when achievement is destroyed' do
         it 'does not destroy course users' do
           achievement.destroy!
-          expect(achievement.destroyed?).to be_truthy
+          expect(achievement.deleted_at).to_not be_nil
           expect(course_user.destroyed?).to be_falsey
         end
       end

@@ -101,6 +101,7 @@ test.describe('user invited to 2 courses', () => {
 
     await page.goto(`/courses/${course1.id}`);
     await expect(page).toHaveURL(new RegExp(course1.id));
+    await page.waitForTimeout(1000);
     await expect(page.getByText(invitation1.name)).toBeVisible();
 
     await page.goto(`/courses/${course2.id}`);
