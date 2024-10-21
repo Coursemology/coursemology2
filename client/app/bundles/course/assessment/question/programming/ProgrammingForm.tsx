@@ -82,6 +82,10 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
           if (debounced) return;
           debounced = true;
 
+          if (response.redirectEditUrl) {
+            navigate(response.redirectEditUrl, { replace: true });
+          }
+
           const newData = await props.revalidate?.(response, rawData);
           if (newData) {
             setData(newData);

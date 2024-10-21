@@ -19,6 +19,14 @@ const EditProgrammingQuestionPage = (): JSX.Element => {
 
   const fetchData = (): Promise<ProgrammingFormData> => fetchEdit(id);
 
+  const reFetchData = async (
+    response: ProgrammingPostStatusData,
+    _rawData: ProgrammingFormData,
+  ): Promise<ProgrammingFormData> => {
+    const newId = response.id ?? id;
+    return fetchEdit(newId);
+  };
+
   return (
     <Preload render={<LoadingIndicator />} while={fetchData}>
       {(data): JSX.Element => (
@@ -26,7 +34,7 @@ const EditProgrammingQuestionPage = (): JSX.Element => {
           onSubmit={(rawData): Promise<ProgrammingPostStatusData> =>
             update(id, buildFormData(rawData))
           }
-          revalidate={fetchData}
+          revalidate={reFetchData}
           with={data}
         />
       )}
