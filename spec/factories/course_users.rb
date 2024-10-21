@@ -6,6 +6,7 @@ FactoryBot.define do
     phantom { false }
     role { :student }
     name { 'default' }
+    deleted_at { nil }
 
     trait :phantom do
       phantom { true }
