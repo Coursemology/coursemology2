@@ -36,9 +36,20 @@ class Course::UserInvitationService
 
     success = Course.transaction do
       new_invitations, existing_invitations,
-      new_course_users, existing_course_users, duplicate_users = invite_users(users)
+        new_course_users, existing_course_users, duplicate_users = invite_users(users)
+
+      new_course_users.each do |course_user|
+        existing_course_user = CourseUser.only_deleted.find_by(course_id: course_user.course_id,
+                                                               user_id: course_user.user_id)
+        if existing_course_user
+          existing_course_user.restore
+          new_course_users.delete(course_user)
+        else
+          raise ActiveRecord::Rollback unless course_user.save
+        end
+      end
+
       raise ActiveRecord::Rollback unless new_invitations.all?(&:save)
-      raise ActiveRecord::Rollback unless new_course_users.all?(&:save)
 
       true
     end
