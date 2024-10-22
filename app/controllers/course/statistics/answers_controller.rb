@@ -5,36 +5,37 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
   MAX_ANSWERS_COUNT = 10
 
   def question_answer_details
-    @answer = Course::Assessment::Answer.find(answer_params[:id])
-    @submission = @answer.submission
+    answer = Course::Assessment::Answer.find(answer_params[:id])
+    @submission = answer.submission
+    @question = answer.question
     @assessment = @submission.assessment
 
+    submission_id = answer.submission_id
+    question_id = answer.question_id
+
+    @question_index = question_index(question_id)
+
     @submission_question = Course::Assessment::SubmissionQuestion.
-                           where(submission_id: @answer.submission_id, question_id: @answer.question_id).
+                           where(submission_id: submission_id, question_id: question_id).
                            includes(actable: { files: { annotations:
                                              { discussion_topic: { posts: :codaveri_feedback } } } },
                                     discussion_topic: { posts: :codaveri_feedback }).first
 
-    fetch_all_answers(@answer.submission_id, @answer.question_id)
+    fetch_all_answers(submission_id, question_id, MAX_ANSWERS_COUNT)
   end
 
   def all_answers
     @submission_question = Course::Assessment::SubmissionQuestion.find(submission_question_params[:id])
-    submission_id = @submission_question.submission_id
-    @submission = Course::Assessment::Submission.find(submission_id)
-
-    question_id = @submission_question.question_id
-    @question = Course::Assessment::Question.find(question_id)
+    @submission = @submission_question.submission
+    @question = @submission_question.question
     @assessment = @submission.assessment
 
-    @submission_question = Course::Assessment::SubmissionQuestion.
-                           where(submission_id: submission_id, question_id: question_id).
-                           includes({ discussion_topic: { posts: :codaveri_feedback } }).first
+    submission_id = @submission_question.submission_id
+    question_id = @submission_question.question_id
+
     @question_index = question_index(question_id)
-    @all_answers = Course::Assessment::Answer.
-                   unscope(:order).
-                   order(:submitted_at).
-                   where(submission_id: submission_id, question_id: question_id)
+
+    fetch_all_answers(submission_id, question_id, -1)
   end
 
   private
@@ -56,12 +57,18 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
     question_ids.index(question_id)
   end
 
-  def fetch_all_answers(submission_id, question_id)
-    answers = Course::Assessment::Answer.
-              unscope(:order).
-              order(:submitted_at).
-              where(submission_id: submission_id, question_id: question_id)
-
-    @all_answers = answers.limit(MAX_ANSWERS_COUNT)
+  def fetch_all_answers(submission_id, question_id, limit)
+    @all_answers = if limit == -1
+                     Course::Assessment::Answer.
+                       unscope(:order).
+                       order(:submitted_at).
+                       where(submission_id: submission_id, question_id: question_id)
+                   else
+                     Course::Assessment::Answer.
+                       unscope(:order).
+                       order(:submitted_at).
+                       where(submission_id: submission_id, question_id: question_id).
+                       limit(limit)
+                   end
   end
 end
