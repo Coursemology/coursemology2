@@ -218,11 +218,11 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         maxWidth="lg"
         onClose={(): void => setOpenPastAnswers(false)}
         open={openPastAnswers}
-        title={answerInfo.studentName}
       >
         <AllAttemptsIndex
           curAnswerId={answerInfo.answerId}
           index={answerInfo.index}
+          name={answerInfo.studentName}
         />
       </Prompt>
     </>

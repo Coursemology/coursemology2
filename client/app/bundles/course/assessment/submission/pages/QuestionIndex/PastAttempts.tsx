@@ -31,6 +31,7 @@ const PastAnswers: FC = () => {
           <>
             <AllAttemptsDisplay
               allAnswers={data.allAnswers}
+              name={data.user.name}
               question={data.question}
               questionNumber={data.question.questionNumber!}
               submissionEditUrl={getEditSubmissionQuestionURL(

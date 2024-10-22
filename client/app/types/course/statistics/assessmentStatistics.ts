@@ -134,6 +134,7 @@ export interface QuestionAllAnswerDisplayDetails<
   T extends keyof typeof QuestionType,
 > {
   isAnswersDisplayed: boolean;
+  user: UserInfo;
   question: QuestionDetails<T>;
   allAnswers: AllAnswerDetails<T>[];
   submissionId: number;

@@ -1,58 +1,27 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
 import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
 
 import { fetchQuestionAnswerDetails } from 'course/assessment/operations/statistics';
-import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import {
   getEditSubmissionQuestionURL,
   getPastAnswersURL,
 } from 'lib/helpers/url-builders';
-import useTranslation from 'lib/hooks/useTranslation';
 
 import AllAttemptsDisplay from './AllAttemptsDisplay';
 import Comment from './Comment';
 
-const translations = defineMessages({
-  questionTitle: {
-    id: 'course.assessment.statistics.questionTitle',
-    defaultMessage: 'Question {index}',
-  },
-  gradeDisplay: {
-    id: 'course.assessment.statistics.gradeDisplay',
-    defaultMessage: 'Grade: {grade} / {maxGrade}',
-  },
-  morePastAnswers: {
-    id: 'course.assessment.statistics.morePastAnswers',
-    defaultMessage: 'View All Past Answers',
-  },
-  currentAnswer: {
-    id: 'course.assessment.statistics.currentAnswer',
-    defaultMessage: 'Most Recent Answer',
-  },
-  pastAnswerTitle: {
-    id: 'course.assessment.statistics.pastAnswerTitle',
-    defaultMessage: 'Submitted At: {submittedAt}',
-  },
-  submissionPage: {
-    id: 'course.assessment.statistics.submissionPage',
-    defaultMessage: 'Go to Answer Page',
-  },
-});
-
 interface Props {
   curAnswerId: number;
   index: number;
+  name: string;
 }
 
 const AllAttemptsIndex: FC<Props> = (props) => {
-  const { curAnswerId, index } = props;
-  const { t } = useTranslation();
+  const { curAnswerId, index, name } = props;
   const { courseId, assessmentId } = useParams();
 
   const fetchQuestionAndCurrentAnswerDetails = (): Promise<
@@ -77,6 +46,8 @@ const AllAttemptsIndex: FC<Props> = (props) => {
           <>
             <AllAttemptsDisplay
               allAnswers={data.allAnswers}
+              name={name}
+              pastAnswersURL={pastAnswersURL}
               question={data.question}
               questionNumber={index}
               submissionEditUrl={getEditSubmissionQuestionURL(
@@ -86,12 +57,6 @@ const AllAttemptsIndex: FC<Props> = (props) => {
                 index,
               )}
             />
-
-            <Link opensInNewTab to={pastAnswersURL}>
-              <Typography className="mt-4" variant="body2">
-                {t(translations.morePastAnswers)}
-              </Typography>
-            </Link>
 
             {data.comments.length > 0 && <Comment comments={data.comments} />}
           </>
