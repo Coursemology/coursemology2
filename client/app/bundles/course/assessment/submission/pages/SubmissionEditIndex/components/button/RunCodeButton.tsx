@@ -9,7 +9,6 @@ import { getSubmissionFlags } from 'course/assessment/submission/selectors/submi
 import { getSubmission } from 'course/assessment/submission/selectors/submissions';
 import translations from 'course/assessment/submission/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -30,7 +29,6 @@ const RunCodeButton: FC<Props> = (props) => {
   const { resetField, getValues } = useFormContext();
 
   const question = questions[questionId];
-  const submissionId = getSubmissionId();
 
   const { answerId, attemptsLeft, attemptLimit } = question;
   const { isAutograding, isResetting } = questionFlags[questionId] || {};
@@ -39,12 +37,7 @@ const RunCodeButton: FC<Props> = (props) => {
 
   const onSubmitAnswer = (): void => {
     dispatch(
-      submitAnswer(
-        submissionId,
-        answerId,
-        getValues(`${answerId}`),
-        resetField,
-      ),
+      submitAnswer(question.id, answerId, getValues(`${answerId}`), resetField),
     );
   };
 

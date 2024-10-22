@@ -22,7 +22,8 @@ export const BUFFER_TIME_TO_FORCE_SUBMIT_MS = 5 * 1000;
 // to still be considered a "newly created" submission
 export const TIME_LAPSE_NEW_SUBMISSION_MS = 10 * 1000;
 
-export const POLL_INTERVAL_MILLISECONDS = 2000;
+export const EVALUATE_POLL_INTERVAL_MILLISECONDS = 500;
+export const FEEDBACK_POLL_INTERVAL_MILLISECONDS = 2000;
 
 export const workflowStates = {
   Unstarted: 'unstarted' as const,
@@ -160,6 +161,7 @@ const actionTypes = mirrorCreator([
   'UNSUBMIT_SUCCESS',
   'UNSUBMIT_FAILURE',
   'AUTOGRADE_REQUEST',
+  'AUTOGRADE_SUBMITTED',
   'AUTOGRADE_SUCCESS',
   'AUTOGRADE_FAILURE',
   'AUTOGRADE_SAVING_SUCCESS',
@@ -168,6 +170,7 @@ const actionTypes = mirrorCreator([
   'FEEDBACK_SUCCESS',
   'FEEDBACK_FAILURE',
   'REEVALUATE_REQUEST',
+  'REEVALUATE_SUBMITTED',
   'REEVALUATE_SUCCESS',
   'REEVALUATE_FAILURE',
   'RESET_REQUEST',
