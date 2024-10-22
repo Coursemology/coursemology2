@@ -15,6 +15,10 @@ module Course::Assessment::Submission::Koditsu::SubmissionsConcern
 
     return [status, nil] if status != 200 && status != 207
 
+    process_fetch_submissions_response(response)
+  end
+
+  def process_fetch_submissions_response(response)
     @all_submissions = response
     @questions = @assessment.questions.includes({ actable: :test_cases })
     @test_cases_order = test_cases_order_for(@questions)

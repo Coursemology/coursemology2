@@ -17,4 +17,12 @@ module Course::Assessment::KoditsuAssessmentInvitationConcern
 
     [status, response]
   end
+
+  def all_invitation_successful?(invitation_response)
+    failure_count = invitation_response.filter do |invitation|
+      invitation['status'] == 'errorOther'
+    end.length
+
+    failure_count == 0
+  end
 end

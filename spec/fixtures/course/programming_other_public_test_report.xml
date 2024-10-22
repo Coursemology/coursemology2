@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite name="PublicTestsGrader" tests="5" time="0.000" failures="0" errors="0" skipped="0">
+		<testcase classname="PublicTestsGrader" name="test_public_01" time="0.000">
+			<meta expression="plusone(1)" expected="2" hint="" output="2"/>
+		</testcase>
+		<testcase classname="PublicTestsGrader" name="test_public_02" time="0.000">
+			<meta expression="plusone(-1)" expected="0" hint="" output="0"/>
+		</testcase>
+		<testcase classname="PublicTestsGrader" name="test_public_03" time="0.000">
+			<meta expression="is_more(7,4)" expected="True" hint="" output="True"/>
+		</testcase>
+		<testcase classname="PublicTestsGrader" name="test_public_04" time="0.000">
+			<meta expression="is_more(5,1)" expected="True" hint="" output="True"/>
+		</testcase>
+		<testcase classname="PublicTestsGrader" name="test_public_05" time="0.000">
+			<meta expression="is_more(1,8)" expected="False" hint="" output="False"/>
+		</testcase>
+		<system-out><![CDATA[]]></system-out>
+		<system-err><![CDATA[]]></system-err>
+	</testsuite>
+</testsuites>
