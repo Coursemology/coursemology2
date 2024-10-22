@@ -1,6 +1,13 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { Chip, Typography } from '@mui/material';
+import {
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
 import {
   Answer,
@@ -15,6 +22,7 @@ import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatLongDateTime } from 'lib/moment';
 
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
 import { getClassNameForMarkCell } from '../classNameUtils';
@@ -33,6 +41,10 @@ const translations = defineMessages({
   submissionPage: {
     id: 'course.assessment.statistics.submissionPage',
     defaultMessage: 'Go to Answer Page',
+  },
+  submittedAt: {
+    id: 'course.assessment.statistics.submittedAt',
+    defaultMessage: 'Submitted At',
   },
 });
 
@@ -70,8 +82,22 @@ const LastAnswerDisplay: FC<Props> = (props) => {
         );
         return (
           <>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="w-1/4">
+                    {t(translations.submittedAt)}
+                  </TableCell>
+                  <TableCell>
+                    {formatLongDateTime(answer.submittedAt)}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+
             <Accordion
               defaultExpanded={false}
+              disableGutters
               title={t(translations.questionTitle, { index })}
             >
               <div className="ml-4 mt-4">

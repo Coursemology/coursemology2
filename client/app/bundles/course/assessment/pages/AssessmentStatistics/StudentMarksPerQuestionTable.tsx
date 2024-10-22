@@ -282,22 +282,24 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}
         title={
-          <span className="flex items-center">
-            {answerDisplayInfo.studentName}
-            <SubmissionWorkflowState
-              className="ml-3"
-              linkTo={getEditSubmissionQuestionURL(
-                courseId,
-                assessmentId,
-                answerDisplayInfo.submissionId,
-                answerDisplayInfo.index,
-              )}
-              opensInNewTab
-              workflowState={
-                answerDisplayInfo.workflowState ?? workflowStates.Unstarted
-              }
-            />
-          </span>
+          <div className="flex flex-row">
+            <span className="flex items-center">
+              {answerDisplayInfo.studentName}
+              <SubmissionWorkflowState
+                className="ml-3"
+                linkTo={getEditSubmissionQuestionURL(
+                  courseId,
+                  assessmentId,
+                  answerDisplayInfo.submissionId,
+                  answerDisplayInfo.index,
+                )}
+                opensInNewTab
+                workflowState={
+                  answerDisplayInfo.workflowState ?? workflowStates.Unstarted
+                }
+              />
+            </span>
+          </div>
         }
       >
         <LastAnswerDisplay
