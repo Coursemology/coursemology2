@@ -3,6 +3,11 @@ is_displayed = @submission.graded? || @submission.published?
 
 json.isAnswersDisplayed is_displayed
 
+json.user do
+  json.name @submission.creator.name
+  json.id @submission.creator.id
+end
+
 if is_displayed
   json.question do
     json.id @question.id
