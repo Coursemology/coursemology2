@@ -264,11 +264,11 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         maxWidth="lg"
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}
-        title={answerDisplayInfo.studentName}
       >
         <LatestAnswerDisplay
           currAnswerId={answerDisplayInfo.answerId}
           index={answerDisplayInfo.index}
+          name={answerDisplayInfo.studentName}
         />
       </Prompt>
     </>
