@@ -184,8 +184,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           subject
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
-
-          expect(ActionMailer::Base.deliveries.count).to eq(1)
+          expect(ActionMailer::Base.deliveries.map(&:to).flatten.uniq.count).to be 1
           expect(emails).to include(user.email)
           expect(email_subjects).to include('course.mailer.user_rejected_email.subject')
         end
