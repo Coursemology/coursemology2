@@ -209,7 +209,7 @@ GEM
     erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
-    excon (0.111.0)
+    excon (0.112.0)
     exifr (1.4.0)
     factory_bot (6.5.0)
       activesupport (>= 5.0.0)
@@ -219,7 +219,7 @@ GEM
     ffi (1.17.0)
     filename (0.1.2)
     flamegraph (0.9.5)
-    fog-aws (3.27.0)
+    fog-aws (3.28.0)
       base64 (~> 0.2.0)
       fog-core (~> 2.1)
       fog-json (~> 1.1)
@@ -337,9 +337,10 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
-    mime-types (3.5.2)
+    mime-types (3.6.0)
+      logger
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2024.0903)
+    mime-types-data (3.2024.1001)
     mimemagic (0.4.3)
       nokogiri (~> 1)
       rake
