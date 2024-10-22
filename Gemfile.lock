@@ -502,7 +502,7 @@ GEM
     rspec-support (3.13.1)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.66.1)
+    rubocop (1.67.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -581,7 +581,7 @@ GEM
       rails (>= 3.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unicode-display_width (2.5.0)
+    unicode-display_width (2.6.0)
     uniform_notifier (1.16.0)
     unread (0.14.0)
       activerecord (>= 6.1)
@@ -677,7 +677,7 @@ DEPENDENCIES
   rspec-rails (~> 6)
   rspec-retry
   rspec_junit_formatter
-  rubocop (~> 1.66)
+  rubocop (~> 1.67)
   rubocop-rails
   ruby-oembed
   rubyzip
