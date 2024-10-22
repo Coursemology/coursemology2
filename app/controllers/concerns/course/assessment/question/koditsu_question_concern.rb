@@ -16,6 +16,10 @@ module Course::Assessment::Question::KoditsuQuestionConcern
 
     status, response = service.run_create_koditsu_question
 
+    adjust_question_from_koditsu_response(status, response)
+  end
+
+  def adjust_question_from_koditsu_response(status, response)
     @question = @programming_question.acting_as
 
     if status == 201
