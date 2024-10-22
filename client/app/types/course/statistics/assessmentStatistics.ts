@@ -114,6 +114,13 @@ export type Answer<T extends keyof typeof QuestionType> =
     workflowState: WorkflowState;
   };
 
+export interface LatestAnswer<T extends keyof typeof QuestionType> {
+  question: Question<T>;
+  answer: Answer<T>;
+  comments: CommentItem[];
+  submissionId: number;
+}
+
 export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
   question: Question<T>;
   answer: AnswerDetailsMap[T];

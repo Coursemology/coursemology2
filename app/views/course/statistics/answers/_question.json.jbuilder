@@ -8,5 +8,5 @@ json.question do
   json.type @question.question_type
   json.questionNumber @question_index + 1
 
-  json.partial! @question, question: @question.specific, can_grade: false, answer: @all_answers.first
+  json.partial! @question, question: @question.specific, can_grade: false, answer: @answer
 end

@@ -1,5 +1,8 @@
 import { QuestionType } from 'types/course/assessment/question';
-import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
+import {
+  LatestAnswer,
+  QuestionAnswerDetails,
+} from 'types/course/statistics/assessmentStatistics';
 
 import { APIResponse } from 'api/types';
 
@@ -14,5 +17,11 @@ export default class AnswerStatisticsAPI extends BaseCourseAPI {
     answerId: number,
   ): APIResponse<QuestionAnswerDetails<keyof typeof QuestionType>> {
     return this.client.get(`${this.#urlPrefix}/${answerId}`);
+  }
+
+  fetchLatestAnswer(
+    answerId: number,
+  ): APIResponse<LatestAnswer<keyof typeof QuestionType>> {
+    return this.client.get(`${this.#urlPrefix}/${answerId}/latest_answer`);
   }
 }

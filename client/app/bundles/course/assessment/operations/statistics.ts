@@ -4,6 +4,7 @@ import { QuestionType } from 'types/course/assessment/question';
 import {
   AncestorAssessmentStats,
   AssessmentLiveFeedbackStatistics,
+  LatestAnswer,
   QuestionAllAnswerDisplayDetails,
   QuestionAnswerDetails,
 } from 'types/course/statistics/assessmentStatistics';
@@ -38,6 +39,15 @@ export const fetchAncestorStatistics = async (
 ): Promise<AncestorAssessmentStats> => {
   const response =
     await CourseAPI.statistics.assessment.fetchAncestorStatistics(ancestorId);
+
+  return response.data;
+};
+
+export const fetchLatestAnswer = async (
+  answerId: number,
+): Promise<LatestAnswer<keyof typeof QuestionType>> => {
+  const response =
+    await CourseAPI.statistics.answer.fetchLatestAnswer(answerId);
 
   return response.data;
 };
