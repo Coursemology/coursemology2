@@ -18,7 +18,7 @@ import {
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import LastAttemptIndex from './AnswerDisplay/LastAttempt';
+import LastAnswerDisplay from './AnswerDisplay/LastAnswerDisplay';
 import { getClassNameForMarkCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
@@ -120,7 +120,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.answers?.[index]?.grade === 'number' ? (
+          return datum.answers?.[index] &&
+            typeof datum.answers?.[index].grade === 'number' ? (
             renderAnswerGradeClickableCell(index, datum)
           ) : (
             <div />
@@ -299,8 +300,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           </span>
         }
       >
-        <LastAttemptIndex
-          curAnswerId={answerDisplayInfo.answerId}
+        <LastAnswerDisplay
+          currAnswerId={answerDisplayInfo.answerId}
           index={answerDisplayInfo.index}
           questionId={answerDisplayInfo.questionId}
           submissionId={answerDisplayInfo.submissionId}

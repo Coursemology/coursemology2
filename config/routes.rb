@@ -447,8 +447,6 @@ Rails.application.routes.draw do
         get 'course/performance' => 'aggregate#course_performance'
         get 'submissions/:submission_id/questions/:question_id' => 'answers#all_answers'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
-        get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
-        get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
         get 'assessment/:id/live_feedback_statistics' => 'assessments#live_feedback_statistics'
         get 'assessment/:id/live_feedback_history' => 'assessments#live_feedback_history'
       end

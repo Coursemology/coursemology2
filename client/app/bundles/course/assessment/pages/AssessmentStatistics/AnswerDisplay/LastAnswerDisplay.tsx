@@ -37,14 +37,14 @@ const translations = defineMessages({
 });
 
 interface Props {
-  curAnswerId: number;
+  currAnswerId: number;
   index: number;
   questionId: number;
   submissionId: number;
 }
 
-const LastAttemptIndex: FC<Props> = (props) => {
-  const { curAnswerId, index, submissionId, questionId } = props;
+const LastAnswerDisplay: FC<Props> = (props) => {
+  const { currAnswerId, index, submissionId, questionId } = props;
   const { t } = useTranslation();
 
   const fetchAnswerDetailsAndComments = async (): Promise<{
@@ -52,7 +52,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
     comments: CommentItem[];
   }> => {
     const [answer, submissionQuestion] = await Promise.all([
-      fetchAnswer(curAnswerId),
+      fetchAnswer(currAnswerId),
       fetchSubmissionQuestionDetails(submissionId, questionId),
     ]);
     return { answer, comments: submissionQuestion.comments };
@@ -101,4 +101,4 @@ const LastAttemptIndex: FC<Props> = (props) => {
   );
 };
 
-export default LastAttemptIndex;
+export default LastAnswerDisplay;
