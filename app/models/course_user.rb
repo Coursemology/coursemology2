@@ -24,15 +24,6 @@ class CourseUser < ApplicationRecord
   # A set of roles which comprise the managers of a course.
   MANAGER_ROLES = Set[:manager, :owner].map { |v| roles[v] }.freeze
 
-  ASSOCIATED_MODELS = %i[
-    experience_points_records
-    learning_rate_records
-    course_user_achievements
-    email_unsubscriptions
-    group_users
-    personal_times
-  ].freeze
-
   validates :role, presence: true
   validates :name, length: { maximum: 255 }, presence: true
   validates :phantom, inclusion: { in: [true, false] }

@@ -1398,7 +1398,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_22_035102) do
     t.string "type", limit: 255, null: false
     t.string "name", limit: 255, null: false
     t.integer "parent_id"
-    t.serial "weight", null: false
+    t.serial "weight"
     t.boolean "enabled", default: true, null: false
     t.index "lower((name)::text)", name: "index_polyglot_languages_on_name", unique: true
     t.index ["parent_id"], name: "fk__polyglot_languages_parent_id"
