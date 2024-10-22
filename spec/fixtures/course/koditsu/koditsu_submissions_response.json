@@ -1,0 +1,166 @@
+{
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439011",
+      "assessmentId": "66fa7643b97aed0e8e189633",
+      "status": "submitted",
+      "score": 10,
+      "user": {
+        "name": "Student One",
+        "email": "studentone@koditsu.com"
+      },
+      "questions": [
+        {
+          "questionId": "66fb2e66cd0216558fde9998",
+          "status": "submitted",
+          "score": 10,
+          "maxScore": 10,
+          "files": [
+            {
+              "path": "template.py",
+              "content": "def hello_world(): \n\t return"
+            }
+          ],
+          "exprTestcaseResults": [
+            {
+              "testcase": {
+                "index": 1,
+                "lhsExpression": "get_data(to_rna(tagged_dna1))",
+                "rhsExpression": "GCAUUU",
+                "display": "15"
+              },
+              "result": {
+                "stdin": "",
+                "stdout": "",
+                "stderr": "",
+                "code": 0,
+                "signal": "SIGTERM",
+                "display": "GCAUUU",
+                "success": true
+              }
+            },
+            {
+              "testcase": {
+                "index": 2,
+                "lhsExpression": "true",
+                "rhsExpression": "GCAUUU",
+                "display": "15"
+              },
+              "result": {
+                "stdin": "",
+                "stdout": "",
+                "stderr": "",
+                "code": 0,
+                "signal": "SIGTERM",
+                "display": "GCAUUU",
+                "success": true
+              }
+            },
+            {
+              "testcase": {
+                "index": 3,
+                "lhsExpression": "is_same_dogma(tagged_rna1, tagged_dna2)",
+                "rhsExpression": "True",
+                "display": "is_same_dogma(tagged_rna1, tagged_dna2)"
+              },
+              "result": {
+                "stdin": "",
+                "stdout": "",
+                "stderr": "",
+                "code": 0,
+                "signal": "SIGTERM",
+                "display": "True",
+                "success": true
+              }
+            },
+            {
+              "testcase": {
+                "index": 4,
+                "lhsExpression": "is_same_dogma(tagged_rna1, tagged_dna2)",
+                "rhsExpression": "True",
+                "display": "is_same_dogma(tagged_rna1, tagged_dna2)"
+              },
+              "result": {
+                "stdin": "",
+                "stdout": "",
+                "stderr": "",
+                "code": 0,
+                "signal": "SIGTERM",
+                "display": "True",
+                "success": true
+              }
+            },
+            {
+              "testcase": {
+                "index": 5,
+                "lhsExpression": "is_same_dogma(tagged_rna1, tagged_dna2)",
+                "rhsExpression": "False",
+                "display": "is_same_dogma(tagged_rna1, tagged_dna2)"
+              },
+              "result": {
+                "stdin": "",
+                "stdout": "",
+                "stderr": "",
+                "code": 0,
+                "signal": "SIGTERM",
+                "display": "False",
+                "success": true
+              }
+            }
+          ],
+          "startedAt": "2024-06-01T12:00:00.000Z",
+          "lastAttemptedAt": "2024-06-01T12:55:00.000Z",
+          "filesSavedAt": "2024-06-01T12:55:00.000Z"
+        },
+        {
+          "questionId": "66fc14477b095d84b42cc6cf",
+          "status": "notStarted",
+          "files": [
+            {
+              "path": "template.py"
+            }
+          ],
+          "exprTestcaseResults": [],
+          "startedAt": null,
+          "lastAttemptedAt": null
+        }
+      ]
+    },
+    {
+      "id": "509r2f77bcf86cd745439023",
+      "assessmentId": "66fa7643b97aed0e8e189633",
+      "status": "submitted",
+      "score": 8,
+      "user": {
+        "name": "Student Two",
+        "email": "studenttwo@koditsu.com"
+      },
+      "questions": [
+        {
+          "questionId": "66fb2e66cd0216558fde9998",
+          "status": "notStarted",
+          "files": [
+            {
+              "path": "template.py"
+            }
+          ],
+          "exprTestcaseResults": [],
+          "startedAt": null,
+          "lastAttemptedAt": null
+        },
+        {
+          "questionId": "66fc14477b095d84b42cc6cf",
+          "status": "notStarted",
+          "files": [
+            {
+              "path": "template.py"
+            }
+          ],
+          "exprTestcaseResults": [],
+          "startedAt": null,
+          "lastAttemptedAt": null
+        }
+      ]
+    }
+  ]
+}

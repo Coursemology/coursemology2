@@ -1,0 +1,17 @@
+{
+  "data": {
+    "title": "Final Exam",
+    "description": "This is the final exam for the course.",
+    "schedule": {
+      "validity": {
+        "startAt": "2023-01-01",
+        "endAt": "2023-12-31"
+      },
+      "duration": 90,
+      "buffer": 10
+    },
+    "questions": [],
+    "id": "66fa7643b97aed0e8e189633",
+    "workspaceId": "66fd754a3486c7994c809e16"
+  }
+}

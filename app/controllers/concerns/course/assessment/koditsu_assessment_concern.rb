@@ -11,6 +11,10 @@ module Course::Assessment::KoditsuAssessmentConcern
                          new(@assessment, [], workspace_id, monitoring_object, seb_config_key)
     status, response = assessment_service.run_create_koditsu_assessment
 
+    adjust_assessment_from_koditsu_response(status, response)
+  end
+
+  def adjust_assessment_from_koditsu_response(status, response)
     if status == 201
       @assessment.update!({
         is_synced_with_koditsu: true,
