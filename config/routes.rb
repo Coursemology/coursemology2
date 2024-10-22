@@ -438,6 +438,9 @@ Rails.application.routes.draw do
       namespace :statistics do
         get '/' => 'statistics#index'
         get 'answer/:id' => 'answers#question_answer_details'
+        get 'answer/:id/latest_answer' => 'answers#latest_answer'
+        get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
+        get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
         get 'assessments' => 'aggregate#all_assessments'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
@@ -445,8 +448,6 @@ Rails.application.routes.draw do
         get 'course/performance' => 'aggregate#course_performance'
         get 'submission_question/:id' => 'answers#all_answers'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
-        get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
-        get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
         get 'assessment/:id/live_feedback_statistics' => 'assessments#live_feedback_statistics'
         get 'assessment/:id/live_feedback_history' => 'assessments#live_feedback_history'
       end

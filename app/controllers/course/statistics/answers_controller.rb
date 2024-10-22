@@ -4,6 +4,24 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
 
   MAX_ANSWERS_COUNT = 10
 
+  def latest_answer
+    @answer = Course::Assessment::Answer.find(answer_params[:id])
+    @submission = @answer.submission
+    @question = @answer.question
+    @assessment = @submission.assessment
+
+    submission_id = @answer.submission_id
+    question_id = @answer.question_id
+
+    @question_index = question_index(question_id)
+
+    @submission_question = Course::Assessment::SubmissionQuestion.
+                           where(submission_id: submission_id, question_id: question_id).
+                           includes(actable: { files: { annotations:
+                                             { discussion_topic: { posts: :codaveri_feedback } } } },
+                                    discussion_topic: { posts: :codaveri_feedback }).first
+  end
+
   def question_answer_details
     answer = Course::Assessment::Answer.find(answer_params[:id])
     @submission = answer.submission
