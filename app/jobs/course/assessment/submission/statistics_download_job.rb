@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::StatisticsDownloadJob < ApplicationJob
   include TrackableJob
-  queue_as :lowest
+  queue_as :highest
 
   protected
 
