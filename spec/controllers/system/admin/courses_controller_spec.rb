@@ -44,9 +44,9 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
       context 'when the user is a system administrator' do
         before { controller_sign_in(controller, admin) }
 
-        it 'soft deletes the course' do
+        it 'destroys the course' do
           subject
-          expect(controller.instance_variable_get(:@course).deleted_at).to_not be_nil
+          expect(controller.instance_variable_get(:@course)).to be_destroyed
         end
 
         it 'succeeds with http status ok' do

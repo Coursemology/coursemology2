@@ -111,9 +111,9 @@ RSpec.describe Course::Admin::AdminController do
       context 'when the user is a Course Manager' do
         let(:user) { create(:course_manager, course: course).user }
 
-        it 'soft deletes the course' do
+        it 'destroys the course' do
           subject
-          expect(controller.current_course.deleted_at).to_not be_nil
+          expect(controller.current_course).to be_destroyed
         end
 
         it { is_expected.to have_http_status(:ok) }

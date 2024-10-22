@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Achievement < ApplicationRecord
   include Course::SanitizeDescriptionConcern
-  acts_as_paranoid
+
   acts_as_conditional
   mount_uploader :badge, ImageUploader
   has_many_attachments on: :description
