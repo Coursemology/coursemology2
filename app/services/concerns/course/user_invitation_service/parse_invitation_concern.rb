@@ -79,7 +79,9 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @param [Hash] users The attributes from the client.
   # @return [Array<Hash>] Array of users to be invited
   def parse_from_form(users)
-    users.map do |(_, value)|
+    users.compact.map do |(_, value)|
+      next if value.nil?
+
       name = value[:name].presence || value[:email]
       phantom = ActiveRecord::Type::Boolean.new.cast(value[:phantom])
       { name: name,
@@ -87,7 +89,7 @@ module Course::UserInvitationService::ParseInvitationConcern
         role: value[:role],
         phantom: phantom,
         timeline_algorithm: value[:timeline_algorithm] }
-    end
+    end.compact
   end
 
   # Loads the given file, and entries with blanks in either fields are ignored.
