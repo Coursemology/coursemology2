@@ -2,7 +2,6 @@
 class Course::ExperiencePointsRecord < ApplicationRecord
   include Generic::CollectionConcern
   actable optional: true
-  acts_as_paranoid
 
   before_save :send_notification, if: :reached_new_level?
   before_create :set_awarded_attributes, if: :manually_awarded?

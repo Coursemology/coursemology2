@@ -186,22 +186,6 @@ class CourseUser < ApplicationRecord
     all.exists?(user: user)
   end
 
-  # Soft delete the course user.
-  def destroy
-    ASSOCIATED_MODELS.each do |association|
-      send(association).destroy_all
-    end
-    super
-  end
-
-  # Restore the course user.
-  def restore
-    super
-    ASSOCIATED_MODELS.each do |association|
-      send(association).only_deleted.each(&:restore)
-    end
-  end
-
   # Test whether this course_user is a manager (i.e. manager or owner)
   #
   # @return [Boolean] True if course_user is a staff
