@@ -118,13 +118,15 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
       end
 
       scenario 'I can upload a template package' do
-        question = create(:course_assessment_question_programming,
-                          assessment: assessment, template_file_count: 0, package_type: :zip_upload)
+        programming_question = create(:course_assessment_question_programming,
+                                      assessment: assessment, template_file_count: 0, package_type: :zip_upload)
+
+        question = programming_question.acting_as
 
         empty_package = File.join(file_fixture_path, 'course/empty_programming_question_template.zip')
         valid_package = File.join(file_fixture_path, 'course/programming_question_template.zip')
 
-        visit edit_course_assessment_question_programming_path(course, assessment, question)
+        visit edit_course_assessment_question_programming_path(course, assessment, programming_question)
         find('span', text: 'Evaluate and test code').click
 
         attach_file(empty_package) do
@@ -151,14 +153,16 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
 
         expect(page).to have_current_path(course_assessment_path(course, assessment))
 
-        visit edit_course_assessment_question_programming_path(course, assessment, question)
+        programming_question = question.reload.actable
+
+        visit edit_course_assessment_question_programming_path(course, assessment, programming_question)
         expect(page).to have_text('success')
 
-        question.template_files.reload.each do |template|
+        programming_question.template_files.reload.each do |template|
           expect(page).to have_text(template.filename)
         end
 
-        question.test_cases.reload.each do |test_case|
+        programming_question.test_cases.reload.each do |test_case|
           expect(page).to have_text(test_case[:expression])
           expect(page).to have_text(test_case[:expected])
           expect(page).to have_text(test_case[:hint])
@@ -166,10 +170,11 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
       end
 
       scenario 'I can edit a question without updating the programming package' do
-        question = create(:course_assessment_question_programming, assessment: assessment)
+        programming_question = create(:course_assessment_question_programming, assessment: assessment)
+        question = programming_question.acting_as
         visit course_assessment_path(course, assessment)
 
-        edit_path = edit_course_assessment_question_programming_path(course, assessment, question)
+        edit_path = edit_course_assessment_question_programming_path(course, assessment, programming_question)
         find_link(nil, href: edit_path).click
 
         maximum_grade = 999.9

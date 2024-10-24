@@ -1,25 +1,33 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Typography } from '@mui/material';
-import { QuestionType } from 'types/course/assessment/question';
+import { History, OpenInNew } from '@mui/icons-material';
 import {
-  AllAnswerDetails,
-  QuestionDetails,
-} from 'types/course/statistics/assessmentStatistics';
+  Card,
+  CardHeader,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { QuestionType } from 'types/course/assessment/question';
+import { Answer, Question } from 'types/course/statistics/assessmentStatistics';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
-import CustomSlider from 'lib/components/extensions/CustomSlider';
+import Slider from 'lib/components/extensions/CustomSlider';
 import useTranslation from 'lib/hooks/useTranslation';
-import { formatLongDateTime } from 'lib/moment';
 
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
+import QuestionDetails from '../QuestionDetails/QuestionDetails';
+
+import { processAttempts } from './utils';
 
 interface Props {
-  allAnswers: AllAnswerDetails<keyof typeof QuestionType>[];
-  question: QuestionDetails<keyof typeof QuestionType>;
+  allAnswers: Answer<keyof typeof QuestionType>[];
+  allQuestions: Question<keyof typeof QuestionType>[];
   questionNumber: number;
   submissionEditUrl: string;
+  pastAnswersURL?: string;
+  name: string;
 }
 
 const translations = defineMessages({
@@ -35,91 +43,124 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.submissionPage',
     defaultMessage: 'Go to Answer Page',
   },
+  submittedAt: {
+    id: 'course.assessment.statistics.submittedAt',
+    defaultMessage: 'Submitted At',
+  },
+  pastAnswers: {
+    id: 'course.assessment.statistics.pastAnswers',
+    defaultMessage: 'See All Past Answers',
+  },
+  questionDetailsTitle: {
+    id: 'course.assessment.statistics.questionDetailsTitle',
+    defaultMessage: 'More Details',
+  },
 });
 
 const AllAttemptsDisplay: FC<Props> = (props) => {
-  const { allAnswers, question, questionNumber, submissionEditUrl } = props;
+  const {
+    allAnswers,
+    allQuestions,
+    questionNumber,
+    submissionEditUrl,
+    name,
+    pastAnswersURL,
+  } = props;
 
   const { t } = useTranslation();
 
-  const currentAnswer = allAnswers.find((answer) => answer.currentAnswer);
-  const sortedAnswers = allAnswers.filter((answer) => !answer.currentAnswer);
+  const { questionMap, allProcessedAnswers, sliderPoints, maxIndex } =
+    processAttempts(allQuestions, allAnswers);
 
-  sortedAnswers.push(currentAnswer!);
+  const [currAnswer, setCurrAnswer] = useState(allProcessedAnswers[maxIndex]);
+  const [currQuestion, setCurrQuestion] = useState<
+    Question<keyof typeof QuestionType>
+  >(questionMap.get(maxIndex) ?? ({} as Question<keyof typeof QuestionType>));
 
-  // TODO: distance between points inside Slider to be reflective towards the time distance
-  // (for example, the distance between 1:00PM to 1:01PM should not be equal to 1:00PM to 2:00PM)
-  const answerSubmittedTimes = sortedAnswers.map((answer, idx) => {
-    return {
-      value: idx,
-      label:
-        idx === 0 || idx === sortedAnswers.length - 1
-          ? formatLongDateTime(answer.createdAt)
-          : '',
-    };
-  });
-
-  const currentAnswerMarker =
-    answerSubmittedTimes[answerSubmittedTimes.length - 1];
-
-  const earliestAnswerMarker = answerSubmittedTimes[0];
-  const [displayedIndex, setDisplayedIndex] = useState(
-    currentAnswerMarker.value,
-  );
+  const updateDisplayedIndex = (index: number): void => {
+    setCurrAnswer(allProcessedAnswers[index]);
+    setCurrQuestion(
+      questionMap.get(index) ?? ({} as Question<keyof typeof QuestionType>),
+    );
+  };
 
   return (
     <>
-      <Link opensInNewTab to={submissionEditUrl}>
-        <Typography className="mb-4" variant="body2">
-          {t(translations.submissionPage)}
-        </Typography>
-      </Link>
-      <Accordion
-        defaultExpanded={false}
-        title={t(translations.questionTitle, {
-          index: questionNumber,
-        })}
-      >
-        <div className="ml-4 mt-4">
-          <Typography variant="body1">{question.title}</Typography>
-          <Typography
-            dangerouslySetInnerHTML={{
-              __html: question.description,
-            }}
-            variant="body2"
-          />
-        </div>
-      </Accordion>
-      {answerSubmittedTimes.length > 1 && (
-        <div className="w-[calc(100%_-_17rem)] mx-auto">
-          <CustomSlider
-            defaultValue={currentAnswerMarker.value}
-            marks={answerSubmittedTimes}
-            max={currentAnswerMarker.value}
-            min={earliestAnswerMarker.value}
+      <Card className="mb-4" variant="outlined">
+        <CardHeader
+          action={
+            <div className="space-x-2">
+              {pastAnswersURL && (
+                <Tooltip placement="top" title={t(translations.pastAnswers)}>
+                  <IconButton
+                    className="p-2"
+                    component={Link}
+                    rel="noopener noreferrer"
+                    size="small"
+                    target="_blank"
+                    to={pastAnswersURL}
+                  >
+                    <History />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Tooltip placement="top" title={t(translations.submissionPage)}>
+                <IconButton
+                  className="p-2"
+                  component={Link}
+                  rel="noopener noreferrer"
+                  size="small"
+                  target="_blank"
+                  to={submissionEditUrl}
+                >
+                  <OpenInNew />
+                </IconButton>
+              </Tooltip>
+            </div>
+          }
+          title={<Typography variant="h6">{name}</Typography>}
+        />
+      </Card>
+
+      {maxIndex > 0 && (
+        <div className="w-[calc(100%_-_17rem)] mx-auto mb-4">
+          <Slider
+            defaultValue={maxIndex}
             onChange={(_, value) => {
-              setDisplayedIndex(Array.isArray(value) ? value[0] : value);
+              updateDisplayedIndex(Array.isArray(value) ? value[0] : value);
             }}
-            step={null}
-            valueLabelDisplay="off"
+            points={sliderPoints}
+            valueLabelDisplay="auto"
           />
         </div>
       )}
 
-      <Typography variant="h6">
-        {t(translations.pastAnswerTitle, {
-          submittedAt: formatLongDateTime(
-            sortedAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]
-              .createdAt,
-          ),
+      <Accordion
+        defaultExpanded={false}
+        disableGutters
+        displayDotIndicator
+        title={t(translations.questionTitle, {
+          index: questionNumber,
         })}
-      </Typography>
-      <AnswerDetails
-        answer={
-          sortedAnswers[displayedIndex ?? answerSubmittedTimes.length - 1]
-        }
-        question={question}
-      />
+      >
+        <div className="m-4">
+          <Typography variant="body1">{currQuestion.title}</Typography>
+          <Typography
+            dangerouslySetInnerHTML={{
+              __html: currQuestion.description,
+            }}
+            variant="body2"
+          />
+        </div>
+        <div className="m-4 mt-8">
+          <Typography variant="body1">
+            {t(translations.questionDetailsTitle)}
+          </Typography>
+          <QuestionDetails question={currQuestion} />
+        </div>
+      </Accordion>
+
+      <AnswerDetails answer={currAnswer} question={currQuestion} />
     </>
   );
 };

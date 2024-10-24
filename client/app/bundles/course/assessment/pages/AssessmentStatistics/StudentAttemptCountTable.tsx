@@ -100,8 +100,8 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.attemptStatus?.[index].attemptCount ===
-            'number' ? (
+          return datum.attemptStatus?.[index] &&
+            typeof datum.attemptStatus[index].attemptCount === 'number' ? (
             renderAttemptCountClickableCell(index, datum)
           ) : (
             <div />
@@ -218,11 +218,11 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         maxWidth="lg"
         onClose={(): void => setOpenPastAnswers(false)}
         open={openPastAnswers}
-        title={answerInfo.studentName}
       >
         <AllAttemptsIndex
           curAnswerId={answerInfo.answerId}
           index={answerInfo.index}
+          name={answerInfo.studentName}
         />
       </Prompt>
     </>

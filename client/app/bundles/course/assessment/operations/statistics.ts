@@ -4,7 +4,8 @@ import { QuestionType } from 'types/course/assessment/question';
 import {
   AncestorAssessmentStats,
   AssessmentLiveFeedbackStatistics,
-  QuestionAllAnswerDisplayDetails,
+  LatestAnswer,
+  QuestionAllAnswerDetails,
   QuestionAnswerDetails,
 } from 'types/course/statistics/assessmentStatistics';
 
@@ -42,20 +43,32 @@ export const fetchAncestorStatistics = async (
   return response.data;
 };
 
-export const fetchQuestionAnswerDetails = async (
+export const fetchLatestAnswer = async (
   answerId: number,
-): Promise<QuestionAnswerDetails<keyof typeof QuestionType>> => {
+): Promise<LatestAnswer<keyof typeof QuestionType>> => {
   const response =
-    await CourseAPI.statistics.answer.fetchQuestionAnswerDetails(answerId);
+    await CourseAPI.statistics.answer.fetchLatestAnswer(answerId);
 
   return response.data;
 };
 
-export const fetchAllAnswers = async (
+export const fetchAttempts = async (
+  answerId: number,
+  limit: number,
+): Promise<QuestionAnswerDetails<keyof typeof QuestionType>> => {
+  const response = await CourseAPI.statistics.answer.fetchAttempts(
+    answerId,
+    limit,
+  );
+
+  return response.data;
+};
+
+export const fetchAllAttempts = async (
   submissionQuestionId: number,
-): Promise<QuestionAllAnswerDisplayDetails<keyof typeof QuestionType>> => {
+): Promise<QuestionAllAnswerDetails<keyof typeof QuestionType>> => {
   const response =
-    await CourseAPI.statistics.allAnswer.fetchAllAnswers(submissionQuestionId);
+    await CourseAPI.statistics.allAnswer.fetchAllAttempts(submissionQuestionId);
 
   return response.data;
 };

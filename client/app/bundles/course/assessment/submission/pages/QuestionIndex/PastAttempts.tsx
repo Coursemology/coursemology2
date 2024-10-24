@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { QuestionType } from 'types/course/assessment/question';
-import { QuestionAllAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionAllAnswerDetails } from 'types/course/statistics/assessmentStatistics';
 
-import { fetchAllAnswers } from 'course/assessment/operations/statistics';
+import { fetchAllAttempts } from 'course/assessment/operations/statistics';
 import AllAttemptsDisplay from 'course/assessment/pages/AssessmentStatistics/AnswerDisplay/AllAttemptsDisplay';
 import Comment from 'course/assessment/pages/AssessmentStatistics/AnswerDisplay/Comment';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -19,9 +19,9 @@ const PastAnswers: FC = () => {
   const parsedSubmissionQuestionId = parseInt(submissionQuestionId, 10);
 
   const fetchAnswers = (): Promise<
-    QuestionAllAnswerDisplayDetails<keyof typeof QuestionType>
+    QuestionAllAnswerDetails<keyof typeof QuestionType>
   > => {
-    return fetchAllAnswers(parsedSubmissionQuestionId);
+    return fetchAllAttempts(parsedSubmissionQuestionId);
   };
 
   return (
@@ -31,13 +31,14 @@ const PastAnswers: FC = () => {
           <>
             <AllAttemptsDisplay
               allAnswers={data.allAnswers}
-              question={data.question}
-              questionNumber={data.question.questionNumber!}
+              allQuestions={data.allQuestions}
+              name={data.user.name}
+              questionNumber={data.allQuestions[0].questionNumber!}
               submissionEditUrl={getEditSubmissionQuestionURL(
                 courseId,
                 assessmentId,
                 data.submissionId,
-                data.question.questionNumber,
+                data.allQuestions[0].questionNumber,
               )}
             />
             {data.comments.length > 0 && <Comment comments={data.comments} />}
