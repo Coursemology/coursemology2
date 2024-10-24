@@ -1,0 +1,58 @@
+{
+  "data": [
+    {
+      "id": "507f1f77bcf86cd799439011",
+      "email": "student1@codaveri.com",
+      "validity": {
+        "startAt": "2024-01-01",
+        "endAt": "2024-12-31"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "62e0aaf4d5f5a933d8231459",
+      "email": "student2@codaveri.com",
+      "validity": {
+        "startAt": "2024-01-01",
+        "endAt": "2024-12-31"
+      },
+      "status": "errorDuplicate"
+    },
+    {
+      "id": "73b4fb16e7c64592d77fa2c1",
+      "email": "student3@codaveri.com",
+      "validity": {
+        "startAt": "2024-01-01",
+        "endAt": "2024-12-31"
+      },
+      "status": "errorOther"
+    },
+    {
+      "id": "4cf8a972ad9b4e74b31567d8",
+      "email": "student4@codaveri.com",
+      "validity": {
+        "startAt": "2024-01-01",
+        "endAt": "2024-12-31"
+      },
+      "status": "errorOther"
+    },
+    {
+      "id": "91fd53c2ba234568b81e9d34",
+      "email": "student5@codaveri.com",
+      "validity": {
+        "startAt": "2024-01-01",
+        "endAt": "2024-12-31"
+      },
+      "status": "pending"
+    },
+    {
+      "id": "a58d87b4c61446a1af0c928b",
+      "email": "student6@codaveri.com",
+      "validity": {
+        "startAt": "2024-01-01",
+        "endAt": "2024-12-31"
+      },
+      "status": "pending"
+    }
+  ]
+}

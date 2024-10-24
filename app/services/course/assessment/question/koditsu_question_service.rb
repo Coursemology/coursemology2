@@ -78,11 +78,65 @@ class Course::Assessment::Question::KoditsuQuestionService
         templates: [{
           path: koditsu_programming_language_map[@type][:filename],
           content: @metadata['submission'],
-          prefix: @metadata['prepend'],
-          suffix: koditsu_programming_language_map[@type][:language] == 'cpp' ? '' : @metadata['append']
+          prefix: truncate_google_test_framework_and_clean_comments(@metadata['prepend']),
+          suffix: truncate_google_test_framework_and_clean_comments(@metadata['append'])
         }],
         exprTestcases: @test_cases
       }]
     }
+  end
+
+  def clean_comments_for_cpp(snippet)
+    no_single_line_comments_snippet = snippet.gsub(/\/\/.*$/, '')
+
+    # remove multiple line comments, and return
+    no_single_line_comments_snippet.gsub(/\/\*.*?\*\//m, '')
+  end
+
+  def truncate_google_test_framework_and_clean_comments(snippet)
+    return snippet unless koditsu_programming_language_map[@type][:language] == 'cpp'
+
+    cleaned_snippet_from_comments = clean_comments_for_cpp(snippet)
+    truncate_google_test_framework_for_cpp(cleaned_snippet_from_comments)
+  end
+
+  # The evaluation mechanism for C/C++ question in Coursemology is dependent on the Google
+  # Test framework, and hence user needs to include the code snippet that complies with how
+  # Google Test framework should be used, either in prepend or append. However, Koditsu
+  # does not use it, and the inclusion of that mentioned code snippet will result in the
+  # runtime error inside Koditsu evaluator. Hence, we should strip the code snippet that
+  # corresponds to Google Test framework before sending our data to Koditsu.
+  def truncate_google_test_framework_for_cpp(snippet)
+    start_pattern = /class\s+GlobalEnv\s*:\s*public\s+testing::Environment\s*{/
+
+    if snippet =~ start_pattern
+      start_index = snippet.index(start_pattern)
+      current_index = start_index + snippet.match(start_pattern)[0].length
+
+      current_index = find_truncation_point(snippet, current_index)
+
+      snippet[0...start_index] + snippet[current_index..]
+    else
+      snippet
+    end
+  end
+
+  def find_truncation_point(snippet, current_index)
+    open_braces = 1
+
+    while current_index < snippet.length && open_braces > 0
+      char = snippet[current_index]
+      open_braces = update_brace_count(char, open_braces)
+
+      current_index += 1
+    end
+
+    current_index + 1
+  end
+
+  def update_brace_count(char, open_braces)
+    open_braces += 1 if char == '{'
+    open_braces -= 1 if char == '}'
+    open_braces
   end
 end

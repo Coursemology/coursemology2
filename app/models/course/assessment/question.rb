@@ -120,5 +120,13 @@ class Course::Assessment::Question < ApplicationRecord
     self.description = other.description
     self.staff_only_comments = other.staff_only_comments
     self.maximum_grade = other.maximum_grade
+
+    # we do creation of Koditsu question on-demand, which means that the association
+    # between "other" and its Koditsu question is not carried over by duplication
+    # once the duplication succeeds, then Koditsu question will be created for the
+    # duplication only if it's necessary, i.e. if the assessment related to it is
+    # a Koditsu assessment
+    self.koditsu_question_id = nil
+    self.is_synced_with_koditsu = false
   end
 end

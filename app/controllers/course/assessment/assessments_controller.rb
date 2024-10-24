@@ -140,15 +140,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
     return head(:bad_request) unless [201, 207].include?(status)
 
-    render_koditsu_invitation_response(response)
-  end
-
-  def render_koditsu_invitation_response(invitation_response)
-    failure_count = invitation_response.filter do |invitation|
-      invitation['status'] == 'errorOther'
-    end.length
-
-    if failure_count == 0
+    if all_invitation_successful?(response)
       head :ok
     else
       head :bad_request

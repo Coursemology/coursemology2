@@ -1,0 +1,49 @@
+{
+  "data": {
+    "version": "1.0",
+    "title": "Sample Question Title",
+    "description": "This is a sample question description.",
+    "resources": [
+      {
+        "languageVersions": {
+          "language": "python",
+          "versions": ["3.10"]
+        },
+        "solutions": [],
+        "templates": [
+          {
+            "path": "template.py",
+            "content": "// Please write your code here",
+            "prefix": "// This is a prefix",
+            "suffix": "// This is a suffix"
+          }
+        ],
+        "exprTestcases": [
+          {
+            "index": 1,
+            "timeout": 5000,
+            "hint": "Consider edge cases for input values",
+            "prefix": "int result = fun1(10);",
+            "lhsExpression": "fun2(result)",
+            "rhsExpression": "100",
+            "display": "result"
+          }
+        ]
+      }
+    ],
+    "ioTestCases": [
+      {
+        "index": 1,
+        "timeout": 3000,
+        "hint": "Consider edge cases for input values",
+        "input": "input_data",
+        "output": "expected_output_data"
+      }
+    ],
+    "difficulty": "medium",
+    "tags": ["algorithm", "data structures"],
+    "id": "66f64c9635e701137783434c",
+    "orgId": "507f191e810c19729de860ea",
+    "workspaceId": "66fd754a3486c7994c809e16"
+  }
+}
