@@ -10,7 +10,7 @@ class Course::Assessment::InviteToKoditsuJob < ApplicationJob
     assessment = Course::Assessment.find_by(id: assessment_id)
 
     is_koditsu = assessment.is_koditsu_enabled && assessment.koditsu_assessment_id
-    return unless is_koditsu && assessment.updated_at == updated_at
+    return unless is_koditsu && Time.zone.at(assessment.updated_at) == Time.zone.at(updated_at)
 
     instance = Course.unscoped { assessment.course.instance }
 
