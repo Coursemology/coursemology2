@@ -121,6 +121,8 @@ class Course < ApplicationRecord
   delegate :mass_update_levels, to: :levels
   delegate :source, :source=, to: :duplication_traceable, allow_nil: true
 
+  before_destroy :hard_delete_course_users
+
   def self.use_relative_model_naming?
     true
   end
@@ -303,5 +305,9 @@ class Course < ApplicationRecord
     return if num_defaults <= 1 # Could be 0 if item is new
 
     errors.add(:reference_timelines, :must_have_at_most_one_default)
+  end
+
+  def hard_delete_course_users
+    course_users.with_deleted.each(&:really_destroy!)
   end
 end
