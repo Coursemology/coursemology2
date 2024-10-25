@@ -43,15 +43,19 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
 
   const [syncStatus, setSyncStatus] = useState<
     keyof typeof KODITSU_SYNC_STATUS
-  >(assessment.isSyncedWithKoditsu ? 'Synced' : 'Syncing');
+  >(
+    assessment.isSyncedWithKoditsu
+      ? KODITSU_SYNC_STATUS.Synced
+      : KODITSU_SYNC_STATUS.Syncing,
+  );
 
   useEffect(() => {
     if (isKoditsuIndicatorShown && syncStatus === KODITSU_SYNC_STATUS.Syncing) {
       syncWithKoditsu(assessment.id)
-        .then(() => setSyncStatus('Synced'))
-        .catch(() => setSyncStatus('Failed'));
+        .then(() => setSyncStatus(KODITSU_SYNC_STATUS.Synced))
+        .catch(() => setSyncStatus(KODITSU_SYNC_STATUS.Failed));
     }
-  }, []);
+  }, [syncStatus]);
 
   return (
     <Page
@@ -212,7 +216,11 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
           )}
 
           {assessment.questions.length > 0 && (
-            <QuestionsManager in={assessment.id} of={assessment.questions} />
+            <QuestionsManager
+              in={assessment.id}
+              of={assessment.questions}
+              setSyncStatus={setSyncStatus}
+            />
           )}
         </Subsection>
       )}
