@@ -226,6 +226,13 @@ class Course::Assessment < ApplicationRecord
     initialize_duplicate_conditions(duplicator, other)
     self.monitor = duplicator.duplicate(other.monitor)
 
+    # we do creation of Koditsu assessment on-demand, which means that the association
+    # between "other" and its Koditsu assessment is not carried over by duplication
+    # once the duplication succeeds, then Koditsu assessment will be created for the
+    # duplication only if it's necessary
+    self.koditsu_assessment_id = nil
+    self.is_synced_with_koditsu = false
+
     set_duplication_flag
   end
 
