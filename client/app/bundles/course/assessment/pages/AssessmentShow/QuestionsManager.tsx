@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Paper } from '@mui/material';
 import { produce } from 'immer';
 import { AssessmentData } from 'types/course/assessment/assessments';
 import { QuestionData } from 'types/course/assessment/questions';
 
+import { KODITSU_SYNC_STATUS } from 'lib/constants/sharedConstants';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -16,6 +17,7 @@ import Question from './Question';
 interface QuestionsManagerProps {
   in: AssessmentData['id'];
   of: QuestionData[];
+  setSyncStatus: Dispatch<SetStateAction<keyof typeof KODITSU_SYNC_STATUS>>;
 }
 
 const QuestionsManager = (props: QuestionsManagerProps): JSX.Element => {
@@ -36,6 +38,7 @@ const QuestionsManager = (props: QuestionsManagerProps): JSX.Element => {
         success: t(translations.questionMoved),
         error: t(translations.errorMovingQuestion),
       })
+      .then(() => props.setSyncStatus(KODITSU_SYNC_STATUS.Syncing))
       .catch(onError)
       .finally(() => {
         setSubmitting(false);
@@ -68,12 +71,14 @@ const QuestionsManager = (props: QuestionsManagerProps): JSX.Element => {
     moveItemAndUpdate(sourceIndex, destinationIndex);
   };
 
-  const removeQuestion = (index: number) => () =>
+  const removeQuestion = (index: number) => () => {
     setQuestions((currentQuestions) =>
       produce(currentQuestions, (draft) => {
         draft.splice(index, 1);
       }),
     );
+    props.setSyncStatus(KODITSU_SYNC_STATUS.Syncing);
+  };
 
   const updateQuestion = (index: number) => (newQuestion: QuestionData) =>
     setQuestions((currentQuestions) =>
