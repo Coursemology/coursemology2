@@ -43,6 +43,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       begin
         new_course = duplicator.duplicate(source_course)
         new_course.instance_id = destination_instance_id if destination_instance_id
+        new_course.koditsu_workspace_id = nil
         new_course.save!
 
         duplicator.set_option(:destination_course, new_course)
