@@ -44,8 +44,6 @@ const NonStudentStatusBadges = (
         </Tooltip>
       )}
 
-      {assessment.isKoditsuAssessmentEnabled && <KoditsuChip />}
-
       {assessment.autograded && (
         <Tooltip disableInteractive title={t(translations.autograded)}>
           <CheckCircle className="text-3xl text-neutral-500 hover?:text-neutral-600" />
@@ -85,6 +83,8 @@ const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
       )}
 
       {!isStudent && <NonStudentStatusBadges for={assessment} />}
+
+      {assessment.isKoditsuAssessmentEnabled && <KoditsuChip />}
 
       <PersonalTimeBooleanIcons
         affectsPersonalTimes={assessment.affectsPersonalTimes}
