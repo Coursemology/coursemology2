@@ -180,7 +180,7 @@ const translations = defineMessages({
   },
   syncingWithKoditsu: {
     id: 'course.assessment.show.syncingWithKoditsu',
-    defaultMessage: 'Syncing',
+    defaultMessage: 'Syncing with Koditsu',
   },
   syncedWithKoditsu: {
     id: 'course.assessment.show.syncedWithKoditsu',
@@ -188,7 +188,7 @@ const translations = defineMessages({
   },
   failedSyncingWithKoditsu: {
     id: 'course.assessment.show.failedSyncingWithKoditsu',
-    defaultMessage: 'Sync Failed',
+    defaultMessage: 'Not Synced with Koditsu',
   },
   koditsuMode: {
     id: 'course.assessment.show.koditsuMode',

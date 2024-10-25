@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Admin::ComponentSettingsController < Course::Admin::Controller
+  include Course::KoditsuWorkspaceConcern
   before_action :load_settings
 
   def edit
@@ -22,14 +23,6 @@ class Course::Admin::ComponentSettingsController < Course::Admin::Controller
   end
 
   private
-
-  def setup_koditsu_workspace
-    workspace_service = Course::KoditsuWorkspaceService.new(current_course)
-    response = workspace_service.run_create_koditsu_workspace_service
-
-    workspace_id = response['id']
-    current_course.update!(koditsu_workspace_id: workspace_id)
-  end
 
   def settings_components_params
     params.require(:settings_components)

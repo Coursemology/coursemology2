@@ -60,6 +60,8 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
 
   def destroy
     if @scribing_question.destroy
+      super
+
       head :ok
     else
       error = @scribing_question.errors.full_messages.to_sentence

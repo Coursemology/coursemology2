@@ -35,15 +35,7 @@ module Course::Assessment::KoditsuAssessmentConcern
             { status: get_question_status, body: questions }
     end
 
-    existing_questions_hash = @assessment.questions.
-                              select(&:koditsu_question_id).
-                              to_h { |question| [question.koditsu_question_id, true] }
-
-    new_questions = questions.filter do |question|
-      existing_questions_hash[question['id']]
-    end
-
-    status = edit_koditsu_assessment(@assessment, new_questions, current_course, monitoring_configuration)
+    status = edit_koditsu_assessment(@assessment, questions, current_course, monitoring_configuration)
 
     @assessment.update!(is_synced_with_koditsu: status == 200)
   end
@@ -54,6 +46,10 @@ module Course::Assessment::KoditsuAssessmentConcern
     else
       create_assessment_in_koditsu
     end
+  end
+
+  def flag_assessment_not_synced_with_koditsu
+    @assessment.update!(is_synced_with_koditsu: false)
   end
 
   def remove_question_from_assessment_in_koditsu(question_id)

@@ -40,6 +40,8 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   def destroy
     if @multiple_response_question.destroy
+      super
+
       head :ok
     else
       error = @multiple_response_question.errors.full_messages.to_sentence

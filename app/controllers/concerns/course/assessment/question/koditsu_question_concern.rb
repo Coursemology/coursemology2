@@ -4,11 +4,6 @@ module Course::Assessment::Question::KoditsuQuestionConcern
   extend ActiveSupport::Concern
   include Course::Assessment::KoditsuAssessmentConcern
 
-  def create_question_in_koditsu
-    status = create_koditsu_question
-    associate_koditsu_question_with_koditsu_assessment if status == 201
-  end
-
   def create_koditsu_question
     workspace_id = current_course.koditsu_workspace_id
     service = Course::Assessment::Question::KoditsuQuestionService.
@@ -31,27 +26,21 @@ module Course::Assessment::Question::KoditsuQuestionConcern
     else
       @question.update!(is_synced_with_koditsu: false)
     end
-
-    status
   end
 
-  def associate_koditsu_question_with_koditsu_assessment
-    assessment_id = @assessment.koditsu_assessment_id
-    get_status, questions = questions_in_koditsu(assessment_id)
+  def arrange_questions_in_assessment_in_koditsu
+    @assessment.reload && @assessment.questions.reload
 
-    if get_status != 200
-      @assessment.update!(is_synced_with_koditsu: false)
-      return
+    koditsu_questions = @assessment.questions.map do |question|
+      {
+        id: question.koditsu_question_id,
+        type: 'QuestionCoding',
+        score: question.maximum_grade.to_i,
+        maxAttempts: question.specific.attempt_limit&.to_i
+      }
     end
 
-    new_questions = questions << {
-      id: @question.koditsu_question_id,
-      type: 'QuestionCoding',
-      score: @question.maximum_grade.to_i,
-      maxAttempts: @programming_question.attempt_limit&.to_i
-    }
-
-    status = edit_koditsu_assessment(@assessment, new_questions, current_course, monitoring_configuration)
+    status = edit_koditsu_assessment(@assessment, koditsu_questions, current_course, monitoring_configuration)
 
     return unless status == 200 && @assessment.questions.reload.all?(&:is_synced_with_koditsu)
 
@@ -81,7 +70,7 @@ module Course::Assessment::Question::KoditsuQuestionConcern
     if @programming_question.acting_as.koditsu_question_id
       edit_koditsu_question
     else
-      create_question_in_koditsu
+      create_koditsu_question
     end
   end
 
