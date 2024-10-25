@@ -31,6 +31,8 @@ class Course::Assessment::Question::ForumPostResponsesController < Course::Asses
 
   def destroy
     if @forum_post_response_question.destroy
+      super
+
       head :ok
     else
       error = @forum_post_response_question.errors.full_messages.to_sentence

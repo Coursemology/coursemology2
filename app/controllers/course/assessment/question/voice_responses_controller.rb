@@ -33,6 +33,8 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
 
   def destroy
     if @voice_response_question.destroy
+      super
+
       head :ok
     else
       error = @voice_response_question.errors.full_messages.to_sentence

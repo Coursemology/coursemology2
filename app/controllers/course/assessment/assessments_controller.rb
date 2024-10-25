@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller # rubocop:disable Metrics/ClassLength
   include Course::Assessment::AssessmentsHelper
+  include Course::KoditsuWorkspaceConcern
   include Course::Assessment::KoditsuAssessmentConcern
   include Course::Assessment::Question::KoditsuQuestionConcern
   include Course::Assessment::KoditsuAssessmentInvitationConcern
 
   before_action :load_submissions, only: [:show]
-  after_action :create_koditsu_invitation_job, only: [:create, :update]
-  after_action :create_fetch_koditsu_submissions_job, only: [:create, :update]
+  after_action :create_koditsu_invitation_job, only: [:update]
+  after_action :create_fetch_koditsu_submissions_job, only: [:update]
 
   include Course::Assessment::MonitoringConcern
 
@@ -56,13 +57,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     # Randomized Assessment is temporarily hidden (PR#5406)
     # @assessment.update_randomization(randomization_params)
 
-    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
-
     ActiveRecord::Base.transaction do
       @assessment.save!
       upsert_monitoring! if can_manage_monitor?
 
-      create_assessment_in_koditsu if is_course_koditsu_enabled && @assessment.is_koditsu_enabled
+      flag_assessment_not_synced_with_koditsu
 
       render json: { id: @assessment.id }
     end
@@ -85,13 +84,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     # Randomized Assessment is temporarily hidden (PR#5406)
     # @assessment.update_randomization(randomization_params)
 
-    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
-
     ActiveRecord::Base.transaction do
       @assessment.update!(assessment_params)
       upsert_monitoring! if can_manage_monitor?
 
-      sync_assessment_and_question_in_koditsu if is_course_koditsu_enabled && @assessment.is_koditsu_enabled
+      flag_assessment_not_synced_with_koditsu
 
       head :ok
     end
@@ -117,15 +114,36 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
     return head(:bad_request) unless is_koditsu_enabled
 
-    create_or_update_assessment_in_koditsu
+    setup_koditsu_workspace unless current_course.koditsu_workspace_id
 
-    @assessment.questions.each do |question|
-      next if question.is_synced_with_koditsu
+    is_new_assessment = !@assessment.koditsu_assessment_id
 
-      @question = question
-      @programming_question = question.specific
+    success = @assessment.class.transaction do
+      create_or_update_assessment_in_koditsu
 
-      create_or_edit_question_in_koditsu
+      if is_new_assessment
+        create_koditsu_invitation_job
+        create_fetch_koditsu_submissions_job
+      end
+
+      @assessment.questions.each do |question|
+        next if question.is_synced_with_koditsu
+
+        @question = question
+        @programming_question = question.specific
+
+        create_or_edit_question_in_koditsu
+      end
+
+      arrange_questions_in_assessment_in_koditsu
+
+      true
+    end
+
+    if success
+      head :ok
+    else
+      head :bad_request
     end
   end
 

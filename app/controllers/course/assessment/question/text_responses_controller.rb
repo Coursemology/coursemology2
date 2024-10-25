@@ -46,6 +46,8 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
 
   def destroy
     if @text_response_question.destroy
+      super
+
       head :ok
     else
       error = @text_response_question.errors.full_messages.to_sentence

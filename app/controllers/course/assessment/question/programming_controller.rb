@@ -21,12 +21,8 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     @programming_question.package_type = programming_question_params.key?(:file) ? :zip_upload : :online_editor
     process_package
 
-    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
-
     if @programming_question.save
       load_question_assessment
-
-      create_question_in_koditsu if is_course_koditsu_enabled && @assessment.is_koditsu_enabled
 
       render_success_json true
     else
@@ -52,13 +48,6 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
       process_package
 
       raise ActiveRecord::Rollback unless @programming_question.save
-
-      @question = @programming_question.acting_as
-      @question.update!(is_synced_with_koditsu: false)
-
-      is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
-
-      edit_koditsu_question if is_course_koditsu_enabled && @assessment.is_koditsu_enabled
 
       true
     end
@@ -120,24 +109,9 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   end
 
   def destroy
-    koditsu_question_id = @programming_question.acting_as.koditsu_question_id
+    if @programming_question.destroy
+      super
 
-    success = @programming_question.class.transaction do
-      raise ActiveRecord::Rollback unless @programming_question.destroy
-
-      is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
-
-      if is_course_koditsu_enabled && @assessment.is_koditsu_enabled
-        @assessment.update!(is_synced_with_koditsu: false)
-        remove_question_from_assessment_in_koditsu(koditsu_question_id)
-
-        delete_koditsu_question(koditsu_question_id)
-      end
-
-      true
-    end
-
-    if success
       head :ok
     else
       error = @programming_question.errors.full_messages.to_sentence
