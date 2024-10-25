@@ -7,17 +7,26 @@ const getFolderTitle = async (
   courseUrl: string,
   folderId: number,
 ): Promise<CrumbPath> => {
-  const { data } = await CourseAPI.folders.fetch(folderId);
+  try {
+    const { data } = await CourseAPI.folders.fetch(folderId);
+    const workbinUrl = `${courseUrl}/materials/folders/${data.breadcrumbs[0].id}`;
 
-  const workbinUrl = `${courseUrl}/materials/folders/${data.breadcrumbs[0].id}`;
-
-  return {
-    activePath: workbinUrl,
-    content: data.breadcrumbs.map((crumb) => ({
-      title: crumb.name,
-      url: `materials/folders/${crumb.id}`,
-    })),
-  };
+    return {
+      activePath: workbinUrl,
+      content: data.breadcrumbs.map((crumb) => ({
+        title: crumb.name,
+        url: `materials/folders/${crumb.id}`,
+      })),
+    };
+  } catch (error) {
+    return {
+      activePath: courseUrl,
+      content: {
+        title: 'Materials',
+        url: courseUrl,
+      },
+    };
+  }
 };
 
 /**
@@ -34,11 +43,23 @@ const getFolderTitle = async (
 export const folderHandle: DataHandle = (match) => {
   const folderId = getIdFromUnknown(match.params?.folderId);
   if (!folderId) throw new Error(`Invalid folder id: ${folderId}`);
-
   const courseUrl = `/courses/${match.params.courseId}`;
 
   return {
     shouldRevalidate: true,
     getData: () => getFolderTitle(courseUrl, folderId),
   };
+};
+
+const extractMaterialPath = (
+  sidebar: { key: string; path: string }[],
+): string | undefined => sidebar.find((item) => item.key === 'materials')?.path;
+
+export const loadDefaultMaterial = async (
+  courseId: number,
+): Promise<string | null> => {
+  const {
+    data: { sidebar },
+  } = await CourseAPI.courses.fetchLayout(courseId);
+  return sidebar ? extractMaterialPath(sidebar) || null : null;
 };

@@ -3,15 +3,15 @@ import { Typography } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 
-interface BaseDownloadFilePageProps {
+interface BaseRetrieveMaterialPageProps {
   illustration: ReactNode;
   title: string;
   description: string;
   children?: ReactNode;
 }
 
-const BaseDownloadFilePage = (
-  props: BaseDownloadFilePageProps,
+const BaseRetrieveMaterialPage = (
+  props: BaseRetrieveMaterialPageProps,
 ): JSX.Element => (
   <Page className="h-full m-auto flex flex-col items-center justify-center text-center">
     {props.illustration}
@@ -32,4 +32,4 @@ const BaseDownloadFilePage = (
   </Page>
 );
 
-export default BaseDownloadFilePage;
+export default BaseRetrieveMaterialPage;
