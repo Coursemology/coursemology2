@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
-  after_action :create_codaveri_problem, only: [:update_evaluator, :update_live_feedback_enabled]
+  after_action :create_or_update_codaveri_problem, only: [:update_evaluator, :update_live_feedback_enabled]
 
   def edit
     load_course_assessments_data
@@ -65,9 +65,9 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
     @assessments_with_programming_qns = current_course.assessments.includes(:tab, programming_questions: [:language])
   end
 
-  def create_codaveri_problem
-    # Since update_all bypasses all rails callbacks, we invoke create_codaveri_problem here
-    # to ensure codaveri problem is created
-    @programming_questions.each(&:create_codaveri_problem)
+  def create_or_update_codaveri_problem
+    # Since update_all bypasses all rails callbacks, we invoke create_or_update_codaveri_problem
+    # here to ensure codaveri problem is created
+    @programming_questions.each(&:create_or_update_codaveri_problem)
   end
 end
