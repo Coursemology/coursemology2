@@ -72,7 +72,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def load_course_user_students_info
-    @all_students = current_course.course_users.students
+    @all_students = current_course.course_users.students.includes(user: :emails)
     @group_names_hash = group_names_hash
   end
 

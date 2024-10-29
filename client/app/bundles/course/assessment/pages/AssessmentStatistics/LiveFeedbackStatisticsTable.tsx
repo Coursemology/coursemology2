@@ -166,6 +166,17 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       csvDownloadable: true,
     },
     {
+      searchProps: {
+        getValue: (datum) => datum.courseUser.email,
+      },
+      title: t(translations.email),
+      hidden: true,
+      cell: (datum) => (
+        <div className="flex grow items-center">{datum.courseUser.email}</div>
+      ),
+      csvDownloadable: true,
+    },
+    {
       of: 'groups',
       title: t(translations.group),
       sortable: true,

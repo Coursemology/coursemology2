@@ -30,6 +30,7 @@ interface UserInfo {
 export interface StudentInfo extends UserInfo {
   isPhantom: boolean;
   role: 'student';
+  email?: string;
 }
 
 export interface AnswerInfo {
