@@ -45,6 +45,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
                                        try(:[], :skill_ids)
       @programming_question.assign_attributes(programming_question_params.
                                               except(:question_assessment))
+      @programming_question.is_synced_with_codaveri = false
       process_package
 
       raise ActiveRecord::Rollback unless @programming_question.save
