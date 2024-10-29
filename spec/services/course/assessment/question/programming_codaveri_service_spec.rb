@@ -9,7 +9,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
     let(:assessment) { create(:assessment, :with_programming_question, course: course) }
     let(:question) do
       create(:course_assessment_question_programming, template_file_count: 0, package_type: :zip_upload,
-                                                      assessment: assessment, is_codaveri: true)
+                                                      assessment: assessment, is_codaveri: false,
+                                                      is_synced_with_codaveri: false)
     end
     let(:package_path) do
       File.join(Rails.root, 'spec/fixtures/course/programming_question_template_codaveri.zip')
@@ -31,7 +32,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
     end
     subject { Course::Assessment::Question::ProgrammingCodaveriService.new(question, attachment) }
 
-    describe '.create_or_update_question' do
+    describe '.create_question' do
       subject { Course::Assessment::Question::ProgrammingCodaveriService }
 
       context 'when the API request is successful' do

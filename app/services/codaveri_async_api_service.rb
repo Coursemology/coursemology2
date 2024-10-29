@@ -23,6 +23,18 @@ class CodaveriAsyncApiService
     parse_response(response)
   end
 
+  def put
+    connection = Excon.new(@api_endpoint)
+    response = connection.put(
+      headers: {
+        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
+        'Content-Type' => 'application/json'
+      },
+      body: @payload.to_json
+    )
+    parse_response(response)
+  end
+
   def get
     connection = Excon.new(@api_endpoint)
     response = connection.get(
