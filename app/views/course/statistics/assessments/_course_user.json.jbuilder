@@ -4,4 +4,5 @@ json.courseUser do
   json.name course_user.name
   json.role course_user.role
   json.isPhantom course_user.phantom?
+  json.email course_user.user.email
 end

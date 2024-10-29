@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   Cell,
+  ColumnDef,
   ColumnFiltersState,
   getCoreRowModel,
   getFacetedUniqueValues,
@@ -11,7 +12,7 @@ import {
   Row,
   useReactTable,
 } from '@tanstack/react-table';
-import { isEmpty } from 'lodash';
+import { isEmpty, isString } from 'lodash';
 
 import { RowEqualityData, TableProps } from '../adapters';
 import { TableTemplate } from '../builder';
@@ -70,6 +71,9 @@ const useTanStackTableBuilder = <D extends object>(
       columnFilters,
       globalFilter: searchKeyword.trim(),
       pagination,
+      columnVisibility: Object.fromEntries(
+        props.columns.map((column) => [column.title, !column.hidden]),
+      ),
     },
     initialState: {
       sorting: props.sort?.initially && [
@@ -82,8 +86,19 @@ const useTanStackTableBuilder = <D extends object>(
   });
 
   const generateAndDownloadCsv = async (): Promise<void> => {
+    const headers = table.options.columns.reduce<string[]>(
+      (acc, column, index) => {
+        const header = column.header || column.id;
+        if (header && (getRealColumn(index)?.csvDownloadable ?? false)) {
+          acc.push(header as string);
+        }
+        return acc;
+      },
+      [],
+    );
+
     const csvData = await generateCsv({
-      headers: () => table.getHeaderGroups()[0]?.headers,
+      headers,
       rows: () => table.getCoreRowModel().rows,
       getRealColumn,
     });

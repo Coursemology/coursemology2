@@ -65,6 +65,10 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.name',
     defaultMessage: 'Name',
   },
+  email: {
+    id: 'course.assessment.statistics.email',
+    defaultMessage: 'Email',
+  },
   nameGroupsGraderSearchText: {
     id: 'course.assessment.statistics.nameGroupsGraderSearchText',
     defaultMessage: 'Search by Student Name, Group or Grader Name',
