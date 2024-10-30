@@ -17,6 +17,25 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
 
     before { controller_sign_in(controller, user) }
 
+    describe '#load_default' do
+      context 'when a folder is found' do
+        it 'renders the folder as JSON with status :ok' do
+          get :load_default, params: { course_id: course.id }
+          expect(response).to have_http_status(:ok)
+          expect(response.body).not_to be_empty
+        end
+      end
+
+      context 'when no folders are available' do
+        before { Course::Material::Folder.where(course_id: course.id).destroy_all }
+
+        it 'renders an error message with status :not_found' do
+          get :load_default, params: { course_id: course.id }
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
     describe '#show' do
       let(:material) { create(:material, folder: folder) }
       subject { get :show, params: { course_id: course, folder_id: folder, id: material } }

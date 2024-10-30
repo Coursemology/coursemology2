@@ -10,7 +10,7 @@ import Link from 'lib/components/core/Link';
 import useEffectOnce from 'lib/hooks/useEffectOnce';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import BaseDownloadFilePage from './components/BaseDownloadFilePage';
+import BaseRetrieveMaterialPage from '../component/BaseRetrieveMaterialPage';
 
 const DEFAULT_FILE_NAME = 'file';
 
@@ -51,7 +51,7 @@ const SuccessDownloadingFilePage = (
   const { t } = useTranslation();
 
   return (
-    <BaseDownloadFilePage
+    <BaseRetrieveMaterialPage
       description={t(translations.downloadingDescription)}
       illustration={
         <DownloadingOutlined className="text-[6rem]" color="success" />
@@ -61,7 +61,7 @@ const SuccessDownloadingFilePage = (
       <Link className="mt-10" href={props.url}>
         {t(translations.tryDownloadingAgain)}
       </Link>
-    </BaseDownloadFilePage>
+    </BaseRetrieveMaterialPage>
   );
 };
 
@@ -71,7 +71,7 @@ const ErrorStartingDownloadFilePage = (
   const { t } = useTranslation();
 
   return (
-    <BaseDownloadFilePage
+    <BaseRetrieveMaterialPage
       description={t(translations.clickToDownloadFileDescription)}
       illustration={
         <div className="relative">
@@ -93,7 +93,7 @@ const ErrorStartingDownloadFilePage = (
       >
         {props.name}
       </Button>
-    </BaseDownloadFilePage>
+    </BaseRetrieveMaterialPage>
   );
 };
 

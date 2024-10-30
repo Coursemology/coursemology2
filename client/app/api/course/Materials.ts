@@ -3,6 +3,8 @@ import { FileListData } from 'types/course/material/files';
 
 import { APIResponse } from 'api/types';
 
+import { FolderMiniEntity } from '../../types/course/material/folders';
+
 import BaseCourseAPI from './Base';
 
 const getShouldDownloadFromContentDisposition = (
@@ -15,14 +17,22 @@ const getShouldDownloadFromContentDisposition = (
 };
 
 export default class MaterialsAPI extends BaseCourseAPI {
+  get #materialPrefix(): string {
+    return `/courses/${this.courseId}/materials`;
+  }
+
   get #urlPrefix(): string {
-    return `/courses/${this.courseId}/materials/folders`;
+    return `${this.#materialPrefix}/folders`;
   }
 
   fetch(folderId: number, materialId: number): APIResponse<FileListData> {
     return this.client.get(
       `${this.#urlPrefix}/${folderId}/files/${materialId}`,
     );
+  }
+
+  fetchDefault(): APIResponse<FolderMiniEntity> {
+    return this.client.get(`${this.#materialPrefix}/load_default`);
   }
 
   /**

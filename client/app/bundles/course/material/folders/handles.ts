@@ -3,11 +3,25 @@ import { getIdFromUnknown } from 'utilities';
 import CourseAPI from 'api/course';
 import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
 
+export const loadDefaultMaterialId = async (): Promise<number> => {
+  const {
+    data: { id },
+  } = await CourseAPI.materials.fetchDefault();
+  return id;
+};
+
 const getFolderTitle = async (
-  courseUrl: string,
+  courseId: string,
   folderId: number,
 ): Promise<CrumbPath> => {
-  const { data } = await CourseAPI.folders.fetch(folderId);
+  const courseUrl = `/courses/${courseId}`;
+  let data;
+  try {
+    ({ data } = await CourseAPI.folders.fetch(folderId));
+  } catch (error) {
+    const defaultMaterialId = await loadDefaultMaterialId();
+    ({ data } = await CourseAPI.folders.fetch(defaultMaterialId));
+  }
 
   const workbinUrl = `${courseUrl}/materials/folders/${data.breadcrumbs[0].id}`;
 
@@ -32,13 +46,13 @@ const getFolderTitle = async (
  * e.g., `useDynamicNest` cannot know if we move out from Folder 2 to Folder 1 from the URL.
  */
 export const folderHandle: DataHandle = (match) => {
+  const courseId = match.params?.courseId;
   const folderId = getIdFromUnknown(match.params?.folderId);
+  if (!courseId) throw new Error(`Invalid course id: ${courseId}`);
   if (!folderId) throw new Error(`Invalid folder id: ${folderId}`);
-
-  const courseUrl = `/courses/${match.params.courseId}`;
 
   return {
     shouldRevalidate: true,
-    getData: () => getFolderTitle(courseUrl, folderId),
+    getData: () => getFolderTitle(courseId, folderId),
   };
 };

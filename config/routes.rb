@@ -410,6 +410,7 @@ Rails.application.routes.draw do
       end
 
       namespace :material, path: 'materials' do
+        get 'load_default', to: 'materials#load_default'
         resources :folders, except: [:index, :new, :create] do
           post 'create/subfolder', on: :member, as: 'create_subfolder', action: 'create_subfolder'
           put 'upload_materials', on: :member

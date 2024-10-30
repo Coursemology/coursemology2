@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 class Course::Material::MaterialsController < Course::Material::Controller
-  load_and_authorize_resource :material, through: :folder, class: 'Course::Material'
+  load_and_authorize_resource :material, through: :folder, class: 'Course::Material', except: :load_default
+
+  def load_default
+    @folder = Course::Material::Folder.where(course_id: current_course.id, parent_id: nil).order(:created_at).first
+    if @folder
+      render json: @folder, status: :ok
+    else
+      render json: { error: 'No folders available' }, status: :not_found
+    end
+  end
 
   def show
     authorize!(:read_owner, @material.folder)

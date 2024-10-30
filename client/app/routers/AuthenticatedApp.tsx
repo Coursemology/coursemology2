@@ -67,6 +67,7 @@ import LessonPlanShow from 'bundles/course/lesson-plan/pages/LessonPlanShow';
 import LevelsIndex from 'bundles/course/level/pages/LevelsIndex';
 import DownloadingFilePage from 'bundles/course/material/files/DownloadingFilePage';
 import ErrorRetrievingFilePage from 'bundles/course/material/files/ErrorRetrievingFilePage';
+import ErrorRetrievingFolderPage from 'bundles/course/material/folders/pages/ErrorRetrievingFolderPage';
 import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import ResponseEdit from 'bundles/course/survey/pages/ResponseEdit';
@@ -127,6 +128,7 @@ import {
   forumTopicHandle,
 } from 'course/forum/handles';
 import { leaderboardHandle } from 'course/leaderboard/handles';
+import folderLoader from 'course/material/folderLoader';
 import { folderHandle } from 'course/material/folders/handles';
 import materialLoader from 'course/material/materialLoader';
 import { videoWatchHistoryHandle } from 'course/statistics/handles';
@@ -221,7 +223,9 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
               children: [
                 {
                   index: true,
+                  loader: folderLoader,
                   element: <FolderShow />,
+                  errorElement: <ErrorRetrievingFolderPage />,
                 },
                 {
                   path: 'files/:materialId',

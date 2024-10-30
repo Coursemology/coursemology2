@@ -1,6 +1,6 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { useLoaderData, useParams } from 'react-router-dom';
 
 import EditButton from 'lib/components/core/buttons/EditButton';
 import Page from 'lib/components/core/layouts/Page';
@@ -10,12 +10,13 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { FolderData } from '../../../../../../types/course/material/folders';
 import DownloadFolderButton from '../../components/buttons/DownloadFolderButton';
 import NewSubfolderButton from '../../components/buttons/NewSubfolderButton';
 import UploadFilesButton from '../../components/buttons/UploadFilesButton';
 import MaterialUpload from '../../components/misc/MaterialUpload';
 import WorkbinTable from '../../components/tables/WorkbinTable';
-import { loadFolder } from '../../operations';
+import { dispatchFolderData } from '../../operations';
 import {
   getCurrFolderInfo,
   getFolderMaterials,
@@ -48,13 +49,16 @@ const FolderShow: FC = () => {
   const materials = useAppSelector(getFolderMaterials);
   const currFolderInfo = useAppSelector(getCurrFolderInfo);
   const permissions = useAppSelector(getFolderPermissions);
+  const loaderData = useLoaderData() as FolderData;
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    if (folderId) {
-      dispatch(loadFolder(+folderId)).finally(() => setIsLoading(false));
+    if (loaderData) {
+      dispatch(dispatchFolderData(loaderData)).finally(() =>
+        setIsLoading(false),
+      );
     }
-  }, [dispatch, folderId]);
+  }, [dispatch, loaderData]);
 
   if (isLoading) {
     return <LoadingIndicator />;

@@ -5,7 +5,7 @@ import { Cancel, InsertDriveFileOutlined } from '@mui/icons-material';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import BaseDownloadFilePage from './components/BaseDownloadFilePage';
+import BaseRetrieveMaterialPage from '../component/BaseRetrieveMaterialPage';
 
 const translations = defineMessages({
   problemRetrievingFile: {
@@ -30,7 +30,7 @@ const ErrorRetrievingFilePage = (): JSX.Element => {
   const workbinURL = `/courses/${params.courseId}/materials/folders/${params.folderId}`;
 
   return (
-    <BaseDownloadFilePage
+    <BaseRetrieveMaterialPage
       description={t(translations.problemRetrievingFileDescription)}
       illustration={
         <div className="relative">
@@ -47,7 +47,7 @@ const ErrorRetrievingFilePage = (): JSX.Element => {
       <Link className="mt-10" to={workbinURL}>
         {t(translations.goToTheWorkbin)}
       </Link>
-    </BaseDownloadFilePage>
+    </BaseRetrieveMaterialPage>
   );
 };
 

@@ -1,5 +1,6 @@
 import { Operation } from 'store';
 import {
+  FolderData,
   FolderFormData,
   MaterialFormData,
   MaterialUploadFormData,
@@ -62,20 +63,20 @@ const formatMaterialAttributes = (data: MaterialFormData): FormData => {
   return payload;
 };
 
-export function loadFolder(folderId: number): Operation<SaveFolderAction> {
-  return async (dispatch) =>
-    CourseAPI.folders.fetch(folderId).then((response) => {
-      const data = response.data;
-      return dispatch(
-        actions.saveFolder(
-          data.currFolderInfo,
-          data.subfolders,
-          data.materials,
-          data.advanceStartAt,
-          data.permissions,
-        ),
-      );
-    });
+export function dispatchFolderData(
+  data: FolderData,
+): Operation<SaveFolderAction> {
+  return async (dispatch) => {
+    return dispatch(
+      actions.saveFolder(
+        data.currFolderInfo,
+        data.subfolders,
+        data.materials,
+        data.advanceStartAt,
+        data.permissions,
+      ),
+    );
+  };
 }
 
 export function createFolder(
