@@ -1,6 +1,7 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
+import { getIdFromUnknown } from 'utilities';
 
 import EditButton from 'lib/components/core/buttons/EditButton';
 import Page from 'lib/components/core/layouts/Page';
@@ -51,9 +52,9 @@ const FolderShow: FC = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    if (folderId) {
-      dispatch(loadFolder(+folderId)).finally(() => setIsLoading(false));
-    }
+    dispatch(loadFolder(getIdFromUnknown(folderId))).finally(() =>
+      setIsLoading(false),
+    );
   }, [dispatch, folderId]);
 
   if (isLoading) {

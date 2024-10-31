@@ -12,9 +12,10 @@ export default class FoldersAPI extends BaseCourseAPI {
 
   /**
    * Fetches a folder, along with all its subfolders and materials.
+   * If `folderId` is not provided, fetches the root folder.
    */
-  fetch(folderId: number): APIResponse<FolderData> {
-    return this.client.get(`${this.#urlPrefix}/${folderId}`);
+  fetch(folderId?: number): APIResponse<FolderData> {
+    return this.client.get(`${this.#urlPrefix}/${folderId ?? ''}`);
   }
 
   /**
