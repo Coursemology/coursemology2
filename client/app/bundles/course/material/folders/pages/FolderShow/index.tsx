@@ -23,6 +23,7 @@ import {
   getFolderPermissions,
   getFolderSubfolders,
 } from '../../selectors';
+import ErrorRetrievingFolderPage from '../ErrorRetrievingFolderPage';
 import FolderEdit from '../FolderEdit';
 import FolderNew from '../FolderNew';
 
@@ -51,15 +52,16 @@ const FolderShow: FC = () => {
   const permissions = useAppSelector(getFolderPermissions);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   useEffect(() => {
-    dispatch(loadFolder(getIdFromUnknown(folderId))).finally(() =>
-      setIsLoading(false),
-    );
+    setIsError(false);
+    dispatch(loadFolder(getIdFromUnknown(folderId)))
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false));
   }, [dispatch, folderId]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
+  if (isLoading) return <LoadingIndicator />;
+  if (isError) return <ErrorRetrievingFolderPage />;
 
   const headerToolbars: ReactElement[] = [];
 
