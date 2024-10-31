@@ -217,6 +217,10 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
           // Dynamic Nest API's builder.
           children: [
             {
+              index: true,
+              element: <FolderShow />,
+            },
+            {
               path: ':folderId',
               children: [
                 {

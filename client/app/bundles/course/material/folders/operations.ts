@@ -62,7 +62,7 @@ const formatMaterialAttributes = (data: MaterialFormData): FormData => {
   return payload;
 };
 
-export function loadFolder(folderId: number): Operation<SaveFolderAction> {
+export function loadFolder(folderId?: number): Operation<SaveFolderAction> {
   return async (dispatch) =>
     CourseAPI.folders.fetch(folderId).then((response) => {
       const data = response.data;

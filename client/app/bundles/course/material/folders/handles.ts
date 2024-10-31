@@ -5,20 +5,18 @@ import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
 
 const getFolderTitle = async (
   courseUrl: string,
-  folderId: number,
-): Promise<CrumbPath> => {
-  const { data } = await CourseAPI.folders.fetch(folderId);
-
-  const workbinUrl = `${courseUrl}/materials/folders/${data.breadcrumbs[0].id}`;
-
-  return {
-    activePath: workbinUrl,
-    content: data.breadcrumbs.map((crumb) => ({
-      title: crumb.name,
-      url: `materials/folders/${crumb.id}`,
-    })),
-  };
-};
+  folderId?: number,
+): Promise<CrumbPath> =>
+  CourseAPI.folders
+    .fetch(folderId)
+    .then((response) => response.data.breadcrumbs)
+    .then((breadcrumbs) => ({
+      activePath: `${courseUrl}/materials/folders/${breadcrumbs[0].id}`,
+      content: breadcrumbs.map((crumb) => ({
+        title: crumb.name,
+        url: `materials/folders/${crumb.id}`,
+      })),
+    }));
 
 /**
  * `shouldRevalidate` here relies on the invariant that `folderHandle` is attached to
@@ -33,7 +31,8 @@ const getFolderTitle = async (
  */
 export const folderHandle: DataHandle = (match) => {
   const folderId = getIdFromUnknown(match.params?.folderId);
-  if (!folderId) throw new Error(`Invalid folder id: ${folderId}`);
+  if (match.params?.folderId && !folderId)
+    throw new Error(`Invalid folder id: ${folderId}`);
 
   const courseUrl = `/courses/${match.params.courseId}`;
 
