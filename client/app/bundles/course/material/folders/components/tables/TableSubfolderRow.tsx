@@ -52,9 +52,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
                 whiteSpace: 'normal',
                 wordBreak: 'break-word',
               }}
-              to={`/courses/${getCourseId()}/materials/folders/${
-                subfolder.id
-              }/`}
+              to={`/courses/${getCourseId()}/materials/folders/${subfolder.id}`}
               underline="hover"
             >
               {`${subfolder.name} (${subfolder.itemCount})`}
