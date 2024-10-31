@@ -7,26 +7,65 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
   with_tenant(:instance) do
     let(:user) { create(:administrator) }
     let(:course) { create(:course) }
-    let(:folder_stub) do
-      stub = create(:folder, course: course, parent: create(:folder, course: course))
-      allow(stub).to receive(:destroy).and_return(false)
-      allow(stub).to receive(:update).and_return(false)
-      allow(stub).to receive(:save).and_return(false)
-      stub
-    end
+    let(:folder_stub) { create(:folder, course: course, parent: create(:folder, course: course)) }
+    let(:root_folder) { course.root_folder }
 
     before { controller_sign_in(controller, user) }
+
+    describe '#show' do
+      render_views
+      subject { get :show, as: :json, params: { course_id: course, id: folder_stub } }
+
+      context 'when folder exists' do
+        it 'responds with 200 and folder_stub json' do
+          expect(subject.status).to eq(200)
+          expect(JSON.parse(subject.body)['currFolderInfo']['id']).to eq(folder_stub.id)
+        end
+      end
+
+      context 'when folder does not exist' do
+        run_rescue
+        before do
+          folder_stub.destroy
+        end
+
+        it 'responds with 404 and root folder json' do
+          expect(subject.status).to eq(404)
+          expect(JSON.parse(subject.body)['currFolderInfo']['id']).to eq(root_folder.id)
+        end
+      end
+    end
+
+    describe '#index' do
+      render_views
+      subject { get :index, as: :json, params: { course_id: course } }
+
+      context 'when root folder exists' do
+        it 'responds with 200 and root folder json' do
+          expect(subject.status).to eq(200)
+          expect(JSON.parse(subject.body)['currFolderInfo']['id']).to eq(root_folder.id)
+        end
+      end
+
+      context 'when root folder does not exist' do
+        before { course.root_folder.destroy }
+
+        it 'responds with 404' do
+          expect(subject.status).to eq(404)
+        end
+      end
+    end
 
     describe '#destroy' do
       subject { delete :destroy, params: { course_id: course, id: folder_stub } }
 
       context 'when folder cannot be destroyed' do
         before do
+          allow(folder_stub).to receive(:destroy).and_return(false)
           controller.instance_variable_set(:@folder, folder_stub)
-          subject
         end
         it 'returns an error' do
-          expect(response.status).to eq(400)
+          expect(subject.status).to eq(400)
         end
       end
     end
@@ -42,11 +81,11 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
 
       context 'when files cannot be uploaded' do
         before do
+          allow(folder_stub).to receive(:save).and_return(false)
           controller.instance_variable_set(:@folder, folder_stub)
-          subject
         end
         it 'returns an error' do
-          expect(response.status).to eq(400)
+          expect(subject.status).to eq(400)
         end
       end
     end
