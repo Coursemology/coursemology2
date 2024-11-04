@@ -52,7 +52,7 @@ end
 
 json.breadcrumbs @folder.ancestors.reverse << @folder do |folder|
   json.id folder.id
-  json.name folder.name == 'Root' ? @settings.title || t('course.material.sidebar_title') : folder.name
+  json.name folder.parent_id.nil? ? @settings.title || t('course.material.sidebar_title') : folder.name
 end
 
 json.advanceStartAt current_course.advance_start_at_duration
