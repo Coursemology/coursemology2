@@ -13,6 +13,8 @@ json.languages Coursemology::Polyglot::Language.all.order(weight: :desc).map do 
   json.id language.id
   json.name language.name
   json.disabled !language.enabled
+  json.evaluatorSupported language.evaluator_whitelisted?
+  json.codaveriSupported language.codaveri_whitelisted?
   json.editorMode language.ace_mode
 end
 

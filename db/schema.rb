@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_21_110207) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_28_141424) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -1435,8 +1435,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_21_110207) do
     t.string "type", limit: 255, null: false
     t.string "name", limit: 255, null: false
     t.integer "parent_id"
-    t.serial "weight"
+    t.serial "weight", null: false
     t.boolean "enabled", default: true, null: false
+    t.boolean "evaluator_whitelisted", default: true, null: false
+    t.boolean "codaveri_whitelisted", default: false, null: false
+    t.boolean "koditsu_whitelisted", default: false, null: false
+    t.string "testcase_type", default: "expr", null: false
     t.index "lower((name)::text)", name: "index_polyglot_languages_on_name", unique: true
     t.index ["parent_id"], name: "fk__polyglot_languages_parent_id"
   end

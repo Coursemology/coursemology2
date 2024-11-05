@@ -76,7 +76,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
         where(enabled: true).
         order(weight: :desc).
         filter_map do |language|
-          if CodaveriAsyncApiService.language_valid_for_codaveri?(language)
+          if language.codaveri_whitelisted?
             {
               id: language.id,
               name: language.name,
@@ -91,7 +91,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   def generate # rubocop:disable Metrics/AbcSize
     language = Coursemology::Polyglot::Language.where(id: params[:language_id]).first
 
-    unless CodaveriAsyncApiService.language_valid_for_codaveri?(language)
+    unless language.codaveri_whitelisted?
       render json: {
         success: false,
         message: 'Language not supported'
