@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 # Sets up a programming evaluation, queues it for execution by codaveri evaluators, then returns the results.
 class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable Metrics/ClassLength
+  include Course::Assessment::Question::CodaveriQuestionConcern
   # The default timeout for the job to finish.
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
@@ -122,6 +123,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
   # @return [Array<(String, String, String, Integer)>] The stdout, stderr, test report and exit
   #   code.
   def evaluate_in_codaveri
+    safe_create_or_update_codaveri_question(@question)
     construct_grading_object
     response_status, response_body, evaluation_id = request_codaveri_evaluation
     poll_codaveri_evaluation_results(response_status, response_body, evaluation_id)
