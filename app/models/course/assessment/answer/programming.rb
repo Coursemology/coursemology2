@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::Programming < ApplicationRecord
+  include Course::Assessment::Question::CodaveriQuestionConcern
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 
@@ -99,6 +100,8 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
                                question.live_feedback_enabled
     return unless should_retrieve_feedback
 
+    safe_create_or_update_codaveri_question(question)
+
     feedback_config = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.default_config.merge(
       revealLevel: 'guidance',
       language: Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.language_from_locale(
@@ -123,6 +126,8 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
     should_retrieve_feedback = question.is_codaveri && !submission.attempting? && current_answer?
     return unless should_retrieve_feedback
+
+    safe_create_or_update_codaveri_question(question)
 
     feedback_job = Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob.perform_later(
       assessment, question, self
