@@ -80,11 +80,11 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
     generation_service = Course::Assessment::Question::CodaveriProblemGenerationService.new(
       @assessment,
-      params[:custom_prompt],
+      params,
       language.polyglot_name,
-      language.polyglot_version,
-      params[:difficulty]
+      language.polyglot_version
     )
+
     generated_problem = generation_service.codaveri_generate_problem
     render json: generated_problem, status: :ok
   end

@@ -135,8 +135,9 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
       # prefix
       prefix = test_content.gsub(reg_meta, '').gsub(/^#{indentation}/, '').strip
 
-      # expression
-      expression = assertion_types[assertion_type.to_sym].call(assertion_content)
+      # lhsExpression and rhsExpression
+      lhs_expression, rhs_expression =
+        assertion_types[assertion_type.to_sym].call(assertion_content).split('==').map(&:strip)
 
       # display
       display_list = test_content.scan(reg_meta_display)
@@ -144,9 +145,10 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
 
       # combine all extracted data
       test_case_object[:index] = test_cases_with_id[test_name]
-      test_case_object[:timeout] = @question.time_limit ? @question.time_limit * 1000 : nil # in millisecond
+      test_case_object[:timeout] = @question.time_limit * 1000 if @question.time_limit # in millisecond
       test_case_object[:prefix] = prefix
-      test_case_object[:expression] = expression
+      test_case_object[:lhsExpression] = lhs_expression
+      test_case_object[:rhsExpression] = rhs_expression
       test_case_object[:display] = display
 
       @test_case_files.append(test_case_object)

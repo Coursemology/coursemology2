@@ -130,10 +130,11 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   fetchLiveFeedback(feedbackUrl, feedbackToken) {
-    return this.externalClient.get(`/signed/v2/feedback/llm`, {
+    const CODAVERI_API_VERSION = '2.1';
+
+    return this.externalClient.get(`/signed/feedback/llm`, {
       baseURL: feedbackUrl,
-      // TODO remove this when we cutover to live CV instance
-      headers: { 'ngrok-skip-browser-warning': '1' },
+      headers: { 'x-api-version': CODAVERI_API_VERSION },
       params: { token: feedbackToken },
     });
   }

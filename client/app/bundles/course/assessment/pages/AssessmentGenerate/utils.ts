@@ -2,10 +2,12 @@ import {
   BasicMetadata,
   LanguageData,
   LanguageMode,
+  MetadataTestCase,
   ProgrammingFormRequestData,
 } from 'types/course/assessment/question/programming';
 import { CodaveriGenerateResponseData } from 'types/course/assessment/question-generation';
 
+import { defaultQuestionFormData } from './constants';
 import { CodaveriGenerateFormData, QuestionPrototypeFormData } from './types';
 
 const getValidPythonTemplate = (prefix: string, template?: string): string => {
@@ -15,6 +17,21 @@ const getValidPythonTemplate = (prefix: string, template?: string): string => {
   }
   return [prefix, template].join('\n');
 };
+
+function buildTestCases(
+  visibility: 'public' | 'private' | 'hidden',
+  response: CodaveriGenerateResponseData,
+): MetadataTestCase[] {
+  return (
+    response?.resources?.[0]?.exprTestcases
+      ?.filter((testCase) => testCase?.visibility === visibility)
+      ?.map((testCase) => ({
+        expression: testCase.lhsExpression,
+        expected: testCase.rhsExpression,
+        hint: testCase.hint,
+      })) ?? []
+  );
+}
 
 export function extractQuestionPrototypeData(
   response: CodaveriGenerateResponseData,
@@ -37,111 +54,82 @@ export function extractQuestionPrototypeData(
           response.resources[0]?.solutions[0]?.files[0]?.content,
         ),
         testCases: {
-          public:
-            response?.resources?.[0]?.exprTestcases
-              ?.filter((testCase) => testCase?.visibility === 'public')
-              ?.map((testCase) => ({
-                expression: testCase.expression,
-                expected: 'True',
-                hint: testCase.hint,
-              })) ?? [],
-          private:
-            response?.resources?.[0]?.exprTestcases
-              ?.filter((testCase) => testCase?.visibility === 'private')
-              ?.map((testCase) => ({
-                expression: testCase.expression,
-                expected: 'True',
-                hint: testCase.hint,
-              })) ?? [],
-          evaluation:
-            response?.resources?.[0]?.exprTestcases
-              ?.filter((testCase) => testCase?.visibility === 'hidden')
-              ?.map((testCase) => ({
-                expression: testCase.expression,
-                expected: 'True',
-                hint: testCase.hint,
-              })) ?? [],
+          public: buildTestCases('public', response),
+          private: buildTestCases('private', response),
+          evaluation: buildTestCases('hidden', response),
         },
       },
     },
   };
 }
 
+type IndexedTestCase = Record<
+  number,
+  { expression: string; expected: string; hint: string }
+>;
+
 export const buildGenerateRequestPayload = (
   codaveriData: CodaveriGenerateFormData,
   questionData: QuestionPrototypeFormData,
 ): FormData => {
   const data = new FormData();
-  // TODO: Currently we are injecting the existing question data into the custom prompt directly.
-  // When Codaveri implements this as a feature, make sure to use the updated request model.
-  const fragments = [codaveriData.customPrompt];
+  const isDefaultQuestionFormData =
+    JSON.stringify(questionData) === JSON.stringify(defaultQuestionFormData);
+
+  const stringifyTestCases = (testCases: MetadataTestCase[]): string => {
+    const testCaseDict = {} as IndexedTestCase;
+    testCases.forEach((testCase, index) => {
+      testCaseDict[index + 1] = {
+        expression: testCase.expression,
+        expected: testCase.expected,
+        hint: testCase.hint,
+      };
+    });
+
+    return JSON.stringify(testCaseDict);
+  };
+
+  data.append(
+    'is_default_question_form_data',
+    isDefaultQuestionFormData.toString(),
+  );
+
   if (questionData?.question?.title) {
-    fragments.push(`title is currently "${questionData?.question?.title}"`);
+    data.append('title', questionData.question.title);
   }
 
   if (questionData?.question?.description) {
-    fragments.push(
-      `description is currently"${questionData?.question?.description}"`,
-    );
+    data.append('description', questionData.question.description);
   }
 
   if (questionData?.testUi?.metadata?.solution) {
-    fragments.push(
-      `solution is currently"${questionData?.testUi?.metadata?.solution}"`,
-    );
+    data.append('solution', questionData.testUi.metadata.solution);
   }
 
   if (questionData?.testUi?.metadata?.submission) {
-    fragments.push(
-      `template is currently"${questionData?.testUi?.metadata?.submission}"`,
+    data.append('template', questionData.testUi.metadata.submission);
+  }
+
+  const publicTestCases = questionData?.testUi?.metadata?.testCases?.public;
+  if (publicTestCases?.length > 0) {
+    data.append('public_test_cases', stringifyTestCases(publicTestCases));
+  }
+
+  const privateTestCases = questionData?.testUi?.metadata?.testCases?.private;
+  if (privateTestCases?.length > 0) {
+    data.append('private_test_cases', stringifyTestCases(privateTestCases));
+  }
+
+  const evaluationTestCases =
+    questionData?.testUi?.metadata?.testCases?.evaluation;
+  if (evaluationTestCases?.length > 0) {
+    data.append(
+      'evaluation_test_cases',
+      stringifyTestCases(evaluationTestCases),
     );
   }
 
-  if (
-    questionData?.testUi?.metadata?.testCases?.public &&
-    questionData?.testUi?.metadata?.testCases?.public.length > 0
-  ) {
-    const subfragments = [`The current public test cases are:`];
-    questionData?.testUi?.metadata?.testCases?.public.forEach(
-      (testCase, index) => {
-        fragments.push(
-          `${index + 1}. ${testCase.expression} is ${testCase.expected} (${testCase.hint})`,
-        );
-      },
-    );
-    fragments.push(subfragments.join('\n'));
-  }
-
-  if (
-    questionData?.testUi?.metadata?.testCases?.private &&
-    questionData?.testUi?.metadata?.testCases?.private.length > 0
-  ) {
-    const subfragments = [`The current private test cases are:`];
-    questionData?.testUi?.metadata?.testCases?.private.forEach(
-      (testCase, index) => {
-        subfragments.push(
-          `${index + 1}. ${testCase.expression} is ${testCase.expected} (${testCase.hint})`,
-        );
-      },
-    );
-    fragments.push(subfragments.join('\n'));
-  }
-
-  if (
-    questionData?.testUi?.metadata?.testCases?.evaluation &&
-    questionData?.testUi?.metadata?.testCases?.evaluation.length > 0
-  ) {
-    const subfragments = [`The current evaluation test cases are:`];
-    questionData?.testUi?.metadata?.testCases?.evaluation.forEach(
-      (testCase, index) => {
-        subfragments.push(
-          `${index + 1}. ${testCase.expression} is ${testCase.expected} (${testCase.hint})`,
-        );
-      },
-    );
-    fragments.push(subfragments.join('\n'));
-  }
-  data.append('custom_prompt', fragments.join('\n'));
+  data.append('custom_prompt', codaveriData.customPrompt);
 
   data.append('language_id', codaveriData.languageId.toString());
   data.append('difficulty', codaveriData.difficulty);
