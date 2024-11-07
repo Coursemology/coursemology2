@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
+class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   Course::Assessment::Answer::AutoGradingService
   def evaluate(answer)
     unless answer.submission.assessment.course.component_enabled?(Course::CodaveriComponent)
