@@ -4,11 +4,8 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Container, Divider, Grid } from '@mui/material';
-import { FetchAssessmentData } from 'types/course/assessment/assessments';
-import { MetadataTestCase } from 'types/course/assessment/question/programming';
 import * as yup from 'yup';
 
-import { fetchAssessment } from 'course/assessment/operations/assessments';
 import GenerateConversation from 'course/assessment/pages/AssessmentGenerate/GenerateConversation';
 import GenerateQuestionPrototypeForm from 'course/assessment/pages/AssessmentGenerate/GenerateQuestionPrototypeForm';
 import GenerateTabs from 'course/assessment/pages/AssessmentGenerate/GenerateTabs';
@@ -35,6 +32,7 @@ import {
   generate,
 } from '../../question/programming/operations';
 
+import { defaultCodaveriFormData, defaultQuestionFormData } from './constants';
 import GenerateExportDialog from './GenerateExportDialog';
 
 const translations = defineMessages({
@@ -72,30 +70,6 @@ const areObjectArraysEqual = <T extends object>(
         ),
       )
       .every((p) => p));
-
-const defaultCodaveriFormData: CodaveriGenerateFormData = {
-  languageId: 0,
-  customPrompt: '',
-  difficulty: 'easy',
-};
-
-const defaultQuestionFormData: QuestionPrototypeFormData = {
-  question: {
-    title: '',
-    description: '',
-  },
-  testUi: {
-    metadata: {
-      solution: '',
-      submission: '',
-      testCases: {
-        public: [] as MetadataTestCase[],
-        private: [] as MetadataTestCase[],
-        evaluation: [] as MetadataTestCase[],
-      },
-    },
-  },
-};
 
 const compareFormData = (
   oldState,
@@ -140,9 +114,6 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
     throw new Error(
       `GenerateProgrammingQuestionPage was loaded with ID: ${id}.`,
     );
-
-  const fetchAssessmentWithId = (): Promise<FetchAssessmentData> =>
-    fetchAssessment(id);
 
   const dispatch = useAppDispatch();
   const [exportDialogOpen, setExportDialogOpen] = useState<boolean>(false);

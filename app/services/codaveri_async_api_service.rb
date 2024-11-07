@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CodaveriAsyncApiService
+  CODAVERI_API_VERSION = 2.1
+
   def config
     ENV.fetch('CODAVERI_URL')
   end
@@ -16,6 +18,7 @@ class CodaveriAsyncApiService
     response = connection.post(
       headers: {
         'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
+        'x-api-version' => CODAVERI_API_VERSION,
         'Content-Type' => 'application/json'
       },
       body: @payload.to_json
@@ -28,6 +31,7 @@ class CodaveriAsyncApiService
     response = connection.put(
       headers: {
         'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
+        'x-api-version' => CODAVERI_API_VERSION,
         'Content-Type' => 'application/json'
       },
       body: @payload.to_json
@@ -39,7 +43,8 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.get(
       headers: {
-        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil)
+        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
+        'x-api-version' => CODAVERI_API_VERSION
       },
       query: @payload
     )
