@@ -34,7 +34,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   end
 
   def fetch_codaveri_feedback(feedback_id)
-    api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM'
+    api_namespace = @course.codaveri_itsp_enabled? ? 'feedback/ITSP' : 'feedback/LLM'
     codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, { id: feedback_id })
     codaveri_api_service.get
   end
@@ -49,7 +49,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   def self.default_config
     {
       persona: 'novice',
-      categories: ['functionality'],
+      categories: [],
       revealLevel: 'solution',
       tone: 'encouraging',
       language: 'english',
@@ -91,7 +91,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   end
 
   def request_codaveri_feedback
-    api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM'
+    api_namespace = @course.codaveri_itsp_enabled? ? 'feedback/ITSP' : 'feedback/LLM'
     codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, @answer_object)
     response_status, response_body = codaveri_api_service.post
 

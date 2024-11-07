@@ -15,6 +15,7 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.post(
       headers: {
+        'x-api-version' => ENV.fetch('CODAVERI_API_VERSION', nil),
         'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
         'Content-Type' => 'application/json'
       },
@@ -27,7 +28,8 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.put(
       headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
+        'x-api-version' => ENV.fetch('CODAVERI_API_VERSION', nil),
+        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
         'Content-Type' => 'application/json'
       },
       body: @payload.to_json
@@ -39,6 +41,7 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.get(
       headers: {
+        'x-api-version' => ENV.fetch('CODAVERI_API_VERSION', nil),
         'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil)
       },
       query: @payload

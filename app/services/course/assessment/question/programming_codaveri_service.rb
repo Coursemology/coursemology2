@@ -97,14 +97,14 @@ class Course::Assessment::Question::ProgrammingCodaveriService
   end
 
   def create_codaveri_problem
-    codaveri_api_service = CodaveriAsyncApiService.new('v2/problem', @problem_object)
+    codaveri_api_service = CodaveriAsyncApiService.new('problem', @problem_object)
     response_status, response_body = codaveri_api_service.post
 
     handle_codaveri_response(response_status, response_body)
   end
 
   def update_codaveri_problem
-    codaveri_api_service = CodaveriAsyncApiService.new('v2/problem', @problem_object)
+    codaveri_api_service = CodaveriAsyncApiService.new('problem', @problem_object)
     response_status, response_body = codaveri_api_service.put
 
     handle_codaveri_response(response_status, response_body)

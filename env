@@ -1,5 +1,6 @@
 CODAVERI_URL                      = ""
 CODAVERI_API_KEY                  = ""
+CODAVERI_API_VERSION              = ""
 KODITSU_WEB_URL                   = ""
 KODITSU_API_URL                   = ""
 KODITSU_API_KEY                   = ""

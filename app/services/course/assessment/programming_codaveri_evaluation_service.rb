@@ -154,7 +154,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
   end
 
   def request_codaveri_evaluation
-    codaveri_api_service = CodaveriAsyncApiService.new('v2/evaluate', @answer_object)
+    codaveri_api_service = CodaveriAsyncApiService.new('evaluate', @answer_object)
     response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
@@ -170,7 +170,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
   end
 
   def fetch_codaveri_evaluation(evaluation_id)
-    codaveri_api_service = CodaveriAsyncApiService.new('v2/evaluate', { id: evaluation_id })
+    codaveri_api_service = CodaveriAsyncApiService.new('evaluate', { id: evaluation_id })
     codaveri_api_service.get
   end
 
@@ -211,7 +211,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
     TestCaseResult.new(
       index: result['testcase']['index'].to_i,
       success: result_run['success'],
-      output: result_run['display'],
+      output: result_run['displayValue'],
       stdout: result_run['stdout'],
       stderr: result_run['stderr'],
       exit_code: result_run['code'],
