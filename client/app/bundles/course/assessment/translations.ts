@@ -1642,6 +1642,20 @@ const translations = defineMessages({
     defaultMessage:
       'Your selected language is deprecated. Please change it to another language.',
   },
+  defaultEvaluatorNotSupported: {
+    id: 'course.assessment.question.programming.defaultEvaluatorNotSupported',
+    defaultMessage: '{languageName} is not supported by the default evaluator.',
+  },
+  codaveriEvaluatorNotSupported: {
+    id: 'course.assessment.question.programming.codaveriEvaluatorNotSupported',
+    defaultMessage:
+      '{languageName} is not supported by the Codaveri evaluator.',
+  },
+  liveFeedbackNotSupported: {
+    id: 'course.assessment.question.programming.liveFeedbackNotSupported',
+    defaultMessage:
+      'Live feedback generation is not supported for {languageName}.',
+  },
 });
 
 export default translations;

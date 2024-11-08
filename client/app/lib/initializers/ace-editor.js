@@ -5,6 +5,7 @@ require('ace-builds/src-noconflict/mode-c_cpp');
 require('ace-builds/src-noconflict/mode-java');
 require('ace-builds/src-noconflict/mode-javascript');
 require('ace-builds/src-noconflict/mode-python');
+require('ace-builds/src-noconflict/mode-r');
 require('ace-builds/src-noconflict/theme-github');
 
 /**

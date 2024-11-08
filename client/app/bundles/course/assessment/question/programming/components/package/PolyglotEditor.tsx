@@ -15,22 +15,17 @@ import CppPackageEditor from './CppPackageEditor';
 import JavaPackageEditor from './JavaPackageEditor';
 import PackageDetails from './PackageDetails';
 import PythonPackageEditor from './PythonPackageEditor';
+import RPackageEditor from './RPackageEditor';
 
 const EDITORS: Partial<Record<LanguageMode, ElementType>> = {
   python: PythonPackageEditor,
   java: JavaPackageEditor,
   c_cpp: CppPackageEditor,
+  r: RPackageEditor,
 };
 
-export const SUPPORTED_EDITORS = new Set(
-  Object.keys(EDITORS) as LanguageMode[],
-);
-
-export const isLanguageSupported = (language: LanguageMode): boolean =>
-  SUPPORTED_EDITORS.has(language);
-
 interface PolyglotEditorProps {
-  getModeFromId: (id: number) => LanguageMode;
+  languageMode: LanguageMode;
   disabled?: boolean;
 }
 
@@ -39,7 +34,6 @@ const PolyglotEditor = (props: PolyglotEditorProps): JSX.Element => {
 
   const { watch } = useFormContext<ProgrammingFormData>();
 
-  const language = props.getModeFromId(watch('question.languageId'));
   const autograded = watch('question.autograded');
   const editOnline = watch('question.editOnline');
 
@@ -48,17 +42,17 @@ const PolyglotEditor = (props: PolyglotEditorProps): JSX.Element => {
       <Section sticksToNavbar title={t(translations.templates)}>
         <ControlledEditor.Template
           disabled={props.disabled}
-          language={language}
+          language={props.languageMode}
         />
       </Section>
     );
 
   if (!editOnline) return <PackageDetails disabled={props.disabled} />;
 
-  const EditorComponent = EDITORS[language];
+  const EditorComponent = EDITORS[props.languageMode];
 
   if (!EditorComponent)
-    throw new Error(`Unsupported language mode: "${language}".`);
+    throw new Error(`Unsupported language mode: "${props.languageMode}".`);
 
   return <EditorComponent disabled={props.disabled} />;
 };

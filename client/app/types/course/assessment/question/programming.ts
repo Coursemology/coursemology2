@@ -1,12 +1,14 @@
 import { AvailableSkills, QuestionFormData } from '../questions';
 
-export type LanguageMode = 'c_cpp' | 'java' | 'javascript' | 'python';
+export type LanguageMode = 'c_cpp' | 'java' | 'javascript' | 'python' | 'r';
 
 export interface LanguageData {
   id: number;
   name: string;
   disabled: boolean;
   editorMode: LanguageMode;
+  codaveriSupported: boolean;
+  evaluatorSupported: boolean;
 }
 
 export interface PackageInfoData {

@@ -1,20 +1,16 @@
 import { useMemo } from 'react';
-import {
-  LanguageData,
-  LanguageMode,
-} from 'types/course/assessment/question/programming';
+import { LanguageData } from 'types/course/assessment/question/programming';
 
-export interface LanguageOption {
+export type LanguageOption = Omit<LanguageData, 'id' | 'name'> & {
   label: string;
   value: number;
-  disabled: boolean;
-}
+};
 
-type LanguageIdMap = Record<number, LanguageMode>;
+type LanguageIdMap = Record<number, LanguageData>;
 
 interface UseLanguageModeHook {
   languageOptions: LanguageOption[];
-  getModeFromId: (id: number) => LanguageMode;
+  getDataFromId: (id: number) => LanguageData;
 }
 
 const useLanguageMode = (languages: LanguageData[]): UseLanguageModeHook => {
@@ -22,13 +18,16 @@ const useLanguageMode = (languages: LanguageData[]): UseLanguageModeHook => {
     () =>
       languages.reduce<[LanguageOption[], LanguageIdMap]>(
         ([options, map], language) => {
-          options.push({
+          const option = {
             label: language.name,
             value: language.id,
+            editorMode: language.editorMode,
             disabled: language.disabled,
-          });
-
-          map[language.id] = language.editorMode;
+            codaveriSupported: language.codaveriSupported,
+            evaluatorSupported: language.evaluatorSupported,
+          };
+          options.push(option);
+          map[language.id] = language;
 
           return [options, map];
         },
@@ -37,9 +36,9 @@ const useLanguageMode = (languages: LanguageData[]): UseLanguageModeHook => {
     [],
   );
 
-  const getModeFromId = (id: number): LanguageMode => languageIdToModeMap[id];
+  const getDataFromId = (id: number): LanguageData => languageIdToModeMap[id];
 
-  return { languageOptions, getModeFromId };
+  return { languageOptions, getDataFromId };
 };
 
 export default useLanguageMode;
