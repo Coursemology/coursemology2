@@ -67,9 +67,25 @@ module Extensions::PolyglotWithDatabase::Coursemology::Polyglot::Language
   end
 end
 
-# This directly injects a method into all concrete languages' class methods.
-module Coursemology::Polyglot::ConcreteLanguage::ClassMethods
-  def instance
-    root_instance
+module Coursemology::Polyglot::ConcreteLanguage
+  # Returns language name in lowercase format (eg python, java).
+  #
+  # @return [String] The language name in lowercase format.
+  def polyglot_name
+    name.split[0].downcase
+  end
+
+  # Returns language version.
+  #
+  # @return [String] The language version.
+  def polyglot_version
+    name.split[1]
+  end
+
+  # This directly injects a method into all concrete languages' class methods.
+  module ClassMethods
+    def instance
+      root_instance
+    end
   end
 end

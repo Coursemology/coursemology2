@@ -77,7 +77,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     }, status: :ok
   end
 
-  def generate # rubocop:disable Metrics/AbcSize
+  def generate
     language = Coursemology::Polyglot::Language.where(id: params[:language_id]).first
 
     unless CodaveriAsyncApiService.language_valid_for_codaveri?(language)
@@ -90,9 +90,8 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     generation_service = Course::Assessment::Question::CodaveriProblemGenerationService.new(
       @assessment,
       params[:custom_prompt],
-      # TODO: move these declarations (polyglot_language_name and _version) to polyglot repo
-      language.name.split[0].downcase,
-      language.name.split[1],
+      language.polyglot_name,
+      language.polyglot_version,
       params[:difficulty]
     )
     generated_problem = generation_service.codaveri_generate_problem

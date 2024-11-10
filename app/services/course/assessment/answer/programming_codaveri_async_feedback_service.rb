@@ -74,8 +74,10 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
 
     @answer_object[:problemId] = @question.codaveri_id
 
-    @answer_object[:languageVersion][:language] = @question.polyglot_language_name
-    @answer_object[:languageVersion][:version] = @question.polyglot_language_version
+    @answer_object[:languageVersion] = {
+      language: @question.language.polyglot_name,
+      version: @question.language.polyglot_version
+    }
 
     @answer_files.each do |file|
       file_template = default_codaveri_student_file_template
