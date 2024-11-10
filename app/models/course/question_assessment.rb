@@ -67,7 +67,7 @@ class Course::QuestionAssessment < ApplicationRecord
 
   def language_valid_for_koditsu?
     language = question.actable.language
-    KoditsuAsyncApiService.language_valid_for_koditsu?(language)
+    language.koditsu_whitelisted?
   end
 
   def add_language_errors

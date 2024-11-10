@@ -16,7 +16,7 @@ is_programming_question = question.actable_type == Course::Assessment::Question:
 is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
 
 if is_course_koditsu_enabled && is_programming_question
-  is_language_supportable_by_koditsu = KoditsuAsyncApiService.language_valid_for_koditsu?(question.actable.language)
+  is_language_supportable_by_koditsu = question.actable.language.koditsu_whitelisted?
   json.isCompatibleWithKoditsu is_programming_question && is_language_supportable_by_koditsu
 end
 

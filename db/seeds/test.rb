@@ -9,3 +9,5 @@ ActsAsTenant.with_tenant(Instance.default) do
     user.save!
   end
 end
+
+Rake::Task['db:set_polyglot_language_flags'].invoke

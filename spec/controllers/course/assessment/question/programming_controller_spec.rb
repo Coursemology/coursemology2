@@ -237,7 +237,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         it 'returns the enabled languages' do
           subject
           expect(response).to have_http_status(:ok)
-          expect(JSON.parse(response.body)['languages'].map { |language| language['name'] }).to include('Python 3.10')
+          expect(JSON.parse(response.body).map { |language| language['name'] }).to include('Python 3.10')
         end
       end
 
@@ -255,7 +255,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
 
         it 'does not return the disabled language' do
           subject
-          expect(JSON.parse(response.body)['languages'].map { |l| l['name'] }).not_to include('Python 3.10')
+          expect(JSON.parse(response.body).map { |l| l['name'] }).not_to include('Python 3.10')
         end
       end
     end

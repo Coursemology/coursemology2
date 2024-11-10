@@ -71,27 +71,17 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   end
 
   def codaveri_languages
-    render json: {
-      languages: Coursemology::Polyglot::Language.
-        where(enabled: true).
-        order(weight: :desc).
-        filter_map do |language|
-          if CodaveriAsyncApiService.language_valid_for_codaveri?(language)
-            {
-              id: language.id,
-              name: language.name,
-              disabled: !language.enabled,
-              editorMode: language.ace_mode
-            }
-          end
-        end
-    }, status: :ok
+    languages = Coursemology::Polyglot::Language.
+                where(enabled: true, question_generation_whitelisted: true).
+                order(weight: :desc)
+
+    render partial: 'languages', locals: { languages: languages }
   end
 
   def generate
     language = Coursemology::Polyglot::Language.where(id: params[:language_id]).first
 
-    unless CodaveriAsyncApiService.language_valid_for_codaveri?(language)
+    unless language.codaveri_evaluator_whitelisted?
       render json: {
         success: false,
         message: 'Language not supported'

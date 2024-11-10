@@ -1,0 +1,82 @@
+# frozen_string_literal: true
+namespace :db do
+  # Run this after adding the *_whitelisted columns to polyglot_languages table.
+  # (20241028141424_add_language_whitelist_flags.rb)
+
+  # These whitelists are accurate as of the date this migration is merged and performed (2024-11-18)
+  CODAVERI_EVALUATOR_WHITELIST =
+    [
+      Coursemology::Polyglot::Language::Python::Python3Point4,
+      Coursemology::Polyglot::Language::Python::Python3Point5,
+      Coursemology::Polyglot::Language::Python::Python3Point6,
+      Coursemology::Polyglot::Language::Python::Python3Point7,
+      Coursemology::Polyglot::Language::Python::Python3Point9,
+      Coursemology::Polyglot::Language::Python::Python3Point10,
+      Coursemology::Polyglot::Language::Python::Python3Point12,
+      Coursemology::Polyglot::Language::R::R4Point1
+    ].freeze
+
+  QUESTION_GENERATION_WHITELIST =
+    [
+      Coursemology::Polyglot::Language::Python::Python3Point4,
+      Coursemology::Polyglot::Language::Python::Python3Point5,
+      Coursemology::Polyglot::Language::Python::Python3Point6,
+      Coursemology::Polyglot::Language::Python::Python3Point7,
+      Coursemology::Polyglot::Language::Python::Python3Point9,
+      Coursemology::Polyglot::Language::Python::Python3Point10,
+      Coursemology::Polyglot::Language::Python::Python3Point12
+    ].freeze
+
+  KODITSU_WHITELIST =
+    [
+      Coursemology::Polyglot::Language::CPlusPlus,
+      Coursemology::Polyglot::Language::Python::Python3Point4,
+      Coursemology::Polyglot::Language::Python::Python3Point5,
+      Coursemology::Polyglot::Language::Python::Python3Point6,
+      Coursemology::Polyglot::Language::Python::Python3Point7,
+      Coursemology::Polyglot::Language::Python::Python3Point9,
+      Coursemology::Polyglot::Language::Python::Python3Point10,
+      Coursemology::Polyglot::Language::Python::Python3Point12
+    ].freeze
+
+  DEPRECATED_LANGUAGES =
+    [
+      Coursemology::Polyglot::Language::Python::Python2Point7,
+      Coursemology::Polyglot::Language::Python::Python3Point4,
+      Coursemology::Polyglot::Language::Python::Python3Point5,
+      Coursemology::Polyglot::Language::JavaScript
+    ].freeze
+
+  EVALUATOR_UNSUPPORTED_LANGUAGES =
+    [
+      Coursemology::Polyglot::Language::JavaScript,
+      Coursemology::Polyglot::Language::R::R4Point1
+    ].freeze
+
+  task set_polyglot_language_flags: :environment do
+    # this ensures all languages are loaded in the database table before flags are updated below
+    Coursemology::Polyglot::Language.load_languages
+
+    ActsAsTenant.without_tenant do
+      Coursemology::Polyglot::Language.
+        where(type: CODAVERI_EVALUATOR_WHITELIST.map(&:name)).
+        update_all(codaveri_evaluator_whitelisted: true)
+
+      Coursemology::Polyglot::Language.
+        where(type: QUESTION_GENERATION_WHITELIST.map(&:name)).
+        update_all(question_generation_whitelisted: true)
+
+      Coursemology::Polyglot::Language.
+        where(type: KODITSU_WHITELIST.map(&:name)).
+        update_all(koditsu_whitelisted: true)
+
+      Coursemology::Polyglot::Language.
+        where(type: DEPRECATED_LANGUAGES.map(&:name)).
+        update_all(enabled: false)
+
+      Coursemology::Polyglot::Language.
+        where(type: EVALUATOR_UNSUPPORTED_LANGUAGES.map(&:name)).
+        update_all(default_evaluator_whitelisted: false)
+    end
+  end
+end
