@@ -17,10 +17,11 @@ interface ControlledEditorChildProps extends Partial<EditorAccordionProps> {
 interface ControlledEditorProps extends ControlledEditorChildProps {
   name: FieldPathByValue<ProgrammingFormData, string | null>;
   title: EditorAccordionProps['title'];
+  defaultValue?: string;
 }
 
 const ControlledEditor = (props: ControlledEditorProps): JSX.Element => {
-  const { name, ...editorProps } = props;
+  const { name, defaultValue, ...editorProps } = props;
 
   const { control } = useFormContext<ProgrammingFormData>();
 
@@ -33,7 +34,7 @@ const ControlledEditor = (props: ControlledEditorProps): JSX.Element => {
           {...editorProps}
           name={field.name}
           onChange={field.onChange}
-          value={field.value ?? ''}
+          value={field.value ?? defaultValue ?? ''}
         />
       )}
     />

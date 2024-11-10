@@ -44,12 +44,12 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
             testCases.public[index].identifier
           }
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="packageUi.testCases.public"
+          rhsHeader={t(translations.expected)}
           static
           title={t(translations.publicTestCases)}
-          lhsHeader={t(translations.expression)}
-          rhsHeader={t(translations.expected)}
-          hintHeader={t(translations.hint)}
         />
 
         <TestCases
@@ -58,13 +58,13 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
             testCases.private[index].identifier
           }
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="packageUi.testCases.private"
+          rhsHeader={t(translations.expected)}
           static
           subtitle={t(translations.privateTestCasesHint)}
           title={t(translations.privateTestCases)}
-          lhsHeader={t(translations.expression)}
-          rhsHeader={t(translations.expected)}
-          hintHeader={t(translations.hint)}
         />
 
         <TestCases
@@ -73,13 +73,13 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
             testCases.evaluation[index].identifier
           }
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="packageUi.testCases.evaluation"
+          rhsHeader={t(translations.expected)}
           static
           subtitle={t(translations.evaluationTestCasesHint)}
           title={t(translations.evaluationTestCases)}
-          lhsHeader={t(translations.expression)}
-          rhsHeader={t(translations.expected)}
-          hintHeader={t(translations.hint)}
         />
       </PackageEditor.TestCases>
     </>

@@ -20,6 +20,9 @@ export interface TestCasesTableProps {
   onClickAdd?: () => void;
   disabled?: boolean;
   subtitle?: string;
+  lhsHeader: string;
+  rhsHeader: string;
+  hintHeader: string;
 }
 
 const TestCasesTable = (
@@ -38,15 +41,15 @@ const TestCasesTable = (
         <TableHead className="sticky top-0 z-10 bg-white">
           <TableRow>
             <TableCell className="border-b border-solid border-b-neutral-200 py-0 pl-4 pr-0">
-              {t(translations.expression)}
+              {props.lhsHeader}
             </TableCell>
 
             <TableCell className="border-b border-solid border-b-neutral-200 px-2 py-0">
-              {t(translations.expected)}
+              {props.rhsHeader}
             </TableCell>
 
             <TableCell className="border-b border-solid border-b-neutral-200 px-0 py-0">
-              {t(translations.hint)}
+              {props.hintHeader}
             </TableCell>
 
             {props.onClickAdd && (

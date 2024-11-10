@@ -1445,6 +1445,14 @@ const translations = defineMessages({
       'against the Expected expectations using the equality operator (<code>==</code>). Notably, <code>print()</code> ' +
       'returns <code>None</code>, so <code>print</code>ed outputs should not be confused with actual return values.',
   },
+  rTestCasesHint: {
+    id: 'course.assessment.question.programming.rTestCasesHint',
+    defaultMessage:
+      'Each test case launches a separate R console instance and provides input via standard input. This console will ' +
+      'run the <prepend>Prepend</prepend> script, the student submission, and the <append>Append</append> script. ' +
+      'The standard output of these scripts will be compared (as a string) to the expected output of the test case. We recommend ' +
+      'processing the standard input in one of these scripts.',
+  },
   inlineCode: {
     id: 'course.assessment.question.programming.inlineCode',
     defaultMessage: 'Inline code',
@@ -1573,6 +1581,14 @@ const translations = defineMessages({
     id: 'course.assessment.question.programming.hint',
     defaultMessage: 'Hint',
   },
+  input: {
+    id: 'course.assessment.question.programming.input',
+    defaultMessage: 'Input',
+  },
+  expectedOutput: {
+    id: 'course.assessment.question.programming.expectedOutput',
+    defaultMessage: 'Expected Output',
+  },
   addTestCase: {
     id: 'course.assessment.question.programming.addTestCase',
     defaultMessage: 'Add a test case',
@@ -1641,6 +1657,20 @@ const translations = defineMessages({
     id: 'course.assessment.question.programming.languageDeprecatedWarning',
     defaultMessage:
       'Your selected language is deprecated. Please change it to another language.',
+  },
+  defaultEvaluatorNotSupported: {
+    id: 'course.assessment.question.programming.defaultEvaluatorNotSupported',
+    defaultMessage: '{languageName} is not supported by the default evaluator.',
+  },
+  codaveriEvaluatorNotSupported: {
+    id: 'course.assessment.question.programming.codaveriEvaluatorNotSupported',
+    defaultMessage:
+      '{languageName} is not supported by the Codaveri evaluator.',
+  },
+  liveFeedbackNotSupported: {
+    id: 'course.assessment.question.programming.liveFeedbackNotSupported',
+    defaultMessage:
+      'Live feedback generation is not supported for {languageName}.',
   },
 });
 

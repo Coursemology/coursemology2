@@ -2,7 +2,7 @@ import { ChangeEventHandler } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Alert } from '@mui/material';
 import {
-  LanguageMode,
+  LanguageData,
   ProgrammingFormData,
 } from 'types/course/assessment/question/programming';
 
@@ -13,11 +13,10 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../../../translations';
 import { useProgrammingFormDataContext } from '../../hooks/ProgrammingFormDataContext';
 import { LanguageOption } from '../../hooks/useLanguageMode';
-import { isLanguageSupported } from '../package/PolyglotEditor';
 
 interface LanguageFieldsProps {
   languageOptions: LanguageOption[];
-  getModeFromId: (id: number) => LanguageMode;
+  getDataFromId: (id: number) => LanguageData;
   disabled?: boolean;
 }
 
@@ -28,7 +27,7 @@ const LanguageFields = (props: LanguageFieldsProps): JSX.Element => {
 
   const { question } = useProgrammingFormDataContext();
 
-  const currentLanguage = props.getModeFromId(watch('question.languageId'));
+  const currentLanguage = props.getDataFromId(watch('question.languageId'));
   const autogradedAssessment = question.autogradedAssessment;
   const autograded = watch('question.autograded');
 
@@ -42,11 +41,14 @@ const LanguageFields = (props: LanguageFieldsProps): JSX.Element => {
             field.onChange(e.target.value);
 
             const value = parseInt(e.target.value, 10);
-            const language = props.getModeFromId(value);
+            const language = props.getDataFromId(value);
 
-            setValue('testUi.mode', language);
+            setValue('testUi.mode', language.editorMode);
 
-            if (!isLanguageSupported(language)) {
+            if (
+              !language.whitelists.codaveriEvaluator &&
+              !language.whitelists.defaultEvaluator
+            ) {
               setValue('question.autograded', false);
             }
           };
@@ -80,7 +82,8 @@ const LanguageFields = (props: LanguageFieldsProps): JSX.Element => {
           <FormCheckboxField
             description={t(translations.evaluateAndTestCodeHint)}
             disabled={
-              !isLanguageSupported(currentLanguage) ||
+              (!currentLanguage?.whitelists.codaveriEvaluator &&
+                !currentLanguage?.whitelists.defaultEvaluator) ||
               question.hasAutoGradings ||
               props.disabled
             }

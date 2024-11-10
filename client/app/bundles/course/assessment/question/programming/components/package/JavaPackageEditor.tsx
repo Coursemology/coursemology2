@@ -156,14 +156,20 @@ const JavaPackageEditor = (props: PackageEditorProps): JSX.Element => {
         <TestCases
           as={JavaTestCase}
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="testUi.metadata.testCases.public"
+          rhsHeader={t(translations.expected)}
           title={t(translations.publicTestCases)}
         />
 
         <TestCases
           as={JavaTestCase}
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="testUi.metadata.testCases.private"
+          rhsHeader={t(translations.expected)}
           subtitle={t(translations.privateTestCasesHint)}
           title={t(translations.privateTestCases)}
         />
@@ -171,7 +177,10 @@ const JavaPackageEditor = (props: PackageEditorProps): JSX.Element => {
         <TestCases
           as={JavaTestCase}
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="testUi.metadata.testCases.evaluation"
+          rhsHeader={t(translations.expected)}
           subtitle={t(translations.evaluationTestCasesHint)}
           title={t(translations.evaluationTestCases)}
         />
