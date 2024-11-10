@@ -54,7 +54,8 @@ class Course::Assessment::Question::ProgrammingCodaveriService
           exprTestcases: []
         }
       ],
-      additionalFiles: []
+      additionalFiles: [],
+      IOTestcases: []
     }
   end
 
@@ -81,7 +82,11 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     )
 
     resources_object[:solutions][0][:files] = codaveri_package.process_solutions
-    resources_object[:exprTestcases] = codaveri_package.process_test_cases
+    all_test_cases = codaveri_package.process_test_cases
+    @problem_object[:IOTestcases] = all_test_cases.filter { |tc| tc[:type] == 'io' }
+    @problem_object.delete(:IOTestcases) if @problem_object[:IOTestcases].empty?
+    resources_object[:exprTestcases] = all_test_cases.filter { |tc| tc[:type] == 'expression' }
+    resources_object.delete(:exprTestcases) if resources_object[:exprTestcases].empty?
     resources_object[:templates] = codaveri_package.process_templates
     @problem_object[:additionalFiles] = codaveri_package.process_data
 

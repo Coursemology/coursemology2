@@ -119,25 +119,24 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   #   graded.
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading The programming auto
   #   grading result to store the test results in.
-  # @param [String] evaluation_results The evaluation results from Codaveri API Response.
+  # @param [Array<Struct>] evaluation_results The evaluation results from Codaveri API Response.
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
   def build_test_case_records_from_test_results(question, auto_grading, evaluation_results) # rubocop:disable Metrics/AbcSize
     test_cases = question.test_cases.to_h { |test_case| [test_case.id, test_case] }
     evaluation_results.map do |result|
-      test_case = find_test_case(test_cases, result['testcase']['index'].to_i)
-      result_run = result['run']
+      test_case = find_test_case(test_cases, result.index)
 
       error_message_sigkill = I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
       messages ||= {
-        error: result_run['code'] == 137 ? error_message_sigkill : result_run['stderr'],
+        error: (result.exit_code == 137) ? error_message_sigkill : result.stderr,
         hint: test_case.hint,
-        output: result_run['display'],
-        code: result_run['code'],
-        signal: result_run['signal']
+        output: result.output,
+        code: result.exit_code,
+        signal: result.exit_signal
       }.reject! { |_, v| v.blank? }
 
       auto_grading.test_results.build(auto_grading: auto_grading, test_case: test_case,
-                                      passed: result_run['success'],
+                                      passed: result.success,
                                       messages: messages)
     end
   end

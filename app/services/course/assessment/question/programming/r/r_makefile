@@ -1,0 +1,24 @@
+prepare:
+
+compile: submission/template.R tests/prepend.R tests/append.R
+	cat tests/prepend.R submission/template.R tests/append.R > answer.R
+
+public:
+	echo "Not Implemented"
+
+private:
+	echo "Not Implemented"
+
+evaluation:
+	echo "Not Implemented"
+
+solution:	solution.R
+	echo "Not Implemented"
+
+solution.R: solution/template.R tests/prepend.R tests/append.R
+	cat tests/prepend.R solution/template.R tests/append.R > solution.R
+
+clean:
+	rm -f answer.R
+	rm -f report.xml
+	rm -f solution.R
