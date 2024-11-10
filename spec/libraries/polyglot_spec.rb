@@ -18,6 +18,20 @@ RSpec.describe 'Extension: Coursemology::Polyglot' do
       self.class::WorkingLanguage.remove_instance_variable(:@root_instance)
     end
 
+    describe '#polyglot_name' do
+      subject { self.class::WorkingLanguage.new(name: 'Workinglanguage 0.3.4') }
+      it 'returns correct language name' do
+        expect(subject.polyglot_name).to eq 'workinglanguage'
+      end
+    end
+
+    describe '#polyglot_version' do
+      subject { self.class::WorkingLanguage.new(name: 'Workinglanguage 0.3.4') }
+      it 'returns correct language version' do
+        expect(subject.polyglot_version).to eq '0.3.4'
+      end
+    end
+
     subject { self.class::DummyLanguage }
 
     describe 'Validations' do

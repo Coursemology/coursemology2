@@ -150,20 +150,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     end
   end
 
-  # Returns language name in lowercase format (eg python, java).
-  #
-  # @return [String] The language name in lowercase format.
-  def polyglot_language_name
-    language.name.split[0].downcase
-  end
-
-  # Returns language version.
-  #
-  # @return [String] The language version.
-  def polyglot_language_version
-    language.name.split[1]
-  end
-
   def create_codaveri_problem
     return unless is_codaveri || live_feedback_enabled
 
