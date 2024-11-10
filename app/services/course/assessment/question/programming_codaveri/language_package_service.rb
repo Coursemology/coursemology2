@@ -62,16 +62,31 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
     }
   end
 
-  # Defines the default test case template as indicated in the Codevari API problem management spec.
+  # Defines the default expression test case template as indicated in the Codevari API problem management spec.
   #
   # @return [Hash]
-  def default_codaveri_test_case_template
+  def default_codaveri_expr_test_case_template
     {
       index: '',
       type: 'expression',
       timeout: '',
       prefix: '',
       expression: '',
+      display: 'str(out)'
+    }
+  end
+
+  # Defines the default test case template as indicated in the Codevari API problem management spec.
+  #
+  # @return [Hash]
+  def default_codaveri_io_test_case_template
+    {
+      index: '',
+      type: 'io',
+      input: '',
+      output: '',
+      visibility: '',
+      hint: '',
       display: 'str(out)'
     }
   end

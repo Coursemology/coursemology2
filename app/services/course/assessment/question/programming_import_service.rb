@@ -48,11 +48,18 @@ class Course::Assessment::Question::ProgrammingImportService
     template_files = package.submission_files
     package.replace_submission_with_solution
     package.save
-    evaluation_result = evaluate_package(package)
 
-    raise evaluation_result if evaluation_result.error?
+    test_reports = if @question.language.default_evaluator_whitelisted?
+                     evaluation_result = evaluate_package(package)
 
-    save!(template_files, evaluation_result)
+                     raise evaluation_result if evaluation_result.error?
+
+                     evaluation_result.test_reports
+                   else
+                     package.test_reports
+                   end
+
+    save!(template_files, test_reports)
   end
 
   # Evaluates the package to obtain the set of tests.
@@ -67,12 +74,13 @@ class Course::Assessment::Question::ProgrammingImportService
   # Saves the templates and tests to the question.
   #
   # @param [Hash<Pathname, String>] template_files The templates found in the package.
-  # @param [Course::Assessment::ProgrammingEvaluationService::Result] evaluation_result The
-  #   result of evaluating the package.
-  def save!(template_files, evaluation_result)
+  # @param [Hash<String, String>] test_reports The test reports from evaluating the package.
+  #   Hash key is the report type, followed by the contents of the report.
+  #   e.g. { 'public': <XML from public tests>, 'private': <XML from private tests> }
+  def save!(template_files, test_reports)
     @question.imported_attachment = @attachment
     @question.template_files = build_template_file_records(template_files)
-    @question.test_cases = build_combined_test_case_records(evaluation_result.test_reports)
+    @question.test_cases = build_combined_test_case_records(test_reports)
 
     @question.skip_process_package = true # Skip package re-processing
     @question.save!

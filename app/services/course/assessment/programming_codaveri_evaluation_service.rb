@@ -8,6 +8,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
   POLL_INTERVAL_SECONDS = 2
   MAX_POLL_RETRIES = 1000
 
+  TestCaseResult = Struct.new(:index, :success, :output, :stdout, :stderr, :exit_code, :exit_signal, keyword_init: true)
+
   # Represents a result of evaluating an answer.
   Result = Struct.new(:stdout, :stderr, :evaluation_results, :exit_code, :evaluation_id) do
     # Checks if the evaluation errored.
@@ -180,17 +182,45 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
 
     response_success = response_body['success']
     if response_status == 200 && response_success
-      @codaveri_evaluation_results = response_body['data']['exprResults']
+      @codaveri_evaluation_results =
+        (response_body['data']['IOResults'] || []).map(&method(:build_io_test_case_result)) +
+        (response_body['data']['exprResults'] || []).map(&method(:build_expr_test_case_result))
     else
       raise CodaveriError,
             { status: response_status, body: response_body }
     end
   end
 
+  def build_io_test_case_result(result)
+    result_run = result['run']
+    TestCaseResult.new(
+      index: result['testcase']['index'].to_i,
+      success: result_run['success'],
+      output: result_run['stdout'],
+      stdout: result_run['stdout'],
+      stderr: result_run['stderr'],
+      exit_code: result_run['code'],
+      exit_signal: result_run['signal']
+    )
+  end
+
+  def build_expr_test_case_result(result)
+    result_run = result['run']
+    TestCaseResult.new(
+      index: result['testcase']['index'].to_i,
+      success: result_run['success'],
+      output: result_run['display'],
+      stdout: result_run['stdout'],
+      stderr: result_run['stderr'],
+      exit_code: result_run['code'],
+      exit_signal: result_run['signal']
+    )
+  end
+
   def build_evaluation_result # rubocop:disable Metrics/CyclomaticComplexity
-    stdout = @codaveri_evaluation_results.map { |result| result['run']['stdout'] }.reject(&:empty?).join("\n")
-    stderr = @codaveri_evaluation_results.map { |result| result['run']['stderr'] }.reject(&:empty?).join("\n")
-    exit_code = (@codaveri_evaluation_results.map { |result| result['run']['success'] }.all? { |n| n == 1 }) ? 0 : 2
+    stdout = @codaveri_evaluation_results.map(&:stdout).reject(&:empty?).join("\n")
+    stderr = @codaveri_evaluation_results.map(&:stderr).reject(&:empty?).join("\n")
+    exit_code = (@codaveri_evaluation_results.map(&:success).all? { |n| n == 1 }) ? 0 : 2
     [stdout, stderr, @codaveri_evaluation_results, exit_code]
   end
 

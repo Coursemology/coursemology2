@@ -129,7 +129,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
 
     # Loop through each test case
     test_cases_regex.each do |test_case_match|
-      test_case_object = default_codaveri_test_case_template
+      test_case_object = default_codaveri_expr_test_case_template
       test_name, indentation, test_content, assertion_type, assertion_content = test_case_match
 
       # prefix
