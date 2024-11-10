@@ -15,7 +15,7 @@ class KoditsuAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.post(
       headers: {
-        'x-api-key' => ENV['KODITSU_API_KEY'],
+        'x-api-key' => ENV.fetch('KODITSU_API_KEY', nil),
         'Content-Type' => 'application/json'
       },
       body: @payload.to_json
@@ -29,7 +29,7 @@ class KoditsuAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.put(
       headers: {
-        'x-api-key' => ENV['KODITSU_API_KEY'],
+        'x-api-key' => ENV.fetch('KODITSU_API_KEY', nil),
         'Content-Type' => 'application/json'
       },
       body: @payload.to_json
@@ -43,7 +43,7 @@ class KoditsuAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.get(
       headers: {
-        'x-api-key' => ENV['KODITSU_API_KEY']
+        'x-api-key' => ENV.fetch('KODITSU_API_KEY', nil)
       }
     )
     parse_response(response)
@@ -55,7 +55,7 @@ class KoditsuAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.delete(
       headers: {
-        'x-api-key' => ENV['KODITSU_API_KEY']
+        'x-api-key' => ENV.fetch('KODITSU_API_KEY', nil)
       }
     )
     parse_response(response)
@@ -63,23 +63,8 @@ class KoditsuAsyncApiService
     [500, nil]
   end
 
-  def self.language_valid_for_koditsu?(language)
-    koditsu_language_whitelist.include?(language.type.constantize)
-  end
-
-  def self.koditsu_language_whitelist
-    [Coursemology::Polyglot::Language::CPlusPlus,
-     Coursemology::Polyglot::Language::Python::Python3Point4,
-     Coursemology::Polyglot::Language::Python::Python3Point5,
-     Coursemology::Polyglot::Language::Python::Python3Point6,
-     Coursemology::Polyglot::Language::Python::Python3Point7,
-     Coursemology::Polyglot::Language::Python::Python3Point9,
-     Coursemology::Polyglot::Language::Python::Python3Point10,
-     Coursemology::Polyglot::Language::Python::Python3Point12]
-  end
-
   def self.assessment_url(assessment_id)
-    url = ENV['KODITSU_WEB_URL']
+    url = ENV.fetch('KODITSU_WEB_URL', nil)
 
     "#{url}?assessment=#{assessment_id}"
   end

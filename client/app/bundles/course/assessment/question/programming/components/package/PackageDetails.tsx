@@ -47,6 +47,9 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
           name="packageUi.testCases.public"
           static
           title={t(translations.publicTestCases)}
+          lhsHeader={t(translations.expression)}
+          rhsHeader={t(translations.expected)}
+          hintHeader={t(translations.hint)}
         />
 
         <TestCases
@@ -59,6 +62,9 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
           static
           subtitle={t(translations.privateTestCasesHint)}
           title={t(translations.privateTestCases)}
+          lhsHeader={t(translations.expression)}
+          rhsHeader={t(translations.expected)}
+          hintHeader={t(translations.hint)}
         />
 
         <TestCases
@@ -71,6 +77,9 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
           static
           subtitle={t(translations.evaluationTestCasesHint)}
           title={t(translations.evaluationTestCases)}
+          lhsHeader={t(translations.expression)}
+          rhsHeader={t(translations.expected)}
+          hintHeader={t(translations.hint)}
         />
       </PackageEditor.TestCases>
     </>

@@ -13,9 +13,7 @@ const EVALUATION_INTERVAL_MS = 500 as const;
 
 const ProgrammingAPI = CourseAPI.assessment.question.programming;
 
-export const fetchCodaveriLanguages = async (): Promise<{
-  languages: LanguageData[];
-}> => {
+export const fetchCodaveriLanguages = async (): Promise<LanguageData[]> => {
   const response = await ProgrammingAPI.fetchCodaveriLanguages();
   return response.data;
 };

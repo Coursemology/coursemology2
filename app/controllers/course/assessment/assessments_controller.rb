@@ -74,7 +74,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     @programming_questions = @assessment.programming_questions
 
     @programming_qns_invalid_for_koditsu = @programming_questions.reject do |question|
-      KoditsuAsyncApiService.language_valid_for_koditsu?(question.language)
+      question.language.koditsu_whitelisted?
     end
   end
 

@@ -285,7 +285,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   return (
     // TODO: Update these queries to return only data needed for this page, instead of the full objects.
     <Preload render={<LoadingIndicator />} while={fetchCodaveriLanguages}>
-      {(data): JSX.Element => {
+      {(languages): JSX.Element => {
         return (
           <>
             <GenerateTabs
@@ -323,7 +323,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                       <GenerateConversation
                         activeSnapshotId={activeSnapshotId}
                         codaveriForm={codaveriForm}
-                        languages={data.languages.map((l) => ({
+                        languages={languages.map((l) => ({
                           label: l.name,
                           value: l.id,
                         }))}
@@ -523,7 +523,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
               <Divider className="mt-8" />
             </Container>
             <GenerateExportDialog
-              languages={data.languages}
+              languages={languages}
               open={exportDialogOpen}
               saveActiveFormData={saveActiveFormData}
               setOpen={setExportDialogOpen}

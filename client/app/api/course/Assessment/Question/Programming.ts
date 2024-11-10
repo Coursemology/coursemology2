@@ -30,7 +30,7 @@ export default class ProgrammingAPI extends BaseAPI {
     return this.client.patch(`${this.#urlPrefix}/${id}`, data);
   }
 
-  fetchCodaveriLanguages(): APIResponse<{ languages: LanguageData[] }> {
+  fetchCodaveriLanguages(): APIResponse<LanguageData[]> {
     return this.client.get(`${this.#urlPrefix}/codaveri_languages`);
   }
 
