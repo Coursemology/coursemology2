@@ -42,6 +42,12 @@ GIT
       activerecord (>= 5.2, < 8.0)
       pg (>= 0.18, < 2.0)
 
+PATH
+  remote: ../polyglot
+  specs:
+    coursemology-polyglot (0.3.8)
+      activesupport (>= 4.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -176,8 +182,6 @@ GEM
     concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     consistency_fail (0.3.7)
-    coursemology-polyglot (0.3.8)
-      activesupport (>= 4.2)
     crass (1.0.6)
     csv (3.3.0)
     date (3.3.4)
@@ -628,7 +632,7 @@ DEPENDENCIES
   capybara-selenium
   carrierwave (~> 3)
   consistency_fail
-  coursemology-polyglot
+  coursemology-polyglot!
   csv
   devise (= 4.9.4)
   devise-multi_email

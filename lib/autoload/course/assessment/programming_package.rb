@@ -191,6 +191,21 @@ class Course::Assessment::ProgrammingPackage
     retrieve_files_in_main_dir
   end
 
+  # Gets the contents of the XML test reports (if present).
+  # Under normal circumstances, they will not be present in the evaluation package,
+  # but current implementation of Codaveri-only evaluations requires them.
+  def test_reports
+    ensure_file_open!
+    reports_map = {}
+    [:public, :private, :evaluation].each do |test_type|
+      if @file.find_entry("report-#{test_type}.xml").present?
+        reports_map[test_type] =
+          @file.read("report-#{test_type}.xml")
+      end
+    end
+    reports_map
+  end
+
   private
 
   # Ensures that the zip file is open.

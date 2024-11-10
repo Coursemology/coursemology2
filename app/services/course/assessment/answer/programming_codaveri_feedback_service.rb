@@ -35,8 +35,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
 
     @answer_object[:problem_id] = @question.codaveri_id
 
-    @answer_object[:language_version][:language] = @question.polyglot_language_name
-    @answer_object[:language_version][:version] = @question.polyglot_language_version
+    @answer_object[:language_version][:language] = @question.language.polyglot_name
+    @answer_object[:language_version][:version] = @question.language.polyglot_version
 
     @answer_object[:is_only_itsp] = true if @course.codaveri_itsp_enabled?
 

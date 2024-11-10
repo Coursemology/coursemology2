@@ -7,7 +7,7 @@ CODAVERI_WHITELIST =
   Coursemology::Polyglot::Language::Python::Python3Point9,
   Coursemology::Polyglot::Language::Python::Python3Point10,
   Coursemology::Polyglot::Language::Python::Python3Point12,
-  Coursemology::Polyglot::Language::R]
+  Coursemology::Polyglot::Language::R::R4Point1]
 
 KODITSU_WHITELIST =
   [Coursemology::Polyglot::Language::CPlusPlus,
@@ -32,7 +32,6 @@ class AddLanguageEvaluatorSupportFlags < ActiveRecord::Migration[7.2]
     add_column :polyglot_languages, :evaluator_whitelisted, :boolean, default: true, null: false
     add_column :polyglot_languages, :codaveri_whitelisted, :boolean, default: false, null: false
     add_column :polyglot_languages, :koditsu_whitelisted, :boolean, default: false, null: false
-    add_column :polyglot_languages, :testcase_type, :string, default: 'expr', null: false
 
     CODAVERI_WHITELIST.each do |language|
       Coursemology::Polyglot::Language.where(type: language.name).update_all(codaveri_whitelisted: true)
@@ -46,6 +45,8 @@ class AddLanguageEvaluatorSupportFlags < ActiveRecord::Migration[7.2]
       Coursemology::Polyglot::Language.where(type: language.name).update_all(enabled: false)
     end
 
-    Coursemology::Polyglot::Language.where(type: Coursemology::Polyglot::Language::R.name).update_all(evaluator_whitelisted: false, testcase_type: 'io')
+    Coursemology::Polyglot::Language.
+    where(type: Coursemology::Polyglot::Language::R::R4Point1.name).
+    update_all(evaluator_whitelisted: false)
   end
 end

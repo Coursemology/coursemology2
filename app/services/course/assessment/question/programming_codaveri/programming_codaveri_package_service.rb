@@ -44,6 +44,8 @@ class Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPack
       case @language
       when Coursemology::Polyglot::Language::Python
         Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageService.new question, package
+      when Coursemology::Polyglot::Language::R
+        Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService.new question, package
       else
         raise NotImplementedError
       end

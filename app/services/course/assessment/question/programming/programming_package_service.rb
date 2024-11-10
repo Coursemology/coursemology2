@@ -48,6 +48,8 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
         Course::Assessment::Question::Programming::Cpp::CppPackageService.new params
       when Coursemology::Polyglot::Language::Java
         Course::Assessment::Question::Programming::Java::JavaPackageService.new params
+      when Coursemology::Polyglot::Language::R
+        Course::Assessment::Question::Programming::R::RPackageService.new params
       else
         raise NotImplementedError
       end

@@ -15,7 +15,7 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.post(
       headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
+        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil),
         'Content-Type' => 'application/json'
       },
       body: @payload.to_json
@@ -27,28 +27,12 @@ class CodaveriAsyncApiService
     connection = Excon.new(@api_endpoint)
     response = connection.get(
       headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY']
+        'x-api-key' => ENV.fetch('CODAVERI_API_KEY', nil)
       },
       query: @payload
     )
     parse_response(response)
   end
-
-  def self.language_valid_for_codaveri?(language)
-    codaveri_language_whitelist.include?(language.type.constantize)
-  end
-
-  def self.codaveri_language_whitelist
-    [Coursemology::Polyglot::Language::Python::Python3Point4,
-     Coursemology::Polyglot::Language::Python::Python3Point5,
-     Coursemology::Polyglot::Language::Python::Python3Point6,
-     Coursemology::Polyglot::Language::Python::Python3Point7,
-     Coursemology::Polyglot::Language::Python::Python3Point9,
-     Coursemology::Polyglot::Language::Python::Python3Point10,
-     Coursemology::Polyglot::Language::Python::Python3Point12]
-  end
-
-  private_class_method :codaveri_language_whitelist
 
   private
 

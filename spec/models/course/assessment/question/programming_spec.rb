@@ -270,20 +270,6 @@ RSpec.describe Course::Assessment::Question::Programming do
       end
     end
 
-    describe '#polyglot_language_name' do
-      subject { build(:course_assessment_question_programming) }
-      it 'returns correct language name' do
-        expect(subject.polyglot_language_name).to eq 'python'
-      end
-    end
-
-    describe '#polyglot_language_version' do
-      subject { build(:course_assessment_question_programming) }
-      it 'returns correct language version' do
-        expect(subject.polyglot_language_version).to eq '3.10'
-      end
-    end
-
     describe '#validate_codaveri_question' do
       let(:subject_evaluator) do
         build(:course_assessment_question_programming, is_codaveri: true, assessment: assessment, language: language)
