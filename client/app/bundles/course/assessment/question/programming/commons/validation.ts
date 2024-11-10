@@ -1,5 +1,6 @@
 import equal from 'fast-deep-equal';
 import {
+  LanguageData,
   LanguageMode,
   ProgrammingFormData,
 } from 'types/course/assessment/question/programming';
@@ -76,6 +77,7 @@ const POLYGLOT_SCHEMA: Partial<
 > = {
   python: basicMetadataSchema,
   c_cpp: basicMetadataSchema,
+  r: basicMetadataSchema,
   java: javaMetadataSchema,
 };
 
@@ -103,7 +105,42 @@ const schema: Translated<AnyObjectSchema> = (t) =>
         .transform(nullCaster)
         .nullable()
         .typeError(t(translations.hasToBeAtLeastOne)),
-      isCodaveri: boolean(),
+      isCodaveri: boolean()
+        // The argument(s) starting with $ are taken from context object (what is passed in to validatesWith)
+        .when(['languageId', '$getDataFromId'], (languageId, getDataFromId) => {
+          const language: LanguageData = getDataFromId(languageId);
+          return boolean()
+            .test({
+              name: 'default-evaluator-not-supported',
+              message: t(translations.defaultEvaluatorNotSupported, {
+                languageName: language.name,
+              }),
+              test: (useCodaveri) =>
+                useCodaveri || language.whitelists.defaultEvaluator,
+            })
+            .test({
+              name: 'codaveri-evaluator-not-supported',
+              message: t(translations.codaveriEvaluatorNotSupported, {
+                languageName: language.name,
+              }),
+              test: (useCodaveri) =>
+                !useCodaveri || language.whitelists.codaveriEvaluator,
+            });
+        }),
+      liveFeedbackEnabled: boolean().when(
+        ['languageId', '$getDataFromId'],
+        (languageId, getDataFromId) => {
+          const language: LanguageData = getDataFromId(languageId);
+          return boolean().test({
+            name: 'live-feedback-not-supported',
+            message: t(translations.liveFeedbackNotSupported, {
+              languageName: language.name,
+            }),
+            test: (useLiveFeedback) =>
+              !useLiveFeedback || language.whitelists.codaveriEvaluator,
+          });
+        },
+      ),
       editOnline: boolean(),
       package: mixed().when(['autograded', 'editOnline'], {
         is: (autograded: boolean, editOnline: boolean) =>

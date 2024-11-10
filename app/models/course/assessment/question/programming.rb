@@ -247,7 +247,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def validate_codaveri_question
     return if (!is_codaveri && !live_feedback_enabled) || duplicating?
 
-    # TODO: Move this validation logic to frontend, to prevent user from submitting in the first place.
     if !language.codaveri_evaluator_whitelisted?
       errors.add(:base, 'Language type must be Python 3 and above to activate either codaveri ' \
                         'evaluator or live feedback')

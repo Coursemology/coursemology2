@@ -52,20 +52,29 @@ const BasicPackageEditor = (props: BasicPackageEditorProps): JSX.Element => {
       <PackageEditor.TestCases hint={props.hint}>
         <TestCases
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="testUi.metadata.testCases.public"
+          rhsHeader={t(translations.expected)}
           title={t(translations.publicTestCases)}
         />
 
         <TestCases
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="testUi.metadata.testCases.private"
+          rhsHeader={t(translations.expected)}
           subtitle={t(translations.privateTestCasesHint)}
           title={t(translations.privateTestCases)}
         />
 
         <TestCases
           disabled={props.disabled}
+          hintHeader={t(translations.hint)}
+          lhsHeader={t(translations.expression)}
           name="testUi.metadata.testCases.evaluation"
+          rhsHeader={t(translations.expected)}
           subtitle={t(translations.evaluationTestCasesHint)}
           title={t(translations.evaluationTestCases)}
         />

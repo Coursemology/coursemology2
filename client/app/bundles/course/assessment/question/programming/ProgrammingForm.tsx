@@ -45,7 +45,7 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
   const [form, setForm] = useState<FormEmitter<ProgrammingFormData>>();
   const [pending, setPending] = useState<() => void>();
 
-  const { languageOptions, getModeFromId } = useLanguageMode(data.languages);
+  const { languageOptions, getDataFromId } = useLanguageMode(data.languages);
 
   const navigate = useNavigate();
 
@@ -104,7 +104,7 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
 
   const preProcessForm = (draft: ProgrammingFormData): ProgrammingFormData => {
     if (draft.testUi?.mode) {
-      draft.testUi.mode = getModeFromId(draft.question.languageId);
+      draft.testUi.mode = getDataFromId(draft.question.languageId)?.editorMode;
     }
 
     return draft;
@@ -131,22 +131,26 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
         }}
         transformsBy={preProcessForm}
         validates={schema(t)}
+        validatesWith={{ getDataFromId }}
       >
         <QuestionFields disabled={submitting} />
 
         <Section sticksToNavbar title={t(translations.languageAndEvaluation)}>
           <LanguageFields
             disabled={submitting}
-            getModeFromId={getModeFromId}
+            getDataFromId={getDataFromId}
             languageOptions={languageOptions}
           />
 
-          <EvaluatorFields disabled={submitting} />
+          <EvaluatorFields
+            disabled={submitting}
+            getDataFromId={getDataFromId}
+          />
         </Section>
 
-        <PackageFields disabled={submitting} getModeFromId={getModeFromId} />
+        <PackageFields disabled={submitting} getDataFromId={getDataFromId} />
 
-        <FeedbackFields disabled={submitting} />
+        <FeedbackFields disabled={submitting} getDataFromId={getDataFromId} />
 
         <BuildLog />
       </Form>

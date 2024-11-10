@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { RadioGroup } from '@mui/material';
 import {
-  LanguageMode,
+  LanguageData,
   ProgrammingFormData,
 } from 'types/course/assessment/question/programming';
 
@@ -20,7 +20,7 @@ import PolyglotEditor from '../package/PolyglotEditor';
 export const PACKAGE_SECTION_ID = 'package-fields' as const;
 
 interface PackageFieldsProps {
-  getModeFromId: (id: number) => LanguageMode;
+  getDataFromId: (id: number) => LanguageData;
   disabled?: boolean;
 }
 
@@ -111,7 +111,7 @@ const PackageFields = (props: PackageFieldsProps): JSX.Element => {
       {languageId && (
         <PolyglotEditor
           disabled={props.disabled}
-          getModeFromId={props.getModeFromId}
+          languageMode={props.getDataFromId(languageId)?.editorMode}
         />
       )}
     </>

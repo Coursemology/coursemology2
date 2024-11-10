@@ -1,6 +1,9 @@
 import { Controller, useFormContext } from 'react-hook-form';
-import { Grid, InputAdornment, RadioGroup } from '@mui/material';
-import { ProgrammingFormData } from 'types/course/assessment/question/programming';
+import { Grid, InputAdornment, RadioGroup, Typography } from '@mui/material';
+import {
+  LanguageData,
+  ProgrammingFormData,
+} from 'types/course/assessment/question/programming';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import ExperimentalChip from 'lib/components/core/ExperimentalChip';
@@ -14,6 +17,7 @@ import { useProgrammingFormDataContext } from '../../hooks/ProgrammingFormDataCo
 
 interface EvaluatorFieldsProps {
   disabled?: boolean;
+  getDataFromId: (id: number) => LanguageData;
 }
 
 const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
@@ -23,6 +27,7 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
 
   const { question } = useProgrammingFormDataContext();
 
+  const currentLanguage = props.getDataFromId(watch('question.languageId'));
   const autograded = watch('question.autograded');
   if (!autograded) return null;
 
@@ -35,21 +40,28 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
         <Controller
           control={control}
           name="question.isCodaveri"
-          render={({ field }): JSX.Element => (
+          render={({ field, fieldState: { error } }): JSX.Element => (
             <RadioGroup
               className="space-y-5"
               {...field}
               onChange={(e): void => {
                 if (codaveriDisabled) return;
-
                 field.onChange(e.target.value === 'codaveri');
               }}
               value={field.value ? 'codaveri' : 'default'}
             >
+              {error && (
+                <Typography color="error" variant="body2">
+                  {error.message}
+                </Typography>
+              )}
               <RadioButton
                 className="my-0"
                 description={t(translations.defaultEvaluatorHint)}
-                disabled={props.disabled}
+                disabled={
+                  !currentLanguage?.whitelists.defaultEvaluator ||
+                  props.disabled
+                }
                 label={t(translations.defaultEvaluator)}
                 value="default"
               />
@@ -57,7 +69,11 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
               <RadioButton
                 className="my-0"
                 description={t(translations.codaveriEvaluatorHint)}
-                disabled={codaveriDisabled || props.disabled}
+                disabled={
+                  codaveriDisabled ||
+                  !currentLanguage?.whitelists.codaveriEvaluator ||
+                  props.disabled
+                }
                 disabledHint={
                   codaveriDisabled &&
                   t(translations.canEnableCodaveriInComponents)
@@ -67,7 +83,11 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
                     <span>{t(translations.codaveriEvaluator)}</span>
 
                     <ExperimentalChip
-                      disabled={codaveriDisabled || props.disabled}
+                      disabled={
+                        codaveriDisabled ||
+                        !currentLanguage?.whitelists.codaveriEvaluator ||
+                        props.disabled
+                      }
                     />
                   </span>
                 }

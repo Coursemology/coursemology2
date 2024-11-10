@@ -161,7 +161,10 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
         <Container disableGutters maxWidth={false}>
           <TestCases
             disabled={lockStates['testUi.metadata.testCases.public']}
+            hintHeader={t(translations.hint)}
+            lhsHeader={t(translations.expression)}
             name="testUi.metadata.testCases.public"
+            rhsHeader={t(translations.expected)}
             title={t(translations.publicTestCases)}
           />
         </Container>
@@ -174,7 +177,10 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
         <Container disableGutters maxWidth={false}>
           <TestCases
             disabled={lockStates['testUi.metadata.testCases.private']}
+            hintHeader={t(translations.hint)}
+            lhsHeader={t(translations.expression)}
             name="testUi.metadata.testCases.private"
+            rhsHeader={t(translations.expected)}
             subtitle={t(translations.privateTestCasesHint)}
             title={t(translations.privateTestCases)}
           />
@@ -189,7 +195,10 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
         <Container disableGutters maxWidth={false}>
           <TestCases
             disabled={lockStates['testUi.metadata.testCases.evaluation']}
+            hintHeader={t(translations.hint)}
+            lhsHeader={t(translations.expression)}
             name="testUi.metadata.testCases.evaluation"
+            rhsHeader={t(translations.expected)}
             subtitle={t(translations.evaluationTestCasesHint)}
             title={t(translations.evaluationTestCases)}
           />
