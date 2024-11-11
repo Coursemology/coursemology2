@@ -65,6 +65,15 @@ const FolderShow: FC = () => {
 
   const headerToolbars: ReactElement[] = [];
 
+  if (folderId === undefined) {
+    const rootFolderId = currFolderInfo.id;
+    window.history.replaceState(
+      {},
+      '',
+      getWorkbinFolderURL(getCourseId(), rootFolderId),
+    );
+  }
+
   if (currFolderInfo.isConcrete && permissions.canCreateSubfolder) {
     headerToolbars.push(
       <NewSubfolderButton
