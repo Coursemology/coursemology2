@@ -275,7 +275,7 @@ class Course::Assessment::Submission < ApplicationRecord
       map do |pair|
       {
         question_id: pair[0],
-        answer_ids: pair[1].reject(&:last).map(&:second)
+        answer_ids: pair[1].reject(&:last).map(&:second).first(10)
       }
     end
   end

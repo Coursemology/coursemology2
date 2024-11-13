@@ -17,13 +17,16 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
 
   /**
    * Gets the past answers from a SubmissionQuestion
+   * Can include answers_to_load in params to indicate how many to pull (default 10)
    *
    * @param {number} submissionQuestionId
    * @return {Promise}
    */
-  getPastAnswers(submissionQuestionId) {
+  getPastAnswers(submissionQuestionId, answersToLoad = 10) {
+    const params = { answers_to_load: answersToLoad };
     return this.client.get(
       `${this.#urlPrefix}/${submissionQuestionId}/past_answers`,
+      { params },
     );
   }
 
