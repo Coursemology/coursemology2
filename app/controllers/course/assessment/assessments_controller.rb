@@ -325,7 +325,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def create_koditsu_invitation_job
-    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    is_course_koditsu_enabled = @assessment.course.component_enabled?(Course::KoditsuPlatformComponent)
     is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
 
     return unless is_course_koditsu_enabled && is_assessment_koditsu_enabled
@@ -346,7 +346,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def create_fetch_koditsu_submissions_job
-    is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
+    is_course_koditsu_enabled = @assessment.course.component_enabled?(Course::KoditsuPlatformComponent)
     is_assessment_koditsu_enabled = @assessment.koditsu_assessment_id && @assessment.is_koditsu_enabled
 
     return unless is_course_koditsu_enabled && is_assessment_koditsu_enabled
