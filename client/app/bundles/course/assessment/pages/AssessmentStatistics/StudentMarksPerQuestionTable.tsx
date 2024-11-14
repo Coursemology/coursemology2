@@ -15,7 +15,7 @@ import { getEditSubmissionURL } from 'lib/helpers/url-builders';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import LastAttemptIndex from './AnswerDisplay/LastAttempt';
+import LatestAnswerDisplay from './AnswerDisplay/LatestAnswerDisplay';
 import { getClassNameForMarkCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
@@ -107,7 +107,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.answers?.[index].grade === 'number' ? (
+          return datum.answers?.[index] &&
+            typeof datum.answers?.[index].grade === 'number' ? (
             renderAnswerGradeClickableCell(index, datum)
           ) : (
             <div />
@@ -274,11 +275,11 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         maxWidth="lg"
         onClose={(): void => setOpenAnswer(false)}
         open={openAnswer}
-        title={answerDisplayInfo.studentName}
       >
-        <LastAttemptIndex
-          curAnswerId={answerDisplayInfo.answerId}
+        <LatestAnswerDisplay
+          currAnswerId={answerDisplayInfo.answerId}
           index={answerDisplayInfo.index}
+          name={answerDisplayInfo.studentName}
         />
       </Prompt>
     </>

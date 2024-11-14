@@ -2,45 +2,65 @@
 class Course::Statistics::AnswersController < Course::Statistics::Controller
   helper Course::Assessment::Submission::SubmissionsHelper.name.sub(/Helper$/, '')
 
-  MAX_ANSWERS_COUNT = 10
-
-  def question_answer_details
+  def latest_answer
     @answer = Course::Assessment::Answer.find(answer_params[:id])
     @submission = @answer.submission
+    @question = @answer.question
     @assessment = @submission.assessment
 
+    submission_id = @answer.submission_id
+    question_id = @answer.question_id
+
+    @question_index = question_index(question_id)
+
     @submission_question = Course::Assessment::SubmissionQuestion.
-                           where(submission_id: @answer.submission_id, question_id: @answer.question_id).
+                           where(submission_id: submission_id, question_id: question_id).
+                           includes(actable: { files: { annotations:
+                                             { discussion_topic: { posts: :codaveri_feedback } } } },
+                                    discussion_topic: { posts: :codaveri_feedback }).first
+  end
+
+  # Attempt here refers to a submitted answer
+  def attempts
+    @answer = Course::Assessment::Answer.find(answer_params[:id])
+    @submission = @answer.submission
+    @question = @answer.question
+    @assessment = @submission.assessment
+
+    submission_id = @answer.submission_id
+    question_id = @answer.question_id
+
+    @question_index = question_index(question_id)
+
+    @submission_question = Course::Assessment::SubmissionQuestion.
+                           where(submission_id: submission_id, question_id: question_id).
                            includes(actable: { files: { annotations:
                                              { discussion_topic: { posts: :codaveri_feedback } } } },
                                     discussion_topic: { posts: :codaveri_feedback }).first
 
-    fetch_all_answers(@answer.submission_id, @answer.question_id)
+    fetch_all_answers(submission_id, question_id, answer_params[:limit].to_i)
+    fetch_all_actable_questions(@question)
   end
 
-  def all_answers
+  def all_attempts
     @submission_question = Course::Assessment::SubmissionQuestion.find(submission_question_params[:id])
-    submission_id = @submission_question.submission_id
-    @submission = Course::Assessment::Submission.find(submission_id)
-
-    question_id = @submission_question.question_id
-    @question = Course::Assessment::Question.find(question_id)
+    @submission = @submission_question.submission
+    @question = @submission_question.question
     @assessment = @submission.assessment
 
-    @submission_question = Course::Assessment::SubmissionQuestion.
-                           where(submission_id: submission_id, question_id: question_id).
-                           includes({ discussion_topic: { posts: :codaveri_feedback } }).first
+    submission_id = @submission_question.submission_id
+    question_id = @submission_question.question_id
+
     @question_index = question_index(question_id)
-    @all_answers = Course::Assessment::Answer.
-                   unscope(:order).
-                   order(:created_at).
-                   where(submission_id: submission_id, question_id: question_id)
+
+    fetch_all_answers(submission_id, question_id, -1)
+    fetch_all_actable_questions(@question)
   end
 
   private
 
   def answer_params
-    params.permit(:id)
+    params.permit(:id, :limit)
   end
 
   def submission_question_params
@@ -56,14 +76,36 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
     question_ids.index(question_id)
   end
 
-  def fetch_all_answers(submission_id, question_id)
-    answers = Course::Assessment::Answer.
-              unscope(:order).
-              order(created_at: :desc).
-              where(submission_id: submission_id, question_id: question_id)
+  def fetch_all_answers(submission_id, question_id, limit)
+    @all_answers = if limit == -1
+                     Course::Assessment::Answer.
+                       unscope(:order).
+                       order(:created_at).
+                       where(submission_id: submission_id, question_id: question_id)
+                   else
+                     Course::Assessment::Answer.
+                       unscope(:order).
+                       order(:created_at).
+                       where(submission_id: submission_id, question_id: question_id).
+                       limit(limit)
+                   end
+  end
 
-    current_answer = answers.find(&:current_answer?)
-    @all_answers = answers.where(current_answer: false).limit(MAX_ANSWERS_COUNT - 1).to_a.reverse
-    @all_answers.unshift(current_answer)
+  def fetch_all_actable_questions(question)
+    unless versioned_question?(question)
+      @all_actable_questions = [question.actable]
+      return
+    end
+
+    question = question.actable
+    @all_actable_questions = [question]
+    while question.parent
+      @all_actable_questions << question.parent
+      question = question.parent
+    end
+  end
+
+  def versioned_question?(question)
+    question.actable.is_a?(Course::Assessment::Question::Programming)
   end
 end

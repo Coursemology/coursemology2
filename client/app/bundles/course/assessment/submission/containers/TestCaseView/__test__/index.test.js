@@ -52,10 +52,9 @@ const defaultStaffViewProps = {
 };
 
 const getWarning = (page, text) =>
-  within(page.getByText(text).closest('div')).queryByText(
-    'Only staff can see this.',
-    { exact: false },
-  );
+  within(
+    page.getByText(text).closest('.MuiAccordionSummary-content'),
+  ).queryByText('Only staff can see this.', { exact: false });
 
 describe('TestCaseView', () => {
   describe('when viewing as staff', () => {
