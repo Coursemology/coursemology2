@@ -5,6 +5,7 @@ interface ToolbarProps {
   alternative?: {
     when: () => boolean;
     render: () => ReactNode;
+    keepNative: boolean;
   };
   searchKeyword?: string;
   onSearchKeywordChange?: (keyword: string) => void;
