@@ -95,9 +95,7 @@ const AssessmentsScoreSummaryDownload = (
       </Button>
 
       <Prompt
-        // TODO: incorporate CSV download job into onClickPrimary after
-        // implemented properly on Backend
-        onClickPrimary={() => setOpenDialog(false)}
+        onClickPrimary={handleOnClick}
         onClose={() => setOpenDialog(false)}
         open={openDialog}
         primaryColor="info"
