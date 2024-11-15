@@ -35,6 +35,7 @@ export interface FilterTemplate {
 export interface ToolbarTemplate<D extends Data> {
   show?: boolean;
   activeToolbar?: (rows: D[]) => JSX.Element;
+  keepNative?: boolean;
   buttons?: JSX.Element[];
 }
 

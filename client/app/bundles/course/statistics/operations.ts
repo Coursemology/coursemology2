@@ -1,4 +1,8 @@
+import { AxiosError } from 'axios';
+import { JobCompleted, JobErrored } from 'types/jobs';
+
 import CourseAPI from 'api/course';
+import pollJob from 'lib/helpers/jobHelpers';
 
 import {
   AssessmentsStatistics,
@@ -7,6 +11,8 @@ import {
   StaffStatistics,
   StudentsStatistics,
 } from './types';
+
+const DOWNLOAD_JOB_POLL_INTERVAL_MS = 2000;
 
 export const fetchStudentStatistics = async (): Promise<StudentsStatistics> => {
   const response =
@@ -40,3 +46,21 @@ export const fetchAssessmentsStatistics =
       await CourseAPI.statistics.course.fetchAssessmentsStatistics();
     return response.data;
   };
+
+export const downloadScoreSummary = (
+  handleSuccess: (successData: JobCompleted) => void,
+  handleFailure: (error: JobErrored | AxiosError) => void,
+  assessmentIds: number[],
+): void => {
+  CourseAPI.statistics.course
+    .downloadScoreSummary(assessmentIds)
+    .then((response) => {
+      pollJob(
+        response.data.jobUrl,
+        handleSuccess,
+        handleFailure,
+        DOWNLOAD_JOB_POLL_INTERVAL_MS,
+      );
+    })
+    .catch(handleFailure);
+};

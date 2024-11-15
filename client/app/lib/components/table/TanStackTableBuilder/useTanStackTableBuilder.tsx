@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
   Cell,
-  ColumnDef,
   ColumnFiltersState,
   getCoreRowModel,
   getFacetedUniqueValues,
@@ -12,7 +11,7 @@ import {
   Row,
   useReactTable,
 } from '@tanstack/react-table';
-import { isEmpty, isString } from 'lodash';
+import { isEmpty } from 'lodash';
 
 import { RowEqualityData, TableProps } from '../adapters';
 import { TableTemplate } from '../builder';
@@ -186,6 +185,7 @@ const useTanStackTableBuilder = <D extends object>(
           props.toolbar?.activeToolbar?.(
             table.getSelectedRowModel().rows.map((row) => row.original),
           ),
+        keepNative: props.toolbar?.keepNative ?? false,
       },
       searchKeyword,
       onSearchKeywordChange: setSearchKeyword,

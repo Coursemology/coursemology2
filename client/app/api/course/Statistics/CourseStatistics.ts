@@ -1,3 +1,5 @@
+import { JobSubmitted } from 'types/jobs';
+
 import { APIResponse } from 'api/types';
 import {
   AssessmentsStatistics,
@@ -32,5 +34,11 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
 
   fetchAssessmentsStatistics(): APIResponse<AssessmentsStatistics> {
     return this.client.get(`${this.#urlPrefix}/assessments`);
+  }
+
+  downloadScoreSummary(assessmentIds: number[]): APIResponse<JobSubmitted> {
+    return this.client.get(`${this.#urlPrefix}/assessments/download`, {
+      params: { assessment_ids: assessmentIds },
+    });
   }
 }

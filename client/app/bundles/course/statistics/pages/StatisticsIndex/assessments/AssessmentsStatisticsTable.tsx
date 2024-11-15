@@ -19,6 +19,8 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatMiniDateTime } from 'lib/moment';
 
+import AssessmentsScoreSummaryDownload from './AssessmentsScoreSummaryDownload';
+
 const translations = defineMessages({
   title: {
     id: 'course.statistics.StatisticsIndex.assessments.title',
@@ -238,7 +240,7 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
 
   return (
     <>
-      <Typography className="ml-2" variant="h6">
+      <Typography className="ml-6" variant="h6">
         {t(translations.tableTitle, { numStudents })}
       </Typography>
       <Table
@@ -251,7 +253,7 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
         }
         getRowEqualityData={(assessment): CourseAssessment => assessment}
         getRowId={(assessment): string => assessment.id.toString()}
-        indexing={{ indices: true }}
+        indexing={{ indices: true, rowSelectable: true }}
         pagination={{
           rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
           showAllRows: true,
@@ -280,7 +282,15 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
             },
           },
         }}
-        toolbar={{ show: true }}
+        toolbar={{
+          show: true,
+          activeToolbar: (selectedAssessments): JSX.Element => (
+            <AssessmentsScoreSummaryDownload
+              assessments={selectedAssessments}
+            />
+          ),
+          keepNative: true,
+        }}
       />
     </>
   );
