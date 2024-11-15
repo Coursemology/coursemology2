@@ -439,6 +439,7 @@ Rails.application.routes.draw do
         get '/' => 'statistics#index'
         get 'answer/:id' => 'answers#question_answer_details'
         get 'assessments' => 'aggregate#all_assessments'
+        get 'assessments/download' => 'aggregate#download_score_summary'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
         get 'course/progression' => 'aggregate#course_progression'

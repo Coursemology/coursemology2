@@ -34,6 +34,13 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     fetch_all_assessment_related_statistics_hash
   end
 
+  def download_score_summary
+    job = Course::Statistics::AssessmentsScoreSummaryDownloadJob.
+          perform_later(current_course, params[:assessment_ids]).job
+
+    render partial: 'jobs/submitted', locals: { job: job }
+  end
+
   private
 
   def assessment_info_array

@@ -1,4 +1,7 @@
 en:
   course:
     statistics:
+      name: 'Name'
+      type: 'Student Type'
+      email: 'Email'
       header: 'Statistics'
