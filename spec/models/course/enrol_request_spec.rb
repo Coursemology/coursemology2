@@ -47,25 +47,19 @@ RSpec.describe Course::EnrolRequest, type: :model do
         let!(:approved_request) { create(:course_enrol_request, :approved, course: course, user: user) }
         subject { approved_request.destroy }
 
-        it 'cannot be destroyed' do
+        it 'can be destroyed' do
           subject
-          expect(approved_request).not_to be_destroyed
-          expect(approved_request.errors[:base]).to include(
-            'activerecord.errors.models.course/enrol_request.attributes.base.deletion'
-          )
+          expect(approved_request).to be_destroyed
         end
       end
 
       context 'when a request is already rejected' do
-        let!(:rejected__request) { create(:course_enrol_request, :rejected, course: course, user: user) }
-        subject { rejected__request.destroy }
+        let!(:rejected_request) { create(:course_enrol_request, :rejected, course: course, user: user) }
+        subject { rejected_request.destroy }
 
-        it 'cannot be destroyed' do
+        it 'can be destroyed' do
           subject
-          expect(rejected__request).not_to be_destroyed
-          expect(rejected__request.errors[:base]).to include(
-            'activerecord.errors.models.course/enrol_request.attributes.base.deletion'
-          )
+          expect(rejected_request).to be_destroyed
         end
       end
 
