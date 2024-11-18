@@ -3,7 +3,13 @@ json.fields do
   json.questionId answer.question_id
   json.id answer.acting_as.id
   question = answer.question.specific
-  json.answer_text answer.answer_text unless question.hide_text
+  if question.hide_text
+    json.answer_text nil
+  elsif answer.submission.workflow_state == 'attempting'
+    json.answer_text answer.answer_text
+  else
+    json.answer_text format_ckeditor_rich_text(answer.answer_text)
+  end
 end
 
 json.attachments answer.attachments do |attachment|
