@@ -57,7 +57,6 @@ spec/controllers/course/user_invitations_controller_spec.rb:3.193817
 spec/controllers/course/user_registrations_controller_spec.rb:3.795959
 spec/controllers/course/users_controller_spec.rb:6.095304
 spec/controllers/course/video/submission/submissions_controller_spec.rb:0.729742
-spec/controllers/course/virtual_classrooms_controller_spec.rb:0.579836
 spec/controllers/jobs_controller_spec.rb:0.066339
 spec/controllers/system/admin/admin_controller_spec.rb:0.073279
 spec/controllers/system/admin/announcements_controller_spec.rb:0.176993
@@ -86,7 +85,6 @@ spec/features/course/admin/leaderboard_settings_spec.rb:3.128346
 spec/features/course/admin/material_settings_spec.rb:0.622561
 spec/features/course/admin/sidebar_settings_spec.rb:0.648388
 spec/features/course/admin/video_settings_spec.rb:0.614424
-spec/features/course/admin/virtual_classroom_settings_spec.rb:1.356165
 spec/features/course/announcement_management_spec.rb:4.620901
 spec/features/course/announcement_pagination_spec.rb:3.474845
 spec/features/course/announcement_sticky_spec.rb:0.525406
@@ -142,9 +140,6 @@ spec/features/course/user_profile_spec.rb:1.450512
 spec/features/course/video/submissions_viewing_spec.rb:0.650255
 spec/features/course/video/video_management_spec.rb:1.934766
 spec/features/course/video/video_viewing_and_attempting_spec.rb:1.171395
-spec/features/course/virtual_classroom/virtual_classroom_access_link_spec.rb:3.819229
-spec/features/course/virtual_classroom/virtual_classroom_management_spec.rb:3.167159
-spec/features/course/virtual_classroom/virtual_classroom_pagination_spec.rb:1.738996
 spec/features/course_management_spec.rb:1.16667
 spec/features/global_announcements_spec.rb:1.335721
 spec/features/jobs_query_spec.rb:0.249097
@@ -181,7 +176,6 @@ spec/helpers/course/condition/conditions_helper_spec.rb:0.01495
 spec/helpers/course/controller_helper_spec.rb:3.681278
 spec/helpers/course/lesson_plan/todos_helper_spec.rb:0.392783
 spec/helpers/course/material/folders_helper_spec.rb:0.006572
-spec/helpers/course/virtual_classrooms_helper_spec.rb:0.006687
 spec/helpers/route_overrides_helper_spec.rb:0.022171
 spec/jobs/course/assessment/answer/auto_grading_job_spec.rb:0.804528
 spec/jobs/course/assessment/closing_reminder_job_spec.rb:0.218738
@@ -312,8 +306,6 @@ spec/models/course/user_invitation_spec.rb:0.007652
 spec/models/course/video/submission_spec.rb:1.534878
 spec/models/course/video/video_ability_spec.rb:4.595735
 spec/models/course/video_spec.rb:0.997433
-spec/models/course/virtual_classroom_ability_spec.rb:1.350009
-spec/models/course/virtual_classroom_spec.rb:0.438186
 spec/models/course_ability_spec.rb:2.084716
 spec/models/course_spec.rb:2.367126
 spec/models/course_user_ability_spec.rb:0.32207
