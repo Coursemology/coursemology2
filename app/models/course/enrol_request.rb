@@ -17,8 +17,6 @@ class Course::EnrolRequest < ApplicationRecord
   validate :validate_no_duplicate_pending_request, on: :create
   validates :workflow_state, length: { maximum: 255 }, presence: true
 
-  before_destroy :validate_before_destroy
-
   belongs_to :course, inverse_of: :enrol_requests
   belongs_to :user, inverse_of: :course_enrol_requests
   belongs_to :confirmer, class_name: 'User', inverse_of: nil, optional: true
@@ -27,6 +25,13 @@ class Course::EnrolRequest < ApplicationRecord
   alias_method :reject=, :reject!
 
   scope :pending, -> { where(workflow_state: :pending) }
+
+  def validate_before_destroy
+    return true if workflow_state == 'pending'
+
+    errors.add(:base, :deletion)
+    false
+  end
 
   private
 
@@ -38,13 +43,6 @@ class Course::EnrolRequest < ApplicationRecord
   def validate_no_duplicate_pending_request
     existing_request = Course::EnrolRequest.find_by(course_id: course_id, user_id: user_id, workflow_state: 'pending')
     errors.add(:base, :existing_pending_request) if existing_request
-  end
-
-  def validate_before_destroy
-    return true if workflow_state == 'pending'
-
-    errors.add(:base, :deletion)
-    throw(:abort)
   end
 
   def approve(_ = nil)
