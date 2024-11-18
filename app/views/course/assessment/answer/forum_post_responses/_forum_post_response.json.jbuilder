@@ -2,7 +2,11 @@
 json.fields do
   json.questionId answer.question_id
   json.id answer.acting_as.id
-  json.answer_text answer.answer_text
+  if answer.submission.workflow_state == 'attempting'
+    json.answer_text answer.answer_text
+  else
+    json.answer_text format_ckeditor_rich_text(answer.answer_text)
+  end
   json.partial! 'course/assessment/submission/answer/forum_post_response/posts/post_packs',
                 selected_posts: answer.compute_post_packs
 end
