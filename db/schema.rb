@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_28_141424) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_18_152013) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -1218,26 +1218,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_141424) do
     t.index ["updater_id"], name: "fk__course_videos_updater_id"
   end
 
-  create_table "course_virtual_classrooms", id: :serial, force: :cascade do |t|
-    t.integer "course_id", null: false
-    t.text "instructor_classroom_link"
-    t.integer "classroom_id"
-    t.string "title", limit: 255, null: false
-    t.text "content"
-    t.datetime "start_at", precision: nil, null: false
-    t.datetime "end_at", precision: nil, null: false
-    t.integer "creator_id", null: false
-    t.integer "updater_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.integer "instructor_id"
-    t.jsonb "recorded_videos"
-    t.index ["course_id"], name: "fk__course_virtual_classrooms_course_id"
-    t.index ["creator_id"], name: "fk__course_virtual_classrooms_creator_id"
-    t.index ["instructor_id"], name: "index_course_virtual_classrooms_on_instructor_id"
-    t.index ["updater_id"], name: "fk__course_virtual_classrooms_updater_id"
-  end
-
   create_table "courses", id: :serial, force: :cascade do |t|
     t.integer "instance_id", null: false
     t.string "title", limit: 255, null: false
@@ -1694,10 +1674,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_141424) do
   add_foreign_key "course_videos", "course_video_tabs", column: "tab_id"
   add_foreign_key "course_videos", "users", column: "creator_id", name: "fk_course_videos_creator_id"
   add_foreign_key "course_videos", "users", column: "updater_id", name: "fk_course_videos_updater_id"
-  add_foreign_key "course_virtual_classrooms", "courses", name: "fk_course_virtual_classrooms_course_id"
-  add_foreign_key "course_virtual_classrooms", "users", column: "creator_id", name: "fk_course_virtual_classrooms_creator_id"
-  add_foreign_key "course_virtual_classrooms", "users", column: "instructor_id", name: "fk_course_virtual_classrooms_instructor_id", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "course_virtual_classrooms", "users", column: "updater_id", name: "fk_course_virtual_classrooms_updater_id"
   add_foreign_key "courses", "instances", name: "fk_courses_instance_id"
   add_foreign_key "courses", "users", column: "creator_id", name: "fk_courses_creator_id"
   add_foreign_key "courses", "users", column: "updater_id", name: "fk_courses_updater_id"
