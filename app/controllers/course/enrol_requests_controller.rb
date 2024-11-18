@@ -24,7 +24,7 @@ class Course::EnrolRequestsController < Course::ComponentController
   # Allow users to withdraw their requests to register for a course that are pending
   # approval/rejection.
   def destroy
-    if @enrol_request.destroy
+    if @enrol_request.validate_before_destroy && @enrol_request.destroy
       head :ok
     else
       render json: { errors: @enrol_request.errors.full_messages.to_sentence }, status: :bad_request
