@@ -181,6 +181,19 @@ RSpec.describe Course::UserInvitationService, type: :service do
           expect(errors.first[:email].first).to match(/invalid/)
         end
       end
+
+      context 'when a user is soft-deleted and restored' do
+        let(:deleted_user) { create(:course_student, course: course, deleted_at: Time.zone.now).user }
+        let(:new_user_attributes) do
+          [{ name: deleted_user.name, email: deleted_user.email, role: :student }]
+        end
+
+        it 'restores the soft-deleted user' do
+          subject.invite(new_user_attributes)
+          restored_user = CourseUser.with_deleted.find_by(course_id: course.id, user_id: deleted_user.id)
+          expect(restored_user).not_to be_nil
+        end
+      end
     end
 
     describe '#resend_invitation' do

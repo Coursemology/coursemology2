@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_22_035102) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -68,8 +68,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "satisfiability_type", default: 0
+    t.datetime "deleted_at"
     t.index ["course_id"], name: "fk__course_achievements_course_id"
     t.index ["creator_id"], name: "fk__course_achievements_creator_id"
+    t.index ["deleted_at"], name: "index_course_achievements_on_deleted_at"
     t.index ["updater_id"], name: "fk__course_achievements_updater_id"
   end
 
@@ -1118,9 +1120,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.integer "updater_id", null: false
     t.bigint "reference_timeline_id"
     t.integer "timeline_algorithm", default: 0, null: false
+    t.datetime "deleted_at"
     t.index ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
     t.index ["course_id"], name: "fk__course_users_course_id"
     t.index ["creator_id"], name: "fk__course_users_creator_id"
+    t.index ["deleted_at"], name: "index_course_users_on_deleted_at"
     t.index ["reference_timeline_id"], name: "index_course_users_on_reference_timeline_id"
     t.index ["updater_id"], name: "fk__course_users_updater_id"
     t.index ["user_id"], name: "fk__course_users_user_id"
@@ -1259,7 +1263,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_17_170847) do
     t.datetime "conditional_satisfiability_evaluation_time", precision: nil, default: "2021-10-24 10:31:32"
     t.integer "default_timeline_algorithm", default: 0, null: false
     t.string "koditsu_workspace_id"
+    t.datetime "deleted_at"
     t.index ["creator_id"], name: "fk__courses_creator_id"
+    t.index ["deleted_at"], name: "index_courses_on_deleted_at"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
     t.index ["updater_id"], name: "fk__courses_updater_id"

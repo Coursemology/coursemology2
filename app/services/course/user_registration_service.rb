@@ -53,9 +53,18 @@ class Course::UserRegistrationService
     phantom = invitation.try(:phantom) || false
     timeline_algorithm = invitation.try(:timeline_algorithm) || registration.course.default_timeline_algorithm
 
-    registration.course_user =
-      CourseUser.find_or_create_by!(course: registration.course, user: registration.user,
-                                    name: name, role: role, phantom: phantom, timeline_algorithm: timeline_algorithm)
+    # Check for existing soft-deleted CourseUser
+    existing_course_user = CourseUser.only_deleted.find_by(course: registration.course, user: registration.user)
+
+    if existing_course_user
+      existing_course_user.update!(name: name, role: role, phantom: phantom, timeline_algorithm: timeline_algorithm,
+                                   deleted_at: nil)
+      registration.course_user = existing_course_user
+    else
+      registration.course_user =
+        CourseUser.find_or_create_by!(course: registration.course, user: registration.user,
+                                      name: name, role: role, phantom: phantom, timeline_algorithm: timeline_algorithm)
+    end
   end
 
   # Claims a given registration code. The correct type of code is deduced from the code itself and
