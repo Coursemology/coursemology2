@@ -26,6 +26,18 @@ export interface CrumbPath {
 
 export type CrumbState = Record<string, CrumbData>;
 
+export const getLastCrumbTitle = (crumbs: CrumbData[]): CrumbTitle | null => {
+  const content = crumbs[crumbs.length - 1]?.content;
+  if (!content) return null;
+
+  const actualContent = Array.isArray(content)
+    ? content[content.length - 1]
+    : content;
+  if (!actualContent) return null;
+
+  return actualContent.title;
+};
+
 export const isCrumbPath = (value: unknown): value is CrumbPath =>
   isRecord(value) && 'content' in value;
 

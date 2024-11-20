@@ -1,28 +1,15 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Footer from 'lib/components/core/layouts/Footer';
-import {
-  CrumbData,
-  CrumbTitle,
-  useDynamicNest,
-} from 'lib/hooks/router/dynamicNest';
+import { useDynamicNest } from 'lib/hooks/router/dynamicNest';
+import { DEFAULT_WINDOW_TITLE } from 'lib/hooks/router/dynamicNest/constants';
+import { getLastCrumbTitle } from 'lib/hooks/router/dynamicNest/crumbs';
 import useTranslation, { translatable } from 'lib/hooks/useTranslation';
 
 import BrandingHead from '../components/navigation/BrandingHead';
 
 import { useAppContext } from './AppContainer';
-
-const getLastCrumbTitle = (crumbs: CrumbData[]): CrumbTitle | null => {
-  const content = crumbs[crumbs.length - 1]?.content;
-  if (!content) return null;
-
-  const actualContent = Array.isArray(content)
-    ? content[content.length - 1]
-    : content;
-  if (!actualContent) return null;
-
-  return actualContent.title;
-};
 
 interface CourselessContainerProps {
   withCourseSwitcher?: boolean;
@@ -39,6 +26,10 @@ const CourselessContainer = (props: CourselessContainerProps): JSX.Element => {
 
   const crumbTitle = getLastCrumbTitle(crumbs);
   const title = translatable(crumbTitle) ? t(crumbTitle) : crumbTitle;
+
+  useEffect(() => {
+    document.title = title ?? DEFAULT_WINDOW_TITLE;
+  }, [title]);
 
   return (
     <div className="flex h-full w-full flex-col">
