@@ -10,6 +10,7 @@ import SearchField from 'lib/components/core/fields/SearchField';
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 import { useAppContext } from 'lib/containers/AppContainer';
+import { getUrlParameter } from 'lib/helpers/url-helpers';
 import useItems from 'lib/hooks/items/useItems';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -129,6 +130,18 @@ const DashboardPageRedirects = (): JSX.Element => {
   if (!courses?.length) return <Navigate to="/courses" />;
 
   if (courses?.length === 1) return <Navigate to={courses[0].url} />;
+
+  if (getUrlParameter('from') === 'auth') {
+    const visitedCourses = courses.filter((c) => !!c.lastActiveAt);
+
+    if (visitedCourses.length > 0) {
+      const lastVisitedCourse = visitedCourses.reduce((c1, c2) =>
+        new Date(c1.lastActiveAt!) > new Date(c2.lastActiveAt!) ? c1 : c2,
+      );
+
+      return <Navigate to={lastVisitedCourse.url} />;
+    }
+  }
 
   return <DashboardPage />;
 };

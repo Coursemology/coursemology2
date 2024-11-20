@@ -20,7 +20,9 @@ interface AuthProviderProps {
 export const INVALID_GRANT_ERROR = 'invalid_grant';
 
 const onSigninCallback = (_user: User | void): void => {
-  window.history.replaceState({}, document.title, window.location.pathname);
+  const url = new URL(window.location.pathname, window.location.origin);
+  url.searchParams.set('from', 'auth');
+  window.history.replaceState({}, document.title, url.toString());
 };
 
 export const oidcConfig = {
