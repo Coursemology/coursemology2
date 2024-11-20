@@ -8,6 +8,9 @@ import CikgoSidebarItems from 'course/stories/components/CikgoSidebarItems';
 import PopupNotifier from 'course/user-notification/PopupNotifier';
 import Footer from 'lib/components/core/layouts/Footer';
 import { DataHandle, useDynamicNest } from 'lib/hooks/router/dynamicNest';
+import { DEFAULT_WINDOW_TITLE } from 'lib/hooks/router/dynamicNest/constants';
+import { getLastCrumbTitle } from 'lib/hooks/router/dynamicNest/crumbs';
+import useTranslation, { translatable } from 'lib/hooks/useTranslation';
 
 import Breadcrumbs from './Breadcrumbs';
 import { loader, useCourseLoader } from './CourseLoader';
@@ -17,6 +20,8 @@ const CourseContainer = (): JSX.Element => {
   const location = useLocation();
 
   const data = useCourseLoader();
+
+  const { t } = useTranslation();
 
   const sidebarRef = useRef<ComponentRef<typeof Sidebar>>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -28,6 +33,13 @@ const CourseContainer = (): JSX.Element => {
   }, [location.pathname]);
 
   const { crumbs, loading, activePath } = useDynamicNest();
+
+  const crumbTitle = getLastCrumbTitle(crumbs);
+  const title = translatable(crumbTitle) ? t(crumbTitle) : crumbTitle;
+
+  useEffect(() => {
+    document.title = title ?? DEFAULT_WINDOW_TITLE;
+  }, [title]);
 
   return (
     <main className="flex h-full min-h-0 w-full">
