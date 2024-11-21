@@ -1,3 +1,4 @@
+import AceEditor from 'react-ace';
 import { QuestionType } from 'types/course/assessment/question';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
@@ -24,9 +25,6 @@ export interface MrqAnswerProps extends AnswerCommonProps<'MultipleResponse'> {
   graderView: boolean;
 }
 
-export interface ProgrammingAnswerProps
-  extends AnswerCommonProps<'Programming'> {}
-
 export interface TextResponseAnswerProps
   extends AnswerCommonProps<'TextResponse'> {
   handleUploadTextResponseFiles: (answerId: number) => void;
@@ -49,6 +47,11 @@ export interface VoiceResponseAnswerProps
 
 export interface ForumPostResponseAnswerProps
   extends AnswerCommonProps<'ForumPostResponse'> {}
+
+export interface ProgrammingAnswerProps
+  extends AnswerCommonProps<'Programming'> {
+  editorRef: React.RefObject<AceEditor>;
+}
 
 export interface AnswerPropsMap {
   MultipleChoice: McqAnswerProps;

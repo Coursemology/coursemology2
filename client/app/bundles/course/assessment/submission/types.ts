@@ -1,3 +1,4 @@
+import { MessageFormatElement } from 'react-intl';
 import { QuestionType } from 'types/course/assessment/question';
 import { AnswerData } from 'types/course/assessment/submission/answer';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
@@ -60,12 +61,27 @@ interface FeedbackLine {
   state: FeedbackLineState;
 }
 
-interface LiveFeedback {
+export interface LiveFeedbackMessage {
+  text: string;
+  sender: 'Student' | 'Codaveri';
+  linenum: number;
+  timestamp: string | null;
+  isBold: boolean;
+}
+
+export interface LiveFeedback {
   isRequestingLiveFeedback: boolean;
   pendingFeedbackToken: string | null;
   answerId: number;
   feedbackFiles: Record<string, FeedbackLine[]>;
   liveFeedbackId: number;
+  isDialogOpen: boolean;
+  conversation: LiveFeedbackMessage[];
+  suggestedReplies: {
+    id: string;
+    defaultMessage: string | MessageFormatElement[] | undefined;
+  }[];
+  focusedMessageIndex: number;
 }
 
 export interface LiveFeedbackState {

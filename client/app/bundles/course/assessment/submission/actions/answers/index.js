@@ -242,6 +242,17 @@ const handleFeedbackOKResponse = ({
   }
 };
 
+export function generateUserRequest(questionId, answerId, message) {
+  return {
+    type: actionTypes.LIVE_FEEDBACK_USER_REQUEST,
+    payload: {
+      questionId,
+      answerId,
+      userRequest: message,
+    },
+  };
+}
+
 export function generateLiveFeedback({
   submissionId,
   answerId,

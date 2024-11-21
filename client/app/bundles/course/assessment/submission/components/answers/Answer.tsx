@@ -86,12 +86,18 @@ const MultipleResponse = (props: MrqAnswerProps): JSX.Element => {
 };
 
 const Programming = (props: ProgrammingAnswerProps): JSX.Element => {
-  const { question, answerId, readOnly, saveAnswerAndUpdateClientVersion } =
-    props;
+  const {
+    question,
+    answerId,
+    readOnly,
+    saveAnswerAndUpdateClientVersion,
+    editorRef,
+  } = props;
   return (
     <ProgrammingAnswer
       key={`question_${question.id}`}
       answerId={answerId!}
+      editorRef={editorRef}
       question={question}
       readOnly={readOnly}
       saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}

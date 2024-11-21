@@ -1,6 +1,6 @@
 import { AppState } from 'store';
 
-import { LiveFeedbackState } from '../types';
+import { LiveFeedback, LiveFeedbackState } from '../types';
 
 const getLocalState = (state: AppState): LiveFeedbackState => {
   return state.assessments.submission.liveFeedback;
@@ -9,3 +9,8 @@ const getLocalState = (state: AppState): LiveFeedbackState => {
 export const getLiveFeedbacks = (state: AppState): LiveFeedbackState => {
   return getLocalState(state);
 };
+
+export const getFeedbackByQuestionId = (
+  state: AppState,
+  questionId: number,
+): LiveFeedback => getLiveFeedbacks(state)?.feedbackByQuestion[questionId];

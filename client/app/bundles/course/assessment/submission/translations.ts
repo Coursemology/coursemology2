@@ -620,6 +620,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
     defaultMessage: '{secs, plural, one {# second} other {# seconds}}',
   },
+  getHelpHeader: {
+    id: 'course.assessment.GetHelp.header',
+    defaultMessage: 'Get Help',
+  },
+  typeYourMessage: {
+    id: 'course.assessment.GetHelp.typeYourMessage',
+    defaultMessage: 'Type your message...',
+  },
 });
 
 export const scribingTranslations = defineMessages({
@@ -770,6 +778,89 @@ export const scribingTranslations = defineMessages({
   saveError: {
     id: 'course.assessment.submission.answer.scribing.saveError',
     defaultMessage: 'Save error.',
+  },
+});
+
+export const suggestionsTranslations = defineMessages({
+  iAmStuck: {
+    id: 'course.assessment.submission.suggestions.iAmStuck',
+    defaultMessage: 'I am stuck',
+  },
+  myCodeDoesntWork: {
+    id: 'course.assessment.submission.suggestions.myCodeDoesntWork',
+    defaultMessage: "My code doesn't work",
+  },
+  howDoIFixThis: {
+    id: 'course.assessment.submission.suggestions.howDoIFixThis',
+    defaultMessage: 'How do I fix this?',
+  },
+  explainThisConcept: {
+    id: 'course.assessment.submission.suggestions.explainThisConcept',
+    defaultMessage: 'Explain this concept',
+  },
+  bestApproach: {
+    id: 'course.assessment.submission.suggestions.bestApproach',
+    defaultMessage: 'Best approach?',
+  },
+  whyIsThisNotWorking: {
+    id: 'course.assessment.submission.suggestions.whyIsThisNotWorking',
+    defaultMessage: 'Why is this not working?',
+  },
+  howToDebug: {
+    id: 'course.assessment.submission.suggestions.howToDebug',
+    defaultMessage: 'How to debug?',
+  },
+  correctSyntax: {
+    id: 'course.assessment.submission.suggestions.correctSyntax',
+    defaultMessage: 'Correct syntax?',
+  },
+  provideAnExample: {
+    id: 'course.assessment.submission.suggestions.provideAnExample',
+    defaultMessage: 'Provide an example',
+  },
+  optimizeThisCode: {
+    id: 'course.assessment.submission.suggestions.optimizeThisCode',
+    defaultMessage: 'Optimize this code',
+  },
+  differenceBetweenMethods: {
+    id: 'course.assessment.submission.suggestions.differenceBetweenMethods',
+    defaultMessage: 'Difference between methods?',
+  },
+  handleThisException: {
+    id: 'course.assessment.submission.suggestions.handleThisException',
+    defaultMessage: 'Handle this exception?',
+  },
+  bestPractice: {
+    id: 'course.assessment.submission.suggestions.bestPractice',
+    defaultMessage: 'Best practice?',
+  },
+  testThisFunction: {
+    id: 'course.assessment.submission.suggestions.testThisFunction',
+    defaultMessage: 'Test this function?',
+  },
+  understandThisError: {
+    id: 'course.assessment.submission.suggestions.understandThisError',
+    defaultMessage: 'Understand this error?',
+  },
+  whichLibrariesToUse: {
+    id: 'course.assessment.submission.suggestions.whichLibrariesToUse',
+    defaultMessage: 'Which libraries to use?',
+  },
+  refactorThisCode: {
+    id: 'course.assessment.submission.suggestions.refactorThisCode',
+    defaultMessage: 'Refactor this code?',
+  },
+  timeComplexity: {
+    id: 'course.assessment.submission.suggestions.timeComplexity',
+    defaultMessage: 'Time complexity?',
+  },
+  implementThisFeature: {
+    id: 'course.assessment.submission.suggestions.implementThisFeature',
+    defaultMessage: 'Implement this feature?',
+  },
+  reviewMyCode: {
+    id: 'course.assessment.submission.suggestions.reviewMyCode',
+    defaultMessage: 'Review my code?',
   },
 });
 

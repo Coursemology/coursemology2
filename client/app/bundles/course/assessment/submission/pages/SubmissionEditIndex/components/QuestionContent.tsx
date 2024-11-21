@@ -74,6 +74,8 @@ const QuestionContent: FC<Props> = (props) => {
           historyQuestions,
           graderView,
           showMcqMrqSolution,
+          stepIndex,
+          questionId,
         }}
       />
       {autograded ? (
