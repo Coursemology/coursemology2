@@ -9,6 +9,7 @@ import {
 import CourseAPI from 'api/course';
 
 import { actions } from './store';
+import { InvitationEntry } from './types';
 
 /**
  * Prepares and maps answer value in the react-hook-form into server side format.
@@ -129,3 +130,42 @@ export function toggleRegistrationCode(shouldEnable: boolean): Operation {
         );
       });
 }
+
+const splitNameAndEmailRegex =
+  /^(?:"\s*([^"]+?)\s*"|\s*([^"<]+?))?\s*<\s*([^>\s]+?)\s*>$|^\s*([^"<\s]+@[^\s,;<>]+)\s*$/;
+const formattedEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const splitEntries = (input: string): string[] => {
+  return input.split(/\s*[;,\n\u200B]\s*(?=(?:[^"]*"[^"]*")*[^"]*$)/);
+};
+
+const processInvitationEntry = (
+  entry: string,
+  errors: string[],
+  results: InvitationEntry[],
+): void => {
+  if (!entry) return;
+  const match = splitNameAndEmailRegex.exec(entry);
+  if (match) {
+    const email = match[3] || match[4];
+    const name = match[1] || match[2] || email;
+    if (formattedEmailRegex.test(email)) {
+      results.push({ name, email });
+      return;
+    }
+  }
+  errors.push(entry);
+};
+
+export const parseInvitationInput = (
+  input: string,
+): { results: InvitationEntry[]; errors: string[] } => {
+  const results: InvitationEntry[] = [];
+  const errors: string[] = [];
+
+  const entries = splitEntries(input);
+
+  entries.forEach((entry) => processInvitationEntry(entry, errors, results));
+
+  return { results, errors };
+};

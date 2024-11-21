@@ -80,3 +80,8 @@ export interface InvitationsState {
   manageCourseUsersData: ManageCourseUsersSharedData;
   courseRegistrationKey: string;
 }
+
+export interface InvitationEntry {
+  name: string;
+  email: string;
+}
