@@ -61,7 +61,7 @@ const getEmail = (index: number) => `${Date.now()}+${index}@example.org`;
 const extend = <T extends Page>(
   use: (r: T) => Promise<void>,
   page: Page,
-  extension: Omit<T, keyof Page>,
+  extension: Omit<T, keyof Page>
 ) => use(Object.assign(page, extension) as T);
 
 export const test = base.extend<TestFixtures>({
@@ -124,14 +124,14 @@ export const test = base.extend<TestFixtures>({
     await page.getEmailField().fill(user.email);
     await page.getPasswordField().fill(user.password);
     await page.getSignInButton().click();
-    await page.waitForURL('/');
+    await page.waitForURL('/?from=auth');
 
     await extend(use, page.originalPage, {
       user,
       signOut: async () => {
         await page.getUserMenuButton().click();
         await page.getByRole('button', { name: 'Sign out' }).click();
-        await page.getByRole('button', { name: 'Logout' }).click()
+        await page.getByRole('button', { name: 'Logout' }).click();
       },
     });
   },
