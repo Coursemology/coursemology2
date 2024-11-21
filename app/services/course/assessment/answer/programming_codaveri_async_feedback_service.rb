@@ -14,17 +14,49 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
     @answer_files = answer.files
 
     @answer_object = {
-      userId: answer.submission.creator_id.to_s,
-      courseName: @course.title,
-      config: feedback_config.nil? ? self.class.default_config : feedback_config,
-      languageVersion: {
-        language: '',
-        version: ''
+      context: {
+        user: {
+          id: answer.submission.creator_id.to_s
+        },
+        course: {
+          instance: 'default',
+          name: @course.title,
+          profile: {
+            experienceLevel: @course.experience_level,
+            educationLevel: @course.education_level
+          }
+        },
+        problem: {
+          id: @question.codaveri_id
+        },
+        runtime: {
+          language: @question.language.polyglot_name,
+          version: @question.language.polyglot_version
+        }
       },
-      files: [],
-      applyVerification: true,
-      requireToken: require_token,
-      problemId: ''
+      feedbackPreferences: {
+        focusAreas: feedback_config[:focus_areas],
+        feedbackApproach: feedback_config[:feedback_approach],
+        revealLevel: feedback_config[:reveal_level],
+        tone: feedback_config[:tone],
+        language: feedback_config[:language]
+      },
+      messages: [
+        {
+          role: 'user',
+          content: @answer.content,
+          files: @answer_files.map do |file|
+            {
+              path: file.filename,
+              content: file.content
+            }
+          end
+        }
+      ],
+      tokenSetting: {
+        requireToken: require_token,
+        returnResult: feedback_config[:return_result]
+      }
     }
   end
 
@@ -72,33 +104,28 @@ class Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService # rubo
   def construct_feedback_object
     return unless @question.codaveri_id
 
-    @answer_object[:problemId] = @question.codaveri_id
-
-    @answer_object[:languageVersion] = {
-      language: @question.language.polyglot_name,
-      version: @question.language.polyglot_version
-    }
+    @answer_object[:context][:problem][:id] = @question.codaveri_id
 
     @answer_files.each do |file|
       file_template = default_codaveri_student_file_template
       file_template[:path] = file.filename
       file_template[:content] = file.content
 
-      @answer_object[:files].append(file_template)
+      @answer_object[:messages][0][:files].append(file_template)
     end
 
     @answer_object
   end
 
   def request_codaveri_feedback
-    api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM'
+    api_namespace = @course.codaveri_itsp_enabled? ? 'v2/feedback/ITSP' : 'v2/feedback/LLM/chat/new'
     codaveri_api_service = CodaveriAsyncApiService.new(api_namespace, @answer_object)
     response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
 
     if response_status == 201 && response_success
-      [response_status, response_body, response_body['data']['id']]
+      [response_status, response_body, response_body['data']['transaction']['id']]
     elsif response_status == 200 && response_success
       [response_status, response_body, nil]
     else
