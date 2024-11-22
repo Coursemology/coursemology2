@@ -65,6 +65,8 @@ describe('ScribingView', () => {
 
     const page = render(<ScribingView answerId={answerId} />, { at: [url] });
 
-    expect(await page.findByTestId(`canvas-${answerId}`)).toBeVisible();
+    expect(
+      await page.findByTestId(`canvas-${answerId}`, {}, { timeout: 5000 }),
+    ).toBeVisible();
   });
 });

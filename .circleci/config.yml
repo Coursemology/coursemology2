@@ -299,7 +299,7 @@ jobs:
           when: always
           working_directory: tests
           command: |
-            zip -r test-results.zip test-results playright-report
+            zip -r test-results.zip test-results playwright-report
 
       - codecov/upload:
           upload_name: playwright-rails

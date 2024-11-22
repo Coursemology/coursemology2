@@ -11,6 +11,9 @@ test('can change password', async ({ authedPage: page }) => {
 
   await page.getByRole('button', { name: 'Save changes' }).click();
   await expect(page.getByText('Your changes have been saved')).toBeVisible();
+  await expect(
+    page.getByText('Your changes have been saved')
+  ).not.toBeVisible();
 
   await page.signOut();
   await page.signIn(page.user.email, page.user.password);

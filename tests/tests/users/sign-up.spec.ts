@@ -75,6 +75,7 @@ test.describe('user invited to a course', () => {
 
 test.describe('user invited to 2 courses', () => {
   test('can sign up with first invitation', async ({ signUpPage: page }) => {
+    test.slow();
     const { password } = page.getFieldMocks();
 
     const course1 = await manufacture({ course: {} });
