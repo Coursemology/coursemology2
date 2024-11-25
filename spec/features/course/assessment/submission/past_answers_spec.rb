@@ -34,6 +34,7 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
         expect(page).to have_selector('span', text: 'Past Answers', count: past_answer_count)
 
         all('span', text: 'Past Answers').each(&:click)
+        wait_for_animation
         # Label selector matches both the expanded 'Past Answers' section and the labels we clicked
         expect(page).to have_selector('label', text: 'Past Answers', count: past_answer_count * 2)
       end
@@ -47,6 +48,7 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
         expect(page).to have_selector('span', text: 'Past Answers', count: past_answer_count)
 
         all('span', text: 'Past Answers').each(&:click)
+        wait_for_animation
         expect(page).to have_selector('label', text: 'Past Answers', count: past_answer_count * 2)
       end
     end
