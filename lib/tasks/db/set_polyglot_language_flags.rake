@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 namespace :db do
-  # Run this after adding the *_whitelisted columns to polyglot_languages table.
-  # (20241028141424_add_language_whitelist_flags.rb)
-
-  # These whitelists are accurate as of the date this migration is merged and performed (2024-11-18)
+  # This rake updates the *_whitelisted fields in the polyglot_languages table. It was created
+  # with the migration introducing these flags (20241028141424_add_language_whitelist_flags.rb)
+  # It should be run whenever any values in those flags need to be changed
+  # (e.g. when a new language is added)
   CODAVERI_EVALUATOR_WHITELIST =
     [
       Coursemology::Polyglot::Language::Python::Python3Point4,
