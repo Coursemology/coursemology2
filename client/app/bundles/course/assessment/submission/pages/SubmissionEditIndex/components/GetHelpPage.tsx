@@ -1,6 +1,5 @@
 import { FC, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import { MessageFormatElement } from 'react-intl';
-import { BeatLoader } from 'react-spinners';
 import { Close, Send } from '@mui/icons-material';
 import {
   Button,
@@ -26,6 +25,7 @@ import { getFeedbackByQuestionId } from 'course/assessment/submission/selectors/
 import { getQuestions } from 'course/assessment/submission/selectors/questions';
 import translations from 'course/assessment/submission/translations';
 import { LiveFeedbackMessage } from 'course/assessment/submission/types';
+import LoadingEllipsis from 'lib/components/core/LoadingEllipsis';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -35,6 +35,7 @@ interface GetHelpPageProps {
   stepIndex: number;
   editorRef: RefObject<EditorRef>;
 }
+
 interface EditorRef {
   editor: {
     gotoLine: (line: number, column: number) => void;
@@ -45,6 +46,67 @@ interface EditorRef {
     focus: () => void;
   };
 }
+
+const Message: FC<{
+  message: {
+    sender: string;
+    linenum: number | null;
+    isBold: boolean;
+    text: string | string[];
+    timestamp: string | null;
+  };
+  onClick: (linenum: number | null) => void;
+}> = ({ message, onClick }) => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  const handleClick = (): void => {
+    onClick(message.linenum);
+  };
+
+  const renderMessageText = (): JSX.Element => {
+    if (Array.isArray(message.text)) {
+      return (
+        <>
+          {message.sender === 'Codaveri' && (
+            <Typography
+              className="text-[1.3rem] cursor-pointer"
+              fontWeight="bold"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              Line: {message.linenum}
+            </Typography>
+          )}
+          {message.text.map((line, index) => (
+            <Typography key={index} className="text-[1.3rem]">
+              {line}
+            </Typography>
+          ))}
+        </>
+      );
+    }
+    if (message.isBold) {
+      return (
+        <Typography className="text-[1.3rem]" fontWeight="bold">
+          {message.text}
+        </Typography>
+      );
+    }
+    return <Typography className="text-[1.3rem]">{message.text}</Typography>;
+  };
+
+  return (
+    <ListItem
+      className={`py-0 ${message.sender === 'Codaveri' ? 'justify-start' : 'justify-end'}`}
+      onClick={handleClick}
+    >
+      <ListItemText
+        className={`rounded-lg p-2 max-w-[70%] flex-none ${message.sender === 'Codaveri' ? 'bg-gray-300' : 'bg-blue-100'}`}
+        primary={renderMessageText()}
+        secondary={message.timestamp ? message.timestamp : ''}
+      />
+    </ListItem>
+  );
+};
 
 const Header: FC<{ questionId: number }> = ({ questionId }) => {
   const { t } = useTranslation();
@@ -94,7 +156,7 @@ const MessageList: FC<{
     }
   }, [messages, focusedMessageIndex]);
 
-  const focusEditorOnFeedbackLine = (linenum: number | null): void => {
+  const handleClick = (linenum: number): void => {
     if (typeof linenum !== 'number' || linenum < 0) return;
     editorRef.current?.editor?.gotoLine(linenum, 0);
     editorRef.current?.editor?.selection?.setAnchor(linenum - 1, 0);
@@ -105,40 +167,16 @@ const MessageList: FC<{
   return (
     <List ref={listRef} className="flex-grow overflow-auto pb-16">
       {messages.map((message, index) => (
-        <ListItem
+        <Message
           key={index}
-          className={`py-0 ${
-            message.sender === 'Codaveri' ? 'justify-start' : 'justify-end'
-          }`}
-          onClick={() => focusEditorOnFeedbackLine(message.linenum)}
-        >
-          <ListItemText
-            className={`rounded-lg p-2 max-w-[70%] flex-none ${
-              message.sender === 'Codaveri' ? 'bg-gray-300' : 'bg-blue-100'
-            }`}
-            primary={
-              message.isBold ? (
-                <Typography className="text-[1.3rem]" fontWeight="bold">
-                  {message.text}
-                </Typography>
-              ) : (
-                <Typography className="text-[1.3rem]">
-                  {message.text}
-                </Typography>
-              )
-            }
-            secondary={
-              message.timestamp
-                ? moment(message.timestamp).format(SHORT_DATE_TIME_FORMAT)
-                : ''
-            }
-          />
-        </ListItem>
+          message={message}
+          onClick={() => handleClick(message.linenum)}
+        />
       ))}
       {loading && (
         <ListItem className="justify-start py-0">
           <Bubble>
-            <BeatLoader color="grey" size={8} />
+            <LoadingEllipsis />
           </Bubble>
         </ListItem>
       )}
@@ -148,23 +186,34 @@ const MessageList: FC<{
 
 const SuggestionButtons: FC<{
   loading: boolean;
-  suggestions: string[];
+  suggestions: {
+    id: string;
+    defaultMessage: string | MessageFormatElement[] | undefined;
+  }[];
   handleSendMessage: (message: string) => void;
-}> = ({ loading, suggestions, handleSendMessage }) => (
-  <div className="absolute top-[-4rem] flex justify-center mb-0 w-full flex-row h-[52%] overflow-x-auto">
-    {suggestions.map((suggestion, index) => (
-      <Button
-        key={index}
-        className="bg-white mx-1 text-[1.3rem] min-w-[160px]"
-        disabled={loading}
-        onClick={() => handleSendMessage(suggestion)}
-        variant="outlined"
-      >
-        {suggestion}
-      </Button>
-    ))}
-  </div>
-);
+}> = ({ loading, suggestions, handleSendMessage }) => {
+  const { t } = useTranslation();
+  const translatedSuggestions = suggestions.map((suggestion) => ({
+    id: suggestion.id,
+    message: t(suggestion),
+  }));
+
+  return (
+    <div className="scrollbar-hidden absolute bottom-full flex p-3 gap-3 justify-around w-full overflow-x-auto">
+      {translatedSuggestions.map((suggestion, index) => (
+        <Button
+          key={suggestion.id}
+          className="bg-white whitespace-nowrap shrink-0"
+          disabled={loading}
+          onClick={() => handleSendMessage(suggestion.message)}
+          variant="outlined"
+        >
+          {suggestion.message}
+        </Button>
+      ))}
+    </div>
+  );
+};
 
 const InputField: FC<{
   loading: boolean;
@@ -224,7 +273,6 @@ const InputArea: FC<{
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [input, setInput] = useState<string>('');
-  const translatedSuggestions = suggestions.map((suggestion) => t(suggestion));
 
   const handleSendMessage = async (message: string): Promise<void> => {
     if (message.trim()) {
@@ -261,7 +309,7 @@ const InputArea: FC<{
       <SuggestionButtons
         handleSendMessage={handleSendMessage}
         loading={loading}
-        suggestions={translatedSuggestions}
+        suggestions={suggestions}
       />
       <InputField
         handleKeyDown={handleKeyDown}

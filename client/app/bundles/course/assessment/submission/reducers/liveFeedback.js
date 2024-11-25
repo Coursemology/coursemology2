@@ -1,6 +1,9 @@
 import { produce } from 'immer';
+import { shuffle } from 'lodash';
+import moment from 'moment/moment';
 
 import { suggestionsTranslations } from 'course/assessment/submission/translations';
+import { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 import actions from '../constants';
 
@@ -29,9 +32,8 @@ const initialState = loadStateFromLocalStorage() || {
 
 const getRandomSuggestions = () => {
   const suggestionValues = Object.values(suggestionsTranslations);
-  const shuffled = suggestionValues.sort(() => 0.5 - Math.random());
   // TODO: Temporarily change to show no suggestions
-  return shuffled.slice(0, 0);
+  return shuffle(suggestionValues).slice(0, 0);
 };
 
 const getOrDefault = (obj, paramKeys, defaultValue) => {
@@ -51,6 +53,45 @@ const updateFeedbackForQuestion = (draft, questionId, newFeedbacks) => {
     ...newFeedbacks,
   };
   saveStateToLocalStorage(draft);
+};
+
+const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
+  const groupedMessages = feedbackFile.feedbackLines
+    .sort((a, b) => a.linenum - b.linenum)
+    .reduce((acc, line) => {
+      const newAcc = { ...acc };
+      if (!newAcc[line.linenum]) {
+        newAcc[line.linenum] = [];
+      }
+      newAcc[line.linenum].push(line.feedback);
+      return newAcc;
+    }, {});
+
+  const messages = Object.entries(groupedMessages).map(
+    ([linenum, texts], index, array) => ({
+      text: texts,
+      sender: 'Codaveri',
+      linenum: Number(linenum),
+      timestamp:
+        index === array.length - 1
+          ? moment(new Date()).format(SHORT_DATE_TIME_FORMAT)
+          : null,
+      isBold: false,
+    }),
+  );
+
+  return [
+    ...(isShowFileName
+      ? [
+          {
+            text: `Filename: ${feedbackFile.path}`,
+            sender: 'Codaveri',
+            isBold: true,
+          },
+        ]
+      : []),
+    ...messages,
+  ];
 };
 
 const liveFeedbackReducer = function (state = initialState, action) {
@@ -75,27 +116,10 @@ const liveFeedbackReducer = function (state = initialState, action) {
       const newFeedbacks = feedbackFiles.reduce(
         (feedbackArr, feedbackFile) => [
           ...feedbackArr,
-          ...(feedbackFiles.length > 1
-            ? [
-                {
-                  text: `Filename: ${feedbackFile.path}`,
-                  sender: 'Codaveri',
-                  isBold: true,
-                },
-              ]
-            : []),
-          ...feedbackFile.feedbackLines
-            .sort((a, b) => a.linenum - b.linenum)
-            .map((line, index) => ({
-              text: `Line ${line.linenum}: ${line.feedback}`,
-              sender: 'Codaveri',
-              linenum: line.linenum,
-              timestamp:
-                index === feedbackFile.feedbackLines.length - 1
-                  ? new Date().toISOString()
-                  : null,
-              isBold: false,
-            })),
+          ...groupFeedbackMessagesByLineNumber(
+            feedbackFile,
+            feedbackFiles.length > 1,
+          ),
         ],
         [],
       );
@@ -127,15 +151,18 @@ const liveFeedbackReducer = function (state = initialState, action) {
     case actions.LIVE_FEEDBACK_USER_REQUEST: {
       const { questionId, answerId, userRequest } = action.payload;
       return produce(state, (draft) => {
+        const previousConversation = getConversation(draft, questionId);
         const updatedConversation = [
-          ...getConversation(draft, questionId),
+          ...previousConversation,
           {
-            text: userRequest,
+            text: [userRequest],
             sender: 'Student',
-            timestamp: new Date().toISOString(),
+            timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
+            index: previousConversation.length,
+            groupIndex: previousConversation.length,
           },
         ];
-        const focusedMessageIndex = updatedConversation.length - 1;
+        const focusedMessageIndex = previousConversation.length;
         updateFeedbackForQuestion(draft, questionId, {
           isRequestingLiveFeedback: true,
           pendingFeedbackToken: null,

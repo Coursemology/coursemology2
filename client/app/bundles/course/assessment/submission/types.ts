@@ -62,7 +62,7 @@ interface FeedbackLine {
 }
 
 export interface LiveFeedbackMessage {
-  text: string;
+  text: string | string[];
   sender: 'Student' | 'Codaveri';
   linenum: number;
   timestamp: string | null;
