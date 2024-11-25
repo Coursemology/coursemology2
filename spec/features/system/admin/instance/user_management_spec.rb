@@ -21,14 +21,13 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
         find('button[aria-label="Search"]').click if click
         find('input[type="text"]').set('').native.send_keys(query)
       end
+      wait_for_field_debouncing
     end
 
     context 'As a Instance Administrator' do
-      before { login_as(instance_admin, scope: :user) }
+      before { login_as(instance_admin, scope: :user, redirect_url: admin_instance_users_path) }
 
       scenario 'I can view all users in the instance' do
-        visit admin_instance_users_path
-
         search_for_users(prefix)
         instance_users.each do |instance_user|
           expect(page).to have_text(instance_user.user.name)
@@ -37,8 +36,6 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
       end
 
       scenario 'I can filter users by role and view only administrators' do
-        visit admin_instance_users_path
-
         within find('p', text: 'Total Users', exact_text: false) do
           find_all('a').first.click
         end
@@ -53,8 +50,6 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
       end
 
       scenario "I can change a user's role" do
-        visit admin_instance_users_path
-
         user_to_change = instance_users.sample
         search_for_users(user_to_change.user.name)
 
@@ -68,8 +63,6 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
       end
 
       scenario 'I can delete a user' do
-        visit admin_instance_users_path
-
         search_for_users(prefix)
         user_to_delete = instance_users.sample
         find("button.user-delete-#{user_to_delete.id}").click
@@ -78,13 +71,11 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
       end
 
       # Generate new users to search so it doesn't conflict with above scenarios
-      scenario 'I can search users' do
+      scenario 'I can search users by name' do
         search_prefix = "testadm-search-#{rand(36**12).to_s(36)}-usr-"
         instance_users_to_search = (1..2).map do |i|
           create(:instance_user, user_name: "#{search_prefix}#{i}")
         end
-
-        visit admin_instance_users_path
 
         # Search by username
         search_for_users(search_prefix)
@@ -93,10 +84,11 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
           expect(page).to have_text(instance_user.user.name)
         end
         expect(page).to have_selector('.instance_user', count: 2)
+      end
 
-        # Search by email
+      scenario 'I can search users by email' do
         random_instance_user = InstanceUser.order('RANDOM()').first
-        search_for_users(random_instance_user.user.email, click: false)
+        search_for_users(random_instance_user.user.email)
 
         expect(page).to have_text(random_instance_user.user.name)
         expect(page).to have_selector('.instance_user', count: 1)

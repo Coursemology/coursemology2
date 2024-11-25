@@ -36,7 +36,6 @@ module Capybara::TestGroupHelpers
     end
 
     def accept_confirm_dialog(class_name = 'button.confirm-btn')
-      expect(page).to have_selector(class_name)
       find(class_name).click
       yield if block_given?
       wait_for_ajax
@@ -86,11 +85,13 @@ module Capybara::TestGroupHelpers
     #
     # Since capybara's `find` has a default timeout until the element is found, this helps
     # to ensure certain changes are made before continuing with the tests.
-    def expect_toastify(message)
-      expect(page).to have_css('.Toastify', visible: true)
-      container = find_all('.Toastify').first
+    def expect_toastify(message, dismiss: false)
+      container = find('.Toastify')
       expect(container).to have_text(message)
+      return unless dismiss
+
       container.find('p', text: message).click
+      expect(page).to have_no_css('.Toastify')
     end
 
     # Finds a react-beautiful-dnd draggable element
@@ -146,8 +147,7 @@ module Capybara::TestGroupHelpers
     end
 
     def expect_forbidden
-      sleep 1 # wait for the page to load
-      expect(page).to have_content("You don't have permission to access")
+      expect(page).to have_content("You don't have permission to access", wait: 10)
     end
 
     def confirm_registration_token_via_email

@@ -34,12 +34,12 @@ RSpec.feature 'Course: Administration: Components', js: true do
 
         control = find('label', text: sample_component.display_name)
         control.click
-        expect_toastify('Your changes have been saved. Refresh to see the new changes.')
+        expect_toastify('Your changes have been saved. Refresh to see the new changes.', dismiss: true)
 
         expect(control).to have_field(type: 'checkbox', checked: false, visible: false)
 
         control.click
-        expect_toastify('Your changes have been saved. Refresh to see the new changes.')
+        expect_toastify('Your changes have been saved. Refresh to see the new changes.', dismiss: true)
 
         expect(control).to have_field(type: 'checkbox', checked: true, visible: false)
       end

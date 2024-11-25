@@ -15,6 +15,8 @@ RSpec.describe 'Course: Skills' do
         visit course_assessments_skills_path(course)
         click_button 'Skill'
 
+        # ensure form is present
+        find('form#skill-form')
         skill_attributes = attributes_for(:course_assessment_skill)
         fill_in 'title', with: skill_attributes[:title]
 
@@ -33,13 +35,16 @@ RSpec.describe 'Course: Skills' do
         visit course_assessments_skills_path(course)
         find('.skill_branch#skill_branch_-1').click
         find(content_tag_selector(skill)).click
+        wait_for_animation
         find("button.skill-edit-#{skill.id}").click
 
+        # ensure form is present
+        find('form#skill-form')
         new_skill_title = "#{skill.title} there!"
         fill_in 'title', with: new_skill_title
-        # Does not work because it is not visible
-        find('#select').click
-        find("#select-#{skill_branch.id}").click
+        find('form#skill-form #select').click
+        wait_for_animation
+        find("#menu-skillBranchId li#select-#{skill_branch.id}").click
 
         find('.btn-submit').click
 
@@ -51,16 +56,15 @@ RSpec.describe 'Course: Skills' do
         expect(skill.skill_branch).to eq(skill_branch)
       end
 
-      # Flaky test
-      xscenario 'I can delete a skill' do
+      scenario 'I can delete a skill' do
         skill = create(:course_assessment_skill, course: course)
         visit course_assessments_skills_path(course)
         find('.skill_branch#skill_branch_-1').click
         find(content_tag_selector(skill)).click
-        wait_for_page
+        wait_for_animation
         expect do
           find("button.skill-delete-#{skill.id}").click
-          accept_confirm_dialog
+          accept_confirm_dialog('button.prompt-primary-btn')
         end.to change { course.assessment_skills.count }.by(-1)
 
         expect(current_path).to eq(course_assessments_skills_path(course))

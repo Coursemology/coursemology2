@@ -63,13 +63,13 @@ RSpec.feature 'Course: Administration: Forums', js: true do
         find_field('allowAnonymousPost', visible: false).set(true)
 
         click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
+        expect_toastify('Your changes have been saved.', dismiss: true)
         expect(page).to have_field('allowAnonymousPost', checked: true, visible: false)
         expect(course.reload.settings(:course_forums_component).allow_anonymous_post).to be_truthy
 
         find_field('allowAnonymousPost', visible: false).set(false)
         click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
+        expect_toastify('Your changes have been saved.', dismiss: true)
         expect(page).to have_field('allowAnonymousPost', checked: false, visible: false)
         expect(course.reload.settings(:course_forums_component).allow_anonymous_post).to be_falsy
       end

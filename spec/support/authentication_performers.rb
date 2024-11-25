@@ -4,13 +4,13 @@ module AuthenticationPerformersTestHelpers
 
   alias_method :warden_logout, :logout
 
-  def login_as(user, _ = {})
+  def login_as(user, **kwargs)
     # For some reasons, sometimes new scenarios are automatically logged in as the previous user.
     # Clearing cookies isn't enough and subsequent requests still carries over an old, authenticated
     # session cookie. We force the server to log out all remaining sessions before logging in.
     # warden_logout
 
-    visit new_user_session_path
+    visit new_user_session_path(next: kwargs[:redirect_url])
 
     fill_in 'Email', with: user.email
     fill_in 'Password', with: password_for(user)
@@ -22,6 +22,7 @@ module AuthenticationPerformersTestHelpers
 
   def logout(*_)
     find('div[data-testid="user-menu-button"]').click
+    wait_for_animation
     find('li', text: 'Sign out').click
     click_button('Logout')
     expect(page).to_not have_css('div[data-testid="user-menu-button"]')

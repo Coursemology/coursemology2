@@ -66,13 +66,13 @@ RSpec.feature 'Course: Administration: Administration', js: true do
 
         click_button 'Save changes'
 
-        expect_toastify('Your changes have been saved.')
+        expect_toastify('Your changes have been saved.', dismiss: true)
         expect(course.reload.advance_start_at_duration).to be_within(1.hour).of(days.days)
 
         fill_in advance_start_at_duration_field, with: ''
         click_button 'Save changes'
 
-        expect_toastify('Your changes have been saved.')
+        expect_toastify('Your changes have been saved.', dismiss: true)
         expect(course.reload.advance_start_at_duration).to eq 0
       end
 

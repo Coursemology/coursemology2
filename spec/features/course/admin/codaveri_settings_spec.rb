@@ -18,13 +18,13 @@ RSpec.feature 'Course: Administration: Codaveri', js: true do
         itsp_engine_radio_button = find('label', text: 'ITSP Engine')
         itsp_engine_radio_button.click
         click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
+        expect_toastify('Your changes have been saved.', dismiss: true)
         expect(course.reload.codaveri_itsp_enabled?).to eq(true)
 
         default_engine_radio_button = find('label', text: 'Default Engine')
         default_engine_radio_button.click
         click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
+        expect_toastify('Your changes have been saved.', dismiss: true)
         expect(course.reload.codaveri_itsp_enabled?).to eq(false)
       end
 
@@ -33,12 +33,12 @@ RSpec.feature 'Course: Administration: Codaveri', js: true do
 
         find('label', text: 'Publish feedback directly to student').click
         click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
+        expect_toastify('Your changes have been saved.', dismiss: true)
         expect(course.reload.codaveri_feedback_workflow).to eq('publish')
 
         find('label', text: 'Generate no feedback').click
         click_button 'Save changes'
-        expect_toastify('Your changes have been saved.')
+        expect_toastify('Your changes have been saved.', dismiss: true)
         expect(course.reload.codaveri_feedback_workflow).to eq('none')
       end
     end
