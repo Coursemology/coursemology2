@@ -142,9 +142,18 @@ const liveFeedbackReducer = function (state = initialState, action) {
     case actions.LIVE_FEEDBACK_FAILURE: {
       const { questionId } = action.payload;
       return produce(state, (draft) => {
+        const previousConversation = getConversation(draft, questionId);
+        const errorMessage = {
+          text: ['An error occurred while processing your request !!!'],
+          sender: 'Codaveri',
+          timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
+          isBold: true,
+        };
+        const updatedConversation = [...previousConversation, errorMessage];
         updateFeedbackForQuestion(draft, questionId, {
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
+          conversation: updatedConversation,
         });
       });
     }

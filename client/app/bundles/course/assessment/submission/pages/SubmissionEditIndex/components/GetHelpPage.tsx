@@ -52,7 +52,7 @@ const Message: FC<{
     sender: string;
     linenum: number | null;
     isBold: boolean;
-    text: string | string[];
+    text: string[];
     timestamp: string | null;
   };
   onClick: (linenum: number | null) => void;
@@ -63,36 +63,23 @@ const Message: FC<{
     onClick(message.linenum);
   };
 
-  const renderMessageText = (): JSX.Element => {
-    if (Array.isArray(message.text)) {
-      return (
-        <>
-          {message.sender === 'Codaveri' && (
-            <Typography
-              className="text-[1.3rem] cursor-pointer"
-              fontWeight="bold"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              Line: {message.linenum}
-            </Typography>
-          )}
-          {message.text.map((line, index) => (
-            <Typography key={index} className="text-[1.3rem]">
-              {line}
-            </Typography>
-          ))}
-        </>
-      );
-    }
-    if (message.isBold) {
-      return (
-        <Typography className="text-[1.3rem]" fontWeight="bold">
-          {message.text}
+  const renderMessageText = (): JSX.Element => (
+    <>
+      {message.sender === 'Codaveri' && message.linenum != null && (
+        <Typography
+          className="text-[1.3rem] cursor-pointer"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          Line: {message.linenum}
         </Typography>
-      );
-    }
-    return <Typography className="text-[1.3rem]">{message.text}</Typography>;
-  };
+      )}
+      {message.text.map((line, index) => (
+        <Typography key={index} className="text-[1.3rem]">
+          {line}
+        </Typography>
+      ))}
+    </>
+  );
 
   return (
     <ListItem
