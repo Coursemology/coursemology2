@@ -1085,9 +1085,6 @@
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "Allow submission with incorrect answers"
   },
-  "course.assessment.AssessmentForm.allowRecordDraftAnswer": {
-    "defaultMessage": "Allow versioning of draft programming answer"
-  },
   "course.assessment.AssessmentForm.answersAndTestCases": {
     "defaultMessage": "Answers and test cases"
   },
@@ -2053,9 +2050,6 @@
   },
   "course.assessment.show assessmentDeleted": {
     "defaultMessage": "Assessment successfully deleted."
-  },
-  "course.assessment.show.allowRecordDraftAnswer": {
-    "defaultMessage": "Allow versioning of draft programming answer"
   },
   "course.assessment.show.allowSkipSteps": {
     "defaultMessage": "Allow to skip steps"
@@ -3083,9 +3077,6 @@
   "course.assessment.submission.downloadSubmissionsJobPending": {
     "defaultMessage": "Please wait as your request to download submission answers is being processed."
   },
-  "course.assessment.submission.draftAnswer": {
-    "defaultMessage": "- Draft"
-  },
   "course.assessment.submission.dueAt": {
     "defaultMessage": "Due At"
   },
@@ -3286,9 +3277,6 @@
   },
   "course.assessment.submission.saveGrade": {
     "defaultMessage": "Save Grade"
-  },
-  "course.assessment.submission.savedAt": {
-    "defaultMessage": "Saved At"
   },
   "course.assessment.submission.sendReminderEmailConfirmation": {
     "defaultMessage": "Send reminder emails to {unattempted} unattempted and {attempting} attempting user(s) ({selectedUsers}) who have not completed the assessment?"

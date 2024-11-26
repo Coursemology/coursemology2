@@ -9,6 +9,5 @@ export interface QuestionHistory {
 }
 
 export type AnswerHistory = AnswerData & {
-  isDraftAnswer: boolean;
   createdAt: Date;
 };

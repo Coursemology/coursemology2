@@ -1052,9 +1052,6 @@
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "允许提交错误答案"
   },
-  "course.assessment.AssessmentForm.allowRecordDraftAnswer": {
-    "defaultMessage": "允许对编程答题草稿进行版本控制"
-  },
   "course.assessment.AssessmentForm.answersAndTestCases": {
     "defaultMessage": "答案和测试用例"
   },
@@ -2002,9 +1999,6 @@
   },
   "course.assessment.show assessmentDeleted": {
     "defaultMessage": "测验已成功删除。"
-  },
-  "course.assessment.show.allowRecordDraftAnswer": {
-    "defaultMessage": "允许对编程题草稿进行版本控制"
   },
   "course.assessment.show.allowSkipSteps": {
     "defaultMessage": "允许跳过步骤"
@@ -3035,9 +3029,6 @@
   "course.assessment.submission.downloadSubmissionsJobPending": {
     "defaultMessage": "正在处理你下载提交答案的请求，请稍候。"
   },
-  "course.assessment.submission.draftAnswer": {
-    "defaultMessage": "- 草稿"
-  },
   "course.assessment.submission.dueAt": {
     "defaultMessage": "截止日期"
   },
@@ -3238,9 +3229,6 @@
   },
   "course.assessment.submission.saveGrade": {
     "defaultMessage": "保存成绩"
-  },
-  "course.assessment.submission.savedAt": {
-    "defaultMessage": "保存于"
   },
   "course.assessment.submission.sendReminderEmailConfirmation": {
     "defaultMessage": "向未完成测验的 {unattempted} 未尝试和 {attempting} 尝试用户 ({selectedUsers}) 发送提醒邮件？"

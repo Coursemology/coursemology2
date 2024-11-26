@@ -100,7 +100,6 @@ if can_attempt && assessment.folder.materials.exists?
 end
 
 if can_observe
-  json.allowRecordDraftAnswer assessment.allow_record_draft_answer
   json.showMcqMrqSolution assessment.show_mcq_mrq_solution
   json.gradedTestCases display_graded_test_types(assessment)
 
