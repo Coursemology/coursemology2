@@ -91,7 +91,6 @@ export const answerShape = PropTypes.shape({
   file: PropTypes.object,
   files: PropTypes.arrayOf(fileShape),
   option_ids: PropTypes.arrayOf(PropTypes.number),
-  isDraftAnswer: PropTypes.bool,
   createdAt: PropTypes.string,
 });
 

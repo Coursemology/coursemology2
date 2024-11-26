@@ -577,18 +577,6 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         >
           <Controller
             control={control}
-            name="allow_record_draft_answer"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormCheckboxField
-                disabled={disabled}
-                field={field}
-                fieldState={fieldState}
-                label={t(translations.allowRecordDraftAnswer)}
-              />
-            )}
-          />
-          <Controller
-            control={control}
             name="skippable"
             render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField

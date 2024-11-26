@@ -60,7 +60,6 @@ const validationSchema = yup.object({
   has_todo: yup.bool(),
   autograded: yup.bool(),
   block_student_viewing_after_submitted: yup.bool(),
-  allow_record_draft_answer: yup.bool(),
   skippable: yup.bool(),
   allow_partial_submission: yup.bool(),
   show_mcq_answer: yup.bool(),

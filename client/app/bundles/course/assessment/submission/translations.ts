@@ -164,10 +164,6 @@ const translations = defineMessages({
     id: 'course.assessment.submission.attemptedAt',
     defaultMessage: 'Attempted At',
   },
-  savedAt: {
-    id: 'course.assessment.submission.savedAt',
-    defaultMessage: 'Saved At',
-  },
   submittedAt: {
     id: 'course.assessment.submission.submittedAt',
     defaultMessage: 'Submitted At',
@@ -511,10 +507,6 @@ const translations = defineMessages({
   getPastAnswersFailure: {
     id: 'course.assessment.submission.getPastAnswersFailure',
     defaultMessage: 'Failed to load past answers',
-  },
-  draftAnswer: {
-    id: 'course.assessment.submission.draftAnswer',
-    defaultMessage: ' - Draft',
   },
   statistics: {
     id: 'course.assessment.submission.statistics',

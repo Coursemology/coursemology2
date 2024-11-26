@@ -130,7 +130,6 @@ export interface AssessmentData extends AssessmentActionsData {
   isKoditsuAssessmentEnabled?: boolean;
   isSyncedWithKoditsu?: boolean;
   isStudent: boolean;
-  allowRecordDraftAnswer?: boolean;
   showMcqMrqSolution?: boolean;
   gradedTestCases?: string;
   skippable?: boolean;

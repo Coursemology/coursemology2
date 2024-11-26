@@ -510,7 +510,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_04_104627) do
     t.boolean "block_student_viewing_after_submitted", default: false
     t.integer "satisfiability_type", default: 0
     t.bigint "monitor_id"
-    t.boolean "allow_record_draft_answer", default: false
     t.integer "time_limit"
     t.string "koditsu_assessment_id"
     t.boolean "is_koditsu_enabled"

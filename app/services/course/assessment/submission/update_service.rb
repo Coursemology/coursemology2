@@ -106,13 +106,13 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
           answer = @submission.answers.includes(:actable).find { |a| a.id == answer_params[:id].to_i }
 
-          if answer && !update_answer(answer, answer_params)
-            logger.error("Failed to update answer #{answer.errors.inspect}")
-            answer.errors.messages.each do |attribute, message|
-              @submission.errors.add(attribute, message)
-            end
-            raise ActiveRecord::Rollback
+          next unless answer && !update_answer(answer, answer_params)
+
+          logger.error("Failed to update answer #{answer.errors.inspect}")
+          answer.errors.messages.each do |attribute, message|
+            @submission.errors.add(attribute, message)
           end
+          raise ActiveRecord::Rollback
         end
       end
 
@@ -123,20 +123,6 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
       true
     end
-  end
-
-  def attempt_draft_answer(answer)
-    return unless answer
-
-    reattempt_answer(answer, finalise: false) if should_attempt_draft_answer?(answer)
-  end
-
-  def should_attempt_draft_answer?(answer)
-    is_save_draft = update_submission_additional_params[:is_save_draft].to_s.downcase == 'true'
-    is_programming = answer.actable_type == Course::Assessment::Answer::Programming.name
-    assessment_save_draft_answer = @assessment.allow_record_draft_answer
-
-    is_save_draft && is_programming && assessment_save_draft_answer
   end
 
   def unsubmit?

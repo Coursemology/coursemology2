@@ -175,10 +175,6 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.calculateGradeWith',
     defaultMessage: 'Calculate grade and EXP with',
   },
-  allowRecordDraftAnswer: {
-    id: 'course.assessment.AssessmentForm.allowRecordDraftAnswer',
-    defaultMessage: 'Allow versioning of draft programming answer',
-  },
   skippable: {
     id: 'course.assessment.AssessmentForm.skippable',
     defaultMessage: 'Allow to skip steps',

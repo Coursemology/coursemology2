@@ -187,7 +187,7 @@ export class VisibleTestCaseView extends Component {
     );
   }
 
-  renderTestCases(testCases, testCaseType, warn, isDraftAnswer) {
+  renderTestCases(testCases, testCaseType, warn) {
     const {
       collapsible,
       testCases: { canReadTests },
@@ -277,10 +277,10 @@ export class VisibleTestCaseView extends Component {
 
     return (
       <Accordion
-        className={!isDraftAnswer && testCaseComponentClassName()}
+        className={testCaseComponentClassName()}
         defaultExpanded={!collapsible}
         disableGutters
-        icon={!isDraftAnswer && <TestCasesIndicatorChip />}
+        icon={<TestCasesIndicatorChip />}
         id={testCaseType}
         subtitle={
           warn && <FormattedMessage {...translations.staffOnlyTestCases} />
@@ -326,7 +326,6 @@ export class VisibleTestCaseView extends Component {
       testCases,
       collapsible,
       showStdoutAndStderr,
-      isDraftAnswer,
     } = this.props;
     if (!testCases) {
       return null;
@@ -349,19 +348,13 @@ export class VisibleTestCaseView extends Component {
           </Alert>
         )}
 
-        {this.renderTestCases(
-          testCases.public_test,
-          'publicTestCases',
-          false,
-          isDraftAnswer,
-        )}
+        {this.renderTestCases(testCases.public_test, 'publicTestCases', false)}
 
         {showPrivateTest &&
           this.renderTestCases(
             testCases.private_test,
             'privateTestCases',
             !showPrivateTestToStudents,
-            isDraftAnswer,
           )}
 
         {showEvaluationTest &&
@@ -369,7 +362,6 @@ export class VisibleTestCaseView extends Component {
             testCases.evaluation_test,
             'evaluationTestCases',
             !showEvaluationTestToStudents,
-            isDraftAnswer,
           )}
 
         {showOutputStreams &&
@@ -412,11 +404,10 @@ VisibleTestCaseView.propTypes = {
     stdout: PropTypes.string,
     stderr: PropTypes.string,
   }),
-  isDraftAnswer: PropTypes.bool,
 };
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {
-  const { questionId, answerId, viewHistory, isDraftAnswer } = ownProps;
+  const { questionId, answerId, viewHistory } = ownProps;
   let testCases;
   let isAutograding;
   if (viewHistory) {
@@ -437,7 +428,6 @@ function mapStateToProps({ assessments: { submission } }, ownProps) {
     collapsible: viewHistory,
     isAutograding,
     testCases,
-    isDraftAnswer,
   };
 }
 
