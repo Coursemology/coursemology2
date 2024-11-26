@@ -64,9 +64,10 @@ interface FeedbackLine {
 export interface LiveFeedbackMessage {
   text: string[];
   sender: 'Student' | 'Codaveri';
-  linenum: number;
+  linenum: number | null;
   timestamp: string | null;
   isBold: boolean;
+  bgColor: string;
 }
 
 export interface LiveFeedback {

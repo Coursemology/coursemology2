@@ -13,7 +13,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import moment from 'moment';
 
 import {
   generateLiveFeedback,
@@ -29,7 +28,6 @@ import LoadingEllipsis from 'lib/components/core/LoadingEllipsis';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
-import { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 interface GetHelpPageProps {
   stepIndex: number;
@@ -48,13 +46,7 @@ interface EditorRef {
 }
 
 const Message: FC<{
-  message: {
-    sender: string;
-    linenum: number | null;
-    isBold: boolean;
-    text: string[];
-    timestamp: string | null;
-  };
+  message: LiveFeedbackMessage;
   onClick: (linenum: number | null) => void;
 }> = ({ message, onClick }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -87,7 +79,7 @@ const Message: FC<{
       onClick={handleClick}
     >
       <ListItemText
-        className={`rounded-lg p-2 max-w-[70%] flex-none ${message.sender === 'Codaveri' ? 'bg-gray-300' : 'bg-blue-100'}`}
+        className={`rounded-lg p-2 max-w-[70%] flex-none ${message.bgColor}`}
         primary={renderMessageText()}
         secondary={message.timestamp ? message.timestamp : ''}
       />
@@ -143,7 +135,7 @@ const MessageList: FC<{
     }
   }, [messages, focusedMessageIndex]);
 
-  const handleClick = (linenum: number): void => {
+  const handleClick = (linenum: number | null): void => {
     if (typeof linenum !== 'number' || linenum < 0) return;
     editorRef.current?.editor?.gotoLine(linenum, 0);
     editorRef.current?.editor?.selection?.setAnchor(linenum - 1, 0);
@@ -310,7 +302,6 @@ const InputArea: FC<{
 };
 
 const GetHelpPage: FC<GetHelpPageProps> = ({ stepIndex, editorRef }) => {
-  const [messages, setMessages] = useState<LiveFeedbackMessage[]>([]);
   const assessment = useAppSelector(getAssessment);
   const questions = useAppSelector(getQuestions);
   const submissionId = getSubmissionId();
@@ -326,10 +317,6 @@ const GetHelpPage: FC<GetHelpPageProps> = ({ stepIndex, editorRef }) => {
   const suggestedReplies = liveFeedback?.suggestedReplies ?? [];
   const focusedMessageIndex = liveFeedback?.focusedMessageIndex;
 
-  useEffect(() => {
-    setMessages(conversation);
-  }, [conversation]);
-
   const questionIndex = questionIds.findIndex((id) => id === questionId) + 1;
 
   return (
@@ -341,7 +328,7 @@ const GetHelpPage: FC<GetHelpPageProps> = ({ stepIndex, editorRef }) => {
           editorRef={editorRef}
           focusedMessageIndex={focusedMessageIndex}
           loading={isRequestingLiveFeedback}
-          messages={messages}
+          messages={conversation}
         />
         <InputArea
           answerId={answerId}

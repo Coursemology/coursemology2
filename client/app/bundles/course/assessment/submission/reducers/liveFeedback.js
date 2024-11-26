@@ -77,6 +77,7 @@ const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
           ? moment(new Date()).format(SHORT_DATE_TIME_FORMAT)
           : null,
       isBold: false,
+      bgColor: 'bg-gray-300',
     }),
   );
 
@@ -144,10 +145,11 @@ const liveFeedbackReducer = function (state = initialState, action) {
       return produce(state, (draft) => {
         const previousConversation = getConversation(draft, questionId);
         const errorMessage = {
-          text: ['An error occurred while processing your request !!!'],
+          text: ['An error occurred while processing your request.'],
           sender: 'Codaveri',
           timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
           isBold: true,
+          bgColor: 'bg-red-100',
         };
         const updatedConversation = [...previousConversation, errorMessage];
         updateFeedbackForQuestion(draft, questionId, {
@@ -169,6 +171,7 @@ const liveFeedbackReducer = function (state = initialState, action) {
             timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
             index: previousConversation.length,
             groupIndex: previousConversation.length,
+            bgColor: 'bg-blue-100',
           },
         ];
         const focusedMessageIndex = previousConversation.length;
