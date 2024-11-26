@@ -87,16 +87,6 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
           <>
             <TableRow>
               <TableCell variant="head">
-                {t(translations.allowRecordDraftAnswer)}
-              </TableCell>
-
-              <TableCell>
-                {assessment.allowRecordDraftAnswer ? '✅' : '❌'}
-              </TableCell>
-            </TableRow>
-
-            <TableRow>
-              <TableCell variant="head">
                 {t(translations.showMcqMrqSolution)}
               </TableCell>
 

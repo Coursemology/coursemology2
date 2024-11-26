@@ -5,7 +5,6 @@ export interface AnswerBaseData {
   questionId: number;
   createdAt: string;
   clientVersion: number | null;
-  isDraftAnswer: boolean;
   grading: {
     id: number; // Answer ID
     grade?: number | null;

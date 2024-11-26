@@ -25,7 +25,6 @@ const INITIAL_VALUES = {
   time_limit: null,
   allow_partial_submission: false,
   block_student_viewing_after_submitted: false,
-  allow_record_draft_answer: false,
   delayed_grade_publication: false,
   password_protected: false,
   view_password: null,
