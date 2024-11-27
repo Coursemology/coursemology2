@@ -6,7 +6,7 @@ import {
 } from 'react-hook-form';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { LoadingButton } from '@mui/lab';
-import { Button, Divider, Grid } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import {
   IndividualInvite,
@@ -145,23 +145,22 @@ const IndividualInvitations: FC<Props> = (props) => {
         ),
       )}
 
-      <Divider sx={{ margin: '12px 0px' }} />
-      <Grid alignItems="center" container>
+      <Divider className="my-5" />
+      <div className="flex gap-3">
         <LoadingButton
           key="invite-users-individual-form-submit-button"
           className="btn-submit"
           form="invite-users-individual-form"
           loading={isLoading}
-          sx={{ marginRight: '4px' }}
           type="submit"
           variant="contained"
         >
           {intl.formatMessage(translations.invite)}
         </LoadingButton>
-        <Button color="primary" onClick={appendNewRow}>
+        <Button color="primary" onClick={appendNewRow} variant="outlined">
           {intl.formatMessage(translations.appendNewRow)}
         </Button>
-      </Grid>
+      </div>
     </>
   );
 };
