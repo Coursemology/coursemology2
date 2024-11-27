@@ -131,8 +131,11 @@ export function toggleRegistrationCode(shouldEnable: boolean): Operation {
       });
 }
 
+// These characters can only allowed in surrounding quotes
+// ()<>[]:;@\,.
+// https://datatracker.ietf.org/doc/html/rfc5322#section-3.2.3
 const splitNameAndEmailRegex =
-  /^(?:"\s*([^"]+?)\s*"|\s*([^"<]+?))?\s*<\s*([^>\s]+?)\s*>$|^\s*([^"<\s]+@[^\s,;<>]+)\s*$/;
+  /^\s*(?:(?:(?:"(?=.*")(.*)"|([^"()<>[\]:;@\\,.]*?))\s*(?=<)<\s*(?=.+>)(\S+)\s*>)|(.+?))\s*$/;
 const formattedEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const splitEntries = (input: string): string[] => {

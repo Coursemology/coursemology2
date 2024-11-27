@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { InvitationResult } from 'types/course/userInvitations';
 
 import Page from 'lib/components/core/layouts/Page';
@@ -72,21 +72,18 @@ const InviteUsers: FC<Props> = (props) => {
           />
 
           <Page.PaddedSection>
-            <Grid
-              alignItems="flex-end"
-              container
-              flexDirection="row"
-              justifyContent="space-between"
-              sx={{ margin: '12px 0px' }}
+            <div
+              // replace the attributes using tailwindcss
+              className="flex justify-between items-end mb-5"
             >
               <Typography variant="h5">
                 {intl.formatMessage(translations.inviteUsersHeader)}
               </Typography>
-              <Grid item style={{ display: 'flex', gap: 12 }}>
+              <div className="flex gap-3">
                 <UploadFileButton openResultDialog={openResultDialog} />
                 <RegistrationCodeButton />
-              </Grid>
-            </Grid>
+              </div>
+            </div>
             <IndividualInviteForm openResultDialog={openResultDialog} />
           </Page.PaddedSection>
 
