@@ -49,7 +49,7 @@ const Message: FC<{
   message: LiveFeedbackMessage;
   onClick: (linenum: number | null) => void;
 }> = ({ message, onClick }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  // const [isOpen, setIsOpen] = useState(true);
 
   const handleClick = (): void => {
     onClick(message.linenum);
@@ -57,16 +57,12 @@ const Message: FC<{
 
   const renderMessageText = (): JSX.Element => (
     <>
-      {message.sender === 'Codaveri' && message.linenum != null && (
-        <Typography
-          className="text-[1.3rem] cursor-pointer"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          Line: {message.linenum}
-        </Typography>
-      )}
       {message.text.map((line, index) => (
-        <Typography key={index} className="text-[1.3rem]">
+        <Typography
+          key={index}
+          className="text-[1.3rem] cursor-pointer"
+          fontWeight={message.isBold ? 'bold' : 'normal'}
+        >
           {line}
         </Typography>
       ))}

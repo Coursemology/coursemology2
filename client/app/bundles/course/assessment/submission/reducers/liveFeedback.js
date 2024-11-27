@@ -67,19 +67,33 @@ const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
       return newAcc;
     }, {});
 
-  const messages = Object.entries(groupedMessages).map(
-    ([linenum, texts], index, array) => ({
-      text: texts,
-      sender: 'Codaveri',
-      linenum: Number(linenum),
-      timestamp:
-        index === array.length - 1
-          ? moment(new Date()).format(SHORT_DATE_TIME_FORMAT)
-          : null,
-      isBold: false,
-      bgColor: 'bg-gray-300',
-    }),
-  );
+  const messages = Object.entries(groupedMessages)
+    .map(([linenum, texts], index, array) => {
+      const lineMessages = [
+        {
+          text: texts,
+          sender: 'Codaveri',
+          linenum: Number(linenum),
+          timestamp:
+            index === array.length - 1
+              ? moment(new Date()).format(SHORT_DATE_TIME_FORMAT)
+              : null,
+          isBold: false,
+          bgColor: 'bg-gray-300',
+        },
+      ];
+
+      lineMessages.unshift({
+        text: [`Line: ${linenum}`],
+        sender: 'Codaveri',
+        linenum: Number(linenum),
+        isBold: true,
+        bgColor: 'bg-gray-300',
+      });
+
+      return lineMessages;
+    })
+    .flat();
 
   return [
     ...(isShowFileName
