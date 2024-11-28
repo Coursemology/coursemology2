@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { shuffle } from 'lodash';
+import { shuffle, uniqueId } from 'lodash';
 import moment from 'moment/moment';
 
 import {
@@ -75,6 +75,7 @@ const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
     .map(([linenum, texts], index, array) => {
       const lineMessages = [
         {
+          id: uniqueId('Codaveri_'),
           texts,
           sender: Sender.Codaveri,
           linenum: Number(linenum),
@@ -88,6 +89,7 @@ const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
       ];
 
       lineMessages.unshift({
+        id: uniqueId('Codaveri_'),
         texts: [`Line: ${linenum}`],
         sender: Sender.Codaveri,
         linenum: Number(linenum),
@@ -103,6 +105,7 @@ const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
     ...(isShowFileName
       ? [
           {
+            id: uniqueId('Codaveri_'),
             texts: `Filename: ${feedbackFile.path}`,
             sender: Sender.Codaveri,
             isBold: true,
@@ -163,6 +166,7 @@ const liveFeedbackReducer = function (state = initialState, action) {
       return produce(state, (draft) => {
         const previousConversation = getConversation(draft, questionId);
         const errorMessage = {
+          id: uniqueId('Codaveri_'),
           texts: [exceptionTranslations.requestError],
           sender: Sender.Codaveri,
           timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
@@ -184,6 +188,7 @@ const liveFeedbackReducer = function (state = initialState, action) {
         const updatedConversation = [
           ...previousConversation,
           {
+            id: uniqueId('Student_'),
             texts: [userRequest],
             sender: Sender.Student,
             timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),

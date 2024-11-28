@@ -61,6 +61,17 @@ interface FeedbackLine {
   state: FeedbackLineState;
 }
 
+export interface EditorRef {
+  editor: {
+    gotoLine: (line: number, column: number) => void;
+    selection: {
+      setAnchor: (row: number, column: number) => void;
+      moveCursorTo: (row: number, column: number) => void;
+    };
+    focus: () => void;
+  };
+}
+
 export interface TranslatableMessage {
   id: string;
   defaultMessage: string | MessageFormatElement[] | undefined;
@@ -72,6 +83,7 @@ export enum Sender {
 }
 
 export interface LiveFeedbackMessage {
+  id: string;
   texts: string[] | TranslatableMessage[];
   sender: Sender;
   linenum: number | null;
