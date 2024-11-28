@@ -61,9 +61,19 @@ interface FeedbackLine {
   state: FeedbackLineState;
 }
 
+export interface TranslatableMessage {
+  id: string;
+  defaultMessage: string | MessageFormatElement[] | undefined;
+}
+
+export enum Sender {
+  Codaveri = 'Codaveri',
+  Student = 'Student',
+}
+
 export interface LiveFeedbackMessage {
-  text: string[];
-  sender: 'Student' | 'Codaveri';
+  texts: string[] | TranslatableMessage[];
+  sender: Sender;
   linenum: number | null;
   timestamp: string | null;
   isBold: boolean;
@@ -78,10 +88,7 @@ export interface LiveFeedback {
   liveFeedbackId: number;
   isDialogOpen: boolean;
   conversation: LiveFeedbackMessage[];
-  suggestedReplies: {
-    id: string;
-    defaultMessage: string | MessageFormatElement[] | undefined;
-  }[];
+  suggestedReplies: TranslatableMessage[];
   focusedMessageIndex: number;
 }
 

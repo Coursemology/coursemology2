@@ -23,7 +23,11 @@ import { getAssessment } from 'course/assessment/submission/selectors/assessment
 import { getFeedbackByQuestionId } from 'course/assessment/submission/selectors/liveFeedbacks';
 import { getQuestions } from 'course/assessment/submission/selectors/questions';
 import translations from 'course/assessment/submission/translations';
-import { LiveFeedbackMessage } from 'course/assessment/submission/types';
+import {
+  LiveFeedbackMessage,
+  Sender,
+  TranslatableMessage,
+} from 'course/assessment/submission/types';
 import LoadingEllipsis from 'lib/components/core/LoadingEllipsis';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -49,29 +53,30 @@ const Message: FC<{
   message: LiveFeedbackMessage;
   onClick: (linenum: number | null) => void;
 }> = ({ message, onClick }) => {
-  // const [isOpen, setIsOpen] = useState(true);
-
   const handleClick = (): void => {
     onClick(message.linenum);
   };
+  const renderMessageText = (): JSX.Element => {
+    const { t } = useTranslation();
 
-  const renderMessageText = (): JSX.Element => (
-    <>
-      {message.text.map((line, index) => (
-        <Typography
-          key={index}
-          className="text-[1.3rem] cursor-pointer"
-          fontWeight={message.isBold ? 'bold' : 'normal'}
-        >
-          {line}
-        </Typography>
-      ))}
-    </>
-  );
+    return (
+      <>
+        {message.texts.map((line, index) => (
+          <Typography
+            key={index}
+            className="text-[1.3rem] cursor-pointer"
+            fontWeight={message.isBold ? 'bold' : 'normal'}
+          >
+            {typeof line === 'string' ? line : t(line)}
+          </Typography>
+        ))}
+      </>
+    );
+  };
 
   return (
     <ListItem
-      className={`py-0 ${message.sender === 'Codaveri' ? 'justify-start' : 'justify-end'}`}
+      className={`py-0 ${message.sender === Sender.Codaveri ? 'justify-start' : 'justify-end'}`}
       onClick={handleClick}
     >
       <ListItemText
@@ -161,10 +166,7 @@ const MessageList: FC<{
 
 const SuggestionButtons: FC<{
   loading: boolean;
-  suggestions: {
-    id: string;
-    defaultMessage: string | MessageFormatElement[] | undefined;
-  }[];
+  suggestions: TranslatableMessage[];
   handleSendMessage: (message: string) => void;
 }> = ({ loading, suggestions, handleSendMessage }) => {
   const { t } = useTranslation();

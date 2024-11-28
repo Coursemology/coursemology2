@@ -864,4 +864,11 @@ export const suggestionsTranslations = defineMessages({
   },
 });
 
+export const exceptionTranslations = defineMessages({
+  requestError: {
+    id: 'course.assessment.submission.suggestions.requestError',
+    defaultMessage: 'An error occurred while processing your request.',
+  },
+});
+
 export default translations;

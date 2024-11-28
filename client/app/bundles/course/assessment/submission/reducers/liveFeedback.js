@@ -2,7 +2,11 @@ import { produce } from 'immer';
 import { shuffle } from 'lodash';
 import moment from 'moment/moment';
 
-import { suggestionsTranslations } from 'course/assessment/submission/translations';
+import {
+  exceptionTranslations,
+  suggestionsTranslations,
+} from 'course/assessment/submission/translations';
+import { Sender } from 'course/assessment/submission/types';
 import { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 import actions from '../constants';
@@ -71,8 +75,8 @@ const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
     .map(([linenum, texts], index, array) => {
       const lineMessages = [
         {
-          text: texts,
-          sender: 'Codaveri',
+          texts,
+          sender: Sender.Codaveri,
           linenum: Number(linenum),
           timestamp:
             index === array.length - 1
@@ -84,8 +88,8 @@ const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
       ];
 
       lineMessages.unshift({
-        text: [`Line: ${linenum}`],
-        sender: 'Codaveri',
+        texts: [`Line: ${linenum}`],
+        sender: Sender.Codaveri,
         linenum: Number(linenum),
         isBold: true,
         bgColor: 'bg-gray-300',
@@ -99,8 +103,8 @@ const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
     ...(isShowFileName
       ? [
           {
-            text: `Filename: ${feedbackFile.path}`,
-            sender: 'Codaveri',
+            texts: `Filename: ${feedbackFile.path}`,
+            sender: Sender.Codaveri,
             isBold: true,
           },
         ]
@@ -159,8 +163,8 @@ const liveFeedbackReducer = function (state = initialState, action) {
       return produce(state, (draft) => {
         const previousConversation = getConversation(draft, questionId);
         const errorMessage = {
-          text: ['An error occurred while processing your request.'],
-          sender: 'Codaveri',
+          texts: [exceptionTranslations.requestError],
+          sender: Sender.Codaveri,
           timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
           isBold: true,
           bgColor: 'bg-red-100',
@@ -180,8 +184,8 @@ const liveFeedbackReducer = function (state = initialState, action) {
         const updatedConversation = [
           ...previousConversation,
           {
-            text: [userRequest],
-            sender: 'Student',
+            texts: [userRequest],
+            sender: Sender.Student,
             timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
             index: previousConversation.length,
             groupIndex: previousConversation.length,
