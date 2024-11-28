@@ -5,7 +5,6 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    "lodash",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
     [
@@ -13,6 +12,14 @@
       {
         "idInterpolationPattern": "[sha512:contenthash:base64:6]",
         "ast": true
+      }
+    ],
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "lodash",
+        "libraryDirectory": "",
+        "camel2DashComponentName": false
       }
     ],
     [
