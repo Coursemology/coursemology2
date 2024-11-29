@@ -196,7 +196,7 @@ GEM
       devise
     diff-lcs (1.5.1)
     docile (1.4.0)
-    docker-api (2.3.0)
+    docker-api (2.4.0)
       excon (>= 0.64.0)
       multi_json
     domain_name (0.6.20240107)
