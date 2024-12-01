@@ -1,9 +1,10 @@
 import { FC, ReactNode, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Chip } from '@mui/material';
-import palette from 'theme/palette';
+import { Box } from '@mui/material';
+import { WorkflowState } from 'types/course/assessment/submission/submission';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
+import SubmissionWorkflowState from 'course/assessment/submission/components/SubmissionWorkflowState';
 import { workflowStates } from 'course/assessment/submission/constants';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
@@ -12,7 +13,10 @@ import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import TableLegends from 'lib/containers/TableLegends';
-import { getEditSubmissionURL } from 'lib/helpers/url-builders';
+import {
+  getEditSubmissionQuestionURL,
+  getEditSubmissionURL,
+} from 'lib/helpers/url-builders';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -20,10 +24,18 @@ import AllAttemptsIndex from './AnswerDisplay/AllAttempts';
 import { getClassNameForAttemptCountCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
-import { getJointGroupsName, translateStatus } from './utils';
+import { getJointGroupsName } from './utils';
 
 interface Props {
   includePhantom: boolean;
+}
+
+interface AnswerInfoState {
+  index: number;
+  questionId: number;
+  submissionId: number;
+  studentName: string;
+  workflowState?: WorkflowState | typeof workflowStates.Unstarted;
 }
 
 const StudentAttemptCountTable: FC<Props> = (props) => {
@@ -33,9 +45,10 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
 
   const statistics = useAppSelector(getAssessmentStatistics);
   const [openPastAnswers, setOpenPastAnswers] = useState(false);
-  const [answerInfo, setAnswerInfo] = useState({
+  const [answerInfo, setAnswerInfo] = useState<AnswerInfoState>({
     index: 0,
-    answerId: 0,
+    questionId: 0,
+    submissionId: 0,
     studentName: '',
   });
   const assessment = statistics.assessment;
@@ -80,8 +93,10 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
           setOpenPastAnswers(true);
           setAnswerInfo({
             index: index + 1,
-            answerId: datum.attemptStatus![index].lastAttemptAnswerId,
+            questionId: assessment!.questionIds[index],
+            submissionId: datum.id,
             studentName: datum.courseUser.name,
+            workflowState: datum.workflowState,
           });
         }}
       >
@@ -164,18 +179,12 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
       title: t(translations.workflowState),
       sortable: true,
       cell: (datum) => (
-        <Link
+        <SubmissionWorkflowState
+          className="w-full"
+          linkTo={getEditSubmissionURL(courseId, assessmentId, datum.id)}
           opensInNewTab
-          to={getEditSubmissionURL(courseId, assessmentId, datum.id)}
-        >
-          <Chip
-            className={`text-blue-800 ${palette.submissionStatusClassName[datum.workflowState ?? workflowStates.Unstarted]} w-full`}
-            label={translateStatus(
-              datum.workflowState ?? workflowStates.Unstarted,
-            )}
-            variant="filled"
-          />
-        </Link>
+          workflowState={datum.workflowState ?? workflowStates.Unstarted}
+        />
       ),
       className: 'center',
     },
@@ -229,11 +238,29 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         maxWidth="lg"
         onClose={(): void => setOpenPastAnswers(false)}
         open={openPastAnswers}
-        title={answerInfo.studentName}
+        title={
+          <span className="flex items-center">
+            {answerInfo.studentName}
+            <SubmissionWorkflowState
+              className="ml-3"
+              linkTo={getEditSubmissionQuestionURL(
+                courseId,
+                assessmentId,
+                answerInfo.submissionId,
+                answerInfo.index,
+              )}
+              opensInNewTab
+              workflowState={
+                answerInfo.workflowState ?? workflowStates.Unstarted
+              }
+            />
+          </span>
+        }
       >
         <AllAttemptsIndex
-          curAnswerId={answerInfo.answerId}
           index={answerInfo.index}
+          questionId={answerInfo.questionId}
+          submissionId={answerInfo.submissionId}
         />
       </Prompt>
     </>

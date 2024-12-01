@@ -17,6 +17,7 @@ interface AssessmentInfo {
 interface MainAssessmentInfo extends AssessmentInfo {
   isAutograded: boolean;
   questionCount: number;
+  questionIds: number[];
   liveFeedbackEnabled: boolean;
 }
 
@@ -105,40 +106,32 @@ export interface CommentItem {
   text: string;
 }
 
+export interface AllAnswerItem {
+  id: number;
+  createdAt: Date;
+  currentAnswer: boolean;
+  workflowState: WorkflowState;
+}
+
+export interface SubmissionQuestionDetails {
+  allAnswers: AllAnswerItem[];
+  comments: CommentItem[];
+}
+
 export type QuestionDetails<T extends keyof typeof QuestionType> =
   QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
 
-export type AllAnswerDetails<T extends keyof typeof QuestionType> =
+export type AnswerStatisticsData<T extends keyof typeof QuestionType> =
   AnswerDetailsMap[T] & {
     createdAt: Date;
-    currentAnswer: boolean;
-    workflowState: WorkflowState;
+    question: QuestionDetails<T>;
   };
-
-export interface QuestionAnswerDetails<T extends keyof typeof QuestionType> {
-  question: QuestionDetails<T>;
-  answer: AnswerDetailsMap[T];
-  allAnswers: AllAnswerDetails<T>[];
-  comments: CommentItem[];
-  submissionId: number;
-  submissionQuestionId: number;
-}
 
 export interface QuestionAnswerDisplayDetails<
   T extends keyof typeof QuestionType,
 > {
   question: QuestionDetails<T>;
   answer: AnswerDetailsMap[T];
-}
-
-export interface QuestionAllAnswerDisplayDetails<
-  T extends keyof typeof QuestionType,
-> {
-  isAnswersDisplayed: boolean;
-  question: QuestionDetails<T>;
-  allAnswers: AllAnswerDetails<T>[];
-  submissionId: number;
-  comments: CommentItem[];
 }
 
 export interface AssessmentLiveFeedbackStatistics {

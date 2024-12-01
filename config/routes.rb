@@ -437,14 +437,14 @@ Rails.application.routes.draw do
 
       namespace :statistics do
         get '/' => 'statistics#index'
-        get 'answer/:id' => 'answers#question_answer_details'
+        get 'answers/:id' => 'answers#show'
         get 'assessments' => 'aggregate#all_assessments'
         get 'assessments/download' => 'aggregate#download_score_summary'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
         get 'course/progression' => 'aggregate#course_progression'
         get 'course/performance' => 'aggregate#course_performance'
-        get 'submission_question/:id' => 'answers#all_answers'
+        get 'submissions/:submission_id/questions/:question_id' => 'answers#all_answers'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
         get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
         get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'

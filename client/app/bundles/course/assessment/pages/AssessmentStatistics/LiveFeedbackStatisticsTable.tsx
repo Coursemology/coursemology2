@@ -1,9 +1,9 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Chip, Typography } from '@mui/material';
-import palette from 'theme/palette';
+import { Box, Typography } from '@mui/material';
 import { AssessmentLiveFeedbackStatistics } from 'types/course/statistics/assessmentStatistics';
 
+import SubmissionWorkflowState from 'course/assessment/submission/components/SubmissionWorkflowState';
 import { workflowStates } from 'course/assessment/submission/constants';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
@@ -17,7 +17,7 @@ import { getClassnameForLiveFeedbackCell } from './classNameUtils';
 import LiveFeedbackHistoryIndex from './LiveFeedbackHistory';
 import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
-import { getJointGroupsName, translateStatus } from './utils';
+import { getJointGroupsName } from './utils';
 
 interface Props {
   includePhantom: boolean;
@@ -192,18 +192,10 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       title: t(translations.workflowState),
       sortable: true,
       cell: (datum) => (
-        <Chip
+        <SubmissionWorkflowState
           className="w-100"
-          label={translateStatus(
-            datum.workflowState ?? workflowStates.Unstarted,
-          )}
-          style={{
-            backgroundColor:
-              palette.submissionStatus[
-                datum.workflowState ?? workflowStates.Unstarted
-              ],
-          }}
-          variant="filled"
+          opensInNewTab
+          workflowState={datum.workflowState ?? workflowStates.Unstarted}
         />
       ),
       className: 'center',
