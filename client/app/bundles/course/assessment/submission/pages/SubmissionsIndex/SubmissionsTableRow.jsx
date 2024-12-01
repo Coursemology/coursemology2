@@ -1,10 +1,9 @@
 import { memo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Warning } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
-import { Chip, IconButton, TableCell, TableRow } from '@mui/material';
+import { IconButton, TableCell, TableRow } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
@@ -22,6 +21,7 @@ import {
   deleteSubmission,
   unsubmitSubmission,
 } from '../../actions/submissions';
+import SubmissionWorkflowState from '../../components/SubmissionWorkflowState';
 import { workflowStates } from '../../constants';
 import { assessmentShape } from '../../propTypes';
 import translations from '../../translations';
@@ -29,9 +29,6 @@ import translations from '../../translations';
 import submissionsTranslations from './translations';
 
 const styles = {
-  chip: {
-    width: 100,
-  },
   tableCell: {
     padding: '0.5em',
     textOverflow: 'initial',
@@ -56,17 +53,6 @@ const renderPhantomUserIcon = (submission) => {
     return <GhostIcon data-tooltip-id="phantom-user" fontSize="small" />;
   }
   return null;
-};
-
-const renderUnpublishedWarning = (submission) => {
-  if (submission.workflowState !== workflowStates.Graded) return null;
-  return (
-    <span style={{ display: 'inline-block', paddingLeft: 5 }}>
-      <div data-tooltip-id="unpublished-grades" data-tooltip-offset={8}>
-        <Warning fontSize="inherit" />
-      </div>
-    </span>
-  );
 };
 
 const SubmissionsTableRow = (props) => {
@@ -187,45 +173,6 @@ const SubmissionsTableRow = (props) => {
     );
   };
 
-  const renderSubmissionWorkflowState = () =>
-    submission.workflowState === workflowStates.Unstarted ? (
-      <FormattedMessage {...translations[submission.workflowState]}>
-        {(msg) => (
-          <Chip
-            icon={renderUnpublishedWarning(submission)}
-            label={msg}
-            style={{
-              ...styles.chip,
-              backgroundColor:
-                palette.submissionStatus[submission.workflowState],
-            }}
-            variant="filled"
-          />
-        )}
-      </FormattedMessage>
-    ) : (
-      <FormattedMessage {...translations[submission.workflowState]}>
-        {(msg) => (
-          <Chip
-            clickable
-            component={Link}
-            icon={renderUnpublishedWarning(submission)}
-            label={msg}
-            style={{
-              ...(submission.workflowState !== workflowStates.Graded &&
-                styles.chip),
-              backgroundColor:
-                palette.submissionStatus[submission.workflowState],
-              textColor: 'white',
-              color: palette.links,
-            }}
-            to={getEditSubmissionURL(courseId, assessmentId, submission.id)}
-            variant="filled"
-          />
-        )}
-      </FormattedMessage>
-    );
-
   const renderUnsubmitButton = () => {
     const disabled =
       disableButtons() ||
@@ -296,7 +243,13 @@ const SubmissionsTableRow = (props) => {
           </span>
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
-          {renderSubmissionWorkflowState()}
+          <SubmissionWorkflowState
+            className={
+              submission.workflowState !== workflowStates.Graded && 'w-36'
+            }
+            linkTo={getEditSubmissionURL(courseId, assessmentId, submission.id)}
+            workflowState={submission.workflowState}
+          />
         </TableCell>
         <TableCell style={tableCenterCellStyle}>{getGradeString()}</TableCell>
         {assessment.gamified ? (

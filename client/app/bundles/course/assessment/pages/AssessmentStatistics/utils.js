@@ -78,16 +78,3 @@ export const getJointGroupsName = (groups) =>
         .sort()
         .join(', ')
     : '';
-
-const statusTranslations = {
-  attempting: 'Attempting',
-  submitted: 'Submitted',
-  graded: 'Graded, unpublished',
-  published: 'Graded',
-  unstarted: 'Not Started',
-};
-
-// Change to this function when file is converted to TypeScript
-// export const translateStatus = (status: WorkflowState): string => statusTranslations[status];
-
-export const translateStatus = (status) => statusTranslations[status];

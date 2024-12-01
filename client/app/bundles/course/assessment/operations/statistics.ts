@@ -3,9 +3,9 @@ import { dispatch } from 'store';
 import { QuestionType } from 'types/course/assessment/question';
 import {
   AncestorAssessmentStats,
+  AnswerStatisticsData,
   AssessmentLiveFeedbackStatistics,
-  QuestionAllAnswerDisplayDetails,
-  QuestionAnswerDetails,
+  SubmissionQuestionDetails,
 } from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
@@ -42,20 +42,23 @@ export const fetchAncestorStatistics = async (
   return response.data;
 };
 
-export const fetchQuestionAnswerDetails = async (
-  answerId: number,
-): Promise<QuestionAnswerDetails<keyof typeof QuestionType>> => {
+export const fetchSubmissionQuestionDetails = async (
+  submissionId: number,
+  questionId: number,
+): Promise<SubmissionQuestionDetails> => {
   const response =
-    await CourseAPI.statistics.answer.fetchQuestionAnswerDetails(answerId);
+    await CourseAPI.statistics.allAnswer.fetchSubmissionQuestionDetails(
+      submissionId,
+      questionId,
+    );
 
   return response.data;
 };
 
-export const fetchAllAnswers = async (
-  submissionQuestionId: number,
-): Promise<QuestionAllAnswerDisplayDetails<keyof typeof QuestionType>> => {
-  const response =
-    await CourseAPI.statistics.allAnswer.fetchAllAnswers(submissionQuestionId);
+export const fetchAnswer = async (
+  answerId: number,
+): Promise<AnswerStatisticsData<keyof typeof QuestionType>> => {
+  const response = await CourseAPI.statistics.answer.fetch(answerId);
 
   return response.data;
 };
