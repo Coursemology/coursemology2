@@ -57,7 +57,7 @@ const countWithLink = (
 
 const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState({ active: false, role: '' });
   const userCounts = useAppSelector(getAdminCounts);
   const users = useAppSelector(getAllUserMiniEntities);
