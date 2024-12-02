@@ -39,8 +39,13 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
   end
 
   def answers
-    Course::Assessment::Answer.where('submission_id = ? AND question_id = ?',
-                                     submission_id, question_id)
+    Course::Assessment::Answer.includes(
+      { actable: [:files] },
+      { auto_grading: [{ actable: { test_results: :test_case } }, :job] },
+      :grader,
+      :question,
+      :submission
+    ).where('submission_id = ? AND question_id = ?', submission_id, question_id)
   end
 
   # Loads the past answers of a specific question
