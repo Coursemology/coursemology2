@@ -20,7 +20,11 @@ interface User {
 interface Page extends BasePage {
   getReCAPTCHA: () => Locator;
   getUserMenuButton: () => Locator;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (
+    email: string,
+    password: string,
+    isPageRendered?: boolean
+  ) => Promise<void>;
 }
 
 interface SignInPage extends Page {
@@ -73,11 +77,19 @@ export const test = base.extend<TestFixtures>({
       getReCAPTCHA: () =>
         page.frameLocator('[title="reCAPTCHA"]').getByLabel("I'm not a robot"),
       getUserMenuButton: () => page.getByTestId('user-menu-button'),
-      signIn: async (email: string, password: string) => {
-        await page.goto('/users/sign_in');
+      signIn: async (
+        email: string,
+        password: string,
+        isPageRendered: boolean = false
+      ) => {
+        if (!isPageRendered) await page.goto('/users/sign_in');
         await page.getByPlaceholder('Email').fill(email);
         await page.getByPlaceholder('Password').fill(password);
         await page.getByRole('button', { name: 'Sign in' }).click();
+        try {
+          await page.waitForURL(/\?from=auth/, { timeout: 1000 });
+          await page.waitForURL(/^(?!.*\?from=auth)/);
+        } catch {}
       },
     } satisfies Omit<Page, keyof BasePage>);
   },
