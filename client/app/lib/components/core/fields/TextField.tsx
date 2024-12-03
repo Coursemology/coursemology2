@@ -35,7 +35,11 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
     };
 
     const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (e): void => {
-      if (onPressEnter && e.key === 'Enter') {
+      if (
+        onPressEnter &&
+        e.key === 'Enter' &&
+        (!textFieldProps.multiline || !e.shiftKey)
+      ) {
         e.preventDefault();
         onPressEnter();
       }
