@@ -44,7 +44,7 @@ const AutogradedActionButtonsRow: FC<Props> = (props) => {
         <Box sx={{ flex: '1', width: '100%' }} />
         {question.type === questionTypes.Programming &&
           question.liveFeedbackEnabled && (
-            <LiveFeedbackButton questionId={questionId} />
+            <LiveFeedbackButton answerId={question.answerId} />
           )}
       </div>
     )
