@@ -206,6 +206,11 @@ interface FeedbackLines {
   feedback: string;
 }
 
+export interface Suggestion {
+  id: string;
+  defaultMessage: string;
+}
+
 export interface LiveFeedbackChatData {
   id: string | number;
   isLiveFeedbackChatOpen: boolean;
@@ -213,4 +218,5 @@ export interface LiveFeedbackChatData {
   pendingFeedbackToken: string | null;
   liveFeedbackId: number | null;
   chats: ChatShape[];
+  suggestions: Suggestion[];
 }
