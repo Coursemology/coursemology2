@@ -1,9 +1,14 @@
 import { FC, useEffect, useRef } from 'react';
 import { Divider, Paper } from '@mui/material';
 
+import { useAppSelector } from 'lib/hooks/store';
+
+import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
+
 import ChatInputArea from './ChatInputArea';
 import ConversationArea from './ConversationArea';
 import Header from './Header';
+import SuggestionChips from './SuggestionChips';
 
 interface GetHelpChatPageProps {
   onFeedbackClick: (linenum: number) => void;
@@ -15,6 +20,16 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
   const { onFeedbackClick, answerId, questionId } = props;
 
   const scrollableRef = useRef<HTMLDivElement>(null);
+
+  const liveFeedbackChats = useAppSelector((state) =>
+    getLiveFeedbackChatsForAnswerId(state, answerId),
+  );
+
+  const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
+  const isPollingLiveFeedback = liveFeedbackChats?.pendingFeedbackToken;
+
+  const isRenderingSuggestionChips =
+    !isRequestingLiveFeedback && !isPollingLiveFeedback;
 
   useEffect(() => {
     if (scrollableRef.current) {
@@ -40,7 +55,10 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
         />
       </div>
 
-      <ChatInputArea answerId={answerId} questionId={questionId} />
+      <div className="relative flex flex-row items-center">
+        {isRenderingSuggestionChips && <SuggestionChips answerId={answerId} />}
+        <ChatInputArea answerId={answerId} questionId={questionId} />
+      </div>
     </Paper>
   );
 };
