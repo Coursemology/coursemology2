@@ -20,7 +20,6 @@ import GradingPanel from '../../containers/GradingPanel';
 import { getInitialAnswer } from '../../selectors/answers';
 import { getAssessment } from '../../selectors/assessments';
 import { getAttachments } from '../../selectors/attachments';
-import { getLiveFeedbacks } from '../../selectors/liveFeedbacks';
 import { getQuestionFlags } from '../../selectors/questionFlags';
 import { getQuestions } from '../../selectors/questions';
 import { getSubmission } from '../../selectors/submissions';
@@ -55,11 +54,17 @@ const SubmissionForm: FC<Props> = (props) => {
   const questions = useAppSelector(getQuestions);
   const questionFlags = useAppSelector(getQuestionFlags);
   const attachments = useAppSelector(getAttachments);
-  const liveFeedbacks = useAppSelector(getLiveFeedbacks);
+  const liveFeedbackChats = useAppSelector(
+    (state) => state.assessments.submission.liveFeedbackChats,
+  );
   const initialValues = useAppSelector(getInitialAnswer);
 
   const { autograded, timeLimit, tabbedView, questionIds } = assessment;
   const { workflowState, attemptedAt } = submission;
+
+  const answerIds = Object.values(questions).map(
+    (question) => question.answerId,
+  );
 
   const maxInitialStep = submission.maxStep ?? questionIds.length - 1;
 
@@ -81,27 +86,24 @@ const SubmissionForm: FC<Props> = (props) => {
     resolver: errorResolver(questions, attachments),
   });
 
-  const onFetchLiveFeedback = (answerId: number, questionId: number): void => {
-    const liveFeedbackId =
-      liveFeedbacks?.feedbackByQuestion?.[questionId].liveFeedbackId;
-    const feedbackToken =
-      liveFeedbacks?.feedbackByQuestion?.[questionId].pendingFeedbackToken;
-    const questionIndex = questionIds.findIndex((id) => id === questionId) + 1;
-    const successMessage = t(translations.liveFeedbackSuccess, {
-      questionIndex,
-    });
-    const noFeedbackMessage = t(translations.liveFeedbackNoneGenerated, {
-      questionIndex,
-    });
+  const onFetchLiveFeedback = (answerId: number): void => {
+    const liveFeedbackChatsForAnswer =
+      liveFeedbackChats.liveFeedbackChatPerAnswer.entities[answerId];
+    if (!liveFeedbackChatsForAnswer) return;
+
+    const liveFeedbackId = liveFeedbackChatsForAnswer.liveFeedbackId;
+    const feedbackToken = liveFeedbackChatsForAnswer.pendingFeedbackToken;
+    const feedbackUrl = liveFeedbackChats.liveFeedbackChatUrl;
+    const noFeedbackMessage = t(translations.liveFeedbackNoneGenerated);
+    const errorMessage = t(translations.requestFailure);
     dispatch(
       fetchLiveFeedback({
         answerId,
-        questionId,
-        feedbackUrl: liveFeedbacks?.feedbackUrl,
+        feedbackUrl,
         liveFeedbackId,
         feedbackToken,
-        successMessage,
         noFeedbackMessage,
+        errorMessage,
       }),
     );
   };
@@ -153,12 +155,12 @@ const SubmissionForm: FC<Props> = (props) => {
   const feedbackPollerRef = useRef<NodeJS.Timeout | null>(null);
   const evaluatePollerRef = useRef<NodeJS.Timeout | null>(null);
   const pollAllFeedback = (): void => {
-    questionIds.forEach((id) => {
-      const question = questions[id];
+    answerIds.forEach((answerId) => {
+      if (!answerId) return;
       const feedbackRequestToken =
-        liveFeedbacks?.feedbackByQuestion?.[question.id]?.pendingFeedbackToken;
-      if (feedbackRequestToken) {
-        onFetchLiveFeedback(question.answerId!, id);
+        liveFeedbackChats.liveFeedbackChatPerAnswer.entities[answerId];
+      if (feedbackRequestToken?.pendingFeedbackToken) {
+        onFetchLiveFeedback(answerId);
       }
     });
   };
