@@ -4,6 +4,7 @@ import {
   type EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
+import { shuffle } from 'lodash';
 import moment from 'moment';
 
 import { SHORT_TIME_FORMAT } from 'lib/moment';
@@ -13,11 +14,13 @@ import {
   modifyLocalStorageValue,
   setLocalStorageValue,
 } from '../../localStorage/liveFeedbackChat/operations';
+import { suggestionsTranslations } from '../../suggestionTranslations';
 import {
   ChatSender,
   ChatShape,
   FeedbackShape,
   LiveFeedbackChatData,
+  Suggestion,
 } from '../../types';
 
 export const liveFeedbackChatAdapter =
@@ -33,6 +36,18 @@ const initialState: LiveFeedbackChatState = {
   liveFeedbackChatUrl: '',
 };
 
+const generateSuggestion = (): Suggestion[] => {
+  const suggestions = Object.values(suggestionsTranslations);
+  const chosenSuggestions = shuffle(suggestions).slice(0, 3);
+
+  return chosenSuggestions.map((suggestion) => {
+    return {
+      id: suggestion.id,
+      defaultMessage: suggestion.defaultMessage,
+    };
+  });
+};
+
 const defaultValue = (questionId: string | number): LiveFeedbackChatData => {
   return {
     id: questionId,
@@ -41,6 +56,7 @@ const defaultValue = (questionId: string | number): LiveFeedbackChatData => {
     pendingFeedbackToken: null,
     liveFeedbackId: null,
     chats: [],
+    suggestions: generateSuggestion(),
   };
 };
 
@@ -226,6 +242,7 @@ export const liveFeedbackChatSlice = createSlice({
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
           chats: [...liveFeedbackChats.chats, ...newChats],
+          suggestions: generateSuggestion(),
         };
 
         liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerQuestion, {
@@ -261,6 +278,7 @@ export const liveFeedbackChatSlice = createSlice({
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
           chats: [...liveFeedbackChats.chats, newChat],
+          suggestions: generateSuggestion(),
         };
 
         liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerQuestion, {
