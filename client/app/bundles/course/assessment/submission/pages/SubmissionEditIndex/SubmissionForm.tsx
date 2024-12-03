@@ -94,6 +94,7 @@ const SubmissionForm: FC<Props> = (props) => {
     const errorMessage = t(translations.requestFailure);
     dispatch(
       fetchLiveFeedback({
+        submissionId,
         questionId,
         feedbackUrl,
         liveFeedbackId,
