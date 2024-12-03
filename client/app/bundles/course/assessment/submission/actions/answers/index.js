@@ -7,6 +7,11 @@ import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../../constants';
 import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
+import {
+  getFailureFeedbackFromCodaveri,
+  getLiveFeedbackFromCodaveri,
+  requestLiveFeedbackFromCodaveri,
+} from '../../reducers/liveFeedbackChats';
 import { getClientVersionForAnswerId } from '../../selectors/answers';
 import translations from '../../translations';
 import { convertAnswerDataToInitialValue } from '../../utils/answers';
@@ -199,55 +204,32 @@ export function generateFeedback(submissionId, answerId, questionId) {
   };
 }
 
-// Immediately disable "Get Help" button to prevent user prematurely retrying.
-export function initializeLiveFeedback(questionId) {
-  return (dispatch) =>
-    dispatch({
-      type: actionTypes.LIVE_FEEDBACK_INITIAL,
-      payload: {
-        questionId,
-      },
-    });
-}
-
 // if status returned 200, populate feedback array if has feedback, otherwise return error
 const handleFeedbackOKResponse = ({
+  answerId,
   dispatch,
   response,
-  answerId,
-  questionId,
-  successMessage,
   noFeedbackMessage,
 }) => {
   const feedbackFiles = response.data?.data?.feedbackFiles ?? [];
   const success = response.data?.success;
   if (success && feedbackFiles.length) {
-    dispatch({
-      type: actionTypes.LIVE_FEEDBACK_SUCCESS,
-      payload: {
-        questionId,
-        answerId,
-        feedbackFiles,
-      },
-    });
-    dispatch(setNotification(successMessage));
+    dispatch(getLiveFeedbackFromCodaveri({ answerId, feedbackFiles }));
   } else {
-    dispatch({
-      type: actionTypes.LIVE_FEEDBACK_FAILURE,
-      payload: {
-        questionId,
-      },
-    });
-    dispatch(setNotification(noFeedbackMessage));
+    dispatch(
+      getFailureFeedbackFromCodaveri({
+        answerId,
+        errorMessage: noFeedbackMessage,
+      }),
+    );
   }
 };
 
 export function generateLiveFeedback({
   submissionId,
   answerId,
-  questionId,
-  successMessage,
   noFeedbackMessage,
+  errorMessage,
 }) {
   return (dispatch) =>
     CourseAPI.assessment.submissions
@@ -255,45 +237,40 @@ export function generateLiveFeedback({
       .then((response) => {
         if (response.status === 200) {
           handleFeedbackOKResponse({
+            answerId,
             dispatch,
             response,
-            answerId,
-            questionId,
-            successMessage,
             noFeedbackMessage,
           });
         } else {
           // 201, save feedback signed token
-          dispatch({
-            type: actionTypes.LIVE_FEEDBACK_REQUEST,
-            payload: {
-              questionId,
+          dispatch(
+            requestLiveFeedbackFromCodaveri({
+              token: response.data?.data?.token,
+              answerId,
               liveFeedbackId: response.data?.liveFeedbackId,
               feedbackUrl: response.data?.feedbackUrl,
-              token: response.data?.data?.token,
-            },
-          });
+            }),
+          );
         }
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.LIVE_FEEDBACK_FAILURE,
-          payload: {
-            questionId,
-          },
-        });
-        dispatch(setNotification(translations.requestFailure));
+        dispatch(
+          getFailureFeedbackFromCodaveri({
+            answerId,
+            errorMessage,
+          }),
+        );
       });
 }
 
 export function fetchLiveFeedback({
   answerId,
-  questionId,
   feedbackUrl,
   liveFeedbackId,
   feedbackToken,
-  successMessage,
   noFeedbackMessage,
+  errorMessage,
 }) {
   return (dispatch) =>
     CourseAPI.assessment.submissions
@@ -305,23 +282,20 @@ export function fetchLiveFeedback({
             response.data?.data?.feedbackFiles ?? [],
           );
           handleFeedbackOKResponse({
+            answerId,
             dispatch,
             response,
-            answerId,
-            questionId,
-            successMessage,
             noFeedbackMessage,
           });
         }
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.LIVE_FEEDBACK_FAILURE,
-          payload: {
-            questionId,
-          },
-        });
-        dispatch(setNotification(translations.requestFailure));
+        dispatch(
+          getFailureFeedbackFromCodaveri({
+            answerId,
+            errorMessage,
+          }),
+        );
       });
 }
 
