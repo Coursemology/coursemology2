@@ -6,8 +6,6 @@ import { WorkflowState } from 'types/course/assessment/submission/submission';
 import { Attachment } from './components/answers/types';
 import { AnswerHistory, QuestionHistory } from './reducers/history/types';
 
-type FeedbackLineState = 'pending' | 'resolved' | 'dismissed';
-
 type TestCaseTypes = 'public_test' | 'private_test' | 'evaluation_test';
 
 type JobStatus = 'submitted' | 'completed' | 'errored';
@@ -49,28 +47,6 @@ export type QuestionsState = Record<
 export interface AnswerState {
   initial: Record<number, AnswerData>;
   clientVersionByAnswerId: Record<number, number>;
-}
-
-interface FeedbackLine {
-  id: string;
-  linenum: number;
-  feedback: string;
-  category: string;
-  isVerified: boolean;
-  state: FeedbackLineState;
-}
-
-interface LiveFeedback {
-  isRequestingLiveFeedback: boolean;
-  pendingFeedbackToken: string | null;
-  answerId: number;
-  feedbackFiles: Record<string, FeedbackLine[]>;
-  liveFeedbackId: number;
-}
-
-export interface LiveFeedbackState {
-  feedbackByQuestion: Record<number, LiveFeedback>;
-  feedbackUrl: string | null;
 }
 
 export interface SubmissionState {
@@ -179,4 +155,37 @@ export interface HistoryQuestion {
 export interface HistoryState {
   answers: Record<number, AnswerHistory>;
   questions: Record<number, QuestionHistory>;
+}
+
+export enum ChatSender {
+  'student' = 0,
+  'codaveri' = 1,
+}
+
+export interface ChatShape {
+  sender: ChatSender;
+  lineNumber: number | null;
+  message: string[];
+  createdAt: string;
+  isError: boolean;
+}
+
+export interface FeedbackShape {
+  path: string;
+  feedbackLines: FeedbackLine[];
+}
+
+interface FeedbackLine {
+  id: string;
+  linenum: number;
+  feedback: string;
+}
+
+export interface LiveFeedbackChatData {
+  id: string | number;
+  isLiveFeedbackChatOpen: boolean;
+  isRequestingLiveFeedback: boolean;
+  pendingFeedbackToken: string | null;
+  liveFeedbackId: number | null;
+  chats: ChatShape[];
 }
