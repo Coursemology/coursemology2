@@ -12,7 +12,7 @@ gem 'csv'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.1'
+gem 'rails', '~> 7.2.2'
 
 # Use PostgreSQL for the backend
 gem 'pg'
