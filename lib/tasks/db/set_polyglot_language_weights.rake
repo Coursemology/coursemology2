@@ -11,34 +11,58 @@ namespace :db do
     'javascript'
   ].freeze
 
-  def version_compare(ver1, ver2)
-    ver1&.split('.')&.map(&:to_i) <=> ver2&.split('.')&.map(&:to_i)
+  def comparable_polyglot_version(language)
+    language&.polyglot_version&.split('.')&.map(&:to_i)
   end
 
-  def language_compare(lang1, lang2)
+  def version_compare(lang1, lang2)
+    comparable_polyglot_version(lang1) <=> comparable_polyglot_version(lang2)
+  end
+
+  # to be populated once we query the languages
+  @latest_hash = {}
+  def latest?(language)
+    @latest_hash.key?(language.name)
+  end
+
+  def language_compare(lang1, lang2) # rubocop:disable Metrics/CyclomaticComplexity
     index1 = LANGUAGE_ORDERING.index { |l| lang1.polyglot_name == l }
     index2 = LANGUAGE_ORDERING.index { |l| lang2.polyglot_name == l }
 
-    # Put most recent versions first
-    return -version_compare(lang1.polyglot_version, lang2.polyglot_version) if index1 == index2
+    # Put more recent versions first
+    return -version_compare(lang1, lang2) if index1 == index2
+
+    # Put latest versions of each language before outdated versions of all languages
+    return -1 if latest?(lang1) && !latest?(lang2)
+    return 1 if !latest?(lang1) && latest?(lang2)
+
+    # Put other languages (not added to LANGUAGE_ORDERING array above) last
     return 1 if index1.nil?
     return -1 if index2.nil?
 
+    # At this point we know that:
+    # - both languages have not-nil index values that are different and
+    # - the languages are either both latest? = true or both latest? = false.
+    # In any case, the index can be safely used to determine the ordering now.
     index1 <=> index2
   end
 
   task set_polyglot_language_weights: :environment do
     # this ensures all languages are loaded in the database table before flags are updated below
     Coursemology::Polyglot::Language.load_languages
+    @all_languages = Coursemology::Polyglot::Language.all
+    @all_languages.group_by(&:polyglot_name).each_value do |languages|
+      @latest_hash[languages.sort(&method(:version_compare)).last.name] = true
+    end
 
     ActsAsTenant.without_tenant do
       ActiveRecord::Base.connection.execute(
         'ALTER SEQUENCE polyglot_languages_weight_seq RESTART WITH 1;'
       )
       # The highest weight is displayed first, so we perform assignments in reverse order
-      Coursemology::Polyglot::Language.all.sort(&method(:language_compare)).reverse_each do |lang|
+      @all_languages.sort(&method(:language_compare)).reverse_each do |language|
         ActiveRecord::Base.connection.execute(
-          "UPDATE polyglot_languages SET weight = nextval('polyglot_languages_weight_seq') WHERE name = '#{lang.name}';"
+          "UPDATE polyglot_languages SET weight = nextval('polyglot_languages_weight_seq') WHERE name = '#{language.name}';" # rubocop:disable Layout/LineLength
         )
       end
     end
