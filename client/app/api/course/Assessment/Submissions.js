@@ -155,22 +155,25 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   static appendFormData(formData, data, name) {
-    const prefix = name || '';
-
     if (data === undefined || data === null) {
       return;
     }
 
     if (data instanceof Array) {
+      if (!name) throw new Error('form key cannot be empty for array data');
       if (data.length === 0) {
-        formData.append(`${prefix}[]`, null);
+        formData.append(`${name}[]`, null);
       }
       data.forEach((item) => {
-        SubmissionsAPI.appendFormData(formData, item, `${prefix}[]`);
+        SubmissionsAPI.appendFormData(formData, item, `${name}[]`);
       });
     } else if (typeof data === 'object' && !(data instanceof File)) {
       Object.keys(data).forEach((key) => {
-        SubmissionsAPI.appendFormData(formData, data[key], `${prefix}[${key}]`);
+        SubmissionsAPI.appendFormData(
+          formData,
+          data[key],
+          name ? `${name}[${key}]` : key,
+        );
       });
     } else {
       formData.append(name, data);
