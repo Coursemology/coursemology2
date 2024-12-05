@@ -327,8 +327,8 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    lograge-sql (2.4.0)
-      activerecord (>= 5, < 7.3)
+    lograge-sql (2.5.1)
+      activerecord (>= 5, < 8.1)
       lograge (~> 0.11)
     lol_dba (2.4.0)
       actionpack
