@@ -240,6 +240,55 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
+    describe '#set_timer_started_at' do
+      let!(:assessment) { create(:assessment, :published, *assessment_traits, course: course, time_limit: 120) }
+      let!(:assessment2) { create(:assessment, :published, *assessment_traits, course: course, time_limit: 120) }
+      let!(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
+      let!(:submission2) do
+        create(:submission, :attempting, assessment: assessment2, creator: user,
+                                         timer_started_at: Time.zone.now - 5.seconds)
+      end
+
+      context 'when user first-time attempt the timed assessment' do
+        subject do
+          patch :set_timer_started_at, params: {
+            course_id: course, assessment_id: assessment.id, id: submission.id
+          }
+        end
+
+        it 'assigns the timer_started_at to current time' do
+          subject
+          json_result = JSON.parse(response.body)
+          expect(json_result['timerStartedAt'].to_datetime.utc).to \
+            be_within(1.second).of Time.zone.now.utc
+          expect(submission.reload.timer_started_at.utc).to \
+            be_within(1.second).of Time.zone.now.utc
+        end
+      end
+
+      context 'when user has already attempted the timed assessment before' do
+        subject do
+          patch :set_timer_started_at, params: {
+            course_id: course, assessment_id: assessment2.id, id: submission2.id
+          }
+        end
+
+        it 'assigns the timer_started_at to current time' do
+          subject
+          json_result = JSON.parse(response.body)
+          expect(json_result['timerStartedAt'].to_datetime.utc).not_to \
+            be_within(1.second).of Time.zone.now.utc
+          expect(submission2.reload.timer_started_at.utc).not_to \
+            be_within(1.second).of Time.zone.now.utc
+
+          expect(json_result['timerStartedAt'].to_datetime.utc).to \
+            be_within(1.second).of (Time.zone.now - 5.seconds).utc
+          expect(submission2.reload.timer_started_at.utc).to \
+            be_within(1.second).of (Time.zone.now - 5.seconds).utc
+        end
+      end
+    end
+
     describe 'submission_actions' do
       let!(:students) { create_list(:course_student, 5, course: course) }
       let!(:phantom_student) { create(:course_student, :phantom, course: course) }

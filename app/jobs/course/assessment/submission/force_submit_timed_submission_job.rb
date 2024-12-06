@@ -10,7 +10,7 @@ class Course::Assessment::Submission::ForceSubmitTimedSubmissionJob < Applicatio
     instance = Course.unscoped { assessment.course.instance }
 
     ActsAsTenant.with_tenant(instance) do
-      submission = Course::Assessment::Submission.find_by(id: submission_id)
+      submission = Course::Assessment::Submission.find_by(id: submission_id, workflow_state: 'attempting')
       return unless submission
 
       force_submit(submission, submitter)
