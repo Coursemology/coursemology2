@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { Switch } from '@mui/material';
 
 import { updateProgrammingQuestionLiveFeedbackEnabledForAssessments } from 'course/admin/reducers/codaveriSettings';
+import { updateLiveFeedbackForAllQuestionsInAssessment } from 'course/assessment/operations/assessments';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -15,11 +16,17 @@ import CodaveriSettingsChip from '../CodaveriSettingsChip';
 interface LiveFeedbackToggleButtonProps {
   assessmentIds: number[];
   for: string;
-  hideChipIndicator?: boolean;
+  isSpecificAssessment?: boolean;
+  isCourseCodaveriEnabled?: boolean;
 }
 
 const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
-  const { assessmentIds, for: title, hideChipIndicator } = props;
+  const {
+    assessmentIds,
+    for: title,
+    isSpecificAssessment,
+    isCourseCodaveriEnabled,
+  } = props;
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
@@ -40,9 +47,22 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
 
   const hasNoProgrammingQuestions = programmingQuestions.length === 0;
 
+  const updateLiveFeedbackEnabled = (
+    liveFeedbackEnabled: boolean,
+  ): Promise<void> =>
+    isSpecificAssessment
+      ? updateLiveFeedbackForAllQuestionsInAssessment(
+          assessmentIds[0],
+          liveFeedbackEnabled,
+        )
+      : updateLiveFeedbackEnabledForAllQuestions(
+          assessmentIds,
+          liveFeedbackEnabled,
+        );
+
   const handleLiveFeedbackUpdate = (liveFeedbackEnabled: boolean): void => {
     setIsLiveFeedbackUpdating(true);
-    updateLiveFeedbackEnabledForAllQuestions(assessmentIds, liveFeedbackEnabled)
+    updateLiveFeedbackEnabled(liveFeedbackEnabled)
       .then(() => {
         dispatch(
           updateProgrammingQuestionLiveFeedbackEnabledForAssessments({
@@ -72,19 +92,23 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
       <div>
         <Switch
           checked={
-            hasNoProgrammingQuestions
+            hasNoProgrammingQuestions || !isCourseCodaveriEnabled
               ? false
               : qnsWithLiveFeedbackEnabled.length ===
                 programmingQuestions.length
           }
           color="primary"
-          disabled={hasNoProgrammingQuestions || isLiveFeedbackUpdating}
+          disabled={
+            hasNoProgrammingQuestions ||
+            !isCourseCodaveriEnabled ||
+            isLiveFeedbackUpdating
+          }
           onChange={(_, isChecked): void => {
             setLiveFeedbackChecked(isChecked);
             setLiveFeedbackSettingsConfirmation(true);
           }}
         />
-        {!hideChipIndicator && (
+        {!isSpecificAssessment && (
           <CodaveriSettingsChip
             assessmentIds={assessmentIds}
             for="live_feedback"

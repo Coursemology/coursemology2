@@ -47,8 +47,8 @@ export const codaveriSettingsSlice = createSlice({
     saveAllAssessmentsQuestions: (
       state,
       action: PayloadAction<{
-        categories: AssessmentCategoryData[];
-        tabs: AssessmentTabData[];
+        categories?: AssessmentCategoryData[];
+        tabs?: AssessmentTabData[];
         assessments: AssessmentProgrammingQuestionsData[];
       }>,
     ) => {
@@ -56,11 +56,17 @@ export const codaveriSettingsSlice = createSlice({
       const questions = assessments.flatMap(
         (assessment) => assessment.programmingQuestions,
       );
-      assessmentCategoriesAdapter.setAll(
-        state.assessmentCategories,
-        categories,
-      );
-      assessmentTabsAdapter.setAll(state.assessmentTabs, tabs);
+      if (categories) {
+        assessmentCategoriesAdapter.setAll(
+          state.assessmentCategories,
+          categories,
+        );
+      }
+
+      if (tabs) {
+        assessmentTabsAdapter.setAll(state.assessmentTabs, tabs);
+      }
+
       assessmentsAdapter.setAll(state.assessments, assessments);
       programmingQuestionsAdapter.setAll(state.programmingQuestions, questions);
     },

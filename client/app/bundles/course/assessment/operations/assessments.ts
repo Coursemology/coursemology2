@@ -10,6 +10,7 @@ import {
 
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
+import { saveAllAssessmentsQuestions } from 'course/admin/reducers/codaveriSettings';
 import { setNotification } from 'lib/actions';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -50,6 +51,46 @@ export const fetchAssessmentEditData = async (
     await CourseAPI.assessment.assessments.fetchEditData(assessmentId);
 
   return response.data;
+};
+
+export const fetchAssessmentLiveFeedbackSettings = (
+  assessmentId: number,
+): Operation => {
+  return async (dispatch) => {
+    return CourseAPI.assessment.assessments
+      .liveFeedbackSettings(assessmentId)
+      .then((response) => {
+        dispatch(
+          saveAllAssessmentsQuestions({
+            assessments: response.data.assessments,
+          }),
+        );
+      })
+      .catch((error) => {
+        if (error instanceof AxiosError) throw error.response?.data?.errors;
+        throw error;
+      });
+  };
+};
+
+export const updateLiveFeedbackForAllQuestionsInAssessment = async (
+  assessmentId: number,
+  liveFeedbackEnabled: boolean,
+): Promise<void> => {
+  const adaptedData = {
+    live_feedback_settings: {
+      enabled: liveFeedbackEnabled,
+    },
+  };
+  try {
+    await CourseAPI.assessment.assessments.updateLiveFeedbackSettings(
+      assessmentId,
+      adaptedData,
+    );
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
 };
 
 export const createAssessment = (

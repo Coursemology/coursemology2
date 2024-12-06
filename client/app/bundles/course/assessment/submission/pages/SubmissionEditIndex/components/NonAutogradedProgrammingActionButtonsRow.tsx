@@ -5,6 +5,7 @@ import {
   questionTypes,
   workflowStates,
 } from 'course/assessment/submission/constants';
+import { getAssessment } from 'course/assessment/submission/selectors/assessments';
 import { getQuestions } from 'course/assessment/submission/selectors/questions';
 import { getSubmission } from 'course/assessment/submission/selectors/submissions';
 import { useAppSelector } from 'lib/hooks/store';
@@ -20,6 +21,7 @@ interface Props {
 const NonAutogradedProgrammingActionButtonsRow: FC<Props> = (props) => {
   const { questionId } = props;
 
+  const assessment = useAppSelector(getAssessment);
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
 
@@ -30,6 +32,8 @@ const NonAutogradedProgrammingActionButtonsRow: FC<Props> = (props) => {
   const question = questions[questionId];
   const { viewHistory } = question;
 
+  const { isCourseCodaveriEnabled } = assessment;
+
   return (
     !viewHistory &&
     attempting &&
@@ -38,7 +42,7 @@ const NonAutogradedProgrammingActionButtonsRow: FC<Props> = (props) => {
         <ResetProgrammingAnswerButton questionId={questionId} />
         {question.autogradable && <RunCodeButton questionId={questionId} />}
         <Box sx={{ flex: '1', width: '100%' }} />
-        {question.liveFeedbackEnabled && (
+        {question.liveFeedbackEnabled && isCourseCodaveriEnabled && (
           <LiveFeedbackButton questionId={questionId} />
         )}
       </div>

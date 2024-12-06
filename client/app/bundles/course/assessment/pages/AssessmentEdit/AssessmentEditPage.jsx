@@ -53,6 +53,7 @@ class AssessmentEditPage extends Component {
   render() {
     const {
       intl,
+      isCourseCodaveriEnabled,
       conditionAttributes,
       disabled,
       folderAttributes,
@@ -94,6 +95,7 @@ class AssessmentEditPage extends Component {
           folderAttributes={folderAttributes}
           gamified={gamified}
           initialValues={initialValues}
+          isCourseCodaveriEnabled={isCourseCodaveriEnabled}
           isKoditsuExamEnabled={isKoditsuExamEnabled}
           isQuestionsValidForKoditsu={isQuestionsValidForKoditsu}
           modeSwitching={modeSwitching}
@@ -128,6 +130,7 @@ AssessmentEditPage.propTypes = {
   initialValues: PropTypes.shape({}),
   isKoditsuExamEnabled: PropTypes.bool,
   isQuestionsValidForKoditsu: PropTypes.bool,
+  isCourseCodaveriEnabled: PropTypes.bool,
 
   // Whether to disable the inner form.
   disabled: PropTypes.bool,

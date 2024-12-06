@@ -1,16 +1,20 @@
-// import { fetchCodaveriSettingsForAssessment } from 'course/admin/pages/CodaveriSettings/operations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { DEFAULT_MONITORING_OPTIONS } from '../../constants';
-import { fetchAssessmentEditData } from '../../operations/assessments';
+import {
+  fetchAssessmentEditData,
+  fetchAssessmentLiveFeedbackSettings,
+} from '../../operations/assessments';
 import translations from '../../translations';
 import { categoryAndTabTitle } from '../../utils';
 
 import AssessmentEditPage from './AssessmentEditPage';
 
 const AssessmentEdit = (): JSX.Element => {
+  const dispatch = useAppDispatch();
   const assessmentId = getAssessmentId();
   if (!assessmentId) {
     return <div />;
@@ -24,11 +28,11 @@ const AssessmentEdit = (): JSX.Element => {
       while={() =>
         Promise.all([
           fetchAssessmentEditData(parsedAssessmentId),
-          // fetchCodaveriSettingsForAssessment(parsedAssessmentId),
+          dispatch(fetchAssessmentLiveFeedbackSettings(parsedAssessmentId)),
         ])
       }
     >
-      {([data]): JSX.Element => {
+      {([data, _]): JSX.Element => {
         const tabAttr = data.tab_attributes;
         const currentTab = {
           tab_id: data.attributes.tab_id,
@@ -59,6 +63,7 @@ const AssessmentEdit = (): JSX.Element => {
                   ? DEFAULT_MONITORING_OPTIONS
                   : undefined),
             }}
+            isCourseCodaveriEnabled={data.isCourseCodaveriEnabled}
             isKoditsuExamEnabled={data.isKoditsuExamEnabled}
             isQuestionsValidForKoditsu={data.isQuestionsValidForKoditsu}
             modeSwitching={data.mode_switching}
