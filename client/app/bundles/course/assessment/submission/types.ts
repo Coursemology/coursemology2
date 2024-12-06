@@ -1,3 +1,4 @@
+import { MessageFormatElement } from 'react-intl';
 import { QuestionType } from 'types/course/assessment/question';
 import { AnswerData } from 'types/course/assessment/submission/answer';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
@@ -60,12 +61,47 @@ interface FeedbackLine {
   state: FeedbackLineState;
 }
 
-interface LiveFeedback {
+export interface EditorRef {
+  editor: {
+    gotoLine: (line: number, column: number) => void;
+    selection: {
+      setAnchor: (row: number, column: number) => void;
+      moveCursorTo: (row: number, column: number) => void;
+    };
+    focus: () => void;
+  };
+}
+
+export interface TranslatableMessage {
+  id: string;
+  defaultMessage: string | MessageFormatElement[] | undefined;
+}
+
+export enum Sender {
+  Codaveri = 'Codaveri',
+  Student = 'Student',
+}
+
+export interface LiveFeedbackMessage {
+  id: string;
+  texts: string[] | TranslatableMessage[];
+  sender: Sender;
+  linenum: number | null;
+  timestamp: string | null;
+  isBold: boolean;
+  bgColor: string;
+}
+
+export interface LiveFeedback {
   isRequestingLiveFeedback: boolean;
   pendingFeedbackToken: string | null;
   answerId: number;
   feedbackFiles: Record<string, FeedbackLine[]>;
   liveFeedbackId: number;
+  isDialogOpen: boolean;
+  conversation: LiveFeedbackMessage[];
+  suggestedReplies: TranslatableMessage[];
+  focusedMessageIndex: number;
 }
 
 export interface LiveFeedbackState {

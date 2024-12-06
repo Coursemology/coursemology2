@@ -1,14 +1,16 @@
 // eslint-disable-next-line simple-import-sort/imports
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Divider, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
-import { useAppDispatch } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import { QuestionType } from 'types/course/assessment/question';
+import GetHelpPage from 'course/assessment/submission/pages/SubmissionEditIndex/components/GetHelpPage';
+import { getFeedbackByQuestionId } from 'course/assessment/submission/selectors/liveFeedbacks';
 import { saveAnswer, updateClientVersion } from '../../actions/answers';
 import { uploadTextResponseFiles } from '../../actions/answers/textResponse';
 
@@ -29,6 +31,8 @@ interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   questionType: T;
   readOnly: boolean;
   showMcqMrqSolution: boolean;
+  stepIndex: number;
+  questionId: number;
 }
 
 const DebounceDelayMap = {
@@ -55,11 +59,15 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     questionType,
     readOnly,
     showMcqMrqSolution,
+    stepIndex,
+    questionId,
   } = props;
   const dispatch = useAppDispatch();
 
   const { getValues, resetField } = useFormContext();
   const errorMessages = useErrorTranslation(allErrors);
+
+  const editorRef = useRef(null);
 
   const handleSaveAnswer = (
     answerData: unknown,
@@ -116,6 +124,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
       question: question as SubmissionQuestionData<'Programming'>,
       readOnly,
       saveAnswerAndUpdateClientVersion,
+      editorRef,
     },
     TextResponse: {
       answerId,
@@ -151,8 +160,13 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     },
   };
 
+  const liveFeedback = useAppSelector((state) =>
+    getFeedbackByQuestionId(state, questionId),
+  );
+  const isDialogOpen = !!liveFeedback?.isDialogOpen;
+
   return (
-    <>
+    <div className="relative">
       <AnswerHeader
         answerId={answerId}
         historyQuestions={historyQuestions}
@@ -184,7 +198,10 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
         question={question}
         questionType={questionType}
       />
-    </>
+      {isDialogOpen && (
+        <GetHelpPage editorRef={editorRef} stepIndex={stepIndex} />
+      )}
+    </div>
   );
 };
 
