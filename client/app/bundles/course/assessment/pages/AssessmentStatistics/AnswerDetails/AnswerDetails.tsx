@@ -70,7 +70,7 @@ export const AnswerDetailsMapper = {
 const AnswerDetails = <T extends keyof typeof QuestionType>(
   props: AnswerDetailsProps<T>,
 ): JSX.Element => {
-  const Component = AnswerDetailsMapper[props.answer.questionType];
+  const Component = AnswerDetailsMapper[props.question.type];
 
   // "Any" type is used here as the props are dynamically generated
   // depending on the different answer type and typescript
