@@ -512,10 +512,6 @@ const translations = defineMessages({
     id: 'course.assessment.submission.getPastAnswersFailure',
     defaultMessage: 'Failed to load past answers',
   },
-  draftAnswer: {
-    id: 'course.assessment.submission.draftAnswer',
-    defaultMessage: ' - Draft',
-  },
   statistics: {
     id: 'course.assessment.submission.statistics',
     defaultMessage: 'Statistics',

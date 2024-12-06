@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_18_152013) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_29_164745) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -509,7 +509,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_18_152013) do
     t.boolean "block_student_viewing_after_submitted", default: false
     t.integer "satisfiability_type", default: 0
     t.bigint "monitor_id"
-    t.boolean "allow_record_draft_answer", default: false
     t.integer "time_limit"
     t.string "koditsu_assessment_id"
     t.boolean "is_koditsu_enabled"

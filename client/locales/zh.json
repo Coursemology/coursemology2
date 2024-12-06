@@ -1052,9 +1052,6 @@
   "course.assessment.AssessmentForm.allowPartialSubmission": {
     "defaultMessage": "允许提交错误答案"
   },
-  "course.assessment.AssessmentForm.allowRecordDraftAnswer": {
-    "defaultMessage": "允许对编程答题草稿进行版本控制"
-  },
   "course.assessment.AssessmentForm.answersAndTestCases": {
     "defaultMessage": "答案和测试用例"
   },
@@ -2002,9 +1999,6 @@
   },
   "course.assessment.show assessmentDeleted": {
     "defaultMessage": "测验已成功删除。"
-  },
-  "course.assessment.show.allowRecordDraftAnswer": {
-    "defaultMessage": "允许对编程题草稿进行版本控制"
   },
   "course.assessment.show.allowSkipSteps": {
     "defaultMessage": "允许跳过步骤"

@@ -165,7 +165,6 @@ interface Topic {
 export type TopicState = Record<number, Topic>;
 
 export type HistoryAnswer = AnswerData & {
-  isDraftAnswer: boolean;
   createdAt: Date;
 };
 

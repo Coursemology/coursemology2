@@ -12,11 +12,7 @@ export default class PastProgrammingAnswer extends Component {
     return (
       <div>
         <ProgrammingImportHistoryView historyAnswer={answer} />
-        <TestCaseView
-          answerId={answer.id}
-          isDraftAnswer={answer.isDraftAnswer}
-          viewHistory
-        />
+        <TestCaseView answerId={answer.id} viewHistory />
       </div>
     );
   }
@@ -33,11 +29,7 @@ export default class PastProgrammingAnswer extends Component {
     return (
       <div>
         {file && <ReadOnlyEditor answerId={answer.id} file={file} />}
-        <TestCaseView
-          answerId={answer.id}
-          isDraftAnswer={answer.isDraftAnswer}
-          viewHistory
-        />
+        <TestCaseView answerId={answer.id} viewHistory />
       </div>
     );
   }

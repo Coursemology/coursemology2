@@ -70,9 +70,6 @@ class PastAnswers extends Component {
       return (
         <MenuItem key={index} value={answer}>
           {formatLongDateTime(answer.createdAt)}
-          {answer.isDraftAnswer && (
-            <>&nbsp;{intl.formatMessage(translations.draftAnswer)}</>
-          )}
         </MenuItem>
       );
     };
@@ -100,10 +97,7 @@ class PastAnswers extends Component {
     return (
       <div key={answer.id}>
         <Typography variant="h6">
-          {answer.isDraftAnswer
-            ? intl.formatMessage(translations.savedAt)
-            : intl.formatMessage(translations.submittedAt)}
-          : {date}
+          {intl.formatMessage(translations.submittedAt)} : {date}
         </Typography>
         {this.getAnswersHistory(question, answer)}
         <hr />

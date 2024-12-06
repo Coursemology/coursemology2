@@ -10,7 +10,6 @@ export default function (state = {}, action) {
             ...obj,
             [answer.id]: {
               ...answer.fields,
-              isDraftAnswer: answer.isDraftAnswer,
               createdAt: answer.createdAt,
             },
           }),
@@ -25,7 +24,6 @@ export default function (state = {}, action) {
           ...state,
           [latestAnswer.id]: {
             ...latestAnswer.fields,
-            isDraftAnswer: latestAnswer.isDraftAnswer,
             createdAt: latestAnswer.createdAt,
           },
         };
