@@ -6,7 +6,10 @@ import { AssessmentProgrammingQuestionsData } from 'types/course/admin/codaveri'
 import Link from 'lib/components/core/Link';
 import { useAppSelector } from 'lib/hooks/store';
 
-import { getViewSettings } from '../selectors';
+import {
+  getProgrammingQuestionsForAssessments,
+  getViewSettings,
+} from '../selectors';
 
 import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import CollapsibleList from './lists/CollapsibleList';
@@ -20,6 +23,10 @@ const AssessmentListItem: FC<AssessmentListItemProps> = (props) => {
   const { assessment } = props;
   const { isAssessmentListExpanded } = useAppSelector(getViewSettings);
 
+  const programmingQuestions = useAppSelector((state) =>
+    getProgrammingQuestionsForAssessments(state, [assessment.id]),
+  );
+
   if (assessment.programmingQuestions.length === 0) return null;
 
   return (
@@ -29,8 +36,8 @@ const AssessmentListItem: FC<AssessmentListItemProps> = (props) => {
       headerAction={
         <div className="pr-2">
           <CodaveriToggleButtons
-            assessmentIds={[assessment.id]}
             for={assessment.title}
+            programmingQuestions={programmingQuestions}
             type="assessment"
           />
         </div>

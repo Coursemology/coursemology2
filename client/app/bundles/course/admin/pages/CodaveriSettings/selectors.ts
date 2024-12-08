@@ -99,12 +99,6 @@ export const getAssessmentForCategory = (
   );
 };
 
-export const getAllProgrammingQuestions = (
-  state: AppState,
-): ProgrammingQuestion[] => {
-  return programmingQuestionsSelector.selectAll(state);
-};
-
 export const getProgrammingQuestion = (
   state: AppState,
   id: EntityId,

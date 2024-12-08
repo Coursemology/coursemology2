@@ -1,39 +1,40 @@
 import { FC, useState } from 'react';
 import { Switch } from '@mui/material';
-import { ProgrammingEvaluator } from 'types/course/admin/codaveri';
+import {
+  ProgrammingEvaluator,
+  ProgrammingQuestion,
+} from 'types/course/admin/codaveri';
 
 import { updateProgrammingQuestionCodaveriSettingsForAssessments } from 'course/admin/reducers/codaveriSettings';
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
-import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { updateEvaluatorForAllQuestions } from '../../operations';
-import { getProgrammingQuestionsForAssessments } from '../../selectors';
 import translations from '../../translations';
 import CodaveriSettingsChip from '../CodaveriSettingsChip';
 
 interface CodaveriEvaluatorToggleButtonProps {
-  assessmentIds: number[];
-  for: string;
-  type: 'course' | 'category' | 'tab' | 'assessment';
+  programmingQuestions: ProgrammingQuestion[];
+  for?: string;
+  type: 'course' | 'category' | 'tab' | 'assessment' | 'question';
 }
 
 const CodaveriEvaluatorToggleButton: FC<CodaveriEvaluatorToggleButtonProps> = (
   props,
 ) => {
-  const { assessmentIds, for: title, type } = props;
+  const { programmingQuestions, for: title, type } = props;
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
-  const programmingQuestions = useAppSelector((state) =>
-    getProgrammingQuestionsForAssessments(state, assessmentIds),
-  );
 
   const [isEvaluatorUpdating, setIsEvaluatorUpdating] = useState(false);
   const [evaluatorSettingsConfirmation, setEvaluatorSettingsConfirmation] =
     useState(false);
   const [isEvaluatorChecked, setEvaluatorChecked] = useState(false);
+
+  const programmingQuestionIds = programmingQuestions.map((qn) => qn.id);
 
   const qnsWithCodaveriEval = programmingQuestions.filter(
     (question) => question.isCodaveri,
@@ -43,12 +44,12 @@ const CodaveriEvaluatorToggleButton: FC<CodaveriEvaluatorToggleButtonProps> = (
 
   const handleEvaluatorUpdate = (evaluator: ProgrammingEvaluator): void => {
     setIsEvaluatorUpdating(true);
-    updateEvaluatorForAllQuestions(assessmentIds, evaluator)
+    updateEvaluatorForAllQuestions(programmingQuestionIds, evaluator)
       .then(() => {
         dispatch(
           updateProgrammingQuestionCodaveriSettingsForAssessments({
             evaluator,
-            assessmentIds,
+            programmingQuestionIds,
           }),
         );
         toast.success(
@@ -66,6 +67,14 @@ const CodaveriEvaluatorToggleButton: FC<CodaveriEvaluatorToggleButtonProps> = (
       });
   };
 
+  const updateEvaluator = (isChecked: boolean): void => {
+    if (type === 'question') {
+      handleEvaluatorUpdate(isChecked ? 'codaveri' : 'default');
+    } else {
+      setEvaluatorSettingsConfirmation(true);
+    }
+  };
+
   return (
     <div>
       <div>
@@ -79,21 +88,21 @@ const CodaveriEvaluatorToggleButton: FC<CodaveriEvaluatorToggleButtonProps> = (
           disabled={hasNoProgrammingQuestions || isEvaluatorUpdating}
           onChange={(_, isChecked): void => {
             setEvaluatorChecked(isChecked);
-            setEvaluatorSettingsConfirmation(true);
+            updateEvaluator(isChecked);
           }}
         />
         <CodaveriSettingsChip
-          assessmentIds={assessmentIds}
           for="codaveri_evaluator"
+          questions={programmingQuestions}
         />
       </div>
 
       <Prompt
         disabled={isEvaluatorUpdating}
         onClickPrimary={() => {
-          return isEvaluatorChecked
-            ? handleEvaluatorUpdate('codaveri')
-            : handleEvaluatorUpdate('default');
+          return handleEvaluatorUpdate(
+            isEvaluatorChecked ? 'codaveri' : 'default',
+          );
         }}
         onClose={() => setEvaluatorSettingsConfirmation(false)}
         open={evaluatorSettingsConfirmation}
