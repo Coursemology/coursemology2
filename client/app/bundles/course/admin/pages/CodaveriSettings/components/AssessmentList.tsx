@@ -7,7 +7,11 @@ import useItems from 'lib/hooks/items/useItems';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { getAllAssessmentCategories, getAllAssessments } from '../selectors';
+import {
+  getAllAssessmentCategories,
+  getAllAssessments,
+  getProgrammingQuestionsForAssessments,
+} from '../selectors';
 import translations from '../translations';
 
 import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
@@ -39,6 +43,10 @@ const AssessmentList: FC<Props> = (props) => {
   );
   const { t } = useTranslation();
   const assessmentIds = assessments.map((item) => item.id);
+  const programmingQuestions = useAppSelector((state) =>
+    getProgrammingQuestionsForAssessments(state, assessmentIds),
+  );
+
   return (
     <Section
       contentClassName="flex flex-col space-y-3"
@@ -72,8 +80,8 @@ const AssessmentList: FC<Props> = (props) => {
         </div>
         <div className="mb-4 pr-2 flex justify-end">
           <CodaveriToggleButtons
-            assessmentIds={assessmentIds}
             for={courseTitle}
+            programmingQuestions={programmingQuestions}
             type="course"
           />
         </div>

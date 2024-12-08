@@ -1,25 +1,31 @@
 import { FC } from 'react';
+import { ProgrammingQuestion } from 'types/course/admin/codaveri';
 
 import CodaveriEvaluatorToggleButton from './CodaveriEvaluatorToggleButton';
 import LiveFeedbackToggleButton from './LiveFeedbackToggleButton';
 
 interface CodaveriToggleButtonsProps {
-  assessmentIds: number[];
-  for: string;
-  type: 'course' | 'category' | 'tab' | 'assessment';
+  programmingQuestions: ProgrammingQuestion[];
+  for?: string;
+  type: 'course' | 'category' | 'tab' | 'assessment' | 'question';
 }
 
 const CodaveriToggleButtons: FC<CodaveriToggleButtonsProps> = (props) => {
-  const { assessmentIds, for: title, type } = props;
+  const { programmingQuestions, for: title, type } = props;
+  const className = `${type === 'question' ? 'pr-[0.65rem]' : 'pr-7'} space-x-8 flex justify-between`;
 
   return (
-    <div className="pr-7 space-x-8 flex justify-between">
+    <div className={className}>
       <CodaveriEvaluatorToggleButton
-        assessmentIds={assessmentIds}
         for={title}
+        programmingQuestions={programmingQuestions}
         type={type}
       />
-      <LiveFeedbackToggleButton assessmentIds={assessmentIds} for={title} />
+      <LiveFeedbackToggleButton
+        for={title}
+        programmingQuestions={programmingQuestions}
+        type={type}
+      />
     </div>
   );
 };
