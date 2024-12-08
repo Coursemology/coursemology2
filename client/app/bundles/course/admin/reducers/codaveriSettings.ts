@@ -78,15 +78,12 @@ export const codaveriSettingsSlice = createSlice({
       state,
       action: PayloadAction<{
         evaluator: ProgrammingEvaluator;
-        assessmentIds: number[];
+        programmingQuestionIds: number[];
       }>,
     ) => {
-      state.programmingQuestions.ids.forEach((qnId) => {
+      action.payload.programmingQuestionIds.forEach((qnId) => {
         const question = state.programmingQuestions.entities[qnId];
-        if (
-          question &&
-          action.payload.assessmentIds.includes(question.assessmentId)
-        ) {
+        if (question) {
           question.isCodaveri = action.payload.evaluator === 'codaveri';
         }
       });
@@ -95,15 +92,12 @@ export const codaveriSettingsSlice = createSlice({
       state,
       action: PayloadAction<{
         liveFeedbackEnabled: boolean;
-        assessmentIds: number[];
+        programmingQuestionIds: number[];
       }>,
     ) => {
-      state.programmingQuestions.ids.forEach((qnId) => {
+      action.payload.programmingQuestionIds.forEach((qnId) => {
         const question = state.programmingQuestions.entities[qnId];
-        if (
-          question &&
-          action.payload.assessmentIds.includes(question.assessmentId)
-        ) {
+        if (question) {
           question.liveFeedbackEnabled = action.payload.liveFeedbackEnabled;
         }
       });

@@ -10,7 +10,10 @@ import Link from 'lib/components/core/Link';
 import useItems from 'lib/hooks/items/useItems';
 import { useAppSelector } from 'lib/hooks/store';
 
-import { getAssessmentsForTab } from '../selectors';
+import {
+  getAssessmentsForTab,
+  getProgrammingQuestionsForAssessments,
+} from '../selectors';
 
 import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 import CollapsibleList from './lists/CollapsibleList';
@@ -44,6 +47,9 @@ const AssessmentTab: FC<AssessmentTabProps> = (props) => {
   const assessmentWithProgrammingQns = assessments.filter(
     (assessment) => assessment.programmingQuestions.length > 0,
   );
+  const programmingQuestions = useAppSelector((state) =>
+    getProgrammingQuestionsForAssessments(state, assessmentIds),
+  );
 
   if (assessmentWithProgrammingQns.length === 0) return null;
 
@@ -52,8 +58,8 @@ const AssessmentTab: FC<AssessmentTabProps> = (props) => {
       headerAction={
         <div className="pr-2">
           <CodaveriToggleButtons
-            assessmentIds={assessmentIds}
             for={tab.title}
+            programmingQuestions={programmingQuestions}
             type="tab"
           />
         </div>

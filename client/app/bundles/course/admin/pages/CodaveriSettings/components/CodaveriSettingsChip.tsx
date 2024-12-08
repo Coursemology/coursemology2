@@ -1,25 +1,22 @@
 import { FC } from 'react';
 import { Chip } from '@mui/material';
-import { CodaveriSettings } from 'types/course/admin/codaveri';
+import {
+  CodaveriSettings,
+  ProgrammingQuestion,
+} from 'types/course/admin/codaveri';
 
-import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { getProgrammingQuestionsForAssessments } from '../selectors';
 import translations from '../translations';
 
 interface CodaveriSettingsChipProps {
-  assessmentIds: number[];
+  questions: ProgrammingQuestion[];
   for: CodaveriSettings;
 }
 
 const CodaveriSettingsChip: FC<CodaveriSettingsChipProps> = (props) => {
-  const { assessmentIds, for: settings } = props;
+  const { questions, for: settings } = props;
   const { t } = useTranslation();
-
-  const questions = useAppSelector((state) =>
-    getProgrammingQuestionsForAssessments(state, assessmentIds),
-  );
 
   const codaveriQnsCount = questions.filter((qn) => qn.isCodaveri).length;
   const liveFeedbackEnabledQnsCount = questions.filter(

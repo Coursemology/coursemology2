@@ -13,6 +13,7 @@ import { useAppSelector } from 'lib/hooks/store';
 import {
   getAllAssessmentTabsFor,
   getAssessmentForCategory,
+  getProgrammingQuestionsForAssessments,
 } from '../selectors';
 
 import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
@@ -41,13 +42,17 @@ const AssessmentCategory: FC<AssessmentCategoryProps> = (props) => {
   const assessmentIds = assessments.map((assessment) => assessment.id);
   const { processedItems: sortedTabs } = useItems(tabs, [], sortTabs);
 
+  const programmingQuestions = useAppSelector((state) =>
+    getProgrammingQuestionsForAssessments(state, assessmentIds),
+  );
+
   return (
     <CollapsibleList
       headerAction={
         <div className="pr-2">
           <CodaveriToggleButtons
-            assessmentIds={assessmentIds}
             for={category.title}
+            programmingQuestions={programmingQuestions}
             type="category"
           />
         </div>

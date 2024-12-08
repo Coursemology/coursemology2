@@ -125,12 +125,12 @@ export const updateProgrammingQuestionLiveFeedback = async (
 };
 
 export const updateEvaluatorForAllQuestions = async (
-  assessmentIds: number[],
+  programmingQuestionIds: number[],
   evaluator: ProgrammingEvaluator,
 ): Promise<void> => {
   const adaptedData = {
     update_evaluator: {
-      assessment_ids: assessmentIds,
+      programming_question_ids: programmingQuestionIds,
       programming_evaluator: evaluator,
     },
   };
@@ -143,12 +143,12 @@ export const updateEvaluatorForAllQuestions = async (
 };
 
 export const updateLiveFeedbackEnabledForAllQuestions = async (
-  assessmentIds: number[],
+  programmingQuestionIds: number[],
   liveFeedbackEnabled: boolean,
 ): Promise<void> => {
   const adaptedData = {
     update_live_feedback_enabled: {
-      assessment_ids: assessmentIds,
+      programming_question_ids: programmingQuestionIds,
       live_feedback_enabled: liveFeedbackEnabled,
     },
   };

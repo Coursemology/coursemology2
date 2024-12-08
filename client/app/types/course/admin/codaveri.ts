@@ -58,14 +58,14 @@ export interface CodaveriSettingsPatchData {
 
 export interface CodaveriSwitchQnsEvaluatorPatchData {
   update_evaluator: {
-    assessment_ids: number[];
+    programming_question_ids: number[];
     programming_evaluator: ProgrammingEvaluator;
   };
 }
 
 export interface CodaveriSwitchQnsLiveFeedbackEnabledPatchData {
   update_live_feedback_enabled: {
-    assessment_ids: number[];
+    programming_question_ids: number[];
     live_feedback_enabled: boolean;
   };
 }

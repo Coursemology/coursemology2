@@ -9,12 +9,11 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import {
-  updateProgrammingQuestionCodaveri,
-  updateProgrammingQuestionLiveFeedback,
-} from '../operations';
+import { updateProgrammingQuestionLiveFeedback } from '../operations';
 import { getProgrammingQuestion, getViewSettings } from '../selectors';
 import translations from '../translations';
+
+import CodaveriToggleButtons from './buttons/CodaveriToggleButtons';
 
 interface ProgrammingQnListProps {
   questionId: number;
@@ -32,31 +31,6 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
 
   if (!programmingQn || (showCodaveriEnabled && !programmingQn.isCodaveri))
     return null;
-
-  const handleCodaveriEvaluatorChange = (isChecked: boolean): void => {
-    const updatedQn = produce(programmingQn, (draft) => {
-      draft.isCodaveri = isChecked;
-    });
-    updateProgrammingQuestionCodaveri(
-      programmingQn.assessmentId,
-      programmingQn.id,
-      updatedQn,
-    )
-      .then(() => {
-        dispatch(updateProgrammingQuestion(updatedQn));
-        toast.success(
-          t(translations.evaluatorUpdateSuccess, {
-            question: programmingQn.title,
-            evaluator: isChecked ? 'codaveri' : 'default',
-          }),
-        );
-      })
-      .catch(() => {
-        toast.error(
-          t(translations.errorOccurredWhenUpdatingCodaveriEvaluatorSettings),
-        );
-      });
-  };
 
   const handleLiveFeedbackEnabledChange = (isChecked: boolean): void => {
     const updatedQn = produce(programmingQn, (draft) => {
@@ -82,16 +56,6 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
         );
       });
   };
-
-  const CodaveriEvaluatorToggle = (): JSX.Element => (
-    <Switch
-      checked={programmingQn.isCodaveri}
-      color="primary"
-      onChange={(_, isChecked): void =>
-        handleCodaveriEvaluatorChange(isChecked)
-      }
-    />
-  );
 
   const LiveFeedbackToggle = (): JSX.Element => (
     <Switch
@@ -119,10 +83,10 @@ const ProgrammingQnList: FC<ProgrammingQnListProps> = (props) => {
             <LiveFeedbackToggle />
           </div>
         ) : (
-          <div className="mr-[6.6rem] space-x-32">
-            <CodaveriEvaluatorToggle />
-            <LiveFeedbackToggle />
-          </div>
+          <CodaveriToggleButtons
+            programmingQuestions={[programmingQn]}
+            type="question"
+          />
         )}
       </ListItem>
       <Divider className="border-neutral-200 last:border-none" />

@@ -20,7 +20,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   acts_as :question, class_name: 'Course::Assessment::Question'
 
   after_initialize :set_defaults
-  after_save :create_codaveri_problem, if: :duplicating?
   before_save :process_package, unless: :skip_process_package?
   before_validation :assign_template_attributes
   before_validation :assign_test_case_attributes
@@ -125,6 +124,14 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     self.test_cases = duplicator.duplicate(other.test_cases)
     self.imported_attachment = duplicator.duplicate(other.attachment)
 
+    # we create the codaveri question on-demand, meaning that upon duplication,
+    # we only keep the state whether question is Codaveri or not, but not with
+    # the Codaveri ID, since it will be created when it's necessary
+    self.codaveri_id = nil
+    self.codaveri_status = nil
+    self.codaveri_message = nil
+    self.is_synced_with_codaveri = false
+
     set_duplication_flag
   end
 
@@ -150,9 +157,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     end
   end
 
-  def create_codaveri_problem
-    return unless is_codaveri || live_feedback_enabled
-
+  def create_or_update_codaveri_problem
     execute_after_commit do
       import_job =
         Course::Assessment::Question::CodaveriImportJob.perform_later(self, attachment)
@@ -174,10 +179,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     elsif should_evaluate_package
       # For non-autograded questions, the attachment is not present
       evaluate_package if attachment
-    elsif is_codaveri_changed? || live_feedback_enabled_changed?
-      # Only when is_codaveri changed (no other setting), we recreate the codaveri
-      # problem to avoid attachment recreation and answers regrading
-      create_codaveri_problem if attachment
+    elsif !is_synced_with_codaveri && ((is_codaveri_changed? && is_codaveri?) ||
+                                       (live_feedback_enabled_changed? && live_feedback_enabled?))
+      # changes in other part of question also needs to be synced to Codaveri for precise feedback
+      create_or_update_codaveri_problem if attachment
     end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_18_152013) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_04_104627) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -314,6 +314,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_18_152013) do
     t.text "codaveri_message"
     t.boolean "live_feedback_enabled", default: false, null: false
     t.string "live_feedback_custom_prompt", default: "", null: false
+    t.boolean "is_synced_with_codaveri", default: false, null: false
     t.index ["import_job_id"], name: "index_course_assessment_question_programming_on_import_job_id", unique: true
     t.index ["language_id"], name: "fk__course_assessment_question_programming_language_id"
   end

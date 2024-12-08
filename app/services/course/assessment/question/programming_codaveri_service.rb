@@ -9,16 +9,16 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     #   be created in the Codaveri service.
     # @param [Attachment] attachment The attachment containing the package to be converted and sent to Codaveri.
     def create_or_update_question(question, attachment)
-      new(question, attachment).create_question
+      new(question, attachment).create_or_update_question
     end
   end
 
   # Opens the attachment, converts it into a programming package, extracts and converts required information
   # to be sent to Codaveri.
-  def create_question
+  def create_or_update_question
     @attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-      create_from_package(package)
+      create_or_update_from_package(package)
     ensure
       next unless package
 
@@ -62,15 +62,18 @@ class Course::Assessment::Question::ProgrammingCodaveriService
   # Constructs codaveri question problem object and send an API request to Codaveri to create/update the question.
   #
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
-  def create_from_package(package)
+  def create_or_update_from_package(package)
     construct_problem_object(package)
-    create_codaveri_problem
+
+    @is_update_problem ? update_codaveri_problem : create_codaveri_problem
   end
 
   # Constructs codaveri question problem object.
   #
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
   def construct_problem_object(package) # rubocop:disable Metrics/AbcSize
+    @problem_object[:problemId] = @question.codaveri_id if @is_update_problem
+
     @problem_object[:title] = @question.title
     @problem_object[:description] = @question.description
     resources_object = @problem_object[:resources][0]
@@ -91,25 +94,35 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     @problem_object[:additionalFiles] = codaveri_package.process_data
 
     @problem_object
-    # For debugging purpose
-    # File.write('codaveri_problem_management_test.json', @problem_object.to_json)
   end
 
   def create_codaveri_problem
     codaveri_api_service = CodaveriAsyncApiService.new('v2/problem', @problem_object)
     response_status, response_body = codaveri_api_service.post
 
-    response_success = response_body['success']
-    response_message = response_body['message']
+    handle_codaveri_response(response_status, response_body)
+  end
 
-    if response_status == 200 && response_success
-      response_problem_id = response_body['data']['id']
-      @question.update!(codaveri_id: response_problem_id, codaveri_status: response_status,
-                        codaveri_message: response_message)
+  def update_codaveri_problem
+    codaveri_api_service = CodaveriAsyncApiService.new('v2/problem', @problem_object)
+    response_status, response_body = codaveri_api_service.put
+
+    handle_codaveri_response(response_status, response_body)
+  end
+
+  def handle_codaveri_response(status, body)
+    success = body['success']
+    message = body['message']
+
+    if status == 200 && success
+      problem_id = body['data']['id']
+      @question.update!(codaveri_id: problem_id, codaveri_status: status,
+                        codaveri_message: message, is_synced_with_codaveri: true)
     else
-      @question.update!(codaveri_id: nil, codaveri_status: response_status, codaveri_message: response_message)
+      @question.update!(codaveri_id: nil, codaveri_status: status, codaveri_message: message,
+                        is_synced_with_codaveri: false)
 
-      raise CodaveriError, "Codevari Error: #{response_message}"
+      raise CodaveriError, "Codevari Error: #{message}"
     end
   end
 end

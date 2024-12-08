@@ -60,7 +60,7 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
             course_id: course2,
             update_live_feedback_enabled: {
               live_feedback_enabled: true,
-              assessment_ids: course2.assessments.map(&:id)
+              programming_question_ids: course2.assessments.first.programming_questions.map(&:id)
             }
           }
         end

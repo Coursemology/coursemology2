@@ -1,31 +1,30 @@
 import { FC, useState } from 'react';
 import { Switch } from '@mui/material';
+import { ProgrammingQuestion } from 'types/course/admin/codaveri';
 
 import { updateProgrammingQuestionLiveFeedbackEnabledForAssessments } from 'course/admin/reducers/codaveriSettings';
 import Prompt from 'lib/components/core/dialogs/Prompt';
-import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { updateLiveFeedbackEnabledForAllQuestions } from '../../operations';
-import { getProgrammingQuestionsForAssessments } from '../../selectors';
 import translations from '../../translations';
 import CodaveriSettingsChip from '../CodaveriSettingsChip';
 
 interface LiveFeedbackToggleButtonProps {
-  assessmentIds: number[];
-  for: string;
+  programmingQuestions: ProgrammingQuestion[];
+  for?: string;
+  type: 'course' | 'category' | 'tab' | 'assessment' | 'question';
   hideChipIndicator?: boolean;
 }
 
 const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
-  const { assessmentIds, for: title, hideChipIndicator } = props;
+  const { programmingQuestions, for: title, type, hideChipIndicator } = props;
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
-  const programmingQuestions = useAppSelector((state) =>
-    getProgrammingQuestionsForAssessments(state, assessmentIds),
-  );
+  const programmingQuestionIds = programmingQuestions.map((qn) => qn.id);
 
   const [isLiveFeedbackUpdating, setIsLiveFeedbackUpdating] = useState(false);
   const [
@@ -42,12 +41,15 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
 
   const handleLiveFeedbackUpdate = (liveFeedbackEnabled: boolean): void => {
     setIsLiveFeedbackUpdating(true);
-    updateLiveFeedbackEnabledForAllQuestions(assessmentIds, liveFeedbackEnabled)
+    updateLiveFeedbackEnabledForAllQuestions(
+      programmingQuestionIds,
+      liveFeedbackEnabled,
+    )
       .then(() => {
         dispatch(
           updateProgrammingQuestionLiveFeedbackEnabledForAssessments({
             liveFeedbackEnabled,
-            assessmentIds,
+            programmingQuestionIds,
           }),
         );
         toast.success(
@@ -67,6 +69,14 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
       });
   };
 
+  const updateLiveFeedbackEnabled = (isChecked: boolean): void => {
+    if (type === 'question') {
+      handleLiveFeedbackUpdate(isChecked);
+    } else {
+      setLiveFeedbackSettingsConfirmation(true);
+    }
+  };
+
   return (
     <div>
       <div>
@@ -81,13 +91,13 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
           disabled={hasNoProgrammingQuestions || isLiveFeedbackUpdating}
           onChange={(_, isChecked): void => {
             setLiveFeedbackChecked(isChecked);
-            setLiveFeedbackSettingsConfirmation(true);
+            updateLiveFeedbackEnabled(isChecked);
           }}
         />
         {!hideChipIndicator && (
           <CodaveriSettingsChip
-            assessmentIds={assessmentIds}
             for="live_feedback"
+            questions={programmingQuestions}
           />
         )}
       </div>
@@ -103,7 +113,7 @@ const LiveFeedbackToggleButton: FC<LiveFeedbackToggleButtonProps> = (props) => {
         })}
         title={t(translations.enableDisableLiveFeedback, {
           enabled: isLiveFeedbackChecked,
-          title,
+          title: title ?? '',
           questionCount: programmingQuestions.length,
         })}
       />

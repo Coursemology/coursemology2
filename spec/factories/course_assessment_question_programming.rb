@@ -23,7 +23,7 @@ FactoryBot.define do
     end
     imported_attachment do
       if template_package
-        file = File.new(File.join(Rails.root, 'spec/fixtures/course/'\
+        file = File.new(File.join(Rails.root, 'spec/fixtures/course/' \
                                               'programming_question_template.zip'), 'rb')
         AttachmentReference.new(file: file)
       end
@@ -48,6 +48,9 @@ FactoryBot.define do
     end
 
     is_codaveri do
+      with_codaveri_question ? true : false
+    end
+    is_synced_with_codaveri do
       with_codaveri_question ? true : false
     end
     codaveri_id do
@@ -90,6 +93,7 @@ FactoryBot.define do
 
     trait :with_codaveri_question do
       is_codaveri { true }
+      is_synced_with_codaveri { true }
       codaveri_id { '6311a0548c57aae93d260927' }
       codaveri_status { 200 }
       codaveri_message { 'Problem successfully created' }
