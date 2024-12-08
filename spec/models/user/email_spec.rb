@@ -40,7 +40,7 @@ RSpec.describe User::Email, type: :model do
 
       with_active_job_queue_adapter(:test) do
         it 'sends email with ActiveJob queue' do
-          expect { subject }.to have_enqueued_job.on_queue('mailers')
+          expect { subject }.to have_enqueued_job.on_queue('highest')
         end
       end
     end

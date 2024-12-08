@@ -2,7 +2,7 @@
 module Extensions::DeviseAsyncEmail::Devise::Models::Authenticatable
   module PrependMethods
     def send_devise_notification(notification, *args)
-      devise_mailer.send(notification, self, *args).deliver_later
+      devise_mailer.send(notification, self, *args).deliver_later(queue: :highest) # default :mailers
     end
   end
 end
