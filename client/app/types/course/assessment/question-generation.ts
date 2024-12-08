@@ -22,7 +22,8 @@ export interface CodaveriGenerateResponseData {
       }[];
     }[];
     exprTestcases: {
-      expression: string;
+      lhsExpression: string;
+      rhsExpression: string;
       hint: string;
       visibility: TestcaseVisibility;
     }[];

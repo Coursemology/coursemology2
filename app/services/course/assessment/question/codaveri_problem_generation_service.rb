@@ -26,28 +26,54 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
   # Creates a new service codaveri feedback rating object.
   #
   # @param [Course::Discussion::Post::CodaveriFeedback] feedback Feedback to be sent to Codaveri
-  def initialize(assessment, custom_prompt, language, version, difficulty)
+  def initialize(assessment, params, language, version)
+    custom_prompt = params[:custom_prompt]
     @payload = {
       userId: assessment.creator_id.to_s,
       courseName: assessment.course.title,
-      config: {
-        difficulty: difficulty,
-        customPrompt: custom_prompt.length >= 500 ? "#{custom_prompt[0...495]}..." : custom_prompt,
-        testcasesType: 'expression',
-        languageVersion: {
-          language: language,
-          version: version
-        }
+      languageVersion: {
+        language: language,
+        version: version
+      },
+      llmConfig: {
+        customPrompt: (custom_prompt.length >= 500) ? "#{custom_prompt[0...495]}..." : custom_prompt,
+        testcasesType: 'expression'
       },
       requireToken: true,
       tokenConfig: {
         returnResult: true
       }
     }
+
+    return unless params[:is_default_question_form_data] == 'false'
+
+    # TODO: update the path to support other languages should it become available next time
+    @payload = @payload.merge({
+      problem: {
+        title: params[:title],
+        description: params[:description],
+        templates: [{
+          path: 'main.py',
+          content: params[:template]
+        }],
+        solutions: [{
+          tag: 'solution',
+          files: [{
+            path: 'main.py',
+            content: params[:solution]
+          }]
+        }],
+        exprTestcases: []
+      }
+    })
+
+    append_test_cases_to_problem_payload('public', params[:public_test_cases])
+    append_test_cases_to_problem_payload('private', params[:private_test_cases])
+    append_test_cases_to_problem_payload('hidden', params[:evaluation_test_cases])
   end
 
   def send_problem_generation_request
-    codaveri_api_service = CodaveriAsyncApiService.new('v2/problem/generate/coding', @payload)
+    codaveri_api_service = CodaveriAsyncApiService.new('problem/generate/coding', @payload)
     response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
@@ -63,7 +89,24 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
   end
 
   def fetch_problem_generation_result(generation_id)
-    codaveri_api_service = CodaveriAsyncApiService.new('v2/problem/generate/coding', { id: generation_id })
+    codaveri_api_service = CodaveriAsyncApiService.new('problem/generate/coding', { id: generation_id })
     codaveri_api_service.get
+  end
+
+  def append_test_cases_to_problem_payload(visibility, test_cases)
+    return unless test_cases
+
+    parsed_test_cases = JSON.parse(test_cases)
+
+    parsed_test_cases.each_value do |test_case|
+      @payload[:problem][:exprTestcases] << {
+        index: @payload[:problem][:exprTestcases].length + 1,
+        visibility: visibility,
+        hint: test_case['hint'],
+        lhsExpression: test_case['expression'],
+        rhsExpression: test_case['expected'],
+        display: test_case['expression']
+      }
+    end
   end
 end

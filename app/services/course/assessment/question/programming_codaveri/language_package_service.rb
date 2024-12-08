@@ -69,9 +69,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
     {
       index: '',
       type: 'expression',
-      timeout: '',
       prefix: '',
-      expression: '',
       display: 'str(out)'
     }
   end

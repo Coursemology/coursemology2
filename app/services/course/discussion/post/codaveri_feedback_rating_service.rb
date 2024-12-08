@@ -29,7 +29,7 @@ class Course::Discussion::Post::CodaveriFeedbackRatingService
   end
 
   def send_codaveri_feedback_rating
-    codaveri_api_service = CodaveriAsyncApiService.new('v2/feedback/rating', @payload)
+    codaveri_api_service = CodaveriAsyncApiService.new('feedback/rating', @payload)
     response_status, response_body = codaveri_api_service.post
 
     response_success = response_body['success']
