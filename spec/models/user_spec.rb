@@ -199,7 +199,7 @@ RSpec.describe User do
       with_active_job_queue_adapter(:test) do
         it 'sends email with ActiveJob queue' do
           expect { subject.send_reset_password_instructions }.to \
-            have_enqueued_job.on_queue('mailers')
+            have_enqueued_job.on_queue('highest')
         end
       end
     end
