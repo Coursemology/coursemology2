@@ -1,125 +1,234 @@
 import { produce } from 'immer';
+import { shuffle, uniqueId } from 'lodash';
+import moment from 'moment/moment';
+
+import {
+  exceptionTranslations,
+  suggestionsTranslations,
+} from 'course/assessment/submission/translations';
+import { Sender } from 'course/assessment/submission/types';
+import { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 import actions from '../constants';
 
-const initialState = {
+export const LIVE_FEEDBACK_LOCAL_STORAGE_KEY = 'liveFeedbackStateLocalStorage';
+
+const loadStateFromLocalStorage = () => {
+  try {
+    const serializedState = localStorage.getItem(
+      LIVE_FEEDBACK_LOCAL_STORAGE_KEY,
+    );
+    return serializedState ? JSON.parse(serializedState) : undefined;
+  } catch (error) {
+    return undefined;
+  }
+};
+
+const saveStateToLocalStorage = (state) => {
+  const serializedState = JSON.stringify(state);
+  localStorage.setItem(LIVE_FEEDBACK_LOCAL_STORAGE_KEY, serializedState);
+};
+
+const initialState = loadStateFromLocalStorage() || {
   feedbackUrl: null,
   feedbackByQuestion: {},
 };
-export default function (state = initialState, action) {
-  switch (action.type) {
-    case actions.LIVE_FEEDBACK_INITIAL: {
-      const { questionId } = action.payload;
-      return produce(state, (draft) => {
-        if (!(questionId in draft)) {
-          draft.feedbackByQuestion[questionId] = {
-            isRequestingLiveFeedback: true,
-            pendingFeedbackToken: null,
-            answerId: null,
-            liveFeedbackId: null,
-            feedbackFiles: {},
-          };
-        } else {
-          draft.feedbackByQuestion[questionId] = {
-            ...draft.feedbackByQuestion[questionId],
-            isRequestingLiveFeedback: true,
-          };
-        }
+
+const getRandomSuggestions = () => {
+  const suggestionValues = Object.values(suggestionsTranslations);
+  // TODO: Temporarily change to show no suggestions
+  return shuffle(suggestionValues).slice(0, 0);
+};
+
+const getOrDefault = (obj, paramKeys, defaultValue) => {
+  const keys = Array.isArray(paramKeys) ? paramKeys : [paramKeys];
+  return keys.reduce(
+    (acc, key) => (acc && acc[key] !== undefined ? acc[key] : defaultValue),
+    obj,
+  );
+};
+
+const getConversation = (state, questionId) =>
+  getOrDefault(state, ['feedbackByQuestion', questionId, 'conversation'], []);
+
+const updateFeedbackForQuestion = (draft, questionId, newFeedbacks) => {
+  draft.feedbackByQuestion[questionId] = {
+    ...getOrDefault(draft.feedbackByQuestion, questionId, {}),
+    ...newFeedbacks,
+  };
+  saveStateToLocalStorage(draft);
+};
+
+const groupFeedbackMessagesByLineNumber = (feedbackFile, isShowFileName) => {
+  const groupedMessages = feedbackFile.feedbackLines
+    .sort((a, b) => a.linenum - b.linenum)
+    .reduce((acc, line) => {
+      const newAcc = { ...acc };
+      if (!newAcc[line.linenum]) {
+        newAcc[line.linenum] = [];
+      }
+      newAcc[line.linenum].push(line.feedback);
+      return newAcc;
+    }, {});
+
+  const messages = Object.entries(groupedMessages)
+    .map(([linenum, texts], index, array) => {
+      const lineMessages = [
+        {
+          id: uniqueId('Codaveri_'),
+          texts,
+          sender: Sender.Codaveri,
+          linenum: Number(linenum),
+          timestamp:
+            index === array.length - 1
+              ? moment(new Date()).format(SHORT_DATE_TIME_FORMAT)
+              : null,
+          isBold: false,
+          bgColor: 'bg-gray-300',
+        },
+      ];
+
+      lineMessages.unshift({
+        id: uniqueId('Codaveri_'),
+        texts: [`Line: ${linenum}`],
+        sender: Sender.Codaveri,
+        linenum: Number(linenum),
+        isBold: true,
+        bgColor: 'bg-gray-300',
       });
-    }
+
+      return lineMessages;
+    })
+    .flat();
+
+  return [
+    ...(isShowFileName
+      ? [
+          {
+            id: uniqueId('Codaveri_'),
+            texts: `Filename: ${feedbackFile.path}`,
+            sender: Sender.Codaveri,
+            isBold: true,
+          },
+        ]
+      : []),
+    ...messages,
+  ];
+};
+
+const liveFeedbackReducer = function (state = initialState, action) {
+  switch (action.type) {
     case actions.LIVE_FEEDBACK_REQUEST: {
       const { token, questionId, liveFeedbackId, feedbackUrl } = action.payload;
       return produce(state, (draft) => {
         draft.feedbackUrl ??= feedbackUrl;
-        if (!(questionId in draft)) {
-          draft.feedbackByQuestion[questionId] = {
-            isRequestingLiveFeedback: false,
-            liveFeedbackId,
-            pendingFeedbackToken: token,
-          };
-        } else {
-          draft.feedbackByQuestion[questionId] = {
-            isRequestingLiveFeedback: false,
-            ...draft.feedbackByQuestion[questionId],
-            liveFeedbackId,
-            pendingFeedbackToken: token,
-          };
-        }
+        const conversation = getConversation(draft, questionId);
+        updateFeedbackForQuestion(draft, questionId, {
+          isRequestingLiveFeedback: true,
+          liveFeedbackId,
+          pendingFeedbackToken: token,
+          conversation,
+          suggestedReplies: [],
+          isDialogOpen: true,
+        });
       });
     }
     case actions.LIVE_FEEDBACK_SUCCESS: {
       const { questionId, answerId, feedbackFiles } = action.payload;
+      const newFeedbacks = feedbackFiles.reduce(
+        (feedbackArr, feedbackFile) => [
+          ...feedbackArr,
+          ...groupFeedbackMessagesByLineNumber(
+            feedbackFile,
+            feedbackFiles.length > 1,
+          ),
+        ],
+        [],
+      );
       return produce(state, (draft) => {
-        draft.feedbackByQuestion[questionId] = {
+        const previousConversation = getConversation(draft, questionId);
+        const newConversation = [...previousConversation, ...newFeedbacks];
+        const suggestedReplies = getRandomSuggestions();
+        const focusedMessageIndex = previousConversation.length;
+        updateFeedbackForQuestion(draft, questionId, {
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
           answerId,
-          feedbackFiles: feedbackFiles.reduce(
-            (feedbackObj, feedbackFile) => ({
-              ...feedbackObj,
-              [feedbackFile.path]: feedbackFile.feedbackLines.map((line) => ({
-                ...line,
-                state: 'pending',
-              })), // 'pending' | 'resolved' | 'dismissed'
-            }),
-            {},
-          ),
-        };
+          conversation: newConversation,
+          suggestedReplies,
+          isDialogOpen: true,
+          focusedMessageIndex,
+        });
       });
     }
     case actions.LIVE_FEEDBACK_FAILURE: {
       const { questionId } = action.payload;
       return produce(state, (draft) => {
-        draft.feedbackByQuestion[questionId] = {
-          ...draft.feedbackByQuestion[questionId],
+        const previousConversation = getConversation(draft, questionId);
+        const errorMessage = {
+          id: uniqueId('Codaveri_'),
+          texts: [exceptionTranslations.requestError],
+          sender: Sender.Codaveri,
+          timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
+          isBold: true,
+          bgColor: 'bg-red-100',
+        };
+        const updatedConversation = [...previousConversation, errorMessage];
+        updateFeedbackForQuestion(draft, questionId, {
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
-        };
+          conversation: updatedConversation,
+        });
       });
     }
-    case actions.LIVE_FEEDBACK_ITEM_MARK_RESOLVED: {
-      const { questionId, lineId, path } = action.payload;
+    case actions.LIVE_FEEDBACK_USER_REQUEST: {
+      const { questionId, answerId, userRequest } = action.payload;
       return produce(state, (draft) => {
-        if (path in draft.feedbackByQuestion[questionId].feedbackFiles) {
-          draft.feedbackByQuestion[questionId].feedbackFiles[path] =
-            draft.feedbackByQuestion[questionId].feedbackFiles[path].map(
-              (line) =>
-                line.id === lineId ? { ...line, state: 'resolved' } : line,
-            );
-        }
+        const previousConversation = getConversation(draft, questionId);
+        const updatedConversation = [
+          ...previousConversation,
+          {
+            id: uniqueId('Student_'),
+            texts: [userRequest],
+            sender: Sender.Student,
+            timestamp: moment(new Date()).format(SHORT_DATE_TIME_FORMAT),
+            index: previousConversation.length,
+            groupIndex: previousConversation.length,
+            bgColor: 'bg-blue-100',
+          },
+        ];
+        const focusedMessageIndex = previousConversation.length;
+        updateFeedbackForQuestion(draft, questionId, {
+          isRequestingLiveFeedback: true,
+          pendingFeedbackToken: null,
+          answerId,
+          conversation: updatedConversation,
+          suggestedReplies: [],
+          isDialogOpen: true,
+          focusedMessageIndex,
+        });
       });
     }
-    case actions.LIVE_FEEDBACK_ITEM_MARK_DISMISSED: {
-      const { questionId, lineId, path } = action.payload;
+    case actions.LIVE_FEEDBACK_OPEN_POPUP: {
+      const { questionId, isDialogOpen } = action.payload;
       return produce(state, (draft) => {
-        if (path in draft.feedbackByQuestion[questionId].feedbackFiles) {
-          draft.feedbackByQuestion[questionId].feedbackFiles[path] =
-            draft.feedbackByQuestion[questionId].feedbackFiles[path].map(
-              (line) =>
-                line.id === lineId ? { ...line, state: 'dismissed' } : line,
-            );
-        }
-      });
-    }
-    case actions.LIVE_FEEDBACK_ITEM_DELETE: {
-      const { questionId, lineId, path } = action.payload;
-      return produce(state, (draft) => {
-        if (path in draft.feedbackByQuestion[questionId].feedbackFiles) {
-          draft.feedbackByQuestion[questionId].feedbackFiles[path] =
-            draft.feedbackByQuestion[questionId].feedbackFiles[path].filter(
-              (line) => line.id !== lineId,
-            );
-          if (
-            !draft.feedbackByQuestion[questionId].feedbackFiles[path] ||
-            draft.feedbackByQuestion[questionId].feedbackFiles[path].length ===
-              0
-          ) {
-            delete draft.feedbackByQuestion[questionId].feedbackFiles[path];
-          }
-        }
+        const localStorageState = loadStateFromLocalStorage();
+        const conversation = getOrDefault(
+          localStorageState,
+          ['feedbackByQuestion', questionId, 'conversation'],
+          [],
+        );
+        const suggestedReplies = getRandomSuggestions();
+        updateFeedbackForQuestion(draft, questionId, {
+          isDialogOpen,
+          conversation,
+          suggestedReplies,
+        });
       });
     }
     default:
       return state;
   }
-}
+};
+
+export default liveFeedbackReducer;
