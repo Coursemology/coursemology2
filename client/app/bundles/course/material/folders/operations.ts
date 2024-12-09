@@ -6,12 +6,14 @@ import {
 } from 'types/course/material/folders';
 
 import CourseAPI from 'api/course';
+import { MATERIAL_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import pollJob from 'lib/helpers/jobHelpers';
 
 import { actions } from './store';
 import { SaveFolderAction } from './types';
 
 const DOWNLOAD_FOLDER_JOB_POLL_INTERVAL_MS = 2000;
+const CHUNK_MATERIAL_JOB_POLL_INTERVAL_MS = 1000;
 
 const formatFolderAttributes = (data: FolderFormData): FormData => {
   const payload = new FormData();
@@ -184,6 +186,68 @@ export function deleteMaterial(
     CourseAPI.folders.deleteMaterial(currFolderId, materialId).then(() => {
       dispatch(actions.deleteMaterialList(materialId));
     });
+}
+
+export function removeChunks(
+  currFolderId: number,
+  materialId: number,
+): Operation {
+  return async (dispatch) =>
+    CourseAPI.folders
+      .deleteMaterialChunks(currFolderId, materialId)
+      .then(() => {
+        dispatch(
+          actions.updateMaterialWorkflowStateList(
+            materialId,
+            MATERIAL_WORKFLOW_STATE.not_chunked,
+          ),
+        );
+      });
+}
+
+export function chunkMaterial(
+  currFolderId: number,
+  materialId: number,
+  handleSuccess: () => void,
+  handleFailure: () => void,
+): Operation {
+  return async (dispatch) => {
+    // Dispatch initial update to set workflow state to 'chunking'
+    dispatch(
+      actions.updateMaterialWorkflowStateList(
+        materialId,
+        MATERIAL_WORKFLOW_STATE.chunking,
+      ),
+    );
+    CourseAPI.folders
+      .chunkMaterial(currFolderId, materialId)
+      .then((response) => {
+        const jobUrl = response.data.jobUrl;
+        pollJob(
+          jobUrl,
+          () => {
+            dispatch(
+              actions.updateMaterialWorkflowStateList(
+                materialId,
+                MATERIAL_WORKFLOW_STATE.chunked,
+              ),
+            );
+            handleSuccess();
+          },
+          () => {
+            dispatch(
+              actions.updateMaterialWorkflowStateList(
+                materialId,
+                MATERIAL_WORKFLOW_STATE.not_chunked,
+              ),
+            );
+            handleFailure();
+          },
+          CHUNK_MATERIAL_JOB_POLL_INTERVAL_MS,
+        );
+      })
+      .catch(handleFailure);
+  };
 }
 
 export function updateMaterial(
