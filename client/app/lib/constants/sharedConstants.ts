@@ -53,6 +53,7 @@ export const STAFF_ROLES: Record<StaffRoles, string> = staffRoles;
 export const AVAILABLE_LOCALES: { [key in Locale]: string } = {
   en: 'English',
   zh: '中文',
+  ko: '한국어',
 };
 
 export const SAVING_STATUS = mirrorCreator([

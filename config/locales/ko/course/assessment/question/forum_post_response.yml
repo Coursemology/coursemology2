@@ -1,0 +1,8 @@
+ko:
+  course:
+    assessment:
+      question:
+        forum_post_responses:
+          new:
+            header: '新论坛帖子回复问题'
+          question_type: 论坛帖子回复问题
