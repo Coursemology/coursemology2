@@ -11,6 +11,7 @@ import {
   getFailureFeedbackFromCodaveri,
   getLiveFeedbackFromCodaveri,
   requestLiveFeedbackFromCodaveri,
+  updateLiveFeedbackChatStatus,
 } from '../../reducers/liveFeedbackChats';
 import { getClientVersionForAnswerId } from '../../selectors/answers';
 import translations from '../../translations';
@@ -269,6 +270,57 @@ export function generateLiveFeedback({
             errorMessage,
           }),
         );
+      });
+}
+
+export function createLiveFeedbackChat({ submissionId, questionId }) {
+  return (dispatch) =>
+    CourseAPI.assessment.submissions
+      .createLiveFeedbackChat(submissionId, {
+        question_id: questionId,
+      })
+      .then((response) => {
+        if (response.status === 200 && response.data?.threadId) {
+          const threadId = response.data?.threadId;
+          const isThreadExpired = response.data?.threadStatus === 'expired';
+          dispatch(
+            updateLiveFeedbackChatStatus({
+              submissionId,
+              questionId,
+              threadId,
+              isThreadExpired,
+            }),
+          );
+        }
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
+export function fetchLiveFeedbackStatus({
+  submissionId,
+  questionId,
+  threadId,
+}) {
+  return (dispatch) =>
+    CourseAPI.assessment.submissions
+      .fetchLiveFeedbackStatus(threadId)
+      .then((response) => {
+        if (response.status === 200 && response.data?.threadStatus) {
+          const isThreadExpired = response.data?.threadStatus === 'expired';
+          dispatch(
+            updateLiveFeedbackChatStatus({
+              submissionId,
+              questionId,
+              threadId,
+              isThreadExpired,
+            }),
+          );
+        }
+      })
+      .catch((error) => {
+        throw error;
       });
 }
 

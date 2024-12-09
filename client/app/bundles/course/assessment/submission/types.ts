@@ -217,6 +217,8 @@ export interface LiveFeedbackChatData {
   isRequestingLiveFeedback: boolean;
   pendingFeedbackToken: string | null;
   liveFeedbackId: number | null;
+  currentThreadId: string | null;
+  isCurrentThreadExpired: boolean;
   chats: ChatShape[];
   suggestions: Suggestion[];
 }
