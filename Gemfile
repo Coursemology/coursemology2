@@ -214,3 +214,10 @@ gem 'rails-html-sanitizer', '>= 1.0.4'
 
 gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'
+
+# Retreival Augmented Generation (RAG) Support
+gem 'pgvector'
+gem 'neighbor'
+gem 'langchainrb'
+gem 'ruby-openai'
+gem 'pdf-reader'
