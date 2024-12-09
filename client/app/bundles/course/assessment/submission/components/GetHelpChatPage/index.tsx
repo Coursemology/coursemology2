@@ -1,6 +1,7 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Divider, Paper } from '@mui/material';
 
+import { SYNC_STATUS } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
@@ -26,11 +27,17 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
     getLiveFeedbackChatsForAnswerId(state, answerId),
   );
 
+  const [syncStatus, setSyncStatus] = useState<keyof typeof SYNC_STATUS>(
+    SYNC_STATUS.Syncing,
+  );
+
   const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
   const isPollingLiveFeedback = liveFeedbackChats?.pendingFeedbackToken;
 
   const isRenderingSuggestionChips =
-    !isRequestingLiveFeedback && !isPollingLiveFeedback;
+    !isRequestingLiveFeedback &&
+    !isPollingLiveFeedback &&
+    liveFeedbackChats?.currentThreadId;
 
   useEffect(() => {
     if (!liveFeedbackChats || liveFeedbackChats?.chats.length === 0) return;
@@ -53,7 +60,11 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
 
   return (
     <Paper className="flex flex-col w-full mb-2" variant="outlined">
-      <Header answerId={answerId} />
+      <Header
+        answerId={answerId}
+        setSyncStatus={setSyncStatus}
+        syncStatus={syncStatus}
+      />
 
       <Divider />
 
@@ -65,8 +76,14 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
       </div>
 
       <div className="relative flex flex-row items-center">
-        {isRenderingSuggestionChips && <SuggestionChips answerId={answerId} />}
-        <ChatInputArea answerId={answerId} questionId={questionId} />
+        {isRenderingSuggestionChips && (
+          <SuggestionChips answerId={answerId} syncStatus={syncStatus} />
+        )}
+        <ChatInputArea
+          answerId={answerId}
+          questionId={questionId}
+          syncStatus={syncStatus}
+        />
       </div>
     </Paper>
   );
