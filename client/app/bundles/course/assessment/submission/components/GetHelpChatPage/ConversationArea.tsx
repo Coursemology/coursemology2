@@ -2,9 +2,11 @@ import { FC } from 'react';
 import { Typography } from '@mui/material';
 
 import LoadingEllipsis from 'lib/components/core/LoadingEllipsis';
-import { useAppSelector } from 'lib/hooks/store';
+import { getSubmissionId } from 'lib/helpers/url-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { resetLiveFeedbackChat } from '../../reducers/liveFeedbackChats';
 import { getLiveFeedbackChatsForQuestionId } from '../../selectors/liveFeedbackChats';
 import translations from '../../translations';
 import { ChatSender } from '../../types';
@@ -16,9 +18,13 @@ interface ConversationAreaProps {
 
 const ConversationArea: FC<ConversationAreaProps> = (props) => {
   const { onFeedbackClick, questionId } = props;
+
+  const submissionId = getSubmissionId();
+  const dispatch = useAppDispatch();
   const liveFeedbackChats = useAppSelector((state) =>
     getLiveFeedbackChatsForQuestionId(state, questionId),
   );
+  const isCurrentThreadExpired = liveFeedbackChats?.isCurrentThreadExpired;
   const { t } = useTranslation();
 
   const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
@@ -99,6 +105,23 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
           </div>
         );
       })}
+      {isCurrentThreadExpired && (
+        <div className="flex justify-center">
+          <div
+            className="cursor-pointer rounded-lg bg-gray-200 pt-3 pl-3 pr-3 pb-2 m-2 w-fit text-wrap break-words"
+            onClick={() =>
+              dispatch(resetLiveFeedbackChat({ submissionId, questionId }))
+            }
+          >
+            <Typography
+              className="whitespace-pre-wrap text-center"
+              variant="body2"
+            >
+              {t(translations.threadExpired)}
+            </Typography>
+          </div>
+        </div>
+      )}
       {(isRequestingLiveFeedback || isPollingLiveFeedback) && (
         <div className="flex justify-start rounded-lg bg-gray-200 w-fit p-3 m-2">
           <LoadingEllipsis />

@@ -55,6 +55,8 @@ const defaultValue = (questionId: string | number): LiveFeedbackChatData => {
     isRequestingLiveFeedback: false,
     pendingFeedbackToken: null,
     liveFeedbackId: null,
+    currentThreadId: null,
+    isCurrentThreadExpired: false,
     chats: [],
     suggestions: generateSuggestion(),
   };
@@ -90,6 +92,30 @@ export const liveFeedbackChatSlice = createSlice({
         );
       });
     },
+    resetLiveFeedbackChat: (
+      state,
+      action: PayloadAction<{
+        submissionId: string | null;
+        questionId: number;
+      }>,
+    ) => {
+      const { submissionId, questionId } = action.payload;
+      const changes: Partial<LiveFeedbackChatData> = {
+        isRequestingLiveFeedback: false,
+        pendingFeedbackToken: null,
+        liveFeedbackId: null,
+        currentThreadId: null,
+        isCurrentThreadExpired: false,
+        chats: [],
+      };
+
+      liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerQuestion, {
+        id: questionId,
+        changes,
+      });
+
+      modifyLocalStorageValue(questionId, changes, submissionId);
+    },
     openLiveFeedbackChat: (
       state,
       action: PayloadAction<{
@@ -118,6 +144,28 @@ export const liveFeedbackChatSlice = createSlice({
       const { submissionId, questionId } = action.payload;
       const changes: Partial<LiveFeedbackChatData> = {
         isLiveFeedbackChatOpen: false,
+      };
+      liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerQuestion, {
+        id: questionId,
+        changes,
+      });
+
+      modifyLocalStorageValue(questionId, changes, submissionId);
+    },
+    updateLiveFeedbackChatStatus: (
+      state,
+      action: PayloadAction<{
+        submissionId: string | null;
+        questionId: number;
+        threadId: string;
+        isThreadExpired: boolean;
+      }>,
+    ) => {
+      const { submissionId, questionId, threadId, isThreadExpired } =
+        action.payload;
+      const changes: Partial<LiveFeedbackChatData> = {
+        currentThreadId: threadId,
+        isCurrentThreadExpired: isThreadExpired,
       };
       liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerQuestion, {
         id: questionId,
@@ -294,8 +342,10 @@ export const liveFeedbackChatSlice = createSlice({
 
 export const {
   initiateLiveFeedbackChatPerQuestion,
+  resetLiveFeedbackChat,
   openLiveFeedbackChat,
   closeLiveFeedbackChat,
+  updateLiveFeedbackChatStatus,
   sendPromptFromStudent,
   requestLiveFeedbackFromCodaveri,
   getLiveFeedbackFromCodaveri,
