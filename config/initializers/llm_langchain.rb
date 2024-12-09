@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 if ENV['OPENAI_API_KEY'].present?
   require 'langchain'
   # Create a global OpenAI client instance

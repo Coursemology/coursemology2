@@ -17,7 +17,8 @@ class Rag::LlmService
         role: 'user',
         content: [
           { type: 'text',
-            text: 'What is in this image? Do not give a summary of image at the end. Make sure response is less than 80 words' },
+            text: 'What is in this image? Do not give a summary of image at the end.
+                  Make sure response is less than 80 words' },
           {
             type: 'image_url',
             image_url: {

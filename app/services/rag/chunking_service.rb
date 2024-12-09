@@ -12,14 +12,16 @@ class Rag::ChunkingService
   end
 
   def file_chunking
-    if @file_type == '.pdf'
-      reader = PDF::Reader.new(@file.path)
-      text = reader.pages.map(&:text).join(' ')
-    elsif @file_type == '.txt'
-      text = File.read(@file.path)
-    else
-      raise "Unsupported file type: #{@file_type}"
-    end
+    text = case @file_type
+           when '.pdf'
+             reader = PDF::Reader.new(@file.path)
+             reader.pages.map(&:text).join(' ')
+           when '.txt'
+             File.read(@file.path)
+           else
+             raise "Unsupported file type: #{@file_type}"
+           end
+
     @text = text.gsub(/\s+/, ' ').strip
     fixed_size_chunk_text(500, 100)
   end
