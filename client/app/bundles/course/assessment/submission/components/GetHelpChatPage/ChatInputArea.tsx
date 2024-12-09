@@ -4,6 +4,7 @@ import { IconButton } from '@mui/material';
 
 import TextField from 'lib/components/core/fields/TextField';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { SYNC_STATUS } from 'lib/constants/sharedConstants';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -19,10 +20,11 @@ import translations from '../../translations';
 interface ChatInputAreaProps {
   answerId: number;
   questionId: number;
+  syncStatus: keyof typeof SYNC_STATUS;
 }
 
 const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
-  const { answerId, questionId } = props;
+  const { answerId, questionId, syncStatus } = props;
   const [input, setInput] = useState('');
 
   const { t } = useTranslation();
@@ -43,6 +45,10 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
   const { attemptsLeft } = question;
   const { isResetting } = questionFlags[questionId] || {};
 
+  const currentThreadId = liveFeedbackChatsForAnswer?.currentThreadId;
+  const isCurrentThreadExpired =
+    liveFeedbackChatsForAnswer?.isCurrentThreadExpired;
+
   const isRequestingLiveFeedback =
     liveFeedbackChatsForAnswer?.isRequestingLiveFeedback ?? false;
   const isPollingLiveFeedback =
@@ -52,6 +58,9 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
     isResetting ||
     isRequestingLiveFeedback ||
     isPollingLiveFeedback ||
+    !currentThreadId ||
+    isCurrentThreadExpired ||
+    syncStatus === SYNC_STATUS.Failed ||
     (!graderView && attemptsLeft === 0);
 
   const sendButtonDisabled = textFieldDisabled || input.trim() === '';

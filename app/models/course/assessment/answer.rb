@@ -140,6 +140,12 @@ class Course::Assessment::Answer < ApplicationRecord
     actable.generate_live_feedback
   end
 
+  def create_live_feedback_chat
+    raise NotImplementedError unless actable.self_respond_to?(:create_live_feedback_chat)
+
+    actable.create_live_feedback_chat
+  end
+
   protected
 
   def finalise
