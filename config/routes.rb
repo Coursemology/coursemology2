@@ -414,7 +414,10 @@ Rails.application.routes.draw do
           post 'create/subfolder', on: :member, as: 'create_subfolder', action: 'create_subfolder'
           put 'upload_materials', on: :member
           get 'download', on: :member
-          resources :materials, path: 'files'
+          resources :materials, path: 'files' do
+            put 'create_text_chunks', on: :member
+            delete 'destroy_text_chunks', on: :member
+          end
         end
       end
 
