@@ -3,9 +3,15 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Chip, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import { QuestionAnswerDetails } from 'types/course/statistics/assessmentStatistics';
+import {
+  AnswerStatisticsData,
+  CommentItem,
+} from 'types/course/statistics/assessmentStatistics';
 
-import { fetchQuestionAnswerDetails } from 'course/assessment/operations/statistics';
+import {
+  fetchAnswer,
+  fetchSubmissionQuestionDetails,
+} from 'course/assessment/operations/statistics';
 import Accordion from 'lib/components/core/layouts/Accordion';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -27,10 +33,6 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.gradeDisplay',
     defaultMessage: 'Grade: {grade} / {maxGrade}',
   },
-  morePastAnswers: {
-    id: 'course.assessment.statistics.morePastAnswers',
-    defaultMessage: 'View All Past Answers',
-  },
   submissionPage: {
     id: 'course.assessment.statistics.submissionPage',
     defaultMessage: 'Go to Answer Page',
@@ -40,28 +42,35 @@ const translations = defineMessages({
 interface Props {
   curAnswerId: number;
   index: number;
+  questionId: number;
+  submissionId: number;
 }
 
 const LastAttemptIndex: FC<Props> = (props) => {
-  const { curAnswerId, index } = props;
+  const { curAnswerId, index, submissionId, questionId } = props;
   const { courseId, assessmentId } = useParams();
   const { t } = useTranslation();
 
-  const fetchQuestionAndCurrentAnswerDetails = (): Promise<
-    QuestionAnswerDetails<keyof typeof QuestionType>
-  > => {
-    return fetchQuestionAnswerDetails(curAnswerId);
+  const fetchAnswerDetailsAndComments = async (): Promise<{
+    answer: AnswerStatisticsData<keyof typeof QuestionType>;
+    comments: CommentItem[];
+  }> => {
+    const [answer, submissionQuestion] = await Promise.all([
+      fetchAnswer(curAnswerId),
+      fetchSubmissionQuestionDetails(submissionId, questionId),
+    ]);
+    return { answer, comments: submissionQuestion.comments };
   };
 
   return (
     <Preload
       render={<LoadingIndicator />}
-      while={fetchQuestionAndCurrentAnswerDetails}
+      while={fetchAnswerDetailsAndComments}
     >
-      {(data): JSX.Element => {
+      {({ answer, comments }): JSX.Element => {
         const gradeCellColor = getClassNameForMarkCell(
-          data.answer.grade,
-          data.question.maximumGrade,
+          answer.grade,
+          answer.question.maximumGrade,
         );
         return (
           <>
@@ -70,7 +79,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
               to={getEditSubmissionQuestionURL(
                 courseId,
                 assessmentId,
-                data.submissionId,
+                submissionId,
                 index,
               )}
             >
@@ -83,25 +92,25 @@ const LastAttemptIndex: FC<Props> = (props) => {
               title={t(translations.questionTitle, { index })}
             >
               <div className="ml-4 mt-4">
-                <Typography variant="body1">{data.question.title}</Typography>
+                <Typography variant="body1">{answer.question.title}</Typography>
                 <Typography
                   dangerouslySetInnerHTML={{
-                    __html: data.question.description,
+                    __html: answer.question.description,
                   }}
                   variant="body2"
                 />
               </div>
             </Accordion>
-            <AnswerDetails answer={data.answer} question={data.question} />
+            <AnswerDetails answer={answer} question={answer.question} />
             <Chip
               className={`w-100 mt-3 ${gradeCellColor}`}
               label={t(translations.gradeDisplay, {
-                grade: data.answer.grade,
-                maxGrade: data.question.maximumGrade,
+                grade: answer.grade,
+                maxGrade: answer.question.maximumGrade,
               })}
               variant="filled"
             />
-            {data.comments.length > 0 && <Comment comments={data.comments} />}
+            {comments.length > 0 && <Comment comments={comments} />}
           </>
         );
       }}

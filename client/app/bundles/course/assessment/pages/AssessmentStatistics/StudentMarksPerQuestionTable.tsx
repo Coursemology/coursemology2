@@ -1,9 +1,9 @@
 import { FC, ReactNode, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Chip } from '@mui/material';
-import palette from 'theme/palette';
+import { Box } from '@mui/material';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
+import SubmissionWorkflowState from 'course/assessment/submission/components/SubmissionWorkflowState';
 import { workflowStates } from 'course/assessment/submission/constants';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
@@ -19,7 +19,7 @@ import LastAttemptIndex from './AnswerDisplay/LastAttempt';
 import { getClassNameForMarkCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
-import { getJointGroupsName, translateStatus } from './utils';
+import { getJointGroupsName } from './utils';
 
 interface Props {
   includePhantom: boolean;
@@ -35,6 +35,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   const [answerDisplayInfo, setAnswerDisplayInfo] = useState({
     index: 0,
     answerId: 0,
+    questionId: 0,
+    submissionId: 0,
     studentName: '',
   });
   const assessment = statistics.assessment;
@@ -76,6 +78,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           setAnswerDisplayInfo({
             index: index + 1,
             answerId: datum.answers![index].lastAttemptAnswerId,
+            questionId: assessment!.questionIds[index],
+            submissionId: datum.id,
             studentName: datum.courseUser.name,
           });
         }}
@@ -170,18 +174,12 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       title: t(translations.workflowState),
       sortable: true,
       cell: (datum) => (
-        <Link
+        <SubmissionWorkflowState
+          className="w-full"
+          linkTo={getEditSubmissionURL(courseId, assessmentId, datum.id)}
           opensInNewTab
-          to={getEditSubmissionURL(courseId, assessmentId, datum.id)}
-        >
-          <Chip
-            className={`text-blue-800 ${palette.submissionStatusClassName[datum.workflowState ?? workflowStates.Unstarted]} w-full`}
-            label={translateStatus(
-              datum.workflowState ?? workflowStates.Unstarted,
-            )}
-            variant="filled"
-          />
-        </Link>
+          workflowState={datum.workflowState ?? workflowStates.Unstarted}
+        />
       ),
       className: 'center',
     },
@@ -279,6 +277,8 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         <LastAttemptIndex
           curAnswerId={answerDisplayInfo.answerId}
           index={answerDisplayInfo.index}
+          questionId={answerDisplayInfo.questionId}
+          submissionId={answerDisplayInfo.submissionId}
         />
       </Prompt>
     </>

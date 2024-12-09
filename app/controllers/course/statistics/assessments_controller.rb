@@ -16,6 +16,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     @course_users_hash = preload_course_users_hash(@assessment.course)
 
     load_course_user_students_info
+    load_ordered_questions
     fetch_all_ancestor_assessments
     create_question_related_hash
 

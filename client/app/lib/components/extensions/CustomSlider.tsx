@@ -20,6 +20,16 @@ const CustomSlider = styled(Slider)<SliderProps>(({ theme }) => ({
   '& .MuiSlider-track': {
     height: 5,
   },
+  '& .MuiSlider-valueLabel': {
+    backgroundColor: `transparent`,
+    color: theme.palette.text.primary,
+    fontWeight: 'normal',
+    top: '-2px',
+  },
+  '& .MuiSlider-markLabel': {
+    color: theme.palette.text.primary,
+    fontWeight: 'normal',
+  },
 }));
 
 export default CustomSlider;
