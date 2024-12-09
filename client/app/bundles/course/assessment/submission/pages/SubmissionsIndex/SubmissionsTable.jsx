@@ -369,6 +369,9 @@ export default class SubmissionsTable extends Component {
               {assessment.gamified
                 ? tableHeaderCenterColumnFor('experiencePoints')
                 : null}
+              {assessment.hasTimeLimit
+                ? tableHeaderCenterColumnFor('timerStartedAt')
+                : null}
               {tableHeaderCenterColumnFor('dateSubmitted')}
               {tableHeaderCenterColumnFor('dateGraded')}
               {tableHeaderCenterColumnFor('grader')}
