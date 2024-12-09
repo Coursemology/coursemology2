@@ -2,9 +2,10 @@ import { FC } from 'react';
 import { Typography } from '@mui/material';
 
 import LoadingEllipsis from 'lib/components/core/LoadingEllipsis';
-import { useAppSelector } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { resetLiveFeedbackChat } from '../../reducers/liveFeedbackChats';
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
 import translations from '../../translations';
 import { ChatSender } from '../../types';
@@ -16,9 +17,12 @@ interface ConversationAreaProps {
 
 const ConversationArea: FC<ConversationAreaProps> = (props) => {
   const { onFeedbackClick, answerId } = props;
+
+  const dispatch = useAppDispatch();
   const liveFeedbackChats = useAppSelector((state) =>
     getLiveFeedbackChatsForAnswerId(state, answerId),
   );
+  const isCurrentThreadExpired = liveFeedbackChats?.isCurrentThreadExpired;
   const { t } = useTranslation();
 
   const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
@@ -114,6 +118,19 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
           </div>
         );
       })}
+      {isCurrentThreadExpired && (
+        <div
+          className="justify-self-center cursor-pointer rounded-lg bg-gray-200 pt-3 pl-3 pr-3 pb-2 m-2 w-fit text-wrap break-words hover:underline"
+          onClick={() => dispatch(resetLiveFeedbackChat({ answerId }))}
+        >
+          <Typography
+            className="whitespace-pre-wrap text-center"
+            variant="body2"
+          >
+            {t(translations.threadExpired)}
+          </Typography>
+        </div>
+      )}
       {(isRequestingLiveFeedback || isPollingLiveFeedback) && (
         <div className="flex justify-start rounded-lg bg-gray-200 w-fit p-3 m-2">
           <LoadingEllipsis />

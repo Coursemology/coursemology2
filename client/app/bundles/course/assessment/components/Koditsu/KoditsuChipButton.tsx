@@ -4,15 +4,15 @@ import { Chip } from '@mui/material';
 
 import { syncWithKoditsu } from 'course/assessment/operations/assessments';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { KODITSU_SYNC_STATUS } from 'lib/constants/sharedConstants';
+import { SYNC_STATUS } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
 interface KoditsuSyncIndicatorProps {
   assessmentId: number;
-  setSyncStatus: Dispatch<SetStateAction<keyof typeof KODITSU_SYNC_STATUS>>;
-  syncStatus: keyof typeof KODITSU_SYNC_STATUS;
+  setSyncStatus: Dispatch<SetStateAction<keyof typeof SYNC_STATUS>>;
+  syncStatus: keyof typeof SYNC_STATUS;
 }
 
 const KoditsuSyncIndicatorMap = {
