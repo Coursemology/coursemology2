@@ -19,7 +19,7 @@ import DescriptionCard from 'lib/components/core/DescriptionCard';
 import Page from 'lib/components/core/layouts/Page';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import Link from 'lib/components/core/Link';
-import { KODITSU_SYNC_STATUS } from 'lib/constants/sharedConstants';
+import { SYNC_STATUS } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -41,19 +41,15 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
   const isKoditsu = assessment.isKoditsuAssessmentEnabled;
   const isKoditsuIndicatorShown = isKoditsu && !assessment.isStudent;
 
-  const [syncStatus, setSyncStatus] = useState<
-    keyof typeof KODITSU_SYNC_STATUS
-  >(
-    assessment.isSyncedWithKoditsu
-      ? KODITSU_SYNC_STATUS.Synced
-      : KODITSU_SYNC_STATUS.Syncing,
+  const [syncStatus, setSyncStatus] = useState<keyof typeof SYNC_STATUS>(
+    assessment.isSyncedWithKoditsu ? SYNC_STATUS.Synced : SYNC_STATUS.Syncing,
   );
 
   useEffect(() => {
-    if (isKoditsuIndicatorShown && syncStatus === KODITSU_SYNC_STATUS.Syncing) {
+    if (isKoditsuIndicatorShown && syncStatus === SYNC_STATUS.Syncing) {
       syncWithKoditsu(assessment.id)
-        .then(() => setSyncStatus(KODITSU_SYNC_STATUS.Synced))
-        .catch(() => setSyncStatus(KODITSU_SYNC_STATUS.Failed));
+        .then(() => setSyncStatus(SYNC_STATUS.Synced))
+        .catch(() => setSyncStatus(SYNC_STATUS.Failed));
     }
   }, [syncStatus]);
 

@@ -370,10 +370,9 @@ const translations = defineMessages({
     id: 'course.assessment.submission.GetHelpChatPage.ConversationArea.lineNumber',
     defaultMessage: 'Line {lineNumber}',
   },
-  liveFeedbackSuccess: {
-    id: 'course.assessment.submission.liveFeedbackSuccess',
-    defaultMessage:
-      'Question {questionIndex}: Feedback successfully generated.',
+  threadExpired: {
+    id: 'course.assessment.submission.GetHelpChatPage.ConversationArea.threadExpired',
+    defaultMessage: 'The chat above has ended. Start a new chat?',
   },
   autogradeSubmissionSuccess: {
     id: 'course.assessment.submission.autogradeSubmissionSuccess',

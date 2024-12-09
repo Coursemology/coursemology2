@@ -120,6 +120,19 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     [response_status, response_body]
   end
 
+  def create_live_feedback_chat
+    question = self.question.actable
+
+    should_retrieve_feedback = submission.attempting? &&
+                               current_answer? &&
+                               question.live_feedback_enabled
+    return unless should_retrieve_feedback
+
+    safe_create_or_update_codaveri_question(question)
+
+    request_create_live_feedback_chat(question)
+  end
+
   def retrieve_codaveri_code_feedback
     question = self.question.actable
     assessment = submission.assessment
@@ -145,5 +158,17 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
     same_file = Set.new(answer_filename_content) == Set.new(other_answer_filename_content)
     same_file_length && same_file
+  end
+
+  private
+
+  def request_create_live_feedback_chat(question)
+    thread_service = Course::Assessment::Answer::LiveFeedback::ThreadService.new(submission.creator,
+                                                                                 submission.assessment.course,
+                                                                                 question)
+    status, body = thread_service.run_create_live_feedback_chat
+    raise CodaveriError, { status: status, body: body } if status != 200
+
+    [status, body]
   end
 end

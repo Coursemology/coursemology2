@@ -100,6 +100,8 @@ const defaultValue = (answerId: number): LiveFeedbackChatData => {
     isRequestingLiveFeedback: false,
     pendingFeedbackToken: null,
     liveFeedbackId: null,
+    currentThreadId: null,
+    isCurrentThreadExpired: false,
     chats: [],
     answerFiles: [],
     suggestions: sampleSuggestions(),
@@ -130,6 +132,29 @@ export const liveFeedbackChatSlice = createSlice({
           initialValue ?? defaultValue(answerId),
         );
       });
+    },
+    resetLiveFeedbackChat: (
+      state,
+      action: PayloadAction<{
+        answerId: number;
+      }>,
+    ) => {
+      const { answerId } = action.payload;
+      const changes: Partial<LiveFeedbackChatData> = {
+        isRequestingLiveFeedback: false,
+        pendingFeedbackToken: null,
+        liveFeedbackId: null,
+        currentThreadId: null,
+        isCurrentThreadExpired: false,
+        chats: [],
+      };
+
+      liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
+        id: answerId,
+        changes,
+      });
+
+      modifyLocalStorageValue(answerId, changes);
     },
     toggleLiveFeedbackChat: (
       state,
@@ -162,7 +187,26 @@ export const liveFeedbackChatSlice = createSlice({
       const changes: Partial<LiveFeedbackChatData> = {
         answerFiles,
       };
+      liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
+        id: answerId,
+        changes,
+      });
 
+      modifyLocalStorageValue(answerId, changes);
+    },
+    updateLiveFeedbackChatStatus: (
+      state,
+      action: PayloadAction<{
+        answerId: number;
+        threadId: string;
+        isThreadExpired: boolean;
+      }>,
+    ) => {
+      const { answerId, threadId, isThreadExpired } = action.payload;
+      const changes: Partial<LiveFeedbackChatData> = {
+        currentThreadId: threadId,
+        isCurrentThreadExpired: isThreadExpired,
+      };
       liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
         id: answerId,
         changes,
@@ -333,7 +377,9 @@ export const liveFeedbackChatSlice = createSlice({
 export const {
   initiateLiveFeedbackChatPerQuestion,
   toggleLiveFeedbackChat,
+  resetLiveFeedbackChat,
   updateAnswerFiles,
+  updateLiveFeedbackChatStatus,
   sendPromptFromStudent,
   requestLiveFeedbackFromCodaveri,
   getLiveFeedbackFromCodaveri,

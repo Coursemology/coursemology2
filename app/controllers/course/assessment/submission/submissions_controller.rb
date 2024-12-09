@@ -121,6 +121,27 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     render json: response_body, status: response_status
   end
 
+  def create_live_feedback_chat
+    @answer = @submission.answers.find_by(id: answer_params[:answer_id])
+    return head :bad_request if @answer.nil?
+
+    status, body = @answer.create_live_feedback_chat
+
+    render json: { threadId: body['thread']['id'], threadStatus: body['thread']['status'] },
+           status: status
+  end
+
+  def fetch_live_feedback_status
+    thread_id = thread_params[:thread_id]
+    codaveri_api_service = CodaveriAsyncApiService.new("chat/feedback/threads/#{thread_id}", nil)
+
+    response_status, response_body = codaveri_api_service.get
+
+    raise CodaveriError, { status: response_status, body: response_body } if response_status != 200
+
+    render json: { threadStatus: response_body['data']['thread']['status'] }, status: response_status
+  end
+
   # Reload the current answer or reset it, depending on parameters.
   # current_answer has the most recent copy of the answer.
   def reload_answer
@@ -297,6 +318,14 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   def reload_answer_params
     params.permit(:answer_id, :reset_answer)
+  end
+
+  def answer_params
+    params.permit(:answer_id)
+  end
+
+  def thread_params
+    params.permit(:thread_id)
   end
 
   def not_downloadable

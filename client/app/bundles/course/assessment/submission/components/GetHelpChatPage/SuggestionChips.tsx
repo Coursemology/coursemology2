@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Button } from '@mui/material';
 
+import { SYNC_STATUS } from 'lib/constants/sharedConstants';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -12,10 +13,11 @@ import translations from '../../translations';
 
 interface SuggestionChipsProps {
   answerId: number;
+  syncStatus: keyof typeof SYNC_STATUS;
 }
 
 const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
-  const { answerId } = props;
+  const { answerId, syncStatus } = props;
 
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -46,6 +48,7 @@ const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
         <Button
           key={suggestion.id}
           className="bg-white text-xl"
+          disabled={syncStatus === SYNC_STATUS.Failed}
           onClick={() => sendHelpRequest(t(suggestion))}
           variant="outlined"
         >
