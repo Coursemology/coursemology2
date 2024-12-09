@@ -52,6 +52,27 @@ export default class FoldersAPI extends BaseCourseAPI {
   }
 
   /**
+   * Chunks a material (file)
+   */
+  chunkMaterial(
+    currFolderId: number,
+    materialId: number,
+  ): APIResponse<JobSubmitted> {
+    return this.client.put(
+      `${this.#urlPrefix}/${currFolderId}/files/${materialId}/create_text_chunks`,
+    );
+  }
+
+  /**
+   * Deletes Chunks associated with a material (file)
+   */
+  deleteMaterialChunks(currFolderId: number, materialId: number): APIResponse {
+    return this.client.delete(
+      `${this.#urlPrefix}/${currFolderId}/files/${materialId}/destroy_text_chunks`,
+    );
+  }
+
+  /**
    * Uploads materials (files)
    */
   uploadMaterials(

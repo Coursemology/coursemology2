@@ -1,5 +1,7 @@
 import { Permissions } from 'types';
 
+import { MATERIAL_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
+
 import {
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,
@@ -12,10 +14,15 @@ export type FolderPermissions = Permissions<
   | 'canCreateSubfolder'
   | 'canUpload'
   | 'canEdit'
+  | 'canManageKnowledgeBase'
 >;
 
 export type SubfolderPermissions = Permissions<
-  'canStudentUpload' | 'showSdlWarning' | 'canEdit' | 'canDelete'
+  | 'canStudentUpload'
+  | 'showSdlWarning'
+  | 'canEdit'
+  | 'canDelete'
+  | 'canManageKnowledgeBase'
 >;
 
 export type MaterialPermissions = Permissions<'canEdit' | 'canDelete'>;
@@ -41,6 +48,7 @@ export interface MaterialListData {
   updatedAt: string;
   updater: CourseUserBasicListData;
   permissions: MaterialPermissions;
+  workflowState: keyof typeof MATERIAL_WORKFLOW_STATE;
 }
 
 export interface FolderMiniEntity {
@@ -63,6 +71,7 @@ export interface MaterialMiniEntity {
   updatedAt: string;
   updater: CourseUserBasicMiniEntity;
   permissions: MaterialPermissions;
+  workflowState: keyof typeof MATERIAL_WORKFLOW_STATE;
 }
 
 export interface FolderData {
@@ -74,6 +83,7 @@ export interface FolderData {
     isConcrete: boolean;
     startAt: string;
     endAt: string | null;
+    workflowState: keyof typeof MATERIAL_WORKFLOW_STATE;
   };
   subfolders: FolderListData[];
   materials: MaterialListData[];

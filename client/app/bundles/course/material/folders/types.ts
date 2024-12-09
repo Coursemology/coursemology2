@@ -7,12 +7,16 @@ import {
 } from 'types/course/material/folders';
 import { EntityStore } from 'types/store';
 
+import { MATERIAL_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
+
 // Action Names
 export const SAVE_FOLDER = 'course/materials/folders/SAVE_FOLDER';
 export const DELETE_FOLDER_LIST = 'course/materials/folders/DELETE_FOLDER_LIST';
 export const DELETE_MATERIAL_LIST =
   'course/materials/folders/DELETE_MATERIAL_LIST';
 export const SAVE_MATERIAL_LIST = 'course/materials/folders/SAVE_MATERIAL_LIST';
+export const UPDATE_MATERIAL_WORKFLOW_STATE_LIST =
+  'course/materials/folders/UPDATE_MATERIAL_WORKFLOW_STATE_LIST';
 
 // Action Types
 export interface SaveFolderAction {
@@ -46,11 +50,18 @@ export interface DeleteMaterialListAction {
   materialId: number;
 }
 
+export interface UpdateMaterialWorkflowStateAction {
+  type: typeof UPDATE_MATERIAL_WORKFLOW_STATE_LIST;
+  materialId: number;
+  state: keyof typeof MATERIAL_WORKFLOW_STATE;
+}
+
 export type FoldersActionType =
   | SaveFolderAction
   | DeleteFolderListAction
   | DeleteMaterialListAction
-  | SaveMaterialListAction;
+  | SaveMaterialListAction
+  | UpdateMaterialWorkflowStateAction;
 
 // State Types
 export interface FoldersState {
