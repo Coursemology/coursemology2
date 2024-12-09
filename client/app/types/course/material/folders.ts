@@ -7,6 +7,7 @@ import {
 
 // Permissions for rendering title bar buttons
 export type FolderPermissions = Permissions<
+  | 'canManageKnowledgeBase'
   | 'isCurrentCourseStudent'
   | 'canStudentUpload'
   | 'canCreateSubfolder'
@@ -15,10 +16,16 @@ export type FolderPermissions = Permissions<
 >;
 
 export type SubfolderPermissions = Permissions<
-  'canStudentUpload' | 'showSdlWarning' | 'canEdit' | 'canDelete'
+  | 'canStudentUpload'
+  | 'showSdlWarning'
+  | 'canEdit'
+  | 'canDelete'
+  | 'canManageKnowledgeBase'
 >;
 
 export type MaterialPermissions = Permissions<'canEdit' | 'canDelete'>;
+
+export type MaterialWorkflowState = 'not_chunked' | 'chunking' | 'chunked';
 
 export interface FolderListData {
   id: number;
@@ -41,6 +48,7 @@ export interface MaterialListData {
   updatedAt: string;
   updater: CourseUserBasicListData;
   permissions: MaterialPermissions;
+  workflowState: MaterialWorkflowState;
 }
 
 export interface FolderMiniEntity {
@@ -63,6 +71,7 @@ export interface MaterialMiniEntity {
   updatedAt: string;
   updater: CourseUserBasicMiniEntity;
   permissions: MaterialPermissions;
+  workflowState: MaterialWorkflowState;
 }
 
 export interface FolderData {
@@ -74,6 +83,7 @@ export interface FolderData {
     isConcrete: boolean;
     startAt: string;
     endAt: string | null;
+    workflowState: MaterialWorkflowState;
   };
   subfolders: FolderListData[];
   materials: MaterialListData[];

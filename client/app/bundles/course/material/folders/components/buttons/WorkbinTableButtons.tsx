@@ -20,6 +20,7 @@ interface Props {
   canEdit: boolean;
   canDelete: boolean;
   type: 'subfolder' | 'material';
+  state: 'not_chunked' | 'chunking' | 'chunked' | null;
   folderInitialValues?: {
     name: string;
     description: string;
@@ -61,6 +62,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
     isConcrete,
     canEdit,
     canDelete,
+    state,
     type,
     folderInitialValues,
     materialInitialValues,
@@ -147,6 +149,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
       <Stack direction={{ xs: 'column', sm: 'row' }}>
         {canEdit && isConcrete && (
           <EditButton
+            disabled={state === 'chunking'}
             id={`${type}-edit-button-${itemId}`}
             onClick={onEdit}
             style={{ padding: 5 }}
@@ -157,7 +160,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
             confirmMessage={`${t(
               translations.deleteConfirmation,
             )} "${itemName}"`}
-            disabled={isDeleting}
+            disabled={isDeleting || state === 'chunking'}
             id={`${type}-delete-button-${itemId}`}
             onClick={onDelete}
             style={{ padding: 5 }}

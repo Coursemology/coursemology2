@@ -134,6 +134,7 @@ const FolderShow: FC = () => {
     >
       <WorkbinTable
         key={currFolderInfo.id}
+        canManageKnowledgeBase={permissions.canManageKnowledgeBase}
         currFolderId={currFolderInfo.id}
         isConcrete={currFolderInfo.isConcrete}
         isCurrentCourseStudent={permissions.isCurrentCourseStudent}

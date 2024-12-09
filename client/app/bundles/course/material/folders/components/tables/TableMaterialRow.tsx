@@ -8,6 +8,7 @@ import Link from 'lib/components/core/Link';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatFullDateTime } from 'lib/moment';
 
+import KnowledgeBaseSwitch from '../buttons/KnowledgeBaseSwitch';
 import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
 
 interface Props {
@@ -15,10 +16,17 @@ interface Props {
   material: MaterialMiniEntity;
   isCurrentCourseStudent: boolean;
   isConcrete: boolean;
+  canManageKnowledgeBase: boolean;
 }
 
 const TableMaterialRow: FC<Props> = (props) => {
-  const { currFolderId, material, isCurrentCourseStudent, isConcrete } = props;
+  const {
+    currFolderId,
+    material,
+    isCurrentCourseStudent,
+    isConcrete,
+    canManageKnowledgeBase,
+  } = props;
 
   return (
     <TableRow id={`material-${material.id}`}>
@@ -80,6 +88,21 @@ const TableMaterialRow: FC<Props> = (props) => {
           -
         </TableCell>
       )}
+      {/* {canManageKnowledgeBase && (
+        <TableCell style={{ width: '60px' }}>
+          <Stack alignItems="center" direction="column" spacing={0.5}>
+            <KnowledgeBaseSwitch
+              canEdit={material.permissions.canEdit}
+              currFolderId={currFolderId}
+              isConcrete={isConcrete}
+              itemId={material.id}
+              itemName={material.name}
+              state={material.workflowState}
+              type="material"
+            />
+          </Stack>
+        </TableCell>
+      )} */}
       <TableCell style={{ width: '60px' }}>
         <WorkbinTableButtons
           canDelete={material.permissions.canDelete}
@@ -98,6 +121,7 @@ const TableMaterialRow: FC<Props> = (props) => {
               }`,
             },
           }}
+          state={material.workflowState}
           type="material"
         />
       </TableCell>

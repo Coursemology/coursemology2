@@ -27,6 +27,7 @@ interface Props extends WrappedComponentProps {
   subfolders: FolderMiniEntity[];
   materials: MaterialMiniEntity[];
   isCurrentCourseStudent: boolean;
+  canManageKnowledgeBase: boolean;
   isConcrete: boolean;
 }
 
@@ -36,6 +37,7 @@ const WorkbinTable: FC<Props> = (props) => {
     subfolders,
     materials,
     isCurrentCourseStudent,
+    canManageKnowledgeBase,
     isConcrete,
   } = props;
 
@@ -126,6 +128,18 @@ const WorkbinTable: FC<Props> = (props) => {
     );
   };
 
+  // const columnHeaderWithoutSort = (columnName: string): JSX.Element => {
+  //   return (
+  //     <Button
+  //       disableFocusRipple
+  //       disableRipple
+  //       style={{ padding: 0, alignItems: 'center', justifyContent: 'start' }}
+  //     >
+  //       {columnName}
+  //     </Button>
+  //   );
+  // };
+
   return (
     <TableContainer dense variant="bare">
       <TableHead>
@@ -135,7 +149,9 @@ const WorkbinTable: FC<Props> = (props) => {
           {!isCurrentCourseStudent && (
             <TableCell>{columnHeaderWithSort('Start At')}</TableCell>
           )}
-          <TableCell />
+          {/* {canManageKnowledgeBase && (
+            <TableCell>{columnHeaderWithoutSort('Knowledge Base')}</TableCell>
+          )} */}
         </TableRow>
       </TableHead>
       <TableBody>
@@ -143,6 +159,7 @@ const WorkbinTable: FC<Props> = (props) => {
           return (
             <TableSubfolderRow
               key={`subfolder-${subfolder.id}`}
+              canManageKnowledgeBase={canManageKnowledgeBase}
               currFolderId={currFolderId}
               isConcrete={isConcrete}
               isCurrentCourseStudent={isCurrentCourseStudent}
@@ -154,6 +171,7 @@ const WorkbinTable: FC<Props> = (props) => {
           return (
             <TableMaterialRow
               key={`material-${material.id}`}
+              canManageKnowledgeBase={canManageKnowledgeBase}
               currFolderId={currFolderId}
               isConcrete={isConcrete}
               isCurrentCourseStudent={isCurrentCourseStudent}

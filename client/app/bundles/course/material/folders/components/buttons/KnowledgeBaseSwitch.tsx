@@ -1,6 +1,8 @@
+// currently not in use
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { Switch } from '@mui/material';
+import { MaterialWorkflowState } from 'types/course/material/folders';
 
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -14,7 +16,7 @@ interface Props {
   itemName: string;
   isConcrete: boolean;
   canEdit: boolean;
-  state: 'not_chunked' | 'chunking' | 'chunked' | null;
+  state: MaterialWorkflowState;
   type: 'subfolder' | 'material';
 }
 
