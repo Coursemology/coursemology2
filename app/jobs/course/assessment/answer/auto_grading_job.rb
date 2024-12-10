@@ -2,6 +2,8 @@
 class Course::Assessment::Answer::AutoGradingJob < ApplicationJob
   include TrackableJob
 
+  retry_on PriorityShouldBeLoweredError, wait: 2.seconds, queue: :delayed_highest
+
   # The Answer Auto Grading Job needs to be at a higher priority than submission auto grading jobs,
   # because it is fired off by submission auto grading jobs. If this is at an equal or lower
   # priority than the submission auto grading job, then it is possible that the answer auto grading
@@ -41,10 +43,15 @@ class Course::Assessment::Answer::AutoGradingJob < ApplicationJob
   # @param [String] redirect_to_path The path to redirect when job finishes.
   def perform_tracked(answer, redirect_to_path = nil)
     ActsAsTenant.without_tenant do
+      raise PriorityShouldBeLoweredError if !queue_name.include?('delayed') && answer.question.is_low_priority
+
+      start_time = Time.now
       Course::Assessment::Answer::AutoGradingService.grade(answer)
       if update_exp?(answer.submission)
         Course::Assessment::Submission::CalculateExpService.update_exp(answer.submission)
       end
+
+      answer.question.downgrade_if_overdue(answer.auto_grading_time_limit, start_time)
     end
 
     redirect_to redirect_to_path

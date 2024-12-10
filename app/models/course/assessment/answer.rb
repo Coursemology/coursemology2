@@ -144,6 +144,10 @@ class Course::Assessment::Answer < ApplicationRecord
     attempting? && !current_answer?
   end
 
+  def auto_grading_time_limit
+    1.minutes
+  end
+
   protected
 
   def finalise

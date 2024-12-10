@@ -112,6 +112,17 @@ class Course::Assessment::Question < ApplicationRecord
     end
   end
 
+  def downgrade_if_overdue(time_limit, start_time)
+    return unless !is_low_priority && (Time.now - start_time > time_limit)
+
+    set_is_low_priority!
+  end
+
+  def set_is_low_priority!
+    self.is_low_priority = true
+    save!
+  end
+
   # Copy attributes for question from the object being duplicated.
   #
   # @param other [Object] The source object to copy attributes from.
