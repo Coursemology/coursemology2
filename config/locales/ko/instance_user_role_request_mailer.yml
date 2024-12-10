@@ -1,41 +1,40 @@
 ko:
   instance_user_role_request_mailer:
     new_role_request:
-      subject: '新的身份变更申请!'
-      empty: '（未指明）'
-      message_html: >
-        %{user} (%{email})申请在%{instance}中变更身份为%{role}。
+      subject: '새로운 역할 요청!'
+      empty: '(지정되지 않음)'
+      message_html: '%{user} (%{email})님이 %{instance} 인스턴스에서 %{role} 역할을 요청했습니다.
 
-        <strong>组织</strong>
+        <strong>조직</strong>
 
         %{organization}
 
 
-        <strong>名称</strong>
+        <strong>직함</strong>
 
         %{designation}
 
 
-        <strong>理由</strong>
+        <strong>이유</strong>
 
         %{reason}
 
 
-        %{click_here}来查看该申请.
+        요청을 검토하려면 %{click_here}를 클릭하세요.
 
+        '
     role_request_approved:
+      subject: '역할 요청이 승인되었습니다!'
+      message: 'Coursemology에서 %{role}로 승인되었습니다!
 
-      subject: '你的身份变更申请已通过！'
-      message: >
-        你已被确认为Coursemology中的%{role}!
+        새 강좌를 만들고 시작하려면 %{click_here}를 클릭하세요!
 
-        %{click_here}来创建一门课程并开始授课吧!
-
+        '
     role_request_rejected:
-      subject: '你的身份变更申请已被拒绝！'
-      message_empty: >
-        您成为Coursemology上的%{role}的请求已被拒绝!
-      message: >
-        您成为Coursemology上的%{role}的请求已被拒绝!
-        请查阅以下信息:
-        %{message}
+      subject: '역할 요청이 거부되었습니다!'
+      message_empty: 'Coursemology에서 %{role}로의 역할 요청이 거부되었습니다!
+
+        '
+      message: 'Coursemology에서 %{role}로의 역할 요청이 거부되었습니다! 아래 메시지를 참조하세요: %{message}
+
+        '

@@ -1,10 +1,10 @@
 ko:
   instance_user_role_requests:
     index:
-      header: '身份变更申请'
+      header: '역할 요청'
     new:
-      header: '要求成为教职人员或管理人员'
+      header: '강사 또는 관리자가 되기 위한 요청'
     edit:
-      header: '编辑身份变更申请'
+      header: '역할 요청 수정'
       user_role_request_rejection_form:
-        header: '身份变更申请被拒绝'
+        header: '역할 요청 거부'

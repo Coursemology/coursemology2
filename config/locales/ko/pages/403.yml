@@ -1,4 +1,4 @@
 ko:
   pages:
     '403':
-      header: '拒绝访问'
+      header: '접근 거부'

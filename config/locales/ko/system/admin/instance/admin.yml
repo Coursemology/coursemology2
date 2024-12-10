@@ -4,4 +4,4 @@ ko:
       instance:
         admin:
           index:
-            header: '实例管理'
+            header: '인스턴스 관리'

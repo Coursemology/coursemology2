@@ -2,13 +2,12 @@ ko:
   activerecord:
     attributes:
       course/condition/survey/title:
-        complete: '已完成 %{survey_title}'
+        complete: '%{survey_title} 완료'
     errors:
       models:
         course/condition/survey:
           attributes:
             survey:
-              unique_dependency: '不能包含重复的解锁条件'
-              references_self: '不能将它自己作为解锁条件'
-              cyclic_dependency: '不能包含循环的依赖'
-
+              unique_dependency: '중복 조건을 가질 수 없습니다'
+              references_self: '자기 자신을 조건으로 가질 수 없습니다'
+              cyclic_dependency: '순환 의존성을 가질 수 없습니다'

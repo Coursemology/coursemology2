@@ -5,4 +5,4 @@ ko:
         course/video/session:
           attributes:
             session_start:
-              cannot_be_after_session_end: '课时开始时间不能晚于结束时间'
+              cannot_be_after_session_end: '세션은 종료 후에 시작할 수 없습니다'

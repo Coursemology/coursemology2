@@ -2,13 +2,13 @@ ko:
   activerecord:
     attributes:
       course/condition/assessment/title:
-        minimum_score: '至少取得%{minimum_grade_percentage}以完成%{assessment_title}'
-        complete: '已完成%{assessment_title}'
+        minimum_score: '%{assessment_title}에서 최소 %{minimum_grade_percentage} 점수를 획득하세요'
+        complete: '%{assessment_title} 완료'
     errors:
       models:
         course/condition/assessment:
           attributes:
             assessment:
-              unique_dependency: '不能包含重复的解锁条件'
-              references_self: '不能将它自己作为解锁条件'
-              cyclic_dependency: '不能包含循环的依赖'
+              unique_dependency: '중복 조건을 가질 수 없습니다'
+              references_self: '자신 자신을 조건으로 가질 수 없습니다'
+              cyclic_dependency: '순환 의존성을 가질 수 없습니다'

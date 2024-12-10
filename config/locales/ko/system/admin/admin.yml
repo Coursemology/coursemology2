@@ -3,4 +3,4 @@ ko:
     admin:
       admin:
         index:
-          header: '管理'
+          header: '관리'

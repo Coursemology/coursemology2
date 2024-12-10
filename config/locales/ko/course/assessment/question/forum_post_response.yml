@@ -4,5 +4,5 @@ ko:
       question:
         forum_post_responses:
           new:
-            header: '新论坛帖子回复问题'
-          question_type: 论坛帖子回复问题
+            header: '새 포럼 게시물 응답 질문'
+          question_type: '포럼 게시물 응답'

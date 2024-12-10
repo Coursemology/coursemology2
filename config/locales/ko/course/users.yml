@@ -3,17 +3,17 @@ ko:
     users:
       sidebar_title: :'course.users.index.header'
       role:
-        student: '学生'
-        teaching_assistant: '助教'
-        observer: '观察者'
-        manager: '管理员'
-        owner: '拥有者'
-        phantom: '虚拟用户'
+        student: '학생'
+        teaching_assistant: '조교'
+        observer: '관찰자'
+        manager: '관리자'
+        owner: '소유자'
+        phantom: '팬텀'
       new:
-        already_registered: '你已注册为%{role}。'
+        already_registered: '당신은 이미 %{role}(으)로 등록되어 있습니다.'
       students:
-        header: '学生'
+        header: '학생들'
       staff:
-        header: '员工'
+        header: '직원'
       index:
-        header: '学生'
+        header: '학생들'

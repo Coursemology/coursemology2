@@ -5,12 +5,12 @@ ko:
         opening_reminder:
           course_notifications:
             email:
-              subject: '%{course}课程提醒'
-              message: '以下项目将在未来24小时内开放。'
+              subject: '%{course} 개강 알림'
+              message: '다음 항목이 24시간 내에 열립니다.'
             course:
               assessment:
-                section_header: '新的可用测验:'
+                section_header: '새로운 평가 가능:'
               survey:
-                section_header: '新的可用调研:'
+                section_header: '새로운 설문조사 가능:'
               video:
-                section_header: '新的可用视频:'
+                section_header: '새로운 비디오 가능:'

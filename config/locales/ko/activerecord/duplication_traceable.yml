@@ -5,4 +5,4 @@ ko:
         duplication_traceable:
           attributes:
             source_id:
-              must_exist: '源必须存在并且是dependent_class的一个实例。'
+              must_exist: '소스는 존재해야 하며 dependent_class의 인스턴스여야 합니다.'

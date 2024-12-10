@@ -2,10 +2,10 @@ ko:
   activerecord:
     attributes:
       course/assessment/tab/title:
-        default: '默认值'
+        default: '기본값'
       course/assessment/tab:
-        weight: '权重'
+        weight: '순서'
     errors:
       models:
         course/assessment/tab:
-          deletion: '最后一项无法被删除'
+          deletion: '마지막 탭은 삭제할 수 없습니다'

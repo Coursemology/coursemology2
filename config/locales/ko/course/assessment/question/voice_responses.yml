@@ -3,4 +3,4 @@ ko:
     assessment:
       question:
         voice_responses:
-          question_type: 音频回答题
+          question_type: '오디오 응답'

@@ -2,19 +2,19 @@ ko:
   activerecord:
     attributes:
       course/assessment/answer:
-        submitted_at: '提交于'
-        grade: '评分'
-        grader: '评分人'
-        graded_at: '批改于'
+        submitted_at: '제출 시각'
+        grade: '점수'
+        grader: '채점자'
+        graded_at: '채점 시각'
     errors:
       models:
         course/assessment/answer:
           attributes:
             question:
-              consistent_assessment: '必须隶属于同一测验'
+              consistent_assessment: '동일한 평가에 속해야 합니다'
             submission:
-              attemptable_state: '必须处于练习状态'
+              attemptable_state: '시도 상태여야 합니다'
             grade:
-              no_blank_grade: '如果之前已评分，则成绩不能为空'
-              consistent_grade: '不能超过问题分数上限'
-              non_negative_grade: '不能为负'
+              no_blank_grade: '이미 채점된 경우 점수는 비워둘 수 없습니다'
+              consistent_grade: '문제의 최대 점수보다 작아야 합니다'
+              non_negative_grade: '음수일 수 없습니다'

@@ -5,8 +5,8 @@ ko:
         course/reference_time:
           attributes:
             reference_timeline:
-              cannot_destroy_in_default_timeline: '无法修改默认参考时间线'
+              cannot_destroy_in_default_timeline: '기본 참조 타임라인에서 시간을 삭제할 수 없습니다'
             start_at:
-              cannot_be_after_end_at: '不能晚于结束时间'
+              cannot_be_after_end_at: '종료 시각 이후일 수 없습니다'
             lesson_plan_item:
-              must_be_in_same_course: '必须与参考时间线在同一课程中'
+              must_be_in_same_course: '참조 타임라인과 동일한 과정에 있어야 합니다'

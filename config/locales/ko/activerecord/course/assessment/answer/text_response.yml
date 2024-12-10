@@ -5,4 +5,4 @@ ko:
         course/assessment/answer/text_response:
           attributes:
             attachments:
-              unique: '文件名不能重复。'
+              unique: '파일 이름은 중복되어선 안 됩니다'

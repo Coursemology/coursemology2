@@ -7,10 +7,9 @@ ko:
             annotated:
               user_notifications:
                 email:
+                  subject: '%{course}: %{topic}에 대한 새 주석'
+                  message: '<p>%{post_author}님이 주석을 추가했습니다: %{post}</p>
 
-                  subject: '%{course}:新批注%{topic}'
-                  message: >
-                    <p>%{post_author}添加了一条批注，%{post}</p>
+                    <p>여기에서 답장할 수 있습니다: '</p> %{topic}'
 
-                    <p>你可以在此处回复：</p>
-                    %{topic}
+                    '

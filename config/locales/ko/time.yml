@@ -1,5 +1,5 @@
 ko:
   time:
-    day: '日期'
+    day: '일'
     formats:
-      default: '%a, %Y %b %d %H:%M:%S'
+      default: '%a, %Y %b %d %p %I:%M:%S'

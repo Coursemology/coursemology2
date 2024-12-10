@@ -4,7 +4,6 @@ ko:
       assessments:
         tabs:
           index:
-            header: '测验标签'
+            header: '평가 탭'
           new:
-            header: '新测验标签'
-
+            header: '새 평가 탭'

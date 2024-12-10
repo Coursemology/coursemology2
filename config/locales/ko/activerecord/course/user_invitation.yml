@@ -3,4 +3,4 @@ ko:
     errors:
       models:
         course/user_invitation:
-          existing_invitation: '此电子邮件地址已存在一个未完成的邀请'
+          existing_invitation: '이 이메일 주소에는 아직 완료되지 않은 초대장이 있습니다'

@@ -2,5 +2,4 @@ ko:
   course:
     learning_map:
       index:
-        header: '学习路线'
-
+        header: '학습 지도'

@@ -5,5 +5,6 @@ ko:
         course/video:
           attributes:
             url:
-              invalid_url: >
-                您输入的URL格式不正确，请重试。
+              invalid_url: '입력하신 URL의 형식이 올바르지 않습니다. 다시 시도해 주세요.
+
+                '

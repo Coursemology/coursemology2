@@ -2,4 +2,4 @@ ko:
   activerecord:
     attributes:
       course/experience_points_record:
-        points_awarded: '经验值奖励已获取'
+        points_awarded: '경험치 부여됨'

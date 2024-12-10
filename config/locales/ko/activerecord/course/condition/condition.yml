@@ -5,4 +5,4 @@ ko:
         course/condition:
           attributes:
             conditional:
-              not_in_same_course: '您选择的条件与当前条件不在同一课程中'
+              not_in_same_course: '선택한 조건이 현재 조건과 동일한 코스에 있지 않습니다'

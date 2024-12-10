@@ -1,8 +1,8 @@
 ko:
   course:
     condition:
-      header: '解锁条件'
+      header: '조건'
       type:
-        header: '类型'
+        header: '유형'
       description:
-        header: '描述'
+        header: '설명'

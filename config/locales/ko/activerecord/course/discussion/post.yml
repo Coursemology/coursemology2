@@ -2,10 +2,10 @@ ko:
   activerecord:
     attributes:
       course/discussion/post:
-        title_reply_template: '回复 %{title}'
+        title_reply_template: '답글: %{title}'
     errors:
       models:
         course/discussion/post:
           attributes:
             post:
-              topic_inconsistent: '当前帖子和它的父帖子引用了不同的主题。'
+              topic_inconsistent: '게시물과 부모 게시물이 다른 주제를 참조하고 있습니다.'

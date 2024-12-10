@@ -3,4 +3,4 @@ ko:
     assessment:
       sessions:
         new:
-          header: '输入密码'
+          header: '비밀번호 입력'

@@ -7,6 +7,6 @@ ko:
     group:
       group_categories:
         index:
-          header: '分组'
+          header: '그룹'
         show:
-          header: '分组'
+          header: '그룹'

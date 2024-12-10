@@ -2,10 +2,11 @@ ko:
   course:
     user_registrations:
       create:
-        invalid_code: '你输入了一个无效的邀请码。'
-        code_taken: >
-          所提供的邀请码已被另一个账户所使用，
-          请使用该账户来访问该课程。
-        code_taken_with_email: >
-          所提供的邀请码已被%{email}使用，
-          请使用该账户访问该课程。
+        invalid_code: '잘못된 초대 코드를 입력하셨습니다.'
+        code_taken: '제공된 초대 코드는 다른 계정에서 사용되었습니다. 해당 계정을 사용하여 코스에 접근해 주세요.
+
+          '
+        code_taken_with_email: '제공된 초대 코드는 %{email}에서 사용되었습니다. 해당 계정을 사용하여 코스에 접근해
+          주세요.
+
+          '

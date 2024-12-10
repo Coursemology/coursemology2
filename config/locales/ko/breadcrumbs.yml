@@ -52,7 +52,7 @@ ko:
         lesson_plan_settings:
           edit: :'layouts.course_admin.lesson_plan.title'
       users:
-        index: '用户'
+        index: '사용자'
         students: :'course.users.students.header'
         staff: :'course.users.staff.header'
         requests: :'course.users.requests.header'
@@ -137,11 +137,11 @@ ko:
       leaderboards:
         index: :'course.leaderboards.title'
       experience_points_records:
-        index: '经验值历史'
+        index: '경험치 기록'
       user_email_subscriptions:
-        index: '管理邮件订阅'
+        index: '이메일 구독 관리'
       video_submissions:
-        index: '视频观看历史'
+        index: '비디오 시청 기록'
       experience_points:
         disbursement:
           new: :'course.experience_points.disbursement.new.header'
@@ -159,9 +159,9 @@ ko:
             edit: :'course.video.submission.submissions.edit.header'
       survey:
         controller:
-          index: '调查'
+          index: '설문조사'
       learning_map:
-        index: '学习路线'
+        index: '학습 지도'
     system:
       admin:
         controller:

@@ -1,67 +1,74 @@
-
 ko:
   devise:
     confirmations:
       new:
-        resend: '重新发送确认指令'
-      confirmed: '您的电子邮件地址已被成功确认。'
-      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何确认你的电子邮件地址，请同时检查你的垃圾邮件文件夹。'
-      send_paranoid_instructions: '如果您的电子邮件地址存在于我们的数据库中，您将在几分钟后收到一封电子邮件，说明如何确认您的电子邮件地址。请同时检查您的垃圾邮件文件夹。'
+        resend: '확인 지침 다시 보내기'
+      confirmed: '이메일 주소가 성공적으로 확인되었습니다.'
+      send_instructions: '몇 분 내로 이메일 주소 확인 방법에 대한 안내 이메일을 받게 됩니다. 스팸 폴더도 확인해 주세요.'
+      send_paranoid_instructions: '귀하의 이메일 주소가 저희 데이터베이스에 존재하면, 몇 분 내로 이메일 주소 확인 방법에'
+        대한 안내 이메일을 받게 됩니다. 스팸 폴더도 확인해 주세요.
     failure:
-      already_authenticated: '你已经登录了。'
-      inactive: '你的账户还没有激活。'
-      invalid: '无效的%{authentication_keys}或密码。'
-      locked: '你的账户被锁定。'
-      last_attempt: '在你的账户被锁定之前，你还有一次尝试的机会。'
-      not_found_in_database: '无效的%{authentication_keys}或密码'
-      timeout: '您的会话已过期。请再次登录以继续。'
-      unauthenticated: '你需要在继续之前登录或注册。'
-      unconfirmed: '在继续之前，你必须验证你的电子邮件地址。'
+      already_authenticated: '이미 로그인되어 있습니다.'
+      inactive: '계정이 아직 활성화되지 않았습니다.'
+      invalid: '잘못된 %{authentication_keys} 또는 비밀번호입니다.'
+      locked: '계정이 잠겼습니다.'
+      last_attempt: '계정이 잠기기 전에 한 번 더 시도할 수 있습니다.'
+      not_found_in_database: '잘못된 %{authentication_keys} 또는 비밀번호입니다.'
+      timeout: '세션이 만료되었습니다. 계속하려면 다시 로그인하세요.'
+      unauthenticated: '계속하려면 로그인 또는 회원가입이 필요합니다.'
+      unconfirmed: '계속하려면 이메일 주소를 확인해야 합니다.'
     mailer:
       confirmation_instructions:
-        subject: '验证说明'
+        subject: '확인 지침'
       reset_password_instructions:
-        subject: '重置密码说明'
+        subject: '비밀번호 재설정 지침'
       unlock_instructions:
-        subject: '解除锁定说明'
+        subject: '잠금 해제 지침'
     omniauth_callbacks:
-      failure: '无法认证您的%{kind}身份，原因为"%{reason}"。'
-      success: '成功认证您的%{kind}账户身份。'
+      failure: '%{kind}에서 인증할 수 없습니다. 이유: "%{reason}".'
+      success: '%{kind} 계정에서 성공적으로 인증되었습니다.'
     passwords:
       new:
-        title: '忘记密码?'
-        button: '向我发送重置密码说明'
-      no_token: '如果你不是来自于密码重置邮件，则不能访问这个页面。如果你确实来自密码重置邮件，请确保你使用了所提供的完整URL。'
-      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何重置你的密码。请同时检查您的垃圾邮件文件夹。'
-      send_paranoid_instructions: '如果您的电子邮件地址存在于我们的数据库中，您将在几分钟后在您的电子邮件地址中收到一个找回密码链接。'
-      updated: '您的密码已被成功更改。您现在已经登录了。'
-      updated_not_active: '您的密码已被成功更改。'
+        title: '비밀번호를 잊으셨나요?'
+        button: '비밀번호 재설정 지침 보내기'
+      no_token: '비밀번호 재설정 이메일에서 오지 않은 경우 이 페이지에 접근할 수 없습니다. 비밀번호 재설정 이메일에서 온 경우, 제공된'
+        전체 URL을 사용했는지 확인하세요.
+      send_instructions: '비밀번호를 재설정하는 방법에 대한 지침이 포함된 이메일을 몇 분 내로 받게 됩니다. 스팸 폴더도 확인해'
+        주세요.
+      send_paranoid_instructions: '이메일 주소가 데이터베이스에 존재하는 경우, 비밀번호 복구 링크가 포함된 이메일을 몇'
+        분 내로 받게 됩니다.
+      updated: '비밀번호가 성공적으로 변경되었습니다. 이제 로그인되었습니다.'
+      updated_not_active: '비밀번호가 성공적으로 변경되었습니다.'
     registrations:
-      destroyed: '再见! 您的账户已被成功注销。我们希望很快再见到你。'
-      signed_up: '欢迎你! 您已经注册成功。'
-      signed_up_but_inactive: '您已经成功注册。但是，您无法登录，因为您的账户尚未激活。'
-      signed_up_but_locked: '你已经成功注册。但是，您无法登录，因为你的账户被锁定。'
-      signed_up_but_unconfirmed: '一条带有验证链接的信息已经发到你的邮箱。请按照该链接激活您的账户。请同时检查您的垃圾邮件文件夹。'
-      update_needs_confirmation: '您成功更新了您的帐户，但我们需要验证您的新电子邮件地址。请检查您的电子邮件并按照确认链接验证您的新电子邮件地址。'
-      updated: '您的账户已被成功更新。'
+      destroyed: '안녕히 가세요! 계정이 성공적으로 취소되었습니다. 곧 다시 뵙기를 바랍니다.'
+      signed_up: '환영합니다! 회원가입이 성공적으로 완료되었습니다.'
+      signed_up_but_inactive: '회원가입이 성공적으로 완료되었습니다. 그러나 계정이 아직 활성화되지 않아 로그인할 수 없습니다.'
+      signed_up_but_locked: '회원가입이 성공적으로 완료되었습니다. 그러나 계정이 잠겨 있어 로그인할 수 없습니다.'
+      signed_up_but_unconfirmed: '확인 링크가 포함된 메시지가 이메일 주소로 전송되었습니다. 링크를 따라 계정을 활성화하세요.'
+        스팸 폴더도 확인해 주세요.
+      update_needs_confirmation: '계정이 성공적으로 업데이트되었지만, 새 이메일 주소를 확인해야 합니다. 이메일을 확인하고'
+        확인 링크를 따라 새 이메일 주소를 확인하세요.
+      updated: '계정이 성공적으로 업데이트되었습니다.'
       new:
-        sign_up: '注册'
-        password_hint: '至少需要 #{length} 个字符'
+        sign_up: '회원가입'
+        password_hint: '#{length}자 이상'
     sessions:
-      signed_in: '登录成功。'
-      signed_out: '登出成功。'
-      already_signed_out: '登出成功。'
+      signed_in: '성공적으로 로그인되었습니다.'
+      signed_out: '성공적으로 로그아웃되었습니다.'
+      already_signed_out: '성공적으로 로그아웃되었습니다.'
     unlocks:
-      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何解锁你的账户。请同时检查您的垃圾邮件文件夹。'
-      send_paranoid_instructions: '如果你的账户存在，你将会在几分钟内收到一封电子邮件，说明如何解锁它。请同时检查你的垃圾邮件文件夹。'
-      unlocked: '您的账户已被成功解锁。请登录后继续。'
+      send_instructions: '계정을 잠금 해제하는 방법에 대한 지침이 포함된 이메일을 몇 분 내로 받게 됩니다. 스팸 폴더도 확인해'
+        주세요.
+      send_paranoid_instructions: '계정이 존재하는 경우, 잠금 해제 방법에 대한 지침이 포함된 이메일을 몇 분 내로 받게'
+        됩니다. 스팸 폴더도 확인해 주세요.
+      unlocked: '계정이 성공적으로 잠금 해제되었습니다. 계속하려면 로그인하세요.'
   errors:
     messages:
-      already_confirmed: '已被确认，请尝试登录'
-      confirmation_period_expired: '需要在%{period}内确认，请申请一个新的。'
-      expired: '已经过期，请申请一个新的'
-      not_found: '未找到'
-      not_locked: '未被锁定'
+      already_confirmed: '이미 확인되었습니다. 로그인해 보세요.'
+      confirmation_period_expired: '%{period} 내에 확인이 필요합니다. 새로 요청하세요.'
+      expired: '만료되었습니다. 새로 요청하세요.'
+      not_found: '찾을 수 없습니다.'
+      not_locked: '잠겨 있지 않습니다.'
       not_saved:
-        one: '一个错误导致%{resource}无法保存：'
-        other: '%{count}个错误导致%{resource}无法保存:'
+        one: '1개의 오류로 인해 %{resource}를 저장할 수 없습니다:'
+        other: '%{count}개의 오류로 인해 %{resource}를 저장할 수 없습니다:'

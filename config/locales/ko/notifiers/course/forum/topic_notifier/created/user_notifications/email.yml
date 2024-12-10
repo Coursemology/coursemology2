@@ -6,10 +6,11 @@ ko:
           created:
             user_notifications:
               email:
-                subject: '%{course} 在论坛%{forum}上创建的新话题'
-                message: >
-                  <p>%{topic_author}在论坛中创建了新话题：%{topic}</p><br>
+                subject: '%{course} 포럼에서 새 주제 생성: %{forum}'
+                message: '<p>%{topic_author}님이 포럼에 새 주제를 생성했습니다: %{topic}</p><br>
                   %{post}
+
+                  '
                 unsubscribe:
-                  tag: '取消订阅'
-                  message: '%从这个论坛主题的电子邮件通知中{unsubscribe_link}'
+                  tag: '구독 취소'
+                  message: '이 포럼의 이메일 알림에서 %{unsubscribe_link}'

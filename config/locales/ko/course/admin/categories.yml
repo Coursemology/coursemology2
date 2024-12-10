@@ -4,6 +4,6 @@ ko:
       assessments:
         categories:
           index:
-            header: '类别'
+            header: '카테고리'
           new:
-            header: '新类别'
+            header: '새 카테고리'

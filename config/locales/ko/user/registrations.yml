@@ -3,12 +3,13 @@ ko:
     registrations:
       new:
         header: :'layout.navbar.register'
-        used: >
-          所提供的邀请码已被另一个账户所使用，请使用该账户登录。
-        used_with_email: >
-          所提供的邀请码已被%{email}使用，
-          请使用该账户访问该课程。
+        used: '제공된 초대 코드는 다른 계정에서 사용되었습니다. 해당 계정으로 로그인해 주세요.
+
+          '
+        used_with_email: '제공된 초대 코드는 %{email}에서 사용되었습니다. 해당 계정으로 로그인해 주세요.
+
+          '
       edit:
-        header: '账户设置'
+        header: '계정 설정'
       create:
-        verify_recaptcha_alert: 下方 reCAPTCHA 验证出现错误，请重试。
+        verify_recaptcha_alert: '아래 reCAPTCHA에 오류가 발생했습니다. 다시 시도해 주세요.'

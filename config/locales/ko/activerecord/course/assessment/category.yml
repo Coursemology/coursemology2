@@ -4,8 +4,8 @@ ko:
       course/assessment/category/title:
         default: :'course.assessment.assessments.index.header'
       course/assessment/category:
-        weight: '权重'
+        weight: '순서'
     errors:
       models:
         course/assessment/category:
-          deletion: '最后一类不能删除'
+          deletion: '마지막 카테고리는 삭제할 수 없습니다'

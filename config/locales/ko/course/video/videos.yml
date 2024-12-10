@@ -4,4 +4,4 @@ ko:
       videos:
         sidebar_title: :'course.video.videos.index.header'
         index:
-          header: '视频'
+          header: '비디오'

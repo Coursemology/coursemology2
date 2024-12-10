@@ -3,4 +3,4 @@ ko:
     admin:
       users:
         index:
-          header: '用户'
+          header: '사용자'

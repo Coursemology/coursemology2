@@ -4,4 +4,4 @@ ko:
       submission:
         logs:
           index:
-            header: '登录记录'
+            header: '접속 기록'

@@ -4,19 +4,17 @@ ko:
       question:
         programming:
           new:
-            header: '新编程题'
+            header: '새 프로그래밍 질문'
           form:
             import_result:
-              success: '包已被正确引入'
-              error: '包无法引入，错误：%{error}'
+              success: '패키지를 성공적으로 가져왔습니다.'
+              error: '패키지를 가져올 수 없습니다: %{error}'
               errors:
-                invalid_package: '上传的包包含无效结构。'
-                time_limit_exceeded: >-
-                  该包超过了问题所允许的最长时间。
-                evaluation_timeout: >-
-                  在规定时间内没有收到评分器的回应。
-                evaluation_error: '在评估过程中发生错误，请参见日志。'
-          question_type: 编程题
-          question_type_codaveri: 编程题(Codaveri)
-          question_type_codaveri_deactivated: >-
-            Codaveri组件已被停用，请向课程所有者/TA报告这个问题。
+                invalid_package: '업로드된 패키지에 유효한 구조가 없습니다.'
+                time_limit_exceeded: '패키지가 문제에서 허용된 최대 시간을 초과했습니다.'
+                evaluation_timeout: '평가자로부터 요구된 시간 내에 응답을 받지 못했습니다.'
+                evaluation_error: '평가 중 오류가 발생했습니다. 로그를 참조하세요.'
+          question_type: '프로그래밍'
+          question_type_codaveri: '프로그래밍 (Codaveri)'
+          question_type_codaveri_deactivated: 'Codaveri 구성 요소가 비활성화되었습니다. 이 문제를 강좌'
+            소유자/TA에게 보고하세요.

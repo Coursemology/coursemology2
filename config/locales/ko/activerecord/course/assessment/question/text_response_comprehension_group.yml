@@ -5,4 +5,4 @@ ko:
         course/assessment/question/text_response_comprehension_group:
           attributes:
             maximum_group_grade:
-              invalid_group_grade: '不能超过该问题的分数上限'
+              invalid_group_grade: '질문의 최대 점수를 초과할 수 없습니다'

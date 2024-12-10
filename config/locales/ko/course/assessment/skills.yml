@@ -2,6 +2,6 @@ ko:
   course:
     assessment:
       skills:
-        sidebar_title: '技能'
+        sidebar_title: '기술'
         index:
-          header: '技能'
+          header: '기술'

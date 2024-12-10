@@ -1,5 +1,5 @@
 ko:
   notifiers:
     course:
-      phantom: '(旁听用户)'
-      anonymous_user: '一个匿名用户'
+      phantom: '(팬텀)'
+      anonymous_user: '익명의 사용자'

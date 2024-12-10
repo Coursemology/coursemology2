@@ -5,6 +5,7 @@ ko:
         opening:
           course_notifications:
             email:
-              subject: '%{course}新的可用测验'
-              message: >
-                新的可用测验 : %{assessment}
+              subject: '%{course} 새로운 평가 가능'
+              message: '새로운 평가 가능 : %{assessment}
+
+                '

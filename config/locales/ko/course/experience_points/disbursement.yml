@@ -2,6 +2,6 @@ ko:
   course:
     experience_points:
       disbursement:
-        sidebar_title: '经验值发放'
+        sidebar_title: '경험치'
         new:
-          header: '发放经验值'
+          header: '경험 포인트 지급'

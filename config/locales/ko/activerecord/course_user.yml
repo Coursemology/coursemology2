@@ -2,14 +2,14 @@ ko:
   activerecord:
     attributes:
       course/course_user:
-        name: '用户名'
+        name: '이름'
       course_user:
-        level_number: '等级'
-        created_at: '加入于'
-        reference_timeline: '引用时间线'
+        level_number: '레벨'
+        created_at: '등록일'
+        reference_timeline: '참조 타임라인'
     errors:
       models:
         course_user:
           attributes:
             reference_timeline:
-              belongs_to_course: '必须隶属于课程'
+              belongs_to_course: '코스에 속해야 합니다'

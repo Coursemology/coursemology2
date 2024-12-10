@@ -7,7 +7,7 @@ ko:
     lesson_plan:
       name: :'course.lesson_plan.items.index.header'
     assessments:
-      name: '测验'
+      name: '평가'
     forums:
       name: :'course.forum.forums.index.header'
     groups:
@@ -20,30 +20,30 @@ ko:
       name: :'course.material.sidebar_title'
     discussion:
       topics:
-        name: '评论中心'
+        name: '댓글 센터'
     statistics:
-      name: '统计'
+      name: '통계'
     experience_points:
-      name: '经验值'
+      name: '경험치'
     duplication:
-      name: '复制'
+      name: '복제'
     video:
       name: :'course.video.videos.index.header'
     settings:
-      name: '设置'
+      name: '설정'
     users:
-      name: '用户'
+      name: '사용자'
     surveys:
       name: :'breadcrumbs.course.survey.controller.index'
     learning_map:
-      name: '学习路线'
+      name: '학습 지도'
     codaveri:
-      name: 'Codaveri 评估和反馈'
+      name: 'Codaveri 평가 및 피드백'
     multiple_reference_timelines:
-      name: '多重参考时间线'
+      name: '다중 참조 타임라인'
     monitoring:
-      name: '监听'
+      name: '시험 모니터링'
     stories:
-      name: '故事'
+      name: '이야기'
     koditsu_platform:
-      name: 'Koditsu 考试'
+      name: 'Koditsu 시험'

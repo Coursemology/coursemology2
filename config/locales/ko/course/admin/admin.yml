@@ -3,6 +3,6 @@ ko:
     admin:
       admin:
         index:
-          header: '设置'
+          header: '설정'
           delete:
-            header: '删除课程'
+            header: '코스 삭제'

@@ -5,8 +5,9 @@ ko:
         submitted:
           user_notifications:
             email:
-              subject: '%{course} 新提交于 : %{assessment}'
-              message: >
-                %{user} 有一个新的提交 
+              subject: '%{course} 새 제출물: %{assessment}'
+              message: '%{user} 님이 새 제출물을 올렸습니다.
 
-                请审阅并评分 %{submission}.
+                %{submission}을(를) 검토하고 점수를 매겨주세요.
+
+                '

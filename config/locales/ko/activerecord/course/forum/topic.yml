@@ -2,7 +2,7 @@ ko:
   activerecord:
     attributes:
       course/forum/topic/topic_type:
-        normal: '常规'
-        announcement: '公告'
-        question: '提问'
-        sticky: '便签'
+        normal: '일반'
+        announcement: '공지'
+        question: '질문'
+        sticky: '고정'

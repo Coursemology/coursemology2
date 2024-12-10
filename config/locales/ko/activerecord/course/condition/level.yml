@@ -2,4 +2,4 @@ ko:
   activerecord:
     attributes:
       course/condition/level/title:
-        title: '等级 %{value}'
+        title: '레벨 %{value}'

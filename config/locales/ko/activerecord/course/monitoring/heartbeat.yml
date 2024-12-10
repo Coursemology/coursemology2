@@ -5,4 +5,4 @@ ko:
         course/monitoring/heartbeat:
           attributes:
             seb_payload:
-              invalid_seb_payload: 'seb payload 必须为空或为有效的 JSON 对象'
+              invalid_seb_payload: 'seb payload는 비어 있거나 유효한 JSON 객체여야 합니다'

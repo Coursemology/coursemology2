@@ -2,6 +2,6 @@ ko:
   course:
     forum:
       forums:
-        sidebar_title: '论坛'
+        sidebar_title: '포럼'
         index:
-          header: '论坛'
+          header: '포럼'

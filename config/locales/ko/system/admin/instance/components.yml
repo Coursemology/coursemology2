@@ -4,4 +4,4 @@ ko:
       instance:
         components:
           edit:
-            header: '组件'
+            header: '구성 요소'

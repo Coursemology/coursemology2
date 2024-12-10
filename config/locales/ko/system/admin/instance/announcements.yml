@@ -6,6 +6,6 @@ ko:
           index:
             header: :'course.announcements.index.header'
           new:
-            header: '创建公告'
+            header: '공지 생성'
           edit:
-            header: '编辑公告'
+            header: '공지 편집'

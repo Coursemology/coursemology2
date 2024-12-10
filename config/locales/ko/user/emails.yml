@@ -2,8 +2,8 @@ ko:
   user:
     emails:
       index:
-        header: '邮箱'
+        header: '이메일'
       set_primary:
-        no_confirmed_emails: '没有已验证的邮箱地址可以设置为主要邮箱。'
+        no_confirmed_emails: '기본 이메일로 설정할 수 있는 확인된 이메일 주소가 없습니다.'
       send_confirmation:
-        already_confirmed: '%{email}已验证。'
+        already_confirmed: '%{email}은(는) 이미 확인되었습니다.'

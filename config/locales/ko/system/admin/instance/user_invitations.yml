@@ -4,20 +4,21 @@ ko:
       instance:
         user_invitations:
           index:
-            header: '邀请'
+            header: '초대'
           new:
-            header: '邀请用户'
+            header: '사용자 초대'
           create:
-            success: >
-              成功从上传的文件中邀请用户:
-              %{new_invitations}, %{already_invited}, %{new_instance_users}, %{already_in_instance}.
+            success: '업로드된 파일에서 사용자를 성공적으로 초대했습니다: %{new_invitations}, %{already_invited},
+              %{new_instance_users}, %{already_in_instance}.
+
+              '
             summary:
               new_invitations:
-                one: '已发送一个新邀请'
-                other: '已发送%{count}个新邀请'
+                one: '새 초대장 1개 발송됨'
+                other: '새 초대장 %{count}개 발송됨'
               new_instance_users:
-                one: '已添加一个用户'
-                other: '已添加%{count}个用户'
-              already_in_instance: '%{count}已在实例中'
-              already_invited: '%{count}已邀请'
-              duplicate_emails: '%{count}重复的邮箱地址已被忽略。'
+                one: '사용자 1명 추가됨'
+                other: '사용자 %{count}명 추가됨'
+              already_in_instance: '%{count}명 이미 인스턴스에 있음'
+              already_invited: '%{count}명 이미 초대됨'
+              duplicate_emails: '%{count}개의 중복 이메일 무시됨.'

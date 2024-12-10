@@ -4,6 +4,6 @@ ko:
       submissions:
         sidebar_title: :'course.assessment.submissions.index.header'
         index:
-          header: '提交'
+          header: '제출물'
         pending:
-          header: '等待中的提交'
+          header: '대기 중인 제출물'

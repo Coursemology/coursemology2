@@ -5,5 +5,4 @@ ko:
         course/assessment/skill:
           attributes:
             course:
-              consistent_course: '必须属于同一课程'
-
+              consistent_course: '동일한 과정에 속해야 합니다'

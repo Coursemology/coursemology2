@@ -3,30 +3,31 @@ ko:
     assessment:
       question_bundle_assignments:
         index:
-          header: '问题绑定作业'
-          prepared_bundle_assignments: '已准备的绑定作业'
-          past_bundle_assignments: '过去的绑定作业'
-          validations: '验证'
-          rerandomize_all: '重新全部随机分配'
-          rerandomize_unassigned: '重新随机分配未分配的学生'
-          user: '用户'
-          submission_id: '提交ID'
-          unbundled: '未绑定'
-          unbundled_tooltip: >
-            这些很可能是被错误分配的绑定作业，不适合任何现有的问题组。
+          header: '문제 묶음 할당'
+          prepared_bundle_assignments: '준비된 묶음 할당'
+          past_bundle_assignments: '과거 묶음 할당'
+          validations: '검증'
+          rerandomize_all: '전부 다시 무작위화'
+          rerandomize_unassigned: '할당되지 않은 학생 다시 무작위화'
+          user: '사용자'
+          submission_id: '제출 ID'
+          unbundled: '묶이지 않음'
+          unbundled_tooltip: '이는 기존의 문제 그룹에 맞지 않는 잘못 할당된 묶음일 가능성이 높습니다.
+
+            '
         validations:
           no_overlapping_questions:
-            desc: '问题绑定组不存在重叠的问题'
-            fail: '问题属于多个绑定组: %{questions}'
+            desc: '문제 묶음에 중복된 문제가 없습니다'
+            fail: '여러 묶음에 속한 문제: %{questions}'
           no_empty_groups:
-            desc: '问题组应至少包含一个绑定组'
-            fail: '该问题组没有绑定组: %{groups}'
+            desc: '문제 그룹은 최소한 하나의 묶음을 포함해야 합니다'
+            fail: '묶음이 없는 그룹: %{groups}'
           one_bundle_assigned:
-            desc: '所有的学生在每个问题组都正好分配有一个绑定组。'
-            fail: '错误分配的学生: %{students}'
-            missing_bundle: '缺少绑定组'
-            unbundled: '未绑定'
+            desc: '모든 학생은 각 질문 그룹마다 정확히 하나의 번들에 할당됩니다.'
+            fail: '잘못 할당된 학생: %{students}'
+            missing_bundle: '묶음 누락'
+            unbundled: '묶이지 않음'
           no_repeat_bundles:
-            desc: '无法给学生分配以前练习过的绑定组'
-            fail: '有重复绑定组的学生: %{students}'
-            repeat_bundle: '学生以前练习过这个绑定组'
+            desc: '학생에게 이전에 시도한 묶음을 할당할 수 없습니다'
+            fail: '반복된 묶음을 가진 학생: %{students}'
+            repeat_bundle: '학생이 이전에 이 묶음을 시도한 적 있습니다.'

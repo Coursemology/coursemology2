@@ -3,4 +3,4 @@ ko:
     admin:
       sidebar_settings:
         edit:
-          header: '侧边栏顺序'
+          header: '사이드바 순서'

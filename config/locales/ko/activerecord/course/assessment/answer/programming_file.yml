@@ -5,4 +5,4 @@ ko:
         course/assessment/answer/programming_file:
           attributes:
             content:
-              exceed_size_limit: '文件必须小于50KB或少于1000行'
+              exceed_size_limit: '파일은 50KB 이하이거나 1000줄 미만이어야 합니다'

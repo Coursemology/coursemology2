@@ -3,4 +3,4 @@ ko:
     announcements:
       sidebar_title: :'course.announcements.index.header'
       index:
-        header: '公告'
+        header: '공지사항'

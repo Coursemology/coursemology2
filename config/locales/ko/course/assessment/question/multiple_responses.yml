@@ -4,5 +4,5 @@ ko:
       question:
         multiple_responses:
           question_type:
-            multiple_response: 多解题
-            multiple_choice: 多选题
+            multiple_response: '다답형'
+            multiple_choice: '객관식'

@@ -5,5 +5,5 @@ ko:
         course/assessment/question/multiple_response:
           attributes:
             options:
-              no_option: '至少要包含一个选项。'
-              no_correct_option: '至少要包含一个正确选项。'
+              no_option: '최소한 하나의 옵션을 포함해야 합니다.'
+              no_correct_option: '최소한 하나의 정답 옵션을 포함해야 합니다.'

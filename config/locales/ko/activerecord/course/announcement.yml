@@ -5,4 +5,4 @@ ko:
         course/announcement:
           attributes:
             end_at:
-              cannot_be_before_start_at: '不能早于起始时间'
+              cannot_be_before_start_at: '시작 시각보다 이를 수 없습니다'

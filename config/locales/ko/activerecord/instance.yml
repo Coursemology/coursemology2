@@ -6,4 +6,4 @@ ko:
           attributes:
             base:
               existing_pending_request: >
-                '你有一个已存在的身份变更请求，请刷新页面。'
+                '이미 존재하는 역할 요청이 있습니다. 페이지를 새로고침 해주세요.'

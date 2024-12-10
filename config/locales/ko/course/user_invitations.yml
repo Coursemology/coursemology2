@@ -2,10 +2,9 @@ ko:
   course:
     user_invitations:
       errors:
-        duplicate_user: '%{user}在提交中出现了多次。'
-        invalid_email: '%{email}无效：%{message}。'
+        duplicate_user: '%{user}가 제출물에 여러 번 나타납니다.'
+        invalid_email: '%{email}이(가) 유효하지 않습니다: %{message}.'
       index:
-        header: '邀请'
+        header: '초대'
       new:
-        header: '邀请用户'
-
+        header: '사용자 초대'

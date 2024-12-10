@@ -7,11 +7,9 @@ ko:
             replied:
               user_notifications:
                 email:
+                  subject: '%{course}: %{topic}에 대한 새 댓글'
+                  message: '<p>%{post_author}님이 댓글을 남겼습니다: %{post}</p>
 
-                  subject: '%{course}：新批注%{topic}'
-                  message: >
-                    <p>%{post_author}添加了一条批注，%{post}</p>
+                    <p>여기에서 답장할 수 있습니다: '</p> %{topic}'
 
-                    <p>你可以在此处回复：</p>
-                    %{topic}
-
+                    '

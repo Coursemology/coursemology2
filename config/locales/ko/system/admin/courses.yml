@@ -3,4 +3,4 @@ ko:
     admin:
       courses:
         index:
-          header: '课程'
+          header: '코스'

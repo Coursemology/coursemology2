@@ -2,10 +2,10 @@ ko:
   activerecord:
     attributes:
       course:
-        reference_timelines: '引用时间线'
+        reference_timelines: '참조 타임라인'
     errors:
       models:
         course:
           attributes:
             reference_timelines:
-              must_have_at_most_one_default: '至少要包含一个默认值'
+              must_have_at_most_one_default: '최대 하나의 기본값만 있어야 합니다'

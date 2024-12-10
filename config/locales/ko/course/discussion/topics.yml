@@ -4,7 +4,7 @@ ko:
       topics:
         sidebar_title: :'course.discussion.topics.index.header'
         index:
-          header: '评论'
+          header: '댓글'
         pending:
           header: :'course.discussion.topics.index.header'
         my_students:

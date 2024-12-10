@@ -2,6 +2,6 @@ ko:
   course:
     courses:
       index:
-        header: '课程'
+        header: '코스'
       new:
-        header: '新课程'
+        header: '새 코스'

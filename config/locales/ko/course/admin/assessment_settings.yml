@@ -3,4 +3,4 @@ ko:
     admin:
       assessment_settings:
         edit:
-          header: '测验设置'
+          header: '평가 설정'
