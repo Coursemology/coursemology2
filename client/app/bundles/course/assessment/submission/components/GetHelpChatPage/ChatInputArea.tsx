@@ -71,7 +71,8 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
       generateLiveFeedback({
         submissionId,
         answerId,
-        noFeedbackMessage: t(translations.liveFeedbackNoneGenerated),
+        threadId: currentThreadId,
+        message: input,
         errorMessage: t(translations.requestFailure),
       }),
     );

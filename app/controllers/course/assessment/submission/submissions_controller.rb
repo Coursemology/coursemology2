@@ -96,29 +96,16 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   end
 
   def generate_live_feedback
-    @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
+    @answer = @submission.answers.find_by(id: live_feedback_params[:answer_id])
 
     return head :bad_request if @answer.nil?
 
-    response_status, response_body = @answer.generate_live_feedback
-    response_body['feedbackUrl'] = ENV.fetch('CODAVERI_URL')
+    thread_id = live_feedback_params[:thread_id]
+    message = live_feedback_params[:message]
 
-    live_feedback = Course::Assessment::LiveFeedback.create_with_codes(
-      @submission.assessment_id,
-      @answer.question_id,
-      @submission.creator,
-      response_body['transactionId'],
-      @answer.actable.files
-    )
+    status, response = @answer.generate_live_feedback(thread_id, message)
 
-    if response_status == 200
-      params[:live_feedback_id] = live_feedback.id
-      params[:feedback_files] = response_body['data']['feedbackFiles']
-      save_live_feedback
-    end
-
-    response_body['liveFeedbackId'] = live_feedback.id
-    render json: response_body, status: response_status
+    render json: response, status: status
   end
 
   def create_live_feedback_chat
@@ -295,6 +282,10 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
   def create_params
     { course_user: current_course_user }
+  end
+
+  def live_feedback_params
+    params.permit(:thread_id, :message, :answer_id)
   end
 
   def create_success_response(submission)

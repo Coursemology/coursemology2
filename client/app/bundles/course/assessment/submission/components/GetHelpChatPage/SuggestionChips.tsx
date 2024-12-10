@@ -27,6 +27,7 @@ const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
   const liveFeedbackChatsForAnswer = useAppSelector((state) =>
     getLiveFeedbackChatsForAnswerId(state, answerId),
   );
+  const currentThreadId = liveFeedbackChatsForAnswer?.currentThreadId;
 
   const suggestions = liveFeedbackChatsForAnswer?.suggestions ?? [];
 
@@ -36,7 +37,8 @@ const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
       generateLiveFeedback({
         submissionId,
         answerId,
-        noFeedbackMessage: t(translations.liveFeedbackNoneGenerated),
+        threadId: currentThreadId,
+        message,
         errorMessage: t(translations.requestFailure),
       }),
     );

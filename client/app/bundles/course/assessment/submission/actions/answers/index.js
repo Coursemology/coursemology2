@@ -213,10 +213,17 @@ const handleFeedbackOKResponse = ({
   response,
   noFeedbackMessage,
 }) => {
-  const feedbackFiles = response.data?.data?.feedbackFiles ?? [];
+  const overallContent = response.data?.data?.message.content ?? null;
+  const feedbackFiles = response.data?.data?.message.files ?? [];
   const success = response.data?.success;
-  if (success && feedbackFiles.length) {
-    dispatch(getLiveFeedbackFromCodaveri({ answerId, feedbackFiles }));
+  if (success && (overallContent || feedbackFiles.length)) {
+    dispatch(
+      getLiveFeedbackFromCodaveri({
+        answerId,
+        overallContent,
+        feedbackFiles,
+      }),
+    );
   } else {
     dispatch(
       getFailureFeedbackFromCodaveri({
@@ -230,22 +237,15 @@ const handleFeedbackOKResponse = ({
 export function generateLiveFeedback({
   submissionId,
   answerId,
-  noFeedbackMessage,
+  threadId,
+  message,
   errorMessage,
 }) {
   return (dispatch) =>
     CourseAPI.assessment.submissions
-      .generateLiveFeedback(submissionId, { answer_id: answerId })
+      .generateLiveFeedback(submissionId, answerId, threadId, message)
       .then((response) => {
-        if (response.status === 200) {
-          handleFeedbackOKResponse({
-            answerId,
-            dispatch,
-            response,
-            noFeedbackMessage,
-          });
-        } else {
-          // 201, save feedback signed token
+        if (response.status === 201) {
           dispatch(
             updateAnswerFiles({
               answerId,
@@ -256,8 +256,16 @@ export function generateLiveFeedback({
             requestLiveFeedbackFromCodaveri({
               token: response.data?.tokenId,
               answerId,
-              liveFeedbackId: response.data?.liveFeedbackId,
               feedbackUrl: response.data?.feedbackUrl,
+              liveFeedbackId: response.data?.liveFeedbackId,
+            }),
+          );
+        } else {
+          dispatch(
+            updateLiveFeedbackChatStatus({
+              answerId,
+              threadId,
+              isThreadExpired: response.data?.threadStatus === 'expired',
             }),
           );
         }
@@ -320,8 +328,8 @@ export function fetchLiveFeedbackStatus({ answerId, threadId }) {
 export function fetchLiveFeedback({
   answerId,
   feedbackUrl,
-  liveFeedbackId,
   feedbackToken,
+  liveFeedbackId,
   noFeedbackMessage,
   errorMessage,
 }) {
