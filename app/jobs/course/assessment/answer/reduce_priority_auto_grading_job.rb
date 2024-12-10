@@ -1,7 +1,6 @@
 # frozen_string_literal: true
-
-class Course::Assessment::Answer::ReducePriorityAutoGradingJob < ApplicationJob
-  include TrackableJob
+class Course::Assessment::Answer::ReducePriorityAutoGradingJob < Course::Assessment::Answer::BaseAutoGradingJob
+  protected
 
   # The Answer Auto Grading Job needs to be at a higher priority than submission auto grading jobs,
   # because it is fired off by submission auto grading jobs. If this is at an equal or lower
@@ -16,40 +15,11 @@ class Course::Assessment::Answer::ReducePriorityAutoGradingJob < ApplicationJob
   #
   # NOTE: See Course::Assessment::Answer::AutoGradingJob for comments regarding usage of
   # is_low_priority flag and :delayed_* queue_as below.
-  queue_as do
-    answer = arguments.first
-    question = answer.question
-
-    if question.is_low_priority
-      :delayed_medium_high
-    else
-      :medium_high
-    end
+  def default_queue_name
+    :medium_high
   end
 
-  protected
-
-  # Performs the auto grading.
-  #
-  # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was
-  #   finished.
-  # @param [Course::Assessment::Answer] answer the answer to be graded.
-  # @param [String] redirect_to_path The path to redirect when job finishes.
-  def perform_tracked(answer, redirect_to_path = nil)
-    ActsAsTenant.without_tenant do
-      Course::Assessment::Answer::AutoGradingService.grade(answer)
-      if update_exp?(answer.submission)
-        Course::Assessment::Submission::CalculateExpService.update_exp(answer.submission)
-      end
-    end
-
-    redirect_to redirect_to_path
-  end
-
-  private
-
-  def update_exp?(submission)
-    submission.assessment.autograded? && !submission.attempting? &&
-      !submission.awarded_at.nil? && submission.awarder == User.system
+  def delayed_queue_name
+    :delayed_medium_high
   end
 end
