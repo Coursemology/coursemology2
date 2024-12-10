@@ -254,8 +254,8 @@ export const liveFeedbackChatSlice = createSlice({
       action: PayloadAction<{
         token: string;
         answerId: number;
-        liveFeedbackId: number;
         feedbackUrl: string;
+        liveFeedbackId: number;
       }>,
     ) => {
       const { token, answerId, liveFeedbackId, feedbackUrl } = action.payload;
@@ -278,10 +278,11 @@ export const liveFeedbackChatSlice = createSlice({
       state,
       action: PayloadAction<{
         answerId: number;
+        overallContent: string | null;
         feedbackFiles: FeedbackShape[];
       }>,
     ) => {
-      const { answerId, feedbackFiles } = action.payload;
+      const { answerId, overallContent, feedbackFiles } = action.payload;
       const liveFeedbackChats =
         state.liveFeedbackChatPerAnswer.entities[answerId];
 
@@ -320,10 +321,23 @@ export const liveFeedbackChatSlice = createSlice({
           };
         });
 
+        const summaryChat: ChatShape[] = overallContent
+          ? [
+              {
+                sender: ChatSender.codaveri,
+                lineNumber: null,
+                lineContent: null,
+                message: [overallContent],
+                createdAt: moment(new Date()).format(SHORT_TIME_FORMAT),
+                isError: false,
+              },
+            ]
+          : [];
+
         const changes: Partial<LiveFeedbackChatData> = {
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
-          chats: [...liveFeedbackChats.chats, ...newChats],
+          chats: [...liveFeedbackChats.chats, ...summaryChat, ...newChats],
           suggestions: sampleSuggestions(),
         };
 
