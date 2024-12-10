@@ -1,6 +1,7 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Divider, Paper } from '@mui/material';
 
+import { GET_HELP_SYNC_STATUS } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 
 import { getLiveFeedbackChatsForQuestionId } from '../../selectors/liveFeedbackChats';
@@ -25,11 +26,17 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
     getLiveFeedbackChatsForQuestionId(state, questionId),
   );
 
+  const [syncStatus, setSyncStatus] = useState<
+    keyof typeof GET_HELP_SYNC_STATUS
+  >(GET_HELP_SYNC_STATUS.Syncing);
+
   const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
   const isPollingLiveFeedback = liveFeedbackChats?.pendingFeedbackToken;
 
   const isRenderingSuggestionChips =
-    !isRequestingLiveFeedback && !isPollingLiveFeedback;
+    !isRequestingLiveFeedback &&
+    !isPollingLiveFeedback &&
+    liveFeedbackChats?.currentThreadId;
 
   useEffect(() => {
     if (scrollableRef.current) {
@@ -44,7 +51,11 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
 
   return (
     <Paper className="flex flex-col w-full mb-2" variant="outlined">
-      <Header questionId={questionId} />
+      <Header
+        questionId={questionId}
+        setSyncStatus={setSyncStatus}
+        syncStatus={syncStatus}
+      />
 
       <Divider />
 
@@ -57,9 +68,17 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
 
       <div className="relative flex flex-row items-center">
         {isRenderingSuggestionChips && (
-          <SuggestionChips answerId={answerId} questionId={questionId} />
+          <SuggestionChips
+            answerId={answerId}
+            questionId={questionId}
+            syncStatus={syncStatus}
+          />
         )}
-        <ChatInputArea answerId={answerId} questionId={questionId} />
+        <ChatInputArea
+          answerId={answerId}
+          questionId={questionId}
+          syncStatus={syncStatus}
+        />
       </div>
     </Paper>
   );

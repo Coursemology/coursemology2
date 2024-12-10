@@ -68,6 +68,12 @@ export const KODITSU_SYNC_STATUS = mirrorCreator([
   'Failed',
 ]);
 
+export const GET_HELP_SYNC_STATUS = mirrorCreator([
+  'Syncing',
+  'Synced',
+  'Failed',
+]);
+
 export default {
   TIMELINE_ALGORITHMS,
   USER_ROLES,

@@ -331,6 +331,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.requestFailure',
     defaultMessage: 'An error occurred while processing your request.',
   },
+  openLiveFeedbackChatFailure: {
+    id: 'course.assessment.submission.openLiveFeedbackChatFailure',
+    defaultMessage: 'An error occurred while initiating Get Help Chat.',
+  },
   deleteFileSuccess: {
     id: 'course.assessment.submission.deleteFileSuccess',
     defaultMessage: 'File deleted successfully',
@@ -373,6 +377,10 @@ const translations = defineMessages({
   lineNumberMessage: {
     id: 'course.assessment.submission.GetHelpChatPage.ConversationArea.lineNumberMessage',
     defaultMessage: 'Line {lineNumber}: {message}',
+  },
+  threadExpired: {
+    id: 'course.assessment.submission.GetHelpChatPage.ConversationArea.threadExpired',
+    defaultMessage: 'This conversation has ended. Start a new chat?',
   },
   liveFeedbackSuccess: {
     id: 'course.assessment.submission.liveFeedbackSuccess',

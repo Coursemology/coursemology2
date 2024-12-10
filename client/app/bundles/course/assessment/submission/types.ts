@@ -197,13 +197,13 @@ export interface ChatShape {
 
 export interface FeedbackShape {
   path: string;
-  feedbackLines: FeedbackLines[];
+  annotations: FeedbackLines[];
 }
 
 interface FeedbackLines {
   id: string;
-  linenum: number;
-  feedback: string;
+  line: number;
+  content: string;
 }
 
 export interface Suggestion {
@@ -217,6 +217,8 @@ export interface LiveFeedbackChatData {
   isRequestingLiveFeedback: boolean;
   pendingFeedbackToken: string | null;
   liveFeedbackId: number | null;
+  currentThreadId: string | null;
+  isCurrentThreadExpired: boolean;
   chats: ChatShape[];
   suggestions: Suggestion[];
 }
