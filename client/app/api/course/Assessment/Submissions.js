@@ -122,10 +122,10 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
-  generateLiveFeedback(submissionId, params) {
+  generateLiveFeedback(submissionId, answerId, threadId, message) {
     return this.client.post(
       `${this.#urlPrefix}/${submissionId}/generate_live_feedback`,
-      params,
+      { thread_id: threadId, answer_id: answerId, message },
     );
   }
 
@@ -145,17 +145,17 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   fetchLiveFeedback(feedbackUrl, feedbackToken) {
     const CODAVERI_API_VERSION = '2.1';
 
-    return this.externalClient.get(`/signed/feedback/llm`, {
+    return this.externalClient.get(`/signed/chat/feedback/messages`, {
       baseURL: feedbackUrl,
       headers: { 'x-api-version': CODAVERI_API_VERSION },
       params: { token: feedbackToken },
     });
   }
 
-  saveLiveFeedback(liveFeedbackId, feedbackFiles) {
+  saveLiveFeedback(liveFeedbackId, message) {
     return this.client.post(`${this.#urlPrefix}/save_live_feedback`, {
       live_feedback_id: liveFeedbackId,
-      feedback_files: feedbackFiles,
+      message,
     });
   }
 

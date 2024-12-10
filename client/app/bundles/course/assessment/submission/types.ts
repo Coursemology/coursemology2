@@ -196,13 +196,13 @@ export interface ChatShape {
 
 export interface FeedbackShape {
   path: string;
-  feedbackLines: FeedbackLines[];
+  annotations: FeedbackLines[];
 }
 
 interface FeedbackLines {
   id: string;
-  linenum: number;
-  feedback: string;
+  line: number;
+  content: string;
 }
 
 export interface Suggestion {
