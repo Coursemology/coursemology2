@@ -89,9 +89,8 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     (codaveri_feedback_job&.status == 'submitted') ? codaveri_feedback_job : retrieve_codaveri_code_feedback&.job
   end
 
-  def generate_live_feedback
+  def generate_live_feedback(thread_id, message)
     question = self.question.actable
-    assessment = submission.assessment
 
     should_retrieve_feedback = submission.attempting? &&
                                current_answer? &&
@@ -100,22 +99,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
     safe_create_or_update_codaveri_question(question)
 
-    feedback_config = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.default_config.merge(
-      revealLevel: 'guidance',
-      language: Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.language_from_locale(
-        answer.submission.creator.locale
-      ),
-      customPrompt: question.live_feedback_custom_prompt
-    )
-    feedback_service = Course::Assessment::Answer::ProgrammingCodaveriAsyncFeedbackService.
-                       new(assessment, question, self, true, feedback_config)
-    response_status, response_body, _feedback_job_id = feedback_service.run_codaveri_feedback_service
-    unless [200, 201].include?(response_status) && response_body['success']
-      raise CodaveriError,
-            { status: response_status, body: response_body }
-    end
-
-    [response_status, response_body]
+    request_live_feedback_response(thread_id, message)
   end
 
   def create_live_feedback_chat
@@ -168,5 +152,24 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     raise CodaveriError, { status: status, body: body } if status != 200
 
     [status, body]
+  end
+
+  def request_live_feedback_response(thread_id, message)
+    feedback_service = Course::Assessment::Answer::LiveFeedback::FeedbackService.new(message, self)
+    status, body = feedback_service.request_codaveri_feedback(thread_id)
+
+    raise CodaveriError, { status: status, body: body } if status != 201 && status != 410
+
+    response = if status == 201
+                 { feedbackUrl: ENV.fetch('CODAVERI_URL'),
+                   threadId: body['thread']['id'],
+                   threadStatus: body['thread']['status'],
+                   tokenId: body['token']['id'] }
+               else
+                 { threadId: body['thread']['id'],
+                   threadStatus: body['thread']['status'] }
+               end
+
+    [status, response]
   end
 end

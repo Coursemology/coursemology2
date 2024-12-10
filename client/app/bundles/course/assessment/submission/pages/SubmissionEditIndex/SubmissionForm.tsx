@@ -87,7 +87,6 @@ const SubmissionForm: FC<Props> = (props) => {
       liveFeedbackChats.liveFeedbackChatPerQuestion.entities[questionId];
     if (!liveFeedbackChatsForQuestion) return;
 
-    const liveFeedbackId = liveFeedbackChatsForQuestion.liveFeedbackId;
     const feedbackToken = liveFeedbackChatsForQuestion.pendingFeedbackToken;
     const feedbackUrl = liveFeedbackChats.liveFeedbackChatUrl;
     const noFeedbackMessage = t(translations.liveFeedbackNoneGenerated);
@@ -97,7 +96,6 @@ const SubmissionForm: FC<Props> = (props) => {
         submissionId,
         questionId,
         feedbackUrl,
-        liveFeedbackId,
         feedbackToken,
         noFeedbackMessage,
         errorMessage,
