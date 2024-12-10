@@ -100,8 +100,8 @@ const SubmissionForm: FC<Props> = (props) => {
       fetchLiveFeedback({
         answerId,
         feedbackUrl,
-        liveFeedbackId,
         feedbackToken,
+        liveFeedbackId,
         noFeedbackMessage,
         errorMessage,
       }),
