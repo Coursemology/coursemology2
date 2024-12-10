@@ -419,6 +419,22 @@ jobs:
           name: Check for missing translations (Mandarin)
           command: bundle exec i18n-tasks missing --locales zh
 
+  i18n_ko:
+    executor: ruby_with_postgres
+
+    steps:
+      - checkout
+      - rehydrate_ruby_deps
+      - setup_db
+
+      - run:
+          name: Check for unused translations (Korean)
+          command: bundle exec i18n-tasks unused --locales ko
+
+      - run:
+          name: Check for missing translations (Korean)
+          command: bundle exec i18n-tasks missing --locales ko
+
 workflows:
   build_and_test_and_lint:
     jobs:
@@ -427,6 +443,7 @@ workflows:
       - build_client
       - i18n_en
       - i18n_zh
+      - i18n_ko
       - factorybot_lint
       - test_rspec:
           requires:

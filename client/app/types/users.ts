@@ -81,7 +81,7 @@ export interface AdminStats {
   instancesCount: number;
 }
 
-export type Locale = 'en' | 'zh';
+export type Locale = 'en' | 'zh' | 'ko';
 
 export interface ProfileData {
   id: string;

@@ -1,0 +1,27 @@
+ko:
+  helpers:
+    buttons:
+      assessment:
+        new: '새 평가'
+  course:
+    assessment:
+      assessments:
+        invalid_questions_order: '평가 질문의 순서가 잘못되었습니다'
+        sidebar_title: :'course.assessment.assessments.index.header'
+        index:
+          header: '평가'
+        show:
+          public_test: '공개'
+          private_test: '비공개'
+          evaluation_test: '평가'
+        new:
+          header: '새 평가'
+        edit:
+          header: '평가 편집'
+        assessment_question_bundle_buttons:
+          question_groups: '그룹'
+          question_bundles: '묶음'
+          question_bundle_questions: '묶음 질문'
+          question_bundle_assignments: '묶음 숙제'
+        unblock_monitor:
+          invalid_password: '입력한 비밀번호가 잘못되었습니다. 다시 시도해 주세요.'

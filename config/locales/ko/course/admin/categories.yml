@@ -1,0 +1,9 @@
+ko:
+  course:
+    admin:
+      assessments:
+        categories:
+          index:
+            header: '카테고리'
+          new:
+            header: '새 카테고리'

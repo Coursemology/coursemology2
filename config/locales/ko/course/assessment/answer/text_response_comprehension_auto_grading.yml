@@ -1,0 +1,19 @@
+ko:
+  course:
+    assessment:
+      answer:
+        text_response_comprehension_auto_grading:
+          explanations:
+            point_html: '<u>부분 (%{index})</u>'
+            correct_point: '이 부분에 대해 바르게 답변했습니다.'
+            lifted_word_singular: '다음 단어를 사용하여 이 부분에서 점수를 얻지 못했습니다: %{word_string}.'
+            lifted_word_plural: '다음 단어들을 사용하여 이 부분에서 점수를 얻지 못했습니다: %{words_string}.'
+            missing_keyword_singular: '다음 키워드를 바꾸어 말하지 않았습니다: %{word_string}.'
+            missing_keyword_plural: '다음 키워드들을 바꾸어 말하지 않았습니다: %{words_string}.'
+            empty_information: '<i>(직원이 단어를 입력하지 않았습니다)</i>'
+            correct_keyword: '"%{answer}"를 사용하여 키워드 "%{keyword}"를 올바르게 바꾸어 말했습니다.'
+            concatenate: ', '
+            concatenate_last: ' 그리고 '
+            line_break_html: '<br>'
+            horizontal_break_html: '<hr>'
+            grade: '점수: %{grade} / %{maximum_grade}'

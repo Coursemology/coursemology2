@@ -1,0 +1,9 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/reference_timeline:
+          attributes:
+            default:
+              taken: '기본 참조 타임라인은 하나만 가질 수 있습니다'
+              cannot_destroy: '기본 참조 타임라인을 삭제할 수 없습니다'

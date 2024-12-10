@@ -1,0 +1,9 @@
+ko:
+  course:
+    admin:
+      videos:
+        tabs:
+          index:
+            header: '비디오 탭'
+          new:
+            header: '새 비디오 탭'

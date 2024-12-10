@@ -1,0 +1,9 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/video/submission:
+          attributes:
+            experience_points_record:
+              inconsistent_user: '생성자는 코스 사용자 기록과 동일해야 합니다'
+          submission_already_exists: '이미 제출을 생성한 것 같습니다. 다시 시도하시겠습니까?'

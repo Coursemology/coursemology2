@@ -1,0 +1,5 @@
+ko:
+  course:
+    enrol_requests:
+      index:
+        header: '사용자 요청'

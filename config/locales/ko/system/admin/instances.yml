@@ -1,0 +1,10 @@
+ko:
+  system:
+    admin:
+      instances:
+        index:
+          header: '인스턴스'
+        new:
+          header: '새 인스턴스'
+        edit:
+          header: '인스턴스 편집'

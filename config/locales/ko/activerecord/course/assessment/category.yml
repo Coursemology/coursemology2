@@ -1,0 +1,11 @@
+ko:
+  activerecord:
+    attributes:
+      course/assessment/category/title:
+        default: :'course.assessment.assessments.index.header'
+      course/assessment/category:
+        weight: '순서'
+    errors:
+      models:
+        course/assessment/category:
+          deletion: '마지막 카테고리는 삭제할 수 없습니다'

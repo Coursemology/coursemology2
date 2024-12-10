@@ -1,0 +1,7 @@
+ko:
+  system:
+    admin:
+      instance:
+        users:
+          index:
+            header: '사용자'

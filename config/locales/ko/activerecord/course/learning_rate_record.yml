@@ -1,0 +1,9 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/learning_rate_record:
+          attributes:
+            learning_rate:
+              less_than_min: '유효한 최소값 이상이어야 합니다'
+              greater_than_max: '유효한 최대값 이하여야 합니다'

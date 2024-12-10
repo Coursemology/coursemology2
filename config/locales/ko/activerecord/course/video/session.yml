@@ -1,0 +1,8 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/video/session:
+          attributes:
+            session_start:
+              cannot_be_after_session_end: '세션은 종료 후에 시작할 수 없습니다'

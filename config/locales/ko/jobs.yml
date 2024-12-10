@@ -1,0 +1,6 @@
+ko:
+  jobs:
+    completed:
+      completed: '작업이 완료되었습니다.'
+    errored:
+      errored: '작업에 오류가 발생했습니다.'

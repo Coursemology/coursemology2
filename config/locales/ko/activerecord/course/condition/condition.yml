@@ -1,0 +1,8 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/condition:
+          attributes:
+            conditional:
+              not_in_same_course: '선택한 조건이 현재 조건과 동일한 코스에 있지 않습니다'

@@ -1,0 +1,5 @@
+ko:
+  activerecord:
+    attributes:
+      course/experience_points_record:
+        points_awarded: '경험치 부여됨'

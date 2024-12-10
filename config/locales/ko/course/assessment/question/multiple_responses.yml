@@ -1,0 +1,8 @@
+ko:
+  course:
+    assessment:
+      question:
+        multiple_responses:
+          question_type:
+            multiple_response: '다답형'
+            multiple_choice: '객관식'

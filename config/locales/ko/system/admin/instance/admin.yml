@@ -1,0 +1,7 @@
+ko:
+  system:
+    admin:
+      instance:
+        admin:
+          index:
+            header: '인스턴스 관리'

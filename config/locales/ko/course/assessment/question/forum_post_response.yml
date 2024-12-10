@@ -1,0 +1,8 @@
+ko:
+  course:
+    assessment:
+      question:
+        forum_post_responses:
+          new:
+            header: '새 포럼 게시물 응답 질문'
+          question_type: '포럼 게시물 응답'

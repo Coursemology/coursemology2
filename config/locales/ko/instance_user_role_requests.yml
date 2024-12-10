@@ -1,0 +1,10 @@
+ko:
+  instance_user_role_requests:
+    index:
+      header: '역할 요청'
+    new:
+      header: '강사 또는 관리자가 되기 위한 요청'
+    edit:
+      header: '역할 요청 수정'
+      user_role_request_rejection_form:
+        header: '역할 요청 거부'

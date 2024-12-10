@@ -1,0 +1,13 @@
+ko:
+  activerecord:
+    attributes:
+      course/condition/video/title:
+        complete: '%{video_title} 시청'
+    errors:
+      models:
+        course/condition/video:
+          attributes:
+            video:
+              unique_dependency: '중복 조건을 가질 수 없습니다'
+              references_self: '자기 자신을 조건으로 가질 수 없습니다'
+              cyclic_dependency: '순환 의존성을 가질 수 없습니다'

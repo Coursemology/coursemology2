@@ -1,0 +1,13 @@
+ko:
+  course:
+    discussion:
+      topics:
+        sidebar_title: :'course.discussion.topics.index.header'
+        index:
+          header: '댓글'
+        pending:
+          header: :'course.discussion.topics.index.header'
+        my_students:
+          header: :'course.discussion.topics.index.header'
+        my_students_pending:
+          header: :'course.discussion.topics.index.header'
