@@ -8,6 +8,7 @@ import {
   initiateAnswerFlagsForAnswers,
   resetExistingAnswerFlags,
 } from '../reducers/answerFlags';
+import { initiateLiveFeedbackChatPerQuestion } from '../reducers/liveFeedbackChats';
 import translations from '../translations';
 
 import { buildErrorMessage, formatAnswers } from './utils';
@@ -59,6 +60,14 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
           payload: data,
         });
         dispatch(initiateAnswerFlagsForAnswers({ answers: data.answers }));
+        dispatch(
+          initiateLiveFeedbackChatPerQuestion({
+            submissionId: id,
+            questions: data.answers.map((answer) => ({
+              id: answer.questionId,
+            })),
+          }),
+        );
       })
       .catch(() => {
         dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE });

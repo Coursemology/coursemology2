@@ -180,3 +180,42 @@ export interface HistoryState {
   answers: Record<number, AnswerHistory>;
   questions: Record<number, QuestionHistory>;
 }
+
+export enum ChatSender {
+  'student' = 0,
+  'codaveri' = 1,
+}
+
+export interface ChatShape {
+  sender: ChatSender;
+  lineNumber: number | null;
+  message: string[];
+  createdAt: string;
+  isError: boolean;
+}
+
+export interface FeedbackShape {
+  path: string;
+  feedbackLines: FeedbackLines[];
+}
+
+interface FeedbackLines {
+  id: string;
+  linenum: number;
+  feedback: string;
+}
+
+export interface Suggestion {
+  id: string;
+  defaultMessage: string;
+}
+
+export interface LiveFeedbackChatData {
+  id: string | number;
+  isLiveFeedbackChatOpen: boolean;
+  isRequestingLiveFeedback: boolean;
+  pendingFeedbackToken: string | null;
+  liveFeedbackId: number | null;
+  chats: ChatShape[];
+  suggestions: Suggestion[];
+}
