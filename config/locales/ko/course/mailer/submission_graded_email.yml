@@ -1,0 +1,7 @@
+ko:
+  course:
+    mailer:
+      submission_graded_email:
+        subject: '%{course}: %{assessment} 제출물이 채점되었습니다'
+        message: >
+          성적을 보려면 %{submission}을 클릭하세요.

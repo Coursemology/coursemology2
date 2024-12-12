@@ -1,0 +1,6 @@
+ko:
+  course:
+    assessment:
+      question:
+        voice_responses:
+          question_type: '오디오 응답'

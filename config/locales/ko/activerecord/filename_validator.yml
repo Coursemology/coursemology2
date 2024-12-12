@@ -1,0 +1,8 @@
+ko:
+  activerecord:
+    errors:
+      messages:
+        filename_validator:
+          invalid_characters: '%{characters}는 허용되지 않습니다.'
+          tailing_dots: '끝에 점이 올 수 없습니다.'
+          whitespaces: '앞이나 뒤에 공백이 올 수 없습니다.'

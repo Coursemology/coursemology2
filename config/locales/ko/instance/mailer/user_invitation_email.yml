@@ -1,0 +1,13 @@
+ko:
+  instance:
+    mailer:
+      user_invitation_email:
+        subject: '%{instance} 인스턴스에 %{role} 역할로 초대합니다'
+        click_here: '여기를 클릭하세요'
+        message: >
+          %{coursemology}의 %{instance} 인스턴스에 등록하도록 초대되었습니다.
+          
+          
+          이 이메일 주소(%{email})로 등록된 계정이 없는 것 같습니다;
+          
+          계정을 생성하고 초대를 수락하려면 %{click_here} 하세요.

@@ -1,0 +1,4 @@
+ko:
+  course:
+    surveys:
+      sidebar_title: :'breadcrumbs.course.survey.controller.index'

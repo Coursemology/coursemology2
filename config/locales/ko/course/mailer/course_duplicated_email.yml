@@ -1,0 +1,10 @@
+ko:
+  course:
+    mailer:
+      course_duplicated_email:
+        subject: '코스 복제 완료: %{new_course}'
+        click_here: '여기를 클릭하세요'
+        message: >
+          %{original_course}의 복제가 %{new_course}로 완료되었습니다.
+          
+          복제된 코스를 보려면 %{click_here}.

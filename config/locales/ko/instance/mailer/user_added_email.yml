@@ -1,0 +1,9 @@
+ko:
+  instance:
+    mailer:
+      user_added_email:
+        subject: '인스턴스 %{instance}에 추가됨'
+        message: >
+          당신은 %{coursemology}의 인스턴스 %{instance}에 추가되었습니다.
+          
+          인스턴스를 보려면 %{email}로 로그인하세요.

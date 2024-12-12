@@ -1,0 +1,9 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        instance/user_role_request:
+          attributes:
+            base:
+              existing_pending_request: >
+                '이미 존재하는 역할 요청이 있습니다. 페이지를 새로고침 해주세요.'

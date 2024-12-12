@@ -1,0 +1,13 @@
+ko:
+  course:
+    mailer:
+      assessment_closing_summary_email:
+        subject: '%{course}: %{assessment}에 대한 알림'
+        message: >
+          다음 학생들에게 %{assessment}이(가) %{time}에 마감된다는 알림 이메일이 발송되었습니다:
+          
+          %{students}
+        message_no_time: >
+          다음 학생들에게 평가 - %{assessment}을(를) 시도하고 제출하라는 알림 이메일이 발송되었습니다:
+          
+          %{students}

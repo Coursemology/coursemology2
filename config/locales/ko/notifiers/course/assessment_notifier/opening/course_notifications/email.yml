@@ -1,0 +1,10 @@
+ko:
+  notifiers:
+    course:
+      assessment_notifier:
+        opening:
+          course_notifications:
+            email:
+              subject: '%{course} 새로운 평가 가능'
+              message: >
+                새로운 평가 가능 : %{assessment}

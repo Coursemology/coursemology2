@@ -1,0 +1,27 @@
+ko:
+  activerecord:
+    attributes:
+      course/assessment/submission:
+        grade: '총점'
+        status: '상태'
+        submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
+        grader: :'activerecord.attributes.course/assessment/answer.grader'
+        graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
+        attempting: '시도 중'
+        submitted: '제출됨'
+        graded: '채점 완료, 미공개'
+        published: '채점 완료'
+    errors:
+      models:
+        course/assessment/submission:
+          attributes:
+            experience_points_record:
+              inconsistent_user: '생성자는 코스 사용자 기록과 동일해야 합니다'
+              absent_award_attributes: >
+                제출물에 대한 보상 속성이 없습니다. 다시 시도하거나 Coursemology
+                팀에 문의하세요.
+          submission_already_exists: '이미 제출물을 생성한 것 같습니다. 다시 시도하시겠습니까?'
+          no_bundles_assigned: '할당된 문제 묶음이 없습니다. 도움을 받으려면 강사에게 문의하세요.'
+          autograded_no_partial_answer: '업데이트된 답변이 아직 다시 제출되지 않았습니다. 제출을 완료하기 전에 모든 답변을 다시 제출하세요.'
+        course/assessment/category:
+          deletion: '마지막 카테고리는 삭제할 수 없습니다'

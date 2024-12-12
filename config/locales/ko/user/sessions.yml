@@ -1,0 +1,5 @@
+ko:
+  user:
+    sessions:
+      new:
+        header: :'layout.navbar.sign_in'

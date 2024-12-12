@@ -1,0 +1,8 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/assessment/question/text_response_comprehension_group:
+          attributes:
+            maximum_group_grade:
+              invalid_group_grade: '질문의 최대 점수를 초과할 수 없습니다'

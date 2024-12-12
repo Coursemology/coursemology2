@@ -1,0 +1,8 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/assessment/answer/text_response:
+          attributes:
+            attachments:
+              unique: '파일 이름은 중복되어선 안 됩니다'

@@ -1,0 +1,8 @@
+ko:
+  activemodel:
+    errors:
+      models:
+        course/experience_points/forum_disbursement:
+          attributes:
+            end_time:
+              invalid_period: '종료 시각은 시작 시각보다 앞설 수 없습니다.'
