@@ -165,6 +165,7 @@ export enum ChatSender {
 export interface ChatShape {
   sender: ChatSender;
   lineNumber: number | null;
+  lineContent: string | null;
   message: string[];
   createdAt: string;
   isError: boolean;
@@ -172,13 +173,18 @@ export interface ChatShape {
 
 export interface FeedbackShape {
   path: string;
-  feedbackLines: FeedbackLine[];
+  annotations: FeedbackLine[];
 }
 
-interface FeedbackLine {
+export interface FeedbackLine {
   id: string;
-  linenum: number;
-  feedback: string;
+  line: number;
+  content: string;
+}
+
+export interface AnswerFile {
+  filename: string;
+  content: string;
 }
 
 export interface Suggestion {
@@ -193,5 +199,6 @@ export interface LiveFeedbackChatData {
   pendingFeedbackToken: string | null;
   liveFeedbackId: number | null;
   chats: ChatShape[];
+  answerFiles: AnswerFile[];
   suggestions: Suggestion[];
 }
