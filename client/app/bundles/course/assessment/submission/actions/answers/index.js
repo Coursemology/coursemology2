@@ -11,6 +11,7 @@ import {
   getFailureFeedbackFromCodaveri,
   getLiveFeedbackFromCodaveri,
   requestLiveFeedbackFromCodaveri,
+  updateAnswerFiles,
 } from '../../reducers/liveFeedbackChats';
 import { getClientVersionForAnswerId } from '../../selectors/answers';
 import translations from '../../translations';
@@ -245,8 +246,14 @@ export function generateLiveFeedback({
         } else {
           // 201, save feedback signed token
           dispatch(
+            updateAnswerFiles({
+              answerId,
+              answerFiles: response.data?.answerFiles,
+            }),
+          );
+          dispatch(
             requestLiveFeedbackFromCodaveri({
-              token: response.data?.data?.token,
+              token: response.data?.tokenId,
               answerId,
               liveFeedbackId: response.data?.liveFeedbackId,
               feedbackUrl: response.data?.feedbackUrl,
@@ -279,7 +286,7 @@ export function fetchLiveFeedback({
         if (response.status === 200) {
           CourseAPI.assessment.submissions.saveLiveFeedback(
             liveFeedbackId,
-            response.data?.data?.feedbackFiles ?? [],
+            response.data?.data?.message ?? { content: '', files: [] },
           );
           handleFeedbackOKResponse({
             answerId,

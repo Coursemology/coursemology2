@@ -4,6 +4,7 @@ import { Divider, Paper } from '@mui/material';
 import { useAppSelector } from 'lib/hooks/store';
 
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
+import { ChatSender } from '../../types';
 
 import ChatInputArea from './ChatInputArea';
 import ConversationArea from './ConversationArea';
@@ -32,13 +33,21 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
     !isRequestingLiveFeedback && !isPollingLiveFeedback;
 
   useEffect(() => {
-    if (scrollableRef.current) {
-      const { clientHeight, scrollHeight } = scrollableRef.current;
-      if (clientHeight < scrollHeight) {
-        scrollableRef.current.scrollTop = scrollableRef.current.scrollHeight;
-      }
+    if (!liveFeedbackChats || liveFeedbackChats?.chats.length === 0) return;
+
+    const lastStudentIndex = liveFeedbackChats.chats
+      .map((chat, i) => (chat.sender === ChatSender.student ? i : -1))
+      .reduce((max, curr) => Math.max(max, curr), -1);
+
+    const targetChat = document.getElementById(
+      `chat-${answerId}-${lastStudentIndex}`,
+    );
+    if (targetChat && scrollableRef.current) {
+      scrollableRef.current.scrollTo({
+        top: targetChat.offsetTop,
+      });
     }
-  });
+  }, [liveFeedbackChats?.chats]);
 
   if (!answerId) return null;
 
