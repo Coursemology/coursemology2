@@ -1,0 +1,7 @@
+ko:
+  course:
+    mailer:
+      course_duplicate_failed_email:
+        subject: '코스 복제 실패: %{original_course}'
+        message: >
+          %{original_course} 복제가 실패했습니다. 나중에 다시 시도하거나 문제가 지속되면 지원팀에 문의하세요.

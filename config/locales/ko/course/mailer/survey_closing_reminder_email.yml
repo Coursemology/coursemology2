@@ -1,0 +1,7 @@
+ko:
+  course:
+    mailer:
+      survey_closing_reminder_email:
+        subject: '%{course}: %{survey}에 대한 알림'
+        message: >
+          %{survey}가 %{time}에 만료될 예정이니 참고하시기 바랍니다.

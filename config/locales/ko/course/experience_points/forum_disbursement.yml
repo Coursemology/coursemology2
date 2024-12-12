@@ -1,0 +1,6 @@
+ko:
+  course:
+    experience_points:
+      forum_disbursement:
+        new:
+          header: :'course.experience_points.disbursement.new.header'

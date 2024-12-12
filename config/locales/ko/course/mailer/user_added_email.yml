@@ -1,0 +1,9 @@
+ko:
+  course:
+    mailer:
+      user_added_email:
+        subject: '%{course} 과정에 추가됨'
+        message: >
+          %{coursemology}의 %{course} 과정에 추가되었습니다.
+          
+          과정을 보려면 %{email}로 로그인하세요.

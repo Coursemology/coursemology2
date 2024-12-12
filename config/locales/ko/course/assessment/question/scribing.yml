@@ -1,0 +1,13 @@
+ko:
+  course:
+    assessment:
+      question:
+        scribing:
+          new:
+            header: '새로운 필기 문제'
+          create:
+            success: '필기 문제가 생성되었습니다.'
+            failure: '필기 문제를 생성할 수 없습니다.'
+          update:
+            failure: '필기 문제를 업데이트할 수 없습니다.'
+          question_type: '필기 문제'

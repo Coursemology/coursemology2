@@ -1,0 +1,36 @@
+ko:
+  instance_user_role_request_mailer:
+    new_role_request:
+      subject: '새로운 역할 요청!'
+      empty: '(지정되지 않음)'
+      message_html: >
+        %{user} (%{email})님이 %{instance} 인스턴스에서 %{role} 역할을 요청했습니다.
+        
+        <strong>조직</strong>
+        
+        %{organization}
+        
+        
+        <strong>직함</strong>
+        
+        %{designation}
+        
+        
+        <strong>이유</strong>
+        
+        %{reason}
+        
+        
+        요청을 검토하려면 %{click_here}를 클릭하세요.
+    role_request_approved:
+      subject: '역할 요청이 승인되었습니다!'
+      message: >
+        Coursemology에서 %{role}로 승인되었습니다!
+        
+        새 강좌를 만들고 시작하려면 %{click_here}를 클릭하세요!
+    role_request_rejected:
+      subject: '역할 요청이 거부되었습니다!'
+      message_empty: >
+        Coursemology에서 %{role}로의 역할 요청이 거부되었습니다!
+      message: >
+        Coursemology에서 %{role}로의 역할 요청이 거부되었습니다! 아래 메시지를 참조하세요: %{message}

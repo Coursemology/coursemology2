@@ -1,0 +1,66 @@
+ko:
+  devise:
+    confirmations:
+      new:
+        resend: '확인 지침 다시 보내기'
+      confirmed: '이메일 주소가 성공적으로 확인되었습니다.'
+      send_instructions: '몇 분 내로 이메일 주소 확인 방법에 대한 안내 이메일을 받게 됩니다. 스팸 폴더도 확인해 주세요.'
+      send_paranoid_instructions: '귀하의 이메일 주소가 저희 데이터베이스에 존재하면, 몇 분 내로 이메일 주소 확인 방법에 대한 안내 이메일을 받게 됩니다. 스팸 폴더도 확인해 주세요.'
+    failure:
+      already_authenticated: '이미 로그인되어 있습니다.'
+      inactive: '계정이 아직 활성화되지 않았습니다.'
+      invalid: '잘못된 %{authentication_keys} 또는 비밀번호입니다.'
+      locked: '계정이 잠겼습니다.'
+      last_attempt: '계정이 잠기기 전에 한 번 더 시도할 수 있습니다.'
+      not_found_in_database: '잘못된 %{authentication_keys} 또는 비밀번호입니다.'
+      timeout: '세션이 만료되었습니다. 계속하려면 다시 로그인하세요.'
+      unauthenticated: '계속하려면 로그인 또는 회원가입이 필요합니다.'
+      unconfirmed: '계속하려면 이메일 주소를 확인해야 합니다.'
+    mailer:
+      confirmation_instructions:
+        subject: '확인 지침'
+      reset_password_instructions:
+        subject: '비밀번호 재설정 지침'
+      unlock_instructions:
+        subject: '잠금 해제 지침'
+    omniauth_callbacks:
+      failure: '%{kind}에서 인증할 수 없습니다. 이유: "%{reason}".'
+      success: '%{kind} 계정에서 성공적으로 인증되었습니다.'
+    passwords:
+      new:
+        title: '비밀번호를 잊으셨나요?'
+        button: '비밀번호 재설정 지침 보내기'
+      no_token: '비밀번호 재설정 이메일에서 오지 않은 경우 이 페이지에 접근할 수 없습니다. 비밀번호 재설정 이메일에서 온 경우, 제공된 전체 URL을 사용했는지 확인하세요.'
+      send_instructions: '비밀번호를 재설정하는 방법에 대한 지침이 포함된 이메일을 몇 분 내로 받게 됩니다. 스팸 폴더도 확인해 주세요.'
+      send_paranoid_instructions: '이메일 주소가 데이터베이스에 존재하는 경우, 비밀번호 복구 링크가 포함된 이메일을 몇 분 내로 받게 됩니다.'
+      updated: '비밀번호가 성공적으로 변경되었습니다. 이제 로그인되었습니다.'
+      updated_not_active: '비밀번호가 성공적으로 변경되었습니다.'
+    registrations:
+      destroyed: '안녕히 가세요! 계정이 성공적으로 취소되었습니다. 곧 다시 뵙기를 바랍니다.'
+      signed_up: '환영합니다! 회원가입이 성공적으로 완료되었습니다.'
+      signed_up_but_inactive: '회원가입이 성공적으로 완료되었습니다. 그러나 계정이 아직 활성화되지 않아 로그인할 수 없습니다.'
+      signed_up_but_locked: '회원가입이 성공적으로 완료되었습니다. 그러나 계정이 잠겨 있어 로그인할 수 없습니다.'
+      signed_up_but_unconfirmed: '확인 링크가 포함된 메시지가 이메일 주소로 전송되었습니다. 링크를 따라 계정을 활성화하세요. 스팸 폴더도 확인해 주세요.'
+      update_needs_confirmation: '계정이 성공적으로 업데이트되었지만, 새 이메일 주소를 확인해야 합니다. 이메일을 확인하고 확인 링크를 따라 새 이메일 주소를 확인하세요.'
+      updated: '계정이 성공적으로 업데이트되었습니다.'
+      new:
+        sign_up: '회원가입'
+        password_hint: '#{length}자 이상'
+    sessions:
+      signed_in: '성공적으로 로그인되었습니다.'
+      signed_out: '성공적으로 로그아웃되었습니다.'
+      already_signed_out: '성공적으로 로그아웃되었습니다.'
+    unlocks:
+      send_instructions: '계정을 잠금 해제하는 방법에 대한 지침이 포함된 이메일을 몇 분 내로 받게 됩니다. 스팸 폴더도 확인해 주세요.'
+      send_paranoid_instructions: '계정이 존재하는 경우, 잠금 해제 방법에 대한 지침이 포함된 이메일을 몇 분 내로 받게 됩니다. 스팸 폴더도 확인해 주세요.'
+      unlocked: '계정이 성공적으로 잠금 해제되었습니다. 계속하려면 로그인하세요.'
+  errors:
+    messages:
+      already_confirmed: '이미 확인되었습니다. 로그인해 보세요.'
+      confirmation_period_expired: '%{period} 내에 확인이 필요합니다. 새로 요청하세요.'
+      expired: '만료되었습니다. 새로 요청하세요.'
+      not_found: '찾을 수 없습니다.'
+      not_locked: '잠겨 있지 않습니다.'
+      not_saved:
+        one: '1개의 오류로 인해 %{resource}를 저장할 수 없습니다:'
+        other: '%{count}개의 오류로 인해 %{resource}를 저장할 수 없습니다:'

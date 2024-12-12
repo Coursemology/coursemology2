@@ -1,0 +1,10 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/assessment/question/text_response_comprehension_point:
+          attributes:
+            point_grade:
+              invalid_point_grade: '그룹의 최대 점수를 초과할 수 없습니다'
+            solutions:
+              more_than_one_compre_lifted_word_solution: '같은 점수에 대한 모든 선택된 단어는 한 줄에 함께 배치되어야 합니다'

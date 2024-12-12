@@ -1,0 +1,14 @@
+ko:
+  common:
+    plain_text_link: '%{text} (%{url})'
+    click_here: '여기를 클릭하세요'
+  helpers:
+    buttons:
+      new: '새 %{model}'
+      create: '생성 %{model}'
+      edit: '편집 %{model}'
+      update: '업데이트 %{model}'
+      delete: '삭제 %{model}'
+      delete_confirm_message: '확실합니까?'
+    password:
+      wrong_password: '잘못된 비밀번호'

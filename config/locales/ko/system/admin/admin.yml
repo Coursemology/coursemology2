@@ -1,0 +1,6 @@
+ko:
+  system:
+    admin:
+      admin:
+        index:
+          header: '관리'

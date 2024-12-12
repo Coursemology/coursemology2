@@ -1,0 +1,14 @@
+ko:
+  activerecord:
+    attributes:
+      course/assessment/assessment:
+        title: '제목'
+    errors:
+      models:
+        course/assessment:
+          attributes:
+            tab:
+              not_in_same_course: >
+                선택한 탭이 평가와 동일한 코스에 있지 않습니다
+            no_test_type_chosen: >
+              점수 및 경험치 계산을 위해 적어도 하나의 테스트 유형을 선택해야 합니다

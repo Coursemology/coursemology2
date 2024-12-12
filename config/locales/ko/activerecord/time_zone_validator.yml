@@ -1,0 +1,6 @@
+ko:
+  activerecord:
+    errors:
+      messages:
+        time_zone_validator:
+          invalid_time_zone: '시간대가 유효하지 않습니다.'

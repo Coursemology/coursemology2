@@ -1,0 +1,10 @@
+ko:
+  course:
+    surveys:
+      survey_download_service:
+        created_at: '타임스탬프 생성'
+        updated_at: '마지막으로 업데이트된 타임스탬프'
+        course_user_id: '코스 사용자 ID'
+        name: '이름'
+        role: '역할'
+        unknown_question_type: '알 수 없는 질문 유형'

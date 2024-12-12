@@ -1,0 +1,7 @@
+ko:
+  course:
+    statistics:
+      name: '이름'
+      type: '학생 유형'
+      email: '이메일'
+      header: '통계'
