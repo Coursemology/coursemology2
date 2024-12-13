@@ -253,8 +253,8 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     return if (!is_codaveri && !live_feedback_enabled) || duplicating?
 
     if !language.codaveri_evaluator_whitelisted?
-      errors.add(:base, 'Language type must be Python 3 and above to activate either codaveri ' \
-                        'evaluator or live feedback')
+      errors.add(:base, 'Language type must be either R, Java, or Python to activate either ' \
+                        'codaveri evaluator or live feedback')
     elsif !question_assessments.empty? &&
           !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
       errors.add(:base,

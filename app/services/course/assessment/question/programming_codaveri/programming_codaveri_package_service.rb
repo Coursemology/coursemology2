@@ -46,6 +46,8 @@ class Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPack
         Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageService.new question, package
       when Coursemology::Polyglot::Language::R
         Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService.new question, package
+      when Coursemology::Polyglot::Language::Java
+        Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageService.new question, package
       else
         raise NotImplementedError
       end
