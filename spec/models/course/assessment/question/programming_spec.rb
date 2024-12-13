@@ -285,9 +285,9 @@ RSpec.describe Course::Assessment::Question::Programming do
         let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
         it 'returns correct validation' do
           expect(subject_evaluator).to_not be_valid
-          expect(subject_evaluator.errors.messages[:base]).to include('Language type must be Python 3 and above ' \
-                                                                      'to activate either codaveri ' \
-                                                                      'evaluator or live feedback')
+          expect(subject_evaluator.errors.messages[:base]).to include('Language type must be either R, Java, ' \
+                                                                      'or Python to activate either ' \
+                                                                      'codaveri evaluator or live feedback')
         end
       end
 
@@ -295,9 +295,9 @@ RSpec.describe Course::Assessment::Question::Programming do
         let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
         it 'returns correct validation' do
           expect(subject_feedback).to_not be_valid
-          expect(subject_feedback.errors.messages[:base]).to include('Language type must be Python 3 and above ' \
-                                                                     'to activate either codaveri ' \
-                                                                     'evaluator or live feedback')
+          expect(subject_feedback.errors.messages[:base]).to include('Language type must be either R, Java, ' \
+                                                                     'or Python to activate either ' \
+                                                                     'codaveri evaluator or live feedback')
         end
       end
 
