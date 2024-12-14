@@ -144,8 +144,8 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         question = create(:course_assessment_question_text_response, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
-        within find('section', text: question.title) { click_button 'Delete' }
-        click_button 'Delete question'
+        within find('section', text: question.title) { find('button[aria-label="Delete"]').click }
+        accept_prompt
 
         expect_toastify('Question successfully deleted.')
         expect(page).not_to have_content(question.title)
