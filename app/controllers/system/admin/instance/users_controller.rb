@@ -33,7 +33,7 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
   private
 
   def load_instance_users
-    @instance_users = @instance.instance_users.includes(user: [:emails, :courses]).
+    @instance_users = @instance.instance_users.human_users.includes(user: [:emails, :courses]).
                       search_and_ordered_by_username(search_param)
     @instance_users = @instance_users.active_in_past_7_days if ActiveRecord::Type::Boolean.new.cast(params[:active])
     @instance_users = @instance_users.where(role: params[:role]) \

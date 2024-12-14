@@ -16,6 +16,7 @@ class InstanceUser < ApplicationRecord
   belongs_to :user, inverse_of: :instance_users
 
   scope :ordered_by_username, -> { joins(:user).merge(User.order(name: :asc)) }
+  scope :human_users, -> { where.not(user_id: [User::SYSTEM_USER_ID, User::DELETED_USER_ID]) }
   scope :active_in_past_7_days, -> { where('last_active_at > ?', 7.days.ago) }
 
   def self.search_and_ordered_by_username(keyword)

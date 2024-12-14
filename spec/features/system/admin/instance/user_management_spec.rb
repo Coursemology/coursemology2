@@ -6,7 +6,7 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
 
   with_tenant(:instance) do
     let(:instance_admin) { create(:instance_user, role: :administrator).user }
-    let!(:prefix) { "testadm-#{rand(36**12).to_s(36)}-usr-" }
+    let!(:prefix) { "testadm-#{SecureRandom.hex}-usr-" }
     let!(:instance_users) do
       (1..2).map do |i|
         create(:instance_user, user_name: "#{prefix}#{i}")
@@ -72,25 +72,23 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
 
       # Generate new users to search so it doesn't conflict with above scenarios
       scenario 'I can search users by name' do
-        search_prefix = "testadm-search-#{rand(36**12).to_s(36)}-usr-"
-        instance_users_to_search = (1..2).map do |i|
-          create(:instance_user, user_name: "#{search_prefix}#{i}")
-        end
+        user_name = SecureRandom.hex
+        instance_users_to_search = create_list(:instance_user, 2, user_name: user_name)
 
         # Search by username
-        search_for_users(search_prefix)
+        search_for_users(user_name)
 
         instance_users_to_search.each do |instance_user|
-          expect(page).to have_text(instance_user.user.name)
+          expect(page).to have_selector('p.user_email', text: instance_user.user.email)
         end
         expect(page).to have_selector('.instance_user', count: 2)
       end
 
       scenario 'I can search users by email' do
-        random_instance_user = InstanceUser.order('RANDOM()').first
+        random_instance_user = InstanceUser.human_users.order('RANDOM()').first
         search_for_users(random_instance_user.user.email)
 
-        expect(page).to have_text(random_instance_user.user.name)
+        expect(page).to have_selector('p.user_email', text: random_instance_user.user.email)
         expect(page).to have_selector('.instance_user', count: 1)
       end
     end

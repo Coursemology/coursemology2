@@ -62,26 +62,30 @@ RSpec.feature 'System: Administration: Users', js: true do
         expect_toastify('User was deleted.')
       end
 
-      scenario 'I can search users' do
+      scenario 'I can search users by name' do
         user_name = SecureRandom.hex
         users_to_search = create_list(:user, 2, name: user_name)
 
-        # Search by username
         find_button('Search').click
         find('div[aria-label="Search"]').find('input').set(user_name)
 
         wait_for_field_debouncing # timeout for search debouncing
         users_to_search.each do |user|
-          expect(page).to have_selector('div.user_name', text: user.name)
+          expect(page).to have_selector('p.user_email', text: user.email)
         end
         expect(all('.system_user').count).to eq(2)
+      end
 
-        # Search by email
+      scenario 'I can search users by email' do
+        user_name = SecureRandom.hex
+        users_to_search = create_list(:user, 2, name: user_name)
+
+        find_button('Search').click
         random_user = users_to_search.sample
         find('div[aria-label="Search"]').find('input').set(random_user.email)
         wait_for_field_debouncing # timeout for search debouncing
 
-        expect(page).to have_selector('div.user_name', text: random_user.name)
+        expect(page).to have_selector('p.user_email', text: random_user.email)
         expect(all('.system_user').count).to eq(1)
       end
     end
