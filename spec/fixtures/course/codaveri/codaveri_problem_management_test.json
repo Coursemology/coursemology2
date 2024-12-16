@@ -95,6 +95,7 @@
     {
       "type": "internal",
       "path": "codon_mapping.csv",
+      "encoding": "utf8",
       "content": "codon,amino_acid,3_letter_abbreviation,1_letter_abbreviation\nAAA,Lysine,Lys,K\nAAC,Asparagine,Asn,N\nAAG,Lysine,Lys,K\nAAU,Asparagine,Asn,N\nACA,Threonine,Thr,T\nACC,Threonine,Thr,T\nACG,Threonine,Thr,T\nACU,Threonine,Thr,T\nAGA,Arginine,Arg,R\nAGC,Serine,Ser,S\nAGG,Arginine,Arg,R\nAGU,Serine,Ser,S\nAUA,Isoleucine,Ile,I\nAUC,Isoleucine,Ile,I\nAUG,Methionine,Met,M\nAUU,Isoleucine,Ile,I\nCAA,Glutamine,Gln,Q\nCAC,Histidine,His,H\nCAG,Glutamine,Gln,Q\nCAU,Histidine,His,H\nCCA,Proline,Pro,P\nCCC,Proline,Pro,P\nCCG,Proline,Pro,P\nCCU,Proline,Pro,P\nCGA,Arginine,Arg,R\nCGC,Arginine,Arg,R\nCGG,Arginine,Arg,R\nCGU,Arginine,Arg,R\nCUA,Leucine,Leu,L\nCUC,Leucine,Leu,L\nCUG,Leucine,Leu,L\nCUU,Leucine,Leu,L\nGAA,Glutamic acid,Glu,E\nGAC,Aspartic acid,Asp,D\nGAG,Glutamic acid,Glu,E\nGAU,Aspartic acid,Asp,D\nGCA,Alanine,Ala,A\nGCC,Alanine,Ala,A\nGCG,Alanine,Ala,A\nGCU,Alanine,Ala,A\nGGA,Glycine,Gly,G\nGGC,Glycine,Gly,G\nGGG,Glycine,Gly,G\nGGU,Glycine,Gly,G\nGUA,Valine,Val,V\nGUC,Valine,Val,V\nGUG,Valine,Val,V\nGUU,Valine,Val,V\nUAA,Stop codon,STOP,_\nUAC,Tyrosine,Tyr,Y\nUAG,Stop codon,STOP,_\nUAU,Tyrosine,Tyr,Y\nUCA,Serine,Ser,S\nUCC,Serine,Ser,S\nUCG,Serine,Ser,S\nUCU,Serine,Ser,S\nUGA,Stop codon,STOP,_\nUGC,Cysteine,Cys,C\nUGG,Tryptophan,Trp,W\nUGU,Cysteine,Cys,C\nUUA,Leucine,Leu,L\nUUC,Phenylalanine,Phe,F\nUUG,Leucine,Leu,L\nUUU,Phenylalanine,Phe,F"
     }
   ]

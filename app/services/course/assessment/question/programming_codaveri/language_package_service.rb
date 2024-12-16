@@ -108,7 +108,8 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
     {
       type: '',
       path: '',
-      content: ''
+      content: '',
+      encoding: ''
     }
   end
 end
