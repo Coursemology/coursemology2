@@ -1,6 +1,5 @@
 import { FC, ReactNode, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 import { WorkflowState } from 'types/course/assessment/submission/submission';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
@@ -98,7 +97,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
           });
         }}
       >
-        <Box>{datum.answers![index].grade.toFixed(1)}</Box>
+        {datum.answers![index].grade.toFixed(1)}
       </div>
     );
   };
@@ -108,11 +107,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
     maxGrade: number,
   ): ReactNode => {
     const className = getClassNameForMarkCell(totalGrade, maxGrade);
-    return (
-      <div className={className}>
-        <Box>{totalGrade.toFixed(1)}</Box>
-      </div>
-    );
+    return <div className={className}>{totalGrade.toFixed(1)}</div>;
   };
 
   const answerColumns: ColumnTemplate<MainSubmissionInfo>[] = Array.from(
@@ -125,7 +120,7 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.answers?.[index].grade === 'number' ? (
+          return typeof datum.answers?.[index]?.grade === 'number' ? (
             renderAnswerGradeClickableCell(index, datum)
           ) : (
             <div />
@@ -189,13 +184,12 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       sortable: true,
       cell: (datum) => (
         <SubmissionWorkflowState
-          className="w-full"
           linkTo={getEditSubmissionURL(courseId, assessmentId, datum.id)}
           opensInNewTab
           workflowState={datum.workflowState ?? workflowStates.Unstarted}
         />
       ),
-      className: 'center',
+      className: 'text-left',
     },
     ...answerColumns,
     {

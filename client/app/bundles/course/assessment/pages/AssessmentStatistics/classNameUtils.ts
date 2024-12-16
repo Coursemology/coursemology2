@@ -47,8 +47,8 @@ export const getClassNameForMarkCell = (
     maxGrade / 2,
   );
   return grade >= maxGrade / 2
-    ? `${greenBackgroundColorClassName[gradientLevel]} p-[1rem]`
-    : `${redBackgroundColorClassName[gradientLevel]} p-[1rem]`;
+    ? `${greenBackgroundColorClassName[gradientLevel]} p-1.5`
+    : `${redBackgroundColorClassName[gradientLevel]} p-1.5`;
 };
 
 // for attempt count cell, the difference in color means the following:
@@ -59,10 +59,10 @@ export const getClassNameForAttemptCountCell = (
   attempt: AttemptInfo,
 ): string => {
   if (!attempt.isAutograded || attempt.correct === null) {
-    return 'bg-gray-300 p-[1rem]';
+    return 'bg-gray-300 p-1.5';
   }
 
-  return attempt.correct ? 'bg-green-300 p-[1rem]' : 'bg-red-300 p-[1rem]';
+  return attempt.correct ? 'bg-green-300 p-1.5' : 'bg-red-300 p-1.5';
 };
 
 export const getClassnameForLiveFeedbackCell = (

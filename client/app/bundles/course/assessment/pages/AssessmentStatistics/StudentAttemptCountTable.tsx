@@ -1,6 +1,5 @@
 import { FC, ReactNode, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 import { WorkflowState } from 'types/course/assessment/submission/submission';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
@@ -100,7 +99,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
           });
         }}
       >
-        <Box>{datum.attemptStatus![index].attemptCount}</Box>
+        {datum.attemptStatus![index].attemptCount}
       </div>
     );
   };
@@ -115,7 +114,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.attemptStatus?.[index].attemptCount ===
+          return typeof datum.attemptStatus?.[index]?.attemptCount ===
             'number' ? (
             renderAttemptCountClickableCell(index, datum)
           ) : (
@@ -180,7 +179,6 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
       sortable: true,
       cell: (datum) => (
         <SubmissionWorkflowState
-          className="w-full"
           linkTo={getEditSubmissionURL(courseId, assessmentId, datum.id)}
           opensInNewTab
           workflowState={datum.workflowState ?? workflowStates.Unstarted}

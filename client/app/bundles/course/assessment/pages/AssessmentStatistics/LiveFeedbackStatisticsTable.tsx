@@ -193,7 +193,6 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       sortable: true,
       cell: (datum) => (
         <SubmissionWorkflowState
-          className="w-100"
           opensInNewTab
           workflowState={datum.workflowState ?? workflowStates.Unstarted}
         />
