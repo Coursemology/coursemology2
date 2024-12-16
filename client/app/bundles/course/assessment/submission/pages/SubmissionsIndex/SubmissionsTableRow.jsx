@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Warning } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
@@ -30,7 +31,7 @@ import submissionsTranslations from './translations';
 
 const styles = {
   tableCell: {
-    padding: '0.5em',
+    padding: '0 0.5em',
     textOverflow: 'initial',
     whiteSpace: 'normal',
     alignItems: 'center',
@@ -53,6 +54,21 @@ const renderPhantomUserIcon = (submission) => {
     return <GhostIcon data-tooltip-id="phantom-user" fontSize="small" />;
   }
   return null;
+};
+
+const renderUnpublishedWarning = (submission) => {
+  if (submission.workflowState !== workflowStates.Graded) return null;
+  return (
+    <span className="d-inline-block pl-1.5">
+      <div
+        className="flex align-center"
+        data-tooltip-id="unpublished-grades"
+        data-tooltip-offset={8}
+      >
+        <Warning fontSize="inherit" />
+      </div>
+    </span>
+  );
 };
 
 const SubmissionsTableRow = (props) => {
@@ -242,11 +258,9 @@ const SubmissionsTableRow = (props) => {
             </Link>
           </span>
         </TableCell>
-        <TableCell style={tableCenterCellStyle}>
+        <TableCell style={styles.tableCell}>
           <SubmissionWorkflowState
-            className={
-              submission.workflowState !== workflowStates.Graded && 'w-36'
-            }
+            icon={renderUnpublishedWarning(submission)}
             linkTo={getEditSubmissionURL(courseId, assessmentId, submission.id)}
             workflowState={submission.workflowState}
           />

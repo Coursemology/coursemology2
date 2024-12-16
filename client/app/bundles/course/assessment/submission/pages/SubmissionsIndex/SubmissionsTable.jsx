@@ -35,7 +35,7 @@ const styles = {
     display: 'none',
   },
   tableCell: {
-    padding: '0.5em',
+    padding: '0 0.5em',
     textOverflow: 'initial',
     whiteSpace: 'nowrap',
     wordBreak: 'break-word',
@@ -364,7 +364,7 @@ export default class SubmissionsTable extends Component {
           <TableHead>
             <TableRow>
               {tableHeaderColumnFor('userName')}
-              {tableHeaderCenterColumnFor('submissionStatus')}
+              {tableHeaderColumnFor('submissionStatus')}
               {tableHeaderCenterColumnFor('grade')}
               {assessment.gamified
                 ? tableHeaderCenterColumnFor('experiencePoints')
