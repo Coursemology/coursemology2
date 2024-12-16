@@ -22,13 +22,13 @@ const styles = {
 };
 
 const translations = defineMessages({
-  deletionSuccess: {
-    id: 'course.users.UserManagementButtons.deletionSuccess',
-    defaultMessage: 'User was deleted.',
+  deletionScheduled: {
+    id: 'course.users.UserManagementButtons.deletionScheduled',
+    defaultMessage: '{role} {name} ({email}) has been scheduled for deletion.',
   },
   deletionFailure: {
     id: 'course.users.UserManagementButtons.deletionFailure',
-    defaultMessage: 'Failed to delete user.',
+    defaultMessage: 'Failed to delete {role} {name} ({email}).',
   },
   deletionConfirm: {
     id: 'course.users.UserManagementButtons.deletionConfirm',
@@ -41,17 +41,30 @@ const UserManagementButtons: FC<Props> = (props) => {
   const dispatch = useAppDispatch();
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const userTranslationDict = {
+    role: COURSE_USER_ROLES[user.role],
+    name: user.name,
+    email: user.email,
+  };
+
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
     return dispatch(deleteUser(user.id))
       .then(() => {
-        toast.success(intl.formatMessage(translations.deletionSuccess));
+        toast.success(
+          intl.formatMessage(
+            translations.deletionScheduled,
+            userTranslationDict,
+          ),
+        );
       })
       .finally(() => {
         setIsDeleting(false);
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.deletionFailure));
+        toast.error(
+          intl.formatMessage(translations.deletionFailure, userTranslationDict),
+        );
         throw error;
       })
       .finally(() => setIsDeleting(false));

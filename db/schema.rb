@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_04_104627) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -1118,6 +1118,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_04_104627) do
     t.integer "updater_id", null: false
     t.bigint "reference_timeline_id"
     t.integer "timeline_algorithm", default: 0, null: false
+    t.datetime "deleted_at"
     t.index ["course_id", "user_id"], name: "index_course_users_on_course_id_and_user_id", unique: true
     t.index ["course_id"], name: "fk__course_users_course_id"
     t.index ["creator_id"], name: "fk__course_users_creator_id"

@@ -8,6 +8,15 @@ class Course::UsersController < Course::ComponentController
   def index
   end
 
+  def destroy
+    if @course_user.deleted_at.nil? && @course_user.update_attribute(:deleted_at, Time.now)
+      Course::UserDeletionJob.perform_later(current_course, @course_user, current_user)
+      head :ok
+    else
+      head :bad_request
+    end
+  end
+
   def show
     @skills_service = Course::SkillsMasteryPreloadService.new(current_course,
                                                               @course_user)
