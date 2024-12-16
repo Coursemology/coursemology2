@@ -45,6 +45,8 @@ class Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService <
 
   # Finds and extracts all contents of additional files in the root package folder
   # (excluding the default Makefile and .meta files).
+  # All data files uploaded through the Coursemology UI will be extracted in this function.
+  # The remaining functions are to capture files manually added to the package ZIP by the user.
   def extract_supporting_main_files
     main_files = @package.main_files.compact.to_h
     main_filenames = main_files.keys
@@ -102,13 +104,19 @@ class Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService <
   # @param [Pathname] pathname The pathname of the file.
   # @param [String] content The content of the file.
   def extract_supporting_file(filename, content)
-    supporting_solution_object = default_codaveri_data_file_template
+    supporting_file_object = default_codaveri_data_file_template
 
-    supporting_solution_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
-    supporting_solution_object[:path] = filename.to_s
-    supporting_solution_object[:content] = content
+    supporting_file_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
+    supporting_file_object[:path] = filename.to_s
+    if content.force_encoding('UTF-8').valid_encoding?
+      supporting_file_object[:content] = content
+      supporting_file_object[:encoding] = 'utf8'
+    else
+      supporting_file_object[:content] = Base64.strict_encode64(content)
+      supporting_file_object[:encoding] = 'base64'
+    end
 
-    @data_files.append(supporting_solution_object)
+    @data_files.append(supporting_file_object)
   end
 
   # Extracts test cases from the built dummy reports and append all the test cases to the
@@ -121,7 +129,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService <
 
         # combine all extracted data
         test_case_object[:index] = test_cases_with_id[test_case.name]
-        test_case_object[:timeout] = @question.time_limit unless @question.time_limit.nil?
+        test_case_object[:timeout] = @question.time_limit * 1000 if @question.time_limit # in millisecond
         test_case_object[:input] = test_case.expression
         test_case_object[:output] = test_case.expected
         test_case_object[:hint] = test_case.hint

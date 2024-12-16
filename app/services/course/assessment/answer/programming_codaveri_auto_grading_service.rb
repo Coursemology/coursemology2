@@ -128,7 +128,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
 
       error_message_sigkill = I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
       messages ||= {
-        error: (result.exit_code == 137) ? error_message_sigkill : result.stderr,
+        error: (result.exit_code == 137 || result.exit_signal == 'SIGKILL') ? error_message_sigkill : result.stderr,
         hint: test_case.hint,
         output: result.output,
         code: result.exit_code,
