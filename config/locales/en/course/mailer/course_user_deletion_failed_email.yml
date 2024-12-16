@@ -1,0 +1,8 @@
+en:
+  course:
+    mailer:
+      course_user_deletion_failed_email:
+        subject: 'User %{course_user_name} Failed to be Deleted from %{course_name}'
+        message: >
+          Deletion of %{course_user_name} from the Course %{course_name} has failed.
+          Please try again later or contact support if the problem persists.
