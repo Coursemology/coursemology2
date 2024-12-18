@@ -6,7 +6,7 @@
     "defaultMessage": "모든 공지사항"
   },
   "app.BrandingItem.coursemology": {
-    "defaultMessage": "코스몰로지"
+    "defaultMessage": "Coursemology"
   },
   "app.BrandingItem.goToOtherCourses": {
     "defaultMessage": "강좌"
@@ -251,6 +251,24 @@
   "course.achievement.AchievementAward.AchievementAwardManager.saveChanges": {
     "defaultMessage": "변경 사항 저장"
   },
+  "course.achievement.AchievementAward.AchievementAwardSummary.awardedStudents": {
+    "defaultMessage": "수상한 학생들"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.name": {
+    "defaultMessage": "이름"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.normalStudent": {
+    "defaultMessage": "평범한 학생"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.phantomStudent": {
+    "defaultMessage": "팬텀 학생"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.revokedStudents": {
+    "defaultMessage": "퇴학생"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.userType": {
+    "defaultMessage": "사용자 유형"
+  },
   "course.achievement.AchievementAward.awardAchievement": {
     "defaultMessage": "성과 부여"
   },
@@ -323,8 +341,26 @@
   "course.achievement.AchievementShow.studentsWithAchievement": {
     "defaultMessage": "이 성과를 가진 학생들"
   },
+  "course.achievement.AchievementTable.actions": {
+    "defaultMessage": "행동"
+  },
+  "course.achievement.AchievementTable.badge": {
+    "defaultMessage": "배지"
+  },
+  "course.achievement.AchievementTable.description": {
+    "defaultMessage": "설명"
+  },
   "course.achievement.AchievementTable.noAchievement": {
     "defaultMessage": "성과 없음"
+  },
+  "course.achievement.AchievementTable.published": {
+    "defaultMessage": "출판된"
+  },
+  "course.achievement.AchievementTable.requirements": {
+    "defaultMessage": "요구 사항"
+  },
+  "course.achievement.AchievementTable.title": {
+    "defaultMessage": "제목"
   },
   "course.achievement.AchievementsIndex.achievements": {
     "defaultMessage": "성과"
@@ -470,6 +506,9 @@
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "일부"
   },
+  "course.admin.CodaveriSettings.assessments": {
+    "defaultMessage": "평가"
+  },
   "course.admin.CodaveriSettings.codaveriEngine": {
     "defaultMessage": "코다베리 엔진"
   },
@@ -503,17 +542,17 @@
   "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
     "defaultMessage": "{enabled, select, true {활성화} other {비활성화}} {questionCount}개의 프로그래밍 질문에 대한 실시간 피드백 {title}?"
   },
-  "course.admin.CodaveriSettings.enableIsOnlyITSP": {
-    "defaultMessage": "ITSP 활성화"
-  },
-  "course.admin.CodaveriSettings.error": {
-    "defaultMessage": "코다베리 설정을 업데이트하는 동안 오류가 발생했습니다."
-  },
   "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
     "defaultMessage": "코다베리 평가자 설정을 업데이트하는 동안 오류가 발생했습니다."
   },
   "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
     "defaultMessage": "실시간 피드백 설정을 업데이트하는 동안 오류가 발생했습니다."
+  },
+  "course.admin.CodaveriSettings.evaluatorUpdateSuccess": {
+    "defaultMessage": "{question}은(는) 이제 {evaluator} 평가자를 사용 중입니다"
+  },
+  "course.admin.CodaveriSettings.expandAll": {
+    "defaultMessage": "모든 질문 펼치기"
   },
   "course.admin.CodaveriSettings.feedbackWorkflow": {
     "defaultMessage": "자동 게시 제출 댓글"
@@ -542,6 +581,15 @@
   "course.admin.CodaveriSettings.liveFeedbackSettings": {
     "defaultMessage": "실시간 피드백"
   },
+  "course.admin.CodaveriSettings.programmingQuestionSettings": {
+    "defaultMessage": "프로그래밍 문제 설정"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettingsSubtitle": {
+    "defaultMessage": "다양한 평가에서 프로그래밍 문제의 Codaveri를 평가자로 활성화/비활성화합니다."
+  },
+  "course.admin.CodaveriSettings.succesfulUpdateAllEvaluator": {
+    "defaultMessage": "모든 질문이 {evaluator} 평가자를 사용하도록 성공적으로 업데이트되었습니다"
+  },
   "course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled": {
     "defaultMessage": "모든 질문에 대해 {liveFeedbackEnabled, select, true {활성화} other {비활성화}}된 실시간 피드백이 성공적으로 {liveFeedbackEnabled, select, true {활성화} other {비활성화}}되었습니다"
   },
@@ -556,6 +604,9 @@
   },
   "course.admin.ComponentSettings.errorOccurredWhenUpdatingComponents": {
     "defaultMessage": "컴포넌트 설정을 업데이트하는 동안 오류가 발생했습니다."
+  },
+  "course.admin.ComponentSettings.settingUpComponent": {
+    "defaultMessage": "이 강좌를 위한 구성 요소 설정"
   },
   "course.admin.CourseSettings.allowUsersToSendEnrolmentRequests": {
     "defaultMessage": "사용자가 등록 요청을 보낼 수 있도록 허용"
@@ -797,6 +848,9 @@
   "course.admin.LessonPlanSettings.lessonPlanItemSettings": {
     "defaultMessage": "교육 계획 항목 설정"
   },
+  "course.admin.LessonPlanSettings.lessonPlanSettings": {
+    "defaultMessage": "수업 계획 설정"
+  },
   "course.admin.LessonPlanSettings.noLessonPlanItems": {
     "defaultMessage": "교육 계획 디스플레이를 구성할 수 있는 교육 계획 항목이 없습니다."
   },
@@ -992,6 +1046,51 @@
   "course.admin.courseSettings": {
     "defaultMessage": "강좌 설정"
   },
+  "course.admin.storiesSettings.autoCreateAccounts": {
+    "defaultMessage": "Cikgo의 사용자 계정 및 채팅방은 아직 존재하지 않는 경우 자동으로 생성됩니다. Cikgo와 공유된 정보는 <ourPpLink>개인정보 처리방침</ourPpLink> 및 <cikgoPpLink>Cikgo의 개인정보 처리방침</cikgoPpLink>에 따라 관리됩니다."
+  },
+  "course.admin.storiesSettings.integrationHint": {
+    "defaultMessage": "Cikgo에 대한 귀하의 강좌를 이 강좌와 통합하려면 여기에 해당 통합 키를 입력하십시오. 이 강좌가 Cikgo와 통합되면 무슨 일이 일어날지 여기 있습니다."
+  },
+  "course.admin.storiesSettings.integrationSettings": {
+    "defaultMessage": "통합 설정"
+  },
+  "course.admin.storiesSettings.learnTitle": {
+    "defaultMessage": "페이지 제목 배우기"
+  },
+  "course.admin.storiesSettings.leaveEmptyToUseDefaultTitle": {
+    "defaultMessage": "기본 '학습' 제목을 사용하려면 비워 두세요."
+  },
+  "course.admin.storiesSettings.onlyOwnersCanManage": {
+    "defaultMessage": "Cikgo와 이 과정의 통합은 귀하와 소유자, 관리자만 설정할 수 있습니다."
+  },
+  "course.admin.storiesSettings.pingError": {
+    "defaultMessage": "Cikgo에 연결하는 데 문제가 있었습니다. 나중에 다시 시도해보실 수 있습니다."
+  },
+  "course.admin.storiesSettings.publishTaskCompletions": {
+    "defaultMessage": "학생의 제출 상태는 Cikgo의 채팅방에 반영됩니다."
+  },
+  "course.admin.storiesSettings.pushKey": {
+    "defaultMessage": "통합 키"
+  },
+  "course.admin.storiesSettings.pushKeyError": {
+    "defaultMessage": "이 통합 키는 Cikgo의 유효한 강좌를 가리키지 않습니다. Cikgo의 설정을 확인하고 다시 시도해주세요."
+  },
+  "course.admin.storiesSettings.pushKeyHint": {
+    "defaultMessage": "통합 키는 기밀사항은 아니지만, 조심히 다뤄야 합니다."
+  },
+  "course.admin.storiesSettings.pushKeyPointsToCourse": {
+    "defaultMessage": "이 통합 키는 Cikgo의 <link>{course}</link>을(를) 가리킵니다."
+  },
+  "course.admin.storiesSettings.redirects": {
+    "defaultMessage": "학생들이 이 <link>코스 루트 URL</link>에 접속하면, 학습 페이지로 리디렉션됩니다. 홈페이지는 여전히 사이드바에서 접근할 수 있습니다."
+  },
+  "course.admin.storiesSettings.storiesSettings": {
+    "defaultMessage": "이야기 설정"
+  },
+  "course.admin.storiesSettings.syncs": {
+    "defaultMessage": "이 강좌에 게시된 평가, 비디오 및 설문 조사 자료는 자원으로서 Cikgo와 동기화되어 제공됩니다."
+  },
   "course.announcement.AnnouncementsDisplay.searchBarPlaceholder": {
     "defaultMessage": "제목이나 내용으로 검색"
   },
@@ -1103,14 +1202,17 @@
   "course.assessment.AssessmentForm.blockStudentViewingAfterSubmittedHint": {
     "defaultMessage": "학생은 성적이 발표된 후에만 제출물을 볼 수 있습니다."
   },
+  "course.assessment.AssessmentForm.blocksAccessesFromInvalidSUS": {
+    "defaultMessage": "잘못된 UA를 가진 브라우저로부터의 접근 차단"
+  },
+  "course.assessment.AssessmentForm.blocksAccessesFromInvalidSUSHint": {
+    "defaultMessage": "활성화된 경우, 지정된 SUS를 포함하지 않는 무효한 UA를 사용하는 응시자는 이 평가에 액세스하는 것이 차단됩니다. 강사는 세션 잠금 비밀번호로 액세스를 재설정할 수 있습니다. 재설정된 브라우저 세션에서의 하트비트는 PulseGrid에서 유효로 표시됩니다."
+  },
   "course.assessment.AssessmentForm.bonusEndAt": {
     "defaultMessage": "보너스 종료 시각"
   },
   "course.assessment.AssessmentForm.calculateGradeWith": {
     "defaultMessage": "등급 및 EXP 계산"
-  },
-  "course.assessment.AssessmentForm.canEnableCodaveriInComponents": {
-    "defaultMessage": "이 기능을 구성 요소에서 활성화하려면 강좌 관리자나 소유자에게 연락하십시오."
   },
   "course.assessment.AssessmentForm.delayedGradePublication": {
     "defaultMessage": "연기된 성적 발표 활성화"
@@ -1172,11 +1274,23 @@
   "course.assessment.AssessmentForm.hasPersonalTimesHint": {
     "defaultMessage": "이 항목의 타이밍은 학습 속도에 따라 사용자를 위해 자동으로 조정됩니다."
   },
+  "course.assessment.AssessmentForm.hasTimeLimit": {
+    "defaultMessage": "타이머가 종료되면 자동으로 제출됩니다"
+  },
+  "course.assessment.AssessmentForm.hasTimeLimitHint": {
+    "defaultMessage": "활성화되면 각 제출물은 자체 타이머를 가지고 있으며 해당 타이머가 종료되면 자동으로 완료됩니다."
+  },
   "course.assessment.AssessmentForm.hasToBeMoreThanMinInterval": {
     "defaultMessage": "최소값보다 커야 합니다."
   },
   "course.assessment.AssessmentForm.hasToBeMoreThanValueMs": {
     "defaultMessage": "적어도 3000ms 이상이어야 합니다."
+  },
+  "course.assessment.AssessmentForm.hasToBeNumber": {
+    "defaultMessage": "유효한 숫자여야 합니다."
+  },
+  "course.assessment.AssessmentForm.hasToBePositive": {
+    "defaultMessage": "양수여야 합니다."
   },
   "course.assessment.AssessmentForm.hasToBePositiveInteger": {
     "defaultMessage": "86,400,000ms 미만의 양의 정수여야 합니다"
@@ -1190,6 +1304,12 @@
   "course.assessment.AssessmentForm.intervalHint": {
     "defaultMessage": "학생의 브라우저에서 하트비트가 전송되는 빈도를 제어합니다. 간격은 이 두 범위 사이에서 무작위화됩니다."
   },
+  "course.assessment.AssessmentForm.koditsuDisabledInCourse": {
+    "defaultMessage": "코스 설정에서 Koditsu 시험을 활성화하려면 코스 관리자에게 문의하십시오."
+  },
+  "course.assessment.AssessmentForm.liveFeedback": {
+    "defaultMessage": "도움받기"
+  },
   "course.assessment.AssessmentForm.maxInterval": {
     "defaultMessage": "최대 간격"
   },
@@ -1199,8 +1319,14 @@
   "course.assessment.AssessmentForm.minInterval": {
     "defaultMessage": "최소 간격"
   },
+  "course.assessment.AssessmentForm.minutes": {
+    "defaultMessage": "분"
+  },
   "course.assessment.AssessmentForm.modeSwitchingHint": {
     "defaultMessage": "이 과제에 대한 제출물이 이미 있으므로 더 이상 채점 방식을 변경할 수 없습니다."
+  },
+  "course.assessment.AssessmentForm.needSUSAndSessionUnlockPassword": {
+    "defaultMessage": "이 작업을 활성화하려면 SUS 및 세션 잠금 비밀번호를 지정해야 합니다."
   },
   "course.assessment.AssessmentForm.noProgrammingQuestion": {
     "defaultMessage": "이 평가에서 실시간 피드백을 활성화하려면 적어도 하나의 프로그래밍 질문을 추가해야 합니다."
@@ -1229,11 +1355,17 @@
   "course.assessment.AssessmentForm.personalisedTimelines": {
     "defaultMessage": "개별화 시간표"
   },
+  "course.assessment.AssessmentForm.proctorWithKoditsu": {
+    "defaultMessage": "Kositsu을 사용하여 프록터 시험"
+  },
   "course.assessment.AssessmentForm.published": {
     "defaultMessage": "게시됨"
   },
   "course.assessment.AssessmentForm.publishedHint": {
     "defaultMessage": "모두가 이 평가를 볼 수 있습니다."
+  },
+  "course.assessment.AssessmentForm.questionsIncompatibleWithKoditsu": {
+    "defaultMessage": "Koditsu에서 감독을 활성화하기 전에 이 평가의 모든 질문이 Koditsu와 호환되는지 확인해주세요."
   },
   "course.assessment.AssessmentForm.secret": {
     "defaultMessage": "비밀 UA 서브스트링 (SUS)"
@@ -1243,9 +1375,6 @@
   },
   "course.assessment.AssessmentForm.sessionPassword": {
     "defaultMessage": "세션 잠금 비밀번호"
-  },
-  "course.assessment.AssessmentForm.sessionPasswordHint": {
-    "defaultMessage": "이상적으로는 이 비밀번호를 학생에게 제공하지 않아야 합니다."
   },
   "course.assessment.AssessmentForm.sessionProtection": {
     "defaultMessage": "세션 보호 활성화"
@@ -1291,6 +1420,9 @@
   },
   "course.assessment.AssessmentForm.timeBonusExp": {
     "defaultMessage": "시간 보너스 EXP"
+  },
+  "course.assessment.AssessmentForm.timeLimit": {
+    "defaultMessage": "시간 제한"
   },
   "course.assessment.AssessmentForm.title": {
     "defaultMessage": "제목"
@@ -1373,6 +1505,54 @@
   "course.assessment.edit.update": {
     "defaultMessage": "저장"
   },
+  "course.assessment.generation.allFieldsLocked": {
+    "defaultMessage": "모든 필드가 잠겨 있어서 아무것도 생성할 수 없습니다."
+  },
+  "course.assessment.generation.confirmDeleteConversation": {
+    "defaultMessage": "정말 \"{title}\"을(를) 삭제하고 모든 히스토리 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다!"
+  },
+  "course.assessment.generation.exportAction": {
+    "defaultMessage": "수출"
+  },
+  "course.assessment.generation.exportClose": {
+    "defaultMessage": "닫다"
+  },
+  "course.assessment.generation.exportDialogHeader": {
+    "defaultMessage": "질문 내보내기 ({exportCount} 선택됨)"
+  },
+  "course.assessment.generation.exportError": {
+    "defaultMessage": "이 질문을 내보내는 중에 오류가 발생했습니다."
+  },
+  "course.assessment.generation.generateError": {
+    "defaultMessage": "질문 \"{title}\" 생성 중 오류가 발생했습니다."
+  },
+  "course.assessment.generation.generatePage": {
+    "defaultMessage": "프로그래밍 문제 생성"
+  },
+  "course.assessment.generation.generateQuestion": {
+    "defaultMessage": "생성하다"
+  },
+  "course.assessment.generation.generateSuccess": {
+    "defaultMessage": "세대 {title} 성공적으로 생성됨."
+  },
+  "course.assessment.generation.languageField": {
+    "defaultMessage": "언어"
+  },
+  "course.assessment.generation.newTab": {
+    "defaultMessage": "새로운"
+  },
+  "course.assessment.generation.openExportDialog": {
+    "defaultMessage": "수출"
+  },
+  "course.assessment.generation.promptPlaceholder": {
+    "defaultMessage": "여기에 무언가를 입력하세요..."
+  },
+  "course.assessment.generation.resetConversation": {
+    "defaultMessage": "재설정"
+  },
+  "course.assessment.generation.showInactive": {
+    "defaultMessage": "비활성 항목 표시"
+  },
   "course.assessment.liveFeedback.comments": {
     "defaultMessage": "댓글"
   },
@@ -1382,11 +1562,11 @@
   "course.assessment.liveFeedback.lineHeader": {
     "defaultMessage": "{lineNumber} 줄"
   },
-  "course.assessment.liveFeedback.liveFeedbackName": {
-    "defaultMessage": "라이브 피드백"
-  },
   "course.assessment.liveFeedback.questionTitle": {
     "defaultMessage": "질문 {index}"
+  },
+  "course.assessment.monitoring.accessGrantedForThisSessionOnly": {
+    "defaultMessage": "이 브라우저 세션에 대해서만 액세스가 허용됩니다."
   },
   "course.assessment.monitoring.alivePresenceHint": {
     "defaultMessage": "마지막 하트비트가 시간 내에 수신되었습니다."
@@ -1397,14 +1577,29 @@
   "course.assessment.monitoring.blankField": {
     "defaultMessage": "(빈칸)"
   },
+  "course.assessment.monitoring.blocksAccessesFromInvalidSUS": {
+    "defaultMessage": "미인증 브라우저로부터의 접근 차단"
+  },
+  "course.assessment.monitoring.blocksAccessesFromInvalidSUSHint": {
+    "defaultMessage": "활성화된 경우, 무단 브라우저를 사용하는 응시자는 이 평가에 액세스할 수 없습니다. 강사는 세션 잠금 비밀번호로 액세스를 재정의할 수 있습니다. 재정의된 브라우저 세션에서의 심박수는 항상 PulseGrid에서 유효합니다(녹색)."
+  },
+  "course.assessment.monitoring.browserAuthorizationMethod": {
+    "defaultMessage": "브라우저 인증 방법"
+  },
+  "course.assessment.monitoring.browserAuthorizationMethodHint": {
+    "defaultMessage": "세션이 유효하거나 무효화되는 방법을 선택하십시오. 변경 사항은 모든 세션 및 하트비트에 즉시 적용되며 PulseGrid에서 실시간으로 업데이트됩니다."
+  },
   "course.assessment.monitoring.cannotConnectToLiveMonitoringChannel": {
     "defaultMessage": "실시간 모니터링 채널에 연결하는 동안 오류가 발생했습니다."
   },
   "course.assessment.monitoring.connected": {
     "defaultMessage": "연결됨"
   },
-  "course.assessment.monitoring.connectedToLiveMonitoringChannel": {
-    "defaultMessage": "실시간 모니터링 채널에 연결됨"
+  "course.assessment.monitoring.connecting": {
+    "defaultMessage": "연결"
+  },
+  "course.assessment.monitoring.deltaFromPreviousHeartbeat": {
+    "defaultMessage": "{ms} 밀리초 전의 심박동으로부터"
   },
   "course.assessment.monitoring.detailsOfNHeartbeats": {
     "defaultMessage": "마지막 {n}개 하트비트의 세부사항"
@@ -1412,20 +1607,44 @@
   "course.assessment.monitoring.disconnected": {
     "defaultMessage": "연결 해제됨"
   },
-  "course.assessment.monitoring.disconnectedFromLiveMonitoringChannel": {
-    "defaultMessage": "실시간 모니터링 채널 연결 해제됨"
+  "course.assessment.monitoring.enableBrowserAuthorization": {
+    "defaultMessage": "이 평가에 접근하는 브라우저를 승인하세요"
+  },
+  "course.assessment.monitoring.enableBrowserAuthorizationHint": {
+    "defaultMessage": "활성화된 경우, PulseGrid는 선택한 인증 방법에 따라 응시자가 허가된 브라우저에서 이 평가에 접근하는지 여부를 추가로 확인합니다."
+  },
+  "course.assessment.monitoring.examMonitoring": {
+    "defaultMessage": "시험 감독 활성화"
+  },
+  "course.assessment.monitoring.examMonitoringHint": {
+    "defaultMessage": "활성화된 경우, 응시자의 세션은 시험을 시도하는 순간부터 시험을 완료하거나 시도한 후 24시간이 경과하기 전까지 실시간으로 모니터링됩니다. 강사는 <pulsegrid>PulseGrid</pulsegrid>에서 이러한 세션을 모니터링할 수 있습니다."
+  },
+  "course.assessment.monitoring.expiredSession": {
+    "defaultMessage": "만료된 세션입니다. 제출된 지 최소 24시간이 지났습니다."
   },
   "course.assessment.monitoring.filterByGroup": {
     "defaultMessage": "그룹별 필터"
   },
+  "course.assessment.monitoring.firstReceivedHeartbeat": {
+    "defaultMessage": "첫 번째로 받은 심장 박동"
+  },
   "course.assessment.monitoring.generatedAt": {
     "defaultMessage": "생성된 시간"
   },
+  "course.assessment.monitoring.intervalHint": {
+    "defaultMessage": "시험 응시자의 브라우저에서 심장박동이 전송되는 빈도를 제어합니다. 간격은 이 두 범위 내에서 무작위로 설정됩니다."
+  },
+  "course.assessment.monitoring.invalidBrowser": {
+    "defaultMessage": "잘못된 브라우저 구성"
+  },
+  "course.assessment.monitoring.invalidBrowserSubtitle": {
+    "defaultMessage": "현재 브라우저나 설정으로는 이 평가에 접근할 수 없습니다. 도움이 필요하면 강사에게 문의하십시오."
+  },
+  "course.assessment.monitoring.invalidHeartbeat": {
+    "defaultMessage": "잘못된"
+  },
   "course.assessment.monitoring.ipAddress": {
     "defaultMessage": "IP 주소"
-  },
-  "course.assessment.monitoring.lastHeartbeat": {
-    "defaultMessage": "마지막 하트비트"
   },
   "course.assessment.monitoring.latePresenceHint": {
     "defaultMessage": "다음 하트비트가 시간 내에 수신되지 않았지만 아직 구성된 하트비트 간격 내에 있습니다."
@@ -1433,14 +1652,47 @@
   "course.assessment.monitoring.live": {
     "defaultMessage": "실시간"
   },
+  "course.assessment.monitoring.liveHint": {
+    "defaultMessage": "이 심장박동은 즉시 서버에 받아들여졌습니다."
+  },
+  "course.assessment.monitoring.liveness": {
+    "defaultMessage": "생동감"
+  },
+  "course.assessment.monitoring.loadAllHeartbeats": {
+    "defaultMessage": "모두 불러오기"
+  },
+  "course.assessment.monitoring.maxInterval": {
+    "defaultMessage": "최대 간격"
+  },
+  "course.assessment.monitoring.milliseconds": {
+    "defaultMessage": "밀리초"
+  },
+  "course.assessment.monitoring.minInterval": {
+    "defaultMessage": "최소 간격"
+  },
   "course.assessment.monitoring.missingPresenceHint": {
     "defaultMessage": "다음 하트비트가 시간 내에 수신되지 않았습니다."
+  },
+  "course.assessment.monitoring.needSUSAndSessionUnlockPassword": {
+    "defaultMessage": "이 작업을 수행하려면 브라우저 인증을 활성화하고 세션 잠금 비밀번호를 설정해야 합니다."
   },
   "course.assessment.monitoring.noActiveSessions": {
     "defaultMessage": "활성 세션이 없습니다."
   },
+  "course.assessment.monitoring.offset": {
+    "defaultMessage": "인터-심박동 오프셋"
+  },
+  "course.assessment.monitoring.offsetHint": {
+    "defaultMessage": "PulseGrid가 세션을 지연으로 플래그 지정하기 전에 주파수 간격 이후 얼마나 기다려야 하는지 제어합니다."
+  },
+  "course.assessment.monitoring.openSubmissionInNewTab": {
+    "defaultMessage": "새 탭에서 제출 열기"
+  },
+  "course.assessment.monitoring.overrideAccess": {
+    "defaultMessage": "액세스 재정의"
+  },
   "course.assessment.monitoring.pulsegrid": {
-    "defaultMessage": "PulseGrid"
+    "defaultMessage": "펄스그리드"
   },
   "course.assessment.monitoring.recentActivities": {
     "defaultMessage": "최근 활동"
@@ -1448,8 +1700,41 @@
   "course.assessment.monitoring.recentActivitiesHint": {
     "defaultMessage": "이 탭을 닫으면 이 로그가 사라집니다!"
   },
+  "course.assessment.monitoring.resetZoom": {
+    "defaultMessage": "줌 재설정"
+  },
+  "course.assessment.monitoring.sebConfigKey": {
+    "defaultMessage": "안전한 시험 브라우저(SEB) 구성 키"
+  },
+  "course.assessment.monitoring.sebConfigKeyFieldHint": {
+    "defaultMessage": "귀하의 <sebConfigKey>SEB 구성 키</sebConfigKey>은 브라우저 시험 키가 아닌 귀하의 특정 SEB 구성에서 생성됩니다. 이는 운영 체제 및 SEB 버전 간에 동일합니다. SEB 구성을 변경하면이 필드를 업데이트하십시오."
+  },
+  "course.assessment.monitoring.sebConfigKeyFieldLabel": {
+    "defaultMessage": "SEB 구성 키"
+  },
+  "course.assessment.monitoring.sebConfigKeyHint": {
+    "defaultMessage": "시험 응시자가 유효한 구성을 사용하여 <seb>Safe Exam Browser (SEB)</seb>를 사용하는 경우 세션을 유효하게 표시합니다. SEB는 특정 구성을 위해 고유한 <sebConfigKey>구성 키</sebConfigKey>를 생성합니다. 이 방법은 Windows용 SEB 3.4 및 iOS 및 macOS용 SEB 3.0 이상을 필요로 합니다."
+  },
+  "course.assessment.monitoring.sebPayload": {
+    "defaultMessage": "안전한 시험 브라우저(SEB) 구성 키 해시 및 URL"
+  },
+  "course.assessment.monitoring.secret": {
+    "defaultMessage": "비밀 UA 부분 문자열 (SUS)"
+  },
+  "course.assessment.monitoring.secretHint": {
+    "defaultMessage": "시험자의 브라우저 User Agent (UA)에 대소문자를 구분하는 비밀이 포함되어 있다면, PulseGrid는 해당 세션을 유효하다고 표시하고, 그렇지 않으면 무효로 표시합니다. 이 부분을 비워 둔다면, 모든 세션이 유효하다고 표시됩니다."
+  },
+  "course.assessment.monitoring.sessionUnlockPassword": {
+    "defaultMessage": "세션 잠금 해제 비밀번호"
+  },
   "course.assessment.monitoring.stale": {
     "defaultMessage": "오래된"
+  },
+  "course.assessment.monitoring.staleHint": {
+    "defaultMessage": "수험자의 브라우저가 일시적으로 접속할 수 없어 서버로 즉시 전달되지 않았습니다. 브라우저에 캐시되어 브라우저가 다시 접속 가능해지면 서버로 전송되었습니다."
+  },
+  "course.assessment.monitoring.stoppedSession": {
+    "defaultMessage": "세션을 중지했습니다. 학생들이 제출을 완료했을 수 있습니다."
   },
   "course.assessment.monitoring.summaryCorrectAsAt": {
     "defaultMessage": "{time} 기준 요약이 정확합니다."
@@ -1460,11 +1745,20 @@
   "course.assessment.monitoring.userAgent": {
     "defaultMessage": "사용자 에이전트"
   },
+  "course.assessment.monitoring.userAgentHint": {
+    "defaultMessage": "시험 응시자의 브라우저 <ua>User Agent (UA)</ua>에 비밀 서브스트링이 포함되어 있으면 세션을 유효하게 표시합니다."
+  },
   "course.assessment.monitoring.userHeartbeatContinuedStreaming": {
     "defaultMessage": "{name}의 하트비트가 계속 스트리밍 중입니다."
   },
   "course.assessment.monitoring.userHeartbeatNotReceivedInTime": {
     "defaultMessage": "{name}의 하트비트가 시간 내에 수신되지 않았습니다."
+  },
+  "course.assessment.monitoring.validHeartbeat": {
+    "defaultMessage": "유효한"
+  },
+  "course.assessment.monitoring.zoomPanHint": {
+    "defaultMessage": "줌을 하려면 핀치하거나 스크롤하세요. 이동하려면 드래그하세요."
   },
   "course.assessment.newAssessment": {
     "defaultMessage": "새 평가"
@@ -1553,8 +1847,17 @@
   "course.assessment.question.multipleResponses.maximumGrade": {
     "defaultMessage": "최대 등급"
   },
+  "course.assessment.question.multipleResponses.mustBeLessThanMaxAttachmentSize": {
+    "defaultMessage": "최대 {defaultMax}MB 이하여야 합니다."
+  },
+  "course.assessment.question.multipleResponses.mustBeLessThanMaxAttachments": {
+    "defaultMessage": "최대 {defaultMax} 이하여야 합니다."
+  },
   "course.assessment.question.multipleResponses.mustBeLessThanMaxMaximumGrade": {
     "defaultMessage": "1000보다 작아야 합니다."
+  },
+  "course.assessment.question.multipleResponses.mustHaveAtLeastOneResponse": {
+    "defaultMessage": "적어도 하나의 응답을 지정해야 합니다."
   },
   "course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice": {
     "defaultMessage": "적어도 하나의 정답을 지정해야 합니다."
@@ -1562,8 +1865,20 @@
   "course.assessment.question.multipleResponses.mustSpecifyChoice": {
     "defaultMessage": "유효한 선택 제목을 지정해야 합니다."
   },
+  "course.assessment.question.multipleResponses.mustSpecifyMaxAttachment": {
+    "defaultMessage": "유효하고 양수인 최대 첨부 파일 수를 지정해야 합니다."
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyMaxAttachmentSize": {
+    "defaultMessage": "유효하고 양수인 최대 첨부 파일 크기를 지정해야 합니다."
+  },
   "course.assessment.question.multipleResponses.mustSpecifyMaximumGrade": {
     "defaultMessage": "부여할 유효하고 비음수 최대 등급을 지정해야 합니다."
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachment": {
+    "defaultMessage": "첨부 파일의 최대 개수는 양수여야 합니다."
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachmentSize": {
+    "defaultMessage": "최대 크기는 양수여야 합니다."
   },
   "course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade": {
     "defaultMessage": "최대 등급은 비음수여야 합니다."
@@ -1679,6 +1994,9 @@
   "course.assessment.question.programming.codaveriEvaluatorHint": {
     "defaultMessage": "기본 평가 외에도, 이 평가자는 제출이 완료되었을 때 Codaveri가 제공하는 자동 코드 피드백을 제공합니다. 이들은 교사가 검토, 편집 및 게시할 수 있는 초안 코멘트로 표시됩니다."
   },
+  "course.assessment.question.programming.codaveriEvaluatorNotSupported": {
+    "defaultMessage": "Codaveri 평가자에서 {languageName}은(는) 지원되지 않습니다."
+  },
   "course.assessment.question.programming.codeInserts": {
     "defaultMessage": "코드 삽입"
   },
@@ -1702,6 +2020,9 @@
   },
   "course.assessment.question.programming.defaultEvaluatorHint": {
     "defaultMessage": "아무 문제 없이, 아래 평가 패키지에 따라 코드를 실행하고 테스트 결과를 보고합니다."
+  },
+  "course.assessment.question.programming.defaultEvaluatorNotSupported": {
+    "defaultMessage": "기본 평가자에서 {languageName}은(는) 지원되지 않습니다."
   },
   "course.assessment.question.programming.editOnline": {
     "defaultMessage": "온라인으로 생성/편집"
@@ -1742,6 +2063,9 @@
   "course.assessment.question.programming.expected": {
     "defaultMessage": "예상"
   },
+  "course.assessment.question.programming.expectedOutput": {
+    "defaultMessage": "예상 출력"
+  },
   "course.assessment.question.programming.expression": {
     "defaultMessage": "식"
   },
@@ -1772,6 +2096,9 @@
   "course.assessment.question.programming.inlineCode": {
     "defaultMessage": "인라인 코드"
   },
+  "course.assessment.question.programming.input": {
+    "defaultMessage": "입력"
+  },
   "course.assessment.question.programming.javaTestCasesHint": {
     "defaultMessage": "식은 제출된 코드의 맥락에서 평가됩니다. 그런 다음 반환 값은 <code>expectEquals(expression, expected)</code> void를 사용하여 예상 기대치와 비교됩니다. <code>Object</code>는 모든 Java 기본 유형에 대해 오버로드되었습니다."
   },
@@ -1787,6 +2114,9 @@
   "course.assessment.question.programming.languageAndEvaluation": {
     "defaultMessage": "언어 및 평가"
   },
+  "course.assessment.question.programming.languageDeprecatedWarning": {
+    "defaultMessage": "선택하신 언어는 사용이 중단되었습니다. 다른 언어로 변경해주세요."
+  },
   "course.assessment.question.programming.lastUpdated": {
     "defaultMessage": "{by}에 의해 {on}에 마지막으로 업데이트되었습니다."
   },
@@ -1796,6 +2126,9 @@
   "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
     "defaultMessage": "실시간 피드백 생성을 안내하기 위한 지침을 여기에 추가하세요. 확실하지 않은 경우, 이 필드를 비워두세요."
   },
+  "course.assessment.question.programming.liveFeedbackNotSupported": {
+    "defaultMessage": "실시간 피드백 생성은 {languageName}을(를) 지원하지 않습니다."
+  },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "가장 낮은 채점 우선순위"
   },
@@ -1803,7 +2136,7 @@
     "defaultMessage": "활성화하면, 이 질문의 평가는 항상 가장 낮은 우선 순위의 평가자를 사용합니다. 확실하지 않은 경우, 이 옵션을 선택하지 마세요."
   },
   "course.assessment.question.programming.megabytes": {
-    "defaultMessage": "MB"
+    "defaultMessage": "엠비"
   },
   "course.assessment.question.programming.memoryLimit": {
     "defaultMessage": "메모리 제한"
@@ -1862,6 +2195,9 @@
   "course.assessment.question.programming.questionSavedButPackageError": {
     "defaultMessage": "변경 사항은 저장되었지만 패키지는 성공적으로 가져오지 못했습니다."
   },
+  "course.assessment.question.programming.rTestCasesHint": {
+    "defaultMessage": "각 테스트 케이스는 별도의 R 콘솔 인스턴스를 시작하고 표준 입력을 통해 입력을 제공합니다. 이 콘솔은 <prepend>Prepend</prepend> 스크립트, 학생 제출물 및 <append>Append</append> 스크립트를 실행할 것입니다. 이러한 스크립트의 표준 출력은 해당 테스트 케이스의 예상 출력과 비교될 것입니다. 우리는 이러한 스크립트 중 하나에서 표준 입력을 처리하는 것을 권장합니다."
+  },
   "course.assessment.question.programming.savingChanges": {
     "defaultMessage": "변경 사항 저장 중..."
   },
@@ -1910,6 +2246,9 @@
   "course.assessment.question.programming.timeLimit": {
     "defaultMessage": "시간 제한"
   },
+  "course.assessment.question.programming.timeLimitDetail": {
+    "defaultMessage": "{timeLimit, plural, one {# 분} other {# 분}}"
+  },
   "course.assessment.question.programming.uploadNewPackage": {
     "defaultMessage": "새 패키지 업로드"
   },
@@ -1929,10 +2268,12 @@
     "defaultMessage": "공란으로 둘 수 없습니다."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.chooseFileButton": {
-    "defaultMessage": "파일 선택"
+    "defaultMessage": "파일 선택",
+    "description": "Button for adding an image attachment."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.descriptionFieldLabel": {
-    "defaultMessage": "설명"
+    "defaultMessage": "설명",
+    "description": "Label for the description input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.fetchFailureMessage": {
     "defaultMessage": "오류가 발생했습니다. 다시 시도하세요."
@@ -1947,10 +2288,12 @@
     "defaultMessage": "값은 0보다 커야 합니다."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.maximumGradeFieldLabel": {
-    "defaultMessage": "최대 등급"
+    "defaultMessage": "최대 등급",
+    "description": "Label for the maximum grade input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.noFileChosenMessage": {
-    "defaultMessage": "선택된 파일이 없습니다"
+    "defaultMessage": "선택된 파일이 없습니다",
+    "description": "Message to be displayed when no file is chosen for a file input."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.positiveNumberValidationError": {
     "defaultMessage": "값은 양수여야 합니다."
@@ -1962,22 +2305,27 @@
     "defaultMessage": "참고: PDF 파일의 각 페이지는 동일한 질문 세부사항을 갖는 단일 스크라이빙 질문으로 생성됩니다. 선택 입력을 비워 두고 생성 후 질문을 다시 편집할 수 있습니다."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.skillsFieldLabel": {
-    "defaultMessage": "기술"
+    "defaultMessage": "기술",
+    "description": "Label for the skills input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.staffOnlyCommentsFieldLabel": {
-    "defaultMessage": "직원 전용 코멘트"
+    "defaultMessage": "직원 전용 코멘트",
+    "description": "Label for the staff only comments input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.submitButton": {
-    "defaultMessage": "제출"
+    "defaultMessage": "제출",
+    "description": "Button for submitting the form."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.submitFailureMessage": {
     "defaultMessage": "오류가 발생했습니다. 다시 시도하세요."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.submittingMessage": {
-    "defaultMessage": "제출 중..."
+    "defaultMessage": "제출 중...",
+    "description": "Text to be displayed when waiting for server response after form submission."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.titleFieldLabel": {
-    "defaultMessage": "제목"
+    "defaultMessage": "제목",
+    "description": "Label for the title input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.valueMoreThan1000Error": {
     "defaultMessage": "값은 1000보다 작아야 합니다."
@@ -1985,8 +2333,14 @@
   "course.assessment.question.textResponses.addSolution": {
     "defaultMessage": "새 솔루션 추가"
   },
-  "course.assessment.question.textResponses.allowFileUpload": {
-    "defaultMessage": "답변에서 파일 업로드 허용"
+  "course.assessment.question.textResponses.attachmentSettingRequired": {
+    "defaultMessage": "이 질문에 첨부 설정을 정의해야 합니다"
+  },
+  "course.assessment.question.textResponses.attachmentSettings": {
+    "defaultMessage": "첨부 파일 설정"
+  },
+  "course.assessment.question.textResponses.attachmentSettingsDescription": {
+    "defaultMessage": "학생들이 이 질문을 시도할 때,"
   },
   "course.assessment.question.textResponses.deleteSolution": {
     "defaultMessage": "솔루션 삭제"
@@ -2000,8 +2354,23 @@
   "course.assessment.question.textResponses.grade": {
     "defaultMessage": "등급"
   },
+  "course.assessment.question.textResponses.isAttachmentRequired": {
+    "defaultMessage": "이 질문에 파일 업로드가 필요합니다"
+  },
   "course.assessment.question.textResponses.keyword": {
     "defaultMessage": "키워드"
+  },
+  "course.assessment.question.textResponses.maxAttachmentSize": {
+    "defaultMessage": "첨부 파일 당 최대 크기"
+  },
+  "course.assessment.question.textResponses.maxAttachments": {
+    "defaultMessage": "첨부 파일 최대 개수"
+  },
+  "course.assessment.question.textResponses.multipleAttachments": {
+    "defaultMessage": "다중 첨부 파일"
+  },
+  "course.assessment.question.textResponses.multipleFileAttachmentDescription": {
+    "defaultMessage": "그들은 여러 첨부 파일을 업로드할 수 있습니다."
   },
   "course.assessment.question.textResponses.mustSpecifyGrade": {
     "defaultMessage": "성적에 대해 유효한 숫자를 지정해야 합니다."
@@ -2014,6 +2383,18 @@
   },
   "course.assessment.question.textResponses.newSolutionCannotUndo": {
     "defaultMessage": "이것은 새 솔루션입니다. 저장하기 전에 삭제하면 즉시 사라집니다."
+  },
+  "course.assessment.question.textResponses.noAttachment": {
+    "defaultMessage": "첨부 없음"
+  },
+  "course.assessment.question.textResponses.noAttachmentDescription": {
+    "defaultMessage": "그들은 어떤 첨부 파일도 업로드할 수 없을 것입니다."
+  },
+  "course.assessment.question.textResponses.singleFileAttachment": {
+    "defaultMessage": "단일 첨부파일"
+  },
+  "course.assessment.question.textResponses.singleFileAttachmentDescription": {
+    "defaultMessage": "그들은 한 개의 첨부 파일만 업로드할 수 있습니다."
   },
   "course.assessment.question.textResponses.solution": {
     "defaultMessage": "솔루션"
@@ -2039,8 +2420,11 @@
   "course.assessment.question.textResponses.undoDeleteSolution": {
     "defaultMessage": "솔루션 삭제 취소"
   },
+  "course.assessment.question.textResponses.validAttachmentSettingValues": {
+    "defaultMessage": "첨부 파일 설정은 첨부 파일 없음, 단일 파일 첨부 또는 다중 파일 첨부 중 하나여야 합니다"
+  },
   "course.assessment.question.textResponses.zeroGrade": {
-    "defaultMessage": "0.0"
+    "defaultMessage": "영점 영"
   },
   "course.assessment.session.assessmentNotStarted": {
     "defaultMessage": "평가가 아직 시작되지 않았습니다. {startDate} 이후에 다시 방문하세요."
@@ -2065,9 +2449,6 @@
   },
   "course.assessment.show.assessmentOnlyAvailableFrom": {
     "defaultMessage": "이 평가는 다음부터만 사용 가능합니다"
-  },
-  "course.assessment.show.audioResponse": {
-    "defaultMessage": "오디오 응답"
   },
   "course.assessment.show.baseExp": {
     "defaultMessage": "기본 EXP"
@@ -2101,6 +2482,9 @@
   },
   "course.assessment.show.chooseAssessmentToDuplicateInto": {
     "defaultMessage": "복제할 평가 선택"
+  },
+  "course.assessment.show.comprehension": {
+    "defaultMessage": "이해"
   },
   "course.assessment.show.delete": {
     "defaultMessage": "삭제"
@@ -2159,8 +2543,14 @@
   "course.assessment.show.errorMovingQuestion": {
     "defaultMessage": "질문을 이동하는 동안 오류가 발생했습니다."
   },
+  "course.assessment.show.failedSyncingWithKoditsu": {
+    "defaultMessage": "Koditsu와 동기화되지 않았습니다"
+  },
   "course.assessment.show.fileUpload": {
     "defaultMessage": "파일 업로드"
+  },
+  "course.assessment.show.fileUploadDescription": {
+    "defaultMessage": "허용된 첨부 파일 수 설정 (없음, 하나 또는 여러 개)"
   },
   "course.assessment.show.files": {
     "defaultMessage": "파일"
@@ -2173,6 +2563,9 @@
   },
   "course.assessment.show.forumPostResponse": {
     "defaultMessage": "포럼 게시물 응답"
+  },
+  "course.assessment.show.generate": {
+    "defaultMessage": "프로그래밍 문제 생성"
   },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "평가된 테스트 케이스"
@@ -2191,6 +2584,9 @@
   },
   "course.assessment.show.hideOptions": {
     "defaultMessage": "옵션 숨기기"
+  },
+  "course.assessment.show.koditsuMode": {
+    "defaultMessage": "Koditsu"
   },
   "course.assessment.show.manageComponents": {
     "defaultMessage": "강좌 설정에서 컴포넌트 관리"
@@ -2318,6 +2714,12 @@
   "course.assessment.show.sureDeletingQuestion": {
     "defaultMessage": "이 질문을 삭제하시겠습니까?"
   },
+  "course.assessment.show.syncedWithKoditsu": {
+    "defaultMessage": "Koditsu와 동기화됨"
+  },
+  "course.assessment.show.syncingWithKoditsu": {
+    "defaultMessage": "Kositsu와 동기화 중"
+  },
   "course.assessment.show.textResponse": {
     "defaultMessage": "텍스트 응답"
   },
@@ -2332,6 +2734,9 @@
   },
   "course.assessment.show.unsubmittingAndChangingQuestionType": {
     "defaultMessage": "제출을 취소하고 질문 유형을 변경하는 중..."
+  },
+  "course.assessment.show.voiceResponse": {
+    "defaultMessage": "오디오 응답"
   },
   "course.assessment.show.whileHoldingToCancelMoving": {
     "defaultMessage": "이동 취소를 위해 계속 누르세요."
@@ -2441,6 +2846,12 @@
   "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
     "defaultMessage": "학생 제출 상태"
   },
+  "course.assessment.statistics.SubmissionStatusChart.graded": {
+    "defaultMessage": "등급이 매겨지고 발표되지 않은"
+  },
+  "course.assessment.statistics.SubmissionStatusChart.published": {
+    "defaultMessage": "등급이 매겨진"
+  },
   "course.assessment.statistics.SubmissionStatusChart.submitted": {
     "defaultMessage": "제출됨"
   },
@@ -2450,11 +2861,26 @@
   "course.assessment.statistics.ancestorFail": {
     "defaultMessage": "이 평가의 이전 반복을 검색하지 못했습니다."
   },
+  "course.assessment.statistics.ancestorSelect.current": {
+    "defaultMessage": "현재"
+  },
+  "course.assessment.statistics.ancestorSelect.fromCourse": {
+    "defaultMessage": "강좌 제목: {courseTitle}에서"
+  },
+  "course.assessment.statistics.ancestorSelect.subtitle": {
+    "defaultMessage": "이 평가의 이전 버전과 비교하십시오:"
+  },
+  "course.assessment.statistics.ancestorSelect.title": {
+    "defaultMessage": "복제 기록"
+  },
   "course.assessment.statistics.ancestorStatisticsFail": {
     "defaultMessage": "조상의 통계를 검색하지 못했습니다."
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "답변"
+  },
+  "course.assessment.statistics.attemptCount": {
+    "defaultMessage": "시도 횟수"
   },
   "course.assessment.statistics.attempts.filename": {
     "defaultMessage": "{assessment}에 대한 질문별 시도 통계"
@@ -2468,8 +2894,20 @@
   "course.assessment.statistics.closePrompt": {
     "defaultMessage": "닫기"
   },
+  "course.assessment.statistics.comments": {
+    "defaultMessage": "의견"
+  },
+  "course.assessment.statistics.duplicationHistory": {
+    "defaultMessage": "복제 기록"
+  },
+  "course.assessment.statistics.email": {
+    "defaultMessage": "이메일"
+  },
   "course.assessment.statistics.fail": {
     "defaultMessage": "통계를 검색하지 못했습니다."
+  },
+  "course.assessment.statistics.gradeDisplay": {
+    "defaultMessage": "등급: {grade} / {maxGrade}"
   },
   "course.assessment.statistics.gradeDistribution": {
     "defaultMessage": "성적 분포"
@@ -2495,11 +2933,17 @@
   "course.assessment.statistics.header": {
     "defaultMessage": "{title}에 대한 통계"
   },
+  "course.assessment.statistics.includePhantom": {
+    "defaultMessage": "팬텀 학생 포함"
+  },
   "course.assessment.statistics.legendHigherusage": {
     "defaultMessage": "사용량이 많음"
   },
   "course.assessment.statistics.legendLowerUsage": {
     "defaultMessage": "사용량이 적음"
+  },
+  "course.assessment.statistics.liveFeedback": {
+    "defaultMessage": "실시간 피드백"
   },
   "course.assessment.statistics.liveFeedback.filename": {
     "defaultMessage": "{assessment}에 대한 질문별 라이브 피드백 통계"
@@ -2516,6 +2960,9 @@
   "course.assessment.statistics.marks.redCellLegend": {
     "defaultMessage": "최대 점수의 < 0.5"
   },
+  "course.assessment.statistics.marksPerQuestion": {
+    "defaultMessage": "문제 당 점수"
+  },
   "course.assessment.statistics.name": {
     "defaultMessage": "이름"
   },
@@ -2525,11 +2972,17 @@
   "course.assessment.statistics.nameGroupsSearchText": {
     "defaultMessage": "이름 또는 그룹으로 검색"
   },
+  "course.assessment.statistics.noIncludePhantom": {
+    "defaultMessage": "이 중복된 평가의 모든 통계에는 팬텀 학생이 포함되어 있지 않습니다"
+  },
   "course.assessment.statistics.noSubmission": {
     "defaultMessage": "아직 제출물 없음"
   },
   "course.assessment.statistics.onlyForAutogradableAssessment": {
     "defaultMessage": "이 테이블은 적어도 하나의 자동 채점 질문이 있는 평가에만 표시됩니다"
+  },
+  "course.assessment.statistics.pastAnswerTitle": {
+    "defaultMessage": "제출 일시: {submittedAt}"
   },
   "course.assessment.statistics.questionDisplayTitle": {
     "defaultMessage": "{student}을(를) 위한 Q{index}"
@@ -2537,8 +2990,14 @@
   "course.assessment.statistics.questionIndex": {
     "defaultMessage": "Q{index}"
   },
+  "course.assessment.statistics.questionTitle": {
+    "defaultMessage": "질문 {index}"
+  },
   "course.assessment.statistics.statistics": {
     "defaultMessage": "통계"
+  },
+  "course.assessment.statistics.submissionPage": {
+    "defaultMessage": "답변 페이지로 이동"
   },
   "course.assessment.statistics.submissionStatuses": {
     "defaultMessage": "제출 상태"
@@ -2591,14 +3050,41 @@
   "course.assessment.submission.EvaluatorErrorPanel.emailSubject": {
     "defaultMessage": "[버그 보고] 평가기 오류"
   },
+  "course.assessment.submission.FileInput.exactlyOneFileUploadAllowed": {
+    "defaultMessage": "이 질문에 정확히 1개의 파일을 업로드해야 합니다"
+  },
+  "course.assessment.submission.FileInput.fileName": {
+    "defaultMessage": "{index}. {name}"
+  },
+  "course.assessment.submission.FileInput.fileTooLargeErrorMessage": {
+    "defaultMessage": "다음 파일은 허용된 크기보다 큽니다 ({maxAttachmentSize} MB)"
+  },
+  "course.assessment.submission.FileInput.fileUploadErrorTitle": {
+    "defaultMessage": "파일 업로드 오류"
+  },
+  "course.assessment.submission.FileInput.onlyOneFileUploadAllowed": {
+    "defaultMessage": "이 질문에는 최대 {maxAttachments}개의 파일만 업로드할 수 있습니다"
+  },
+  "course.assessment.submission.FileInput.requiredUploadLimitedNumberOfFiles": {
+    "defaultMessage": "이 질문에는 최소 1개 이상, 최대 {maxAttachments}개의 파일을 업로드할 수 있습니다."
+  },
+  "course.assessment.submission.FileInput.tooManyFilesErrorMessage": {
+    "defaultMessage": "당신은 {numFiles}개의 파일을 업로드하려고 시도했지만, {maxAttachmentsAllowed}개의 {maxAttachmentsAllowed, plural, one {파일} other {파일들}}만 업로드할 수 있습니다. {numAttachments, plural, =0 {} one {이전에 1개의 파일이 업로드되었으므로} other {이전에 {numAttachments}개의 파일이 업로드되었으므로}}"
+  },
   "course.assessment.submission.FileInput.uploadDisabled": {
     "defaultMessage": "파일 업로드 비활성화됨"
   },
   "course.assessment.submission.FileInput.uploadLabel": {
     "defaultMessage": "파일을 업로드하려면 드래그 앤 드롭하거나 클릭하세요."
   },
+  "course.assessment.submission.ImportedFileView.delete": {
+    "defaultMessage": "삭제"
+  },
   "course.assessment.submission.ImportedFileView.deleteConfirmation": {
     "defaultMessage": "이 파일을 삭제하시겠습니까?"
+  },
+  "course.assessment.submission.ImportedFileView.deleteTitle": {
+    "defaultMessage": "파일 삭제"
   },
   "course.assessment.submission.ImportedFileView.noFiles": {
     "defaultMessage": "업로드된 파일이 없습니다."
@@ -2606,8 +3092,11 @@
   "course.assessment.submission.ImportedFileView.uploadedFiles": {
     "defaultMessage": "업로드된 파일:"
   },
-  "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
-    "defaultMessage": "과거 답변 보기"
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds": {
+    "defaultMessage": "{hrs, plural, one {# 시간} other {# 시간}} {mins, plural, =0 {} one {# 분} other {# 분}} {secs, plural, =0 {} one {# 초} other {# 초}}"
+  },
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds": {
+    "defaultMessage": "{secs, plural, one {# 초} other {# 초들}}"
   },
   "course.assessment.submission.SubmissionsIndex.accessLogs": {
     "defaultMessage": "접속 로그"
@@ -2641,6 +3130,9 @@
   },
   "course.assessment.submission.SubmissionsIndex.experiencePoints": {
     "defaultMessage": "획득한 경험치"
+  },
+  "course.assessment.submission.SubmissionsIndex.fetchFromKoditsu": {
+    "defaultMessage": "Kositsu로부터 제출물 가져오기"
   },
   "course.assessment.submission.SubmissionsIndex.forceSubmit": {
     "defaultMessage": "남은 제출 강제 제출"
@@ -2690,6 +3182,9 @@
   "course.assessment.submission.SubmissionsIndex.userName": {
     "defaultMessage": "이름"
   },
+  "course.assessment.submission.TestCaseView.allFailed": {
+    "defaultMessage": "모두 실패했습니다"
+  },
   "course.assessment.submission.TestCaseView.allPassed": {
     "defaultMessage": "모두 통과됨"
   },
@@ -2729,8 +3224,17 @@
   "course.assessment.submission.TestCaseView.standardOutput": {
     "defaultMessage": "표준 출력"
   },
+  "course.assessment.submission.TestCaseView.testCasesPassed": {
+    "defaultMessage": "{numPassed}/{numTestCases} 테스트 통과"
+  },
   "course.assessment.submission.UploadedFileView.deleteConfirmation": {
     "defaultMessage": "이 첨부 파일을 삭제하시겠습니까?"
+  },
+  "course.assessment.submission.UploadedFileView.deleteTitle": {
+    "defaultMessage": "파일 삭제"
+  },
+  "course.assessment.submission.UploadedFileView.deleting": {
+    "defaultMessage": "삭제"
   },
   "course.assessment.submission.UploadedFileView.noFiles": {
     "defaultMessage": "업로드된 파일이 없습니다."
@@ -2751,7 +3255,7 @@
     "defaultMessage": "녹음 중지"
   },
   "course.assessment.submission.answer.scribing.arial": {
-    "defaultMessage": "Arial"
+    "defaultMessage": "아리얼"
   },
   "course.assessment.submission.answer.scribing.arialBlack": {
     "defaultMessage": "Arial Black"
@@ -2763,7 +3267,7 @@
     "defaultMessage": "색상:"
   },
   "course.assessment.submission.answer.scribing.comicSansMs": {
-    "defaultMessage": "Comic Sans MS"
+    "defaultMessage": "코믹 산스 MS"
   },
   "course.assessment.submission.answer.scribing.dashed": {
     "defaultMessage": "점선"
@@ -2787,7 +3291,7 @@
     "defaultMessage": "글꼴 크기:"
   },
   "course.assessment.submission.answer.scribing.georgia": {
-    "defaultMessage": "Georgia"
+    "defaultMessage": "조지아"
   },
   "course.assessment.submission.answer.scribing.impact": {
     "defaultMessage": "Impact"
@@ -2799,7 +3303,7 @@
     "defaultMessage": "선"
   },
   "course.assessment.submission.answer.scribing.lucidaSanUnicode": {
-    "defaultMessage": "Lucida Sans Unicode"
+    "defaultMessage": "루시다 산스 유니코드"
   },
   "course.assessment.submission.answer.scribing.move": {
     "defaultMessage": "이동"
@@ -2808,7 +3312,7 @@
     "defaultMessage": "채우기 없음"
   },
   "course.assessment.submission.answer.scribing.palatinoLinotype": {
-    "defaultMessage": "Palatino Linotype"
+    "defaultMessage": "팔라티노 리노타입"
   },
   "course.assessment.submission.answer.scribing.pencil": {
     "defaultMessage": "연필"
@@ -2841,7 +3345,7 @@
     "defaultMessage": "스타일:"
   },
   "course.assessment.submission.answer.scribing.tahoma": {
-    "defaultMessage": "Tahoma"
+    "defaultMessage": "타호마"
   },
   "course.assessment.submission.answer.scribing.text": {
     "defaultMessage": "텍스트"
@@ -2850,7 +3354,7 @@
     "defaultMessage": "두께:"
   },
   "course.assessment.submission.answer.scribing.timesNewRoman": {
-    "defaultMessage": "Times New Roman"
+    "defaultMessage": "타임스 뉴 로만"
   },
   "course.assessment.submission.answer.scribing.undo": {
     "defaultMessage": "실행 취소"
@@ -2866,6 +3370,9 @@
   },
   "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
     "defaultMessage": "과거 답변이 없습니다."
+  },
+  "course.assessment.submission.answers.AnswerHeader.viewPastAnswers": {
+    "defaultMessage": "과거의 대답"
   },
   "course.assessment.submission.answers.ForumPostResponse.ForumCard.forumCardTitleTypeNoneSelected": {
     "defaultMessage": "포럼"
@@ -2939,9 +3446,6 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "새 탭에서 주제 보기"
   },
-  "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
-    "defaultMessage": "파일 다운로드"
-  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.sizeTooBig": {
     "defaultMessage": "파일이 너무 커서 표시할 수 없습니다."
   },
@@ -2956,6 +3460,9 @@
   },
   "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
     "defaultMessage": "라인 {linenum}"
+  },
+  "course.assessment.submission.attachmentRequired": {
+    "defaultMessage": "이 질문에 적어도 1개의 파일을 업로드해주세요"
   },
   "course.assessment.submission.attemptedAt": {
     "defaultMessage": "시도한 시간"
@@ -3068,6 +3575,9 @@
   "course.assessment.submission.emptyAssessment": {
     "defaultMessage": "현재 이 평가에는 질문이 없습니다."
   },
+  "course.assessment.submission.errorUnknown": {
+    "defaultMessage": "오류는 알 수 없습니다"
+  },
   "course.assessment.submission.examDialogMessage": {
     "defaultMessage": "브라우저를 종료하거나 로그아웃하지 마세요. 그렇지 않으면 시험을 계속 진행하는데 문제가 발생할 수 있습니다."
   },
@@ -3076,6 +3586,15 @@
   },
   "course.assessment.submission.expAwarded": {
     "defaultMessage": "획득한 경험치"
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuConfirmation": {
+    "defaultMessage": "Koditsu에서 모든 제출물을 가져오길 원하시는 건가요? 여기 있는 모든 기존 답변이 새로운 것으로 덮어씌워질 거에요. 이 작업은 되돌릴 수 없다는 점을 주의하세요!"
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuPending": {
+    "defaultMessage": "Koditsu에서 제출물을 현재 가져오는 중이니 잠시 기다려 주세요."
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuSuccess": {
+    "defaultMessage": "Koditsu로부터 모든 제출물이 성공적으로 가져와졌습니다"
   },
   "course.assessment.submission.finalise": {
     "defaultMessage": "제출 완료"
@@ -3116,9 +3635,6 @@
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "등급 요약"
   },
-  "course.assessment.submission.gradeUnsaved": {
-    "defaultMessage": "저장되지 않음"
-  },
   "course.assessment.submission.gradeUnsavedHint": {
     "defaultMessage": "이 등급은 아직 저장되지 않았습니다. 페이지 끝에 있는 '등급 저장'을 클릭하여 모든 등급 변경 사항을 저장하세요."
   },
@@ -3142,6 +3658,15 @@
   },
   "course.assessment.submission.invalidFileUpload": {
     "defaultMessage": "파일 업로드 실패: 자바 파일만 업로드할 수 있습니다"
+  },
+  "course.assessment.submission.isSaved": {
+    "defaultMessage": "저장됨"
+  },
+  "course.assessment.submission.isSaving": {
+    "defaultMessage": "저축"
+  },
+  "course.assessment.submission.isUnsaved": {
+    "defaultMessage": "저장되지 않은"
   },
   "course.assessment.submission.lateSubmission": {
     "defaultMessage": "이 제출이 늦었습니다! 늦게 제출한 학생에게 패널티를 적용할 수 있습니다."
@@ -3200,6 +3725,24 @@
   "course.assessment.submission.ok": {
     "defaultMessage": "확인"
   },
+  "course.assessment.submission.onlyOneAttachmentAllowed": {
+    "defaultMessage": "이 질문에는 파일 1개만 허용됩니다"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.attempting": {
+    "defaultMessage": "시도 중"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.graded": {
+    "defaultMessage": "채점 완료, 미발행"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.published": {
+    "defaultMessage": "채점 완료"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.submitted": {
+    "defaultMessage": "제출됨"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.unknown": {
+    "defaultMessage": "알 수 없는 상태입니다. 관리자에게 문의해주세요"
+  },
   "course.assessment.submission.pastAnswers": {
     "defaultMessage": "이전 답변"
   },
@@ -3245,6 +3788,12 @@
   "course.assessment.submission.reevaluate": {
     "defaultMessage": "답변 재평가"
   },
+  "course.assessment.submission.remainingBufferTime": {
+    "defaultMessage": "마감 시간: {timeLimit}"
+  },
+  "course.assessment.submission.remainingTime": {
+    "defaultMessage": "남은 시간: {timeLimit}"
+  },
   "course.assessment.submission.rendererNotImplemented": {
     "defaultMessage": "이 질문 유형에 대한 디스플레이가 아직 구현되지 않았습니다."
   },
@@ -3268,6 +3817,15 @@
   },
   "course.assessment.submission.saveGrade": {
     "defaultMessage": "등급 저장"
+  },
+  "course.assessment.submission.saved": {
+    "defaultMessage": "저장됨"
+  },
+  "course.assessment.submission.saving": {
+    "defaultMessage": "저축"
+  },
+  "course.assessment.submission.savingFailed": {
+    "defaultMessage": "저장 실패"
   },
   "course.assessment.submission.sendReminderEmailConfirmation": {
     "defaultMessage": "평가를 완료하지 않은 {unattempted}명의 미시도 및 {attempting}명의 시도 중인 사용자 ({selectedUsers})에게 리마인더 이메일을 보내시겠습니까?"
@@ -3305,6 +3863,9 @@
   "course.assessment.submission.submissionBy": {
     "defaultMessage": "{name}의 제출"
   },
+  "course.assessment.submission.submissionError": {
+    "defaultMessage": "질문 제출 중에 문제가 있습니다 {questions}"
+  },
   "course.assessment.submission.submissionsHeader": {
     "defaultMessage": "제출물: {assessment}"
   },
@@ -3322,6 +3883,21 @@
   },
   "course.assessment.submission.submittedAt": {
     "defaultMessage": "제출 시각"
+  },
+  "course.assessment.submission.timeIsUp": {
+    "defaultMessage": "시간이 끝났어요!"
+  },
+  "course.assessment.submission.timedAssessmentDialogMessage": {
+    "defaultMessage": "아직 시간이 남았습니다. 시간이 다 되면, 평가가 자동으로 완료됩니다."
+  },
+  "course.assessment.submission.timedAssessmentDialogTitle": {
+    "defaultMessage": "이 평가를 완료하려면 {stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {남은 시간}}을(를) 사용하십시오.} other {평가가 종료되었습니다!}}"
+  },
+  "course.assessment.submission.timedExamDialogMessage": {
+    "defaultMessage": "아직 시간이 남았습니다. 시험을 시도하는 동안 로그아웃하거나 브라우저를 닫지 마십시오. 시간이 다 되면 평가가 자동으로 완료됩니다."
+  },
+  "course.assessment.submission.timedExamDialogTitle": {
+    "defaultMessage": "{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {남은 시간}}을(를) 완료하기 위해 남았습니다.} other {시험이 종료되었습니다!}}"
   },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "총 등급"
@@ -3358,6 +3934,9 @@
   },
   "course.assessment.submission.updateFailure": {
     "defaultMessage": "제출 업데이트 실패: {errors}"
+  },
+  "course.assessment.submission.updateIndividualSuccess": {
+    "defaultMessage": "제출 항목 {errors}이(가) 성공적으로 업데이트되었습니다"
   },
   "course.assessment.submission.updateSuccess": {
     "defaultMessage": "제출이 성공적으로 업데이트되었습니다."
@@ -3476,6 +4055,18 @@
   "course.assessments.index.hasTodo": {
     "defaultMessage": "할 일 있음"
   },
+  "course.assessments.index.inviteToKoditsu": {
+    "defaultMessage": "Kositsu 시험에 사용자를 초대하세요"
+  },
+  "course.assessments.index.invitingUserToKoditsu": {
+    "defaultMessage": "Kositsu 시험에 사용자 초대"
+  },
+  "course.assessments.index.invitingUserToKoditsuFailure": {
+    "defaultMessage": "Kositsu에 사용자를 초대하는 데 문제가 있습니다. 나중에 다시 시도해주세요."
+  },
+  "course.assessments.index.invitingUserToKoditsuSuccess": {
+    "defaultMessage": "Kositsu 시험에 사용자를 성공적으로 초대함"
+  },
   "course.assessments.index.neededFor": {
     "defaultMessage": "필요한 경우"
   },
@@ -3502,6 +4093,9 @@
   },
   "course.assessments.index.submissions": {
     "defaultMessage": "제출물"
+  },
+  "course.assessments.index.timeLimitIcon": {
+    "defaultMessage": "시간 제한: {timeLimit, plural, one {# 분} other {# 분}}"
   },
   "course.assessments.index.title": {
     "defaultMessage": "제목"
@@ -4085,6 +4679,9 @@
   "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
     "defaultMessage": "경험치 부여"
   },
+  "course.experiencePoints.disbursement.DisbursementIndex.experienceTab": {
+    "defaultMessage": "역사"
+  },
   "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
     "defaultMessage": "데이터를 검색하는 데 실패했습니다."
   },
@@ -4118,6 +4715,15 @@
   "course.experiencePoints.disbursement.FilterForm.weeklyCap": {
     "defaultMessage": "주간 한도"
   },
+  "course.experiencePoints.disbursement.ForumDisbursement.fetchDisbursementFailure": {
+    "defaultMessage": "데이터를 검색하지 못했습니다."
+  },
+  "course.experiencePoints.disbursement.ForumDisbursement.fetchForumPostsFailure": {
+    "defaultMessage": "포럼 게시물을 가져오지 못했습니다."
+  },
+  "course.experiencePoints.disbursement.ForumDisbursement.postListDialogHeader": {
+    "defaultMessage": "시작일 {startDate}과 종료일 {endDate} 사이에 작성된 게시물"
+  },
   "course.experiencePoints.disbursement.ForumDisbursementForm.createDisbursementFailure": {
     "defaultMessage": "경험치 부여 실패."
   },
@@ -4126,9 +4732,6 @@
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.fetchForumPostsFailure": {
     "defaultMessage": "포럼 게시물을 가져오는 데 실패했습니다."
-  },
-  "course.experiencePoints.disbursement.ForumDisbursementForm.postListDialogHeader": {
-    "defaultMessage": "{startDate}와 {endDate} 사이에 생성된 게시물"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reason": {
     "defaultMessage": "부여 이유"
@@ -4168,6 +4771,27 @@
   },
   "course.experiencePoints.disbursement.ForumPostTable.voteTally": {
     "defaultMessage": "투표 집계"
+  },
+  "course.experiencePoints.disbursement.GeneralDisbursement.fetchDisbursementFailure": {
+    "defaultMessage": "데이터를 검색하지 못했습니다."
+  },
+  "course.experiencePoints.downloadCsvButton": {
+    "defaultMessage": "CSV 다운로드"
+  },
+  "course.experiencePoints.downloadFailure": {
+    "defaultMessage": "다운로드 요청 중 오류가 발생했습니다."
+  },
+  "course.experiencePoints.downloadPending": {
+    "defaultMessage": "다운로드 요청이 처리되는 동안 기다려 주세요."
+  },
+  "course.experiencePoints.downloadRequestSuccess": {
+    "defaultMessage": "다운로드 요청이 성공적으로 완료되었습니다"
+  },
+  "course.experiencePoints.fetchRecordsFailure": {
+    "defaultMessage": "기록을 가져오지 못했습니다"
+  },
+  "course.experiencePoints.filterByNameButton": {
+    "defaultMessage": "이름으로 필터링"
   },
   "course.forum.FormShow.fetchTopicsFailure": {
     "defaultMessage": "포럼 주제 데이터를 검색하는 데 실패했습니다."
@@ -4623,7 +5247,7 @@
     "defaultMessage": "설명이 없습니다."
   },
   "course.group.GroupShow.CategoryCard.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}}"
+    "defaultMessage": "{numGroups, plural, one {그룹} other {그룹들}}"
   },
   "course.group.GroupShow.CategoryCard.updateFailure": {
     "defaultMessage": "{categoryName} 업데이트 실패."
@@ -4698,7 +5322,7 @@
     "defaultMessage": "변경 사항 저장"
   },
   "course.group.GroupShow.GroupManager.GroupManager.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}}"
+    "defaultMessage": "{numGroups, plural, one {그룹} other {그룹들}}"
   },
   "course.group.GroupShow.GroupManager.GroupManager.title": {
     "defaultMessage": "{categoryName}의 그룹 관리"
@@ -4737,7 +5361,7 @@
     "defaultMessage": "이름으로 검색 (여러 개를 검색하려면 쉼표로 구분)"
   },
   "course.group.GroupShow.GroupManager.GroupUserManager.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers, plural, one {멤버} other {멤버들}}"
   },
   "course.group.GroupShow.GroupManager.GroupUserManager.updateFailure": {
     "defaultMessage": "{groupName} 업데이트 실패."
@@ -4785,7 +5409,7 @@
     "defaultMessage": "일련 번호"
   },
   "course.group.GroupShow.GroupTableCard.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers, plural, one {한 명의 회원} other {# 명의 회원}}"
   },
   "course.group.GroupShow.fetchFailure": {
     "defaultMessage": "그룹 데이터를 가져오는 데 실패했습니다! 새로 고침 후 다시 시도하세요."
@@ -4826,8 +5450,26 @@
   "course.leaderboard.LeaderboardTable.average": {
     "defaultMessage": "평균"
   },
+  "course.leaderboard.LeaderboardTable.averageAchievements": {
+    "defaultMessage": "평균 성취"
+  },
+  "course.leaderboard.LeaderboardTable.averageExperience": {
+    "defaultMessage": "평균 경험"
+  },
   "course.leaderboard.LeaderboardTable.experience": {
     "defaultMessage": "경험"
+  },
+  "course.leaderboard.LeaderboardTable.level": {
+    "defaultMessage": "레벨"
+  },
+  "course.leaderboard.LeaderboardTable.members": {
+    "defaultMessage": "회원"
+  },
+  "course.leaderboard.LeaderboardTable.name": {
+    "defaultMessage": "이름"
+  },
+  "course.leaderboard.LeaderboardTable.rank": {
+    "defaultMessage": "순위"
   },
   "course.leaderboard.LeaderboardTable.titleAchievements": {
     "defaultMessage": "성과별"
@@ -4848,7 +5490,7 @@
     "defaultMessage": "이 조건 삭제"
   },
   "course.learningMap.responseDashboardMessage": {
-    "defaultMessage": "{responseMessage}"
+    "defaultMessage": "응답 메시지"
   },
   "course.learningMap.selectedArrowDashboardMessage": {
     "defaultMessage": "선택된 조건: {fromNode} --> {toNode}"
@@ -4857,7 +5499,7 @@
     "defaultMessage": "{node}의 선택된 게이트"
   },
   "course.learningMap.summaryGateContent": {
-    "defaultMessage": "{numerator}/{denominator}"
+    "defaultMessage": "{분자}/{분모}"
   },
   "course.learningMap.toggleSatisfiabilityType": {
     "defaultMessage": "만족도 유형을 {satisfiabilityType}(으)로 전환"
@@ -4997,11 +5639,23 @@
   "course.level.Level.levelHeader": {
     "defaultMessage": "레벨"
   },
+  "course.level.Level.orderedIncorrectly": {
+    "defaultMessage": "레벨은 여기의 순서와 상관없이 저장될 때 자동으로 정렬됩니다."
+  },
+  "course.level.Level.placeholder": {
+    "defaultMessage": "영"
+  },
+  "course.level.Level.reset": {
+    "defaultMessage": "초기화"
+  },
+  "course.level.Level.resetTooltip": {
+    "defaultMessage": "변경 사항 초기화"
+  },
+  "course.level.Level.saveChanges": {
+    "defaultMessage": "저장"
+  },
   "course.level.Level.saveFailure": {
     "defaultMessage": "레벨 저장 실패, 다시 시도하세요."
-  },
-  "course.level.Level.saveLevels": {
-    "defaultMessage": "레벨 저장"
   },
   "course.level.Level.saveSuccess": {
     "defaultMessage": "레벨이 저장되었습니다"
@@ -5009,8 +5663,32 @@
   "course.level.Level.thresholdHeader": {
     "defaultMessage": "기준"
   },
-  "course.level.LevelRow.zeroThresholdError": {
-    "defaultMessage": "경험치 기준은 0이 될 수 없습니다"
+  "course.level.Level.unsavedChanges": {
+    "defaultMessage": "저장되지 않은 변경 사항이 있습니다"
+  },
+  "course.material.files.DownloadingFilePage.clickToDownloadFile": {
+    "defaultMessage": "다운로드 {name}"
+  },
+  "course.material.files.DownloadingFilePage.clickToDownloadFileDescription": {
+    "defaultMessage": "자동 다운로드를 시작할 때 문제가 발생했습니다. 파일을 즉시 다운로드하려면 아래 링크를 클릭하세요."
+  },
+  "course.material.files.DownloadingFilePage.downloading": {
+    "defaultMessage": "다운로드 중 {name}"
+  },
+  "course.material.files.DownloadingFilePage.downloadingDescription": {
+    "defaultMessage": "이 파일은 지금 자동으로 다운로드를 시작해야 합니다. 그렇지 않으면 아래 링크를 클릭하거나 이 페이지를 새로고침하여 다시 시도할 수 있습니다."
+  },
+  "course.material.files.DownloadingFilePage.tryDownloadingAgain": {
+    "defaultMessage": "다시 다운로드 해보세요"
+  },
+  "course.material.files.ErrorRetrievingFilePage.goToTheWorkbin": {
+    "defaultMessage": "작업함으로 이동하세요"
+  },
+  "course.material.files.ErrorRetrievingFilePage.problemRetrievingFile": {
+    "defaultMessage": "파일을 검색하는 중 문제가 발생했습니다"
+  },
+  "course.material.files.ErrorRetrievingFilePage.problemRetrievingFileDescription": {
+    "defaultMessage": "해당 항목이 더 이상 존재하지 않거나 액세스 권한이 없거나, 검색하는 동안 예기치 않은 문제가 발생했습니다."
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "다운로드에 실패했습니다. 나중에 다시 시도하세요."
@@ -5020,6 +5698,15 @@
   },
   "course.material.folders.DownloadFolderButton.downloading": {
     "defaultMessage": "다운로드 중..."
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.goToMainFolder": {
+    "defaultMessage": "주 폴더로 이동하세요"
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.problemRetrievingFolder": {
+    "defaultMessage": "폴더를 검색하는 중 문제가 발생했습니다"
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.problemRetrievingFolderDescription": {
+    "defaultMessage": "해당 항목이 더 이상 존재하지 않거나 액세스 권한이 없거나, 검색하는 동안 예기치 않은 문제가 발생했습니다."
   },
   "course.material.folders.FolderEdit.editSubfolderTitle": {
     "defaultMessage": "폴더 수정"
@@ -5059,6 +5746,9 @@
   },
   "course.material.folders.FolderShow.defaultHeader": {
     "defaultMessage": "자료"
+  },
+  "course.material.folders.FolderShow.folderNotFound": {
+    "defaultMessage": "폴더를 찾을 수 없습니다"
   },
   "course.material.folders.MaterialEdit.editMaterialTitle": {
     "defaultMessage": "자료 수정"
@@ -5105,6 +5795,15 @@
   "course.material.folders.UploadFilesButton.uploadFilesTooltip": {
     "defaultMessage": "업로드"
   },
+  "course.material.folders.WorkbinTable.lastModified": {
+    "defaultMessage": "최종 수정"
+  },
+  "course.material.folders.WorkbinTable.name": {
+    "defaultMessage": "이름"
+  },
+  "course.material.folders.WorkbinTable.startAt": {
+    "defaultMessage": "시작"
+  },
   "course.material.folders.WorkbinTableButtons.DeletionFailure": {
     "defaultMessage": "삭제할 수 없습니다"
   },
@@ -5117,20 +5816,65 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "삭제"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
-    "defaultMessage": "성과 개수 (총계: {courseAchievementCount})"
+  "course.statistics.StatisticsIndex.assessments.averageGrade": {
+    "defaultMessage": "평균 성적"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.ascending": {
-    "defaultMessage": "오름차순"
+  "course.statistics.StatisticsIndex.assessments.averageTimeTaken": {
+    "defaultMessage": "평균 시간"
+  },
+  "course.statistics.StatisticsIndex.assessments.category": {
+    "defaultMessage": "카테고리"
+  },
+  "course.statistics.StatisticsIndex.assessments.csvFileTitle": {
+    "defaultMessage": "평가 통계"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadCsv": {
+    "defaultMessage": "다음 평가에 대한 점수 요약을 다운로드하시겠습니까?"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryFailure": {
+    "defaultMessage": "점수 요약을 다운로드하는 동안 오류가 발생했습니다"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryPending": {
+    "defaultMessage": "다운로드 요청이 처리되는 동안 기다려 주세요"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummarySuccess": {
+    "defaultMessage": "성공적으로 점수 요약을 다운로드했습니다"
+  },
+  "course.statistics.StatisticsIndex.assessments.numLateStudents": {
+    "defaultMessage": "# 늦게"
+  },
+  "course.statistics.StatisticsIndex.assessments.numSubmittedStudents": {
+    "defaultMessage": "# 시도함"
+  },
+  "course.statistics.StatisticsIndex.assessments.searchBar": {
+    "defaultMessage": "평가 제목, 탭 또는 카테고리로 검색하세요"
+  },
+  "course.statistics.StatisticsIndex.assessments.selectedNUsers": {
+    "defaultMessage": "점수 요약 다운로드 ({n, plural, =1 {# 평가} other {# 평가들}})"
+  },
+  "course.statistics.StatisticsIndex.assessments.startAt": {
+    "defaultMessage": "시작"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevGrade": {
+    "defaultMessage": "표준편차 등급"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevTimeTaken": {
+    "defaultMessage": "표준편차 시간"
+  },
+  "course.statistics.StatisticsIndex.assessments.tab": {
+    "defaultMessage": "탭"
+  },
+  "course.statistics.StatisticsIndex.assessments.tableTitle": {
+    "defaultMessage": "평가 통계 ({numStudents} 학생)"
+  },
+  "course.statistics.StatisticsIndex.assessments.title": {
+    "defaultMessage": "제목"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCountDetails": {
+    "defaultMessage": "성취 횟수 ({courseAchievementCount}개 중)"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctness": {
     "defaultMessage": "정확도"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctnessHint": {
-    "defaultMessage": "정확도는 학생이 수행한 모든 평가의 평균 등급 백분율입니다."
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.descending": {
-    "defaultMessage": "내림차순"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.experiencePoints": {
     "defaultMessage": "경험치"
@@ -5144,14 +5888,8 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRate": {
     "defaultMessage": "학습 속도"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRateHint": {
-    "defaultMessage": "학습 속도가 200%인 경우, 학생은 과정을 절반의 시간에 완료할 수 있습니다."
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.level": {
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelInfo": {
     "defaultMessage": "레벨 (최대: {maxLevel})"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelFilter": {
-    "defaultMessage": "레벨: {name}"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.name": {
     "defaultMessage": "이름"
@@ -5159,11 +5897,8 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.noData": {
     "defaultMessage": "데이터 없음"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.numSubmissions": {
-    "defaultMessage": "제출 횟수 (총계: {courseAssessmentCount})"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.phantom": {
-    "defaultMessage": "팬텀 사용자 포함"
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.numSubmissionsDetails": {
+    "defaultMessage": "제출 횟수 (총: {courseAssessmentCount}회)"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType": {
     "defaultMessage": "학생 유형"
@@ -5174,17 +5909,8 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.phantom": {
     "defaultMessage": "팬텀"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tableTitle": {
-    "defaultMessage": "{direction} {column} 순 학생 정렬"
-  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.title": {
     "defaultMessage": "학생 성능"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tutorFilter": {
-    "defaultMessage": "튜터: {name}"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatched": {
-    "defaultMessage": "비디오 % 수"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatchedHeader": {
     "defaultMessage": "평균 비디오 % 시청"
@@ -5222,14 +5948,14 @@
   "course.statistics.StatisticsIndex.course.StudentProgressionChart.yAxisLabel": {
     "defaultMessage": "마감일별 평가 정렬"
   },
-  "course.statistics.StatisticsIndex.course.error": {
-    "defaultMessage": "과정 통계를 가져오는 동안 문제가 발생했습니다! 새로고침해서 다시 시도하세요."
+  "course.statistics.StatisticsIndex.course.csvFileTitle": {
+    "defaultMessage": "학생 성적 통계"
   },
-  "course.statistics.StatisticsIndex.course.performanceError": {
-    "defaultMessage": "과정 성능 통계를 가져오는 동안 문제가 발생했습니다! 새로고침해서 다시 시도하세요."
+  "course.statistics.StatisticsIndex.course.searchBar": {
+    "defaultMessage": "학생 이름으로 검색"
   },
-  "course.statistics.StatisticsIndex.course.progressionError": {
-    "defaultMessage": "과정 진행 통계를 가져오는 동안 문제가 발생했습니다! 새로고침해서 다시 시도하세요."
+  "course.statistics.StatisticsIndex.header.assessments": {
+    "defaultMessage": "평가"
   },
   "course.statistics.StatisticsIndex.header.statistics": {
     "defaultMessage": "통계"
@@ -5237,8 +5963,8 @@
   "course.statistics.StatisticsIndex.staff.averageMarkingTime": {
     "defaultMessage": "평균 평가 시간"
   },
-  "course.statistics.StatisticsIndex.staff.error": {
-    "defaultMessage": "교직원 통계를 가져오는 동안 문제가 발생했습니다! 새로고침해서 다시 시도하세요."
+  "course.statistics.StatisticsIndex.staff.csvFileTitle": {
+    "defaultMessage": "직원 통계"
   },
   "course.statistics.StatisticsIndex.staff.name": {
     "defaultMessage": "이름"
@@ -5249,17 +5975,17 @@
   "course.statistics.StatisticsIndex.staff.numStudents": {
     "defaultMessage": "# 학생"
   },
+  "course.statistics.StatisticsIndex.staff.searchBar": {
+    "defaultMessage": "직원 이름으로 검색"
+  },
   "course.statistics.StatisticsIndex.staff.stddev": {
     "defaultMessage": "표준 편차"
   },
   "course.statistics.StatisticsIndex.staff.tableTitle": {
     "defaultMessage": "교직원 통계"
   },
-  "course.statistics.StatisticsIndex.staffFailure": {
-    "defaultMessage": "교직원 데이터를 가져오는 데 실패했습니다!"
-  },
-  "course.statistics.StatisticsIndex.students.error": {
-    "defaultMessage": "학생 통계를 가져오는 동안 문제가 발생했습니다! 새로고침해서 다시 시도하세요."
+  "course.statistics.StatisticsIndex.students.csvFileTitle": {
+    "defaultMessage": "학생 통계"
   },
   "course.statistics.StatisticsIndex.students.experiencePoints": {
     "defaultMessage": "경험치"
@@ -5273,20 +5999,14 @@
   "course.statistics.StatisticsIndex.students.name": {
     "defaultMessage": "이름"
   },
-  "course.statistics.StatisticsIndex.students.noStudents": {
-    "defaultMessage": "아직 이 과정에 학생이 없습니다..."
-  },
-  "course.statistics.StatisticsIndex.students.showMyStudentsOnly": {
-    "defaultMessage": "내 학생만 보기"
+  "course.statistics.StatisticsIndex.students.searchBar": {
+    "defaultMessage": "학생 이름 또는 학생 유형으로 검색"
   },
   "course.statistics.StatisticsIndex.students.studentsType": {
     "defaultMessage": "학생 유형"
   },
   "course.statistics.StatisticsIndex.students.tableTitle": {
     "defaultMessage": "학생 통계 ({numStudents}명의 학생, {numPhantom}명의 팬텀)"
-  },
-  "course.statistics.StatisticsIndex.students.tutorFilter": {
-    "defaultMessage": "튜터: {name}"
   },
   "course.statistics.StatisticsIndex.students.videoPercentWatched": {
     "defaultMessage": "평균 % 시청"
@@ -5312,14 +6032,26 @@
   "course.statistics.course.studentProgressionChart.startAt": {
     "defaultMessage": "시작일: {startAt}"
   },
-  "course.statistics.failures.coursePerformance": {
-    "defaultMessage": "코스 성과 데이터를 가져오지 못했습니다!"
-  },
-  "course.statistics.failures.courseProgression": {
-    "defaultMessage": "코스 진행 데이터를 가져오지 못했습니다!"
-  },
   "course.statistics.tabs.course": {
     "defaultMessage": "과정"
+  },
+  "course.statistics.tabs.coursePerformance": {
+    "defaultMessage": "수업 성적"
+  },
+  "course.statistics.tabs.courseProgression": {
+    "defaultMessage": "코스 진도"
+  },
+  "course.stories.CikgoErrorPage.errorFetching": {
+    "defaultMessage": "아마도 없거나, 뭔가 잘못된 것 같습니다."
+  },
+  "course.stories.CikgoErrorPage.errorFetchingDescription": {
+    "defaultMessage": "<cikgo>Cikgo</cikgo>는 이 경험을 지원하는 파트너입니다. 그들은 연락이 가능했지만, 현재 이 요청에 대한 자원을 제공하지 않았습니다. 나중에 다시 시도해 주세요. 만약 문제가 계속된다면, <link>저희에게 연락하세요</link>."
+  },
+  "course.stories.pages.LearnPage": {
+    "defaultMessage": "배우다"
+  },
+  "course.stories.pages.MissionControlPage": {
+    "defaultMessage": "미션 컨트롤"
   },
   "course.survey.DeleteSectionButton.deleteSection": {
     "defaultMessage": "섹션 삭제"
@@ -5978,6 +6710,9 @@
   "course.userInvitation.InviteUsersRegistrationCode.registrationCodeNote": {
     "defaultMessage": "초대받은 사용자가 이 초대 코드를 사용하여 과정에 등록할 경우, 초대 페이지에서 해당 상태가 올바르게 반영되지 않을 수 있습니다."
   },
+  "course.userInvitations.IndividualInvitations.addRowsByEmail": {
+    "defaultMessage": "이메일로 행 추가"
+  },
   "course.userInvitations.IndividualInvitations.appendNewRow": {
     "defaultMessage": "행 추가"
   },
@@ -5986,6 +6721,12 @@
   },
   "course.userInvitations.IndividualInvitations.invite": {
     "defaultMessage": "모든 사용자 초대"
+  },
+  "course.userInvitations.IndividualInvitations.malformedEmail": {
+    "defaultMessage": "{n, plural, one {이 이메일은 } other {이 이메일들은 }} 잘못된 형식입니다: {emails}"
+  },
+  "course.userInvitations.IndividualInvitations.nameEmailInput": {
+    "defaultMessage": "존 도 '<john.doe@example.org>'; '도, 제인' '<jane.doe@example.org>'; ..."
   },
   "course.userInvitations.IndividualInvitations.namePlaceholder": {
     "defaultMessage": "멋진 사용자"
@@ -6154,12 +6895,6 @@
   },
   "course.users.ExperiencePointsRecords.experiencePointsHistoryHeader": {
     "defaultMessage": "경험치 기록: {for}"
-  },
-  "course.users.ExperiencePointsRecords.fetchUsersFailure": {
-    "defaultMessage": "기록을 가져오지 못했습니다."
-  },
-  "course.users.ExperiencePointsTable.fetchRecordsFailure": {
-    "defaultMessage": "기록을 가져오지 못했습니다."
   },
   "course.users.ManageStaff.noStaff": {
     "defaultMessage": "과정에 직원이 없습니다."
@@ -6476,8 +7211,26 @@
   "course.video.VideoShow.videoTitle": {
     "defaultMessage": "비디오 - {title}"
   },
+  "course.video.VideoTable.actions": {
+    "defaultMessage": "행동"
+  },
+  "course.video.VideoTable.averageWatched": {
+    "defaultMessage": "평균 시청률"
+  },
   "course.video.VideoTable.noVideo": {
     "defaultMessage": "비디오 없음"
+  },
+  "course.video.VideoTable.published": {
+    "defaultMessage": "출판된"
+  },
+  "course.video.VideoTable.startAt": {
+    "defaultMessage": "시작하다"
+  },
+  "course.video.VideoTable.title": {
+    "defaultMessage": "제목"
+  },
+  "course.video.VideoTable.watchCount": {
+    "defaultMessage": "시청 횟수"
   },
   "course.video.VideosIndex.fetchVideosFailure": {
     "defaultMessage": "비디오를 가져오지 못했습니다."
@@ -6628,6 +7381,21 @@
   },
   "landing_page.create_an_account": {
     "defaultMessage": "계정 생성"
+  },
+  "landing_page.iconEngaging": {
+    "defaultMessage": "매력적인"
+  },
+  "landing_page.iconEngagingSubtitle": {
+    "defaultMessage": "모든 교사를 위해 만들어졌습니다. 플랫폼을 마스터하기 위해 프로그래밍 지식이 필요하지 않습니다. Coursemology는 교사와 학생 모두에게 사용하기 쉽고 직관적입니다."
+  },
+  "landing_page.iconGeneral": {
+    "defaultMessage": "장군"
+  },
+  "landing_page.iconGeneralSubtitle": {
+    "defaultMessage": "모든 주제를 위해 만들어졌습니다. Coursemology의 게임화 시스템은 주제에 대한 어떠한 가정도 하지 않습니다. Coursemology를 통해 어떤 주제를 가르치는 어떤 교사라도 자신의 강의 연습 문제를 온라인 게임으로 변환할 수 있습니다."
+  },
+  "landing_page.iconSimple": {
+    "defaultMessage": "간단한"
   },
   "landing_page.new_to_coursemology": {
     "defaultMessage": "Coursemology를 처음 사용하시나요?"
@@ -7050,7 +7818,7 @@
     "defaultMessage": "호스트 이름"
   },
   "lib.translations.table.column.id": {
-    "defaultMessage": "ID"
+    "defaultMessage": "식별 번호"
   },
   "lib.translations.table.column.instance": {
     "defaultMessage": "인스턴스"
@@ -7150,9 +7918,6 @@
   },
   "lib.translations.yes": {
     "defaultMessage": "예"
-  },
-  "material.attemptLoader.errorAccessingMaterial": {
-    "defaultMessage": "이 자료에 접근하는 중 오류가 발생했습니다. 나중에 다시 시도해 주세요."
   },
   "sysstem.admin.instance.instance.InstanceAdminNavigator.announcements": {
     "defaultMessage": "공지사항"
@@ -7268,14 +8033,23 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "{field}이(가) {prevValue}에서 {newValue}로 변경되었습니다."
   },
+  "system.admin.admin.UsersButton.associatedInstances": {
+    "defaultMessage": "{index}. {instanceName}"
+  },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "사용자 삭제"
   },
   "system.admin.admin.UsersButton.deletionConfirm": {
     "defaultMessage": "{role} {name} ({email})을(를) 삭제하시겠습니까?"
   },
+  "system.admin.admin.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "역할 {role} {name} ({email}) 삭제 중"
+  },
   "system.admin.admin.UsersButton.deletionFailure": {
     "defaultMessage": "사용자를 삭제하지 못했습니다 - {error}"
+  },
+  "system.admin.admin.UsersButton.deletionPromptContent": {
+    "defaultMessage": "이 사용자를 삭제한 후 다음 인스턴스에 연결된 모든 인스턴스 사용자가 삭제됩니다."
   },
   "system.admin.admin.UsersButton.deletionSuccess": {
     "defaultMessage": "사용자가 삭제되었습니다."

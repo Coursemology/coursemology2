@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { Grid } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -12,8 +13,36 @@ interface Props {
   selectedUserIds: Set<number>;
 }
 
+const translations = defineMessages({
+  name: {
+    id: 'course.achievement.AchievementAward.AchievementAwardSummary.name',
+    defaultMessage: 'Name',
+  },
+  userType: {
+    id: 'course.achievement.AchievementAward.AchievementAwardSummary.userType',
+    defaultMessage: 'User Type',
+  },
+  awardedStudents: {
+    id: 'course.achievement.AchievementAward.AchievementAwardSummary.awardedStudents',
+    defaultMessage: 'Awarded Students',
+  },
+  revokedStudents: {
+    id: 'course.achievement.AchievementAward.AchievementAwardSummary.revokedStudents',
+    defaultMessage: 'Revoked Students',
+  },
+  phantomStudent: {
+    id: 'course.achievement.AchievementAward.AchievementAwardSummary.phantomStudent',
+    defaultMessage: 'Phantom Student',
+  },
+  normalStudent: {
+    id: 'course.achievement.AchievementAward.AchievementAwardSummary.normalStudent',
+    defaultMessage: 'Normal Student',
+  },
+});
+
 const AchievementAwardSummary: FC<Props> = (props) => {
   const { achievementUsers, initialObtainedUserIds, selectedUserIds } = props;
+  const { formatMessage: t } = useIntl();
 
   const removedUserIds = new Set(
     [...initialObtainedUserIds].filter(
@@ -57,22 +86,21 @@ const AchievementAwardSummary: FC<Props> = (props) => {
   const awardedTableColumns: TableColumns[] = [
     {
       name: 'name',
-      label: 'Name',
+      label: t(translations.name),
       options: {
         filter: false,
       },
     },
     {
       name: 'phantom',
-      label: 'User Type',
+      label: t(translations.userType),
       options: {
         search: false,
         customBodyRenderLite: (dataIndex): string => {
           const isPhantom = awardedUsers[dataIndex].phantom;
-          if (isPhantom) {
-            return 'Phantom Student';
-          }
-          return 'Normal Student';
+          return isPhantom
+            ? t(translations.phantomStudent)
+            : t(translations.normalStudent);
         },
       },
     },
@@ -81,22 +109,21 @@ const AchievementAwardSummary: FC<Props> = (props) => {
   const removedTableColumns: TableColumns[] = [
     {
       name: 'name',
-      label: 'Name',
+      label: t(translations.name),
       options: {
         filter: false,
       },
     },
     {
       name: 'phantom',
-      label: 'User Type',
+      label: t(translations.userType),
       options: {
         search: false,
         customBodyRenderLite: (dataIndex): string => {
           const isPhantom = removedUsers[dataIndex].phantom;
-          if (isPhantom) {
-            return 'Phantom Student';
-          }
-          return 'Normal Student';
+          return isPhantom
+            ? t(translations.phantomStudent)
+            : t(translations.normalStudent);
         },
       },
     },
@@ -109,7 +136,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
           columns={awardedTableColumns}
           data={awardedUsers}
           options={awardedTableOptions}
-          title={`Awarded Students (${awardedUsers.length})`}
+          title={`${t(translations.awardedStudents)} (${awardedUsers.length})`}
         />
       </Grid>
       <Grid item xs={6}>
@@ -117,7 +144,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
           columns={removedTableColumns}
           data={removedUsers}
           options={removedTableOptions}
-          title={`Revoked Students (${removedUsers.length})`}
+          title={`${t(translations.revokedStudents)} (${removedUsers.length})`}
         />
       </Grid>
     </Grid>

@@ -30,14 +30,39 @@ const translations = defineMessages({
     id: 'course.video.VideoTable.noVideo',
     defaultMessage: 'No Video',
   },
+  title: {
+    id: 'course.video.VideoTable.title',
+    defaultMessage: 'Title',
+  },
+  startAt: {
+    id: 'course.video.VideoTable.startAt',
+    defaultMessage: 'Start At',
+  },
+  watchCount: {
+    id: 'course.video.VideoTable.watchCount',
+    defaultMessage: 'Watch Count',
+  },
+  averageWatched: {
+    id: 'course.video.VideoTable.averageWatched',
+    defaultMessage: 'Average % Watched',
+  },
+  published: {
+    id: 'course.video.VideoTable.published',
+    defaultMessage: 'Published',
+  },
+  actions: {
+    id: 'course.video.VideoTable.actions',
+    defaultMessage: 'Actions',
+  },
 });
 
 const VideoTable: FC<Props> = (props) => {
   const { videos, permissions, onTogglePublished, intl } = props;
+  const { formatMessage: t } = intl;
   const videoMetadata = useAppSelector(getVideoMetadata);
 
   if (videos && videos.length === 0) {
-    return <Note message={intl.formatMessage(translations.noVideo)} />;
+    return <Note message={t(translations.noVideo)} />;
   }
 
   const videoSortMethodByDate = (
@@ -92,7 +117,7 @@ const VideoTable: FC<Props> = (props) => {
   const columns: TableColumns[] = [
     {
       name: 'title',
-      label: 'Title',
+      label: t(translations.title),
       options: {
         filter: false,
         sort: false,
@@ -119,7 +144,7 @@ const VideoTable: FC<Props> = (props) => {
     },
     {
       name: 'startTimeInfo',
-      label: 'Start At',
+      label: t(translations.startAt),
       options: {
         filter: false,
         sort: true,
@@ -159,7 +184,7 @@ const VideoTable: FC<Props> = (props) => {
   if (permissions?.canAnalyze) {
     columns.push({
       name: 'watchCount',
-      label: 'Watch Count',
+      label: t(translations.watchCount),
       options: {
         filter: false,
         sort: false,
@@ -185,7 +210,7 @@ const VideoTable: FC<Props> = (props) => {
     });
     columns.push({
       name: 'percentWatched',
-      label: 'Average % Watched',
+      label: t(translations.averageWatched),
       options: {
         filter: false,
         sort: false,
@@ -203,7 +228,7 @@ const VideoTable: FC<Props> = (props) => {
   if (permissions?.canManage) {
     columns.push({
       name: 'published',
-      label: 'Published',
+      label: t(translations.published),
       options: {
         filter: false,
         sort: false,
@@ -227,7 +252,7 @@ const VideoTable: FC<Props> = (props) => {
     });
     columns.push({
       name: 'id',
-      label: 'Actions',
+      label: t(translations.actions),
       options: {
         filter: false,
         sort: false,
