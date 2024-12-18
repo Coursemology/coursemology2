@@ -370,6 +370,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.GetHelpChatPage.ConversationArea.lineNumber',
     defaultMessage: 'Line {lineNumber}',
   },
+  fileNameAndLineNumber: {
+    id: 'course.assessment.submission.GetHelpChatPage.ConversationArea.fileNameAndLineNumber',
+    defaultMessage: '{filename}:{lineNumber}',
+  },
   threadExpired: {
     id: 'course.assessment.submission.GetHelpChatPage.ConversationArea.threadExpired',
     defaultMessage: 'The chat above has ended. Start a new chat?',

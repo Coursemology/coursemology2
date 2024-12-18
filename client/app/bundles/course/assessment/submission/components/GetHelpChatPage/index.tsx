@@ -13,7 +13,7 @@ import Header from './Header';
 import SuggestionChips from './SuggestionChips';
 
 interface GetHelpChatPageProps {
-  onFeedbackClick: (linenum: number) => void;
+  onFeedbackClick: (linenum: number, filename?: string) => void;
   answerId: number | null;
   questionId: number;
 }
