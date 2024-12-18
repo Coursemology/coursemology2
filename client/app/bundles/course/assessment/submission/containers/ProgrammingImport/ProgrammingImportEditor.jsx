@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Component } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import ImportedFileView from './ImportedFileView';
 
 const SelectProgrammingFileEditor = ({
   answerId,
+  editorRef,
   readOnly,
   language,
   displayFileName,
@@ -54,6 +55,7 @@ const SelectProgrammingFileEditor = ({
           return (
             <Editor
               key={file.id}
+              editorRef={editorRef}
               fieldName={`${answerId}.files_attributes.${index}.content`}
               file={file}
               language={language}
@@ -75,6 +77,10 @@ SelectProgrammingFileEditor.propTypes = {
   language: PropTypes.string,
   displayFileName: PropTypes.string,
   saveAnswerAndUpdateClientVersion: PropTypes.func,
+  editorRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Component) }),
+  ]),
 };
 
 const renderProgrammingHistoryEditor = (answer, displayFileName) => {
@@ -119,11 +125,14 @@ const handleStageFiles = async (filesToImport) => {
 const VisibleProgrammingImportEditor = (props) => {
   const {
     answerId,
+    editorRef,
     disabled,
     dispatch,
     historyAnswers,
     question,
     readOnly,
+    displayFileName,
+    setDisplayFileName,
     saveAnswerAndUpdateClientVersion,
     viewHistory,
   } = props;
@@ -135,10 +144,6 @@ const VisibleProgrammingImportEditor = (props) => {
     ? answers[answerId].files_attributes ||
       answers[`${answerId}`].files_attributes
     : null;
-
-  const [displayFileName, setDisplayFileName] = useState(
-    files && files.length > 0 ? files[0].filename : '',
-  );
 
   // When an assessment is submitted/unsubmitted,
   // the form is somehow not reset yet and the answers for the new answerId
@@ -198,6 +203,7 @@ const VisibleProgrammingImportEditor = (props) => {
         <SelectProgrammingFileEditor
           {...{
             answerId,
+            editorRef,
             readOnly,
             question,
             displayFileName,
@@ -238,7 +244,13 @@ VisibleProgrammingImportEditor.propTypes = {
     questionId: PropTypes.number,
     files_attributes: PropTypes.arrayOf(fileShape),
   }),
+  displayFileName: PropTypes.string,
+  setDisplayFileName: PropTypes.func,
   saveAnswerAndUpdateClientVersion: PropTypes.func,
+  editorRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Component) }),
+  ]),
 };
 
 function mapStateToProps(state, ownProps) {
