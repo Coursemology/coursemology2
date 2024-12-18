@@ -1,11 +1,12 @@
 import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { Chip, TableBody, TableCell, TableRow } from '@mui/material';
 import palette from 'theme/palette';
 import { LogsMainInfo } from 'types/course/assessment/submission/logs';
 
 import TableContainer from 'lib/components/core/layouts/TableContainer';
 import Link from 'lib/components/core/Link';
-import useTranslation from 'lib/hooks/useTranslation';
+import useTranslation, { Descriptor } from 'lib/hooks/useTranslation';
 
 import translations from './translations';
 
@@ -13,15 +14,30 @@ interface Props {
   with: LogsMainInfo;
 }
 
-const statusTranslations = {
-  attempting: 'Attempting',
-  submitted: 'Submitted',
-  graded: 'Graded, unpublished',
-  published: 'Graded',
-  unknown: 'Unknown status, please contact administrator',
-};
+const statusTranslations = defineMessages({
+  attempting: {
+    id: 'course.assessment.submission.pages.LogsIndex.LogsHead.attempting',
+    defaultMessage: 'Attempting',
+  },
+  submitted: {
+    id: 'course.assessment.submission.pages.LogsIndex.LogsHead.submitted',
+    defaultMessage: 'Submitted',
+  },
+  graded: {
+    id: 'course.assessment.submission.pages.LogsIndex.LogsHead.graded',
+    defaultMessage: 'Graded, unpublished',
+  },
+  published: {
+    id: 'course.assessment.submission.pages.LogsIndex.LogsHead.published',
+    defaultMessage: 'Graded',
+  },
+  unknown: {
+    id: 'course.assessment.submission.pages.LogsIndex.LogsHead.unknown',
+    defaultMessage: 'Unknown status, please contact administrator',
+  },
+});
 
-const translateStatus: (var1: string) => string = (oldStatus) => {
+const translateStatus: (var1: string) => Descriptor = (oldStatus) => {
   switch (oldStatus) {
     case 'attempting':
       return statusTranslations.attempting;
@@ -66,7 +82,7 @@ const LogsHead: FC<Props> = (props) => {
           <TableCell>
             <Link to={info.editUrl}>
               <Chip
-                label={translateStatus(info.submissionWorkflowState)}
+                label={t(translateStatus(info.submissionWorkflowState))}
                 style={{
                   width: 100,
                   backgroundColor:

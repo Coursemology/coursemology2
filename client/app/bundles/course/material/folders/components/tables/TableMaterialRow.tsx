@@ -22,18 +22,14 @@ const TableMaterialRow: FC<Props> = (props) => {
 
   return (
     <TableRow id={`material-${material.id}`}>
-      <TableCell style={{ minWidth: '200px' }}>
+      <TableCell className="min-w-[200px]">
         <Stack spacing={1}>
           <Stack alignItems="center" direction="row" spacing={0.5}>
             <DescriptionIcon htmlColor="grey" />
             <Link
+              className="whitespace-normal break-all"
               href={material.materialUrl}
               opensInNewTab
-              style={{
-                textOverflow: 'initial',
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
-              }}
               underline="hover"
             >
               {material.name}
@@ -42,26 +38,16 @@ const TableMaterialRow: FC<Props> = (props) => {
           {material.description !== null &&
             material.description.length !== 0 && (
               <Typography
+                className="whitespace-normal break-all"
                 dangerouslySetInnerHTML={{
                   __html: material.description,
-                }}
-                style={{
-                  textOverflow: 'initial',
-                  whiteSpace: 'normal',
-                  wordBreak: 'break-word',
                 }}
                 variant="body2"
               />
             )}
         </Stack>
       </TableCell>
-      <TableCell
-        style={{
-          width: '240px',
-          maxWidth: '240px',
-          minWidth: '60px',
-        }}
-      >
+      <TableCell className="w-[240px] max-w-[240px] min-w-[60px]">
         <Stack className="items-start">
           <div>{formatFullDateTime(material.updatedAt)}</div>
           <Link to={material.updater.userUrl} underline="hover">
@@ -70,17 +56,11 @@ const TableMaterialRow: FC<Props> = (props) => {
         </Stack>
       </TableCell>
       {!isCurrentCourseStudent && (
-        <TableCell
-          style={{
-            width: '240px',
-            maxWidth: '240px',
-            minWidth: '60px',
-          }}
-        >
+        <TableCell className="w-[240px] max-w-[240px] min-w-[60px]">
           -
         </TableCell>
       )}
-      <TableCell style={{ width: '60px' }}>
+      <TableCell className="w-[60px]">
         <WorkbinTableButtons
           canDelete={material.permissions.canDelete}
           canEdit={material.permissions.canEdit}

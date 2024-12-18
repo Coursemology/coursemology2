@@ -15,6 +15,7 @@ import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import AchievementManagementButtons from '../buttons/AchievementManagementButtons';
 
@@ -30,6 +31,30 @@ const translations = defineMessages({
     id: 'course.achievement.AchievementTable.noAchievement',
     defaultMessage: 'No achievement',
   },
+  badge: {
+    id: 'course.achievement.AchievementTable.badge',
+    defaultMessage: 'Badge',
+  },
+  title: {
+    id: 'course.achievement.AchievementTable.title',
+    defaultMessage: 'Title',
+  },
+  description: {
+    id: 'course.achievement.AchievementTable.description',
+    defaultMessage: 'Description',
+  },
+  requirements: {
+    id: 'course.achievement.AchievementTable.requirements',
+    defaultMessage: 'Requirements',
+  },
+  published: {
+    id: 'course.achievement.AchievementTable.published',
+    defaultMessage: 'Published',
+  },
+  actions: {
+    id: 'course.achievement.AchievementTable.actions',
+    defaultMessage: 'Actions',
+  },
 });
 
 const styles = {
@@ -42,6 +67,7 @@ const styles = {
 
 const AchievementTable: FC<Props> = (props) => {
   const { achievements, permissions, onTogglePublished, isReordering } = props;
+  const { t } = useTranslation();
 
   if (achievements && achievements.length === 0) {
     return (
@@ -104,7 +130,7 @@ const AchievementTable: FC<Props> = (props) => {
     },
     {
       name: 'badge',
-      label: 'Badge',
+      label: t(translations.badge),
       options: {
         filter: false,
         sort: false,
@@ -128,7 +154,7 @@ const AchievementTable: FC<Props> = (props) => {
     },
     {
       name: 'title',
-      label: 'Title',
+      label: t(translations.title),
       options: {
         filter: false,
         sort: false,
@@ -149,7 +175,7 @@ const AchievementTable: FC<Props> = (props) => {
     },
     {
       name: 'description',
-      label: 'Description',
+      label: t(translations.description),
       options: {
         filter: false,
         sort: false,
@@ -170,7 +196,7 @@ const AchievementTable: FC<Props> = (props) => {
     },
     {
       name: 'conditions',
-      label: 'Requirements',
+      label: t(translations.requirements),
       options: {
         filter: false,
         sort: false,
@@ -194,7 +220,7 @@ const AchievementTable: FC<Props> = (props) => {
   if (permissions?.canManage) {
     columns.push({
       name: 'published',
-      label: 'Published',
+      label: t(translations.published),
       options: {
         filter: false,
         sort: false,
@@ -218,7 +244,7 @@ const AchievementTable: FC<Props> = (props) => {
     });
     columns.push({
       name: 'id',
-      label: 'Actions',
+      label: t(translations.actions),
       options: {
         filter: false,
         sort: false,
