@@ -313,6 +313,7 @@ export const liveFeedbackChatSlice = createSlice({
         const newChats: ChatShape[] = sortedAndCombinedFeedbacks.map((line) => {
           return {
             sender: ChatSender.codaveri,
+            filename: line.path,
             lineNumber: line.line,
             lineContent: answerLines[line.path][line.line - 1].trim() ?? null,
             message: line.content,

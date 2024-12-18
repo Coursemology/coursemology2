@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { Typography } from '@mui/material';
 
 import LoadingEllipsis from 'lib/components/core/LoadingEllipsis';
@@ -11,12 +12,20 @@ import translations from '../../translations';
 import { ChatSender } from '../../types';
 
 interface ConversationAreaProps {
-  onFeedbackClick: (linenum: number) => void;
+  onFeedbackClick: (linenum: number, filename?: string) => void;
   answerId: number;
 }
 
 const ConversationArea: FC<ConversationAreaProps> = (props) => {
   const { onFeedbackClick, answerId } = props;
+
+  const { control } = useFormContext();
+  const currentAnswer = useWatch({ control });
+
+  const files = currentAnswer[answerId]
+    ? currentAnswer[answerId].files_attributes ||
+      currentAnswer[`${answerId}`].files_attributes
+    : [];
 
   const dispatch = useAppDispatch();
   const liveFeedbackChats = useAppSelector((state) =>
@@ -78,9 +87,14 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
                     className="flex flex-col whitespace-pre-wrap ml-1"
                     variant="body2"
                   >
-                    {t(translations.lineNumber, {
-                      lineNumber: chat.lineNumber,
-                    })}
+                    {files.length === 1
+                      ? t(translations.lineNumber, {
+                          lineNumber: chat.lineNumber,
+                        })
+                      : t(translations.fileNameAndLineNumber, {
+                          filename: chat.filename ?? '',
+                          lineNumber: chat.lineNumber,
+                        })}
                   </Typography>
                   <Typography
                     className="flex flex-col whitespace-pre-wrap ml-1"

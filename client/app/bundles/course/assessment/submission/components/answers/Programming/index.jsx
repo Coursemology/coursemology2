@@ -1,6 +1,5 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { workflowStates } from 'course/assessment/submission/constants';
@@ -23,20 +22,11 @@ import ProgrammingFile from './ProgrammingFile';
 const ProgrammingFiles = ({
   readOnly,
   answerId,
-  questionId,
+  editorRef,
   language,
   saveAnswerAndUpdateClientVersion,
 }) => {
   const { control } = useFormContext();
-
-  const liveFeedbackChatForAnswer = useAppSelector((state) =>
-    getLiveFeedbackChatsForAnswerId(state, answerId),
-  );
-  const submission = useAppSelector(getSubmission);
-  const isAttempting = submission.workflowState === workflowStates.Attempting;
-
-  const isLiveFeedbackChatOpen =
-    liveFeedbackChatForAnswer?.isLiveFeedbackChatOpen;
 
   const { fields } = useFieldArray({
     control,
@@ -47,15 +37,6 @@ const ProgrammingFiles = ({
     control,
     name: `${answerId}.files_attributes`,
   });
-
-  const editorRef = useRef(null);
-
-  const focusEditorOnFeedbackLine = (linenum) => {
-    editorRef.current?.editor?.gotoLine(linenum, 0);
-    editorRef.current?.editor?.selection?.setAnchor(linenum - 1, 0);
-    editorRef.current?.editor?.selection?.moveCursorTo(linenum - 1, 0);
-    editorRef.current?.editor?.focus();
-  };
 
   const controlledProgrammingFields = fields.map((field, index) => ({
     ...field,
@@ -73,34 +54,17 @@ const ProgrammingFiles = ({
     const keyString = `editor-container-${index}`;
 
     return (
-      <div
-        key={keyString}
-        className="flex w-full relative gap-3 mb-1 max-h-full"
-        id={keyString}
-      >
-        <Box
-          className={`${isLiveFeedbackChatOpen && isAttempting ? 'w-1/2' : 'w-full'}`}
-        >
-          <ProgrammingFile
-            key={field.id}
-            answerId={answerId}
-            editorRef={editorRef}
-            fieldName={`${answerId}.files_attributes.${index}.content`}
-            file={file}
-            language={language}
-            readOnly={readOnly}
-            saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-          />
-        </Box>
-        {isLiveFeedbackChatOpen && isAttempting && (
-          <div className="absolute h-full flex w-1/2 whitespace-nowrap right-0">
-            <GetHelpChatPage
-              answerId={answerId}
-              onFeedbackClick={focusEditorOnFeedbackLine}
-              questionId={questionId}
-            />
-          </div>
-        )}
+      <div key={keyString} id={keyString}>
+        <ProgrammingFile
+          key={field.id}
+          answerId={answerId}
+          editorRef={editorRef}
+          fieldName={`${answerId}.files_attributes.${index}.content`}
+          file={file}
+          language={language}
+          readOnly={readOnly}
+          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
+        />
       </div>
     );
   });
@@ -109,10 +73,44 @@ const ProgrammingFiles = ({
 const Programming = (props) => {
   const { question, readOnly, answerId, saveAnswerAndUpdateClientVersion } =
     props;
+
+  const { control } = useFormContext();
+  const currentAnswer = useWatch({ control });
+
+  const liveFeedbackChatForAnswer = useAppSelector((state) =>
+    getLiveFeedbackChatsForAnswerId(state, answerId),
+  );
+  const submission = useAppSelector(getSubmission);
+  const isAttempting = submission.workflowState === workflowStates.Attempting;
+
+  const isLiveFeedbackChatOpen =
+    liveFeedbackChatForAnswer?.isLiveFeedbackChatOpen;
   const fileSubmission = question.fileSubmission;
   const isSavingAnswer = useAppSelector((state) =>
     getIsSavingAnswer(state, answerId),
   );
+
+  const files = currentAnswer[answerId]
+    ? currentAnswer[answerId].files_attributes ||
+      currentAnswer[`${answerId}`].files_attributes
+    : null;
+
+  const [displayFileName, setDisplayFileName] = useState(
+    files && files.length > 0 ? files[0].filename : '',
+  );
+
+  const editorRef = useRef(null);
+
+  const focusEditorOnFeedbackLine = (linenum, filename) => {
+    if (filename) {
+      setDisplayFileName(filename);
+    }
+
+    editorRef.current?.editor?.gotoLine(linenum, 0);
+    editorRef.current?.editor?.selection?.setAnchor(linenum - 1, 0);
+    editorRef.current?.editor?.selection?.moveCursorTo(linenum - 1, 0);
+    editorRef.current?.editor?.focus();
+  };
 
   const feedbackFiles = useAppSelector(
     (state) =>
@@ -122,29 +120,51 @@ const Programming = (props) => {
   );
 
   return (
-    <div className="mt-5">
-      {fileSubmission ? (
-        <ProgrammingImportEditor
-          key={question.id}
-          answerId={answerId}
-          isSavingAnswer={isSavingAnswer}
-          question={question}
-          readOnly={readOnly}
-          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-        />
-      ) : (
-        <ProgrammingFiles
-          key={question.id}
-          answerId={answerId}
-          feedbackFiles={feedbackFiles}
-          language={parseLanguages(question.language)}
-          questionId={question.id}
-          readOnly={readOnly}
-          saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
-        />
-      )}
+    <>
+      <div className="mt-5 flex w-full relative gap-3 mb-1 max-h-[100%]">
+        <div
+          className={`${isLiveFeedbackChatOpen && isAttempting ? 'w-1/2' : 'w-full'}`}
+        >
+          {fileSubmission ? (
+            <ProgrammingImportEditor
+              key={question.id}
+              answerId={answerId}
+              displayFileName={displayFileName}
+              editorRef={editorRef}
+              isSavingAnswer={isSavingAnswer}
+              question={question}
+              readOnly={readOnly}
+              saveAnswerAndUpdateClientVersion={
+                saveAnswerAndUpdateClientVersion
+              }
+              setDisplayFileName={setDisplayFileName}
+            />
+          ) : (
+            <ProgrammingFiles
+              key={question.id}
+              answerId={answerId}
+              editorRef={editorRef}
+              feedbackFiles={feedbackFiles}
+              language={parseLanguages(question.language)}
+              readOnly={readOnly}
+              saveAnswerAndUpdateClientVersion={
+                saveAnswerAndUpdateClientVersion
+              }
+            />
+          )}
+        </div>
+        {isLiveFeedbackChatOpen && isAttempting && (
+          <div className="absolute h-[100%] flex w-1/2 whitespace-nowrap right-0">
+            <GetHelpChatPage
+              answerId={answerId}
+              onFeedbackClick={focusEditorOnFeedbackLine}
+              questionId={question.id}
+            />
+          </div>
+        )}
+      </div>
       <CodaveriFeedbackStatus answerId={answerId} questionId={question.id} />
-    </div>
+    </>
   );
 };
 
