@@ -251,6 +251,24 @@
   "course.achievement.AchievementAward.AchievementAwardManager.saveChanges": {
     "defaultMessage": "保存更改"
   },
+  "course.achievement.AchievementAward.AchievementAwardSummary.awardedStudents": {
+    "defaultMessage": "获奖学生"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.name": {
+    "defaultMessage": "名字"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.normalStudent": {
+    "defaultMessage": "普通学生"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.phantomStudent": {
+    "defaultMessage": "虚拟学生"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.revokedStudents": {
+    "defaultMessage": "被取消资格的学生"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.userType": {
+    "defaultMessage": "用户类型"
+  },
   "course.achievement.AchievementAward.awardAchievement": {
     "defaultMessage": "获奖成就"
   },
@@ -323,8 +341,26 @@
   "course.achievement.AchievementShow.studentsWithAchievement": {
     "defaultMessage": "有此成就的学生"
   },
+  "course.achievement.AchievementTable.actions": {
+    "defaultMessage": "行动"
+  },
+  "course.achievement.AchievementTable.badge": {
+    "defaultMessage": "徽章"
+  },
+  "course.achievement.AchievementTable.description": {
+    "defaultMessage": "描述"
+  },
   "course.achievement.AchievementTable.noAchievement": {
     "defaultMessage": "暂无成就"
+  },
+  "course.achievement.AchievementTable.published": {
+    "defaultMessage": "出版"
+  },
+  "course.achievement.AchievementTable.requirements": {
+    "defaultMessage": "要求"
+  },
+  "course.achievement.AchievementTable.title": {
+    "defaultMessage": "标题"
   },
   "course.achievement.AchievementsIndex.achievements": {
     "defaultMessage": "成就"
@@ -467,32 +503,32 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "到 {tab}"
   },
-  "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
-    "defaultMessage": "目前这是一项实验性功能。 Codaveri 为学生的代码提供代码测验和自动代码反馈服务。"
-  },
-  "course.admin.CodaveriSettings.codaveriSettings": {
-    "defaultMessage": "Codaveri 设置"
-  },
-  "course.admin.CodaveriSettings.enableIsOnlyITSP": {
-    "defaultMessage": "启用 ITSP"
-  },
-  "course.admin.CodaveriSettings.error": {
-    "defaultMessage": "更新 codaveri 设置时出错。"
-  },
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "一些"
   },
-  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
-    "defaultMessage": "更新 Codaveri 评估器设置时发生了错误。"
+  "course.admin.CodaveriSettings.assessments": {
+    "defaultMessage": "评估"
+  },
+  "course.admin.CodaveriSettings.codaveriEngine": {
+    "defaultMessage": "Codaveri Engine"
+  },
+  "course.admin.CodaveriSettings.codaveriEngineDescription": {
+    "defaultMessage": "Type of codaveri engine used to generate programming code feedback"
   },
   "course.admin.CodaveriSettings.codaveriEvaluatorSettings": {
     "defaultMessage": "Codaveri 评估器"
   },
-  "course.admin.CodaveriSettings.liveFeedbackSettings": {
-    "defaultMessage": "实时帮助"
+  "course.admin.CodaveriSettings.codaveriSettings": {
+    "defaultMessage": "Codaveri 设置"
   },
-  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
-    "defaultMessage": "更新实时帮助设置时发生了错误。"
+  "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
+    "defaultMessage": "目前这是一项实验性功能。 Codaveri 为学生的代码提供代码测验和自动代码反馈服务。"
+  },
+  "course.admin.CodaveriSettings.defaultEngine": {
+    "defaultMessage": "Default Engine"
+  },
+  "course.admin.CodaveriSettings.defaultEngineDescription": {
+    "defaultMessage": "Uses generative AI and verification techniques"
   },
   "course.admin.CodaveriSettings.enableDisableButton": {
     "defaultMessage": "{enabled, select, true {启用} other {禁用}}"
@@ -500,14 +536,59 @@
   "course.admin.CodaveriSettings.enableDisableEvaluator": {
     "defaultMessage": "{enabled, select, true {启用} other {禁用}} Codaveri 评估器 对 {questionCount} 道编程题目在 {title} 中?"
   },
-  "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
-    "defaultMessage": "{enabled, select, true {启用} other {禁用}} 实时帮助 对 {questionCount} 道编程题目在 {title} 中?"
-  },
   "course.admin.CodaveriSettings.enableDisableEvaluatorDescription": {
     "defaultMessage": "这 {type} 中的 {questionCount} 道编程题目将使用 {enabled, select, true {Codaveri} other {默认}} 评估器"
   },
+  "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
+    "defaultMessage": "{enabled, select, true {启用} other {禁用}} 实时帮助 对 {questionCount} 道编程题目在 {title} 中?"
+  },
+  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
+    "defaultMessage": "更新 Codaveri 评估器设置时发生了错误。"
+  },
+  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
+    "defaultMessage": "更新实时帮助设置时发生了错误。"
+  },
+  "course.admin.CodaveriSettings.evaluatorUpdateSuccess": {
+    "defaultMessage": "{question}现在正在使用{evaluator}评估者"
+  },
+  "course.admin.CodaveriSettings.expandAll": {
+    "defaultMessage": "展开所有问题"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflow": {
+    "defaultMessage": "Automatic Post-Submission Comments"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowDescription": {
+    "defaultMessage": "When a submission with programming question is finalised,"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowDraft": {
+    "defaultMessage": "Generate feedback as a draft requiring approval from staff"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowNone": {
+    "defaultMessage": "Generate no feedback"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowPublish": {
+    "defaultMessage": "Publish feedback directly to student"
+  },
+  "course.admin.CodaveriSettings.itspEngine": {
+    "defaultMessage": "ITSP Engine"
+  },
+  "course.admin.CodaveriSettings.itspEngineDescription": {
+    "defaultMessage": "Uses automated program repair technique"
+  },
   "course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess": {
     "defaultMessage": "对于 {question}，实时帮助现在已 {liveFeedbackEnabled, select, true {启用} other {禁用}}"
+  },
+  "course.admin.CodaveriSettings.liveFeedbackSettings": {
+    "defaultMessage": "实时帮助"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettings": {
+    "defaultMessage": "编程问题设置"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettingsSubtitle": {
+    "defaultMessage": "在各种评估中启用/禁用Codaveri作为编程问题的评估者。"
+  },
+  "course.admin.CodaveriSettings.succesfulUpdateAllEvaluator": {
+    "defaultMessage": "成功将所有问题更新为使用 {evaluator} 评估器"
   },
   "course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled": {
     "defaultMessage": "成功地将所有问题的实时帮助设置为 {liveFeedbackEnabled, select, true {启用} other {禁用}}"
@@ -523,6 +604,9 @@
   },
   "course.admin.ComponentSettings.errorOccurredWhenUpdatingComponents": {
     "defaultMessage": "更新组件设置时出错。"
+  },
+  "course.admin.ComponentSettings.settingUpComponent": {
+    "defaultMessage": "为这门课程设置组件"
   },
   "course.admin.CourseSettings.allowUsersToSendEnrolmentRequests": {
     "defaultMessage": "允许用户发送注册请求"
@@ -764,6 +848,9 @@
   "course.admin.LessonPlanSettings.lessonPlanItemSettings": {
     "defaultMessage": "课程计划项目设置"
   },
+  "course.admin.LessonPlanSettings.lessonPlanSettings": {
+    "defaultMessage": "课程计划设置"
+  },
   "course.admin.LessonPlanSettings.noLessonPlanItems": {
     "defaultMessage": "没有教案项目以配置展示。"
   },
@@ -959,6 +1046,51 @@
   "course.admin.courseSettings": {
     "defaultMessage": "课程设置"
   },
+  "course.admin.storiesSettings.autoCreateAccounts": {
+    "defaultMessage": "如果Cikgo上的用户帐户和聊天室尚不存在，它们将自动创建。与Cikgo共享的信息受 <ourPpLink>我们的隐私政策</ourPpLink> 和 <cikgoPpLink>Cikgo的隐私政策</cikgoPpLink> 管辖。"
+  },
+  "course.admin.storiesSettings.integrationHint": {
+    "defaultMessage": "要将您的Cikgo课程与此课程集成，请在此处输入其集成密钥。以下是一旦此课程与Cikgo集成后将会发生的事情。"
+  },
+  "course.admin.storiesSettings.integrationSettings": {
+    "defaultMessage": "集成设置"
+  },
+  "course.admin.storiesSettings.learnTitle": {
+    "defaultMessage": "学习页面标题"
+  },
+  "course.admin.storiesSettings.leaveEmptyToUseDefaultTitle": {
+    "defaultMessage": "留空使用默认的“学习”标题。"
+  },
+  "course.admin.storiesSettings.onlyOwnersCanManage": {
+    "defaultMessage": "只有您、所有者和管理员才能配置此课程与Cikgo的集成。"
+  },
+  "course.admin.storiesSettings.pingError": {
+    "defaultMessage": "连接到Cikgo时出现问题。您可以稍后再试。"
+  },
+  "course.admin.storiesSettings.publishTaskCompletions": {
+    "defaultMessage": "学生的提交状态将反映在Cikgo的聊天室中。"
+  },
+  "course.admin.storiesSettings.pushKey": {
+    "defaultMessage": "集成密钥"
+  },
+  "course.admin.storiesSettings.pushKeyError": {
+    "defaultMessage": "此集成密钥未指向Cikgo上的有效课程。请检查您在Cikgo上的设置，然后重试。"
+  },
+  "course.admin.storiesSettings.pushKeyHint": {
+    "defaultMessage": "集成密钥并非严格保密，但应保密处理。"
+  },
+  "course.admin.storiesSettings.pushKeyPointsToCourse": {
+    "defaultMessage": "这个集成密钥指向 Cikgo 上的 <link>{course}</link>。"
+  },
+  "course.admin.storiesSettings.redirects": {
+    "defaultMessage": "当学生访问这个<link>课程的根URL</link>时，他们将被重定向到学习页面。主页仍然可以从侧边栏访问。"
+  },
+  "course.admin.storiesSettings.storiesSettings": {
+    "defaultMessage": "故事设置"
+  },
+  "course.admin.storiesSettings.syncs": {
+    "defaultMessage": "本课程中发布的测验、视频和调查将作为资源在Cikgo中提供并保持同步。"
+  },
   "course.announcement.AnnouncementsDisplay.searchBarPlaceholder": {
     "defaultMessage": "按标题或内容搜索"
   },
@@ -1070,6 +1202,12 @@
   "course.assessment.AssessmentForm.blockStudentViewingAfterSubmittedHint": {
     "defaultMessage": "学生只有在成绩公布后才能查看他们提交的内容。"
   },
+  "course.assessment.AssessmentForm.blocksAccessesFromInvalidSUS": {
+    "defaultMessage": "阻止具有无效UA的浏览器访问"
+  },
+  "course.assessment.AssessmentForm.blocksAccessesFromInvalidSUSHint": {
+    "defaultMessage": "如果启用，使用浏览器的考生，其UA无效（不包含下面指定的SUS）将被阻止访问此评估。教师可以使用会话解锁密码覆盖访问权限。来自被覆盖的浏览器会话的心跳将在PulseGrid中标记为有效。"
+  },
   "course.assessment.AssessmentForm.bonusEndAt": {
     "defaultMessage": "额外奖励结束于"
   },
@@ -1136,11 +1274,23 @@
   "course.assessment.AssessmentForm.hasPersonalTimesHint": {
     "defaultMessage": "该项目的时间将根据学习率自动为用户调整。"
   },
+  "course.assessment.AssessmentForm.hasTimeLimit": {
+    "defaultMessage": "计时器结束时自动提交"
+  },
+  "course.assessment.AssessmentForm.hasTimeLimitHint": {
+    "defaultMessage": "启用后，每个提交将拥有自己的计时器，并在计时器结束时自动完成。"
+  },
   "course.assessment.AssessmentForm.hasToBeMoreThanMinInterval": {
     "defaultMessage": "必须大于设定的最小值"
   },
   "course.assessment.AssessmentForm.hasToBeMoreThanValueMs": {
     "defaultMessage": "必须至少为 3000 毫秒"
+  },
+  "course.assessment.AssessmentForm.hasToBeNumber": {
+    "defaultMessage": "必须是有效的数字。"
+  },
+  "course.assessment.AssessmentForm.hasToBePositive": {
+    "defaultMessage": "必须是正数。"
   },
   "course.assessment.AssessmentForm.hasToBePositiveInteger": {
     "defaultMessage": "必须为一个小于 86,400,000 毫秒的正整数"
@@ -1154,6 +1304,12 @@
   "course.assessment.AssessmentForm.intervalHint": {
     "defaultMessage": "控制来自学生浏览器的心跳数据包的发送频率。发送间隔在这两个范围内随机选取"
   },
+  "course.assessment.AssessmentForm.koditsuDisabledInCourse": {
+    "defaultMessage": "请联系课程管理员，在课程设置中启用 Koditsu 考试。"
+  },
+  "course.assessment.AssessmentForm.liveFeedback": {
+    "defaultMessage": "获取帮助"
+  },
   "course.assessment.AssessmentForm.maxInterval": {
     "defaultMessage": "最大间隔"
   },
@@ -1163,8 +1319,17 @@
   "course.assessment.AssessmentForm.minInterval": {
     "defaultMessage": "最小间隔"
   },
+  "course.assessment.AssessmentForm.minutes": {
+    "defaultMessage": "分钟"
+  },
   "course.assessment.AssessmentForm.modeSwitchingHint": {
     "defaultMessage": "你不能再更改评分模式，因为已经有此测验的提交。"
+  },
+  "course.assessment.AssessmentForm.needSUSAndSessionUnlockPassword": {
+    "defaultMessage": "您需要指定一个SUS和会话解锁密码才能启用此功能。"
+  },
+  "course.assessment.AssessmentForm.noProgrammingQuestion": {
+    "defaultMessage": "You need to add at least one programming question that can be supported by Codaveri to allow enabling live feedback for this Assessment"
   },
   "course.assessment.AssessmentForm.noTestCaseChosenError": {
     "defaultMessage": "至少选择一种类型的测试用例"
@@ -1190,11 +1355,17 @@
   "course.assessment.AssessmentForm.personalisedTimelines": {
     "defaultMessage": "个性化时间表"
   },
+  "course.assessment.AssessmentForm.proctorWithKoditsu": {
+    "defaultMessage": "使用Koditsu进行监考考试"
+  },
   "course.assessment.AssessmentForm.published": {
     "defaultMessage": "发布时间"
   },
   "course.assessment.AssessmentForm.publishedHint": {
     "defaultMessage": "每个人都可以看到这个评价。"
+  },
+  "course.assessment.AssessmentForm.questionsIncompatibleWithKoditsu": {
+    "defaultMessage": "请确保在激活Koditsu的监考之前，此评估中的所有问题与Koditsu兼容。"
   },
   "course.assessment.AssessmentForm.secret": {
     "defaultMessage": "UA子字符串密文（SUS）"
@@ -1204,9 +1375,6 @@
   },
   "course.assessment.AssessmentForm.sessionPassword": {
     "defaultMessage": "会话解锁密码"
-  },
-  "course.assessment.AssessmentForm.sessionPasswordHint": {
-    "defaultMessage": "理想情况下，不要将此密码提供给学生。"
   },
   "course.assessment.AssessmentForm.sessionProtection": {
     "defaultMessage": "启用会话保护"
@@ -1253,8 +1421,14 @@
   "course.assessment.AssessmentForm.timeBonusExp": {
     "defaultMessage": "额外时间奖励经验"
   },
+  "course.assessment.AssessmentForm.timeLimit": {
+    "defaultMessage": "时间限制"
+  },
   "course.assessment.AssessmentForm.title": {
     "defaultMessage": "标题"
+  },
+  "course.assessment.AssessmentForm.toggleLiveFeedbackDescription": {
+    "defaultMessage": "Enable live feedback feature for all programming questions"
   },
   "course.assessment.AssessmentForm.unavailableInAutograded": {
     "defaultMessage": "在自动评分测验中不可用。"
@@ -1331,6 +1505,69 @@
   "course.assessment.edit.update": {
     "defaultMessage": "保存"
   },
+  "course.assessment.generation.allFieldsLocked": {
+    "defaultMessage": "所有字段都已锁定，因此无法生成任何内容。"
+  },
+  "course.assessment.generation.confirmDeleteConversation": {
+    "defaultMessage": "您确定要删除\"{title}\"及其所有历史记录吗？此操作不可逆转！"
+  },
+  "course.assessment.generation.exportAction": {
+    "defaultMessage": "导出"
+  },
+  "course.assessment.generation.exportClose": {
+    "defaultMessage": "关闭"
+  },
+  "course.assessment.generation.exportDialogHeader": {
+    "defaultMessage": "导出问题（已选择{exportCount}个）"
+  },
+  "course.assessment.generation.exportError": {
+    "defaultMessage": "导出此问题时发生了错误。"
+  },
+  "course.assessment.generation.generateError": {
+    "defaultMessage": "生成问题\"{title}\"时发生错误。"
+  },
+  "course.assessment.generation.generatePage": {
+    "defaultMessage": "生成编程问题"
+  },
+  "course.assessment.generation.generateQuestion": {
+    "defaultMessage": "生成"
+  },
+  "course.assessment.generation.generateSuccess": {
+    "defaultMessage": "成功生成“{title}”的一代。"
+  },
+  "course.assessment.generation.languageField": {
+    "defaultMessage": "语言"
+  },
+  "course.assessment.generation.newTab": {
+    "defaultMessage": "新"
+  },
+  "course.assessment.generation.openExportDialog": {
+    "defaultMessage": "导出"
+  },
+  "course.assessment.generation.promptPlaceholder": {
+    "defaultMessage": "在这里输入一些内容..."
+  },
+  "course.assessment.generation.resetConversation": {
+    "defaultMessage": "重置"
+  },
+  "course.assessment.generation.showInactive": {
+    "defaultMessage": "显示非活动项目"
+  },
+  "course.assessment.liveFeedback.comments": {
+    "defaultMessage": "评论"
+  },
+  "course.assessment.liveFeedback.feedbackTimingTitle": {
+    "defaultMessage": "使用时间：{usedAt}"
+  },
+  "course.assessment.liveFeedback.lineHeader": {
+    "defaultMessage": "第 {lineNumber} 行"
+  },
+  "course.assessment.liveFeedback.questionTitle": {
+    "defaultMessage": "题目 {index}"
+  },
+  "course.assessment.monitoring.accessGrantedForThisSessionOnly": {
+    "defaultMessage": "只有在此浏览器会话期间才会授予访问权限。"
+  },
   "course.assessment.monitoring.alivePresenceHint": {
     "defaultMessage": "及时收到最后一次心跳"
   },
@@ -1340,14 +1577,29 @@
   "course.assessment.monitoring.blankField": {
     "defaultMessage": "（空）"
   },
+  "course.assessment.monitoring.blocksAccessesFromInvalidSUS": {
+    "defaultMessage": "阻止未授权浏览器访问"
+  },
+  "course.assessment.monitoring.blocksAccessesFromInvalidSUSHint": {
+    "defaultMessage": "如果启用，使用未经授权的浏览器的考生将无法访问此评估。教师可以使用会话解锁密码覆盖访问权限。覆盖浏览器会话的“心跳信号”（浏览器与服务器之间的定期通信）始终有效（绿色）在PulseGrid中。"
+  },
+  "course.assessment.monitoring.browserAuthorizationMethod": {
+    "defaultMessage": "浏览器授权方法"
+  },
+  "course.assessment.monitoring.browserAuthorizationMethodHint": {
+    "defaultMessage": "选择会话如何被授权为有效或无效。更改立即应用于所有会话和心跳“心跳信号”（浏览器与服务器之间的定期通信），并在PulseGrid中实时更新。"
+  },
   "course.assessment.monitoring.cannotConnectToLiveMonitoringChannel": {
     "defaultMessage": "连接到实时监控频道时发生错误"
   },
   "course.assessment.monitoring.connected": {
     "defaultMessage": "已连接"
   },
-  "course.assessment.monitoring.connectedToLiveMonitoringChannel": {
-    "defaultMessage": "连接到实时监控频道"
+  "course.assessment.monitoring.connecting": {
+    "defaultMessage": "连接"
+  },
+  "course.assessment.monitoring.deltaFromPreviousHeartbeat": {
+    "defaultMessage": "{ms} 毫秒前的上一个“心跳信号”（浏览器与服务器之间的定期通信）"
   },
   "course.assessment.monitoring.detailsOfNHeartbeats": {
     "defaultMessage": "最后 {n} 次心跳的详情"
@@ -1355,20 +1607,44 @@
   "course.assessment.monitoring.disconnected": {
     "defaultMessage": "已断开连接"
   },
-  "course.assessment.monitoring.disconnectedFromLiveMonitoringChannel": {
-    "defaultMessage": "与实时监控频道断开连接"
+  "course.assessment.monitoring.enableBrowserAuthorization": {
+    "defaultMessage": "授权访问此评估的浏览器"
+  },
+  "course.assessment.monitoring.enableBrowserAuthorizationHint": {
+    "defaultMessage": "如果启用，PulseGrid还将根据您选择的授权方法，额外检查考生是否从授权的浏览器访问此评估。"
+  },
+  "course.assessment.monitoring.examMonitoring": {
+    "defaultMessage": "启用考试监控"
+  },
+  "course.assessment.monitoring.examMonitoringHint": {
+    "defaultMessage": "如果启用，考生的会话将在他们尝试考试时实时监控，直到他们完成考试或自尝试以来的前24小时，以较早者为准。教师可以在 <pulsegrid>PulseGrid</pulsegrid> 中监控这些会话。"
+  },
+  "course.assessment.monitoring.expiredSession": {
+    "defaultMessage": "会话已过期。自提交以来已经过去至少24小时。"
   },
   "course.assessment.monitoring.filterByGroup": {
     "defaultMessage": "按组筛选"
   },
+  "course.assessment.monitoring.firstReceivedHeartbeat": {
+    "defaultMessage": "首次接收到的“心跳信号”（浏览器与服务器之间的定期通信）"
+  },
   "course.assessment.monitoring.generatedAt": {
     "defaultMessage": "生成于"
   },
+  "course.assessment.monitoring.intervalHint": {
+    "defaultMessage": "控制考生浏览器发送“心跳信号”（浏览器与服务器之间的定期通信）的频率。间隔在这两个范围之间随机化。"
+  },
+  "course.assessment.monitoring.invalidBrowser": {
+    "defaultMessage": "无效的浏览器配置"
+  },
+  "course.assessment.monitoring.invalidBrowserSubtitle": {
+    "defaultMessage": "您的当前浏览器或其配置不允许访问此评估。请联系您的教练寻求帮助。"
+  },
+  "course.assessment.monitoring.invalidHeartbeat": {
+    "defaultMessage": "无效的"
+  },
   "course.assessment.monitoring.ipAddress": {
     "defaultMessage": "IP地址"
-  },
-  "course.assessment.monitoring.lastHeartbeat": {
-    "defaultMessage": "最后一次心跳"
   },
   "course.assessment.monitoring.latePresenceHint": {
     "defaultMessage": "未及时收到下一次心跳，但仍在设定的心跳间隔内。"
@@ -1376,14 +1652,47 @@
   "course.assessment.monitoring.live": {
     "defaultMessage": "在线"
   },
+  "course.assessment.monitoring.liveHint": {
+    "defaultMessage": "这个“心跳信号”（浏览器与服务器之间的定期通信）立即被服务器接收。"
+  },
+  "course.assessment.monitoring.liveness": {
+    "defaultMessage": "活力"
+  },
+  "course.assessment.monitoring.loadAllHeartbeats": {
+    "defaultMessage": "加载全部"
+  },
+  "course.assessment.monitoring.maxInterval": {
+    "defaultMessage": "最大间隔"
+  },
+  "course.assessment.monitoring.milliseconds": {
+    "defaultMessage": "毫秒"
+  },
+  "course.assessment.monitoring.minInterval": {
+    "defaultMessage": "最小间隔"
+  },
   "course.assessment.monitoring.missingPresenceHint": {
     "defaultMessage": "没有及时收到下一次心跳。"
+  },
+  "course.assessment.monitoring.needSUSAndSessionUnlockPassword": {
+    "defaultMessage": "您必须启用浏览器授权并设置会话解锁密码才能启用此功能。"
   },
   "course.assessment.monitoring.noActiveSessions": {
     "defaultMessage": "没有活跃的会话。"
   },
+  "course.assessment.monitoring.offset": {
+    "defaultMessage": "“心跳信号”（浏览器与服务器之间的定期通信）间隔偏移"
+  },
+  "course.assessment.monitoring.offsetHint": {
+    "defaultMessage": "控制 PulseGrid 在频率间隔后等待多长时间，然后将会话标记为迟到。"
+  },
+  "course.assessment.monitoring.openSubmissionInNewTab": {
+    "defaultMessage": "在新标签页中打开提交"
+  },
+  "course.assessment.monitoring.overrideAccess": {
+    "defaultMessage": "覆盖访问"
+  },
   "course.assessment.monitoring.pulsegrid": {
-    "defaultMessage": "PulseGrid"
+    "defaultMessage": "脉冲网"
   },
   "course.assessment.monitoring.recentActivities": {
     "defaultMessage": "近期活动"
@@ -1391,8 +1700,41 @@
   "course.assessment.monitoring.recentActivitiesHint": {
     "defaultMessage": "关闭此选项卡会让这些日志消失"
   },
+  "course.assessment.monitoring.resetZoom": {
+    "defaultMessage": "重置缩放"
+  },
+  "course.assessment.monitoring.sebConfigKey": {
+    "defaultMessage": "安全考试浏览器（SEB）配置密钥"
+  },
+  "course.assessment.monitoring.sebConfigKeyFieldHint": {
+    "defaultMessage": "您的<sebConfigKey>SEB配置密钥</sebConfigKey>，而不是浏览器考试密钥，是从您特定的SEB配置生成的。它在操作系统和SEB版本之间保持不变。如果您更改了SEB配置，请确保更新此字段。"
+  },
+  "course.assessment.monitoring.sebConfigKeyFieldLabel": {
+    "defaultMessage": "SEB配置密钥"
+  },
+  "course.assessment.monitoring.sebConfigKeyHint": {
+    "defaultMessage": "如果考生使用有效配置使用 <seb>安全考试浏览器（SEB）</seb>，则将会话标记为有效。 SEB为特定配置生成唯一的 <sebConfigKey>配置密钥</sebConfigKey>。此方法需要 Windows 上的 SEB 3.4 和 iOS 及 macOS 上的 SEB 3.0 或更高版本。"
+  },
+  "course.assessment.monitoring.sebPayload": {
+    "defaultMessage": "安全考试浏览器（SEB）配置密钥哈希和URL"
+  },
+  "course.assessment.monitoring.secret": {
+    "defaultMessage": "秘密UA子字符串（SUS）"
+  },
+  "course.assessment.monitoring.secretHint": {
+    "defaultMessage": "如果考生的浏览器 User Agent (UA) 包含区分大小写的秘密信息，PulseGrid 将标记该会话为有效，否则标记为无效。如果您将此留空，所有会话都将被标记为有效。"
+  },
+  "course.assessment.monitoring.sessionUnlockPassword": {
+    "defaultMessage": "会话解锁密码"
+  },
   "course.assessment.monitoring.stale": {
     "defaultMessage": "陈旧的"
+  },
+  "course.assessment.monitoring.staleHint": {
+    "defaultMessage": "这个心跳信号没有立即被服务器接收，因为受检者的浏览器暂时无法访问。它被缓存在浏览器中，当浏览器再次可访问时发送到服务器。"
+  },
+  "course.assessment.monitoring.stoppedSession": {
+    "defaultMessage": "停止会话。学生可能已经完成了他们的提交。"
   },
   "course.assessment.monitoring.summaryCorrectAsAt": {
     "defaultMessage": "截至 {time} 的摘要是正确的"
@@ -1403,11 +1745,20 @@
   "course.assessment.monitoring.userAgent": {
     "defaultMessage": "用户代理（UA）"
   },
+  "course.assessment.monitoring.userAgentHint": {
+    "defaultMessage": "如果考生的浏览器的<ua>User Agent (UA)</ua>包含一个秘密子字符串，则将会标记该会话为有效。"
+  },
   "course.assessment.monitoring.userHeartbeatContinuedStreaming": {
     "defaultMessage": "{name}的心跳持续串流。"
   },
   "course.assessment.monitoring.userHeartbeatNotReceivedInTime": {
     "defaultMessage": "{name}的心跳没有被及时接收到。"
+  },
+  "course.assessment.monitoring.validHeartbeat": {
+    "defaultMessage": "有效"
+  },
+  "course.assessment.monitoring.zoomPanHint": {
+    "defaultMessage": "捏或滚动缩放。拖动以平移。"
   },
   "course.assessment.newAssessment": {
     "defaultMessage": "新测验"
@@ -1496,8 +1847,17 @@
   "course.assessment.question.multipleResponses.maximumGrade": {
     "defaultMessage": "得分最大值"
   },
+  "course.assessment.question.multipleResponses.mustBeLessThanMaxAttachmentSize": {
+    "defaultMessage": "最多 {defaultMax}MB。"
+  },
+  "course.assessment.question.multipleResponses.mustBeLessThanMaxAttachments": {
+    "defaultMessage": "必须最多为 {defaultMax}。"
+  },
   "course.assessment.question.multipleResponses.mustBeLessThanMaxMaximumGrade": {
     "defaultMessage": "必须小于1000。"
+  },
+  "course.assessment.question.multipleResponses.mustHaveAtLeastOneResponse": {
+    "defaultMessage": "您必须至少指定一个回复。"
   },
   "course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice": {
     "defaultMessage": "你必须指定至少一个正确选项。"
@@ -1505,8 +1865,20 @@
   "course.assessment.question.multipleResponses.mustSpecifyChoice": {
     "defaultMessage": "你必须指定一个有效的选项标题。"
   },
+  "course.assessment.question.multipleResponses.mustSpecifyMaxAttachment": {
+    "defaultMessage": "您必须指定一个有效的正数最大附件数量。"
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyMaxAttachmentSize": {
+    "defaultMessage": "您必须指定一个有效且正数的最大附件大小。"
+  },
   "course.assessment.question.multipleResponses.mustSpecifyMaximumGrade": {
     "defaultMessage": "你必须指定一个有效且非负的奖励得分最大值。"
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachment": {
+    "defaultMessage": "附件的最大数量必顶是正数。"
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachmentSize": {
+    "defaultMessage": "最大尺寸必须是正数。"
   },
   "course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade": {
     "defaultMessage": "得分最大值必须非负。"
@@ -1622,6 +1994,9 @@
   "course.assessment.question.programming.codaveriEvaluatorHint": {
     "defaultMessage": "提交后，在默认评分的基础上，此判题器将提供基于 Codaveri 的自动代码反馈。这些反馈将以草稿注释的形式出现，供导师审阅、编辑和发布。"
   },
+  "course.assessment.question.programming.codaveriEvaluatorNotSupported": {
+    "defaultMessage": "Codaveri 评估器不支持{languageName}。"
+  },
   "course.assessment.question.programming.codeInserts": {
     "defaultMessage": "代码插入"
   },
@@ -1645,6 +2020,9 @@
   },
   "course.assessment.question.programming.defaultEvaluatorHint": {
     "defaultMessage": "无额外操作，只需按照下面的包运行代码，并报告测试结果即可。"
+  },
+  "course.assessment.question.programming.defaultEvaluatorNotSupported": {
+    "defaultMessage": "默认评估器不支持{languageName}。"
   },
   "course.assessment.question.programming.editOnline": {
     "defaultMessage": "在线创建/修改"
@@ -1685,6 +2063,9 @@
   "course.assessment.question.programming.expected": {
     "defaultMessage": "预期结果"
   },
+  "course.assessment.question.programming.expectedOutput": {
+    "defaultMessage": "预期输出"
+  },
   "course.assessment.question.programming.expression": {
     "defaultMessage": "表达式"
   },
@@ -1715,6 +2096,9 @@
   "course.assessment.question.programming.inlineCode": {
     "defaultMessage": "内联代码"
   },
+  "course.assessment.question.programming.input": {
+    "defaultMessage": "输入"
+  },
   "course.assessment.question.programming.javaTestCasesHint": {
     "defaultMessage": "表达式将在提交的代码的上下文中进行评估。返回值将使用 <code>expectEquals(expression, expected)</code> 与期望值进行比较。其简化定义如下，其中 <code>Object</code> 已被重载为 Java 原始类型。"
   },
@@ -1730,6 +2114,9 @@
   "course.assessment.question.programming.languageAndEvaluation": {
     "defaultMessage": "语言和评估"
   },
+  "course.assessment.question.programming.languageDeprecatedWarning": {
+    "defaultMessage": "您选择的语言已被弃用。请将其更改为其他语言。"
+  },
   "course.assessment.question.programming.lastUpdated": {
     "defaultMessage": "上次由 {by} 于 {on} 更新."
   },
@@ -1738,6 +2125,9 @@
   },
   "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
     "defaultMessage": "在此添加指导实时反馈生成的说明。如果不确定，可以留空。"
+  },
+  "course.assessment.question.programming.liveFeedbackNotSupported": {
+    "defaultMessage": "不支持为{languageName}生成实时反馈。"
   },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "最低评分优先级"
@@ -1805,6 +2195,9 @@
   "course.assessment.question.programming.questionSavedButPackageError": {
     "defaultMessage": "已保存更改，但包未成功导入。"
   },
+  "course.assessment.question.programming.rTestCasesHint": {
+    "defaultMessage": "每个测试用例都会启动一个单独的 R 控制台实例，并通过标准输入提供输入。该控制台将运行 <prepend>Prepend</prepend> 脚本、学生提交内容和 <append>Append</append> 脚本。这些脚本的标准输出将与测试用例的预期输出（作为字符串）进行比较。我们建议在这些脚本中处理标准输入。"
+  },
   "course.assessment.question.programming.savingChanges": {
     "defaultMessage": "正在保存你的修改"
   },
@@ -1853,6 +2246,9 @@
   "course.assessment.question.programming.timeLimit": {
     "defaultMessage": "时间限制"
   },
+  "course.assessment.question.programming.timeLimitDetail": {
+    "defaultMessage": "{timeLimit, plural, one {# 分钟} other {# 分钟}}"
+  },
   "course.assessment.question.programming.uploadNewPackage": {
     "defaultMessage": "提交一个新包"
   },
@@ -1872,10 +2268,12 @@
     "defaultMessage": "不能留空。"
   },
   "course.assessment.question.scribing.ScribingQuestionForm.chooseFileButton": {
-    "defaultMessage": "选择文件"
+    "defaultMessage": "选择文件",
+    "description": "Button for adding an image attachment."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.descriptionFieldLabel": {
-    "defaultMessage": "描述"
+    "defaultMessage": "描述",
+    "description": "Label for the description input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.fetchFailureMessage": {
     "defaultMessage": "发生错误，请重试。"
@@ -1890,10 +2288,12 @@
     "defaultMessage": "值必须大于 0。"
   },
   "course.assessment.question.scribing.ScribingQuestionForm.maximumGradeFieldLabel": {
-    "defaultMessage": "最高等级"
+    "defaultMessage": "最高等级",
+    "description": "Label for the maximum grade input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.noFileChosenMessage": {
-    "defaultMessage": "没有选中任何文件"
+    "defaultMessage": "没有选中任何文件",
+    "description": "Message to be displayed when no file is chosen for a file input."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.positiveNumberValidationError": {
     "defaultMessage": "必须为正值。"
@@ -1905,22 +2305,27 @@
     "defaultMessage": "注意：PDF 文件的每一页都将创建为单个 Scribing 问题，每个问题都采用相同的问题详细信息。你可以选择将可选输入留空并在创建后返回再次编辑问题。"
   },
   "course.assessment.question.scribing.ScribingQuestionForm.skillsFieldLabel": {
-    "defaultMessage": "技能"
+    "defaultMessage": "技能",
+    "description": "Label for the skills input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.staffOnlyCommentsFieldLabel": {
-    "defaultMessage": "仅限工作人员评论"
+    "defaultMessage": "仅限工作人员评论",
+    "description": "Label for the staff only comments input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.submitButton": {
-    "defaultMessage": "提交"
+    "defaultMessage": "提交",
+    "description": "Button for submitting the form."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.submitFailureMessage": {
     "defaultMessage": "发生错误，请重试。"
   },
   "course.assessment.question.scribing.ScribingQuestionForm.submittingMessage": {
-    "defaultMessage": "提交中..."
+    "defaultMessage": "提交中...",
+    "description": "Text to be displayed when waiting for server response after form submission."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.titleFieldLabel": {
-    "defaultMessage": "标题"
+    "defaultMessage": "标题",
+    "description": "Label for the title input field."
   },
   "course.assessment.question.scribing.ScribingQuestionForm.valueMoreThan1000Error": {
     "defaultMessage": "值必须小于 1000。"
@@ -1928,8 +2333,14 @@
   "course.assessment.question.textResponses.addSolution": {
     "defaultMessage": "添加一个新答案"
   },
-  "course.assessment.question.textResponses.allowFileUpload": {
-    "defaultMessage": "允许在回答中上传文件"
+  "course.assessment.question.textResponses.attachmentSettingRequired": {
+    "defaultMessage": "附件设置应该在这个问题中定义"
+  },
+  "course.assessment.question.textResponses.attachmentSettings": {
+    "defaultMessage": "附件设置"
+  },
+  "course.assessment.question.textResponses.attachmentSettingsDescription": {
+    "defaultMessage": "当学生尝试这个问题时，"
   },
   "course.assessment.question.textResponses.deleteSolution": {
     "defaultMessage": "删除答案"
@@ -1943,8 +2354,23 @@
   "course.assessment.question.textResponses.grade": {
     "defaultMessage": "得分"
   },
+  "course.assessment.question.textResponses.isAttachmentRequired": {
+    "defaultMessage": "此问题需要文件上传"
+  },
   "course.assessment.question.textResponses.keyword": {
     "defaultMessage": "关键词"
+  },
+  "course.assessment.question.textResponses.maxAttachmentSize": {
+    "defaultMessage": "每个附件的最大尺寸"
+  },
+  "course.assessment.question.textResponses.maxAttachments": {
+    "defaultMessage": "附件最大数量"
+  },
+  "course.assessment.question.textResponses.multipleAttachments": {
+    "defaultMessage": "多个附件"
+  },
+  "course.assessment.question.textResponses.multipleFileAttachmentDescription": {
+    "defaultMessage": "他们可以上传多个附件。"
   },
   "course.assessment.question.textResponses.mustSpecifyGrade": {
     "defaultMessage": "您必须设定一个有效成绩分数。"
@@ -1957,6 +2383,18 @@
   },
   "course.assessment.question.textResponses.newSolutionCannotUndo": {
     "defaultMessage": "这是一个新答案。如果在保存前删除，它会立即消失。"
+  },
+  "course.assessment.question.textResponses.noAttachment": {
+    "defaultMessage": "无附件"
+  },
+  "course.assessment.question.textResponses.noAttachmentDescription": {
+    "defaultMessage": "他们将无法上传任何附件。"
+  },
+  "course.assessment.question.textResponses.singleFileAttachment": {
+    "defaultMessage": "单个附件"
+  },
+  "course.assessment.question.textResponses.singleFileAttachmentDescription": {
+    "defaultMessage": "他们只能上传一个附件。"
   },
   "course.assessment.question.textResponses.solution": {
     "defaultMessage": "答案"
@@ -1981,6 +2419,9 @@
   },
   "course.assessment.question.textResponses.undoDeleteSolution": {
     "defaultMessage": "撤销删除答案"
+  },
+  "course.assessment.question.textResponses.validAttachmentSettingValues": {
+    "defaultMessage": "附件设置应为无附件、单个文件附件或多个文件附件之一"
   },
   "course.assessment.question.textResponses.zeroGrade": {
     "defaultMessage": "0.0"
@@ -2008,9 +2449,6 @@
   },
   "course.assessment.show.assessmentOnlyAvailableFrom": {
     "defaultMessage": "此测验仅可来自"
-  },
-  "course.assessment.show.audioResponse": {
-    "defaultMessage": "声音反馈"
   },
   "course.assessment.show.baseExp": {
     "defaultMessage": "基础经验值"
@@ -2044,6 +2482,9 @@
   },
   "course.assessment.show.chooseAssessmentToDuplicateInto": {
     "defaultMessage": "选择要复制到的测验"
+  },
+  "course.assessment.show.comprehension": {
+    "defaultMessage": "理解"
   },
   "course.assessment.show.delete": {
     "defaultMessage": "删除"
@@ -2102,8 +2543,14 @@
   "course.assessment.show.errorMovingQuestion": {
     "defaultMessage": "移动问题时出错。"
   },
+  "course.assessment.show.failedSyncingWithKoditsu": {
+    "defaultMessage": "与Koditsu不同步"
+  },
   "course.assessment.show.fileUpload": {
     "defaultMessage": "上传文件"
+  },
+  "course.assessment.show.fileUploadDescription": {
+    "defaultMessage": "允许的附件数量设置（无、一个或多个）"
   },
   "course.assessment.show.files": {
     "defaultMessage": "文件"
@@ -2116,6 +2563,9 @@
   },
   "course.assessment.show.forumPostResponse": {
     "defaultMessage": "论坛帖子回复"
+  },
+  "course.assessment.show.generate": {
+    "defaultMessage": "生成编程问题"
   },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "为测试用例打分"
@@ -2134,6 +2584,9 @@
   },
   "course.assessment.show.hideOptions": {
     "defaultMessage": "隐藏选项"
+  },
+  "course.assessment.show.koditsuMode": {
+    "defaultMessage": "Koditsu"
   },
   "course.assessment.show.manageComponents": {
     "defaultMessage": "在课程设置中管理组件"
@@ -2261,6 +2714,12 @@
   "course.assessment.show.sureDeletingQuestion": {
     "defaultMessage": "你确定要删除这个问题吗？"
   },
+  "course.assessment.show.syncedWithKoditsu": {
+    "defaultMessage": "与Koditsu同步"
+  },
+  "course.assessment.show.syncingWithKoditsu": {
+    "defaultMessage": "与Koditsu同步"
+  },
   "course.assessment.show.textResponse": {
     "defaultMessage": "文字回复"
   },
@@ -2275,6 +2734,9 @@
   },
   "course.assessment.show.unsubmittingAndChangingQuestionType": {
     "defaultMessage": "正在取消提交并更改你的问题类型..."
+  },
+  "course.assessment.show.voiceResponse": {
+    "defaultMessage": "音频回应"
   },
   "course.assessment.show.whileHoldingToCancelMoving": {
     "defaultMessage": "按住取消移动。"
@@ -2378,23 +2840,47 @@
   "course.assessment.skills.SkillsTable.uncategorised": {
     "defaultMessage": "未分类技能"
   },
-  "course.assessment.liveFeedback.questionTitle": {
-    "defaultMessage": "题目 {index}"
+  "course.assessment.statistics.SubmissionStatusChart.attempting": {
+    "defaultMessage": "尝试"
   },
-  "course.assessment.liveFeedback.feedbackTimingTitle": {
-    "defaultMessage": "使用时间：{usedAt}"
+  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
+    "defaultMessage": "学生提交状态"
   },
-  "course.assessment.liveFeedback.liveFeedbackName": {
-    "defaultMessage": "实时反馈"
+  "course.assessment.statistics.SubmissionStatusChart.graded": {
+    "defaultMessage": "已评分，未发布"
   },
-  "course.assessment.liveFeedback.comments": {
-    "defaultMessage": "评论"
+  "course.assessment.statistics.SubmissionStatusChart.published": {
+    "defaultMessage": "分级"
   },
-  "course.assessment.liveFeedback.lineHeader": {
-    "defaultMessage": "第 {lineNumber} 行"
+  "course.assessment.statistics.SubmissionStatusChart.submitted": {
+    "defaultMessage": "已提交"
+  },
+  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
+    "defaultMessage": "未尝试"
+  },
+  "course.assessment.statistics.ancestorFail": {
+    "defaultMessage": "无法获取此测试的过去结果。"
+  },
+  "course.assessment.statistics.ancestorSelect.current": {
+    "defaultMessage": "当前"
+  },
+  "course.assessment.statistics.ancestorSelect.fromCourse": {
+    "defaultMessage": "来自{courseTitle}课程"
+  },
+  "course.assessment.statistics.ancestorSelect.subtitle": {
+    "defaultMessage": "与此评估的过去版本进行比较："
+  },
+  "course.assessment.statistics.ancestorSelect.title": {
+    "defaultMessage": "复制历史"
+  },
+  "course.assessment.statistics.ancestorStatisticsFail": {
+    "defaultMessage": "获取祖先统计数据失败。"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "答案"
+  },
+  "course.assessment.statistics.attemptCount": {
+    "defaultMessage": "尝试次数"
   },
   "course.assessment.statistics.attempts.filename": {
     "defaultMessage": "{assessment} 的题目尝试统计"
@@ -2408,6 +2894,33 @@
   "course.assessment.statistics.closePrompt": {
     "defaultMessage": "关闭"
   },
+  "course.assessment.statistics.comments": {
+    "defaultMessage": "评论"
+  },
+  "course.assessment.statistics.duplicationHistory": {
+    "defaultMessage": "复制历史"
+  },
+  "course.assessment.statistics.email": {
+    "defaultMessage": "电子邮件"
+  },
+  "course.assessment.statistics.fail": {
+    "defaultMessage": "获取统计数据失败。"
+  },
+  "course.assessment.statistics.gradeDisplay": {
+    "defaultMessage": "等级: {grade} / {maxGrade}"
+  },
+  "course.assessment.statistics.gradeDistribution": {
+    "defaultMessage": "成绩分布"
+  },
+  "course.assessment.statistics.gradeViolin.datasetLabel": {
+    "defaultMessage": "分布"
+  },
+  "course.assessment.statistics.gradeViolin.xAxisLabel": {
+    "defaultMessage": "得分"
+  },
+  "course.assessment.statistics.gradeViolin.yAxisLabel": {
+    "defaultMessage": "提交"
+  },
   "course.assessment.statistics.grader": {
     "defaultMessage": "评分者"
   },
@@ -2417,11 +2930,20 @@
   "course.assessment.statistics.group": {
     "defaultMessage": "组别"
   },
+  "course.assessment.statistics.header": {
+    "defaultMessage": "{title} 的统计数据"
+  },
+  "course.assessment.statistics.includePhantom": {
+    "defaultMessage": "包括虚拟学生"
+  },
   "course.assessment.statistics.legendHigherusage": {
     "defaultMessage": "使用较多"
   },
   "course.assessment.statistics.legendLowerUsage": {
     "defaultMessage": "使用较少"
+  },
+  "course.assessment.statistics.liveFeedback": {
+    "defaultMessage": "实时反馈"
   },
   "course.assessment.statistics.liveFeedback.filename": {
     "defaultMessage": "{assessment} 的题目实时反馈统计"
@@ -2438,6 +2960,9 @@
   "course.assessment.statistics.marks.redCellLegend": {
     "defaultMessage": "< 0.5 * 最高分"
   },
+  "course.assessment.statistics.marksPerQuestion": {
+    "defaultMessage": "每题分数"
+  },
   "course.assessment.statistics.name": {
     "defaultMessage": "姓名"
   },
@@ -2447,11 +2972,17 @@
   "course.assessment.statistics.nameGroupsSearchText": {
     "defaultMessage": "按姓名或组别搜索"
   },
+  "course.assessment.statistics.noIncludePhantom": {
+    "defaultMessage": "此重复评估中的所有统计数据均不包括虚拟学生"
+  },
   "course.assessment.statistics.noSubmission": {
     "defaultMessage": "尚未提交"
   },
   "course.assessment.statistics.onlyForAutogradableAssessment": {
     "defaultMessage": "此表仅适用于包含至少一个自动评分问题的评估"
+  },
+  "course.assessment.statistics.pastAnswerTitle": {
+    "defaultMessage": "提交时间：{submittedAt}"
   },
   "course.assessment.statistics.questionDisplayTitle": {
     "defaultMessage": "{student} 的题目 {index}"
@@ -2459,53 +2990,14 @@
   "course.assessment.statistics.questionIndex": {
     "defaultMessage": "题目 {index}"
   },
-  "course.assessment.statistics.totalFeedbackCount": {
-    "defaultMessage": "总计"
-  },
-  "course.assessment.statistics.totalGrade": {
-    "defaultMessage": "总分"
-  },
-  "course.assessment.statistics.workflowState": {
-    "defaultMessage": "状态"
-  },
-  "course.assessment.statistics.ancestorFail": {
-    "defaultMessage": "无法获取此测试的过去结果。"
-  },
-  "course.assessment.statistics.ancestorStatisticsFail": {
-    "defaultMessage": "获取祖先统计数据失败。"
-  },
-  "course.assessment.statistics.fail": {
-    "defaultMessage": "获取统计数据失败。"
-  },
-  "course.assessment.statistics.gradeDistribution": {
-    "defaultMessage": "成绩分布"
-  },
-  "course.assessment.statistics.gradeViolin.datasetLabel": {
-    "defaultMessage": "分布"
-  },
-  "course.assessment.statistics.gradeViolin.xAxisLabel": {
-    "defaultMessage": "得分"
-  },
-  "course.assessment.statistics.gradeViolin.yAxisLabel": {
-    "defaultMessage": "提交"
-  },
-  "course.assessment.statistics.header": {
-    "defaultMessage": "{title} 的统计数据"
+  "course.assessment.statistics.questionTitle": {
+    "defaultMessage": "问题 {index}"
   },
   "course.assessment.statistics.statistics": {
     "defaultMessage": "统计数据"
   },
-  "course.assessment.statistics.SubmissionStatusChart.attempting": {
-    "defaultMessage": "尝试"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
-    "defaultMessage": "学生提交状态"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.submitted": {
-    "defaultMessage": "已提交"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
-    "defaultMessage": "未尝试"
+  "course.assessment.statistics.submissionPage": {
+    "defaultMessage": "前往答案页面"
   },
   "course.assessment.statistics.submissionStatuses": {
     "defaultMessage": "提交状态"
@@ -2525,8 +3017,20 @@
   "course.assessment.statistics.submissionTimeGradeChart.xAxisLabel.withoutDeadline": {
     "defaultMessage": "提交日期"
   },
+  "course.assessment.statistics.total": {
+    "defaultMessage": "Total"
+  },
+  "course.assessment.statistics.workflowState": {
+    "defaultMessage": "状态"
+  },
   "course.assessment.submission.Annotations.comment": {
     "defaultMessage": "添加评论"
+  },
+  "course.assessment.submission.Answer.missingAnswer": {
+    "defaultMessage": "此问题没有已提交的答案——可能是因为提交之后又添加了新问题。"
+  },
+  "course.assessment.submission.Answer.rendererNotImplemented": {
+    "defaultMessage": "此问题类型的显示尚未实现。"
   },
   "course.assessment.submission.CodaveriFeedbackStatus.codaveriFeedbackStatus": {
     "defaultMessage": "Codaveri反馈状态"
@@ -2546,14 +3050,41 @@
   "course.assessment.submission.EvaluatorErrorPanel.emailSubject": {
     "defaultMessage": "[Bug Report] 评测错误"
   },
+  "course.assessment.submission.FileInput.exactlyOneFileUploadAllowed": {
+    "defaultMessage": "您必须为此问题上传1个文件"
+  },
+  "course.assessment.submission.FileInput.fileName": {
+    "defaultMessage": "{index}. {name}"
+  },
+  "course.assessment.submission.FileInput.fileTooLargeErrorMessage": {
+    "defaultMessage": "以下文件的大小超过了允许的大小 ({maxAttachmentSize} MB)"
+  },
+  "course.assessment.submission.FileInput.fileUploadErrorTitle": {
+    "defaultMessage": "上传文件错误"
+  },
+  "course.assessment.submission.FileInput.onlyOneFileUploadAllowed": {
+    "defaultMessage": "您只能为此问题上传最多{maxAttachments}个文件"
+  },
+  "course.assessment.submission.FileInput.requiredUploadLimitedNumberOfFiles": {
+    "defaultMessage": "您可以为此问题上传至少1个，最多{maxAttachments}个文件。"
+  },
+  "course.assessment.submission.FileInput.tooManyFilesErrorMessage": {
+    "defaultMessage": "您尝试上传{numFiles}个文件，但只能上传{maxAttachmentsAllowed}个{maxAttachmentsAllowed, plural, one {文件} other {文件}}，因为{numAttachments, plural, =0 {} one {之前已上传了1个文件} other {之前已上传了{numAttachments}个文件}}"
+  },
   "course.assessment.submission.FileInput.uploadDisabled": {
     "defaultMessage": "文件上传已禁用"
   },
   "course.assessment.submission.FileInput.uploadLabel": {
     "defaultMessage": "拖放或点击上传文件"
   },
+  "course.assessment.submission.ImportedFileView.delete": {
+    "defaultMessage": "删除"
+  },
   "course.assessment.submission.ImportedFileView.deleteConfirmation": {
     "defaultMessage": "你确定要删除此文件吗？"
+  },
+  "course.assessment.submission.ImportedFileView.deleteTitle": {
+    "defaultMessage": "删除文件"
   },
   "course.assessment.submission.ImportedFileView.noFiles": {
     "defaultMessage": "未上传文件。"
@@ -2561,17 +3092,11 @@
   "course.assessment.submission.ImportedFileView.uploadedFiles": {
     "defaultMessage": "上传的文件："
   },
-  "course.assessment.submission.Answer.missingAnswer": {
-    "defaultMessage": "此问题没有已提交的答案——可能是因为提交之后又添加了新问题。"
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds": {
+    "defaultMessage": "{hrs, plural, one {# 小时} other {# 小时}} {mins, plural, =0 {} one {# 分钟} other {# 分钟}} {secs, plural, =0 {} one {# 秒} other {# 秒}}"
   },
-  "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
-    "defaultMessage": "没有过去的答案。"
-  },
-  "course.assessment.submission.Answer.rendererNotImplemented": {
-    "defaultMessage": "此问题类型的显示尚未实现。"
-  },
-  "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
-    "defaultMessage": "查看过去的答案"
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds": {
+    "defaultMessage": "{secs, plural, one {# 秒} other {# 秒}}"
   },
   "course.assessment.submission.SubmissionsIndex.accessLogs": {
     "defaultMessage": "访问日志"
@@ -2605,6 +3130,9 @@
   },
   "course.assessment.submission.SubmissionsIndex.experiencePoints": {
     "defaultMessage": "获得的经验值"
+  },
+  "course.assessment.submission.SubmissionsIndex.fetchFromKoditsu": {
+    "defaultMessage": "从Koditsu获取提交内容"
   },
   "course.assessment.submission.SubmissionsIndex.forceSubmit": {
     "defaultMessage": "强制提交其余作业"
@@ -2654,6 +3182,9 @@
   "course.assessment.submission.SubmissionsIndex.userName": {
     "defaultMessage": "姓名"
   },
+  "course.assessment.submission.TestCaseView.allFailed": {
+    "defaultMessage": "全部失败了"
+  },
   "course.assessment.submission.TestCaseView.allPassed": {
     "defaultMessage": "全部通过"
   },
@@ -2693,8 +3224,17 @@
   "course.assessment.submission.TestCaseView.standardOutput": {
     "defaultMessage": "标准输出"
   },
+  "course.assessment.submission.TestCaseView.testCasesPassed": {
+    "defaultMessage": "{numPassed}/{numTestCases} 个测试通过"
+  },
   "course.assessment.submission.UploadedFileView.deleteConfirmation": {
     "defaultMessage": "你确定要删除此附件吗？"
+  },
+  "course.assessment.submission.UploadedFileView.deleteTitle": {
+    "defaultMessage": "删除文件"
+  },
+  "course.assessment.submission.UploadedFileView.deleting": {
+    "defaultMessage": "删除"
   },
   "course.assessment.submission.UploadedFileView.noFiles": {
     "defaultMessage": "没有文件上传。"
@@ -2751,7 +3291,7 @@
     "defaultMessage": "字体大小："
   },
   "course.assessment.submission.answer.scribing.georgia": {
-    "defaultMessage": "Georgia"
+    "defaultMessage": "乔治亚"
   },
   "course.assessment.submission.answer.scribing.impact": {
     "defaultMessage": "力度"
@@ -2814,7 +3354,7 @@
     "defaultMessage": "线宽："
   },
   "course.assessment.submission.answer.scribing.timesNewRoman": {
-    "defaultMessage": "Times New Roman"
+    "defaultMessage": "新罗马字体"
   },
   "course.assessment.submission.answer.scribing.undo": {
     "defaultMessage": "撤消"
@@ -2827,6 +3367,12 @@
   },
   "course.assessment.submission.answerSubmitted": {
     "defaultMessage": "答案已提交"
+  },
+  "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
+    "defaultMessage": "没有过去的答案。"
+  },
+  "course.assessment.submission.answers.AnswerHeader.viewPastAnswers": {
+    "defaultMessage": "过去的答案"
   },
   "course.assessment.submission.answers.ForumPostResponse.ForumCard.forumCardTitleTypeNoneSelected": {
     "defaultMessage": "论坛"
@@ -2900,11 +3446,23 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "查看主题"
   },
-  "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
-    "defaultMessage": "下载文件"
-  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.sizeTooBig": {
     "defaultMessage": "文件太大，无法显示。"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete": {
+    "defaultMessage": "忽略"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike": {
+    "defaultMessage": "不喜欢"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike": {
+    "defaultMessage": "喜欢"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
+    "defaultMessage": "线 {linenum}"
+  },
+  "course.assessment.submission.attachmentRequired": {
+    "defaultMessage": "请至少上传1个文件以回答此问题"
   },
   "course.assessment.submission.attemptedAt": {
     "defaultMessage": "试图在"
@@ -2929,12 +3487,6 @@
   },
   "course.assessment.submission.codaveriAutogradeFailure": {
     "defaultMessage": "(T_T) 抱歉，codaveri 自动打分气罢工了。尝试在几分钟后再次提交你的代码或检查网络响应中的错误消息。"
-  },
-  "course.assessment.submission.liveFeedbackNoneGenerated": {
-    "defaultMessage": "问题 {questionIndex}：未生成反馈。"
-  },
-  "course.assessment.submission.liveFeedbackSuccess": {
-    "defaultMessage": "问题 {questionIndex}：反馈生成成功。"
   },
   "course.assessment.submission.comment.CodaveriCommentCard.finalise": {
     "defaultMessage": "完成并发布反馈"
@@ -2977,18 +3529,6 @@
   },
   "course.assessment.submission.comments": {
     "defaultMessage": "注释"
-  },
-  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete": {
-    "defaultMessage": "忽略"
-  },
-  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike": {
-    "defaultMessage": "不喜欢"
-  },
-  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike": {
-    "defaultMessage": "喜欢"
-  },
-  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
-    "defaultMessage": "线 {linenum}"
   },
   "course.assessment.submission.continue": {
     "defaultMessage": "继续"
@@ -3035,6 +3575,9 @@
   "course.assessment.submission.emptyAssessment": {
     "defaultMessage": "此测验目前没有问题。"
   },
+  "course.assessment.submission.errorUnknown": {
+    "defaultMessage": "错误是未知的"
+  },
   "course.assessment.submission.examDialogMessage": {
     "defaultMessage": "请不要注销或关闭浏览器，否则你可能无法继续考试。"
   },
@@ -3043,6 +3586,15 @@
   },
   "course.assessment.submission.expAwarded": {
     "defaultMessage": "获得的经验值"
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuConfirmation": {
+    "defaultMessage": "您确定要从Koditsu获取所有提交吗？这里的所有现有答案将被新的答案覆盖。请注意，此操作是不可逆转的！"
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuPending": {
+    "defaultMessage": "请稍等，正在从Koditsu获取提交内容。"
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuSuccess": {
+    "defaultMessage": "所有提交已成功从Koditsu获取"
   },
   "course.assessment.submission.finalise": {
     "defaultMessage": "完成提交"
@@ -3083,9 +3635,6 @@
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "成绩总结"
   },
-  "course.assessment.submission.gradeUnsaved": {
-    "defaultMessage": "未保存"
-  },
   "course.assessment.submission.gradeUnsavedHint": {
     "defaultMessage": "该成绩尚未保存。单击页面末尾的\"保存成绩\"可保存所有更改。"
   },
@@ -3110,8 +3659,23 @@
   "course.assessment.submission.invalidFileUpload": {
     "defaultMessage": "文件上传失败：只能上传java文件"
   },
+  "course.assessment.submission.isSaved": {
+    "defaultMessage": "已保存"
+  },
+  "course.assessment.submission.isSaving": {
+    "defaultMessage": "保存"
+  },
+  "course.assessment.submission.isUnsaved": {
+    "defaultMessage": "未保存"
+  },
   "course.assessment.submission.lateSubmission": {
     "defaultMessage": "这次提交是迟到的！你可能想对迟交的学生进行处罚。"
+  },
+  "course.assessment.submission.liveFeedbackNoneGenerated": {
+    "defaultMessage": "问题 {questionIndex}：未生成反馈。"
+  },
+  "course.assessment.submission.liveFeedbackSuccess": {
+    "defaultMessage": "问题 {questionIndex}：反馈生成成功。"
   },
   "course.assessment.submission.loadingComment": {
     "defaultMessage": "正在加载评论字段..."
@@ -3161,6 +3725,24 @@
   "course.assessment.submission.ok": {
     "defaultMessage": "好的"
   },
+  "course.assessment.submission.onlyOneAttachmentAllowed": {
+    "defaultMessage": "此问题仅允许上传1个文件"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.attempting": {
+    "defaultMessage": "尝试中"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.graded": {
+    "defaultMessage": "已评分，未发布"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.published": {
+    "defaultMessage": "分级"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.submitted": {
+    "defaultMessage": "已提交"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.unknown": {
+    "defaultMessage": "未知状态，请联系管理员"
+  },
   "course.assessment.submission.pastAnswers": {
     "defaultMessage": "过去的答案"
   },
@@ -3206,6 +3788,12 @@
   "course.assessment.submission.reevaluate": {
     "defaultMessage": "重新测验答案"
   },
+  "course.assessment.submission.remainingBufferTime": {
+    "defaultMessage": "最终时间：{timeLimit}"
+  },
+  "course.assessment.submission.remainingTime": {
+    "defaultMessage": "剩余时间：{timeLimit}"
+  },
   "course.assessment.submission.rendererNotImplemented": {
     "defaultMessage": "此问题类型的显示尚未实现。"
   },
@@ -3229,6 +3817,15 @@
   },
   "course.assessment.submission.saveGrade": {
     "defaultMessage": "保存成绩"
+  },
+  "course.assessment.submission.saved": {
+    "defaultMessage": "已保存"
+  },
+  "course.assessment.submission.saving": {
+    "defaultMessage": "保存"
+  },
+  "course.assessment.submission.savingFailed": {
+    "defaultMessage": "保存失败"
   },
   "course.assessment.submission.sendReminderEmailConfirmation": {
     "defaultMessage": "向未完成测验的 {unattempted} 未尝试和 {attempting} 尝试用户 ({selectedUsers}) 发送提醒邮件？"
@@ -3266,6 +3863,9 @@
   "course.assessment.submission.submissionBy": {
     "defaultMessage": "{name} 提交"
   },
+  "course.assessment.submission.submissionError": {
+    "defaultMessage": "提交问题时出现问题 {questions}"
+  },
   "course.assessment.submission.submissionsHeader": {
     "defaultMessage": "提交：{assessment}"
   },
@@ -3283,6 +3883,21 @@
   },
   "course.assessment.submission.submittedAt": {
     "defaultMessage": "提交于"
+  },
+  "course.assessment.submission.timeIsUp": {
+    "defaultMessage": "时间到了！"
+  },
+  "course.assessment.submission.timedAssessmentDialogMessage": {
+    "defaultMessage": "还有一些时间剩余。时间到期后，评估将自动完成。"
+  },
+  "course.assessment.submission.timedAssessmentDialogTitle": {
+    "defaultMessage": "{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {剩余}} 完成此评估。} other {评估已结束!}}"
+  },
+  "course.assessment.submission.timedExamDialogMessage": {
+    "defaultMessage": "还有一些时间剩余。在尝试考试时，请不要退出或关闭浏览器。一旦时间到，评估将自动完成。"
+  },
+  "course.assessment.submission.timedExamDialogTitle": {
+    "defaultMessage": "{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {剩余}} 完成这次考试。} other {考试已结束!}}"
   },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "总成绩"
@@ -3319,6 +3934,9 @@
   },
   "course.assessment.submission.updateFailure": {
     "defaultMessage": "提交更新失败：{errors}"
+  },
+  "course.assessment.submission.updateIndividualSuccess": {
+    "defaultMessage": "成功更新{errors}的提交"
   },
   "course.assessment.submission.updateSuccess": {
     "defaultMessage": "提交已成功更新。"
@@ -3437,6 +4055,18 @@
   "course.assessments.index.hasTodo": {
     "defaultMessage": "显示待办事项"
   },
+  "course.assessments.index.inviteToKoditsu": {
+    "defaultMessage": "邀请用户参加Koditsu考试"
+  },
+  "course.assessments.index.invitingUserToKoditsu": {
+    "defaultMessage": "邀请用户参加Koditsu考试"
+  },
+  "course.assessments.index.invitingUserToKoditsuFailure": {
+    "defaultMessage": "在邀请用户加入Koditsu时出现问题。请稍后再试。"
+  },
+  "course.assessments.index.invitingUserToKoditsuSuccess": {
+    "defaultMessage": "成功邀请用户参加Koditsu考试"
+  },
   "course.assessments.index.neededFor": {
     "defaultMessage": "需要的"
   },
@@ -3463,6 +4093,9 @@
   },
   "course.assessments.index.submissions": {
     "defaultMessage": "提交"
+  },
+  "course.assessments.index.timeLimitIcon": {
+    "defaultMessage": "时间限制：{timeLimit, plural, one {# 分钟} other {# 分钟}}"
   },
   "course.assessments.index.title": {
     "defaultMessage": "标题"
@@ -3914,14 +4547,14 @@
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "复制数据"
   },
-  "course.duplication.Duplication.fromCourse": {
-    "defaultMessage": "复制数据从{courseTitle}"
-  },
   "course.duplication.Duplication.duplicationDisabled": {
     "defaultMessage": "本课程禁止复制。"
   },
   "course.duplication.Duplication.existingCourse": {
     "defaultMessage": "现有课程"
+  },
+  "course.duplication.Duplication.fromCourse": {
+    "defaultMessage": "复制数据从{courseTitle}"
   },
   "course.duplication.Duplication.items": {
     "defaultMessage": "已选项目"
@@ -4046,6 +4679,9 @@
   "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
     "defaultMessage": "经验值发放"
   },
+  "course.experiencePoints.disbursement.DisbursementIndex.experienceTab": {
+    "defaultMessage": "历史"
+  },
   "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
     "defaultMessage": "无法检索数据。"
   },
@@ -4079,6 +4715,15 @@
   "course.experiencePoints.disbursement.FilterForm.weeklyCap": {
     "defaultMessage": "每周上限"
   },
+  "course.experiencePoints.disbursement.ForumDisbursement.fetchDisbursementFailure": {
+    "defaultMessage": "无法检索数据。"
+  },
+  "course.experiencePoints.disbursement.ForumDisbursement.fetchForumPostsFailure": {
+    "defaultMessage": "无法获取论坛帖子。"
+  },
+  "course.experiencePoints.disbursement.ForumDisbursement.postListDialogHeader": {
+    "defaultMessage": "在{startDate}和{endDate}之间创建的帖子"
+  },
   "course.experiencePoints.disbursement.ForumDisbursementForm.createDisbursementFailure": {
     "defaultMessage": "奖励经验值失败。"
   },
@@ -4087,9 +4732,6 @@
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.fetchForumPostsFailure": {
     "defaultMessage": "无法获取论坛帖子。"
-  },
-  "course.experiencePoints.disbursement.ForumDisbursementForm.postListDialogHeader": {
-    "defaultMessage": "从 {startDate} 到 {endDate} 创建的帖子，由"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reason": {
     "defaultMessage": "发放原因"
@@ -4129,6 +4771,27 @@
   },
   "course.experiencePoints.disbursement.ForumPostTable.voteTally": {
     "defaultMessage": "点赞总数"
+  },
+  "course.experiencePoints.disbursement.GeneralDisbursement.fetchDisbursementFailure": {
+    "defaultMessage": "无法检索数据。"
+  },
+  "course.experiencePoints.downloadCsvButton": {
+    "defaultMessage": "下载CSV"
+  },
+  "course.experiencePoints.downloadFailure": {
+    "defaultMessage": "在下载请求过程中发生了错误。"
+  },
+  "course.experiencePoints.downloadPending": {
+    "defaultMessage": "请等待您的下载请求正在处理中。"
+  },
+  "course.experiencePoints.downloadRequestSuccess": {
+    "defaultMessage": "您的下载请求已成功"
+  },
+  "course.experiencePoints.fetchRecordsFailure": {
+    "defaultMessage": "获取记录失败"
+  },
+  "course.experiencePoints.filterByNameButton": {
+    "defaultMessage": "按名称筛选"
   },
   "course.forum.FormShow.fetchTopicsFailure": {
     "defaultMessage": "无法检索论坛主题数据。"
@@ -4367,20 +5030,17 @@
   "course.forum.HideButton.hide": {
     "defaultMessage": "隐藏"
   },
-  "course.forum.HideButton.hideTooltip": {
-    "defaultMessage": "对学生隐藏主题"
-  },
   "course.forum.HideButton.hideFailure": {
     "defaultMessage": "未能隐藏主题\"{title}\"- {error}"
   },
   "course.forum.HideButton.hideSuccess": {
     "defaultMessage": "主题\"{title}\"已成功隐藏。"
   },
+  "course.forum.HideButton.hideTooltip": {
+    "defaultMessage": "对学生隐藏主题"
+  },
   "course.forum.HideButton.unhide": {
     "defaultMessage": "取消隐藏"
-  },
-  "course.forum.HideButton.unhideTooltip": {
-    "defaultMessage": "向学生显示主题"
   },
   "course.forum.HideButton.unhideFailure": {
     "defaultMessage": "未能取消隐藏主题\"{title}\"- {error}"
@@ -4388,11 +5048,14 @@
   "course.forum.HideButton.unhideSuccess": {
     "defaultMessage": "主题\"{title}\"已成功取消隐藏。"
   },
-  "course.forum.LockButton.locked": {
-    "defaultMessage": "锁定"
+  "course.forum.HideButton.unhideTooltip": {
+    "defaultMessage": "向学生显示主题"
   },
   "course.forum.LockButton.lockTooltip": {
     "defaultMessage": "锁定以禁止学生在此主题中发帖"
+  },
+  "course.forum.LockButton.locked": {
+    "defaultMessage": "锁定"
   },
   "course.forum.LockButton.lockedFailure": {
     "defaultMessage": "无法锁定主题\"{title}\"- {error}"
@@ -4400,11 +5063,11 @@
   "course.forum.LockButton.lockedSuccess": {
     "defaultMessage": "主题\"{title}\"已成功锁定。"
   },
-  "course.forum.LockButton.unlocked": {
-    "defaultMessage": "解锁"
-  },
   "course.forum.LockButton.unlockTooltip": {
     "defaultMessage": "解锁以允许学生在此主题中发帖"
+  },
+  "course.forum.LockButton.unlocked": {
+    "defaultMessage": "解锁"
   },
   "course.forum.LockButton.unlockedFailure": {
     "defaultMessage": "无法解锁主题\"{title}\" - {error}"
@@ -4584,7 +5247,7 @@
     "defaultMessage": "没有可用的描述。"
   },
   "course.group.GroupShow.CategoryCard.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}}"
+    "defaultMessage": "{numGroups, plural, one {组} other {组}}"
   },
   "course.group.GroupShow.CategoryCard.updateFailure": {
     "defaultMessage": "无法更新 {categoryName}。"
@@ -4659,7 +5322,7 @@
     "defaultMessage": "保存更改"
   },
   "course.group.GroupShow.GroupManager.GroupManager.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}}"
+    "defaultMessage": "{numGroups, plural, one {组} other {组}}"
   },
   "course.group.GroupShow.GroupManager.GroupManager.title": {
     "defaultMessage": "管理 {categoryName} 的群组"
@@ -4698,7 +5361,7 @@
     "defaultMessage": "按名称搜索（以逗号分隔以搜索多个）"
   },
   "course.group.GroupShow.GroupManager.GroupUserManager.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers, plural, one {成员} other {成员}}"
   },
   "course.group.GroupShow.GroupManager.GroupUserManager.updateFailure": {
     "defaultMessage": "无法更新 {groupName}。"
@@ -4746,7 +5409,7 @@
     "defaultMessage": "序列号"
   },
   "course.group.GroupShow.GroupTableCard.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers, plural, one {一名成员} other {# 名成员}}"
   },
   "course.group.GroupShow.fetchFailure": {
     "defaultMessage": "获取组数据失败！请重新加载并重试。"
@@ -4787,8 +5450,26 @@
   "course.leaderboard.LeaderboardTable.average": {
     "defaultMessage": "平均的"
   },
+  "course.leaderboard.LeaderboardTable.averageAchievements": {
+    "defaultMessage": "平均成就"
+  },
+  "course.leaderboard.LeaderboardTable.averageExperience": {
+    "defaultMessage": "平均经验"
+  },
   "course.leaderboard.LeaderboardTable.experience": {
     "defaultMessage": "经验"
+  },
+  "course.leaderboard.LeaderboardTable.level": {
+    "defaultMessage": "级别"
+  },
+  "course.leaderboard.LeaderboardTable.members": {
+    "defaultMessage": "成员"
+  },
+  "course.leaderboard.LeaderboardTable.name": {
+    "defaultMessage": "名字"
+  },
+  "course.leaderboard.LeaderboardTable.rank": {
+    "defaultMessage": "排名"
   },
   "course.leaderboard.LeaderboardTable.titleAchievements": {
     "defaultMessage": "按成就"
@@ -4809,7 +5490,7 @@
     "defaultMessage": "删除此条件"
   },
   "course.learningMap.responseDashboardMessage": {
-    "defaultMessage": "{responseMessage}"
+    "defaultMessage": "回应信息"
   },
   "course.learningMap.selectedArrowDashboardMessage": {
     "defaultMessage": "已选中条件：{fromNode} --> {toNode}"
@@ -4818,7 +5499,7 @@
     "defaultMessage": "为{node}选择的门"
   },
   "course.learningMap.summaryGateContent": {
-    "defaultMessage": "{numerator}/{denominator}"
+    "defaultMessage": "{分子}/{分母}"
   },
   "course.learningMap.toggleSatisfiabilityType": {
     "defaultMessage": "将可满足性类型切换为 {satisfiabilityType}"
@@ -4958,11 +5639,23 @@
   "course.level.Level.levelHeader": {
     "defaultMessage": "等级"
   },
+  "course.level.Level.orderedIncorrectly": {
+    "defaultMessage": "无论这里的顺序如何，保存时级别都会自动排序。"
+  },
+  "course.level.Level.placeholder": {
+    "defaultMessage": "0"
+  },
+  "course.level.Level.reset": {
+    "defaultMessage": "重置"
+  },
+  "course.level.Level.resetTooltip": {
+    "defaultMessage": "重置更改"
+  },
+  "course.level.Level.saveChanges": {
+    "defaultMessage": "保存"
+  },
   "course.level.Level.saveFailure": {
     "defaultMessage": "等级保存失败，请重试。"
-  },
-  "course.level.Level.saveLevels": {
-    "defaultMessage": "保存"
   },
   "course.level.Level.saveSuccess": {
     "defaultMessage": "等级已保存"
@@ -4970,8 +5663,32 @@
   "course.level.Level.thresholdHeader": {
     "defaultMessage": "阈值"
   },
-  "course.level.LevelRow.zeroThresholdError": {
-    "defaultMessage": "经验值阈值不能为0"
+  "course.level.Level.unsavedChanges": {
+    "defaultMessage": "您有未保存的更改"
+  },
+  "course.material.files.DownloadingFilePage.clickToDownloadFile": {
+    "defaultMessage": "下载{name}"
+  },
+  "course.material.files.DownloadingFilePage.clickToDownloadFileDescription": {
+    "defaultMessage": "在启动自动下载时发生了一些问题。请点击下面的链接立即下载文件。"
+  },
+  "course.material.files.DownloadingFilePage.downloading": {
+    "defaultMessage": "下载中 {name}"
+  },
+  "course.material.files.DownloadingFilePage.downloadingDescription": {
+    "defaultMessage": "这个文件现在应该自动开始下载。如果没有，请尝试点击下面的链接或刷新此页面。"
+  },
+  "course.material.files.DownloadingFilePage.tryDownloadingAgain": {
+    "defaultMessage": "请再次下载"
+  },
+  "course.material.files.ErrorRetrievingFilePage.goToTheWorkbin": {
+    "defaultMessage": "去工作箱"
+  },
+  "course.material.files.ErrorRetrievingFilePage.problemRetrievingFile": {
+    "defaultMessage": "检索文件时出现问题"
+  },
+  "course.material.files.ErrorRetrievingFilePage.problemRetrievingFileDescription": {
+    "defaultMessage": "文件夹可能已不存在，您没有访问权限，或系统检索时出现意外错误。"
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "下载失败。请稍后再试。"
@@ -4981,6 +5698,15 @@
   },
   "course.material.folders.DownloadFolderButton.downloading": {
     "defaultMessage": "正在下载..."
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.goToMainFolder": {
+    "defaultMessage": "前往主文件夹"
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.problemRetrievingFolder": {
+    "defaultMessage": "检索文件夹时出现问题"
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.problemRetrievingFolderDescription": {
+    "defaultMessage": "文件夹可能已不存在，您没有访问权限，或系统检索时出现意外错误。"
   },
   "course.material.folders.FolderEdit.editSubfolderTitle": {
     "defaultMessage": "编辑文件夹"
@@ -5020,6 +5746,9 @@
   },
   "course.material.folders.FolderShow.defaultHeader": {
     "defaultMessage": "材料"
+  },
+  "course.material.folders.FolderShow.folderNotFound": {
+    "defaultMessage": "找不到文件夹"
   },
   "course.material.folders.MaterialEdit.editMaterialTitle": {
     "defaultMessage": "编辑材料"
@@ -5066,6 +5795,15 @@
   "course.material.folders.UploadFilesButton.uploadFilesTooltip": {
     "defaultMessage": "上传"
   },
+  "course.material.folders.WorkbinTable.lastModified": {
+    "defaultMessage": "最后修改"
+  },
+  "course.material.folders.WorkbinTable.name": {
+    "defaultMessage": "名字"
+  },
+  "course.material.folders.WorkbinTable.startAt": {
+    "defaultMessage": "开始"
+  },
   "course.material.folders.WorkbinTableButtons.DeletionFailure": {
     "defaultMessage": "无法删除"
   },
@@ -5078,20 +5816,65 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "删除"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
-    "defaultMessage": "成就数（总计：{courseAchievementCount}）"
+  "course.statistics.StatisticsIndex.assessments.averageGrade": {
+    "defaultMessage": "平均成绩"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.ascending": {
-    "defaultMessage": "升序"
+  "course.statistics.StatisticsIndex.assessments.averageTimeTaken": {
+    "defaultMessage": "平均时间"
+  },
+  "course.statistics.StatisticsIndex.assessments.category": {
+    "defaultMessage": "类别"
+  },
+  "course.statistics.StatisticsIndex.assessments.csvFileTitle": {
+    "defaultMessage": "评估统计"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadCsv": {
+    "defaultMessage": "下载以下评估的分数摘要？"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryFailure": {
+    "defaultMessage": "下载分数摘要时发生错误"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryPending": {
+    "defaultMessage": "请等待您的下载请求正在处理中"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummarySuccess": {
+    "defaultMessage": "成功下载了分数摘要"
+  },
+  "course.statistics.StatisticsIndex.assessments.numLateStudents": {
+    "defaultMessage": "# 晚了"
+  },
+  "course.statistics.StatisticsIndex.assessments.numSubmittedStudents": {
+    "defaultMessage": "# 尝试"
+  },
+  "course.statistics.StatisticsIndex.assessments.searchBar": {
+    "defaultMessage": "按评估标题、选项或类别搜索"
+  },
+  "course.statistics.StatisticsIndex.assessments.selectedNUsers": {
+    "defaultMessage": "下载分数摘要（{n，复数，=1 {# 评估} other {# 评估}}）"
+  },
+  "course.statistics.StatisticsIndex.assessments.startAt": {
+    "defaultMessage": "开始"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevGrade": {
+    "defaultMessage": "标准差等级"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevTimeTaken": {
+    "defaultMessage": "标准偏差时间"
+  },
+  "course.statistics.StatisticsIndex.assessments.tab": {
+    "defaultMessage": "标签"
+  },
+  "course.statistics.StatisticsIndex.assessments.tableTitle": {
+    "defaultMessage": "评估统计 ({numStudents} 学生)"
+  },
+  "course.statistics.StatisticsIndex.assessments.title": {
+    "defaultMessage": "标题"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCountDetails": {
+    "defaultMessage": "成就数量（总计：{courseAchievementCount}）"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctness": {
     "defaultMessage": "正确率"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctnessHint": {
-    "defaultMessage": "该学生所有已批改测验的平均成绩（百分比）"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.descending": {
-    "defaultMessage": "降序"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.experiencePoints": {
     "defaultMessage": "经验值"
@@ -5105,14 +5888,8 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRate": {
     "defaultMessage": "学习率"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRateHint": {
-    "defaultMessage": "200%的学习率意味着他们可以用一半的时间完成课程。"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.level": {
-    "defaultMessage": "等级 (最高: {maxLevel})"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelFilter": {
-    "defaultMessage": "等级: {name}"
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelInfo": {
+    "defaultMessage": "等级（最高：{maxLevel}）"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.name": {
     "defaultMessage": "姓名"
@@ -5120,11 +5897,8 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.noData": {
     "defaultMessage": "无数据"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.numSubmissions": {
-    "defaultMessage": "提交的数量 (总计: {courseAssessmentCount})"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.phantom": {
-    "defaultMessage": "包括旁听学生"
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.numSubmissionsDetails": {
+    "defaultMessage": "提交次数（总计：{courseAssessmentCount}次）"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType": {
     "defaultMessage": "学生类型"
@@ -5135,17 +5909,8 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.phantom": {
     "defaultMessage": "旁听学生"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tableTitle": {
-    "defaultMessage": "学生以 {direction} {column} 排序"
-  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.title": {
     "defaultMessage": "学生表现"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tutorFilter": {
-    "defaultMessage": "讲师：{name}"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatched": {
-    "defaultMessage": "视频 % 数量"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatchedHeader": {
     "defaultMessage": "平均视频 % 已观看"
@@ -5183,14 +5948,14 @@
   "course.statistics.StatisticsIndex.course.StudentProgressionChart.yAxisLabel": {
     "defaultMessage": "测验 (按截止日期排序)"
   },
-  "course.statistics.StatisticsIndex.course.error": {
-    "defaultMessage": "获取课程统计时出了点问题！ 请刷新重试。"
+  "course.statistics.StatisticsIndex.course.csvFileTitle": {
+    "defaultMessage": "学生表现统计"
   },
-  "course.statistics.StatisticsIndex.course.performanceError": {
-    "defaultMessage": "获取课程表现统计时出现问题！ 请刷新重试。"
+  "course.statistics.StatisticsIndex.course.searchBar": {
+    "defaultMessage": "按学生姓名搜索"
   },
-  "course.statistics.StatisticsIndex.course.progressionError": {
-    "defaultMessage": "获取课程进度统计时出了点问题！ 请刷新重试。"
+  "course.statistics.StatisticsIndex.header.assessments": {
+    "defaultMessage": "评估"
   },
   "course.statistics.StatisticsIndex.header.statistics": {
     "defaultMessage": "数据"
@@ -5198,8 +5963,8 @@
   "course.statistics.StatisticsIndex.staff.averageMarkingTime": {
     "defaultMessage": "平均时间/测验"
   },
-  "course.statistics.StatisticsIndex.staff.error": {
-    "defaultMessage": "获取员工统计信息时出了点问题！请刷新重试。"
+  "course.statistics.StatisticsIndex.staff.csvFileTitle": {
+    "defaultMessage": "员工统计"
   },
   "course.statistics.StatisticsIndex.staff.name": {
     "defaultMessage": "姓名"
@@ -5210,17 +5975,17 @@
   "course.statistics.StatisticsIndex.staff.numStudents": {
     "defaultMessage": "# 学生"
   },
+  "course.statistics.StatisticsIndex.staff.searchBar": {
+    "defaultMessage": "按员工姓名搜索"
+  },
   "course.statistics.StatisticsIndex.staff.stddev": {
     "defaultMessage": "标准偏差"
   },
   "course.statistics.StatisticsIndex.staff.tableTitle": {
     "defaultMessage": "员工统计"
   },
-  "course.statistics.StatisticsIndex.staffFailure": {
-    "defaultMessage": "获取员工数据失败！"
-  },
-  "course.statistics.StatisticsIndex.students.error": {
-    "defaultMessage": "获取学生数据时出了点问题！请刷新重试。"
+  "course.statistics.StatisticsIndex.students.csvFileTitle": {
+    "defaultMessage": "学生统计"
   },
   "course.statistics.StatisticsIndex.students.experiencePoints": {
     "defaultMessage": "经验值"
@@ -5234,20 +5999,14 @@
   "course.statistics.StatisticsIndex.students.name": {
     "defaultMessage": "姓名"
   },
-  "course.statistics.StatisticsIndex.students.noStudents": {
-    "defaultMessage": "该课程还没有学生"
-  },
-  "course.statistics.StatisticsIndex.students.showMyStudentsOnly": {
-    "defaultMessage": "只显示我的学生"
+  "course.statistics.StatisticsIndex.students.searchBar": {
+    "defaultMessage": "按学生姓名或学生类型搜索"
   },
   "course.statistics.StatisticsIndex.students.studentsType": {
     "defaultMessage": "学生类型"
   },
   "course.statistics.StatisticsIndex.students.tableTitle": {
     "defaultMessage": "学生统计"
-  },
-  "course.statistics.StatisticsIndex.students.tutorFilter": {
-    "defaultMessage": "讲师：{name}"
   },
   "course.statistics.StatisticsIndex.students.videoPercentWatched": {
     "defaultMessage": "平均 % 已观看"
@@ -5273,14 +6032,26 @@
   "course.statistics.course.studentProgressionChart.startAt": {
     "defaultMessage": "开始于：{startAt}"
   },
-  "course.statistics.failures.coursePerformance": {
-    "defaultMessage": "无法获取课程表现数据！"
-  },
-  "course.statistics.failures.courseProgression": {
-    "defaultMessage": "无法获取课程进度数据！"
-  },
   "course.statistics.tabs.course": {
     "defaultMessage": "课程"
+  },
+  "course.statistics.tabs.coursePerformance": {
+    "defaultMessage": "课程表现"
+  },
+  "course.statistics.tabs.courseProgression": {
+    "defaultMessage": "课程进度"
+  },
+  "course.stories.CikgoErrorPage.errorFetching": {
+    "defaultMessage": "可能本来就没有内容，也可能是出了一些问题。"
+  },
+  "course.stories.CikgoErrorPage.errorFetchingDescription": {
+    "defaultMessage": "<cikgo>Cikgo</cikgo> 是我们的合作伙伴，为这一体验提供支持。他们可以联系，但目前没有为这个请求提供任何资源。请稍后再试，如果问题仍然存在，请<link>联系我们</link>。"
+  },
+  "course.stories.pages.LearnPage": {
+    "defaultMessage": "学习"
+  },
+  "course.stories.pages.MissionControlPage": {
+    "defaultMessage": "任务控制"
   },
   "course.survey.DeleteSectionButton.deleteSection": {
     "defaultMessage": "删除部分"
@@ -5939,6 +6710,9 @@
   "course.userInvitation.InviteUsersRegistrationCode.registrationCodeNote": {
     "defaultMessage": "已被邀请并使用此邀请代码注册课程的用户，不会在邀请页面中显示正确状态。"
   },
+  "course.userInvitations.IndividualInvitations.addRowsByEmail": {
+    "defaultMessage": "通过电子邮件添加行"
+  },
   "course.userInvitations.IndividualInvitations.appendNewRow": {
     "defaultMessage": "添加行"
   },
@@ -5947,6 +6721,12 @@
   },
   "course.userInvitations.IndividualInvitations.invite": {
     "defaultMessage": "邀请所有用户"
+  },
+  "course.userInvitations.IndividualInvitations.malformedEmail": {
+    "defaultMessage": "{n, plural, one {这封电子邮件是} other {这些电子邮件是}}错误格式：{emails}"
+  },
+  "course.userInvitations.IndividualInvitations.nameEmailInput": {
+    "defaultMessage": "John Doe '<john.doe@example.org>'; 'Doe, Jane' '<jane.doe@example.org>'; ..."
   },
   "course.userInvitations.IndividualInvitations.namePlaceholder": {
     "defaultMessage": "很棒的用户"
@@ -6115,12 +6895,6 @@
   },
   "course.users.ExperiencePointsRecords.experiencePointsHistoryHeader": {
     "defaultMessage": "经验值历史：{for}"
-  },
-  "course.users.ExperiencePointsRecords.fetchUsersFailure": {
-    "defaultMessage": "无法获取记录"
-  },
-  "course.users.ExperiencePointsTable.fetchRecordsFailure": {
-    "defaultMessage": "无法获取记录"
   },
   "course.users.ManageStaff.noStaff": {
     "defaultMessage": "课程中没有助教。"
@@ -6437,8 +7211,26 @@
   "course.video.VideoShow.videoTitle": {
     "defaultMessage": "视频 - {title}"
   },
+  "course.video.VideoTable.actions": {
+    "defaultMessage": "行动"
+  },
+  "course.video.VideoTable.averageWatched": {
+    "defaultMessage": "平均观看百分率"
+  },
   "course.video.VideoTable.noVideo": {
     "defaultMessage": "没有视频"
+  },
+  "course.video.VideoTable.published": {
+    "defaultMessage": "已发布"
+  },
+  "course.video.VideoTable.startAt": {
+    "defaultMessage": "开始"
+  },
+  "course.video.VideoTable.title": {
+    "defaultMessage": "标题"
+  },
+  "course.video.VideoTable.watchCount": {
+    "defaultMessage": "观看次数"
   },
   "course.video.VideosIndex.fetchVideosFailure": {
     "defaultMessage": "无法检索视频。"
@@ -6589,6 +7381,21 @@
   },
   "landing_page.create_an_account": {
     "defaultMessage": "创建一个账户"
+  },
+  "landing_page.iconEngaging": {
+    "defaultMessage": "吸引人的"
+  },
+  "landing_page.iconEngagingSubtitle": {
+    "defaultMessage": "它是为所有教师设计的。您不需要具备任何编程知识来掌握这个平台。Coursemology对于教师和学生来说易于使用且直观。"
+  },
+  "landing_page.iconGeneral": {
+    "defaultMessage": "通用"
+  },
+  "landing_page.iconGeneralSubtitle": {
+    "defaultMessage": "它适用于所有学科。Coursemology的游戏化系统不对学科做任何假设。通过Coursemology，任何教授任何学科的教师都可以将他的课程练习转变为在线游戏。"
+  },
+  "landing_page.iconSimple": {
+    "defaultMessage": "简单"
   },
   "landing_page.new_to_coursemology": {
     "defaultMessage": "第一次访问 Coursemology ？"
@@ -7011,7 +7818,7 @@
     "defaultMessage": "主机名"
   },
   "lib.translations.table.column.id": {
-    "defaultMessage": "ID"
+    "defaultMessage": "身份证"
   },
   "lib.translations.table.column.instance": {
     "defaultMessage": "实例"
@@ -7111,9 +7918,6 @@
   },
   "lib.translations.yes": {
     "defaultMessage": "是的"
-  },
-  "material.attemptLoader.errorAccessingMaterial": {
-    "defaultMessage": "获取该资料时发生错误，请稍后再试。"
   },
   "sysstem.admin.instance.instance.InstanceAdminNavigator.announcements": {
     "defaultMessage": "公告"
@@ -7229,14 +8033,23 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "已将 {field} 从 {prevValue} 重命名为 {newValue}"
   },
+  "system.admin.admin.UsersButton.associatedInstances": {
+    "defaultMessage": "{index}. {instanceName}"
+  },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "删除用户"
   },
   "system.admin.admin.UsersButton.deletionConfirm": {
     "defaultMessage": "你确定要删除{role} {name} ({email}) 吗？"
   },
+  "system.admin.admin.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "删除 {role} {name} ({email})"
+  },
   "system.admin.admin.UsersButton.deletionFailure": {
     "defaultMessage": "无法删除用户 - {error}"
+  },
+  "system.admin.admin.UsersButton.deletionPromptContent": {
+    "defaultMessage": "删除此用户后，以下实例中的所有关联实例用户将被删除。"
   },
   "system.admin.admin.UsersButton.deletionSuccess": {
     "defaultMessage": "用户已被删除。"
