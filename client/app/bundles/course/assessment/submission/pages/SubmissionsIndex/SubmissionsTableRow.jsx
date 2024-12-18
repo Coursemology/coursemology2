@@ -266,13 +266,16 @@ const SubmissionsTableRow = (props) => {
           />
         </TableCell>
         <TableCell style={tableCenterCellStyle}>{getGradeString()}</TableCell>
-        {assessment.gamified ? (
+        {assessment.gamified && (
           <TableCell style={tableCenterCellStyle}>
-            {submission.pointsAwarded !== undefined
-              ? submission.pointsAwarded
-              : null}
+            {submission.pointsAwarded !== undefined && submission.pointsAwarded}
           </TableCell>
-        ) : null}
+        )}
+        {assessment.hasTimeLimit && (
+          <TableCell style={tableCenterCellStyle}>
+            {submission.timerStartedAt && formatDate(submission.timerStartedAt)}
+          </TableCell>
+        )}
         <TableCell style={tableCenterCellStyle}>
           {formatDate(submission.dateSubmitted)}
         </TableCell>
@@ -280,21 +283,21 @@ const SubmissionsTableRow = (props) => {
           {formatDate(submission.dateGraded)}
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
-          {submission.graders && submission.graders.length > 0
-            ? submission.graders.map((grader) => (
-                <div key={`grader_${grader.id}`}>
-                  <Link
-                    to={
-                      Boolean(grader.id && grader.id !== 0) &&
-                      getCourseUserURL(courseId, grader.id)
-                    }
-                  >
-                    {grader.name}
-                  </Link>
-                  <br />
-                </div>
-              ))
-            : null}
+          {submission.graders &&
+            submission.graders.length > 0 &&
+            submission.graders.map((grader) => (
+              <div key={`grader_${grader.id}`}>
+                <Link
+                  to={
+                    Boolean(grader.id && grader.id !== 0) &&
+                    getCourseUserURL(courseId, grader.id)
+                  }
+                >
+                  {grader.name}
+                </Link>
+                <br />
+              </div>
+            ))}
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
           {renderSubmissionLogsLink()}

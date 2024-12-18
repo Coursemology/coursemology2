@@ -11,11 +11,8 @@ class Course::Assessment::Submission < ApplicationRecord
 
   acts_as_experience_points_record
 
-  FORCE_SUBMIT_DELAY = 5.minutes
-
   after_save :auto_grade_submission, if: :submitted?
   after_save :retrieve_codaveri_feedback, if: :submitted?
-  after_create :create_force_submission_job, if: :attempting?
 
   workflow do
     state :attempting do
@@ -233,14 +230,6 @@ class Course::Assessment::Submission < ApplicationRecord
       merge(Course::Assessment::QuestionGroup.order(:weight)).
       merge(Course::Assessment::QuestionBundleQuestion.order(:weight)).
       extending(Course::Assessment::QuestionsConcern)
-  end
-
-  def create_force_submission_job
-    return unless assessment.time_limit
-
-    Course::Assessment::Submission::ForceSubmitTimedSubmissionJob.
-      set(wait_until: created_at + assessment.time_limit.minutes + FORCE_SUBMIT_DELAY).
-      perform_later(assessment, id, creator)
   end
 
   # The answers with current_answer flag set to true, filtering out orphaned answers to questions which are no longer
