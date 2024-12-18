@@ -358,9 +358,17 @@ const translations = defineMessages({
         Try submitting your code again in a couple of minutes \
         or check the error message in the network response.',
   },
+  chatInputText: {
+    id: 'course.assessment.submission.GetHelpChatPage.ChatInputArea',
+    defaultMessage: 'How can we help you?',
+  },
   liveFeedbackNoneGenerated: {
     id: 'course.assessment.submission.liveFeedbackNoneGenerated',
-    defaultMessage: 'Question {questionIndex}: No feedback generated.',
+    defaultMessage: 'No feedback generated.',
+  },
+  lineNumberMessage: {
+    id: 'course.assessment.submission.GetHelpChatPage.ConversationArea.lineNumberMessage',
+    defaultMessage: 'Line {lineNumber}: {message}',
   },
   liveFeedbackSuccess: {
     id: 'course.assessment.submission.liveFeedbackSuccess',
