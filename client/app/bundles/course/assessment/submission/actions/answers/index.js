@@ -11,6 +11,8 @@ import {
   getFailureFeedbackFromCodaveri,
   getLiveFeedbackFromCodaveri,
   requestLiveFeedbackFromCodaveri,
+  updateAnswerFiles,
+  updateLiveFeedbackChatStatus,
 } from '../../reducers/liveFeedbackChats';
 import { getClientVersionForAnswerId } from '../../selectors/answers';
 import translations from '../../translations';
@@ -211,10 +213,17 @@ const handleFeedbackOKResponse = ({
   response,
   noFeedbackMessage,
 }) => {
-  const feedbackFiles = response.data?.data?.feedbackFiles ?? [];
+  const overallContent = response.data?.data?.message.content ?? null;
+  const feedbackFiles = response.data?.data?.message.files ?? [];
   const success = response.data?.success;
-  if (success && feedbackFiles.length) {
-    dispatch(getLiveFeedbackFromCodaveri({ answerId, feedbackFiles }));
+  if (success && (overallContent || feedbackFiles.length)) {
+    dispatch(
+      getLiveFeedbackFromCodaveri({
+        answerId,
+        overallContent,
+        feedbackFiles,
+      }),
+    );
   } else {
     dispatch(
       getFailureFeedbackFromCodaveri({
@@ -228,28 +237,35 @@ const handleFeedbackOKResponse = ({
 export function generateLiveFeedback({
   submissionId,
   answerId,
-  noFeedbackMessage,
+  threadId,
+  message,
   errorMessage,
 }) {
   return (dispatch) =>
     CourseAPI.assessment.submissions
-      .generateLiveFeedback(submissionId, { answer_id: answerId })
+      .generateLiveFeedback(submissionId, answerId, threadId, message)
       .then((response) => {
-        if (response.status === 200) {
-          handleFeedbackOKResponse({
-            answerId,
-            dispatch,
-            response,
-            noFeedbackMessage,
-          });
-        } else {
-          // 201, save feedback signed token
+        if (response.status === 201) {
+          dispatch(
+            updateAnswerFiles({
+              answerId,
+              answerFiles: response.data?.answerFiles,
+            }),
+          );
           dispatch(
             requestLiveFeedbackFromCodaveri({
-              token: response.data?.data?.token,
+              token: response.data?.tokenId,
               answerId,
-              liveFeedbackId: response.data?.liveFeedbackId,
               feedbackUrl: response.data?.feedbackUrl,
+              liveFeedbackId: response.data?.liveFeedbackId,
+            }),
+          );
+        } else {
+          dispatch(
+            updateLiveFeedbackChatStatus({
+              answerId,
+              threadId,
+              isThreadExpired: response.data?.threadStatus === 'expired',
             }),
           );
         }
@@ -264,11 +280,56 @@ export function generateLiveFeedback({
       });
 }
 
+export function createLiveFeedbackChat({ submissionId, answerId }) {
+  return (dispatch) =>
+    CourseAPI.assessment.submissions
+      .createLiveFeedbackChat(submissionId, {
+        answer_id: answerId,
+      })
+      .then((response) => {
+        if (response.status === 200 && response.data?.threadId) {
+          const threadId = response.data?.threadId;
+          const isThreadExpired = response.data?.threadStatus === 'expired';
+          dispatch(
+            updateLiveFeedbackChatStatus({
+              answerId,
+              threadId,
+              isThreadExpired,
+            }),
+          );
+        }
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
+export function fetchLiveFeedbackStatus({ answerId, threadId }) {
+  return (dispatch) =>
+    CourseAPI.assessment.submissions
+      .fetchLiveFeedbackStatus(threadId)
+      .then((response) => {
+        if (response.status === 200 && response.data?.threadStatus) {
+          const isThreadExpired = response.data?.threadStatus === 'expired';
+          dispatch(
+            updateLiveFeedbackChatStatus({
+              answerId,
+              threadId,
+              isThreadExpired,
+            }),
+          );
+        }
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
 export function fetchLiveFeedback({
   answerId,
   feedbackUrl,
-  liveFeedbackId,
   feedbackToken,
+  liveFeedbackId,
   noFeedbackMessage,
   errorMessage,
 }) {
@@ -279,7 +340,7 @@ export function fetchLiveFeedback({
         if (response.status === 200) {
           CourseAPI.assessment.submissions.saveLiveFeedback(
             liveFeedbackId,
-            response.data?.data?.feedbackFiles ?? [],
+            response.data?.data?.message ?? { content: '', files: [] },
           );
           handleFeedbackOKResponse({
             answerId,

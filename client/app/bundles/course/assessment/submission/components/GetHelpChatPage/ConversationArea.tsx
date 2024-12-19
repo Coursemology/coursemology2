@@ -2,9 +2,10 @@ import { FC } from 'react';
 import { Typography } from '@mui/material';
 
 import LoadingEllipsis from 'lib/components/core/LoadingEllipsis';
-import { useAppSelector } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { resetLiveFeedbackChat } from '../../reducers/liveFeedbackChats';
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
 import translations from '../../translations';
 import { ChatSender } from '../../types';
@@ -16,9 +17,12 @@ interface ConversationAreaProps {
 
 const ConversationArea: FC<ConversationAreaProps> = (props) => {
   const { onFeedbackClick, answerId } = props;
+
+  const dispatch = useAppDispatch();
   const liveFeedbackChats = useAppSelector((state) =>
     getLiveFeedbackChatsForAnswerId(state, answerId),
   );
+  const isCurrentThreadExpired = liveFeedbackChats?.isCurrentThreadExpired;
   const { t } = useTranslation();
 
   const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
@@ -45,7 +49,7 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
     <div
       className={`flex-1 overflow-auto ${isRenderingSuggestionChips && 'pb-14'}`}
     >
-      {liveFeedbackChats.chats.map((chat) => {
+      {liveFeedbackChats.chats.map((chat, index) => {
         const isStudent = chat.sender === ChatSender.student;
         const allMessages = [...chat.message];
         if (allMessages.length === 0) return null;
@@ -53,30 +57,46 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
         const firstMessage = allMessages[0];
         const nextMessages = allMessages.slice(1, allMessages.length);
 
-        const formattedFirstMessage = chat.lineNumber
-          ? t(translations.lineNumberMessage, {
-              lineNumber: chat.lineNumber,
-              message: firstMessage,
-            })
-          : firstMessage;
         return (
           <div
             key={`${firstMessage} ${chat.createdAt}`}
             className={`flex ${justifyAlign(isStudent, chat.isError)}`}
+            id={`chat-${answerId}-${index}`}
           >
             <div
-              className={`flex flex-col ${chat.lineNumber && 'cursor-pointer'} rounded-lg ${isStudent ? 'bg-blue-200' : 'bg-gray-200'} max-w-[70%] pt-3 pl-3 pr-3 pb-2 m-2 w-fit text-wrap break-words space-y-1`}
-              onClick={() => {
-                if (chat.lineNumber) {
-                  onFeedbackClick(chat.lineNumber);
-                }
-              }}
+              className={`flex flex-col rounded-lg ${isStudent ? 'bg-blue-200' : 'bg-gray-200'} max-w-[70%] pt-3 pl-3 pr-3 pb-2 m-2 w-fit text-wrap break-words space-y-1`}
             >
+              {chat.lineContent && chat.lineNumber && (
+                <div
+                  className={`flex flex-col ${chat.lineNumber && 'cursor-pointer'} rounded-lg bg-gray-50 hover:bg-gray-100 p-3 w-full text-wrap break-words`}
+                  onClick={() => {
+                    if (chat.lineNumber) {
+                      onFeedbackClick(chat.lineNumber);
+                    }
+                  }}
+                >
+                  <Typography
+                    className="flex flex-col whitespace-pre-wrap ml-1"
+                    variant="body2"
+                  >
+                    {t(translations.lineNumber, {
+                      lineNumber: chat.lineNumber,
+                    })}
+                  </Typography>
+                  <Typography
+                    className="flex flex-col whitespace-pre-wrap ml-1"
+                    variant="body2"
+                  >
+                    {chat.lineContent}
+                  </Typography>
+                </div>
+              )}
+
               <Typography
                 className={`flex flex-col whitespace-pre-wrap ${isStudent ? 'text-right' : 'text-left'}`}
                 variant="body2"
               >
-                {formattedFirstMessage}
+                {firstMessage}
               </Typography>
               {nextMessages.map((nextMessage) => (
                 <Typography
@@ -99,6 +119,19 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
           </div>
         );
       })}
+      {isCurrentThreadExpired && (
+        <div
+          className="justify-self-center cursor-pointer rounded-lg bg-gray-200 pt-3 pl-3 pr-3 pb-2 m-2 w-fit text-wrap break-words"
+          onClick={() => dispatch(resetLiveFeedbackChat({ answerId }))}
+        >
+          <Typography
+            className="whitespace-pre-wrap text-center hover:underline"
+            variant="body2"
+          >
+            {t(translations.threadExpired)}
+          </Typography>
+        </div>
+      )}
       {(isRequestingLiveFeedback || isPollingLiveFeedback) && (
         <div className="flex justify-start rounded-lg bg-gray-200 w-fit p-3 m-2">
           <LoadingEllipsis />

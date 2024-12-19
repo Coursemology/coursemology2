@@ -1,17 +1,22 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { defineMessages } from 'react-intl';
 import { Close } from '@mui/icons-material';
 import { IconButton, Typography } from '@mui/material';
 import { dispatch } from 'store';
 
+import { SYNC_STATUS } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { toggleLiveFeedbackChat } from '../../reducers/liveFeedbackChats';
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
 
+import ChipButton from './ChipButton';
+
 interface HeaderProps {
   answerId: number;
+  syncStatus: keyof typeof SYNC_STATUS;
+  setSyncStatus: Dispatch<SetStateAction<keyof typeof SYNC_STATUS>>;
 }
 
 const translations = defineMessages({
@@ -22,7 +27,7 @@ const translations = defineMessages({
 });
 
 const Header: FC<HeaderProps> = (props) => {
-  const { answerId } = props;
+  const { answerId, syncStatus, setSyncStatus } = props;
 
   const liveFeedbackChats = useAppSelector((state) =>
     getLiveFeedbackChatsForAnswerId(state, answerId),
@@ -34,9 +39,17 @@ const Header: FC<HeaderProps> = (props) => {
 
   return (
     <div className="flex-none p-1 flex items-center justify-between">
-      <Typography className="pl-2" variant="h6">
-        {t(translations.getHelpHeader)}
-      </Typography>
+      <div className="flex flex-row gap-4">
+        <Typography className="pl-2" variant="h6">
+          {t(translations.getHelpHeader)}
+        </Typography>
+        <ChipButton
+          answerId={answerId}
+          setSyncStatus={setSyncStatus}
+          syncStatus={syncStatus}
+        />
+      </div>
+
       <IconButton
         onClick={() => dispatch(toggleLiveFeedbackChat({ answerId }))}
       >
