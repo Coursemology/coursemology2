@@ -24,7 +24,7 @@ class Course::Assessment::Answer::LiveFeedback::ThreadService
         problem: { id: @question.codaveri_id },
         runtime: {
           language: question.language.polyglot_name,
-          version: question.language.polyglot_version
+          version: question.language.extend(CodaveriLanguageConcern).polyglot_version
         }
       }
     }
