@@ -82,7 +82,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
       @assessment,
       params,
       language.polyglot_name,
-      language.polyglot_version
+      language.extend(CodaveriLanguageConcern).polyglot_version
     )
 
     generated_problem = generation_service.codaveri_generate_problem
