@@ -107,6 +107,18 @@ class Course::Mailer < ApplicationMailer
     end
   end
 
+  def course_user_deletion_failed_email(course, course_user, user)
+    return unless user.email
+
+    @course = course
+    @course_user = course_user
+    @recipient = user
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email,
+           subject: t('.subject', course_user_name: @course_user.name, course_name: @course.title))
+    end
+  end
+
   # Send a reminder of the assessment closing to a single user
   #
   # @param [Course::Assessment] assessment The assessment that is closing.
