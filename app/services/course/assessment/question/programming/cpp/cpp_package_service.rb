@@ -202,6 +202,24 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
     data_files.sort_by { |file| file[:filename].downcase }
   end
 
+  # Get the hash of the files we add to the programming package, so that
+  # any changes made to those files would trigger a rebuild so package recompiles correctly.
+  def package_file_entry(package_file_path)
+    {
+      path: package_file_path,
+      hash: Digest::SHA256.file(get_file_path(package_file_path)).hexdigest
+    }
+  end
+
+  def package_files_meta
+    @package_files_meta ||= [
+      package_file_entry('cpp_autograde_include.cc'),
+      package_file_entry('cpp_autograde_pre.cc'),
+      package_file_entry('cpp_autograde_post.cc'),
+      package_file_entry('cpp_makefile')
+    ]
+  end
+
   def generate_meta(data_files_to_keep)
     meta = default_meta
 
@@ -213,6 +231,8 @@ class Course::Assessment::Question::Programming::Cpp::CppPackageService < \
     [:public, :private, :evaluation].each do |test_type|
       meta[:test_cases][test_type] = @test_params[:test_cases][test_type] || []
     end
+
+    meta[:package_files] = package_files_meta
 
     meta.as_json
   end

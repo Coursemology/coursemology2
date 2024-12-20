@@ -279,8 +279,80 @@ RSpec.describe Course::Assessment::ProgrammingTestCaseReport do
       end
 
       describe '#output' do
-        it 'returns an empty string as the hint attribute' do
-          expect(subject.hint).to eq('')
+        it 'returns an empty string as the output attribute' do
+          expect(subject.output).to eq('')
+        end
+      end
+    end
+  end
+
+  context 'when given a report with information attached to test case properties' do
+    let(:report_path) do
+      File.join(Rails.root, 'spec/fixtures/course/'\
+                            'programming_properties_test_report.xml')
+    end
+
+    let(:report_xml) { File.read(report_path) }
+
+    let(:parsed_report) do
+      Course::Assessment::ProgrammingTestCaseReport.new(report_xml)
+    end
+    let(:test_cases) { parsed_report.test_suites.first.test_cases }
+
+    describe Course::Assessment::ProgrammingTestCaseReport::TestCase do
+      context 'test case with all fields' do
+        subject { test_cases.first }
+
+        describe '#expression' do
+          it 'returns the expression attribute' do
+            expect(subject.expression).to eq('rabbits_made(1)')
+          end
+        end
+
+        describe '#expected' do
+          it 'returns the expected attribute' do
+            expect(subject.expected).to eq('1')
+          end
+        end
+        describe '#hint' do
+          it 'returns the hint attribute' do
+            expect(subject.hint).to eq('Output on day 1')
+          end
+        end
+
+        describe '#output' do
+          it 'returns the output attribute' do
+            expect(subject.output).
+              to eq('2')
+          end
+        end
+      end
+
+      context 'test case with some fields missing' do
+        subject { test_cases.second }
+
+        describe '#expression' do
+          it 'returns the expression attribute' do
+            expect(subject.expression).to eq('rabbits_made(3)')
+          end
+        end
+
+        describe '#expected' do
+          it 'returns the expected attribute' do
+            expect(subject.expected).to eq('6')
+          end
+        end
+
+        describe '#hint' do
+          it 'returns an empty string as the hint attribute' do
+            expect(subject.hint).to eq('')
+          end
+        end
+
+        describe '#output' do
+          it 'returns an empty string as the output attribute' do
+            expect(subject.output).to eq('')
+          end
         end
       end
     end

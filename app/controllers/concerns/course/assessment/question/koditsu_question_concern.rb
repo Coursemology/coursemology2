@@ -93,6 +93,11 @@ module Course::Assessment::Question::KoditsuQuestionConcern
         version: '10.2',
         filename: 'template.cpp'
       },
+      Coursemology::Polyglot::Language::CPlusPlus::CPlusPlus11 => {
+        language: 'cpp',
+        version: '10.2',
+        filename: 'template.cpp'
+      },
       Coursemology::Polyglot::Language::Python::Python3Point4 => {
         language: 'python',
         version: '3.4',

@@ -1,5 +1,7 @@
 const ProgrammingLanguageMapper = {
   'C/C++': 'c_cpp',
+  'C++ 11': 'c_cpp',
+  'C++ 17': 'c_cpp',
   'Java 8': 'java',
   'Java 11': 'java',
   'Java 17': 'java',

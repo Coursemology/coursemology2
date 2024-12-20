@@ -13,6 +13,8 @@ namespace :db do
       Coursemology::Polyglot::Language::Python::Python3Point9,
       Coursemology::Polyglot::Language::Python::Python3Point10,
       Coursemology::Polyglot::Language::Python::Python3Point12,
+      Coursemology::Polyglot::Language::Java::Java17,
+      Coursemology::Polyglot::Language::Java::Java21,
       Coursemology::Polyglot::Language::R::R4Point1
     ].freeze
 
@@ -29,7 +31,7 @@ namespace :db do
 
   KODITSU_WHITELIST =
     [
-      Coursemology::Polyglot::Language::CPlusPlus,
+      Coursemology::Polyglot::Language::CPlusPlus::CPlusPlus11,
       Coursemology::Polyglot::Language::Python::Python3Point4,
       Coursemology::Polyglot::Language::Python::Python3Point5,
       Coursemology::Polyglot::Language::Python::Python3Point6,
@@ -44,12 +46,14 @@ namespace :db do
       Coursemology::Polyglot::Language::Python::Python2Point7,
       Coursemology::Polyglot::Language::Python::Python3Point4,
       Coursemology::Polyglot::Language::Python::Python3Point5,
-      Coursemology::Polyglot::Language::JavaScript
+      Coursemology::Polyglot::Language::JavaScript,
+      Coursemology::Polyglot::Language::CPlusPlus
     ].freeze
 
   EVALUATOR_UNSUPPORTED_LANGUAGES =
     [
       Coursemology::Polyglot::Language::JavaScript,
+      Coursemology::Polyglot::Language::CPlusPlus,
       Coursemology::Polyglot::Language::R::R4Point1
     ].freeze
 
@@ -61,22 +65,37 @@ namespace :db do
       Coursemology::Polyglot::Language.
         where(type: CODAVERI_EVALUATOR_WHITELIST.map(&:name)).
         update_all(codaveri_evaluator_whitelisted: true)
+      Coursemology::Polyglot::Language.
+        where.not(type: CODAVERI_EVALUATOR_WHITELIST.map(&:name)).
+        update_all(codaveri_evaluator_whitelisted: false)
 
       Coursemology::Polyglot::Language.
         where(type: QUESTION_GENERATION_WHITELIST.map(&:name)).
         update_all(question_generation_whitelisted: true)
+      Coursemology::Polyglot::Language.
+        where.not(type: QUESTION_GENERATION_WHITELIST.map(&:name)).
+        update_all(question_generation_whitelisted: false)
 
       Coursemology::Polyglot::Language.
         where(type: KODITSU_WHITELIST.map(&:name)).
         update_all(koditsu_whitelisted: true)
+      Coursemology::Polyglot::Language.
+        where.not(type: KODITSU_WHITELIST.map(&:name)).
+        update_all(koditsu_whitelisted: false)
 
       Coursemology::Polyglot::Language.
         where(type: DEPRECATED_LANGUAGES.map(&:name)).
         update_all(enabled: false)
+      Coursemology::Polyglot::Language.
+        where.not(type: DEPRECATED_LANGUAGES.map(&:name)).
+        update_all(enabled: true)
 
       Coursemology::Polyglot::Language.
         where(type: EVALUATOR_UNSUPPORTED_LANGUAGES.map(&:name)).
         update_all(default_evaluator_whitelisted: false)
+      Coursemology::Polyglot::Language.
+        where.not(type: EVALUATOR_UNSUPPORTED_LANGUAGES.map(&:name)).
+        update_all(default_evaluator_whitelisted: true)
     end
   end
 end
