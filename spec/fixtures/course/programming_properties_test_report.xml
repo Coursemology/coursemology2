@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="4" failures="3" disabled="0" errors="0" time="0.006" timestamp="2024-12-19T02:19:45" name="AllTests">
+  <testsuite name="Autograder" tests="4" failures="3" disabled="0" errors="0" time="0.004" timestamp="2024-12-19T02:19:45">
+    <testcase name="test_public_01" status="run" result="completed" time="0.003" timestamp="2024-12-19T02:19:45" classname="Autograder">
+      <failure message="answer.cc:25&#x0A;Expected equality of these values:&#x0A;  a&#x0A;    Which is: 1&#x0A;  b&#x0A;    Which is: 2" type=""><![CDATA[answer.cc:25
+Expected equality of these values:
+  a
+    Which is: 1
+  b
+    Which is: 2]]></failure>
+<properties>
+<property name="expression" value="rabbits_made(1)"/>
+<property name="output" value="2"/>
+<property name="expected" value="1"/>
+<property name="hint" value="Output on day 1"/>
+</properties>
+    </testcase>
+    <testcase name="test_public_02" status="run" result="completed" time="0.001" timestamp="2024-12-19T02:19:45" classname="Autograder">
+      <failure message="answer.cc:25&#x0A;Expected equality of these values:&#x0A;  a&#x0A;    Which is: 6&#x0A;  b&#x0A;    Which is: 4" type=""><![CDATA[answer.cc:25
+Expected equality of these values:
+  a
+    Which is: 6
+  b
+    Which is: 4]]></failure>
+<properties>
+<property name="expression" value="rabbits_made(3)"/>
+<property name="expected" value="6"/>
+</properties>
+    </testcase>
+    <testcase name="test_public_03" status="run" result="completed" time="0" timestamp="2024-12-19T02:19:45" classname="Autograder">
+      <failure message="answer.cc:25&#x0A;Expected equality of these values:&#x0A;  a&#x0A;    Which is: 28&#x0A;  b&#x0A;    Which is: 8" type=""><![CDATA[answer.cc:25
+Expected equality of these values:
+  a
+    Which is: 28
+  b
+    Which is: 8]]></failure>
+<properties>
+<property name="expression" value="rabbits_made(7)"/>
+<property name="output" value="8"/>
+<property name="expected" value="28"/>
+</properties>
+    </testcase>
+  </testsuite>
+</testsuites>

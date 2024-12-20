@@ -1,8 +1,11 @@
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
+# Backward compatibility for legacy container
+CXX_STD ?= c++11
+
 CPPFLAGS += -isystem $(GTEST_DIR)/include
-CXXFLAGS += -g -w -Wall -Wextra -pthread -std=c++11
+CXXFLAGS += -g -w -Wall -Wextra -pthread -std=$(CXX_STD)
 
 prepare: answer.cc
 

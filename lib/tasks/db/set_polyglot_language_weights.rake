@@ -6,9 +6,10 @@ namespace :db do
   LANGUAGE_ORDERING = [
     'python',
     'java',
-    'c/c++',
+    'c++',
     'r',
-    'javascript'
+    'javascript',
+    'c/c++'
   ].freeze
 
   def comparable_polyglot_version(language)

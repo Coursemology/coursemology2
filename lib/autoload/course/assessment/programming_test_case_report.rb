@@ -236,8 +236,12 @@ class Course::Assessment::ProgrammingTestCaseReport
       meta = @test_case.search('meta')
       if meta.present? && meta[0][attribute_name]
         meta[0][attribute_name]
+      elsif @test_case.attributes.key?(attribute_name)
+        @test_case[attribute_name]
+      elsif (named_property ||= @test_case.search("./properties/property[@name=\"#{attribute_name}\"]")).present?
+        named_property[0]['value']
       else
-        @test_case[attribute_name] || ''
+        ''
       end
     end
   end
