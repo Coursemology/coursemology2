@@ -104,7 +104,7 @@ module Course::UserInvitationService::ParseInvitationConcern
   def parse_from_file(file)
     row_num = 0
     [].tap do |invites|
-      CSV.foreach(file).with_index(1) do |row, row_number|
+      CSV.foreach(file, encoding: 'utf-8').with_index(1) do |row, row_number|
         row_num = row_number
         row[0] = remove_utf8_byte_order_mark(row[0]) if row_number == 1
         row = strip_row(row)

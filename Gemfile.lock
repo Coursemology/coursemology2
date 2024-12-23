@@ -189,7 +189,7 @@ GEM
     cronex (0.15.0)
       tzinfo
       unicode (>= 0.4.4.5)
-    csv (3.3.0)
+    csv (3.3.2)
     date (3.4.1)
     devise (4.9.4)
       bcrypt (~> 3.0)
