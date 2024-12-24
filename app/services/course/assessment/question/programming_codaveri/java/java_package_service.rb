@@ -2,6 +2,8 @@
 # rubocop:disable Metrics/abcSize
 class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageService <
   Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
+  include Course::Assessment::Question::CodaveriQuestionConcern
+
   def process_solutions
     extract_main_solution
   end
@@ -112,7 +114,9 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
     submission_files.each_key do |pathname|
       main_template_object = default_codaveri_template_template
 
-      main_template_object[:path] = extract_pathname_from_file(submission_files[pathname], pathname)
+      main_template_object[:path] =
+        (!@question.multiple_file_submission && extract_pathname_from_java_file(submission_files[pathname])) ||
+        pathname.to_s
       main_template_object[:content] = submission_files[pathname]
       main_template_object[:prefix] = strip_autograding_definition_from(test_files[Pathname.new('prepend')])
       # TODO: fill in the suffix properly when we have aligned our append file convention with Codaveri
@@ -126,13 +130,6 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
     # The regex below finds all text after the last slash
     # (eg AutoGrader/AutoGrader/test_private_4 -> test_private_4)
     @question.test_cases.pluck(:identifier, :id).to_h { |x| [x[0].match(/[^\/]+$/).to_s, x[1]] }
-  end
-
-  def extract_pathname_from_file(file_content, pathname)
-    class_name_extractor = /public\s+class\s+([A-Za-z_][A-Za-z0-9_]*)/
-    match = file_content.match(class_name_extractor)
-
-    match ? "#{match[1]}.java" : pathname.to_s
   end
 
   def strip_autograding_definition_from(file_content)

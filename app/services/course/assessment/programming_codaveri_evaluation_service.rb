@@ -141,7 +141,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
 
     @answer.files.each do |file|
       file_template = default_codaveri_student_file_template
-      file_template[:path] = extract_pathname_from_file(file.content, file.filename)
+      file_template[:path] =
+        (!@question.multiple_file_submission && extract_pathname_from_java_file(file.content)) || file.filename
       file_template[:content] = file.content
 
       @answer_object[:files].append(file_template)
@@ -231,12 +232,5 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
       path: '',
       content: ''
     }
-  end
-
-  def extract_pathname_from_file(file_content, filename)
-    class_name_extractor = /public\s+class\s+([A-Za-z_][A-Za-z0-9_]*)/
-    match = file_content.match(class_name_extractor)
-
-    match ? "#{match[1]}.java" : filename
   end
 end

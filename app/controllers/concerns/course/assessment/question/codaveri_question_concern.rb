@@ -15,4 +15,12 @@ module Course::Assessment::Question::CodaveriQuestionConcern
         create_or_update_question(question, question.attachment)
     end
   end
+
+  def extract_pathname_from_java_file(file_content)
+    # extracts pathname based on public class of java file
+    class_name_extractor = /(?:^|;)\s*public\s+class\s+([A-Za-z_][A-Za-z0-9_]*)/
+    match = file_content.match(class_name_extractor)
+
+    match ? "#{match[1]}.java" : nil
+  end
 end
