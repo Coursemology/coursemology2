@@ -77,7 +77,7 @@ const translations = defineMessages({
     id: 'course.achievement.AchievementAward.AchievementAwardManager.note',
     defaultMessage:
       'If an Achievement has conditions associated with it, \
-      Coursemology will automatically award achievements when the student meets those conditions. ',
+        Coursemology will automatically award achievements when the student meets those conditions. ',
   },
   noUser: {
     id: 'course.achievement.AchievementAward.AchievementAwardManager.noUser',
@@ -242,7 +242,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
     },
     {
       name: 'id',
-      label: 'Obtained Achievement',
+      label: columnHeadLabelAchievement,
       options: {
         filter: false,
         search: false,

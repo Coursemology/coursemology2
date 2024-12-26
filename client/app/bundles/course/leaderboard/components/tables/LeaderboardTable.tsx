@@ -15,6 +15,7 @@ import Link from 'lib/components/core/Link';
 import { getAchievementURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useMedia from 'lib/hooks/useMedia';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { LeaderboardTableType } from '../../types';
 
@@ -48,6 +49,30 @@ const translations = defineMessages({
     id: 'course.leaderboard.LeaderboardTable.achievements',
     defaultMessage: 'Achievements',
   },
+  rank: {
+    id: 'course.leaderboard.LeaderboardTable.rank',
+    defaultMessage: 'Rank',
+  },
+  name: {
+    id: 'course.leaderboard.LeaderboardTable.name',
+    defaultMessage: 'Name',
+  },
+  level: {
+    id: 'course.leaderboard.LeaderboardTable.level',
+    defaultMessage: 'Level',
+  },
+  averageExperience: {
+    id: 'course.leaderboard.LeaderboardTable.averageExperience',
+    defaultMessage: 'Average Experience',
+  },
+  averageAchievements: {
+    id: 'course.leaderboard.LeaderboardTable.averageAchievements',
+    defaultMessage: 'Average Achievements',
+  },
+  members: {
+    id: 'course.leaderboard.LeaderboardTable.members',
+    defaultMessage: 'Members',
+  },
 });
 
 const styles = {
@@ -78,6 +103,7 @@ const styles = {
 
 const LeaderboardTable: FC<Props> = (props: Props) => {
   const { data, id: tableType } = props;
+  const { t } = useTranslation();
   const tabletView = useMedia.MinWidth('sm');
   const phoneView = useMedia.MinWidth('xs');
   const [maxAvatars, setMaxAvatars] = useState(6);
@@ -95,7 +121,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
   const columns: TableColumns[] = [
     {
       name: 'id',
-      label: 'Rank',
+      label: t(translations.rank),
       options: {
         filter: false,
         sort: false,
@@ -116,7 +142,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
       | LeaderboardAchievement[];
     columns.push({
       name: 'name',
-      label: 'Name',
+      label: t(translations.name),
       options: {
         filter: false,
         sort: false,
@@ -157,7 +183,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
     columns.push(
       {
         name: 'level',
-        label: 'Level',
+        label: t(translations.level),
         options: {
           filter: false,
           sort: false,
@@ -172,7 +198,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
       },
       {
         name: 'experience',
-        label: 'Experience',
+        label: t(translations.experience),
         options: {
           filter: false,
           sort: false,
@@ -192,7 +218,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
     const achievementData = data as LeaderboardAchievement[];
     columns.push({
       name: 'achievements',
-      label: 'Achievements',
+      label: t(translations.achievements),
       options: {
         filter: false,
         sort: false,
@@ -249,7 +275,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
     columns.push(
       {
         name: 'name',
-        label: 'Name',
+        label: t(translations.name),
         options: {
           filter: false,
           sort: false,
@@ -268,7 +294,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
       },
       {
         name: 'members',
-        label: 'Members',
+        label: t(translations.members),
         options: {
           filter: false,
           sort: false,
@@ -306,7 +332,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
     const groupPointData = data as GroupLeaderboardPoints[];
     columns.push({
       name: 'points',
-      label: 'Average Experience',
+      label: t(translations.averageExperience),
       options: {
         filter: false,
         sort: false,
@@ -332,7 +358,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
     const groupAchievementData = data as GroupLeaderboardAchievement[];
     columns.push({
       name: 'achievements',
-      label: 'Average Achievements',
+      label: t(translations.averageAchievements),
       options: {
         filter: false,
         sort: false,
