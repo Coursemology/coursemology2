@@ -3,6 +3,7 @@ en:
     emails:
       index:
         header: 'Emails'
+        cannot_delete_primary: 'You cannot delete the primary email.'
       set_primary:
         no_confirmed_emails: 'There are no confirmed emails to set as the primary email.'
       send_confirmation:

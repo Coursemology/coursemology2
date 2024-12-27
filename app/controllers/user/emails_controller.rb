@@ -14,6 +14,13 @@ class User::EmailsController < ApplicationController
   end
 
   def destroy
+    if @email.primary?
+      @email.errors.add(:base, I18n.t('user.emails.index.cannot_delete_primary'))
+      render json: { errors: @email.errors.full_messages.to_sentence }, status: :bad_request
+
+      return
+    end
+
     if @email.destroy
       render_emails
     else
