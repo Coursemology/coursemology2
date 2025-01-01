@@ -6,7 +6,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
-    let(:parent_folder) { create(:folder, course: course) }
+    let(:parent_folder) { course.root_folder }
     let(:unpublished_started_folder) do
       folder = create(:assessment, course: course, start_at: 1.day.ago).folder
       create(:material, folder: folder)
@@ -30,12 +30,11 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       folders << create(:folder, :ended, parent: parent_folder, course: course)
     end
 
-    before { login_as(user, scope: :user) }
+    before { login_as(user, scope: :user, redirect_url: course_material_folders_path(course)) }
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
       scenario 'I can view all the subfolders' do
-        visit course_material_folder_path(course, parent_folder)
         concrete_subfolders.each do |subfolder|
           expect(page).to have_selector("#subfolder-#{subfolder.id}")
           expect(page).to have_selector("#subfolder-edit-button-#{subfolder.id}")
@@ -55,7 +54,6 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       end
 
       scenario 'I can create a subfolder' do
-        visit course_material_folder_path(course, parent_folder)
         find('#new-subfolder-button').click
 
         new_folder = build(:folder, course: course)
@@ -75,7 +73,6 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
 
       scenario 'I can edit a subfolder' do
         sample_folder = concrete_subfolders.sample
-        visit course_material_folder_path(course, parent_folder)
         find("#subfolder-edit-button-#{sample_folder.id}").click
 
         find('input[name="name"]').set(' ')
@@ -93,7 +90,6 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       end
 
       scenario 'I can delete a subfolder' do
-        visit course_material_folder_path(course, parent_folder)
         sample_folder = concrete_subfolders.sample
 
         find("#subfolder-delete-button-#{sample_folder.id}").click
@@ -110,7 +106,6 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
         file1 = File.join(Rails.root, '/spec/fixtures/files/text.txt')
         file2 = File.join(Rails.root, '/spec/fixtures/files/text2.txt')
 
-        visit course_material_folder_path(course, parent_folder)
         find('#upload-files-button').click
         find('input[type="file"]', visible: false).attach_file([file1, file2], make_visible: true)
 
@@ -121,7 +116,6 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       end
 
       scenario 'I can download the folder' do
-        visit course_material_folder_path(course, parent_folder)
         expect(page).to have_selector('#download-folder-button')
       end
 
@@ -140,8 +134,6 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can view the Material Sidebar item' do
-        visit course_path(course)
-
         expect(find_sidebar).to have_text(I18n.t('course.material.sidebar_title'))
       end
 
