@@ -142,7 +142,7 @@ const FolderShow: FC = () => {
       />
 
       <FolderNew
-        folderId={+folderId!}
+        folderId={currFolderInfo.id}
         isOpen={isNewFolderOpen}
         onClose={(): void => setIsNewFolderOpen(false)}
       />
