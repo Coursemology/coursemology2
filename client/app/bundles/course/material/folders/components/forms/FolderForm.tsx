@@ -90,6 +90,7 @@ const FolderForm: FC<Props> = (props) => {
             name="name"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                autoFocus
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}

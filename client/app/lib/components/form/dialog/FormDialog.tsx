@@ -76,6 +76,7 @@ const FormDialog = (props: Props): JSX.Element => {
       <Dialog
         className="top-10"
         disableEnforceFocus
+        disableRestoreFocus
         maxWidth="md"
         onClose={(_event: object, reason: string): void => {
           if (reason === 'backdropClick' && formState.isSubmitting) return;
