@@ -15,7 +15,7 @@ class Course::Material::FoldersController < Course::Material::Controller
 
   def update
     if @folder.update(folder_params)
-      @folder = @folder.parent || @folder
+      @folder = params[:is_current_folder] == 'true' ? @folder : @folder.parent
       load_subfolders
       render 'show'
     else

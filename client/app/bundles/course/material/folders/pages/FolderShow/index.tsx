@@ -119,6 +119,7 @@ const FolderShow: FC = () => {
     startAt: new Date(currFolderInfo.startAt),
     endAt:
       currFolderInfo.endAt !== null ? new Date(currFolderInfo.endAt) : null,
+    isCurrentFolder: true,
   };
 
   return (

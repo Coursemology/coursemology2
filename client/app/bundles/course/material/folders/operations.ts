@@ -16,34 +16,39 @@ const DOWNLOAD_FOLDER_JOB_POLL_INTERVAL_MS = 2000;
 const formatFolderAttributes = (data: FolderFormData): FormData => {
   const payload = new FormData();
 
-  ['name', 'description', 'canStudentUpload', 'startAt', 'endAt'].forEach(
-    (field) => {
-      if (data[field] !== undefined && data[field] !== null) {
-        switch (field) {
-          case 'startAt':
-            payload.append('material_folder[start_at]', data[field].toString());
-            break;
-          case 'endAt':
-            if (data[field]) {
-              payload.append(
-                'material_folder[end_at]',
-                data[field]!.toString(),
-              );
-            }
-            break;
-          case 'canStudentUpload':
-            payload.append(
-              'material_folder[can_student_upload]',
-              `${data[field]}`,
-            );
-            break;
-          default:
-            payload.append(`material_folder[${field}]`, data[field]);
-            break;
-        }
+  [
+    'name',
+    'description',
+    'canStudentUpload',
+    'startAt',
+    'endAt',
+    'isCurrentFolder',
+  ].forEach((field) => {
+    if (data[field] !== undefined && data[field] !== null) {
+      switch (field) {
+        case 'startAt':
+          payload.append('material_folder[start_at]', data[field].toString());
+          break;
+        case 'endAt':
+          if (data[field]) {
+            payload.append('material_folder[end_at]', data[field]!.toString());
+          }
+          break;
+        case 'canStudentUpload':
+          payload.append(
+            'material_folder[can_student_upload]',
+            `${data[field]}`,
+          );
+          break;
+        case 'isCurrentFolder':
+          payload.append('is_current_folder', `${data[field]}`);
+          break;
+        default:
+          payload.append(`material_folder[${field}]`, data[field]);
+          break;
       }
-    },
-  );
+    }
+  });
   return payload;
 };
 

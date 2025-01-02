@@ -88,6 +88,7 @@ export interface FolderFormData {
   canStudentUpload: boolean;
   startAt: Date;
   endAt: Date | null;
+  isCurrentFolder?: boolean;
 }
 
 export interface MaterialUploadFormData {
