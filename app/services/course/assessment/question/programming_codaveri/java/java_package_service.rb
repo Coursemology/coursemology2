@@ -48,22 +48,13 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
 
     test_cases_regex.each do |test_case|
       test_case_object = default_codaveri_expr_test_case_template
-      test_case_name, prefix, expression = test_case
-
-      first_comma_index = find_unenclosed_comma_index(expression)
-      lhs_expression = expression[..first_comma_index - 1].strip
-      rhs_expression = expression[first_comma_index + 1..].strip
-
-      cleaned_prefix = prefix.lines.reject do |line|
-        line.include?('ITestResult') || line.include?('setAttribute') ||
-          line.include?('expectEquals') || line.include?('printValue')
-      end.join
+      test_case_name, _, lhs_expression, = process_scanned_test_case(test_case)
 
       test_case_object[:index] = test_cases_with_id[test_case_name]
       test_case_object[:timeout] = @question.time_limit * 1000 if @question.time_limit
-      test_case_object[:prefix] = cleaned_prefix
-      test_case_object[:lhsExpression] = lhs_expression
-      test_case_object[:rhsExpression] = rhs_expression
+      test_case_object[:prefix] = 'Autograder autograder = new Autograder();'
+      test_case_object[:lhsExpression] = "autograder.test_#{test_cases_with_id[test_case_name]}()"
+      test_case_object[:rhsExpression] = 'true'
       test_case_object[:display] = lhs_expression
 
       @test_case_files.append(test_case_object)
@@ -109,7 +100,6 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
 
   def extract_template
     submission_files = @package.submission_files
-    test_files = @package.test_files
 
     submission_files.each_key do |pathname|
       main_template_object = default_codaveri_template_template
@@ -118,12 +108,13 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
         (!@question.multiple_file_submission && extract_pathname_from_java_file(submission_files[pathname])) ||
         pathname.to_s
       main_template_object[:content] = submission_files[pathname]
-      main_template_object[:prefix] = strip_autograding_definition_from(test_files[Pathname.new('prepend')])
-      # TODO: fill in the suffix properly when we have aligned our append file convention with Codaveri
+      main_template_object[:prefix] = ''
       main_template_object[:suffix] = ''
 
       @template_files.append(main_template_object)
     end
+
+    @template_files.append(autograder_object)
   end
 
   def preload_question_test_cases
@@ -167,6 +158,71 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
     end
 
     input.length
+  end
+
+  def autograder_object
+    test_files = @package.test_files
+    autograder = default_codaveri_template_template
+
+    autograder[:path] = 'Autograder.java'
+    autograder[:content] = format_autograder_content
+    autograder[:prefix] = strip_autograding_definition_from(test_files[Pathname.new('prepend')])
+
+    autograder
+  end
+
+  def format_autograder_content
+    test_cases_regex = extract_test_cases_by_regex
+
+    test_cases_with_id = preload_question_test_cases
+    test_cases_content = []
+
+    test_cases_regex.each do |test_case|
+      test_case_name, cleaned_prefix, lhs_expression, rhs_expression = process_scanned_test_case(test_case)
+
+      test_cases_content.append(<<~JAVA
+          public boolean test_#{test_cases_with_id[test_case_name]}() {
+            #{cleaned_prefix};
+            assert #{lhs_expression} == #{rhs_expression};
+
+            return true;
+        }
+      JAVA
+                               )
+    end
+
+    <<-JAVA
+      import java.util.Arrays;
+
+      public class Autograder {
+        #{@package.test_files[Pathname.new('append')]};
+        #{test_cases_content.join("\n")};
+      }
+    JAVA
+  end
+
+  def extract_test_cases_by_regex
+    autograde_content = @package.test_files[Pathname.new('autograde')]
+    pattern_test = /@Test\(groups\s*=\s*\{\s*"(?:public|private|evaluation)"\s*\}\)\s*public\s+void\s+(\w+)\s*\(\)\s*\{([\s\S]*?expectEquals\((.*)\);[\s\S]*?)\}/ # rubocop:disable Layout/LineLength
+
+    reg_test = Regexp.new(pattern_test)
+
+    autograde_content.scan(reg_test)
+  end
+
+  def process_scanned_test_case(test_case)
+    test_case_name, prefix, expression = test_case
+
+    first_comma_index = find_unenclosed_comma_index(expression)
+    lhs_expression = expression[..first_comma_index - 1].strip
+    rhs_expression = expression[first_comma_index + 1..].strip
+
+    cleaned_prefix = prefix.lines.reject do |line|
+      line.include?('ITestResult') || line.include?('setAttribute') ||
+        line.include?('expectEquals') || line.include?('printValue')
+    end.join
+
+    [test_case_name, cleaned_prefix, lhs_expression, rhs_expression]
   end
 end
 # rubocop:enable Metrics/abcSize
