@@ -125,6 +125,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
     defaultValues: defaultCodaveriFormData,
     resolver: yupResolver(codaveriValidationSchema),
   });
+  const currentLanguageId = codaveriForm.watch('languageId');
 
   // lower form (populate to new programming question page)
   // TODO: We reuse ProgrammingFormData object here because test case UI mandates it.
@@ -192,9 +193,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
     saveActiveFormData();
     const snapshot = conversation.snapshots?.[conversation.activeSnapshotId];
     let languageId = snapshot?.codaveriData?.languageId ?? 0;
-    if (languageId === 0) {
-      languageId = codaveriForm.getValues('languageId');
-    }
+    if (languageId === 0) languageId = currentLanguageId;
     if (snapshot) {
       dispatch(
         actions.setActiveConversationId({ conversationId: conversation.id }),
@@ -254,7 +253,6 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   };
 
   return (
-    // TODO: Update these queries to return only data needed for this page, instead of the full objects.
     <Preload render={<LoadingIndicator />} while={fetchCodaveriLanguages}>
       {(languages): JSX.Element => {
         return (
@@ -479,6 +477,11 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
 
                 <Grid item lg={8} xs={12}>
                   <GenerateQuestionPrototypeForm
+                    editorMode={
+                      languages.find(
+                        (language) => language.id === currentLanguageId,
+                      )?.editorMode ?? 'python'
+                    }
                     lockStates={lockStates}
                     onToggleLock={(lockStateKey: string) => {
                       setLockStates({

@@ -32,6 +32,7 @@ export const questionShape = PropTypes.shape({
   // as we are moving to Typescript
   allowAttachment: PropTypes.bool,
   language: PropTypes.string,
+  editorMode: PropTypes.string,
   options: PropTypes.arrayOf(optionShape),
 
   // Below are added in Redux

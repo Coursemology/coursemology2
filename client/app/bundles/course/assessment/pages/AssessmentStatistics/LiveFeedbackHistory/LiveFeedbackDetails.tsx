@@ -3,7 +3,6 @@ import ReactAce from 'react-ace';
 import { Box, Card, CardContent, Drawer, Typography } from '@mui/material';
 import { LiveFeedbackCodeAndComments } from 'types/course/assessment/submission/liveFeedback';
 
-import { parseLanguages } from 'course/assessment/submission/utils';
 import EditorField from 'lib/components/core/fields/EditorField';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -48,7 +47,7 @@ const LiveFeedbackDetails: FC<Props> = (props) => {
           // This height matches the prompt height exactly so there is no awkward scroll bar
           // and the prompt does not expand weirdly when description is opened
           height="43.6rem"
-          language={parseLanguages[file.language]}
+          language={file.editorMode}
           onCursorChange={handleCursorChange}
           value={file.content}
         />

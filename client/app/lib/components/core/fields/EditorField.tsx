@@ -38,8 +38,18 @@ const EditorField = forwardRef(
     return (
       <AceEditor
         ref={ref}
-        // Short-circuit this because during build time, `mode` can be `undefined` and
-        // `AceEditor` will request for `/webpack/mode-mode.js`, which doesn't exist.
+        /**
+         * This "mode" parameter should match one of the file names in this git directory:
+         * https://github.com/thlorenz/brace/tree/master/mode
+         *
+         * Short-circuit this because during build time, `mode` can be `undefined` and
+         * AceEditor will request for `/webpack/mode-mode.js`, which doesn't exist.
+         *
+         * TODO: This parameter is called by many names in various places in the codebase,
+         * such as "language", "editorMode", "languageMode", or "ace_mode".
+         * We should standardize to reduce ambiguity, which can be done safely when all relevant
+         * components have been moved to TypeScript.
+         */
         mode={language || 'python'}
         onChange={onChange}
         theme="github"

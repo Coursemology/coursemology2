@@ -1,3 +1,5 @@
+import { LanguageMode } from '../question/programming';
+
 export interface LiveFeedbackComments {
   lineNumber: number;
   comment: string;
@@ -8,6 +10,7 @@ export interface LiveFeedbackCode {
   filename: string;
   content: string;
   language: string;
+  editorMode: LanguageMode;
 }
 
 export interface LiveFeedbackCodeAndComments extends LiveFeedbackCode {
