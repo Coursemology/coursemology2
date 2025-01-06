@@ -20,6 +20,10 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
     extract_template
   end
 
+  def process_evaluator
+    extract_evaluator
+  end
+
   private
 
   def extract_main_solution
@@ -62,9 +66,11 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
       test_case_object[:index] = test_cases_with_id[test_case_name]
       test_case_object[:timeout] = @question.time_limit * 1000 if @question.time_limit
       test_case_object[:prefix] = cleaned_prefix
-      test_case_object[:lhsExpression] = lhs_expression
-      test_case_object[:rhsExpression] = rhs_expression
-      test_case_object[:display] = lhs_expression
+      # Objects.deepEquals will lead to stackoverflow error if object contains self-references
+      # TODO: handle self-references case
+      test_case_object[:lhsExpression] = "Objects.deepEquals(#{lhs_expression}, #{rhs_expression})"
+      test_case_object[:rhsExpression] = 'true'
+      test_case_object[:display] = "printValue(#{lhs_expression})"
 
       @test_case_files.append(test_case_object)
     end
@@ -109,7 +115,6 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
 
   def extract_template
     submission_files = @package.submission_files
-    test_files = @package.test_files
 
     submission_files.each_key do |pathname|
       main_template_object = default_codaveri_template_template
@@ -118,18 +123,33 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
         (!@question.multiple_file_submission && extract_pathname_from_java_file(submission_files[pathname])) ||
         pathname.to_s
       main_template_object[:content] = submission_files[pathname]
-      main_template_object[:prefix] = strip_autograding_definition_from(test_files[Pathname.new('prepend')])
-      # TODO: fill in the suffix properly when we have aligned our append file convention with Codaveri
+      main_template_object[:prefix] = ''
       main_template_object[:suffix] = ''
 
       @template_files.append(main_template_object)
     end
   end
 
+  def extract_evaluator
+    test_files = @package.test_files
+    @evaluator_config[:prefix] =
+      "#{strip_autograding_definition_from(test_files[Pathname.new('prepend')])}\nimport java.util.Objects;"
+    @evaluator_config[:suffix] =
+      "#{extract_print_functions_from(test_files[Pathname.new('prepend')])}\n\n#{test_files[Pathname.new('append')]}"
+  end
+
   def preload_question_test_cases
     # The regex below finds all text after the last slash
     # (eg AutoGrader/AutoGrader/test_private_4 -> test_private_4)
     @question.test_cases.pluck(:identifier, :id).to_h { |x| [x[0].match(/[^\/]+$/).to_s, x[1]] }
+  end
+
+  def extract_print_functions_from(prepend_file_content)
+    autograding_definition = prepend_file_content[-6256..]
+
+    autograding_lines = autograding_definition.lines[-44..-5].join
+
+    autograding_lines.gsub(/\bString printValue\b/, 'static String printValue')
   end
 
   def strip_autograding_definition_from(file_content)

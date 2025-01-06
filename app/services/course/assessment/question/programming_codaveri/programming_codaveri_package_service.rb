@@ -34,6 +34,11 @@ class Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPack
     @language_codaveri_package_service.data_files
   end
 
+  def process_evaluator
+    @language_codaveri_package_service.process_evaluator
+    @language_codaveri_package_service.evaluator_config
+  end
+
   private
 
   # @param [Course::Assessment::Question::Programming] question The programming question with the
