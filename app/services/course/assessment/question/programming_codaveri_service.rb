@@ -91,6 +91,8 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     @problem_object.delete(:IOTestcases) if @problem_object[:IOTestcases].empty?
     resources_object[:exprTestcases] = all_test_cases.filter { |tc| tc[:type] == 'expression' }
     resources_object.delete(:exprTestcases) if resources_object[:exprTestcases].empty?
+    resources_object[:evaluator] = codaveri_package.process_evaluator
+    resources_object.delete(:evaluator) if resources_object[:evaluator].empty?
     resources_object[:templates] = codaveri_package.process_templates
     @problem_object[:additionalFiles] = codaveri_package.process_data
 

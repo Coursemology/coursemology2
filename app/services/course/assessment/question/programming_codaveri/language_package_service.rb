@@ -18,9 +18,10 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
     @test_case_files = []
     @template_files = []
     @data_files = []
+    @evaluator_config = {}
   end
 
-  attr_reader :solution_files, :test_case_files, :template_files, :data_files
+  attr_reader :solution_files, :test_case_files, :template_files, :data_files, :evaluator_config
 
   # Returns an array containing the solution files for Codaveri problem object.
   #
@@ -48,6 +49,14 @@ class Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   # @return [Array]
   def process_data
     raise NotImplementedError, 'You must implement this'
+  end
+
+  # Returns the EvaluatorConfig for Codaveri problem object.
+  # Expected to be overriden in the concrete language package service if needed.
+  #
+  # @return [Hash]
+  def process_evaluator
+    {}
   end
 
   private
