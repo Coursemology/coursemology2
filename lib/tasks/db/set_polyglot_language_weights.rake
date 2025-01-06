@@ -3,15 +3,6 @@ namespace :db do
   # This rake updates the weight column in the polyglot_languages table,
   # changing the order in which languages are displayed in drop-down menus.
 
-  LANGUAGE_ORDERING = [
-    'python',
-    'java',
-    'c++',
-    'r',
-    'javascript',
-    'c/c++'
-  ].freeze
-
   def comparable_polyglot_version(language)
     language&.polyglot_version&.split('.')&.map(&:to_i)
   end
@@ -27,25 +18,18 @@ namespace :db do
   end
 
   def language_compare(lang1, lang2) # rubocop:disable Metrics/CyclomaticComplexity
-    index1 = LANGUAGE_ORDERING.index { |l| lang1.polyglot_name == l }
-    index2 = LANGUAGE_ORDERING.index { |l| lang2.polyglot_name == l }
-
     # Put more recent versions first
-    return -version_compare(lang1, lang2) if index1 == index2
+    return -version_compare(lang1, lang2) if lang1.polyglot_name == lang2.polyglot_name
 
     # Put latest versions of each language before outdated versions of all languages
     return -1 if latest?(lang1) && !latest?(lang2)
     return 1 if !latest?(lang1) && latest?(lang2)
 
-    # Put other languages (not added to LANGUAGE_ORDERING array above) last
-    return 1 if index1.nil?
-    return -1 if index2.nil?
-
     # At this point we know that:
-    # - both languages have not-nil index values that are different and
+    # - both languages are different and
     # - the languages are either both latest? = true or both latest? = false.
-    # In any case, the index can be safely used to determine the ordering now.
-    index1 <=> index2
+    # Now polyglot_name can be safely used to determine the ordering now.
+    lang1.polyglot_name <=> lang2.polyglot_name
   end
 
   task set_polyglot_language_weights: :environment do
