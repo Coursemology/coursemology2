@@ -14,7 +14,6 @@ import CodaveriFeedbackStatus from '../../../containers/CodaveriFeedbackStatus';
 import ProgrammingImportEditor from '../../../containers/ProgrammingImport/ProgrammingImportEditor';
 import { questionShape } from '../../../propTypes';
 import { getLiveFeedbackChatsForAnswerId } from '../../../selectors/liveFeedbackChats';
-import { parseLanguages } from '../../../utils';
 import GetHelpChatPage from '../../GetHelpChatPage';
 
 import ProgrammingFile from './ProgrammingFile';
@@ -145,7 +144,7 @@ const Programming = (props) => {
               answerId={answerId}
               editorRef={editorRef}
               feedbackFiles={feedbackFiles}
-              language={parseLanguages(question.language)}
+              language={question.editorMode}
               readOnly={readOnly}
               saveAnswerAndUpdateClientVersion={
                 saveAnswerAndUpdateClientVersion

@@ -2,6 +2,7 @@ import { FC, ReactNode } from 'react';
 import { Controller, FormProvider, UseFormReturn } from 'react-hook-form';
 import { LockOpenOutlined, LockOutlined } from '@mui/icons-material';
 import { Container, Divider, IconButton } from '@mui/material';
+import { LanguageMode } from 'types/course/assessment/question/programming';
 
 import EditorAccordion from 'course/assessment/question/programming/components/common/EditorAccordion';
 import TestCases from 'course/assessment/question/programming/components/common/TestCases';
@@ -42,10 +43,11 @@ interface Props {
   prototypeForm: UseFormReturn<QuestionPrototypeFormData>;
   onToggleLock: (key: string) => void;
   lockStates: { [key: string]: boolean };
+  editorMode: LanguageMode;
 }
 
 const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
-  const { prototypeForm, lockStates, onToggleLock } = props;
+  const { prototypeForm, lockStates, onToggleLock, editorMode } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { onChange } = prototypeForm.register('question.title', {
@@ -119,7 +121,7 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
             render={({ field }): JSX.Element => (
               <EditorAccordion
                 disabled={lockStates['testUi.metadata.submission']}
-                language="python"
+                language={editorMode}
                 name={field.name}
                 onChange={field.onChange}
                 subtitle={t(translations.templateHint)}
@@ -142,7 +144,7 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
             render={({ field }): JSX.Element => (
               <EditorAccordion
                 disabled={lockStates['testUi.metadata.solution']}
-                language="python"
+                language={editorMode}
                 name={field.name}
                 onChange={field.onChange}
                 subtitle={t(translations.solutionHint)}

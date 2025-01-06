@@ -10,7 +10,6 @@ import {
 import Editor from '../../components/Editor';
 import FileInputField from '../../components/FileInput';
 import { fileShape, questionShape } from '../../propTypes';
-import { parseLanguages } from '../../utils';
 import ReadOnlyEditor from '../ReadOnlyEditor';
 
 import ImportedFileView from './ImportedFileView';
@@ -157,7 +156,7 @@ const VisibleProgrammingImportEditor = (props) => {
       importProgrammingFiles(
         answerId,
         filesToUpload,
-        parseLanguages(question.language),
+        question.editorMode,
         resetField,
       ),
     );
@@ -209,7 +208,7 @@ const VisibleProgrammingImportEditor = (props) => {
             displayFileName,
             viewHistory,
             saveAnswerAndUpdateClientVersion,
-            language: parseLanguages(question.language),
+            language: question.editorMode,
           }}
         />
       )}
