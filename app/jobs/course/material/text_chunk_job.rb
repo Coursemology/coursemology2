@@ -6,6 +6,8 @@ class Course::Material::TextChunkJob < ApplicationJob
   protected
 
   def perform_tracked(material, current_user)
+    material.start_chunking!
+    material.save!
     material.build_text_chunks(current_user)
     material.finish_chunking!
     material.save!

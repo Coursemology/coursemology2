@@ -20,8 +20,8 @@ class Course::Material < ApplicationRecord
   end
 
   belongs_to :folder, inverse_of: :materials, class_name: 'Course::Material::Folder'
-  has_many :text_chunks, inverse_of: :material, class_name: 'Course::Material::TextChunk',
-                         dependent: :destroy, foreign_key: :course_material_id, autosave: true
+  has_many :text_chunk_references, inverse_of: :material, class_name: 'Course::Material::TextChunkReference',
+                                   dependent: :destroy, autosave: true
   has_one :text_chunking, class_name: 'Course::Material::TextChunking',
                           dependent: :destroy, inverse_of: :material, autosave: true
 
@@ -66,6 +66,8 @@ class Course::Material < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.attachment = duplicator.duplicate(other.attachment)
+    self.text_chunk_references = other.text_chunk_references.
+                                 map { |text_chunk_reference| duplicator.duplicate(text_chunk_reference) }
     self.folder = if duplicator.duplicated?(other.folder)
                     duplicator.duplicate(other.folder)
                   else
@@ -95,17 +97,12 @@ class Course::Material < ApplicationRecord
   end
 
   def build_text_chunks(current_user)
-    start_chunking!
-    save!
-    course_id = folder.course_id
     File.open(attachment.path, 'r:ASCII-8BIT') do |file|
-      llm_service = Rag::LlmService.new
-      chunking_service = Rag::ChunkingService.new(file: file)
-      chunks = chunking_service.file_chunking
-      embeddings = llm_service.generate_embeddings_from_chunks(chunks)
-      chunks.each_with_index do |chunk, index|
-        text_chunks.build(embedding: embeddings[index], content: chunk, creator: current_user,
-                          course_id: course_id)
+      existing_text_chunks = Course::Material::TextChunk.existing_chunks(file: file)
+      if existing_text_chunks.exists?
+        create_references_for_existing_chunks(existing_text_chunks, current_user)
+      else
+        create_new_chunks_and_references(current_user, file)
       end
     end
     save!
@@ -132,5 +129,35 @@ class Course::Material < ApplicationRecord
 
     association(:text_chunking).reload
     text_chunking
+  end
+
+  def create_references_for_existing_chunks(existing_chunks, current_user)
+    existing_chunks.find_each do |chunk|
+      text_chunk_references.build(
+        text_chunk: chunk,
+        creator: current_user,
+        updater: current_user
+      )
+    end
+  end
+
+  def create_new_chunks_and_references(current_user, file)
+    llm_service = Rag::LlmService.new
+    chunking_service = Rag::ChunkingService.new(file: file)
+
+    file_digest = Digest::SHA256.file(file.try(:tempfile) || file).hexdigest
+    chunks = chunking_service.file_chunking
+    embeddings = llm_service.generate_embeddings_from_chunks(chunks)
+    chunks.each_with_index do |chunk, index|
+      text_chunk_references.build(
+        text_chunk: Course::Material::TextChunk.new(
+          name: file_digest,
+          embedding: embeddings[index],
+          content: chunk
+        ),
+        creator: current_user,
+        updater: current_user
+      )
+    end
   end
 end

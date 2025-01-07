@@ -46,7 +46,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
   end
 
   def destroy_text_chunks
-    if @material.workflow_state == 'chunked' && @material.text_chunks.destroy_all
+    if @material.workflow_state == 'chunked' && @material.text_chunk_references.destroy_all
       @material.delete_chunks!
       @material.save
       head :ok
@@ -95,7 +95,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
   end
 
   def delete_material_text_chunks
-    if @material.text_chunks.destroy_all
+    if @material.text_chunk_references.destroy_all
       @material.delete_chunks!
       @material.save
     else
