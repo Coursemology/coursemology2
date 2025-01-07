@@ -46,9 +46,9 @@ class Course::Material::MaterialsController < Course::Material::Controller
   end
 
   def destroy_text_chunks
-    if @material.text_chunks.destroy_all && @material.workflow_state == 'chunked'
+    if @material.text_chunk_references.destroy_all && @material.workflow_state == 'chunked'
       @material.delete_chunks!
-      @material.save
+      @material.save!
       head :ok
     else
       render json: { errors: @material.errors.full_messages.to_sentence }, status: :bad_request
@@ -95,7 +95,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
   end
 
   def delete_material_text_chunks
-    if @material.text_chunks.destroy_all
+    if @material.text_chunk_references.destroy_all
       @material.delete_chunks!
       @material.save
     else
