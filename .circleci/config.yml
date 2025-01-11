@@ -27,10 +27,11 @@ executors:
           DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
           COLLECT_COVERAGE: << parameters.collects_rails_coverage >>
 
-      - image: cimg/postgres:16.1
+      - image: pgvector/pgvector:pg16
         environment:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: coursemology_test
+          POSTGRES_PASSWORD: Testing1234
 
       - image: cimg/redis:7.2.3
 
@@ -129,7 +130,7 @@ commands:
       - run:
           name: Create coursemology_keycloak db
           command: |
-            DB_CONTAINER_ID=$(docker ps -q --filter ancestor=cimg/postgres:16.1)
+            DB_CONTAINER_ID=$(docker ps -q --filter ancestor=pgvector/pgvector:pg16)
             docker exec $DB_CONTAINER_ID psql -c "CREATE DATABASE coursemology_keycloak OWNER ubuntu;" -U ubuntu -d postgres
             docker exec $DB_CONTAINER_ID psql -c "CREATE DATABASE coursemology OWNER ubuntu;" -U ubuntu -d postgres
       - run:
@@ -148,7 +149,7 @@ commands:
           working_directory: authentication
           command: |
             touch .env
-            echo KC_NETWORK_MODE="container:$(docker ps -q --filter ancestor=cimg/postgres:16.1)" >> .env
+            echo KC_NETWORK_MODE="container:$(docker ps -q --filter ancestor=pgvector/pgvector:pg16)" >> .env
             echo KC_DB="postgres" >> .env
             echo KC_DB_URL="jdbc:postgresql://localhost:5432/coursemology_keycloak" >> .env
             echo KC_DB_USERNAME="ubuntu" >> .env
