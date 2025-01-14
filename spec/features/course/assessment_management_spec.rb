@@ -44,8 +44,7 @@ RSpec.feature 'Course: Assessments: Management', js: true do
 
         expect do
           find('svg[data-testid="DeleteIcon"]').click
-          Capybara.enable_aria_label = false
-          click_button 'Delete Assessment'
+          find('button.prompt-primary-btn').click
           expect_toastify('Assessment successfully deleted.')
         end.to change { course.reload.assessments.count }.by(-1)
 

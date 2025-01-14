@@ -38,7 +38,7 @@ RSpec.feature 'System: Administration: Users', js: true do
       end
 
       scenario "I can change a user's record" do
-        user_to_change = users.sample
+        user_to_change = User.human_users.normal.ordered_by_name.limit(5).sample
         new_name = 'updated user name'
         within find("tr.system_user_#{user_to_change.id}") do
           find('button.inline-edit-button', visible: false).click

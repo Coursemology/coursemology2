@@ -78,7 +78,9 @@ module Capybara::TestGroupHelpers
 
     # Special helper to fill in MUI DateTimePicker defined by react.
     def fill_in_mui_datetime(field_name, date)
-      find_field(field_name).send_keys([:control, 'a']).send_keys(date)
+      # remove space in date DateTimePicker as space key causes input issues
+      # https://mui.com/x/react-data-grid/accessibility/#navigation
+      find_field(field_name).send_keys([:control, 'a']).send_keys(date.gsub(' ', ''))
     end
 
     # Special helper to find a react-toastify message
