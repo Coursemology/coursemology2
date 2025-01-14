@@ -102,7 +102,6 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       end
 
       scenario 'I can upload a file to the folder' do
-        Capybara.enable_aria_label = false
         file1 = File.join(Rails.root, '/spec/fixtures/files/text.txt')
         file2 = File.join(Rails.root, '/spec/fixtures/files/text2.txt')
 
@@ -110,7 +109,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
         find('input[type="file"]', visible: false).attach_file([file1, file2], make_visible: true)
 
         expect do
-          click_button 'Upload'
+          find('button#material-upload-form-upload-button').click
           wait_for_page
         end.to change { parent_folder.materials.count }.by(2)
       end
@@ -158,7 +157,6 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       end
 
       scenario 'I can upload a file to the folder' do
-        Capybara.enable_aria_label = false
         folder = create(:folder, parent: parent_folder, course: course, can_student_upload: true)
         file1 = File.join(Rails.root, '/spec/fixtures/files/text.txt')
         file2 = File.join(Rails.root, '/spec/fixtures/files/text2.txt')
@@ -168,7 +166,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
         find('input[type="file"]', visible: false).attach_file([file1, file2], make_visible: true)
 
         expect do
-          click_button 'Upload'
+          find('button#material-upload-form-upload-button').click
           wait_for_page
         end.to change { folder.materials.count }.by(2)
 
