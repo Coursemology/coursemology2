@@ -108,13 +108,10 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
 
     supporting_file_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
     supporting_file_object[:path] = filename.to_s
-    if content.force_encoding('UTF-8').valid_encoding?
-      supporting_file_object[:content] = content
-      supporting_file_object[:encoding] = 'utf8'
-    else
-      supporting_file_object[:content] = Base64.strict_encode64(content)
-      supporting_file_object[:encoding] = 'base64'
-    end
+    # TODO: re-implement content.force_encoding('UTF-8').valid_encoding? check
+    # Pending Codaveri 'utf8' encoding support for compiled languages
+    supporting_file_object[:content] = Base64.strict_encode64(content)
+    supporting_file_object[:encoding] = 'base64'
 
     @data_files.append(supporting_file_object)
   end
