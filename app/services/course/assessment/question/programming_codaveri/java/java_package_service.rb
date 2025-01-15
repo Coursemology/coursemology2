@@ -104,10 +104,10 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
   end
 
   def extract_supporting_file(filename, content)
-    supporting_solution_object = default_codaveri_data_file_template
+    supporting_file_object = default_codaveri_data_file_template
 
-    supporting_solution_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
-    supporting_solution_object[:path] = filename.to_s
+    supporting_file_object[:type] = 'internal' # 'external' s3 upload not yet implemented by codaveri
+    supporting_file_object[:path] = filename.to_s
     if content.force_encoding('UTF-8').valid_encoding?
       supporting_file_object[:content] = content
       supporting_file_object[:encoding] = 'utf8'
@@ -116,7 +116,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageServic
       supporting_file_object[:encoding] = 'base64'
     end
 
-    @data_files.append(supporting_solution_object)
+    @data_files.append(supporting_file_object)
   end
 
   def extract_template
