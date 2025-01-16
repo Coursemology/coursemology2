@@ -10,6 +10,7 @@ import { resetLiveFeedbackChat } from '../../reducers/liveFeedbackChats';
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
 import translations from '../../translations';
 import { ChatSender } from '../../types';
+import MarkdownText from '../MarkdownText';
 
 interface ConversationAreaProps {
   onFeedbackClick: (linenum: number, filename?: string) => void;
@@ -58,7 +59,7 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
     <div
       className={`flex-1 overflow-auto ${isRenderingSuggestionChips && 'pb-14'}`}
     >
-      {liveFeedbackChats.chats.map((chat, index) => {
+      {liveFeedbackChats.chats.map((chat) => {
         const isStudent = chat.sender === ChatSender.student;
         const allMessages = [...chat.message];
         if (allMessages.length === 0) return null;
@@ -79,7 +80,7 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
                   className={`flex flex-col ${chat.lineNumber && 'cursor-pointer'} rounded-lg bg-gray-50 hover:bg-gray-100 p-3 w-full text-wrap break-words`}
                   onClick={() => {
                     if (chat.lineNumber) {
-                      onFeedbackClick(chat.lineNumber);
+                      onFeedbackClick(chat.lineNumber, chat.filename);
                     }
                   }}
                 >
@@ -96,29 +97,13 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
                           lineNumber: chat.lineNumber,
                         })}
                   </Typography>
-                  <Typography
-                    className="flex flex-col whitespace-pre-wrap ml-1"
-                    variant="body2"
-                  >
-                    {chat.lineContent}
-                  </Typography>
+                  <MarkdownText content={`${chat.lineContent}`} />
                 </div>
               )}
 
-              <Typography
-                className={`flex flex-col whitespace-pre-wrap ${isStudent ? 'text-right' : 'text-left'}`}
-                variant="body2"
-              >
-                {firstMessage}
-              </Typography>
+              <MarkdownText content={`${firstMessage}`} />
               {nextMessages.map((nextMessage) => (
-                <Typography
-                  key={nextMessage}
-                  className={`flex flex-col whitespace-pre-wrap ${isStudent ? 'text-right' : 'text-left'}`}
-                  variant="body2"
-                >
-                  {nextMessage}
-                </Typography>
+                <MarkdownText key={nextMessage} content={`${nextMessage}`} />
               ))}
               {!chat.isError && (
                 <Typography
