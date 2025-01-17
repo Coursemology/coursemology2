@@ -6,7 +6,7 @@ orbs:
 executors:
   node:
     docker:
-      - image: cimg/node:18.17.0
+      - image: cimg/node:22.12.0
 
     working_directory: ~/repo
     resource_class: large
@@ -73,8 +73,8 @@ commands:
       - restore_cache:
           name: Restore client Yarn dependencies cache
           keys:
-            - v18.17.0-node-{{ checksum "client/yarn.lock" }}-{{ checksum "client/vendor/recorderjs/package.json" }}
-            - v18.17.0-node-
+            - v22.12.0-node-{{ checksum "client/yarn.lock" }}-{{ checksum "client/vendor/recorderjs/package.json" }}
+            - v22.12.0-node-
 
       - run:
           name: Install client Yarn dependencies
@@ -85,7 +85,7 @@ commands:
           paths:
             - ./client/node_modules
             - ./client/vendor/recorderjs/node_modules
-          key: v18.17.0-node-{{ checksum "client/yarn.lock" }}-{{ checksum "client/vendor/recorderjs/package.json" }}
+          key: v22.12.0-node-{{ checksum "client/yarn.lock" }}-{{ checksum "client/vendor/recorderjs/package.json" }}
 
   restore_client_cache:
     steps:
