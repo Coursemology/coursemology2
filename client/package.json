@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Coursemology Frontend",
   "engines": {
-    "node": ">=18.17.0",
+    "node": ">=22.12.0",
     "yarn": "^1.0.0"
   },
   "scripts": {
