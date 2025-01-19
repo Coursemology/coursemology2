@@ -1,4 +1,4 @@
-import { SubmissionQuestionDetails } from 'types/course/statistics/assessmentStatistics';
+import { SubmissionQuestionDetails } from 'types/course/assessment/submission/submission-question';
 
 import { APIResponse } from 'api/types';
 

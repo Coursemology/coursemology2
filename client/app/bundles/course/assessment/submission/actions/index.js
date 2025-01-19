@@ -3,11 +3,12 @@ import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
-import actionTypes from '../constants';
+import actionTypes, { workflowStates } from '../constants';
 import {
   initiateAnswerFlagsForAnswers,
   resetExistingAnswerFlags,
 } from '../reducers/answerFlags';
+import { historyActions } from '../reducers/history';
 import { initiateLiveFeedbackChatPerQuestion } from '../reducers/liveFeedbackChats';
 import translations from '../translations';
 
@@ -25,6 +26,18 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
           type: actionTypes.AUTOGRADE_SUCCESS,
           payload: { ...data, answerId },
         });
+        dispatch(
+          historyActions.pushSingleAnswerItem({
+            questionId,
+            submissionId,
+            answerItem: {
+              id: data.latestAnswer.id,
+              createdAt: data.latestAnswer.createdAt,
+              currentAnswer: false,
+              workflowState: workflowStates.Graded,
+            },
+          }),
+        );
       })
       .catch(() => {
         dispatch(setNotification(translations.requestFailure));
@@ -59,6 +72,12 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
           type: actionTypes.FETCH_SUBMISSION_SUCCESS,
           payload: data,
         });
+        dispatch(
+          historyActions.initSubmissionHistory({
+            submissionId: data.submission.id,
+            questionHistories: data.history.questions,
+          }),
+        );
         dispatch(initiateAnswerFlagsForAnswers({ answers: data.answers }));
         dispatch(
           initiateLiveFeedbackChatPerQuestion({

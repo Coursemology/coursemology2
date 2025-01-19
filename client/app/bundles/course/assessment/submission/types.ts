@@ -1,10 +1,22 @@
 import { QuestionType } from 'types/course/assessment/question';
 import { AnswerData } from 'types/course/assessment/submission/answer';
+import { AnswerBaseData } from 'types/course/assessment/submission/answer/answer';
+import { ForumPostResponseAnswerData } from 'types/course/assessment/submission/answer/forumPostResponse';
+import {
+  MultipleChoiceAnswerData,
+  MultipleResponseAnswerData,
+} from 'types/course/assessment/submission/answer/multipleResponse';
+import { ProgrammingAnswerData } from 'types/course/assessment/submission/answer/programming';
+import { ScribingAnswerData } from 'types/course/assessment/submission/answer/scribing';
+import {
+  FileUploadAnswerData,
+  TextResponseAnswerData,
+} from 'types/course/assessment/submission/answer/textResponse';
+import { VoiceResponseAnswerData } from 'types/course/assessment/submission/answer/voiceResponse';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 import { WorkflowState } from 'types/course/assessment/submission/submission';
 
 import { Attachment } from './components/answers/types';
-import { AnswerHistory, QuestionHistory } from './reducers/history/types';
 
 type TestCaseTypes = 'public_test' | 'private_test' | 'evaluation_test';
 
@@ -76,6 +88,7 @@ export interface SubmissionState {
     id: number;
     name: string;
   };
+  id: number;
   submittedAt: Date;
   workflowState: WorkflowState;
 }
@@ -140,21 +153,30 @@ interface Topic {
 
 export type TopicState = Record<number, Topic>;
 
-export type HistoryAnswer = AnswerData & {
-  createdAt: Date;
-};
-
-export interface HistoryQuestion {
-  pastAnswersLoaded: boolean;
-  isLoading: boolean;
-  answerIds: number[];
-  selected: number[];
-  loaded: boolean;
+export interface AnswerDetailsMap {
+  MultipleChoice: MultipleChoiceAnswerData;
+  MultipleResponse: MultipleResponseAnswerData;
+  Programming: ProgrammingAnswerData;
+  TextResponse: TextResponseAnswerData;
+  FileUpload: FileUploadAnswerData;
+  Comprehension: AnswerBaseData;
+  Scribing: ScribingAnswerData;
+  VoiceResponse: VoiceResponseAnswerData;
+  ForumPostResponse: ForumPostResponseAnswerData;
 }
 
-export interface HistoryState {
-  answers: Record<number, AnswerHistory>;
-  questions: Record<number, QuestionHistory>;
+export interface AnswerDetailsProps<T extends keyof typeof QuestionType> {
+  question: SubmissionQuestionData<T>;
+  answer: AnswerDetailsMap[T];
+}
+
+export type AnswerDataWithQuestion<T extends keyof typeof QuestionType> =
+  AnswerDetailsMap[T] & { question: SubmissionQuestionData<T> };
+
+export interface HistoryViewData {
+  open: boolean;
+  questionId: number;
+  questionNumber: number;
 }
 
 export enum ChatSender {

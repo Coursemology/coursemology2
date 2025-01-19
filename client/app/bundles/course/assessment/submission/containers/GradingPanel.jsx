@@ -133,6 +133,7 @@ class VisibleGradingPanel extends Component {
   }
 
   renderGradeRow(question, showGrader) {
+    const { intl } = this.props;
     const questionGrading = this.props.grading.questions[question.id];
     const parsedGrade = parseFloat(questionGrading?.grade);
     const questionGrade = Number.isNaN(parsedGrade) ? '' : parsedGrade;
@@ -157,7 +158,10 @@ class VisibleGradingPanel extends Component {
     return (
       <TableRow key={question.id}>
         <TableCell colSpan={2} style={styles.headerColumn}>
-          {`${question.questionNumber}: ${question.questionTitle ?? ''}`}
+          {intl.formatMessage(translations.questionHeadingWithTitle, {
+            number: question.questionNumber,
+            title: question.questionTitle ?? '',
+          })}
         </TableCell>
         {showGrader ? (
           <TableCell style={styles.headerColumn}>{graderInfo}</TableCell>

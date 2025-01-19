@@ -1,4 +1,4 @@
-import { FC, JSXElementConstructor, ReactElement } from 'react';
+import { FC, ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import { Chip } from '@mui/material';
 import palette from 'theme/palette';

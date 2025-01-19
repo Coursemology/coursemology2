@@ -1,16 +1,16 @@
 import { AxiosError } from 'axios';
 import { dispatch } from 'store';
 import { QuestionType } from 'types/course/assessment/question';
+import { SubmissionQuestionDetails } from 'types/course/assessment/submission/submission-question';
 import {
   AncestorAssessmentStats,
-  AnswerStatisticsData,
   AssessmentLiveFeedbackStatistics,
-  SubmissionQuestionDetails,
 } from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 
 import { statisticsActions as actions } from '../reducers/statistics';
+import { AnswerDataWithQuestion, AnswerDetailsMap } from '../submission/types';
 
 export const fetchAssessmentStatistics = async (
   assessmentId: number,
@@ -57,7 +57,7 @@ export const fetchSubmissionQuestionDetails = async (
 
 export const fetchAnswer = async (
   answerId: number,
-): Promise<AnswerStatisticsData<keyof typeof QuestionType>> => {
+): Promise<AnswerDataWithQuestion<keyof typeof QuestionType>> => {
   const response = await CourseAPI.statistics.answer.fetch(answerId);
 
   return response.data;

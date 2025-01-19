@@ -1,9 +1,4 @@
-import { QuestionType } from '../assessment/question';
-import { SpecificQuestionDataMap } from '../assessment/submission/question/types';
 import { WorkflowState } from '../assessment/submission/submission';
-import { CourseUserBasicListData } from '../courseUsers';
-
-import { AnswerDetailsMap } from './answer';
 
 interface AssessmentInfo {
   id: number;
@@ -88,51 +83,6 @@ export interface AncestorAssessmentStats {
 }
 
 export interface AssessmentStatisticsState extends MainAssessmentStats {}
-
-interface QuestionBasicDetails<T extends keyof typeof QuestionType> {
-  id: number;
-  title: string;
-  description: string;
-  type: T;
-  questionNumber?: number;
-  maximumGrade: number;
-}
-
-export interface CommentItem {
-  id: number;
-  createdAt: Date;
-  creator: CourseUserBasicListData;
-  isDelayed: boolean;
-  text: string;
-}
-
-export interface AllAnswerItem {
-  id: number;
-  createdAt: Date;
-  currentAnswer: boolean;
-  workflowState: WorkflowState;
-}
-
-export interface SubmissionQuestionDetails {
-  allAnswers: AllAnswerItem[];
-  comments: CommentItem[];
-}
-
-export type QuestionDetails<T extends keyof typeof QuestionType> =
-  QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
-
-export type AnswerStatisticsData<T extends keyof typeof QuestionType> =
-  AnswerDetailsMap[T] & {
-    createdAt: Date;
-    question: QuestionDetails<T>;
-  };
-
-export interface QuestionAnswerDisplayDetails<
-  T extends keyof typeof QuestionType,
-> {
-  question: QuestionDetails<T>;
-  answer: AnswerDetailsMap[T];
-}
 
 export interface AssessmentLiveFeedbackStatistics {
   courseUser: StudentInfo;

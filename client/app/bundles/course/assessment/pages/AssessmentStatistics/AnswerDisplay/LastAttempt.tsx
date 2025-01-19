@@ -2,24 +2,19 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { Chip, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import {
-  AnswerStatisticsData,
-  CommentItem,
-} from 'types/course/statistics/assessmentStatistics';
+import { CommentItem } from 'types/course/assessment/submission/submission-question';
 
-import {
-  fetchAnswer,
-  fetchSubmissionQuestionDetails,
-} from 'course/assessment/operations/statistics';
+import { fetchAnswer } from 'course/assessment/operations/history';
+import { fetchSubmissionQuestionDetails } from 'course/assessment/operations/statistics';
+import Comment from 'course/assessment/submission/components/AllAttempts/Comment';
+import AnswerDetails from 'course/assessment/submission/components/AnswerDetails/AnswerDetails';
+import { AnswerDataWithQuestion } from 'course/assessment/submission/types';
 import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import AnswerDetails from '../AnswerDetails/AnswerDetails';
 import { getClassNameForMarkCell } from '../classNameUtils';
-
-import Comment from './Comment';
 
 const translations = defineMessages({
   questionTitle: {
@@ -43,14 +38,16 @@ interface Props {
   submissionId: number;
 }
 
+interface LastAttemptData {
+  answer: AnswerDataWithQuestion<keyof typeof QuestionType>;
+  comments: CommentItem[];
+}
+
 const LastAttemptIndex: FC<Props> = (props) => {
   const { curAnswerId, index, submissionId, questionId } = props;
   const { t } = useTranslation();
 
-  const fetchAnswerDetailsAndComments = async (): Promise<{
-    answer: AnswerStatisticsData<keyof typeof QuestionType>;
-    comments: CommentItem[];
-  }> => {
+  const fetchAnswerDetailsAndComments = async (): Promise<LastAttemptData> => {
     const [answer, submissionQuestion] = await Promise.all([
       fetchAnswer(curAnswerId),
       fetchSubmissionQuestionDetails(submissionId, questionId),
@@ -63,9 +60,9 @@ const LastAttemptIndex: FC<Props> = (props) => {
       render={<LoadingIndicator />}
       while={fetchAnswerDetailsAndComments}
     >
-      {({ answer, comments }): JSX.Element => {
+      {({ answer, comments }: LastAttemptData): JSX.Element => {
         const gradeCellColor = getClassNameForMarkCell(
-          answer.grade,
+          answer.grading?.grade,
           answer.question.maximumGrade,
         );
         return (
@@ -75,7 +72,9 @@ const LastAttemptIndex: FC<Props> = (props) => {
               title={t(translations.questionTitle, { index })}
             >
               <div className="ml-4 mt-4">
-                <Typography variant="body1">{answer.question.title}</Typography>
+                <Typography variant="body1">
+                  {answer.question.questionTitle}
+                </Typography>
                 <Typography
                   dangerouslySetInnerHTML={{
                     __html: answer.question.description,
@@ -88,7 +87,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
             <Chip
               className={`w-100 mt-3 ${gradeCellColor}`}
               label={t(translations.gradeDisplay, {
-                grade: answer.grade,
+                grade: answer.grading.grade ?? '-',
                 maxGrade: answer.question.maximumGrade,
               })}
               variant="filled"

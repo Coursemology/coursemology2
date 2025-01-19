@@ -9,7 +9,6 @@ import Comments from 'course/assessment/submission/containers/Comments';
 import QuestionGrade from 'course/assessment/submission/containers/QuestionGrade';
 import TestCaseView from 'course/assessment/submission/containers/TestCaseView';
 import { getAssessment } from 'course/assessment/submission/selectors/assessments';
-import { getHistoryQuestions } from 'course/assessment/submission/selectors/history';
 import { getQuestions } from 'course/assessment/submission/selectors/questions';
 import { getSubmissionFlags } from 'course/assessment/submission/selectors/submissionFlags';
 import { getSubmission } from 'course/assessment/submission/selectors/submissions';
@@ -28,17 +27,17 @@ import NonAutogradedProgrammingActionButtonsRow from './NonAutogradedProgramming
 interface Props {
   handleNext: () => void;
   stepIndex: number;
+  openAnswerHistoryView: (questionId: number, questionNumber: number) => void;
 }
 
 const QuestionContent: FC<Props> = (props) => {
-  const { handleNext, stepIndex } = props;
+  const { handleNext, stepIndex, openAnswerHistoryView } = props;
 
   const assessment = useAppSelector(getAssessment);
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
   const topics = useAppSelector(getTopics);
   const submissionFlags = useAppSelector(getSubmissionFlags);
-  const historyQuestions = useAppSelector(getHistoryQuestions);
 
   const {
     formState: { errors },
@@ -71,9 +70,11 @@ const QuestionContent: FC<Props> = (props) => {
           allErrors,
           question,
           questionType: question.type,
-          historyQuestions,
+          submissionId: submission.id,
           graderView,
           showMcqMrqSolution,
+          openAnswerHistoryView,
+          questionNumber: stepIndex + 1,
         }}
       />
       {autograded ? (

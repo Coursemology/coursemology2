@@ -9,6 +9,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { finalise, getEvaluationResult, getJobStatus } from '../../actions';
 import { fetchLiveFeedback } from '../../actions/answers';
+import AllAttemptsPrompt from '../../components/AllAttempts';
 import WarningDialog from '../../components/WarningDialog';
 import actionTypes, {
   EVALUATE_POLL_INTERVAL_MILLISECONDS,
@@ -24,6 +25,7 @@ import { getQuestionFlags } from '../../selectors/questionFlags';
 import { getQuestions } from '../../selectors/questions';
 import { getSubmission } from '../../selectors/submissions';
 import translations from '../../translations';
+import { HistoryViewData } from '../../types';
 import { setTimerForForceSubmission } from '../../utils/timer';
 
 import AutogradeSubmissionButton from './components/button/AutogradeSubmissionButton';
@@ -80,6 +82,11 @@ const SubmissionForm: FC<Props> = (props) => {
 
   const [maxStep, setMaxStep] = useState(maxInitialStep);
   const [stepIndex, setStepIndex] = useState(initialStep);
+  const [historyInfo, setHistoryInfo] = useState<HistoryViewData>({
+    open: false,
+    questionId: 0,
+    questionNumber: 0,
+  });
 
   const methods = useForm({
     defaultValues: initialValues,
@@ -235,12 +242,14 @@ const SubmissionForm: FC<Props> = (props) => {
             <TabbedViewQuestions
               handleNext={onContinueToNextQuestion}
               maxStep={maxStep}
+              setHistoryInfo={setHistoryInfo}
               setStepIndex={setStepIndex}
               stepIndex={stepIndex}
             />
           ) : (
             <SinglePageQuestions
               scrollToRef={scrollToRef}
+              setHistoryInfo={setHistoryInfo}
               stepIndex={stepIndex}
             />
           )}
@@ -266,6 +275,21 @@ const SubmissionForm: FC<Props> = (props) => {
         </form>
       </FormProvider>
 
+      <AllAttemptsPrompt
+        graderView={submission.graderView}
+        onClose={(): void => setHistoryInfo({ ...historyInfo, open: false })}
+        open={historyInfo.open}
+        questionId={historyInfo.questionId}
+        submissionId={submission.id}
+        title={
+          <>
+            {t(translations.historyTitle, {
+              number: historyInfo.questionNumber,
+              studentName: submission.submitter.name,
+            })}
+          </>
+        }
+      />
       <WarningDialog />
     </div>
   );

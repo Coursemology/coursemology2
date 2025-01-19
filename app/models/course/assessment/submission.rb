@@ -266,18 +266,24 @@ class Course::Assessment::Submission < ApplicationRecord
     current_answers.select { |ans| ans.actable_type == Course::Assessment::Answer::Programming.name }
   end
 
-  # Loads the answer ids of the past answers of each question
+  # Loads basic information about the past answers of each question
   def answer_history
-    answers.unscope(:order).
-      order(created_at: :desc).
-      pluck(:question_id, :id, :current_answer).
-      group_by(&:first).
+    answers.
+      without_attempting_state.
+      group_by(&:question_id).
       map do |pair|
-      {
-        question_id: pair[0],
-        answer_ids: pair[1].reject(&:last).map(&:second).first(10)
-      }
-    end
+        {
+          question_id: pair[0],
+          answers: pair[1].map do |answer|
+            {
+              id: answer.id,
+              createdAt: answer.created_at&.iso8601,
+              currentAnswer: answer.current_answer,
+              workflowState: answer.workflow_state
+            }
+          end
+        }
+      end
   end
 
   # Returns all graded answers of the question in current submission.

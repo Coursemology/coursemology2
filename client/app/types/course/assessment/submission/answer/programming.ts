@@ -1,4 +1,5 @@
 import { JobStatus, JobStatusResponse } from 'types/jobs';
+import { UserBasicListData } from 'types/users';
 
 import { QuestionType } from '../../question';
 
@@ -23,6 +24,44 @@ export interface TestCaseResult {
   expected: string;
   output?: string;
   passed: boolean;
+}
+
+export interface Annotation {
+  fileId: number;
+  topics: {
+    id: number;
+    postIds: number[];
+    line: string;
+  }[];
+}
+
+export interface Post {
+  id: number;
+  topicId: number;
+  title: string;
+  text: string;
+  creator: UserBasicListData;
+  createdAt: string;
+  canUpdate: boolean;
+  canDestroy: boolean;
+  isDelayed: boolean;
+  codaveriFeedback: CodaveriFeedback;
+}
+
+export interface TestCase {
+  canReadTests: boolean;
+  public_test?: TestCaseResult[];
+  private_test?: TestCaseResult[];
+  evaluation_test?: TestCaseResult[];
+  stdout?: string;
+  stderr?: string;
+}
+
+export interface CodaveriFeedback {
+  jobId: string;
+  jobStatus: keyof typeof JobStatus;
+  jobUrl?: string;
+  errorMessage?: string;
 }
 
 // BE Data Type
@@ -67,6 +106,8 @@ export interface ProgrammingAnswerData extends AnswerBaseData {
       }[];
     };
   };
+  annotations?: Annotation[];
+  posts?: Post[];
 }
 
 // FE Data Type
