@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Header, Row } from '@tanstack/react-table';
+import { Row } from '@tanstack/react-table';
 import { unparse } from 'papaparse';
 
 import { ColumnTemplate, Data } from '../builder';

@@ -1700,8 +1700,20 @@
   "course.assessment.question.programming.defaultEvaluator": {
     "defaultMessage": "기본"
   },
+  "course.assessment.question.programming.defaultEvaluatorDependencyTitle": {
+    "defaultMessage": "{name}: 설치된 종속성"
+  },
+  "course.assessment.question.programming.defaultEvaluatorDependencyDescription": {
+    "defaultMessage": "제출된 코드는 컨테이너화된 환경에서 실행되며, 다음 종속성이 로컬에 설치되어 있습니다.{br}프로그래밍 문제에 아래에 없는 종속성이 필요하다면, <mailto>문의해 주세요</mailto>. 추가 여부를 검토하겠습니다."
+  },
   "course.assessment.question.programming.defaultEvaluatorHint": {
     "defaultMessage": "아무 문제 없이, 아래 평가 패키지에 따라 코드를 실행하고 테스트 결과를 보고합니다."
+  },
+  "course.assessment.question.programming.dependencySearchText": {
+    "defaultMessage": "이름으로 종속성 검색"
+  },
+  "course.assessment.question.programming.dependencyVersionTableHeading": {
+    "defaultMessage": "버전"
   },
   "course.assessment.question.programming.editOnline": {
     "defaultMessage": "온라인으로 생성/편집"
@@ -1738,6 +1750,9 @@
   },
   "course.assessment.question.programming.evaluator": {
     "defaultMessage": "평가자"
+  },
+  "course.assessment.question.programming.evaluatorHasDependencies": {
+    "defaultMessage": "이 평가자는 <viewdeps>일부 서드파티 종속성을 설치한 상태입니다.</viewdeps>"
   },
   "course.assessment.question.programming.expected": {
     "defaultMessage": "예상"

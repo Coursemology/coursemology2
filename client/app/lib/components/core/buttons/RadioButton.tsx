@@ -7,7 +7,7 @@ interface RadioButtonProps {
   value: string;
   label: ReactNode;
   className?: string;
-  description?: string;
+  description?: string | ReactNode;
   disabled?: boolean;
   disabledHint?: ReactNode;
 }

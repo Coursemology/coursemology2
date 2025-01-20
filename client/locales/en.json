@@ -1685,8 +1685,20 @@
   "course.assessment.question.programming.defaultEvaluator": {
     "defaultMessage": "Default"
   },
+  "course.assessment.question.programming.defaultEvaluatorDependencyTitle": {
+    "defaultMessage": "{name}: Installed Dependencies"
+  },
+  "course.assessment.question.programming.defaultEvaluatorDependencyDescription": {
+    "defaultMessage": "Submitted code is run in a containerized environment with the following dependencies installed locally.{br}If your programming question requires a dependency not listed below, <mailto>contact us</mailto> and we will consider adding it."
+  },
   "course.assessment.question.programming.defaultEvaluatorHint": {
     "defaultMessage": "No fuss; just run the code according to the evaluation package below and report the test results."
+  },
+  "course.assessment.question.programming.dependencySearchText": {
+    "defaultMessage": "Search dependencies by name"
+  },
+  "course.assessment.question.programming.dependencyVersionTableHeading": {
+    "defaultMessage": "Version"
   },
   "course.assessment.question.programming.editOnline": {
     "defaultMessage": "Create/edit online"
@@ -1723,6 +1735,9 @@
   },
   "course.assessment.question.programming.evaluator": {
     "defaultMessage": "Evaluator"
+  },
+  "course.assessment.question.programming.evaluatorHasDependencies": {
+    "defaultMessage": "This evaluator comes with <viewdeps>certain third-party dependencies installed.</viewdeps>"
   },
   "course.assessment.question.programming.expected": {
     "defaultMessage": "Expected"
