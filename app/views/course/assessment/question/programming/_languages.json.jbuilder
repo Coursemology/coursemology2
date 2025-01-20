@@ -8,5 +8,6 @@ json.array! languages do |language|
     json.defaultEvaluator language.default_evaluator_whitelisted?
     json.codaveriEvaluator language.codaveri_evaluator_whitelisted?
   end
+  json.dependencies language.class.dependencies
   json.editorMode language.ace_mode
 end

@@ -27,6 +27,7 @@ const useLanguageMode = (languages: LanguageData[]): UseLanguageModeHook => {
               codaveriEvaluator: language.whitelists.codaveriEvaluator,
               defaultEvaluator: language.whitelists.defaultEvaluator,
             },
+            dependencies: language.dependencies,
           };
           options.push(option);
           map[language.id] = language;

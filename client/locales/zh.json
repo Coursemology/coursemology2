@@ -1643,8 +1643,20 @@
   "course.assessment.question.programming.defaultEvaluator": {
     "defaultMessage": "默认"
   },
+  "course.assessment.question.programming.defaultEvaluatorDependencyTitle": {
+    "defaultMessage": "{name}: 已安装的依赖项"
+  },
+  "course.assessment.question.programming.defaultEvaluatorDependencyDescription": {
+    "defaultMessage": "提交的代码将在一个容器化环境中运行，并且以下依赖项已本地安装。{br}如果您的编程问题需要未列出的依赖项，<mailto>请联系我们</mailto>，我们将考虑添加它。"
+  },
   "course.assessment.question.programming.defaultEvaluatorHint": {
     "defaultMessage": "无额外操作，只需按照下面的包运行代码，并报告测试结果即可。"
+  },
+  "course.assessment.question.programming.dependencySearchText": {
+    "defaultMessage": "按名称搜索依赖项"
+  },
+  "course.assessment.question.programming.dependencyVersionTableHeading": {
+    "defaultMessage": "版本"
   },
   "course.assessment.question.programming.editOnline": {
     "defaultMessage": "在线创建/修改"
@@ -1681,6 +1693,9 @@
   },
   "course.assessment.question.programming.evaluator": {
     "defaultMessage": "评测器"
+  },
+  "course.assessment.question.programming.evaluatorHasDependencies": {
+    "defaultMessage": "此评估器已安装<viewdeps>某些第三方依赖项</viewdeps>。"
   },
   "course.assessment.question.programming.expected": {
     "defaultMessage": "预期结果"

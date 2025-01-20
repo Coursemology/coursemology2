@@ -1336,6 +1336,28 @@ const translations = defineMessages({
     defaultMessage:
       'No fuss; just run the code according to the evaluation package below and report the test results.',
   },
+  evaluatorHasDependencies: {
+    id: 'course.assessment.question.programming.evaluatorHasDependencies',
+    defaultMessage:
+      'This evaluator comes with <viewdeps>certain third-party dependencies installed.</viewdeps>',
+  },
+  defaultEvaluatorDependencyTitle: {
+    id: 'course.assessment.question.programming.defaultEvaluatorDependencyTitle',
+    defaultMessage: '{name}: Installed Dependencies',
+  },
+  defaultEvaluatorDependencyDescription: {
+    id: 'course.assessment.question.programming.defaultEvaluatorDependencyDescription',
+    defaultMessage:
+      'Submitted code is run in a containerized environment with the following dependencies installed locally.{br}If your programming question requires a dependency not listed below, <mailto>contact us</mailto> and we will consider adding it.',
+  },
+  dependencySearchText: {
+    id: 'course.assessment.question.programming.dependencySearchText',
+    defaultMessage: 'Search dependencies by name',
+  },
+  dependencyVersionTableHeading: {
+    id: 'course.assessment.question.programming.dependencyVersionTableHeading',
+    defaultMessage: 'Version',
+  },
   codaveriEvaluator: {
     id: 'course.assessment.question.programming.codaveriEvaluator',
     defaultMessage: 'Codaveri',

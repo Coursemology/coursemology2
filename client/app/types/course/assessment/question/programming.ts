@@ -2,6 +2,14 @@ import { AvailableSkills, QuestionFormData } from '../questions';
 
 export type LanguageMode = 'c_cpp' | 'java' | 'javascript' | 'python' | 'r';
 
+export interface LanguageDependencyData {
+  name: string;
+  version: string;
+  aliases?: string[];
+  href?: string;
+  title?: string;
+}
+
 export interface LanguageData {
   id: number;
   name: string;
@@ -11,6 +19,7 @@ export interface LanguageData {
     defaultEvaluator: boolean;
     codaveriEvaluator: boolean;
   };
+  dependencies: LanguageDependencyData[];
 }
 
 export interface PackageInfoData {

@@ -1,23 +1,34 @@
+import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Grid, InputAdornment, RadioGroup, Typography } from '@mui/material';
 import {
   LanguageData,
+  LanguageDependencyData,
   ProgrammingFormData,
 } from 'types/course/assessment/question/programming';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import ExperimentalChip from 'lib/components/core/ExperimentalChip';
 import Subsection from 'lib/components/core/layouts/Subsection';
+import Link from 'lib/components/core/Link';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
+import { SUPPORT_EMAIL } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
 import { useProgrammingFormDataContext } from '../../hooks/ProgrammingFormDataContext';
+import InstalledDependenciesPrompt from '../common/InstalledDependenciesPrompt';
 
 interface EvaluatorFieldsProps {
   disabled?: boolean;
   getDataFromId: (id: number) => LanguageData;
+}
+
+interface DependencyPromptState {
+  title: string;
+  description: string;
+  dependencies: LanguageDependencyData[];
 }
 
 const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
@@ -27,12 +38,38 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
 
   const { question } = useProgrammingFormDataContext();
 
+  const [isDependencyPromptOpen, setIsDependencyPromptOpen] = useState(false);
+  const [dependencyPromptState, setDependencyPromptState] =
+    useState<DependencyPromptState>({
+      title: '',
+      description: '',
+      dependencies: [],
+    });
+
   const currentLanguage = props.getDataFromId(watch('question.languageId'));
   const autograded = watch('question.autograded');
   if (!autograded) return null;
 
   const autogradedAssessment = question.autogradedAssessment;
   const codaveriDisabled = !question.codaveriEnabled;
+
+  const openEvaluatorDependencyPrompt = (): void => {
+    setDependencyPromptState({
+      title: t(translations.defaultEvaluatorDependencyTitle, {
+        name: currentLanguage.name,
+      }),
+      description: t(translations.defaultEvaluatorDependencyDescription, {
+        br: <br />,
+        mailto: (chunk: string): JSX.Element => (
+          <Link external href={`mailto:${SUPPORT_EMAIL}`}>
+            {chunk}
+          </Link>
+        ),
+      }),
+      dependencies: currentLanguage.dependencies,
+    });
+    setIsDependencyPromptOpen(true);
+  };
 
   return (
     <>
@@ -57,7 +94,23 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
               )}
               <RadioButton
                 className="my-0"
-                description={t(translations.defaultEvaluatorHint)}
+                description={
+                  <>
+                    {t(translations.defaultEvaluatorHint)}
+                    {currentLanguage?.dependencies?.length && (
+                      <>
+                        <br />
+                        {t(translations.evaluatorHasDependencies, {
+                          viewdeps: (chunk: string): JSX.Element => (
+                            <Link onClick={openEvaluatorDependencyPrompt}>
+                              {chunk}
+                            </Link>
+                          ),
+                        })}
+                      </>
+                    )}
+                  </>
+                }
                 disabled={
                   !currentLanguage?.whitelists.defaultEvaluator ||
                   props.disabled
@@ -189,6 +242,13 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
           )}
         />
       </Subsection>
+      <InstalledDependenciesPrompt
+        dependencies={dependencyPromptState.dependencies}
+        description={dependencyPromptState.description}
+        onClose={() => setIsDependencyPromptOpen(false)}
+        open={isDependencyPromptOpen}
+        title={dependencyPromptState.title}
+      />
     </>
   );
 };
