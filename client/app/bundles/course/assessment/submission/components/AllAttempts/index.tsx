@@ -9,7 +9,7 @@ import {
 import { LinearScale, TableRows } from '@mui/icons-material';
 import { Alert, Button, ButtonGroup, Tooltip } from '@mui/material';
 
-import { fetchSubmissionQuestionDetails } from 'course/assessment/operations/statistics';
+import { fetchSubmissionQuestionDetails } from 'course/assessment/operations/history';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';

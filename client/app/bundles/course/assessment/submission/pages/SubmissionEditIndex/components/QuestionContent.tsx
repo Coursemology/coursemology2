@@ -51,7 +51,7 @@ const QuestionContent: FC<Props> = (props) => {
 
   const questionId = questionIds[stepIndex];
   const question = questions[questionId];
-  const { answerId, topicId, viewHistory, type } = question;
+  const { answerId, topicId, type } = question;
   const topic = topics[topicId];
   const submissionErrors = errors as unknown as ErrorStruct[];
 
@@ -85,18 +85,18 @@ const QuestionContent: FC<Props> = (props) => {
       ) : (
         <NonAutogradedProgrammingActionButtonsRow questionId={question.id} />
       )}
-      {(autograded || (isProgrammingQuestion && !viewHistory)) && (
+      {(autograded || (isProgrammingQuestion)) && (
         <ExplanationPanel questionId={questionId} />
       )}
-      {(autograded || !viewHistory) && (
+      {autograded && (
         <AutogradingErrorPanel questionId={questionId} />
       )}
       <TestCaseView questionId={questionId} />
-      {(autograded || !viewHistory) &&
+      {autograded &&
         !attempting &&
         graderView &&
         isProgrammingQuestion && <ReevaluateButton questionId={questionId} />}
-      {(autograded || !viewHistory) && (
+      {autograded && (
         <QuestionGrade isSaving={isSaving} questionId={questionId} />
       )}
       <Comments topic={topic} />

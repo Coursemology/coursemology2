@@ -5,11 +5,26 @@ import CourseAPI from 'api/course';
 
 import { historyActions } from '../submission/reducers/history';
 import { AnswerDataWithQuestion } from '../submission/types';
+import { SubmissionQuestionDetails } from 'types/course/assessment/submission/submission-question';
+
+export const fetchSubmissionQuestionDetails = async (
+  submissionId: number,
+  questionId: number,
+): Promise<SubmissionQuestionDetails> => {
+  const response =
+    await CourseAPI.assessment.allAnswers.fetchSubmissionQuestionDetails(
+      submissionId,
+      questionId,
+    );
+
+  return response.data;
+};
 
 export const fetchAnswer = async (
+  submissionId: number,
   answerId: number,
 ): Promise<AnswerDataWithQuestion<keyof typeof QuestionType>> => {
-  const response = await CourseAPI.statistics.answer.fetch(answerId);
+  const response = await CourseAPI.assessment.allAnswers.fetch(submissionId, answerId);
 
   return response.data;
 };
@@ -28,7 +43,7 @@ export const tryFetchAnswerById = (
       status: 'submitted',
     }),
   );
-  return fetchAnswer(answerId)
+  return fetchAnswer(submissionId, answerId)
     .then((details) => {
       dispatch(
         historyActions.updateSingleAnswerHistory({

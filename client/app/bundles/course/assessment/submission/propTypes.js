@@ -37,7 +37,6 @@ export const questionShape = PropTypes.shape({
 
   // Below are added in Redux
   attemptsLeft: PropTypes.number,
-  viewHistory: PropTypes.bool,
 });
 
 export const fileShape = PropTypes.shape({

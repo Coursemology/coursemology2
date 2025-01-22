@@ -19,8 +19,10 @@ json.question do
 end
 json.partial! specific_answer, answer: specific_answer, can_grade: false
 
-json.grading do
-  json.grade @answer&.grade&.to_f if can_grade || answer.submission.published?
+if can_grade || @answer.submission.published?
+  json.grading do
+    json.grade @answer&.grade
+  end
 end
 
 if @answer.actable_type == Course::Assessment::Answer::Programming.name

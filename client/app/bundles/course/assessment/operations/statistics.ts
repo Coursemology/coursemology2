@@ -42,27 +42,6 @@ export const fetchAncestorStatistics = async (
   return response.data;
 };
 
-export const fetchSubmissionQuestionDetails = async (
-  submissionId: number,
-  questionId: number,
-): Promise<SubmissionQuestionDetails> => {
-  const response =
-    await CourseAPI.statistics.allAnswer.fetchSubmissionQuestionDetails(
-      submissionId,
-      questionId,
-    );
-
-  return response.data;
-};
-
-export const fetchAnswer = async (
-  answerId: number,
-): Promise<AnswerDataWithQuestion<keyof typeof QuestionType>> => {
-  const response = await CourseAPI.statistics.answer.fetch(answerId);
-
-  return response.data;
-};
-
 export const fetchLiveFeedbackStatistics = async (
   assessmentId: number,
 ): Promise<AssessmentLiveFeedbackStatistics[]> => {

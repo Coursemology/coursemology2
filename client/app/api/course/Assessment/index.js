@@ -7,9 +7,11 @@ import SessionsAPI from './Sessions';
 import SkillsAPI from './Skills';
 import SubmissionQuestionsAPI from './SubmissionQuestions';
 import SubmissionsAPI from './Submissions';
+import AllAnswersAPI from './AllAnswers';
 
 const AssessmentAPI = {
   answer: AnswerAPI,
+  allAnswers: new AllAnswersAPI(),
   assessments: new AssessmentsAPI(),
   categories: new CategoriesAPI(),
   logs: new LogsAPI(),

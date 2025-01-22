@@ -266,7 +266,7 @@ Rails.application.routes.draw do
               patch :delete_all, on: :collection
               resources :logs, only: [:index]
               scope module: :answer do
-                resources :answers, only: [:update] do
+                resources :answers, only: [:show, :update] do
                   patch :submit_answer, on: :member
                   namespace :text_response do
                     post 'create_files' => 'text_response#create_files'
@@ -290,9 +290,9 @@ Rails.application.routes.draw do
             end
           end
 
+          get 'submissions/:submission_id/questions/:question_id/all_answers', on: :member, to: 'submission_question/submission_questions#all_answers', as: 'submission_question_custom'
           scope module: :submission_question do
             resources :submission_questions, only: [] do
-              get :past_answers, on: :member
               resources :comments, only: [:create]
             end
           end
@@ -439,14 +439,12 @@ Rails.application.routes.draw do
 
       namespace :statistics do
         get '/' => 'statistics#index'
-        get 'answers/:id' => 'answers#show'
         get 'assessments' => 'aggregate#all_assessments'
         get 'assessments/download' => 'aggregate#download_score_summary'
         get 'students' => 'aggregate#all_students'
         get 'staff' => 'aggregate#all_staff'
         get 'course/progression' => 'aggregate#course_progression'
         get 'course/performance' => 'aggregate#course_performance'
-        get 'submissions/:submission_id/questions/:question_id' => 'answers#all_answers'
         get 'user/:user_id/learning_rate_records' => 'users#learning_rate_records'
         get 'assessment/:id/main_statistics' => 'assessments#main_statistics'
         get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'

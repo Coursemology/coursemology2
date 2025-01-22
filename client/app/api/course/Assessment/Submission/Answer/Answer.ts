@@ -5,10 +5,18 @@ import { APIResponse } from 'api/types';
 
 import BaseAPI from '../../Base';
 import SubmissionsAPI from '../../Submissions';
+import { QuestionType } from 'types/course/assessment/question';
+import { AnswerDataWithQuestion } from 'course/assessment/submission/types';
 
 export default class AnswersAPI extends BaseAPI {
   get #urlPrefix(): string {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/submissions/${this.submissionId}/answers`;
+  }
+
+  fetch(
+    answerId: number,
+  ): APIResponse<AnswerDataWithQuestion<keyof typeof QuestionType>> {
+    return this.client.get(`${this.#urlPrefix}/${answerId}`);
   }
 
   saveDraft(answerId: number, answerData: unknown): APIResponse<AnswerData> {

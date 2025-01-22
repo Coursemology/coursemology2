@@ -32,6 +32,7 @@ export interface AssessmentState {
     name: string;
     url: string;
   }[];
+  id: number;
   gamified: boolean;
   isCodaveriEnabled: boolean;
   isKoditsuEnabled: boolean;

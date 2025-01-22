@@ -57,6 +57,7 @@ const HistoryToggle: FC<HistoryToggleProps> = (props) => {
       <span>
         <Chip
           className={`hover:bg-gray-300 ${noPastAnswers ? '' : 'cursor-pointer'}`}
+          component={'button'}
           clickable={noPastAnswers}
           color="info"
           disabled={noPastAnswers}

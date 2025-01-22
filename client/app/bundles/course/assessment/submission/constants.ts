@@ -263,13 +263,6 @@ const actionTypes = mirrorCreator([
   'DELETE_ALL_SUBMISSIONS_SUCCESS',
   'DELETE_ALL_SUBMISSIONS_FAILURE',
 
-  // View Past Answer History action types
-  'TOGGLE_VIEW_HISTORY_MODE',
-  'SELECT_PAST_ANSWERS',
-  'GET_PAST_ANSWERS_REQUEST',
-  'GET_PAST_ANSWERS_SUCCESS',
-  'GET_PAST_ANSWERS_FAILURE',
-
   // Answer action types
   'UPDATE_ANSWER_CLIENT_VERSION',
 

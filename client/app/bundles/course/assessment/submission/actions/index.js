@@ -255,53 +255,6 @@ export function exitStudentView() {
   };
 }
 
-export function toggleViewHistoryMode(
-  viewHistory,
-  submissionQuestionId,
-  questionId,
-  answersLoaded,
-) {
-  return (dispatch) => {
-    if (!answersLoaded) {
-      dispatch({
-        type: actionTypes.GET_PAST_ANSWERS_REQUEST,
-        payload: { questionId },
-      });
-
-      CourseAPI.assessment.submissionQuestions
-        .getPastAnswers(submissionQuestionId)
-        .then((response) => response.data)
-        .then((data) => {
-          dispatch({
-            type: actionTypes.GET_PAST_ANSWERS_SUCCESS,
-            payload: { answers: data.answers, questionId },
-          });
-          dispatch({
-            type: actionTypes.TOGGLE_VIEW_HISTORY_MODE,
-            payload: { viewHistory, questionId },
-          });
-        })
-        .catch((error) => {
-          dispatch({
-            type: actionTypes.GET_PAST_ANSWERS_FAILURE,
-            payload: { questionId },
-          });
-          dispatch(
-            setNotification(
-              translations.getPastAnswersFailure,
-              buildErrorMessage(error),
-            ),
-          );
-        });
-    } else {
-      dispatch({
-        type: actionTypes.TOGGLE_VIEW_HISTORY_MODE,
-        payload: { viewHistory, questionId },
-      });
-    }
-  };
-}
-
 export function purgeSubmissionStore() {
   return (dispatch) => {
     dispatch({ type: actionTypes.PURGE_SUBMISSION_STORE });

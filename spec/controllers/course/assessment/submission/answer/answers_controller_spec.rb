@@ -5,16 +5,14 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    let(:user) { create(:user) }
-    let!(:course) { create(:course, creator: user) }
-    let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
-
-    before { controller_sign_in(controller, user) }
-
     context 'when the assessment is autograded' do
+      let(:user) { create(:user) }
+      let!(:course) { create(:course, creator: user) }
+      let(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
       let(:assessment) { create(:assessment, :autograded, :with_mrq_question, course: course) }
       let!(:current_answer) { submission.answers.first }
 
+      before { controller_sign_in(controller, user) }
       describe '#submit_answer' do
         subject do
           patch :submit_answer,
@@ -55,6 +53,74 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
             current_answer = submission.reload.current_answers.first
             expect(current_answer.current_answer).to be_truthy
             expect(current_answer.workflow_state).to eq 'attempting'
+          end
+        end
+      end
+    end
+
+    context 'when a student submits an answer' do
+      let(:course) { create(:course, :enrollable) }
+      let(:submitter) { create(:course_student, course: course).user }
+      let(:assessment) do
+        create(:assessment, :published_with_mrq_question, course: course, start_at: 1.day.from_now)
+      end
+      let(:submission) { create(:submission, :published, assessment: assessment, creator: submitter) }
+      let(:answer) { submission.answers.first }
+      let!(:submission_question) do
+        create(:submission_question, :with_post, submission_id: answer.submission_id, question_id: answer.question_id)
+      end
+
+      describe '#show' do
+        render_views
+        subject { get :show, format: :json, params: { course_id: course, assessment_id: assessment, submission_id: submission, id: answer.id } }
+
+        context 'when the Normal User get the question answer details for the statistics' do
+          let(:user) { create(:user) }
+          before { controller_sign_in(controller, user) }
+          it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+        end
+
+        context 'when the submitter Student get the question answer details for the statistics' do
+          before { controller_sign_in(controller, submitter) }
+
+          it 'returns OK with right question id and answer grade being displayed' do
+            expect(subject).to have_http_status(:success)
+            json_result = JSON.parse(response.body)
+
+            expect(json_result['question']['id']).to eq(answer.question.id)
+            expect(json_result['grading']['grade'].to_f).to eq(answer.grade)
+          end
+        end
+
+        context 'when another Course Student get the question answer details for the statistics' do
+          let(:user) { create(:course_student, course: course).user }
+          before { controller_sign_in(controller, user) }
+          it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+        end
+
+        context 'when the Course Manager get the question answer details for the statistics' do
+          let(:user) { create(:course_manager, course: course).user }
+          before { controller_sign_in(controller, user) }
+
+          it 'returns OK with right question id and answer grade being displayed' do
+            expect(subject).to have_http_status(:success)
+            json_result = JSON.parse(response.body)
+
+            expect(json_result['question']['id']).to eq(answer.question.id)
+            expect(json_result['grading']['grade'].to_f).to eq(answer.grade)
+          end
+        end
+
+        context 'when the administrator get the question answer details for the statistics' do
+          let(:administrator) { create(:administrator) }
+          before { controller_sign_in(controller, administrator) }
+
+          it 'returns OK with right question id and answer grade being displayed' do
+            expect(subject).to have_http_status(:success)
+            json_result = JSON.parse(response.body)
+
+            expect(json_result['question']['id']).to eq(answer.question.id)
+            expect(json_result['grading']['grade'].to_f).to eq(answer.grade)
           end
         end
       end

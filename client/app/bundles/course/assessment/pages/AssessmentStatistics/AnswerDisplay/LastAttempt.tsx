@@ -5,7 +5,7 @@ import { QuestionType } from 'types/course/assessment/question';
 import { CommentItem } from 'types/course/assessment/submission/submission-question';
 
 import { fetchAnswer } from 'course/assessment/operations/history';
-import { fetchSubmissionQuestionDetails } from 'course/assessment/operations/statistics';
+import { fetchSubmissionQuestionDetails } from 'course/assessment/operations/history';
 import Comment from 'course/assessment/submission/components/AllAttempts/Comment';
 import AnswerDetails from 'course/assessment/submission/components/AnswerDetails/AnswerDetails';
 import { AnswerDataWithQuestion } from 'course/assessment/submission/types';
@@ -14,13 +14,11 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import submissionTranslations from '../../../submission/translations';
+
 import { getClassNameForMarkCell } from '../classNameUtils';
 
 const translations = defineMessages({
-  questionTitle: {
-    id: 'course.assessment.statistics.questionTitle',
-    defaultMessage: 'Question {index}',
-  },
   gradeDisplay: {
     id: 'course.assessment.statistics.gradeDisplay',
     defaultMessage: 'Grade: {grade} / {maxGrade}',
@@ -33,7 +31,6 @@ const translations = defineMessages({
 
 interface Props {
   curAnswerId: number;
-  index: number;
   questionId: number;
   submissionId: number;
 }
@@ -44,12 +41,12 @@ interface LastAttemptData {
 }
 
 const LastAttemptIndex: FC<Props> = (props) => {
-  const { curAnswerId, index, submissionId, questionId } = props;
+  const { curAnswerId, submissionId, questionId } = props;
   const { t } = useTranslation();
 
   const fetchAnswerDetailsAndComments = async (): Promise<LastAttemptData> => {
     const [answer, submissionQuestion] = await Promise.all([
-      fetchAnswer(curAnswerId),
+      fetchAnswer(submissionId, curAnswerId),
       fetchSubmissionQuestionDetails(submissionId, questionId),
     ]);
     return { answer, comments: submissionQuestion.comments };
@@ -61,6 +58,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
       while={fetchAnswerDetailsAndComments}
     >
       {({ answer, comments }: LastAttemptData): JSX.Element => {
+        console.log({ answer });
         const gradeCellColor = getClassNameForMarkCell(
           answer.grading?.grade,
           answer.question.maximumGrade,
@@ -69,7 +67,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
           <>
             <Accordion
               defaultExpanded={false}
-              title={t(translations.questionTitle, { index })}
+              title={t(submissionTranslations.historyQuestionTitle)}
             >
               <div className="ml-4 mt-4">
                 <Typography variant="body1">
@@ -87,7 +85,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
             <Chip
               className={`w-100 mt-3 ${gradeCellColor}`}
               label={t(translations.gradeDisplay, {
-                grade: answer.grading.grade ?? '-',
+                grade: answer.grading?.grade ?? '--',
                 maxGrade: answer.question.maximumGrade,
               })}
               variant="filled"
