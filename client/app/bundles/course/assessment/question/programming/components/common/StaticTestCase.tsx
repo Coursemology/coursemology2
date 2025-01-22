@@ -7,7 +7,11 @@ import { TestCaseProps } from './TestCase';
 import TestCaseCell from './TestCaseCell';
 import TestCaseRow from './TestCaseRow';
 
-const StaticTestCase = (props: TestCaseProps): JSX.Element => {
+interface StaticTestCaseProps extends TestCaseProps {
+  id?: string;
+}
+
+const StaticTestCase = (props: StaticTestCaseProps): JSX.Element => {
   const testCase = useWatch({ control: props.control, name: props.name });
 
   return (

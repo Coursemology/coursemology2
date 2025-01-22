@@ -5,7 +5,7 @@ import { Container, Divider, IconButton } from '@mui/material';
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
 import EditorAccordion from 'course/assessment/question/programming/components/common/EditorAccordion';
-import TestCases from 'course/assessment/question/programming/components/common/TestCases';
+import ReorderableTestCases from 'course/assessment/question/programming/components/common/ReorderableTestCases';
 import { generationActions as actions } from 'course/assessment/reducers/generation';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
@@ -161,7 +161,7 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
         onToggleLock={onToggleLock}
       >
         <Container disableGutters maxWidth={false}>
-          <TestCases
+          <ReorderableTestCases
             disabled={lockStates['testUi.metadata.testCases.public']}
             hintHeader={t(translations.hint)}
             lhsHeader={t(translations.expression)}
@@ -177,7 +177,7 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
         onToggleLock={onToggleLock}
       >
         <Container disableGutters maxWidth={false}>
-          <TestCases
+          <ReorderableTestCases
             disabled={lockStates['testUi.metadata.testCases.private']}
             hintHeader={t(translations.hint)}
             lhsHeader={t(translations.expression)}
@@ -195,7 +195,7 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
         onToggleLock={onToggleLock}
       >
         <Container disableGutters maxWidth={false}>
-          <TestCases
+          <ReorderableTestCases
             disabled={lockStates['testUi.metadata.testCases.evaluation']}
             hintHeader={t(translations.hint)}
             lhsHeader={t(translations.expression)}
