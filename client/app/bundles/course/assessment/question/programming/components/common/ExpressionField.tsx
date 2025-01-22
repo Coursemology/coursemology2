@@ -9,11 +9,12 @@ interface ExpressionFieldProps {
   onChange?: (value: string) => void;
   plain?: boolean;
   disabled?: boolean;
+  label?: string;
 }
 
 const ExpressionField = forwardRef<HTMLDivElement, ExpressionFieldProps>(
   (props, ref): JSX.Element => (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full w-[27%] flex-col">
       <TextField
         ref={ref}
         className={`-mx-2 h-full rounded-lg ${
@@ -23,19 +24,17 @@ const ExpressionField = forwardRef<HTMLDivElement, ExpressionFieldProps>(
         }`}
         disabled={props.disabled}
         fullWidth
-        hiddenLabel
         InputProps={{
-          className: `p-2 text-[1.3rem] h-full ${
-            props.plain ? '' : 'font-mono'
-          }`,
+          className: `text-[1.3rem] h-full ${props.plain ? '' : 'font-mono'}`,
           disableUnderline: true,
         }}
+        label={props.label ?? ''}
         multiline
         onChange={(e): void => props.onChange?.(e.target.value)}
         size="small"
         spellCheck={false}
         value={props.value}
-        variant="standard"
+        variant="filled"
       />
 
       {props.error && (

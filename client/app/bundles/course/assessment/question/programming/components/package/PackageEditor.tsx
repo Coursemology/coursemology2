@@ -71,7 +71,7 @@ const AutoFocusOnLoad = (props: ContainerProps): JSX.Element => {
   return <div ref={ref}>{props.children}</div>;
 };
 
-const TestCases = (props: TestCasesProps): JSX.Element => {
+const TestCasesTemplate = (props: TestCasesProps): JSX.Element => {
   const { t } = useTranslation();
 
   const { formState } = useFormContext<ProgrammingFormData>();
@@ -103,6 +103,6 @@ const TestCases = (props: TestCasesProps): JSX.Element => {
   );
 };
 
-const PackageEditor = { Templates, CodeInserts, DataFiles, TestCases };
+const PackageEditor = { Templates, CodeInserts, DataFiles, TestCasesTemplate };
 
 export default PackageEditor;

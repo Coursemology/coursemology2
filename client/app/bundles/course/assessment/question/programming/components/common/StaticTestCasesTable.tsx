@@ -1,23 +1,11 @@
 import { ReactNode } from 'react';
-import { Add } from '@mui/icons-material';
-import {
-  IconButton,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Tooltip,
-} from '@mui/material';
+import { TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import TableContainer from 'lib/components/core/layouts/TableContainer';
-import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../../../translations';
-
-export interface TestCasesTableProps {
+export interface StaticTestCasesTableProps {
   title: string;
-  onClickAdd?: () => void;
   disabled?: boolean;
   subtitle?: string;
   lhsHeader: string;
@@ -25,11 +13,9 @@ export interface TestCasesTableProps {
   hintHeader: string;
 }
 
-const TestCasesTable = (
-  props: TestCasesTableProps & { children: ReactNode },
+const StaticTestCasesTable = (
+  props: StaticTestCasesTableProps & { children: ReactNode },
 ): JSX.Element => {
-  const { t } = useTranslation();
-
   return (
     <Accordion
       defaultExpanded
@@ -51,21 +37,6 @@ const TestCasesTable = (
             <TableCell className="border-b border-solid border-b-neutral-200 px-0 py-0">
               {props.hintHeader}
             </TableCell>
-
-            {props.onClickAdd && (
-              <TableCell className="border-b border-solid border-b-neutral-200 py-0 pl-0">
-                <Tooltip disableInteractive title={t(translations.addTestCase)}>
-                  <IconButton
-                    color="primary"
-                    disabled={props.disabled}
-                    edge="end"
-                    onClick={props.onClickAdd}
-                  >
-                    <Add />
-                  </IconButton>
-                </Tooltip>
-              </TableCell>
-            )}
           </TableRow>
         </TableHead>
 
@@ -75,4 +46,4 @@ const TestCasesTable = (
   );
 };
 
-export default TestCasesTable;
+export default StaticTestCasesTable;

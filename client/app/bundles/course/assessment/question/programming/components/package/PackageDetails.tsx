@@ -3,8 +3,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
 import { useProgrammingFormDataContext } from '../../hooks/ProgrammingFormDataContext';
-import StaticTestCase from '../common/StaticTestCase';
-import TestCases from '../common/TestCases';
+import StaticTestCases from '../common/StaticTestCases';
 
 import PackageEditor from './PackageEditor';
 
@@ -37,9 +36,8 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
         ))}
       </PackageEditor.Templates>
 
-      <PackageEditor.TestCases>
-        <TestCases
-          as={StaticTestCase}
+      <PackageEditor.TestCasesTemplate>
+        <StaticTestCases
           byIdentifier={(index: number): string =>
             testCases.public[index].identifier
           }
@@ -52,8 +50,7 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
           title={t(translations.publicTestCases)}
         />
 
-        <TestCases
-          as={StaticTestCase}
+        <StaticTestCases
           byIdentifier={(index: number): string =>
             testCases.private[index].identifier
           }
@@ -67,8 +64,7 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
           title={t(translations.privateTestCases)}
         />
 
-        <TestCases
-          as={StaticTestCase}
+        <StaticTestCases
           byIdentifier={(index: number): string =>
             testCases.evaluation[index].identifier
           }
@@ -81,7 +77,7 @@ const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
           subtitle={t(translations.evaluationTestCasesHint)}
           title={t(translations.evaluationTestCases)}
         />
-      </PackageEditor.TestCases>
+      </PackageEditor.TestCasesTemplate>
     </>
   );
 };

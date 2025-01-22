@@ -13,7 +13,7 @@ import ControlledEditor from '../common/ControlledEditor';
 import DataFilesAccordion from '../common/DataFilesAccordion';
 import DataFilesManager from '../common/DataFilesManager';
 import JavaTestCase from '../common/JavaTestCase';
-import TestCases from '../common/TestCases';
+import ReorderableTestCases from '../common/ReorderableTestCases';
 
 import PackageEditor, {
   CODE_INSERTS_ID,
@@ -152,8 +152,8 @@ const JavaPackageEditor = (props: PackageEditorProps): JSX.Element => {
         />
       </PackageEditor.DataFiles>
 
-      <PackageEditor.TestCases hint={<TestCasesHint />}>
-        <TestCases
+      <PackageEditor.TestCasesTemplate hint={<TestCasesHint />}>
+        <ReorderableTestCases
           as={JavaTestCase}
           disabled={props.disabled}
           hintHeader={t(translations.hint)}
@@ -163,7 +163,7 @@ const JavaPackageEditor = (props: PackageEditorProps): JSX.Element => {
           title={t(translations.publicTestCases)}
         />
 
-        <TestCases
+        <ReorderableTestCases
           as={JavaTestCase}
           disabled={props.disabled}
           hintHeader={t(translations.hint)}
@@ -174,7 +174,7 @@ const JavaPackageEditor = (props: PackageEditorProps): JSX.Element => {
           title={t(translations.privateTestCases)}
         />
 
-        <TestCases
+        <ReorderableTestCases
           as={JavaTestCase}
           disabled={props.disabled}
           hintHeader={t(translations.hint)}
@@ -184,7 +184,7 @@ const JavaPackageEditor = (props: PackageEditorProps): JSX.Element => {
           subtitle={t(translations.evaluationTestCasesHint)}
           title={t(translations.evaluationTestCases)}
         />
-      </PackageEditor.TestCases>
+      </PackageEditor.TestCasesTemplate>
     </>
   );
 };
