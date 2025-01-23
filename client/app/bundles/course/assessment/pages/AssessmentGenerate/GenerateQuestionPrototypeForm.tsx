@@ -1,11 +1,9 @@
-import { FC, ReactNode } from 'react';
+import { FC } from 'react';
 import { Controller, FormProvider, UseFormReturn } from 'react-hook-form';
-import { LockOpenOutlined, LockOutlined } from '@mui/icons-material';
-import { Container, Divider, IconButton } from '@mui/material';
+import { Container } from '@mui/material';
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
 import EditorAccordion from 'course/assessment/question/programming/components/common/EditorAccordion';
-import ReorderableTestCases from 'course/assessment/question/programming/components/common/ReorderableTestCases';
 import { generationActions as actions } from 'course/assessment/reducers/generation';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
@@ -14,30 +12,9 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
+import LockableSection from './LockableSection';
+import TestCasesManager from './TestCasesManager';
 import { QuestionPrototypeFormData } from './types';
-
-interface LockableSectionProps {
-  onToggleLock: (key: string) => void;
-  children: ReactNode;
-  lockStateKey: string;
-  lockState: boolean;
-}
-
-const LockableSection: FC<LockableSectionProps> = (props) => (
-  <>
-    <div className="flex flex-nowrap">
-      <IconButton
-        centerRipple={false}
-        className="m-1 rounded-lg items-start"
-        onClick={() => props.onToggleLock(props.lockStateKey)}
-      >
-        {props.lockState ? <LockOutlined /> : <LockOpenOutlined />}
-      </IconButton>
-      {props.children}
-    </div>
-    <Divider className="my-4" variant="middle" />
-  </>
-);
 
 interface Props {
   prototypeForm: UseFormReturn<QuestionPrototypeFormData>;
@@ -155,57 +132,8 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
           />
         </Container>
       </LockableSection>
-      <LockableSection
-        lockState={lockStates['testUi.metadata.testCases.public']}
-        lockStateKey="testUi.metadata.testCases.public"
-        onToggleLock={onToggleLock}
-      >
-        <Container disableGutters maxWidth={false}>
-          <ReorderableTestCases
-            disabled={lockStates['testUi.metadata.testCases.public']}
-            hintHeader={t(translations.hint)}
-            lhsHeader={t(translations.expression)}
-            name="testUi.metadata.testCases.public"
-            rhsHeader={t(translations.expected)}
-            title={t(translations.publicTestCases)}
-          />
-        </Container>
-      </LockableSection>
-      <LockableSection
-        lockState={lockStates['testUi.metadata.testCases.private']}
-        lockStateKey="testUi.metadata.testCases.private"
-        onToggleLock={onToggleLock}
-      >
-        <Container disableGutters maxWidth={false}>
-          <ReorderableTestCases
-            disabled={lockStates['testUi.metadata.testCases.private']}
-            hintHeader={t(translations.hint)}
-            lhsHeader={t(translations.expression)}
-            name="testUi.metadata.testCases.private"
-            rhsHeader={t(translations.expected)}
-            subtitle={t(translations.privateTestCasesHint)}
-            title={t(translations.privateTestCases)}
-          />
-        </Container>
-      </LockableSection>
 
-      <LockableSection
-        lockState={lockStates['testUi.metadata.testCases.evaluation']}
-        lockStateKey="testUi.metadata.testCases.evaluation"
-        onToggleLock={onToggleLock}
-      >
-        <Container disableGutters maxWidth={false}>
-          <ReorderableTestCases
-            disabled={lockStates['testUi.metadata.testCases.evaluation']}
-            hintHeader={t(translations.hint)}
-            lhsHeader={t(translations.expression)}
-            name="testUi.metadata.testCases.evaluation"
-            rhsHeader={t(translations.expected)}
-            subtitle={t(translations.evaluationTestCasesHint)}
-            title={t(translations.evaluationTestCases)}
-          />
-        </Container>
-      </LockableSection>
+      <TestCasesManager lockStates={lockStates} onToggleLock={onToggleLock} />
     </FormProvider>
   );
 };

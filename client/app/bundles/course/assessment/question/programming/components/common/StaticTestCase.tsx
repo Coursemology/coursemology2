@@ -3,11 +3,11 @@ import { Typography } from '@mui/material';
 
 import ExpandableCode from 'lib/components/core/ExpandableCode';
 
-import { TestCaseProps } from './TestCase';
+import { ReorderableTestCaseProps } from './ReorderableTestCase';
 import TestCaseCell from './TestCaseCell';
 import TestCaseRow from './TestCaseRow';
 
-interface StaticTestCaseProps extends TestCaseProps {
+interface StaticTestCaseProps extends ReorderableTestCaseProps {
   id?: string;
 }
 

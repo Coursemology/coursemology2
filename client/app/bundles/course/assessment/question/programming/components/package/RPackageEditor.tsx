@@ -5,7 +5,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../../../translations';
 import ControlledEditor from '../common/ControlledEditor';
 import DataFilesManager from '../common/DataFilesManager';
-import ReorderableTestCases from '../common/ReorderableTestCases';
+import ReorderableTestCasesManager from '../ReorderableTestCasesManager';
 
 import PackageEditor, { PackageEditorProps } from './PackageEditor';
 
@@ -60,33 +60,11 @@ const RPackageEditor = (props: PackageEditorProps): JSX.Element => {
       </PackageEditor.DataFiles>
 
       <PackageEditor.TestCasesTemplate hint={<TestCasesHint />}>
-        <ReorderableTestCases
+        <ReorderableTestCasesManager
           disabled={props.disabled}
-          hintHeader={t(translations.hint)}
           lhsHeader={t(translations.input)}
           name="testUi.metadata.testCases.public"
           rhsHeader={t(translations.expectedOutput)}
-          title={t(translations.publicTestCases)}
-        />
-
-        <ReorderableTestCases
-          disabled={props.disabled}
-          hintHeader={t(translations.hint)}
-          lhsHeader={t(translations.input)}
-          name="testUi.metadata.testCases.private"
-          rhsHeader={t(translations.expectedOutput)}
-          subtitle={t(translations.privateTestCasesHint)}
-          title={t(translations.privateTestCases)}
-        />
-
-        <ReorderableTestCases
-          disabled={props.disabled}
-          hintHeader={t(translations.hint)}
-          lhsHeader={t(translations.input)}
-          name="testUi.metadata.testCases.evaluation"
-          rhsHeader={t(translations.expectedOutput)}
-          subtitle={t(translations.evaluationTestCasesHint)}
-          title={t(translations.evaluationTestCases)}
         />
       </PackageEditor.TestCasesTemplate>
     </>

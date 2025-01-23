@@ -1,6 +1,11 @@
+import { UseFormSetValue } from 'react-hook-form';
+import { DropResult } from '@hello-pangea/dnd';
 import { AxiosError } from 'axios';
 import {
+  JavaMetadataTestCase,
   LanguageData,
+  MetadataTestCase,
+  MetadataTestCases,
   ProgrammingFormData,
   ProgrammingPostStatusData,
 } from 'types/course/assessment/question/programming';
@@ -82,3 +87,40 @@ export const watchEvaluation = (
     (error) => onError(error.message),
     EVALUATION_INTERVAL_MS,
   );
+
+export const rearrangeTestCases = (
+  result: DropResult,
+  testCases:
+    | MetadataTestCases<MetadataTestCase>
+    | MetadataTestCases<JavaMetadataTestCase>,
+  setValue: UseFormSetValue<ProgrammingFormData>,
+): void => {
+  const { source, destination } = result;
+  if (!destination) return;
+
+  if (
+    source.droppableId === destination.droppableId &&
+    source.index === destination.index
+  ) {
+    return;
+  }
+
+  const updatedTestCases = { ...testCases };
+
+  const sourceArray = [...updatedTestCases[source.droppableId]];
+  const destinationArray =
+    source.droppableId === destination.droppableId
+      ? sourceArray
+      : [...updatedTestCases[destination.droppableId]];
+
+  const [reorderedTestCase] = sourceArray.splice(source.index, 1);
+
+  destinationArray.splice(destination.index, 0, reorderedTestCase);
+
+  updatedTestCases[source.droppableId] = sourceArray;
+  updatedTestCases[destination.droppableId] = destinationArray;
+
+  setValue('testUi.metadata.testCases', updatedTestCases, {
+    shouldDirty: true,
+  });
+};

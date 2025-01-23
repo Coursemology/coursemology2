@@ -12,8 +12,8 @@ import { useProgrammingFormDataContext } from '../../hooks/ProgrammingFormDataCo
 import ControlledEditor from '../common/ControlledEditor';
 import DataFilesAccordion from '../common/DataFilesAccordion';
 import DataFilesManager from '../common/DataFilesManager';
-import JavaTestCase from '../common/JavaTestCase';
-import ReorderableTestCases from '../common/ReorderableTestCases';
+import ReorderableJavaTestCase from '../common/ReorderableJavaTestCase';
+import ReorderableTestCasesManager from '../ReorderableTestCasesManager';
 
 import PackageEditor, {
   CODE_INSERTS_ID,
@@ -153,36 +153,12 @@ const JavaPackageEditor = (props: PackageEditorProps): JSX.Element => {
       </PackageEditor.DataFiles>
 
       <PackageEditor.TestCasesTemplate hint={<TestCasesHint />}>
-        <ReorderableTestCases
-          as={JavaTestCase}
+        <ReorderableTestCasesManager
+          component={ReorderableJavaTestCase}
           disabled={props.disabled}
-          hintHeader={t(translations.hint)}
           lhsHeader={t(translations.expression)}
           name="testUi.metadata.testCases.public"
           rhsHeader={t(translations.expected)}
-          title={t(translations.publicTestCases)}
-        />
-
-        <ReorderableTestCases
-          as={JavaTestCase}
-          disabled={props.disabled}
-          hintHeader={t(translations.hint)}
-          lhsHeader={t(translations.expression)}
-          name="testUi.metadata.testCases.private"
-          rhsHeader={t(translations.expected)}
-          subtitle={t(translations.privateTestCasesHint)}
-          title={t(translations.privateTestCases)}
-        />
-
-        <ReorderableTestCases
-          as={JavaTestCase}
-          disabled={props.disabled}
-          hintHeader={t(translations.hint)}
-          lhsHeader={t(translations.expression)}
-          name="testUi.metadata.testCases.evaluation"
-          rhsHeader={t(translations.expected)}
-          subtitle={t(translations.evaluationTestCasesHint)}
-          title={t(translations.evaluationTestCases)}
         />
       </PackageEditor.TestCasesTemplate>
     </>
