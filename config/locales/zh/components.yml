@@ -47,3 +47,5 @@ zh:
       name: '故事'
     koditsu_platform:
       name: 'Koditsu 考试'
+    rag_wise:
+      name: 'RagWise 自动论坛回复'
