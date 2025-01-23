@@ -6,11 +6,11 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
 
+import { TestCaseFieldPath } from './ReorderableTestCase';
 import StaticTestCase from './StaticTestCase';
 import StaticTestCasesTable, {
   StaticTestCasesTableProps,
 } from './StaticTestCasesTable';
-import { TestCaseFieldPath } from './TestCase';
 
 interface TestCasesProps extends StaticTestCasesTableProps {
   name: FieldArrayPath<ProgrammingFormData>;
