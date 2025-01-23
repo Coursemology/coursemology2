@@ -3,8 +3,10 @@ import {
   ForumTopicPostListData,
   ForumTopicPostPostData,
 } from 'types/course/forums';
+import { JobSubmitted } from 'types/jobs';
 
 import { APIResponse } from 'api/types';
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 
 import BaseCourseAPI from '../Base';
 
@@ -62,11 +64,39 @@ export default class PostsAPI extends BaseCourseAPI {
   }
 
   /**
+   * Mark AI generated drafted post as answer and publish
+   */
+  markAnswerAndPublish(urlSlug: string): APIResponse<{
+    workflowState: keyof typeof POST_WORKFLOW_STATE;
+    isTopicResolved: boolean;
+    creator: { id: number; userUrl: string; name: string; imageUrl: string };
+  }> {
+    return this.client.put(`${urlSlug}/mark_answer_and_publish`);
+  }
+
+  /**
    * Upvote/downvote an existing post.
    */
   vote(urlSlug: string, vote: -1 | 0 | 1): APIResponse<ForumTopicPostListData> {
     return this.client.put(`${urlSlug}/vote`, {
       vote,
     });
+  }
+
+  /**
+   * Publish a drafted post
+   */
+  publish(urlSlug: string): APIResponse<{
+    workflowState: keyof typeof POST_WORKFLOW_STATE;
+    creator: { id: number; userUrl: string; name: string; imageUrl: string };
+  }> {
+    return this.client.put(`${urlSlug}/publish`);
+  }
+
+  /**
+   * Toggle Between Publish and Draft workflow state for a rag auto generated post.
+   */
+  generateReply(urlSlug: string): APIResponse<JobSubmitted> {
+    return this.client.put(`${urlSlug}/generate_reply`);
   }
 }
