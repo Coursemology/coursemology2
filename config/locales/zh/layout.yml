@@ -18,6 +18,8 @@ zh:
         title: '课程计划'
       codaveri:
         title: 'Codaveri评估和反馈'
+      rag_wise:
+        title: 'RagWise 自动论坛回复'
     course_users:
       title: '管理用户'
     duplication:
