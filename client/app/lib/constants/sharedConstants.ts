@@ -71,6 +71,13 @@ export const MATERIAL_WORKFLOW_STATE = mirrorCreator([
   'chunked',
 ]);
 
+export const POST_WORKFLOW_STATE = mirrorCreator([
+  'draft',
+  'published',
+  'delayed',
+  'answering',
+]);
+
 export default {
   TIMELINE_ALGORITHMS,
   USER_ROLES,

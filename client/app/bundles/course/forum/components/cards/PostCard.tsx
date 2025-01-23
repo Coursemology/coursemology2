@@ -11,12 +11,15 @@ import {
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import Link from 'lib/components/core/Link';
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 
 import { getForumTopic, getForumTopicPost } from '../../selectors';
 import ForumTopicPostEditActionButtons from '../buttons/ForumTopicPostEditActionButtons';
 import ForumTopicPostManagementButtons from '../buttons/ForumTopicPostManagementButtons';
+import GenerateReplyButton from '../buttons/GenerateReplyButton';
+import MarkAnswerAndPublishButton from '../buttons/MarkAnswerAndPublishButton';
 import MarkAnswerButton from '../buttons/MarkAnswerButton';
 import VotePostButton from '../buttons/VotePostButton';
 import PostCreatorObject from '../misc/PostCreatorObject';
@@ -56,9 +59,10 @@ const PostCard: FC<Props> = (props) => {
         style={{ marginLeft: 0 + Math.min(3, level - 1) * 25 }}
       >
         <Card
-          className={`space-y-4 border-2 border-solid ${
-            post.isUnread ? 'bg-red-100' : ''
-          } ${post.isAnswer ? 'border-green-600' : 'border-white'} `}
+          className={`space-y-4 border-2 border-solid
+            ${post.workflowState === POST_WORKFLOW_STATE.draft ? 'bg-orange-100' : ''}
+            ${post.isUnread ? 'bg-red-100' : ''}
+            ${post.isAnswer ? 'border-green-600' : 'border-white'} `}
         >
           <CardHeader
             action={
@@ -75,21 +79,30 @@ const PostCard: FC<Props> = (props) => {
                 topicId={topic.id}
               />
             }
-            avatar={postCreatorObject.avatar}
+            avatar={
+              post.isAiGenerated &&
+              post.workflowState === POST_WORKFLOW_STATE.draft
+                ? null
+                : postCreatorObject.avatar
+            }
             className="pb-0"
             subheader={formatLongDateTime(post.createdAt)}
             title={
-              <>
-                <Link
-                  opensInNewTab
-                  to={postCreatorObject.userUrl}
-                  variant="body1"
-                >
-                  {postCreatorObject.name}
-                </Link>
-
-                {postCreatorObject.visibilityIcon}
-              </>
+              post.isAiGenerated &&
+              post.workflowState === POST_WORKFLOW_STATE.draft ? (
+                <>AI Generated Draft Response</>
+              ) : (
+                <>
+                  <Link
+                    opensInNewTab
+                    to={postCreatorObject.userUrl}
+                    variant="body1"
+                  >
+                    {postCreatorObject.name}
+                  </Link>
+                  {postCreatorObject.visibilityIcon}
+                </>
+              )
             }
             titleTypographyProps={{ variant: 'body1' }}
           />
@@ -116,6 +129,7 @@ const PostCard: FC<Props> = (props) => {
                 editValue={editValue}
                 post={post}
                 setIsEditing={setIsEditing}
+                topic={topic}
               />
             ) : (
               <>
@@ -125,6 +139,15 @@ const PostCard: FC<Props> = (props) => {
                   post={post}
                   topic={topic}
                 />
+                <MarkAnswerAndPublishButton post={post} topic={topic} />
+                {topic.permissions.canManageAIResponse &&
+                  post.parentId === null && (
+                    <GenerateReplyButton
+                      forumId={topic.forumId.toString()}
+                      post={post}
+                      topicId={topic.id.toString()}
+                    />
+                  )}
               </>
             )}
           </CardActions>
