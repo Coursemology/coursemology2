@@ -22,6 +22,7 @@ class Course::Material < ApplicationRecord
   belongs_to :folder, inverse_of: :materials, class_name: 'Course::Material::Folder'
   has_many :text_chunk_references, inverse_of: :material, class_name: 'Course::Material::TextChunkReference',
                                    dependent: :destroy, autosave: true
+  has_many :text_chunks, through: :text_chunk_references
   has_one :text_chunking, class_name: 'Course::Material::TextChunking',
                           dependent: :destroy, inverse_of: :material, autosave: true
 

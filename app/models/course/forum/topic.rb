@@ -42,11 +42,12 @@ class Course::Forum::Topic < ApplicationRecord
   end)
 
   # @!attribute [r] post_count
-  #   The number of posts in this topic.
+  #   The number of published posts in this topic.
   calculated :post_count, (lambda do
     Course::Discussion::Topic.joins(:posts).
       where('actable_id = course_forum_topics.id').
       where(actable_type: Course::Forum::Topic.name).
+      where.not(posts: { workflow_state: 'draft' }).
       select("count('*')")
   end)
 

@@ -6,7 +6,7 @@ class Course::Material::TextChunk < ApplicationRecord
   validates :name, presence: true
   has_many :text_chunk_references, class_name: 'Course::Material::TextChunkReference',
                                    dependent: :destroy
-
+  has_many :materials, through: :text_chunk_references, class_name: 'Course::Material'
   class << self
     def existing_chunks(attributes)
       file = attributes.delete(:file)
