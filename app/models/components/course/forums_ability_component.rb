@@ -74,6 +74,7 @@ module Course::ForumsAbilityComponent
   def define_teaching_staff_forum_permissions
     allow_teaching_staff_manage_forums
     allow_teaching_staff_manage_topics
+    allow_manage_ai_responses
   end
 
   def allow_teaching_staff_manage_forums
@@ -82,5 +83,11 @@ module Course::ForumsAbilityComponent
 
   def allow_teaching_staff_manage_topics
     can :manage, Course::Forum::Topic, topic_course_hash
+  end
+
+  def allow_manage_ai_responses
+    can :publish, Course::Forum::Topic, topic_course_hash
+    can :generate_reply, Course::Forum::Topic, topic_course_hash
+    can :mark_answer_and_publish, Course::Forum::Topic, topic_course_hash
   end
 end

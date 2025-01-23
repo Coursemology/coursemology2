@@ -22,6 +22,7 @@ class Course::Material < ApplicationRecord
   belongs_to :folder, inverse_of: :materials, class_name: 'Course::Material::Folder'
   has_many :text_chunk_references, inverse_of: :material, class_name: 'Course::Material::TextChunkReference',
                                    dependent: :destroy, autosave: true
+  has_many :text_chunks, through: :text_chunk_references
   has_one :text_chunking, class_name: 'Course::Material::TextChunking',
                           dependent: :destroy, inverse_of: :material, autosave: true
 
@@ -142,8 +143,8 @@ class Course::Material < ApplicationRecord
   end
 
   def create_new_chunks_and_references(current_user, file)
-    llm_service = Rag::LlmService.new
-    chunking_service = Rag::ChunkingService.new(file: file)
+    llm_service = RagWise::LlmService.new
+    chunking_service = RagWise::ChunkingService.new(file: file)
 
     file_digest = Digest::SHA256.file(file.try(:tempfile) || file).hexdigest
     chunks = chunking_service.file_chunking
