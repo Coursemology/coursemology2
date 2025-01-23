@@ -10,6 +10,7 @@ import LeaderboardAdminAPI from './Leaderboard';
 import LessonPlanSettingsAPI from './LessonPlan';
 import MaterialsAdminAPI from './Materials';
 import NotificationsSettingsAPI from './Notifications';
+import RagWiseAdminAPI from './RagWise';
 import SidebarAPI from './Sidebar';
 import StoriesAdminAPI from './Stories';
 import VideosAdminAPI from './Videos';
@@ -30,6 +31,7 @@ const AdminAPI = {
   notifications: new NotificationsSettingsAPI(),
   codaveri: new CodaveriAdminAPI(),
   stories: new StoriesAdminAPI(),
+  ragWise: new RagWiseAdminAPI(),
 };
 
 Object.freeze(AdminAPI);
