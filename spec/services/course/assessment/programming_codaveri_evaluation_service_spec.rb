@@ -59,17 +59,50 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
     # rubocop:enable Layout/LineLength
 
     subject { Course::Assessment::ProgrammingCodaveriEvaluationService }
-    before do
-      Excon.defaults[:mock] = true
-      Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_success_final_result)
-    end
-    after do
-      Excon.stubs.clear
+
+    describe '#execute success' do
+      before do
+        Excon.defaults[:mock] = true
+        Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_success_final_result)
+      end
+      after do
+        Excon.stubs.clear
+      end
+      it 'returns the result of evaluating' do
+        result = subject.execute(course, question, answer.actable)
+        expect(result).to be_a(Course::Assessment::ProgrammingCodaveriEvaluationService::Result)
+
+        codaveri_evaluation_results = result[2]
+        expect(codaveri_evaluation_results[0][:success]).to eq(1)
+        expect(codaveri_evaluation_results[0][:output]).to eq("'GCAUUU'\\n")
+        expect(codaveri_evaluation_results[0][:stdout]).to eq("'GCAUUU'\\n")
+        expect(codaveri_evaluation_results[2][:success]).to eq(1)
+        expect(codaveri_evaluation_results[2][:output]).to eq('True\\n')
+        expect(codaveri_evaluation_results[2][:stdout]).to eq('True\\n')
+      end
     end
 
-    it 'returns the result of evaluating' do
-      result = subject.execute(course, question, answer.actable)
-      expect(result).to be_a(Course::Assessment::ProgrammingCodaveriEvaluationService::Result)
+    describe '#execute with error statuses' do
+      before do
+        Excon.defaults[:mock] = true
+        Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_error_status_final_result)
+      end
+      after do
+        Excon.stubs.clear
+      end
+      it 'returns the result of evaluating' do
+        result = subject.execute(course, question, answer.actable)
+        expect(result).to be_a(Course::Assessment::ProgrammingCodaveriEvaluationService::Result)
+
+        codaveri_evaluation_results = result[2]
+
+        codaveri_evaluation_results.each do |test_case_result|
+          expect(test_case_result[:success]).to eq(0)
+          expect(test_case_result[:output]).to be_empty
+          expect(test_case_result[:stderr]).to eq('Error')
+          expect(test_case_result[:error]).to_not be_empty
+        end
+      end
     end
 
     describe '#construct_grading_object' do
