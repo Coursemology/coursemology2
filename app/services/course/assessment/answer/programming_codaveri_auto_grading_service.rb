@@ -125,12 +125,12 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
     test_cases = question.test_cases.to_h { |test_case| [test_case.id, test_case] }
     evaluation_results.map do |result|
       test_case = find_test_case(test_cases, result.index)
-
-      error_message_sigkill = I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
       messages ||= {
-        error: (result.exit_code == 137 || result.exit_signal == 'SIGKILL') ? error_message_sigkill : result.stderr,
+        error: result.error,
         hint: test_case.hint,
-        output: result.output,
+        # By default, output (if any) will take precedence over error in "Output" test case display.
+        # This prevents that by suppressing the output in case of error.
+        output: result.error.blank? ? result.output : '',
         code: result.exit_code,
         signal: result.exit_signal
       }.reject! { |_, v| v.blank? }
