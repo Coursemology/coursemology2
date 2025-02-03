@@ -244,6 +244,14 @@ class Course < ApplicationRecord
     settings(:course_codaveri_component).is_only_itsp
   end
 
+  def rag_wise_response_workflow
+    settings(:course_rag_wise_component).response_workflow
+  end
+
+  def rag_wise_character_prompt
+    settings(:course_rag_wise_component).roleplay
+  end
+
   def upcoming_lesson_plan_items_exist?
     opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
     opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.any? do |item|
