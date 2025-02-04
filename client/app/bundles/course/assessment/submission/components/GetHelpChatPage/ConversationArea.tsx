@@ -59,7 +59,7 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
     <div
       className={`flex-1 overflow-auto ${isRenderingSuggestionChips && 'pb-14'}`}
     >
-      {liveFeedbackChats.chats.map((chat) => {
+      {liveFeedbackChats.chats.map((chat, index) => {
         const isStudent = chat.sender === ChatSender.student;
         const allMessages = [...chat.message];
         if (allMessages.length === 0) return null;
@@ -71,6 +71,7 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
           <div
             key={`${firstMessage} ${chat.createdAt}`}
             className={`flex ${justifyPosition(isStudent, chat.isError)}`}
+            id={`chat-${answerId}-${index}`}
           >
             <div
               className={`flex flex-col rounded-lg ${isStudent ? 'bg-blue-200' : 'bg-gray-200'} max-w-[70%] pt-3 pl-3 pr-3 pb-2 m-2 w-fit text-wrap break-words space-y-1`}
