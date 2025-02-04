@@ -51,8 +51,6 @@ const sampleSuggestions = (): Suggestion[] => {
 };
 
 const sortAndCombineFeedbacks = (
-  numFeedbackFiles: number,
-  answerFilename: string,
   feedbackLines: {
     path: string;
     annotation: FeedbackLine;
@@ -69,9 +67,8 @@ const sortAndCombineFeedbacks = (
   }[] = Object.values(
     feedbackLines.reduce((acc, current) => {
       if (!acc[(current.path, current.annotation.line)]) {
-        const path = numFeedbackFiles === 1 ? answerFilename : current.path;
         acc[(current.path, current.annotation.line)] = {
-          path,
+          path: current.path,
           line: current.annotation.line,
           content: [current.annotation.content],
         };
@@ -294,11 +291,8 @@ export const liveFeedbackChatSlice = createSlice({
           })),
         );
 
-        const sortedAndCombinedFeedbacks = sortAndCombineFeedbacks(
-          feedbackFiles.length,
-          liveFeedbackChats.answerFiles[0].filename,
-          feedbackLines,
-        );
+        const sortedAndCombinedFeedbacks =
+          sortAndCombineFeedbacks(feedbackLines);
 
         const answerLines = liveFeedbackChats.answerFiles.reduce(
           (acc, current) => {
