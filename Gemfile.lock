@@ -221,8 +221,8 @@ GEM
       tzinfo
     excon (1.2.2)
     exifr (1.4.0)
-    factory_bot (6.5.0)
-      activesupport (>= 5.0.0)
+    factory_bot (6.5.1)
+      activesupport (>= 6.1.0)
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
@@ -646,7 +646,7 @@ DEPENDENCIES
   dotenv-rails
   edge
   email_spec
-  factory_bot (~> 6.5.0)
+  factory_bot (~> 6.5.1)
   factory_bot_rails
   ffi (>= 1.14.2)
   filename

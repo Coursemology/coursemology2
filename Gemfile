@@ -112,7 +112,7 @@ group :development, :test do
 
   # Factory Bot for factories
   # fix for https://github.com/thoughtbot/factory_bot/issues/1690
-  gem 'factory_bot', '~> 6.5.0'
+  gem 'factory_bot', '~> 6.5.1'
   gem 'factory_bot_rails'
 
   # Checks that all translations are used and defined
