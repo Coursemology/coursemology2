@@ -254,11 +254,11 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
   end
 
   def build_test_case_stdout(result)
-    [result.dig('compile', 'stdout'), result.dig('run', 'stdout')].compact.join('\n')
+    [result.dig('compile', 'stdout'), result.dig('run', 'stdout')].compact.join("\n")
   end
 
   def build_test_case_stderr(result)
-    [result.dig('compile', 'stderr'), result.dig('run', 'stderr')].compact.join('\n')
+    [result.dig('compile', 'stderr'), result.dig('run', 'stderr')].compact.join("\n")
   end
 
   def build_io_test_case_result(result)

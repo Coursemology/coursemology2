@@ -190,6 +190,47 @@ module Codaveri::EvaluateApiStubs
     }
   end
 
+  def evaluate_result_with_compile_stage
+    ids = test_cases_id_from_factory.map(&:to_s)
+    {
+      status: 200,
+      body: {
+        success: true,
+        message: 'Evaluation successfully generated',
+        data: {
+          id: '6659878d3ad73c7a4aac96f0',
+          exprResults: [
+            {
+              compile: {
+                stdout: 'One',
+                stderr: 'Three',
+                code: 0,
+                signal: nil,
+                success: 1,
+                status: nil,
+                message: nil
+              },
+              run: {
+                stdout: 'Two',
+                stderr: 'Four',
+                code: 0,
+                signal: nil,
+                displayValue: '\'GCAUUU\'\n',
+                success: 0,
+                status: 'RE',
+                message: 'Runtime Error'
+              },
+              testcase: {
+                index: ids[0].to_s
+              }
+            }
+          ]
+        },
+        transactionId: '66598c55fac28dd29e968852'
+      }.to_json
+    }
+  end
+
   def evaluate_failure_final_result
     {
       status: 400,
@@ -343,6 +384,7 @@ module Codaveri::EvaluateApiStubs
   end
 
   module_function \
+    :evaluate_result_with_compile_stage,
     :evaluate_error_status_final_result,
     :evaluate_failure_final_result,
     :evaluate_success_final_result,

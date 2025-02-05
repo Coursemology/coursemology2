@@ -105,6 +105,28 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
       end
     end
 
+    describe '#execute with compile and run stage' do
+      before do
+        Excon.defaults[:mock] = true
+        Excon.stub({ method: 'POST' }, Codaveri::EvaluateApiStubs.evaluate_result_with_compile_stage)
+      end
+      after do
+        Excon.stubs.clear
+      end
+      it 'returns the result of evaluating' do
+        result = subject.execute(course, question, answer.actable)
+        expect(result).to be_a(Course::Assessment::ProgrammingCodaveriEvaluationService::Result)
+
+        test_case_result = result[2][0]
+
+        expect(test_case_result[:success]).to eq(0)
+        expect(test_case_result[:output]).to be_empty
+        expect(test_case_result[:error]).to_not be_empty
+        expect(test_case_result[:stdout]).to eq("One\nTwo")
+        expect(test_case_result[:stderr]).to eq("Three\nFour")
+      end
+    end
+
     describe '#construct_grading_object' do
       let(:service_instance) do
         subject.new(course, question, answer.actable, 1)
