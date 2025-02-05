@@ -1896,7 +1896,8 @@
   "internationalizationEnabled": true,
   "supportedLocales": [
     "en",
-    "zh-CN"
+    "zh-CN",
+    "ko"
   ],
   "defaultLocale": "en",
   "authenticationFlows": [
@@ -4271,7 +4272,8 @@
   "internationalizationEnabled": true,
   "supportedLocales": [
     "en",
-    "zh-CN"
+    "zh-CN",
+    "ko"
   ],
   "defaultLocale": "en",
   "authenticationFlows": [
