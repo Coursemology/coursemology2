@@ -165,9 +165,7 @@ export enum ChatSender {
 export interface ChatShape {
   sender: ChatSender;
   filename?: string;
-  lineNumber: number | null;
-  lineContent: string | null;
-  message: string[];
+  message: string;
   createdAt: string;
   isError: boolean;
 }

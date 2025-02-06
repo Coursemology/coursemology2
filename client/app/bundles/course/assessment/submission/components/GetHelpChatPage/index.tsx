@@ -13,13 +13,12 @@ import Header from './Header';
 import SuggestionChips from './SuggestionChips';
 
 interface GetHelpChatPageProps {
-  onFeedbackClick: (linenum: number, filename?: string) => void;
   answerId: number | null;
   questionId: number;
 }
 
 const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
-  const { onFeedbackClick, answerId, questionId } = props;
+  const { answerId, questionId } = props;
 
   const scrollableRef = useRef<HTMLDivElement>(null);
 
@@ -69,10 +68,7 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
       <Divider />
 
       <div ref={scrollableRef} className="flex-1 overflow-auto mt-1">
-        <ConversationArea
-          answerId={answerId}
-          onFeedbackClick={onFeedbackClick}
-        />
+        <ConversationArea answerId={answerId} />
       </div>
 
       <div className="relative flex flex-row items-center">
