@@ -214,14 +214,12 @@ const handleFeedbackOKResponse = ({
   noFeedbackMessage,
 }) => {
   const overallContent = response.data?.data?.message.content ?? null;
-  const feedbackFiles = response.data?.data?.message.files ?? [];
   const success = response.data?.success;
-  if (success && (overallContent || feedbackFiles.length)) {
+  if (success && overallContent) {
     dispatch(
       getLiveFeedbackFromCodaveri({
         answerId,
         overallContent,
-        feedbackFiles,
       }),
     );
   } else {
