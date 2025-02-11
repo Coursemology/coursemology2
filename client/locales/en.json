@@ -251,6 +251,24 @@
   "course.achievement.AchievementAward.AchievementAwardManager.saveChanges": {
     "defaultMessage": "Save Changes"
   },
+  "course.achievement.AchievementAward.AchievementAwardSummary.awardedStudents": {
+    "defaultMessage": "Awarded Students"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.name": {
+    "defaultMessage": "Name"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.normalStudent": {
+    "defaultMessage": "Normal Student"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.phantomStudent": {
+    "defaultMessage": "Phantom Student"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.revokedStudents": {
+    "defaultMessage": "Revoked Students"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.userType": {
+    "defaultMessage": "User Type"
+  },
   "course.achievement.AchievementAward.awardAchievement": {
     "defaultMessage": "Award Achievement"
   },
@@ -323,8 +341,26 @@
   "course.achievement.AchievementShow.studentsWithAchievement": {
     "defaultMessage": "Students with this achievement"
   },
+  "course.achievement.AchievementTable.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.achievement.AchievementTable.badge": {
+    "defaultMessage": "Badge"
+  },
+  "course.achievement.AchievementTable.description": {
+    "defaultMessage": "Description"
+  },
   "course.achievement.AchievementTable.noAchievement": {
     "defaultMessage": "No achievement"
+  },
+  "course.achievement.AchievementTable.published": {
+    "defaultMessage": "Published"
+  },
+  "course.achievement.AchievementTable.requirements": {
+    "defaultMessage": "Requirements"
+  },
+  "course.achievement.AchievementTable.title": {
+    "defaultMessage": "Title"
   },
   "course.achievement.AchievementsIndex.achievements": {
     "defaultMessage": "Achievements"
@@ -467,11 +503,20 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "to {tab}"
   },
+  "course.admin.CodaveriSettings.Some": {
+    "defaultMessage": "Some"
+  },
+  "course.admin.CodaveriSettings.assessments": {
+    "defaultMessage": "Assessments"
+  },
   "course.admin.CodaveriSettings.codaveriEngine": {
     "defaultMessage": "Codaveri Engine"
   },
   "course.admin.CodaveriSettings.codaveriEngineDescription": {
     "defaultMessage": "Type of codaveri engine used to generate programming code feedback"
+  },
+  "course.admin.CodaveriSettings.codaveriEvaluatorSettings": {
+    "defaultMessage": "Codaveri Evaluator"
   },
   "course.admin.CodaveriSettings.codaveriSettings": {
     "defaultMessage": "Codaveri settings"
@@ -485,8 +530,29 @@
   "course.admin.CodaveriSettings.defaultEngineDescription": {
     "defaultMessage": "Uses generative AI and verification techniques"
   },
-  "course.admin.CodaveriSettings.enableIsOnlyITSP": {
-    "defaultMessage": "Enable ITSP"
+  "course.admin.CodaveriSettings.enableDisableButton": {
+    "defaultMessage": "{enabled, select, true {Enable} other {Disable}}"
+  },
+  "course.admin.CodaveriSettings.enableDisableEvaluator": {
+    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Codaveri Evaluator for {questionCount} programming questions in {title}?"
+  },
+  "course.admin.CodaveriSettings.enableDisableEvaluatorDescription": {
+    "defaultMessage": "{questionCount} programming questions in this {type} will use {enabled, select, true {Codaveri } other {Default }} evaluator"
+  },
+  "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
+    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} live feedback for {questionCount} programming questions in {title}?"
+  },
+  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
+    "defaultMessage": "An error occurred while updating the codaveri evaluator settings."
+  },
+  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
+    "defaultMessage": "An error occurred while updating the live feedback settings."
+  },
+  "course.admin.CodaveriSettings.evaluatorUpdateSuccess": {
+    "defaultMessage": "{question} is now using {evaluator} evaluator"
+  },
+  "course.admin.CodaveriSettings.expandAll": {
+    "defaultMessage": "Expand All Questions"
   },
   "course.admin.CodaveriSettings.feedbackWorkflow": {
     "defaultMessage": "Automatic Post-Submission Comments"
@@ -494,17 +560,14 @@
   "course.admin.CodaveriSettings.feedbackWorkflowDescription": {
     "defaultMessage": "When a submission with programming question is finalised,"
   },
-  "course.admin.CodaveriSettings.feedbackWorkflowNone": {
-    "defaultMessage": "Generate no feedback"
-  },
   "course.admin.CodaveriSettings.feedbackWorkflowDraft": {
     "defaultMessage": "Generate feedback as a draft requiring approval from staff"
   },
+  "course.admin.CodaveriSettings.feedbackWorkflowNone": {
+    "defaultMessage": "Generate no feedback"
+  },
   "course.admin.CodaveriSettings.feedbackWorkflowPublish": {
     "defaultMessage": "Publish feedback directly to student"
-  },
-  "course.admin.CodaveriSettings.error": {
-    "defaultMessage": "An error occurred while updating the codaveri setting."
   },
   "course.admin.CodaveriSettings.itspEngine": {
     "defaultMessage": "ITSP Engine"
@@ -512,35 +575,20 @@
   "course.admin.CodaveriSettings.itspEngineDescription": {
     "defaultMessage": "Uses automated program repair technique"
   },
-  "course.admin.CodaveriSettings.Some": {
-    "defaultMessage": "Some"
-  },
-  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
-    "defaultMessage": "An error occurred while updating the codaveri evaluator settings."
-  },
-  "course.admin.CodaveriSettings.codaveriEvaluatorSettings": {
-    "defaultMessage": "Codaveri Evaluator"
-  },
-  "course.admin.CodaveriSettings.liveFeedbackSettings": {
-    "defaultMessage": "Live Feedback"
-  },
-  "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
-    "defaultMessage": "An error occurred while updating the live feedback settings."
-  },
-  "course.admin.CodaveriSettings.enableDisableButton": {
-    "defaultMessage": "{enabled, select, true {Enable} other {Disable}}"
-  },
-  "course.admin.CodaveriSettings.enableDisableEvaluator": {
-    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Codaveri Evaluator for {questionCount} programming questions in {title}?"
-  },
-  "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
-    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Live feedback for {questionCount} programming questions in {title}?"
-  },
-  "course.admin.CodaveriSettings.enableDisableEvaluatorDescription": {
-    "defaultMessage": "{questionCount} programming questions in this {type} will use {enabled, select, true {Codaveri } other {Default }} evaluator"
-  },
   "course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess": {
     "defaultMessage": "Live feedback for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}"
+  },
+  "course.admin.CodaveriSettings.liveFeedbackSettings": {
+    "defaultMessage": "Get Help"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettings": {
+    "defaultMessage": "Programming Question Settings"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettingsSubtitle": {
+    "defaultMessage": "Enable/disable Codaveri as evaluator for programming questions in various assessments."
+  },
+  "course.admin.CodaveriSettings.succesfulUpdateAllEvaluator": {
+    "defaultMessage": "Sucessfully updated all questions to use {evaluator} evaluator"
   },
   "course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled": {
     "defaultMessage": "Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} live feedback for all questions"
@@ -556,6 +604,9 @@
   },
   "course.admin.ComponentSettings.errorOccurredWhenUpdatingComponents": {
     "defaultMessage": "An error occurred while updating the component settings."
+  },
+  "course.admin.ComponentSettings.settingUpComponent": {
+    "defaultMessage": "Setting up component for this course"
   },
   "course.admin.CourseSettings.allowUsersToSendEnrolmentRequests": {
     "defaultMessage": "Allow users to send enrolment requests"
@@ -795,7 +846,10 @@
     "defaultMessage": "Component Item Settings"
   },
   "course.admin.LessonPlanSettings.lessonPlanItemSettings": {
-    "defaultMessage": "Lesson Plan Item Settings"
+    "defaultMessage": "Item Settings"
+  },
+  "course.admin.LessonPlanSettings.lessonPlanSettings": {
+    "defaultMessage": "Lesson Plan Settings"
   },
   "course.admin.LessonPlanSettings.noLessonPlanItems": {
     "defaultMessage": "There are no lesson plan items to configure for lesson plan display."
@@ -816,7 +870,7 @@
     "defaultMessage": "Description"
   },
   "course.admin.NotificationSettings.emailSettings": {
-    "defaultMessage": "Email Settings"
+    "defaultMessage": "Email settings"
   },
   "course.admin.NotificationSettings.noEmailSettings": {
     "defaultMessage": "None of the enabled components have email settings."
@@ -992,6 +1046,51 @@
   "course.admin.courseSettings": {
     "defaultMessage": "Course Settings"
   },
+  "course.admin.storiesSettings.autoCreateAccounts": {
+    "defaultMessage": "User accounts and chat rooms on Cikgo will automatically be created if they don't yet exist. Information shared with Cikgo is governed by <ourPpLink>our Privacy Policy</ourPpLink> and <cikgoPpLink>Cikgo's Privacy Policy</cikgoPpLink>."
+  },
+  "course.admin.storiesSettings.integrationHint": {
+    "defaultMessage": "To integrate your course on Cikgo with this course, enter its integration key here. Here's what's going to happen once this course is integrated with Cikgo."
+  },
+  "course.admin.storiesSettings.integrationSettings": {
+    "defaultMessage": "Integration settings"
+  },
+  "course.admin.storiesSettings.learnTitle": {
+    "defaultMessage": "Learn page title"
+  },
+  "course.admin.storiesSettings.leaveEmptyToUseDefaultTitle": {
+    "defaultMessage": "Leave empty to use the default \"Learn\" title."
+  },
+  "course.admin.storiesSettings.onlyOwnersCanManage": {
+    "defaultMessage": "Only you, Owners, and Managers can configure the integration of this course with Cikgo."
+  },
+  "course.admin.storiesSettings.pingError": {
+    "defaultMessage": "There was a problem connecting to Cikgo. You may try again at a later time."
+  },
+  "course.admin.storiesSettings.publishTaskCompletions": {
+    "defaultMessage": "Student's submission statuses will be reflected in their chat rooms in Cikgo."
+  },
+  "course.admin.storiesSettings.pushKey": {
+    "defaultMessage": "Integration key"
+  },
+  "course.admin.storiesSettings.pushKeyError": {
+    "defaultMessage": "This integration key doesn't point to a valid course on Cikgo. Please check your settings on Cikgo and try again."
+  },
+  "course.admin.storiesSettings.pushKeyHint": {
+    "defaultMessage": "Integration keys aren't strictly secretive, but should be handled in confidence."
+  },
+  "course.admin.storiesSettings.pushKeyPointsToCourse": {
+    "defaultMessage": "This integration key points to <link>{course}</link> on Cikgo."
+  },
+  "course.admin.storiesSettings.redirects": {
+    "defaultMessage": "When students access this <link>course's root URL</link>, they'll be redirected to the Learn page. The home page is still accessible from the sidebar."
+  },
+  "course.admin.storiesSettings.storiesSettings": {
+    "defaultMessage": "Stories settings"
+  },
+  "course.admin.storiesSettings.syncs": {
+    "defaultMessage": "Published assessments, videos, and surveys in this course will be available in and kept in sync with Cikgo as resources."
+  },
   "course.announcement.AnnouncementsDisplay.searchBarPlaceholder": {
     "defaultMessage": "Search by title or content"
   },
@@ -1103,6 +1202,12 @@
   "course.assessment.AssessmentForm.blockStudentViewingAfterSubmittedHint": {
     "defaultMessage": "Students will only be able to view their submissions after their grades have been published."
   },
+  "course.assessment.AssessmentForm.blocksAccessesFromInvalidSUS": {
+    "defaultMessage": "Block accesses from browsers with invalid UA"
+  },
+  "course.assessment.AssessmentForm.blocksAccessesFromInvalidSUSHint": {
+    "defaultMessage": "If enabled, examinees using browsers with invalid UA (does not contain the specified SUS below) will be blocked from accessing this assessment. Instructors can override access with the session unlock password. Heartbeats from an overridden browser session will be flagged as valid in the PulseGrid."
+  },
   "course.assessment.AssessmentForm.bonusEndAt": {
     "defaultMessage": "Bonus ends at"
   },
@@ -1114,9 +1219,6 @@
   },
   "course.assessment.AssessmentForm.delayedGradePublicationHint": {
     "defaultMessage": "If enabled, gradings will not be immediately shown to students. To publish all gradings, you may click Publish Grades in the Submissions page."
-  },
-  "course.assessment.AssessmentForm.canEnableCodaveriInComponents": {
-    "defaultMessage": "Contact the course manager or owner to enable this feature in Components in the Course Settings."
   },
   "course.assessment.AssessmentForm.description": {
     "defaultMessage": "Description"
@@ -1172,11 +1274,23 @@
   "course.assessment.AssessmentForm.hasPersonalTimesHint": {
     "defaultMessage": "Timings for this item will be automatically adjusted for users based on learning rate."
   },
+  "course.assessment.AssessmentForm.hasTimeLimit": {
+    "defaultMessage": "Automatically submit when timer ends"
+  },
+  "course.assessment.AssessmentForm.hasTimeLimitHint": {
+    "defaultMessage": "When enabled, each submission will have its own timer and will automatically be finalised when its timer ends."
+  },
   "course.assessment.AssessmentForm.hasToBeMoreThanMinInterval": {
     "defaultMessage": "Has to be greater than the minimum value."
   },
   "course.assessment.AssessmentForm.hasToBeMoreThanValueMs": {
     "defaultMessage": "Has to be at least 3000 ms."
+  },
+  "course.assessment.AssessmentForm.hasToBeNumber": {
+    "defaultMessage": "Has to be valid number."
+  },
+  "course.assessment.AssessmentForm.hasToBePositive": {
+    "defaultMessage": "Has to be positive."
   },
   "course.assessment.AssessmentForm.hasToBePositiveInteger": {
     "defaultMessage": "Has to be a positive integer less than 86,400,000 ms"
@@ -1190,6 +1304,12 @@
   "course.assessment.AssessmentForm.intervalHint": {
     "defaultMessage": "Controls how frequent heartbeats are sent from the students' browsers. Intervals are randomised between these two ranges."
   },
+  "course.assessment.AssessmentForm.koditsuDisabledInCourse": {
+    "defaultMessage": "Please contact the Course Administrator to enable Koditsu Exam in Course Settings."
+  },
+  "course.assessment.AssessmentForm.liveFeedback": {
+    "defaultMessage": "Get Help"
+  },
   "course.assessment.AssessmentForm.maxInterval": {
     "defaultMessage": "Max interval"
   },
@@ -1199,8 +1319,17 @@
   "course.assessment.AssessmentForm.minInterval": {
     "defaultMessage": "Min interval"
   },
+  "course.assessment.AssessmentForm.minutes": {
+    "defaultMessage": "minute(s)"
+  },
   "course.assessment.AssessmentForm.modeSwitchingHint": {
     "defaultMessage": "You can no longer change the grading mode because there are already submissions for this assessment."
+  },
+  "course.assessment.AssessmentForm.needSUSAndSessionUnlockPassword": {
+    "defaultMessage": "You need to specify a SUS and session unlock password to enable this."
+  },
+  "course.assessment.AssessmentForm.noProgrammingQuestion": {
+    "defaultMessage": "You need to add at least one programming question that can be supported by Codaveri to allow enabling live feedback for this Assessment"
   },
   "course.assessment.AssessmentForm.noTestCaseChosenError": {
     "defaultMessage": "Select at least one type of test case"
@@ -1226,29 +1355,32 @@
   "course.assessment.AssessmentForm.personalisedTimelines": {
     "defaultMessage": "Personalised timelines"
   },
+  "course.assessment.AssessmentForm.proctorWithKoditsu": {
+    "defaultMessage": "Proctor Exam using Koditsu"
+  },
   "course.assessment.AssessmentForm.published": {
     "defaultMessage": "Published"
   },
   "course.assessment.AssessmentForm.publishedHint": {
     "defaultMessage": "Everyone can see this assessment."
   },
+  "course.assessment.AssessmentForm.questionsIncompatibleWithKoditsu": {
+    "defaultMessage": "Please make sure that all questions in this assessment is compatible with Koditsu before activating proctoring in Koditsu"
+  },
   "course.assessment.AssessmentForm.secret": {
     "defaultMessage": "Secret UA Substring (SUS)"
   },
   "course.assessment.AssessmentForm.secretHint": {
-    "defaultMessage": "If provided, Coursemology can automatically flag a connection as valid in <pulsegrid>PulseGrid</pulsegrid> if the examinee's User Agent (UA) contains this secret. Otherwise, connections will be flagged only by heartbeat intervals."
+    "defaultMessage": "If provided, the <pulsegrid>PulseGrid</pulsegrid> automatically checks if the examinee's browser's User Agent (UA) contains this secret, and marks connections that do not as invalid. This string is case-sensitive."
   },
   "course.assessment.AssessmentForm.sessionPassword": {
     "defaultMessage": "Session unlock password"
-  },
-  "course.assessment.AssessmentForm.sessionPasswordHint": {
-    "defaultMessage": "Ideally, do NOT give this password to students."
   },
   "course.assessment.AssessmentForm.sessionProtection": {
     "defaultMessage": "Enable session protection"
   },
   "course.assessment.AssessmentForm.sessionProtectionHint": {
-    "defaultMessage": "If enabled, students can only access their attempt once. Further access will require the session unlock password."
+    "defaultMessage": "If enabled, students can only access their attempt once. Further access will require the session unlock password. Ideally, <b>do NOT give this password to students</b>."
   },
   "course.assessment.AssessmentForm.showEvaluation": {
     "defaultMessage": "Show evaluation test cases"
@@ -1289,8 +1421,14 @@
   "course.assessment.AssessmentForm.timeBonusExp": {
     "defaultMessage": "Time Bonus EXP"
   },
+  "course.assessment.AssessmentForm.timeLimit": {
+    "defaultMessage": "Time Limit"
+  },
   "course.assessment.AssessmentForm.title": {
     "defaultMessage": "Title"
+  },
+  "course.assessment.AssessmentForm.toggleLiveFeedbackDescription": {
+    "defaultMessage": "Enable live feedback feature for all programming questions"
   },
   "course.assessment.AssessmentForm.unavailableInAutograded": {
     "defaultMessage": "Unavailable in autograded assessments."
@@ -1321,12 +1459,6 @@
   },
   "course.assessment.AssessmentForm.visibility": {
     "defaultMessage": "Visibility"
-  },
-  "course.assessment.AssessmentForm.toggleLiveFeedbackDescription": {
-    "defaultMessage": "{enabled, select, true {Enable} other {Disable}} live feedback feature for all programming questions"
-  },
-  "course.assessment.AssessmentForm.noProgrammingQuestion": {
-    "defaultMessage": "You need to add at least one programming question that can be supported by Codaveri to allow enabling live feedback for this Assessment"
   },
   "course.assessment.FileManager.addFiles": {
     "defaultMessage": "Add Files"
@@ -1373,14 +1505,89 @@
   "course.assessment.edit.update": {
     "defaultMessage": "Save"
   },
+  "course.assessment.generation.allFieldsLocked": {
+    "defaultMessage": "All fields are locked, so nothing can be generated."
+  },
+  "course.assessment.generation.confirmDeleteConversation": {
+    "defaultMessage": "Are you sure you want to delete \"{title}\" and all its history items? THIS ACTION IS IRREVERSIBLE!"
+  },
+  "course.assessment.generation.exportAction": {
+    "defaultMessage": "Export"
+  },
+  "course.assessment.generation.exportClose": {
+    "defaultMessage": "Close"
+  },
+  "course.assessment.generation.exportDialogHeader": {
+    "defaultMessage": "Export Questions ({exportCount} selected)"
+  },
+  "course.assessment.generation.exportError": {
+    "defaultMessage": "An error occured in exporting this question."
+  },
+  "course.assessment.generation.generateError": {
+    "defaultMessage": "An error occured generating question \"{title}\"."
+  },
+  "course.assessment.generation.generatePage": {
+    "defaultMessage": "Generate Programming Question"
+  },
+  "course.assessment.generation.generateQuestion": {
+    "defaultMessage": "Generate"
+  },
+  "course.assessment.generation.generateSuccess": {
+    "defaultMessage": "Generation for \"{title}\" successful."
+  },
+  "course.assessment.generation.languageField": {
+    "defaultMessage": "Language"
+  },
+  "course.assessment.generation.newTab": {
+    "defaultMessage": "New"
+  },
+  "course.assessment.generation.openExportDialog": {
+    "defaultMessage": "Export"
+  },
+  "course.assessment.generation.promptPlaceholder": {
+    "defaultMessage": "Type something here..."
+  },
+  "course.assessment.generation.resetConversation": {
+    "defaultMessage": "Reset"
+  },
+  "course.assessment.generation.showInactive": {
+    "defaultMessage": "Show inactive items"
+  },
+  "course.assessment.liveFeedback.comments": {
+    "defaultMessage": "Comments"
+  },
+  "course.assessment.liveFeedback.feedbackTimingTitle": {
+    "defaultMessage": "Used at: {usedAt}"
+  },
+  "course.assessment.liveFeedback.lineHeader": {
+    "defaultMessage": "Line {lineNumber}"
+  },
+  "course.assessment.liveFeedback.questionTitle": {
+    "defaultMessage": "Question {index}"
+  },
+  "course.assessment.monitoring.accessGrantedForThisSessionOnly": {
+    "defaultMessage": "Access will be granted only for this browser session."
+  },
   "course.assessment.monitoring.alivePresenceHint": {
     "defaultMessage": "Last heartbeat was received in time."
   },
   "course.assessment.monitoring.alivePresenceHintSUSMatches": {
-    "defaultMessage": "Last heartbeat was received in time and the SUS matches."
+    "defaultMessage": "Last heartbeat was received in time and came from an authorised browser, if browser authorisation is enabled."
   },
   "course.assessment.monitoring.blankField": {
     "defaultMessage": "(blank)"
+  },
+  "course.assessment.monitoring.blocksAccessesFromInvalidSUS": {
+    "defaultMessage": "Block accesses from unauthorised browsers"
+  },
+  "course.assessment.monitoring.blocksAccessesFromInvalidSUSHint": {
+    "defaultMessage": "If enabled, examinees using unauthorised browsers can't access this assessment. Instructors can override access with the session unlock password. Heartbeats from overridden browser sessions will always be valid (green) in the PulseGrid."
+  },
+  "course.assessment.monitoring.browserAuthorizationMethod": {
+    "defaultMessage": "Browser authorisation method"
+  },
+  "course.assessment.monitoring.browserAuthorizationMethodHint": {
+    "defaultMessage": "Choose how sessions are authorised as valid or invalid. Changes apply to all sessions and heartbeats immediately and updates live in PulseGrid."
   },
   "course.assessment.monitoring.cannotConnectToLiveMonitoringChannel": {
     "defaultMessage": "Oops, an error occurred when connecting to the live monitoring channel."
@@ -1388,29 +1595,56 @@
   "course.assessment.monitoring.connected": {
     "defaultMessage": "Connected"
   },
-  "course.assessment.monitoring.connectedToLiveMonitoringChannel": {
-    "defaultMessage": "Connected to the live monitoring channel"
+  "course.assessment.monitoring.connecting": {
+    "defaultMessage": "Connecting"
+  },
+  "course.assessment.monitoring.deltaFromPreviousHeartbeat": {
+    "defaultMessage": "{ms} ms from previous heartbeat"
   },
   "course.assessment.monitoring.detailsOfNHeartbeats": {
-    "defaultMessage": "Details of the last {n} heartbeats"
+    "defaultMessage": "Last {n} heartbeats"
   },
   "course.assessment.monitoring.disconnected": {
     "defaultMessage": "Disconnected"
   },
-  "course.assessment.monitoring.disconnectedFromLiveMonitoringChannel": {
-    "defaultMessage": "Disconnected from the live monitoring channel"
+  "course.assessment.monitoring.enableBrowserAuthorization": {
+    "defaultMessage": "Authorise browsers that access this assessment"
+  },
+  "course.assessment.monitoring.enableBrowserAuthorizationHint": {
+    "defaultMessage": "If enabled, PulseGrid will additionally check if an examinee is accessing this assessment from an authorised browser, based on the authorisation method you choose."
+  },
+  "course.assessment.monitoring.examMonitoring": {
+    "defaultMessage": "Enable exam monitoring"
+  },
+  "course.assessment.monitoring.examMonitoringHint": {
+    "defaultMessage": "If enabled, examinees' sessions will be monitored in real time from when they attempt the exam until they finalise it or the first 24 hours since their attempt, whichever is earlier. Instructors can monitor these sessions in <pulsegrid>PulseGrid</pulsegrid>."
+  },
+  "course.assessment.monitoring.expiredSession": {
+    "defaultMessage": "Expired session. It has been at least 24 hours since the submission was made."
   },
   "course.assessment.monitoring.filterByGroup": {
     "defaultMessage": "Filter by Group"
   },
+  "course.assessment.monitoring.firstReceivedHeartbeat": {
+    "defaultMessage": "First received heartbeat"
+  },
   "course.assessment.monitoring.generatedAt": {
     "defaultMessage": "Generated at"
   },
+  "course.assessment.monitoring.intervalHint": {
+    "defaultMessage": "Controls how frequent heartbeats are sent from the examinees' browsers. Intervals are randomised between these two ranges."
+  },
+  "course.assessment.monitoring.invalidBrowser": {
+    "defaultMessage": "Invalid browser configuration"
+  },
+  "course.assessment.monitoring.invalidBrowserSubtitle": {
+    "defaultMessage": "Access to this assessment is not allowed with your current browser and/or its configuration. Contact your instructor for assistance."
+  },
+  "course.assessment.monitoring.invalidHeartbeat": {
+    "defaultMessage": "Invalid"
+  },
   "course.assessment.monitoring.ipAddress": {
     "defaultMessage": "IP Address"
-  },
-  "course.assessment.monitoring.lastHeartbeat": {
-    "defaultMessage": "Last heartbeat"
   },
   "course.assessment.monitoring.latePresenceHint": {
     "defaultMessage": "Next heartbeat hasn't been received in time, but still within the configured inter-heartbeats interval."
@@ -1418,11 +1652,44 @@
   "course.assessment.monitoring.live": {
     "defaultMessage": "Live"
   },
+  "course.assessment.monitoring.liveHint": {
+    "defaultMessage": "This heartbeat was immediately received by the server."
+  },
+  "course.assessment.monitoring.liveness": {
+    "defaultMessage": "Liveness"
+  },
+  "course.assessment.monitoring.loadAllHeartbeats": {
+    "defaultMessage": "Load all"
+  },
+  "course.assessment.monitoring.maxInterval": {
+    "defaultMessage": "Max interval"
+  },
+  "course.assessment.monitoring.milliseconds": {
+    "defaultMessage": "ms"
+  },
+  "course.assessment.monitoring.minInterval": {
+    "defaultMessage": "Min interval"
+  },
   "course.assessment.monitoring.missingPresenceHint": {
-    "defaultMessage": "Next heartbeat hasn't been received in time."
+    "defaultMessage": "Next heartbeat hasn't been received in time, or the last heartbeat came from an unauthorised browser, if browser authorisation is enabled."
+  },
+  "course.assessment.monitoring.needSUSAndSessionUnlockPassword": {
+    "defaultMessage": "You must enable browser authorisation and set a session unlock password to enable this."
   },
   "course.assessment.monitoring.noActiveSessions": {
-    "defaultMessage": "No active sessions."
+    "defaultMessage": "No active sessions. No attempts have been made."
+  },
+  "course.assessment.monitoring.offset": {
+    "defaultMessage": "Inter-heartbeat offset"
+  },
+  "course.assessment.monitoring.offsetHint": {
+    "defaultMessage": "Controls how long PulseGrid should wait after the frequency interval before flagging a session as late."
+  },
+  "course.assessment.monitoring.openSubmissionInNewTab": {
+    "defaultMessage": "Open submission in new tab"
+  },
+  "course.assessment.monitoring.overrideAccess": {
+    "defaultMessage": "Override access"
   },
   "course.assessment.monitoring.pulsegrid": {
     "defaultMessage": "PulseGrid"
@@ -1433,8 +1700,41 @@
   "course.assessment.monitoring.recentActivitiesHint": {
     "defaultMessage": "These logs will disappear if you close this tab!"
   },
+  "course.assessment.monitoring.resetZoom": {
+    "defaultMessage": "Reset zoom"
+  },
+  "course.assessment.monitoring.sebConfigKey": {
+    "defaultMessage": "Safe Exam Browser (SEB) Config Key"
+  },
+  "course.assessment.monitoring.sebConfigKeyFieldHint": {
+    "defaultMessage": "Your <sebConfigKey>SEB Config Key</sebConfigKey>, <i>not the Browser Exam Key</i>, is generated from your specific SEB configuration. It stays the same across operating systems and SEB versions. Ensure this field is updated if you change your SEB configuration."
+  },
+  "course.assessment.monitoring.sebConfigKeyFieldLabel": {
+    "defaultMessage": "SEB Config Key"
+  },
+  "course.assessment.monitoring.sebConfigKeyHint": {
+    "defaultMessage": "Flags a session as valid if the examinee is using <seb>Safe Exam Browser (SEB)</seb> with a valid configuration. SEB generates a unique <sebConfigKey>Config Key</sebConfigKey> for a specific configuration. This method requires SEB 3.4 for Windows and SEB 3.0 for iOS and macOS, or later."
+  },
+  "course.assessment.monitoring.sebPayload": {
+    "defaultMessage": "Safe Exam Browser (SEB) Config Key Hash & URL"
+  },
+  "course.assessment.monitoring.secret": {
+    "defaultMessage": "Secret UA Substring (SUS)"
+  },
+  "course.assessment.monitoring.secretHint": {
+    "defaultMessage": "If an examinee's browser's User Agent (UA) contains this case-sensitive secret, PulseGrid will flag that session as valid, and invalid otherwise. If you leave this blank, all sessions will be flagged as valid."
+  },
+  "course.assessment.monitoring.sessionUnlockPassword": {
+    "defaultMessage": "Session unlock password"
+  },
   "course.assessment.monitoring.stale": {
     "defaultMessage": "Stale"
+  },
+  "course.assessment.monitoring.staleHint": {
+    "defaultMessage": "This heartbeat wasn't immediately received by the server because the examinee's browser was temporarily unreachable. It was cached in the browser, and sent to the server when the browser was reachable again."
+  },
+  "course.assessment.monitoring.stoppedSession": {
+    "defaultMessage": "Stopped session. Student may have finalised their submission."
   },
   "course.assessment.monitoring.summaryCorrectAsAt": {
     "defaultMessage": "Summary correct as at {time}"
@@ -1443,13 +1743,22 @@
     "defaultMessage": "Type"
   },
   "course.assessment.monitoring.userAgent": {
-    "defaultMessage": "User Agent"
+    "defaultMessage": "User Agent (UA)"
+  },
+  "course.assessment.monitoring.userAgentHint": {
+    "defaultMessage": "Flags a session as valid if the examinee's browser's <ua>User Agent (UA)</ua> contains a secret substring."
   },
   "course.assessment.monitoring.userHeartbeatContinuedStreaming": {
     "defaultMessage": "{name}'s heartbeat just continued streaming."
   },
   "course.assessment.monitoring.userHeartbeatNotReceivedInTime": {
     "defaultMessage": "{name}'s heartbeat wasn't received in time."
+  },
+  "course.assessment.monitoring.validHeartbeat": {
+    "defaultMessage": "Valid"
+  },
+  "course.assessment.monitoring.zoomPanHint": {
+    "defaultMessage": "Pinch or scroll to zoom. Drag to pan."
   },
   "course.assessment.newAssessment": {
     "defaultMessage": "New Assessment"
@@ -1538,8 +1847,17 @@
   "course.assessment.question.multipleResponses.maximumGrade": {
     "defaultMessage": "Maximum grade"
   },
+  "course.assessment.question.multipleResponses.mustBeLessThanMaxAttachmentSize": {
+    "defaultMessage": "Must be at most {defaultMax}MB."
+  },
+  "course.assessment.question.multipleResponses.mustBeLessThanMaxAttachments": {
+    "defaultMessage": "Must be at most {defaultMax}."
+  },
   "course.assessment.question.multipleResponses.mustBeLessThanMaxMaximumGrade": {
     "defaultMessage": "Must be less than 1000."
+  },
+  "course.assessment.question.multipleResponses.mustHaveAtLeastOneResponse": {
+    "defaultMessage": "You must specify at least one response."
   },
   "course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice": {
     "defaultMessage": "You must specify at least one correct choice."
@@ -1547,8 +1865,20 @@
   "course.assessment.question.multipleResponses.mustSpecifyChoice": {
     "defaultMessage": "You must specify a valid choice title."
   },
+  "course.assessment.question.multipleResponses.mustSpecifyMaxAttachment": {
+    "defaultMessage": "You must specify a valid, positive maximum attachment number."
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyMaxAttachmentSize": {
+    "defaultMessage": "You must specify a valid, positive maximum attachment size."
+  },
   "course.assessment.question.multipleResponses.mustSpecifyMaximumGrade": {
     "defaultMessage": "You must specify a valid, non-negative maximum grade to award."
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachment": {
+    "defaultMessage": "Maximum Number of Attachments has to be positive."
+  },
+  "course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachmentSize": {
+    "defaultMessage": "Max Size has to be positive."
   },
   "course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade": {
     "defaultMessage": "Maximum grade has to be non-negative."
@@ -1664,6 +1994,9 @@
   "course.assessment.question.programming.codaveriEvaluatorHint": {
     "defaultMessage": "On top of the default evaluation, this evaluator will provide automated code feedback powered by Codaveri when the submission is finalised. They will appear as draft comments for the instructors to review, edit, and publish."
   },
+  "course.assessment.question.programming.codaveriEvaluatorNotSupported": {
+    "defaultMessage": "{languageName} is not supported by the Codaveri evaluator."
+  },
   "course.assessment.question.programming.codeInserts": {
     "defaultMessage": "Code inserts"
   },
@@ -1687,6 +2020,9 @@
   },
   "course.assessment.question.programming.defaultEvaluatorHint": {
     "defaultMessage": "No fuss; just run the code according to the evaluation package below and report the test results."
+  },
+  "course.assessment.question.programming.defaultEvaluatorNotSupported": {
+    "defaultMessage": "{languageName} is not supported by the default evaluator."
   },
   "course.assessment.question.programming.editOnline": {
     "defaultMessage": "Create/edit online"
@@ -1713,7 +2049,7 @@
     "defaultMessage": "Hold tight, evaluating all submissions with the new package..."
   },
   "course.assessment.question.programming.evaluationLimits": {
-    "defaultMessage": "Evaluationlimits"
+    "defaultMessage": "Evaluation limits"
   },
   "course.assessment.question.programming.evaluationTestCases": {
     "defaultMessage": "Evaluation test cases"
@@ -1726,6 +2062,9 @@
   },
   "course.assessment.question.programming.expected": {
     "defaultMessage": "Expected"
+  },
+  "course.assessment.question.programming.expectedOutput": {
+    "defaultMessage": "Expected Output"
   },
   "course.assessment.question.programming.expression": {
     "defaultMessage": "Expression"
@@ -1757,6 +2096,9 @@
   "course.assessment.question.programming.inlineCode": {
     "defaultMessage": "Inline code"
   },
+  "course.assessment.question.programming.input": {
+    "defaultMessage": "Input"
+  },
   "course.assessment.question.programming.javaTestCasesHint": {
     "defaultMessage": "Expressions will be evaluated in the context of the submitted code. Their return values will be compared against the Expected expectations using the <code>expectEquals(expression, expected)</code> void. Its simplified definition is as follows, where <code>Object</code> has been overloaded for all Java primitives."
   },
@@ -1772,6 +2114,9 @@
   "course.assessment.question.programming.languageAndEvaluation": {
     "defaultMessage": "Language and evaluation"
   },
+  "course.assessment.question.programming.languageDeprecatedWarning": {
+    "defaultMessage": "Your selected language is deprecated. Please change it to another language."
+  },
   "course.assessment.question.programming.lastUpdated": {
     "defaultMessage": "Last updated by {by} on {on}."
   },
@@ -1780,6 +2125,9 @@
   },
   "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
     "defaultMessage": "Add instructions to guide the generation of live feedback here. If unsure, just leave this blank."
+  },
+  "course.assessment.question.programming.liveFeedbackNotSupported": {
+    "defaultMessage": "Live feedback generation is not supported for {languageName}."
   },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "Lowest grading priority"
@@ -1847,6 +2195,9 @@
   "course.assessment.question.programming.questionSavedButPackageError": {
     "defaultMessage": "Your changes was saved, but the package wasn't successfully imported."
   },
+  "course.assessment.question.programming.rTestCasesHint": {
+    "defaultMessage": "Each test case launches a separate R console instance and provides input via standard input. This console will run the <prepend>Prepend</prepend> script, the student submission, and the <append>Append</append> script. The standard output of these scripts will be compared (as a string) to the expected output of the test case. We recommend processing the standard input in one of these scripts."
+  },
   "course.assessment.question.programming.savingChanges": {
     "defaultMessage": "Saving your changes..."
   },
@@ -1894,6 +2245,9 @@
   },
   "course.assessment.question.programming.timeLimit": {
     "defaultMessage": "Time limit"
+  },
+  "course.assessment.question.programming.timeLimitDetail": {
+    "defaultMessage": "{timeLimit, plural, one {# minute} other {# minutes}}"
   },
   "course.assessment.question.programming.uploadNewPackage": {
     "defaultMessage": "Upload a new package"
@@ -1979,8 +2333,14 @@
   "course.assessment.question.textResponses.addSolution": {
     "defaultMessage": "Add a new solution"
   },
-  "course.assessment.question.textResponses.allowFileUpload": {
-    "defaultMessage": "Allow file upload in the answer"
+  "course.assessment.question.textResponses.attachmentSettingRequired": {
+    "defaultMessage": "Attachment Setting should be defined in this question"
+  },
+  "course.assessment.question.textResponses.attachmentSettings": {
+    "defaultMessage": "Attachment Settings"
+  },
+  "course.assessment.question.textResponses.attachmentSettingsDescription": {
+    "defaultMessage": "When students are attempting this question,"
   },
   "course.assessment.question.textResponses.deleteSolution": {
     "defaultMessage": "Delete solution"
@@ -1994,8 +2354,23 @@
   "course.assessment.question.textResponses.grade": {
     "defaultMessage": "Grade"
   },
+  "course.assessment.question.textResponses.isAttachmentRequired": {
+    "defaultMessage": "Require file upload for this question"
+  },
   "course.assessment.question.textResponses.keyword": {
     "defaultMessage": "Keyword"
+  },
+  "course.assessment.question.textResponses.maxAttachmentSize": {
+    "defaultMessage": "Max Size per Attachment"
+  },
+  "course.assessment.question.textResponses.maxAttachments": {
+    "defaultMessage": "Max Number of Attachments"
+  },
+  "course.assessment.question.textResponses.multipleAttachments": {
+    "defaultMessage": "Multiple Attachments"
+  },
+  "course.assessment.question.textResponses.multipleFileAttachmentDescription": {
+    "defaultMessage": "They can upload several attachments."
   },
   "course.assessment.question.textResponses.mustSpecifyGrade": {
     "defaultMessage": "You must specify a valid number for grade."
@@ -2008,6 +2383,18 @@
   },
   "course.assessment.question.textResponses.newSolutionCannotUndo": {
     "defaultMessage": "This is a new solution. It will immediately disappear if you delete before saving it."
+  },
+  "course.assessment.question.textResponses.noAttachment": {
+    "defaultMessage": "No Attachment"
+  },
+  "course.assessment.question.textResponses.noAttachmentDescription": {
+    "defaultMessage": "They will not be able to upload any attachment."
+  },
+  "course.assessment.question.textResponses.singleFileAttachment": {
+    "defaultMessage": "Single Attachment"
+  },
+  "course.assessment.question.textResponses.singleFileAttachmentDescription": {
+    "defaultMessage": "They can only upload one attachment."
   },
   "course.assessment.question.textResponses.solution": {
     "defaultMessage": "Solution"
@@ -2032,6 +2419,9 @@
   },
   "course.assessment.question.textResponses.undoDeleteSolution": {
     "defaultMessage": "Undo delete solution"
+  },
+  "course.assessment.question.textResponses.validAttachmentSettingValues": {
+    "defaultMessage": "Attachment Settings should be either no attachment, single file attachment, or multiple file attachment"
   },
   "course.assessment.question.textResponses.zeroGrade": {
     "defaultMessage": "0.0"
@@ -2059,9 +2449,6 @@
   },
   "course.assessment.show.assessmentOnlyAvailableFrom": {
     "defaultMessage": "This assessment will only be available from"
-  },
-  "course.assessment.show.audioResponse": {
-    "defaultMessage": "Audio Response"
   },
   "course.assessment.show.baseExp": {
     "defaultMessage": "Base EXP"
@@ -2095,6 +2482,9 @@
   },
   "course.assessment.show.chooseAssessmentToDuplicateInto": {
     "defaultMessage": "Choose an assessment to duplicate into"
+  },
+  "course.assessment.show.comprehension": {
+    "defaultMessage": "Comprehension"
   },
   "course.assessment.show.delete": {
     "defaultMessage": "Delete"
@@ -2153,8 +2543,14 @@
   "course.assessment.show.errorMovingQuestion": {
     "defaultMessage": "An error occurred while moving the question."
   },
+  "course.assessment.show.failedSyncingWithKoditsu": {
+    "defaultMessage": "Not Synced with Koditsu"
+  },
   "course.assessment.show.fileUpload": {
     "defaultMessage": "File Upload"
+  },
+  "course.assessment.show.fileUploadDescription": {
+    "defaultMessage": "Settings for the number of attachments allowed (none, one, or multiple)"
   },
   "course.assessment.show.files": {
     "defaultMessage": "Files"
@@ -2167,6 +2563,9 @@
   },
   "course.assessment.show.forumPostResponse": {
     "defaultMessage": "Forum Post Response"
+  },
+  "course.assessment.show.generate": {
+    "defaultMessage": "Generate Programming Question"
   },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "Graded test cases"
@@ -2185,6 +2584,9 @@
   },
   "course.assessment.show.hideOptions": {
     "defaultMessage": "Hide options"
+  },
+  "course.assessment.show.koditsuMode": {
+    "defaultMessage": "Koditsu"
   },
   "course.assessment.show.manageComponents": {
     "defaultMessage": "Manage Components in Course Settings"
@@ -2312,6 +2714,12 @@
   "course.assessment.show.sureDeletingQuestion": {
     "defaultMessage": "Sure you're deleting this question?"
   },
+  "course.assessment.show.syncedWithKoditsu": {
+    "defaultMessage": "Synced with Koditsu"
+  },
+  "course.assessment.show.syncingWithKoditsu": {
+    "defaultMessage": "Syncing with Koditsu"
+  },
   "course.assessment.show.textResponse": {
     "defaultMessage": "Text Response"
   },
@@ -2326,6 +2734,9 @@
   },
   "course.assessment.show.unsubmittingAndChangingQuestionType": {
     "defaultMessage": "Unsubmitting submissions and changing your question type..."
+  },
+  "course.assessment.show.voiceResponse": {
+    "defaultMessage": "Audio Response"
   },
   "course.assessment.show.whileHoldingToCancelMoving": {
     "defaultMessage": "while holding to cancel moving."
@@ -2429,23 +2840,47 @@
   "course.assessment.skills.SkillsTable.uncategorised": {
     "defaultMessage": "Uncategorised Skills"
   },
-  "course.assessment.liveFeedback.questionTitle": {
-    "defaultMessage": "Question {index}"
+  "course.assessment.statistics.SubmissionStatusChart.attempting": {
+    "defaultMessage": "Attempting"
   },
-  "course.assessment.liveFeedback.feedbackTimingTitle": {
-    "defaultMessage": "Used at: {usedAt}"
+  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
+    "defaultMessage": "Student Submission Statuses"
   },
-  "course.assessment.liveFeedback.liveFeedbackName": {
-    "defaultMessage": "Live Feedback"
+  "course.assessment.statistics.SubmissionStatusChart.graded": {
+    "defaultMessage": "Graded, unpublished"
   },
-  "course.assessment.liveFeedback.comments": {
-    "defaultMessage": "Comments"
+  "course.assessment.statistics.SubmissionStatusChart.published": {
+    "defaultMessage": "Graded"
   },
-  "course.assessment.liveFeedback.lineHeader": {
-    "defaultMessage": "Line {lineNumber}"
+  "course.assessment.statistics.SubmissionStatusChart.submitted": {
+    "defaultMessage": "Submitted"
+  },
+  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
+    "defaultMessage": "Not Started"
+  },
+  "course.assessment.statistics.ancestorFail": {
+    "defaultMessage": "Failed to fetch past iterations of this assessment."
+  },
+  "course.assessment.statistics.ancestorSelect.current": {
+    "defaultMessage": "Current"
+  },
+  "course.assessment.statistics.ancestorSelect.fromCourse": {
+    "defaultMessage": "From {courseTitle}"
+  },
+  "course.assessment.statistics.ancestorSelect.subtitle": {
+    "defaultMessage": "Compare against past versions of this assessment:"
+  },
+  "course.assessment.statistics.ancestorSelect.title": {
+    "defaultMessage": "Duplication History"
+  },
+  "course.assessment.statistics.ancestorStatisticsFail": {
+    "defaultMessage": "Failed to fetch ancestor's statistics."
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "Answers"
+  },
+  "course.assessment.statistics.attemptCount": {
+    "defaultMessage": "Attempt Count"
   },
   "course.assessment.statistics.attempts.filename": {
     "defaultMessage": "Question-level Attempt Statistics for {assessment}"
@@ -2459,6 +2894,33 @@
   "course.assessment.statistics.closePrompt": {
     "defaultMessage": "Close"
   },
+  "course.assessment.statistics.comments": {
+    "defaultMessage": "Comments"
+  },
+  "course.assessment.statistics.duplicationHistory": {
+    "defaultMessage": "Duplication History"
+  },
+  "course.assessment.statistics.email": {
+    "defaultMessage": "Email"
+  },
+  "course.assessment.statistics.fail": {
+    "defaultMessage": "Failed to fetch statistics."
+  },
+  "course.assessment.statistics.gradeDisplay": {
+    "defaultMessage": "Grade: {grade} / {maxGrade}"
+  },
+  "course.assessment.statistics.gradeDistribution": {
+    "defaultMessage": "Grade Distribution"
+  },
+  "course.assessment.statistics.gradeViolin.datasetLabel": {
+    "defaultMessage": "Distribution"
+  },
+  "course.assessment.statistics.gradeViolin.xAxisLabel": {
+    "defaultMessage": "Grades"
+  },
+  "course.assessment.statistics.gradeViolin.yAxisLabel": {
+    "defaultMessage": "Submissions"
+  },
   "course.assessment.statistics.grader": {
     "defaultMessage": "Grader"
   },
@@ -2468,11 +2930,20 @@
   "course.assessment.statistics.group": {
     "defaultMessage": "Group"
   },
+  "course.assessment.statistics.header": {
+    "defaultMessage": "Statistics for {title}"
+  },
+  "course.assessment.statistics.includePhantom": {
+    "defaultMessage": "Include Phantom Student"
+  },
   "course.assessment.statistics.legendHigherusage": {
     "defaultMessage": "Higher Usage"
   },
   "course.assessment.statistics.legendLowerUsage": {
     "defaultMessage": "Lower Usage"
+  },
+  "course.assessment.statistics.liveFeedback": {
+    "defaultMessage": "Live Feedback"
   },
   "course.assessment.statistics.liveFeedback.filename": {
     "defaultMessage": "Question-level Live Feedback Statistics for {assessment}"
@@ -2489,6 +2960,9 @@
   "course.assessment.statistics.marks.redCellLegend": {
     "defaultMessage": "< 0.5 * Maximum Grade"
   },
+  "course.assessment.statistics.marksPerQuestion": {
+    "defaultMessage": "Marks Per Question"
+  },
   "course.assessment.statistics.name": {
     "defaultMessage": "Name"
   },
@@ -2498,11 +2972,17 @@
   "course.assessment.statistics.nameGroupsSearchText": {
     "defaultMessage": "Search by Name or Groups"
   },
+  "course.assessment.statistics.noIncludePhantom": {
+    "defaultMessage": "*All statistics in this duplicated assessments does not include Phantom Students"
+  },
   "course.assessment.statistics.noSubmission": {
     "defaultMessage": "No submission yet"
   },
   "course.assessment.statistics.onlyForAutogradableAssessment": {
     "defaultMessage": "This table is only displayed for Assessment with at least one Autograded Questions"
+  },
+  "course.assessment.statistics.pastAnswerTitle": {
+    "defaultMessage": "Submitted At: {submittedAt}"
   },
   "course.assessment.statistics.questionDisplayTitle": {
     "defaultMessage": "Q{index} for {student}"
@@ -2510,50 +2990,14 @@
   "course.assessment.statistics.questionIndex": {
     "defaultMessage": "Q{index}"
   },
-  "course.assessment.statistics.total": {
-    "defaultMessage": "Total"
-  },
-  "course.assessment.statistics.workflowState": {
-    "defaultMessage": "Status"
-  },
-  "course.assessment.statistics.ancestorFail": {
-    "defaultMessage": "Failed to fetch past iterations of this assessment."
-  },
-  "course.assessment.statistics.ancestorStatisticsFail": {
-    "defaultMessage": "Failed to fetch ancestor's statistics."
-  },
-  "course.assessment.statistics.fail": {
-    "defaultMessage": "Failed to fetch statistics."
-  },
-  "course.assessment.statistics.gradeDistribution": {
-    "defaultMessage": "Grade Distribution"
-  },
-  "course.assessment.statistics.gradeViolin.datasetLabel": {
-    "defaultMessage": "Distribution"
-  },
-  "course.assessment.statistics.gradeViolin.xAxisLabel": {
-    "defaultMessage": "Grades"
-  },
-  "course.assessment.statistics.gradeViolin.yAxisLabel": {
-    "defaultMessage": "Submissions"
-  },
-  "course.assessment.statistics.header": {
-    "defaultMessage": "Statistics for {title}"
+  "course.assessment.statistics.questionTitle": {
+    "defaultMessage": "Question {index}"
   },
   "course.assessment.statistics.statistics": {
     "defaultMessage": "Statistics"
   },
-  "course.assessment.statistics.SubmissionStatusChart.attempting": {
-    "defaultMessage": "Attempting"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
-    "defaultMessage": "Student Submission Statuses"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.submitted": {
-    "defaultMessage": "Submitted"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
-    "defaultMessage": "Unattempted"
+  "course.assessment.statistics.submissionPage": {
+    "defaultMessage": "Go to Answer Page"
   },
   "course.assessment.statistics.submissionStatuses": {
     "defaultMessage": "Submission Statuses"
@@ -2573,8 +3017,20 @@
   "course.assessment.statistics.submissionTimeGradeChart.xAxisLabel.withoutDeadline": {
     "defaultMessage": "Submission Date"
   },
+  "course.assessment.statistics.total": {
+    "defaultMessage": "Total"
+  },
+  "course.assessment.statistics.workflowState": {
+    "defaultMessage": "Status"
+  },
   "course.assessment.submission.Annotations.comment": {
     "defaultMessage": "Add Comment"
+  },
+  "course.assessment.submission.Answer.missingAnswer": {
+    "defaultMessage": "There is no answer submitted for this question - this might be caused by the addition of this question after the submission is submitted."
+  },
+  "course.assessment.submission.Answer.rendererNotImplemented": {
+    "defaultMessage": "The display for this question type has not been implemented yet."
   },
   "course.assessment.submission.CodaveriFeedbackStatus.codaveriFeedbackStatus": {
     "defaultMessage": "Codaveri Feedback Status"
@@ -2594,14 +3050,41 @@
   "course.assessment.submission.EvaluatorErrorPanel.emailSubject": {
     "defaultMessage": "[Bug Report] Evaluator Error"
   },
+  "course.assessment.submission.FileInput.exactlyOneFileUploadAllowed": {
+    "defaultMessage": "*You must upload EXACTLY 1 file for this question"
+  },
+  "course.assessment.submission.FileInput.fileName": {
+    "defaultMessage": "{index}. {name}"
+  },
+  "course.assessment.submission.FileInput.fileTooLargeErrorMessage": {
+    "defaultMessage": "The following files have size larger than allowed ({maxAttachmentSize} MB)"
+  },
+  "course.assessment.submission.FileInput.fileUploadErrorTitle": {
+    "defaultMessage": "Error in Uploading Files"
+  },
+  "course.assessment.submission.FileInput.onlyOneFileUploadAllowed": {
+    "defaultMessage": "*You can only upload AT MOST {maxAttachments} file for this question"
+  },
+  "course.assessment.submission.FileInput.requiredUploadLimitedNumberOfFiles": {
+    "defaultMessage": "*You can upload AT LEAST 1 and AT MOST {maxAttachments} files for this question"
+  },
+  "course.assessment.submission.FileInput.tooManyFilesErrorMessage": {
+    "defaultMessage": "You have attempted to upload {numFiles} files, but ONLY {maxAttachmentsAllowed} {maxAttachmentsAllowed, plural, one {file} other {files}} can be uploaded {numAttachments, plural, =0 {} one {since 1 file has been uploaded before} other {since {numAttachments} files has been uploaded before}}"
+  },
   "course.assessment.submission.FileInput.uploadDisabled": {
     "defaultMessage": "File upload disabled"
   },
   "course.assessment.submission.FileInput.uploadLabel": {
     "defaultMessage": "Drag and drop or click to upload files"
   },
+  "course.assessment.submission.ImportedFileView.delete": {
+    "defaultMessage": "Delete"
+  },
   "course.assessment.submission.ImportedFileView.deleteConfirmation": {
-    "defaultMessage": "Are you sure you want to delete this file?"
+    "defaultMessage": "Are you sure you want to delete \"{fileName}\"?"
+  },
+  "course.assessment.submission.ImportedFileView.deleteTitle": {
+    "defaultMessage": "Delete File"
   },
   "course.assessment.submission.ImportedFileView.noFiles": {
     "defaultMessage": "No files uploaded."
@@ -2609,17 +3092,11 @@
   "course.assessment.submission.ImportedFileView.uploadedFiles": {
     "defaultMessage": "Uploaded Files:"
   },
-  "course.assessment.submission.Answer.missingAnswer": {
-    "defaultMessage": "There is no answer submitted for this question - this might be caused by the addition of this question after the submission is submitted."
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds": {
+    "defaultMessage": "{hrs, plural, one {# hour} other {# hours}} {mins, plural, =0 {} one {# minute} other {# minutes}} {secs, plural, =0 {} one {# second} other {# seconds}}"
   },
-  "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
-    "defaultMessage": "No past answers."
-  },
-  "course.assessment.submission.Answer.rendererNotImplemented": {
-    "defaultMessage": "The display for this question type has not been implemented yet."
-  },
-  "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
-    "defaultMessage": "Past Answers"
+  "course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds": {
+    "defaultMessage": "{secs, plural, one {# second} other {# seconds}}"
   },
   "course.assessment.submission.SubmissionsIndex.accessLogs": {
     "defaultMessage": "Access Logs"
@@ -2653,6 +3130,9 @@
   },
   "course.assessment.submission.SubmissionsIndex.experiencePoints": {
     "defaultMessage": "EXP Awarded"
+  },
+  "course.assessment.submission.SubmissionsIndex.fetchFromKoditsu": {
+    "defaultMessage": "Fetch Submissions from Koditsu"
   },
   "course.assessment.submission.SubmissionsIndex.forceSubmit": {
     "defaultMessage": "Force Submit Remaining"
@@ -2702,6 +3182,9 @@
   "course.assessment.submission.SubmissionsIndex.userName": {
     "defaultMessage": "Name"
   },
+  "course.assessment.submission.TestCaseView.allFailed": {
+    "defaultMessage": "All failed"
+  },
   "course.assessment.submission.TestCaseView.allPassed": {
     "defaultMessage": "All passed"
   },
@@ -2741,8 +3224,17 @@
   "course.assessment.submission.TestCaseView.standardOutput": {
     "defaultMessage": "Standard Output"
   },
+  "course.assessment.submission.TestCaseView.testCasesPassed": {
+    "defaultMessage": "{numPassed}/{numTestCases} passed"
+  },
   "course.assessment.submission.UploadedFileView.deleteConfirmation": {
-    "defaultMessage": "Are you sure you want to delete this attachment?"
+    "defaultMessage": "Are you sure you want to delete {fileName}?"
+  },
+  "course.assessment.submission.UploadedFileView.deleteTitle": {
+    "defaultMessage": "Delete File"
+  },
+  "course.assessment.submission.UploadedFileView.deleting": {
+    "defaultMessage": "Delete"
   },
   "course.assessment.submission.UploadedFileView.noFiles": {
     "defaultMessage": "No files uploaded."
@@ -2751,7 +3243,7 @@
     "defaultMessage": "Uploaded Files"
   },
   "course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain": {
-    "defaultMessage": "Drag your audio file here, or click to select an audio file. Only wav and mp3 formats are supported. Alternatively, you may use the recorder below to record your response"
+    "defaultMessage": "Drag and drop or click to upload your WAV / MP3 files. Alternatively, use the recorder below to record your response"
   },
   "course.assessment.submission.VoiceResponseAnswer.pleaseRecordYourVoice": {
     "defaultMessage": "Please record your voice"
@@ -2876,6 +3368,12 @@
   "course.assessment.submission.answerSubmitted": {
     "defaultMessage": "Answer Submitted"
   },
+  "course.assessment.submission.answers.AnswerHeader.noPastAnswers": {
+    "defaultMessage": "No past answers."
+  },
+  "course.assessment.submission.answers.AnswerHeader.viewPastAnswers": {
+    "defaultMessage": "Past Answers"
+  },
   "course.assessment.submission.answers.ForumPostResponse.ForumCard.forumCardTitleTypeNoneSelected": {
     "defaultMessage": "Forum"
   },
@@ -2948,11 +3446,23 @@
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab": {
     "defaultMessage": "View Topic"
   },
-  "course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile": {
-    "defaultMessage": "Download File"
-  },
   "course.assessment.submission.answers.Programming.ProgrammingFile.sizeTooBig": {
     "defaultMessage": "The file is too big and cannot be displayed."
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete": {
+    "defaultMessage": "Dismiss"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike": {
+    "defaultMessage": "Dislike"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike": {
+    "defaultMessage": "Like"
+  },
+  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
+    "defaultMessage": "Line {linenum}"
+  },
+  "course.assessment.submission.attachmentRequired": {
+    "defaultMessage": "*please upload AT LEAST 1 file for this question"
   },
   "course.assessment.submission.attemptedAt": {
     "defaultMessage": "Attempted At"
@@ -2977,12 +3487,6 @@
   },
   "course.assessment.submission.codaveriAutogradeFailure": {
     "defaultMessage": "There is an error while evaluating your code in Codaveri. Try submitting your code again in a couple of minutes or check the error message in the network response."
-  },
-  "course.assessment.submission.liveFeedbackNoneGenerated": {
-    "defaultMessage": "Question {questionIndex}: No feedback generated."
-  },
-  "course.assessment.submission.liveFeedbackSuccess": {
-    "defaultMessage": "Question {questionIndex}: Feedback successfully generated."
   },
   "course.assessment.submission.comment.CodaveriCommentCard.finalise": {
     "defaultMessage": "Finalise and Post Feedback"
@@ -3025,18 +3529,6 @@
   },
   "course.assessment.submission.comments": {
     "defaultMessage": "Comments"
-  },
-  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDelete": {
-    "defaultMessage": "Dismiss"
-  },
-  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemDislike": {
-    "defaultMessage": "Dislike"
-  },
-  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLike": {
-    "defaultMessage": "Like"
-  },
-  "course.assessment.submission.answers.Programming.ProgrammingFiles.liveFeedbackItemLineHeading": {
-    "defaultMessage": "Line {linenum}"
   },
   "course.assessment.submission.continue": {
     "defaultMessage": "Continue"
@@ -3083,6 +3575,9 @@
   "course.assessment.submission.emptyAssessment": {
     "defaultMessage": "This assessment currently has no questions."
   },
+  "course.assessment.submission.errorUnknown": {
+    "defaultMessage": "Error is Unknown"
+  },
   "course.assessment.submission.examDialogMessage": {
     "defaultMessage": "Please do not sign out or close the browser, otherwise you may have trouble continuing the exam."
   },
@@ -3091,6 +3586,15 @@
   },
   "course.assessment.submission.expAwarded": {
     "defaultMessage": "EXP Awarded"
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuConfirmation": {
+    "defaultMessage": "Are you sure you want to fetch all submissions from Koditsu? all the existing answers here will be overwritten by the newer one. NOTE THAT THIS ACTION IS IRREVERSIBLE!"
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuPending": {
+    "defaultMessage": "Please wait as the submissions are currently being fetched from Koditsu."
+  },
+  "course.assessment.submission.fetchSubmissionsFromKoditsuSuccess": {
+    "defaultMessage": "All submissions have been fetched successfully from Koditsu"
   },
   "course.assessment.submission.finalise": {
     "defaultMessage": "Finalise Submission"
@@ -3131,9 +3635,6 @@
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "Grade Summary"
   },
-  "course.assessment.submission.gradeUnsaved": {
-    "defaultMessage": "Unsaved"
-  },
   "course.assessment.submission.gradeUnsavedHint": {
     "defaultMessage": "This grade is not yet saved. Click Save Grade at the end of the page to save all grade changes."
   },
@@ -3158,8 +3659,23 @@
   "course.assessment.submission.invalidFileUpload": {
     "defaultMessage": "File uploads failed: Only java files can be uploaded"
   },
+  "course.assessment.submission.isSaved": {
+    "defaultMessage": "Saved"
+  },
+  "course.assessment.submission.isSaving": {
+    "defaultMessage": "Saving"
+  },
+  "course.assessment.submission.isUnsaved": {
+    "defaultMessage": "Unsaved"
+  },
   "course.assessment.submission.lateSubmission": {
     "defaultMessage": "This submission is LATE! You may want to penalize the student for late submission."
+  },
+  "course.assessment.submission.liveFeedbackNoneGenerated": {
+    "defaultMessage": "Question {questionIndex}: No feedback generated."
+  },
+  "course.assessment.submission.liveFeedbackSuccess": {
+    "defaultMessage": "Question {questionIndex}: Feedback successfully generated."
   },
   "course.assessment.submission.loadingComment": {
     "defaultMessage": "Loading comment field..."
@@ -3209,6 +3725,24 @@
   "course.assessment.submission.ok": {
     "defaultMessage": "OK"
   },
+  "course.assessment.submission.onlyOneAttachmentAllowed": {
+    "defaultMessage": "*ONLY 1 file is allowed for this question"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.attempting": {
+    "defaultMessage": "Attempting"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.graded": {
+    "defaultMessage": "Graded, unpublished"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.published": {
+    "defaultMessage": "Graded"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.submitted": {
+    "defaultMessage": "Submitted"
+  },
+  "course.assessment.submission.pages.LogsIndex.LogsHead.unknown": {
+    "defaultMessage": "Unknown status, please contact administrator"
+  },
   "course.assessment.submission.pastAnswers": {
     "defaultMessage": "Past Answers"
   },
@@ -3254,6 +3788,12 @@
   "course.assessment.submission.reevaluate": {
     "defaultMessage": "Re-evaluate Answer"
   },
+  "course.assessment.submission.remainingBufferTime": {
+    "defaultMessage": "Finalising in: {timeLimit}"
+  },
+  "course.assessment.submission.remainingTime": {
+    "defaultMessage": "Time Remaining: {timeLimit}"
+  },
   "course.assessment.submission.rendererNotImplemented": {
     "defaultMessage": "The display for this question type has not been implemented yet."
   },
@@ -3277,6 +3817,15 @@
   },
   "course.assessment.submission.saveGrade": {
     "defaultMessage": "Save Grade"
+  },
+  "course.assessment.submission.saved": {
+    "defaultMessage": "Saved"
+  },
+  "course.assessment.submission.saving": {
+    "defaultMessage": "Saving"
+  },
+  "course.assessment.submission.savingFailed": {
+    "defaultMessage": "Saving Failed"
   },
   "course.assessment.submission.sendReminderEmailConfirmation": {
     "defaultMessage": "Send reminder emails to {unattempted} unattempted and {attempting} attempting user(s) ({selectedUsers}) who have not completed the assessment?"
@@ -3314,6 +3863,9 @@
   "course.assessment.submission.submissionBy": {
     "defaultMessage": "Submission by {name}"
   },
+  "course.assessment.submission.submissionError": {
+    "defaultMessage": "There is a problem in submitting question for {questions}"
+  },
   "course.assessment.submission.submissionsHeader": {
     "defaultMessage": "Submissions: {assessment}"
   },
@@ -3331,6 +3883,21 @@
   },
   "course.assessment.submission.submittedAt": {
     "defaultMessage": "Submitted At"
+  },
+  "course.assessment.submission.timeIsUp": {
+    "defaultMessage": "Time is Up!"
+  },
+  "course.assessment.submission.timedAssessmentDialogMessage": {
+    "defaultMessage": "{stillSomeTimeRemaining, select, true {Once the time is up, the assessment will be automatically finalised.} other {Finalising the submission now!}}"
+  },
+  "course.assessment.submission.timedAssessmentDialogTitle": {
+    "defaultMessage": "{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {remaining}} to complete this assessment.} other {The assessment has ended!}}"
+  },
+  "course.assessment.submission.timedExamDialogMessage": {
+    "defaultMessage": "{stillSomeTimeRemaining, select, true {Please do not sign out or close the browser while attempting this exam. Once the time is up, the assessment will be automatically finalised.} other {Finalising the submission now!}}"
+  },
+  "course.assessment.submission.timedExamDialogTitle": {
+    "defaultMessage": "{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {remaining}} to complete this exam.} other {The exam has ended!}}"
   },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "Total Grade"
@@ -3367,6 +3934,9 @@
   },
   "course.assessment.submission.updateFailure": {
     "defaultMessage": "Submission update failed: {errors}"
+  },
+  "course.assessment.submission.updateIndividualSuccess": {
+    "defaultMessage": "Submission for {errors} updated successfully"
   },
   "course.assessment.submission.updateSuccess": {
     "defaultMessage": "Submission updated successfully."
@@ -3485,6 +4055,18 @@
   "course.assessments.index.hasTodo": {
     "defaultMessage": "Has TODO"
   },
+  "course.assessments.index.inviteToKoditsu": {
+    "defaultMessage": "Invite users to Koditsu Exam"
+  },
+  "course.assessments.index.invitingUserToKoditsu": {
+    "defaultMessage": "Inviting users to Koditsu Exam"
+  },
+  "course.assessments.index.invitingUserToKoditsuFailure": {
+    "defaultMessage": "There is a problem in inviting users to Koditsu. Please try again later"
+  },
+  "course.assessments.index.invitingUserToKoditsuSuccess": {
+    "defaultMessage": "Successful in inviting users to Koditsu Exam"
+  },
   "course.assessments.index.neededFor": {
     "defaultMessage": "Needed for"
   },
@@ -3511,6 +4093,9 @@
   },
   "course.assessments.index.submissions": {
     "defaultMessage": "Submissions"
+  },
+  "course.assessments.index.timeLimitIcon": {
+    "defaultMessage": "Time Limit: {timeLimit, plural, one {# minute} other {# minutes}}"
   },
   "course.assessments.index.title": {
     "defaultMessage": "Title"
@@ -3962,14 +4547,14 @@
   "course.duplication.Duplication.duplicateData": {
     "defaultMessage": "Duplicate Data"
   },
-  "course.duplication.Duplication.fromCourse": {
-    "defaultMessage": "Duplicate Data from {courseTitle}"
-  },
   "course.duplication.Duplication.duplicationDisabled": {
     "defaultMessage": "Duplication is disabled for this course."
   },
   "course.duplication.Duplication.existingCourse": {
     "defaultMessage": "Existing Course"
+  },
+  "course.duplication.Duplication.fromCourse": {
+    "defaultMessage": "Duplicate data from {courseTitle}"
   },
   "course.duplication.Duplication.items": {
     "defaultMessage": "Selected Items"
@@ -4092,13 +4677,16 @@
     "defaultMessage": "Disburse Points"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
-    "defaultMessage": "Disburse Experience Points"
+    "defaultMessage": "Experience Points"
+  },
+  "course.experiencePoints.disbursement.DisbursementIndex.experienceTab": {
+    "defaultMessage": "History"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
     "defaultMessage": "Failed to retrieve data."
   },
   "course.experiencePoints.disbursement.DisbursementIndex.forumTab": {
-    "defaultMessage": "Forum Participation"
+    "defaultMessage": "Forum Participation Disbursement"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.generalTab": {
     "defaultMessage": "General Disbursement"
@@ -4127,6 +4715,15 @@
   "course.experiencePoints.disbursement.FilterForm.weeklyCap": {
     "defaultMessage": "Weekly Cap"
   },
+  "course.experiencePoints.disbursement.ForumDisbursement.fetchDisbursementFailure": {
+    "defaultMessage": "Failed to retrieve data."
+  },
+  "course.experiencePoints.disbursement.ForumDisbursement.fetchForumPostsFailure": {
+    "defaultMessage": "Failed to fetch forum posts."
+  },
+  "course.experiencePoints.disbursement.ForumDisbursement.postListDialogHeader": {
+    "defaultMessage": "Posts created between {startDate} and {endDate} by"
+  },
   "course.experiencePoints.disbursement.ForumDisbursementForm.createDisbursementFailure": {
     "defaultMessage": "Failed to award experience points."
   },
@@ -4135,9 +4732,6 @@
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.fetchForumPostsFailure": {
     "defaultMessage": "Failed to fetch forum posts."
-  },
-  "course.experiencePoints.disbursement.ForumDisbursementForm.postListDialogHeader": {
-    "defaultMessage": "Posts created between {startDate} and {endDate} by"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reason": {
     "defaultMessage": "Reason For Disbursement"
@@ -4177,6 +4771,27 @@
   },
   "course.experiencePoints.disbursement.ForumPostTable.voteTally": {
     "defaultMessage": "Vote Tally"
+  },
+  "course.experiencePoints.disbursement.GeneralDisbursement.fetchDisbursementFailure": {
+    "defaultMessage": "Failed to retrieve data."
+  },
+  "course.experiencePoints.downloadCsvButton": {
+    "defaultMessage": "Download CSV"
+  },
+  "course.experiencePoints.downloadFailure": {
+    "defaultMessage": "An error occurred while doing your request for download."
+  },
+  "course.experiencePoints.downloadPending": {
+    "defaultMessage": "Please wait as your request to download is being processed."
+  },
+  "course.experiencePoints.downloadRequestSuccess": {
+    "defaultMessage": "Your request to download is successful"
+  },
+  "course.experiencePoints.fetchRecordsFailure": {
+    "defaultMessage": "Failed to fetch records"
+  },
+  "course.experiencePoints.filterByNameButton": {
+    "defaultMessage": "Filter by Name"
   },
   "course.forum.FormShow.fetchTopicsFailure": {
     "defaultMessage": "Failed to retrieve forum topic data."
@@ -4415,20 +5030,17 @@
   "course.forum.HideButton.hide": {
     "defaultMessage": "Hide"
   },
-  "course.forum.HideButton.hideTooltip": {
-    "defaultMessage": "Hide topic from students"
-  },
   "course.forum.HideButton.hideFailure": {
     "defaultMessage": "Failed to hide the topic \"{title}\" - {error}"
   },
   "course.forum.HideButton.hideSuccess": {
     "defaultMessage": "The topic \"{title}\" has successfully been hidden."
   },
+  "course.forum.HideButton.hideTooltip": {
+    "defaultMessage": "Hide topic from students"
+  },
   "course.forum.HideButton.unhide": {
     "defaultMessage": "Unhide"
-  },
-  "course.forum.HideButton.unhideTooltip": {
-    "defaultMessage": "Show topic to students"
   },
   "course.forum.HideButton.unhideFailure": {
     "defaultMessage": "Failed to unhide the topic \"{title}\" - {error}"
@@ -4436,11 +5048,14 @@
   "course.forum.HideButton.unhideSuccess": {
     "defaultMessage": "The topic \"{title}\" has successfully been unhidden."
   },
-  "course.forum.LockButton.locked": {
-    "defaultMessage": "Lock"
+  "course.forum.HideButton.unhideTooltip": {
+    "defaultMessage": "Show topic to students"
   },
   "course.forum.LockButton.lockTooltip": {
     "defaultMessage": "Lock to stop students from posting in this topic"
+  },
+  "course.forum.LockButton.locked": {
+    "defaultMessage": "Lock"
   },
   "course.forum.LockButton.lockedFailure": {
     "defaultMessage": "Failed to locked the topic \"{title}\" - {error}"
@@ -4448,11 +5063,11 @@
   "course.forum.LockButton.lockedSuccess": {
     "defaultMessage": "The topic \"{title}\" has successfully been locked."
   },
-  "course.forum.LockButton.unlocked": {
-    "defaultMessage": "Unlock"
-  },
   "course.forum.LockButton.unlockTooltip": {
     "defaultMessage": "Unlock to allow students to post within this topic"
+  },
+  "course.forum.LockButton.unlocked": {
+    "defaultMessage": "Unlock"
   },
   "course.forum.LockButton.unlockedFailure": {
     "defaultMessage": "Failed to unlocked the topic \"{title}\" - {error}"
@@ -4835,8 +5450,26 @@
   "course.leaderboard.LeaderboardTable.average": {
     "defaultMessage": "Average"
   },
+  "course.leaderboard.LeaderboardTable.averageAchievements": {
+    "defaultMessage": "Average Achievements"
+  },
+  "course.leaderboard.LeaderboardTable.averageExperience": {
+    "defaultMessage": "Average Experience"
+  },
   "course.leaderboard.LeaderboardTable.experience": {
     "defaultMessage": "Experience"
+  },
+  "course.leaderboard.LeaderboardTable.level": {
+    "defaultMessage": "Level"
+  },
+  "course.leaderboard.LeaderboardTable.members": {
+    "defaultMessage": "Members"
+  },
+  "course.leaderboard.LeaderboardTable.name": {
+    "defaultMessage": "Name"
+  },
+  "course.leaderboard.LeaderboardTable.rank": {
+    "defaultMessage": "Rank"
   },
   "course.leaderboard.LeaderboardTable.titleAchievements": {
     "defaultMessage": "By Achievements"
@@ -5006,20 +5639,56 @@
   "course.level.Level.levelHeader": {
     "defaultMessage": "Levels"
   },
-  "course.level.Level.saveFailure": {
-    "defaultMessage": "Level saving failed, please try again."
+  "course.level.Level.orderedIncorrectly": {
+    "defaultMessage": "Levels will be sorted automatically when saved regardless of their order here."
   },
-  "course.level.Level.saveLevels": {
-    "defaultMessage": "Save Levels"
+  "course.level.Level.placeholder": {
+    "defaultMessage": "0"
+  },
+  "course.level.Level.reset": {
+    "defaultMessage": "Reset"
+  },
+  "course.level.Level.resetTooltip": {
+    "defaultMessage": "Reset changes"
+  },
+  "course.level.Level.saveChanges": {
+    "defaultMessage": "Save"
+  },
+  "course.level.Level.saveFailure": {
+    "defaultMessage": "Failed to save levels"
   },
   "course.level.Level.saveSuccess": {
     "defaultMessage": "Levels Saved"
   },
   "course.level.Level.thresholdHeader": {
-    "defaultMessage": "Threshold"
+    "defaultMessage": "EXP Threshold"
   },
-  "course.level.LevelRow.zeroThresholdError": {
-    "defaultMessage": "Experience points threshold cannot be 0"
+  "course.level.Level.unsavedChanges": {
+    "defaultMessage": "You have unsaved changes"
+  },
+  "course.material.files.DownloadingFilePage.clickToDownloadFile": {
+    "defaultMessage": "Download {name}"
+  },
+  "course.material.files.DownloadingFilePage.clickToDownloadFileDescription": {
+    "defaultMessage": "Something happened when initiating an automatic download. Click the link below to immediately download the file."
+  },
+  "course.material.files.DownloadingFilePage.downloading": {
+    "defaultMessage": "Downloading {name}"
+  },
+  "course.material.files.DownloadingFilePage.downloadingDescription": {
+    "defaultMessage": "This file should start downloading automatically now. If it doesn't, you can try again by clicking the link below or refreshing this page."
+  },
+  "course.material.files.DownloadingFilePage.tryDownloadingAgain": {
+    "defaultMessage": "Try downloading again"
+  },
+  "course.material.files.ErrorRetrievingFilePage.goToTheWorkbin": {
+    "defaultMessage": "Go to the Workbin"
+  },
+  "course.material.files.ErrorRetrievingFilePage.problemRetrievingFile": {
+    "defaultMessage": "Problem retrieving file"
+  },
+  "course.material.files.ErrorRetrievingFilePage.problemRetrievingFileDescription": {
+    "defaultMessage": "Either it no longer exists, you don't have the permission to access it, or something unexpected happened when we were trying to retrieve it."
   },
   "course.material.folders.DownloadFolderButton.downloadFolderErrorMessage": {
     "defaultMessage": "Download has failed. Please try again later."
@@ -5029,6 +5698,15 @@
   },
   "course.material.folders.DownloadFolderButton.downloading": {
     "defaultMessage": "Downloading..."
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.goToMainFolder": {
+    "defaultMessage": "Go to the main folder"
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.problemRetrievingFolder": {
+    "defaultMessage": "Problem retrieving folder"
+  },
+  "course.material.folders.ErrorRetrievingFolderPage.problemRetrievingFolderDescription": {
+    "defaultMessage": "Either it no longer exists, you don't have the permission to access it, or something unexpected happened when we were trying to retrieve it."
   },
   "course.material.folders.FolderEdit.editSubfolderTitle": {
     "defaultMessage": "Edit Folder"
@@ -5068,6 +5746,9 @@
   },
   "course.material.folders.FolderShow.defaultHeader": {
     "defaultMessage": "Materials"
+  },
+  "course.material.folders.FolderShow.folderNotFound": {
+    "defaultMessage": "Folder not found"
   },
   "course.material.folders.MaterialEdit.editMaterialTitle": {
     "defaultMessage": "Edit Material"
@@ -5114,6 +5795,15 @@
   "course.material.folders.UploadFilesButton.uploadFilesTooltip": {
     "defaultMessage": "Upload"
   },
+  "course.material.folders.WorkbinTable.lastModified": {
+    "defaultMessage": "Last Modified"
+  },
+  "course.material.folders.WorkbinTable.name": {
+    "defaultMessage": "Name"
+  },
+  "course.material.folders.WorkbinTable.startAt": {
+    "defaultMessage": "Start At"
+  },
   "course.material.folders.WorkbinTableButtons.DeletionFailure": {
     "defaultMessage": "could not be deleted"
   },
@@ -5126,20 +5816,65 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "Delete"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
-    "defaultMessage": "No. of Achievements (Total: {courseAchievementCount})"
+  "course.statistics.StatisticsIndex.assessments.averageGrade": {
+    "defaultMessage": "Avg Grade"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.ascending": {
-    "defaultMessage": "Ascending"
+  "course.statistics.StatisticsIndex.assessments.averageTimeTaken": {
+    "defaultMessage": "Avg Time"
+  },
+  "course.statistics.StatisticsIndex.assessments.category": {
+    "defaultMessage": "Category"
+  },
+  "course.statistics.StatisticsIndex.assessments.csvFileTitle": {
+    "defaultMessage": "Assessments Statistics"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadCsv": {
+    "defaultMessage": "Download Score Summary for the following Assessments?"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryFailure": {
+    "defaultMessage": "An error occurred while downloading score summary"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryPending": {
+    "defaultMessage": "Please wait as your request to download is being processed"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummarySuccess": {
+    "defaultMessage": "Successfully downloaded score summary"
+  },
+  "course.statistics.StatisticsIndex.assessments.numLateStudents": {
+    "defaultMessage": "# Late"
+  },
+  "course.statistics.StatisticsIndex.assessments.numSubmittedStudents": {
+    "defaultMessage": "# Attempted"
+  },
+  "course.statistics.StatisticsIndex.assessments.searchBar": {
+    "defaultMessage": "Search by Assessment Title, Tab, or Category"
+  },
+  "course.statistics.StatisticsIndex.assessments.selectedNUsers": {
+    "defaultMessage": "Download Score Summary ({n, plural, =1 {# assessment} other {# assessments}})"
+  },
+  "course.statistics.StatisticsIndex.assessments.startAt": {
+    "defaultMessage": "Starts At"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevGrade": {
+    "defaultMessage": "Stdev Grade"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevTimeTaken": {
+    "defaultMessage": "Stdev Time"
+  },
+  "course.statistics.StatisticsIndex.assessments.tab": {
+    "defaultMessage": "Tab"
+  },
+  "course.statistics.StatisticsIndex.assessments.tableTitle": {
+    "defaultMessage": "Assessments Statistics ({numStudents} students)"
+  },
+  "course.statistics.StatisticsIndex.assessments.title": {
+    "defaultMessage": "Title"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCountDetails": {
+    "defaultMessage": "No. of Achievements (Total: {courseAchievementCount})"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctness": {
     "defaultMessage": "Correctness"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctnessHint": {
-    "defaultMessage": "Correctness is the average grade percentage of all graded assessments by a student."
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.descending": {
-    "defaultMessage": "Descending"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.experiencePoints": {
     "defaultMessage": "Experience Points"
@@ -5148,19 +5883,13 @@
     "defaultMessage": "Tutors"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.highlight": {
-    "defaultMessage": "Highlight top and bottom {percent}%"
+    "defaultMessage": "Highlight top and bottom {percent}% based on {criteria}"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRate": {
     "defaultMessage": "Learning Rate"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRateHint": {
-    "defaultMessage": "A learning rate of 200% means that they can complete the course in half the time."
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.level": {
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelInfo": {
     "defaultMessage": "Level (Max: {maxLevel})"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelFilter": {
-    "defaultMessage": "Level: {name}"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.name": {
     "defaultMessage": "Name"
@@ -5168,11 +5897,8 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.noData": {
     "defaultMessage": "No Data"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.numSubmissions": {
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.numSubmissionsDetails": {
     "defaultMessage": "No. of Submissions (Total: {courseAssessmentCount})"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.phantom": {
-    "defaultMessage": "Include phantom users"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType": {
     "defaultMessage": "Student Type"
@@ -5183,17 +5909,8 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.phantom": {
     "defaultMessage": "Phantom"
   },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tableTitle": {
-    "defaultMessage": "Students Sorted in {direction} {column}"
-  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.title": {
     "defaultMessage": "Student Performance"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tutorFilter": {
-    "defaultMessage": "Tutor: {name}"
-  },
-  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatched": {
-    "defaultMessage": "Video % Count"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatchedHeader": {
     "defaultMessage": "Average Video % Watched"
@@ -5231,14 +5948,14 @@
   "course.statistics.StatisticsIndex.course.StudentProgressionChart.yAxisLabel": {
     "defaultMessage": "Assessment (Sorted by Deadline)"
   },
-  "course.statistics.StatisticsIndex.course.error": {
-    "defaultMessage": "Something went wrong when fetching course statistics! Please refresh to try again."
+  "course.statistics.StatisticsIndex.course.csvFileTitle": {
+    "defaultMessage": "Student Performance Statistics"
   },
-  "course.statistics.StatisticsIndex.course.performanceError": {
-    "defaultMessage": "Something went wrong when fetching course performance statistics! Please refresh to try again."
+  "course.statistics.StatisticsIndex.course.searchBar": {
+    "defaultMessage": "Search by Student Name"
   },
-  "course.statistics.StatisticsIndex.course.progressionError": {
-    "defaultMessage": "Something went wrong when fetching course progression statistics! Please refresh to try again."
+  "course.statistics.StatisticsIndex.header.assessments": {
+    "defaultMessage": "Assessments"
   },
   "course.statistics.StatisticsIndex.header.statistics": {
     "defaultMessage": "Statistics"
@@ -5246,8 +5963,8 @@
   "course.statistics.StatisticsIndex.staff.averageMarkingTime": {
     "defaultMessage": "Avg Time / Assessment"
   },
-  "course.statistics.StatisticsIndex.staff.error": {
-    "defaultMessage": "Something went wrong when fetching staff statistics! Please refresh to try again."
+  "course.statistics.StatisticsIndex.staff.csvFileTitle": {
+    "defaultMessage": "Staff Statistics"
   },
   "course.statistics.StatisticsIndex.staff.name": {
     "defaultMessage": "Name"
@@ -5258,17 +5975,17 @@
   "course.statistics.StatisticsIndex.staff.numStudents": {
     "defaultMessage": "# Students"
   },
+  "course.statistics.StatisticsIndex.staff.searchBar": {
+    "defaultMessage": "Search by Staff Name"
+  },
   "course.statistics.StatisticsIndex.staff.stddev": {
-    "defaultMessage": "Standard Deviation"
+    "defaultMessage": "Stdev Time / Assessment"
   },
   "course.statistics.StatisticsIndex.staff.tableTitle": {
     "defaultMessage": "Staff Statistics"
   },
-  "course.statistics.StatisticsIndex.staffFailure": {
-    "defaultMessage": "Failed to fetch staff data!"
-  },
-  "course.statistics.StatisticsIndex.students.error": {
-    "defaultMessage": "Something went wrong when fetching student statistics! Please refresh to try again."
+  "course.statistics.StatisticsIndex.students.csvFileTitle": {
+    "defaultMessage": "Student Statistics"
   },
   "course.statistics.StatisticsIndex.students.experiencePoints": {
     "defaultMessage": "Experience Points"
@@ -5282,20 +5999,14 @@
   "course.statistics.StatisticsIndex.students.name": {
     "defaultMessage": "Name"
   },
-  "course.statistics.StatisticsIndex.students.noStudents": {
-    "defaultMessage": "There is no student in this course, yet..."
-  },
-  "course.statistics.StatisticsIndex.students.showMyStudentsOnly": {
-    "defaultMessage": "Show My Students Only"
+  "course.statistics.StatisticsIndex.students.searchBar": {
+    "defaultMessage": "Search by Students Name or Student Type"
   },
   "course.statistics.StatisticsIndex.students.studentsType": {
     "defaultMessage": "Student Type"
   },
   "course.statistics.StatisticsIndex.students.tableTitle": {
     "defaultMessage": "Student Statistics ({numStudents} students, {numPhantom} phantom)"
-  },
-  "course.statistics.StatisticsIndex.students.tutorFilter": {
-    "defaultMessage": "Tutor: {name}"
   },
   "course.statistics.StatisticsIndex.students.videoPercentWatched": {
     "defaultMessage": "Average % Watched"
@@ -5321,14 +6032,26 @@
   "course.statistics.course.studentProgressionChart.startAt": {
     "defaultMessage": "Starts at: {startAt}"
   },
-  "course.statistics.failures.coursePerformance": {
-    "defaultMessage": "Failed to fetch course performance data!"
-  },
-  "course.statistics.failures.courseProgression": {
-    "defaultMessage": "Failed to fetch course progression data!"
-  },
   "course.statistics.tabs.course": {
     "defaultMessage": "Course"
+  },
+  "course.statistics.tabs.coursePerformance": {
+    "defaultMessage": "Course Performance"
+  },
+  "course.statistics.tabs.courseProgression": {
+    "defaultMessage": "Course Progression"
+  },
+  "course.stories.CikgoErrorPage.errorFetching": {
+    "defaultMessage": "Either it's supposed to be naught, or something went wrong."
+  },
+  "course.stories.CikgoErrorPage.errorFetchingDescription": {
+    "defaultMessage": "<cikgo>Cikgo</cikgo> is our partner that powers this experience. They were contactable, but did not give us any resources for this request just now. Please try again later, and if this persists, <link>contact us</link>."
+  },
+  "course.stories.pages.LearnPage": {
+    "defaultMessage": "Learn"
+  },
+  "course.stories.pages.MissionControlPage": {
+    "defaultMessage": "Mission Control"
   },
   "course.survey.DeleteSectionButton.deleteSection": {
     "defaultMessage": "Delete Section"
@@ -5987,6 +6710,9 @@
   "course.userInvitation.InviteUsersRegistrationCode.registrationCodeNote": {
     "defaultMessage": "Users who have been invited and use this invitation code to register for the course would not have the proper status reflected in the Invitations page."
   },
+  "course.userInvitations.IndividualInvitations.addRowsByEmail": {
+    "defaultMessage": "Add Rows by Email"
+  },
   "course.userInvitations.IndividualInvitations.appendNewRow": {
     "defaultMessage": "Add Row"
   },
@@ -5995,6 +6721,12 @@
   },
   "course.userInvitations.IndividualInvitations.invite": {
     "defaultMessage": "Invite All Users"
+  },
+  "course.userInvitations.IndividualInvitations.malformedEmail": {
+    "defaultMessage": "{n, plural, one {This email is } other {These emails are }} wrongly formatted: {emails}"
+  },
+  "course.userInvitations.IndividualInvitations.nameEmailInput": {
+    "defaultMessage": "John Doe '<john.doe@example.org'>; \"Doe, Jane\" '<jane.doe@example.org'>; ..."
   },
   "course.userInvitations.IndividualInvitations.namePlaceholder": {
     "defaultMessage": "Awesome User"
@@ -6163,12 +6895,6 @@
   },
   "course.users.ExperiencePointsRecords.experiencePointsHistoryHeader": {
     "defaultMessage": "Experience Points History: {for}"
-  },
-  "course.users.ExperiencePointsRecords.fetchUsersFailure": {
-    "defaultMessage": "Failed to fetch records"
-  },
-  "course.users.ExperiencePointsTable.fetchRecordsFailure": {
-    "defaultMessage": "Failed to fetch records"
   },
   "course.users.ManageStaff.noStaff": {
     "defaultMessage": "No staff in course."
@@ -6485,8 +7211,26 @@
   "course.video.VideoShow.videoTitle": {
     "defaultMessage": "Video - {title}"
   },
+  "course.video.VideoTable.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.video.VideoTable.averageWatched": {
+    "defaultMessage": "Average % Watched"
+  },
   "course.video.VideoTable.noVideo": {
     "defaultMessage": "No Video"
+  },
+  "course.video.VideoTable.published": {
+    "defaultMessage": "Published"
+  },
+  "course.video.VideoTable.startAt": {
+    "defaultMessage": "Start At"
+  },
+  "course.video.VideoTable.title": {
+    "defaultMessage": "Title"
+  },
+  "course.video.VideoTable.watchCount": {
+    "defaultMessage": "Watch Count"
   },
   "course.video.VideosIndex.fetchVideosFailure": {
     "defaultMessage": "Failed to retrieve videos."
@@ -6637,6 +7381,21 @@
   },
   "landing_page.create_an_account": {
     "defaultMessage": "Create an account"
+  },
+  "landing_page.iconEngaging": {
+    "defaultMessage": "Engaging"
+  },
+  "landing_page.iconEngagingSubtitle": {
+    "defaultMessage": "It is built for all teachers. You do not need to have any programming knowledge to master the platform. Coursemology is easy and intuitive to use for both teachers and students."
+  },
+  "landing_page.iconGeneral": {
+    "defaultMessage": "General"
+  },
+  "landing_page.iconGeneralSubtitle": {
+    "defaultMessage": "It is built for all subjects. The gamification system of Coursemology does not make any assumptions on the subject. Through Coursemology, any teacher who teaches any subject can turn his course exercises into an online game."
+  },
+  "landing_page.iconSimple": {
+    "defaultMessage": "Simple"
   },
   "landing_page.new_to_coursemology": {
     "defaultMessage": "New to Coursemology?"
@@ -7160,9 +7919,6 @@
   "lib.translations.yes": {
     "defaultMessage": "Yes"
   },
-  "material.attemptLoader.errorAccessingMaterial": {
-    "defaultMessage": "An error occurred while accessing this material. Try again later."
-  },
   "sysstem.admin.instance.instance.InstanceAdminNavigator.announcements": {
     "defaultMessage": "Announcements"
   },
@@ -7277,14 +8033,23 @@
   "system.admin.admin.InstancesTable.updateSuccess": {
     "defaultMessage": "Renamed {field} from {prevValue} to {newValue}"
   },
+  "system.admin.admin.UsersButton.associatedInstances": {
+    "defaultMessage": "{index}. {instanceName}"
+  },
   "system.admin.admin.UsersButton.deleteTooltip": {
     "defaultMessage": "Delete User"
   },
   "system.admin.admin.UsersButton.deletionConfirm": {
-    "defaultMessage": "Are you sure you wish to delete {role} {name} ({email})?"
+    "defaultMessage": "Are you sure?"
+  },
+  "system.admin.admin.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "Deleting {role} {name} ({email})"
   },
   "system.admin.admin.UsersButton.deletionFailure": {
     "defaultMessage": "Failed to delete user - {error}"
+  },
+  "system.admin.admin.UsersButton.deletionPromptContent": {
+    "defaultMessage": "After deleting this user, all associated instance users in the following instances will be deleted."
   },
   "system.admin.admin.UsersButton.deletionSuccess": {
     "defaultMessage": "User was deleted."
