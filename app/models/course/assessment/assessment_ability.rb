@@ -158,6 +158,7 @@ module Course::Assessment::AssessmentAbility
     allow_teaching_staff_manage_assessments
     allow_teaching_staff_grade_assessment_submissions
     allow_teaching_staff_manage_assessment_annotations
+    allow_teaching_staff_interact_with_live_feedback
     disallow_teaching_staff_publish_assessment_submission_grades
     disallow_teaching_staff_force_submit_assessment_submissions
     disallow_teaching_staff_delete_assessment_submissions
@@ -194,10 +195,15 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_teaching_staff_grade_assessment_submissions
-    can [:update, :reload_answer, :grade, :reevaluate_answer, :generate_feedback, :fetch_submitted_feedback],
+    can [:update, :reload_answer, :grade, :reevaluate_answer, :generate_feedback],
         Course::Assessment::Submission, assessment: assessment_course_hash
     can :grade, Course::Assessment::Answer,
         submission: { assessment: assessment_course_hash }
+  end
+
+  def allow_teaching_staff_interact_with_live_feedback
+    can [:generate_live_feedback, :save_live_feedback, :create_live_feedback_chat, :fetch_live_feedback_status],
+        Course::Assessment::Submission, assessment: assessment_course_hash
   end
 
   def allow_teaching_staff_manage_assessment_annotations
