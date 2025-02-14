@@ -100,17 +100,6 @@ const Programming = (props) => {
 
   const editorRef = useRef(null);
 
-  const focusEditorOnFeedbackLine = (linenum, filename) => {
-    if (filename) {
-      setDisplayFileName(filename);
-    }
-
-    editorRef.current?.editor?.gotoLine(linenum, 0);
-    editorRef.current?.editor?.selection?.setAnchor(linenum - 1, 0);
-    editorRef.current?.editor?.selection?.moveCursorTo(linenum - 1, 0);
-    editorRef.current?.editor?.focus();
-  };
-
   const feedbackFiles = useAppSelector(
     (state) =>
       state.assessments.submission.liveFeedback?.feedbackByQuestion?.[
@@ -154,11 +143,7 @@ const Programming = (props) => {
         </div>
         {isLiveFeedbackChatOpen && isAttempting && (
           <div className="absolute h-[100%] flex w-1/2 whitespace-nowrap right-0">
-            <GetHelpChatPage
-              answerId={answerId}
-              onFeedbackClick={focusEditorOnFeedbackLine}
-              questionId={question.id}
-            />
+            <GetHelpChatPage answerId={answerId} questionId={question.id} />
           </div>
         )}
       </div>

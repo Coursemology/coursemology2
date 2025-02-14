@@ -33,11 +33,11 @@ class Course::Assessment::Answer::LiveFeedback::ThreadService
   end
 
   def extend_thread_object_with_custom_prompt
-    return unless @custom_prompt
+    return if @custom_prompt.blank?
 
-    @thread_object.merge({
+    @thread_object = @thread_object.merge({
       message: {
-        role: 'user',
+        role: 'system',
         content: (@custom_prompt.length >= 500) ? "#{@custom_prompt[0...495]}..." : @custom_prompt
       }
     })
