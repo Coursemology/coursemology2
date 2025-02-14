@@ -22,3 +22,10 @@ export const suggestionsTranslations = defineMessages({
     defaultMessage: 'Where am I wrong?',
   },
 });
+
+export const suggestionFixesTranslations = defineMessages({
+  looksWrong: {
+    id: 'course.assessment.submission.suggestions.looksWrong',
+    defaultMessage: 'Your advice is wrong',
+  },
+});

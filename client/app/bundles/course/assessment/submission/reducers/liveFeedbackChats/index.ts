@@ -14,13 +14,14 @@ import {
   modifyLocalStorageValue,
   setLocalStorageValue,
 } from '../../localStorage/liveFeedbackChat/operations';
-import { suggestionsTranslations } from '../../suggestionTranslations';
+import {
+  suggestionFixesTranslations,
+  suggestionsTranslations,
+} from '../../suggestionTranslations';
 import {
   AnswerFile,
   ChatSender,
   ChatShape,
-  FeedbackLine,
-  FeedbackShape,
   LiveFeedbackChatData,
   Suggestion,
 } from '../../types';
@@ -38,9 +39,17 @@ const initialState: LiveFeedbackChatState = {
   liveFeedbackChatUrl: '',
 };
 
-const sampleSuggestions = (): Suggestion[] => {
+const sampleSuggestions = (
+  isIncludingSuggestionFixes: boolean,
+): Suggestion[] => {
   const suggestions = Object.values(suggestionsTranslations);
-  const chosenSuggestions = shuffle(suggestions).slice(0, 3);
+  const suggestionFixes = Object.values(suggestionFixesTranslations);
+
+  const chosenSuggestions = isIncludingSuggestionFixes
+    ? shuffle(suggestions)
+        .slice(0, 2)
+        .concat(shuffle(suggestionFixes).slice(0, 1))
+    : shuffle(suggestions).slice(0, 3);
 
   return chosenSuggestions.map((suggestion) => {
     return {
@@ -48,49 +57,6 @@ const sampleSuggestions = (): Suggestion[] => {
       defaultMessage: suggestion.defaultMessage,
     };
   });
-};
-
-const sortAndCombineFeedbacks = (
-  numFeedbackFiles: number,
-  answerFilename: string,
-  feedbackLines: {
-    path: string;
-    annotation: FeedbackLine;
-  }[],
-): {
-  path: string;
-  line: number;
-  content: string[];
-}[] => {
-  const processedFeedbackLines: {
-    path: string;
-    line: number;
-    content: string[];
-  }[] = Object.values(
-    feedbackLines.reduce((acc, current) => {
-      if (!acc[(current.path, current.annotation.line)]) {
-        const path = numFeedbackFiles === 1 ? answerFilename : current.path;
-        acc[(current.path, current.annotation.line)] = {
-          path,
-          line: current.annotation.line,
-          content: [current.annotation.content],
-        };
-      } else {
-        acc[(current.path, current.annotation.line)].content = [
-          ...acc[(current.path, current.annotation.line)].content,
-          current.annotation.content,
-        ];
-      }
-
-      return acc;
-    }, {}),
-  );
-
-  processedFeedbackLines
-    .sort((f1, f2) => f1.line - f2.line)
-    .sort((f1, f2) => f1.path.localeCompare(f2.path));
-
-  return processedFeedbackLines;
 };
 
 const defaultValue = (answerId: number): LiveFeedbackChatData => {
@@ -104,7 +70,7 @@ const defaultValue = (answerId: number): LiveFeedbackChatData => {
     isCurrentThreadExpired: false,
     chats: [],
     answerFiles: [],
-    suggestions: sampleSuggestions(),
+    suggestions: sampleSuggestions(false),
   };
 };
 
@@ -233,9 +199,7 @@ export const liveFeedbackChatSlice = createSlice({
             ...liveFeedbackChats.chats,
             {
               sender: ChatSender.student,
-              lineNumber: null,
-              lineContent: null,
-              message: [message],
+              message,
               createdAt: currentTime,
               isError: false,
             },
@@ -279,56 +243,18 @@ export const liveFeedbackChatSlice = createSlice({
       action: PayloadAction<{
         answerId: number;
         overallContent: string | null;
-        feedbackFiles: FeedbackShape[];
       }>,
     ) => {
-      const { answerId, overallContent, feedbackFiles } = action.payload;
+      const { answerId, overallContent } = action.payload;
       const liveFeedbackChats =
         state.liveFeedbackChatPerAnswer.entities[answerId];
 
       if (liveFeedbackChats) {
-        const feedbackLines = feedbackFiles.flatMap((file) =>
-          file.annotations.map((annotation) => ({
-            path: file.path,
-            annotation,
-          })),
-        );
-
-        const sortedAndCombinedFeedbacks = sortAndCombineFeedbacks(
-          feedbackFiles.length,
-          liveFeedbackChats.answerFiles[0].filename,
-          feedbackLines,
-        );
-
-        const answerLines = liveFeedbackChats.answerFiles.reduce(
-          (acc, current) => {
-            if (!acc[current.filename]) {
-              acc[current.filename] = current.content.split('\n');
-            }
-            return acc;
-          },
-          {},
-        );
-
-        const newChats: ChatShape[] = sortedAndCombinedFeedbacks.map((line) => {
-          return {
-            sender: ChatSender.codaveri,
-            filename: line.path,
-            lineNumber: line.line,
-            lineContent: answerLines[line.path][line.line - 1].trim() ?? null,
-            message: line.content,
-            createdAt: moment(new Date()).format(SHORT_TIME_FORMAT),
-            isError: false,
-          };
-        });
-
         const summaryChat: ChatShape[] = overallContent
           ? [
               {
                 sender: ChatSender.codaveri,
-                lineNumber: null,
-                lineContent: null,
-                message: [overallContent],
+                message: overallContent,
                 createdAt: moment(new Date()).format(SHORT_TIME_FORMAT),
                 isError: false,
               },
@@ -338,8 +264,8 @@ export const liveFeedbackChatSlice = createSlice({
         const changes: Partial<LiveFeedbackChatData> = {
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
-          chats: [...liveFeedbackChats.chats, ...summaryChat, ...newChats],
-          suggestions: sampleSuggestions(),
+          chats: [...liveFeedbackChats.chats, ...summaryChat],
+          suggestions: sampleSuggestions(true),
         };
 
         liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
@@ -364,9 +290,7 @@ export const liveFeedbackChatSlice = createSlice({
       if (liveFeedbackChats) {
         const newChat: ChatShape = {
           sender: ChatSender.codaveri,
-          lineNumber: null,
-          lineContent: null,
-          message: [errorMessage],
+          message: errorMessage,
           createdAt: moment(new Date()).format(SHORT_TIME_FORMAT),
           isError: true,
         };
@@ -375,7 +299,7 @@ export const liveFeedbackChatSlice = createSlice({
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
           chats: [...liveFeedbackChats.chats, newChat],
-          suggestions: sampleSuggestions(),
+          suggestions: sampleSuggestions(true),
         };
 
         liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {

@@ -9,7 +9,24 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
   POLL_INTERVAL_SECONDS = 2
   MAX_POLL_RETRIES = 1000
 
-  TestCaseResult = Struct.new(:index, :success, :output, :stdout, :stderr, :exit_code, :exit_signal, keyword_init: true)
+  CODAVERI_STATUS_RUNTIME_ERROR = 'RE'
+  CODAVERI_STATUS_EXIT_SIGNAL = 'SG'
+  CODAVERI_STATUS_TIMEOUT = 'TO'
+  CODAVERI_STATUS_STDOUT_TOO_LONG = 'OL'
+  CODAVERI_STATUS_STDERR_TOO_LONG = 'EL'
+  CODAVERI_STATUS_INTERNAL_ERROR = 'XX'
+
+  TestCaseResult = Struct.new(
+    :index,
+    :success,
+    :output,
+    :stdout,
+    :stderr,
+    :exit_code,
+    :exit_signal,
+    :error,
+    keyword_init: true
+  )
 
   # Represents a result of evaluating an answer.
   Result = Struct.new(:stdout, :stderr, :evaluation_results, :exit_code, :evaluation_id) do
@@ -115,6 +132,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
     }
 
     @codaveri_evaluation_results = nil
+    @codaveri_evaluation_transaction_id = nil
   end
 
   # Makes an API call to Codaveri to run the evaluation, waits for its completion, then returns the
@@ -127,6 +145,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
     construct_grading_object
     response_status, response_body, evaluation_id = request_codaveri_evaluation
     poll_codaveri_evaluation_results(response_status, response_body, evaluation_id)
+    process_evaluation_results
     build_evaluation_result
   end
 
@@ -184,39 +203,91 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
     end
 
     response_success = response_body['success']
-    if response_status == 200 && response_success
-      @codaveri_evaluation_results =
-        (response_body['data']['IOResults'] || []).map(&method(:build_io_test_case_result)) +
-        (response_body['data']['exprResults'] || []).map(&method(:build_expr_test_case_result))
-    else
-      raise CodaveriError,
-            { status: response_status, body: response_body }
+    unless response_status == 200 && response_success
+      raise CodaveriError, { status: response_status, body: response_body }
     end
+
+    @evaluation_response = response_body
+  end
+
+  def process_evaluation_results
+    @codaveri_evaluation_results =
+      (@evaluation_response['data']['IOResults'] || []).map(&method(:build_io_test_case_result)) +
+      (@evaluation_response['data']['exprResults'] || []).map(&method(:build_expr_test_case_result))
+    @codaveri_evaluation_transaction_id = @evaluation_response['transactionId']
+  end
+
+  def status_error_messages
+    {
+      CODAVERI_STATUS_RUNTIME_ERROR =>
+        I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax'),
+      CODAVERI_STATUS_TIMEOUT =>
+        I18n.t('course.assessment.answer.programming_auto_grading.grade.time_limit_error'),
+      CODAVERI_STATUS_STDOUT_TOO_LONG =>
+        I18n.t('course.assessment.answer.programming_auto_grading.grade.stdout_too_long'),
+      CODAVERI_STATUS_STDERR_TOO_LONG =>
+        I18n.t('course.assessment.answer.programming_auto_grading.grade.stderr_too_long')
+    }
+  end
+
+  def build_codaveri_error_message(result)
+    compile_status, run_status = result.dig('compile', 'status'), result.dig('run', 'status')
+
+    statuses = [compile_status, run_status]
+
+    error_key = status_error_messages.keys.find { |key| statuses.include?(key) }
+    return status_error_messages[error_key] if error_key
+
+    if [CODAVERI_STATUS_EXIT_SIGNAL, CODAVERI_STATUS_INTERNAL_ERROR].include?(compile_status)
+      compile_message = result.dig('compile', 'message')
+      return I18n.t('course.assessment.answer.programming_auto_grading.job.failure.generic_error',
+                    error: "Codaveri transaction id: #{@codaveri_evaluation_transaction_id}, #{compile_message}")
+    end
+
+    if [CODAVERI_STATUS_EXIT_SIGNAL, CODAVERI_STATUS_INTERNAL_ERROR].include?(run_status)
+      run_message = result.dig('run', 'message')
+      return I18n.t('course.assessment.answer.programming_auto_grading.job.failure.generic_error',
+                    error: "Codaveri transaction id: #{@codaveri_evaluation_transaction_id}, #{run_message}")
+    end
+
+    ''
+  end
+
+  def build_test_case_stdout(result)
+    [result.dig('compile', 'stdout'), result.dig('run', 'stdout')].compact.join("\n")
+  end
+
+  def build_test_case_stderr(result)
+    [result.dig('compile', 'stderr'), result.dig('run', 'stderr')].compact.join("\n")
   end
 
   def build_io_test_case_result(result)
+    result_error_message = build_codaveri_error_message(result)
     result_run = result['run']
     TestCaseResult.new(
       index: result['testcase']['index'].to_i,
       success: result_run['success'],
-      output: result_run['stdout'],
-      stdout: result_run['stdout'],
-      stderr: result_run['stderr'],
+      output: result_error_message.blank? ? result_run['stdout'] : '',
+      stdout: build_test_case_stdout(result),
+      stderr: build_test_case_stderr(result),
       exit_code: result_run['code'],
-      exit_signal: result_run['signal']
+      exit_signal: result_run['signal'],
+      error: result_error_message
     )
   end
 
   def build_expr_test_case_result(result)
+    result_error_message = build_codaveri_error_message(result)
     result_run = result['run']
     TestCaseResult.new(
       index: result['testcase']['index'].to_i,
       success: result_run['success'],
-      output: result_run['displayValue'],
-      stdout: result_run['stdout'],
-      stderr: result_run['stderr'],
+      output: result_error_message.blank? ? result_run['displayValue'] : '',
+      stdout: build_test_case_stdout(result),
+      stderr: build_test_case_stderr(result),
       exit_code: result_run['code'],
-      exit_signal: result_run['signal']
+      exit_signal: result_run['signal'],
+      error: result_error_message
     )
   end
 

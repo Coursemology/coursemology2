@@ -9,6 +9,12 @@ en:
               or unsupported libraries are used, please check your code again.
             evaluation_failed_time_or_memory: >
               Your code failed to complete within the allocated time or memory limits.
+            stdout_too_long: >
+              Your code's execution was terminated because it generated too much output in stdout.
+              Please exclude unnecessary output and try again.
+            stderr_too_long: >
+              Your code's execution was terminated because it generated too much output in stderr.
+              Please exclude unnecessary output and try again.
             time_limit_error: >
               Time Limit Exceeded (TLE) Error
             memory_limit_error: >

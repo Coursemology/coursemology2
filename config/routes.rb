@@ -250,7 +250,6 @@ Rails.application.routes.draw do
               post :reload_answer, on: :member
               post :reevaluate_answer, on: :member
               post :generate_feedback, on: :member
-              get :fetch_submitted_feedback, on: :member
               post :generate_live_feedback, on: :member
               post :create_live_feedback_chat, on: :member
               get :fetch_live_feedback_status, on: :collection

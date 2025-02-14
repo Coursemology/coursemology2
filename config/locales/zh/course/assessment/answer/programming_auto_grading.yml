@@ -8,6 +8,12 @@ zh:
               你的代码无法运行，可能存在语法错误或者使用了不支持的库，请再次检查代码。
             evaluation_failed_time_or_memory: >
               你的代码未能在指定的时间/内存限制内完成。
+            stdout_too_long: >
+              由于代码执行时在 stdout 生成了过多输出，因此被终止。
+              请排除不必要的输出后重试。
+            stderr_too_long: >
+              由于代码执行时在 stderr 生成了过多输出，因此被终止。
+              请排除不必要的输出后重试。
             time_limit_error: >
               错误：超过时间限制 (TLE)
             memory_limit_error: >

@@ -9,6 +9,12 @@ ko:
               사용되었을 수 있습니다. 코드를 다시 확인해 주세요.
             evaluation_failed_time_or_memory: >
               코드가 할당된 시간 또는 메모리 제한 내에 완료되지 않았습니다.
+            stdout_too_long: >
+              코드 실행이 너무 많은 stdout 출력을 생성하여 중단되었습니다.
+              불필요한 출력을 제거하고 다시 시도해주세요.
+            stderr_too_long: >
+              코드 실행이 너무 많은 stderr 출력을 생성하여 중단되었습니다.
+              불필요한 출력을 제거하고 다시 시도해주세요.
             time_limit_error: >
               시간 제한 초과 (TLE) 오류
             memory_limit_error: >

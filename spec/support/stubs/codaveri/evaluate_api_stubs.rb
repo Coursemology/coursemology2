@@ -17,7 +17,7 @@ module Codaveri::EvaluateApiStubs
                 stderr: '',
                 code: 0,
                 signal: nil,
-                display: '\'GCAUUU\'\n',
+                displayValue: '\'GCAUUU\'\n',
                 success: 1
               },
               testcase: {
@@ -30,7 +30,7 @@ module Codaveri::EvaluateApiStubs
                 stderr: '',
                 code: 0,
                 signal: nil,
-                display: '\'GCAUUU\'\n',
+                displayValue: '\'GCAUUU\'\n',
                 success: 1
               },
               testcase: {
@@ -43,7 +43,7 @@ module Codaveri::EvaluateApiStubs
                 stderr: '',
                 code: 0,
                 signal: nil,
-                display: 'True\n',
+                displayValue: 'True\n',
                 success: 1
               },
               testcase: {
@@ -57,7 +57,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: 'True\n',
+                displayValue: 'True\n',
                 success: 1
               },
               testcase: {
@@ -71,7 +71,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: 'False\n',
+                displayValue: 'False\n',
                 success: 1
               },
               testcase: {
@@ -85,7 +85,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: '\'rna\'\n',
+                displayValue: '\'rna\'\n',
                 success: 1
               },
               testcase: {
@@ -99,11 +99,129 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: '\'dna\'\n',
+                displayValue: '\'dna\'\n',
                 success: 1
               },
               testcase: {
                 index: ids[6].to_s
+              }
+            }
+          ]
+        },
+        transactionId: '66598c55fac28dd29e968852'
+      }.to_json
+    }
+  end
+
+  def evaluate_error_status_final_result
+    ids = test_cases_id_from_factory.map(&:to_s)
+    {
+      status: 200,
+      body: {
+        success: true,
+        message: 'Evaluation successfully generated',
+        data: {
+          id: '6659878d3ad73c7a4aac96f0',
+          exprResults: [
+            {
+              run: {
+                stdout: '\'GCAUUU\'\n',
+                stderr: 'Error',
+                code: 0,
+                signal: nil,
+                displayValue: '\'GCAUUU\'\n',
+                success: 0,
+                status: 'RE',
+                message: 'Runtime Error'
+              },
+              testcase: {
+                index: ids[0].to_s
+              }
+            },
+            {
+              run: {
+                stdout: '\'GCAUUU\'\n',
+                stderr: 'Error',
+                code: 0,
+                signal: 'SIGKILL',
+                displayValue: '\'GCAUUU\'\n',
+                success: 0,
+                status: 'SG',
+                message: 'Killed'
+              },
+              testcase: {
+                index: ids[1].to_s
+              }
+            },
+            {
+              run: {
+                stdout: '\'GCAUUU\'\n',
+                stderr: 'Error',
+                code: 0,
+                signal: nil,
+                displayValue: '\'GCAUUU\'\n',
+                success: 0,
+                status: 'TO',
+                message: 'Timeout'
+              },
+              testcase: {
+                index: ids[2].to_s
+              }
+            },
+            {
+              run: {
+                stdout: '\'GCAUUU\'\n',
+                stderr: 'Error',
+                code: 0,
+                signal: nil,
+                displayValue: '\'GCAUUU\'\n',
+                success: 0,
+                status: 'XX',
+                message: 'Internal Run Error'
+              },
+              testcase: {
+                index: ids[3].to_s
+              }
+            }
+          ]
+        },
+        transactionId: '66598c55fac28dd29e968852'
+      }.to_json
+    }
+  end
+
+  def evaluate_result_with_compile_stage
+    ids = test_cases_id_from_factory.map(&:to_s)
+    {
+      status: 200,
+      body: {
+        success: true,
+        message: 'Evaluation successfully generated',
+        data: {
+          id: '6659878d3ad73c7a4aac96f0',
+          exprResults: [
+            {
+              compile: {
+                stdout: 'One',
+                stderr: 'Three',
+                code: 0,
+                signal: nil,
+                success: 1,
+                status: nil,
+                message: nil
+              },
+              run: {
+                stdout: 'Two',
+                stderr: 'Four',
+                code: 0,
+                signal: nil,
+                displayValue: '\'GCAUUU\'\n',
+                success: 0,
+                status: 'RE',
+                message: 'Runtime Error'
+              },
+              testcase: {
+                index: ids[0].to_s
               }
             }
           ]
@@ -164,7 +282,7 @@ module Codaveri::EvaluateApiStubs
                 code: 1,
                 signal: nil,
                 stdin: '',
-                display: '\'GCAUUA\'\n',
+                displayValue: '\'GCAUUA\'\n',
                 success: 0
               },
               testcase: {
@@ -178,7 +296,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: '\'GCAUUU\'\n',
+                displayValue: '\'GCAUUU\'\n',
                 success: 1
               },
               testcase: {
@@ -192,7 +310,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: 'True\n',
+                displayValue: 'True\n',
                 success: 1
               },
               testcase: {
@@ -206,7 +324,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: 'True\n',
+                displayValue: 'True\n',
                 success: 1
               },
               testcase: {
@@ -220,7 +338,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: 'False\n',
+                displayValue: 'False\n',
                 success: 1
               },
               testcase: {
@@ -234,7 +352,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: '\'rna\'\n',
+                displayValue: '\'rna\'\n',
                 success: 1
               },
               testcase: {
@@ -248,7 +366,7 @@ module Codaveri::EvaluateApiStubs
                 code: 0,
                 signal: nil,
                 stdin: '',
-                display: '\'dna\'\n',
+                displayValue: '\'dna\'\n',
                 success: 1
               },
               testcase: {
@@ -266,9 +384,11 @@ module Codaveri::EvaluateApiStubs
   end
 
   module_function \
-    :evaluate_failure_final_result, \
-    :evaluate_success_final_result, \
-    :evaluate_wrong_answer_final_result, \
+    :evaluate_result_with_compile_stage,
+    :evaluate_error_status_final_result,
+    :evaluate_failure_final_result,
+    :evaluate_success_final_result,
+    :evaluate_wrong_answer_final_result,
     :test_cases_id_from_factory
 end
 # rubocop: enable Metrics/ModuleLength
