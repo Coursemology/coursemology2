@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_12_162346) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -1352,6 +1352,52 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
     t.datetime "updated_at", precision: nil
   end
 
+  create_table "live_feedback_files", force: :cascade do |t|
+    t.string "filename", null: false
+    t.text "content", null: false
+  end
+
+  create_table "live_feedback_message_files", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.bigint "file_id", null: false
+    t.index ["file_id"], name: "index_live_feedback_message_files_on_file_id"
+    t.index ["message_id"], name: "index_live_feedback_message_files_on_message_id"
+  end
+
+  create_table "live_feedback_message_options", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.bigint "option_id", null: false
+    t.index ["message_id"], name: "index_live_feedback_message_options_on_message_id"
+    t.index ["option_id"], name: "index_live_feedback_message_options_on_option_id"
+  end
+
+  create_table "live_feedback_messages", force: :cascade do |t|
+    t.bigint "thread_id", null: false
+    t.bigint "option_id"
+    t.bigint "creator_id"
+    t.boolean "is_error", default: false, null: false
+    t.string "content", null: false
+    t.datetime "created_at", null: false
+    t.index ["creator_id"], name: "index_live_feedback_messages_on_creator_id"
+    t.index ["option_id"], name: "index_live_feedback_messages_on_option_id"
+    t.index ["thread_id"], name: "index_live_feedback_messages_on_thread_id"
+  end
+
+  create_table "live_feedback_options", force: :cascade do |t|
+    t.integer "option_type", null: false
+    t.boolean "is_enabled", default: false, null: false
+  end
+
+  create_table "live_feedback_threads", force: :cascade do |t|
+    t.bigint "submission_question_id", null: false
+    t.bigint "submission_creator_id", null: false
+    t.string "codaveri_thread_id", null: false
+    t.boolean "is_active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.index ["submission_creator_id"], name: "index_live_feedback_threads_on_submission_creator_id"
+    t.index ["submission_question_id"], name: "index_live_feedback_threads_on_submission_question_id"
+  end
+
   create_table "oauth_access_grants", force: :cascade do |t|
     t.bigint "resource_owner_id", null: false
     t.bigint "application_id", null: false
@@ -1692,6 +1738,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
   add_foreign_key "instance_user_role_requests", "users", name: "fk_instance_user_role_requests_user_id"
   add_foreign_key "instance_users", "instances", name: "fk_instance_users_instance_id"
   add_foreign_key "instance_users", "users", name: "fk_instance_users_user_id"
+  add_foreign_key "live_feedback_message_files", "live_feedback_files", column: "file_id"
+  add_foreign_key "live_feedback_message_files", "live_feedback_messages", column: "message_id"
+  add_foreign_key "live_feedback_message_options", "live_feedback_messages", column: "message_id"
+  add_foreign_key "live_feedback_message_options", "live_feedback_options", column: "option_id"
+  add_foreign_key "live_feedback_messages", "live_feedback_options", column: "option_id"
+  add_foreign_key "live_feedback_messages", "live_feedback_threads", column: "thread_id"
+  add_foreign_key "live_feedback_messages", "users", column: "creator_id"
+  add_foreign_key "live_feedback_threads", "course_assessment_submission_questions", column: "submission_question_id"
+  add_foreign_key "live_feedback_threads", "users", column: "submission_creator_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
