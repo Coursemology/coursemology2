@@ -91,7 +91,7 @@ const SubmissionForm: FC<Props> = (props) => {
       liveFeedbackChats.liveFeedbackChatPerAnswer.entities[answerId];
     if (!liveFeedbackChatsForAnswer) return;
 
-    const liveFeedbackId = liveFeedbackChatsForAnswer.liveFeedbackId;
+    const currentThreadId = liveFeedbackChatsForAnswer.currentThreadId;
     const feedbackToken = liveFeedbackChatsForAnswer.pendingFeedbackToken;
     const feedbackUrl = liveFeedbackChats.liveFeedbackChatUrl;
     const noFeedbackMessage = t(translations.liveFeedbackNoneGenerated);
@@ -101,7 +101,7 @@ const SubmissionForm: FC<Props> = (props) => {
         answerId,
         feedbackUrl,
         feedbackToken,
-        liveFeedbackId,
+        currentThreadId,
         noFeedbackMessage,
         errorMessage,
       }),

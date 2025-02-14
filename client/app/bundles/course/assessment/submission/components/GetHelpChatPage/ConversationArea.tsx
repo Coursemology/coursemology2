@@ -25,13 +25,15 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
   const isCurrentThreadExpired = liveFeedbackChats?.isCurrentThreadExpired;
   const { t } = useTranslation();
 
+  const isLiveFeedbackChatLoaded = liveFeedbackChats?.isLiveFeedbackChatLoaded;
+
   const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
   const isPollingLiveFeedback = liveFeedbackChats?.pendingFeedbackToken;
 
   const isRenderingSuggestionChips =
     !isRequestingLiveFeedback && !isPollingLiveFeedback;
 
-  if (!liveFeedbackChats) return null;
+  if (!liveFeedbackChats || !isLiveFeedbackChatLoaded) return null;
 
   const justifyPosition = (isStudent: boolean, isError: boolean): string => {
     if (isStudent) {

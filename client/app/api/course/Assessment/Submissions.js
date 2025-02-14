@@ -152,10 +152,17 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     });
   }
 
-  saveLiveFeedback(liveFeedbackId, message) {
+  fetchLiveFeedbackChat(answerId) {
+    return this.client.get(`${this.#urlPrefix}/fetch_live_feedback_chat`, {
+      params: { answer_id: answerId },
+    });
+  }
+
+  saveLiveFeedback(currentThreadId, content, isError) {
     return this.client.post(`${this.#urlPrefix}/save_live_feedback`, {
-      live_feedback_id: liveFeedbackId,
-      message,
+      current_thread_id: currentThreadId,
+      content,
+      is_error: isError,
     });
   }
 

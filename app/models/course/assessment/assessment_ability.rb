@@ -73,7 +73,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_create_assessment_submission
-    can :create, Course::Assessment::Submission,
+    can [:create, :fetch_live_feedback_chat], Course::Assessment::Submission,
         experience_points_record: { course_user: { user_id: user.id } }
     can [:update, :generate_live_feedback, :save_live_feedback,
          :create_live_feedback_chat, :fetch_live_feedback_status],
@@ -202,7 +202,8 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_teaching_staff_interact_with_live_feedback
-    can [:generate_live_feedback, :save_live_feedback, :create_live_feedback_chat, :fetch_live_feedback_status],
+    can [:generate_live_feedback, :save_live_feedback, :create_live_feedback_chat,
+         :fetch_live_feedback_status, :fetch_live_feedback_chat],
         Course::Assessment::Submission, assessment: assessment_course_hash
   end
 

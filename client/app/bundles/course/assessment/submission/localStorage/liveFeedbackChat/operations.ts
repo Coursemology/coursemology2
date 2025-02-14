@@ -1,21 +1,21 @@
-import { LiveFeedbackChatData } from '../../types';
+import { LiveFeedbackLocalStorage } from '../../types';
 
 const getLocalStorageKey = (answerId: string | number): string =>
   `liveFeedbackChat-${answerId}`;
 
 export const getLocalStorageValue = (
   answerId: number,
-): LiveFeedbackChatData | null => {
+): LiveFeedbackLocalStorage | null => {
   const key = getLocalStorageKey(answerId);
   const value = localStorage.getItem(key);
   if (!value) return null;
 
-  return JSON.parse(value) as LiveFeedbackChatData;
+  return JSON.parse(value) as LiveFeedbackLocalStorage;
 };
 
 export const setLocalStorageValue = (
   answerId: number,
-  storedValue: LiveFeedbackChatData,
+  storedValue: LiveFeedbackLocalStorage,
 ): void => {
   const key = getLocalStorageKey(answerId);
   if (!key) return;
@@ -25,7 +25,7 @@ export const setLocalStorageValue = (
 
 export const modifyLocalStorageValue = (
   answerId: number,
-  changes: Partial<LiveFeedbackChatData>,
+  changes: Partial<LiveFeedbackLocalStorage>,
 ): void => {
   const value = getLocalStorageValue(answerId);
 
@@ -34,7 +34,7 @@ export const modifyLocalStorageValue = (
     ...Object.fromEntries(
       Object.entries(changes).filter(([_, v]) => v !== undefined),
     ),
-  } as LiveFeedbackChatData;
+  } as LiveFeedbackLocalStorage;
 
   setLocalStorageValue(answerId, modifiedValue);
 };

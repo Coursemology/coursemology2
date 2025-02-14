@@ -1,0 +1,6 @@
+zh:
+  course:
+    assessment:
+      live_feedback:
+        thread:
+          only_one_active_thread: '每个提交问题只能有一个活动线程'
