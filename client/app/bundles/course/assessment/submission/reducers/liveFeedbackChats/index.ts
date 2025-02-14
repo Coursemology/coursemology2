@@ -23,6 +23,8 @@ import {
   ChatSender,
   ChatShape,
   LiveFeedbackChatData,
+  LiveFeedbackLocalStorage,
+  LiveFeedbackThread,
   Suggestion,
 } from '../../types';
 
@@ -31,7 +33,7 @@ export const liveFeedbackChatAdapter =
 
 export interface LiveFeedbackChatState {
   liveFeedbackChatPerAnswer: EntityState<LiveFeedbackChatData>;
-  liveFeedbackChatUrl: string;
+  liveFeedbackChatUrl: string | null;
 }
 
 const initialState: LiveFeedbackChatState = {
@@ -63,6 +65,7 @@ const defaultValue = (answerId: number): LiveFeedbackChatData => {
   return {
     id: answerId,
     isLiveFeedbackChatOpen: false,
+    isLiveFeedbackChatLoaded: false,
     isRequestingLiveFeedback: false,
     pendingFeedbackToken: null,
     liveFeedbackId: null,
@@ -72,6 +75,13 @@ const defaultValue = (answerId: number): LiveFeedbackChatData => {
     answerFiles: [],
     suggestions: sampleSuggestions(false),
   };
+};
+
+const initialLocalStorageValue: LiveFeedbackLocalStorage = {
+  isLiveFeedbackChatOpen: false,
+  isRequestingLiveFeedback: false,
+  pendingFeedbackToken: null,
+  feedbackUrl: null,
 };
 
 export const liveFeedbackChatSlice = createSlice({
@@ -86,17 +96,51 @@ export const liveFeedbackChatSlice = createSlice({
     ) => {
       const { answerIds } = action.payload;
       liveFeedbackChatAdapter.removeAll(state.liveFeedbackChatPerAnswer);
-      answerIds.forEach((answerId) => {
-        const initialValue = getLocalStorageValue(answerId);
 
-        if (!initialValue) {
-          setLocalStorageValue(answerId, defaultValue(answerId));
+      answerIds.forEach((answerId) => {
+        const localStorageValue = getLocalStorageValue(answerId);
+
+        if (!localStorageValue) {
+          setLocalStorageValue(answerId, initialLocalStorageValue);
         }
 
         liveFeedbackChatAdapter.setOne(
           state.liveFeedbackChatPerAnswer,
-          initialValue ?? defaultValue(answerId),
+          localStorageValue
+            ? { ...defaultValue(answerId), ...localStorageValue }
+            : defaultValue(answerId),
         );
+
+        state.liveFeedbackChatUrl = localStorageValue?.feedbackUrl ?? null;
+      });
+    },
+    storeInitialLiveFeedbackChats: (
+      state,
+      action: PayloadAction<{ thread: LiveFeedbackThread }>,
+    ) => {
+      const { thread } = action.payload;
+      const changes: Partial<LiveFeedbackChatData> = {
+        isLiveFeedbackChatLoaded: true,
+        currentThreadId: thread.threadId,
+        chats: thread.messages.map((message) => {
+          const createdAt = moment(new Date(message.createdAt)).format(
+            SHORT_TIME_FORMAT,
+          );
+          return {
+            sender:
+              message.creatorId === 0
+                ? ChatSender.codaveri
+                : ChatSender.student,
+            message: message.content,
+            createdAt,
+            isError: message.isError,
+          };
+        }),
+      };
+
+      liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
+        id: thread.answerId,
+        changes,
       });
     },
     resetLiveFeedbackChat: (
@@ -120,7 +164,12 @@ export const liveFeedbackChatSlice = createSlice({
         changes,
       });
 
-      modifyLocalStorageValue(answerId, changes);
+      const localStorageValueChanges: Partial<LiveFeedbackLocalStorage> = {
+        isRequestingLiveFeedback: false,
+        pendingFeedbackToken: null,
+      };
+
+      modifyLocalStorageValue(answerId, localStorageValueChanges);
     },
     toggleLiveFeedbackChat: (
       state,
@@ -140,7 +189,11 @@ export const liveFeedbackChatSlice = createSlice({
         changes,
       });
 
-      modifyLocalStorageValue(answerId, changes);
+      const localStorageValueChanges: Partial<LiveFeedbackLocalStorage> = {
+        isLiveFeedbackChatOpen: !isChatOpen,
+      };
+
+      modifyLocalStorageValue(answerId, localStorageValueChanges);
     },
     updateAnswerFiles: (
       state,
@@ -210,7 +263,11 @@ export const liveFeedbackChatSlice = createSlice({
           changes,
         });
 
-        modifyLocalStorageValue(answerId, changes);
+        const localStorageValueChanges: Partial<LiveFeedbackLocalStorage> = {
+          isRequestingLiveFeedback: true,
+        };
+
+        modifyLocalStorageValue(answerId, localStorageValueChanges);
       }
     },
     requestLiveFeedbackFromCodaveri: (
@@ -236,7 +293,13 @@ export const liveFeedbackChatSlice = createSlice({
         changes,
       });
 
-      modifyLocalStorageValue(answerId, changes);
+      const localStorageValueChanges: Partial<LiveFeedbackLocalStorage> = {
+        isRequestingLiveFeedback: true,
+        pendingFeedbackToken: token,
+        feedbackUrl,
+      };
+
+      modifyLocalStorageValue(answerId, localStorageValueChanges);
     },
     getLiveFeedbackFromCodaveri: (
       state,
@@ -273,7 +336,12 @@ export const liveFeedbackChatSlice = createSlice({
           changes,
         });
 
-        modifyLocalStorageValue(answerId, changes);
+        const localStorageValueChanges: Partial<LiveFeedbackLocalStorage> = {
+          isRequestingLiveFeedback: false,
+          pendingFeedbackToken: null,
+        };
+
+        modifyLocalStorageValue(answerId, localStorageValueChanges);
       }
     },
     getFailureFeedbackFromCodaveri: (
@@ -307,7 +375,12 @@ export const liveFeedbackChatSlice = createSlice({
           changes,
         });
 
-        modifyLocalStorageValue(answerId, changes);
+        const localStorageValueChanges: Partial<LiveFeedbackLocalStorage> = {
+          isRequestingLiveFeedback: false,
+          pendingFeedbackToken: null,
+        };
+
+        modifyLocalStorageValue(answerId, localStorageValueChanges);
       }
     },
   },
@@ -315,6 +388,7 @@ export const liveFeedbackChatSlice = createSlice({
 
 export const {
   initiateLiveFeedbackChatPerQuestion,
+  storeInitialLiveFeedbackChats,
   toggleLiveFeedbackChat,
   resetLiveFeedbackChat,
   updateAnswerFiles,

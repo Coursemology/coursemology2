@@ -13,6 +13,8 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
   belongs_to :question, class_name: 'Course::Assessment::Question',
                         inverse_of: :submission_questions
 
+  has_many :threads, class_name: 'Course::Assessment::LiveFeedback::Thread',
+                     inverse_of: :submission_question, dependent: :destroy
   after_initialize :set_course, if: :new_record?
   before_validation :set_course, if: :new_record?
 

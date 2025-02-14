@@ -2,8 +2,9 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { Divider, Paper } from '@mui/material';
 
 import { SYNC_STATUS } from 'lib/constants/sharedConstants';
-import { useAppSelector } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
+import fetchLiveFeedbackChat from '../../actions/live_feedback';
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
 import { ChatSender } from '../../types';
 
@@ -26,9 +27,13 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
     getLiveFeedbackChatsForAnswerId(state, answerId),
   );
 
+  const dispatch = useAppDispatch();
+
   const [syncStatus, setSyncStatus] = useState<keyof typeof SYNC_STATUS>(
     SYNC_STATUS.Syncing,
   );
+
+  const isLiveFeedbackChatLoaded = liveFeedbackChats?.isLiveFeedbackChatLoaded;
 
   const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
   const isPollingLiveFeedback = liveFeedbackChats?.pendingFeedbackToken;
@@ -54,6 +59,12 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
       });
     }
   }, [liveFeedbackChats?.chats]);
+
+  useEffect(() => {
+    if (!answerId || isLiveFeedbackChatLoaded) return;
+
+    fetchLiveFeedbackChat(dispatch, answerId);
+  }, [answerId, isLiveFeedbackChatLoaded]);
 
   if (!answerId) return null;
 

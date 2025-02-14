@@ -194,6 +194,7 @@ export interface Suggestion {
 export interface LiveFeedbackChatData {
   id: string | number;
   isLiveFeedbackChatOpen: boolean;
+  isLiveFeedbackChatLoaded: boolean;
   isRequestingLiveFeedback: boolean;
   pendingFeedbackToken: string | null;
   liveFeedbackId: number | null;
@@ -202,4 +203,26 @@ export interface LiveFeedbackChatData {
   chats: ChatShape[];
   answerFiles: AnswerFile[];
   suggestions: Suggestion[];
+}
+
+export interface LiveFeedbackLocalStorage {
+  isLiveFeedbackChatOpen: boolean;
+  isRequestingLiveFeedback: boolean;
+  pendingFeedbackToken: string | null;
+  feedbackUrl: string | null;
+}
+
+export interface LiveFeedbackThread {
+  id: number;
+  answerId: number;
+  threadId: string;
+  creatorId: number;
+  messages: LiveFeedbackMessage[];
+}
+
+export interface LiveFeedbackMessage {
+  content: string;
+  isError: boolean;
+  creatorId: number;
+  createdAt: string;
 }

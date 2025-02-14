@@ -6,6 +6,8 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   include Course::Assessment::Submission::MonitoringConcern
   include Course::Assessment::SubmissionConcern
   include Course::Assessment::Submission::Koditsu::SubmissionsConcern
+  include Course::Assessment::LiveFeedback::ThreadConcern
+  include Course::Assessment::LiveFeedback::MessageConcern
 
   before_action :authorize_assessment!, only: :create
   skip_authorize_resource :submission, only: [:edit, :update, :auto_grade]
@@ -100,19 +102,37 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
     return head :bad_request if @answer.nil?
 
-    thread_id = live_feedback_params[:thread_id]
-    message = live_feedback_params[:message]
+    @thread_id = live_feedback_params[:thread_id]
+    @message = live_feedback_params[:message]
 
-    status, response = @answer.generate_live_feedback(thread_id, message)
+    @thread = Course::Assessment::LiveFeedback::Thread.where(codaveri_thread_id: thread_id).first
+
+    handle_save_user_message
+
+    status, response = @answer.generate_live_feedback(@thread_id, @message)
 
     render json: response, status: status
+  end
+
+  def fetch_live_feedback_chat
+    @answer_id = live_feedback_params[:answer_id]
+    answer = Course::Assessment::Answer.find(@answer_id)
+
+    submission = answer.submission
+    question = answer.question
+
+    submission_question = Course::Assessment::SubmissionQuestion.where(submission_id: submission.id,
+                                                                       question_id: question.id).first
+
+    @thread = Course::Assessment::LiveFeedback::Thread.where(submission_question_id: submission_question.id,
+                                                             is_active: true).preload(:messages).first
   end
 
   def create_live_feedback_chat
     @answer = @submission.answers.find_by(id: answer_params[:answer_id])
     return head :bad_request if @answer.nil?
 
-    status, body = @answer.create_live_feedback_chat
+    status, body = safe_create_and_save_thread_info
 
     render json: { threadId: body['thread']['id'], threadStatus: body['thread']['status'] },
            status: status
@@ -126,7 +146,12 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
     raise CodaveriError, { status: response_status, body: response_body } if response_status != 200
 
-    render json: { threadStatus: response_body['data']['thread']['status'] }, status: response_status
+    thread_status = response_body['data']['thread']['status']
+
+    thread = Course::Assessment::LiveFeedback::Thread.find_by(codaveri_thread_id: thread_id)
+    thread.update!(is_active: thread_status == 'active')
+
+    render json: { threadStatus: thread_status }, status: response_status
   end
 
   # Reload the current answer or reset it, depending on parameters.
@@ -285,7 +310,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   end
 
   def live_feedback_params
-    params.permit(:thread_id, :message, :answer_id)
+    params.permit(:thread_id, :message, :answer_id, :option_id, options: [])
   end
 
   def create_success_response(submission)

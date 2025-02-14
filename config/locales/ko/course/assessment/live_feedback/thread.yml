@@ -1,0 +1,6 @@
+ko:
+  course:
+    assessment:
+      live_feedback:
+        thread:
+          only_one_active_thread: '제출 질문당 활성화된 스레드는 하나만 존재할 수 있습니다'

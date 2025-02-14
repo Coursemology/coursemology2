@@ -327,7 +327,7 @@ export function fetchLiveFeedback({
   answerId,
   feedbackUrl,
   feedbackToken,
-  liveFeedbackId,
+  currentThreadId,
   noFeedbackMessage,
   errorMessage,
 }) {
@@ -337,8 +337,9 @@ export function fetchLiveFeedback({
       .then((response) => {
         if (response.status === 200) {
           CourseAPI.assessment.submissions.saveLiveFeedback(
-            liveFeedbackId,
-            response.data?.data?.message ?? { content: '', files: [] },
+            currentThreadId,
+            response.data?.data?.message.content ?? '',
+            false,
           );
           handleFeedbackOKResponse({
             answerId,
@@ -349,6 +350,11 @@ export function fetchLiveFeedback({
         }
       })
       .catch(() => {
+        CourseAPI.assessment.submissions.saveLiveFeedback(
+          currentThreadId,
+          errorMessage,
+          true,
+        );
         dispatch(
           getFailureFeedbackFromCodaveri({
             answerId,
