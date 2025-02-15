@@ -18,11 +18,8 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
              assessment: assessment,
              creator: student)
     end
-    # Forum post response questions currently don't show 'Past Answers' element
     let(:past_answer_count) do
-      submission.assessment.questions.reject do |q|
-        q.question_type == 'ForumPostResponse'
-      end.count
+      submission.assessment.questions.count
     end
 
     context 'As a Course Student' do
@@ -31,12 +28,14 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
       scenario 'I can view my past answers' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
         # Ensure all 'Past Answers' labels are rendered before continuing
-        expect(page).to have_selector('span', text: 'Past Answers', count: past_answer_count)
+        # "//button/span" matches and returns the label, "//button[span]" matches and returns the button
+        expect(page).to have_xpath('//button[span]', text: 'All Answers', count: past_answer_count)
 
-        all('span', text: 'Past Answers').each(&:click)
-        wait_for_animation
-        # Label selector matches both the expanded 'Past Answers' section and the labels we clicked
-        expect(page).to have_selector('label', text: 'Past Answers', count: past_answer_count * 2)
+        all(:xpath, '//button[span]', text: 'All Answers').each do |btn|
+          btn.click
+          expect(page).to have_button('Close')
+          click_button('Close')
+        end
       end
     end
 
@@ -45,11 +44,13 @@ RSpec.describe 'Course: Assessment: Submissions: Past Answers', js: true do
 
       scenario "I can view my student's past answers" do
         visit edit_course_assessment_submission_path(course, assessment, submission)
-        expect(page).to have_selector('span', text: 'Past Answers', count: past_answer_count)
+        expect(page).to have_xpath('//button[span]', text: 'All Answers', count: past_answer_count)
 
-        all('span', text: 'Past Answers').each(&:click)
-        wait_for_animation
-        expect(page).to have_selector('label', text: 'Past Answers', count: past_answer_count * 2)
+        all(:xpath, '//button[span]', text: 'All Answers').each do |btn|
+          btn.click
+          expect(page).to have_button('Close')
+          click_button('Close')
+        end
       end
     end
   end

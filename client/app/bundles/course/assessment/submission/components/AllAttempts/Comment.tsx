@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { Avatar, Box, CardHeader, Typography } from '@mui/material';
-import { CommentItem } from 'types/course/statistics/assessmentStatistics';
+import { CommentItem } from 'types/course/assessment/submission/submission-question';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';

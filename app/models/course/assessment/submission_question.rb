@@ -38,21 +38,6 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
     Course::Assessment::SubmissionQuestion::CommentNotifier.post_replied(post)
   end
 
-  def answers
-    Course::Assessment::Answer.where('submission_id = ? AND question_id = ?',
-                                     submission_id, question_id)
-  end
-
-  # Loads the past answers of a specific question
-  def past_answers(answers_to_load)
-    answers.
-      unscope(:order).
-      order(created_at: :desc).
-      where('workflow_state != ? '\
-            'OR (workflow_state = ? AND current_answer IS false)', 'attempting', 'attempting').
-      first(answers_to_load)
-  end
-
   private
 
   # Set the course as the same course of the assessment.
