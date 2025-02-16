@@ -159,6 +159,9 @@ group :production, :ci do
 end
 
 group :production do
+  gem 'aws-sdk-cloudwatch'
+  gem 'aws-sdk-core'
+
   # Use fog-aws as CarrierWave's storage provider
   gem 'fog-aws', '>= 3.19'
   gem 'flamegraph'

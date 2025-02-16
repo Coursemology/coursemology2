@@ -34,12 +34,15 @@ module SendFile
   def self.send_file_production(file, public_name)
     current_time = Time.now.to_i
     s3_key = "downloads/#{current_time}/#{public_name}"
-    object = S3_BUCKET.object(s3_key)
     File.open(file, 'rb') do |f|
-      object.put(body: f)
+      S3_CLIENT.put_object({
+        body: f,
+        bucket: ENV.fetch('AWS_BUCKET', nil),
+        key: s3_key
+      })
     end
 
-    signer = Aws::S3::Presigner.new
+    signer = Aws::S3::Presigner.new(client: S3_CLIENT)
     signer.presigned_url(:get_object, bucket: S3_BUCKET.name, key: s3_key)
   end
 end
