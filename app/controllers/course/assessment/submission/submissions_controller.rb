@@ -105,7 +105,8 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     @thread_id = live_feedback_params[:thread_id]
     @message = live_feedback_params[:message]
 
-    @thread = Course::Assessment::LiveFeedback::Thread.where(codaveri_thread_id: thread_id).first
+    @options = live_feedback_params[:options]
+    @option_id = live_feedback_params[:option_id]
 
     handle_save_user_message
 

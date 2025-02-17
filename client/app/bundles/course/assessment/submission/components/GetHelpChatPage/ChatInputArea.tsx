@@ -53,6 +53,7 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
     liveFeedbackChatsForAnswer?.isRequestingLiveFeedback ?? false;
   const isPollingLiveFeedback =
     (liveFeedbackChatsForAnswer?.pendingFeedbackToken ?? false) !== false;
+  const suggestions = liveFeedbackChatsForAnswer?.suggestions ?? [];
 
   const textFieldDisabled =
     isResetting ||
@@ -74,6 +75,8 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
         threadId: currentThreadId,
         message: input,
         errorMessage: t(translations.requestFailure),
+        options: suggestions.map((option) => option.index),
+        optionId: null,
       }),
     );
     setInput('');

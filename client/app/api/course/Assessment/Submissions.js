@@ -122,10 +122,23 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
-  generateLiveFeedback(submissionId, answerId, threadId, message) {
+  generateLiveFeedback(
+    submissionId,
+    answerId,
+    threadId,
+    message,
+    options,
+    optionId,
+  ) {
     return this.client.post(
       `${this.#urlPrefix}/${submissionId}/generate_live_feedback`,
-      { thread_id: threadId, answer_id: answerId, message },
+      {
+        thread_id: threadId,
+        answer_id: answerId,
+        message,
+        options,
+        option_id: optionId,
+      },
     );
   }
 
