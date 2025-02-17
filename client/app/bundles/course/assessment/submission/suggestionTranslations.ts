@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-export const suggestionsTranslations = defineMessages({
+const suggestionsTranslations = defineMessages({
   iAmStuck: {
     id: 'course.assessment.submission.suggestions.iAmStuck',
     defaultMessage: 'I am stuck',
@@ -23,9 +23,22 @@ export const suggestionsTranslations = defineMessages({
   },
 });
 
-export const suggestionFixesTranslations = defineMessages({
+const suggestionFixesTranslations = defineMessages({
   looksWrong: {
     id: 'course.assessment.submission.suggestions.looksWrong',
-    defaultMessage: 'Your advice is wrong',
+    defaultMessage: 'This looks wrong',
   },
 });
+
+// NOTE: the index key in suggestionsMapping follow the assigned index in DB table live_feedback_options
+export const suggestionMapping = {
+  1: suggestionsTranslations.iAmStuck,
+  2: suggestionsTranslations.howDoIFixThis,
+  3: suggestionsTranslations.questionUnclear,
+  4: suggestionsTranslations.optimizeThisCode,
+  5: suggestionsTranslations.whereAmIWrong,
+};
+
+export const suggestionFixesMapping = {
+  6: suggestionFixesTranslations.looksWrong,
+};

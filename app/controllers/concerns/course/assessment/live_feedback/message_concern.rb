@@ -9,6 +9,16 @@ module Course::Assessment::LiveFeedback::MessageConcern
     @thread.class.transaction do
       new_message = create_new_message
 
+      new_options = @options.map do |option_id|
+        {
+          message_id: new_message.id,
+          option_id: option_id
+        }
+      end
+
+      options = Course::Assessment::LiveFeedback::MessageOption.insert_all(new_options)
+      raise ActiveRecord::Rollback if !new_options.empty? && (options.nil? || options.rows.empty?)
+
       associate_new_message_with_new_or_existing_files(new_message)
     end
   end
@@ -20,7 +30,7 @@ module Course::Assessment::LiveFeedback::MessageConcern
       content: @message,
       creator_id: current_user.id,
       created_at: Time.zone.now,
-      option_id: nil # TODO: change after we handle the suggestion passing to BE
+      option_id: @option_id
     })
 
     raise ActiveRecord::Rollback unless new_message.persisted?

@@ -15,8 +15,8 @@ import {
   setLocalStorageValue,
 } from '../../localStorage/liveFeedbackChat/operations';
 import {
-  suggestionFixesTranslations,
-  suggestionsTranslations,
+  suggestionFixesMapping,
+  suggestionMapping,
 } from '../../suggestionTranslations';
 import {
   AnswerFile,
@@ -44,18 +44,23 @@ const initialState: LiveFeedbackChatState = {
 const sampleSuggestions = (
   isIncludingSuggestionFixes: boolean,
 ): Suggestion[] => {
-  const suggestions = Object.values(suggestionsTranslations);
-  const suggestionFixes = Object.values(suggestionFixesTranslations);
+  const suggestionIndexes = Object.keys(suggestionMapping);
+  const suggestionFixIndexes = Object.keys(suggestionFixesMapping);
 
-  const chosenSuggestions = isIncludingSuggestionFixes
-    ? shuffle(suggestions)
+  const chosenSuggestionIndexes = isIncludingSuggestionFixes
+    ? shuffle(suggestionIndexes)
         .slice(0, 2)
-        .concat(shuffle(suggestionFixes).slice(0, 1))
-    : shuffle(suggestions).slice(0, 3);
+        .concat(shuffle(suggestionFixIndexes).slice(0, 1))
+    : shuffle(suggestionIndexes).slice(0, 3);
 
-  return chosenSuggestions.map((suggestion) => {
+  return chosenSuggestionIndexes.map((index) => {
+    const suggestionIndex = Number(index);
+    const suggestion =
+      suggestionMapping[suggestionIndex] ??
+      suggestionFixesMapping[suggestionIndex];
     return {
       id: suggestion.id,
+      index: suggestionIndex,
       defaultMessage: suggestion.defaultMessage,
     };
   });

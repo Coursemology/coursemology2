@@ -189,6 +189,7 @@ export interface AnswerFile {
 export interface Suggestion {
   id: string;
   defaultMessage: string;
+  index: number;
 }
 
 export interface LiveFeedbackChatData {

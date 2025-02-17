@@ -10,6 +10,7 @@ import { generateLiveFeedback } from '../../actions/answers';
 import { sendPromptFromStudent } from '../../reducers/liveFeedbackChats';
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
 import translations from '../../translations';
+import { Suggestion } from '../../types';
 
 interface SuggestionChipsProps {
   answerId: number;
@@ -33,7 +34,12 @@ const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
 
   const suggestions = liveFeedbackChatsForAnswer?.suggestions ?? [];
 
-  const sendHelpRequest = (message: string): void => {
+  const sendHelpRequest = (suggestion: Suggestion): void => {
+    const message = t({
+      id: suggestion.id,
+      defaultMessage: suggestion.defaultMessage,
+    });
+
     dispatch(sendPromptFromStudent({ answerId, message }));
     dispatch(
       generateLiveFeedback({
@@ -42,6 +48,8 @@ const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
         threadId: currentThreadId,
         message,
         errorMessage: t(translations.requestFailure),
+        options: suggestions.map((option) => option.index),
+        optionId: suggestion.index,
       }),
     );
   };
@@ -53,10 +61,13 @@ const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
           key={suggestion.id}
           className="bg-white text-xl shrink-0"
           disabled={syncStatus === SYNC_STATUS.Failed || isCurrentThreadExpired}
-          onClick={() => sendHelpRequest(t(suggestion))}
+          onClick={() => sendHelpRequest(suggestion)}
           variant="outlined"
         >
-          {t(suggestion)}
+          {t({
+            id: suggestion.id,
+            defaultMessage: suggestion.defaultMessage,
+          })}
         </Button>
       ))}
     </div>
