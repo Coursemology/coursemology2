@@ -240,6 +240,44 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
+    describe '#generate_live_feedback' do
+      let!(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
+      let!(:answer) { submission.answers.where(actable_type: 'Course::Assessment::Answer::Programming').first }
+      let!(:question) { answer.question }
+      let!(:submission_question) do
+        Course::Assessment::SubmissionQuestion.create!(submission_id: submission.id, question_id: question.id)
+      end
+      let!(:thread_id) { SecureRandom.hex(12) }
+      let!(:thread_status) { 'active' }
+      let!(:message) { 'This is a message' }
+      let!(:option_id) { 2 }
+      let!(:options) { [1, 2, 3] }
+
+      context 'when the answer exists' do
+        before do
+          options.each do |_|
+            Course::Assessment::LiveFeedback::Option.create!(option_type: 0, is_enabled: true)
+          end
+          Course::Assessment::LiveFeedback::Thread.create!({ codaveri_thread_id: thread_id,
+                                                             submission_question: submission_question,
+                                                             is_active: true,
+                                                             submission_creator_id: submission.creator_id,
+                                                             created_at: Time.zone.now })
+
+          allow(answer).to receive(:generate_live_feedback).with(thread_id, message).and_return(:ok)
+        end
+
+        it 'generates live feedback' do
+          post :generate_live_feedback, as: :json, params: {
+            course_id: course, assessment_id: assessment, id: submission.id, answer_id: answer.id,
+            thread_id: thread_id, message: message, option_id: option_id, options: options
+          }
+
+          expect(response).to have_http_status(:ok)
+        end
+      end
+    end
+
     describe 'submission_actions' do
       let!(:students) { create_list(:course_student, 5, course: course) }
       let!(:phantom_student) { create(:course_student, :phantom, course: course) }
