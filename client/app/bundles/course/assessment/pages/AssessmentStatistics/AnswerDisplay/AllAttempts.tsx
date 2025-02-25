@@ -31,6 +31,7 @@ const AllAttemptsIndex: FC<Props> = (props) => {
           <>
             <AllAttemptsDisplay
               allAnswers={data.allAnswers}
+              allQuestions={data.allQuestions}
               questionNumber={index}
             />
 

@@ -15,9 +15,13 @@ interface MultipleResponseQuestionData {
 
 interface ProgrammingQuestionData {
   language: string;
-  fileSubmission: boolean;
-  isCodaveri: boolean;
+  memoryLimit?: number;
+  timeLimit?: number;
   attemptLimit?: number;
+  fileSubmission: boolean;
+  autoGradable: boolean;
+  isCodaveri: boolean;
+  liveFeedbackEnabled: boolean;
 }
 
 interface TextResponseParentQuestionData {}

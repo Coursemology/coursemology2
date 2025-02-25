@@ -6,6 +6,7 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
   def show
     @submission = @answer.submission
     @assessment = @submission.assessment
+    @question = @answer.question
   end
 
   def all_answers
@@ -25,11 +26,37 @@ class Course::Statistics::AnswersController < Course::Statistics::Controller
                      question_id: all_answers_params[:question_id]
                    ).
                    where.not(workflow_state: :attempting)
+    @question = Course::Assessment::Question.find(all_answers_params[:question_id])
+    assessment_id = Course::QuestionAssessment.where(question_id: @question.id).first.assessment_id
+    @assessment = Course::Assessment.find(assessment_id)
+    @submission = Course::Assessment::Submission.find(all_answers_params[:submission_id])
+
+    fetch_all_actable_questions(@question)
   end
 
   private
 
   def all_answers_params
     params.permit(:submission_id, :question_id)
+  end
+
+  def fetch_all_actable_questions(question)
+    unless versioned_question?(question)
+      @all_actable_questions = [question.actable]
+      return
+    end
+
+    question = question.actable
+    @all_actable_questions = [question]
+    while question.parent
+      @all_actable_questions << question.parent
+      question = question.parent
+    end
+  end
+
+  # at the moment, we only support versioning for Programming Question. In the future, we might extend the support
+  # for all auto-gradable questions, such as MCQ/MRQ.
+  def versioned_question?(question)
+    question.actable.is_a?(Course::Assessment::Question::Programming)
   end
 end

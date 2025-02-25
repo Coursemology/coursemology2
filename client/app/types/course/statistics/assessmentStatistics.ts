@@ -3,7 +3,7 @@ import { SpecificQuestionDataMap } from '../assessment/submission/question/types
 import { WorkflowState } from '../assessment/submission/submission';
 import { CourseUserBasicListData } from '../courseUsers';
 
-import { AnswerDetailsMap } from './answer';
+import { AnswerDetailsMap, ProcessedAnswerDetailsMap } from './answer';
 
 interface AssessmentInfo {
   id: number;
@@ -108,30 +108,37 @@ export interface CommentItem {
 
 export interface AllAnswerItem {
   id: number;
-  createdAt: Date;
+  submittedAt: Date;
   currentAnswer: boolean;
   workflowState: WorkflowState;
 }
 
+export type ProcessedAnswer<T extends keyof typeof QuestionType> =
+  ProcessedAnswerDetailsMap[T] & {
+    submittedAt: Date;
+    question: Question<T>;
+  };
+
 export interface SubmissionQuestionDetails {
-  allAnswers: AllAnswerItem[];
+  allAnswers: Answer<keyof typeof QuestionType>[];
+  allQuestions: Question<keyof typeof QuestionType>[];
   comments: CommentItem[];
 }
 
-export type QuestionDetails<T extends keyof typeof QuestionType> =
+export type Question<T extends keyof typeof QuestionType> =
   QuestionBasicDetails<T> & SpecificQuestionDataMap[T];
 
-export type AnswerStatisticsData<T extends keyof typeof QuestionType> =
+export type Answer<T extends keyof typeof QuestionType> =
   AnswerDetailsMap[T] & {
-    createdAt: Date;
-    question: QuestionDetails<T>;
+    submittedAt: Date;
+    question: Question<T>;
   };
 
 export interface QuestionAnswerDisplayDetails<
   T extends keyof typeof QuestionType,
 > {
-  question: QuestionDetails<T>;
-  answer: AnswerDetailsMap[T];
+  question: Question<T>;
+  answer: ProcessedAnswer<T>;
 }
 
 export interface AssessmentLiveFeedbackStatistics {

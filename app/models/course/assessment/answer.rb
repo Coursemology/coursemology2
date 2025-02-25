@@ -80,6 +80,9 @@ class Course::Assessment::Answer < ApplicationRecord
   def auto_grade!(redirect_to_path: nil, reduce_priority: false)
     raise IllegalStateError if attempting?
 
+    # When evaluated or graded, only autograde most recent answer
+    return if !submitted? && !current_answer?
+
     ensure_auto_grading!
     if grade_inline?
       Course::Assessment::Answer::AutoGradingService.grade(self)

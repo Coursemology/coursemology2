@@ -1,9 +1,8 @@
 # frozen_string_literal: true
+json.partial! 'all_questions'
+
 json.allAnswers @all_answers do |answer|
-  json.id answer.id
-  json.createdAt answer.created_at&.iso8601
-  json.currentAnswer answer.current_answer
-  json.workflowState answer.workflow_state
+  json.partial! 'answer', answer: answer, question: @question
 end
 
 posts = @submission_question.discussion_topic.posts

@@ -1,9 +1,16 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { Chip, Typography } from '@mui/material';
+import {
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
 import {
-  AnswerStatisticsData,
+  Answer,
   CommentItem,
 } from 'types/course/statistics/assessmentStatistics';
 
@@ -15,11 +22,13 @@ import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatLongDateTime } from 'lib/moment';
 
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
 import { getClassNameForMarkCell } from '../classNameUtils';
 
 import Comment from './Comment';
+import { processLastAttempt } from './utils';
 
 const translations = defineMessages({
   questionTitle: {
@@ -34,25 +43,29 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.submissionPage',
     defaultMessage: 'Go to Answer Page',
   },
+  submittedAt: {
+    id: 'course.assessment.statistics.submittedAt',
+    defaultMessage: 'Submitted At',
+  },
 });
 
 interface Props {
-  curAnswerId: number;
+  currAnswerId: number;
   index: number;
   questionId: number;
   submissionId: number;
 }
 
-const LastAttemptIndex: FC<Props> = (props) => {
-  const { curAnswerId, index, submissionId, questionId } = props;
+const LastAnswerDisplay: FC<Props> = (props) => {
+  const { currAnswerId, index, submissionId, questionId } = props;
   const { t } = useTranslation();
 
   const fetchAnswerDetailsAndComments = async (): Promise<{
-    answer: AnswerStatisticsData<keyof typeof QuestionType>;
+    answer: Answer<keyof typeof QuestionType>;
     comments: CommentItem[];
   }> => {
     const [answer, submissionQuestion] = await Promise.all([
-      fetchAnswer(curAnswerId),
+      fetchAnswer(currAnswerId),
       fetchSubmissionQuestionDetails(submissionId, questionId),
     ]);
     return { answer, comments: submissionQuestion.comments };
@@ -68,10 +81,30 @@ const LastAttemptIndex: FC<Props> = (props) => {
           answer.grade,
           answer.question.maximumGrade,
         );
+
+        const { allProcessedAnswers } = processLastAttempt(
+          answer.question,
+          answer,
+        );
+
         return (
           <>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="w-1/4">
+                    {t(translations.submittedAt)}
+                  </TableCell>
+                  <TableCell>
+                    {formatLongDateTime(answer.submittedAt)}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+
             <Accordion
               defaultExpanded={false}
+              disableGutters
               title={t(translations.questionTitle, { index })}
             >
               <div className="ml-4 mt-4">
@@ -84,7 +117,10 @@ const LastAttemptIndex: FC<Props> = (props) => {
                 />
               </div>
             </Accordion>
-            <AnswerDetails answer={answer} question={answer.question} />
+            <AnswerDetails
+              answer={allProcessedAnswers}
+              question={answer.question}
+            />
             <Chip
               className={`w-100 mt-3 ${gradeCellColor}`}
               label={t(translations.gradeDisplay, {
@@ -101,4 +137,4 @@ const LastAttemptIndex: FC<Props> = (props) => {
   );
 };
 
-export default LastAttemptIndex;
+export default LastAnswerDisplay;

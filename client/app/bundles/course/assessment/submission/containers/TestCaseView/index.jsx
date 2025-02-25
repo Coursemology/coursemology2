@@ -411,7 +411,7 @@ function mapStateToProps({ assessments: { submission } }, ownProps) {
   let testCases;
   let isAutograding;
   if (viewHistory) {
-    testCases = submission.history.testCases[answerId];
+    testCases = submission.history.testCases[answerId][0];
     isAutograding = false;
   } else {
     testCases = submission.testCases[questionId];

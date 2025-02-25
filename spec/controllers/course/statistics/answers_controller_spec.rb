@@ -24,19 +24,19 @@ RSpec.describe Course::Statistics::AnswersController, type: :controller do
             params: { course_id: course, submission_id: answer.submission_id, question_id: answer.question_id }
       end
 
-      context 'when the Normal User get the question answer details for the statistics' do
+      context 'when the Normal User get the attempts for the statistics' do
         let(:user) { create(:user) }
         before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
-      context 'when the Course Student get the question answer details for the statistics' do
+      context 'when the Course Student get the attempts for the statistics' do
         let(:user) { create(:course_student, course: course).user }
         before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
-      context 'when the Course Manager get the question answer details for the statistics' do
+      context 'when the Course Manager get the attempts for the statistics' do
         let(:user) { create(:course_manager, course: course).user }
         before { controller_sign_in(controller, user) }
 

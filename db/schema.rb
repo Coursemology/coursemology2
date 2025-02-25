@@ -141,6 +141,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
     t.text "stdout"
     t.text "stderr"
     t.integer "exit_code"
+    t.integer "parent_id"
+    t.index ["parent_id"], name: "index_ca_answer_programming_auto_gradings_on_parent_id"
   end
 
   create_table "course_assessment_answer_programming_file_annotations", id: :serial, force: :cascade do |t|
@@ -315,8 +317,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
     t.boolean "live_feedback_enabled", default: false, null: false
     t.string "live_feedback_custom_prompt", default: "", null: false
     t.boolean "is_synced_with_codaveri", default: false, null: false
+    t.integer "parent_id"
     t.index ["import_job_id"], name: "index_course_assessment_question_programming_on_import_job_id", unique: true
     t.index ["language_id"], name: "fk__course_assessment_question_programming_language_id"
+    t.index ["parent_id"], name: "index_ca_question_programming_on_parent_id"
   end
 
   create_table "course_assessment_question_programming_template_files", id: :serial, force: :cascade do |t|
@@ -1489,6 +1493,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
   add_foreign_key "course_assessment_answer_multiple_response_options", "course_assessment_answer_multiple_responses", column: "answer_id", name: "fk_course_assessment_answer_multiple_response_options_answer_id"
   add_foreign_key "course_assessment_answer_multiple_response_options", "course_assessment_question_multiple_response_options", column: "option_id", name: "fk_course_assessment_answer_multiple_response_options_option_id"
   add_foreign_key "course_assessment_answer_programming", "jobs", column: "codaveri_feedback_job_id", on_delete: :nullify
+  add_foreign_key "course_assessment_answer_programming_auto_gradings", "course_assessment_answer_programming_auto_gradings", column: "parent_id"
   add_foreign_key "course_assessment_answer_programming_file_annotations", "course_assessment_answer_programming_files", column: "file_id", name: "fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d"
   add_foreign_key "course_assessment_answer_programming_files", "course_assessment_answer_programming", column: "answer_id", name: "fk_course_assessment_answer_programming_files_answer_id"
   add_foreign_key "course_assessment_answer_programming_test_results", "course_assessment_answer_programming_auto_gradings", column: "auto_grading_id", name: "fk_course_assessment_answer_e3d785447112439bb306849be8690102"
@@ -1515,6 +1520,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_16_104132) do
   add_foreign_key "course_assessment_question_bundles", "course_assessment_question_groups", column: "group_id"
   add_foreign_key "course_assessment_question_groups", "course_assessments", column: "assessment_id"
   add_foreign_key "course_assessment_question_multiple_response_options", "course_assessment_question_multiple_responses", column: "question_id", name: "fk_course_assessment_question_multiple_response_options_questio"
+  add_foreign_key "course_assessment_question_programming", "course_assessment_question_programming", column: "parent_id"
   add_foreign_key "course_assessment_question_programming", "jobs", column: "import_job_id", name: "fk_course_assessment_question_programming_import_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_question_programming", "polyglot_languages", column: "language_id", name: "fk_course_assessment_question_programming_language_id"
   add_foreign_key "course_assessment_question_programming_template_files", "course_assessment_question_programming", column: "question_id", name: "fk_course_assessment_questi_0788633b496294e558f55f2b41bc7c45"

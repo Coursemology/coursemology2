@@ -1,5 +1,5 @@
 import { QuestionType } from 'types/course/assessment/question';
-import { AnswerStatisticsData } from 'types/course/statistics/assessmentStatistics';
+import { Answer } from 'types/course/statistics/assessmentStatistics';
 
 import { APIResponse } from 'api/types';
 
@@ -10,9 +10,7 @@ export default class AnswerStatisticsAPI extends BaseCourseAPI {
     return `/courses/${this.courseId}/statistics/answers`;
   }
 
-  fetch(
-    answerId: number,
-  ): APIResponse<AnswerStatisticsData<keyof typeof QuestionType>> {
+  fetch(answerId: number): APIResponse<Answer<keyof typeof QuestionType>> {
     return this.client.get(`${this.#urlPrefix}/${answerId}`);
   }
 }
