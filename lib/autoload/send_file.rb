@@ -43,6 +43,6 @@ module SendFile
     end
 
     signer = Aws::S3::Presigner.new(client: S3_CLIENT)
-    signer.presigned_url(:get_object, bucket: S3_BUCKET.name, key: s3_key)
+    signer.presigned_url(:get_object, bucket: ENV.fetch('AWS_BUCKET', nil), key: s3_key)
   end
 end
