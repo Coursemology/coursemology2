@@ -133,7 +133,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
 
         click_button 'Save changes'
         expect_toastify("package wasn't successfully imported")
-        expect(page).to have_text('error')
+        expect(page).to have_text('The package could not be imported')
         find('.Toastify').find('svg[data-testid="CloseIcon"]').click
 
         attach_file(valid_package) do

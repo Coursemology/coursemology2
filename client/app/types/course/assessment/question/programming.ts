@@ -126,8 +126,17 @@ export interface BuildLogData {
   stderr: string;
 }
 
+export enum PackageImportResultError {
+  INVALID_PACKAGE = 'invalid_package',
+  EVALUATION_TIMEOUT = 'evaluation_timeout',
+  EVALUATION_TIME_LIMIT_EXCEEDED = 'time_limit_exceeded',
+  EVALUATION_ERROR = 'evaluation_error',
+  GENERIC_ERROR = 'generic_error',
+}
+
 export interface PackageImportResultData {
-  importResultMessage?: string;
+  error?: PackageImportResultError;
+  message?: string;
   status?: 'success' | 'error';
   buildLog?: BuildLogData;
 }
