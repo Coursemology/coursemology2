@@ -6,6 +6,7 @@ import {
   LanguageData,
   MetadataTestCase,
   MetadataTestCases,
+  PackageImportResultData,
   ProgrammingFormData,
   ProgrammingPostStatusData,
 } from 'types/course/assessment/question/programming';
@@ -31,6 +32,13 @@ export const fetchNew = async (): Promise<ProgrammingFormData> => {
 export const fetchEdit = async (id: number): Promise<ProgrammingFormData> => {
   const response = await ProgrammingAPI.fetchEdit(id);
   return response.data;
+};
+
+export const fetchImportResult = async (
+  id: number,
+): Promise<PackageImportResultData> => {
+  const response = await ProgrammingAPI.fetchImportResult(id);
+  return response.data.importResult;
 };
 
 export const create = async (

@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { AssessmentData } from 'types/course/assessment/assessments';
@@ -182,20 +183,22 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
             <NewQuestionMenu with={assessment.newQuestionUrls} />
           )}
           {assessment.generateQuestionUrl && (
-            <Link
-              opensInNewTab
-              to={assessment.generateQuestionUrl}
-              underline="none"
-            >
-              <Button
-                size="small"
-                startIcon={<AutoFixHigh />}
-                sx={{ marginTop: '0 !important', marginLeft: 1 }}
-                variant="outlined"
+            <Tooltip title={t(translations.generateTooltip)}>
+              <Link
+                opensInNewTab
+                to={assessment.generateQuestionUrl}
+                underline="none"
               >
-                {t(translations.generate)}
-              </Button>
-            </Link>
+                <Button
+                  size="small"
+                  startIcon={<AutoFixHigh />}
+                  sx={{ marginTop: '0 !important', marginLeft: 1 }}
+                  variant="outlined"
+                >
+                  {t(translations.generate)}
+                </Button>
+              </Link>
+            </Tooltip>
           )}
 
           {assessment.hasUnautogradableQuestions && (

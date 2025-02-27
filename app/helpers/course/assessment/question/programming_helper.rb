@@ -1,17 +1,23 @@
 # frozen_string_literal: true
 module Course::Assessment::Question::ProgrammingHelper
-  # Displays the result alert for an import job.
+  # Displays a specific error type for an import job, for frontend to map to an appropriate error message.
   #
-  # @return [String] If there is an import job for the question.
-  # @return [nil] If there is no import job for the question.
-  def import_result_message
-    import_job = @programming_question.import_job
-    return nil unless import_job
+  # @return [String] If the import job for the question exists and raised an error.
+  # @return [nil] If the import job for the question succeded, or does not exist.
+  def import_result_error
+    return nil unless import_errored?
 
-    if import_job.completed?
-      successful_import_message
-    elsif import_job.errored?
-      errored_import_message
+    case @programming_question.import_job.error['class']
+    when InvalidDataError.name
+      :invalid_package
+    when Timeout::Error.name
+      :evaluation_timeout
+    when Course::Assessment::ProgrammingEvaluationService::TimeLimitExceededError.name
+      :time_limit_exceeded
+    when Course::Assessment::ProgrammingEvaluationService::Error.name
+      :evaluation_error
+    else
+      :generic_error
     end
   end
 
@@ -49,35 +55,5 @@ module Course::Assessment::Question::ProgrammingHelper
     return true if params[:action] == 'new'
 
     @meta.present?
-  end
-
-  private
-
-  def successful_import_message
-    t('course.assessment.question.programming.form.import_result.success')
-  end
-
-  def errored_import_message
-    t('course.assessment.question.programming.form.import_result.error',
-      error: import_error_message(@programming_question.import_job.error))
-  end
-
-  # Translates an error object serialised in the +TrackableJobs+ table to a user-readable message.
-  #
-  # @param [Hash] error The error object in the +TrackableJobs+ table.
-  # @return [String]
-  def import_error_message(error)
-    case error['class']
-    when InvalidDataError.name
-      t('course.assessment.question.programming.form.import_result.errors.invalid_package')
-    when Timeout::Error.name
-      t('course.assessment.question.programming.form.import_result.errors.evaluation_timeout')
-    when Course::Assessment::ProgrammingEvaluationService::TimeLimitExceededError.name
-      t('course.assessment.question.programming.form.import_result.errors.time_limit_exceeded')
-    when Course::Assessment::ProgrammingEvaluationService::Error.name
-      t('course.assessment.question.programming.form.import_result.errors.evaluation_error')
-    else
-      error['message']
-    end
   end
 end

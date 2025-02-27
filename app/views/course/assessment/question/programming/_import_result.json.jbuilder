@@ -16,5 +16,8 @@ json.importResult do
     end
   end
 
-  json.importResultMessage import_result_message if import_job
+  if import_errored?
+    json.error import_result_error
+    json.message import_job.error['message']
+  end
 end

@@ -20,12 +20,17 @@ import {
   Typography,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { LanguageData } from 'types/course/assessment/question/programming';
+import {
+  LanguageData,
+  PackageImportResultError,
+} from 'types/course/assessment/question/programming';
 
 import GlobalAPI from 'api';
 import buildFormData from 'course/assessment/question/programming/commons/builder';
+import { ImportResultErrorMapper } from 'course/assessment/question/programming/components/common/ImportResult';
 import {
   create,
+  fetchImportResult,
   update,
 } from 'course/assessment/question/programming/operations';
 import { generationActions as actions } from 'course/assessment/reducers/generation';
@@ -60,7 +65,7 @@ const translations = defineMessages({
   },
   exportError: {
     id: 'course.assessment.generation.exportError',
-    defaultMessage: 'An error occured in exporting this question.',
+    defaultMessage: 'An error occured in exporting this question: {error}',
   },
 });
 
@@ -84,6 +89,26 @@ const GenerateExportDialog: FC<Props> = (props) => {
     );
   };
 
+  const handleExportError = async (
+    conversation: ConversationState,
+    exportErrorMessage?: string,
+  ): Promise<void> => {
+    let exportError = PackageImportResultError.GENERIC_ERROR;
+    if (conversation.questionId) {
+      const importResult = await fetchImportResult(conversation.questionId);
+      exportError = importResult.error ?? exportError;
+      // exportErrorMessage in arguments will take precedence, in case a new error happens somewhere other than the import job.
+      exportErrorMessage = exportErrorMessage ?? importResult.message;
+    }
+    dispatch(
+      actions.exportConversationError({
+        conversationId: conversation.id,
+        exportError,
+        exportErrorMessage,
+      }),
+    );
+  };
+
   const pollQuestionExportJobs = (): void => {
     Object.values(generatePageData.conversations)
       .filter(
@@ -102,19 +127,11 @@ const GenerateExportDialog: FC<Props> = (props) => {
                 }),
               );
             } else if (response.data.status === 'errored') {
-              dispatch(
-                actions.exportConversationError({
-                  conversationId: conversation.id,
-                }),
-              );
+              handleExportError(conversation);
             }
           })
           .catch((error) => {
-            dispatch(
-              actions.exportConversationError({
-                conversationId: conversation.id,
-              }),
-            );
+            handleExportError(conversation, error.message);
           });
       });
   };
@@ -127,6 +144,20 @@ const GenerateExportDialog: FC<Props> = (props) => {
       }
     };
   });
+
+  const exportErrorMessage = (conversation: ConversationState): string => {
+    if (
+      !conversation.exportError ||
+      conversation.exportError === PackageImportResultError.GENERIC_ERROR
+    ) {
+      return t(translations.exportError, {
+        error: conversation.exportErrorMessage ?? '',
+      });
+    }
+    // We reuse the same error messages as the main programming question page,
+    // though the user should never see INVALID_PACKAGE error because it's entirely managed by us.
+    return t(ImportResultErrorMapper[conversation.exportError]);
+  };
 
   return (
     <Dialog
@@ -203,7 +234,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
                 />
                 {conversation.exportStatus === 'error' && (
                   <Typography color={red[700]} variant="caption">
-                    {t(translations.exportError)}
+                    {exportErrorMessage(conversation)}
                   </Typography>
                 )}
               </section>
@@ -286,11 +317,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
                     }
                   })
                   .catch((error) => {
-                    dispatch(
-                      actions.exportConversationError({
-                        conversationId: conversation.id,
-                      }),
-                    );
+                    handleExportError(conversation, error.message);
                   });
               });
           }}
