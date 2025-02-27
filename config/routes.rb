@@ -241,6 +241,7 @@ Rails.application.routes.draw do
             resources :programming, only: [:new, :create, :edit, :update, :destroy] do
               post :generate, on: :collection
               get :codaveri_languages, on: :collection
+              get :import_result, on: :member
               patch :update_question_setting, on: :member
             end
             resources :voice_responses, only: [:new, :create, :edit, :update, :destroy]

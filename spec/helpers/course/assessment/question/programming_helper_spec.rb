@@ -16,16 +16,30 @@ RSpec.describe Course::Assessment::Question::ProgrammingHelper do
       end
     end
 
-    describe '#import_error_message' do
-      subject { helper.send(:import_error_message, build_error(error_class, message)) }
+    describe '#import_result_error' do
+      subject { helper.send(:import_result_error) }
       let(:error_class) { StandardError }
+      let(:import_job) { build(:trackable_job, :errored, error: build_error(error_class)) }
       let(:message) { '' }
+
+      context 'when the job does not exist' do
+        let(:import_job) { nil }
+        it 'returns invalid package' do
+          expect(subject).to be_nil
+        end
+      end
+
+      context 'when the job succeeded' do
+        let(:import_job) { build(:trackable_job, :completed) }
+        it 'returns invalid package' do
+          expect(subject).to be_nil
+        end
+      end
 
       context 'when an InvalidDataError is raised' do
         let(:error_class) { InvalidDataError }
         it 'returns invalid package' do
-          expect(subject).to eq(I18n.t('course.assessment.question.programming.form.import_result.'\
-                                       'errors.invalid_package'))
+          expect(subject).to eq(:invalid_package)
         end
       end
 
@@ -35,8 +49,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingHelper do
         end
 
         it 'returns time limit exceeded' do
-          expect(subject).to eq(I18n.t('course.assessment.question.programming.form.import_result.'\
-                                       'errors.time_limit_exceeded'))
+          expect(subject).to eq(:time_limit_exceeded)
         end
       end
 
@@ -44,23 +57,22 @@ RSpec.describe Course::Assessment::Question::ProgrammingHelper do
         let(:error_class) { Timeout::Error }
 
         it 'returns timeout error' do
-          expect(subject).to eq(I18n.t('course.assessment.question.programming.form.import_result.'\
-                                       'errors.evaluation_timeout'))
+          expect(subject).to eq(:evaluation_timeout)
         end
       end
 
       context 'when a generic Evaluation error is raised' do
         let(:error_class) { Course::Assessment::ProgrammingEvaluationService::Error }
         it 'returns the generic error message' do
-          expect(subject).to eq(I18n.t('course.assessment.question.programming.form.import_result.'\
-                                       'errors.evaluation_error'))
+          expect(subject).to eq(:evaluation_error)
         end
       end
 
       context 'when any other error is raised' do
         let(:message) { 'test' }
+        let(:import_job) { build(:trackable_job, :errored, error: build_error(error_class, message)) }
         it 'returns the error message' do
-          expect(subject).to eq(message)
+          expect(subject).to eq(:generic_error)
         end
       end
     end
