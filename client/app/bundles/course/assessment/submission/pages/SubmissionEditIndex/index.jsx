@@ -28,7 +28,6 @@ import {
   purgeSubmissionStore,
 } from '../../actions';
 import ProgressPanel from '../../components/ProgressPanel';
-import { workflowStates } from '../../constants';
 import {
   assessmentShape,
   gradingShape,
@@ -66,14 +65,12 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderTimeLimitBanner() {
-    const { assessment, submission, submissionTimeLimitAt } = this.props;
+    const { assessment, submission } = this.props;
 
     return (
       assessment.timeLimit &&
       !assessment.isKoditsuEnabled &&
-      submission.workflowState === 'attempting' && (
-        <TimeLimitBanner submissionTimeLimitAt={submissionTimeLimitAt} />
-      )
+      submission.workflowState === 'attempting' && <TimeLimitBanner />
     );
   }
 
@@ -185,7 +182,6 @@ VisibleSubmissionEditIndex.propTypes = {
     }),
   }),
   assessment: assessmentShape,
-  submissionTimeLimitAt: PropTypes.number,
   intl: PropTypes.object.isRequired,
   submission: submissionShape,
   isLoading: PropTypes.bool.isRequired,
@@ -198,17 +194,8 @@ VisibleSubmissionEditIndex.propTypes = {
 };
 
 function mapStateToProps({ assessments: { submission } }) {
-  const hasSubmissionTimeLimit =
-    submission.submission.workflowState === workflowStates.Attempting &&
-    submission.assessment.timeLimit;
-  const submissionTimeLimitAt = hasSubmissionTimeLimit
-    ? new Date(submission.submission.attemptedAt).getTime() +
-      submission.assessment.timeLimit * 60 * 1000
-    : null;
-
   return {
     assessment: submission.assessment,
-    submissionTimeLimitAt,
     submission: submission.submission,
     isLoading: submission.submissionFlags.isLoading,
     isSaving: submission.submissionFlags.isSaving,

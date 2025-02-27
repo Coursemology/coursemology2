@@ -319,6 +319,11 @@ const translations = defineMessages({
     id: 'course.assessment.submission.updateFailure',
     defaultMessage: 'Submission update failed: {errors}',
   },
+  startTimedExamAssessmentFailed: {
+    id: 'course.assessment.submission.startTimedExamAssessmentFailed',
+    defaultMessage:
+      'There was an error starting the assessment. Please check your internet connection and try again.',
+  },
   downloadRequestSuccess: {
     id: 'course.assessment.submission.downloadRequestSuccess',
     defaultMessage: 'Your download request is successful.',
@@ -478,11 +483,19 @@ const translations = defineMessages({
       '{stillSomeTimeRemaining, select, true {Once the time is up, \
       the assessment will be automatically finalised.} other {Finalising the submission now!}}',
   },
+  timedAssessmentStartDialogMessage: {
+    id: 'course.assessment.submission.timedExamStartDialogMessage',
+    defaultMessage: 'Start the timed exam',
+  },
   timedExamDialogTitle: {
     id: 'course.assessment.submission.timedExamDialogTitle',
     defaultMessage:
       '{stillSomeTimeRemaining, select, true {{remainingTime} {isNewSubmission, select, true {} other {remaining}} to \
       complete this exam.} other {The exam has ended!}}',
+  },
+  timedExamStartDialogMessage: {
+    id: 'course.assessment.submission.timedExamStartDialogMessage',
+    defaultMessage: 'Click to start the exam and the timer',
   },
   timedExamDialogMessage: {
     id: 'course.assessment.submission.timedExamDialogMessage',
@@ -502,6 +515,10 @@ const translations = defineMessages({
   ok: {
     id: 'course.assessment.submission.ok',
     defaultMessage: 'OK',
+  },
+  start: {
+    id: 'course.assessment.submission.start',
+    defaultMessage: '{isNewSubmission, select, true {Start} other {OK}}',
   },
   answerSubmitted: {
     id: 'course.assessment.submission.answerSubmitted',
@@ -609,19 +626,9 @@ const translations = defineMessages({
   hoursMinutesSeconds: {
     id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.hoursMinutesSeconds',
     defaultMessage:
-      '{hrs, plural, one {# hour} other {# hours}} \
+      '{hrs, plural, =0 {} one {# hour} other {# hours}} \
     {mins, plural, =0 {} one {# minute} other {# minutes}} \
     {secs, plural, =0 {} one {# second} other {# seconds}}',
-  },
-  minutesSeconds: {
-    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
-    defaultMessage:
-      '{mins, plural, one {# minute} other {# minutes}} \
-    {secs, plural, =0 {} one {# second} other {# seconds}}',
-  },
-  seconds: {
-    id: 'course.assessment.submission.SubmissionEditIndex.TimeLimitBanner.minutesSeconds',
-    defaultMessage: '{secs, plural, one {# second} other {# seconds}}',
   },
 });
 

@@ -145,6 +145,28 @@ export function unsubmit(submissionId) {
   };
 }
 
+export function setTimerStartAt(submissionId, setExamNotice, setTimerNotice) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.SET_TIMER_STARTED_AT_REQUEST });
+
+    return CourseAPI.assessment.submissions
+      .setTimerStartAt(submissionId)
+      .then((response) => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.SET_TIMER_STARTED_AT_SUCCESS,
+          payload: data,
+        });
+        setExamNotice(false);
+        setTimerNotice(false);
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.SET_TIMER_STARTED_AT_FAILURE });
+        dispatch(setNotification(translations.startTimedExamAssessmentFailed));
+      });
+  };
+}
+
 export function mark(submissionId, grades, exp) {
   const payload = {
     submission: {

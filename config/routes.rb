@@ -256,6 +256,7 @@ Rails.application.routes.draw do
               post 'save_live_feedback', to: 'live_feedback#save_live_feedback', on: :collection
               get :download_all, on: :collection
               get :download_statistics, on: :collection
+              patch :set_timer_started_at, on: :member
               patch :publish_all, on: :collection
               patch :force_submit_all, on: :collection
               patch :fetch_submissions_from_koditsu, on: :collection
