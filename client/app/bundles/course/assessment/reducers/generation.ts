@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ProgrammingPostStatusData } from 'types/course/assessment/question/programming';
+import {
+  PackageImportResultError,
+  ProgrammingPostStatusData,
+} from 'types/course/assessment/question/programming';
 
 import {
   CodaveriGenerateFormData,
@@ -293,12 +296,16 @@ export const generationSlice = createSlice({
       state,
       action: PayloadAction<{
         conversationId: string;
+        exportError?: PackageImportResultError;
+        exportErrorMessage?: string;
       }>,
     ) => {
       const { conversationId } = action.payload;
       const conversation = state.conversations[conversationId];
       if (conversation) {
         conversation.exportStatus = 'error';
+        conversation.exportError = action.payload.exportError;
+        conversation.exportErrorMessage = action.payload.exportErrorMessage;
       }
     },
     clearErroredConversationData: (state) => {
