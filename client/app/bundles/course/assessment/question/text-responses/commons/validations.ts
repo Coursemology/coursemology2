@@ -34,7 +34,7 @@ export const questionSchema = (
       is: AttachmentType.MULTIPLE_ATTACHMENT,
       then: number()
         .required()
-        .min(1, translations.mustSpecifyPositiveMaxAttachment)
+        .min(2, translations.mustSpecifyPositiveMaxAttachment)
         .max(
           defaultMaxAttachments,
           t(translations.mustBeLessThanMaxAttachments, {

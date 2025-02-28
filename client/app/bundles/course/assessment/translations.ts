@@ -816,7 +816,7 @@ const translations = defineMessages({
   },
   mustSpecifyPositiveMaxAttachment: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachment',
-    defaultMessage: 'Maximum Number of Attachments has to be positive.',
+    defaultMessage: 'Max Number of Attachments has to be at least 2.',
   },
   mustSpecifyPositiveMaxAttachmentSize: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaxAttachmentSize',
