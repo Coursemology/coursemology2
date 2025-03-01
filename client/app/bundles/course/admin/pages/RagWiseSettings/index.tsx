@@ -2,9 +2,12 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
 import RagWiseSettingsForm from './components/forms/RagWiseSettingsForm';
+import ForumList from './components/ForumList';
 import MaterialList from './components/MaterialList';
 import {
+  fetchAllCourses,
   fetchAllFolders,
+  fetchAllForums,
   fetchAllMaterials,
   fetchRagWiseSettings,
 } from './operations';
@@ -18,10 +21,12 @@ const RagWiseSettings = (): JSX.Element => {
           fetchRagWiseSettings(),
           fetchAllMaterials(),
           fetchAllFolders(),
+          fetchAllCourses(),
+          fetchAllForums(),
         ])
       }
     >
-      {([ragWiseSettings, materials, folders]): JSX.Element => {
+      {([ragWiseSettings, materials, folders, coures, forums]): JSX.Element => {
         return (
           <>
             <RagWiseSettingsForm settings={ragWiseSettings} />
@@ -30,6 +35,7 @@ const RagWiseSettings = (): JSX.Element => {
                 folders.filter((folder) => folder.parentId === null)[0]
               }
             />
+            <ForumList />
           </>
         );
       }}

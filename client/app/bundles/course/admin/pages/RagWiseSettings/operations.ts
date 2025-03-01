@@ -1,7 +1,10 @@
 import { AxiosError } from 'axios';
 import { dispatch, Operation } from 'store';
 import {
+  Course,
   Folder,
+  ForumImport,
+  ForumImportData,
   Material,
   RagWiseSettings,
   RagWiseSettingsPostData,
@@ -9,12 +12,17 @@ import {
 
 import CourseAPI from 'api/course';
 import {
+  saveAllCourses,
   saveAllFolders,
+  saveAllForums,
   saveAllMaterials,
-  updateMaterialWorkflowState,
+  updateForumImportsWorkflowState,
+  updateMaterialsWorkflowState,
 } from 'course/admin/reducers/ragWiseSettings';
 import { MATERIAL_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import pollJob from 'lib/helpers/jobHelpers';
+
+import { FORUM_IMPORT_WORKFLOW_STATE } from './constants';
 
 const CHUNK_MATERIAL_JOB_POLL_INTERVAL_MS = 2000;
 
@@ -64,15 +72,38 @@ export const fetchAllFolders = async (): Promise<Folder[]> => {
   }
 };
 
-export function removeChunks(
-  currFolderId: number,
-  materialId: number,
-): Operation {
+export const fetchAllCourses = async (): Promise<Course[]> => {
+  try {
+    const response = await CourseAPI.admin.ragWise.courses();
+    dispatch(saveAllCourses({ courses: response.data.courses }));
+    return response.data.courses;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const fetchAllForums = async (): Promise<ForumImport[]> => {
+  try {
+    const response = await CourseAPI.admin.ragWise.forums();
+    dispatch(saveAllForums({ forums: response.data.forums }));
+    return response.data.forums;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export function removeChunks(materialIds: number[]): Operation {
   return async () => {
-    await CourseAPI.folders.deleteMaterialChunks(currFolderId, materialId);
+    await CourseAPI.materials.deleteMaterialChunks({
+      material: {
+        material_ids: materialIds,
+      },
+    });
     dispatch(
-      updateMaterialWorkflowState({
-        id: materialId,
+      updateMaterialsWorkflowState({
+        ids: materialIds,
         workflowState: MATERIAL_WORKFLOW_STATE.not_chunked,
       }),
     );
@@ -80,28 +111,31 @@ export function removeChunks(
 }
 
 export function chunkMaterial(
-  currFolderId: number,
-  materialId: number,
+  materialIds: number[],
   handleSuccess: () => void,
   handleFailure: () => void,
 ): Operation {
   return async () => {
-    CourseAPI.folders
-      .chunkMaterial(currFolderId, materialId)
+    dispatch(
+      updateMaterialsWorkflowState({
+        ids: materialIds,
+        workflowState: MATERIAL_WORKFLOW_STATE.chunking,
+      }),
+    );
+    CourseAPI.materials
+      .chunkMaterials({
+        material: {
+          material_ids: materialIds,
+        },
+      })
       .then((response) => {
         const jobUrl = response.data.jobUrl;
-        dispatch(
-          updateMaterialWorkflowState({
-            id: materialId,
-            workflowState: MATERIAL_WORKFLOW_STATE.chunking,
-          }),
-        );
         pollJob(
           jobUrl,
           () => {
             dispatch(
-              updateMaterialWorkflowState({
-                id: materialId,
+              updateMaterialsWorkflowState({
+                ids: materialIds,
                 workflowState: MATERIAL_WORKFLOW_STATE.chunked,
               }),
             );
@@ -109,8 +143,8 @@ export function chunkMaterial(
           },
           () => {
             dispatch(
-              updateMaterialWorkflowState({
-                id: materialId,
+              updateMaterialsWorkflowState({
+                ids: materialIds,
                 workflowState: MATERIAL_WORKFLOW_STATE.not_chunked,
               }),
             );
@@ -119,6 +153,87 @@ export function chunkMaterial(
           CHUNK_MATERIAL_JOB_POLL_INTERVAL_MS,
         );
       })
-      .catch(handleFailure);
+      .catch(() => {
+        dispatch(
+          updateMaterialsWorkflowState({
+            ids: materialIds,
+            workflowState: MATERIAL_WORKFLOW_STATE.not_chunked,
+          }),
+        );
+        handleFailure();
+      });
+  };
+}
+
+export function importForum(
+  forumImportIds: number[],
+  handleSuccess: () => void,
+  handleFailure: () => void,
+): Operation {
+  return async () => {
+    dispatch(
+      updateForumImportsWorkflowState({
+        ids: forumImportIds,
+        workflowState: FORUM_IMPORT_WORKFLOW_STATE.importing,
+      }),
+    );
+    const data: ForumImportData = {
+      forum_imports: {
+        forum_ids: forumImportIds,
+      },
+    };
+    CourseAPI.admin.ragWise
+      .importCourseForums(data)
+      .then((response) => {
+        const jobUrl = response.data.jobUrl;
+        pollJob(
+          jobUrl,
+          () => {
+            dispatch(
+              updateForumImportsWorkflowState({
+                ids: forumImportIds,
+                workflowState: FORUM_IMPORT_WORKFLOW_STATE.imported,
+              }),
+            );
+            handleSuccess();
+          },
+          () => {
+            dispatch(
+              updateForumImportsWorkflowState({
+                ids: forumImportIds,
+                workflowState: FORUM_IMPORT_WORKFLOW_STATE.not_imported,
+              }),
+            );
+            handleFailure();
+          },
+          CHUNK_MATERIAL_JOB_POLL_INTERVAL_MS,
+        );
+      })
+      .catch(() => {
+        dispatch(
+          updateForumImportsWorkflowState({
+            ids: forumImportIds,
+            workflowState: FORUM_IMPORT_WORKFLOW_STATE.not_imported,
+          }),
+        );
+        handleFailure();
+      });
+  };
+}
+
+export function destroyImportedDiscussions(forumImportId: number[]): Operation {
+  return async () => {
+    const data: ForumImportData = {
+      forum_imports: {
+        forum_ids: forumImportId,
+      },
+    };
+    await CourseAPI.admin.ragWise.destroyImportedDiscussions(data);
+    dispatch(
+      updateForumImportsWorkflowState({
+        ids: forumImportId,
+        workflowState: FORUM_IMPORT_WORKFLOW_STATE.not_imported,
+      }),
+    );
   };
 }

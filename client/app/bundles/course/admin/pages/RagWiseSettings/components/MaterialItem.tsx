@@ -5,7 +5,9 @@ import { Material } from 'types/course/admin/ragWise';
 
 import Link from 'lib/components/core/Link';
 
-import KnowledgeBaseSwitch from './buttons/KnowledgeBaseSwitch';
+import { MATERIAL_SWITCH_TYPE } from '../constants';
+
+import MaterialKnowledgeBaseSwitch from './buttons/MaterialKnowledgeBaseSwitch';
 
 interface MaterialItemProps {
   material: Material;
@@ -28,7 +30,10 @@ const MaterialItem: FC<MaterialItemProps> = (props) => {
           <ListItemText primary={material.name} />
         </Link>
         <div className="mr-1">
-          <KnowledgeBaseSwitch material={material} />
+          <MaterialKnowledgeBaseSwitch
+            materials={[material]}
+            type={MATERIAL_SWITCH_TYPE.material}
+          />
         </div>
       </ListItem>
       <Divider className="border-neutral-200 last:border-none" />

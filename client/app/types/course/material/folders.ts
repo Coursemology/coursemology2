@@ -110,3 +110,9 @@ export interface MaterialFormData {
   description: string;
   file: { name: string; url: string; file?: Blob };
 }
+
+export interface MaterialIdsData {
+  material: {
+    material_ids: number[];
+  };
+}
