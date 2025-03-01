@@ -196,6 +196,10 @@ Rails.application.routes.draw do
         patch 'rag_wise' => 'rag_wise_settings#update'
         get 'rag_wise/materials' => 'rag_wise_settings#materials'
         get 'rag_wise/folders' => 'rag_wise_settings#folders'
+        get 'rag_wise/forums' => 'rag_wise_settings#forums'
+        get 'rag_wise/courses' => 'rag_wise_settings#courses'
+        put 'rag_wise/import_course_forums' => 'rag_wise_settings#import_course_forums'
+        put 'rag_wise/destroy_imported_discussions' => 'rag_wise_settings#destroy_imported_discussions'
 
         namespace 'assessments' do
           resources :categories, only: [:create, :destroy] do
@@ -420,14 +424,13 @@ Rails.application.routes.draw do
       end
 
       namespace :material, path: 'materials' do
+        put 'create_text_chunks', to: '#create_text_chunks'
+        put 'destroy_text_chunks', to: '#destroy_text_chunks'
         resources :folders, except: [:new, :create] do
           post 'create/subfolder', on: :member, as: 'create_subfolder', action: 'create_subfolder'
           put 'upload_materials', on: :member
           get 'download', on: :member
-          resources :materials, path: 'files' do
-            put 'create_text_chunks', on: :member
-            delete 'destroy_text_chunks', on: :member
-          end
+          resources :materials, path: 'files'
         end
       end
 
