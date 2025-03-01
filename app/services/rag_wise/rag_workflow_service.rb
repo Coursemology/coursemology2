@@ -12,11 +12,12 @@ class RagWise::RagWorkflowService
     @evaluation = evaluation_service
 
     course_materials_tool = RagWise::Tools::CourseMaterialsTool.new(course, @evaluation)
+    course_forum_discussions_tool = RagWise::Tools::CourseForumDiscussionsTool.new(course, @evaluation)
 
     @assistant = Langchain::Assistant.new(
       llm: @client,
       instructions: self.class.prompt.format(character: character),
-      tools: [course_materials_tool]
+      tools: [course_materials_tool, course_forum_discussions_tool]
     )
   end
 
