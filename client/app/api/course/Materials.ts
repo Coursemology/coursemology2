@@ -1,5 +1,7 @@
 import { AxiosResponseHeaders } from 'axios';
 import { FileListData } from 'types/course/material/files';
+import { MaterialIdsData } from 'types/course/material/folders';
+import { JobSubmitted } from 'types/jobs';
 
 import { APIResponse } from 'api/types';
 
@@ -62,6 +64,20 @@ export default class MaterialsAPI extends BaseCourseAPI {
   destroy(folderId: number, materialId: number): APIResponse {
     return this.client.delete(
       `${this.#urlPrefix}/${folderId}/files/${materialId}`,
+    );
+  }
+
+  deleteMaterialChunks(params: MaterialIdsData): APIResponse {
+    return this.client.put(
+      `/courses/${this.courseId}/materials/destroy_text_chunks`,
+      params,
+    );
+  }
+
+  chunkMaterials(params: MaterialIdsData): APIResponse<JobSubmitted> {
+    return this.client.put(
+      `/courses/${this.courseId}/materials/create_text_chunks`,
+      params,
     );
   }
 }
