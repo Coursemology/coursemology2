@@ -3,11 +3,12 @@ class RagWise::Tools::CourseMaterialsTool
   extend Langchain::ToolDefinition
 
   define_function :get_course_materials,
-                  description: 'Retrieve the course material chunks that are semantically closest to the user query.' do
+                  description: 'Search for answer to all queries based on course material knowledge base.
+                  Always execute this tool.' do
     property :user_query, type: 'string', description: 'Exact user query', required: true
     property :material_names, type: 'string',
-                              description: 'list of course material names referenced in user query,' \
-                                           'e.g., lecture 1, lecture 2....',
+                              description: 'list of course material/assignment filenames or any filenames referenced
+                              in user query,e.g., lecture 1, lecture 2, (i.e any filenames)',
                               required: false
   end
 
