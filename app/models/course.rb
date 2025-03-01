@@ -66,6 +66,10 @@ class Course < ApplicationRecord
   has_many :achievements, dependent: :destroy
   has_many :discussion_topics, class_name: 'Course::Discussion::Topic', inverse_of: :course
   has_many :forums, dependent: :destroy, inverse_of: :course
+  has_many :forum_imports, class_name: 'Course::Forum::Import', foreign_key: :course_id,
+                           inverse_of: :course, dependent: :destroy
+  has_many :imported_forums, through: :forum_imports, source: :imported_forum
+  has_many :imported_forum_discussions, through: :forum_imports, source: :discussions
   has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: 'Course::Survey'
   has_many :videos, through: :lesson_plan_items, source: :actable, source_type: 'Course::Video'
   has_many :video_tabs, class_name: 'Course::Video::Tab', inverse_of: :course, dependent: :destroy
@@ -110,6 +114,13 @@ class Course < ApplicationRecord
 
   scope :active_in_past_7_days, (lambda do
     joins(:course_users).merge(CourseUser.active_in_past_7_days).merge(CourseUser.student).distinct
+  end)
+
+  scope :owned_or_managed_by, (lambda do |user, current_course|
+    joins(:course_users).
+      where(course_users: { user_id: user.id, role: [:owner, :manager] }).
+      where.not(id: current_course.id).
+      distinct
   end)
 
   delegate :students, to: :course_users
@@ -305,6 +316,24 @@ class Course < ApplicationRecord
 
   def materials_list
     materials.where(workflow_state: 'chunked').distinct.pluck(:name)
+  end
+
+  def create_missing_forum_imports(forum_ids)
+    filtered_forum_ids = forum_ids.reject do |forum_id|
+      forum_imports.exists?(imported_forum: forum_id)
+    end
+
+    Course::Forum.where(id: filtered_forum_ids).each do |forum|
+      forum_imports.build(imported_forum: forum)
+    end
+    save!
+  end
+
+  def nearest_forum_discussions(query_embedding)
+    imported_forum_discussions.connection.execute('SET hnsw.ef_search = 100')
+
+    imported_forum_discussions.nearest_neighbors(:embedding, query_embedding, distance: 'cosine').
+      first(3).pluck(:discussion)
   end
 
   private

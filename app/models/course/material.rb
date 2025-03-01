@@ -42,6 +42,35 @@ class Course::Material < ApplicationRecord
 
   scope :in_concrete_folder, -> { joins(:folder).merge(Folder.concrete) }
 
+  class << self
+    def text_chunking!(material_ids, current_user)
+      materials = Course::Material.where(id: material_ids)
+      return if materials.empty?
+
+      materials.each(&:ensure_text_chunking!)
+      Course::Material::TextChunkJob.perform_later(material_ids, current_user).tap do |job|
+        materials.each do |material|
+          material.text_chunking.update_column(:job_id, job.job_id)
+        end
+      end
+    end
+
+    def destroy_text_chunk_references(material_ids)
+      ActiveRecord::Base.transaction do
+        materials = Course::Material.includes(:text_chunk_references).where(id: material_ids)
+        materials.each do |material|
+          # Only process materaial that are in 'chunked' state
+          return false if material.workflow_state != 'chunked'
+
+          material.text_chunk_references.destroy_all
+          material.delete_chunks!
+          material.save!
+        end
+      end
+      true
+    end
+  end
+
   def touch_folder
     folder.touch if !duplicating? && changed?
   end
@@ -90,13 +119,6 @@ class Course::Material < ApplicationRecord
     self.name = next_valid_name
   end
 
-  def text_chunking!(current_user)
-    ensure_text_chunking!
-    Course::Material::TextChunkJob.perform_later(self, current_user).tap do |job|
-      text_chunking.update_column(:job_id, job.job_id)
-    end
-  end
-
   def build_text_chunks(current_user)
     File.open(attachment.path, 'r:ASCII-8BIT') do |file|
       existing_text_chunks = Course::Material::TextChunk.existing_chunks(file: file)
@@ -109,6 +131,17 @@ class Course::Material < ApplicationRecord
     save!
   end
 
+  def ensure_text_chunking!
+    ActiveRecord::Base.transaction(requires_new: true) do
+      text_chunking || create_text_chunking!
+    end
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
+    raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:material_id].empty?
+
+    association(:text_chunking).reload
+    text_chunking
+  end
+
   private
 
   # TODO: Not threadsafe, consider making all folders as materials
@@ -119,17 +152,6 @@ class Course::Material < ApplicationRecord
 
     conflicts = folder.children.where('name ILIKE ?', name)
     errors.add(:name, :taken) unless conflicts.empty?
-  end
-
-  def ensure_text_chunking!
-    ActiveRecord::Base.transaction(requires_new: true) do
-      text_chunking || create_text_chunking!
-    end
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
-    raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:material_id].empty?
-
-    association(:text_chunking).reload
-    text_chunking
   end
 
   def create_references_for_existing_chunks(existing_chunks, current_user)
