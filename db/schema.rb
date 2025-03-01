@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_12_162346) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_22_095313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -670,6 +670,39 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_162346) do
     t.index ["updater_id"], name: "fk__course_experience_points_records_updater_id"
   end
 
+  create_table "course_forum_discussion_references", force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.bigint "forum_import_id", null: false
+    t.bigint "discussion_id", null: false
+    t.bigint "creator_id", null: false
+    t.bigint "updater_id", null: false
+    t.index ["creator_id"], name: "fk__course_forum_discussion_references_creator_id"
+    t.index ["discussion_id"], name: "fk__course_forum_discussion_references_discussion_id"
+    t.index ["forum_import_id"], name: "fk__course_forum_discussion_references_forum_import_id"
+    t.index ["updater_id"], name: "fk__course_forum_discussion_references_updater_id"
+  end
+
+  create_table "course_forum_discussions", force: :cascade do |t|
+    t.vector "embedding", limit: 1536, null: false
+    t.jsonb "discussion", default: {}, null: false
+    t.string "name", null: false
+    t.index ["embedding"], name: "index_course_forum_discussions_on_embedding", opclass: :vector_cosine_ops, using: :hnsw
+    t.index ["name"], name: "index_course_forum_discussions_on_name"
+  end
+
+  create_table "course_forum_imports", force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.bigint "course_id", null: false
+    t.bigint "imported_forum_id", null: false
+    t.string "workflow_state", limit: 255, default: "not_imported", null: false
+    t.uuid "job_id"
+    t.index ["course_id"], name: "fk__course_forum_imports_course_id"
+    t.index ["imported_forum_id"], name: "fk__course_forum_imports_imported_forum_id"
+    t.index ["job_id"], name: "fk__course_forum_importings_job_id"
+  end
+
   create_table "course_forum_rag_auto_answerings", force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -897,7 +930,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_162346) do
     t.datetime "updated_at", null: false
     t.bigint "material_id", null: false
     t.uuid "job_id"
-    t.index ["job_id"], name: "fk__course_material_text_chunkings_job_id", unique: true
+    t.index ["job_id"], name: "fk__course_material_text_chunkings_job_id"
     t.index ["material_id"], name: "fk__course_material_text_chunkings_material_id", unique: true
   end
 
@@ -1667,6 +1700,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_12_162346) do
   add_foreign_key "course_experience_points_records", "users", column: "awarder_id", name: "fk_course_experience_points_records_awarder_id"
   add_foreign_key "course_experience_points_records", "users", column: "creator_id", name: "fk_course_experience_points_records_creator_id"
   add_foreign_key "course_experience_points_records", "users", column: "updater_id", name: "fk_course_experience_points_records_updater_id"
+  add_foreign_key "course_forum_discussion_references", "course_forum_discussions", column: "discussion_id", name: "fk_course_forum_discussion_references_discussion_id"
+  add_foreign_key "course_forum_discussion_references", "course_forum_imports", column: "forum_import_id", name: "fk_course_forum_discussion_references_forum_import_id"
+  add_foreign_key "course_forum_discussion_references", "users", column: "creator_id", name: "fk_course_forum_discussion_references_creator_id"
+  add_foreign_key "course_forum_discussion_references", "users", column: "updater_id", name: "fk_course_forum_discussion_references_updater_id"
+  add_foreign_key "course_forum_imports", "course_forums", column: "imported_forum_id", name: "fk_course_forum_imports_imported_forum_id"
+  add_foreign_key "course_forum_imports", "courses", name: "fk_ccourse_forum_imports_course_id"
+  add_foreign_key "course_forum_imports", "jobs", name: "fk_course_forum_importings_job_id", on_delete: :nullify
   add_foreign_key "course_forum_rag_auto_answerings", "course_discussion_posts", column: "post_id", name: "fk_course_forum_rag_auto_answerings_post_id"
   add_foreign_key "course_forum_rag_auto_answerings", "jobs", name: "fk_course_forum_rag_auto_answerings_job_id", on_delete: :nullify
   add_foreign_key "course_forum_subscriptions", "course_forums", column: "forum_id", name: "fk_course_forum_subscriptions_forum_id"
