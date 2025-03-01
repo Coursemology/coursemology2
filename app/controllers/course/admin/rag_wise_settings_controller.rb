@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Admin::RagWiseSettingsController < Course::Admin::Controller
   before_action :set_parent_courses, only: [:forums, :courses]
+  before_action :authorize_import_forums, only: [:import_course_forums, :destroy_imported_discussions]
   def edit
     respond_to do |format|
       format.json
@@ -25,34 +26,34 @@ class Course::Admin::RagWiseSettingsController < Course::Admin::Controller
   end
 
   def courses
-    @courses = @parent_courses
+    course_users = CourseUser.where(
+      user_id: current_user.id,
+      course_id: @parent_courses.map(&:id)
+    ).index_by(&:course_id) # Load CourseUsers into a hash for fast lookup
+
+    @courses = @parent_courses.map do |course|
+      {
+        course: course,
+        canManageCourse: course_users[course.id]&.manager_or_owner?
+      }
+    end
   end
 
   def forums
-    @forums = Course::Forum.includes(:course_forum_imports).
-              where(course_id: @parent_courses.map(&:id)).map do |forum|
+    @forums = Course::Forum.includes(:course_forum_exports).
+              where(course_id: @parent_courses.map(&:id)).
+              map do |forum|
+      imports_hash = forum.course_forum_exports.to_h { |imp| [imp.course_id, imp] }
       {
         forum: forum,
-        workflow_state: forum.course_forum_imports.
-          find { |imp| imp.course_id == current_course.id }&.workflow_state || 'not_imported'
+        workflow_state: imports_hash[current_course.id]&.workflow_state || 'not_imported'
       }
     end
-
-    # parent_forums = if @parent_courses.present?
-    #                   Course::Forum.where(course_id: @parent_courses.map(&:id))
-    #                 else
-    #                   Course::Forum.none
-    #                 end
-    # imported_forum_ids = current_course.imported_forums.pluck(:id)
-    # forums_to_import = parent_forums.where.not(id: imported_forum_ids)
-    # current_course.build_forum_imports(forums_to_import)
-    # current_course.save!
-    # @forums = current_course.forum_imports
   end
 
   def import_course_forums
     forum_ids = import_course_forum_params[:forum_ids]
-    create_missing_forum_imports(forum_ids)
+    current_course.create_missing_forum_imports(forum_ids)
 
     forum_imports = current_course.forum_imports.where(imported_forum_id: forum_ids)
     job = nil
@@ -80,13 +81,9 @@ class Course::Admin::RagWiseSettingsController < Course::Admin::Controller
 
   private
 
-  def create_missing_forum_imports(forum_ids)
-    filtered_forum_ids = forum_ids.reject do |forum_id|
-      current_course.forum_imports.exists?(imported_forum: forum_id)
-    end
-    forums_to_import = Course::Forum.where(id: filtered_forum_ids)
-    current_course.build_forum_imports(forums_to_import)
-    current_course.save!
+  def authorize_import_forums
+    forum_ids = import_course_forum_params[:forum_ids]
+    authorize!(:import_course_forums, Course::Forum.find(forum_ids.first).course)
   end
 
   def set_parent_courses

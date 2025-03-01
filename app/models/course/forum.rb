@@ -17,6 +17,8 @@ class Course::Forum < ApplicationRecord
   belongs_to :course, inverse_of: :forums
   has_many :topics, dependent: :destroy, inverse_of: :forum
   has_many :subscriptions, dependent: :destroy, inverse_of: :forum
+  has_many :course_forum_exports, class_name: 'Course::Forum::Import', dependent: :destroy,
+                                  inverse_of: :imported_forum
 
   default_scope { order(created_at: :asc) }
 
