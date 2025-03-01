@@ -26,12 +26,14 @@ json.subfolders @subfolders do |subfolder|
     json.showSdlWarning show_sdl_warning?(subfolder)
     json.canEdit can?(:edit, subfolder)
     json.canDelete can?(:destroy, subfolder)
+    json.canManageKnowledgeBase current_course_user&.manager_or_owner?
   end
 end
 
 json.materials @folder.materials.includes(:updater) do |material|
   json.id material.id
   json.name material.name
+  json.workflowState material.workflow_state
   json.description format_ckeditor_rich_text(material.description)
   json.materialUrl url_to_material(current_course, @folder, material)
   json.updatedAt material.attachment.updated_at
@@ -59,6 +61,7 @@ json.advanceStartAt current_course.advance_start_at_duration
 
 json.permissions do
   json.isCurrentCourseStudent current_course_user&.student?
+  json.canManageKnowledgeBase current_course_user&.manager_or_owner?
   json.canStudentUpload @folder.can_student_upload
   json.canCreateSubfolder can?(:new_subfolder, @folder)
   json.canUpload can?(:upload, @folder)

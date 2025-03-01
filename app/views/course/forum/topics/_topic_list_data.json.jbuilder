@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 first_post = topic.posts.first
-last_post = topic.posts.last
+last_post = if current_course_user&.teaching_staff?
+              topic.posts.last
+            else
+              topic.posts.where.not(workflow_state: 'draft').last
+            end
 
 json.id topic.id
 json.forumId forum.id
@@ -52,4 +56,5 @@ json.permissions do
   json.canReplyTopic can?(:reply, topic)
   json.canToggleAnswer can?(:toggle_answer, topic)
   json.isAnonymousEnabled current_course.settings(:course_forums_component).allow_anonymous_post
+  json.canManageAIResponse can?(:publish, topic) && current_course.component_enabled?(Course::RagWiseComponent)
 end

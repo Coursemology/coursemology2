@@ -47,3 +47,5 @@ en:
       name: 'Stories'
     koditsu_platform:
       name: 'Koditsu Exam'
+    rag_wise:
+      name: 'RagWise Auto Forum Response'

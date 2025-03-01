@@ -5,5 +5,17 @@ FactoryBot.define do
     sequence(:name) { |n| "Material #{n}" }
     sequence(:description) { |n| "Material Description #{n}" }
     attachment_reference
+
+    trait :not_chunked do
+      workflow_state { 'not_chunked' }
+    end
+
+    trait :chunking do
+      workflow_state { 'chunking' }
+    end
+
+    trait :chunked do
+      workflow_state { 'chunked' }
+    end
   end
 end

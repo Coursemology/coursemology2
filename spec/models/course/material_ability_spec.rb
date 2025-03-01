@@ -44,6 +44,9 @@ RSpec.describe Course::Material do
       it { is_expected.not_to be_able_to(:download, ended_material.folder) }
       it { is_expected.to be_able_to(:download, started_linked_material.folder) }
       it { is_expected.not_to be_able_to(:download, not_started_linked_material.folder) }
+
+      it { is_expected.not_to be_able_to(:create_text_chunks, valid_material) }
+      it { is_expected.not_to be_able_to(:destroy_text_chunks, valid_material) }
     end
 
     context 'when the user is a Course Teaching Staff' do
@@ -55,6 +58,8 @@ RSpec.describe Course::Material do
       it { is_expected.to be_able_to(:manage, ended_material) }
       it { is_expected.to be_able_to(:manage, not_started_linked_material) }
       it { is_expected.to be_able_to(:show, not_started_linked_material) }
+      it { is_expected.not_to be_able_to(:create_text_chunks, valid_material) }
+      it { is_expected.not_to be_able_to(:destroy_text_chunks, valid_material) }
     end
 
     context 'when the user is a Course Observer' do
@@ -78,6 +83,25 @@ RSpec.describe Course::Material do
       it { is_expected.to be_able_to(:download, ended_material.folder) }
       it { is_expected.to be_able_to(:download, started_linked_material.folder) }
       it { is_expected.to be_able_to(:download, not_started_linked_material.folder) }
+
+      it { is_expected.not_to be_able_to(:create_text_chunks, valid_material) }
+      it { is_expected.not_to be_able_to(:destroy_text_chunks, valid_material) }
+    end
+
+    context 'when the user is a Course Manager' do
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:user) { course_user.user }
+
+      it { is_expected.to be_able_to(:create_text_chunks, valid_material) }
+      it { is_expected.to be_able_to(:destroy_text_chunks, valid_material) }
+    end
+
+    context 'when the user is a Course Owner' do
+      let(:course_user) { create(:course_owner, course: course) }
+      let(:user) { course_user.user }
+
+      it { is_expected.to be_able_to(:create_text_chunks, valid_material) }
+      it { is_expected.to be_able_to(:destroy_text_chunks, valid_material) }
     end
   end
 end

@@ -43,6 +43,7 @@ class Course < ApplicationRecord
     include Course::MaterialConcern
   end
   has_many :materials, through: :material_folders
+  has_many :material_text_chunks, through: :materials, source: :text_chunks
   has_many :assessment_categories, class_name: 'Course::Assessment::Category',
                                    dependent: :destroy, inverse_of: :course
   has_many :assessment_tabs, source: :tabs, through: :assessment_categories
@@ -243,6 +244,14 @@ class Course < ApplicationRecord
     settings(:course_codaveri_component).is_only_itsp
   end
 
+  def rag_wise_response_workflow
+    settings(:course_rag_wise_component).response_workflow
+  end
+
+  def rag_wise_character_prompt
+    settings(:course_rag_wise_component).roleplay
+  end
+
   def upcoming_lesson_plan_items_exist?
     opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
     opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.any? do |item|
@@ -279,6 +288,23 @@ class Course < ApplicationRecord
   def reference_timeline_for(course_user)
     # TODO: [PR#5491] Return only `default_reference_timeline.id` if Multiple Reference Timelines component is disabled.
     course_user&.reference_timeline_id || default_reference_timeline.id
+  end
+
+  def nearest_text_chunks(query_embedding, material_names: nil)
+    text_chunks = material_text_chunks
+    text_chunks.connection.execute('SET hnsw.ef_search = 100')
+
+    if material_names
+      # Join the material table to filter by material name
+      text_chunks = text_chunks.joins(:materials).where(course_materials: { name: material_names })
+    end
+
+    text_chunks.nearest_neighbors(:embedding, query_embedding, distance: 'cosine').
+      first(5).pluck(:content)
+  end
+
+  def materials_list
+    materials.where(workflow_state: 'chunked').distinct.pluck(:name)
   end
 
   private

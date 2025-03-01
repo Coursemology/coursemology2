@@ -1,5 +1,7 @@
 import { Permissions, RecursiveArray } from 'types';
 
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
+
 export interface EmailSubscriptionSetting {
   isCourseEmailSettingEnabled: boolean;
   isUserEmailSettingEnabled: boolean;
@@ -33,6 +35,7 @@ export type ForumTopicListDataPermissions = Permissions<
   | 'canReplyTopic'
   | 'canToggleAnswer'
   | 'isAnonymousEnabled'
+  | 'canManageAIResponse'
 >;
 
 export type ForumTopicPostListDataPermissions = Permissions<
@@ -110,6 +113,8 @@ export interface ForumTopicPostListData {
   voteTally: number;
   isAnonymous: boolean;
   creator?: { id: number; userUrl: string; name: string; imageUrl: string };
+  isAiGenerated: boolean;
+  workflowState: keyof typeof POST_WORKFLOW_STATE;
   permissions: ForumTopicPostListDataPermissions;
 }
 
@@ -186,6 +191,8 @@ export interface ForumTopicPostEntity {
   voteTally: ForumTopicPostListData['voteTally'];
   isAnonymous: ForumTopicPostListData['isAnonymous'];
   creator?: ForumTopicPostListData['creator'];
+  isAiGenerated: ForumTopicPostListData['isAiGenerated'];
+  workflowState: ForumTopicPostListData['workflowState'];
 
   permissions: ForumTopicPostListData['permissions'];
 }

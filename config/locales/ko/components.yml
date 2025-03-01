@@ -47,3 +47,5 @@ ko:
       name: '이야기'
     koditsu_platform:
       name: 'Koditsu 시험'
+    rag_wise:
+      name: 'RagWise 자동 포럼 응답'
