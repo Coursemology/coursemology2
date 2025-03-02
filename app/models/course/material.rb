@@ -2,8 +2,29 @@
 class Course::Material < ApplicationRecord
   has_one_attachment
   include DuplicationStateTrackingConcern
+  include Workflow
+
+  workflow do
+    state :not_chunked do
+      event :start_chunking, transitions_to: :chunking
+    end
+    # State where there is a job running to chunk course materials
+    state :chunking do
+      event :finish_chunking, transitions_to: :chunked
+      event :cancel_chunking, transitions_to: :not_chunked
+    end
+    # The state where chunking job is completed and course_materials is chunked
+    state :chunked do
+      event :delete_chunks, transitions_to: :not_chunked
+    end
+  end
 
   belongs_to :folder, inverse_of: :materials, class_name: 'Course::Material::Folder'
+  has_many :text_chunk_references, inverse_of: :material, class_name: 'Course::Material::TextChunkReference',
+                                   dependent: :destroy, autosave: true
+  has_many :text_chunks, through: :text_chunk_references
+  has_one :text_chunking, class_name: 'Course::Material::TextChunking',
+                          dependent: :destroy, inverse_of: :material, autosave: true
 
   before_save :touch_folder
 
@@ -17,8 +38,38 @@ class Course::Material < ApplicationRecord
                                  if: -> { folder_id? && name_changed? } }
   validates :folder_id, uniqueness: { scope: [:name], case_sensitive: false,
                                       if: -> { name? && folder_id_changed? } }
+  validates :workflow_state, presence: true
 
   scope :in_concrete_folder, -> { joins(:folder).merge(Folder.concrete) }
+
+  class << self
+    def text_chunking!(material_ids, current_user)
+      materials = Course::Material.where(id: material_ids)
+      return if materials.empty?
+
+      materials.each(&:ensure_text_chunking!)
+      Course::Material::TextChunkJob.perform_later(material_ids, current_user).tap do |job|
+        materials.each do |material|
+          material.text_chunking.update_column(:job_id, job.job_id)
+        end
+      end
+    end
+
+    def destroy_text_chunk_references(material_ids)
+      ActiveRecord::Base.transaction do
+        materials = Course::Material.includes(:text_chunk_references).where(id: material_ids)
+        materials.each do |material|
+          # Only process materaial that are in 'chunked' state
+          return false if material.workflow_state != 'chunked'
+
+          material.text_chunk_references.destroy_all
+          material.delete_chunks!
+          material.save!
+        end
+      end
+      true
+    end
+  end
 
   def touch_folder
     folder.touch if !duplicating? && changed?
@@ -45,6 +96,8 @@ class Course::Material < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.attachment = duplicator.duplicate(other.attachment)
+    self.text_chunk_references = other.text_chunk_references.
+                                 map { |text_chunk_reference| duplicator.duplicate(text_chunk_reference) }
     self.folder = if duplicator.duplicated?(other.folder)
                     duplicator.duplicate(other.folder)
                   else
@@ -66,6 +119,29 @@ class Course::Material < ApplicationRecord
     self.name = next_valid_name
   end
 
+  def build_text_chunks(current_user)
+    File.open(attachment.path, 'r:ASCII-8BIT') do |file|
+      existing_text_chunks = Course::Material::TextChunk.existing_chunks(file: file)
+      if existing_text_chunks.exists?
+        create_references_for_existing_chunks(existing_text_chunks, current_user)
+      else
+        create_new_chunks_and_references(current_user, file)
+      end
+    end
+    save!
+  end
+
+  def ensure_text_chunking!
+    ActiveRecord::Base.transaction(requires_new: true) do
+      text_chunking || create_text_chunking!
+    end
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
+    raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:material_id].empty?
+
+    association(:text_chunking).reload
+    text_chunking
+  end
+
   private
 
   # TODO: Not threadsafe, consider making all folders as materials
@@ -76,5 +152,35 @@ class Course::Material < ApplicationRecord
 
     conflicts = folder.children.where('name ILIKE ?', name)
     errors.add(:name, :taken) unless conflicts.empty?
+  end
+
+  def create_references_for_existing_chunks(existing_chunks, current_user)
+    existing_chunks.find_each do |chunk|
+      text_chunk_references.build(
+        text_chunk: chunk,
+        creator: current_user,
+        updater: current_user
+      )
+    end
+  end
+
+  def create_new_chunks_and_references(current_user, file)
+    llm_service = RagWise::LlmService.new
+    chunking_service = RagWise::ChunkingService.new(file: file)
+
+    file_digest = Digest::SHA256.file(file.try(:tempfile) || file).hexdigest
+    chunks = chunking_service.file_chunking
+    embeddings = llm_service.generate_embeddings_from_chunks(chunks)
+    chunks.each_with_index do |chunk, index|
+      text_chunk_references.build(
+        text_chunk: Course::Material::TextChunk.new(
+          name: file_digest,
+          embedding: embeddings[index],
+          content: chunk
+        ),
+        creator: current_user,
+        updater: current_user
+      )
+    end
   end
 end

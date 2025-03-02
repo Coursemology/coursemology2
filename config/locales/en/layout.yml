@@ -18,6 +18,8 @@ en:
         title: 'Lesson Plan'
       codaveri:
         title: 'Codaveri Evaluation and Feedback'
+      rag_wise:
+        title: 'RagWise Auto Forum Response'
     course_users:
       title: 'Manage Users'
     duplication:

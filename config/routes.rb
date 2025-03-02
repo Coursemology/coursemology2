@@ -192,6 +192,15 @@ Rails.application.routes.draw do
         get 'stories' => 'stories_settings#edit'
         patch 'stories' => 'stories_settings#update'
 
+        get 'rag_wise' => 'rag_wise_settings#edit'
+        patch 'rag_wise' => 'rag_wise_settings#update'
+        get 'rag_wise/materials' => 'rag_wise_settings#materials'
+        get 'rag_wise/folders' => 'rag_wise_settings#folders'
+        get 'rag_wise/forums' => 'rag_wise_settings#forums'
+        get 'rag_wise/courses' => 'rag_wise_settings#courses'
+        put 'rag_wise/import_course_forums' => 'rag_wise_settings#import_course_forums'
+        put 'rag_wise/destroy_imported_discussions' => 'rag_wise_settings#destroy_imported_discussions'
+
         namespace 'assessments' do
           resources :categories, only: [:create, :destroy] do
             resources :tabs, only: [:create, :destroy]
@@ -351,6 +360,9 @@ Rails.application.routes.draw do
             resources :posts, only: [:create, :update, :destroy] do
               put 'vote', on: :member
               put 'toggle_answer', on: :member
+              put 'mark_answer_and_publish', on: :member
+              put 'publish', on: :member
+              put 'generate_reply', on: :member
             end
 
             post 'subscribe', on: :member
@@ -412,6 +424,8 @@ Rails.application.routes.draw do
       end
 
       namespace :material, path: 'materials' do
+        put 'create_text_chunks', to: '#create_text_chunks'
+        put 'destroy_text_chunks', to: '#destroy_text_chunks'
         resources :folders, except: [:new, :create] do
           post 'create/subfolder', on: :member, as: 'create_subfolder', action: 'create_subfolder'
           put 'upload_materials', on: :member

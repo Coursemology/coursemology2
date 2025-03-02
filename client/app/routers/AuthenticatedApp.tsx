@@ -24,6 +24,7 @@ import LeaderboardSettings from 'bundles/course/admin/pages/LeaderboardSettings'
 import LessonPlanSettings from 'bundles/course/admin/pages/LessonPlanSettings';
 import MaterialsSettings from 'bundles/course/admin/pages/MaterialsSettings';
 import NotificationSettings from 'bundles/course/admin/pages/NotificationSettings';
+import RagWiseSettings from 'bundles/course/admin/pages/RagWiseSettings';
 import SidebarSettings from 'bundles/course/admin/pages/SidebarSettings';
 import VideosSettings from 'bundles/course/admin/pages/VideosSettings';
 import AnnouncementsIndex from 'bundles/course/announcements/pages/AnnouncementsIndex';
@@ -421,6 +422,10 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             {
               path: 'stories',
               element: <StoriesSettings />,
+            },
+            {
+              path: 'rag_wise',
+              element: <RagWiseSettings />,
             },
           ],
         },

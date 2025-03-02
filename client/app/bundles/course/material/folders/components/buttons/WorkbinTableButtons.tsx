@@ -4,6 +4,7 @@ import { Stack } from '@mui/material';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
+import { MATERIAL_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -20,6 +21,7 @@ interface Props {
   canEdit: boolean;
   canDelete: boolean;
   type: 'subfolder' | 'material';
+  state: keyof typeof MATERIAL_WORKFLOW_STATE;
   folderInitialValues?: {
     name: string;
     description: string;
@@ -61,6 +63,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
     isConcrete,
     canEdit,
     canDelete,
+    state,
     type,
     folderInitialValues,
     materialInitialValues,
@@ -147,6 +150,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
       <Stack direction={{ xs: 'column', sm: 'row' }}>
         {canEdit && isConcrete && (
           <EditButton
+            disabled={state === MATERIAL_WORKFLOW_STATE.chunking}
             id={`${type}-edit-button-${itemId}`}
             onClick={onEdit}
             style={{ padding: 5 }}
@@ -157,7 +161,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
             confirmMessage={`${t(
               translations.deleteConfirmation,
             )} "${itemName}"`}
-            disabled={isDeleting}
+            disabled={isDeleting || state === MATERIAL_WORKFLOW_STATE.chunking}
             id={`${type}-delete-button-${itemId}`}
             onClick={onDelete}
             style={{ padding: 5 }}

@@ -8,7 +8,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
     let(:user) { create(:administrator) }
     let!(:course_user) { create(:course_user, course: course, user: user) }
     let(:material_stub) do
-      stub = create(:material)
+      stub = create(:material, :not_chunked)
       allow(stub).to receive(:destroy).and_return(false)
       stub
     end

@@ -43,6 +43,7 @@ class Course < ApplicationRecord
     include Course::MaterialConcern
   end
   has_many :materials, through: :material_folders
+  has_many :material_text_chunks, through: :materials, source: :text_chunks
   has_many :assessment_categories, class_name: 'Course::Assessment::Category',
                                    dependent: :destroy, inverse_of: :course
   has_many :assessment_tabs, source: :tabs, through: :assessment_categories
@@ -65,6 +66,10 @@ class Course < ApplicationRecord
   has_many :achievements, dependent: :destroy
   has_many :discussion_topics, class_name: 'Course::Discussion::Topic', inverse_of: :course
   has_many :forums, dependent: :destroy, inverse_of: :course
+  has_many :forum_imports, class_name: 'Course::Forum::Import', foreign_key: :course_id,
+                           inverse_of: :course, dependent: :destroy
+  has_many :imported_forums, through: :forum_imports, source: :imported_forum
+  has_many :imported_forum_discussions, through: :forum_imports, source: :discussions
   has_many :surveys, through: :lesson_plan_items, source: :actable, source_type: 'Course::Survey'
   has_many :videos, through: :lesson_plan_items, source: :actable, source_type: 'Course::Video'
   has_many :video_tabs, class_name: 'Course::Video::Tab', inverse_of: :course, dependent: :destroy
@@ -109,6 +114,13 @@ class Course < ApplicationRecord
 
   scope :active_in_past_7_days, (lambda do
     joins(:course_users).merge(CourseUser.active_in_past_7_days).merge(CourseUser.student).distinct
+  end)
+
+  scope :owned_or_managed_by, (lambda do |user, current_course|
+    joins(:course_users).
+      where(course_users: { user_id: user.id, role: [:owner, :manager] }).
+      where.not(id: current_course.id).
+      distinct
   end)
 
   delegate :students, to: :course_users
@@ -243,6 +255,14 @@ class Course < ApplicationRecord
     settings(:course_codaveri_component).is_only_itsp
   end
 
+  def rag_wise_response_workflow
+    settings(:course_rag_wise_component).response_workflow
+  end
+
+  def rag_wise_character_prompt
+    settings(:course_rag_wise_component).roleplay
+  end
+
   def upcoming_lesson_plan_items_exist?
     opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
     opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.any? do |item|
@@ -279,6 +299,41 @@ class Course < ApplicationRecord
   def reference_timeline_for(course_user)
     # TODO: [PR#5491] Return only `default_reference_timeline.id` if Multiple Reference Timelines component is disabled.
     course_user&.reference_timeline_id || default_reference_timeline.id
+  end
+
+  def nearest_text_chunks(query_embedding, material_names: nil)
+    text_chunks = material_text_chunks
+    text_chunks.connection.execute('SET hnsw.ef_search = 100')
+
+    if material_names
+      # Join the material table to filter by material name
+      text_chunks = text_chunks.joins(:materials).where(course_materials: { name: material_names })
+    end
+
+    text_chunks.nearest_neighbors(:embedding, query_embedding, distance: 'cosine').
+      first(5).pluck(:content)
+  end
+
+  def materials_list
+    materials.where(workflow_state: 'chunked').distinct.pluck(:name)
+  end
+
+  def create_missing_forum_imports(forum_ids)
+    filtered_forum_ids = forum_ids.reject do |forum_id|
+      forum_imports.exists?(imported_forum: forum_id)
+    end
+
+    Course::Forum.where(id: filtered_forum_ids).each do |forum|
+      forum_imports.build(imported_forum: forum)
+    end
+    save!
+  end
+
+  def nearest_forum_discussions(query_embedding)
+    imported_forum_discussions.connection.execute('SET hnsw.ef_search = 100')
+
+    imported_forum_discussions.nearest_neighbors(:embedding, query_embedding, distance: 'cosine').
+      first(3).pluck(:discussion)
   end
 
   private

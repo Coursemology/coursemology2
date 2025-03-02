@@ -9,13 +9,16 @@ class Course::Material::MaterialsController < Course::Material::Controller
   end
 
   def update
-    if @material.update(material_params)
+    if @material.workflow_state != 'chunking' && @material.update(material_params)
+      # deletes material's text chunk if file has been changed and file has been chunked
+      delete_material_text_chunks if material_params['file'] && @material.workflow_state == 'chunked'
       course_user = @material.attachment.updater.course_users.find_by(course: current_course)
       user = course_user || @material.attachment.updater
       render json: { id: @material.id,
                      name: @material.name,
                      description: @material.description,
                      updatedAt: @material.attachment.updated_at,
+                     workflowState: @material.workflow_state,
                      updater: { id: user.id, name: user.name,
                                 userUrl: url_to_user_or_course_user(current_course, user) } },
              status: :ok
@@ -25,7 +28,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
   end
 
   def destroy
-    if @material.destroy
+    if @material.workflow_state != 'chunking' && @material.destroy
       head :ok
     else
       render json: { errors: @material.errors.full_messages.to_sentence }, status: :bad_request
@@ -64,5 +67,14 @@ class Course::Material::MaterialsController < Course::Material::Controller
   def log_service
     @log_service ||=
       Course::Assessment::SessionLogService.new(@assessment, current_session_id, @submission)
+  end
+
+  def delete_material_text_chunks
+    if @material.text_chunk_references.destroy_all
+      @material.delete_chunks!
+      @material.save
+    else
+      render json: { errors: @material.errors.full_messages.to_sentence }, status: :bad_request
+    end
   end
 end
