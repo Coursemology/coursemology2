@@ -5,7 +5,10 @@ import { Container } from '@mui/material';
 import { ProgrammingFormData } from 'types/course/assessment/question/programming';
 
 import ReorderableTestCases from 'course/assessment/question/programming/components/common/ReorderableTestCases';
-import { rearrangeTestCases } from 'course/assessment/question/programming/operations';
+import {
+  deleteTestCase,
+  rearrangeTestCases,
+} from 'course/assessment/question/programming/operations';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -28,20 +31,31 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
     rearrangeTestCases(result, testCases, setValue);
   };
 
+  const onDeletingTestCase = (type: string, index: number): void => {
+    deleteTestCase(testCases, setValue, index, type);
+  };
+
+  const publicTestCasesName = 'testUi.metadata.testCases.public';
+  const privateTestCasesName = 'testUi.metadata.testCases.private';
+  const evaluationTestCasesName = 'testUi.metadata.testCases.evaluation';
+
   return (
     <DragDropContext onDragEnd={onRearrangingTestCases}>
       <LockableSection
-        lockState={lockStates['testUi.metadata.testCases.public']}
-        lockStateKey="testUi.metadata.testCases.public"
+        lockState={lockStates[publicTestCasesName]}
+        lockStateKey={publicTestCasesName}
         onToggleLock={onToggleLock}
       >
         <Container disableGutters maxWidth={false}>
           <ReorderableTestCases
             control={control}
-            disabled={lockStates['testUi.metadata.testCases.public']}
+            disabled={lockStates[publicTestCasesName]}
             hintHeader={t(translations.hint)}
             lhsHeader={t(translations.expression)}
-            name="testUi.metadata.testCases.public"
+            name={publicTestCasesName}
+            onDelete={(index: number) =>
+              onDeletingTestCase(publicTestCasesName, index)
+            }
             rhsHeader={t(translations.expected)}
             testCases={testCases.public}
             title={t(translations.publicTestCases)}
@@ -50,17 +64,20 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
       </LockableSection>
 
       <LockableSection
-        lockState={lockStates['testUi.metadata.testCases.private']}
-        lockStateKey="testUi.metadata.testCases.private"
+        lockState={lockStates[privateTestCasesName]}
+        lockStateKey={privateTestCasesName}
         onToggleLock={onToggleLock}
       >
         <Container disableGutters maxWidth={false}>
           <ReorderableTestCases
             control={control}
-            disabled={lockStates['testUi.metadata.testCases.private']}
+            disabled={lockStates[privateTestCasesName]}
             hintHeader={t(translations.hint)}
             lhsHeader={t(translations.expression)}
-            name="testUi.metadata.testCases.private"
+            name={privateTestCasesName}
+            onDelete={(index: number) =>
+              onDeletingTestCase(privateTestCasesName, index)
+            }
             rhsHeader={t(translations.expected)}
             subtitle={t(translations.privateTestCasesHint)}
             testCases={testCases.private}
@@ -70,17 +87,20 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
       </LockableSection>
 
       <LockableSection
-        lockState={lockStates['testUi.metadata.testCases.evaluation']}
-        lockStateKey="testUi.metadata.testCases.evaluation"
+        lockState={lockStates[evaluationTestCasesName]}
+        lockStateKey={evaluationTestCasesName}
         onToggleLock={onToggleLock}
       >
         <Container disableGutters maxWidth={false}>
           <ReorderableTestCases
             control={control}
-            disabled={lockStates['testUi.metadata.testCases.evaluation']}
+            disabled={lockStates[evaluationTestCasesName]}
             hintHeader={t(translations.hint)}
             lhsHeader={t(translations.expression)}
-            name="testUi.metadata.testCases.evaluation"
+            name={evaluationTestCasesName}
+            onDelete={(index: number) =>
+              onDeletingTestCase(evaluationTestCasesName, index)
+            }
             rhsHeader={t(translations.expected)}
             subtitle={t(translations.evaluationTestCasesHint)}
             testCases={testCases.evaluation}
