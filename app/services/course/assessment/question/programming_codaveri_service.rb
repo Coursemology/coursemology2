@@ -77,9 +77,10 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     @problem_object[:title] = @question.title
     @problem_object[:description] = @question.description
     resources_object = @problem_object[:resources][0]
-    resources_object[:languageVersions][:language] = @question.language.polyglot_name
+    resources_object[:languageVersions][:language] =
+      @question.language.extend(CodaveriLanguageConcern).codaveri_language
     resources_object[:languageVersions][:versions] =
-      [@question.language.extend(CodaveriLanguageConcern).polyglot_version]
+      [@question.language.extend(CodaveriLanguageConcern).codaveri_version]
 
     codaveri_package = Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService.new(
       @question, package

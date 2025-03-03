@@ -1,6 +1,6 @@
 import {
   LanguageData,
-  MetadataTestCase,
+  MetadataTestCases,
   PackageImportResultError,
 } from 'types/course/assessment/question/programming';
 
@@ -22,11 +22,7 @@ export interface QuestionPrototypeFormData {
     metadata: {
       solution: string;
       submission: string;
-      testCases: {
-        public: MetadataTestCase[];
-        private: MetadataTestCase[];
-        evaluation: MetadataTestCase[];
-      };
+      testCases: MetadataTestCases;
     };
   };
 }
