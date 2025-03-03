@@ -87,8 +87,8 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     generation_service = Course::Assessment::Question::CodaveriProblemGenerationService.new(
       @assessment,
       params,
-      language.polyglot_name,
-      language.extend(CodaveriLanguageConcern).polyglot_version
+      language.extend(CodaveriLanguageConcern).codaveri_language,
+      language.extend(CodaveriLanguageConcern).codaveri_version
     )
 
     generated_problem = generation_service.codaveri_generate_problem
