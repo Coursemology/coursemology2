@@ -124,3 +124,24 @@ export const rearrangeTestCases = (
     shouldDirty: true,
   });
 };
+
+export const deleteTestCase = (
+  testCases:
+    | MetadataTestCases<MetadataTestCase>
+    | MetadataTestCases<JavaMetadataTestCase>,
+  setValue: UseFormSetValue<ProgrammingFormData>,
+  index: number,
+  name: string,
+): void => {
+  const type = name.split('.').pop();
+  const updatedTestCases = { ...testCases };
+
+  const targetedArray = [...updatedTestCases[type!]];
+  targetedArray.splice(index, 1);
+
+  updatedTestCases[type!] = targetedArray;
+
+  setValue('testUi.metadata.testCases', updatedTestCases, {
+    shouldDirty: true,
+  });
+};

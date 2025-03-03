@@ -24,6 +24,7 @@ export interface ReorderableTestCasesProps extends StaticTestCasesTableProps {
   onClickAdd?: () => void;
   control: Control<ProgrammingFormData>;
   name: FieldArrayPath<ProgrammingFormData>;
+  onDelete: (index: number) => void;
   byIdentifier?: (index: number) => string;
   component?: ElementType<ReorderableTestCaseProps>;
   static?: boolean;
@@ -38,6 +39,7 @@ const ReorderableTestCases = (
     component,
     name,
     testCases,
+    onDelete,
     control,
     disabled,
     ...otherProps
@@ -47,7 +49,7 @@ const ReorderableTestCases = (
 
   const { t } = useTranslation();
 
-  const { append, remove } = useFieldArray({
+  const { append } = useFieldArray({
     control,
     name,
   });
@@ -93,7 +95,9 @@ const ReorderableTestCases = (
                 disabled={disabled}
                 id={byIdentifier?.(index)}
                 name={`${name}.${index}` as TestCaseFieldPath}
-                onDelete={!props.static ? (): void => remove(index) : undefined}
+                onDelete={
+                  !props.static ? (): void => onDelete(index) : undefined
+                }
                 {...otherProps}
               />
             ))}
