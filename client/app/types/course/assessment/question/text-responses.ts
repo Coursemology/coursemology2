@@ -19,6 +19,9 @@ export enum AttachmentType {
   MULTIPLE_ATTACHMENT = 'multiple_attachment',
 }
 
+export const INITIAL_MAX_ATTACHMENTS = 3;
+export const INITIAL_MAX_ATTACHMENT_SIZE = 10;
+
 export interface TextResponseQuestionFormData extends QuestionFormData {
   attachmentType: AttachmentType;
   maxAttachments: number;

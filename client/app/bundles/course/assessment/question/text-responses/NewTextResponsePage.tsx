@@ -2,6 +2,8 @@ import { ElementType } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   AttachmentType,
+  INITIAL_MAX_ATTACHMENT_SIZE,
+  INITIAL_MAX_ATTACHMENTS,
   TextResponseData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
@@ -19,9 +21,6 @@ import TextResponseForm, {
   TextResponseFormProps,
 } from './components/TextResponseForm';
 import { create, fetchNewFileUpload, fetchNewTextResponse } from './operations';
-
-const INITIAL_MAX_ATTACHMENTS = 3;
-const INITIAL_MAX_ATTACHMENT_SIZE = 10;
 
 const NEW_TEXT_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
