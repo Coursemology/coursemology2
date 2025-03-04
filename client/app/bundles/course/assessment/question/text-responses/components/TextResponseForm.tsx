@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import { Alert } from '@mui/material';
 import {
   AttachmentType,
+  INITIAL_MAX_ATTACHMENT_SIZE,
+  INITIAL_MAX_ATTACHMENTS,
   TextResponseData,
   TextResponseFormData,
 } from 'types/course/assessment/question/text-responses';
@@ -40,6 +42,14 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
       attachmentType:
         data.question?.attachmentType ??
         getAttachmentTypeFromMaxAttachment(data.question?.maxAttachments),
+      maxAttachments:
+        data.question && data.question.maxAttachments <= 1
+          ? INITIAL_MAX_ATTACHMENTS
+          : data.question!.maxAttachments,
+      maxAttachmentSize:
+        data.question && !data.question.maxAttachmentSize
+          ? INITIAL_MAX_ATTACHMENT_SIZE
+          : data.question!.maxAttachmentSize,
     },
   };
 
