@@ -41,25 +41,30 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def live_feedback_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
                   calculated(:question_count).
-                  preload(course: :course_users).first
-    submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
-                  preload(creator: :course_users)
-    assessment_live_feedbacks = Course::Assessment::LiveFeedback.where(assessment_id: assessment_params[:id]).
-                                preload(:creator, creator: :course_users, code: :comments)
+                  preload(:questions, course: :course_users).first
+    @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
+                   preload(creator: :course_users)
+
+    create_submission_question_hash(@assessment.questions)
 
     @course_users_hash = preload_course_users_hash(@assessment.course)
 
     load_course_user_students_info
     load_ordered_questions
 
-    @student_live_feedback_hash = fetch_hash_for_live_feedback_assessment(submissions,
-                                                                          assessment_live_feedbacks)
+    create_student_live_feedback_hash
   end
 
   def live_feedback_history
-    fetch_live_feedbacks
-    @live_feedback_details_hash = build_live_feedback_details_hash(@live_feedbacks)
+    user = current_course.course_users.find_by(id: params[:course_user_id]).user
+    @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id], creator: user)
     @question = Course::Assessment::Question.find(params[:question_id])
+
+    create_submission_question_hash([@question])
+
+    @messages = Course::Assessment::LiveFeedback::Thread.where(submission_question_id: @submission_question_hash.keys).
+                preload(messages: [message_files: :file]).
+                map(&:messages).flatten
   end
 
   private
@@ -96,38 +101,26 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     end
   end
 
+  def create_student_live_feedback_hash
+    live_feedback_chats = Course::Assessment::LiveFeedback::Thread.
+                          where(submission_question_id: @submission_question_hash.keys).
+                          preload(:messages)
+
+    @student_live_feedback_hash = fetch_hash_for_live_feedback_assessment(@submissions,
+                                                                          live_feedback_chats)
+  end
+
   def create_question_order_hash
     @question_order_hash = @assessment.question_assessments.to_h do |q|
       [q.question_id, q.weight]
     end
   end
 
-  def fetch_live_feedbacks
-    user = current_course.course_users.find_by(id: params[:course_user_id]).user
-    @live_feedbacks = Course::Assessment::LiveFeedback.where(assessment_id: assessment_params[:id],
-                                                             creator: user,
-                                                             question_id: params[:question_id]).
-                      order(created_at: :asc).includes(:code, code: :comments)
-  end
-
-  def build_live_feedback_details_hash(live_feedbacks)
-    live_feedbacks.each_with_object({}) do |live_feedback, hash|
-      hash[live_feedback.id] = live_feedback.code.map do |code|
-        {
-          code: {
-            id: code.id,
-            filename: code.filename,
-            content: code.content
-          },
-          comments: code.comments.map do |comment|
-            {
-              id: comment.id,
-              line_number: comment.line_number,
-              comment: comment.comment
-            }
-          end
-        }
-      end
+  def create_submission_question_hash(questions)
+    @submission_question_hash = Course::Assessment::SubmissionQuestion.
+                                where(submission_id: @submissions,
+                                      question_id: questions).to_h do |sq|
+      [sq.id, sq]
     end
   end
 end
