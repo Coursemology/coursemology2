@@ -34,14 +34,13 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
   );
 
   const isLiveFeedbackChatLoaded = liveFeedbackChats?.isLiveFeedbackChatLoaded;
+  const currentThreadId = liveFeedbackChats?.currentThreadId;
 
   const isRequestingLiveFeedback = liveFeedbackChats?.isRequestingLiveFeedback;
   const isPollingLiveFeedback = liveFeedbackChats?.pendingFeedbackToken;
 
   const isRenderingSuggestionChips =
-    !isRequestingLiveFeedback &&
-    !isPollingLiveFeedback &&
-    liveFeedbackChats?.currentThreadId;
+    !isRequestingLiveFeedback && !isPollingLiveFeedback && currentThreadId;
 
   useEffect(() => {
     if (!liveFeedbackChats || liveFeedbackChats?.chats.length === 0) return;
@@ -61,10 +60,10 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
   }, [liveFeedbackChats?.chats]);
 
   useEffect(() => {
-    if (!answerId || isLiveFeedbackChatLoaded) return;
+    if (!answerId || !currentThreadId || isLiveFeedbackChatLoaded) return;
 
     fetchLiveFeedbackChat(dispatch, answerId);
-  }, [answerId, isLiveFeedbackChatLoaded]);
+  }, [answerId, isLiveFeedbackChatLoaded, currentThreadId]);
 
   if (!answerId) return null;
 

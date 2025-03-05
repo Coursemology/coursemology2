@@ -125,8 +125,8 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     submission_question = Course::Assessment::SubmissionQuestion.where(submission_id: submission.id,
                                                                        question_id: question.id).first
 
-    @thread = Course::Assessment::LiveFeedback::Thread.where(submission_question_id: submission_question.id,
-                                                             is_active: true).preload(:messages).first
+    @thread = Course::Assessment::LiveFeedback::Thread.where(submission_question_id: submission_question.id).
+              order(created_at: :desc).preload(:messages).first
   end
 
   def create_live_feedback_chat
