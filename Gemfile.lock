@@ -745,7 +745,7 @@ DEPENDENCIES
   rspec-rails (~> 6)
   rspec-retry
   rspec_junit_formatter
-  rubocop (~> 1.70)
+  rubocop (~> 1.73)
   rubocop-rails
   ruby-oembed
   ruby-openai
