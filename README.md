@@ -15,107 +15,36 @@ Coursemology is an open source gamified learning platform that enables educators
 
 ### System Requirements
 
-1. Ruby (= 3.3.5)
-2. Ruby on Rails (= 7.2.1)
-3. PostgreSQL (>= 9.5)
-4. ImageMagick or GraphicsMagick (For [MiniMagick](https://github.com/minimagick/minimagick) - if PDF processing doesn't work for the import of scribing questions, download Ghostscript)
-5. Node.js (v18 LTS)
-6. Yarn
-7. Installed docker
-8. Redis
-
-Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some front-end components use [React.js](https://facebook.github.io/react/). This [guide](https://gorails.com/setup/) written by the awesome people at GoRails should help you to get started on Ruby on Rails (however, be careful about the Rails version that you are going to install here. Please refer to the system requirements for the version of Rails you need to have for your system)
+1. **Ruby** (= 3.3.5)
+2. **Ruby on Rails** (= 7.2.2.1)
+3. **PostgreSQL** (= 16) with **PGVector extension**
+4. **ImageMagick** or **GraphicsMagick** (For [MiniMagick](https://github.com/minimagick/minimagick) - if PDF processing doesn't work for the import of scribing questions, download **Ghostscript**)
+5. **Node.js** (v22 LTS)
+6. **Yarn**
+7. **Docker** (installed and running)
+8. **Redis**
 
 ### Getting Started
 
-1. We use submodules in the git repo; use this command to update submodules:
+We use Git submodules. Run the following command to initialize them before proceeding:
 
    ```sh
    $ git submodule update --init --recursive
    ```
 
-2. Download bundler to install dependencies
+Coursemology consists of three main components:
+1. [Keycloak authentication provider](./authentication/README.md)
+2. [Ruby on Rails application server](./app/README.md)
+3. [React frontend client](./client/README.md)
 
-   ```sh
-   $ gem install bundler:2.5.9
-   ```
+Set up and run each component sequentially by following the linked documentation pages. As you proceed, open a new terminal window for each component after the previous component has been fully set up and started running.
 
-3. Install ruby dependencies
+Once each component has been set up and is running on their own terminals, you can access the app by visiting [http://localhost:8080](http://localhost:8080), and log in using the default user email and password:
 
-   ```sh
-   $ bundle config set --local without 'ci:production'
-   $ bundle install
-   ```
+email: `test@example.org`
+password: `Coursemology!`
 
-4. Install javascript dependencies
 
-   ```sh
-   $ cd client && yarn; cd -
-   ```
-
-5. Create and seed the database
-
-   ```sh
-   $ bundle exec rake db:setup
-   ```
-
-6. We are using [Keycloak](https://www.keycloak.org/) as our Identity and Access Management (IAM) solution. Before proceeding to the next step, please navigate to `./authentication` folder, follow the instruction provided over the [README](https://github.com/Coursemology/coursemology2/blob/master/authentication/README.md), and then ensure that the Docker for Coursemology Authentication is running and that you are able to access the Keycloak site as mentioned in the very last step of that instruction
-
-7. Initialize .env files for Frontend and Backend
-
-   ```sh
-   $ cp env .env; cp client/env client/.env
-   ```
-
-   You may need to add specific API keys (such as the [GOOGLE_RECAPTCHA_SITE_KEY](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do)) to the .env files for testing specific features.
-
-8. Open up 3 different terminals. On the terminal for Frontend in the `client` directory, run
-
-   ```
-   yarn build:development
-   ```
-
-   on the terminal for authentication service in the `authentication` directory, if you have not yet started Keycloak, run
-
-   ```
-   docker compose up
-   ```
-
-   or
-
-   ```
-   docker-compose up
-   ```
-
-   and on the terminal for Backend, run
-
-   ```
-   bundle exec rails s -p 3000
-   ```
-
-9. Access the App by visiting `http://localhost:8080`
-
-10. You're all set! Simply login with the default username and password:
-
-> Email: `test@example.org`
->
-> Password: `Coursemology!`
-
-### Configuration
-
-#### Multi Tenancy
-
-To make sure that multi tenancy works correctly for you, change the default host in `config/application.rb` before deploying:
-
-```ruby
-config.x.default_host = 'your_domain.com'
-```
-
-#### Opening Reminder Emails
-
-Email reminders for items which are about to start are sent via a cronjob which should be run once an hour. See `config/initializers/sidekiq.rb` and `config/schedule.yml` for sample configuration which assumes that the [Sidekiq](https://github.com/mperham/sidekiq) and [Sidekiq-Cron](https://github.com/ondrejbartas/sidekiq-cron) gems are used.
-
-If you use a different job scheduler, edit those files so your favourite job scheduler invokes the `ConsolidatedItemEmailJob` job once an hour.
 
 ## Found Boogs?
 

@@ -1,5 +1,31 @@
 # Coursemology Client
 
+The front-end UI of Coursemology is written using [React.js](https://facebook.github.io/react/). Most of our pages and their components are written in TypeScript as [React functional components](https://react.dev/learn/your-first-component#defining-a-component), though there are some older parts in JS or using class components that should be migrated to functional components in the future.
+
+## Getting Started
+
+These commands should be run with the working directory `coursemology2/client` (the same directory this README file is in)
+
+1. Install javascript dependencies
+
+   ```sh
+   yarn
+   ```
+
+2. Run the following command to initialize `.env` files over here
+
+   ```sh
+   cp env .env
+   ```
+
+   You may need to add specific API keys (such as the [GOOGLE_RECAPTCHA_SITE_KEY](https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do)) to the .env files for testing specific features.
+
+3. To start the frontend, run
+
+  ```sh
+  yarn build:development
+  ```
+
 ## Translations
 
 To generate a list of strings that need to be translated,
