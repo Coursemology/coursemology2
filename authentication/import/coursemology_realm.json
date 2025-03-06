@@ -508,7 +508,7 @@
         "http://kranjisec.localhost:8080/*",
         "http://hwachong.localhost:8080/*",
         "http://sourceacademy.space/*",
-        "http://localhost/*",
+        "http://localhost:8080/*",
         "http://commonwealthsec.localhost:8080/*",
         "http://serangoongardensec.localhost:8080/*",
         "http://woodgrovesec.localhost:8080/*",

@@ -1,10 +1,15 @@
-# Coursemology ID Authentication
+# Coursemology Authentication Provider
 
 We are now using [Keycloak](https://www.keycloak.org/) as our Identity and Access Management (IAM) solution.
 
 ## Installation Guide
 
+### Getting Started
+
+These commands should be run with the working directory `coursemology2/authentication` (the same directory this README file is in)
+
 1. Make sure you have docker and also docker-compose installed.
+
 2. Run the following command
 
    ```
@@ -38,6 +43,21 @@ We are now using [Keycloak](https://www.keycloak.org/) as our Identity and Acces
 6. The authentication pages can be accessed via `http://localhost:8443/admin`
 
 ## Further Guide
+
+The local setup requires the authentication provider container to connect to the postgres service running on the host machine. On Windows and Mac, this is already set up by Docker Desktop, which lets the container do this by accessing the `host.docker.internal` hostname. On Linux devices, this can be set up by either:
+- installing [Docker Desktop for Linux](https://docs.docker.com/desktop/setup/install/linux/); **or**
+- changing the `KC_NETWORK_MODE` environment variable to `host`, and adding the following to the docker-compose service declaration:
+
+  ```yaml
+  
+  services:
+    coursemology_auth:
+      container_name: coursemology_authentication
+        ...
+        extra_hosts:
+        - 'host.docker.internal:127.0.0.1'
+
+  ```
 
 To ensure the smoothness in signing-in to Coursemology, you must ensure that the configuration for `KEYCLOAK_BE_CLIENT_SECRET` inside `.env` matches with the settings inside Keycloak. To do so, you can simply do the following instructions:
 
