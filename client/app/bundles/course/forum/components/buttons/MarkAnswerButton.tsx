@@ -7,6 +7,7 @@ import {
   TopicType,
 } from 'types/course/forums';
 
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -44,6 +45,9 @@ const MarkAnswerButton = (props: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
   if (topic.topicType !== TopicType.QUESTION) return null;
+
+  if (post.isAiGenerated && post.workflowState === POST_WORKFLOW_STATE.draft)
+    return null;
 
   if (!topic.permissions.canToggleAnswer) {
     return isAnswer ? (

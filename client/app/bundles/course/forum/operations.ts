@@ -7,6 +7,8 @@ import {
 
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
+import pollJob from 'lib/helpers/jobHelpers';
 
 import {
   changeForumTopicHidden,
@@ -28,7 +30,10 @@ import {
   updateForumTopicPostIds,
   updateForumTopicPostListData,
   updatePostAsAnswer,
+  updatePostWorkflowState,
 } from './store';
+
+const GENERATE_REPLY_JOB_POLL_INTERVAL_MS = 2000;
 
 // Forum
 
@@ -320,9 +325,88 @@ export function toggleForumTopicPostAnswer(
     });
 }
 
+export function markForumTopicPostAnswerAndPublish(
+  postUrl: string,
+  topicId: number,
+  postId: number,
+): Operation {
+  return async (dispatch) =>
+    CourseAPI.forum.posts.markAnswerAndPublish(postUrl).then((response) => {
+      dispatch(
+        updatePostAsAnswer({
+          topicId,
+          postId,
+          isTopicResolved: response.data.isTopicResolved,
+          workflowState: response.data.workflowState,
+          creator: response.data.creator,
+        }),
+      );
+    });
+}
+
 export function voteTopicPost(postUrl: string, vote: -1 | 0 | 1): Operation {
   return async (dispatch) =>
     CourseAPI.forum.posts.vote(postUrl, vote).then((response) => {
       dispatch(updateForumTopicPostListData(response.data));
     });
+}
+
+export function publishPost(postId: number, postUrl: string): Operation {
+  return async (dispatch) =>
+    CourseAPI.forum.posts.publish(postUrl).then((response) => {
+      dispatch(
+        updatePostWorkflowState({
+          postId,
+          workflowState: response.data.workflowState,
+          creator: response.data.creator,
+        }),
+      );
+    });
+}
+
+export function generateNewReply(
+  forumId: string,
+  topicId: string,
+  postId: number,
+  postUrl: string,
+  handleSuccess: () => void,
+  handleFailure: () => void,
+): Operation {
+  return async (dispatch) => {
+    CourseAPI.forum.posts
+      .generateReply(postUrl)
+      .then((job) => {
+        dispatch(
+          updatePostWorkflowState({
+            postId,
+            workflowState: POST_WORKFLOW_STATE.answering,
+          }),
+        );
+        const jobUrl = job.data.jobUrl;
+        pollJob(
+          jobUrl,
+          () => {
+            dispatch(
+              updatePostWorkflowState({
+                postId,
+                workflowState: POST_WORKFLOW_STATE.published,
+              }),
+            );
+            dispatch(fetchForumTopic(forumId, topicId));
+            handleSuccess();
+          },
+          () => {
+            dispatch(
+              updatePostWorkflowState({
+                postId,
+                workflowState: POST_WORKFLOW_STATE.published,
+              }),
+            );
+            handleFailure();
+          },
+          GENERATE_REPLY_JOB_POLL_INTERVAL_MS,
+        );
+      })
+      .catch(handleFailure);
+  };
 }

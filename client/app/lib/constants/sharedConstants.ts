@@ -65,6 +65,19 @@ export const SAVING_STATUS = mirrorCreator([
 
 export const SYNC_STATUS = mirrorCreator(['Synced', 'Syncing', 'Failed']);
 
+export const MATERIAL_WORKFLOW_STATE = mirrorCreator([
+  'not_chunked',
+  'chunking',
+  'chunked',
+]);
+
+export const POST_WORKFLOW_STATE = mirrorCreator([
+  'draft',
+  'published',
+  'delayed',
+  'answering',
+]);
+
 export default {
   TIMELINE_ALGORITHMS,
   USER_ROLES,

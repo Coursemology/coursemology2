@@ -192,6 +192,11 @@ Rails.application.routes.draw do
         get 'stories' => 'stories_settings#edit'
         patch 'stories' => 'stories_settings#update'
 
+        get 'rag_wise' => 'rag_wise_settings#edit'
+        patch 'rag_wise' => 'rag_wise_settings#update'
+        get 'rag_wise/materials' => 'rag_wise_settings#materials'
+        get 'rag_wise/folders' => 'rag_wise_settings#folders'
+
         namespace 'assessments' do
           resources :categories, only: [:create, :destroy] do
             resources :tabs, only: [:create, :destroy]
@@ -351,6 +356,9 @@ Rails.application.routes.draw do
             resources :posts, only: [:create, :update, :destroy] do
               put 'vote', on: :member
               put 'toggle_answer', on: :member
+              put 'mark_answer_and_publish', on: :member
+              put 'publish', on: :member
+              put 'generate_reply', on: :member
             end
 
             post 'subscribe', on: :member
@@ -416,7 +424,10 @@ Rails.application.routes.draw do
           post 'create/subfolder', on: :member, as: 'create_subfolder', action: 'create_subfolder'
           put 'upload_materials', on: :member
           get 'download', on: :member
-          resources :materials, path: 'files'
+          resources :materials, path: 'files' do
+            put 'create_text_chunks', on: :member
+            delete 'destroy_text_chunks', on: :member
+          end
         end
       end
 

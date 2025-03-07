@@ -10,6 +10,7 @@ import equal from 'fast-deep-equal';
 import { FolderMiniEntity } from 'types/course/material/folders';
 
 import Link from 'lib/components/core/Link';
+import { MATERIAL_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatFullDateTime } from 'lib/moment';
@@ -21,6 +22,7 @@ interface Props {
   subfolder: FolderMiniEntity;
   isCurrentCourseStudent: boolean;
   isConcrete: boolean;
+  canManageKnowledgeBase: boolean;
 }
 
 const translations = defineMessages({
@@ -37,7 +39,13 @@ const translations = defineMessages({
 });
 
 const TableSubfolderRow: FC<Props> = (props) => {
-  const { currFolderId, subfolder, isCurrentCourseStudent, isConcrete } = props;
+  const {
+    currFolderId,
+    subfolder,
+    isCurrentCourseStudent,
+    isConcrete,
+    canManageKnowledgeBase,
+  } = props;
   const { t } = useTranslation();
 
   return (
@@ -52,7 +60,9 @@ const TableSubfolderRow: FC<Props> = (props) => {
                 whiteSpace: 'normal',
                 wordBreak: 'break-word',
               }}
-              to={`/courses/${getCourseId()}/materials/folders/${subfolder.id}`}
+              to={`/courses/${getCourseId()}/materials/folders/${
+                subfolder.id
+              }/`}
               underline="hover"
             >
               {`${subfolder.name} (${subfolder.itemCount})`}
@@ -113,6 +123,15 @@ const TableSubfolderRow: FC<Props> = (props) => {
           </Stack>
         </TableCell>
       )}
+      {/* Temporarily commented out until we decide whether or not to allow users to add/remove 
+          from knowledge base from Workbin directly */}
+      {/* {canManageKnowledgeBase && (
+        <TableCell style={{ width: '60px' }}>
+          <Stack alignItems="center" direction="column" spacing={0.5}>
+            -
+          </Stack>
+        </TableCell>
+      )} */}
       <TableCell
         style={{
           width: '60px',
@@ -132,6 +151,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
           isConcrete={isConcrete}
           itemId={subfolder.id}
           itemName={subfolder.name}
+          state={MATERIAL_WORKFLOW_STATE.not_chunked}
           type="subfolder"
         />
       </TableCell>

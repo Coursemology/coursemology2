@@ -18,6 +18,8 @@ ko:
         title: '수업 계획'
       codaveri:
         title: 'Codaveri 평가 및 피드백'
+      rag_wise:
+        title: 'RagWise 자동 포럼 응답'
     course_users:
       title: '사용자 관리'
     duplication:

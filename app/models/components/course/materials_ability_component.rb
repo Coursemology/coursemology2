@@ -8,6 +8,8 @@ module Course::MaterialsAbilityComponent
       allow_upload_materials
       allow_staff_read_materials if course_user.staff?
       allow_teaching_staff_manage_materials if course_user.teaching_staff?
+      disallow_text_chunking if course_user.teaching_staff?
+      manage_text_chunking if course_user.manager_or_owner?
     end
 
     disallow_superusers_change_root_and_linked_folders
@@ -43,6 +45,16 @@ module Course::MaterialsAbilityComponent
     can :upload, Course::Material::Folder, { course_id: course.id }.
       reverse_merge(can_student_upload: true)
     can :manage, Course::Material, creator: user
+  end
+
+  def manage_text_chunking
+    can :create_text_chunks, Course::Material, material_course_hash
+    can :destroy_text_chunks, Course::Material, material_course_hash
+  end
+
+  def disallow_text_chunking
+    cannot :create_text_chunks, Course::Material, material_course_hash
+    cannot :destroy_text_chunks, Course::Material, material_course_hash
   end
 
   def allow_staff_read_materials
@@ -82,7 +94,7 @@ module Course::MaterialsAbilityComponent
   def opened_material_hashes
     max_start_at = Time.zone.now
     # Extend start_at time with self directed time from course settings.
-    max_start_at += (course.advance_start_at_duration || 0) if course
+    max_start_at += course.advance_start_at_duration || 0 if course
 
     # Add materials with parent assessments that open early due to personalized timeline
     # Dealing with personal times is too complicated to represent as a hash of conditions

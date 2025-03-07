@@ -11,6 +11,8 @@ json.isUnread post.unread?(current_user)
 json.hasUserVoted !post.vote_for(current_user).nil?
 json.userVoteFlag post.vote_for(current_user)&.vote_flag?
 json.voteTally post.vote_tally
+json.workflowState post.workflow_state
+json.isAiGenerated post.is_ai_generated
 
 json.partial! 'course/forum/posts/post_creator_data', post: post
 

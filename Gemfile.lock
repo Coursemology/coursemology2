@@ -52,6 +52,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    Ascii85 (2.0.1)
     actioncable (7.2.2.1)
       actionpack (= 7.2.2.1)
       activesupport (= 7.2.2.1)
@@ -129,6 +130,7 @@ GEM
       rails (>= 6.0)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
+    afm (0.2.2)
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -152,6 +154,7 @@ GEM
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.11.0)
       aws-eventstream (~> 1, >= 1.0.2)
+    baran (0.1.12)
     base64 (0.2.0)
     bcrypt (3.1.20)
     benchmark (0.4.0)
@@ -222,6 +225,7 @@ GEM
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
+    event_stream_parser (1.0.0)
     excon (1.2.2)
     exifr (1.4.0)
     factory_bot (6.5.1)
@@ -229,6 +233,14 @@ GEM
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
+    faraday (2.12.2)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-multipart (1.1.0)
+      multipart-post (~> 2.0)
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
     ffi (1.17.0)
     filename (0.1.2)
     flamegraph (0.9.5)
@@ -257,6 +269,7 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    hashery (2.1.2)
     highline (3.0.1)
     html-pipeline (2.14.3)
       activesupport (>= 2)
@@ -302,6 +315,8 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.9.1)
+    json-schema (4.3.1)
+      addressable (>= 2.8)
     jwt (2.10.1)
       base64
     kaminari (1.2.2)
@@ -320,6 +335,13 @@ GEM
       json (~> 2.6)
       jwt (~> 2.4)
       rest-client (~> 2.1)
+    langchainrb (0.19.3)
+      baran (~> 0.1.9)
+      csv
+      json-schema (~> 4)
+      matrix
+      pragmatic_segmenter (~> 0.3.0)
+      zeitwerk (~> 2.5)
     language_server-protocol (3.17.0.3)
     launchy (3.0.1)
       addressable (~> 2.8)
@@ -362,6 +384,11 @@ GEM
     mini_portile2 (2.8.8)
     minitest (5.25.4)
     multi_json (1.15.0)
+    multipart-post (2.4.1)
+    neighbor (0.5.2)
+      activerecord (>= 7)
+    net-http (0.6.0)
+      uri
     net-imap (0.5.6)
       date
       net-protocol
@@ -384,7 +411,15 @@ GEM
     parser (3.3.6.0)
       ast (~> 2.4.1)
       racc
+    pdf-reader (2.13.0)
+      Ascii85 (>= 1.0, < 3.0, != 2.0.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     pg (1.5.9)
+    pgvector (0.3.2)
+    pragmatic_segmenter (0.3.24)
     progress (3.6.0)
     psych (5.2.2)
       date
@@ -535,7 +570,12 @@ GEM
       rubocop (>= 1.52.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
     ruby-oembed (0.18.1)
+    ruby-openai (7.3.1)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     ruby-progressbar (1.13.0)
+    ruby-rc4 (0.1.5)
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
@@ -595,6 +635,8 @@ GEM
     timeout (0.4.3)
     traceroute (0.8.1)
       rails (>= 3.0.0)
+    ttfunk (1.8.0)
+      bigdecimal (~> 3.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode (0.4.4.5)
@@ -602,6 +644,7 @@ GEM
     uniform_notifier (1.16.0)
     unread (0.14.0)
       activerecord (>= 6.1)
+    uri (1.0.2)
     useragent (0.16.11)
     validates_hostname (1.0.13)
       activerecord (>= 3.0)
@@ -667,6 +710,7 @@ DEPENDENCIES
   jwt
   kaminari
   keycloak
+  langchainrb
   listen
   lograge
   lograge-sql
@@ -674,10 +718,13 @@ DEPENDENCIES
   loofah (>= 2.2.1)
   mimemagic (= 0.4.3)
   mini_magick
+  neighbor
   nokogiri (>= 1.8.1)
   ostruct
   parallel_tests
+  pdf-reader
   pg
+  pgvector
   puma
   rack-cors
   rack-mini-profiler
@@ -698,6 +745,7 @@ DEPENDENCIES
   rubocop (~> 1.70)
   rubocop-rails
   ruby-oembed
+  ruby-openai
   rubyzip
   rwordnet!
   sanitize (>= 4.6.3)

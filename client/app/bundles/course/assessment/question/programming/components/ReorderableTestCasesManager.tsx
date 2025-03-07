@@ -6,7 +6,7 @@ import { ProgrammingFormData } from 'types/course/assessment/question/programmin
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
-import { rearrangeTestCases } from '../operations';
+import { deleteTestCase, rearrangeTestCases } from '../operations';
 
 import ReorderableTestCases, {
   ReorderableTestCasesProps,
@@ -15,7 +15,7 @@ import ReorderableTestCases, {
 export interface ReorderableTestCasesManagerProps
   extends Omit<
     ReorderableTestCasesProps,
-    'testCases' | 'hintHeader' | 'title' | 'control'
+    'testCases' | 'hintHeader' | 'title' | 'control' | 'onDelete'
   > {}
 
 const ReorderableTestCasesManager: FC<ReorderableTestCasesManagerProps> = (
@@ -31,6 +31,10 @@ const ReorderableTestCasesManager: FC<ReorderableTestCasesManagerProps> = (
     rearrangeTestCases(result, testCases, setValue);
   };
 
+  const onDeletingTestCase = (type: string, index: number): void => {
+    deleteTestCase(testCases, setValue, index, type);
+  };
+
   return (
     <DragDropContext onDragEnd={onRearrangingTestCases}>
       <ReorderableTestCases
@@ -40,6 +44,9 @@ const ReorderableTestCasesManager: FC<ReorderableTestCasesManagerProps> = (
         hintHeader={t(translations.hint)}
         lhsHeader={lhsHeader}
         name="testUi.metadata.testCases.public"
+        onDelete={(index: number) =>
+          onDeletingTestCase('testUi.metadata.testCases.public', index)
+        }
         rhsHeader={rhsHeader}
         testCases={testCases?.public ?? []}
         title={t(translations.publicTestCases)}
@@ -52,6 +59,9 @@ const ReorderableTestCasesManager: FC<ReorderableTestCasesManagerProps> = (
         hintHeader={t(translations.hint)}
         lhsHeader={lhsHeader}
         name="testUi.metadata.testCases.private"
+        onDelete={(index: number) =>
+          onDeletingTestCase('testUi.metadata.testCases.private', index)
+        }
         rhsHeader={rhsHeader}
         subtitle={t(translations.privateTestCasesHint)}
         testCases={testCases?.private ?? []}
@@ -65,6 +75,9 @@ const ReorderableTestCasesManager: FC<ReorderableTestCasesManagerProps> = (
         hintHeader={t(translations.hint)}
         lhsHeader={lhsHeader}
         name="testUi.metadata.testCases.evaluation"
+        onDelete={(index: number) =>
+          onDeletingTestCase('testUi.metadata.testCases.evaluation', index)
+        }
         rhsHeader={rhsHeader}
         subtitle={t(translations.evaluationTestCasesHint)}
         testCases={testCases?.evaluation ?? []}
