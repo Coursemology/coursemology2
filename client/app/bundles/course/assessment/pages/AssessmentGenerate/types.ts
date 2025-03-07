@@ -1,6 +1,7 @@
 import {
   LanguageData,
-  MetadataTestCase,
+  MetadataTestCases,
+  PackageImportResultError,
 } from 'types/course/assessment/question/programming';
 
 const CODAVERI_DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
@@ -21,11 +22,7 @@ export interface QuestionPrototypeFormData {
     metadata: {
       solution: string;
       submission: string;
-      testCases: {
-        public: MetadataTestCase[];
-        private: MetadataTestCase[];
-        evaluation: MetadataTestCase[];
-      };
+      testCases: MetadataTestCases;
     };
   };
 }
@@ -64,6 +61,8 @@ export interface ConversationState {
   duplicateFromId?: string;
   toExport: boolean;
   exportStatus: ExportStatus;
+  exportError?: PackageImportResultError;
+  exportErrorMessage?: string;
   redirectEditUrl?: string;
   importJobUrl?: string;
   questionId?: number;

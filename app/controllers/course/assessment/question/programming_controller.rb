@@ -60,6 +60,12 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     end
   end
 
+  def import_result
+    head :not_found and return if @programming_question&.import_job.nil?
+
+    render partial: 'import_result', locals: { import_job: @programming_question.import_job }
+  end
+
   def codaveri_languages
     languages = Coursemology::Polyglot::Language.
                 where(enabled: true, question_generation_whitelisted: true).
@@ -81,8 +87,8 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     generation_service = Course::Assessment::Question::CodaveriProblemGenerationService.new(
       @assessment,
       params,
-      language.polyglot_name,
-      language.extend(CodaveriLanguageConcern).polyglot_version
+      language.extend(CodaveriLanguageConcern).codaveri_language,
+      language.extend(CodaveriLanguageConcern).codaveri_version
     )
 
     generated_problem = generation_service.codaveri_generate_problem
