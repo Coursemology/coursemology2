@@ -32,7 +32,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
 
   validates :language, presence: true
-  validate :validate_language_enabled, unless: :duplicating?
+  validate :validate_language_enabled, unless: :skip_process_package?
 
   validate -> { validate_time_limit }
   validate :validate_codaveri_question
