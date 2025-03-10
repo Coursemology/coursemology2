@@ -107,9 +107,9 @@ const translations = defineMessages({
     id: 'course.assessment.liveFeedback.questionTitle',
     defaultMessage: 'Question {index}',
   },
-  feedbackTimingTitle: {
-    id: 'course.assessment.liveFeedback.feedbackTimingTitle',
-    defaultMessage: 'Used at: {usedAt}',
+  messageTimingTitle: {
+    id: 'course.assessment.liveFeedback.messageTimingTitle',
+    defaultMessage: 'Generated at: {usedAt}',
   },
 
   liveFeedbackName: {

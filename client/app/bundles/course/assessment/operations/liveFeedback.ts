@@ -21,7 +21,7 @@ export const fetchLiveFeedbackHistory = async (
     const data = response.data;
     dispatch(
       actions.initialize({
-        liveFeedbackHistory: data.liveFeedbackHistory,
+        messages: data.messages,
         question: data.question,
       }),
     );

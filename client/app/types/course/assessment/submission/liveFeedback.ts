@@ -1,35 +1,30 @@
 import { LanguageMode } from '../question/programming';
 
-export interface LiveFeedbackComments {
-  lineNumber: number;
-  comment: string;
-}
-
-export interface LiveFeedbackCode {
-  id: number;
-  filename: string;
-  content: string;
-  language: string;
-  editorMode: LanguageMode;
-}
-
-export interface LiveFeedbackCodeAndComments extends LiveFeedbackCode {
-  comments: LiveFeedbackComments[];
-}
-
-export interface LiveFeedbackHistory {
-  id: number;
-  createdAt: string;
-  files: LiveFeedbackCodeAndComments[];
-}
-
 export interface QuestionInfo {
   id: number;
   title: string;
   description: string;
 }
 
+export interface MessageFile {
+  id: number;
+  filename: string;
+  content: string;
+  language: string;
+  editorMode: LanguageMode;
+  highlightedContent: string | null;
+}
+
+export interface LiveFeedbackChatMessage {
+  id: number;
+  content: string;
+  createdAt: string;
+  creatorId: number;
+  isError: boolean;
+  files: MessageFile[];
+}
+
 export interface LiveFeedbackHistoryState {
-  liveFeedbackHistory: LiveFeedbackHistory[];
+  messages: LiveFeedbackChatMessage[];
   question: QuestionInfo;
 }

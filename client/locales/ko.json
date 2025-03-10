@@ -1376,8 +1376,8 @@
   "course.assessment.liveFeedback.comments": {
     "defaultMessage": "댓글"
   },
-  "course.assessment.liveFeedback.feedbackTimingTitle": {
-    "defaultMessage": "{usedAt}에 사용됨"
+  "course.assessment.liveFeedback.messageTimingTitle": {
+    "defaultMessage": "{usedAt}에 생성됨"
   },
   "course.assessment.liveFeedback.lineHeader": {
     "defaultMessage": "{lineNumber} 줄"

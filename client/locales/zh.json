@@ -2396,8 +2396,8 @@
   "course.assessment.liveFeedback.questionTitle": {
     "defaultMessage": "题目 {index}"
   },
-  "course.assessment.liveFeedback.feedbackTimingTitle": {
-    "defaultMessage": "使用时间：{usedAt}"
+  "course.assessment.liveFeedback.messageTimingTitle": {
+    "defaultMessage": "生成时间：{usedAt}"
   },
   "course.assessment.liveFeedback.liveFeedbackName": {
     "defaultMessage": "实时反馈"
