@@ -1,11 +1,15 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { defineMessages } from 'react-intl';
-import { Divider, Paper, Typography } from '@mui/material';
+import { Button, Divider, Paper, Typography } from '@mui/material';
 import moment from 'moment';
 import { LiveFeedbackChatMessage } from 'types/course/assessment/submission/liveFeedback';
 
 import { justifyPosition } from 'course/assessment/submission/components/GetHelpChatPage/utils';
 import MarkdownText from 'course/assessment/submission/components/MarkdownText';
+import {
+  suggestionFixesMapping,
+  suggestionMapping,
+} from 'course/assessment/submission/suggestionTranslations';
 import useTranslation from 'lib/hooks/useTranslation';
 import { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
@@ -42,6 +46,7 @@ const isAllFileIdsIdentical = (
 const LiveFeedbackConversation: FC<Props> = (props) => {
   const { messages, selectedMessageIndex, setSelectedMessageIndex } = props;
 
+  const curMessage = messages[selectedMessageIndex];
   const selectedMessageFileIdHash: Record<number, boolean> = messages[
     selectedMessageIndex
   ].files.reduce(function (map, file) {
@@ -78,6 +83,14 @@ const LiveFeedbackConversation: FC<Props> = (props) => {
     }
   }
 
+  const options = [...curMessage.options];
+
+  options.sort(
+    (option1, option2) =>
+      (curMessage.optionId === option1.optionId ? 0 : 1) -
+      (curMessage.optionId === option2.optionId ? 0 : 1),
+  );
+
   const { t } = useTranslation();
 
   return (
@@ -90,7 +103,9 @@ const LiveFeedbackConversation: FC<Props> = (props) => {
 
       <Divider />
 
-      <div className="flex-1 overflow-auto mt-1">
+      <div
+        className={`flex-1 overflow-auto ${curMessage.options.length > 0 && 'pb-14'}`}
+      >
         {messages.map((message, index) => {
           const isStudent = message.creatorId !== 0;
           const isError = message.isError;
@@ -120,6 +135,31 @@ const LiveFeedbackConversation: FC<Props> = (props) => {
             </div>
           );
         })}
+      </div>
+
+      <div className="relative flex flex-row items-center">
+        <div className="scrollbar-hidden absolute bottom-full flex px-1.5 py-0.5 gap-2 w-full overflow-x-auto">
+          {options.map((option) => {
+            const optionDetail =
+              option.optionType === 'suggestion'
+                ? suggestionMapping[option.optionId]
+                : suggestionFixesMapping[option.optionId];
+
+            return (
+              <Button
+                key={option.optionId}
+                className={`${messages[selectedMessageIndex].optionId === option.optionId ? 'bg-blue-300' : 'bg-white'} text-black text-xl shrink-0 mb-2`}
+                disabled
+                variant="outlined"
+              >
+                {t({
+                  id: optionDetail.id,
+                  defaultMessage: optionDetail.defaultMessage,
+                })}
+              </Button>
+            );
+          })}
+        </div>
       </div>
     </Paper>
   );

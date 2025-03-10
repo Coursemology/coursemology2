@@ -65,7 +65,7 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     @messages = Course::Assessment::LiveFeedback::Message.
                 joins(:thread).
                 where(live_feedback_threads: { submission_question_id: @submission_question_hash.keys }).
-                includes(message_files: :file).
+                includes(message_options: :option, message_files: :file).
                 order(:created_at)
   end
 
