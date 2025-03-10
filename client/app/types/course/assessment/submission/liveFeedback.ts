@@ -22,9 +22,16 @@ export interface LiveFeedbackChatMessage {
   creatorId: number;
   isError: boolean;
   files: MessageFile[];
+  options: MessageOption[];
+  optionId: number;
 }
 
 export interface LiveFeedbackHistoryState {
   messages: LiveFeedbackChatMessage[];
   question: QuestionInfo;
+}
+
+export interface MessageOption {
+  optionId: number;
+  optionType: 'suggestion' | 'fix';
 }
