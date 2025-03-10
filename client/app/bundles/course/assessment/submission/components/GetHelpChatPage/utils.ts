@@ -12,3 +12,20 @@ export const justifyPosition = (
 
   return 'justify-start';
 };
+
+export const isAllFileIdsIdentical = (
+  fileIds: number[],
+  fileIdHash: Record<number, boolean>,
+): boolean => {
+  if (fileIds.length !== Object.keys(fileIdHash).map(Number).length) {
+    return false;
+  }
+
+  for (let i = 0; i < fileIds.length; i++) {
+    if (!fileIdHash[fileIds[i]]) {
+      return false;
+    }
+  }
+
+  return true;
+};
