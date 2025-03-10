@@ -6,6 +6,7 @@ import { Folder } from 'types/course/admin/ragWise';
 import Section from 'lib/components/core/layouts/Section';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { EXPAND_SWITCH_TYPE } from '../constants';
 import translations from '../translations';
 
 import ExpandAllSwitch from './buttons/ExpandAllSwitch';
@@ -29,7 +30,7 @@ const MaterialList: FC<MaterialListProps> = (props) => {
       <section>
         <div className="flex justify-between items-center mb-4">
           <div>
-            <ExpandAllSwitch />
+            <ExpandAllSwitch type={EXPAND_SWITCH_TYPE.folders} />
           </div>
           <div className="pr-5 space-x-48 flex justify-end">
             <div className="text-center">
