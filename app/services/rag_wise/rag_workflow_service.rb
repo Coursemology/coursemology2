@@ -22,6 +22,7 @@ class RagWise::RagWorkflowService
 
   def get_assistant_response(post, topic)
     query_payload = "query title: #{topic.title} query text: #{post.text} "
+    @evaluation.question = query_payload
     first_attachment = post.attachments.first
     if first_attachment
       data = Base64.strict_encode64(File.read(first_attachment.path))
