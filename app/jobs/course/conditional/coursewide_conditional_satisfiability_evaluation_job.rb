@@ -3,6 +3,7 @@ class Course::Conditional::CoursewideConditionalSatisfiabilityEvaluationJob < Ap
   DELTA = 1.0
 
   include TrackableJob
+  queue_as :delayed_medium_high
 
   protected
 

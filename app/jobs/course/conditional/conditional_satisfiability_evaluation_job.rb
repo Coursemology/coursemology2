@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Conditional::ConditionalSatisfiabilityEvaluationJob < ApplicationJob
   include TrackableJob
+  queue_as :delayed_medium_high
 
   protected
 
