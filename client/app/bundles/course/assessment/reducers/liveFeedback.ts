@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LiveFeedbackHistoryState } from 'types/course/assessment/submission/liveFeedback';
 
 const initialState: LiveFeedbackHistoryState = {
-  liveFeedbackHistory: [],
+  messages: [],
   question: {
     id: 0,
     title: '',
@@ -15,7 +15,7 @@ export const liveFeedbackSlice = createSlice({
   initialState,
   reducers: {
     initialize: (state, action: PayloadAction<LiveFeedbackHistoryState>) => {
-      state.liveFeedbackHistory = action.payload.liveFeedbackHistory;
+      state.messages = action.payload.messages;
       state.question = action.payload.question;
     },
     reset: () => {

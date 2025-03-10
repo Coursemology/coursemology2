@@ -2447,8 +2447,8 @@
   "course.assessment.liveFeedback.questionTitle": {
     "defaultMessage": "Question {index}"
   },
-  "course.assessment.liveFeedback.feedbackTimingTitle": {
-    "defaultMessage": "Used at: {usedAt}"
+  "course.assessment.liveFeedback.messageTimingTitle": {
+    "defaultMessage": "Generated at: {usedAt}"
   },
   "course.assessment.liveFeedback.liveFeedbackName": {
     "defaultMessage": "Live Feedback"

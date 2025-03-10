@@ -11,6 +11,8 @@ import translations from '../../translations';
 import { ChatSender } from '../../types';
 import MarkdownText from '../MarkdownText';
 
+import { justifyPosition } from './utils';
+
 interface ConversationAreaProps {
   answerId: number;
 }
@@ -34,18 +36,6 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
     !isRequestingLiveFeedback && !isPollingLiveFeedback;
 
   if (!liveFeedbackChats || !isLiveFeedbackChatLoaded) return null;
-
-  const justifyPosition = (isStudent: boolean, isError: boolean): string => {
-    if (isStudent) {
-      return 'justify-end';
-    }
-
-    if (isError) {
-      return 'justify-center';
-    }
-
-    return 'justify-start';
-  };
 
   return (
     <div
