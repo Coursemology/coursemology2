@@ -167,17 +167,13 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
       render_views
 
       let(:question1) { create(:course_assessment_question_programming, assessment: assessment).acting_as }
-      let(:question2) { create(:course_assessment_question_multiple_response, assessment: assessment).acting_as }
-      let!(:course_student) { students[0] }
-
-      before do
-        create_list(:course_assessment_live_feedback, 3,
-                    assessment: assessment,
-                    question: question1,
-                    creator: course_student.user,
-                    with_comment: true)
-        create(:course_assessment_live_feedback, assessment: assessment, question: question2,
-                                                 creator: course_student.user)
+      let!(:course_student) { students[1] }
+      let!(:thread) do
+        create(:live_feedback_thread, assessment: assessment, question: question1,
+                                      submission_creator_id: course_student.user.id)
+      end
+      let!(:messages) do
+        create_list(:live_feedback_message, 3, thread: thread)
       end
 
       subject do
@@ -227,12 +223,6 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           else
             expect(first_result['liveFeedbackCount'][question_index]).to eq(0)
           end
-
-          # No feedback for the second question, since there is no comment
-          question_index = first_result['questionIds'].index(question2.id)
-          if first_result['courseUser']['id'] == course_student.id
-            expect(first_result['liveFeedbackCount'][question_index]).to eq(0)
-          end
         end
       end
 
@@ -265,12 +255,6 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           else
             expect(first_result['liveFeedbackCount'][question_index]).to eq(0)
           end
-
-          # No feedback for the second question, since there is no comment
-          question_index = first_result['questionIds'].index(question2.id)
-          if first_result['courseUser']['id'] == course_student.id
-            expect(first_result['liveFeedbackCount'][question_index]).to eq(0)
-          end
         end
       end
     end
@@ -281,12 +265,15 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
       end
       let(:user) { create(:user) }
 
-      let!(:course_student) { create(:course_student, course: course, user: user) }
-      let!(:live_feedback) do
-        create(:course_assessment_live_feedback, assessment: assessment,
-                                                 question: question,
-                                                 creator: user,
-                                                 with_comment: true)
+      let!(:course_student) { students[1] }
+      let!(:submission_question) { create(:submission_question, submission: submission2, question: question) }
+      let!(:thread) do
+        create(:live_feedback_thread, assessment: assessment, question: question,
+                                      submission_question_id: submission_question.id,
+                                      submission_creator_id: course_student.user.id)
+      end
+      let!(:messages) do
+        create_list(:live_feedback_message, 3, thread: thread)
       end
 
       render_views
@@ -315,21 +302,11 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
 
-          feedback_history = json_result['liveFeedbackHistory']
+          message_history = json_result['messages']
           question = json_result['question']
 
-          expect(feedback_history).not_to be_empty
-          expect(feedback_history.first).to have_key('files')
-
-          file = feedback_history.first['files'].first
-          expect(file).to have_key('filename')
-          expect(file).to have_key('content')
-          expect(file).to have_key('language')
-          expect(file).to have_key('comments')
-
-          comment = file['comments'].first
-          expect(comment).to have_key('lineNumber')
-          expect(comment).to have_key('comment')
+          expect(message_history).not_to be_empty
+          expect(message_history.first).to have_key('files')
 
           expect(question).not_to be_empty
           expect(question).to have_key('title')
@@ -346,21 +323,11 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
 
-          feedback_history = json_result['liveFeedbackHistory']
+          message_history = json_result['messages']
           question = json_result['question']
 
-          expect(feedback_history).not_to be_empty
-          expect(feedback_history.first).to have_key('files')
-
-          file = feedback_history.first['files'].first
-          expect(file).to have_key('filename')
-          expect(file).to have_key('content')
-          expect(file).to have_key('language')
-          expect(file).to have_key('comments')
-
-          comment = file['comments'].first
-          expect(comment).to have_key('lineNumber')
-          expect(comment).to have_key('comment')
+          expect(message_history).not_to be_empty
+          expect(message_history.first).to have_key('files')
 
           expect(question).not_to be_empty
           expect(question).to have_key('title')
