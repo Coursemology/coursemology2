@@ -1373,6 +1373,33 @@
   "course.assessment.edit.update": {
     "defaultMessage": "저장"
   },
+"course.assessment.generation.confirmDeleteConversation": {
+    "defaultMessage": "\"{title}\" 및 모든 기록 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다!"
+  },
+  "course.assessment.generation.exportAction": {
+    "defaultMessage": "내보내기"
+  },
+  "course.assessment.generation.exportDialogHeader": {
+    "defaultMessage": "문제 내보내기 ({exportCount}개 선택됨)"
+  },
+  "course.assessment.generation.exportError": {
+    "defaultMessage": "이 문제를 내보내는 중 오류가 발생했습니다: {error}"
+  },
+  "course.assessment.generation.lockTooltip": {
+    "defaultMessage": "이 섹션의 변경을 방지하려면 잠그세요"
+  },
+  "course.assessment.generation.newTab": {
+    "defaultMessage": "새로 만들기"
+  },
+  "course.assessment.generation.openExportDialog": {
+    "defaultMessage": "내보내기"
+  },
+  "course.assessment.generation.resetConversation": {
+    "defaultMessage": "초기화"
+  },
+  "course.assessment.generation.unlockTooltip": {
+    "defaultMessage": "이 섹션을 계속 편집하려면 잠금을 해제하세요"
+  },
   "course.assessment.liveFeedback.comments": {
     "defaultMessage": "댓글"
   },
@@ -1838,6 +1865,24 @@
   "course.assessment.question.programming.packageCreationModeHint": {
     "defaultMessage": "이 질문이 성공적으로 생성되면 이 모드를 변경할 수 없습니다. 신중하게 선택하세요!"
   },
+  "course.assessment.question.programming.packageImportSuccess": {
+    "defaultMessage": "패키지가 성공적으로 가져와졌습니다."
+  },
+  "course.assessment.question.programming.packageImportInvalidPackage": {
+    "defaultMessage": "패키지를 가져올 수 없습니다: 업로드된 패키지의 구조가 올바르지 않습니다."
+  },
+  "course.assessment.question.programming.packageImportEvaluationTimeout": {
+    "defaultMessage": "요구된 시간 내에 평가자로부터 응답을 받지 못했습니다. 현재 모든 평가자가 사용 중일 수 있습니다. 나중에 다시 시도해주세요."
+  },
+  "course.assessment.question.programming.packageImportTimeLimitExceeded": {
+    "defaultMessage": "지정된 시간 제한 내에 테스트 케이스 평가를 완료하지 못했습니다."
+  },
+  "course.assessment.question.programming.packageImportEvaluationError": {
+    "defaultMessage": "솔루션을 테스트 케이스와 비교하는 과정에서 오류가 발생했습니다. 다시 한 번 확인하고 시도해주세요."
+  },
+  "course.assessment.question.programming.packageImportGenericError": {
+    "defaultMessage": "패키지를 가져올 수 없습니다: {error}"
+  },
   "course.assessment.question.programming.packageInfoOnline": {
     "defaultMessage": "생성된 평가 패키지"
   },
@@ -2188,6 +2233,12 @@
   },
   "course.assessment.show.forumPostResponse": {
     "defaultMessage": "포럼 게시물 응답"
+  },
+  "course.assessment.show.generate": {
+    "defaultMessage": "프로그래밍 문제 생성"
+  },
+  "course.assessment.show.generateTooltip": {
+    "defaultMessage": "Codaveri AI와 협업하여 문제를 생성하세요"
   },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "평가된 테스트 케이스"

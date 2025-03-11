@@ -38,6 +38,7 @@ import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 import { getAssessmentGenerateQuestionsData } from './selectors';
 import { ConversationState } from './types';
@@ -58,10 +59,6 @@ const translations = defineMessages({
   exportAction: {
     id: 'course.assessment.generation.exportAction',
     defaultMessage: 'Export',
-  },
-  exportClose: {
-    id: 'course.assessment.generation.exportClose',
-    defaultMessage: 'Close',
   },
   exportError: {
     id: 'course.assessment.generation.exportError',
@@ -249,7 +246,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
           color="secondary"
           onClick={() => setOpen(false)}
         >
-          {t(translations.exportClose)}
+          {t(formTranslations.close)}
         </Button>
         <Button
           className="btn-submit"

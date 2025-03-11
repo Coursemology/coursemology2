@@ -15,12 +15,11 @@ interface LockableSectionProps {
 const translations = defineMessages({
   lockTooltip: {
     id: 'course.assessment.generation.lockTooltip',
-    defaultMessage:
-      'Lock this section if you do not want it changed by generation',
+    defaultMessage: 'Lock to prevent changes to this section',
   },
   unlockTooltip: {
     id: 'course.assessment.generation.unlockTooltip',
-    defaultMessage: 'Unlock this section to continue editing it',
+    defaultMessage: 'Unlock to continue editing this section',
   },
 });
 
