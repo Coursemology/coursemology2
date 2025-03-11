@@ -1,9 +1,11 @@
 import { FormControlLabel, Radio, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
-import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionType } from 'types/course/assessment/question';
+
+import { AnswerDetailsProps } from '../../types';
 
 const MultipleChoiceDetails = (
-  props: QuestionAnswerDisplayDetails<'MultipleChoice'>,
+  props: AnswerDetailsProps<QuestionType.MultipleChoice>,
 ): JSX.Element => {
   const { question, answer } = props;
   return (
@@ -16,7 +18,7 @@ const MultipleChoiceDetails = (
             answer.fields.option_ids.includes(option.id)
           }
           className="w-full"
-          control={<Radio />}
+          control={<Radio className="py-0 px-4" />}
           disabled
           label={
             <b>
