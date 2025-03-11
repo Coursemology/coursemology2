@@ -24,7 +24,7 @@ class RagWise::RagWorkflowService
     query_payload = "query title: #{topic.title} query text: #{post.text} "
     first_attachment = post.attachments.first
     if first_attachment
-      data = Base64.strict_encode64(File.read(first_attachment.path))
+      data = Base64.strict_encode64(first_attachment.open(encoding: 'ASCII-8BIT', &:read))
       @assistant.add_message_and_run!(content: query_payload,
                                       image_url: "data:image/jpeg;base64,#{data}")
     else
