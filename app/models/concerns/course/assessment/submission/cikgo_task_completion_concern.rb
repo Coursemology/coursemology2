@@ -3,6 +3,7 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
   WORKFLOW_STATE_TO_TASK_COMPLETION_STATUS = {
     attempting: :ongoing,
     submitted: :ongoing,
+    graded: :ongoing,
     published: :completed
   }.freeze
 
@@ -17,7 +18,11 @@ module Course::Assessment::Submission::CikgoTaskCompletionConcern
   delegate :edit_course_assessment_submission_url, to: 'Rails.application.routes.url_helpers'
 
   def publish_task_completion
-    Cikgo::ResourcesService.mark_task!(status, lesson_plan_item, { user_id: creator_id_on_cikgo, url: submission_url })
+    Cikgo::ResourcesService.mark_task!(status, lesson_plan_item, {
+      user_id: creator_id_on_cikgo,
+      url: submission_url,
+      score: grade&.to_i
+    })
   rescue StandardError => e
     Rails.logger.error("Cikgo: Cannot publish task completion for submission #{id}: #{e}")
     raise e unless Rails.env.production?
