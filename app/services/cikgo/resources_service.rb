@@ -42,8 +42,9 @@ class Cikgo::ResourcesService < Cikgo::Service
         status: status,
         provider: 'coursemology',
         userId: data[:user_id].to_s,
-        url: data[:url]
-      }.compact)
+        url: data[:url],
+        score: data[:score]
+      })
     end
 
     private
