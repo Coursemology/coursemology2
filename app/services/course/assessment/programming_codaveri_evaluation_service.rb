@@ -155,8 +155,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
 
     @answer_object[:problemId] = @question.codaveri_id
 
-    @answer_object[:languageVersion][:language] = @question.language.polyglot_name
-    @answer_object[:languageVersion][:version] = @question.language.extend(CodaveriLanguageConcern).polyglot_version
+    @answer_object[:languageVersion][:language] = @question.language.extend(CodaveriLanguageConcern).codaveri_language
+    @answer_object[:languageVersion][:version] = @question.language.extend(CodaveriLanguageConcern).codaveri_version
 
     @answer.files.each do |file|
       file_template = default_codaveri_student_file_template

@@ -5,17 +5,6 @@ zh:
         programming:
           new:
             header: '新编程题'
-          form:
-            import_result:
-              success: '包已被正确引入'
-              error: '包无法引入，错误：%{error}'
-              errors:
-                invalid_package: '上传的包包含无效结构。'
-                time_limit_exceeded: >-
-                  该包超过了问题所允许的最长时间。
-                evaluation_timeout: >-
-                  在规定时间内没有收到评分器的回应。
-                evaluation_error: '在评估过程中发生错误，请参见日志。'
           question_type: 编程题
           question_type_codaveri: 编程题(Codaveri)
           question_type_codaveri_deactivated: >-

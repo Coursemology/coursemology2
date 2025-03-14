@@ -1373,6 +1373,33 @@
   "course.assessment.edit.update": {
     "defaultMessage": "Save"
   },
+  "course.assessment.generation.confirmDeleteConversation": {
+    "defaultMessage": "Are you sure you want to delete \"{title}\" and all its history items? THIS ACTION IS IRREVERSIBLE!"
+  },
+  "course.assessment.generation.exportAction": {
+    "defaultMessage": "Export"
+  },
+  "course.assessment.generation.exportDialogHeader": {
+    "defaultMessage": "Export Questions ({exportCount} selected)"
+  },
+  "course.assessment.generation.exportError": {
+    "defaultMessage": "An error occurred in exporting this question: {error}"
+  },
+  "course.assessment.generation.lockTooltip": {
+    "defaultMessage": "Lock to prevent changes to this section"
+  },
+  "course.assessment.generation.newTab": {
+    "defaultMessage": "New"
+  },
+  "course.assessment.generation.openExportDialog": {
+    "defaultMessage": "Export"
+  },
+  "course.assessment.generation.resetConversation": {
+    "defaultMessage": "Reset"
+  },
+  "course.assessment.generation.unlockTooltip": {
+    "defaultMessage": "Unlock to continue editing this section"
+  },
   "course.assessment.monitoring.alivePresenceHint": {
     "defaultMessage": "Last heartbeat was received in time."
   },
@@ -1823,6 +1850,24 @@
   "course.assessment.question.programming.packageCreationModeHint": {
     "defaultMessage": "You cannot change this mode once this question is successfully created. Choose wisely!"
   },
+  "course.assessment.question.programming.packageImportSuccess": {
+    "defaultMessage": "The package was successfully imported."
+  },
+  "course.assessment.question.programming.packageImportInvalidPackage": {
+    "defaultMessage": "The package could not be imported: the uploaded package does not have a valid structure."
+  },
+  "course.assessment.question.programming.packageImportEvaluationTimeout": {
+    "defaultMessage": "No response was received from an evaluator within the required time. This may indicate all our evaluators are busy right now, please try again later."
+  },
+  "course.assessment.question.programming.packageImportTimeLimitExceeded": {
+    "defaultMessage": "The solution did not finish evaluating the test cases in the specified time limit."
+  },
+  "course.assessment.question.programming.packageImportEvaluationError": {
+    "defaultMessage": "An error occurred evaluating your solution against its test cases. Please double-check them and try again."
+  },
+  "course.assessment.question.programming.packageImportGenericError": {
+    "defaultMessage": "The package could not be imported: {error}"
+  },
   "course.assessment.question.programming.packageInfoOnline": {
     "defaultMessage": "Generated evaluation package"
   },
@@ -2185,6 +2230,12 @@
   },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "Graded test cases"
+  },
+  "course.assessment.show.generate": {
+    "defaultMessage": "Generate Programming Questions"
+  },
+  "course.assessment.show.generateTooltip": {
+    "defaultMessage": "Collaborate with Codaveri AI to create questions"
   },
   "course.assessment.show.gradingMode": {
     "defaultMessage": "Grading mode"

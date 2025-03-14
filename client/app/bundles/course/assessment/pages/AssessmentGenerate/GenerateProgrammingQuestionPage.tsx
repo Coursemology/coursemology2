@@ -255,6 +255,9 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   return (
     <Preload render={<LoadingIndicator />} while={fetchCodaveriLanguages}>
       {(languages): JSX.Element => {
+        const currentLanguageMode =
+          languages.find((language) => language.id === currentLanguageId)
+            ?.editorMode ?? 'python';
         return (
           <>
             <GenerateTabs
@@ -349,6 +352,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                               buildGenerateRequestPayload(
                                 codaveriFormData,
                                 questionFormData,
+                                currentLanguageMode === 'java',
                               ),
                             )
                               .then((response) => {
@@ -477,11 +481,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
 
                 <Grid item lg={8} xs={12}>
                   <GenerateQuestionPrototypeForm
-                    editorMode={
-                      languages.find(
-                        (language) => language.id === currentLanguageId,
-                      )?.editorMode ?? 'python'
-                    }
+                    editorMode={currentLanguageMode}
                     lockStates={lockStates}
                     onToggleLock={(lockStateKey: string) => {
                       setLockStates({

@@ -1,9 +1,10 @@
-import { FC } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { ElementType, FC } from 'react';
+import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { Container } from '@mui/material';
 import { ProgrammingFormData } from 'types/course/assessment/question/programming';
 
+import { ReorderableTestCaseProps } from 'course/assessment/question/programming/components/common/ReorderableTestCase';
 import ReorderableTestCases from 'course/assessment/question/programming/components/common/ReorderableTestCases';
 import {
   deleteTestCase,
@@ -14,17 +15,25 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../translations';
 
 import LockableSection from './LockableSection';
+import { QuestionPrototypeFormData } from './types';
 
 interface TestCasesManagerProps {
+  control: Control<QuestionPrototypeFormData>;
+  setValue: UseFormSetValue<QuestionPrototypeFormData>;
   lockStates: { [key: string]: boolean };
   onToggleLock: (key: string) => void;
+  component?: ElementType<ReorderableTestCaseProps>;
 }
 
 const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
   const { t } = useTranslation();
-  const { lockStates, onToggleLock } = props;
+  const { component, lockStates, onToggleLock } = props;
 
-  const { control, setValue } = useFormContext<ProgrammingFormData>();
+  // Cast fields to ProgrammingFormData to satisfy helper components' type assertions
+  const control = props.control as unknown as Control<ProgrammingFormData>;
+  const setValue =
+    props.setValue as unknown as UseFormSetValue<ProgrammingFormData>;
+
   const testCases = useWatch({ control, name: 'testUi.metadata.testCases' });
 
   const onRearrangingTestCases = (result: DropResult): void => {
@@ -48,6 +57,7 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
       >
         <Container disableGutters maxWidth={false}>
           <ReorderableTestCases
+            component={component}
             control={control}
             disabled={lockStates[publicTestCasesName]}
             hintHeader={t(translations.hint)}
@@ -70,6 +80,7 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
       >
         <Container disableGutters maxWidth={false}>
           <ReorderableTestCases
+            component={component}
             control={control}
             disabled={lockStates[privateTestCasesName]}
             hintHeader={t(translations.hint)}
@@ -93,6 +104,7 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
       >
         <Container disableGutters maxWidth={false}>
           <ReorderableTestCases
+            component={component}
             control={control}
             disabled={lockStates[evaluationTestCasesName]}
             hintHeader={t(translations.hint)}

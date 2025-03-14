@@ -1,5 +1,6 @@
 import {
   LanguageData,
+  PackageImportResultData,
   ProgrammingFormData,
   ProgrammingPostStatusData,
 } from 'types/course/assessment/question/programming';
@@ -20,6 +21,12 @@ export default class ProgrammingAPI extends BaseAPI {
 
   fetchEdit(id: number): APIResponse<ProgrammingFormData> {
     return this.client.get(`${this.#urlPrefix}/${id}/edit`);
+  }
+
+  fetchImportResult(
+    id: number,
+  ): APIResponse<{ importResult: PackageImportResultData }> {
+    return this.client.get(`${this.#urlPrefix}/${id}/import_result`);
   }
 
   create(data: FormData): APIResponse<ProgrammingPostStatusData> {

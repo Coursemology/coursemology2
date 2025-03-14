@@ -196,7 +196,11 @@ const translations = defineMessages({
   },
   generate: {
     id: 'course.assessment.show.generate',
-    defaultMessage: 'Generate Programming Question',
+    defaultMessage: 'Generate Programming Questions',
+  },
+  generateTooltip: {
+    id: 'course.assessment.show.generateTooltip',
+    defaultMessage: 'Collaborate with Codaveri AI to create questions',
   },
   questionsReorderHint: {
     id: 'course.assessment.show.questionsReorderHint',
@@ -1407,6 +1411,34 @@ const translations = defineMessages({
   seeBuildLog: {
     id: 'course.assessment.question.programming.seeBuildLog',
     defaultMessage: 'See the build log',
+  },
+  packageImportSuccess: {
+    id: 'course.assessment.question.programming.packageImportSuccess',
+    defaultMessage: 'The package was successfully imported.',
+  },
+  packageImportInvalidPackage: {
+    id: 'course.assessment.question.programming.packageImportInvalidPackage',
+    defaultMessage:
+      'The package could not be imported: the uploaded package does not have a valid structure.',
+  },
+  packageImportEvaluationTimeout: {
+    id: 'course.assessment.question.programming.packageImportEvaluationTimeout',
+    defaultMessage:
+      'No response was received from an evaluator within the required time. This may indicate all our evaluators are busy right now, please try again later.',
+  },
+  packageImportTimeLimitExceeded: {
+    id: 'course.assessment.question.programming.packageImportTimeLimitExceeded',
+    defaultMessage:
+      'The solution did not finish evaluating the test cases in the specified time limit.',
+  },
+  packageImportEvaluationError: {
+    id: 'course.assessment.question.programming.packageImportEvaluationError',
+    defaultMessage:
+      'An error occurred evaluating your solution against its test cases. Please double-check them and try again.',
+  },
+  packageImportGenericError: {
+    id: 'course.assessment.question.programming.packageImportGenericError',
+    defaultMessage: 'The package could not be imported: {error}',
   },
   packagePending: {
     id: 'course.assessment.question.programming.packagePending',
