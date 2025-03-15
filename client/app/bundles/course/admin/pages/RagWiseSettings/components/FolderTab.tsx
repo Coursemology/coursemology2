@@ -8,12 +8,14 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import useItems from 'lib/hooks/items/useItems';
 import { useAppSelector } from 'lib/hooks/store';
 
+import { MATERIAL_SWITCH_TYPE } from '../constants';
 import {
-  getExpandedSettings,
+  getFolderExpandedSettings,
   getMaterialByFolderId,
   getSubfolder,
 } from '../selectors';
 
+import MaterialKnowledgeBaseSwitch from './buttons/MaterialKnowledgeBaseSwitch';
 import CollapsibleList from './lists/CollapsibleList';
 import MaterialItem from './MaterialItem';
 
@@ -42,12 +44,19 @@ const FolderTab: FC<FolderTabProps> = (props) => {
     [],
     sortItems,
   );
-  const isFolderExpanded = useAppSelector(getExpandedSettings);
+  const isFolderExpanded = useAppSelector(getFolderExpandedSettings);
 
   return (
     <CollapsibleList
       collapsedByDefault
       forceExpand={isFolderExpanded}
+      headerAction={
+        <MaterialKnowledgeBaseSwitch
+          className="mr-7"
+          materials={materials}
+          type={MATERIAL_SWITCH_TYPE.folder}
+        />
+      }
       headerTitle={
         <Link
           onClick={(e): void => e.stopPropagation()}

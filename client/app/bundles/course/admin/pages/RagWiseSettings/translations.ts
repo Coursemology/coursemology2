@@ -119,6 +119,20 @@ export default defineMessages({
   },
   expandAll: {
     id: 'course.admin.RagWiseSettings.expandAll',
-    defaultMessage: 'Expand all folders',
+    defaultMessage: 'Expand all {object}',
+  },
+  forumSectionTitle: {
+    id: 'course.admin.RagWiseSettings.forumSectionTitle',
+    defaultMessage: 'Forums',
+  },
+  forumSectionSubtitle: {
+    id: 'course.admin.RagWiseSettings.forumSectionSubtitle',
+    defaultMessage:
+      'Manage the inclusion or exclusion of forum data from related courses\
+      in the knowledge base, allowing users to control its availability to the LLM for generating responses.',
+  },
+  noRelatedCourses: {
+    id: 'course.admin.RagWiseSettings.forumSectionTitle',
+    defaultMessage: 'No related courses found.',
   },
 });
