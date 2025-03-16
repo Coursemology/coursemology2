@@ -39,16 +39,16 @@ export const TestCaseTypes = {
   Evaluation: 'evaluation_test',
 };
 
-export const selectedUserType = mirrorCreator([
-  'my_students',
-  'my_students_w_phantom',
-  'students',
-  'students_w_phantom',
-  'staff',
-  'staff_w_phantom',
-]);
+export enum SelectedUserType {
+  MY_STUDENTS = 'my_students',
+  MY_STUDENTS_W_PHANTOM = 'my_students_w_phantom',
+  STUDENTS = 'students',
+  STUDENTS_W_PHANTOM = 'students_w_phantom',
+  STAFF = 'staff',
+  STAFF_W_PHANTOM = 'staff_w_phantom',
+}
 
-export const selectedUserTypeDisplay = {
+export const SelectedUserTypeDisplayMapper = {
   my_students: 'MY STUDENTS',
   my_students_w_phantom: 'MY STUDENTS INCL. PHANTOM',
   students: 'STUDENTS',
