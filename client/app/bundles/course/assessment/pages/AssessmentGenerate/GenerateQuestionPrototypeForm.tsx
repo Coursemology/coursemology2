@@ -1,9 +1,13 @@
-import { FC } from 'react';
+import { ElementType, FC } from 'react';
 import { Controller, FormProvider, UseFormReturn } from 'react-hook-form';
 import { Container } from '@mui/material';
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
 import EditorAccordion from 'course/assessment/question/programming/components/common/EditorAccordion';
+import ReorderableJavaTestCase from 'course/assessment/question/programming/components/common/ReorderableJavaTestCase';
+import ReorderableTestCase, {
+  ReorderableTestCaseProps,
+} from 'course/assessment/question/programming/components/common/ReorderableTestCase';
 import { generationActions as actions } from 'course/assessment/reducers/generation';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
@@ -23,6 +27,17 @@ interface Props {
   editorMode: LanguageMode;
 }
 
+const TestCaseComponentMapper: Record<
+  LanguageMode,
+  ElementType<ReorderableTestCaseProps>
+> = {
+  python: ReorderableTestCase,
+  java: ReorderableJavaTestCase,
+  c_cpp: ReorderableTestCase,
+  javascript: ReorderableTestCase,
+  r: ReorderableTestCase,
+};
+
 const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
   const { prototypeForm, lockStates, onToggleLock, editorMode } = props;
   const { t } = useTranslation();
@@ -33,6 +48,8 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
       if (title) dispatch(actions.setActiveFormTitle({ title }));
     },
   });
+
+  const TestCaseComponent = TestCaseComponentMapper[editorMode];
 
   return (
     <FormProvider {...prototypeForm}>
@@ -133,7 +150,13 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
         </Container>
       </LockableSection>
 
-      <TestCasesManager lockStates={lockStates} onToggleLock={onToggleLock} />
+      <TestCasesManager
+        component={TestCaseComponent}
+        control={prototypeForm.control}
+        lockStates={lockStates}
+        onToggleLock={onToggleLock}
+        setValue={prototypeForm.setValue}
+      />
     </FormProvider>
   );
 };

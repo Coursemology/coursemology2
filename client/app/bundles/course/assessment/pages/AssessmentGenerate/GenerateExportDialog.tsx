@@ -38,9 +38,10 @@ import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 import { getAssessmentGenerateQuestionsData } from './selectors';
-import { ConversationState } from './types';
+import { ConversationState, ExportError } from './types';
 import { buildQuestionDataFromPrototype } from './utils';
 
 interface Props {
@@ -58,10 +59,6 @@ const translations = defineMessages({
   exportAction: {
     id: 'course.assessment.generation.exportAction',
     defaultMessage: 'Export',
-  },
-  exportClose: {
-    id: 'course.assessment.generation.exportClose',
-    defaultMessage: 'Close',
   },
   exportError: {
     id: 'course.assessment.generation.exportError',
@@ -93,10 +90,10 @@ const GenerateExportDialog: FC<Props> = (props) => {
     conversation: ConversationState,
     exportErrorMessage?: string,
   ): Promise<void> => {
-    let exportError = PackageImportResultError.GENERIC_ERROR;
+    let exportError: ExportError | undefined;
     if (conversation.questionId) {
       const importResult = await fetchImportResult(conversation.questionId);
-      exportError = importResult.error ?? exportError;
+      exportError = importResult.error;
       // exportErrorMessage in arguments will take precedence, in case a new error happens somewhere other than the import job.
       exportErrorMessage = exportErrorMessage ?? importResult.message;
     }
@@ -154,9 +151,13 @@ const GenerateExportDialog: FC<Props> = (props) => {
         error: conversation.exportErrorMessage ?? '',
       });
     }
-    // We reuse the same error messages as the main programming question page,
+    // If export error is a PackageImportResultError,
+    // we reuse the same error messages as the main programming question page,
     // though the user should never see INVALID_PACKAGE error because it's entirely managed by us.
     return t(ImportResultErrorMapper[conversation.exportError]);
+
+    // In the future, if we expand ExportError to include more error types,
+    // we should add the error message logic here.
   };
 
   return (
@@ -249,7 +250,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
           color="secondary"
           onClick={() => setOpen(false)}
         >
-          {t(translations.exportClose)}
+          {t(formTranslations.close)}
         </Button>
         <Button
           className="btn-submit"

@@ -1,0 +1,11 @@
+{
+  "custom_prompt": "This is a custom prompt.",
+  "is_default_question_form_data": "false",
+  "title": "Absolute Value",
+  "description": "Given a number n, return its absolute value",
+  "template": "public class Absolute {\n  public static int absolute(int n) {\n    // Implement your solution here\n    return 0;\n  }\n}",
+  "solution": "",
+  "public_test_cases": "{ \"0\": {\"inlineCode\": \"System.out.println(\\\"Hello World!\\\");\",\"hint\": \"Positive number\", \"expression\": \"absolute(1)\", \"expected\": \"1\"} }",
+  "private_test_cases": "{}",
+  "evaluation_test_cases": "{}"
+}

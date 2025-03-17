@@ -179,27 +179,28 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
           }
           title={t(translations.questions)}
         >
-          {assessment.newQuestionUrls && (
-            <NewQuestionMenu with={assessment.newQuestionUrls} />
-          )}
-          {assessment.generateQuestionUrl && (
-            <Tooltip title={t(translations.generateTooltip)}>
-              <Link
-                opensInNewTab
-                to={assessment.generateQuestionUrl}
-                underline="none"
-              >
-                <Button
-                  size="small"
-                  startIcon={<AutoFixHigh />}
-                  sx={{ marginTop: '0 !important', marginLeft: 1 }}
-                  variant="outlined"
+          <div className="space-x-3 flex items-end">
+            {assessment.newQuestionUrls && (
+              <NewQuestionMenu with={assessment.newQuestionUrls} />
+            )}
+            {assessment.generateQuestionUrl && (
+              <Tooltip title={t(translations.generateTooltip)}>
+                <Link
+                  opensInNewTab
+                  to={assessment.generateQuestionUrl}
+                  underline="none"
                 >
-                  {t(translations.generate)}
-                </Button>
-              </Link>
-            </Tooltip>
-          )}
+                  <Button
+                    size="small"
+                    startIcon={<AutoFixHigh />}
+                    variant="outlined"
+                  >
+                    {t(translations.generate)}
+                  </Button>
+                </Link>
+              </Tooltip>
+            )}
+          </div>
 
           {assessment.hasUnautogradableQuestions && (
             <Alert severity="warning">
