@@ -7,15 +7,8 @@ module Course::Assessment::Question::ProgrammingHelper
   def import_result_error
     return nil unless import_errored?
 
-    case @programming_question.import_job.error['class']
-    when InvalidDataError.name
-      :invalid_package
-    when Timeout::Error.name
-      :evaluation_timeout
-    when Course::Assessment::ProgrammingEvaluationService::TimeLimitExceededError.name
-      :time_limit_exceeded
-    when Course::Assessment::ProgrammingEvaluationService::Error.name
-      :evaluation_error
+    if import_job_error_map.key?(@programming_question.import_job.error['class'])
+      import_job_error_map[@programming_question.import_job.error['class']]
     else
       :generic_error
     end
@@ -55,5 +48,16 @@ module Course::Assessment::Question::ProgrammingHelper
     return true if params[:action] == 'new'
 
     @meta.present?
+  end
+
+  private
+
+  def import_job_error_map
+    {
+      InvalidDataError.name => :invalid_package,
+      Timeout::Error.name => :evaluation_timeout,
+      Course::Assessment::ProgrammingEvaluationService::TimeLimitExceededError.name => :time_limit_exceeded,
+      Course::Assessment::ProgrammingEvaluationService::Error.name => :evaluation_error
+    }
   end
 end

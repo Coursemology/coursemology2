@@ -1,5 +1,6 @@
 import {
   BasicMetadata,
+  JavaMetadataTestCase,
   LanguageData,
   LanguageMode,
   MetadataTestCase,
@@ -9,14 +10,6 @@ import { CodaveriGenerateResponseData } from 'types/course/assessment/question-g
 
 import { defaultQuestionFormData } from './constants';
 import { CodaveriGenerateFormData, QuestionPrototypeFormData } from './types';
-
-const getValidPythonTemplate = (prefix: string, template?: string): string => {
-  if (!template) return '';
-  if (template.trim().startsWith('def ')) {
-    return template;
-  }
-  return [prefix, template].join('\n');
-};
 
 function buildTestCases(
   visibility: 'public' | 'private' | 'hidden',
@@ -45,14 +38,15 @@ export function extractQuestionPrototypeData(
     },
     testUi: {
       metadata: {
-        submission: getValidPythonTemplate(
+        submission: [prefix, response.resources[0]?.templates[0]?.content ?? '']
+          .filter((text) => text?.length)
+          .join('\n'),
+        solution: [
           prefix,
-          response.resources[0]?.templates[0]?.content,
-        ),
-        solution: getValidPythonTemplate(
-          prefix,
-          response.resources[0]?.solutions[0]?.files[0]?.content,
-        ),
+          response.resources[0]?.solutions[0]?.files[0]?.content ?? '',
+        ]
+          .filter((text) => text?.length)
+          .join('\n'),
         testCases: {
           public: buildTestCases('public', response),
           private: buildTestCases('private', response),
@@ -63,31 +57,34 @@ export function extractQuestionPrototypeData(
   };
 }
 
-type IndexedTestCase = Record<
-  number,
-  { expression: string; expected: string; hint: string }
->;
+const stringifyTestCases = <T extends MetadataTestCase | JavaMetadataTestCase>(
+  testCases: T[],
+  isIncludingInlineCode: boolean,
+): string => {
+  const testCaseDict: Record<number, T> = {};
+  testCases.forEach((testCase, index) => {
+    testCaseDict[index + 1] = {
+      expression: testCase.expression,
+      expected: testCase.expected,
+      hint: testCase.hint,
+    } as T;
+    if (isIncludingInlineCode) {
+      (testCaseDict[index + 1] as JavaMetadataTestCase).inlineCode = (
+        testCase as JavaMetadataTestCase
+      ).inlineCode;
+    }
+  });
+  return JSON.stringify(testCaseDict);
+};
 
 export const buildGenerateRequestPayload = (
   codaveriData: CodaveriGenerateFormData,
   questionData: QuestionPrototypeFormData,
+  isIncludingInlineCode: boolean,
 ): FormData => {
   const data = new FormData();
   const isDefaultQuestionFormData =
     JSON.stringify(questionData) === JSON.stringify(defaultQuestionFormData);
-
-  const stringifyTestCases = (testCases: MetadataTestCase[]): string => {
-    const testCaseDict = {} as IndexedTestCase;
-    testCases.forEach((testCase, index) => {
-      testCaseDict[index + 1] = {
-        expression: testCase.expression,
-        expected: testCase.expected,
-        hint: testCase.hint,
-      };
-    });
-
-    return JSON.stringify(testCaseDict);
-  };
 
   data.append(
     'is_default_question_form_data',
@@ -112,12 +109,18 @@ export const buildGenerateRequestPayload = (
 
   const publicTestCases = questionData?.testUi?.metadata?.testCases?.public;
   if (publicTestCases?.length > 0) {
-    data.append('public_test_cases', stringifyTestCases(publicTestCases));
+    data.append(
+      'public_test_cases',
+      stringifyTestCases(publicTestCases, isIncludingInlineCode),
+    );
   }
 
   const privateTestCases = questionData?.testUi?.metadata?.testCases?.private;
   if (privateTestCases?.length > 0) {
-    data.append('private_test_cases', stringifyTestCases(privateTestCases));
+    data.append(
+      'private_test_cases',
+      stringifyTestCases(privateTestCases, isIncludingInlineCode),
+    );
   }
 
   const evaluationTestCases =
@@ -125,7 +128,7 @@ export const buildGenerateRequestPayload = (
   if (evaluationTestCases?.length > 0) {
     data.append(
       'evaluation_test_cases',
-      stringifyTestCases(evaluationTestCases),
+      stringifyTestCases(evaluationTestCases, isIncludingInlineCode),
     );
   }
 

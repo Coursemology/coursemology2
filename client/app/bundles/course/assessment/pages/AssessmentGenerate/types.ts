@@ -1,6 +1,6 @@
 import {
   LanguageData,
-  MetadataTestCase,
+  MetadataTestCases,
   PackageImportResultError,
 } from 'types/course/assessment/question/programming';
 
@@ -22,11 +22,7 @@ export interface QuestionPrototypeFormData {
     metadata: {
       solution: string;
       submission: string;
-      testCases: {
-        public: MetadataTestCase[];
-        private: MetadataTestCase[];
-        evaluation: MetadataTestCase[];
-      };
+      testCases: MetadataTestCases;
     };
   };
 }
@@ -56,6 +52,8 @@ export type ExportStatus =
   | 'exported'
   | 'error';
 
+export type ExportError = PackageImportResultError;
+
 export interface ConversationState {
   id: string;
   snapshots: { [id: string]: SnapshotState };
@@ -65,7 +63,7 @@ export interface ConversationState {
   duplicateFromId?: string;
   toExport: boolean;
   exportStatus: ExportStatus;
-  exportError?: PackageImportResultError;
+  exportError?: ExportError;
   exportErrorMessage?: string;
   redirectEditUrl?: string;
   importJobUrl?: string;

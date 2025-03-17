@@ -1,5 +1,3 @@
-import { MetadataTestCase } from 'types/course/assessment/question/programming';
-
 import { CodaveriGenerateFormData, QuestionPrototypeFormData } from './types';
 
 export const defaultQuestionFormData: QuestionPrototypeFormData = {
@@ -12,9 +10,9 @@ export const defaultQuestionFormData: QuestionPrototypeFormData = {
       solution: '',
       submission: '',
       testCases: {
-        public: [] as MetadataTestCase[],
-        private: [] as MetadataTestCase[],
-        evaluation: [] as MetadataTestCase[],
+        public: [],
+        private: [],
+        evaluation: [],
       },
     },
   },

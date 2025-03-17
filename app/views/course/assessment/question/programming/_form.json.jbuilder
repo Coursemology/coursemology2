@@ -14,8 +14,6 @@ end
 
 json.partial! 'question'
 json.partial! 'package_ui'
-
-import_job = @programming_question.import_job
-json.partial! 'import_result', import_job: import_job if import_job
+json.partial! 'import_result' if @programming_question.import_job
 
 json.partial! 'test_ui' if @meta.present?

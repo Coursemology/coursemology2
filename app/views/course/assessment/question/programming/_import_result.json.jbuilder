@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+import_job = @programming_question.import_job
 json.importResult do
   status = if import_job.completed?
              'success'
@@ -10,7 +11,7 @@ json.importResult do
 
   if display_build_log?
     json.buildLog do
-      log = @programming_question.import_job.error.slice('stdout', 'stderr')
+      log = import_job.error.slice('stdout', 'stderr')
       json.stdout log['stdout']
       json.stderr log['stderr']
     end

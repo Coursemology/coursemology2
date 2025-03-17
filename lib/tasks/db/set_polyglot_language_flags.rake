@@ -26,7 +26,9 @@ namespace :db do
       Coursemology::Polyglot::Language::Python::Python3Point7,
       Coursemology::Polyglot::Language::Python::Python3Point9,
       Coursemology::Polyglot::Language::Python::Python3Point10,
-      Coursemology::Polyglot::Language::Python::Python3Point12
+      Coursemology::Polyglot::Language::Python::Python3Point12,
+      Coursemology::Polyglot::Language::Java::Java17,
+      Coursemology::Polyglot::Language::Java::Java21
     ].freeze
 
   KODITSU_WHITELIST =

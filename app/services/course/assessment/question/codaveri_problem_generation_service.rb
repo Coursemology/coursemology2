@@ -23,9 +23,6 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
 
   private
 
-  # Creates a new service codaveri feedback rating object.
-  #
-  # @param [Course::Discussion::Post::CodaveriFeedback] feedback Feedback to be sent to Codaveri
   def initialize(assessment, params, language, version)
     custom_prompt = params[:custom_prompt]
     @payload = {
@@ -47,20 +44,22 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
 
     return unless params[:is_default_question_form_data] == 'false'
 
-    # TODO: update the path to support other languages should it become available next time
+    template_file_name = generate_payload_file_name(language, params[:template])
+    solution_file_name = generate_payload_file_name(language, params[:solution])
+
     @payload = @payload.merge({
       problem: {
         title: params[:title],
         description: params[:description],
         templates: [{
-          path: 'main.py',
-          content: params[:template]
+          path: template_file_name,
+          content: params[:template] || ''
         }],
         solutions: [{
           tag: 'solution',
           files: [{
-            path: 'main.py',
-            content: params[:solution]
+            path: solution_file_name,
+            content: params[:solution] || ''
           }]
         }],
         exprTestcases: []
@@ -70,6 +69,13 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
     append_test_cases_to_problem_payload('public', params[:public_test_cases])
     append_test_cases_to_problem_payload('private', params[:private_test_cases])
     append_test_cases_to_problem_payload('hidden', params[:evaluation_test_cases])
+  end
+
+  def generate_payload_file_name(codaveri_language, file_content)
+    return 'main.py' if codaveri_language == 'python'
+
+    match = file_content&.match(/\bclass\s+(\w+)\s*\{/)
+    match ? "#{match[1]}.java" : 'Main.java'
   end
 
   def send_problem_generation_request
@@ -103,6 +109,7 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
         index: @payload[:problem][:exprTestcases].length + 1,
         visibility: visibility,
         hint: test_case['hint'],
+        prefix: test_case['inlineCode'] || '',
         lhsExpression: test_case['expression'],
         rhsExpression: test_case['expected'],
         display: test_case['expression']
