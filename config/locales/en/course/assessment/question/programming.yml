@@ -5,17 +5,6 @@ en:
         programming:
           new:
             header: 'New Programming Question'
-          form:
-            import_result:
-              success: 'The package was successfully imported.'
-              error: 'The package could not be imported: %{error}'
-              errors:
-                invalid_package: 'the package uploaded does not have a valid structure.'
-                time_limit_exceeded: >-
-                  the package exceeded the maximum time allowed by the question.
-                evaluation_timeout: >-
-                  no response was received from an evaluator within the required time.
-                evaluation_error: 'an error occurred during evaluation, see logs.'
           question_type: Programming
           question_type_codaveri: Programming (Codaveri)
           question_type_codaveri_deactivated: >-
