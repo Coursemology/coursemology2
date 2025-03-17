@@ -1331,6 +1331,33 @@
   "course.assessment.edit.update": {
     "defaultMessage": "保存"
   },
+  "course.assessment.generation.confirmDeleteConversation": {
+    "defaultMessage": "您确定要删除 \"{title}\" 及其所有历史记录吗？此操作不可撤销！"
+  },
+  "course.assessment.generation.exportAction": {
+    "defaultMessage": "导出"
+  },
+  "course.assessment.generation.exportDialogHeader": {
+    "defaultMessage": "导出问题（已选择 {exportCount} 个）"
+  },
+  "course.assessment.generation.exportError": {
+    "defaultMessage": "导出此问题时发生错误：{error}"
+  },
+  "course.assessment.generation.lockTooltip": {
+    "defaultMessage": "锁定以防止更改此部分"
+  },
+  "course.assessment.generation.newTab": {
+    "defaultMessage": "新建"
+  },
+  "course.assessment.generation.openExportDialog": {
+    "defaultMessage": "导出"
+  },
+  "course.assessment.generation.resetConversation": {
+    "defaultMessage": "重置"
+  },
+  "course.assessment.generation.unlockTooltip": {
+    "defaultMessage": "解锁以继续编辑此部分"
+  },
   "course.assessment.monitoring.alivePresenceHint": {
     "defaultMessage": "及时收到最后一次心跳"
   },
@@ -1781,6 +1808,24 @@
   "course.assessment.question.programming.packageCreationModeHint": {
     "defaultMessage": "一旦成功创建此问题，无法更改此模式，请谨慎选择。"
   },
+  "course.assessment.question.programming.packageImportSuccess": {
+    "defaultMessage": "包已被正确引入。"
+  },
+  "course.assessment.question.programming.packageImportInvalidPackage": {
+    "defaultMessage": "无法导入软件包：上传的软件包结构无效。"
+  },
+  "course.assessment.question.programming.packageImportEvaluationTimeout": {
+    "defaultMessage": "在规定时间内未收到评估器的响应。这可能表示所有评估器当前都很忙，请稍后再试。"
+  },
+  "course.assessment.question.programming.packageImportTimeLimitExceeded": {
+    "defaultMessage": "解决方案未能在规定时间内完成测试用例的评估。"
+  },
+  "course.assessment.question.programming.packageImportEvaluationError": {
+    "defaultMessage": "评估您的解决方案时发生错误。请仔细检查测试用例并重试。"
+  },
+  "course.assessment.question.programming.packageImportGenericError": {
+    "defaultMessage": "无法导入软件包：{error}"
+  },
   "course.assessment.question.programming.packageInfoOnline": {
     "defaultMessage": "生成评估包"
   },
@@ -2131,6 +2176,12 @@
   },
   "course.assessment.show.forumPostResponse": {
     "defaultMessage": "论坛帖子回复"
+  },
+  "course.assessment.show.generate": {
+    "defaultMessage": "生成编程问题"
+  },
+  "course.assessment.show.generateTooltip": {
+    "defaultMessage": "与 Codaveri AI 合作创建问题"
   },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "为测试用例打分"
