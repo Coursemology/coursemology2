@@ -35,7 +35,7 @@ const SectionFormDialogue = ({
     >
       <SectionForm
         {...{ initialValues, onSubmit, disabled }}
-        emitsVia={(sectionForm) => setIsDirty(sectionForm.isDirty)}
+        onDirtyChange={setIsDirty}
       />
     </FormDialogue>
   );
