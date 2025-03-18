@@ -44,9 +44,9 @@ const EventFormDialog = ({
     >
       <EventForm
         {...{ initialValues, onSubmit, disabled }}
-        emitsVia={(eventForm) => setIsDirty(eventForm.isDirty)}
         eventLocations={[...new Set(eventLocations)]}
         eventTypes={[...new Set(eventTypes)]}
+        onDirtyChange={setIsDirty}
       />
     </FormDialogue>
   );
