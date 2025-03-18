@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import useEmitterFactory from 'react-emitter-factory';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -193,7 +192,8 @@ const validationSchema = yup.object({
 });
 
 const QuestionForm = (props) => {
-  const { disabled, initialValues, onSubmit, intl } = props;
+  const { disabled, initialValues, onSubmit, intl, onDirtyChange } = props;
+
   const {
     control,
     handleSubmit,
@@ -204,6 +204,7 @@ const QuestionForm = (props) => {
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
+
   const {
     fields: optionsFields,
     append: optionsAppend,
@@ -213,13 +214,9 @@ const QuestionForm = (props) => {
     name: 'options',
   });
 
-  useEmitterFactory(
-    props,
-    {
-      isDirty,
-    },
-    [isDirty],
-  );
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty]);
 
   const {
     fields: deletedOptionsFields,
@@ -473,6 +470,7 @@ QuestionForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
+  onDirtyChange: PropTypes.func,
 };
 
 export default injectIntl(QuestionForm);
