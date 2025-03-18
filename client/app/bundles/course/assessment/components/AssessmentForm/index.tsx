@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import useEmitterFactory from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
 import {
   Block as DraftIcon,
@@ -54,6 +53,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     isQuestionsValidForKoditsu,
     modeSwitching,
     onSubmit,
+    onDirtyChange,
     pulsegridUrl,
     // Randomized Assessment is temporarily hidden (PR#5406)
     // randomizationAllowed,
@@ -117,13 +117,9 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     dispatch(fetchTabs(t(translations.fetchTabFailure)));
   }, [dispatch]);
 
-  useEmitterFactory(
-    props,
-    {
-      isDirty,
-    },
-    [isDirty],
-  );
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty]);
 
   const renderPasswordFields = (): JSX.Element => (
     <>

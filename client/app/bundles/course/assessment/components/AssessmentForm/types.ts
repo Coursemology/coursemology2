@@ -1,4 +1,3 @@
-import { Emits } from 'react-emitter-factory';
 import { FieldValues, UseFormSetError } from 'react-hook-form';
 import { connect, ConnectedProps } from 'react-redux';
 import { ConditionsData } from 'types/course/conditions';
@@ -20,20 +19,15 @@ interface FolderAttributes {
   enable_materials_action?: boolean;
 }
 
-export interface AssessmentFormEmitter {
-  isDirty?: boolean;
-}
-
 // @ts-ignore until Assessment store is fully typed
 export const connector = connect(({ assessments }) => ({
   tabs: assessments.editPage.tabs,
 }));
 
-export interface AssessmentFormProps
-  extends ConnectedProps<typeof connector>,
-    Emits<AssessmentFormEmitter> {
+export interface AssessmentFormProps extends ConnectedProps<typeof connector> {
   tabs: Tab[];
   onSubmit: (data: FieldValues, setError: UseFormSetError<FieldValues>) => void;
+  onDirtyChange?: (isDirty: boolean) => void;
 
   initialValues?;
   isKoditsuExamEnabled: boolean;
