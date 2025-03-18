@@ -60,10 +60,7 @@ const SurveyFormDialogue = ({
       skipConfirmation={!isDirty}
       title={formTitle}
     >
-      <SurveyForm
-        {...surveyFormProps}
-        emitsVia={(surveyForm) => setIsDirty(surveyForm.isDirty)}
-      />
+      <SurveyForm {...surveyFormProps} onDirtyChange={setIsDirty} />
     </FormDialogue>
   );
 };

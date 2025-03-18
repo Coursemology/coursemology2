@@ -1,4 +1,4 @@
-import useEmitterFactory from 'react-emitter-factory';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { injectIntl } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -56,8 +56,15 @@ const validationSchema = yup.object({
 });
 
 const SurveyForm = (props) => {
-  const { intl, onSubmit, disabled, disableAnonymousToggle, initialValues } =
-    props;
+  const {
+    intl,
+    onSubmit,
+    disabled,
+    disableAnonymousToggle,
+    initialValues,
+    onDirtyChange,
+  } = props;
+
   const {
     control,
     handleSubmit,
@@ -68,13 +75,9 @@ const SurveyForm = (props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  useEmitterFactory(
-    props,
-    {
-      isDirty,
-    },
-    [isDirty],
-  );
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty]);
 
   return (
     <form
@@ -276,6 +279,7 @@ SurveyForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onDirtyChange: PropTypes.func,
 };
 
 export default injectIntl(SurveyForm);
