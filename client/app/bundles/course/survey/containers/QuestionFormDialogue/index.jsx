@@ -53,7 +53,7 @@ const QuestionFormDialogue = ({
           initialValues,
           onSubmit,
         }}
-        emitsVia={(questionForm) => setIsDirty(questionForm.isDirty)}
+        onDirtyChange={setIsDirty}
       />
     </FormDialogue>
   );
