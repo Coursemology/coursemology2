@@ -1,4 +1,4 @@
-import useEmitterFactory from 'react-emitter-factory';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,7 +16,8 @@ const validationSchema = yup.object({
 });
 
 const SectionForm = (props) => {
-  const { onSubmit, disabled, initialValues } = props;
+  const { onSubmit, disabled, initialValues, onDirtyChange } = props;
+
   const {
     control,
     handleSubmit,
@@ -27,13 +28,9 @@ const SectionForm = (props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  useEmitterFactory(
-    props,
-    {
-      isDirty,
-    },
-    [isDirty],
-  );
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty]);
 
   return (
     <form
@@ -87,6 +84,7 @@ SectionForm.propTypes = {
   disabled: PropTypes.bool,
   initialValues: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onDirtyChange: PropTypes.func,
 };
 
 export default SectionForm;
