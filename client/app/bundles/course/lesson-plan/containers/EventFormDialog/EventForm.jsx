@@ -1,4 +1,4 @@
-import useEmitterFactory from 'react-emitter-factory';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -61,8 +61,15 @@ const validationSchema = yup.object({
 });
 
 const EventForm = (props) => {
-  const { onSubmit, initialValues, disabled, eventTypes, eventLocations } =
-    props;
+  const {
+    onSubmit,
+    initialValues,
+    disabled,
+    eventTypes,
+    eventLocations,
+    onDirtyChange,
+  } = props;
+
   const {
     control,
     handleSubmit,
@@ -73,13 +80,9 @@ const EventForm = (props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  useEmitterFactory(
-    props,
-    {
-      isDirty,
-    },
-    [isDirty],
-  );
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty]);
 
   return (
     <form
@@ -210,6 +213,7 @@ EventForm.propTypes = {
   eventLocations: PropTypes.arrayOf(PropTypes.string),
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
+  onDirtyChange: PropTypes.func,
 };
 
 export default EventForm;
