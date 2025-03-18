@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { RadioGroup } from '@mui/material';
 import { CodaveriSettingsEntity } from 'types/course/admin/codaveri';
@@ -6,7 +6,7 @@ import { CodaveriSettingsEntity } from 'types/course/admin/codaveri';
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
@@ -24,7 +24,7 @@ const CodaveriSettingsForm = (
   const { settings } = props;
   const { t } = useTranslation();
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState<FormEmitter<CodaveriSettingsEntity>>();
+  const formRef = useRef<FormRef<CodaveriSettingsEntity>>(null);
   const disabled = submitting;
 
   const handleSubmit = (data: CodaveriSettingsEntity): void => {
@@ -33,18 +33,18 @@ const CodaveriSettingsForm = (
     updateCodaveriSettings(data)
       .then((newData) => {
         if (!newData) return;
-        form?.resetTo?.(newData);
+        formRef.current?.resetTo?.(newData);
         toast.success(t(formTranslations.changesSaved));
       })
-      .catch(form?.receiveErrors)
+      .catch(formRef.current?.receiveErrors)
       .finally(() => setSubmitting(false));
   };
 
   return (
     <Form
+      ref={formRef}
       className="!pb-0"
       disabled={disabled}
-      emitsVia={setForm}
       headsUp
       initialValues={settings}
       onSubmit={handleSubmit}

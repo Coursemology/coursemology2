@@ -1,28 +1,26 @@
-import { useMemo, useState } from 'react';
-import { Emits } from 'react-emitter-factory';
+import { forwardRef, useMemo, useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { Alert } from '@mui/material';
 import { TimeZones } from 'types/course/admin/course';
 import { EmailData } from 'types/users';
-import { object, ref, string } from 'yup';
+import { object, ref as yupRef, string } from 'yup';
 
 import AvatarSelector from 'lib/components/core/AvatarSelector';
 import Section from 'lib/components/core/layouts/Section';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import { AVAILABLE_LOCALES } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AddEmailSubsection, {
-  AddEmailSubsectionEmitter,
+  AddEmailSubsectionRef,
 } from '../components/AddEmailSubsection';
 import EmailsList from '../components/EmailsList';
 import { AccountSettingsData } from '../operations';
 import translations from '../translations';
 
-interface AccountSettingsFormProps
-  extends Emits<FormEmitter<AccountSettingsData>> {
+interface AccountSettingsFormProps {
   settings: AccountSettingsData;
   timeZones: TimeZones;
   disabled?: boolean;
@@ -47,14 +45,16 @@ interface AccountSettingsFormProps
   ) => void;
 }
 
-const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
+const AccountSettingsForm = forwardRef<
+  FormRef<AccountSettingsData>,
+  AccountSettingsFormProps
+>((props, ref): JSX.Element => {
   const { t } = useTranslation();
   const [stagedImage, setStagedImage] = useState<File>();
   const [requirePasswordConfirmation, setRequirePasswordConfirmation] =
     useState(true);
 
-  const [addEmailSubsection, setAddEmailSubsection] =
-    useState<AddEmailSubsectionEmitter>();
+  const addEmailSubsectionRef = useRef<AddEmailSubsectionRef>(null);
 
   const validationSchema = useMemo(
     () =>
@@ -86,7 +86,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
               ? string()
                   .required(t(translations.newPasswordConfirmationRequired))
                   .equals(
-                    [ref('password')],
+                    [yupRef('password')],
                     t(translations.newPasswordConfirmationMustMatch),
                   )
               : string().optional().nullable(),
@@ -137,14 +137,14 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
 
   return (
     <Form
+      ref={ref}
       dirty={Boolean(stagedImage)}
       disabled={props.disabled}
-      emitsVia={props.emitsVia}
       headsUp
       initialValues={props.settings}
       onReset={(): void => {
         setStagedImage(undefined);
-        addEmailSubsection?.reset?.();
+        addEmailSubsectionRef.current?.reset?.();
       }}
       onSubmit={handleSubmit}
       submitsDirtyFieldsOnly
@@ -240,8 +240,8 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
             />
 
             <AddEmailSubsection
+              ref={addEmailSubsectionRef}
               disabled={props.disabled}
-              emitsVia={setAddEmailSubsection}
               onClickAddEmail={props.onAddEmail}
             />
           </Section>
@@ -318,6 +318,8 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
       )}
     </Form>
   );
-};
+});
+
+AccountSettingsForm.displayName = 'AccountSettingsForm';
 
 export default AccountSettingsForm;

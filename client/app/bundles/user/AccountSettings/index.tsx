@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { TimeZones } from 'types/course/admin/course';
 import { EmailData } from 'types/users';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { FormEmitter } from 'lib/components/form/Form';
+import { FormRef } from 'lib/components/form/Form';
 import Preload from 'lib/components/wrappers/Preload';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -31,7 +31,7 @@ const fetchAccountSettingsAndTimeZones = (): Promise<
 
 const AccountSettings = (): JSX.Element => {
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter<AccountSettingsData>>();
+  const formRef = useRef<FormRef<AccountSettingsData>>(null);
   const [reloadForm, setReloadForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -43,7 +43,7 @@ const AccountSettings = (): JSX.Element => {
 
     updateAccountSettings(data)
       .then((newData) => {
-        form?.resetByMerging?.(newData);
+        formRef.current?.resetByMerging?.(newData);
         toast.success(t(formTranslations.changesSaved));
         setReloadForm((value) => !value);
 
@@ -54,7 +54,7 @@ const AccountSettings = (): JSX.Element => {
           }, 1000);
         }
       })
-      .catch(form?.receiveErrors)
+      .catch(formRef.current?.receiveErrors)
       .finally(() => setSubmitting(false));
   };
 
@@ -70,7 +70,7 @@ const AccountSettings = (): JSX.Element => {
         success: t(translations.profilePictureUpdated),
       })
       .then((newData) => {
-        form?.resetByMerging?.(newData);
+        formRef.current?.resetByMerging?.(newData);
         onSuccess();
       })
       .catch((error: Error) => {
@@ -88,7 +88,7 @@ const AccountSettings = (): JSX.Element => {
 
     addEmail(email)
       .then((emails) => {
-        form?.mutate?.(emails);
+        formRef.current?.mutate?.(emails);
         toast.success(t(translations.emailAdded, { email }));
         onSuccess();
       })
@@ -110,7 +110,7 @@ const AccountSettings = (): JSX.Element => {
 
     removeEmail(id)
       .then((emails) => {
-        form?.mutate?.(emails);
+        formRef.current?.mutate?.(emails);
         toast.success(t(translations.emailRemoved, { email }));
       })
       .catch(() => {
@@ -127,7 +127,7 @@ const AccountSettings = (): JSX.Element => {
 
     setEmailAsPrimary(url)
       .then((emails) => {
-        form?.mutate?.(emails);
+        formRef.current?.mutate?.(emails);
         toast.success(t(translations.emailSetAsPrimary, { email }));
       })
       .catch(() => {
@@ -161,8 +161,8 @@ const AccountSettings = (): JSX.Element => {
       >
         {([settings, timeZones]): JSX.Element => (
           <AccountSettingsForm
+            ref={formRef}
             disabled={submitting}
-            emitsVia={setForm}
             onAddEmail={handleAddEmail}
             onRemoveEmail={handleRemoveEmail}
             onResendConfirmationEmail={handleResendConfirmationEmail}

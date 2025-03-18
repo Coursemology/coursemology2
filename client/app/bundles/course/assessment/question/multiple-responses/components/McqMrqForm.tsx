@@ -8,7 +8,7 @@ import {
 
 import Section from 'lib/components/core/layouts/Section';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ConvertMcqMrqButton from '../../../components/ConvertMcqMrqButton';
@@ -39,8 +39,8 @@ const McqMrqForm = <T extends 'new' | 'edit'>(
 
   const [submitting, setSubmitting] = useState(false);
   const [isOptionsDirty, setIsOptionsDirty] = useState(false);
-  const [form, setForm] = useState<FormEmitter>();
 
+  const formRef = useRef<FormRef>(null);
   const optionsRef = useRef<OptionsManagerRef>(null);
 
   const prepareOptions = async (
@@ -74,7 +74,7 @@ const McqMrqForm = <T extends 'new' | 'edit'>(
 
     props.onSubmit(newData).catch((errors) => {
       setSubmitting(false);
-      form?.receiveErrors?.(errors);
+      formRef.current?.receiveErrors?.(errors);
     });
   };
 
@@ -82,9 +82,9 @@ const McqMrqForm = <T extends 'new' | 'edit'>(
 
   return (
     <Form
+      ref={formRef}
       dirty={isOptionsDirty}
       disabled={submitting}
-      emitsVia={setForm}
       headsUp
       initialValues={data.question!}
       onReset={optionsRef.current?.reset}

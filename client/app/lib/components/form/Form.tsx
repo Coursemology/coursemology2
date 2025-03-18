@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ReactNode, useState } from 'react';
-import useEmitterFactory, { Emits } from 'react-emitter-factory';
+import {
+  ForwardedRef,
+  forwardRef,
+  ReactNode,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import {
   Control,
   DefaultValues,
@@ -26,7 +31,7 @@ import messagesTranslations from 'lib/translations/messages';
 
 type Data = FieldValues;
 
-export interface FormEmitter<D extends Data = any> {
+export interface FormRef<D extends Data = any> {
   reset?: () => void;
   resetTo?: (data: D, keepDirty?: boolean) => void;
 
@@ -67,8 +72,9 @@ interface FormProps<
   D extends Data = any,
   M extends boolean = false,
   V extends AnyObjectSchema = never,
-> extends Emits<FormEmitter<D>> {
+> {
   initialValues: D;
+  ref?: ForwardedRef<FormRef<D>>;
   onSubmit?: (data: M extends true ? Partial<D> : D) => void;
   headsUp?: boolean;
   dirty?: boolean;
@@ -127,12 +133,13 @@ const transformableResolver = <D extends Data>(
 ): Resolver<D> =>
   transformer ? transformedResolver(transformer, resolver) : resolver;
 
-const Form = <
+const FormWithoutRef = <
   D extends Data = any,
   M extends boolean = false,
   V extends AnyObjectSchema = never,
 >(
   props: FormProps<D, M, V>,
+  ref: ForwardedRef<FormRef<D>>,
 ): JSX.Element => {
   const {
     transformsBy: transformer,
@@ -162,37 +169,41 @@ const Form = <
     setInitialValues(data);
   };
 
-  useEmitterFactory(props, {
-    reset: resetForm,
-    resetTo,
-    resetByMerging: (data) => {
-      if (!data || isEmpty(data)) return;
-      resetTo({ ...initialValues, ...data });
-    },
-    setValue,
-    setError,
-    receiveErrors: (errors) => {
-      if (errors) {
-        setReactHookFormError(setError, errors);
-      } else {
-        toast.error(t(messagesTranslations.formUpdateError));
-      }
-    },
-    mutate: (data) => {
-      const newInitialValues = { ...initialValues, ...data };
+  useImperativeHandle(
+    ref,
+    () => ({
+      reset: resetForm,
+      resetTo,
+      resetByMerging: (data): void => {
+        if (!data || isEmpty(data)) return;
+        resetTo({ ...initialValues, ...data });
+      },
+      setValue,
+      setError,
+      receiveErrors: (errors): void => {
+        if (errors) {
+          setReactHookFormError(setError, errors);
+        } else {
+          toast.error(t(messagesTranslations.formUpdateError));
+        }
+      },
+      mutate: (data): void => {
+        const newInitialValues = { ...initialValues, ...data };
 
-      reset(newInitialValues, {
-        keepValues: true,
-        keepDirty: true,
-      });
+        reset(newInitialValues, {
+          keepValues: true,
+          keepDirty: true,
+        });
 
-      setInitialValues(newInitialValues);
+        setInitialValues(newInitialValues);
 
-      Object.entries(data).forEach(([fieldName, value]) => {
-        setValue(fieldName as FieldPath<D>, value as D[string]);
-      });
-    },
-  });
+        Object.entries(data).forEach(([fieldName, value]) => {
+          setValue(fieldName as FieldPath<D>, value as D[string]);
+        });
+      },
+    }),
+    [],
+  );
 
   const processAndSubmit = (data: D): void => {
     if (!props.onSubmit) return;
@@ -260,5 +271,10 @@ const Form = <
 
   return form;
 };
+
+/**
+ * We do this hack because `forwardRef` doesn't support generic types.
+ */
+const Form = forwardRef(FormWithoutRef) as typeof FormWithoutRef;
 
 export default Form;

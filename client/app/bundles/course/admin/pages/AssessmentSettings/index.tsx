@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { ComponentRef, useRef, useState } from 'react';
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { FormEmitter } from 'lib/components/form/Form';
 import Preload from 'lib/components/wrappers/Preload';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -35,7 +34,7 @@ const LoadedAssessmentSettings = (
   props: LoadedAssessmentSettingsProps,
 ): JSX.Element | null => {
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter<AssessmentSettingsData>>();
+  const formRef = useRef<ComponentRef<typeof AssessmentSettingsForm>>(null);
   const [settings, setSettings] = useState(props.data);
   const [submitting, setSubmitting] = useState(false);
 
@@ -45,7 +44,7 @@ const LoadedAssessmentSettings = (
   ): void => {
     if (!data) return;
     setSettings(data);
-    form?.resetTo?.(data);
+    formRef.current?.resetTo?.(data);
     toast.success(message);
   };
 
@@ -56,7 +55,7 @@ const LoadedAssessmentSettings = (
       .then((newData) => {
         updateFormAndToast(newData, t(formTranslations.changesSaved));
       })
-      .catch(form?.receiveErrors)
+      .catch(formRef.current?.receiveErrors)
       .finally(() => setSubmitting(false));
   };
 
@@ -167,9 +166,9 @@ const LoadedAssessmentSettings = (
   return (
     <AssessmentSettingsProvider value={assessmentSettings}>
       <AssessmentSettingsForm
+        ref={formRef}
         data={settings}
         disabled={submitting}
-        emitsVia={setForm}
         onSubmit={handleSubmit}
       />
     </AssessmentSettingsProvider>

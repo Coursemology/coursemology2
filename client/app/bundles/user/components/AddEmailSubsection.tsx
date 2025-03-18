@@ -1,5 +1,11 @@
-import { KeyboardEventHandler, useRef, useState } from 'react';
-import useEmitterFactory, { Emits } from 'react-emitter-factory';
+import {
+  forwardRef,
+  KeyboardEventHandler,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { Add } from '@mui/icons-material';
 import { Button, Collapse } from '@mui/material';
 import { EmailData } from 'types/users';
@@ -11,11 +17,11 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../translations';
 
-export interface AddEmailSubsectionEmitter {
+export interface AddEmailSubsectionRef {
   reset?: () => void;
 }
 
-interface AddEmailSubsectionProps extends Emits<AddEmailSubsectionEmitter> {
+interface AddEmailSubsectionProps {
   disabled?: boolean;
   onClickAddEmail?: (
     email: EmailData['email'],
@@ -24,17 +30,20 @@ interface AddEmailSubsectionProps extends Emits<AddEmailSubsectionEmitter> {
   ) => void;
 }
 
-const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
+const AddEmailSubsection = forwardRef<
+  AddEmailSubsectionRef,
+  AddEmailSubsectionProps
+>((props, ref): JSX.Element => {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [expanded, setExpanded] = useState(false);
   const emailInputRef = useRef<HTMLInputElement>(null);
 
-  const resetField = (): void => {
+  const resetField = useCallback(() => {
     setEmail('');
     setError('');
-  };
+  }, []);
 
   const expandAndFocusField = (): void => {
     setExpanded((wasExpanded) => !wasExpanded);
@@ -61,7 +70,7 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
     }
   };
 
-  useEmitterFactory(props, { reset: resetField });
+  useImperativeHandle(ref, () => ({ reset: resetField }), [resetField]);
 
   return (
     <div className="!mt-10 space-y-5">
@@ -97,6 +106,8 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
       </Button>
     </div>
   );
-};
+});
+
+AddEmailSubsection.displayName = 'AddEmailSubsection';
 
 export default AddEmailSubsection;

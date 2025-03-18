@@ -1,4 +1,4 @@
-import { Emits } from 'react-emitter-factory';
+import { forwardRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { Typography } from '@mui/material';
 import { CommentsSettingsData } from 'types/course/admin/comments';
@@ -6,15 +6,14 @@ import { number, object, string } from 'yup';
 
 import Section from 'lib/components/core/layouts/Section';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import commonTranslations from '../../translations';
 
 import translations from './translations';
 
-interface CommentsSettingsFormProps
-  extends Emits<FormEmitter<CommentsSettingsData>> {
+interface CommentsSettingsFormProps {
   data: CommentsSettingsData;
   onSubmit: (data: CommentsSettingsData) => void;
   disabled?: boolean;
@@ -27,15 +26,16 @@ const validationSchema = object({
     .positive(commonTranslations.paginationMustBePositive),
 });
 
-const CommentsSettingsForm = (
-  props: CommentsSettingsFormProps,
-): JSX.Element => {
+const CommentsSettingsForm = forwardRef<
+  FormRef<CommentsSettingsData>,
+  CommentsSettingsFormProps
+>((props, ref): JSX.Element => {
   const { t } = useTranslation();
 
   return (
     <Form
+      ref={ref}
       disabled={props.disabled}
-      emitsVia={props.emitsVia}
       headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
@@ -85,6 +85,8 @@ const CommentsSettingsForm = (
       )}
     </Form>
   );
-};
+});
+
+CommentsSettingsForm.displayName = 'CommentsSettingsForm';
 
 export default CommentsSettingsForm;

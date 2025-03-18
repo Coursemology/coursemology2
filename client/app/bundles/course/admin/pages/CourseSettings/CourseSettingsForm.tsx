@@ -1,5 +1,4 @@
-import { useMemo, useState } from 'react';
-import { Emits } from 'react-emitter-factory';
+import { forwardRef, useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { Button, Grid, RadioGroup, Typography } from '@mui/material';
 import { CourseInfo, TimeOffset, TimeZones } from 'types/course/admin/course';
@@ -15,7 +14,7 @@ import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerFi
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import DeleteCoursePrompt from './DeleteCoursePrompt';
@@ -23,7 +22,7 @@ import OffsetTimesPrompt from './OffsetTimesPrompt';
 import translations from './translations';
 import validationSchema from './validationSchema';
 
-interface CourseSettingsFormProps extends Emits<FormEmitter<CourseInfo>> {
+interface CourseSettingsFormProps {
   data: CourseInfo;
   timeZones: TimeZones;
   onSubmit: (data: CourseInfo, timeOffset?: TimeOffset) => void;
@@ -32,7 +31,10 @@ interface CourseSettingsFormProps extends Emits<FormEmitter<CourseInfo>> {
   disabled: boolean;
 }
 
-const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
+const CourseSettingsForm = forwardRef<
+  FormRef<CourseInfo>,
+  CourseSettingsFormProps
+>((props, ref): JSX.Element => {
   const { t } = useTranslation();
   const [offsetTimesPrompt, setOffsetTimesPrompt] = useState(false);
   const [deletingCourse, setDeletingCourse] = useState(false);
@@ -72,9 +74,9 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
 
   return (
     <Form
+      ref={ref}
       dirty={Boolean(stagedLogo)}
       disabled={props.disabled}
-      emitsVia={props.emitsVia}
       headsUp
       initialValues={props.data}
       onReset={(): void => setStagedLogo(undefined)}
@@ -351,6 +353,8 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
       )}
     </Form>
   );
-};
+});
+
+CourseSettingsForm.displayName = 'CourseSettingsForm';
 
 export default CourseSettingsForm;
