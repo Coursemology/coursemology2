@@ -80,7 +80,6 @@
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
     "react-dropzone": "^14.2.3",
-    "react-emitter-factory": "^1.1.2",
     "react-google-recaptcha": "^3.1.0",
     "react-hook-form": "^7.51.1",
     "react-hot-keys": "^2.7.3",
