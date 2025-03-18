@@ -1,8 +1,8 @@
-import { ComponentProps, useState } from 'react';
+import { ComponentProps, useRef, useState } from 'react';
 
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import ImageCropper, {
-  ImageCropperEmitter,
+  ImageCropperRef,
 } from 'lib/components/core/ImageCropper';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
@@ -23,7 +23,7 @@ interface ImageCropDialogProps {
 const ImageCropDialog = (props: ImageCropDialogProps): JSX.Element => {
   const { t } = useTranslation();
   const [disabled, setDisabled] = useState(false);
-  const [imageCropper, setImageCropper] = useState<ImageCropperEmitter>();
+  const imageCropperRef = useRef<ImageCropperRef>(null);
 
   const handleLoadError = (): void => {
     props.onLoadError?.();
@@ -31,7 +31,7 @@ const ImageCropDialog = (props: ImageCropDialogProps): JSX.Element => {
   };
 
   const handleConfirmImage = async (): Promise<void> => {
-    const image = await imageCropper?.getImage?.();
+    const image = await imageCropperRef.current?.getImage?.();
     if (!image) throw new Error(`ImageCropper returned: ${image} image data.`);
 
     props.onConfirmImage?.(image);
@@ -51,10 +51,10 @@ const ImageCropDialog = (props: ImageCropDialogProps): JSX.Element => {
       title={props.title}
     >
       <ImageCropper
+        ref={imageCropperRef}
         alt={props.alt}
         aspect={props.aspect}
         circular={props.circular}
-        emitsVia={setImageCropper}
         onLoadError={handleLoadError}
         src={props.src}
         type={props.type}
