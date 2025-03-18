@@ -321,9 +321,6 @@ const GroupManager = ({
         skipConfirmation={!isDirty}
       >
         <GroupCreationForm
-          emitsVia={(nameDescriptionForm) =>
-            setIsDirty(nameDescriptionForm.isDirty)
-          }
           existingGroups={groups}
           initialValues={{
             name: '',
@@ -331,6 +328,7 @@ const GroupManager = ({
             num_to_create: 0,
             is_single: true,
           }}
+          onDirtyChange={setIsDirty}
           onSubmit={onCreateFormSubmit}
         />
       </GroupFormDialog>

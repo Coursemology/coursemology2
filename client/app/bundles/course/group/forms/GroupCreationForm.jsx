@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import useEmitterFactory from 'react-emitter-factory';
 import { Controller, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
@@ -113,7 +112,9 @@ const getConflictingNames = (name, numToCreate, existingGroups) => {
 };
 
 const GroupCreationForm = (props) => {
-  const { dispatch, existingGroups, initialValues, onSubmit } = props;
+  const { dispatch, existingGroups, initialValues, onSubmit, onDirtyChange } =
+    props;
+
   const {
     control,
     handleSubmit,
@@ -126,13 +127,10 @@ const GroupCreationForm = (props) => {
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
-  useEmitterFactory(
-    props,
-    {
-      isDirty,
-    },
-    [isDirty],
-  );
+
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty]);
 
   const name = watch('name');
   const numToCreate = Number.parseInt(watch('num_to_create'), 10);
@@ -294,6 +292,7 @@ GroupCreationForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onDirtyChange: PropTypes.func,
 };
 
 export default connect(({ groups }) => ({
