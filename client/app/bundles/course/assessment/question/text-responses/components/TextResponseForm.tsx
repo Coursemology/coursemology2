@@ -10,7 +10,7 @@ import {
 
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
@@ -54,9 +54,9 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
   };
 
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState<FormEmitter>();
   const [isSolutionsDirty, setIsSolutionsDirty] = useState(false);
 
+  const formRef = useRef<FormRef>(null);
   const solutionsRef = useRef<SolutionsManagerRef>(null);
 
   const prepareSolutions = async (
@@ -101,16 +101,16 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     setSubmitting(true);
     props.onSubmit(newData).catch((errors) => {
       setSubmitting(false);
-      form?.receiveErrors?.(errors);
+      formRef.current?.receiveErrors?.(errors);
     });
   };
 
   return (
     <Form
+      ref={formRef}
       contextual
       dirty={isSolutionsDirty}
       disabled={submitting}
-      emitsVia={setForm}
       headsUp
       initialValues={formattedData.question!}
       onSubmit={handleSubmit}

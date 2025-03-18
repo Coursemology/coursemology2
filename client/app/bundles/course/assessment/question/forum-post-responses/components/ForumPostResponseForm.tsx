@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import {
   ForumPostResponseData,
@@ -8,7 +8,7 @@ import {
 import Section from 'lib/components/core/layouts/Section';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
@@ -28,7 +28,7 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
   const { t } = useTranslation();
 
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState<FormEmitter>();
+  const formRef = useRef<FormRef>(null);
 
   const handleSubmit = async (
     question: ForumPostResponseData['question'],
@@ -39,14 +39,14 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
 
     props.onSubmit(newData).catch((errors) => {
       setSubmitting(false);
-      form?.receiveErrors?.(errors);
+      formRef.current?.receiveErrors?.(errors);
     });
   };
 
   return (
     <Form
+      ref={formRef}
       disabled={submitting}
-      emitsVia={setForm}
       headsUp
       initialValues={data.question!}
       onSubmit={handleSubmit}

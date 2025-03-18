@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { ComponentRef, useRef, useState } from 'react';
 import { VideosSettingsData, VideosTab } from 'types/course/admin/videos';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { FormEmitter } from 'lib/components/form/Form';
 import Preload from 'lib/components/wrappers/Preload';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -23,7 +22,7 @@ import VideosSettingsForm from './VideosSettingsForm';
 const VideosSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter<VideosSettingsData>>();
+  const formRef = useRef<ComponentRef<typeof VideosSettingsForm>>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const updateFormAndToast = (
@@ -31,7 +30,7 @@ const VideosSettings = (): JSX.Element => {
     message: string,
   ): void => {
     if (!data) return;
-    form?.resetTo?.(data);
+    formRef.current?.resetTo?.(data);
     toast.success(message);
   };
 
@@ -43,7 +42,7 @@ const VideosSettings = (): JSX.Element => {
         reloadItems();
         updateFormAndToast(newData, t(formTranslations.changesSaved));
       })
-      .catch(form?.receiveErrors)
+      .catch(formRef.current?.receiveErrors)
       .finally(() => setSubmitting(false));
   };
 
@@ -83,10 +82,10 @@ const VideosSettings = (): JSX.Element => {
     <Preload render={<LoadingIndicator />} while={fetchVideosSettings}>
       {(data): JSX.Element => (
         <VideosSettingsForm
+          ref={formRef}
           canCreateTabs={data.canCreateTabs}
           data={data}
           disabled={submitting}
-          emitsVia={setForm}
           onCreateTab={handleCreateTab}
           onDeleteTab={handleDeleteTab}
           onSubmit={handleSubmit}

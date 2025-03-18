@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ProgrammingFormData,
@@ -6,7 +6,7 @@ import {
 } from 'types/course/assessment/question/programming';
 
 import Section from 'lib/components/core/layouts/Section';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import { loadingToast } from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -42,7 +42,7 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
   const { t } = useTranslation();
 
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState<FormEmitter<ProgrammingFormData>>();
+  const formRef = useRef<FormRef<ProgrammingFormData>>(null);
   const [pending, setPending] = useState<() => void>();
 
   const { languageOptions, getDataFromId } = useLanguageMode(data.languages);
@@ -85,7 +85,7 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
           const newData = await props.revalidate?.(response, rawData);
           if (newData) {
             setData(newData);
-            form?.resetTo?.(newData, true);
+            formRef.current?.resetTo?.(newData, true);
           }
 
           toast.error(t(translations.questionSavedButPackageError));
@@ -113,10 +113,10 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
   return (
     <ProgrammingFormDataProvider from={data}>
       <Form
+        ref={formRef}
         contextual
         dirty={props.dirty}
         disabled={submitting}
-        emitsVia={setForm}
         headsUp
         initialValues={data}
         onSubmit={(rawData): void => {

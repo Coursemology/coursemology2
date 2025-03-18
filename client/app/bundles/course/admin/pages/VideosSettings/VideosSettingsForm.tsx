@@ -1,11 +1,11 @@
-import { Emits } from 'react-emitter-factory';
+import { forwardRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { Typography } from '@mui/material';
 import { VideosSettingsData, VideosTab } from 'types/course/admin/videos';
 
 import Section from 'lib/components/core/layouts/Section';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import commonTranslations from '../../translations';
@@ -13,8 +13,7 @@ import commonTranslations from '../../translations';
 import translations from './translations';
 import VideosTabsManager from './VideosTabsManager';
 
-interface VideosSettingsFormProps
-  extends Emits<FormEmitter<VideosSettingsData>> {
+interface VideosSettingsFormProps {
   data: VideosSettingsData;
   onSubmit: (data: VideosSettingsData) => void;
   onCreateTab: (title: VideosTab['title'], weight: VideosTab['weight']) => void;
@@ -23,13 +22,16 @@ interface VideosSettingsFormProps
   disabled?: boolean;
 }
 
-const VideosSettingsForm = (props: VideosSettingsFormProps): JSX.Element => {
+const VideosSettingsForm = forwardRef<
+  FormRef<VideosSettingsData>,
+  VideosSettingsFormProps
+>((props, ref): JSX.Element => {
   const { t } = useTranslation();
 
   return (
     <Form
+      ref={ref}
       disabled={props.disabled}
-      emitsVia={props.emitsVia}
       headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
@@ -85,6 +87,8 @@ const VideosSettingsForm = (props: VideosSettingsFormProps): JSX.Element => {
       )}
     </Form>
   );
-};
+});
+
+VideosSettingsForm.displayName = 'VideosSettingsForm';
 
 export default VideosSettingsForm;

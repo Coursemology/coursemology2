@@ -1,4 +1,4 @@
-import { Emits } from 'react-emitter-factory';
+import { forwardRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { InputAdornment, Typography } from '@mui/material';
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
@@ -8,22 +8,22 @@ import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AssessmentCategoriesManager from './AssessmentCategoriesManager';
 import translations from './translations';
 
-interface AssessmentsSettingsFormProps
-  extends Emits<FormEmitter<AssessmentSettingsData>> {
+interface AssessmentsSettingsFormProps {
   data: AssessmentSettingsData;
   onSubmit?: (data: AssessmentSettingsData) => void;
   disabled?: boolean;
 }
 
-const AssessmentsSettingsForm = (
-  props: AssessmentsSettingsFormProps,
-): JSX.Element => {
+const AssessmentsSettingsForm = forwardRef<
+  FormRef<AssessmentSettingsData>,
+  AssessmentsSettingsFormProps
+>((props, ref): JSX.Element => {
   const { t } = useTranslation();
   const validationSchema = yup.object({
     maxProgrammingTimeLimit: yup
@@ -35,8 +35,8 @@ const AssessmentsSettingsForm = (
 
   return (
     <Form
+      ref={ref}
       disabled={props.disabled}
-      emitsVia={props.emitsVia}
       headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
@@ -158,6 +158,8 @@ const AssessmentsSettingsForm = (
       )}
     </Form>
   );
-};
+});
+
+AssessmentsSettingsForm.displayName = 'AssessmentsSettingsForm';
 
 export default AssessmentsSettingsForm;

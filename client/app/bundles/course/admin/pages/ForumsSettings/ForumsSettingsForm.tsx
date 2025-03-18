@@ -1,4 +1,4 @@
-import { Emits } from 'react-emitter-factory';
+import { forwardRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { RadioGroup, Typography } from '@mui/material';
 import { ForumsSettingsData } from 'types/course/admin/forums';
@@ -9,15 +9,14 @@ import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import commonTranslations from '../../translations';
 
 import translations from './translations';
 
-interface ForumsSettingsFormProps
-  extends Emits<FormEmitter<ForumsSettingsData>> {
+interface ForumsSettingsFormProps {
   data: ForumsSettingsData;
   onSubmit: (data: ForumsSettingsData) => void;
   disabled?: boolean;
@@ -30,13 +29,16 @@ const validationSchema = object({
     .positive(commonTranslations.paginationMustBePositive),
 });
 
-const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
+const ForumsSettingsForm = forwardRef<
+  FormRef<ForumsSettingsData>,
+  ForumsSettingsFormProps
+>((props, ref): JSX.Element => {
   const { t } = useTranslation();
 
   return (
     <Form
+      ref={ref}
       disabled={props.disabled}
-      emitsVia={props.emitsVia}
       headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
@@ -132,6 +134,8 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
       )}
     </Form>
   );
-};
+});
+
+ForumsSettingsForm.displayName = 'ForumsSettingsForm';
 
 export default ForumsSettingsForm;

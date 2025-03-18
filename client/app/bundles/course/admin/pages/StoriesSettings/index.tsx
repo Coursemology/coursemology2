@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { Alert } from '@mui/material';
@@ -8,7 +8,7 @@ import Section from 'lib/components/core/layouts/Section';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import Preload from 'lib/components/wrappers/Preload';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -91,7 +91,7 @@ const PingResultAlert = (
 
 const StoriesSettings = (): JSX.Element => {
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter<StoriesSettingsData>>();
+  const formRef = useRef<FormRef<StoriesSettingsData>>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (data: StoriesSettingsData): void => {
@@ -101,10 +101,10 @@ const StoriesSettings = (): JSX.Element => {
       .then((newData) => {
         if (!newData) return;
 
-        form?.resetTo?.(newData);
+        formRef.current?.resetTo?.(newData);
         toast.success(t(formTranslations.changesSaved));
       })
-      .catch(form?.receiveErrors)
+      .catch(formRef.current?.receiveErrors)
       .finally(() => setSubmitting(false));
   };
 
@@ -112,8 +112,8 @@ const StoriesSettings = (): JSX.Element => {
     <Preload render={<LoadingIndicator />} while={fetchStoriesSettings}>
       {(data) => (
         <Form
+          ref={formRef}
           disabled={submitting}
-          emitsVia={setForm}
           headsUp
           initialValues={data}
           onSubmit={handleSubmit}

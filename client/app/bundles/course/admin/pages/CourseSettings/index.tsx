@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { ComponentRef, useRef, useState } from 'react';
 import { CourseInfo, TimeOffset, TimeZones } from 'types/course/admin/course';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { FormEmitter } from 'lib/components/form/Form';
 import Preload from 'lib/components/wrappers/Preload';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -26,13 +25,13 @@ const fetchSettingsAndTimeZones = (): Promise<[CourseInfo, TimeZones]> =>
 const CourseSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter<CourseInfo>>();
+  const formRef = useRef<ComponentRef<typeof CourseSettingsForm>>(null);
   const [reloadForm, setReloadForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const updateForm = (data?: CourseInfo): void => {
     if (!data) return;
-    form?.resetTo?.(data);
+    formRef.current?.resetTo?.(data);
   };
 
   const updateFormAndToast = (message: string, data?: CourseInfo): void => {
@@ -49,7 +48,7 @@ const CourseSettings = (): JSX.Element => {
         updateFormAndToast(t(formTranslations.changesSaved), newData);
         setReloadForm((value) => !value);
       })
-      .catch(form?.receiveErrors)
+      .catch(formRef.current?.receiveErrors)
       .finally(() => setSubmitting(false));
   };
 
@@ -94,9 +93,9 @@ const CourseSettings = (): JSX.Element => {
     >
       {([settings, timeZones]): JSX.Element => (
         <CourseSettingsForm
+          ref={formRef}
           data={settings}
           disabled={submitting}
-          emitsVia={setForm}
           onDeleteCourse={handleDeleteCourse}
           onSubmit={handleSubmit}
           onUploadCourseLogo={handleUploadCourseLogo}

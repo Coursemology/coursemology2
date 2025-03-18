@@ -1,4 +1,4 @@
-import { Emits } from 'react-emitter-factory';
+import { forwardRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { Typography } from '@mui/material';
 import { LeaderboardSettingsData } from 'types/course/admin/leaderboard';
@@ -6,29 +6,29 @@ import { LeaderboardSettingsData } from 'types/course/admin/leaderboard';
 import Section from 'lib/components/core/layouts/Section';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
+import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import commonTranslations from '../../translations';
 
 import translations from './translations';
 
-interface LeaderboardSettingsFormProps
-  extends Emits<FormEmitter<LeaderboardSettingsData>> {
+interface LeaderboardSettingsFormProps {
   data: LeaderboardSettingsData;
   onSubmit: (data: LeaderboardSettingsData) => void;
   disabled?: boolean;
 }
 
-const LeaderboardSettingsForm = (
-  props: LeaderboardSettingsFormProps,
-): JSX.Element => {
+const LeaderboardSettingsForm = forwardRef<
+  FormRef<LeaderboardSettingsData>,
+  LeaderboardSettingsFormProps
+>((props, ref): JSX.Element => {
   const { t } = useTranslation();
 
   return (
     <Form
+      ref={ref}
       disabled={props.disabled}
-      emitsVia={props.emitsVia}
       headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
@@ -109,6 +109,8 @@ const LeaderboardSettingsForm = (
       )}
     </Form>
   );
-};
+});
+
+LeaderboardSettingsForm.displayName = 'LeaderboardSettingsForm';
 
 export default LeaderboardSettingsForm;
