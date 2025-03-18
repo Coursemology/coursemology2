@@ -29,7 +29,7 @@ const MilestoneFormDialog = ({
     >
       <MilestoneForm
         {...{ initialValues, onSubmit, disabled }}
-        emitsVia={(milestoneForm) => setIsDirty(milestoneForm.isDirty)}
+        onDirtyChange={setIsDirty}
       />
     </FormDialogue>
   );

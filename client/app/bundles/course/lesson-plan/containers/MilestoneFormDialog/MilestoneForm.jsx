@@ -1,4 +1,4 @@
-import useEmitterFactory from 'react-emitter-factory';
+import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -27,7 +27,8 @@ const validationSchema = yup.object({
 });
 
 const MilestoneForm = (props) => {
-  const { onSubmit, initialValues, disabled } = props;
+  const { onSubmit, initialValues, disabled, onDirtyChange } = props;
+
   const {
     control,
     handleSubmit,
@@ -38,13 +39,9 @@ const MilestoneForm = (props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  useEmitterFactory(
-    props,
-    {
-      isDirty,
-    },
-    [isDirty],
-  );
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty]);
 
   return (
     <form
@@ -110,6 +107,7 @@ MilestoneForm.propTypes = {
   disabled: PropTypes.bool,
   initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
+  onDirtyChange: PropTypes.func,
 };
 
 export default MilestoneForm;
