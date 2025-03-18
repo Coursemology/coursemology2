@@ -24,7 +24,7 @@ class NewAssessmentFormButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      assessmentForm: undefined,
+      isDirty: false,
       redirectUrl: undefined,
     };
   }
@@ -55,7 +55,7 @@ class NewAssessmentFormButton extends Component {
   };
 
   handleClose = () => {
-    if (this.state.assessmentForm?.isDirty) {
+    if (this.state.isDirty) {
       this.props.dispatch({
         type: actionTypes.ASSESSMENT_FORM_CANCEL,
       });
@@ -87,11 +87,11 @@ class NewAssessmentFormButton extends Component {
     const formActions = [
       <Button
         key="assessment-popup-dialog-cancel-button"
-        color={this.state.assessmentForm?.isDirty ? 'error' : 'primary'}
+        color={this.state.isDirty ? 'error' : 'primary'}
         disabled={disabled}
         onClick={this.handleClose}
       >
-        {this.state.assessmentForm?.isDirty ? (
+        {this.state.isDirty ? (
           <FormattedMessage {...formTranslations.discard} />
         ) : (
           <FormattedMessage {...formTranslations.cancel} />
@@ -166,12 +166,12 @@ class NewAssessmentFormButton extends Component {
             <AssessmentForm
               canManageMonitor={canManageMonitor}
               disabled={disabled}
-              emitsVia={(assessmentForm) => this.setState({ assessmentForm })}
               gamified={gamified}
               initialValues={initialValues}
               isKoditsuExamEnabled={isKoditsuExamEnabled}
               modeSwitching
               monitoringEnabled={monitoringEnabled}
+              onDirtyChange={(isDirty) => this.setState({ isDirty })}
               onSubmit={this.onFormSubmit}
               randomizationAllowed={randomizationAllowed}
             />
