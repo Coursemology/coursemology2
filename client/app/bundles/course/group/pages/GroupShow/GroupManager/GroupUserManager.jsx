@@ -496,13 +496,11 @@ const GroupUserManager = ({
         skipConfirmation={!isDirty}
       >
         <NameDescriptionForm
-          emitsVia={(nameDescriptionForm) =>
-            setIsDirty(nameDescriptionForm.isDirty)
-          }
           initialValues={{
             name: group.name,
             description: group.description,
           }}
+          onDirtyChange={setIsDirty}
           onSubmit={onFormSubmit}
         />
       </GroupFormDialog>
