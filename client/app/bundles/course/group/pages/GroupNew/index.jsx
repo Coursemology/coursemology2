@@ -56,13 +56,11 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
         skipConfirmation={!isDirty}
       >
         <NameDescriptionForm
-          emitsVia={(nameDescriptionForm) =>
-            setIsDirty(nameDescriptionForm.isDirty)
-          }
           initialValues={{
             name: '',
             description: '',
           }}
+          onDirtyChange={setIsDirty}
           onSubmit={onFormSubmit}
         />
       </GroupFormDialog>

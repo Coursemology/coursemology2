@@ -172,13 +172,11 @@ const CategoryCard = ({
             skipConfirmation={!isDirty}
           >
             <NameDescriptionForm
-              emitsVia={(nameDescriptionForm) =>
-                setIsDirty(nameDescriptionForm.isDirty)
-              }
               initialValues={{
                 name: category.name,
                 description: category.description,
               }}
+              onDirtyChange={setIsDirty}
               onSubmit={onFormSubmit}
             />
           </GroupFormDialog>
