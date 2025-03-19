@@ -91,6 +91,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.SubmissionsIndex.phantom',
     defaultMessage: 'Phantom User',
   },
+  publishAutoFeedback: {
+    id: 'course.assessment.submission.SubmissionsIndex.publishAutoFeedback',
+    defaultMessage: 'Publish Automated Feedback ({count})',
+  },
   unsubmitAllSubmissions: {
     id: 'course.assessment.submission.SubmissionsIndex.unsubmitAllSubmissions',
     defaultMessage: 'Unsubmit All Submissions',
