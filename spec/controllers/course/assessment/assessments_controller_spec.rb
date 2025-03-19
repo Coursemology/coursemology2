@@ -214,6 +214,75 @@ RSpec.describe Course::Assessment::AssessmentsController do
       end
     end
 
+    describe '#auto_feedback_count' do
+      let(:student) { create(:user, name: 'Student') }
+      let(:assessment) { create(:assessment, :with_programming_question, course: course) }
+      let!(:course_user) { create(:course_student, course: course, user: student) }
+      let(:submission) { create(:submission, :submitted, assessment: assessment, creator: student) }
+      let(:answer) { submission.answers.first }
+      let(:file) { answer.actable.files.first }
+      let(:annotation) { create(:course_assessment_answer_programming_file_annotation, file: file) }
+      let!(:post) do
+        annotation.posts.create(title: assessment.title,
+                                text: 'sample draft auto feedback',
+                                creator: User.system,
+                                updater: User.system,
+                                workflow_state: :draft)
+      end
+      subject do
+        get :auto_feedback_count, as: :json, params: {
+          course_id: course,
+          id: assessment,
+          course_users: Course::Assessment::AssessmentsController::COURSE_USERS[:students]
+        }
+      end
+
+      context 'when auto feedback count is fetched' do
+        it 'returns the correct count of student auto feedback' do
+          subject
+          expect(JSON.parse(response.body).count).to eq(1)
+        end
+      end
+    end
+
+    describe '#publish_auto_feedback' do
+      let(:student) { create(:user, name: 'Student') }
+      let(:assessment) { create(:assessment, :with_programming_question, course: course) }
+      let!(:course_user) { create(:course_student, course: course, user: student) }
+      let(:submission) { create(:submission, :submitted, assessment: assessment, creator: student) }
+      let(:answer) { submission.answers.first }
+      let(:file) { answer.actable.files.first }
+      let(:annotation) { create(:course_assessment_answer_programming_file_annotation, file: file) }
+      let!(:post) do
+        annotation.posts.create(title: assessment.title,
+                                text: 'sample draft auto feedback',
+                                creator: User.system,
+                                updater: User.system,
+                                workflow_state: :draft)
+      end
+      let!(:codaveri_feedback) do
+        post.create_codaveri_feedback(codaveri_feedback_id: '12345',
+                                      original_feedback: 'sample',
+                                      status: :pending_review)
+      end
+      subject do
+        patch :publish_auto_feedback, as: :json, params: {
+          course_id: course,
+          id: assessment,
+          course_users: Course::Assessment::AssessmentsController::COURSE_USERS[:students],
+          rating: 4
+        }
+      end
+
+      context 'when publish auto feedback is called' do
+        it 'publishes the post' do
+          subject
+          expect(post.reload.workflow_state).to eq('published')
+          expect(post.reload.codaveri_feedback.reload.rating).to eq(4)
+        end
+      end
+    end
+
     describe '#authenticate' do
       let(:started_assessment) do
         create(:assessment, :published_with_all_question_types, :view_password, course: course)

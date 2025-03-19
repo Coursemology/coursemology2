@@ -234,6 +234,8 @@ Rails.application.routes.draw do
           get :statistics, on: :member
           get :monitoring, on: :member
           get :seb_payload, on: :member
+          get :auto_feedback_count, on: :member
+          patch :publish_auto_feedback, on: :member
 
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
