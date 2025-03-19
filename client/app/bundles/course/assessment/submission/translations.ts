@@ -263,6 +263,16 @@ const translations = defineMessages({
       all the existing answers here will be overwritten by the newer one.\
       NOTE THAT THIS ACTION IS IRREVERSIBLE!',
   },
+  publishAutoFeedbackConfirmationHeader: {
+    id: 'course.assessment.submission.publishAutoFeedbackConfirmationHeader',
+    defaultMessage:
+      'You are about to publish {count} automated feedback {count, plural, one {comment} other {comments}}.',
+  },
+  publishAutoFeedbackConfirmationPleaseRate: {
+    id: 'course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate',
+    defaultMessage:
+      'Please rate the overall quality of the automated feedback for this assessment. Your rating will help us improve automated feedback generation for everyone.',
+  },
   remainingTime: {
     id: 'course.assessment.submission.remainingTime',
     defaultMessage: 'Time Remaining: {timeLimit}',
@@ -414,6 +424,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.fetchSubmissionsFromKoditsuSuccess',
     defaultMessage:
       'All submissions have been fetched successfully from Koditsu',
+  },
+  publishAutoFeedbackSuccess: {
+    id: 'course.assessment.submission.publishAutoFeedbackSuccess',
+    defaultMessage: 'All automated feedback has been published.',
   },
   sendReminderEmailSuccess: {
     id: 'course.assessment.assessments.sendReminderEmailSuccess',

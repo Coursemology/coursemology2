@@ -196,6 +196,40 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     );
   }
 
+  /**
+   * Fetch count of automated feedbacks associated with this assessment.
+   *
+   * @param {number} assessmentId
+   * @param {string} courseUsers
+   * @returns {Promise<import('api/types').APIResponse<{ count: number }>>}
+   */
+  fetchAutoFeedbackCount(assessmentId, courseUsers) {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/auto_feedback_count`,
+      {
+        params: { course_users: courseUsers },
+      },
+    );
+  }
+
+  /**
+   * Publish all automated feedback for this assessment.
+   *
+   * @param {number} assessmentId
+   * @param {string} courseUsers
+   * @param {number} rating
+   * @returns {Promise<import('api/types').APIResponse<void>>}
+   */
+  publishAutoFeedback(assessmentId, courseUsers, rating) {
+    return this.client.patch(
+      `${this.#urlPrefix}/${assessmentId}/publish_auto_feedback`,
+      {
+        course_users: courseUsers,
+        rating,
+      },
+    );
+  }
+
   get #urlPrefix() {
     return `/courses/${this.courseId}/assessments`;
   }

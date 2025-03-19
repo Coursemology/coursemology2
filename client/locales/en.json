@@ -3293,6 +3293,15 @@
   "course.assessment.submission.publish": {
     "defaultMessage": "Publish Grade"
   },
+  "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
+    "defaultMessage": "You are about to publish {count} automated feedback {count, plural, one {comment} other {comments}}."
+  },
+  "course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate": {
+    "defaultMessage": "Please rate the overall quality of the automated feedback for this assessment. Your rating will help us improve automated feedback generation for everyone."
+  },
+  "course.assessment.submission.publishAutoFeedbackSuccess": {
+    "defaultMessage": "All automated feedback has been published."
+  },
   "course.assessment.submission.publishConfirmation": {
     "defaultMessage": "Are you sure you want to publish all {graded} graded submissions ({selectedUsers})? THIS ACTION IS IRREVERSIBLE! All graded submissions will be published and users will be able to see their own grades."
   },
@@ -3469,6 +3478,9 @@
   },
   "course.assessment.submissions.SubmissionsIndex.header": {
     "defaultMessage": "Submissions"
+  },
+  "course.assessment.submission.SubmissionsIndex.publishAutoFeedback": {
+    "defaultMessage": "Publish Automated Feedback ({count})"
   },
   "course.assessment.submissions.SubmissionsTable.gradeTooltip": {
     "defaultMessage": "These grades can't be seen by the student until they are published"

@@ -152,6 +152,34 @@ export function sendAssessmentReminderEmail(assessmentId, type) {
   };
 }
 
+export async function fetchAssessmentAutoFeedbackCount(
+  assessmentId,
+  courseUsers,
+) {
+  const response =
+    await CourseAPI.assessment.assessments.fetchAutoFeedbackCount(
+      assessmentId,
+      courseUsers,
+    );
+  return response.data;
+}
+
+export function publishAssessmentAutoFeedback(
+  assessmentId,
+  courseUsers,
+  rating,
+) {
+  return (dispatch) =>
+    CourseAPI.assessment.assessments
+      .publishAutoFeedback(assessmentId, courseUsers, rating)
+      .then(() => {
+        dispatch(setNotification(translations.publishAutoFeedbackSuccess));
+      })
+      .catch(() => {
+        dispatch(setNotification(translations.requestFailure));
+      });
+}
+
 /**
  * Download submissions for indicated user types in a given format (zip or csv)
  *

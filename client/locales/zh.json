@@ -2636,6 +2636,15 @@
   "course.assessment.submission.Answer.rendererNotImplemented": {
     "defaultMessage": "此问题类型的显示尚未实现。"
   },
+  "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
+    "defaultMessage": "您即将发布 {count} 条自动反馈。"
+  },
+  "course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate": {
+    "defaultMessage": "请评价本次测验自动反馈的整体质量。您的评分将帮助我们改进自动反馈生成，以便所有用户受益。"
+  },
+  "course.assessment.submission.publishAutoFeedbackSuccess": {
+    "defaultMessage": "所有自动反馈均已发布。"
+  },
   "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
     "defaultMessage": "查看过去的答案"
   },
@@ -2689,6 +2698,9 @@
   },
   "course.assessment.submission.SubmissionsIndex.phantom": {
     "defaultMessage": "旁听用户"
+  },
+  "course.assessment.submission.SubmissionsIndex.publishAutoFeedback": {
+    "defaultMessage": "发布自动反馈（{count})"
   },
   "course.assessment.submission.SubmissionsIndex.publishGrades": {
     "defaultMessage": "发布成绩"

@@ -3,19 +3,23 @@ import { useParams } from 'react-router-dom';
 import {
   Button,
   FormControlLabel,
+  Rating,
   Switch,
   Tab,
   Tabs,
+  Typography,
 } from '@mui/material';
 import palette from 'theme/palette';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import SubmissionStatusChart from 'course/assessment/pages/AssessmentStatistics/SubmissionStatus/SubmissionStatusChart';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 import assessmentsTranslations from '../../../translations';
 import { purgeSubmissionStore } from '../../actions';
@@ -23,9 +27,11 @@ import {
   deleteAllSubmissions,
   downloadStatistics,
   downloadSubmissions,
+  fetchAssessmentAutoFeedbackCount,
   fetchSubmissions,
   fetchSubmissionsFromKoditsu,
   forceSubmitSubmissions,
+  publishAssessmentAutoFeedback,
   publishSubmissions,
   sendAssessmentReminderEmail,
   unsubmitAllSubmissions,
@@ -112,6 +118,18 @@ const AssessmentSubmissionsIndex: FC = () => {
   const [isConfirmingFetchFromKoditsu, setIsConfirmingFetchFromKoditsu] =
     useState(false);
   const [isConfirmingRemind, setIsConfirmingRemind] = useState(false);
+  const [isConfirmingPublishAutoFeedback, setIsConfirmingPublishAutoFeedback] =
+    useState(false);
+
+  // Whether these requests are in flight
+  const [isQueryingAutoFeedback, setIsQueryingAutoFeedback] = useState(false);
+  const [isPublishingAutoFeedback, setIsPublishingAutoFeedback] =
+    useState(false);
+
+  const [autoFeedbackCounts, setAutoFeedbackCounts] = useState<
+    Partial<Record<SelectedUserType, number>>
+  >({});
+  const [autoFeedbackRating, setAutoFeedbackRating] = useState(0);
 
   const myStudentsUserType = isIncludingPhantoms
     ? SelectedUserType.MY_STUDENTS_W_PHANTOM
@@ -134,6 +152,26 @@ const AssessmentSubmissionsIndex: FC = () => {
 
   useEffect(() => {
     if (
+      !(currentSelectedUserType in autoFeedbackCounts) &&
+      currentSelectedUserType !== SelectedUserType.STAFF &&
+      currentSelectedUserType !== SelectedUserType.STAFF_W_PHANTOM
+    ) {
+      setIsQueryingAutoFeedback(true);
+      fetchAssessmentAutoFeedbackCount(
+        assessmentId,
+        currentSelectedUserType,
+      ).then(({ count }) => {
+        setIsQueryingAutoFeedback(false);
+        setAutoFeedbackCounts({
+          ...autoFeedbackCounts,
+          [currentSelectedUserType]: count,
+        });
+      });
+    }
+  }, [dispatch, currentSelectedUserType]);
+
+  useEffect(() => {
+    if (
       tab === AssessmentSubmissionsIndexTab.MY_STUDENTS_TAB &&
       submissions.every((s) => !s.courseUser.myStudent)
     ) {
@@ -141,7 +179,7 @@ const AssessmentSubmissionsIndex: FC = () => {
     }
   }, [dispatch, submissions]);
 
-  if (isLoading) {
+  if (isLoading || isQueryingAutoFeedback) {
     return <LoadingIndicator />;
   }
   const myStudentAllSubmissions = submissions.filter(
@@ -174,6 +212,9 @@ const AssessmentSubmissionsIndex: FC = () => {
   };
   // shownSubmissions are submissions currently shown on the active tab on the page
   const shownSubmissions = tabShownSubmissionsMapper[tab];
+
+  const shownAutoFeedbackCount =
+    autoFeedbackCounts[currentSelectedUserType] ?? 0;
 
   const renderForceSubmitConfirmation = (): JSX.Element => {
     const values = {
@@ -233,8 +274,11 @@ const AssessmentSubmissionsIndex: FC = () => {
       isForceSubmitting ||
       isDeleting ||
       isUnsubmitting ||
-      isReminding;
+      isReminding ||
+      isPublishingAutoFeedback;
     const isShowingRemindButton =
+      tab !== AssessmentSubmissionsIndexTab.STAFF_TAB;
+    const isShowingPublishAutoFeedbackButton =
       tab !== AssessmentSubmissionsIndexTab.STAFF_TAB;
 
     return (
@@ -313,6 +357,25 @@ const AssessmentSubmissionsIndex: FC = () => {
               {t(submissionsTranslations.remind)}
             </Button>
           )}
+
+          {isShowingPublishAutoFeedbackButton && (
+            <Button
+              className="m-2"
+              color="warning"
+              disabled={disableButtons || shownAutoFeedbackCount === 0}
+              endIcon={
+                isPublishingAutoFeedback && <LoadingIndicator bare size={20} />
+              }
+              onClick={() => {
+                setIsConfirmingPublishAutoFeedback(true);
+              }}
+              variant="contained"
+            >
+              {t(submissionsTranslations.publishAutoFeedback, {
+                count: shownAutoFeedbackCount,
+              })}
+            </Button>
+          )}
         </section>
       </>
     );
@@ -362,6 +425,60 @@ const AssessmentSubmissionsIndex: FC = () => {
         }}
         open={isConfirmingRemind}
       />
+    );
+  };
+
+  const renderPublishAutoFeedbackConfirmation = (): JSX.Element => {
+    return (
+      <Prompt
+        cancelColor="secondary"
+        onClickPrimary={() => {
+          const publishSelectedUserType = currentSelectedUserType; // Capture the value at dispatch
+          setIsPublishingAutoFeedback(true);
+          dispatch(
+            publishAssessmentAutoFeedback(
+              assessmentId,
+              publishSelectedUserType,
+              autoFeedbackRating,
+            ),
+          )
+            .then(() => {
+              setAutoFeedbackCounts({
+                ...autoFeedbackCounts,
+                [publishSelectedUserType]: 0,
+              });
+            })
+            .finally(() => {
+              setIsPublishingAutoFeedback(false);
+            });
+          setIsConfirmingPublishAutoFeedback(false);
+        }}
+        onClose={() => setIsConfirmingPublishAutoFeedback(false)}
+        open={isConfirmingPublishAutoFeedback}
+        primaryDisabled={autoFeedbackRating === 0}
+        primaryLabel={t(formTranslations.continue)}
+      >
+        <Typography variant="body2">
+          {t(translations.publishAutoFeedbackConfirmationHeader, {
+            count: shownAutoFeedbackCount,
+          })}
+        </Typography>
+        <br />
+        <Typography variant="body2">
+          {t(translations.publishAutoFeedbackConfirmationPleaseRate)}
+        </Typography>
+        <Rating
+          max={5}
+          onChange={(_, newValue) => {
+            // To prevent the rating to be reset to null when clicking on the same previous rating
+            if (newValue !== null) {
+              setAutoFeedbackRating(newValue);
+            }
+          }}
+          size="medium"
+          value={autoFeedbackRating}
+        />
+      </Prompt>
     );
   };
 
@@ -465,10 +582,15 @@ const AssessmentSubmissionsIndex: FC = () => {
       )}
 
       {isConfirmingPublish && renderPublishConfirmation()}
+
       {isConfirmingForceSubmit && renderForceSubmitConfirmation()}
+
       {isConfirmingFetchFromKoditsu && renderFetchFromKoditsuConfirmation()}
+
       {isConfirmingRemind && renderReminderConfirmation()}
 
+      {isConfirmingPublishAutoFeedback &&
+        renderPublishAutoFeedbackConfirmation()}
     </Page>
   );
 };
