@@ -9,7 +9,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
     let(:forum) { create(:forum, course: course) }
     before do
       login_as(user, scope: :user)
-      allow_any_instance_of(Course::Forum::TopicsController).to receive(:auto_answer_action)
+      allow_any_instance_of(Course::Discussion::Post).to receive(:rag_auto_answer!)
     end
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
@@ -28,7 +28,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-normal').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to_not receive(:auto_answer_action)
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
@@ -46,7 +46,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-question').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to_not receive(:auto_answer_action)
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
@@ -64,7 +64,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-announcement').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to_not receive(:auto_answer_action)
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
@@ -82,7 +82,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-sticky').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to_not receive(:auto_answer_action)
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
@@ -105,7 +105,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-normal').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to_not receive(:auto_answer_action)
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
@@ -123,7 +123,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-question').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to_not receive(:auto_answer_action)
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
@@ -141,7 +141,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-announcement').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to_not receive(:auto_answer_action)
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
@@ -159,7 +159,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-sticky').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to_not receive(:auto_answer_action)
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
@@ -180,7 +180,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-normal').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to receive(:auto_answer_action).with(false).once
+        expect_any_instance_of(Course::Discussion::Post).to receive(:rag_auto_answer!).once
 
         find('button.btn-submit').click
         wait_for_page
@@ -198,8 +198,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-question').click
 
-        expect_any_instance_of(Course::Forum::TopicsController).to receive(:auto_answer_action).with(false).once
-
+        expect_any_instance_of(Course::Discussion::Post).to receive(:rag_auto_answer!).once
         find('button.btn-submit').click
         wait_for_page
       end
