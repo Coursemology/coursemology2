@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Footer from 'lib/components/core/layouts/Footer';
-import { useDynamicNest } from 'lib/hooks/router/dynamicNest';
-import { DEFAULT_WINDOW_TITLE } from 'lib/hooks/router/dynamicNest/constants';
-import { getLastCrumbTitle } from 'lib/hooks/router/dynamicNest/crumbs';
+import {
+  DEFAULT_WINDOW_TITLE,
+  getLastCrumbTitle,
+  useDynamicNest,
+} from 'lib/hooks/router/dynamicNest';
 import useTranslation, { translatable } from 'lib/hooks/useTranslation';
 
 import BrandingHead from '../components/navigation/BrandingHead';

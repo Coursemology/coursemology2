@@ -1,9 +1,8 @@
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { Breadcrumbs as MuiBreadcrumbs } from '@mui/material';
 
 import LoadingEllipsis from 'lib/components/core/LoadingEllipsis';
-import { CrumbData } from 'lib/hooks/router/dynamicNest';
-import { CrumbContent } from 'lib/hooks/router/dynamicNest/crumbs';
+import { CrumbData, forEachFlatCrumb } from 'lib/hooks/router/dynamicNest';
 import useTranslation, { translatable } from 'lib/hooks/useTranslation';
 
 import Crumb from './Crumb';
@@ -22,34 +21,19 @@ const Breadcrumbs = (props: BreadcrumbProps): JSX.Element => {
 
   const sliders = useSliders();
 
-  const getCrumbElement = useCallback(
-    (content: CrumbContent, disabled: boolean, key: string): JSX.Element => (
-      <Crumb key={key} to={!disabled && content.url}>
-        {translatable(content.title) ? t(content.title) : content.title}
-      </Crumb>
-    ),
-    [],
-  );
+  const validCrumbs = useMemo(() => {
+    const elements: JSX.Element[] = [];
 
-  const validCrumbs = crumbs.reduce<JSX.Element[]>((elements, crumb, index) => {
-    const content = crumb.content;
-    if (!content) return elements;
-
-    const isLastCrumb = index >= crumbs.length - 1;
-
-    if (Array.isArray(content)) {
-      content.forEach((item, itemIndex) => {
-        const isLastItem = isLastCrumb && itemIndex >= content.length - 1;
-        const key = `${crumb.pathname}-${itemIndex}`;
-
-        elements.push(getCrumbElement(item, isLastItem, key));
-      });
-    } else {
-      elements.push(getCrumbElement(content, isLastCrumb, crumb.pathname));
-    }
+    forEachFlatCrumb(crumbs, (content, isLastCrumb, key) => {
+      elements.push(
+        <Crumb key={key} to={!isLastCrumb && content.url}>
+          {translatable(content.title) ? t(content.title) : content.title}
+        </Crumb>,
+      );
+    });
 
     return elements;
-  }, []);
+  }, [crumbs]);
 
   return (
     <div className={`relative flex items-center ${props.className ?? ''}`}>
