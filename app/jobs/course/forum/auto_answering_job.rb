@@ -25,10 +25,10 @@ class Course::Forum::AutoAnsweringJob < ApplicationJob
   private
 
   def create_response_post(post, response, current_author, evaluation)
-    post.children.create!(
+    Course::Discussion::Post.create!(
       creator: current_author,
       updater: current_author,
-      parent_id: post.id,
+      parent_id: post.parent&.id || post.id,
       is_ai_generated: true,
       text: response,
       original_text: response,

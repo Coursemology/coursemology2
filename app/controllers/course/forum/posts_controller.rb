@@ -19,6 +19,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
     if result
       send_created_notification(current_user, current_course_user, @post)
+      auto_answer_action(@post, @topic)
       render 'create'
     else
       render json: { errors: @post.errors.full_messages.to_sentence }, status: :bad_request
@@ -88,7 +89,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     if job
       render partial: 'jobs/submitted', locals: { job: job }
     else
-      job = auto_answer_action(true)
+      job = auto_answer_action(@post, @topic, is_regenerated_response: true)
       render partial: 'jobs/submitted', locals: { job: job.job }
     end
   end

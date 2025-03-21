@@ -10,6 +10,7 @@ class RagWise::RagWorkflowService
   def initialize(course, evaluation_service, character)
     @client = LANGCHAIN_OPENAI
     @evaluation = evaluation_service
+    @course = course
 
     course_materials_tool = RagWise::Tools::CourseMaterialsTool.new(course, @evaluation)
     course_forum_discussions_tool = RagWise::Tools::CourseForumDiscussionsTool.new(course, @evaluation)
@@ -22,8 +23,10 @@ class RagWise::RagWorkflowService
   end
 
   def get_assistant_response(post, topic)
-    query_payload = "query title: #{topic.title} query text: #{post.text} "
+    query_payload = "query title: #{sanitised_text(topic.title)} query text: #{sanitised_text(post.text)} "
     @evaluation.question = query_payload
+    @assistant.add_message(content: "Here is the forum history for this topic, but please note that only the latest
+    responses will be provided. Use it to answer question in next message: #{topic_history(topic, query_payload)}")
     first_attachment = post.attachments.first
     if first_attachment
       data = Base64.strict_encode64(first_attachment.open(encoding: 'ASCII-8BIT', &:read))
@@ -39,6 +42,16 @@ class RagWise::RagWorkflowService
   end
 
   private
+
+  def sanitised_text(text)
+    ActionController::Base.helpers.strip_tags(text)
+  end
+
+  def topic_history(topic, query)
+    history = RagWise::DiscussionExtractionService.new(@course, topic, topic.latest_history).call
+    history[:topic_description] = query
+    history
+  end
 
   # for multiple images, currently not in use
   def images_captions(post)
