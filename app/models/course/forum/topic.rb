@@ -121,6 +121,10 @@ class Course::Forum::Topic < ApplicationRecord
     end
   end
 
+  def latest_history(limit: 5)
+    posts.only_published_posts.reorder(created_at: :desc).limit(limit)
+  end
+
   private
 
   # Try building a slug based on the following fields in

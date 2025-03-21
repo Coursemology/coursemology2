@@ -15,35 +15,37 @@ class RagWise::ChunkingService
     text = case @file_type
            when '.pdf'
              reader = PDF::Reader.new(@file.path)
-             reader.pages.map(&:text).join(' ')
+             reader.pages.map(&:text).join("\n\n")
            when '.txt'
              File.read(@file.path)
+           when '.docx'
+             doc = Docx::Document.open(@file.path)
+             doc.paragraphs.map(&:text).join("\n\n")
+           when '.ipynb'
+             parse_ipynb(@file.path)
            else
              raise "Unsupported file type: #{@file_type}"
            end
 
     @text = text.gsub(/\s+/, ' ').strip
-    fixed_size_chunk_text(500, 100)
+    text_chunking
   end
 
   def text_chunking
-    fixed_size_chunk_text(500, 100)
+    chunks = Langchain::Chunker::RecursiveText.new(@text,
+                                                   chunk_size: 800, chunk_overlap: 160,
+                                                   separators: ["\n\n", "\n", ' ', '']).chunks
+    chunks.map(&:text)
   end
 
   private
 
-  def fixed_size_chunk_text(chunk_size, overlap_size)
-    chunks = []
-    start = 0
-    ending = 0
-    while ending < @text.length
-      # Define the chunk with overlap
-      chunk = @text[start, chunk_size]
-      chunks << chunk
-      ending = start + chunk_size
-      # Move the starting position forward, keeping the overlap
-      start += (chunk_size - overlap_size)
-    end
-    chunks
+  def parse_ipynb(file_path)
+    notebook = JSON.parse(File.read(file_path))
+
+    notebook['cells'].
+      select { |cell| ['markdown', 'code', 'raw'].include?(cell['cell_type']) }.
+      map { |cell| cell['source'].join }.
+      join("\n\n")
   end
 end

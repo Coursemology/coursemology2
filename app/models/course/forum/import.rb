@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Forum::Import < ApplicationRecord # rubocop:disable Metrics/ClassLength
+class Course::Forum::Import < ApplicationRecord
   include Workflow
   include DuplicationStateTrackingConcern
 
@@ -58,7 +58,8 @@ class Course::Forum::Import < ApplicationRecord # rubocop:disable Metrics/ClassL
 
   def build_discussions(current_user)
     imported_forum.topics.each do |topic|
-      discussion_data = extract_discussion_data(topic)
+      discussion_data = RagWise::DiscussionExtractionService.new(topic.course, topic,
+                                                                 topic.posts.only_published_posts).call
       next if discussion_data[:discussion].empty?
 
       existing_discussion = Course::Forum::Discussion.existing_discussion(discussion_data[:discussion])
@@ -72,22 +73,6 @@ class Course::Forum::Import < ApplicationRecord # rubocop:disable Metrics/ClassL
   end
 
   private
-
-  def extract_discussion_data(topic)
-    sanitized_topic_title = sanitize_text(topic[:title])
-    discussion = topic.posts.order(created_at: :asc).filter_map do |post|
-      next unless post[:workflow_state] == 'published'
-
-      sanitized_text = sanitize_text(post[:text])
-      { role: post_creator_role(imported_forum.course, post), text: sanitized_text }
-    end
-
-    { topic_title: sanitized_topic_title, discussion: discussion }
-  end
-
-  def sanitize_text(text)
-    ActionController::Base.helpers.strip_tags(text)
-  end
 
   def create_new_discussion_and_reference(discussion_data, current_user)
     topic_title_and_post = [

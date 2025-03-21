@@ -31,7 +31,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
       send_created_notification(@topic)
       @topic.ensure_subscribed_by(current_user) if @forum.forum_topics_auto_subscribe
       mark_posts_read
-      auto_answer_action(false) unless current_course_user.staff? || rag_settings[:response_workflow] == 'no'
+      auto_answer_action(@topic.posts.first, @topic)
       render json: { redirectUrl: course_forum_topic_path(current_course, @forum, @topic) }, status: :ok
     else
       render json: { errors: @topic.errors }, status: :bad_request
