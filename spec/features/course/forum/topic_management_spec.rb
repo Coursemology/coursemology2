@@ -252,6 +252,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('button.btn-submit').click
         wait_for_page
 
+        expect_toastify("Topic #{topic.title} has been created.")
         expect(forum.topics.last.topic_type).to eq('normal')
         expect(forum.topics.last.posts.first.text).to eq('<p>test</p>')
 
@@ -267,6 +268,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('button.btn-submit').click
         wait_for_page
 
+        expect_toastify("Topic #{topic.title} has been created.")
         expect(forum.topics.last.topic_type).to eq('question')
       end
 
