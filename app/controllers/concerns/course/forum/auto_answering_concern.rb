@@ -31,10 +31,10 @@ module Course::Forum::AutoAnsweringConcern
   end
 
   def rag_settings
-    rag_component = current_component_host[:course_rag_wise_component].settings
+    rag_component = current_component_host[:course_rag_wise_component]&.settings
     {
-      response_workflow: rag_component.response_workflow,
-      roleplay: rag_component.roleplay
+      response_workflow: rag_component&.response_workflow,
+      roleplay: rag_component&.roleplay
     }
   end
 
