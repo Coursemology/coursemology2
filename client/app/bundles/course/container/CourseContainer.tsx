@@ -7,9 +7,12 @@ import { CourseLayoutData } from 'types/course/courses';
 import CikgoSidebarItems from 'course/stories/components/CikgoSidebarItems';
 import PopupNotifier from 'course/user-notification/PopupNotifier';
 import Footer from 'lib/components/core/layouts/Footer';
-import { DataHandle, useDynamicNest } from 'lib/hooks/router/dynamicNest';
-import { DEFAULT_WINDOW_TITLE } from 'lib/hooks/router/dynamicNest/constants';
-import { getLastCrumbTitle } from 'lib/hooks/router/dynamicNest/crumbs';
+import {
+  DataHandle,
+  DEFAULT_WINDOW_TITLE,
+  getLastCrumbTitle,
+  useDynamicNest,
+} from 'lib/hooks/router/dynamicNest';
 import useTranslation, { translatable } from 'lib/hooks/useTranslation';
 
 import Breadcrumbs from './Breadcrumbs';

@@ -6267,6 +6267,11 @@ immer@^10.0.4:
   resolved "https://registry.yarnpkg.com/immer/-/immer-10.0.4.tgz#09af41477236b99449f9d705369a4daaf780362b"
   integrity sha512-cuBuGK40P/sk5IzWa9QPUaAdvPHjkk1c+xYsd9oZw+YQQEV+10G0P5uMpGctZZKnyQ+ibRO08bD25nWLmYi2pw==
 
+immer@^10.1.1:
+  version "10.1.1"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-10.1.1.tgz#206f344ea372d8ea176891545ee53ccc062db7bc"
+  integrity sha512-s2MPrmjovJcoMaHtx6K11Ra7oD05NT97w1IC5zpMkT6Atjr7H8LjaDd81iIxUYpMKSRRNMJE703M1Fhr/TctHw==
+
 immer@^9.0.21:
   version "9.0.21"
   resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.21.tgz#1e025ea31a40f24fb064f1fef23e931496330176"
@@ -9295,6 +9300,13 @@ react-dropzone@^14.2.3:
     attr-accept "^2.2.2"
     file-selector "^0.6.0"
     prop-types "^15.8.1"
+
+react-dynamic-breadcrumbs@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-dynamic-breadcrumbs/-/react-dynamic-breadcrumbs-1.0.1.tgz#6dd4b7f494a55baab4d51d2ff51aab733c5d5305"
+  integrity sha512-WQY6rcjtMHQUxBL+XKSVq4ZohDA0BcOJgahStjBeW7RZS1StAg3Q5Xz+zKo5lUQ+46KJWTcmaaMtFW0UnjICNg==
+  dependencies:
+    immer "^10.1.1"
 
 react-fast-compare@^3.0.1:
   version "3.2.0"
