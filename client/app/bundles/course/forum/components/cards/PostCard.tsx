@@ -140,14 +140,13 @@ const PostCard: FC<Props> = (props) => {
                   topic={topic}
                 />
                 <MarkAnswerAndPublishButton post={post} topic={topic} />
-                {topic.permissions.canManageAIResponse &&
-                  post.parentId === null && (
-                    <GenerateReplyButton
-                      forumId={topic.forumId.toString()}
-                      post={post}
-                      topicId={topic.id.toString()}
-                    />
-                  )}
+                {topic.permissions.canManageAIResponse && (
+                  <GenerateReplyButton
+                    forumId={topic.forumId.toString()}
+                    post={post}
+                    topicId={topic.id.toString()}
+                  />
+                )}
               </>
             )}
           </CardActions>

@@ -68,20 +68,17 @@ const MarkAnswerAndPublishButton = (props: Props): JSX.Element | null => {
     return null;
 
   const handleMarkAnswerAndPublish = (): void => {
+    save?.();
     dispatch(
       markForumTopicPostAnswerAndPublish(post.postUrl, topic.id, post.id),
-    )
-      .then(() => {
-        save?.();
-      })
-      .catch((error) => {
-        const errorMessage = error.response?.data?.errors ?? '';
-        toast.error(
-          t(translations.updateFailure, {
-            error: errorMessage,
-          }),
-        );
-      });
+    ).catch((error) => {
+      const errorMessage = error.response?.data?.errors ?? '';
+      toast.error(
+        t(translations.updateFailure, {
+          error: errorMessage,
+        }),
+      );
+    });
   };
 
   const handlePublish = (): Promise<void> => {

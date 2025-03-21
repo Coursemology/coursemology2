@@ -110,7 +110,7 @@ export default defineMessages({
   materialsSectionSubtitle: {
     id: 'course.admin.RagWiseSettings.materialsSectionSubtitle',
     defaultMessage:
-      'Add/remove pdf/txt files in knowledge base, allowing users to\
+      'Add/remove pdf/docx/ipynb/txt files in knowledge base, allowing users to\
       control its availability to the LLM for generating responses.',
   },
   knowledgeBaseStatusSettings: {

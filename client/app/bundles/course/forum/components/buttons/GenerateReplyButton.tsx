@@ -33,6 +33,10 @@ const translations = defineMessages({
     id: 'course.forum.publishButton.generateReplyTooltip',
     defaultMessage: 'Generate a draft reply using AI',
   },
+  GenerateReplyDisabledTooltip: {
+    id: 'course.forum.publishButton.generateReplyDisabledTooltip',
+    defaultMessage: 'Disabled for generated reply',
+  },
 });
 
 interface Props {
@@ -77,28 +81,36 @@ const GenerateReplyButton: FC<Props> = ({ post, forumId, topicId }: Props) => {
   }, [isLoading]);
 
   return (
-    <Tooltip title={t(translations.GenerateReplyTooltip)}>
-      <Chip
-        classes={{
-          root: 'pr-2',
-        }}
-        color="primary"
-        deleteIcon={
-          isLoading ? <LoadingIndicator bare size={15} /> : <AutoAwesome />
-        }
-        disabled={isLoading}
-        label={
-          isLoading
-            ? t(translations.GeneratingReply)
-            : t(translations.GenerateReply)
-        }
-        onClick={handleGenerateNewAnswer}
-        onDelete={(e) => {
-          e.stopPropagation();
-          handleGenerateNewAnswer();
-        }}
-        size="small"
-      />
+    <Tooltip
+      title={
+        post.isAiGenerated
+          ? t(translations.GenerateReplyDisabledTooltip)
+          : t(translations.GenerateReplyTooltip)
+      }
+    >
+      <span>
+        <Chip
+          classes={{
+            root: 'pr-2',
+          }}
+          color="primary"
+          deleteIcon={
+            isLoading ? <LoadingIndicator bare size={15} /> : <AutoAwesome />
+          }
+          disabled={isLoading || post.isAiGenerated}
+          label={
+            isLoading
+              ? t(translations.GeneratingReply)
+              : t(translations.GenerateReply)
+          }
+          onClick={handleGenerateNewAnswer}
+          onDelete={(e) => {
+            e.stopPropagation();
+            handleGenerateNewAnswer();
+          }}
+          size="small"
+        />
+      </span>
     </Tooltip>
   );
 };
