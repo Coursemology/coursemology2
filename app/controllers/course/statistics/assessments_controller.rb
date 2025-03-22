@@ -84,9 +84,14 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def fetch_all_ancestor_assessments
     current_assessment = Course::Assessment.preload(:duplication_traceable).find(assessment_params[:id])
     @ancestors = [current_assessment]
-    while current_assessment.duplication_traceable.present? &&
-          current_assessment.duplication_traceable.source_id.present?
-      current_assessment = current_assessment.duplication_traceable.source
+    while current_assessment.duplication_traceable&.source_id.present?
+      # TODO: To skip over deleted/non-readable ancestors in duplication chain instead of breaking
+      # ActiveRecord::RecordNotFound will occur if source course deleted
+      begin
+        current_assessment = current_assessment.duplication_traceable.source
+      rescue ActiveRecord::RecordNotFound
+        break
+      end
       break unless can?(:read_ancestor, current_assessment)
 
       @ancestors.unshift(current_assessment)
