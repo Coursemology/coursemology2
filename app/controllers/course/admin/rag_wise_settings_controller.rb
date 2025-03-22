@@ -18,7 +18,7 @@ class Course::Admin::RagWiseSettingsController < Course::Admin::Controller
 
   def materials
     @materials = current_course.materials.includes(:folder).
-                 where('course_materials.name ~* ?', '\\.(pdf|txt)$').to_a
+                 where('course_materials.name ~* ?', '\\.(pdf|txt|docx|ipynb)$').to_a
   end
 
   def folders

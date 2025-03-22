@@ -2,18 +2,19 @@
 module Course::Forum::AutoAnsweringConcern
   extend ActiveSupport::Concern
 
-  def auto_answer_action(is_new_reply)
+  def auto_answer_action(query_post, topic, is_regenerated_response: false)
     return unless current_course.component_enabled?(Course::RagWiseComponent)
+
+    return if response_should_not_be_generated?(is_regenerated_response)
 
     settings = rag_settings
     # ensures that when manually generating new reply it will always draft
-    settings[:response_workflow] = '0' if is_new_reply
+    settings[:response_workflow] = '0' if is_regenerated_response
 
     system ||= User.find(User::SYSTEM_USER_ID)
     raise 'No system user. Did you run rake db:seed?' unless system
 
-    target_post = is_new_reply ? @post : @topic.posts.first
-    target_post.rag_auto_answer!(@topic, system, nil, settings)
+    query_post.rag_auto_answer!(topic, system, nil, settings)
   end
 
   def publish_post_action
@@ -67,5 +68,11 @@ module Course::Forum::AutoAnsweringConcern
     return unless current_author
 
     Course::Forum::PostNotifier.post_replied(current_author, current_course_author, post)
+  end
+
+  private
+
+  def response_should_not_be_generated?(is_regenerated_response)
+    !is_regenerated_response && (current_course_user.staff? || rag_settings[:response_workflow] == 'no')
   end
 end

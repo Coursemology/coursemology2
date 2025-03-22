@@ -13,15 +13,19 @@ RSpec.feature 'Course: Administration: RagWise', js: true do
       let(:user) { create(:course_manager, course: course).user }
       let(:parent_folder) { course.root_folder }
 
-      scenario 'I can see uploaded pdfs and txt in materials tree' do
+      scenario 'I can see uploaded pdfs, txts, ipynb, docx in materials tree' do
         # inserting files
         txt_file = File.join(Rails.root, '/spec/fixtures/files/text.txt')
         pdf_file = File.join(Rails.root, '/spec/fixtures/files/one-page-document.pdf')
-        non_pdf_text_file = File.join(Rails.root, '/spec/fixtures/files/template_file')
+        ipynb_file = File.join(Rails.root, '/spec/fixtures/files/template_ipynb.ipynb')
+        docx_file = File.join(Rails.root, '/spec/fixtures/files/one-page-word-document.docx')
+        unsupported_file_type = File.join(Rails.root, '/spec/fixtures/files/template_file')
         find('#upload-files-button').click
         find('input[type="file"]', visible: false).attach_file([txt_file,
                                                                 pdf_file,
-                                                                non_pdf_text_file], make_visible: true)
+                                                                ipynb_file,
+                                                                docx_file,
+                                                                unsupported_file_type], make_visible: true)
         find('button#material-upload-form-upload-button').click
         wait_for_page
 
@@ -31,6 +35,8 @@ RSpec.feature 'Course: Administration: RagWise', js: true do
         find('label', text: 'Expand all folders').click
         expect(page).to have_selector('.MuiListItemText-root span', text: 'text.txt')
         expect(page).to have_selector('.MuiListItemText-root span', text: 'one-page-document.pdf')
+        expect(page).to have_selector('.MuiListItemText-root span', text: 'template_ipynb.ipynb')
+        expect(page).to have_selector('.MuiListItemText-root span', text: 'one-page-word-document.docx')
         expect(page).to_not have_selector('.MuiListItemText-root span', text: 'template_file')
       end
 
@@ -74,8 +80,11 @@ RSpec.feature 'Course: Administration: RagWise', js: true do
         # inserting files
         pdf_file = File.join(Rails.root, '/spec/fixtures/files/two-page-document-with-text.pdf')
         txt_file = File.join(Rails.root, '/spec/fixtures/files/text.txt')
+        ipynb_file = File.join(Rails.root, '/spec/fixtures/files/template_ipynb.ipynb')
+        docx_file = File.join(Rails.root, '/spec/fixtures/files/one-page-word-document.docx')
         find('#upload-files-button').click
-        find('input[type="file"]', visible: false).attach_file([pdf_file, txt_file], make_visible: true)
+        find('input[type="file"]', visible: false).attach_file([pdf_file, txt_file, ipynb_file, docx_file],
+                                                               make_visible: true)
         find('button#material-upload-form-upload-button').click
         wait_for_page
         first_file = parent_folder.materials.first

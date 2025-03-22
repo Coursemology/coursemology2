@@ -121,6 +121,11 @@ class Course::Forum::Topic < ApplicationRecord
     end
   end
 
+  def latest_history(limit: 5)
+    lastest_posts = posts.only_published_posts.reorder(created_at: :desc).limit(limit)
+    RagWise::DiscussionExtractionService.new(forum.course, self, lastest_posts).call
+  end
+
   private
 
   # Try building a slug based on the following fields in

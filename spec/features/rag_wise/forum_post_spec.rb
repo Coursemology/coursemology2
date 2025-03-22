@@ -11,7 +11,7 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
     let(:question_topic) { create(:forum_topic, forum: forum, course: course, topic_type: :question) }
     before do
       login_as(user, scope: :user)
-      allow_any_instance_of(Course::Forum::PostsController).to receive(:auto_answer_action)
+      allow_any_instance_of(Course::Discussion::Post).to receive(:rag_auto_answer!)
     end
 
     context 'As a Course Manager' do
@@ -52,20 +52,30 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
         end
       end
 
-      scenario 'I can see generate reply button only on post without parent' do
+      scenario 'I can see generate reply buttons on all posts except AI generated post with disabled reply button' do
         parent_posts = create_list(:course_discussion_post, 2,
                                    topic: topic.acting_as)
         child_posts = create_list(:course_discussion_post, 2,
                                   topic: topic.acting_as, parent: topic.posts.first)
+        ai_generated_child_posts = create_list(:course_discussion_post, 2,
+                                               topic: topic.acting_as, parent: topic.posts.first, is_ai_generated: true)
         visit course_forum_topic_path(course, forum, topic)
         parent_posts.each do |post|
           actual_post = find("div.post_#{post.id}")
           expect(actual_post).to have_selector('div.MuiChip-root', text: 'Generate reply')
+          expect(actual_post).to_not have_css('div.MuiChip-root.Mui-disabled')
         end
 
         child_posts.each do |post|
           actual_post = find("div.post_#{post.id}")
-          expect(actual_post).to_not have_selector('div.MuiChip-root', text: 'Generate reply')
+          expect(actual_post).to have_selector('div.MuiChip-root', text: 'Generate reply')
+          expect(actual_post).to_not have_css('div.MuiChip-root.Mui-disabled')
+        end
+
+        ai_generated_child_posts.each do |post|
+          actual_post = find("div.post_#{post.id}")
+          expect(actual_post).to have_selector('div.MuiChip-root', text: 'Generate reply')
+          expect(actual_post).to have_css('div.MuiChip-root.Mui-disabled')
         end
       end
 
@@ -75,7 +85,7 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
 
         generate_reply_button = find("div.post_#{topic_post.id}").find('div.MuiChip-root', text: 'Generate reply')
 
-        expect_any_instance_of(Course::Forum::PostsController).to receive(:auto_answer_action).with(true).once
+        expect_any_instance_of(Course::Discussion::Post).to receive(:rag_auto_answer!).once
         generate_reply_button.click
         wait_for_page
       end
@@ -125,6 +135,19 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
           expect(page).to have_text('new_text')
         end
       end
+
+      scenario 'I cannot trigger automatic response by posting new post' do
+        visit course_forum_topic_path(course, forum, topic)
+        topic_post = topic.posts.first
+
+        find("button.post-reply-#{topic_post.id}").click
+
+        # Reply a post with the default title.
+        fill_in_react_ck "textarea[name=postReplyText_#{topic_post.id}]", 'test'
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
+        find('.reply-button').click
+        wait_for_page
+      end
     end
 
     context 'As a teaching staff' do
@@ -165,19 +188,30 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
         end
       end
 
-      scenario 'I can see generate reply button only on post without parent' do
+      scenario 'I can see generate reply buttons on all posts except AI generated post with disabled reply button' do
         parent_posts = create_list(:course_discussion_post, 2,
                                    topic: topic.acting_as)
         child_posts = create_list(:course_discussion_post, 2,
                                   topic: topic.acting_as, parent: topic.posts.first)
+        ai_generated_child_posts = create_list(:course_discussion_post, 2,
+                                               topic: topic.acting_as, parent: topic.posts.first, is_ai_generated: true)
         visit course_forum_topic_path(course, forum, topic)
         parent_posts.each do |post|
           actual_post = find("div.post_#{post.id}")
           expect(actual_post).to have_selector('div.MuiChip-root', text: 'Generate reply')
+          expect(actual_post).to_not have_css('div.MuiChip-root.Mui-disabled')
         end
+
         child_posts.each do |post|
           actual_post = find("div.post_#{post.id}")
-          expect(actual_post).to_not have_selector('div.MuiChip-root', text: 'Generate reply')
+          expect(actual_post).to have_selector('div.MuiChip-root', text: 'Generate reply')
+          expect(actual_post).to_not have_css('div.MuiChip-root.Mui-disabled')
+        end
+
+        ai_generated_child_posts.each do |post|
+          actual_post = find("div.post_#{post.id}")
+          expect(actual_post).to have_selector('div.MuiChip-root', text: 'Generate reply')
+          expect(actual_post).to have_css('div.MuiChip-root.Mui-disabled')
         end
       end
 
@@ -186,7 +220,7 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
         visit course_forum_topic_path(course, forum, topic)
 
         generate_reply_button = find("div.post_#{topic_post.id}").find('div.MuiChip-root', text: 'Generate reply')
-        expect_any_instance_of(Course::Forum::PostsController).to receive(:auto_answer_action).with(true).once
+        expect_any_instance_of(Course::Discussion::Post).to receive(:rag_auto_answer!).once
         generate_reply_button.click
         wait_for_page
       end
@@ -236,6 +270,19 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
           expect(page).to have_text('new_text')
         end
       end
+
+      scenario 'I cannot trigger automatic response by posting new post' do
+        visit course_forum_topic_path(course, forum, topic)
+        topic_post = topic.posts.first
+
+        find("button.post-reply-#{topic_post.id}").click
+
+        # Reply a post with the default title.
+        fill_in_react_ck "textarea[name=postReplyText_#{topic_post.id}]", 'test'
+        expect_any_instance_of(Course::Discussion::Post).to_not receive(:rag_auto_answer!).once
+        find('.reply-button').click
+        wait_for_page
+      end
     end
 
     context 'As a course student' do
@@ -255,6 +302,19 @@ RSpec.feature 'Course: RagWise: Forum: Post', js: true do
         visit course_forum_topic_path(course, forum, topic)
         topic_post = topic.posts.first
         expect(topic_post).to_not have_selector('div.MuiChip-root', text: 'Generate reply')
+      end
+
+      scenario 'I can trigger automatic response by posting new post' do
+        visit course_forum_topic_path(course, forum, topic)
+        topic_post = topic.posts.first
+
+        find("button.post-reply-#{topic_post.id}").click
+
+        # Reply a post with the default title.
+        fill_in_react_ck "textarea[name=postReplyText_#{topic_post.id}]", 'test'
+        expect_any_instance_of(Course::Discussion::Post).to receive(:rag_auto_answer!).once
+        find('.reply-button').click
+        wait_for_page
       end
     end
   end
