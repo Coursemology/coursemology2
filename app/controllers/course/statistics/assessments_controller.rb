@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-class Course::Statistics::AssessmentsController < Course::Statistics::Controller
+class Course::Statistics::AssessmentsController < Course::Statistics::Controller # rubocop:disable Metrics/ClassLength
   include Course::UsersHelper
   include Course::Statistics::SubmissionsConcern
   include Course::Statistics::UsersConcern
-  include Course::Statistics::LiveFeedbackConcern
 
   def main_statistics
     @assessment = Course::Assessment.where(id: assessment_params[:id]).
@@ -39,15 +38,13 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def live_feedback_statistics
-    @assessment = Course::Assessment.where(id: assessment_params[:id]).
-                  calculated(:question_count).
-                  preload(:questions, course: :course_users).first
-    @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
-                   preload(creator: :course_users)
+    @assessment = Course::Assessment.unscoped.includes(:questions).
+                  find(assessment_params[:id])
+    @submissions = Course::Assessment::Submission.unscoped.
+                   select(:id, :creator_id, :workflow_state).
+                   where(assessment_id: assessment_params[:id])
 
-    create_submission_question_hash(@assessment.questions)
-
-    @course_users_hash = preload_course_users_hash(@assessment.course)
+    create_submission_question_id_hash(@assessment.questions)
 
     load_course_user_students_info
     load_ordered_questions
@@ -56,15 +53,15 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def live_feedback_history
-    user = current_course.course_users.find_by(id: params[:course_user_id]).user
-    @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id], creator: user)
+    user_id = CourseUser.joins(:user).where(id: params[:course_user_id]).pluck('users.id').first
+    @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id], creator_id: user_id)
     @question = Course::Assessment::Question.find(params[:question_id])
 
-    create_submission_question_hash([@question])
+    create_submission_question_id_hash([@question])
 
     @messages = Course::Assessment::LiveFeedback::Message.
                 joins(:thread).
-                where(live_feedback_threads: { submission_question_id: @submission_question_hash.keys }).
+                where(live_feedback_threads: { submission_question_id: @submission_question_id_hash.values }).
                 includes(message_options: :option, message_files: :file).
                 order(:created_at)
   end
@@ -104,12 +101,22 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def create_student_live_feedback_hash
-    live_feedback_chats = Course::Assessment::LiveFeedback::Thread.
-                          where(submission_question_id: @submission_question_hash.keys).
-                          preload(:messages)
-
-    @student_live_feedback_hash = fetch_hash_for_live_feedback_assessment(@submissions,
-                                                                          live_feedback_chats)
+    count_hash = Course::Assessment::LiveFeedback::Message.joins(:thread).
+                 select('live_feedback_threads.submission_creator_id',
+                        'live_feedback_threads.submission_question_id').
+                 where.not(creator_id: User::SYSTEM_USER_ID).
+                 where(live_feedback_threads: {
+                   submission_question_id: @submission_question_id_hash.values,
+                   submission_creator_id: @all_students.pluck(:user_id)
+                 }).
+                 group('live_feedback_threads.submission_creator_id',
+                       'live_feedback_threads.submission_question_id').count
+    submission_hash = @submissions.to_h { |submission| [submission.creator_id, submission] }
+    @student_live_feedback_hash = @all_students.to_h do |student|
+      submission = submission_hash[student.user_id]
+      live_feedback_count = get_live_feedback_count(count_hash, submission)
+      [student, [submission, live_feedback_count]]
+    end
   end
 
   def create_question_order_hash
@@ -118,11 +125,19 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     end
   end
 
-  def create_submission_question_hash(questions)
-    @submission_question_hash = Course::Assessment::SubmissionQuestion.
-                                where(submission_id: @submissions,
-                                      question_id: questions).to_h do |sq|
-      [sq.id, sq]
+  def create_submission_question_id_hash(questions)
+    @submission_question_id_hash = Course::Assessment::SubmissionQuestion.unscoped.
+                                   select(:id, :submission_id, :question_id).
+                                   where(submission_id: @submissions.pluck(:id),
+                                         question_id: questions.pluck(:id)).to_h do |sq|
+      [[sq.submission_id, sq.question_id], sq.id]
+    end
+  end
+
+  def get_live_feedback_count(count_hash, submission)
+    @ordered_questions.map do |question_id|
+      submission_question_id = @submission_question_id_hash[[submission&.id, question_id]]
+      count_hash[[submission&.creator_id, submission_question_id]] || 0
     end
   end
 end
