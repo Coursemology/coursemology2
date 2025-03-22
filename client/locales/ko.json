@@ -2726,6 +2726,9 @@
   "course.assessment.submission.SubmissionsIndex.phantom": {
     "defaultMessage": "팬텀 사용자"
   },
+  "course.assessment.submission.SubmissionsIndex.publishAutoFeedback": {
+    "defaultMessage": "자동 피드백 게시 ({count})"
+  },
   "course.assessment.submission.SubmissionsIndex.publishGrades": {
     "defaultMessage": "성적 발표"
   },
@@ -3283,6 +3286,15 @@
   },
   "course.assessment.submission.publish": {
     "defaultMessage": "등급 공개"
+  },
+  "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
+    "defaultMessage": "{count}개의 자동 피드백을 게시하려고 합니다. {count, plural, one {댓글} other {댓글들}}."
+  },
+  "course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate": {
+    "defaultMessage": "이 평가에 대한 자동 피드백의 전반적인 품질을 평가해주세요. 귀하의 평가가 자동 피드백 생성 개선에 도움이 됩니다."
+  },
+  "course.assessment.submission.publishAutoFeedbackSuccess": {
+    "defaultMessage": "모든 자동 피드백이 게시되었습니다."
   },
   "course.assessment.submission.publishConfirmation": {
     "defaultMessage": "모든 {graded} 채점된 제출물을 공개하시겠습니까 ({selectedUsers})? 이 조치는 되돌릴 수 없습니다! 모든 채점된 제출물이 공개되며 사용자는 자신의 등급을 볼 수 있습니다."
