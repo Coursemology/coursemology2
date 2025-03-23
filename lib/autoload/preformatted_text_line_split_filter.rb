@@ -19,7 +19,10 @@ class PreformattedTextLineSplitFilter < HTML::Pipeline::Filter
   #
   # @param [Nokogiri::XML::Node] pre The +pre+ tag being processed.
   def process_pre_tag(pre)
-    content_tag = pre.children.filter('code').first || pre
+    # TODO: monitor for any impact of removing the code filter, or
+    #       restore once https://gitlab.gnome.org/GNOME/libxml2/-/issues/130 resolved
+    # content_tag = pre.children.filter('code').first || pre
+    content_tag = pre
     lines = content_tag.inner_html.split(NEWLINE_REGEX, -1)
 
     pre.add_previous_sibling(lines.join("\n"))
