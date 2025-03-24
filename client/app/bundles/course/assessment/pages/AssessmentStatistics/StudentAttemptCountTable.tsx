@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 import { WorkflowState } from 'types/course/assessment/submission/submission';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
+import AllAttemptsPrompt from 'course/assessment/submission/components/AllAttempts';
 import SubmissionWorkflowState from 'course/assessment/submission/components/SubmissionWorkflowState';
 import { workflowStates } from 'course/assessment/submission/constants';
-import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import GhostIcon from 'lib/components/icons/GhostIcon';
@@ -19,7 +19,8 @@ import {
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import AllAttemptsIndex from './AnswerDisplay/AllAttempts';
+import submissionTranslations from '../../submission/translations';
+
 import { getClassNameForAttemptCountCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
@@ -50,6 +51,7 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
     submissionId: 0,
     studentName: '',
   });
+
   const assessment = statistics.assessment;
   const submissions = statistics.submissions;
 
@@ -231,36 +233,37 @@ const StudentAttemptCountTable: FC<Props> = (props) => {
         search={{ searchPlaceholder: t(translations.nameGroupsSearchText) }}
         toolbar={{ show: true }}
       />
-      <Prompt
-        cancelLabel={t(translations.closePrompt)}
-        maxWidth="lg"
+      <AllAttemptsPrompt
+        graderView
         onClose={(): void => setOpenPastAnswers(false)}
         open={openPastAnswers}
+        questionId={answerInfo.questionId}
+        submissionId={answerInfo.submissionId}
         title={
-          <span className="flex items-center">
-            {answerInfo.studentName}
-            <SubmissionWorkflowState
-              className="ml-3"
-              linkTo={getEditSubmissionQuestionURL(
-                courseId,
-                assessmentId,
-                answerInfo.submissionId,
-                answerInfo.index,
-              )}
-              opensInNewTab
-              workflowState={
-                answerInfo.workflowState ?? workflowStates.Unstarted
-              }
-            />
+          <span className="flex items-center space-x-5">
+            <div>
+              {t(submissionTranslations.historyTitle, {
+                number: answerInfo.index,
+                studentName: answerInfo.studentName,
+              })}
+            </div>
+            <div>
+              <SubmissionWorkflowState
+                linkTo={getEditSubmissionQuestionURL(
+                  courseId,
+                  assessmentId,
+                  answerInfo.submissionId,
+                  answerInfo.index,
+                )}
+                opensInNewTab
+                workflowState={
+                  answerInfo.workflowState ?? workflowStates.Unstarted
+                }
+              />
+            </div>
           </span>
         }
-      >
-        <AllAttemptsIndex
-          index={answerInfo.index}
-          questionId={answerInfo.questionId}
-          submissionId={answerInfo.submissionId}
-        />
-      </Prompt>
+      />
     </>
   );
 };

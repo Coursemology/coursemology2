@@ -18,6 +18,8 @@ import {
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import submissionTranslations from '../../submission/translations';
+
 import LastAttemptIndex from './AnswerDisplay/LastAttempt';
 import { getClassNameForMarkCell } from './classNameUtils';
 import { getAssessmentStatistics } from './selectors';
@@ -282,7 +284,10 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
         open={openAnswer}
         title={
           <span className="flex items-center">
-            {answerDisplayInfo.studentName}
+            {t(submissionTranslations.historyTitle, {
+              number: answerDisplayInfo.index,
+              studentName: answerDisplayInfo.studentName,
+            })}
             <SubmissionWorkflowState
               className="ml-3"
               linkTo={getEditSubmissionQuestionURL(
@@ -301,7 +306,6 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
       >
         <LastAttemptIndex
           curAnswerId={answerDisplayInfo.answerId}
-          index={answerDisplayInfo.index}
           questionId={answerDisplayInfo.questionId}
           submissionId={answerDisplayInfo.submissionId}
         />

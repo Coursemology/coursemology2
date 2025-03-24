@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
-import { Annotation } from 'types/course/statistics/answer';
-import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionType } from 'types/course/assessment/question';
 
 import actionTypes from 'course/assessment/submission/constants';
 import { useAppDispatch } from 'lib/hooks/store';
+
+import { AnswerDetailsProps } from '../../types';
 
 import CodaveriFeedbackStatus from './ProgrammingComponent/CodaveriFeedbackStatus';
 import FileContent from './ProgrammingComponent/FileContent';
 import TestCases from './ProgrammingComponent/TestCases';
 
 const ProgrammingAnswerDetails = (
-  props: QuestionAnswerDisplayDetails<'Programming'>,
+  props: AnswerDetailsProps<QuestionType.Programming>,
 ): JSX.Element => {
   const { answer } = props;
-  const annotations = answer.annotations ?? ([] as Annotation[]);
+  const annotations = answer.annotations ?? [];
 
   const dispatch = useAppDispatch();
 
@@ -22,7 +23,7 @@ const ProgrammingAnswerDetails = (
       type: actionTypes.FETCH_ANNOTATION_SUCCESS,
       payload: { posts: answer.posts },
     });
-  });
+  }, [dispatch]);
 
   return (
     <>

@@ -41,16 +41,6 @@ export default function (state = {}, action) {
         },
       };
     }
-    case actions.TOGGLE_VIEW_HISTORY_MODE: {
-      const { questionId, viewHistory } = action.payload;
-      return {
-        ...state,
-        [questionId]: {
-          ...state[questionId],
-          viewHistory,
-        },
-      };
-    }
     default:
       return state;
   }

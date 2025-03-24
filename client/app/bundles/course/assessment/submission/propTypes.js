@@ -21,7 +21,7 @@ export const questionShape = PropTypes.shape({
   canViewHistory: PropTypes.bool.isRequired,
   type: PropTypes.string.isRequired,
 
-  questionNumber: PropTypes.string.isRequired,
+  questionNumber: PropTypes.number.isRequired,
   questionTitle: PropTypes.string.isRequired,
   submissionQuestionId: PropTypes.number.isRequired,
   topicId: PropTypes.number.isRequired,
@@ -37,7 +37,6 @@ export const questionShape = PropTypes.shape({
 
   // Below are added in Redux
   attemptsLeft: PropTypes.number,
-  viewHistory: PropTypes.bool,
 });
 
 export const fileShape = PropTypes.shape({
