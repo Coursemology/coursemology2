@@ -212,6 +212,7 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           expect(first_result['courseUser']).to have_key('isPhantom')
 
           expect(first_result).to have_key('workflowState')
+          expect(first_result).to have_key('submissionId')
           expect(first_result).to have_key('groups')
           expect(first_result).to have_key('liveFeedbackCount')
           expect(first_result).to have_key('questionIds')
@@ -244,6 +245,7 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           expect(first_result['courseUser']).to have_key('isPhantom')
 
           expect(first_result).to have_key('workflowState')
+          expect(first_result).to have_key('submissionId')
           expect(first_result).to have_key('groups')
           expect(first_result).to have_key('liveFeedbackCount')
           expect(first_result).to have_key('questionIds')
