@@ -3,8 +3,10 @@ json.array! @student_live_feedback_hash.each do |course_user, (submission, live_
   json.partial! 'course_user', course_user: course_user
   if submission.nil?
     json.workflowState 'unstarted'
+    json.submissionId nil
   else
     json.workflowState submission.workflow_state
+    json.submissionId submission.id
   end
 
   json.groups @group_names_hash[course_user.id] do |name|

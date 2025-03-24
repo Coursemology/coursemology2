@@ -138,6 +138,7 @@ export interface AssessmentLiveFeedbackStatistics {
   courseUser: StudentInfo;
   groups: { name: string }[];
   workflowState?: WorkflowState;
+  submissionId?: number;
   liveFeedbackCount?: number[]; // Will already be ordered by question
   totalFeedbackCount?: number;
   questionIds: number[];
