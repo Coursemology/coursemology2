@@ -10,6 +10,7 @@ import Link from 'lib/components/core/Link';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { getEditSubmissionURL } from 'lib/helpers/url-builders';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -26,7 +27,7 @@ interface Props {
 
 const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { courseId } = useParams();
+  const { courseId, assessmentId } = useParams();
   const { includePhantom, liveFeedbackStatistics } = props;
 
   const statistics = useAppSelector(getAssessmentStatistics);
@@ -193,6 +194,11 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       sortable: true,
       cell: (datum) => (
         <SubmissionWorkflowState
+          linkTo={getEditSubmissionURL(
+            courseId,
+            assessmentId,
+            datum.submissionId,
+          )}
           opensInNewTab
           workflowState={datum.workflowState ?? workflowStates.Unstarted}
         />
