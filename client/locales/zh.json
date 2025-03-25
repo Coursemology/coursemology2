@@ -2693,7 +2693,7 @@
   "course.assessment.submission.SubmissionsIndex.includePhantoms": {
     "defaultMessage": "包括旁听学生"
   },
-  "course.assessment.submission.SubmissionsIndex.myStudents": {
+  "lib.translations.myStudents": {
     "defaultMessage": "我的学生"
   },
   "course.assessment.submission.SubmissionsIndex.phantom": {
@@ -2711,10 +2711,10 @@
   "course.assessment.submission.SubmissionsIndex.remind": {
     "defaultMessage": "发送提醒邮件"
   },
-  "course.assessment.submission.SubmissionsIndex.staff": {
+  "lib.translations.staff": {
     "defaultMessage": "职员"
   },
-  "course.assessment.submission.SubmissionsIndex.students": {
+  "lib.translations.students": {
     "defaultMessage": "学生"
   },
   "course.assessment.submission.SubmissionsIndex.submissionStatus": {
