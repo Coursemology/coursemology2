@@ -90,7 +90,7 @@ module Course::Statistics::SubmissionsConcern
     fetch_personal_and_reference_timeline_hash
 
     submissions.map do |submission|
-      submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
+      submitter_course_user = @course_users_hash[submission.creator_id]
       next unless submitter_course_user&.student?
 
       answers = answers_hash[submission.id]
@@ -105,7 +105,7 @@ module Course::Statistics::SubmissionsConcern
     fetch_personal_and_reference_timeline_hash
 
     submissions.map do |submission|
-      submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
+      submitter_course_user = @course_users_hash[submission.creator_id]
       next unless submitter_course_user&.student?
 
       end_at = @personal_end_at_hash[[@assessment.id, submitter_course_user.id]] ||
