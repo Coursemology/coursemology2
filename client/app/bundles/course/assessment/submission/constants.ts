@@ -39,16 +39,7 @@ export const TestCaseTypes = {
   Evaluation: 'evaluation_test',
 };
 
-export enum SelectedUserType {
-  MY_STUDENTS = 'my_students',
-  MY_STUDENTS_W_PHANTOM = 'my_students_w_phantom',
-  STUDENTS = 'students',
-  STUDENTS_W_PHANTOM = 'students_w_phantom',
-  STAFF = 'staff',
-  STAFF_W_PHANTOM = 'staff_w_phantom',
-}
-
-export const SelectedUserTypeDisplayMapper = {
+export const CourseUserTypeDisplayMapper = {
   my_students: 'MY STUDENTS',
   my_students_w_phantom: 'MY STUDENTS INCL. PHANTOM',
   students: 'STUDENTS',

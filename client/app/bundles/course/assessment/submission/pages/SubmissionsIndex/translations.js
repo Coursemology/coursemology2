@@ -55,18 +55,6 @@ const translations = defineMessages({
     id: 'course.assessment.submission.SubmissionsIndex.accessLogs',
     defaultMessage: 'Access Logs',
   },
-  myStudents: {
-    id: 'course.assessment.submission.SubmissionsIndex.myStudents',
-    defaultMessage: 'My Students',
-  },
-  students: {
-    id: 'course.assessment.submission.SubmissionsIndex.students',
-    defaultMessage: 'Students',
-  },
-  staff: {
-    id: 'course.assessment.submission.SubmissionsIndex.staff',
-    defaultMessage: 'Staff',
-  },
   publishGrades: {
     id: 'course.assessment.submission.SubmissionsIndex.publishGrades',
     defaultMessage: 'Publish Grades',

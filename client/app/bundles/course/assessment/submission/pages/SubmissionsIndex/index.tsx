@@ -5,14 +5,16 @@ import {
   FormControlLabel,
   Rating,
   Switch,
-  Tab,
-  Tabs,
   Typography,
 } from '@mui/material';
-import palette from 'theme/palette';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import SubmissionStatusChart from 'course/assessment/pages/AssessmentStatistics/SubmissionStatus/SubmissionStatusChart';
+import CourseUserTypeTabs, {
+  CourseUserType,
+  CourseUserTypeTabValue,
+  getCurrentSelectedUserType,
+} from 'lib/components/core/CourseUserTypeTabs';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Page from 'lib/components/core/layouts/Page';
@@ -36,11 +38,7 @@ import {
   sendAssessmentReminderEmail,
   unsubmitAllSubmissions,
 } from '../../actions/submissions';
-import {
-  SelectedUserType,
-  SelectedUserTypeDisplayMapper,
-  workflowStates,
-} from '../../constants';
+import { CourseUserTypeDisplayMapper, workflowStates } from '../../constants';
 import translations from '../../translations';
 
 import SubmissionsTable from './SubmissionsTable';
@@ -50,26 +48,6 @@ interface SubmissionData {
   workflowState: (typeof workflowStates)[keyof typeof workflowStates];
   courseUser: { isPhantom: boolean };
 }
-
-enum AssessmentSubmissionsIndexTab {
-  MY_STUDENTS_TAB = 'my-students-tab',
-  STUDENTS_TAB = 'students-tab',
-  STAFF_TAB = 'staff-tab',
-}
-
-const TabSelectedUserTypeNormalMapper = {
-  [AssessmentSubmissionsIndexTab.MY_STUDENTS_TAB]: SelectedUserType.MY_STUDENTS,
-  [AssessmentSubmissionsIndexTab.STUDENTS_TAB]: SelectedUserType.STUDENTS,
-  [AssessmentSubmissionsIndexTab.STAFF_TAB]: SelectedUserType.STAFF,
-};
-
-const TabSelectedUserTypePhantomMapper = {
-  [AssessmentSubmissionsIndexTab.MY_STUDENTS_TAB]:
-    SelectedUserType.MY_STUDENTS_W_PHANTOM,
-  [AssessmentSubmissionsIndexTab.STUDENTS_TAB]:
-    SelectedUserType.STUDENTS_W_PHANTOM,
-  [AssessmentSubmissionsIndexTab.STAFF_TAB]: SelectedUserType.STAFF_W_PHANTOM,
-};
 
 const canForceSubmitOrRemind = (
   shownSubmissions: SubmissionData[],
@@ -108,8 +86,8 @@ const AssessmentSubmissionsIndex: FC = () => {
   } = useAppSelector((state) => state.assessments.submission);
 
   const [isIncludingPhantoms, setIsIncludingPhantoms] = useState(false);
-  const [tab, setTab] = useState<AssessmentSubmissionsIndexTab>(
-    AssessmentSubmissionsIndexTab.MY_STUDENTS_TAB,
+  const [tab, setTab] = useState<CourseUserTypeTabValue>(
+    CourseUserTypeTabValue.MY_STUDENTS_TAB,
   );
 
   // Whether these confirmation dialogs are open
@@ -127,23 +105,24 @@ const AssessmentSubmissionsIndex: FC = () => {
     useState(false);
 
   const [autoFeedbackCounts, setAutoFeedbackCounts] = useState<
-    Partial<Record<SelectedUserType, number>>
+    Partial<Record<CourseUserType, number>>
   >({});
   const [autoFeedbackRating, setAutoFeedbackRating] = useState(0);
 
   const myStudentsUserType = isIncludingPhantoms
-    ? SelectedUserType.MY_STUDENTS_W_PHANTOM
-    : SelectedUserType.MY_STUDENTS;
+    ? CourseUserType.MY_STUDENTS_W_PHANTOM
+    : CourseUserType.MY_STUDENTS;
   const studentsUserType = isIncludingPhantoms
-    ? SelectedUserType.STUDENTS_W_PHANTOM
-    : SelectedUserType.STUDENTS;
+    ? CourseUserType.STUDENTS_W_PHANTOM
+    : CourseUserType.STUDENTS;
   const staffUserType = isIncludingPhantoms
-    ? SelectedUserType.STAFF_W_PHANTOM
-    : SelectedUserType.STAFF;
+    ? CourseUserType.STAFF_W_PHANTOM
+    : CourseUserType.STAFF;
 
-  const currentSelectedUserType = isIncludingPhantoms
-    ? TabSelectedUserTypePhantomMapper[tab]
-    : TabSelectedUserTypeNormalMapper[tab];
+  const currentSelectedUserType = getCurrentSelectedUserType(
+    tab,
+    isIncludingPhantoms,
+  );
 
   useEffect(() => {
     dispatch(fetchSubmissions());
@@ -153,8 +132,8 @@ const AssessmentSubmissionsIndex: FC = () => {
   useEffect(() => {
     if (
       !(currentSelectedUserType in autoFeedbackCounts) &&
-      currentSelectedUserType !== SelectedUserType.STAFF &&
-      currentSelectedUserType !== SelectedUserType.STAFF_W_PHANTOM
+      currentSelectedUserType !== CourseUserType.STAFF &&
+      currentSelectedUserType !== CourseUserType.STAFF_W_PHANTOM
     ) {
       setIsQueryingAutoFeedback(true);
       fetchAssessmentAutoFeedbackCount(
@@ -172,10 +151,10 @@ const AssessmentSubmissionsIndex: FC = () => {
 
   useEffect(() => {
     if (
-      tab === AssessmentSubmissionsIndexTab.MY_STUDENTS_TAB &&
+      tab === CourseUserTypeTabValue.MY_STUDENTS_TAB &&
       submissions.every((s) => !s.courseUser.myStudent)
     ) {
-      setTab(AssessmentSubmissionsIndexTab.STUDENTS_TAB);
+      setTab(CourseUserTypeTabValue.STUDENTS_TAB);
     }
   }, [dispatch, submissions]);
 
@@ -206,9 +185,9 @@ const AssessmentSubmissionsIndex: FC = () => {
   const myStudentsExist = myStudentAllSubmissions.length > 0;
 
   const tabShownSubmissionsMapper = {
-    [AssessmentSubmissionsIndexTab.MY_STUDENTS_TAB]: myStudentSubmissions,
-    [AssessmentSubmissionsIndexTab.STUDENTS_TAB]: studentSubmissions,
-    [AssessmentSubmissionsIndexTab.STAFF_TAB]: staffSubmissions,
+    [CourseUserTypeTabValue.MY_STUDENTS_TAB]: myStudentSubmissions,
+    [CourseUserTypeTabValue.STUDENTS_TAB]: studentSubmissions,
+    [CourseUserTypeTabValue.STAFF_TAB]: staffSubmissions,
   };
   // shownSubmissions are submissions currently shown on the active tab on the page
   const shownSubmissions = tabShownSubmissionsMapper[tab];
@@ -224,7 +203,7 @@ const AssessmentSubmissionsIndex: FC = () => {
       attempting: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Attempting,
       ).length,
-      selectedUsers: SelectedUserTypeDisplayMapper[currentSelectedUserType],
+      selectedUsers: CourseUserTypeDisplayMapper[currentSelectedUserType],
     };
     const message = assessment.autograded
       ? translations.forceSubmitConfirmationAutograded
@@ -276,15 +255,12 @@ const AssessmentSubmissionsIndex: FC = () => {
       isUnsubmitting ||
       isReminding ||
       isPublishingAutoFeedback;
-    const isShowingRemindButton =
-      tab !== AssessmentSubmissionsIndexTab.STAFF_TAB;
+    const isShowingRemindButton = tab !== CourseUserTypeTabValue.STAFF_TAB;
     const isShowingPublishAutoFeedbackButton =
-      tab !== AssessmentSubmissionsIndexTab.STAFF_TAB;
+      tab !== CourseUserTypeTabValue.STAFF_TAB;
 
     return (
-      <>
-        {renderStatusChart()}
-
+      <div className="space-y-5">
         <FormControlLabel
           control={
             <Switch
@@ -298,10 +274,11 @@ const AssessmentSubmissionsIndex: FC = () => {
           labelPlacement="end"
         />
 
-        <section className="-m-2 flex-wrap">
+        {renderStatusChart()}
+
+        <section className="flex-wrap space-x-4">
           {canPublishGrades && (
             <Button
-              className="m-2"
               color="primary"
               disabled={disableButtons || !canPublish(shownSubmissions)}
               endIcon={isPublishing && <LoadingIndicator bare size={20} />}
@@ -315,7 +292,6 @@ const AssessmentSubmissionsIndex: FC = () => {
           {canForceSubmit &&
             (isKoditsuEnabled ? (
               <Button
-                className="m-2"
                 color="primary"
                 disabled={disableButtons}
                 endIcon={
@@ -328,7 +304,6 @@ const AssessmentSubmissionsIndex: FC = () => {
               </Button>
             ) : (
               <Button
-                className="m-2"
                 color="primary"
                 disabled={
                   disableButtons || !canForceSubmitOrRemind(shownSubmissions)
@@ -345,7 +320,6 @@ const AssessmentSubmissionsIndex: FC = () => {
 
           {isShowingRemindButton && (
             <Button
-              className="m-2"
               color="primary"
               disabled={
                 disableButtons || !canForceSubmitOrRemind(shownSubmissions)
@@ -360,7 +334,6 @@ const AssessmentSubmissionsIndex: FC = () => {
 
           {isShowingPublishAutoFeedbackButton && (
             <Button
-              className="m-2"
               color="warning"
               disabled={disableButtons || shownAutoFeedbackCount === 0}
               endIcon={
@@ -377,7 +350,7 @@ const AssessmentSubmissionsIndex: FC = () => {
             </Button>
           )}
         </section>
-      </>
+      </div>
     );
   };
 
@@ -386,7 +359,7 @@ const AssessmentSubmissionsIndex: FC = () => {
       graded: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Graded,
       ).length,
-      selectedUsers: SelectedUserTypeDisplayMapper[currentSelectedUserType],
+      selectedUsers: CourseUserTypeDisplayMapper[currentSelectedUserType],
     };
 
     return (
@@ -410,7 +383,7 @@ const AssessmentSubmissionsIndex: FC = () => {
       attempting: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Attempting,
       ).length,
-      selectedUsers: SelectedUserTypeDisplayMapper[currentSelectedUserType],
+      selectedUsers: CourseUserTypeDisplayMapper[currentSelectedUserType],
     };
 
     return (
@@ -484,7 +457,7 @@ const AssessmentSubmissionsIndex: FC = () => {
 
   const renderTable = (
     tableSubmissions: SubmissionData,
-    selectedUserType: SelectedUserType,
+    selectedUserType: CourseUserType,
     confirmDialogValue: string,
     isActive: boolean,
   ): JSX.Element => {
@@ -519,35 +492,6 @@ const AssessmentSubmissionsIndex: FC = () => {
     );
   };
 
-  const renderTabs = (): JSX.Element => (
-    <Tabs
-      className="border-only-y-neutral-200"
-      onChange={(_, value) => setTab(value)}
-      value={tab}
-      variant="fullWidth"
-    >
-      {myStudentsExist && (
-        <Tab
-          id="my-students-tab"
-          label={t(submissionsTranslations.myStudents)}
-          style={{ color: palette.submissionIcon.person }}
-          value={AssessmentSubmissionsIndexTab.MY_STUDENTS_TAB}
-        />
-      )}
-      <Tab
-        id="students-tab"
-        label={t(submissionsTranslations.students)}
-        value={AssessmentSubmissionsIndexTab.STUDENTS_TAB}
-      />
-
-      <Tab
-        id="staff-tab"
-        label={t(submissionsTranslations.staff)}
-        value={AssessmentSubmissionsIndexTab.STAFF_TAB}
-      />
-    </Tabs>
-  );
-
   return (
     <Page
       title={t(translations.submissionsHeader, {
@@ -555,30 +499,34 @@ const AssessmentSubmissionsIndex: FC = () => {
       })}
       unpadded
     >
-      <Page.PaddedSection>{renderHeader()}</Page.PaddedSection>
+      <CourseUserTypeTabs
+        myStudentsExist={myStudentsExist}
+        onChange={(_, value) => setTab(value)}
+        value={tab}
+      />
 
-      {renderTabs()}
+      <Page.PaddedSection>{renderHeader()}</Page.PaddedSection>
 
       {myStudentsExist &&
         renderTable(
           myStudentSubmissions,
           myStudentsUserType,
           'your students',
-          tab === AssessmentSubmissionsIndexTab.MY_STUDENTS_TAB,
+          tab === CourseUserTypeTabValue.MY_STUDENTS_TAB,
         )}
 
       {renderTable(
         staffSubmissions,
         staffUserType,
         'staff',
-        tab === AssessmentSubmissionsIndexTab.STAFF_TAB,
+        tab === CourseUserTypeTabValue.STAFF_TAB,
       )}
 
       {renderTable(
         studentSubmissions,
         studentsUserType,
         'students',
-        tab === AssessmentSubmissionsIndexTab.STUDENTS_TAB,
+        tab === CourseUserTypeTabValue.STUDENTS_TAB,
       )}
 
       {isConfirmingPublish && renderPublishConfirmation()}
