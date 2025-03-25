@@ -37,7 +37,7 @@ module Course::Statistics::SubmissionsConcern
               caa_inner.submission_id,
               caa_inner.correct,
               caa_inner.grade,
-              cas_inner.workflow_state,
+              caa_inner.workflow_state,
               ROW_NUMBER() OVER (PARTITION BY caa_inner.question_id, caa_inner.submission_id ORDER BY caa_inner.created_at DESC) AS row_num
             FROM
               course_assessment_answers caa_inner
