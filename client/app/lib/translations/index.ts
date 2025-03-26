@@ -33,6 +33,18 @@ const translations = defineMessages({
     id: 'lib.translations.staff',
     defaultMessage: 'Staff',
   },
+  myStudentsIncludingPhantoms: {
+    id: 'lib.translations.myStudentsIncludingPhantoms',
+    defaultMessage: 'My Students (Including Phantoms)',
+  },
+  studentsIncludingPhantoms: {
+    id: 'lib.translations.studentsIncludingPhantoms',
+    defaultMessage: 'Students (Including Phantoms)',
+  },
+  staffIncludingPhantoms: {
+    id: 'lib.translations.staffIncludingPhantoms',
+    defaultMessage: 'Staff (Including Phantoms)',
+  },
 });
 
 export default translations;

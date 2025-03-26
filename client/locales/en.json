@@ -2753,6 +2753,15 @@
   "lib.translations.students": {
     "defaultMessage": "Students"
   },
+  "lib.translations.myStudentsIncludingPhantoms": {
+    "defaultMessage": "My Students (Including Phantoms)"
+  },
+  "lib.translations.studentsIncludingPhantoms": {
+    "defaultMessage": "Students (Including Phantoms)"
+  },
+  "lib.translations.staffIncludingPhantoms": {
+    "defaultMessage": "Staff (Including Phantoms)"
+  },
   "course.assessment.submission.SubmissionsIndex.submissionStatus": {
     "defaultMessage": "Status"
   },
@@ -5619,10 +5628,7 @@
     "defaultMessage": "Download Responses"
   },
   "course.survey.ResponseIndex.RemindButton.confirmation": {
-    "defaultMessage": "Send emails to all students (excluding phantoms) who have not completed the survey?"
-  },
-  "course.survey.ResponseIndex.RemindButton.confirmationAll": {
-    "defaultMessage": "Send emails to all students (including phantoms) who have not completed the survey?"
+    "defaultMessage": "Send reminder emails to all {selectedUsers} who have not completed the survey?"
   },
   "course.survey.ResponseIndex.RemindButton.explanation": {
     "defaultMessage": "A reminder will be automatically emailed to students who have not completed the survey one day before the survey expires."
@@ -5635,9 +5641,6 @@
   },
   "course.survey.ResponseIndex.RemindButton.success": {
     "defaultMessage": "Reminder emails have been dispatched."
-  },
-  "course.survey.ResponseIndex.includePhantoms": {
-    "defaultMessage": "Include Phantom Students"
   },
   "course.survey.ResponseIndex.name": {
     "defaultMessage": "Name"
@@ -5656,9 +5659,6 @@
   },
   "course.survey.ResponseIndex.responses": {
     "defaultMessage": "Responses"
-  },
-  "course.survey.ResponseIndex.stats": {
-    "defaultMessage": "Response Statistics"
   },
   "course.survey.ResponseIndex.submitted": {
     "defaultMessage": "Submitted"
@@ -5722,9 +5722,6 @@
   },
   "course.survey.SurveyLayout.AdminMenu.updateSuccess": {
     "defaultMessage": "Survey \"{title}\" updated."
-  },
-  "course.survey.SurveyResults.includePhantoms": {
-    "defaultMessage": "Include Phantom Students"
   },
   "course.survey.SurveyResults.noPhantoms": {
     "defaultMessage": "No phantom student responses."
