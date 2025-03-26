@@ -11,7 +11,7 @@ const styles = {
   },
 };
 
-const ResultsSection = ({ section, includePhantoms, anonymous }) => (
+const ResultsSection = ({ section, anonymous, answerFilter }) => (
   <Card style={styles.card}>
     <CardHeader
       subheader={
@@ -26,7 +26,7 @@ const ResultsSection = ({ section, includePhantoms, anonymous }) => (
       {section.questions.map((question, index) => (
         <ResultsQuestion
           key={question.id}
-          {...{ question, index, includePhantoms, anonymous }}
+          {...{ question, index, anonymous, answerFilter }}
         />
       ))}
     </CardContent>
@@ -35,8 +35,8 @@ const ResultsSection = ({ section, includePhantoms, anonymous }) => (
 
 ResultsSection.propTypes = {
   section: sectionShape.isRequired,
-  includePhantoms: PropTypes.bool.isRequired,
   anonymous: PropTypes.bool.isRequired,
+  answerFilter: PropTypes.func.isRequired,
 };
 
 export default ResultsSection;

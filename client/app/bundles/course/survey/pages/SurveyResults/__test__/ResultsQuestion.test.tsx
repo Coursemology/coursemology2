@@ -62,7 +62,7 @@ const testExpandLongQuestion = (question): void => {
     <ResultsQuestion
       {...{ question }}
       anonymous={false}
-      includePhantoms
+      answerFilter={(_) => true}
       index={1}
     />,
   );
@@ -93,7 +93,7 @@ describe('<ResultsQuestion />', () => {
       <ResultsQuestion
         {...{ question }}
         anonymous={false}
-        includePhantoms={false}
+        answerFilter={(answer) => !answer.phantom}
         index={1}
       />,
     );
