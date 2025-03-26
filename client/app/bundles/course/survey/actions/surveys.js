@@ -173,11 +173,12 @@ export function sendReminderEmail(
   successMessage,
   failureMessage,
   includePhantom,
+  courseUsers,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.SEND_REMINDER_REQUEST });
     return CourseAPI.survey.surveys
-      .remind(includePhantom)
+      .remind(includePhantom, courseUsers)
       .then(() => {
         dispatch({ type: actionTypes.SEND_REMINDER_SUCCESS });
         setNotification(successMessage)(dispatch);
