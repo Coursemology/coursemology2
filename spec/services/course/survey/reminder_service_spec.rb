@@ -172,7 +172,9 @@ RSpec.describe Course::Survey::ReminderService, type: :mailer do
 
     describe '#send_closing_reminder' do
       subject do
-        Course::Survey::ReminderService.send_closing_reminder(survey, include_phantom: true, include_unsubscribed: true)
+        Course::Survey::ReminderService.send_closing_reminder(
+          survey, [unresponded_student.id, unresponded_student_phantom.id], include_unsubscribed: true
+        )
       end
 
       def set_survey_email_setting(setting, regular, phantom)
