@@ -39,15 +39,6 @@ export const TestCaseTypes = {
   Evaluation: 'evaluation_test',
 };
 
-export const CourseUserTypeDisplayMapper = {
-  my_students: 'MY STUDENTS',
-  my_students_w_phantom: 'MY STUDENTS INCL. PHANTOM',
-  students: 'STUDENTS',
-  students_w_phantom: 'STUDENTS INCL. PHANTOM',
-  staff: 'STAFF',
-  staff_w_phantom: 'STAFF INCL. PHANTOM',
-};
-
 export const scribingPopoverTypes = mirrorCreator([
   'TYPE',
   'DRAW',

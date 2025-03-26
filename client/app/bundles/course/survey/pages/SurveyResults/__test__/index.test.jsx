@@ -73,10 +73,7 @@ describe('<SurveyResults />', () => {
     const spyResults = jest.spyOn(CourseAPI.survey.surveys, 'results');
 
     const page = render(
-      <SurveyResults
-        survey={mockResultsData.survey}
-        surveyId={surveyId}
-      />,
+      <SurveyResults survey={mockResultsData.survey} surveyId={surveyId} />,
       [resultsUrl],
     );
 

@@ -1,11 +1,4 @@
 import { defineMessages } from 'react-intl';
-import mirrorCreator from 'mirror-creator';
-
-const responseStatus = mirrorCreator([
-  'NOT_STARTED',
-  'SUBMITTED',
-  'RESPONDING',
-]);
 
 const translations = defineMessages({
   name: {
@@ -16,15 +9,15 @@ const translations = defineMessages({
     id: 'course.survey.ResponseIndex.responseStatus',
     defaultMessage: 'Response Status',
   },
-  [responseStatus.NOT_STARTED]: {
+  notStarted: {
     id: 'course.survey.ResponseIndex.notStarted',
     defaultMessage: 'Not Started',
   },
-  [responseStatus.SUBMITTED]: {
+  submitted: {
     id: 'course.survey.ResponseIndex.submitted',
     defaultMessage: 'Submitted',
   },
-  [responseStatus.RESPONDING]: {
+  responding: {
     id: 'course.survey.ResponseIndex.responding',
     defaultMessage: 'Responding',
   },
@@ -39,14 +32,6 @@ const translations = defineMessages({
   phantoms: {
     id: 'course.survey.ResponseIndex.phantoms',
     defaultMessage: 'Phantom Students',
-  },
-  stats: {
-    id: 'course.survey.ResponseIndex.stats',
-    defaultMessage: 'Response Statistics',
-  },
-  includePhantoms: {
-    id: 'course.survey.ResponseIndex.includePhantoms',
-    defaultMessage: 'Include Phantom Students',
   },
   unsubmit: {
     id: 'course.survey.ResponseIndex.unsubmit',
