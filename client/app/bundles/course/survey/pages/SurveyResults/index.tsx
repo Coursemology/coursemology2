@@ -9,8 +9,14 @@ import {
   Typography,
 } from '@mui/material';
 
+import submissionTranslations from 'course/assessment/submission/pages/SubmissionsIndex/translations';
 import { fetchResults } from 'course/survey/actions/surveys';
 import surveyTranslations from 'course/survey/translations';
+import CourseUserTypeTabs, {
+  CourseUserType,
+  CourseUserTypeTabValue,
+  getCurrentSelectedUserType,
+} from 'lib/components/core/CourseUserTypeTabs';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -23,10 +29,6 @@ const translations = defineMessages({
   results: {
     id: 'course.survey.SurveyResults.results',
     defaultMessage: 'Results',
-  },
-  includePhantoms: {
-    id: 'course.survey.SurveyResults.includePhantoms',
-    defaultMessage: 'Include Phantom Students',
   },
   responsesCount: {
     id: 'course.survey.SurveyResults.responsesCount',
@@ -42,17 +44,30 @@ const translations = defineMessages({
   },
 });
 
-interface RespondentCounts {
-  totalStudents: number;
-  realStudents: number;
-}
-
 interface SurveyResultsProps {
   survey: {
     anonymous: boolean;
   };
   surveyId: string;
 }
+
+interface Answer {
+  phantom: boolean;
+  isStudent: boolean;
+  myStudent?: boolean;
+}
+type AnswerFilter = (answer: Answer) => boolean;
+
+const CourseUserTypeAnswerFilterMapper: Record<CourseUserType, AnswerFilter> = {
+  [CourseUserType.MY_STUDENTS]: (answer) =>
+    !answer.phantom && answer.isStudent && Boolean(answer.myStudent),
+  [CourseUserType.MY_STUDENTS_W_PHANTOM]: (answer) =>
+    answer.isStudent && Boolean(answer.myStudent),
+  [CourseUserType.STUDENTS]: (answer) => !answer.phantom && answer.isStudent,
+  [CourseUserType.STUDENTS_W_PHANTOM]: (answer) => answer.isStudent,
+  [CourseUserType.STAFF]: (answer) => !answer.phantom && !answer.isStudent,
+  [CourseUserType.STAFF_W_PHANTOM]: (answer) => !answer.isStudent,
+};
 
 const SurveyResults: FC<SurveyResultsProps> = (props) => {
   const {
@@ -65,26 +80,47 @@ const SurveyResults: FC<SurveyResultsProps> = (props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [isIncludingPhantoms, setIsIncludingPhantoms] = useState(true);
+  const [tab, setTab] = useState<CourseUserTypeTabValue>(
+    CourseUserTypeTabValue.MY_STUDENTS_TAB,
+  );
 
   useEffect(() => {
     dispatch(fetchResults(surveyId));
   }, [dispatch]);
 
-  const getRespondentsCount = (): RespondentCounts => {
+  const currentSelectedUserType = getCurrentSelectedUserType(
+    tab,
+    isIncludingPhantoms,
+  );
+
+  const getFilteredResponsesCount = (answerFilter: AnswerFilter): number => {
     if (
       !sections?.length ||
       !sections[0]?.questions?.length ||
       !sections[0]?.questions[0]?.answers?.length
     ) {
-      return { totalStudents: 0, realStudents: 0 };
+      return 0;
     }
-
-    const totalStudents = sections[0].questions[0].answers.length;
-    const realStudents = sections[0].questions[0].answers.filter(
-      (answer) => !answer.phantom,
-    ).length;
-    return { totalStudents, realStudents };
+    return sections[0].questions[0].answers.filter(answerFilter).length;
   };
+
+  const responsesCountMapper = Object.fromEntries(
+    Object.entries(CourseUserTypeAnswerFilterMapper).map(
+      ([userType, answerFilter]) => [
+        userType,
+        getFilteredResponsesCount(answerFilter),
+      ],
+    ),
+  );
+  const myStudentsExist = isIncludingPhantoms
+    ? responsesCountMapper[CourseUserType.MY_STUDENTS_W_PHANTOM] > 0
+    : responsesCountMapper[CourseUserType.MY_STUDENTS] > 0;
+
+  useEffect(() => {
+    if (tab === CourseUserTypeTabValue.MY_STUDENTS_TAB && !myStudentsExist) {
+      setTab(CourseUserTypeTabValue.STUDENTS_TAB);
+    }
+  }, [dispatch, myStudentsExist]);
 
   const noSections = sections && sections.length < 1;
   if (isLoading) {
@@ -96,34 +132,31 @@ const SurveyResults: FC<SurveyResultsProps> = (props) => {
     );
   }
 
-  const { totalStudents, realStudents } = getRespondentsCount();
-  const responsesCount = isIncludingPhantoms ? totalStudents : realStudents;
   return (
     <>
       <Card>
         <CardContent>
+          <CourseUserTypeTabs
+            myStudentsExist={myStudentsExist}
+            onChange={(_, value) => setTab(value)}
+            value={tab}
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isIncludingPhantoms}
+                color="primary"
+                onChange={(_, value) => setIsIncludingPhantoms(value)}
+              />
+            }
+            label={<b>{t(submissionTranslations.includePhantoms)}</b>}
+            labelPlacement="end"
+          />
           <Typography className="font-bold" variant="body2">
             {t(translations.responsesCount, {
-              count: responsesCount.toString(),
+              count: responsesCountMapper[currentSelectedUserType],
             })}
           </Typography>
-          {totalStudents === realStudents ? (
-            <Typography variant="body2">
-              {t(translations.noPhantoms)}
-            </Typography>
-          ) : (
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={isIncludingPhantoms}
-                  color="primary"
-                  onChange={(_, value) => setIsIncludingPhantoms(value)}
-                />
-              }
-              label={<b>{t(translations.includePhantoms)}</b>}
-              labelPlacement="end"
-            />
-          )}
         </CardContent>
       </Card>
       <ListSubheader disableSticky>
@@ -132,7 +165,9 @@ const SurveyResults: FC<SurveyResultsProps> = (props) => {
       {sections.map((section, index) => (
         <ResultsSection
           key={section.id}
-          includePhantoms={isIncludingPhantoms}
+          answerFilter={
+            CourseUserTypeAnswerFilterMapper[currentSelectedUserType]
+          }
           {...{ section, index, anonymous }}
         />
       ))}

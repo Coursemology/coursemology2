@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+my_students_set = Set.new(@my_students.map(&:id))
 json.sections @sections do |section|
   json.(section, :id, :title, :weight)
   json.description format_ckeditor_rich_text(section.description)
@@ -20,6 +21,8 @@ json.sections @sections do |section|
         json.course_user_id answer.response.course_user.id
       end
       json.phantom answer.response.course_user.phantom?
+      json.myStudent my_students_set.include?(answer.response.course_user.id) if answer.response.course_user.student?
+      json.isStudent answer.response.course_user.student?
       if question.text?
         json.(answer, :text_response)
       else

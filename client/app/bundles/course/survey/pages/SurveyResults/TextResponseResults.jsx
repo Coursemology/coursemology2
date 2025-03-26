@@ -142,19 +142,16 @@ class TextResponseResults extends Component {
   }
 
   render() {
-    const { includePhantoms, answers, anonymous } = this.props;
-    const filteredAnswers = includePhantoms
-      ? answers
-      : answers.filter((answer) => !answer.phantom);
-    const nonEmptyAnswers = filteredAnswers.filter(
+    const { answers, anonymous } = this.props;
+    const nonEmptyAnswers = answers.filter(
       (answer) =>
         answer.text_response && answer.text_response.trim().length > 0,
     );
-    const validPhantomResponses = includePhantoms
-      ? nonEmptyAnswers.filter((answer) => answer.phantom)
-      : [];
+    const validPhantomResponses = nonEmptyAnswers.filter(
+      (answer) => answer.phantom,
+    );
     const toggle = this.renderExpandToggle({
-      total: filteredAnswers.length,
+      total: answers.length,
       quantity: nonEmptyAnswers.length,
       phantoms: validPhantomResponses.length,
     });
@@ -174,7 +171,6 @@ class TextResponseResults extends Component {
 }
 
 TextResponseResults.propTypes = {
-  includePhantoms: PropTypes.bool.isRequired,
   anonymous: PropTypes.bool.isRequired,
   answers: PropTypes.arrayOf(
     PropTypes.shape({

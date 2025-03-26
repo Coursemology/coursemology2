@@ -1,15 +1,15 @@
 import { createMockAdapter } from 'mocks/axiosMock';
-import { store } from 'store';
 import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 
-import { SurveyResults } from '../index';
+import SurveyResults from '../index';
 
 const client = CourseAPI.survey.surveys.client;
 const mock = createMockAdapter(client);
 
-const data = {
+// Need to prefix this with "mock" because {global.courseId} is referenced
+const mockResultsData = {
   sections: [
     {
       id: 2,
@@ -27,6 +27,8 @@ const data = {
               id: 123,
               course_user_name: 'Normal student',
               phantom: false,
+              isStudent: true,
+              myStudent: true,
               text_response: 'Normal answer',
               response_path: `/courses/${global.courseId}/surveys/6/responses/9`,
             },
@@ -34,6 +36,8 @@ const data = {
               id: 124,
               course_user_name: 'Some phantom student',
               phantom: true,
+              isStudent: true,
+              myStudent: true,
               text_response: 'Phantom answer',
               response_path: `/courses/${global.courseId}/surveys/6/responses/10`,
             },
@@ -49,23 +53,28 @@ const data = {
   },
 };
 
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    surveyId: mockResultsData.survey.id.toString(),
+    courseId: global.courseId.toString(),
+  }),
+}));
+
 beforeEach(() => {
   mock.reset();
 });
 
 describe('<SurveyResults />', () => {
   it('allows phantom students to be excluded from the results', async () => {
-    const surveyId = data.survey.id.toString();
+    const surveyId = mockResultsData.survey.id.toString();
     const resultsUrl = `/courses/${global.courseId}/surveys/${surveyId}/results`;
-    mock.onGet(resultsUrl).reply(200, data);
+    mock.onGet(resultsUrl).reply(200, mockResultsData);
     const spyResults = jest.spyOn(CourseAPI.survey.surveys, 'results');
 
     const page = render(
       <SurveyResults
-        dispatch={store.dispatch}
-        isLoading={false}
-        sections={data.sections}
-        survey={data.survey}
+        survey={mockResultsData.survey}
         surveyId={surveyId}
       />,
       [resultsUrl],
@@ -76,11 +85,11 @@ describe('<SurveyResults />', () => {
     });
 
     const phantomStudent =
-      data.sections[0].questions[0].answers[1].course_user_name;
+      mockResultsData.sections[0].questions[0].answers[1].course_user_name;
 
     expect(page.getByText(phantomStudent, { exact: false })).toBeVisible();
 
-    const phantomSwitch = page.getByText('Include Phantom Students');
+    const phantomSwitch = page.getByText('Include phantom users');
     fireEvent.click(phantomSwitch);
 
     expect(

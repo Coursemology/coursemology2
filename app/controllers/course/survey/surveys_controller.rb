@@ -39,6 +39,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   end
 
   def results
+    @my_students = current_course_user.try(:my_students) || []
     preload_questions_results
   end
 
