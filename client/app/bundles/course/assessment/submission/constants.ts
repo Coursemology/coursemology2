@@ -39,16 +39,7 @@ export const TestCaseTypes = {
   Evaluation: 'evaluation_test',
 };
 
-export const selectedUserType = mirrorCreator([
-  'my_students',
-  'my_students_w_phantom',
-  'students',
-  'students_w_phantom',
-  'staff',
-  'staff_w_phantom',
-]);
-
-export const selectedUserTypeDisplay = {
+export const CourseUserTypeDisplayMapper = {
   my_students: 'MY STUDENTS',
   my_students_w_phantom: 'MY STUDENTS INCL. PHANTOM',
   students: 'STUDENTS',
