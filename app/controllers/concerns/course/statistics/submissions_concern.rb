@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module Course::Statistics::SubmissionsConcern
+  include Course::UsersHelper
   include Course::Statistics::ReferenceTimesConcern
 
   private
@@ -10,6 +11,7 @@ module Course::Statistics::SubmissionsConcern
 
   def fetch_hash_for_main_assessment(submissions, students)
     student_hash = initialize_student_hash(students)
+    @course_users_hash = preload_course_users_hash(@assessment.course)
 
     populate_hash_including_answers(student_hash, submissions)
     student_hash
@@ -17,6 +19,7 @@ module Course::Statistics::SubmissionsConcern
 
   def fetch_hash_for_ancestor_assessment(submissions, students)
     student_hash = initialize_student_hash(students)
+    @course_users_hash = preload_course_users_hash(@assessment.course)
 
     populate_hash_without_answers(student_hash, submissions)
     student_hash
@@ -37,7 +40,7 @@ module Course::Statistics::SubmissionsConcern
               caa_inner.submission_id,
               caa_inner.correct,
               caa_inner.grade,
-              cas_inner.workflow_state,
+              caa_inner.workflow_state,
               ROW_NUMBER() OVER (PARTITION BY caa_inner.question_id, caa_inner.submission_id ORDER BY caa_inner.created_at DESC) AS row_num
             FROM
               course_assessment_answers caa_inner
@@ -90,7 +93,7 @@ module Course::Statistics::SubmissionsConcern
     fetch_personal_and_reference_timeline_hash
 
     submissions.map do |submission|
-      submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
+      submitter_course_user = @course_users_hash[submission.creator_id]
       next unless submitter_course_user&.student?
 
       answers = answers_hash[submission.id]
@@ -105,7 +108,7 @@ module Course::Statistics::SubmissionsConcern
     fetch_personal_and_reference_timeline_hash
 
     submissions.map do |submission|
-      submitter_course_user = submission.creator.course_users.select { |u| u.course_id == @assessment.course_id }.first
+      submitter_course_user = @course_users_hash[submission.creator_id]
       next unless submitter_course_user&.student?
 
       end_at = @personal_end_at_hash[[@assessment.id, submitter_course_user.id]] ||

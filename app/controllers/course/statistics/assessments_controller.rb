@@ -5,13 +5,13 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   include Course::Statistics::UsersConcern
 
   def main_statistics
-    @assessment = Course::Assessment.where(id: assessment_params[:id]).
+    @assessment = Course::Assessment.unscoped.
+                  includes(programming_questions: [:language]).preload(course: :course_users).
                   calculated(:maximum_grade, :question_count).
-                  includes(programming_questions: [:language]).
-                  preload(course: :course_users).first
-    submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id]).
-                  calculated(:grade, :grader_ids).
-                  preload(creator: :course_users)
+                  find(assessment_params[:id])
+    submissions = Course::Assessment::Submission.unscoped.
+                  where(assessment_id: assessment_params[:id]).
+                  calculated(:grade, :grader_ids)
     @course_users_hash = preload_course_users_hash(@assessment.course)
 
     load_course_user_students_info
@@ -24,12 +24,14 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def ancestor_statistics
-    @assessment = Course::Assessment.where(id: assessment_params[:id]).
+    @assessment = Course::Assessment.unscoped.
                   calculated(:maximum_grade).
                   preload(lesson_plan_item: [:reference_times, personal_times: :course_user],
-                          course: :course_users).first
+                          course: :course_users).
+                  find(assessment_params[:id])
     authorize!(:read_ancestor, @assessment)
-    submissions = Course::Assessment::Submission.preload(creator: :course_users).
+    submissions = Course::Assessment::Submission.unscoped.
+                  preload(creator: :course_users).
                   where(assessment_id: assessment_params[:id]).
                   calculated(:grade)
 
