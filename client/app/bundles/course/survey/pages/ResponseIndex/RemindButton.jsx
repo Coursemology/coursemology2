@@ -52,6 +52,7 @@ class RemindButton extends Component {
         successMessage,
         failureMessage,
         this.props.includePhantom,
+        this.props.courseUsers,
       ),
     );
     this.setState({ open: false });
@@ -91,6 +92,7 @@ class RemindButton extends Component {
 RemindButton.propTypes = {
   dispatch: PropTypes.func.isRequired,
   includePhantom: PropTypes.bool.isRequired,
+  courseUsers: PropTypes.string.isRequired,
 };
 
 export default connect()(RemindButton);

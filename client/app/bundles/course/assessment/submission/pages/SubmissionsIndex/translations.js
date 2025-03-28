@@ -55,18 +55,6 @@ const translations = defineMessages({
     id: 'course.assessment.submission.SubmissionsIndex.accessLogs',
     defaultMessage: 'Access Logs',
   },
-  myStudents: {
-    id: 'course.assessment.submission.SubmissionsIndex.myStudents',
-    defaultMessage: 'My Students',
-  },
-  students: {
-    id: 'course.assessment.submission.SubmissionsIndex.students',
-    defaultMessage: 'Students',
-  },
-  staff: {
-    id: 'course.assessment.submission.SubmissionsIndex.staff',
-    defaultMessage: 'Staff',
-  },
   publishGrades: {
     id: 'course.assessment.submission.SubmissionsIndex.publishGrades',
     defaultMessage: 'Publish Grades',
@@ -90,6 +78,10 @@ const translations = defineMessages({
   phantom: {
     id: 'course.assessment.submission.SubmissionsIndex.phantom',
     defaultMessage: 'Phantom User',
+  },
+  publishAutoFeedback: {
+    id: 'course.assessment.submission.SubmissionsIndex.publishAutoFeedback',
+    defaultMessage: 'Publish Automated Feedback ({count})',
   },
   unsubmitAllSubmissions: {
     id: 'course.assessment.submission.SubmissionsIndex.unsubmitAllSubmissions',

@@ -1,13 +1,16 @@
 # frozen_string_literal: true
+my_students_set = Set.new(@my_students.map(&:id))
 responses = @responses.to_h { |r| [r.course_user_id, r] }
-json.responses @course_students do |student|
-  response = responses[student.id]
+json.responses @course_users do |course_user|
+  response = responses[course_user.id]
   can_read_answers = response.present? && can?(:read_answers, response)
 
   json.course_user do
-    json.(student, :id, :name)
-    json.phantom student.phantom?
-    json.path course_user_path(current_course, student)
+    json.(course_user, :id, :name)
+    json.phantom course_user.phantom?
+    json.path course_user_path(current_course, course_user)
+    json.isStudent course_user.student?
+    json.myStudent my_students_set.include?(course_user.id) if course_user.student?
   end
 
   json.present !response.nil?

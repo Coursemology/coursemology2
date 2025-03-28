@@ -11,7 +11,7 @@ import AdminMenu from './AdminMenu';
 
 const backLocations = (courseId, surveyId, componentName) => {
   switch (componentName) {
-    case 'Connect(SurveyResults)':
+    case 'SurveyResults':
     case 'Connect(ResponseIndex)':
       return `/courses/${courseId}/surveys/${surveyId}`;
     default:

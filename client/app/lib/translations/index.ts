@@ -21,6 +21,18 @@ const translations = defineMessages({
     id: 'lib.translations.experimental',
     defaultMessage: 'Experimental',
   },
+  myStudents: {
+    id: 'lib.translations.myStudents',
+    defaultMessage: 'My Students',
+  },
+  students: {
+    id: 'lib.translations.students',
+    defaultMessage: 'Students',
+  },
+  staff: {
+    id: 'lib.translations.staff',
+    defaultMessage: 'Staff',
+  },
 });
 
 export default translations;

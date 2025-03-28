@@ -2636,6 +2636,15 @@
   "course.assessment.submission.Answer.rendererNotImplemented": {
     "defaultMessage": "此问题类型的显示尚未实现。"
   },
+  "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
+    "defaultMessage": "您即将发布 {count} 条自动反馈。"
+  },
+  "course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate": {
+    "defaultMessage": "请评价本次测验自动反馈的整体质量。您的评分将帮助我们改进自动反馈生成，以便所有用户受益。"
+  },
+  "course.assessment.submission.publishAutoFeedbackSuccess": {
+    "defaultMessage": "所有自动反馈均已发布。"
+  },
   "course.assessment.submission.SubmissionAnswer.viewPastAnswers": {
     "defaultMessage": "查看过去的答案"
   },
@@ -2684,11 +2693,14 @@
   "course.assessment.submission.SubmissionsIndex.includePhantoms": {
     "defaultMessage": "包括旁听学生"
   },
-  "course.assessment.submission.SubmissionsIndex.myStudents": {
+  "lib.translations.myStudents": {
     "defaultMessage": "我的学生"
   },
   "course.assessment.submission.SubmissionsIndex.phantom": {
     "defaultMessage": "旁听用户"
+  },
+  "course.assessment.submission.SubmissionsIndex.publishAutoFeedback": {
+    "defaultMessage": "发布自动反馈（{count})"
   },
   "course.assessment.submission.SubmissionsIndex.publishGrades": {
     "defaultMessage": "发布成绩"
@@ -2699,10 +2711,10 @@
   "course.assessment.submission.SubmissionsIndex.remind": {
     "defaultMessage": "发送提醒邮件"
   },
-  "course.assessment.submission.SubmissionsIndex.staff": {
+  "lib.translations.staff": {
     "defaultMessage": "职员"
   },
-  "course.assessment.submission.SubmissionsIndex.students": {
+  "lib.translations.students": {
     "defaultMessage": "学生"
   },
   "course.assessment.submission.SubmissionsIndex.submissionStatus": {
