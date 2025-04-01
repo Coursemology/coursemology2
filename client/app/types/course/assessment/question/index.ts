@@ -8,4 +8,5 @@ export enum QuestionType {
   'Scribing' = 'Scribing',
   'VoiceResponse' = 'VoiceResponse',
   'ForumPostResponse' = 'ForumPostResponse',
+  'RubricBasedResponse' = 'RubricBasedResponse',
 }

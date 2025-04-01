@@ -521,6 +521,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.forumPostResponse',
     defaultMessage: 'Forum Post Response',
   },
+  rubricBasedResponse: {
+    id: 'course.assessment.show.rubricBasedResponse',
+    defaultMessage: 'Rubric-Based Response',
+  },
   newMultipleChoice: {
     id: 'course.assessment.show.newMultipleChoice',
     defaultMessage: 'New Multiple Choice Question (MCQ)',

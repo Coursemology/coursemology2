@@ -1,4 +1,5 @@
 import { QuestionType } from '../../question';
+import { CategoryData } from '../../question/rubric-based-responses';
 
 interface QuestionData {
   id: number;
@@ -66,6 +67,20 @@ interface ForumPostResponseQuestionData {
   maxPosts: boolean;
 }
 
+export interface SubmissionCategoryData
+  extends Omit<CategoryData, 'id' | 'levels'> {
+  id: number;
+  levels: {
+    id: number;
+    level: number;
+    explanation: string;
+  }[];
+}
+
+interface RubricBasedResponseQuestionData {
+  categories: SubmissionCategoryData[];
+}
+
 export interface SpecificQuestionDataMap {
   MultipleChoice: MultipleResponseQuestionData;
   MultipleResponse: MultipleResponseQuestionData;
@@ -76,6 +91,7 @@ export interface SpecificQuestionDataMap {
   Scribing: ScribingQuestionData;
   VoiceResponse: VoiceResponseQuestionData;
   ForumPostResponse: ForumPostResponseQuestionData;
+  RubricBasedResponse: RubricBasedResponseQuestionData;
 }
 
 export interface SubmissionQuestionBaseData extends QuestionData {

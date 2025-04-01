@@ -47,6 +47,14 @@ export type QuestionsState = Record<
 export interface AnswerState {
   initial: Record<number, AnswerData>;
   clientVersionByAnswerId: Record<number, number>;
+  categoryScores: Record<number, CategoryScoreType[]>;
+}
+
+export interface CategoryScoreType {
+  id: number;
+  categoryId: number;
+  score: number;
+  explanation: string | null;
 }
 
 export interface SubmissionState {
@@ -121,6 +129,7 @@ export interface CodaveriFeedbackStatus {
 }
 
 export interface GradeWithPrefilledStatus {
+  id: number; // answerId
   originalGrade: number;
   grade: number;
   prefilled: boolean;

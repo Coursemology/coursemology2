@@ -9,6 +9,10 @@ import {
   MultipleResponseFieldEntity,
 } from './multipleResponse';
 import { ProgrammingAnswerData, ProgrammingFieldEntity } from './programming';
+import {
+  RubricBasedResponseAnswerData,
+  RubricBasedResponseFieldEntity,
+} from './rubricBasedResponse';
 import { ScribingAnswerData, ScribingFieldEntity } from './scribing';
 import {
   FileUploadAnswerData,
@@ -31,7 +35,8 @@ export type AnswerData =
   | FileUploadAnswerData
   | ScribingAnswerData
   | VoiceResponseAnswerData
-  | ForumPostResponseAnswerData;
+  | ForumPostResponseAnswerData
+  | RubricBasedResponseAnswerData;
 
 // FE Data Type
 
@@ -43,4 +48,5 @@ export type AnswerFieldEntity =
   | FileUploadFieldEntity
   | ScribingFieldEntity
   | VoiceResponseFieldEntity
-  | ForumPostResponseFieldEntity;
+  | ForumPostResponseFieldEntity
+  | RubricBasedResponseFieldEntity;

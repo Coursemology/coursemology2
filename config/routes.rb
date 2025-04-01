@@ -297,6 +297,10 @@ Rails.application.routes.draw do
                   namespace :forum_post_response do
                     get 'selected_post_packs' => 'posts#selected'
                   end
+                  namespace :rubric_based_response do
+                    patch 'update_score' => 'rubric_based_response#update_score'
+                    patch 'update_explanation' => 'rubric_based_response#update_explanation'
+                  end
                 end
               end
             end

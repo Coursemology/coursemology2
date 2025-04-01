@@ -50,6 +50,9 @@ export interface VoiceResponseAnswerProps
 export interface ForumPostResponseAnswerProps
   extends AnswerCommonProps<'ForumPostResponse'> {}
 
+export interface RubricBasedResponseAnswerProps
+  extends AnswerCommonProps<'RubricBasedResponse'> {}
+
 export interface AnswerPropsMap {
   MultipleChoice: McqAnswerProps;
   MultipleResponse: MrqAnswerProps;
@@ -60,6 +63,7 @@ export interface AnswerPropsMap {
   Scribing: ScribingAnswerProps;
   VoiceResponse: VoiceResponseAnswerProps;
   ForumPostResponse: ForumPostResponseAnswerProps;
+  RubricBasedResponse: RubricBasedResponseAnswerProps;
 }
 
 export interface Attachment {

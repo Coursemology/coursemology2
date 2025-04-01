@@ -47,6 +47,7 @@ const DebounceDelayMap = {
   VoiceResponse: 0,
   ForumPostResponse: FIELD_LONG_DEBOUNCE_DELAY_MS,
   Scribing: 0,
+  RubricBasedResponse: FIELD_LONG_DEBOUNCE_DELAY_MS,
 };
 
 const SubmissionAnswer = <T extends keyof typeof QuestionType>(
@@ -146,6 +147,12 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
       handleUploadTextResponseFiles,
     },
     Comprehension: {},
+    RubricBasedResponse: {
+      answerId,
+      question: question as SubmissionQuestionData<'RubricBasedResponse'>,
+      readOnly,
+      saveAnswerAndUpdateClientVersion,
+    },
     VoiceResponse: {
       answerId,
       question: question as SubmissionQuestionData<'VoiceResponse'>,

@@ -22,6 +22,7 @@ import {
   McqAnswerProps,
   MrqAnswerProps,
   ProgrammingAnswerProps,
+  RubricBasedResponseAnswerProps,
   ScribingAnswerProps,
   TextResponseAnswerProps,
   VoiceResponseAnswerProps,
@@ -196,6 +197,10 @@ export const AnswerMapper = {
     <FileUpload {...props} />
   ),
   Comprehension: (): JSX.Element => <AnswerNotImplemented />,
+  // TODO: implement Rubric Based Answer View once implementation for answer has started
+  RubricBasedResponse: (
+    _props: RubricBasedResponseAnswerProps,
+  ): JSX.Element => <AnswerNotImplemented />,
   Scribing: (props: ScribingAnswerProps): JSX.Element => (
     <Scribing {...props} />
   ),
