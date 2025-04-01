@@ -55,6 +55,10 @@ export const AnswerDetailsMapper = {
   Programming: (props: AnswerDetailsProps<'Programming'>): JSX.Element => (
     <ProgrammingAnswerDetails {...props} />
   ),
+  // TODO: define component for Rubric Based Response once implementation for answer has started
+  RubricBasedResponse: (
+    _props: AnswerDetailsProps<'RubricBasedResponse'>,
+  ): JSX.Element => <AnswerNotImplemented />,
   // TODO: define component for Voice Response, Scribing
   VoiceResponse: (_props: AnswerDetailsProps<'VoiceResponse'>): JSX.Element => (
     <AnswerNotImplemented />

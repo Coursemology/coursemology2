@@ -23,6 +23,7 @@ const NEW_QUESTION_LABELS: Record<keyof typeof QuestionType, Descriptor> = {
   Scribing: translations.scribing,
   ForumPostResponse: translations.forumPostResponse,
   Comprehension: translations.comprehension,
+  RubricBasedResponse: translations.rubricBasedResponse,
 };
 
 const NewQuestionMenu = (props: NewQuestionMenuProps): JSX.Element => {
