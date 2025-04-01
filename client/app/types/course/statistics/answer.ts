@@ -163,6 +163,9 @@ export interface ForumPostResponseAnswerDetails
   };
 }
 
+export interface RubricBasedResponseAnswerDetails
+  extends AnswerCommonDetails<'RubricBasedResponse'> {}
+
 export interface AnswerDetailsMap {
   MultipleChoice: McqAnswerDetails;
   MultipleResponse: MrqAnswerDetails;
@@ -173,4 +176,5 @@ export interface AnswerDetailsMap {
   Scribing: ScribingAnswerDetails;
   VoiceResponse: VoiceResponseAnswerDetails;
   ForumPostResponse: ForumPostResponseAnswerDetails;
+  RubricBasedResponse: RubricBasedResponseAnswerDetails;
 }
