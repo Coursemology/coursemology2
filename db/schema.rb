@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_22_095313) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_21_095827) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -165,6 +165,21 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_22_095313) do
     t.jsonb "messages", default: {}, null: false
     t.index ["auto_grading_id"], name: "fk__course_assessment_answe_3d4bf9a99ed787551e4454c7106971fc"
     t.index ["test_case_id"], name: "fk__course_assessment_answe_ca0d5ba368869806d2a9cb8717feed4f"
+  end
+
+  create_table "course_assessment_answer_rubric_based_response_selections", force: :cascade do |t|
+    t.bigint "answer_id", null: false
+    t.bigint "category_id", null: false
+    t.bigint "criterion_id"
+    t.integer "grade"
+    t.text "explanation"
+    t.index ["answer_id"], name: "fk__course_assessment_answer_rubric_based_response_selections"
+    t.index ["category_id"], name: "fk__course_assessment_answer_rubric_based_category_selections"
+    t.index ["criterion_id"], name: "fk__course_assessment_answer_rubric_based_question_criterions"
+  end
+
+  create_table "course_assessment_answer_rubric_based_responses", force: :cascade do |t|
+    t.string "answer_text"
   end
 
   create_table "course_assessment_answer_scribing_scribbles", id: :serial, force: :cascade do |t|
@@ -337,6 +352,23 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_22_095313) do
     t.text "hint"
     t.index ["identifier", "question_id"], name: "index_course_assessment_question_programming_test_case_ident", unique: true
     t.index ["question_id"], name: "fk__course_assessment_quest_18b37224652fc59d955122a17ba20d07"
+  end
+
+  create_table "course_assessment_question_rubric_based_response_categories", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.text "name", null: false
+    t.boolean "is_bonus_category", default: false, null: false
+    t.index ["question_id"], name: "fk__course_assessment_rubric_question_categories"
+  end
+
+  create_table "course_assessment_question_rubric_based_response_criterions", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.integer "grade", default: 0, null: false
+    t.text "explanation", null: false
+    t.index ["category_id"], name: "fk__course_assessment_rubric_question_category_criterions"
+  end
+
+  create_table "course_assessment_question_rubric_based_responses", force: :cascade do |t|
   end
 
   create_table "course_assessment_question_scribings", id: :serial, force: :cascade do |t|
@@ -515,6 +547,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_22_095313) do
     t.string "koditsu_assessment_id"
     t.boolean "is_koditsu_enabled"
     t.boolean "is_synced_with_koditsu", default: false, null: false
+    t.boolean "show_rubric_to_students"
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
@@ -1618,6 +1651,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_22_095313) do
   add_foreign_key "course_assessment_answer_programming_files", "course_assessment_answer_programming", column: "answer_id", name: "fk_course_assessment_answer_programming_files_answer_id"
   add_foreign_key "course_assessment_answer_programming_test_results", "course_assessment_answer_programming_auto_gradings", column: "auto_grading_id", name: "fk_course_assessment_answer_e3d785447112439bb306849be8690102"
   add_foreign_key "course_assessment_answer_programming_test_results", "course_assessment_question_programming_test_cases", column: "test_case_id", name: "fk_course_assessment_answer_bbb492885b1e3dca4433b8af8cb95906"
+  add_foreign_key "course_assessment_answer_rubric_based_response_selections", "course_assessment_answer_rubric_based_responses", column: "answer_id"
+  add_foreign_key "course_assessment_answer_rubric_based_response_selections", "course_assessment_question_rubric_based_response_categories", column: "category_id"
+  add_foreign_key "course_assessment_answer_rubric_based_response_selections", "course_assessment_question_rubric_based_response_criterions", column: "criterion_id"
   add_foreign_key "course_assessment_answer_scribing_scribbles", "course_assessment_answer_scribings", column: "answer_id", name: "fk_course_assessment_answer_scribing_scribbles_answer_id"
   add_foreign_key "course_assessment_answer_scribing_scribbles", "users", column: "creator_id", name: "fk_course_assessment_answer_scribing_scribbles_creator_id"
   add_foreign_key "course_assessment_answers", "course_assessment_questions", column: "question_id", name: "fk_course_assessment_answers_question_id"
@@ -1644,6 +1680,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_22_095313) do
   add_foreign_key "course_assessment_question_programming", "polyglot_languages", column: "language_id", name: "fk_course_assessment_question_programming_language_id"
   add_foreign_key "course_assessment_question_programming_template_files", "course_assessment_question_programming", column: "question_id", name: "fk_course_assessment_questi_0788633b496294e558f55f2b41bc7c45"
   add_foreign_key "course_assessment_question_programming_test_cases", "course_assessment_question_programming", column: "question_id", name: "fk_course_assessment_questi_ee00a2daf4389c4c2ddba3041a15c35f"
+  add_foreign_key "course_assessment_question_rubric_based_response_categories", "course_assessment_question_rubric_based_responses", column: "question_id"
+  add_foreign_key "course_assessment_question_rubric_based_response_criterions", "course_assessment_question_rubric_based_response_categories", column: "category_id"
   add_foreign_key "course_assessment_question_text_response_compre_groups", "course_assessment_question_text_responses", column: "question_id"
   add_foreign_key "course_assessment_question_text_response_compre_points", "course_assessment_question_text_response_compre_groups", column: "group_id"
   add_foreign_key "course_assessment_question_text_response_compre_solutions", "course_assessment_question_text_response_compre_points", column: "point_id"
