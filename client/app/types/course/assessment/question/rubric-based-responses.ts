@@ -7,7 +7,7 @@ export interface RubricBasedResponseData {
 }
 
 export interface CategoryData {
-  id: number | string;
+  id: number | string | null;
   name: string;
   maximumGrade: number;
   grades: QuestionRubricGradeEntity[];

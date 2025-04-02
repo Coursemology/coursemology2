@@ -545,6 +545,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.newFileUpload',
     defaultMessage: 'New File Upload Question',
   },
+  newRubricBasedResponse: {
+    id: 'course.assessment.show.newRubricBasedResponse',
+    defaultMessage: 'New Rubric Based Response Question',
+  },
   newProgramming: {
     id: 'course.assessment.show.newProgramming',
     defaultMessage: 'New Programming Question',
@@ -906,6 +910,44 @@ const translations = defineMessages({
   solutionWillBeDeleted: {
     id: 'course.assessment.question.textResponses.solutionWillBeDeleted',
     defaultMessage: 'This solution will be deleted once you save your changes.',
+  },
+  rubric: {
+    id: 'course.assessment.question.rubricBasedResponses.rubric',
+    defaultMessage: 'Rubric',
+  },
+  categoryName: {
+    id: 'course.assessment.question.rubricBasedResponses.categoryName',
+    defaultMessage: 'Category Name',
+  },
+  categoryMaximumGrade: {
+    id: 'course.assessment.question.rubricBasedResponses.categoryMaximumGrade',
+    defaultMessage: 'Max Grade',
+  },
+  categoryGrade: {
+    id: 'course.assessment.question.rubricBasedResponses.categoryGrade',
+    defaultMessage: 'Band Score',
+  },
+  gradeExplanation: {
+    id: 'course.assessment.question.rubricBasedResponses.gradeExplanation',
+    defaultMessage: 'Explanation',
+  },
+  rubricHint: {
+    id: 'course.assessment.question.rubricBasedResponses.rubricHint',
+    defaultMessage: "Rubric is used to grade the student's submission.",
+  },
+  bonusReservedNames: {
+    id: 'course.assessment.question.rubricBasedResponses.bonusReservedNames',
+    defaultMessage:
+      "After finalization, a special category named 'moderation' will be added automatically. \
+      It allows graders to award bonus or penalty points at their discretion.",
+  },
+  addNewCategory: {
+    id: 'course.assessment.question.rubricBasedResponses.addNewCategory',
+    defaultMessage: 'Add new category',
+  },
+  addNewGrade: {
+    id: 'course.assessment.question.rubricBasedResponses.addNewLevel',
+    defaultMessage: 'Add new grade',
   },
   newSolutionCannotUndo: {
     id: 'course.assessment.question.textResponses.newSolutionCannotUndo',
