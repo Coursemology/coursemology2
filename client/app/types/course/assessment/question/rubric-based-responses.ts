@@ -7,7 +7,7 @@ export interface RubricBasedResponseData {
 }
 
 export interface CategoryData {
-  id: number | string;
+  id: number | string | null;
   name: string;
   maximumScore: number;
   levels: CategoryLevelEntity[];
@@ -27,7 +27,7 @@ export interface CategoryScoreData {
 }
 
 export interface CategoryLevelData {
-  id: number | string;
+  id: number | string | null;
   level: number;
   explanation: string;
 }

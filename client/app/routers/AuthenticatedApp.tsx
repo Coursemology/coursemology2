@@ -119,6 +119,8 @@ import {
 } from 'course/assessment/handles';
 import GenerateProgrammingQuestionPage from 'course/assessment/pages/AssessmentGenerate/GenerateProgrammingQuestionPage';
 import QuestionFormOutlet from 'course/assessment/question/components/QuestionFormOutlet';
+import EditRubricBasedResponsePage from 'course/assessment/question/rubric-based-responses/EditRubricBasedResponsePage';
+import NewRubricBasedResponsePage from 'course/assessment/question/rubric-based-responses/NewRubricBasedResponsePage';
 import { CourseContainer } from 'course/container';
 import { commentHandle } from 'course/discussion/topics/handles';
 import {
@@ -724,6 +726,20 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                         {
                           path: ':questionId/edit',
                           element: <ScribingQuestion />,
+                        },
+                      ],
+                    },
+                    {
+                      path: 'rubric_based_responses',
+                      children: [
+                        {
+                          path: 'new',
+                          handle: NewRubricBasedResponsePage.handle,
+                          element: <NewRubricBasedResponsePage />,
+                        },
+                        {
+                          path: ':questionId/edit',
+                          element: <EditRubricBasedResponsePage />,
                         },
                       ],
                     },
