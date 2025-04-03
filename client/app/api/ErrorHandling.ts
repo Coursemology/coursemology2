@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import {
   redirectToAuthPage,
+  redirectToBaseNotFound,
   redirectToForbidden,
   redirectToNotFound,
 } from 'lib/hooks/router/redirect';
@@ -23,6 +24,10 @@ const isComponentNotFoundResponse = (response?: AxiosResponse): boolean =>
   response?.status === 404 &&
   response.data?.error?.toLowerCase().includes('component not found'); // NOTE: This string is taken from BE's handle_component_not_found
 
+const isInstanceNotFoundResponse = (response?: AxiosResponse): boolean =>
+  response?.status === 404 &&
+  response.data?.error?.toLowerCase().includes('instance not found'); // NOTE: This string is taken from BE's handle_component_not_found
+
 export const redirectIfMatchesErrorIn = (response?: AxiosResponse): void => {
   if (isUnauthenticatedResponse(response)) {
     localStorage.clear();
@@ -32,4 +37,5 @@ export const redirectIfMatchesErrorIn = (response?: AxiosResponse): void => {
     // Should open a new window and login
     redirectToForbidden();
   if (isComponentNotFoundResponse(response)) redirectToNotFound();
+  if (isInstanceNotFoundResponse(response)) redirectToBaseNotFound();
 };
