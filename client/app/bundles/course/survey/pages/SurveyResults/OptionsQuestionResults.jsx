@@ -226,16 +226,13 @@ class OptionsQuestionResults extends Component {
    * Computes the list and count of students that selected each option for the current question.
    */
   getOptionsBreakdown() {
-    const { includePhantoms, options, answers } = this.props;
+    const { options, answers } = this.props;
     const breakdown = { length: answers.length };
     options.forEach((option) => {
       breakdown[option.id] = { count: 0, students: [] };
     });
     answers.forEach((answer) => {
       answer.question_option_ids.forEach((selectedOption) => {
-        if (!includePhantoms && answer.phantom) {
-          return;
-        }
         breakdown[selectedOption].count += 1;
         breakdown[selectedOption].students.push({
           id: answer.course_user_id,
@@ -354,7 +351,6 @@ class OptionsQuestionResults extends Component {
 
 OptionsQuestionResults.propTypes = {
   options: PropTypes.arrayOf(optionShape),
-  includePhantoms: PropTypes.bool,
   anonymous: PropTypes.bool,
   questionType: PropTypes.string,
   answers: PropTypes.arrayOf(
