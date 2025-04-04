@@ -7,6 +7,9 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Override default JSON parser/encoder to use Yajl
+require 'yajl/json_gem'
+
 # Load dotenv only in development environment
 Dotenv::Rails.load if ['development'].include? ENV['RAILS_ENV']
 

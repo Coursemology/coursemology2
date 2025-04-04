@@ -67,6 +67,7 @@ gem 'docker-api'
 
 gem 'recaptcha'
 gem 'rexml'
+gem 'yajl-ruby', '~> 1.4'
 
 # Page profiler
 gem 'rack-mini-profiler'
