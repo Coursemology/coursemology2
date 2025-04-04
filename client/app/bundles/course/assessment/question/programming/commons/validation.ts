@@ -166,7 +166,6 @@ export const isPackageFieldsDirty = (
   +before.question.languageId !== +after.question.languageId ||
   +before.question.memoryLimit !== +after.question.memoryLimit ||
   +before.question.timeLimit !== +after.question.timeLimit ||
-  +before.question.attemptLimit !== +after.question.attemptLimit ||
   before.question.autograded !== after.question.autograded ||
   before.question.editOnline !== after.question.editOnline ||
   before.question.isCodaveri !== after.question.isCodaveri ||
