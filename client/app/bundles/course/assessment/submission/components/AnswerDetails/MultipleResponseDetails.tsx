@@ -1,9 +1,11 @@
 import { Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
-import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionType } from 'types/course/assessment/question';
+
+import { AnswerDetailsProps } from '../../types';
 
 const MultipleResponseDetails = (
-  props: QuestionAnswerDisplayDetails<'MultipleResponse'>,
+  props: AnswerDetailsProps<QuestionType.MultipleResponse>,
 ): JSX.Element => {
   const { question, answer } = props;
   return (
@@ -17,7 +19,7 @@ const MultipleResponseDetails = (
               answer.fields.option_ids.indexOf(option.id) !== -1
             }
             className="w-full"
-            control={<Checkbox />}
+            control={<Checkbox className="py-0 px-4" />}
             disabled
             label={
               <b>

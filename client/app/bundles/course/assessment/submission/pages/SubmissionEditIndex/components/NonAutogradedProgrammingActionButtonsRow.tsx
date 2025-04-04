@@ -28,10 +28,8 @@ const NonAutogradedProgrammingActionButtonsRow: FC<Props> = (props) => {
   const attempting = workflowState === workflowStates.Attempting;
 
   const question = questions[questionId];
-  const { viewHistory } = question;
 
   return (
-    !viewHistory &&
     attempting &&
     question.type === questionTypes.Programming && (
       <div className="flex flex-nowrap">

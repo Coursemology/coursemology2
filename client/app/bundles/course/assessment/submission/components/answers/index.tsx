@@ -15,7 +15,6 @@ import { uploadTextResponseFiles } from '../../actions/answers/textResponse';
 import Answer from './Answer';
 import AnswerHeader from './AnswerHeader';
 import { AnswerPropsMap } from './types';
-import { QuestionHistory } from '../../reducers/history/types';
 import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
 import useErrorTranslation from '../../pages/SubmissionEditIndex/useErrorTranslation';
 import { ErrorType } from '../../pages/SubmissionEditIndex/validations/types';
@@ -24,11 +23,12 @@ interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number | null;
   graderView: boolean;
   allErrors: ErrorType[];
-  historyQuestions: Record<number, QuestionHistory>;
   question: SubmissionQuestionData<T>;
   questionType: T;
   readOnly: boolean;
   showMcqMrqSolution: boolean;
+  openAnswerHistoryView: (questionId: number, questionNumber: number) => void;
+  questionNumber: number;
 }
 
 const DebounceDelayMap = {
@@ -50,11 +50,12 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     answerId,
     allErrors,
     graderView,
-    historyQuestions,
     question,
     questionType,
     readOnly,
     showMcqMrqSolution,
+    openAnswerHistoryView,
+    questionNumber,
   } = props;
   const dispatch = useAppDispatch();
 
@@ -155,10 +156,10 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     <>
       <AnswerHeader
         answerId={answerId}
-        historyQuestions={historyQuestions}
-        question={question}
+        openAnswerHistoryView={openAnswerHistoryView}
+        questionId={question.id}
+        questionNumber={questionNumber}
       />
-
       <Divider />
 
       {errorMessages.map((message) => (
