@@ -127,6 +127,8 @@ module Course::Assessment::AssessmentAbility
     allow_staff_read_assessment_tests
     allow_staff_read_submission_questions
     allow_staff_delete_own_assessment_submission
+    allow_staff_update_category_grades
+    allow_staff_update_category_explanations
   end
 
   def allow_staff_read_observe_access_and_attempt_assessment
@@ -143,6 +145,14 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_assessment_tests
     can :read_tests, Course::Assessment::Submission, assessment: assessment_course_hash
+  end
+
+  def allow_staff_update_category_grades
+    can :update_category_grades, Course::Assessment::Submission, assessment: assessment_course_hash
+  end
+
+  def allow_staff_update_category_explanations
+    can :update_category_explanations, Course::Assessment::Submission, assessment: assessment_course_hash
   end
 
   def allow_staff_read_submission_questions
