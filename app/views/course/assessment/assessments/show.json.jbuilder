@@ -141,6 +141,10 @@ if can_observe
           url: new_course_assessment_question_text_response_path(current_course, assessment)
         },
         {
+          type: 'RubricBasedResponse',
+          url: new_course_assessment_question_rubric_based_response_path(current_course, assessment)
+        },
+        {
           type: 'VoiceResponse',
           url: new_course_assessment_question_voice_response_path(current_course, assessment)
         },

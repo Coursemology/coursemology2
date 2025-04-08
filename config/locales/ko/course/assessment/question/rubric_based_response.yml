@@ -1,0 +1,22 @@
+ko:
+  activerecord:
+    attributes:
+      models:
+        course/assessment/question/rubric_based_response:
+          rubric_based_response: '루브릭 기반 응답 질문'
+    errors:
+      models:
+        'course/assessment/question/rubric_based_response':
+          attributes:
+            categories:
+              duplicate_category_names: '카테고리 이름은 질문 루브릭 내에서 고유해야 합니다'
+              at_least_one_category: '최소한 하나의 루브릭 카테고리가 필요합니다'
+            maximum_grade:
+              invalid_grade: '질문의 최대 점수는 카테고리의 점수보다 작거나 같아야 합니다'
+        'course/assessment/question/rubric_based_response_category':
+          attributes:
+            levels:
+              duplicate_levels_within_category: '레벨은 카테고리 내에서 고유해야 합니다'
+              at_least_one_level: '각 카테고리에는 최소한 하나의 레벨이 필요합니다'
+              level_zero_or_maximum_score_missing: '각 카테고리에는 레벨 0 또는 최대 점수가 필요합니다'
+              level_higher_than_maximum_score: '레벨은 최대 점수보다 작거나 같아야 합니다'

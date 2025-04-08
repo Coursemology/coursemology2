@@ -1,0 +1,8 @@
+en:
+  course:
+    assessment:
+      question:
+        rubric_based_response:
+          new:
+            header: 'New Rubric Based Response Question'
+          question_type: Rubric Based Response
