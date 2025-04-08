@@ -70,6 +70,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
     @monitoring_session_id = monitoring_service&.session&.id if should_monitor?
     @submission = @submission.calculated(:graded_at, :grade) unless @submission.attempting?
+    @answers = @submission.answers.includes(actable: [grades: [question_grade: :category]])
   end
 
   def auto_grade
