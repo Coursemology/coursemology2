@@ -27,7 +27,7 @@ RSpec.describe Course::Assessment::Submission::Answer::AnswersController do
 
         context 'when update fails' do
           before do
-            allow(current_answer).to receive(:save).and_return(false)
+            allow(current_answer.specific).to receive(:save).and_return(false)
             allow(submission.answers).to receive(:find).and_return(current_answer)
             controller.instance_variable_set(:@submission, submission)
             subject

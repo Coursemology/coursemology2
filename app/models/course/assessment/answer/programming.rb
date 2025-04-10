@@ -15,6 +15,8 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
   accepts_nested_attributes_for :files, allow_destroy: true
 
+  validate :validate_total_file_size
+
   def to_partial_path
     'course/assessment/answer/programming/programming'
   end
@@ -84,7 +86,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   def delete_file(file_id)
     file = files.find { |f| f.id == file_id }
     file.mark_for_destruction if file.present?
-    save
+    save(validate: false)
   end
 
   def generate_feedback
@@ -144,7 +146,17 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     same_file_length && same_file
   end
 
+  MAX_TOTAL_FILE_SIZE = 2.megabytes
   private
+
+  def validate_total_file_size
+    total_size = files.reject(&:marked_for_destruction?).sum { |file| file.content.bytesize }
+    return if total_size <= MAX_TOTAL_FILE_SIZE
+
+    # Round up to 2 decimal places, so student will see "2.01 MB" if size is slightly over
+    display_total_size = (total_size.to_f / 1.megabyte).ceil(2)
+    errors.add(:files, :exceed_size_limit, total_size_mb: display_total_size)
+  end
 
   def request_create_live_feedback_chat(question)
     thread_service = Course::Assessment::Answer::LiveFeedback::ThreadService.new(submission.creator,

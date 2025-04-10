@@ -25,6 +25,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.graded',
     defaultMessage: 'Graded, unpublished',
   },
+  answerTooLargeError: {
+    id: 'course.assessment.submission.answerTooLargeError',
+    defaultMessage: 'Your answer must be less than 2 MB.',
+  },
   published: {
     id: 'course.assessment.submission.published',
     defaultMessage: 'Graded',

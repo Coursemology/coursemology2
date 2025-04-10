@@ -1,13 +1,17 @@
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
-import { SAVING_STATUS } from 'lib/constants/sharedConstants';
+import { MAX_SAVING_SIZE, SAVING_STATUS } from 'lib/constants/sharedConstants';
+import toast from 'lib/hooks/toast';
 
 import actionTypes from '../../constants';
 import translations from '../../translations';
 import { convertAnswerDataToInitialValue } from '../../utils/answers';
 import { buildErrorMessage } from '../utils';
 
-import { dispatchUpdateAnswerFlagSavingStatus } from '.';
+import {
+  dispatchUpdateAnswerFlagSavingSize,
+  dispatchUpdateAnswerFlagSavingStatus,
+} from '.';
 
 // Ensure that there are no existing files with the same filenames
 const validateUniqueFilenames = (files) => {
@@ -44,6 +48,22 @@ const validateProgrammingFilesErrorMsg = (language, files) => {
 };
 
 export function importProgrammingFiles(answerId, files, language, resetField) {
+  const savingSize = files.reduce(
+    (acc, file) => acc + (file?.content?.length ?? 0),
+    0,
+  );
+  if (savingSize > MAX_SAVING_SIZE) {
+    return (dispatch) => {
+      dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
+      dispatch(
+        dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Failed),
+      );
+      resetField(`${answerId}.import_files`, {
+        defaultValue: null,
+      });
+      dispatch(setNotification(translations.answerTooLargeError));
+    };
+  }
   const filesPayload = files.map((file) => ({
     id: file.id,
     filename: file.filename,
@@ -57,6 +77,7 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
   };
 
   return (dispatch) => {
+    dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
     dispatch({
       type: actionTypes.UPLOAD_PROGRAMMING_FILES_REQUEST,
       payload: { answerId },
@@ -104,17 +125,16 @@ export function importProgrammingFiles(answerId, files, language, resetField) {
           type: actionTypes.UPLOAD_PROGRAMMING_FILES_FAILURE,
         });
         dispatch(
-          dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Failed),
+          dispatchUpdateAnswerFlagSavingStatus(
+            answerId,
+            SAVING_STATUS.Failed,
+            false,
+          ),
         );
         resetField(`${answerId}.import_files`, {
           defaultValue: null,
         });
-        dispatch(
-          setNotification(
-            translations.importFilesFailure,
-            buildErrorMessage(error),
-          ),
-        );
+        toast.error(buildErrorMessage(error));
       });
   };
 }

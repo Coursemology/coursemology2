@@ -40,11 +40,12 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
         end
       end
 
-      context 'when uploading new programming files with more than 50KB' do
-        # defining a file that has size more than 50KB
-        let(:large_file_attribute) { { filename: 'template2', content: 'a' * ((50 * 1024) + 1) } }
+      context 'when uploading new programming files that are too large' do
+        let(:max_file_size) { 2.kilobytes }
+        let(:large_file_attribute) { { filename: 'template2', content: 'a' * (max_file_size + 1) } }
 
         it 'expects to return a bad request' do
+          stub_const('Course::Assessment::Answer::Programming::MAX_TOTAL_FILE_SIZE', max_file_size)
           post :create_programming_files, as: :json, params: {
             course_id: course, assessment_id: assessment.id, submission_id: submission.id,
             answer_id: answer.id, answer: {
@@ -56,12 +57,11 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::ProgrammingC
 
           response_body = JSON.parse(response.body)
           errors = response_body['errors']
-          file_content_errors = errors['files.content']
           expected_error_message = I18n.t('activerecord.errors.models.' \
-                                          'course/assessment/answer/programming_file.' \
-                                          'attributes.content.exceed_size_limit')
+                                          'course/assessment/answer/programming.' \
+                                          'attributes.files.exceed_size_limit')
 
-          expect(file_content_errors.first).to include(expected_error_message)
+          expect(errors['files'].first).to include(expected_error_message)
         end
       end
     end

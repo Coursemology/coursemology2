@@ -2,11 +2,18 @@ import { produce } from 'immer';
 
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
-import { SAVING_STATUS } from 'lib/constants/sharedConstants';
+import {
+  ANSWER_TOO_LARGE_ERR,
+  MAX_SAVING_SIZE,
+  SAVING_STATUS,
+} from 'lib/constants/sharedConstants';
 import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../../constants';
-import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
+import {
+  updateAnswerFlagSavingSize,
+  updateAnswerFlagSavingStatus,
+} from '../../reducers/answerFlags';
 import {
   getFailureFeedbackFromCodaveri,
   getLiveFeedbackFromCodaveri,
@@ -22,6 +29,17 @@ import { fetchSubmission } from '..';
 
 const JOB_POLL_DELAY_MS = 500;
 export const STALE_ANSWER_ERR = 'stale_answer';
+
+export const dispatchUpdateAnswerFlagSavingSize =
+  (answerId, savingSize, isStaleAnswer = false) =>
+  (dispatch) =>
+    dispatch(
+      updateAnswerFlagSavingSize({
+        answer: { id: answerId },
+        savingSize,
+        isStaleAnswer,
+      }),
+    );
 
 export const dispatchUpdateAnswerFlagSavingStatus =
   (answerId, savingStatus, isStaleAnswer = false) =>
@@ -43,9 +61,25 @@ export const updateClientVersion = (answerId, clientVersion) => (dispatch) =>
 export function submitAnswer(questionId, answerId, rawAnswer, resetField) {
   const currentTime = Date.now();
   const answer = formatAnswer(rawAnswer, currentTime);
+
+  const savingSize = rawAnswer?.files_attributes?.reduce(
+    (acc, file) => acc + (file?.content?.length ?? 0),
+    0,
+  );
+  if (savingSize > MAX_SAVING_SIZE) {
+    return (dispatch) => {
+      dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
+      dispatch(
+        dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Failed),
+      );
+      return Promise.reject(new Error(ANSWER_TOO_LARGE_ERR));
+    };
+  }
+
   const payload = { answer };
 
   return (dispatch) => {
+    dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
     dispatch(updateClientVersion(answerId, currentTime));
     dispatch({
       type: actionTypes.AUTOGRADE_REQUEST,
@@ -94,7 +128,23 @@ export function saveAnswer(answerData, answerId, currentTime, resetField) {
   const answer = formatAnswer(answerData, currentTime);
   const payload = { answer };
 
+  const savingSize = answerData?.files_attributes?.reduce(
+    (acc, file) => acc + (file?.content?.length ?? 0),
+    0,
+  );
+
+  if (savingSize > MAX_SAVING_SIZE) {
+    return (dispatch) => {
+      dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
+      dispatch(
+        dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Failed),
+      );
+      return Promise.reject(new Error(ANSWER_TOO_LARGE_ERR));
+    };
+  }
+
   return (dispatch, getState) => {
+    dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
     // When the current client version is greater than that in the redux store,
     // the answer is already stale and no API call is needed.
     const isAnswerStale =

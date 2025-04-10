@@ -12,6 +12,7 @@ export const answerFlagsAdapter = createEntityAdapter<AnswerFlagData>({});
 export interface AnswerFlagData {
   id: string | number;
   savingStatus: keyof typeof SAVING_STATUS;
+  savingSize: number;
   clientVersion: number | null | undefined;
 }
 
@@ -39,6 +40,7 @@ export const answerFlagsSlice = createSlice({
         answerFlagsAdapter.setOne(state.flagsByAnswerId, {
           id: answer.id,
           savingStatus: SAVING_STATUS.None,
+          savingSize: 0,
           clientVersion: answer.clientVersion,
         });
       });
@@ -49,8 +51,25 @@ export const answerFlagsSlice = createSlice({
           id: answerId,
           changes: {
             savingStatus: SAVING_STATUS.None,
+            savingSize: 0,
           },
         });
+      });
+    },
+    updateAnswerFlagSavingSize: (
+      state,
+      action: PayloadAction<{
+        answer: { id: number | string };
+        savingSize: AnswerFlagData['savingSize'];
+        isStaleAnswer?: boolean;
+      }>,
+    ) => {
+      if (action.payload.isStaleAnswer) return;
+      answerFlagsAdapter.updateOne(state.flagsByAnswerId, {
+        id: action.payload.answer.id,
+        changes: {
+          savingSize: action.payload.savingSize,
+        },
       });
     },
     updateAnswerFlagSavingStatus: (
@@ -62,7 +81,6 @@ export const answerFlagsSlice = createSlice({
       }>,
     ) => {
       if (action.payload.isStaleAnswer) return;
-
       answerFlagsAdapter.updateOne(state.flagsByAnswerId, {
         id: action.payload.answer.id,
         changes: {
@@ -76,6 +94,7 @@ export const answerFlagsSlice = createSlice({
 export const {
   initiateAnswerFlagsForAnswers,
   resetExistingAnswerFlags,
+  updateAnswerFlagSavingSize,
   updateAnswerFlagSavingStatus,
 } = answerFlagsSlice.actions;
 

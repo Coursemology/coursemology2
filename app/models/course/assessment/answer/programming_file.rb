@@ -4,7 +4,6 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   before_validation :normalize_filename
 
   validates :content, exclusion: [nil]
-  validate :validate_content_size
   validates :filename, length: { maximum: 255 }, presence: true
   validates :answer, presence: true
   validates :filename, uniqueness: { scope: [:answer_id],
@@ -18,8 +17,6 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
 
   # Separate the lines by `\r` `\n` or `\r\n`
   LINE_SEPARATOR = /\r\n|\r|\n/
-  MAX_LINES = ApplicationHtmlFormattersHelper::MAX_CODE_LINES
-  MAX_SIZE = ApplicationHtmlFormattersHelper::MAX_CODE_SIZE
 
   # Returns the code at lines.
   #
@@ -45,12 +42,5 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
   # Normalises the filename for use across platforms.
   def normalize_filename
     self.filename = Pathname.normalize_path(filename)
-  end
-
-  def validate_content_size
-    return if content.blank?
-    return if content.bytesize <= MAX_SIZE && content.lines.size <= MAX_LINES
-
-    errors.add(:content, :exceed_size_limit)
   end
 end

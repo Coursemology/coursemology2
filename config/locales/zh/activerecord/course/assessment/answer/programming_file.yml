@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/assessment/answer/programming_file:
-          attributes:
-            content:
-              exceed_size_limit: '文件必须小于50KB或少于1000行'

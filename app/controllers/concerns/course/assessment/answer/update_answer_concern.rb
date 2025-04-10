@@ -9,7 +9,11 @@ module Course::Assessment::Answer::UpdateAnswerConcern
 
     specific_answer = answer.specific
     specific_answer.assign_params(update_answer_params)
-    answer.save
+    # Saving the specific_answer to forward validation errors
+    return true if specific_answer.save
+
+    answer.errors.merge!(specific_answer.errors)
+    false
   end
 
   protected

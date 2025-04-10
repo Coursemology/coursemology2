@@ -3,12 +3,17 @@ import { memo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Divider, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
-import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
+import {
+  FIELD_LONG_DEBOUNCE_DELAY_MS,
+  ANSWER_TOO_LARGE_ERR,
+} from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import { useDebounce } from 'lib/hooks/useDebounce';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import { QuestionType } from 'types/course/assessment/question';
+import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 import { saveAnswer, updateClientVersion } from '../../actions/answers';
 import { uploadTextResponseFiles } from '../../actions/answers/textResponse';
 
@@ -19,6 +24,7 @@ import { QuestionHistory } from '../../reducers/history/types';
 import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
 import useErrorTranslation from '../../pages/SubmissionEditIndex/useErrorTranslation';
 import { ErrorType } from '../../pages/SubmissionEditIndex/validations/types';
+import translations from '../../translations';
 
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number | null;
@@ -57,6 +63,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     showMcqMrqSolution,
   } = props;
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const { getValues, resetField } = useFormContext();
   const errorMessages = useErrorTranslation(allErrors);
@@ -66,7 +73,13 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     savedAnswerId: number,
     currentTime: number,
   ): void => {
-    dispatch(saveAnswer(answerData, savedAnswerId, currentTime, resetField));
+    dispatch(
+      saveAnswer(answerData, savedAnswerId, currentTime, resetField),
+    ).catch((error) => {
+      if (error?.message?.includes(ANSWER_TOO_LARGE_ERR)) {
+        toast.error(t(translations.answerTooLargeError));
+      }
+    });
   };
 
   const debouncedSaveAnswer = useDebounce(
