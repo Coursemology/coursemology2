@@ -104,7 +104,10 @@ const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
       <Typography variant="h6">{question.questionNumber}</Typography>
 
       <div className="flex items-center">
-        <SavingIndicator savingStatus={savingStatus} />
+        <SavingIndicator
+          savingSize={answerFlag?.savingSize}
+          savingStatus={savingStatus}
+        />
 
         <HistoryToggle
           historyQuestions={historyQuestions}

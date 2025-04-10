@@ -63,6 +63,9 @@ export const SAVING_STATUS = mirrorCreator([
   'Failed',
 ]);
 
+export const MAX_SAVING_SIZE = 2_000_000; // 2MB
+export const ANSWER_TOO_LARGE_ERR = 'exceed_size_limit';
+
 export const SYNC_STATUS = mirrorCreator(['Synced', 'Syncing', 'Failed']);
 
 export const MATERIAL_WORKFLOW_STATE = mirrorCreator([

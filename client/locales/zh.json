@@ -2636,6 +2636,12 @@
   "course.assessment.submission.Answer.rendererNotImplemented": {
     "defaultMessage": "此问题类型的显示尚未实现。"
   },
+  "course.assessment.submission.answerTooLarge": {
+    "defaultMessage": "答案过大"
+  },
+  "course.assessment.submission.answerTooLargeError": {
+    "defaultMessage": "您的答案必须小于 2 MB。"
+  },
   "course.assessment.submission.publishAutoFeedbackConfirmationHeader": {
     "defaultMessage": "您即将发布 {count} 条自动反馈。"
   },

@@ -123,5 +123,18 @@ RSpec.describe Course::Assessment::Answer::Programming do
         end
       end
     end
+
+    describe 'validations' do
+      context 'when the content exceeds the size limit' do
+        let(:max_file_size) { 2.kilobytes }
+        let(:invalid_content) { 'a' * (max_file_size + 1) }
+
+        it 'is not valid' do
+          stub_const('Course::Assessment::Answer::Programming::MAX_TOTAL_FILE_SIZE', max_file_size)
+          answer = build(:course_assessment_answer_programming, file_contents: [invalid_content])
+          expect(answer).not_to be_valid
+        end
+      end
+    end
   end
 end

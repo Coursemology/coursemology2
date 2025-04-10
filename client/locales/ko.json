@@ -2639,6 +2639,12 @@
   "course.assessment.submission.Answer.rendererNotImplemented": {
     "defaultMessage": "이 질문 유형에 대한 디스플레이가 아직 구현되지 않았습니다."
   },
+  "course.assessment.submission.answerTooLarge": {
+    "defaultMessage": "답변이 너무 큽니다"
+  },
+  "course.assessment.submission.answerTooLargeError": {
+    "defaultMessage": "제출한 답변은 2MB 미만이어야 합니다."
+  },
   "course.assessment.submission.CodaveriFeedbackStatus.codaveriFeedbackStatus": {
     "defaultMessage": "Codaveri 피드백 상태"
   },

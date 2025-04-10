@@ -3020,6 +3020,12 @@
   "course.assessment.submission.answers.Programming.ProgrammingFile.sizeTooBig": {
     "defaultMessage": "The file is too big and cannot be displayed."
   },
+  "course.assessment.submission.answerTooLarge": {
+    "defaultMessage": "Answer Too Large"
+  },
+  "course.assessment.submission.answerTooLargeError": {
+    "defaultMessage": "Your answer must be less than 2 MB."
+  },
   "course.assessment.submission.attemptedAt": {
     "defaultMessage": "Attempted At"
   },

@@ -1,0 +1,8 @@
+ko:
+  activerecord:
+    errors:
+      models:
+        course/assessment/answer/programming:
+          attributes:
+            files:
+              exceed_size_limit: '제출한 답변(%{total_size_mb} MB)은 2MB 미만이어야 합니다.'

@@ -9,7 +9,9 @@ import { getSubmissionFlags } from 'course/assessment/submission/selectors/submi
 import { getSubmission } from 'course/assessment/submission/selectors/submissions';
 import translations from 'course/assessment/submission/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { ANSWER_TOO_LARGE_ERR } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {
@@ -38,7 +40,11 @@ const RunCodeButton: FC<Props> = (props) => {
   const onSubmitAnswer = (): void => {
     dispatch(
       submitAnswer(question.id, answerId, getValues(`${answerId}`), resetField),
-    );
+    ).catch((error) => {
+      if (error?.message?.includes(ANSWER_TOO_LARGE_ERR)) {
+        toast.error(t(translations.answerTooLargeError));
+      }
+    });
   };
 
   return (

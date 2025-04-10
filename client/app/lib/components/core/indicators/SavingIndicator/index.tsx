@@ -1,13 +1,16 @@
 import { defineMessages } from 'react-intl';
 import { Cancel, CheckCircle } from '@mui/icons-material';
-import { Chip } from '@mui/material';
+import { Chip, Tooltip } from '@mui/material';
+import { formatReadableBytes } from 'utilities';
 
+import submissionTranslations from 'course/assessment/submission/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { SAVING_STATUS } from 'lib/constants/sharedConstants';
+import { MAX_SAVING_SIZE, SAVING_STATUS } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface SavingIndicatorProps {
   savingStatus: keyof typeof SAVING_STATUS | undefined;
+  savingSize?: number;
 }
 
 const translations = defineMessages({
@@ -22,6 +25,10 @@ const translations = defineMessages({
   savingFailed: {
     id: 'course.assessment.submission.savingFailed',
     defaultMessage: 'Saving Failed',
+  },
+  answerTooLarge: {
+    id: 'course.assessment.submission.answerTooLarge',
+    defaultMessage: 'Answer Too Large',
   },
 });
 
@@ -44,7 +51,7 @@ const SavingIndicatorMap = {
 };
 
 const SavingIndicator = (props: SavingIndicatorProps): JSX.Element | null => {
-  const { savingStatus } = props;
+  const { savingStatus, savingSize } = props;
   const { t } = useTranslation();
 
   if (savingStatus === SAVING_STATUS.None || !savingStatus) return null;
@@ -52,14 +59,26 @@ const SavingIndicator = (props: SavingIndicatorProps): JSX.Element | null => {
   const chipProps = SavingIndicatorMap[savingStatus];
   if (!chipProps) return null;
 
+  const answerTooLarge = savingSize && savingSize > MAX_SAVING_SIZE;
+  const sizeFragment =
+    !answerTooLarge || savingSize === undefined
+      ? ''
+      : ` (-${formatReadableBytes(savingSize - MAX_SAVING_SIZE)})`;
+
   return (
-    <Chip
-      color={chipProps.color}
-      icon={chipProps.icon}
-      label={t(chipProps.label)}
-      size="medium"
-      variant="outlined"
-    />
+    <Tooltip
+      title={
+        answerTooLarge ? t(submissionTranslations.answerTooLargeError) : ''
+      }
+    >
+      <Chip
+        color={chipProps.color}
+        icon={chipProps.icon}
+        label={`${answerTooLarge ? t(translations.answerTooLarge) : t(chipProps.label)}${sizeFragment}`}
+        size="medium"
+        variant="outlined"
+      />
+    </Tooltip>
   );
 };
 

@@ -1,16 +1,7 @@
 import { Delete, Undo } from '@mui/icons-material';
 import { IconButton, TableCell, TableRow } from '@mui/material';
 import { DataFile } from 'types/course/assessment/question/programming';
-
-const KB = 1000;
-const SIZES = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-
-const formatReadableBytes = (bytes: number, decimals = 3): string => {
-  if (bytes === 0) return 'Zero bytes';
-
-  const i = Math.floor(Math.log(bytes) / Math.log(KB));
-  return `${parseFloat((bytes / KB ** i).toFixed(decimals))} ${SIZES[i]}`;
-};
+import { formatReadableBytes } from 'utilities';
 
 type Marked<T> = [T];
 type MaybeMarked<T> = T | Marked<T>;
