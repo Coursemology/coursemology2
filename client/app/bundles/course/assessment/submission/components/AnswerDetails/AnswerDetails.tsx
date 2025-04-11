@@ -1,10 +1,11 @@
 import { defineMessages } from 'react-intl';
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import { AnswerDetailsMap } from 'types/course/statistics/answer';
-import { QuestionDetails } from 'types/course/statistics/assessmentStatistics';
 
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatLongDateTime } from 'lib/moment';
+
+import { AnswerDetailsProps } from '../../types';
 
 import FileUploadDetails from './FileUploadDetails';
 import ForumPostResponseDetails from './ForumPostResponseDetails';
@@ -19,12 +20,11 @@ const translations = defineMessages({
     defaultMessage:
       'The display for this question type has not been implemented yet.',
   },
+  pastAnswerTitle: {
+    id: 'course.assessment.statistics.pastAnswerTitle',
+    defaultMessage: 'Submitted At: {submittedAt}',
+  },
 });
-
-interface AnswerDetailsProps<T extends keyof typeof QuestionType> {
-  question: QuestionDetails<T>;
-  answer: AnswerDetailsMap[T];
-}
 
 const AnswerNotImplemented = (): JSX.Element => {
   const { t } = useTranslation();
@@ -71,13 +71,24 @@ const AnswerDetails = <T extends keyof typeof QuestionType>(
   props: AnswerDetailsProps<T>,
 ): JSX.Element => {
   const Component = AnswerDetailsMapper[props.question.type];
-
+  const { t } = useTranslation();
   // "Any" type is used here as the props are dynamically generated
   // depending on the different answer type and typescript
   // does not support union typing for the elements.
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return Component({ ...props } as any);
+  const componentProps = props as any;
+
+  return (
+    <div className="space-y-0">
+      <Typography variant="body1">
+        {t(translations.pastAnswerTitle, {
+          submittedAt: formatLongDateTime(props.answer.createdAt),
+        })}
+      </Typography>
+      <Component {...componentProps} />
+    </div>
+  );
 };
 
 export default AnswerDetails;

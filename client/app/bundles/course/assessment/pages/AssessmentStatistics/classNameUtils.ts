@@ -39,9 +39,12 @@ const calculateOneSidedColorGradientLevel = (
 // 1. Green : the grade obtained is at least half the maximum possible grade
 // 2. Red : the grade obtained is less than half the maximum possible grade
 export const getClassNameForMarkCell = (
-  grade: number,
+  grade: number | null | undefined,
   maxGrade: number,
 ): string => {
+  if (grade === null || grade === undefined) {
+    return 'bg-gray-300 p-1.5';
+  }
   const gradientLevel = calculateTwoSidedColorGradientLevel(
     grade,
     maxGrade / 2,
