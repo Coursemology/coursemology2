@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
+import { QuestionType } from 'types/course/assessment/question';
 import { SubmissionQuestionBaseData } from 'types/course/assessment/submission/question/types';
 
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
@@ -21,6 +22,8 @@ import {
 import { getQuestions } from '../selectors/questions';
 import { getSubmission } from '../selectors/submissions';
 import translations from '../translations';
+
+import RubricPanel from './RubricPanel';
 
 const GRADE_STEP = 1;
 
@@ -67,6 +70,9 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
 
   const attempting = workflowState === workflowStates.Attempting;
   const published = workflowState === workflowStates.Published;
+
+  const isRubricBasedResponse =
+    question.type === QuestionType.RubricBasedResponse;
 
   const editable = !attempting && graderView;
 
@@ -193,6 +199,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
       <div className="flex items-center space-x-4">
         <TextField
           className="w-40"
+          disabled={isRubricBasedResponse}
           hiddenLabel
           inputProps={{ className: 'grade' }}
           onBlur={(e): void => processValue(e.target.value)}
@@ -268,18 +275,29 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
 
   return (
     (editable || published) && (
-      <Paper
-        className={`transition-none flex items-center space-x-5 px-5 py-4 ring-2 ${
-          dirty ? 'ring-2 ring-warning border-transparent' : 'ring-transparent'
-        }`}
-        variant="outlined"
-      >
-        <Typography color="text.secondary" variant="body1">
-          {t(translations.grade)}
-        </Typography>
+      <>
+        {isRubricBasedResponse && (
+          <RubricPanel
+            questionId={questionId}
+            setIsFirstRendering={setIsFirstRendering}
+          />
+        )}
 
-        {editable ? renderQuestionGradeField() : renderQuestionGrade()}
-      </Paper>
+        <Paper
+          className={`transition-none flex items-center space-x-5 px-5 py-4 ring-2 ${
+            dirty
+              ? 'ring-2 ring-warning border-transparent'
+              : 'ring-transparent'
+          }`}
+          variant="outlined"
+        >
+          <Typography color="text.secondary" variant="body1">
+            {t(translations.grade)}
+          </Typography>
+
+          {editable ? renderQuestionGradeField() : renderQuestionGrade()}
+        </Paper>
+      </>
     )
   );
 };

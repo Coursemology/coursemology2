@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 
 import { saveAllGrades } from 'course/assessment/submission/actions/answers';
 import { workflowStates } from 'course/assessment/submission/constants';
+import { getRubricCategoryGrades } from 'course/assessment/submission/selectors/answers';
 import {
   getExperiencePoints,
   getQuestionWithGrades,
@@ -31,6 +32,28 @@ const SaveGradeButton: FC = () => {
   const attempting = workflowState === workflowStates.Attempting;
   const published = workflowState === workflowStates.Published;
 
+  const categoryGrade = useAppSelector(getRubricCategoryGrades);
+  const categoryGradeDetail = JSON.parse(JSON.stringify(categoryGrade));
+
+  Object.keys(categoryGrade).forEach((answerId) => {
+    if (categoryGrade[answerId]) {
+      categoryGradeDetail[answerId] = categoryGrade[answerId].reduce(
+        (obj, category) => ({
+          ...obj,
+          [category.categoryId]: {
+            id: category.id,
+            gradeId: category.gradeId,
+            grade: category.grade,
+            explanation: category.explanation,
+          },
+        }),
+        {},
+      );
+    } else {
+      categoryGradeDetail[answerId] = null;
+    }
+  });
+
   const handleSaveAllGrades = (): void => {
     dispatch(
       saveAllGrades(
@@ -38,6 +61,7 @@ const SaveGradeButton: FC = () => {
         Object.values(questionWithGrades),
         expPoints,
         published,
+        categoryGradeDetail,
       ),
     );
   };

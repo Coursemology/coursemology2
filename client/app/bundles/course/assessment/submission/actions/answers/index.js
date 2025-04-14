@@ -486,12 +486,43 @@ export function resetAnswer(submissionId, answerId, questionId, resetField) {
   };
 }
 
-export function saveAllGrades(submissionId, grades, exp, published) {
+export function saveAllGrades(
+  submissionId,
+  grades,
+  exp,
+  published,
+  categoryGradeDetail,
+) {
   const expParam = published ? 'points_awarded' : 'draft_points_awarded';
-  const modifiedGrades = grades.map((grade) => ({
-    id: grade.id,
-    grade: grade.grade,
-  }));
+
+  const modifiedGrades = grades.map((grade) => {
+    if (categoryGradeDetail[grade.id]) {
+      const totalGrade = Object.values(categoryGradeDetail[grade.id]).reduce(
+        (acc, category) => acc + category.grade,
+        0,
+      );
+
+      return {
+        id: grade.id,
+        grade: totalGrade,
+        selections_attributes: Object.keys(categoryGradeDetail[grade.id]).map(
+          (categoryId) => ({
+            id: categoryGradeDetail[grade.id][categoryId].id,
+            grade: categoryGradeDetail[grade.id][categoryId].gradeId
+              ? null
+              : categoryGradeDetail[grade.id][categoryId].grade,
+            criterion_id: categoryGradeDetail[grade.id][categoryId].gradeId,
+            explanation: categoryGradeDetail[grade.id][categoryId].explanation,
+          }),
+        ),
+      };
+    }
+    return {
+      id: grade.id,
+      grade: grade.grade,
+    };
+  });
+
   const payload = {
     submission: {
       answers: modifiedGrades,
@@ -564,5 +595,84 @@ export function updateGrade(id, grade, bonusAwarded) {
       grade,
       bonusAwarded,
     });
+  };
+}
+
+export function updateRubric(id, categoryGrades) {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.UPDATE_RUBRIC,
+      payload: {
+        id,
+        categoryGrades,
+      },
+    });
+  };
+}
+
+export function saveRubricAndGrade(
+  submissionId,
+  answerId,
+  questionId,
+  categoryIds,
+  exp,
+  published,
+  categoryGrades,
+  maximumGrade,
+) {
+  const expParam = published ? 'points_awarded' : 'draft_points_awarded';
+
+  const totalGrade = Object.values(categoryGrades).reduce(
+    (acc, category) => acc + category.grade,
+    0,
+  );
+
+  const finalGrade = Math.max(0, Math.min(totalGrade, maximumGrade));
+
+  const modifiedAnswerObject = {
+    id: answerId,
+    grade: finalGrade,
+    selections_attributes: categoryIds.map((categoryId) => ({
+      id: categoryGrades[categoryId].id,
+      grade: categoryGrades[categoryId].gradeId
+        ? null
+        : categoryGrades[categoryId].grade,
+      criterion_id: categoryGrades[categoryId].gradeId,
+      explanation: categoryGrades[categoryId].explanation,
+    })),
+  };
+
+  const payload = {
+    submission: {
+      answers: [modifiedAnswerObject],
+      [expParam]: exp,
+    },
+  };
+
+  return (dispatch) => {
+    dispatch({ type: actionTypes.SAVE_GRADE_REQUEST });
+
+    return CourseAPI.assessment.submissions
+      .updateGrade(submissionId, payload)
+      .then((response) => response.data)
+      .then((data) => {
+        const updatedGrade = produce(data, (draftData) => {
+          const tempDraftData = draftData;
+          tempDraftData.answers = tempDraftData.answers.filter(
+            (answer) => answer.questionId === questionId,
+          );
+        });
+
+        dispatch({
+          type: actionTypes.SAVE_GRADE_SUCCESS,
+          payload: updatedGrade,
+        });
+      })
+      .catch((error) => {
+        dispatch({ type: actionTypes.SAVE_GRADE_FAILURE });
+        dispatch(
+          setNotification(translations.updateFailure, buildErrorMessage(error)),
+        );
+      });
   };
 }

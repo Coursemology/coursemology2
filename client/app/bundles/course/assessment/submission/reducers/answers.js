@@ -80,6 +80,12 @@ export default function (state = initialState, action) {
     case actions.RESET_SUCCESS: {
       return state;
     }
+    case actions.UPDATE_RUBRIC: {
+      const { id: answerId, categoryGrades } = action.payload;
+      return produce(state, (draft) => {
+        draft.categoryGrades[answerId] = categoryGrades;
+      });
+    }
     default:
       return state;
   }
