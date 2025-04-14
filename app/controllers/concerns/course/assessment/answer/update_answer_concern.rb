@@ -31,30 +31,59 @@ module Course::Assessment::Answer::UpdateAnswerConcern
     end
   end
 
-  def update_specific_answer_type_params(answer) # rubocop:disable Metrics/MethodLength
+  def update_specific_answer_type_params(answer) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     answer_actable_class = answer.actable.class.name
     scalar_params = []
     array_params = {}
 
     case answer_actable_class
     when 'Course::Assessment::Answer::MultipleResponse'
-      array_params[:option_ids] = []
+      update_multiple_response_params(array_params)
     when 'Course::Assessment::Answer::Programming'
-      array_params[:files_attributes] = [:id, :filename, :content]
+      update_programming_params(array_params)
     when 'Course::Assessment::Answer::TextResponse'
-      scalar_params.push(:answer_text)
-      scalar_params.push(attachments_params)
+      update_text_response_params(scalar_params)
+    when 'Course::Assessment::Answer::RubricBasedResponse'
+      update_rubric_based_response_params(scalar_params, array_params, answer)
     when 'Course::Assessment::Answer::VoiceResponse'
-      scalar_params.push(attachments_params)
+      update_voice_response_params(scalar_params)
     when 'Course::Assessment::Answer::Scribing'
       nil
     when 'Course::Assessment::Answer::ForumPostResponse'
-      scalar_params.push(:answer_text)
-      forum_post_attributes = [:id, :text, :creatorId, :updatedAt]
-      array_params[:selected_post_packs] =
-        [core_post: forum_post_attributes, parent_post: forum_post_attributes, topic: [:id]]
+      update_forum_post_response_params(scalar_params, array_params)
     end
 
     scalar_params.push(array_params)
+  end
+
+  def update_multiple_response_params(array_params)
+    array_params[:option_ids] = []
+  end
+
+  def update_programming_params(array_params)
+    array_params[:files_attributes] = [:id, :filename, :content]
+  end
+
+  def update_text_response_params(scalar_params)
+    scalar_params.push(:answer_text)
+    scalar_params.push(attachments_params)
+  end
+
+  def update_voice_response_params(scalar_params)
+    scalar_params.push(attachments_params)
+  end
+
+  def update_rubric_based_response_params(scalar_params, array_params, answer)
+    scalar_params.push(:answer_text)
+    return unless can?(:grade, answer) && !answer.submission.attempting?
+
+    array_params[:selections_attributes] = [:id, :answer_id, :category_id, :criterion_id, :grade, :explanation]
+  end
+
+  def update_forum_post_response_params(scalar_params, array_params)
+    scalar_params.push(:answer_text)
+    forum_post_attributes = [:id, :text, :creatorId, :updatedAt]
+    array_params[:selected_post_packs] =
+      [core_post: forum_post_attributes, parent_post: forum_post_attributes, topic: [:id]]
   end
 end

@@ -64,8 +64,8 @@ const RubricBasedResponseForm = (
         <QuestionFields disabled={submitting} disableSettingMaxGrade />
         <Section
           sticksToNavbar
-          subtitle={t(translations.rubricsHint)}
-          title={t(translations.rubrics)}
+          subtitle={t(translations.rubricHint)}
+          title={t(translations.rubric)}
         >
           <CategoryManager
             disabled={submitting}

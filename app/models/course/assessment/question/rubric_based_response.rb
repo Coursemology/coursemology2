@@ -19,6 +19,10 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
     self.categories = duplicator.duplicate(other.categories)
   end
 
+  def auto_gradable?
+    !categories.empty?
+  end
+
   def question_type
     'RubricBasedResponse'
   end
@@ -29,6 +33,13 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
 
   def history_viewable?
     true
+  end
+
+  def attempt(submission, last_attempt = nil)
+    answer = Course::Assessment::Answer::RubricBasedResponse.new(submission: submission, question: question)
+    answer.answer_text = last_attempt.answer_text if last_attempt
+
+    answer.acting_as
   end
 
   private

@@ -37,6 +37,9 @@ const formatAnswerSpecific = (answer) => {
     [questionTypes.TextResponse]: () => ({
       answer_text: answer.answer_text,
     }),
+    [questionTypes.RubricBasedResponse]: () => ({
+      answer_text: answer.answer_text,
+    }),
     [questionTypes.FileUpload]: () => ({}),
     [questionTypes.VoiceResponse]: () => {
       const fileObj = answer.file;

@@ -1,0 +1,146 @@
+import { Dispatch, FC, SetStateAction } from 'react';
+import { MenuItem, Select, Typography } from '@mui/material';
+import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
+import {
+  RubricBasedResponseCategoryQuestionData,
+  SubmissionQuestionBaseData,
+} from 'types/course/assessment/submission/question/types';
+
+import TextField from 'lib/components/core/fields/TextField';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+
+import {
+  updateGrade as updateGradeState,
+  updateRubric,
+} from '../actions/answers';
+import { workflowStates } from '../constants';
+import { getQuestionWithGrades } from '../selectors/grading';
+import { getQuestions } from '../selectors/questions';
+import { getSubmission } from '../selectors/submissions';
+import { GradeWithPrefilledStatus } from '../types';
+import { transformRubric } from '../utils/rubrics';
+
+interface RubricExplanationProps {
+  answerId: number;
+  questionId: number;
+  category: RubricBasedResponseCategoryQuestionData;
+  categoryGrades: Record<number, AnswerRubricGradeData>;
+  setCategoryGrades: Dispatch<
+    SetStateAction<Record<number, AnswerRubricGradeData>>
+  >;
+  setIsFirstRendering: (isFirstRendering: boolean) => void;
+  updateGrade: (
+    catGrades: Record<number, AnswerRubricGradeData>,
+    qId: number,
+    oldQuestions: Record<number, GradeWithPrefilledStatus>,
+  ) => void;
+}
+
+const RubricExplanation: FC<RubricExplanationProps> = (props) => {
+  const {
+    answerId,
+    questionId,
+    category,
+    categoryGrades,
+    setCategoryGrades,
+    setIsFirstRendering,
+    updateGrade,
+  } = props;
+
+  const questionWithGrades = useAppSelector(getQuestionWithGrades);
+  const submission = useAppSelector(getSubmission);
+
+  const dispatch = useAppDispatch();
+
+  const { submittedAt, bonusEndAt, bonusPoints, workflowState } = submission;
+  const bonusAwarded =
+    new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
+  const questions = useAppSelector(getQuestions);
+
+  const question = questions[questionId] as SubmissionQuestionBaseData;
+  const isNotGradedAndNotPublished =
+    workflowState !== workflowStates.Graded &&
+    workflowState !== workflowStates.Published;
+
+  const categoryIdToGradeMap = category.grades.reduce(
+    (acc, catGrade) => ({
+      ...acc,
+      [catGrade.id]: catGrade.grade,
+    }),
+    {},
+  );
+
+  const handleOnChange = (event): void => {
+    const newValue = event.target.value;
+
+    const newCategoryGrades = category.isBonusCategory
+      ? {
+          ...categoryGrades,
+          [category.id]: {
+            ...categoryGrades[category.id],
+            explanation: newValue,
+          },
+        }
+      : {
+          ...categoryGrades,
+          [category.id]: {
+            ...categoryGrades[category.id],
+            gradeId: Number(newValue),
+            grade: categoryIdToGradeMap[Number(newValue)],
+          },
+        };
+
+    const totalGrade = Object.values(newCategoryGrades).reduce(
+      (acc, catGrade) => acc + Number(catGrade.grade),
+      0,
+    );
+
+    const finalGrade = Math.max(0, Math.min(totalGrade, question.maximumGrade));
+
+    setCategoryGrades(newCategoryGrades);
+    setIsFirstRendering(false);
+
+    dispatch(updateRubric(answerId, transformRubric(newCategoryGrades)));
+    dispatch(updateGradeState(questionId, finalGrade, bonusAwarded));
+
+    if (isNotGradedAndNotPublished) {
+      updateGrade(newCategoryGrades, questionId, questionWithGrades);
+    }
+  };
+
+  if (category.isBonusCategory) {
+    return (
+      <TextField
+        className="w-full h-20 text-wrap"
+        id={`category-${category.id}`}
+        multiline
+        onChange={handleOnChange}
+        value={categoryGrades[category.id].explanation}
+        variant="outlined"
+      />
+    );
+  }
+
+  return (
+    <Select
+      className="w-full h-20 text-wrap"
+      id={`category-${category.id}`}
+      onChange={handleOnChange}
+      value={categoryGrades[category.id].gradeId}
+      variant="outlined"
+    >
+      {category.grades.map((grade) => (
+        <MenuItem key={grade.id} value={grade.id}>
+          <Typography
+            dangerouslySetInnerHTML={{
+              __html: grade.explanation,
+            }}
+            variant="body2"
+          />
+        </MenuItem>
+      ))}
+    </Select>
+  );
+};
+
+export default RubricExplanation;

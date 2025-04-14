@@ -550,6 +550,18 @@ const translations = defineMessages({
     defaultMessage:
       'The display for this question type has not been implemented yet.',
   },
+  rubricScores: {
+    id: 'course.assessment.submission.rubricScores',
+    defaultMessage: 'Rubric Grades',
+  },
+  category: {
+    id: 'course.assessment.submission.category',
+    defaultMessage: 'Category',
+  },
+  explanation: {
+    id: 'course.assessment.submission.explanation',
+    defaultMessage: 'Explanation',
+  },
   solutions: {
     id: 'course.assessment.submission.solutions',
     defaultMessage: 'Solutions',

@@ -44,11 +44,18 @@ module Course::Assessment::Submission::AnswersConcern
     new_answers_actables = new_answers_record.map(&:actable)
     new_answers_group_by_actables = new_answers_actables.group_by { |actable| actable.class.to_s }
 
+    bulk_save_new_answer_actables(new_answers_group_by_actables)
+    true
+  end
+
+  def bulk_save_new_answer_actables(new_answers_group_by_actables)
     ActiveRecord::Base.transaction do
       new_answers_group_by_actables.each_key do |key|
         key.constantize.import! new_answers_group_by_actables[key], recursive: true
+        if key.constantize == Course::Assessment::Answer::RubricBasedResponse
+          new_answers_group_by_actables[key].each(&:create_category_grade_instances)
+        end
       end
     end
-    true
   end
 end
