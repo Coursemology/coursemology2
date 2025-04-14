@@ -15,8 +15,8 @@ class Course::Survey::ReminderService
     send_closing_reminder(survey)
   end
 
-  def send_closing_reminder(survey, include_phantom: true, include_unsubscribed: false)
-    students = uncompleted_subscribed_students(survey, include_phantom, include_unsubscribed)
+  def send_closing_reminder(survey, course_user_ids = [], include_unsubscribed: false)
+    students = uncompleted_subscribed_students(survey, course_user_ids, include_unsubscribed)
     unless students.empty?
       closing_reminder_students(survey, students)
       closing_reminder_staff(survey, students)
@@ -55,19 +55,22 @@ class Course::Survey::ReminderService
   # Returns a Set of students who have not completed the given survey and subscribe to the survey email.
   #
   # @param [Course::Survey] survey The survey to query.
-  # @param [Boolean] include_phantom Whether to include phantom students in the reminder email.
+  # @param [Array<Integer>] course_user_ids Course user ids of intended recipients (if specified).
+  #   If empty, all students will be selected.
   # @param [Boolean] include_unsubscribed Whether to include unsubscribed students in the reminder (forced reminder).
   # @return [Set<CourseUser>] Set of CourseUsers who have not finished the survey.
-  def uncompleted_subscribed_students(survey, include_phantom, include_unsubscribed)
-    course_users = survey.course.course_users.student
+  # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
+  def uncompleted_subscribed_students(survey, course_user_ids, include_unsubscribed)
+    course_users = survey.course.course_users
+    course_users = course_users.where(id: course_user_ids) unless course_user_ids.empty?
     email_enabled = survey.course.email_enabled(:surveys, :closing_reminder)
     # Eager load :user as it's needed for the recipient email.
-    students = if (email_enabled.regular && !email_enabled.phantom) || !include_phantom
-                 course_users.without_phantom_users.includes(:user)
+    students = if email_enabled.regular && !email_enabled.phantom
+                 course_users.student.without_phantom_users.includes(:user)
                elsif email_enabled.phantom && !email_enabled.regular
-                 course_users.phantom.includes(:user)
+                 course_users.student.phantom.includes(:user)
                else
-                 course_users.includes(:user)
+                 course_users.student.includes(:user)
                end
 
     submitted =
@@ -79,4 +82,5 @@ class Course::Survey::ReminderService
                    where('course_user_email_unsubscriptions.course_settings_email_id = ?', email_enabled.id)
     Set.new(students) - Set.new(unsubscribed) - Set.new(submitted)
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
 end

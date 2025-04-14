@@ -169,15 +169,11 @@ export function fetchResults(surveyId) {
   };
 }
 
-export function sendReminderEmail(
-  successMessage,
-  failureMessage,
-  includePhantom,
-) {
+export function sendReminderEmail(successMessage, failureMessage, courseUsers) {
   return (dispatch) => {
     dispatch({ type: actionTypes.SEND_REMINDER_REQUEST });
     return CourseAPI.survey.surveys
-      .remind(includePhantom)
+      .remind(courseUsers)
       .then(() => {
         dispatch({ type: actionTypes.SEND_REMINDER_SUCCESS });
         setNotification(successMessage)(dispatch);

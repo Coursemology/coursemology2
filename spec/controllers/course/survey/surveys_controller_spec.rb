@@ -28,7 +28,14 @@ RSpec.describe Course::Survey::SurveysController do
     end
     let(:json_response) { JSON.parse(response.body) }
 
-    before { controller_sign_in(controller, user) }
+    before do
+      controller_sign_in(controller, user)
+
+      group = create(:course_group, course: course)
+      create(:course_group_user,
+             course: course, group: group, course_user: student)
+      create(:course_group_manager, course: course, group: group, course_user: manager)
+    end
 
     describe '#index' do
       let!(:published_survey) { create(:survey, :published, course: course) }
@@ -228,7 +235,7 @@ RSpec.describe Course::Survey::SurveysController do
 
           expect(multiple_choice_question['answers'][0].keys).to contain_exactly(
             'id', 'course_user_name', 'course_user_id', 'phantom', 'question_option_ids',
-            'response_path'
+            'response_path', 'isStudent', 'myStudent'
           )
 
           expect(multiple_choice_question['options'][0].keys).to contain_exactly(
@@ -244,16 +251,48 @@ RSpec.describe Course::Survey::SurveysController do
     end
 
     describe '#remind' do
-      let(:user) { admin }
+      let(:user) { manager.user }
+      let!(:other_student) { create(:course_student, course: course) }
       let(:survey_traits) { :currently_active }
 
-      subject { post :remind, as: :json, params: { course_id: course.id, id: survey.id } }
+      subject do
+        post :remind, as: :json, params: {
+          course_id: course.id, id: survey.id, course_users: course_users_param
+        }
+      end
 
-      it 'sends reminder to students' do
-        allow(Course::Survey::ReminderService).to receive(:send_closing_reminder)
-        subject
-        expect(Course::Survey::ReminderService).to have_received(:send_closing_reminder)
-        expect(response).to have_http_status(:ok)
+      context 'when course_users param is my students' do
+        let(:course_users_param) { 'my_students' }
+        it 'sends reminder only to my students' do
+          allow(Course::Survey::ReminderService).to receive(:send_closing_reminder)
+          subject
+          expect(Course::Survey::ReminderService).to have_received(:send_closing_reminder).with(
+            survey, a_collection_containing_exactly(student.id), include_unsubscribed: true
+          )
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'when course_users param is students' do
+        let(:course_users_param) { 'students' }
+        it 'sends reminder to all students' do
+          allow(Course::Survey::ReminderService).to receive(:send_closing_reminder)
+          subject
+          expect(Course::Survey::ReminderService).to have_received(:send_closing_reminder).with(
+            survey, a_collection_containing_exactly(student.id, other_student.id), include_unsubscribed: true
+          )
+          expect(response).to have_http_status(:ok)
+        end
+      end
+
+      context 'when course_users param is not valid' do
+        let(:course_users_param) { 'sheesh' }
+        it 'does not send reminders and returns bad request' do
+          allow(Course::Survey::ReminderService).to receive(:send_closing_reminder)
+          subject
+          expect(Course::Survey::ReminderService).not_to have_received(:send_closing_reminder)
+          expect(response).to have_http_status(:bad_request)
+        end
       end
     end
 

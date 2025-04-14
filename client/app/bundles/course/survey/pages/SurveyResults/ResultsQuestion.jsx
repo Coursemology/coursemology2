@@ -21,11 +21,16 @@ class ResultsQuestion extends Component {
     const {
       question: { options, answers, question_type: questionType },
       anonymous,
-      includePhantoms,
+      answerFilter,
     } = this.props;
     return (
       <OptionsQuestionResults
-        {...{ options, answers, questionType, anonymous, includePhantoms }}
+        {...{
+          options,
+          answers: answers.filter(answerFilter),
+          questionType,
+          anonymous,
+        }}
       />
     );
   }
@@ -47,11 +52,16 @@ class ResultsQuestion extends Component {
 
   renderTextResults() {
     const {
-      includePhantoms,
       question: { answers },
+      answerFilter,
       anonymous,
     } = this.props;
-    return <TextResponseResults {...{ includePhantoms, answers, anonymous }} />;
+    return (
+      <TextResponseResults
+        anonymous={anonymous}
+        answers={answers.filter(answerFilter)}
+      />
+    );
   }
 
   render() {
@@ -84,7 +94,6 @@ class ResultsQuestion extends Component {
 
 ResultsQuestion.propTypes = {
   index: PropTypes.number.isRequired,
-  includePhantoms: PropTypes.bool.isRequired,
   anonymous: PropTypes.bool.isRequired,
   question: PropTypes.shape({
     id: PropTypes.number,
@@ -105,6 +114,7 @@ ResultsQuestion.propTypes = {
       }),
     ),
   }).isRequired,
+  answerFilter: PropTypes.func.isRequired,
 };
 
 export default ResultsQuestion;

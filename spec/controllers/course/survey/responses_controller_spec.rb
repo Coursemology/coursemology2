@@ -49,8 +49,11 @@ RSpec.describe Course::Survey::ResponsesController do
           )
 
           expect(first_response['course_user'].keys).to contain_exactly(
-            'id', 'name', 'path', 'phantom'
+            'id', 'name', 'path', 'phantom', 'isStudent', 'myStudent'
           )
+
+          expect(first_response['course_user']['isStudent']).to be_truthy
+          expect(first_response['course_user']['myStudent']).to be_falsey
         end
       end
     end

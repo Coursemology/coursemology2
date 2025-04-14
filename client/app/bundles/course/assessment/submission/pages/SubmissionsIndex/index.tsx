@@ -10,6 +10,7 @@ import {
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import SubmissionStatusChart from 'course/assessment/pages/AssessmentStatistics/SubmissionStatus/SubmissionStatusChart';
+import CourseUserTypeFragment from 'lib/components/core/CourseUserTypeFragment';
 import CourseUserTypeTabs, {
   CourseUserType,
   CourseUserTypeTabValue,
@@ -38,7 +39,7 @@ import {
   sendAssessmentReminderEmail,
   unsubmitAllSubmissions,
 } from '../../actions/submissions';
-import { CourseUserTypeDisplayMapper, workflowStates } from '../../constants';
+import { workflowStates } from '../../constants';
 import translations from '../../translations';
 
 import SubmissionsTable from './SubmissionsTable';
@@ -203,7 +204,9 @@ const AssessmentSubmissionsIndex: FC = () => {
       attempting: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Attempting,
       ).length,
-      selectedUsers: CourseUserTypeDisplayMapper[currentSelectedUserType],
+      selectedUsers: (
+        <CourseUserTypeFragment userType={currentSelectedUserType} />
+      ),
     };
     const message = assessment.autograded
       ? translations.forceSubmitConfirmationAutograded
@@ -359,7 +362,9 @@ const AssessmentSubmissionsIndex: FC = () => {
       graded: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Graded,
       ).length,
-      selectedUsers: CourseUserTypeDisplayMapper[currentSelectedUserType],
+      selectedUsers: (
+        <CourseUserTypeFragment userType={currentSelectedUserType} />
+      ),
     };
 
     return (
@@ -383,7 +388,9 @@ const AssessmentSubmissionsIndex: FC = () => {
       attempting: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Attempting,
       ).length,
-      selectedUsers: CourseUserTypeDisplayMapper[currentSelectedUserType],
+      selectedUsers: (
+        <CourseUserTypeFragment userType={currentSelectedUserType} />
+      ),
     };
 
     return (
