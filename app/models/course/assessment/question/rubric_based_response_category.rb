@@ -14,6 +14,8 @@ class Course::Assessment::Question::RubricBasedResponseCategory < ApplicationRec
 
   has_many :levels, class_name: 'Course::Assessment::Question::RubricBasedResponseLevel',
                     dependent: :destroy, foreign_key: :category_id, inverse_of: :category
+  has_many :scores, class_name: 'Course::Assessment::Answer::RubricBasedResponseScore',
+                    dependent: :destroy, foreign_key: :category_id, inverse_of: :category
 
   accepts_nested_attributes_for :levels, allow_destroy: true
 

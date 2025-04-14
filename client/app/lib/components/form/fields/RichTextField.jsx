@@ -33,6 +33,8 @@ FormRichTextField.propTypes = {
   disableMargins: PropTypes.bool,
   placeholder: PropTypes.string,
   required: PropTypes.bool,
+  multiline: PropTypes.bool,
+  renderIf: PropTypes.bool,
 };
 
 export default memo(FormRichTextField, propsAreEqual);

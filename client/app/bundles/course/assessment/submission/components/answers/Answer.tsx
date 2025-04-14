@@ -14,6 +14,7 @@ import ForumPostResponseAnswer from './ForumPostResponse';
 import MultipleChoiceAnswer from './MultipleChoice';
 import MultipleResponseAnswer from './MultipleResponse';
 import ProgrammingAnswer from './Programming';
+import RubricBasedResponseAnswer from './RubricBasedResponse';
 import TextResponseAnswer from './TextResponse';
 import {
   AnswerPropsMap,
@@ -122,6 +123,22 @@ const TextResponse = (props: TextResponseAnswerProps): JSX.Element => {
   );
 };
 
+const RubricBasedResponse = (
+  props: RubricBasedResponseAnswerProps,
+): JSX.Element => {
+  const { question, answerId, readOnly, saveAnswerAndUpdateClientVersion } =
+    props;
+  return (
+    <RubricBasedResponseAnswer
+      key={`question_${question.id}`}
+      answerId={answerId!}
+      question={question}
+      readOnly={readOnly}
+      saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}
+    />
+  );
+};
+
 const FileUpload = (props: FileUploadAnswerProps): JSX.Element => {
   const { question, answerId, readOnly, handleUploadTextResponseFiles } = props;
   return (
@@ -197,10 +214,9 @@ export const AnswerMapper = {
     <FileUpload {...props} />
   ),
   Comprehension: (): JSX.Element => <AnswerNotImplemented />,
-  // TODO: implement Rubric Based Answer View once implementation for answer has started
-  RubricBasedResponse: (
-    _props: RubricBasedResponseAnswerProps,
-  ): JSX.Element => <AnswerNotImplemented />,
+  RubricBasedResponse: (props: RubricBasedResponseAnswerProps): JSX.Element => (
+    <RubricBasedResponse {...props} />
+  ),
   Scribing: (props: ScribingAnswerProps): JSX.Element => (
     <Scribing {...props} />
   ),
