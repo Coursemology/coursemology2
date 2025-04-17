@@ -31,7 +31,7 @@ module Course::Assessment::Answer::UpdateAnswerConcern
     end
   end
 
-  def update_specific_answer_type_params(answer) # rubocop:disable Metrics/MethodLength
+  def update_specific_answer_type_params(answer) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
     answer_actable_class = answer.actable.class.name
     scalar_params = []
     array_params = {}
@@ -44,6 +44,8 @@ module Course::Assessment::Answer::UpdateAnswerConcern
     when 'Course::Assessment::Answer::TextResponse'
       scalar_params.push(:answer_text)
       scalar_params.push(attachments_params)
+    when 'Course::Assessment::Answer::RubricBasedResponse'
+      scalar_params.push(:answer_text)
     when 'Course::Assessment::Answer::VoiceResponse'
       scalar_params.push(attachments_params)
     when 'Course::Assessment::Answer::Scribing'

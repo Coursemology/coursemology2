@@ -1,7 +1,7 @@
 import { AppState } from 'store';
 import { AnswerData } from 'types/course/assessment/submission/answer';
 
-import { AnswerState } from '../types';
+import { AnswerState, CategoryScoreType } from '../types';
 
 const getLocalState = (state: AppState): AnswerState => {
   return state.assessments.submission.answers;
@@ -18,4 +18,11 @@ export const getClientVersionForAnswerId = (
   answerId: number,
 ): number => {
   return getLocalState(state).clientVersionByAnswerId[answerId];
+};
+
+export const getRubricCategoryScoresForAnswerId = (
+  state: AppState,
+  answerId: number,
+): CategoryScoreType[] => {
+  return getLocalState(state).categoryScores[answerId];
 };

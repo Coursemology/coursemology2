@@ -57,6 +57,11 @@ export const convertAnswerDataToInitialValue = (
         ...answer.fields,
         questionType: answer.questionType,
       };
+    case QuestionType.RubricBasedResponse:
+      return {
+        ...answer.fields,
+        questionType: answer.questionType,
+      };
     default:
       return null;
   }

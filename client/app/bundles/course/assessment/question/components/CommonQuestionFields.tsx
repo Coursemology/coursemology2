@@ -41,6 +41,7 @@ export const commonQuestionFieldsValidation = object({
 interface CommonQuestionFieldsProps<T extends FieldValues>
   extends Partial<AvailableSkills> {
   disabled?: boolean;
+  disableSettingMaxGrade?: boolean;
   control?: Control<T>;
   name?: FieldPath<T>;
 }
@@ -48,7 +49,13 @@ interface CommonQuestionFieldsProps<T extends FieldValues>
 const CommonQuestionFields = <T extends FieldValues>(
   props: CommonQuestionFieldsProps<T>,
 ): JSX.Element => {
-  const { disabled: submitting, control, availableSkills, skillsUrl } = props;
+  const {
+    disabled: submitting,
+    disableSettingMaxGrade,
+    control,
+    availableSkills,
+    skillsUrl,
+  } = props;
 
   const { t } = useTranslation();
 
@@ -110,7 +117,7 @@ const CommonQuestionFields = <T extends FieldValues>(
           name={`${prefix}maximumGrade` as FieldPath<T>}
           render={({ field, fieldState }): JSX.Element => (
             <FormTextField
-              disabled={submitting}
+              disabled={submitting || disableSettingMaxGrade}
               disableMargins
               field={field}
               fieldState={fieldState}

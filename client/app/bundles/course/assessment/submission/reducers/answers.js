@@ -9,6 +9,7 @@ import {
 const initialState = {
   initial: {},
   clientVersionByAnswerId: {},
+  categoryScores: {},
 };
 
 export default function (state = initialState, action) {
@@ -54,8 +55,17 @@ export default function (state = initialState, action) {
         draft.clientVersionByAnswerId = buildInitialClientVersion(
           action.payload.answers,
         );
+
+        draft.categoryScores = answers.reduce(
+          (previousObj, answer) => ({
+            ...previousObj,
+            [answer.id]: answer.categoryScores,
+          }),
+          {},
+        );
       });
     }
+
     case actions.UPDATE_ANSWER_CLIENT_VERSION: {
       const { clientVersion, id: answerId } = action.payload.answer;
 

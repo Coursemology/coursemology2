@@ -53,6 +53,7 @@ const isSpecificAnswerGradePrefillableMap = {
       isEvaluationTestCasesExist
     );
   },
+  [questionTypes.RubricBasedResponse]: () => false,
   [questionTypes.TextResponse]: () => false,
   [questionTypes.Comprehension]: () => false,
   [questionTypes.FileUpload]: () => false,

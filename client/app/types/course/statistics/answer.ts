@@ -163,6 +163,11 @@ export interface ForumPostResponseAnswerDetails
   };
 }
 
+export interface RubricBasedResponseAnswerDetails
+  extends AnswerCommonDetails<'RubricBasedResponse'> {
+  // TODO: add proper fields once the implementation of answer views in Rubric has started
+}
+
 export interface AnswerDetailsMap {
   MultipleChoice: McqAnswerDetails;
   MultipleResponse: MrqAnswerDetails;
@@ -173,4 +178,5 @@ export interface AnswerDetailsMap {
   Scribing: ScribingAnswerDetails;
   VoiceResponse: VoiceResponseAnswerDetails;
   ForumPostResponse: ForumPostResponseAnswerDetails;
+  RubricBasedResponse: RubricBasedResponseAnswerDetails;
 }

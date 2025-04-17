@@ -12,6 +12,7 @@ export const questionTypes = mirrorCreator([
   'Scribing',
   'VoiceResponse',
   'ForumPostResponse',
+  'RubricBasedResponse',
 ]);
 
 export const MEGABYTES_TO_BYTES = 1024 * 1024;

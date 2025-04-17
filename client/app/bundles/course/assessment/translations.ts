@@ -521,6 +521,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.forumPostResponse',
     defaultMessage: 'Forum Post Response',
   },
+  rubricBasedResponse: {
+    id: 'course.assessment.show.rubricBasedResponse',
+    defaultMessage: 'Rubric-Based Response',
+  },
   newMultipleChoice: {
     id: 'course.assessment.show.newMultipleChoice',
     defaultMessage: 'New Multiple Choice Question (MCQ)',
@@ -540,6 +544,10 @@ const translations = defineMessages({
   newFileUpload: {
     id: 'course.assessment.show.newFileUpload',
     defaultMessage: 'New File Upload Question',
+  },
+  newRubricBasedResponse: {
+    id: 'course.assessment.show.newRubricBasedResponse',
+    defaultMessage: 'New Rubric Based Response Question',
   },
   newProgramming: {
     id: 'course.assessment.show.newProgramming',
@@ -902,6 +910,38 @@ const translations = defineMessages({
   solutionWillBeDeleted: {
     id: 'course.assessment.question.textResponses.solutionWillBeDeleted',
     defaultMessage: 'This solution will be deleted once you save your changes.',
+  },
+  rubrics: {
+    id: 'course.assessment.question.rubricBasedResponses.rubrics',
+    defaultMessage: 'Rubrics',
+  },
+  categoryName: {
+    id: 'course.assessment.question.rubricBasedResponses.categoryName',
+    defaultMessage: 'Name',
+  },
+  categoryMaximumScore: {
+    id: 'course.assessment.question.rubricBasedResponses.categoryMaximumScore',
+    defaultMessage: 'Maximum Score',
+  },
+  levelLevel: {
+    id: 'course.assessment.question.rubricBasedResponses.levelLevel',
+    defaultMessage: 'Level',
+  },
+  levelExplanation: {
+    id: 'course.assessment.question.rubricBasedResponses.levelExplanation',
+    defaultMessage: 'Explanation',
+  },
+  rubricsHint: {
+    id: 'course.assessment.question.rubricBasedResponses.rubricsHint',
+    defaultMessage: "Rubrics are used to grade the student's submission.",
+  },
+  addNewCategory: {
+    id: 'course.assessment.question.rubricBasedResponses.addNewCategory',
+    defaultMessage: 'Add new category',
+  },
+  addNewLevel: {
+    id: 'course.assessment.question.rubricBasedResponses.addNewLevel',
+    defaultMessage: 'Add new level',
   },
   newSolutionCannotUndo: {
     id: 'course.assessment.question.textResponses.newSolutionCannotUndo',

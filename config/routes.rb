@@ -244,6 +244,7 @@ Rails.application.routes.draw do
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
+            resources :rubric_based_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :programming, only: [:new, :create, :edit, :update, :destroy] do
               post :generate, on: :collection
               get :codaveri_languages, on: :collection
@@ -296,6 +297,10 @@ Rails.application.routes.draw do
                   end
                   namespace :forum_post_response do
                     get 'selected_post_packs' => 'posts#selected'
+                  end
+                  namespace :rubric_based_response do
+                    patch 'update_score' => 'rubric_based_response#update_score'
+                    patch 'update_explanation' => 'rubric_based_response#update_explanation'
                   end
                 end
               end
