@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const packageJSON = require('./package.json');
+const cssIncludes = require('./css-includes.json');
 
 const ENV_DIR = process.env.BABEL_ENV === 'e2e-test' ? './.env.test' : './.env';
 
@@ -91,31 +92,12 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-        include: [
-          resolve(__dirname, 'node_modules/rc-slider/assets'),
-          resolve(
-            __dirname,
-            'node_modules/react-image-crop/dist/ReactCrop.css',
-          ),
-          resolve(
-            __dirname,
-            'node_modules/react-tooltip/dist/react-tooltip.min.css',
-          ),
-          resolve(__dirname, 'app/lib/components/core/fields/CKEditor.css'),
-          resolve(__dirname, 'app/lib/components/core/fields/AceEditor.css'),
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { sourceMap: false } },
+          'postcss-loader',
         ],
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
-        include: [resolve(__dirname, 'app/theme/index.css')],
-      },
-      {
-        test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-        include: [resolve(__dirname, 'app/lib/styles')],
-        exclude: /node_modules/,
+        include: cssIncludes.map((path) => resolve(__dirname, path)),
       },
       {
         test: /\.scss$/,
@@ -124,15 +106,16 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1,
+              sourceMap: false,
               modules: {
                 localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
               },
             },
           },
+          'postcss-loader',
           'sass-loader',
         ],
-        exclude: [/node_modules/, resolve(__dirname, 'app/lib/styles')],
+        exclude: [/node_modules/],
       },
       {
         test: /\.(csv|png|svg)$/i,
