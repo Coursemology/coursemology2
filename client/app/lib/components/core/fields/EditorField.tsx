@@ -1,8 +1,15 @@
-import { ComponentProps, ForwardedRef, forwardRef } from 'react';
+import {
+  ComponentProps,
+  ForwardedRef,
+  forwardRef,
+  useEffect,
+  useState,
+} from 'react';
 import AceEditor from 'react-ace';
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
 import 'ace-builds/src-noconflict/theme-github';
+import 'ace-builds/src-noconflict/mode-python';
 
 import './AceEditor.css';
 
@@ -30,10 +37,47 @@ const DEFAULT_FONT_FAMILY = [
   'monospace',
 ].join(',');
 
+/**
+ * Loads Ace's mode scripts on demand for `language` and returns `true` if the mode
+ * has been loaded.
+ *
+ * Remember to update the regex in the `webpackInclude` comment below to bundle any
+ * new languages we support in the future.
+ */
+const useLazyMode = (language: LanguageMode): boolean => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+
+    let ignore = false;
+
+    (async (): Promise<void> => {
+      await import(
+        /* webpackInclude: /ace-builds\/src-noconflict\/mode-(c_cpp|python|r|java|javascript)\./ */
+        /* webpackChunkName: "ace-[request]" */
+        `ace-builds/src-noconflict/mode-${language}`
+      );
+
+      if (ignore) return;
+
+      setLoading(false);
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [language]);
+
+  return loading;
+};
+
 const EditorField = forwardRef(
   (props: EditorProps, ref: ForwardedRef<AceEditor>): JSX.Element => {
     const { language, value, disabled, onChange, cursorStart, ...otherProps } =
       props;
+
+    const loading = useLazyMode(language);
 
     return (
       <AceEditor
@@ -42,15 +86,15 @@ const EditorField = forwardRef(
          * This "mode" parameter should match one of the file names in this git directory:
          * https://github.com/thlorenz/brace/tree/master/mode
          *
-         * Short-circuit this because during build time, `mode` can be `undefined` and
-         * AceEditor will request for `/webpack/mode-mode.js`, which doesn't exist.
+         * Python is always available. For other modes, we lazy-load them, and when it is
+         * loaded, the editor will simply "snap" to the new mode's syntax highlighting.
          *
          * TODO: This parameter is called by many names in various places in the codebase,
          * such as "language", "editorMode", "languageMode", or "ace_mode".
          * We should standardize to reduce ambiguity, which can be done safely when all relevant
          * components have been moved to TypeScript.
          */
-        mode={language || 'python'}
+        mode={loading || !language ? 'python' : language}
         onChange={onChange}
         theme="github"
         value={value}

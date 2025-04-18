@@ -7,9 +7,6 @@ import { getIsSavingAnswer } from 'course/assessment/submission/selectors/answer
 import { getSubmission } from 'course/assessment/submission/selectors/submissions';
 import { useAppSelector } from 'lib/hooks/store';
 
-import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/theme-github';
-
 import CodaveriFeedbackStatus from '../../../containers/CodaveriFeedbackStatus';
 import ProgrammingImportEditor from '../../../containers/ProgrammingImport/ProgrammingImportEditor';
 import { questionShape } from '../../../propTypes';
