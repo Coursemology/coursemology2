@@ -3312,7 +3312,7 @@
     "defaultMessage": "运行代码"
   },
   "course.assessment.submission.runCodeWithLimit": {
-    "defaultMessage": "运行代码（{attempts Left, pleural, one {# attempt} other {# attempts}} left）"
+    "defaultMessage": "运行代码（{attemptsLeft, plural, one {# attempt} other {# attempts}} left）"
   },
   "course.assessment.submission.saveDraft": {
     "defaultMessage": "保存草稿"
@@ -4725,7 +4725,7 @@
     "defaultMessage": "无法创建 {numFailed} 个组。"
   },
   "course.group.GroupShow.GroupManager.GroupManager.createMultiplePartialFailure": {
-    "defaultMessage": "无法创建 {numFailed} {numFailed，复数，一个 {group} 其他 {groups}}。"
+    "defaultMessage": "无法创建 {numFailed} {numFailed, plural, one {group} other {groups}}。"
   },
   "course.group.GroupShow.GroupManager.GroupManager.createMultipleSuccess": {
     "defaultMessage": "{numCreated} {numCreated, plural, one {group was} other {groups were}} 已成功创建。"
