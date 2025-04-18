@@ -1,7 +1,8 @@
 import { CSSProperties, memo } from 'react';
 import { areEqual } from 'react-window';
 import { Typography } from '@mui/material';
-import moment from 'moment';
+
+import moment from 'lib/moment';
 
 import { getSecondsFromDays, isToday, isWeekend } from '../../utils';
 

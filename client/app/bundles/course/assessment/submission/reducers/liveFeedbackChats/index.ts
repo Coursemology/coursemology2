@@ -5,9 +5,8 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { shuffle } from 'lodash';
-import moment from 'moment';
 
-import { SHORT_TIME_FORMAT } from 'lib/moment';
+import moment, { SHORT_TIME_FORMAT } from 'lib/moment';
 
 import {
   getLocalStorageValue,
