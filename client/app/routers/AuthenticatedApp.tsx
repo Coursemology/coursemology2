@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { memo } from 'react';
 import { withAuthenticationRequired } from 'react-oidc-context';
@@ -8,145 +9,6 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
-import GlobalAnnouncementIndex from 'bundles/announcements/GlobalAnnouncementIndex';
-import DashboardPage from 'bundles/common/DashboardPage';
-import AchievementShow from 'bundles/course/achievement/pages/AchievementShow';
-import AchievementsIndex from 'bundles/course/achievement/pages/AchievementsIndex';
-import SettingsNavigation from 'bundles/course/admin/components/SettingsNavigation';
-import AnnouncementSettings from 'bundles/course/admin/pages/AnnouncementsSettings';
-import AssessmentSettings from 'bundles/course/admin/pages/AssessmentSettings';
-import CodaveriSettings from 'bundles/course/admin/pages/CodaveriSettings';
-import CommentsSettings from 'bundles/course/admin/pages/CommentsSettings';
-import ComponentSettings from 'bundles/course/admin/pages/ComponentSettings';
-import CourseSettings from 'bundles/course/admin/pages/CourseSettings';
-import ForumsSettings from 'bundles/course/admin/pages/ForumsSettings';
-import LeaderboardSettings from 'bundles/course/admin/pages/LeaderboardSettings';
-import LessonPlanSettings from 'bundles/course/admin/pages/LessonPlanSettings';
-import MaterialsSettings from 'bundles/course/admin/pages/MaterialsSettings';
-import NotificationSettings from 'bundles/course/admin/pages/NotificationSettings';
-import RagWiseSettings from 'bundles/course/admin/pages/RagWiseSettings';
-import SidebarSettings from 'bundles/course/admin/pages/SidebarSettings';
-import VideosSettings from 'bundles/course/admin/pages/VideosSettings';
-import AnnouncementsIndex from 'bundles/course/announcements/pages/AnnouncementsIndex';
-import AssessmentEdit from 'bundles/course/assessment/pages/AssessmentEdit';
-import AssessmentMonitoring from 'bundles/course/assessment/pages/AssessmentMonitoring';
-import AssessmentShow from 'bundles/course/assessment/pages/AssessmentShow';
-import AssessmentsIndex from 'bundles/course/assessment/pages/AssessmentsIndex';
-import AssessmentStatistics from 'bundles/course/assessment/pages/AssessmentStatistics';
-import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/EditForumPostResponsePage';
-import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
-import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
-import NewMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/NewMcqMrqPage';
-import EditProgrammingQuestionPage from 'bundles/course/assessment/question/programming/EditProgrammingQuestionPage';
-import NewProgrammingQuestionPage from 'bundles/course/assessment/question/programming/NewProgrammingQuestionPage';
-import ScribingQuestion from 'bundles/course/assessment/question/scribing/ScribingQuestion';
-import EditTextResponse from 'bundles/course/assessment/question/text-responses/EditTextResponsePage';
-import NewTextResponse from 'bundles/course/assessment/question/text-responses/NewTextResponsePage';
-import EditVoicePage from 'bundles/course/assessment/question/voice-responses/EditVoicePage';
-import NewVoicePage from 'bundles/course/assessment/question/voice-responses/NewVoicePage';
-import AssessmentSessionNew from 'bundles/course/assessment/sessions/pages/AssessmentSessionNew';
-import SkillsIndex from 'bundles/course/assessment/skills/pages/SkillsIndex';
-import LogsIndex from 'bundles/course/assessment/submission/pages/LogsIndex';
-import SubmissionEditIndex from 'bundles/course/assessment/submission/pages/SubmissionEditIndex';
-import AssessmentSubmissionsIndex from 'bundles/course/assessment/submission/pages/SubmissionsIndex';
-import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
-import CourseShow from 'bundles/course/courses/pages/CourseShow';
-import CommentIndex from 'bundles/course/discussion/topics/pages/CommentIndex';
-import Duplication from 'bundles/course/duplication/pages/Duplication';
-import UserRequests from 'bundles/course/enrol-requests/pages/UserRequests';
-import ExperiencePointsIndex from 'bundles/course/experience-points';
-import ForumShow from 'bundles/course/forum/pages/ForumShow';
-import ForumsIndex from 'bundles/course/forum/pages/ForumsIndex';
-import ForumTopicShow from 'bundles/course/forum/pages/ForumTopicShow';
-import GroupIndex from 'bundles/course/group/pages/GroupIndex';
-import GroupShow from 'bundles/course/group/pages/GroupShow';
-import LeaderboardIndex from 'bundles/course/leaderboard/pages/LeaderboardIndex';
-import LearningMap from 'bundles/course/learning-map/containers/LearningMap';
-import LessonPlanLayout from 'bundles/course/lesson-plan/containers/LessonPlanLayout';
-import LessonPlanEdit from 'bundles/course/lesson-plan/pages/LessonPlanEdit';
-import LessonPlanShow from 'bundles/course/lesson-plan/pages/LessonPlanShow';
-import LevelsIndex from 'bundles/course/level/pages/LevelsIndex';
-import DownloadingFilePage from 'bundles/course/material/files/DownloadingFilePage';
-import ErrorRetrievingFilePage from 'bundles/course/material/files/ErrorRetrievingFilePage';
-import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
-import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
-import ResponseEdit from 'bundles/course/survey/pages/ResponseEdit';
-import ResponseIndex from 'bundles/course/survey/pages/ResponseIndex';
-import ResponseShow from 'bundles/course/survey/pages/ResponseShow';
-import SurveyIndex from 'bundles/course/survey/pages/SurveyIndex';
-import SurveyResults from 'bundles/course/survey/pages/SurveyResults';
-import SurveyShow from 'bundles/course/survey/pages/SurveyShow';
-import UserEmailSubscriptions from 'bundles/course/user-email-subscriptions/UserEmailSubscriptions';
-import InvitationsIndex from 'bundles/course/user-invitations/pages/InvitationsIndex';
-import InviteUsers from 'bundles/course/user-invitations/pages/InviteUsers';
-import ExperiencePointsRecords from 'bundles/course/users/pages/ExperiencePointsRecords';
-import ManageStaff from 'bundles/course/users/pages/ManageStaff';
-import ManageStudents from 'bundles/course/users/pages/ManageStudents';
-import PersonalTimes from 'bundles/course/users/pages/PersonalTimes';
-import PersonalTimesShow from 'bundles/course/users/pages/PersonalTimesShow';
-import CourseUserShow from 'bundles/course/users/pages/UserShow';
-import UsersIndex from 'bundles/course/users/pages/UsersIndex';
-import VideoShow from 'bundles/course/video/pages/VideoShow';
-import VideosIndex from 'bundles/course/video/pages/VideosIndex';
-import VideoSubmissionEdit from 'bundles/course/video/submission/pages/VideoSubmissionEdit';
-import VideoSubmissionShow from 'bundles/course/video/submission/pages/VideoSubmissionShow';
-import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSubmissionsIndex';
-import UserVideoSubmissionsIndex from 'bundles/course/video-submissions/pages/UserVideoSubmissionsIndex';
-import AdminNavigator from 'bundles/system/admin/admin/AdminNavigator';
-import AnnouncementIndex from 'bundles/system/admin/admin/pages/AnnouncementsIndex';
-import CourseIndex from 'bundles/system/admin/admin/pages/CoursesIndex';
-import InstancesIndex from 'bundles/system/admin/admin/pages/InstancesIndex';
-import UserIndex from 'bundles/system/admin/admin/pages/UsersIndex';
-import InstanceAdminNavigator from 'bundles/system/admin/instance/instance/InstanceAdminNavigator';
-import InstanceAnnouncementsIndex from 'bundles/system/admin/instance/instance/pages/InstanceAnnouncementsIndex';
-import InstanceComponentsIndex from 'bundles/system/admin/instance/instance/pages/InstanceComponentsIndex';
-import InstanceCoursesIndex from 'bundles/system/admin/instance/instance/pages/InstanceCoursesIndex';
-import InstanceUserRoleRequestsIndex from 'bundles/system/admin/instance/instance/pages/InstanceUserRoleRequestsIndex';
-import InstanceUsersIndex from 'bundles/system/admin/instance/instance/pages/InstanceUsersIndex';
-import InstanceUsersInvitations from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvitations';
-import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvite';
-import AccountSettings from 'bundles/user/AccountSettings';
-import ConfirmEmailPage from 'bundles/users/pages/ConfirmEmailPage';
-import UserShow from 'bundles/users/pages/UserShow';
-import { achievementHandle } from 'course/achievement/handles';
-import StoriesSettings from 'course/admin/pages/StoriesSettings';
-import { announcementsHandle } from 'course/announcements/handles';
-import assessmentAttemptLoader from 'course/assessment/attemptLoader';
-import {
-  assessmentHandle,
-  assessmentsHandle,
-  questionHandle,
-} from 'course/assessment/handles';
-import GenerateProgrammingQuestionPage from 'course/assessment/pages/AssessmentGenerate/GenerateProgrammingQuestionPage';
-import QuestionFormOutlet from 'course/assessment/question/components/QuestionFormOutlet';
-import { CourseContainer } from 'course/container';
-import { commentHandle } from 'course/discussion/topics/handles';
-import {
-  forumHandle,
-  forumNameHandle,
-  forumTopicHandle,
-} from 'course/forum/handles';
-import { leaderboardHandle } from 'course/leaderboard/handles';
-import { folderHandle } from 'course/material/folders/handles';
-import materialLoader from 'course/material/materialLoader';
-import { videoWatchHistoryHandle } from 'course/statistics/handles';
-import StatisticsIndex from 'course/statistics/pages/StatisticsIndex';
-import AssessmentsStatistics from 'course/statistics/pages/StatisticsIndex/assessments/AssessmentsStatistics';
-import CourseStatistics from 'course/statistics/pages/StatisticsIndex/course/CourseStatistics';
-import StaffStatistics from 'course/statistics/pages/StatisticsIndex/staff/StaffStatistics';
-import StudentsStatistics from 'course/statistics/pages/StatisticsIndex/students/StudentsStatistics';
-import LearnRedirect from 'course/stories/components/LearnRedirect';
-import LearnPage from 'course/stories/pages/LearnPage';
-import MissionControlPage from 'course/stories/pages/MissionControlPage';
-import { surveyHandle, surveyResponseHandle } from 'course/survey/handles';
-import {
-  courseUserHandle,
-  courseUserPersonalizedTimelineHandle,
-  manageUserHandles,
-} from 'course/users/handles';
-import videoAttemptLoader from 'course/video/attemptLoader';
-import { videoHandle, videosHandle } from 'course/video/handles';
-import CourselessContainer from 'lib/containers/CourselessContainer';
 import useTranslation, { Translated } from 'lib/hooks/useTranslation';
 
 import { reservedRoutes } from './redirects';
@@ -156,61 +18,187 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
   createAppRouter([
     {
       path: 'courses/:courseId',
-      element: <CourseContainer />,
-      loader: CourseContainer.loader,
-      handle: CourseContainer.handle,
+      lazy: async () => {
+        const CourseContainer = (
+          await import(
+            /* webpackChunkName: 'CourseContainer' */
+            'course/container/CourseContainer'
+          )
+        ).default;
+
+        return {
+          Component: CourseContainer,
+          handle: CourseContainer.handle,
+          loader: CourseContainer.loader,
+        };
+      },
       shouldRevalidate: ({ currentParams, nextParams }): boolean => {
         return currentParams.courseId !== nextParams.courseId;
       },
       children: [
         {
           index: true,
-          element: (
-            <LearnRedirect otherwiseRender={<CourseShow />} to="learn" />
-          ),
+          lazy: async () => {
+            const [CourseShow, LearnRedirect] = await Promise.all([
+              import(
+                /* webpackChunkName: 'CourseShow' */
+                'course/courses/pages/CourseShow'
+              ).then((module) => module.default),
+              import(
+                /* webpackChunkName: 'LearnRedirect' */
+                'course/stories/components/LearnRedirect'
+              ).then((module) => module.default),
+            ]);
+
+            return {
+              element: (
+                <LearnRedirect otherwiseRender={<CourseShow />} to="learn" />
+              ),
+            };
+          },
         },
         {
           path: 'home',
-          element: <CourseShow />,
+          lazy: async () => ({
+            Component: (
+              await import(
+                /* webpackChunkName: 'CourseShow' */
+                'course/courses/pages/CourseShow'
+              )
+            ).default,
+          }),
         },
         {
           path: 'learn',
-          handle: LearnPage.handle,
-          element: <LearnPage />,
+          lazy: async () => {
+            const LearnPage = (
+              await import(
+                /* webpackChunkName: 'LearnPage' */
+                'course/stories/pages/LearnPage'
+              )
+            ).default;
+
+            return {
+              Component: LearnPage,
+              handle: LearnPage.handle,
+            };
+          },
         },
         {
           path: 'mission_control',
-          handle: MissionControlPage.handle,
-          element: <MissionControlPage />,
+          lazy: async () => {
+            const MissionControlPage = (
+              await import(
+                /* webpackChunkName: 'MissionControlPage' */
+                'course/stories/pages/MissionControlPage'
+              )
+            ).default;
+
+            return {
+              Component: MissionControlPage,
+              handle: MissionControlPage.handle,
+            };
+          },
         },
         {
           path: 'timelines',
-          handle: TimelineDesigner.handle,
-          element: <TimelineDesigner />,
+          lazy: async () => {
+            const TimelineDesigner = (
+              await import(
+                /* webpackChunkName: 'TimelineDesigner' */
+                'course/reference-timelines/TimelineDesigner'
+              )
+            ).default;
+
+            return {
+              Component: TimelineDesigner,
+              handle: TimelineDesigner.handle,
+            };
+          },
         },
         {
           path: 'announcements',
-          handle: announcementsHandle,
-          element: <AnnouncementsIndex />,
+          lazy: async () => {
+            const [announcementsHandle, AnnouncementsIndex] = await Promise.all(
+              [
+                import(
+                  /* webpackChunkName: 'announcementsHandle' */
+                  'course/announcements/handles'
+                ).then((module) => module.announcementsHandle),
+                import(
+                  /* webpackChunkName: 'AnnouncementsIndex' */
+                  'course/announcements/pages/AnnouncementsIndex'
+                ).then((module) => module.default),
+              ],
+            );
+
+            return {
+              Component: AnnouncementsIndex,
+              handle: announcementsHandle,
+            };
+          },
         },
         {
           path: 'comments',
-          handle: commentHandle,
-          element: <CommentIndex />,
+          lazy: async () => {
+            const [commentHandle, CommentIndex] = await Promise.all([
+              import(
+                /* webpackChunkName: 'commentHandle' */
+                'course/discussion/topics/handles'
+              ).then((module) => module.commentHandle),
+              import(
+                /* webpackChunkName: 'CommentIndex' */
+                'course/discussion/topics/pages/CommentIndex'
+              ).then((module) => module.default),
+            ]);
+
+            return {
+              Component: CommentIndex,
+              handle: commentHandle,
+            };
+          },
         },
         {
           path: 'leaderboard',
-          handle: leaderboardHandle,
-          element: <LeaderboardIndex />,
+          lazy: async () => {
+            const [leaderboardHandle, LeaderboardIndex] = await Promise.all([
+              import(
+                /* webpackChunkName: 'leaderboardHandle' */
+                'course/leaderboard/handles'
+              ).then((module) => module.leaderboardHandle),
+              import(
+                /* webpackChunkName: 'LeaderboardIndex' */
+                'course/leaderboard/pages/LeaderboardIndex'
+              ).then((module) => module.default),
+            ]);
+
+            return {
+              Component: LeaderboardIndex,
+              handle: leaderboardHandle,
+            };
+          },
         },
         {
           path: 'learning_map',
-          handle: LearningMap.handle,
-          element: <LearningMap />,
+          lazy: async () => ({
+            Component: (
+              await import(
+                /* webpackChunkName: 'LearningMap' */
+                'course/learning-map/containers/LearningMap'
+              )
+            ).default,
+          }),
         },
         {
           path: 'materials/folders',
-          handle: folderHandle,
+          lazy: async () => ({
+            handle: (
+              await import(
+                /* webpackChunkName: 'folderHandle' */
+                'course/material/folders/handles'
+              )
+            ).folderHandle,
+          }),
           // `:folderId` must be split this way so that `folderHandle` is matched
           // to the stable (non-changing) match of `/materials/folders`. This allows
           // the crumbs in the Workbin to not disappear when revalidated by the
@@ -218,20 +206,57 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
           children: [
             {
               index: true,
-              element: <FolderShow />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'FolderShow' */
+                    'course/material/folders/pages/FolderShow'
+                  )
+                ).default,
+              }),
             },
             {
               path: ':folderId',
               children: [
                 {
                   index: true,
-                  element: <FolderShow />,
+                  lazy: async () => ({
+                    Component: (
+                      await import(
+                        /* webpackChunkName: 'FolderShow' */
+                        'course/material/folders/pages/FolderShow'
+                      )
+                    ).default,
+                  }),
                 },
                 {
                   path: 'files/:materialId',
-                  loader: materialLoader,
-                  errorElement: <ErrorRetrievingFilePage />,
-                  element: <DownloadingFilePage />,
+                  lazy: async () => {
+                    const [
+                      materialLoader,
+                      ErrorRetrievingFilePage,
+                      DownloadingFilePage,
+                    ] = await Promise.all([
+                      import(
+                        /* webpackChunkName: 'materialLoader' */
+                        'course/material/materialLoader'
+                      ).then((module) => module.default),
+                      import(
+                        /* webpackChunkName: 'ErrorRetrievingFilePage' */
+                        'course/material/files/ErrorRetrievingFilePage'
+                      ).then((module) => module.default),
+                      import(
+                        /* webpackChunkName: 'DownloadingFilePage' */
+                        'course/material/files/DownloadingFilePage'
+                      ).then((module) => module.default),
+                    ]);
+
+                    return {
+                      loader: materialLoader,
+                      errorElement: <ErrorRetrievingFilePage />,
+                      element: <DownloadingFilePage />,
+                    };
+                  },
                 },
               ],
             },
@@ -239,237 +264,691 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'levels',
-          handle: LevelsIndex.handle,
-          element: <LevelsIndex />,
+          lazy: async () => {
+            const LevelsIndex = (
+              await import(
+                /* webpackChunkName: 'LevelsIndex' */
+                'course/level/pages/LevelsIndex'
+              )
+            ).default;
+
+            return {
+              Component: LevelsIndex,
+              handle: LevelsIndex.handle,
+            };
+          },
         },
         {
           path: 'statistics',
-          handle: StatisticsIndex.handle,
-          element: <StatisticsIndex />,
+          lazy: async () => {
+            const StatisticsIndex = (
+              await import(
+                /* webpackChunkName: 'StatisticsIndex' */
+                'course/statistics/pages/StatisticsIndex'
+              )
+            ).default;
+
+            return {
+              Component: StatisticsIndex,
+              handle: StatisticsIndex.handle,
+            };
+          },
           children: [
             {
               path: 'students',
-              element: <StudentsStatistics />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'StudentsStatistics' */
+                    'course/statistics/pages/StatisticsIndex/students/StudentsStatistics'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'staff',
-              element: <StaffStatistics />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'StaffStatistics' */
+                    'course/statistics/pages/StatisticsIndex/staff/StaffStatistics'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'course',
-              element: <CourseStatistics />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'CourseStatistics' */
+                    'course/statistics/pages/StatisticsIndex/course/CourseStatistics'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'assessments',
-              element: <AssessmentsStatistics />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'CourseStatistics' */
+                    'course/statistics/pages/StatisticsIndex/assessments/AssessmentsStatistics'
+                  )
+                ).default,
+              }),
             },
           ],
         },
         {
           path: 'duplication',
-          handle: Duplication.handle,
-          element: <Duplication />,
+          lazy: async () => {
+            const Duplication = (
+              await import(
+                /* webpackChunkName: 'Duplication' */
+                'course/duplication/pages/Duplication'
+              )
+            ).default;
+
+            return {
+              Component: Duplication,
+              handle: Duplication.handle,
+            };
+          },
         },
         {
           path: 'enrol_requests',
-          handle: manageUserHandles.enrolRequests,
-          element: <UserRequests />,
+          lazy: async () => {
+            const [manageUserHandles, UserRequests] = await Promise.all([
+              import(
+                /* webpackChunkName: 'userHandles' */
+                'course/users/handles'
+              ).then((module) => module.manageUserHandles),
+              import(
+                /* webpackChunkName: 'UserRequests' */
+                'course/enrol-requests/pages/UserRequests'
+              ).then((module) => module.default),
+            ]);
+
+            return {
+              Component: UserRequests,
+              handle: manageUserHandles.enrolRequests,
+            };
+          },
         },
         {
           path: 'user_invitations',
-          handle: manageUserHandles.invitations,
-          element: <InvitationsIndex />,
+          lazy: async () => {
+            const [manageUserHandles, UserRequests] = await Promise.all([
+              import(
+                /* webpackChunkName: 'userHandles' */
+                'course/users/handles'
+              ).then((module) => module.manageUserHandles),
+              import(
+                /* webpackChunkName: 'InvitationsIndex' */
+                'course/user-invitations/pages/InvitationsIndex'
+              ).then((module) => module.default),
+            ]);
+
+            return {
+              Component: UserRequests,
+              handle: manageUserHandles.invitations,
+            };
+          },
         },
         {
           path: 'students',
-          handle: manageUserHandles.students,
-          element: <ManageStudents />,
+          lazy: async () => {
+            const [manageUserHandles, UserRequests] = await Promise.all([
+              import(
+                /* webpackChunkName: 'userHandles' */
+                'course/users/handles'
+              ).then((module) => module.manageUserHandles),
+              import(
+                /* webpackChunkName: 'ManageStudents' */
+                'course/users/pages/ManageStudents'
+              ).then((module) => module.default),
+            ]);
+
+            return {
+              Component: UserRequests,
+              handle: manageUserHandles.students,
+            };
+          },
         },
         {
           path: 'staff',
-          handle: manageUserHandles.staff,
-          element: <ManageStaff />,
+          lazy: async () => {
+            const [manageUserHandles, UserRequests] = await Promise.all([
+              import(
+                /* webpackChunkName: 'userHandles' */
+                'course/users/handles'
+              ).then((module) => module.manageUserHandles),
+              import(
+                /* webpackChunkName: 'ManageStaff' */
+                'course/users/pages/ManageStaff'
+              ).then((module) => module.default),
+            ]);
+
+            return {
+              Component: UserRequests,
+              handle: manageUserHandles.staff,
+            };
+          },
         },
         {
           path: 'lesson_plan',
-          // @ts-ignore `connect` throws error when cannot find `store` as direct parent
-          element: <LessonPlanLayout />,
-          handle: LessonPlanLayout.handle,
+          lazy: async () => {
+            const LessonPlanLayout = (
+              await import(
+                /* webpackChunkName: 'LessonPlanLayout' */
+                'course/lesson-plan/containers/LessonPlanLayout'
+              )
+            ).default;
+
+            return {
+              // @ts-ignore `connect` throws error when cannot find `store` as direct parent
+              element: <LessonPlanLayout />,
+              handle: LessonPlanLayout.handle,
+            };
+          },
           children: [
             {
               index: true,
-              element: <LessonPlanShow />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'LessonPlanShow' */
+                    'course/lesson-plan/pages/LessonPlanShow'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'edit',
-              element: <LessonPlanEdit />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'LessonPlanEdit' */
+                    'course/lesson-plan/pages/LessonPlanEdit'
+                  )
+                ).default,
+              }),
             },
           ],
         },
         {
           path: 'experience_points_records',
-          handle: ExperiencePointsIndex.handle,
-          element: <ExperiencePointsIndex />,
+          lazy: async () => {
+            const ExperiencePointsIndex = (
+              await import(
+                /* webpackChunkName: 'ExperiencePointsIndex' */
+                'course/experience-points'
+              )
+            ).default;
+
+            return {
+              Component: ExperiencePointsIndex,
+              handle: ExperiencePointsIndex.handle,
+            };
+          },
         },
         {
           path: 'users',
           children: [
             {
               index: true,
-              handle: UsersIndex.handle,
-              element: <UsersIndex />,
+              lazy: async () => {
+                const UsersIndex = (
+                  await import(
+                    /* webpackChunkName: 'UsersIndex' */
+                    'course/users/pages/UsersIndex'
+                  )
+                ).default;
+
+                return {
+                  Component: UsersIndex,
+                  handle: UsersIndex.handle,
+                };
+              },
             },
             {
               path: 'personal_times',
-              handle: manageUserHandles.personalizedTimelines,
-              element: <PersonalTimes />,
+              lazy: async () => {
+                const [manageUserHandles, PersonalTimes] = await Promise.all([
+                  import(
+                    /* webpackChunkName: 'userHandles' */
+                    'course/users/handles'
+                  ).then((module) => module.manageUserHandles),
+                  import(
+                    /* webpackChunkName: 'PersonalTimes' */
+                    'course/users/pages/PersonalTimes'
+                  ).then((module) => module.default),
+                ]);
+
+                return {
+                  Component: PersonalTimes,
+                  handle: manageUserHandles.personalizedTimelines,
+                };
+              },
             },
             {
               path: 'invite',
-              handle: manageUserHandles.inviteUsers,
-              element: <InviteUsers />,
+              lazy: async () => {
+                const [manageUserHandles, InviteUsers] = await Promise.all([
+                  import(
+                    /* webpackChunkName: 'userHandles' */
+                    'course/users/handles'
+                  ).then((module) => module.manageUserHandles),
+                  import(
+                    /* webpackChunkName: 'InviteUsers' */
+                    'course/user-invitations/pages/InviteUsers'
+                  ).then((module) => module.default),
+                ]);
+
+                return {
+                  Component: InviteUsers,
+                  handle: manageUserHandles.inviteUsers,
+                };
+              },
             },
             {
               path: ':userId',
-              handle: courseUserHandle,
+              lazy: async () => ({
+                handle: await import(
+                  /* webpackChunkName: 'userHandles' */
+                  'course/users/handles'
+                ).then((module) => module.courseUserHandle),
+              }),
               children: [
                 {
                   index: true,
-                  element: <CourseUserShow />,
+                  lazy: async () => ({
+                    Component: (
+                      await import(
+                        /* webpackChunkName: 'CourseUserShow' */
+                        'course/users/pages/UserShow'
+                      )
+                    ).default,
+                  }),
                 },
                 {
                   path: 'experience_points_records',
-                  handle: ExperiencePointsRecords.handle,
-                  element: <ExperiencePointsRecords />,
+                  lazy: async () => {
+                    const ExperiencePointsRecords = (
+                      await import(
+                        /* webpackChunkName: 'ExperiencePointsRecords' */
+                        'course/users/pages/ExperiencePointsRecords'
+                      )
+                    ).default;
+
+                    return {
+                      Component: ExperiencePointsRecords,
+                      handle: ExperiencePointsRecords.handle,
+                    };
+                  },
                 },
               ],
             },
             {
               path: ':userId/personal_times',
-              handle: courseUserPersonalizedTimelineHandle,
-              element: <PersonalTimesShow />,
+              lazy: async () => {
+                const [courseUserPersonalizedTimelineHandle, InviteUsers] =
+                  await Promise.all([
+                    import(
+                      /* webpackChunkName: 'userHandles' */
+                      'course/users/handles'
+                    ).then(
+                      (module) => module.courseUserPersonalizedTimelineHandle,
+                    ),
+                    import(
+                      /* webpackChunkName: 'PersonalTimesShow' */
+                      'course/users/pages/PersonalTimesShow'
+                    ).then((module) => module.default),
+                  ]);
+
+                return {
+                  Component: InviteUsers,
+                  handle: courseUserPersonalizedTimelineHandle,
+                };
+              },
             },
             {
               path: ':userId/video_submissions',
-              handle: videoWatchHistoryHandle,
-              element: <UserVideoSubmissionsIndex />,
+              lazy: async () => {
+                const [videoWatchHistoryHandle, UserVideoSubmissionsIndex] =
+                  await Promise.all([
+                    import(
+                      /* webpackChunkName: 'videoWatchHistoryHandle' */
+                      'course/statistics/handles'
+                    ).then((module) => module.videoWatchHistoryHandle),
+                    import(
+                      /* webpackChunkName: 'UserVideoSubmissionsIndex' */
+                      'course/video-submissions/pages/UserVideoSubmissionsIndex'
+                    ).then((module) => module.default),
+                  ]);
+
+                return {
+                  Component: UserVideoSubmissionsIndex,
+                  handle: videoWatchHistoryHandle,
+                };
+              },
             },
             {
               path: ':userId/manage_email_subscription',
-              handle: UserEmailSubscriptions.handle,
-              element: <UserEmailSubscriptions />,
+              lazy: async () => {
+                const UserEmailSubscriptions = (
+                  await import(
+                    /* webpackChunkName: 'UserEmailSubscriptions' */
+                    'course/user-email-subscriptions/UserEmailSubscriptions'
+                  )
+                ).default;
+
+                return {
+                  Component: UserEmailSubscriptions,
+                  handle: UserEmailSubscriptions.handle,
+                };
+              },
             },
           ],
         },
         {
           path: 'admin',
-          loader: SettingsNavigation.loader,
-          handle: SettingsNavigation.handle,
-          element: <SettingsNavigation />,
+          lazy: async () => {
+            const SettingsNavigation = (
+              await import(
+                /* webpackChunkName: 'SettingsNavigation' */
+                'course/admin/components/SettingsNavigation'
+              )
+            ).default;
+
+            return {
+              Component: SettingsNavigation,
+              handle: SettingsNavigation.handle,
+              loader: SettingsNavigation.loader,
+            };
+          },
           children: [
             {
               index: true,
-              element: <CourseSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'CourseSettings' */
+                    'course/admin/pages/CourseSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'components',
-              element: <ComponentSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'ComponentSettings' */
+                    'course/admin/pages/ComponentSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'sidebar',
-              element: <SidebarSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'SidebarSettings' */
+                    'course/admin/pages/SidebarSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'notifications',
-              element: <NotificationSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'NotificationSettings' */
+                    'course/admin/pages/NotificationSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'announcements',
-              element: <AnnouncementSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'AnnouncementsSettings' */
+                    'course/admin/pages/AnnouncementsSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'assessments',
-              element: <AssessmentSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'AssessmentSettings' */
+                    'course/admin/pages/AssessmentSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'materials',
-              element: <MaterialsSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'MaterialsSettings' */
+                    'course/admin/pages/MaterialsSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'forums',
-              element: <ForumsSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'ForumsSettings' */
+                    'course/admin/pages/ForumsSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'leaderboard',
-              element: <LeaderboardSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'LeaderboardSettings' */
+                    'course/admin/pages/LeaderboardSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'comments',
-              element: <CommentsSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'CommentsSettings' */
+                    'course/admin/pages/CommentsSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'videos',
-              element: <VideosSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'VideosSettings' */
+                    'course/admin/pages/VideosSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'lesson_plan',
-              element: <LessonPlanSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'LessonPlanSettings' */
+                    'course/admin/pages/LessonPlanSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'codaveri',
-              element: <CodaveriSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'CodaveriSettings' */
+                    'course/admin/pages/CodaveriSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'stories',
-              element: <StoriesSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'StoriesSettings' */
+                    'course/admin/pages/StoriesSettings'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'rag_wise',
-              element: <RagWiseSettings />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'RagWiseSettings' */
+                    'course/admin/pages/RagWiseSettings'
+                  )
+                ).default,
+              }),
             },
           ],
         },
         {
           path: 'surveys',
-          handle: SurveyIndex.handle,
+          lazy: async () => ({
+            handle: (
+              await import(
+                /* webpackChunkName: 'SurveyIndex' */
+                'course/survey/pages/SurveyIndex'
+              )
+            ).default.handle,
+          }),
           children: [
             {
               index: true,
-              element: <SurveyIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'SurveyIndex' */
+                    'course/survey/pages/SurveyIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: ':surveyId',
-              handle: surveyHandle,
+              lazy: async () => ({
+                handle: (
+                  await import(
+                    /* webpackChunkName: 'surveyHandles' */
+                    'course/survey/handles'
+                  )
+                ).surveyHandle,
+              }),
               children: [
                 {
                   index: true,
-                  element: <SurveyShow />,
+                  lazy: async () => ({
+                    Component: (
+                      await import(
+                        /* webpackChunkName: 'SurveyShow' */
+                        'course/survey/pages/SurveyShow'
+                      )
+                    ).default,
+                  }),
                 },
                 {
                   path: 'results',
-                  handle: SurveyResults.handle,
-                  element: <SurveyResults />,
+                  lazy: async () => {
+                    const SurveyResults = (
+                      await import(
+                        /* webpackChunkName: 'SurveyResults' */
+                        'course/survey/pages/SurveyResults'
+                      )
+                    ).default;
+
+                    return {
+                      Component: SurveyResults,
+                      handle: SurveyResults.handle,
+                    };
+                  },
                 },
                 {
                   path: 'responses',
                   children: [
                     {
                       index: true,
-                      handle: ResponseIndex.handle,
-                      element: <ResponseIndex />,
+                      lazy: async () => {
+                        const ResponseIndex = (
+                          await import(
+                            /* webpackChunkName: 'ResponseIndex' */
+                            'course/survey/pages/ResponseIndex'
+                          )
+                        ).default;
+
+                        return {
+                          Component: ResponseIndex,
+                          handle: ResponseIndex.handle,
+                        };
+                      },
                     },
                     {
                       path: ':responseId',
                       children: [
                         {
                           index: true,
-                          handle: surveyResponseHandle,
-                          element: <ResponseShow />,
+                          lazy: async () => {
+                            const [surveyResponseHandle, ResponseShow] =
+                              await Promise.all([
+                                import(
+                                  /* webpackChunkName: 'surveyHandles' */
+                                  'course/survey/handles'
+                                ).then((module) => module.surveyResponseHandle),
+                                import(
+                                  /* webpackChunkName: 'ResponseShow' */
+                                  'course/survey/pages/ResponseShow'
+                                ).then((module) => module.default),
+                              ]);
+
+                            return {
+                              Component: ResponseShow,
+                              handle: surveyResponseHandle,
+                            };
+                          },
                         },
                         {
                           path: 'edit',
-                          handle: ResponseEdit.handle,
-                          element: <ResponseEdit />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'ResponseEdit' */
+                                'course/survey/pages/ResponseEdit'
+                              )
+                            ).default,
+                          }),
                         },
                       ],
                     },
@@ -481,50 +960,128 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'groups',
-          element: <GroupIndex />,
-          handle: GroupIndex.handle,
+          lazy: async () => {
+            const GroupIndex = (
+              await import(
+                /* webpackChunkName: 'GroupIndex' */
+                'course/group/pages/GroupIndex'
+              )
+            ).default;
+
+            return {
+              Component: GroupIndex,
+              handle: GroupIndex.handle,
+            };
+          },
           children: [
             {
               path: ':groupCategoryId',
-              element: <GroupShow />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'GroupShow' */
+                    'course/group/pages/GroupShow'
+                  )
+                ).default,
+              }),
             },
           ],
         },
         {
           path: 'videos',
-          handle: videosHandle,
+          lazy: async () => ({
+            handle: (
+              await import(
+                /* webpackChunkName: 'videoHandles' */
+                'course/video/handles'
+              )
+            ).videosHandle,
+          }),
           children: [
             {
               index: true,
-              element: <VideosIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'VideosIndex' */
+                    'course/video/pages/VideosIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: ':videoId',
-              handle: videoHandle,
+              lazy: async () => ({
+                handle: (
+                  await import(
+                    /* webpackChunkName: 'videoHandles' */
+                    'course/video/handles'
+                  )
+                ).videoHandle,
+              }),
               children: [
                 {
                   index: true,
-                  element: <VideoShow />,
+                  lazy: async () => ({
+                    Component: (
+                      await import(
+                        /* webpackChunkName: 'VideoShow' */
+                        'course/video/pages/VideoShow'
+                      )
+                    ).default,
+                  }),
                 },
                 {
                   path: 'submissions',
                   children: [
                     {
                       index: true,
-                      handle: VideoSubmissionsIndex.handle,
-                      element: <VideoSubmissionsIndex />,
+                      lazy: async () => {
+                        const VideoSubmissionsIndex = (
+                          await import(
+                            /* webpackChunkName: 'VideoSubmissionsIndex' */
+                            'course/video/submission/pages/VideoSubmissionsIndex'
+                          )
+                        ).default;
+
+                        return {
+                          Component: VideoSubmissionsIndex,
+                          handle: VideoSubmissionsIndex.handle,
+                        };
+                      },
                     },
                     {
                       path: ':submissionId',
-                      handle: VideoSubmissionShow.handle,
+                      lazy: async () => ({
+                        handle: (
+                          await import(
+                            /* webpackChunkName: 'VideoSubmissionShow' */
+                            'course/video/submission/pages/VideoSubmissionShow'
+                          )
+                        ).default.handle,
+                      }),
                       children: [
                         {
                           index: true,
-                          element: <VideoSubmissionShow />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'VideoSubmissionShow' */
+                                'course/video/submission/pages/VideoSubmissionShow'
+                              )
+                            ).default,
+                          }),
                         },
                         {
                           path: 'edit',
-                          element: <VideoSubmissionEdit />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'VideoSubmissionEdit' */
+                                'course/video/submission/pages/VideoSubmissionEdit'
+                              )
+                            ).default,
+                          }),
                         },
                       ],
                     },
@@ -532,7 +1089,16 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                 },
                 {
                   path: 'attempt',
-                  loader: videoAttemptLoader(t),
+                  lazy: async () => {
+                    const videoAttemptLoader = (
+                      await import(
+                        /* webpackChunkName: 'videoAttemptLoader' */
+                        'course/video/attemptLoader'
+                      )
+                    ).default;
+
+                    return { loader: videoAttemptLoader(t) };
+                  },
                 },
               ],
             },
@@ -540,24 +1106,68 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'forums',
-          handle: forumHandle,
+          lazy: async () => ({
+            handle: (
+              await import(
+                /* webpackChunkName: 'forumHandles' */
+                'course/forum/handles'
+              )
+            ).forumHandle,
+          }),
           children: [
             {
               index: true,
-              element: <ForumsIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'ForumsIndex' */
+                    'course/forum/pages/ForumsIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: ':forumId',
-              handle: forumNameHandle,
+              lazy: async () => ({
+                handle: (
+                  await import(
+                    /* webpackChunkName: 'forumHandles' */
+                    'course/forum/handles'
+                  )
+                ).forumNameHandle,
+              }),
               children: [
                 {
                   index: true,
-                  element: <ForumShow />,
+                  lazy: async () => ({
+                    Component: (
+                      await import(
+                        /* webpackChunkName: 'ForumShow' */
+                        'course/forum/pages/ForumShow'
+                      )
+                    ).default,
+                  }),
                 },
                 {
                   path: 'topics/:topicId',
-                  handle: forumTopicHandle,
-                  element: <ForumTopicShow />,
+                  lazy: async () => {
+                    const [forumTopicHandle, ForumTopicShow] =
+                      await Promise.all([
+                        import(
+                          /* webpackChunkName: 'forumHandles' */
+                          'course/forum/handles'
+                        ).then((module) => module.forumTopicHandle),
+                        import(
+                          /* webpackChunkName: 'ForumTopicShow' */
+                          'course/forum/pages/ForumTopicShow'
+                        ).then((module) => module.default),
+                      ]);
+
+                    return {
+                      Component: ForumTopicShow,
+                      handle: forumTopicHandle,
+                    };
+                  },
                 },
               ],
             },
@@ -565,88 +1175,249 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'achievements',
-          handle: AchievementsIndex.handle,
+          lazy: async () => ({
+            handle: (
+              await import(
+                /* webpackChunkName: 'AchievementsIndex' */
+                'course/achievement/pages/AchievementsIndex'
+              )
+            ).default.handle,
+          }),
           children: [
             {
               index: true,
-              element: <AchievementsIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'AchievementsIndex' */
+                    'course/achievement/pages/AchievementsIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: ':achievementId',
-              handle: achievementHandle,
-              element: <AchievementShow />,
+              lazy: async () => {
+                const [achievementHandle, AchievementShow] = await Promise.all([
+                  import(
+                    /* webpackChunkName: 'achievementHandle' */
+                    'course/achievement/handles'
+                  ).then((module) => module.achievementHandle),
+                  import(
+                    /* webpackChunkName: 'AchievementShow' */
+                    'course/achievement/pages/AchievementShow'
+                  ).then((module) => module.default),
+                ]);
+
+                return {
+                  Component: AchievementShow,
+                  handle: achievementHandle,
+                };
+              },
             },
           ],
         },
         {
           path: 'assessments',
-          handle: assessmentsHandle,
+          lazy: async () => ({
+            handle: (
+              await import(
+                /* webpackChunkName: 'assessmentHandles' */
+                'course/assessment/handles'
+              )
+            ).assessmentsHandle,
+          }),
           children: [
             {
               index: true,
-              element: <AssessmentsIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'AssessmentsIndex' */
+                    'bundles/course/assessment/pages/AssessmentsIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'submissions',
-              handle: SubmissionsIndex.handle,
-              element: <SubmissionsIndex />,
+              lazy: async () => {
+                const SubmissionsIndex = (
+                  await import(
+                    /* webpackChunkName: 'SubmissionsIndex' */
+                    'course/assessment/submissions/SubmissionsIndex'
+                  )
+                ).default;
+
+                return {
+                  Component: SubmissionsIndex,
+                  handle: SubmissionsIndex.handle,
+                };
+              },
             },
             {
               path: 'skills',
-              handle: SkillsIndex.handle,
-              element: <SkillsIndex />,
+              lazy: async () => {
+                const SkillsIndex = (
+                  await import(
+                    /* webpackChunkName: 'SkillsIndex' */
+                    'course/assessment/skills/pages/SkillsIndex'
+                  )
+                ).default;
+
+                return {
+                  Component: SkillsIndex,
+                  handle: SkillsIndex.handle,
+                };
+              },
             },
             {
               path: ':assessmentId',
-              handle: assessmentHandle,
+              lazy: async () => ({
+                handle: (
+                  await import(
+                    /* webpackChunkName: 'assessmentHandles' */
+                    'course/assessment/handles'
+                  )
+                ).assessmentHandle,
+              }),
               children: [
                 {
                   index: true,
-                  element: <AssessmentShow />,
+                  lazy: async () => ({
+                    Component: (
+                      await import(
+                        /* webpackChunkName: 'AssessmentShow' */
+                        'course/assessment/pages/AssessmentShow'
+                      )
+                    ).default,
+                  }),
                 },
                 {
                   path: 'edit',
-                  handle: AssessmentEdit.handle,
-                  element: <AssessmentEdit />,
+                  lazy: async () => {
+                    const AssessmentEdit = (
+                      await import(
+                        /* webpackChunkName: 'AssessmentEdit' */
+                        'course/assessment/pages/AssessmentEdit'
+                      )
+                    ).default;
+
+                    return {
+                      Component: AssessmentEdit,
+                      handle: AssessmentEdit.handle,
+                    };
+                  },
                 },
                 {
                   path: 'attempt',
-                  loader: assessmentAttemptLoader(t),
+                  lazy: async () => {
+                    const assessmentAttemptLoader = (
+                      await import(
+                        /* webpackChunkName: 'assessmentAttemptLoader' */
+                        'course/assessment/attemptLoader'
+                      )
+                    ).default;
+
+                    return { loader: assessmentAttemptLoader(t) };
+                  },
                 },
                 {
                   path: 'monitoring',
-                  handle: AssessmentMonitoring.handle,
-                  element: <AssessmentMonitoring />,
+                  lazy: async () => {
+                    const AssessmentMonitoring = (
+                      await import(
+                        /* webpackChunkName: 'AssessmentMonitoring' */
+                        'course/assessment/pages/AssessmentMonitoring'
+                      )
+                    ).default;
+
+                    return {
+                      Component: AssessmentMonitoring,
+                      handle: AssessmentMonitoring.handle,
+                    };
+                  },
                 },
                 {
                   path: 'sessions/new',
-                  element: <AssessmentSessionNew />,
+                  lazy: async () => ({
+                    Component: (
+                      await import(
+                        /* webpackChunkName: 'AssessmentSessionNew' */
+                        'course/assessment/sessions/pages/AssessmentSessionNew'
+                      )
+                    ).default,
+                  }),
                 },
                 {
                   path: 'statistics',
-                  handle: AssessmentStatistics.handle,
-                  element: <AssessmentStatistics />,
+                  lazy: async () => {
+                    const AssessmentStatistics = (
+                      await import(
+                        /* webpackChunkName: 'AssessmentStatistics' */
+                        'course/assessment/pages/AssessmentStatistics'
+                      )
+                    ).default;
+
+                    return {
+                      Component: AssessmentStatistics,
+                      handle: AssessmentStatistics.handle,
+                    };
+                  },
                 },
                 {
                   path: 'submissions',
                   children: [
                     {
                       index: true,
-                      handle: AssessmentSubmissionsIndex.handle,
-                      element: <AssessmentSubmissionsIndex />,
+                      lazy: async () => {
+                        const AssessmentSubmissionsIndex = (
+                          await import(
+                            /* webpackChunkName: 'AssessmentSubmissionsIndex' */
+                            'course/assessment/submission/pages/SubmissionsIndex'
+                          )
+                        ).default;
+
+                        return {
+                          Component: AssessmentSubmissionsIndex,
+                          handle: AssessmentSubmissionsIndex.handle,
+                        };
+                      },
                     },
                     {
                       path: ':submissionId',
                       children: [
                         {
                           path: 'edit',
-                          handle: SubmissionEditIndex.handle,
-                          element: <SubmissionEditIndex />,
+                          lazy: async () => {
+                            const SubmissionEditIndex = (
+                              await import(
+                                /* webpackChunkName: 'SubmissionEditIndex' */
+                                'course/assessment/submission/pages/SubmissionEditIndex'
+                              )
+                            ).default;
+
+                            return {
+                              Component: SubmissionEditIndex,
+                              handle: SubmissionEditIndex.handle,
+                            };
+                          },
                         },
                         {
                           path: 'logs',
-                          handle: LogsIndex.handle,
-                          element: <LogsIndex />,
+                          lazy: async () => {
+                            const SubmissionLogs = (
+                              await import(
+                                /* webpackChunkName: 'SubmissionLogs' */
+                                'course/assessment/submission/pages/LogsIndex'
+                              )
+                            ).default;
+
+                            return {
+                              Component: SubmissionLogs,
+                              handle: SubmissionLogs.handle,
+                            };
+                          },
                         },
                       ],
                     },
@@ -654,20 +1425,54 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                 },
                 {
                   path: 'question',
-                  element: <QuestionFormOutlet />,
-                  handle: questionHandle,
+                  lazy: async () => {
+                    const [questionHandle, QuestionFormOutlet] =
+                      await Promise.all([
+                        import(
+                          /* webpackChunkName: 'assessmentHandles' */
+                          'course/assessment/handles'
+                        ).then((module) => module.questionHandle),
+                        import(
+                          /* webpackChunkName: 'QuestionFormOutlet' */
+                          'course/assessment/question/components/QuestionFormOutlet'
+                        ).then((module) => module.default),
+                      ]);
+
+                    return {
+                      Component: QuestionFormOutlet,
+                      handle: questionHandle,
+                    };
+                  },
                   children: [
                     {
                       path: 'forum_post_responses',
                       children: [
                         {
                           path: 'new',
-                          handle: NewForumPostResponsePage.handle,
-                          element: <NewForumPostResponsePage />,
+                          lazy: async () => {
+                            const NewForumPostResponsePage = (
+                              await import(
+                                /* webpackChunkName: 'NewForumPostResponsePage' */
+                                'course/assessment/question/forum-post-responses/NewForumPostResponsePage'
+                              )
+                            ).default;
+
+                            return {
+                              Component: NewForumPostResponsePage,
+                              handle: NewForumPostResponsePage.handle,
+                            };
+                          },
                         },
                         {
                           path: ':questionId/edit',
-                          element: <EditForumPostResponsePage />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'EditForumPostResponsePage' */
+                                'course/assessment/question/forum-post-responses/EditForumPostResponsePage'
+                              )
+                            ).default,
+                          }),
                         },
                       ],
                     },
@@ -676,12 +1481,30 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                       children: [
                         {
                           path: 'new',
-                          handle: NewTextResponse.handle,
-                          element: <NewTextResponse />,
+                          lazy: async () => {
+                            const NewTextResponse = (
+                              await import(
+                                /* webpackChunkName: 'NewTextResponsePage' */
+                                'course/assessment/question/text-responses/NewTextResponsePage'
+                              )
+                            ).default;
+
+                            return {
+                              Component: NewTextResponse,
+                              handle: NewTextResponse.handle,
+                            };
+                          },
                         },
                         {
                           path: ':questionId/edit',
-                          element: <EditTextResponse />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'EditTextResponsePage' */
+                                'course/assessment/question/text-responses/EditTextResponsePage'
+                              )
+                            ).default,
+                          }),
                         },
                       ],
                     },
@@ -690,12 +1513,30 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                       children: [
                         {
                           path: 'new',
-                          handle: NewVoicePage.handle,
-                          element: <NewVoicePage />,
+                          lazy: async () => {
+                            const NewVoicePage = (
+                              await import(
+                                /* webpackChunkName: 'NewVoicePage' */
+                                'course/assessment/question/voice-responses/NewVoicePage'
+                              )
+                            ).default;
+
+                            return {
+                              Component: NewVoicePage,
+                              handle: NewVoicePage.handle,
+                            };
+                          },
                         },
                         {
                           path: ':questionId/edit',
-                          element: <EditVoicePage />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'EditVoicePage' */
+                                'course/assessment/question/voice-responses/EditVoicePage'
+                              )
+                            ).default,
+                          }),
                         },
                       ],
                     },
@@ -704,12 +1545,30 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                       children: [
                         {
                           path: 'new',
-                          handle: NewMcqMrqPage.handle,
-                          element: <NewMcqMrqPage />,
+                          lazy: async () => {
+                            const NewMcqMrqPage = (
+                              await import(
+                                /* webpackChunkName: 'NewMcqMrqPage' */
+                                'course/assessment/question/multiple-responses/NewMcqMrqPage'
+                              )
+                            ).default;
+
+                            return {
+                              Component: NewMcqMrqPage,
+                              handle: NewMcqMrqPage.handle,
+                            };
+                          },
                         },
                         {
                           path: ':questionId/edit',
-                          element: <EditMcqMrqPage />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'EditMcqMrqPage' */
+                                'course/assessment/question/multiple-responses/EditMcqMrqPage'
+                              )
+                            ).default,
+                          }),
                         },
                       ],
                     },
@@ -718,12 +1577,30 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                       children: [
                         {
                           path: 'new',
-                          handle: ScribingQuestion.handle,
-                          element: <ScribingQuestion />,
+                          lazy: async () => {
+                            const ScribingQuestion = (
+                              await import(
+                                /* webpackChunkName: 'ScribingQuestion' */
+                                'course/assessment/question/scribing/ScribingQuestion'
+                              )
+                            ).default;
+
+                            return {
+                              Component: ScribingQuestion,
+                              handle: ScribingQuestion.handle,
+                            };
+                          },
                         },
                         {
                           path: ':questionId/edit',
-                          element: <ScribingQuestion />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'ScribingQuestion' */
+                                'course/assessment/question/scribing/ScribingQuestion'
+                              )
+                            ).default,
+                          }),
                         },
                       ],
                     },
@@ -732,17 +1609,46 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
                       children: [
                         {
                           path: 'new',
-                          handle: NewProgrammingQuestionPage.handle,
-                          element: <NewProgrammingQuestionPage />,
+                          lazy: async () => {
+                            const NewProgrammingQuestionPage = (
+                              await import(
+                                /* webpackChunkName: 'NewProgrammingQuestionPage' */
+                                'course/assessment/question/programming/NewProgrammingQuestionPage'
+                              )
+                            ).default;
+
+                            return {
+                              Component: NewProgrammingQuestionPage,
+                              handle: NewProgrammingQuestionPage.handle,
+                            };
+                          },
                         },
                         {
                           path: 'generate',
-                          handle: GenerateProgrammingQuestionPage.handle,
-                          element: <GenerateProgrammingQuestionPage />,
+                          lazy: async () => {
+                            const GenerateProgrammingQuestionPage = (
+                              await import(
+                                /* webpackChunkName: 'GenerateProgrammingQuestionPage' */
+                                'course/assessment/pages/AssessmentGenerate/GenerateProgrammingQuestionPage'
+                              )
+                            ).default;
+
+                            return {
+                              Component: GenerateProgrammingQuestionPage,
+                              handle: GenerateProgrammingQuestionPage.handle,
+                            };
+                          },
                         },
                         {
                           path: ':questionId/edit',
-                          element: <EditProgrammingQuestionPage />,
+                          lazy: async () => ({
+                            Component: (
+                              await import(
+                                /* webpackChunkName: 'EditProgrammingQuestionPage' */
+                                'course/assessment/question/programming/EditProgrammingQuestionPage'
+                              )
+                            ).default,
+                          }),
                         },
                       ],
                     },
@@ -756,23 +1662,64 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
     },
     {
       path: '/',
-      element: <CourselessContainer withGotoCoursesLink withUserMenu />,
+      lazy: async () => {
+        const CourselessContainer = (
+          await import(
+            /* webpackChunkName: 'CourselessContainer' */
+            'lib/containers/CourselessContainer'
+          )
+        ).default;
+
+        return {
+          element: <CourselessContainer withGotoCoursesLink withUserMenu />,
+        };
+      },
       children: [
         {
           index: true,
-          element: <DashboardPage />,
+          lazy: async () => ({
+            Component: (
+              await import(
+                /* webpackChunkName: 'DashboardPage' */
+                'bundles/common/DashboardPage'
+              )
+            ).default,
+          }),
         },
       ],
     },
     {
       path: '*',
-      element: <CourselessContainer withCourseSwitcher withUserMenu />,
+      lazy: async () => {
+        const CourselessContainer = (
+          await import(
+            /* webpackChunkName: 'CourselessContainer' */
+            'lib/containers/CourselessContainer'
+          )
+        ).default;
+
+        return {
+          element: <CourselessContainer withCourseSwitcher withUserMenu />,
+        };
+      },
+
       children: [
         reservedRoutes,
         {
           path: 'admin',
-          handle: AdminNavigator.handle,
-          element: <AdminNavigator />,
+          lazy: async () => {
+            const AdminNavigator = (
+              await import(
+                /* webpackChunkName: 'AdminNavigator' */
+                'bundles/system/admin/admin/AdminNavigator'
+              )
+            ).default;
+
+            return {
+              Component: AdminNavigator,
+              handle: AdminNavigator.handle,
+            };
+          },
           children: [
             {
               index: true,
@@ -780,26 +1727,65 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             },
             {
               path: 'announcements',
-              element: <AnnouncementIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'AnnouncementsIndex' */
+                    'bundles/system/admin/admin/pages/AnnouncementsIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'users',
-              element: <UserIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'UsersIndex' */
+                    'bundles/system/admin/admin/pages/UsersIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'instances',
-              element: <InstancesIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'InstancesIndex' */
+                    'bundles/system/admin/admin/pages/InstancesIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'courses',
-              element: <CourseIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'CoursesIndex' */
+                    'bundles/system/admin/admin/pages/CoursesIndex'
+                  )
+                ).default,
+              }),
             },
           ],
         },
         {
           path: 'admin/instance',
-          handle: InstanceAdminNavigator.handle,
-          element: <InstanceAdminNavigator />,
+          lazy: async () => {
+            const InstanceAdminNavigator = (
+              await import(
+                /* webpackChunkName: 'InstanceAdminNavigator' */
+                'bundles/system/admin/instance/instance/InstanceAdminNavigator'
+              )
+            ).default;
+
+            return {
+              Component: InstanceAdminNavigator,
+              handle: InstanceAdminNavigator.handle,
+            };
+          },
           children: [
             {
               index: true,
@@ -807,54 +1793,132 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
             },
             {
               path: 'announcements',
-              element: <InstanceAnnouncementsIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'InstanceAnnouncementsIndex' */
+                    'bundles/system/admin/instance/instance/pages/InstanceAnnouncementsIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'components',
-              element: <InstanceComponentsIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'InstanceComponentsIndex' */
+                    'bundles/system/admin/instance/instance/pages/InstanceComponentsIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'courses',
-              element: <InstanceCoursesIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'InstanceCoursesIndex' */
+                    'bundles/system/admin/instance/instance/pages/InstanceCoursesIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'users',
-              element: <InstanceUsersIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'InstanceUsersIndex' */
+                    'bundles/system/admin/instance/instance/pages/InstanceUsersIndex'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'users/invite',
-              element: <InstanceUsersInvite />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'InstanceUsersInvite' */
+                    'bundles/system/admin/instance/instance/pages/InstanceUsersInvite'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'user_invitations',
-              element: <InstanceUsersInvitations />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'InstanceUsersInvitations' */
+                    'bundles/system/admin/instance/instance/pages/InstanceUsersInvitations'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'role_requests',
-              element: <InstanceUserRoleRequestsIndex />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'InstanceUserRoleRequestsIndex' */
+                    'bundles/system/admin/instance/instance/pages/InstanceUserRoleRequestsIndex'
+                  )
+                ).default,
+              }),
             },
           ],
         },
         {
           path: 'announcements',
-          handle: GlobalAnnouncementIndex.handle,
-          element: <GlobalAnnouncementIndex />,
+          lazy: async () => {
+            const GlobalAnnouncementIndex = (
+              await import(
+                /* webpackChunkName: 'GlobalAnnouncementIndex' */
+                'bundles/announcements/GlobalAnnouncementIndex'
+              )
+            ).default;
+
+            return {
+              Component: GlobalAnnouncementIndex,
+              handle: GlobalAnnouncementIndex.handle,
+            };
+          },
         },
         {
           path: 'users',
           children: [
             {
               path: ':userId',
-              element: <UserShow />,
+              lazy: async () => ({
+                Component: (
+                  await import(
+                    /* webpackChunkName: 'UserShow' */
+                    'bundles/users/pages/UserShow'
+                  )
+                ).default,
+              }),
             },
             {
               path: 'confirmation',
               children: [
                 {
                   index: true,
-                  loader: ConfirmEmailPage.loader,
-                  element: <Navigate to="/" />,
-                  errorElement: <ConfirmEmailPage.InvalidRedirect />,
+                  lazy: async () => {
+                    const ConfirmEmailPage = (
+                      await import(
+                        /* webpackChunkName: 'ConfirmEmailPage' */
+                        'bundles/users/pages/ConfirmEmailPage'
+                      )
+                    ).default;
+
+                    return {
+                      element: <Navigate to="/" />,
+                      errorElement: <ConfirmEmailPage.InvalidRedirect />,
+                      loader: ConfirmEmailPage.loader,
+                    };
+                  },
                 },
               ],
             },
@@ -862,8 +1926,19 @@ const authenticatedRouter: Translated<RouteObject[]> = (t) =>
         },
         {
           path: 'user/profile/edit',
-          handle: AccountSettings.handle,
-          element: <AccountSettings />,
+          lazy: async () => {
+            const AccountSettings = (
+              await import(
+                /* webpackChunkName: 'AccountSettings' */
+                'bundles/user/AccountSettings'
+              )
+            ).default;
+
+            return {
+              Component: AccountSettings,
+              handle: AccountSettings.handle,
+            };
+          },
         },
         {
           path: 'role_requests',
