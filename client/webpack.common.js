@@ -4,7 +4,6 @@ const {
   ContextReplacementPlugin,
   DefinePlugin,
 } = require('webpack');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -15,6 +14,9 @@ const cssIncludes = require('./css-includes.json');
 
 const ENV_DIR = process.env.BABEL_ENV === 'e2e-test' ? './.env.test' : './.env';
 
+/**
+ * @type {import('webpack').Configuration}
+ */
 module.exports = {
   entry: './app/index.tsx',
   output: {
@@ -46,12 +48,12 @@ module.exports = {
   plugins: [
     new DotenvPlugin({ path: ENV_DIR }),
     new IgnorePlugin({ resourceRegExp: /__test__/ }),
-    new WebpackManifestPlugin({
-      publicPath: '/webpack/',
-      writeToFileEmit: true,
-    }),
     new HtmlWebpackPlugin({ template: './public/index.html' }),
-    new FaviconsWebpackPlugin({ logo: './favicon.svg', inject: true }),
+    new FaviconsWebpackPlugin({
+      logo: './favicon.svg',
+      inject: true,
+      mode: 'auto',
+    }),
     // Do not require all locales in moment
     new ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
     new ForkTsCheckerWebpackPlugin({
@@ -117,13 +119,6 @@ module.exports = {
           },
         ],
         exclude: /node_modules/,
-      },
-      {
-        test: require.resolve('./app/lib/moment-timezone'),
-        loader: 'expose-loader',
-        options: {
-          exposes: 'moment',
-        },
       },
       {
         test: /\.md$/,
