@@ -19,6 +19,7 @@ import {
 import {
   buildGenerateRequestPayload,
   extractQuestionPrototypeData,
+  replaceUnlockedPrototypeFields,
 } from 'course/assessment/pages/AssessmentGenerate/utils';
 import { generationActions as actions } from 'course/assessment/reducers/generation';
 import { setNotification } from 'lib/actions';
@@ -138,6 +139,8 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
     'question.description': false,
     'testUi.metadata.solution': false,
     'testUi.metadata.submission': false,
+    'testUi.metadata.prepend': false,
+    'testUi.metadata.append': false,
     'testUi.metadata.testCases.public': false,
     'testUi.metadata.testCases.private': false,
     'testUi.metadata.testCases.evaluation': false,
@@ -361,60 +364,12 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                               .then((response) => {
                                 const responseQuestionFormData =
                                   extractQuestionPrototypeData(response.data);
-                                const newQuestionFormData = {
-                                  question: {
-                                    title: lockStates['question.title']
-                                      ? questionFormData.question.title
-                                      : responseQuestionFormData.question.title,
-                                    description: lockStates[
-                                      'question.description'
-                                    ]
-                                      ? questionFormData.question.description
-                                      : responseQuestionFormData.question
-                                          .description,
-                                  },
-                                  testUi: {
-                                    metadata: {
-                                      submission: lockStates[
-                                        'testUi.metadata.submission'
-                                      ]
-                                        ? questionFormData.testUi?.metadata
-                                            .submission
-                                        : responseQuestionFormData.testUi
-                                            .metadata.submission,
-                                      solution: lockStates[
-                                        'testUi.metadata.solution'
-                                      ]
-                                        ? questionFormData.testUi?.metadata
-                                            .solution
-                                        : responseQuestionFormData.testUi
-                                            .metadata.solution,
-                                      testCases: {
-                                        public: lockStates[
-                                          'testUi.metadata.testCases.public'
-                                        ]
-                                          ? questionFormData.testUi?.metadata
-                                              .testCases.public
-                                          : responseQuestionFormData.testUi
-                                              .metadata.testCases.public,
-                                        private: lockStates[
-                                          'testUi.metadata.testCases.private'
-                                        ]
-                                          ? questionFormData.testUi?.metadata
-                                              .testCases.private
-                                          : responseQuestionFormData.testUi
-                                              .metadata.testCases.private,
-                                        evaluation: lockStates[
-                                          'testUi.metadata.testCases.evaluation'
-                                        ]
-                                          ? questionFormData.testUi?.metadata
-                                              .testCases.evaluation
-                                          : responseQuestionFormData.testUi
-                                              .metadata.testCases.evaluation,
-                                      },
-                                    },
-                                  },
-                                };
+                                const newQuestionFormData =
+                                  replaceUnlockedPrototypeFields(
+                                    questionFormData,
+                                    responseQuestionFormData,
+                                    lockStates,
+                                  );
                                 dispatch((_, getState) => {
                                   const currentActiveConversationId =
                                     getAssessmentGenerateQuestionsData(

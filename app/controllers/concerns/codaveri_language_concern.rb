@@ -10,6 +10,8 @@ module CodaveriLanguageConcern
 
   private
 
+  # We only need to list the special cases here, any others will fall back to the default
+  # name and version we are already using on our side.
   def programming_language_map
     {
       Coursemology::Polyglot::Language::CPlusPlus::CPlusPlus11 => {
