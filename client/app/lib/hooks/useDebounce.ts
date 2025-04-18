@@ -1,6 +1,5 @@
 import { DependencyList, useCallback, useEffect } from 'react';
-import type { DebouncedFunc } from 'lodash';
-import { debounce } from 'lodash';
+import debounce, { type DebouncedFunc } from 'lodash-es/debounce';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useDebounce = <T extends (...args: any[]) => any>(

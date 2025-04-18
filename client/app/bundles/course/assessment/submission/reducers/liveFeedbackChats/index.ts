@@ -4,7 +4,7 @@ import {
   type EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { shuffle } from 'lodash';
+import shuffle from 'lodash-es/shuffle';
 
 import moment, { SHORT_TIME_FORMAT } from 'lib/moment';
 
