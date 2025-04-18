@@ -2,7 +2,6 @@ import { defineMessages } from 'react-intl';
 import { Navigate } from 'react-router-dom';
 import { ArrowForward } from '@mui/icons-material';
 import { Avatar, Stack, Typography } from '@mui/material';
-import moment from 'moment';
 import { HomeLayoutCourseData } from 'types/home';
 
 import { getCourseLogoUrl } from 'course/helper';
@@ -13,6 +12,7 @@ import { useAppContext } from 'lib/containers/AppContainer';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import useItems from 'lib/hooks/items/useItems';
 import useTranslation from 'lib/hooks/useTranslation';
+import moment from 'lib/moment';
 
 import NewCourseButton from './components/NewCourseButton';
 

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Cancel, CheckCircle } from '@mui/icons-material';
 import { Chip, Grow, Tooltip, Typography } from '@mui/material';
-import moment from 'moment';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import useTranslation from 'lib/hooks/useTranslation';
+import moment from 'lib/moment';
 
 import { useLastSaved } from '../contexts';
 import translations from '../translations';

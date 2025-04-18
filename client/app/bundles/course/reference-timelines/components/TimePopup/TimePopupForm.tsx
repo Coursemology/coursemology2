@@ -1,11 +1,11 @@
 import { Controller } from 'react-hook-form';
 import { Button, Collapse } from '@mui/material';
-import moment from 'moment';
 import { date, object, ref } from 'yup';
 
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import Form from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
+import moment from 'lib/moment';
 import formTranslations from 'lib/translations/form';
 
 import { useLastSaved } from '../../contexts';
