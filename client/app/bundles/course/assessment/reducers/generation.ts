@@ -28,6 +28,8 @@ const sentinelSnapshot = (): SnapshotState => ({
       metadata: {
         solution: '',
         submission: '',
+        prepend: null,
+        append: null,
         testCases: {
           public: [],
           private: [],
@@ -41,6 +43,8 @@ const sentinelSnapshot = (): SnapshotState => ({
     'question.description': false,
     'testUi.metadata.solution': false,
     'testUi.metadata.submission': false,
+    'testUi.metadata.prepend': false,
+    'testUi.metadata.append': false,
     'testUi.metadata.testCases.public': false,
     'testUi.metadata.testCases.private': false,
     'testUi.metadata.testCases.evaluation': false,

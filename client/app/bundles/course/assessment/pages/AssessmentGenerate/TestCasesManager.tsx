@@ -15,19 +15,21 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../translations';
 
 import LockableSection from './LockableSection';
-import { QuestionPrototypeFormData } from './types';
+import { LockStates, QuestionPrototypeFormData } from './types';
 
 interface TestCasesManagerProps {
   control: Control<QuestionPrototypeFormData>;
   setValue: UseFormSetValue<QuestionPrototypeFormData>;
-  lockStates: { [key: string]: boolean };
+  lockStates: LockStates;
   onToggleLock: (key: string) => void;
   component?: ElementType<ReorderableTestCaseProps>;
+  lhsHeader: string;
+  rhsHeader: string;
 }
 
 const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
   const { t } = useTranslation();
-  const { component, lockStates, onToggleLock } = props;
+  const { component, lockStates, onToggleLock, lhsHeader, rhsHeader } = props;
 
   // Cast fields to ProgrammingFormData to satisfy helper components' type assertions
   const control = props.control as unknown as Control<ProgrammingFormData>;
@@ -61,12 +63,12 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
             control={control}
             disabled={lockStates[publicTestCasesName]}
             hintHeader={t(translations.hint)}
-            lhsHeader={t(translations.expression)}
+            lhsHeader={lhsHeader}
             name={publicTestCasesName}
             onDelete={(index: number) =>
               onDeletingTestCase(publicTestCasesName, index)
             }
-            rhsHeader={t(translations.expected)}
+            rhsHeader={rhsHeader}
             testCases={testCases.public}
             title={t(translations.publicTestCases)}
           />
@@ -84,12 +86,12 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
             control={control}
             disabled={lockStates[privateTestCasesName]}
             hintHeader={t(translations.hint)}
-            lhsHeader={t(translations.expression)}
+            lhsHeader={lhsHeader}
             name={privateTestCasesName}
             onDelete={(index: number) =>
               onDeletingTestCase(privateTestCasesName, index)
             }
-            rhsHeader={t(translations.expected)}
+            rhsHeader={rhsHeader}
             subtitle={t(translations.privateTestCasesHint)}
             testCases={testCases.private}
             title={t(translations.privateTestCases)}
@@ -108,12 +110,12 @@ const TestCasesManager: FC<TestCasesManagerProps> = (props) => {
             control={control}
             disabled={lockStates[evaluationTestCasesName]}
             hintHeader={t(translations.hint)}
-            lhsHeader={t(translations.expression)}
+            lhsHeader={lhsHeader}
             name={evaluationTestCasesName}
             onDelete={(index: number) =>
               onDeletingTestCase(evaluationTestCasesName, index)
             }
-            rhsHeader={t(translations.expected)}
+            rhsHeader={rhsHeader}
             subtitle={t(translations.evaluationTestCasesHint)}
             testCases={testCases.evaluation}
             title={t(translations.evaluationTestCases)}
