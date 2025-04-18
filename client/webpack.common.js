@@ -165,13 +165,6 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: require.resolve('jquery'),
-        loader: 'expose-loader',
-        options: {
-          exposes: ['jQuery', '$'],
-        },
-      },
-      {
         test: require.resolve('./app/lib/moment-timezone'),
         loader: 'expose-loader',
         options: {
