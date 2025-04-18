@@ -46,28 +46,6 @@ module.exports = {
   optimization: {
     splitChunks: {
       chunks: 'all',
-      name: (_, chunks, cacheGroupKey) => {
-        /**
-         * Workers are not part of the `coursemology` runtime, so their dependencies
-         * are packed in a separate chunk. This chunk has `name` set to `undefined`.
-         * When simply `Array.prototype.join`ed, we will get weird chunk names like
-         * `vendors~coursemology~.js` or `vendors~.js` that `application_helper.rb`
-         * should inject. Normally, this isn't an issue with `HtmlWebpackPlugin`, but
-         * since we don't have that and are manually injecting webpack assets in
-         * `layouts/default.html.slim`, we combine these `undefined` chunks into
-         * `coursemology`'s runtime. So, we have one `vendors~coursemology.js`.
-         */
-        const allChunksNames =
-          chunks
-            .map((chunk) => chunk.name)
-            .filter((name) => Boolean(name))
-            .join('~') || 'coursemology';
-
-        const prefix =
-          cacheGroupKey === 'defaultVendors' ? 'vendors' : cacheGroupKey;
-
-        return `${prefix}~${allChunksNames}`;
-      },
     },
     moduleIds: 'deterministic',
   },
