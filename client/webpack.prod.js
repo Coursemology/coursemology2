@@ -16,6 +16,9 @@ module.exports = merge(common, {
     publicPath: '/static/',
     clean: true,
   },
+  cache: {
+    type: 'filesystem',
+  },
   optimization: {
     usedExports: true,
     minimizer: [
