@@ -5,6 +5,7 @@ const common = require('./webpack.common');
 const packageJSON = require('./package.json');
 
 const SERVER_PORT = packageJSON.devServer.serverPort;
+const CLIENT_PORT = packageJSON.devServer.clientPort;
 const APP_HOST = packageJSON.devServer.appHost;
 
 const BLUE_ANSI = '\x1b[36m%s\x1b[0m';
@@ -20,10 +21,14 @@ const bypassProxyIf = [
   (request) => request.url.startsWith('/oauth'),
 ];
 
+/**
+ * @type {import('webpack').Configuration}
+ */
 module.exports = merge(common, {
   mode: 'development',
   devtool: 'eval-cheap-module-source-map',
   devServer: {
+    port: CLIENT_PORT,
     allowedHosts: [`.${APP_HOST}`],
     historyApiFallback: true,
     devMiddleware: {
