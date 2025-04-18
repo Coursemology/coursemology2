@@ -1,4 +1,4 @@
-import { isNumber } from 'lodash';
+import isNumber from 'lodash-es/isNumber';
 
 const getNumberBetweenTwoSquareBrackets = (str: string): number | undefined => {
   const match = str.match(/\[(\d+)\]/);
@@ -18,7 +18,7 @@ const getIndexAndKeyPath = <T extends string>(path: string): [number, T] => {
   if (!isNumber(index))
     throw new Error(`validateOptions encountered ${index} index`);
 
-  return [index, key as T];
+  return [index as number, key as T];
 };
 
 export default getIndexAndKeyPath;
