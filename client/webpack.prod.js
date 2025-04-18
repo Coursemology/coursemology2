@@ -5,6 +5,9 @@ const common = require('./webpack.common');
 
 const AVAILABLE_CPUS = +process.env.AVAILABLE_CPUS;
 
+/**
+ * @type {import('webpack').Configuration}
+ */
 module.exports = merge(common, {
   mode: 'production',
   devtool: 'source-map',

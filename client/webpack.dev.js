@@ -21,6 +21,9 @@ const bypassProxyIf = [
   (request) => request.url.startsWith('/oauth'),
 ];
 
+/**
+ * @type {import('webpack').Configuration}
+ */
 module.exports = merge(common, {
   mode: 'development',
   devtool: 'eval-cheap-module-source-map',
