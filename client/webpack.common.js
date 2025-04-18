@@ -18,14 +18,7 @@ const ENV_DIR = process.env.BABEL_ENV === 'e2e-test' ? './.env.test' : './.env';
  * @type {import('webpack').Configuration}
  */
 module.exports = {
-  entry: {
-    coursemology: [
-      '@babel/polyfill',
-      'jquery',
-      './app/index',
-      './app/lib/moment-timezone',
-    ],
-  },
+  entry: './app/index.tsx',
   output: {
     path: join(__dirname, 'build'),
     publicPath: '/',

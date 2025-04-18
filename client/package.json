@@ -30,8 +30,6 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.12.1",
-    "@babel/runtime": "^7.26.10",
     "@ckeditor/ckeditor5-build-custom": "github:Coursemology/CKEditor5-build-coursemology#0.3.0",
     "@ckeditor/ckeditor5-react": "^6.2.0",
     "@emotion/react": "^11.11.4",
