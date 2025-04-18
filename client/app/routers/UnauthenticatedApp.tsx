@@ -1,17 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-import AuthenticationRedirection from 'bundles/authentication/pages/AuthenticationRedirection';
-import LandingPage from 'bundles/common/LandingPage';
-import ConfirmEmailPage from 'bundles/users/pages/ConfirmEmailPage';
-import ForgotPasswordLandingPage from 'bundles/users/pages/ForgotPasswordLandingPage';
-import ForgotPasswordPage from 'bundles/users/pages/ForgotPasswordPage';
-import ResendConfirmationEmailLandingPage from 'bundles/users/pages/ResendConfirmationEmailLandingPage';
-import ResendConfirmationEmailPage from 'bundles/users/pages/ResendConfirmationEmailPage';
-import ResetPasswordPage from 'bundles/users/pages/ResetPasswordPage';
-import SignUpLandingPage from 'bundles/users/pages/SignUpLandingPage';
-import SignUpPage from 'bundles/users/pages/SignUpPage';
-import AuthPagesContainer from 'lib/containers/AuthPagesContainer';
-import CourselessContainer from 'lib/containers/CourselessContainer';
 
 import { protectedRoutes } from './redirects';
 import createAppRouter from './router';
@@ -20,37 +8,94 @@ const unauthenticatedRouter = createAppRouter([
   protectedRoutes,
   {
     path: '*',
-    element: <CourselessContainer withGotoCoursesLink />,
+    lazy: async () => {
+      const CourselessContainer = (
+        await import(
+          /* webpackChunkName: "CourselessContainer" */
+          'lib/containers/CourselessContainer'
+        )
+      ).default;
+
+      return {
+        element: <CourselessContainer withGotoCoursesLink />,
+      };
+    },
     children: [
       {
         index: true,
-        element: <LandingPage />,
+        lazy: async () => ({
+          Component: (
+            await import(
+              /* webpackChunkName: "LandingPage" */
+              'bundles/common/LandingPage'
+            )
+          ).default,
+        }),
       },
       {
         index: true,
         path: 'auth',
-        element: <AuthenticationRedirection />,
+        lazy: async () => ({
+          Component: (
+            await import(
+              /* webpackChunkName: "AuthenticationRedirection" */
+              'bundles/authentication/pages/AuthenticationRedirection'
+            )
+          ).default,
+        }),
       },
       {
         path: 'users',
-        element: <AuthPagesContainer />,
+        lazy: async () => ({
+          Component: (
+            await import(
+              /* webpackChunkName: "AuthPagesContainer" */
+              'lib/containers/AuthPagesContainer'
+            )
+          ).default,
+        }),
         children: [
           {
             index: true,
             path: 'sign_in',
-            element: <AuthenticationRedirection />,
+            lazy: async () => ({
+              Component: (
+                await import(
+                  /* webpackChunkName: "AuthenticationRedirection" */
+                  'bundles/authentication/pages/AuthenticationRedirection'
+                )
+              ).default,
+            }),
           },
           {
             path: 'sign_up',
             children: [
               {
                 index: true,
-                loader: SignUpPage.loader,
-                element: <SignUpPage />,
+                lazy: async () => {
+                  const SignUpPage = (
+                    await import(
+                      /* webpackChunkName: "SignUpPage" */
+                      'bundles/users/pages/SignUpPage'
+                    )
+                  ).default;
+
+                  return {
+                    Component: SignUpPage,
+                    loader: SignUpPage.loader,
+                  };
+                },
               },
               {
                 path: 'completed',
-                element: <SignUpLandingPage />,
+                lazy: async () => ({
+                  Component: (
+                    await import(
+                      /* webpackChunkName: "SignUpLandingPage" */
+                      'bundles/users/pages/SignUpLandingPage'
+                    )
+                  ).default,
+                }),
               },
             ],
           },
@@ -59,20 +104,45 @@ const unauthenticatedRouter = createAppRouter([
             children: [
               {
                 index: true,
-                loader: ConfirmEmailPage.loader,
-                element: <ConfirmEmailPage />,
-                errorElement: <ConfirmEmailPage.InvalidRedirect />,
+                lazy: async () => {
+                  const ConfirmEmailPage = (
+                    await import(
+                      /* webpackChunkName: "ConfirmEmailPage" */
+                      'bundles/users/pages/ConfirmEmailPage'
+                    )
+                  ).default;
+
+                  return {
+                    Component: ConfirmEmailPage,
+                    loader: ConfirmEmailPage.loader,
+                    errorElement: <ConfirmEmailPage.InvalidRedirect />,
+                  };
+                },
               },
               {
                 path: 'new',
                 children: [
                   {
                     index: true,
-                    element: <ResendConfirmationEmailPage />,
+                    lazy: async () => ({
+                      Component: (
+                        await import(
+                          /* webpackChunkName: "ResendConfirmationEmailPage" */
+                          'bundles/users/pages/ResendConfirmationEmailPage'
+                        )
+                      ).default,
+                    }),
                   },
                   {
                     path: 'completed',
-                    element: <ResendConfirmationEmailLandingPage />,
+                    lazy: async () => ({
+                      Component: (
+                        await import(
+                          /* webpackChunkName: "ResendConfirmationEmailLandingPage" */
+                          'bundles/users/pages/ResendConfirmationEmailLandingPage'
+                        )
+                      ).default,
+                    }),
                   },
                 ],
               },
@@ -86,19 +156,44 @@ const unauthenticatedRouter = createAppRouter([
                 children: [
                   {
                     index: true,
-                    element: <ForgotPasswordPage />,
+                    lazy: async () => ({
+                      Component: (
+                        await import(
+                          /* webpackChunkName: "ForgotPasswordPage" */
+                          'bundles/users/pages/ForgotPasswordPage'
+                        )
+                      ).default,
+                    }),
                   },
                   {
                     path: 'completed',
-                    element: <ForgotPasswordLandingPage />,
+                    lazy: async () => ({
+                      Component: (
+                        await import(
+                          /* webpackChunkName: "ForgotPasswordLandingPage" */
+                          'bundles/users/pages/ForgotPasswordLandingPage'
+                        )
+                      ).default,
+                    }),
                   },
                 ],
               },
               {
                 path: 'edit',
-                loader: ResetPasswordPage.loader,
-                errorElement: <ResetPasswordPage.InvalidRedirect />,
-                element: <ResetPasswordPage />,
+                lazy: async () => {
+                  const ResetPasswordPage = (
+                    await import(
+                      /* webpackChunkName: "ResetPasswordPage" */
+                      'bundles/users/pages/ResetPasswordPage'
+                    )
+                  ).default;
+
+                  return {
+                    Component: ResetPasswordPage,
+                    loader: ResetPasswordPage.loader,
+                    errorElement: <ResetPasswordPage.InvalidRedirect />,
+                  };
+                },
               },
             ],
           },

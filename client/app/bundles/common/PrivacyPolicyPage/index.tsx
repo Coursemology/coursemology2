@@ -1,10 +1,8 @@
-import { lazy, Suspense } from 'react';
 import { defineMessages } from 'react-intl';
 
-const PrivacyPolicyPage = lazy(
-  () =>
-    import(/* webpackChunkName: "PrivacyPolicyPage" */ './PrivacyPolicyPage'),
-);
+import MarkdownPage from 'lib/components/core/layouts/MarkdownPage';
+
+import privacyPolicy from './privacy-policy.md';
 
 const translations = defineMessages({
   privacyPolicy: {
@@ -13,12 +11,10 @@ const translations = defineMessages({
   },
 });
 
-const SuspensedPrivacyPolicyPage = (): JSX.Element => (
-  <Suspense>
-    <PrivacyPolicyPage />
-  </Suspense>
+const PrivacyPolicyPage = (): JSX.Element => (
+  <MarkdownPage className="m-auto max-w-7xl" markdown={privacyPolicy} />
 );
 
 const handle = translations.privacyPolicy;
 
-export default Object.assign(SuspensedPrivacyPolicyPage, { handle });
+export default Object.assign(PrivacyPolicyPage, { handle });
