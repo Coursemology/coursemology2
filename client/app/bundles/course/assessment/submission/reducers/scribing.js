@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { isNumber } from 'lodash';
+import isNumber from 'lodash-es/isNumber';
 
 import actions, {
   canvasActionTypes,

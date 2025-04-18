@@ -20,7 +20,7 @@ import {
 } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Slide, Typography } from '@mui/material';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash-es/isEmpty';
 import { AnyObjectSchema } from 'yup';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';

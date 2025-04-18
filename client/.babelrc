@@ -17,14 +17,6 @@
     [
       "babel-plugin-import",
       {
-        "libraryName": "lodash",
-        "libraryDirectory": "",
-        "camel2DashComponentName": false
-      }
-    ],
-    [
-      "babel-plugin-import",
-      {
         "libraryName": "@mui/material",
         "libraryDirectory": "",
         "camel2DashComponentName": false
