@@ -74,7 +74,7 @@ const ThemeProvider = (props: ThemeProviderProps): JSX.Element => {
           classes: {
             root: 'rounded-full',
             sizeLarge: 'px-5 py-3',
-            sizeMedium: 'px-3 py-2',
+            sizeMedium: 'px-2 py-2',
             sizeSmall: 'min-w-[6rem] px-1 py-1',
           },
         },

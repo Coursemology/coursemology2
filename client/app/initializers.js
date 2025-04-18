@@ -1,7 +1,6 @@
 /* eslint-disable global-require */
 
 function loadModules() {
-  require('lib/initializers/ace-editor');
   // Require web font last so that it doesn't block the load of current module.
   require('lib/initializers/webfont');
 }
