@@ -161,13 +161,6 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: require.resolve('./app/lib/moment-timezone'),
-        loader: 'expose-loader',
-        options: {
-          exposes: 'moment',
-        },
-      },
-      {
         test: /\.md$/,
         type: 'asset/source',
       },
