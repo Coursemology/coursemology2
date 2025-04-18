@@ -1,5 +1,6 @@
-import moment from 'moment';
 import { TimeData } from 'types/course/referenceTimelines';
+
+import moment from 'lib/moment';
 
 const SECONDS_IN_A_DAY = 86_400 as const;
 

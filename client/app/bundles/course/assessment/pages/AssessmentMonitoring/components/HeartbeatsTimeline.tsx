@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import moment from 'moment';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
 import { BrowserAuthorizationMethod } from 'course/assessment/components/monitoring/BrowserAuthorizationMethodOptionsFormFields/common';
+import moment from 'lib/moment';
 
 import HeartbeatDetailCard from './HeartbeatDetailCard';
 import HeartbeatsTimelineChart from './HeartbeatsTimelineChart';
