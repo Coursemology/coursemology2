@@ -14,6 +14,9 @@ const packageJSON = require('./package.json');
 
 const ENV_DIR = process.env.BABEL_ENV === 'e2e-test' ? './.env.test' : './.env';
 
+/**
+ * @type {import('webpack').Configuration}
+ */
 module.exports = {
   entry: {
     coursemology: [
