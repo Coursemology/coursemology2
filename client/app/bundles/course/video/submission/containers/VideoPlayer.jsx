@@ -82,7 +82,7 @@ class VideoPlayer extends Component {
   UNSAFE_componentWillMount() {
     if (VideoPlayer.ReactPlayer !== undefined) return; // Already loaded
 
-    import(/* webpackChunkName: "video" */ 'react-player').then(
+    import(/* webpackChunkName: "video" */ 'react-player/youtube').then(
       (ReactPlayer) => {
         VideoPlayer.ReactPlayer = ReactPlayer.default;
         this.forceUpdate();
