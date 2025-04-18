@@ -14,6 +14,7 @@ module.exports = merge(common, {
   output: {
     filename: '[name]-[contenthash].js',
     publicPath: '/static/',
+    clean: true,
   },
   optimization: {
     usedExports: true,
