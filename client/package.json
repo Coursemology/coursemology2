@@ -146,6 +146,7 @@
     "babel-plugin-istanbul": "^6.1.1",
     "babel-plugin-react-remove-properties": "^0.3.0",
     "babel-plugin-transform-import-meta": "^2.2.1",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "css-loader": "^6.11.0",
     "cssnano": "^6.1.2",
     "dotenv-webpack": "^8.0.1",

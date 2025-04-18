@@ -36,7 +36,14 @@
   "env": {
     "production": {
       "plugins": [
-        ["react-remove-properties", { "properties": ["data-testid"] }]
+        ["react-remove-properties", { "properties": ["data-testid"] }],
+        [
+          "transform-react-remove-prop-types",
+          {
+            "mode": "remove",
+            "removeImport": true
+          }
+        ]
       ]
     },
     "test": {
