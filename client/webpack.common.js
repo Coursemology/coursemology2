@@ -4,7 +4,6 @@ const {
   ContextReplacementPlugin,
   DefinePlugin,
 } = require('webpack');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -70,10 +69,6 @@ module.exports = {
   plugins: [
     new DotenvPlugin({ path: ENV_DIR }),
     new IgnorePlugin({ resourceRegExp: /__test__/ }),
-    new WebpackManifestPlugin({
-      publicPath: '/webpack/',
-      writeToFileEmit: true,
-    }),
     new HtmlWebpackPlugin({ template: './public/index.html' }),
     new FaviconsWebpackPlugin({ logo: './favicon.svg', inject: true }),
     // Do not require all locales in moment
