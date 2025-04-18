@@ -306,7 +306,7 @@
     "defaultMessage": "New Achievement"
   },
   "course.achievement.AchievementReordering.endReorderAchievement": {
-    "defaultMessage": "Save New Ordering"
+    "defaultMessage": "Done reordering"
   },
   "course.achievement.AchievementReordering.startReorderAchievement": {
     "defaultMessage": "Reorder"
