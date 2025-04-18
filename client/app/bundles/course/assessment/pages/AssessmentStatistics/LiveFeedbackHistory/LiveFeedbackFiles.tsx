@@ -1,5 +1,4 @@
-import { FC, useRef, useState } from 'react';
-import ReactAce from 'react-ace';
+import { ComponentRef, FC, useRef, useState } from 'react';
 import { MessageFile } from 'types/course/assessment/submission/liveFeedback';
 
 import ProgrammingFileDownloadChip from 'course/assessment/submission/components/answers/Programming/ProgrammingFileDownloadChip';
@@ -12,7 +11,7 @@ interface Props {
 const LiveFeedbackFiles: FC<Props> = (props) => {
   const { file } = props;
 
-  const editorRef = useRef<ReactAce | null>(null);
+  const editorRef = useRef<ComponentRef<typeof EditorField>>(null);
 
   const [selectedLine, setSelectedLine] = useState(1);
 
