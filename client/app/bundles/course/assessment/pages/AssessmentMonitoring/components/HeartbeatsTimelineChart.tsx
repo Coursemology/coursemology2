@@ -10,12 +10,12 @@ import {
   PointStyle,
 } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
-import moment from 'moment';
 import palette from 'theme/palette';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+import moment from 'lib/moment';
 
 import translations from '../../../translations';
 import { select } from '../selectors';

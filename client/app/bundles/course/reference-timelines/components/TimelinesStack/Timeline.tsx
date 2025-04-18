@@ -1,10 +1,10 @@
 import { ReactNode, useState } from 'react';
 import { Add } from '@mui/icons-material';
 import { Typography } from '@mui/material';
-import moment from 'moment';
 import { TimeData } from 'types/course/referenceTimelines';
 
 import useTranslation from 'lib/hooks/useTranslation';
+import moment from 'lib/moment';
 
 import translations from '../../translations';
 import { DAY_WIDTH_PIXELS, getSecondsFromDays } from '../../utils';
