@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import {
@@ -8,7 +8,7 @@ import {
 import { useI18nConfig } from 'lib/hooks/session';
 import moment from 'lib/moment';
 
-import translations from '../../../../build/locales/locales.json';
+import LoadingIndicator from '../core/LoadingIndicator';
 
 interface I18nProviderProps {
   children: ReactNode;
@@ -17,26 +17,61 @@ interface I18nProviderProps {
 const getLocaleWithoutRegionCode = (locale: string): string =>
   locale.toLowerCase().split(/[_-]+/)[0];
 
-const getMessages = (locale: string): Record<string, string> | undefined => {
-  const localeWithoutRegionCode = getLocaleWithoutRegionCode(locale);
-
-  return localeWithoutRegionCode !== DEFAULT_LOCALE
-    ? translations[localeWithoutRegionCode] || translations[locale]
-    : undefined;
-};
-
 const I18nProvider = (props: I18nProviderProps): JSX.Element => {
   const { locale, timeZone } = useI18nConfig();
+  const [messages, setMessages] = useState<Record<string, string>>();
 
   useEffect(() => {
     moment.tz.setDefault(timeZone?.trim() || DEFAULT_TIME_ZONE);
   }, [timeZone]);
 
+  const localeWithoutRegionCode = getLocaleWithoutRegionCode(locale);
+
+  useEffect(() => {
+    setMessages(undefined);
+
+    let ignore = false;
+
+    (async (): Promise<void> => {
+      let loadedMessages: Record<string, string>;
+
+      try {
+        loadedMessages = await import(
+          /* webpackChunkName: "locale-[request]" */
+          `../../../../compiled-locales/${localeWithoutRegionCode}.json`
+        );
+      } catch (error) {
+        if (
+          !(
+            error instanceof Error &&
+            error.message.includes('Cannot find module')
+          )
+        )
+          throw error;
+
+        loadedMessages = await import(
+          /* webpackChunkName: "locale-[request]" */
+          `../../../../compiled-locales/${DEFAULT_LOCALE}.json`
+        );
+      }
+
+      if (ignore) return;
+
+      setMessages(loadedMessages);
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [localeWithoutRegionCode]);
+
+  if (!messages) return <LoadingIndicator />;
+
   return (
     <IntlProvider
       defaultLocale={DEFAULT_LOCALE}
       locale={locale}
-      messages={getMessages(locale)}
+      messages={messages}
       textComponent="span"
     >
       {props.children}
