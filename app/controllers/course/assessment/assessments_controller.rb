@@ -483,8 +483,6 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
       where({ file: { answer: programming_answer_ids } }).
       pluck(:id)
 
-    p({ programming_answer_ids: programming_answer_ids, file_annotation_ids: file_annotation_ids })
-
     Course::Discussion::Post.unscoped.
       only_draft_posts.
       includes(:topic).

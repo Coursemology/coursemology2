@@ -15,7 +15,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
   accepts_nested_attributes_for :files, allow_destroy: true
 
-  validate :validate_total_file_size
+  validate :validate_total_file_size, if: -> { files.any?(&:content_changed?) }
 
   def to_partial_path
     'course/assessment/answer/programming/programming'

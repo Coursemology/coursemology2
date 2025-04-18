@@ -156,17 +156,35 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         post :update, params: {
           course_id: course, assessment_id: assessment2, id: graded_submission,
           submission: {
-            answers: [{ id: answer.id, grade: nil }]
-          }
+            answers: [{ id: answer.id, grade: grade }]
+          },
+          format: :json
         }
       end
 
       context 'when update fails' do
+        let(:grade) { nil }
         before do
           subject
         end
 
         it { is_expected.to have_http_status(:bad_request) }
+      end
+
+      context 'when update grade is called, even when answer is not valid' do
+        let(:grade) { 0 }
+        let(:answer) { graded_submission.answers.third } # programming answer
+        let(:max_file_size) { 2.kilobytes }
+        let(:invalid_content) { 'a' * (max_file_size + 1) }
+        before do
+          stub_const('Course::Assessment::Answer::Programming::MAX_TOTAL_FILE_SIZE', max_file_size)
+          file = answer.actable.files.first
+          file.content = invalid_content
+          file.save!(validate: false)
+          subject
+        end
+
+        it { is_expected.to have_http_status(:ok) }
       end
     end
 

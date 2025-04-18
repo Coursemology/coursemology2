@@ -129,9 +129,15 @@ const AssessmentSubmissionsIndex: FC = () => {
     return () => dispatch(purgeSubmissionStore());
   }, [dispatch]);
 
+  const myStudentsExist = submissions.some((s) => s.courseUser.myStudent);
+
   useEffect(() => {
     if (
       !(currentSelectedUserType in autoFeedbackCounts) &&
+      // don't query auto feedback for my students if I don't have any students
+      (myStudentsExist ||
+        (currentSelectedUserType !== CourseUserType.MY_STUDENTS &&
+          currentSelectedUserType !== CourseUserType.MY_STUDENTS_W_PHANTOM)) &&
       currentSelectedUserType !== CourseUserType.STAFF &&
       currentSelectedUserType !== CourseUserType.STAFF_W_PHANTOM
     ) {
@@ -150,10 +156,7 @@ const AssessmentSubmissionsIndex: FC = () => {
   }, [dispatch, currentSelectedUserType]);
 
   useEffect(() => {
-    if (
-      tab === CourseUserTypeTabValue.MY_STUDENTS_TAB &&
-      submissions.every((s) => !s.courseUser.myStudent)
-    ) {
+    if (!myStudentsExist && tab === CourseUserTypeTabValue.MY_STUDENTS_TAB) {
       setTab(CourseUserTypeTabValue.STUDENTS_TAB);
     }
   }, [dispatch, submissions]);
@@ -181,8 +184,6 @@ const AssessmentSubmissionsIndex: FC = () => {
     : submissions.filter(
         (s) => !s.courseUser.isStudent && !s.courseUser.phantom,
       );
-
-  const myStudentsExist = myStudentAllSubmissions.length > 0;
 
   const tabShownSubmissionsMapper = {
     [CourseUserTypeTabValue.MY_STUDENTS_TAB]: myStudentSubmissions,
