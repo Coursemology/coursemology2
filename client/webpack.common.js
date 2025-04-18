@@ -71,7 +71,11 @@ module.exports = {
     new DotenvPlugin({ path: ENV_DIR }),
     new IgnorePlugin({ resourceRegExp: /__test__/ }),
     new HtmlWebpackPlugin({ template: './public/index.html' }),
-    new FaviconsWebpackPlugin({ logo: './favicon.svg', inject: true }),
+    new FaviconsWebpackPlugin({
+      logo: './favicon.svg',
+      inject: true,
+      mode: 'auto',
+    }),
     // Do not require all locales in moment
     new ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
     new ForkTsCheckerWebpackPlugin({
