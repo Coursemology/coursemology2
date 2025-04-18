@@ -14,8 +14,6 @@ import './mocks/matchMedia';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-require('@babel/polyfill');
-
 const timeZone = 'Asia/Singapore';
 const intlCache = createIntlCache();
 const intl = createIntl({ locale: 'en', timeZone }, intlCache);
