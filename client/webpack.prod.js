@@ -1,6 +1,7 @@
 const { merge } = require('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
 const MomentTimezoneDataPlugin = require('moment-timezone-data-webpack-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
 const common = require('./webpack.common');
 
@@ -46,5 +47,25 @@ module.exports = merge(common, {
   },
   plugins: [
     new MomentTimezoneDataPlugin({ startYear: 2014 }),
+    new ImageMinimizerPlugin({
+      test: /\.(jpe?g|png|gif)$/i,
+      minimizer: {
+        implementation: ImageMinimizerPlugin.sharpMinify,
+        options: {
+          encodeOptions: {
+            png: {
+              quality: 90,
+              compressionLevel: 9,
+            },
+          },
+        },
+      },
+    }),
+    new ImageMinimizerPlugin({
+      test: /\.svg$/i,
+      minimizer: {
+        implementation: ImageMinimizerPlugin.svgoMinify,
+      },
+    }),
   ],
 });
