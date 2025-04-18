@@ -167,7 +167,6 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-simple-import-sort": "^12.1.0",
     "eslint-plugin-sonarjs": "^0.24.0",
-    "expose-loader": "^5.0.0",
     "favicons": "^7.1.4",
     "favicons-webpack-plugin": "^6.0.1",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
