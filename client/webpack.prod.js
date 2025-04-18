@@ -24,6 +24,13 @@ module.exports = merge(common, {
     minimizer: [
       new TerserPlugin({
         parallel: AVAILABLE_CPUS || true,
+        minify: TerserPlugin.swcMinify,
+        extractComments: false,
+        terserOptions: {
+          compress: true,
+          mangle: true,
+          format: { comments: false },
+        },
       }),
     ],
   },
