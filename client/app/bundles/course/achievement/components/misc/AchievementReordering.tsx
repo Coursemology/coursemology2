@@ -26,7 +26,7 @@ const translations = defineMessages({
   },
   endReorderAchievement: {
     id: 'course.achievement.AchievementReordering.endReorderAchievement',
-    defaultMessage: 'Save New Ordering',
+    defaultMessage: 'Done reordering',
   },
   updateFailed: {
     id: 'course.achievement.AchievementReordering.updateFailed',
