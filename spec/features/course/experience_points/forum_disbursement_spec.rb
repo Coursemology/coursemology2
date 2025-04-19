@@ -29,7 +29,7 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
         end
         create(:course_discussion_post_vote, post: older_posts[0])
         visit course_experience_points_records_path(course)
-        find('button', text: 'Forum Participation Disbursement').click
+        find('button', text: 'Forum Participation').click
 
         within find(content_tag_selector(students[0])) do
           expect(page).to have_field(type: 'text', with: '100')
