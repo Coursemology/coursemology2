@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { render, within } from 'test-utils';
+import { render, waitFor, within } from 'test-utils';
 
 import { VisibleTestCaseView } from 'course/assessment/submission/containers/TestCaseView';
 
@@ -59,27 +59,29 @@ const getWarning = (page, text) =>
 
 describe('TestCaseView', () => {
   describe('when viewing as staff', () => {
-    it('renders all test cases and standard streams', () => {
+    it('renders all test cases and standard streams', async () => {
       const page = render(<VisibleTestCaseView {...defaultStaffViewProps} />);
 
-      expect(page.getByText('Public Test Cases')).toBeVisible();
+      expect(await page.findByText('Public Test Cases')).toBeVisible();
       expect(page.getByText('Private Test Cases')).toBeVisible();
       expect(page.getByText('Evaluation Test Cases')).toBeVisible();
       expect(page.getByText('Standard Output')).toBeVisible();
       expect(page.getByText('Standard Error')).toBeVisible();
     });
 
-    it('renders staff-only warnings', () => {
+    it('renders staff-only warnings', async () => {
       const page = render(<VisibleTestCaseView {...defaultStaffViewProps} />);
 
-      expect(getWarning(page, 'Private Test Cases')).toBeVisible();
-      expect(getWarning(page, 'Evaluation Test Cases')).toBeVisible();
-      expect(getWarning(page, 'Standard Output')).toBeVisible();
-      expect(getWarning(page, 'Standard Error')).toBeVisible();
+      await waitFor(() => {
+        expect(getWarning(page, 'Private Test Cases')).toBeVisible();
+        expect(getWarning(page, 'Evaluation Test Cases')).toBeVisible();
+        expect(getWarning(page, 'Standard Output')).toBeVisible();
+        expect(getWarning(page, 'Standard Error')).toBeVisible();
+      });
     });
 
     describe('when showEvaluation & showPrivate are true', () => {
-      it('renders staff-only warnings when assessment is not yet published', () => {
+      it('renders staff-only warnings when assessment is not yet published', async () => {
         const page = render(
           <VisibleTestCaseView
             {...defaultStaffViewProps}
@@ -89,11 +91,13 @@ describe('TestCaseView', () => {
           />,
         );
 
-        expect(getWarning(page, 'Private Test Cases')).toBeVisible();
-        expect(getWarning(page, 'Evaluation Test Cases')).toBeVisible();
+        await waitFor(() => {
+          expect(getWarning(page, 'Private Test Cases')).toBeVisible();
+          expect(getWarning(page, 'Evaluation Test Cases')).toBeVisible();
+        });
       });
 
-      it('does not render staff-only warnings when assessment is published', () => {
+      it('does not render staff-only warnings when assessment is published', async () => {
         const page = render(
           <VisibleTestCaseView
             {...defaultStaffViewProps}
@@ -102,15 +106,19 @@ describe('TestCaseView', () => {
           />,
         );
 
-        expect(getWarning(page, 'Private Test Cases')).not.toBeInTheDocument();
-        expect(
-          getWarning(page, 'Evaluation Test Cases'),
-        ).not.toBeInTheDocument();
+        await waitFor(() => {
+          expect(
+            getWarning(page, 'Private Test Cases'),
+          ).not.toBeInTheDocument();
+          expect(
+            getWarning(page, 'Evaluation Test Cases'),
+          ).not.toBeInTheDocument();
+        });
       });
     });
 
     describe('when students can see standard streams', () => {
-      it('does not render staff-only warnings', () => {
+      it('does not render staff-only warnings', async () => {
         const page = render(
           <VisibleTestCaseView
             {...defaultStaffViewProps}
@@ -118,14 +126,16 @@ describe('TestCaseView', () => {
           />,
         );
 
-        expect(getWarning(page, 'Standard Output')).not.toBeInTheDocument();
-        expect(getWarning(page, 'Standard Error')).not.toBeInTheDocument();
+        await waitFor(() => {
+          expect(getWarning(page, 'Standard Output')).not.toBeInTheDocument();
+          expect(getWarning(page, 'Standard Error')).not.toBeInTheDocument();
+        });
       });
     });
   });
 
   describe('when viewing as student', () => {
-    it('does not show any staff-only warnings', () => {
+    it('does not show any staff-only warnings', async () => {
       const page = render(
         <VisibleTestCaseView
           {...defaultTestCaseViewProps}
@@ -135,13 +145,17 @@ describe('TestCaseView', () => {
         />,
       );
 
-      expect(getWarning(page, 'Private Test Cases')).not.toBeInTheDocument();
-      expect(getWarning(page, 'Evaluation Test Cases')).not.toBeInTheDocument();
-      expect(getWarning(page, 'Standard Output')).not.toBeInTheDocument();
-      expect(getWarning(page, 'Standard Error')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(getWarning(page, 'Private Test Cases')).not.toBeInTheDocument();
+        expect(
+          getWarning(page, 'Evaluation Test Cases'),
+        ).not.toBeInTheDocument();
+        expect(getWarning(page, 'Standard Output')).not.toBeInTheDocument();
+        expect(getWarning(page, 'Standard Error')).not.toBeInTheDocument();
+      });
     });
 
-    it('shows standard streams when the flag is enabled', () => {
+    it('shows standard streams when the flag is enabled', async () => {
       const page = render(
         <VisibleTestCaseView
           {...defaultTestCaseViewProps}
@@ -149,12 +163,12 @@ describe('TestCaseView', () => {
         />,
       );
 
-      expect(page.getByText('Standard Output')).toBeVisible();
+      expect(await page.findByText('Standard Output')).toBeVisible();
       expect(page.getByText('Standard Error')).toBeVisible();
     });
 
     describe('when showEvaluation & showPrivate flags are enabled', () => {
-      it('shows private and evaluation tests after assessment is published', () => {
+      it('shows private and evaluation tests after assessment is published', async () => {
         const page = render(
           <VisibleTestCaseView
             {...defaultTestCaseViewProps}
@@ -163,11 +177,11 @@ describe('TestCaseView', () => {
           />,
         );
 
-        expect(page.getByText('Private Test Cases')).toBeVisible();
+        expect(await page.findByText('Private Test Cases')).toBeVisible();
         expect(page.getByText('Evaluation Test Cases')).toBeVisible();
       });
 
-      it('does not show private and evaluation tests before assessment is published', () => {
+      it('does not show private and evaluation tests before assessment is published', async () => {
         const page = render(
           <VisibleTestCaseView
             {...defaultTestCaseViewProps}
@@ -177,10 +191,14 @@ describe('TestCaseView', () => {
           />,
         );
 
-        expect(page.queryByText('Private Test Cases')).not.toBeInTheDocument();
-        expect(
-          page.queryByText('Evaluation Test Cases'),
-        ).not.toBeInTheDocument();
+        await waitFor(() => {
+          expect(
+            page.queryByText('Private Test Cases'),
+          ).not.toBeInTheDocument();
+          expect(
+            page.queryByText('Evaluation Test Cases'),
+          ).not.toBeInTheDocument();
+        });
       });
     });
   });

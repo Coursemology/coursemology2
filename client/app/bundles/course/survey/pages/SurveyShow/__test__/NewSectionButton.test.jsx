@@ -17,7 +17,7 @@ describe('<NewSectionButton />', () => {
       </>,
     );
 
-    const newSectionButton = page.getByRole('button');
+    const newSectionButton = await page.findByRole('button');
     fireEvent.click(newSectionButton);
 
     const titleField = page.getByLabelText('Title', { exact: false });

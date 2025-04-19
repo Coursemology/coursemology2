@@ -59,6 +59,8 @@ describe('<ProgrammingFile />', () => {
       at: [url],
     });
 
-    expect(page.getByText('file is too big', { exact: false })).toBeVisible();
+    expect(
+      await page.findByText('file is too big', { exact: false }),
+    ).toBeVisible();
   });
 });

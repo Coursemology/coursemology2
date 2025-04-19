@@ -47,7 +47,7 @@ const defaultProps = {
 
 describe('<SubmissionsTable />', () => {
   describe('when canViewLogs, canUnsubmitSubmission and canDeleteAllSubmissions are set to true ', () => {
-    it('renders the submissions table with access log links', () => {
+    it('renders the submissions table with access log links', async () => {
       const page = render(
         <SubmissionsTable
           {...defaultProps}
@@ -60,7 +60,7 @@ describe('<SubmissionsTable />', () => {
         />,
       );
 
-      expect(page.getByText('John').closest('tr')).toBeVisible();
+      expect((await page.findByText('John')).closest('tr')).toBeVisible();
       expect(page.getByTestId('HistoryIcon').closest('button')).toBeVisible();
       expect(page.getByTestId('DeleteIcon').closest('button')).toBeVisible();
       expect(
@@ -70,7 +70,7 @@ describe('<SubmissionsTable />', () => {
   });
 
   describe('when canViewLogs, canUnsubmitSubmission and canDeleteAllSubmissions are set to false', () => {
-    it('renders the submissions table without access log links', () => {
+    it('renders the submissions table without access log links', async () => {
       const page = render(
         <SubmissionsTable
           {...defaultProps}
@@ -83,7 +83,7 @@ describe('<SubmissionsTable />', () => {
         />,
       );
 
-      expect(page.getByText('John').closest('tr')).toBeVisible();
+      expect((await page.findByText('John')).closest('tr')).toBeVisible();
       expect(page.queryByTestId('HistoryIcon')).not.toBeInTheDocument();
       expect(page.queryByTestId('DeleteIcon')).not.toBeInTheDocument();
       expect(page.queryByTestId('RemoveCircleIcon')).not.toBeInTheDocument();
