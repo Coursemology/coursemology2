@@ -22,7 +22,7 @@ describe('<MoveUpButton />', () => {
     const spyMove = jest.spyOn(CourseAPI.survey.surveys, 'reorderSections');
 
     const page = render(<MoveUpButton sectionIndex={3} />);
-    const moveUpButton = page.getByRole('button');
+    const moveUpButton = await page.findByRole('button');
 
     fireEvent.click(moveUpButton);
 
