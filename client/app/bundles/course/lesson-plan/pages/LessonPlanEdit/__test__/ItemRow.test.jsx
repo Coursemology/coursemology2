@@ -51,7 +51,7 @@ describe('<ItemRow />', () => {
       { state },
     );
 
-    const input = page.getByDisplayValue(startAt);
+    const input = await page.findByDisplayValue(startAt);
 
     fireEvent.change(input, { target: { value: newStartAt } });
     fireEvent.blur(input);
@@ -67,7 +67,7 @@ describe('<ItemRow />', () => {
     );
   });
 
-  it('clears end date', () => {
+  it('clears end date', async () => {
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
 
     const page = render(
@@ -83,7 +83,7 @@ describe('<ItemRow />', () => {
       { state },
     );
 
-    const input = page.getByDisplayValue(endAt);
+    const input = await page.findByDisplayValue(endAt);
 
     fireEvent.change(input, { target: { value: '' } });
     fireEvent.blur(input);

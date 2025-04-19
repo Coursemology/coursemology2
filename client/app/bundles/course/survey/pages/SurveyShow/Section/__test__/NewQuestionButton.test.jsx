@@ -20,7 +20,7 @@ describe('<NewQuestionButton />', () => {
       </>,
     );
 
-    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(await page.findByRole('button'));
 
     fireEvent.change(page.getByLabelText('Question Text', { exact: false }), {
       target: { value: questionText },

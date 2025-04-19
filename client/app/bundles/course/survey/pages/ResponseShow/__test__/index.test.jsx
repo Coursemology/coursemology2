@@ -1,4 +1,4 @@
-import { render } from 'test-utils';
+import { render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 import { LOADING_INDICATOR_TEST_ID } from 'lib/components/core/LoadingIndicator';
@@ -25,7 +25,7 @@ describe('<ResponseShow />', () => {
       [responseUrl],
     );
 
-    expect(spyFetch).toHaveBeenCalled();
+    await waitFor(() => expect(spyFetch).toHaveBeenCalled());
   });
 
   it('shows form and admin buttons if user has permissions and page is loaded', async () => {
@@ -65,13 +65,13 @@ describe('<ResponseShow />', () => {
       [responseUrl],
     );
 
-    expect(page.getByText(data.response.creator_name)).toBeVisible();
+    expect(await page.findByText(data.response.creator_name)).toBeVisible();
     expect(page.getByText(data.survey.description)).toBeVisible();
     expect(page.getByRole('button', { name: 'View' })).toBeVisible();
     expect(page.getByRole('button', { name: 'Unsubmit' })).toBeVisible();
   });
 
-  it('shows only description and loading indicator when loading', () => {
+  it('shows only description and loading indicator when loading', async () => {
     const surveyId = 2;
     const responseId = 2;
 
@@ -103,7 +103,7 @@ describe('<ResponseShow />', () => {
       <ResponseShow dispatch={jest.fn()} {...data} {...params} />,
     );
 
-    expect(page.getByText(data.survey.description)).toBeVisible();
+    expect(await page.findByText(data.survey.description)).toBeVisible();
     expect(page.getByTestId(LOADING_INDICATOR_TEST_ID)).toBeVisible();
   });
 });
