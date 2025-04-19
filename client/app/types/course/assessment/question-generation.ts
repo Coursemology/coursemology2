@@ -1,5 +1,6 @@
 const CODAVERI_TESTCASE_VISIBILITIES = ['public', 'private', 'hidden'] as const;
-type TestcaseVisibility = (typeof CODAVERI_TESTCASE_VISIBILITIES)[number];
+export type TestcaseVisibility =
+  (typeof CODAVERI_TESTCASE_VISIBILITIES)[number];
 
 export interface CodaveriGenerateResponse {
   success: boolean;
@@ -14,6 +15,7 @@ export interface CodaveriGenerateResponseData {
     templates: {
       prefix?: string;
       content?: string;
+      suffix?: string;
     }[];
     solutions: {
       files: {
@@ -26,6 +28,13 @@ export interface CodaveriGenerateResponseData {
       rhsExpression: string;
       hint: string;
       visibility: TestcaseVisibility;
+      prefix?: string;
     }[];
+  }[];
+  IOTestcases: {
+    input: string;
+    output: string;
+    hint: string;
+    visibility: TestcaseVisibility;
   }[];
 }
