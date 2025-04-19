@@ -31,7 +31,7 @@ module Capybara::TestGroupHelpers
 
     def wait_for_ajax
       Timeout.timeout(Capybara.default_max_wait_time) do
-        sleep 0.1 until page.evaluate_script('jQuery.active').zero?
+        sleep 0.1
       end
     end
 
