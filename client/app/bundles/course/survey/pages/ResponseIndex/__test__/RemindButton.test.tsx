@@ -5,11 +5,11 @@ import CourseAPI from 'api/course';
 import RemindButton from '../RemindButton';
 
 describe('<RemindButton />', () => {
-  it('renders confirmation dialog that triggers the reminder', () => {
+  it('renders confirmation dialog that triggers the reminder', async () => {
     const spyRemind = jest.spyOn(CourseAPI.survey.surveys, 'remind');
     const page = render(<RemindButton includePhantom />);
 
-    const button = page.getByRole('button');
+    const button = await page.findByRole('button');
     fireEvent.click(button);
     fireEvent.click(page.getByText('Cancel'));
 

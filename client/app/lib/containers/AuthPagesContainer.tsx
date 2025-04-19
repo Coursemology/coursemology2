@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Outlet, useLocation, useOutletContext } from 'react-router-dom';
-import { isString } from 'lodash';
+import isString from 'lodash-es/isString';
 
 import Page from 'lib/components/core/layouts/Page';
 

@@ -11,7 +11,7 @@ import {
   Row,
   useReactTable,
 } from '@tanstack/react-table';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash-es/isEmpty';
 
 import { RowEqualityData, TableProps } from '../adapters';
 import { TableTemplate } from '../builder';

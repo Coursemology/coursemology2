@@ -41,8 +41,8 @@ beforeEach(() => {
 beforeEach(mock.reset);
 
 describe('<FileManager />', () => {
-  it('shows existing files', () => {
-    expect(fileManager.getByText('Material 1')).toBeVisible();
+  it('shows existing files', async () => {
+    expect(await fileManager.findByText('Material 1')).toBeVisible();
     expect(fileManager.getByText('Material 2')).toBeVisible();
   });
 
@@ -56,8 +56,7 @@ describe('<FileManager />', () => {
       });
 
     const uploadApi = jest.spyOn(CourseAPI.materialFolders, 'upload');
-    const addFilesButton = fileManager.getByText('Add Files');
-    expect(addFilesButton).toBeVisible();
+    expect(await fileManager.findByText('Add Files')).toBeVisible();
 
     const fileInput = fileManager.getByTestId('FileInput');
 

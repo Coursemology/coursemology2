@@ -1,0 +1,9 @@
+[
+  "app/theme/index.css",
+  "node_modules/rc-slider/assets",
+  "node_modules/react-image-crop/dist/ReactCrop.css",
+  "node_modules/react-tooltip/dist/react-tooltip.min.css",
+  "node_modules/coursemology-ckeditor/build/index.css",
+  "app/lib/components/core/fields/CKEditor.css",
+  "app/lib/components/core/fields/AceEditor.css"
+]

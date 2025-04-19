@@ -14,10 +14,6 @@ import './mocks/matchMedia';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-require('@babel/polyfill');
-// Our jquery is from CDN and loaded at runtime, so this is required in test.
-const jQuery = require('jquery');
-
 const timeZone = 'Asia/Singapore';
 const intlCache = createIntlCache();
 const intl = createIntl({ locale: 'en', timeZone }, intlCache);
@@ -47,8 +43,6 @@ const buildContextOptions = (store) => {
 global.courseId = courseId;
 global.window = window;
 global.muiTheme = muiTheme;
-global.$ = jQuery;
-global.jQuery = jQuery;
 global.buildContextOptions = buildContextOptions;
 
 window.history.pushState({}, '', `/courses/${courseId}`);

@@ -25,7 +25,7 @@ const translations = defineMessages({
   },
   forumDisbursementTab: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.forumTab',
-    defaultMessage: 'Forum Participation Disbursement',
+    defaultMessage: 'Forum Participation',
   },
   generalDisbursementTab: {
     id: 'course.experiencePoints.disbursement.DisbursementIndex.generalTab',

@@ -23,6 +23,7 @@ const config = {
     '^bundles(.*)$': '<rootDir>/app/bundles$1',
     '^course(.*)$': '<rootDir>/app/bundles/course$1',
     '^store(.*)$': '<rootDir>/app/store$1',
+    '^lodash-es(.*)$': 'lodash$1',
   },
   coveragePathIgnorePatterns: ['/node_modules/', '/__test__/'],
 };

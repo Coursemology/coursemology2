@@ -1,23 +1,15 @@
+import { useRef, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 import CourseAPI from 'api/course';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-require('jquery-ui/ui/widgets/sortable');
-
 interface AchievementReorderingProps {
   handleReordering: (state: boolean) => void;
   isReordering: boolean;
 }
-
-const styles = {
-  AchievementReorderingButton: {
-    fontSize: 14,
-    marginRight: 12,
-  },
-};
 
 const translations = defineMessages({
   startReorderAchievement: {
@@ -26,7 +18,7 @@ const translations = defineMessages({
   },
   endReorderAchievement: {
     id: 'course.achievement.AchievementReordering.endReorderAchievement',
-    defaultMessage: 'Save New Ordering',
+    defaultMessage: 'Done reordering',
   },
   updateFailed: {
     id: 'course.achievement.AchievementReordering.updateFailed',
@@ -37,12 +29,6 @@ const translations = defineMessages({
     defaultMessage: 'Achievements successfully reordered',
   },
 });
-
-// Serialise the ordered achievements as data for the API call.
-function serializedOrdering(): string {
-  const options = { attribute: 'achievementid', key: 'achievement_order[]' };
-  return $('tbody').first().sortable('serialize', options);
-}
 
 const AchievementReordering = (
   props: AchievementReorderingProps,
@@ -60,35 +46,80 @@ const AchievementReordering = (
     }
   }
 
+  const [loadingSortable, setLoadingSortable] = useState(false);
+
+  const sortableCallbacksRef = useRef<{
+    enable: () => void;
+    disable: () => void;
+  }>();
+
   return (
-    <Button
-      key="achievement-reordering-button"
-      className="achievement-reordering-button"
+    <LoadingButton
       color="primary"
+      loading={loadingSortable}
+      loadingPosition="start"
       onClick={(): void => {
-        if (isReordering) {
-          $('tbody').first().sortable({ disabled: true });
-          handleReordering(false);
-        } else {
-          $('tbody')
-            .first()
-            .sortable({
-              update() {
-                const ordering = serializedOrdering();
-                submitReordering(ordering);
+        if (loadingSortable) return;
+
+        if (!sortableCallbacksRef.current) {
+          setLoadingSortable(true);
+
+          (async (): Promise<void> => {
+            const [jquery] = await Promise.all([
+              import(
+                /* webpackChunkName: "jquery-sortable" */
+                'jquery'
+              ),
+              import(
+                /* webpackChunkName: "jquery-sortable" */
+                'jquery-ui/ui/widgets/sortable'
+              ),
+            ]);
+
+            sortableCallbacksRef.current = {
+              enable: (): void => {
+                const table = jquery.default('tbody').first();
+
+                table.sortable({
+                  disabled: false,
+                  update() {
+                    const ordering = table.sortable('serialize', {
+                      attribute: 'achievementid',
+                      key: 'achievement_order[]',
+                    });
+
+                    submitReordering(ordering);
+                  },
+                });
+
+                handleReordering(true);
               },
-              disabled: false,
-            });
-          handleReordering(true);
+              disable: (): void => {
+                jquery.default('tbody').first().sortable({ disabled: true });
+                handleReordering(false);
+              },
+            };
+
+            sortableCallbacksRef.current.enable();
+
+            setLoadingSortable(false);
+          })();
+
+          return;
+        }
+
+        if (isReordering) {
+          sortableCallbacksRef.current.disable();
+        } else {
+          sortableCallbacksRef.current.enable();
         }
       }}
-      style={styles.AchievementReorderingButton}
       variant={isReordering ? 'contained' : 'outlined'}
     >
       {isReordering
         ? t(translations.endReorderAchievement)
         : t(translations.startReorderAchievement)}
-    </Button>
+    </LoadingButton>
   );
 };
 

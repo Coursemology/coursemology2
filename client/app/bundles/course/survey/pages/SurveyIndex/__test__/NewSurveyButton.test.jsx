@@ -40,7 +40,7 @@ describe('<NewSurveyButton />', () => {
       { state },
     );
 
-    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(await page.findByRole('button'));
 
     fireEvent.change(page.getByLabelText('Title', { exact: false }), {
       target: { value: survey.title },

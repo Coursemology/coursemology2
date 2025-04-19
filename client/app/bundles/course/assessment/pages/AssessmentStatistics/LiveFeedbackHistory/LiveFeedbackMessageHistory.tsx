@@ -1,6 +1,5 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { Typography } from '@mui/material';
-import moment from 'moment';
 import { LiveFeedbackChatMessage } from 'types/course/assessment/submission/liveFeedback';
 
 import {
@@ -8,7 +7,7 @@ import {
   justifyPosition,
 } from 'course/assessment/submission/components/GetHelpChatPage/utils';
 import MarkdownText from 'course/assessment/submission/components/MarkdownText';
-import { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
+import moment, { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 interface Props {
   messages: LiveFeedbackChatMessage[];

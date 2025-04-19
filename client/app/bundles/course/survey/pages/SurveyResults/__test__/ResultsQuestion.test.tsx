@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { fireEvent, render, within } from 'test-utils';
+import { fireEvent, render, waitFor, within } from 'test-utils';
 
 import ResultsQuestion from '../ResultsQuestion';
 
@@ -57,7 +57,7 @@ const getMultipleChoiceData = (optionCount) => {
   };
 };
 
-const testExpandLongQuestion = (question): void => {
+const testExpandLongQuestion = async (question) => {
   const page = render(
     <ResultsQuestion
       {...{ question }}
@@ -67,12 +67,14 @@ const testExpandLongQuestion = (question): void => {
     />,
   );
 
-  expect(page.queryByRole('table')).not.toBeInTheDocument();
+  await waitFor(() =>
+    expect(page.queryByRole('table')).not.toBeInTheDocument(),
+  );
 
-  const expandButton = page.getAllByRole('button')[0];
+  const expandButton = (await page.findAllByRole('button'))[0];
   fireEvent.click(expandButton);
 
-  expect(page.getByRole('table')).toBeVisible();
+  expect(await page.findByRole('table')).toBeVisible();
 };
 
 describe('<ResultsQuestion />', () => {
@@ -86,7 +88,7 @@ describe('<ResultsQuestion />', () => {
     testExpandLongQuestion(question);
   });
 
-  it('allows sorting by percentage', () => {
+  it('allows sorting by percentage', async () => {
     const question = getMultipleChoiceData(2);
 
     const page = render(
@@ -98,7 +100,7 @@ describe('<ResultsQuestion />', () => {
       />,
     );
 
-    let lastRow = page.getAllByRole('row').at(-1)!;
+    let lastRow = (await page.findAllByRole('row')).at(-1)!;
     expect(within(lastRow).getByText('1')).toBeVisible();
 
     const sortToggle = page.getByRole('checkbox');

@@ -1,5 +1,4 @@
 import { Typography } from '@mui/material';
-import moment from 'moment';
 import {
   ItemWithTimeData,
   TimelineData,
@@ -8,6 +7,7 @@ import {
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
+import moment from 'lib/moment';
 
 import { useSetLastSaved } from '../../contexts';
 import { createTime, deleteTime, updateTime } from '../../operations';

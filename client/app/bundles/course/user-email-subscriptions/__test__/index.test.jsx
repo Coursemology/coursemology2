@@ -42,7 +42,7 @@ describe('<UserEmailSubscriptions />', () => {
 
     const page = render(<UserEmailSubscriptions />, { state });
 
-    const toggle = page.getByRole('checkbox');
+    const toggle = await page.findByRole('checkbox');
     fireEvent.click(toggle);
 
     await waitFor(() => {

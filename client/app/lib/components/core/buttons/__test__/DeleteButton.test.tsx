@@ -1,4 +1,11 @@
-import { fireEvent, render, RenderResult, screen } from 'test-utils';
+import {
+  fireEvent,
+  render,
+  RenderResult,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from 'test-utils';
 
 import DeleteButton from '../DeleteButton';
 
@@ -14,22 +21,29 @@ describe('<DeleteButton />', () => {
       );
     });
 
-    it('shows the delete icon button', () => {
-      expect(documentBody.getByTestId('DeleteIconButton')).toBeVisible();
+    it('shows the delete icon button', async () => {
+      expect(await documentBody.findByTestId('DeleteIconButton')).toBeVisible();
       expect(documentBody.getByTestId('DeleteIcon')).toBeVisible();
     });
 
-    it('does not show the confirmation dialog when clicked', () => {
+    it('does not show the confirmation dialog when clicked', async () => {
       // Before clicking
-      expect(documentBody.queryByTitle(PROMPT_TITLE)).toBeNull();
+      await waitFor(() =>
+        expect(documentBody.queryByTitle(PROMPT_TITLE)).not.toBeInTheDocument(),
+      );
 
-      fireEvent.click(screen.getByTestId('DeleteIconButton'));
+      fireEvent.click(await screen.findByTestId('DeleteIconButton'));
+
       // After clicking
-      expect(documentBody.queryByTitle(PROMPT_TITLE)).toBeNull();
+      await waitFor(() =>
+        expect(documentBody.queryByTitle(PROMPT_TITLE)).toBeNull(),
+      );
     });
 
-    it('matches the snapshot', () => {
+    it('matches the snapshot', async () => {
       const { baseElement } = documentBody;
+      await waitForElementToBeRemoved(screen.getByRole('progressbar'));
+
       expect(baseElement).toMatchSnapshot();
     });
   });
@@ -46,8 +60,8 @@ describe('<DeleteButton />', () => {
       );
     });
 
-    it('shows the delete icon button', () => {
-      expect(documentBody.getByTestId('DeleteIconButton')).toBeVisible();
+    it('shows the delete icon button', async () => {
+      expect(await documentBody.findByTestId('DeleteIconButton')).toBeVisible();
       expect(documentBody.getByTestId('DeleteIcon')).toBeVisible();
       expect(documentBody.getByTestId('DeleteIconButton')).toBeDisabled();
     });
@@ -65,16 +79,18 @@ describe('<DeleteButton />', () => {
       );
     });
 
-    it('shows the delete icon button', () => {
-      expect(documentBody.getByTestId('DeleteIconButton')).toBeVisible();
+    it('shows the delete icon button', async () => {
+      expect(await documentBody.findByTestId('DeleteIconButton')).toBeVisible();
       expect(documentBody.getByTestId('DeleteIcon')).toBeVisible();
     });
 
-    it('shows the confirmation dialog when clicked', () => {
+    it('shows the confirmation dialog when clicked', async () => {
       // Before clicking delete button
-      expect(documentBody.queryByTitle(PROMPT_TITLE)).toBeNull();
+      await waitFor(() =>
+        expect(documentBody.queryByTitle(PROMPT_TITLE)).not.toBeInTheDocument(),
+      );
 
-      fireEvent.click(screen.getByTestId('DeleteIconButton'));
+      fireEvent.click(await screen.findByTestId('DeleteIconButton'));
       // After clicking delete button
       expect(documentBody.getByText(PROMPT_TITLE)).toBeVisible();
 

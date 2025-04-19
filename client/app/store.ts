@@ -108,6 +108,12 @@ const purgeableRootReducer: Reducer<AppState> = (state, action) => {
 
 export const store = configureStore({
   reducer: purgeableRootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: [/\.onSubmit$/, /\.onConfirm$/],
+      },
+    }),
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

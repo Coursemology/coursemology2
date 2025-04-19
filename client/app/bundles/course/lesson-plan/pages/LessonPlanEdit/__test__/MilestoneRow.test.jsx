@@ -37,7 +37,7 @@ describe('<MilestoneRow />', () => {
       { state: { lessonPlan: { milestones: [milestoneData] } } },
     );
 
-    const input = page.getByDisplayValue(startAt);
+    const input = await page.findByDisplayValue(startAt);
 
     fireEvent.change(input, { target: { value: newStartAt } });
     fireEvent.blur(input);

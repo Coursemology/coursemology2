@@ -64,7 +64,7 @@ describe('<AssessmentEdit />', () => {
   it('submits correct form data', async () => {
     const user = userEvent.setup();
 
-    const title = form.getByLabelText('Title *');
+    const title = await form.findByLabelText('Title *');
     await user.type(title, '{Control>}a{/Control}{Delete}');
     await user.type(title, NEW_VALUES.title);
     expect(title).toHaveValue(NEW_VALUES.title);

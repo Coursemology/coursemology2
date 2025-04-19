@@ -12,31 +12,35 @@ const renderElement = (canManageLessonPlan, milestone) => {
 };
 
 describe('<MilestoneAdminTools />', () => {
-  it('hides admin tools for dummy milestone', () => {
+  it('hides admin tools for dummy milestone', async () => {
     const page = renderElement(true, {
       id: undefined,
       title: 'Ungrouped Items',
     });
 
-    expect(page.queryByRole('button')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(page.queryByRole('button')).not.toBeInTheDocument(),
+    );
   });
 
-  it('hides admin tools when user does not have permissions', () => {
+  it('hides admin tools when user does not have permissions', async () => {
     const page = renderElement(false, {
       id: 4,
       title: 'User-defined Milestone',
     });
 
-    expect(page.queryByRole('button')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(page.queryByRole('button')).not.toBeInTheDocument(),
+    );
   });
 
-  it('shows admin tools when user has permissions', () => {
+  it('shows admin tools when user has permissions', async () => {
     const page = renderElement(true, {
       id: 4,
       title: 'User-defined Milestone',
     });
 
-    expect(page.getAllByRole('button')).toHaveLength(2);
+    expect(await page.findAllByRole('button')).toHaveLength(2);
   });
 
   it('allows milestone to be deleted', async () => {
@@ -58,7 +62,7 @@ describe('<MilestoneAdminTools />', () => {
       { state: { lessonPlan: { flags: { canManageLessonPlan: true } } } },
     );
 
-    fireEvent.click(page.getAllByRole('button')[1]);
+    fireEvent.click((await page.findAllByRole('button'))[1]);
     fireEvent.click(page.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => expect(spy).toHaveBeenCalledWith(milestoneId));
@@ -93,7 +97,7 @@ describe('<MilestoneAdminTools />', () => {
       { state: { lessonPlan: { flags: { canManageLessonPlan: true } } } },
     );
 
-    fireEvent.click(page.getAllByRole('button')[0]);
+    fireEvent.click((await page.findAllByRole('button'))[0]);
 
     fireEvent.change(page.getByLabelText('Description'), {
       target: { value: description },

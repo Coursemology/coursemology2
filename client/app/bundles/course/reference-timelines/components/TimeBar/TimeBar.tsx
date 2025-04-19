@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import moment from 'moment';
+
+import moment from 'lib/moment';
 
 import { DAY_WIDTH_PIXELS, getDaysFromWidth } from '../../utils';
 import HorizontallyDraggable from '../HorizontallyDraggable';

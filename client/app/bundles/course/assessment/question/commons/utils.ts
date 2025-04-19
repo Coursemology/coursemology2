@@ -1,4 +1,4 @@
-import { isNumber } from 'lodash';
+import isNumber from 'lodash-es/isNumber';
 
 const getNumberBetweenTwoSquareBrackets = (str: string): number | undefined => {
   const match = str.match(/\[(\d+)\]/);

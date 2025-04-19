@@ -68,13 +68,13 @@ const expectedPayload = {
 };
 
 describe('<DuplicateButton />', () => {
-  it('allows duplication to be triggered with the correct parameters', () => {
+  it('allows duplication to be triggered with the correct parameters', async () => {
     const spy = jest.spyOn(CourseAPI.duplication, 'duplicateItems');
 
     store.dispatch(loadObjectsList(data));
     const page = render(<DuplicateButton />);
 
-    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(await page.findByRole('button'));
     fireEvent.click(page.getByRole('button', { name: 'Duplicate' }));
 
     expect(spy).toHaveBeenCalledWith(data.sourceCourse.id, expectedPayload);

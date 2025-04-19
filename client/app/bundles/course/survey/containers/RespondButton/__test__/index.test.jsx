@@ -28,7 +28,7 @@ describe('<RespondButton />', () => {
       />,
     );
 
-    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(await page.findByRole('button'));
 
     await waitFor(() => {
       expect(spyCreate).toHaveBeenCalledWith(surveyId);

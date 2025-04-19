@@ -4,10 +4,9 @@ import {
   type EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import { shuffle } from 'lodash';
-import moment from 'moment';
+import shuffle from 'lodash-es/shuffle';
 
-import { SHORT_TIME_FORMAT } from 'lib/moment';
+import moment, { SHORT_TIME_FORMAT } from 'lib/moment';
 
 import {
   getLocalStorageValue,
