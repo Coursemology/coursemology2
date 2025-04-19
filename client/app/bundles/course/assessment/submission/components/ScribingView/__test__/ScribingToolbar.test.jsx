@@ -151,13 +151,13 @@ beforeEach(() => {
 describe('ScribingToolbar', () => {
   it('renders tool popovers', async () => {
     const page = render(<ScribingToolbar {...props} />);
-    expect(page.getAllByRole('button')).toHaveLength(20);
+    expect(await page.findAllByRole('button')).toHaveLength(20);
   });
 
   it('renders color pickers', async () => {
     const page = render(<ScribingToolbar {...props} />);
 
-    const buttons = page.getAllByRole('button');
+    const buttons = await page.findAllByRole('button');
     fireEvent.click(buttons[2]);
     expect(page.getByText('Text')).toBeVisible();
 
@@ -183,7 +183,7 @@ describe('ScribingToolbar', () => {
       dispatch(setColoringToolColor(answerId, coloringTool, color)),
     );
 
-    const buttons = page.getAllByRole('button');
+    const buttons = await page.findAllByRole('button');
     fireEvent.click(buttons[2]);
 
     const colorPicker = page.getByLabelText('Color Picker');

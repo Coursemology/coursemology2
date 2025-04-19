@@ -29,7 +29,7 @@ describe('<NewMilestoneButton />', () => {
       { state },
     );
 
-    fireEvent.click(page.getByRole('button', { name: 'New Milestone' }));
+    fireEvent.click(await page.findByRole('button', { name: 'New Milestone' }));
 
     fireEvent.change(page.getByLabelText('Title', { exact: false }), {
       target: { value: milestoneData.title },
@@ -48,8 +48,11 @@ describe('<NewMilestoneButton />', () => {
     });
   });
 
-  it('is hidden when canManageLessonPlan is false', () => {
+  it('is hidden when canManageLessonPlan is false', async () => {
     const page = render(<NewMilestoneButton />);
-    expect(page.queryByRole('button')).not.toBeInTheDocument();
+
+    await waitFor(() =>
+      expect(page.queryByRole('button')).not.toBeInTheDocument(),
+    );
   });
 });

@@ -1,4 +1,9 @@
-import { render, RenderResult } from 'test-utils';
+import {
+  render,
+  RenderResult,
+  screen,
+  waitForElementToBeRemoved,
+} from 'test-utils';
 
 import LoadingIndicator, {
   LOADING_INDICATOR_TEST_ID,
@@ -7,8 +12,9 @@ import LoadingIndicator, {
 let documentBody: RenderResult;
 
 describe('<LoadingIndicator />', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     documentBody = render(<LoadingIndicator />);
+    await waitForElementToBeRemoved(screen.getByRole('progressbar'));
   });
 
   it('shows the loading indicator', () => {

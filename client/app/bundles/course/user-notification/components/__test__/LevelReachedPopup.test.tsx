@@ -3,19 +3,21 @@ import { LevelReachedNotification } from 'types/course/userNotifications';
 
 import LevelReachedPopup from '../LevelReachedPopup';
 
-const renderPopup = (data: LevelReachedNotification): HTMLElement => {
+const renderPopup = async (
+  data: LevelReachedNotification,
+): Promise<HTMLElement> => {
   const page = render(
     <LevelReachedPopup notification={data} onDismiss={jest.fn()} />,
   );
 
-  return page.getByRole('dialog');
+  return page.findByRole('dialog');
 };
 
 describe('<LevelReachedPopup />', () => {
   describe('when leaderboard is disabled', () => {
-    it('shows the reached level but does not show leaderboard button', () => {
+    it('shows the reached level but does not show leaderboard button', async () => {
       const popup = within(
-        renderPopup({
+        await renderPopup({
           id: 69,
           notificationType: 'levelReached',
           levelNumber: 5,
@@ -33,9 +35,9 @@ describe('<LevelReachedPopup />', () => {
   });
 
   describe('when the student is on the leaderboard', () => {
-    it('shows the reached level, position, and the leaderboard button', () => {
+    it('shows the reached level, position, and the leaderboard button', async () => {
       const popup = within(
-        renderPopup({
+        await renderPopup({
           id: 69,
           notificationType: 'levelReached',
           levelNumber: 5,
@@ -51,9 +53,9 @@ describe('<LevelReachedPopup />', () => {
   });
 
   describe('when the student is not on the leaderboard', () => {
-    it('shows the reached level, leaderboard button, but no position', () => {
+    it('shows the reached level, leaderboard button, but no position', async () => {
       const popup = within(
-        renderPopup({
+        await renderPopup({
           id: 69,
           notificationType: 'levelReached',
           levelNumber: 5,

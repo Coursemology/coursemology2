@@ -13,14 +13,17 @@ const state = {
 const renderElement = (item) => render(<AdminTools item={item} />, { state });
 
 describe('<AdminTools />', () => {
-  it('does not show admin menu for lesson plan events', () => {
+  it('does not show admin menu for lesson plan events', async () => {
     const page = renderElement({ title: 'Event', eventId: 7 });
-    expect(page.getAllByRole('button')).toHaveLength(2);
+    expect(await page.findAllByRole('button')).toHaveLength(2);
   });
 
-  it('does not show admin menu for non-event lesson plan items', () => {
+  it('does not show admin menu for non-event lesson plan items', async () => {
     const wrapper = renderElement({ title: 'eventId absent' });
-    expect(wrapper.queryAllByRole('button')).toHaveLength(0);
+
+    await waitFor(() =>
+      expect(wrapper.queryAllByRole('button')).toHaveLength(0),
+    );
   });
 
   it('allows event to be deleted', async () => {
@@ -35,7 +38,7 @@ describe('<AdminTools />', () => {
       { state },
     );
 
-    fireEvent.click(page.getAllByRole('button')[1]);
+    fireEvent.click((await page.findAllByRole('button'))[1]);
     fireEvent.click(page.getByRole('button', { name: 'Delete' }));
 
     await waitFor(() => expect(spy).toHaveBeenCalledWith(eventId));
@@ -71,7 +74,7 @@ describe('<AdminTools />', () => {
       { state },
     );
 
-    fireEvent.click(page.getAllByRole('button')[0]);
+    fireEvent.click((await page.findAllByRole('button'))[0]);
 
     const description = 'Add nice description';
     fireEvent.change(page.getByLabelText('Description'), {

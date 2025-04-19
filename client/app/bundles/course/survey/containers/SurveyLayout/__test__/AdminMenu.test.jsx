@@ -7,7 +7,7 @@ import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import AdminMenu from '../AdminMenu';
 
 describe('<AdminMenu />', () => {
-  it('does not render button if user cannot edit or update', () => {
+  it('does not render button if user cannot edit or update', async () => {
     const survey = {
       id: 2,
       title: 'Survey',
@@ -19,7 +19,9 @@ describe('<AdminMenu />', () => {
       <AdminMenu survey={survey} surveyId={survey.id.toString()} />,
     );
 
-    expect(page.queryByRole('button')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(page.queryByRole('button')).not.toBeInTheDocument(),
+    );
   });
 
   it('allows surveys to be deleted', async () => {
@@ -37,7 +39,7 @@ describe('<AdminMenu />', () => {
       </>,
     );
 
-    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(await page.findByRole('button'));
     fireEvent.click(page.getByText('Delete Survey'));
     fireEvent.click(page.getByRole('button', { name: 'Delete' }));
 
@@ -74,7 +76,7 @@ describe('<AdminMenu />', () => {
       </>,
     );
 
-    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(await page.findByRole('button'));
     fireEvent.click(page.getByText('Edit Survey'));
 
     const description = 'To update description';
