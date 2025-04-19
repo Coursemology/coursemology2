@@ -69,7 +69,7 @@ RSpec.feature 'Course: Assessments: Management', js: true do
 
         find_link(assessment.title, href: course_assessment_path(course, assessment)).click
 
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
       end
     end
   end
