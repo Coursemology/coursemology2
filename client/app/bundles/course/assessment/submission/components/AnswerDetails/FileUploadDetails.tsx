@@ -1,9 +1,11 @@
-import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionType } from 'types/course/assessment/question';
+
+import { AnswerDetailsProps } from '../../types';
 
 import AttachmentDetails from './AttachmentDetails';
 
 const FileUploadDetails = (
-  props: QuestionAnswerDisplayDetails<'FileUpload'>,
+  props: AnswerDetailsProps<QuestionType.FileUpload>,
 ): JSX.Element => {
   const { answer } = props;
 
