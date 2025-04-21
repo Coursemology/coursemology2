@@ -24,6 +24,7 @@ import { getQuestionFlags } from '../../selectors/questionFlags';
 import { getQuestions } from '../../selectors/questions';
 import { getSubmission } from '../../selectors/submissions';
 import translations from '../../translations';
+import { HistoryViewData } from '../../types';
 import { setTimerForForceSubmission } from '../../utils/timer';
 
 import AutogradeSubmissionButton from './components/button/AutogradeSubmissionButton';
@@ -80,6 +81,11 @@ const SubmissionForm: FC<Props> = (props) => {
 
   const [maxStep, setMaxStep] = useState(maxInitialStep);
   const [stepIndex, setStepIndex] = useState(initialStep);
+  const [historyInfo, setHistoryInfo] = useState<HistoryViewData>({
+    open: false,
+    questionId: 0,
+    questionNumber: 0,
+  });
 
   const methods = useForm({
     defaultValues: initialValues,
@@ -235,12 +241,14 @@ const SubmissionForm: FC<Props> = (props) => {
             <TabbedViewQuestions
               handleNext={onContinueToNextQuestion}
               maxStep={maxStep}
+              setHistoryInfo={setHistoryInfo}
               setStepIndex={setStepIndex}
               stepIndex={stepIndex}
             />
           ) : (
             <SinglePageQuestions
               scrollToRef={scrollToRef}
+              setHistoryInfo={setHistoryInfo}
               stepIndex={stepIndex}
             />
           )}
@@ -265,7 +273,6 @@ const SubmissionForm: FC<Props> = (props) => {
           <ErrorMessages />
         </form>
       </FormProvider>
-
       <WarningDialog />
     </div>
   );
