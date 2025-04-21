@@ -5,7 +5,6 @@ import { SubmissionQuestionData } from 'types/course/assessment/submission/quest
 
 import useTranslation from 'lib/hooks/useTranslation';
 
-import PastAnswers from '../../containers/PastAnswers';
 import ScribingView from '../../containers/ScribingView';
 import VoiceResponseAnswer from '../../containers/VoiceResponseAnswer';
 
@@ -238,15 +237,11 @@ interface AnswerComponentProps<T extends keyof typeof QuestionType> {
 const Answer = <T extends keyof typeof QuestionType>(
   props: AnswerComponentProps<T>,
 ): JSX.Element => {
-  const { answerId, questionType, question, answerProps } = props;
+  const { answerId, questionType, answerProps } = props;
   const { t } = useTranslation();
 
   if (!answerId) {
     return <Alert severity="warning">{t(translations.missingAnswer)}</Alert>;
-  }
-
-  if (question.viewHistory) {
-    return <PastAnswers question={question} />;
   }
 
   const Component = AnswerMapper[questionType];
