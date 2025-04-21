@@ -95,7 +95,7 @@ export interface SpecificQuestionDataMap {
 }
 
 export interface SubmissionQuestionBaseData extends QuestionData {
-  questionNumber: string;
+  questionNumber: number;
   questionTitle: string;
   submissionQuestionId: number;
   topicId: number;

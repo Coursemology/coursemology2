@@ -5,6 +5,6 @@ export enum ErrorType {
 }
 
 export interface ErrorStruct {
-  questionNumber: string;
+  questionNumber: number;
   errorTypes: ErrorType[];
 }
