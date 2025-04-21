@@ -2,30 +2,25 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { Chip, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import {
-  AnswerStatisticsData,
-  CommentItem,
-} from 'types/course/statistics/assessmentStatistics';
+import { CommentItem } from 'types/course/assessment/submission/submission-question';
 
 import {
   fetchAnswer,
   fetchSubmissionQuestionDetails,
-} from 'course/assessment/operations/statistics';
+} from 'course/assessment/operations/history';
+import Comment from 'course/assessment/submission/components/AllAttempts/Comment';
+import AnswerDetails from 'course/assessment/submission/components/AnswerDetails/AnswerDetails';
+import { HistoryFetchStatus } from 'course/assessment/submission/reducers/history';
+import { AnswerDataWithQuestion } from 'course/assessment/submission/types';
 import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import AnswerDetails from '../AnswerDetails/AnswerDetails';
+import submissionTranslations from '../../../submission/translations';
 import { getClassNameForMarkCell } from '../classNameUtils';
 
-import Comment from './Comment';
-
 const translations = defineMessages({
-  questionTitle: {
-    id: 'course.assessment.statistics.questionTitle',
-    defaultMessage: 'Question {index}',
-  },
   gradeDisplay: {
     id: 'course.assessment.statistics.gradeDisplay',
     defaultMessage: 'Grade: {grade} / {maxGrade}',
@@ -38,21 +33,22 @@ const translations = defineMessages({
 
 interface Props {
   curAnswerId: number;
-  index: number;
   questionId: number;
   submissionId: number;
 }
 
+interface LastAttemptData {
+  answer: AnswerDataWithQuestion<keyof typeof QuestionType>;
+  comments: CommentItem[];
+}
+
 const LastAttemptIndex: FC<Props> = (props) => {
-  const { curAnswerId, index, submissionId, questionId } = props;
+  const { curAnswerId, submissionId, questionId } = props;
   const { t } = useTranslation();
 
-  const fetchAnswerDetailsAndComments = async (): Promise<{
-    answer: AnswerStatisticsData<keyof typeof QuestionType>;
-    comments: CommentItem[];
-  }> => {
+  const fetchAnswerDetailsAndComments = async (): Promise<LastAttemptData> => {
     const [answer, submissionQuestion] = await Promise.all([
-      fetchAnswer(curAnswerId),
+      fetchAnswer(submissionId, curAnswerId),
       fetchSubmissionQuestionDetails(submissionId, questionId),
     ]);
     return { answer, comments: submissionQuestion.comments };
@@ -63,19 +59,21 @@ const LastAttemptIndex: FC<Props> = (props) => {
       render={<LoadingIndicator />}
       while={fetchAnswerDetailsAndComments}
     >
-      {({ answer, comments }): JSX.Element => {
+      {({ answer, comments }: LastAttemptData): JSX.Element => {
         const gradeCellColor = getClassNameForMarkCell(
-          answer.grade,
+          answer.grading?.grade,
           answer.question.maximumGrade,
         );
         return (
           <>
             <Accordion
               defaultExpanded={false}
-              title={t(translations.questionTitle, { index })}
+              title={t(submissionTranslations.historyQuestionTitle)}
             >
               <div className="ml-4 mt-4">
-                <Typography variant="body1">{answer.question.title}</Typography>
+                <Typography variant="body1">
+                  {answer.question.questionTitle}
+                </Typography>
                 <Typography
                   dangerouslySetInnerHTML={{
                     __html: answer.question.description,
@@ -84,11 +82,15 @@ const LastAttemptIndex: FC<Props> = (props) => {
                 />
               </div>
             </Accordion>
-            <AnswerDetails answer={answer} question={answer.question} />
+            <AnswerDetails
+              answer={answer}
+              question={answer.question}
+              status={HistoryFetchStatus.COMPLETED}
+            />
             <Chip
               className={`w-100 mt-3 ${gradeCellColor}`}
               label={t(translations.gradeDisplay, {
-                grade: answer.grade,
+                grade: answer.grading?.grade ?? '--',
                 maxGrade: answer.question.maximumGrade,
               })}
               variant="filled"
