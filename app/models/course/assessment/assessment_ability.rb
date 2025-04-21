@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 module Course::Assessment::AssessmentAbility
-  include Course::Assessment::SubmissionQuestionAbility
   include Course::Assessment::Answer::ProgrammingAbility
 
   def define_permissions
@@ -125,6 +124,7 @@ module Course::Assessment::AssessmentAbility
     allow_staff_read_observe_access_and_attempt_assessment
     allow_staff_read_assessment_submissions
     allow_staff_read_assessment_tests
+    allow_staff_read_submission_answers
     allow_staff_read_submission_questions
     allow_staff_delete_own_assessment_submission
     allow_staff_update_category_grades
@@ -157,6 +157,10 @@ module Course::Assessment::AssessmentAbility
 
   def allow_staff_read_submission_questions
     can :read, Course::Assessment::SubmissionQuestion, discussion_topic: { course_id: course.id }
+  end
+
+  def allow_staff_read_submission_answers
+    can :read, Course::Assessment::Answer, submission: { assessment: assessment_course_hash }
   end
 
   def allow_staff_delete_own_assessment_submission

@@ -6,6 +6,8 @@ json.allAnswers @all_answers do |answer|
   json.workflowState answer.workflow_state
 end
 
+json.canViewHistory @submission_question.question.history_viewable?
+
 posts = @submission_question.discussion_topic.posts
 
 json.comments posts do |post|

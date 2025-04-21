@@ -97,6 +97,20 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
+  /**
+   * Fetches an answer with a given id.
+   * This is declared here instead of in the AnswerAPI class to allow specifying submissionId.
+   *
+   * @param {number} submissionId
+   * @param {number} answerId
+   * @return {APIResponse<AnswerDataWithQuestion<keyof typeof QuestionType>>}
+   */
+  fetchAnswer(submissionId, answerId) {
+    return this.client.get(
+      `${this.#urlPrefix}/${submissionId}/answers/${answerId}`,
+    );
+  }
+
   reloadAnswer(submissionId, params) {
     return this.client.post(
       `${this.#urlPrefix}/${submissionId}/reload_answer`,

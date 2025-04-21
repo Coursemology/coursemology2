@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 specific_answer = @answer.specific
 question = @answer.question
+can_grade = can?(:grade, @answer.submission)
 
 json.id @answer.id
-json.grade @answer.grade
 json.createdAt @answer.created_at&.iso8601
 
 # this section is here because the answer can affect how the question is displayed
 # e.g. option randomization for mcq/mrq questions
 json.question do
   json.id question.id
-  json.title question.title
+  json.questionTitle question.title
   json.maximumGrade question.maximum_grade
   json.description format_ckeditor_rich_text(question.description)
   json.type question.question_type
@@ -18,6 +18,12 @@ json.question do
   json.partial! question, question: question.specific, can_grade: false, answer: @answer
 end
 json.partial! specific_answer, answer: specific_answer, can_grade: false
+
+if can_grade || @answer.submission.published?
+  json.grading do
+    json.grade @answer&.grade
+  end
+end
 
 if @answer.actable_type == Course::Assessment::Answer::Programming.name
   files = @answer.specific.files

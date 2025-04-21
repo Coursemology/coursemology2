@@ -46,4 +46,8 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
   def files_downloadable?
     true
   end
+
+  def history_viewable?
+    true
+  end
 end
