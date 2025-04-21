@@ -184,6 +184,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.question',
     defaultMessage: 'Question',
   },
+  questionHeading: {
+    id: 'course.assessment.submission.questionHeading',
+    defaultMessage: 'Question {number}',
+  },
+  questionHeadingWithTitle: {
+    id: 'course.assessment.submission.questionHeadingWithTitle',
+    defaultMessage: 'Question {number}: {title}',
+  },
   questionNumber: {
     id: 'course.assessment.submission.questionNumber',
     defaultMessage: 'Q{number}',
