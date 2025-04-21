@@ -1,21 +1,22 @@
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { FormControlLabel, Switch, Tooltip, Typography } from '@mui/material';
-import { SubmissionQuestionBaseData } from 'types/course/assessment/submission/question/types';
+import { Chip, Tooltip, Typography } from '@mui/material';
 
 import SavingIndicator from 'lib/components/core/indicators/SavingIndicator';
 import { SAVING_STATUS } from 'lib/constants/sharedConstants';
-import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { toggleViewHistoryMode } from '../../actions';
-import { QuestionHistory } from '../../reducers/history/types';
 import { getFlagForAnswerId } from '../../selectors/answerFlags';
+import { getSubmissionQuestionHistory } from '../../selectors/history';
+import { getSubmission } from '../../selectors/submissions';
+import submissionTranslations from '../../translations';
 
 interface HistoryToggleProps {
-  historyQuestions: Record<number, QuestionHistory>;
-  question: SubmissionQuestionBaseData;
+  questionNumber: number;
+  questionId: number;
+  openAnswerHistoryView: (questionId: number, questionNumber: number) => void;
 }
 
 const translations = defineMessages({
@@ -25,68 +26,71 @@ const translations = defineMessages({
   },
   viewPastAnswers: {
     id: 'course.assessment.submission.answers.AnswerHeader.viewPastAnswers',
-    defaultMessage: 'Past Answers',
+    defaultMessage: 'Past Answers ({count})',
+  },
+  viewAllAnswers: {
+    id: 'course.assessment.submission.answers.AnswerHeader.viewAllAnswers',
+    defaultMessage: 'All Answers ({count})',
   },
 });
 
 const HistoryToggle: FC<HistoryToggleProps> = (props) => {
-  const { historyQuestions, question } = props;
+  const { questionNumber, questionId, openAnswerHistoryView } = props;
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
 
-  const historyQuestion = historyQuestions[question.id];
-  const noPastAnswers = historyQuestion
-    ? historyQuestion.answerIds.length === 0
-    : true;
-  const isLoading = historyQuestion ? historyQuestion.isLoading : false;
-  const disabled = noPastAnswers || isLoading;
+  const submission = useAppSelector(getSubmission);
+  const attempting = submission.workflowState === 'attempting';
+  const { allAnswers, canViewHistory } = useAppSelector(
+    getSubmissionQuestionHistory(submission.id, questionId),
+  );
 
-  if (!question.canViewHistory) return null;
+  if (!canViewHistory) return null;
+  const noPastAnswers =
+    allAnswers.length === 0 || (allAnswers.length === 1 && !attempting);
+  const label = attempting
+    ? t(translations.viewPastAnswers, { count: allAnswers.length })
+    : t(translations.viewAllAnswers, { count: allAnswers.length });
 
-  const handleToggleViewHistoryMode = (): void => {
-    dispatch(
-      toggleViewHistoryMode(
-        !question.viewHistory,
-        question.submissionQuestionId,
-        question.id,
-        historyQuestion.pastAnswersLoaded,
-      ),
-    );
-  };
-
+  // wrap element so tooltip displays when it's disabled
   return (
     <Tooltip title={noPastAnswers ? t(translations.noPastAnswers) : ''}>
-      <FormControlLabel
-        className="whitespace-nowrap"
-        control={
-          <Switch
-            checked={question.viewHistory || false}
-            color="primary"
-            onChange={(): void => handleToggleViewHistoryMode()}
-          />
-        }
-        disabled={disabled}
-        label={t(translations.viewPastAnswers)}
-        labelPlacement="start"
-      />
+      <span>
+        <Chip
+          className={`hover:bg-gray-300 ${noPastAnswers ? '' : 'cursor-pointer'}`}
+          clickable={noPastAnswers}
+          color="info"
+          component="button"
+          disabled={noPastAnswers}
+          label={label}
+          onClick={(e) => {
+            // prevent calling onSubmit handler when component is within form context
+            e.preventDefault();
+            openAnswerHistoryView(questionId, questionNumber);
+          }}
+          size="small"
+          variant="outlined"
+        />
+      </span>
     </Tooltip>
   );
 };
 
 interface AnswerHeaderProps {
+  questionId: number;
+  questionNumber: number;
   answerId: number | null;
-  historyQuestions: Record<number, QuestionHistory>;
-  question: SubmissionQuestionBaseData;
+  openAnswerHistoryView: (questionId: number, questionNumber: number) => void;
 }
 
 const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
-  const { answerId, historyQuestions, question } = props;
+  const { answerId, questionId, questionNumber, openAnswerHistoryView } = props;
   const answerFlag = useAppSelector((state) =>
     getFlagForAnswerId(state, answerId),
   );
   const {
     formState: { dirtyFields },
   } = useFormContext();
+  const { t } = useTranslation();
   const isAnswerDirty = answerId ? !!dirtyFields[answerId] : false;
 
   // to mitigate the issue when, during saving, user modify the answer and hence
@@ -100,19 +104,23 @@ const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
       : answerFlag?.savingStatus;
 
   return (
-    <div className="flex items-start justify-between">
-      <Typography variant="h6">{question.questionNumber}</Typography>
+    <div className="flex items-center justify-between">
+      <Typography variant="h6">
+        {t(submissionTranslations.questionHeading, { number: questionNumber })}
+      </Typography>
 
-      <div className="flex items-center">
+      <div className="flex items-center space-x-4">
         <SavingIndicator
           savingSize={answerFlag?.savingSize}
           savingStatus={savingStatus}
         />
-
-        <HistoryToggle
-          historyQuestions={historyQuestions}
-          question={question}
-        />
+        {answerId && (
+          <HistoryToggle
+            openAnswerHistoryView={openAnswerHistoryView}
+            questionId={questionId}
+            questionNumber={questionNumber}
+          />
+        )}
       </div>
     </div>
   );
