@@ -3,11 +3,12 @@ import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
-import actionTypes from '../constants';
+import actionTypes, { workflowStates } from '../constants';
 import {
   initiateAnswerFlagsForAnswers,
   resetExistingAnswerFlags,
 } from '../reducers/answerFlags';
+import { historyActions } from '../reducers/history';
 import { initiateLiveFeedbackChatPerQuestion } from '../reducers/liveFeedbackChats';
 import translations from '../translations';
 
@@ -25,6 +26,18 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
           type: actionTypes.AUTOGRADE_SUCCESS,
           payload: { ...data, answerId },
         });
+        dispatch(
+          historyActions.pushSingleAnswerItem({
+            questionId,
+            submissionId,
+            answerItem: {
+              id: data.latestAnswer.id,
+              createdAt: data.latestAnswer.createdAt,
+              currentAnswer: false,
+              workflowState: workflowStates.Graded,
+            },
+          }),
+        );
       })
       .catch(() => {
         dispatch(setNotification(translations.requestFailure));
@@ -59,6 +72,13 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
           type: actionTypes.FETCH_SUBMISSION_SUCCESS,
           payload: data,
         });
+        dispatch(
+          historyActions.initSubmissionHistory({
+            submissionId: data.submission.id,
+            questionHistories: data.history.questions,
+            questions: data.questions,
+          }),
+        );
         dispatch(initiateAnswerFlagsForAnswers({ answers: data.answers }));
         dispatch(
           initiateLiveFeedbackChatPerQuestion({
@@ -233,53 +253,6 @@ export function enterStudentView() {
 export function exitStudentView() {
   return (dispatch) => {
     dispatch({ type: actionTypes.EXIT_STUDENT_VIEW });
-  };
-}
-
-export function toggleViewHistoryMode(
-  viewHistory,
-  submissionQuestionId,
-  questionId,
-  answersLoaded,
-) {
-  return (dispatch) => {
-    if (!answersLoaded) {
-      dispatch({
-        type: actionTypes.GET_PAST_ANSWERS_REQUEST,
-        payload: { questionId },
-      });
-
-      CourseAPI.assessment.submissionQuestions
-        .getPastAnswers(submissionQuestionId)
-        .then((response) => response.data)
-        .then((data) => {
-          dispatch({
-            type: actionTypes.GET_PAST_ANSWERS_SUCCESS,
-            payload: { answers: data.answers, questionId },
-          });
-          dispatch({
-            type: actionTypes.TOGGLE_VIEW_HISTORY_MODE,
-            payload: { viewHistory, questionId },
-          });
-        })
-        .catch((error) => {
-          dispatch({
-            type: actionTypes.GET_PAST_ANSWERS_FAILURE,
-            payload: { questionId },
-          });
-          dispatch(
-            setNotification(
-              translations.getPastAnswersFailure,
-              buildErrorMessage(error),
-            ),
-          );
-        });
-    } else {
-      dispatch({
-        type: actionTypes.TOGGLE_VIEW_HISTORY_MODE,
-        payload: { viewHistory, questionId },
-      });
-    }
   };
 }
 
