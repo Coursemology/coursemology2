@@ -1265,6 +1265,9 @@
   "course.assessment.AssessmentForm.showMcqMrqSolution": {
     "defaultMessage": "MCQ/MRQ 솔루션 표시"
   },
+  "course.assessment.AssessmentForm.showRubricToStudents": {
+    "defaultMessage": "학생에게 루브릭 세부사항 표시"
+  },
   "course.assessment.AssessmentForm.showPrivate": {
     "defaultMessage": "개인 테스트 케이스 표시"
   },
@@ -1373,7 +1376,7 @@
   "course.assessment.edit.update": {
     "defaultMessage": "저장"
   },
-"course.assessment.generation.confirmDeleteConversation": {
+  "course.assessment.generation.confirmDeleteConversation": {
     "defaultMessage": "\"{title}\" 및 모든 기록 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다!"
   },
   "course.assessment.generation.exportAction": {
@@ -2368,6 +2371,9 @@
   },
   "course.assessment.show.showMcqMrqSolution": {
     "defaultMessage": "객관식/다중 응답형 질문 솔루션 보기"
+  },
+  "course.assessment.show.showRubricToStudents": {
+    "defaultMessage": "학생에게 루브릭 세부사항 표시"
   },
   "course.assessment.show.showMcqSubmitResult": {
     "defaultMessage": "객관식 질문 제출 결과 보기"

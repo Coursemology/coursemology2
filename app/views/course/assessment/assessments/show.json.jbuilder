@@ -101,6 +101,7 @@ end
 
 if can_observe
   json.showMcqMrqSolution assessment.show_mcq_mrq_solution
+  json.showRubricToStudents assessment.show_rubric_to_students
   json.gradedTestCases display_graded_test_types(assessment)
 
   if assessment.autograded?

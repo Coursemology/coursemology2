@@ -33,6 +33,7 @@ const INITIAL_VALUES = {
   show_evaluation: false,
   show_mcq_answer: false,
   show_mcq_mrq_solution: false,
+  show_rubric_to_students: false,
   skippable: false,
   monitoring: { enabled: false },
 };

@@ -219,6 +219,10 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.showMcqMrqSolution',
     defaultMessage: 'Show MCQ/MRQ solution(s)',
   },
+  showRubricToStudents: {
+    id: 'course.assessment.AssessmentForm.showRubricToStudents',
+    defaultMessage: 'Show rubric breakdown to students',
+  },
   passwordRequired: {
     id: 'course.assessment.AssessmentForm.passwordRequired',
     defaultMessage: 'At least one password is required',

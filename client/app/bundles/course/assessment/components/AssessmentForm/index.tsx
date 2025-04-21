@@ -639,6 +639,19 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               />
             )}
           />
+
+          <Controller
+            control={control}
+            name="show_rubric_to_students"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                disabled={disabled}
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.showRubricToStudents)}
+              />
+            )}
+          />
         </Section>
 
         <Section sticksToNavbar={editing} title={t(translations.organization)}>

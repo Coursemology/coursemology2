@@ -133,6 +133,7 @@ class NewAssessmentFormButton extends Component {
       view_password: null,
       session_password: null,
       show_mcq_mrq_solution: true,
+      show_rubric_to_students: false,
       use_public: false,
       use_private: true,
       use_evaluation: true,
