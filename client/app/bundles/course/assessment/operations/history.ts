@@ -4,7 +4,10 @@ import { SubmissionQuestionDetails } from 'types/course/assessment/submission/su
 
 import CourseAPI from 'api/course';
 
-import { historyActions } from '../submission/reducers/history';
+import {
+  historyActions,
+  HistoryFetchStatus,
+} from '../submission/reducers/history';
 import { AnswerDataWithQuestion } from '../submission/types';
 
 export const fetchSubmissionQuestionDetails = async (
@@ -42,8 +45,7 @@ export const tryFetchAnswerById = (
       questionId,
       answerId,
       submissionId,
-      details: null,
-      status: 'submitted',
+      status: HistoryFetchStatus.SUBMITTED,
     }),
   );
   return fetchAnswer(submissionId, answerId)
@@ -54,7 +56,7 @@ export const tryFetchAnswerById = (
           answerId,
           submissionId,
           details,
-          status: 'completed',
+          status: HistoryFetchStatus.COMPLETED,
         }),
       );
     })
@@ -64,8 +66,7 @@ export const tryFetchAnswerById = (
           questionId,
           answerId,
           submissionId,
-          details: null,
-          status: 'errored',
+          status: HistoryFetchStatus.ERRORED,
         }),
       );
     });
