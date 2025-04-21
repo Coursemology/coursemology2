@@ -9,6 +9,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { finalise, getEvaluationResult, getJobStatus } from '../../actions';
 import { fetchLiveFeedback } from '../../actions/answers';
+import AllAttemptsPrompt from '../../components/AllAttempts';
 import WarningDialog from '../../components/WarningDialog';
 import actionTypes, {
   EVALUATE_POLL_INTERVAL_MILLISECONDS,
@@ -273,6 +274,22 @@ const SubmissionForm: FC<Props> = (props) => {
           <ErrorMessages />
         </form>
       </FormProvider>
+
+      <AllAttemptsPrompt
+        graderView={submission.graderView}
+        onClose={(): void => setHistoryInfo({ ...historyInfo, open: false })}
+        open={historyInfo.open}
+        questionId={historyInfo.questionId}
+        submissionId={submission.id}
+        title={
+          <>
+            {t(translations.historyTitle, {
+              number: historyInfo.questionNumber,
+              studentName: submission.submitter.name,
+            })}
+          </>
+        }
+      />
       <WarningDialog />
     </div>
   );

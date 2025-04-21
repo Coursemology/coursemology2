@@ -1,6 +1,8 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Typography } from '@mui/material';
-import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionType } from 'types/course/assessment/question';
+
+import { AnswerDetailsProps } from '../../types';
 
 import PostPack from './ForumPostResponseComponent/PostPack';
 
@@ -13,7 +15,7 @@ const translations = defineMessages({
 });
 
 const ForumPostResponseDetails = (
-  props: QuestionAnswerDisplayDetails<'ForumPostResponse'>,
+  props: AnswerDetailsProps<QuestionType.ForumPostResponse>,
 ): JSX.Element => {
   const { answer } = props;
   const postPacks = answer.fields.selected_post_packs;

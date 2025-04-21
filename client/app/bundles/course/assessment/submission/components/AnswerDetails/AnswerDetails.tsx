@@ -1,10 +1,14 @@
 import { defineMessages } from 'react-intl';
-import { Card, CardContent } from '@mui/material';
+import { Alert, Card, CardContent, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import { AnswerDetailsMap } from 'types/course/statistics/answer';
-import { QuestionDetails } from 'types/course/statistics/assessmentStatistics';
 
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatLongDateTime } from 'lib/moment';
+import messagesTranslations from 'lib/translations/messages';
+
+import { HistoryFetchStatus } from '../../reducers/history';
+import { AnswerDetailsProps } from '../../types';
 
 import FileUploadDetails from './FileUploadDetails';
 import ForumPostResponseDetails from './ForumPostResponseDetails';
@@ -19,12 +23,11 @@ const translations = defineMessages({
     defaultMessage:
       'The display for this question type has not been implemented yet.',
   },
+  pastAnswerTitle: {
+    id: 'course.assessment.statistics.pastAnswerTitle',
+    defaultMessage: 'Submitted At: {submittedAt}',
+  },
 });
-
-interface AnswerDetailsProps<T extends keyof typeof QuestionType> {
-  question: QuestionDetails<T>;
-  answer: AnswerDetailsMap[T];
-}
 
 const AnswerNotImplemented = (): JSX.Element => {
   const { t } = useTranslation();
@@ -55,11 +58,10 @@ export const AnswerDetailsMapper = {
   Programming: (props: AnswerDetailsProps<'Programming'>): JSX.Element => (
     <ProgrammingAnswerDetails {...props} />
   ),
-  // TODO: define component for Rubric Based Response once implementation for answer has started
+  // TODO: define component for Voice Response, Scribing, Rubric Based Response
   RubricBasedResponse: (
     _props: AnswerDetailsProps<'RubricBasedResponse'>,
   ): JSX.Element => <AnswerNotImplemented />,
-  // TODO: define component for Voice Response, Scribing
   VoiceResponse: (_props: AnswerDetailsProps<'VoiceResponse'>): JSX.Element => (
     <AnswerNotImplemented />
   ),
@@ -71,17 +73,52 @@ export const AnswerDetailsMapper = {
   ),
 };
 
-const AnswerDetails = <T extends keyof typeof QuestionType>(
+const FetchedAnswerDetails = <T extends keyof typeof QuestionType>(
   props: AnswerDetailsProps<T>,
 ): JSX.Element => {
   const Component = AnswerDetailsMapper[props.question.type];
-
+  const { t } = useTranslation();
   // "Any" type is used here as the props are dynamically generated
   // depending on the different answer type and typescript
   // does not support union typing for the elements.
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return Component({ ...props } as any);
+  const componentProps = props as any;
+
+  return (
+    <div className="space-y-0">
+      <Typography variant="body1">
+        {t(translations.pastAnswerTitle, {
+          submittedAt: formatLongDateTime(props.answer.createdAt),
+        })}
+      </Typography>
+      <Component {...componentProps} />
+    </div>
+  );
+};
+
+type AnswerDetailsComponentProps<T extends keyof typeof QuestionType> = {
+  status: HistoryFetchStatus;
+} & Partial<AnswerDetailsProps<T>>;
+
+const AnswerDetails = <T extends keyof typeof QuestionType>(
+  props: AnswerDetailsComponentProps<T>,
+): JSX.Element => {
+  const { answer, question, status } = props;
+
+  const { t } = useTranslation();
+
+  const isAnswerRenderable =
+    answer && question && status === HistoryFetchStatus.COMPLETED;
+  if (isAnswerRenderable) {
+    return <FetchedAnswerDetails answer={answer!} question={question!} />;
+  }
+  if (status === HistoryFetchStatus.ERRORED) {
+    return (
+      <Alert severity="error">{t(messagesTranslations.fetchingError)}</Alert>
+    );
+  }
+  return <LoadingIndicator />;
 };
 
 export default AnswerDetails;

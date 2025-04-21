@@ -1,10 +1,12 @@
 import { Typography } from '@mui/material';
-import { QuestionAnswerDisplayDetails } from 'types/course/statistics/assessmentStatistics';
+import { QuestionType } from 'types/course/assessment/question';
+
+import { AnswerDetailsProps } from '../../types';
 
 import AttachmentDetails from './AttachmentDetails';
 
 const TextResponseDetails = (
-  props: QuestionAnswerDisplayDetails<'TextResponse'>,
+  props: AnswerDetailsProps<QuestionType.TextResponse>,
 ): JSX.Element => {
   const { question, answer } = props;
 
