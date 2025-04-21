@@ -1262,6 +1262,9 @@
   "course.assessment.AssessmentForm.showMcqMrqSolution": {
     "defaultMessage": "Show MCQ/MRQ solution(s)"
   },
+  "course.assessment.AssessmentForm.showRubricToStudents": {
+    "defaultMessage": "Show rubric breakdown to students"
+  },
   "course.assessment.AssessmentForm.showPrivate": {
     "defaultMessage": "Show private test cases"
   },
@@ -2362,6 +2365,9 @@
   },
   "course.assessment.show.showMcqMrqSolution": {
     "defaultMessage": "Show MCQ/MRQ solutions"
+  },
+  "course.assessment.show.showRubricToStudents": {
+    "defaultMessage": "Show rubric breakdown to students"
   },
   "course.assessment.show.showMcqSubmitResult": {
     "defaultMessage": "Show MCQ submit result"

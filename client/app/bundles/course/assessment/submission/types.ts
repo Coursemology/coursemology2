@@ -29,6 +29,7 @@ export interface AssessmentState {
   showEvaluation: boolean;
   showMcqAnswer: boolean;
   showMcqMrqSolution: boolean;
+  showRubricToStudents: boolean;
   showPrivate: boolean;
   skippable: boolean;
   tabId: number;
@@ -75,6 +76,7 @@ export interface SubmissionState {
   graderView: boolean;
   isCreator: boolean;
   isGrader: boolean;
+  isStudent: boolean;
   late: boolean;
   maxStep?: number;
   maximumGrade: number;

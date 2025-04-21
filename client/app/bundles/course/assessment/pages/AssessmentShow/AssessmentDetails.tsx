@@ -97,6 +97,16 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
 
             <TableRow>
               <TableCell variant="head">
+                {t(translations.showRubricToStudents)}
+              </TableCell>
+
+              <TableCell>
+                {assessment.showRubricToStudents ? '✅' : '❌'}
+              </TableCell>
+            </TableRow>
+
+            <TableRow>
+              <TableCell variant="head">
                 {t(translations.gradedTestCases)}
               </TableCell>
 

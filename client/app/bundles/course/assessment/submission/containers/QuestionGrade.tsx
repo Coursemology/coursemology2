@@ -13,6 +13,7 @@ import { saveGrade, updateGrade } from '../actions/answers';
 import { workflowStates } from '../constants';
 import { computeExp } from '../reducers/grading';
 import { QuestionGradeData } from '../reducers/grading/types';
+import { getAssessment } from '../selectors/assessments';
 import {
   getBasePoints,
   getExpMultiplier,
@@ -50,6 +51,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
 
   const [isFirstRendering, setIsFirstRendering] = useState(true);
 
+  const assessment = useAppSelector(getAssessment);
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
   const questionWithGrades = useAppSelector(getQuestionWithGrades);
@@ -79,6 +81,9 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const isNotGradedAndNotPublished =
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
+
+  const isRubricVisible =
+    !submission.isStudent || assessment.showRubricToStudents;
 
   const handleSaveGrade = (
     newGrade: string | number | null,
@@ -276,7 +281,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   return (
     (editable || published) && (
       <>
-        {isRubricBasedResponse && (
+        {isRubricBasedResponse && isRubricVisible && (
           <RubricPanel
             questionId={questionId}
             setIsFirstRendering={setIsFirstRendering}

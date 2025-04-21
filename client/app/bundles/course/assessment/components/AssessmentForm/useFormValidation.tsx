@@ -84,6 +84,7 @@ const validationSchema = yup.object({
   view_password: yup.string().nullable(),
   session_password: yup.string().nullable(),
   show_mcq_mrq_solution: yup.bool(),
+  show_rubric_to_students: yup.bool().nullable(),
   use_public: yup.bool(),
   use_private: yup.bool(),
   use_evaluation: yup

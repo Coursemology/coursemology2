@@ -4,6 +4,7 @@ json.submission do
   json.canGrade can_grade
   json.canUpdate can_update
   json.isCreator current_user.id == submission.creator_id
+  json.isStudent current_course_user&.student? || false
 
   if assessment.autograded? && !assessment.skippable?
     question = submission.questions.next_unanswered(submission)

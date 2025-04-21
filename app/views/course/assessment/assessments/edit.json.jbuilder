@@ -5,7 +5,7 @@ json.attributes do
             :skippable, :tabbed_view, :view_password, :session_password, :delayed_grade_publication, :tab_id,
             :use_public, :use_private, :use_evaluation, :allow_partial_submission, :has_personal_times,
             :affects_personal_times, :show_mcq_answer, :block_student_viewing_after_submitted, :has_todo,
-            :time_limit, :is_koditsu_enabled)
+            :time_limit, :is_koditsu_enabled, :show_rubric_to_students)
 
   # TODO: [PR#5491] Edit Assessment only changes time in the Default Timeline
   json.start_at @assessment.start_at&.iso8601

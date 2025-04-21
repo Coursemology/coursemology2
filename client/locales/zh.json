@@ -1226,6 +1226,9 @@
   "course.assessment.AssessmentForm.showMcqMrqSolution": {
     "defaultMessage": "显示 单选题/多选题 解决方案"
   },
+  "course.assessment.AssessmentForm.showRubricToStudents": {
+    "defaultMessage": "向学生显示评分细则"
+  },
   "course.assessment.AssessmentForm.showPrivate": {
     "defaultMessage": "显示私有测试用例"
   },
@@ -2311,6 +2314,9 @@
   },
   "course.assessment.show.showMcqMrqSolution": {
     "defaultMessage": "显示多选题解决方案"
+  },
+  "course.assessment.show.showRubricToStudents": {
+    "defaultMessage": "向学生显示评分细则"
   },
   "course.assessment.show.showMcqSubmitResult": {
     "defaultMessage": "显示多选题提交结果"

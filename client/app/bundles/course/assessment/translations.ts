@@ -243,6 +243,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.showMcqMrqSolution',
     defaultMessage: 'Show MCQ/MRQ solutions',
   },
+  showRubricToStudents: {
+    id: 'course.assessment.show.showRubricToStudents',
+    defaultMessage: 'Show rubric breakdown to students',
+  },
   gradedTestCases: {
     id: 'course.assessment.show.gradedTestCases',
     defaultMessage: 'Graded test cases',

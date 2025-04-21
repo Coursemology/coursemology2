@@ -111,6 +111,7 @@ export const assessmentShape = PropTypes.shape({
   published: PropTypes.bool,
   skippable: PropTypes.bool,
   showMcqMrqSolution: PropTypes.bool,
+  showRubricToStudents: PropTypes.bool,
   tabbedView: PropTypes.bool,
   showPrivate: PropTypes.bool,
   showEvaluation: PropTypes.bool,
