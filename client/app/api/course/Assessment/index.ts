@@ -1,5 +1,6 @@
 import AnswerAPI from './Submission/Answer';
 import LogsAPI from './Submission/Logs/Logs';
+import AllAnswersAPI from './AllAnswers';
 import AssessmentsAPI from './Assessments';
 import CategoriesAPI from './Categories';
 import QuestionAPI from './Question';
@@ -10,6 +11,7 @@ import SubmissionsAPI from './Submissions';
 
 const AssessmentAPI = {
   answer: AnswerAPI,
+  allAnswers: new AllAnswersAPI(),
   assessments: new AssessmentsAPI(),
   categories: new CategoriesAPI(),
   logs: new LogsAPI(),

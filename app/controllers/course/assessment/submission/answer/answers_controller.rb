@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
-class Course::Assessment::Submission::Answer::AnswersController < \
+class Course::Assessment::Submission::Answer::AnswersController <
   Course::Assessment::Submission::Answer::Controller
   include Course::Assessment::SubmissionConcern
   include Course::Assessment::Answer::UpdateAnswerConcern
 
   before_action :authorize_submission!
   before_action :check_password, only: [:update]
+
+  def show
+    authorize! :read, @answer
+  end
 
   def update
     authorize! :update, @answer

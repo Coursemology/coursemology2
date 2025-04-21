@@ -77,6 +77,7 @@ FactoryBot.define do
         old_answers = submission.assessment.questions.attempt(submission)
         old_answers.map do |answer|
           answer.created_at = Time.zone.now - 1.day
+          answer.finalise!
           answer.save!
         end
         submission.answers << old_answers
@@ -84,6 +85,7 @@ FactoryBot.define do
         new_answers = submission.assessment.questions.attempt(submission)
         new_answers.map do |answer|
           answer.current_answer = true
+          answer.finalise!
           answer.save!
         end
         submission.answers << new_answers

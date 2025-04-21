@@ -4,6 +4,6 @@ json.history do
 
   json.questions answer_history.map do |group|
     json.id group[:question_id]
-    json.answerIds group[:answer_ids]
+    json.answers group[:answers]
   end
 end
