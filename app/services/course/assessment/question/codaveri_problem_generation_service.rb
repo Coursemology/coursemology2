@@ -24,7 +24,7 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
   private
 
   def initialize(assessment, params, language, version)
-    custom_prompt = params[:custom_prompt]
+    custom_prompt = params[:custom_prompt].to_s || ''
     @payload = {
       userId: assessment.creator_id.to_s,
       courseName: assessment.course.title,
@@ -33,8 +33,8 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
         version: version
       },
       llmConfig: {
-        customPrompt: (custom_prompt.length >= 500) ? "#{custom_prompt[0...495]}..." : custom_prompt,
-        testcasesType: 'expression'
+        customPrompt: custom_prompt[0...500],
+        testcasesType: generate_payload_testcases_type(language)
       },
       requireToken: true,
       tokenConfig: {
@@ -49,8 +49,8 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
 
     @payload = @payload.merge({
       problem: {
-        title: params[:title],
-        description: params[:description],
+        title: params[:title] || '',
+        description: params[:description] || '',
         templates: [{
           path: template_file_name,
           content: params[:template] || ''
@@ -61,21 +61,48 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
             path: solution_file_name,
             content: params[:solution] || ''
           }]
-        }],
-        exprTestcases: []
+        }]
       }
     })
 
-    append_test_cases_to_problem_payload('public', params[:public_test_cases])
-    append_test_cases_to_problem_payload('private', params[:private_test_cases])
-    append_test_cases_to_problem_payload('hidden', params[:evaluation_test_cases])
+    append_test_cases_to_problem_payload('public', language, params[:public_test_cases])
+    append_test_cases_to_problem_payload('private', language, params[:private_test_cases])
+    append_test_cases_to_problem_payload('hidden', language, params[:evaluation_test_cases])
   end
 
   def generate_payload_file_name(codaveri_language, file_content)
     return 'main.py' if codaveri_language == 'python'
+    return 'main.R' if codaveri_language == 'r'
 
     match = file_content&.match(/\bclass\s+(\w+)\s*\{/)
     match ? "#{match[1]}.java" : 'Main.java'
+  end
+
+  def generate_payload_testcases_type(codaveri_language)
+    codaveri_language == 'r' ? 'IO' : 'expression'
+  end
+
+  def generate_payload_io_test_case(test_case, visibility, index)
+    {
+      index: index,
+      visibility: visibility,
+      hint: test_case['hint'],
+      input: test_case['expression'],
+      output: test_case['expected'],
+      display: test_case['expression']
+    }
+  end
+
+  def generate_payload_expr_test_case(test_case, visibility, index)
+    {
+      index: index,
+      visibility: visibility,
+      hint: test_case['hint'],
+      prefix: test_case['inlineCode'] || '',
+      lhsExpression: test_case['expression'],
+      rhsExpression: test_case['expected'],
+      display: test_case['expression']
+    }
   end
 
   def send_problem_generation_request
@@ -99,21 +126,37 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
     codaveri_api_service.get
   end
 
-  def append_test_cases_to_problem_payload(visibility, test_cases)
+  def append_test_cases_to_problem_payload(visibility, codaveri_language, test_cases)
     return unless test_cases
 
     parsed_test_cases = JSON.parse(test_cases)
 
+    if generate_payload_testcases_type(codaveri_language) == 'IO'
+      append_parsed_io_test_cases(parsed_test_cases, visibility)
+    else
+      append_parsed_expr_test_cases(parsed_test_cases, visibility)
+    end
+  end
+
+  def append_parsed_io_test_cases(parsed_test_cases, visibility)
+    @payload[:problem][:IOTestcases] ||= []
     parsed_test_cases.each_value do |test_case|
-      @payload[:problem][:exprTestcases] << {
-        index: @payload[:problem][:exprTestcases].length + 1,
-        visibility: visibility,
-        hint: test_case['hint'],
-        prefix: test_case['inlineCode'] || '',
-        lhsExpression: test_case['expression'],
-        rhsExpression: test_case['expected'],
-        display: test_case['expression']
-      }
+      @payload[:problem][:IOTestcases] << generate_payload_io_test_case(
+        test_case,
+        visibility,
+        @payload[:problem][:IOTestcases].length + 1
+      )
+    end
+  end
+
+  def append_parsed_expr_test_cases(parsed_test_cases, visibility)
+    @payload[:problem][:exprTestcases] ||= []
+    parsed_test_cases.each_value do |test_case|
+      @payload[:problem][:exprTestcases] << generate_payload_expr_test_case(
+        test_case,
+        visibility,
+        @payload[:problem][:exprTestcases].length + 1
+      )
     end
   end
 end

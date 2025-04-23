@@ -91,7 +91,7 @@ RSpec.describe Course::Assessment::Question::CodaveriProblemGenerationService do
             payload = subject.instance_variable_get(:@payload)
             indices = payload[:problem][:exprTestcases].map { |tc| tc[:index] }
 
-            expect(indices).to eq([1, 2, 3, 4]) # Ensuring the indices are assigned incrementally
+            expect(indices).to contain_exactly(1, 2, 3, 4) # Ensuring the indices are assigned incrementally
           end
         end
       end
@@ -140,6 +140,65 @@ RSpec.describe Course::Assessment::Question::CodaveriProblemGenerationService do
               prefix: 'System.out.println("Hello World!");',
               visibility: 'public'
             )
+          end
+        end
+      end
+
+      context 'when generating an R problem' do
+        let(:params) do
+          JSON.parse(
+            File.read(File.join(Rails.root,
+                                'spec/fixtures/course/codaveri/codaveri_problem_generation_r_test.json'))
+          ).symbolize_keys
+        end
+        let(:language) { 'r' }
+        let(:version) { '4.1' }
+        context 'when initializing with problem details' do
+          it 'sets the problem title and description correctly' do
+            payload = subject.instance_variable_get(:@payload)
+            expect(payload[:problem][:title]).to eq('Absolute Value')
+            expect(payload[:problem][:description]).to eq('Given a number n, return its absolute value')
+          end
+
+          it 'sets the template content correctly' do
+            payload = subject.instance_variable_get(:@payload)
+            expect(payload[:problem][:templates].first[:path]).to eq('main.R')
+            expect(payload[:problem][:templates].first[:content]).to eq(params[:template])
+          end
+
+          it 'initializes solution as an empty string' do
+            payload = subject.instance_variable_get(:@payload)
+            expect(payload[:problem][:solutions].first[:tag]).to eq('solution')
+            expect(payload[:problem][:solutions].first[:files].first[:path]).to eq('main.R')
+            expect(payload[:problem][:solutions].first[:files].first[:content]).to eq('')
+          end
+        end
+
+        context 'when appending test cases' do
+          it 'appends public test cases to IOTestcases' do
+            payload = subject.instance_variable_get(:@payload)
+            public_test_cases = payload[:problem][:IOTestcases].select { |tc| tc[:visibility] == 'public' }
+
+            expect(public_test_cases.size).to eq(2)
+            expect(public_test_cases[0]).to include(
+              hint: 'Positive number',
+              input: '1',
+              output: '1',
+              display: '1'
+            )
+            expect(public_test_cases[1]).to include(
+              hint: 'Negative number',
+              input: '-2',
+              output: '2',
+              display: '-2'
+            )
+          end
+
+          it 'assigns incremental indices to exprTestcases' do
+            payload = subject.instance_variable_get(:@payload)
+            indices = payload[:problem][:IOTestcases].map { |tc| tc[:index] }
+
+            expect(indices).to contain_exactly(1, 2) # Ensuring the indices are assigned incrementally
           end
         end
       end

@@ -6,13 +6,16 @@ import {
   MetadataTestCase,
   ProgrammingFormRequestData,
 } from 'types/course/assessment/question/programming';
-import { CodaveriGenerateResponseData } from 'types/course/assessment/question-generation';
+import {
+  CodaveriGenerateResponseData,
+  TestcaseVisibility,
+} from 'types/course/assessment/question-generation';
 
 import { defaultQuestionFormData } from './constants';
 import { CodaveriGenerateFormData, QuestionPrototypeFormData } from './types';
 
-function buildTestCases(
-  visibility: 'public' | 'private' | 'hidden',
+function buildFromExpressionTestCase(
+  visibility: TestcaseVisibility,
   response: CodaveriGenerateResponseData,
 ): MetadataTestCase[] {
   return (
@@ -21,16 +24,39 @@ function buildTestCases(
       ?.map((testCase) => ({
         expression: testCase.lhsExpression,
         expected: testCase.rhsExpression,
+        prefix: testCase.prefix ?? '',
         hint: testCase.hint,
       })) ?? []
+  );
+}
+
+function buildFromIOTestCase(
+  visibility: TestcaseVisibility,
+  response: CodaveriGenerateResponseData,
+): MetadataTestCase[] {
+  return (
+    response?.IOTestcases?.filter(
+      (testCase) => testCase?.visibility === visibility,
+    )?.map((testCase) => ({
+      expression: testCase.input,
+      expected: testCase.output,
+      hint: testCase.hint,
+    })) ?? []
+  );
+}
+
+function buildTestCases(
+  visibility: TestcaseVisibility,
+  response: CodaveriGenerateResponseData,
+): MetadataTestCase[] {
+  return buildFromExpressionTestCase(visibility, response).concat(
+    buildFromIOTestCase(visibility, response),
   );
 }
 
 export function extractQuestionPrototypeData(
   response: CodaveriGenerateResponseData,
 ): QuestionPrototypeFormData {
-  const prefix = response.resources[0]?.templates[0]?.prefix ?? '';
-
   return {
     question: {
       title: response.title,
@@ -38,19 +64,58 @@ export function extractQuestionPrototypeData(
     },
     testUi: {
       metadata: {
-        submission: [prefix, response.resources[0]?.templates[0]?.content ?? '']
-          .filter((text) => text?.length)
-          .join('\n'),
-        solution: [
-          prefix,
-          response.resources[0]?.solutions[0]?.files[0]?.content ?? '',
-        ]
-          .filter((text) => text?.length)
-          .join('\n'),
+        prepend: response.resources[0]?.templates[0]?.prefix ?? null,
+        submission: response.resources[0]?.templates[0]?.content ?? '',
+        solution: response.resources[0]?.solutions[0]?.files[0]?.content ?? '',
+        append: response.resources[0]?.templates[0]?.suffix ?? null,
         testCases: {
           public: buildTestCases('public', response),
           private: buildTestCases('private', response),
           evaluation: buildTestCases('hidden', response),
+        },
+      },
+    },
+  };
+}
+
+export function replaceUnlockedPrototypeFields(
+  oldData: QuestionPrototypeFormData,
+  newData: QuestionPrototypeFormData,
+  lockStates: Record<string, boolean>,
+): QuestionPrototypeFormData {
+  return {
+    question: {
+      title: lockStates['question.title']
+        ? oldData.question.title
+        : newData.question.title,
+      description: lockStates['question.description']
+        ? oldData.question.description
+        : newData.question.description,
+    },
+    testUi: {
+      metadata: {
+        submission: lockStates['testUi.metadata.submission']
+          ? oldData.testUi?.metadata.submission
+          : newData.testUi.metadata.submission,
+        solution: lockStates['testUi.metadata.solution']
+          ? oldData.testUi?.metadata.solution
+          : newData.testUi.metadata.solution,
+        prepend: lockStates['testUi.metadata.prepend']
+          ? oldData.testUi?.metadata.prepend
+          : newData.testUi.metadata.prepend,
+        append: lockStates['testUi.metadata.append']
+          ? oldData.testUi?.metadata.append
+          : newData.testUi.metadata.append,
+        testCases: {
+          public: lockStates['testUi.metadata.testCases.public']
+            ? oldData.testUi?.metadata.testCases.public
+            : newData.testUi.metadata.testCases.public,
+          private: lockStates['testUi.metadata.testCases.private']
+            ? oldData.testUi?.metadata.testCases.private
+            : newData.testUi.metadata.testCases.private,
+          evaluation: lockStates['testUi.metadata.testCases.evaluation']
+            ? oldData.testUi?.metadata.testCases.evaluation
+            : newData.testUi.metadata.testCases.evaluation,
         },
       },
     },
@@ -144,11 +209,12 @@ export const buildQuestionDataFromPrototype = (
   languageId: LanguageData['id'],
   languageMode: LanguageMode,
 ): ProgrammingFormRequestData => {
+  const isCodaveri = languageMode === 'r';
   const metadata: BasicMetadata = {
     solution: prefilledData?.testUi?.metadata?.solution,
     submission: prefilledData?.testUi?.metadata?.submission,
-    prepend: '',
-    append: '',
+    prepend: prefilledData?.testUi?.metadata?.prepend,
+    append: prefilledData?.testUi?.metadata?.append,
     dataFiles: [],
     testCases: {
       public: prefilledData?.testUi?.metadata?.testCases?.public,
@@ -164,7 +230,7 @@ export const buildQuestionDataFromPrototype = (
       maximumGrade: '10.0',
       editOnline: true,
       isLowPriority: false,
-      isCodaveri: false,
+      isCodaveri,
       liveFeedbackEnabled: false,
       // set question to autograded if it includes at least one test case
       autograded:
