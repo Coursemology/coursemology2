@@ -18,12 +18,12 @@ import translations from '../../translations';
 
 import LockableSection from './LockableSection';
 import TestCasesManager from './TestCasesManager';
-import { QuestionPrototypeFormData } from './types';
+import { LockStates, QuestionPrototypeFormData } from './types';
 
 interface Props {
   prototypeForm: UseFormReturn<QuestionPrototypeFormData>;
   onToggleLock: (key: string) => void;
-  lockStates: { [key: string]: boolean };
+  lockStates: LockStates;
   editorMode: LanguageMode;
 }
 
@@ -48,8 +48,15 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
       if (title) dispatch(actions.setActiveFormTitle({ title }));
     },
   });
+  const isIOTestCaseLanguage = editorMode === 'r';
 
   const TestCaseComponent = TestCaseComponentMapper[editorMode];
+  const lhsHeader = isIOTestCaseLanguage
+    ? t(translations.input)
+    : t(translations.expression);
+  const rhsHeader = isIOTestCaseLanguage
+    ? t(translations.expectedOutput)
+    : t(translations.expected);
 
   return (
     <FormProvider {...prototypeForm}>
@@ -149,12 +156,60 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
           />
         </Container>
       </LockableSection>
+      <LockableSection
+        lockState={lockStates['testUi.metadata.prepend']}
+        lockStateKey="testUi.metadata.prepend"
+        onToggleLock={onToggleLock}
+      >
+        <Container disableGutters maxWidth={false}>
+          <Controller
+            control={prototypeForm.control}
+            name="testUi.metadata.prepend"
+            render={({ field }): JSX.Element => (
+              <EditorAccordion
+                disabled={lockStates['testUi.metadata.prepend']}
+                language={editorMode}
+                name={field.name}
+                onChange={field.onChange}
+                subtitle={t(translations.prependHint)}
+                title={t(translations.prepend)}
+                value={field.value ?? ''}
+              />
+            )}
+          />
+        </Container>
+      </LockableSection>
+      <LockableSection
+        lockState={lockStates['testUi.metadata.append']}
+        lockStateKey="testUi.metadata.append"
+        onToggleLock={onToggleLock}
+      >
+        <Container disableGutters maxWidth={false}>
+          <Controller
+            control={prototypeForm.control}
+            name="testUi.metadata.append"
+            render={({ field }): JSX.Element => (
+              <EditorAccordion
+                disabled={lockStates['testUi.metadata.append']}
+                language={editorMode}
+                name={field.name}
+                onChange={field.onChange}
+                subtitle={t(translations.appendHint)}
+                title={t(translations.append)}
+                value={field.value ?? ''}
+              />
+            )}
+          />
+        </Container>
+      </LockableSection>
 
       <TestCasesManager
         component={TestCaseComponent}
         control={prototypeForm.control}
+        lhsHeader={lhsHeader}
         lockStates={lockStates}
         onToggleLock={onToggleLock}
+        rhsHeader={rhsHeader}
         setValue={prototypeForm.setValue}
       />
     </FormProvider>

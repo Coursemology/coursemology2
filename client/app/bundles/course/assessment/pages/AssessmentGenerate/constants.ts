@@ -9,6 +9,8 @@ export const defaultQuestionFormData: QuestionPrototypeFormData = {
     metadata: {
       solution: '',
       submission: '',
+      prepend: null,
+      append: null,
       testCases: {
         public: [],
         private: [],

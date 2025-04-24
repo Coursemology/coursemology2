@@ -4,7 +4,8 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
 
   def index
     authorize!(:manage, @survey)
-    @course_students = current_course.course_users.students.order_alphabetically
+    @course_users = current_course.course_users.order_alphabetically
+    @my_students = current_course_user.try(:my_students) || []
   end
 
   def create

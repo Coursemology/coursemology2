@@ -5571,10 +5571,7 @@
     "defaultMessage": "下载回复"
   },
   "course.survey.ResponseIndex.RemindButton.confirmation": {
-    "defaultMessage": "向所有未完成调查的学生（不包括旁听学生）发送电子邮件？"
-  },
-  "course.survey.ResponseIndex.RemindButton.confirmationAll": {
-    "defaultMessage": "向所有未完成调查的学生（包括旁听学生）发送电子邮件？"
+    "defaultMessage": "向所有尚未完成调查的 {selectedUsers} 发送提醒邮件？"
   },
   "course.survey.ResponseIndex.RemindButton.explanation": {
     "defaultMessage": "调查到期前一天，提醒的电子邮件将自动发送给尚未完成调查的学生。"
@@ -5608,9 +5605,6 @@
   },
   "course.survey.ResponseIndex.responses": {
     "defaultMessage": "回复"
-  },
-  "course.survey.ResponseIndex.stats": {
-    "defaultMessage": "回复统计"
   },
   "course.survey.ResponseIndex.submitted": {
     "defaultMessage": "已提交"
@@ -7027,6 +7021,15 @@
   },
   "lib.translations.messages.loadImageError": {
     "defaultMessage": "加载图片时出错。请尝试选择另一张。"
+  },
+  "lib.translations.myStudentsIncludingPhantoms": {
+    "defaultMessage": "我的学生（包括旁听学生）"
+  },
+  "lib.translations.studentsIncludingPhantoms": {
+    "defaultMessage": "学生（包括旁听学生）"
+  },
+  "lib.translations.staffIncludingPhantoms": {
+    "defaultMessage": "职员（包括旁听学生）"
   },
   "lib.translations.no": {
     "defaultMessage": "否"

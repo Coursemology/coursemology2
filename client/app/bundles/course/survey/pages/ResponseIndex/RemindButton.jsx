@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { sendReminderEmail } from 'course/survey/actions/surveys';
+import CourseUserTypeFragment from 'lib/components/core/CourseUserTypeFragment';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 const translations = defineMessages({
@@ -21,12 +22,7 @@ const translations = defineMessages({
   confirmation: {
     id: 'course.survey.ResponseIndex.RemindButton.confirmation',
     defaultMessage:
-      'Send emails to all students (excluding phantoms) who have not completed the survey?',
-  },
-  confirmationAll: {
-    id: 'course.survey.ResponseIndex.RemindButton.confirmationAll',
-    defaultMessage:
-      'Send emails to all students (including phantoms) who have not completed the survey?',
+      'Send reminder emails to all {selectedUsers} who have not completed the survey?',
   },
   success: {
     id: 'course.survey.ResponseIndex.RemindButton.success',
@@ -48,11 +44,7 @@ class RemindButton extends Component {
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     this.props.dispatch(
-      sendReminderEmail(
-        successMessage,
-        failureMessage,
-        this.props.includePhantom,
-      ),
+      sendReminderEmail(successMessage, failureMessage, this.props.userType),
     );
     this.setState({ open: false });
   };
@@ -72,11 +64,14 @@ class RemindButton extends Component {
               <FormattedMessage {...translations.explanation} />
               <br />
               <br />
-              {this.props.includePhantom ? (
-                <FormattedMessage {...translations.confirmationAll} />
-              ) : (
-                <FormattedMessage {...translations.confirmation} />
-              )}
+              <FormattedMessage
+                {...translations.confirmation}
+                values={{
+                  selectedUsers: (
+                    <CourseUserTypeFragment userType={this.props.userType} />
+                  ),
+                }}
+              />
             </>
           }
           onCancel={() => this.setState({ open: false })}
@@ -90,7 +85,7 @@ class RemindButton extends Component {
 
 RemindButton.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  includePhantom: PropTypes.bool.isRequired,
+  userType: PropTypes.string.isRequired,
 };
 
 export default connect()(RemindButton);

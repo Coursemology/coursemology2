@@ -5610,10 +5610,7 @@
     "defaultMessage": "응답 다운로드"
   },
   "course.survey.ResponseIndex.RemindButton.confirmation": {
-    "defaultMessage": "설문을 완료하지 않은 모든 학생(팬텀 제외)에게 이메일을 보내시겠습니까?"
-  },
-  "course.survey.ResponseIndex.RemindButton.confirmationAll": {
-    "defaultMessage": "설문을 완료하지 않은 모든 학생(팬텀 포함)에게 이메일을 보내시겠습니까?"
+    "defaultMessage": "설문을 완료하지 않은 {selectedUsers} 모두에게 알림 이메일을 보내시겠습니까?"
   },
   "course.survey.ResponseIndex.RemindButton.explanation": {
     "defaultMessage": "설문이 만료되기 하루 전에 설문을 완료하지 않은 학생들에게 자동으로 알림 이메일이 발송됩니다."
@@ -5647,9 +5644,6 @@
   },
   "course.survey.ResponseIndex.responses": {
     "defaultMessage": "응답"
-  },
-  "course.survey.ResponseIndex.stats": {
-    "defaultMessage": "응답 통계"
   },
   "course.survey.ResponseIndex.submitted": {
     "defaultMessage": "제출됨"
@@ -7022,6 +7016,15 @@
   "lib.translations.form.messages.unsavedChanges": {
     "defaultMessage": "저장되지 않은 변경 사항이 있습니다."
   },
+  "lib.translations.myStudentsIncludingPhantoms": {
+    "defaultMessage": "내 학생들 (팬텀 포함)"
+  },
+  "lib.translations.studentsIncludingPhantoms": {
+    "defaultMessage": "학생들 (팬텀 포함)"
+  },
+  "lib.translations.staffIncludingPhantoms": {
+    "defaultMessage": "스태프 (팬텀 포함)"
+  },  
   "lib.translations.form.startAt": {
     "defaultMessage": "시작 시각"
   },

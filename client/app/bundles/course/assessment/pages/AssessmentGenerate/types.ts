@@ -20,6 +20,8 @@ export interface QuestionPrototypeFormData {
   };
   testUi: {
     metadata: {
+      prepend: string | null;
+      append: string | null;
       solution: string;
       submission: string;
       testCases: MetadataTestCases;
@@ -27,9 +29,7 @@ export interface QuestionPrototypeFormData {
   };
 }
 
-export interface LockStates {
-  [name: string]: boolean;
-}
+export type LockStates = Record<string, boolean>;
 
 export interface GenerationState {
   activeConversationId: string;

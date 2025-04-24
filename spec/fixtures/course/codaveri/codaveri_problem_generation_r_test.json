@@ -1,0 +1,11 @@
+{
+  "custom_prompt": "This is a custom prompt.",
+  "is_default_question_form_data": "false",
+  "title": "Absolute Value",
+  "description": "Given a number n, return its absolute value",
+  "template": "absolute_value <- function(n) {\nreturn(0)\n}",
+  "solution": "",
+  "public_test_cases": "{ \"0\": {\"hint\": \"Positive number\", \"expression\": \"1\", \"expected\": \"1\"}, \"1\": {\"hint\": \"Negative number\", \"expression\": \"-2\", \"expected\": \"2\"} }",
+  "private_test_cases": "{}",
+  "evaluation_test_cases": "{}"
+}
