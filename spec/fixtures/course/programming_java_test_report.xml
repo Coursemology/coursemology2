@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="4" total="8" passed="2" failed="2" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-04-25T07:08:34Z" name="AllTests" finished-at="2025-04-25T07:08:34Z" duration-ms="105">
+    <groups>
+      <group name="public">
+        <method signature="Autograder.test_public_01()[pri:0, instance:Autograder@6574a52c]" name="test_public_01" class="Autograder"/>
+        <method signature="Autograder.test_public_02()[pri:0, instance:Autograder@6574a52c]" name="test_public_02" class="Autograder"/>
+        <method signature="Autograder.test_public_03()[pri:0, instance:Autograder@6574a52c]" name="test_public_03" class="Autograder"/>
+        <method signature="Autograder.test_public_04()[pri:0, instance:Autograder@6574a52c]" name="test_public_04" class="Autograder"/>
+      </group> <!-- public -->
+    </groups>
+    <test started-at="2025-04-25T07:08:34Z" name="tests" finished-at="2025-04-25T07:08:34Z" duration-ms="105">
+      <class name="Autograder">
+        <test-method signature="test_public_01()[pri:0, instance:Autograder@6574a52c]" started-at="2025-04-25T07:08:34Z" name="test_public_01" finished-at="2025-04-25T07:08:34Z" duration-ms="9" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[expected [11] but found [8]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: expected [11] but found [8]
+	at org.testng.Assert.fail(Assert.java:93)
+	at org.testng.Assert.failNotEquals(Assert.java:512)
+	at org.testng.Assert.assertEqualsImpl(Assert.java:134)
+	at org.testng.Assert.assertEquals(Assert.java:115)
+	at org.testng.Assert.assertEquals(Assert.java:178)
+	at Autograder.expectEquals(Unknown Source)
+	at Autograder.test_public_01(Unknown Source)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:108)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:661)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:869)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1193)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:126)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at org.testng.TestRunner.privateRun(TestRunner.java:744)
+	at org.testng.TestRunner.run(TestRunner.java:602)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:380)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:375)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1301)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1226)
+	at org.testng.TestNG.runSuites(TestNG.java:1144)
+	at org.testng.TestNG.run(TestNG.java:1115)
+	at RunTests.main(Unknown Source)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.apache.tools.ant.taskdefs.ExecuteJava.run(ExecuteJava.java:218)
+	at org.apache.tools.ant.taskdefs.ExecuteJava.execute(ExecuteJava.java:155)
+	at org.apache.tools.ant.taskdefs.Java.run(Java.java:891)
+	at org.apache.tools.ant.taskdefs.Java.executeJava(Java.java:231)
+	at org.apache.tools.ant.taskdefs.Java.executeJava(Java.java:135)
+	at org.apache.tools.ant.taskdefs.Java.execute(Java.java:108)
+	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:299)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:99)
+	at org.apache.tools.ant.Task.perform(Task.java:350)
+	at org.apache.tools.ant.Target.execute(Target.java:449)
+	at org.apache.tools.ant.Target.performTasks(Target.java:470)
+	at org.apache.tools.ant.Project.executeSortedTargets(Project.java:1401)
+	at org.apache.tools.ant.Project.executeTarget(Project.java:1374)
+	at org.apache.tools.ant.helper.DefaultExecutor.executeTargets(DefaultExecutor.java:41)
+	at org.apache.tools.ant.Project.executeTargets(Project.java:1264)
+	at org.apache.tools.ant.Main.runBuild(Main.java:818)
+	at org.apache.tools.ant.Main.startAnt(Main.java:223)
+	at org.apache.tools.ant.launch.Launcher.run(Launcher.java:284)
+	at org.apache.tools.ant.launch.Launcher.main(Launcher.java:101)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+          <attributes>
+            <attribute name="output">
+              <![CDATA[8]]>
+            </attribute> <!-- output -->
+            <attribute name="expression">
+              <![CDATA[{1, 3, 5, 7, 9, 11, 10, 8, 6, 4}]]>
+            </attribute> <!-- expression -->
+            <attribute name="expected">
+              <![CDATA[11]]>
+            </attribute> <!-- expected -->
+            <attribute name="hint">
+              <![CDATA[Another hint]]>
+            </attribute> <!-- hint -->
+          </attributes>
+        </test-method> <!-- test_public_01 -->
+        <test-method signature="test_public_02()[pri:0, instance:Autograder@6574a52c]" started-at="2025-04-25T07:08:34Z" name="test_public_02" finished-at="2025-04-25T07:08:34Z" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+          <attributes>
+            <attribute name="output">
+              <![CDATA[100]]>
+            </attribute> <!-- output -->
+            <attribute name="expression">
+              <![CDATA[{67, 65, 43, 42, 23, 17, 9, 100}]]>
+            </attribute> <!-- expression -->
+            <attribute name="expected">
+              <![CDATA[100]]>
+            </attribute> <!-- expected -->
+            <attribute name="hint">
+              <![CDATA[A hint]]>
+            </attribute> <!-- hint -->
+          </attributes>
+        </test-method> <!-- test_public_02 -->
+        <test-method signature="test_public_03()[pri:0, instance:Autograder@6574a52c]" started-at="2025-04-25T07:08:34Z" name="test_public_03" finished-at="2025-04-25T07:08:34Z" duration-ms="0" status="FAIL">
+          <exception class="org.apache.tools.ant.ExitException">
+            <message>
+              <![CDATA[Permission ("java.lang.RuntimePermission" "exitVM") was not granted.]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[org.apache.tools.ant.ExitException: Permission ("java.lang.RuntimePermission" "exitVM") was not granted.
+	at org.apache.tools.ant.types.Permissions$MySM.checkExit(Permissions.java:196)
+	at java.base/java.lang.Runtime.exit(Runtime.java:186)
+	at java.base/java.lang.System.exit(System.java:1920)
+	at Optimization.searchMax(Unknown Source)
+	at Autograder.test_public_03(Unknown Source)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:108)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:661)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:869)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1193)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:126)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+	at org.testng.TestRunner.privateRun(TestRunner.java:744)
+	at org.testng.TestRunner.run(TestRunner.java:602)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:380)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:375)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:340)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:289)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1301)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1226)
+	at org.testng.TestNG.runSuites(TestNG.java:1144)
+	at org.testng.TestNG.run(TestNG.java:1115)
+	at RunTests.main(Unknown Source)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.apache.tools.ant.taskdefs.ExecuteJava.run(ExecuteJava.java:218)
+	at org.apache.tools.ant.taskdefs.ExecuteJava.execute(ExecuteJava.java:155)
+	at org.apache.tools.ant.taskdefs.Java.run(Java.java:891)
+	at org.apache.tools.ant.taskdefs.Java.executeJava(Java.java:231)
+	at org.apache.tools.ant.taskdefs.Java.executeJava(Java.java:135)
+	at org.apache.tools.ant.taskdefs.Java.execute(Java.java:108)
+	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:299)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:99)
+	at org.apache.tools.ant.Task.perform(Task.java:350)
+	at org.apache.tools.ant.Target.execute(Target.java:449)
+	at org.apache.tools.ant.Target.performTasks(Target.java:470)
+	at org.apache.tools.ant.Project.executeSortedTargets(Project.java:1401)
+	at org.apache.tools.ant.Project.executeTarget(Project.java:1374)
+	at org.apache.tools.ant.helper.DefaultExecutor.executeTargets(DefaultExecutor.java:41)
+	at org.apache.tools.ant.Project.executeTargets(Project.java:1264)
+	at org.apache.tools.ant.Main.runBuild(Main.java:818)
+	at org.apache.tools.ant.Main.startAnt(Main.java:223)
+	at org.apache.tools.ant.launch.Launcher.run(Launcher.java:284)
+	at org.apache.tools.ant.launch.Launcher.main(Launcher.java:101)
+]]>
+            </full-stacktrace>
+          </exception> <!-- org.apache.tools.ant.ExitException -->
+          <reporter-output>
+          </reporter-output>
+          <attributes>
+            <attribute name="expression">
+              <![CDATA[{4, -100, -80, 15, 20, 25, 30}]]>
+            </attribute> <!-- expression -->
+            <attribute name="expected">
+              <![CDATA[30]]>
+            </attribute> <!-- expected -->
+          </attributes>
+        </test-method> <!-- test_public_03 -->
+        <test-method signature="test_public_04()[pri:0, instance:Autograder@6574a52c]" started-at="2025-04-25T07:08:34Z" name="test_public_04" finished-at="2025-04-25T07:08:34Z" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+          <attributes>
+            <attribute name="output">
+              <![CDATA[100]]>
+            </attribute> <!-- output -->
+            <attribute name="expression">
+              <![CDATA[{2, 3, 4, 5, 6, 7, 8, 100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88, 87, 86, 85, 84, 83}]]>
+            </attribute> <!-- expression -->
+            <attribute name="expected">
+              <![CDATA[100]]>
+            </attribute> <!-- expected -->
+          </attributes>
+        </test-method> <!-- test_public_04 -->
+      </class> <!-- Autograder -->
+    </test> <!-- tests -->
+  </suite> <!-- AllTests -->
+</testng-results>
