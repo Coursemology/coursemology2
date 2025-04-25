@@ -24,7 +24,7 @@ class ReadOnlyEditorContainer extends Component {
   render() {
     const { answerId, file, annotations } = this.props;
 
-    if (file.highlightedContent) {
+    if (file.highlightedContent !== null) {
       return (
         <ReadOnlyEditorComponent
           annotations={Object.values(annotations)}
