@@ -25,7 +25,7 @@ const FileContent: FC<Props> = (props) => {
   const { answerId, annotations, file } = props;
   const fileAnnotation = annotations.find((a) => a.fileId === file.id);
 
-  return file.highlightedContent ? (
+  return file.highlightedContent !== null ? (
     <ReadOnlyEditor
       annotations={fileAnnotation?.topics ?? ([] as AnnotationTopic[])}
       answerId={answerId}
