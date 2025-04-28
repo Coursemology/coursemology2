@@ -86,13 +86,7 @@ module ApplicationHtmlFormattersHelper
   # List of video hosting site URLs to allow
   VIDEO_URL_WHITELIST = Regexp.union(
     /\A(?:https?:)?\/\/(?:www\.)?(?:m.)?youtube\.com\//,
-    /\A(?:https?:)?\/\/(?:www\.)?youtu.be\//,
-    /\A(?:https?:)?\/\/(?:www\.)?(?:player.)?vimeo\.com\//,
-    /\A(?:https?:)?\/\/(?:www\.)?vine\.co\//,
-    /\A(?:https?:)?\/\/(?:www\.)?instagram\.com\//,
-    /\A(?:https?:)?\/\/(?:www\.)?(?:geo.)?dailymotion\.com\//,
-    /\A(?:https?:)?\/\/(?:www\.)?dai\.ly\//,
-    /\A(?:https?:)?\/\/(?:www\.)?youku\.com\//
+    /\A(?:https?:)?\/\/(?:www\.)?youtu.be\//
   ).freeze
 
   OEMBED_WHITELIST_TRANSFORMER = lambda do |env|
