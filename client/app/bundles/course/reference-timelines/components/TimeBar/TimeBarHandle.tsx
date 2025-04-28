@@ -5,7 +5,8 @@ import {
   TouchEventHandler,
 } from 'react';
 import { Typography } from '@mui/material';
-import moment from 'moment';
+
+import moment from 'lib/moment';
 
 interface HandleContentProps {
   side: 'start' | 'end';

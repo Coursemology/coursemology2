@@ -1,5 +1,6 @@
 import { MouseEventHandler, ReactNode, TouchEventHandler } from 'react';
-import moment from 'moment';
+
+import moment from 'lib/moment';
 
 import {
   DAY_WIDTH_PIXELS,

@@ -6,7 +6,8 @@ import {
   useContext,
   useState,
 } from 'react';
-import moment from 'moment';
+
+import moment from 'lib/moment';
 
 type FetchStatus = 'loading' | 'success' | 'failure';
 

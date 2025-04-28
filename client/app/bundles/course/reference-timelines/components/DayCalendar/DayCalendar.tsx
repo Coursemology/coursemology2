@@ -2,9 +2,9 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import { Button, Typography } from '@mui/material';
-import moment from 'moment';
 
 import useTranslation from 'lib/hooks/useTranslation';
+import moment from 'lib/moment';
 
 import translations from '../../translations';
 import {

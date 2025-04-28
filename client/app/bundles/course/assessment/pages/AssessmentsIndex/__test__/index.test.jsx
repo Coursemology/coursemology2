@@ -6,7 +6,7 @@ describe('<AssessmentIndex />', () => {
   it('renders the index page', async () => {
     const page = render(<AssessmentIndex categoryId={1} tabId={1} />);
 
-    const newButton = page.getByRole('button');
+    const newButton = await page.findByRole('button');
     fireEvent.click(newButton);
 
     expect(page.getByRole('heading', { name: 'New Assessment' })).toBeVisible();

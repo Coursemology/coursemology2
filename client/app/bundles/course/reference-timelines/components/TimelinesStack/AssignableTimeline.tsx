@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import moment from 'moment';
 import {
   ItemWithTimeData,
   TimeData,
   TimelineData,
 } from 'types/course/referenceTimelines';
+
+import moment from 'lib/moment';
 
 import { useLastSaved } from '../../contexts';
 import { DraftableTimeData } from '../../utils';

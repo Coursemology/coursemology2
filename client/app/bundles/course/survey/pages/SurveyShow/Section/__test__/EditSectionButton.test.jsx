@@ -31,7 +31,7 @@ describe('<EditSectionButton />', () => {
       </>,
     );
 
-    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(await page.findByRole('button'));
 
     fireEvent.change(page.getByLabelText('Description'), {
       target: { value: newDescription },
