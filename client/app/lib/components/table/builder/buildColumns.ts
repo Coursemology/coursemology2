@@ -11,6 +11,7 @@ export const buildColumns = <D extends Data, C>(
   getColumn: (column: ColumnTemplate<D>) => C,
   initial: C[] = [],
 ): BuiltColumns<D, C> => {
+  const initialColumnsLength = initial.length;
   const defToColumns: Record<number, ColumnTemplate<D>> = {};
 
   const defColumns = columns.reduce<C[]>((columnDefs, column) => {
@@ -18,7 +19,7 @@ export const buildColumns = <D extends Data, C>(
 
     columnDefs.push(getColumn(column));
 
-    defToColumns[columnDefs.length - 1] = column;
+    defToColumns[columnDefs.length - 1 - initialColumnsLength] = column;
 
     return columnDefs;
   }, initial);
