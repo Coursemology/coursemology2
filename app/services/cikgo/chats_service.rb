@@ -7,7 +7,8 @@ class Cikgo::ChatsService < Cikgo::Service
       result = connection(:post, 'chats', body: {
         pushKey: push_key(course_user.course),
         userId: cikgo_user_id(course_user),
-        role: cikgo_role(course_user)
+        role: cikgo_role(course_user),
+        name: course_user.name
       })
 
       [result&.[](:url), result&.[](:openThreadsCount)]
