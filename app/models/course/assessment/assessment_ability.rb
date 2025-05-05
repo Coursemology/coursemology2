@@ -193,6 +193,7 @@ module Course::Assessment::AssessmentAbility
       Course::Assessment::Question::MultipleResponse,
       Course::Assessment::Question::TextResponse,
       Course::Assessment::Question::Programming,
+      Course::Assessment::Question::RubricBasedResponse,
       Course::Assessment::Question::Scribing,
       Course::Assessment::Question::VoiceResponse
     ].each do |question_class|
