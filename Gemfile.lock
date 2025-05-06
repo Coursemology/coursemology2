@@ -212,7 +212,7 @@ GEM
     docker-api (2.4.0)
       excon (>= 0.64.0)
       multi_json
-    docx (0.8.0)
+    docx (0.9.1)
       nokogiri (~> 1.13, >= 1.13.0)
       rubyzip (~> 2.0)
     domain_name (0.6.20240107)
