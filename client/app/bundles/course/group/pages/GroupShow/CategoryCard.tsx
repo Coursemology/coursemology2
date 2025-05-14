@@ -1,18 +1,22 @@
-import { useCallback, useMemo, useState } from 'react';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import { FC, useCallback, useMemo, useState } from 'react';
+import {
+  defineMessages,
+  FormattedMessage,
+  injectIntl,
+  WrappedComponentProps,
+} from 'react-intl';
 import Delete from '@mui/icons-material/Delete';
 import { red } from '@mui/material/colors';
-import PropTypes from 'prop-types';
 
+import { GroupCategory } from 'course/group/types';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { useAppDispatch } from 'lib/hooks/store';
 
 import { deleteCategory, updateCategory } from '../../actions';
-import GroupCard from '../../components/GroupCard';
+import GroupCard, { GroupCardBottomButton } from '../../components/GroupCard';
 import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
-import { categoryShape } from '../../propTypes';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -62,7 +66,14 @@ const translations = defineMessages({
   },
 });
 
-const CategoryCard = ({
+interface CategoryCardProps extends WrappedComponentProps {
+  category: GroupCategory;
+  numGroups: number;
+  onManageGroups: () => void;
+  canManageCategory: boolean;
+}
+
+const CategoryCard: FC<CategoryCardProps> = ({
   category,
   numGroups,
   intl,
@@ -126,7 +137,7 @@ const CategoryCard = ({
   ]);
 
   const bottomButtons = useMemo(() => {
-    const result = [];
+    const result: GroupCardBottomButton[] = [];
     if (canManageCategory) {
       result.push({
         label: <FormattedMessage {...translations.edit} />,
@@ -198,14 +209,6 @@ const CategoryCard = ({
       )}
     </>
   );
-};
-
-CategoryCard.propTypes = {
-  category: categoryShape.isRequired,
-  numGroups: PropTypes.number.isRequired,
-  onManageGroups: PropTypes.func.isRequired,
-  canManageCategory: PropTypes.bool.isRequired,
-  intl: PropTypes.object,
 };
 
 export default injectIntl(CategoryCard);
