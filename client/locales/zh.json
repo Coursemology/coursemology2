@@ -4842,7 +4842,7 @@
     "defaultMessage": "序列号"
   },
   "course.group.GroupShow.GroupTableCard.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers} 总计 ({numManagers} 管理员, {numNormals} 成员)"
   },
   "course.group.GroupShow.fetchFailure": {
     "defaultMessage": "获取组数据失败！请重新加载并重试。"

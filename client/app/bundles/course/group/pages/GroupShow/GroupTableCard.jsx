@@ -23,7 +23,9 @@ const translations = defineMessages({
   subtitle: {
     id: 'course.group.GroupShow.GroupTableCard.subtitle',
     defaultMessage:
-      '{numMembers} {numMembers, plural, one {member} other {members}}',
+      '{numMembers} total (' +
+      '{numManagers} {numManagers, plural, one {manager} other {managers}}, ' +
+      '{numNormals} {numNormals, plural, one {member} other {members}})',
   },
   serialNumber: {
     id: 'course.group.GroupShow.GroupTableCard.serialNumber',
@@ -72,6 +74,12 @@ const GroupTableCard = ({ group, onManageGroup, canManageCategory }) => {
   const hasPhantomMembers = allMembers.length !== membersWithoutPhantom.length;
   const members = hidePhantomStudents ? membersWithoutPhantom : allMembers;
 
+  const numMembers = members.length ?? 0;
+  const numManagers =
+    members.filter((m) => m.groupRole === 'manager').length ?? 0;
+  const numNormals =
+    members.filter((m) => m.groupRole === 'normal').length ?? 0;
+
   const titleButton = useMemo(
     () => [
       ...(canManageCategory
@@ -91,7 +99,7 @@ const GroupTableCard = ({ group, onManageGroup, canManageCategory }) => {
     <GroupCard
       subtitle={
         <FormattedMessage
-          values={{ numMembers: members.length ?? 0 }}
+          values={{ numMembers, numManagers, numNormals }}
           {...translations.subtitle}
         />
       }

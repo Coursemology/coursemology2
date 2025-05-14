@@ -4899,7 +4899,7 @@
     "defaultMessage": "S/N"
   },
   "course.group.GroupShow.GroupTableCard.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers} total ({numManagers} {numManagers, plural, one {manager} other {managers}}, {numNormals} {numNormals, plural, one {member} other {members}})"
   },
   "course.group.GroupShow.fetchFailure": {
     "defaultMessage": "Failed to fetch group data! Please reload and try again."
