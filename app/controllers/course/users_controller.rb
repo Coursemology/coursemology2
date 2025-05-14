@@ -35,7 +35,7 @@ class Course::UsersController < Course::ComponentController
         @user_options = course_users.order_alphabetically.pluck(:id, :name, :role)
       else
         @course_users ||= course_users.without_phantom_users.students.
-                          includes(user: [:emails]).order_alphabetically
+                          includes(:groups, user: [:emails]).order_alphabetically
       end
 
     else
