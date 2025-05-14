@@ -4875,7 +4875,7 @@
     "defaultMessage": "일련 번호"
   },
   "course.group.GroupShow.GroupTableCard.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers} 전체 ({numManagers} 관리자, {numNormals} 멤버)"
   },
   "course.group.GroupShow.fetchFailure": {
     "defaultMessage": "그룹 데이터를 가져오는 데 실패했습니다! 새로 고침 후 다시 시도하세요."
