@@ -1,6 +1,6 @@
 import { CourseUserRoles, CourseUserShape } from 'types/course/courseUsers';
 
-interface GroupMember {
+export interface GroupMember {
   id: number;
   name: string;
   role: CourseUserRoles;
@@ -8,13 +8,13 @@ interface GroupMember {
   groupRole: 'manager' | 'normal';
 }
 
-interface GroupCategory {
+export interface GroupCategory {
   id: number;
   name: string;
   description?: string;
 }
 
-interface Group {
+export interface Group {
   id: number;
   name: string;
   description?: string;

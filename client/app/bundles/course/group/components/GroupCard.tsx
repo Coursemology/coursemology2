@@ -1,3 +1,4 @@
+import { FC, ReactElement, ReactNode } from 'react';
 import {
   Button,
   Card,
@@ -7,22 +8,21 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import PropTypes from 'prop-types';
 
-export const groupCardTitleButtonShape = PropTypes.shape({
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-  onClick: PropTypes.func.isRequired,
-  isDisabled: PropTypes.bool,
-  icon: PropTypes.element,
-});
+export interface GroupCardTitleButton {
+  label: ReactElement;
+  onClick: () => void;
+  isDisabled?: boolean;
+  icon?: ReactElement;
+}
 
-export const groupCardBottomButtonShape = PropTypes.shape({
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-  onClick: PropTypes.func.isRequired,
-  isDisabled: PropTypes.bool,
-  icon: PropTypes.element,
-  isRight: PropTypes.bool,
-});
+export interface GroupCardBottomButton {
+  label: ReactElement;
+  onClick: () => void;
+  isDisabled?: boolean;
+  icon?: ReactElement;
+  isRight?: boolean;
+}
 
 const styles = {
   card: {
@@ -66,24 +66,21 @@ const styles = {
   },
 };
 
-function mapButtonObjectToElement(button, isLast) {
-  if (button.icon) {
-    return (
-      <Tooltip key={`tooltip_${button.label.props.id}`} title={button.label}>
-        <IconButton
-          key={button.label.props.id}
-          onClick={button.onClick}
-          style={{
-            ...styles.iconButton,
-            ...(isLast ? {} : styles.nonLastButton),
-          }}
-        >
-          {button.icon}
-        </IconButton>
-      </Tooltip>
-    );
-  }
-  return (
+function mapButtonObjectToElement(
+  button: GroupCardTitleButton | GroupCardBottomButton,
+  isLast: boolean,
+): ReactElement {
+  return button.icon ? (
+    <Tooltip key={`tooltip_${button.label.props.id}`} title={button.label}>
+      <IconButton
+        key={button.label.props.id}
+        onClick={button.onClick}
+        style={{ ...styles.iconButton, ...(!isLast && styles.nonLastButton) }}
+      >
+        {button.icon}
+      </IconButton>
+    </Tooltip>
+  ) : (
     <Button
       key={button.label.props.id}
       color="primary"
@@ -96,10 +93,19 @@ function mapButtonObjectToElement(button, isLast) {
   );
 }
 
+interface GroupCardProps {
+  title?: string | ReactElement;
+  subtitle?: string | ReactElement;
+  titleButtons?: GroupCardTitleButton[];
+  bottomButtons?: GroupCardBottomButton[];
+  className?: string;
+  children: ReactNode;
+}
+
 /**
  * A wrapper around MUI card to help standardise styling for groups.
  */
-const GroupCard = ({
+const GroupCard: FC<GroupCardProps> = ({
   title,
   subtitle,
   titleButtons = [],
@@ -161,19 +167,5 @@ const GroupCard = ({
     ) : null}
   </Card>
 );
-
-GroupCard.propTypes = {
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  titleButtons: PropTypes.arrayOf(groupCardTitleButtonShape),
-  bottomButtons: PropTypes.arrayOf(groupCardBottomButtonShape),
-  className: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.element,
-    PropTypes.string,
-    PropTypes.object,
-  ]).isRequired,
-};
 
 export default GroupCard;

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Checkbox,
@@ -10,13 +10,12 @@ import {
   TableRow,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import PropTypes from 'prop-types';
 
 import GhostIcon from 'lib/components/icons/GhostIcon';
 
 import GroupCard from '../../components/GroupCard';
 import GroupRoleChip from '../../components/GroupRoleChip';
-import { groupShape } from '../../propTypes';
+import { Group } from '../../types';
 import { sortByGroupRole, sortByName, sortByPhantom } from '../../utils/sort';
 
 const translations = defineMessages({
@@ -57,15 +56,29 @@ const translations = defineMessages({
 const styles = {
   empty: {
     paddingTop: '2rem',
-    textAlign: 'center',
+    textAlign: 'center' as const,
     color: grey[700],
   },
   rowHeight: {
     height: 36,
   },
+  checkbox: {
+    width: 'auto',
+    padding: 0,
+  },
 };
 
-const GroupTableCard = ({ group, onManageGroup, canManageCategory }) => {
+interface GroupTableCardProps {
+  group: Group;
+  onManageGroup: () => void;
+  canManageCategory: boolean;
+}
+
+const GroupTableCard: FC<GroupTableCardProps> = ({
+  group,
+  onManageGroup,
+  canManageCategory,
+}) => {
   const [hidePhantomStudents, setHidePhantomStudents] = useState(true);
 
   const allMembers = [...group.members];
@@ -156,12 +169,6 @@ const GroupTableCard = ({ group, onManageGroup, canManageCategory }) => {
       ) : null}
     </GroupCard>
   );
-};
-
-GroupTableCard.propTypes = {
-  group: groupShape.isRequired,
-  onManageGroup: PropTypes.func.isRequired,
-  canManageCategory: PropTypes.bool.isRequired,
 };
 
 export default GroupTableCard;

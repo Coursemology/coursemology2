@@ -1,8 +1,9 @@
+import { FC } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Chip } from '@mui/material';
 import palette from 'theme/palette';
 
-import { memberShape } from '../propTypes';
+import { GroupMember } from '../types';
 
 const translations = defineMessages({
   manager: {
@@ -15,7 +16,11 @@ const translations = defineMessages({
   },
 });
 
-const GroupRoleChip = ({ user }) => (
+interface GroupRoleChipProps {
+  user: GroupMember;
+}
+
+const GroupRoleChip: FC<GroupRoleChipProps> = ({ user }) => (
   <Chip
     label={<FormattedMessage {...translations[user.groupRole]} />}
     style={{
@@ -26,9 +31,5 @@ const GroupRoleChip = ({ user }) => (
     }}
   />
 );
-
-GroupRoleChip.propTypes = {
-  user: memberShape.isRequired,
-};
 
 export default GroupRoleChip;
