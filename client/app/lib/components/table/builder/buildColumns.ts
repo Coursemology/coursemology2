@@ -4,7 +4,11 @@ type TemplateAccessor<D extends Data> = (
   builtColumnIndex: number,
 ) => ColumnTemplate<D> | undefined;
 
-export type BuiltColumns<D extends Data, C> = [C[], TemplateAccessor<D>];
+export type BuiltColumns<D extends Data, C> = [
+  C[],
+  TemplateAccessor<D>,
+  number,
+];
 
 export const buildColumns = <D extends Data, C>(
   columns: ColumnTemplate<D>[],
@@ -24,5 +28,9 @@ export const buildColumns = <D extends Data, C>(
     return columnDefs;
   }, initial);
 
-  return [defColumns, (index): ColumnTemplate<D> => defToColumns[index]];
+  return [
+    defColumns,
+    (index): ColumnTemplate<D> => defToColumns[index],
+    initialColumnsLength,
+  ];
 };
