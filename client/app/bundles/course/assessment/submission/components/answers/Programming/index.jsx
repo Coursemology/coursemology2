@@ -106,7 +106,7 @@ const Programming = (props) => {
 
   return (
     <>
-      <div className="mt-5 flex w-full relative gap-3 mb-1 max-h-[100%]">
+      <div className="flex w-full relative gap-3 mb-1 max-h-[100%]">
         <div
           className={`${isLiveFeedbackChatOpen && isAttempting ? 'w-1/2' : 'w-full'}`}
         >

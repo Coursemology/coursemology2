@@ -3287,6 +3287,12 @@
   "course.assessment.submission.questionNumber": {
     "defaultMessage": "Q{数字}"
   },
+  "course.assessment.submission.questionDescription": {
+    "defaultMessage": "描述"
+  },
+  "course.assessment.submission.questionAnswer": {
+    "defaultMessage": "作答"
+  },
   "course.assessment.submission.readOnlyEditor.expandComments": {
     "defaultMessage": "展开所有评论"
   },

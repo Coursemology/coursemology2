@@ -179,8 +179,8 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
         openAnswerHistoryView={openAnswerHistoryView}
         questionId={question.id}
         questionNumber={questionNumber}
+        questionTitle={question.questionTitle}
       />
-      <Divider />
 
       {errorMessages.map((message) => (
         <Typography key={message} className="text-error" variant="body2">
@@ -188,17 +188,22 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
         </Typography>
       ))}
 
-      <Typography className="mt-2" variant="body1">
-        {question.questionTitle ?? ''}
+      {question.description && (
+        <>
+          <Typography color="text.secondary" variant="caption">
+            {t(translations.questionDescription)}
+          </Typography>
+          <Typography
+            dangerouslySetInnerHTML={{ __html: question.description }}
+            variant="body2"
+          />
+          <Divider />
+        </>
+      )}
+
+      <Typography color="text.secondary" variant="caption">
+        {t(translations.questionAnswer)}
       </Typography>
-
-      <Typography
-        dangerouslySetInnerHTML={{ __html: question.description }}
-        variant="body2"
-      />
-
-      <Divider />
-
       <Answer
         answerId={answerId}
         answerProps={answerPropsMap[questionType]}

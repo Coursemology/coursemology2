@@ -7,8 +7,6 @@ import FormEditorField from 'lib/components/form/fields/EditorField';
 
 import { fileShape } from '../propTypes';
 
-import ProgrammingFileDownloadChip from './answers/Programming/ProgrammingFileDownloadChip';
-
 const Editor = (props) => {
   const {
     file,
@@ -22,9 +20,6 @@ const Editor = (props) => {
 
   return (
     <Stack spacing={0.5}>
-      <div>
-        <ProgrammingFileDownloadChip file={file} />
-      </div>
       <Controller
         control={control}
         name={fieldName}

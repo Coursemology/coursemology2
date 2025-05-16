@@ -78,12 +78,19 @@ const HistoryToggle: FC<HistoryToggleProps> = (props) => {
 interface AnswerHeaderProps {
   questionId: number;
   questionNumber: number;
+  questionTitle: string;
   answerId: number | null;
   openAnswerHistoryView: (questionId: number, questionNumber: number) => void;
 }
 
 const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
-  const { answerId, questionId, questionNumber, openAnswerHistoryView } = props;
+  const {
+    answerId,
+    questionId,
+    questionNumber,
+    questionTitle,
+    openAnswerHistoryView,
+  } = props;
   const answerFlag = useAppSelector((state) =>
     getFlagForAnswerId(state, answerId),
   );
@@ -104,11 +111,16 @@ const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
       : answerFlag?.savingStatus;
 
   return (
-    <div className="flex items-center justify-between">
-      <Typography variant="h6">
-        {t(submissionTranslations.questionHeading, { number: questionNumber })}
+    <div className="flex items-center justify-between sticky top-0 z-10 bg-white border-only-b-neutral-200 -mx-5 px-5">
+      <div className="absolute -left-6 flex items-center justify-center rounded-full wh-10 bg-neutral-500">
+        <Typography color="white" variant="body2">
+          {questionNumber}
+        </Typography>
+      </div>
+      <Typography className="line-clamp-2 xl:line-clamp-1" variant="h6">
+        {questionTitle ||
+          t(submissionTranslations.questionHeading, { number: questionNumber })}
       </Typography>
-
       <div className="flex items-center space-x-4">
         <SavingIndicator
           savingSize={answerFlag?.savingSize}
