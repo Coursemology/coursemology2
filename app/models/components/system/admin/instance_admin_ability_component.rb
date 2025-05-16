@@ -26,9 +26,11 @@ module System::Admin::InstanceAdminAbilityComponent
   end
 
   def allow_instance_admin_manage_courses
-    can :manage, Course do |course|
-      course.instance.instance_users.administrator.exists?(user_id: user.id)
-    end
+    admin_instance_ids = user.instance_users.administrator.pluck(:instance_id)
+    can :manage, Course, instance_id: admin_instance_ids
+    can :manage_users, Course, instance_id: admin_instance_ids
+    can :manage, CourseUser, course: { instance_id: admin_instance_ids }
+    can :manage, Course::EnrolRequest, course: { instance_id: admin_instance_ids }
   end
 
   def allow_instance_admin_manage_role_requests
