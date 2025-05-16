@@ -75,7 +75,7 @@ const SavingIndicator = (props: SavingIndicatorProps): JSX.Element | null => {
         color={chipProps.color}
         icon={chipProps.icon}
         label={`${answerTooLarge ? t(translations.answerTooLarge) : t(chipProps.label)}${sizeFragment}`}
-        size="medium"
+        size="small"
         variant="outlined"
       />
     </Tooltip>

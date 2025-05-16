@@ -3326,6 +3326,12 @@
   "course.assessment.submission.questionNumber": {
     "defaultMessage": "Q{number}"
   },
+  "course.assessment.submission.questionDescription": {
+    "defaultMessage": "설명"
+  },
+  "course.assessment.submission.questionAnswer": {
+    "defaultMessage": "응답"
+  },
   "course.assessment.submission.readOnlyEditor.expandComments": {
     "defaultMessage": "모든 댓글 확장"
   },

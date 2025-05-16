@@ -26,7 +26,10 @@ const StepperButton: FC<Props> = (props) => {
     stepButtonColor = isCurrentQuestion ? blue[800] : lightBlue[400];
   }
   return (
-    <SvgIcon htmlColor={stepButtonColor}>
+    <SvgIcon
+      fontSize={isCurrentQuestion ? 'large' : 'medium'}
+      htmlColor={stepButtonColor}
+    >
       <circle cx="12" cy="12" r="12" />
       <text fill="#fff" fontSize="12" textAnchor="middle" x="12" y="16">
         {questionIndex + 1}

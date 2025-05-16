@@ -3341,6 +3341,12 @@
   "course.assessment.submission.questionNumber": {
     "defaultMessage": "Q{number}"
   },
+  "course.assessment.submission.questionDescription": {
+    "defaultMessage": "Description"
+  },
+  "course.assessment.submission.questionAnswer": {
+    "defaultMessage": "Answer"
+  },
   "course.assessment.submission.readOnlyEditor.expandComments": {
     "defaultMessage": "Expand all comments"
   },

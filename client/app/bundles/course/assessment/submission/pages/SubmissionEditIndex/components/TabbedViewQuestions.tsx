@@ -44,9 +44,9 @@ const TabbedViewQuestions: FC<Props> = (props) => {
       questionIds.length > 1 && (
         <Stepper
           activeStep={stepIndex}
+          className="justify-center flex-wrap p-4 gap-y-10"
           connector={<div />}
           nonLinear
-          style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 10 }}
         >
           {questionIds.map((id, index) => {
             if (shouldRenderActiveStepper(index)) {
@@ -56,6 +56,7 @@ const TabbedViewQuestions: FC<Props> = (props) => {
                   active={!autograded || index <= maxStep}
                 >
                   <StepButton
+                    className="p-4"
                     icon={
                       <StepperButton
                         questionId={id}
