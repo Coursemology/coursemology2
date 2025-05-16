@@ -1,16 +1,12 @@
 import { FC, useCallback, useMemo, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import Delete from '@mui/icons-material/Delete';
 import { red } from '@mui/material/colors';
 
 import { GroupCategory } from 'course/group/types';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { useAppDispatch } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteCategory, updateCategory } from '../../actions';
 import GroupCard, { GroupCardBottomButton } from '../../components/GroupCard';
@@ -83,6 +79,7 @@ const CategoryCard: FC<CategoryCardProps> = ({
   const dispatch = useAppDispatch();
 
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const { t } = useTranslation();
 
   const onFormSubmit = useCallback(
     (data, setError) => {
@@ -140,19 +137,19 @@ const CategoryCard: FC<CategoryCardProps> = ({
     const result: GroupCardBottomButton[] = [];
     if (canManageCategory) {
       result.push({
-        label: <FormattedMessage {...translations.edit} />,
+        label: t(translations.edit),
         onClick: handleEdit,
       });
     }
     if (canManageCategory) {
       result.push({
-        label: <FormattedMessage {...translations.manage} />,
+        label: t(translations.manage),
         onClick: onManageGroups,
       });
     }
     if (canManageCategory) {
       result.push({
-        label: <FormattedMessage {...translations.delete} />,
+        label: t(translations.delete),
         onClick: () => setIsConfirmingDelete(true),
         isRight: true,
         icon: <Delete htmlColor={red[500]} />,
@@ -166,14 +163,12 @@ const CategoryCard: FC<CategoryCardProps> = ({
     <>
       <GroupCard
         bottomButtons={bottomButtons}
-        subtitle={
-          <FormattedMessage values={{ numGroups }} {...translations.subtitle} />
-        }
+        subtitle={t(translations.subtitle, {
+          numGroups,
+        })}
         title={category.name}
       >
-        {category.description ?? (
-          <FormattedMessage {...translations.noDescription} />
-        )}
+        {category.description ?? t(translations.noDescription)}
       </GroupCard>
       {canManageCategory && (
         <>

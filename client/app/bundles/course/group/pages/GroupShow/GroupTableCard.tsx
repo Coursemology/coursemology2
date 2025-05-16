@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import {
   Checkbox,
   FormControlLabel,
@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 
 import GhostIcon from 'lib/components/icons/GhostIcon';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import GroupCard from '../../components/GroupCard';
 import GroupRoleChip from '../../components/GroupRoleChip';
@@ -64,6 +65,7 @@ const GroupTableCard: FC<GroupTableCardProps> = ({
   canManageCategory,
 }) => {
   const [hidePhantomStudents, setHidePhantomStudents] = useState(true);
+  const { t } = useTranslation();
 
   const allMembers = [...group.members];
   allMembers.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
@@ -82,24 +84,23 @@ const GroupTableCard: FC<GroupTableCardProps> = ({
       ...(canManageCategory
         ? [
             {
-              label: <FormattedMessage {...translations.manageOneGroup} />,
+              label: t(translations.manageOneGroup),
               onClick: onManageGroup,
             },
           ]
         : []),
     ],
 
-    [onManageGroup, canManageCategory],
+    [onManageGroup, canManageCategory, t],
   );
 
   return (
     <GroupCard
-      subtitle={
-        <FormattedMessage
-          values={{ numMembers, numManagers, numNormals }}
-          {...translations.subtitle}
-        />
-      }
+      subtitle={t(translations.subtitle, {
+        numMembers,
+        numManagers,
+        numNormals,
+      })}
       title={group.name}
       titleButtons={titleButton}
     >
@@ -112,21 +113,17 @@ const GroupTableCard: FC<GroupTableCardProps> = ({
               onChange={(_, checked) => setHidePhantomStudents(checked)}
             />
           }
-          label={<FormattedMessage {...translations.hidePhantomStudents} />}
+          label={t(translations.hidePhantomStudents)}
         />
       )}
       <Table>
         <TableHead>
           <TableRow className="h-9">
             <TableCell className="h-9">
-              <FormattedMessage {...translations.serialNumber} />
+              {t(translations.serialNumber)}
             </TableCell>
-            <TableCell className="h-9">
-              <FormattedMessage {...translations.name} />
-            </TableCell>
-            <TableCell className="h-9">
-              <FormattedMessage {...translations.role} />
-            </TableCell>
+            <TableCell className="h-9">{t(translations.name)}</TableCell>
+            <TableCell className="h-9">{t(translations.role)}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -148,7 +145,7 @@ const GroupTableCard: FC<GroupTableCardProps> = ({
       </Table>
       {members.length === 0 ? (
         <div className="pt-8 text-center text-gray-700">
-          <FormattedMessage {...translations.noMembers} />
+          {t(translations.noMembers)}
         </div>
       ) : null}
     </GroupCard>
