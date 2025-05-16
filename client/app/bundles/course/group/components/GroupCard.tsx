@@ -10,14 +10,14 @@ import {
 } from '@mui/material';
 
 export interface GroupCardTitleButton {
-  label: ReactElement;
+  label: string | ReactElement;
   onClick: () => void;
   isDisabled?: boolean;
   icon?: ReactElement;
 }
 
 export interface GroupCardBottomButton {
-  label: ReactElement;
+  label: string | ReactElement;
   onClick: () => void;
   isDisabled?: boolean;
   icon?: ReactElement;
@@ -27,11 +27,12 @@ export interface GroupCardBottomButton {
 function mapButtonObjectToElement(
   button: GroupCardTitleButton | GroupCardBottomButton,
   isLast: boolean,
+  index: number,
 ): ReactElement {
   return button.icon ? (
-    <Tooltip key={`tooltip_${button.label.props.id}`} title={button.label}>
+    <Tooltip key={`tooltip_${index}`} title={button.label}>
       <IconButton
-        key={button.label.props.id}
+        key={index}
         className={`h-15 w-15 p-2.5 ${!isLast ? 'mr-4' : ''}`}
         onClick={button.onClick}
       >
@@ -40,7 +41,7 @@ function mapButtonObjectToElement(
     </Tooltip>
   ) : (
     <Button
-      key={button.label.props.id}
+      key={index}
       className={!isLast ? 'mr-4' : ''}
       color="primary"
       onClick={button.onClick}
@@ -85,6 +86,7 @@ const GroupCard: FC<GroupCardProps> = ({
                   mapButtonObjectToElement(
                     button,
                     index === titleButtons.length - 1,
+                    index,
                   ),
                 )}
               </div>
@@ -106,6 +108,7 @@ const GroupCard: FC<GroupCardProps> = ({
               mapButtonObjectToElement(
                 button,
                 index === titleButtons.length - 1,
+                index,
               ),
             )}
         </div>
@@ -116,6 +119,7 @@ const GroupCard: FC<GroupCardProps> = ({
               mapButtonObjectToElement(
                 button,
                 index === titleButtons.length - 1,
+                index,
               ),
             )}
         </div>
