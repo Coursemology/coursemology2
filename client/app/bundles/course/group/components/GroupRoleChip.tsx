@@ -22,13 +22,8 @@ interface GroupRoleChipProps {
 
 const GroupRoleChip: FC<GroupRoleChipProps> = ({ user }) => (
   <Chip
+    className={`w-40 h-10 ${palette.groupRole[user.groupRole]} mr-2`}
     label={<FormattedMessage {...translations[user.groupRole]} />}
-    style={{
-      width: 100,
-      height: 25,
-      backgroundColor: palette.groupRole[user.groupRole],
-      marginRight: 5,
-    }}
   />
 );
 

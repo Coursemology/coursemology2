@@ -9,7 +9,6 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { grey } from '@mui/material/colors';
 
 import GhostIcon from 'lib/components/icons/GhostIcon';
 
@@ -52,21 +51,6 @@ const translations = defineMessages({
     defaultMessage: 'Hide all phantom students',
   },
 });
-
-const styles = {
-  empty: {
-    paddingTop: '2rem',
-    textAlign: 'center' as const,
-    color: grey[700],
-  },
-  rowHeight: {
-    height: 36,
-  },
-  checkbox: {
-    width: 'auto',
-    padding: 0,
-  },
-};
 
 interface GroupTableCardProps {
   group: Group;
@@ -121,6 +105,7 @@ const GroupTableCard: FC<GroupTableCardProps> = ({
     >
       {hasPhantomMembers && (
         <FormControlLabel
+          className="w-auto p-0"
           control={
             <Checkbox
               checked={hidePhantomStudents}
@@ -128,34 +113,33 @@ const GroupTableCard: FC<GroupTableCardProps> = ({
             />
           }
           label={<FormattedMessage {...translations.hidePhantomStudents} />}
-          style={styles.checkbox}
         />
       )}
       <Table>
         <TableHead>
-          <TableRow style={styles.rowHeight}>
-            <TableCell style={styles.rowHeight}>
+          <TableRow className="h-9">
+            <TableCell className="h-9">
               <FormattedMessage {...translations.serialNumber} />
             </TableCell>
-            <TableCell style={styles.rowHeight}>
+            <TableCell className="h-9">
               <FormattedMessage {...translations.name} />
             </TableCell>
-            <TableCell style={styles.rowHeight}>
+            <TableCell className="h-9">
               <FormattedMessage {...translations.role} />
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {members.map((m, index) => (
-            <TableRow key={m.id} style={styles.rowHeight}>
-              <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
-              <TableCell style={styles.rowHeight}>
+            <TableRow key={m.id} className="h-9">
+              <TableCell className="h-9">{index + 1}</TableCell>
+              <TableCell className="h-9">
                 <div className="flex grow items-center">
                   {m.name}
                   {m.isPhantom && <GhostIcon />}
                 </div>
               </TableCell>
-              <TableCell style={styles.rowHeight}>
+              <TableCell className="h-9">
                 <GroupRoleChip user={m} />
               </TableCell>
             </TableRow>
@@ -163,7 +147,7 @@ const GroupTableCard: FC<GroupTableCardProps> = ({
         </TableBody>
       </Table>
       {members.length === 0 ? (
-        <div style={styles.empty}>
+        <div className="pt-8 text-center text-gray-700">
           <FormattedMessage {...translations.noMembers} />
         </div>
       ) : null}

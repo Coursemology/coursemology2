@@ -24,48 +24,6 @@ export interface GroupCardBottomButton {
   isRight?: boolean;
 }
 
-const styles = {
-  card: {
-    marginBottom: '2rem',
-  },
-  cardHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-  },
-  cardHeaderFullWidthTitle: {
-    width: '100%',
-    paddingRight: 0,
-  },
-  title: {
-    fontWeight: 'bold',
-    marginTop: '0.5rem',
-    marginBottom: 0,
-  },
-  body: {
-    paddingTop: 0,
-  },
-  actions: {
-    padding: 16,
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  buttonsContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  nonLastButton: {
-    marginRight: '1rem',
-  },
-  iconButton: {
-    height: 36,
-    width: 36,
-    padding: 6,
-  },
-};
-
 function mapButtonObjectToElement(
   button: GroupCardTitleButton | GroupCardBottomButton,
   isLast: boolean,
@@ -74,8 +32,8 @@ function mapButtonObjectToElement(
     <Tooltip key={`tooltip_${button.label.props.id}`} title={button.label}>
       <IconButton
         key={button.label.props.id}
+        className={`h-15 w-15 p-2.5 ${!isLast ? 'mr-4' : ''}`}
         onClick={button.onClick}
-        style={{ ...styles.iconButton, ...(!isLast && styles.nonLastButton) }}
       >
         {button.icon}
       </IconButton>
@@ -83,9 +41,9 @@ function mapButtonObjectToElement(
   ) : (
     <Button
       key={button.label.props.id}
+      className={!isLast ? 'mr-4' : ''}
       color="primary"
       onClick={button.onClick}
-      style={isLast ? undefined : styles.nonLastButton}
       variant="contained"
     >
       {button.label}
@@ -113,16 +71,16 @@ const GroupCard: FC<GroupCardProps> = ({
   className = '',
   children,
 }) => (
-  <Card className={className} style={styles.card}>
+  <Card className={`mb-8 ${className}`}>
     {title || subtitle ? (
       <CardHeader
         subheader={subtitle}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         title={
-          <div style={styles.cardHeader}>
-            <h3 style={styles.title}>{title}</h3>
+          <div className="flex justify-between items-center w-full">
+            <h3 className="font-bold mt-2 mb-0">{title}</h3>
             {titleButtons.length > 0 && (
-              <div style={styles.buttonsContainer}>
+              <div className="flex justify-center items-center">
                 {titleButtons.map((button, index) =>
                   mapButtonObjectToElement(
                     button,
@@ -134,15 +92,13 @@ const GroupCard: FC<GroupCardProps> = ({
           </div>
         }
         titleTypographyProps={
-          titleButtons.length > 0
-            ? { style: styles.cardHeaderFullWidthTitle }
-            : {}
+          titleButtons.length > 0 ? { className: 'w-full pr-0' } : {}
         }
       />
     ) : null}
-    <CardContent style={styles.body}>{children}</CardContent>
+    <CardContent className="pt-0">{children}</CardContent>
     {bottomButtons.length > 0 ? (
-      <CardActions style={styles.actions}>
+      <CardActions className="p-6 flex justify-between">
         <div>
           {bottomButtons
             .filter((b) => !b.isRight)

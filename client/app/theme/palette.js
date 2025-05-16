@@ -90,8 +90,8 @@ const palette = {
   },
 
   groupRole: {
-    [groupRole.Normal]: colors.green[100],
-    [groupRole.Manager]: colors.red[100],
+    [groupRole.Normal]: 'bg-green-200',
+    [groupRole.Manager]: 'bg-red-200',
   },
 
   submissionIcon: {
