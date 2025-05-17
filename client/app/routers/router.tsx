@@ -1,19 +1,24 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { RouteObject } from 'react-router-dom';
 import { resetStore } from 'store';
-
-import ErrorPage from 'bundles/common/ErrorPage';
-import PrivacyPolicyPage from 'bundles/common/PrivacyPolicyPage';
-import TermsOfServicePage from 'bundles/common/TermsOfServicePage';
-import CoursesIndex from 'bundles/course/courses/pages/CoursesIndex';
-import AppContainer from 'lib/containers/AppContainer';
-import CourselessContainer from 'lib/containers/CourselessContainer';
 
 const createAppRouter = (router: RouteObject[]): RouteObject[] => [
   {
     path: '/',
-    element: <AppContainer />,
-    loader: AppContainer.loader,
-    errorElement: <AppContainer.ErrorBoundary />,
+    lazy: async () => {
+      const AppContainer = (
+        await import(
+          /* webpackChunkName: "AppContainer" */
+          'lib/containers/AppContainer'
+        )
+      ).default;
+
+      return {
+        Component: AppContainer,
+        loader: AppContainer.loader,
+        errorElement: <AppContainer.ErrorBoundary />,
+      };
+    },
     shouldRevalidate: (props): boolean => {
       const isChangingCourse =
         props.currentParams.courseId !== props.nextParams.courseId;
@@ -35,36 +40,102 @@ const createAppRouter = (router: RouteObject[]): RouteObject[] => [
       ...router,
       {
         path: '*',
-        element: <CourselessContainer withCourseSwitcher withUserMenu />,
+        lazy: async () => {
+          const CourselessContainer = (
+            await import(
+              /* webpackChunkName: "CourselessContainer" */
+              'lib/containers/CourselessContainer'
+            )
+          ).default;
+
+          return {
+            element: <CourselessContainer withCourseSwitcher withUserMenu />,
+          };
+        },
         children: [
           {
             path: 'courses',
-            handle: CoursesIndex.handle,
-            element: <CoursesIndex />,
+            lazy: async () => {
+              const CoursesIndex = (
+                await import(
+                  /* webpackChunkName: "CoursesIndex" */
+                  'bundles/course/courses/pages/CoursesIndex'
+                )
+              ).default;
+
+              return {
+                Component: CoursesIndex,
+                handle: CoursesIndex.handle,
+              };
+            },
           },
           {
             path: 'pages',
             children: [
               {
                 path: 'terms_of_service',
-                handle: TermsOfServicePage.handle,
-                element: <TermsOfServicePage />,
+                lazy: async () => {
+                  const TermsOfServicePage = (
+                    await import(
+                      /* webpackChunkName: "TermsOfServicePage" */
+                      'bundles/common/TermsOfServicePage'
+                    )
+                  ).default;
+
+                  return {
+                    Component: TermsOfServicePage,
+                    handle: TermsOfServicePage.handle,
+                  };
+                },
               },
               {
                 path: 'privacy_policy',
-                handle: PrivacyPolicyPage.handle,
-                element: <PrivacyPolicyPage />,
+                lazy: async () => {
+                  const PrivacyPolicyPage = (
+                    await import(
+                      /* webpackChunkName: "PrivacyPolicyPage" */
+                      'bundles/common/PrivacyPolicyPage'
+                    )
+                  ).default;
+
+                  return {
+                    Component: PrivacyPolicyPage,
+                    handle: PrivacyPolicyPage.handle,
+                  };
+                },
               },
             ],
           },
           {
             path: 'forbidden',
-            loader: ErrorPage.Forbidden.loader,
-            element: <ErrorPage.Forbidden />,
+            lazy: async () => {
+              const ErrorPage = (
+                await import(
+                  /* webpackChunkName: "ErrorPage" */
+                  'bundles/common/ErrorPage'
+                )
+              ).default;
+
+              return {
+                Component: ErrorPage.Forbidden,
+                loader: ErrorPage.Forbidden.loader,
+              };
+            },
           },
           {
             path: '*',
-            element: <ErrorPage.NotFound />,
+            lazy: async () => {
+              const ErrorPage = (
+                await import(
+                  /* webpackChunkName: "ErrorPage" */
+                  'bundles/common/ErrorPage'
+                )
+              ).default;
+
+              return {
+                Component: ErrorPage.NotFound,
+              };
+            },
           },
         ],
       },

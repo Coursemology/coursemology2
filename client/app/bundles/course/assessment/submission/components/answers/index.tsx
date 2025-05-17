@@ -207,7 +207,6 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
       <Answer
         answerId={answerId}
         answerProps={answerPropsMap[questionType]}
-        question={question}
         questionType={questionType}
       />
     </>

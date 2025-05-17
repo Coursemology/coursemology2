@@ -11,18 +11,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const packageJSON = require('./package.json');
+const cssIncludes = require('./css-includes.json');
 
 const ENV_DIR = process.env.BABEL_ENV === 'e2e-test' ? './.env.test' : './.env';
 
 module.exports = {
-  entry: {
-    coursemology: [
-      '@babel/polyfill',
-      'jquery',
-      './app/index',
-      './app/lib/moment-timezone',
-    ],
-  },
+  entry: './app/index.tsx',
   output: {
     path: join(__dirname, 'build'),
     publicPath: '/',
@@ -46,28 +40,6 @@ module.exports = {
   optimization: {
     splitChunks: {
       chunks: 'all',
-      name: (_, chunks, cacheGroupKey) => {
-        /**
-         * Workers are not part of the `coursemology` runtime, so their dependencies
-         * are packed in a separate chunk. This chunk has `name` set to `undefined`.
-         * When simply `Array.prototype.join`ed, we will get weird chunk names like
-         * `vendors~coursemology~.js` or `vendors~.js` that `application_helper.rb`
-         * should inject. Normally, this isn't an issue with `HtmlWebpackPlugin`, but
-         * since we don't have that and are manually injecting webpack assets in
-         * `layouts/default.html.slim`, we combine these `undefined` chunks into
-         * `coursemology`'s runtime. So, we have one `vendors~coursemology.js`.
-         */
-        const allChunksNames =
-          chunks
-            .map((chunk) => chunk.name)
-            .filter((name) => Boolean(name))
-            .join('~') || 'coursemology';
-
-        const prefix =
-          cacheGroupKey === 'defaultVendors' ? 'vendors' : cacheGroupKey;
-
-        return `${prefix}~${allChunksNames}`;
-      },
     },
     moduleIds: 'deterministic',
   },
@@ -100,31 +72,12 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-        include: [
-          resolve(__dirname, 'node_modules/rc-slider/assets'),
-          resolve(
-            __dirname,
-            'node_modules/react-image-crop/dist/ReactCrop.css',
-          ),
-          resolve(
-            __dirname,
-            'node_modules/react-tooltip/dist/react-tooltip.min.css',
-          ),
-          resolve(__dirname, 'app/lib/components/core/fields/CKEditor.css'),
-          resolve(__dirname, 'app/lib/components/core/fields/AceEditor.css'),
+        use: [
+          'style-loader',
+          { loader: 'css-loader', options: { sourceMap: false } },
+          'postcss-loader',
         ],
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
-        include: [resolve(__dirname, 'app/theme/index.css')],
-      },
-      {
-        test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-        include: [resolve(__dirname, 'app/lib/styles')],
-        exclude: /node_modules/,
+        include: cssIncludes.map((path) => resolve(__dirname, path)),
       },
       {
         test: /\.scss$/,
@@ -133,15 +86,16 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1,
+              sourceMap: false,
               modules: {
                 localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
               },
             },
           },
+          'postcss-loader',
           'sass-loader',
         ],
-        exclude: [/node_modules/, resolve(__dirname, 'app/lib/styles')],
+        exclude: [/node_modules/],
       },
       {
         test: /\.(csv|png|svg)$/i,
