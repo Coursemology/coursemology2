@@ -12,6 +12,7 @@ json.students @all_students do |student|
   json.id student.id
   json.name student.name
   json.nameLink course_user_path(current_course, student)
+  json.email student.user.email
   json.studentType student.phantom? ? 'Phantom' : 'Normal'
 
   unless no_group_managers

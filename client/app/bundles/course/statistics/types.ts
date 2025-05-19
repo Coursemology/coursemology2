@@ -8,6 +8,7 @@ export interface Student {
   id: number;
   name: string;
   nameLink: string;
+  email: string;
   studentType: 'Phantom' | 'Normal';
   isMyStudent: boolean;
   groupManagers?: GroupManager[];
