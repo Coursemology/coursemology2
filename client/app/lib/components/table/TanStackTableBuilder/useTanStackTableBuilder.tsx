@@ -71,7 +71,10 @@ const useTanStackTableBuilder = <D extends object>(
       globalFilter: searchKeyword.trim(),
       pagination,
       columnVisibility: Object.fromEntries(
-        props.columns.map((column) => [column.title, !column.hidden]),
+        props.columns.map((column) => [
+          column.of ?? column.title,
+          !column.hidden,
+        ]),
       ),
     },
     initialState: {

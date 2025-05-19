@@ -105,7 +105,7 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       searchable: true,
       cell: (student) => (
         <Link key={student.id} opensInNewTab to={student.nameLink}>
-          <div>{student.name}</div>
+          {student.name}
         </Link>
       ),
       csvDownloadable: true,
@@ -113,8 +113,7 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
     {
       of: 'email',
       title: t(translations.email),
-      sortable: true,
-      searchable: true,
+      hidden: true,
       cell: (student) => student.email,
       csvDownloadable: true,
     },
