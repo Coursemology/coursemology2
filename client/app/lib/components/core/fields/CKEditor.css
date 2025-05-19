@@ -1,10 +1,13 @@
 /* Below are needed to ensure ckeditor popup (eg link)
 is rendered properly in MUI dialog */
-
 .ck-body-wrapper {
   position: absolute;
   z-index: 1500;
   .ck-powered-by {
     display: none;
   }
+}
+
+.ck-editor__editable {
+  max-height: 35rem;
 }
