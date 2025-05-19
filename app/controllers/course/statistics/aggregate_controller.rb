@@ -23,7 +23,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def all_students
-    @all_students = course_users.students.ordered_by_experience_points.with_video_statistics
+    @all_students = course_users.students.includes(user: :emails).ordered_by_experience_points.with_video_statistics
     @service = group_manager_preload_service
   end
 
