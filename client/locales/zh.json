@@ -5330,6 +5330,9 @@
   "course.statistics.StatisticsIndex.students.name": {
     "defaultMessage": "姓名"
   },
+  "course.statistics.StatisticsIndex.students.email": {
+    "defaultMessage": "电子邮件"
+  },
   "course.statistics.StatisticsIndex.students.noStudents": {
     "defaultMessage": "该课程还没有学生"
   },

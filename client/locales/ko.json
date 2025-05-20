@@ -5369,6 +5369,9 @@
   "course.statistics.StatisticsIndex.students.name": {
     "defaultMessage": "이름"
   },
+  "course.statistics.StatisticsIndex.students.email": {
+    "defaultMessage": "이메일"
+  },
   "course.statistics.StatisticsIndex.students.noStudents": {
     "defaultMessage": "아직 이 과정에 학생이 없습니다..."
   },

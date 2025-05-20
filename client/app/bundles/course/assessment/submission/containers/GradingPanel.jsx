@@ -197,7 +197,7 @@ class VisibleGradingPanel extends Component {
         <Typography variant="h6">
           {intl.formatMessage(translations.gradeSummary)}
         </Typography>
-        <Table style={styles.table}>
+        <Table size="small" style={styles.table}>
           <TableHead>
             <TableRow>
               <TableCell colSpan={2} style={styles.headerColumn}>
@@ -280,7 +280,7 @@ class VisibleGradingPanel extends Component {
         <Typography variant="h6">
           {intl.formatMessage(translations.statistics)}
         </Typography>
-        <Table style={styles.table}>
+        <Table size="small" style={styles.table}>
           <TableBody>
             {tableRow(
               'student',

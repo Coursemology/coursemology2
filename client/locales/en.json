@@ -5387,6 +5387,9 @@
   "course.statistics.StatisticsIndex.students.name": {
     "defaultMessage": "Name"
   },
+  "course.statistics.StatisticsIndex.students.email": {
+    "defaultMessage": "Email"
+  },
   "course.statistics.StatisticsIndex.students.noStudents": {
     "defaultMessage": "There is no student in this course, yet..."
   },

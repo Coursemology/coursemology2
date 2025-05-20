@@ -21,6 +21,10 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.students.name',
     defaultMessage: 'Name',
   },
+  email: {
+    id: 'course.statistics.StatisticsIndex.students.email',
+    defaultMessage: 'Email',
+  },
   studentType: {
     id: 'course.statistics.StatisticsIndex.students.studentsType',
     defaultMessage: 'Student Type',
@@ -99,7 +103,18 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
       title: t(translations.name),
       sortable: true,
       searchable: true,
-      cell: (student) => student.name,
+      cell: (student) => (
+        <Link key={student.id} opensInNewTab to={student.nameLink}>
+          {student.name}
+        </Link>
+      ),
+      csvDownloadable: true,
+    },
+    {
+      of: 'email',
+      title: t(translations.email),
+      hidden: true,
+      cell: (student) => student.email,
       csvDownloadable: true,
     },
     {
