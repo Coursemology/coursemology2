@@ -136,7 +136,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
           accept_prompt
         end.to change { forum.topics.exists?(topic.id) }.to(false)
 
-        expect(current_path).to eq(course_forum_path(course, forum))
+        expect(page).to have_current_path(course_forum_path(course, forum))
         expect(page).to have_no_selector("tr.topic_#{topic.id}")
       end
 
@@ -323,7 +323,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         topic = create(:forum_topic, forum: forum)
         topic.subscriptions.create(user: user)
         visit course_forum_topic_path(course, topic.forum, topic, subscribe_topic: false)
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_current_path(course_forum_topic_path(course, forum, topic, { subscribe_topic: false }))
         expect_toastify("You have successfully been unsubscribed from the forum topic #{topic.title}.")
         expect(Course::Discussion::Topic::Subscription.where(user: user, topic: topic).empty?).to eq(true)
 

@@ -81,7 +81,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find("button.post-delete-#{post.id}").click
           accept_prompt
         end.to change { topic.posts.exists?(post.id) }.to(false)
-        expect(current_path).to eq(course_forum_path(course, forum))
+        expect(page).to have_current_path(course_forum_path(course, forum))
         expect(page).to have_no_selector("tr.topic_#{topic.id}")
         expect(forum.topics.exists?(topic.id)).to eq(false)
       end

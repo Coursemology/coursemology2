@@ -7,8 +7,12 @@ RSpec.feature 'Course: Administration: Components', js: true do
   with_tenant(:instance) do
     let(:course) { create(:course) }
     let(:components) { course.disableable_components }
-    let(:sample_component) { components.sample }
-    before { login_as(user, scope: :user) }
+    let(:enabled_components) { course.reload.enabled_components }
+    before do
+      login_as(user, scope: :user)
+      course.set_component_enabled_boolean!(components.first.key, true)
+      course.set_component_enabled_boolean!(components.second.key, false)
+    end
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
@@ -16,7 +20,6 @@ RSpec.feature 'Course: Administration: Components', js: true do
       scenario 'I can view the list of enabled/disabled components' do
         visit course_admin_components_path(course)
 
-        enabled_components = course.enabled_components
         components.each do |component|
           expect(page).to have_selector('label', text: component.display_name)
           within find('label', text: component.display_name) do
@@ -32,6 +35,7 @@ RSpec.feature 'Course: Administration: Components', js: true do
       scenario 'I can disable and enable a component' do
         visit course_admin_components_path(course)
 
+        sample_component = components.intersection(enabled_components).sample
         control = find('label', text: sample_component.display_name)
         control.click
         expect_toastify('Your changes have been saved. Refresh to see the new changes.', dismiss: true)
