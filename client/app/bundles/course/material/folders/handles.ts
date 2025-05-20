@@ -22,8 +22,11 @@ const getFolderTitle = async (
     .then((response) => response.data.breadcrumbs)
     .catch((error) => {
       const response = (error as AxiosError<FolderData>).response;
-      if (!response?.data.breadcrumbs) throw new Error('Root folder not found');
-      return [...response.data.breadcrumbs, { id: -1, name: '' }];
+      const placeholderCrumb = { id: -1, name: '' };
+      if (!response?.data.breadcrumbs) {
+        return [placeholderCrumb];
+      }
+      return [...response.data.breadcrumbs, placeholderCrumb];
     })
     .then((breadcrumbs) => ({
       activePath: `${courseUrl}/materials/folders/${breadcrumbs[0].id}`,
