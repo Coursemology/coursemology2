@@ -113,7 +113,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
           accept_prompt
         end.to change { course.forums.exists?(forum.id) }.to(false)
 
-        expect(current_path).to eq(course_forums_path(course))
+        expect(page).to have_current_path(course_forums_path(course))
         expect(page).to have_no_selector("tr.forum_#{forum.id}")
       end
 
@@ -183,7 +183,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         forum = create(:forum, course: course)
         forum.subscriptions.create(user: user)
         visit course_forum_path(course, forum, subscribe_forum: false)
-        expect(current_path).to eq(course_forum_path(course, forum))
+        expect(page).to have_current_path(course_forum_path(course, forum, { subscribe_forum: false }))
         expect_toastify("You have successfully been unsubscribed from #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
 
@@ -204,7 +204,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         find('button.mark-all-as-read-button').click
         wait_for_page
 
-        expect(current_path).to eq(course_forums_path(course))
+        expect(page).to have_current_path(course_forums_path(course))
         expect(topics.all? { |t| t.unread?(user) }).to be_falsy
       end
 
@@ -220,7 +220,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         find('button.mark-all-as-read-button').click
         wait_for_page
 
-        expect(current_path).to eq(course_forum_path(course, forum))
+        expect(page).to have_current_path(course_forum_path(course, forum))
         expect(topics.all? { |t| t.unread?(user) }).to be_falsy
       end
 
