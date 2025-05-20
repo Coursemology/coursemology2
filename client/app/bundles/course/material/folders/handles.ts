@@ -11,6 +11,10 @@ const translations = defineMessages({
     id: 'course.material.folders.FolderShow.folderNotFound',
     defaultMessage: 'Folder not found',
   },
+  error: {
+    id: 'course.material.folders.FolderShow.error',
+    defaultMessage: '(Error)',
+  },
 });
 
 const getFolderTitle = async (
@@ -22,13 +26,16 @@ const getFolderTitle = async (
     .then((response) => response.data.breadcrumbs)
     .catch((error) => {
       const response = (error as AxiosError<FolderData>).response;
-      if (!response?.data.breadcrumbs) throw new Error('Root folder not found');
-      return [...response.data.breadcrumbs, { id: -1, name: '' }];
+      const placeholderCrumb = { id: -1, name: '' };
+      if (!response?.data.breadcrumbs) {
+        return [placeholderCrumb];
+      }
+      return [...response.data.breadcrumbs, placeholderCrumb];
     })
     .then((breadcrumbs) => ({
       activePath: `${courseUrl}/materials/folders/${breadcrumbs[0].id}`,
       content: breadcrumbs.map((crumb) => ({
-        title: crumb.id < 0 ? translations.folderNotFound : crumb.name,
+        title: crumb.id < 0 ? translations.error : crumb.name,
         url: `materials/folders/${crumb.id < 0 ? '' : crumb.id}`,
       })),
     }));
