@@ -31,9 +31,6 @@ interface RubricPanelRowProps {
   questionId: number;
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
-  setCategoryGrades: Dispatch<
-    SetStateAction<Record<number, AnswerRubricGradeData>>
-  >;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
 }
 
