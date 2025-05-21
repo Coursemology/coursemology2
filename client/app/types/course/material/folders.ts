@@ -91,6 +91,12 @@ export interface FolderData {
   advanceStartAt: number;
   permissions: FolderPermissions;
 }
+export interface BreadcrumbData {
+  breadcrumbs: {
+    id: number;
+    name: string;
+  }[];
+}
 
 export interface FolderFormData {
   name: string;
