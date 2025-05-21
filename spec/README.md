@@ -9,7 +9,7 @@ Our tests are written using the [RSpec](https://rspec.info/) framework for Ruby.
 First, make sure the test database is seeded before running any specs:
 
 ```bash
-RAILS_ENV=test bundle exec rake db:seed
+RAILS_ENV=test bundle exec rake db:setup
 ```
 
 Then, make sure the [authentication server](../authentication/README.md) is running.
