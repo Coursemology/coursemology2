@@ -62,6 +62,10 @@ class Course::Material::FoldersController < Course::Material::Controller
     render partial: 'jobs/submitted', locals: { job: job }
   end
 
+  def breadcrumbs
+    @folder = current_course.root_folder unless params[:id]
+  end
+
   private
 
   def authorize_read_owner!

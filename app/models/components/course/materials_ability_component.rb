@@ -29,7 +29,7 @@ module Course::MaterialsAbilityComponent
       end
 
       opened_material_hashes.each do |properties|
-        can [:read, :download],
+        can [:read, :download, :breadcrumbs],
             Course::Material::Folder, { course_id: course.id }.reverse_merge(properties)
       end
     end

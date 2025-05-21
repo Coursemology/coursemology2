@@ -109,5 +109,40 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
         end
       end
     end
+
+    describe '#breadcrumbs' do
+      render_views
+
+      context 'when fetching breadcrumbs for a specific folder (member route)' do
+        let!(:ancestor) { create(:folder, course: course, parent: course.root_folder) }
+        let!(:folder) { create(:folder, course: course, parent: ancestor) }
+
+        subject do
+          get :breadcrumbs, as: :json, params: { course_id: course, id: folder.id }
+        end
+
+        it 'returns 200 and includes ancestor and folder in breadcrumbs' do
+          subject
+          expect(response).to have_http_status(:ok)
+          json = JSON.parse(response.body)
+          breadcrumb_ids = json['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id, ancestor.id, folder.id])
+        end
+      end
+
+      context 'when fetching breadcrumbs for root folder (collection route)' do
+        subject do
+          get :breadcrumbs, as: :json, params: { course_id: course }
+        end
+
+        it 'returns 200 and includes only root folder in breadcrumbs' do
+          subject
+          expect(response).to have_http_status(:ok)
+          json = JSON.parse(response.body)
+          breadcrumb_ids = json['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id])
+        end
+      end
+    end
   end
 end
