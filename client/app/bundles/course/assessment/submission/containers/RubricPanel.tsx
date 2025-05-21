@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo } from 'react';
 import {
   Table,
   TableBody,
@@ -7,7 +7,6 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import { useAppSelector } from 'lib/hooks/store';
@@ -42,21 +41,21 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
     getRubricCategoryGradesForAnswerId(state, answerId),
   );
 
-  const categoryGradeHash = categoryGrade.reduce(
-    (obj, category) => ({
-      ...obj,
-      [category.categoryId]: {
-        id: category.id,
-        gradeId: category.gradeId,
-        grade: category.grade,
-        explanation: category.explanation,
-      },
-    }),
-    {},
-  );
+  const categoryGrades = useMemo(() => {
+    const categoryGradeHash = categoryGrade.reduce(
+      (obj, category) => ({
+        ...obj,
+        [category.categoryId]: {
+          id: category.id,
+          gradeId: category.gradeId,
+          grade: category.grade,
+          explanation: category.explanation,
+        },
+      }),
+      {},
+    );
 
-  const initialCategoriesGrade: Record<number, AnswerRubricGradeData> =
-    question.categories.reduce(
+    return question.categories.reduce(
       (obj, category) => ({
         ...obj,
         [category.id]: {
@@ -69,8 +68,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
       }),
       {},
     );
-
-  const [categoryGrades, setCategoryGrades] = useState(initialCategoriesGrade);
+  }, [categoryGrade, question.categories]);
 
   return (
     <div className="w-full p-2">
@@ -100,7 +98,6 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
               category={category}
               categoryGrades={categoryGrades}
               questionId={questionId}
-              setCategoryGrades={setCategoryGrades}
               setIsFirstRendering={setIsFirstRendering}
             />
           ))}

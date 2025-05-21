@@ -25,9 +25,6 @@ interface RubricGradeProps {
   questionId: number;
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
-  setCategoryGrades: Dispatch<
-    SetStateAction<Record<number, AnswerRubricGradeData>>
-  >;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
   updateGrade: (
     catGrades: Record<number, AnswerRubricGradeData>,
@@ -42,7 +39,6 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
     questionId,
     category,
     categoryGrades,
-    setCategoryGrades,
     setIsFirstRendering,
     updateGrade,
   } = props;
@@ -96,7 +92,6 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
 
     const finalGrade = Math.max(0, Math.min(totalGrade, question.maximumGrade));
 
-    setCategoryGrades(newCategoryGrades);
     setIsFirstRendering(false);
 
     dispatch(updateRubric(answerId, transformRubric(newCategoryGrades)));
