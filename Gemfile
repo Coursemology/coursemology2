@@ -107,7 +107,7 @@ end
 
 group :development, :test do
   # Use RSpec for Behaviour testing
-  gem 'rspec-rails', '~> 6'
+  gem 'rspec-rails', '~> 8'
 
   gem 'rubocop', '~> 1.73'
 
