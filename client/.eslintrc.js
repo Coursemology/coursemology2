@@ -16,6 +16,7 @@ module.exports = {
     'jsx-a11y',
     'import',
     'eslint-comments',
+    'max-lines-per-function-except-fcs',
     'simple-import-sort',
     'sonarjs',
   ],
@@ -144,6 +145,11 @@ module.exports = {
     'default-param-last': 'off',
     'func-names': 'off',
     'max-len': ['warn', 125],
+    'max-lines-per-function': 'off',
+    'max-lines-per-function-except-fcs/max-lines-per-function': ['warn', {
+      'skipBlankLines': true,
+      'skipComments': true,
+    }],
     'no-multi-str': 'off',
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     // Use `_` to indicate that the method is private

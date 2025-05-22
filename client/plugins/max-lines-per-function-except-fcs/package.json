@@ -1,0 +1,14 @@
+{
+  "name": "eslint-plugin-max-lines-per-function-except-fcs",
+  "version": "1.0.0",
+  "description": "A custom ESLint plugin to ignore max-lines-per-function for functional components",
+  "engines": {
+    "node": ">=22.12.0",
+    "yarn": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AICET",
+  "license": "MIT"
+}
