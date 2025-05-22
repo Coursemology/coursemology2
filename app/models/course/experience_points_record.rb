@@ -95,10 +95,8 @@ class Course::ExperiencePointsRecord < ApplicationRecord
 
   def validate_lesson_plan_item_points(lesson_plan_item_specific)
     max_exp_points = lesson_plan_item_specific.base_exp + lesson_plan_item_specific.time_bonus_exp
-    if points_awarded && points_awarded > max_exp_points
-      errors.add(:base, "Points awarded cannot exceed the upper bound exp: #{max_exp_points}")
-    elsif points_awarded && points_awarded < 0
-      errors.add(:base, 'Points awarded cannot be negative')
-    end
+    return unless points_awarded && points_awarded < 0
+
+    errors.add(:base, 'Points awarded cannot be negative')
   end
 end
