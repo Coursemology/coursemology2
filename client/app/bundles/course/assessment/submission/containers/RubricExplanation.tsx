@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { FC } from 'react';
 import { MenuItem, Select, Typography } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import {
@@ -15,7 +15,9 @@ import {
 } from '../actions/answers';
 import { workflowStates } from '../constants';
 import { getQuestionWithGrades } from '../selectors/grading';
+import { getQuestionFlags } from '../selectors/questionFlags';
 import { getQuestions } from '../selectors/questions';
+import { getSubmissionFlags } from '../selectors/submissionFlags';
 import { getSubmission } from '../selectors/submissions';
 import { GradeWithPrefilledStatus } from '../types';
 import { transformRubric } from '../utils/rubrics';
@@ -54,6 +56,10 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   const questions = useAppSelector(getQuestions);
 
   const question = questions[questionId] as SubmissionQuestionBaseData;
+  const questionFlags = useAppSelector(getQuestionFlags);
+  const submissionFlags = useAppSelector(getSubmissionFlags);
+  const isAutograding =
+    submissionFlags?.isAutograding || questionFlags[questionId]?.isAutograding;
   const isNotGradedAndNotPublished =
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
@@ -107,6 +113,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
     return (
       <TextField
         className="w-full h-20 text-wrap"
+        disabled={isAutograding}
         id={`category-${category.id}`}
         multiline
         onChange={handleOnChange}
@@ -119,6 +126,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   return (
     <Select
       className="w-full h-20 text-wrap"
+      disabled={isAutograding}
       id={`category-${category.id}`}
       onChange={handleOnChange}
       value={categoryGrades[category.id].gradeId}
