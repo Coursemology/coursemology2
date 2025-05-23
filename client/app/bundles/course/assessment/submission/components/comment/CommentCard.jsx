@@ -1,13 +1,15 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { CheckCircleOutline } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
-import { Avatar, Button, CardHeader, Typography } from '@mui/material';
+import { Avatar, Button, CardHeader, Chip, Typography } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { formatLongDateTime } from 'lib/moment';
 
 import { postShape } from '../../propTypes';
@@ -24,6 +26,14 @@ const translations = defineMessages({
   save: {
     id: 'course.assessment.submission.comment.CommentCard.save',
     defaultMessage: 'Save',
+  },
+  publish: {
+    id: 'course.assessment.submission.comment.CommentCard.publish',
+    defaultMessage: 'Publish',
+  },
+  isAiGeneratedDraft: {
+    id: 'course.assessment.submission.comment.CommentCard.isAiGeneratedDraft',
+    defaultMessage: 'AI Generated Draft Comment',
   },
 });
 
@@ -65,6 +75,9 @@ const styles = {
     height: 35,
     width: 40,
     minWidth: 40,
+  },
+  headerChip: {
+    height: 35,
   },
   headerButtonHidden: {
     height: 35,
@@ -115,6 +128,16 @@ export default class CommentCard extends Component {
     this.setState({ editMode: false });
   }
 
+  onSaveAndPublish() {
+    const { editValue } = this.props;
+    this.props
+      .updateComment(editValue)
+      .then(() => this.props.publishComment())
+      .finally(() => {
+        this.setState({ editMode: false });
+      });
+  }
+
   toggleEditMode() {
     const { editMode } = this.state;
     const {
@@ -129,8 +152,11 @@ export default class CommentCard extends Component {
     const { editMode } = this.state;
     const {
       editValue,
-      post: { text, id },
+      post: { text, id, isAiGenerated, workflowState },
     } = this.props;
+
+    const isAiGeneratedDraft =
+      isAiGenerated && workflowState === POST_WORKFLOW_STATE.draft;
 
     if (editMode) {
       return (
@@ -148,9 +174,15 @@ export default class CommentCard extends Component {
             >
               <FormattedMessage {...translations.cancel} />
             </Button>
-            <Button color="primary" onClick={() => this.onSave()}>
-              <FormattedMessage {...translations.save} />
-            </Button>
+            {isAiGeneratedDraft ? (
+              <Button color="primary" onClick={() => this.onSaveAndPublish()}>
+                <FormattedMessage {...translations.publish} />
+              </Button>
+            ) : (
+              <Button color="primary" onClick={() => this.onSave()}>
+                <FormattedMessage {...translations.save} />
+              </Button>
+            )}
           </div>
         </>
       );
@@ -171,22 +203,56 @@ export default class CommentCard extends Component {
       isDelayed,
     } = this.props.post;
 
-    const { isUpdatingAnnotationAllowed } = this.props;
+    const { post, isUpdatingAnnotationAllowed, publishComment } = this.props;
+    const isAiGeneratedDraft =
+      post.isAiGenerated && post.workflowState === POST_WORKFLOW_STATE.draft;
 
     return (
       <div id={CommentCard.postIdentifier(id)} style={styles.card}>
-        <div style={isDelayed ? styles.delayedHeader : styles.header}>
+        <div
+          style={
+            isDelayed || isAiGeneratedDraft
+              ? styles.delayedHeader
+              : styles.header
+          }
+        >
           <CardHeader
-            avatar={<Avatar src={imageUrl} style={styles.avatar} />}
+            avatar={
+              isAiGeneratedDraft ? null : (
+                <Avatar src={imageUrl} style={styles.avatar} />
+              )
+            }
             style={styles.cardHeader}
             subheader={`${formatLongDateTime(createdAt)}${
               isDelayed ? ' (delayed comment)' : ''
             }`}
             subheaderTypographyProps={{ display: 'block' }}
-            title={name}
-            titleTypographyProps={{ display: 'block', marginright: 20 }}
+            title={
+              isAiGeneratedDraft ? (
+                <FormattedMessage {...translations.isAiGeneratedDraft} />
+              ) : (
+                name
+              )
+            }
+            titleTypographyProps={{
+              display: 'block',
+              marginRight: 20,
+              fontSize: '1.5rem',
+            }}
           />
           <div style={styles.buttonContainer}>
+            {isAiGeneratedDraft && (
+              <Chip
+                color="default"
+                disabled={this.state.editMode}
+                icon={<CheckCircleOutline />}
+                label={<FormattedMessage {...translations.publish} />}
+                onClick={() => publishComment(id)}
+                size="small"
+                style={styles.headerChip}
+                variant="outlined"
+              />
+            )}
             {canUpdate && isUpdatingAnnotationAllowed ? (
               <Button
                 className="edit-comment"
@@ -227,5 +293,6 @@ CommentCard.propTypes = {
   handleChange: PropTypes.func,
   updateComment: PropTypes.func,
   deleteComment: PropTypes.func,
+  publishComment: PropTypes.func,
   isUpdatingAnnotationAllowed: PropTypes.bool,
 };

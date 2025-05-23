@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { FC } from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import {
@@ -31,9 +31,6 @@ interface RubricPanelRowProps {
   questionId: number;
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
-  setCategoryGrades: Dispatch<
-    SetStateAction<Record<number, AnswerRubricGradeData>>
-  >;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
 }
 

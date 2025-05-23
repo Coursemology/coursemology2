@@ -122,4 +122,16 @@ export default class CommentsAPI extends BaseCourseAPI {
       data: params,
     });
   }
+
+  /**
+   * Publishes a drafted comment (discussion post)
+   *
+   * @param {string} topicId
+   * @param {string} postId
+   */
+  publish(topicId: string, postId: string): APIResponse<void> {
+    return this.client.put(
+      `${this.#urlPrefix}/${topicId}/posts/${postId}/publish`,
+    );
+  }
 }

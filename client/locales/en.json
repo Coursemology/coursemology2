@@ -3098,6 +3098,12 @@
   "course.assessment.submission.comment.CommentCard.save": {
     "defaultMessage": "Save"
   },
+  "course.assessment.submission.comment.CommentCard.publish": {
+    "defaultMessage": "Publish"
+  },
+  "course.assessment.submission.comment.CommentCard.isAiGeneratedDraft": {
+    "defaultMessage": "AI Generated Draft Comment"
+  },
   "course.assessment.submission.comment.CommentField.comment": {
     "defaultMessage": "Comment"
   },

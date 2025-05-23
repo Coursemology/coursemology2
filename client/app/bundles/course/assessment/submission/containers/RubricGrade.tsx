@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { FC } from 'react';
 import { MenuItem, Select } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import {
@@ -15,7 +15,9 @@ import {
 } from '../actions/answers';
 import { workflowStates } from '../constants';
 import { getQuestionWithGrades } from '../selectors/grading';
+import { getQuestionFlags } from '../selectors/questionFlags';
 import { getQuestions } from '../selectors/questions';
+import { getSubmissionFlags } from '../selectors/submissionFlags';
 import { getSubmission } from '../selectors/submissions';
 import { GradeWithPrefilledStatus } from '../types';
 import { transformRubric } from '../utils/rubrics';
@@ -25,9 +27,6 @@ interface RubricGradeProps {
   questionId: number;
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
-  setCategoryGrades: Dispatch<
-    SetStateAction<Record<number, AnswerRubricGradeData>>
-  >;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
   updateGrade: (
     catGrades: Record<number, AnswerRubricGradeData>,
@@ -42,7 +41,6 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
     questionId,
     category,
     categoryGrades,
-    setCategoryGrades,
     setIsFirstRendering,
     updateGrade,
   } = props;
@@ -57,7 +55,10 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
 
   const question = questions[questionId] as SubmissionQuestionBaseData;
-
+  const questionFlags = useAppSelector(getQuestionFlags);
+  const submissionFlags = useAppSelector(getSubmissionFlags);
+  const isAutograding =
+    submissionFlags?.isAutograding || questionFlags[questionId]?.isAutograding;
   const isNotGradedAndNotPublished =
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
@@ -96,7 +97,6 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
 
     const finalGrade = Math.max(0, Math.min(totalGrade, question.maximumGrade));
 
-    setCategoryGrades(newCategoryGrades);
     setIsFirstRendering(false);
 
     dispatch(updateRubric(answerId, transformRubric(newCategoryGrades)));
@@ -111,6 +111,7 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
     return (
       <NumberTextField
         className="w-full h-20 max-w-3xl"
+        disabled={isAutograding}
         id={`category-${category.id}`}
         onChange={(event) => handleOnChange(event, category.isBonusCategory)}
         value={categoryGrades[category.id].grade}

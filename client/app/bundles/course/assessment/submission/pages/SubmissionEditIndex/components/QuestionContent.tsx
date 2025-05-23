@@ -55,6 +55,8 @@ const QuestionContent: FC<Props> = (props) => {
   const topic = topics[topicId];
   const submissionErrors = errors as unknown as ErrorStruct[];
 
+  const isRubricBasedResponseQuestion =
+    type === questionTypes.RubricBasedResponse;
   const isProgrammingQuestion = type === questionTypes.Programming;
 
   const allErrors = answerId
@@ -89,10 +91,12 @@ const QuestionContent: FC<Props> = (props) => {
         <ExplanationPanel questionId={questionId} />
       )}
       <AutogradingErrorPanel questionId={questionId} />
-      <TestCaseView questionId={questionId} />
-      {!attempting && graderView && isProgrammingQuestion && (
-        <ReevaluateButton questionId={questionId} />
-      )}
+      {isProgrammingQuestion && <TestCaseView questionId={questionId} />}
+      {!attempting &&
+        graderView &&
+        (isProgrammingQuestion || isRubricBasedResponseQuestion) && (
+          <ReevaluateButton questionId={questionId} />
+        )}
       <QuestionGrade isSaving={isSaving} questionId={questionId} />
       <Comments topic={topic} />
     </>
