@@ -82,6 +82,9 @@ export const postShape = PropTypes.shape({
     originalFeedback: PropTypes.string,
     rating: PropTypes.number,
   }),
+  isAiGenerated: PropTypes.bool.isRequired,
+  workflowState: PropTypes.oneOf(['draft', 'published', 'delayed', 'answering'])
+    .isRequired,
 });
 
 export const answerShape = PropTypes.shape({

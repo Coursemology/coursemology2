@@ -83,6 +83,7 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
               categoryGrades: data.categoryGrades,
             },
           });
+          dispatch(fetchSubmission(submissionId));
         }
         dispatch(
           historyActions.pushSingleAnswerItem({
