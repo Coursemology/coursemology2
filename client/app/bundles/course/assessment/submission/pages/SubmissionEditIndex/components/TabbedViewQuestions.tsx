@@ -1,5 +1,5 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import { Paper, Step, StepButton, StepLabel, Stepper } from '@mui/material';
+import { Paper, Step, StepButton, Stepper } from '@mui/material';
 
 import { workflowStates } from 'course/assessment/submission/constants';
 import { getAssessment } from 'course/assessment/submission/selectors/assessments';
@@ -30,8 +30,6 @@ const TabbedViewQuestions: FC<Props> = (props) => {
 
   const published = workflowState === workflowStates.Published;
 
-  const currentQuestionId = questionIds[stepIndex];
-
   const shouldRenderActiveStepper = (index: number): boolean => {
     return (
       !autograded || published || skippable || graderView || index <= maxStep
@@ -49,29 +47,22 @@ const TabbedViewQuestions: FC<Props> = (props) => {
           nonLinear
         >
           {questionIds.map((id, index) => {
-            if (shouldRenderActiveStepper(index)) {
-              return (
-                <Step
-                  key={currentQuestionId}
-                  active={!autograded || index <= maxStep}
-                >
-                  <StepButton
-                    className="p-4"
-                    icon={
-                      <StepperButton
-                        questionId={id}
-                        questionIndex={index}
-                        stepIndex={stepIndex}
-                      />
-                    }
-                    onClick={() => setStepIndex(index)}
-                  />
-                </Step>
-              );
-            }
+            const isDisabled = !shouldRenderActiveStepper(index);
             return (
-              <Step key={id}>
-                <StepLabel />
+              <Step key={id} active={!autograded || index <= maxStep}>
+                <StepButton
+                  className="p-4"
+                  disabled={isDisabled}
+                  icon={
+                    <StepperButton
+                      disabled={isDisabled}
+                      questionId={id}
+                      questionIndex={index}
+                      stepIndex={stepIndex}
+                    />
+                  }
+                  onClick={() => setStepIndex(index)}
+                />
               </Step>
             );
           })}
