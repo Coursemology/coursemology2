@@ -242,6 +242,15 @@ export default function (state = initialState, action) {
       }
       return state;
     }
+    case actions.AUTOGRADE_RUBRIC_SUCCESS: {
+      const { grading, questionId } = action.payload;
+      if (grading) {
+        return produce(state, (draftState) => {
+          draftState.questions[questionId].originalGrade = grading.grade;
+        });
+      }
+      return state;
+    }
     default:
       return state;
   }

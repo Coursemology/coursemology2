@@ -21,6 +21,8 @@ json.topicId post.topic_id
 json.canUpdate can?(:update, post)
 json.canDestroy can?(:destroy, post)
 json.isDelayed post.delayed?
+json.workflowState post.workflow_state
+json.isAiGenerated post.is_ai_generated
 
 if codaveri_feedback && codaveri_feedback.status == 'pending_review'
   json.codaveriFeedback do

@@ -11,6 +11,22 @@ json.fields do
 end
 
 last_attempt = last_attempt(answer)
+attempt = answer.current_answer? ? last_attempt : answer
+
+job = attempt&.auto_grading&.job
+
+if job
+  json.autograding do
+    json.path job_path(job) if job.submitted?
+    json.partial! "jobs/#{job.status}", job: job
+  end
+end
+
+if attempt.submitted? && !attempt.auto_grading
+  json.autograding do
+    json.status :submitted
+  end
+end
 
 json.categoryGrades answer.selections do |selection|
   criterion = selection.criterion
@@ -20,6 +36,14 @@ json.categoryGrades answer.selections do |selection|
   json.categoryId selection.category_id
   json.grade criterion ? criterion.grade : selection.grade
   json.explanation criterion ? nil : selection.explanation
+end
+
+posts = answer.submission.submission_questions.find_by(question_id: answer.question_id)&.discussion_topic&.posts
+ai_generated_comment = posts&.select(&:is_ai_generated)&.last
+if ai_generated_comment
+  json.aiGeneratedComment do
+    json.partial! ai_generated_comment
+  end
 end
 
 json.explanation do

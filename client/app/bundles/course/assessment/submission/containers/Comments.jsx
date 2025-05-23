@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import toast from 'lib/hooks/toast';
 
 import * as commentActions from '../actions/comments';
@@ -28,6 +29,7 @@ class VisibleComments extends Component {
       createComment,
       updateComment,
       deleteComment,
+      publishComment,
       graderView,
       renderDelayedCommentButton,
     } = this.props;
@@ -40,7 +42,9 @@ class VisibleComments extends Component {
 
         {posts.map(
           (post) =>
-            (graderView || !post.isDelayed) && (
+            (graderView ||
+              (!post.isDelayed &&
+                post.workflowState !== POST_WORKFLOW_STATE.draft)) && (
               <CommentCard
                 key={post.id}
                 deleteComment={() => deleteComment(post.id)}
@@ -48,6 +52,7 @@ class VisibleComments extends Component {
                 handleChange={(value) => handleUpdateChange(post.id, value)}
                 isUpdatingAnnotationAllowed
                 post={post}
+                publishComment={(value) => publishComment(post.id, value)}
                 updateComment={(value) => updateComment(post.id, value)}
               />
             ),
@@ -86,6 +91,7 @@ VisibleComments.propTypes = {
   createComment: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
+  publishComment: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {
@@ -127,6 +133,8 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(commentActions.update(topic.id, postId, comment)),
     deleteComment: (postId) =>
       dispatch(commentActions.destroy(topic.id, postId)),
+    publishComment: (postId, comment) =>
+      dispatch(commentActions.publish(topic.id, postId, comment)),
   };
 }
 

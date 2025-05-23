@@ -1,0 +1,5 @@
+{
+  "_type": "prompt",
+  "input_variables": ["question_title", "question_description", "rubric_categories", "answer_text"],
+  "template": "QUESTION:\n{question_title}\n{question_description}\n\nRUBRIC CATEGORIES:\n{rubric_categories}\n\nSTUDENT RESPONSE:\n{answer_text}"
+}

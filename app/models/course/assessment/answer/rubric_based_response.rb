@@ -36,6 +36,11 @@ class Course::Assessment::Answer::RubricBasedResponse < ApplicationRecord
     end
   end
 
+  # Rubric based responses should be graded in a job.
+  def grade_inline?
+    false
+  end
+
   def csv_download
     ActionController::Base.helpers.strip_tags(answer_text)
   end

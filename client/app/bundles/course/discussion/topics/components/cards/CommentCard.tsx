@@ -1,27 +1,32 @@
 import { FC, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
-import Delete from '@mui/icons-material/Delete';
-import Edit from '@mui/icons-material/Edit';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { CheckCircleOutline } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import { Avatar, Button, CardHeader, Typography } from '@mui/material';
-import { grey, orange, red } from '@mui/material/colors';
+import {
+  Avatar,
+  Button,
+  CardHeader,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { grey, orange } from '@mui/material/colors';
 import { CommentPostMiniEntity } from 'types/course/comments';
 
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import EditButton from 'lib/components/core/buttons/EditButton';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import Link from 'lib/components/core/Link';
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
-import { deletePost, updatePost } from '../../operations';
+import { deletePost, publishPost, updatePost } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   post: CommentPostMiniEntity;
 }
 
@@ -37,6 +42,14 @@ const translations = defineMessages({
   save: {
     id: 'course.discussion.topics.CommentCard.save',
     defaultMessage: 'Save',
+  },
+  publish: {
+    id: 'course.discussion.topics.CommentCard.publish',
+    defaultMessage: 'Publish',
+  },
+  isAiGenerated: {
+    id: 'course.discussion.topics.CommentCard.isAiGenerated',
+    defaultMessage: 'AI Generated Comment',
   },
   comment: {
     id: 'course.discussion.topics.CommentCard.comment',
@@ -58,16 +71,26 @@ const translations = defineMessages({
     id: 'course.discussion.topics.CommentCard.deleteFailure',
     defaultMessage: 'Failed to delete comment.',
   },
+  publishSuccess: {
+    id: 'course.discussion.topics.CommentCard.publishSuccess',
+    defaultMessage: 'Successfully published feedback.',
+  },
+  publishFailure: {
+    id: 'course.discussion.topics.CommentCard.publishFailure',
+    defaultMessage: 'Failed to publish feedback.',
+  },
 });
 
 const CommentCard: FC<Props> = (props) => {
-  const { intl, post } = props;
+  const { post } = props;
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [editMode, setEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [editValue, setEditValue] = useState(post.text);
+  const isDraft = post.workflowState === POST_WORKFLOW_STATE.draft;
 
   const editPostIdentifier = (field: string): string => {
     return `edit_post_${field}`;
@@ -81,10 +104,25 @@ const CommentCard: FC<Props> = (props) => {
     dispatch(updatePost(post, text))
       .then(() => {
         setEditMode(false);
-        toast.success(intl.formatMessage(translations.updateSuccess));
+        toast.success(t(translations.updateSuccess));
       })
       .catch(() => {
-        toast.error(intl.formatMessage(translations.updateFailure));
+        toast.error(t(translations.updateFailure));
+      })
+      .finally(() => {
+        setIsSaving(false);
+      });
+  };
+
+  const publishComment = (text: string): void => {
+    setIsSaving(true);
+    dispatch(publishPost(post, text))
+      .then(() => {
+        setEditMode(false);
+        toast.success(t(translations.publishSuccess));
+      })
+      .catch(() => {
+        toast.error(t(translations.publishFailure));
       })
       .finally(() => {
         setIsSaving(false);
@@ -95,10 +133,10 @@ const CommentCard: FC<Props> = (props) => {
     setIsDeleting(true);
     dispatch(deletePost(post))
       .then(() => {
-        toast.success(intl.formatMessage(translations.deleteSuccess));
+        toast.success(t(translations.deleteSuccess));
       })
       .catch(() => {
-        toast.error(intl.formatMessage(translations.deleteFailure));
+        toast.error(t(translations.deleteFailure));
       })
       .finally(() => {
         setDeleteConfirmation(false);
@@ -133,7 +171,7 @@ const CommentCard: FC<Props> = (props) => {
           <CKEditorRichText
             disabled={isSaving}
             inputId={editPostIdentifier(post.id.toString())}
-            name={intl.formatMessage(translations.comment)}
+            name={t(translations.comment)}
             onChange={(value): void => {
               setEditValue(value);
             }}
@@ -152,7 +190,7 @@ const CommentCard: FC<Props> = (props) => {
               id={`post_${post.id}`}
               onClick={(): void => setEditMode(false)}
             >
-              <FormattedMessage {...translations.cancel} />
+              {t(translations.cancel)}
             </Button>
             <LoadingButton
               className="submit-button"
@@ -160,9 +198,9 @@ const CommentCard: FC<Props> = (props) => {
               disabled={isDeleting || isSaving}
               id={`post_${post.id}`}
               loading={isSaving}
-              onClick={onSave}
+              onClick={isDraft ? (): void => publishComment(editValue) : onSave}
             >
-              <FormattedMessage {...translations.save} />
+              {isDraft ? t(translations.publish) : t(translations.save)}
             </LoadingButton>
           </div>
         </div>
@@ -175,6 +213,22 @@ const CommentCard: FC<Props> = (props) => {
         variant="body2"
       />
     );
+  };
+
+  const renderAuthorName = (): JSX.Element | string => {
+    if (post.isAiGenerated && isDraft) {
+      return t(translations.isAiGenerated);
+    }
+
+    if (post.creator.userUrl) {
+      return (
+        <Link to={post.creator.userUrl} underline="hover">
+          {post.creator.name}
+        </Link>
+      );
+    }
+
+    return post.creator.name;
   };
 
   return (
@@ -193,20 +247,22 @@ const CommentCard: FC<Props> = (props) => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          backgroundColor: post.isDelayed ? orange[100] : grey[100],
+          backgroundColor: post.isDelayed || isDraft ? orange[100] : grey[100],
           borderRadius: '5px 5px 0px 0px',
         }}
       >
         <CardHeader
           avatar={
-            <Avatar
-              alt={post.creator.name}
-              className="wh-14"
-              component={Link}
-              src={post.creator.imageUrl}
-              to={post.creator.userUrl}
-              underline="none"
-            />
+            post.isAiGenerated && isDraft ? null : (
+              <Avatar
+                alt={post.creator.name}
+                className="wh-14"
+                component={Link}
+                src={post.creator.imageUrl}
+                to={post.creator.userUrl}
+                underline="none"
+              />
+            )
           }
           classes={{ avatar: 'mr-4' }}
           style={{ padding: 6 }}
@@ -214,16 +270,12 @@ const CommentCard: FC<Props> = (props) => {
             post.isDelayed ? ' (delayed comment)' : ''
           }`}
           subheaderTypographyProps={{ display: 'block' }}
-          title={
-            post.creator.userUrl ? (
-              <Link to={post.creator.userUrl} underline="hover">
-                {post.creator.name}
-              </Link>
-            ) : (
-              post.creator.name
-            )
-          }
-          titleTypographyProps={{ display: 'block', marginright: 20 }}
+          title={renderAuthorName()}
+          titleTypographyProps={{
+            display: 'block',
+            marginright: 20,
+            fontSize: '1.5rem',
+          }}
         />
         <div
           style={{
@@ -232,34 +284,33 @@ const CommentCard: FC<Props> = (props) => {
             marginBottom: 2,
           }}
         >
+          {isDraft && (
+            <Tooltip title={t(translations.publish)}>
+              <IconButton
+                disabled={isSaving || isDeleting || editMode}
+                onClick={() => publishComment(editValue)}
+              >
+                <CheckCircleOutline />
+              </IconButton>
+            </Tooltip>
+          )}
           {post.canUpdate ? (
-            <Button
+            <EditButton
               className="edit-comment"
+              disabled={isSaving || isDeleting || editMode}
               id={`post_${post.id}`}
               onClick={toggleEditMode}
-              style={{
-                height: 35,
-                width: 40,
-                minWidth: 40,
-              }}
-            >
-              <Edit htmlColor="black" />
-            </Button>
+            />
           ) : null}
           {post.canDestroy ? (
-            <Button
+            <DeleteButton
               className="delete-comment"
-              disabled={isDeleting}
+              disabled={isSaving || isDeleting}
               id={`post_${post.id}`}
-              onClick={(): void => setDeleteConfirmation(true)}
-              style={{
-                height: 35,
-                width: 40,
-                minWidth: 40,
+              onClick={async (): Promise<void> => {
+                setDeleteConfirmation(true);
               }}
-            >
-              <Delete htmlColor={red[500]} />
-            </Button>
+            />
           ) : null}
         </div>
       </div>
@@ -285,4 +336,4 @@ const CommentCard: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(CommentCard);
+export default CommentCard;

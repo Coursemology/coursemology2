@@ -3089,6 +3089,12 @@
   "course.assessment.submission.comment.CommentCard.save": {
     "defaultMessage": "저장"
   },
+  "course.assessment.submission.comment.CommentCard.publish": {
+    "defaultMessage": "게시"
+  },
+  "course.assessment.submission.comment.CommentCard.isAiGenerated": {
+    "defaultMessage": "AI 생성 댓글"
+  },
   "course.assessment.submission.comment.CommentField.comment": {
     "defaultMessage": "댓글"
   },
@@ -3883,6 +3889,12 @@
   },
   "course.discussion.topics.CommentCard.updateSuccess": {
     "defaultMessage": "댓글이 성공적으로 업데이트되었습니다."
+  },
+  "course.discussion.topics.CommentCard.publish": {
+    "defaultMessage": "게시"
+  },
+  "course.discussion.topics.CommentCard.isAiGenerated": {
+    "defaultMessage": "AI 생성 초안 댓글"
   },
   "course.discussion.topics.CommentField.comment": {
     "defaultMessage": "댓글"

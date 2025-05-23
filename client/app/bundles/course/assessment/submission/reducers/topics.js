@@ -9,8 +9,12 @@ export default function (state = {}, action) {
         ...state,
         ...arrayToObjectWithKey(action.payload.topics, 'id'),
       };
+    case actions.AUTOGRADE_RUBRIC_SUCCESS:
     case actions.CREATE_COMMENT_SUCCESS: {
-      const { topicId, id: postId } = action.payload;
+      const { topicId, id: postId } =
+        action.type === actions.AUTOGRADE_RUBRIC_SUCCESS
+          ? action.payload.aiGeneratedComment
+          : action.payload;
       return {
         ...state,
         [topicId]: {
