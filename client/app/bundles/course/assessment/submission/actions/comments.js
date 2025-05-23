@@ -80,3 +80,19 @@ export function destroy(topicId, postId) {
       .catch(() => dispatch({ type: actionTypes.DELETE_COMMENT_FAILURE }));
   };
 }
+
+export function publish(topicId, postId) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.PUBLISH_COMMENT_REQUEST });
+    return CourseAPI.comments
+      .publish(topicId, postId)
+      .then((response) => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.PUBLISH_COMMENT_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.PUBLISH_COMMENT_FAILURE }));
+  };
+}

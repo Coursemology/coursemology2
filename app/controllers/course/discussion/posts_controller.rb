@@ -56,6 +56,25 @@ class Course::Discussion::PostsController < Course::ComponentController
     end
   end
 
+  def publish
+    result = ActiveRecord::Base.transaction do
+      @post.creator = current_user
+      @post.updater = current_user
+      @post.publish!
+      @post.save!
+      create_topic_subscription && update_topic_pending_status
+    end
+
+    if result
+      send_created_notification(@post) if @post.published?
+      respond_to do |format|
+        format.json { render @post }
+      end
+    else
+      head :bad_request
+    end
+  end
+
   protected
 
   def discussion_topic
