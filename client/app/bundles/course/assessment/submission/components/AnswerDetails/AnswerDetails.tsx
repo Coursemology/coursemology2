@@ -15,6 +15,7 @@ import ForumPostResponseDetails from './ForumPostResponseDetails';
 import MultipleChoiceDetails from './MultipleChoiceDetails';
 import MultipleResponseDetails from './MultipleResponseDetails';
 import ProgrammingAnswerDetails from './ProgrammingAnswerDetails';
+import RubricBasedResponseDetails from './RubricBasedResponseDetails';
 import TextResponseDetails from './TextResponseDetails';
 
 const translations = defineMessages({
@@ -58,10 +59,10 @@ export const AnswerDetailsMapper = {
   Programming: (props: AnswerDetailsProps<'Programming'>): JSX.Element => (
     <ProgrammingAnswerDetails {...props} />
   ),
-  // TODO: define component for Voice Response, Scribing, Rubric Based Response
   RubricBasedResponse: (
-    _props: AnswerDetailsProps<'RubricBasedResponse'>,
-  ): JSX.Element => <AnswerNotImplemented />,
+    props: AnswerDetailsProps<'RubricBasedResponse'>,
+  ): JSX.Element => <RubricBasedResponseDetails {...props} />,
+  // TODO: define component for Voice Response, Scribing
   VoiceResponse: (_props: AnswerDetailsProps<'VoiceResponse'>): JSX.Element => (
     <AnswerNotImplemented />
   ),
