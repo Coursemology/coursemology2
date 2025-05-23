@@ -23,6 +23,10 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
     !categories.empty?
   end
 
+  def auto_grader
+    Course::Assessment::Answer::RubricAutoGradingService.new
+  end
+
   def question_type
     'RubricBasedResponse'
   end

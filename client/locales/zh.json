@@ -3053,6 +3053,12 @@
   "course.assessment.submission.comment.CommentCard.save": {
     "defaultMessage": "保存"
   },
+  "course.assessment.submission.comment.CommentCard.publish": {
+    "defaultMessage": "发布"
+  },
+  "course.assessment.submission.comment.CommentCard.isAiGenerated": {
+    "defaultMessage": "AI 生成的评论"
+  },
   "course.assessment.submission.comment.CommentField.comment": {
     "defaultMessage": "评论"
   },
@@ -3844,6 +3850,12 @@
   },
   "course.discussion.topics.CommentCard.updateSuccess": {
     "defaultMessage": "已成功更新评论。"
+  },
+  "course.discussion.topics.CommentCard.publish": {
+    "defaultMessage": "发布"
+  },
+  "course.discussion.topics.CommentCard.isAiGenerated": {
+    "defaultMessage": "AI 生成的草稿评论"
   },
   "course.discussion.topics.CommentField.comment": {
     "defaultMessage": "评论"

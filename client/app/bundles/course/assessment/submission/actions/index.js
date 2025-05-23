@@ -1,3 +1,5 @@
+import { QuestionType } from 'types/course/assessment/question';
+
 import GlobalAPI from 'api';
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
@@ -26,6 +28,18 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
           type: actionTypes.AUTOGRADE_SUCCESS,
           payload: { ...data, answerId },
         });
+        if (data.questionType === QuestionType.RubricBasedResponse) {
+          dispatch({
+            type: actionTypes.AUTOGRADE_RUBRIC_SUCCESS,
+            payload: {
+              id: answerId,
+              questionId,
+              grading: data.grading,
+              categoryGrades: data.categoryGrades,
+              aiGeneratedComment: data.aiGeneratedComment,
+            },
+          });
+        }
         dispatch(
           historyActions.pushSingleAnswerItem({
             questionId,

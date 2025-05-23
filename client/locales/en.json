@@ -3098,6 +3098,12 @@
   "course.assessment.submission.comment.CommentCard.save": {
     "defaultMessage": "Save"
   },
+  "course.assessment.submission.comment.CommentCard.publish": {
+    "defaultMessage": "Publish"
+  },
+  "course.assessment.submission.comment.CommentCard.isAiGenerated": {
+    "defaultMessage": "AI Generated Comment"
+  },
   "course.assessment.submission.comment.CommentField.comment": {
     "defaultMessage": "Comment"
   },
@@ -3901,6 +3907,12 @@
   },
   "course.discussion.topics.CommentCard.updateSuccess": {
     "defaultMessage": "Successfully updated comment."
+  },
+  "course.discussion.topics.CommentCard.publish": {
+    "defaultMessage": "Publish"
+  },
+  "course.discussion.topics.CommentCard.isAiGenerated": {
+    "defaultMessage": "AI Generated Comment"
   },
   "course.discussion.topics.CommentField.comment": {
     "defaultMessage": "Comment"

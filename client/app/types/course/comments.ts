@@ -1,3 +1,5 @@
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
+
 import { CourseUserBasicListData } from './courseUsers';
 
 /**
@@ -64,6 +66,8 @@ export interface CommentPostListData {
   canUpdate: boolean;
   canDestroy: boolean;
   codaveriFeedback?: CodaveriFeedback;
+  workflowState: keyof typeof POST_WORKFLOW_STATE;
+  isAiGenerated: boolean;
 }
 
 export interface CodaveriFeedback {
@@ -107,6 +111,8 @@ export interface CommentPostMiniEntity {
   canUpdate: boolean;
   canDestroy: boolean;
   codaveriFeedback?: CodaveriFeedback;
+  workflowState: keyof typeof POST_WORKFLOW_STATE;
+  isAiGenerated: boolean;
 }
 
 export interface CommentPageState {

@@ -10,14 +10,19 @@ export default function (state = {}, action) {
         ...state,
         ...arrayToObjectWithKey(action.payload.posts, 'id'),
       };
+    case actions.AUTOGRADE_RUBRIC_SUCCESS:
     case actions.CREATE_COMMENT_SUCCESS:
     case actions.UPDATE_COMMENT_SUCCESS:
     case actions.CREATE_ANNOTATION_SUCCESS:
     case actions.UPDATE_ANNOTATION_SUCCESS: {
-      const { id } = action.payload;
+      const post =
+        action.type === actions.AUTOGRADE_RUBRIC_SUCCESS
+          ? action.payload.aiGeneratedComment
+          : action.payload;
+      const { id } = post;
       return {
         ...state,
-        [id]: action.payload,
+        [id]: post,
       };
     }
     case actions.DELETE_COMMENT_SUCCESS:
