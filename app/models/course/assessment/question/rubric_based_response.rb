@@ -39,6 +39,10 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
     true
   end
 
+  def csv_downloadable?
+    true
+  end
+
   def attempt(submission, last_attempt = nil)
     answer = Course::Assessment::Answer::RubricBasedResponse.new(submission: submission, question: question)
     answer.answer_text = last_attempt.answer_text if last_attempt
