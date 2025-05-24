@@ -17,28 +17,42 @@ const translations = defineMessages({
   },
 });
 
+/**
+ * Returns a crumb path for the given breadcrumbs.
+ * @param courseUrl
+ * @param breadcrumbs
+ * @returns CrumbPath
+ */
+const buildCrumbPath = (
+  courseUrl: string,
+  breadcrumbs: { id: number; name: string }[],
+): CrumbPath => ({
+  activePath: `${courseUrl}/materials/folders/${breadcrumbs[0].id}`,
+  content: breadcrumbs.map((crumb) => ({
+    title: crumb.id < 0 ? translations.error : crumb.name,
+    url: `materials/folders/${crumb.id < 0 ? '' : crumb.id}`,
+  })),
+});
+
+/**
+ * Retrieves the folder title and builds a crumb path.
+ * If `folderId` is not provided, it fetches the current folder info.
+ * @param courseUrl
+ * @param folderId
+ * @returns Promise<CrumbPath>
+ */
 const getFolderTitle = async (
   courseUrl: string,
   folderId?: number,
 ): Promise<CrumbPath> =>
   CourseAPI.folders
-    .fetch(folderId)
-    .then((response) => response.data.breadcrumbs)
+    .breadcrumbs(folderId)
+    .then(({ data }) => buildCrumbPath(courseUrl, data.breadcrumbs))
     .catch((error) => {
-      const response = (error as AxiosError<FolderData>).response;
-      const placeholderCrumb = { id: -1, name: '' };
-      if (!response?.data.breadcrumbs) {
-        return [placeholderCrumb];
-      }
-      return [...response.data.breadcrumbs, placeholderCrumb];
-    })
-    .then((breadcrumbs) => ({
-      activePath: `${courseUrl}/materials/folders/${breadcrumbs[0].id}`,
-      content: breadcrumbs.map((crumb) => ({
-        title: crumb.id < 0 ? translations.error : crumb.name,
-        url: `materials/folders/${crumb.id < 0 ? '' : crumb.id}`,
-      })),
-    }));
+      const breadcrumbs =
+        (error as AxiosError<FolderData>).response?.data.breadcrumbs ?? [];
+      return buildCrumbPath(courseUrl, [...breadcrumbs, { id: -1, name: '' }]);
+    });
 
 /**
  * `shouldRevalidate` here relies on the invariant that `folderHandle` is attached to

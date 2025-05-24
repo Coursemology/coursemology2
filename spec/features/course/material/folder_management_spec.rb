@@ -106,7 +106,20 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
         file2 = File.join(Rails.root, '/spec/fixtures/files/text2.txt')
 
         find('#upload-files-button').click
-        find('input[type="file"]', visible: false).attach_file([file1, file2], make_visible: true)
+
+        # Ref: https://stackoverflow.com/questions/38049020/how-to-test-file-attachment-on-hidden-input-using-capybara
+        # Wait for file input to be in the DOM (even if hidden)
+        expect(page).to have_selector('input[type="file"]', visible: false)
+        input = find('input[type="file"]', visible: false)
+
+        # NOTE: Using `make_visible: true` with `attach_file` is flaky — Capybara sometimes fails with
+        # a Capybara::ExpectationNotMet error even when the file input exists and is targeted correctly.
+        # Instead, we use JavaScript to explicitly change the file input's CSS and make it visible.
+        # This workaround ensures consistent behavior across browsers and environments.
+        page.execute_script("arguments[0].style.display = 'block';", input)
+
+        # Attach files to the (now visible) input
+        input.attach_file([file1, file2])
 
         expect do
           find('button#material-upload-form-upload-button').click
@@ -163,7 +176,13 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
 
         visit course_material_folder_path(course, folder)
         find('#upload-files-button').click
-        find('input[type="file"]', visible: false).attach_file([file1, file2], make_visible: true)
+
+        # Ref: https://stackoverflow.com/questions/38049020/how-to-test-file-attachment-on-hidden-input-using-capybara
+        # See scenario 'I can upload a file to the folder' under 'As a Course Manager' for detailed explanation.
+        expect(page).to have_selector('input[type="file"]', visible: false)
+        input = find('input[type="file"]', visible: false)
+        page.execute_script("arguments[0].style.display = 'block';", input)
+        input.attach_file([file1, file2])
 
         expect do
           find('button#material-upload-form-upload-button').click

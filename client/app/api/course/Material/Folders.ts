@@ -1,4 +1,8 @@
-import { FolderData, MaterialListData } from 'types/course/material/folders';
+import {
+  BreadcrumbData,
+  FolderData,
+  MaterialListData,
+} from 'types/course/material/folders';
 import { JobSubmitted } from 'types/jobs';
 
 import { APIResponse } from 'api/types';
@@ -104,5 +108,15 @@ export default class FoldersAPI extends BaseCourseAPI {
    */
   downloadFolder(currFolderId: number): APIResponse<JobSubmitted> {
     return this.client.get(`${this.#urlPrefix}/${currFolderId}/download`);
+  }
+
+  /**
+   * Fetches the breadcrumbs for a folder
+   */
+  breadcrumbs(folderId?: number): APIResponse<BreadcrumbData> {
+    if (folderId === undefined) {
+      return this.client.get(`${this.#urlPrefix}/breadcrumbs`);
+    }
+    return this.client.get(`${this.#urlPrefix}/${folderId}/breadcrumbs`);
   }
 }
