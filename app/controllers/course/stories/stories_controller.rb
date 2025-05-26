@@ -15,6 +15,12 @@ class Course::Stories::StoriesController < Course::ComponentController
     render json: { redirectUrl: url }
   end
 
+  def learn_settings
+    title = current_course.settings(:course_stories_component).title
+
+    render json: { title: title }
+  end
+
   def mission_control
     target_course_user = current_course.course_users.find_by(id: params[:course_user_id]) || current_course_user
     url, @pending_threads_count = get_mission_control_url(target_course_user)

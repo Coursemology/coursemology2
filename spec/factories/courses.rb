@@ -55,5 +55,12 @@ FactoryBot.define do
         course.set_component_enabled_boolean(:course_rag_wise_component, true)
       end
     end
+
+    trait :with_stories_component_enabled do
+      after(:build) do |course|
+        course.instance.set_component_enabled_boolean!(:course_stories_component, true)
+        course.set_component_enabled_boolean(:course_stories_component, true)
+      end
+    end
   end
 end
