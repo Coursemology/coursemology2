@@ -1,5 +1,3 @@
-import { defineMessage } from 'react-intl';
-
 import CourseAPI from 'api/course';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useSetFooter } from 'lib/components/wrappers/FooterProvider';
@@ -29,7 +27,7 @@ export const learnHandle: DataHandle = (match) => {
   const courseId = match.params.courseId;
   return {
     getData: async (): Promise<CrumbPath> => {
-      const { data } = await CourseAPI.admin.stories.index();
+      const { data } = await CourseAPI.stories.learnSettings();
       return {
         activePath: `/courses/${courseId}/learn`,
         content: { title: data.title || 'Learn' },
