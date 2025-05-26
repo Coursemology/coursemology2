@@ -20,7 +20,7 @@ import DuplicationHistoryStatistics from './DuplicationHistoryStatistics';
 import LiveFeedbackStatistics from './LiveFeedbackStatistics';
 import { getAssessmentStatistics } from './selectors';
 import StudentAttemptCountTable from './StudentAttemptCountTable';
-import StudentMarksPerQuestionTable from './StudentMarksPerQuestionTable';
+import StudentGradesPerQuestionTable from './StudentGradesPerQuestionTable';
 
 const translations = defineMessages({
   header: {
@@ -47,9 +47,9 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.liveFeedback',
     defaultMessage: 'Live Feedback',
   },
-  marksPerQuestion: {
-    id: 'course.assessment.statistics.marksPerQuestion',
-    defaultMessage: 'Marks Per Question',
+  gradesPerQuestion: {
+    id: 'course.assessment.statistics.gradesPerQuestion',
+    defaultMessage: 'Grades Per Question',
   },
   attemptCount: {
     id: 'course.assessment.statistics.attemptCount',
@@ -71,8 +71,8 @@ const translations = defineMessages({
 
 const tabMapping = (includePhantom: boolean): Record<string, JSX.Element> => {
   return {
-    marksPerQuestion: (
-      <StudentMarksPerQuestionTable includePhantom={includePhantom} />
+    gradesPerQuestion: (
+      <StudentGradesPerQuestionTable includePhantom={includePhantom} />
     ),
     attemptCount: <StudentAttemptCountTable includePhantom={includePhantom} />,
     gradeDistribution: <MainGradesChart includePhantom={includePhantom} />,
@@ -86,7 +86,7 @@ const tabMapping = (includePhantom: boolean): Record<string, JSX.Element> => {
 
 const AssessmentStatisticsPage: FC = () => {
   const { t } = useTranslation();
-  const [tabValue, setTabValue] = useState('marksPerQuestion');
+  const [tabValue, setTabValue] = useState('gradesPerQuestion');
   const [includePhantom, setIncludePhantom] = useState(false);
 
   const statistics = useAppSelector(getAssessmentStatistics);
@@ -132,9 +132,9 @@ const AssessmentStatisticsPage: FC = () => {
           >
             <Tab
               className="min-h-12"
-              id="marksPerQuestion"
-              label={t(translations.marksPerQuestion)}
-              value="marksPerQuestion"
+              id="gradesPerQuestion"
+              label={t(translations.gradesPerQuestion)}
+              value="gradesPerQuestion"
             />
             <Tab
               className="min-h-12"

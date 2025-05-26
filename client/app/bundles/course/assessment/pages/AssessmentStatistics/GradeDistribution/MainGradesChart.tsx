@@ -15,6 +15,7 @@ const MainGradesChart: FC<Props> = (props) => {
 
   const statistics = useAppSelector(getAssessmentStatistics);
   const submissions = statistics.submissions;
+  const maximumGrade = statistics.assessment?.maximumGrade;
   const nonNullSubmissions = submissions.filter((s) => s.totalGrade);
 
   const includedSubmissions = includePhantom
@@ -26,7 +27,7 @@ const MainGradesChart: FC<Props> = (props) => {
       ?.filter((s) => s.totalGrade)
       ?.map((s) => s.totalGrade) ?? [];
 
-  return <GradesChart totalGrades={totalGrades} />;
+  return <GradesChart maximumGrade={maximumGrade} totalGrades={totalGrades} />;
 };
 
 export default MainGradesChart;

@@ -39,7 +39,7 @@ interface AnswerInfoState {
   workflowState?: WorkflowState | typeof workflowStates.Unstarted;
 }
 
-const StudentMarksPerQuestionTable: FC<Props> = (props) => {
+const StudentGradesPerQuestionTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId, assessmentId } = useParams();
   const { includePhantom } = props;
@@ -314,4 +314,4 @@ const StudentMarksPerQuestionTable: FC<Props> = (props) => {
   );
 };
 
-export default StudentMarksPerQuestionTable;
+export default StudentGradesPerQuestionTable;
