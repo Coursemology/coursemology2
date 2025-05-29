@@ -76,13 +76,7 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
           payload: { ...data, answerId },
         });
         if (data.questionType === QuestionType.RubricBasedResponse) {
-          dispatch({
-            type: actionTypes.UPDATE_RUBRIC,
-            payload: {
-              id: answerId,
-              categoryGrades: data.categoryGrades,
-            },
-          });
+          // To refresh the rubric selections and AI generated draft comment
           dispatch(fetchSubmission(submissionId));
         }
         dispatch(

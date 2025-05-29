@@ -101,13 +101,13 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         it 'renders all questions' do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
-          expect(json_result['questions'].count).to eq(6)
+          expect(json_result['questions'].count).to eq(7)
         end
 
         it 'renders the total grade' do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
-          expect(json_result['submission']['maximumGrade']).to eq(12)
+          expect(json_result['submission']['maximumGrade']).to eq(14)
         end
       end
 

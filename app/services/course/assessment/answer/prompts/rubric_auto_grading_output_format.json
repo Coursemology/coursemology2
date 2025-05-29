@@ -11,23 +11,19 @@
             "type": "number",
             "description": "The ID of the rubric category"
           },
-          "grade": {
-            "type": "number",
-            "description": "The grade assigned to the category, must be one of the listed grades for the rubric category"
-          },
           "criterion_id": {
             "type": "number",
             "description": "The ID of the criterion within the rubric category, must be one of the listed criteria for the rubric category"
           },
           "explanation": {
             "type": "string",
-            "description": "An explanation of the grade given"
+            "description": "An explanation for why the criterion was selected"
           }
         },
-        "required": ["category_id", "grade", "explanation"],
+        "required": ["category_id", "criterion_id", "explanation"],
         "additionalProperties": false
       },
-      "description": "A list of grades for each rubric category with explanations"
+      "description": "A list of criterions selected for each rubric category with explanations"
     },
     "overall_feedback": {
       "type": "string",
