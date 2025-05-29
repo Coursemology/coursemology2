@@ -230,7 +230,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         visit course_forums_path(course)
         find_link('Next Unread', href: course_forum_topic_path(course, forum, topic)).click
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
+        expect(page).to have_current_path(course_forum_topic_path(course, forum, topic))
         expect(page).to have_selector('div', text: topic.title)
       end
     end

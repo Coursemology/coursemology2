@@ -21,11 +21,13 @@ coverage:
       frontend:
         target: auto
         threshold: 0.1%
-        flags: frontend
+        flags:
+          - frontend
       backend:
         target: auto
         threshold: 0.1%
-        flags: backend
+        flags:
+          - backend
     patch: yes
     changes: no
 

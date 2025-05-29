@@ -24,7 +24,7 @@ RSpec.feature 'Course: EnrolRequests', js: true do
       course_user = course.course_users.find_by(user_id: enrol_request.user.id)
       expect(course_user).to be_present
 
-      expect(current_path).to eq(course_enrol_requests_path(course))
+      expect(page).to have_current_path(course_enrol_requests_path(course))
       expect(page).to_not have_selector("tr.pending_enrol_request_#{enrol_request.id}")
       expect(page).to have_selector("tr.approved_enrol_request_#{enrol_request.id}")
 
@@ -48,7 +48,7 @@ RSpec.feature 'Course: EnrolRequests', js: true do
       enrol_request.reload
 
       expect(enrol_request.workflow_state).to eq('rejected')
-      expect(current_path).to eq(course_enrol_requests_path(course))
+      expect(page).to have_current_path(course_enrol_requests_path(course))
       expect(page).to_not have_selector("tr.pending_enrol_request_#{enrol_request.id}")
       expect(page).to have_selector("tr.rejected_enrol_request_#{enrol_request.id}")
     end
