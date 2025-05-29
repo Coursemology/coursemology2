@@ -43,7 +43,6 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId, assessmentId } = useParams();
   const { includePhantom } = props;
-
   const statistics = useAppSelector(getAssessmentStatistics);
   const [openAnswer, setOpenAnswer] = useState(false);
   const [answerDisplayInfo, setAnswerDisplayInfo] = useState<AnswerInfoState>({

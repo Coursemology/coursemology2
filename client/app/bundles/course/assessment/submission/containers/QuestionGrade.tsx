@@ -1,7 +1,10 @@
 import { FC, useState } from 'react';
 import { Chip, Paper, TextField, Tooltip, Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
-import { SubmissionQuestionBaseData } from 'types/course/assessment/submission/question/types';
+import {
+  SubmissionQuestionBaseData,
+  SubmissionQuestionData,
+} from 'types/course/assessment/submission/question/types';
 
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
@@ -13,6 +16,7 @@ import { saveGrade, updateGrade } from '../actions/answers';
 import { workflowStates } from '../constants';
 import { computeExp } from '../reducers/grading';
 import { QuestionGradeData } from '../reducers/grading/types';
+import { getRubricCategoryGradesForAnswerId } from '../selectors/answers';
 import { getAssessment } from '../selectors/assessments';
 import {
   getBasePoints,
@@ -23,6 +27,7 @@ import {
 import { getQuestions } from '../selectors/questions';
 import { getSubmission } from '../selectors/submissions';
 import translations from '../translations';
+import { AnswerDetailsMap } from '../types';
 
 import RubricPanel from './RubricPanel';
 
@@ -55,7 +60,6 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
   const questionWithGrades = useAppSelector(getQuestionWithGrades);
-
   const submissionId = getSubmissionId();
 
   const { submittedAt, bonusEndAt, graderView, bonusPoints, workflowState } =
@@ -69,12 +73,12 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const basePoints = useAppSelector(getBasePoints);
   const expMultiplier = useAppSelector(getExpMultiplier);
   const maximumGrade = useAppSelector(getMaximumGrade);
+  const answerCategoryGradesFromStore = useAppSelector((state) =>
+    grading ? getRubricCategoryGradesForAnswerId(state, grading.id) : [],
+  );
 
   const attempting = workflowState === workflowStates.Attempting;
   const published = workflowState === workflowStates.Published;
-
-  const isRubricBasedResponse =
-    question.type === QuestionType.RubricBasedResponse;
 
   const editable = !attempting && graderView;
 
@@ -82,8 +86,11 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
 
+  const isRubricBasedResponse =
+    question.type === QuestionType.RubricBasedResponse;
   const isRubricVisible =
-    !submission.isStudent || assessment.showRubricToStudents;
+    isRubricBasedResponse &&
+    (!submission.isStudent || assessment.showRubricToStudents);
 
   const handleSaveGrade = (
     newGrade: string | number | null,
@@ -278,12 +285,18 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     </Typography>
   );
 
+  const answerCategoryGrades = (
+    isRubricVisible && grading ? answerCategoryGradesFromStore : undefined
+  ) as AnswerDetailsMap['RubricBasedResponse']['categoryGrades'] | undefined;
+
   return (
     (editable || published) && (
       <>
-        {isRubricBasedResponse && isRubricVisible && (
+        {isRubricVisible && answerCategoryGrades && (
           <RubricPanel
-            questionId={questionId}
+            answerCategoryGrades={answerCategoryGrades!}
+            answerId={grading.id}
+            question={question as SubmissionQuestionData<'RubricBasedResponse'>}
             setIsFirstRendering={setIsFirstRendering}
           />
         )}

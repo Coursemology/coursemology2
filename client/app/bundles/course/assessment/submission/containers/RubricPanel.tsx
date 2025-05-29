@@ -9,40 +9,27 @@ import {
 } from '@mui/material';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
-import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { getRubricCategoryGradesForAnswerId } from '../selectors/answers';
-import { getQuestionWithGrades } from '../selectors/grading';
-import { getQuestions } from '../selectors/questions';
 import translations from '../translations';
+import { AnswerDetailsMap } from '../types';
 
 import RubricPanelRow from './RubricPanelRow';
 
 interface RubricPanelProps {
+  answerId: number;
+  answerCategoryGrades: AnswerDetailsMap['RubricBasedResponse']['categoryGrades'];
+  question: SubmissionQuestionData<'RubricBasedResponse'>;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
-  questionId: number;
 }
 
 const RubricPanel: FC<RubricPanelProps> = (props) => {
-  const { setIsFirstRendering, questionId } = props;
-
   const { t } = useTranslation();
-  const questions = useAppSelector(getQuestions);
-
-  const question = questions[
-    questionId
-  ] as SubmissionQuestionData<'RubricBasedResponse'>;
-  const questionWithGrades = useAppSelector(getQuestionWithGrades);
-
-  const answerId = questionWithGrades[questionId].id;
-
-  const categoryGrade = useAppSelector((state) =>
-    getRubricCategoryGradesForAnswerId(state, answerId),
-  );
+  const { answerId, answerCategoryGrades, question, setIsFirstRendering } =
+    props;
 
   const categoryGrades = useMemo(() => {
-    const categoryGradeHash = categoryGrade.reduce(
+    const categoryGradeHash = answerCategoryGrades.reduce(
       (obj, category) => ({
         ...obj,
         [category.categoryId]: {
@@ -68,7 +55,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
       }),
       {},
     );
-  }, [categoryGrade, question.categories]);
+  }, [answerCategoryGrades, question.categories]);
 
   return (
     <div className="w-full p-2">
@@ -84,20 +71,24 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
             <TableCell className="w-[80%] text-wrap">
               {t(translations.explanation)}
             </TableCell>
-            <TableCell className="w-[10%] text-wrap">
+            <TableCell className="w-[5%] text-wrap px-0 text-center">
               {t(translations.grade)}
+            </TableCell>
+            <TableCell className="px-0 text-center">/</TableCell>
+            <TableCell className="w-[5%] text-wrap px-0 text-center">
+              {t(translations.max)}
             </TableCell>
           </TableRow>
         </TableHead>
 
         <TableBody>
-          {question.categories.map((category) => (
+          {question?.categories.map((category) => (
             <RubricPanelRow
               key={category.id}
               answerId={answerId}
               category={category}
               categoryGrades={categoryGrades}
-              questionId={questionId}
+              question={question}
               setIsFirstRendering={setIsFirstRendering}
             />
           ))}

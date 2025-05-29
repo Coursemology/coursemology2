@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+json.questionType answer.question.question_type
+
 json.fields do
   json.questionId answer.question_id
   json.id answer.acting_as.id

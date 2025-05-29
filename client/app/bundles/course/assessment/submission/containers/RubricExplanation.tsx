@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { MenuItem, Select, Typography } from '@mui/material';
+import { FC, useState } from 'react';
+import { Chip, MenuItem, Select, Typography } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import {
   RubricBasedResponseCategoryQuestionData,
@@ -8,6 +8,7 @@ import {
 
 import TextField from 'lib/components/core/fields/TextField';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import {
   updateGrade as updateGradeState,
@@ -19,6 +20,7 @@ import { getQuestionFlags } from '../selectors/questionFlags';
 import { getQuestions } from '../selectors/questions';
 import { getSubmissionFlags } from '../selectors/submissionFlags';
 import { getSubmission } from '../selectors/submissions';
+import translations from '../translations';
 import { GradeWithPrefilledStatus } from '../types';
 import { transformRubric } from '../utils/rubrics';
 
@@ -44,6 +46,8 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
     setIsFirstRendering,
     updateGrade,
   } = props;
+
+  const { t } = useTranslation();
 
   const questionWithGrades = useAppSelector(getQuestionWithGrades);
   const submission = useAppSelector(getSubmission);
@@ -129,18 +133,36 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
       disabled={isAutograding}
       id={`category-${category.id}`}
       onChange={handleOnChange}
+      renderValue={(selectedId) => {
+        // Display the selected grade explanation only, excluding the grade chip
+        const selected = category.grades.find((g) => g.id === selectedId);
+        return (
+          <Typography
+            className="text-wrap"
+            dangerouslySetInnerHTML={{ __html: selected?.explanation ?? '' }}
+            variant="body2"
+          />
+        );
+      }}
       value={categoryGrades[category.id].gradeId}
       variant="outlined"
     >
       {category.grades.map((grade) => (
         <MenuItem key={grade.id} value={grade.id}>
-          <Typography
-            className="w-full text-wrap"
-            dangerouslySetInnerHTML={{
-              __html: grade.explanation,
-            }}
-            variant="body2"
-          />
+          <div className="flex items-center justify-between w-full">
+            <Typography
+              className="text-wrap"
+              dangerouslySetInnerHTML={{ __html: grade.explanation }}
+              variant="body2"
+            />
+            <Chip
+              label={t(translations.gradeDisplay, {
+                grade: grade?.grade ?? '--',
+              })}
+              size="small"
+              variant="filled"
+            />
+          </div>
         </MenuItem>
       ))}
     </Select>
