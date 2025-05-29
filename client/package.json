@@ -171,7 +171,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-simple-import-sort": "^12.1.0",
     "eslint-plugin-sonarjs": "^0.24.0",
-    "favicons": "^7.1.4",
+    "favicons": "^7.2.0",
     "favicons-webpack-plugin": "^6.0.1",
     "fork-ts-checker-webpack-plugin": "^9.0.2",
     "html-webpack-plugin": "^5.6.0",
@@ -190,7 +190,7 @@
     "redux-logger": "^3.0.6",
     "sass": "^1.76.0",
     "sass-loader": "^14.1.0",
-    "sharp": "^0.34.1",
+    "sharp": "^0.34.2",
     "style-loader": "^3.3.4",
     "svgo": "^3.3.2",
     "tailwindcss": "^3.4.1",
@@ -203,7 +203,8 @@
     "webpack-merge": "^5.10.0"
   },
   "resolutions": {
-    "cheerio": "1.0.0-rc.10"
+    "cheerio": "1.0.0-rc.10",
+    "sharp": "^0.34.2"
   },
   "license": "MIT",
   "firstBuildYear": 2013,
