@@ -1,3 +1,5 @@
+import { QuestionType } from 'types/course/assessment/question';
+
 import GlobalAPI from 'api';
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
@@ -15,36 +17,6 @@ import translations from '../translations';
 import { buildErrorMessage, formatAnswers } from './utils';
 
 const JOB_POLL_DELAY_MS = 500;
-
-export function getEvaluationResult(submissionId, answerId, questionId) {
-  return (dispatch) => {
-    CourseAPI.assessment.submissions
-      .reloadAnswer(submissionId, { answer_id: answerId })
-      .then((response) => response.data)
-      .then((data) => {
-        dispatch({
-          type: actionTypes.AUTOGRADE_SUCCESS,
-          payload: { ...data, answerId },
-        });
-        dispatch(
-          historyActions.pushSingleAnswerItem({
-            questionId,
-            submissionId,
-            answerItem: {
-              id: data.latestAnswer.id,
-              createdAt: data.latestAnswer.createdAt,
-              currentAnswer: false,
-              workflowState: workflowStates.Graded,
-            },
-          }),
-        );
-      })
-      .catch(() => {
-        dispatch(setNotification(translations.requestFailure));
-        dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId, answerId });
-      });
-  };
-}
 
 export function getJobStatus(jobUrl) {
   return GlobalAPI.jobs.get(jobUrl);
@@ -89,6 +61,40 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
       .catch(() => {
         dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE });
         dispatch(resetExistingAnswerFlags());
+      });
+  };
+}
+
+export function getEvaluationResult(submissionId, answerId, questionId) {
+  return (dispatch) => {
+    CourseAPI.assessment.submissions
+      .reloadAnswer(submissionId, { answer_id: answerId })
+      .then((response) => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.AUTOGRADE_SUCCESS,
+          payload: { ...data, answerId },
+        });
+        if (data.questionType === QuestionType.RubricBasedResponse) {
+          // To refresh the rubric selections and AI generated draft comment
+          dispatch(fetchSubmission(submissionId));
+        }
+        dispatch(
+          historyActions.pushSingleAnswerItem({
+            questionId,
+            submissionId,
+            answerItem: {
+              id: data.latestAnswer.id,
+              createdAt: data.latestAnswer.createdAt,
+              currentAnswer: false,
+              workflowState: workflowStates.Graded,
+            },
+          }),
+        );
+      })
+      .catch(() => {
+        dispatch(setNotification(translations.requestFailure));
+        dispatch({ type: actionTypes.AUTOGRADE_FAILURE, questionId, answerId });
       });
   };
 }

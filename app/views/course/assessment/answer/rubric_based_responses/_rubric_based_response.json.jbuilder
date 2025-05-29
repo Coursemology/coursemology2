@@ -11,6 +11,22 @@ json.fields do
 end
 
 last_attempt = last_attempt(answer)
+attempt = answer.current_answer? ? last_attempt : answer
+
+job = attempt&.auto_grading&.job
+
+if job
+  json.autograding do
+    json.path job_path(job) if job.submitted?
+    json.partial! "jobs/#{job.status}", job: job
+  end
+end
+
+if attempt.submitted? && !attempt.auto_grading
+  json.autograding do
+    json.status :submitted
+  end
+end
 
 json.categoryGrades answer.selections do |selection|
   criterion = selection.criterion

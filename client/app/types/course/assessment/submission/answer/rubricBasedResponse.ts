@@ -1,3 +1,5 @@
+import { JobStatusResponse } from 'types/jobs';
+
 import { QuestionType } from '../../question';
 
 import {
@@ -18,6 +20,9 @@ export interface RubricBasedResponseAnswerData extends AnswerBaseData {
   explanation: {
     correct: boolean | null;
     explanations: string[];
+  };
+  autograding?: JobStatusResponse & {
+    path?: string;
   };
   latestAnswer?: RubricBasedResponseAnswerData;
   categoryScores: {

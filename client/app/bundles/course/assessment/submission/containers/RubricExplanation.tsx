@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { FC } from 'react';
 import { MenuItem, Select, Typography } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import {
@@ -15,7 +15,9 @@ import {
 } from '../actions/answers';
 import { workflowStates } from '../constants';
 import { getQuestionWithGrades } from '../selectors/grading';
+import { getQuestionFlags } from '../selectors/questionFlags';
 import { getQuestions } from '../selectors/questions';
+import { getSubmissionFlags } from '../selectors/submissionFlags';
 import { getSubmission } from '../selectors/submissions';
 import { GradeWithPrefilledStatus } from '../types';
 import { transformRubric } from '../utils/rubrics';
@@ -25,9 +27,6 @@ interface RubricExplanationProps {
   questionId: number;
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
-  setCategoryGrades: Dispatch<
-    SetStateAction<Record<number, AnswerRubricGradeData>>
-  >;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
   updateGrade: (
     catGrades: Record<number, AnswerRubricGradeData>,
@@ -42,7 +41,6 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
     questionId,
     category,
     categoryGrades,
-    setCategoryGrades,
     setIsFirstRendering,
     updateGrade,
   } = props;
@@ -58,6 +56,10 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   const questions = useAppSelector(getQuestions);
 
   const question = questions[questionId] as SubmissionQuestionBaseData;
+  const questionFlags = useAppSelector(getQuestionFlags);
+  const submissionFlags = useAppSelector(getSubmissionFlags);
+  const isAutograding =
+    submissionFlags?.isAutograding || questionFlags[questionId]?.isAutograding;
   const isNotGradedAndNotPublished =
     workflowState !== workflowStates.Graded &&
     workflowState !== workflowStates.Published;
@@ -97,7 +99,6 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
 
     const finalGrade = Math.max(0, Math.min(totalGrade, question.maximumGrade));
 
-    setCategoryGrades(newCategoryGrades);
     setIsFirstRendering(false);
 
     dispatch(updateRubric(answerId, transformRubric(newCategoryGrades)));
@@ -112,6 +113,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
     return (
       <TextField
         className="w-full h-20 text-wrap"
+        disabled={isAutograding}
         id={`category-${category.id}`}
         multiline
         onChange={handleOnChange}
@@ -124,6 +126,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   return (
     <Select
       className="w-full h-20 text-wrap"
+      disabled={isAutograding}
       id={`category-${category.id}`}
       onChange={handleOnChange}
       value={categoryGrades[category.id].gradeId}
@@ -132,6 +135,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
       {category.grades.map((grade) => (
         <MenuItem key={grade.id} value={grade.id}>
           <Typography
+            className="w-full text-wrap"
             dangerouslySetInnerHTML={{
               __html: grade.explanation,
             }}
