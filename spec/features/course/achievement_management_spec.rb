@@ -30,7 +30,7 @@ RSpec.feature 'Course: Achievements', js: true do
         end.to change { course.achievements.count }.by(1)
         achievement_created = course.achievements.last
         expect(page).to have_text(achievement[:title])
-        expect(current_path).to eq(course_achievement_path(course, achievement_created))
+        expect(page).to have_current_path(course_achievement_path(course, achievement_created))
 
         # Edit the achivement
         find("button.achievement-edit-#{achievement_created.id}").click
@@ -41,7 +41,7 @@ RSpec.feature 'Course: Achievements', js: true do
         # Edit the achievement
         find('.btn-submit').click
         expect(page).to have_selector('h2', text: 'Edit Achievement')
-        expect(current_path).to eq(course_achievement_path(course, achievement_created))
+        expect(page).to have_current_path(course_achievement_path(course, achievement_created))
         expect(page).to have_text(new_achievement[:title])
       end
 

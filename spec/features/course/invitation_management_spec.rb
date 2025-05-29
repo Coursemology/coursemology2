@@ -67,7 +67,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         click_button 'Registration Code'
         page.find('button.toggle-registration-code').click
 
-        expect(current_path).to eq(invite_course_users_path(course))
+        expect(page).to have_current_path(invite_course_users_path(course))
         expect_toastify('Successfully enabled registration code!')
         course.reload
         expect(course.registration_key).not_to be_nil
@@ -75,7 +75,7 @@ RSpec.feature 'Courses: Invitations', js: true do
 
         # Disable registration codes
         page.find('button.toggle-registration-code').click
-        expect(current_path).to eq(invite_course_users_path(course))
+        expect(page).to have_current_path(invite_course_users_path(course))
         expect(page).not_to have_selector('pre', text: course.registration_key)
         course.reload
         expect(course.registration_key).to be_nil
@@ -110,7 +110,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         # Resend user_invitation for entire course
         click_button('Resend All Invitations')
         wait_for_page
-        expect(current_path).to eq(course_user_invitations_path(course))
+        expect(page).to have_current_path(course_user_invitations_path(course))
         expect(invitation_to_delete.reload.sent_at).not_to eq(old_time)
 
         # Delete individual user_invitation
@@ -119,7 +119,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         end
         accept_prompt
 
-        expect(current_path).to eq(course_user_invitations_path(course))
+        expect(page).to have_current_path(course_user_invitations_path(course))
         expect(page).to_not have_selector("tr.pending_invitation_#{invitation_to_delete.id}")
       end
     end
