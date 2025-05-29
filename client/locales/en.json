@@ -3908,6 +3908,12 @@
   "course.discussion.topics.CommentCard.updateSuccess": {
     "defaultMessage": "Successfully updated comment."
   },
+  "course.discussion.topics.CommentCard.publish": {
+    "defaultMessage": "Publish"
+  },
+  "course.discussion.topics.CommentCard.isAiGeneratedDraft": {
+    "defaultMessage": "AI Generated Draft Comment"
+  },
   "course.discussion.topics.CommentField.comment": {
     "defaultMessage": "Comment"
   },

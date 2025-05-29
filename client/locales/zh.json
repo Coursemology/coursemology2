@@ -3851,6 +3851,12 @@
   "course.discussion.topics.CommentCard.updateSuccess": {
     "defaultMessage": "已成功更新评论。"
   },
+  "course.discussion.topics.CommentCard.publish": {
+    "defaultMessage": "发布"
+  },
+  "course.discussion.topics.CommentCard.isAiGeneratedDraft": {
+    "defaultMessage": "AI 生成的草稿评论"
+  },
   "course.discussion.topics.CommentField.comment": {
     "defaultMessage": "评论"
   },

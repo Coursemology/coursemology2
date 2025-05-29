@@ -11,6 +11,7 @@ import {
 } from 'types/course/comments';
 
 import CourseAPI from 'api/course';
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 
 import { actions } from './store';
 
@@ -30,7 +31,7 @@ const formatPostCodaveriAttributes = (
   return {
     discussion_post: {
       text,
-      workflow_state: 'published',
+      workflow_state: POST_WORKFLOW_STATE.published,
       codaveri_feedback_attributes: {
         id: codaveriId,
         rating,
@@ -42,6 +43,15 @@ const formatPostCodaveriAttributes = (
 
 const formatNewPostAttributes = (text: string): Object => {
   return { discussion_post: { text } };
+};
+
+const formatPublishPostAttributes = (text: string): Object => {
+  return {
+    discussion_post: {
+      text,
+      workflow_state: POST_WORKFLOW_STATE.published,
+    },
+  };
 };
 
 export function fetchTabData(): Operation<
@@ -155,5 +165,21 @@ export function deletePost(
       })
       .then(() => {
         dispatch(actions.deletePost(post.id));
+      });
+}
+
+export function publishPost(
+  post: CommentPostMiniEntity,
+  text: string,
+): Operation {
+  return async (dispatch) =>
+    CourseAPI.comments
+      .update(
+        post.topicId.toString(),
+        post.id.toString(),
+        formatPublishPostAttributes(text),
+      )
+      .then((response) => {
+        dispatch(actions.updatePost(response.data));
       });
 }

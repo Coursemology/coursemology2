@@ -96,9 +96,8 @@ RSpec.describe Course::Assessment::Answer::RubricLlmService do
       end
       context 'with invalid JSON' do
         before do
-          allow(Langchain::OutputParsers::OutputFixingParser).to receive(:from_llm).
-            with(llm: LANGCHAIN_OPENAI, parser: parser).and_return(fix_parser)
-          allow(fix_parser).to receive(:parse).with(invalid_json).and_return(JSON.parse(valid_json))
+          allow_any_instance_of(Langchain::OutputParsers::OutputFixingParser).to receive(:parse).with(invalid_json).
+            and_return(JSON.parse(valid_json))
         end
         it 'attempts to fix and parse the response' do
           result = subject.parse_llm_response(invalid_json)

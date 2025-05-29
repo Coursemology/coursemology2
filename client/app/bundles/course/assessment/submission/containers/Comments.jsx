@@ -52,7 +52,7 @@ class VisibleComments extends Component {
                 handleChange={(value) => handleUpdateChange(post.id, value)}
                 isUpdatingAnnotationAllowed
                 post={post}
-                publishComment={() => publishComment(post.id)}
+                publishComment={(value) => publishComment(post.id, value)}
                 updateComment={(value) => updateComment(post.id, value)}
               />
             ),
@@ -133,8 +133,8 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(commentActions.update(topic.id, postId, comment)),
     deleteComment: (postId) =>
       dispatch(commentActions.destroy(topic.id, postId)),
-    publishComment: (postId) =>
-      dispatch(commentActions.publish(topic.id, postId)),
+    publishComment: (postId, comment) =>
+      dispatch(commentActions.publish(topic.id, postId, comment)),
   };
 }
 

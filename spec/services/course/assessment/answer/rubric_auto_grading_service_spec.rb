@@ -17,6 +17,63 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
       create(:course_assessment_answer_auto_grading, answer: answer)
     end
 
+    describe '#grade' do
+      before do
+        allow(answer.submission.assessment).to receive(:autograded?).and_return(true)
+        allow_any_instance_of(Course::Assessment::Answer::RubricLlmService).
+          to receive(:evaluate).and_return(
+            'category_grades' => [
+              {
+                'category_id' => question.categories.first.id,
+                'criterion_id' => question.categories.first.criterions.last.id,
+                'grade' => question.categories.first.criterions.last.grade,
+                'explanation' => '1st selection explanation'
+              },
+              {
+                'category_id' => question.categories.second.id,
+                'criterion_id' => question.categories.second.criterions.last.id,
+                'grade' => question.categories.second.criterions.last.grade,
+                'explanation' => '2nd selection explanation'
+              }
+            ],
+            'overall_feedback' => 'overall feedback'
+          )
+      end
+      context 'when the question is rubric-based' do
+        it 'always grades the answer as correct' do
+          subject.grade(answer)
+          expect(answer.grade).to eq(question.categories.first.criterions.last.grade +
+                                    question.categories.second.criterions.last.grade)
+          expect(answer).to be_correct
+          expect(grading.result['messages']).to contain_exactly('success')
+        end
+      end
+    end
+
+    describe '#evaluate' do
+      it 'evaluates the answer and creates an AI-generated draft post' do
+        allow(subject).to receive(:evaluate_answer).and_return([true, 10, ['success'], 'feedback'])
+        expect(subject).to receive(:create_ai_generated_draft_post).with(answer, 'feedback')
+        result = subject.evaluate(answer)
+        expect(result).to eq(10)
+        expect(answer.auto_grading.result).to eq({ 'messages' => ['success'] })
+      end
+    end
+
+    describe '#evaluate_answer' do
+      it 'instantiates LLM service and processes its response' do
+        question = answer.question.actable
+        llm_service_instance = instance_double(Course::Assessment::Answer::RubricLlmService)
+        llm_response = { 'category_grades' => [], 'overall_feedback' => 'feedback' }
+        expect(Course::Assessment::Answer::RubricLlmService).to receive(:new).and_return(llm_service_instance)
+        expect(llm_service_instance).to receive(:evaluate).with(question, answer.actable).and_return(llm_response)
+        expect(subject).to receive(:process_llm_grading_response).
+          with(question, answer.actable, llm_response).and_return([true, 10, ['success'], 'feedback'])
+        result = subject.send(:evaluate_answer, answer.actable)
+        expect(result).to eq([true, 10, ['success'], 'feedback'])
+      end
+    end
+
     describe '#process_llm_grading_response' do
       context 'with valid LLM response' do
         let(:valid_response) do
@@ -24,9 +81,15 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
             'category_grades' => [
               {
                 'category_id' => question.categories.first.id,
-                'criterion_id' => question.categories.first.criterions.first.id,
-                'grade' => question.categories.first.criterions.first.grade,
-                'explanation' => 'selection explanation'
+                'criterion_id' => question.categories.first.criterions.last.id,
+                'grade' => question.categories.first.criterions.last.grade,
+                'explanation' => '1st selection explanation'
+              },
+              {
+                'category_id' => question.categories.second.id,
+                'criterion_id' => question.categories.second.criterions.last.id,
+                'grade' => question.categories.second.criterions.last.grade,
+                'explanation' => '2nd selection explanation'
               }
             ],
             'overall_feedback' => 'overall feedback'
@@ -34,10 +97,11 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
         end
         it 'processes category grades' do
           result = subject.send(:process_llm_grading_response, question, answer.actable, valid_response)
-          expect(result[0]).to be true # always correct for rubric questions
-          expect(result[1]).to eq(question.categories.first.criterions.first.grade) # grade
-          expect(result[2]).to contain_exactly('success') # messages
-          expect(result[3]).to eq('overall feedback') # feedback
+          expect(result[0]).to be true
+          expect(result[1]).to eq(question.categories.first.criterions.last.grade +
+                                 question.categories.second.criterions.last.grade)
+          expect(result[2]).to contain_exactly('success')
+          expect(result[3]).to eq('overall feedback')
         end
         it 'updates answer selections' do
           expect(answer.actable).to receive(:assign_params).with(hash_including(:selections_attributes))
@@ -119,6 +183,76 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
           )
           subject.send(:update_answer_selections, answer.actable, category_grades)
         end
+      end
+    end
+
+    describe '#update_answer_grade' do
+      let(:category_grades) do
+        [
+          {
+            category_id: question.categories.first.id,
+            criterion_id: question.categories.first.criterions.first.id,
+            grade: question.categories.first.criterions.last.grade,
+            explanation: '1st selection explanation'
+          },
+          {
+            category_id: question.categories.second.id,
+            criterion_id: question.categories.second.criterions.first.id,
+            grade: question.categories.second.criterions.last.grade,
+            explanation: '2nd selection explanation'
+          }
+        ]
+      end
+      it 'updates the answer grade based on category grades' do
+        subject.send(:update_answer_selections, answer.actable, category_grades)
+        total_grade = subject.send(:update_answer_grade, answer.actable, category_grades)
+        expect(total_grade).to eq(
+          question.categories.first.criterions.last.grade +
+          question.categories.second.criterions.last.grade
+        )
+        expect(answer.actable.grade).to eq(total_grade)
+      end
+    end
+
+    describe '#build_draft_post' do
+      let(:submission_question) do
+        create(:course_assessment_submission_question, submission: submission, question: question.acting_as)
+      end
+      it 'builds a draft post with AI-generated feedback' do
+        post = subject.send(:build_draft_post, submission_question, answer, 'feedback')
+        expect(post.creator).to eq(User.system)
+        expect(post.updater).to eq(User.system)
+        expect(post.text).to eq('feedback')
+        expect(post.is_ai_generated).to be true
+        expect(post.workflow_state).to eq('draft')
+        expect(post.title).to eq(answer.submission.assessment.title)
+      end
+    end
+
+    describe '#save_draft_post' do
+      let(:submission_question) do
+        create(:course_assessment_submission_question, submission: submission, question: question.acting_as)
+      end
+      let(:post) { subject.send(:build_draft_post, submission_question, answer, 'draft post') }
+      it 'saves the draft post and updates the submission question' do
+        expect(submission_question.posts).to receive(:length).and_return(1)
+        expect(post).to receive(:save!)
+        expect(submission_question).to receive(:save!)
+        expect(subject).to receive(:create_topic_subscription).with(post.topic, answer)
+        expect(post.topic).to receive(:mark_as_pending)
+        subject.send(:save_draft_post, submission_question, answer, post)
+      end
+    end
+
+    describe '#create_topic_subscription' do
+      let(:discussion_topic) { create(:course_discussion_topic) }
+      it 'ensures the student and group managers are subscribed' do
+        expect(discussion_topic).to receive(:ensure_subscribed_by).with(answer.submission.creator)
+        answer_course_user = answer.submission.course_user
+        answer_course_user.my_managers.each do |manager|
+          expect(discussion_topic).to receive(:ensure_subscribed_by).with(manager.user)
+        end
+        subject.send(:create_topic_subscription, discussion_topic, answer)
       end
     end
 

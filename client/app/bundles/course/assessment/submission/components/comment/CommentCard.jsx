@@ -1,12 +1,19 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { CheckCircleOutline } from '@mui/icons-material';
-import Delete from '@mui/icons-material/Delete';
-import Edit from '@mui/icons-material/Edit';
-import { Avatar, Button, CardHeader, Chip, Typography } from '@mui/material';
-import { grey, orange, red } from '@mui/material/colors';
+import {
+  Avatar,
+  Button,
+  CardHeader,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { grey, orange } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import EditButton from 'lib/components/core/buttons/EditButton';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
@@ -71,14 +78,6 @@ const styles = {
     marginRight: 5,
     marginBottom: 2,
   },
-  headerButton: {
-    height: 35,
-    width: 40,
-    minWidth: 40,
-  },
-  headerChip: {
-    height: 35,
-  },
   headerButtonHidden: {
     height: 35,
     width: 40,
@@ -128,14 +127,10 @@ export default class CommentCard extends Component {
     this.setState({ editMode: false });
   }
 
-  onSaveAndPublish() {
+  onPublish() {
     const { editValue } = this.props;
-    this.props
-      .updateComment(editValue)
-      .then(() => this.props.publishComment())
-      .finally(() => {
-        this.setState({ editMode: false });
-      });
+    this.props.publishComment(editValue);
+    this.setState({ editMode: false });
   }
 
   toggleEditMode() {
@@ -175,7 +170,7 @@ export default class CommentCard extends Component {
               <FormattedMessage {...translations.cancel} />
             </Button>
             {isAiGeneratedDraft ? (
-              <Button color="primary" onClick={() => this.onSaveAndPublish()}>
+              <Button color="primary" onClick={() => this.onPublish()}>
                 <FormattedMessage {...translations.publish} />
               </Button>
             ) : (
@@ -203,7 +198,8 @@ export default class CommentCard extends Component {
       isDelayed,
     } = this.props.post;
 
-    const { post, isUpdatingAnnotationAllowed, publishComment } = this.props;
+    const { post, isUpdatingAnnotationAllowed, editValue, publishComment } =
+      this.props;
     const isAiGeneratedDraft =
       post.isAiGenerated && post.workflowState === POST_WORKFLOW_STATE.draft;
 
@@ -242,34 +238,27 @@ export default class CommentCard extends Component {
           />
           <div style={styles.buttonContainer}>
             {isAiGeneratedDraft && (
-              <Chip
-                color="default"
-                disabled={this.state.editMode}
-                icon={<CheckCircleOutline />}
-                label={<FormattedMessage {...translations.publish} />}
-                onClick={() => publishComment(id)}
-                size="small"
-                style={styles.headerChip}
-                variant="outlined"
-              />
+              <Tooltip title={<FormattedMessage {...translations.publish} />}>
+                <IconButton
+                  disabled={this.state.editMode}
+                  onClick={() => publishComment(editValue)}
+                >
+                  <CheckCircleOutline />
+                </IconButton>
+              </Tooltip>
             )}
             {canUpdate && isUpdatingAnnotationAllowed ? (
-              <Button
+              <EditButton
                 className="edit-comment"
+                disabled={this.state.editMode}
                 onClick={() => this.toggleEditMode()}
-                style={styles.headerButton}
-              >
-                <Edit htmlColor="black" />
-              </Button>
+              />
             ) : null}
             {canDestroy && isUpdatingAnnotationAllowed ? (
-              <Button
+              <DeleteButton
                 className="delete-comment"
                 onClick={() => this.onDelete()}
-                style={styles.headerButton}
-              >
-                <Delete htmlColor={red[500]} />
-              </Button>
+              />
             ) : null}
           </div>
         </div>

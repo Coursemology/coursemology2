@@ -12,7 +12,6 @@ export default function (state = {}, action) {
       };
     case actions.CREATE_COMMENT_SUCCESS:
     case actions.UPDATE_COMMENT_SUCCESS:
-    case actions.PUBLISH_COMMENT_SUCCESS:
     case actions.CREATE_ANNOTATION_SUCCESS:
     case actions.UPDATE_ANNOTATION_SUCCESS: {
       const { id } = action.payload;

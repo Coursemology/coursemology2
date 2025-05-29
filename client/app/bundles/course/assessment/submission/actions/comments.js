@@ -1,4 +1,5 @@
 import CourseAPI from 'api/course';
+import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 
 import actionTypes from '../constants';
 
@@ -81,18 +82,22 @@ export function destroy(topicId, postId) {
   };
 }
 
-export function publish(topicId, postId) {
+export function publish(topicId, postId, text) {
+  const payload = {
+    discussion_post: { text, workflow_state: POST_WORKFLOW_STATE.published },
+  };
   return (dispatch) => {
-    dispatch({ type: actionTypes.PUBLISH_COMMENT_REQUEST });
+    dispatch({ type: actionTypes.UPDATE_COMMENT_REQUEST });
+
     return CourseAPI.comments
-      .publish(topicId, postId)
+      .update(topicId, postId, payload)
       .then((response) => response.data)
       .then((data) => {
         dispatch({
-          type: actionTypes.PUBLISH_COMMENT_SUCCESS,
+          type: actionTypes.UPDATE_COMMENT_SUCCESS,
           payload: data,
         });
       })
-      .catch(() => dispatch({ type: actionTypes.PUBLISH_COMMENT_FAILURE }));
+      .catch(() => dispatch({ type: actionTypes.UPDATE_COMMENT_FAILURE }));
   };
 }

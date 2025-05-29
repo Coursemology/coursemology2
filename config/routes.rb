@@ -454,9 +454,7 @@ Rails.application.routes.draw do
           get 'all', on: :collection
           patch 'toggle_pending', on: :member
           patch 'mark_as_read', on: :member
-          resources :posts, only: [:create, :update, :destroy] do
-            put 'publish', on: :member
-          end
+          resources :posts, only: [:create, :update, :destroy]
         end
       end
 

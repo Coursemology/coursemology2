@@ -40,7 +40,8 @@ const ReevaluateButton: FC<Props> = (props) => {
   const question = questions[questionId];
   const { answerId } = question;
 
-  const { isAutograding } = questionFlags[questionId] || {};
+  const isAutograding =
+    questionFlags[questionId].isAutograding || submissionFlags.isAutograding;
 
   const { isSaving } = submissionFlags;
 
