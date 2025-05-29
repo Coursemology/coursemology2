@@ -28,10 +28,14 @@ class Course::CoursesController < Course::Controller
   end
 
   def sidebar
-    @home_redirects_to_learn =
-      current_course_user&.student? &&
-      current_component_host[:course_stories_component] &&
-      current_course.settings(:course_stories_component).push_key.present?
+    # Redirection to Learn page is currently disabled.
+    # Original logic:
+    # @home_redirects_to_learn = current_course_user&.student? &&
+    #   current_component_host[:course_stories_component] &&
+    #   current_course.settings(:course_stories_component).push_key.present?
+    #
+    # To re-enable, restore the original condition.
+    @home_redirects_to_learn = false
   end
 
   protected

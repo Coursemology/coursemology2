@@ -8,6 +8,10 @@ interface LearnRedirectProps {
   otherwiseRender: ReactNode;
 }
 
+/**
+ * NOTE: Redirection to the Learn page is currently disabled by setting
+ * `@home_redirects_to_learn = false` in the backend (CourseController).
+ */
 const LearnRedirect = (props: LearnRedirectProps): ReactNode => {
   const { homeRedirectsToLearn } = useCourseContext();
   if (!homeRedirectsToLearn) return props.otherwiseRender;
