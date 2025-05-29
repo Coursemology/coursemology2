@@ -91,6 +91,7 @@ export interface SubmissionState {
   isCreator: boolean;
   isGrader: boolean;
   isStudent: boolean;
+  isEditable?: boolean;
   late: boolean;
   maxStep?: number;
   maximumGrade: number;

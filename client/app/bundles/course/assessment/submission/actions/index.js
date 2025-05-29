@@ -50,7 +50,11 @@ export function getJobStatus(jobUrl) {
   return GlobalAPI.jobs.get(jobUrl);
 }
 
-export function fetchSubmission(id, onGetMonitoringSessionId) {
+export function fetchSubmission(
+  id,
+  onGetMonitoringSessionId,
+  isReadOnly = false,
+) {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSION_REQUEST });
 
@@ -70,7 +74,13 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
           onGetMonitoringSessionId?.(data.monitoringSessionId);
         dispatch({
           type: actionTypes.FETCH_SUBMISSION_SUCCESS,
-          payload: data,
+          payload: {
+            ...data,
+            submission: {
+              ...data.submission,
+              ...(isReadOnly ? { isEditable: false } : {}),
+            },
+          },
         });
         dispatch(
           historyActions.initSubmissionHistory({
