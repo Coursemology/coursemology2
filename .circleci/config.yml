@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  codecov: codecov/codecov@3.2.5
+  codecov: codecov/codecov@5.4.3
 
 executors:
   node:
@@ -229,6 +229,23 @@ commands:
           no_output_timeout: 5m
           command: until [ -f coverage/coverage.xml ]; do sleep 1; done
 
+  upload_coverage_report:
+    steps:
+      - run:
+          name: Assign unique coverage filename
+          command: |
+            mv coverage/coverage.xml coverage/cov-<< parameters.prefix >>-${CIRCLE_NODE_INDEX}.xml
+            stat coverage/cov-<< parameters.prefix >>-${CIRCLE_NODE_INDEX}.xml
+
+      - codecov/upload:
+          upload_name: << parameters.prefix >>-${CIRCLE_NODE_INDEX}
+          files: coverage/cov-<< parameters.prefix >>-${CIRCLE_NODE_INDEX}.xml
+          flags: backend
+
+    parameters:
+      prefix:
+        type: string
+
   setup_docker_layer_cache:
     steps:
       - setup_remote_docker:
@@ -294,6 +311,8 @@ jobs:
           command: yarn coverage
 
       - terminate_rails_and_wait_for_coverage_results
+      - upload_coverage_report:
+          prefix: playwright-rails
 
       - run:
           name: Zip test results
@@ -301,10 +320,6 @@ jobs:
           working_directory: tests
           command: |
             zip -r test-results.zip test-results playwright-report
-
-      - codecov/upload:
-          upload_name: playwright-rails
-          file: coverage/coverage.xml
 
       - store_test_results:
           path: ~/repo/tests/results.xml
@@ -340,9 +355,8 @@ jobs:
             mkdir ~/rspec
             circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml" --verbose --split-by=timings
 
-      - codecov/upload:
-          upload_name: rspec-rails
-          file: coverage/coverage.xml
+      - upload_coverage_report:
+          prefix: rspec-rails
 
       - store_test_results:
           path: ~/rspec

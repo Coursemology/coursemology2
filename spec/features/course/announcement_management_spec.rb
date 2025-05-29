@@ -30,7 +30,7 @@ RSpec.feature 'Course: Announcements', js: true do
 
         expect_toastify('New announcement posted!')
 
-        expect(current_path).to eq(course_announcements_path(course))
+        expect(page).to have_current_path(course_announcements_path(course))
       end
 
       scenario 'I can edit announcements' do
@@ -48,7 +48,7 @@ RSpec.feature 'Course: Announcements', js: true do
         fill_in 'title', with: new_title
         find('#form-dialog-update-button').click
 
-        expect(current_path).to eq course_announcements_path(course)
+        expect(page).to have_current_path(course_announcements_path(course))
         within find("#announcement-#{announcement.id}") do
           expect(page).to have_text(new_title)
         end
