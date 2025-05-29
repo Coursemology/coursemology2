@@ -33,6 +33,7 @@ export interface AnswerInfo {
   lastAttemptAnswerId: number;
   grade: number;
   maximumGrade: number;
+  questionType: string;
 }
 
 export interface AttemptInfo {

@@ -45,7 +45,7 @@ const RubricPanelRow: FC<RubricPanelRowProps> = (props) => {
   const submission = useAppSelector(getSubmission);
   const questions = useAppSelector(getQuestions);
 
-  const { graderView, workflowState } = submission;
+  const { graderView, workflowState, isEditable } = submission;
   const question = questions[
     questionId
   ] as SubmissionQuestionData<'RubricBasedResponse'>;
@@ -58,7 +58,12 @@ const RubricPanelRow: FC<RubricPanelRowProps> = (props) => {
 
   const attempting = workflowState === workflowStates.Attempting;
   const published = workflowState === workflowStates.Published;
-  const editable = !attempting && graderView;
+  /**
+   * - `isEditable` may be `undefined`. In such cases, the submission is considered editable
+   * if both `!attempting` and `graderView` are `true`.
+   * - If `isEditable` is explicitly `false`, the submission is not editable regardless of other conditions.
+   */
+  const editable = isEditable !== false && !attempting && graderView;
 
   const { submittedAt, bonusEndAt, bonusPoints } = submission;
 

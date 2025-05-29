@@ -1,5 +1,6 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { QuestionType } from 'types/course/assessment/question';
 import { WorkflowState } from 'types/course/assessment/submission/submission';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
@@ -7,6 +8,7 @@ import SubmissionWorkflowState from 'course/assessment/submission/components/Sub
 import { workflowStates } from 'course/assessment/submission/constants';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
@@ -15,9 +17,10 @@ import {
   getEditSubmissionQuestionURL,
   getEditSubmissionURL,
 } from 'lib/helpers/url-builders';
-import { useAppSelector } from 'lib/hooks/store';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import { fetchSubmission } from '../../submission/actions';
 import submissionTranslations from '../../submission/translations';
 
 import LastAttemptIndex from './AnswerDisplay/LastAttempt';
@@ -43,8 +46,9 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId, assessmentId } = useParams();
   const { includePhantom } = props;
-
+  const dispatch = useAppDispatch();
   const statistics = useAppSelector(getAssessmentStatistics);
+  const [submissionLoading, setSubmissionLoading] = useState(false);
   const [openAnswer, setOpenAnswer] = useState(false);
   const [answerDisplayInfo, setAnswerDisplayInfo] = useState<AnswerInfoState>({
     index: 0,
@@ -55,6 +59,33 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
   });
   const assessment = statistics.assessment;
   const submissions = statistics.submissions;
+
+  useEffect(() => {
+    if (!openAnswer || !answerDisplayInfo.submissionId) return;
+
+    const submission = submissions.find(
+      (s) => s.id === answerDisplayInfo.submissionId,
+    );
+
+    const isRubricBasedResponseAnswer = submission?.answers?.some(
+      (a) =>
+        a.lastAttemptAnswerId === answerDisplayInfo.answerId &&
+        a.questionType === QuestionType.RubricBasedResponse,
+    );
+
+    if (!isRubricBasedResponseAnswer) return;
+
+    setSubmissionLoading(true);
+    dispatch(
+      fetchSubmission(answerDisplayInfo.submissionId, undefined, true),
+    ).finally(() => setSubmissionLoading(false));
+  }, [
+    openAnswer,
+    answerDisplayInfo.submissionId,
+    answerDisplayInfo.answerId,
+    submissions,
+    dispatch,
+  ]);
 
   // since submissions come from Redux store, it is immutable, and hence
   // toggling between includePhantom status will render typeError if we
@@ -304,11 +335,15 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
           </span>
         }
       >
-        <LastAttemptIndex
-          curAnswerId={answerDisplayInfo.answerId}
-          questionId={answerDisplayInfo.questionId}
-          submissionId={answerDisplayInfo.submissionId}
-        />
+        {submissionLoading ? (
+          <LoadingIndicator />
+        ) : (
+          <LastAttemptIndex
+            curAnswerId={answerDisplayInfo.answerId}
+            questionId={answerDisplayInfo.questionId}
+            submissionId={answerDisplayInfo.submissionId}
+          />
+        )}
       </Prompt>
     </>
   );
