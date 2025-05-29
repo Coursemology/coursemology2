@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+json.questionType answer.question.question_type
+
 json.scribing_answer do
   json.image_url answer.question.actable.attachment_reference.generate_public_url
   json.user_id current_user.id

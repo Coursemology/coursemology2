@@ -20,6 +20,8 @@ if is_current_answer && !latest_answer.current_answer?
   end
 end
 
+json.questionType answer.question.question_type
+
 json.fields do
   json.questionId answer.question_id
   json.id answer.acting_as.id

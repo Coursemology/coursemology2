@@ -25,11 +25,12 @@ export interface RubricBasedResponseAnswerData extends AnswerBaseData {
     path?: string;
   };
   latestAnswer?: RubricBasedResponseAnswerData;
-  categoryScores: {
-    canReadRubric: boolean;
+  categoryGrades: {
     id: number | null | undefined;
     categoryId: number;
-    score: number;
+    grade: number;
+    gradeId: number;
+    explanation: string | null;
   }[];
 }
 

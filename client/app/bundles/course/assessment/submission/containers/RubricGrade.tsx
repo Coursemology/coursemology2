@@ -113,6 +113,11 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
         className="w-full h-20 max-w-3xl"
         disabled={isAutograding}
         id={`category-${category.id}`}
+        InputProps={{
+          classes: {
+            input: 'text-center',
+          },
+        }}
         onChange={(event) => handleOnChange(event, category.isBonusCategory)}
         value={categoryGrades[category.id].grade}
         variant="outlined"
@@ -131,7 +136,7 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
     >
       {category.grades.map((catGrade) => (
         <MenuItem key={catGrade.id} value={catGrade.id}>
-          {catGrade.grade}
+          {catGrade.grade} / {category.maximumGrade}
         </MenuItem>
       ))}
     </Select>

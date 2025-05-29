@@ -611,6 +611,14 @@ const translations = defineMessages({
     id: 'course.assessment.submission.grade',
     defaultMessage: 'Grade',
   },
+  gradeDisplay: {
+    id: 'course.assessment.submission.gradeDisplay',
+    defaultMessage: 'Grade: {grade}',
+  },
+  max: {
+    id: 'course.assessment.submission.max',
+    defaultMessage: 'Max',
+  },
   group: {
     id: 'course.assessment.submission.group',
     defaultMessage: 'Group',
