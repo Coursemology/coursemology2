@@ -89,7 +89,14 @@ export interface AssessmentLiveFeedbackStatistics {
   groups: { name: string }[];
   workflowState?: WorkflowState;
   submissionId?: number;
-  liveFeedbackCount?: number[]; // Will already be ordered by question
-  totalFeedbackCount?: number;
+  liveFeedbackData: AssessmentLiveFeedbackData[]; // Will already be ordered by question
   questionIds: number[];
+  totalMetricCount?: number;
+}
+
+export interface AssessmentLiveFeedbackData {
+  grade: number;
+  grade_diff: number;
+  prompt_count: number;
+  prompt_length: number;
 }
