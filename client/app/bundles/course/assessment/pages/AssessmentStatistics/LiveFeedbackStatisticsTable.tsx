@@ -48,8 +48,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
 
   useEffect(() => {
     const feedbackCounts = liveFeedbackStatistics
-      .flatMap((s) => s.liveFeedbackCount ?? [])
-      .map((c) => c ?? 0)
+      .flatMap((s) => s.liveFeedbackData.map((d) => d.prompt_count))
       .filter((c) => c !== 0)
       .sort((a, b) => a - b);
     const upperQuartilePercentileIndex = Math.floor(
@@ -64,9 +63,10 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       : liveFeedbackStatistics.filter((s) => !s.courseUser.isPhantom);
 
     filteredStats.forEach((stat) => {
-      stat.totalFeedbackCount =
-        stat.liveFeedbackCount?.reduce((sum, count) => sum + (count || 0), 0) ??
-        0;
+      stat.totalFeedbackCount = stat.liveFeedbackData.reduce(
+        (sum, data) => sum + data.prompt_count,
+        0,
+      );
     });
 
     setParsedStatistics(
@@ -117,13 +117,14 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       return {
         searchProps: {
           getValue: (datum) =>
-            datum.liveFeedbackCount?.[index]?.toString() ?? '',
+            datum.liveFeedbackData[index]?.prompt_count.toString() ?? '',
         },
         title: t(translations.questionIndex, { index: index + 1 }),
         cell: (datum): ReactNode => {
-          return typeof datum.liveFeedbackCount?.[index] === 'number'
+          const promptCount = datum.liveFeedbackData[index]?.prompt_count;
+          return typeof promptCount === 'number'
             ? renderNonNullClickableLiveFeedbackCountCell(
-                datum.liveFeedbackCount?.[index],
+                promptCount,
                 datum.courseUser.id,
                 datum.questionIds[index],
                 index + 1,
@@ -136,9 +137,11 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         sortProps: {
           sort: (a, b): number => {
             const aValue =
-              a.liveFeedbackCount?.[index] ?? Number.MIN_SAFE_INTEGER;
+              a.liveFeedbackData[index]?.prompt_count ??
+              Number.MIN_SAFE_INTEGER;
             const bValue =
-              b.liveFeedbackCount?.[index] ?? Number.MIN_SAFE_INTEGER;
+              b.liveFeedbackData[index]?.prompt_count ??
+              Number.MIN_SAFE_INTEGER;
 
             return aValue - bValue;
           },
@@ -209,20 +212,16 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
     {
       searchProps: {
         getValue: (datum) =>
-          datum.liveFeedbackCount
-            ? datum.liveFeedbackCount
-                .reduce((sum, count) => sum + (count || 0), 0)
-                .toString()
-            : '',
+          datum.liveFeedbackData
+            .reduce((sum, data) => sum + data.prompt_count, 0)
+            .toString(),
       },
       title: t(translations.total),
       cell: (datum): ReactNode => {
-        const totalFeedbackCount = datum.liveFeedbackCount
-          ? datum.liveFeedbackCount.reduce(
-              (sum, count) => sum + (count || 0),
-              0,
-            )
-          : null;
+        const totalFeedbackCount = datum.liveFeedbackData.reduce(
+          (sum, data) => sum + data.prompt_count,
+          0,
+        );
         return (
           <div className="p-[1rem]">
             <Box>{totalFeedbackCount}</Box>

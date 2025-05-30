@@ -108,21 +108,71 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def create_student_live_feedback_hash
-    count_hash = Course::Assessment::LiveFeedback::Message.joins(:thread).
-                 select('live_feedback_threads.submission_creator_id',
-                        'live_feedback_threads.submission_question_id').
-                 where.not(creator_id: User::SYSTEM_USER_ID).
-                 where(live_feedback_threads: {
-                   submission_question_id: @submission_question_id_hash.values,
-                   submission_creator_id: @all_students.pluck(:user_id)
-                 }).
-                 group('live_feedback_threads.submission_creator_id',
-                       'live_feedback_threads.submission_question_id').count
+    count_hash = fetch_live_feedback_count_hash
     submission_hash = @submissions.to_h { |submission| [submission.creator_id, submission] }
+
     @student_live_feedback_hash = @all_students.to_h do |student|
       submission = submission_hash[student.user_id]
       live_feedback_count = get_live_feedback_count(count_hash, submission)
-      [student, [submission, live_feedback_count]]
+      live_feedback_data = build_live_feedback_data(submission, live_feedback_count)
+
+      [student, [submission, live_feedback_data]]
+    end
+  end
+
+  def fetch_live_feedback_count_hash
+    Course::Assessment::LiveFeedback::Message.joins(:thread).
+      select('live_feedback_threads.submission_creator_id',
+             'live_feedback_threads.submission_question_id').
+      where.not(creator_id: User::SYSTEM_USER_ID).
+      where(live_feedback_threads: {
+        submission_question_id: @submission_question_id_hash.values,
+        submission_creator_id: @all_students.pluck(:user_id)
+      }).
+      group('live_feedback_threads.submission_creator_id',
+            'live_feedback_threads.submission_question_id').count
+  end
+
+  def build_live_feedback_data(submission, live_feedback_count)
+    @ordered_questions.each_with_index.map do |question_id, idx|
+      answer = find_current_answer(submission, question_id)
+      submission_question_id = @submission_question_id_hash[[submission&.id, question_id]]
+      messages = fetch_messages_for_question(submission_question_id)
+      time_taken = calculate_time_taken(submission, question_id)
+      prompt_length = calculate_prompt_length(messages)
+
+      {
+        grade: answer&.grade&.to_f || 0,
+        time_taken: time_taken,
+        prompt_length: prompt_length,
+        prompt_count: live_feedback_count[idx]
+      }
+    end
+  end
+
+  def find_current_answer(submission, question_id)
+    submission&.answers&.find { |a| a.question_id == question_id && a.current_answer? }
+  end
+
+  def fetch_messages_for_question(submission_question_id)
+    Course::Assessment::LiveFeedback::Message.
+      joins(:thread).
+      where(live_feedback_threads: { submission_question_id: submission_question_id }).
+      order(:created_at)
+  end
+
+  def calculate_time_taken(submission, question_id)
+    return 0 unless submission
+
+    answers = submission.answers.select { |a| a.question_id == question_id }.sort_by(&:created_at)
+    return 0 if answers.empty?
+
+    (answers.last.created_at - answers.first.created_at).to_i
+  end
+
+  def calculate_prompt_length(messages)
+    messages.where.not(creator_id: 0).sum do |message|
+      message.content.split(/\s+/).count
     end
   end
 
