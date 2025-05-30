@@ -1,7 +1,10 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
-import { AssessmentLiveFeedbackStatistics } from 'types/course/statistics/assessmentStatistics';
+import { Box, Tooltip, Typography } from '@mui/material';
+import {
+  AssessmentLiveFeedbackData,
+  AssessmentLiveFeedbackStatistics,
+} from 'types/course/statistics/assessmentStatistics';
 
 import SubmissionWorkflowState from 'course/assessment/submission/components/SubmissionWorkflowState';
 import { workflowStates } from 'course/assessment/submission/constants';
@@ -14,11 +17,35 @@ import { getEditSubmissionURL } from 'lib/helpers/url-builders';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import LiveFeedbackMetricSelector from './components/LiveFeedbackMetricsSelector';
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
 import LiveFeedbackHistoryContent from './LiveFeedbackHistory';
 import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
 import { getJointGroupsName } from './utils';
+
+const METRIC_CONFIG = {
+  grade: {
+    showTotal: true,
+    legendLowerLabel: 'legendLowerLabelGrade',
+    legendUpperLabel: 'legendUpperLabelGrade',
+  },
+  grade_diff: {
+    showTotal: false,
+    legendLowerLabel: 'legendLowerLabelGradeDiff',
+    legendUpperLabel: 'legendUpperLabelGradeDiff',
+  },
+  prompt_count: {
+    showTotal: true,
+    legendLowerLabel: 'legendLowerLabelPromptCount',
+    legendUpperLabel: 'legendUpperLabelPromptCount',
+  },
+  prompt_length: {
+    showTotal: true,
+    legendLowerLabel: 'legendLowerLabelPromptLength',
+    legendUpperLabel: 'legendUpperLabelPromptLength',
+  },
+} as const;
 
 interface Props {
   includePhantom: boolean;
@@ -37,225 +64,376 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
   const [parsedStatistics, setParsedStatistics] = useState<
     AssessmentLiveFeedbackStatistics[]
   >([]);
-  const [upperQuartileFeedbackCount, setUpperQuartileFeedbackCount] =
+  const [upperQuartileMetricValue, setUpperQuartileMetricValue] =
     useState<number>(0);
-
   const [openLiveFeedbackHistory, setOpenLiveFeedbackHistory] = useState(false);
   const [liveFeedbackInfo, setLiveFeedbackInfo] = useState({
     courseUserId: 0,
     questionId: 0,
     questionNumber: 0,
   });
+  const [selectedMetric, setSelectedMetric] = useState({
+    value: 'prompt_count',
+    label: 'Prompt Count',
+  });
 
   useEffect(() => {
-    const feedbackCounts = liveFeedbackStatistics
-      .flatMap((s) => s.liveFeedbackCount ?? [])
-      .map((c) => c ?? 0)
+    // Create a deep copy of the statistics to avoid mutating the original data
+    const processedStats = liveFeedbackStatistics.map((stat) => ({
+      ...stat,
+      liveFeedbackData: stat.liveFeedbackData.map((data) => ({
+        ...data,
+        [selectedMetric.value]: data[selectedMetric.value as keyof typeof data],
+      })),
+    }));
+
+    // Calculate quartile value from all non-zero values
+    const feedbackStats = processedStats
+      .flatMap((s) =>
+        s.liveFeedbackData.map((d) => {
+          const val = d[selectedMetric.value as keyof typeof d];
+          return typeof val === 'number' ? val : 0;
+        }),
+      )
       .filter((c) => c !== 0)
       .sort((a, b) => a - b);
+
     const upperQuartilePercentileIndex = Math.floor(
-      0.75 * (feedbackCounts.length - 1),
+      0.75 * (feedbackStats.length - 1),
     );
     const upperQuartilePercentileValue =
-      feedbackCounts[upperQuartilePercentileIndex];
-    setUpperQuartileFeedbackCount(upperQuartilePercentileValue);
+      feedbackStats[upperQuartilePercentileIndex];
+    setUpperQuartileMetricValue(upperQuartilePercentileValue);
 
     const filteredStats = includePhantom
-      ? liveFeedbackStatistics
-      : liveFeedbackStatistics.filter((s) => !s.courseUser.isPhantom);
+      ? processedStats
+      : processedStats.filter((s) => !s.courseUser.isPhantom);
 
-    filteredStats.forEach((stat) => {
-      stat.totalFeedbackCount =
-        stat.liveFeedbackCount?.reduce((sum, count) => sum + (count || 0), 0) ??
-        0;
+    // Only calculate totals if the metric should show them
+    if (
+      METRIC_CONFIG[selectedMetric.value as keyof typeof METRIC_CONFIG]
+        ?.showTotal
+    ) {
+      filteredStats.forEach((stat) => {
+        stat.totalMetricCount = stat.liveFeedbackData.reduce((sum, data) => {
+          const value = data[selectedMetric.value as keyof typeof data];
+          return sum + (typeof value === 'number' ? value : 0);
+        }, 0);
+      });
+    } else {
+      // Clear any existing totals
+      filteredStats.forEach((stat) => {
+        stat.totalMetricCount = undefined;
+      });
+    }
+
+    const sortedStats = filteredStats.sort((a, b) => {
+      // First sort by phantom status
+      const phantomDiff =
+        Number(a.courseUser.isPhantom) - Number(b.courseUser.isPhantom);
+      if (phantomDiff !== 0) return phantomDiff;
+
+      // Then sort by workflow state
+      const workflowStateOrder = {
+        [workflowStates.Published]: 0,
+        [workflowStates.Graded]: 1,
+        [workflowStates.Submitted]: 2,
+        [workflowStates.Attempting]: 3,
+        [workflowStates.Unstarted]: 4,
+      };
+      const stateA =
+        workflowStateOrder[a.workflowState ?? workflowStates.Unstarted] ?? 5;
+      const stateB =
+        workflowStateOrder[b.workflowState ?? workflowStates.Unstarted] ?? 5;
+      if (stateA !== stateB) return stateA - stateB;
+
+      // Then sort by total metric count
+      const feedbackDiff =
+        (b.totalMetricCount ?? 0) - (a.totalMetricCount ?? 0);
+      if (feedbackDiff !== 0) return feedbackDiff;
+
+      // Finally sort by name
+      return a.courseUser.name.localeCompare(b.courseUser.name);
     });
 
-    setParsedStatistics(
-      filteredStats.sort((a, b) => {
-        const phantomDiff =
-          Number(a.courseUser.isPhantom) - Number(b.courseUser.isPhantom);
-        if (phantomDiff !== 0) return phantomDiff;
+    setParsedStatistics(sortedStats);
+  }, [liveFeedbackStatistics, includePhantom, selectedMetric]);
 
-        const feedbackDiff =
-          (b.totalFeedbackCount ?? 0) - (a.totalFeedbackCount ?? 0);
-        if (feedbackDiff !== 0) return feedbackDiff;
+  const renderTooltipContent = (
+    liveFeedbackData: AssessmentLiveFeedbackData,
+  ): ReactNode => (
+    <Box>
+      <Typography variant="body2">
+        Grade: {liveFeedbackData.grade ?? '-'}
+      </Typography>
+      <Typography variant="body2">
+        Grade Difference: {liveFeedbackData.grade_diff ?? '-'}
+      </Typography>
+      <Typography variant="body2">
+        Prompt Count: {liveFeedbackData.prompt_count ?? '-'}
+      </Typography>
+      <Typography variant="body2">
+        Prompt Length: {liveFeedbackData.prompt_length ?? '-'}
+      </Typography>
+    </Box>
+  );
 
-        return a.courseUser.name.localeCompare(b.courseUser.name);
-      }),
-    );
-  }, [liveFeedbackStatistics, includePhantom]);
+  const renderClickableCell = (
+    metricValue: number,
+    classname: string,
+    courseUserId: number,
+    questionId: number,
+    questionNumber: number,
+  ): JSX.Element => (
+    <div
+      className={`cursor-pointer ${classname}`}
+      onClick={(): void => {
+        setOpenLiveFeedbackHistory(true);
+        setLiveFeedbackInfo({ courseUserId, questionId, questionNumber });
+      }}
+    >
+      <Box>{metricValue}</Box>
+    </div>
+  );
 
   // the case where the live feedback count is null is handled separately inside the column
   // (refer to the definition of statColumns below)
   const renderNonNullClickableLiveFeedbackCountCell = (
-    count: number,
+    metricValue: number,
     courseUserId: number,
     questionId: number,
     questionNumber: number,
+    liveFeedbackData: AssessmentLiveFeedbackData,
   ): ReactNode => {
     const classname = getClassnameForLiveFeedbackCell(
-      count,
-      upperQuartileFeedbackCount,
+      metricValue,
+      upperQuartileMetricValue,
     );
-    if (count === 0) {
-      return <Box>{count}</Box>;
+
+    const tooltipContent = renderTooltipContent(liveFeedbackData);
+
+    // If there is no LiveFeedbackHistory, we do not show the clickable cell
+    if (liveFeedbackData.prompt_count === 0) {
+      return (
+        <div className="p-1.5">
+          <Tooltip arrow placement="left" title={tooltipContent}>
+            <Box>{metricValue}</Box>
+          </Tooltip>
+        </div>
+      );
     }
+
     return (
-      <div
-        className={`cursor-pointer ${classname}`}
-        onClick={(): void => {
-          setOpenLiveFeedbackHistory(true);
-          setLiveFeedbackInfo({ courseUserId, questionId, questionNumber });
-        }}
-      >
-        <Box>{count}</Box>
-      </div>
+      <Tooltip arrow placement="left" title={tooltipContent}>
+        {renderClickableCell(
+          metricValue,
+          classname,
+          courseUserId,
+          questionId,
+          questionNumber,
+        )}
+      </Tooltip>
     );
   };
 
-  const statColumns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] =
-    Array.from({ length: assessment?.questionCount ?? 0 }, (_, index) => {
-      return {
+  const columns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] =
+    useMemo(() => {
+      const statColumns = Array.from(
+        { length: assessment?.questionCount ?? 0 },
+        (_, index) => {
+          return {
+            searchProps: {
+              getValue: (datum) =>
+                datum.liveFeedbackData[index]?.[
+                  selectedMetric.value as keyof (typeof datum.liveFeedbackData)[number]
+                ]?.toString() ?? '',
+            },
+            title: t(translations.questionIndex, { index: index + 1 }),
+            cell: (datum): ReactNode => {
+              const metricValue =
+                datum.liveFeedbackData[index]?.[
+                  selectedMetric.value as keyof (typeof datum.liveFeedbackData)[number]
+                ];
+              return typeof metricValue === 'number'
+                ? renderNonNullClickableLiveFeedbackCountCell(
+                    metricValue,
+                    datum.courseUser.id,
+                    datum.questionIds[index],
+                    index + 1,
+                    datum.liveFeedbackData[index],
+                  )
+                : null;
+            },
+            sortable: true,
+            csvDownloadable: true,
+            className: 'text-right',
+            sortProps: {
+              sort: (a, b): number => {
+                const aValue =
+                  a.liveFeedbackData[index]?.[
+                    selectedMetric.value as keyof (typeof a.liveFeedbackData)[number]
+                  ] ?? Number.MIN_SAFE_INTEGER;
+                const bValue =
+                  b.liveFeedbackData[index]?.[
+                    selectedMetric.value as keyof (typeof b.liveFeedbackData)[number]
+                  ] ?? Number.MIN_SAFE_INTEGER;
+                return aValue - bValue;
+              },
+            },
+          };
+        },
+      );
+
+      const baseColumns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] = [
+        {
+          searchProps: {
+            getValue: (datum) => datum.courseUser.name,
+          },
+          title: t(translations.name),
+          sortable: true,
+          searchable: true,
+          cell: (datum) => (
+            <div className="flex grow items-center">
+              <Link to={`/courses/${courseId}/users/${datum.courseUser.id}`}>
+                {datum.courseUser.name}
+              </Link>
+              {datum.courseUser.isPhantom && (
+                <GhostIcon className="ml-2" fontSize="small" />
+              )}
+            </div>
+          ),
+          csvDownloadable: true,
+        },
+        {
+          searchProps: {
+            getValue: (datum) => datum.courseUser.email,
+          },
+          title: t(translations.email),
+          hidden: true,
+          cell: (datum) => (
+            <div className="flex grow items-center">
+              {datum.courseUser.email}
+            </div>
+          ),
+          csvDownloadable: true,
+        },
+        {
+          of: 'groups',
+          title: t(translations.group),
+          sortable: true,
+          searchable: true,
+          searchProps: {
+            getValue: (datum) => getJointGroupsName(datum.groups),
+          },
+          cell: (datum) => getJointGroupsName(datum.groups),
+          csvDownloadable: true,
+        },
+        {
+          of: 'workflowState',
+          title: t(translations.workflowState),
+          sortable: true,
+          cell: (datum) => (
+            <SubmissionWorkflowState
+              linkTo={getEditSubmissionURL(
+                courseId,
+                assessmentId,
+                datum.submissionId,
+              )}
+              opensInNewTab
+              workflowState={datum.workflowState ?? workflowStates.Unstarted}
+            />
+          ),
+          className: 'center',
+        },
+        ...statColumns,
+      ];
+
+      // Always add total column, but make it empty when showTotal is false to prevent UI elements shifting
+      baseColumns.push({
         searchProps: {
           getValue: (datum) =>
-            datum.liveFeedbackCount?.[index]?.toString() ?? '',
+            METRIC_CONFIG[selectedMetric.value as keyof typeof METRIC_CONFIG]
+              ?.showTotal
+              ? datum.liveFeedbackData
+                  .reduce((sum, data) => {
+                    const value =
+                      data[selectedMetric.value as keyof typeof data];
+                    return sum + (typeof value === 'number' ? value : 0);
+                  }, 0)
+                  .toString()
+              : '',
         },
-        title: t(translations.questionIndex, { index: index + 1 }),
+        title: t(translations.total),
         cell: (datum): ReactNode => {
-          return typeof datum.liveFeedbackCount?.[index] === 'number'
-            ? renderNonNullClickableLiveFeedbackCountCell(
-                datum.liveFeedbackCount?.[index],
-                datum.courseUser.id,
-                datum.questionIds[index],
-                index + 1,
-              )
-            : null;
+          if (
+            !METRIC_CONFIG[selectedMetric.value as keyof typeof METRIC_CONFIG]
+              ?.showTotal
+          ) {
+            return <Box>-</Box>;
+          }
+
+          const totalMetricValue = datum.liveFeedbackData.reduce(
+            (sum, data) => {
+              const value = data[selectedMetric.value as keyof typeof data];
+              return sum + (typeof value === 'number' ? value : 0);
+            },
+            0,
+          );
+
+          return <Box>{totalMetricValue}</Box>;
         },
         sortable: true,
         csvDownloadable: true,
         className: 'text-right',
         sortProps: {
           sort: (a, b): number => {
-            const aValue =
-              a.liveFeedbackCount?.[index] ?? Number.MIN_SAFE_INTEGER;
-            const bValue =
-              b.liveFeedbackCount?.[index] ?? Number.MIN_SAFE_INTEGER;
-
-            return aValue - bValue;
+            if (
+              !METRIC_CONFIG[selectedMetric.value as keyof typeof METRIC_CONFIG]
+                ?.showTotal
+            ) {
+              return 0;
+            }
+            const totalA = a.totalMetricCount ?? 0;
+            const totalB = b.totalMetricCount ?? 0;
+            return totalA - totalB;
           },
         },
-      };
-    });
+      });
 
-  const columns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] = [
-    {
-      searchProps: {
-        getValue: (datum) => datum.courseUser.name,
-      },
-      title: t(translations.name),
-      sortable: true,
-      searchable: true,
-      cell: (datum) => (
-        <div className="flex grow items-center">
-          <Link to={`/courses/${courseId}/users/${datum.courseUser.id}`}>
-            {datum.courseUser.name}
-          </Link>
-          {datum.courseUser.isPhantom && (
-            <GhostIcon className="ml-2" fontSize="small" />
-          )}
-        </div>
-      ),
-      csvDownloadable: true,
-    },
-    {
-      searchProps: {
-        getValue: (datum) => datum.courseUser.email,
-      },
-      title: t(translations.email),
-      hidden: true,
-      cell: (datum) => (
-        <div className="flex grow items-center">{datum.courseUser.email}</div>
-      ),
-      csvDownloadable: true,
-    },
-    {
-      of: 'groups',
-      title: t(translations.group),
-      sortable: true,
-      searchable: true,
-      searchProps: {
-        getValue: (datum) => getJointGroupsName(datum.groups),
-      },
-      cell: (datum) => getJointGroupsName(datum.groups),
-      csvDownloadable: true,
-    },
-    {
-      of: 'workflowState',
-      title: t(translations.workflowState),
-      sortable: true,
-      cell: (datum) => (
-        <SubmissionWorkflowState
-          linkTo={getEditSubmissionURL(
-            courseId,
-            assessmentId,
-            datum.submissionId,
-          )}
-          opensInNewTab
-          workflowState={datum.workflowState ?? workflowStates.Unstarted}
-        />
-      ),
-      className: 'center',
-    },
-    ...statColumns,
-    {
-      searchProps: {
-        getValue: (datum) =>
-          datum.liveFeedbackCount
-            ? datum.liveFeedbackCount
-                .reduce((sum, count) => sum + (count || 0), 0)
-                .toString()
-            : '',
-      },
-      title: t(translations.total),
-      cell: (datum): ReactNode => {
-        const totalFeedbackCount = datum.liveFeedbackCount
-          ? datum.liveFeedbackCount.reduce(
-              (sum, count) => sum + (count || 0),
-              0,
-            )
-          : null;
-        return (
-          <div className="p-[1rem]">
-            <Box>{totalFeedbackCount}</Box>
-          </div>
-        );
-      },
-      sortable: true,
-      csvDownloadable: true,
-      className: 'text-right',
-      sortProps: {
-        sort: (a, b): number => {
-          const totalA = a.totalFeedbackCount ?? 0;
-          const totalB = b.totalFeedbackCount ?? 0;
-          return totalA - totalB;
-        },
-      },
-    },
-  ];
+      return baseColumns;
+    }, [selectedMetric.value, upperQuartileMetricValue]);
 
   return (
     <>
-      <div className="flex items-center">
-        <Typography variant="caption">
-          {t(translations.legendLowerUsage)}
-        </Typography>
-        {
-          // The gradient color bar
-          <div className="h-5 w-1/4 mx-2 bg-gradient-to-r from-red-100 to-red-500" />
-        }
-        <Typography variant="caption">
-          {t(translations.legendHigherusage)}
-        </Typography>
+      <div className="flex mb-4 w-full">
+        <div className="w-1/2 flex items-center">
+          <LiveFeedbackMetricSelector
+            selectedMetric={selectedMetric}
+            setSelectedMetric={setSelectedMetric}
+          />
+        </div>
+
+        <div className="w-1/2 flex items-center justify-end">
+          <Typography variant="caption">
+            {t(
+              translations[
+                METRIC_CONFIG[
+                  selectedMetric.value as keyof typeof METRIC_CONFIG
+                ].legendLowerLabel
+              ],
+            )}
+          </Typography>
+          <div className="h-5 w-1/4 mx-2 bg-gradient-to-r from-red-100 to-red-500 rounded" />
+          <Typography variant="caption">
+            {t(
+              translations[
+                METRIC_CONFIG[
+                  selectedMetric.value as keyof typeof METRIC_CONFIG
+                ].legendUpperLabel
+              ],
+            )}
+          </Typography>
+        </div>
       </div>
 
       <Table

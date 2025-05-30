@@ -69,12 +69,12 @@ export const getClassNameForAttemptCountCell = (
 };
 
 export const getClassnameForLiveFeedbackCell = (
-  count: number,
+  metricValue: number,
   upperQuartile: number,
 ): string => {
   const gradientLevel = calculateOneSidedColorGradientLevel(
-    count,
+    metricValue,
     upperQuartile,
   );
-  return `${redBackgroundColorClassName[gradientLevel]} p-[1rem]`;
+  return `${redBackgroundColorClassName[gradientLevel]} p-1.5`;
 };
