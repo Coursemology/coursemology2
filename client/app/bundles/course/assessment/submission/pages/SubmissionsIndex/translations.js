@@ -81,7 +81,7 @@ const translations = defineMessages({
   },
   publishAutoFeedback: {
     id: 'course.assessment.submission.SubmissionsIndex.publishAutoFeedback',
-    defaultMessage: 'Publish Automated Feedback ({count})',
+    defaultMessage: 'Publish Automated Programming Feedback ({count})',
   },
   unsubmitAllSubmissions: {
     id: 'course.assessment.submission.SubmissionsIndex.unsubmitAllSubmissions',

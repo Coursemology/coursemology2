@@ -294,12 +294,12 @@ const translations = defineMessages({
   publishAutoFeedbackConfirmationHeader: {
     id: 'course.assessment.submission.publishAutoFeedbackConfirmationHeader',
     defaultMessage:
-      'You are about to publish {count} automated feedback {count, plural, one {comment} other {comments}}.',
+      'You are about to publish {count} automated programming feedback {count, plural, one {comment} other {comments}}.',
   },
   publishAutoFeedbackConfirmationPleaseRate: {
     id: 'course.assessment.submission.publishAutoFeedbackConfirmationPleaseRate',
     defaultMessage:
-      'Please rate the overall quality of the automated feedback for this assessment. Your rating will help us improve automated feedback generation for everyone.',
+      'Please rate the overall quality of the automated programming feedback for this assessment. Your rating will help us improve automated programming feedback generation for everyone.',
   },
   remainingTime: {
     id: 'course.assessment.submission.remainingTime',
@@ -455,7 +455,7 @@ const translations = defineMessages({
   },
   publishAutoFeedbackSuccess: {
     id: 'course.assessment.submission.publishAutoFeedbackSuccess',
-    defaultMessage: 'All automated feedback has been published.',
+    defaultMessage: 'All automated programming feedback has been published.',
   },
   sendReminderEmailSuccess: {
     id: 'course.assessment.assessments.sendReminderEmailSuccess',
