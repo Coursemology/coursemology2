@@ -292,6 +292,14 @@ jobs:
       - serve_rails_server
       - build_and_run_auth_server
 
+      # Replace both archive and security repositories 
+      # https://support.circleci.com/hc/en-us/articles/37474192881179-Resolving-Unable-to-connect-to-archive-ubuntu-com-Error-in-CircleCI
+      - run:
+          name: Change Ubuntu archive mirrors
+          command: |
+            sudo sed -i 's|http://archive.ubuntu.com|http://mirrors.rit.edu|g' /etc/apt/sources.list
+            sudo sed -i 's|http://security.ubuntu.com|http://mirrors.rit.edu|g' /etc/apt/sources.list
+
       - run:
           name: Install Playwright dependencies
           working_directory: tests
