@@ -85,10 +85,13 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
 
   def update_rubric_based_response_question
     ActiveRecord::Base.transaction do
-      @rubric_based_response_question.update(
+      existing_category_ids = @rubric_based_response_question.categories.pluck(:id)
+      raise ActiveRecord::Rollback unless @rubric_based_response_question.update(
         rubric_based_response_question_params.except(:question_assessment)
       )
 
+      new_category_ids = @rubric_based_response_question.reload.categories.pluck(:id) - existing_category_ids
+      create_new_category_grade_instances(new_category_ids) if new_category_ids.present?
       update_all_submission_answer_grades
     end
   end

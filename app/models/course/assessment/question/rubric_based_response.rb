@@ -2,7 +2,7 @@
 class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
   acts_as :question, class_name: 'Course::Assessment::Question'
 
-  validate :validate_no_reserved_category_names, on: :create
+  validate :validate_no_reserved_category_names
   validate :validate_unique_category_names
   validate :validate_at_least_one_category
 
@@ -53,11 +53,11 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
   private
 
   def validate_no_reserved_category_names
-    return nil if categories.reject(&:marked_for_destruction?).map(&:name).none? do |name|
+    reserved_names_count = categories.reject(&:marked_for_destruction?).map(&:name).count do |name|
       RESERVED_CATEGORY_NAMES.include?(name.downcase)
     end
-
-    errors.add(:categories, :reserved_category_name)
+    expected_count = new_record? ? 0 : 1
+    errors.add(:categories, :reserved_category_name) if reserved_names_count > expected_count
   end
 
   def validate_unique_category_names

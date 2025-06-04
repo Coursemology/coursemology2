@@ -22,6 +22,8 @@ FactoryBot.define do
         end
         question.categories << category
       end
+      # override the maximum grade in :course_assessment_question
+      question.maximum_grade = evaluator.category_count * evaluator.criterion_count * 2
     end
   end
 end
