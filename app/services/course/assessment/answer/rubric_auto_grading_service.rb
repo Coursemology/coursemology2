@@ -97,6 +97,7 @@ class Course::Assessment::Answer::RubricAutoGradingService <
     total_grade = answer.selections.sum do |selection|
       grade_lookup[selection.category_id] || selection.criterion&.grade || selection.grade || 0
     end
+    total_grade = total_grade.clamp(0, answer.question.maximum_grade)
     answer.grade = total_grade
     total_grade
   end
