@@ -30,7 +30,7 @@ if attempt.submitted? && !attempt.auto_grading
   end
 end
 
-json.categoryGrades answer.selections do |selection|
+json.categoryGrades answer.selections.includes(:criterion).map do |selection|
   criterion = selection.criterion
 
   json.id selection.id
