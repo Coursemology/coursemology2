@@ -72,10 +72,9 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
   );
 
   const handleOnChange = (event, isBonusCategory: boolean): void => {
-    const selectedGrade = Number(event.target.value);
-    const bonusGrade = Number.isNaN(selectedGrade)
-      ? event.target.value
-      : selectedGrade;
+    const value = event.target.value;
+    const selectedGrade = value === '' ? value : Number(value);
+    const bonusGrade = Number.isNaN(selectedGrade) ? value : selectedGrade;
 
     const newCategoryGrades = {
       ...categoryGrades,
@@ -110,7 +109,7 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
   if (category.isBonusCategory) {
     return (
       <NumberTextField
-        className="w-full h-20 max-w-3xl"
+        className="w-full max-w-3xl"
         disabled={isAutograding}
         id={`category-${category.id}`}
         InputProps={{

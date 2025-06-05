@@ -228,7 +228,6 @@ export default class CommentCard extends Component {
             }
             titleTypographyProps={{
               display: 'block',
-              marginRight: 20,
               fontSize: '1.5rem',
             }}
           />
