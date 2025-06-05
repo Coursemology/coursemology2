@@ -12,6 +12,7 @@ export const updateMaximumGrade = (
   setValue: UseFormSetValue<RubricBasedResponseFormData>,
 ): void => {
   const maximumCategoryGrade = Math.max(
+    0,
     ...cats[categoryIndex].grades
       .filter((cat) => !cat.toBeDeleted)
       .map((cat) => Number(cat.grade)),
@@ -28,6 +29,20 @@ export const updateMaximumGrade = (
   setValue('question.maximumGrade', `${maximumGrade}`);
 };
 
+const markGradeForDeletion = (
+  categories: CategoryEntity[],
+  categoryIndex: number,
+  gradeIndex: number,
+): CategoryEntity[] => {
+  return produce(categories, (draft) => {
+    draft[categoryIndex].grades[gradeIndex].toBeDeleted =
+      !draft[categoryIndex].grades[gradeIndex].toBeDeleted;
+    draft[categoryIndex].toBeDeleted = draft[categoryIndex].grades.every(
+      (grade) => grade.toBeDeleted,
+    );
+  });
+};
+
 export const handleDeleteGrade = (
   categories: CategoryEntity[],
   categoryIndex: number,
@@ -40,10 +55,11 @@ export const handleDeleteGrade = (
   if (countGrades === 0) return;
 
   if (!categories[categoryIndex].grades[gradeIndex].draft) {
-    const updatedCategories = produce(categories, (draft) => {
-      draft[categoryIndex].grades[gradeIndex].toBeDeleted =
-        !draft[categoryIndex].grades[gradeIndex].toBeDeleted;
-    });
+    const updatedCategories = markGradeForDeletion(
+      categories,
+      categoryIndex,
+      gradeIndex,
+    );
     setValue('categories', updatedCategories);
 
     updateMaximumGrade(updatedCategories, categoryIndex, setValue);

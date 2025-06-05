@@ -273,7 +273,6 @@ const CommentCard: FC<Props> = (props) => {
           title={renderAuthorName()}
           titleTypographyProps={{
             display: 'block',
-            marginright: 20,
             fontSize: '1.5rem',
           }}
         />

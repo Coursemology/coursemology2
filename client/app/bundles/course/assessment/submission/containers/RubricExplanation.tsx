@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Chip, MenuItem, Select, Typography } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import {
@@ -116,7 +116,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   if (category.isBonusCategory) {
     return (
       <TextField
-        className="w-full h-20 text-wrap"
+        className="w-full"
         disabled={isAutograding}
         id={`category-${category.id}`}
         multiline
@@ -129,7 +129,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
 
   return (
     <Select
-      className="w-full h-20 text-wrap"
+      className="w-full h-20"
       disabled={isAutograding}
       id={`category-${category.id}`}
       onChange={handleOnChange}
@@ -137,21 +137,23 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
         // Display the selected grade explanation only, excluding the grade chip
         const selected = category.grades.find((g) => g.id === selectedId);
         return (
-          <Typography
-            className="text-wrap"
-            dangerouslySetInnerHTML={{ __html: selected?.explanation ?? '' }}
-            variant="body2"
-          />
+          <div className="h-20">
+            <Typography
+              className="line-clamp-1 break-all text-wrap"
+              dangerouslySetInnerHTML={{ __html: selected?.explanation ?? '' }}
+              variant="body2"
+            />
+          </div>
         );
       }}
       value={categoryGrades[category.id].gradeId}
       variant="outlined"
     >
       {category.grades.map((grade) => (
-        <MenuItem key={grade.id} value={grade.id}>
+        <MenuItem key={grade.id} className="h-auto" value={grade.id}>
           <div className="flex items-center justify-between w-full">
             <Typography
-              className="text-wrap"
+              className="break-all text-wrap"
               dangerouslySetInnerHTML={{ __html: grade.explanation }}
               variant="body2"
             />
