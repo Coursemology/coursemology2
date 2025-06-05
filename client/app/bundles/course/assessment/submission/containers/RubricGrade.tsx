@@ -72,10 +72,9 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
   );
 
   const handleOnChange = (event, isBonusCategory: boolean): void => {
-    const selectedGrade = Number(event.target.value);
-    const bonusGrade = Number.isNaN(selectedGrade)
-      ? event.target.value
-      : selectedGrade;
+    const value = event.target.value;
+    const selectedGrade = value === '' ? value : Number(value);
+    const bonusGrade = Number.isNaN(selectedGrade) ? value : selectedGrade;
 
     const newCategoryGrades = {
       ...categoryGrades,
