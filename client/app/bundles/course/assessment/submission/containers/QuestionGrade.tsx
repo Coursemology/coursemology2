@@ -11,6 +11,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { saveGrade, updateGrade } from '../actions/answers';
 import { workflowStates } from '../constants';
+import ReevaluateButton from '../pages/SubmissionEditIndex/components/button/ReevaluateButton';
 import { computeExp } from '../reducers/grading';
 import { QuestionGradeData } from '../reducers/grading/types';
 import { getAssessment } from '../selectors/assessments';
@@ -73,6 +74,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const attempting = workflowState === workflowStates.Attempting;
   const published = workflowState === workflowStates.Published;
 
+  const isProgrammingQuestion = question.type === QuestionType.Programming;
   const isRubricBasedResponse =
     question.type === QuestionType.RubricBasedResponse;
 
@@ -286,6 +288,10 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
             questionId={questionId}
             setIsFirstRendering={setIsFirstRendering}
           />
+        )}
+
+        {editable && (isProgrammingQuestion || isRubricBasedResponse) && (
+          <ReevaluateButton questionId={questionId} />
         )}
 
         <Paper

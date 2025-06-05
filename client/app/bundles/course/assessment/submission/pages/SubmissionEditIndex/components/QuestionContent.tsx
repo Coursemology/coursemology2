@@ -18,7 +18,6 @@ import { useAppSelector } from 'lib/hooks/store';
 import SubmissionAnswer from '../../../components/answers';
 import { ErrorStruct } from '../validations/types';
 
-import ReevaluateButton from './button/ReevaluateButton';
 import AutogradedActionButtonsRow from './AutogradedActionButtonsRow';
 import AutogradingErrorPanel from './AutogradingErrorPanel';
 import ExplanationPanel from './ExplanationPanel';
@@ -55,8 +54,6 @@ const QuestionContent: FC<Props> = (props) => {
   const topic = topics[topicId];
   const submissionErrors = errors as unknown as ErrorStruct[];
 
-  const isRubricBasedResponseQuestion =
-    type === questionTypes.RubricBasedResponse;
   const isProgrammingQuestion = type === questionTypes.Programming;
 
   const allErrors = answerId
@@ -92,11 +89,6 @@ const QuestionContent: FC<Props> = (props) => {
       )}
       <AutogradingErrorPanel questionId={questionId} />
       {isProgrammingQuestion && <TestCaseView questionId={questionId} />}
-      {!attempting &&
-        graderView &&
-        (isProgrammingQuestion || isRubricBasedResponseQuestion) && (
-          <ReevaluateButton questionId={questionId} />
-        )}
       <QuestionGrade isSaving={isSaving} questionId={questionId} />
       <Comments topic={topic} />
     </>
