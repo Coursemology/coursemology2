@@ -23,7 +23,7 @@ class Course::Assessment::Answer::RubricAutoGradingService <
   end
 
   # Processes the LLM response into grades and feedback, and updates the answer.
-  # @param [Course::Assessment::Question] question The question to be graded.
+  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
   # @param [Course::Assessment::Answer::RubricBasedResponse] answer The answer to update.
   # @param [Hash] llm_response The parsed LLM response containing grading information
   # @return [Array<(Boolean, Integer, Object, String)>] The correct status, grade, and feedback messages.
@@ -39,7 +39,7 @@ class Course::Assessment::Answer::RubricAutoGradingService <
   end
 
   # Processes category grades from LLM response into a structured format
-  # @param [Course::Assessment::Question] question The question to be graded.
+  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
   # @param [Hash] llm_response The parsed LLM response with category grades
   # @return [Array<Hash>] Array of processed category grades.
   def process_category_grades(question, llm_response)
