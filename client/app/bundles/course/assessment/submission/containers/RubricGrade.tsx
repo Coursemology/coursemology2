@@ -109,7 +109,7 @@ const RubricGrade: FC<RubricGradeProps> = (props) => {
   if (category.isBonusCategory) {
     return (
       <NumberTextField
-        className="w-full h-20 max-w-3xl"
+        className="w-full max-w-3xl"
         disabled={isAutograding}
         id={`category-${category.id}`}
         onChange={(event) => handleOnChange(event, category.isBonusCategory)}
