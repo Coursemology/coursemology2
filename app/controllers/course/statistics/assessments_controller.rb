@@ -4,7 +4,13 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   include Course::Statistics::SubmissionsConcern
   include Course::Statistics::UsersConcern
 
-  def main_statistics
+  def assessment_statistics
+    # @assessment = Course::Assessment.unscoped.
+    #               includes(programming_questions: [:language]).
+    #               calculated(:maximum_grade, :question_count).
+    #               find(assessment_params[:id])
+    # load_ordered_questions
+    # @assessment_autograded = @question_hash.any? { |_, (_, _, auto_gradable)| auto_gradable }
     @assessment = Course::Assessment.unscoped.
                   includes(programming_questions: [:language]).
                   calculated(:maximum_grade, :question_count).
@@ -22,6 +28,42 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     @assessment_autograded = @question_hash.any? { |_, (_, _, auto_gradable)| auto_gradable }
     @student_submissions_hash = fetch_hash_for_main_assessment(submissions, @all_students)
   end
+
+  def submission_statistics
+    @assessment = Course::Assessment.unscoped.
+                  includes(programming_questions: [:language]).
+                  calculated(:maximum_grade, :question_count).
+                  find(assessment_params[:id])
+    submissions = Course::Assessment::Submission.unscoped.
+                  where(assessment_id: assessment_params[:id]).
+                  calculated(:grade, :grader_ids)
+    @course_users_hash = preload_course_users_hash(current_course)
+
+    load_course_user_students_info
+    load_ordered_questions
+    create_question_related_hash
+
+    @student_submissions_hash = fetch_hash_for_main_assessment(submissions, @all_students)
+  end
+
+  # def main_statistics
+  #   @assessment = Course::Assessment.unscoped.
+  #                 includes(programming_questions: [:language]).
+  #                 calculated(:maximum_grade, :question_count).
+  #                 find(assessment_params[:id])
+  #   submissions = Course::Assessment::Submission.unscoped.
+  #                 where(assessment_id: assessment_params[:id]).
+  #                 calculated(:grade, :grader_ids)
+  #   @course_users_hash = preload_course_users_hash(current_course)
+
+  #   load_course_user_students_info
+  #   load_ordered_questions
+  #   fetch_all_ancestor_assessments
+  #   create_question_related_hash
+
+  #   @assessment_autograded = @question_hash.any? { |_, (_, _, auto_gradable)| auto_gradable }
+  #   @student_submissions_hash = fetch_hash_for_main_assessment(submissions, @all_students)
+  # end
 
   def ancestor_statistics
     @assessment = Course::Assessment.
@@ -66,6 +108,10 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                 where(live_feedback_threads: { submission_question_id: @submission_question_id_hash.values }).
                 includes(message_options: :option, message_files: :file).
                 order(:created_at)
+  end
+
+  def ancestor_info
+    fetch_all_ancestor_assessments
   end
 
   private

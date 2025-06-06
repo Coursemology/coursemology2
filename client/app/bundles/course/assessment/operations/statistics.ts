@@ -1,9 +1,6 @@
 import { AxiosError } from 'axios';
 import { dispatch } from 'store';
-import {
-  AncestorAssessmentStats,
-  AssessmentLiveFeedbackStatistics,
-} from 'types/course/statistics/assessmentStatistics';
+import { AncestorAssessmentStats } from 'types/course/statistics/assessmentStatistics';
 
 import CourseAPI from 'api/course';
 
@@ -13,17 +10,39 @@ export const fetchAssessmentStatistics = async (
   assessmentId: number,
 ): Promise<void> => {
   try {
-    dispatch(actions.reset());
     const response =
-      await CourseAPI.statistics.assessment.fetchMainStatistics(assessmentId);
-    const data = response.data;
-    dispatch(
-      actions.initialize({
-        assessment: data.assessment,
-        submissions: data.submissions,
-        ancestors: data.ancestors,
-      }),
-    );
+      await CourseAPI.statistics.assessment.fetchAssessmentStatistics(
+        assessmentId,
+      );
+    dispatch(actions.setAssessmentStatistics(response.data));
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const fetchSubmissionStatistics = async (
+  assessmentId: number,
+): Promise<void> => {
+  try {
+    const response =
+      await CourseAPI.statistics.assessment.fetchSubmissionStatistics(
+        assessmentId,
+      );
+    dispatch(actions.setSubmissionStatistics(response.data));
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const fetchAncestorInfo = async (
+  assessmentId: number,
+): Promise<void> => {
+  try {
+    const response =
+      await CourseAPI.statistics.assessment.fetchAncestorInfo(assessmentId);
+    dispatch(actions.setAncestorInfo(response.data));
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
@@ -41,10 +60,15 @@ export const fetchAncestorStatistics = async (
 
 export const fetchLiveFeedbackStatistics = async (
   assessmentId: number,
-): Promise<AssessmentLiveFeedbackStatistics[]> => {
-  const response =
-    await CourseAPI.statistics.assessment.fetchLiveFeedbackStatistics(
-      assessmentId,
-    );
-  return response.data;
+): Promise<void> => {
+  try {
+    const response =
+      await CourseAPI.statistics.assessment.fetchLiveFeedbackStatistics(
+        assessmentId,
+      );
+    dispatch(actions.setLiveFeedbackStatistics(response.data));
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
 };

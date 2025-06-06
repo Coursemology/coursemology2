@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { AncestorSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import GradesChart from './GradesChart';
+import { getMaximumGrade } from 'course/assessment/submission/selectors/grading';
+import { max } from 'lodash';
 
 interface Props {
   ancestorSubmissions: AncestorSubmissionInfo[];
@@ -10,12 +12,14 @@ interface Props {
 const AncestorGradesChart: FC<Props> = (props) => {
   const { ancestorSubmissions } = props;
 
-  const totalGrades =
-    ancestorSubmissions
-      ?.filter((s) => s.totalGrade)
-      ?.map((s) => s.totalGrade) ?? [];
+  const gradedSubmissions =
+    ancestorSubmissions?.filter((s) => s.totalGrade) ?? [];
+  const totalGrades = gradedSubmissions.map((s) =>
+    parseFloat(s.totalGrade as unknown as string),
+  );
+  const maximumGrade = gradedSubmissions[0]?.maximumGrade ?? undefined;
 
-  return <GradesChart totalGrades={totalGrades} />;
+  return <GradesChart maximumGrade={maximumGrade} totalGrades={totalGrades} />;
 };
 
 export default AncestorGradesChart;

@@ -1,7 +1,10 @@
+import { Box, Typography } from '@mui/material';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography } from '@mui/material';
-import { AssessmentLiveFeedbackStatistics } from 'types/course/statistics/assessmentStatistics';
+import {
+  AssessmentLiveFeedbackStatistics,
+  MainAssessmentInfo,
+} from 'types/course/statistics/assessmentStatistics';
 
 import SubmissionWorkflowState from 'course/assessment/submission/components/SubmissionWorkflowState';
 import { workflowStates } from 'course/assessment/submission/constants';
@@ -11,27 +14,24 @@ import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getEditSubmissionURL } from 'lib/helpers/url-builders';
-import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
 import LiveFeedbackHistoryIndex from './LiveFeedbackHistory';
-import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
 import { getJointGroupsName } from './utils';
 
 interface Props {
   includePhantom: boolean;
+  assessmentStatistics: MainAssessmentInfo | null;
   liveFeedbackStatistics: AssessmentLiveFeedbackStatistics[];
 }
 
 const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId, assessmentId } = useParams();
-  const { includePhantom, liveFeedbackStatistics } = props;
-
-  const statistics = useAppSelector(getAssessmentStatistics);
-  const assessment = statistics.assessment;
+  const { includePhantom, assessmentStatistics, liveFeedbackStatistics } =
+    props;
 
   const [parsedStatistics, setParsedStatistics] = useState<
     AssessmentLiveFeedbackStatistics[]
@@ -59,15 +59,18 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       feedbackCounts[upperQuartilePercentileIndex];
     setUpperQuartileFeedbackCount(upperQuartilePercentileValue);
 
-    const filteredStats = includePhantom
-      ? liveFeedbackStatistics
-      : liveFeedbackStatistics.filter((s) => !s.courseUser.isPhantom);
-
-    filteredStats.forEach((stat) => {
-      stat.totalFeedbackCount =
-        stat.liveFeedbackCount?.reduce((sum, count) => sum + (count || 0), 0) ??
-        0;
-    });
+    // Create new objects instead of modifying the original ones from Redux store
+    // This is necessary because Redux store objects are frozen and cannot be modified
+    const filteredStats = liveFeedbackStatistics
+      .filter((stat) => !stat.courseUser.isPhantom || props.includePhantom)
+      .map((stat) => ({
+        ...stat,
+        totalFeedbackCount:
+          stat.liveFeedbackCount?.reduce(
+            (sum, count) => sum + (count || 0),
+            0,
+          ) ?? 0,
+      }));
 
     setParsedStatistics(
       filteredStats.sort((a, b) => {
@@ -113,38 +116,41 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
   };
 
   const statColumns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] =
-    Array.from({ length: assessment?.questionCount ?? 0 }, (_, index) => {
-      return {
-        searchProps: {
-          getValue: (datum) =>
-            datum.liveFeedbackCount?.[index]?.toString() ?? '',
-        },
-        title: t(translations.questionIndex, { index: index + 1 }),
-        cell: (datum): ReactNode => {
-          return typeof datum.liveFeedbackCount?.[index] === 'number'
-            ? renderNonNullClickableLiveFeedbackCountCell(
-                datum.liveFeedbackCount?.[index],
-                datum.courseUser.id,
-                datum.questionIds[index],
-                index + 1,
-              )
-            : null;
-        },
-        sortable: true,
-        csvDownloadable: true,
-        className: 'text-right',
-        sortProps: {
-          sort: (a, b): number => {
-            const aValue =
-              a.liveFeedbackCount?.[index] ?? Number.MIN_SAFE_INTEGER;
-            const bValue =
-              b.liveFeedbackCount?.[index] ?? Number.MIN_SAFE_INTEGER;
-
-            return aValue - bValue;
+    Array.from(
+      { length: assessmentStatistics?.questionCount ?? 0 },
+      (_, index) => {
+        return {
+          searchProps: {
+            getValue: (datum) =>
+              datum.liveFeedbackCount?.[index]?.toString() ?? '',
           },
-        },
-      };
-    });
+          title: t(translations.questionIndex, { index: index + 1 }),
+          cell: (datum): ReactNode => {
+            return typeof datum.liveFeedbackCount?.[index] === 'number'
+              ? renderNonNullClickableLiveFeedbackCountCell(
+                  datum.liveFeedbackCount?.[index],
+                  datum.courseUser.id,
+                  datum.questionIds[index],
+                  index + 1,
+                )
+              : null;
+          },
+          sortable: true,
+          csvDownloadable: true,
+          className: 'text-right',
+          sortProps: {
+            sort: (a, b): number => {
+              const aValue =
+                a.liveFeedbackCount?.[index] ?? Number.MIN_SAFE_INTEGER;
+              const bValue =
+                b.liveFeedbackCount?.[index] ?? Number.MIN_SAFE_INTEGER;
+
+              return aValue - bValue;
+            },
+          },
+        };
+      },
+    );
 
   const columns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] = [
     {
@@ -261,7 +267,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         columns={columns}
         csvDownload={{
           filename: t(translations.liveFeedbackFilename, {
-            assessment: assessment?.title ?? '',
+            assessment: assessmentStatistics?.title ?? '',
           }),
         }}
         data={parsedStatistics}

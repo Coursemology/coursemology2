@@ -12,6 +12,10 @@ const processAnswer = (answer) => ({
 export const processSubmission = (submission) => {
   const totalGrade =
     submission.totalGrade != null ? parseFloat(submission.totalGrade) : null;
+  const maximumGrade =
+    submission.maximumGrade != null
+      ? parseFloat(submission.maximumGrade)
+      : null;
   const answers =
     submission.answers != null ? submission.answers.map(processAnswer) : null;
   const submittedAt =
@@ -26,6 +30,7 @@ export const processSubmission = (submission) => {
     ...submission,
     answers,
     totalGrade,
+    maximumGrade,
     submittedAt,
     endAt,
     dayDifference,
