@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Container, Divider, Grid } from '@mui/material';
+import {
+  LanguageData,
+  ProgrammingFormData,
+} from 'types/course/assessment/question/programming';
 import * as yup from 'yup';
 
 import GenerateConversation from 'course/assessment/pages/AssessmentGenerate/GenerateConversation';
@@ -18,6 +22,7 @@ import {
 } from 'course/assessment/pages/AssessmentGenerate/types';
 import {
   buildGenerateRequestPayload,
+  buildPrototypeFromQuestionData,
   extractQuestionPrototypeData,
   replaceUnlockedPrototypeFields,
 } from 'course/assessment/pages/AssessmentGenerate/utils';
@@ -30,6 +35,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import {
   fetchCodaveriLanguages,
+  fetchEdit,
   generate,
 } from '../../question/programming/operations';
 
@@ -48,6 +54,15 @@ const translations = defineMessages({
   generateError: {
     id: 'course.assessment.generation.generateError',
     defaultMessage: 'An error occured generating question "{title}".',
+  },
+  loadingSourceError: {
+    id: 'course.assessment.generation.loadingSourceError',
+    defaultMessage: 'Unable to load source question data.',
+  },
+  sourceLanguageNotSupported: {
+    id: 'course.assessment.generation.sourceLanguageNotSupported',
+    defaultMessage:
+      'Source question language not supported by the generation tool.',
   },
   allFieldsLocked: {
     id: 'course.assessment.generation.allFieldsLocked',
@@ -115,6 +130,11 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
     throw new Error(
       `GenerateProgrammingQuestionPage was loaded with ID: ${id}.`,
     );
+
+  const [searchParams] = useSearchParams();
+  const sourceId =
+    parseInt(searchParams.get('source_question_id') ?? '', 10) || undefined;
+  const sourceDataInitializedRef = useRef<boolean>(false);
 
   const dispatch = useAppDispatch();
   const [exportDialogOpen, setExportDialogOpen] = useState<boolean>(false);
@@ -201,6 +221,11 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
       dispatch(
         actions.setActiveConversationId({ conversationId: conversation.id }),
       );
+      dispatch(
+        actions.setActiveFormTitle({
+          title: conversation.activeSnapshotEditedData.question.title,
+        }),
+      );
       codaveriForm.reset({ ...defaultCodaveriFormData, languageId });
       prototypeForm.reset(conversation.activeSnapshotEditedData);
       setLockStates(snapshot.lockStates);
@@ -255,14 +280,54 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
     dispatch(actions.deleteConversation({ conversationId: conversation.id }));
   };
 
+  const fetchSourceData = async (): Promise<
+    ProgrammingFormData | undefined
+  > => {
+    if (sourceId) {
+      try {
+        return await fetchEdit(sourceId);
+      } catch {
+        dispatch(setNotification(t(translations.loadingSourceError)));
+      }
+    }
+    return Promise.resolve(undefined);
+  };
+
+  const preloadData = async (): Promise<{
+    languages: LanguageData[];
+    sourceData?: ProgrammingFormData;
+  }> => {
+    const [languages, sourceData] = await Promise.all([
+      fetchCodaveriLanguages(),
+      fetchSourceData(),
+    ]);
+    return { languages, sourceData };
+  };
+
   return (
-    <Preload render={<LoadingIndicator />} while={fetchCodaveriLanguages}>
-      {(languages): JSX.Element => {
+    <Preload render={<LoadingIndicator />} while={preloadData}>
+      {({ languages, sourceData }): JSX.Element => {
         const currentLanguageMode =
           languages.find((language) => language.id === currentLanguageId)
             ?.editorMode ?? 'python';
         // Only Java has inline code support, so we do not forward to Codaveri for other languages
         const isIncludingInlineCode = currentLanguageMode === 'java';
+
+        if (sourceData && !sourceDataInitializedRef.current) {
+          sourceDataInitializedRef.current = true;
+          const isLanguageSupported = languages.some(
+            (language) => language.id === sourceData.question.languageId,
+          );
+          if (!isLanguageSupported) {
+            dispatch(
+              setNotification(t(translations.sourceLanguageNotSupported)),
+            );
+          }
+          dispatch(
+            actions.setActiveFormTitle({ title: sourceData.question.title }),
+          );
+          prototypeForm.reset(buildPrototypeFromQuestionData(sourceData));
+        }
 
         return (
           <>

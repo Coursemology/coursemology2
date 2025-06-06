@@ -2186,6 +2186,9 @@
   "course.assessment.show.generateTooltip": {
     "defaultMessage": "与 Codaveri AI 合作创建问题"
   },
+  "course.assessment.show.generateFromQuestion": {
+    "defaultMessage": "使用 Codaveri AI 生成类似问题"
+  },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "为测试用例打分"
   },
