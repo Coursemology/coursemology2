@@ -23,13 +23,15 @@ module Course::MaterialsAbilityComponent
   end
 
   def allow_show_materials
+    alias_action :breadcrumbs, to: :read
+
     if course_user.student?
       valid_materials_hashes.each do |properties|
         can :read, Course::Material, material_course_hash.deep_merge(properties)
       end
 
       opened_material_hashes.each do |properties|
-        can [:read, :download, :breadcrumbs],
+        can [:read, :download],
             Course::Material::Folder, { course_id: course.id }.reverse_merge(properties)
       end
     end
