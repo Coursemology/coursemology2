@@ -23,6 +23,11 @@ end
 if can?(:manage, assessment)
   json.editUrl url_for([:edit, current_course, assessment, question.specific])
   json.deleteUrl url_for([current_course, assessment, question.specific])
+  if is_programming_question
+    json.generateFromUrl "#{generate_course_assessment_question_programming_index_path(
+      current_course, assessment
+    )}?source_question_id=#{question.specific.id}"
+  end
 
   json.duplicationUrls question_duplication_dropdown_data do |tab_hash|
     json.tab tab_hash[:title]

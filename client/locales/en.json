@@ -2240,6 +2240,9 @@
   "course.assessment.show.generateTooltip": {
     "defaultMessage": "Collaborate with Codaveri AI to create questions"
   },
+  "course.assessment.show.generateFromQuestion": {
+    "defaultMessage": "Generate a similar question with Codaveri AI"
+  },
   "course.assessment.show.gradingMode": {
     "defaultMessage": "Grading mode"
   },

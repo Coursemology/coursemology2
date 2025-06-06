@@ -2243,6 +2243,9 @@
   "course.assessment.show.generateTooltip": {
     "defaultMessage": "Codaveri AI와 협업하여 문제를 생성하세요"
   },
+  "course.assessment.show.generateFromQuestion": {
+    "defaultMessage": "Codaveri AI로 유사한 질문 생성"
+  },
   "course.assessment.show.gradedTestCases": {
     "defaultMessage": "평가된 테스트 케이스"
   },
