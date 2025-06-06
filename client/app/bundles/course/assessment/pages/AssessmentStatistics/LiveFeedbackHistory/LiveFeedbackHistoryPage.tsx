@@ -5,7 +5,7 @@ import Accordion from 'lib/components/core/layouts/Accordion';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { getLiveFeedbadkQuestionInfo } from '../selectors';
+import { getLiveFeedbackQuestionInfo } from '../selectors';
 import translations from '../translations';
 
 import LiveFeedbackDetails from './LiveFeedbackDetails';
@@ -17,7 +17,7 @@ interface Props {
 const LiveFeedbackHistoryPage: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { questionNumber } = props;
-  const question = useAppSelector(getLiveFeedbadkQuestionInfo);
+  const question = useAppSelector(getLiveFeedbackQuestionInfo);
 
   return (
     <>
