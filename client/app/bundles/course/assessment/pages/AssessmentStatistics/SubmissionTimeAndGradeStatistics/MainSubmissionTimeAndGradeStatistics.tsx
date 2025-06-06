@@ -1,8 +1,12 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Preload from 'lib/components/wrappers/Preload';
 import { useAppSelector } from 'lib/hooks/store';
 
-import { getAssessmentStatistics } from '../selectors';
+import { fetchSubmissionStatistics } from '../../../operations/statistics';
+import { getSubmissionStatistics } from '../selectors';
 
 import SubmissionTimeAndGradeChart from './SubmissionTimeAndGradeChart';
 
@@ -10,18 +14,33 @@ interface Props {
   includePhantom: boolean;
 }
 
-const MainSubmissionTimeAndGradeStatistics: FC<Props> = (props) => {
-  const { includePhantom } = props;
-  const statistics = useAppSelector(getAssessmentStatistics);
+const MainSubmissionTimeAndGradeStatistics: FC<Props> = ({
+  includePhantom,
+}) => {
+  const { assessmentId } = useParams();
+  const parsedAssessmentId = parseInt(assessmentId!, 10);
 
-  const submissions = statistics.submissions;
+  const submissionStatistics = useAppSelector(getSubmissionStatistics);
 
-  const nonNullSubmissions = submissions.filter((s) => s.totalGrade);
-  const includedSubmissions = includePhantom
-    ? nonNullSubmissions
-    : nonNullSubmissions.filter((s) => !s.courseUser.isPhantom);
+  const fetchAndSetSubmissionStatistics = async (): Promise<void> => {
+    if (submissionStatistics.length > 0) return;
+    await fetchSubmissionStatistics(parsedAssessmentId);
+  };
 
-  return <SubmissionTimeAndGradeChart submissions={includedSubmissions} />;
+  const includedSubmissions = useMemo(() => {
+    return submissionStatistics.filter(
+      (s) => s.totalGrade && (includePhantom || !s.courseUser.isPhantom),
+    );
+  }, [submissionStatistics, includePhantom]);
+
+  return (
+    <Preload
+      render={<LoadingIndicator />}
+      while={fetchAndSetSubmissionStatistics}
+    >
+      <SubmissionTimeAndGradeChart submissions={includedSubmissions} />
+    </Preload>
+  );
 };
 
 export default MainSubmissionTimeAndGradeStatistics;

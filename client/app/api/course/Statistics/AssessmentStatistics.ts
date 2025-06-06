@@ -1,8 +1,10 @@
 import { LiveFeedbackHistoryState } from 'types/course/assessment/submission/liveFeedback';
 import {
   AncestorAssessmentStats,
+  AncestorInfo,
   AssessmentLiveFeedbackStatistics,
-  MainAssessmentStats,
+  MainAssessmentInfo,
+  MainSubmissionInfo,
 } from 'types/course/statistics/assessmentStatistics';
 
 import { APIResponse } from 'api/types';
@@ -24,15 +26,23 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
     ancestorId: string | number,
   ): APIResponse<AncestorAssessmentStats> {
     return this.client.get(
-      `${this.#urlPrefix}/${ancestorId}/ancestor_statistics/`,
+      `${this.#urlPrefix}/${ancestorId}/ancestor_statistics`,
     );
   }
 
-  fetchMainStatistics(
+  fetchAssessmentStatistics(
     assessmentId: string | number,
-  ): APIResponse<MainAssessmentStats> {
+  ): APIResponse<MainAssessmentInfo | null> {
     return this.client.get(
-      `${this.#urlPrefix}/${assessmentId}/main_statistics`,
+      `${this.#urlPrefix}/${assessmentId}/assessment_statistics`,
+    );
+  }
+
+  fetchSubmissionStatistics(
+    assessmentId: string | number,
+  ): APIResponse<MainSubmissionInfo[]> {
+    return this.client.get(
+      `${this.#urlPrefix}/${assessmentId}/submission_statistics`,
     );
   }
 
@@ -64,5 +74,11 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
       `${urlPrefix}/${assessmentId}/live_feedback_history`,
       { params: { question_id: questionId, course_user_id: courseUserId } },
     );
+  }
+
+  fetchAncestorInfo(
+    assessmentId: number,
+  ): Promise<APIResponse<AncestorInfo[]>> {
+    return this.client.get(`${this.#urlPrefix}/${assessmentId}/ancestor_info`);
   }
 }
