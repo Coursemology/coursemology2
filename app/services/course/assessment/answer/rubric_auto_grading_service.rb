@@ -23,7 +23,7 @@ class Course::Assessment::Answer::RubricAutoGradingService <
   end
 
   # Processes the LLM response into grades and feedback, and updates the answer.
-  # @param [Course::Assessment::Question] question The question to be graded.
+  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
   # @param [Course::Assessment::Answer::RubricBasedResponse] answer The answer to update.
   # @param [Hash] llm_response The parsed LLM response containing grading information
   # @return [Array<(Boolean, Integer, Object, String)>] The correct status, grade, and feedback messages.
@@ -39,11 +39,11 @@ class Course::Assessment::Answer::RubricAutoGradingService <
   end
 
   # Processes category grades from LLM response into a structured format
-  # @param [Course::Assessment::Question] question The question to be graded.
+  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
   # @param [Hash] llm_response The parsed LLM response with category grades
   # @return [Array<Hash>] Array of processed category grades.
   def process_category_grades(question, llm_response)
-    category_lookup = question.categories.index_by(&:id)
+    category_lookup = question.categories.includes(:criterions).index_by(&:id)
     llm_response['category_grades'].filter_map do |category_grade|
       category = category_lookup[category_grade['category_id']]
       next unless category
@@ -94,9 +94,10 @@ class Course::Assessment::Answer::RubricAutoGradingService <
   # @return [Integer] The new total grade for the answer.
   def update_answer_grade(answer, category_grades)
     grade_lookup = category_grades.to_h { |info| [info[:category_id], info[:grade]] }
-    total_grade = answer.selections.sum do |selection|
+    total_grade = answer.selections.includes(:criterion).sum do |selection|
       grade_lookup[selection.category_id] || selection.criterion&.grade || selection.grade || 0
     end
+    total_grade = total_grade.clamp(0, answer.question.maximum_grade)
     answer.grade = total_grade
     total_grade
   end

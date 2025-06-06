@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { MenuItem, Select, Typography } from '@mui/material';
+import { Box, MenuItem, Select, Typography } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import {
   RubricBasedResponseCategoryQuestionData,
@@ -112,7 +112,7 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
   if (category.isBonusCategory) {
     return (
       <TextField
-        className="w-full h-20 text-wrap"
+        className="w-full"
         disabled={isAutograding}
         id={`category-${category.id}`}
         multiline
@@ -125,15 +125,27 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
 
   return (
     <Select
-      className="w-full h-20 text-wrap"
+      className="w-full h-20"
       disabled={isAutograding}
       id={`category-${category.id}`}
       onChange={handleOnChange}
+      renderValue={(selectedId) => {
+        const found = category.grades.find((g) => g.id === selectedId);
+        return (
+          <Box className="h-20">
+            <Typography
+              className="line-clamp-1 whitespace-normal"
+              dangerouslySetInnerHTML={{ __html: found?.explanation ?? '' }}
+              variant="body2"
+            />
+          </Box>
+        );
+      }}
       value={categoryGrades[category.id].gradeId}
       variant="outlined"
     >
       {category.grades.map((grade) => (
-        <MenuItem key={grade.id} value={grade.id}>
+        <MenuItem key={grade.id} className="h-auto" value={grade.id}>
           <Typography
             className="w-full text-wrap"
             dangerouslySetInnerHTML={{
