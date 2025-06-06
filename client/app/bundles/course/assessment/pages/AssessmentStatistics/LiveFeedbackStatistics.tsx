@@ -1,42 +1,53 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useParams } from 'react-router-dom';
-import { AssessmentLiveFeedbackStatistics } from 'types/course/statistics/assessmentStatistics';
 
-import { fetchLiveFeedbackStatistics } from 'course/assessment/operations/statistics';
+import {
+  fetchAssessmentStatistics,
+  fetchLiveFeedbackStatistics,
+} from 'course/assessment/operations/statistics';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import { useAppSelector } from 'lib/hooks/store';
 
 import LiveFeedbackStatisticsTable from './LiveFeedbackStatisticsTable';
+import {
+  getAssessmentStatistics,
+  getLiveFeedbackStatistics,
+} from './selectors';
 
 interface Props {
   includePhantom: boolean;
 }
 
-const LiveFeedbackStatistics: FC<Props> = (props) => {
+const LiveFeedbackStatistics: FC<Props> = ({ includePhantom }) => {
   const { assessmentId } = useParams();
   const parsedAssessmentId = parseInt(assessmentId!, 10);
-  const { includePhantom } = props;
 
-  const [liveFeedbackStatistics, setLiveFeedbackStatistics] = useState<
-    AssessmentLiveFeedbackStatistics[]
-  >([]);
+  const assessmentStatistics = useAppSelector(getAssessmentStatistics);
+  const liveFeedbackStatistics = useAppSelector(getLiveFeedbackStatistics);
 
-  const fetchAndSetLiveFeedbackStatistics = (): Promise<void> =>
-    fetchLiveFeedbackStatistics(parsedAssessmentId).then(
-      setLiveFeedbackStatistics,
-    );
+  const fetchAndSetAssessmentAndLiveFeedbackStatistics =
+    async (): Promise<void> => {
+      const promises: Promise<void>[] = [];
+      if (!assessmentStatistics) {
+        promises.push(fetchAssessmentStatistics(parsedAssessmentId));
+      }
+      if (liveFeedbackStatistics.length === 0) {
+        promises.push(fetchLiveFeedbackStatistics(parsedAssessmentId));
+      }
+      await Promise.all(promises);
+    };
 
   return (
     <Preload
       render={<LoadingIndicator />}
-      while={fetchAndSetLiveFeedbackStatistics}
+      while={fetchAndSetAssessmentAndLiveFeedbackStatistics}
     >
-      {(): JSX.Element => (
-        <LiveFeedbackStatisticsTable
-          includePhantom={includePhantom}
-          liveFeedbackStatistics={liveFeedbackStatistics}
-        />
-      )}
+      <LiveFeedbackStatisticsTable
+        assessmentStatistics={assessmentStatistics}
+        includePhantom={includePhantom}
+        liveFeedbackStatistics={liveFeedbackStatistics}
+      />
     </Preload>
   );
 };

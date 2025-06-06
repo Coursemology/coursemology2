@@ -4,6 +4,7 @@ import { Box, Tooltip, Typography } from '@mui/material';
 import {
   AssessmentLiveFeedbackData,
   AssessmentLiveFeedbackStatistics,
+  MainAssessmentInfo,
 } from 'types/course/statistics/assessmentStatistics';
 
 import SubmissionWorkflowState from 'course/assessment/submission/components/SubmissionWorkflowState';
@@ -14,13 +15,13 @@ import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getEditSubmissionURL } from 'lib/helpers/url-builders';
-import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import LiveFeedbackMetricSelector from './components/LiveFeedbackMetricsSelector';
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
-import LiveFeedbackHistoryContent from './LiveFeedbackHistory';
 import { getAssessmentStatistics } from './selectors';
+import LiveFeedbackHistoryContent from './LiveFeedbackHistory';
+import LiveFeedbackHistoryIndex from './LiveFeedbackHistory';
 import translations from './translations';
 import { getJointGroupsName } from './utils';
 
@@ -49,17 +50,16 @@ const METRIC_CONFIG = {
 
 interface Props {
   includePhantom: boolean;
+  assessmentStatistics: MainAssessmentInfo | null;
   liveFeedbackStatistics: AssessmentLiveFeedbackStatistics[];
 }
 
 const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId, assessmentId } = useParams();
-  const { includePhantom, liveFeedbackStatistics } = props;
+  const { includePhantom, assessmentStatistics, liveFeedbackStatistics } =
+    props;
   const parsedAssessmentId = parseInt(assessmentId!, 10);
-
-  const statistics = useAppSelector(getAssessmentStatistics);
-  const assessment = statistics.assessment;
 
   const [parsedStatistics, setParsedStatistics] = useState<
     AssessmentLiveFeedbackStatistics[]
@@ -239,7 +239,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
   const columns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] =
     useMemo(() => {
       const statColumns = Array.from(
-        { length: assessment?.questionCount ?? 0 },
+        { length: assessmentStatistics?.questionCount ?? 0 },
         (_, index) => {
           return {
             searchProps: {
@@ -440,7 +440,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         columns={columns}
         csvDownload={{
           filename: t(translations.liveFeedbackFilename, {
-            assessment: assessment?.title ?? '',
+            assessment: assessmentStatistics?.title ?? '',
           }),
         }}
         data={parsedStatistics}

@@ -4,9 +4,10 @@ import { AssessmentStatisticsState } from 'types/course/statistics/assessmentSta
 import { processAssessment, processSubmission } from '../utils/statisticsUtils';
 
 const initialState: AssessmentStatisticsState = {
-  assessment: null,
-  submissions: [],
-  ancestors: [],
+  submissionStatistics: [],
+  assessmentStatistics: null,
+  liveFeedbackStatistics: [],
+  ancestorInfo: [],
 };
 
 export const statisticsSlice = createSlice({
@@ -14,9 +15,39 @@ export const statisticsSlice = createSlice({
   initialState,
   reducers: {
     initialize: (state, action: PayloadAction<AssessmentStatisticsState>) => {
-      state.assessment = processAssessment(action.payload.assessment);
-      state.submissions = action.payload.submissions.map(processSubmission);
-      state.ancestors = action.payload.ancestors;
+      state.assessmentStatistics = processAssessment(
+        action.payload.assessmentStatistics,
+      );
+      state.submissionStatistics =
+        action.payload.submissionStatistics.map(processSubmission);
+      state.liveFeedbackStatistics = action.payload.liveFeedbackStatistics;
+      state.ancestorInfo = action.payload.ancestorInfo;
+    },
+    setSubmissionStatistics: (
+      state,
+      action: PayloadAction<AssessmentStatisticsState['submissionStatistics']>,
+    ) => {
+      state.submissionStatistics = action.payload.map(processSubmission);
+    },
+    setAssessmentStatistics: (
+      state,
+      action: PayloadAction<AssessmentStatisticsState['assessmentStatistics']>,
+    ) => {
+      state.assessmentStatistics = action.payload;
+    },
+    setLiveFeedbackStatistics: (
+      state,
+      action: PayloadAction<
+        AssessmentStatisticsState['liveFeedbackStatistics']
+      >,
+    ) => {
+      state.liveFeedbackStatistics = action.payload;
+    },
+    setAncestorInfo: (
+      state,
+      action: PayloadAction<AssessmentStatisticsState['ancestorInfo']>,
+    ) => {
+      state.ancestorInfo = action.payload;
     },
     reset: () => {
       return initialState;
