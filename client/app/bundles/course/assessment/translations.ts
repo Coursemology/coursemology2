@@ -577,6 +577,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.whileHoldingToCancelMoving',
     defaultMessage: 'while holding to cancel moving.',
   },
+  generateFromQuestion: {
+    id: 'course.assessment.show.generateFromQuestion',
+    defaultMessage: 'Generate a similar question with Codaveri AI',
+  },
   duplicateToAssessment: {
     id: 'course.assessment.show.duplicateToAssessment',
     defaultMessage: 'Duplicate to another assessment',

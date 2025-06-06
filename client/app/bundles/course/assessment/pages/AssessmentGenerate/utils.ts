@@ -4,6 +4,7 @@ import {
   LanguageData,
   LanguageMode,
   MetadataTestCase,
+  ProgrammingFormData,
   ProgrammingFormRequestData,
 } from 'types/course/assessment/question/programming';
 import {
@@ -241,6 +242,28 @@ export const buildQuestionDataFromPrototype = (
     testUi: {
       mode: languageMode,
       metadata,
+    },
+  };
+};
+
+export const buildPrototypeFromQuestionData = (
+  questionData: ProgrammingFormData,
+): QuestionPrototypeFormData => {
+  return {
+    question: questionData.question,
+    testUi: {
+      metadata: {
+        prepend: questionData.testUi?.metadata?.prepend || '',
+        append: questionData.testUi?.metadata?.append || '',
+        solution: questionData.testUi?.metadata?.solution || '',
+        submission: questionData.testUi?.metadata?.submission || '',
+        testCases: questionData.testUi?.metadata?.testCases || {
+          public: questionData.testUi?.metadata?.testCases?.public || [],
+          private: questionData.testUi?.metadata?.testCases?.private || [],
+          evaluation:
+            questionData.testUi?.metadata?.testCases?.evaluation || [],
+        },
+      },
     },
   };
 };
