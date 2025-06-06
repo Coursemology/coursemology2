@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { Draggable } from '@hello-pangea/dnd';
-import { ContentCopy, Create, DragIndicator } from '@mui/icons-material';
+import {
+  AutoFixHigh,
+  ContentCopy,
+  Create,
+  DragIndicator,
+} from '@mui/icons-material';
 import { Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import { QuestionData } from 'types/course/assessment/questions';
 
@@ -110,6 +115,26 @@ const Question = (props: QuestionProps): JSX.Element => {
               </div>
 
               <div className="flex items-center">
+                {question.generateFromUrl && (
+                  <Tooltip
+                    disableInteractive
+                    title={t(translations.generateFromQuestion)}
+                  >
+                    <Link
+                      opensInNewTab
+                      to={question.generateFromUrl}
+                      underline="none"
+                    >
+                      <IconButton
+                        aria-label={t(translations.generateFromQuestion)}
+                        disabled={disabled || dragging}
+                      >
+                        <AutoFixHigh />
+                      </IconButton>
+                    </Link>
+                  </Tooltip>
+                )}
+
                 <Tooltip
                   disableInteractive
                   title={t(translations.duplicateToAssessment)}

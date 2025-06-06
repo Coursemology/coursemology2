@@ -14,6 +14,7 @@ export interface QuestionData {
   description?: string;
   editUrl?: string;
   deleteUrl?: string;
+  generateFromUrl?: string;
   duplicationUrls?: {
     tab: string;
     destinations: {
