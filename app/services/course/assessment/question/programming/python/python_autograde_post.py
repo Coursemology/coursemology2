@@ -1,8 +1,10 @@
 
 # Do not modify beyond this line
 if __name__ == '__main__':
-    unittest.main(
-            testRunner=xmlrunner.XMLTestRunner(open('report.xml', 'wb'), outsuffix = ''),
+    with open('report.xml', 'wb') as output:
+        unittest.main(
+            testRunner=xmlrunner.XMLTestRunner(output, outsuffix=''),
             failfast=False,
             buffer=False,
-            catchbreak=False)
+            catchbreak=False
+        )
