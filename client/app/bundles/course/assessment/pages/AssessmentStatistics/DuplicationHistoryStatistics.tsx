@@ -12,12 +12,21 @@ import AncestorOptions from './AncestorOptions';
 import AncestorStatistics from './AncestorStatistics';
 import { getAncestorInfo } from './selectors';
 
-const renderDuplicationHistoryStatistics = (
-  ancestorInfo: AncestorInfo[],
-  parsedAssessmentId: number,
-  selectedAncestorId: number,
-  setSelectedAncestorId: Dispatch<SetStateAction<number>>,
-): JSX.Element => (
+interface DuplicationHistoryStatisticsContentProps {
+  ancestorInfo: AncestorInfo[];
+  parsedAssessmentId: number;
+  selectedAncestorId: number;
+  setSelectedAncestorId: Dispatch<SetStateAction<number>>;
+}
+
+const DuplicationHistoryStatisticsContent: FC<
+  DuplicationHistoryStatisticsContentProps
+> = ({
+  ancestorInfo,
+  parsedAssessmentId,
+  selectedAncestorId,
+  setSelectedAncestorId,
+}) => (
   <>
     <AncestorOptions
       ancestors={ancestorInfo}
@@ -48,12 +57,12 @@ const DuplicationHistoryStatistics: FC = () => {
 
   return (
     <Preload render={<LoadingIndicator />} while={fetchAndSetAncestorInfo}>
-      {renderDuplicationHistoryStatistics(
-        ancestorInfo,
-        parsedAssessmentId,
-        selectedAncestorId,
-        setSelectedAncestorId,
-      )}
+      <DuplicationHistoryStatisticsContent
+        ancestorInfo={ancestorInfo}
+        parsedAssessmentId={parsedAssessmentId}
+        selectedAncestorId={selectedAncestorId}
+        setSelectedAncestorId={setSelectedAncestorId}
+      />
     </Preload>
   );
 };

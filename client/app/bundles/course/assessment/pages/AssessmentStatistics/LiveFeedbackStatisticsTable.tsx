@@ -19,9 +19,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import LiveFeedbackMetricSelector from './components/LiveFeedbackMetricsSelector';
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
-import { getAssessmentStatistics } from './selectors';
 import LiveFeedbackHistoryContent from './LiveFeedbackHistory';
-import LiveFeedbackHistoryIndex from './LiveFeedbackHistory';
 import translations from './translations';
 import { getJointGroupsName } from './utils';
 
