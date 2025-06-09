@@ -30,7 +30,6 @@ interface RubricPanelRowProps {
   question: SubmissionQuestionData<'RubricBasedResponse'>;
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
-  // eslint-disable-next-line react/no-unused-prop-types
   setIsFirstRendering: (isFirstRendering: boolean) => void;
   readOnly?: boolean;
 }
