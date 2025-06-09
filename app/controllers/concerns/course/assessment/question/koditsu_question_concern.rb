@@ -132,6 +132,11 @@ module Course::Assessment::Question::KoditsuQuestionConcern
         language: 'python',
         version: '3.12',
         filename: 'main.py'
+      },
+      Coursemology::Polyglot::Language::Python::Python3Point13 => {
+        language: 'python',
+        version: '3.13',
+        filename: 'main.py'
       }
     }
   end

@@ -22,9 +22,9 @@ GIT
 
 GIT
   remote: https://github.com/Coursemology/polyglot
-  revision: 1a975cdfcc9765226389f06e8bb11c5f72200d35
+  revision: 7cf1c55b530fd50950144d24524b0647f2d98f76
   specs:
-    coursemology-polyglot (0.4.0)
+    coursemology-polyglot (0.4.1)
       activesupport (>= 4.2)
 
 GIT
@@ -159,8 +159,8 @@ GEM
     baran (0.1.12)
     base64 (0.2.0)
     bcrypt (3.1.20)
-    benchmark (0.4.0)
-    bigdecimal (3.1.9)
+    benchmark (0.4.1)
+    bigdecimal (3.2.2)
     builder (3.3.0)
     bullet (8.0.7)
       activesupport (>= 3.0.0)
@@ -220,7 +220,7 @@ GEM
     dotenv-rails (3.1.7)
       dotenv (= 3.1.7)
       railties (>= 6.1)
-    drb (2.2.1)
+    drb (2.2.3)
     edge (0.6.1)
       activerecord (>= 5.0.0)
     email_spec (2.3.0)
