@@ -3,7 +3,6 @@ import { JobSubmitted } from 'types/jobs';
 import { APIResponse } from 'api/types';
 import {
   AssessmentsStatistics,
-  CodaveriStatistics,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
   GetHelpStatistics,
