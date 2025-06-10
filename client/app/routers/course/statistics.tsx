@@ -62,6 +62,17 @@ const statisticsRouter: Translated<RouteObject> = (_) => ({
         ).default,
       }),
     },
+    {
+      path: 'codaveri',
+      lazy: async (): Promise<RouteObject> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'CodaveriStatistics' */
+            'course/statistics/pages/StatisticsIndex/codaveri/CodaveriStatistics'
+          )
+        ).default,
+      }),
+    },
   ],
 });
 

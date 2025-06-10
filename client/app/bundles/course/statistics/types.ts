@@ -132,3 +132,23 @@ export interface AssessmentsStatistics {
   numStudents: number;
   assessments: CourseAssessment[];
 }
+
+export interface CodaveriLiveFeedbackActivity {
+  id: number;
+  userId: number;
+  submissionId: number;
+  assessmentId: number;
+  questionId: number;
+  name: string;
+  nameLink: string;
+  messageCount: number;
+  lastMessage: string;
+  questionNumber: number;
+  questionTitle: string;
+  assessmentTitle: string;
+  createdAt: string;
+}
+
+export interface CodaveriStatistics {
+  liveFeedbacks: CodaveriLiveFeedbackActivity[];
+}

@@ -6,6 +6,7 @@ import pollJob from 'lib/helpers/jobHelpers';
 
 import {
   AssessmentsStatistics,
+  CodaveriStatistics,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
   StaffStatistics,
@@ -44,6 +45,13 @@ export const fetchAssessmentsStatistics =
   async (): Promise<AssessmentsStatistics> => {
     const response =
       await CourseAPI.statistics.course.fetchAssessmentsStatistics();
+    return response.data;
+  };
+
+export const fetchCodaveriStatistics =
+  async (): Promise<CodaveriStatistics> => {
+    const response =
+      await CourseAPI.statistics.course.fetchCodaveriStatistics();
     return response.data;
   };
 
