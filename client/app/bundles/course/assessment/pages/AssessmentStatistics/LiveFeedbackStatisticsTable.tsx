@@ -35,15 +35,15 @@ const METRIC_CONFIG = {
     legendLowerLabel: 'legendLowerLabelGradeDiff',
     legendUpperLabel: 'legendUpperLabelGradeDiff',
   },
-  prompt_count: {
+  messages_sent: {
     showTotal: true,
-    legendLowerLabel: 'legendLowerLabelPromptCount',
-    legendUpperLabel: 'legendUpperLabelPromptCount',
+    legendLowerLabel: 'legendLowerLabelMessagesSent',
+    legendUpperLabel: 'legendUpperLabelMessagesSent',
   },
-  prompt_length: {
+  word_count: {
     showTotal: true,
-    legendLowerLabel: 'legendLowerLabelPromptLength',
-    legendUpperLabel: 'legendUpperLabelPromptLength',
+    legendLowerLabel: 'legendLowerLabelWordCount',
+    legendUpperLabel: 'legendUpperLabelWordCount',
   },
 } as const;
 
@@ -73,8 +73,8 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
     questionNumber: 0,
   });
   const [selectedMetric, setSelectedMetric] = useState({
-    value: 'prompt_count',
-    label: 'Prompt Count',
+    value: 'messages_sent',
+    label: 'Messages Sent',
   });
 
   useEffect(() => {
@@ -170,10 +170,10 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         Grade Difference: {liveFeedbackData.grade_diff ?? '-'}
       </Typography>
       <Typography variant="body2">
-        Prompt Count: {liveFeedbackData.prompt_count ?? '-'}
+        Messages Sent: {liveFeedbackData.messages_sent ?? '-'}
       </Typography>
       <Typography variant="body2">
-        Prompt Length: {liveFeedbackData.prompt_length ?? '-'}
+        Word Count: {liveFeedbackData.word_count ?? '-'}
       </Typography>
     </Box>
   );
@@ -213,7 +213,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
     const tooltipContent = renderTooltipContent(liveFeedbackData);
 
     // If there is no LiveFeedbackHistory, we do not show the clickable cell
-    if (liveFeedbackData.prompt_count === 0) {
+    if (liveFeedbackData.messages_sent === 0) {
       return (
         <div className="p-1.5">
           <Tooltip arrow placement="left" title={tooltipContent}>

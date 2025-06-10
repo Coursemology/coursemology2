@@ -220,9 +220,9 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           # Ensure that the feedback count is correct for the specific questions
           question_index = first_result['questionIds'].index(question1.id)
           if first_result['courseUser']['id'] == course_student.id
-            expect(first_result['liveFeedbackData'][question_index]['prompt_count']).to eq(3)
+            expect(first_result['liveFeedbackData'][question_index]['messages_sent']).to eq(3)
           else
-            expect(first_result['liveFeedbackData'][question_index]['prompt_count']).to eq(0)
+            expect(first_result['liveFeedbackData'][question_index]['messages_sent']).to eq(0)
           end
         end
       end
@@ -253,9 +253,9 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           # Ensure that the feedback count is correct for the specific questions
           question_index = first_result['questionIds'].index(question1.id)
           if first_result['courseUser']['id'] == course_student.id
-            expect(first_result['liveFeedbackData'][question_index]['prompt_count']).to eq(3)
+            expect(first_result['liveFeedbackData'][question_index]['messages_sent']).to eq(3)
           else
-            expect(first_result['liveFeedbackData'][question_index]['prompt_count']).to eq(0)
+            expect(first_result['liveFeedbackData'][question_index]['messages_sent']).to eq(0)
           end
         end
       end
