@@ -3,7 +3,6 @@ import { JobSubmitted } from 'types/jobs';
 import { APIResponse } from 'api/types';
 import {
   AssessmentsStatistics,
-  CodaveriStatistics,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
   StaffStatistics,
@@ -35,10 +34,6 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
 
   fetchAssessmentsStatistics(): APIResponse<AssessmentsStatistics> {
     return this.client.get(`${this.#urlPrefix}/assessments`);
-  }
-
-  fetchCodaveriStatistics(): APIResponse<CodaveriStatistics> {
-    return this.client.get(`${this.#urlPrefix}/codaveri`);
   }
 
   downloadScoreSummary(assessmentIds: number[]): APIResponse<JobSubmitted> {

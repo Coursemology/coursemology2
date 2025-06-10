@@ -11,19 +11,12 @@ interface Props {
   questionNumber: number;
   questionId: number;
   courseUserId: number;
-  assessmentId?: number; // Optional, only used when fetching course-level live feedback history
 }
 
 const LiveFeedbackHistoryIndex: FC<Props> = (props): JSX.Element => {
-  const {
-    questionNumber,
-    questionId,
-    courseUserId,
-    assessmentId: propsAssessmentId,
-  } = props;
-  const { assessmentId: paramsAssessmentId } = useParams();
-  const parsedAssessmentId =
-    propsAssessmentId ?? parseInt(paramsAssessmentId!, 10);
+  const { questionNumber, questionId, courseUserId } = props;
+  const { assessmentId } = useParams();
+  const parsedAssessmentId = parseInt(assessmentId!, 10);
 
   const fetchLiveFeedbackHistoryDetails = (): Promise<void> =>
     fetchLiveFeedbackHistory(parsedAssessmentId, questionId, courseUserId);
