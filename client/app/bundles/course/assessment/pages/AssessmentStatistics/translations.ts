@@ -49,20 +49,20 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.legendHigherLabelGradeDiff',
     defaultMessage: 'Higher Grade Difference',
   },
-  legendLowerLabelPromptCount: {
-    id: 'course.assessment.statistics.legendLowerLabelPromptCount',
+  legendLowerLabelMessagesSent: {
+    id: 'course.assessment.statistics.legendLowerLabelMessagesSent',
     defaultMessage: 'Lower Usage',
   },
-  legendUpperLabelPromptCount: {
-    id: 'course.assessment.statistics.legendUpperLabelPromptCount',
+  legendUpperLabelMessagesSent: {
+    id: 'course.assessment.statistics.legendUpperLabelMessagesSent',
     defaultMessage: 'Higher Usage',
   },
-  legendLowerLabelPromptLength: {
-    id: 'course.assessment.statistics.legendLowerLabelPromptLength',
+  legendLowerLabelWordCount: {
+    id: 'course.assessment.statistics.legendLowerLabelWordCount',
     defaultMessage: 'Lower Word Count',
   },
-  legendUpperLabelPromptLength: {
-    id: 'course.assessment.statistics.legendUpperLabelPromptLength',
+  legendUpperLabelWordCount: {
+    id: 'course.assessment.statistics.legendUpperLabelWordCount',
     defaultMessage: 'Higher Word Count',
   },
   liveFeedbackFilename: {

@@ -151,15 +151,15 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
       submission_question_id = @submission_question_id_hash[[submission&.id, question_id]]
       key = [submission&.creator_id, submission_question_id]
 
-      prompt_data = prompt_hash[key] || { prompt_count: 0, prompt_length: 0 }
+      prompt_data = prompt_hash[key] || { messages_sent: 0, word_count: 0 }
       messages = message_hash[key] || []
       answer = answer_hash[[submission&.id, question_id]]
 
       {
         grade: answer,
         grade_diff: calculate_grade_diff(submission, question_id, messages),
-        prompt_length: prompt_data[:prompt_length],
-        prompt_count: prompt_data[:prompt_count]
+        word_count: prompt_data[:word_count],
+        messages_sent: prompt_data[:messages_sent]
       }
     end
   end
@@ -167,8 +167,8 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   def calculate_prompt_hash(message_hash)
     message_hash.transform_values do |messages|
       {
-        prompt_count: messages.size,
-        prompt_length: messages.sum { |m| m.content.split(/\s+/).size }
+        messages_sent: messages.size,
+        word_count: messages.sum { |m| m.content.split(/\s+/).size }
       }
     end
   end

@@ -97,6 +97,6 @@ export interface AssessmentLiveFeedbackStatistics {
 export interface AssessmentLiveFeedbackData {
   grade: number;
   grade_diff: number;
-  prompt_count: number;
-  prompt_length: number;
+  messages_sent: number;
+  word_count: number;
 }
