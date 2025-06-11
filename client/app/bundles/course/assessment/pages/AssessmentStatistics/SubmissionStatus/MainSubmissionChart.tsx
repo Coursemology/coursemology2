@@ -1,6 +1,6 @@
 import { useAppSelector } from 'lib/hooks/store';
 
-import { getAssessmentStatistics } from '../selectors';
+import { getSubmissionStatistics } from '../selectors';
 
 import SubmissionStatusChart from './SubmissionStatusChart';
 
@@ -10,13 +10,12 @@ interface Props {
 
 const MainSubmissionChart = (props: Props): JSX.Element => {
   const { includePhantom } = props;
-  const statistics = useAppSelector(getAssessmentStatistics);
 
-  const submissions = statistics.submissions;
+  const submissionStatistics = useAppSelector(getSubmissionStatistics);
 
   const includedSubmissions = includePhantom
-    ? submissions
-    : submissions.filter((s) => !s.courseUser.isPhantom);
+    ? submissionStatistics
+    : submissionStatistics.filter((s) => !s.courseUser.isPhantom);
 
   return <SubmissionStatusChart submissions={includedSubmissions} />;
 };

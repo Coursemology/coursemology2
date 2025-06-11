@@ -89,16 +89,16 @@ const AssessmentStatisticsPage: FC = () => {
   const [tabValue, setTabValue] = useState('gradesPerQuestion');
   const [includePhantom, setIncludePhantom] = useState(false);
 
-  const statistics = useAppSelector(getAssessmentStatistics);
+  const assessmentStatistics = useAppSelector(getAssessmentStatistics);
 
   const tabComponentMapping = tabMapping(includePhantom);
 
   return (
     <Page
-      backTo={statistics.assessment?.url}
+      backTo={assessmentStatistics?.url}
       className="space-y-5"
       title={t(translations.header, {
-        title: statistics.assessment?.title ?? '',
+        title: assessmentStatistics?.title ?? '',
       })}
     >
       <>
@@ -160,7 +160,7 @@ const AssessmentStatisticsPage: FC = () => {
               label={t(translations.duplicationHistory)}
               value="duplicationHistory"
             />
-            {statistics.assessment?.liveFeedbackEnabled && (
+            {assessmentStatistics?.liveFeedbackEnabled && (
               <Tab
                 className="min-h-12"
                 id="liveFeedback"

@@ -1,14 +1,23 @@
-import { FC, ReactNode, useState } from 'react';
+// the case where the grade is null is handled separately inside the column
+// (refer to the definition of answerColumns below)
+
+import { FC, ReactNode, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { WorkflowState } from 'types/course/assessment/submission/submission';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
+import {
+  fetchAssessmentStatistics,
+  fetchSubmissionStatistics,
+} from 'course/assessment/operations/statistics';
 import SubmissionWorkflowState from 'course/assessment/submission/components/SubmissionWorkflowState';
 import { workflowStates } from 'course/assessment/submission/constants';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 import Table, { ColumnTemplate } from 'lib/components/table';
+import Preload from 'lib/components/wrappers/Preload';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import TableLegends from 'lib/containers/TableLegends';
 import {
@@ -22,7 +31,7 @@ import submissionTranslations from '../../submission/translations';
 
 import LastAttemptIndex from './AnswerDisplay/LastAttempt';
 import { getClassNameForMarkCell } from './classNameUtils';
-import { getAssessmentStatistics } from './selectors';
+import { getAssessmentStatistics, getSubmissionStatistics } from './selectors';
 import translations from './translations';
 import { getJointGroupsName } from './utils';
 
@@ -39,11 +48,14 @@ interface AnswerInfoState {
   workflowState?: WorkflowState | typeof workflowStates.Unstarted;
 }
 
-const StudentGradesPerQuestionTable: FC<Props> = (props) => {
+const StudentGradesPerQuestionTable: FC<Props> = ({ includePhantom }) => {
   const { t } = useTranslation();
   const { courseId, assessmentId } = useParams();
-  const { includePhantom } = props;
-  const statistics = useAppSelector(getAssessmentStatistics);
+  const parsedAssessmentId = parseInt(assessmentId!, 10);
+
+  const assessmentStatistics = useAppSelector(getAssessmentStatistics);
+  const submissionStatistics = useAppSelector(getSubmissionStatistics);
+
   const [openAnswer, setOpenAnswer] = useState(false);
   const [answerDisplayInfo, setAnswerDisplayInfo] = useState<AnswerInfoState>({
     index: 0,
@@ -52,26 +64,35 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
     submissionId: 0,
     studentName: '',
   });
-  const assessment = statistics.assessment;
-  const submissions = statistics.submissions;
+
+  const fetchAndSetAssessmentAndSubmissionStatistics =
+    async (): Promise<void> => {
+      const promises: Promise<void>[] = [];
+      if (!assessmentStatistics) {
+        promises.push(fetchAssessmentStatistics(parsedAssessmentId));
+      }
+      if (submissionStatistics.length === 0) {
+        promises.push(fetchSubmissionStatistics(parsedAssessmentId));
+      }
+      await Promise.all(promises);
+    };
 
   // since submissions come from Redux store, it is immutable, and hence
   // toggling between includePhantom status will render typeError if we
   // use submissions. Hence the reason of using slice in here, basically
   // creating a new array and use this instead for the display.
-  const filteredSubmissions = includePhantom
-    ? submissions.slice()
-    : submissions.slice().filter((s) => !s.courseUser.isPhantom);
-
-  const sortedSubmission = filteredSubmissions
-    .sort((datum1, datum2) =>
-      datum1.courseUser.name.localeCompare(datum2.courseUser.name),
-    )
-    .sort(
-      (datum1, datum2) =>
-        Number(datum1.courseUser.isPhantom) -
-        Number(datum2.courseUser.isPhantom),
-    );
+  const filteredAndSortedSubmissions = useMemo(() => {
+    return submissionStatistics
+      .filter((s) => includePhantom || !s.courseUser.isPhantom)
+      .slice()
+      .sort((a, b) => {
+        const phantomDiff =
+          Number(a.courseUser.isPhantom) - Number(b.courseUser.isPhantom);
+        return (
+          phantomDiff || a.courseUser.name.localeCompare(b.courseUser.name)
+        );
+      });
+  }, [submissionStatistics, includePhantom]);
 
   // the case where the grade is null is handled separately inside the column
   // (refer to the definition of answerColumns below)
@@ -91,7 +112,7 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
           setAnswerDisplayInfo({
             index: index + 1,
             answerId: datum.answers![index].lastAttemptAnswerId,
-            questionId: assessment!.questionIds[index],
+            questionId: assessmentStatistics!.questionIds[index],
             submissionId: datum.id,
             studentName: datum.courseUser.name,
             workflowState: datum.workflowState,
@@ -112,7 +133,7 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
   };
 
   const answerColumns: ColumnTemplate<MainSubmissionInfo>[] = Array.from(
-    { length: assessment?.questionCount ?? 0 },
+    { length: assessmentStatistics?.questionCount ?? 0 },
     (_, index) => {
       return {
         searchProps: {
@@ -204,7 +225,10 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
           datum.workflowState === workflowStates.Graded ||
           datum.workflowState === workflowStates.Published;
         return typeof datum.totalGrade === 'number' && isGradedOrPublished ? (
-          renderTotalGradeCell(datum.totalGrade, assessment!.maximumGrade)
+          renderTotalGradeCell(
+            datum.totalGrade,
+            assessmentStatistics!.maximumGrade,
+          )
         ) : (
           <div />
         );
@@ -238,78 +262,83 @@ const StudentGradesPerQuestionTable: FC<Props> = (props) => {
   ];
 
   return (
-    <>
-      <TableLegends
-        legends={[
-          {
-            key: 'correct',
-            backgroundColor: 'bg-green-500',
-            description: t(translations.marksGreenCellLegend),
-          },
-          {
-            key: 'incorrect',
-            backgroundColor: 'bg-red-500',
-            description: t(translations.marksRedCellLegend),
-          },
-        ]}
-      />
-      <Table
-        columns={columns}
-        csvDownload={{
-          filename: t(translations.marksFilename, {
-            assessment: assessment?.title ?? '',
-          }),
-        }}
-        data={sortedSubmission}
-        getRowClassName={(datum): string =>
-          `data_${datum.courseUser.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
-        }
-        getRowEqualityData={(datum): MainSubmissionInfo => datum}
-        getRowId={(datum): string => datum.courseUser.id.toString()}
-        indexing={{ indices: true }}
-        pagination={{
-          rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
-          showAllRows: true,
-        }}
-        search={{
-          searchPlaceholder: t(translations.nameGroupsGraderSearchText),
-        }}
-        toolbar={{ show: true }}
-      />
-      <Prompt
-        cancelLabel={t(translations.closePrompt)}
-        maxWidth="lg"
-        onClose={(): void => setOpenAnswer(false)}
-        open={openAnswer}
-        title={
-          <span className="flex items-center">
-            {t(submissionTranslations.historyTitle, {
-              number: answerDisplayInfo.index,
-              studentName: answerDisplayInfo.studentName,
-            })}
-            <SubmissionWorkflowState
-              className="ml-3"
-              linkTo={getEditSubmissionQuestionURL(
-                courseId,
-                assessmentId,
-                answerDisplayInfo.submissionId,
-                answerDisplayInfo.index,
-              )}
-              opensInNewTab
-              workflowState={
-                answerDisplayInfo.workflowState ?? workflowStates.Unstarted
-              }
-            />
-          </span>
-        }
-      >
-        <LastAttemptIndex
-          curAnswerId={answerDisplayInfo.answerId}
-          questionId={answerDisplayInfo.questionId}
-          submissionId={answerDisplayInfo.submissionId}
+    <Preload
+      render={<LoadingIndicator />}
+      while={fetchAndSetAssessmentAndSubmissionStatistics}
+    >
+      <>
+        <TableLegends
+          legends={[
+            {
+              key: 'correct',
+              backgroundColor: 'bg-green-500',
+              description: t(translations.marksGreenCellLegend),
+            },
+            {
+              key: 'incorrect',
+              backgroundColor: 'bg-red-500',
+              description: t(translations.marksRedCellLegend),
+            },
+          ]}
         />
-      </Prompt>
-    </>
+        <Table
+          columns={columns}
+          csvDownload={{
+            filename: t(translations.marksFilename, {
+              assessment: assessmentStatistics?.title ?? '',
+            }),
+          }}
+          data={filteredAndSortedSubmissions}
+          getRowClassName={(datum): string =>
+            `data_${datum.courseUser.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
+          }
+          getRowEqualityData={(datum): MainSubmissionInfo => datum}
+          getRowId={(datum): string => datum.courseUser.id.toString()}
+          indexing={{ indices: true }}
+          pagination={{
+            rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+            showAllRows: true,
+          }}
+          search={{
+            searchPlaceholder: t(translations.nameGroupsGraderSearchText),
+          }}
+          toolbar={{ show: true }}
+        />
+        <Prompt
+          cancelLabel={t(translations.closePrompt)}
+          maxWidth="lg"
+          onClose={(): void => setOpenAnswer(false)}
+          open={openAnswer}
+          title={
+            <span className="flex items-center">
+              {t(submissionTranslations.historyTitle, {
+                number: answerDisplayInfo.index,
+                studentName: answerDisplayInfo.studentName,
+              })}
+              <SubmissionWorkflowState
+                className="ml-3"
+                linkTo={getEditSubmissionQuestionURL(
+                  courseId,
+                  assessmentId,
+                  answerDisplayInfo.submissionId,
+                  answerDisplayInfo.index,
+                )}
+                opensInNewTab
+                workflowState={
+                  answerDisplayInfo.workflowState ?? workflowStates.Unstarted
+                }
+              />
+            </span>
+          }
+        >
+          <LastAttemptIndex
+            curAnswerId={answerDisplayInfo.answerId}
+            questionId={answerDisplayInfo.questionId}
+            submissionId={answerDisplayInfo.submissionId}
+          />
+        </Prompt>
+      </>
+    </Preload>
   );
 };
 

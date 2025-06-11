@@ -36,23 +36,23 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
              assessment: assessment, course: course, creator: teaching_assistant.user)
     end
 
-    describe '#main_statistics' do
+    describe '#assessment_statistics' do
       render_views
-      subject { get :main_statistics, as: :json, params: { course_id: course, id: assessment.id } }
+      subject { get :assessment_statistics, as: :json, params: { course_id: course, id: assessment.id } }
 
-      context 'when the Normal User get the main statistics data' do
+      context 'when the Normal User get the assessment statistics data' do
         let(:user) { create(:user) }
         before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
-      context 'when the Course Student get the main statistics data' do
+      context 'when the Course Student get the assessment statistics data' do
         let(:user) { create(:course_student, course: course).user }
         before { controller_sign_in(controller, user) }
         it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
       end
 
-      context 'when the Course Manager get the main statistics data' do
+      context 'when the Course Manager get the assessment statistics data' do
         let(:user) { create(:course_manager, course: course).user }
         before { controller_sign_in(controller, user) }
 
@@ -60,33 +60,12 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
 
-          # all the students data will be included here, including the non-existing submission one
-          expect(json_result['submissions'].count).to eq(4)
-
-          # showing the correct workflow state
-          expect(json_result['submissions'][0]['workflowState']).to eq('published')
-          expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
-          expect(json_result['submissions'][2]['workflowState']).to eq('graded')
-          expect(json_result['submissions'][3]['workflowState']).to eq('unstarted')
-
-          # only graded and published submissions' answers will be included in the stats
-          expect(json_result['submissions'][0]['answers']).not_to be_nil
-          expect(json_result['submissions'][1]['answers']).to be_nil
-          expect(json_result['submissions'][2]['answers']).not_to be_nil
-          expect(json_result['submissions'][3]['answers']).to be_nil
-
-          # only graded and published submissions' answers will be included in the stats
-          expect(json_result['submissions'][0]['courseUser']['role']).to eq('student')
-          expect(json_result['submissions'][1]['courseUser']['role']).to eq('student')
-          expect(json_result['submissions'][2]['courseUser']['role']).to eq('student')
-          expect(json_result['submissions'][3]['courseUser']['role']).to eq('student')
-
-          # only 1 ancestor will be returned (current) as no permission for ancestor assessment
-          expect(json_result['ancestors'].count).to eq(1)
+          expect(json_result['title']).to eq(course.assessments.first.title)
+          expect(json_result['questionCount']).to eq(json_result['questionIds'].length)
         end
       end
 
-      context 'when the administrator get the main statistics data' do
+      context 'when the administrator get the assessment statistics data' do
         let(:administrator) { create(:administrator) }
         before { controller_sign_in(controller, administrator) }
 
@@ -94,28 +73,129 @@ RSpec.describe Course::Statistics::AssessmentsController, type: :controller do
           expect(subject).to have_http_status(:success)
           json_result = JSON.parse(response.body)
 
+          expect(json_result['title']).to eq(course.assessments.first.title)
+          expect(json_result['questionCount']).to eq(json_result['questionIds'].length)
+        end
+      end
+    end
+
+    describe '#submission_statistics' do
+      render_views
+      subject { get :submission_statistics, as: :json, params: { course_id: course, id: assessment.id } }
+
+      context 'when the Normal User get the submission statistics data' do
+        let(:user) { create(:user) }
+        before { controller_sign_in(controller, user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the Course Student get the submission statistics data' do
+        let(:user) { create(:course_student, course: course).user }
+        before { controller_sign_in(controller, user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the Course Manager get the submission statistics data' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'returns OK with right number of submissions being displayed' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
           # all the students data will be included here, including the non-existing submission one
-          expect(json_result['submissions'].count).to eq(4)
+          expect(json_result.count).to eq(4)
 
           # showing the correct workflow state
-          expect(json_result['submissions'][0]['workflowState']).to eq('published')
-          expect(json_result['submissions'][1]['workflowState']).to eq('attempting')
-          expect(json_result['submissions'][2]['workflowState']).to eq('graded')
-          expect(json_result['submissions'][3]['workflowState']).to eq('unstarted')
+          expect(json_result[0]['workflowState']).to eq('published')
+          expect(json_result[1]['workflowState']).to eq('attempting')
+          expect(json_result[2]['workflowState']).to eq('graded')
+          expect(json_result[3]['workflowState']).to eq('unstarted')
 
           # only graded and published submissions' answers will be included in the stats
-          expect(json_result['submissions'][0]['answers']).not_to be_nil
-          expect(json_result['submissions'][1]['answers']).to be_nil
-          expect(json_result['submissions'][2]['answers']).not_to be_nil
-          expect(json_result['submissions'][3]['answers']).to be_nil
+          expect(json_result[0]['answers']).not_to be_nil
+          expect(json_result[1]['answers']).to be_nil
+          expect(json_result[2]['answers']).not_to be_nil
+          expect(json_result[3]['answers']).to be_nil
 
           # only graded and published submissions' answers will be included in the stats
-          expect(json_result['submissions'][0]['courseUser']['role']).to eq('student')
-          expect(json_result['submissions'][1]['courseUser']['role']).to eq('student')
-          expect(json_result['submissions'][2]['courseUser']['role']).to eq('student')
-          expect(json_result['submissions'][3]['courseUser']['role']).to eq('student')
+          expect(json_result[0]['courseUser']['role']).to eq('student')
+          expect(json_result[1]['courseUser']['role']).to eq('student')
+          expect(json_result[2]['courseUser']['role']).to eq('student')
+          expect(json_result[3]['courseUser']['role']).to eq('student')
+        end
+      end
 
-          expect(json_result['ancestors'].count).to eq(2)
+      context 'when the administrator get the submission statistics data' do
+        let(:administrator) { create(:administrator) }
+        before { controller_sign_in(controller, administrator) }
+
+        it 'returns OK with right information' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          # all the students data will be included here, including the non-existing submission one
+          expect(json_result.count).to eq(4)
+
+          # showing the correct workflow state
+          expect(json_result[0]['workflowState']).to eq('published')
+          expect(json_result[1]['workflowState']).to eq('attempting')
+          expect(json_result[2]['workflowState']).to eq('graded')
+          expect(json_result[3]['workflowState']).to eq('unstarted')
+
+          # only graded and published submissions' answers will be included in the stats
+          expect(json_result[0]['answers']).not_to be_nil
+          expect(json_result[1]['answers']).to be_nil
+          expect(json_result[2]['answers']).not_to be_nil
+          expect(json_result[3]['answers']).to be_nil
+
+          # only graded and published submissions' answers will be included in the stats
+          expect(json_result[0]['courseUser']['role']).to eq('student')
+          expect(json_result[1]['courseUser']['role']).to eq('student')
+          expect(json_result[2]['courseUser']['role']).to eq('student')
+          expect(json_result[3]['courseUser']['role']).to eq('student')
+        end
+      end
+    end
+
+    describe '#ancestor_info' do
+      render_views
+      subject { get :ancestor_info, as: :json, params: { course_id: course, id: assessment.id } }
+
+      context 'when the Normal User get the ancestor info data' do
+        let(:user) { create(:user) }
+        before { controller_sign_in(controller, user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the Course Student get the ancestor info data' do
+        let(:user) { create(:course_student, course: course).user }
+        before { controller_sign_in(controller, user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the Course Manager get the ancestor info data' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'returns OK with only 1 ancestor' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          # only 1 ancestor will be returned (current) as no permission for ancestor assessment
+          expect(json_result.count).to eq(1)
+        end
+      end
+
+      context 'when the administrator get the ancestor info data' do
+        let(:administrator) { create(:administrator) }
+        before { controller_sign_in(controller, administrator) }
+
+        it 'returns OK with right information and 2 ancestors (both current and its predecessors)' do
+          expect(subject).to have_http_status(:success)
+          json_result = JSON.parse(response.body)
+
+          expect(json_result.count).to eq(2)
         end
       end
     end

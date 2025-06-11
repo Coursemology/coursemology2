@@ -9,14 +9,14 @@ interface AssessmentInfo {
   url: string;
 }
 
-interface MainAssessmentInfo extends AssessmentInfo {
+export interface MainAssessmentInfo extends AssessmentInfo {
   isAutograded: boolean;
   questionCount: number;
   questionIds: number[];
   liveFeedbackEnabled: boolean;
 }
 
-interface AncestorAssessmentInfo extends AssessmentInfo {}
+export interface AncestorAssessmentInfo extends AssessmentInfo {}
 
 interface UserInfo {
   id: number;
@@ -49,6 +49,7 @@ interface SubmissionInfo {
   submittedAt?: string;
   endAt?: string;
   totalGrade?: number | null;
+  maximumGrade?: number | null;
 }
 
 export interface MainSubmissionInfo extends SubmissionInfo {
@@ -72,9 +73,10 @@ export interface AncestorInfo {
 }
 
 export interface MainAssessmentStats {
-  assessment: MainAssessmentInfo | null;
-  submissions: MainSubmissionInfo[];
-  ancestors: AncestorInfo[];
+  ancestorInfo: AncestorInfo[];
+  assessmentStatistics: MainAssessmentInfo | null;
+  submissionStatistics: MainSubmissionInfo[];
+  liveFeedbackStatistics: AssessmentLiveFeedbackStatistics[];
 }
 
 export interface AncestorAssessmentStats {
