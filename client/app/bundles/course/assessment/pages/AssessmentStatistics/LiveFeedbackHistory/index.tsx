@@ -4,7 +4,7 @@ import { fetchLiveFeedbackHistory } from 'course/assessment/operations/liveFeedb
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
-import LiveFeedbackHistoryPage from './LiveFeedbackHistoryPage';
+import LiveFeedbackHistoryTimelineView from './LiveFeedbackHistoryTimelineView';
 
 interface Props {
   questionNumber: number;
@@ -13,7 +13,7 @@ interface Props {
   assessmentId: number;
 }
 
-const LiveFeedbackHistoryIndex: FC<Props> = (props): JSX.Element => {
+const LiveFeedbackHistoryContent: FC<Props> = (props): JSX.Element => {
   const { questionNumber, questionId, courseUserId, assessmentId } = props;
 
   const fetchLiveFeedbackHistoryDetails = (): Promise<void> =>
@@ -25,10 +25,10 @@ const LiveFeedbackHistoryIndex: FC<Props> = (props): JSX.Element => {
       while={fetchLiveFeedbackHistoryDetails}
     >
       {(): JSX.Element => (
-        <LiveFeedbackHistoryPage questionNumber={questionNumber} />
+        <LiveFeedbackHistoryTimelineView questionNumber={questionNumber} />
       )}
     </Preload>
   );
 };
 
-export default LiveFeedbackHistoryIndex;
+export default LiveFeedbackHistoryContent;

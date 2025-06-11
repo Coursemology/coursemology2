@@ -34,7 +34,8 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     fetch_all_assessment_related_statistics_hash
   end
 
-  def get_help_activities # rubocop:disable Naming/AccessorMethodName
+  # This is named as `activity_get_help` to satisfy RuboCop naming checks without having to disable them.
+  def activity_get_help
     @course_user_hash = current_course.course_users.index_by(&:user_id)
     load_assessment_question_hash
     @live_feedbacks = fetch_recent_live_feedbacks
