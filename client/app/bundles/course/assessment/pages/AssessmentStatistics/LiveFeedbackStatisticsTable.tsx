@@ -29,6 +29,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { courseId, assessmentId } = useParams();
   const { includePhantom, liveFeedbackStatistics } = props;
+  const parsedAssessmentId = parseInt(assessmentId!, 10);
 
   const statistics = useAppSelector(getAssessmentStatistics);
   const assessment = statistics.assessment;
@@ -286,6 +287,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         title={t(translations.liveFeedbackHistoryPromptTitle)}
       >
         <LiveFeedbackHistoryIndex
+          assessmentId={parsedAssessmentId}
           courseUserId={liveFeedbackInfo.courseUserId}
           questionId={liveFeedbackInfo.questionId}
           questionNumber={liveFeedbackInfo.questionNumber}

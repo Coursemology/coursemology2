@@ -5,6 +5,7 @@ import {
   AssessmentsStatistics,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
+  GetHelpStatistics,
   StaffStatistics,
   StudentsStatistics,
 } from 'course/statistics/types';
@@ -34,6 +35,10 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
 
   fetchAssessmentsStatistics(): APIResponse<AssessmentsStatistics> {
     return this.client.get(`${this.#urlPrefix}/assessments`);
+  }
+
+  fetchGetHelpStatistics(): APIResponse<GetHelpStatistics> {
+    return this.client.get(`${this.#urlPrefix}/get_help`);
   }
 
   downloadScoreSummary(assessmentIds: number[]): APIResponse<JobSubmitted> {

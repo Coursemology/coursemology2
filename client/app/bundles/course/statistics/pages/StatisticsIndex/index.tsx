@@ -44,6 +44,10 @@ export const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.studentsFailure',
     defaultMessage: 'Failed to fetch student data!',
   },
+  getHelp: {
+    id: 'course.statistics.StatisticsIndex.tabs.getHelp',
+    defaultMessage: 'Get Help',
+  },
 });
 
 interface TabData {
@@ -69,6 +73,10 @@ const allTabs = {
     label: translations.assessments,
     href: 'assessments',
   },
+  getHelpTab: {
+    label: translations.getHelp,
+    href: 'get_help',
+  },
 };
 
 const StatisticsIndex: FC = () => {
@@ -80,6 +88,7 @@ const StatisticsIndex: FC = () => {
     allTabs.staffTab,
     allTabs.courseTab,
     allTabs.assessmentTab,
+    allTabs.getHelpTab,
   ];
 
   const lastPartOfCurrentPath = getCurrentPath()?.split('/').pop();
