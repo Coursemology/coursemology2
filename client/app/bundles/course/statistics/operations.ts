@@ -8,6 +8,7 @@ import {
   AssessmentsStatistics,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
+  GetHelpStatistics,
   StaffStatistics,
   StudentsStatistics,
 } from './types';
@@ -46,6 +47,11 @@ export const fetchAssessmentsStatistics =
       await CourseAPI.statistics.course.fetchAssessmentsStatistics();
     return response.data;
   };
+
+export const fetchGetHelpStatistics = async (): Promise<GetHelpStatistics> => {
+  const response = await CourseAPI.statistics.course.fetchGetHelpStatistics();
+  return response.data;
+};
 
 export const downloadScoreSummary = (
   handleSuccess: (successData: JobCompleted) => void,

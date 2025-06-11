@@ -62,6 +62,17 @@ const statisticsRouter: Translated<RouteObject> = (_) => ({
         ).default,
       }),
     },
+    {
+      path: 'get_help',
+      lazy: async (): Promise<RouteObject> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'GetHelpStatistics' */
+            'course/statistics/pages/StatisticsIndex/get_help/GetHelpStatistics'
+          )
+        ).default,
+      }),
+    },
   ],
 });
 

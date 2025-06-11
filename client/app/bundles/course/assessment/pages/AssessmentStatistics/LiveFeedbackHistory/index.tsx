@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { fetchLiveFeedbackHistory } from 'course/assessment/operations/liveFeedback';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -11,15 +10,14 @@ interface Props {
   questionNumber: number;
   questionId: number;
   courseUserId: number;
+  assessmentId: number;
 }
 
 const LiveFeedbackHistoryIndex: FC<Props> = (props): JSX.Element => {
-  const { questionNumber, questionId, courseUserId } = props;
-  const { assessmentId } = useParams();
-  const parsedAssessmentId = parseInt(assessmentId!, 10);
+  const { questionNumber, questionId, courseUserId, assessmentId } = props;
 
   const fetchLiveFeedbackHistoryDetails = (): Promise<void> =>
-    fetchLiveFeedbackHistory(parsedAssessmentId, questionId, courseUserId);
+    fetchLiveFeedbackHistory(assessmentId, questionId, courseUserId);
 
   return (
     <Preload
