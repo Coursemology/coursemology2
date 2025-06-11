@@ -15,7 +15,7 @@ import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
-import LiveFeedbackHistoryIndex from './LiveFeedbackHistory';
+import LiveFeedbackHistoryContent from './LiveFeedbackHistory';
 import { getAssessmentStatistics } from './selectors';
 import translations from './translations';
 import { getJointGroupsName } from './utils';
@@ -286,7 +286,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         open={openLiveFeedbackHistory}
         title={t(translations.liveFeedbackHistoryPromptTitle)}
       >
-        <LiveFeedbackHistoryIndex
+        <LiveFeedbackHistoryContent
           assessmentId={parsedAssessmentId}
           courseUserId={liveFeedbackInfo.courseUserId}
           questionId={liveFeedbackInfo.questionId}

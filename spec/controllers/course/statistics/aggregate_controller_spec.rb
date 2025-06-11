@@ -211,5 +211,116 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
         it { expect(subject).to be_successful }
       end
     end
+
+    describe '#activity_get_help' do
+      subject { get :activity_get_help, format: :json, params: { course_id: course } }
+
+      let(:student) { create(:course_student, course: course) }
+      let(:assessment) { create(:assessment, course: course) }
+      let(:submission) { create(:submission, assessment: assessment, creator: student.user) }
+      let(:question) do
+        create(:course_assessment_question_programming, assessment: assessment).acting_as
+      end
+      let(:question_assessment) { create(:question_assessment, assessment: assessment, question: question) }
+      let(:submission_question) { create(:submission_question, submission: submission, question: question) }
+      let(:thread) do
+        create(:live_feedback_thread, assessment: assessment, question: question,
+                                      submission_question_id: submission_question.id,
+                                      submission_creator_id: student.user.id)
+      end
+      let!(:messages) do
+        create_list(:live_feedback_message, 3, thread: thread)
+      end
+      render_views
+
+      context 'when a Normal User pings the endpoint' do
+        let(:user) { create(:user) }
+        before { controller_sign_in(controller, user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when a Course Student pings the endpoint' do
+        let(:user) { create(:course_student, course: course).user }
+        before { controller_sign_in(controller, user) }
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when a Course Teaching Assistant pings the endpoint' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+        before { controller_sign_in(controller, user) }
+        it { expect(subject).to be_successful }
+      end
+
+      context 'when a Course Owner pings the endpoint' do
+        let(:user) { create(:course_owner, course: course).user }
+        before { controller_sign_in(controller, user) }
+        it { expect(subject).to be_successful }
+      end
+
+      context 'when a Course Manager pings the endpoint' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, user) }
+        it { expect(subject).to be_successful }
+      end
+
+      context 'when a Course Observer pings the endpoint' do
+        let(:user) { create(:course_observer, course: course).user }
+        before { controller_sign_in(controller, user) }
+        it { expect(subject).to be_successful }
+      end
+
+      context 'when there are live feedback messages' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'returns the live feedback messages' do
+          expect(subject).to be_successful
+          json_response = JSON.parse(response.body)
+
+          expect(json_response).to have_key('liveFeedbacks')
+          expect(json_response['liveFeedbacks']).to be_an(Array)
+          expect(json_response['liveFeedbacks'].length).to eq(1)
+
+          feedback = json_response['liveFeedbacks'].first
+          expect(feedback['lastMessage']).to eq(messages.first.content)
+          expect(feedback['assessmentId']).to eq(assessment.id)
+          expect(feedback['submissionId']).to eq(submission.id)
+          expect(feedback['questionId']).to eq(question.id)
+          expect(feedback['userId']).to eq(student.id)
+          expect(feedback['assessmentTitle']).to eq(assessment.title)
+          expect(feedback['questionTitle']).to eq(question.title)
+          expect(feedback['questionNumber']).to eq(1)
+          expect(feedback['name']).to eq(student.name)
+          expect(feedback['nameLink']).to eq("/courses/#{course.id}/users/#{student.id}")
+        end
+
+        context 'when there are multiple messages' do
+          let!(:message2) { create(:live_feedback_message, thread: thread, content: 'Still need help!') }
+
+          it 'returns the most recent message' do
+            subject
+            json_response = JSON.parse(response.body)
+            expect(json_response['liveFeedbacks']).to include(
+              hash_including(
+                'lastMessage' => 'Still need help!',
+                'messageCount' => 4
+              )
+            )
+          end
+        end
+
+        context 'when messages are older than 7 days' do
+          before do
+            messages.each { |m| m.update_column(:created_at, 8.days.ago) }
+          end
+
+          it 'does not include old messages' do
+            subject
+            json_response = JSON.parse(response.body)
+            expect(json_response['liveFeedbacks']).to be_empty
+          end
+        end
+      end
+    end
   end
 end

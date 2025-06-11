@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Tooltip, Typography } from '@mui/material';
 
-import LiveFeedbackHistoryIndex from 'course/assessment/pages/AssessmentStatistics/LiveFeedbackHistory';
+import LiveFeedbackHistoryContent from 'course/assessment/pages/AssessmentStatistics/LiveFeedbackHistory';
 import { GetHelpActivity } from 'course/statistics/types';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
@@ -196,7 +196,7 @@ const GetHelpStatisticsTable: FC<{
           assessmentStatisticsTranslations.liveFeedbackHistoryPromptTitle,
         )}
       >
-        <LiveFeedbackHistoryIndex
+        <LiveFeedbackHistoryContent
           assessmentId={courseLevelGetHelpInfo.assessmentId}
           courseUserId={courseLevelGetHelpInfo.courseUserId}
           questionId={courseLevelGetHelpInfo.questionId}

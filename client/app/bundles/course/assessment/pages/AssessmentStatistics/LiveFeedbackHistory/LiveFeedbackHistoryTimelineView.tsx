@@ -14,20 +14,16 @@ interface Props {
   questionNumber: number;
 }
 
-const LiveFeedbackHistoryPage: FC<Props> = (props) => {
+const LiveFeedbackHistoryTimelineView: FC<Props> = ({ questionNumber }) => {
   const { t } = useTranslation();
-  const { questionNumber } = props;
   const question = useAppSelector(getLiveFeedbadkQuestionInfo);
-
   return (
     <>
       <div className="pb-2">
         <Accordion
           defaultExpanded={false}
           disableGutters
-          title={t(translations.questionTitle, {
-            index: questionNumber,
-          })}
+          title={t(translations.questionTitle, { index: questionNumber })}
         >
           <div className="ml-4 mt-4">
             <Typography variant="body1">{question.title}</Typography>
@@ -40,10 +36,9 @@ const LiveFeedbackHistoryPage: FC<Props> = (props) => {
           </div>
         </Accordion>
       </div>
-
       <LiveFeedbackDetails />
     </>
   );
 };
 
-export default LiveFeedbackHistoryPage;
+export default LiveFeedbackHistoryTimelineView;
