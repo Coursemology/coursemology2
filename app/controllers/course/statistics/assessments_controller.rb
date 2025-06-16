@@ -108,22 +108,106 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def create_student_live_feedback_hash
-    count_hash = Course::Assessment::LiveFeedback::Message.joins(:thread).
-                 select('live_feedback_threads.submission_creator_id',
-                        'live_feedback_threads.submission_question_id').
-                 where.not(creator_id: User::SYSTEM_USER_ID).
-                 where(live_feedback_threads: {
-                   submission_question_id: @submission_question_id_hash.values,
-                   submission_creator_id: @all_students.pluck(:user_id)
-                 }).
-                 group('live_feedback_threads.submission_creator_id',
-                       'live_feedback_threads.submission_question_id').count
-    submission_hash = @submissions.to_h { |submission| [submission.creator_id, submission] }
+    answer_hash = fetch_current_answer_hash
+    message_hash = fetch_live_feedback_message_hash
+    prompt_hash = calculate_prompt_hash(message_hash)
+    submission_hash = @submissions.index_by(&:creator_id)
+
     @student_live_feedback_hash = @all_students.to_h do |student|
       submission = submission_hash[student.user_id]
-      live_feedback_count = get_live_feedback_count(count_hash, submission)
-      [student, [submission, live_feedback_count]]
+      live_feedback_data = build_live_feedback_data(submission, answer_hash, message_hash, prompt_hash)
+
+      [student, [submission, live_feedback_data]]
     end
+  end
+
+  def fetch_current_answer_hash
+    Course::Assessment::Answer.where(
+      submission_id: @submissions.pluck(:id),
+      current_answer: true
+    ).to_h { |answer| [[answer.submission_id, answer.question_id], answer&.grade&.to_f || 0] }
+  end
+
+  def fetch_live_feedback_message_hash
+    Course::Assessment::LiveFeedback::Message.
+      joins(:thread).
+      where(live_feedback_threads: {
+        submission_question_id: @submission_question_id_hash.values,
+        submission_creator_id: @all_students.pluck(:user_id)
+      }).
+      where.not(creator_id: User::SYSTEM_USER_ID).
+      select('live_feedback_threads.submission_creator_id',
+             'live_feedback_threads.submission_question_id',
+             'live_feedback_messages.created_at',
+             'live_feedback_messages.content').
+      order(:created_at).
+      group_by do |message|
+        [message.submission_creator_id, message.submission_question_id]
+      end
+  end
+
+  def build_live_feedback_data(submission, answer_hash, message_hash, prompt_hash)
+    @ordered_questions.map do |question_id|
+      submission_question_id = @submission_question_id_hash[[submission&.id, question_id]]
+      key = [submission&.creator_id, submission_question_id]
+
+      prompt_data = prompt_hash[key] || { messages_sent: 0, word_count: 0 }
+      messages = message_hash[key] || []
+      answer = answer_hash[[submission&.id, question_id]]
+
+      {
+        grade: answer,
+        grade_diff: calculate_grade_diff(submission, question_id, messages),
+        word_count: prompt_data[:word_count],
+        messages_sent: prompt_data[:messages_sent]
+      }
+    end
+  end
+
+  def calculate_prompt_hash(message_hash)
+    message_hash.transform_values do |messages|
+      {
+        messages_sent: messages.size,
+        word_count: messages.sum { |m| m.content.split(/\s+/).size }
+      }
+    end
+  end
+
+  def calculate_grade_diff(submission, question_id, messages)
+    return 0 unless submission && messages.any?
+
+    first_message_time = messages.first.created_at
+    last_message_time = messages.last.created_at
+
+    answer_before = fetch_answer_before(submission, question_id, first_message_time)
+    answer_after = fetch_answer_after(submission, question_id, last_message_time)
+
+    return 0 unless answer_after && answer_before
+
+    (answer_after.grade.to_f - answer_before.grade.to_f).round(2)
+  end
+
+  def fetch_answer_before(submission, question_id, timestamp)
+    Course::Assessment::Answer.
+      where(submission_id: submission.id, question_id: question_id).
+      where('created_at < ?', timestamp).
+      order(:created_at).
+      last
+  end
+
+  def fetch_answer_after(submission, question_id, timestamp)
+    Course::Assessment::Answer.
+      where(submission_id: submission.id, question_id: question_id).
+      where('created_at > ?', timestamp).
+      order(:created_at).
+      first
+  end
+
+  def fetch_messages_for_question(submission_question_id)
+    Course::Assessment::LiveFeedback::Message.
+      joins(:thread).
+      where(live_feedback_threads: { submission_question_id: submission_question_id }).
+      order(:created_at)
   end
 
   def create_question_order_hash
@@ -138,13 +222,6 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                                    where(submission_id: @submissions.pluck(:id),
                                          question_id: questions.pluck(:id)).to_h do |sq|
       [[sq.submission_id, sq.question_id], sq.id]
-    end
-  end
-
-  def get_live_feedback_count(count_hash, submission)
-    @ordered_questions.map do |question_id|
-      submission_question_id = @submission_question_id_hash[[submission&.id, question_id]]
-      count_hash[[submission&.creator_id, submission_question_id]] || 0
     end
   end
 end
