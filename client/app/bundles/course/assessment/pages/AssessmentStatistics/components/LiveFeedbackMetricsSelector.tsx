@@ -9,6 +9,13 @@ import {
 
 import InfoLabel from 'lib/components/core/InfoLabel';
 
+enum MetricType {
+  GRADE = 'grade',
+  GRADE_DIFF = 'grade_diff',
+  MESSAGES_SENT = 'messages_sent',
+  WORD_COUNT = 'word_count',
+}
+
 interface MetricOption {
   value: string;
   label: string;
@@ -20,23 +27,23 @@ interface Props {
 }
 
 const metricOptions: MetricOption[] = [
-  { value: 'grade', label: 'Grade' },
-  { value: 'grade_diff', label: 'Grade Difference' },
-  { value: 'messages_sent', label: 'Messages Sent' },
-  { value: 'word_count', label: 'Word Count' },
+  { value: MetricType.GRADE, label: 'Grade' },
+  { value: MetricType.GRADE_DIFF, label: 'Grade Difference' },
+  { value: MetricType.MESSAGES_SENT, label: 'Messages Sent' },
+  { value: MetricType.WORD_COUNT, label: 'Word Count' },
 ];
 
 const metricDescriptions: Record<string, React.ReactNode> = {
-  grade: 'The final grade assigned to the student.',
-  grade_diff: (
+  [MetricType.GRADE]: 'The final grade assigned to the student.',
+  [MetricType.GRADE_DIFF]: (
     <>
       The grade difference between the{' '}
       <b>last answer before the first message</b> and the{' '}
       <b>first answer after the last message</b>.
     </>
   ),
-  messages_sent: 'The number of messages sent during the session.',
-  word_count: "Total word count from the user's messages.",
+  [MetricType.MESSAGES_SENT]: 'The number of messages sent during the session.',
+  [MetricType.WORD_COUNT]: "Total word count from the user's messages.",
 };
 
 const LiveFeedbackMetricSelector: FC<Props> = ({
@@ -44,7 +51,7 @@ const LiveFeedbackMetricSelector: FC<Props> = ({
   setSelectedMetric,
 }) => {
   const description =
-    metricDescriptions[selectedMetric?.value] ||
+    metricDescriptions[selectedMetric?.value as string] ||
     'Select a metric to see its description.'; // Just in case no metric is selected
 
   return (
