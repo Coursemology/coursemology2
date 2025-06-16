@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Discussion::TopicsController < Course::ComponentController
   include Course::UsersHelper
+  include Course::Discussion::TopicsHelper
   include Signals::EmissionConcern
 
   load_and_authorize_resource :discussion_topic, through: :course, instance_name: :topic,
@@ -87,12 +88,22 @@ class Course::Discussion::TopicsController < Course::ComponentController
   end
 
   def my_students_topics
-    my_student_ids = current_course_user ? current_course_user.my_students.pluck(:user_id) : []
-    @topics.
-      globally_displayed.
-      ordered_by_updated_at.
-      merge(Course::Discussion::Topic.from_user(my_student_ids)).
-      preload(:actable)
+    return @topics.none unless current_course_user
+
+    my_student_ids = current_course_user.my_students.pluck(:user_id)
+    topics = @topics.globally_displayed.
+             includes(actable: [:submission, file: { answer: :submission }])
+    # Do the filtering in memory instead of database query for better performance.
+    my_student_topic_ids = topics.filter_map do |topic|
+      topic.id if from_user(topic, my_student_ids)
+    end
+    @topics.where(id: my_student_topic_ids).preload([:posts,
+                                                     actable: [:question,
+                                                               { submission: [:assessment,
+                                                                              :creator] },
+                                                               file: { answer: [:question,
+                                                                                :submission] }]]).
+      order('course_discussion_topics.updated_at DESC')
   end
 
   def component
