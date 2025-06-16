@@ -108,56 +108,152 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def create_student_live_feedback_hash
-    answer_hash = fetch_current_answer_hash
-    message_hash = fetch_live_feedback_message_hash
-    prompt_hash = calculate_prompt_hash(message_hash)
+    message_grade_hash = fetch_message_grade_hash
+    prompt_hash = calculate_prompt_hash(message_grade_hash)
     submission_hash = @submissions.index_by(&:creator_id)
+
+    final_grade_hash = Course::Assessment::Answer.where(
+      submission_id: @submissions.pluck(:id),
+      current_answer: true
+    ).to_h { |answer| [[answer.submission_id, answer.question_id], answer&.grade&.to_f || 0] }
 
     @student_live_feedback_hash = @all_students.to_h do |student|
       submission = submission_hash[student.user_id]
-      live_feedback_data = build_live_feedback_data(submission, answer_hash, message_hash, prompt_hash)
+      live_feedback_data = build_live_feedback_data(submission, final_grade_hash, message_grade_hash, prompt_hash)
 
       [student, [submission, live_feedback_data]]
     end
   end
 
-  def fetch_current_answer_hash
-    Course::Assessment::Answer.where(
-      submission_id: @submissions.pluck(:id),
-      current_answer: true
-    ).to_h { |answer| [[answer.submission_id, answer.question_id], answer&.grade&.to_f || 0] }
+  # Fetches all user Get Help messages grouped by [submission_creator_id, submission_question_id],
+  # along with `grade_before` and `grade_after` relative to the message timestamps.
+  # The returned structure looks like:
+  # {
+  #   [4, 70] => {
+  #     messages: [
+  #       { created_at: "2025-05-30T05:18:48.623076", content: "Explain the question" }
+  #     ],
+  #     grade_before: 0.0,
+  #     grade_after: 75.0
+  #   },
+  #   [4, 72] => {
+  #     messages: [
+  #       { created_at: "2025-05-30T05:19:38.71754", content: "Where am I wrong?" },
+  #       { created_at: "2025-05-30T05:19:47.08988", content: "How do I fix this?" },
+  #       { created_at: "2025-05-30T05:25:04.50411", content: "I am stuck" }
+  #     ],
+  #     grade_before: 10.0,
+  #     grade_after: 10.0
+  #   },
+  #   ...
+  # }
+  def fetch_message_grade_hash
+    student_ids = @all_students.pluck(:user_id)
+    submission_question_ids = @submission_question_id_hash.values
+
+    result = ActiveRecord::Base.connection.execute(
+      build_message_grade_sql(student_ids, submission_question_ids)
+    )
+
+    result.to_h do |row|
+      key = [row['submission_creator_id'], row['submission_question_id']]
+      [
+        key,
+        messages: JSON.parse(row['messages_json']),
+        grade_before: row['grade_before']&.to_f || 0,
+        grade_after: row['grade_after']&.to_f || 0
+      ]
+    end
   end
 
-  def fetch_live_feedback_message_hash
-    Course::Assessment::LiveFeedback::Message.
-      joins(:thread).
-      where(live_feedback_threads: {
-        submission_question_id: @submission_question_id_hash.values,
-        submission_creator_id: @all_students.pluck(:user_id)
-      }).
-      where.not(creator_id: User::SYSTEM_USER_ID).
-      select('live_feedback_threads.submission_creator_id',
-             'live_feedback_threads.submission_question_id',
-             'live_feedback_messages.created_at',
-             'live_feedback_messages.content').
-      order(:created_at).
-      group_by do |message|
-        [message.submission_creator_id, message.submission_question_id]
-      end
+  def build_message_grade_sql(student_ids, submission_question_ids)
+    <<-SQL
+    WITH feedback_messages AS (
+      #{feedback_messages_cte(student_ids, submission_question_ids)}
+    ),
+    grades_before AS (
+      #{grades_before_cte}
+    ),
+    grades_after AS (
+      #{grades_after_cte}
+    )
+    SELECT
+      f.submission_creator_id,
+      f.submission_question_id,
+      f.messages_json,
+      gb.grade_before,
+      ga.grade_after
+    FROM feedback_messages f
+    LEFT JOIN grades_before gb ON f.submission_creator_id = gb.submission_creator_id AND f.submission_question_id = gb.submission_question_id
+    LEFT JOIN grades_after ga ON f.submission_creator_id = ga.submission_creator_id AND f.submission_question_id = ga.submission_question_id
+    SQL
   end
 
-  def build_live_feedback_data(submission, answer_hash, message_hash, prompt_hash)
+  def feedback_messages_cte(student_ids, submission_question_ids)
+    <<-SQL
+    SELECT
+      lft.submission_creator_id,
+      lft.submission_question_id,
+      json_agg(json_build_object(
+        'created_at', m.created_at,
+        'content', m.content
+      ) ORDER BY m.created_at) AS messages_json,
+      MIN(m.created_at) AS first_message_at,
+      MAX(m.created_at) AS last_message_at
+    FROM live_feedback_messages m
+    JOIN live_feedback_threads lft
+      ON lft.id = m.thread_id
+    WHERE m.creator_id != #{User::SYSTEM_USER_ID}
+      AND lft.submission_creator_id = ANY(ARRAY[#{student_ids.join(',')}])
+      AND lft.submission_question_id = ANY(ARRAY[#{submission_question_ids.join(',')}])
+    GROUP BY lft.submission_creator_id, lft.submission_question_id
+    SQL
+  end
+
+  def grades_before_cte
+    <<-SQL
+    SELECT DISTINCT ON (a.submission_id, a.question_id)
+      a.grade AS grade_before,
+      lft.submission_creator_id,
+      lft.submission_question_id
+    FROM feedback_messages f
+    JOIN live_feedback_threads lft ON lft.submission_creator_id = f.submission_creator_id AND lft.submission_question_id = f.submission_question_id
+    JOIN course_assessment_submission_questions sq ON sq.id = lft.submission_question_id
+    JOIN course_assessment_answers a ON a.submission_id = sq.submission_id AND a.question_id = sq.question_id
+    WHERE a.created_at < f.first_message_at
+    ORDER BY a.submission_id, a.question_id, a.created_at DESC
+    SQL
+  end
+
+  def grades_after_cte
+    <<-SQL
+    SELECT DISTINCT ON (a.submission_id, a.question_id)
+      a.grade AS grade_after,
+      lft.submission_creator_id,
+      lft.submission_question_id
+    FROM feedback_messages f
+    JOIN live_feedback_threads lft ON lft.submission_creator_id = f.submission_creator_id AND lft.submission_question_id = f.submission_question_id
+    JOIN course_assessment_submission_questions sq ON sq.id = lft.submission_question_id
+    JOIN course_assessment_answers a ON a.submission_id = sq.submission_id AND a.question_id = sq.question_id
+    WHERE a.created_at > f.last_message_at
+    ORDER BY a.submission_id, a.question_id, a.created_at ASC
+    SQL
+  end
+
+  def build_live_feedback_data(submission, final_grade_hash, message_grade_hash, prompt_hash)
     @ordered_questions.map do |question_id|
       submission_question_id = @submission_question_id_hash[[submission&.id, question_id]]
       key = [submission&.creator_id, submission_question_id]
 
+      message_grade_data = message_grade_hash[key] || {}
+      grade_before = message_grade_data[:grade_before]
+      grade_after  = message_grade_data[:grade_after]
+
       prompt_data = prompt_hash[key] || { messages_sent: 0, word_count: 0 }
-      messages = message_hash[key] || []
-      answer = answer_hash[[submission&.id, question_id]]
 
       {
-        grade: answer,
-        grade_diff: calculate_grade_diff(submission, question_id, messages),
+        grade: final_grade_hash[[submission&.id, question_id]],
+        grade_diff: (grade_after && grade_before) ? (grade_after - grade_before).round(2) : 0,
         word_count: prompt_data[:word_count],
         messages_sent: prompt_data[:messages_sent]
       }
@@ -165,42 +261,13 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def calculate_prompt_hash(message_hash)
-    message_hash.transform_values do |messages|
+    message_hash.transform_values do |data|
+      messages = data[:messages] || []
       {
         messages_sent: messages.size,
-        word_count: messages.sum { |m| m.content.split(/\s+/).size }
+        word_count: messages.sum { |m| m['content'].to_s.split(/\s+/).size }
       }
     end
-  end
-
-  def calculate_grade_diff(submission, question_id, messages)
-    return 0 unless submission && messages.any?
-
-    first_message_time = messages.first.created_at
-    last_message_time = messages.last.created_at
-
-    answer_before = fetch_answer_before(submission, question_id, first_message_time)
-    answer_after = fetch_answer_after(submission, question_id, last_message_time)
-
-    return 0 unless answer_after && answer_before
-
-    (answer_after.grade.to_f - answer_before.grade.to_f).round(2)
-  end
-
-  def fetch_answer_before(submission, question_id, timestamp)
-    Course::Assessment::Answer.
-      where(submission_id: submission.id, question_id: question_id).
-      where('created_at < ?', timestamp).
-      order(:created_at).
-      last
-  end
-
-  def fetch_answer_after(submission, question_id, timestamp)
-    Course::Assessment::Answer.
-      where(submission_id: submission.id, question_id: question_id).
-      where('created_at > ?', timestamp).
-      order(:created_at).
-      first
   end
 
   def fetch_messages_for_question(submission_question_id)
