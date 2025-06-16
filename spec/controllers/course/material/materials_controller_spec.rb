@@ -19,13 +19,41 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
 
     describe '#show' do
       let(:material) { create(:material, folder: folder) }
+
       subject { get :show, params: { course_id: course, folder_id: folder, id: material } }
 
       it 'renders the attachment url' do
-        expect(subject.body).to include(material.attachment.url)
+        subject
+        expect(response.body).to include(material.attachment.url)
       end
 
-      context 'when a material is uploaded for an assessment' do
+      context 'when a Course Manager uploads a material for an assessment' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        let!(:course_user) { CourseUser.find_by(course: course, user: user) }
+        let!(:assessment) do
+          create(:assessment, :published, :with_all_question_types, :with_attachments, course: course,
+                                                                                       session_password: 'super_secret')
+        end
+        let!(:folder_assessment) { assessment.folder }
+        let!(:material_assessment) { folder_assessment.materials.first }
+
+        subject { get :show, params: { course_id: course, folder_id: folder_assessment, id: material_assessment } }
+
+        it 'creates a new submission' do
+          subject
+          expect(assessment.submissions.length).to eq(1)
+          expect(assessment.submissions.first.answers.length).to eq(assessment.questions.length)
+          expect(response.body).to include(material_assessment.attachment.url)
+        end
+      end
+
+      context 'when a Course Owner uploads a material for an assessment' do
+        let(:user) { create(:course_owner, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        let!(:course_user) { CourseUser.find_by(course: course, user: user) }
         let!(:assessment) do
           create(:assessment, :published, :with_all_question_types, :with_attachments, course: course,
                                                                                        session_password: 'super_secret')

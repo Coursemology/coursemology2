@@ -93,6 +93,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
     describe '#download' do
       let(:folder) { create(:folder, course: course, parent: course.root_folder) }
       let!(:material) { create(:course_material, folder: folder) }
+
       subject { get :download, as: :json, params: { course_id: course, id: folder } }
 
       it 'downloads all the files in current folder' do
@@ -100,46 +101,144 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
         expect(controller.instance_variable_get(:@materials)).to contain_exactly(material)
       end
 
-      context 'when the user is a student' do
+      context 'when the user is a Course Student' do
         let(:user) { create(:course_student, course: course).user }
+        before do
+          controller_sign_in(controller, user)
+          subject
+        end
 
         it 'downloads all the files in current folder' do
+          expect(response).to have_http_status(:ok)
+          expect(controller.instance_variable_get(:@materials)).to contain_exactly(material)
+        end
+      end
+
+      context 'when the user is a Course Manager' do
+        let(:user) { create(:course_manager, course: course).user }
+        before do
+          controller_sign_in(controller, user)
           subject
+        end
+
+        it 'downloads all the files in current folder' do
+          expect(response).to have_http_status(:ok)
+          expect(controller.instance_variable_get(:@materials)).to contain_exactly(material)
+        end
+      end
+
+      context 'when the user is a Course Owner' do
+        let(:user) { create(:course_owner, course: course).user }
+        before do
+          controller_sign_in(controller, user)
+          subject
+        end
+
+        it 'downloads all the files in current folder' do
+          expect(response).to have_http_status(:ok)
+          expect(controller.instance_variable_get(:@materials)).to contain_exactly(material)
+        end
+      end
+
+      context 'when the user is a Course Teaching Assistant' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+        before do
+          controller_sign_in(controller, user)
+          subject
+        end
+
+        it 'downloads all the files in current folder' do
+          expect(response).to have_http_status(:ok)
           expect(controller.instance_variable_get(:@materials)).to contain_exactly(material)
         end
       end
     end
 
     describe '#breadcrumbs' do
+      let!(:ancestor) { create(:folder, course: course, parent: course.root_folder) }
+      let!(:folder) { create(:folder, course: course, parent: ancestor) }
       render_views
 
-      context 'when fetching breadcrumbs for a specific folder (member route)' do
-        let!(:ancestor) { create(:folder, course: course, parent: course.root_folder) }
-        let!(:folder) { create(:folder, course: course, parent: ancestor) }
+      subject(:member_request) do
+        get :breadcrumbs, as: :json, params: { course_id: course, id: folder.id }
+      end
 
-        subject do
-          get :breadcrumbs, as: :json, params: { course_id: course, id: folder.id }
+      subject(:collection_request) do
+        get :breadcrumbs, as: :json, params: { course_id: course }
+      end
+
+      context 'when a Course Student fetches breadcrumbs' do
+        let(:user) { create(:course_student, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'returns 200 for a specific folder (member route)' do
+          member_request
+          expect(response).to have_http_status(:ok)
+          breadcrumb_ids = JSON.parse(response.body)['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id, ancestor.id, folder.id])
         end
 
-        it 'returns 200 and includes ancestor and folder in breadcrumbs' do
-          subject
+        it 'returns 200 for a root folder (collection route)' do
+          collection_request
           expect(response).to have_http_status(:ok)
-          json = JSON.parse(response.body)
-          breadcrumb_ids = json['breadcrumbs'].map { |b| b['id'] }
-          expect(breadcrumb_ids).to eq([course.root_folder.id, ancestor.id, folder.id])
+          breadcrumb_ids = JSON.parse(response.body)['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id])
         end
       end
 
-      context 'when fetching breadcrumbs for root folder (collection route)' do
-        subject do
-          get :breadcrumbs, as: :json, params: { course_id: course }
+      context 'when a Course Manager fetches breadcrumbs' do
+        let(:user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'returns 200 for a specific folder (member route)' do
+          member_request
+          expect(response).to have_http_status(:ok)
+          breadcrumb_ids = JSON.parse(response.body)['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id, ancestor.id, folder.id])
         end
 
-        it 'returns 200 and includes only root folder in breadcrumbs' do
-          subject
+        it 'returns 200 for a root folder (collection route)' do
+          collection_request
           expect(response).to have_http_status(:ok)
-          json = JSON.parse(response.body)
-          breadcrumb_ids = json['breadcrumbs'].map { |b| b['id'] }
+          breadcrumb_ids = JSON.parse(response.body)['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id])
+        end
+      end
+
+      context 'when a Course Owner fetches breadcrumbs' do
+        let(:user) { create(:course_owner, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'returns 200 for a specific folder (member route)' do
+          member_request
+          expect(response).to have_http_status(:ok)
+          breadcrumb_ids = JSON.parse(response.body)['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id, ancestor.id, folder.id])
+        end
+
+        it 'returns 200 for a root folder (collection route)' do
+          collection_request
+          expect(response).to have_http_status(:ok)
+          breadcrumb_ids = JSON.parse(response.body)['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id])
+        end
+      end
+
+      context 'when a Course Teaching Assistant fetches breadcrumbs' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'returns 200 for a specific folder (member route)' do
+          member_request
+          expect(response).to have_http_status(:ok)
+          breadcrumb_ids = JSON.parse(response.body)['breadcrumbs'].map { |b| b['id'] }
+          expect(breadcrumb_ids).to eq([course.root_folder.id, ancestor.id, folder.id])
+        end
+
+        it 'returns 200 for a root folder (collection route)' do
+          collection_request
+          expect(response).to have_http_status(:ok)
+          breadcrumb_ids = JSON.parse(response.body)['breadcrumbs'].map { |b| b['id'] }
           expect(breadcrumb_ids).to eq([course.root_folder.id])
         end
       end
