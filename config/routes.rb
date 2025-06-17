@@ -110,6 +110,7 @@ Rails.application.routes.draw do
       resources :instances, only: [:index, :create, :update, :destroy]
       resources :users, only: [:index, :update, :destroy]
       resources :courses, only: [:index, :destroy]
+      resources :get_help, only: [:index]
 
       namespace :instance do
         get '/' => 'admin#index', as: :admin

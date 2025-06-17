@@ -4,6 +4,7 @@ import { InstanceFormData, InstanceMiniEntity } from 'types/system/instances';
 import { UserMiniEntity } from 'types/users';
 
 import SystemAPI from 'api/system';
+import { SystemGetHelpActivity } from 'course/statistics/types';
 
 import { actions } from './store';
 
@@ -200,3 +201,11 @@ export function deleteInstance(instanceId: number): Operation {
       dispatch(actions.deleteInstance(instanceId));
     });
 }
+
+export const fetchSystemGetHelpActivity = async (params?: {
+  startDate?: string;
+  endDate?: string;
+}): Promise<SystemGetHelpActivity[]> => {
+  const response = await SystemAPI.admin.fetchSystemGetHelpActivity(params);
+  return response.data;
+};

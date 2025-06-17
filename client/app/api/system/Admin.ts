@@ -150,4 +150,16 @@ export default class AdminAPI extends BaseSystemAPI {
   deleteCourse(id: number): Promise<AxiosResponse> {
     return this.client.delete(`${AdminAPI.#urlPrefix}/courses/${id}`);
   }
+
+  /**
+   * Fetches Get Help data for the system
+   */
+  fetchSystemGetHelpActivity(params?: {
+    startDate?: string;
+    endDate?: string;
+  }): Promise<AxiosResponse> {
+    return this.client.get(`${AdminAPI.#urlPrefix}/get_help`, {
+      params,
+    });
+  }
 }
