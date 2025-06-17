@@ -9,6 +9,7 @@ export const fetchLiveFeedbackHistory = async (
   assessmentId: number,
   questionId: number,
   courseUserId: number,
+  courseId?: number, // Optional, only used for system admin context
 ): Promise<void> => {
   try {
     const response =
@@ -16,6 +17,7 @@ export const fetchLiveFeedbackHistory = async (
         assessmentId,
         questionId,
         courseUserId,
+        courseId,
       );
 
     const data = response.data;
