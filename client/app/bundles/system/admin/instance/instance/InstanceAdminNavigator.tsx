@@ -3,6 +3,7 @@ import {
   AssignmentInd,
   AutoStories,
   Campaign,
+  Chat,
   Group,
   ListAlt,
 } from '@mui/icons-material';

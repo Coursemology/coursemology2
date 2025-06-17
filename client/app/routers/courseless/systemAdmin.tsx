@@ -66,6 +66,17 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
         ).default,
       }),
     },
+    {
+      path: 'get_help',
+      lazy: async (): Promise<RouteObject> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'SystemGetHelpActivityIndex' */
+            'bundles/system/admin/admin/pages/SystemGetHelpActivityIndex'
+          )
+        ).default,
+      }),
+    },
   ],
 });
 
