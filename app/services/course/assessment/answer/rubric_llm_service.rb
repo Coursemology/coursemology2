@@ -11,9 +11,11 @@ class Course::Assessment::Answer::RubricLlmService
   @user_prompt = Langchain::Prompt.load_from_path(
     file_path: 'app/services/course/assessment/answer/prompts/rubric_auto_grading_user_prompt.json'
   )
+  @llm = LANGCHAIN_OPENAI
 
   class << self
     attr_reader :system_prompt, :user_prompt, :output_parser
+    attr_accessor :llm
   end
 
   # Calls the LLM service to evaluate the answer.
@@ -32,7 +34,7 @@ class Course::Assessment::Answer::RubricLlmService
       { role: 'system', content: self.class.system_prompt },
       { role: 'user', content: formatted_user_prompt }
     ]
-    response = LANGCHAIN_OPENAI.chat(
+    response = self.class.llm.chat(
       messages: messages,
       response_format: { type: 'json_object' }
     ).completion
@@ -58,13 +60,10 @@ class Course::Assessment::Answer::RubricLlmService
 
   # Parses LLM response with retry logic for handling parsing failures
   # @param [String] response The raw LLM response to parse
-  # @param [Hash] default_output The default grading output to return on failure
   # @return [Hash] The parsed response as a structured hash
   def parse_llm_response(response)
-    self.class.output_parser.parse(response)
-  rescue Langchain::OutputParsers::OutputParserException
     fix_parser = Langchain::OutputParsers::OutputFixingParser.from_llm(
-      llm: LANGCHAIN_OPENAI,
+      llm: self.class.llm,
       parser: self.class.output_parser
     )
     fix_parser.parse(response)
