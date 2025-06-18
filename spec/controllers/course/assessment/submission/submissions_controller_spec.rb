@@ -299,21 +299,25 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
     describe 'submission_actions' do
       let!(:students) { create_list(:course_student, 5, course: course) }
       let!(:phantom_student) { create(:course_student, :phantom, course: course) }
-      let!(:submitted_submission) do
-        create(:submission, :submitted,
-               assessment: assessment, course: course, creator: students[0].user)
-      end
-      let!(:attempting_submission) do
-        create(:submission, :attempting,
-               assessment: assessment, course: course, creator: students[1].user)
-      end
-      let!(:published_submission) do
-        create(:submission, :published,
-               assessment: assessment, course: course, creator: students[2].user)
-      end
-      let!(:graded_submission) do
-        create(:submission, :graded, assessment: assessment, course: course,
-                                     creator: students[3].user)
+      let!(:submissions_hash) do
+        {
+          attempting: create(
+            :submission, :attempting,
+            assessment: assessment, course: course, creator: students[1].user
+          ),
+          submitted: create(
+            :submission, :submitted,
+            assessment: assessment, course: course, creator: students[0].user
+          ),
+          graded: create(
+            :submission, :graded,
+            assessment: assessment, course: course, creator: students[3].user
+          ),
+          published: create(
+            :submission, :published,
+            assessment: assessment, course: course, creator: students[2].user
+          )
+        }
       end
 
       describe '#publish_all' do
@@ -326,7 +330,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
         context 'when there is no graded submission' do
           before do
-            graded_submission.destroy!
+            submissions_hash[:graded].destroy!
           end
           it { expect(subject).to have_http_status(:ok) }
         end
@@ -337,7 +341,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             subject
             wait_for_job
 
-            expect(graded_submission.reload.published?).to be(true)
+            expect(submissions_hash[:graded].reload.published?).to be(true)
             json_result = JSON.parse(response.body)
             expect(json_result['jobUrl']).not_to be(nil)
           end
@@ -369,8 +373,8 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             expect(assessment.submissions.count).to eq(6) # 5 normal students + 1 phantom student
             expect(assessment.submissions.pluck(:workflow_state)).not_to include 'attempting'
 
-            expect(attempting_submission.reload.draft_points_awarded).to eq(nil)
-            expect(attempting_submission.reload.points_awarded).to eq(0)
+            expect(submissions_hash[:attempting].reload.draft_points_awarded).to eq(nil)
+            expect(submissions_hash[:attempting].reload.points_awarded).to eq(0)
 
             json_result = JSON.parse(response.body)
             expect(json_result['jobUrl']).not_to be(nil)
@@ -390,8 +394,8 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             expect(assessment.submissions.pluck(:workflow_state)).to include 'graded'
             expect(assessment.submissions.pluck(:workflow_state)).not_to include 'attempting'
 
-            expect(attempting_submission.reload.draft_points_awarded).to eq(0)
-            expect(attempting_submission.reload.points_awarded).to eq(nil)
+            expect(submissions_hash[:attempting].reload.draft_points_awarded).to eq(0)
+            expect(submissions_hash[:attempting].reload.points_awarded).to eq(nil)
 
             json_result = JSON.parse(response.body)
             expect(json_result['jobUrl']).not_to be(nil)
@@ -410,8 +414,8 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             expect(assessment.submissions.count).to eq(6)
             expect(assessment.submissions.pluck(:workflow_state)).not_to include 'attempting'
 
-            expect(attempting_submission.reload.draft_points_awarded).to eq(nil)
-            expect(attempting_submission.reload.points_awarded).to eq(0)
+            expect(submissions_hash[:attempting].reload.draft_points_awarded).to eq(nil)
+            expect(submissions_hash[:attempting].reload.points_awarded).to eq(0)
 
             json_result = JSON.parse(response.body)
             expect(json_result['jobUrl']).not_to be(nil)
@@ -428,9 +432,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there is no submission' do
-          before do
-            assessment.submissions.destroy_all
-          end
+          let!(:submissions_hash) { nil }
           it { expect(subject).to have_http_status(:ok) }
         end
 
@@ -440,7 +442,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             subject
             wait_for_job
 
-            expect(submitted_submission.reload.attempting?).to be(true)
+            expect(submissions_hash[:submitted].reload.attempting?).to be(true)
             json_result = JSON.parse(response.body)
             expect(json_result['jobUrl']).not_to be(nil)
           end
@@ -457,9 +459,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
         context 'when there is no submission' do
           let(:course_users) { 'staff' }
-          before do
-            assessment.submissions.destroy_all
-          end
+          let!(:submissions_hash) { nil }
           it { expect(subject).to have_http_status(:ok) }
         end
 
@@ -487,9 +487,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there is no submission' do
-          before do
-            assessment.submissions.destroy_all
-          end
+          let!(:submissions_hash) { nil }
           it { expect(subject).to have_http_status(:bad_request) }
         end
 
@@ -540,9 +538,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there is no submission' do
-          before do
-            assessment.submissions.destroy_all
-          end
+          let!(:submissions_hash) { nil }
           it { expect(subject).to have_http_status(:bad_request) }
         end
 
