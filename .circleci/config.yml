@@ -227,20 +227,19 @@ commands:
       - run:
           name: Wait for Rails coverage results
           no_output_timeout: 5m
-          command: until [ -f coverage/coverage.xml ]; do sleep 1; done
+          command: until [ -f coverage/coursemology.lcov ]; do sleep 1; done
 
-  upload_coverage_report:
+  persist_coverage_reports:
     steps:
       - run:
           name: Assign unique coverage filename
           command: |
-            mv coverage/coverage.xml coverage/cov-<< parameters.prefix >>-${CIRCLE_NODE_INDEX}.xml
-            stat coverage/cov-<< parameters.prefix >>-${CIRCLE_NODE_INDEX}.xml
+            mv coverage/coursemology.lcov coverage/cov-<< parameters.prefix >>-${CIRCLE_NODE_INDEX}.lcov
 
-      - codecov/upload:
-          upload_name: << parameters.prefix >>-${CIRCLE_NODE_INDEX}
-          files: coverage/cov-<< parameters.prefix >>-${CIRCLE_NODE_INDEX}.xml
-          flags: backend
+      - persist_to_workspace:
+          root: coverage
+          paths:
+            - cov-*.lcov
 
     parameters:
       prefix:
@@ -319,24 +318,23 @@ jobs:
           command: yarn coverage
 
       - terminate_rails_and_wait_for_coverage_results
-      - upload_coverage_report:
+      - persist_coverage_reports:
           prefix: playwright-rails
-
-      - run:
-          name: Zip test results
-          when: always
-          working_directory: tests
-          command: |
-            zip -r test-results.zip test-results playwright-report
 
       - store_test_results:
           path: ~/repo/tests/results.xml
 
-      - store_artifacts:
-          path: ~/repo/tests/results.xml
+      - run:
+          name: Assign unique test results filename
+          when: always
+          working_directory: tests
+          command: |
+            mv test-results test-results-${CIRCLE_NODE_INDEX}
 
-      - store_artifacts:
-          path: ~/repo/tests/test-results.zip
+      - persist_to_workspace:
+          root: tests
+          paths:
+            - test-results-*
 
   test_rspec:
     executor:
@@ -363,11 +361,41 @@ jobs:
             mkdir ~/rspec
             circleci tests glob "spec/**/*_spec.rb" | circleci tests run --command="xargs bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml" --verbose --split-by=timings
 
-      - upload_coverage_report:
+      - persist_coverage_reports:
           prefix: rspec-rails
 
       - store_test_results:
           path: ~/rspec
+
+  process_test_results:
+    docker:
+      - image: cimg/base:2025.06
+    steps:
+      # Need the source code to be present in the workspace for codecov to accept the report
+      - checkout
+      - attach_workspace:
+          at: workspace
+
+      - run:
+          name: Combine all lcov reports
+          command: |
+            sudo apt-get update
+            sudo apt-get install lcov
+            lcov $(printf -- '--add-tracefile %s ' workspace/cov-*.lcov) --output-file workspace/coverage-combined.lcov --branch-coverage --ignore-errors inconsistent
+
+      - codecov/upload:
+          upload_name: coverage-combined
+          disable_search: true
+          files: workspace/coverage-combined.lcov
+          flags: backend
+
+      - run:
+          name: Zip all test results
+          command: |
+            zip -r test-results.zip workspace/*
+
+      - store_artifacts:
+          path: test-results.zip
 
   factorybot_lint:
     executor: ruby_with_postgres
@@ -475,3 +503,7 @@ workflows:
       - test_playwright:
           requires:
             - build_client
+      - process_test_results:
+          requires:
+            - test_rspec
+            - test_playwright

@@ -130,9 +130,9 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
 
-  # Code Coverage reporters
+  # Code coverage reporter and formatter
   gem 'simplecov'
-  gem 'simplecov-cobertura'
+  gem 'simplecov-lcov', '>= 0.8.0'
 
   gem 'dotenv-rails'
 end
