@@ -45,7 +45,7 @@ class Course::Assessment::Answer::RubricLlmService
   # @param [Course::Assessment::Question::TextResponse] question The question containing rubric categories
   # @return [String] Formatted string representation of rubric categories and criteria
   def format_rubric_categories(question)
-    question.categories.includes(:criterions).map do |category|
+    question.categories.without_bonus_category.includes(:criterions).map do |category|
       criterions = category.criterions.map do |criterion|
         "- [Grade: #{criterion.grade}, Criterion ID: #{criterion.id}]: #{criterion.explanation}"
       end
