@@ -1,8 +1,11 @@
 import { useFieldArray } from 'react-hook-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader, Chip, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
+
+import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 import ResponseAnswer from './ResponseAnswer';
 
@@ -27,6 +30,7 @@ const translations = defineMessages({
 });
 
 const ResponseSection = (props) => {
+  const { t } = useTranslation();
   const { control, disabled, section, sectionIndex } = props;
   const { fields: questionFields } = useFieldArray({
     control,
@@ -49,10 +53,24 @@ const ResponseSection = (props) => {
       <CardContent>
         {questionFields.map((question, questionIndex) => (
           <Card key={question.id} style={styles.questionCard}>
-            <CardContent>
+            <CardContent className="relative">
+              <div className="absolute -left-5 top-6 flex items-center justify-center rounded-full wh-10 bg-neutral-500">
+                <Typography color="white" variant="body2">
+                  {questionIndex + 1}
+                </Typography>
+              </div>
+              {question.required && (
+                <Chip
+                  color="error"
+                  label={t(formTranslations.starRequired)}
+                  size="small"
+                  variant="outlined"
+                />
+              )}
               <Typography
+                component="div"
                 dangerouslySetInnerHTML={{
-                  __html: `${questionIndex + 1}. ${question.description}`,
+                  __html: question.description,
                 }}
                 variant="body2"
               />
