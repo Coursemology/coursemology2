@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_21_095827) do
+ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -369,6 +369,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_21_095827) do
   end
 
   create_table "course_assessment_question_rubric_based_responses", force: :cascade do |t|
+    t.boolean "ai_grading_enabled", default: true, null: false
+    t.string "ai_grading_custom_prompt", default: "", null: false
   end
 
   create_table "course_assessment_question_scribings", id: :serial, force: :cascade do |t|

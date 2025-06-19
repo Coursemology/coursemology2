@@ -4,6 +4,8 @@ export interface RubricBasedResponseData {
   question: QuestionFormData;
   categories?: CategoryEntity[] | null | undefined;
   isAssessmentAutograded: boolean;
+  aiGradingEnabled: boolean;
+  aiGradingCustomPrompt: string;
 }
 
 export interface CategoryData {
@@ -64,5 +66,7 @@ export interface RubricBasedResponsePostData {
         _destroy?: QuestionRubricGradeEntity['toBeDeleted'];
       }[];
     }[];
+    ai_grading_enabled?: RubricBasedResponseData['aiGradingEnabled'];
+    ai_grading_custom_prompt?: RubricBasedResponseData['aiGradingCustomPrompt'];
   };
 }

@@ -20,7 +20,7 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
   end
 
   def auto_gradable?
-    !categories.empty?
+    !categories.empty? && ai_grading_enabled?
   end
 
   def auto_grader

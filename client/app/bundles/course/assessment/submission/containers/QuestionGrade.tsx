@@ -93,6 +93,10 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
   const isRubricVisible =
     isRubricBasedResponse &&
     (!submission.isStudent || assessment.showRubricToStudents);
+  const isRubricBasedResponseAndAutogradable =
+    isRubricBasedResponse &&
+    (question as SubmissionQuestionData<QuestionType.RubricBasedResponse>)
+      .aiGradingEnabled;
 
   const handleSaveGrade = (
     newGrade: string | number | null,
@@ -303,9 +307,10 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           />
         )}
 
-        {editable && (isProgrammingQuestion || isRubricBasedResponse) && (
-          <ReevaluateButton questionId={questionId} />
-        )}
+        {editable &&
+          (isProgrammingQuestion || isRubricBasedResponseAndAutogradable) && (
+            <ReevaluateButton questionId={questionId} />
+          )}
 
         <Paper
           className={`transition-none flex items-center space-x-5 px-5 py-4 ring-2 ${
