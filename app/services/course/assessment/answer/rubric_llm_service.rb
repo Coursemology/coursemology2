@@ -30,7 +30,8 @@ class Course::Assessment::Answer::RubricLlmService
       question_title: question.title,
       question_description: question.description,
       rubric_categories: format_rubric_categories(question),
-      answer_text: answer.answer_text
+      answer_text: answer.answer_text,
+      custom_prompt: question.ai_grading_custom_prompt
     )
     messages = [
       { role: 'system', content: formatted_system_prompt },

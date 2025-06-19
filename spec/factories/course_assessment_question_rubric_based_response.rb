@@ -6,6 +6,7 @@ FactoryBot.define do
     transient do
       category_count { 2 }
       criterion_count { 2 }
+      ai_grading_enabled { true }
     end
 
     after(:build) do |question, evaluator|

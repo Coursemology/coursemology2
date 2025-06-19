@@ -45,6 +45,8 @@ const adaptPostData = (
         _destroy: catGrade.toBeDeleted,
       })),
     })),
+    ai_grading_enabled: data.aiGradingEnabled,
+    ai_grading_custom_prompt: data.aiGradingCustomPrompt,
   },
 });
 
