@@ -8,11 +8,11 @@
         "type": "object",
         "properties": {
           "category_id": {
-            "type": "number",
-            "description": "The ID of the rubric category"
+            "type": "integer",
+            "description": "The ID of the rubric category, must be one of the listed categories for the rubric"
           },
           "criterion_id": {
-            "type": "number",
+            "type": "integer",
             "description": "The ID of the criterion within the rubric category, must be one of the listed criteria for the rubric category"
           },
           "explanation": {
