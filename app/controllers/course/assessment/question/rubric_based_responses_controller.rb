@@ -68,7 +68,7 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
     bonus_category_objects = RESERVED_CATEGORY_NAMES.map do |name|
       {
         question_id: @rubric_based_response_question.id,
-        name: name,
+        name: name.titleize,
         is_bonus_category: true
       }
     end
