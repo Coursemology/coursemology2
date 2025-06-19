@@ -946,7 +946,7 @@ const translations = defineMessages({
   bonusReservedNames: {
     id: 'course.assessment.question.rubricBasedResponses.bonusReservedNames',
     defaultMessage:
-      "After finalization, a special category named 'moderation' will be added automatically. \
+      "After finalization, a special category named 'Moderation' will be added automatically. \
       It allows graders to award bonus or penalty points at their discretion.",
   },
   addNewCategory: {
