@@ -21,12 +21,18 @@ interface RubricPanelProps {
   answerCategoryGrades: AnswerDetailsMap['RubricBasedResponse']['categoryGrades'];
   question: SubmissionQuestionData<'RubricBasedResponse'>;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
+  readOnly?: boolean;
 }
 
 const RubricPanel: FC<RubricPanelProps> = (props) => {
   const { t } = useTranslation();
-  const { answerId, answerCategoryGrades, question, setIsFirstRendering } =
-    props;
+  const {
+    answerId,
+    answerCategoryGrades,
+    question,
+    setIsFirstRendering,
+    readOnly,
+  } = props;
 
   const categoryGrades = useMemo(() => {
     const categoryGradeHash = answerCategoryGrades.reduce(
@@ -89,6 +95,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
               category={category}
               categoryGrades={categoryGrades}
               question={question}
+              readOnly={readOnly}
               setIsFirstRendering={setIsFirstRendering}
             />
           ))}
