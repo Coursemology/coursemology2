@@ -31,6 +31,7 @@ interface RubricPanelRowProps {
   category: RubricBasedResponseCategoryQuestionData;
   categoryGrades: Record<number, AnswerRubricGradeData>;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
+  readOnly?: boolean;
 }
 
 function buildCategoryGradeExplanationMap(
@@ -144,7 +145,13 @@ const MaxGradeCell: FC<{ maxGrade?: number }> = ({ maxGrade }) => (
 );
 
 const RubricPanelRow: FC<RubricPanelRowProps> = (props) => {
-  const { answerId, question, category, categoryGrades } = props;
+  const {
+    answerId,
+    question,
+    category,
+    categoryGrades,
+    readOnly = false,
+  } = props;
 
   const dispatch = useAppDispatch();
   const submission = useAppSelector(getSubmission);
@@ -158,7 +165,7 @@ const RubricPanelRow: FC<RubricPanelRowProps> = (props) => {
 
   const attempting = workflowState === workflowStates.Attempting;
   const published = workflowState === workflowStates.Published;
-  const editable = !attempting && graderView;
+  const editable = !attempting && graderView && !readOnly;
 
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
