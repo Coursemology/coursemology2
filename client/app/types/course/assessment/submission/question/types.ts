@@ -78,6 +78,7 @@ export interface RubricBasedResponseCategoryQuestionData
 }
 
 interface RubricBasedResponseQuestionData {
+  aiGradingEnabled: boolean;
   categories: RubricBasedResponseCategoryQuestionData[];
 }
 

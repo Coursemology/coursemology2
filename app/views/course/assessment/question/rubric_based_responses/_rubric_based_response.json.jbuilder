@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+json.aiGradingEnabled question.ai_grading_enabled?
 json.categories question.categories.each do |category|
   json.id category.id
   json.name category.name

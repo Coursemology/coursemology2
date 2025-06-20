@@ -13,6 +13,7 @@ import translations from '../../../translations';
 import schema from '../commons/validation';
 import { RubricBasedResponseFormDataProvider } from '../hooks/RubricBasedResponseFormDataContext';
 
+import AIGradingFields from './AIGradingFields';
 import CategoryManager from './CategoryManager';
 import QuestionFields from './QuestionFields';
 
@@ -40,6 +41,8 @@ const RubricBasedResponseForm = (
       isAssessmentAutograded: rawData.isAssessmentAutograded,
       question: rawData.question,
       categories: rawData.categories,
+      aiGradingEnabled: rawData.aiGradingEnabled,
+      aiGradingCustomPrompt: rawData.aiGradingCustomPrompt,
     };
 
     setSubmitting(true);
@@ -73,6 +76,7 @@ const RubricBasedResponseForm = (
             onDirtyChange={setIsCategoriesDirty}
           />
         </Section>
+        <AIGradingFields disabled={submitting} />
       </Form>
     </RubricBasedResponseFormDataProvider>
   );

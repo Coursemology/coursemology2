@@ -946,7 +946,7 @@ const translations = defineMessages({
   bonusReservedNames: {
     id: 'course.assessment.question.rubricBasedResponses.bonusReservedNames',
     defaultMessage:
-      "After finalization, a special category named 'moderation' will be added automatically. \
+      "After finalization, a special category named 'Moderation' will be added automatically. \
       It allows graders to award bonus or penalty points at their discretion.",
   },
   addNewCategory: {
@@ -956,6 +956,28 @@ const translations = defineMessages({
   addNewGrade: {
     id: 'course.assessment.question.rubricBasedResponses.addNewLevel',
     defaultMessage: 'Add new grade',
+  },
+  aiGrading: {
+    id: 'course.assessment.question.rubricBasedResponses.aiGrading',
+    defaultMessage: 'AI Grading',
+  },
+  enableAiGrading: {
+    id: 'course.assessment.question.rubricBasedResponses.enableAiGrading',
+    defaultMessage: 'Enable AI to auto-grade submissions',
+  },
+  enableAiGradingDescription: {
+    id: 'course.assessment.question.rubricBasedResponses.enableAiGradingDescription',
+    defaultMessage:
+      'AI will assign rubric scores and draft feedback for you to review and publish.',
+  },
+  aiGradingCustomPrompt: {
+    id: 'course.assessment.question.rubricBasedResponses.aiGradingCustomPrompt',
+    defaultMessage: 'Custom Prompt',
+  },
+  aiGradingCustomPromptDescription: {
+    id: 'course.assessment.question.rubricBasedResponses.aiGradingCustomPromptDescription',
+    defaultMessage:
+      'Add grading instructions (e.g. question context, model answer, feedback tone). Leave blank if unsure.',
   },
   newSolutionCannotUndo: {
     id: 'course.assessment.question.textResponses.newSolutionCannotUndo',

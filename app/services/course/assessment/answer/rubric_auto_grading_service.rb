@@ -43,12 +43,11 @@ class Course::Assessment::Answer::RubricAutoGradingService <
   # @param [Hash] llm_response The parsed LLM response with category grades
   # @return [Array<Hash>] Array of processed category grades.
   def process_category_grades(question, llm_response)
-    category_lookup = question.categories.includes(:criterions).index_by(&:id)
+    category_lookup = question.categories.without_bonus_category.includes(:criterions).index_by(&:id)
     llm_response['category_grades'].filter_map do |category_grade|
       category = category_lookup[category_grade['category_id']]
       next unless category
 
-      # Skip 'moderation' category as it does not have criterions
       criterion = category.criterions.find { |c| c.id == category_grade['criterion_id'] }
       next unless criterion
 
