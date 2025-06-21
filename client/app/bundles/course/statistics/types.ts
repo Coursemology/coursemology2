@@ -149,6 +149,25 @@ export interface GetHelpActivity {
   createdAt: string;
 }
 
+export interface InstanceGetHelpActivity extends GetHelpActivity {
+  instanceId: number;
+  instanceTitle: string;
+}
+
+export interface SystemGetHelpActivity extends InstanceGetHelpActivity {
+  courseUserId: number;
+  courseId: number;
+  courseTitle: string;
+}
+
 export interface GetHelpStatistics {
   liveFeedbacks: GetHelpActivity[];
+}
+
+export interface InstanceGetHelpStatistics {
+  getHelpData: InstanceGetHelpActivity[];
+}
+
+export interface SystemGetHelpStatistics {
+  getHelpData: SystemGetHelpActivity[];
 }
