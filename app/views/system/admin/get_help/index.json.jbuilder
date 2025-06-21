@@ -2,7 +2,6 @@
 json.array! @get_help_data do |data|
   assessment_question = @assessment_question_hash[[data.assessment_id, data.question_id]]
   course_id = assessment_question[:course_id]
-  user = @user_hash[data.submission_creator_id]
   course_user = @course_user_hash[course_id]&.[](data.submission_creator_id)
 
   json.id data.id
@@ -13,7 +12,7 @@ json.array! @get_help_data do |data|
   json.questionId data.question_id
   json.courseId course_id
 
-  json.name course_user&.name || user&.name
+  json.name course_user&.name
   json.nameLink course_user_path(course_id, course_user)
 
   json.messageCount data.message_count

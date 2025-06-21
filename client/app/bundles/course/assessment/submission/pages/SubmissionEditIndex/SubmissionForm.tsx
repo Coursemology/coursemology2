@@ -152,9 +152,8 @@ const SubmissionForm: FC<Props> = (props) => {
       setStepIndex(assignedStep);
 
       if (scrollToRef.current) {
-        setTimeout(
-          () => (scrollToRef.current! as HTMLElement).scrollIntoView(),
-          0,
+        setImmediate(() =>
+          (scrollToRef.current! as HTMLElement).scrollIntoView(),
         );
       }
     }
