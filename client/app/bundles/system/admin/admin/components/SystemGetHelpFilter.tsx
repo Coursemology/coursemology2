@@ -334,11 +334,9 @@ const SystemGetHelpFilter: FC<Props> = (props) => {
           handleClearFilter={handleClearFilter}
         />
         <Grid alignItems="center" display="flex" gap={2} item>
-          {helperText && (
-            <Typography color="error" variant="caption">
-              {helperText}
-            </Typography>
-          )}
+          <Typography color="error" variant="caption">
+            {helperText}
+          </Typography>
           <PresetDateRangeChips
             selectedFilter={selectedFilter}
             setSelectedFilter={setSelectedFilter}
