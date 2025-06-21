@@ -1,30 +1,42 @@
 # frozen_string_literal: true
 class System::Admin::GetHelpController < System::Admin::Controller
-  before_action :load_users
-
   def index
-    start_date = params[:start_date].presence
-    end_date = params[:end_date].presence
-    @get_help_data = fetch_all_recent_live_feedbacks(start_date, end_date)
+    start_date = params[:start_at].presence
+    end_date = params[:end_at].presence
+
+    unless valid_date_range?(start_date, end_date)
+      return render json: { error: 'Invalid date range' }, status: :bad_request
+    end
+
+    fetch_all_recent_live_feedbacks(start_date, end_date)
     load_assessment_question_hash
     load_course_user_hash
   end
 
   private
 
-  def load_users
-    @users = User.human_users.includes(:emails).active_in_past_7_days
-    @user_hash = @users.index_by(&:id)
+  def valid_date_range?(start_date_str, end_date_str)
+    return true unless start_date_str.present? && end_date_str.present?
+
+    begin
+      start_date = Date.parse(start_date_str)
+      end_date = Date.parse(end_date_str)
+    rescue ArgumentError
+      return false
+    end
+
+    return false if start_date > end_date
+    return false if day_d(end_date - start_date).to_i > 366
+
+    true
   end
 
   def load_course_user_hash
-    # Get all unique course IDs from the assessment data
     course_ids = @assessment_question_hash.values.map { |v| v[:course_id] }.uniq
-
-    @course_user_hash = {}
-    course_ids.each do |course_id|
-      course_users = CourseUser.where(course_id: course_id, user_id: @user_hash.keys)
-      @course_user_hash[course_id] = course_users.index_by(&:user_id)
+    user_ids = @get_help_data.map(&:submission_creator_id).uniq
+    course_users = CourseUser.where(course_id: course_ids, user_id: user_ids)
+    @course_user_hash = course_users.group_by(&:course_id).transform_values do |users|
+      users.index_by(&:user_id)
     end
   end
 
@@ -38,7 +50,7 @@ class System::Admin::GetHelpController < System::Admin::Controller
     date_conditions << "m.created_at <= '#{end_date} 23:59:59'" if end_date
     date_sql = date_conditions.join(' AND ')
 
-    get_help_data = Course::Assessment::LiveFeedback::Message.find_by_sql(<<-SQL)
+    @get_help_data = Course::Assessment::LiveFeedback::Message.find_by_sql(<<-SQL)
       SELECT DISTINCT ON (t.submission_creator_id, s.assessment_id, sq.question_id)
         m.id, m.content, m.created_at, t.submission_creator_id,
         s.assessment_id, sq.submission_id, sq.question_id,
@@ -49,13 +61,12 @@ class System::Admin::GetHelpController < System::Admin::Controller
       INNER JOIN live_feedback_threads t ON m.thread_id = t.id
       INNER JOIN course_assessment_submission_questions sq ON t.submission_question_id = sq.id
       INNER JOIN course_assessment_submissions s ON sq.submission_id = s.id
-      WHERE t.submission_creator_id IN (#{@user_hash.keys.join(',')})
-        AND m.creator_id != #{User::SYSTEM_USER_ID}
+      WHERE m.creator_id != #{User::SYSTEM_USER_ID}
         AND #{date_sql}
       ORDER BY t.submission_creator_id, s.assessment_id, sq.question_id, m.created_at DESC
     SQL
 
-    get_help_data.sort_by(&:created_at).reverse
+    @get_help_data.sort_by(&:created_at).reverse
   end
 
   def load_assessment_question_hash

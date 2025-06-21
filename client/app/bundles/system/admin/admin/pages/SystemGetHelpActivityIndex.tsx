@@ -29,13 +29,10 @@ const getDefaultDateRange = (): { startDate: string; endDate: string } => {
   };
 };
 
-const { startDate, endDate } = getDefaultDateRange();
-
 const defaultFilter: GetHelpFilter = {
   course: null,
   user: null,
-  startDate,
-  endDate,
+  ...getDefaultDateRange(),
 };
 
 const SystemGetHelpActivityIndex: FC = () => {
@@ -55,9 +52,10 @@ const SystemGetHelpActivityIndex: FC = () => {
   const fetchData = useCallback(
     async (filter = appliedFilter) => {
       setIsLoading(true);
-      const params: Record<string, string> = {};
-      if (filter.startDate) params.start_date = filter.startDate;
-      if (filter.endDate) params.end_date = filter.endDate;
+      const params = {
+        startDate: filter.startDate,
+        endDate: filter.endDate,
+      };
       const result = await fetchSystemGetHelpActivity(params);
       setData(result);
       setIsLoading(false);
@@ -90,10 +88,19 @@ const SystemGetHelpActivityIndex: FC = () => {
   };
 
   const handleClearFilter = (): void => {
-    setSelectedFilter(defaultFilter);
-    setAppliedFilter(defaultFilter);
-    fetchData(defaultFilter);
-    lastFetchedDateRange.current = { startDate: '', endDate: '' };
+    setSelectedFilter({
+      course: null,
+      user: null,
+      startDate: selectedFilter.startDate,
+      endDate: selectedFilter.endDate,
+    });
+    setAppliedFilter({
+      course: null,
+      user: null,
+      startDate: selectedFilter.startDate,
+      endDate: selectedFilter.endDate,
+    });
+    // No need to refetch, as date range is unchanged
   };
 
   // In-memory filtering for course/user
@@ -115,21 +122,18 @@ const SystemGetHelpActivityIndex: FC = () => {
 
   const courseOptions = useMemo(() => {
     if (!data) return [];
-    const courseMap = new Map<number, string>();
-    data.forEach((item) => {
-      if (item.courseId && item.courseTitle)
-        courseMap.set(item.courseId, item.courseTitle);
-    });
-    return Array.from(courseMap, ([id, title]) => ({ id, title }));
+    const titles = data.map((item) => item.courseTitle).filter(Boolean);
+    // Remove duplicates
+    const uniqueTitles = Array.from(new Set(titles));
+    return uniqueTitles.map((title) => ({ title }));
   }, [data]);
 
   const userOptions = useMemo(() => {
     if (!data) return [];
-    const userMap = new Map<number, string>();
-    data.forEach((item) => {
-      if (item.userId && item.name) userMap.set(item.userId, item.name);
-    });
-    return Array.from(userMap, ([id, name]) => ({ id, name }));
+    const names = data.map((item) => item.name).filter(Boolean);
+    // Remove duplicates
+    const uniqueNames = Array.from(new Set(names));
+    return uniqueNames.map((name) => ({ name }));
   }, [data]);
 
   return (
@@ -139,11 +143,11 @@ const SystemGetHelpActivityIndex: FC = () => {
       </Typography>
       <SystemGetHelpFilter
         courseOptions={courseOptions}
-        userOptions={userOptions}
         handleApplyFilter={handleApplyFilter}
         handleClearFilter={handleClearFilter}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
+        userOptions={userOptions}
       />
       {isLoading || !data ? (
         <LoadingIndicator />
