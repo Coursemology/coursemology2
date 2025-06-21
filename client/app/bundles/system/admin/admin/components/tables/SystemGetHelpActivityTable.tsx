@@ -184,6 +184,7 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
       of: 'createdAt',
       title: t(translations.createdAt),
       sortable: true,
+      className: NUM_CELL_CLASS_NAME,
       cell: (getHelpDatum) => formatMiniDateTime(getHelpDatum.createdAt),
     },
     {
