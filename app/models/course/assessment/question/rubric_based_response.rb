@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
+  include DuplicationStateTrackingConcern
   acts_as :question, class_name: 'Course::Assessment::Question'
 
-  validate :validate_no_reserved_category_names
+  validate :validate_no_reserved_category_names, unless: :duplicating?
   validate :validate_unique_category_names
   validate :validate_at_least_one_category
 
@@ -14,6 +15,7 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
   RESERVED_CATEGORY_NAMES = ['moderation'].freeze
 
   def initialize_duplicate(duplicator, other)
+    set_duplication_flag
     copy_attributes(other)
 
     self.categories = duplicator.duplicate(other.categories)
