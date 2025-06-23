@@ -9,7 +9,7 @@ export const fetchLiveFeedbackHistory = async (
   assessmentId: number,
   questionId: number,
   courseUserId: number,
-  courseId?: number, // Optional, only used for system admin context
+  courseId?: number, // Optional, only used for system and instance admin context
 ): Promise<void> => {
   try {
     const response =

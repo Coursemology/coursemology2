@@ -48,7 +48,7 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
     assessmentId: string | number,
     questionId: string | number,
     courseUserId: string | number,
-    courseId?: string | number, // Optional, only used for system admin context
+    courseId?: string | number, // Optional, only used for system and instance admin context
   ): APIResponse<LiveFeedbackHistoryState> {
     const actualCourseId = this.courseId || courseId;
     const urlPrefix = `/courses/${actualCourseId}/statistics/assessment`;

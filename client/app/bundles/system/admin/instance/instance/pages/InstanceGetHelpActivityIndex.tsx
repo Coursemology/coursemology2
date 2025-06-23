@@ -2,27 +2,27 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, MessageDescriptor } from 'react-intl';
 import { Typography } from '@mui/material';
 
-import { SystemGetHelpActivity } from 'course/statistics/types';
+import { InstanceGetHelpActivity } from 'course/statistics/types';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import SystemGetHelpFilter, {
+import InstanceGetHelpFilter, {
   GetHelpFilter,
-} from '../components/misc/SystemGetHelpFilter';
-import SystemGetHelpActivityTable from '../components/tables/SystemGetHelpActivityTable';
-import { fetchSystemGetHelpActivity } from '../operations';
+} from '../components/misc/InstanceGetHelpFilter';
+import InstanceGetHelpActivityTable from '../components/tables/InstanceGetHelpActivityTable';
+import { fetchInstanceGetHelpActivity } from '../operations';
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.header',
+    id: 'system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header',
     defaultMessage: 'Recent Get Help Activity',
   },
   invalidDateSelection: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection',
+    id: 'system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection',
     defaultMessage: 'End Date must be after or equal to Start Date',
   },
   exceedDateRange: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange',
+    id: 'system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.exceedDateRange',
     defaultMessage: 'Date range cannot exceed 365 days',
   },
 });
@@ -42,6 +42,7 @@ const defaultFilter: GetHelpFilter = {
   user: null,
   ...getDefaultDateRange(),
 };
+
 const getDateValidationError = (
   filter: GetHelpFilter,
   t: (message: MessageDescriptor) => string,
@@ -58,16 +59,15 @@ const getDateValidationError = (
   return dayDiff > 365 ? t(translations.exceedDateRange) : '';
 };
 
-const SystemGetHelpActivityIndex: FC = () => {
+const InstanceGetHelpActivityIndex: FC = () => {
   const { t } = useTranslation();
-  const [data, setData] = useState<SystemGetHelpActivity[] | null>(null);
+  const [data, setData] = useState<InstanceGetHelpActivity[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFilter, setSelectedFilter] =
     useState<GetHelpFilter>(defaultFilter);
   const [appliedFilter, setAppliedFilter] =
     useState<GetHelpFilter>(defaultFilter);
 
-  // Track the last fetched date range
   const lastFetchedDateRange = useRef<{ startDate: string; endDate: string }>({
     startDate: '',
     endDate: '',
@@ -79,7 +79,7 @@ const SystemGetHelpActivityIndex: FC = () => {
       start_at: filter.startDate,
       end_at: filter.endDate,
     };
-    const result = await fetchSystemGetHelpActivity(params);
+    const result = await fetchInstanceGetHelpActivity(params);
     setData(result);
     setIsLoading(false);
   }, []);
@@ -152,7 +152,7 @@ const SystemGetHelpActivityIndex: FC = () => {
       <Typography className="m-6" variant="h6">
         {t(translations.header)}
       </Typography>
-      <SystemGetHelpFilter
+      <InstanceGetHelpFilter
         courseOptions={courseOptions}
         getDateValidationError={getDateValidationError}
         onFilterChange={handleApplyFilter}
@@ -160,13 +160,14 @@ const SystemGetHelpActivityIndex: FC = () => {
         setSelectedFilter={setSelectedFilter}
         userOptions={userOptions}
       />
+
       {isLoading || !data ? (
         <LoadingIndicator />
       ) : (
-        <SystemGetHelpActivityTable getHelpData={filteredData} />
+        <InstanceGetHelpActivityTable getHelpData={filteredData} />
       )}
     </>
   );
 };
 
-export default SystemGetHelpActivityIndex;
+export default InstanceGetHelpActivityIndex;

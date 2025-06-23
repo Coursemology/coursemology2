@@ -7235,20 +7235,23 @@
   "material.attemptLoader.errorAccessingMaterial": {
     "defaultMessage": "获取该资料时发生错误，请稍后再试。"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.announcements": {
+  "system.admin.instance.instance.InstanceAdminNavigator.announcements": {
     "defaultMessage": "公告"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.components": {
+  "system.admin.instance.instance.InstanceAdminNavigator.components": {
     "defaultMessage": "组件"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.courses": {
+  "system.admin.instance.instance.InstanceAdminNavigator.courses": {
     "defaultMessage": "课程"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.roleRequests": {
+  "system.admin.instance.instance.InstanceAdminNavigator.roleRequests": {
     "defaultMessage": "角色要求"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.users": {
+  "system.admin.instance.instance.InstanceAdminNavigator.users": {
     "defaultMessage": "用户"
+  },
+  "system.admin.instance.instance.InstanceAdminNavigator.getHelp": {
+    "defaultMessage": "实例"
   },
   "system.admin.admin.AdminNavigator.announcements": {
     "defaultMessage": "系统公告"
@@ -7264,6 +7267,9 @@
   },
   "system.admin.admin.AdminNavigator.users": {
     "defaultMessage": "用户"
+  },
+  "system.admin.admin.AdminNavigator.getHelp": {
+    "defaultMessage": "实时帮助"
   },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "无法获取公告"
@@ -7422,7 +7428,7 @@
     "defaultMessage": "结束日期必须大于或等于开始日期"
   },
   "system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange": {
-    "defaultMessage": "日期范围不能超过 365 天"
+    "defaultMessage": "日期范围不能超过365天"
   },
   "system.admin.admin.components.tables.SystemGetHelpActivityTable.studentName": {
     "defaultMessage": "姓名"
@@ -7444,6 +7450,66 @@
   },
   "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
     "defaultMessage": "课程"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.instanceTitle": {
+    "defaultMessage": "实例"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
+    "defaultMessage": "最近实时帮助活动"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
+    "defaultMessage": "结束日期必须晚于或等于开始日期"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.exceedDateRange": {
+    "defaultMessage": "日期范围不能超过365天"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.studentName": {
+    "defaultMessage": "姓名"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.messageCount": {
+    "defaultMessage": "消息数"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.lastMessage": {
+    "defaultMessage": "最新消息"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.questionNumber": {
+    "defaultMessage": "题号"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.assessmentTitle": {
+    "defaultMessage": "测验"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.createdAt": {
+    "defaultMessage": "最新消息时间"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.courseTitle": {
+    "defaultMessage": "课程"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterCourseLabel": {
+    "defaultMessage": "按课程筛选"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStudentLabel": {
+    "defaultMessage": "按学生筛选"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStartDateLabel": {
+    "defaultMessage": "开始日期"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterEndDateLabel": {
+    "defaultMessage": "结束日期"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSevenDays": {
+    "defaultMessage": "最近7天"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastFourteenDays": {
+    "defaultMessage": "最近14天"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastThirtyDays": {
+    "defaultMessage": "最近30天"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSixMonths": {
+    "defaultMessage": "最近6个月"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastTwelveMonths": {
+    "defaultMessage": "最近12个月"
   },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"

@@ -150,15 +150,15 @@ export interface GetHelpActivity {
 }
 
 export interface InstanceGetHelpActivity extends GetHelpActivity {
-  instanceId: number;
-  instanceTitle: string;
-  instanceHost: string;
-}
-
-export interface SystemGetHelpActivity extends InstanceGetHelpActivity {
   courseUserId: number;
   courseId: number;
   courseTitle: string;
+}
+
+export interface SystemGetHelpActivity extends InstanceGetHelpActivity {
+  instanceId: number;
+  instanceTitle: string;
+  instanceHost: string;
 }
 
 export interface GetHelpStatistics {
