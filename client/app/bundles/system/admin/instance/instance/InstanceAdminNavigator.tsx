@@ -3,6 +3,7 @@ import {
   AssignmentInd,
   AutoStories,
   Campaign,
+  Chat,
   Group,
   ListAlt,
 } from '@mui/icons-material';
@@ -15,24 +16,28 @@ import { fetchInstance } from './operations';
 
 const translations = defineMessages({
   announcements: {
-    id: 'sysstem.admin.instance.instance.InstanceAdminNavigator.announcements',
+    id: 'system.admin.instance.instance.InstanceAdminNavigator.announcements',
     defaultMessage: 'Announcements',
   },
   users: {
-    id: 'sysstem.admin.instance.instance.InstanceAdminNavigator.users',
+    id: 'system.admin.instance.instance.InstanceAdminNavigator.users',
     defaultMessage: 'Users',
   },
   courses: {
-    id: 'sysstem.admin.instance.instance.InstanceAdminNavigator.courses',
+    id: 'system.admin.instance.instance.InstanceAdminNavigator.courses',
     defaultMessage: 'Courses',
   },
   components: {
-    id: 'sysstem.admin.instance.instance.InstanceAdminNavigator.components',
+    id: 'system.admin.instance.instance.InstanceAdminNavigator.components',
     defaultMessage: 'Components',
   },
   roleRequests: {
-    id: 'sysstem.admin.instance.instance.InstanceAdminNavigator.roleRequests',
+    id: 'system.admin.instance.instance.InstanceAdminNavigator.roleRequests',
     defaultMessage: 'Role Requests',
+  },
+  getHelp: {
+    id: 'system.admin.instance.instance.InstanceAdminNavigator.getHelp',
+    defaultMessage: 'Get Help',
   },
 });
 
@@ -66,6 +71,11 @@ const InstanceAdminNavigator = (): JSX.Element => {
           icon: <AssignmentInd />,
           title: t(translations.roleRequests),
           path: '/admin/instance/role_requests',
+        },
+        {
+          icon: <Chat />,
+          title: t(translations.getHelp),
+          path: '/admin/instance/get_help',
         },
       ]}
     />

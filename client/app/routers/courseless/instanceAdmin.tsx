@@ -99,6 +99,17 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
         ).default,
       }),
     },
+    {
+      path: 'get_help',
+      lazy: async (): Promise<RouteObject> => ({
+        Component: (
+          await import(
+            /* webpackChunkName: 'InstanceGetHelpActivityIndex' */
+            'bundles/system/admin/instance/instance/pages/InstanceGetHelpActivityIndex'
+          )
+        ).default,
+      }),
+    },
   ],
 });
 

@@ -7277,20 +7277,23 @@
   "material.attemptLoader.errorAccessingMaterial": {
     "defaultMessage": "An error occurred while accessing this material. Try again later."
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.announcements": {
+  "system.admin.instance.instance.InstanceAdminNavigator.announcements": {
     "defaultMessage": "Announcements"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.components": {
+  "system.admin.instance.instance.InstanceAdminNavigator.components": {
     "defaultMessage": "Components"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.courses": {
+  "system.admin.instance.instance.InstanceAdminNavigator.courses": {
     "defaultMessage": "Courses"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.roleRequests": {
+  "system.admin.instance.instance.InstanceAdminNavigator.roleRequests": {
     "defaultMessage": "Role Requests"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.users": {
+  "system.admin.instance.instance.InstanceAdminNavigator.users": {
     "defaultMessage": "Users"
+  },
+  "system.admin.instance.instance.InstanceAdminNavigator.getHelp": {
+    "defaultMessage": "Get Help"
   },
   "system.admin.admin.AdminNavigator.announcements": {
     "defaultMessage": "System Announcements"
@@ -7306,6 +7309,9 @@
   },
   "system.admin.admin.AdminNavigator.users": {
     "defaultMessage": "Users"
+  },
+  "system.admin.admin.AdminNavigator.getHelp": {
+    "defaultMessage": "Get Help"
   },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "Unable to fetch announcements"
@@ -7486,6 +7492,66 @@
   },
   "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
     "defaultMessage": "Course"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.instanceTitle": {
+    "defaultMessage": "Instance"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
+    "defaultMessage": "Recent Get Help Activity"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
+    "defaultMessage": "End Date must be after or equal to Start Date"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.exceedDateRange": {
+    "defaultMessage": "Date range cannot exceed 365 days"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.studentName": {
+    "defaultMessage": "Name"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.messageCount": {
+    "defaultMessage": "# Msgs"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.lastMessage": {
+    "defaultMessage": "Last Message"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.questionNumber": {
+    "defaultMessage": "Question"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.assessmentTitle": {
+    "defaultMessage": "Assessment"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.createdAt": {
+    "defaultMessage": "Last Message At"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.courseTitle": {
+    "defaultMessage": "Course"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterCourseLabel": {
+    "defaultMessage": "Filter by Course"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStudentLabel": {
+    "defaultMessage": "Filter by Student"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStartDateLabel": {
+    "defaultMessage": "Start Date"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterEndDateLabel": {
+    "defaultMessage": "End Date"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSevenDays": {
+    "defaultMessage": "Last 7 Days"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastFourteenDays": {
+    "defaultMessage": "Last 14 Days"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastThirtyDays": {
+    "defaultMessage": "Last 30 Days"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSixMonths": {
+    "defaultMessage": "Last 6 Months"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastTwelveMonths": {
+    "defaultMessage": "Last 12 Months"
   },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"

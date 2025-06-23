@@ -301,4 +301,16 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     }
     return this.client.patch(`/role_requests/${requestId}/reject`);
   }
+
+  /**
+   * Fetches Get Help data for the instance
+   */
+  fetchInstanceGetHelpActivity(params: {
+    start_at: string;
+    end_at: string;
+  }): Promise<AxiosResponse> {
+    return this.client.get(`${InstanceAdminAPI.#urlPrefix}/get_help`, {
+      params,
+    });
+  }
 }

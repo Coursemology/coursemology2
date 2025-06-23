@@ -11,7 +11,7 @@ interface Props {
   questionId: number;
   courseUserId: number;
   assessmentId: number;
-  courseId?: number; // Optional, only used for system admin context
+  courseId?: number; // Optional, only used for system or instance admin context
 }
 
 const LiveFeedbackHistoryContent: FC<Props> = (props): JSX.Element => {

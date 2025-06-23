@@ -125,6 +125,7 @@ Rails.application.routes.draw do
           post 'resend_invitation'
         end
         resources :courses, only: [:index, :destroy]
+        resources :get_help, only: [:index]
         get 'components' => 'components#index'
         patch 'components' => 'components#update'
       end

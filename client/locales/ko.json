@@ -7274,20 +7274,23 @@
   "material.attemptLoader.errorAccessingMaterial": {
     "defaultMessage": "이 자료에 접근하는 중 오류가 발생했습니다. 나중에 다시 시도해 주세요."
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.announcements": {
+  "system.admin.instance.instance.InstanceAdminNavigator.announcements": {
     "defaultMessage": "공지사항"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.components": {
+  "system.admin.instance.instance.InstanceAdminNavigator.components": {
     "defaultMessage": "구성 요소"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.courses": {
+  "system.admin.instance.instance.InstanceAdminNavigator.courses": {
     "defaultMessage": "과정"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.roleRequests": {
+  "system.admin.instance.instance.InstanceAdminNavigator.roleRequests": {
     "defaultMessage": "역할 요청"
   },
-  "sysstem.admin.instance.instance.InstanceAdminNavigator.users": {
+  "system.admin.instance.instance.InstanceAdminNavigator.users": {
     "defaultMessage": "사용자"
+  },
+  "system.admin.instance.instance.InstanceAdminNavigator.getHelp": {
+    "defaultMessage": "도움받기"
   },
   "system.admin.admin.AdminNavigator.announcements": {
     "defaultMessage": "시스템 공지사항"
@@ -7303,6 +7306,9 @@
   },
   "system.admin.admin.AdminNavigator.users": {
     "defaultMessage": "사용자"
+  },
+  "system.admin.admin.AdminNavigator.getHelp": {
+    "defaultMessage": "도움받기"
   },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "공지사항을 가져올 수 없습니다."
@@ -7483,6 +7489,66 @@
   },
   "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
     "defaultMessage": "과목"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.instanceTitle": {
+    "defaultMessage": "인스턴스"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
+    "defaultMessage": "최근 도움 요청 활동"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
+    "defaultMessage": "종료일은 시작일 이후거나 같아야 합니다"
+  },
+  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.exceedDateRange": {
+    "defaultMessage": "날짜 범위는 최대 365일을 초과할 수 없습니다"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.studentName": {
+    "defaultMessage": "이름"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.messageCount": {
+    "defaultMessage": "메시지 수"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.lastMessage": {
+    "defaultMessage": "최근 메시지"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.questionNumber": {
+    "defaultMessage": "문항"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.assessmentTitle": {
+    "defaultMessage": "과제"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.createdAt": {
+    "defaultMessage": "최근 메시지 시각"
+  },
+  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.courseTitle": {
+    "defaultMessage": "과목"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterCourseLabel": {
+    "defaultMessage": "과목으로 필터링"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStudentLabel": {
+    "defaultMessage": "학생으로 필터링"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStartDateLabel": {
+    "defaultMessage": "시작일"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterEndDateLabel": {
+    "defaultMessage": "종료일"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSevenDays": {
+    "defaultMessage": "최근 7일"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastFourteenDays": {
+    "defaultMessage": "최근 14일"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastThirtyDays": {
+    "defaultMessage": "최근 30일"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSixMonths": {
+    "defaultMessage": "최근 6개월"
+  },
+  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastTwelveMonths": {
+    "defaultMessage": "최근 12개월"
   },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"

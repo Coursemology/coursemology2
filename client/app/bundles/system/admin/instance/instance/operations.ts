@@ -14,6 +14,7 @@ import { InstanceUserMiniEntity } from 'types/system/instance/users';
 import { InstanceBasicListData } from 'types/system/instances';
 
 import SystemAPI from 'api/system';
+import { InstanceGetHelpActivity } from 'course/statistics/types';
 
 import { actions } from './store';
 
@@ -336,3 +337,12 @@ export function rejectRoleRequest(
         dispatch(actions.saveRoleRequest(roleRequest));
       });
 }
+
+export const fetchInstanceGetHelpActivity = async (params: {
+  start_at: string;
+  end_at: string;
+}): Promise<InstanceGetHelpActivity[]> => {
+  const response =
+    await SystemAPI.instance.fetchInstanceGetHelpActivity(params);
+  return response.data;
+};
