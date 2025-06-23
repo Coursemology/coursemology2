@@ -33,21 +33,45 @@ const translations = defineMessages({
     id: 'course.assessment.statistics.group',
     defaultMessage: 'Group',
   },
-  legendHigherusage: {
-    id: 'course.assessment.statistics.legendHigherusage',
+  legendLowerLabelGrade: {
+    id: 'course.assessment.statistics.legendLowerLabelGrade',
+    defaultMessage: 'Lower Grade',
+  },
+  legendUpperLabelGrade: {
+    id: 'course.assessment.statistics.legendHigherLabelGrade',
+    defaultMessage: 'Higher Grade',
+  },
+  legendLowerLabelGradeDiff: {
+    id: 'course.assessment.statistics.legendLowerLabelGradeDiff',
+    defaultMessage: 'Lower Grade Difference',
+  },
+  legendUpperLabelGradeDiff: {
+    id: 'course.assessment.statistics.legendHigherLabelGradeDiff',
+    defaultMessage: 'Higher Grade Difference',
+  },
+  legendLowerLabelMessagesSent: {
+    id: 'course.assessment.statistics.legendLowerLabelMessagesSent',
+    defaultMessage: 'Lower Usage',
+  },
+  legendUpperLabelMessagesSent: {
+    id: 'course.assessment.statistics.legendUpperLabelMessagesSent',
     defaultMessage: 'Higher Usage',
   },
-  legendLowerUsage: {
-    id: 'course.assessment.statistics.legendLowerUsage',
-    defaultMessage: 'Lower Usage',
+  legendLowerLabelWordCount: {
+    id: 'course.assessment.statistics.legendLowerLabelWordCount',
+    defaultMessage: 'Lower Word Count',
+  },
+  legendUpperLabelWordCount: {
+    id: 'course.assessment.statistics.legendUpperLabelWordCount',
+    defaultMessage: 'Higher Word Count',
   },
   liveFeedbackFilename: {
     id: 'course.assessment.statistics.liveFeedback.filename',
-    defaultMessage: 'Question-level Live Feedback Statistics for {assessment}',
+    defaultMessage: 'Question-level Get Help Statistics for {assessment}',
   },
   liveFeedbackHistoryPromptTitle: {
     id: 'course.assessment.statistics.liveFeedbackHistoryPromptTitle',
-    defaultMessage: 'Live Feedback History',
+    defaultMessage: 'Get Help History',
   },
   marksFilename: {
     id: 'course.assessment.statistics.marks.filename',

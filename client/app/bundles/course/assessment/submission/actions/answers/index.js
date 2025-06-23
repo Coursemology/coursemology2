@@ -145,11 +145,12 @@ export function saveAnswer(answerData, answerId, currentTime, resetField) {
 
   return (dispatch, getState) => {
     dispatch(dispatchUpdateAnswerFlagSavingSize(answerId, savingSize));
+
     // When the current client version is greater than that in the redux store,
     // the answer is already stale and no API call is needed.
     const isAnswerStale =
       getClientVersionForAnswerId(getState(), answerId) > currentTime;
-    if (isAnswerStale) return {};
+    if (isAnswerStale) return Promise.resolve({});
 
     dispatch({
       type: actionTypes.SAVE_ANSWER_REQUEST,
@@ -182,6 +183,7 @@ export function saveAnswer(answerData, answerId, currentTime, resetField) {
         dispatch(
           dispatchUpdateAnswerFlagSavingStatus(answerId, SAVING_STATUS.Saved),
         );
+        return Promise.resolve({});
       })
       .catch((e) => {
         dispatch({
@@ -196,6 +198,7 @@ export function saveAnswer(answerData, answerId, currentTime, resetField) {
             isStaleAnswer,
           ),
         );
+        return Promise.reject(e);
       });
   };
 }
