@@ -6,7 +6,10 @@ export type LanguageMode =
   | 'javascript'
   | 'python'
   | 'r'
-  | 'csharp';
+  | 'csharp'
+  | 'golang'
+  | 'rust'
+  | 'typescript';
 
 export interface LanguageDependencyData {
   name: string;

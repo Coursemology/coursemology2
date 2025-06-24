@@ -38,6 +38,9 @@ const TestCaseComponentMapper: Record<
   javascript: ReorderableTestCase,
   r: ReorderableTestCase,
   csharp: ReorderableTestCase,
+  golang: ReorderableTestCase,
+  rust: ReorderableTestCase,
+  typescript: ReorderableTestCase,
 };
 
 const GenerateQuestionPrototypeForm: FC<Props> = (props) => {

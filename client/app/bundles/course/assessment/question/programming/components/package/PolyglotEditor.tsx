@@ -13,11 +13,14 @@ import ControlledEditor from '../common/ControlledEditor';
 
 import CppPackageEditor from './CppPackageEditor';
 import CsharpPackageEditor from './CsharpPackageEditor';
+import GoPackageEditor from './GoPackageEditor';
 import JavaPackageEditor from './JavaPackageEditor';
 import JavascriptPackageEditor from './JavascriptPackageEditor';
 import PackageDetails from './PackageDetails';
 import PythonPackageEditor from './PythonPackageEditor';
 import RPackageEditor from './RPackageEditor';
+import RustPackageEditor from './RustPackageEditor';
+import TypescriptPackageEditor from './TypescriptPackageEditor';
 
 const EDITORS: Partial<Record<LanguageMode, ElementType>> = {
   python: PythonPackageEditor,
@@ -26,6 +29,9 @@ const EDITORS: Partial<Record<LanguageMode, ElementType>> = {
   r: RPackageEditor,
   javascript: JavascriptPackageEditor,
   csharp: CsharpPackageEditor,
+  golang: GoPackageEditor,
+  rust: RustPackageEditor,
+  typescript: TypescriptPackageEditor,
 };
 
 interface PolyglotEditorProps {

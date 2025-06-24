@@ -18,7 +18,10 @@ namespace :db do
       Coursemology::Polyglot::Language::Java::Java21,
       Coursemology::Polyglot::Language::R::R4Point1,
       Coursemology::Polyglot::Language::JavaScript::JavaScript22,
-      Coursemology::Polyglot::Language::CSharp::CSharp5Point0
+      Coursemology::Polyglot::Language::CSharp::CSharp5Point0,
+      Coursemology::Polyglot::Language::Go::Go1Point16,
+      Coursemology::Polyglot::Language::Rust::Rust1Point68,
+      Coursemology::Polyglot::Language::TypeScript::TypeScript5Point8
     ].freeze
 
   QUESTION_GENERATION_WHITELIST =
@@ -35,7 +38,10 @@ namespace :db do
       Coursemology::Polyglot::Language::Java::Java21,
       Coursemology::Polyglot::Language::R::R4Point1,
       Coursemology::Polyglot::Language::JavaScript::JavaScript22,
-      Coursemology::Polyglot::Language::CSharp::CSharp5Point0
+      Coursemology::Polyglot::Language::CSharp::CSharp5Point0,
+      Coursemology::Polyglot::Language::Go::Go1Point16,
+      Coursemology::Polyglot::Language::Rust::Rust1Point68,
+      Coursemology::Polyglot::Language::TypeScript::TypeScript5Point8
     ].freeze
 
   KODITSU_WHITELIST =
@@ -66,7 +72,10 @@ namespace :db do
       Coursemology::Polyglot::Language::CPlusPlus,
       Coursemology::Polyglot::Language::R::R4Point1,
       Coursemology::Polyglot::Language::JavaScript::JavaScript22,
-      Coursemology::Polyglot::Language::CSharp::CSharp5Point0
+      Coursemology::Polyglot::Language::CSharp::CSharp5Point0,
+      Coursemology::Polyglot::Language::Go::Go1Point16,
+      Coursemology::Polyglot::Language::Rust::Rust1Point68,
+      Coursemology::Polyglot::Language::TypeScript::TypeScript5Point8
     ].freeze
 
   task set_polyglot_language_flags: :environment do

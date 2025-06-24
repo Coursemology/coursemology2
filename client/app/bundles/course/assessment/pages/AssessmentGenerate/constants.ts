@@ -32,4 +32,7 @@ export const CODAVERI_EVALUATOR_ONLY_LANGUAGES: LanguageMode[] = [
   'r',
   'javascript',
   'csharp',
+  'golang',
+  'rust',
+  'typescript',
 ];

@@ -81,6 +81,9 @@ const POLYGLOT_SCHEMA: Partial<
   java: javaMetadataSchema,
   javascript: basicMetadataSchema,
   csharp: basicMetadataSchema,
+  golang: basicMetadataSchema,
+  rust: basicMetadataSchema,
+  typescript: basicMetadataSchema,
 };
 
 const schema: Translated<AnyObjectSchema> = (t) =>
