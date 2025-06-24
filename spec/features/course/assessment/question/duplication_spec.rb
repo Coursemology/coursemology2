@@ -20,6 +20,13 @@ RSpec.describe 'Course: Assessments: Questions: Duplication Spec', js: true do
         programming_question.question_assessments.first.skills << skill
       end
     end
+    let(:rubric_source_assessment) do
+      create(:assessment, :with_rubric_question, course: course).tap do |assessment|
+        rubric_question =
+          assessment.questions.where(actable_type: 'Course::Assessment::Question::RubricBasedResponse').first
+        rubric_question.question_assessments.first.skills << skill
+      end
+    end
 
     before { login_as(user, scope: :user) }
 
@@ -30,6 +37,11 @@ RSpec.describe 'Course: Assessments: Questions: Duplication Spec', js: true do
         questions = second_source_assessment.questions
 
         questions.where(actable_type: 'Course::Assessment::Question::Programming').first
+      end
+      let!(:rubric_question) do
+        questions = rubric_source_assessment.questions
+
+        questions.where(actable_type: 'Course::Assessment::Question::RubricBasedResponse').first
       end
 
       context 'upon duplicating a question' do
@@ -53,6 +65,33 @@ RSpec.describe 'Course: Assessments: Questions: Duplication Spec', js: true do
           expect(duplicated_question.title).to eq(question.title)
           expect(duplicated_question.question_assessments.first.skills.first.id).
             to eq(question.question_assessments.first.skills.first.id)
+        end
+      end
+
+      context 'upon duplicating a rubric-based response question' do
+        let!(:rubric_destination_assessment) { create(:assessment, course: course) }
+
+        scenario 'I can duplicate that question from one assessment to another' do
+          visit course_assessment_path(course, rubric_source_assessment)
+
+          expect(rubric_destination_assessment.questions.count).to be(0)
+
+          within all('section', text: rubric_question.title).first do
+            click_button 'Duplicate'
+          end
+
+          find('li', text: rubric_destination_assessment.title).click
+          expect_toastify('Your question has been duplicated.')
+
+          expect(rubric_destination_assessment.questions.reload.count).to eq(1)
+          duplicated_question = rubric_destination_assessment.questions.last
+          expect(duplicated_question.title).to eq(rubric_question.title)
+          expect(duplicated_question.question_assessments.first.skills.first.id).
+            to eq(rubric_question.question_assessments.first.skills.first.id)
+
+          visit course_assessment_path(course, rubric_destination_assessment)
+
+          expect(page).to have_text(rubric_destination_assessment.title)
         end
       end
 
