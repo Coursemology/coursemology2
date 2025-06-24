@@ -18,7 +18,7 @@ const TestCasesHint = (): JSX.Element => {
   return (
     <Typography color="text.secondary" variant="body2">
       {t(translations.standardInputOutputTestCasesHint, {
-        language: 'R',
+        language: 'C#',
         prepend: (chunk) => <Link href={`#${PREPEND_DIV_ID}`}>{chunk}</Link>,
         append: (chunk) => <Link href={`#${APPEND_DIV_ID}`}>{chunk}</Link>,
       })}
@@ -26,29 +26,45 @@ const TestCasesHint = (): JSX.Element => {
   );
 };
 
-const RPackageEditor = (props: PackageEditorProps): JSX.Element => {
+const CsharpPackageEditor = (props: PackageEditorProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (
     <>
       <PackageEditor.Templates>
-        <ControlledEditor.Template disabled={props.disabled} language="r" />
-        <ControlledEditor.Solution disabled={props.disabled} language="r" />
+        <ControlledEditor.Template
+          disabled={props.disabled}
+          language="csharp"
+        />
+        <ControlledEditor.Solution
+          disabled={props.disabled}
+          language="csharp"
+        />
       </PackageEditor.Templates>
 
       <PackageEditor.CodeInserts>
         <div id={PREPEND_DIV_ID}>
-          <ControlledEditor.Prepend disabled={props.disabled} language="r" />
+          <ControlledEditor.Prepend
+            defaultValue="// using System;"
+            disabled={props.disabled}
+            language="csharp"
+          />
         </div>
         <div id={APPEND_DIV_ID}>
           <ControlledEditor.Append
             defaultValue={
-              "# N <- as.integer(readLines('stdin', n=1))\n" +
-              '# result <- my_function(N)\n' +
-              '# cat(result)\n'
+              '// public class Program\n' +
+              '// {\n' +
+              '//     public static void Main(string[] args)\n' +
+              '//     {\n' +
+              '//        int N = int.Parse(Console.ReadLine());\n' +
+              '//        int result = MyClass.MyFunction(N);\n' +
+              '//        Console.WriteLine(result);\n' +
+              '//     }\n' +
+              '// }\n'
             }
             disabled={props.disabled}
-            language="r"
+            language="csharp"
           />
         </div>
       </PackageEditor.CodeInserts>
@@ -72,4 +88,4 @@ const RPackageEditor = (props: PackageEditorProps): JSX.Element => {
   );
 };
 
-export default RPackageEditor;
+export default CsharpPackageEditor;

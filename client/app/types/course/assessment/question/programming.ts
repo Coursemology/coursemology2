@@ -1,6 +1,15 @@
 import { AvailableSkills, QuestionFormData } from '../questions';
 
-export type LanguageMode = 'c_cpp' | 'java' | 'javascript' | 'python' | 'r';
+export type LanguageMode =
+  | 'c_cpp'
+  | 'java'
+  | 'javascript'
+  | 'python'
+  | 'r'
+  | 'csharp'
+  | 'golang'
+  | 'rust'
+  | 'typescript';
 
 export interface LanguageDependencyData {
   name: string;

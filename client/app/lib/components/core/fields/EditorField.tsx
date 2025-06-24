@@ -54,7 +54,7 @@ const useLazyMode = (language: LanguageMode): boolean => {
 
     (async (): Promise<void> => {
       await import(
-        /* webpackInclude: /ace-builds\/src-noconflict\/mode-(c_cpp|python|r|java|javascript)\./ */
+        /* webpackInclude: /ace-builds\/src-noconflict\/mode-(c_cpp|python|r|java|javascript|csharp|golang|rust|typescript)\./ */
         /* webpackChunkName: "ace-[request]" */
         `ace-builds/src-noconflict/mode-${language}`
       );

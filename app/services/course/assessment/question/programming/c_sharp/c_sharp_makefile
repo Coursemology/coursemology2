@@ -1,0 +1,24 @@
+prepare:
+
+compile: submission/template.cs tests/prepend.cs tests/append.cs
+	cat tests/prepend.cs submission/template.cs tests/append.cs > answer.cs
+
+public:
+	echo "Not Implemented"
+
+private:
+	echo "Not Implemented"
+
+evaluation:
+	echo "Not Implemented"
+
+solution:	solution.cs
+	echo "Not Implemented"
+
+solution.cs: solution/template.cs tests/prepend.cs tests/append.cs
+	cat tests/prepend.cs solution/template.cs tests/append.cs > solution.cs
+
+clean:
+	rm -f answer.cs
+	rm -f report.xml
+	rm -f solution.cs

@@ -18,7 +18,7 @@ const TestCasesHint = (): JSX.Element => {
   return (
     <Typography color="text.secondary" variant="body2">
       {t(translations.standardInputOutputTestCasesHint, {
-        language: 'R',
+        language: 'Go',
         prepend: (chunk) => <Link href={`#${PREPEND_DIV_ID}`}>{chunk}</Link>,
         append: (chunk) => <Link href={`#${APPEND_DIV_ID}`}>{chunk}</Link>,
       })}
@@ -26,29 +26,47 @@ const TestCasesHint = (): JSX.Element => {
   );
 };
 
-const RPackageEditor = (props: PackageEditorProps): JSX.Element => {
+const GoPackageEditor = (props: PackageEditorProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (
     <>
       <PackageEditor.Templates>
-        <ControlledEditor.Template disabled={props.disabled} language="r" />
-        <ControlledEditor.Solution disabled={props.disabled} language="r" />
+        <ControlledEditor.Template
+          disabled={props.disabled}
+          language="golang"
+        />
+        <ControlledEditor.Solution
+          disabled={props.disabled}
+          language="golang"
+        />
       </PackageEditor.Templates>
 
       <PackageEditor.CodeInserts>
         <div id={PREPEND_DIV_ID}>
-          <ControlledEditor.Prepend disabled={props.disabled} language="r" />
+          <ControlledEditor.Prepend
+            defaultValue={
+              '// package main\n' +
+              '// import (\n' +
+              '//     "fmt"\n' +
+              '// )\n'
+            }
+            disabled={props.disabled}
+            language="golang"
+          />
         </div>
         <div id={APPEND_DIV_ID}>
           <ControlledEditor.Append
             defaultValue={
-              "# N <- as.integer(readLines('stdin', n=1))\n" +
-              '# result <- my_function(N)\n' +
-              '# cat(result)\n'
+              '// func main() {\n' +
+              '//     var n int\n' +
+              '//     fmt.Scan(&n)\n' +
+              '//     result := myFunction(n)\n' +
+              '//     fmt.Println(result)\n' +
+              '// }\n'
             }
             disabled={props.disabled}
-            language="r"
+            language="golang"
           />
         </div>
       </PackageEditor.CodeInserts>
@@ -72,4 +90,4 @@ const RPackageEditor = (props: PackageEditorProps): JSX.Element => {
   );
 };
 
-export default RPackageEditor;
+export default GoPackageEditor;

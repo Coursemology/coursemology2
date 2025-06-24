@@ -18,7 +18,7 @@ const TestCasesHint = (): JSX.Element => {
   return (
     <Typography color="text.secondary" variant="body2">
       {t(translations.standardInputOutputTestCasesHint, {
-        language: 'R',
+        language: 'Rust',
         prepend: (chunk) => <Link href={`#${PREPEND_DIV_ID}`}>{chunk}</Link>,
         append: (chunk) => <Link href={`#${APPEND_DIV_ID}`}>{chunk}</Link>,
       })}
@@ -26,29 +26,37 @@ const TestCasesHint = (): JSX.Element => {
   );
 };
 
-const RPackageEditor = (props: PackageEditorProps): JSX.Element => {
+const RustPackageEditor = (props: PackageEditorProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (
     <>
       <PackageEditor.Templates>
-        <ControlledEditor.Template disabled={props.disabled} language="r" />
-        <ControlledEditor.Solution disabled={props.disabled} language="r" />
+        <ControlledEditor.Template disabled={props.disabled} language="rust" />
+        <ControlledEditor.Solution disabled={props.disabled} language="rust" />
       </PackageEditor.Templates>
 
       <PackageEditor.CodeInserts>
         <div id={PREPEND_DIV_ID}>
-          <ControlledEditor.Prepend disabled={props.disabled} language="r" />
+          <ControlledEditor.Prepend
+            defaultValue={'// use std::io;\n'}
+            disabled={props.disabled}
+            language="rust"
+          />
         </div>
         <div id={APPEND_DIV_ID}>
           <ControlledEditor.Append
             defaultValue={
-              "# N <- as.integer(readLines('stdin', n=1))\n" +
-              '# result <- my_function(N)\n' +
-              '# cat(result)\n'
+              '// fn main() {\n' +
+              '//     let mut input = String::new();\n' +
+              '//     io::stdin().read_line(&mut input).unwrap();\n' +
+              '//     let n: i32 = input.trim().parse().unwrap();\n' +
+              '//     let result = my_function(n);\n' +
+              '//     println!("{}", result);\n' +
+              '// }\n'
             }
             disabled={props.disabled}
-            language="r"
+            language="rust"
           />
         </div>
       </PackageEditor.CodeInserts>
@@ -72,4 +80,4 @@ const RPackageEditor = (props: PackageEditorProps): JSX.Element => {
   );
 };
 
-export default RPackageEditor;
+export default RustPackageEditor;

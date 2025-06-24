@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 # rubocop:disable Metrics/AbcSize
 class Course::Assessment::ProgrammingTestCaseReportBuilder
-  def self.build_dummy_report(test_type, test_cases)
+  def self.build_dummy_report(test_type, test_cases, file_type)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.testsuites do
         xml.testsuite(
           name: "#{test_type.capitalize}TestsGrader",
           tests: test_cases.count.to_s,
-          file: '.R',
+          file: file_type,
           time: '0.01',
           timestamp: Time.now.iso8601,
           failures: 0.to_s,
@@ -19,7 +19,7 @@ class Course::Assessment::ProgrammingTestCaseReportBuilder
               name: "test_#{test_type}_#{format('%<index>02i', index: index)}",
               time: '0.00001',
               timestamp: Time.now.iso8601,
-              file: 'answer.R',
+              file: "answer#{file_type}",
               line: '1'
             ) do
               xml.meta(expression: test_case[:expression], expected: test_case[:expected], hint: test_case[:hint])

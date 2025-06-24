@@ -1,0 +1,24 @@
+prepare:
+
+compile: submission/template.js tests/prepend.js tests/append.js
+	cat tests/prepend.js submission/template.js tests/append.js > answer.js
+
+public:
+	echo "Not Implemented"
+
+private:
+	echo "Not Implemented"
+
+evaluation:
+	echo "Not Implemented"
+
+solution:	solution.js
+	echo "Not Implemented"
+
+solution.js: solution/template.js tests/prepend.js tests/append.js
+	cat tests/prepend.js solution/template.js tests/append.js > solution.js
+
+clean:
+	rm -f answer.js
+	rm -f report.xml
+	rm -f solution.js
