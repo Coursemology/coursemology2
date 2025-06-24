@@ -16,6 +16,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
+import { CODAVERI_EVALUATOR_ONLY_LANGUAGES } from './constants';
 import LockableSection from './LockableSection';
 import TestCasesManager from './TestCasesManager';
 import { LockStates, QuestionPrototypeFormData } from './types';
@@ -36,6 +37,10 @@ const TestCaseComponentMapper: Record<
   c_cpp: ReorderableTestCase,
   javascript: ReorderableTestCase,
   r: ReorderableTestCase,
+  csharp: ReorderableTestCase,
+  golang: ReorderableTestCase,
+  rust: ReorderableTestCase,
+  typescript: ReorderableTestCase,
 };
 
 const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
@@ -48,7 +53,9 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
       if (title) dispatch(actions.setActiveFormTitle({ title }));
     },
   });
-  const isIOTestCaseLanguage = editorMode === 'r';
+  // New languages supported by Codaveri only allow IO test cases.
+  const isIOTestCaseLanguage =
+    CODAVERI_EVALUATOR_ONLY_LANGUAGES.includes(editorMode);
 
   const TestCaseComponent = TestCaseComponentMapper[editorMode];
   const lhsHeader = isIOTestCaseLanguage

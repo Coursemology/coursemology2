@@ -1571,13 +1571,13 @@ const translations = defineMessages({
       'against the Expected expectations using the equality operator (<code>==</code>). Notably, <code>print()</code> ' +
       'returns <code>None</code>, so <code>print</code>ed outputs should not be confused with actual return values.',
   },
-  rTestCasesHint: {
-    id: 'course.assessment.question.programming.rTestCasesHint',
+  standardInputOutputTestCasesHint: {
+    id: 'course.assessment.question.programming.standardInputOutputTestCasesHint',
     defaultMessage:
-      'Each test case launches a separate R console instance and provides input via standard input. This console will ' +
-      'run the <prepend>Prepend</prepend> script, the student submission, and the <append>Append</append> script. ' +
-      'The standard output of these scripts will be compared (as a string) to the expected output of the test case. We recommend ' +
-      'processing the standard input in one of these scripts.',
+      'Each test case launches a separate {language} console environment and provides input via standard input. ' +
+      'The environment will combine the <prepend>Prepend</prepend>, student submission, and <append>Append</append> scripts into a single program and run it. ' +
+      'The standard output of the program will be compared (as a string) to the expected output of the test case. ' +
+      'We recommend handling input parsing and function calls in one of these scripts.',
   },
   inlineCode: {
     id: 'course.assessment.question.programming.inlineCode',
