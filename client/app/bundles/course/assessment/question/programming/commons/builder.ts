@@ -146,6 +146,8 @@ const POLYGLOT_BUILDER: Partial<
   c_cpp: basicBuilder,
   java: javaBuilder,
   r: basicBuilder,
+  javascript: basicBuilder,
+  csharp: basicBuilder,
 };
 
 const appendSkillIdsInto = (data: FormData, skillIds: number[]): void =>

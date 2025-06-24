@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::CodaveriProblemGenerationService
+class Course::Assessment::Question::CodaveriProblemGenerationService # rubocop:disable Metrics/ClassLength
   POLL_INTERVAL_SECONDS = 2
   MAX_POLL_RETRIES = 1000
 
@@ -23,7 +23,7 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
 
   private
 
-  def initialize(assessment, params, language, version)
+  def initialize(assessment, params, language, version) # rubocop:disable Metrics/AbcSize
     custom_prompt = params[:custom_prompt].to_s || ''
     @payload = {
       userId: assessment.creator_id.to_s,
@@ -73,13 +73,16 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
   def generate_payload_file_name(codaveri_language, file_content)
     return 'main.py' if codaveri_language == 'python'
     return 'main.R' if codaveri_language == 'r'
+    return 'main.js' if codaveri_language == 'javascript'
+    return 'main.cs' if codaveri_language == 'csharp'
 
     match = file_content&.match(/\bclass\s+(\w+)\s*\{/)
     match ? "#{match[1]}.java" : 'Main.java'
   end
 
   def generate_payload_testcases_type(codaveri_language)
-    codaveri_language == 'r' ? 'IO' : 'expression'
+    # New languages supported by Codaveri only allow IO test cases.
+    ['r', 'javascript', 'csharp'].include?(codaveri_language) ? 'IO' : 'expression'
   end
 
   def generate_payload_io_test_case(test_case, visibility, index)

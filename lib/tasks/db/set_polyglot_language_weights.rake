@@ -4,7 +4,7 @@ namespace :db do
   # changing the order in which languages are displayed in drop-down menus.
 
   def comparable_polyglot_version(language)
-    language&.polyglot_version&.split('.')&.map(&:to_i)
+    language.polyglot_version&.split('.')&.map(&:to_i) || []
   end
 
   def version_compare(lang1, lang2)
@@ -17,7 +17,7 @@ namespace :db do
     @latest_hash.key?(language.name)
   end
 
-  def language_compare(lang1, lang2) # rubocop:disable Metrics/CyclomaticComplexity
+  def language_compare(lang1, lang2)
     # Put more recent versions first
     return -version_compare(lang1, lang2) if lang1.polyglot_name == lang2.polyglot_name
 

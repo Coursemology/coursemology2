@@ -12,7 +12,9 @@ import translations from '../../../../translations';
 import ControlledEditor from '../common/ControlledEditor';
 
 import CppPackageEditor from './CppPackageEditor';
+import CsharpPackageEditor from './CsharpPackageEditor';
 import JavaPackageEditor from './JavaPackageEditor';
+import JavascriptPackageEditor from './JavascriptPackageEditor';
 import PackageDetails from './PackageDetails';
 import PythonPackageEditor from './PythonPackageEditor';
 import RPackageEditor from './RPackageEditor';
@@ -22,6 +24,8 @@ const EDITORS: Partial<Record<LanguageMode, ElementType>> = {
   java: JavaPackageEditor,
   c_cpp: CppPackageEditor,
   r: RPackageEditor,
+  javascript: JavascriptPackageEditor,
+  csharp: CsharpPackageEditor,
 };
 
 interface PolyglotEditorProps {

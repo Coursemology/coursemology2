@@ -39,7 +39,7 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
 
   private
 
-  def init_language_package_service(params)
+  def init_language_package_service(params) # rubocop:disable Metrics/MethodLength
     @language_package_service =
       case @language
       when Coursemology::Polyglot::Language::Python
@@ -50,6 +50,10 @@ class Course::Assessment::Question::Programming::ProgrammingPackageService
         Course::Assessment::Question::Programming::Java::JavaPackageService.new params
       when Coursemology::Polyglot::Language::R
         Course::Assessment::Question::Programming::R::RPackageService.new params
+      when Coursemology::Polyglot::Language::CSharp
+        Course::Assessment::Question::Programming::CSharp::CSharpPackageService.new params
+      when Coursemology::Polyglot::Language::JavaScript
+        Course::Assessment::Question::Programming::JavaScript::JavaScriptPackageService.new params
       else
         raise NotImplementedError
       end
