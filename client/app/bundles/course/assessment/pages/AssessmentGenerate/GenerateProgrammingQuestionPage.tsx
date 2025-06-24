@@ -290,7 +290,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
         dispatch(setNotification(t(translations.loadingSourceError)));
       }
     }
-    return Promise.resolve(undefined);
+    return undefined;
   };
 
   const preloadData = async (): Promise<{
@@ -378,9 +378,16 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                                 conversationId:
                                   generatePageData.activeConversationId,
                                 snapshotId: snapshot.id,
-                                questionData: getActivePrototypeFormData(),
+                                questionData: snapshot.questionData,
                               }),
                             );
+                            if (snapshot.questionData) {
+                              dispatch(
+                                actions.setActiveFormTitle({
+                                  title: snapshot.questionData.question.title,
+                                }),
+                              );
+                            }
                             if (snapshot.codaveriData) {
                               codaveriForm.reset(snapshot.codaveriData);
                             }
@@ -472,6 +479,17 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                                       questionData: newQuestionFormData,
                                     }),
                                   );
+                                  if (
+                                    currentActiveConversationId ===
+                                    conversationId
+                                  ) {
+                                    dispatch(
+                                      actions.setActiveFormTitle({
+                                        title:
+                                          newQuestionFormData.question.title,
+                                      }),
+                                    );
+                                  }
                                 });
                               })
                               .catch((response) => {

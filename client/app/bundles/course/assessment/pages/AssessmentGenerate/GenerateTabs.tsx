@@ -125,6 +125,7 @@ const GenerateTabs: FC<Props> = (props) => {
                         className="-ml-0.25 -mr-0.25 py-0 px-0.5 scale-[0.86] origin-right"
                         color="inherit"
                         component="span"
+                        disabled={metadata.isGenerating}
                         onClick={(e) => {
                           e.stopPropagation();
                           duplicateConversation(conversations[metadata.id]);
@@ -140,7 +141,9 @@ const GenerateTabs: FC<Props> = (props) => {
                         className="-ml-0.25 -mr-0.25 py-0 px-0.5 scale-[0.86] origin-right"
                         color="inherit"
                         component="span"
-                        disabled={conversationIds.length <= 1}
+                        disabled={
+                          conversationIds.length <= 1 || metadata.isGenerating
+                        }
                         onClick={(e) => {
                           e.stopPropagation();
                           if (metadata.hasData) {
