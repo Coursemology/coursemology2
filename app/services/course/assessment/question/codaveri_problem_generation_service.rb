@@ -1,7 +1,26 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::CodaveriProblemGenerationService
+class Course::Assessment::Question::CodaveriProblemGenerationService # rubocop:disable Metrics/ClassLength
   POLL_INTERVAL_SECONDS = 2
   MAX_POLL_RETRIES = 1000
+
+  LANGUAGE_FILENAME_MAPPING = {
+    'python' => 'main.py',
+    'r' => 'main.R',
+    'javascript' => 'main.js',
+    'csharp' => 'main.cs',
+    'go' => 'main.go',
+    'rust' => 'main.rs',
+    'typescript' => 'main.ts'
+  }.freeze
+
+  LANGUAGE_TESTCASE_TYPE_MAPPING = {
+    'r' => 'IO',
+    'javascript' => 'IO',
+    'csharp' => 'IO',
+    'go' => 'IO',
+    'rust' => 'IO',
+    'typescript' => 'IO'
+  }.freeze
 
   def codaveri_generate_problem
     response_status, response_body, generation_id = send_problem_generation_request
@@ -23,7 +42,7 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
 
   private
 
-  def initialize(assessment, params, language, version)
+  def initialize(assessment, params, language, version) # rubocop:disable Metrics/AbcSize
     custom_prompt = params[:custom_prompt].to_s || ''
     @payload = {
       userId: assessment.creator_id.to_s,
@@ -71,15 +90,15 @@ class Course::Assessment::Question::CodaveriProblemGenerationService
   end
 
   def generate_payload_file_name(codaveri_language, file_content)
-    return 'main.py' if codaveri_language == 'python'
-    return 'main.R' if codaveri_language == 'r'
+    return LANGUAGE_FILENAME_MAPPING[codaveri_language] if LANGUAGE_FILENAME_MAPPING.key?(codaveri_language)
 
     match = file_content&.match(/\bclass\s+(\w+)\s*\{/)
     match ? "#{match[1]}.java" : 'Main.java'
   end
 
   def generate_payload_testcases_type(codaveri_language)
-    codaveri_language == 'r' ? 'IO' : 'expression'
+    # New languages supported by Codaveri only allow IO test cases.
+    LANGUAGE_TESTCASE_TYPE_MAPPING.fetch(codaveri_language, 'expression')
   end
 
   def generate_payload_io_test_case(test_case, visibility, index)

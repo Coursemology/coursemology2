@@ -12,7 +12,10 @@ import {
   TestcaseVisibility,
 } from 'types/course/assessment/question-generation';
 
-import { defaultQuestionFormData } from './constants';
+import {
+  CODAVERI_EVALUATOR_ONLY_LANGUAGES,
+  defaultQuestionFormData,
+} from './constants';
 import { CodaveriGenerateFormData, QuestionPrototypeFormData } from './types';
 
 function buildFromExpressionTestCase(
@@ -210,7 +213,7 @@ export const buildQuestionDataFromPrototype = (
   languageId: LanguageData['id'],
   languageMode: LanguageMode,
 ): ProgrammingFormRequestData => {
-  const isCodaveri = languageMode === 'r';
+  const isCodaveri = CODAVERI_EVALUATOR_ONLY_LANGUAGES.includes(languageMode);
   const metadata: BasicMetadata = {
     solution: prefilledData?.testUi?.metadata?.solution,
     submission: prefilledData?.testUi?.metadata?.submission,
