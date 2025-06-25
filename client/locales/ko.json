@@ -7057,7 +7057,7 @@
   },
   "lib.translations.staffIncludingPhantoms": {
     "defaultMessage": "스태프 (팬텀 포함)"
-  },  
+  },
   "lib.translations.form.startAt": {
     "defaultMessage": "시작 시각"
   },
@@ -7426,6 +7426,63 @@
   },
   "system.admin.admin.UsersTable.updateRoleFailure": {
     "defaultMessage": "사용자 역할을 업데이트하지 못했습니다."
+  },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
+    "defaultMessage": "최근 도움 요청 활동"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
+    "defaultMessage": "과목으로 필터링"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterStudentLabel": {
+    "defaultMessage": "학생으로 필터링"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterStartDateLabel": {
+    "defaultMessage": "시작일"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterEndDateLabel": {
+    "defaultMessage": "종료일"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastSevenDays": {
+    "defaultMessage": "최근 7일"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastFourteenDays": {
+    "defaultMessage": "최근 14일"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastThirtyDays": {
+    "defaultMessage": "최근 30일"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastSixMonths": {
+    "defaultMessage": "최근 6개월"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastTwelveMonths": {
+    "defaultMessage": "최근 12개월"
+  },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection": {
+    "defaultMessage": "종료일은 시작일 이후이거나 같아야 합니다"
+  },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange": {
+    "defaultMessage": "날짜 범위는 365일을 초과할 수 없습니다"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.studentName": {
+    "defaultMessage": "이름"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.messageCount": {
+    "defaultMessage": "메시지 수"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.lastMessage": {
+    "defaultMessage": "마지막 메시지"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.questionNumber": {
+    "defaultMessage": "문제"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.assessmentTitle": {
+    "defaultMessage": "평가"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.createdAt": {
+    "defaultMessage": "마지막 메시지 시간"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
+    "defaultMessage": "과목"
   },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"

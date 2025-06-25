@@ -23,49 +23,37 @@ import { formatMiniDateTime } from 'lib/moment';
 import assessmentStatisticsTranslations from '../../../../../course/assessment/pages/AssessmentStatistics/translations';
 
 const translations = defineMessages({
-  header: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.header',
-    defaultMessage: 'Get Help',
-  },
-  tableTitle: {
-    id: 'course.statistics.StatisticsIndex.getHelp.tableTitle',
-    defaultMessage: 'Recent Get Help Activity',
-  },
   studentName: {
-    id: 'course.statistics.StatisticsIndex.getHelp.name',
+    id: 'system.admin.admin.components.tables.SystemGetHelpActivityTable.studentName',
     defaultMessage: 'Name',
   },
   messageCount: {
-    id: 'course.statistics.StatisticsIndex.getHelp.messageCount',
+    id: 'system.admin.admin.components.tables.SystemGetHelpActivityTable.messageCount',
     defaultMessage: '# Msgs',
   },
   lastMessage: {
-    id: 'course.statistics.StatisticsIndex.getHelp.lastMessage',
+    id: 'system.admin.admin.components.tables.SystemGetHelpActivityTable.lastMessage',
     defaultMessage: 'Last Message',
   },
   questionNumber: {
-    id: 'course.statistics.StatisticsIndex.getHelp.questionNumber',
+    id: 'system.admin.admin.components.tables.SystemGetHelpActivityTable.questionNumber',
     defaultMessage: 'Question',
   },
   assessmentTitle: {
-    id: 'course.statistics.StatisticsIndex.getHelp.assessmentTitle',
+    id: 'system.admin.admin.components.tables.SystemGetHelpActivityTable.assessmentTitle',
     defaultMessage: 'Assessment',
   },
   createdAt: {
-    id: 'course.statistics.StatisticsIndex.getHelp.createdAt',
+    id: 'system.admin.admin.components.tables.SystemGetHelpActivityTable.createdAt',
     defaultMessage: 'Last Message At',
   },
   courseTitle: {
-    id: 'course.statistics.StatisticsIndex.getHelp.courseTitle',
+    id: 'system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle',
     defaultMessage: 'Course',
   },
   instanceTitle: {
-    id: 'course.statistics.StatisticsIndex.getHelp.instanceTitle',
+    id: 'system.admin.admin.components.tables.SystemGetHelpActivityTable.instanceTitle',
     defaultMessage: 'Instance',
-  },
-  searchBar: {
-    id: 'course.statistics.StatisticsIndex.getHelp.searchBar',
-    defaultMessage: 'Search by Student Name, Question, or Assessment',
   },
 });
 
@@ -88,11 +76,27 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
 
   const columns: ColumnTemplate<SystemGetHelpActivity>[] = [
     {
+      of: 'instanceTitle',
+      title: t(translations.instanceTitle),
+      sortable: true,
+      searchable: true,
+      cell: (getHelpDatum) => (
+        <Link
+          key={getHelpDatum.id}
+          href={`//${getHelpDatum.instanceHost}/admin/get_help`}
+          opensInNewTab
+        >
+          {getHelpDatum.instanceTitle}
+        </Link>
+      ),
+    },
+    {
       of: 'courseTitle',
       title: t(translations.courseTitle),
       sortable: true,
       searchable: true,
       cell: (getHelpDatum) => (
+        // TODO: To fix link for non-default instance course
         <Link
           key={getHelpDatum.id}
           opensInNewTab

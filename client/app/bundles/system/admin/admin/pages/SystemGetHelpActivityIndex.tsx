@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { defineMessages } from 'react-intl';
+import { defineMessages, MessageDescriptor } from 'react-intl';
 import { Typography } from '@mui/material';
 
 import { SystemGetHelpActivity } from 'course/statistics/types';
@@ -16,6 +16,14 @@ const translations = defineMessages({
   header: {
     id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.header',
     defaultMessage: 'Recent Get Help Activity',
+  },
+  invalidDateSelection: {
+    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection',
+    defaultMessage: 'End Date must be after or equal to Start Date',
+  },
+  exceedDateRange: {
+    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange',
+    defaultMessage: 'Date range cannot exceed 365 days',
   },
 });
 
@@ -34,6 +42,21 @@ const defaultFilter: GetHelpFilter = {
   user: null,
   ...getDefaultDateRange(),
 };
+const getDateValidationError = (
+  filter: GetHelpFilter,
+  t: (message: MessageDescriptor) => string,
+): string => {
+  const { startDate, endDate } = filter;
+  if (!startDate || !endDate) return '';
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (end < start) return t(translations.invalidDateSelection);
+
+  const dayDiff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+  return dayDiff > 365 ? t(translations.exceedDateRange) : '';
+};
 
 const SystemGetHelpActivityIndex: FC = () => {
   const { t } = useTranslation();
@@ -43,64 +66,52 @@ const SystemGetHelpActivityIndex: FC = () => {
     useState<GetHelpFilter>(defaultFilter);
   const [appliedFilter, setAppliedFilter] =
     useState<GetHelpFilter>(defaultFilter);
+
   // Track the last fetched date range
   const lastFetchedDateRange = useRef<{ startDate: string; endDate: string }>({
     startDate: '',
     endDate: '',
   });
 
-  const fetchData = useCallback(
-    async (filter = appliedFilter) => {
-      setIsLoading(true);
-      const params = {
-        startDate: filter.startDate,
-        endDate: filter.endDate,
-      };
-      const result = await fetchSystemGetHelpActivity(params);
-      setData(result);
-      setIsLoading(false);
-    },
-    [appliedFilter],
-  );
+  const fetchData = useCallback(async (filter: GetHelpFilter) => {
+    setIsLoading(true);
+    const params = {
+      start_at: filter.startDate,
+      end_at: filter.endDate,
+    };
+    const result = await fetchSystemGetHelpActivity(params);
+    setData(result);
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
-    fetchData();
+    fetchData(defaultFilter);
     lastFetchedDateRange.current = {
-      startDate: appliedFilter.startDate,
-      endDate: appliedFilter.endDate,
+      startDate: defaultFilter.startDate,
+      endDate: defaultFilter.endDate,
     };
   }, []);
 
-  const handleApplyFilter = (): void => {
+  const handleApplyFilter = (filter: GetHelpFilter): void => {
+    const validationError = getDateValidationError(filter, t);
+    if (validationError) {
+      // Don't apply the filter if there's a validation error
+      return;
+    }
+
     // Check if date range changed
     const dateChanged =
-      selectedFilter.startDate !== lastFetchedDateRange.current.startDate ||
-      selectedFilter.endDate !== lastFetchedDateRange.current.endDate;
-    setAppliedFilter(selectedFilter);
+      filter.startDate !== lastFetchedDateRange.current.startDate ||
+      filter.endDate !== lastFetchedDateRange.current.endDate;
+    setAppliedFilter(filter);
     if (dateChanged) {
-      fetchData(selectedFilter);
+      fetchData(filter);
       lastFetchedDateRange.current = {
-        startDate: selectedFilter.startDate,
-        endDate: selectedFilter.endDate,
+        startDate: filter.startDate,
+        endDate: filter.endDate,
       };
     }
     // else: no fetch, just update appliedFilter (in-memory filtering)
-  };
-
-  const handleClearFilter = (): void => {
-    setSelectedFilter({
-      course: null,
-      user: null,
-      startDate: selectedFilter.startDate,
-      endDate: selectedFilter.endDate,
-    });
-    setAppliedFilter({
-      course: null,
-      user: null,
-      startDate: selectedFilter.startDate,
-      endDate: selectedFilter.endDate,
-    });
-    // No need to refetch, as date range is unchanged
   };
 
   // In-memory filtering for course/user
@@ -143,8 +154,8 @@ const SystemGetHelpActivityIndex: FC = () => {
       </Typography>
       <SystemGetHelpFilter
         courseOptions={courseOptions}
-        handleApplyFilter={handleApplyFilter}
-        handleClearFilter={handleClearFilter}
+        getDateValidationError={getDateValidationError}
+        onFilterChange={handleApplyFilter}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         userOptions={userOptions}
