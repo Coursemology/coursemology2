@@ -152,6 +152,7 @@ export interface GetHelpActivity {
 export interface InstanceGetHelpActivity extends GetHelpActivity {
   instanceId: number;
   instanceTitle: string;
+  instanceHost: string;
 }
 
 export interface SystemGetHelpActivity extends InstanceGetHelpActivity {

@@ -7430,6 +7430,63 @@
   "system.admin.admin.UsersTable.updateRoleFailure": {
     "defaultMessage": "Failed to update user's role."
   },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
+    "defaultMessage": "Recent Get Help Activity"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
+    "defaultMessage": "Filter by Course"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterStudentLabel": {
+    "defaultMessage": "Filter by Student"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterStartDateLabel": {
+    "defaultMessage": "Start Date"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterEndDateLabel": {
+    "defaultMessage": "End Date"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastSevenDays": {
+    "defaultMessage": "Last 7 Days"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastFourteenDays": {
+    "defaultMessage": "Last 14 Days"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastThirtyDays": {
+    "defaultMessage": "Last 30 Days"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastSixMonths": {
+    "defaultMessage": "Last 6 Months"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastTwelveMonths": {
+    "defaultMessage": "Last 12 Months"
+  },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection": {
+    "defaultMessage": "End Date must be after or equal to Start Date"
+  },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange": {
+    "defaultMessage": "Date range cannot exceed 365 days"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.studentName": {
+    "defaultMessage": "Name"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.messageCount": {
+    "defaultMessage": "# Msgs"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.lastMessage": {
+    "defaultMessage": "Last Message"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.questionNumber": {
+    "defaultMessage": "Question"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.assessmentTitle": {
+    "defaultMessage": "Assessment"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.createdAt": {
+    "defaultMessage": "Last Message At"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
+    "defaultMessage": "Course"
+  },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"
   },

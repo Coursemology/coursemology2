@@ -203,8 +203,8 @@ export function deleteInstance(instanceId: number): Operation {
 }
 
 export const fetchSystemGetHelpActivity = async (params: {
-  startDate: string;
-  endDate: string;
+  start_at: string;
+  end_at: string;
 }): Promise<SystemGetHelpActivity[]> => {
   const response = await SystemAPI.admin.fetchSystemGetHelpActivity(params);
   return response.data;

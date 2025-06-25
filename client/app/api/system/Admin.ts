@@ -155,8 +155,8 @@ export default class AdminAPI extends BaseSystemAPI {
    * Fetches Get Help data for the system
    */
   fetchSystemGetHelpActivity(params: {
-    startDate: string;
-    endDate: string;
+    start_at: string;
+    end_at: string;
   }): Promise<AxiosResponse> {
     return this.client.get(`${AdminAPI.#urlPrefix}/get_help`, {
       params,

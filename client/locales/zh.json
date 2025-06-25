@@ -7388,6 +7388,63 @@
   "system.admin.admin.UsersTable.updateRoleFailure": {
     "defaultMessage": "无法更新用户的角色。"
   },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
+    "defaultMessage": "最近实时帮助活动"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
+    "defaultMessage": "按课程筛选"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterStudentLabel": {
+    "defaultMessage": "按学生筛选"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterStartDateLabel": {
+    "defaultMessage": "开始日期"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.filterEndDateLabel": {
+    "defaultMessage": "结束日期"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastSevenDays": {
+    "defaultMessage": "最近7天"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastFourteenDays": {
+    "defaultMessage": "最近14天"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastThirtyDays": {
+    "defaultMessage": "最近30天"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastSixMonths": {
+    "defaultMessage": "最近6个月"
+  },
+  "system.admin.admin.components.SystemGetHelpFilter.lastTwelveMonths": {
+    "defaultMessage": "最近12个月"
+  },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection": {
+    "defaultMessage": "结束日期必须大于或等于开始日期"
+  },
+  "system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange": {
+    "defaultMessage": "日期范围不能超过 365 天"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.studentName": {
+    "defaultMessage": "姓名"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.messageCount": {
+    "defaultMessage": "消息数"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.lastMessage": {
+    "defaultMessage": "最后一条消息"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.questionNumber": {
+    "defaultMessage": "题号"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.assessmentTitle": {
+    "defaultMessage": "测验"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.createdAt": {
+    "defaultMessage": "最后消息时间"
+  },
+  "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
+    "defaultMessage": "课程"
+  },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"
   },

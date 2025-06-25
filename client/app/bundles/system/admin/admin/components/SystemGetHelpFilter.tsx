@@ -1,9 +1,8 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
+import { defineMessages, MessageDescriptor } from 'react-intl';
 import {
   Autocomplete,
   Box,
-  Button,
   Chip,
   Grid,
   Stack,
@@ -25,8 +24,11 @@ interface Props {
   userOptions: { name: string }[];
   selectedFilter: GetHelpFilter;
   setSelectedFilter: (newFilter: GetHelpFilter) => void;
-  handleApplyFilter: () => void;
-  handleClearFilter: () => void;
+  onFilterChange: (filter: GetHelpFilter) => void;
+  getDateValidationError: (
+    filter: GetHelpFilter,
+    t: (msg: MessageDescriptor) => string,
+  ) => string;
 }
 
 const translations = defineMessages({
@@ -45,14 +47,6 @@ const translations = defineMessages({
   filterEndDateLabel: {
     id: 'system.admin.admin.components.SystemGetHelpFilter.filterEndDateLabel',
     defaultMessage: 'End Date',
-  },
-  applyFilterButton: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.applyFilterButton',
-    defaultMessage: 'Apply Filter',
-  },
-  clearFilterButton: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.clearFilterButton',
-    defaultMessage: 'Clear Filter',
   },
   lastSevenDays: {
     id: 'system.admin.admin.components.SystemGetHelpFilter.lastSevenDays',
@@ -79,11 +73,13 @@ const translations = defineMessages({
 interface PresetDateRangeChipsProps {
   setSelectedFilter: (newFilter: GetHelpFilter) => void;
   selectedFilter: GetHelpFilter;
+  onFilterChange: (filter: GetHelpFilter) => void;
 }
 
 const PresetDateRangeChips: FC<PresetDateRangeChipsProps> = ({
   setSelectedFilter,
   selectedFilter,
+  onFilterChange,
 }) => {
   const { t } = useTranslation();
   const chips = [
@@ -136,23 +132,36 @@ const PresetDateRangeChips: FC<PresetDateRangeChipsProps> = ({
     },
   ];
 
+  // Helper to check if the current date filter matches a preset
+  const isPresetSelected = (start: Date, end: Date): boolean => {
+    const startStr = start.toISOString().slice(0, 10);
+    const endStr = end.toISOString().slice(0, 10);
+    return (
+      selectedFilter.startDate === startStr && selectedFilter.endDate === endStr
+    );
+  };
+
   return (
     <Box display="flex" gap={1}>
       {chips.map((chip) => {
         const { start, end } = chip.getRange();
+        const selected = isPresetSelected(start, end);
         return (
           <Chip
             key={chip.label}
+            color={selected ? 'primary' : 'default'}
             label={chip.label}
             onClick={() => {
-              setSelectedFilter({
+              const newFilter = {
                 ...selectedFilter,
                 startDate: start.toISOString().slice(0, 10),
                 endDate: end.toISOString().slice(0, 10),
-              });
+              };
+              setSelectedFilter(newFilter);
+              onFilterChange(newFilter);
             }}
             size="small"
-            variant="outlined"
+            variant={selected ? 'filled' : 'outlined'}
           />
         );
       })}
@@ -160,23 +169,20 @@ const PresetDateRangeChips: FC<PresetDateRangeChipsProps> = ({
   );
 };
 
-const getDateValidationError = (filter: GetHelpFilter): string => {
-  const { startDate, endDate } = filter;
-  if (!startDate || !endDate) return '';
-
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-
-  if (end < start) return 'End Date must be after or equal to Start Date';
-
-  const dayDiff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
-  return dayDiff > 366 ? 'Date range cannot exceed 1 year' : '';
-};
-
-const FilterFields: FC<
-  Omit<Props, 'handleApplyFilter' | 'handleClearFilter'>
-> = ({ courseOptions, userOptions, selectedFilter, setSelectedFilter }) => {
+const FilterFields: FC<Props> = ({
+  courseOptions,
+  userOptions,
+  selectedFilter,
+  setSelectedFilter,
+  onFilterChange,
+  getDateValidationError,
+}) => {
   const { t } = useTranslation();
+
+  const handleFilterChange = (newFilter: GetHelpFilter): void => {
+    setSelectedFilter(newFilter);
+    onFilterChange(newFilter);
+  };
 
   return (
     <Grid columns={4} container>
@@ -186,10 +192,11 @@ const FilterFields: FC<
           disablePortal
           getOptionLabel={(option): string => option.title}
           onChange={(_, value): void => {
-            setSelectedFilter({
+            const newFilter = {
               ...selectedFilter,
               course: value,
-            });
+            };
+            handleFilterChange(newFilter);
           }}
           options={courseOptions}
           renderInput={(params): JSX.Element => (
@@ -204,10 +211,11 @@ const FilterFields: FC<
           disablePortal
           getOptionLabel={(option): string => option.name}
           onChange={(_, value): void => {
-            setSelectedFilter({
+            const newFilter = {
               ...selectedFilter,
               user: value,
-            });
+            };
+            handleFilterChange(newFilter);
           }}
           options={userOptions}
           renderInput={(params): JSX.Element => (
@@ -221,77 +229,28 @@ const FilterFields: FC<
           fullWidth
           InputLabelProps={{ shrink: true }}
           label={t(translations.filterStartDateLabel)}
-          onChange={(e) =>
-            setSelectedFilter({ ...selectedFilter, startDate: e.target.value })
-          }
+          onChange={(e) => {
+            const newFilter = { ...selectedFilter, startDate: e.target.value };
+            handleFilterChange(newFilter);
+          }}
           type="date"
           value={selectedFilter.startDate || ''}
         />
       </Grid>
       <Grid item paddingBottom={1} xs={1}>
         <TextField
-          error={!!getDateValidationError(selectedFilter)}
+          error={!!getDateValidationError(selectedFilter, t)}
           fullWidth
           InputLabelProps={{ shrink: true }}
           label={t(translations.filterEndDateLabel)}
-          onChange={(e) =>
-            setSelectedFilter({ ...selectedFilter, endDate: e.target.value })
-          }
+          onChange={(e) => {
+            const newFilter = { ...selectedFilter, endDate: e.target.value };
+            handleFilterChange(newFilter);
+          }}
           type="date"
           value={selectedFilter.endDate || ''}
         />
       </Grid>
-    </Grid>
-  );
-};
-
-const FilterButtons: FC<
-  Pick<
-    Props,
-    'handleApplyFilter' | 'handleClearFilter' | 'setSelectedFilter'
-  > & {
-    selectedFilter: GetHelpFilter;
-    dateValidationError: string;
-  }
-> = ({
-  selectedFilter,
-  setSelectedFilter,
-  handleApplyFilter,
-  handleClearFilter,
-  dateValidationError,
-}) => {
-  const { t } = useTranslation();
-  const disableButton =
-    !selectedFilter.startDate ||
-    !selectedFilter.endDate ||
-    !!dateValidationError;
-
-  return (
-    <Grid item>
-      <Button
-        disabled={disableButton}
-        onClick={handleApplyFilter}
-        variant="contained"
-      >
-        {t(translations.applyFilterButton)}
-      </Button>
-      <Button
-        className="ml-10"
-        color="secondary"
-        disabled={disableButton}
-        onClick={() => {
-          setSelectedFilter({
-            course: null,
-            user: null,
-            startDate: '',
-            endDate: '',
-          });
-          handleClearFilter();
-        }}
-        variant="contained"
-      >
-        {t(translations.clearFilterButton)}
-      </Button>
     </Grid>
   );
 };
@@ -302,11 +261,12 @@ const SystemGetHelpFilter: FC<Props> = (props) => {
     userOptions,
     selectedFilter,
     setSelectedFilter,
-    handleApplyFilter,
-    handleClearFilter,
+    onFilterChange,
+    getDateValidationError,
   } = props;
 
-  const helperText = getDateValidationError(selectedFilter);
+  const { t } = useTranslation();
+  const helperText = getDateValidationError(selectedFilter, t);
   const sortedCourseOptions = [...courseOptions].sort((a, b) =>
     a.title.localeCompare(b.title),
   );
@@ -321,26 +281,18 @@ const SystemGetHelpFilter: FC<Props> = (props) => {
         courseOptions={sortedCourseOptions}
         userOptions={sortedUserOptions}
       />
-      <Grid
-        alignItems="flex-start"
-        container
-        justifyContent="space-between"
-        paddingBottom={1}
-      >
-        <FilterButtons
-          {...props}
-          dateValidationError={helperText}
-          handleApplyFilter={handleApplyFilter}
-          handleClearFilter={handleClearFilter}
-        />
-        <Grid alignItems="center" display="flex" gap={2} item>
-          <Typography color="error" variant="caption">
-            {helperText}
-          </Typography>
-          <PresetDateRangeChips
-            selectedFilter={selectedFilter}
-            setSelectedFilter={setSelectedFilter}
-          />
+      <Grid container justifyContent="flex-end">
+        <Grid item>
+          <Box alignItems="center" display="flex" gap={2}>
+            <Typography color="error" variant="caption">
+              {helperText}
+            </Typography>
+            <PresetDateRangeChips
+              onFilterChange={onFilterChange}
+              selectedFilter={selectedFilter}
+              setSelectedFilter={setSelectedFilter}
+            />
+          </Box>
         </Grid>
       </Grid>
     </Stack>
