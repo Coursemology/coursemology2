@@ -48,7 +48,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
       {},
     );
 
-    return question.categories.reduce(
+    return (question.categories ?? []).reduce(
       (obj, category) => ({
         ...obj,
         [category.id]: {
@@ -88,7 +88,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
         </TableHead>
 
         <TableBody>
-          {question?.categories.map((category) => (
+          {(question?.categories ?? []).map((category) => (
             <RubricPanelRow
               key={category.id}
               answerId={answerId}

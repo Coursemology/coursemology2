@@ -92,7 +92,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
     question.type === QuestionType.RubricBasedResponse;
   const isRubricVisible =
     isRubricBasedResponse &&
-    (!submission.isStudent || assessment.showRubricToStudents);
+    (graderView || (published && assessment.showRubricToStudents));
   const isRubricBasedResponseAndAutogradable =
     isRubricBasedResponse &&
     (question as SubmissionQuestionData<QuestionType.RubricBasedResponse>)
