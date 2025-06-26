@@ -71,6 +71,9 @@
   "app.Footer.instructorsGuide": {
     "defaultMessage": "Instructors' Guide"
   },
+  "app.Footer.reportIssue": {
+    "defaultMessage": "Report an Issue"
+  },
   "app.Footer.privacyPolicy": {
     "defaultMessage": "Privacy Policy"
   },

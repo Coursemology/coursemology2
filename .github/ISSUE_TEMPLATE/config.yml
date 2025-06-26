@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: User Guide
+    url: https://coursemology.github.io/coursemology-help/
+    about: Please refer to the User Guide for help on using Coursemology
+  - name: Developer Guide
+    url: https://github.com/Coursemology/coursemology2/wiki
+    about: Please refer to the Developer Guide for help on developing Coursemology

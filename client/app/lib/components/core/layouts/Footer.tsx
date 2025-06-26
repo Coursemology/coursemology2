@@ -25,6 +25,10 @@ const translations = defineMessages({
     id: 'app.Footer.instructorsGuide',
     defaultMessage: "Instructors' Guide",
   },
+  reportIssue: {
+    id: 'app.Footer.reportIssue',
+    defaultMessage: 'Report an Issue',
+  },
   github: {
     id: 'app.Footer.github',
     defaultMessage: 'GitHub',
@@ -70,6 +74,15 @@ const Footer = (): JSX.Element | null => {
             opensInNewTab
           >
             {t(translations.instructorsGuide)}
+          </Link>
+
+          <Link
+            className="mx-3 my-1"
+            external
+            href="https://github.com/Coursemology/coursemology2/issues"
+            opensInNewTab
+          >
+            {t(translations.reportIssue)}
           </Link>
         </section>
 
