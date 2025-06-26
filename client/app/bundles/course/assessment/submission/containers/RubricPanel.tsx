@@ -35,7 +35,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
   } = props;
 
   const categoryGrades = useMemo(() => {
-    const categoryGradeHash = answerCategoryGrades.reduce(
+    const categoryGradeHash = (answerCategoryGrades ?? []).reduce(
       (obj, category) => ({
         ...obj,
         [category.categoryId]: {

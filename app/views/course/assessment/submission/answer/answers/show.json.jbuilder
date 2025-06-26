@@ -15,9 +15,9 @@ json.question do
   json.description format_ckeditor_rich_text(question.description)
   json.type question.question_type
 
-  json.partial! question, question: question.specific, can_grade: false, answer: @answer
+  json.partial! question, question: question.specific, can_grade: can_grade, answer: @answer
 end
-json.partial! specific_answer, answer: specific_answer, can_grade: false
+json.partial! specific_answer, answer: specific_answer, can_grade: can_grade
 
 if can_grade || @answer.submission.published?
   json.grading do
@@ -25,6 +25,7 @@ if can_grade || @answer.submission.published?
   end
 end
 
+# hide unpublished annotations in answer details
 if @answer.actable_type == Course::Assessment::Answer::Programming.name
   files = @answer.specific.files
   json.partial! 'course/assessment/answer/programming/annotations', programming_files: files,

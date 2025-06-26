@@ -30,23 +30,27 @@ if attempt.submitted? && !attempt.auto_grading
   end
 end
 
-json.categoryGrades answer.selections.includes(:criterion).map do |selection|
-  criterion = selection.criterion
+if can_grade || (@assessment.show_rubric_to_students? && @submission.published?)
+  json.categoryGrades answer.selections.includes(:criterion).map do |selection|
+    criterion = selection.criterion
 
-  json.id selection.id
-  json.gradeId criterion&.id
-  json.categoryId selection.category_id
-  json.grade criterion ? criterion.grade : selection.grade
-  json.explanation criterion ? nil : selection.explanation
+    json.id selection.id
+    json.gradeId criterion&.id
+    json.categoryId selection.category_id
+    json.grade criterion ? criterion.grade : selection.grade
+    json.explanation criterion ? nil : selection.explanation
+  end
 end
 
-posts = answer.submission.submission_questions.find_by(question_id: answer.question_id)&.discussion_topic&.posts
-ai_generated_comment = posts&.select do |post|
-  post.is_ai_generated && post.workflow_state == 'draft'
-end&.last
-if ai_generated_comment
-  json.aiGeneratedComment do
-    json.partial! ai_generated_comment
+if can_grade
+  posts = answer.submission.submission_questions.find_by(question_id: answer.question_id)&.discussion_topic&.posts
+  ai_generated_comment = posts&.select do |post|
+    post.is_ai_generated && post.workflow_state == 'draft'
+  end&.last
+  if ai_generated_comment
+    json.aiGeneratedComment do
+      json.partial! ai_generated_comment
+    end
   end
 end
 

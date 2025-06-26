@@ -25,7 +25,7 @@ export interface RubricBasedResponseAnswerData extends AnswerBaseData {
     path?: string;
   };
   latestAnswer?: RubricBasedResponseAnswerData;
-  categoryGrades: {
+  categoryGrades?: {
     id: number | null | undefined;
     categoryId: number;
     grade: number;
