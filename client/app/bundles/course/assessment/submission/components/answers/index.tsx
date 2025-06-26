@@ -28,6 +28,7 @@ import translations from '../../translations';
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number | null;
   graderView: boolean;
+  published: boolean;
   allErrors: ErrorType[];
   question: SubmissionQuestionData<T>;
   questionType: T;
@@ -57,6 +58,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
     answerId,
     allErrors,
     graderView,
+    published,
     question,
     questionType,
     readOnly,
@@ -117,6 +119,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
       saveAnswerAndUpdateClientVersion,
       graderView,
       showMcqMrqSolution,
+      published,
     },
     MultipleResponse: {
       answerId,
@@ -125,6 +128,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
       saveAnswerAndUpdateClientVersion,
       graderView,
       showMcqMrqSolution,
+      published,
     },
     Programming: {
       answerId,

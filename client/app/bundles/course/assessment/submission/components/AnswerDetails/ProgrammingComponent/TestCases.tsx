@@ -86,8 +86,9 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
   const { testCaseResults, testCaseType } = props;
   const { t } = useTranslation();
 
+  // result.output might be undefined for private and evaluation test cases for students
   const isProgrammingAnswerEvaluated =
-    testCaseResults.filter((result) => !!result.output).length > 0;
+    testCaseResults.filter((result) => result.passed !== undefined).length > 0;
 
   const numPassedTestCases = testCaseResults.filter(
     (result) => result.passed,

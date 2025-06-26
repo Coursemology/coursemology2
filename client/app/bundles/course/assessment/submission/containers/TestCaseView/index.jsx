@@ -126,9 +126,10 @@ export class VisibleTestCaseView extends Component {
     );
   }
 
-  renderTestCaseRow(testCase) {
+  renderTestCaseRow(testCase, testCaseType) {
     const {
       testCases: { canReadTests },
+      graderView,
     } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
@@ -175,7 +176,9 @@ export class VisibleTestCaseView extends Component {
             <ExpandableCode>{testCase.expected || ''}</ExpandableCode>
           </TableCell>
 
-          {(canReadTests || showPublicTestCasesOutput) && (
+          {((graderView && canReadTests) ||
+            (showPublicTestCasesOutput &&
+              testCaseType === 'publicTestCases')) && (
             <TableCell className="w-full pt-1">
               <ExpandableCode>{testCase.output || ''}</ExpandableCode>
             </TableCell>
@@ -199,8 +202,9 @@ export class VisibleTestCaseView extends Component {
       return null;
     }
 
+    // testCase.output might be undefined for private and evaluation test cases for students
     const isProgrammingAnswerEvaluated =
-      testCases.filter((testCase) => !!testCase.output).length > 0;
+      testCases.filter((testCase) => testCase.passed !== undefined).length > 0;
 
     const numPassedTestCases = testCases.filter(
       (testCase) => testCase.passed,
@@ -298,7 +302,9 @@ export class VisibleTestCaseView extends Component {
                 <FormattedMessage {...translations.expected} />
               </TableCell>
 
-              {((graderView && canReadTests) || showPublicTestCasesOutput) && (
+              {((graderView && canReadTests) ||
+                (showPublicTestCasesOutput &&
+                  testCaseType === 'publicTestCases')) && (
                 <TableCell className="w-full">
                   <FormattedMessage {...translations.output} />
                 </TableCell>
@@ -309,7 +315,9 @@ export class VisibleTestCaseView extends Component {
           </TableHead>
 
           <TableBody>
-            {testCases.map(this.renderTestCaseRow.bind(this))}
+            {testCases.map((testCase) =>
+              this.renderTestCaseRow(testCase, testCaseType),
+            )}
           </TableBody>
         </Table>
       </Accordion>

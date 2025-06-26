@@ -7,6 +7,7 @@ const MultipleChoiceAdapter = (props: McqAnswerProps): JSX.Element => {
     answerId,
     readOnly,
     graderView,
+    published,
     showMcqMrqSolution,
     saveAnswerAndUpdateClientVersion,
   } = props;
@@ -15,6 +16,7 @@ const MultipleChoiceAdapter = (props: McqAnswerProps): JSX.Element => {
       key={`question_${question.id}`}
       answerId={answerId!}
       graderView={graderView}
+      published={published}
       question={question}
       readOnly={readOnly}
       saveAnswerAndUpdateClientVersion={saveAnswerAndUpdateClientVersion}

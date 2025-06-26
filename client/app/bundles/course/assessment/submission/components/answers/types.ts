@@ -17,11 +17,13 @@ export interface ScribingAnswerProps
 export interface McqAnswerProps extends AnswerCommonProps<'MultipleChoice'> {
   showMcqMrqSolution: boolean;
   graderView: boolean;
+  published: boolean;
 }
 
 export interface MrqAnswerProps extends AnswerCommonProps<'MultipleResponse'> {
   showMcqMrqSolution: boolean;
   graderView: boolean;
+  published: boolean;
 }
 
 export interface ProgrammingAnswerProps

@@ -12,6 +12,7 @@ const MultipleResponseOptions = ({
   readOnly,
   showMcqMrqSolution,
   graderView,
+  published,
   question,
   field: { onChange, value },
 }) => (
@@ -27,7 +28,9 @@ const MultipleResponseOptions = ({
             <Typography
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}
               style={
-                option.correct && readOnly && (showMcqMrqSolution || graderView)
+                option.correct &&
+                readOnly &&
+                (graderView || (published && showMcqMrqSolution))
                   ? {
                       backgroundColor: green[50],
                       verticalAlign: 'middle',
@@ -62,6 +65,7 @@ MultipleResponseOptions.propTypes = {
   readOnly: PropTypes.bool,
   showMcqMrqSolution: PropTypes.bool,
   graderView: PropTypes.bool,
+  published: PropTypes.bool,
   field: PropTypes.shape({
     onChange: PropTypes.func,
     value: PropTypes.arrayOf(PropTypes.number),
@@ -77,8 +81,8 @@ const MemoMultipleResponseOptions = memo(
   (prevProps, nextProps) => {
     const { id: prevId } = prevProps.question;
     const { id: nextId } = nextProps.question;
-    const { graderView: prevGraderView } = prevProps.graderView;
-    const { graderView: nextGraderView } = nextProps.graderView;
+    const prevGraderView = prevProps.graderView;
+    const nextGraderView = nextProps.graderView;
     const isQuestionIdUnchanged = prevId === nextId;
     const isGraderViewUnchanged = prevGraderView === nextGraderView;
     return (
@@ -93,6 +97,7 @@ const MultipleResponse = (props) => {
   const {
     answerId,
     graderView,
+    published,
     question,
     readOnly,
     saveAnswerAndUpdateClientVersion,
@@ -114,7 +119,7 @@ const MultipleResponse = (props) => {
             },
           }}
           fieldState={fieldState}
-          {...{ question, readOnly, showMcqMrqSolution, graderView }}
+          {...{ question, readOnly, showMcqMrqSolution, graderView, published }}
         />
       )}
     />
@@ -124,6 +129,7 @@ const MultipleResponse = (props) => {
 MultipleResponse.propTypes = {
   answerId: PropTypes.number.isRequired,
   graderView: PropTypes.bool.isRequired,
+  published: PropTypes.bool.isRequired,
   question: questionShape.isRequired,
   readOnly: PropTypes.bool.isRequired,
   saveAnswerAndUpdateClientVersion: PropTypes.func.isRequired,

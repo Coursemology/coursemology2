@@ -47,6 +47,7 @@ const QuestionContent: FC<Props> = (props) => {
   const { isSaving } = submissionFlags;
 
   const attempting = workflowState === workflowStates.Attempting;
+  const published = workflowState === workflowStates.Published;
 
   const questionId = questionIds[stepIndex];
   const question = questions[questionId];
@@ -71,6 +72,7 @@ const QuestionContent: FC<Props> = (props) => {
           questionType: question.type,
           submissionId: submission.id,
           graderView,
+          published,
           showMcqMrqSolution,
           openAnswerHistoryView,
           questionNumber: stepIndex + 1,
