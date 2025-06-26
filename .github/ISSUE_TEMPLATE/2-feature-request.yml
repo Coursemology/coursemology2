@@ -1,0 +1,43 @@
+name: 💡 Feature Request
+description: Suggest a new feature or enhancement
+labels: ["Feature"]
+assignees:
+  - cysjonathan
+  - adi-herwana-nus
+body:
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if a feature request already exists for what you're proposing.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: textarea
+    attributes:
+      label: Problem Statement
+      description: What problem would this feature solve? What is the current limitation?
+      placeholder: "As a [user type], I want [goal] so that [reason]..."
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Proposed Solution
+      description: Describe the feature you'd like to see implemented.
+      placeholder: "I would like to see..."
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Alternative Solutions
+      description: Have you considered any alternative solutions or workarounds?
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Anything else?
+      description: |
+        Mockups? Screenshots? Anything that will give us more context about the feature you are requesting!
+
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+    validations:
+      required: false

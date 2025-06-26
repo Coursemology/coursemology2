@@ -71,6 +71,9 @@
   "app.Footer.instructorsGuide": {
     "defaultMessage": "讲师使用指南"
   },
+  "app.Footer.reportIssue": {
+    "defaultMessage": "报告问题"
+  },
   "app.Footer.privacyPolicy": {
     "defaultMessage": "隐私政策"
   },

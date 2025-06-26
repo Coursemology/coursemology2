@@ -71,6 +71,9 @@
   "app.Footer.instructorsGuide": {
     "defaultMessage": "교사 안내서"
   },
+  "app.Footer.reportIssue": {
+    "defaultMessage": "문제 신고"
+  },
   "app.Footer.privacyPolicy": {
     "defaultMessage": "개인정보 보호정책"
   },
