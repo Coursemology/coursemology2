@@ -84,6 +84,16 @@ const LastAttemptIndex: FC<Props> = (props) => {
             </Accordion>
             <AnswerDetails
               answer={answer}
+              displaySettings={{
+                showPrivateTestCases: true,
+                showEvaluationTestCases: true,
+                showMcqMrqSolution: true,
+                showRubricBreakdown: true,
+                showPublicTestCasesOutput: true,
+                showPrivateTestCasesOutput: true,
+                showEvaluationTestCasesOutput: true,
+                showStdoutAndStderr: true,
+              }}
               question={answer.question}
               status={HistoryFetchStatus.COMPLETED}
             />

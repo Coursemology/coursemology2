@@ -7,7 +7,8 @@ import { AnswerDetailsProps } from '../../types';
 const MultipleChoiceDetails = (
   props: AnswerDetailsProps<QuestionType.MultipleChoice>,
 ): JSX.Element => {
-  const { question, answer } = props;
+  const { question, answer, displaySettings } = props;
+  const { showMcqMrqSolution } = displaySettings;
   return (
     <>
       {question.options.map((option) => (
@@ -25,7 +26,7 @@ const MultipleChoiceDetails = (
               <Typography
                 dangerouslySetInnerHTML={{ __html: option.option.trim() }}
                 style={
-                  option.correct
+                  showMcqMrqSolution && option.correct
                     ? {
                         backgroundColor: green[50],
                         verticalAlign: 'middle',

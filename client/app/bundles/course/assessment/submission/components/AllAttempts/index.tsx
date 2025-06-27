@@ -111,6 +111,7 @@ const AllAttemptsContent: FC<ContentProps> = (props) => {
         )}
         {viewType === 'timeline' && (
           <AllAttemptsTimelineView
+            graderView={graderView}
             questionId={questionId}
             submissionId={submissionId}
           />
