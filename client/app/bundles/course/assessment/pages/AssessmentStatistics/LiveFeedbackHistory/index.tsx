@@ -12,14 +12,27 @@ interface Props {
   courseUserId: number;
   assessmentId: number;
   courseId?: number; // Optional, only used for system or instance admin context
+  instanceHost?: string; // Optional, used for system admin context
 }
 
 const LiveFeedbackHistoryContent: FC<Props> = (props): JSX.Element => {
-  const { questionNumber, questionId, courseUserId, assessmentId, courseId } =
-    props;
+  const {
+    questionNumber,
+    questionId,
+    courseUserId,
+    assessmentId,
+    courseId,
+    instanceHost,
+  } = props;
 
   const fetchLiveFeedbackHistoryDetails = (): Promise<void> =>
-    fetchLiveFeedbackHistory(assessmentId, questionId, courseUserId, courseId);
+    fetchLiveFeedbackHistory(
+      assessmentId,
+      questionId,
+      courseUserId,
+      courseId,
+      instanceHost,
+    );
 
   return (
     <Preload
