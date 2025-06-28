@@ -49,9 +49,17 @@ export default class AssessmentStatisticsAPI extends BaseCourseAPI {
     questionId: string | number,
     courseUserId: string | number,
     courseId?: string | number, // Optional, only used for system and instance admin context
+    instanceHost?: string, // Optional, used for system admin context
   ): APIResponse<LiveFeedbackHistoryState> {
     const actualCourseId = this.courseId || courseId;
     const urlPrefix = `/courses/${actualCourseId}/statistics/assessment`;
+    if (instanceHost) {
+      // TODO: To use instanceHost to update BaseUrl
+      return this.client.get(
+        `${urlPrefix}/${assessmentId}/live_feedback_history`,
+        { params: { question_id: questionId, course_user_id: courseUserId } },
+      );
+    }
     return this.client.get(
       `${urlPrefix}/${assessmentId}/live_feedback_history`,
       { params: { question_id: questionId, course_user_id: courseUserId } },

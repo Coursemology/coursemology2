@@ -72,6 +72,7 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
     questionId: 0,
     questionNumber: 0,
     assessmentId: 0,
+    instanceHost: '',
   });
 
   const columns: ColumnTemplate<SystemGetHelpActivity>[] = [
@@ -96,11 +97,10 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
       sortable: true,
       searchable: true,
       cell: (getHelpDatum) => (
-        // TODO: To fix link for non-default instance course
         <Link
           key={getHelpDatum.id}
+          href={`//${getHelpDatum.instanceHost}${getCourseURL(getHelpDatum.courseId)}`}
           opensInNewTab
-          to={getCourseURL(getHelpDatum.courseId)}
         >
           {getHelpDatum.courseTitle}
         </Link>
@@ -114,12 +114,12 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
       cell: (getHelpDatum) => (
         <Link
           key={getHelpDatum.id}
-          opensInNewTab
-          to={getEditSubmissionURL(
+          href={`//${getHelpDatum.instanceHost}${getEditSubmissionURL(
             getHelpDatum.courseId,
             getHelpDatum.assessmentId,
             getHelpDatum.submissionId,
-          )}
+          )}`}
+          opensInNewTab
         >
           {getHelpDatum.assessmentTitle}
         </Link>
@@ -133,13 +133,13 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
       cell: (getHelpDatum) => (
         <Link
           key={getHelpDatum.id}
-          opensInNewTab
-          to={getEditSubmissionQuestionURL(
+          href={`//${getHelpDatum.instanceHost}${getEditSubmissionQuestionURL(
             getHelpDatum.courseId,
             getHelpDatum.assessmentId,
             getHelpDatum.submissionId,
             getHelpDatum.questionNumber,
-          )}
+          )}`}
+          opensInNewTab
         >
           Question {getHelpDatum.questionNumber}
           {getHelpDatum.questionTitle ? `: ${getHelpDatum.questionTitle}` : ''}
@@ -152,7 +152,11 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
       sortable: true,
       searchable: true,
       cell: (getHelpDatum) => (
-        <Link key={getHelpDatum.id} opensInNewTab to={getHelpDatum.nameLink}>
+        <Link
+          key={getHelpDatum.id}
+          href={`//${getHelpDatum.instanceHost}${getHelpDatum.nameLink}`}
+          opensInNewTab
+        >
           {getHelpDatum.name}
         </Link>
       ),
@@ -176,6 +180,7 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
                 questionId: getHelpDatum.questionId,
                 questionNumber: getHelpDatum.questionNumber,
                 assessmentId: getHelpDatum.assessmentId,
+                instanceHost: getHelpDatum.instanceHost,
               });
             }}
           >
@@ -240,6 +245,7 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
           courseUserId={systemLevelGetHelpInfo.courseUserId}
           questionId={systemLevelGetHelpInfo.questionId}
           questionNumber={systemLevelGetHelpInfo.questionNumber}
+          instanceHost={systemLevelGetHelpInfo.instanceHost}
         />
       </Prompt>
     </div>
