@@ -96,11 +96,10 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
       sortable: true,
       searchable: true,
       cell: (getHelpDatum) => (
-        // TODO: To fix link for non-default instance course
         <Link
           key={getHelpDatum.id}
           opensInNewTab
-          to={getCourseURL(getHelpDatum.courseId)}
+          href={`//${getHelpDatum.instanceHost}${getCourseURL(getHelpDatum.courseId)}`}
         >
           {getHelpDatum.courseTitle}
         </Link>
@@ -115,11 +114,11 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
         <Link
           key={getHelpDatum.id}
           opensInNewTab
-          to={getEditSubmissionURL(
+          href={`//${getHelpDatum.instanceHost}${getEditSubmissionURL(
             getHelpDatum.courseId,
             getHelpDatum.assessmentId,
             getHelpDatum.submissionId,
-          )}
+          )}`}
         >
           {getHelpDatum.assessmentTitle}
         </Link>
@@ -134,12 +133,12 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
         <Link
           key={getHelpDatum.id}
           opensInNewTab
-          to={getEditSubmissionQuestionURL(
+          href={`//${getHelpDatum.instanceHost}${getEditSubmissionQuestionURL(
             getHelpDatum.courseId,
             getHelpDatum.assessmentId,
             getHelpDatum.submissionId,
             getHelpDatum.questionNumber,
-          )}
+          )}`}
         >
           Question {getHelpDatum.questionNumber}
           {getHelpDatum.questionTitle ? `: ${getHelpDatum.questionTitle}` : ''}
@@ -152,7 +151,11 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
       sortable: true,
       searchable: true,
       cell: (getHelpDatum) => (
-        <Link key={getHelpDatum.id} opensInNewTab to={getHelpDatum.nameLink}>
+        <Link
+          key={getHelpDatum.id}
+          opensInNewTab
+          href={`//${getHelpDatum.instanceHost}${getHelpDatum.nameLink}`}
+        >
           {getHelpDatum.name}
         </Link>
       ),

@@ -55,17 +55,19 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
   end
 
   def live_feedback_history
-    user_id = CourseUser.joins(:user).where(id: params[:course_user_id]).pluck('users.id').first
-    @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id], creator_id: user_id)
-    @question = Course::Assessment::Question.find(params[:question_id])
+    ActsAsTenant.without_tenant do
+      user_id = CourseUser.joins(:user).where(id: params[:course_user_id]).pluck('users.id').first
+      @submissions = Course::Assessment::Submission.where(assessment_id: assessment_params[:id], creator_id: user_id)
+      @question = Course::Assessment::Question.find(params[:question_id])
 
-    create_submission_question_id_hash([@question])
+      create_submission_question_id_hash([@question])
 
-    @messages = Course::Assessment::LiveFeedback::Message.
-                joins(:thread).
-                where(live_feedback_threads: { submission_question_id: @submission_question_id_hash.values }).
-                includes(message_options: :option, message_files: :file).
-                order(:created_at)
+      @messages = Course::Assessment::LiveFeedback::Message.
+                  joins(:thread).
+                  where(live_feedback_threads: { submission_question_id: @submission_question_id_hash.values }).
+                  includes(message_options: :option, message_files: :file).
+                  order(:created_at)
+    end
   end
 
   private

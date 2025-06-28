@@ -1,20 +1,22 @@
 # frozen_string_literal: true
 class System::Admin::GetHelpController < System::Admin::Controller
   def index
-    start_date, end_date = sanitize_date_range(params[:start_at], params[:end_at])
+    ActsAsTenant.without_tenant do
+      start_date, end_date = sanitize_date_range(params[:start_at], params[:end_at])
 
-    unless valid_date_range?(start_date, end_date)
-      return render json: { error: 'Invalid date range' }, status: :bad_request
+      unless valid_date_range?(start_date, end_date)
+        return render json: { error: 'Invalid date range' }, status: :bad_request
+      end
+
+      @get_help_data = fetch_all_recent_live_feedbacks(start_date, end_date)
+
+      user_ids = @get_help_data.map(&:submission_creator_id).uniq
+      assessment_ids = @get_help_data.map(&:assessment_id).uniq
+
+      load_assessment_and_course_hash(assessment_ids)
+      load_course_instance_hash
+      load_course_user_hash(user_ids)
     end
-
-    @get_help_data = fetch_all_recent_live_feedbacks(start_date, end_date)
-
-    user_ids = @get_help_data.map(&:submission_creator_id).uniq
-    assessment_ids = @get_help_data.map(&:assessment_id).uniq
-
-    load_assessment_and_course_hash(assessment_ids)
-    load_course_instance_hash
-    load_course_user_hash(user_ids)
   end
 
   private
