@@ -18,8 +18,11 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
+import { workflowStates } from '../../constants';
 import { historyActions } from '../../reducers/history';
+import { getAssessment } from '../../selectors/assessments';
 import { getSubmissionQuestionHistory } from '../../selectors/history';
+import { getSubmission } from '../../selectors/submissions';
 import translations from '../../translations';
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
 import TextResponseSolutions from '../TextResponseSolutions';
@@ -37,6 +40,10 @@ const AllAttemptsSequenceView: FC<Props> = (props) => {
 
   const { answerDataById, allAnswers, selectedAnswerIds, question } =
     useAppSelector(getSubmissionQuestionHistory(submissionId, questionId));
+
+  const assessment = useAppSelector(getAssessment);
+  const submission = useAppSelector(getSubmission);
+  const published = submission.workflowState === workflowStates.Published;
 
   useEffect(() => {
     const answerIdsToFetch =
@@ -94,6 +101,23 @@ const AllAttemptsSequenceView: FC<Props> = (props) => {
               <AnswerDetails
                 key={answerId}
                 answer={answerDataById?.[answerId]?.details}
+                displaySettings={{
+                  showEvaluationTestCases:
+                    graderView || (published && assessment.showEvaluation),
+                  showEvaluationTestCasesOutput: graderView,
+                  showMcqMrqSolution:
+                    graderView || (published && assessment.showMcqMrqSolution),
+                  showPrivateTestCases:
+                    graderView || (published && assessment.showPrivate),
+                  showPrivateTestCasesOutput: graderView,
+                  showPublicTestCasesOutput:
+                    graderView || submission.showPublicTestCasesOutput,
+                  showRubricBreakdown:
+                    graderView ||
+                    (published && assessment.showRubricToStudents),
+                  showStdoutAndStderr:
+                    graderView || submission.showStdoutAndStderr,
+                }}
                 question={question!}
                 status={answerDataById?.[answerId]?.status}
               />

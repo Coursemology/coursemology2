@@ -6,15 +6,23 @@ import { useAppDispatch } from 'lib/hooks/store';
 
 import { AnswerDetailsProps } from '../../types';
 
-import CodaveriFeedbackStatus from './ProgrammingComponent/CodaveriFeedbackStatus';
 import FileContent from './ProgrammingComponent/FileContent';
 import TestCases from './ProgrammingComponent/TestCases';
 
 const ProgrammingAnswerDetails = (
   props: AnswerDetailsProps<QuestionType.Programming>,
 ): JSX.Element => {
-  const { answer } = props;
+  const { answer, displaySettings } = props;
   const annotations = answer.annotations ?? [];
+
+  const {
+    showPrivateTestCases,
+    showEvaluationTestCases,
+    showPublicTestCasesOutput,
+    showPrivateTestCasesOutput,
+    showEvaluationTestCasesOutput,
+    showStdoutAndStderr,
+  } = displaySettings;
 
   const dispatch = useAppDispatch();
 
@@ -35,8 +43,18 @@ const ProgrammingAnswerDetails = (
           file={file}
         />
       ))}
-      <TestCases testCase={answer.testCases} />
-      <CodaveriFeedbackStatus status={answer.codaveriFeedback} />
+      <TestCases
+        showEvaluationTestCases={showEvaluationTestCases}
+        showEvaluationTestCasesOutput={showEvaluationTestCasesOutput}
+        showPrivateTestCases={showPrivateTestCases}
+        showPrivateTestCasesOutput={showPrivateTestCasesOutput}
+        showPublicTestCasesOutput={showPublicTestCasesOutput}
+        showStdoutAndStderr={showStdoutAndStderr}
+        testCase={answer.testCases}
+      />
+      {/* might not need this component because unpublished annotations (i.e Codaveri) are not shown in Answer Details */}
+      {/* students can see this status bar in past attempts view, which is not relevant to them */}
+      {/* <CodaveriFeedbackStatus status={answer.codaveriFeedback} /> */}
     </>
   );
 };

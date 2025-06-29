@@ -7,19 +7,23 @@ import { AnswerDetailsProps } from '../../types';
 const RubricBasedResponseDetails = (
   props: AnswerDetailsProps<QuestionType.RubricBasedResponse>,
 ): JSX.Element => {
-  const { question, answer } = props;
+  const { question, answer, displaySettings } = props;
+  const { showRubricBreakdown } = displaySettings;
   return (
     <>
       <Typography
         dangerouslySetInnerHTML={{ __html: answer.fields.answer_text }}
         variant="body2"
       />
-      <RubricPanel
-        answerCategoryGrades={answer.categoryGrades}
-        answerId={answer.id}
-        question={question}
-        setIsFirstRendering={() => {}} // Placeholder function since RubricPanel is not editable here
-      />
+      {showRubricBreakdown && answer.categoryGrades && (
+        <RubricPanel
+          answerCategoryGrades={answer.categoryGrades}
+          answerId={answer.id}
+          question={question}
+          readOnly
+          setIsFirstRendering={() => {}} // Placeholder function since RubricPanel is not editable here
+        />
+      )}
     </>
   );
 };

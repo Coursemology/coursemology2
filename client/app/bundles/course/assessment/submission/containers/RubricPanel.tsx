@@ -21,15 +21,21 @@ interface RubricPanelProps {
   answerCategoryGrades: AnswerDetailsMap['RubricBasedResponse']['categoryGrades'];
   question: SubmissionQuestionData<'RubricBasedResponse'>;
   setIsFirstRendering: (isFirstRendering: boolean) => void;
+  readOnly?: boolean;
 }
 
 const RubricPanel: FC<RubricPanelProps> = (props) => {
   const { t } = useTranslation();
-  const { answerId, answerCategoryGrades, question, setIsFirstRendering } =
-    props;
+  const {
+    answerId,
+    answerCategoryGrades,
+    question,
+    setIsFirstRendering,
+    readOnly,
+  } = props;
 
   const categoryGrades = useMemo(() => {
-    const categoryGradeHash = answerCategoryGrades.reduce(
+    const categoryGradeHash = (answerCategoryGrades ?? []).reduce(
       (obj, category) => ({
         ...obj,
         [category.categoryId]: {
@@ -42,7 +48,7 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
       {},
     );
 
-    return question.categories.reduce(
+    return (question.categories ?? []).reduce(
       (obj, category) => ({
         ...obj,
         [category.id]: {
@@ -82,13 +88,14 @@ const RubricPanel: FC<RubricPanelProps> = (props) => {
         </TableHead>
 
         <TableBody>
-          {question?.categories.map((category) => (
+          {(question?.categories ?? []).map((category) => (
             <RubricPanelRow
               key={category.id}
               answerId={answerId}
               category={category}
               categoryGrades={categoryGrades}
               question={question}
+              readOnly={readOnly}
               setIsFirstRendering={setIsFirstRendering}
             />
           ))}

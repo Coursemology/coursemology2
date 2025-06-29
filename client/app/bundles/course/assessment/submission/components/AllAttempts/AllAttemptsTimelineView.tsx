@@ -5,22 +5,30 @@ import CustomSlider from 'lib/components/extensions/CustomSlider';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 
+import { workflowStates } from '../../constants';
+import { getAssessment } from '../../selectors/assessments';
 import { getSubmissionQuestionHistory } from '../../selectors/history';
+import { getSubmission } from '../../selectors/submissions';
 import AnswerDetails from '../AnswerDetails/AnswerDetails';
 
 interface Props {
   questionId: number;
   submissionId: number;
+  graderView: boolean;
 }
 
 const AllAttemptsTimelineView: FC<Props> = (props) => {
-  const { submissionId, questionId } = props;
+  const { submissionId, questionId, graderView } = props;
 
   const dispatch = useAppDispatch();
 
   const { answerDataById, allAnswers, question } = useAppSelector(
     getSubmissionQuestionHistory(submissionId, questionId),
   );
+
+  const assessment = useAppSelector(getAssessment);
+  const submission = useAppSelector(getSubmission);
+  const published = submission.workflowState === workflowStates.Published;
 
   // sliderIndex is the uncommited index that is updated on drag
   // displayedIndex is updated on drop or with any non-mouse (keyboard) events
@@ -102,6 +110,21 @@ const AllAttemptsTimelineView: FC<Props> = (props) => {
       <div className={sliderIndex === displayedIndex ? '' : 'opacity-60'}>
         <AnswerDetails
           answer={answerDetails}
+          displaySettings={{
+            showEvaluationTestCases:
+              graderView || (published && assessment.showEvaluation),
+            showEvaluationTestCasesOutput: graderView,
+            showMcqMrqSolution:
+              graderView || (published && assessment.showMcqMrqSolution),
+            showPrivateTestCases:
+              graderView || (published && assessment.showPrivate),
+            showPrivateTestCasesOutput: graderView,
+            showPublicTestCasesOutput:
+              graderView || submission.showPublicTestCasesOutput,
+            showRubricBreakdown:
+              graderView || (published && assessment.showRubricToStudents),
+            showStdoutAndStderr: graderView || submission.showStdoutAndStderr,
+          }}
           question={question}
           status={answerStatus}
         />
