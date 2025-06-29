@@ -50,9 +50,12 @@ class System::Admin::Instance::GetHelpController < System::Admin::Instance::Cont
       INNER JOIN live_feedback_threads t ON m.thread_id = t.id
       INNER JOIN course_assessment_submission_questions sq ON t.submission_question_id = sq.id
       INNER JOIN course_assessment_submissions s ON sq.submission_id = s.id
-      INNER JOIN instance_users iu ON t.submission_creator_id = iu.user_id
+      INNER JOIN course_assessments a ON s.assessment_id = a.id
+      INNER JOIN course_assessment_tabs tab ON a.tab_id = tab.id
+      INNER JOIN course_assessment_categories cat ON tab.category_id = cat.id
+      INNER JOIN courses c ON cat.course_id = c.id
       WHERE m.creator_id != #{User::SYSTEM_USER_ID}
-        AND iu.instance_id = #{@instance.id}
+        AND c.instance_id = #{@instance.id}
         AND m.created_at >= '#{start_date.utc.iso8601}'
         AND m.created_at <= '#{end_date.utc.iso8601}'
       ORDER BY t.submission_creator_id, s.assessment_id, sq.question_id, m.created_at DESC
