@@ -243,9 +243,9 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
           assessmentId={systemLevelGetHelpInfo.assessmentId}
           courseId={systemLevelGetHelpInfo.courseId}
           courseUserId={systemLevelGetHelpInfo.courseUserId}
+          instanceHost={systemLevelGetHelpInfo.instanceHost}
           questionId={systemLevelGetHelpInfo.questionId}
           questionNumber={systemLevelGetHelpInfo.questionNumber}
-          instanceHost={systemLevelGetHelpInfo.instanceHost}
         />
       </Prompt>
     </div>
