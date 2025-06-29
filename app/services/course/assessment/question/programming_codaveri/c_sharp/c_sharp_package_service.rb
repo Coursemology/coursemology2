@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService < # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question::ProgrammingCodaveri::CSharp::CSharpPackageService < # rubocop:disable Metrics/ClassLength
   Course::Assessment::Question::ProgrammingCodaveri::LanguagePackageService
   def process_solutions
     extract_main_solution
@@ -26,8 +26,8 @@ class Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService < # 
 
     solution_files = @package.solution_files
 
-    main_solution_object[:path] = 'template.R'
-    main_solution_object[:content] = solution_files[Pathname.new('template.R')]
+    main_solution_object[:path] = 'template.cs'
+    main_solution_object[:content] = solution_files[Pathname.new('template.cs')]
     return if main_solution_object[:content].blank?
 
     @solution_files.append(main_solution_object)
@@ -59,39 +59,39 @@ class Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService < # 
   end
 
   # Finds and extracts all contents of additional files in the test files folder
-  # (excluding the default append.R and prepend.R files).
+  # (excluding the default append.cs and prepend.cs files).
   def extract_supporting_tests_files
     test_files = @package.test_files
     test_filenames = test_files.keys
 
     test_filenames.each do |filename|
-      next if ['append.R', 'prepend.R'].include?(filename.to_s)
+      next if ['append.cs', 'prepend.cs'].include?(filename.to_s)
 
       extract_supporting_file(filename, test_files[filename])
     end
   end
 
   # Finds and extracts all contents of additional files in the submission files folder
-  # (excluding the default template.R file).
+  # (excluding the default template.cs file).
   def extract_supporting_submission_files
     submission_files = @package.submission_files
     submission_filenames = submission_files.keys
 
     submission_filenames.each do |filename|
-      next if ['template.R'].include?(filename.to_s)
+      next if ['template.cs'].include?(filename.to_s)
 
       extract_supporting_file(filename, submission_files[filename])
     end
   end
 
   # Finds and extracts all contents of additional files in the solution files folder
-  # (excluding the default template.R file).
+  # (excluding the default template.cs file).
   def extract_supporting_solution_files
     solution_files = @package.solution_files
     solution_filenames = solution_files.keys
 
     solution_filenames.each do |filename|
-      next if ['template.R'].include?(filename.to_s)
+      next if ['template.cs'].include?(filename.to_s)
 
       extract_supporting_file(filename, solution_files[filename])
     end
@@ -147,11 +147,11 @@ class Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService < # 
     submission_files = @package.submission_files
     test_files = @package.test_files
 
-    main_template_object[:path] = 'template.R'
-    main_template_object[:content] = submission_files[Pathname.new('template.R')]
+    main_template_object[:path] = 'template.cs'
+    main_template_object[:content] = submission_files[Pathname.new('template.cs')]
 
-    main_template_object[:prefix] = test_files[Pathname.new('prepend.R')]
-    main_template_object[:suffix] = test_files[Pathname.new('append.R')]
+    main_template_object[:prefix] = test_files[Pathname.new('prepend.cs')]
+    main_template_object[:suffix] = test_files[Pathname.new('append.cs')]
 
     @template_files.append(main_template_object)
   end

@@ -29,6 +29,10 @@ module CodaveriLanguageConcern
       Coursemology::Polyglot::Language::Java::Java21 => {
         language: 'java',
         version: '21.0'
+      },
+      Coursemology::Polyglot::Language::CSharp::CSharp5Point0 => {
+        language: 'csharp',
+        version: '5.0.201'
       }
     }
   end
