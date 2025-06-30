@@ -2,28 +2,28 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, MessageDescriptor } from 'react-intl';
 import { Typography } from '@mui/material';
 
-import { SystemGetHelpActivity } from 'course/statistics/types';
+import { fetchCourseGetHelpActivity } from 'course/statistics/operations';
+import { CourseGetHelpActivity } from 'course/statistics/types';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import SystemGetHelpFilter, {
-  GetHelpFilter,
-} from '../components/misc/SystemGetHelpFilter';
-import SystemGetHelpActivityTable from '../components/tables/SystemGetHelpActivityTable';
-import { fetchSystemGetHelpActivity } from '../operations';
+import CourseGetHelpFilter, {
+  GetHelpFilter as FilterType,
+} from './CourseGetHelpFilter';
+import CourseGetHelpStatisticsTable from './CourseGetHelpStatisticsTable';
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.header',
+    id: 'course.statistics.StatisticsIndex.getHelp.header',
     defaultMessage:
       'Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})',
   },
   invalidDateSelection: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection',
+    id: 'course.statistics.StatisticsIndex.getHelp.invalidDateSelection',
     defaultMessage: 'End Date must be after or equal to Start Date',
   },
   exceedDateRange: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange',
+    id: 'course.statistics.StatisticsIndex.getHelp.exceedDateRange',
     defaultMessage: 'Date range cannot exceed 365 days',
   },
 });
@@ -38,13 +38,14 @@ const getDefaultDateRange = (): { startDate: string; endDate: string } => {
   };
 };
 
-const defaultFilter: GetHelpFilter = {
-  course: null,
+const defaultFilter: FilterType = {
+  assessment: null,
   user: null,
   ...getDefaultDateRange(),
 };
+
 const getDateValidationError = (
-  filter: GetHelpFilter,
+  filter: FilterType,
   t: (message: MessageDescriptor) => string,
 ): string => {
   const { startDate, endDate } = filter;
@@ -59,28 +60,26 @@ const getDateValidationError = (
   return dayDiff > 365 ? t(translations.exceedDateRange) : '';
 };
 
-const SystemGetHelpActivityIndex: FC = () => {
+const CourseGetHelpStatistics: FC = () => {
   const { t } = useTranslation();
-  const [data, setData] = useState<SystemGetHelpActivity[] | null>(null);
+  const [data, setData] = useState<CourseGetHelpActivity[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFilter, setSelectedFilter] =
-    useState<GetHelpFilter>(defaultFilter);
-  const [appliedFilter, setAppliedFilter] =
-    useState<GetHelpFilter>(defaultFilter);
+    useState<FilterType>(defaultFilter);
+  const [appliedFilter, setAppliedFilter] = useState<FilterType>(defaultFilter);
 
-  // Track the last fetched date range
   const lastFetchedDateRange = useRef<{ startDate: string; endDate: string }>({
     startDate: '',
     endDate: '',
   });
 
-  const fetchData = useCallback(async (filter: GetHelpFilter) => {
+  const fetchData = useCallback(async (filter: FilterType) => {
     setIsLoading(true);
     const params = {
       start_at: filter.startDate,
       end_at: filter.endDate,
     };
-    const result = await fetchSystemGetHelpActivity(params);
+    const result = await fetchCourseGetHelpActivity(params);
     setData(result);
     setIsLoading(false);
   }, []);
@@ -93,7 +92,7 @@ const SystemGetHelpActivityIndex: FC = () => {
     };
   }, []);
 
-  const handleApplyFilter = (filter: GetHelpFilter): void => {
+  const handleApplyFilter = (filter: FilterType): void => {
     const validationError = getDateValidationError(filter, t);
     if (validationError) {
       // Don't apply the filter if there's a validation error
@@ -115,13 +114,13 @@ const SystemGetHelpActivityIndex: FC = () => {
     // else: no fetch, just update appliedFilter (in-memory filtering)
   };
 
-  // In-memory filtering for course/user
+  // In-memory filtering for assessment/user
   const filteredData = useMemo(() => {
     if (!data) return [];
     let filtered = [...data];
-    if (appliedFilter.course && 'title' in appliedFilter.course) {
+    if (appliedFilter.assessment && 'title' in appliedFilter.assessment) {
       filtered = filtered.filter(
-        (item) => item.courseTitle === appliedFilter.course?.title,
+        (item) => item.assessmentTitle === appliedFilter.assessment?.title,
       );
     }
     if (appliedFilter.user && 'name' in appliedFilter.user) {
@@ -132,9 +131,9 @@ const SystemGetHelpActivityIndex: FC = () => {
     return filtered;
   }, [data, appliedFilter]);
 
-  const courseOptions = useMemo(() => {
+  const assessmentOptions = useMemo(() => {
     if (!data) return [];
-    const titles = data.map((item) => item.courseTitle).filter(Boolean);
+    const titles = data.map((item) => item.assessmentTitle).filter(Boolean);
     // Remove duplicates
     const uniqueTitles = Array.from(new Set(titles));
     return uniqueTitles.map((title) => ({ title }));
@@ -153,21 +152,22 @@ const SystemGetHelpActivityIndex: FC = () => {
       <Typography className="m-6" variant="h6">
         {t(translations.header, { total: filteredData.length })}
       </Typography>
-      <SystemGetHelpFilter
-        courseOptions={courseOptions}
+      <CourseGetHelpFilter
+        assessmentOptions={assessmentOptions}
         getDateValidationError={getDateValidationError}
         onFilterChange={handleApplyFilter}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
         userOptions={userOptions}
       />
+
       {isLoading || !data ? (
         <LoadingIndicator />
       ) : (
-        <SystemGetHelpActivityTable getHelpData={filteredData} />
+        <CourseGetHelpStatisticsTable liveFeedbacks={filteredData} />
       )}
     </>
   );
 };
 
-export default SystemGetHelpActivityIndex;
+export default CourseGetHelpStatistics;

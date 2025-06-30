@@ -3,9 +3,9 @@ import { JobSubmitted } from 'types/jobs';
 import { APIResponse } from 'api/types';
 import {
   AssessmentsStatistics,
+  CourseGetHelpActivity,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
-  GetHelpStatistics,
   StaffStatistics,
   StudentsStatistics,
 } from 'course/statistics/types';
@@ -45,8 +45,13 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
     return this.client.get(`${this.#urlPrefix}/assessments`);
   }
 
-  fetchGetHelpStatistics(): APIResponse<GetHelpStatistics> {
-    return this.client.get(`${this.#urlPrefix}/get_help`);
+  fetchCourseGetHelpActivity(params?: {
+    start_at: string;
+    end_at: string;
+  }): APIResponse<CourseGetHelpActivity[]> {
+    return this.client.get(`${this.#urlPrefix}/get_help`, {
+      params,
+    });
   }
 
   downloadScoreSummary(assessmentIds: number[]): APIResponse<JobSubmitted> {

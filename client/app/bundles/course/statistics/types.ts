@@ -137,7 +137,7 @@ export interface AssessmentsStatistics {
   assessments: CourseAssessment[];
 }
 
-export interface GetHelpActivity {
+export interface CourseGetHelpActivity {
   id: number;
   userId: number;
   submissionId: number;
@@ -153,7 +153,7 @@ export interface GetHelpActivity {
   createdAt: string;
 }
 
-export interface InstanceGetHelpActivity extends GetHelpActivity {
+export interface InstanceGetHelpActivity extends CourseGetHelpActivity {
   courseUserId: number;
   courseId: number;
   courseTitle: string;
@@ -165,8 +165,8 @@ export interface SystemGetHelpActivity extends InstanceGetHelpActivity {
   instanceHost: string;
 }
 
-export interface GetHelpStatistics {
-  liveFeedbacks: GetHelpActivity[];
+export interface CourseGetHelpStatistics {
+  getHelpData: CourseGetHelpActivity[];
 }
 
 export interface InstanceGetHelpStatistics {

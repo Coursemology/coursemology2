@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
-import { Tooltip, Typography } from '@mui/material';
+import { Tooltip } from '@mui/material';
 
 import LiveFeedbackHistoryContent from 'course/assessment/pages/AssessmentStatistics/LiveFeedbackHistory';
-import { GetHelpActivity } from 'course/statistics/types';
+import { CourseGetHelpActivity } from 'course/statistics/types';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
 import { ColumnTemplate } from 'lib/components/table';
@@ -23,17 +23,13 @@ import { formatMiniDateTime } from 'lib/moment';
 import assessmentStatisticsTranslations from '../../../../assessment/pages/AssessmentStatistics/translations';
 
 const translations = defineMessages({
-  tableTitle: {
-    id: 'course.statistics.StatisticsIndex.getHelp.tableTitle',
-    defaultMessage: 'Recent Get Help Activity (last 7 days)',
-  },
   studentName: {
     id: 'course.statistics.StatisticsIndex.getHelp.name',
     defaultMessage: 'Name',
   },
   messageCount: {
     id: 'course.statistics.StatisticsIndex.getHelp.messageCount',
-    defaultMessage: '# Messages',
+    defaultMessage: '# Msgs',
   },
   lastMessage: {
     id: 'course.statistics.StatisticsIndex.getHelp.lastMessage',
@@ -51,14 +47,10 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.getHelp.createdAt',
     defaultMessage: 'Last Message At',
   },
-  searchBar: {
-    id: 'course.statistics.StatisticsIndex.getHelp.searchBar',
-    defaultMessage: 'Search by Student Name, Question, or Assessment',
-  },
 });
 
-const GetHelpStatisticsTable: FC<{
-  liveFeedbacks: GetHelpActivity[];
+const CourseGetHelpStatisticsTable: FC<{
+  liveFeedbacks: CourseGetHelpActivity[];
 }> = ({ liveFeedbacks }) => {
   const { t } = useTranslation();
   const { courseId } = useParams();
@@ -70,7 +62,7 @@ const GetHelpStatisticsTable: FC<{
     assessmentId: 0,
   });
 
-  const columns: ColumnTemplate<GetHelpActivity>[] = [
+  const columns: ColumnTemplate<CourseGetHelpActivity>[] = [
     {
       of: 'assessmentTitle',
       title: t(translations.assessmentTitle),
@@ -167,15 +159,12 @@ const GetHelpStatisticsTable: FC<{
 
   return (
     <>
-      <Typography className="ml-6" variant="h6">
-        {t(translations.tableTitle)}
-      </Typography>
       <Table
         className="border-none"
         columns={columns}
         data={liveFeedbacks}
         getRowClassName={(feedback): string => `get_help_${feedback.id}`}
-        getRowEqualityData={(feedback): GetHelpActivity => feedback}
+        getRowEqualityData={(feedback): CourseGetHelpActivity => feedback}
         getRowId={(feedback): string => feedback.id.toString()}
         indexing={{ indices: true }}
         pagination={{
@@ -203,4 +192,4 @@ const GetHelpStatisticsTable: FC<{
   );
 };
 
-export default GetHelpStatisticsTable;
+export default CourseGetHelpStatisticsTable;

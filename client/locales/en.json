@@ -5252,6 +5252,15 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "Delete"
   },
+  "course.statistics.StatisticsIndex.getHelp.header": {
+    "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"
+  },
+  "course.statistics.StatisticsIndex.getHelp.invalidDateSelection": {
+    "defaultMessage": "End Date must be after or equal to Start Date"
+  },
+  "course.statistics.StatisticsIndex.getHelp.exceedDateRange": {
+    "defaultMessage": "Date range cannot exceed 365 days"
+  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "No. of Achievements (Total: {courseAchievementCount})"
   },
@@ -7440,7 +7449,7 @@
     "defaultMessage": "Failed to update user's role."
   },
   "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
-    "defaultMessage": "Recent Get Help Activity"
+    "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"
   },
   "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
     "defaultMessage": "Filter by Course"
@@ -7500,7 +7509,7 @@
     "defaultMessage": "Instance"
   },
   "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
-    "defaultMessage": "Recent Get Help Activity"
+    "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"
   },
   "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
     "defaultMessage": "End Date must be after or equal to Start Date"

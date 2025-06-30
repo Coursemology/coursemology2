@@ -36,9 +36,15 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
 
   # This is named as `activity_get_help` to satisfy RuboCop naming checks without having to disable them.
   def activity_get_help
-    @course_user_hash = current_course.course_users.index_by(&:user_id)
+    start_date, end_date = sanitize_date_range(params[:start_at], params[:end_at])
+
+    unless valid_date_range?(start_date, end_date)
+      return render json: { error: 'Invalid date range' }, status: :bad_request
+    end
+
+    @get_help_data = fetch_course_get_help_data(start_date, end_date)
     load_assessment_question_hash
-    @live_feedbacks = fetch_recent_live_feedbacks
+    @course_user_hash = current_course.course_users.index_by(&:user_id)
   end
 
   def download_score_summary
@@ -50,8 +56,20 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
 
   private
 
-  def fetch_recent_live_feedbacks
-    feedbacks = Course::Assessment::LiveFeedback::Message.find_by_sql(<<-SQL)
+  def sanitize_date_range(start_at_param, end_at_param)
+    start_date_str = start_at_param.presence || (Time.current - 7.days).iso8601
+    end_date_str = end_at_param.presence || Time.current.iso8601
+    [Date.parse(start_date_str).beginning_of_day, Date.parse(end_date_str).end_of_day]
+  end
+
+  def valid_date_range?(start_date, end_date)
+    return true unless start_date.present? && end_date.present?
+
+    start_date <= end_date && (end_date.to_date - start_date.to_date).to_i <= 365
+  end
+
+  def fetch_course_get_help_data(start_date, end_date)
+    get_help_data = Course::Assessment::LiveFeedback::Message.find_by_sql(<<-SQL)
       SELECT DISTINCT ON (t.submission_creator_id, s.assessment_id, sq.question_id)
       m.id, m.content, m.created_at, t.submission_creator_id,
       s.assessment_id, sq.submission_id, sq.question_id,
@@ -62,13 +80,17 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     INNER JOIN live_feedback_threads t ON m.thread_id = t.id
     INNER JOIN course_assessment_submission_questions sq ON t.submission_question_id = sq.id
     INNER JOIN course_assessment_submissions s ON sq.submission_id = s.id
-    WHERE t.submission_creator_id IN (#{@course_user_hash.keys.join(',')})
-      AND m.creator_id != #{User::SYSTEM_USER_ID}
-      AND m.created_at >= NOW() - INTERVAL '7 days'
+    INNER JOIN course_assessments a ON s.assessment_id = a.id
+    INNER JOIN course_assessment_tabs tab ON a.tab_id = tab.id
+    INNER JOIN course_assessment_categories cat ON tab.category_id = cat.id
+    WHERE m.creator_id != #{User::SYSTEM_USER_ID}
+      AND cat.course_id = #{current_course.id}
+      AND m.created_at >= '#{start_date.utc.iso8601}'
+      AND m.created_at <= '#{end_date.utc.iso8601}'
     ORDER BY t.submission_creator_id, s.assessment_id, sq.question_id, m.created_at DESC
     SQL
 
-    feedbacks.sort_by(&:created_at).reverse
+    get_help_data.sort_by(&:created_at).reverse
   end
 
   def load_assessment_question_hash

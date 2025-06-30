@@ -8,7 +8,7 @@ class System::Admin::GetHelpController < System::Admin::Controller
         return render json: { error: 'Invalid date range' }, status: :bad_request
       end
 
-      @get_help_data = fetch_all_recent_live_feedbacks(start_date, end_date)
+      @get_help_data = fetch_system_get_help_data(start_date, end_date)
 
       user_ids = @get_help_data.map(&:submission_creator_id).uniq
       assessment_ids = @get_help_data.map(&:assessment_id).uniq
@@ -40,7 +40,7 @@ class System::Admin::GetHelpController < System::Admin::Controller
     end
   end
 
-  def fetch_all_recent_live_feedbacks(start_date, end_date)
+  def fetch_system_get_help_data(start_date, end_date)
     get_help_data = Course::Assessment::LiveFeedback::Message.find_by_sql(<<-SQL)
       SELECT DISTINCT ON (t.submission_creator_id, s.assessment_id, sq.question_id)
         m.id, m.content, m.created_at, t.submission_creator_id,
