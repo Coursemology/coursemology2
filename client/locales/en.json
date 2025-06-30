@@ -2553,10 +2553,10 @@
     "defaultMessage": "Lower Usage"
   },
   "course.assessment.statistics.liveFeedback.filename": {
-    "defaultMessage": "Question-level Live Feedback Statistics for {assessment}"
+    "defaultMessage": "Question-level Get Help Statistics for {assessment}"
   },
   "course.assessment.statistics.liveFeedbackHistoryPromptTitle": {
-    "defaultMessage": "Live Feedback History"
+    "defaultMessage": "Get Help History"
   },
   "course.assessment.statistics.marks.filename": {
     "defaultMessage": "Question-level Marks Statistics for {assessment}"
