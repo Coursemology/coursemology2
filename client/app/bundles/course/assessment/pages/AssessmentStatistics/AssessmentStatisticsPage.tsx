@@ -45,7 +45,7 @@ const translations = defineMessages({
   },
   liveFeedback: {
     id: 'course.assessment.statistics.liveFeedback',
-    defaultMessage: 'Live Feedback',
+    defaultMessage: 'Get Help',
   },
   gradesPerQuestion: {
     id: 'course.assessment.statistics.gradesPerQuestion',

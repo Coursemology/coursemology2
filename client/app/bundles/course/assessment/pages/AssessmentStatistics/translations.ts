@@ -43,11 +43,11 @@ const translations = defineMessages({
   },
   liveFeedbackFilename: {
     id: 'course.assessment.statistics.liveFeedback.filename',
-    defaultMessage: 'Question-level Live Feedback Statistics for {assessment}',
+    defaultMessage: 'Question-level Get Help Statistics for {assessment}',
   },
   liveFeedbackHistoryPromptTitle: {
     id: 'course.assessment.statistics.liveFeedbackHistoryPromptTitle',
-    defaultMessage: 'Live Feedback History',
+    defaultMessage: 'Get Help History',
   },
   marksFilename: {
     id: 'course.assessment.statistics.marks.filename',
