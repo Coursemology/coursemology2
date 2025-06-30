@@ -6,9 +6,9 @@ import pollJob from 'lib/helpers/jobHelpers';
 
 import {
   AssessmentsStatistics,
+  CourseGetHelpActivity,
   CoursePerformanceStatistics,
   CourseProgressionStatistics,
-  GetHelpStatistics,
   StaffStatistics,
   StudentsStatistics,
 } from './types';
@@ -48,8 +48,12 @@ export const fetchAssessmentsStatistics =
     return response.data;
   };
 
-export const fetchGetHelpStatistics = async (): Promise<GetHelpStatistics> => {
-  const response = await CourseAPI.statistics.course.fetchGetHelpStatistics();
+export const fetchCourseGetHelpActivity = async (params?: {
+  start_at: string;
+  end_at: string;
+}): Promise<CourseGetHelpActivity[]> => {
+  const response =
+    await CourseAPI.statistics.course.fetchCourseGetHelpActivity(params);
   return response.data;
 };
 

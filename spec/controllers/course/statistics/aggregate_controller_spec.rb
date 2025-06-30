@@ -277,21 +277,20 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
           expect(subject).to be_successful
           json_response = JSON.parse(response.body)
 
-          expect(json_response).to have_key('liveFeedbacks')
-          expect(json_response['liveFeedbacks']).to be_an(Array)
-          expect(json_response['liveFeedbacks'].length).to eq(1)
+          expect(json_response).to be_an(Array)
+          expect(json_response.length).to eq(1)
 
-          feedback = json_response['liveFeedbacks'].first
-          expect(feedback['lastMessage']).to eq(messages.first.content)
-          expect(feedback['assessmentId']).to eq(assessment.id)
-          expect(feedback['submissionId']).to eq(submission.id)
-          expect(feedback['questionId']).to eq(question.id)
-          expect(feedback['userId']).to eq(student.id)
-          expect(feedback['assessmentTitle']).to eq(assessment.title)
-          expect(feedback['questionTitle']).to eq(question.title)
-          expect(feedback['questionNumber']).to eq(1)
-          expect(feedback['name']).to eq(student.name)
-          expect(feedback['nameLink']).to eq("/courses/#{course.id}/users/#{student.id}")
+          data = json_response.first
+          expect(data['lastMessage']).to eq(messages.first.content)
+          expect(data['assessmentId']).to eq(assessment.id)
+          expect(data['submissionId']).to eq(submission.id)
+          expect(data['questionId']).to eq(question.id)
+          expect(data['userId']).to eq(student.id)
+          expect(data['assessmentTitle']).to eq(assessment.title)
+          expect(data['questionTitle']).to eq(question.title)
+          expect(data['questionNumber']).to eq(1)
+          expect(data['name']).to eq(student.name)
+          expect(data['nameLink']).to eq("/courses/#{course.id}/users/#{student.id}")
         end
 
         context 'when there are multiple messages' do
@@ -300,24 +299,12 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
           it 'returns the most recent message' do
             subject
             json_response = JSON.parse(response.body)
-            expect(json_response['liveFeedbacks']).to include(
+            expect(json_response).to include(
               hash_including(
                 'lastMessage' => 'Still need help!',
                 'messageCount' => 4
               )
             )
-          end
-        end
-
-        context 'when messages are older than 7 days' do
-          before do
-            messages.each { |m| m.update_column(:created_at, 8.days.ago) }
-          end
-
-          it 'does not include old messages' do
-            subject
-            json_response = JSON.parse(response.body)
-            expect(json_response['liveFeedbacks']).to be_empty
           end
         end
       end

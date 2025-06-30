@@ -67,8 +67,8 @@ const statisticsRouter: Translated<RouteObject> = (_) => ({
       lazy: async (): Promise<RouteObject> => ({
         Component: (
           await import(
-            /* webpackChunkName: 'GetHelpStatistics' */
-            'course/statistics/pages/StatisticsIndex/get_help/GetHelpStatistics'
+            /* webpackChunkName: 'CourseGetHelpStatistics' */
+            'course/statistics/pages/StatisticsIndex/get_help/CourseGetHelpStatistics'
           )
         ).default,
       }),
