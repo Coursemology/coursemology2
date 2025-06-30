@@ -5195,6 +5195,15 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "删除"
   },
+  "course.statistics.StatisticsIndex.getHelp.header": {
+    "defaultMessage": "最近实时帮助活动（{total} 个对话）"
+  },
+  "course.statistics.StatisticsIndex.getHelp.invalidDateSelection": {
+    "defaultMessage": "结束日期必须大于或等于开始日期"
+  },
+  "course.statistics.StatisticsIndex.getHelp.exceedDateRange": {
+    "defaultMessage": "日期范围不能超过365天"
+  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "成就数（总计：{courseAchievementCount}）"
   },
@@ -7398,7 +7407,7 @@
     "defaultMessage": "无法更新用户的角色。"
   },
   "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
-    "defaultMessage": "最近实时帮助活动"
+    "defaultMessage": "最近实时帮助活动 ({total} 个对话）"
   },
   "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
     "defaultMessage": "按课程筛选"
@@ -7458,7 +7467,7 @@
     "defaultMessage": "实例"
   },
   "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
-    "defaultMessage": "最近实时帮助活动"
+    "defaultMessage": "最近实时帮助活动（{total} 个对话）"
   },
   "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
     "defaultMessage": "结束日期必须晚于或等于开始日期"

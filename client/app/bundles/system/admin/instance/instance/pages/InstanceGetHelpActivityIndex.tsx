@@ -15,7 +15,8 @@ import { fetchInstanceGetHelpActivity } from '../operations';
 const translations = defineMessages({
   header: {
     id: 'system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header',
-    defaultMessage: 'Recent Get Help Activity',
+    defaultMessage:
+      'Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})',
   },
   invalidDateSelection: {
     id: 'system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection',
@@ -150,7 +151,7 @@ const InstanceGetHelpActivityIndex: FC = () => {
   return (
     <>
       <Typography className="m-6" variant="h6">
-        {t(translations.header)}
+        {t(translations.header, { total: filteredData.length })}
       </Typography>
       <InstanceGetHelpFilter
         courseOptions={courseOptions}

@@ -5234,6 +5234,15 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "삭제"
   },
+  "course.statistics.StatisticsIndex.getHelp.header": {
+    "defaultMessage": "최근 도움 요청 활동 ({total}건의 대화)"
+  },
+  "course.statistics.StatisticsIndex.getHelp.invalidDateSelection": {
+    "defaultMessage": "종료일은 시작일 이후이거나 같아야 합니다"
+  },
+  "course.statistics.StatisticsIndex.getHelp.exceedDateRange": {
+    "defaultMessage": "날짜 범위는 365일을 초과할 수 없습니다"
+  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "성과 개수 (총계: {courseAchievementCount})"
   },
@@ -7437,7 +7446,7 @@
     "defaultMessage": "사용자 역할을 업데이트하지 못했습니다."
   },
   "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
-    "defaultMessage": "최근 도움 요청 활동"
+    "defaultMessage": "최근 도움 요청 활동 ({total}건의 대화)"
   },
   "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
     "defaultMessage": "과목으로 필터링"
@@ -7497,7 +7506,7 @@
     "defaultMessage": "인스턴스"
   },
   "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
-    "defaultMessage": "최근 도움 요청 활동"
+    "defaultMessage": "최근 도움 요청 활동 ({total}건의 대화)"
   },
   "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
     "defaultMessage": "종료일은 시작일 이후거나 같아야 합니다"
