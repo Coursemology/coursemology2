@@ -19,7 +19,9 @@ export default function (state = {}, action) {
         ...state,
         [topicId]: {
           ...state[topicId],
-          postIds: [...state[topicId].postIds, postId],
+          postIds: state[topicId].postIds.includes(postId)
+            ? state[topicId].postIds
+            : [...state[topicId].postIds, postId],
         },
       };
     }

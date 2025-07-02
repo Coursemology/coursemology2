@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::RubricAutoGradingService <
+class Course::Assessment::Answer::RubricAutoGradingService < # rubocop:disable Metrics/ClassLength
   Course::Assessment::Answer::AutoGradingService
   def evaluate(answer)
     answer.correct, grade, messages, feedback = evaluate_answer(answer.actable)
@@ -134,6 +134,22 @@ class Course::Assessment::Answer::RubricAutoGradingService <
     end
   end
 
+  # Updates an existing AI-generated draft post with new feedback
+  # @param [Course::Discussion::Post] post The existing post to update
+  # @param [Course::Assessment::Answer] answer The answer
+  # @param [String] feedback The new feedback text
+  # @return [void]
+  def update_existing_draft_post(post, answer, feedback)
+    post.class.transaction do
+      post.update!(
+        text: feedback,
+        updater: User.system,
+        title: answer.submission.assessment.title
+      )
+      post.topic.mark_as_pending
+    end
+  end
+
   # Creates a subscription for the discussion topic of the answer post
   # @param [Course::Assessment::Answer] answer The answer to create the subscription for
   # @param [Course::Discussion::Topic] discussion_topic The discussion topic to subscribe to
@@ -148,15 +164,30 @@ class Course::Assessment::Answer::RubricAutoGradingService <
     end
   end
 
-  # Creates AI-generated draft feedback post for the answer
-  # @param [Course::Assessment::Answer] answer The answer to create the post for
+  # Finds the latest AI-generated draft post for the submission question
+  # @param [Course::Assessment::SubmissionQuestion] submission_question The submission question
+  # @return [Course::Discussion::Post, nil] The latest AI-generated draft post or nil if none exists
+  def find_existing_ai_draft_post(submission_question)
+    submission_question.posts.
+      where(is_ai_generated: true, workflow_state: 'draft').
+      last
+  end
+
+  # Creates or updates AI-generated draft feedback post for the answer
+  # @param [Course::Assessment::Answer] answer The answer to create/update the post for
   # @param [String] feedback The feedback text to include in the post
   # @return [void]
   def create_ai_generated_draft_post(answer, feedback)
     submission_question = answer.submission.submission_questions.find_by(question_id: answer.question_id)
     return unless submission_question
 
-    post = build_draft_post(submission_question, answer, feedback)
-    save_draft_post(submission_question, answer, post)
+    existing_post = find_existing_ai_draft_post(submission_question)
+
+    if existing_post
+      update_existing_draft_post(existing_post, answer, feedback)
+    else
+      post = build_draft_post(submission_question, answer, feedback)
+      save_draft_post(submission_question, answer, post)
+    end
   end
 end
