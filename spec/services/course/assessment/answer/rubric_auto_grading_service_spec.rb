@@ -222,6 +222,21 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
       end
     end
 
+    describe '#update_existing_draft_post' do
+      let(:submission_question) do
+        create(:course_assessment_submission_question, submission: submission, question: question.acting_as)
+      end
+      let(:existing_post) do
+        create(:course_discussion_post, topic: submission_question.acting_as, text: 'draft post', is_ai_generated: true,
+                                        workflow_state: 'draft')
+      end
+      it 'updates the existing post with new feedback' do
+        expect(existing_post).to receive(:update!)
+        expect(existing_post.topic).to receive(:mark_as_pending)
+        subject.send(:update_existing_draft_post, existing_post, answer, 'new draft post')
+      end
+    end
+
     describe '#create_topic_subscription' do
       let(:discussion_topic) { create(:course_discussion_topic) }
       it 'ensures the student and group managers are subscribed' do
@@ -234,6 +249,38 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
       end
     end
 
+    describe '#find_existing_ai_draft_post' do
+      let(:submission_question) do
+        create(:course_assessment_submission_question, submission: submission, question: question.acting_as)
+      end
+
+      context 'when there are no AI-generated draft posts' do
+        it 'returns nil' do
+          result = subject.send(:find_existing_ai_draft_post, submission_question)
+          expect(result).to be_nil
+        end
+      end
+
+      context 'when there are AI-generated draft posts' do
+        let!(:older_ai_draft_post) do
+          create(:course_discussion_post, topic: submission_question.acting_as, is_ai_generated: true,
+                                          workflow_state: 'draft', created_at: 1.hour.ago)
+        end
+        let!(:newer_ai_draft_post) do
+          create(:course_discussion_post, topic: submission_question.acting_as, is_ai_generated: true,
+                                          workflow_state: 'draft', created_at: 30.minutes.ago)
+        end
+        let!(:ai_published_post) do
+          create(:course_discussion_post, topic: submission_question.acting_as, is_ai_generated: true,
+                                          workflow_state: 'published')
+        end
+        it 'returns the most recent AI-generated draft post' do
+          result = subject.send(:find_existing_ai_draft_post, submission_question)
+          expect(result).to eq(newer_ai_draft_post)
+        end
+      end
+    end
+
     describe '#create_ai_generated_draft_post' do
       let(:submission_question) do
         create(:course_assessment_submission_question, submission: submission, question: question.acting_as)
@@ -243,17 +290,39 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
           double(find_by: submission_question)
         )
       end
-      it 'creates a AI-gernerated draft post' do
-        expect do
-          subject.send(:create_ai_generated_draft_post, answer, 'draft post')
-        end.to change { Course::Discussion::Post.count }.by(1)
-        post = Course::Discussion::Post.last
-        expect(post.text).to eq('draft post')
-        expect(post.is_ai_generated).to be true
-        expect(post.workflow_state).to eq('draft')
-        expect(post.title).to eq(answer.submission.assessment.title)
-        expect(post.topic.pending_staff_reply).to be true
+
+      context 'when no existing AI-generated draft post exists' do
+        it 'creates a new AI-generated draft post' do
+          expect do
+            subject.send(:create_ai_generated_draft_post, answer, 'draft post')
+          end.to change { Course::Discussion::Post.count }.by(1)
+          post = Course::Discussion::Post.last
+          expect(post.text).to eq('draft post')
+          expect(post.is_ai_generated).to be true
+          expect(post.workflow_state).to eq('draft')
+          expect(post.title).to eq(answer.submission.assessment.title)
+          expect(post.topic.pending_staff_reply).to be true
+        end
       end
+
+      context 'when an existing AI-generated draft post exists' do
+        let!(:existing_post) do
+          create(:course_discussion_post, topic: submission_question.acting_as, text: 'draft post',
+                                          is_ai_generated: true, workflow_state: 'draft')
+        end
+        it 'updates the existing post instead of creating a new one' do
+          expect do
+            subject.send(:create_ai_generated_draft_post, answer, 'updated draft post')
+          end.not_to(change { Course::Discussion::Post.count })
+          existing_post.reload
+          expect(existing_post.text).to eq('updated draft post')
+          expect(existing_post.is_ai_generated).to be true
+          expect(existing_post.workflow_state).to eq('draft')
+          expect(existing_post.title).to eq(answer.submission.assessment.title)
+          expect(existing_post.topic.pending_staff_reply).to be true
+        end
+      end
+
       context 'when no submission question exists' do
         before do
           allow(answer.submission).to receive(:submission_questions).and_return(

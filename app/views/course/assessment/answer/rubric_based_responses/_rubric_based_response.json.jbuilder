@@ -41,7 +41,9 @@ json.categoryGrades answer.selections.includes(:criterion).map do |selection|
 end
 
 posts = answer.submission.submission_questions.find_by(question_id: answer.question_id)&.discussion_topic&.posts
-ai_generated_comment = posts&.select(&:is_ai_generated)&.last
+ai_generated_comment = posts&.select do |post|
+  post.is_ai_generated && post.workflow_state == 'draft'
+end&.last
 if ai_generated_comment
   json.aiGeneratedComment do
     json.partial! ai_generated_comment
