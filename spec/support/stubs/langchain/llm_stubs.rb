@@ -25,7 +25,7 @@ module Langchain::LlmStubs
     private
 
     def rubric_grading_request?(user_message)
-      user_message.include?('Category ID:') && user_message.include?('Criterion ID:') && user_message.include?('Grade:')
+      user_message.include?('<ANSWER>') && user_message.include?('</ANSWER>')
     end
 
     def output_fixing_request?(user_message)
