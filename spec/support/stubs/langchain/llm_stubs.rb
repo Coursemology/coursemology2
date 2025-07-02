@@ -9,14 +9,15 @@ module Langchain::LlmStubs
   end
 
   class OpenAiStub < Langchain::LLM::Base
-    def chat(messages: [], **_kwargs)
+    def chat(messages: [], **_kwargs) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+      system_message = messages.find { |msg| msg[:role] == 'system' }&.dig(:content) || ''
       user_message = messages.find { |msg| msg[:role] == 'user' }&.dig(:content) || ''
 
       # add more llm response use cases here as needed
-      if rubric_grading_request?(user_message)
-        handle_rubric_grading(user_message)
-      elsif output_fixing_request?(user_message)
-        handle_output_fixing(user_message)
+      if rubric_grading_request?(system_message, user_message)
+        handle_rubric_grading(system_message, user_message)
+      elsif output_fixing_request?(system_message, user_message)
+        handle_output_fixing(system_message, user_message)
       else
         raise NotImplementedError, 'Unsupported request type'
       end
@@ -24,16 +25,15 @@ module Langchain::LlmStubs
 
     private
 
-    def rubric_grading_request?(user_message)
-      user_message.include?('Category ID:') && user_message.include?('Criterion ID:') && user_message.include?('Grade:')
+    def rubric_grading_request?(system_message, _user_message)
+      system_message.include?('rubric') && system_message.include?('grade')
     end
 
-    def output_fixing_request?(user_message)
+    def output_fixing_request?(_system_message, user_message)
       user_message.include?('JSON Schema')
     end
 
-    def handle_output_fixing(_user_message)
-      # only fix rubric grading output for now
+    def handle_output_fixing(_system_message, _user_message)
       mock_response = {
         'category_grades' => [
           {
@@ -48,9 +48,9 @@ module Langchain::LlmStubs
       MockChatResponse.new(mock_response.to_json)
     end
 
-    def handle_rubric_grading(user_message)
-      category_ids = user_message.scan(/Category ID: (\d+)/).flatten.map(&:to_i)
-      criterion_ids = extract_random_criterion_ids(user_message)
+    def handle_rubric_grading(system_message, _user_message)
+      category_ids = system_message.scan(/Category ID: (\d+)/).flatten.map(&:to_i)
+      criterion_ids = extract_random_criterion_ids(system_message)
 
       category_grades = category_ids.zip(criterion_ids).map do |category_id, criterion_id|
         {
@@ -68,8 +68,8 @@ module Langchain::LlmStubs
       MockChatResponse.new(mock_response.to_json)
     end
 
-    def extract_random_criterion_ids(user_message)
-      category_sections = user_message.split(/(?=Category ID: \d+)/).reject(&:empty?)
+    def extract_random_criterion_ids(system_message)
+      category_sections = system_message.split(/(?=Category ID: \d+)/).reject(&:empty?)
 
       category_sections.filter_map do |section|
         criterion_ids = section.scan(/- \[Grade: \d+(?:\.\d+)?, Criterion ID: (\d+)\]/)

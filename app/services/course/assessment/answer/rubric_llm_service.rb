@@ -25,13 +25,15 @@ class Course::Assessment::Answer::RubricLlmService
   # @param [Course::Assessment::Answer::RubricBasedResponse] answer The student's answer.
   # @return [Hash] The LLM's evaluation response.
   def evaluate(question, answer)
-    formatted_system_prompt = self.class.system_prompt.format
-    formatted_user_prompt = self.class.user_prompt.format(
+    formatted_system_prompt = self.class.system_prompt.format(
       question_title: question.title,
       question_description: question.description,
       rubric_categories: format_rubric_categories(question),
-      answer_text: answer.answer_text,
       custom_prompt: question.ai_grading_custom_prompt
+    )
+
+    formatted_user_prompt = self.class.user_prompt.format(
+      answer_text: answer.answer_text
     )
     messages = [
       { role: 'system', content: formatted_system_prompt },
