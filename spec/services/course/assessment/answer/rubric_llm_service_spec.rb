@@ -20,13 +20,15 @@ RSpec.describe Course::Assessment::Answer::RubricLlmService do
         expect(subject).to receive(:format_rubric_categories).with(question).and_call_original
         result = subject.evaluate(question, answer)
         expect(result).to be_a(Hash)
-        expect(result['category_grades']).to be_an(Array)
-        result['category_grades'].each do |grade|
-          category = categories.find { |c| c.id == grade['category_id'] }
-          expect(category).to be_present
-          criterion = category.criterions.find { |c| c.id == grade['criterion_id'] }
+        category_grades = result['category_grades']
+        expect(category_grades).to be_a(Array)
+        categories.each do |category|
+          category_grade = category_grades.find { |cg| cg[:category_id] == category.id }
+          expect(category_grade).to be_present
+          criterion = category.criterions.find { |c| c.id == category_grade[:criterion_id] }
           expect(criterion).to be_present
-          expect(grade['explanation']).to include('Mock explanation for category')
+          expect(category_grade[:grade]).to eq(criterion.grade)
+          expect(category_grade[:explanation]).to eq("Mock explanation for category_#{category.id}")
         end
         expect(result['overall_feedback']).to include('Mock overall feedback')
       end
@@ -49,34 +51,47 @@ RSpec.describe Course::Assessment::Answer::RubricLlmService do
 
     describe '#parse_llm_response' do
       let(:valid_json) do
+        category_fields = categories.map do |category|
+          "\"category_#{category.id}\": {
+            \"criterion_id_with_grade\":
+              \"criterion_#{category.criterions.first.id}_grade_#{category.criterions.first.grade}\",
+            \"explanation\": \"selection explanation\"
+          }"
+        end.join(',')
+
         <<~JSON
           {
-            "category_grades": [
-              {
-                "category_id": #{categories.first.id},
-                "criterion_id": #{categories.first.criterions.first.id},
-                "explanation": "selection explanation"
-              }
-            ],
+            "category_grades": { #{category_fields} },
             "overall_feedback": "overall feedback"
           }
         JSON
       end
       let(:invalid_json) { '{ "category_grades": [{ "missing": "closing bracket" }' }
+
+      let(:output_parser) do
+        schema = subject.generate_dynamic_schema(question)
+        Langchain::OutputParsers::StructuredOutputParser.from_json_schema(schema)
+      end
+
       context 'with valid JSON' do
         it 'returns the parsed output' do
-          result = subject.parse_llm_response(valid_json)
+          result = subject.parse_llm_response(valid_json, output_parser)
           expect(result).to eq(JSON.parse(valid_json))
         end
       end
       context 'with invalid JSON' do
         it 'attempts to fix and parse the response' do
-          result = subject.parse_llm_response(invalid_json)
-          expect(result['category_grades']).to be_an(Array)
-          result['category_grades'].each do |grade|
-            expect(grade['category_id']).to be_a(Integer)
-            expect(grade['criterion_id']).to be_a(Integer)
-            expect(grade['explanation']).to be_a(String)
+          result = subject.parse_llm_response(invalid_json, output_parser)
+          categories.each do |category|
+            field_name = "category_#{category.id}"
+            expect(result['category_grades'][field_name]).to be_present
+            criterion_id_with_grade = result['category_grades'][field_name]['criterion_id_with_grade']
+            expect(criterion_id_with_grade).to match(/criterion_(\d+)_grade_(\d+)/)
+            criterion_id, grade = criterion_id_with_grade.match(/criterion_(\d+)_grade_(\d+)/).captures
+            criterion = category.criterions.find { |c| c.id == criterion_id.to_i }
+            expect(criterion).to be_present
+            expect(grade.to_i).to eq(criterion.grade)
+            expect(result['category_grades'][field_name]['explanation']).to be_a(String)
           end
           expect(result['overall_feedback']).to be_a(String)
         end
