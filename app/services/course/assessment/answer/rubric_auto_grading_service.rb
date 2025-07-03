@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::RubricAutoGradingService < # rubocop:disable Metrics/ClassLength
-  Course::Assessment::Answer::AutoGradingService
+class Course::Assessment::Answer::RubricAutoGradingService < Course::Assessment::Answer::AutoGradingService # rubocop:disable Metrics/ClassLength
   def evaluate(answer)
     answer.correct, grade, messages, feedback = evaluate_answer(answer.actable)
     answer.auto_grading.result = { messages: messages }
@@ -12,23 +11,22 @@ class Course::Assessment::Answer::RubricAutoGradingService < # rubocop:disable M
 
   # Grades the given answer.
   #
-  # @param [Course::Assessment::Answer::RubricBasedResponse] answer The answer specified by the
+  # @param [Course::Assessment::Answer::RubricBasedResponse] answer The answer specified.
   # @return [Array<(Boolean, Integer, Object, String)>] The correct status, grade, messages to be
   #   assigned to the grading, and feedback for the draft post.
   def evaluate_answer(answer)
     question = answer.question.actable
     llm_service = Course::Assessment::Answer::RubricLlmService.new
     llm_response = llm_service.evaluate(question, answer)
-    process_llm_grading_response(question, answer, llm_response)
+    process_llm_grading_response(answer, llm_response)
   end
 
   # Processes the LLM response into grades and feedback, and updates the answer.
-  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
   # @param [Course::Assessment::Answer::RubricBasedResponse] answer The answer to update.
   # @param [Hash] llm_response The parsed LLM response containing grading information
   # @return [Array<(Boolean, Integer, Object, String)>] The correct status, grade, and feedback messages.
-  def process_llm_grading_response(question, answer, llm_response)
-    category_grades = process_category_grades(question, llm_response)
+  def process_llm_grading_response(answer, llm_response)
+    category_grades = llm_response['category_grades']
 
     # For rubric-based questions, update the answer's selections and grade to database
     update_answer_selections(answer, category_grades)
@@ -36,28 +34,6 @@ class Course::Assessment::Answer::RubricAutoGradingService < # rubocop:disable M
 
     # Currently no support for correctness in rubric-based questions
     [true, grade, ['success'], llm_response['overall_feedback']]
-  end
-
-  # Processes category grades from LLM response into a structured format
-  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
-  # @param [Hash] llm_response The parsed LLM response with category grades
-  # @return [Array<Hash>] Array of processed category grades.
-  def process_category_grades(question, llm_response)
-    category_lookup = question.categories.without_bonus_category.includes(:criterions).index_by(&:id)
-    llm_response['category_grades'].filter_map do |category_grade|
-      category = category_lookup[category_grade['category_id']]
-      next unless category
-
-      criterion = category.criterions.find { |c| c.id == category_grade['criterion_id'] }
-      next unless criterion
-
-      {
-        category_id: category_grade['category_id'],
-        criterion_id: criterion&.id,
-        grade: criterion&.grade,
-        explanation: category_grade['explanation']
-      }
-    end
   end
 
   # Updates the answer's selections and total grade based on the graded categories.

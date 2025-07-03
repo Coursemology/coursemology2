@@ -58,64 +58,25 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
           {
             'category_grades' => [
               {
-                'category_id' => question.categories.first.id,
-                'criterion_id' => question.categories.first.criterions.last.id,
-                'grade' => question.categories.first.criterions.last.grade,
-                'explanation' => '1st selection explanation'
+                category_id: question.categories.first.id,
+                criterion_id: question.categories.first.criterions.last.id,
+                grade: question.categories.first.criterions.last.grade,
+                explanation: '1st selection explanation'
               },
               {
-                'category_id' => question.categories.second.id,
-                'criterion_id' => question.categories.second.criterions.last.id,
-                'grade' => question.categories.second.criterions.last.grade,
-                'explanation' => '2nd selection explanation'
+                category_id: question.categories.second.id,
+                criterion_id: question.categories.second.criterions.last.id,
+                grade: question.categories.second.criterions.last.grade,
+                explanation: '2nd selection explanation'
               }
             ],
             'overall_feedback' => 'overall feedback'
           }
         end
-        it 'processes category grades' do
-          result = subject.send(:process_llm_grading_response, question, answer.actable, valid_response)
-          expect(result[0]).to be true
-          expect(result[1]).to eq(question.categories.first.criterions.last.grade +
-                                 question.categories.second.criterions.last.grade)
-          expect(result[2]).to contain_exactly('success')
-          expect(result[3]).to eq('overall feedback')
-        end
         it 'updates answer selections' do
           expect(answer.actable).to receive(:assign_params).with(hash_including(:selections_attributes))
-          subject.send(:process_llm_grading_response, question, answer.actable, valid_response)
+          subject.send(:process_llm_grading_response, answer.actable, valid_response)
         end
-      end
-    end
-
-    describe '#process_category_grades' do
-      let(:category) { question.categories.first }
-      let(:criterion) { category.criterions.first }
-      let(:llm_response) do
-        {
-          'category_grades' => [
-            {
-              'category_id' => category.id,
-              'criterion_id' => criterion.id,
-              'explanation' => 'selection explanation'
-            }
-          ]
-        }
-      end
-      it 'processes category grades correctly' do
-        result = subject.send(:process_category_grades, question, llm_response)
-        expect(result.size).to eq(1)
-        expect(result.first[:category_id]).to eq(category.id)
-        expect(result.first[:criterion_id]).to eq(criterion.id)
-        expect(result.first[:grade]).to eq(criterion.grade)
-        expect(result.first[:explanation]).to eq('selection explanation')
-      end
-      it 'ignores non-existent categories' do
-        llm_response['category_grades'] << { 'category_id' => -1, 'criterion_id' => -1 }
-        llm_response['category_grades'] << { 'category_id' => category.id, 'criterion_id' => -1 }
-        result = subject.send(:process_category_grades, question, llm_response)
-        expect(result.size).to eq(1)
-        expect(result.first[:category_id]).to eq(category.id)
       end
     end
 
