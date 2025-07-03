@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::RubricLlmService
-  @output_schema = JSON.parse(
-    File.read('app/services/course/assessment/answer/prompts/rubric_auto_grading_output_format.json')
-  )
-  @output_parser = Langchain::OutputParsers::StructuredOutputParser.from_json_schema(
-    @output_schema
-  )
   @system_prompt = Langchain::Prompt.load_from_path(
     file_path: 'app/services/course/assessment/answer/prompts/rubric_auto_grading_system_prompt.json'
   )
@@ -15,7 +9,7 @@ class Course::Assessment::Answer::RubricLlmService
   @llm = LANGCHAIN_OPENAI
 
   class << self
-    attr_reader :system_prompt, :user_prompt, :output_schema, :output_parser
+    attr_reader :system_prompt, :user_prompt
     attr_accessor :llm
   end
 
@@ -24,14 +18,13 @@ class Course::Assessment::Answer::RubricLlmService
   # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
   # @param [Course::Assessment::Answer::RubricBasedResponse] answer The student's answer.
   # @return [Hash] The LLM's evaluation response.
-  def evaluate(question, answer)
+  def evaluate(question, answer) # rubocop:disable Metrics/AbcSize
     formatted_system_prompt = self.class.system_prompt.format(
       question_title: question.title,
       question_description: question.description,
       rubric_categories: format_rubric_categories(question),
       custom_prompt: question.ai_grading_custom_prompt
     )
-
     formatted_user_prompt = self.class.user_prompt.format(
       answer_text: answer.answer_text
     )
@@ -39,18 +32,60 @@ class Course::Assessment::Answer::RubricLlmService
       { role: 'system', content: formatted_system_prompt },
       { role: 'user', content: formatted_user_prompt }
     ]
+    dynamic_schema = generate_dynamic_schema(question)
+    output_parser = Langchain::OutputParsers::StructuredOutputParser.from_json_schema(dynamic_schema)
     response = self.class.llm.chat(
       messages: messages,
       response_format: {
         type: 'json_schema',
         json_schema: {
-          name: 'rubric_grading_output',
+          name: 'rubric_grading_response',
           strict: true,
-          schema: self.class.output_schema
+          schema: dynamic_schema
         }
       }
     ).completion
-    parse_llm_response(response)
+
+    llm_response = parse_llm_response(response, output_parser)
+    llm_response['category_grades'] = process_category_grades(llm_response['category_grades'])
+    llm_response
+  end
+
+  # Generates dynamic JSON schema with separate fields for each category
+  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
+  # @return [Hash] Dynamic JSON schema with category-specific fields
+  def generate_dynamic_schema(question)
+    dynamic_schema = JSON.parse(
+      File.read('app/services/course/assessment/answer/prompts/rubric_auto_grading_output_format.json')
+    )
+    question.categories.without_bonus_category.includes(:criterions).each do |category|
+      field_name = "category_#{category.id}"
+      dynamic_schema['properties']['category_grades']['properties'][field_name] =
+        build_category_schema(category, field_name)
+      dynamic_schema['properties']['category_grades']['required'] << field_name
+    end
+    dynamic_schema
+  end
+
+  def build_category_schema(category, field_name)
+    criterion_ids_with_grades = category.criterions.map { |c| "criterion_#{c.id}_grade_#{c.grade}" }
+    {
+      'type' => 'object',
+      'properties' => {
+        'criterion_id_with_grade' => {
+          'type' => 'string',
+          'enum' => criterion_ids_with_grades,
+          'description' => "Selected criterion for #{field_name}"
+        },
+        'explanation' => {
+          'type' => 'string',
+          'description' => "Explanation for selected criterion in #{field_name}"
+        }
+      },
+      'required' => ['criterion_id_with_grade', 'explanation'],
+      'additionalProperties' => false,
+      'description' => "Selected criterion and explanation for #{field_name} #{category.name}"
+    }
   end
 
   # Formats rubric categories for inclusion in the LLM prompt
@@ -70,13 +105,29 @@ class Course::Assessment::Answer::RubricLlmService
     end.join("\n\n")
   end
 
-  # Parses LLM response with retry logic for handling parsing failures
+  # Processes the category grades from the LLM response
+  # @param [Hash] category_grades The category grades from the LLM response
+  # @return [Array<Hash>] An array of hashes with category_id, criterion_id, grade, and explanation
+  def process_category_grades(category_grades)
+    category_grades.map do |field_name, category_grade|
+      criterion_id, grade = category_grade['criterion_id_with_grade'].match(/criterion_(\d+)_grade_(\d+)/).captures
+      {
+        category_id: field_name.match(/category_(\d+)/).captures.first.to_i,
+        criterion_id: criterion_id.to_i,
+        grade: grade.to_i,
+        explanation: category_grade['explanation']
+      }
+    end
+  end
+
+  # Parses LLM response with OutputFixingParser for handling parsing failures
   # @param [String] response The raw LLM response to parse
+  # @param [Langchain::OutputParsers::StructuredOutputParser] output_parser The parser to use
   # @return [Hash] The parsed response as a structured hash
-  def parse_llm_response(response)
+  def parse_llm_response(response, output_parser)
     fix_parser = Langchain::OutputParsers::OutputFixingParser.from_llm(
       llm: self.class.llm,
-      parser: self.class.output_parser
+      parser: output_parser
     )
     fix_parser.parse(response)
   end
