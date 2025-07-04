@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::RubricLlmService
+class Course::Assessment::Answer::RubricLlmService # rubocop:disable Metrics/ClassLength
+  MAX_RETRIES = 1
   @system_prompt = Langchain::Prompt.load_from_path(
     file_path: 'app/services/course/assessment/answer/prompts/rubric_auto_grading_system_prompt.json'
   )
@@ -18,7 +19,7 @@ class Course::Assessment::Answer::RubricLlmService
   # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
   # @param [Course::Assessment::Answer::RubricBasedResponse] answer The student's answer.
   # @return [Hash] The LLM's evaluation response.
-  def evaluate(question, answer) # rubocop:disable Metrics/AbcSize
+  def evaluate(question, answer)
     formatted_system_prompt = self.class.system_prompt.format
 
     dynamic_schema = generate_dynamic_schema(question)
@@ -36,19 +37,8 @@ class Course::Assessment::Answer::RubricLlmService
       { role: 'system', content: formatted_system_prompt },
       { role: 'user', content: formatted_user_prompt }
     ]
-    response = self.class.llm.chat(
-      messages: messages,
-      response_format: {
-        type: 'json_schema',
-        json_schema: {
-          name: 'rubric_grading_response',
-          strict: true,
-          schema: dynamic_schema
-        }
-      }
-    ).completion
 
-    llm_reponse = parse_llm_response(response, output_parser)
+    llm_reponse = call_llm_with_retries(messages, dynamic_schema, output_parser)
     llm_reponse['category_grades'] = process_category_grades(llm_reponse['category_grades'])
     llm_reponse
   end
@@ -132,5 +122,36 @@ class Course::Assessment::Answer::RubricLlmService
       parser: output_parser
     )
     fix_parser.parse(response)
+  end
+
+  # Calls LLM with retry mechanism for parsing failures
+  # @param [Array] messages The messages to send to LLM
+  # @param [Hash] schema The JSON schema for response format
+  # @param [Langchain::OutputParsers::StructuredOutputParser] output_parser The parser for LLM response
+  # @return [Hash] The parsed LLM response
+  def call_llm_with_retries(messages, schema, output_parser)
+    retries = 0
+    begin
+      response = self.class.llm.chat(
+        messages: messages,
+        response_format: {
+          type: 'json_schema',
+          json_schema: {
+            name: 'rubric_grading_response',
+            strict: true,
+            schema: schema
+          }
+        }
+      ).completion
+      output_parser.parse(response)
+    rescue Langchain::OutputParsers::OutputParserException
+      if retries < MAX_RETRIES
+        retries += 1
+        retry
+      else
+        # If parsing fails after retries, use OutputFixingParser fallback
+        parse_llm_response(response, output_parser)
+      end
+    end
   end
 end
