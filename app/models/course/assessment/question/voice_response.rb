@@ -2,6 +2,10 @@
 class Course::Assessment::Question::VoiceResponse < ApplicationRecord
   acts_as :question, class_name: 'Course::Assessment::Question'
 
+  def is_saving_snapshots?
+    false
+  end
+
   def attempt(submission, last_attempt = nil)
     answer =
       Course::Assessment::Answer::VoiceResponse.new(submission: submission, question: question)

@@ -21,6 +21,10 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
     self.categories = duplicator.duplicate(other.categories)
   end
 
+  def is_saving_snapshots?
+    false
+  end
+
   def auto_gradable?
     !categories.empty? && ai_grading_enabled?
   end

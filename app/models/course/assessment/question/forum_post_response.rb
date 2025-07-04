@@ -5,6 +5,10 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
   validates :max_posts, presence: true, numericality: { only_integer: true }
   validate :allowable_max_post_count
 
+  def is_saving_snapshots?
+    false
+  end
+
   def question_type
     'ForumPostResponse'
   end

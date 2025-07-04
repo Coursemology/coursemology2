@@ -78,6 +78,7 @@ export interface ProgrammingAnswerData extends AnswerBaseData {
     explanation: string[];
     failureType: TestCaseType;
   };
+  gradedOnPastSnapshot: boolean;
   testCases: {
     canReadTests: boolean;
     public_test?: TestCaseResult[];

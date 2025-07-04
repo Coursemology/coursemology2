@@ -3,6 +3,10 @@ class Course::Assessment::Question::Scribing < ApplicationRecord
   acts_as :question, class_name: 'Course::Assessment::Question'
   has_one_attachment
 
+  def is_saving_snapshots?
+    false
+  end
+
   def to_partial_path
     'course/assessment/question/scribing/scribing'
   end

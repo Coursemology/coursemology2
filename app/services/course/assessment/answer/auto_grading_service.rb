@@ -19,7 +19,7 @@ class Course::Assessment::Answer::AutoGradingService
     # Picks the grader to use for the given question.
     #
     # @param [Course::Assessment::Question] question The question that the needs to be graded.
-    # @return [Course::Assessment::Answer::AnswerAutoGraderService] The service object that can
+    # @return [Course::Assessment::Answer::AnswerAutoGradingService] The service object that can
     #   grade this question.
     def pick_grader(question)
       question.auto_grader

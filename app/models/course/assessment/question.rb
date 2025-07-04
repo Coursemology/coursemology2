@@ -31,6 +31,7 @@ class Course::Assessment::Question < ApplicationRecord
   delegate :to_partial_path, to: :actable
   delegate :question_type, to: :actable
   delegate :question_type_readable, to: :actable
+  delegate :is_saving_snapshots?, to: :actable, allow_nil: true
 
   # Checks if the given question is auto gradable. This defaults to false if the specific
   # question does not implement auto grading. If this returns true, +auto_grader+ is guaranteed

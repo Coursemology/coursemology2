@@ -1,12 +1,19 @@
 # frozen_string_literal: true
 submission = answer.submission
 assessment = submission.assessment
-question = answer.question.specific
 # If a non current_answer is being loaded, use it instead of loading the last_attempt.
 is_current_answer = answer.current_answer?
 latest_answer = last_attempt(answer)
 attempt = is_current_answer ? latest_answer : answer
+
+question = answer.question.specific
 auto_grading = attempt&.auto_grading&.specific
+graded_snapshot = auto_grading&.question_snapshot
+graded_on_past_snapshot = !(graded_snapshot.nil? || graded_snapshot == question)
+json.gradedOnPastSnapshot graded_on_past_snapshot
+if graded_on_past_snapshot
+  question = graded_snapshot
+end
 
 can_grade = can?(:grade, submission)
 

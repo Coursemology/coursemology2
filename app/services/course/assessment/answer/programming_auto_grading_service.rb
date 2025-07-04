@@ -2,7 +2,18 @@
 class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
   def evaluate(answer)
-    answer.correct, grade, programming_auto_grading, = evaluate_answer(answer.actable)
+    # We pre-load the programming question, including test cases,
+    # to ensure consistency with at least one saved snapshot.
+    question = Course::Assessment::Answer.includes(question: {actable: [:test_cases ]}).find_by_id(answer.id).question.actable
+
+    answer.correct, grade, programming_auto_grading, = evaluate_answer(answer.actable, question)
+
+    # If the question was updated during the evaluation, we can still find
+    # our original question by comparing the updated_at timestamps.
+    # this overrides auto_grading.actable_id, previous AG result is retained.
+    programming_auto_grading.question_snapshot_id = 
+      Course::Assessment::Question::Programming.
+        where(current_id: question.id, snapshot_of_state_at: question.snapshot_of_state_at).first&.id || question.id
     programming_auto_grading.auto_grading = answer.auto_grading
     grade
   end
@@ -14,9 +25,8 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
   # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
   #   correct status, grade and the programming auto grading record.
-  def evaluate_answer(answer)
+  def evaluate_answer(answer, question)
     course = answer.submission.assessment.course
-    question = answer.question.actable
     assessment = answer.submission.assessment
     question.max_time_limit = course.programming_max_time_limit
     question.attachment.open(binmode: true) do |temporary_file|

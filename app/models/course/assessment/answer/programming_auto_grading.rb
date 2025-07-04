@@ -14,6 +14,11 @@ class Course::Assessment::Answer::ProgrammingAutoGrading < ApplicationRecord
            class_name: 'Course::Assessment::Answer::ProgrammingAutoGradingTestResult',
            foreign_key: :auto_grading_id, inverse_of: :auto_grading,
            dependent: :destroy
+  
+  belongs_to :question_snapshot,
+             class_name: 'Course::Assessment::Question::Programming',
+             foreign_key: :question_snapshot_id,
+             optional: true
 
   private
 

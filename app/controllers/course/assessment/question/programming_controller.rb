@@ -19,6 +19,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def create
     @programming_question.package_type = programming_question_params.key?(:file) ? :zip_upload : :online_editor
+    @programming_question.current = @programming_question
     process_package
 
     if @programming_question.save
@@ -41,6 +42,27 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def update
     result = @programming_question.class.transaction do
+      old_update_timestamp = @programming_question.snapshot_of_state_at
+
+      # Duplicate the original question as a snapshot
+      snapshot = @programming_question.dup
+      snapshot.current = @programming_question
+
+      snapshot.template_files = @programming_question.template_files.map do |template_file|
+        duplicated_template_file = template_file.dup
+        duplicated_template_file.question = snapshot
+        duplicated_template_file
+      end
+
+      snapshot.test_cases = @programming_question.test_cases.map do |test_case|
+        duplicated_test_case = test_case.dup
+        duplicated_test_case.question = snapshot
+
+        # Test case results aren't duplicated by default, so we do that now
+        duplicated_test_case.test_results = test_case.test_results.map(&:dup) if test_case.test_results.any?
+        duplicated_test_case
+      end
+
       @question_assessment.skill_ids = programming_question_params[:question_assessment].
                                        try(:[], :skill_ids)
       @programming_question.assign_attributes(programming_question_params.
@@ -48,7 +70,33 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
       @programming_question.is_synced_with_codaveri = false
       process_package
 
+      update_timestamp = Time.current
+      @programming_question.updated_at = update_timestamp
+      @programming_question.snapshot_of_state_at = update_timestamp
+      @programming_question.snapshot_index = @programming_question.snapshot_index + 1
+
       raise ActiveRecord::Rollback unless @programming_question.save
+
+      if @programming_question.should_create_snapshot?
+        @programming_question.update_column(:import_job_id, nil) # maintains uniqueness constraint
+        snapshot.skip_process_package = true
+        snapshot.save!
+
+        update_result = ActiveRecord::Base.connection.execute(<<-SQL.squish
+          UPDATE course_assessment_answer_programming_auto_gradings
+          SET question_snapshot_id = #{snapshot.id}
+          FROM course_assessment_answer_auto_gradings, course_assessment_answers, course_assessment_questions
+          WHERE course_assessment_answer_programming_auto_gradings.id = course_assessment_answer_auto_gradings.actable_id
+            AND course_assessment_answer_auto_gradings.answer_id = course_assessment_answers.id
+            AND course_assessment_questions.id = course_assessment_answers.question_id
+            AND course_assessment_questions.actable_id = #{@programming_question.id}
+            AND course_assessment_questions.actable_type = 'Course::Assessment::Question::Programming'
+            AND (course_assessment_answer_programming_auto_gradings.question_snapshot_id IS NULL
+                OR course_assessment_answer_programming_auto_gradings.question_snapshot_id = #{@programming_question.id})
+        SQL
+        )
+        
+      end
 
       true
     end

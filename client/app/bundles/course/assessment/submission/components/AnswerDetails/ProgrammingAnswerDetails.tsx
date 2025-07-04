@@ -1,9 +1,12 @@
 import { useEffect } from 'react';
+import { Alert } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
 
 import actionTypes from 'course/assessment/submission/constants';
 import { useAppDispatch } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
+import translations from '../../translations';
 import { AnswerDetailsProps } from '../../types';
 
 import CodaveriFeedbackStatus from './ProgrammingComponent/CodaveriFeedbackStatus';
@@ -17,6 +20,7 @@ const ProgrammingAnswerDetails = (
   const annotations = answer.annotations ?? [];
 
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch({
@@ -27,6 +31,11 @@ const ProgrammingAnswerDetails = (
 
   return (
     <>
+      {answer.gradedOnPastSnapshot && (
+        <Alert severity="warning">
+          {t(translations.answerGradedOnPastSnapshot)}
+        </Alert>
+      )}
       {answer.fields.files_attributes.map((file) => (
         <FileContent
           key={`file-${file.id}-answer-${answer.id}`}

@@ -20,6 +20,10 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
   # "any correct" allows it to have more than one correct answer.
   alias_method :multiple_choice?, :any_correct?
 
+  def is_saving_snapshots?
+    false
+  end
+
   def auto_gradable?
     true
   end

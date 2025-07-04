@@ -23,6 +23,10 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
 
   accepts_nested_attributes_for :groups, allow_destroy: true
 
+  def is_saving_snapshots?
+    false
+  end
+
   def auto_gradable?
     if comprehension_question?
       groups.any?(&:auto_gradable_group?)

@@ -19,6 +19,8 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   acts_as :question, class_name: 'Course::Assessment::Question'
 
+  before_create :set_snapshot_attributes
+  after_destroy_commit :destroy_snapshots
   after_initialize :set_defaults
   before_save :process_package, unless: :skip_process_package?
   before_validation :assign_template_attributes
@@ -44,6 +46,20 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
                             dependent: :destroy, foreign_key: :question_id, inverse_of: :question
   has_many :test_cases, class_name: 'Course::Assessment::Question::ProgrammingTestCase',
                         dependent: :destroy, foreign_key: :question_id, inverse_of: :question
+
+  has_many :snapshots, class_name: 'Course::Assessment::Question::Programming',
+                       foreign_key: :current_id, inverse_of: :current
+
+  belongs_to :current, class_name: 'Course::Assessment::Question::Programming',
+                       optional: true, inverse_of: :snapshots
+
+  def should_create_snapshot?
+    !skip_process_package?
+  end
+
+  def is_saving_snapshots?
+    true
+  end
 
   def auto_gradable?
     !test_cases.empty?
@@ -167,6 +183,12 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   private
 
+  def set_snapshot_attributes
+    self.current ||= self
+    self.snapshot_of_state_at ||= Time.current
+    self.snapshot_index ||= 0
+  end
+
   def set_defaults
     self.max_time_limit = DEFAULT_CPU_TIMEOUT
     self.skip_process_package = false
@@ -261,6 +283,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
                  'Codaveri component is deactivated.' \
                  'Activate it in the course setting or switch this question into a non-codaveri type.')
     end
+  end
+
+  def destroy_snapshots
+    self.snapshots.where.not(id: self).destroy_all
   end
 end
 
