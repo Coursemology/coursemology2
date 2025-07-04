@@ -1,0 +1,24 @@
+prepare:
+
+compile: submission/template.go tests/prepend.go tests/append.go
+	cat tests/prepend.go submission/template.go tests/append.go > answer.go
+
+public:
+	echo "Not Implemented"
+
+private:
+	echo "Not Implemented"
+
+evaluation:
+	echo "Not Implemented"
+
+solution:	solution.go
+	echo "Not Implemented"
+
+solution.go: solution/template.go tests/prepend.go tests/append.go
+	cat tests/prepend.go solution/template.go tests/append.go > solution.go
+
+clean:
+	rm -f answer.go
+	rm -f report.xml
+	rm -f solution.go

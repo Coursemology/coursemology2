@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Programming::R::RPackageService < # rubocop:disable Metrics/ClassLength
+class Course::Assessment::Question::Programming::Go::GoPackageService < # rubocop:disable Metrics/ClassLength
   Course::Assessment::Question::Programming::LanguagePackageService
   def submission_templates
     [
       {
-        filename: 'template.R',
+        filename: 'template.go',
         content: @test_params[:submission] || ''
       }
     ]
@@ -94,29 +94,29 @@ class Course::Assessment::Question::Programming::R::RPackageService < # rubocop:
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def generate_zip_file(data_files_to_keep)
     tmp = Tempfile.new(['package', '.zip'])
-    makefile_path = get_file_path('r_makefile')
+    makefile_path = get_file_path('go_makefile')
 
     Zip::OutputStream.open(tmp.path) do |zip|
       # Create solution directory with template file
       zip.put_next_entry 'solution/'
-      zip.put_next_entry 'solution/template.R'
+      zip.put_next_entry 'solution/template.go'
       zip.print @test_params[:solution]
       zip.print "\n"
 
       # Create submission directory with template file
       zip.put_next_entry 'submission/'
-      zip.put_next_entry 'submission/template.R'
+      zip.put_next_entry 'submission/template.go'
       zip.print @test_params[:submission]
       zip.print "\n"
 
       # Create tests directory with prepend, append and autograde files
       zip.put_next_entry 'tests/'
-      zip.put_next_entry 'tests/append.R'
+      zip.put_next_entry 'tests/append.go'
       zip.print "\n"
       zip.print @test_params[:append]
       zip.print "\n"
 
-      zip.put_next_entry 'tests/prepend.R'
+      zip.put_next_entry 'tests/prepend.go'
       zip.print @test_params[:prepend]
       zip.print "\n"
 
@@ -165,7 +165,7 @@ class Course::Assessment::Question::Programming::R::RPackageService < # rubocop:
   end
 
   def build_dummy_report(test_type, test_cases)
-    Course::Assessment::ProgrammingTestCaseReportBuilder.build_dummy_report(test_type, test_cases, '.R')
+    Course::Assessment::ProgrammingTestCaseReportBuilder.build_dummy_report(test_type, test_cases, '.go')
   end
 
   def get_data_files_meta(data_files_to_keep, new_data_files)

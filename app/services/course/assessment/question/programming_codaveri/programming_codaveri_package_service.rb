@@ -53,6 +53,16 @@ class Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPack
         Course::Assessment::Question::ProgrammingCodaveri::R::RPackageService.new question, package
       when Coursemology::Polyglot::Language::Java
         Course::Assessment::Question::ProgrammingCodaveri::Java::JavaPackageService.new question, package
+      when Coursemology::Polyglot::Language::CSharp
+        Course::Assessment::Question::ProgrammingCodaveri::CSharp::CSharpPackageService.new question, package
+      when Coursemology::Polyglot::Language::JavaScript
+        Course::Assessment::Question::ProgrammingCodaveri::JavaScript::JavaScriptPackageService.new question, package
+      when Coursemology::Polyglot::Language::Go
+        Course::Assessment::Question::ProgrammingCodaveri::Go::GoPackageService.new question, package
+      when Coursemology::Polyglot::Language::Rust
+        Course::Assessment::Question::ProgrammingCodaveri::Rust::RustPackageService.new question, package
+      when Coursemology::Polyglot::Language::TypeScript
+        Course::Assessment::Question::ProgrammingCodaveri::TypeScript::TypeScriptPackageService.new question, package
       else
         raise NotImplementedError
       end
