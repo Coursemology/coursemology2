@@ -246,7 +246,9 @@ Rails.application.routes.draw do
           end
 
           namespace :question do
-            resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
+            resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy] do
+              post :generate, on: :collection
+            end
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :rubric_based_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :programming, only: [:new, :create, :edit, :update, :destroy] do

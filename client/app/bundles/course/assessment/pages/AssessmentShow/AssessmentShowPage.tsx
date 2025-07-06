@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react';
-import { AutoFixHigh, InsertDriveFile } from '@mui/icons-material';
+import { InsertDriveFile } from '@mui/icons-material';
 import {
   Alert,
-  Button,
   Chip,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Paper,
-  Tooltip,
   Typography,
 } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { AssessmentData } from 'types/course/assessment/assessments';
 
 import KoditsuChipButton from 'course/assessment/components/Koditsu/KoditsuChipButton';
@@ -27,6 +25,7 @@ import translations from '../../translations';
 
 import AssessmentDetails from './AssessmentDetails';
 import AssessmentShowHeader from './AssessmentShowHeader';
+import GenerateQuestionMenu from './GenerateQuestionMenu';
 import NewQuestionMenu from './NewQuestionMenu';
 import QuestionsManager from './QuestionsManager';
 import UnavailableAlert from './UnavailableAlert';
@@ -180,26 +179,14 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
           title={t(translations.questions)}
         >
           <div className="space-x-3 flex items-end">
-            {assessment.newQuestionUrls && (
-              <NewQuestionMenu with={assessment.newQuestionUrls} />
-            )}
-            {assessment.generateQuestionUrl && (
-              <Tooltip title={t(translations.generateTooltip)}>
-                <Link
-                  opensInNewTab
-                  to={assessment.generateQuestionUrl}
-                  underline="none"
-                >
-                  <Button
-                    size="small"
-                    startIcon={<AutoFixHigh />}
-                    variant="outlined"
-                  >
-                    {t(translations.generate)}
-                  </Button>
-                </Link>
-              </Tooltip>
-            )}
+            {assessment.newQuestionUrls &&
+              assessment.newQuestionUrls.length > 0 && (
+                <NewQuestionMenu with={assessment.newQuestionUrls} />
+              )}
+            {assessment.generateQuestionUrls &&
+              assessment.generateQuestionUrls.length > 0 && (
+                <GenerateQuestionMenu with={assessment.generateQuestionUrls} />
+              )}
           </div>
 
           {assessment.hasUnautogradableQuestions && (

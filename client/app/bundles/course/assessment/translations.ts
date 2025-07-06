@@ -196,7 +196,7 @@ const translations = defineMessages({
   },
   generate: {
     id: 'course.assessment.show.generate',
-    defaultMessage: 'Generate Programming Questions',
+    defaultMessage: 'Generate Questions',
   },
   generateTooltip: {
     id: 'course.assessment.show.generateTooltip',

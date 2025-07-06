@@ -2244,7 +2244,7 @@
     "defaultMessage": "포럼 게시물 응답"
   },
   "course.assessment.show.generate": {
-    "defaultMessage": "프로그래밍 문제 생성"
+    "defaultMessage": "질문 생성"
   },
   "course.assessment.show.generateTooltip": {
     "defaultMessage": "Codaveri AI와 협업하여 문제를 생성하세요"
