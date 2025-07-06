@@ -173,6 +173,21 @@ if can_observe
       ]
     end
 
-    json.generateQuestionUrl generate_course_assessment_question_programming_index_path(current_course, assessment)
+    json.generateQuestionUrls [
+      # {
+      #   type: 'MultipleChoice',
+      #   url: generate_course_assessment_question_multiple_responses_path(current_course, assessment, {
+      #     multiple_choice: true
+      #   })
+      # },
+      {
+        type: 'MultipleResponse',
+        url: generate_course_assessment_question_multiple_responses_path(current_course, assessment)
+      },
+      {
+        type: 'Programming',
+        url: generate_course_assessment_question_programming_index_path(current_course, assessment)
+      }
+    ]
   end
 end
