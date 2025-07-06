@@ -2238,7 +2238,7 @@
     "defaultMessage": "Graded test cases"
   },
   "course.assessment.show.generate": {
-    "defaultMessage": "Generate Programming Questions"
+    "defaultMessage": "Generate Questions"
   },
   "course.assessment.show.generateTooltip": {
     "defaultMessage": "Collaborate with Codaveri AI to create questions"
