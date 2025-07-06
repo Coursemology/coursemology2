@@ -15,6 +15,7 @@ json.type question_assessment.question.question_type_readable
 json.description format_ckeditor_rich_text(question.description) unless question.description.blank?
 
 is_programming_question = question.actable_type == Course::Assessment::Question::Programming.name
+is_multiple_response_question = question.actable_type == Course::Assessment::Question::MultipleResponse.name
 is_course_koditsu_enabled = current_course.component_enabled?(Course::KoditsuPlatformComponent)
 
 if is_course_koditsu_enabled && is_programming_question
@@ -27,6 +28,10 @@ if can?(:manage, assessment)
   json.deleteUrl url_for([current_course, assessment, question.specific])
   if is_programming_question
     json.generateFromUrl "#{generate_course_assessment_question_programming_index_path(
+      current_course, assessment
+    )}?source_question_id=#{question.specific.id}"
+  elsif is_multiple_response_question
+    json.generateFromUrl "#{generate_course_assessment_question_multiple_responses_path(
       current_course, assessment
     )}?source_question_id=#{question.specific.id}"
   end

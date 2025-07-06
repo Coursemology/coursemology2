@@ -2184,7 +2184,7 @@
     "defaultMessage": "论坛帖子回复"
   },
   "course.assessment.show.generate": {
-    "defaultMessage": "生成编程问题"
+    "defaultMessage": "生成问题"
   },
   "course.assessment.show.generateTooltip": {
     "defaultMessage": "与 Codaveri AI 合作创建问题"
