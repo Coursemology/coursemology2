@@ -4,6 +4,7 @@ import {
   AnnouncementPermissions,
 } from 'types/course/announcements';
 import { CourseListData, CourseStats } from 'types/system/courses';
+import { ComponentData } from 'types/system/instance/components';
 import { InvitationListData } from 'types/system/instance/invitations';
 import { RoleRequestListData } from 'types/system/instance/roleRequests';
 import {
@@ -31,6 +32,7 @@ import {
   InstanceAdminState,
   SAVE_ANNOUNCEMENT,
   SAVE_ANNOUNCEMENT_LIST,
+  SAVE_COMPONENT_LIST,
   SAVE_COURSE_LIST,
   SAVE_INVITATION,
   SAVE_INVITATION_LIST,
@@ -40,6 +42,7 @@ import {
   SAVE_USER_LIST,
   SaveAnnouncementAction,
   SaveAnnouncementListAction,
+  SaveComponentListAction,
   SaveCourseListAction,
   SaveInvitationAction,
   SaveInvitationListAction,
@@ -55,6 +58,7 @@ const initialState: InstanceAdminState = {
   courses: createEntityStore(),
   roleRequests: createEntityStore(),
   invitations: createEntityStore(),
+  components: [],
   counts: {
     totalUsers: {
       adminCount: 0,
@@ -183,6 +187,10 @@ const reducer = produce(
         saveEntityToStore(draft.roleRequests, roleRequestMiniEntity);
         break;
       }
+      case SAVE_COMPONENT_LIST: {
+        draft.components = action.components;
+        break;
+      }
       default: {
         break;
       }
@@ -285,6 +293,12 @@ export const actions = {
     return {
       type: DELETE_INVITATION,
       invitationId,
+    };
+  },
+  saveComponentList: (components: ComponentData[]): SaveComponentListAction => {
+    return {
+      type: SAVE_COMPONENT_LIST,
+      components,
     };
   },
 };

@@ -11,10 +11,12 @@ import {
 import { ComponentData } from 'types/system/instance/components';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import tableTranslations from 'lib/translations/table';
 
 import { indexComponents, updateComponents } from '../operations';
+import { actions } from '../store';
 
 type Props = WrappedComponentProps;
 
@@ -35,6 +37,7 @@ const translations = defineMessages({
 
 const InstanceComponentsIndex: FC<Props> = (props) => {
   const { intl } = props;
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [components, setComponents] = useState<ComponentData[]>([]);
@@ -42,7 +45,10 @@ const InstanceComponentsIndex: FC<Props> = (props) => {
   useEffect(() => {
     setIsLoading(true);
     indexComponents()
-      .then((data) => setComponents(data))
+      .then((data) => {
+        setComponents(data);
+        dispatch(actions.saveComponentList(data));
+      })
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchComponentsFailure)),
       )
@@ -56,6 +62,7 @@ const InstanceComponentsIndex: FC<Props> = (props) => {
     updateComponents(components, updatedComponentKey)
       .then((data) => {
         setComponents(data);
+        dispatch(actions.saveComponentList(data));
         toast.success(intl.formatMessage(translations.updateComponentsSuccess));
       })
       .catch(() =>

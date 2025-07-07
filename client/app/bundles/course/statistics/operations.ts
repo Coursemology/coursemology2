@@ -10,10 +10,16 @@ import {
   CourseProgressionStatistics,
   GetHelpStatistics,
   StaffStatistics,
+  StatisticsIndexData,
   StudentsStatistics,
 } from './types';
 
 const DOWNLOAD_JOB_POLL_INTERVAL_MS = 2000;
+
+export const fetchStatisticsIndex = async (): Promise<StatisticsIndexData> => {
+  const response = await CourseAPI.statistics.course.fetchStatisticsIndex();
+  return response.data;
+};
 
 export const fetchStudentStatistics = async (): Promise<StudentsStatistics> => {
   const response =

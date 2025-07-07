@@ -9,6 +9,7 @@ import {
   CourseMiniEntity,
   CourseStats,
 } from 'types/system/courses';
+import { ComponentData } from 'types/system/instance/components';
 import {
   InvitationListData,
   InvitationMiniEntity,
@@ -38,6 +39,7 @@ export const SAVE_ROLE_REQUEST = 'system/instance/SAVE_ROLE_REQUEST';
 export const SAVE_INVITATION = 'system/instance/SAVE_INVITATION';
 export const SAVE_INVITATION_LIST = 'system/instance/SAVE_INVITATION_LIST';
 export const DELETE_INVITATION = 'system/instance/DELETE_INVITATION';
+export const SAVE_COMPONENT_LIST = 'system/instance/SAVE_COMPONENT_LIST';
 
 // Action Types
 export interface SaveAnnouncementListAction {
@@ -106,6 +108,11 @@ export interface DeleteInvitationAction {
   invitationId: number;
 }
 
+export interface SaveComponentListAction {
+  type: typeof SAVE_COMPONENT_LIST;
+  components: ComponentData[];
+}
+
 export type InstanceAdminActionType =
   | SaveAnnouncementListAction
   | SaveAnnouncementAction
@@ -119,7 +126,8 @@ export type InstanceAdminActionType =
   | SaveRoleRequestAction
   | SaveInvitationAction
   | SaveInvitationListAction
-  | DeleteInvitationAction;
+  | DeleteInvitationAction
+  | SaveComponentListAction;
 
 // State Types
 export interface InstanceAdminState {
@@ -128,6 +136,7 @@ export interface InstanceAdminState {
   roleRequests: EntityStore<RoleRequestMiniEntity>;
   users: EntityStore<InstanceUserMiniEntity>;
   invitations: EntityStore<InvitationMiniEntity>;
+  components: ComponentData[];
   counts: InstanceAdminStats;
   permissions: InstancePermissions;
 }

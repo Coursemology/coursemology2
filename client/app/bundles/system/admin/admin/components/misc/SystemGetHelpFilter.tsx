@@ -9,8 +9,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import useTranslation from 'lib/hooks/useTranslation';
+import moment from 'lib/moment';
 
 export interface GetHelpFilter {
   course: { title: string } | null;
@@ -184,6 +188,23 @@ const FilterFields: FC<Props> = ({
     onFilterChange(newFilter);
   };
 
+  const getDateValue = (dateString: string): moment.Moment | null => {
+    if (!dateString) return null;
+    const date = moment(dateString);
+    return date.isValid() ? date : null;
+  };
+
+  const handleDateChange = (
+    newValue: moment.Moment | null,
+    field: 'startDate' | 'endDate',
+  ): void => {
+    const newFilter = {
+      ...selectedFilter,
+      [field]: newValue?.isValid() ? newValue.format('YYYY-MM-DD') : '',
+    };
+    handleFilterChange(newFilter);
+  };
+
   return (
     <Grid columns={4} container>
       <Grid item paddingBottom={1} paddingRight={1} xs={1}>
@@ -225,31 +246,37 @@ const FilterFields: FC<Props> = ({
         />
       </Grid>
       <Grid item paddingBottom={1} paddingRight={1} xs={1}>
-        <TextField
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          label={t(translations.filterStartDateLabel)}
-          onChange={(e) => {
-            const newFilter = { ...selectedFilter, startDate: e.target.value };
-            handleFilterChange(newFilter);
-          }}
-          type="date"
-          value={selectedFilter.startDate || ''}
-        />
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <DesktopDatePicker
+            format="DD/MM/YYYY"
+            label={t(translations.filterStartDateLabel)}
+            onChange={(newValue) => handleDateChange(newValue, 'startDate')}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                InputLabelProps: { shrink: true },
+              },
+            }}
+            value={getDateValue(selectedFilter.startDate)}
+          />
+        </LocalizationProvider>
       </Grid>
       <Grid item paddingBottom={1} xs={1}>
-        <TextField
-          error={!!getDateValidationError(selectedFilter, t)}
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          label={t(translations.filterEndDateLabel)}
-          onChange={(e) => {
-            const newFilter = { ...selectedFilter, endDate: e.target.value };
-            handleFilterChange(newFilter);
-          }}
-          type="date"
-          value={selectedFilter.endDate || ''}
-        />
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <DesktopDatePicker
+            format="DD/MM/YYYY"
+            label={t(translations.filterEndDateLabel)}
+            onChange={(newValue) => handleDateChange(newValue, 'endDate')}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                InputLabelProps: { shrink: true },
+                error: !!getDateValidationError(selectedFilter, t),
+              },
+            }}
+            value={getDateValue(selectedFilter.endDate)}
+          />
+        </LocalizationProvider>
       </Grid>
     </Grid>
   );
