@@ -2471,6 +2471,9 @@
   "course.assessment.liveFeedback.lineHeader": {
     "defaultMessage": "第 {lineNumber} 行"
   },
+  "course.assessment.submission.GetHelpChatPage.codeUpdated": {
+    "defaultMessage": "代码已更新"
+  },
   "course.assessment.statistics.answers": {
     "defaultMessage": "答案"
   },

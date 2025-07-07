@@ -85,8 +85,7 @@ export default defineMessages({
   },
   errorOccurredWhenUpdatingLiveFeedbackSettings: {
     id: 'course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings',
-    defaultMessage:
-      'An error occurred while updating the live feedback settings.',
+    defaultMessage: 'An error occurred while updating the Get Help settings.',
   },
   enableDisableButton: {
     id: 'course.admin.CodaveriSettings.enableDisableButton',
@@ -101,7 +100,7 @@ export default defineMessages({
   enableDisableLiveFeedback: {
     id: 'course.admin.CodaveriSettings.enableDisableLiveFeedback',
     defaultMessage:
-      '{enabled, select, true {Enable } other {Disable }} live feedback for {questionCount} \
+      '{enabled, select, true {Enable } other {Disable }} Get Help for {questionCount} \
       programming questions in {title}?',
   },
   enableDisableEvaluatorDescription: {
@@ -112,12 +111,12 @@ export default defineMessages({
   succesfulUpdateAllEvaluator: {
     id: 'course.admin.CodaveriSettings.succesfulUpdateAllEvaluator',
     defaultMessage:
-      'Sucessfully updated all questions to use {evaluator} evaluator',
+      'Successfully updated all questions to use {evaluator} evaluator',
   },
   successfulUpdateAllLiveFeedbackEnabled: {
     id: 'course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled',
     defaultMessage:
-      'Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} live feedback for all questions',
+      'Successfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} Get Help for all questions',
   },
   evaluatorUpdateSuccess: {
     id: 'course.admin.CodaveriSettings.evaluatorUpdateSuccess',
@@ -126,7 +125,7 @@ export default defineMessages({
   liveFeedbackEnabledUpdateSuccess: {
     id: 'course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess',
     defaultMessage:
-      'Live feedback for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}',
+      'Get Help for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}',
   },
   expandAll: {
     id: 'course.admin.CodaveriSettings.expandAll',

@@ -32,6 +32,37 @@ export const isAllFileIdsIdentical = (
   return true;
 };
 
+export const groupMessagesByFileIds = (
+  messages: LiveFeedbackChatMessage[],
+): Array<{
+  groupId: string;
+  indices: number[];
+}> => {
+  const groups: Array<{ groupId: string; indices: number[] }> = [];
+
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+    const fileIds = message.files
+      .map((file) => file.id)
+      .sort()
+      .join(',');
+
+    // Find existing group with same file IDs
+    const existingGroup = groups.find((group) => group.groupId === fileIds);
+
+    if (existingGroup) {
+      existingGroup.indices.push(i);
+    } else {
+      groups.push({
+        groupId: fileIds,
+        indices: [i],
+      });
+    }
+  }
+
+  return groups;
+};
+
 export const fetchAllIndexWithIdenticalFileIds = (
   messages: LiveFeedbackChatMessage[],
   selectedMessageIndex: number,
