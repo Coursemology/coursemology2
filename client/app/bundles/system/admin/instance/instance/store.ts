@@ -28,11 +28,12 @@ import {
   DeleteCourseAction,
   DeleteInvitationAction,
   DeleteUserAction,
+  INIT_COMPONENT_LIST,
+  InitComponentListAction,
   InstanceAdminActionType,
   InstanceAdminState,
   SAVE_ANNOUNCEMENT,
   SAVE_ANNOUNCEMENT_LIST,
-  SAVE_COMPONENT_LIST,
   SAVE_COURSE_LIST,
   SAVE_INVITATION,
   SAVE_INVITATION_LIST,
@@ -42,7 +43,6 @@ import {
   SAVE_USER_LIST,
   SaveAnnouncementAction,
   SaveAnnouncementListAction,
-  SaveComponentListAction,
   SaveCourseListAction,
   SaveInvitationAction,
   SaveInvitationListAction,
@@ -187,7 +187,7 @@ const reducer = produce(
         saveEntityToStore(draft.roleRequests, roleRequestMiniEntity);
         break;
       }
-      case SAVE_COMPONENT_LIST: {
+      case INIT_COMPONENT_LIST: {
         draft.components = action.components;
         break;
       }
@@ -295,9 +295,9 @@ export const actions = {
       invitationId,
     };
   },
-  saveComponentList: (components: ComponentData[]): SaveComponentListAction => {
+  initComponentList: (components: ComponentData[]): InitComponentListAction => {
     return {
-      type: SAVE_COMPONENT_LIST,
+      type: INIT_COMPONENT_LIST,
       components,
     };
   },

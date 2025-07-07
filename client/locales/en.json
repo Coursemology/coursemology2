@@ -525,10 +525,10 @@
     "defaultMessage": "Codaveri Evaluator"
   },
   "course.admin.CodaveriSettings.liveFeedbackSettings": {
-    "defaultMessage": "Live Feedback"
+    "defaultMessage": "Get Help"
   },
   "course.admin.CodaveriSettings.errorOccurredWhenUpdatingLiveFeedbackSettings": {
-    "defaultMessage": "An error occurred while updating the live feedback settings."
+    "defaultMessage": "An error occurred while updating the Get Help settings."
   },
   "course.admin.CodaveriSettings.enableDisableButton": {
     "defaultMessage": "{enabled, select, true {Enable} other {Disable}}"
@@ -537,16 +537,16 @@
     "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Codaveri Evaluator for {questionCount} programming questions in {title}?"
   },
   "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
-    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Live feedback for {questionCount} programming questions in {title}?"
+    "defaultMessage": "{enabled, select, true {Enable } other {Disable }} Get Help for {questionCount} programming questions in {title}?"
   },
   "course.admin.CodaveriSettings.enableDisableEvaluatorDescription": {
     "defaultMessage": "{questionCount} programming questions in this {type} will use {enabled, select, true {Codaveri } other {Default }} evaluator"
   },
   "course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess": {
-    "defaultMessage": "Live feedback for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}"
+    "defaultMessage": "Get Help for {question} is now {liveFeedbackEnabled, select, true {enabled} other {disabled}}"
   },
   "course.admin.CodaveriSettings.successfulUpdateAllLiveFeedbackEnabled": {
-    "defaultMessage": "Sucessfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} live feedback for all questions"
+    "defaultMessage": "Successfully {liveFeedbackEnabled, select, true {enabled} other {disabled}} Get Help for all questions"
   },
   "course.admin.CommentsSettings.commentsSettings": {
     "defaultMessage": "Comments settings"
@@ -1329,10 +1329,10 @@
     "defaultMessage": "Visibility"
   },
   "course.assessment.AssessmentForm.toggleLiveFeedbackDescription": {
-    "defaultMessage": "{enabled, select, true {Enable} other {Disable}} live feedback feature for all programming questions"
+    "defaultMessage": "{enabled, select, true {Enable} other {Disable}} Get Help feature for all programming questions"
   },
   "course.assessment.AssessmentForm.noProgrammingQuestion": {
-    "defaultMessage": "You need to add at least one programming question that can be supported by Codaveri to allow enabling live feedback for this Assessment"
+    "defaultMessage": "You need to add at least one programming question that can be supported by Codaveri to allow enabling Get Help for this Assessment"
   },
   "course.assessment.FileManager.addFiles": {
     "defaultMessage": "Add Files"
@@ -1740,7 +1740,7 @@
     "defaultMessage": "Do everything right here in this page. Useful for quick edits (especially exams) or collaborating with other instructors."
   },
   "course.assessment.question.programming.enableLiveFeedback": {
-    "defaultMessage": "Allow live feedback generation"
+    "defaultMessage": "Allow Get Help"
   },
   "course.assessment.question.programming.enableLiveFeedbackDescription": {
     "defaultMessage": "Allow students to request live programming help during submission attempts. (AI-generated feedback may not always be accurate.)"
@@ -1827,7 +1827,7 @@
     "defaultMessage": "Custom Prompt"
   },
   "course.assessment.question.programming.liveFeedbackCustomPromptDescription": {
-    "defaultMessage": "Add instructions to guide the generation of live feedback here. If unsure, just leave this blank."
+    "defaultMessage": "Add instructions to guide the generation of Get Help feedback here. If unsure, just leave this blank."
   },
   "course.assessment.question.programming.lowestGradingPriority": {
     "defaultMessage": "Lowest grading priority"
@@ -2514,13 +2514,16 @@
     "defaultMessage": "Generated at: {usedAt}"
   },
   "course.assessment.liveFeedback.liveFeedbackName": {
-    "defaultMessage": "Live Feedback"
+    "defaultMessage": "Get Help"
   },
   "course.assessment.liveFeedback.comments": {
     "defaultMessage": "Comments"
   },
   "course.assessment.liveFeedback.lineHeader": {
     "defaultMessage": "Line {lineNumber}"
+  },
+  "course.assessment.submission.GetHelpChatPage.codeUpdated": {
+    "defaultMessage": "Code Updated"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "Answers"
@@ -2553,10 +2556,10 @@
     "defaultMessage": "Lower Usage"
   },
   "course.assessment.statistics.liveFeedback.filename": {
-    "defaultMessage": "Question-level Live Feedback Statistics for {assessment}"
+    "defaultMessage": "Question-level Get Help Statistics for {assessment}"
   },
   "course.assessment.statistics.liveFeedbackHistoryPromptTitle": {
-    "defaultMessage": "Live Feedback History"
+    "defaultMessage": "Get Help History"
   },
   "course.assessment.statistics.marks.filename": {
     "defaultMessage": "Question-level Marks Statistics for {assessment}"

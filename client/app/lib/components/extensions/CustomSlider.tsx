@@ -5,8 +5,8 @@ const CustomSlider = styled(Slider)<SliderProps>(({ theme }) => ({
   height: 8,
   '& .MuiSlider-mark': {
     // Makes marks bigger
-    height: 6,
-    width: 6,
+    height: 5,
+    width: 5,
     borderRadius: '50%', // Make the marks rounded
     backgroundColor: '#555',
   },
@@ -19,6 +19,7 @@ const CustomSlider = styled(Slider)<SliderProps>(({ theme }) => ({
   },
   '& .MuiSlider-track': {
     height: 5,
+    border: 'none',
   },
   '& .MuiSlider-valueLabel': {
     backgroundColor: `transparent`,

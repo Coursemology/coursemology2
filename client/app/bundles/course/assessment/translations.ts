@@ -1741,7 +1741,7 @@ const translations = defineMessages({
   },
   enableLiveFeedback: {
     id: 'course.assessment.question.programming.enableLiveFeedback',
-    defaultMessage: 'Allow live feedback generation',
+    defaultMessage: 'Allow Get Help',
   },
   enableLiveFeedbackDescription: {
     id: 'course.assessment.question.programming.enableLiveFeedbackDescription',
@@ -1755,7 +1755,7 @@ const translations = defineMessages({
   liveFeedbackCustomPromptDescription: {
     id: 'course.assessment.question.programming.liveFeedbackCustomPromptDescription',
     defaultMessage:
-      'Add instructions to guide the generation of live feedback here. If unsure, just leave this blank.',
+      'Add instructions to guide the generation of Get Help feedback here. If unsure, just leave this blank.',
   },
   savingChanges: {
     id: 'course.assessment.question.programming.savingChanges',
@@ -1795,8 +1795,7 @@ const translations = defineMessages({
   },
   liveFeedbackNotSupported: {
     id: 'course.assessment.question.programming.liveFeedbackNotSupported',
-    defaultMessage:
-      'Live feedback generation is not supported for {languageName}.',
+    defaultMessage: 'Get Help is not supported for {languageName}.',
   },
 });
 

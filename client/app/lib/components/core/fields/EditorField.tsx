@@ -108,6 +108,25 @@ const EditorField = forwardRef(
           if (cursorStart !== undefined) {
             editor.getSession().getSelection().moveCursorTo(cursorStart, 0);
           }
+          if (disabled) {
+            editor.container.style.pointerEvents = 'none';
+            if (
+              !editor.container.querySelector(
+                'style[data-ace-cursor-transparent]',
+              )
+            ) {
+              const styleEl = document.createElement('style');
+              styleEl.innerHTML = `
+                .ace_cursor {
+                  background-color: transparent;
+                  border-left: none;
+                }
+              `;
+              styleEl.setAttribute('data-ace-cursor-transparent', 'true');
+              editor.container.appendChild(styleEl);
+            }
+          }
+
           if (language === 'python')
             editor.onPaste = (originalText, event: ClipboardEvent): void => {
               event.preventDefault();

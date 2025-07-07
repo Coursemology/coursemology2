@@ -47,7 +47,7 @@ const InstanceComponentsIndex: FC<Props> = (props) => {
     indexComponents()
       .then((data) => {
         setComponents(data);
-        dispatch(actions.saveComponentList(data));
+        dispatch(actions.initComponentList(data));
       })
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchComponentsFailure)),
@@ -62,7 +62,7 @@ const InstanceComponentsIndex: FC<Props> = (props) => {
     updateComponents(components, updatedComponentKey)
       .then((data) => {
         setComponents(data);
-        dispatch(actions.saveComponentList(data));
+        dispatch(actions.initComponentList(data));
         toast.success(intl.formatMessage(translations.updateComponentsSuccess));
       })
       .catch(() =>

@@ -2,7 +2,15 @@
 require 'rails_helper'
 
 RSpec.describe Course::Statistics::StatisticsController, type: :controller do
-  let(:instance) { Instance.default }
+  let!(:instance) { create(:instance) }
+
+  around do |example|
+    RSpec::Mocks.with_temporary_scope do
+      allow(Instance).to receive(:find_tenant_by_host_or_default).and_return(instance)
+      allow(instance).to receive(:host).and_return(Instance.default.host)
+      example.run
+    end
+  end
 
   with_tenant(:instance) do
     let(:course) { create(:course, :enrollable) }

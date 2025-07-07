@@ -54,7 +54,7 @@ const InstanceAdminNavigator = (): JSX.Element => {
     if (components.length === 0) {
       indexComponents()
         .then((componentData) => {
-          dispatch(actions.saveComponentList(componentData));
+          dispatch(actions.initComponentList(componentData));
         })
         .catch((error) => {
           console.error('Failed to load components:', error);

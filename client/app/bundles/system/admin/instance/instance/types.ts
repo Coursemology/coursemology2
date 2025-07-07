@@ -39,7 +39,7 @@ export const SAVE_ROLE_REQUEST = 'system/instance/SAVE_ROLE_REQUEST';
 export const SAVE_INVITATION = 'system/instance/SAVE_INVITATION';
 export const SAVE_INVITATION_LIST = 'system/instance/SAVE_INVITATION_LIST';
 export const DELETE_INVITATION = 'system/instance/DELETE_INVITATION';
-export const SAVE_COMPONENT_LIST = 'system/instance/SAVE_COMPONENT_LIST';
+export const INIT_COMPONENT_LIST = 'system/instance/INIT_COMPONENT_LIST';
 
 // Action Types
 export interface SaveAnnouncementListAction {
@@ -108,8 +108,8 @@ export interface DeleteInvitationAction {
   invitationId: number;
 }
 
-export interface SaveComponentListAction {
-  type: typeof SAVE_COMPONENT_LIST;
+export interface InitComponentListAction {
+  type: typeof INIT_COMPONENT_LIST;
   components: ComponentData[];
 }
 
@@ -127,7 +127,7 @@ export type InstanceAdminActionType =
   | SaveInvitationAction
   | SaveInvitationListAction
   | DeleteInvitationAction
-  | SaveComponentListAction;
+  | InitComponentListAction;
 
 // State Types
 export interface InstanceAdminState {

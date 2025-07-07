@@ -1415,6 +1415,9 @@
   "course.assessment.liveFeedback.lineHeader": {
     "defaultMessage": "{lineNumber} 줄"
   },
+  "course.assessment.submission.GetHelpChatPage.codeUpdated": {
+    "defaultMessage": "코드가 업데이트되었습니다"
+  },
   "course.assessment.liveFeedback.liveFeedbackName": {
     "defaultMessage": "라이브 피드백"
   },
