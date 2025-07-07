@@ -4,6 +4,10 @@ export interface GroupManager {
   nameLink: string;
 }
 
+export interface StatisticsIndexData {
+  codaveriComponentEnabled: boolean;
+}
+
 export interface Student {
   id: number;
   name: string;

@@ -13,9 +13,9 @@ import {
   NUM_CELL_CLASS_NAME,
 } from 'lib/constants/sharedConstants';
 import {
+  getAssessmentURL,
   getCourseURL,
   getEditSubmissionQuestionURL,
-  getEditSubmissionURL,
 } from 'lib/helpers/url-builders';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatMiniDateTime } from 'lib/moment';
@@ -114,10 +114,9 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
       cell: (getHelpDatum) => (
         <Link
           key={getHelpDatum.id}
-          href={`//${getHelpDatum.instanceHost}${getEditSubmissionURL(
+          href={`//${getHelpDatum.instanceHost}${getAssessmentURL(
             getHelpDatum.courseId,
             getHelpDatum.assessmentId,
-            getHelpDatum.submissionId,
           )}`}
           opensInNewTab
         >

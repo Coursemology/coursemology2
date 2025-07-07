@@ -14,8 +14,8 @@ import {
   NUM_CELL_CLASS_NAME,
 } from 'lib/constants/sharedConstants';
 import {
+  getAssessmentURL,
   getEditSubmissionQuestionURL,
-  getEditSubmissionURL,
 } from 'lib/helpers/url-builders';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatMiniDateTime } from 'lib/moment';
@@ -80,11 +80,7 @@ const GetHelpStatisticsTable: FC<{
         <Link
           key={feedback.id}
           opensInNewTab
-          to={getEditSubmissionURL(
-            courseId,
-            feedback.assessmentId,
-            feedback.submissionId,
-          )}
+          to={getAssessmentURL(courseId, feedback.assessmentId)}
         >
           {feedback.assessmentTitle}
         </Link>

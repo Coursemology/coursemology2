@@ -12,9 +12,17 @@ import {
 
 import BaseCourseAPI from '../Base';
 
+interface StatisticsIndexData {
+  codaveriComponentEnabled: boolean;
+}
+
 export default class CourseStatisticsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
     return `/courses/${this.courseId}/statistics`;
+  }
+
+  fetchStatisticsIndex(): APIResponse<StatisticsIndexData> {
+    return this.client.get(`${this.#urlPrefix}`);
   }
 
   fetchAllStudentStatistics(): APIResponse<StudentsStatistics> {
