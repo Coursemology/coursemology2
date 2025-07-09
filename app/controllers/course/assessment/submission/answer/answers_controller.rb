@@ -74,8 +74,8 @@ class Course::Assessment::Submission::Answer::AnswersController <
 
     attempts = submission.answers.from_question(answer.question_id)
     last_non_current_answer = attempts.reject(&:current_answer?).last
-    job = last_non_current_answer&.auto_grading&.job
-    job&.status == 'submitted' ? job : nil
+    jobs = last_non_current_answer&.auto_gradings&.map(&:job)&.compact&.select { |j| j.status == 'submitted' }
+    jobs&.first
   end
 
   def reattempt_and_grade_answer(answer)
@@ -87,7 +87,8 @@ class Course::Assessment::Submission::Answer::AnswersController <
     # so destroy the failed job answer and re-grade the current entry.
     answer.class.transaction do
       last_answer = answer.submission.answers.select { |ans| ans.question_id == answer.question_id }.last
-      last_answer.destroy! if last_answer&.auto_grading&.job&.errored?
+      p({ laag: last_answer&.auto_gradings, should_destroy: last_answer&.auto_gradings&.any? { |ag| ag.job&.errored? } })
+      last_answer.destroy! if last_answer&.auto_gradings&.any? { |ag| ag.job&.errored? }
       new_answer = reattempt_answer(answer, finalise: true)
       new_answer.auto_grade!(redirect_to_path: nil, reduce_priority: false)
     end

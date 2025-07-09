@@ -1,13 +1,21 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   Course::Assessment::Answer::AutoGradingService
-  def evaluate(answer)
+  def evaluate(answer, auto_grading)
     unless answer.submission.assessment.course.component_enabled?(Course::CodaveriComponent)
       raise CodaveriError, I18n.t('course.assessment.question.programming.question_type_codaveri_deactivated')
     end
+    # We pre-load the programming question, including test cases,
+    # to ensure consistency with at least one saved snapshot.
+    question = Course::Assessment::Answer.includes(question: {actable: [:test_cases ]}).find_by_id(answer.id).question.actable
 
     answer.correct, grade, programming_auto_grading, = evaluate_answer(answer.actable)
-    programming_auto_grading.auto_grading = answer.auto_grading
+    # If the question was updated during the evaluation, we can still find
+    # our original question by comparing the updated_at timestamps.
+    programming_auto_grading.question_snapshot_id =
+      Course::Assessment::Question::Programming.
+        where(current_id: question.id, snapshot_of_state_at: question.snapshot_of_state_at).first&.id || question.id
+    programming_auto_grading.auto_grading = auto_grading
     grade
   end
 

@@ -31,6 +31,11 @@ const ProgrammingAnswerDetails = (
 
   return (
     <>
+      {(answer.autoGradingCount > 1) && (
+        <Alert severity="info">
+          {t(translations.multipleAutoGradingResults)}
+        </Alert>
+      )}
       {answer.gradedOnPastSnapshot && (
         <Alert severity="warning">
           {t(translations.answerGradedOnPastSnapshot)}

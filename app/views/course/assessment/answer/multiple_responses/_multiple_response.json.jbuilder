@@ -10,9 +10,9 @@ end
 last_attempt = last_attempt(answer)
 
 json.explanation do
-  if last_attempt&.auto_grading&.result
+  if last_attempt&.auto_gradings&.last&.result
     json.correct last_attempt.correct
-    json.explanations(last_attempt.auto_grading.result['messages'].map { |e| format_ckeditor_rich_text(e) })
+    json.explanations(last_attempt.auto_gradings.last.result['messages'].map { |e| format_ckeditor_rich_text(e) })
   end
 end
 

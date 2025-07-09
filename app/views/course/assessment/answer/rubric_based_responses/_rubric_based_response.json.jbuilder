@@ -15,7 +15,7 @@ end
 last_attempt = last_attempt(answer)
 attempt = answer.current_answer? ? last_attempt : answer
 
-job = attempt&.auto_grading&.job
+job = attempt&.auto_gradings&.last&.job
 
 if job
   json.autograding do
@@ -24,7 +24,7 @@ if job
   end
 end
 
-if attempt.submitted? && !attempt.auto_grading
+if attempt.submitted? && !attempt.auto_gradings&.any?
   json.autograding do
     json.status :submitted
   end

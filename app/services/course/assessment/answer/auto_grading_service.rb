@@ -5,9 +5,10 @@ class Course::Assessment::Answer::AutoGradingService
     # +Course::Assessment::Answer::AutoGrading+ object.
     #
     # @param [Course::Assessment::Answer] answer The answer to be graded.
-    def grade(answer)
+    # @param [Course::Assessment::Answer::AutoGrading] auto_grading The auto grading object that will store the results.
+    def grade(answer, auto_grading)
       answer = if answer.question.auto_gradable?
-                 pick_grader(answer.question).grade(answer)
+                 pick_grader(answer.question).grade(answer, auto_grading)
                else
                  assign_maximum_grade(answer)
                end
@@ -48,10 +49,11 @@ class Course::Assessment::Answer::AutoGradingService
   # and makes sure answer is in the correct state.
   #
   # @param [Course::Assessment::Answer] answer The answer to be graded.
+    # @param [Course::Assessment::Answer::AutoGrading] auto_grading The auto grading object that will store the results.
   # @return [Course::Assessment::Answer] The graded answer. Note that this answer is not persisted
   #   yet.
-  def grade(answer)
-    grade = evaluate(answer)
+  def grade(answer, auto_grading)
+    grade = evaluate(answer, auto_grading)
     answer.evaluate!
 
     if answer.submission.assessment.autograded?
@@ -66,8 +68,9 @@ class Course::Assessment::Answer::AutoGradingService
   # subclasses.
   #
   # @param [Course::Assessment::Answer] answer The answer to be evaluated.
+    # @param [Course::Assessment::Answer::AutoGrading] auto_grading The auto grading object that will store the results.
   # @return [Integer] grade The grade of the answer.
-  def evaluate(_answer)
+  def evaluate(_answer, _auto_grading)
     raise 'Not Implemented'
   end
 end

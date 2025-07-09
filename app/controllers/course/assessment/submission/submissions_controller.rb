@@ -371,12 +371,12 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     return if submitted_answers.empty?
 
     dead_answers = submitted_answers.select do |a|
-      job = a.auto_grading&.job
+      job = a.auto_gradings&.last&.job
       job&.submitted? && !job.in_queue?
     end
 
     dead_answers.each do |a|
-      old_job = a.auto_grading.job
+      old_job = a.auto_gradings&.last&.job
       job = a.auto_grade!(redirect_to_path: old_job.redirect_to, reduce_priority: true)
 
       logger.debug(message: 'Restart Answer Grading', answer_id: a.id, job_id: job.job.id,

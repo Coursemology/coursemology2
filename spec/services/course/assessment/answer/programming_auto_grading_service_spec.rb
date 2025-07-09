@@ -195,14 +195,14 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
 
           it 'sets each test result as failed' do
             subject
-            answer.auto_grading.specific.test_results.each do |test_result|
+            answer.auto_gradings.first.specific.test_results.each do |test_result|
               expect(test_result).not_to be_passed
             end
           end
 
           it 'sets the message for each test result' do
             subject
-            answer.auto_grading.specific.test_results.each do |test_result|
+            answer.auto_gradings.first.specific.test_results.each do |test_result|
               expect(test_result.messages['error']).
                 to eq 'course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax'
             end
@@ -210,11 +210,11 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
 
           it 'sets stdout, stderr and exit code for the programming autograding object' do
             subject
-            expect(answer.auto_grading.specific.stdout).
+            expect(answer.auto_gradings.first.specific.stdout).
               to eq "Makefile:6: recipe for target 'test' failed"
-            expect(answer.auto_grading.specific.stderr).
+            expect(answer.auto_gradings.first.specific.stderr).
               to eq "ImportError: No module named 'simulation'"
-            expect(answer.auto_grading.specific.exit_code).to eq 2
+            expect(answer.auto_gradings.first.specific.exit_code).to eq 2
           end
         end
       end

@@ -55,8 +55,9 @@ class Course::Assessment::Answer < ApplicationRecord
   belongs_to :submission, inverse_of: :answers
   belongs_to :question, class_name: 'Course::Assessment::Question', inverse_of: nil
   belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
-  has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
-                         dependent: :destroy, inverse_of: :answer, autosave: true
+  has_many :auto_gradings, -> { order(:created_at) },
+           class_name: 'Course::Assessment::Answer::AutoGrading',
+           dependent: :destroy, inverse_of: :answer, autosave: true
 
   accepts_nested_attributes_for :actable
 
@@ -80,13 +81,18 @@ class Course::Assessment::Answer < ApplicationRecord
   def auto_grade!(redirect_to_path: nil, reduce_priority: false)
     raise IllegalStateError if attempting?
 
-    ensure_auto_grading!
+    p({ ssq: self.question, ssq_is_saving_snapshots: self.question.is_saving_snapshots? })
+    auto_grading = if self.question.is_saving_snapshots?
+                     Course::Assessment::Answer::AutoGrading.create!(answer: self)
+                   else
+                     ensure_auto_grading!
+                   end
     if grade_inline?
-      Course::Assessment::Answer::AutoGradingService.grade(self)
+      Course::Assessment::Answer::AutoGradingService.grade(self, auto_grading)
       nil
     else
       auto_grading_job_class(reduce_priority).
-        perform_later(self, redirect_to_path).tap do |job|
+        perform_later(self, auto_grading, redirect_to_path).tap do |job|
           auto_grading.update_column(:job_id, job.job_id)
         end
     end
@@ -189,23 +195,9 @@ class Course::Assessment::Answer < ApplicationRecord
 
   # Ensures that an auto grading record exists for this answer.
   #
-  # Use this to guarantee that an auto grading record exists, and retrieves it. This is because
-  # there can be a concurrent creation of such a record across two processes, and this can only
-  # be detected at the database level.
-  #
-  # The additional transaction is in place because a RecordNotUnique will cause the active
-  # transaction to be considered as errored, and needing a rollback.
-  #
   # @return [Course::Assessment::Answer::AutoGrading]
   def ensure_auto_grading!
-    ActiveRecord::Base.transaction(requires_new: true) do
-      auto_grading || create_auto_grading!
-    end
-  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
-    raise e if e.is_a?(ActiveRecord::RecordInvalid) && e.record.errors[:answer_id].empty?
-
-    association(:auto_grading).reload
-    auto_grading
+    auto_gradings&.last || Course::Assessment::Answer::AutoGrading.create!(answer: self)
   end
 
   def unsubmit
@@ -213,7 +205,7 @@ class Course::Assessment::Answer < ApplicationRecord
     self.grader = nil
     self.graded_at = nil
     self.submitted_at = nil
-    auto_grading&.mark_for_destruction
+    auto_gradings.map(&:mark_for_destruction)
   end
 
   def auto_grading_job_class(reduce_priority)

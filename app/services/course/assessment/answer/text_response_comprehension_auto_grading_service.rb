@@ -2,9 +2,9 @@
 require 'rwordnet'
 class Course::Assessment::Answer::TextResponseComprehensionAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
-  def evaluate(answer)
+  def evaluate(answer, auto_grading)
     answer.correct, grade, messages = evaluate_answer(answer.actable)
-    answer.auto_grading.result = { messages: messages }
+    auto_grading.result = { messages: messages }
     grade
   end
 

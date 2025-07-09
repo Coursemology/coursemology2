@@ -100,7 +100,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_29_052451) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["actable_id", "actable_type"], name: "index_course_assessment_answer_auto_gradings_on_actable", unique: true
-    t.index ["answer_id"], name: "index_course_assessment_answer_auto_gradings_on_answer_id", unique: true
+    t.index ["answer_id"], name: "index_course_assessment_answer_auto_gradings_on_answer_id"
     t.index ["job_id"], name: "index_course_assessment_answer_auto_gradings_on_job_id", unique: true
   end
 

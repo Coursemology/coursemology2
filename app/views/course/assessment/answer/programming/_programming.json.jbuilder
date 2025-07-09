@@ -7,9 +7,10 @@ latest_answer = last_attempt(answer)
 attempt = is_current_answer ? latest_answer : answer
 
 question = answer.question.specific
-auto_grading = attempt&.auto_grading&.specific
+auto_grading = attempt&.auto_gradings&.last&.specific
 graded_snapshot = auto_grading&.question_snapshot
 graded_on_past_snapshot = !(graded_snapshot.nil? || graded_snapshot == question)
+json.autoGradingCount attempt&.auto_gradings&.count
 json.gradedOnPastSnapshot graded_on_past_snapshot
 if graded_on_past_snapshot
   question = graded_snapshot
@@ -39,7 +40,7 @@ json.fields do
   end
 end
 
-job = attempt&.auto_grading&.job
+job = attempt&.auto_gradings&.last&.job
 
 if job
   json.autograding do
@@ -48,7 +49,7 @@ if job
   end
 end
 
-if attempt.submitted? && !attempt.auto_grading
+if attempt.submitted? && !attempt&.auto_gradings&.any?
   json.autograding do
     json.status :submitted
   end
@@ -59,6 +60,7 @@ show_private = can_read_tests || (submission.published? && assessment.show_priva
 show_evaluation = can_read_tests || (submission.published? && assessment.show_evaluation?)
 
 test_cases_by_type = question.test_cases_by_type
+p({ ag: auto_grading, auto_grading: attempt&.auto_gradings&.last, test_cases_by_type: test_cases_by_type })
 test_cases_and_results = get_test_cases_and_results(test_cases_by_type, auto_grading)
 
 show_stdout_and_stderr = (can_read_tests || current_course.show_stdout_and_stderr) &&
@@ -112,7 +114,7 @@ json.explanation do
 
     passed_evaluation_tests = failed_test_cases_by_type['evaluation_test'].blank?
 
-    json.correct attempt&.auto_grading && attempt&.correct && (can_grade ? passed_evaluation_tests : true)
+    json.correct attempt&.auto_gradings&.last && attempt&.correct && (can_grade ? passed_evaluation_tests : true)
     json.explanations explanations
   end
 end

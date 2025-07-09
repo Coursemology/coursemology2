@@ -97,7 +97,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
             before { subject.save! }
 
             it 'saves the specific auto_grading' do
-              auto_grading = answer.reload.auto_grading.actable
+              auto_grading = answer.reload.auto_gradings.first.actable
 
               expect(auto_grading).to be_present
               expect(auto_grading.test_results).to be_present
@@ -197,7 +197,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
             expect(answer.grade).to eq(nil)
             expect(answer.correct).to eq(nil)
             expect(answer.graded_at).to eq(nil)
-            expect(answer.actable.auto_grading.actable).to eq(nil)
+            expect(answer.actable.auto_gradings.first.actable).to eq(nil)
           end
         end
       end

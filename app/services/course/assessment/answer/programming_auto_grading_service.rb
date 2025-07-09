@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
-  def evaluate(answer)
+  def evaluate(answer, auto_grading)
     # We pre-load the programming question, including test cases,
     # to ensure consistency with at least one saved snapshot.
     question = Course::Assessment::Answer.includes(question: {actable: [:test_cases ]}).find_by_id(answer.id).question.actable
@@ -10,11 +10,11 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
 
     # If the question was updated during the evaluation, we can still find
     # our original question by comparing the updated_at timestamps.
-    # this overrides auto_grading.actable_id, previous AG result is retained.
     programming_auto_grading.question_snapshot_id = 
       Course::Assessment::Question::Programming.
-        where(current_id: question.id, snapshot_of_state_at: question.snapshot_of_state_at).first&.id || question.id
-    programming_auto_grading.auto_grading = answer.auto_grading
+        where(current_id: question.id, snapshot_index: question.snapshot_index).first&.id || question.id
+    programming_auto_grading.auto_grading = auto_grading
+    auto_grading.save!
     grade
   end
 

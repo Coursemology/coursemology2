@@ -34,13 +34,14 @@ class Course::Assessment::Answer::BaseAutoGradingJob < ApplicationJob
   # @param [String|nil] redirect_to_path The path to be redirected after auto grading job was
   #   finished.
   # @param [Course::Assessment::Answer] answer the answer to be graded.
+  # @param [Course::Assessment::AutoGrading] The auto grading result to save the results to.
   # @param [String] redirect_to_path The path to redirect when job finishes.
-  def perform_tracked(answer, redirect_to_path = nil)
+  def perform_tracked(answer, auto_grading, redirect_to_path = nil)
     ActsAsTenant.without_tenant do
       raise PriorityShouldBeLoweredError if !queue_name.include?('delayed') && answer.question.is_low_priority
 
       downgrade_if_timeout(answer.question) do
-        Course::Assessment::Answer::AutoGradingService.grade(answer)
+        Course::Assessment::Answer::AutoGradingService.grade(answer, auto_grading)
       end
 
       if update_exp?(answer.submission)

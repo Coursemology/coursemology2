@@ -35,9 +35,14 @@ class AddProgrammingQuestionCurrentIds < ActiveRecord::Migration[7.2]
                   :question_snapshot,
                   foreign_key: { to_table: :course_assessment_question_programming },
                   null: true
+
+    remove_index :course_assessment_answer_auto_gradings, column: :answer_id
+    add_index :course_assessment_answer_auto_gradings, :answer_id
   end
 
   def down
+    remove_index :course_assessment_answer_auto_gradings, :answer_id
+    add_index :course_assessment_answer_auto_gradings, :answer_id, unique: true
     remove_reference :course_assessment_answer_programming_auto_gradings, :question_snapshot
     remove_column :course_assessment_question_programming, :snapshot_of_state_at
     remove_column :course_assessment_question_programming, :snapshot_index
