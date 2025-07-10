@@ -7,6 +7,7 @@ import ExpandableCode from 'lib/components/core/ExpandableCode';
 
 interface Props {
   result: TestCaseResult;
+  showTestCaseOutput: boolean;
 }
 
 const TestCaseClassName = {
@@ -16,7 +17,7 @@ const TestCaseClassName = {
 };
 
 const TestCaseRow: FC<Props> = (props) => {
-  const { result } = props;
+  const { result, showTestCaseOutput } = props;
 
   const nameRegex = /\/?(\w+)$/;
   const idMatch = result.identifier?.match(nameRegex);
@@ -56,9 +57,11 @@ const TestCaseRow: FC<Props> = (props) => {
           <ExpandableCode>{result.expected || ''}</ExpandableCode>
         </TableCell>
 
-        <TableCell className="w-full pt-1">
-          <ExpandableCode>{result.output || ''}</ExpandableCode>
-        </TableCell>
+        {showTestCaseOutput && (
+          <TableCell className="w-full pt-1">
+            <ExpandableCode>{result.output || ''}</ExpandableCode>
+          </TableCell>
+        )}
 
         <TableCell>{testCaseIcon}</TableCell>
       </TableRow>

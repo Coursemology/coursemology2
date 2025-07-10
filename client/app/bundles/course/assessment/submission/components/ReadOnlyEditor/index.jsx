@@ -56,6 +56,17 @@ class ReadOnlyEditor extends Component {
 
       this.setState({ expanded: newExpanded });
     }
+
+    // Update editor mode when annotations length changes
+    if (prevProps.annotations.length !== this.props.annotations.length) {
+      const newEditorMode =
+        this.props.annotations.length > 0
+          ? EDITOR_MODE_WIDE
+          : EDITOR_MODE_NARROW;
+      if (this.state.editorMode !== newEditorMode) {
+        this.setState({ editorMode: newEditorMode });
+      }
+    }
   }
 
   setAllCommentStateCollapsed() {

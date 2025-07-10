@@ -180,9 +180,21 @@ export interface AnswerDetailsMap {
   RubricBasedResponse: RubricBasedResponseAnswerData;
 }
 
+export interface DisplaySettings {
+  showPrivateTestCases: boolean;
+  showEvaluationTestCases: boolean;
+  showMcqMrqSolution: boolean;
+  showRubricBreakdown: boolean;
+  showPublicTestCasesOutput: boolean;
+  showPrivateTestCasesOutput: boolean;
+  showEvaluationTestCasesOutput: boolean;
+  showStdoutAndStderr: boolean;
+}
+
 export interface AnswerDetailsProps<T extends keyof typeof QuestionType> {
   question: SubmissionQuestionData<T>;
   answer: AnswerDetailsMap[T];
+  displaySettings: DisplaySettings;
 }
 
 export type AnswerDataWithQuestion<T extends keyof typeof QuestionType> =

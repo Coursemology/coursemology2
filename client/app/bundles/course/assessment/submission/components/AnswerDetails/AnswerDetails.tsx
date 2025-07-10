@@ -8,7 +8,7 @@ import { formatLongDateTime } from 'lib/moment';
 import messagesTranslations from 'lib/translations/messages';
 
 import { HistoryFetchStatus } from '../../reducers/history';
-import { AnswerDetailsProps } from '../../types';
+import { AnswerDetailsProps, DisplaySettings } from '../../types';
 
 import FileUploadDetails from './FileUploadDetails';
 import ForumPostResponseDetails from './ForumPostResponseDetails';
@@ -100,19 +100,26 @@ const FetchedAnswerDetails = <T extends keyof typeof QuestionType>(
 
 type AnswerDetailsComponentProps<T extends keyof typeof QuestionType> = {
   status: HistoryFetchStatus;
+  displaySettings: DisplaySettings;
 } & Partial<AnswerDetailsProps<T>>;
 
 const AnswerDetails = <T extends keyof typeof QuestionType>(
   props: AnswerDetailsComponentProps<T>,
 ): JSX.Element => {
-  const { answer, question, status } = props;
+  const { answer, question, status, displaySettings } = props;
 
   const { t } = useTranslation();
 
   const isAnswerRenderable =
     answer && question && status === HistoryFetchStatus.COMPLETED;
   if (isAnswerRenderable) {
-    return <FetchedAnswerDetails answer={answer!} question={question!} />;
+    return (
+      <FetchedAnswerDetails
+        answer={answer!}
+        displaySettings={displaySettings!}
+        question={question!}
+      />
+    );
   }
   if (status === HistoryFetchStatus.ERRORED) {
     return (

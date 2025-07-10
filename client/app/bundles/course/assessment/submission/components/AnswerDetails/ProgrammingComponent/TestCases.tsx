@@ -70,11 +70,18 @@ const translations = defineMessages({
 
 interface Props {
   testCase: TestCase;
+  showPrivateTestCases: boolean;
+  showEvaluationTestCases: boolean;
+  showPublicTestCasesOutput: boolean;
+  showPrivateTestCasesOutput: boolean;
+  showEvaluationTestCasesOutput: boolean;
+  showStdoutAndStderr: boolean;
 }
 
 interface TestCaseComponentProps {
   testCaseResults: TestCaseResult[];
   testCaseType: string;
+  showTestCaseOutput: boolean;
 }
 
 interface OutputStreamProps {
@@ -83,11 +90,12 @@ interface OutputStreamProps {
 }
 
 const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
-  const { testCaseResults, testCaseType } = props;
+  const { testCaseResults, testCaseType, showTestCaseOutput } = props;
   const { t } = useTranslation();
 
+  // result.output might be undefined for private and evaluation test cases for students
   const isProgrammingAnswerEvaluated =
-    testCaseResults.filter((result) => !!result.output).length > 0;
+    testCaseResults.filter((result) => result.passed !== undefined).length > 0;
 
   const numPassedTestCases = testCaseResults.filter(
     (result) => result.passed,
@@ -178,9 +186,11 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
               <FormattedMessage {...translations.expected} />
             </TableCell>
 
-            <TableCell className="w-full">
-              <FormattedMessage {...translations.output} />
-            </TableCell>
+            {showTestCaseOutput && (
+              <TableCell className="w-full">
+                <FormattedMessage {...translations.output} />
+              </TableCell>
+            )}
 
             <TableCell className="w-24" />
           </TableRow>
@@ -188,7 +198,11 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
 
         <TableBody>
           {testCaseResults.map((result) => (
-            <TestCaseRow key={result.identifier} result={result} />
+            <TestCaseRow
+              key={result.identifier}
+              result={result}
+              showTestCaseOutput={showTestCaseOutput}
+            />
           ))}
         </TableBody>
       </Table>
@@ -222,37 +236,59 @@ const OutputStream: FC<OutputStreamProps> = (props) => {
 };
 
 const TestCases: FC<Props> = (props) => {
-  const { testCase } = props;
+  const {
+    testCase,
+    showPrivateTestCases,
+    showEvaluationTestCases,
+    showPublicTestCasesOutput,
+    showPrivateTestCasesOutput,
+    showEvaluationTestCasesOutput,
+    showStdoutAndStderr,
+  } = props;
 
   return (
     <div className="my-5 space-y-5">
       {testCase.public_test && testCase.public_test.length > 0 && (
         <TestCaseComponent
+          showTestCaseOutput={showPublicTestCasesOutput}
           testCaseResults={testCase.public_test}
           testCaseType="publicTestCases"
         />
       )}
 
-      {testCase.private_test && testCase.private_test.length > 0 && (
-        <TestCaseComponent
-          testCaseResults={testCase.private_test}
-          testCaseType="privateTestCases"
-        />
+      {showPrivateTestCases &&
+        testCase.private_test &&
+        testCase.private_test.length > 0 && (
+          <TestCaseComponent
+            showTestCaseOutput={showPrivateTestCasesOutput}
+            testCaseResults={testCase.private_test}
+            testCaseType="privateTestCases"
+          />
+        )}
+
+      {showEvaluationTestCases &&
+        testCase.evaluation_test &&
+        testCase.evaluation_test.length > 0 && (
+          <TestCaseComponent
+            showTestCaseOutput={showEvaluationTestCasesOutput}
+            testCaseResults={testCase.evaluation_test}
+            testCaseType="evaluationTestCases"
+          />
+        )}
+
+      {showStdoutAndStderr && (
+        <>
+          <OutputStream
+            output={testCase.stdout}
+            outputStreamType="standardOutput"
+          />
+
+          <OutputStream
+            output={testCase.stderr}
+            outputStreamType="standardError"
+          />
+        </>
       )}
-
-      {testCase.evaluation_test && testCase.evaluation_test.length > 0 && (
-        <TestCaseComponent
-          testCaseResults={testCase.evaluation_test}
-          testCaseType="evaluationTestCases"
-        />
-      )}
-
-      <OutputStream
-        output={testCase.stdout}
-        outputStreamType="standardOutput"
-      />
-
-      <OutputStream output={testCase.stderr} outputStreamType="standardError" />
     </div>
   );
 };
