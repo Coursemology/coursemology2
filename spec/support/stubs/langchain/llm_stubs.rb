@@ -25,61 +25,62 @@ module Langchain::LlmStubs
     private
 
     def rubric_grading_request?(user_message)
-      user_message.include?('Category ID:') && user_message.include?('Criterion ID:') && user_message.include?('Grade:')
+      user_message.include?('<ANSWER>') && user_message.include?('</ANSWER>')
     end
 
     def output_fixing_request?(user_message)
       user_message.include?('JSON Schema')
     end
 
-    def handle_output_fixing(_user_message)
-      # only fix rubric grading output for now
+    def handle_output_fixing(user_message)
+      schema = parse_json_schema(user_message)
+      category_grades = {}
+      category_properties = schema['properties']['category_grades']['properties']
+      category_properties.each do |category_name, category_schema|
+        category_grades[category_name] = {
+          'criterion_id_with_grade' => category_schema['properties']['criterion_id_with_grade']['enum'].first,
+          'explanation' => "Mock explanation for #{category_name}"
+        }
+      end
       mock_response = {
-        'category_grades' => [
-          {
-            'category_id' => 1,
-            'criterion_id' => 1,
-            'explanation' => 'Mock explanation for category 1'
-          }
-        ],
+        'category_grades' => category_grades,
         'overall_feedback' => 'Mock overall feedback'
       }
-
       MockChatResponse.new(mock_response.to_json)
     end
 
     def handle_rubric_grading(user_message)
       category_ids = user_message.scan(/Category ID: (\d+)/).flatten.map(&:to_i)
-      criterion_ids = extract_random_criterion_ids(user_message)
+      criterion_ids_with_grades = extract_random_criterion(user_message)
 
-      category_grades = category_ids.zip(criterion_ids).map do |category_id, criterion_id|
-        {
-          'category_id' => category_id,
-          'criterion_id' => criterion_id,
-          'explanation' => "Mock explanation for category #{category_id}"
+      mock_response = { 'overall_feedback' => 'Mock overall feedback' }
+      category_ids.zip(criterion_ids_with_grades).each do |category_id, criterion_id_with_grade|
+        mock_response["category_#{category_id}"] = {
+          'criterion_id_with_grade' => criterion_id_with_grade,
+          'explanation' => "Mock explanation for category_#{category_id}"
         }
       end
-
-      mock_response = {
-        'category_grades' => category_grades,
-        'overall_feedback' => 'Mock overall feedback'
-      }
-
       MockChatResponse.new(mock_response.to_json)
     end
 
-    def extract_random_criterion_ids(user_message)
+    def extract_random_criterion(user_message)
       category_sections = user_message.split(/(?=Category ID: \d+)/).reject(&:empty?)
 
       category_sections.filter_map do |section|
-        criterion_ids = section.scan(/- \[Grade: \d+(?:\.\d+)?, Criterion ID: (\d+)\]/)
-
-        next if criterion_ids.empty?
-
-        criterion_ids.sample.first.to_i
+        criterion = section.scan(/- \[Grade: (\d+(?:\.\d+)?), Criterion ID: (\d+)\]/).sample
+        if criterion
+          {
+            criterion_id: criterion[1].to_i,
+            grade: criterion[0].to_i
+          }
+        end
       end
     end
-  end
 
+    def parse_json_schema(user_message)
+      json_match = user_message.match(/```json\s*(.*?)\s*```/m)
+      JSON.parse(json_match[1])
+    end
+  end
   STUBBED_LANGCHAIN_OPENAI = OpenAiStub.new.freeze
 end

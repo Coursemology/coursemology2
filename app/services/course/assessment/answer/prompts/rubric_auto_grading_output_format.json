@@ -3,31 +3,16 @@
   "type": "object",
   "properties": {
     "category_grades": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "category_id": {
-            "type": "integer",
-            "description": "The ID of the rubric category, must be one of the listed categories for the rubric"
-          },
-          "criterion_id": {
-            "type": "integer",
-            "description": "The ID of the criterion within the rubric category, must be one of the listed criteria for the rubric category"
-          },
-          "explanation": {
-            "type": "string",
-            "description": "An explanation for why the criterion was selected"
-          }
-        },
-        "required": ["category_id", "criterion_id", "explanation"],
-        "additionalProperties": false
+      "type": "object",
+      "properties": {
       },
-      "description": "A list of criterions selected for each rubric category with explanations"
+      "required": [],
+      "additionalProperties": false,
+      "description": "A mapping of categories to their selected criterion and explanation"
     },
     "overall_feedback": {
       "type": "string",
-      "description": "General feedback about the student's response, provided in HTML format and focused on how the student can improve according to the rubric"
+      "description": "General feedback about the student's response, provided in HTML format"
     }
   },
   "required": ["category_grades", "overall_feedback"],
