@@ -1,6 +1,6 @@
+import { useRef, useState } from 'react';
 import { AutoFixHigh } from '@mui/icons-material';
 import { Button, Menu, MenuItem, Tooltip } from '@mui/material';
-import { useRef, useState } from 'react';
 import { AssessmentData } from 'types/course/assessment/assessments';
 import { QuestionType } from 'types/course/assessment/question';
 
@@ -41,24 +41,34 @@ const GenerateQuestionMenu = (
 
   return (
     <>
-      <Tooltip title={t(translations.generateTooltip)}>
-        <Button
-          ref={generateButton}
-          onClick={(): void => setOpen(true)}
-          size="small"
-          startIcon={<AutoFixHigh />}
-          variant="outlined"
-        >
-          {t(translations.generate)}
-        </Button>
-      </Tooltip>
+      <Button
+        ref={generateButton}
+        onClick={(): void => setOpen(true)}
+        size="small"
+        startIcon={<AutoFixHigh />}
+        variant="outlined"
+      >
+        {t(translations.generate)}
+      </Button>
 
       <Menu anchorEl={generateButton.current} onClose={handleClose} open={open}>
-        {generateQuestionUrls.map((url) => (
-          <Link key={url.type} opensInNewTab to={url.url} underline="none">
-            <MenuItem>{t(GENERATE_QUESTION_LABELS[url.type])}</MenuItem>
-          </Link>
-        ))}
+        {generateQuestionUrls.map((url) => {
+          const label = t(GENERATE_QUESTION_LABELS[url.type]);
+          if (url.type === 'Programming') {
+            return (
+              <Link key={url.type} opensInNewTab to={url.url} underline="none">
+                <Tooltip title={t(translations.generateTooltip)}>
+                  <MenuItem>{label}</MenuItem>
+                </Tooltip>
+              </Link>
+            );
+          }
+          return (
+            <Link key={url.type} opensInNewTab to={url.url} underline="none">
+              <MenuItem>{label}</MenuItem>
+            </Link>
+          );
+        })}
       </Menu>
     </>
   );

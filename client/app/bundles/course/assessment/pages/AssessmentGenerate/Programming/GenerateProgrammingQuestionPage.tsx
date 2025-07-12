@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { useParams, useSearchParams } from 'react-router-dom';
@@ -10,19 +10,19 @@ import {
 } from 'types/course/assessment/question/programming';
 import * as yup from 'yup';
 
-import GenerateConversation from 'course/assessment/pages/AssessmentGenerate/GenerateConversation';
-import GenerateQuestionPrototypeForm from 'course/assessment/pages/AssessmentGenerate/GenerateQuestionPrototypeForm';
 import GenerateTabs from 'course/assessment/pages/AssessmentGenerate/GenerateTabs';
+import GenerateProgrammingConversation from 'course/assessment/pages/AssessmentGenerate/Programming/GenerateProgrammingConversation';
+import GenerateProgrammingPrototypeForm from 'course/assessment/pages/AssessmentGenerate/Programming/GenerateProgrammingPrototypeForm';
 import { getAssessmentGenerateQuestionsData } from 'course/assessment/pages/AssessmentGenerate/selectors';
 import {
-  CodaveriGenerateFormData,
   ConversationState,
-  QuestionPrototypeFormData,
+  ProgrammingGenerateFormData,
+  ProgrammingPrototypeFormData,
   SnapshotState,
 } from 'course/assessment/pages/AssessmentGenerate/types';
 import {
-  buildGenerateRequestPayload,
-  buildPrototypeFromQuestionData,
+  buildProgrammingGenerateRequestPayload,
+  buildPrototypeFromProgrammingQuestionData,
   extractQuestionPrototypeData,
   replaceUnlockedPrototypeFields,
 } from 'course/assessment/pages/AssessmentGenerate/utils';
@@ -37,10 +37,13 @@ import {
   fetchCodaveriLanguages,
   fetchEdit,
   generate,
-} from '../../question/programming/operations';
+} from '../../../question/programming/operations';
+import {
+  defaultProgrammingGenerateFormData,
+  defaultProgrammingPrototypeFormData,
+} from '../constants';
 
-import { defaultCodaveriFormData, defaultQuestionFormData } from './constants';
-import GenerateExportDialog from './GenerateExportDialog';
+import GenerateProgrammingExportDialog from './GenerateProgrammingExportDialog';
 
 const translations = defineMessages({
   generatePage: {
@@ -53,7 +56,7 @@ const translations = defineMessages({
   },
   generateError: {
     id: 'course.assessment.generation.generateError',
-    defaultMessage: 'An error occured generating question "{title}".',
+    defaultMessage: 'An error occurred generating question "{title}".',
   },
   loadingSourceError: {
     id: 'course.assessment.generation.loadingSourceError',
@@ -140,10 +143,15 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   const [exportDialogOpen, setExportDialogOpen] = useState<boolean>(false);
   const generatePageData = useAppSelector(getAssessmentGenerateQuestionsData);
 
+  // Initialize generation state with programming questionType
+  useEffect(() => {
+    dispatch(actions.initializeGeneration({ questionType: 'programming' }));
+  }, []);
+
   const { t } = useTranslation();
   // upper form (submit to Codaveri)
-  const codaveriForm = useForm<CodaveriGenerateFormData>({
-    defaultValues: defaultCodaveriFormData,
+  const codaveriForm = useForm<ProgrammingGenerateFormData>({
+    defaultValues: defaultProgrammingGenerateFormData,
     resolver: yupResolver(codaveriValidationSchema),
   });
   const currentLanguageId = codaveriForm.watch('languageId');
@@ -151,7 +159,9 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   // lower form (populate to new programming question page)
   // TODO: We reuse ProgrammingFormData object here because test case UI mandates it.
   // Consider reworking type declarations in TestCases.tsx to enable creating an independent model class here.
-  const prototypeForm = useForm({ defaultValues: defaultQuestionFormData });
+  const prototypeForm = useForm({
+    defaultValues: defaultProgrammingPrototypeFormData,
+  });
   const questionFormData = prototypeForm.watch();
 
   const defaultLockStates = {
@@ -196,10 +206,10 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   // calling getValues() directly returns a "readonly" reference, which can lead to errors
   // as the object is propagated across various state / handler functions
   // so instead, these helper functions return a deep copy
-  const getActiveCodaveriFormData = (): CodaveriGenerateFormData =>
+  const getActiveCodaveriFormData = (): ProgrammingGenerateFormData =>
     JSON.parse(JSON.stringify(codaveriForm.getValues()));
 
-  const getActivePrototypeFormData = (): QuestionPrototypeFormData =>
+  const getActivePrototypeFormData = (): ProgrammingPrototypeFormData =>
     JSON.parse(JSON.stringify(prototypeForm.getValues()));
 
   const saveActiveFormData = (): void => {
@@ -215,8 +225,15 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   const switchToConversation = (conversation: ConversationState): void => {
     saveActiveFormData();
     const snapshot = conversation.snapshots?.[conversation.activeSnapshotId];
-    let languageId = snapshot?.codaveriData?.languageId ?? 0;
-    if (languageId === 0) languageId = currentLanguageId;
+    let languageId = 0;
+    if (
+      snapshot?.generateFormData &&
+      'languageId' in snapshot.generateFormData
+    ) {
+      languageId = snapshot.generateFormData.languageId;
+    }
+    if (languageId === 0 && typeof currentLanguageId === 'number')
+      languageId = currentLanguageId;
     if (snapshot) {
       dispatch(
         actions.setActiveConversationId({ conversationId: conversation.id }),
@@ -226,14 +243,14 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
           title: conversation.activeSnapshotEditedData.question.title,
         }),
       );
-      codaveriForm.reset({ ...defaultCodaveriFormData, languageId });
+      codaveriForm.reset({ ...defaultProgrammingGenerateFormData, languageId });
       prototypeForm.reset(conversation.activeSnapshotEditedData);
       setLockStates(snapshot.lockStates);
     }
   };
 
   const createConversation = (): void => {
-    dispatch(actions.createConversation());
+    dispatch(actions.createConversation({ questionType: 'programming' }));
     dispatch((_, getState) => {
       const newState = getAssessmentGenerateQuestionsData(getState());
       const newConversationId =
@@ -285,7 +302,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   > => {
     if (sourceId) {
       try {
-        return await fetchEdit(sourceId);
+        return fetchEdit(sourceId);
       } catch {
         dispatch(setNotification(t(translations.loadingSourceError)));
       }
@@ -326,7 +343,9 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
           dispatch(
             actions.setActiveFormTitle({ title: sourceData.question.title }),
           );
-          prototypeForm.reset(buildPrototypeFromQuestionData(sourceData));
+          prototypeForm.reset(
+            buildPrototypeFromProgrammingQuestionData(sourceData),
+          );
         }
 
         return (
@@ -363,7 +382,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                   {activeConversationSnapshots &&
                     activeSnapshotId &&
                     latestSnapshotId && (
-                      <GenerateConversation
+                      <GenerateProgrammingConversation
                         activeSnapshotId={activeSnapshotId}
                         codaveriForm={codaveriForm}
                         languages={languages.map((l) => ({
@@ -388,8 +407,8 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                                 }),
                               );
                             }
-                            if (snapshot.codaveriData) {
-                              codaveriForm.reset(snapshot.codaveriData);
+                            if (snapshot.generateFormData) {
+                              codaveriForm.reset(snapshot.generateFormData);
                             }
                             if (snapshot.questionData) {
                               prototypeForm.reset(snapshot.questionData);
@@ -421,13 +440,13 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                               actions.createSnapshot({
                                 snapshotId: newSnapshotId,
                                 parentId: activeSnapshotId,
-                                codaveriData: getActiveCodaveriFormData(),
+                                generateFormData: getActiveCodaveriFormData(),
                                 conversationId,
                                 lockStates,
                               }),
                             );
                             return generate(
-                              buildGenerateRequestPayload(
+                              buildProgrammingGenerateRequestPayload(
                                 codaveriFormData,
                                 questionFormData,
                                 isIncludingInlineCode,
@@ -510,7 +529,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                                   ),
                                 );
                                 setNotification(
-                                  'An error occured in generating the question.',
+                                  'An error occurred in generating the question.',
                                 );
                               });
                           },
@@ -521,7 +540,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
                 </Grid>
 
                 <Grid item lg={8} xs={12}>
-                  <GenerateQuestionPrototypeForm
+                  <GenerateProgrammingPrototypeForm
                     editorMode={currentLanguageMode}
                     lockStates={lockStates}
                     onToggleLock={(lockStateKey: string) => {
@@ -537,7 +556,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
 
               <Divider className="mt-8" />
             </Container>
-            <GenerateExportDialog
+            <GenerateProgrammingExportDialog
               languages={languages}
               open={exportDialogOpen}
               saveActiveFormData={saveActiveFormData}
