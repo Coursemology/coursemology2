@@ -5,55 +5,94 @@ import {
 } from 'types/course/assessment/question/programming';
 
 import {
-  CodaveriGenerateFormData,
   GenerationState,
   LockStates,
-  QuestionPrototypeFormData,
+  MrqGenerateFormData,
+  MrqPrototypeFormData,
+  ProgrammingGenerateFormData,
+  ProgrammingPrototypeFormData,
   SnapshotState,
 } from '../pages/AssessmentGenerate/types';
 
 const generateConversationId = (): string => Date.now().toString(16);
 const generateSnapshotId = (): string => Date.now().toString(16);
-const sentinelSnapshot = (): SnapshotState => ({
-  id: generateSnapshotId(),
-  parentId: undefined,
-  state: 'sentinel', // 'generating' | 'success' | 'sentinel'
-  codaveriData: { languageId: 0, customPrompt: '', difficulty: 'easy' },
-  questionData: {
-    question: {
-      title: '',
-      description: '',
-    },
-    testUi: {
-      metadata: {
-        solution: '',
-        submission: '',
-        prepend: null,
-        append: null,
-        testCases: {
-          public: [],
-          private: [],
-          evaluation: [],
+const sentinelSnapshot = (
+  questionType: 'programming' | 'mrq',
+): SnapshotState => {
+  switch (questionType) {
+    case 'mrq':
+      return {
+        id: generateSnapshotId(),
+        parentId: undefined,
+        state: 'sentinel',
+        generateFormData: { customPrompt: '', numberOfQuestions: 1 },
+        questionData: {
+          question: {
+            title: '',
+            description: '',
+            skipGrading: false,
+            randomizeOptions: false,
+          },
+          options: [],
+          gradingScheme: 'all_correct',
         },
-      },
-    },
-  },
-  lockStates: {
-    'question.title': false,
-    'question.description': false,
-    'testUi.metadata.solution': false,
-    'testUi.metadata.submission': false,
-    'testUi.metadata.prepend': false,
-    'testUi.metadata.append': false,
-    'testUi.metadata.testCases.public': false,
-    'testUi.metadata.testCases.private': false,
-    'testUi.metadata.testCases.evaluation': false,
-  },
-});
+        lockStates: {
+          'question.title': false,
+          'question.description': false,
+          'question.options': false,
+          'question.correct': false,
+        },
+      };
+    case 'programming':
+    default:
+      return {
+        id: generateSnapshotId(),
+        parentId: undefined,
+        state: 'sentinel',
+        generateFormData: {
+          languageId: 0,
+          customPrompt: '',
+          difficulty: 'easy',
+        },
+        questionData: {
+          question: {
+            title: '',
+            description: '',
+          },
+          testUi: {
+            metadata: {
+              solution: '',
+              submission: '',
+              prepend: null,
+              append: null,
+              testCases: {
+                public: [],
+                private: [],
+                evaluation: [],
+              },
+            },
+          },
+        },
+        lockStates: {
+          'question.title': false,
+          'question.description': false,
+          'testUi.metadata.solution': false,
+          'testUi.metadata.submission': false,
+          'testUi.metadata.prepend': false,
+          'testUi.metadata.append': false,
+          'testUi.metadata.testCases.public': false,
+          'testUi.metadata.testCases.private': false,
+          'testUi.metadata.testCases.evaluation': false,
+        },
+      };
+  }
+};
 
-const initialState = (): GenerationState => {
+const initialState = (
+  questionType: 'programming' | 'mrq' = 'programming',
+): GenerationState => {
   const newConversationId = generateConversationId();
-  const snapshot = sentinelSnapshot();
+  const snapshot = sentinelSnapshot(questionType);
   return {
     activeConversationId: newConversationId,
     conversations: {
@@ -79,6 +118,13 @@ export const generationSlice = createSlice({
   name: 'generation',
   initialState,
   reducers: {
+    initializeGeneration: (
+      state,
+      action: PayloadAction<{ questionType: 'programming' | 'mrq' }>,
+    ) => {
+      const newState = initialState(action.payload.questionType);
+      Object.assign(state, newState);
+    },
     setActiveConversationId: (
       state,
       action: PayloadAction<{ conversationId: string }>,
@@ -88,9 +134,12 @@ export const generationSlice = createSlice({
         state.activeConversationId = conversationId;
       }
     },
-    createConversation: (state) => {
+    createConversation: (
+      state,
+      action: PayloadAction<{ questionType: 'programming' | 'mrq' }>,
+    ) => {
       const newConversationId = generateConversationId();
-      const snapshot = sentinelSnapshot();
+      const snapshot = sentinelSnapshot(action.payload.questionType);
       state.conversations[newConversationId] = {
         id: newConversationId,
         snapshots: {
@@ -152,21 +201,26 @@ export const generationSlice = createSlice({
       state,
       action: PayloadAction<{
         conversationId: string;
-        codaveriData: CodaveriGenerateFormData;
+        generateFormData: ProgrammingGenerateFormData | MrqGenerateFormData;
         snapshotId: string;
         parentId: string;
         lockStates: LockStates;
       }>,
     ) => {
-      const { conversationId, codaveriData, snapshotId, parentId, lockStates } =
-        action.payload;
+      const {
+        conversationId,
+        generateFormData,
+        snapshotId,
+        parentId,
+        lockStates,
+      } = action.payload;
       const conversation = state.conversations[conversationId];
       if (conversation) {
         conversation.snapshots[snapshotId] = {
           id: snapshotId,
           parentId,
           lockStates,
-          codaveriData,
+          generateFormData,
           state: 'generating',
         };
       }
@@ -175,7 +229,7 @@ export const generationSlice = createSlice({
       state,
       action: PayloadAction<{
         conversationId: string;
-        questionData: QuestionPrototypeFormData;
+        questionData: ProgrammingPrototypeFormData | MrqPrototypeFormData;
         snapshotId: string;
       }>,
     ) => {
@@ -205,7 +259,7 @@ export const generationSlice = createSlice({
       action: PayloadAction<{
         conversationId: string;
         snapshotId: string;
-        questionData?: QuestionPrototypeFormData;
+        questionData?: ProgrammingPrototypeFormData | MrqPrototypeFormData;
       }>,
     ) => {
       const { conversationId, snapshotId, questionData } = action.payload;
@@ -259,7 +313,7 @@ export const generationSlice = createSlice({
         conversation.exportStatus = 'pending';
       }
     },
-    exportConversationPendingImport: (
+    exportProgrammingConversationPendingImport: (
       state,
       action: PayloadAction<{
         conversationId: string;
@@ -277,7 +331,7 @@ export const generationSlice = createSlice({
         conversation.questionId = data.id ?? conversation.questionId;
       }
     },
-    exportConversationSuccess: (
+    exportProgrammingConversationSuccess: (
       state,
       action: PayloadAction<{
         conversationId: string;
@@ -293,6 +347,22 @@ export const generationSlice = createSlice({
           conversation.redirectEditUrl =
             data.redirectEditUrl ?? conversation.redirectEditUrl;
           conversation.questionId = data.id ?? conversation.questionId;
+        }
+      }
+    },
+    exportMrqConversationSuccess: (
+      state,
+      action: PayloadAction<{
+        conversationId: string;
+        data?: { redirectEditUrl: string };
+      }>,
+    ) => {
+      const { conversationId, data } = action.payload;
+      const conversation = state.conversations[conversationId];
+      if (conversation) {
+        conversation.exportStatus = 'exported';
+        if (data) {
+          conversation.redirectEditUrl = data.redirectEditUrl;
         }
       }
     },
@@ -320,6 +390,39 @@ export const generationSlice = createSlice({
           delete conversation.importJobUrl;
         }
       });
+    },
+    createConversationWithSnapshots: (
+      state,
+      action: PayloadAction<{
+        questionType: 'programming' | 'mrq';
+        copiedSnapshots: { [id: string]: SnapshotState };
+        latestSnapshotId: string;
+        activeSnapshotId: string;
+        activeSnapshotEditedData:
+          | ProgrammingPrototypeFormData
+          | MrqPrototypeFormData;
+      }>,
+    ) => {
+      const {
+        questionType,
+        copiedSnapshots,
+        latestSnapshotId,
+        activeSnapshotId,
+        activeSnapshotEditedData,
+      } = action.payload;
+      const newConversationId = generateConversationId();
+      state.conversations[newConversationId] = {
+        id: newConversationId,
+        snapshots: JSON.parse(JSON.stringify(copiedSnapshots)),
+        latestSnapshotId,
+        activeSnapshotId,
+        activeSnapshotEditedData: JSON.parse(
+          JSON.stringify(activeSnapshotEditedData),
+        ),
+        toExport: true,
+        exportStatus: 'none',
+      };
+      state.conversationIds.push(newConversationId);
     },
   },
 });
