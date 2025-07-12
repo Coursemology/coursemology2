@@ -1,4 +1,8 @@
 import {
+  McqMrqData,
+  McqMrqFormData,
+} from 'types/course/assessment/question/multiple-responses';
+import {
   BasicMetadata,
   JavaMetadataTestCase,
   LanguageData,
@@ -9,14 +13,22 @@ import {
 } from 'types/course/assessment/question/programming';
 import {
   CodaveriGenerateResponseData,
+  MrqGeneratedOption,
+  MrqGenerateResponseData,
   TestcaseVisibility,
 } from 'types/course/assessment/question-generation';
 
 import {
   CODAVERI_EVALUATOR_ONLY_LANGUAGES,
-  defaultQuestionFormData,
+  defaultMrqPrototypeFormData,
+  defaultProgrammingPrototypeFormData,
 } from './constants';
-import { CodaveriGenerateFormData, QuestionPrototypeFormData } from './types';
+import {
+  MrqGenerateFormData,
+  MrqPrototypeFormData,
+  ProgrammingGenerateFormData,
+  ProgrammingPrototypeFormData,
+} from './types';
 
 function buildFromExpressionTestCase(
   visibility: TestcaseVisibility,
@@ -60,7 +72,7 @@ function buildTestCases(
 
 export function extractQuestionPrototypeData(
   response: CodaveriGenerateResponseData,
-): QuestionPrototypeFormData {
+): ProgrammingPrototypeFormData {
   return {
     question: {
       title: response.title,
@@ -83,10 +95,10 @@ export function extractQuestionPrototypeData(
 }
 
 export function replaceUnlockedPrototypeFields(
-  oldData: QuestionPrototypeFormData,
-  newData: QuestionPrototypeFormData,
+  oldData: ProgrammingPrototypeFormData,
+  newData: ProgrammingPrototypeFormData,
   lockStates: Record<string, boolean>,
-): QuestionPrototypeFormData {
+): ProgrammingPrototypeFormData {
   return {
     question: {
       title: lockStates['question.title']
@@ -146,18 +158,19 @@ const stringifyTestCases = <T extends MetadataTestCase | JavaMetadataTestCase>(
   return JSON.stringify(testCaseDict);
 };
 
-export const buildGenerateRequestPayload = (
-  codaveriData: CodaveriGenerateFormData,
-  questionData: QuestionPrototypeFormData,
+export const buildProgrammingGenerateRequestPayload = (
+  generateFormData: ProgrammingGenerateFormData,
+  questionData: ProgrammingPrototypeFormData,
   isIncludingInlineCode: boolean,
 ): FormData => {
   const data = new FormData();
-  const isDefaultQuestionFormData =
-    JSON.stringify(questionData) === JSON.stringify(defaultQuestionFormData);
+  const isDefaultProgrammingPrototypeFormData =
+    JSON.stringify(questionData) ===
+    JSON.stringify(defaultProgrammingPrototypeFormData);
 
   data.append(
     'is_default_question_form_data',
-    isDefaultQuestionFormData.toString(),
+    isDefaultProgrammingPrototypeFormData.toString(),
   );
 
   if (questionData?.question?.title) {
@@ -201,15 +214,15 @@ export const buildGenerateRequestPayload = (
     );
   }
 
-  data.append('custom_prompt', codaveriData.customPrompt);
+  data.append('custom_prompt', generateFormData.customPrompt);
 
-  data.append('language_id', codaveriData.languageId.toString());
-  data.append('difficulty', codaveriData.difficulty);
+  data.append('language_id', generateFormData.languageId.toString());
+  data.append('difficulty', generateFormData.difficulty);
   return data;
 };
 
-export const buildQuestionDataFromPrototype = (
-  prefilledData: QuestionPrototypeFormData,
+export const buildProgrammingQuestionDataFromPrototype = (
+  prefilledData: ProgrammingPrototypeFormData,
   languageId: LanguageData['id'],
   languageMode: LanguageMode,
 ): ProgrammingFormRequestData => {
@@ -249,9 +262,9 @@ export const buildQuestionDataFromPrototype = (
   };
 };
 
-export const buildPrototypeFromQuestionData = (
+export const buildPrototypeFromProgrammingQuestionData = (
   questionData: ProgrammingFormData,
-): QuestionPrototypeFormData => {
+): ProgrammingPrototypeFormData => {
   return {
     question: questionData.question,
     testUi: {
@@ -268,5 +281,152 @@ export const buildPrototypeFromQuestionData = (
         },
       },
     },
+  };
+};
+
+export function extractMrqQuestionPrototypeData(
+  response: MrqGenerateResponseData,
+): MrqPrototypeFormData {
+  // Parse the real API response
+  const timestamp = Date.now();
+  const options =
+    response.options && response.options.length > 0
+      ? response.options.map((option: MrqGeneratedOption, index: number) => ({
+          id: `option-${timestamp}-${index}`,
+          option: option.option,
+          correct: option.correct,
+          weight: index + 1,
+          explanation: option.explanation || '',
+          ignoreRandomization: false,
+          toBeDeleted: false,
+        }))
+      : [];
+
+  return {
+    question: {
+      title: response.title || 'Generated MRQ Question',
+      description: response.description || 'Generated question description',
+      skipGrading: false,
+      randomizeOptions: false,
+    },
+    options,
+    gradingScheme: 'all_correct',
+  };
+}
+
+export function replaceUnlockedMrqPrototypeFields(
+  oldData: MrqPrototypeFormData,
+  newData: MrqPrototypeFormData,
+  lockStates: Record<string, boolean>,
+): MrqPrototypeFormData {
+  return {
+    question: {
+      title: lockStates['question.title']
+        ? oldData.question.title
+        : newData.question.title,
+      description: lockStates['question.description']
+        ? oldData.question.description
+        : newData.question.description,
+      skipGrading: lockStates['question.skipGrading']
+        ? oldData.question.skipGrading
+        : newData.question.skipGrading,
+      randomizeOptions: lockStates['question.randomizeOptions']
+        ? oldData.question.randomizeOptions
+        : newData.question.randomizeOptions,
+    },
+    options: lockStates['question.options'] ? oldData.options : newData.options,
+    gradingScheme: lockStates.gradingScheme
+      ? oldData.gradingScheme
+      : newData.gradingScheme,
+  };
+}
+
+export const buildMrqGenerateRequestPayload = (
+  generateFormData: MrqGenerateFormData,
+  prototypeFormData: MrqPrototypeFormData,
+): FormData => {
+  const data = new FormData();
+  const isDefaultMrqPrototypeFormData =
+    JSON.stringify(prototypeFormData) ===
+    JSON.stringify(defaultMrqPrototypeFormData);
+
+  data.append(
+    'is_default_question_form_data',
+    isDefaultMrqPrototypeFormData.toString(),
+  );
+
+  // Add source question data for context
+  const sourceQuestionData = {
+    title: prototypeFormData?.question?.title || '',
+    description: prototypeFormData?.question?.description || '',
+    options: prototypeFormData?.options || [],
+  };
+
+  data.append('source_question_data', JSON.stringify(sourceQuestionData));
+
+  if (prototypeFormData?.question?.title) {
+    data.append('title', prototypeFormData.question.title);
+  }
+
+  if (prototypeFormData?.question?.description) {
+    data.append('description', prototypeFormData.question.description);
+  }
+
+  if (prototypeFormData?.options?.length > 0) {
+    data.append('options', JSON.stringify(prototypeFormData.options));
+  }
+
+  data.append('custom_prompt', generateFormData.customPrompt);
+  data.append(
+    'number_of_questions',
+    generateFormData.numberOfQuestions.toString(),
+  );
+  return data;
+};
+
+export const buildMrqQuestionDataFromPrototype = (
+  prefilledData: MrqPrototypeFormData,
+): McqMrqData => {
+  // Filter out empty options before sending to backend
+  const filteredOptions =
+    prefilledData.options?.filter(
+      (option) => option.option && option.option.trim().length > 0,
+    ) || [];
+
+  return {
+    gradingScheme: prefilledData.gradingScheme,
+    question: {
+      title: prefilledData.question.title,
+      description: prefilledData.question.description,
+      skipGrading: prefilledData.question.skipGrading,
+      randomizeOptions: prefilledData.question.randomizeOptions,
+      maximumGrade: '10.0',
+      staffOnlyComments: '',
+      skillIds: [],
+    },
+    options: filteredOptions,
+  };
+};
+
+export const buildPrototypeFromMrqQuestionData = (
+  questionData: McqMrqFormData,
+): MrqPrototypeFormData => {
+  const timestamp = Date.now();
+  const options = (questionData.options || []).map((option, index) => ({
+    ...option,
+    id: option.id?.toString().startsWith('option-')
+      ? option.id
+      : `option-${timestamp}-${index}`,
+  }));
+
+  return {
+    question: {
+      title: questionData.question?.title || '',
+      description: questionData.question?.description || '',
+      skipGrading: questionData.question?.skipGrading || false,
+      randomizeOptions: questionData.question?.randomizeOptions || false,
+    },
+    options,
+    gradingScheme: questionData.gradingScheme || 'all_correct',
   };
 };

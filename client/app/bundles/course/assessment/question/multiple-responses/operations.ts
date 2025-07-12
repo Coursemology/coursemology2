@@ -4,6 +4,7 @@ import {
   McqMrqFormData,
   McqMrqPostData,
 } from 'types/course/assessment/question/multiple-responses';
+import { MrqGenerateResponse } from 'types/course/assessment/question-generation';
 
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
@@ -18,7 +19,7 @@ export const fetchNewMcq = async (): Promise<McqMrqFormData<'new'>> => {
   return response.data;
 };
 
-export const fetchEditMcqMrq = async (
+export const fetchEditMrq = async (
   id: number,
 ): Promise<McqMrqFormData<'edit'>> => {
   const response = await CourseAPI.assessment.question.mcqMrq.fetchEdit(id);
@@ -47,6 +48,24 @@ const adaptPostData = (data: McqMrqData): McqMrqPostData => ({
   },
 });
 
+export const updateMcqMrq = async (
+  id: number,
+  data: McqMrqData,
+): Promise<JustRedirect> => {
+  const adaptedData = adaptPostData(data);
+
+  try {
+    const response = await CourseAPI.assessment.question.mcqMrq.update(
+      id,
+      adaptedData,
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
 export const create = async (data: McqMrqData): Promise<JustRedirect> => {
   const adaptedData = adaptPostData(data);
 
@@ -61,18 +80,11 @@ export const create = async (data: McqMrqData): Promise<JustRedirect> => {
   }
 };
 
-export const updateMcqMrq = async (
-  id: number,
-  data: McqMrqData,
-): Promise<JustRedirect> => {
-  const adaptedData = adaptPostData(data);
-
+export const generate = async (
+  data: FormData,
+): Promise<MrqGenerateResponse> => {
   try {
-    const response = await CourseAPI.assessment.question.mcqMrq.update(
-      id,
-      adaptedData,
-    );
-
+    const response = await CourseAPI.assessment.question.mcqMrq.generate(data);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;

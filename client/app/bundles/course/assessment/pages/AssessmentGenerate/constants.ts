@@ -1,28 +1,34 @@
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
-import { CodaveriGenerateFormData, QuestionPrototypeFormData } from './types';
+import {
+  MrqGenerateFormData,
+  MrqPrototypeFormData,
+  ProgrammingGenerateFormData,
+  ProgrammingPrototypeFormData,
+} from './types';
 
-export const defaultQuestionFormData: QuestionPrototypeFormData = {
-  question: {
-    title: '',
-    description: '',
-  },
-  testUi: {
-    metadata: {
-      solution: '',
-      submission: '',
-      prepend: null,
-      append: null,
-      testCases: {
-        public: [],
-        private: [],
-        evaluation: [],
+export const defaultProgrammingPrototypeFormData: ProgrammingPrototypeFormData =
+  {
+    question: {
+      title: '',
+      description: '',
+    },
+    testUi: {
+      metadata: {
+        solution: '',
+        submission: '',
+        prepend: null,
+        append: null,
+        testCases: {
+          public: [],
+          private: [],
+          evaluation: [],
+        },
       },
     },
-  },
-};
+  };
 
-export const defaultCodaveriFormData: CodaveriGenerateFormData = {
+export const defaultProgrammingGenerateFormData: ProgrammingGenerateFormData = {
   languageId: 0,
   customPrompt: '',
   difficulty: 'easy',
@@ -36,3 +42,19 @@ export const CODAVERI_EVALUATOR_ONLY_LANGUAGES: LanguageMode[] = [
   'rust',
   'typescript',
 ];
+
+export const defaultMrqPrototypeFormData: MrqPrototypeFormData = {
+  question: {
+    title: '',
+    description: '',
+    skipGrading: false,
+    randomizeOptions: false,
+  },
+  options: [],
+  gradingScheme: 'all_correct',
+};
+
+export const defaultMrqGenerateFormData: MrqGenerateFormData = {
+  customPrompt: '',
+  numberOfQuestions: 1,
+};
