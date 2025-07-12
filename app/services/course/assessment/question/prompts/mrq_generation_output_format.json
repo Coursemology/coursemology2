@@ -1,0 +1,50 @@
+{
+  "_type": "json_schema",
+  "type": "object",
+  "properties": {
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the question"
+          },
+          "description": {
+            "type": "string",
+            "description": "The question description"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "option": {
+                  "type": "string",
+                  "description": "The text of the option"
+                },
+                "correct": {
+                  "type": "boolean",
+                  "description": "Whether this option is correct"
+                },
+                "explanation": {
+                  "type": "string",
+                  "description": "Explanation for why this option is correct or incorrect"
+                }
+              },
+              "required": ["option", "correct", "explanation"],
+              "additionalProperties": false
+            },
+            "description": "Array of 4-6 options for the question"
+          }
+        },
+        "required": ["title", "description", "options"],
+        "additionalProperties": false
+      },
+      "description": "Array of generated multiple response questions"
+    }
+  },
+  "required": ["questions"],
+  "additionalProperties": false
+}

@@ -16,6 +16,8 @@ module Langchain::LlmStubs
       # add more llm response use cases here as needed
       if rubric_grading_request?(system_message, user_message)
         handle_rubric_grading(system_message, user_message)
+      elsif mrq_generation_request?(user_message)
+        handle_mrq_generation(user_message)
       elsif output_fixing_request?(system_message, user_message)
         handle_output_fixing(system_message, user_message)
       else
@@ -27,6 +29,10 @@ module Langchain::LlmStubs
 
     def rubric_grading_request?(system_message, _user_message)
       system_message.include?('rubric') && system_message.include?('grade')
+    end
+
+    def mrq_generation_request?(user_message)
+      user_message.include?('multiple response question') && user_message.include?('Custom Instructions:')
     end
 
     def output_fixing_request?(_system_message, user_message)
@@ -61,6 +67,55 @@ module Langchain::LlmStubs
           'explanation' => "Mock explanation for category_#{category_id}"
         }
       end
+      MockChatResponse.new(mock_response.to_json)
+    end
+
+    def handle_rubric_grading(system_message, _user_message)
+      category_ids = system_message.scan(/Category ID: (\d+)/).flatten.map(&:to_i)
+      criterion_ids_with_grades = extract_random_criterion(system_message)
+
+      mock_response = { 'overall_feedback' => 'Mock overall feedback' }
+      category_ids.zip(criterion_ids_with_grades).each do |category_id, criterion_id_with_grade|
+        mock_response["category_#{category_id}"] = {
+          'criterion_id_with_grade' => criterion_id_with_grade,
+          'explanation' => "Mock explanation for category_#{category_id}"
+        }
+      end
+
+      mock_response = {
+        'questions' => questions
+      }
+
+      MockChatResponse.new(mock_response.to_json)
+    end
+
+    def handle_mrq_generation(user_message)
+      # Extract number of questions from the prompt
+      number_match = user_message.match(/Generate (\d+) high-quality multiple response question/)
+      number_of_questions = number_match ? number_match[1].to_i : 1
+
+      questions = []
+      number_of_questions.times do |i|
+        question_number = i + 1
+        questions << {
+          'title' => "Generated MRQ Question #{question_number}",
+          'description' => "This is a sample multiple response question #{question_number}. Which of the following are correct?",
+          'options' => [
+            { 'option' => "Option A for question #{question_number}", 'correct' => true,
+              'explanation' => 'This is correct' },
+            { 'option' => "Option B for question #{question_number}", 'correct' => true,
+              'explanation' => 'This is also correct' },
+            { 'option' => "Option C for question #{question_number}", 'correct' => false,
+              'explanation' => 'This is incorrect' },
+            { 'option' => "Option D for question #{question_number}", 'correct' => false,
+              'explanation' => 'This is also incorrect' }
+          ]
+        }
+      end
+      mock_response = {
+        'questions' => questions
+      }
+
       MockChatResponse.new(mock_response.to_json)
     end
 
