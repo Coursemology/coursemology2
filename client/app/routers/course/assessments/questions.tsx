@@ -140,6 +140,22 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
           },
         },
         {
+          path: 'generate',
+          lazy: async (): Promise<RouteObject> => {
+            const GenerateMrqQuestionPage = (
+              await import(
+                /* webpackChunkName: 'GenerateMrqQuestionPage' */
+                'course/assessment/pages/AssessmentGenerate/MultipleResponse/GenerateMrqQuestionPage'
+              )
+            ).default;
+
+            return {
+              Component: GenerateMrqQuestionPage,
+              handle: GenerateMrqQuestionPage.handle,
+            };
+          },
+        },
+        {
           path: ':questionId/edit',
           lazy: async (): Promise<RouteObject> => ({
             Component: (
@@ -241,7 +257,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
             const GenerateProgrammingQuestionPage = (
               await import(
                 /* webpackChunkName: 'GenerateProgrammingQuestionPage' */
-                'course/assessment/pages/AssessmentGenerate/GenerateProgrammingQuestionPage'
+                'course/assessment/pages/AssessmentGenerate/Programming/GenerateProgrammingQuestionPage'
               )
             ).default;
 

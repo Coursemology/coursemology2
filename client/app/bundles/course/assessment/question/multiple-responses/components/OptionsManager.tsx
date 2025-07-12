@@ -22,7 +22,7 @@ import Option, { OptionRef } from './Option';
 
 interface OptionsManagerProps {
   for: OptionEntity[];
-  onDirtyChange: (isDirty: boolean) => void;
+  onDirtyChange?: (isDirty: boolean) => void;
   adapter: McqMrqAdapter;
   allowRandomization?: boolean;
   hideCorrect?: boolean;
@@ -34,6 +34,7 @@ export interface OptionsManagerRef {
   reset: () => void;
   setErrors: (errors: OptionsErrors) => void;
   resetErrors: () => void;
+  updateOptions: (newOptions: OptionEntity[]) => void;
 }
 
 const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
@@ -45,6 +46,11 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
 
     const { isDirty, mark, marker, reset } = useDirty<OptionEntity['id']>();
     const [error, setError] = useState<string>();
+
+    // Watch for changes to originalOptions and update internal state
+    useEffect(() => {
+      setOptions(originalOptions);
+    }, [originalOptions]);
 
     const idToIndex = useMemo(
       () =>
@@ -81,6 +87,11 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
           optionRefs.current[id]?.setError(optionError);
         });
       },
+      updateOptions: (newOptions: OptionEntity[]): void => {
+        setOptions(newOptions);
+        // Mark all new options as dirty to trigger the onDirtyChange callback
+        newOptions.forEach((option) => mark(option.id, true));
+      },
     }));
 
     const isOrderDirty = (currentOptions: OptionEntity[]): boolean => {
@@ -92,7 +103,7 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
     };
 
     useEffect(() => {
-      props.onDirtyChange(isDirty || isOrderDirty(options));
+      props.onDirtyChange?.(isDirty || isOrderDirty(options));
     }, [isDirty, options]);
 
     const updateOption = (updater: (draft: OptionEntity[]) => void): void =>
@@ -113,7 +124,8 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
 
     const addNewOption = (): void => {
       const count = options.length;
-      const id = `new-option-${count}`;
+      const timestamp = Date.now();
+      const id = `option-${timestamp}-${count}`;
 
       updateOption((draft) => {
         draft.push({

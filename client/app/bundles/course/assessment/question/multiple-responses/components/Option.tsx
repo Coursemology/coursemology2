@@ -44,6 +44,11 @@ const Option = forwardRef<OptionRef, OptionProps>((props, ref): JSX.Element => {
 
   const { t } = useTranslation();
 
+  useEffect(() => {
+    // Only update if the option ID changed (different option)
+    if (option.id !== originalOption.id) setOption(originalOption);
+  }, [originalOption.id]);
+
   useImperativeHandle(ref, () => ({
     getOption: () => option,
     reset: (): void => {

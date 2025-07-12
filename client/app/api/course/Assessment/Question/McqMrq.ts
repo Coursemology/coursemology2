@@ -2,6 +2,7 @@ import {
   McqMrqFormData,
   McqMrqPostData,
 } from 'types/course/assessment/question/multiple-responses';
+import { MrqGenerateResponse } from 'types/course/assessment/question-generation';
 
 import { APIResponse, JustRedirect } from 'api/types';
 
@@ -32,5 +33,9 @@ export default class McqMrqAPI extends BaseAPI {
 
   update(id: number, data: McqMrqPostData): APIResponse<JustRedirect> {
     return this.client.patch(`${this.#urlPrefix}/${id}`, data);
+  }
+
+  generate(data: FormData): APIResponse<MrqGenerateResponse> {
+    return this.client.post(`${this.#urlPrefix}/generate`, data);
   }
 }

@@ -14,15 +14,14 @@ import FormTextField from 'lib/components/form/fields/TextField';
 import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../translations';
-
-import { CODAVERI_EVALUATOR_ONLY_LANGUAGES } from './constants';
-import LockableSection from './LockableSection';
-import TestCasesManager from './TestCasesManager';
-import { LockStates, QuestionPrototypeFormData } from './types';
+import translations from '../../../translations';
+import { CODAVERI_EVALUATOR_ONLY_LANGUAGES } from '../constants';
+import LockableSection from '../LockableSection';
+import TestCasesManager from '../TestCasesManager';
+import { LockStates, ProgrammingPrototypeFormData } from '../types';
 
 interface Props {
-  prototypeForm: UseFormReturn<QuestionPrototypeFormData>;
+  prototypeForm: UseFormReturn<ProgrammingPrototypeFormData>;
   onToggleLock: (key: string) => void;
   lockStates: LockStates;
   editorMode: LanguageMode;
@@ -43,7 +42,7 @@ const TestCaseComponentMapper: Record<
   typescript: ReorderableTestCase,
 };
 
-const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
+const GenerateProgrammingPrototypeForm: FC<Props> = (props) => {
   const { prototypeForm, lockStates, onToggleLock, editorMode } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -223,4 +222,4 @@ const GenerateQuestionPrototypeForm: FC<Props> = (props) => {
   );
 };
 
-export default GenerateQuestionPrototypeForm;
+export default GenerateProgrammingPrototypeForm;

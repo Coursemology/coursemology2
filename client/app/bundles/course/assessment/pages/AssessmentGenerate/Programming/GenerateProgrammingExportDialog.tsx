@@ -40,9 +40,9 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
-import { getAssessmentGenerateQuestionsData } from './selectors';
-import { ConversationState, ExportError } from './types';
-import { buildQuestionDataFromPrototype } from './utils';
+import { getAssessmentGenerateQuestionsData } from '../selectors';
+import { ConversationState, ExportError } from '../types';
+import { buildProgrammingQuestionDataFromPrototype } from '../utils';
 
 interface Props {
   open: boolean;
@@ -66,7 +66,7 @@ const translations = defineMessages({
   },
 });
 
-const GenerateExportDialog: FC<Props> = (props) => {
+const GenerateProgrammingExportDialog: FC<Props> = (props) => {
   const { open, setOpen, saveActiveFormData, languages } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -109,9 +109,9 @@ const GenerateExportDialog: FC<Props> = (props) => {
   const pollQuestionExportJobs = (): void => {
     Object.values(generatePageData.conversations)
       .filter(
-        (conversation) =>
+        (conversation): conversation is ConversationState =>
           conversation.exportStatus === 'importing' &&
-          conversation.importJobUrl,
+          conversation.importJobUrl !== undefined,
       )
       .forEach((conversation) => {
         GlobalAPI.jobs
@@ -119,7 +119,7 @@ const GenerateExportDialog: FC<Props> = (props) => {
           .then((response) => {
             if (response.data.status === 'completed') {
               dispatch(
-                actions.exportConversationSuccess({
+                actions.exportProgrammingConversationSuccess({
                   conversationId: conversation.id,
                 }),
               );
@@ -275,51 +275,70 @@ const GenerateExportDialog: FC<Props> = (props) => {
                   snapshot &&
                   snapshot.state !== 'sentinel',
               )
-              .forEach(({ conversation }, index) => {
-                const questionData = conversation.activeSnapshotEditedData;
-                const { codaveriData } =
-                  conversation.snapshots[conversation.activeSnapshotId];
-                const { id: languageId, editorMode: languageMode } =
-                  languages.find(
-                    (lang) => lang.id === codaveriData!.languageId,
-                  )!;
-                const formData = buildFormData(
-                  buildQuestionDataFromPrototype(
-                    questionData!,
-                    languageId,
-                    languageMode,
-                  ),
-                );
-                dispatch(
-                  actions.exportConversation({
-                    conversationId: conversation.id,
-                  }),
-                );
-                const operation =
-                  conversation.questionId === undefined
-                    ? create(formData)
-                    : update(conversation.questionId, formData);
-                operation
-                  .then((response) => {
-                    if (response.importJobUrl) {
-                      dispatch(
-                        actions.exportConversationPendingImport({
-                          conversationId: conversation.id,
-                          data: response,
-                        }),
-                      );
-                    } else {
-                      dispatch(
-                        actions.exportConversationSuccess({
-                          conversationId: conversation.id,
-                          data: response,
-                        }),
-                      );
-                    }
-                  })
-                  .catch((error) => {
-                    handleExportError(conversation, error.message);
-                  });
+              .forEach(({ conversation, snapshot }, index) => {
+                // type guard for programming questions
+                if (
+                  snapshot &&
+                  'generateFormData' in snapshot &&
+                  snapshot.generateFormData &&
+                  'languageId' in snapshot.generateFormData
+                ) {
+                  const questionData = conversation.activeSnapshotEditedData;
+                  // type guard for ProgrammingPrototypeFormData
+                  if (
+                    questionData &&
+                    'testUi' in questionData &&
+                    questionData.testUi &&
+                    'metadata' in questionData.testUi &&
+                    questionData.testUi.metadata &&
+                    'solution' in questionData.testUi.metadata
+                  ) {
+                    const { generateFormData } = snapshot;
+                    const language = languages.find(
+                      (lang) => lang.id === generateFormData.languageId,
+                    );
+                    if (!language) return; // skip if language not found
+                    const { id: languageId, editorMode: languageMode } =
+                      language;
+                    const formData = buildFormData(
+                      buildProgrammingQuestionDataFromPrototype(
+                        questionData,
+                        languageId,
+                        languageMode,
+                      ),
+                    );
+                    dispatch(
+                      actions.exportConversation({
+                        conversationId: conversation.id,
+                      }),
+                    );
+                    const operation =
+                      conversation.questionId === undefined
+                        ? create(formData)
+                        : update(conversation.questionId, formData);
+                    operation
+                      .then((response) => {
+                        if (response.importJobUrl) {
+                          dispatch(
+                            actions.exportProgrammingConversationPendingImport({
+                              conversationId: conversation.id,
+                              data: response,
+                            }),
+                          );
+                        } else {
+                          dispatch(
+                            actions.exportProgrammingConversationSuccess({
+                              conversationId: conversation.id,
+                              data: response,
+                            }),
+                          );
+                        }
+                      })
+                      .catch((error) => {
+                        handleExportError(conversation, error.message);
+                      });
+                  }
+                }
               });
           }}
           variant="contained"
@@ -331,4 +350,4 @@ const GenerateExportDialog: FC<Props> = (props) => {
   );
 };
 
-export default GenerateExportDialog;
+export default GenerateProgrammingExportDialog;

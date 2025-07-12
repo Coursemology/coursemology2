@@ -49,6 +49,98 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
     end
   end
 
+  def generate
+    # Parse the form data
+    custom_prompt = params[:custom_prompt] || ''
+    number_of_questions = (params[:number_of_questions] || 1).to_i
+    
+    # Parse source_question_data from JSON string
+    source_question_data = {}
+    if params[:source_question_data].present?
+      begin
+        source_question_data = JSON.parse(params[:source_question_data])
+      rescue JSON::ParserError => e
+        Rails.logger.warn "Failed to parse source_question_data: #{e.message}"
+        source_question_data = {}
+      end
+    end
+
+    # Validate parameters
+    if custom_prompt.blank?
+      render json: { success: false, message: 'Custom prompt is required' }, status: :bad_request
+      return
+    end
+
+    if number_of_questions < 1 || number_of_questions > 3
+      render json: { success: false, message: 'Number of questions must be between 1 and 3' }, status: :bad_request
+      return
+    end
+
+    # Create generation service
+    generation_service = Course::Assessment::Question::MrqGenerationService.new(
+      @assessment,
+      {
+        custom_prompt: custom_prompt,
+        number_of_questions: number_of_questions,
+        source_question_data: source_question_data
+      }
+    )
+
+    # Generate questions
+    generated_questions = generation_service.generate_questions
+    # Transform the response to match the expected frontend format
+    questions = generated_questions['questions'] || []
+
+    if questions.empty?
+      render json: { success: false, message: 'No questions were generated' }, status: :internal_server_error
+      return
+    end
+    # Format response for frontend
+    response_data = {
+      success: true,
+      data: {
+        title: questions.first['title'],
+        description: questions.first['description'],
+        options: questions.first['options'].map.with_index do |option, index|
+          {
+            id: index + 1,
+            option: option['option'],
+            correct: option['correct'],
+            weight: index + 1,
+            explanation: option['explanation'] || '',
+            ignoreRandomization: false,
+            toBeDeleted: false
+          }
+        end,
+        allQuestions: questions.map.with_index do |question, q_index|
+          {
+            title: question['title'],
+            description: question['description'],
+            options: question['options'].map.with_index do |option, index|
+              {
+                id: index + 1,
+                option: option['option'],
+                correct: option['correct'],
+                weight: index + 1,
+                explanation: option['explanation'] || '',
+                ignoreRandomization: false,
+                toBeDeleted: false
+              }
+            end
+          }
+        end,
+        numberOfQuestions: questions.length
+      }
+    }
+
+    render json: response_data, status: :ok
+  rescue StandardError => e
+    Rails.logger.error "MRQ Generation Error: #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
+    render json: { success: false, message: 'An error occurred while generating questions' },
+           status: :internal_server_error
+  end
+
   private
 
   def respond_to_switch_mcq_mrq_type

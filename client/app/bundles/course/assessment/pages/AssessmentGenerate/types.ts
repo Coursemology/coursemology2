@@ -1,3 +1,4 @@
+import { OptionEntity } from 'types/course/assessment/question/multiple-responses';
 import {
   LanguageData,
   MetadataTestCases,
@@ -7,13 +8,18 @@ import {
 const CODAVERI_DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 type Difficulty = (typeof CODAVERI_DIFFICULTIES)[number];
 
-export interface CodaveriGenerateFormData {
+export interface ProgrammingGenerateFormData {
   difficulty: Difficulty;
   languageId: LanguageData['id'];
   customPrompt: string;
 }
 
-export interface QuestionPrototypeFormData {
+export interface MrqGenerateFormData {
+  customPrompt: string;
+  numberOfQuestions: number;
+}
+
+export interface ProgrammingPrototypeFormData {
   question: {
     title: string;
     description: string;
@@ -27,6 +33,17 @@ export interface QuestionPrototypeFormData {
       testCases: MetadataTestCases;
     };
   };
+}
+
+export interface MrqPrototypeFormData {
+  question: {
+    title: string;
+    description: string;
+    skipGrading: boolean;
+    randomizeOptions: boolean;
+  };
+  options: OptionEntity[];
+  gradingScheme: 'any_correct' | 'all_correct';
 }
 
 export type LockStates = Record<string, boolean>;
@@ -59,7 +76,7 @@ export interface ConversationState {
   snapshots: { [id: string]: SnapshotState };
   latestSnapshotId: string;
   activeSnapshotId: string;
-  activeSnapshotEditedData: QuestionPrototypeFormData;
+  activeSnapshotEditedData: ProgrammingPrototypeFormData | MrqPrototypeFormData;
   duplicateFromId?: string;
   toExport: boolean;
   exportStatus: ExportStatus;
@@ -81,7 +98,7 @@ export interface SnapshotState {
   id: string;
   parentId?: string;
   state: 'generating' | 'success' | 'sentinel';
-  codaveriData?: CodaveriGenerateFormData;
-  questionData?: QuestionPrototypeFormData;
+  generateFormData?: ProgrammingGenerateFormData | MrqGenerateFormData;
+  questionData?: ProgrammingPrototypeFormData | MrqPrototypeFormData;
   lockStates: LockStates;
 }

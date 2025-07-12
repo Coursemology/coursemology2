@@ -11,10 +11,14 @@ export const getAssessmentGenerateQuestionsData = (
       let title: string | undefined;
       if (
         conversation.id === internalState.activeConversationId &&
-        internalState.activeConversationFormTitle &&
-        internalState.activeConversationFormTitle.length > 0
+        internalState.activeConversationFormTitle !== undefined
       ) {
-        title = internalState.activeConversationFormTitle;
+        // For active conversation, always use activeConversationFormTitle
+        // This ensures that when user deletes the title, it shows "Untitled Question"
+        title =
+          internalState.activeConversationFormTitle.length > 0
+            ? internalState.activeConversationFormTitle
+            : undefined;
       } else if (
         conversation.activeSnapshotEditedData.question.title.length > 0
       ) {
