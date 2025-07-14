@@ -19,7 +19,7 @@ export const fetchNewMcq = async (): Promise<McqMrqFormData<'new'>> => {
   return response.data;
 };
 
-export const fetchEditMrq = async (
+export const fetchEditMcqMrq = async (
   id: number,
 ): Promise<McqMrqFormData<'edit'>> => {
   const response = await CourseAPI.assessment.question.mcqMrq.fetchEdit(id);

@@ -15,7 +15,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { MrqGenerateFormData, SnapshotState } from '../types';
+import { McqMrqGenerateFormData, SnapshotState } from '../types';
 
 const translations = defineMessages({
   topicField: {
@@ -72,10 +72,10 @@ const ConversationSnapshot: FC<{
 };
 
 interface Props {
-  onGenerate: (data: MrqGenerateFormData) => Promise<void>;
+  onGenerate: (data: McqMrqGenerateFormData) => Promise<void>;
   onSaveActiveData: () => void;
   questionFormDataEqual: () => boolean;
-  generateForm: UseFormReturn<MrqGenerateFormData>;
+  generateForm: UseFormReturn<McqMrqGenerateFormData>;
   activeSnapshotId: string;
   snapshots: { [id: string]: SnapshotState };
   latestSnapshotId: string;

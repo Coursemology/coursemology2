@@ -5,7 +5,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Container, Divider, Grid } from '@mui/material';
 import { McqMrqFormData } from 'types/course/assessment/question/multiple-responses';
-import { MrqGeneratedOption } from 'types/course/assessment/question-generation';
+import { McqMrqGeneratedOption } from 'types/course/assessment/question-generation';
 import * as yup from 'yup';
 
 import GenerateTabs from 'course/assessment/pages/AssessmentGenerate/GenerateTabs';
@@ -15,40 +15,43 @@ import GenerateMrqPrototypeForm from 'course/assessment/pages/AssessmentGenerate
 import { getAssessmentGenerateQuestionsData } from 'course/assessment/pages/AssessmentGenerate/selectors';
 import {
   ConversationState,
-  MrqGenerateFormData,
-  MrqPrototypeFormData,
+  McqMrqGenerateFormData,
+  McqMrqPrototypeFormData,
   SnapshotState,
 } from 'course/assessment/pages/AssessmentGenerate/types';
 import {
-  buildMrqGenerateRequestPayload,
-  buildPrototypeFromMrqQuestionData,
-  extractMrqQuestionPrototypeData,
-  replaceUnlockedMrqPrototypeFields,
+  buildMcqMrqGenerateRequestPayload,
+  buildPrototypeFromMcqMrqQuestionData,
+  extractMcqMrqQuestionPrototypeData,
+  replaceUnlockedMcqMrqPrototypeFields,
 } from 'course/assessment/pages/AssessmentGenerate/utils';
 import { generationActions as actions } from 'course/assessment/reducers/generation';
 import { setNotification } from 'lib/actions';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import { DataHandle } from 'lib/hooks/router/dynamicNest';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { OptionsManagerRef } from '../../../question/multiple-responses/components/OptionsManager';
 import {
-  fetchEditMrq,
+  fetchEditMcqMrq,
   generate,
 } from '../../../question/multiple-responses/operations';
 import {
-  defaultMrqGenerateFormData,
+  defaultMcqMrqGenerateFormData,
+  defaultMcqPrototypeFormData,
   defaultMrqPrototypeFormData,
 } from '../constants';
 
-// Helper function to generate snapshot ID (copied from generation reducer)
-const generateSnapshotId = (): string => Date.now().toString(16);
-
 const translations = defineMessages({
-  generatePage: {
-    id: 'course.assessment.generation.generatePage',
+  generateMrqPage: {
+    id: 'course.assessment.generation.generateMrqPage',
     defaultMessage: 'Generate Multiple Response Question',
+  },
+  generateMcqPage: {
+    id: 'course.assessment.generation.generateMcqPage',
+    defaultMessage: 'Generate Multiple Choice Question',
   },
   generateSuccess: {
     id: 'course.assessment.generation.generateSuccess',
@@ -80,20 +83,24 @@ const compareFormData = (
       oldState.question.description.replace(/<(\/)?[^>]+(>|$)/g, '') ===
       newState.question.description.replace(/<(\/)?[^>]+(>|$)/g, ''),
     'question.options':
-      JSON.stringify(oldState.question.options) ===
-      JSON.stringify(newState.question.options),
-    'question.correct':
-      JSON.stringify(oldState.question.correct) ===
-      JSON.stringify(newState.question.correct),
+      JSON.stringify(oldState.options) === JSON.stringify(newState.options),
   };
 };
 
+const getMcqMrqType = (
+  params: URLSearchParams,
+): McqMrqFormData['mcqMrqType'] =>
+  params.get('multiple_choice') === 'true' ? 'mcq' : 'mrq';
+
+const generateSnapshotId = (): string => Date.now().toString(16);
+
 const generateFormValidationSchema = yup.object({
   customPrompt: yup.string().min(1).max(500),
-  numberOfQuestions: yup.number().min(1).max(3).required(),
+  numberOfQuestions: yup.number().min(1).max(10).required(),
 });
 
 const GenerateMrqQuestionPage = (): JSX.Element => {
+  const { t } = useTranslation();
   const params = useParams();
   const id = parseInt(params?.assessmentId ?? '', 10) || undefined;
   if (!id)
@@ -102,6 +109,10 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
   const [searchParams] = useSearchParams();
   const sourceId =
     parseInt(searchParams.get('source_question_id') ?? '', 10) || undefined;
+
+  const isMultipleChoice = searchParams.get('multiple_choice') === 'true';
+  const questionType = isMultipleChoice ? 'mcq' : 'mrq';
+
   const sourceDataInitializedRef = useRef<boolean>(false);
   const optionsRef = useRef<OptionsManagerRef>(null);
 
@@ -109,21 +120,22 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
   const [exportDialogOpen, setExportDialogOpen] = useState<boolean>(false);
   const generatePageData = useAppSelector(getAssessmentGenerateQuestionsData);
 
-  // Initialize generation state with MRQ questionType
+  // Initialize generation state with the appropriate questionType
   useEffect(() => {
-    dispatch(actions.initializeGeneration({ questionType: 'mrq' }));
-  }, []);
+    dispatch(actions.initializeGeneration({ questionType }));
+  }, [questionType]);
 
-  const { t } = useTranslation();
   // upper form (submit to OpenAI)
-  const generateForm = useForm<MrqGenerateFormData>({
-    defaultValues: defaultMrqGenerateFormData,
+  const generateForm = useForm<McqMrqGenerateFormData>({
+    defaultValues: defaultMcqMrqGenerateFormData,
     resolver: yupResolver(generateFormValidationSchema),
   });
 
-  // lower form (populate to new MRQ question page)
+  // lower form (populate to new question page)
   const prototypeForm = useForm({
-    defaultValues: defaultMrqPrototypeFormData,
+    defaultValues: isMultipleChoice
+      ? defaultMcqPrototypeFormData
+      : defaultMrqPrototypeFormData,
   });
   const questionFormData = prototypeForm.watch();
 
@@ -164,10 +176,10 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
   // calling getValues() directly returns a "readonly" reference, which can lead to errors
   // as the object is propagated across various state / handler functions
   // so instead, these helper functions return a deep copy
-  const getActiveGenerateFormData = (): MrqGenerateFormData =>
+  const getActiveGenerateFormData = (): McqMrqGenerateFormData =>
     JSON.parse(JSON.stringify(generateForm.getValues()));
 
-  const getActivePrototypeFormData = (): MrqPrototypeFormData => {
+  const getActivePrototypeFormData = (): McqMrqPrototypeFormData => {
     const formData = JSON.parse(JSON.stringify(prototypeForm.getValues()));
 
     // Update the form data with current options from OptionsManager
@@ -198,14 +210,14 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
           title: conversation.activeSnapshotEditedData.question.title,
         }),
       );
-      generateForm.reset(defaultMrqGenerateFormData);
+      generateForm.reset(defaultMcqMrqGenerateFormData);
       prototypeForm.reset(conversation.activeSnapshotEditedData);
       setLockStates(snapshot.lockStates);
     }
   };
 
   const createConversation = (): void => {
-    dispatch(actions.createConversation({ questionType: 'mrq' }));
+    dispatch(actions.createConversation({ questionType }));
     dispatch((_, getState) => {
       const newState = getAssessmentGenerateQuestionsData(getState());
       const newConversationId =
@@ -259,7 +271,7 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
   > => {
     if (sourceId) {
       try {
-        return await fetchEditMrq(sourceId);
+        return fetchEditMcqMrq(sourceId);
       } catch (error) {
         dispatch(setNotification(t(translations.loadingSourceError)));
       }
@@ -282,7 +294,9 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
           dispatch(
             actions.setActiveFormTitle({ title: sourceData.question.title }),
           );
-          prototypeForm.reset(buildPrototypeFromMrqQuestionData(sourceData));
+          prototypeForm.reset(
+            buildPrototypeFromMcqMrqQuestionData(sourceData, isMultipleChoice),
+          );
         }
 
         return (
@@ -356,13 +370,13 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
 
                             // Update OptionsManager with the snapshot's options
                             if (snapshot.questionData) {
-                              const mrqData =
-                                snapshot.questionData as MrqPrototypeFormData;
+                              const questionData =
+                                snapshot.questionData as McqMrqPrototypeFormData;
                               if (
-                                mrqData.options &&
-                                mrqData.options.length > 0
+                                questionData.options &&
+                                questionData.options.length > 0
                               ) {
-                                const draftOptions = mrqData.options.map(
+                                const draftOptions = questionData.options.map(
                                   (option) => ({
                                     ...option,
                                     draft: true,
@@ -402,9 +416,10 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
                           );
                           try {
                             const response = await generate(
-                              buildMrqGenerateRequestPayload(
-                                generateFormData,
-                                questionFormData,
+                              buildMcqMrqGenerateRequestPayload(
+                                generateFormData as McqMrqGenerateFormData,
+                                questionFormData as McqMrqPrototypeFormData,
+                                isMultipleChoice,
                               ),
                             );
 
@@ -437,14 +452,16 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
                                   },
                                   options: additionalQuestion.options.map(
                                     (
-                                      option: MrqGeneratedOption,
+                                      option: McqMrqGeneratedOption,
                                       index: number,
                                     ) => ({
                                       ...option,
                                       id: `option-${additionalQuestionTimestamp}-${index}`,
                                     }),
                                   ),
-                                  gradingScheme: 'all_correct' as const,
+                                  gradingScheme: isMultipleChoice
+                                    ? ('any_correct' as const)
+                                    : ('all_correct' as const),
                                 };
 
                                 // Copy only the latest snapshot from the original conversation
@@ -465,7 +482,7 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
                                   // Create a new conversation with only the new snapshot
                                   dispatch(
                                     actions.createConversationWithSnapshots({
-                                      questionType: 'mrq',
+                                      questionType,
                                       copiedSnapshots: {
                                         [newAdditionalQuestionSnapshotId]:
                                           newSnapshot,
@@ -491,11 +508,14 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
 
                             // Handle the first/main question as before
                             const responseQuestionFormData =
-                              extractMrqQuestionPrototypeData(response.data);
+                              extractMcqMrqQuestionPrototypeData(
+                                response.data,
+                                isMultipleChoice,
+                              );
                             const newQuestionFormData =
-                              replaceUnlockedMrqPrototypeFields(
-                                questionFormData,
-                                responseQuestionFormData,
+                              replaceUnlockedMcqMrqPrototypeFields(
+                                questionFormData as McqMrqPrototypeFormData,
+                                responseQuestionFormData as McqMrqPrototypeFormData,
                                 lockStates,
                               );
                             dispatch((_, getState) => {
@@ -618,6 +638,12 @@ const GenerateMrqQuestionPage = (): JSX.Element => {
   );
 };
 
-const handle = translations.generatePage;
+const handle: DataHandle = (_, location) => {
+  const searchParams = new URLSearchParams(location.search);
+
+  return getMcqMrqType(searchParams) === 'mcq'
+    ? translations.generateMcqPage
+    : translations.generateMrqPage;
+};
 
 export default Object.assign(GenerateMrqQuestionPage, { handle });

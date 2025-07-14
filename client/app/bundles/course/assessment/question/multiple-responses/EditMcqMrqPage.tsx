@@ -13,7 +13,7 @@ import formTranslations from 'lib/translations/form';
 
 import AdaptedForm from './components/AdaptedForm';
 import { AdaptedFormProps } from './components/McqMrqForm';
-import { fetchEditMrq, updateMcqMrq } from './operations';
+import { fetchEditMcqMrq, updateMcqMrq } from './operations';
 
 const editMcqMrqComponent: Record<
   McqMrqFormData['mcqMrqType'],
@@ -30,7 +30,7 @@ const EditMcqMrqPage = (): JSX.Element => {
   const id = parseInt(params?.questionId ?? '', 10) || undefined;
   if (!id) throw new Error(`EditMcqMrqForm was loaded with ID: ${id}.`);
 
-  const fetchData = (): Promise<McqMrqFormData<'edit'>> => fetchEditMrq(id);
+  const fetchData = (): Promise<McqMrqFormData<'edit'>> => fetchEditMcqMrq(id);
 
   const handleSubmit = (data: McqMrqData): Promise<void> =>
     updateMcqMrq(id, data).then(({ redirectUrl }) => {

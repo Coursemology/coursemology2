@@ -26,8 +26,8 @@ import {
   updateMcqMrq,
 } from '../../../question/multiple-responses/operations';
 import { getAssessmentGenerateQuestionsData } from '../selectors';
-import { ConversationState, MrqPrototypeFormData } from '../types';
-import { buildMrqQuestionDataFromPrototype } from '../utils';
+import { ConversationState, McqMrqPrototypeFormData } from '../types';
+import { buildMcqMrqQuestionDataFromPrototype } from '../utils';
 
 interface Props {
   open: boolean;
@@ -104,8 +104,8 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
       );
 
       // Build the question data from the conversation
-      const questionData = buildMrqQuestionDataFromPrototype(
-        conversation.activeSnapshotEditedData as MrqPrototypeFormData,
+      const questionData = buildMcqMrqQuestionDataFromPrototype(
+        conversation.activeSnapshotEditedData as McqMrqPrototypeFormData,
       );
 
       // Validate that we have at least one non-empty option
@@ -131,7 +131,7 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
       operation
         .then((response) => {
           dispatch(
-            actions.exportMrqConversationSuccess({
+            actions.exportMcqMrqConversationSuccess({
               conversationId: conversation.id,
               data: { redirectEditUrl: response.redirectUrl },
             }),
@@ -207,7 +207,7 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
                   />
                 )}
                 {conversation.exportStatus === 'exported' && (
-                  <Done className="mr-1 text-gray-600" fontSize="small" />
+                  <Done className="mr-1 text-green-600" fontSize="small" />
                 )}
                 {conversation.exportStatus === 'exported' &&
                   conversation.redirectEditUrl && (

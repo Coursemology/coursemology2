@@ -31,18 +31,18 @@ RSpec.describe Course::Assessment::Question::MrqGenerationService do
 
       it 'generates questions using the LLM service' do
         result = subject.generate_questions
-        
+
         expect(result).to be_a(Hash)
         expect(result['questions']).to be_an(Array)
         expect(result['questions'].length).to eq(2)
-        
+
         result['questions'].each do |question|
           expect(question).to have_key('title')
           expect(question).to have_key('description')
           expect(question).to have_key('options')
           expect(question['options']).to be_an(Array)
           expect(question['options'].length).to be >= 4
-          
+
           question['options'].each do |option|
             expect(option).to have_key('option')
             expect(option).to have_key('correct')
@@ -80,7 +80,7 @@ RSpec.describe Course::Assessment::Question::MrqGenerationService do
           { 'option' => 'First option', 'correct' => true },
           { 'option' => 'Second option', 'correct' => false }
         ]
-        
+
         formatted = subject.send(:format_source_options, options)
         expect(formatted).to include('Option 1: First option (Correct: true)')
         expect(formatted).to include('Option 2: Second option (Correct: false)')
@@ -92,4 +92,4 @@ RSpec.describe Course::Assessment::Question::MrqGenerationService do
       end
     end
   end
-end 
+end

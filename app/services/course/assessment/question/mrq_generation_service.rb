@@ -6,16 +6,22 @@ class Course::Assessment::Question::MrqGenerationService
   @output_parser = Langchain::OutputParsers::StructuredOutputParser.from_json_schema(
     @output_schema
   )
-  @system_prompt = Langchain::Prompt.load_from_path(
+  @mrq_system_prompt = Langchain::Prompt.load_from_path(
     file_path: 'app/services/course/assessment/question/prompts/mrq_generation_system_prompt.json'
   )
-  @user_prompt = Langchain::Prompt.load_from_path(
+  @mrq_user_prompt = Langchain::Prompt.load_from_path(
     file_path: 'app/services/course/assessment/question/prompts/mrq_generation_user_prompt.json'
+  )
+  @mcq_system_prompt = Langchain::Prompt.load_from_path(
+    file_path: 'app/services/course/assessment/question/prompts/mcq_generation_system_prompt.json'
+  )
+  @mcq_user_prompt = Langchain::Prompt.load_from_path(
+    file_path: 'app/services/course/assessment/question/prompts/mcq_generation_user_prompt.json'
   )
   @llm = LANGCHAIN_OPENAI
 
   class << self
-    attr_reader :system_prompt, :user_prompt, :output_schema, :output_parser
+    attr_reader :output_schema, :output_parser, :mrq_system_prompt, :mrq_user_prompt, :mcq_system_prompt, :mcq_user_prompt
     attr_accessor :llm
   end
 
@@ -25,13 +31,18 @@ class Course::Assessment::Question::MrqGenerationService
     @custom_prompt = params[:custom_prompt].to_s
     @number_of_questions = params[:number_of_questions].to_i || 1
     @source_question_data = params[:source_question_data]
+    @question_type = params[:question_type] || 'mrq'
   end
 
-  # Calls the LLM service to generate MRQ questions.
+  # Calls the LLM service to generate MRQ or MCQ questions.
   # @return [Hash] The LLM's generation response containing multiple questions.
   def generate_questions
-    formatted_system_prompt = self.class.system_prompt.format
-    formatted_user_prompt = self.class.user_prompt.format(
+    # Select appropriate prompts based on question type
+    system_prompt = @question_type == 'mcq' ? self.class.mcq_system_prompt : self.class.mrq_system_prompt
+    user_prompt = @question_type == 'mcq' ? self.class.mcq_user_prompt : self.class.mrq_user_prompt
+
+    formatted_system_prompt = system_prompt.format
+    formatted_user_prompt = user_prompt.format(
       custom_prompt: @custom_prompt,
       number_of_questions: @number_of_questions,
       source_question_title: @source_question_data&.dig(:title) || '',
@@ -49,7 +60,7 @@ class Course::Assessment::Question::MrqGenerationService
       response_format: {
         type: 'json_schema',
         json_schema: {
-          name: 'mrq_generation_output',
+          name: "#{@question_type}_generation_output",
           strict: true,
           schema: self.class.output_schema
         }

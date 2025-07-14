@@ -15,7 +15,7 @@ import OptionsManager, {
   OptionsManagerRef,
 } from '../../../question/multiple-responses/components/OptionsManager';
 import LockableSection from '../LockableSection';
-import { LockStates, MrqPrototypeFormData } from '../types';
+import { LockStates, McqMrqPrototypeFormData } from '../types';
 
 const translations = defineMessages({
   title: {
@@ -33,7 +33,7 @@ const translations = defineMessages({
 });
 
 interface Props {
-  form: UseFormReturn<MrqPrototypeFormData>;
+  form: UseFormReturn<McqMrqPrototypeFormData>;
   lockStates: LockStates;
   onToggleLock: (key: string) => void;
   optionsRef: React.RefObject<OptionsManagerRef>;

@@ -48,7 +48,7 @@ export interface MrqGenerateResponse {
 export interface MrqGenerateResponseData {
   title: string;
   description: string;
-  options: MrqGeneratedOption[];
+  options: McqMrqGeneratedOption[];
   allQuestions: MrqGeneratedQuestion[];
   numberOfQuestions: number;
 }
@@ -56,10 +56,10 @@ export interface MrqGenerateResponseData {
 export interface MrqGeneratedQuestion {
   title: string;
   description: string;
-  options: MrqGeneratedOption[];
+  options: McqMrqGeneratedOption[];
 }
 
-export interface MrqGeneratedOption {
+export interface McqMrqGeneratedOption {
   id: number;
   option: string;
   correct: boolean;
