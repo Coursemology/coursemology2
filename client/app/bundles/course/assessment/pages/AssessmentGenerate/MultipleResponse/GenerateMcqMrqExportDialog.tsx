@@ -1,20 +1,22 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Done, Launch } from '@mui/icons-material';
+import { Done, ExpandLess, ExpandMore, Launch } from '@mui/icons-material';
 import {
   Box,
   Button,
-  Checkbox,
+  Collapse,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Paper,
+  Radio,
   Typography,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 import { generationActions as actions } from 'course/assessment/reducers/generation';
+import Checkbox from 'lib/components/core/buttons/Checkbox';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -26,8 +28,8 @@ import {
   updateMcqMrq,
 } from '../../../question/multiple-responses/operations';
 import { getAssessmentGenerateQuestionsData } from '../selectors';
-import { ConversationState, MrqPrototypeFormData } from '../types';
-import { buildMrqQuestionDataFromPrototype } from '../utils';
+import { ConversationState, McqMrqPrototypeFormData } from '../types';
+import { buildMcqMrqQuestionDataFromPrototype } from '../utils';
 
 interface Props {
   open: boolean;
@@ -40,7 +42,7 @@ const translations = defineMessages({
     defaultMessage: 'Export Questions ({exportCount} selected)',
   },
   exportAction: {
-    id: 'course.assessment.generation.exportAction',
+    id: 'course.assessment.generation.mrq.exportAction',
     defaultMessage: 'Export',
   },
   exportError: {
@@ -55,13 +57,40 @@ const translations = defineMessages({
     id: 'course.assessment.generation.untitledQuestion',
     defaultMessage: 'Untitled Question',
   },
+  showOptions: {
+    id: 'course.assessment.question.multipleResponses.showOptions',
+    defaultMessage: 'Show Options',
+  },
+  hideOptions: {
+    id: 'course.assessment.question.multipleResponses.hideOptions',
+    defaultMessage: 'Hide Options',
+  },
+  noOptions: {
+    id: 'course.assessment.question.multipleResponses.noOptions',
+    defaultMessage: 'No options',
+  },
 });
 
-const GenerateMrqExportDialog: FC<Props> = (props) => {
+const GenerateMcqMrqExportDialog: FC<Props> = (props) => {
   const { open, onClose } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const generatePageData = useAppSelector(getAssessmentGenerateQuestionsData);
+
+  // State to track which questions have expanded options
+  const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(
+    new Set(),
+  );
+
+  const toggleExpanded = (conversationId: string): void => {
+    const newExpanded = new Set(expandedQuestions);
+    if (newExpanded.has(conversationId)) {
+      newExpanded.delete(conversationId);
+    } else {
+      newExpanded.add(conversationId);
+    }
+    setExpandedQuestions(newExpanded);
+  };
 
   const setToExport = (
     conversation: ConversationState,
@@ -88,13 +117,10 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
   };
 
   const handleExport = async (): Promise<void> => {
-    // Only export conversations that have data AND are marked for export
+    // Only export conversations that are marked for export
     const conversationsToExport = Object.values(
       generatePageData.conversations,
-    ).filter((conversation) => {
-      const metadata = generatePageData.conversationMetadata[conversation.id];
-      return conversation.toExport && metadata?.hasData;
-    });
+    ).filter((conversation) => conversation.toExport);
 
     conversationsToExport.forEach((conversation) => {
       dispatch(
@@ -104,8 +130,10 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
       );
 
       // Build the question data from the conversation
-      const questionData = buildMrqQuestionDataFromPrototype(
-        conversation.activeSnapshotEditedData as MrqPrototypeFormData,
+      const isCreate = conversation.questionId === undefined;
+      const questionData = buildMcqMrqQuestionDataFromPrototype(
+        conversation.activeSnapshotEditedData as McqMrqPrototypeFormData,
+        isCreate,
       );
 
       // Validate that we have at least one non-empty option
@@ -131,9 +159,11 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
       operation
         .then((response) => {
           dispatch(
-            actions.exportMrqConversationSuccess({
+            actions.exportMcqMrqConversationSuccess({
               conversationId: conversation.id,
-              data: { redirectEditUrl: response.redirectUrl },
+              data: response.redirectEditUrl
+                ? { redirectEditUrl: response.redirectEditUrl }
+                : undefined,
             }),
           );
         })
@@ -179,16 +209,22 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
             ? questionData.description.replace(/<(\/)?[^>]+(>|$)/g, '')
             : '';
 
+          // Get options from the conversation data
+          const options =
+            (conversation.activeSnapshotEditedData as McqMrqPrototypeFormData)
+              ?.options || [];
+          const hasOptions = options.length > 0;
+          const isExpanded = expandedQuestions.has(conversationId);
+
           return (
-            <Paper
-              key={conversationId}
-              onClick={() => setToExport(conversation, !conversation.toExport)}
-              variant="outlined"
-            >
+            <Paper key={conversationId} variant="outlined">
               <div className="flex flex-nowrap px-6 py-3 items-center">
                 <Checkbox
                   checked={conversation.toExport}
                   className="py-0 pr-2 pl-0"
+                  onClick={() =>
+                    setToExport(conversation, !conversation.toExport)
+                  }
                 />
 
                 <Typography
@@ -199,6 +235,25 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
                 </Typography>
 
                 <Box className="flex-1 full-width" />
+
+                {/* Options expand/collapse button */}
+                {hasOptions && (
+                  <Button
+                    className="mr-2"
+                    endIcon={isExpanded ? <ExpandLess /> : <ExpandMore />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExpanded(conversationId);
+                    }}
+                    size="small"
+                    variant="outlined"
+                  >
+                    {isExpanded
+                      ? t(translations.hideOptions)
+                      : t(translations.showOptions)}
+                  </Button>
+                )}
+
                 {conversation.exportStatus === 'pending' && (
                   <LoadingIndicator
                     bare
@@ -207,7 +262,7 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
                   />
                 )}
                 {conversation.exportStatus === 'exported' && (
-                  <Done className="mr-1 text-gray-600" fontSize="small" />
+                  <Done className="mr-1 text-green-600" fontSize="small" />
                 )}
                 {conversation.exportStatus === 'exported' &&
                   conversation.redirectEditUrl && (
@@ -232,6 +287,42 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
                     {description}
                   </Typography>
                 )}
+
+                {/* Collapsible options section */}
+                <Collapse in={isExpanded}>
+                  <div className="space-y-2 mt-4">
+                    {hasOptions ? (
+                      options.map((option) => {
+                        // Determine if this is MCQ or MRQ based on gradingScheme
+                        const isMcq =
+                          (
+                            conversation.activeSnapshotEditedData as McqMrqPrototypeFormData
+                          )?.gradingScheme === 'any_correct';
+
+                        return (
+                          <Checkbox
+                            key={option.id}
+                            checked={option.correct}
+                            className="text-neutral-500"
+                            component={isMcq ? Radio : undefined}
+                            dangerouslySetInnerHTML={{ __html: option.option }}
+                            labelClassName="items-start"
+                            readOnly
+                            variant="body2"
+                          />
+                        );
+                      })
+                    ) : (
+                      <Typography
+                        className="italic text-neutral-500"
+                        variant="body2"
+                      >
+                        {t(translations.noOptions)}
+                      </Typography>
+                    )}
+                  </div>
+                </Collapse>
+
                 {conversation.exportStatus === 'error' && (
                   <Typography color={red[700]} variant="caption">
                     {exportErrorMessage(conversation)}
@@ -265,4 +356,4 @@ const GenerateMrqExportDialog: FC<Props> = (props) => {
   );
 };
 
-export default GenerateMrqExportDialog;
+export default GenerateMcqMrqExportDialog;
