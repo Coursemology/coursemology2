@@ -1406,6 +1406,63 @@
   "course.assessment.generation.unlockTooltip": {
     "defaultMessage": "Unlock to continue editing this section"
   },
+  "course.assessment.generation.mrq.numberOfQuestionsField": {
+    "defaultMessage": "Number of Questions"
+  },
+  "course.assessment.generation.promptPlaceholder": {
+    "defaultMessage": "Type something here..."
+  },
+  "course.assessment.generation.generateQuestion": {
+    "defaultMessage": "Generate"
+  },
+  "course.assessment.generation.showInactive": {
+    "defaultMessage": "Show inactive items"
+  },
+  "course.assessment.generation.mrq.numberOfQuestionsRange": {
+    "defaultMessage": "Please enter a number from {min} to {max}"
+  },
+  "course.assessment.generation.mrq.exportDialogHeader": {
+    "defaultMessage": "Export Questions ({exportCount} selected)"
+  },
+  "course.assessment.generation.requireNonEmptyOptionError": {
+    "defaultMessage": "Question must have at least one non-empty option"
+  },
+  "course.assessment.generation.untitledQuestion": {
+    "defaultMessage": "Untitled Question"
+  },
+  "course.assessment.question.multipleResponses.showOptions": {
+    "defaultMessage": "Show Options"
+  },
+  "course.assessment.question.multipleResponses.hideOptions": {
+    "defaultMessage": "Hide Options"
+  },
+  "course.assessment.question.multipleResponses.noOptions": {
+    "defaultMessage": "No options"
+  },
+  "course.assessment.question.multipleResponses.title": {
+    "defaultMessage": "Title"
+  },
+  "course.assessment.generation.generateMrqPage": {
+    "defaultMessage": "Generate Multiple Response Question"
+  },
+  "course.assessment.generation.generateMcqPage": {
+    "defaultMessage": "Generate Multiple Choice Question"
+  },
+  "course.assessment.generation.generateMultipleSuccess": {
+    "defaultMessage": "Successfully generated {count} questions!"
+  },
+  "course.assessment.generation.generateSuccess": {
+    "defaultMessage": "Generation for {title} successful."
+  },
+  "course.assessment.generation.generateError": {
+    "defaultMessage": "An error occurred generating question {title}."
+  },
+  "course.assessment.generation.loadingSourceError": {
+    "defaultMessage": "Unable to load source question data."
+  },
+  "course.assessment.generation.allFieldsLocked": {
+    "defaultMessage": "All fields are locked, so nothing can be generated."
+  },
   "course.assessment.monitoring.alivePresenceHint": {
     "defaultMessage": "Last heartbeat was received in time."
   },
@@ -2244,6 +2301,9 @@
     "defaultMessage": "Collaborate with Codaveri AI to create questions"
   },
   "course.assessment.show.generateFromQuestion": {
+    "defaultMessage": "Generate a similar question with AI"
+  },
+  "course.assessment.show.generateFromProgrammingQuestion": {
     "defaultMessage": "Generate a similar question with Codaveri AI"
   },
   "course.assessment.show.gradingMode": {
@@ -3750,7 +3810,7 @@
     "defaultMessage": "Your enrol request has been submitted."
   },
   "course.courses.CourseEnrolOptions.requestFailedMessage": {
-    "defaultMessage": "An error occured, please try again later."
+    "defaultMessage": "An error occurred, please try again later."
   },
   "course.courses.CourseInvitationCodeForm.codeSubmitFailure": {
     "defaultMessage": "Your code is incorrect"
@@ -3906,7 +3966,7 @@
     "defaultMessage": "Ignore"
   },
   "course.courses.TodoIgnoreButton.ignoreFailure": {
-    "defaultMessage": "An error occured"
+    "defaultMessage": "An error occurred"
   },
   "course.courses.TodoIgnoreButton.ignoreSuccess": {
     "defaultMessage": "Pending task successfully ignored"

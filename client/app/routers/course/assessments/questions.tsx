@@ -142,16 +142,16 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         {
           path: 'generate',
           lazy: async (): Promise<RouteObject> => {
-            const GenerateMrqQuestionPage = (
+            const GenerateMcqMrqQuestionPage = (
               await import(
-                /* webpackChunkName: 'GenerateMrqQuestionPage' */
-                'course/assessment/pages/AssessmentGenerate/MultipleResponse/GenerateMrqQuestionPage'
+                /* webpackChunkName: 'GenerateMcqMrqQuestionPage' */
+                'course/assessment/pages/AssessmentGenerate/MultipleResponse/GenerateMcqMrqQuestionPage'
               )
             ).default;
 
             return {
-              Component: GenerateMrqQuestionPage,
-              handle: GenerateMrqQuestionPage.handle,
+              Component: GenerateMcqMrqQuestionPage,
+              handle: GenerateMcqMrqQuestionPage.handle,
             };
           },
         },

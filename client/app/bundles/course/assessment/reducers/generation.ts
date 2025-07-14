@@ -7,8 +7,8 @@ import {
 import {
   GenerationState,
   LockStates,
-  MrqGenerateFormData,
-  MrqPrototypeFormData,
+  McqMrqGenerateFormData,
+  McqMrqPrototypeFormData,
   ProgrammingGenerateFormData,
   ProgrammingPrototypeFormData,
   SnapshotState,
@@ -17,7 +17,7 @@ import {
 const generateConversationId = (): string => Date.now().toString(16);
 const generateSnapshotId = (): string => Date.now().toString(16);
 const sentinelSnapshot = (
-  questionType: 'programming' | 'mrq',
+  questionType: 'programming' | 'mrq' | 'mcq',
 ): SnapshotState => {
   switch (questionType) {
     case 'mrq':
@@ -35,6 +35,29 @@ const sentinelSnapshot = (
           },
           options: [],
           gradingScheme: 'all_correct',
+        },
+        lockStates: {
+          'question.title': false,
+          'question.description': false,
+          'question.options': false,
+          'question.correct': false,
+        },
+      };
+    case 'mcq':
+      return {
+        id: generateSnapshotId(),
+        parentId: undefined,
+        state: 'sentinel',
+        generateFormData: { customPrompt: '', numberOfQuestions: 1 },
+        questionData: {
+          question: {
+            title: '',
+            description: '',
+            skipGrading: false,
+            randomizeOptions: false,
+          },
+          options: [],
+          gradingScheme: 'any_correct',
         },
         lockStates: {
           'question.title': false,
@@ -89,7 +112,7 @@ const sentinelSnapshot = (
 };
 
 const initialState = (
-  questionType: 'programming' | 'mrq' = 'programming',
+  questionType: 'programming' | 'mrq' | 'mcq' = 'programming',
 ): GenerationState => {
   const newConversationId = generateConversationId();
   const snapshot = sentinelSnapshot(questionType);
@@ -120,7 +143,7 @@ export const generationSlice = createSlice({
   reducers: {
     initializeGeneration: (
       state,
-      action: PayloadAction<{ questionType: 'programming' | 'mrq' }>,
+      action: PayloadAction<{ questionType: 'programming' | 'mrq' | 'mcq' }>,
     ) => {
       const newState = initialState(action.payload.questionType);
       Object.assign(state, newState);
@@ -136,12 +159,14 @@ export const generationSlice = createSlice({
     },
     createConversation: (
       state,
-      action: PayloadAction<{ questionType: 'programming' | 'mrq' }>,
+      action: PayloadAction<{ questionType: 'programming' | 'mrq' | 'mcq' }>,
     ) => {
-      const newConversationId = generateConversationId();
+      const conversationId = Date.now().toString(16);
       const snapshot = sentinelSnapshot(action.payload.questionType);
-      state.conversations[newConversationId] = {
-        id: newConversationId,
+
+      state.conversationIds.push(conversationId);
+      state.conversations[conversationId] = {
+        id: conversationId,
         snapshots: {
           [snapshot.id]: snapshot,
         },
@@ -150,10 +175,13 @@ export const generationSlice = createSlice({
         activeSnapshotEditedData: JSON.parse(
           JSON.stringify(snapshot.questionData),
         ),
-        toExport: true,
+        toExport: false,
         exportStatus: 'none',
       };
-      state.conversationIds.push(newConversationId);
+
+      if (state.conversationIds.length === 1) {
+        state.activeConversationId = conversationId;
+      }
     },
     duplicateConversation: (
       state,
@@ -201,7 +229,7 @@ export const generationSlice = createSlice({
       state,
       action: PayloadAction<{
         conversationId: string;
-        generateFormData: ProgrammingGenerateFormData | MrqGenerateFormData;
+        generateFormData: ProgrammingGenerateFormData | McqMrqGenerateFormData;
         snapshotId: string;
         parentId: string;
         lockStates: LockStates;
@@ -229,7 +257,7 @@ export const generationSlice = createSlice({
       state,
       action: PayloadAction<{
         conversationId: string;
-        questionData: ProgrammingPrototypeFormData | MrqPrototypeFormData;
+        questionData: ProgrammingPrototypeFormData | McqMrqPrototypeFormData;
         snapshotId: string;
       }>,
     ) => {
@@ -239,6 +267,7 @@ export const generationSlice = createSlice({
         conversation.snapshots[snapshotId].questionData = questionData;
         conversation.snapshots[snapshotId].state = 'success';
         conversation.latestSnapshotId = snapshotId;
+        conversation.toExport = true;
       }
     },
     snapshotError: (
@@ -259,7 +288,7 @@ export const generationSlice = createSlice({
       action: PayloadAction<{
         conversationId: string;
         snapshotId: string;
-        questionData?: ProgrammingPrototypeFormData | MrqPrototypeFormData;
+        questionData?: ProgrammingPrototypeFormData | McqMrqPrototypeFormData;
       }>,
     ) => {
       const { conversationId, snapshotId, questionData } = action.payload;
@@ -350,7 +379,7 @@ export const generationSlice = createSlice({
         }
       }
     },
-    exportMrqConversationSuccess: (
+    exportMcqMrqConversationSuccess: (
       state,
       action: PayloadAction<{
         conversationId: string;
@@ -394,35 +423,32 @@ export const generationSlice = createSlice({
     createConversationWithSnapshots: (
       state,
       action: PayloadAction<{
-        questionType: 'programming' | 'mrq';
+        questionType: 'programming' | 'mrq' | 'mcq';
         copiedSnapshots: { [id: string]: SnapshotState };
         latestSnapshotId: string;
         activeSnapshotId: string;
         activeSnapshotEditedData:
           | ProgrammingPrototypeFormData
-          | MrqPrototypeFormData;
+          | McqMrqPrototypeFormData;
       }>,
     ) => {
-      const {
-        questionType,
-        copiedSnapshots,
-        latestSnapshotId,
-        activeSnapshotId,
-        activeSnapshotEditedData,
-      } = action.payload;
-      const newConversationId = generateConversationId();
-      state.conversations[newConversationId] = {
-        id: newConversationId,
-        snapshots: JSON.parse(JSON.stringify(copiedSnapshots)),
-        latestSnapshotId,
-        activeSnapshotId,
-        activeSnapshotEditedData: JSON.parse(
-          JSON.stringify(activeSnapshotEditedData),
-        ),
-        toExport: true,
+      const conversationId = Date.now().toString(16);
+
+      // Check if the conversation has actual data (not just sentinel snapshots)
+      const hasData = Object.values(action.payload.copiedSnapshots).some(
+        (snapshot) => snapshot.state !== 'sentinel',
+      );
+
+      state.conversationIds.push(conversationId);
+      state.conversations[conversationId] = {
+        id: conversationId,
+        snapshots: action.payload.copiedSnapshots,
+        latestSnapshotId: action.payload.latestSnapshotId,
+        activeSnapshotId: action.payload.activeSnapshotId,
+        activeSnapshotEditedData: action.payload.activeSnapshotEditedData,
+        toExport: hasData,
         exportStatus: 'none',
       };
-      state.conversationIds.push(newConversationId);
     },
   },
 });

@@ -13,7 +13,7 @@
           },
           "description": {
             "type": "string",
-            "description": "The question description"
+            "description": "The description of the question"
           },
           "options": {
             "type": "array",
@@ -30,13 +30,13 @@
                 },
                 "explanation": {
                   "type": "string",
-                  "description": "Explanation for why this option is correct or incorrect"
+                  "description": "Highly detailed explanation for why this option is correct or incorrect"
                 }
               },
               "required": ["option", "correct", "explanation"],
               "additionalProperties": false
             },
-            "description": "Array of 4-6 options for the question"
+            "description": "Array of at least 2 options for the question"
           }
         },
         "required": ["title", "description", "options"],

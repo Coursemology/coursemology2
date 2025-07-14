@@ -10,12 +10,15 @@ import FormTextField from 'lib/components/form/fields/TextField';
 import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { mrqAdapter } from '../../../question/multiple-responses/commons/translationAdapter';
+import {
+  mcqAdapter,
+  mrqAdapter,
+} from '../../../question/multiple-responses/commons/translationAdapter';
 import OptionsManager, {
   OptionsManagerRef,
 } from '../../../question/multiple-responses/components/OptionsManager';
 import LockableSection from '../LockableSection';
-import { LockStates, MrqPrototypeFormData } from '../types';
+import { LockStates, McqMrqPrototypeFormData } from '../types';
 
 const translations = defineMessages({
   title: {
@@ -33,14 +36,23 @@ const translations = defineMessages({
 });
 
 interface Props {
-  form: UseFormReturn<MrqPrototypeFormData>;
+  form: UseFormReturn<McqMrqPrototypeFormData>;
   lockStates: LockStates;
   onToggleLock: (key: string) => void;
   optionsRef: React.RefObject<OptionsManagerRef>;
+  onOptionsDirtyChange: (isDirty: boolean) => void;
+  isMultipleChoice: boolean;
 }
 
-const GenerateMrqPrototypeForm: FC<Props> = (props) => {
-  const { form, lockStates, onToggleLock, optionsRef } = props;
+const GenerateMcqMrqPrototypeForm: FC<Props> = (props) => {
+  const {
+    form,
+    lockStates,
+    onToggleLock,
+    optionsRef,
+    onOptionsDirtyChange,
+    isMultipleChoice,
+  } = props;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -51,7 +63,7 @@ const GenerateMrqPrototypeForm: FC<Props> = (props) => {
     },
   });
 
-  const adapter = mrqAdapter(t);
+  const adapter = isMultipleChoice ? mcqAdapter(t) : mrqAdapter(t);
 
   // Mark all options as drafts for immediate deletion in generation page
   // Memoize to prevent unnecessary re-renders of OptionsManager
@@ -156,6 +168,7 @@ const GenerateMrqPrototypeForm: FC<Props> = (props) => {
               disabled={lockStates['question.options']}
               for={draftOptions}
               hideCorrect={form.watch('question.skipGrading')}
+              onDirtyChange={onOptionsDirtyChange}
             />
           </div>
         </Container>
@@ -164,4 +177,4 @@ const GenerateMrqPrototypeForm: FC<Props> = (props) => {
   );
 };
 
-export default GenerateMrqPrototypeForm;
+export default GenerateMcqMrqPrototypeForm;
