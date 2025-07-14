@@ -1,10 +1,13 @@
 import { FC } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
+import Clear from '@mui/icons-material/Clear';
 import DoneAll from '@mui/icons-material/DoneAll';
 import {
   Box,
   Button,
+  IconButton,
+  InputAdornment,
   Paper,
   TextareaAutosize,
   Typography,
@@ -12,23 +15,15 @@ import {
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { MrqGenerateFormData, SnapshotState } from '../types';
+import { McqMrqGenerateFormData, SnapshotState } from '../types';
 
 const translations = defineMessages({
-  topicField: {
-    id: 'course.assessment.generation.mrq.topicField',
-    defaultMessage: 'Topic',
-  },
   numberOfQuestionsField: {
     id: 'course.assessment.generation.mrq.numberOfQuestionsField',
     defaultMessage: 'Number of Questions',
-  },
-  difficultyField: {
-    id: 'course.assessment.generation.mrq.difficultyField',
-    defaultMessage: 'Difficulty',
   },
   promptPlaceholder: {
     id: 'course.assessment.generation.promptPlaceholder',
@@ -42,9 +37,15 @@ const translations = defineMessages({
     id: 'course.assessment.generation.showInactive',
     defaultMessage: 'Show inactive items',
   },
+  numberOfQuestionsRange: {
+    id: 'course.assessment.generation.mrq.numberOfQuestionsRange',
+    defaultMessage: 'Please enter a number from {min} to {max}',
+  },
 });
 
-const MAX_PROMPT_LENGTH = 500;
+const MAX_PROMPT_LENGTH = 10_000;
+const NUM_OF_QN_MIN = 1;
+const NUM_OF_QN_MAX = 10;
 
 const ConversationSnapshot: FC<{
   snapshot: SnapshotState;
@@ -72,17 +73,17 @@ const ConversationSnapshot: FC<{
 };
 
 interface Props {
-  onGenerate: (data: MrqGenerateFormData) => Promise<void>;
+  onGenerate: (data: McqMrqGenerateFormData) => Promise<void>;
   onSaveActiveData: () => void;
   questionFormDataEqual: () => boolean;
-  generateForm: UseFormReturn<MrqGenerateFormData>;
+  generateForm: UseFormReturn<McqMrqGenerateFormData>;
   activeSnapshotId: string;
   snapshots: { [id: string]: SnapshotState };
   latestSnapshotId: string;
   onClickSnapshot: (snapshot: SnapshotState) => void;
 }
 
-const GenerateMrqConversation: FC<Props> = (props) => {
+const GenerateMcqMrqConversation: FC<Props> = (props) => {
   const { t } = useTranslation();
   const {
     onGenerate,
@@ -192,50 +193,116 @@ const GenerateMrqConversation: FC<Props> = (props) => {
               disabled={isGenerating}
               maxRows={4}
               minRows={4}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#ccc';
+                e.target.style.borderWidth = '1px';
+              }}
               onChange={onChange}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#1976d2';
+                e.target.style.borderWidth = '2px';
+              }}
               placeholder={t(translations.promptPlaceholder)}
+              style={{
+                outline: 'none',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+              }}
               value={value}
             />
           )}
         />
-        <Typography className="mb-1 mt-0.5 mr-2 text-right" variant="caption">
+        <Typography
+          className="mb-1 mr-2 text-right"
+          color={
+            customPrompt.length > MAX_PROMPT_LENGTH ? 'error' : 'textSecondary'
+          }
+          variant="caption"
+        >
           {customPrompt.length} / {MAX_PROMPT_LENGTH}
         </Typography>
       </div>
 
-      <div className="flex flex-nowrap">
-        <Controller
-          control={generateForm.control}
-          name="numberOfQuestions"
-          render={({ field, fieldState }): JSX.Element => (
-            <FormSelectField
-              className="mt-3 mx-0"
-              disabled={isGenerating}
-              field={field}
-              fieldState={fieldState}
-              label={t(translations.numberOfQuestionsField)}
-              options={Array.from({ length: 10 }, (_, i) => ({
-                value: i + 1,
-                label: (i + 1).toString(),
-              }))}
-              required
-              variant="outlined"
-            />
-          )}
-        />
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-nowrap gap-4 items-center">
+          <Controller
+            control={generateForm.control}
+            name="numberOfQuestions"
+            render={({ field, fieldState }): JSX.Element => {
+              return (
+                <FormTextField
+                  disabled={isGenerating}
+                  disableMargins
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  InputProps={{
+                    inputProps: {
+                      min: NUM_OF_QN_MIN,
+                      max: NUM_OF_QN_MAX,
+                      step: 1,
+                      onKeyDown: (e) => {
+                        // Prevent typing minus sign, decimal point, and other non-numeric characters
+                        if (['-', '.', 'e', 'E'].includes(e.key)) {
+                          e.preventDefault();
+                        }
+                      },
+                    },
+                    endAdornment: !isGenerating &&
+                      field.value !== undefined &&
+                      field.value !== null && (
+                        <InputAdornment position="end">
+                          <IconButton
+                            edge="end"
+                            onClick={() => field.onChange('')}
+                            size="small"
+                            tabIndex={-1}
+                          >
+                            <Clear />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                  }}
+                  label={t(translations.numberOfQuestionsField)}
+                  type="number"
+                  variant="filled"
+                />
+              );
+            }}
+          />
 
-        <Button
-          className="w-48 max-h-14 mt-8"
-          disabled={isGenerating || !generateForm.formState.isValid}
-          onClick={handleGenerate}
-          startIcon={isGenerating && <LoadingIndicator bare size={20} />}
-          variant="contained"
-        >
-          {t(translations.generateQuestion)}
-        </Button>
+          <Button
+            className="w-48 max-h-14"
+            disabled={isGenerating || !generateForm.formState.isValid}
+            onClick={handleGenerate}
+            startIcon={isGenerating && <LoadingIndicator bare size={20} />}
+            variant="contained"
+          >
+            {t(translations.generateQuestion)}
+          </Button>
+        </div>
+
+        {((): JSX.Element => {
+          const value = generateForm.watch('numberOfQuestions');
+          const isOutOfRange =
+            value && (value < NUM_OF_QN_MIN || value > NUM_OF_QN_MAX);
+
+          return (
+            <Typography
+              className="ml-5"
+              color={isOutOfRange ? 'error' : 'textSecondary'}
+              variant="caption"
+            >
+              {t(translations.numberOfQuestionsRange, {
+                min: NUM_OF_QN_MIN,
+                max: NUM_OF_QN_MAX,
+              })}
+            </Typography>
+          );
+        })()}
       </div>
     </Paper>
   );
 };
 
-export default GenerateMrqConversation;
+export default GenerateMcqMrqConversation;

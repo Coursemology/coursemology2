@@ -39,27 +39,27 @@ export interface CodaveriGenerateResponseData {
   }[];
 }
 
-export interface MrqGenerateResponse {
+export interface McqMrqGenerateResponse {
   success: boolean;
   message: string;
-  data: MrqGenerateResponseData;
+  data: McqMrqGenerateResponseData;
 }
 
-export interface MrqGenerateResponseData {
+export interface McqMrqGenerateResponseData {
   title: string;
   description: string;
-  options: MrqGeneratedOption[];
-  allQuestions: MrqGeneratedQuestion[];
+  options: McqMrqGeneratedOption[];
+  allQuestions: McqMrqGeneratedQuestion[];
   numberOfQuestions: number;
 }
 
-export interface MrqGeneratedQuestion {
+export interface McqMrqGeneratedQuestion {
   title: string;
   description: string;
-  options: MrqGeneratedOption[];
+  options: McqMrqGeneratedOption[];
 }
 
-export interface MrqGeneratedOption {
+export interface McqMrqGeneratedOption {
   id: number;
   option: string;
   correct: boolean;

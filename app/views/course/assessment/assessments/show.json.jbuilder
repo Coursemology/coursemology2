@@ -174,12 +174,12 @@ if can_observe
     end
 
     json.generateQuestionUrls [
-      # {
-      #   type: 'MultipleChoice',
-      #   url: generate_course_assessment_question_multiple_responses_path(current_course, assessment, {
-      #     multiple_choice: true
-      #   })
-      # },
+      {
+        type: 'MultipleChoice',
+        url: generate_course_assessment_question_multiple_responses_path(current_course, assessment, {
+          multiple_choice: true
+        })
+      },
       {
         type: 'MultipleResponse',
         url: generate_course_assessment_question_multiple_responses_path(current_course, assessment)

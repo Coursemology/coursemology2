@@ -1364,6 +1364,63 @@
   "course.assessment.generation.unlockTooltip": {
     "defaultMessage": "解锁以继续编辑此部分"
   },
+  "course.assessment.generation.mrq.numberOfQuestionsField": {
+    "defaultMessage": "题目数量"
+  },
+  "course.assessment.generation.promptPlaceholder": {
+    "defaultMessage": "请输入内容..."
+  },
+  "course.assessment.generation.generateQuestion": {
+    "defaultMessage": "生成"
+  },
+  "course.assessment.generation.showInactive": {
+    "defaultMessage": "显示未启用项"
+  },
+  "course.assessment.generation.mrq.numberOfQuestionsRange": {
+    "defaultMessage": "请输入 {min} 到 {max} 之间的数字"
+  },
+  "course.assessment.generation.mrq.exportDialogHeader": {
+    "defaultMessage": "导出题目（已选择 {exportCount} 项）"
+  },
+  "course.assessment.generation.requireNonEmptyOptionError": {
+    "defaultMessage": "题目必须至少包含一个非空选项"
+  },
+  "course.assessment.generation.untitledQuestion": {
+    "defaultMessage": "无标题题目"
+  },
+  "course.assessment.question.multipleResponses.showOptions": {
+    "defaultMessage": "显示选项"
+  },
+  "course.assessment.question.multipleResponses.hideOptions": {
+    "defaultMessage": "隐藏选项"
+  },
+  "course.assessment.question.multipleResponses.noOptions": {
+    "defaultMessage": "无选项"
+  },
+  "course.assessment.question.multipleResponses.title": {
+    "defaultMessage": "标题"
+  },
+  "course.assessment.generation.generateMrqPage": {
+    "defaultMessage": "生成多选题"
+  },
+  "course.assessment.generation.generateMcqPage": {
+    "defaultMessage": "生成单选题"
+  },
+  "course.assessment.generation.generateMultipleSuccess": {
+    "defaultMessage": "成功生成了 {count} 道题目！"
+  },
+  "course.assessment.generation.generateSuccess": {
+    "defaultMessage": "{title} 生成成功。"
+  },
+  "course.assessment.generation.generateError": {
+    "defaultMessage": "生成题目 {title} 时发生错误。"
+  },
+  "course.assessment.generation.loadingSourceError": {
+    "defaultMessage": "无法加载原始题目信息。"
+  },
+  "course.assessment.generation.allFieldsLocked": {
+    "defaultMessage": "所有字段都已锁定，无法生成内容。"
+  },
   "course.assessment.monitoring.alivePresenceHint": {
     "defaultMessage": "及时收到最后一次心跳"
   },
@@ -2190,6 +2247,9 @@
     "defaultMessage": "与 Codaveri AI 合作创建问题"
   },
   "course.assessment.show.generateFromQuestion": {
+    "defaultMessage": "使用 AI 生成类似问题"
+  },
+  "course.assessment.show.generateFromProgrammingQuestion": {
     "defaultMessage": "使用 Codaveri AI 生成类似问题"
   },
   "course.assessment.show.gradedTestCases": {

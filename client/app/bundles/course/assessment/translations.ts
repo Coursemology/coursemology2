@@ -579,6 +579,10 @@ const translations = defineMessages({
   },
   generateFromQuestion: {
     id: 'course.assessment.show.generateFromQuestion',
+    defaultMessage: 'Generate a similar question with AI',
+  },
+  generateFromProgrammingQuestion: {
+    id: 'course.assessment.show.generateFromProgrammingQuestion',
     defaultMessage: 'Generate a similar question with Codaveri AI',
   },
   duplicateToAssessment: {

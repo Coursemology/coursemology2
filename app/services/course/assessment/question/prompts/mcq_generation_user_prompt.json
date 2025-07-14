@@ -1,0 +1,11 @@
+{
+  "_type": "prompt",
+  "input_variables": [
+    "custom_prompt",
+    "number_of_questions",
+    "source_question_title",
+    "source_question_description",
+    "source_question_options"
+  ],
+  "template": "Please generate {number_of_questions} multiple choice question(s) based on the following instructions:\n\nCustom Instructions: {custom_prompt}\n\nSource Question Context (for reference only):\nTitle: {source_question_title}\nDescription: {source_question_description}\nOptions:\n{source_question_options}\n\nGenerate {number_of_questions} high-quality multiple choice question(s) that:\n- Have clear, educational content\n- Include at least 2 options per question\n- Have exactly ONE correct answer per question\n- Are appropriate for educational assessment\n- Follow the custom instructions provided\n\nEach question should be original and well-structured for educational use."
+}
