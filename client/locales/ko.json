@@ -1406,6 +1406,63 @@
   "course.assessment.generation.unlockTooltip": {
     "defaultMessage": "이 섹션을 계속 편집하려면 잠금을 해제하세요"
   },
+  "course.assessment.generation.mrq.numberOfQuestionsField": {
+    "defaultMessage": "문항 수"
+  },
+  "course.assessment.generation.promptPlaceholder": {
+    "defaultMessage": "여기에 입력하세요..."
+  },
+  "course.assessment.generation.generateQuestion": {
+    "defaultMessage": "생성"
+  },
+  "course.assessment.generation.showInactive": {
+    "defaultMessage": "비활성 항목 보기"
+  },
+  "course.assessment.generation.mrq.numberOfQuestionsRange": {
+    "defaultMessage": "{min}에서 {max} 사이의 숫자를 입력하세요"
+  },
+  "course.assessment.generation.mrq.exportDialogHeader": {
+    "defaultMessage": "문항 내보내기 ({exportCount}개 선택됨)"
+  },
+  "course.assessment.generation.requireNonEmptyOptionError": {
+    "defaultMessage": "문항에는 최소 하나의 빈칸이 아닌 선택지가 있어야 합니다"
+  },
+  "course.assessment.generation.untitledQuestion": {
+    "defaultMessage": "제목 없는 문항"
+  },
+  "course.assessment.question.multipleResponses.showOptions": {
+    "defaultMessage": "옵션 보기"
+  },
+  "course.assessment.question.multipleResponses.hideOptions": {
+    "defaultMessage": "옵션 숨기기"
+  },
+  "course.assessment.question.multipleResponses.noOptions": {
+    "defaultMessage": "옵션 없음"
+  },
+  "course.assessment.question.multipleResponses.title": {
+    "defaultMessage": "제목"
+  },
+  "course.assessment.generation.generateMrqPage": {
+    "defaultMessage": "다중 선택 문항 생성"
+  },
+  "course.assessment.generation.generateMcqPage": {
+    "defaultMessage": "객관식 문항 생성"
+  },
+  "course.assessment.generation.generateMultipleSuccess": {
+    "defaultMessage": "{count}개의 문항이 성공적으로 생성되었습니다!"
+  },
+  "course.assessment.generation.generateSuccess": {
+    "defaultMessage": "{title} 생성에 성공했습니다."
+  },
+  "course.assessment.generation.generateError": {
+    "defaultMessage": "{title} 문항 생성 중 오류가 발생했습니다."
+  },
+  "course.assessment.generation.loadingSourceError": {
+    "defaultMessage": "원본 문항 데이터를 불러올 수 없습니다."
+  },
+  "course.assessment.generation.allFieldsLocked": {
+    "defaultMessage": "모든 필드가 잠겨 있어 생성을 진행할 수 없습니다."
+  },
   "course.assessment.liveFeedback.comments": {
     "defaultMessage": "댓글"
   },
@@ -2250,6 +2307,9 @@
     "defaultMessage": "Codaveri AI와 협업하여 문제를 생성하세요"
   },
   "course.assessment.show.generateFromQuestion": {
+    "defaultMessage": "AI로 유사한 질문 생성"
+  },
+  "course.assessment.show.generateFromProgrammingQuestion": {
     "defaultMessage": "Codaveri AI로 유사한 질문 생성"
   },
   "course.assessment.show.gradedTestCases": {

@@ -62,7 +62,7 @@ const translations = defineMessages({
   },
   exportError: {
     id: 'course.assessment.generation.exportError',
-    defaultMessage: 'An error occured in exporting this question: {error}',
+    defaultMessage: 'An error occurred in exporting this question: {error}',
   },
 });
 
@@ -297,7 +297,7 @@ const GenerateProgrammingExportDialog: FC<Props> = (props) => {
                     const language = languages.find(
                       (lang) => lang.id === generateFormData.languageId,
                     );
-                    if (!language) return; // skip if language not found
+                    if (!language) return;
                     const { id: languageId, editorMode: languageMode } =
                       language;
                     const formData = buildFormData(

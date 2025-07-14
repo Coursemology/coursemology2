@@ -302,7 +302,7 @@ const GenerateProgrammingQuestionPage = (): JSX.Element => {
   > => {
     if (sourceId) {
       try {
-        return fetchEdit(sourceId);
+        return await fetchEdit(sourceId);
       } catch {
         dispatch(setNotification(t(translations.loadingSourceError)));
       }

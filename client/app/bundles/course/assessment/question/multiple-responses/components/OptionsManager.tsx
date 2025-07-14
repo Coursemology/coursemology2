@@ -22,7 +22,7 @@ import Option, { OptionRef } from './Option';
 
 interface OptionsManagerProps {
   for: OptionEntity[];
-  onDirtyChange?: (isDirty: boolean) => void;
+  onDirtyChange: (isDirty: boolean) => void;
   adapter: McqMrqAdapter;
   allowRandomization?: boolean;
   hideCorrect?: boolean;
@@ -103,7 +103,7 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
     };
 
     useEffect(() => {
-      props.onDirtyChange?.(isDirty || isOrderDirty(options));
+      props.onDirtyChange(isDirty || isOrderDirty(options));
     }, [isDirty, options]);
 
     const updateOption = (updater: (draft: OptionEntity[]) => void): void =>

@@ -1,8 +1,8 @@
 import { LanguageMode } from 'types/course/assessment/question/programming';
 
 import {
-  MrqGenerateFormData,
-  MrqPrototypeFormData,
+  McqMrqGenerateFormData,
+  McqMrqPrototypeFormData,
   ProgrammingGenerateFormData,
   ProgrammingPrototypeFormData,
 } from './types';
@@ -43,7 +43,23 @@ export const CODAVERI_EVALUATOR_ONLY_LANGUAGES: LanguageMode[] = [
   'typescript',
 ];
 
-export const defaultMrqPrototypeFormData: MrqPrototypeFormData = {
+export const defaultMcqMrqGenerateFormData: McqMrqGenerateFormData = {
+  customPrompt: '',
+  numberOfQuestions: 1,
+};
+
+export const defaultMcqPrototypeFormData: McqMrqPrototypeFormData = {
+  question: {
+    title: '',
+    description: '',
+    skipGrading: false,
+    randomizeOptions: false,
+  },
+  options: [],
+  gradingScheme: 'any_correct',
+};
+
+export const defaultMrqPrototypeFormData: McqMrqPrototypeFormData = {
   question: {
     title: '',
     description: '',
@@ -52,9 +68,4 @@ export const defaultMrqPrototypeFormData: MrqPrototypeFormData = {
   },
   options: [],
   gradingScheme: 'all_correct',
-};
-
-export const defaultMrqGenerateFormData: MrqGenerateFormData = {
-  customPrompt: '',
-  numberOfQuestions: 1,
 };

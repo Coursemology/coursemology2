@@ -13,19 +13,20 @@ import {
 } from 'types/course/assessment/question/programming';
 import {
   CodaveriGenerateResponseData,
-  MrqGeneratedOption,
-  MrqGenerateResponseData,
+  McqMrqGeneratedOption,
+  McqMrqGenerateResponseData,
   TestcaseVisibility,
 } from 'types/course/assessment/question-generation';
 
 import {
   CODAVERI_EVALUATOR_ONLY_LANGUAGES,
+  defaultMcqPrototypeFormData,
   defaultMrqPrototypeFormData,
   defaultProgrammingPrototypeFormData,
 } from './constants';
 import {
-  MrqGenerateFormData,
-  MrqPrototypeFormData,
+  McqMrqGenerateFormData,
+  McqMrqPrototypeFormData,
   ProgrammingGenerateFormData,
   ProgrammingPrototypeFormData,
 } from './types';
@@ -284,41 +285,44 @@ export const buildPrototypeFromProgrammingQuestionData = (
   };
 };
 
-export function extractMrqQuestionPrototypeData(
-  response: MrqGenerateResponseData,
-): MrqPrototypeFormData {
-  // Parse the real API response
+// MCQ and MRQ utility functions
+export function extractMcqMrqQuestionPrototypeData(
+  response: McqMrqGenerateResponseData,
+  isMultipleChoice: boolean,
+): McqMrqPrototypeFormData {
   const timestamp = Date.now();
   const options =
     response.options && response.options.length > 0
-      ? response.options.map((option: MrqGeneratedOption, index: number) => ({
-          id: `option-${timestamp}-${index}`,
-          option: option.option,
-          correct: option.correct,
-          weight: index + 1,
-          explanation: option.explanation || '',
-          ignoreRandomization: false,
-          toBeDeleted: false,
-        }))
+      ? response.options.map(
+          (option: McqMrqGeneratedOption, index: number) => ({
+            id: `option-${timestamp}-${index}`,
+            option: option.option,
+            correct: option.correct,
+            weight: index + 1,
+            explanation: option.explanation || '',
+            ignoreRandomization: false,
+            toBeDeleted: false,
+          }),
+        )
       : [];
 
   return {
     question: {
-      title: response.title || 'Generated MRQ Question',
-      description: response.description || 'Generated question description',
+      title: response.title,
+      description: response.description,
       skipGrading: false,
       randomizeOptions: false,
     },
     options,
-    gradingScheme: 'all_correct',
+    gradingScheme: isMultipleChoice ? 'any_correct' : 'all_correct',
   };
 }
 
-export function replaceUnlockedMrqPrototypeFields(
-  oldData: MrqPrototypeFormData,
-  newData: MrqPrototypeFormData,
+export function replaceUnlockedMcqMrqPrototypeFields(
+  oldData: McqMrqPrototypeFormData,
+  newData: McqMrqPrototypeFormData,
   lockStates: Record<string, boolean>,
-): MrqPrototypeFormData {
+): McqMrqPrototypeFormData {
   return {
     question: {
       title: lockStates['question.title']
@@ -341,21 +345,26 @@ export function replaceUnlockedMrqPrototypeFields(
   };
 }
 
-export const buildMrqGenerateRequestPayload = (
-  generateFormData: MrqGenerateFormData,
-  prototypeFormData: MrqPrototypeFormData,
+export const buildMcqMrqGenerateRequestPayload = (
+  generateFormData: McqMrqGenerateFormData,
+  prototypeFormData: McqMrqPrototypeFormData,
+  isMultipleChoice: boolean,
 ): FormData => {
   const data = new FormData();
-  const isDefaultMrqPrototypeFormData =
-    JSON.stringify(prototypeFormData) ===
-    JSON.stringify(defaultMrqPrototypeFormData);
+
+  const isDefaultPrototypeFormData = isMultipleChoice
+    ? JSON.stringify(prototypeFormData) ===
+      JSON.stringify(defaultMcqPrototypeFormData)
+    : JSON.stringify(prototypeFormData) ===
+      JSON.stringify(defaultMrqPrototypeFormData);
+
+  data.append('question_type', isMultipleChoice ? 'mcq' : 'mrq');
 
   data.append(
     'is_default_question_form_data',
-    isDefaultMrqPrototypeFormData.toString(),
+    isDefaultPrototypeFormData.toString(),
   );
 
-  // Add source question data for context
   const sourceQuestionData = {
     title: prototypeFormData?.question?.title || '',
     description: prototypeFormData?.question?.description || '',
@@ -384,14 +393,24 @@ export const buildMrqGenerateRequestPayload = (
   return data;
 };
 
-export const buildMrqQuestionDataFromPrototype = (
-  prefilledData: MrqPrototypeFormData,
+export const buildMcqMrqQuestionDataFromPrototype = (
+  prefilledData: McqMrqPrototypeFormData,
+  isCreate: boolean = true,
 ): McqMrqData => {
   // Filter out empty options before sending to backend
   const filteredOptions =
     prefilledData.options?.filter(
       (option) => option.option && option.option.trim().length > 0,
     ) || [];
+
+  // For create operations, mark all options as draft so they get new IDs
+  // For update operations, preserve existing IDs
+  const processedOptions = isCreate
+    ? filteredOptions.map((option) => ({
+        ...option,
+        draft: true,
+      }))
+    : filteredOptions;
 
   return {
     gradingScheme: prefilledData.gradingScheme,
@@ -404,13 +423,14 @@ export const buildMrqQuestionDataFromPrototype = (
       staffOnlyComments: '',
       skillIds: [],
     },
-    options: filteredOptions,
+    options: processedOptions,
   };
 };
 
-export const buildPrototypeFromMrqQuestionData = (
+export const buildPrototypeFromMcqMrqQuestionData = (
   questionData: McqMrqFormData,
-): MrqPrototypeFormData => {
+  isMultipleChoice: boolean,
+): McqMrqPrototypeFormData => {
   const timestamp = Date.now();
   const options = (questionData.options || []).map((option, index) => ({
     ...option,
@@ -427,6 +447,8 @@ export const buildPrototypeFromMrqQuestionData = (
       randomizeOptions: questionData.question?.randomizeOptions || false,
     },
     options,
-    gradingScheme: questionData.gradingScheme || 'all_correct',
+    gradingScheme:
+      questionData.gradingScheme ||
+      (isMultipleChoice ? 'any_correct' : 'all_correct'),
   };
 };
