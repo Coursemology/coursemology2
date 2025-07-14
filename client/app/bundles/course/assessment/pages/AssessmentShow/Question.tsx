@@ -127,7 +127,11 @@ const Question = (props: QuestionProps): JSX.Element => {
                 {question.generateFromUrl && (
                   <Tooltip
                     disableInteractive
-                    title={t(translations.generateFromQuestion)}
+                    title={
+                      question.type === 'Programming'
+                        ? t(translations.generateFromProgrammingQuestion)
+                        : t(translations.generateFromQuestion)
+                    }
                   >
                     <Link
                       opensInNewTab
@@ -135,7 +139,11 @@ const Question = (props: QuestionProps): JSX.Element => {
                       underline="none"
                     >
                       <IconButton
-                        aria-label={t(translations.generateFromQuestion)}
+                        aria-label={
+                          question.type === 'Programming'
+                            ? t(translations.generateFromProgrammingQuestion)
+                            : t(translations.generateFromQuestion)
+                        }
                         disabled={disabled || dragging}
                       >
                         <AutoFixHigh />

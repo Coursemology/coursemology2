@@ -4,10 +4,10 @@ import {
   McqMrqFormData,
   McqMrqPostData,
 } from 'types/course/assessment/question/multiple-responses';
-import { MrqGenerateResponse } from 'types/course/assessment/question-generation';
+import { McqMrqGenerateResponse } from 'types/course/assessment/question-generation';
 
 import CourseAPI from 'api/course';
-import { JustRedirect } from 'api/types';
+import { RedirectWithEditUrl } from 'api/types';
 
 export const fetchNewMrq = async (): Promise<McqMrqFormData<'new'>> => {
   const response = await CourseAPI.assessment.question.mcqMrq.fetchNewMrq();
@@ -19,7 +19,7 @@ export const fetchNewMcq = async (): Promise<McqMrqFormData<'new'>> => {
   return response.data;
 };
 
-export const fetchEditMrq = async (
+export const fetchEditMcqMrq = async (
   id: number,
 ): Promise<McqMrqFormData<'edit'>> => {
   const response = await CourseAPI.assessment.question.mcqMrq.fetchEdit(id);
@@ -51,7 +51,7 @@ const adaptPostData = (data: McqMrqData): McqMrqPostData => ({
 export const updateMcqMrq = async (
   id: number,
   data: McqMrqData,
-): Promise<JustRedirect> => {
+): Promise<RedirectWithEditUrl> => {
   const adaptedData = adaptPostData(data);
 
   try {
@@ -66,7 +66,9 @@ export const updateMcqMrq = async (
   }
 };
 
-export const create = async (data: McqMrqData): Promise<JustRedirect> => {
+export const create = async (
+  data: McqMrqData,
+): Promise<RedirectWithEditUrl> => {
   const adaptedData = adaptPostData(data);
 
   try {
@@ -82,7 +84,7 @@ export const create = async (data: McqMrqData): Promise<JustRedirect> => {
 
 export const generate = async (
   data: FormData,
-): Promise<MrqGenerateResponse> => {
+): Promise<McqMrqGenerateResponse> => {
   try {
     const response = await CourseAPI.assessment.question.mcqMrq.generate(data);
     return response.data;

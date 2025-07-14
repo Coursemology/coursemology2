@@ -14,7 +14,7 @@ export interface ProgrammingGenerateFormData {
   customPrompt: string;
 }
 
-export interface MrqGenerateFormData {
+export interface McqMrqGenerateFormData {
   customPrompt: string;
   numberOfQuestions: number;
 }
@@ -35,7 +35,7 @@ export interface ProgrammingPrototypeFormData {
   };
 }
 
-export interface MrqPrototypeFormData {
+export interface McqMrqPrototypeFormData {
   question: {
     title: string;
     description: string;
@@ -76,7 +76,9 @@ export interface ConversationState {
   snapshots: { [id: string]: SnapshotState };
   latestSnapshotId: string;
   activeSnapshotId: string;
-  activeSnapshotEditedData: ProgrammingPrototypeFormData | MrqPrototypeFormData;
+  activeSnapshotEditedData:
+    | ProgrammingPrototypeFormData
+    | McqMrqPrototypeFormData;
   duplicateFromId?: string;
   toExport: boolean;
   exportStatus: ExportStatus;
@@ -98,7 +100,7 @@ export interface SnapshotState {
   id: string;
   parentId?: string;
   state: 'generating' | 'success' | 'sentinel';
-  generateFormData?: ProgrammingGenerateFormData | MrqGenerateFormData;
-  questionData?: ProgrammingPrototypeFormData | MrqPrototypeFormData;
+  generateFormData?: ProgrammingGenerateFormData | McqMrqGenerateFormData;
+  questionData?: ProgrammingPrototypeFormData | McqMrqPrototypeFormData;
   lockStates: LockStates;
 }
