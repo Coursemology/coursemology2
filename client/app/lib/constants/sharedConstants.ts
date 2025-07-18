@@ -81,6 +81,13 @@ export const POST_WORKFLOW_STATE = mirrorCreator([
   'answering',
 ]);
 
+export const ASSESSMENT_SIMILARITY_WORKFLOW_STATE = mirrorCreator([
+  'not_started',
+  'running',
+  'completed',
+  'failed',
+]);
+
 export default {
   TIMELINE_ALGORITHMS,
   USER_ROLES,
