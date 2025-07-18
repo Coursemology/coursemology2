@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -436,6 +436,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
     t.index ["updater_id"], name: "fk__course_assessment_questions_updater_id"
   end
 
+  create_table "course_assessment_similarity_checks", force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.string "workflow_state", limit: 255, default: "not_started", null: false
+    t.datetime "last_started_at", precision: nil
+    t.bigint "assessment_id", null: false
+    t.uuid "job_id"
+    t.index ["assessment_id"], name: "fk__course_assessment_similarity_checks_assessment_id", unique: true
+    t.index ["job_id"], name: "fk__course_assessment_similarity_checks_job_id", unique: true
+  end
+
   create_table "course_assessment_skill_branches", id: :serial, force: :cascade do |t|
     t.integer "course_id", null: false
     t.string "title", limit: 255, null: false
@@ -501,10 +512,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
     t.string "session_id", limit: 255
     t.datetime "submitted_at", precision: nil
     t.datetime "last_graded_time", precision: nil, default: "2021-10-24 14:11:56"
+    t.uuid "ssid_submission_id"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
     t.index ["publisher_id"], name: "fk__course_assessment_submissions_publisher_id"
+    t.index ["ssid_submission_id"], name: "index_course_assessment_submissions_on_ssid_submission_id", unique: true
     t.index ["updater_id"], name: "fk__course_assessment_submissions_updater_id"
   end
 
@@ -550,8 +563,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
     t.boolean "is_koditsu_enabled"
     t.boolean "is_synced_with_koditsu", default: false, null: false
     t.boolean "show_rubric_to_students"
+    t.uuid "ssid_folder_id"
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"
+    t.index ["ssid_folder_id"], name: "index_course_assessments_on_ssid_folder_id", unique: true
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
     t.index ["updater_id"], name: "fk__course_assessments_updater_id"
   end
@@ -1354,9 +1369,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
     t.datetime "conditional_satisfiability_evaluation_time", precision: nil, default: "2021-10-24 10:31:32"
     t.integer "default_timeline_algorithm", default: 0, null: false
     t.string "koditsu_workspace_id"
+    t.uuid "ssid_folder_id"
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true
+    t.index ["ssid_folder_id"], name: "index_courses_on_ssid_folder_id", unique: true
     t.index ["updater_id"], name: "fk__courses_updater_id"
   end
 
@@ -1558,7 +1575,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
     t.string "type", limit: 255, null: false
     t.string "name", limit: 255, null: false
     t.integer "parent_id"
-    t.serial "weight"
+    t.serial "weight", null: false
     t.boolean "enabled", default: true, null: false
     t.boolean "default_evaluator_whitelisted", default: true, null: false
     t.boolean "codaveri_evaluator_whitelisted", default: false, null: false
@@ -1690,6 +1707,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
   add_foreign_key "course_assessment_question_text_response_solutions", "course_assessment_question_text_responses", column: "question_id", name: "fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4"
   add_foreign_key "course_assessment_questions", "users", column: "creator_id", name: "fk_course_assessment_questions_creator_id"
   add_foreign_key "course_assessment_questions", "users", column: "updater_id", name: "fk_course_assessment_questions_updater_id"
+  add_foreign_key "course_assessment_similarity_checks", "course_assessments", column: "assessment_id", name: "fk_course_assessment_similarity_checks_assessment_id"
+  add_foreign_key "course_assessment_similarity_checks", "jobs", name: "fk_course_assessment_similarity_checks_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_skill_branches", "courses", name: "fk_course_assessment_skill_branches_course_id"
   add_foreign_key "course_assessment_skill_branches", "users", column: "creator_id", name: "fk_course_assessment_skill_branches_creator_id"
   add_foreign_key "course_assessment_skill_branches", "users", column: "updater_id", name: "fk_course_assessment_skill_branches_updater_id"
