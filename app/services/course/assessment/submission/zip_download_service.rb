@@ -8,9 +8,10 @@ class Course::Assessment::Submission::ZipDownloadService
     # @param [String|nil] course_users The subset of course users whose submissions to download.
     # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
     #   'staff', 'staff_w_phantom'
+    # # @param [Boolean] for_ssid_similarity_service Whether the zip is for ssid similarity service.
     # @return [String] The path to the zip file.
-    def download_and_zip(course_user, assessment, course_users)
-      service = new(course_user, assessment, course_users)
+    def download_and_zip(course_user, assessment, course_users, for_ssid_similarity_service)
+      service = new(course_user, assessment, course_users, for_ssid_similarity_service)
       service.download_and_zip
     end
   end
@@ -31,11 +32,12 @@ class Course::Assessment::Submission::ZipDownloadService
 
   private
 
-  def initialize(course_user, assessment, course_users)
+  def initialize(course_user, assessment, course_users, for_ssid_similarity_service)
     @course_user = course_user
     @assessment = assessment
     @questions = assessment.questions.to_h { |q| [q.id, q] }
     @course_users = course_users
+    @for_ssid_similarity_service = for_ssid_similarity_service
     @base_dir = Dir.mktmpdir('coursemology-download-')
   end
 
@@ -44,15 +46,39 @@ class Course::Assessment::Submission::ZipDownloadService
     submissions = @assessment.submissions.by_users(course_user_ids).
                   includes(:answers, experience_points_record: :course_user)
     submissions.find_each do |submission|
-      submission_dir = create_folder(@base_dir, submission.course_user.name)
+      folder_name = if @for_ssid_similarity_service
+                      "#{submission.id}_#{submission.course_user.name}"
+                    else
+                      submission.course_user.name
+                    end
+      submission_dir = create_folder(@base_dir, folder_name)
       download_answers(submission, submission_dir)
+    end
+    create_skeleton_folder if @for_ssid_similarity_service
+  end
+
+  # Downloads programming question template files to a 'skeleton' folder in the base directory.
+  def create_skeleton_folder
+    skeleton_dir = create_folder(@base_dir, 'skeleton')
+    @questions.each_value do |question|
+      next unless question.specific.is_a?(Course::Assessment::Question::Programming)
+
+      question_dir = create_folder(skeleton_dir, question.question_assessments.first.display_title)
+      programming_question = question.specific
+      programming_question.template_files.each do |template_file|
+        file_path = File.join(question_dir, template_file.filename)
+        File.write(file_path, template_file.content)
+      end
     end
   end
 
   # Downloads each answer to its own folder in the submission directory.
   def download_answers(submission, submission_dir)
     answers = submission.answers.includes(:question).latest_answers.
-              select { |answer| @questions[answer.question_id]&.files_downloadable? }
+              select do |answer|
+                question = @questions[answer.question_id]
+                @for_ssid_similarity_service ? question.similarity_checkable? : question.files_downloadable?
+              end
     answers.each do |answer|
       question_assessment = submission.assessment.question_assessments.
                             find_by!(question: @questions[answer.question_id])
