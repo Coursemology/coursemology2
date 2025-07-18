@@ -62,5 +62,12 @@ FactoryBot.define do
         course.set_component_enabled_boolean(:course_stories_component, true)
       end
     end
+
+    trait :with_similarity_component_enabled do
+      after(:build) do |course|
+        course.instance.set_component_enabled_boolean!(:course_similarity_component, true)
+        course.set_component_enabled_boolean(:course_similarity_component, true)
+      end
+    end
   end
 end
