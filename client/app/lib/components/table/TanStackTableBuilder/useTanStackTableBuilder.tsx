@@ -53,7 +53,13 @@ const useTanStackTableBuilder = <D extends object>(
   const table = useReactTable({
     data: props.data,
     columns,
-    enableRowSelection: props.indexing?.rowSelectable,
+    enableRowSelection:
+      typeof props.indexing?.rowSelectable === 'function'
+        ? (row): boolean =>
+            (props.indexing!.rowSelectable as (datum: D) => boolean)(
+              row.original,
+            )
+        : props.indexing?.rowSelectable,
     getRowId: props.getRowId,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: props.pagination && getPaginationRowModel(),

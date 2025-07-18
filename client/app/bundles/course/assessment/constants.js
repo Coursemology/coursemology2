@@ -27,6 +27,13 @@ const actionTypes = mirrorCreator([
   'FETCH_ANCESTOR_STATISTICS_FAILURE',
 ]);
 
+export const similarityWorkflowStates = {
+  NotStarted: 'not_started',
+  Running: 'running',
+  Completed: 'completed',
+  Failed: 'failed',
+};
+
 export const DEFAULT_MONITORING_OPTIONS = {
   enabled: false,
   secret: '',

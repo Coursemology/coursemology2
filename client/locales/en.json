@@ -2324,6 +2324,9 @@
   "course.assessment.show.notAutogradable": {
     "defaultMessage": "Not autogradable"
   },
+  "course.assessment.show.similarityCheckable": {
+    "defaultMessage": "Has similarity check"
+  },
   "course.assessment.show.press": {
     "defaultMessage": "Press"
   },
@@ -2524,6 +2527,51 @@
   },
   "course.assessment.submission.GetHelpChatPage.codeUpdated": {
     "defaultMessage": "Code Updated"
+  },
+  "course.assessment.similarity.similarity": {
+    "defaultMessage": "Similarity Results"
+  },
+  "course.assessment.similarity.status": {
+    "defaultMessage": "Similarity Check Status"
+  },
+  "course.assessment.similarity.lastRunTime": {
+    "defaultMessage": "Last run at: {date}"
+  },
+  "course.assessment.similarity.start": {
+    "defaultMessage": "New Similarity Check"
+  },
+  "course.assessment.similarity.notStarted": {
+    "defaultMessage": "No similarity check has been run"
+  },
+  "course.assessment.similarity.confirmStartTitle": {
+    "defaultMessage": "Confirm Similarity Check?"
+  },
+  "course.assessment.similarity.confirmStartMessage": {
+    "defaultMessage": "Running a new similarity check will remove the previous results."
+  },
+  "course.assessment.similarity.results": {
+    "defaultMessage": "Similarity Results (Top 100 Most Similar Submission Pairs)"
+  },
+  "course.assessment.similarity.baseSubmission": {
+    "defaultMessage": "Base Submission"
+  },
+  "course.assessment.similarity.comparedSubmission": {
+    "defaultMessage": "Compared Submission"
+  },
+  "course.assessment.similarity.similarityScore": {
+    "defaultMessage": "Similarity Score"
+  },
+  "course.assessment.similarity.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.assessment.similarity.viewReport": {
+    "defaultMessage": "View Report"
+  },
+  "course.assessment.similarity.downloadPdf": {
+    "defaultMessage": "Download PDF"
+  },
+  "course.assessment.similarity.searchByStudentName": {
+    "defaultMessage": "Search by Student Name"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "Answers"
@@ -5251,6 +5299,78 @@
   },
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "Delete"
+  },
+  "course.similarity.SimilarityIndex.header.similarity": {
+    "defaultMessage": "Similarity Check"
+  },
+  "course.similarity.SimilarityIndex.assessments.assessment": {
+    "defaultMessage": "Assessments"
+  },
+  "course.similarity.SimilarityIndex.assessments.numSubmitted": {
+    "defaultMessage": "# Submissions"
+  },
+  "course.similarity.SimilarityIndex.assessments.numCheckableQuestions": {
+    "defaultMessage": "# Checkable Questions"
+  },
+  "course.similarity.SimilarityIndex.assessments.lastSubmittedAt": {
+    "defaultMessage": "Last Submission At"
+  },
+  "course.similarity.SimilarityIndex.assessments.lastRunStatus": {
+    "defaultMessage": "Status"
+  },
+  "course.similarity.SimilarityIndex.assessments.lastRunTime": {
+    "defaultMessage": "Last Run At"
+  },
+  "course.similarity.SimilarityIndex.assessments.statusNotStarted": {
+    "defaultMessage": "Not Started"
+  },
+  "course.similarity.SimilarityIndex.assessments.statusRunning": {
+    "defaultMessage": "Running"
+  },
+  "course.similarity.SimilarityIndex.assessments.statusCompleted": {
+    "defaultMessage": "Completed"
+  },
+  "course.similarity.SimilarityIndex.assessments.statusFailed": {
+    "defaultMessage": "Failed"
+  },
+  "course.similarity.SimilarityIndex.assessments.noSimilarityCheckableQuestions": {
+    "defaultMessage": "No checkable questions"
+  },
+  "course.similarity.SimilarityIndex.assessments.notEnoughSubmissions": { 
+    "defaultMessage": "Not enough submissions"
+  },
+  "course.similarity.SimilarityIndex.assessments.runAssessmentsSimilarity": {
+    "defaultMessage": "New Similarity Check ({count})"
+  },
+  "course.similarity.SimilarityIndex.assessments.runSimilarityCheckSuccess": {
+    "defaultMessage": "Started similarity check for {count, plural, =1 {# assessment} other {# assessments}}"
+  },
+  "course.similarity.SimilarityIndex.assessments.runSimilarityCheckError": {
+    "defaultMessage": "Failed to start similarity checks for some assessments"
+  },
+  "course.similarity.SimilarityIndex.assessments.searchByAssessmentTitle": {
+    "defaultMessage": "Search by Assessment Title"
+  },
+  "course.similarity.SimilarityIndex.assessments.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.similarity.SimilarityIndex.assessments.runSimilarityCheck": {
+    "defaultMessage": "Run Similarity Check"
+  },
+  "course.similarity.SimilarityIndex.assessments.viewResults": {
+    "defaultMessage": "View Results"
+  },
+  "course.similarity.SimilarityIndex.assessments.newSubmissionsWarning": {
+    "defaultMessage": "New submissions detected since last similarity run"
+  },
+  "course.similarity.SimilarityIndex.assessments.noNewSubmissionsWarning": {
+    "defaultMessage": "No new submissions since last similarity run"
+  },
+  "course.similarity.SimilarityIndex.assessments.confirmRerunTitle": {
+    "defaultMessage": "Confirm Similarity Check?"
+  },
+  "course.similarity.SimilarityIndex.assessments.confirmRerunMessage": {
+    "defaultMessage": "Some of the selected assessments already have completed similarity checks. Running a new similarity check will remove the previous results."
   },
   "course.statistics.StatisticsIndex.getHelp.header": {
     "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"
