@@ -55,6 +55,21 @@ module Course::Statistics::CountsConcern
     not_late_submission_hash(@assessments, not_late_count(all_submissions))
   end
 
+  def latest_submission_time_hash
+    latest_submissions = ActiveRecord::Base.connection.execute("
+      SELECT cas.assessment_id AS id, MAX(cas.submitted_at) AS latest_submitted_at
+      FROM course_assessment_submissions cas
+      WHERE
+        cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
+        AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
+        AND cas.workflow_state != 'attempting'
+        AND cas.submitted_at IS NOT NULL
+      GROUP BY cas.assessment_id
+                                                        ")
+
+    latest_submissions.to_h { |submission| [submission['id'], submission['latest_submitted_at']] }
+  end
+
   def not_late_hash(submissions)
     current_time = Time.now
 

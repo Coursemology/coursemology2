@@ -234,6 +234,7 @@ Rails.application.routes.draw do
           post 'invite_to_koditsu', on: :member
           get :requirements, on: :member
           get :statistics, on: :member
+          get :similarity, on: :member
           get :monitoring, on: :member
           get :seb_payload, on: :member
           get :auto_feedback_count, on: :member
@@ -476,6 +477,16 @@ Rails.application.routes.draw do
         get 'assessment/:id/ancestor_statistics' => 'assessments#ancestor_statistics'
         get 'assessment/:id/live_feedback_statistics' => 'assessments#live_feedback_statistics'
         get 'assessment/:id/live_feedback_history' => 'assessments#live_feedback_history'
+      end
+
+      namespace :similarity do
+        get 'assessments' => 'assessments#index'
+        get 'assessment/:assessment_id' => 'assessments#similarity_data'
+        get 'assessment/:assessment_id/download_submission_pair_result' => 'assessments#download_submission_pair_result'
+        post 'assessment/:assessment_id/share_submission_pair_result' => 'assessments#share_submission_pair_result'
+        post 'assessment/:assessment_id/share_assessment_result' => 'assessments#share_assessment_result'
+        post 'assessment/:assessment_id' => 'assessments#similarity_check'
+        post 'assessments/similarity_checks' => 'assessments#similarity_checks'
       end
 
       scope module: :video do
