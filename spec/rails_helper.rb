@@ -13,6 +13,7 @@ ENV['KEYCLOAK_REALM'] ||= 'coursemology_test'
 # We use a dummy value since leaving it as null raises an error, and potentially
 # in the future we can use it in stub logic to differentiate from other external APIs.
 ENV['CODAVERI_URL'] ||= 'http://localhost:53896'
+ENV['SSID_URL'] ||= 'http://localhost:53897'
 
 require 'spec_helper'
 require 'rspec/rails'

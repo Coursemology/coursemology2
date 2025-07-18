@@ -33,7 +33,39 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
     end
 
     let(:service) do
-      Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff1, assessment, nil)
+      Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff1, assessment, nil, false)
+    end
+
+    let(:programming_assessment) { create(:assessment, :published_with_programming_question, course: course) }
+    let(:programming_submission1) do
+      create(:submission, :submitted, assessment: programming_assessment, course: course, creator: student1.user)
+    end
+    let(:service_for_ssid) do
+      Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff1, programming_assessment,
+                                                              'students_w_phantom', true)
+    end
+
+    context 'when for_ssid_plagiarism_service is true' do
+      let(:dir) { service_for_ssid.instance_variable_get(:@base_dir) }
+      subject { service_for_ssid.send(:download_to_base_dir) }
+
+      before do
+        programming_submission1
+      end
+
+      it 'downloads skeleton files and student submissions with correct directory names' do
+        subject
+
+        student1_folder = "#{programming_submission1.id}_#{student1.name}"
+        question = programming_assessment.questions.first
+        question_title = Pathname.normalize_filename(question.question_assessments.first.display_title)
+        template_file = question.specific.template_files.first
+
+        expect(Dir.exist?(File.join(dir, 'skeleton'))).to be_truthy
+        expect(Dir.exist?(File.join(dir, student1_folder))).to be_truthy
+        expect(Dir.exist?(File.join(dir, 'skeleton', question_title))).to be_truthy
+        expect(File.exist?(File.join(dir, 'skeleton', question_title, template_file.filename))).to be_truthy
+      end
     end
 
     describe '#download_to_base_dir' do
@@ -226,7 +258,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
     describe '.download_and_zip' do
       subject do
         Course::Assessment::Submission::ZipDownloadService.
-          download_and_zip(course_staff1, assessment, nil)
+          download_and_zip(course_staff1, assessment, nil, false)
       end
 
       it 'downloads and zips the folder' do
