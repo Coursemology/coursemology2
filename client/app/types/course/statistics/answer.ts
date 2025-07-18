@@ -1,4 +1,4 @@
-import { JobStatus, JobStatusResponse } from 'types/jobs';
+import { JobStatus } from 'types/jobs';
 import { UserBasicListData } from 'types/users';
 
 import { QuestionType } from '../assessment/question';
@@ -8,8 +8,8 @@ import {
   MultipleResponseFieldData,
 } from '../assessment/submission/answer/multipleResponse';
 import {
+  ProgrammingAutoGradingData,
   ProgrammingFieldData,
-  TestCaseResult,
   TestCaseType,
 } from '../assessment/submission/answer/programming';
 import { ScribingFieldData } from '../assessment/submission/answer/scribing';
@@ -69,15 +69,6 @@ export interface Post {
   codaveriFeedback: CodaveriFeedback;
 }
 
-export interface TestCase {
-  canReadTests: boolean;
-  public_test?: TestCaseResult[];
-  private_test?: TestCaseResult[];
-  evaluation_test?: TestCaseResult[];
-  stdout?: string;
-  stderr?: string;
-}
-
 export interface CodaveriFeedback {
   jobId: string;
   jobStatus: keyof typeof JobStatus;
@@ -93,11 +84,10 @@ export interface ProgrammingAnswerDetails
     explanation: string[];
     failureType: TestCaseType;
   };
-  testCases: TestCase;
   attemptsLeft?: number;
-  autograding?: JobStatusResponse & {
-    path?: string;
-  };
+  canReadTests?: boolean;
+  autoGradingCount: number;
+  autogradings?: ProgrammingAutoGradingData[];
   codaveriFeedback?: CodaveriFeedback;
   latestAnswer?: ProgrammingAnswerDetails & {
     annotations: Annotation[];

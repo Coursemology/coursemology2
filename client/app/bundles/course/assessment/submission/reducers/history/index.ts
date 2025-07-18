@@ -180,10 +180,18 @@ export const historySlice = createSlice({
       const { submissionId, questionId, answerItem } = action.payload;
       const submissionQuestionState = state[submissionId]?.[questionId];
       if (submissionQuestionState?.details) {
-        submissionQuestionState.details.allAnswers.push(answerItem);
-        submissionQuestionState.details.sequenceViewSelectedAnswerIds.unshift(
-          answerItem.id,
-        );
+        const answerIndex =
+          submissionQuestionState.details.allAnswers.findIndex(
+            (answer) => answer.id === answerItem.id,
+          );
+        if (answerIndex >= 0) {
+          submissionQuestionState.details.allAnswers[answerIndex] = answerItem;
+        } else {
+          submissionQuestionState.details.allAnswers.push(answerItem);
+          submissionQuestionState.details.sequenceViewSelectedAnswerIds.unshift(
+            answerItem.id,
+          );
+        }
       }
     },
     updateSingleAnswerHistory: (

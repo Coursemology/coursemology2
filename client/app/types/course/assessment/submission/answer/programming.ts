@@ -48,15 +48,6 @@ export interface Post {
   codaveriFeedback: CodaveriFeedback;
 }
 
-export interface TestCase {
-  canReadTests: boolean;
-  public_test?: TestCaseResult[];
-  private_test?: TestCaseResult[];
-  evaluation_test?: TestCaseResult[];
-  stdout?: string;
-  stderr?: string;
-}
-
 export interface CodaveriFeedback {
   jobId: string;
   jobStatus: keyof typeof JobStatus;
@@ -70,6 +61,20 @@ export interface ProgrammingFieldData extends AnswerFieldBaseData {
   files_attributes: ProgrammingContent[];
 }
 
+export interface ProgrammingAutoGradingData {
+  id: number;
+  createdAt: string;
+  job: JobStatusResponse & {
+    path?: string;
+  };
+  public_test?: TestCaseResult[];
+  private_test?: TestCaseResult[];
+  evaluation_test?: TestCaseResult[];
+  stdout?: string;
+  stderr?: string;
+  gradedOnPastSnapshot: boolean;
+}
+
 export interface ProgrammingAnswerData extends AnswerBaseData {
   questionType: QuestionType.Programming;
   fields: ProgrammingFieldData;
@@ -78,20 +83,10 @@ export interface ProgrammingAnswerData extends AnswerBaseData {
     explanation: string[];
     failureType: TestCaseType;
   };
+  canReadTests?: boolean;
   autoGradingCount: number;
-  gradedOnPastSnapshot: boolean;
-  testCases: {
-    canReadTests: boolean;
-    public_test?: TestCaseResult[];
-    private_test?: TestCaseResult[];
-    evaluation_test?: TestCaseResult[];
-    stdout?: string;
-    stderr?: string;
-  };
+  autogradings?: ProgrammingAutoGradingData[];
   attemptsLeft?: number;
-  autograding?: JobStatusResponse & {
-    path?: string;
-  };
   codaveriFeedback?: {
     jobId: string;
     jobStatus: keyof typeof JobStatus;

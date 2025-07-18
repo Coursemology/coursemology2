@@ -196,16 +196,6 @@ const translations = defineMessages({
     id: 'course.assessment.submission.history.title',
     defaultMessage: 'Submission by {studentName}, Question {number}',
   },
-  answerGradedOnPastSnapshot: {
-    id: 'course.assessment.submission.history.answerGradedOnPastSnapshot',
-    defaultMessage:
-      'Changes have been made to the question after this answer was graded.',
-  },
-  multipleAutoGradingResults: {
-    id: 'course.assessment.submission.history.multipleAutoGradingResults',
-    defaultMessage:
-      'This answer has been autograded multiple times.',
-  },
   historyQuestionTitle: {
     id: 'course.assessment.submission.history.questionTitle',
     defaultMessage: 'Question Details',

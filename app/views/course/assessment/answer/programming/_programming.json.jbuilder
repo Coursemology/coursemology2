@@ -17,6 +17,7 @@ if graded_on_past_snapshot
 end
 
 can_grade = can?(:grade, submission)
+can_read_tests = can?(:read_tests, submission)
 
 # Required in response of reload_answer and submit_answer to update past answers with the latest_attempt
 # Removing this check will cause it to render the latest_answer recursively
@@ -40,6 +41,26 @@ json.fields do
   end
 end
 
+json.canReadTests can_read_tests
+if attempt.submitted? && !attempt&.auto_gradings&.any?
+  json.autogradings do
+    json.child! do
+      json.job do
+        json.status :submitted
+      end
+    end
+  end
+end
+json.autogradings do
+  json.array! attempt&.auto_gradings&.map(&:specific)&.compact do |auto_grading|
+    json.partial! 'course/assessment/answer/programming/auto_grading', assessment: assessment,
+                  submission: submission,
+                  question: question,
+                  auto_grading: auto_grading,
+                  can_read_tests: can_read_tests
+  end
+end
+
 job = attempt&.auto_gradings&.last&.job
 
 if job
@@ -55,44 +76,8 @@ if attempt.submitted? && !attempt&.auto_gradings&.any?
   end
 end
 
-can_read_tests = can?(:read_tests, submission)
-show_private = can_read_tests || (submission.published? && assessment.show_private?)
-show_evaluation = can_read_tests || (submission.published? && assessment.show_evaluation?)
-
-test_cases_by_type = question.test_cases_by_type
-p({ ag: auto_grading, auto_grading: attempt&.auto_gradings&.last, test_cases_by_type: test_cases_by_type })
+test_cases_by_type = graded_snapshot.test_cases_by_type
 test_cases_and_results = get_test_cases_and_results(test_cases_by_type, auto_grading)
-
-show_stdout_and_stderr = (can_read_tests || current_course.show_stdout_and_stderr) &&
-                         auto_grading && auto_grading&.exit_code != 0
-
-displayed_test_case_types = ['public_test']
-displayed_test_case_types << 'private_test' if show_private
-displayed_test_case_types << 'evaluation_test' if show_evaluation
-
-json.testCases do
-  json.canReadTests can_read_tests
-  displayed_test_case_types.each do |test_case_type|
-    show_public = (test_case_type == 'public_test') && current_course.show_public_test_cases_output
-    show_testcase_outputs = can_read_tests || show_public
-    json.set! test_case_type do
-      if test_cases_and_results[test_case_type].present?
-        json.array! test_cases_and_results[test_case_type] do |test_case, test_result|
-          json.identifier test_case.identifier if can_read_tests
-          json.expression test_case.expression
-          json.expected test_case.expected
-          if test_result
-            json.output get_output(test_result) if show_testcase_outputs
-            json.passed test_result.passed?
-          end
-        end
-      end
-    end
-  end
-
-  json.(auto_grading, :stdout, :stderr) if show_stdout_and_stderr
-end
-
 failed_test_cases_by_type = get_failed_test_cases_by_type(test_cases_and_results)
 
 json.explanation do

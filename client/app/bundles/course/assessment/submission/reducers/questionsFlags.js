@@ -5,18 +5,19 @@ function initQuestionsFlagsFromSubmissionPayload(payload) {
     const answer = payload.answers.find(
       (ans) => ans.questionId === question.id,
     );
+    const lastAutogradingJob = answer?.autogradings?.at(-1)?.job;
     return {
       ...obj,
       [question.id]: {
         isResetting: false,
         isAutograding:
-          Boolean(answer?.autograding) &&
-          answer?.autograding?.status === 'submitted',
-        jobUrl: answer?.autograding?.jobUrl,
+          Boolean(lastAutogradingJob) &&
+          lastAutogradingJob.status === 'submitted',
+        jobUrl: lastAutogradingJob?.jobUrl,
         jobError:
-          Boolean(answer?.autograding) &&
-          answer?.autograding?.status === 'errored',
-        jobErrorMessage: answer?.autograding?.errorMessage,
+          Boolean(lastAutogradingJob) &&
+          lastAutogradingJob.status === 'errored',
+        jobErrorMessage: lastAutogradingJob?.errorMessage,
       },
     };
   }, {});
