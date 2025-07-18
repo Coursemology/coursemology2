@@ -111,6 +111,15 @@ const Question = (props: QuestionProps): JSX.Element => {
                       variant="outlined"
                     />
                   )}
+
+                  {question.similarityCheckable && (
+                    <Chip
+                      color="default"
+                      label={t(translations.similarityCheckable)}
+                      size="small"
+                      variant="outlined"
+                    />
+                  )}
                 </div>
               </div>
 
