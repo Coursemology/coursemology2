@@ -28,6 +28,7 @@ class Course::Assessment < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
   validates :tab, presence: true
+  validates :ssid_folder_id, uniqueness: { if: :ssid_folder_id_changed? }, allow_nil: true
 
   belongs_to :tab, inverse_of: :assessments
 
@@ -75,6 +76,8 @@ class Course::Assessment < ApplicationRecord
                                          inverse_of: :assessment, dependent: :destroy
   has_one :duplication_traceable, class_name: 'DuplicationTraceable::Assessment',
                                   inverse_of: :assessment, dependent: :destroy
+  has_one :similarity_check, class_name: 'Course::Assessment::SimilarityCheck',
+                             inverse_of: :assessment, dependent: :destroy, autosave: true
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             inverse_of: :assessment, dependent: :destroy
 
@@ -220,6 +223,10 @@ class Course::Assessment < ApplicationRecord
     questions.any?(&:csv_downloadable?)
   end
 
+  def num_similarity_checkable_questions
+    questions.count(&:similarity_checkable?)
+  end
+
   def initialize_duplicate(duplicator, other)
     copy_attributes(other, duplicator)
     target_tab = initialize_duplicate_tab(duplicator, other)
@@ -235,6 +242,9 @@ class Course::Assessment < ApplicationRecord
     # duplication only if it's necessary
     self.koditsu_assessment_id = nil
     self.is_synced_with_koditsu = false
+
+    # ssid folder is not duplicated, as it is isolated to the assessment and created on-demand
+    self.ssid_folder_id = nil
 
     set_duplication_flag
   end
