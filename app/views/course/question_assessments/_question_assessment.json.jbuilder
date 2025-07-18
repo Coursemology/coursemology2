@@ -9,6 +9,8 @@ json.number question_number
 json.defaultTitle question_assessment.default_title(question_number)
 json.title question.title
 json.unautogradable !question.auto_gradable? && assessment.autograded?
+is_course_similarity_enabled = current_course.component_enabled?(Course::SimilarityComponent)
+json.similarityCheckable is_course_similarity_enabled && question.similarity_checkable?
 json.type question_assessment.question.question_type_readable
 json.description format_ckeditor_rich_text(question.description) unless question.description.blank?
 

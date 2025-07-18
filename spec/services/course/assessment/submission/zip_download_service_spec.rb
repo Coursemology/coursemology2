@@ -33,7 +33,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
     end
 
     let(:service) do
-      Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff1, assessment, nil)
+      Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff1, assessment, nil, false)
     end
 
     describe '#download_to_base_dir' do
@@ -226,7 +226,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
     describe '.download_and_zip' do
       subject do
         Course::Assessment::Submission::ZipDownloadService.
-          download_and_zip(course_staff1, assessment, nil)
+          download_and_zip(course_staff1, assessment, nil, false)
       end
 
       it 'downloads and zips the folder' do

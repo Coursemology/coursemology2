@@ -153,6 +153,22 @@ const assessmentsRouter: Translated<RouteObject> = (t) => ({
             };
           },
         },
+        {
+          path: 'similarity',
+          lazy: async (): Promise<RouteObject> => {
+            const AssessmentSimilarity = (
+              await import(
+                /* webpackChunkName: 'AssessmentSimilarity' */
+                'course/assessment/pages/AssessmentSimilarity'
+              )
+            ).default;
+
+            return {
+              Component: AssessmentSimilarity,
+              handle: AssessmentSimilarity.handle,
+            };
+          },
+        },
         submissionsRouter(t),
         questionsRouter(t),
       ],

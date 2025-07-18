@@ -112,6 +112,18 @@ class Course::Assessment::Question < ApplicationRecord
     end
   end
 
+  # Whether the question has similarity check.
+  # Currently, this is only for programming questions.
+  #
+  # @return [Boolean]
+  def similarity_checkable?
+    if actable.self_respond_to?(:similarity_checkable?)
+      actable.similarity_checkable?
+    else
+      false
+    end
+  end
+
   # Copy attributes for question from the object being duplicated.
   #
   # @param other [Object] The source object to copy attributes from.

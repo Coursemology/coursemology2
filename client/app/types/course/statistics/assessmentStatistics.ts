@@ -18,7 +18,7 @@ interface MainAssessmentInfo extends AssessmentInfo {
 
 interface AncestorAssessmentInfo extends AssessmentInfo {}
 
-interface UserInfo {
+export interface UserInfo {
   id: number;
   name: string;
 }

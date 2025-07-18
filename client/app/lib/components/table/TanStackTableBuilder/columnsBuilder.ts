@@ -7,7 +7,7 @@ export const ROW_SELECTOR_ID = 'rowSelector';
 
 const buildTanStackColumns = <D extends Data>(
   columns: ColumnTemplate<D>[],
-  hasCheckboxes?: boolean,
+  hasCheckboxes?: boolean | ((datum: D) => boolean),
   hasIndices?: boolean,
 ): BuiltColumns<D, ColumnDef<D, unknown>> => {
   const initialColumns: ColumnDef<D, unknown>[] = [];
