@@ -636,6 +636,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.notAutogradable',
     defaultMessage: 'Not autogradable',
   },
+  similarityCheckable: {
+    id: 'course.assessment.show.similarityCheckable',
+    defaultMessage: 'Has similarity check',
+  },
   noOptions: {
     id: 'course.assessment.show.noOptions',
     defaultMessage: 'This question has no options.',

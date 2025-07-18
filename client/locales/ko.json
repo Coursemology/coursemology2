@@ -2333,6 +2333,9 @@
   "course.assessment.show.notAutogradable": {
     "defaultMessage": "자동 채점할 수 없습니다."
   },
+  "course.assessment.show.similarityCheckable": {
+    "defaultMessage": "유사성 검사 가능"
+  },
   "course.assessment.show.press": {
     "defaultMessage": "누르기"
   },
@@ -2533,6 +2536,51 @@
   },
   "course.assessment.statistics.ancestorStatisticsFail": {
     "defaultMessage": "조상의 통계를 검색하지 못했습니다."
+  },
+  "course.assessment.similarity.similarity": {
+    "defaultMessage": "유사성 결과"
+  },
+  "course.assessment.similarity.status": {
+    "defaultMessage": "유사성 검사 상태"
+  },
+  "course.assessment.similarity.lastRunTime": {
+    "defaultMessage": "마지막 실행 시간: {date}"
+  },
+  "course.assessment.similarity.start": {
+    "defaultMessage": "새 유사성 검사"
+  },
+  "course.assessment.similarity.notStarted": {
+    "defaultMessage": "유사성 검사가 실행되지 않았습니다."
+  },
+  "course.assessment.similarity.confirmStartTitle": {
+    "defaultMessage": "유사성 검사 확인?"
+  },
+  "course.assessment.similarity.confirmStartMessage": {
+    "defaultMessage": "새 유사성 검사를 실행하면 이전 결과가 제거됩니다."
+  },
+  "course.assessment.similarity.results": {
+    "defaultMessage": "유사성 결과 (가장 유사한 제출 쌍 상위 100개)"
+  },
+  "course.assessment.similarity.baseSubmission": {
+    "defaultMessage": "기본 제출"
+  },
+  "course.assessment.similarity.comparedSubmission": {
+    "defaultMessage": "비교된 제출"
+  },
+  "course.assessment.similarity.similarityScore": {
+    "defaultMessage": "유사성 점수"
+  },
+  "course.assessment.similarity.actions": {
+    "defaultMessage": "작업"
+  },
+  "course.assessment.similarity.viewReport": {
+    "defaultMessage": "보고서 보기"
+  },
+  "course.assessment.similarity.downloadPdf": {
+    "defaultMessage": "PDF 다운로드"
+  },
+  "course.assessment.similarity.searchByStudentName": {
+    "defaultMessage": "학생 이름으로 검색"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "답변"
@@ -5233,6 +5281,78 @@
   },
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "삭제"
+  },
+  "course.similarity.SimilarityIndex.header.similarity": {
+    "defaultMessage": "유사성 검사"
+  },
+  "course.similarity.SimilarityIndex.assessments.assessment": {
+    "defaultMessage": "평가"
+  },
+  "course.similarity.SimilarityIndex.assessments.numSubmitted": {
+    "defaultMessage": "# 제출"
+  },
+  "course.similarity.SimilarityIndex.assessments.numCheckableQuestions": {
+    "defaultMessage": "# 검사 가능한 질문"
+  },
+  "course.similarity.SimilarityIndex.assessments.lastSubmittedAt": {
+    "defaultMessage": "마지막 제출 시각"
+  },
+  "course.similarity.SimilarityIndex.assessments.lastRunStatus": {
+    "defaultMessage": "상태"
+  },
+  "course.similarity.SimilarityIndex.assessments.lastRunTime": {
+    "defaultMessage": "마지막 실행 시각"
+  },
+  "course.similarity.SimilarityIndex.assessments.statusNotStarted": {
+    "defaultMessage": "시작되지 않음"
+  },
+  "course.similarity.SimilarityIndex.assessments.statusRunning": {
+    "defaultMessage": "실행 중"
+  },
+  "course.similarity.SimilarityIndex.assessments.statusCompleted": {
+    "defaultMessage": "완료됨"
+  },
+  "course.similarity.SimilarityIndex.assessments.statusFailed": {
+    "defaultMessage": "실패"
+  },
+  "course.similarity.SimilarityIndex.assessments.noSimilarityCheckableQuestions": {
+    "defaultMessage": "검사 가능한 질문이 없습니다"
+  },
+  "course.similarity.SimilarityIndex.assessments.notEnoughSubmissions": { 
+    "defaultMessage": "제출이 충분하지 않습니다"
+  },
+  "course.similarity.SimilarityIndex.assessments.runAssessmentsSimilarity": {
+    "defaultMessage": "새 유사성 검사 ({count})"
+  },
+  "course.similarity.SimilarityIndex.assessments.runSimilarityCheckSuccess": {
+    "defaultMessage": "유사성 검사를 시작했습니다 {count, plural, =1 {# 평가} other {# 평가}}"
+  },
+  "course.similarity.SimilarityIndex.assessments.runSimilarityCheckError": {
+    "defaultMessage": "일부 평가에 대한 유사성 검사를 시작하지 못했습니다"
+  },
+  "course.similarity.SimilarityIndex.assessments.searchByAssessmentTitle": {
+    "defaultMessage": "평가 제목으로 검색"
+  },
+  "course.similarity.SimilarityIndex.assessments.actions": {
+    "defaultMessage": "작업"
+  },
+  "course.similarity.SimilarityIndex.assessments.runSimilarityCheck": {
+    "defaultMessage": "유사성 검사 실행"
+  },
+  "course.similarity.SimilarityIndex.assessments.viewResults": {
+    "defaultMessage": "결과 보기"
+  },
+  "course.similarity.SimilarityIndex.assessments.newSubmissionsWarning": {
+    "defaultMessage": "마지막 유사성 검사 이후 새 제출물이 감지되었습니다"
+  },
+  "course.similarity.SimilarityIndex.assessments.noNewSubmissionsWarning": {
+    "defaultMessage": "마지막 유사성 검사 이후 새 제출물이 없습니다"
+  },
+  "course.similarity.SimilarityIndex.assessments.confirmRerunTitle": {
+    "defaultMessage": "유사성 검사를 확인하시겠습니까?"
+  },
+  "course.similarity.SimilarityIndex.assessments.confirmRerunMessage": {
+    "defaultMessage": "선택한 평가 중 일부는 이미 완료된 유사성 검사가 있습니다. 새 유사성 검사를 실행하면 이전 결과가 제거됩니다."
   },
   "course.statistics.StatisticsIndex.getHelp.header": {
     "defaultMessage": "최근 도움 요청 활동 ({total}건의 대화)"

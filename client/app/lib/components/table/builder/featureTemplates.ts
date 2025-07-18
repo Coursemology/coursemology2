@@ -22,8 +22,8 @@ export interface SearchTemplate<D extends Data> {
   searchProps?: SearchProps<D>;
 }
 
-export interface IndexingTemplate {
-  rowSelectable?: boolean;
+export interface IndexingTemplate<D extends Data> {
+  rowSelectable?: boolean | ((datum: D) => boolean);
   indices?: boolean;
 }
 

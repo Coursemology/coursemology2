@@ -19,7 +19,7 @@ interface TableTemplate<D extends Data> {
   pagination?: PaginationTemplate;
   csvDownload?: CsvDownloadTemplate;
   search?: SearchTemplate<D>;
-  indexing?: IndexingTemplate;
+  indexing?: IndexingTemplate<D>;
   filter?: FilterTemplate;
   toolbar?: ToolbarTemplate<D>;
   sort?: SortTemplate;
