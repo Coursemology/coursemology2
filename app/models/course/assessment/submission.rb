@@ -55,6 +55,7 @@ class Course::Assessment::Submission < ApplicationRecord
   validates :updater, presence: true
   validates :assessment, presence: true
   validates :last_graded_time, presence: true
+  validates :ssid_submission_id, uniqueness: { if: :ssid_submission_id_changed? }, allow_nil: true
 
   belongs_to :assessment, inverse_of: :submissions
 
@@ -340,7 +341,7 @@ class Course::Assessment::Submission < ApplicationRecord
     return unless existing
 
     errors.clear
-    errors.add(:base, I18n.t('activerecord.errors.models.course/assessment/'\
+    errors.add(:base, I18n.t('activerecord.errors.models.course/assessment/' \
                              'submission.submission_already_exists'))
   end
 

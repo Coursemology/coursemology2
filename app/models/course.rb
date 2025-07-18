@@ -26,6 +26,7 @@ class Course < ApplicationRecord
   validates :updater, presence: true
   validates :instance, presence: true
   validates :conditional_satisfiability_evaluation_time, presence: true
+  validates :ssid_folder_id, uniqueness: { if: :ssid_folder_id_changed? }, allow_nil: true
 
   enum :default_timeline_algorithm, CourseUser.timeline_algorithms
 
