@@ -96,6 +96,7 @@ RSpec.describe Course::Assessment::Question::MrqGenerationService do
 
       it 'formats source question options correctly' do
         result = subject.generate_questions
+
         expect(result['questions']).to be_an(Array)
         expect(result['questions'].length).to eq(2)
       end

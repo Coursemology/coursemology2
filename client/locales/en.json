@@ -1421,6 +1421,18 @@
   "course.assessment.generation.mrq.numberOfQuestionsRange": {
     "defaultMessage": "Please enter a number from {min} to {max}"
   },
+  "course.assessment.generation.enhanceMode": {
+    "defaultMessage": "Enhance"
+  },
+  "course.assessment.generation.createMode": {
+    "defaultMessage": "Create New"
+  },
+  "course.assessment.generation.enhanceModeTooltip": {
+    "defaultMessage": "Build upon your current question"
+  },
+  "course.assessment.generation.createModeTooltip": {
+    "defaultMessage": "Generate fresh questions from scratch"
+  },
   "course.assessment.generation.mrq.exportDialogHeader": {
     "defaultMessage": "Export Questions ({exportCount} selected)"
   },

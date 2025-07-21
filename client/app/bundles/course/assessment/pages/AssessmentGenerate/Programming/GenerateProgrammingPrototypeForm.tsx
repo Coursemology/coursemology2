@@ -17,8 +17,9 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../../translations';
 import { CODAVERI_EVALUATOR_ONLY_LANGUAGES } from '../constants';
 import LockableSection from '../LockableSection';
-import TestCasesManager from '../TestCasesManager';
 import { LockStates, ProgrammingPrototypeFormData } from '../types';
+
+import TestCasesManager from './TestCasesManager';
 
 interface Props {
   prototypeForm: UseFormReturn<ProgrammingPrototypeFormData>;

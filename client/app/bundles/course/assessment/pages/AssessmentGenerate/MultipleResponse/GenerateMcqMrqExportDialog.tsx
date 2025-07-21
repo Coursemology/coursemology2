@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { Done, ExpandLess, ExpandMore, Launch } from '@mui/icons-material';
 import {
-  Box,
   Button,
   Collapse,
   Dialog,
@@ -218,41 +217,41 @@ const GenerateMcqMrqExportDialog: FC<Props> = (props) => {
 
           return (
             <Paper key={conversationId} variant="outlined">
-              <div className="flex flex-nowrap px-6 py-3 items-center">
+              <div className="flex flex-wrap px-6 py-3 items-start">
                 <Checkbox
                   checked={conversation.toExport}
-                  className="py-0 pr-2 pl-0"
+                  className="py-0 pr-2 pl-0 flex-shrink-0"
                   onClick={() =>
                     setToExport(conversation, !conversation.toExport)
                   }
                 />
 
                 <Typography
-                  className={conversation.toExport ? '' : 'line-through'}
+                  className={`${conversation.toExport ? '' : 'line-through'} flex-1 min-w-0`}
                   color={conversation.toExport ? 'default' : 'gray'}
                 >
                   {title}
                 </Typography>
 
-                <Box className="flex-1 full-width" />
-
-                {/* Options expand/collapse button */}
-                {hasOptions && (
-                  <Button
-                    className="mr-2"
-                    endIcon={isExpanded ? <ExpandLess /> : <ExpandMore />}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleExpanded(conversationId);
-                    }}
-                    size="small"
-                    variant="outlined"
-                  >
-                    {isExpanded
-                      ? t(translations.hideOptions)
-                      : t(translations.showOptions)}
-                  </Button>
-                )}
+                <div className="flex-shrink-0 ml-auto">
+                  {/* Options expand/collapse button */}
+                  {hasOptions && (
+                    <Button
+                      className="mr-2 whitespace-nowrap"
+                      endIcon={isExpanded ? <ExpandLess /> : <ExpandMore />}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleExpanded(conversationId);
+                      }}
+                      size="small"
+                      variant="outlined"
+                    >
+                      {isExpanded
+                        ? t(translations.hideOptions)
+                        : t(translations.showOptions)}
+                    </Button>
+                  )}
+                </div>
 
                 {conversation.exportStatus === 'pending' && (
                   <LoadingIndicator
@@ -262,7 +261,7 @@ const GenerateMcqMrqExportDialog: FC<Props> = (props) => {
                   />
                 )}
                 {conversation.exportStatus === 'exported' && (
-                  <Done className="mr-1 text-green-600" fontSize="small" />
+                  <Done className="mr-1 mt-2 text-green-600" fontSize="small" />
                 )}
                 {conversation.exportStatus === 'exported' &&
                   conversation.redirectEditUrl && (

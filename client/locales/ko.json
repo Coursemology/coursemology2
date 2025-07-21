@@ -1421,6 +1421,18 @@
   "course.assessment.generation.mrq.numberOfQuestionsRange": {
     "defaultMessage": "{min}에서 {max} 사이의 숫자를 입력하세요"
   },
+  "course.assessment.generation.enhanceMode": {
+    "defaultMessage": "강화"
+  },
+  "course.assessment.generation.createMode": {
+    "defaultMessage": "새로 만들기"
+  },
+  "course.assessment.generation.enhanceModeTooltip": {
+    "defaultMessage": "현재 질문을 기반으로 확장합니다"
+  },
+  "course.assessment.generation.createModeTooltip": {
+    "defaultMessage": "처음부터 새로운 질문을 생성합니다"
+  },
   "course.assessment.generation.mrq.exportDialogHeader": {
     "defaultMessage": "문항 내보내기 ({exportCount}개 선택됨)"
   },
