@@ -154,18 +154,18 @@ const assessmentsRouter: Translated<RouteObject> = (t) => ({
           },
         },
         {
-          path: 'similarity',
+          path: 'plagiarism',
           lazy: async (): Promise<RouteObject> => {
-            const AssessmentSimilarity = (
+            const AssessmentPlagiarism = (
               await import(
-                /* webpackChunkName: 'AssessmentSimilarity' */
-                'course/assessment/pages/AssessmentSimilarity'
+                /* webpackChunkName: 'AssessmentPlagiarism' */
+                'course/assessment/pages/AssessmentPlagiarism'
               )
             ).default;
 
             return {
-              Component: AssessmentSimilarity,
-              handle: AssessmentSimilarity.handle,
+              Component: AssessmentPlagiarism,
+              handle: AssessmentPlagiarism.handle,
             };
           },
         },

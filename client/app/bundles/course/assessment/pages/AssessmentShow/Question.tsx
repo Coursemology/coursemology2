@@ -112,10 +112,10 @@ const Question = (props: QuestionProps): JSX.Element => {
                     />
                   )}
 
-                  {question.similarityCheckable && (
+                  {question.plagiarismCheckable && (
                     <Chip
                       color="default"
-                      label={t(translations.similarityCheckable)}
+                      label={t(translations.plagiarismCheckable)}
                       size="small"
                       variant="outlined"
                     />

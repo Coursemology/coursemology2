@@ -246,9 +246,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     authorize!(:read_statistics, current_course)
   end
 
-  # This endpoint provides the view. The actual data is fetched client-side from the similarity module.
-  def similarity
-    authorize!(:manage_similarity, current_course)
+  # This endpoint provides the view. The actual data is fetched client-side from the plagiarism module.
+  def plagiarism
+    authorize!(:manage_plagiarism, current_course)
   end
 
   protected

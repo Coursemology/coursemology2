@@ -27,7 +27,7 @@ const actionTypes = mirrorCreator([
   'FETCH_ANCESTOR_STATISTICS_FAILURE',
 ]);
 
-export const similarityWorkflowStates = {
+export const plagiarismWorkflowStates = {
   NotStarted: 'not_started',
   Running: 'running',
   Completed: 'completed',
@@ -44,5 +44,7 @@ export const DEFAULT_MONITORING_OPTIONS = {
   browser_authorization: true,
   browser_authorization_method: 'user_agent',
 };
+
+export const PLAGIARISM_JOB_POLL_INTERVAL_MS = 5000;
 
 export default actionTypes;

@@ -1,6 +1,0 @@
-# frozen_string_literal: true
-require 'rails_helper'
-
-RSpec.describe Course::Assessment::SimilarityCheck do
-  it { is_expected.to belong_to(:assessment) }
-end

@@ -14,7 +14,7 @@ interface AssessmentActionsData {
   actionButtonUrl: string | null;
   monitoringUrl?: string;
   statisticsUrl?: string;
-  similarityUrl?: string;
+  plagiarismUrl?: string;
   submissionsUrl?: string;
   editUrl?: string;
   deleteUrl?: string;
