@@ -46,7 +46,6 @@ class Course::Assessment::Question::MrqGenerationService
   # @return [Hash] The LLM's generation response containing multiple questions.
   def generate_questions
     messages = build_messages
-
     response = self.class.llm.chat(
       messages: messages,
       response_format: {
@@ -71,11 +70,10 @@ class Course::Assessment::Question::MrqGenerationService
     formatted_user_prompt = user_prompt.format(
       custom_prompt: @custom_prompt,
       number_of_questions: @number_of_questions,
-      source_question_title: @source_question_data&.dig(:title) || '',
-      source_question_description: @source_question_data&.dig(:description) || '',
-      source_question_options: format_source_options(@source_question_data&.dig(:options) || [])
+      source_question_title: @source_question_data&.dig('title') || '',
+      source_question_description: @source_question_data&.dig('description') || '',
+      source_question_options: format_source_options(@source_question_data&.dig('options') || [])
     )
-
     [
       { role: 'system', content: formatted_system_prompt },
       { role: 'user', content: formatted_user_prompt }
