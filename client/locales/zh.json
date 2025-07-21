@@ -2478,13 +2478,7 @@
     "defaultMessage": "代码已更新"
   },
   "course.assessment.similarity.similarity": {
-    "defaultMessage": "相似性检查"
-  },
-  "course.assessment.similarity.startSuccess": {
-    "defaultMessage": "相似性检查成功启动"
-  },
-  "course.assessment.similarity.startError": {
-    "defaultMessage": "相似性检查启动失败"
+    "defaultMessage": "相似性结果"
   },
   "course.assessment.similarity.status": {
     "defaultMessage": "相似性检查状态"

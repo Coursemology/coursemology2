@@ -2529,13 +2529,7 @@
     "defaultMessage": "Code Updated"
   },
   "course.assessment.similarity.similarity": {
-    "defaultMessage": "Similarity Check"
-  },
-  "course.assessment.similarity.startSuccess": {
-    "defaultMessage": "Similarity check started successfully"
-  },
-  "course.assessment.similarity.startError": {
-    "defaultMessage": "Similarity check failed to start"
+    "defaultMessage": "Similarity Results"
   },
   "course.assessment.similarity.status": {
     "defaultMessage": "Similarity Check Status"

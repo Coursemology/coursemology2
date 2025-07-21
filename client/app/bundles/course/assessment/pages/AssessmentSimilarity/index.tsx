@@ -12,7 +12,7 @@ import AssessmentSimilarityPage from './AssessmentSimilarityPage';
 const translations = defineMessages({
   similarity: {
     id: 'course.assessment.similarity.similarity',
-    defaultMessage: 'Similarity Check',
+    defaultMessage: 'Similarity Results',
   },
 });
 

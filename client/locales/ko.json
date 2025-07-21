@@ -2538,13 +2538,7 @@
     "defaultMessage": "조상의 통계를 검색하지 못했습니다."
   },
   "course.assessment.similarity.similarity": {
-    "defaultMessage": "유사성 검사"
-  },
-  "course.assessment.similarity.startSuccess": {
-    "defaultMessage": "유사성 검사가 성공적으로 시작되었습니다."
-  },
-  "course.assessment.similarity.startError": {
-    "defaultMessage": "유사성 검사를 시작하지 못했습니다."
+    "defaultMessage": "유사성 결과"
   },
   "course.assessment.similarity.status": {
     "defaultMessage": "유사성 검사 상태"
