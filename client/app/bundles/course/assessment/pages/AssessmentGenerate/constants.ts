@@ -46,6 +46,7 @@ export const CODAVERI_EVALUATOR_ONLY_LANGUAGES: LanguageMode[] = [
 export const defaultMcqMrqGenerateFormData: McqMrqGenerateFormData = {
   customPrompt: '',
   numberOfQuestions: 1,
+  generationMode: 'create',
 };
 
 export const defaultMcqPrototypeFormData: McqMrqPrototypeFormData = {

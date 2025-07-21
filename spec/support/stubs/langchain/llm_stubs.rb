@@ -72,7 +72,7 @@ module Langchain::LlmStubs
     end
 
     def handle_mrq_generation(_system_message, user_message)
-      number_match = user_message.match(/generate (\d+) (multiple response|multiple choice)/)
+      number_match = user_message.match(/EXACTLY (\d+) multiple/)
       number_of_questions = number_match ? number_match[1].to_i : 1
       is_mcq = user_message.include?('multiple choice question')
 
@@ -82,7 +82,6 @@ module Langchain::LlmStubs
         questions << (is_mcq ? build_mock_mcq(question_number) : build_mock_mrq(question_number))
       end
       mock_response = { 'questions' => questions }
-
       MockChatResponse.new(mock_response.to_json)
     end
 

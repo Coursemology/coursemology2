@@ -225,7 +225,18 @@ const GenerateMcqMrqQuestionPage = (): JSX.Element => {
           title: conversation.activeSnapshotEditedData.question.title,
         }),
       );
-      generateForm.reset(defaultMcqMrqGenerateFormData);
+
+      // Set the correct generation mode based on snapshot state
+      const isSentinel = snapshot.state === 'sentinel';
+      const defaultMode: 'create' | 'enhance' = isSentinel
+        ? 'create'
+        : 'enhance';
+      const formDataWithCorrectMode: McqMrqGenerateFormData = {
+        ...defaultMcqMrqGenerateFormData,
+        generationMode: defaultMode,
+      };
+
+      generateForm.reset(formDataWithCorrectMode);
       prototypeForm.reset(conversation.activeSnapshotEditedData);
       setLockStates(snapshot.lockStates);
       // Reset options dirty state when switching conversations
@@ -408,6 +419,7 @@ const GenerateMcqMrqQuestionPage = (): JSX.Element => {
                                 optionsRef.current?.updateOptions([]);
                               }
                             }
+
                             // Reset options dirty state when switching snapshots
                             setIsOptionsDirty(false);
                           }
