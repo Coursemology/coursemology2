@@ -9,7 +9,7 @@ import forumsRouter from './forums';
 import groupsRouter from './groups';
 import lessonPlanRouter from './lessonPlan';
 import materialsRouter from './materials';
-import similarityRouter from './similarity';
+import plagiarismRouter from './plagiarism';
 import statisticsRouter from './statistics';
 import surveysRouter from './surveys';
 import usersRouter from './users';
@@ -42,7 +42,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     groupsRouter(t),
     lessonPlanRouter(t),
     materialsRouter(t),
-    similarityRouter(t),
+    plagiarismRouter(t),
     statisticsRouter(t),
     surveysRouter(t),
     usersRouter(t),

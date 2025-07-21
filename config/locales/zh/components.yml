@@ -49,5 +49,5 @@ zh:
       name: 'Koditsu 考试'
     rag_wise:
       name: 'RagWise 自动论坛回复'
-    similarity:
-      name: 'SSID 相似性检查'
+    plagiarism:
+      name: 'SSID 抄袭检查'

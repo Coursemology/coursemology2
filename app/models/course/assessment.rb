@@ -76,7 +76,7 @@ class Course::Assessment < ApplicationRecord
                                          inverse_of: :assessment, dependent: :destroy
   has_one :duplication_traceable, class_name: 'DuplicationTraceable::Assessment',
                                   inverse_of: :assessment, dependent: :destroy
-  has_one :similarity_check, class_name: 'Course::Assessment::SimilarityCheck',
+  has_one :plagiarism_check, class_name: 'Course::Assessment::PlagiarismCheck',
                              inverse_of: :assessment, dependent: :destroy, autosave: true
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             inverse_of: :assessment, dependent: :destroy
@@ -223,8 +223,8 @@ class Course::Assessment < ApplicationRecord
     questions.any?(&:csv_downloadable?)
   end
 
-  def num_similarity_checkable_questions
-    questions.count(&:similarity_checkable?)
+  def num_plagiarism_checkable_questions
+    questions.count(&:plagiarism_checkable?)
   end
 
   def initialize_duplicate(duplicator, other)
