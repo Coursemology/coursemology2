@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import Clear from '@mui/icons-material/Clear';
@@ -10,6 +10,9 @@ import {
   InputAdornment,
   Paper,
   TextareaAutosize,
+  ToggleButton,
+  ToggleButtonGroup,
+  Tooltip,
   Typography,
 } from '@mui/material';
 
@@ -40,6 +43,22 @@ const translations = defineMessages({
   numberOfQuestionsRange: {
     id: 'course.assessment.generation.mrq.numberOfQuestionsRange',
     defaultMessage: 'Please enter a number from {min} to {max}',
+  },
+  enhanceMode: {
+    id: 'course.assessment.generation.enhanceMode',
+    defaultMessage: 'Enhance',
+  },
+  createMode: {
+    id: 'course.assessment.generation.createMode',
+    defaultMessage: 'Create New',
+  },
+  enhanceModeTooltip: {
+    id: 'course.assessment.generation.enhanceModeTooltip',
+    defaultMessage: 'Build upon your current question',
+  },
+  createModeTooltip: {
+    id: 'course.assessment.generation.createModeTooltip',
+    defaultMessage: 'Generate fresh questions from scratch',
   },
 });
 
@@ -96,11 +115,44 @@ const GenerateMcqMrqConversation: FC<Props> = (props) => {
     onClickSnapshot,
   } = props;
 
-  const customPrompt = generateForm.watch('customPrompt');
+  // Store the mode before generation starts to preserve it during generation
+  const [modeBeforeGeneration, setModeBeforeGeneration] = useState(
+    generateForm.getValues('generationMode'),
+  );
 
+  const customPrompt = generateForm.watch('customPrompt');
+  const isEnhanceMode = generateForm.watch('generationMode') === 'enhance';
   const isGenerating = Object.values(snapshots || {}).some(
     (snapshot) => snapshot.state === 'generating',
   );
+
+  // Update the stored mode when not generating
+  useEffect(() => {
+    if (!isGenerating) {
+      setModeBeforeGeneration(generateForm.getValues('generationMode'));
+    }
+  }, [generateForm.watch('generationMode'), isGenerating]);
+
+  // Set default generation mode based on snapshot state
+  useEffect(() => {
+    const currentSnapshot = snapshots?.[activeSnapshotId];
+    const isSentinel = currentSnapshot?.state === 'sentinel';
+    const defaultMode = isSentinel ? 'create' : 'enhance';
+    const currentMode = generateForm.getValues('generationMode');
+
+    // Only update if the current mode doesn't match the expected default
+    if (currentMode !== defaultMode) {
+      generateForm.setValue('generationMode', defaultMode);
+    }
+  }, [activeSnapshotId, snapshots, generateForm]);
+
+  // Set numberOfQuestions to 1 when enhance mode is selected
+  useEffect(() => {
+    const currentMode = generateForm.watch('generationMode');
+    if (currentMode === 'enhance') {
+      generateForm.setValue('numberOfQuestions', 1);
+    }
+  }, [generateForm.watch('generationMode'), generateForm]);
 
   let traversalId: string | undefined = latestSnapshotId;
   const mainlineSnapshots: SnapshotState[] = [];
@@ -183,7 +235,50 @@ const GenerateMcqMrqConversation: FC<Props> = (props) => {
         )}
       </Box>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col my-4">
+        <Controller
+          control={generateForm.control}
+          name="generationMode"
+          render={({ field }): JSX.Element => (
+            <ToggleButtonGroup
+              color="primary"
+              disabled={isGenerating}
+              exclusive
+              fullWidth
+              onChange={(_, newValue) => {
+                // Prevent onChange when disabled to preserve the selected value
+                if (isGenerating) {
+                  return;
+                }
+                if (newValue !== null) {
+                  field.onChange(newValue);
+                }
+              }}
+              size="small"
+              value={isGenerating ? modeBeforeGeneration : field.value}
+            >
+              <Tooltip
+                placement="top"
+                title={t(translations.createModeTooltip)}
+              >
+                <ToggleButton className="flex-1" value="create">
+                  {t(translations.createMode)}
+                </ToggleButton>
+              </Tooltip>
+              <Tooltip
+                placement="top"
+                title={t(translations.enhanceModeTooltip)}
+              >
+                <ToggleButton className="flex-1" value="enhance">
+                  {t(translations.enhanceMode)}
+                </ToggleButton>
+              </Tooltip>
+            </ToggleButtonGroup>
+          )}
+        />
+      </div>
+
+      <div className="flex flex-col">
         <Controller
           control={generateForm.control}
           name="customPrompt"
@@ -193,27 +288,14 @@ const GenerateMcqMrqConversation: FC<Props> = (props) => {
               disabled={isGenerating}
               maxRows={4}
               minRows={4}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#ccc';
-                e.target.style.borderWidth = '1px';
-              }}
               onChange={onChange}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#1976d2';
-                e.target.style.borderWidth = '2px';
-              }}
               placeholder={t(translations.promptPlaceholder)}
-              style={{
-                outline: 'none',
-                border: '1px solid #ccc',
-                borderRadius: '4px',
-              }}
               value={value}
             />
           )}
         />
         <Typography
-          className="mb-1 mr-2 text-right"
+          className="mr-2 text-right"
           color={
             customPrompt.length > MAX_PROMPT_LENGTH ? 'error' : 'textSecondary'
           }
@@ -222,54 +304,63 @@ const GenerateMcqMrqConversation: FC<Props> = (props) => {
           {customPrompt.length} / {MAX_PROMPT_LENGTH}
         </Typography>
       </div>
-
       <div className="flex flex-col gap-2">
         <div className="flex flex-nowrap gap-4 items-center">
-          <Controller
-            control={generateForm.control}
-            name="numberOfQuestions"
-            render={({ field, fieldState }): JSX.Element => {
-              return (
-                <FormTextField
-                  disabled={isGenerating}
-                  disableMargins
-                  field={field}
-                  fieldState={fieldState}
-                  fullWidth
-                  InputProps={{
-                    inputProps: {
-                      min: NUM_OF_QN_MIN,
-                      max: NUM_OF_QN_MAX,
-                      step: 1,
-                      onKeyDown: (e) => {
-                        // Prevent typing minus sign, decimal point, and other non-numeric characters
-                        if (['-', '.', 'e', 'E'].includes(e.key)) {
-                          e.preventDefault();
-                        }
-                      },
-                    },
-                    endAdornment: !isGenerating &&
-                      field.value !== undefined &&
-                      field.value !== null && (
-                        <InputAdornment position="end">
-                          <IconButton
-                            edge="end"
-                            onClick={() => field.onChange('')}
-                            size="small"
-                            tabIndex={-1}
-                          >
-                            <Clear />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                  }}
-                  label={t(translations.numberOfQuestionsField)}
-                  type="number"
-                  variant="filled"
+          {((): JSX.Element => {
+            return (
+              <div
+                className="transition-opacity duration-200 flex-grow"
+                style={{
+                  opacity: isEnhanceMode ? 0 : 1,
+                  pointerEvents: isEnhanceMode ? 'none' : 'auto',
+                }}
+              >
+                <Controller
+                  control={generateForm.control}
+                  name="numberOfQuestions"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormTextField
+                      disabled={isGenerating}
+                      disableMargins
+                      field={field}
+                      fieldState={fieldState}
+                      fullWidth
+                      InputProps={{
+                        inputProps: {
+                          min: NUM_OF_QN_MIN,
+                          max: NUM_OF_QN_MAX,
+                          step: 1,
+                          onKeyDown: (e) => {
+                            if (['-', '.', 'e', 'E'].includes(e.key)) {
+                              e.preventDefault();
+                            }
+                          },
+                        },
+                        endAdornment: !isEnhanceMode &&
+                          !isGenerating &&
+                          field.value !== undefined &&
+                          field.value !== null && (
+                            <InputAdornment position="end">
+                              <IconButton
+                                edge="end"
+                                onClick={() => field.onChange('')}
+                                size="small"
+                                tabIndex={-1}
+                              >
+                                <Clear />
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                      }}
+                      label={t(translations.numberOfQuestionsField)}
+                      type="number"
+                      variant="filled"
+                    />
+                  )}
                 />
-              );
-            }}
-          />
+              </div>
+            );
+          })()}
 
           <Button
             className="w-48 max-h-14"
@@ -282,22 +373,28 @@ const GenerateMcqMrqConversation: FC<Props> = (props) => {
           </Button>
         </div>
 
-        {((): JSX.Element => {
+        {((): JSX.Element | null => {
           const value = generateForm.watch('numberOfQuestions');
           const isOutOfRange =
             value && (value < NUM_OF_QN_MIN || value > NUM_OF_QN_MAX);
-
           return (
-            <Typography
-              className="ml-5"
-              color={isOutOfRange ? 'error' : 'textSecondary'}
-              variant="caption"
+            <div
+              className="transition-opacity duration-300 ml-4 overflow-hidden"
+              style={{
+                opacity: isEnhanceMode ? 0 : 1,
+                pointerEvents: isEnhanceMode ? 'none' : 'auto',
+              }}
             >
-              {t(translations.numberOfQuestionsRange, {
-                min: NUM_OF_QN_MIN,
-                max: NUM_OF_QN_MAX,
-              })}
-            </Typography>
+              <Typography
+                color={isOutOfRange ? 'error' : 'textSecondary'}
+                variant="caption"
+              >
+                {t(translations.numberOfQuestionsRange, {
+                  min: NUM_OF_QN_MIN,
+                  max: NUM_OF_QN_MAX,
+                })}
+              </Typography>
+            </div>
           );
         })()}
       </div>
