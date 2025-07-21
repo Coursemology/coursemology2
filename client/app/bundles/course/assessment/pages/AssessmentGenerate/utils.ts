@@ -365,11 +365,16 @@ export const buildMcqMrqGenerateRequestPayload = (
     isDefaultPrototypeFormData.toString(),
   );
 
-  const sourceQuestionData = {
-    title: prototypeFormData?.question?.title || '',
-    description: prototypeFormData?.question?.description || '',
-    options: prototypeFormData?.options || [],
-  };
+  // If generation mode is 'create', send empty source question data
+  // If generation mode is 'build', send the current prototype form data
+  const sourceQuestionData =
+    generateFormData.generationMode === 'create'
+      ? { title: '', description: '', options: [] }
+      : {
+          title: prototypeFormData?.question?.title || '',
+          description: prototypeFormData?.question?.description || '',
+          options: prototypeFormData?.options || [],
+        };
 
   data.append('source_question_data', JSON.stringify(sourceQuestionData));
 

@@ -25,7 +25,11 @@ const sentinelSnapshot = (
         id: generateSnapshotId(),
         parentId: undefined,
         state: 'sentinel',
-        generateFormData: { customPrompt: '', numberOfQuestions: 1 },
+        generateFormData: {
+          customPrompt: '',
+          numberOfQuestions: 1,
+          generationMode: 'create',
+        },
         questionData: {
           question: {
             title: '',
@@ -48,7 +52,11 @@ const sentinelSnapshot = (
         id: generateSnapshotId(),
         parentId: undefined,
         state: 'sentinel',
-        generateFormData: { customPrompt: '', numberOfQuestions: 1 },
+        generateFormData: {
+          customPrompt: '',
+          numberOfQuestions: 1,
+          generationMode: 'create',
+        },
         questionData: {
           question: {
             title: '',

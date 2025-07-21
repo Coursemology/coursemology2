@@ -17,6 +17,7 @@ export interface ProgrammingGenerateFormData {
 export interface McqMrqGenerateFormData {
   customPrompt: string;
   numberOfQuestions: number;
+  generationMode: 'enhance' | 'create';
 }
 
 export interface ProgrammingPrototypeFormData {
