@@ -17,7 +17,7 @@ class Course::Admin::ComponentSettingsController < Course::Admin::Controller
       setup_koditsu_workspace if is_koditsu_enabled && !current_course.koditsu_workspace_id
 
       is_ssid_enabled = settings_components_params['enabled_component_ids'].
-                        include?('course_similarity_component')
+                        include?('course_plagiarism_component')
       sync_course_ssid_folder(current_course) if is_ssid_enabled && !current_course.ssid_folder_id
 
       render 'edit'

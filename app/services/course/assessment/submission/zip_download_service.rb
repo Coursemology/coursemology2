@@ -8,10 +8,10 @@ class Course::Assessment::Submission::ZipDownloadService
     # @param [String|nil] course_users The subset of course users whose submissions to download.
     # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
     #   'staff', 'staff_w_phantom'
-    # # @param [Boolean] for_ssid_similarity_service Whether the zip is for ssid similarity service.
+    # # @param [Boolean] for_ssid_plagiarism_service Whether the zip is for ssid plagiarism service.
     # @return [String] The path to the zip file.
-    def download_and_zip(course_user, assessment, course_users, for_ssid_similarity_service)
-      service = new(course_user, assessment, course_users, for_ssid_similarity_service)
+    def download_and_zip(course_user, assessment, course_users, for_ssid_plagiarism_service)
+      service = new(course_user, assessment, course_users, for_ssid_plagiarism_service)
       service.download_and_zip
     end
   end
@@ -32,12 +32,12 @@ class Course::Assessment::Submission::ZipDownloadService
 
   private
 
-  def initialize(course_user, assessment, course_users, for_ssid_similarity_service)
+  def initialize(course_user, assessment, course_users, for_ssid_plagiarism_service)
     @course_user = course_user
     @assessment = assessment
     @questions = assessment.questions.to_h { |q| [q.id, q] }
     @course_users = course_users
-    @for_ssid_similarity_service = for_ssid_similarity_service
+    @for_ssid_plagiarism_service = for_ssid_plagiarism_service
     @base_dir = Dir.mktmpdir('coursemology-download-')
   end
 
@@ -46,7 +46,7 @@ class Course::Assessment::Submission::ZipDownloadService
     submissions = @assessment.submissions.by_users(course_user_ids).
                   includes(:answers, experience_points_record: :course_user)
     submissions.find_each do |submission|
-      folder_name = if @for_ssid_similarity_service
+      folder_name = if @for_ssid_plagiarism_service
                       "#{submission.id}_#{submission.course_user.name}"
                     else
                       submission.course_user.name
@@ -54,7 +54,7 @@ class Course::Assessment::Submission::ZipDownloadService
       submission_dir = create_folder(@base_dir, folder_name)
       download_answers(submission, submission_dir)
     end
-    create_skeleton_folder if @for_ssid_similarity_service
+    create_skeleton_folder if @for_ssid_plagiarism_service
   end
 
   # Downloads programming question template files to a 'skeleton' folder in the base directory.
@@ -77,7 +77,7 @@ class Course::Assessment::Submission::ZipDownloadService
     answers = submission.answers.includes(:question).latest_answers.
               select do |answer|
                 question = @questions[answer.question_id]
-                @for_ssid_similarity_service ? question.similarity_checkable? : question.files_downloadable?
+                @for_ssid_plagiarism_service ? question.plagiarism_checkable? : question.files_downloadable?
               end
     answers.each do |answer|
       question_assessment = submission.assessment.question_assessments.

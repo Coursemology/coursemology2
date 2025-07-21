@@ -27,7 +27,7 @@ const actionTypes = mirrorCreator([
   'FETCH_ANCESTOR_STATISTICS_FAILURE',
 ]);
 
-export const similarityWorkflowStates = {
+export const plagiarismWorkflowStates = {
   NotStarted: 'not_started',
   Running: 'running',
   Completed: 'completed',

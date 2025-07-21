@@ -262,6 +262,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
     t.index ["question_id"], name: "index_course_assessment_live_feedbacks_on_question_id"
   end
 
+  create_table "course_assessment_plagiarism_checks", force: :cascade do |t|
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.string "workflow_state", limit: 255, default: "not_started", null: false
+    t.bigint "assessment_id", null: false
+    t.uuid "job_id"
+    t.index ["assessment_id"], name: "fk__course_assessment_plagiarism_checks_assessment_id", unique: true
+    t.index ["job_id"], name: "fk__course_assessment_plagiarism_checks_job_id", unique: true
+  end
+
   create_table "course_assessment_question_bundle_assignments", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "assessment_id", null: false
@@ -434,16 +444,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
     t.index ["actable_type", "actable_id"], name: "index_course_assessment_questions_actable", unique: true
     t.index ["creator_id"], name: "fk__course_assessment_questions_creator_id"
     t.index ["updater_id"], name: "fk__course_assessment_questions_updater_id"
-  end
-
-  create_table "course_assessment_similarity_checks", force: :cascade do |t|
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.string "workflow_state", limit: 255, default: "not_started", null: false
-    t.bigint "assessment_id", null: false
-    t.uuid "job_id"
-    t.index ["assessment_id"], name: "fk__course_assessment_similarity_checks_assessment_id", unique: true
-    t.index ["job_id"], name: "fk__course_assessment_similarity_checks_job_id", unique: true
   end
 
   create_table "course_assessment_skill_branches", id: :serial, force: :cascade do |t|
@@ -1685,6 +1685,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
   add_foreign_key "course_assessment_live_feedbacks", "course_assessment_questions", column: "question_id"
   add_foreign_key "course_assessment_live_feedbacks", "course_assessments", column: "assessment_id"
   add_foreign_key "course_assessment_live_feedbacks", "users", column: "creator_id"
+  add_foreign_key "course_assessment_plagiarism_checks", "course_assessments", column: "assessment_id", name: "fk_course_assessment_plagiarism_checks_assessment_id"
+  add_foreign_key "course_assessment_plagiarism_checks", "jobs", name: "fk_course_assessment_plagiarism_checks_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_question_bundles", column: "bundle_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessment_submissions", column: "submission_id"
   add_foreign_key "course_assessment_question_bundle_assignments", "course_assessments", column: "assessment_id"
@@ -1706,8 +1708,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
   add_foreign_key "course_assessment_question_text_response_solutions", "course_assessment_question_text_responses", column: "question_id", name: "fk_course_assessment_questi_2fbeabfad04f21c2d05c8b2d9100d1c4"
   add_foreign_key "course_assessment_questions", "users", column: "creator_id", name: "fk_course_assessment_questions_creator_id"
   add_foreign_key "course_assessment_questions", "users", column: "updater_id", name: "fk_course_assessment_questions_updater_id"
-  add_foreign_key "course_assessment_similarity_checks", "course_assessments", column: "assessment_id", name: "fk_course_assessment_similarity_checks_assessment_id"
-  add_foreign_key "course_assessment_similarity_checks", "jobs", name: "fk_course_assessment_similarity_checks_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_skill_branches", "courses", name: "fk_course_assessment_skill_branches_course_id"
   add_foreign_key "course_assessment_skill_branches", "users", column: "creator_id", name: "fk_course_assessment_skill_branches_creator_id"
   add_foreign_key "course_assessment_skill_branches", "users", column: "updater_id", name: "fk_course_assessment_skill_branches_updater_id"

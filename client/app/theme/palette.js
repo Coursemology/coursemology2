@@ -1,6 +1,6 @@
 import * as colors from '@mui/material/colors';
 
-import { similarityWorkflowStates } from '../bundles/course/assessment/constants';
+import { plagiarismWorkflowStates } from '../bundles/course/assessment/constants';
 import { workflowStates } from '../bundles/course/assessment/submission/constants';
 import { groupRole } from '../bundles/course/group/constants';
 
@@ -95,11 +95,11 @@ const palette = {
     [groupRole.Manager]: 'bg-red-200',
   },
 
-  assessmentSimilarityStatus: {
-    [similarityWorkflowStates.NotStarted]: 'bg-grey-200',
-    [similarityWorkflowStates.Running]: 'bg-blue-200',
-    [similarityWorkflowStates.Completed]: 'bg-green-200',
-    [similarityWorkflowStates.Failed]: 'bg-red-200',
+  assessmentPlagiarismStatus: {
+    [plagiarismWorkflowStates.NotStarted]: 'bg-grey-200',
+    [plagiarismWorkflowStates.Running]: 'bg-blue-200',
+    [plagiarismWorkflowStates.Completed]: 'bg-green-200',
+    [plagiarismWorkflowStates.Failed]: 'bg-red-200',
   },
 
   submissionIcon: {

@@ -115,7 +115,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     true
   end
 
-  def similarity_checkable?
+  def plagiarism_checkable?
     true
   end
 

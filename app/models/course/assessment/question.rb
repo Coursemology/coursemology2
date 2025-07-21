@@ -112,13 +112,13 @@ class Course::Assessment::Question < ApplicationRecord
     end
   end
 
-  # Whether the question has similarity check.
+  # Whether the question has plagiarism check.
   # Currently, this is only for programming questions.
   #
   # @return [Boolean]
-  def similarity_checkable?
-    if actable.self_respond_to?(:similarity_checkable?)
-      actable.similarity_checkable?
+  def plagiarism_checkable?
+    if actable.self_respond_to?(:plagiarism_checkable?)
+      actable.plagiarism_checkable?
     else
       false
     end

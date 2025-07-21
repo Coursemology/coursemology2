@@ -75,7 +75,7 @@ export const COURSE_COMPONENT_ICONS = {
   lessonPlan: { outlined: BookOutlined, filled: Book },
   forum: { outlined: ForumOutlined, filled: Forum },
   manageUsers: { outlined: ManageAccountsOutlined, filled: ManageAccounts },
-  similarity: { outlined: PlagiarismOutlined, filled: Plagiarism },
+  plagiarism: { outlined: PlagiarismOutlined, filled: Plagiarism },
   statistics: { outlined: InsertChartOutlined, filled: InsertChart },
   experience: { outlined: StarOutline, filled: Star },
   duplication: { outlined: FileCopyOutlined, filled: FileCopy },
