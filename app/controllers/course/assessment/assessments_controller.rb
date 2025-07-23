@@ -246,6 +246,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     authorize!(:read_statistics, current_course)
   end
 
+  # This endpoint provides the view. The actual data is fetched client-side from the plagiarism module.
+  def plagiarism
+    authorize!(:manage_plagiarism, current_course)
+  end
+
   protected
 
   def load_assessment_options

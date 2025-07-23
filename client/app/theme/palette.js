@@ -1,5 +1,6 @@
 import * as colors from '@mui/material/colors';
 
+import { plagiarismWorkflowStates } from '../bundles/course/assessment/constants';
 import { workflowStates } from '../bundles/course/assessment/submission/constants';
 import { groupRole } from '../bundles/course/group/constants';
 
@@ -92,6 +93,13 @@ const palette = {
   groupRole: {
     [groupRole.Normal]: 'bg-green-200',
     [groupRole.Manager]: 'bg-red-200',
+  },
+
+  assessmentPlagiarismStatus: {
+    [plagiarismWorkflowStates.NotStarted]: 'bg-grey-200',
+    [plagiarismWorkflowStates.Running]: 'bg-blue-200',
+    [plagiarismWorkflowStates.Completed]: 'bg-green-200',
+    [plagiarismWorkflowStates.Failed]: 'bg-red-200',
   },
 
   submissionIcon: {

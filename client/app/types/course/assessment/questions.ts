@@ -8,6 +8,7 @@ export interface QuestionData {
   defaultTitle: string;
   title: string | null;
   unautogradable: boolean;
+  plagiarismCheckable: boolean;
   type: string;
   isCompatibleWithKoditsu?: boolean;
 

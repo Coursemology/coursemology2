@@ -49,3 +49,5 @@ en:
       name: 'Koditsu Exam'
     rag_wise:
       name: 'RagWise Auto Forum Response'
+    plagiarism:
+      name: 'SSID Plagiarism Check'

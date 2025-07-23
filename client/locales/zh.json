@@ -2273,6 +2273,9 @@
   "course.assessment.show.notAutogradable": {
     "defaultMessage": "不能自动升级"
   },
+  "course.assessment.show.plagiarismCheckable": {
+    "defaultMessage": "具有抄袭检查"
+  },
   "course.assessment.show.press": {
     "defaultMessage": "按下"
   },
@@ -2473,6 +2476,51 @@
   },
   "course.assessment.submission.GetHelpChatPage.codeUpdated": {
     "defaultMessage": "代码已更新"
+  },
+  "course.assessment.plagiarism.plagiarism": {
+    "defaultMessage": "抄袭结果"
+  },
+  "course.assessment.plagiarism.status": {
+    "defaultMessage": "抄袭检查状态"
+  },
+  "course.assessment.plagiarism.lastRunTime": {
+    "defaultMessage": "上次运行时间：{date}"
+  },
+  "course.assessment.plagiarism.start": {
+    "defaultMessage": "新的抄袭检查"
+  },
+  "course.assessment.plagiarism.notStarted": {
+    "defaultMessage": "尚未运行抄袭检查"
+  },
+  "course.assessment.plagiarism.confirmStartTitle": {
+    "defaultMessage": "确认抄袭检查？"
+  },
+  "course.assessment.plagiarism.confirmStartMessage": {
+    "defaultMessage": "运行新的抄袭检查将删除之前的结果。"
+  },
+  "course.assessment.plagiarism.results": {
+    "defaultMessage": "抄袭结果（前 100 个最相似的提交对）"
+  },
+  "course.assessment.plagiarism.baseSubmission": {
+    "defaultMessage": "基准提交"
+  },
+  "course.assessment.plagiarism.comparedSubmission": {
+    "defaultMessage": "比较提交"
+  },
+  "course.assessment.plagiarism.similarityScore": {
+    "defaultMessage": "相似性分数"
+  },
+  "course.assessment.plagiarism.actions": {
+    "defaultMessage": "操作"
+  },
+  "course.assessment.plagiarism.viewReport": {
+    "defaultMessage": "查看报告"
+  },
+  "course.assessment.plagiarism.downloadPdf": {
+    "defaultMessage": "下载 PDF"
+  },
+  "course.assessment.plagiarism.searchByStudentName": {
+    "defaultMessage": "按学生姓名搜索"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "答案"
@@ -5194,6 +5242,78 @@
   },
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "删除"
+  },
+  "course.plagiarism.PlagiarismIndex.header.plagiarism": {
+    "defaultMessage": "抄袭检查"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.assessment": {
+    "defaultMessage": "测验"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.numSubmitted": {
+    "defaultMessage": "# 提交"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.numCheckableQuestions": {
+    "defaultMessage": "# 可检查问题"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.lastSubmittedAt": {
+    "defaultMessage": "最后提交于"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.lastRunStatus": {
+    "defaultMessage": "状态"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.lastRunTime": {
+    "defaultMessage": "最后运行于"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.statusNotStarted": {
+    "defaultMessage": "未开始"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.statusRunning": {
+    "defaultMessage": "运行中"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.statusCompleted": {
+    "defaultMessage": "已完成"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.statusFailed": {
+    "defaultMessage": "失败"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.noPlagiarismCheckableQuestions": {
+    "defaultMessage": "没有可检查的问题"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": { 
+    "defaultMessage": "提交数量不足"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.runAssessmentsPlagiarism": {
+    "defaultMessage": "新的抄袭检查 ({count})"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.runPlagiarismCheckSuccess": {
+    "defaultMessage": "已开始 {count, plural, =1 {# 个测验} other {# 个测验}} 的抄袭检查"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.runPlagiarismCheckError": {
+    "defaultMessage": "无法为某些测验开始抄袭检查"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.searchByAssessmentTitle": {
+    "defaultMessage": "按测验标题搜索"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.actions": {
+    "defaultMessage": "操作"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.runPlagiarismCheck": {
+    "defaultMessage": "运行抄袭检查"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.viewResults": {
+    "defaultMessage": "查看结果"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.newSubmissionsWarning": {
+    "defaultMessage": "自上次抄袭检查以来检测到新提交"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.noNewSubmissionsWarning": {
+    "defaultMessage": "自上次抄袭检查以来没有新提交"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.confirmRerunTitle": {
+    "defaultMessage": "确认抄袭检查？"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.confirmRerunMessage": {
+    "defaultMessage": "某些选定的测验已经完成了抄袭检查。运行新的抄袭检查将删除之前的结果。"
   },
   "course.statistics.StatisticsIndex.getHelp.header": {
     "defaultMessage": "最近实时帮助活动（{total} 个对话）"

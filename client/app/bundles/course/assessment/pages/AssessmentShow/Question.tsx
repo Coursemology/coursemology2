@@ -111,6 +111,15 @@ const Question = (props: QuestionProps): JSX.Element => {
                       variant="outlined"
                     />
                   )}
+
+                  {question.plagiarismCheckable && (
+                    <Chip
+                      color="default"
+                      label={t(translations.plagiarismCheckable)}
+                      size="small"
+                      variant="outlined"
+                    />
+                  )}
                 </div>
               </div>
 

@@ -49,3 +49,5 @@ ko:
       name: 'Koditsu 시험'
     rag_wise:
       name: 'RagWise 자동 포럼 응답'
+    plagiarism:
+      name: 'SSID 표절 검사'

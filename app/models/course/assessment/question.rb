@@ -112,6 +112,18 @@ class Course::Assessment::Question < ApplicationRecord
     end
   end
 
+  # Whether the question has plagiarism check.
+  # Currently, this is only for programming questions.
+  #
+  # @return [Boolean]
+  def plagiarism_checkable?
+    if actable.self_respond_to?(:plagiarism_checkable?)
+      actable.plagiarism_checkable?
+    else
+      false
+    end
+  end
+
   # Copy attributes for question from the object being duplicated.
   #
   # @param other [Object] The source object to copy attributes from.

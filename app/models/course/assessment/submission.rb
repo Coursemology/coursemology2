@@ -340,7 +340,7 @@ class Course::Assessment::Submission < ApplicationRecord
     return unless existing
 
     errors.clear
-    errors.add(:base, I18n.t('activerecord.errors.models.course/assessment/'\
+    errors.add(:base, I18n.t('activerecord.errors.models.course/assessment/' \
                              'submission.submission_already_exists'))
   end
 

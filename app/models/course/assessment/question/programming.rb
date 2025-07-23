@@ -115,6 +115,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     true
   end
 
+  def plagiarism_checkable?
+    true
+  end
+
   def initialize_duplicate(duplicator, other)
     copy_attributes(other)
 

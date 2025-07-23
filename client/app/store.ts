@@ -34,6 +34,7 @@ import learningMapReducer from './bundles/course/learning-map/store';
 import lessonPlanReducer from './bundles/course/lesson-plan/store';
 import levelsReducer from './bundles/course/level/store';
 import foldersReducer from './bundles/course/material/folders/store';
+import plagiarismReducer from './bundles/course/plagiarism/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
 import surveysReducer from './bundles/course/survey/store';
 import userEmailSubscriptionsReducer from './bundles/course/user-email-subscriptions/store';
@@ -69,6 +70,7 @@ const rootReducer = combineReducers({
   learningMap: learningMapReducer,
   lessonPlan: lessonPlanReducer,
   levels: levelsReducer,
+  plagiarism: plagiarismReducer,
   scribingQuestion: scribingQuestionReducer,
   skills: skillsReducer,
   submissions: submissionsReducer,

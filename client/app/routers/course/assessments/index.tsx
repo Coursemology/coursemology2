@@ -153,6 +153,22 @@ const assessmentsRouter: Translated<RouteObject> = (t) => ({
             };
           },
         },
+        {
+          path: 'plagiarism',
+          lazy: async (): Promise<RouteObject> => {
+            const AssessmentPlagiarism = (
+              await import(
+                /* webpackChunkName: 'AssessmentPlagiarism' */
+                'course/assessment/pages/AssessmentPlagiarism'
+              )
+            ).default;
+
+            return {
+              Component: AssessmentPlagiarism,
+              handle: AssessmentPlagiarism.handle,
+            };
+          },
+        },
         submissionsRouter(t),
         questionsRouter(t),
       ],

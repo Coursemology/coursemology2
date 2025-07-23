@@ -2324,6 +2324,9 @@
   "course.assessment.show.notAutogradable": {
     "defaultMessage": "Not autogradable"
   },
+  "course.assessment.show.plagiarismCheckable": {
+    "defaultMessage": "Has plagiarism check"
+  },
   "course.assessment.show.press": {
     "defaultMessage": "Press"
   },
@@ -2524,6 +2527,51 @@
   },
   "course.assessment.submission.GetHelpChatPage.codeUpdated": {
     "defaultMessage": "Code Updated"
+  },
+  "course.assessment.plagiarism.plagiarism": {
+    "defaultMessage": "Plagiarism Results"
+  },
+  "course.assessment.plagiarism.status": {
+    "defaultMessage": "Plagiarism Check Status"
+  },
+  "course.assessment.plagiarism.lastRunTime": {
+    "defaultMessage": "Last run at: {date}"
+  },
+  "course.assessment.plagiarism.start": {
+    "defaultMessage": "New Plagiarism Check"
+  },
+  "course.assessment.plagiarism.notStarted": {
+    "defaultMessage": "No plagiarism check has been run"
+  },
+  "course.assessment.plagiarism.confirmStartTitle": {
+    "defaultMessage": "Confirm Plagiarism Check?"
+  },
+  "course.assessment.plagiarism.confirmStartMessage": {
+    "defaultMessage": "Running a new plagiarism check will remove the previous results."
+  },
+  "course.assessment.plagiarism.results": {
+    "defaultMessage": "Plagiarism Results (Top 100 Most Similar Submission Pairs)"
+  },
+  "course.assessment.plagiarism.baseSubmission": {
+    "defaultMessage": "Base Submission"
+  },
+  "course.assessment.plagiarism.comparedSubmission": {
+    "defaultMessage": "Compared Submission"
+  },
+  "course.assessment.plagiarism.similarityScore": {
+    "defaultMessage": "Similarity Score"
+  },
+  "course.assessment.plagiarism.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.assessment.plagiarism.viewReport": {
+    "defaultMessage": "View Report"
+  },
+  "course.assessment.plagiarism.downloadPdf": {
+    "defaultMessage": "Download PDF"
+  },
+  "course.assessment.plagiarism.searchByStudentName": {
+    "defaultMessage": "Search by Student Name"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "Answers"
@@ -5251,6 +5299,78 @@
   },
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "Delete"
+  },
+  "course.plagiarism.PlagiarismIndex.header.plagiarism": {
+    "defaultMessage": "Plagiarism Check"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.assessment": {
+    "defaultMessage": "Assessments"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.numSubmitted": {
+    "defaultMessage": "# Submissions"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.numCheckableQuestions": {
+    "defaultMessage": "# Checkable Questions"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.lastSubmittedAt": {
+    "defaultMessage": "Last Submission At"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.lastRunStatus": {
+    "defaultMessage": "Status"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.lastRunTime": {
+    "defaultMessage": "Last Run At"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.statusNotStarted": {
+    "defaultMessage": "Not Started"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.statusRunning": {
+    "defaultMessage": "Running"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.statusCompleted": {
+    "defaultMessage": "Completed"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.statusFailed": {
+    "defaultMessage": "Failed"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.noPlagiarismCheckableQuestions": {
+    "defaultMessage": "No checkable questions"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.notEnoughSubmissions": { 
+    "defaultMessage": "Not enough submissions"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.runAssessmentsPlagiarism": {
+    "defaultMessage": "New Plagiarism Check ({count})"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.runPlagiarismCheckSuccess": {
+    "defaultMessage": "Started plagiarism check for {count, plural, =1 {# assessment} other {# assessments}}"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.runPlagiarismCheckError": {
+    "defaultMessage": "Failed to start plagiarism checks for some assessments"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.searchByAssessmentTitle": {
+    "defaultMessage": "Search by Assessment Title"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.actions": {
+    "defaultMessage": "Actions"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.runPlagiarismCheck": {
+    "defaultMessage": "Run Plagiarism Check"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.viewResults": {
+    "defaultMessage": "View Results"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.newSubmissionsWarning": {
+    "defaultMessage": "New submissions detected since last plagiarism run"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.noNewSubmissionsWarning": {
+    "defaultMessage": "No new submissions since last plagiarism run"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.confirmRerunTitle": {
+    "defaultMessage": "Confirm Plagiarism Check?"
+  },
+  "course.plagiarism.PlagiarismIndex.assessments.confirmRerunMessage": {
+    "defaultMessage": "Some of the selected assessments already have completed plagiarism checks. Running a new plagiarism check will remove the previous results."
   },
   "course.statistics.StatisticsIndex.getHelp.header": {
     "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"

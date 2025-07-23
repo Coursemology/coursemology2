@@ -20,6 +20,7 @@ import LevelAPI from './Level';
 import MaterialFoldersAPI from './MaterialFolders';
 import MaterialsAPI from './Materials';
 import PersonalTimesAPI from './PersonalTimes';
+import PlagiarismAPI from './Plagiarism';
 import ReferenceTimelinesAPI from './ReferenceTimelines';
 import StatisticsAPI from './Statistics';
 import StoriesAPI from './Stories';
@@ -53,6 +54,7 @@ const CourseAPI = {
   materials: new MaterialsAPI(),
   materialFolders: new MaterialFoldersAPI(),
   personalTimes: new PersonalTimesAPI(),
+  plagiarism: new PlagiarismAPI(),
   referenceTimelines: new ReferenceTimelinesAPI(),
   statistics: StatisticsAPI,
   submissions: new SubmissionsAPI(),
