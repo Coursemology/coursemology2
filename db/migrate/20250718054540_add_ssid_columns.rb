@@ -8,10 +8,6 @@ class AddSsidColumns < ActiveRecord::Migration[7.2]
     add_column :course_assessments, :ssid_folder_id, :uuid, null: true
     add_index :course_assessments, :ssid_folder_id, unique: true
 
-    # for submission
-    add_column :course_assessment_submissions, :ssid_submission_id, :uuid, null: true
-    add_index :course_assessment_submissions, :ssid_submission_id, unique: true
-
     # assessment plagiarism check table
     create_table :course_assessment_plagiarism_checks do |t|
       t.datetime :created_at, precision: nil, null: false

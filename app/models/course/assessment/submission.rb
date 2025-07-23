@@ -55,7 +55,6 @@ class Course::Assessment::Submission < ApplicationRecord
   validates :updater, presence: true
   validates :assessment, presence: true
   validates :last_graded_time, presence: true
-  validates :ssid_submission_id, uniqueness: { if: :ssid_submission_id_changed? }, allow_nil: true
 
   belongs_to :assessment, inverse_of: :submissions
 

@@ -13,7 +13,6 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   def run_plagiarism_check
     create_ssid_folders
     run_upload_answers
-    sync_ssid_submissions
     send_plagiarism_check_request
 
     poll_count = 0
@@ -30,16 +29,17 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def fetch_plagiarism_result
+    ssid_id_to_submission_hash = sync_ssid_submissions
     response = fetch_ssid_submission_pair_data
-
-    ssid_id_to_submission_hash = @assessment.submissions.
-                                 where.not(ssid_submission_id: nil).
-                                 index_by(&:ssid_submission_id)
 
     submission_pair_data = response['submissionPairs']
     submission_pair_data.map do |pair|
       base_submission = ssid_id_to_submission_hash[pair['baseSubmission']]
+      next unless base_submission
+
       compared_submission = ssid_id_to_submission_hash[pair['comparedSubmission']]
+      next unless compared_submission
+
       {
         base_submission: base_submission,
         compared_submission: compared_submission,
@@ -107,12 +107,13 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def sync_ssid_submissions
-    fetch_ssid_submissions.each do |ssid_submission|
-      submission_id = ssid_submission['name'].split('_').first.to_i
-      ssid_submission_id = ssid_submission['id']
+    submissions_by_id = @assessment.submissions.index_by(&:id)
 
-      @assessment.submissions.find_by(id: submission_id)&.update!(ssid_submission_id: ssid_submission_id)
-    end
+    fetch_ssid_submissions.filter_map do |ssid_submission|
+      submission_id = ssid_submission['name'].split('_').first.to_i
+      submission = submissions_by_id[submission_id]
+      [ssid_submission['id'], submission] if submission
+    end.to_h
   end
 
   def fetch_ssid_submission_pair_data

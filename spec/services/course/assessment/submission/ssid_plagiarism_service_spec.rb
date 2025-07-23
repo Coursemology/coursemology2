@@ -50,12 +50,6 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
            { 'Content-Type': 'application/json' },
            Ssid::ApiStubs::UPLOAD_ANSWERS_SUCCESS[:body]]
         end
-        stubs.get(/folders\/.*\/submissions/) do |env|
-          expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/submissions")
-          [Ssid::ApiStubs::FETCH_SSID_SUBMISSIONS_SUCCESS[:status],
-           { 'Content-Type': 'application/json' },
-           Ssid::ApiStubs::FETCH_SSID_SUBMISSIONS_SUCCESS[:body]]
-        end
         stubs.post(/folders\/.*\/plagiarism-checks/) do |env|
           expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/plagiarism-checks")
           [Ssid::ApiStubs::SEND_PLAGIARISM_CHECK_SUCCESS[:status],
@@ -80,6 +74,12 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
 
     describe '#fetch_plagiarism_result' do
       before do
+        stubs.get(/folders\/.*\/submissions/) do |env|
+          expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/submissions")
+          [Ssid::ApiStubs::FETCH_SSID_SUBMISSIONS_SUCCESS[:status],
+           { 'Content-Type': 'application/json' },
+           Ssid::ApiStubs::FETCH_SSID_SUBMISSIONS_SUCCESS[:body]]
+        end
         stubs.get(/folders\/.*\/plagiarism-checks\/latest/) do |env|
           expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/plagiarism-checks/latest")
           [Ssid::ApiStubs::FETCH_SSID_SUBMISSION_PAIR_DATA_SUCCESS[:status],

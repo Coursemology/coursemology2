@@ -511,12 +511,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
     t.string "session_id", limit: 255
     t.datetime "submitted_at", precision: nil
     t.datetime "last_graded_time", precision: nil, default: "2021-10-24 14:11:56"
-    t.uuid "ssid_submission_id"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
     t.index ["publisher_id"], name: "fk__course_assessment_submissions_publisher_id"
-    t.index ["ssid_submission_id"], name: "index_course_assessment_submissions_on_ssid_submission_id", unique: true
     t.index ["updater_id"], name: "fk__course_assessment_submissions_updater_id"
   end
 
