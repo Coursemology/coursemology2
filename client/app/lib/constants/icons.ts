@@ -39,6 +39,8 @@ import {
   SendOutlined,
   Settings,
   SettingsOutlined,
+  SmartToy,
+  SmartToyOutlined,
   Speed,
   SpeedOutlined,
   Stairs,
@@ -85,6 +87,7 @@ export const COURSE_COMPONENT_ICONS = {
   map: { outlined: MapOutlined, filled: MapIcon },
   learn: { outlined: AssistantOutlined, filled: Assistant },
   mission_control: { outlined: SpeedOutlined, filled: Speed },
+  chatbot: { outlined: SmartToyOutlined, filled: SmartToy },
 } satisfies Record<string, IconTuple>;
 
 export type CourseComponentIconName = keyof typeof COURSE_COMPONENT_ICONS;

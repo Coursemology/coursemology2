@@ -9,6 +9,7 @@ import forumsRouter from './forums';
 import groupsRouter from './groups';
 import lessonPlanRouter from './lessonPlan';
 import materialsRouter from './materials';
+import scholaisticRouter from './scholaistic';
 import statisticsRouter from './statistics';
 import surveysRouter from './surveys';
 import usersRouter from './users';
@@ -45,6 +46,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     surveysRouter(t),
     usersRouter(t),
     videosRouter(t),
+    scholaisticRouter(t),
     {
       index: true,
       lazy: async (): Promise<RouteObject> => {

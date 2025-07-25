@@ -1558,7 +1558,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_19_030938) do
     t.string "type", limit: 255, null: false
     t.string "name", limit: 255, null: false
     t.integer "parent_id"
-    t.serial "weight"
+    t.serial "weight", null: false
     t.boolean "enabled", default: true, null: false
     t.boolean "default_evaluator_whitelisted", default: true, null: false
     t.boolean "codaveri_evaluator_whitelisted", default: false, null: false

@@ -51,6 +51,9 @@ class CourseUser < ApplicationRecord
   has_many :personal_times, class_name: 'Course::PersonalTime', inverse_of: :course_user, dependent: :destroy
   belongs_to :reference_timeline, class_name: 'Course::ReferenceTimeline', inverse_of: :course_users, optional: true
 
+  has_one :scholaistic_course_user, class_name: Course::Scholaistic::CourseUser.name,
+                                    inverse_of: :course_user, dependent: :destroy
+
   default_scope { where(deleted_at: nil) }
 
   validate :validate_reference_timeline_belongs_to_course

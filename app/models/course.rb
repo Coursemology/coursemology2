@@ -87,6 +87,9 @@ class Course < ApplicationRecord
   has_one :duplication_traceable, class_name: 'DuplicationTraceable::Course',
                                   inverse_of: :course, dependent: :destroy
 
+  # has_many :scholaistic_assessments, through: :lesson_plan_items, source: :actable,
+  #                                    source_type: Course::Scholaistic::Assessment.name
+
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
 
   calculated :user_count, (lambda do

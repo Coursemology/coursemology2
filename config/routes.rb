@@ -142,6 +142,10 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :scholaistic do
+        get 'assessments', to: 'assessments#index'
+      end
+
       namespace :admin do
         get '/' => 'admin#index'
         patch '/' => 'admin#update'
@@ -193,6 +197,15 @@ Rails.application.routes.draw do
 
         get 'stories' => 'stories_settings#edit'
         patch 'stories' => 'stories_settings#update'
+
+        scope 'scholaistic', as: :scholaistic do
+          get '/' => 'scholaistic_settings#edit'
+          patch '/' => 'scholaistic_settings#update'
+
+          get 'link_course' => 'scholaistic_settings#link_course'
+          post 'confirm_link_course' => 'scholaistic_settings#confirm_link_course'
+          post 'unlink_course' => 'scholaistic_settings#unlink_course'
+        end
 
         get 'rag_wise' => 'rag_wise_settings#edit'
         patch 'rag_wise' => 'rag_wise_settings#update'
