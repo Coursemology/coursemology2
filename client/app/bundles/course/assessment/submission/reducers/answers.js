@@ -29,7 +29,7 @@ export default function (state = initialState, action) {
       const clientVersionBE = answerValue.clientVersion;
       const clientVersionFE = state.clientVersionByAnswerId[answerId];
 
-      // When both client versions are different, it means that race condition has occured
+      // When both client versions are different, it means that race condition has occurred
       // i.e. FE answer has been updated (yet to be saved due to debouncing) but BE is returning older result
       // As such, keep FE answer and do not update the answer fields until the next autosave is triggered
       if (clientVersionFE !== clientVersionBE) {

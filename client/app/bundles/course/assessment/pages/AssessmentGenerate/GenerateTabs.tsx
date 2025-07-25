@@ -112,53 +112,57 @@ const GenerateTabs: FC<Props> = (props) => {
                   className="min-h-17 p-2"
                   id={metadata.id}
                   label={
-                    <span>
+                    <span className="flex items-center min-w-0 max-w-full">
                       {metadata.isGenerating && (
                         <LoadingIndicator
                           bare
-                          className={`mr-2${metadata.id === activeConversationId ? '' : ' text-gray-600'}`}
+                          className={`mr-2 flex-shrink-0${metadata.id === activeConversationId ? '' : ' text-gray-600'}`}
                           size={15}
                         />
                       )}
-                      {metadata.title ?? 'Untitled Question'}
-                      <IconButton
-                        className="-ml-0.25 -mr-0.25 py-0 px-0.5 scale-[0.86] origin-right"
-                        color="inherit"
-                        component="span"
-                        disabled={metadata.isGenerating}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          duplicateConversation(conversations[metadata.id]);
-                        }}
-                        onMouseDown={(e) => {
-                          e.stopPropagation();
-                        }}
-                        size="small"
-                      >
-                        <ContentCopy />
-                      </IconButton>
-                      <IconButton
-                        className="-ml-0.25 -mr-0.25 py-0 px-0.5 scale-[0.86] origin-right"
-                        color="inherit"
-                        component="span"
-                        disabled={
-                          conversationIds.length <= 1 || metadata.isGenerating
-                        }
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (metadata.hasData) {
-                            setConversationToDeleteId(metadata.id);
-                          } else {
-                            deleteConversation(conversations[metadata.id]);
+                      <span className="overflow-hidden text-ellipsis whitespace-nowrap min-w-0 flex-1">
+                        {metadata.title ?? 'Untitled Question'}
+                      </span>
+                      <div className="flex items-center flex-shrink-0 ml-1">
+                        <IconButton
+                          className="-ml-0.25 -mr-0.25 py-0 px-0.5 scale-[0.86] origin-right"
+                          color="inherit"
+                          component="span"
+                          disabled={metadata.isGenerating}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            duplicateConversation(conversations[metadata.id]);
+                          }}
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                          }}
+                          size="small"
+                        >
+                          <ContentCopy />
+                        </IconButton>
+                        <IconButton
+                          className="-ml-0.25 -mr-0.25 py-0 px-0.5 scale-[0.86] origin-right"
+                          color="inherit"
+                          component="span"
+                          disabled={
+                            conversationIds.length <= 1 || metadata.isGenerating
                           }
-                        }}
-                        onMouseDown={(e) => {
-                          e.stopPropagation();
-                        }}
-                        size="small"
-                      >
-                        <Close />
-                      </IconButton>
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (metadata.hasData) {
+                              setConversationToDeleteId(metadata.id);
+                            } else {
+                              deleteConversation(conversations[metadata.id]);
+                            }
+                          }}
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                          }}
+                          size="small"
+                        >
+                          <Close />
+                        </IconButton>
+                      </div>
                     </span>
                   }
                   value={metadata.id}

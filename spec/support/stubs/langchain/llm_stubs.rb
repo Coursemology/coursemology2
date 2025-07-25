@@ -16,6 +16,8 @@ module Langchain::LlmStubs
       # add more llm response use cases here as needed
       if rubric_grading_request?(system_message, user_message)
         handle_rubric_grading(system_message, user_message)
+      elsif mrq_generation_request?(system_message, user_message)
+        handle_mrq_generation(system_message, user_message)
       elsif output_fixing_request?(system_message, user_message)
         handle_output_fixing(system_message, user_message)
       else
@@ -27,6 +29,11 @@ module Langchain::LlmStubs
 
     def rubric_grading_request?(system_message, _user_message)
       system_message.include?('rubric') && system_message.include?('grade')
+    end
+
+    def mrq_generation_request?(system_message, _user_message)
+      system_message.include?('multiple response questions') ||
+        system_message.include?('multiple choice questions')
     end
 
     def output_fixing_request?(_system_message, user_message)
@@ -62,6 +69,55 @@ module Langchain::LlmStubs
         }
       end
       MockChatResponse.new(mock_response.to_json)
+    end
+
+    def handle_mrq_generation(_system_message, user_message)
+      number_match = user_message.match(/generate (\d+) (multiple response|multiple choice)/)
+      number_of_questions = number_match ? number_match[1].to_i : 1
+      is_mcq = user_message.include?('multiple choice question')
+
+      questions = []
+      number_of_questions.times do |i|
+        question_number = i + 1
+        questions << (is_mcq ? build_mock_mcq(question_number) : build_mock_mrq(question_number))
+      end
+      mock_response = { 'questions' => questions }
+
+      MockChatResponse.new(mock_response.to_json)
+    end
+
+    def build_mock_mcq(question_number)
+      {
+        'title' => "Mock generated MCQ Question #{question_number}",
+        'description' => "Mock description for multiple choice question #{question_number}.",
+        'options' => [
+          { 'option' => "Option A for question #{question_number}", 'correct' => true,
+            'explanation' => 'This is correct' },
+          { 'option' => "Option B for question #{question_number}", 'correct' => false,
+            'explanation' => 'This is incorrect' },
+          { 'option' => "Option C for question #{question_number}", 'correct' => false,
+            'explanation' => 'This is incorrect' },
+          { 'option' => "Option D for question #{question_number}", 'correct' => false,
+            'explanation' => 'This is incorrect' }
+        ]
+      }
+    end
+
+    def build_mock_mrq(question_number)
+      {
+        'title' => "Mock generated MRQ Question #{question_number}",
+        'description' => "Mock description for multiple response question #{question_number}.",
+        'options' => [
+          { 'option' => "Option A for question #{question_number}", 'correct' => true,
+            'explanation' => 'This is correct' },
+          { 'option' => "Option B for question #{question_number}", 'correct' => true,
+            'explanation' => 'This is also correct' },
+          { 'option' => "Option C for question #{question_number}", 'correct' => false,
+            'explanation' => 'This is incorrect' },
+          { 'option' => "Option D for question #{question_number}", 'correct' => false,
+            'explanation' => 'This is also incorrect' }
+        ]
+      }
     end
 
     def extract_random_criterion(system_message)

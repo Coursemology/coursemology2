@@ -38,7 +38,7 @@ const translations = defineMessages({
   },
   requestFailedMessage: {
     id: 'course.courses.CourseEnrolOptions.requestFailedMessage',
-    defaultMessage: 'An error occured, please try again later.',
+    defaultMessage: 'An error occurred, please try again later.',
   },
 });
 

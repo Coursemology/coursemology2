@@ -85,6 +85,11 @@ interface NewQuestionBuilderData {
   url: string;
 }
 
+interface GenerateQuestionBuilderData {
+  type: keyof typeof QuestionType;
+  url: string;
+}
+
 export interface AssessmentData extends AssessmentActionsData {
   id: number;
   title: string;
@@ -139,7 +144,7 @@ export interface AssessmentData extends AssessmentActionsData {
   hasUnautogradableQuestions?: boolean;
   questions?: QuestionData[];
   newQuestionUrls?: NewQuestionBuilderData[];
-  generateQuestionUrl?: string;
+  generateQuestionUrls?: GenerateQuestionBuilderData[];
 }
 
 export interface UnauthenticatedAssessmentData {

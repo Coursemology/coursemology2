@@ -15,7 +15,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { CodaveriGenerateFormData, SnapshotState } from './types';
+import { ProgrammingGenerateFormData, SnapshotState } from '../types';
 
 const translations = defineMessages({
   languageField: {
@@ -54,7 +54,7 @@ const ConversationSnapshot: FC<{
         {snapshot.state === 'success' && (
           <DoneAll className="mr-1 text-gray-600" fontSize="small" />
         )}
-        {snapshot?.codaveriData?.customPrompt}
+        {snapshot?.generateFormData?.customPrompt}
       </Typography>
     </div>
   );
@@ -62,7 +62,7 @@ const ConversationSnapshot: FC<{
 
 interface Props {
   onGenerate: () => Promise<void>;
-  codaveriForm: UseFormReturn<CodaveriGenerateFormData>;
+  codaveriForm: UseFormReturn<ProgrammingGenerateFormData>;
   languages: object[];
   snapshots: { [id: string]: SnapshotState };
   activeSnapshotId: string;
@@ -70,7 +70,7 @@ interface Props {
   onClickSnapshot: (snapshot: SnapshotState) => void;
 }
 
-const GenerateConversation: FC<Props> = (props) => {
+const GenerateProgrammingConversation: FC<Props> = (props) => {
   const { t } = useTranslation();
   const {
     languages,
@@ -212,4 +212,4 @@ const GenerateConversation: FC<Props> = (props) => {
   );
 };
 
-export default GenerateConversation;
+export default GenerateProgrammingConversation;
