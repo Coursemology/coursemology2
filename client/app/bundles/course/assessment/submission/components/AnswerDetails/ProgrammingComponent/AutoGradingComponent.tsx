@@ -43,11 +43,6 @@ const translations = defineMessages({
   },
 });
 
-interface TestCaseResultCounts {
-  passed: number;
-  total: number;
-}
-
 const AutoGradingItemComponent: FC<{ testCase: ProgrammingAutoGradingData }> = (
   props,
 ) => {
@@ -60,26 +55,32 @@ const AutoGradingItemComponent: FC<{ testCase: ProgrammingAutoGradingData }> = (
           {t(translations.answerGradedOnPastSnapshot)}
         </Alert>
       )}
-      {testCase.public_test && testCase.public_test.length > 0 && (
-        <TestCaseComponent
-          testCaseResults={testCase.public_test}
-          testCaseType="publicTestCases"
-        />
-      )}
+      {testCase.testCases?.public_test &&
+        testCase.testCases.public_test.length > 0 && (
+          <TestCaseComponent
+            testCases={testCase.testCases.public_test}
+            testCaseType="publicTestCases"
+            testResults={testCase.testResults?.public_test}
+          />
+        )}
 
-      {testCase.private_test && testCase.private_test.length > 0 && (
-        <TestCaseComponent
-          testCaseResults={testCase.private_test}
-          testCaseType="privateTestCases"
-        />
-      )}
+      {testCase.testCases?.private_test &&
+        testCase.testCases.private_test.length > 0 && (
+          <TestCaseComponent
+            testCases={testCase.testCases.private_test}
+            testCaseType="privateTestCases"
+            testResults={testCase.testResults?.private_test}
+          />
+        )}
 
-      {testCase.evaluation_test && testCase.evaluation_test.length > 0 && (
-        <TestCaseComponent
-          testCaseResults={testCase.evaluation_test}
-          testCaseType="evaluationTestCases"
-        />
-      )}
+      {testCase.testCases?.evaluation_test &&
+        testCase.testCases.evaluation_test.length > 0 && (
+          <TestCaseComponent
+            testCases={testCase.testCases.evaluation_test}
+            testCaseType="evaluationTestCases"
+            testResults={testCase.testResults?.evaluation_test}
+          />
+        )}
 
       <OutputStream
         output={testCase.stdout}
@@ -103,18 +104,24 @@ const AutoGradingComponent: FC<Props> = (props) => {
   const autogradingResultCounts = autogradings.map((autograding) => ({
     public_test: {
       passed:
-        autograding.public_test?.filter((test) => test.passed).length ?? 0,
-      total: autograding.public_test?.length ?? 0,
+        autograding.testCases?.public_test?.filter(
+          (test) => autograding.testResults?.public_test?.[test.id]?.passed,
+        ).length ?? 0,
+      total: autograding.testCases?.public_test?.length ?? 0,
     },
     private_test: {
       passed:
-        autograding.private_test?.filter((test) => test.passed).length ?? 0,
-      total: autograding.private_test?.length ?? 0,
+        autograding.testCases?.private_test?.filter(
+          (test) => autograding.testResults?.private_test?.[test.id]?.passed,
+        ).length ?? 0,
+      total: autograding.testCases?.private_test?.length ?? 0,
     },
     evaluation_test: {
       passed:
-        autograding.evaluation_test?.filter((test) => test.passed).length ?? 0,
-      total: autograding.evaluation_test?.length ?? 0,
+        autograding.testCases?.evaluation_test?.filter(
+          (test) => autograding.testResults?.evaluation_test?.[test.id]?.passed,
+        ).length ?? 0,
+      total: autograding.testCases?.evaluation_test?.length ?? 0,
     },
   }));
 
@@ -147,7 +154,7 @@ const AutoGradingComponent: FC<Props> = (props) => {
   return (
     <div className="my-5 pt-5 space-y-5">
       {autogradings.length > 1 && autogradingResultsAllIdentical && (
-        <Alert severity="warning">
+        <Alert severity="info">
           {t(translations.multipleAutoGradingResults, {
             count: autogradings.length,
           })}

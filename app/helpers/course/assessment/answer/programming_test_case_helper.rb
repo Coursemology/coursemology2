@@ -32,12 +32,13 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
   #
   # @param [Hash] test_cases_by_type The test cases and their results keyed by type
   # @return [Hash] Failed test case and its result, if any
-  def get_failed_test_cases_by_type(test_cases_and_results)
-    {}.tap do |result|
-      test_cases_and_results.each do |test_case_type, test_cases_and_results_of_type|
-        result[test_case_type] = get_first_failed_test(test_cases_and_results_of_type)
-      end
-    end
+  def get_first_test_failures_by_type(test_cases_by_type, test_results_by_type)
+    test_cases_by_type.entries.map do |test_case_type, test_cases|
+      [
+        test_case_type,
+        test_cases.find { |test_case| test_results_by_type[test_case.id]&.passed? }
+      ]
+    end.to_h
   end
 
   # Organize the test cases and test results into a hash, keyed by test case type.
@@ -51,12 +52,13 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
   # @param [Hash] test_cases_by_type The test cases keyed by type
   # @param [Course::Assessment::Answer::ProgrammingAutoGrading] auto_grading Auto grading object
   # @return [Hash] The hash structure described above
-  def get_test_cases_and_results(test_cases_by_type, auto_grading)
-    results_hash = auto_grading ? auto_grading.test_results.includes(:test_case).group_by(&:test_case) : {}
-    test_cases_by_type.each do |type, test_cases|
-      test_cases_by_type[type] =
-        test_cases.map { |test_case| [test_case, results_hash[test_case]&.first] }.
-        sort_by { |test_case, _| test_case.identifier }.to_h
+  def get_test_results_by_type(test_cases_by_type, auto_grading)
+    results_hash = auto_grading ? auto_grading.test_results.group_by(&:test_case_id) : {}
+    test_cases_by_type.transform_values do |test_cases|
+      test_cases.map do |test_case|
+        result = results_hash[test_case.id].first
+        [test_case, result]
+      end.to_h
     end
   end
 

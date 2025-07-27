@@ -1,3 +1,6 @@
+// TODO Drop this component entirely, in favor of TestCaseComponent.
+// This requires rewriting (and renaming) testCases reducer to TypeScript.
+
 import { Component, Fragment } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
@@ -126,7 +129,7 @@ export class VisibleTestCaseView extends Component {
     );
   }
 
-  renderTestCaseRow(testCase) {
+  renderTestCaseRow(testCase, testResult) {
     const {
       testCases: { canReadTests },
     } = this.props;
@@ -138,9 +141,9 @@ export class VisibleTestCaseView extends Component {
 
     let testCaseResult = 'unattempted';
     let testCaseIcon;
-    if (testCase.passed !== undefined) {
-      testCaseResult = testCase.passed ? 'correct' : 'wrong';
-      testCaseIcon = testCase.passed ? (
+    if (testResult.passed !== undefined) {
+      testCaseResult = testResult?.passed ? 'correct' : 'wrong';
+      testCaseIcon = testResult?.passed ? (
         <Done color="success" />
       ) : (
         <Clear color="error" />
@@ -177,7 +180,7 @@ export class VisibleTestCaseView extends Component {
 
           {(canReadTests || showPublicTestCasesOutput) && (
             <TableCell className="w-full pt-1">
-              <ExpandableCode>{testCase.output || ''}</ExpandableCode>
+              <ExpandableCode>{testResult?.output || ''}</ExpandableCode>
             </TableCell>
           )}
 
@@ -187,23 +190,21 @@ export class VisibleTestCaseView extends Component {
     );
   }
 
-  renderTestCases(testCases, testCaseType, warn) {
+  renderTestCases(testCases, testResults, testCaseType, warn) {
     const {
-      collapsible,
       testCases: { canReadTests },
       graderView,
     } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
-    if (!testCases || testCases.length === 0) {
+    if (!testCases?.length) {
       return null;
     }
 
-    const isProgrammingAnswerEvaluated =
-      testCases.filter((testCase) => !!testCase.output).length > 0;
+    const isProgrammingAnswerEvaluated = Boolean(testResults);
 
     const numPassedTestCases = testCases.filter(
-      (testCase) => testCase.passed,
+      (testCase) => testResults?.[testCase.id]?.passed,
     ).length;
 
     const AllTestCasesPassedChip = () => (
@@ -278,7 +279,7 @@ export class VisibleTestCaseView extends Component {
     return (
       <Accordion
         className={testCaseComponentClassName()}
-        defaultExpanded={!collapsible}
+        defaultExpanded
         disableGutters
         icon={<TestCasesIndicatorChip />}
         id={testCaseType}
@@ -309,7 +310,9 @@ export class VisibleTestCaseView extends Component {
           </TableHead>
 
           <TableBody>
-            {testCases.map(this.renderTestCaseRow.bind(this))}
+            {testCases.map((testCase) =>
+              this.renderTestCaseRow(testCase, testResults?.[testCase.id]),
+            )}
           </TableBody>
         </Table>
       </Accordion>
@@ -323,8 +326,7 @@ export class VisibleTestCaseView extends Component {
       showEvaluation,
       graderView,
       isAutograding,
-      testCases,
-      collapsible,
+      testCases: { canReadTests, testCases, testResults, stdout, stderr },
       showStdoutAndStderr,
     } = this.props;
     if (!testCases) {
@@ -336,9 +338,9 @@ export class VisibleTestCaseView extends Component {
     const showPrivateTestToStudents = published && showPrivate;
     const showEvaluationTestToStudents = published && showEvaluation;
     const showPrivateTest =
-      (graderView && testCases.canReadTests) || showPrivateTestToStudents;
+      (graderView && canReadTests) || showPrivateTestToStudents;
     const showEvaluationTest =
-      (graderView && testCases.canReadTests) || showEvaluationTestToStudents;
+      (graderView && canReadTests) || showEvaluationTestToStudents;
 
     return (
       <div className="my-5 space-y-5">
@@ -348,11 +350,17 @@ export class VisibleTestCaseView extends Component {
           </Alert>
         )}
 
-        {this.renderTestCases(testCases.public_test, 'publicTestCases', false)}
+        {this.renderTestCases(
+          testCases.public_test,
+          testResults?.public_test,
+          'publicTestCases',
+          false,
+        )}
 
         {showPrivateTest &&
           this.renderTestCases(
             testCases.private_test,
+            testResults?.private_test,
             'privateTestCases',
             !showPrivateTestToStudents,
           )}
@@ -360,23 +368,22 @@ export class VisibleTestCaseView extends Component {
         {showEvaluationTest &&
           this.renderTestCases(
             testCases.evaluation_test,
+            testResults?.evaluation_test,
             'evaluationTestCases',
             !showEvaluationTestToStudents,
           )}
 
         {showOutputStreams &&
-          !collapsible &&
           VisibleTestCaseView.renderOutputStream(
             'standardOutput',
-            testCases.stdout,
+            stdout,
             !showStdoutAndStderr,
           )}
 
         {showOutputStreams &&
-          !collapsible &&
           VisibleTestCaseView.renderOutputStream(
             'standardError',
-            testCases.stderr,
+            stderr,
             !showStdoutAndStderr,
           )}
       </div>
@@ -395,28 +402,23 @@ VisibleTestCaseView.propTypes = {
   showPrivate: PropTypes.bool,
   showEvaluation: PropTypes.bool,
   isAutograding: PropTypes.bool,
-  collapsible: PropTypes.bool,
   testCases: PropTypes.shape({
     canReadTests: PropTypes.bool,
-    evaluation_test: PropTypes.arrayOf(testCaseShape),
-    private_test: PropTypes.arrayOf(testCaseShape),
-    public_test: PropTypes.arrayOf(testCaseShape),
+    testCases: PropTypes.shape({
+      evaluation_test: PropTypes.arrayOf(testCaseShape),
+      private_test: PropTypes.arrayOf(testCaseShape),
+      public_test: PropTypes.arrayOf(testCaseShape),
+    }),
+    testResults: PropTypes.object,
     stdout: PropTypes.string,
     stderr: PropTypes.string,
   }),
 };
 
 function mapStateToProps({ assessments: { submission } }, ownProps) {
-  const { questionId, answerId, viewHistory } = ownProps;
-  let testCases;
-  let isAutograding;
-  if (viewHistory) {
-    testCases = submission.history.testCases[answerId];
-    isAutograding = false;
-  } else {
-    testCases = submission.testCases[questionId];
-    isAutograding = submission.questionsFlags[questionId].isAutograding;
-  }
+  const { questionId } = ownProps;
+  const testCases = submission.testCases[questionId];
+  const isAutograding = submission.questionsFlags[questionId].isAutograding;
 
   return {
     submissionState: submission.submission.workflowState,
@@ -425,7 +427,6 @@ function mapStateToProps({ assessments: { submission } }, ownProps) {
     showStdoutAndStderr: submission.submission.showStdoutAndStderr,
     showPrivate: submission.assessment.showPrivate,
     showEvaluation: submission.assessment.showEvaluation,
-    collapsible: viewHistory,
     isAutograding,
     testCases,
   };

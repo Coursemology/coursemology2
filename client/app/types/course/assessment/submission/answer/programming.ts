@@ -61,15 +61,36 @@ export interface ProgrammingFieldData extends AnswerFieldBaseData {
   files_attributes: ProgrammingContent[];
 }
 
+export interface ProgrammingTestCaseData {
+  id: number;
+  identifier?: string;
+  expression: string;
+  expected: string;
+}
+
+export interface ProgrammingTestResultData {
+  id: number;
+  output?: string;
+  passed: boolean;
+}
+
 export interface ProgrammingAutoGradingData {
   id: number;
   createdAt: string;
   job: JobStatusResponse & {
     path?: string;
   };
-  public_test?: TestCaseResult[];
-  private_test?: TestCaseResult[];
-  evaluation_test?: TestCaseResult[];
+  testCases?: {
+    public_test?: ProgrammingTestCaseData[];
+    private_test?: ProgrammingTestCaseData[];
+    evaluation_test?: ProgrammingTestCaseData[];
+  };
+  testResults?: {
+    public_test?: Record<string, ProgrammingTestResultData>;
+    private_test?: Record<string, ProgrammingTestResultData>;
+    evaluation_test?: Record<string, ProgrammingTestResultData>;
+  };
+
   stdout?: string;
   stderr?: string;
   gradedOnPastSnapshot: boolean;
@@ -105,6 +126,11 @@ export interface ProgrammingAnswerData extends AnswerBaseData {
   };
   annotations?: Annotation[];
   posts?: Post[];
+  testCases?: {
+    public_test?: ProgrammingTestCaseData[];
+    private_test?: ProgrammingTestCaseData[];
+    evaluation_test?: ProgrammingTestCaseData[];
+  };
 }
 
 // FE Data Type

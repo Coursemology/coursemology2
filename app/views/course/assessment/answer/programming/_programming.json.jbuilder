@@ -6,18 +6,16 @@ is_current_answer = answer.current_answer?
 latest_answer = last_attempt(answer)
 attempt = is_current_answer ? latest_answer : answer
 
-question = answer.question.specific
 auto_grading = attempt&.auto_gradings&.last&.specific
-graded_snapshot = auto_grading&.question_snapshot
-graded_on_past_snapshot = !(graded_snapshot.nil? || graded_snapshot == question)
+question = auto_grading&.question_snapshot || answer.question.specific
 json.autoGradingCount attempt&.auto_gradings&.count
-json.gradedOnPastSnapshot graded_on_past_snapshot
-if graded_on_past_snapshot
-  question = graded_snapshot
-end
+json.gradedOnPastSnapshot answer.question.specific != question
+test_cases_by_type = question.test_cases_by_type
 
 can_grade = can?(:grade, submission)
 can_read_tests = can?(:read_tests, submission)
+show_private = can_read_tests || (submission.published? && assessment.show_private?)
+show_evaluation = can_read_tests || (submission.published? && assessment.show_evaluation?)
 
 # Required in response of reload_answer and submit_answer to update past answers with the latest_attempt
 # Removing this check will cause it to render the latest_answer recursively
@@ -51,13 +49,36 @@ if attempt.submitted? && !attempt&.auto_gradings&.any?
     end
   end
 end
+
+displayed_test_case_types = ['public_test']
+displayed_test_case_types << 'private_test' if show_private
+displayed_test_case_types << 'evaluation_test' if show_evaluation
+
+# If the answer has no auto gradings, include the test cases directly here.
+# Otherwise, read the test cases from the auto grading.
+
+json.testCases do
+  displayed_test_case_types.each do |test_case_type|
+    json.set! test_case_type do
+      if test_cases_by_type[test_case_type].present?
+        json.array! test_cases_by_type[test_case_type] do |test_case|
+          json.partial! 'course/assessment/answer/programming/test_case',
+                        test_case: test_case,
+                        can_read_tests: can_read_tests
+        end
+      end
+    end
+  end
+end
+
 json.autogradings do
   json.array! attempt&.auto_gradings&.map(&:specific)&.compact do |auto_grading|
     json.partial! 'course/assessment/answer/programming/auto_grading', assessment: assessment,
                   submission: submission,
                   question: question,
                   auto_grading: auto_grading,
-                  can_read_tests: can_read_tests
+                  can_read_tests: can_read_tests,
+                  displayed_test_case_types: displayed_test_case_types
   end
 end
 
@@ -76,30 +97,30 @@ if attempt.submitted? && !attempt&.auto_gradings&.any?
   end
 end
 
-test_cases_by_type = graded_snapshot.test_cases_by_type
-test_cases_and_results = get_test_cases_and_results(test_cases_by_type, auto_grading)
-failed_test_cases_by_type = get_failed_test_cases_by_type(test_cases_and_results)
-
 json.explanation do
-  if attempt
+  if auto_grading
+    test_results_by_type = get_test_results_by_type(test_cases_by_type, auto_grading)
+    first_failures_by_type = get_first_test_failures_by_type(test_cases_by_type, test_results_by_type)
     explanations = []
 
-    if failed_test_cases_by_type['public_test']
-      failed_test_cases_by_type['public_test'].each do |test_case, test_result|
-        explanations << format_ckeditor_rich_text(get_hint(test_case, test_result))
-      end
+    if first_failures_by_type['public_test']
+      explanations << format_ckeditor_rich_text(get_hint(
+        first_failures_by_type['public_test'],
+        test_results_by_type['public_test'][first_failures_by_type['public_test'].id]
+      ))
       json.failureType 'public_test'
 
-    elsif failed_test_cases_by_type['private_test']
-      failed_test_cases_by_type['private_test'].each do |test_case, test_result|
-        explanations << format_ckeditor_rich_text(get_hint(test_case, test_result))
-      end
+    elsif first_failures_by_type['private_test']
+      explanations << format_ckeditor_rich_text(get_hint(
+        first_failures_by_type['private_test'],
+        test_results_by_type['private_test'][first_failures_by_type['private_test'].id]
+      ))
       json.failureType 'private_test'
     end
 
-    passed_evaluation_tests = failed_test_cases_by_type['evaluation_test'].blank?
+    passed_evaluation_tests = first_failures_by_type['evaluation_test'].blank?
 
-    json.correct attempt&.auto_gradings&.last && attempt&.correct && (can_grade ? passed_evaluation_tests : true)
+    json.correct attempt&.correct && (can_grade ? passed_evaluation_tests : true)
     json.explanations explanations
   end
 end

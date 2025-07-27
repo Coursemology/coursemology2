@@ -9,7 +9,10 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { TestCaseResult } from 'types/course/assessment/submission/answer/programming';
+import {
+  ProgrammingTestCaseData,
+  ProgrammingTestResultData,
+} from 'types/course/assessment/submission/answer/programming';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -64,21 +67,21 @@ const translations = defineMessages({
 });
 
 interface TestCaseComponentProps {
-  testCaseResults: TestCaseResult[];
+  testCases: ProgrammingTestCaseData[];
+  testResults?: Record<string, ProgrammingTestResultData>;
   testCaseType: string;
 }
 
 const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
-  const { testCaseResults, testCaseType } = props;
+  const { testCases, testResults, testCaseType } = props;
   const { t } = useTranslation();
 
-  const isProgrammingAnswerEvaluated =
-    testCaseResults.filter((result) => !!result.output).length > 0;
+  const isProgrammingAnswerEvaluated = Boolean(testResults);
 
-  const numPassedTestCases = testCaseResults.filter(
-    (result) => result.passed,
+  const numPassedTestCases = testCases.filter(
+    (testCase) => testResults?.[testCase.id]?.passed,
   ).length;
-  const numTestCases = testCaseResults.length;
+  const numTestCases = testCases.length;
 
   const AllTestCasesPassedChip: FC = () => (
     <Chip
@@ -173,8 +176,12 @@ const TestCaseComponent: FC<TestCaseComponentProps> = (props) => {
         </TableHead>
 
         <TableBody>
-          {testCaseResults.map((result) => (
-            <TestCaseRow key={result.identifier} result={result} />
+          {testCases.map((testCase) => (
+            <TestCaseRow
+              key={testCase.identifier}
+              testCase={testCase}
+              testResult={testResults?.[testCase.id]}
+            />
           ))}
         </TableBody>
       </Table>

@@ -1,5 +1,19 @@
 import actions from '../constants';
 
+function initQuestionStateFromAnswerPayload(answer) {
+  const lastAutograding = answer.autogradings?.at(-1);
+  if (lastAutograding) {
+    return {
+      canReadTests: answer.canReadTests,
+      testCases: lastAutograding.testCases,
+      testResults: lastAutograding.testResults,
+      stdout: lastAutograding.stdout,
+      stderr: lastAutograding.stderr,
+    };
+  }
+  return { testCases: answer.testCases };
+}
+
 export default function (state = {}, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
@@ -13,7 +27,10 @@ export default function (state = {}, action) {
       return {
         ...state,
         ...action.payload.answers.reduce(
-          (obj, answer) => ({ ...obj, [answer.questionId]: answer.testCases }),
+          (obj, answer) => ({
+            ...obj,
+            [answer.questionId]: initQuestionStateFromAnswerPayload(answer),
+          }),
           {},
         ),
       };
@@ -29,7 +46,7 @@ export default function (state = {}, action) {
           }
           return obj;
         },
-        { [questionId]: action.payload.testCases },
+        { [questionId]: initQuestionStateFromAnswerPayload(action.payload) },
       );
     }
     case actions.REEVALUATE_FAILURE:
@@ -41,19 +58,9 @@ export default function (state = {}, action) {
       // For each test case in each test type, add back the data without the output
       // and passed values.
       if (state[questionId]) {
-        Object.keys(state[questionId]).forEach((testType) => {
-          if (
-            testType !== 'stdout' &&
-            testType !== 'stderr' &&
-            testType !== 'canReadTests'
-          ) {
-            questionState[testType] = state[questionId][testType].map(
-              (testCase) => ({
-                identifier: testCase.identifier,
-                expression: testCase.expression,
-                expected: testCase.expected,
-              }),
-            );
+        Object.keys(state[questionId]).forEach((key) => {
+          if (key !== 'testResults') {
+            questionState[key] = state[questionId][key];
           }
         });
       }

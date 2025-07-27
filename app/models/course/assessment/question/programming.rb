@@ -116,7 +116,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   #
   # @return [Hash] A hash of the test cases keyed by test case type.
   def test_cases_by_type
-    test_cases.group_by(&:test_case_type)
+    test_cases.group_by(&:test_case_type).transform_values { |test_cases| test_cases.sort_by(&:identifier) }
   end
 
   def files_downloadable?

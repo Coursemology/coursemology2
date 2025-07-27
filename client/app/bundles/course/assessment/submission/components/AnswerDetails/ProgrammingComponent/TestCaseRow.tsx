@@ -1,12 +1,16 @@
 import { FC, Fragment } from 'react';
 import { Clear, Done } from '@mui/icons-material';
 import { TableCell, TableRow, Typography } from '@mui/material';
-import { TestCaseResult } from 'types/course/assessment/submission/answer/programming';
+import {
+  ProgrammingTestCaseData,
+  ProgrammingTestResultData,
+} from 'types/course/assessment/submission/answer/programming';
 
 import ExpandableCode from 'lib/components/core/ExpandableCode';
 
 interface Props {
-  result: TestCaseResult;
+  testCase: ProgrammingTestCaseData;
+  testResult?: ProgrammingTestResultData;
 }
 
 const TestCaseClassName = {
@@ -16,17 +20,17 @@ const TestCaseClassName = {
 };
 
 const TestCaseRow: FC<Props> = (props) => {
-  const { result } = props;
+  const { testCase, testResult } = props;
 
   const nameRegex = /\/?(\w+)$/;
-  const idMatch = result.identifier?.match(nameRegex);
+  const idMatch = testCase.identifier?.match(nameRegex);
   const truncatedIdentifier = idMatch ? idMatch[1] : '';
 
   let testCaseResult = 'unattempted';
   let testCaseIcon;
-  if (result.passed !== undefined) {
-    testCaseResult = result.passed ? 'correct' : 'wrong';
-    testCaseIcon = result.passed ? (
+  if (testResult?.passed !== undefined) {
+    testCaseResult = testResult.passed ? 'correct' : 'wrong';
+    testCaseIcon = testResult.passed ? (
       <Done color="success" />
     ) : (
       <Clear color="error" />
@@ -34,7 +38,7 @@ const TestCaseRow: FC<Props> = (props) => {
   }
 
   return (
-    <Fragment key={result.identifier}>
+    <Fragment key={testCase.identifier}>
       <TableRow className={TestCaseClassName[testCaseResult]}>
         <TableCell className="h-fit border-none pb-0 leading-none" colSpan={5}>
           <Typography
@@ -49,15 +53,15 @@ const TestCaseRow: FC<Props> = (props) => {
 
       <TableRow className={TestCaseClassName[testCaseResult]}>
         <TableCell className="w-full pt-1">
-          <ExpandableCode>{result.expression}</ExpandableCode>
+          <ExpandableCode>{testCase.expression}</ExpandableCode>
         </TableCell>
 
         <TableCell className="w-full pt-1">
-          <ExpandableCode>{result.expected || ''}</ExpandableCode>
+          <ExpandableCode>{testCase.expected || ''}</ExpandableCode>
         </TableCell>
 
         <TableCell className="w-full pt-1">
-          <ExpandableCode>{result.output || ''}</ExpandableCode>
+          <ExpandableCode>{testResult?.output || ''}</ExpandableCode>
         </TableCell>
 
         <TableCell>{testCaseIcon}</TableCell>
