@@ -400,7 +400,7 @@ const AssessmentSubmissionsIndex: FC = () => {
         onCancel={() => setIsConfirmingRemind(false)}
         onConfirm={() => {
           dispatch(
-            sendAssessmentReminderEmail(assessment.id, currentSelectedUserType),
+            sendAssessmentReminderEmail(assessmentId, currentSelectedUserType),
           );
           setIsConfirmingRemind(false);
         }}
