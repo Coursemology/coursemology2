@@ -17,6 +17,10 @@ interface FilterParams {
   search?: string;
 }
 
+export interface DeploymentInfo {
+  commit_hash: string;
+}
+
 export default class AdminAPI extends BaseSystemAPI {
   static get #urlPrefix(): string {
     return `/admin`;
@@ -161,5 +165,12 @@ export default class AdminAPI extends BaseSystemAPI {
     return this.client.get(`${AdminAPI.#urlPrefix}/get_help`, {
       params,
     });
+  }
+
+  /**
+   * Get deployment information
+   */
+  getDeploymentInfo(): Promise<AxiosResponse<DeploymentInfo>> {
+    return this.client.get(`${AdminAPI.#urlPrefix}/deployment_info`);
   }
 }

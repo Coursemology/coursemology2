@@ -106,6 +106,7 @@ Rails.application.routes.draw do
   scope module: 'system' do
     namespace :admin do
       get '/' => 'admin#index'
+      get 'deployment_info' => 'admin#deployment_info'
       resources :announcements, only: [:index, :create, :update, :destroy]
       resources :instances, only: [:index, :create, :update, :destroy]
       resources :users, only: [:index, :update, :destroy]
