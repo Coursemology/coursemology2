@@ -191,7 +191,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
               setAdding(false);
             }}
           >
-            {ability.type}
+            {ability.displayName || t(specify(ability.type).defaultDisplayName)}
           </MenuItem>
         ))}
       </Menu>
