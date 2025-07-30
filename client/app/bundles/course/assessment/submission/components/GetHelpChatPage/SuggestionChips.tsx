@@ -35,10 +35,7 @@ const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
   const suggestions = liveFeedbackChatsForAnswer?.suggestions ?? [];
 
   const sendHelpRequest = (suggestion: Suggestion): void => {
-    const message = t({
-      id: suggestion.id,
-      defaultMessage: suggestion.defaultMessage,
-    });
+    const message = t(suggestion);
 
     dispatch(sendPromptFromStudent({ answerId, message }));
     dispatch(
@@ -64,10 +61,7 @@ const SuggestionChips: FC<SuggestionChipsProps> = (props) => {
           onClick={() => sendHelpRequest(suggestion)}
           variant="outlined"
         >
-          {t({
-            id: suggestion.id,
-            defaultMessage: suggestion.defaultMessage,
-          })}
+          {t(suggestion)}
         </Button>
       ))}
     </div>
