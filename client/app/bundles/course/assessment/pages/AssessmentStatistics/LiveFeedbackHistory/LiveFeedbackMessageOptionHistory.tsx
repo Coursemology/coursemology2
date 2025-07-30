@@ -36,10 +36,7 @@ const LiveFeedbackMessageOptionHistory: FC<Props> = (props) => {
             disabled
             variant="outlined"
           >
-            {t({
-              id: optionDetail.id,
-              defaultMessage: optionDetail.defaultMessage,
-            })}
+            {t(optionDetail)}
           </Button>
         );
       })}
