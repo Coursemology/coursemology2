@@ -4,13 +4,15 @@ export interface ConditionListData {
 }
 
 export interface ConditionData extends ConditionListData {
-  type: 'Achievement' | 'Assessment' | 'Level' | 'Survey' | 'Video';
+  type: 'achievement' | 'assessment' | 'level' | 'survey';
   url?: string;
+  displayName?: string | null;
 }
 
 export interface ConditionAbility {
   type: ConditionData['type'];
   url: string;
+  displayName?: string | null;
 }
 
 export type EnabledConditions = ConditionAbility[];
