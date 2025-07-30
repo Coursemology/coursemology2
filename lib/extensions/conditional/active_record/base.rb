@@ -164,6 +164,10 @@ module Extensions::Conditional::ActiveRecord::Base
   end
 
   module ConditionClassMethods
+    # Custom display name for the condition. If not overridden, the client will use its default.
+    def display_name(course)
+    end
+
     # Class that the condition depends on.
     def dependent_class
       raise NotImplementedError, 'Subclasses must implement a dependent_class method.'
