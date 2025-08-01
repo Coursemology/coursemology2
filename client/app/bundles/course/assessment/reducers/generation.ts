@@ -5,55 +5,125 @@ import {
 } from 'types/course/assessment/question/programming';
 
 import {
-  CodaveriGenerateFormData,
   GenerationState,
   LockStates,
-  QuestionPrototypeFormData,
+  McqMrqGenerateFormData,
+  McqMrqPrototypeFormData,
+  ProgrammingGenerateFormData,
+  ProgrammingPrototypeFormData,
   SnapshotState,
 } from '../pages/AssessmentGenerate/types';
 
 const generateConversationId = (): string => Date.now().toString(16);
 const generateSnapshotId = (): string => Date.now().toString(16);
-const sentinelSnapshot = (): SnapshotState => ({
-  id: generateSnapshotId(),
-  parentId: undefined,
-  state: 'sentinel', // 'generating' | 'success' | 'sentinel'
-  codaveriData: { languageId: 0, customPrompt: '', difficulty: 'easy' },
-  questionData: {
-    question: {
-      title: '',
-      description: '',
-    },
-    testUi: {
-      metadata: {
-        solution: '',
-        submission: '',
-        prepend: null,
-        append: null,
-        testCases: {
-          public: [],
-          private: [],
-          evaluation: [],
+const sentinelSnapshot = (
+  questionType: 'programming' | 'mrq' | 'mcq',
+): SnapshotState => {
+  switch (questionType) {
+    case 'mrq':
+      return {
+        id: generateSnapshotId(),
+        parentId: undefined,
+        state: 'sentinel',
+        generateFormData: {
+          customPrompt: '',
+          numberOfQuestions: 1,
+          generationMode: 'create',
         },
-      },
-    },
-  },
-  lockStates: {
-    'question.title': false,
-    'question.description': false,
-    'testUi.metadata.solution': false,
-    'testUi.metadata.submission': false,
-    'testUi.metadata.prepend': false,
-    'testUi.metadata.append': false,
-    'testUi.metadata.testCases.public': false,
-    'testUi.metadata.testCases.private': false,
-    'testUi.metadata.testCases.evaluation': false,
-  },
-});
+        questionData: {
+          question: {
+            title: '',
+            description: '',
+            skipGrading: false,
+            randomizeOptions: false,
+          },
+          options: [],
+          gradingScheme: 'all_correct',
+        },
+        lockStates: {
+          'question.title': false,
+          'question.description': false,
+          'question.options': false,
+          'question.correct': false,
+        },
+      };
+    case 'mcq':
+      return {
+        id: generateSnapshotId(),
+        parentId: undefined,
+        state: 'sentinel',
+        generateFormData: {
+          customPrompt: '',
+          numberOfQuestions: 1,
+          generationMode: 'create',
+        },
+        questionData: {
+          question: {
+            title: '',
+            description: '',
+            skipGrading: false,
+            randomizeOptions: false,
+          },
+          options: [],
+          gradingScheme: 'any_correct',
+        },
+        lockStates: {
+          'question.title': false,
+          'question.description': false,
+          'question.options': false,
+          'question.correct': false,
+        },
+      };
+    case 'programming':
+    default:
+      return {
+        id: generateSnapshotId(),
+        parentId: undefined,
+        state: 'sentinel',
+        generateFormData: {
+          languageId: 0,
+          customPrompt: '',
+          difficulty: 'easy',
+        },
+        questionData: {
+          question: {
+            title: '',
+            description: '',
+          },
+          testUi: {
+            metadata: {
+              solution: '',
+              submission: '',
+              prepend: null,
+              append: null,
+              testCases: {
+                public: [],
+                private: [],
+                evaluation: [],
+              },
+            },
+          },
+        },
+        lockStates: {
+          'question.title': false,
+          'question.description': false,
+          'testUi.metadata.solution': false,
+          'testUi.metadata.submission': false,
+          'testUi.metadata.prepend': false,
+          'testUi.metadata.append': false,
+          'testUi.metadata.testCases.public': false,
+          'testUi.metadata.testCases.private': false,
+          'testUi.metadata.testCases.evaluation': false,
+        },
+      };
+  }
+};
 
-const initialState = (): GenerationState => {
+const initialState = (
+  questionType: 'programming' | 'mrq' | 'mcq' = 'programming',
+): GenerationState => {
   const newConversationId = generateConversationId();
-  const snapshot = sentinelSnapshot();
+  const snapshot = sentinelSnapshot(questionType);
   return {
     activeConversationId: newConversationId,
     conversations: {
@@ -79,6 +149,13 @@ export const generationSlice = createSlice({
   name: 'generation',
   initialState,
   reducers: {
+    initializeGeneration: (
+      state,
+      action: PayloadAction<{ questionType: 'programming' | 'mrq' | 'mcq' }>,
+    ) => {
+      const newState = initialState(action.payload.questionType);
+      Object.assign(state, newState);
+    },
     setActiveConversationId: (
       state,
       action: PayloadAction<{ conversationId: string }>,
@@ -88,11 +165,16 @@ export const generationSlice = createSlice({
         state.activeConversationId = conversationId;
       }
     },
-    createConversation: (state) => {
-      const newConversationId = generateConversationId();
-      const snapshot = sentinelSnapshot();
-      state.conversations[newConversationId] = {
-        id: newConversationId,
+    createConversation: (
+      state,
+      action: PayloadAction<{ questionType: 'programming' | 'mrq' | 'mcq' }>,
+    ) => {
+      const conversationId = Date.now().toString(16);
+      const snapshot = sentinelSnapshot(action.payload.questionType);
+
+      state.conversationIds.push(conversationId);
+      state.conversations[conversationId] = {
+        id: conversationId,
         snapshots: {
           [snapshot.id]: snapshot,
         },
@@ -101,10 +183,13 @@ export const generationSlice = createSlice({
         activeSnapshotEditedData: JSON.parse(
           JSON.stringify(snapshot.questionData),
         ),
-        toExport: true,
+        toExport: false,
         exportStatus: 'none',
       };
-      state.conversationIds.push(newConversationId);
+
+      if (state.conversationIds.length === 1) {
+        state.activeConversationId = conversationId;
+      }
     },
     duplicateConversation: (
       state,
@@ -152,21 +237,26 @@ export const generationSlice = createSlice({
       state,
       action: PayloadAction<{
         conversationId: string;
-        codaveriData: CodaveriGenerateFormData;
+        generateFormData: ProgrammingGenerateFormData | McqMrqGenerateFormData;
         snapshotId: string;
         parentId: string;
         lockStates: LockStates;
       }>,
     ) => {
-      const { conversationId, codaveriData, snapshotId, parentId, lockStates } =
-        action.payload;
+      const {
+        conversationId,
+        generateFormData,
+        snapshotId,
+        parentId,
+        lockStates,
+      } = action.payload;
       const conversation = state.conversations[conversationId];
       if (conversation) {
         conversation.snapshots[snapshotId] = {
           id: snapshotId,
           parentId,
           lockStates,
-          codaveriData,
+          generateFormData,
           state: 'generating',
         };
       }
@@ -175,7 +265,7 @@ export const generationSlice = createSlice({
       state,
       action: PayloadAction<{
         conversationId: string;
-        questionData: QuestionPrototypeFormData;
+        questionData: ProgrammingPrototypeFormData | McqMrqPrototypeFormData;
         snapshotId: string;
       }>,
     ) => {
@@ -185,6 +275,7 @@ export const generationSlice = createSlice({
         conversation.snapshots[snapshotId].questionData = questionData;
         conversation.snapshots[snapshotId].state = 'success';
         conversation.latestSnapshotId = snapshotId;
+        conversation.toExport = true;
       }
     },
     snapshotError: (
@@ -205,7 +296,7 @@ export const generationSlice = createSlice({
       action: PayloadAction<{
         conversationId: string;
         snapshotId: string;
-        questionData?: QuestionPrototypeFormData;
+        questionData?: ProgrammingPrototypeFormData | McqMrqPrototypeFormData;
       }>,
     ) => {
       const { conversationId, snapshotId, questionData } = action.payload;
@@ -259,7 +350,7 @@ export const generationSlice = createSlice({
         conversation.exportStatus = 'pending';
       }
     },
-    exportConversationPendingImport: (
+    exportProgrammingConversationPendingImport: (
       state,
       action: PayloadAction<{
         conversationId: string;
@@ -277,7 +368,7 @@ export const generationSlice = createSlice({
         conversation.questionId = data.id ?? conversation.questionId;
       }
     },
-    exportConversationSuccess: (
+    exportProgrammingConversationSuccess: (
       state,
       action: PayloadAction<{
         conversationId: string;
@@ -293,6 +384,22 @@ export const generationSlice = createSlice({
           conversation.redirectEditUrl =
             data.redirectEditUrl ?? conversation.redirectEditUrl;
           conversation.questionId = data.id ?? conversation.questionId;
+        }
+      }
+    },
+    exportMcqMrqConversationSuccess: (
+      state,
+      action: PayloadAction<{
+        conversationId: string;
+        data?: { redirectEditUrl: string };
+      }>,
+    ) => {
+      const { conversationId, data } = action.payload;
+      const conversation = state.conversations[conversationId];
+      if (conversation) {
+        conversation.exportStatus = 'exported';
+        if (data) {
+          conversation.redirectEditUrl = data.redirectEditUrl;
         }
       }
     },
@@ -320,6 +427,36 @@ export const generationSlice = createSlice({
           delete conversation.importJobUrl;
         }
       });
+    },
+    createConversationWithSnapshots: (
+      state,
+      action: PayloadAction<{
+        questionType: 'programming' | 'mrq' | 'mcq';
+        copiedSnapshots: { [id: string]: SnapshotState };
+        latestSnapshotId: string;
+        activeSnapshotId: string;
+        activeSnapshotEditedData:
+          | ProgrammingPrototypeFormData
+          | McqMrqPrototypeFormData;
+      }>,
+    ) => {
+      const conversationId = Date.now().toString(16);
+
+      // Check if the conversation has actual data (not just sentinel snapshots)
+      const hasData = Object.values(action.payload.copiedSnapshots).some(
+        (snapshot) => snapshot.state !== 'sentinel',
+      );
+
+      state.conversationIds.push(conversationId);
+      state.conversations[conversationId] = {
+        id: conversationId,
+        snapshots: action.payload.copiedSnapshots,
+        latestSnapshotId: action.payload.latestSnapshotId,
+        activeSnapshotId: action.payload.activeSnapshotId,
+        activeSnapshotEditedData: action.payload.activeSnapshotEditedData,
+        toExport: hasData,
+        exportStatus: 'none',
+      };
     },
   },
 });

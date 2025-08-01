@@ -21,7 +21,7 @@ const translations = defineMessages({
   },
   ignoreFailure: {
     id: 'course.courses.TodoIgnoreButton.ignoreFailure',
-    defaultMessage: 'An error occured',
+    defaultMessage: 'An error occurred',
   },
   ignoreButtonText: {
     id: 'course.courses.TodoIgnoreButton.ignore.ignoreButtonText',
