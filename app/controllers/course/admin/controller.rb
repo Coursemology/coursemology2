@@ -5,7 +5,7 @@ class Course::Admin::Controller < Course::ComponentController
   private
 
   def authorize_admin
-    authorize!(:manage, current_course)
+    authorize!(:manage, current_course) unless publicly_accessible?
   end
 
   # @return [Course::SettingsComponent]
