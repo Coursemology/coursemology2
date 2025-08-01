@@ -4,21 +4,21 @@ import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConsta
 
 import { UserInfo } from './statistics/assessmentStatistics';
 
+export interface AssessmentPlagiarismSubmission {
+  id: number;
+  courseUser: UserInfo;
+  assessmentTitle: string;
+  courseTitle: string;
+  submissionUrl: string;
+  canManage: boolean;
+}
+
 export interface AssessmentPlagiarismSubmissionPair {
-  baseSubmission: {
-    id: number;
-    courseUser: UserInfo;
-    submissionUrl: string;
-  };
-  comparedSubmission: {
-    id: number;
-    courseUser: UserInfo;
-    submissionUrl: string;
-  };
+  baseSubmission: AssessmentPlagiarismSubmission;
+  comparedSubmission: AssessmentPlagiarismSubmission;
   similarityScore: number;
   submissionPairId: number;
 }
-
 export interface AssessmentPlagiarismJobData {
   jobId: number;
   jobStatus: keyof typeof JobStatus;
@@ -37,14 +37,18 @@ export interface AssessmentPlagiarism {
   submissionPairs: AssessmentPlagiarismSubmissionPair[];
 }
 
-export interface PlagiarismAssessmentListData {
+interface BaseAssessment {
   id: number;
   title: string;
   url: string;
+}
+
+export interface PlagiarismAssessmentListData extends BaseAssessment {
   plagiarismUrl: string;
   submissionsUrl: string;
   numCheckableQuestions: number;
   numSubmitted: number;
+  numLinkedAssessments: number;
   lastSubmittedAt?: Date;
   workflowState: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE;
   lastRunTime?: Date;
@@ -53,6 +57,17 @@ export interface PlagiarismAssessmentListData {
 
 export interface PlagiarismAssessments {
   assessments: PlagiarismAssessmentListData[];
+}
+
+export interface LinkedAssessment extends BaseAssessment {
+  courseId: number;
+  courseTitle: string;
+  canManage: boolean;
+}
+
+export interface AssessmentLinkData {
+  linkedAssessments: LinkedAssessment[];
+  unlinkedAssessments: LinkedAssessment[];
 }
 
 export interface AssessmentPlagiarismState {

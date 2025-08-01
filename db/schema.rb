@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_22_082737) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -237,6 +237,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
     t.index ["updater_id"], name: "fk__course_assessment_categories_updater_id"
   end
 
+  create_table "course_assessment_links", force: :cascade do |t|
+    t.bigint "assessment_id", null: false
+    t.bigint "linked_assessment_id", null: false
+    t.index ["assessment_id", "linked_assessment_id"], name: "idx_on_assessment_id_linked_assessment_id_2fe527ec4a", unique: true
+    t.index ["assessment_id"], name: "index_course_assessment_links_on_assessment_id"
+    t.index ["linked_assessment_id"], name: "index_course_assessment_links_on_linked_assessment_id"
+  end
+
   create_table "course_assessment_live_feedback_code", force: :cascade do |t|
     t.bigint "feedback_id", null: false
     t.string "filename", null: false
@@ -265,8 +273,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
   create_table "course_assessment_plagiarism_checks", force: :cascade do |t|
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.string "workflow_state", limit: 255, default: "not_started", null: false
     t.datetime "last_started_at", precision: nil
+    t.string "workflow_state", limit: 255, default: "not_started", null: false
     t.bigint "assessment_id", null: false
     t.uuid "job_id"
     t.index ["assessment_id"], name: "fk__course_assessment_plagiarism_checks_assessment_id", unique: true
@@ -1679,6 +1687,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_18_054540) do
   add_foreign_key "course_assessment_categories", "courses", name: "fk_course_assessment_categories_course_id"
   add_foreign_key "course_assessment_categories", "users", column: "creator_id", name: "fk_course_assessment_categories_creator_id"
   add_foreign_key "course_assessment_categories", "users", column: "updater_id", name: "fk_course_assessment_categories_updater_id"
+  add_foreign_key "course_assessment_links", "course_assessments", column: "assessment_id"
+  add_foreign_key "course_assessment_links", "course_assessments", column: "linked_assessment_id"
   add_foreign_key "course_assessment_live_feedback_code", "course_assessment_live_feedbacks", column: "feedback_id"
   add_foreign_key "course_assessment_live_feedback_comments", "course_assessment_live_feedback_code", column: "code_id"
   add_foreign_key "course_assessment_live_feedbacks", "course_assessment_questions", column: "question_id"
