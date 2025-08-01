@@ -80,6 +80,8 @@ class Course::Assessment < ApplicationRecord
                              inverse_of: :assessment, dependent: :destroy, autosave: true
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             inverse_of: :assessment, dependent: :destroy
+  has_many :links, class_name: 'Course::Assessment::Link', inverse_of: :assessment, dependent: :destroy
+  has_many :linked_assessments, through: :links, source: :linked_assessment
 
   validate :tab_in_same_course
   validate :selected_test_type_for_grading
@@ -227,7 +229,7 @@ class Course::Assessment < ApplicationRecord
     questions.count(&:plagiarism_checkable?)
   end
 
-  def initialize_duplicate(duplicator, other)
+  def initialize_duplicate(duplicator, other) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     copy_attributes(other, duplicator)
     target_tab = initialize_duplicate_tab(duplicator, other)
     self.folder = duplicator.duplicate(other.folder)
@@ -235,6 +237,17 @@ class Course::Assessment < ApplicationRecord
     self.question_assessments = duplicator.duplicate(other.question_assessments)
     initialize_duplicate_conditions(duplicator, other)
     self.monitor = duplicator.duplicate(other.monitor)
+
+    # the new assessment has links to all linked assessments of the original assessment,
+    # as well as the duplicates of those linked assessments if they are duplicated
+    # in the same process (i.e course duplication)
+    self.linked_assessments = other.all_linked_assessments.flat_map do |assessment|
+      if duplicator.duplicated?(assessment)
+        [assessment, duplicator.duplicate(assessment)]
+      else
+        assessment
+      end
+    end
 
     # we do creation of Koditsu assessment on-demand, which means that the association
     # between "other" and its Koditsu assessment is not carried over by duplication
@@ -265,6 +278,10 @@ class Course::Assessment < ApplicationRecord
       result.push('private_test') if use_private
       result.push('evaluation_test') if use_evaluation
     end
+  end
+
+  def all_linked_assessments
+    ([self] + linked_assessments.includes(:course, :submissions)).uniq
   end
 
   private

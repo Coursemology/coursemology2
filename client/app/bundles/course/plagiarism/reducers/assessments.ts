@@ -19,6 +19,21 @@ export const plagiarismAssessmentsSlice = createSlice({
       state.assessments = action.payload.assessments;
     },
 
+    updateNumLinkedAssessments: (
+      state,
+      action: PayloadAction<{
+        assessmentId: number;
+        numLinkedAssessments: number;
+      }>,
+    ) => {
+      const assessment = state.assessments.find(
+        (a) => a.id === action.payload.assessmentId,
+      );
+      if (assessment) {
+        assessment.numLinkedAssessments = action.payload.numLinkedAssessments;
+      }
+    },
+
     reset: () => {
       return initialState;
     },

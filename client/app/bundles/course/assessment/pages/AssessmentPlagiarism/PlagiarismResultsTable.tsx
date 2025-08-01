@@ -2,7 +2,10 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { OpenInNew, PictureAsPdf } from '@mui/icons-material';
 import { IconButton, Tooltip, Typography } from '@mui/material';
-import { AssessmentPlagiarismSubmissionPair } from 'types/course/plagiarism';
+import {
+  AssessmentPlagiarismSubmission,
+  AssessmentPlagiarismSubmissionPair,
+} from 'types/course/plagiarism';
 
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -56,6 +59,10 @@ const translations = defineMessages({
     id: 'course.assessment.plagiarism.searchByStudentName',
     defaultMessage: 'Search by Student Name',
   },
+  cannotManageSubmission: {
+    id: 'course.assessment.plagiarism.cannotManageSubmission',
+    defaultMessage: 'You do not have permission to manage this submission.',
+  },
 });
 
 const PlagiarismResultsTable: FC<Props> = (props) => {
@@ -73,6 +80,37 @@ const PlagiarismResultsTable: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
+  const createSubmissionCell = (
+    submission: AssessmentPlagiarismSubmission,
+  ): JSX.Element => {
+    const link = (
+      <Link
+        className={!submission.canManage ? 'text-neutral-500' : ''}
+        opensInNewTab
+        to={submission.submissionUrl}
+      >
+        {submission.courseUser.name}
+      </Link>
+    );
+    return (
+      <div>
+        {submission.canManage ? (
+          link
+        ) : (
+          <Tooltip title={t(translations.cannotManageSubmission)}>
+            {link}
+          </Tooltip>
+        )}
+        <Typography className="text-gray-600" variant="body2">
+          {submission.assessmentTitle}
+        </Typography>
+        <Typography className="text-gray-600" variant="body2">
+          {submission.courseTitle}
+        </Typography>
+      </div>
+    );
+  };
+
   const columns: ColumnTemplate<AssessmentPlagiarismSubmissionPair>[] = [
     {
       of: 'baseSubmission',
@@ -82,11 +120,7 @@ const PlagiarismResultsTable: FC<Props> = (props) => {
       searchProps: {
         getValue: (datum) => datum.baseSubmission.courseUser.name,
       },
-      cell: (datum) => (
-        <Link opensInNewTab to={datum.baseSubmission.submissionUrl}>
-          {datum.baseSubmission.courseUser.name}
-        </Link>
-      ),
+      cell: (datum) => createSubmissionCell(datum.baseSubmission),
     },
     {
       of: 'comparedSubmission',
@@ -96,11 +130,7 @@ const PlagiarismResultsTable: FC<Props> = (props) => {
       searchProps: {
         getValue: (datum) => datum.comparedSubmission.courseUser.name,
       },
-      cell: (datum) => (
-        <Link opensInNewTab to={datum.comparedSubmission.submissionUrl}>
-          {datum.comparedSubmission.courseUser.name}
-        </Link>
-      ),
+      cell: (datum) => createSubmissionCell(datum.comparedSubmission),
     },
     {
       of: 'similarityScore',

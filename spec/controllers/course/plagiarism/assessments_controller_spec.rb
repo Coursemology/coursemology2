@@ -51,7 +51,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
         end
 
         it 'returns plagiarism data with results' do
-          get :plagiarism_data, as: :json, params: { course_id: course, assessment_id: assessment }
+          get :plagiarism_data, as: :json, params: { course_id: course, id: assessment }
 
           expect(response).to have_http_status(:success)
           expect(controller.instance_variable_get(:@results)).to eq(plagiarism_results)
@@ -64,7 +64,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
         end
 
         it 'returns empty results' do
-          get :plagiarism_data, as: :json, params: { course_id: course, assessment_id: assessment }
+          get :plagiarism_data, as: :json, params: { course_id: course, id: assessment }
 
           expect(response).to have_http_status(:success)
           expect(controller.instance_variable_get(:@results)).to eq([])
@@ -77,7 +77,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
         end
 
         it 'returns empty results' do
-          get :plagiarism_data, as: :json, params: { course_id: course, assessment_id: assessment }
+          get :plagiarism_data, as: :json, params: { course_id: course, id: assessment }
           expect(response).to have_http_status(:success)
           expect(controller.instance_variable_get(:@results)).to eq([])
         end
@@ -95,7 +95,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
       context 'when plagiarism check does not exist' do
         it 'creates a new plagiarism check and starts job' do
           expect do
-            post :plagiarism_check, as: :json, params: { course_id: course, assessment_id: assessment }
+            post :plagiarism_check, as: :json, params: { course_id: course, id: assessment }
           end.to change(Course::Assessment::PlagiarismCheck, :count).by(1)
           expect(response).to have_http_status(:success)
           plagiarism_check = assessment.reload.plagiarism_check
@@ -109,7 +109,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
 
         it 'uses existing plagiarism check and starts job' do
           expect do
-            post :plagiarism_check, as: :json, params: { course_id: course, assessment_id: assessment }
+            post :plagiarism_check, as: :json, params: { course_id: course, id: assessment }
           end.not_to change(Course::Assessment::PlagiarismCheck, :count)
           existing_check.reload
           expect(existing_check.workflow_state).to eq('running')
@@ -149,7 +149,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
       it 'returns the HTML report for the submission pair' do
         post :download_submission_pair_result, as: :json, params: {
           course_id: course,
-          assessment_id: assessment,
+          id: assessment,
           submission_pair_id: EXAMPLE_UUID
         }
         expect(response).to have_http_status(:success)
@@ -171,7 +171,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
       it 'returns the shared URL for the submission pair' do
         post :share_submission_pair_result, as: :json, params: {
           course_id: course,
-          assessment_id: assessment,
+          id: assessment,
           submission_pair_id: EXAMPLE_UUID
         }
         expect(response).to have_http_status(:success)
@@ -192,11 +192,62 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
       it 'returns the shared URL for the assessment' do
         post :share_assessment_result, as: :json, params: {
           course_id: course,
-          assessment_id: assessment
+          id: assessment
         }
         expect(response).to have_http_status(:success)
         json_response = JSON.parse(response.body)
         expect(json_response['url']).to eq(EXAMPLE_URL)
+      end
+    end
+
+    describe 'GET #linked_and_unlinked_assessments' do
+      render_views
+      let!(:linked_assessment_in_duplication_tree) do
+        create(:assessment, :published_with_programming_question, course: course)
+      end
+      let!(:unlinked_assessment_in_duplication_tree) do
+        create(:assessment, :published_with_programming_question, course: course)
+      end
+      let!(:unlinked_assessment_not_in_duplication_tree) do
+        create(:assessment, :published_with_programming_question, course: course)
+      end
+
+      before do
+        create(:duplication_traceable_assessment,
+               source: assessment,
+               assessment: unlinked_assessment_in_duplication_tree)
+        create(:duplication_traceable_assessment,
+               source: assessment,
+               assessment: linked_assessment_in_duplication_tree)
+        assessment.linked_assessments << linked_assessment_in_duplication_tree
+      end
+
+      it 'returns linked and unlinked assessments, filtering unlinked to only include those in duplication tree' do
+        get :linked_and_unlinked_assessments, as: :json, params: { course_id: course, id: assessment }
+        expect(response).to have_http_status(:success)
+        json_response = JSON.parse(response.body)
+        expect(json_response['linkedAssessments'].pluck('id')).to contain_exactly(
+          assessment.id, linked_assessment_in_duplication_tree.id
+        )
+        expect(json_response['unlinkedAssessments'].pluck('id')).to contain_exactly(
+          unlinked_assessment_in_duplication_tree.id
+        )
+      end
+    end
+
+    describe 'PATCH #update_assessment_links' do
+      let!(:linked_assessment) { create(:assessment, :published_with_programming_question, course: course) }
+
+      it 'updates linked assessments successfully' do
+        expect do
+          patch :update_assessment_links, as: :json, params: {
+            course_id: course,
+            id: assessment,
+            linked_assessment_ids: [linked_assessment.id]
+          }
+        end.to change { assessment.reload.linked_assessments.count }.by(1)
+        expect(response).to have_http_status(:success)
+        expect(assessment.linked_assessments).to include(linked_assessment)
       end
     end
 
@@ -207,10 +258,10 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
         it 'denies access' do
           expect { get :index, params: { course_id: course } }.to raise_error(CanCan::AccessDenied)
           expect do
-            get :plagiarism_data, params: { course_id: course, assessment_id: assessment }
+            get :plagiarism_data, params: { course_id: course, id: assessment }
           end.to raise_error(CanCan::AccessDenied)
           expect do
-            post :plagiarism_check, params: { course_id: course, assessment_id: assessment }
+            post :plagiarism_check, params: { course_id: course, id: assessment }
           end.to raise_error(CanCan::AccessDenied)
           expect do
             post :plagiarism_checks,
@@ -219,7 +270,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
           expect do
             post :download_submission_pair_result, params: {
               course_id: course,
-              assessment_id: assessment,
+              id: assessment,
               base_submission_id: submission1.id,
               compared_submission_id: submission2.id
             }
@@ -227,14 +278,24 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
           expect do
             post :share_submission_pair_result, params: {
               course_id: course,
-              assessment_id: assessment,
+              id: assessment,
               submission_pair_id: EXAMPLE_UUID
             }
           end.to raise_error(CanCan::AccessDenied)
           expect do
             post :share_assessment_result, params: {
               course_id: course,
-              assessment_id: assessment
+              id: assessment
+            }
+          end.to raise_error(CanCan::AccessDenied)
+          expect do
+            get :linked_and_unlinked_assessments, params: { course_id: course, id: assessment }
+          end.to raise_error(CanCan::AccessDenied)
+          expect do
+            patch :update_assessment_links, params: {
+              course_id: course,
+              id: assessment,
+              linked_assessment_ids: []
             }
           end.to raise_error(CanCan::AccessDenied)
         end
