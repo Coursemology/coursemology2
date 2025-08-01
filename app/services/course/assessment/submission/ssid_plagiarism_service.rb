@@ -105,7 +105,9 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def sync_ssid_submissions
-    submissions_by_id = @assessment.submissions.index_by(&:id)
+    linked_assessments = Course::Assessment.where(id: @assessment.all_linked_assessments.pluck(:id)).
+                         includes(submissions: [assessment: :course])
+    submissions_by_id = linked_assessments.flat_map(&:submissions).index_by(&:id)
 
     fetch_ssid_submissions.filter_map do |ssid_submission|
       submission_id = ssid_submission['name'].split('_').first.to_i

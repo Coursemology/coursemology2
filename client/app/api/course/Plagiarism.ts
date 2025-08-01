@@ -1,4 +1,5 @@
 import {
+  AssessmentLinkData,
   AssessmentPlagiarism,
   PlagiarismAssessments,
 } from 'types/course/plagiarism';
@@ -26,7 +27,7 @@ export default class PlagiarismAPI extends BaseCourseAPI {
   fetchAssessmentPlagiarism(
     assessmentId: number,
   ): APIResponse<AssessmentPlagiarism> {
-    return this.client.get(`${this.#urlPrefix}/assessment/${assessmentId}`);
+    return this.client.get(`${this.#urlPrefix}/assessments/${assessmentId}`);
   }
 
   /**
@@ -37,7 +38,7 @@ export default class PlagiarismAPI extends BaseCourseAPI {
     submissionPairId: number,
   ): APIResponse<{ html: string }> {
     return this.client.get(
-      `${this.#urlPrefix}/assessment/${assessmentId}/download_submission_pair_result`,
+      `${this.#urlPrefix}/assessments/${assessmentId}/download_submission_pair_result`,
       {
         params: { submission_pair_id: submissionPairId },
       },
@@ -52,7 +53,7 @@ export default class PlagiarismAPI extends BaseCourseAPI {
     submissionPairId: number,
   ): APIResponse<{ url: string }> {
     return this.client.post(
-      `${this.#urlPrefix}/assessment/${assessmentId}/share_submission_pair_result`,
+      `${this.#urlPrefix}/assessments/${assessmentId}/share_submission_pair_result`,
       {
         submission_pair_id: submissionPairId,
       },
@@ -64,7 +65,7 @@ export default class PlagiarismAPI extends BaseCourseAPI {
    */
   shareAssessmentResult(assessmentId: number): APIResponse<{ url: string }> {
     return this.client.post(
-      `${this.#urlPrefix}/assessment/${assessmentId}/share_assessment_result`,
+      `${this.#urlPrefix}/assessments/${assessmentId}/share_assessment_result`,
     );
   }
 
@@ -72,7 +73,7 @@ export default class PlagiarismAPI extends BaseCourseAPI {
    * Initiates plagiarism check on an assessment.
    */
   runAssessmentPlagiarism(assessmentId: number): APIResponse<JobSubmitted> {
-    return this.client.post(`${this.#urlPrefix}/assessment/${assessmentId}`);
+    return this.client.post(`${this.#urlPrefix}/assessments/${assessmentId}`);
   }
 
   /**
@@ -83,6 +84,32 @@ export default class PlagiarismAPI extends BaseCourseAPI {
       `${this.#urlPrefix}/assessments/plagiarism_checks`,
       {
         assessment_ids: assessmentIds,
+      },
+    );
+  }
+
+  /**
+   * Fetches linked and unlinked assessments for a given assessment.
+   */
+  fetchLinkedAndUnlinkedAssessments(
+    assessmentId: number,
+  ): APIResponse<AssessmentLinkData> {
+    return this.client.get(
+      `${this.#urlPrefix}/assessments/${assessmentId}/linked_and_unlinked_assessments`,
+    );
+  }
+
+  /**
+   * Updates the linked assessments for a given assessment.
+   */
+  updateAssessmentLinks(
+    assessmentId: number,
+    linkedAssessmentIds: number[],
+  ): APIResponse<void> {
+    return this.client.patch(
+      `${this.#urlPrefix}/assessments/${assessmentId}/update_assessment_links`,
+      {
+        linked_assessment_ids: linkedAssessmentIds,
       },
     );
   }

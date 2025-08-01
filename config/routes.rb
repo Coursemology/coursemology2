@@ -481,13 +481,19 @@ Rails.application.routes.draw do
       end
 
       namespace :plagiarism do
-        get 'assessments' => 'assessments#index'
-        get 'assessment/:assessment_id' => 'assessments#plagiarism_data'
-        get 'assessment/:assessment_id/download_submission_pair_result' => 'assessments#download_submission_pair_result'
-        post 'assessment/:assessment_id/share_submission_pair_result' => 'assessments#share_submission_pair_result'
-        post 'assessment/:assessment_id/share_assessment_result' => 'assessments#share_assessment_result'
-        post 'assessment/:assessment_id' => 'assessments#plagiarism_check'
-        post 'assessments/plagiarism_checks' => 'assessments#plagiarism_checks'
+        resources :assessments, only: [:index] do
+          post 'plagiarism_checks', on: :collection
+          member do
+            get '' => 'assessments#plagiarism_data'
+            post '' => 'assessments#plagiarism_check'
+            get 'download_submission_pair_result'
+            post 'share_submission_pair_result'
+            post 'share_assessment_result'
+
+            get 'linked_and_unlinked_assessments'
+            patch 'update_assessment_links'
+          end
+        end
       end
 
       scope module: :video do

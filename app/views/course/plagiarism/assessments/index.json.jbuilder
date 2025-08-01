@@ -11,6 +11,7 @@ json.assessments @assessments do |assessment|
   json.numCheckableQuestions assessment.num_plagiarism_checkable_questions
   json.numSubmitted num_submitted
   json.lastSubmittedAt @latest_submission_time_hash[assessment.id]&.iso8601
+  json.numLinkedAssessments assessment.all_linked_assessments.size
 
   json.workflowState assessment.plagiarism_check&.workflow_state || 'not_started'
   json.lastRunTime assessment.plagiarism_check&.last_started_at&.iso8601

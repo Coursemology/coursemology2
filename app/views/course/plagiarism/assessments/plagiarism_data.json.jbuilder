@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-assessment = @assessment
 plagiarism_check = @plagiarism_check
 job = plagiarism_check.job
 
@@ -23,22 +22,30 @@ json.submissionPairs @results do |result|
 
   json.baseSubmission do
     json.id base_submission.id
-    course_user = @course_users_hash[base_submission.creator_id]
+    course_user = @course_users_hash[base_submission.assessment.course_id][base_submission.creator_id]
     json.courseUser do
       json.(course_user, :id, :name)
-      json.path course_user_path(current_course, course_user)
+      json.path course_user_path(course_user.course, course_user)
     end
-    json.submissionUrl edit_course_assessment_submission_path(current_course, assessment, base_submission)
+    json.assessmentTitle base_submission.assessment.title
+    json.courseTitle base_submission.assessment.course.title
+    json.submissionUrl edit_course_assessment_submission_path(course_user.course, base_submission.assessment,
+                                                              base_submission)
+    json.canManage @can_manage_course_hash[base_submission.assessment.course.id]
   end
 
   json.comparedSubmission do
     json.id compared_submission.id
-    course_user = @course_users_hash[compared_submission.creator_id]
+    course_user = @course_users_hash[compared_submission.assessment.course_id][compared_submission.creator_id]
     json.courseUser do
       json.(course_user, :id, :name)
-      json.path course_user_path(current_course, course_user)
+      json.path course_user_path(course_user.course, course_user)
     end
-    json.submissionUrl edit_course_assessment_submission_path(current_course, assessment, compared_submission)
+    json.assessmentTitle compared_submission.assessment.title
+    json.courseTitle compared_submission.assessment.course.title
+    json.submissionUrl edit_course_assessment_submission_path(course_user.course, compared_submission.assessment,
+                                                              compared_submission)
+    json.canManage @can_manage_course_hash[compared_submission.assessment.course.id]
   end
 
   json.similarityScore result[:similarity_score]

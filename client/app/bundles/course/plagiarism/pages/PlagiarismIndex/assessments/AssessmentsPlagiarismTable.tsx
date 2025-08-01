@@ -4,9 +4,11 @@ import {
   InfoOutlined,
   Plagiarism,
   PlayArrow,
+  SyncAlt,
   Warning,
 } from '@mui/icons-material';
 import {
+  Badge,
   Button,
   Chip,
   CircularProgress,
@@ -16,6 +18,7 @@ import {
 import palette from 'theme/palette';
 import { PlagiarismAssessmentListData } from 'types/course/plagiarism';
 
+import AssessmentLinkDialog from 'course/plagiarism/components/AssessmentLinkDialog';
 import { ASSESSMENTS_POLL_INTERVAL_MILLISECONDS } from 'course/plagiarism/constants';
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
@@ -133,6 +136,10 @@ const translations = defineMessages({
     defaultMessage:
       'Some of the selected assessments already have completed plagiarism checks. Running a new plagiarism check will remove the previous results.',
   },
+  linkAssessments: {
+    id: 'course.plagiarism.PlagiarismIndex.assessments.linkAssessments',
+    defaultMessage: 'Link Assessments',
+  },
 });
 
 const AssessmentsPlagiarismTable: FC = () => {
@@ -147,6 +154,10 @@ const AssessmentsPlagiarismTable: FC = () => {
   const [markedAssessments, setMarkedAssessments] = useState<
     PlagiarismAssessmentListData[]
   >([]);
+  const [linkDialogOpen, setLinkDialogOpen] = useState(false);
+  const [linkedAssessmentId, setLinkedAssessmentId] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     assessmentsPollerRef.current = setInterval(() => {
@@ -211,6 +222,16 @@ const AssessmentsPlagiarismTable: FC = () => {
     setOpenDialog(false);
     await handleRunPlagiarismCheck(markedAssessments);
     setMarkedAssessments([]);
+  };
+
+  const handleOpenLinkDialog = (assessmentId: number): void => {
+    setLinkedAssessmentId(assessmentId);
+    setLinkDialogOpen(true);
+  };
+
+  const handleCloseLinkDialog = (): void => {
+    setLinkDialogOpen(false);
+    setLinkedAssessmentId(null);
   };
 
   const getStatusText = (
@@ -377,37 +398,51 @@ const AssessmentsPlagiarismTable: FC = () => {
       cell: (assessment) => (
         <div className="flex">
           <Tooltip title={t(translations.runPlagiarismCheck)}>
-            <IconButton
-              color="primary"
-              disabled={!canRunPlagiarismCheck(assessment)}
-              onClick={() =>
-                handleRunPlagiarismCheckWithConfirmation([assessment])
-              }
-              size="small"
-            >
-              <PlayArrow />
-            </IconButton>
+            <span>
+              <IconButton
+                color="primary"
+                disabled={!canRunPlagiarismCheck(assessment)}
+                onClick={() =>
+                  handleRunPlagiarismCheckWithConfirmation([assessment])
+                }
+                size="small"
+              >
+                <PlayArrow />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Tooltip title={t(translations.linkAssessments)}>
+            <span>
+              <IconButton
+                color="primary"
+                disabled={
+                  assessment.workflowState ===
+                  ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running
+                }
+                onClick={() => handleOpenLinkDialog(assessment.id)}
+                size="small"
+              >
+                <Badge badgeContent={assessment.numLinkedAssessments}>
+                  <SyncAlt />
+                </Badge>
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title={t(translations.viewResults)}>
-            <Link
-              disabled={
-                assessment.workflowState !==
-                ASSESSMENT_SIMILARITY_WORKFLOW_STATE.completed
-              }
-              opensInNewTab
-              to={assessment.plagiarismUrl}
-            >
+            <span>
               <IconButton
                 color="primary"
                 disabled={
                   assessment.workflowState !==
                   ASSESSMENT_SIMILARITY_WORKFLOW_STATE.completed
                 }
+                href={assessment.plagiarismUrl}
                 size="small"
+                target="_blank"
               >
                 <Plagiarism />
               </IconButton>
-            </Link>
+            </span>
           </Tooltip>
         </div>
       ),
@@ -485,6 +520,14 @@ const AssessmentsPlagiarismTable: FC = () => {
       >
         <PromptText>{t(translations.confirmRerunMessage)}</PromptText>
       </Prompt>
+
+      {linkedAssessmentId && (
+        <AssessmentLinkDialog
+          assessmentId={linkedAssessmentId}
+          onClose={handleCloseLinkDialog}
+          open={linkDialogOpen}
+        />
+      )}
     </>
   );
 };
