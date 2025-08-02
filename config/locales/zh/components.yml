@@ -43,6 +43,9 @@ zh:
       name: '多重参考时间线'
     monitoring:
       name: '监听'
+    scholaistic:
+      name: '角色扮演聊天机器人和评估'
+      manage_assistants: '学习助手'
     stories:
       name: '故事'
     koditsu_platform:
