@@ -66,6 +66,8 @@ class Course::ExperiencePointsDownloadService
                  record.specific.assessment.title
                when Course::Survey::Response
                  record.specific.survey.title
+               when Course::ScholaisticSubmission
+                 record.specific.assessment.title
                end
              end
 

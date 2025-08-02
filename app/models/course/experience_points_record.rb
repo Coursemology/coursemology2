@@ -90,6 +90,8 @@ class Course::ExperiencePointsRecord < ApplicationRecord
       survey = response.survey
 
       validate_lesson_plan_item_points(survey)
+    when Course::ScholaisticSubmission
+      validate_lesson_plan_item_points(specific.assessment)
     end
   end
 

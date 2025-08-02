@@ -24,7 +24,8 @@ class Course::Condition < ApplicationRecord
     { name: Course::Condition::Assessment.name, active: true },
     { name: Course::Condition::Level.name, active: true },
     { name: Course::Condition::Survey.name, active: true },
-    { name: Course::Condition::Video.name, active: false }
+    { name: Course::Condition::Video.name, active: false },
+    { name: Course::Condition::ScholaisticAssessment.name, active: true }
   ].freeze
 
   class << self
