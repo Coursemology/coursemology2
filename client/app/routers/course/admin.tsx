@@ -163,6 +163,15 @@ const adminRouter: Translated<RouteObject> = (_) => ({
       }),
     },
     {
+      path: 'scholaistic',
+      lazy: async (): Promise<RouteObject> => ({
+        loader: (await import('course/admin/pages/ScholaisticSettings/loader'))
+          .loader,
+        Component: (await import('course/admin/pages/ScholaisticSettings'))
+          .default,
+      }),
+    },
+    {
       path: 'stories',
       lazy: async (): Promise<RouteObject> => ({
         Component: (
