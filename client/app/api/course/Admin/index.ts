@@ -11,6 +11,7 @@ import LessonPlanSettingsAPI from './LessonPlan';
 import MaterialsAdminAPI from './Materials';
 import NotificationsSettingsAPI from './Notifications';
 import RagWiseAdminAPI from './RagWise';
+import ScholaisticAdminAPI from './Scholaistic';
 import SidebarAPI from './Sidebar';
 import StoriesAdminAPI from './Stories';
 import VideosAdminAPI from './Videos';
@@ -30,6 +31,7 @@ const AdminAPI = {
   videos: new VideosAdminAPI(),
   notifications: new NotificationsSettingsAPI(),
   codaveri: new CodaveriAdminAPI(),
+  scholaistic: new ScholaisticAdminAPI(),
   stories: new StoriesAdminAPI(),
   ragWise: new RagWiseAdminAPI(),
 };

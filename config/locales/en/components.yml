@@ -43,6 +43,9 @@ en:
       name: 'Multiple Reference Timelines'
     monitoring:
       name: 'Heartbeat Monitoring for Exams'
+    scholaistic:
+      name: 'Role-Playing Chatbots & Assessments'
+      manage_assistants: 'Assistants'
     stories:
       name: 'Stories'
     koditsu_platform:
