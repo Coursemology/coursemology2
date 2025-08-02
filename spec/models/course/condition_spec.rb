@@ -51,11 +51,14 @@ RSpec.describe Course::Condition, type: :model do
             to receive(:dependent_class).and_return(Course::Achievement.name)
           allow(Course::Condition::Video).
             to receive(:dependent_class).and_return(Course::Achievement.name)
+          allow(Course::Condition::ScholaisticAssessment).
+            to receive(:dependent_class).and_return(Course::Achievement.name)
           actual_mapping = Course::Condition.send(:dependent_class_to_condition_class_mapping)
           expected_mapping = { Course::Achievement.name => [Course::Condition::Achievement.name,
                                                             Course::Condition::Assessment.name,
                                                             Course::Condition::Survey.name,
-                                                            Course::Condition::Video.name] }
+                                                            Course::Condition::Video.name,
+                                                            Course::Condition::ScholaisticAssessment.name] }
           expect(actual_mapping).to eq(expected_mapping)
         end
       end
