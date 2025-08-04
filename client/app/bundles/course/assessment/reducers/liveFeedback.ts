@@ -8,6 +8,7 @@ const initialState: LiveFeedbackHistoryState = {
     title: '',
     description: '',
   },
+  endOfConversationFiles: [],
 };
 
 export const liveFeedbackSlice = createSlice({
@@ -17,6 +18,7 @@ export const liveFeedbackSlice = createSlice({
     initialize: (state, action: PayloadAction<LiveFeedbackHistoryState>) => {
       state.messages = action.payload.messages;
       state.question = action.payload.question;
+      state.endOfConversationFiles = action.payload.endOfConversationFiles;
     },
     reset: () => {
       return initialState;

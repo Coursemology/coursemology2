@@ -12,6 +12,9 @@ interface Props {
   messages: LiveFeedbackChatMessage[];
   selectedMessageIndex: number;
   setSelectedMessageIndex: Dispatch<SetStateAction<number>>;
+  isConversationEndSelected: boolean;
+  isConversationEndSelectable: boolean;
+  setIsConversationEndSelected: Dispatch<SetStateAction<boolean>>;
 }
 
 const translations = defineMessages({
@@ -24,7 +27,14 @@ const translations = defineMessages({
 const MESSAGE_OFFSET = 40;
 
 const LiveFeedbackConversation: FC<Props> = (props) => {
-  const { messages, selectedMessageIndex, setSelectedMessageIndex } = props;
+  const {
+    messages,
+    selectedMessageIndex,
+    setSelectedMessageIndex,
+    isConversationEndSelected,
+    isConversationEndSelectable,
+    setIsConversationEndSelected,
+  } = props;
   const scrollableRef = useRef<HTMLDivElement>(null);
   const curMessage = messages[selectedMessageIndex];
   const options = [...curMessage.options];
@@ -69,9 +79,12 @@ const LiveFeedbackConversation: FC<Props> = (props) => {
 
       <div ref={scrollableRef} className="flex-1 overflow-auto">
         <LiveFeedbackMessageHistory
+          isConversationEndSelectable={isConversationEndSelectable}
+          isConversationEndSelected={isConversationEndSelected}
           messages={messages}
           onMessageClick={scrollToMessage}
           selectedMessageIndex={selectedMessageIndex}
+          setIsConversationEndSelected={setIsConversationEndSelected}
           setSelectedMessageIndex={setSelectedMessageIndex}
         />
       </div>

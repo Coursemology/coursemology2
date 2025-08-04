@@ -27,6 +27,7 @@ export const fetchLiveFeedbackHistory = async (
       actions.initialize({
         messages: data.messages,
         question: data.question,
+        endOfConversationFiles: data.endOfConversationFiles,
       }),
     );
   } catch (error) {
