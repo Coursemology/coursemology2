@@ -17,29 +17,37 @@ import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getEditSubmissionURL } from 'lib/helpers/url-builders';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import LiveFeedbackMetricSelector from './components/LiveFeedbackMetricsSelector';
+import LiveFeedbackMetricSelector, {
+  MetricType,
+} from './components/LiveFeedbackMetricsSelector';
 import { getClassnameForLiveFeedbackCell } from './classNameUtils';
 import LiveFeedbackHistoryContent from './LiveFeedbackHistory';
 import translations from './translations';
 import { getJointGroupsName } from './utils';
 
-const METRIC_CONFIG = {
-  grade: {
+interface MetricConfig {
+  showTotal: boolean;
+  legendLowerLabel: string;
+  legendUpperLabel: string;
+}
+
+const METRIC_CONFIG: Record<MetricType, MetricConfig> = {
+  [MetricType.GRADE]: {
     showTotal: true,
     legendLowerLabel: 'legendLowerLabelGrade',
     legendUpperLabel: 'legendUpperLabelGrade',
   },
-  grade_diff: {
-    showTotal: false,
+  [MetricType.GRADE_DIFF]: {
+    showTotal: true,
     legendLowerLabel: 'legendLowerLabelGradeDiff',
     legendUpperLabel: 'legendUpperLabelGradeDiff',
   },
-  messages_sent: {
+  [MetricType.MESSAGES_SENT]: {
     showTotal: true,
     legendLowerLabel: 'legendLowerLabelMessagesSent',
     legendUpperLabel: 'legendUpperLabelMessagesSent',
   },
-  word_count: {
+  [MetricType.WORD_COUNT]: {
     showTotal: true,
     legendLowerLabel: 'legendLowerLabelWordCount',
     legendUpperLabel: 'legendUpperLabelWordCount',
@@ -71,7 +79,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
     questionNumber: 0,
   });
   const [selectedMetric, setSelectedMetric] = useState({
-    value: 'messages_sent',
+    value: MetricType.MESSAGES_SENT,
     label: 'Messages Sent',
   });
 
@@ -165,7 +173,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         Grade: {liveFeedbackData.grade ?? '-'}
       </Typography>
       <Typography variant="body2">
-        Grade Difference: {liveFeedbackData.grade_diff ?? '-'}
+        Grade Improvement: {liveFeedbackData.grade_diff ?? '-'}
       </Typography>
       <Typography variant="body2">
         Messages Sent: {liveFeedbackData.messages_sent ?? '-'}
@@ -190,7 +198,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
         setLiveFeedbackInfo({ courseUserId, questionId, questionNumber });
       }}
     >
-      <Box>{metricValue}</Box>
+      {metricValue}
     </div>
   );
 
@@ -215,7 +223,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       return (
         <div className="p-1.5">
           <Tooltip arrow placement="left" title={tooltipContent}>
-            <Box>{metricValue}</Box>
+            <span>{metricValue ?? '-'}</span>
           </Tooltip>
         </div>
       );
@@ -250,7 +258,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
             cell: (datum): ReactNode => {
               const metricValue =
                 datum.liveFeedbackData[index]?.[
-                  selectedMetric.value as keyof (typeof datum.liveFeedbackData)[number]
+                  selectedMetric.value as keyof typeof datum.liveFeedbackData
                 ];
               return typeof metricValue === 'number'
                 ? renderNonNullClickableLiveFeedbackCountCell(
@@ -260,7 +268,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
                     index + 1,
                     datum.liveFeedbackData[index],
                   )
-                : null;
+                : '-';
             },
             sortable: true,
             csvDownloadable: true,
@@ -280,6 +288,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
             },
           };
         },
+        selectedMetric,
       );
 
       const baseColumns: ColumnTemplate<AssessmentLiveFeedbackStatistics>[] = [
@@ -421,7 +430,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
               ],
             )}
           </Typography>
-          <div className="h-5 w-1/4 mx-2 bg-gradient-to-r from-red-100 to-red-500 rounded" />
+          <div className="h-5 w-1/4 mx-2 bg-gradient-to-r from-green-100 to-green-500" />
           <Typography variant="caption">
             {t(
               translations[

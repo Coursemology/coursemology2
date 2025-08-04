@@ -1,21 +1,30 @@
 import { AttemptInfo } from 'types/course/statistics/assessmentStatistics';
 
-const redBackgroundColorClassName = {
-  0: 'bg-red-50',
-  100: 'bg-red-100',
-  200: 'bg-red-200',
-  300: 'bg-red-300',
-  400: 'bg-red-400',
-  500: 'bg-red-500',
-};
+enum DatumColor {
+  RED,
+  GREEN,
+}
 
-const greenBackgroundColorClassName = {
-  0: 'bg-green-50',
-  100: 'bg-green-100',
-  200: 'bg-green-200',
-  300: 'bg-green-300',
-  400: 'bg-green-400',
-  500: 'bg-green-500',
+const BackgroundColorClassNameMapper: Record<
+  DatumColor,
+  Record<number, string>
+> = {
+  [DatumColor.RED]: {
+    0: 'bg-red-50',
+    100: 'bg-red-100',
+    200: 'bg-red-200',
+    300: 'bg-red-300',
+    400: 'bg-red-400',
+    500: 'bg-red-500',
+  },
+  [DatumColor.GREEN]: {
+    0: 'bg-green-50',
+    100: 'bg-green-100',
+    200: 'bg-green-200',
+    300: 'bg-green-300',
+    400: 'bg-green-400',
+    500: 'bg-green-500',
+  },
 };
 
 // 1. we compute the distance between the value and the halfMaxValue
@@ -50,8 +59,8 @@ export const getClassNameForMarkCell = (
     maxGrade / 2,
   );
   return grade >= maxGrade / 2
-    ? `${greenBackgroundColorClassName[gradientLevel]} p-1.5`
-    : `${redBackgroundColorClassName[gradientLevel]} p-1.5`;
+    ? `${BackgroundColorClassNameMapper[DatumColor.GREEN][gradientLevel]} p-1.5`
+    : `${BackgroundColorClassNameMapper[DatumColor.RED][gradientLevel]} p-1.5`;
 };
 
 // for attempt count cell, the difference in color means the following:
@@ -72,9 +81,12 @@ export const getClassnameForLiveFeedbackCell = (
   metricValue: number,
   upperQuartile: number,
 ): string => {
+  if (metricValue < 0) {
+    return `bg-red-300 p-1.5`;
+  }
   const gradientLevel = calculateOneSidedColorGradientLevel(
     metricValue,
     upperQuartile,
   );
-  return `${redBackgroundColorClassName[gradientLevel]} p-1.5`;
+  return `${BackgroundColorClassNameMapper[DatumColor.GREEN][gradientLevel]} p-1.5`;
 };

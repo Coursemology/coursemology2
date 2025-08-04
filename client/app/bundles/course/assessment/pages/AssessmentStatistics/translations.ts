@@ -43,11 +43,11 @@ const translations = defineMessages({
   },
   legendLowerLabelGradeDiff: {
     id: 'course.assessment.statistics.legendLowerLabelGradeDiff',
-    defaultMessage: 'Lower Grade Difference',
+    defaultMessage: 'Less Improvement',
   },
   legendUpperLabelGradeDiff: {
     id: 'course.assessment.statistics.legendHigherLabelGradeDiff',
-    defaultMessage: 'Higher Grade Difference',
+    defaultMessage: 'More Improvement',
   },
   legendLowerLabelMessagesSent: {
     id: 'course.assessment.statistics.legendLowerLabelMessagesSent',
