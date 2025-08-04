@@ -1,6 +1,7 @@
 import { AppState } from 'store';
 import {
   LiveFeedbackChatMessage,
+  MessageFile,
   QuestionInfo,
 } from 'types/course/assessment/submission/liveFeedback';
 import {
@@ -33,3 +34,8 @@ export const getLiveFeedbackChatMessages = (
 
 export const getLiveFeedbackQuestionInfo = (state: AppState): QuestionInfo =>
   state.assessments.liveFeedback.question;
+
+export const getLiveFeedbackEndOfConversationFiles = (
+  state: AppState,
+): MessageFile[] | undefined =>
+  state.assessments.liveFeedback.endOfConversationFiles;

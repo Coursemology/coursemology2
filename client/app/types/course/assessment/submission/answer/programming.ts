@@ -13,7 +13,7 @@ export interface ProgrammingContent {
   id: number;
   filename: string;
   content: string;
-  highlightedContent: string | null;
+  highlightedContent?: string | null;
 }
 
 export type TestCaseType = 'public_test' | 'private_test' | 'evaluation_test';

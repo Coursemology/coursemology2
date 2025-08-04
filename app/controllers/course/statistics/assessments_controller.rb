@@ -74,6 +74,12 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
                 where(live_feedback_threads: { submission_question_id: @submission_question_id_hash.values }).
                 includes(message_options: :option, message_files: :file).
                 order(:created_at)
+
+    return unless @messages && @messages.count >= 1
+
+    @end_of_conversation_answer = @submissions.first.answers.where(
+      'question_id = ? AND created_at > ?', @question.id, @messages.last.created_at
+    )&.first&.actable
   end
 
   def ancestor_info

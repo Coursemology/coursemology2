@@ -16,7 +16,6 @@ json.messages @messages.each do |message|
     json.content file.content
     json.language @question.specific.language[:name]
     json.editorMode @question.specific.language.ace_mode
-    json.highlightedContent highlight_code_block(file.content, @question.specific.language)
   end
 
   json.options message.message_options.each do |message_option|
@@ -24,6 +23,16 @@ json.messages @messages.each do |message|
 
     json.optionId option.id
     json.optionType option.option_type
+  end
+end
+
+if @end_of_conversation_answer
+  json.endOfConversationFiles @end_of_conversation_answer.files.each do |file|
+    json.id file.id
+    json.filename file.filename
+    json.content file.content
+    json.language @question.specific.language[:name]
+    json.editorMode @question.specific.language.ace_mode
   end
 end
 

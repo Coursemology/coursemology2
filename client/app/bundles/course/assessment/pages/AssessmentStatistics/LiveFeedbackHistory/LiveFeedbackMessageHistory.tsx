@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, MouseEventHandler, SetStateAction } from 'react';
 import { defineMessages } from 'react-intl';
 import { Chip, Typography } from '@mui/material';
 import { LiveFeedbackChatMessage } from 'types/course/assessment/submission/liveFeedback';
@@ -9,7 +9,7 @@ import {
   justifyPosition,
 } from 'course/assessment/submission/components/GetHelpChatPage/utils';
 import MarkdownText from 'course/assessment/submission/components/MarkdownText';
-import useTranslation from 'lib/hooks/useTranslation';
+import useTranslation, { MessageTranslator } from 'lib/hooks/useTranslation';
 import moment, { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 interface Props {
@@ -17,6 +17,9 @@ interface Props {
   selectedMessageIndex: number;
   setSelectedMessageIndex: Dispatch<SetStateAction<number>>;
   onMessageClick: (messageId: number) => void;
+  isConversationEndSelectable: boolean;
+  isConversationEndSelected: boolean;
+  setIsConversationEndSelected: Dispatch<SetStateAction<boolean>>;
 }
 
 const translations = defineMessages({
@@ -24,7 +27,32 @@ const translations = defineMessages({
     id: 'course.assessment.submission.GetHelpChatPage.codeUpdated',
     defaultMessage: 'Code Updated',
   },
+  endOfConversation: {
+    id: 'course.assessment.submission.GetHelpChatPage.endOfConversation',
+    defaultMessage: 'View code after conversation',
+  },
 });
+
+interface MessageGroupDividerProps {
+  className: string;
+  onClick: MouseEventHandler;
+  label: string;
+}
+
+const MessageGroupDivider: FC<MessageGroupDividerProps> = (props) => {
+  return (
+    <div className="my-2 flex justify-center">
+      <Chip
+        className={props.className}
+        color="primary"
+        label={props.label}
+        onClick={props.onClick}
+        size="small"
+        variant="filled"
+      />
+    </div>
+  );
+};
 
 const LiveFeedbackMessageHistory: FC<Props> = (props) => {
   const {
@@ -32,6 +60,9 @@ const LiveFeedbackMessageHistory: FC<Props> = (props) => {
     selectedMessageIndex,
     setSelectedMessageIndex,
     onMessageClick,
+    isConversationEndSelected,
+    isConversationEndSelectable,
+    setIsConversationEndSelected,
   } = props;
 
   const { t } = useTranslation();
@@ -57,24 +88,18 @@ const LiveFeedbackMessageHistory: FC<Props> = (props) => {
   // Helper function to check if a message index is active
   const isMessageActive = (messageIndex: number): boolean => {
     return (
-      messageIndex === selectedMessageIndex ||
-      messageIndex === selectedMessageIndex + 1
+      !isConversationEndSelected &&
+      (messageIndex === selectedMessageIndex ||
+        messageIndex === selectedMessageIndex + 1)
     );
   };
 
   // Helper function to get divider opacity class
   const getDividerOpacityClass = (groupIndex: number): string => {
-    const lastMessageOfCurrentGroup =
-      messageGroups[groupIndex].indices[
-        messageGroups[groupIndex].indices.length - 1
-      ];
     const nextGroup = messageGroups[groupIndex + 1];
     const firstMessageOfNextGroup = nextGroup.indices[0];
-
-    const isLastMessageActive = isMessageActive(lastMessageOfCurrentGroup);
     const isFirstMessageActive = isMessageActive(firstMessageOfNextGroup);
-
-    return isLastMessageActive || isFirstMessageActive ? '' : 'opacity-35';
+    return isFirstMessageActive ? '' : 'opacity-35';
   };
 
   return (
@@ -96,6 +121,7 @@ const LiveFeedbackMessageHistory: FC<Props> = (props) => {
                   'flex',
                   justifyPosition(isStudent, isError),
                   messageIndex === messages.length - 1 &&
+                  !isConversationEndSelectable &&
                   allChosenMessageIndex[messageIndex]
                     ? 'pb-16'
                     : '',
@@ -107,6 +133,7 @@ const LiveFeedbackMessageHistory: FC<Props> = (props) => {
                 onClick={() => {
                   const newIndex = findMostRecentUserMessage(messageIndex);
                   setSelectedMessageIndex(newIndex);
+                  setIsConversationEndSelected(false);
                   onMessageClick(messages[newIndex].id);
                 }}
               >
@@ -132,23 +159,42 @@ const LiveFeedbackMessageHistory: FC<Props> = (props) => {
           })}
           {/* Add divider between groups, except for the last group */}
           {groupIndex < messageGroups.length - 1 && (
-            <div className="my-2 flex justify-center">
-              <Chip
-                className={[
-                  'bg-blue-200 text-black',
-                  getDividerOpacityClass(groupIndex),
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                color="primary"
-                label={t(translations.codeUpdated)}
-                size="small"
-                variant="filled"
-              />
-            </div>
+            <MessageGroupDivider
+              className={[
+                'bg-blue-200 text-black',
+                getDividerOpacityClass(groupIndex),
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              label={t(translations.codeUpdated)}
+              onClick={() => {
+                setSelectedMessageIndex(
+                  messageGroups[groupIndex + 1].indices[0],
+                );
+                setIsConversationEndSelected(false);
+                onMessageClick(
+                  messages[messageGroups[groupIndex + 1].indices[0]].id,
+                );
+              }}
+            />
           )}
         </div>
       ))}
+      {isConversationEndSelectable && (
+        <MessageGroupDivider
+          className={[
+            'mb-16 bg-blue-200 text-black',
+            isConversationEndSelected ? '' : 'opacity-35',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          label={t(translations.endOfConversation)}
+          onClick={() => {
+            setSelectedMessageIndex(messages.length - 1);
+            setIsConversationEndSelected(true);
+          }}
+        />
+      )}
     </>
   );
 };

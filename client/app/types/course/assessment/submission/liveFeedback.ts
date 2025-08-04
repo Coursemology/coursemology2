@@ -12,7 +12,6 @@ export interface MessageFile {
   content: string;
   language: string;
   editorMode: LanguageMode;
-  highlightedContent: string | null;
 }
 
 export interface LiveFeedbackChatMessage {
@@ -29,6 +28,7 @@ export interface LiveFeedbackChatMessage {
 export interface LiveFeedbackHistoryState {
   messages: LiveFeedbackChatMessage[];
   question: QuestionInfo;
+  endOfConversationFiles?: MessageFile[];
 }
 
 export interface MessageOption {

@@ -3,7 +3,10 @@ import { FC, useRef, useState } from 'react';
 import { useAppSelector } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 
-import { getLiveFeedbackChatMessages } from '../selectors';
+import {
+  getLiveFeedbackChatMessages,
+  getLiveFeedbackEndOfConversationFiles,
+} from '../selectors';
 
 import GetHelpSlider from './GetHelpSlider';
 import LiveFeedbackConversation from './LiveFeedbackConversation';
@@ -11,6 +14,9 @@ import LiveFeedbackFiles from './LiveFeedbackFiles';
 
 const LiveFeedbackDetails: FC = () => {
   const messages = useAppSelector(getLiveFeedbackChatMessages);
+  const endOfConversationFiles = useAppSelector(
+    getLiveFeedbackEndOfConversationFiles,
+  );
 
   // Create user messages and their indices
   const userMessagesWithIndices = messages
@@ -43,8 +49,16 @@ const LiveFeedbackDetails: FC = () => {
     userMessageToActualIndex[userMessages.length - 1],
   );
 
+  const [isConversationEndSelected, setIsConversationEndSelected] =
+    useState(false);
+
   const latestMessageMarker = messageTimeMarkers[messageTimeMarkers.length - 1];
   const earliestMessageMarker = messageTimeMarkers[0];
+
+  const selectedMessageFiles =
+    isConversationEndSelected && endOfConversationFiles
+      ? endOfConversationFiles
+      : messages[selectedMessageIndex].files;
 
   return (
     <>
@@ -71,9 +85,9 @@ const LiveFeedbackDetails: FC = () => {
 
       <div className="flex flex-row w-full relative min-h-[52.5rem]">
         <div className="absolute w-1/2 top-0 bottom-0 left-0 pr-1 flex">
-          {messages[selectedMessageIndex].files.map((file) => (
+          {selectedMessageFiles.map((file) => (
             <LiveFeedbackFiles
-              key={`${messages[selectedMessageIndex].id} ${file.id}`}
+              key={`${isConversationEndSelected ? 'end' : ''}_${messages[selectedMessageIndex].id}_${file.id}`}
               file={file}
             />
           ))}
@@ -84,8 +98,11 @@ const LiveFeedbackDetails: FC = () => {
           className="absolute w-1/2 top-0 bottom-0 right-0 pl-1 flex"
         >
           <LiveFeedbackConversation
+            isConversationEndSelectable={Boolean(endOfConversationFiles)}
+            isConversationEndSelected={isConversationEndSelected}
             messages={messages}
             selectedMessageIndex={selectedMessageIndex}
+            setIsConversationEndSelected={setIsConversationEndSelected}
             setSelectedMessageIndex={setSelectedMessageIndex}
           />
         </div>
