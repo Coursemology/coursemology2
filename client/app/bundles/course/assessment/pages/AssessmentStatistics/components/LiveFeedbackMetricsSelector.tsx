@@ -9,7 +9,7 @@ import {
 
 import InfoLabel from 'lib/components/core/InfoLabel';
 
-enum MetricType {
+export enum MetricType {
   GRADE = 'grade',
   GRADE_DIFF = 'grade_diff',
   MESSAGES_SENT = 'messages_sent',
@@ -17,7 +17,7 @@ enum MetricType {
 }
 
 interface MetricOption {
-  value: string;
+  value: MetricType;
   label: string;
 }
 
@@ -28,7 +28,7 @@ interface Props {
 
 const metricOptions: MetricOption[] = [
   { value: MetricType.GRADE, label: 'Grade' },
-  { value: MetricType.GRADE_DIFF, label: 'Grade Difference' },
+  { value: MetricType.GRADE_DIFF, label: 'Grade Improvement' },
   { value: MetricType.MESSAGES_SENT, label: 'Messages Sent' },
   { value: MetricType.WORD_COUNT, label: 'Word Count' },
 ];

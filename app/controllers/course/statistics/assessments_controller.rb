@@ -137,6 +137,11 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     end
   end
 
+  # If grade_before is null (the student didn't submit any code before prompting),
+  # we treat it as if it were a blank submission (graded as zero).
+  # If grade_after is null (the student didn't submit any new code after the last prompt),
+  # we take their final answer to compute the grade improvement metric.
+
   # Fetches all user Get Help messages grouped by [submission_creator_id, submission_question_id],
   # along with `grade_before` and `grade_after` relative to the message timestamps.
   # The returned structure looks like:
@@ -166,14 +171,13 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     result = ActiveRecord::Base.connection.execute(
       build_message_grade_sql(student_ids, submission_question_ids)
     )
-
     result.to_h do |row|
       key = [row['submission_creator_id'], row['submission_question_id']]
       [
         key,
         messages: JSON.parse(row['messages_json']),
         grade_before: row['grade_before']&.to_f || 0,
-        grade_after: row['grade_after']&.to_f || 0
+        grade_after: row['grade_after']&.to_f
       ]
     end
   end
@@ -182,6 +186,9 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     <<-SQL
     WITH feedback_messages AS (
       #{feedback_messages_cte(student_ids, submission_question_ids)}
+    ),
+    feedback_answers AS (
+      #{feedback_answers_cte}
     ),
     grades_before AS (
       #{grades_before_cte}
@@ -222,33 +229,49 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
     SQL
   end
 
+  def feedback_answers_cte
+    <<-SQL
+      SELECT
+        a.submission_id,
+        a.question_id,
+        a.created_at,
+        a.grade,
+        f.first_message_at,
+        f.last_message_at,
+        lft.submission_creator_id,
+        lft.submission_question_id
+      FROM feedback_messages f
+      JOIN live_feedback_threads lft ON lft.submission_creator_id = f.submission_creator_id AND lft.submission_question_id = f.submission_question_id
+      JOIN course_assessment_submission_questions sq ON sq.id = lft.submission_question_id
+      JOIN course_assessment_answers a ON a.submission_id = sq.submission_id AND a.question_id = sq.question_id
+    SQL
+  end
+
   def grades_before_cte
     <<-SQL
-    SELECT DISTINCT ON (a.submission_id, a.question_id)
-      a.grade AS grade_before,
-      lft.submission_creator_id,
-      lft.submission_question_id
-    FROM feedback_messages f
-    JOIN live_feedback_threads lft ON lft.submission_creator_id = f.submission_creator_id AND lft.submission_question_id = f.submission_question_id
-    JOIN course_assessment_submission_questions sq ON sq.id = lft.submission_question_id
-    JOIN course_assessment_answers a ON a.submission_id = sq.submission_id AND a.question_id = sq.question_id
-    WHERE a.created_at < f.first_message_at
-    ORDER BY a.submission_id, a.question_id, a.created_at DESC
+      SELECT DISTINCT ON (submission_id, question_id)
+        grade AS grade_before,
+        submission_creator_id,
+        submission_question_id
+      FROM feedback_answers
+      WHERE created_at < first_message_at
+      ORDER BY submission_id, question_id, created_at DESC
     SQL
   end
 
   def grades_after_cte
     <<-SQL
-    SELECT DISTINCT ON (a.submission_id, a.question_id)
-      a.grade AS grade_after,
-      lft.submission_creator_id,
-      lft.submission_question_id
-    FROM feedback_messages f
-    JOIN live_feedback_threads lft ON lft.submission_creator_id = f.submission_creator_id AND lft.submission_question_id = f.submission_question_id
-    JOIN course_assessment_submission_questions sq ON sq.id = lft.submission_question_id
-    JOIN course_assessment_answers a ON a.submission_id = sq.submission_id AND a.question_id = sq.question_id
-    WHERE a.created_at > f.last_message_at
-    ORDER BY a.submission_id, a.question_id, a.created_at ASC
+      SELECT DISTINCT ON (submission_id, question_id)
+        grade AS grade_after,
+        submission_creator_id,
+        submission_question_id
+      FROM feedback_answers
+      WHERE created_at > last_message_at
+      ORDER BY
+        submission_id,
+        question_id,
+        CASE WHEN created_at > last_message_at THEN -1 ELSE 1 END,
+        (CASE WHEN created_at > last_message_at THEN 1 ELSE -1 END) * EXTRACT(EPOCH FROM created_at)
     SQL
   end
 
@@ -263,9 +286,13 @@ class Course::Statistics::AssessmentsController < Course::Statistics::Controller
 
       prompt_data = prompt_hash[key] || { messages_sent: 0, word_count: 0 }
 
+      grade_diff = if grade_before && grade_after && prompt_data[:messages_sent] > 0
+                     (grade_after - grade_before).round(2)
+                   end
+
       {
         grade: final_grade_hash[[submission&.id, question_id]],
-        grade_diff: (grade_after && grade_before) ? (grade_after - grade_before).round(2) : 0,
+        grade_diff: grade_diff,
         word_count: prompt_data[:word_count],
         messages_sent: prompt_data[:messages_sent]
       }
