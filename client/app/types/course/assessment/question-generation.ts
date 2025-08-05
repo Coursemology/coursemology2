@@ -38,3 +38,33 @@ export interface CodaveriGenerateResponseData {
     visibility: TestcaseVisibility;
   }[];
 }
+
+export interface McqMrqGenerateResponse {
+  success: boolean;
+  message: string;
+  data: McqMrqGenerateResponseData;
+}
+
+export interface McqMrqGenerateResponseData {
+  title: string;
+  description: string;
+  options: McqMrqGeneratedOption[];
+  allQuestions: McqMrqGeneratedQuestion[];
+  numberOfQuestions: number;
+}
+
+export interface McqMrqGeneratedQuestion {
+  title: string;
+  description: string;
+  options: McqMrqGeneratedOption[];
+}
+
+export interface McqMrqGeneratedOption {
+  id: number;
+  option: string;
+  correct: boolean;
+  weight: number;
+  explanation: string;
+  ignoreRandomization: boolean;
+  toBeDeleted: boolean;
+}

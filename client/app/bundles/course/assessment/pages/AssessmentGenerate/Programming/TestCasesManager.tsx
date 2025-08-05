@@ -12,14 +12,13 @@ import {
 } from 'course/assessment/question/programming/operations';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../translations';
-
-import LockableSection from './LockableSection';
-import { LockStates, QuestionPrototypeFormData } from './types';
+import translations from '../../../translations';
+import LockableSection from '../LockableSection';
+import { LockStates, ProgrammingPrototypeFormData } from '../types';
 
 interface TestCasesManagerProps {
-  control: Control<QuestionPrototypeFormData>;
-  setValue: UseFormSetValue<QuestionPrototypeFormData>;
+  control: Control<ProgrammingPrototypeFormData>;
+  setValue: UseFormSetValue<ProgrammingPrototypeFormData>;
   lockStates: LockStates;
   onToggleLock: (key: string) => void;
   component?: ElementType<ReorderableTestCaseProps>;
