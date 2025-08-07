@@ -21,6 +21,7 @@ module Course::Condition::ConditionsHelper
       hash[Course::Condition::Level.name] = :course_levels_component
       hash[Course::Condition::Survey.name] = :course_survey_component
       hash[Course::Condition::Video.name] = :course_videos_component
+      hash[Course::Condition::ScholaisticAssessment.name] = :course_scholaistic_component
     end
   end
 end

@@ -1,3 +1,6 @@
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
 export const getIdFromUnknown = (id?: string | null): number | undefined =>
   parseInt(id ?? '', 10) || undefined;
 
@@ -27,3 +30,5 @@ export const formatReadableBytes = (bytes: number, decimals = 2): string => {
     Math.ceil((bytes * 10 ** decimals) / KB ** unitIndex) / 10 ** decimals;
   return `${parseFloat(quantizedBytes.toFixed(decimals))} ${SIZES[unitIndex]}`;
 };
+
+export const cn = (...inputs: ClassValue[]): string => twMerge(clsx(inputs));

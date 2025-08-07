@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/scholaistic_assessment:
+          attributes:
+            time_bonus_exp:
+              bonus_attributes_not_allowed: 'bonus attributes are not allowed'
