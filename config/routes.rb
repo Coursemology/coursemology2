@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       resources :levels, except: [:new, :edit]
       resources :assessments, except: [:new, :edit]
       resources :surveys, except: [:new, :edit]
+      resources :scholaistic_assessments, except: [:new, :edit]
     end
   end
 
@@ -141,6 +142,15 @@ Rails.application.routes.draw do
         collection do
           get 'download'
         end
+      end
+
+      namespace :scholaistic do
+        resources :scholaistic_assessments, as: :assessments, path: 'assessments', except: [:create, :destroy] do
+          get :submission, on: :member, to: 'submissions#submission'
+          resources :submissions, only: [:index, :show]
+        end
+
+        resources :assistants, only: [:index, :show]
       end
 
       namespace :admin do

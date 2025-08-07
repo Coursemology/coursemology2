@@ -1,6 +1,7 @@
 import {
   AvailableAchievements,
   AvailableAssessments,
+  AvailableScholaisticAssessments,
   AvailableSurveys,
   ConditionAbility,
   ConditionData,
@@ -43,6 +44,12 @@ export default class ConditionsAPI extends BaseCourseAPI {
   }
 
   fetchSurveys(url: ConditionAbility['url']): APIResponse<AvailableSurveys> {
+    return this.client.get(url);
+  }
+
+  fetchScholaisticAssessments(
+    url: ConditionAbility['url'],
+  ): APIResponse<AvailableScholaisticAssessments> {
     return this.client.get(url);
   }
 }

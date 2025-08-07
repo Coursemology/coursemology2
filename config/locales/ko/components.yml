@@ -43,6 +43,9 @@ ko:
       name: '다중 참조 타임라인'
     monitoring:
       name: '시험 모니터링'
+    scholaistic:
+      name: '롤플레잉 챗봇 및 평가'
+      manage_assistants: '학습 조수'
     stories:
       name: '이야기'
     koditsu_platform:

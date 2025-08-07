@@ -8,14 +8,18 @@ class Course::Admin::ScholaisticSettingsController < Course::Admin::Controller
   end
 
   def update
-    update_settings_and_render(scholaistic_settings_params)
+    if @settings.update(params) && current_course.save
+      render_settings
+    else
+      render json: { errors: @settings.errors }, status: :bad_request
+    end
   end
 
   def confirm_link_course
     key = ScholaisticApiService.parse_link_course_callback_request(request, params)
     head :bad_request and return if key.blank?
 
-    @settings.update(integration_key: key) && current_course.save
+    @settings.update(integration_key: key, last_synced_at: nil) && current_course.save
   end
 
   def link_course
@@ -33,9 +37,18 @@ class Course::Admin::ScholaisticSettingsController < Course::Admin::Controller
   def unlink_course
     head :ok and return if @settings.integration_key.blank?
 
-    ScholaisticApiService.unlink_course!(@settings.integration_key)
+    ActiveRecord::Base.transaction do
+      ScholaisticApiService.unlink_course!(@settings.integration_key)
 
-    update_settings_and_render(integration_key: nil)
+      raise ActiveRecord::Rollback unless current_course.scholaistic_assessments.destroy_all
+
+      @settings.update(integration_key: nil, last_synced_at: nil)
+      current_course.save!
+    end
+
+    render_settings
+  rescue ActiveRecord::Rollback
+    render json: { errors: @settings.errors }, status: :bad_request
   end
 
   protected
@@ -57,13 +70,5 @@ class Course::Admin::ScholaisticSettingsController < Course::Admin::Controller
   def render_settings
     @ping_result = ScholaisticApiService.ping_course(@settings.integration_key) if @settings.integration_key.present?
     render 'edit'
-  end
-
-  def update_settings_and_render(params)
-    if @settings.update(params) && current_course.save
-      render_settings
-    else
-      render json: { errors: @settings.errors }, status: :bad_request
-    end
   end
 end

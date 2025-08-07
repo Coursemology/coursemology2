@@ -1,6 +1,134 @@
 # frozen_string_literal: true
 class ScholaisticApiService
   class << self
+    def new_assessment_path
+      '/administration/assessments/new'
+    end
+
+    def edit_assessment_details_path(assessment_id)
+      "/administration/assessments/#{assessment_id}/details"
+    end
+
+    def edit_assessment_path(assessment_id)
+      "/administration/assessments/#{assessment_id}"
+    end
+
+    def assessment_path(assessment_id)
+      "/assessments/#{assessment_id}"
+    end
+
+    def submissions_path(assessment_id)
+      "/administration/assessments/#{assessment_id}/submissions"
+    end
+
+    def manage_submission_path(assessment_id, submission_id)
+      "/administration/assessments/#{assessment_id}/submissions/#{submission_id}"
+    end
+
+    def submission_path(assessment_id, submission_id)
+      "/assessments/#{assessment_id}/submissions/#{submission_id}"
+    end
+
+    def assistants_path
+      '/administration/assistants'
+    end
+
+    def assistant_path(assistant_id)
+      "/assistants/#{assistant_id}"
+    end
+
+    def embed!(course_user, path, origin)
+      connection!(:post, 'embed', body: {
+        key: settings(course_user.course).integration_key,
+        path: path,
+        origin: origin,
+        upsert_course_user: course_user_upsert_payload(course_user)
+      })
+    end
+
+    def assistant!(course, assistant_id)
+      result = connection!(:get, 'assistant', query: { key: settings(course).integration_key, id: assistant_id })
+
+      { title: result[:title] }
+    end
+
+    def assistants!(course)
+      result = connection!(:get, 'assistants', query: { key: settings(course).integration_key })
+
+      result.filter_map do |assistant|
+        next if assistant[:activityType] != 'assistant' || !assistant[:isPublished]
+
+        {
+          id: assistant[:id],
+          title: assistant[:title],
+          sidebar_title: assistant[:altTitle]
+        }
+      end
+    end
+
+    def find_or_create_submission!(course_user, assessment_id)
+      result = connection!(:post, 'submission', body: {
+        key: settings(course_user.course).integration_key,
+        assessment_id: assessment_id,
+        upsert_course_user: course_user_upsert_payload(course_user)
+      })
+
+      result[:id]
+    end
+
+    def submission!(course, submission_id)
+      result = connection!(:get, 'submission', query: {
+        key: settings(course).integration_key,
+        id: submission_id
+      })
+
+      {
+        creator_name: result[:creatorName],
+        creator_email: result[:creatorEmail],
+        status: result[:status]&.to_sym
+      }
+    rescue Excon::Error::NotFound
+      { status: :not_found }
+    end
+
+    def submissions!(assessment_ids, course_user)
+      result = connection!(:post, 'submissions', body: {
+        key: settings(course_user.course).integration_key,
+        assessment_ids: assessment_ids,
+        upsert_course_user: course_user_upsert_payload(course_user)
+      })
+
+      result.to_h do |assessment_id, submission|
+        [assessment_id.to_s,
+         status: submission[:status]&.to_sym,
+         id: submission[:submissionId]]
+      end
+    end
+
+    def assessments!(course)
+      result = connection!(:get, 'assessments', query: {
+        key: settings(course).integration_key,
+        lastSynced: settings(course).last_synced_at
+      }.compact)
+
+      {
+        assessments: result[:assessments].filter_map do |assessment|
+          next if assessment[:activityType] != 'assessment'
+
+          {
+            upstream_id: assessment[:id],
+            published: assessment[:isPublished],
+            title: assessment[:title],
+            description: assessment[:description],
+            start_at: assessment[:startsAt],
+            end_at: assessment[:endsAt]
+          }
+        end,
+        deleted: result[:deleted],
+        last_synced_at: result[:lastSynced]
+      }
+    end
+
     def ping_course(key)
       response = connection!(:get, 'course-link', query: { key: key })
 
@@ -78,6 +206,25 @@ class ScholaisticApiService
 
     def api_key
       ENV.fetch('SCHOLAISTIC_API_KEY')
+    end
+
+    def settings(course)
+      course.settings(:course_scholaistic_component)
+    end
+
+    def scholaistic_course_user_role(course_user)
+      return 'owner' if course_user.manager_or_owner?
+      return 'manager' if course_user.staff?
+
+      'student'
+    end
+
+    def course_user_upsert_payload(course_user)
+      {
+        name: course_user.name,
+        email: course_user.user.email,
+        role: scholaistic_course_user_role(course_user)
+      }
     end
   end
 end
