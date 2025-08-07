@@ -17,5 +17,6 @@ module Course::ConditionsAbilityComponent
     can :manage, Course::Condition::Level, condition: { course_id: course.id }
     can :manage, Course::Condition::Survey, condition: { course_id: course.id }
     can :manage, Course::Condition::Video, condition: { course_id: course.id }
+    can :manage, Course::Condition::ScholaisticAssessment, condition: { course_id: course.id }
   end
 end

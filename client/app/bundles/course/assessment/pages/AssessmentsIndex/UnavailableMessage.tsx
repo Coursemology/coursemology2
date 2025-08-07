@@ -1,10 +1,7 @@
 import { ReactNode } from 'react';
 import { Lock } from '@mui/icons-material';
 import { Tooltip, Typography } from '@mui/material';
-import {
-  AssessmentListData,
-  AssessmentUnlockRequirements,
-} from 'types/course/assessment/assessments';
+import { AssessmentUnlockRequirements } from 'types/course/assessment/assessments';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
@@ -12,10 +9,6 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { fetchAssessmentUnlockRequirements } from '../../operations/assessments';
 import translations from '../../translations';
-
-interface UnavailableMessageProps {
-  for: AssessmentListData;
-}
 
 const ShakyLock = ({ title }: { title: string | ReactNode }): JSX.Element => (
   <div className="flex min-w-[8.5rem] justify-center">
@@ -28,16 +21,22 @@ const ShakyLock = ({ title }: { title: string | ReactNode }): JSX.Element => (
   </div>
 );
 
-const UnavailableMessage = (
-  props: UnavailableMessageProps,
-): JSX.Element | null => {
-  const { for: assessment } = props;
+const UnavailableMessage = ({
+  isStartTimeBegin,
+  hasConditions,
+}: {
+  isStartTimeBegin?: boolean;
+  hasConditions?: {
+    conditionSatisfied: boolean;
+    assessmentId: number;
+  };
+}): JSX.Element | null => {
   const { t } = useTranslation();
 
-  if (!assessment.isStartTimeBegin)
+  if (!isStartTimeBegin)
     return <ShakyLock title={t(translations.openingSoon)} />;
 
-  if (!assessment.conditionSatisfied)
+  if (hasConditions && !hasConditions.conditionSatisfied)
     return (
       <ShakyLock
         title={
@@ -52,7 +51,7 @@ const UnavailableMessage = (
                 <LoadingIndicator bare className="text-white" size={15} />
               }
               while={(): Promise<AssessmentUnlockRequirements> =>
-                fetchAssessmentUnlockRequirements(assessment.id)
+                fetchAssessmentUnlockRequirements(hasConditions.assessmentId)
               }
             >
               {(data): JSX.Element => (

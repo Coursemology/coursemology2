@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_22_082737) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -592,6 +592,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_22_082737) do
     t.integer "minimum_level", null: false
   end
 
+  create_table "course_condition_scholaistic_assessments", force: :cascade do |t|
+    t.bigint "scholaistic_assessment_id", null: false
+    t.index ["scholaistic_assessment_id"], name: "idx_on_scholaistic_assessment_id_60ce66b4ce"
+  end
+
   create_table "course_condition_surveys", id: :serial, force: :cascade do |t|
     t.bigint "survey_id", null: false
     t.index ["survey_id"], name: "fk__course_condition_surveys_survey_id"
@@ -1102,6 +1107,23 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_22_082737) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["lesson_plan_item_id"], name: "index_course_reference_times_on_lesson_plan_item_id"
     t.index ["reference_timeline_id"], name: "index_course_reference_times_on_reference_timeline_id"
+  end
+
+  create_table "course_scholaistic_assessments", force: :cascade do |t|
+    t.string "upstream_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "course_scholaistic_submissions", force: :cascade do |t|
+    t.string "upstream_id", null: false
+    t.bigint "assessment_id", null: false
+    t.bigint "creator_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assessment_id", "creator_id"], name: "idx_on_assessment_id_creator_id_ac62df4c1b", unique: true
+    t.index ["assessment_id"], name: "index_course_scholaistic_submissions_on_assessment_id"
+    t.index ["creator_id"], name: "fk__course_scholaistic_submissions_creator_id"
   end
 
   create_table "course_settings_emails", force: :cascade do |t|
@@ -1742,6 +1764,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_22_082737) do
   add_foreign_key "course_assessments", "users", column: "updater_id", name: "fk_course_assessments_updater_id"
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
   add_foreign_key "course_condition_assessments", "course_assessments", column: "assessment_id", name: "fk_course_condition_assessments_assessment_id"
+  add_foreign_key "course_condition_scholaistic_assessments", "course_scholaistic_assessments", column: "scholaistic_assessment_id"
   add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id", name: "fk_course_condition_surveys_survey_id"
   add_foreign_key "course_condition_videos", "course_videos", column: "video_id", name: "fk_course_condition_videos_video_id"
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"
@@ -1833,6 +1856,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_22_082737) do
   add_foreign_key "course_reference_timelines", "courses"
   add_foreign_key "course_reference_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
   add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
+  add_foreign_key "course_scholaistic_submissions", "course_scholaistic_assessments", column: "assessment_id"
+  add_foreign_key "course_scholaistic_submissions", "users", column: "creator_id"
   add_foreign_key "course_settings_emails", "course_assessment_categories"
   add_foreign_key "course_settings_emails", "courses"
   add_foreign_key "course_survey_answer_options", "course_survey_answers", column: "answer_id", name: "fk_course_survey_answer_options_answer_id"

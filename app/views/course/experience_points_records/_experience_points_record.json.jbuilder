@@ -38,6 +38,16 @@ json.reason do
       else
         json.link course_survey_responses_path(course, survey)
       end
+    when Course::ScholaisticSubmission
+      submission = specific
+      scholaistic_assessment = submission.assessment
+      json.maxExp scholaistic_assessment.base_exp
+      json.text scholaistic_assessment.title
+      if can?(:read, scholaistic_assessment)
+        json.link course_scholaistic_assessment_submission_path(course, scholaistic_assessment, submission.upstream_id)
+      else
+        json.link course_scholaistic_assessment_submissions_path(course, scholaistic_assessment)
+      end
     end
   end
 end

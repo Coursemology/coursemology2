@@ -22,6 +22,7 @@ import MaterialsAPI from './Materials';
 import PersonalTimesAPI from './PersonalTimes';
 import PlagiarismAPI from './Plagiarism';
 import ReferenceTimelinesAPI from './ReferenceTimelines';
+import ScholaisticAPI from './Scholaistic';
 import StatisticsAPI from './Statistics';
 import StoriesAPI from './Stories';
 import SurveyAPI from './Survey';
@@ -66,6 +67,7 @@ const CourseAPI = {
   userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
   userNotifications: new UserNotificationsAPI(),
   stories: new StoriesAPI(),
+  scholaistic: new ScholaisticAPI(),
 };
 
 Object.freeze(CourseAPI);

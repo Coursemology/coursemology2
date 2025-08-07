@@ -1,9 +1,11 @@
+import { defineMessage } from 'react-intl';
 import {
   AchievementConditionData,
   AssessmentConditionData,
   ConditionData,
   ConditionPostData,
   LevelConditionData,
+  ScholaisticAssessmentConditionData,
   SurveyConditionData,
 } from 'types/course/conditions';
 
@@ -12,6 +14,7 @@ import { Descriptor } from 'lib/hooks/useTranslation';
 import AchievementCondition from './conditions/AchievementCondition';
 import AssessmentCondition from './conditions/AssessmentCondition';
 import LevelCondition from './conditions/LevelCondition';
+import ScholaisticAssessmentCondition from './conditions/ScholaisticAssessmentCondition';
 import SurveyCondition from './conditions/SurveyCondition';
 import { AnyCondition } from './AnyCondition';
 import translations from './translations';
@@ -67,11 +70,26 @@ const surveySpecifier: Specifier<SurveyConditionData> = {
   defaultDisplayName: translations.survey,
 };
 
+const scholaisticAssessmentSpecifier: Specifier<ScholaisticAssessmentConditionData> =
+  {
+    component: ScholaisticAssessmentCondition,
+    extractUniqueData: (condition) => condition.assessmentId,
+    adaptDataForPost: (data) => ({
+      condition_scholaistic_assessment: {
+        scholaistic_assessment_id: data.assessmentId,
+      },
+    }),
+    defaultDisplayName: defineMessage({
+      defaultMessage: 'Role-Playing Assessment',
+    }),
+  };
+
 const SPECIFIERS: Specifiers = {
   achievement: achievementSpecifier,
   assessment: assessmentSpecifier,
   level: levelSpecifier,
   survey: surveySpecifier,
+  scholaistic_assessment: scholaisticAssessmentSpecifier,
 };
 
 /**

@@ -1,0 +1,12 @@
+zh:
+  activerecord:
+    attributes:
+      course/condition/scholaistic_assessment/title:
+        complete: '已完成%{title}'
+    errors:
+      models:
+        course/condition/scholaistic_assessment:
+          attributes:
+            scholaistic_assessment:
+              unique_dependency: '不能包含重复的解锁条件'
+              references_self: '不能将它自己作为解锁条件'
