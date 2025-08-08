@@ -14,7 +14,7 @@ class Course::DuplicationJob < ApplicationJob
     ActsAsTenant.without_tenant do
       new_course =
         Course::Duplication::CourseDuplicationService.duplicate_course(source_course, options)
-      redirect_to course_path(new_course) if new_course.valid?
+      redirect_to course_path(new_course) if new_course&.valid?
     end
   end
 end
