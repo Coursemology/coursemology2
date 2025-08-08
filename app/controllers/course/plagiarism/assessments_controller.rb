@@ -78,9 +78,10 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
 
   def linked_and_unlinked_assessments
     assessment = current_course.assessments.find(params[:id])
-    all_assessments = get_all_assessments_in_duplication_tree(assessment)
+    # TODO: properly handle cases for assessments in different instances.
+    all_assessments = get_all_assessments_in_duplication_tree(assessment).reject { |a| a.course.nil? }
     fetch_can_manage_course_hash(all_assessments)
-    @linked_assessments = assessment.all_linked_assessments
+    @linked_assessments = assessment.all_linked_assessments.reject { |a| a.course.nil? }
     @unlinked_assessments = all_assessments - @linked_assessments
   end
 
