@@ -114,7 +114,7 @@ const InstanceAdminNavigator = (): JSX.Element => {
 const handle: DataHandle = () => ({
   getData: async (): Promise<string> => {
     const data = await fetchInstance();
-    return `${data.name} Admin Panel`;
+    return `${data.name} Instance Admin Panel`;
   },
 });
 
