@@ -23,7 +23,8 @@ class FileUploader < CarrierWave::Uploader::Base
     response_content_disposition = url_inline?(filename) ? 'inline;' : 'attachment;'
     query_option = { 'response-content-disposition' => response_content_disposition }
     query_option['response-content-disposition'] += " filename=\"#{CGI.escape(filename)}\"" if filename
-    super(query: query_option)
+    # The AWS maximum is 7 days, but we subtract a short time to avoid potential clock skew issues.
+    super(expire_at: Time.current + (7.days - 15.minutes), query: query_option)
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
