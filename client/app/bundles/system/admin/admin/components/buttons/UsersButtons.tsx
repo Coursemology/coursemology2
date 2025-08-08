@@ -1,5 +1,5 @@
 import { FC, memo, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import equal from 'fast-deep-equal';
 import { UserMiniEntity } from 'types/users';
 
@@ -12,7 +12,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteUser } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   user: UserMiniEntity;
 }
 
@@ -49,7 +49,7 @@ const translations = defineMessages({
 });
 
 const UserManagementButtons: FC<Props> = (props) => {
-  const { intl, user } = props;
+  const { user } = props;
   const dispatch = useAppDispatch();
   const [isDeleting, setIsDeleting] = useState(false);
   const { t } = useTranslation();
@@ -58,7 +58,7 @@ const UserManagementButtons: FC<Props> = (props) => {
     setIsDeleting(true);
     return dispatch(deleteUser(user.id))
       .then(() => {
-        toast.success(intl.formatMessage(translations.deletionSuccess));
+        toast.success(t(translations.deletionSuccess));
       })
       .catch((error) => {
         setIsDeleting(false);
@@ -66,7 +66,7 @@ const UserManagementButtons: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.deletionFailure, {
+          t(translations.deletionFailure, {
             error: errorMessage,
           }),
         );
@@ -108,7 +108,7 @@ const UserManagementButtons: FC<Props> = (props) => {
 };
 
 export default memo(
-  injectIntl(UserManagementButtons),
+  UserManagementButtons,
   (prevProps, nextProps) => {
     return equal(prevProps.user, nextProps.user);
   },

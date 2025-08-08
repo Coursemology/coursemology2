@@ -1,5 +1,5 @@
 import { FC, memo, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import equal from 'fast-deep-equal';
 import { InstanceUserMiniEntity } from 'types/system/instance/users';
 
@@ -9,8 +9,9 @@ import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 
 import { deleteUser } from '../../operations';
+import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   user: InstanceUserMiniEntity;
 }
 
@@ -34,15 +35,16 @@ const translations = defineMessages({
 });
 
 const UserManagementButtons: FC<Props> = (props) => {
-  const { intl, user } = props;
+  const { user } = props;
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
     return dispatch(deleteUser(user.id))
       .then(() => {
-        toast.success(intl.formatMessage(translations.deletionSuccess));
+        toast.success(t(translations.deletionSuccess));
       })
       .catch((error) => {
         setIsDeleting(false);
@@ -50,7 +52,7 @@ const UserManagementButtons: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.deletionFailure, {
+          t(translations.deletionFailure, {
             error: errorMessage,
           }),
         );
@@ -62,7 +64,7 @@ const UserManagementButtons: FC<Props> = (props) => {
     <div key={`buttons-${user.id}`}>
       <DeleteButton
         className={`user-delete-${user.id} p-0`}
-        confirmMessage={intl.formatMessage(translations.deletionConfirm, {
+        confirmMessage={t(translations.deletionConfirm, {
           role: USER_ROLES[user.role],
           name: user.name,
           email: user.email,
@@ -70,14 +72,14 @@ const UserManagementButtons: FC<Props> = (props) => {
         disabled={isDeleting}
         loading={isDeleting}
         onClick={onDelete}
-        tooltip={intl.formatMessage(translations.deleteTooltip)}
+        tooltip={t(translations.deleteTooltip)}
       />
     </div>
   );
 };
 
 export default memo(
-  injectIntl(UserManagementButtons),
+  UserManagementButtons,
   (prevProps, nextProps) => {
     return equal(prevProps.user, nextProps.user);
   },
