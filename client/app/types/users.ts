@@ -14,6 +14,10 @@ export interface UserListData {
   instances: {
     name: string;
     host: string;
+    courses: {
+      id: number;
+      title: string;
+    }[];
   }[];
   role: UserRoles;
 }
@@ -29,6 +33,10 @@ export interface UserMiniEntity extends UserBasicMiniEntity {
   instances: {
     name: string;
     host: string;
+    courses: {
+      id: number;
+      title: string;
+    }[];
   }[];
   role: UserRoles;
 }

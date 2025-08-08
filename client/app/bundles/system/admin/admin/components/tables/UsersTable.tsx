@@ -25,10 +25,10 @@ import {
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
 import { indexUsers, updateUser } from '../../operations';
-import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {
   users: UserMiniEntity[];
@@ -63,11 +63,15 @@ const translations = defineMessages({
     id: 'system.admin.users.UsersTable.fetchFilteredUsersFailure',
     defaultMessage: 'Failed to fetch users.',
   },
+  userInstanceEntry: {
+    id: 'system.admin.users.UsersTable.instanceEntry',
+    defaultMessage:
+      '{instanceName}{courseCount, plural, =0 {} one { (1 course)} other { ({courseCount} courses)}}',
+  },
 });
 
 const UsersTable: FC<Props> = (props) => {
-  const { title, renderRowActionComponent, filter, users, userCounts } =
-    props;
+  const { title, renderRowActionComponent, filter, users, userCounts } = props;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -144,9 +148,7 @@ const UsersTable: FC<Props> = (props) => {
         active: filter.active,
       }),
     )
-      .catch(() =>
-        toast.error(t(translations.fetchFilteredUsersFailure)),
-      )
+      .catch(() => toast.error(t(translations.fetchFilteredUsersFailure)))
       .finally(() => {
         setIsLoading(false);
       });
@@ -167,9 +169,7 @@ const UsersTable: FC<Props> = (props) => {
         search: searchText ? searchText.trim() : searchText,
       }),
     )
-      .catch(() =>
-        toast.error(t(translations.fetchFilteredUsersFailure)),
-      )
+      .catch(() => toast.error(t(translations.fetchFilteredUsersFailure)))
       .finally(() => {
         setIsLoading(false);
       });
@@ -283,7 +283,10 @@ const UsersTable: FC<Props> = (props) => {
                     href={`//${instance.host}/admin/users`}
                     underline="hover"
                   >
-                    {instance.name}
+                    {t(translations.userInstanceEntry, {
+                      instanceName: instance.name,
+                      courseCount: instance.courses.length,
+                    })}
                   </Link>
                 </li>
               ))}

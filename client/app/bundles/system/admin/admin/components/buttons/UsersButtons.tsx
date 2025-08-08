@@ -27,20 +27,20 @@ const translations = defineMessages({
   },
   deletionConfirmTitle: {
     id: 'system.admin.admin.UsersButton.deletionConfirmTitle',
-    defaultMessage: 'Deleting {role} {name} ({email})',
+    defaultMessage: 'Deleting {role} User {name} ({email})',
   },
   deletionPromptContent: {
     id: 'system.admin.admin.UsersButton.deletionPromptContent',
     defaultMessage:
-      'After deleting this user, all associated instance users in the following instances will be deleted.',
+      'Deleting this user will PERMANENTLY delete associated data in the following {count, plural, one {course} other {courses}}:',
   },
-  associatedInstances: {
-    id: 'system.admin.admin.UsersButton.associatedInstances',
-    defaultMessage: '{index}. {instanceName}',
+  associatedCourses: {
+    id: 'system.admin.admin.UsersButton.associatedCourses',
+    defaultMessage: '{courseName} ({instanceName})',
   },
   deletionConfirm: {
     id: 'system.admin.admin.UsersButton.deletionConfirm',
-    defaultMessage: 'Are you sure?',
+    defaultMessage: 'Are you sure you wish to proceed?',
   },
   deleteTooltip: {
     id: 'system.admin.admin.UsersButton.deleteTooltip',
@@ -53,6 +53,13 @@ const UserManagementButtons: FC<Props> = (props) => {
   const dispatch = useAppDispatch();
   const [isDeleting, setIsDeleting] = useState(false);
   const { t } = useTranslation();
+
+  const userCoursesWithInstanceNames = user.instances.flatMap((instance) =>
+    instance.courses.map((course) => ({
+      ...course,
+      instanceName: instance.name,
+    })),
+  );
 
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
@@ -88,17 +95,25 @@ const UserManagementButtons: FC<Props> = (props) => {
         })}
         tooltip={t(translations.deleteTooltip)}
       >
-        {user.instances.length > 1 && (
+        {userCoursesWithInstanceNames.length > 0 && (
           <>
-            <PromptText>{t(translations.deletionPromptContent)}</PromptText>
-            {user.instances.map((instance, index) => (
-              <PromptText key={`instance-${instance.host}`}>
-                {t(translations.associatedInstances, {
-                  index: index + 1,
-                  instanceName: instance.name,
-                })}
-              </PromptText>
-            ))}
+            <PromptText>
+              {t(translations.deletionPromptContent, {
+                count: userCoursesWithInstanceNames.length,
+              })}
+            </PromptText>
+            <ol>
+              {userCoursesWithInstanceNames.map((course) => (
+                <PromptText key={`course-${course.id}`}>
+                  <li>
+                    {t(translations.associatedCourses, {
+                      instanceName: course.instanceName,
+                      courseName: course.title,
+                    })}
+                  </li>
+                </PromptText>
+              ))}
+            </ol>
           </>
         )}
         <PromptText>{t(translations.deletionConfirm)}</PromptText>
@@ -107,9 +122,6 @@ const UserManagementButtons: FC<Props> = (props) => {
   );
 };
 
-export default memo(
-  UserManagementButtons,
-  (prevProps, nextProps) => {
-    return equal(prevProps.user, nextProps.user);
-  },
-);
+export default memo(UserManagementButtons, (prevProps, nextProps) => {
+  return equal(prevProps.user, nextProps.user);
+});

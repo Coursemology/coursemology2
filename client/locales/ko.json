@@ -7602,13 +7602,19 @@
     "defaultMessage": "사용자 삭제"
   },
   "system.admin.admin.UsersButton.deletionConfirm": {
-    "defaultMessage": "{role} {name} ({email})을(를) 삭제하시겠습니까?"
+    "defaultMessage": "정말로 계속하시겠습니까?"
   },
   "system.admin.admin.UsersButton.deletionFailure": {
-    "defaultMessage": "사용자를 삭제하지 못했습니다 - {error}"
+    "defaultMessage": "사용자 삭제에 실패했습니다 - {error}"
   },
   "system.admin.admin.UsersButton.deletionSuccess": {
     "defaultMessage": "사용자가 삭제되었습니다."
+  },
+  "system.admin.admin.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "{role} 사용자 {name} ({email}) 삭제 중"
+  },
+  "system.admin.admin.UsersButton.deletionPromptContent": {
+    "defaultMessage": "이 사용자를 삭제하면 다음 {count, plural, one {과목} other {과목들}}에 연결된 데이터가 영구적으로 삭제됩니다:"
   },
   "system.admin.admin.UsersIndex.activeUsers": {
     "defaultMessage": "활성 사용자: {allCount} ({adminCount} 관리자, {normalCount} 일반){br}(지난 7일 동안 활성)"
@@ -7624,6 +7630,9 @@
   },
   "system.admin.admin.UsersTable.changeRoleSuccess": {
     "defaultMessage": "{name}의 역할이 {role}(으)로 변경되었습니다."
+  },
+  "system.admin.users.UsersTable.instanceEntry": {
+    "defaultMessage": "{instanceName}{courseCount, plural, =0 {} one { (1개 과목)} other { ({courseCount}개 과목)}}"
   },
   "system.admin.admin.UsersTable.renameSuccess": {
     "defaultMessage": "{oldName}이(가) {newName}(으)로 이름이 변경되었습니다."
@@ -7989,16 +7998,22 @@
     "defaultMessage": "대기 중"
   },
   "system.admin.instance.instance.UsersButton.deleteTooltip": {
-    "defaultMessage": "사용자 삭제"
+    "defaultMessage": "사용자 제거"
   },
   "system.admin.instance.instance.UsersButton.deletionConfirm": {
-    "defaultMessage": "{role} {name} ({email})을(를) 삭제하시겠습니까?"
+    "defaultMessage": "정말로 계속하시겠습니까?"
   },
   "system.admin.instance.instance.UsersButton.deletionFailure": {
-    "defaultMessage": "사용자를 삭제하지 못했습니다 - {error}"
+    "defaultMessage": "사용자 제거에 실패했습니다 - {error}"
   },
   "system.admin.instance.instance.UsersButton.deletionSuccess": {
-    "defaultMessage": "사용자가 삭제되었습니다."
+    "defaultMessage": "사용자가 이 인스턴스에서 제거되었습니다."
+  },
+  "system.admin.instance.instance.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "{role} 사용자 {name} ({email}) 제거 중"
+  },
+  "system.admin.instance.instance.UsersButton.deletionPromptContent": {
+    "defaultMessage": "이 사용자를 제거하면 다음 {count, plural, one {과목} other {과목들}}에서 오류가 발생할 수 있습니다:"
   },
   "system.admin.instance.instance.UsersTable.changeRoleSuccess": {
     "defaultMessage": "{name}의 역할이 {role}(으)로 성공적으로 변경되었습니다."
