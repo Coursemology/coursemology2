@@ -11,6 +11,7 @@ module Course::Video::UrlConcern
     /(?:https?:\/\/)?youtu\.be\/(.+)/,
     /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=(.*?)(&|#|$)/,
     /(?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/(.*?)(\?|$)/,
+    /(?:https?:\/\/)?(?:www\.)?youtube\.com\/shorts\/(.*?)(\?|$)/,
     /(?:https?:\/\/)?(?:www\.)?youtube\.com\/v\/(.*?)(#|\?|$)/
   ].freeze
 
