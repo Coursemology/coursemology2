@@ -21,9 +21,10 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
   const location = useLocation();
   const activeUrl = activePath ?? location.pathname + location.search;
 
-  const isActive = exact
-    ? activeUrl === item.path
-    : activeUrl.startsWith(item.path);
+  const isActive =
+    exact || item.exact
+      ? activeUrl === item.path
+      : activeUrl.startsWith(item.path);
 
   const Icon = defensivelyGetIcon(item.icon, isActive ? 'filled' : 'outlined');
 

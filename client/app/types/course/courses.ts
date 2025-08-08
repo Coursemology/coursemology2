@@ -81,6 +81,7 @@ export interface SidebarItemData {
   path: string;
   icon: CourseComponentIconName;
   unread?: number;
+  exact?: boolean;
 }
 
 export interface CourseUserProgressData {

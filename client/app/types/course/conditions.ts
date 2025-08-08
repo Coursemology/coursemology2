@@ -4,13 +4,20 @@ export interface ConditionListData {
 }
 
 export interface ConditionData extends ConditionListData {
-  type: 'Achievement' | 'Assessment' | 'Level' | 'Survey' | 'Video';
+  type:
+    | 'achievement'
+    | 'assessment'
+    | 'level'
+    | 'survey'
+    | 'scholaistic_assessment';
   url?: string;
+  displayName?: string | null;
 }
 
 export interface ConditionAbility {
   type: ConditionData['type'];
   url: string;
+  displayName?: string | null;
 }
 
 export type EnabledConditions = ConditionAbility[];
@@ -37,6 +44,10 @@ export interface SurveyConditionData extends ConditionData {
   surveyId?: number;
 }
 
+export interface ScholaisticAssessmentConditionData extends ConditionData {
+  assessmentId?: number;
+}
+
 export interface AvailableAssessments {
   ids: AssessmentConditionData['id'][];
   assessments: Record<
@@ -59,6 +70,14 @@ export type AvailableAchievements = Record<
   }
 >;
 
+export interface AvailableScholaisticAssessments {
+  ids: ScholaisticAssessmentConditionData['id'][];
+  assessments: Record<
+    ScholaisticAssessmentConditionData['id'],
+    { title: string; url: string }
+  >;
+}
+
 export interface ConditionPostData {
   condition_achievement?: {
     achievement_id: AchievementConditionData['achievementId'];
@@ -72,5 +91,8 @@ export interface ConditionPostData {
   };
   condition_survey?: {
     survey_id: SurveyConditionData['surveyId'];
+  };
+  condition_scholaistic_assessment?: {
+    scholaistic_assessment_id: ScholaisticAssessmentConditionData['assessmentId'];
   };
 }

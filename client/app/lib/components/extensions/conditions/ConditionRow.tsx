@@ -32,7 +32,7 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
 ): JSX.Element => {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
-  const { component } = specify(props.condition.type);
+  const { component, defaultDisplayName } = specify(props.condition.type);
 
   const updateCondition = (
     data: ConditionData,
@@ -52,7 +52,9 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
   return (
     <TableRow className="group" hover>
       <TableCell className="w-48 group-last:border-0">
-        <Typography variant="body2">{props.condition.type}</Typography>
+        <Typography variant="body2">
+          {props.condition.displayName || t(defaultDisplayName)}
+        </Typography>
       </TableCell>
 
       <TableCell className="flex items-center justify-between group-last:border-0">
