@@ -1,5 +1,5 @@
 import { FC, ReactElement, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import {
   CircularProgress,
   MenuItem,
@@ -31,8 +31,9 @@ import toast from 'lib/hooks/toast';
 import tableTranslations from 'lib/translations/table';
 
 import { indexUsers, updateUser } from '../../operations';
+import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   users: InstanceUserMiniEntity[];
   userCounts: InstanceAdminStats;
   title: string;
@@ -68,10 +69,11 @@ const translations = defineMessages({
 });
 
 const UsersTable: FC<Props> = (props) => {
-  const { title, renderRowActionComponent, intl, users, userCounts, filter } =
+  const { title, renderRowActionComponent, users, userCounts, filter } =
     props;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const [tableState, setTableState] = useState<TableState>({
     count: userCounts.usersCount,
@@ -96,14 +98,14 @@ const UsersTable: FC<Props> = (props) => {
       .then(() => {
         updateValue(newRole);
         toast.success(
-          intl.formatMessage(translations.changeRoleSuccess, {
+          t(translations.changeRoleSuccess, {
             name: user.name,
             role: INSTANCE_USER_ROLES[newRole],
           }),
         );
       })
       .catch(() => {
-        toast.error(intl.formatMessage(translations.updateRoleFailure));
+        toast.error(t(translations.updateRoleFailure));
       });
   };
 
@@ -122,7 +124,7 @@ const UsersTable: FC<Props> = (props) => {
       }),
     )
       .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchFilteredUsersFailure)),
+        toast.error(t(translations.fetchFilteredUsersFailure)),
       )
       .finally(() => {
         setIsLoading(false);
@@ -145,7 +147,7 @@ const UsersTable: FC<Props> = (props) => {
       }),
     )
       .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchFilteredUsersFailure)),
+        toast.error(t(translations.fetchFilteredUsersFailure)),
       )
       .finally(() => {
         setIsLoading(false);
@@ -175,7 +177,7 @@ const UsersTable: FC<Props> = (props) => {
     rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
     rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: true,
-    searchPlaceholder: intl.formatMessage(translations.searchText),
+    searchPlaceholder: t(translations.searchText),
     selectableRows: 'none',
     serverSide: true,
     setTableProps: (): Record<string, unknown> => {
@@ -212,7 +214,7 @@ const UsersTable: FC<Props> = (props) => {
     },
     {
       name: 'name',
-      label: intl.formatMessage(tableTranslations.name),
+      label: t(tableTranslations.name),
       options: {
         alignCenter: false,
         sort: false,
@@ -220,7 +222,7 @@ const UsersTable: FC<Props> = (props) => {
     },
     {
       name: 'email',
-      label: intl.formatMessage(tableTranslations.email),
+      label: t(tableTranslations.email),
       options: {
         alignCenter: false,
         sort: false,
@@ -240,7 +242,7 @@ const UsersTable: FC<Props> = (props) => {
     },
     {
       name: 'courses',
-      label: intl.formatMessage(tableTranslations.relatedCourses),
+      label: t(tableTranslations.relatedCourses),
       options: {
         alignCenter: false,
         sort: false,
@@ -262,7 +264,7 @@ const UsersTable: FC<Props> = (props) => {
     },
     {
       name: 'role',
-      label: intl.formatMessage(tableTranslations.role),
+      label: t(tableTranslations.role),
       options: {
         alignCenter: false,
         sort: false,
@@ -296,7 +298,7 @@ const UsersTable: FC<Props> = (props) => {
     },
     {
       name: 'actions',
-      label: intl.formatMessage(tableTranslations.actions),
+      label: t(tableTranslations.actions),
       options: {
         empty: true,
         sort: false,
@@ -329,4 +331,4 @@ const UsersTable: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(UsersTable);
+export default UsersTable;
