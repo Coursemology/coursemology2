@@ -7535,6 +7535,12 @@
   "system.admin.admin.UsersButton.deletionConfirm": {
     "defaultMessage": "Are you sure you wish to delete {role} {name} ({email})?"
   },
+  "system.admin.admin.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "Deleting {role} User {name} ({email})"
+  },
+  "system.admin.admin.UsersButton.deletionPromptContent": {
+    "defaultMessage": "Deleting this user will PERMANENTLY delete associated data in the following {count, plural, one {course} other {courses}}:"
+  },
   "system.admin.admin.UsersButton.deletionFailure": {
     "defaultMessage": "Failed to delete user - {error}"
   },
@@ -7920,16 +7926,22 @@
     "defaultMessage": "pending"
   },
   "system.admin.instance.instance.UsersButton.deleteTooltip": {
-    "defaultMessage": "Delete User"
+    "defaultMessage": "Remove User"
   },
   "system.admin.instance.instance.UsersButton.deletionConfirm": {
-    "defaultMessage": "Are you sure you wish to delete {role} {name} ({email})?"
+    "defaultMessage": "Are you sure you wish to proceed?"
+  },
+  "system.admin.instance.instance.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "Removing {role} User {name} ({email})"
+  },
+  "system.admin.instance.instance.UsersButton.deletionPromptContent": {
+    "defaultMessage": "Removing this user may cause errors in the following {count, plural, one {course} other {courses}}:"
   },
   "system.admin.instance.instance.UsersButton.deletionFailure": {
-    "defaultMessage": "Failed to delete user - {error}"
+    "defaultMessage": "Failed to remove user - {error}"
   },
   "system.admin.instance.instance.UsersButton.deletionSuccess": {
-    "defaultMessage": "User was deleted."
+    "defaultMessage": "User was removed from this instance."
   },
   "system.admin.instance.instance.UsersTable.changeRoleSuccess": {
     "defaultMessage": "Successfully changed {name}'s role to {role}."
@@ -7951,6 +7963,9 @@
   },
   "system.admin.users.UsersTable.fetchFilteredUsersFailure": {
     "defaultMessage": "Failed to fetch users."
+  },
+  "system.admin.users.UsersTable.instanceEntry": {
+    "defaultMessage": "{instanceName}{courseCount, plural, =0 {} one { (1 course)} other { ({courseCount} courses)}}"
   },
   "user.accountSettings": {
     "defaultMessage": "Account Settings"

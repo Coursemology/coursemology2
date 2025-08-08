@@ -28,10 +28,10 @@ import {
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
 import { indexUsers, updateUser } from '../../operations';
-import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {
   users: InstanceUserMiniEntity[];
@@ -69,8 +69,7 @@ const translations = defineMessages({
 });
 
 const UsersTable: FC<Props> = (props) => {
-  const { title, renderRowActionComponent, users, userCounts, filter } =
-    props;
+  const { title, renderRowActionComponent, users, userCounts, filter } = props;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -123,9 +122,7 @@ const UsersTable: FC<Props> = (props) => {
         active: filter.active,
       }),
     )
-      .catch(() =>
-        toast.error(t(translations.fetchFilteredUsersFailure)),
-      )
+      .catch(() => toast.error(t(translations.fetchFilteredUsersFailure)))
       .finally(() => {
         setIsLoading(false);
       });
@@ -146,9 +143,7 @@ const UsersTable: FC<Props> = (props) => {
         search: searchText ? searchText.trim() : searchText,
       }),
     )
-      .catch(() =>
-        toast.error(t(translations.fetchFilteredUsersFailure)),
-      )
+      .catch(() => toast.error(t(translations.fetchFilteredUsersFailure)))
       .finally(() => {
         setIsLoading(false);
       });
@@ -256,7 +251,7 @@ const UsersTable: FC<Props> = (props) => {
               to={`/users/${user.userId}`}
               underline="hover"
             >
-              {user.courses}
+              {user.courses.length}
             </Link>
           );
         },

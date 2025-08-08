@@ -7,7 +7,11 @@ class System::Admin::UsersController < System::Admin::Controller
       format.json do
         load_users
         load_counts
-        @instances_preload_service = User::InstancePreloadService.new(@users.map(&:id))
+        user_ids = @users.map(&:id)
+        @instances_preload_service = User::InstancePreloadService.new(user_ids)
+        @user_course_hash = ActsAsTenant.without_tenant do
+          CourseUser.includes(:course).where(user_id: user_ids).group_by(&:user_id)
+        end
       end
     end
   end
