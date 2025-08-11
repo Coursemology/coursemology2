@@ -87,6 +87,49 @@ RSpec.describe Course::Condition::Level, type: :model do
       end
     end
 
+    describe '#compute_satisfaction_information' do
+      let(:course_user1) do
+        course_user = double
+        allow(course_user).to receive(:level_number).and_return(5)
+        course_user
+      end
+      let(:course_user2) do
+        course_user = double
+        allow(course_user).to receive(:level_number).and_return(10)
+        course_user
+      end
+
+      let(:course_user3) do
+        course_user = double
+        allow(course_user).to receive(:level_number).and_return(15)
+        course_user
+      end
+
+      context 'when all users have reached the required level' do
+        it 'returns true for all users' do
+          subject.minimum_level = 1
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([true, true, true])
+        end
+      end
+
+      context 'when one user has not reached the required level while the rest have' do
+        it 'returns true for all users' do
+          subject.minimum_level = 6
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([false, true, true])
+        end
+      end
+
+      context 'when all users have reached the required level' do
+        it 'returns true for all users' do
+          subject.minimum_level = 50
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([false, false, false])
+        end
+      end
+    end
+
     describe '.dependent_class' do
       it 'returns no class' do
         expect(Course::Condition::Level.dependent_class).to be_nil
