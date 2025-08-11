@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 json.users @users.each do |user|
-  json.partial! 'user_list_data', user: user
+  json.partial! 'user_list_data', user: user, course_users: @user_course_hash.fetch(user.id, [])
 end
 
 json.counts do

@@ -8,7 +8,10 @@ export interface InstanceUserListData {
   name: string;
   email: string;
   role: InstanceUserRoles;
-  courses: number;
+  courses: {
+    id: number;
+    title: string;
+  }[];
 }
 
 export interface InstanceUserBasicListData {
@@ -36,7 +39,10 @@ export interface InstanceUserBasicPhotoMiniEntity
 export interface InstanceUserMiniEntity extends InstanceUserBasicMiniEntity {
   email: string;
   role: InstanceUserRoles;
-  courses: number;
+  courses: {
+    id: number;
+    title: string;
+  }[];
 }
 
 export interface InstanceAdminStats {
