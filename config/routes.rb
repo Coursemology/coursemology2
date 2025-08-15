@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       resources :levels, except: [:new, :edit]
       resources :assessments, except: [:new, :edit]
       resources :surveys, except: [:new, :edit]
+      resources :scholaistic_assessments, except: [:new, :edit]
     end
   end
 
@@ -143,6 +144,15 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :scholaistic do
+        resources :scholaistic_assessments, as: :assessments, path: 'assessments', except: [:create, :destroy] do
+          get :submission, on: :member, to: 'submissions#submission'
+          resources :submissions, only: [:index, :show]
+        end
+
+        resources :assistants, only: [:index, :show]
+      end
+
       namespace :admin do
         get '/' => 'admin#index'
         patch '/' => 'admin#update'
@@ -194,6 +204,15 @@ Rails.application.routes.draw do
 
         get 'stories' => 'stories_settings#edit'
         patch 'stories' => 'stories_settings#update'
+
+        scope 'scholaistic', as: :scholaistic do
+          get '/' => 'scholaistic_settings#edit'
+          patch '/' => 'scholaistic_settings#update'
+
+          get 'link_course' => 'scholaistic_settings#link_course'
+          post 'confirm_link_course' => 'scholaistic_settings#confirm_link_course'
+          post 'unlink_course' => 'scholaistic_settings#unlink_course'
+        end
 
         get 'rag_wise' => 'rag_wise_settings#edit'
         patch 'rag_wise' => 'rag_wise_settings#update'

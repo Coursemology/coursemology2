@@ -82,7 +82,13 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
       )}
 
       {assessment.status === 'unavailable' && (
-        <UnavailableMessage for={assessment} />
+        <UnavailableMessage
+          hasConditions={{
+            conditionSatisfied: assessment.conditionSatisfied,
+            assessmentId: assessment.id,
+          }}
+          isStartTimeBegin={assessment.isStartTimeBegin}
+        />
       )}
 
       {student && assessment.status === 'locked' && (
