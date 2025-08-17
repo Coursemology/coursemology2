@@ -7,7 +7,9 @@ class System::Admin::UsersController < System::Admin::Controller
       format.json do
         load_users
         load_counts
-        @instances_preload_service = User::InstancePreloadService.new(@users.map(&:id))
+        user_ids = @users.map(&:id)
+        @instances_preload_service = User::InstancePreloadService.new(user_ids)
+        @user_course_hash = get_user_course_hash(user_ids)
       end
     end
   end
@@ -16,7 +18,7 @@ class System::Admin::UsersController < System::Admin::Controller
     @instances_preload_service = User::InstancePreloadService.new(@user.id)
     if @user.update(user_params)
       render 'system/admin/users/_user_list_data',
-             locals: { user: @user },
+             locals: { user: @user, course_users: get_user_course_hash([@user.id]).fetch(@user.id, []) },
              status: :ok
     else
       render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
@@ -41,6 +43,12 @@ class System::Admin::UsersController < System::Admin::Controller
   end
 
   private
+
+  def get_user_course_hash(user_ids)
+    ActsAsTenant.without_tenant do
+      CourseUser.includes(:course).where(user_id: user_ids).group_by(&:user_id)
+    end
+  end
 
   def user_params
     params.require(:user).permit(:name, :role)

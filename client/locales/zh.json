@@ -7563,13 +7563,19 @@
     "defaultMessage": "删除用户"
   },
   "system.admin.admin.UsersButton.deletionConfirm": {
-    "defaultMessage": "你确定要删除{role} {name} ({email}) 吗？"
+    "defaultMessage": "您确定要继续此操作吗？"
   },
   "system.admin.admin.UsersButton.deletionFailure": {
-    "defaultMessage": "无法删除用户 - {error}"
+    "defaultMessage": "删除用户失败 - {error}"
   },
   "system.admin.admin.UsersButton.deletionSuccess": {
     "defaultMessage": "用户已被删除。"
+  },
+  "system.admin.admin.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "正在删除{role}用户 {name}（{email}）"
+  },
+  "system.admin.admin.UsersButton.deletionPromptContent": {
+    "defaultMessage": "删除该用户将永久删除以下{count, plural, one {课程} other {课程}}中的相关数据："
   },
   "system.admin.admin.UsersIndex.activeUsers": {
     "defaultMessage": "活跃用户：{allCount}（{adminCount} 管理员，{normalCount} 普通用户）{br}（过去7天内活跃）"
@@ -7585,6 +7591,9 @@
   },
   "system.admin.admin.UsersTable.changeRoleSuccess": {
     "defaultMessage": "已成功将 {name} 的角色更改为 {role}。"
+  },
+  "system.admin.users.UsersTable.instanceEntry": {
+    "defaultMessage": "{instanceName}{courseCount, plural, =0 {} one {（1 门课程）} other {（{courseCount} 门课程）}}"
   },
   "system.admin.admin.UsersTable.renameSuccess": {
     "defaultMessage": "{oldName} 已重命名为 {newName}。"
@@ -7950,16 +7959,22 @@
     "defaultMessage": "待处理"
   },
   "system.admin.instance.instance.UsersButton.deleteTooltip": {
-    "defaultMessage": "删除用户"
+    "defaultMessage": "移除用户"
   },
   "system.admin.instance.instance.UsersButton.deletionConfirm": {
-    "defaultMessage": "你确定要删除{role} {name} ({email}) 吗？"
+    "defaultMessage": "您确定要继续此操作吗？"
   },
   "system.admin.instance.instance.UsersButton.deletionFailure": {
     "defaultMessage": "无法删除用户 - {error}"
   },
   "system.admin.instance.instance.UsersButton.deletionSuccess": {
-    "defaultMessage": "用户已被删除。"
+    "defaultMessage": "用户已从该实例中移除。"
+  },
+  "system.admin.instance.instance.UsersButton.deletionConfirmTitle": {
+    "defaultMessage": "正在移除{role}用户 {name}（{email}）"
+  },
+  "system.admin.instance.instance.UsersButton.deletionPromptContent": {
+    "defaultMessage": "移除该用户可能会导致以下{count, plural, one {课程} other {课程}}出现错误："
   },
   "system.admin.instance.instance.UsersTable.changeRoleSuccess": {
     "defaultMessage": "已成功将 {name} 的角色更改为 {role}。"
