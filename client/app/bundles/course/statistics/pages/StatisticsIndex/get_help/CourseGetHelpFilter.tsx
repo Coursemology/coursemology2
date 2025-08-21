@@ -68,6 +68,10 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.getHelp.lastSixMonths',
     defaultMessage: 'Last 6 Months',
   },
+  lastTwelveMonths: {
+    id: 'course.statistics.StatisticsIndex.getHelp.lastTwelveMonths',
+    defaultMessage: 'Last 12 Months',
+  },
 });
 
 interface PresetDateRangeChipsProps {
@@ -116,6 +120,16 @@ const PresetDateRangeChips: FC<PresetDateRangeChipsProps> = ({
         const end = new Date();
         const start = new Date();
         start.setMonth(end.getMonth() - 5); // 6 months including current
+        start.setDate(1); // Start from the 1st of the month
+        return { start, end };
+      },
+    },
+    {
+      label: t(translations.lastTwelveMonths),
+      getRange: (): { start: Date; end: Date } => {
+        const end = new Date();
+        const start = new Date();
+        start.setMonth(end.getMonth() - 11); // 12 months including current
         start.setDate(1); // Start from the 1st of the month
         return { start, end };
       },

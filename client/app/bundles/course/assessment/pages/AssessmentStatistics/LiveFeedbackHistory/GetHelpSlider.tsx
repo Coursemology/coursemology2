@@ -32,16 +32,6 @@ const GetHelpSlider = styled(CustomSlider)<SliderProps>(({ theme }) => ({
     border: 'none',
     backgroundColor: '#93c5fd', // Tailwind's bg-blue-300 hex value
   },
-  '& .MuiSlider-valueLabel': {
-    backgroundColor: `transparent`,
-    color: theme.palette.text.primary,
-    fontWeight: 'normal',
-    top: '-2px',
-  },
-  '& .MuiSlider-markLabel': {
-    color: theme.palette.text.primary,
-    fontWeight: 'normal',
-  },
 }));
 
 export default GetHelpSlider;

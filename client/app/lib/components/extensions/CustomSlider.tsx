@@ -25,11 +25,12 @@ const CustomSlider = styled(Slider)<SliderProps>(({ theme }) => ({
     backgroundColor: `transparent`,
     color: theme.palette.text.primary,
     fontWeight: 'normal',
-    top: '-2px',
+    top: '45px',
   },
   '& .MuiSlider-markLabel': {
     color: theme.palette.text.primary,
     fontWeight: 'normal',
+    top: '-15px',
   },
 }));
 

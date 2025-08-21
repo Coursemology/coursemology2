@@ -77,7 +77,7 @@ const LiveFeedbackDetails: FC = () => {
             valueLabelDisplay="on"
             valueLabelFormat={(value) => {
               const userMessageIndex = userMessageToActualIndex.indexOf(value);
-              return `${formatLongDateTime(messageTimeMarkers[userMessageIndex].label)} (${userMessageIndex + 1} of ${userMessages.length})`;
+              return `${formatLongDateTime(userMessages[userMessageIndex].createdAt)} (${userMessageIndex + 1} of ${userMessages.length})`;
             }}
           />
         </div>
