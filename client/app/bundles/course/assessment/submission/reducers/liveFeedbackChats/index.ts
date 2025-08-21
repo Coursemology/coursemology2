@@ -43,26 +43,30 @@ const initialState: LiveFeedbackChatState = {
 const sampleSuggestions = (
   isIncludingSuggestionFixes: boolean,
 ): Suggestion[] => {
-  const suggestionIndexes = Object.keys(suggestionMapping);
-  const suggestionFixIndexes = Object.keys(suggestionFixesMapping);
+  /**
+   * TODO: this feature is currently disabled, decide later whether to re-add or fully remove.
+   */
+  return [];
+  // const suggestionIndexes = Object.keys(suggestionMapping);
+  // const suggestionFixIndexes = Object.keys(suggestionFixesMapping);
 
-  const chosenSuggestionIndexes = isIncludingSuggestionFixes
-    ? shuffle(suggestionIndexes)
-        .slice(0, 2)
-        .concat(shuffle(suggestionFixIndexes).slice(0, 1))
-    : shuffle(suggestionIndexes).slice(0, 3);
+  // const chosenSuggestionIndexes = isIncludingSuggestionFixes
+  //   ? shuffle(suggestionIndexes)
+  //       .slice(0, 2)
+  //       .concat(shuffle(suggestionFixIndexes).slice(0, 1))
+  //   : shuffle(suggestionIndexes).slice(0, 3);
 
-  return chosenSuggestionIndexes.map((index) => {
-    const suggestionIndex = Number(index);
-    const suggestion =
-      suggestionMapping[suggestionIndex] ??
-      suggestionFixesMapping[suggestionIndex];
-    return {
-      id: suggestion.id,
-      index: suggestionIndex,
-      defaultMessage: suggestion.defaultMessage,
-    };
-  });
+  // return chosenSuggestionIndexes.map((index) => {
+  //   const suggestionIndex = Number(index);
+  //   const suggestion =
+  //     suggestionMapping[suggestionIndex] ??
+  //     suggestionFixesMapping[suggestionIndex];
+  //   return {
+  //     id: suggestion.id,
+  //     index: suggestionIndex,
+  //     defaultMessage: suggestion.defaultMessage,
+  //   };
+  // });
 };
 
 const defaultValue = (answerId: number): LiveFeedbackChatData => {
