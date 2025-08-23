@@ -29,7 +29,7 @@ class Course::Admin::ScholaisticSettingsController < Course::Admin::Controller
       redirectUrl: ScholaisticApiService.link_course_url!(
         course_title: current_course.title,
         course_url: course_url(current_course),
-        callback_url: course_admin_scholaistic_confirm_link_course_url(current_course)
+        callback_url: course_admin_scholaistic_confirm_link_course_url(current_course, params: { format: :json })
       )
     }
   end
