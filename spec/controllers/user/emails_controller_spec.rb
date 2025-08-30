@@ -6,10 +6,12 @@ RSpec.describe User::EmailsController, type: :controller do
 
   with_tenant(:instance) do
     let!(:user) { create(:administrator) }
+    let!(:primary_email) { user.send(:default_email_record) }
+    let!(:non_primary_email) { create(:user_email, user: user, primary: false) }
     before { controller_sign_in(controller, user) }
 
-    describe '#destroy' do
-      subject { delete :destroy, as: :json, params: { id: user.send(:default_email_record) } }
+    describe '#destroy_primary_email' do
+      subject { delete :destroy, as: :json, params: { id: primary_email.id } }
 
       context 'when the user only has one email address' do
         it 'cannot be deleted' do
@@ -19,16 +21,23 @@ RSpec.describe User::EmailsController, type: :controller do
       end
 
       context 'when destroying a primary email' do
-        let!(:non_primary_email) { create(:user_email, user: user, primary: false) }
         before { controller_sign_in(controller, user) }
 
-        it 'deletes the primary email' do
-          expect { subject }.to change { user.emails.count }.by(-1)
+        it 'cannot be deleted' do
+          expect { subject }.to change { user.emails.count }.by(0)
         end
+        it { is_expected.to have_http_status(:bad_request) }
+      end
+    end
 
-        it 'sets another email as primary' do
-          subject
-          expect(non_primary_email.reload).to be_primary
+    describe '#destroy_non_primary_email' do
+      subject { delete :destroy, as: :json, params: { id: non_primary_email.id } }
+
+      context 'when destroying a non-primary email' do
+        before { controller_sign_in(controller, user) }
+
+        it 'deletes that email' do
+          expect { subject }.to change { user.emails.count }.by(-1)
         end
       end
     end
