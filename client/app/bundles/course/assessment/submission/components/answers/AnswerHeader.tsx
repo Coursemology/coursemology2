@@ -117,7 +117,7 @@ const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
           {questionNumber}
         </Typography>
       </div>
-      <Typography className="line-clamp-2 xl:line-clamp-1" variant="h6">
+      <Typography variant="h6">
         {questionTitle ||
           t(submissionTranslations.questionHeading, { number: questionNumber })}
       </Typography>
