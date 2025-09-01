@@ -8,7 +8,7 @@ class Course::Admin::ScholaisticSettingsController < Course::Admin::Controller
   end
 
   def update
-    if @settings.update(params) && current_course.save
+    if @settings.update(scholaistic_settings_params) && current_course.save
       render_settings
     else
       render json: { errors: @settings.errors }, status: :bad_request
