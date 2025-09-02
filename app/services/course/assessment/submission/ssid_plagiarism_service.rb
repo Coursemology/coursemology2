@@ -7,7 +7,8 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
 
   def initialize(course, assessment)
     @course = course
-    @assessment = assessment
+    @main_assessment = assessment
+    @linked_assessments = assessment.all_linked_assessments
   end
 
   def run_plagiarism_check
@@ -34,10 +35,20 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
 
     submission_pair_data = response['submissionPairs']
     submission_pair_data.map do |pair|
-      base_submission = ssid_id_to_submission_hash[pair['baseSubmission']]
+      base_submission_id = if pair['baseSubmission'].is_a?(String)
+                             pair['baseSubmission']
+                           else
+                             pair['baseSubmission']['id']
+                           end
+      base_submission = ssid_id_to_submission_hash[base_submission_id]
       next unless base_submission
 
-      compared_submission = ssid_id_to_submission_hash[pair['comparedSubmission']]
+      compared_submission_id = if pair['comparedSubmission'].is_a?(String)
+                                 pair['comparedSubmission']
+                               else
+                                 pair['comparedSubmission']['id']
+                               end
+      compared_submission = ssid_id_to_submission_hash[compared_submission_id]
       next unless compared_submission
 
       {
@@ -65,31 +76,37 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def share_assessment_result
-    response = create_ssid_shared_resource_link('report', @assessment.ssid_folder_id)
+    response = create_ssid_shared_resource_link('report', @main_assessment.ssid_folder_id)
     response['sharedUrl']
   end
 
   private
 
   def create_ssid_folders
-    sync_assessment_ssid_folder(@course, @assessment)
+    @linked_assessments.each do |assessment|
+      sync_assessment_ssid_folder(assessment.course, assessment)
+    end
   end
 
   def run_upload_answers
-    zip_file = Course::Assessment::Submission::SsidZipDownloadService.download_and_zip(@assessment)
-    ssid_api_service = SsidAsyncApiService.new("folders/#{@assessment.ssid_folder_id}/submissions", {})
-    response_status, response_body = ssid_api_service.post_multipart(zip_file)
-    raise SsidError, { status: response_status, body: response_body } unless response_status == 204
+    @linked_assessments.each do |assessment|
+      zip_file = Course::Assessment::Submission::SsidZipDownloadService.download_and_zip(assessment)
+      ssid_api_service = SsidAsyncApiService.new("folders/#{assessment.ssid_folder_id}/submissions", {})
+      response_status, response_body = ssid_api_service.post_multipart(zip_file)
+      raise SsidError, { status: response_status, body: response_body } unless response_status == 204
+    end
   end
 
   def send_plagiarism_check_request
-    ssid_api_service = SsidAsyncApiService.new("folders/#{@assessment.ssid_folder_id}/plagiarism-checks", {})
+    ssid_api_service = SsidAsyncApiService.new("folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks", {
+      comparedFolderIds: @linked_assessments.pluck(:ssid_folder_id)
+    })
     response_status, response_body = ssid_api_service.post
     raise SsidError, { status: response_status, body: response_body } unless response_status == 202
   end
 
   def fetch_plagiarism_check_result
-    ssid_api_service = SsidAsyncApiService.new("folders/#{@assessment.ssid_folder_id}/plagiarism-checks", {})
+    ssid_api_service = SsidAsyncApiService.new("folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks", {})
     response_status, response_body = ssid_api_service.get
     raise SsidError, { status: response_status, body: response_body } unless response_status == 200
 
@@ -97,17 +114,20 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def fetch_ssid_submissions
-    ssid_api_service = SsidAsyncApiService.new("folders/#{@assessment.ssid_folder_id}/submissions", {})
-    response_status, response_body = ssid_api_service.get
-    raise SsidError, { status: response_status, body: response_body } unless response_status == 200
+    @linked_assessments.flat_map do |assessment|
+      ssid_api_service = SsidAsyncApiService.new("folders/#{assessment.ssid_folder_id}/submissions", {})
+      response_status, response_body = ssid_api_service.get
+      raise SsidError, { status: response_status, body: response_body } unless response_status == 200
 
-    response_body['payload']['data']
+      response_body['payload']['data']
+    end
   end
 
   def sync_ssid_submissions
-    linked_assessments = Course::Assessment.where(id: @assessment.all_linked_assessments.pluck(:id)).
-                         includes(submissions: [assessment: :course])
-    submissions_by_id = linked_assessments.flat_map(&:submissions).index_by(&:id)
+    linked_assessments_with_parent_data = Course::Assessment.
+                                          where(id: @linked_assessments.pluck(:id)).
+                                          includes(submissions: [assessment: :course])
+    submissions_by_id = linked_assessments_with_parent_data.flat_map(&:submissions).index_by(&:id)
 
     fetch_ssid_submissions.filter_map do |ssid_submission|
       submission_id = ssid_submission['name'].split('_').first.to_i
@@ -118,7 +138,7 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
 
   def fetch_ssid_submission_pair_data
     ssid_api_service = SsidAsyncApiService.new(
-      "folders/#{@assessment.ssid_folder_id}/plagiarism-checks/latest", {}
+      "folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks/latest", {}
     )
     response_status, response_body = ssid_api_service.get
     raise SsidError, { status: response_status, body: response_body } unless [200, 204].include?(response_status)

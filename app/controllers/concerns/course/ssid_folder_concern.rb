@@ -5,15 +5,17 @@ module Course::SsidFolderConcern
   def sync_course_ssid_folder(course)
     return if course.ssid_folder_id
 
-    folder_id = create_ssid_folder("course_#{course.id}")
+    folder_id = create_ssid_folder("cm_course_#{course.id}")
     course.update!(ssid_folder_id: folder_id)
   end
 
   def sync_assessment_ssid_folder(course, assessment)
+    return if assessment.ssid_folder_id
+
     sync_course_ssid_folder(course) unless course.ssid_folder_id
 
     # create a new assessment folder for each run
-    folder_id = create_ssid_folder("assessment_#{assessment.id}_#{assessment.title}", course.ssid_folder_id)
+    folder_id = create_ssid_folder("assessment_#{assessment.id}", course.ssid_folder_id)
     assessment.update!(ssid_folder_id: folder_id)
   end
 

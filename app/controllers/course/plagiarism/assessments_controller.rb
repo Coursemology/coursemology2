@@ -22,7 +22,7 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
 
     if @plagiarism_check.completed?
       service = Course::Assessment::Submission::SsidPlagiarismService.new(current_course, main_assessment)
-      @results = service.fetch_plagiarism_result
+      @results = service.fetch_plagiarism_result.compact
       fetch_can_manage_course_hash(get_all_assessments_in_duplication_tree(main_assessment))
     else
       @results = []
@@ -106,12 +106,12 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
       user_id: current_user.id,
       course_id: assessments.map(&:course_id).uniq
     ).index_by(&:course_id)
-    courses = assessments.map(&:course).uniq
-    @can_manage_course_hash = courses.to_h do |course|
+    course_ids = assessments.map(&:course_id).uniq
+    @can_manage_course_hash = course_ids.map do |course_id|
       [
-        course.id,
-        course_users[course.id]&.manager_or_owner?
+        course_id,
+        course_users[course_id]&.manager_or_owner?
       ]
-    end
+    end.to_h
   end
 end
