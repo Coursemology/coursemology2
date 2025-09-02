@@ -29,19 +29,15 @@ RSpec.describe Course::Assessment::Submission::SsidZipDownloadService do
       it 'downloads skeleton files and student submissions with correct directory names' do
         subject
 
-        student1_folder = "#{submission1.id}_#{student1.name}_" \
-                          "#{assessment.title}_#{course.title}"
-        course_assessment_folder = "#{course.title} - #{assessment.title}"
+        student1_folder = "#{submission1.id}_#{student1.name}"
         question = assessment.questions.first
         question_title = Pathname.normalize_filename(question.question_assessments.first.display_title)
         template_file = question.specific.template_files.first
 
         expect(Dir.exist?(File.join(dir, 'skeleton'))).to be_truthy
         expect(Dir.exist?(File.join(dir, student1_folder))).to be_truthy
-        expect(Dir.exist?(File.join(dir, 'skeleton', course_assessment_folder))).to be_truthy
-        expect(Dir.exist?(File.join(dir, 'skeleton', course_assessment_folder, question_title))).to be_truthy
-        expect(File.exist?(File.join(dir, 'skeleton', course_assessment_folder, question_title,
-                                     template_file.filename))).to be_truthy
+        expect(Dir.exist?(File.join(dir, 'skeleton', question_title))).to be_truthy
+        expect(File.exist?(File.join(dir, 'skeleton', question_title, template_file.filename))).to be_truthy
       end
     end
   end
