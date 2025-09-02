@@ -197,7 +197,7 @@ GEM
     cronex (0.15.0)
       tzinfo
       unicode (>= 0.4.4.5)
-    csv (3.3.4)
+    csv (3.3.5)
     date (3.4.1)
     devise (4.9.4)
       bcrypt (~> 3.0)
@@ -323,8 +323,9 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.10.2)
-    json-schema (4.3.1)
-      addressable (>= 2.8)
+    json-schema (5.2.2)
+      addressable (~> 2.8)
+      bigdecimal (~> 3.1)
     jwt (2.10.1)
       base64
     kaminari (1.2.2)
@@ -343,10 +344,10 @@ GEM
       json (~> 2.6)
       jwt (~> 2.4)
       rest-client (~> 2.1)
-    langchainrb (0.19.4)
+    langchainrb (0.19.5)
       baran (~> 0.1.9)
       csv
-      json-schema (~> 4)
+      json-schema (>= 4, < 6)
       matrix
       pragmatic_segmenter (~> 0.3.0)
       zeitwerk (~> 2.5)
@@ -380,7 +381,7 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
-    matrix (0.4.2)
+    matrix (0.4.3)
     mime-types (3.6.0)
       logger
       mime-types-data (~> 3.2015)
@@ -436,7 +437,7 @@ GEM
     psych (5.2.4)
       date
       stringio
-    public_suffix (6.0.1)
+    public_suffix (6.0.2)
     puma (6.6.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
@@ -677,7 +678,7 @@ GEM
       nokogiri (~> 1.8)
     yajl-ruby (1.4.3)
     yard (0.9.37)
-    zeitwerk (2.7.2)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   ruby

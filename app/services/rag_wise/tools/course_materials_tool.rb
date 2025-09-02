@@ -67,7 +67,7 @@ class RagWise::Tools::CourseMaterialsTool
         content: "Actual Course Materials List: #{materials_list} user query: #{material_name}"
       }
     ]
-    response = LANGCHAIN_OPENAI.chat(messages: messages, temperature: 0).chat_completion
+    response = LANGCHAIN_OPENAI.chat(messages: messages).chat_completion
     JSON.parse(response)
   end
 end
