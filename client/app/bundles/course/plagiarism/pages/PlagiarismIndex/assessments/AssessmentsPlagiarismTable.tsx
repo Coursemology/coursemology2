@@ -22,6 +22,7 @@ import AssessmentLinkDialog from 'course/plagiarism/components/AssessmentLinkDia
 import { ASSESSMENTS_POLL_INTERVAL_MILLISECONDS } from 'course/plagiarism/constants';
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import Link from 'lib/components/core/Link';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { ColumnTemplate } from 'lib/components/table';
 import Table from 'lib/components/table/Table';
 import {
@@ -38,6 +39,7 @@ import formTranslations from 'lib/translations/form';
 import {
   fetchAssessments,
   runAssessmentsPlagiarism,
+  updateAssessmentWorkflowState,
 } from '../../../operations';
 import { getPlagiarismAssessments } from '../../../selectors';
 
@@ -181,7 +183,16 @@ const AssessmentsPlagiarismTable: FC = () => {
         (assessment) => assessment.id,
       );
       await runAssessmentsPlagiarism(assessmentIds);
-      await dispatch(fetchAssessments());
+      await Promise.all(
+        assessmentIds.map((id) =>
+          dispatch(
+            updateAssessmentWorkflowState(
+              id,
+              ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running,
+            ),
+          ),
+        ),
+      );
       toast.success(
         t(translations.runPlagiarismCheckSuccess, {
           count: selectedAssessments.length,
@@ -358,6 +369,12 @@ const AssessmentsPlagiarismTable: FC = () => {
           <div className="flex gap-2">
             <Chip
               className={`w-fit py-1.5 h-auto ${palette.assessmentPlagiarismStatus[assessment.workflowState]}`}
+              icon={
+                assessment.workflowState ===
+                ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running ? (
+                  <LoadingIndicator bare size={15} />
+                ) : undefined
+              }
               label={getStatusText(assessment.workflowState)}
             />
             {isCompletedWithNewSubmissions(assessment) && (

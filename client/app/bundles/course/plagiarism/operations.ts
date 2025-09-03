@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 import { Operation } from 'store';
 
 import CourseAPI from 'api/course';
+import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 
 import { plagiarismAssessmentsActions } from './reducers/assessments';
 
@@ -11,6 +12,20 @@ export function fetchAssessments(): Operation {
       const data = response.data;
       dispatch(plagiarismAssessmentsActions.updateAssessments(data));
     });
+}
+
+export function updateAssessmentWorkflowState(
+  assessmentId: number,
+  workflowState: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE,
+): Operation {
+  return async (dispatch) => {
+    dispatch(
+      plagiarismAssessmentsActions.updateAssessmentWorkflowState({
+        assessmentId,
+        workflowState,
+      }),
+    );
+  };
 }
 
 export const runAssessmentsPlagiarism = async (

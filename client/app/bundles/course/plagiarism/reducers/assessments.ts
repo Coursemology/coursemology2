@@ -4,6 +4,8 @@ import {
   PlagiarismAssessmentsState,
 } from 'types/course/plagiarism';
 
+import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
+
 const initialState: PlagiarismAssessmentsState = {
   assessments: [],
 };
@@ -31,6 +33,21 @@ export const plagiarismAssessmentsSlice = createSlice({
       );
       if (assessment) {
         assessment.numLinkedAssessments = action.payload.numLinkedAssessments;
+      }
+    },
+
+    updateAssessmentWorkflowState: (
+      state,
+      action: PayloadAction<{
+        assessmentId: number;
+        workflowState: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE;
+      }>,
+    ) => {
+      const assessment = state.assessments.find(
+        (a) => a.id === action.payload.assessmentId,
+      );
+      if (assessment) {
+        assessment.workflowState = action.payload.workflowState;
       }
     },
 
