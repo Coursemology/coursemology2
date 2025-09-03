@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessment::Submission::BaseZipDownloadService
+  SSID_MAX_ZIP_FILE_SIZE = 8.megabytes
+
   class << self
     # Downloads the submissions and zip them to upload to SSID.
     #
@@ -58,6 +60,56 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
                             find_by!(question: @questions[answer.question_id])
       answer_dir = create_folder(submission_dir, question_assessment.display_title)
       answer.specific.download(answer_dir)
+    end
+  end
+
+  def answer_size_hash
+    answers_to_zip = Dir.children(@base_dir).map { |child| File.join(@base_dir, child) }
+
+    answers_to_zip.map do |answer_dir|
+      answer_size = if File.directory?(answer_dir)
+                      Dir["#{answer_dir}/**/**"].select { |f| File.file?(f) }.sum { |f| File.size(f) }
+                    else
+                      File.size(answer_dir)
+                    end
+      [answer_dir, answer_size]
+    end.to_h
+  end
+
+  def partition_answers_by_size(answer_sizes)
+    answer_partitions = []
+    current_partition = []
+    current_partition_size = 0
+
+    answer_sizes.each do |answer_dir, answer_size|
+      if current_partition_size + answer_size > SSID_MAX_ZIP_FILE_SIZE && !current_partition.empty?
+        answer_partitions << current_partition
+        current_partition = [answer_dir]
+        current_partition_size = answer_size
+      else
+        current_partition << answer_dir
+        current_partition_size += answer_size
+      end
+    end
+    answer_partitions << current_partition
+    answer_partitions
+  end
+
+  # Zip the directory and write to the file.
+  #
+  # @return [Array] The paths to the zip files.
+  def zip_base_dir
+    answer_partitions = partition_answers_by_size(answer_size_hash)
+    answer_partitions.map.with_index do |partition, index|
+      output_file = "#{@base_dir}_#{index}.zip"
+      Zip::File.open(output_file, Zip::File::CREATE) do |zip_file|
+        partition.each do |answer_dir|
+          Dir["#{answer_dir}/**/**"].each do |file|
+            zip_file.add(file.sub(File.join("#{@base_dir}/"), ''), file)
+          end
+        end
+      end
+      output_file
     end
   end
 

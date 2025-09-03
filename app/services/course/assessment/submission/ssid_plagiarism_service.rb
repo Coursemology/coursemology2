@@ -90,10 +90,12 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
 
   def run_upload_answers
     @linked_assessments.each do |assessment|
-      zip_file = Course::Assessment::Submission::SsidZipDownloadService.download_and_zip(assessment)
+      zip_files = Course::Assessment::Submission::SsidZipDownloadService.download_and_zip(assessment)
       ssid_api_service = SsidAsyncApiService.new("folders/#{assessment.ssid_folder_id}/submissions", {})
-      response_status, response_body = ssid_api_service.post_multipart(zip_file)
-      raise SsidError, { status: response_status, body: response_body } unless response_status == 204
+      zip_files.each do |zip_file|
+        response_status, response_body = ssid_api_service.post_multipart(zip_file)
+        raise SsidError, { status: response_status, body: response_body } unless response_status == 204
+      end
     end
   end
 
