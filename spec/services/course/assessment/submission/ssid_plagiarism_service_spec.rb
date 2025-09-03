@@ -22,7 +22,7 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
     before do
       allow_any_instance_of(SsidAsyncApiService).to receive(:connection).and_return(connection)
       allow(Course::Assessment::Submission::SsidZipDownloadService).to receive(:download_and_zip).
-        and_return(File.join(Rails.root, 'spec/fixtures/course/ssid/submissions.zip'))
+        and_return([File.join(Rails.root, 'spec/fixtures/course/ssid/submissions.zip')])
     end
 
     after do
@@ -33,7 +33,7 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
       it 'initializes with course and assessment' do
         service = described_class.new(course, assessment)
         expect(service.instance_variable_get(:@course)).to eq(course)
-        expect(service.instance_variable_get(:@assessment)).to eq(assessment)
+        expect(service.instance_variable_get(:@main_assessment)).to eq(assessment)
       end
     end
 
