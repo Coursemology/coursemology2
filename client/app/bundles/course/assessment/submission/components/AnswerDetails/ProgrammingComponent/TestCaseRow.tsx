@@ -48,15 +48,15 @@ const TestCaseRow: FC<Props> = (props) => {
       </TableRow>
 
       <TableRow className={TestCaseClassName[testCaseResult]}>
-        <TableCell className="w-full pt-1">
+        <TableCell className="w-full pt-1 align-top">
           <ExpandableCode>{result.expression}</ExpandableCode>
         </TableCell>
 
-        <TableCell className="w-full pt-1">
+        <TableCell className="w-full pt-1 align-top">
           <ExpandableCode>{result.expected || ''}</ExpandableCode>
         </TableCell>
 
-        <TableCell className="w-full pt-1">
+        <TableCell className="w-full pt-1 align-top">
           <ExpandableCode>{result.output || ''}</ExpandableCode>
         </TableCell>
 
