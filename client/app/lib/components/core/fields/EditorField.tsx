@@ -109,7 +109,7 @@ const EditorField = forwardRef(
             editor.getSession().getSelection().moveCursorTo(cursorStart, 0);
           }
           if (disabled) {
-            editor.container.style.pointerEvents = 'none';
+            editor.setReadOnly(true);
             if (
               !editor.container.querySelector(
                 'style[data-ace-cursor-transparent]',

@@ -53,7 +53,7 @@ const Expandable = (props: ExpandableProps): JSX.Element => {
   }, []);
 
   return (
-    <div className="flex h-full flex-col items-start">
+    <div className="flex h-fit flex-col items-start">
       <div
         ref={containerRef}
         style={

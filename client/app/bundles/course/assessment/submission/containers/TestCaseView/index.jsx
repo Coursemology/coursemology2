@@ -168,18 +168,18 @@ export class VisibleTestCaseView extends Component {
         )}
 
         <TableRow style={styles.testCaseRow[testCaseResult]}>
-          <TableCell className="w-full pt-1">
+          <TableCell className="w-full pt-1 align-top">
             <ExpandableCode>{testCase.expression}</ExpandableCode>
           </TableCell>
 
-          <TableCell className="w-full pt-1">
+          <TableCell className="w-full pt-1 align-top">
             <ExpandableCode>{testCase.expected || ''}</ExpandableCode>
           </TableCell>
 
           {((graderView && canReadTests) ||
             (showPublicTestCasesOutput &&
               testCaseType === 'publicTestCases')) && (
-            <TableCell className="w-full pt-1">
+            <TableCell className="w-full pt-1 align-top">
               <ExpandableCode>{testCase.output || ''}</ExpandableCode>
             </TableCell>
           )}
