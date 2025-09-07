@@ -28,6 +28,7 @@ export default function (state = {}, action) {
         ...submission,
         isGrader: canGrade,
         graderView: calculateGraderView(state, canGrade),
+        getHelpCounts: action.payload.getHelpCounts ?? [],
       };
     case actions.ENTER_STUDENT_VIEW:
       return { ...state, graderView: false };
