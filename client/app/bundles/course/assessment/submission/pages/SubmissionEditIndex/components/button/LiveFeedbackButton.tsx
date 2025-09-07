@@ -17,8 +17,6 @@ const LiveFeedbackButton: FC<Props> = (props) => {
   const dispatch = useAppDispatch();
   if (!answerId) return null;
 
-  // TODO: update logic pending #7418: allow [Live feedback] on all programming questions
-
   return (
     <Button
       className="mb-2 mr-2"

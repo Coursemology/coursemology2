@@ -1,19 +1,24 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
 import { Chip, Tooltip, Typography } from '@mui/material';
 
+import LiveFeedbackHistoryContent from 'course/assessment/pages/AssessmentStatistics/LiveFeedbackHistory';
+import statisticsTranslations from 'course/assessment/pages/AssessmentStatistics/translations';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import SavingIndicator from 'lib/components/core/indicators/SavingIndicator';
 import { SAVING_STATUS } from 'lib/constants/sharedConstants';
+import { getAssessmentId } from 'lib/helpers/url-helpers';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 import { getFlagForAnswerId } from '../../selectors/answerFlags';
 import { getSubmissionQuestionHistory } from '../../selectors/history';
 import { getSubmission } from '../../selectors/submissions';
 import submissionTranslations from '../../translations';
 
-interface HistoryToggleProps {
+interface AnswerHistoryChipProps {
   questionNumber: number;
   questionId: number;
   openAnswerHistoryView: (questionId: number, questionNumber: number) => void;
@@ -32,9 +37,37 @@ const translations = defineMessages({
     id: 'course.assessment.submission.answers.AnswerHeader.viewAllAnswers',
     defaultMessage: 'All Answers ({count})',
   },
+  viewGetHelpHistory: {
+    id: 'course.assessment.submission.answers.AnswerHeader.viewGetHelpHistory',
+    defaultMessage: 'Get Help History ({count})',
+  },
 });
 
-const HistoryToggle: FC<HistoryToggleProps> = (props) => {
+const AnswerHeaderChip: FC<{
+  label: string;
+  onClick: () => void;
+  disabled?: boolean;
+}> = (props) => {
+  return (
+    <Chip
+      className={`${props.disabled ? '' : 'hover:bg-gray-300 cursor-pointer'}`}
+      clickable={!props.disabled}
+      color="info"
+      component="button"
+      disabled={props.disabled}
+      label={props.label}
+      onClick={(e) => {
+        // prevent calling onSubmit handler when component is within form context
+        e.preventDefault();
+        props.onClick();
+      }}
+      size="small"
+      variant="outlined"
+    />
+  );
+};
+
+const AnswerHistoryChip: FC<AnswerHistoryChipProps> = (props) => {
   const { questionNumber, questionId, openAnswerHistoryView } = props;
   const { t } = useTranslation();
 
@@ -55,20 +88,10 @@ const HistoryToggle: FC<HistoryToggleProps> = (props) => {
   return (
     <Tooltip title={noPastAnswers ? t(translations.noPastAnswers) : ''}>
       <span>
-        <Chip
-          className={`hover:bg-gray-300 ${noPastAnswers ? '' : 'cursor-pointer'}`}
-          clickable={noPastAnswers}
-          color="info"
-          component="button"
+        <AnswerHeaderChip
           disabled={noPastAnswers}
           label={label}
-          onClick={(e) => {
-            // prevent calling onSubmit handler when component is within form context
-            e.preventDefault();
-            openAnswerHistoryView(questionId, questionNumber);
-          }}
-          size="small"
-          variant="outlined"
+          onClick={() => openAnswerHistoryView(questionId, questionNumber)}
         />
       </span>
     </Tooltip>
@@ -99,6 +122,16 @@ const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
   } = useFormContext();
   const { t } = useTranslation();
   const isAnswerDirty = answerId ? !!dirtyFields[answerId] : false;
+  const submission = useAppSelector(getSubmission);
+  const parsedAssessmentId = parseInt(getAssessmentId() ?? '', 10);
+  const [openLiveFeedbackHistory, setOpenLiveFeedbackHistory] = useState(false);
+
+  // If getHelpCounts is not returned for this question, that means it is not enabled,
+  // so we skip rendering the button entirely.
+  const getHelpEntry = submission.getHelpCounts?.find(
+    (item) => item.questionId === questionId,
+  );
+  const getHelpMessageCount = getHelpEntry?.messageCount ?? 0;
 
   // to mitigate the issue when, during saving, user modify the answer and hence
   // the saving status will be None for a while, then Saved (ongoing Saving is finished),
@@ -126,13 +159,37 @@ const AnswerHeader: FC<AnswerHeaderProps> = (props) => {
           savingSize={answerFlag?.savingSize}
           savingStatus={savingStatus}
         />
+        {Boolean(getHelpEntry) && (
+          <AnswerHeaderChip
+            disabled={getHelpMessageCount === 0}
+            label={t(translations.viewGetHelpHistory, {
+              count: getHelpMessageCount,
+            })}
+            onClick={() => setOpenLiveFeedbackHistory(true)}
+          />
+        )}
         {answerId && (
-          <HistoryToggle
+          <AnswerHistoryChip
             openAnswerHistoryView={openAnswerHistoryView}
             questionId={questionId}
             questionNumber={questionNumber}
           />
         )}
+
+        <Prompt
+          cancelLabel={t(formTranslations.close)}
+          maxWidth="lg"
+          onClose={(): void => setOpenLiveFeedbackHistory(false)}
+          open={openLiveFeedbackHistory}
+          title={t(statisticsTranslations.liveFeedbackHistoryPromptTitle)}
+        >
+          <LiveFeedbackHistoryContent
+            assessmentId={parsedAssessmentId}
+            courseUserId={submission.submitter.id}
+            questionId={questionId}
+            questionNumber={questionNumber}
+          />
+        </Prompt>
       </div>
     </div>
   );
