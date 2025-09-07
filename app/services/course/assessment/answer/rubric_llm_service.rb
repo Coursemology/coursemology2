@@ -31,6 +31,7 @@ class Course::Assessment::Answer::RubricLlmService # rubocop:disable Metrics/Cla
     )
     messages = [
       { role: 'system', content: formatted_system_prompt },
+      { role: 'assistant', content: 'Your next response will be graded as the answer as-is.' },
       { role: 'user', content: formatted_user_prompt }
     ]
     dynamic_schema = generate_dynamic_schema(question)
@@ -82,14 +83,14 @@ class Course::Assessment::Answer::RubricLlmService # rubocop:disable Metrics/Cla
   # @return [String] Formatted string representation of rubric categories and criteria
   def format_rubric_categories(question)
     question.categories.without_bonus_category.includes(:criterions).map do |category|
+      max_grade = category.criterions.maximum(:grade) || 0
       criterions = category.criterions.map do |criterion|
-        "- [Grade: #{criterion.grade}, Criterion ID: #{criterion.id}]: #{criterion.explanation}"
+        "<BAND id=\"#{criterion.id}\" grade=\"#{criterion.grade}\">#{criterion.explanation}</BAND>"
       end
       <<~CATEGORY
-        Category ID: #{category.id}
-        Name: #{category.name}
-        Criteria:
+        <CATEGORY id=\"#{category.id}\" name=\"#{category.name}\" max_grade=\"#{max_grade}\">
         #{criterions.join("\n")}
+        </CATEGORY>
       CATEGORY
     end.join("\n\n")
   end

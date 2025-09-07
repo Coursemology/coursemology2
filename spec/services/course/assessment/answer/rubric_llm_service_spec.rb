@@ -37,13 +37,11 @@ RSpec.describe Course::Assessment::Answer::RubricLlmService do
     describe '#format_rubric_categories' do
       it 'formats categories and criteria correctly' do
         result = subject.format_rubric_categories(question)
-        categories.each do |category|
-          expect(result).to include("Category ID: #{category.id}")
-          expect(result).to include("Name: #{category.name}")
-          category.criterions.each do |criterion|
-            expect(result).to include("Grade: #{criterion.grade}")
-            expect(result).to include("Criterion ID: #{criterion.id}")
-            expect(result).to include(criterion.explanation)
+        categories.each do |cat|
+          max_grade = cat.criterions.maximum(:grade) || 0
+          expect(result).to include("<CATEGORY id=\"#{cat.id}\" name=\"#{cat.name}\" max_grade=\"#{max_grade}\">")
+          cat.criterions.each do |crit|
+            expect(result).to include("<BAND id=\"#{crit.id}\" grade=\"#{crit.grade}\">#{crit.explanation}</BAND>")
           end
         end
       end
