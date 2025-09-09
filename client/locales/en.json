@@ -509,12 +509,6 @@
   "course.admin.CodaveriSettings.error": {
     "defaultMessage": "An error occurred while updating the codaveri setting."
   },
-  "course.admin.CodaveriSettings.itspEngine": {
-    "defaultMessage": "ITSP Engine"
-  },
-  "course.admin.CodaveriSettings.itspEngineDescription": {
-    "defaultMessage": "Uses automated program repair technique"
-  },
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "Some"
   },

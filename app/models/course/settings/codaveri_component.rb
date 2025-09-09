@@ -14,7 +14,7 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
   end
 
   # Returns the ITSP requirement of codaveri component
-  #
+  # This field is deprecated and should not be used.
   # @return [String] The custom or default ITSP requirement of codaveri component
   def is_only_itsp
     settings.is_only_itsp

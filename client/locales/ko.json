@@ -533,12 +533,6 @@
   "course.admin.CodaveriSettings.feedbackWorkflowPublish": {
     "defaultMessage": "학생에게 직접 피드백 게시"
   },
-  "course.admin.CodaveriSettings.itspEngine": {
-    "defaultMessage": "ITSP 엔진"
-  },
-  "course.admin.CodaveriSettings.itspEngineDescription": {
-    "defaultMessage": "자동 프로그램 수리 기술 사용"
-  },
   "course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess": {
     "defaultMessage": "{question}에 대한 실시간 피드백이 {liveFeedbackEnabled, select, true {활성화} other {비활성화}}되었습니다"
   },
