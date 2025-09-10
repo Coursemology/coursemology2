@@ -25,6 +25,8 @@ const convertEntityDataToPatchData = (
 ): CodaveriSettingsPatchData => ({
   settings_codaveri_component: {
     feedback_workflow: data.feedbackWorkflow,
+    model: data.model,
+    system_prompt: data.systemPrompt,
   },
 });
 

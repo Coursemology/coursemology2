@@ -2,6 +2,7 @@
 json.feedbackWorkflow @settings.feedback_workflow
 json.model @settings.model
 json.systemPrompt @settings.system_prompt
+json.availableModels Course::Settings::CodaveriComponentValidator.all_models
 
 json.assessmentCategories current_course.assessment_categories do |cat|
   json.id cat.id

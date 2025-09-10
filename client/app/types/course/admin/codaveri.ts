@@ -35,6 +35,9 @@ export interface AssessmentCategoryData {
 export interface CodaveriSettingsData {
   isOnlyITSP: boolean;
   feedbackWorkflow: 'none' | 'draft' | 'publish';
+  model: string;
+  availableModels: string[];
+  systemPrompt: string;
   liveFeedbackEnabled: boolean;
   assessmentCategories: AssessmentCategoryData[];
   assessmentTabs: AssessmentTabData[];
@@ -43,6 +46,9 @@ export interface CodaveriSettingsData {
 
 export interface CodaveriSettingsEntity {
   feedbackWorkflow: CodaveriSettingsData['feedbackWorkflow'];
+  model: CodaveriSettingsData['model'];
+  availableModels: string[];
+  systemPrompt: CodaveriSettingsData['systemPrompt'];
   assessmentCategories: AssessmentCategoryData[];
   assessmentTabs: AssessmentTabData[];
   assessments: AssessmentProgrammingQuestionsData[];
@@ -51,6 +57,8 @@ export interface CodaveriSettingsEntity {
 export interface CodaveriSettingsPatchData {
   settings_codaveri_component: {
     feedback_workflow: CodaveriSettingsData['feedbackWorkflow'];
+    model: string;
+    system_prompt: string;
   };
 }
 

@@ -252,6 +252,14 @@ class Course < ApplicationRecord
     settings(:course_codaveri_component).is_only_itsp
   end
 
+  def codaveri_model
+    settings(:course_codaveri_component).model
+  end
+
+  def codaveri_system_prompt
+    settings(:course_codaveri_component).system_prompt
+  end
+
   def rag_wise_response_workflow
     settings(:course_rag_wise_component).response_workflow
   end

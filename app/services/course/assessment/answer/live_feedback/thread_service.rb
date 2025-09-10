@@ -26,21 +26,29 @@ class Course::Assessment::Answer::LiveFeedback::ThreadService
           language: question.language.extend(CodaveriLanguageConcern).codaveri_language,
           version: question.language.extend(CodaveriLanguageConcern).codaveri_version
         }
-      }
+      },
+      llmConfig: {
+        model: @course.codaveri_model
+      },
+      messages: []
     }
 
-    extend_thread_object_with_custom_prompt
+    extend_thread_object_with_instructor_prompts
   end
 
-  def extend_thread_object_with_custom_prompt
+  def extend_thread_object_with_instructor_prompts
+    unless @course.codaveri_system_prompt.blank?
+      @thread_object[:messages] << {
+        role: 'system',
+        content: truncate_prompt(@course.codaveri_system_prompt)
+      }
+    end
     return if @custom_prompt.blank?
 
-    @thread_object = @thread_object.merge({
-      message: {
-        role: 'system',
-        content: (@custom_prompt.length >= 500) ? "#{@custom_prompt[0...495]}..." : @custom_prompt
-      }
-    })
+    @thread_object[:messages] << {
+      role: 'custom',
+      content: truncate_prompt(@custom_prompt)
+    }
   end
 
   def run_create_live_feedback_chat
@@ -52,5 +60,11 @@ class Course::Assessment::Answer::LiveFeedback::ThreadService
     else
       [response_status, response_body]
     end
+  end
+
+  private
+
+  def truncate_prompt(prompt)
+    (prompt.length >= 500) ? "#{prompt[0...495]}..." : prompt
   end
 end
