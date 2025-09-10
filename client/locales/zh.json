@@ -470,6 +470,21 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "到 {tab}"
   },
+  "course.admin.CodaveriSettings.codaveriModel": {
+    "defaultMessage": "模型"
+  },
+  "course.admin.CodaveriSettings.codaveriModelDescription": {
+    "defaultMessage": "Codaveri 使用的 AI 模型，用于为学生的编程问题生成帮助对话。"
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPromptDescription": {
+    "defaultMessage": "您可以在此提供指令以自定义 Codaveri 模型的行为。{br} 在帮助学生时，这些指令将与您在具体题目中设置的指令一并执行。{br}要引用题目相关的细节，您可以在提示中使用以下变量，并按照如下方式用括号写出："
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPromptProblemDescriptionLine": {
+    "defaultMessage": "{problemDescriptionVar} ：编程问题的完整描述。"
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPromptStudentFilePathsLine": {
+    "defaultMessage": "{studentFilePathsVar} ：学生正在处理的文件路径（以逗号分隔）。"
+  },
   "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
     "defaultMessage": "目前这是一项实验性功能。 Codaveri 为学生的代码提供代码测验和自动代码反馈服务。"
   },

@@ -470,11 +470,21 @@
   "course.admin.AssessmentSettings.toTab": {
     "defaultMessage": "to {tab}"
   },
-  "course.admin.CodaveriSettings.codaveriEngine": {
-    "defaultMessage": "Codaveri Engine"
+  "course.admin.CodaveriSettings.codaveriModel": {
+    "defaultMessage": "Model"
   },
-  "course.admin.CodaveriSettings.codaveriEngineDescription": {
-    "defaultMessage": "Type of codaveri engine used to generate programming code feedback"
+  "course.admin.CodaveriSettings.codaveriModelDescription": {
+    "defaultMessage": "The AI model used by Codaveri to generate help conversations with students for programming questions."
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPromptDescription": {
+    "defaultMessage":
+      "You may customize the behavior of the Codaveri model by providing instructions here. {br} When assisting students, these instructions will be followed in addition to any you have set on the question itself.{br}To reference question-specific details, you may use the following variables within the prompt, writing them with brackets as shown below:"
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPromptProblemDescriptionLine": {
+    "defaultMessage": "{problemDescriptionVar} : The full description of the coding problem."
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPromptStudentFilePathsLine": {
+    "defaultMessage": "{studentFilePathsVar} : A comma-separated list of file paths the student is working on."
   },
   "course.admin.CodaveriSettings.codaveriSettings": {
     "defaultMessage": "Codaveri settings"

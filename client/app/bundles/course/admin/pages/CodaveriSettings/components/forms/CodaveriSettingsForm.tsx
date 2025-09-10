@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { RadioGroup } from '@mui/material';
+import { RadioGroup, Typography } from '@mui/material';
 import { CodaveriSettingsEntity } from 'types/course/admin/codaveri';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import FormSelectField from 'lib/components/form/fields/SelectField';
 import Form, { FormRef } from 'lib/components/form/Form';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -51,7 +53,7 @@ const CodaveriSettingsForm = (
     >
       {(control): JSX.Element => (
         <Section
-          contentClassName="flex flex-col space-y-3"
+          contentClassName="flex flex-col space-y-8"
           sticksToNavbar
           subtitle={t(translations.codaveriSettingsSubtitle)}
           title={t(translations.codaveriSettings)}
@@ -115,6 +117,66 @@ const CodaveriSettingsForm = (
                     value="itsp"
                   />
                 </RadioGroup>
+              )}
+            />
+          </Subsection>
+
+          <Subsection
+            subtitle={t(translations.codaveriModelDescription)}
+            title={t(translations.codaveriModel)}
+          >
+            <Controller
+              control={control}
+              name="model"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormSelectField
+                  disabled={disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  native
+                  options={settings.availableModels.map((model) => ({
+                    label: model,
+                    value: model,
+                  }))}
+                  variant="outlined"
+                />
+              )}
+            />
+          </Subsection>
+          <Subsection title={t(translations.codaveriSystemPrompt)}>
+            <Typography color="text.secondary" variant="body2">
+              {t(translations.codaveriSystemPromptDescription, { br: <br /> })}
+              <ul>
+                <li>
+                  {t(translations.codaveriSystemPromptProblemDescriptionLine, {
+                    problemDescriptionVar: (
+                      <code>&#123;problemDescription&#125;</code>
+                    ),
+                  })}
+                </li>
+                <li>
+                  {t(translations.codaveriSystemPromptStudentFilePathsLine, {
+                    studentFilePathsVar: (
+                      <code>&#123;studentFilePaths&#125;</code>
+                    ),
+                  })}
+                </li>
+              </ul>
+            </Typography>
+            <Controller
+              control={control}
+              name="systemPrompt"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormRichTextField
+                  disabled={disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="standard"
+                />
               )}
             />
           </Subsection>
