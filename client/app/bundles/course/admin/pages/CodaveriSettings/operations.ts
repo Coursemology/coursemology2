@@ -26,7 +26,8 @@ const convertEntityDataToPatchData = (
 ): CodaveriSettingsPatchData => ({
   settings_codaveri_component: {
     feedback_workflow: data.feedbackWorkflow,
-    is_only_itsp: data.isOnlyITSP === 'itsp',
+    model: data.model,
+    system_prompt: data.systemPrompt,
   },
 });
 

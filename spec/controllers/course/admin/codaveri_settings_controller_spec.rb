@@ -45,7 +45,12 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
         allow(controller).to receive(:current_course).and_return(course)
       end
       context 'when course cannot be saved' do
-        subject { patch :update, params: { course_id: course, settings_codaveri_component: { is_only_itsp: '' } } }
+        subject do
+          patch :update, params: {
+            course_id: course,
+            settings_codaveri_component: { feedback_workflow: 'invalid' }
+          }
+        end
         it 'returns bad_request with errors' do
           expect(subject).to have_http_status(:bad_request)
           expect(JSON.parse(subject.body)['errors']).not_to be_nil
