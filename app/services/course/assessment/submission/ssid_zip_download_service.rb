@@ -15,6 +15,30 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
 
   private
 
+  # TODO: Move this mapping to polyglot repository.
+  # C# and R are not yet supported by SSID, so they are excluded.
+  FILE_EXTENSION_MAPPER = {
+    Coursemology::Polyglot::Language::CPlusPlus::CPlusPlus11 => '.cpp',
+    Coursemology::Polyglot::Language::CPlusPlus::CPlusPlus17 => '.cpp',
+    Coursemology::Polyglot::Language::Go::Go1Point16 => '.go',
+    Coursemology::Polyglot::Language::Java::Java11 => '.java',
+    Coursemology::Polyglot::Language::Java::Java17 => '.java',
+    Coursemology::Polyglot::Language::Java::Java21 => '.java',
+    Coursemology::Polyglot::Language::Java::Java8 => '.java',
+    Coursemology::Polyglot::Language::JavaScript::JavaScript22 => '.js',
+    Coursemology::Polyglot::Language::Python::Python2Point7 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point10 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point12 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point13 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point4 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point5 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point6 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point7 => '.py',
+    Coursemology::Polyglot::Language::Python::Python3Point9 => '.py',
+    Coursemology::Polyglot::Language::Rust::Rust1Point68 => '.rs',
+    Coursemology::Polyglot::Language::TypeScript::TypeScript5Point8 => '.ts'
+  }.freeze
+
   def initialize(assessment)
     super()
     @assessment = assessment
@@ -60,6 +84,21 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
                             find_by!(question: @questions[answer.question_id])
       answer_dir = create_folder(submission_dir, question_assessment.display_title)
       answer.specific.download(answer_dir)
+      ensure_file_extension(answer_dir, answer.question)
+    end
+  end
+
+  def ensure_file_extension(answer_dir, question)
+    return unless question.specific.is_a?(Course::Assessment::Question::Programming)
+
+    file_extension = FILE_EXTENSION_MAPPER[question.specific.language.class]
+    return unless file_extension
+
+    Dir["#{answer_dir}/**/**"].each do |file|
+      next unless File.file?(file)
+
+      new_file = "#{File.dirname(file)}/#{File.basename(file, '.*')}#{file_extension}"
+      File.rename(file, new_file) if file != new_file
     end
   end
 
