@@ -13,6 +13,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
     let(:user) { create(:course_manager, course: course).user }
     let(:student1) { create(:course_student, course: course).user }
     let(:student2) { create(:course_student, course: course).user }
+    let(:teaching_assistant) { create(:course_teaching_assistant, course: course).user }
     let(:assessment) { create(:assessment, :published_with_programming_question, course: course) }
     let(:submission1) { create(:submission, :submitted, assessment: assessment, creator: student1) }
     let(:submission2) { create(:submission, :submitted, assessment: assessment, creator: student2) }
@@ -252,52 +253,54 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
     end
 
     describe 'authorization' do
-      context 'when the user is a student1' do
-        before { controller_sign_in(controller, student1) }
+      [:student1, :teaching_assistant].each do |user_symbol|
+        context "when the user is a #{user_symbol}" do
+          before { controller_sign_in(controller, send(user_symbol)) }
 
-        it 'denies access' do
-          expect { get :index, params: { course_id: course } }.to raise_error(CanCan::AccessDenied)
-          expect do
-            get :plagiarism_data, params: { course_id: course, id: assessment }
-          end.to raise_error(CanCan::AccessDenied)
-          expect do
-            post :plagiarism_check, params: { course_id: course, id: assessment }
-          end.to raise_error(CanCan::AccessDenied)
-          expect do
-            post :plagiarism_checks,
-                 params: { course_id: course, assessment_ids: [assessment.id] }
-          end.to raise_error(CanCan::AccessDenied)
-          expect do
-            post :download_submission_pair_result, params: {
-              course_id: course,
-              id: assessment,
-              base_submission_id: submission1.id,
-              compared_submission_id: submission2.id
-            }
-          end.to raise_error(CanCan::AccessDenied)
-          expect do
-            post :share_submission_pair_result, params: {
-              course_id: course,
-              id: assessment,
-              submission_pair_id: EXAMPLE_UUID
-            }
-          end.to raise_error(CanCan::AccessDenied)
-          expect do
-            post :share_assessment_result, params: {
-              course_id: course,
-              id: assessment
-            }
-          end.to raise_error(CanCan::AccessDenied)
-          expect do
-            get :linked_and_unlinked_assessments, params: { course_id: course, id: assessment }
-          end.to raise_error(CanCan::AccessDenied)
-          expect do
-            patch :update_assessment_links, params: {
-              course_id: course,
-              id: assessment,
-              linked_assessment_ids: []
-            }
-          end.to raise_error(CanCan::AccessDenied)
+          it 'denies access' do
+            expect { get :index, params: { course_id: course } }.to raise_error(CanCan::AccessDenied)
+            expect do
+              get :plagiarism_data, params: { course_id: course, id: assessment }
+            end.to raise_error(CanCan::AccessDenied)
+            expect do
+              post :plagiarism_check, params: { course_id: course, id: assessment }
+            end.to raise_error(CanCan::AccessDenied)
+            expect do
+              post :plagiarism_checks,
+                  params: { course_id: course, assessment_ids: [assessment.id] }
+            end.to raise_error(CanCan::AccessDenied)
+            expect do
+              post :download_submission_pair_result, params: {
+                course_id: course,
+                id: assessment,
+                base_submission_id: submission1.id,
+                compared_submission_id: submission2.id
+              }
+            end.to raise_error(CanCan::AccessDenied)
+            expect do
+              post :share_submission_pair_result, params: {
+                course_id: course,
+                id: assessment,
+                submission_pair_id: EXAMPLE_UUID
+              }
+            end.to raise_error(CanCan::AccessDenied)
+            expect do
+              post :share_assessment_result, params: {
+                course_id: course,
+                id: assessment
+              }
+            end.to raise_error(CanCan::AccessDenied)
+            expect do
+              get :linked_and_unlinked_assessments, params: { course_id: course, id: assessment }
+            end.to raise_error(CanCan::AccessDenied)
+            expect do
+              patch :update_assessment_links, params: {
+                course_id: course,
+                id: assessment,
+                linked_assessment_ids: []
+              }
+            end.to raise_error(CanCan::AccessDenied)
+          end
         end
       end
     end
