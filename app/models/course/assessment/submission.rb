@@ -286,6 +286,26 @@ class Course::Assessment::Submission < ApplicationRecord
       end
   end
 
+  # Returns the count of user messages for each question in the submission.
+  def user_get_help_message_counts
+    Course::Assessment::SubmissionQuestion.find_by_sql(<<-SQL)
+      SELECT
+        q.id AS question_id,
+        COUNT(m.id) AS message_count
+      FROM course_assessment_submission_questions sq
+      INNER JOIN course_assessment_questions q ON sq.question_id = q.id
+      INNER JOIN course_assessment_question_programming pq
+        ON q.actable_id = pq.id AND q.actable_type = 'Course::Assessment::Question::Programming'
+      INNER JOIN course_assessment_submissions s ON sq.submission_id = s.id
+      LEFT JOIN live_feedback_threads t ON t.submission_question_id = sq.id
+      LEFT JOIN live_feedback_messages m ON m.thread_id = t.id AND m.creator_id != #{User::SYSTEM_USER_ID}
+      WHERE
+        s.id = #{id}
+        AND pq.live_feedback_enabled = TRUE
+      GROUP BY q.id;
+    SQL
+  end
+
   # Returns all graded answers of the question in current submission.
   def evaluated_or_graded_answers(question)
     answers.select { |a| a.question_id == question.id && (a.evaluated? || a.graded?) }

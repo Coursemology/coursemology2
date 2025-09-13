@@ -38,7 +38,9 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   end
 
   def codaveri_settings_params
-    params.require(:settings_codaveri_component).permit(:is_only_itsp, :feedback_workflow, :live_feedback_enabled)
+    params.require(:settings_codaveri_component).permit(
+      :feedback_workflow, :model, :system_prompt, :live_feedback_enabled
+    )
   end
 
   def update_evaluator_params

@@ -81,6 +81,10 @@ export interface SubmissionState {
   canGrade: boolean;
   canUpdate: boolean;
   dueAt: Date;
+  getHelpCounts?: {
+    questionId: number;
+    messageCount: number;
+  }[];
   grade?: number;
   gradedAt?: Date;
   grader?: {
