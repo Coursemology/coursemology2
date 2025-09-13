@@ -1,4 +1,4 @@
-import { JobStatus } from 'types/jobs';
+import { JobStatus, JobStatusResponse } from 'types/jobs';
 
 import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 
@@ -50,9 +50,14 @@ export interface PlagiarismAssessmentListData extends BaseAssessment {
   numSubmitted: number;
   numLinkedAssessments: number;
   lastSubmittedAt?: Date;
+  plagiarismCheck?: PlagiarismCheck;
+}
+
+export interface PlagiarismCheck {
+  assessmentId: number;
   workflowState: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE;
   lastRunTime?: Date;
-  errorMessage?: string;
+  job?: JobStatusResponse;
 }
 
 export interface PlagiarismAssessments {
@@ -74,4 +79,6 @@ export interface AssessmentPlagiarismState {
   data: AssessmentPlagiarism;
 }
 
-export type PlagiarismAssessmentsState = PlagiarismAssessments;
+export interface PlagiarismAssessmentsState {
+  assessments: Record<number, PlagiarismAssessmentListData>;
+}

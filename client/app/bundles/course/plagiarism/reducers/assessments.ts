@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  PlagiarismAssessments,
+  PlagiarismAssessmentListData,
   PlagiarismAssessmentsState,
+  PlagiarismCheck,
 } from 'types/course/plagiarism';
 
 import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 
 const initialState: PlagiarismAssessmentsState = {
-  assessments: [],
+  assessments: {},
 };
 
 export const plagiarismAssessmentsSlice = createSlice({
@@ -16,9 +17,24 @@ export const plagiarismAssessmentsSlice = createSlice({
   reducers: {
     updateAssessments: (
       state,
-      action: PayloadAction<PlagiarismAssessments>,
+      action: PayloadAction<PlagiarismAssessmentListData[]>,
     ) => {
-      state.assessments = action.payload.assessments;
+      state.assessments = action.payload.reduce((acc, assessment) => {
+        acc[assessment.id] = assessment;
+        return acc;
+      }, {});
+    },
+
+    updatePlagiarismChecks: (
+      state,
+      action: PayloadAction<PlagiarismCheck[]>,
+    ) => {
+      action.payload.forEach((plagiarismCheck) => {
+        if (state.assessments[plagiarismCheck.assessmentId]) {
+          state.assessments[plagiarismCheck.assessmentId].plagiarismCheck =
+            plagiarismCheck;
+        }
+      });
     },
 
     updateNumLinkedAssessments: (
@@ -28,26 +44,9 @@ export const plagiarismAssessmentsSlice = createSlice({
         numLinkedAssessments: number;
       }>,
     ) => {
-      const assessment = state.assessments.find(
-        (a) => a.id === action.payload.assessmentId,
-      );
+      const assessment = state.assessments[action.payload.assessmentId];
       if (assessment) {
         assessment.numLinkedAssessments = action.payload.numLinkedAssessments;
-      }
-    },
-
-    updateAssessmentWorkflowState: (
-      state,
-      action: PayloadAction<{
-        assessmentId: number;
-        workflowState: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE;
-      }>,
-    ) => {
-      const assessment = state.assessments.find(
-        (a) => a.id === action.payload.assessmentId,
-      );
-      if (assessment) {
-        assessment.workflowState = action.payload.workflowState;
       }
     },
 

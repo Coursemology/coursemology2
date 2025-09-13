@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-json.assessments @assessments do |assessment|
+json.array! @assessments do |assessment|
   num_submitted = @num_submitted_students_hash[assessment.id] || 0
 
   json.id assessment.id
@@ -13,9 +13,9 @@ json.assessments @assessments do |assessment|
   json.lastSubmittedAt @latest_submission_time_hash[assessment.id]&.iso8601
   json.numLinkedAssessments assessment.all_linked_assessments.size
 
-  json.workflowState assessment.plagiarism_check&.workflow_state || 'not_started'
-  json.lastRunTime assessment.plagiarism_check&.last_started_at&.iso8601
-
-  job = assessment.plagiarism_check&.job
-  json.errorMessage job.error['message'] if job&.error
+  if assessment.plagiarism_check
+    json.plagiarismCheck do
+      json.partial! 'plagiarism_check', locals: { plagiarism_check: assessment.plagiarism_check }
+    end
+  end
 end

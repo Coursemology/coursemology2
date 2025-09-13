@@ -267,7 +267,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
             end.to raise_error(CanCan::AccessDenied)
             expect do
               post :plagiarism_checks,
-                  params: { course_id: course, assessment_ids: [assessment.id] }
+                   params: { course_id: course, assessment_ids: [assessment.id] }
             end.to raise_error(CanCan::AccessDenied)
             expect do
               post :download_submission_pair_result, params: {

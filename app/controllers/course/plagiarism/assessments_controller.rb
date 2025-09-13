@@ -36,13 +36,12 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
     plagiarism_job = Course::Assessment::PlagiarismCheckJob.perform_later(current_course, assessment).tap do |job|
       plagiarism_check.update!(job_id: job.job_id, workflow_state: :running, last_started_at: Time.current)
     end.job
-
-    render partial: 'jobs/submitted', locals: { job: plagiarism_job }
+    render partial: 'plagiarism_check', locals: { plagiarism_check: plagiarism_check }
   end
 
   def plagiarism_checks
     assessment_ids = params[:assessment_ids]
-    assessments = current_course.assessments.where(id: assessment_ids)
+    assessments = current_course.assessments.includes(plagiarism_check: :job).where(id: assessment_ids)
 
     assessments.each do |assessment|
       plagiarism_check = assessment.plagiarism_check || assessment.create_plagiarism_check
@@ -53,7 +52,16 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
       end.job
     end
 
-    head :accepted
+    render partial: 'plagiarism_checks', locals: {
+      plagiarism_checks: assessments.map(&:plagiarism_check).compact
+    }, status: :accepted
+  end
+
+  def fetch_plagiarism_checks
+    render partial: 'plagiarism_checks', locals: {
+      plagiarism_checks: current_course.assessments.
+        includes(plagiarism_check: :job).map(&:plagiarism_check).compact
+    }
   end
 
   def download_submission_pair_result
