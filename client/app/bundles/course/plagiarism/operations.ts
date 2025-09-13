@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { Operation } from 'store';
+import { PlagiarismCheck } from 'types/course/plagiarism';
 
 import CourseAPI from 'api/course';
 import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
@@ -14,28 +15,26 @@ export function fetchAssessments(): Operation {
     });
 }
 
-export function updateAssessmentWorkflowState(
-  assessmentId: number,
-  workflowState: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE,
-): Operation {
-  return async (dispatch) => {
-    dispatch(
-      plagiarismAssessmentsActions.updateAssessmentWorkflowState({
-        assessmentId,
-        workflowState,
-      }),
-    );
-  };
+export function fetchPlagiarismChecks(): Operation {
+  return async (dispatch) =>
+    CourseAPI.plagiarism.fetchPlagiarismChecks().then((response) => {
+      const data = response.data;
+      dispatch(plagiarismAssessmentsActions.updatePlagiarismChecks(data));
+    });
 }
 
-export const runAssessmentsPlagiarism = async (
-  assessmentIds: number[],
-): Promise<void> => {
-  try {
-    await CourseAPI.plagiarism.runAssessmentsPlagiarism(assessmentIds);
-  } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data?.error);
-    throw error;
-  }
-};
+export function runAssessmentsPlagiarism(assessmentIds: number[]): Operation {
+  return async (dispatch) => {
+    try {
+      const response =
+        await CourseAPI.plagiarism.runAssessmentsPlagiarism(assessmentIds);
+      dispatch(
+        plagiarismAssessmentsActions.updatePlagiarismChecks(response.data),
+      );
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data?.error);
+      throw error;
+    }
+  };
+}

@@ -504,6 +504,7 @@ Rails.application.routes.draw do
       namespace :plagiarism do
         resources :assessments, only: [:index] do
           post 'plagiarism_checks', on: :collection
+          get 'plagiarism_checks', on: :collection, action: 'fetch_plagiarism_checks'
           member do
             get '' => 'assessments#plagiarism_data'
             post '' => 'assessments#plagiarism_check'

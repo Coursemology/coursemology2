@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import palette from 'theme/palette';
 import { PlagiarismAssessmentListData } from 'types/course/plagiarism';
+import { JobErrored } from 'types/jobs';
 
 import AssessmentLinkDialog from 'course/plagiarism/components/AssessmentLinkDialog';
 import { ASSESSMENTS_POLL_INTERVAL_MILLISECONDS } from 'course/plagiarism/constants';
@@ -25,6 +26,7 @@ import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { ColumnTemplate } from 'lib/components/table';
 import Table from 'lib/components/table/Table';
+import Preload from 'lib/components/wrappers/Preload';
 import {
   ASSESSMENT_SIMILARITY_WORKFLOW_STATE,
   DEFAULT_TABLE_ROWS_PER_PAGE,
@@ -38,8 +40,8 @@ import formTranslations from 'lib/translations/form';
 
 import {
   fetchAssessments,
+  fetchPlagiarismChecks,
   runAssessmentsPlagiarism,
-  updateAssessmentWorkflowState,
 } from '../../../operations';
 import { getPlagiarismAssessments } from '../../../selectors';
 
@@ -148,7 +150,9 @@ const AssessmentsPlagiarismTable: FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const { assessments } = useAppSelector(getPlagiarismAssessments);
+  const assessments = Object.values(
+    useAppSelector(getPlagiarismAssessments).assessments,
+  );
   const assessmentsPollerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -163,7 +167,7 @@ const AssessmentsPlagiarismTable: FC = () => {
 
   useEffect(() => {
     assessmentsPollerRef.current = setInterval(() => {
-      dispatch(fetchAssessments());
+      dispatch(fetchPlagiarismChecks());
     }, ASSESSMENTS_POLL_INTERVAL_MILLISECONDS);
     return () => {
       if (assessmentsPollerRef.current) {
@@ -182,17 +186,7 @@ const AssessmentsPlagiarismTable: FC = () => {
       const assessmentIds = selectedAssessments.map(
         (assessment) => assessment.id,
       );
-      await runAssessmentsPlagiarism(assessmentIds);
-      await Promise.all(
-        assessmentIds.map((id) =>
-          dispatch(
-            updateAssessmentWorkflowState(
-              id,
-              ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running,
-            ),
-          ),
-        ),
-      );
+      await dispatch(runAssessmentsPlagiarism(assessmentIds));
       toast.success(
         t(translations.runPlagiarismCheckSuccess, {
           count: selectedAssessments.length,
@@ -212,7 +206,7 @@ const AssessmentsPlagiarismTable: FC = () => {
 
     const hasCompletedAssessments = selectedAssessments.some(
       (assessment) =>
-        assessment.workflowState ===
+        assessment.plagiarismCheck?.workflowState ===
         ASSESSMENT_SIMILARITY_WORKFLOW_STATE.completed,
     );
 
@@ -246,8 +240,11 @@ const AssessmentsPlagiarismTable: FC = () => {
   };
 
   const getStatusText = (
-    workflowState: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE,
+    workflowState?: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE,
   ): string => {
+    if (!workflowState) {
+      return t(translations.statusNotStarted);
+    }
     switch (workflowState) {
       case ASSESSMENT_SIMILARITY_WORKFLOW_STATE.not_started:
         return t(translations.statusNotStarted);
@@ -266,36 +263,38 @@ const AssessmentsPlagiarismTable: FC = () => {
     assessment: PlagiarismAssessmentListData,
   ): boolean => {
     if (
-      assessment.workflowState ===
+      assessment.plagiarismCheck?.workflowState ===
         ASSESSMENT_SIMILARITY_WORKFLOW_STATE.not_started ||
       !assessment.lastSubmittedAt ||
-      !assessment.lastRunTime
+      !assessment.plagiarismCheck?.lastRunTime
     ) {
       return false;
     }
     return (
-      new Date(assessment.lastSubmittedAt) > new Date(assessment.lastRunTime)
+      new Date(assessment.lastSubmittedAt) >
+      new Date(assessment.plagiarismCheck?.lastRunTime)
     );
   };
 
   const isCompletedWithNewSubmissions = (
     assessment: PlagiarismAssessmentListData,
   ): boolean =>
-    assessment.workflowState ===
+    assessment.plagiarismCheck?.workflowState ===
       ASSESSMENT_SIMILARITY_WORKFLOW_STATE.completed &&
     hasNewSubmissionsSinceLastRun(assessment);
 
   const isCompletedWithoutNewSubmissions = (
     assessment: PlagiarismAssessmentListData,
   ): boolean =>
-    assessment.workflowState ===
+    assessment.plagiarismCheck?.workflowState ===
       ASSESSMENT_SIMILARITY_WORKFLOW_STATE.completed &&
     !hasNewSubmissionsSinceLastRun(assessment);
 
   const canRunPlagiarismCheck = (
     assessment: PlagiarismAssessmentListData,
   ): boolean =>
-    assessment.workflowState !== ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running &&
+    assessment.plagiarismCheck?.workflowState !==
+      ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running &&
     assessment.numCheckableQuestions > 0 &&
     assessment.numSubmitted >= 2;
 
@@ -361,30 +360,33 @@ const AssessmentsPlagiarismTable: FC = () => {
           : '-',
     },
     {
-      of: 'workflowState',
       title: t(translations.lastRunStatus),
       sortable: true,
       cell: (assessment): JSX.Element => {
         const content = (
           <div className="flex gap-2">
             <Chip
-              className={`w-fit py-1.5 h-auto ${palette.assessmentPlagiarismStatus[assessment.workflowState]}`}
+              className={`w-fit py-1.5 h-auto ${palette.assessmentPlagiarismStatus[assessment.plagiarismCheck?.workflowState]}`}
               icon={
-                assessment.workflowState ===
+                assessment.plagiarismCheck?.workflowState ===
                 ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running ? (
                   <LoadingIndicator bare size={15} />
                 ) : undefined
               }
-              label={getStatusText(assessment.workflowState)}
+              label={getStatusText(assessment.plagiarismCheck?.workflowState)}
             />
             {isCompletedWithNewSubmissions(assessment) && (
               <Tooltip title={t(translations.newSubmissionsWarning)}>
                 <InfoOutlined color="info" />
               </Tooltip>
             )}
-            {assessment.workflowState ===
+            {assessment.plagiarismCheck?.workflowState ===
               ASSESSMENT_SIMILARITY_WORKFLOW_STATE.failed && (
-              <Tooltip title={assessment.errorMessage}>
+              <Tooltip
+                title={
+                  (assessment.plagiarismCheck?.job as JobErrored)?.errorMessage
+                }
+              >
                 <InfoOutlined color="info" />
               </Tooltip>
             )}
@@ -401,12 +403,11 @@ const AssessmentsPlagiarismTable: FC = () => {
       },
     },
     {
-      of: 'lastRunTime',
       title: t(translations.lastRunTime),
       sortable: true,
       cell: (assessment) =>
-        assessment.lastRunTime
-          ? formatMiniDateTime(assessment.lastRunTime)
+        assessment.plagiarismCheck?.lastRunTime
+          ? formatMiniDateTime(assessment.plagiarismCheck?.lastRunTime)
           : '-',
     },
     {
@@ -433,7 +434,7 @@ const AssessmentsPlagiarismTable: FC = () => {
               <IconButton
                 color="primary"
                 disabled={
-                  assessment.workflowState ===
+                  assessment.plagiarismCheck?.workflowState ===
                   ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running
                 }
                 onClick={() => handleOpenLinkDialog(assessment.id)}
@@ -450,7 +451,7 @@ const AssessmentsPlagiarismTable: FC = () => {
               <IconButton
                 color="primary"
                 disabled={
-                  assessment.workflowState !==
+                  assessment.plagiarismCheck?.workflowState !==
                   ASSESSMENT_SIMILARITY_WORKFLOW_STATE.completed
                 }
                 href={assessment.plagiarismUrl}
@@ -467,85 +468,100 @@ const AssessmentsPlagiarismTable: FC = () => {
   ];
 
   return (
-    <>
-      <Table
-        className="border-none"
-        columns={columns}
-        data={assessments}
-        getRowClassName={(assessment): string =>
-          `assessment_plagiarism_${assessment.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
-        }
-        getRowEqualityData={(assessment): PlagiarismAssessmentListData =>
-          assessment
-        }
-        getRowId={(assessment): string => assessment.id.toString()}
-        indexing={{ rowSelectable: canRunPlagiarismCheck }}
-        pagination={{
-          rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
-          showAllRows: true,
-        }}
-        search={{
-          searchPlaceholder: t(translations.searchByAssessmentTitle),
-          searchProps: {
-            shouldInclude: (assessment, filterValue?: string): boolean => {
-              if (!assessment.title) return false;
-              if (!filterValue) return true;
+    <Preload
+      render={<LoadingIndicator />}
+      while={() =>
+        dispatch(fetchAssessments()).then(() =>
+          dispatch(fetchPlagiarismChecks()),
+        )
+      }
+    >
+      <>
+        <Table
+          className="border-none"
+          columns={columns}
+          data={assessments}
+          getRowClassName={(assessment): string =>
+            `assessment_plagiarism_${assessment.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
+          }
+          getRowEqualityData={(assessment): PlagiarismAssessmentListData =>
+            assessment
+          }
+          getRowId={(assessment): string => assessment.id.toString()}
+          indexing={{ rowSelectable: canRunPlagiarismCheck }}
+          pagination={{
+            rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+            showAllRows: true,
+          }}
+          search={{
+            searchPlaceholder: t(translations.searchByAssessmentTitle),
+            searchProps: {
+              shouldInclude: (assessment, filterValue?: string): boolean => {
+                if (!assessment.title) return false;
+                if (!filterValue) return true;
 
-              return assessment.title
-                .toLowerCase()
-                .trim()
-                .includes(filterValue.toLowerCase().trim());
+                return assessment.title
+                  .toLowerCase()
+                  .trim()
+                  .includes(filterValue.toLowerCase().trim());
+              },
             },
-          },
-        }}
-        toolbar={{
-          show: true,
-          activeToolbar: (selectedAssessments): JSX.Element => {
-            selectedAssessments = selectedAssessments.filter(
-              canRunPlagiarismCheck,
-            );
-            return (
-              <Button
-                color="primary"
-                disabled={selectedAssessments.length === 0 || isSubmitting}
-                onClick={() => {
-                  handleRunPlagiarismCheckWithConfirmation(selectedAssessments);
-                }}
-                startIcon={
-                  isSubmitting ? <CircularProgress size={20} /> : <PlayArrow />
-                }
-                variant="contained"
-              >
-                {t(translations.runAssessmentsPlagiarism, {
-                  count: selectedAssessments.length,
-                })}
-              </Button>
-            );
-          },
-          keepNative: true,
-        }}
-      />
-
-      <Prompt
-        disabled={isSubmitting}
-        onClickPrimary={handleConfirmRerun}
-        onClose={handleDialogClose}
-        open={openDialog}
-        primaryColor="info"
-        primaryLabel={t(formTranslations.continue)}
-        title={t(translations.confirmRerunTitle)}
-      >
-        <PromptText>{t(translations.confirmRerunMessage)}</PromptText>
-      </Prompt>
-
-      {linkedAssessmentId && (
-        <AssessmentLinkDialog
-          assessmentId={linkedAssessmentId}
-          onClose={handleCloseLinkDialog}
-          open={linkDialogOpen}
+          }}
+          toolbar={{
+            show: true,
+            activeToolbar: (selectedAssessments): JSX.Element => {
+              selectedAssessments = selectedAssessments.filter(
+                canRunPlagiarismCheck,
+              );
+              return (
+                <Button
+                  color="primary"
+                  disabled={selectedAssessments.length === 0 || isSubmitting}
+                  onClick={() => {
+                    handleRunPlagiarismCheckWithConfirmation(
+                      selectedAssessments,
+                    );
+                  }}
+                  startIcon={
+                    isSubmitting ? (
+                      <CircularProgress size={20} />
+                    ) : (
+                      <PlayArrow />
+                    )
+                  }
+                  variant="contained"
+                >
+                  {t(translations.runAssessmentsPlagiarism, {
+                    count: selectedAssessments.length,
+                  })}
+                </Button>
+              );
+            },
+            keepNative: true,
+          }}
         />
-      )}
-    </>
+
+        <Prompt
+          disabled={isSubmitting}
+          onClickPrimary={handleConfirmRerun}
+          onClose={handleDialogClose}
+          open={openDialog}
+          primaryColor="info"
+          primaryLabel={t(formTranslations.continue)}
+          title={t(translations.confirmRerunTitle)}
+        >
+          <PromptText>{t(translations.confirmRerunMessage)}</PromptText>
+        </Prompt>
+
+        {linkedAssessmentId && (
+          <AssessmentLinkDialog
+            assessmentId={linkedAssessmentId}
+            onClose={handleCloseLinkDialog}
+            open={linkDialogOpen}
+          />
+        )}
+      </>
+    </Preload>
   );
 };
 

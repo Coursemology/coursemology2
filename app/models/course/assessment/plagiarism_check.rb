@@ -27,4 +27,8 @@ class Course::Assessment::PlagiarismCheck < ApplicationRecord
   # @!attribute [r] job
   #   This might be null if the job has been cleared.
   belongs_to :job, class_name: 'TrackableJob::Job', inverse_of: nil, optional: true
+
+  def to_partial_path
+    'course/plagiarism/assessments/plagiarism_check'
+  end
 end

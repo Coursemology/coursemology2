@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { dispatch } from 'store';
+import { PlagiarismCheck } from 'types/course/plagiarism';
 
 import CourseAPI from 'api/course';
 
@@ -51,9 +52,12 @@ export const shareAssessmentResult = async (
 
 export const runAssessmentsPlagiarism = async (
   assessmentId: number,
-): Promise<void> => {
+): Promise<PlagiarismCheck[]> => {
   try {
-    await CourseAPI.plagiarism.runAssessmentsPlagiarism([assessmentId]);
+    const response = await CourseAPI.plagiarism.runAssessmentsPlagiarism([
+      assessmentId,
+    ]);
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError)
       throw new Error(error.response?.data?.error);

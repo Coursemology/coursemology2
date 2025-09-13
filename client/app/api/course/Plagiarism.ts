@@ -1,7 +1,8 @@
 import {
   AssessmentLinkData,
   AssessmentPlagiarism,
-  PlagiarismAssessments,
+  PlagiarismAssessmentListData,
+  PlagiarismCheck,
 } from 'types/course/plagiarism';
 import { JobSubmitted } from 'types/jobs';
 
@@ -15,10 +16,18 @@ export default class PlagiarismAPI extends BaseCourseAPI {
   }
 
   /**
-   * Fetches all assessments with their plagiarism run status.
+   * Fetches all assessments, with relevant data required to determine eligibility for
+   * plagiarism checks.
    */
-  fetchAssessments(): APIResponse<PlagiarismAssessments> {
+  fetchAssessments(): APIResponse<PlagiarismAssessmentListData[]> {
     return this.client.get(`${this.#urlPrefix}/assessments`);
+  }
+
+  /**
+   * Fetches all plagiarism checks for the current course's assessments.
+   */
+  fetchPlagiarismChecks(): APIResponse<PlagiarismCheck[]> {
+    return this.client.get(`${this.#urlPrefix}/assessments/plagiarism_checks`);
   }
 
   /**
@@ -79,7 +88,9 @@ export default class PlagiarismAPI extends BaseCourseAPI {
   /**
    * Initiates plagiarism checks for multiple assessments.
    */
-  runAssessmentsPlagiarism(assessmentIds: number[]): APIResponse<void> {
+  runAssessmentsPlagiarism(
+    assessmentIds: number[],
+  ): APIResponse<PlagiarismCheck[]> {
     return this.client.post(
       `${this.#urlPrefix}/assessments/plagiarism_checks`,
       {
