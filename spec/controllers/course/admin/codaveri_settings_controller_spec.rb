@@ -40,11 +40,9 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
     end
 
     describe '#update' do
-      before do
-        allow(course).to receive(:save).and_return(false)
-        allow(controller).to receive(:current_course).and_return(course)
-      end
+      before { allow(controller).to receive(:current_course).and_return(course) }
       context 'when course cannot be saved' do
+        before { allow(course).to receive(:save).and_return(false) }
         subject do
           patch :update, params: {
             course_id: course,
@@ -54,6 +52,19 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
         it 'returns bad_request with errors' do
           expect(subject).to have_http_status(:bad_request)
           expect(JSON.parse(subject.body)['errors']).not_to be_nil
+        end
+      end
+
+      context 'when course can be saved, but user is not an admin' do
+        before { allow(user).to receive(:instance_administrator?).and_return(false) }
+        subject do
+          patch :update, params: {
+            course_id: course,
+            settings_codaveri_component: { model: 'gpt-5' }
+          }
+        end
+        it 'returns forbidden' do
+          expect(subject).to have_http_status(:forbidden)
         end
       end
     end

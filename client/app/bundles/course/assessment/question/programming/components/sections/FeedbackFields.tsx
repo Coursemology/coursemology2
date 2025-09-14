@@ -8,7 +8,7 @@ import ExperimentalChip from 'lib/components/core/ExperimentalChip';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
-import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
@@ -62,7 +62,7 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
           control={control}
           name="question.liveFeedbackCustomPrompt"
           render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
+            <FormTextField
               disabled={
                 props.disabled ||
                 !currentLanguage?.whitelists.codaveriEvaluator ||
@@ -71,6 +71,11 @@ const FeedbackFields = (props: FeedbackFieldsProps): JSX.Element | null => {
               field={field}
               fieldState={fieldState}
               fullWidth
+              inputProps={{
+                maxLength: 500,
+              }}
+              multiline
+              rows={8}
             />
           )}
         />

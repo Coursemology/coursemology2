@@ -18,18 +18,25 @@ const convertSettingsDataToEntity = (
   settings: CodaveriSettingsData,
 ): CodaveriSettingsEntity => ({
   ...settings,
+  adminSettings: settings.adminSettings,
   isOnlyITSP: settings.isOnlyITSP ? 'itsp' : 'default',
 });
 
 const convertEntityDataToPatchData = (
   data: CodaveriSettingsEntity,
-): CodaveriSettingsPatchData => ({
-  settings_codaveri_component: {
-    feedback_workflow: data.feedbackWorkflow,
-    model: data.model,
-    system_prompt: data.systemPrompt,
-  },
-});
+): CodaveriSettingsPatchData => {
+  const patchObject: CodaveriSettingsPatchData['settings_codaveri_component'] =
+    {
+      feedback_workflow: data.feedbackWorkflow,
+    };
+  if (data.adminSettings) {
+    patchObject.model = data.adminSettings.model;
+    patchObject.system_prompt = data.adminSettings.systemPrompt;
+  }
+  return {
+    settings_codaveri_component: patchObject,
+  };
+};
 
 export const fetchCodaveriSettings = async (): Data => {
   try {

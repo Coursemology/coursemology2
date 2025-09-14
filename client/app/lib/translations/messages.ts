@@ -16,6 +16,10 @@ const messagesTranslations = defineMessages({
     defaultMessage:
       'An error occurred when saving your changes. You may reload and try again.',
   },
+  featureUnavailable: {
+    id: 'lib.translations.messages.featureUnavailable',
+    defaultMessage: 'This feature is currently unavailable.',
+  },
 });
 
 export default messagesTranslations;

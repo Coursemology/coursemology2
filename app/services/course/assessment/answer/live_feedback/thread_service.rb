@@ -65,6 +65,6 @@ class Course::Assessment::Answer::LiveFeedback::ThreadService
   private
 
   def truncate_prompt(prompt)
-    (prompt.length >= 500) ? "#{prompt[0...495]}..." : prompt
+    (prompt.length >= 500) ? prompt[0...500] : prompt
   end
 end

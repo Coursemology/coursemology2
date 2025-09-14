@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 json.feedbackWorkflow @settings.feedback_workflow
 json.isOnlyITSP @settings.is_only_itsp
-json.model @settings.model
-json.systemPrompt @settings.system_prompt
-json.availableModels Course::Settings::CodaveriComponentValidator.all_models
+if current_course_user.user.instance_administrator?(current_tenant)
+  json.adminSettings do
+    json.availableModels Course::Settings::CodaveriComponentValidator.all_models
+    json.model @settings.model
+    json.systemPrompt @settings.system_prompt
+  end
+end
 
 json.assessmentCategories current_course.assessment_categories do |cat|
   json.id cat.id
