@@ -35,31 +35,35 @@ export interface AssessmentCategoryData {
 export interface CodaveriSettingsData {
   isOnlyITSP: boolean;
   feedbackWorkflow: 'none' | 'draft' | 'publish';
-  model: string;
-  availableModels: string[];
-  systemPrompt: string;
   liveFeedbackEnabled: boolean;
   assessmentCategories: AssessmentCategoryData[];
   assessmentTabs: AssessmentTabData[];
   assessments: AssessmentProgrammingQuestionsData[];
+  adminSettings?: {
+    model: string;
+    availableModels: string[];
+    systemPrompt: string;
+  };
 }
 
 export interface CodaveriSettingsEntity {
   isOnlyITSP: 'itsp' | 'default';
   feedbackWorkflow: CodaveriSettingsData['feedbackWorkflow'];
-  model: CodaveriSettingsData['model'];
-  availableModels: string[];
-  systemPrompt: CodaveriSettingsData['systemPrompt'];
   assessmentCategories: AssessmentCategoryData[];
   assessmentTabs: AssessmentTabData[];
   assessments: AssessmentProgrammingQuestionsData[];
+  adminSettings?: {
+    model?: string;
+    availableModels: string[];
+    systemPrompt?: string;
+  };
 }
 
 export interface CodaveriSettingsPatchData {
   settings_codaveri_component: {
     feedback_workflow: CodaveriSettingsData['feedbackWorkflow'];
-    model: string;
-    system_prompt: string;
+    model?: string;
+    system_prompt?: string;
   };
 }
 

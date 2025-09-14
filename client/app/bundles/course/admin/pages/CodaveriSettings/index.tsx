@@ -22,7 +22,10 @@ const CodaveriSettings = (): JSX.Element => {
     >
       {([courseData, codaveriData]): JSX.Element => (
         <>
-          <CodaveriSettingsForm settings={codaveriData} />
+          <CodaveriSettingsForm
+            availableModels={codaveriData.adminSettings?.availableModels ?? []}
+            settings={codaveriData}
+          />
           <AssessmentList courseTitle={courseData.title} />
         </>
       )}

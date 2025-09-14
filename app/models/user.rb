@@ -94,6 +94,13 @@ class User < ApplicationRecord
     id == User::SYSTEM_USER_ID || id == User::DELETED_USER_ID
   end
 
+  # Test whether the user is an administrator in the specified instance
+  #
+  # @return [Boolean]
+  def instance_administrator?(instance)
+    administrator? || instance.instance_users.administrator.exists?(user_id: id)
+  end
+
   # Pick the default email and set it as primary email. This method would immediately set the
   # attributes in the database.
   #

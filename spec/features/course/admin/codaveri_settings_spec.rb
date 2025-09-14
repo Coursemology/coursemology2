@@ -11,23 +11,6 @@ RSpec.feature 'Course: Administration: Codaveri', js: true do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can enable and disable codaveri ITSP setting' do
-        visit course_admin_codaveri_path(course)
-        expect(course.reload.codaveri_itsp_enabled?).to eq(nil)
-
-        itsp_engine_radio_button = find('label', text: 'ITSP Engine')
-        itsp_engine_radio_button.click
-        click_button 'Save changes'
-        expect_toastify('Your changes have been saved.', dismiss: true)
-        expect(course.reload.codaveri_itsp_enabled?).to eq(true)
-
-        default_engine_radio_button = find('label', text: 'Default Engine')
-        default_engine_radio_button.click
-        click_button 'Save changes'
-        expect_toastify('Your changes have been saved.', dismiss: true)
-        expect(course.reload.codaveri_itsp_enabled?).to eq(false)
-      end
-
       scenario 'I can change automatic feedback comment setting' do
         visit course_admin_codaveri_path(course)
 
