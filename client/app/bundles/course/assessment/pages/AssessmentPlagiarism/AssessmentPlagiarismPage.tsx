@@ -39,7 +39,7 @@ const AssessmentPlagiarismPage: FC = () => {
           plagiarismActions.pollPlagiarismJobFinished({
             status: {
               workflowState: ASSESSMENT_SIMILARITY_WORKFLOW_STATE.failed,
-              lastRunAt: new Date(),
+              lastRunAt: new Date().toISOString(),
             },
             submissionPairs: [],
           }),

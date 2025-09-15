@@ -4,7 +4,7 @@ job = plagiarism_check.job
 
 json.status do
   json.workflowState plagiarism_check.workflow_state
-  json.updatedAt plagiarism_check.last_started_at&.iso8601
+  json.lastRunAt plagiarism_check.last_started_at&.iso8601
 
   if job
     json.job do
