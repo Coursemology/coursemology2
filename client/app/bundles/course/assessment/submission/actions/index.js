@@ -45,8 +45,8 @@ export function getEvaluationResult(submissionId, answerId, questionId) {
             questionId,
             submissionId,
             answerItem: {
-              id: data.latestAnswer.id,
-              createdAt: data.latestAnswer.createdAt,
+              id: data.latestAnswer?.id ?? data.id,
+              createdAt: data.latestAnswer?.createdAt ?? data.createdAt,
               currentAnswer: false,
               workflowState: workflowStates.Graded,
             },
