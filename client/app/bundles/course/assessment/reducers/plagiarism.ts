@@ -11,7 +11,7 @@ const initialState: AssessmentPlagiarismState = {
   data: {
     status: {
       workflowState: ASSESSMENT_SIMILARITY_WORKFLOW_STATE.not_started,
-      lastRunAt: new Date(),
+      lastRunAt: new Date().toISOString(),
     },
     submissionPairs: [],
   },

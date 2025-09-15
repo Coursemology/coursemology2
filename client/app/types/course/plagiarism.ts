@@ -28,7 +28,7 @@ export interface AssessmentPlagiarismJobData {
 
 export interface AssessmentPlagiarismStatus {
   workflowState: keyof typeof ASSESSMENT_SIMILARITY_WORKFLOW_STATE;
-  lastRunAt: Date;
+  lastRunAt: string;
   job?: AssessmentPlagiarismJobData;
 }
 
