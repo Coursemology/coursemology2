@@ -180,10 +180,21 @@ export const historySlice = createSlice({
       const { submissionId, questionId, answerItem } = action.payload;
       const submissionQuestionState = state[submissionId]?.[questionId];
       if (submissionQuestionState?.details) {
-        submissionQuestionState.details.allAnswers.push(answerItem);
-        submissionQuestionState.details.sequenceViewSelectedAnswerIds.unshift(
-          answerItem.id,
-        );
+        const answerIndex =
+          submissionQuestionState.details.allAnswers.findIndex(
+            (answer) => answer.id === answerItem.id,
+          );
+        if (answerIndex > 0) {
+          // If answer item already exists (in case of regrading),
+          // remove the saved data (as it may have changed) and update in place.
+          submissionQuestionState.details.allAnswers[answerIndex] = answerItem;
+          delete submissionQuestionState.details.answerDataById[answerItem.id];
+        } else {
+          submissionQuestionState.details.allAnswers.push(answerItem);
+          submissionQuestionState.details.sequenceViewSelectedAnswerIds.unshift(
+            answerItem.id,
+          );
+        }
       }
     },
     updateSingleAnswerHistory: (
