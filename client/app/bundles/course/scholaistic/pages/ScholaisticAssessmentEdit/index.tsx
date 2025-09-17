@@ -47,13 +47,6 @@ const ScholaisticAssessmentEdit = (): JSX.Element => {
 
   return (
     <Page className="gap-5" title={t({ defaultMessage: 'Edit Assessment' })}>
-      <Section
-        sticksToNavbar
-        title={t(assessmentFormTranslations.assessmentDetails)}
-      >
-        <ScholaisticFramePage framed src={data.embedSrc} />
-      </Section>
-
       {data.display.isGamified && (
         <Section
           sticksToNavbar
@@ -88,6 +81,13 @@ const ScholaisticAssessmentEdit = (): JSX.Element => {
           </Form>
         </Section>
       )}
+
+      <Section
+        sticksToNavbar
+        title={t(assessmentFormTranslations.assessmentDetails)}
+      >
+        <ScholaisticFramePage framed src={data.embedSrc} />
+      </Section>
     </Page>
   );
 };
