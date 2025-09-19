@@ -7,7 +7,10 @@ class Course < ApplicationRecord
   include Generic::CollectionConcern
 
   acts_as_tenant :instance, inverse_of: :courses
-  has_settings_on :settings
+  has_settings_on :settings do |s|
+    Course::Settings::CodaveriComponent.add_default_settings(s)
+  end
+
   mount_uploader :logo, ImageUploader
 
   after_initialize :set_defaults, if: :new_record?

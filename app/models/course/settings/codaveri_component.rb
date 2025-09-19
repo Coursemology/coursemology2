@@ -45,23 +45,35 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
     Course::CodaveriComponent
   end
 
+  def self.default_settings
+    {
+      feedback_workflow: 'draft',
+      model: 'gemini-2.5-pro',
+      system_prompt: ''
+    }.freeze
+  end
+
+  def self.add_default_settings(settings)
+    settings.key :course_codaveri_component, defaults: default_settings
+  end
+
   # Returns the feedback generation workflow: no feedback, draft feedback or published feedback
   #
   # @return [none|draft|publish] The feedback generation workflow in a course
   def feedback_workflow
-    settings.feedback_workflow || 'draft'
+    settings.feedback_workflow
   end
 
   # Returns the AI model used by Codaveri to generate feedback.
   # @return [String] The AI model
   def model
-    settings.model || 'gemini-2.5-pro'
+    settings.model
   end
 
   # Returns the system prompt entered by user to configure Codaveri.
   # @return [String] The system prompt
   def system_prompt
-    settings.system_prompt || ''
+    settings.system_prompt
   end
 
   # Returns the ITSP requirement of codaveri component
