@@ -5,7 +5,7 @@ module Course::SsidFolderConcern
   def sync_course_ssid_folder(course)
     return if course.ssid_folder_id
 
-    folder_id = create_ssid_folder("cm_course_#{course.id}")
+    folder_id = create_ssid_folder("coursemology_course_#{course.id}")
     course.update!(ssid_folder_id: folder_id)
   end
 
