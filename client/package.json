@@ -39,7 +39,7 @@
     "@mui/lab": "^5.0.0-alpha.169",
     "@mui/material": "^5.15.14",
     "@mui/x-date-pickers": "^7.3.2",
-    "@rails/actioncable": "^7.1.3",
+    "@rails/actioncable": "^8.0.300",
     "@reduxjs/toolkit": "^1.9.7",
     "@rollbar/react": "^0.11.2",
     "@sgratzl/chartjs-chart-boxplot": "^3.8.0",
