@@ -32,7 +32,7 @@ class Course::Scholaistic::SubmissionsController < Course::Scholaistic::Controll
 
   def submission
     head :not_found and return unless
-      can?(:attempt, @scholaistic_assessment) && @scholaistic_assessment.start_at <= Time.zone.now
+      can_attempt_scholaistic_assessment?(@scholaistic_assessment)
 
     submission_id = ScholaisticApiService.find_or_create_submission!(
       current_course_user,
