@@ -83,6 +83,7 @@ export const POST_WORKFLOW_STATE = mirrorCreator([
 
 export const ASSESSMENT_SIMILARITY_WORKFLOW_STATE = mirrorCreator([
   'not_started',
+  'starting',
   'running',
   'completed',
   'failed',

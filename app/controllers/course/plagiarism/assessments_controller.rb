@@ -4,6 +4,9 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
   include Course::Statistics::CountsConcern
   include Course::Assessment::DuplicationTreeConcern
 
+  PLAGIARISM_CHECK_QUERY_INTERVAL = 4.seconds
+  PLAGIARISM_CHECK_START_TIMEOUT = 10.minutes
+
   def index
     @assessments = current_course.assessments.
                    includes(:plagiarism_check, :linked_assessments).
@@ -19,6 +22,8 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
       [assessment.course_id, preload_course_users_hash(assessment.course)]
     end
     @plagiarism_check = main_assessment.plagiarism_check || main_assessment.build_plagiarism_check
+    query_and_update_plagiarism_check(main_assessment) if should_query_plagiarism_check?(main_assessment)
+    timeout_plagiarism_check(main_assessment) if should_timeout_plagiarism_check?(main_assessment)
 
     if @plagiarism_check.completed?
       service = Course::Assessment::Submission::SsidPlagiarismService.new(current_course, main_assessment)
@@ -33,9 +38,12 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
     assessment = current_course.assessments.find(params[:id])
     plagiarism_check = assessment.plagiarism_check || assessment.create_plagiarism_check
 
-    plagiarism_job = Course::Assessment::PlagiarismCheckJob.perform_later(current_course, assessment).tap do |job|
-      plagiarism_check.update!(job_id: job.job_id, workflow_state: :running, last_started_at: Time.current)
-    end.job
+    unless plagiarism_check.starting? || plagiarism_check.running?
+      Course::Assessment::PlagiarismCheckJob.perform_later(current_course, assessment).tap do |job|
+        plagiarism_check.update!(job_id: job.job_id, workflow_state: :starting, last_started_at: Time.current)
+      end
+    end
+
     render partial: 'plagiarism_check', locals: { plagiarism_check: plagiarism_check }
   end
 
@@ -45,10 +53,10 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
 
     assessments.each do |assessment|
       plagiarism_check = assessment.plagiarism_check || assessment.create_plagiarism_check
-      next if plagiarism_check.running?
+      next if plagiarism_check.starting? || plagiarism_check.running?
 
       Course::Assessment::PlagiarismCheckJob.perform_later(current_course, assessment).tap do |job|
-        plagiarism_check.update!(job_id: job.job_id, workflow_state: :running, last_started_at: Time.current)
+        plagiarism_check.update!(job_id: job.job_id, workflow_state: :starting, last_started_at: Time.current)
       end.job
     end
 
@@ -58,9 +66,17 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
   end
 
   def fetch_plagiarism_checks
+    all_assessments = current_course.assessments.includes(:plagiarism_check)
+
+    # don't send another query to SSID if we recently queried
+    assessments_to_query = all_assessments.select { |assessment| should_query_plagiarism_check?(assessment) }
+    assessments_to_query.each { |assessment| query_and_update_plagiarism_check(assessment) }
+
+    assessments_to_timeout = all_assessments.select { |assessment| should_timeout_plagiarism_check?(assessment) }
+    assessments_to_timeout.each { |assessment| timeout_plagiarism_check(assessment) }
+
     render partial: 'plagiarism_checks', locals: {
-      plagiarism_checks: current_course.assessments.
-        includes(plagiarism_check: :job).map(&:plagiarism_check).compact
+      plagiarism_checks: all_assessments.map(&:plagiarism_check).compact
     }
   end
 
@@ -103,6 +119,39 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
   end
 
   private
+
+  def should_timeout_plagiarism_check?(assessment)
+    return false if assessment.plagiarism_check.nil?
+
+    assessment.plagiarism_check.starting? &&
+      assessment.plagiarism_check.updated_at <= (Time.current - PLAGIARISM_CHECK_START_TIMEOUT)
+  end
+
+  def should_query_plagiarism_check?(assessment)
+    return false if assessment.plagiarism_check.nil?
+
+    assessment.plagiarism_check.running? &&
+      assessment.plagiarism_check.updated_at <= (Time.current - PLAGIARISM_CHECK_QUERY_INTERVAL)
+  end
+
+  def timeout_plagiarism_check(assessment)
+    assessment.plagiarism_check.update!(workflow_state: :failed)
+  end
+
+  def query_and_update_plagiarism_check(assessment)
+    service = Course::Assessment::Submission::SsidPlagiarismService.new(current_course, assessment)
+    response = service.fetch_plagiarism_check_result
+    case response['status']
+    when 'successful'
+      assessment.plagiarism_check.update!(workflow_state: :completed)
+    when 'failed'
+      assessment.plagiarism_check.update!(workflow_state: :failed)
+    else
+      # Explicitly update to cover cases such as scan initiated from SSID side,
+      # or scan was initiated on SSID but transaction rolled back from our side
+      assessment.plagiarism_check.update!(workflow_state: :running, updated_at: Time.current)
+    end
+  end
 
   def fetch_all_assessment_related_statistics_hash
     @num_submitted_students_hash = num_submitted_students_hash

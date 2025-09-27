@@ -97,6 +97,7 @@ const palette = {
 
   assessmentPlagiarismStatus: {
     [plagiarismWorkflowStates.NotStarted]: 'bg-grey-200',
+    [plagiarismWorkflowStates.Starting]: 'bg-blue-200',
     [plagiarismWorkflowStates.Running]: 'bg-blue-200',
     [plagiarismWorkflowStates.Completed]: 'bg-green-200',
     [plagiarismWorkflowStates.Failed]: 'bg-red-200',

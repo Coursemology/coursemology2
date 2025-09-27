@@ -29,6 +29,7 @@ const actionTypes = mirrorCreator([
 
 export const plagiarismWorkflowStates = {
   NotStarted: 'not_started',
+  Starting: 'starting',
   Running: 'running',
   Completed: 'completed',
   Failed: 'failed',

@@ -8,8 +8,8 @@ class Course::Assessment::PlagiarismCheckJob < ApplicationJob
     instance = Course.unscoped { course.instance }
     ActsAsTenant.with_tenant(instance) do
       service = Course::Assessment::Submission::SsidPlagiarismService.new(course, assessment)
-      service.run_plagiarism_check
-      assessment.plagiarism_check.update!(workflow_state: :completed)
+      service.start_plagiarism_check
+      assessment.plagiarism_check.update!(workflow_state: :running)
     rescue StandardError => e
       assessment.plagiarism_check.update!(workflow_state: :failed)
       raise e
