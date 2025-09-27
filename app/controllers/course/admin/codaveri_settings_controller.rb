@@ -12,7 +12,7 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   def update
     head :forbidden and return if
       (codaveri_settings_params.key?(:model) || codaveri_settings_params.key?(:system_prompt)) &&
-      !current_course_user.user.instance_administrator?(current_tenant)
+      !current_user.instance_administrator?(current_tenant)
 
     if @settings.update(codaveri_settings_params) && current_course.save
       render 'edit'

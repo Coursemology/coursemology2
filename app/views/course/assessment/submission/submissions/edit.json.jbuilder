@@ -42,7 +42,7 @@ json.partial! 'answers', submission: @submission, answers: answers
 json.partial! 'topics', submission: @submission, submission_questions: submission_questions, can_grade: can_grade
 json.partial! 'history', submission: @submission
 
-if @submission.workflow_state != 'attempting' || current_course_user.staff?
+if @submission.workflow_state != 'attempting' || current_course_user&.staff?
   json.getHelpCounts @submission.user_get_help_message_counts do |row|
     json.questionId row.question_id
     json.messageCount row.message_count
