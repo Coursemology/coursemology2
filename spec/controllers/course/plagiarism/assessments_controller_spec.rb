@@ -100,7 +100,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
           end.to change(Course::Assessment::PlagiarismCheck, :count).by(1)
           expect(response).to have_http_status(:success)
           plagiarism_check = assessment.reload.plagiarism_check
-          expect(plagiarism_check.workflow_state).to eq('running')
+          expect(plagiarism_check.workflow_state).to eq('starting')
           expect(plagiarism_check.job).to eq(job)
         end
       end
@@ -113,7 +113,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
             post :plagiarism_check, as: :json, params: { course_id: course, id: assessment }
           end.not_to change(Course::Assessment::PlagiarismCheck, :count)
           existing_check.reload
-          expect(existing_check.workflow_state).to eq('running')
+          expect(existing_check.workflow_state).to eq('starting')
           expect(existing_check.job).to eq(job)
         end
       end
@@ -133,7 +133,7 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
           post :plagiarism_checks, as: :json, params: { course_id: course, assessment_ids: assessment_ids }
         end.to change(Course::Assessment::PlagiarismCheck, :count).by(1)
         expect(response).to have_http_status(:accepted)
-        expect(assessment.reload.plagiarism_check.workflow_state).to eq('running')
+        expect(assessment.reload.plagiarism_check.workflow_state).to eq('starting')
       end
     end
 

@@ -37,7 +37,7 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
       end
     end
 
-    describe '#run_plagiarism_check' do
+    describe '#start_plagiarism_check' do
       before do
         stubs.post('/folders') do
           [Ssid::ApiStubs::CREATE_FOLDER_SUCCESS[:status],
@@ -65,7 +65,8 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
       end
 
       it 'completes similarity check successfully' do
-        response = subject.run_plagiarism_check
+        subject.start_plagiarism_check
+        response = subject.fetch_plagiarism_check_result
         expect(response['status']).to eq('successful')
       end
     end

@@ -74,6 +74,10 @@ const translations = defineMessages({
     id: 'course.plagiarism.PlagiarismIndex.assessments.statusNotStarted',
     defaultMessage: 'Not Started',
   },
+  statusStarting: {
+    id: 'course.plagiarism.PlagiarismIndex.assessments.statusStarting',
+    defaultMessage: 'Starting',
+  },
   statusRunning: {
     id: 'course.plagiarism.PlagiarismIndex.assessments.statusRunning',
     defaultMessage: 'Running',
@@ -248,6 +252,8 @@ const AssessmentsPlagiarismTable: FC = () => {
     switch (workflowState) {
       case ASSESSMENT_SIMILARITY_WORKFLOW_STATE.not_started:
         return t(translations.statusNotStarted);
+      case ASSESSMENT_SIMILARITY_WORKFLOW_STATE.starting:
+        return t(translations.statusStarting);
       case ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running:
         return t(translations.statusRunning);
       case ASSESSMENT_SIMILARITY_WORKFLOW_STATE.completed:
@@ -290,11 +296,18 @@ const AssessmentsPlagiarismTable: FC = () => {
       ASSESSMENT_SIMILARITY_WORKFLOW_STATE.completed &&
     !hasNewSubmissionsSinceLastRun(assessment);
 
+  const isPlagiarismCheckInProgress = (
+    assessment: PlagiarismAssessmentListData,
+  ): boolean =>
+    assessment.plagiarismCheck?.workflowState ===
+      ASSESSMENT_SIMILARITY_WORKFLOW_STATE.starting ||
+    assessment.plagiarismCheck?.workflowState ===
+      ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running;
+
   const canRunPlagiarismCheck = (
     assessment: PlagiarismAssessmentListData,
   ): boolean =>
-    assessment.plagiarismCheck?.workflowState !==
-      ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running &&
+    !isPlagiarismCheckInProgress(assessment) &&
     assessment.numCheckableQuestions > 0 &&
     assessment.numSubmitted >= 2;
 
@@ -368,8 +381,7 @@ const AssessmentsPlagiarismTable: FC = () => {
             <Chip
               className={`w-fit py-1.5 h-auto ${palette.assessmentPlagiarismStatus[assessment.plagiarismCheck?.workflowState]}`}
               icon={
-                assessment.plagiarismCheck?.workflowState ===
-                ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running ? (
+                isPlagiarismCheckInProgress(assessment) ? (
                   <LoadingIndicator bare size={15} />
                 ) : undefined
               }
@@ -433,10 +445,7 @@ const AssessmentsPlagiarismTable: FC = () => {
             <span>
               <IconButton
                 color="primary"
-                disabled={
-                  assessment.plagiarismCheck?.workflowState ===
-                  ASSESSMENT_SIMILARITY_WORKFLOW_STATE.running
-                }
+                disabled={isPlagiarismCheckInProgress(assessment)}
                 onClick={() => handleOpenLinkDialog(assessment.id)}
                 size="small"
               >

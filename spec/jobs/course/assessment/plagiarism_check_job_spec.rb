@@ -9,7 +9,7 @@ RSpec.describe Course::Assessment::PlagiarismCheckJob do
     let(:course) { create(:course) }
     let(:assessment) { create(:assessment, course: course) }
 
-    context 'when running plagiarism check' do
+    context 'when starting plagiarism check' do
       let(:service) { instance_double(Course::Assessment::Submission::SsidPlagiarismService) }
 
       before do
@@ -19,20 +19,20 @@ RSpec.describe Course::Assessment::PlagiarismCheckJob do
 
       context 'when plagiarism check succeeds' do
         before do
-          assessment.create_plagiarism_check(workflow_state: :running)
-          allow(service).to receive(:run_plagiarism_check)
+          assessment.create_plagiarism_check(workflow_state: :starting)
+          allow(service).to receive(:start_plagiarism_check)
         end
 
-        it 'updates state to completed' do
+        it 'updates state to running' do
           subject.perform_now(course, assessment)
-          expect(assessment.plagiarism_check.reload.workflow_state).to eq('completed')
+          expect(assessment.plagiarism_check.reload.workflow_state).to eq('running')
         end
       end
 
       context 'when plagiarism check fails' do
         before do
-          allow(service).to receive(:run_plagiarism_check).and_raise(SsidError.new('error'))
-          assessment.create_plagiarism_check(workflow_state: :running)
+          allow(service).to receive(:start_plagiarism_check).and_raise(SsidError.new('error'))
+          assessment.create_plagiarism_check(workflow_state: :starting)
         end
 
         it 'updates state to failed' do

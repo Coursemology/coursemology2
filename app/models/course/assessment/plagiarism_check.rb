@@ -4,17 +4,23 @@ class Course::Assessment::PlagiarismCheck < ApplicationRecord
 
   workflow do
     state :not_started do
+      event :start, transitions_to: :starting
+    end
+    # "starting" covers the state before the actual scan on SSID is run
+    # (creating folders, uploading submissions, etc.)
+    state :starting do
       event :run, transitions_to: :running
+      event :fail, transitions_to: :failed
     end
     state :running do
       event :complete, transitions_to: :completed
       event :fail, transitions_to: :failed
     end
     state :completed do
-      event :run, transitions_to: :running
+      event :start, transitions_to: :starting
     end
     state :failed do
-      event :run, transitions_to: :running
+      event :start, transitions_to: :starting
     end
   end
 

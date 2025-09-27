@@ -11,22 +11,10 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
     @linked_assessments = assessment.all_linked_assessments
   end
 
-  def run_plagiarism_check
+  def start_plagiarism_check
     create_ssid_folders
     run_upload_answers
     send_plagiarism_check_request
-
-    poll_count = 0
-    until poll_count >= MAX_POLL_RETRIES
-      sleep(POLL_INTERVAL_SECONDS)
-      response = fetch_plagiarism_check_result
-      return response if response['status'] == 'successful'
-      raise SsidError, { status: :ok, body: response } if response['status'] == 'failed'
-
-      poll_count += 1
-    end
-
-    raise SsidError, { status: :request_timeout }
   end
 
   def fetch_plagiarism_result
@@ -80,6 +68,14 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
     response['sharedUrl']
   end
 
+  def fetch_plagiarism_check_result
+    ssid_api_service = SsidAsyncApiService.new("folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks", {})
+    response_status, response_body = ssid_api_service.get
+    raise SsidError, { status: response_status, body: response_body } unless response_status == 200
+
+    response_body['payload']['data']
+  end
+
   private
 
   def create_ssid_folders
@@ -105,14 +101,6 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
     })
     response_status, response_body = ssid_api_service.post
     raise SsidError, { status: response_status, body: response_body } unless response_status == 202
-  end
-
-  def fetch_plagiarism_check_result
-    ssid_api_service = SsidAsyncApiService.new("folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks", {})
-    response_status, response_body = ssid_api_service.get
-    raise SsidError, { status: response_status, body: response_body } unless response_status == 200
-
-    response_body['payload']['data']
   end
 
   def fetch_ssid_submissions

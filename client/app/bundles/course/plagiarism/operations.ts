@@ -1,9 +1,7 @@
 import { AxiosError } from 'axios';
 import { Operation } from 'store';
-import { PlagiarismCheck } from 'types/course/plagiarism';
 
 import CourseAPI from 'api/course';
-import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 
 import { plagiarismAssessmentsActions } from './reducers/assessments';
 

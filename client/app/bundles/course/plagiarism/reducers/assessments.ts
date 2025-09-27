@@ -5,8 +5,6 @@ import {
   PlagiarismCheck,
 } from 'types/course/plagiarism';
 
-import { ASSESSMENT_SIMILARITY_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
-
 const initialState: PlagiarismAssessmentsState = {
   assessments: {},
 };
