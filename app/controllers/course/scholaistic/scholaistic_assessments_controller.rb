@@ -19,7 +19,7 @@ class Course::Scholaistic::ScholaisticAssessmentsController < Course::Scholaisti
        elsif submission_status.present?
          submission_status
        else
-         (can?(:attempt, assessment) && (assessment.start_at <= Time.zone.now)) ? :open : :unavailable
+         can_attempt_scholaistic_assessment?(assessment) ? :open : :unavailable
        end]
     end
   end

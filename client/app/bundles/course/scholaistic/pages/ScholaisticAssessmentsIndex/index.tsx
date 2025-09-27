@@ -140,7 +140,8 @@ const ScholaisticAssessmentsIndex = (): JSX.Element => {
         getRowClassName={(assessment) =>
           cn('bg-white hover?:bg-neutral-100', {
             'bg-neutral-100 hover?:bg-neutral-200/50':
-              assessment.status === 'unavailable',
+              assessment.status === 'unavailable' ||
+              !assessment.isStartTimeBegin,
             'bg-lime-50 hover?:bg-lime-100': assessment.status === 'submitted',
             'shadow-[2px_0_0_0_inset] shadow-amber-500':
               assessment.status === 'attempting',
