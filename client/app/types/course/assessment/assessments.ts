@@ -50,6 +50,7 @@ export interface AssessmentListData extends AssessmentActionsData {
   isEndTimePassed?: boolean;
   remainingConditionalsCount?: number;
   topConditionals?: AchievementBadgeData[];
+  submittedCount?: number;
 }
 
 export interface AssessmentsListData {
@@ -77,7 +78,7 @@ export interface AssessmentsListData {
       }[];
     };
   };
-
+  totalStudentCount?: number;
   assessments: AssessmentListData[];
 }
 

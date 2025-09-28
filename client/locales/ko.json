@@ -3728,6 +3728,9 @@
   "course.assessments.index.submissions": {
     "defaultMessage": "제출물"
   },
+  "course.assessments.index.submittedCount": {
+    "defaultMessage": "제출물"
+  },
   "course.assessments.index.title": {
     "defaultMessage": "제목"
   },

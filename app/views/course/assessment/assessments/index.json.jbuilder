@@ -29,6 +29,7 @@ json.display do
   json.isKoditsuExamEnabled current_course.component_enabled?(Course::KoditsuPlatformComponent)
 end
 
+json.totalStudentCount @total_count if defined?(@total_count)
 json.assessments @assessments do |assessment|
   json.id assessment.id
   json.title assessment.title
@@ -41,6 +42,10 @@ json.assessments @assessments do |assessment|
   json.affectsPersonalTimes current_course.show_personalized_timeline_features && assessment.affects_personal_times?
   json.url course_assessment_path(current_course, assessment)
   json.timeLimit assessment.time_limit
+  if defined?(@assessment_counts)
+    submitted_count = @assessment_counts[assessment.id] || 0
+    json.submittedCount submitted_count
+  end
 
   if current_course.component_enabled?(Course::KoditsuPlatformComponent)
     json.isKoditsuAssessmentEnabled assessment.is_koditsu_enabled

@@ -3707,6 +3707,9 @@
   "course.assessments.index.submissions": {
     "defaultMessage": "提交"
   },
+  "course.assessments.index.submittedCount": {
+    "defaultMessage": "提交"
+  },
   "course.assessments.index.title": {
     "defaultMessage": "标题"
   },
