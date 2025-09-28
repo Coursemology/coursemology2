@@ -37,7 +37,7 @@ class Course::Assessment::Answer::LiveFeedback::ThreadService
   end
 
   def extend_thread_object_with_instructor_prompts
-    unless @course.codaveri_system_prompt.blank?
+    unless !@course.codaveri_override_system_prompt? || @course.codaveri_system_prompt.blank?
       @thread_object[:messages] << {
         role: 'system',
         content: truncate_prompt(@course.codaveri_system_prompt)

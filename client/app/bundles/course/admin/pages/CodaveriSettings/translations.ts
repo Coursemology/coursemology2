@@ -57,7 +57,25 @@ export default defineMessages({
   codaveriSystemPromptDescription: {
     id: 'course.admin.CodaveriSettings.codaveriSystemPromptDescription',
     defaultMessage:
-      'You may customize the behavior of the Codaveri model by providing instructions here. {br} When assisting students, these instructions will be followed in addition to any you have set on the question itself.{br}To reference question-specific details, you may use the following variables within the prompt, writing them with brackets as shown below:',
+      'The Codaveri system prompt controls AI behavior when interacting with students.',
+  },
+  codaveriUseDefaultSystemPrompt: {
+    id: 'course.admin.CodaveriSettings.codaveriSystemPrompt',
+    defaultMessage: 'Use the default system prompt',
+  },
+  codaveriOverrideSystemPrompt: {
+    id: 'course.admin.CodaveriSettings.codaveriSystemPrompt',
+    defaultMessage: 'Use a custom system prompt',
+  },
+  codaveriOverrideSystemPromptDescription: {
+    id: 'course.admin.CodaveriSettings.codaveriOverrideSystemPrompt',
+    defaultMessage:
+      'When assisting students, these instructions will be followed in addition to any you have set on the question itself. To reference question-specific details, you may use these variables within the prompt, writing them with brackets as shown below:',
+  },
+  codaveriEmptySystemPrompt: {
+    id: 'course.admin.CodaveriSettings.codaveriEmptySystemPrompt',
+    defaultMessage:
+      'You must enter a custom system prompt if you want to override the default one.',
   },
   codaveriSystemPromptProblemDescriptionLine: {
     id: 'course.admin.CodaveriSettings.codaveriSystemPromptProblemDescriptionLine',

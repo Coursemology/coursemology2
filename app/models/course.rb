@@ -263,6 +263,10 @@ class Course < ApplicationRecord
     settings(:course_codaveri_component).system_prompt
   end
 
+  def codaveri_override_system_prompt?
+    settings(:course_codaveri_component).override_system_prompt
+  end
+
   def rag_wise_response_workflow
     settings(:course_rag_wise_component).response_workflow
   end

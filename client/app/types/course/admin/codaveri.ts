@@ -42,6 +42,7 @@ export interface CodaveriSettingsData {
   adminSettings?: {
     model: string;
     availableModels: string[];
+    overrideSystemPrompt: boolean;
     systemPrompt: string;
   };
 }
@@ -54,7 +55,7 @@ export interface CodaveriSettingsEntity {
   assessments: AssessmentProgrammingQuestionsData[];
   adminSettings?: {
     model?: string;
-    availableModels: string[];
+    useSystemPrompt: 'default' | 'override';
     systemPrompt?: string;
   };
 }
@@ -64,6 +65,7 @@ export interface CodaveriSettingsPatchData {
     feedback_workflow: CodaveriSettingsData['feedbackWorkflow'];
     model?: string;
     system_prompt?: string;
+    override_system_prompt?: boolean;
   };
 }
 
