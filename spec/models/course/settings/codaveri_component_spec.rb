@@ -16,12 +16,14 @@ RSpec.describe Course::Settings::CodaveriComponent do
         expect(course.codaveri_model).to eq(default_settings[:model])
         expect(course.codaveri_feedback_workflow).to eq(default_settings[:feedback_workflow])
         expect(course.codaveri_system_prompt).to eq(default_settings[:system_prompt])
+        expect(course.codaveri_override_system_prompt?).to eq(default_settings[:override_system_prompt])
       end
 
       it 'populates settings class with correct default values' do
         expect(settings.model).to eq(default_settings[:model])
         expect(settings.feedback_workflow).to eq(default_settings[:feedback_workflow])
         expect(settings.system_prompt).to eq(default_settings[:system_prompt])
+        expect(settings.override_system_prompt).to eq(default_settings[:override_system_prompt])
       end
     end
   end

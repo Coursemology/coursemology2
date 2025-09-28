@@ -5,6 +5,7 @@ if current_user.instance_administrator?(current_tenant)
   json.adminSettings do
     json.availableModels Course::Settings::CodaveriComponentValidator.all_models
     json.model @settings.model
+    json.overrideSystemPrompt @settings.override_system_prompt
     json.systemPrompt @settings.system_prompt
   end
 end

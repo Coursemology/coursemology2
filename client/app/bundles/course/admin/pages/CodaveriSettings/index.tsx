@@ -1,4 +1,4 @@
-import { CodaveriSettingsEntity } from 'types/course/admin/codaveri';
+import { CodaveriSettingsData } from 'types/course/admin/codaveri';
 import { CourseInfo } from 'types/course/admin/course';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -8,11 +8,14 @@ import { fetchCourseSettings } from '../CourseSettings/operations';
 
 import AssessmentList from './components/AssessmentList';
 import CodaveriSettingsForm from './components/forms/CodaveriSettingsForm';
-import { fetchCodaveriSettings } from './operations';
+import {
+  convertSettingsDataToEntity,
+  fetchCodaveriSettings,
+} from './operations';
 
 const CodaveriSettings = (): JSX.Element => {
   const fetchCourseAndCodaveriSettings = (): Promise<
-    [CourseInfo, CodaveriSettingsEntity]
+    [CourseInfo, CodaveriSettingsData]
   > => Promise.all([fetchCourseSettings(), fetchCodaveriSettings()]);
 
   return (
@@ -24,7 +27,7 @@ const CodaveriSettings = (): JSX.Element => {
         <>
           <CodaveriSettingsForm
             availableModels={codaveriData.adminSettings?.availableModels ?? []}
-            settings={codaveriData}
+            settings={convertSettingsDataToEntity(codaveriData)}
           />
           <AssessmentList courseTitle={courseData.title} />
         </>

@@ -49,6 +49,7 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
     {
       feedback_workflow: 'draft',
       model: 'gemini-2.5-pro',
+      override_system_prompt: false,
       system_prompt: ''
     }.freeze
   end
@@ -74,6 +75,13 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
   # @return [String] The system prompt
   def system_prompt
     settings.system_prompt
+  end
+
+
+  # Returns whether the user is overriding the default system prompt.
+  # @return [Boolean] The system prompt
+  def override_system_prompt
+    settings.override_system_prompt
   end
 
   # Returns the ITSP requirement of codaveri component
@@ -111,5 +119,12 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
   def system_prompt=(system_prompt)
     system_prompt = nil if system_prompt.nil?
     settings.system_prompt = system_prompt
+  end
+
+  # Sets whether to use the system prompt entered by user to configure Codaveri.
+  # @param [Boolean] override_system_prompt The new setting
+  def override_system_prompt=(override_system_prompt)
+    override_system_prompt = nil if override_system_prompt.nil?
+    settings.override_system_prompt = override_system_prompt
   end
 end

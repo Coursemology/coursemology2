@@ -11,7 +11,7 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
 
   def update
     head :forbidden and return if
-      (codaveri_settings_params.key?(:model) || codaveri_settings_params.key?(:system_prompt)) &&
+      (codaveri_settings_params.key?(:model) || codaveri_settings_params.key?(:system_prompt) || codaveri_settings_params.key?(:override_system_prompt)) &&
       !current_user.instance_administrator?(current_tenant)
 
     if @settings.update(codaveri_settings_params) && current_course.save
@@ -43,7 +43,7 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
 
   def codaveri_settings_params
     params.require(:settings_codaveri_component).permit(
-      :feedback_workflow, :model, :system_prompt, :live_feedback_enabled
+      :feedback_workflow, :model, :system_prompt, :override_system_prompt, :live_feedback_enabled
     )
   end
 

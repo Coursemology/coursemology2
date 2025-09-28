@@ -14,13 +14,25 @@ import { saveAllAssessmentsQuestions } from 'course/admin/reducers/codaveriSetti
 
 type Data = Promise<CodaveriSettingsEntity>;
 
-const convertSettingsDataToEntity = (
+export const convertSettingsDataToEntity = (
   settings: CodaveriSettingsData,
-): CodaveriSettingsEntity => ({
-  ...settings,
-  adminSettings: settings.adminSettings,
-  isOnlyITSP: settings.isOnlyITSP ? 'itsp' : 'default',
-});
+): CodaveriSettingsEntity => {
+  const { adminSettings, ...baseSettings } = settings;
+  const settingsEntity: CodaveriSettingsEntity = {
+    ...baseSettings,
+    isOnlyITSP: settings.isOnlyITSP ? 'itsp' : 'default',
+  };
+  if (adminSettings) {
+    settingsEntity.adminSettings = {
+      useSystemPrompt: adminSettings.overrideSystemPrompt
+        ? 'override'
+        : 'default',
+      model: adminSettings.model,
+      systemPrompt: adminSettings.systemPrompt,
+    };
+  }
+  return settingsEntity;
+};
 
 const convertEntityDataToPatchData = (
   data: CodaveriSettingsEntity,
@@ -31,30 +43,34 @@ const convertEntityDataToPatchData = (
     };
   if (data.adminSettings) {
     patchObject.model = data.adminSettings.model;
-    patchObject.system_prompt = data.adminSettings.systemPrompt;
+    if (data.adminSettings.systemPrompt?.length) {
+      patchObject.system_prompt = data.adminSettings.systemPrompt;
+    }
+    patchObject.override_system_prompt =
+      data.adminSettings.useSystemPrompt === 'override';
   }
   return {
     settings_codaveri_component: patchObject,
   };
 };
 
-export const fetchCodaveriSettings = async (): Data => {
-  try {
-    const response = await CourseAPI.admin.codaveri.index();
-    const data = convertSettingsDataToEntity(response.data);
-    dispatch(
-      saveAllAssessmentsQuestions({
-        assessments: data.assessments,
-        tabs: data.assessmentTabs,
-        categories: data.assessmentCategories,
-      }),
-    );
-    return data;
-  } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data?.errors;
-    throw error;
-  }
-};
+export const fetchCodaveriSettings =
+  async (): Promise<CodaveriSettingsData> => {
+    try {
+      const response = await CourseAPI.admin.codaveri.index();
+      dispatch(
+        saveAllAssessmentsQuestions({
+          assessments: response.data.assessments,
+          tabs: response.data.assessmentTabs,
+          categories: response.data.assessmentCategories,
+        }),
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) throw error.response?.data?.errors;
+      throw error;
+    }
+  };
 
 export const fetchCodaveriSettingsForAssessment = async (
   assessmentId: number,
