@@ -90,6 +90,10 @@ const translations = defineMessages({
     id: 'course.assessments.index.bonusEndsAt',
     defaultMessage: 'Bonus ends at',
   },
+  submittedCount: {
+    id: 'course.assessments.index.submittedCount',
+    defaultMessage: 'Submissions',
+  },
   actions: {
     id: 'course.assessments.index.actions',
     defaultMessage: 'Actions',

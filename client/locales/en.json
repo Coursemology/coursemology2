@@ -3747,6 +3747,9 @@
   "course.assessments.index.submissions": {
     "defaultMessage": "Submissions"
   },
+  "course.assessments.index.submittedCount": {
+    "defaultMessage": "Submissions"
+  },
   "course.assessments.index.title": {
     "defaultMessage": "Title"
   },

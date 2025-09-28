@@ -20,7 +20,7 @@ interface AssessmentsTableProps {
 }
 
 const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
-  const { display, assessments } = props.assessments;
+  const { display, assessments, totalStudentCount } = props.assessments;
   const { t } = useTranslation();
 
   const columns: ColumnTemplate<AssessmentListData>[] = [
@@ -122,6 +122,22 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
       ),
       unless: !display.endTimes,
       className: 'whitespace-nowrap pointer-coarse:max-sm:!hidden',
+    },
+    {
+      of: 'submittedCount',
+      title: t(translations.submittedCount),
+      cell: (assessment): JSX.Element | null => {
+        if (typeof assessment.submittedCount === 'number') {
+          return (
+            <span className={assessment.published ? '' : 'text-neutral-400'}>
+              {assessment.submittedCount} / {totalStudentCount}
+            </span>
+          );
+        }
+        return null;
+      },
+      unless: typeof totalStudentCount !== 'number',
+      className: 'max-lg:!hidden text-right whitespace-nowrap',
     },
     {
       id: 'actions',

@@ -22,6 +22,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def index
     @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
 
+    load_assessment_submission_counts if current_course_user&.staff?
+
     @items_hash = @course.lesson_plan_items.where(actable_id: @assessments.pluck(:id),
                                                   actable_type: Course::Assessment.name).
                   preload(actable: :conditions).
@@ -260,6 +262,16 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   private
+
+  def load_assessment_submission_counts
+    real_student_ids = current_course.course_users.students.without_phantom_users.pluck(:user_id)
+    @total_count = real_student_ids.count
+    @assessment_counts = Course::Assessment::Submission.
+                         without_attempting_state.
+                         by_users(real_student_ids).
+                         group(:assessment_id).
+                         count
+  end
 
   def question_order_ids
     @question_order_ids ||= begin
