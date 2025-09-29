@@ -497,12 +497,6 @@
   "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
     "defaultMessage": "현재 실험적인 기능입니다. 코다베리는 학생의 코드에 대한 코드 평가 및 자동 코드 피드백 서비스를 제공합니다."
   },
-  "course.admin.CodaveriSettings.defaultEngine": {
-    "defaultMessage": "기본 엔진"
-  },
-  "course.admin.CodaveriSettings.defaultEngineDescription": {
-    "defaultMessage": "생성적 AI 및 검증 기술 사용"
-  },
   "course.admin.CodaveriSettings.enableDisableButton": {
     "defaultMessage": "{enabled, select, true {활성화} other {비활성화}}"
   },
@@ -514,9 +508,6 @@
   },
   "course.admin.CodaveriSettings.enableDisableLiveFeedback": {
     "defaultMessage": "{enabled, select, true {활성화} other {비활성화}} {questionCount}개의 프로그래밍 질문에 대한 실시간 피드백 {title}?"
-  },
-  "course.admin.CodaveriSettings.enableIsOnlyITSP": {
-    "defaultMessage": "ITSP 활성화"
   },
   "course.admin.CodaveriSettings.error": {
     "defaultMessage": "코다베리 설정을 업데이트하는 동안 오류가 발생했습니다."
@@ -541,12 +532,6 @@
   },
   "course.admin.CodaveriSettings.feedbackWorkflowPublish": {
     "defaultMessage": "학생에게 직접 피드백 게시"
-  },
-  "course.admin.CodaveriSettings.itspEngine": {
-    "defaultMessage": "ITSP 엔진"
-  },
-  "course.admin.CodaveriSettings.itspEngineDescription": {
-    "defaultMessage": "자동 프로그램 수리 기술 사용"
   },
   "course.admin.CodaveriSettings.liveFeedbackEnabledUpdateSuccess": {
     "defaultMessage": "{question}에 대한 실시간 피드백이 {liveFeedbackEnabled, select, true {활성화} other {비활성화}}되었습니다"

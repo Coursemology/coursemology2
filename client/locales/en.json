@@ -492,15 +492,6 @@
   "course.admin.CodaveriSettings.codaveriSettingsSubtitle": {
     "defaultMessage": "This is currently an experimental feature. Codaveri provides code evaluation and automated code feedback services for students' codes."
   },
-  "course.admin.CodaveriSettings.defaultEngine": {
-    "defaultMessage": "Default Engine"
-  },
-  "course.admin.CodaveriSettings.defaultEngineDescription": {
-    "defaultMessage": "Uses generative AI and verification techniques"
-  },
-  "course.admin.CodaveriSettings.enableIsOnlyITSP": {
-    "defaultMessage": "Enable ITSP"
-  },
   "course.admin.CodaveriSettings.feedbackWorkflow": {
     "defaultMessage": "Automatic Post-Submission Comments"
   },
@@ -518,12 +509,6 @@
   },
   "course.admin.CodaveriSettings.error": {
     "defaultMessage": "An error occurred while updating the codaveri setting."
-  },
-  "course.admin.CodaveriSettings.itspEngine": {
-    "defaultMessage": "ITSP Engine"
-  },
-  "course.admin.CodaveriSettings.itspEngineDescription": {
-    "defaultMessage": "Uses automated program repair technique"
   },
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "Some"
