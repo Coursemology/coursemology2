@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 json.feedbackWorkflow @settings.feedback_workflow
-if current_user.instance_administrator?(current_tenant)
+if can?(:manage_course_admin_settings, current_tenant)
   json.adminSettings do
     json.availableModels Course::Settings::CodaveriComponentValidator.all_models
     json.model @settings.model
