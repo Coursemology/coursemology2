@@ -77,7 +77,6 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
     settings.system_prompt
   end
 
-
   # Returns whether the user is overriding the default system prompt.
   # @return [Boolean] The system prompt
   def override_system_prompt
