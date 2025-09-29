@@ -112,42 +112,6 @@ const CodaveriSettingsForm = (
               />
             </Subsection>
 
-            <Subsection
-              subtitle={t(translations.codaveriEngineDescription)}
-              title={t(translations.codaveriEngine)}
-            >
-              <Controller
-                control={control}
-                name="isOnlyITSP"
-                render={({ field }): JSX.Element => (
-                  <RadioGroup className="space-y-5" {...field}>
-                    <RadioButton
-                      className="my-0"
-                      description={t(translations.defaultEngineDescription)}
-                      disabled={disabled}
-                      label={t(translations.defaultEngine)}
-                      value="default"
-                    />
-
-                    <RadioButton
-                      className="my-0"
-                      description={
-                        <>
-                          {t(translations.itspEngineDescription)} <br />
-                          <Typography color="error" variant="caption">
-                            {t(messageTranslations.featureUnavailable)}
-                          </Typography>
-                        </>
-                      }
-                      disabled
-                      label={t(translations.itspEngine)}
-                      value="itsp"
-                    />
-                  </RadioGroup>
-                )}
-              />
-            </Subsection>
-
             {settings.adminSettings && (
               <Subsection
                 subtitle={t(translations.codaveriModelDescription)}

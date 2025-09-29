@@ -87,22 +87,6 @@ export default defineMessages({
     defaultMessage:
       '{studentFilePathsVar} : A comma-separated list of file paths the student is working on.',
   },
-  defaultEngine: {
-    id: 'course.admin.CodaveriSettings.defaultEngine',
-    defaultMessage: 'Default Engine',
-  },
-  defaultEngineDescription: {
-    id: 'course.admin.CodaveriSettings.defaultEngineDescription',
-    defaultMessage: 'Uses generative AI and verification techniques',
-  },
-  itspEngine: {
-    id: 'course.admin.CodaveriSettings.itspEngine',
-    defaultMessage: 'ITSP Engine',
-  },
-  itspEngineDescription: {
-    id: 'course.admin.CodaveriSettings.itspEngineDescription',
-    defaultMessage: 'Uses automated program repair technique',
-  },
   assessments: {
     id: 'course.admin.CodaveriSettings.assessments',
     defaultMessage: 'Assessments',

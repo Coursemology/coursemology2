@@ -20,7 +20,6 @@ export const convertSettingsDataToEntity = (
   const { adminSettings, ...baseSettings } = settings;
   const settingsEntity: CodaveriSettingsEntity = {
     ...baseSettings,
-    isOnlyITSP: settings.isOnlyITSP ? 'itsp' : 'default',
   };
   if (adminSettings) {
     settingsEntity.adminSettings = {

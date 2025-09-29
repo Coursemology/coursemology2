@@ -491,9 +491,6 @@
   "course.admin.CodaveriSettings.codaveriSettings": {
     "defaultMessage": "Codaveri 设置"
   },
-  "course.admin.CodaveriSettings.enableIsOnlyITSP": {
-    "defaultMessage": "启用 ITSP"
-  },
   "course.admin.CodaveriSettings.error": {
     "defaultMessage": "更新 codaveri 设置时出错。"
   },

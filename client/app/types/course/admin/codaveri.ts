@@ -33,7 +33,6 @@ export interface AssessmentCategoryData {
 }
 
 export interface CodaveriSettingsData {
-  isOnlyITSP: boolean;
   feedbackWorkflow: 'none' | 'draft' | 'publish';
   liveFeedbackEnabled: boolean;
   assessmentCategories: AssessmentCategoryData[];
@@ -48,7 +47,6 @@ export interface CodaveriSettingsData {
 }
 
 export interface CodaveriSettingsEntity {
-  isOnlyITSP: 'itsp' | 'default';
   feedbackWorkflow: CodaveriSettingsData['feedbackWorkflow'];
   assessmentCategories: AssessmentCategoryData[];
   assessmentTabs: AssessmentTabData[];
