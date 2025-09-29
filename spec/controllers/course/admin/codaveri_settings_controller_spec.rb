@@ -56,15 +56,43 @@ RSpec.describe Course::Admin::CodaveriSettingsController, type: :controller do
       end
 
       context 'when course can be saved, but user is not an admin' do
-        before { allow(user).to receive(:instance_administrator?).and_return(false) }
         subject do
           patch :update, params: {
             course_id: course,
-            settings_codaveri_component: { model: 'gpt-5' }
+            settings_codaveri_component: { model: 'gpt-5' },
+            format: :json
           }
         end
         it 'returns forbidden' do
-          expect(subject).to have_http_status(:forbidden)
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+        end
+      end
+
+      context 'when course can be saved, and user is instance admin' do
+        let(:user) { create(:instance_administrator).user }
+        subject do
+          patch :update, params: {
+            course_id: course,
+            settings_codaveri_component: { model: 'gpt-5' },
+            format: :json
+          }
+        end
+        it 'returns ok' do
+          expect(subject).to have_http_status(:ok)
+        end
+      end
+
+      context 'when course can be saved, and user is system admin' do
+        let(:user) { create(:administrator) }
+        subject do
+          patch :update, params: {
+            course_id: course,
+            settings_codaveri_component: { model: 'gpt-5' },
+            format: :json
+          }
+        end
+        it 'returns ok' do
+          expect(subject).to have_http_status(:ok)
         end
       end
     end

@@ -10,9 +10,9 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   end
 
   def update
-    head :forbidden and return if
-      (codaveri_settings_params.key?(:model) || codaveri_settings_params.key?(:system_prompt) || codaveri_settings_params.key?(:override_system_prompt)) &&
-      !current_user.instance_administrator?(current_tenant)
+    unless (codaveri_settings_params.keys & ['model', 'system_prompt', 'override_system_prompt']).empty?
+      authorize!(:manage_course_admin_settings, current_tenant)
+    end
 
     if @settings.update(codaveri_settings_params) && current_course.save
       render 'edit'
