@@ -48,7 +48,7 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
         expect(result[0]).to be true
         expect(result[1]).to be_between(0, question.maximum_grade).inclusive
         expect(result[2]).to contain_exactly('success')
-        expect(result[3]).to include('Mock overall feedback')
+        expect(result[3]).to include('Mock feedback')
       end
     end
 
@@ -70,7 +70,7 @@ RSpec.describe Course::Assessment::Answer::RubricAutoGradingService do
                 explanation: '2nd selection explanation'
               }
             ],
-            'overall_feedback' => 'overall feedback'
+            'feedback' => 'feedback'
           }
         end
         it 'updates answer selections' do

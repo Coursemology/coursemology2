@@ -33,7 +33,7 @@ class Course::Assessment::Answer::RubricAutoGradingService < Course::Assessment:
     grade = update_answer_grade(answer, category_grades)
 
     # Currently no support for correctness in rubric-based questions
-    [true, grade, ['success'], llm_response['overall_feedback']]
+    [true, grade, ['success'], llm_response['feedback']]
   end
 
   # Updates the answer's selections and total grade based on the graded categories.
