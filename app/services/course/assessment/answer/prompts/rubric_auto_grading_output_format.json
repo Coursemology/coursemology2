@@ -4,17 +4,16 @@
   "properties": {
     "category_grades": {
       "type": "object",
-      "properties": {
-      },
+      "properties": {},
       "required": [],
       "additionalProperties": false,
       "description": "A mapping of categories to their selected criterion and explanation"
     },
-    "overall_feedback": {
+    "feedback": {
       "type": "string",
-      "description": "General feedback about the student's response, provided in HTML format"
+      "description": "Feedback on the student's response in HTML that honours the TEACHER_INSTRUCTION (if any) and align with RUBRIC (where applicable)"
     }
   },
-  "required": ["category_grades", "overall_feedback"],
+  "required": ["category_grades", "feedback"],
   "additionalProperties": false
 }

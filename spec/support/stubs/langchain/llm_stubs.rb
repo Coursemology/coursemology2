@@ -52,7 +52,7 @@ module Langchain::LlmStubs
       end
       mock_response = {
         'category_grades' => category_grades,
-        'overall_feedback' => 'Mock overall feedback'
+        'feedback' => 'Mock feedback'
       }
       MockChatResponse.new(mock_response.to_json)
     end
@@ -61,7 +61,7 @@ module Langchain::LlmStubs
       category_ids = system_message.scan(/Category ID: (\d+)/).flatten.map(&:to_i)
       criterion_ids_with_grades = extract_random_criterion(system_message)
 
-      mock_response = { 'overall_feedback' => 'Mock overall feedback' }
+      mock_response = { 'feedback' => 'Mock feedback' }
       category_ids.zip(criterion_ids_with_grades).each do |category_id, criterion_id_with_grade|
         mock_response["category_#{category_id}"] = {
           'criterion_id_with_grade' => criterion_id_with_grade,

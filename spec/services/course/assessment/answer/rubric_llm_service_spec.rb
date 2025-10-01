@@ -30,7 +30,7 @@ RSpec.describe Course::Assessment::Answer::RubricLlmService do
           expect(category_grade[:grade]).to eq(criterion.grade)
           expect(category_grade[:explanation]).to eq("Mock explanation for category_#{category.id}")
         end
-        expect(result['overall_feedback']).to include('Mock overall feedback')
+        expect(result['feedback']).to include('Mock feedback')
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe Course::Assessment::Answer::RubricLlmService do
         <<~JSON
           {
             "category_grades": { #{category_fields} },
-            "overall_feedback": "overall feedback"
+            "feedback": "feedback"
           }
         JSON
       end
@@ -91,7 +91,7 @@ RSpec.describe Course::Assessment::Answer::RubricLlmService do
             expect(grade.to_i).to eq(criterion.grade)
             expect(result['category_grades'][field_name]['explanation']).to be_a(String)
           end
-          expect(result['overall_feedback']).to be_a(String)
+          expect(result['feedback']).to be_a(String)
         end
       end
     end
