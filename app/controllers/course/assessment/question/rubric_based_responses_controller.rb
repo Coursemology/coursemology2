@@ -62,6 +62,10 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
     end
   end
 
+  def migrate_rubric
+    render partial: 'course/rubric/rubric', locals: { rubric: Course::Rubric.build_from_v1(@rubric_based_response_question, current_course) }, status: :created
+  end
+
   private
 
   def add_bonus_category_to_rubric_based_question

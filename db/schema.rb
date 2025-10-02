@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_02_070442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -158,7 +158,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
     t.index ["answer_id"], name: "fk__course_assessment_answer_programming_files_answer_id"
   end
 
-  create_table "course_assessment_answer_programming_test_results", id: :serial, force: :cascade do |t|
+  create_table "course_assessment_answer_programming_test_results", id: :integer, default: -> { "nextval('course_assessment_answer_programming_auto_grading_test_r_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "auto_grading_id", null: false
     t.integer "test_case_id"
     t.boolean "passed", null: false
@@ -392,6 +392,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
     t.string "ai_grading_custom_prompt", default: "", null: false
   end
 
+  create_table "course_assessment_question_rubrics", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.bigint "rubric_id", null: false
+    t.index ["question_id"], name: "fk__course_assessment_question_rubrics_questions"
+    t.index ["rubric_id"], name: "fk__course_assessment_question_rubrics_rubrics"
+  end
+
   create_table "course_assessment_question_scribings", id: :serial, force: :cascade do |t|
   end
 
@@ -519,7 +526,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
     t.datetime "published_at", precision: nil
     t.string "session_id", limit: 255
     t.datetime "submitted_at", precision: nil
-    t.datetime "last_graded_time", precision: nil, default: "2021-10-24 14:11:56"
+    t.datetime "last_graded_time", precision: nil, default: "2021-11-09 00:08:09"
     t.index ["assessment_id", "creator_id"], name: "unique_assessment_id_and_creator_id", unique: true
     t.index ["assessment_id"], name: "fk__course_assessment_submissions_assessment_id"
     t.index ["creator_id"], name: "fk__course_assessment_submissions_creator_id"
@@ -597,7 +604,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
     t.index ["scholaistic_assessment_id"], name: "idx_on_scholaistic_assessment_id_60ce66b4ce"
   end
 
-  create_table "course_condition_surveys", id: :serial, force: :cascade do |t|
+  create_table "course_condition_surveys", force: :cascade do |t|
     t.bigint "survey_id", null: false
     t.index ["survey_id"], name: "fk__course_condition_surveys_survey_id"
   end
@@ -627,7 +634,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
 
   create_table "course_discussion_post_codaveri_feedbacks", force: :cascade do |t|
     t.bigint "post_id", null: false
-    t.integer "status"
+    t.integer "status", default: 0
     t.text "codaveri_feedback_id", null: false
     t.text "original_feedback", null: false
     t.integer "rating"
@@ -1109,6 +1116,44 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
     t.index ["reference_timeline_id"], name: "index_course_reference_times_on_reference_timeline_id"
   end
 
+  create_table "course_rubric_answer_evaluation_category_criterion_selections", force: :cascade do |t|
+    t.bigint "answer_evaluation_id", null: false
+    t.bigint "category_id", null: false
+    t.bigint "criterion_id", null: false
+    t.index ["answer_evaluation_id"], name: "fk__course_evaluation_criterion_evaluations"
+    t.index ["category_id"], name: "fk__course_evaluation_criterion_categories"
+    t.index ["criterion_id"], name: "fk__course_evaluation_criterion_criterions"
+  end
+
+  create_table "course_rubric_answer_evaluations", force: :cascade do |t|
+    t.bigint "answer_id", null: false
+    t.bigint "rubric_id", null: false
+    t.uuid "job_id"
+    t.index ["answer_id"], name: "fk__course_rubric_answer_evaluations_answers"
+    t.index ["job_id"], name: "fk_course_rubric_answer_evaluations_jobs", unique: true
+    t.index ["rubric_id"], name: "fk__course_rubric_answer_evaluations_rubrics"
+  end
+
+  create_table "course_rubric_categories", force: :cascade do |t|
+    t.bigint "rubric_id", null: false
+    t.text "name", null: false
+    t.boolean "is_bonus_category", default: false, null: false
+    t.index ["rubric_id"], name: "fk__course_rubric_categories"
+  end
+
+  create_table "course_rubric_category_criterions", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.integer "grade", default: 0, null: false
+    t.text "explanation", null: false
+    t.index ["category_id"], name: "fk__course_rubric_category_criterions"
+  end
+
+  create_table "course_rubrics", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["course_id"], name: "fk__course_rubrics"
+  end
+
   create_table "course_scholaistic_assessments", force: :cascade do |t|
     t.string "upstream_id", null: false
     t.datetime "created_at", null: false
@@ -1394,7 +1439,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
     t.boolean "enrollable", default: false, null: false
     t.string "time_zone", limit: 255
     t.boolean "show_personalized_timeline_features", default: false, null: false
-    t.datetime "conditional_satisfiability_evaluation_time", precision: nil, default: "2021-10-24 10:31:32"
+    t.datetime "conditional_satisfiability_evaluation_time", precision: nil, default: "2021-11-09 00:08:09"
     t.integer "default_timeline_algorithm", default: 0, null: false
     t.string "koditsu_workspace_id"
     t.uuid "ssid_folder_id"
@@ -1603,7 +1648,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
     t.string "type", limit: 255, null: false
     t.string "name", limit: 255, null: false
     t.integer "parent_id"
-    t.serial "weight", null: false
+    t.serial "weight"
     t.boolean "enabled", default: true, null: false
     t.boolean "default_evaluator_whitelisted", default: true, null: false
     t.boolean "codaveri_evaluator_whitelisted", default: false, null: false
@@ -1733,6 +1778,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
   add_foreign_key "course_assessment_question_programming_test_cases", "course_assessment_question_programming", column: "question_id", name: "fk_course_assessment_questi_ee00a2daf4389c4c2ddba3041a15c35f"
   add_foreign_key "course_assessment_question_rubric_based_response_categories", "course_assessment_question_rubric_based_responses", column: "question_id"
   add_foreign_key "course_assessment_question_rubric_based_response_criterions", "course_assessment_question_rubric_based_response_categories", column: "category_id"
+  add_foreign_key "course_assessment_question_rubrics", "course_assessment_questions", column: "question_id"
+  add_foreign_key "course_assessment_question_rubrics", "course_rubrics", column: "rubric_id"
   add_foreign_key "course_assessment_question_text_response_compre_groups", "course_assessment_question_text_responses", column: "question_id"
   add_foreign_key "course_assessment_question_text_response_compre_points", "course_assessment_question_text_response_compre_groups", column: "group_id"
   add_foreign_key "course_assessment_question_text_response_compre_solutions", "course_assessment_question_text_response_compre_points", column: "point_id"
@@ -1765,8 +1812,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
   add_foreign_key "course_condition_assessments", "course_assessments", column: "assessment_id", name: "fk_course_condition_assessments_assessment_id"
   add_foreign_key "course_condition_scholaistic_assessments", "course_scholaistic_assessments", column: "scholaistic_assessment_id"
-  add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id", name: "fk_course_condition_surveys_survey_id"
-  add_foreign_key "course_condition_videos", "course_videos", column: "video_id", name: "fk_course_condition_videos_video_id"
+  add_foreign_key "course_condition_surveys", "course_surveys", column: "survey_id"
+  add_foreign_key "course_condition_videos", "course_videos", column: "video_id"
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"
   add_foreign_key "course_conditions", "users", column: "creator_id", name: "fk_course_conditions_creator_id"
   add_foreign_key "course_conditions", "users", column: "updater_id", name: "fk_course_conditions_updater_id"
@@ -1819,8 +1866,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
   add_foreign_key "course_groups", "course_group_categories", column: "group_category_id"
   add_foreign_key "course_groups", "users", column: "creator_id", name: "fk_course_groups_creator_id"
   add_foreign_key "course_groups", "users", column: "updater_id", name: "fk_course_groups_updater_id"
-  add_foreign_key "course_learning_maps", "courses", name: "fk_course_learning_maps_course_id"
-  add_foreign_key "course_learning_rate_records", "course_users", name: "fk_course_learning_rate_records_course_user_id"
+  add_foreign_key "course_learning_maps", "courses"
+  add_foreign_key "course_learning_rate_records", "course_users"
   add_foreign_key "course_lesson_plan_event_materials", "course_lesson_plan_events", column: "lesson_plan_event_id", name: "fk_course_lesson_plan_event_materials_lesson_plan_event_id"
   add_foreign_key "course_lesson_plan_event_materials", "course_materials", column: "material_id", name: "fk_course_lesson_plan_event_materials_material_id"
   add_foreign_key "course_lesson_plan_items", "courses", name: "fk_course_lesson_plan_items_course_id"
@@ -1856,6 +1903,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
   add_foreign_key "course_reference_timelines", "courses"
   add_foreign_key "course_reference_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
   add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
+  add_foreign_key "course_rubric_answer_evaluation_category_criterion_selections", "course_rubric_answer_evaluations", column: "answer_evaluation_id"
+  add_foreign_key "course_rubric_answer_evaluation_category_criterion_selections", "course_rubric_categories", column: "category_id"
+  add_foreign_key "course_rubric_answer_evaluation_category_criterion_selections", "course_rubric_category_criterions", column: "criterion_id"
+  add_foreign_key "course_rubric_answer_evaluations", "course_assessment_answers", column: "answer_id"
+  add_foreign_key "course_rubric_answer_evaluations", "course_rubrics", column: "rubric_id"
+  add_foreign_key "course_rubric_answer_evaluations", "jobs", name: "fk_course_rubric_answer_evaluations_jobs", on_delete: :nullify
+  add_foreign_key "course_rubric_categories", "course_rubrics", column: "rubric_id"
+  add_foreign_key "course_rubric_category_criterions", "course_rubric_categories", column: "category_id"
+  add_foreign_key "course_rubrics", "courses"
   add_foreign_key "course_scholaistic_submissions", "course_scholaistic_assessments", column: "assessment_id"
   add_foreign_key "course_scholaistic_submissions", "users", column: "creator_id"
   add_foreign_key "course_settings_emails", "course_assessment_categories"
