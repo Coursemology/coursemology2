@@ -9,7 +9,7 @@ class User::RegistrationsController < Devise::RegistrationsController
     if @invitation&.confirmed?
       message = @invitation.confirmer ? t('.used_with_email', email: @invitation.confirmer.email) : t('.used')
       render json: { message: message }, status: :conflict and return
-    elsif @invitation
+    elsif @invitation.is_a?(Course::UserInvitation)
       course = @invitation.course
 
       render json: {
@@ -17,6 +17,13 @@ class User::RegistrationsController < Devise::RegistrationsController
         email: @invitation.email,
         courseTitle: course.title,
         courseId: course.id
+      }
+    elsif @invitation.is_a?(Instance::UserInvitation)
+      render json: {
+        name: @invitation.name,
+        email: @invitation.email,
+        instanceName: @invitation.instance.name,
+        instanceHost: @invitation.instance.host
       }
     else
       head :no_content

@@ -8189,7 +8189,7 @@
   "users.checkYourEmail": {
     "defaultMessage": "거의 완료되었습니다. 이메일을 확인하세요!"
   },
-  "users.completeSignUpToJoinCourse": {
+  "users.completeSignUpToJoin": {
     "defaultMessage": "거의 끝났습니다! <strong>{course}</strong>에 가입하려면 회원가입을 완료하세요."
   },
   "users.confirmEmailLinkInvalidOrExpired": {
@@ -8327,7 +8327,7 @@
   "users.signUpSuccessful": {
     "defaultMessage": "계정이 성공적으로 생성되었습니다."
   },
-  "users.signUpWelcomeToCourse": {
+  "users.signUpWelcome": {
     "defaultMessage": "{course}에 오신 것을 환영합니다!"
   },
   "users.suddenlyRememberPassword": {

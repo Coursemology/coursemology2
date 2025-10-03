@@ -107,7 +107,7 @@ class User < ApplicationRecord
 
   # Update the user using the info from invitation.
   #
-  # @param [Course::UserInvitation]
+  # @param [Course::UserInvitation|Instance::UserInvitation]
   def build_from_invitation(invitation)
     self.name = invitation.name
     self.email = invitation.email

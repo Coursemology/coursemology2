@@ -8168,7 +8168,7 @@
   "users.checkYourEmail": {
     "defaultMessage": "请查看你的电子邮箱"
   },
-  "users.completeSignUpToJoinCourse": {
+  "users.completeSignUpToJoin": {
     "defaultMessage": "注册成功，欢迎加入 <strong>{course}</strong>。"
   },
   "users.confirmEmailLinkInvalidOrExpired": {
@@ -8306,7 +8306,7 @@
   "users.signUpSuccessful": {
     "defaultMessage": "你的账户已创建成功。"
   },
-  "users.signUpWelcomeToCourse": {
+  "users.signUpWelcome": {
     "defaultMessage": "欢迎来到 {course}!"
   },
   "users.suddenlyRememberPassword": {
