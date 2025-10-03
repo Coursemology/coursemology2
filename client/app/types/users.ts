@@ -145,6 +145,8 @@ export interface PasswordPostData {
 export interface InvitedSignUpData {
   name: string;
   email: string;
-  courseTitle: string;
-  courseId: string;
+  courseTitle?: string;
+  courseId?: string;
+  instanceName?: string;
+  instanceHost?: string;
 }

@@ -213,13 +213,13 @@ const translations = defineMessages({
     defaultMessage:
       'Manage all your email addresses in <link>Account Settings</link>.',
   },
-  completeSignUpToJoinCourse: {
-    id: 'users.completeSignUpToJoinCourse',
+  completeSignUpToJoin: {
+    id: 'users.completeSignUpToJoin',
     defaultMessage:
       'Almost there! Complete your sign up to join <strong>{course}</strong>.',
   },
-  signUpWelcomeToCourse: {
-    id: 'users.signUpWelcomeToCourse',
+  signUpWelcome: {
+    id: 'users.signUpWelcome',
     defaultMessage: 'Welcome to {course}!',
   },
   signUpSuccessful: {

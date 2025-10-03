@@ -22,6 +22,16 @@ import { getValidationErrors, signUpValidationSchema } from '../validations';
 
 type InvitedSignUpLoaderData = null | (InvitedSignUpData & { token: string });
 
+function getInvitationJoinTitle(invitation: InvitedSignUpData): string {
+  if (invitation.courseTitle) {
+    return invitation.courseTitle;
+  }
+  if (invitation.instanceName === 'Default') {
+    return `${invitation.instanceHost}`;
+  }
+  return `${invitation.instanceName} @ ${invitation.instanceHost}`;
+}
+
 const SignUpPage = (): JSX.Element => {
   const { t } = useTranslation();
 
@@ -83,10 +93,14 @@ const SignUpPage = (): JSX.Element => {
 
       if (invitation) {
         authenticate();
-        navigate(`/courses/${invitation.courseId}`);
+        if (invitation.courseId) {
+          navigate(`/courses/${invitation.courseId}`);
+        } else {
+          navigate(`/auth`);
+        }
         toast.success(
-          t(translations.signUpWelcomeToCourse, {
-            course: invitation.courseTitle,
+          t(translations.signUpWelcome, {
+            course: getInvitationJoinTitle(invitation),
           }),
         );
 
@@ -126,8 +140,8 @@ const SignUpPage = (): JSX.Element => {
       <Widget.Body>
         {invitation && (
           <Alert severity="info">
-            {t(translations.completeSignUpToJoinCourse, {
-              course: invitation.courseTitle,
+            {t(translations.completeSignUpToJoin, {
+              course: getInvitationJoinTitle(invitation),
               strong: (chunk) => <strong>{chunk}</strong>,
             })}
           </Alert>

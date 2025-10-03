@@ -8193,7 +8193,7 @@
   "users.checkYourEmail": {
     "defaultMessage": "Almost there; check your email!"
   },
-  "users.completeSignUpToJoinCourse": {
+  "users.completeSignUpToJoin": {
     "defaultMessage": "Almost there! Complete your sign up to join <strong>{course}</strong>."
   },
   "users.confirmEmailLinkInvalidOrExpired": {
@@ -8331,7 +8331,7 @@
   "users.signUpSuccessful": {
     "defaultMessage": "Your account was successfully created."
   },
-  "users.signUpWelcomeToCourse": {
+  "users.signUpWelcome": {
     "defaultMessage": "Welcome to {course}!"
   },
   "users.suddenlyRememberPassword": {
