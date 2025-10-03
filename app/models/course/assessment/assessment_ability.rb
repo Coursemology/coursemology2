@@ -10,6 +10,7 @@ module Course::Assessment::AssessmentAbility
       define_teaching_staff_assessment_permissions if course_user.teaching_staff?
       define_manager_assessment_permissions if course_user.manager_or_owner?
     end
+    allow_instance_admin_manage_assessments if user
 
     super
   end
@@ -284,5 +285,12 @@ module Course::Assessment::AssessmentAbility
 
   def allow_manager_update_assessment_answer
     can [:update, :submit_answer], Course::Assessment::Answer, submission: { assessment: assessment_course_hash }
+  end
+
+  def allow_instance_admin_manage_assessments
+    admin_instance_ids = user.instance_users.administrator.pluck(:instance_id)
+    can :manage, Course::Assessment, tab: { category: { course: { instance_id: admin_instance_ids } } }
+    can :manage, Course::Assessment::Tab, category: { course: { instance_id: admin_instance_ids } }
+    can :manage, Course::Assessment::Category, course: { instance_id: admin_instance_ids }
   end
 end

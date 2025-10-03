@@ -229,5 +229,18 @@ RSpec.describe Course::Assessment do
       it { is_expected.to be_able_to(:delete_submission, attempting_submission) }
       it { is_expected.to be_able_to(:delete_submission, coursemate_attempting_submission) }
     end
+
+    context 'when the user is an Instance Admin' do
+      let(:user) { create(:instance_administrator).user }
+      let(:course_user) { nil }
+
+      # Course Tabs and Categories
+      it { is_expected.to be_able_to(:manage, tab) }
+      it { is_expected.to be_able_to(:manage, category) }
+
+      # Course Assessments
+      it { is_expected.to be_able_to(:publish_grades, published_started_assessment) }
+      it { is_expected.to be_able_to(:force_submit_assessment_submission, published_started_assessment) }
+    end
   end
 end
