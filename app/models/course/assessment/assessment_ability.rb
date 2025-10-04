@@ -194,6 +194,9 @@ module Course::Assessment::AssessmentAbility
     question_assessments_current_course =
       { question_assessments: { assessment: assessment_course_hash } }
 
+    # Currently only the read endpoint for generic questions is implemented
+    can :read, Course::Assessment::Question, question_assessments: { assessment: assessment_course_hash }
+
     [
       Course::Assessment::Question::ForumPostResponse,
       Course::Assessment::Question::MultipleResponse,
@@ -232,7 +235,7 @@ module Course::Assessment::AssessmentAbility
 
   def allow_teaching_staff_manage_mock_answers
     can :manage, Course::Assessment::Question::MockAnswer,
-        { question_assessments: { assessment: assessment_course_hash } }
+        question: { question_assessments: { assessment: assessment_course_hash } }
   end
 
   # Teaching assistants have all assessment abilities except :publish_grades

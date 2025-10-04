@@ -1,4 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import { RubricBasedResponseFormData } from 'types/course/assessment/question/rubric-based-responses';
 
 import ExperimentalChip from 'lib/components/core/ExperimentalChip';
@@ -9,14 +10,18 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
+import AIGradingPlaygroundAlert from '../../components/AIGradingPlaygroundAlert';
 
 interface AIGradingFieldsProps {
   disabled?: boolean;
+  questionId?: number;
 }
 
 export const AI_GRADING_SECTION_ID = 'ai-grading-fields' as const;
 
 const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
+  const { disabled, questionId } = props;
+  const { courseId, assessmentId } = useParams();
   const { t } = useTranslation();
   const { control, watch } = useFormContext<RubricBasedResponseFormData>();
   const aiGradingEnabled = watch('aiGradingEnabled');
@@ -28,7 +33,7 @@ const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
       title={
         <>
           {t(translations.aiGrading)}
-          <ExperimentalChip className="ml-2" disabled={props.disabled} />
+          <ExperimentalChip className="ml-2" disabled={disabled} />
         </>
       }
     >
@@ -38,7 +43,7 @@ const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
         render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField
             description={t(translations.enableAiGradingDescription)}
-            disabled={props.disabled}
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
             label={t(translations.enableAiGrading)}
@@ -55,13 +60,21 @@ const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
           name="aiGradingCustomPrompt"
           render={({ field, fieldState }): JSX.Element => (
             <FormRichTextField
-              disabled={props.disabled || !aiGradingEnabled}
+              disabled={disabled || !aiGradingEnabled}
               field={field}
               fieldState={fieldState}
               fullWidth
             />
           )}
         />
+
+        {courseId && assessmentId && questionId && (
+          <AIGradingPlaygroundAlert
+            assessmentId={assessmentId}
+            courseId={courseId}
+            questionId={questionId}
+          />
+        )}
       </Subsection>
     </Section>
   );

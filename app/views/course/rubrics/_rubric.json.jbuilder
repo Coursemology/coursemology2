@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 json.id rubric.id
-json.createdAt rubric.created_at
+json.createdAt rubric.created_at.iso8601
 json.questions rubric.questions.map(&:id)
 json.gradingPrompt rubric.grading_prompt
 

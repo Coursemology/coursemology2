@@ -280,6 +280,22 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
       ],
     },
+    {
+      path: ':questionId/rubric-playground',
+      lazy: async (): Promise<RouteObject> => {
+        const RubricPlayground = (
+          await import(
+            /* webpackChunkName: 'RubricPlayground' */
+            'course/assessment/question/rubric-playground/RubricPlaygroundPage'
+          )
+        ).default;
+
+        return {
+          Component: RubricPlayground,
+          handle: RubricPlayground.handle,
+        };
+      },
+    },
   ],
 });
 

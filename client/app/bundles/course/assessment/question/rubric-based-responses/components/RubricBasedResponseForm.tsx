@@ -76,7 +76,10 @@ const RubricBasedResponseForm = (
             onDirtyChange={setIsCategoriesDirty}
           />
         </Section>
-        <AIGradingFields disabled={submitting} />
+        <AIGradingFields
+          disabled={submitting}
+          questionId={data.parentQuestionId}
+        />
       </Form>
     </RubricBasedResponseFormDataProvider>
   );
