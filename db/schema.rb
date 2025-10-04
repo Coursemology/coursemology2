@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_02_070442) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -390,6 +390,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
   create_table "course_assessment_question_rubric_based_responses", force: :cascade do |t|
     t.boolean "ai_grading_enabled", default: true, null: false
     t.string "ai_grading_custom_prompt", default: "", null: false
+  end
+
+  create_table "course_assessment_question_rubrics", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.bigint "rubric_id", null: false
+    t.index ["question_id"], name: "fk__course_assessment_question_rubrics_questions"
+    t.index ["rubric_id"], name: "fk__course_assessment_question_rubrics_rubrics"
   end
 
   create_table "course_assessment_question_scribings", id: :serial, force: :cascade do |t|
@@ -1109,6 +1116,45 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
     t.index ["reference_timeline_id"], name: "index_course_reference_times_on_reference_timeline_id"
   end
 
+  create_table "course_rubric_answer_evaluation_category_criterion_selections", force: :cascade do |t|
+    t.bigint "answer_evaluation_id", null: false
+    t.bigint "category_id", null: false
+    t.bigint "criterion_id", null: false
+    t.index ["answer_evaluation_id"], name: "fk__course_evaluation_criterion_evaluations"
+    t.index ["category_id"], name: "fk__course_evaluation_criterion_categories"
+    t.index ["criterion_id"], name: "fk__course_evaluation_criterion_criterions"
+  end
+
+  create_table "course_rubric_answer_evaluations", force: :cascade do |t|
+    t.bigint "answer_id", null: false
+    t.bigint "rubric_id", null: false
+    t.uuid "job_id"
+    t.index ["answer_id"], name: "fk__course_rubric_answer_evaluations_answers"
+    t.index ["job_id"], name: "fk_course_rubric_answer_evaluations_jobs", unique: true
+    t.index ["rubric_id"], name: "fk__course_rubric_answer_evaluations_rubrics"
+  end
+
+  create_table "course_rubric_categories", force: :cascade do |t|
+    t.bigint "rubric_id", null: false
+    t.text "name", null: false
+    t.boolean "is_bonus_category", default: false, null: false
+    t.index ["rubric_id"], name: "fk__course_rubric_categories"
+  end
+
+  create_table "course_rubric_category_criterions", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.integer "grade", default: 0, null: false
+    t.text "explanation", null: false
+    t.index ["category_id"], name: "fk__course_rubric_category_criterions"
+  end
+
+  create_table "course_rubrics", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.datetime "created_at", null: false
+    t.text "grading_prompt", default: "", null: false
+    t.index ["course_id"], name: "fk__course_rubrics"
+  end
+
   create_table "course_scholaistic_assessments", force: :cascade do |t|
     t.string "upstream_id", null: false
     t.datetime "created_at", null: false
@@ -1733,6 +1779,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
   add_foreign_key "course_assessment_question_programming_test_cases", "course_assessment_question_programming", column: "question_id", name: "fk_course_assessment_questi_ee00a2daf4389c4c2ddba3041a15c35f"
   add_foreign_key "course_assessment_question_rubric_based_response_categories", "course_assessment_question_rubric_based_responses", column: "question_id"
   add_foreign_key "course_assessment_question_rubric_based_response_criterions", "course_assessment_question_rubric_based_response_categories", column: "category_id"
+  add_foreign_key "course_assessment_question_rubrics", "course_assessment_questions", column: "question_id"
+  add_foreign_key "course_assessment_question_rubrics", "course_rubrics", column: "rubric_id"
   add_foreign_key "course_assessment_question_text_response_compre_groups", "course_assessment_question_text_responses", column: "question_id"
   add_foreign_key "course_assessment_question_text_response_compre_points", "course_assessment_question_text_response_compre_groups", column: "group_id"
   add_foreign_key "course_assessment_question_text_response_compre_solutions", "course_assessment_question_text_response_compre_points", column: "point_id"
@@ -1856,6 +1904,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_25_030938) do
   add_foreign_key "course_reference_timelines", "courses"
   add_foreign_key "course_reference_times", "course_lesson_plan_items", column: "lesson_plan_item_id"
   add_foreign_key "course_reference_times", "course_reference_timelines", column: "reference_timeline_id"
+  add_foreign_key "course_rubric_answer_evaluation_category_criterion_selections", "course_rubric_answer_evaluations", column: "answer_evaluation_id"
+  add_foreign_key "course_rubric_answer_evaluation_category_criterion_selections", "course_rubric_categories", column: "category_id"
+  add_foreign_key "course_rubric_answer_evaluation_category_criterion_selections", "course_rubric_category_criterions", column: "criterion_id"
+  add_foreign_key "course_rubric_answer_evaluations", "course_assessment_answers", column: "answer_id"
+  add_foreign_key "course_rubric_answer_evaluations", "course_rubrics", column: "rubric_id"
+  add_foreign_key "course_rubric_answer_evaluations", "jobs", name: "fk_course_rubric_answer_evaluations_jobs", on_delete: :nullify
+  add_foreign_key "course_rubric_categories", "course_rubrics", column: "rubric_id"
+  add_foreign_key "course_rubric_category_criterions", "course_rubric_categories", column: "category_id"
+  add_foreign_key "course_rubrics", "courses"
   add_foreign_key "course_scholaistic_submissions", "course_scholaistic_assessments", column: "assessment_id"
   add_foreign_key "course_scholaistic_submissions", "users", column: "creator_id"
   add_foreign_key "course_settings_emails", "course_assessment_categories"

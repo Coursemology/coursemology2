@@ -94,6 +94,8 @@ class Course < ApplicationRecord
   has_many :scholaistic_assessments, through: :lesson_plan_items, source: :actable,
                                      source_type: 'Course::ScholaisticAssessment'
 
+  has_many :rubrics, class_name: 'Course::Rubric', inverse_of: :course, dependent: :destroy
+
   accepts_nested_attributes_for :invitations, :assessment_categories, :video_tabs
 
   calculated :user_count, (lambda do

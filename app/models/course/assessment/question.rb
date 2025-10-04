@@ -27,6 +27,8 @@ class Course::Assessment::Question < ApplicationRecord
   has_many :question_bundles, through: :question_bundle_questions, class_name: 'Course::Assessment::QuestionBundle'
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             dependent: :destroy, inverse_of: :question
+  has_many :question_rubrics, class_name: 'Course::Assessment::Question::QuestionRubric', inverse_of: :question, dependent: :destroy
+  has_many :rubrics, through: :question_rubrics, class_name: 'Course::Rubric', source: :rubric
 
   delegate :to_partial_path, to: :actable
   delegate :question_type, to: :actable
