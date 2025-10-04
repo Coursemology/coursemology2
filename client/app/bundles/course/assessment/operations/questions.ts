@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 import { QuestionOrderPostData } from 'types/course/assessment/assessments';
 import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
 import { QuestionDuplicationResult } from 'types/course/assessment/questions';
+import { RubricData } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
 
@@ -52,4 +53,9 @@ export const convertMcqMrq = async (
 
     throw error;
   }
+};
+
+export const fetchQuestionRubrics = async (): Promise<RubricData[]> => {
+  const response = await CourseAPI.assessment.question.rubrics.index();
+  return response.data;
 };
