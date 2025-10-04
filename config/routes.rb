@@ -262,6 +262,7 @@ Rails.application.routes.draw do
 
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
+            resources :rubrics, on: :member, only: [:index]
           end
 
           namespace :question do
@@ -269,7 +270,9 @@ Rails.application.routes.draw do
               post :generate, on: :collection
             end
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
-            resources :rubric_based_responses, only: [:new, :create, :edit, :update, :destroy]
+            resources :rubric_based_responses, only: [:new, :create, :edit, :update, :destroy] do
+              post :migrate_rubric, on: :member
+            end
             resources :programming, only: [:new, :create, :edit, :update, :destroy] do
               post :generate, on: :collection
               get :codaveri_languages, on: :collection
@@ -366,6 +369,10 @@ Rails.application.routes.draw do
 
       resources :user_invitations, only: [:index, :new, :create, :destroy] do
         post 'resend_invitation'
+      end
+
+      resources :rubrics, only: [:index, :destroy] do
+        post :evaluate, on: :member
       end
 
       resources :enrol_requests, only: [:index, :create, :destroy] do
