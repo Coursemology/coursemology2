@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Answer::RubricLlmService # rubocop:disable Metrics/ClassLength
+class Course::Rubric::LlmService
   MAX_RETRIES = 1
   @system_prompt = Langchain::Prompt.load_from_path(
     file_path: 'app/services/course/assessment/answer/prompts/rubric_auto_grading_system_prompt.json'
@@ -14,85 +14,35 @@ class Course::Assessment::Answer::RubricLlmService # rubocop:disable Metrics/Cla
     attr_accessor :llm
   end
 
+  def initialize(question_adapter, rubric_adapter, answer_adapter)
+    @question_adapter = question_adapter
+    @rubric_adapter = rubric_adapter
+    @answer_adapter = answer_adapter
+  end
+
   # Calls the LLM service to evaluate the answer.
   #
-  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
-  # @param [Course::Assessment::Answer::RubricBasedResponse] answer The student's answer.
   # @return [Hash] The LLM's evaluation response.
-  def evaluate(question, answer)
+  def evaluate
     formatted_system_prompt = self.class.system_prompt.format(
-      question_title: question.title,
-      question_description: question.description,
-      rubric_categories: format_rubric_categories(question),
-      custom_prompt: question.ai_grading_custom_prompt
+      question_title: @question_adapter.question_title,
+      question_description: @question_adapter.question_description,
+      rubric_categories: @rubric_adapter.formatted_rubric_categories,
+      custom_prompt: @rubric_adapter.grading_prompt
     )
     formatted_user_prompt = self.class.user_prompt.format(
-      answer_text: answer.answer_text
+      answer_text: @answer_adapter.answer_text
     )
     messages = [
       { role: 'system', content: formatted_system_prompt },
       { role: 'assistant', content: 'Your next response will be graded as the answer as-is.' },
       { role: 'user', content: formatted_user_prompt }
     ]
-    dynamic_schema = generate_dynamic_schema(question)
+    dynamic_schema = @rubric_adapter.generate_dynamic_schema
     output_parser = Langchain::OutputParsers::StructuredOutputParser.from_json_schema(dynamic_schema)
     llm_response = call_llm_with_retries(messages, dynamic_schema, output_parser)
     llm_response['category_grades'] = process_category_grades(llm_response['category_grades'])
     llm_response
-  end
-
-  # Generates dynamic JSON schema with separate fields for each category
-  # @param [Course::Assessment::Question::RubricBasedResponse] question The question to be graded.
-  # @return [Hash] Dynamic JSON schema with category-specific fields
-  def generate_dynamic_schema(question)
-    dynamic_schema = JSON.parse(
-      File.read('app/services/course/assessment/answer/prompts/rubric_auto_grading_output_format.json')
-    )
-    question.categories.without_bonus_category.includes(:criterions).each do |category|
-      field_name = "category_#{category.id}"
-      dynamic_schema['properties']['category_grades']['properties'][field_name] =
-        build_category_schema(category, field_name)
-      dynamic_schema['properties']['category_grades']['required'] << field_name
-    end
-    dynamic_schema
-  end
-
-  def build_category_schema(category, field_name)
-    criterion_ids_with_grades = category.criterions.map { |c| "criterion_#{c.id}_grade_#{c.grade}" }
-    {
-      'type' => 'object',
-      'properties' => {
-        'criterion_id_with_grade' => {
-          'type' => 'string',
-          'enum' => criterion_ids_with_grades,
-          'description' => "Selected criterion for #{field_name}"
-        },
-        'explanation' => {
-          'type' => 'string',
-          'description' => "Explanation for selected criterion in #{field_name}"
-        }
-      },
-      'required' => ['criterion_id_with_grade', 'explanation'],
-      'additionalProperties' => false,
-      'description' => "Selected criterion and explanation for #{field_name} #{category.name}"
-    }
-  end
-
-  # Formats rubric categories for inclusion in the LLM prompt
-  # @param [Course::Assessment::Question::TextResponse] question The question containing rubric categories
-  # @return [String] Formatted string representation of rubric categories and criteria
-  def format_rubric_categories(question)
-    question.categories.without_bonus_category.includes(:criterions).map do |category|
-      max_grade = category.criterions.maximum(:grade) || 0
-      criterions = category.criterions.map do |criterion|
-        "<BAND id=\"#{criterion.id}\" grade=\"#{criterion.grade}\">#{criterion.explanation}</BAND>"
-      end
-      <<~CATEGORY
-        <CATEGORY id=\"#{category.id}\" name=\"#{category.name}\" max_grade=\"#{max_grade}\">
-        #{criterions.join("\n")}
-        </CATEGORY>
-      CATEGORY
-    end.join("\n\n")
   end
 
   # Processes the category grades from the LLM response
