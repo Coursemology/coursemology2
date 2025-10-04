@@ -2,6 +2,7 @@ import ForumPostResponseAPI from './ForumPostResponse';
 import McqMrqAPI from './McqMrq';
 import ProgrammingAPI from './Programming';
 import RubricBasedResponseAPI from './RubricBasedResponse';
+import RubricsAPI from './Rubrics';
 import ScribingQuestionAPI from './Scribing';
 import TextResponseAPI from './TextResponse';
 import VoiceResponseAPI from './VoiceResponse';
@@ -14,6 +15,7 @@ const QuestionAPI = {
   textResponse: new TextResponseAPI(),
   voiceResponse: new VoiceResponseAPI(),
   rubricBasedResponse: new RubricBasedResponseAPI(),
+  rubrics: new RubricsAPI(),
 };
 
 Object.freeze(QuestionAPI);

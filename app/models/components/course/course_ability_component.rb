@@ -45,6 +45,7 @@ module Course::CourseAbilityComponent
   def define_teaching_staff_course_permissions
     allow_teaching_staff_manage_personal_times
     allow_teaching_staff_analyze_videos
+    allow_teaching_staff_manage_course_rubrics
   end
 
   def allow_teaching_staff_manage_personal_times

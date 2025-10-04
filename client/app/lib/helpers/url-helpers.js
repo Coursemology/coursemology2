@@ -68,6 +68,18 @@ function getAssessmentId() {
 }
 
 /**
+ * Get the (abstract) question id from URL.
+ *
+ * return {number}
+ */
+function getQuestionId() {
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/assessments\/\d+\/question\/(\d+)/,
+  );
+  return match && match[1];
+}
+
+/**
  * Get the submission id from URL.
  *
  * return {number}
@@ -149,6 +161,7 @@ export {
   getCourseId,
   getCourseUserId,
   getCurrentPath,
+  getQuestionId,
   getScribingId,
   getSubmissionId,
   getSubmissionQuestionId,

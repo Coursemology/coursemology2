@@ -23,6 +23,8 @@ class Course::Rubric < ApplicationRecord
 
   accepts_nested_attributes_for :categories, allow_destroy: true
 
+  default_scope { order(created_at: :asc) }
+
   RESERVED_CATEGORY_NAMES = ['moderation'].freeze
 
   def initialize_duplicate(duplicator, other)

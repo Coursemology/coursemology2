@@ -1,4 +1,8 @@
-import { getAssessmentId, getSubmissionId } from 'lib/helpers/url-helpers';
+import {
+  getAssessmentId,
+  getQuestionId,
+  getSubmissionId,
+} from 'lib/helpers/url-helpers';
 
 import BaseCourseAPI from '../Base';
 
@@ -13,5 +17,10 @@ export default class BaseAssessmentAPI extends BaseCourseAPI {
   // eslint-disable-next-line class-methods-use-this
   get submissionId() {
     return getSubmissionId();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  get questionId() {
+    return getQuestionId();
   }
 }
