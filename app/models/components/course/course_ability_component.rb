@@ -55,6 +55,10 @@ module Course::CourseAbilityComponent
     can :analyze_videos, Course, id: course.id
   end
 
+  def allow_teaching_staff_manage_course_rubrics
+    can :manage, Course::Rubric, course_id: course.id
+  end
+
   def define_owners_course_permissions
     allow_owners_managing_course
   end

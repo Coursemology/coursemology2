@@ -27,6 +27,11 @@ class Course::Assessment::Question < ApplicationRecord
   has_many :question_bundles, through: :question_bundle_questions, class_name: 'Course::Assessment::QuestionBundle'
   has_many :live_feedbacks, class_name: 'Course::Assessment::LiveFeedback',
                             dependent: :destroy, inverse_of: :question
+  has_many :question_rubrics, class_name: 'Course::Assessment::Question::QuestionRubric',
+                              dependent: :destroy, inverse_of: :question
+  has_many :rubrics, through: :question_rubrics, class_name: 'Course::Rubric', source: :rubric
+  has_many :mock_answers, class_name: 'Course::Assessment::Question::MockAnswer',
+                          dependent: :destroy, inverse_of: :question
 
   delegate :to_partial_path, to: :actable
   delegate :question_type, to: :actable

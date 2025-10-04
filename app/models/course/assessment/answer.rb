@@ -57,6 +57,8 @@ class Course::Assessment::Answer < ApplicationRecord
   belongs_to :grader, class_name: 'User', inverse_of: nil, optional: true
   has_one :auto_grading, class_name: 'Course::Assessment::Answer::AutoGrading',
                          dependent: :destroy, inverse_of: :answer, autosave: true
+  has_many :rubric_evaluations, class_name: 'Course::Rubric::AnswerEvaluation',
+                                dependent: :destroy, inverse_of: :answer
 
   accepts_nested_attributes_for :actable
 
