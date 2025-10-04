@@ -22,6 +22,7 @@ import MaterialsAPI from './Materials';
 import PersonalTimesAPI from './PersonalTimes';
 import PlagiarismAPI from './Plagiarism';
 import ReferenceTimelinesAPI from './ReferenceTimelines';
+import RubricsAPI from './Rubrics';
 import ScholaisticAPI from './Scholaistic';
 import StatisticsAPI from './Statistics';
 import StoriesAPI from './Stories';
@@ -57,6 +58,7 @@ const CourseAPI = {
   personalTimes: new PersonalTimesAPI(),
   plagiarism: new PlagiarismAPI(),
   referenceTimelines: new ReferenceTimelinesAPI(),
+  rubrics: new RubricsAPI(),
   statistics: StatisticsAPI,
   submissions: new SubmissionsAPI(),
   survey: SurveyAPI,

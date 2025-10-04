@@ -41,7 +41,7 @@ export interface QuestionRubricGradeEntity extends QuestionRubricGradeData {
 }
 
 export type RubricBasedResponseFormData = RubricBasedResponseData &
-  AvailableSkills;
+  AvailableSkills & { parentQuestionId?: number };
 
 type RubricBasedResponseDataQuestion = RubricBasedResponseData['question'];
 
