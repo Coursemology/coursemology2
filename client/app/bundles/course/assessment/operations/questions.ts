@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 import { QuestionOrderPostData } from 'types/course/assessment/assessments';
 import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
 import { QuestionDuplicationResult } from 'types/course/assessment/questions';
+import { RubricData } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
 
@@ -46,6 +47,19 @@ export const convertMcqMrq = async (
   try {
     const response =
       await CourseAPI.assessment.assessments.convertMcqMrq(convertUrl);
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const fetchQuestionRubrics = async (
+  questionId: number,
+): Promise<{ rubrics: RubricData[] }> => {
+  try {
+    const response = await CourseAPI.rubrics.indexForQuestion(questionId);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
