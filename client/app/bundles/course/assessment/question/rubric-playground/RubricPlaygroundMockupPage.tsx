@@ -437,7 +437,7 @@
 //       addMode: AddSampleMode.SPECIFIC_ANSWER,
 //       addAnswerIds: [],
 //       addRandomAnswerCount: 0,
-//       addCustomAnswerText: ''
+//       addMockAnswerText: ''
 //     },
 //   });
 
@@ -807,7 +807,7 @@
 //                   {selectedAddMode === AddSampleMode.CUSTOM_ANSWER &&
 //                   <Controller
 //                     control={control3}
-//                     name={'addCustomAnswerText'}
+//                     name={'addMockAnswerText'}
 //                     render={({ field, fieldState }): JSX.Element => (
 //                       <FormRichTextField
 //                         disabled={false}

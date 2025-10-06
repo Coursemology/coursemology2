@@ -262,7 +262,13 @@ Rails.application.routes.draw do
 
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
-            resources :rubrics, on: :member, only: [:index]
+            resources :rubrics, on: :member, only: [:index, :show] do
+              get :answers, on: :collection, action: 'rubric_answers'
+              get :answer_evaluations, on: :member
+              get :mock_answer_evaluations, on: :member
+            end
+
+            resources :mock_answers, on: :member, only: [:index, :create]
           end
 
           namespace :question do

@@ -1,4 +1,4 @@
-import { RubricData } from 'types/course/rubrics';
+import { RubricAnswerData, RubricData } from 'types/course/rubrics';
 
 import { APIResponse } from 'api/types';
 
@@ -11,5 +11,9 @@ export default class RubricsAPI extends BaseAssessmentAPI {
 
   index(): APIResponse<{ rubrics: RubricData[] }> {
     return this.client.get(this.#urlPrefix);
+  }
+
+  answers(): APIResponse<RubricAnswerData[]> {
+    return this.client.get(`${this.#urlPrefix}/answers`);
   }
 }

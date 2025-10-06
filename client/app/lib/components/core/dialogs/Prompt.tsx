@@ -19,7 +19,7 @@ interface BasePromptProps {
   onClosed?: () => void;
   disabled?: boolean;
   contentClassName?: string;
-  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
 }
 
 type DefaultActionProps<Action extends string> = {

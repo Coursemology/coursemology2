@@ -1,5 +1,6 @@
 import ForumPostResponseAPI from './ForumPostResponse';
 import McqMrqAPI from './McqMrq';
+import MockAnswersAPI from './MockAnswers';
 import ProgrammingAPI from './Programming';
 import RubricBasedResponseAPI from './RubricBasedResponse';
 import RubricsAPI from './Rubrics';
@@ -10,6 +11,7 @@ import VoiceResponseAPI from './VoiceResponse';
 const QuestionAPI = {
   forumPostResponse: new ForumPostResponseAPI(),
   mcqMrq: new McqMrqAPI(),
+  mockAnswers: new MockAnswersAPI(),
   programming: new ProgrammingAPI(),
   scribing: new ScribingQuestionAPI(),
   textResponse: new TextResponseAPI(),

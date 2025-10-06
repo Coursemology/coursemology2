@@ -1,10 +1,6 @@
 import { UseFormSetValue } from 'react-hook-form';
 import { produce } from 'immer';
-import {
-  CategoryEntity,
-  QuestionRubricGradeEntity,
-  RubricBasedResponseFormData,
-} from 'types/course/assessment/question/rubric-based-responses';
+import { QuestionRubricGradeEntity } from 'types/course/assessment/question/rubric-based-responses';
 
 import { RubricCategoryEntity, RubricHeaderFormData } from './types';
 

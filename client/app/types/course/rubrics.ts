@@ -17,3 +17,20 @@ export interface RubricCategoryCriterionData {
   grade: number;
   explanation: string;
 }
+
+export interface RubricEvaluationData {
+  selections?: {
+    categoryId: number;
+    criterionId: number;
+    grade: number;
+  };
+  feedback?: string;
+  jobUrl?: string;
+}
+
+export interface RubricAnswerData {
+  id: number;
+  title: string;
+  grade?: number;
+  answerText: string;
+}
