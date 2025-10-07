@@ -47,7 +47,7 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
 
   # Downloads each submission to its own folder in the base directory.
   def download_to_base_dir
-    submissions = @assessment.submissions.by_users(course_user_ids(@assessment)).
+    submissions = @assessment.submissions.confirmed.by_users(course_user_ids(@assessment)).
                   includes(:answers, experience_points_record: :course_user)
     submissions.find_each do |submission|
       folder_name = "#{submission.id}_#{submission.course_user.name}"
@@ -63,7 +63,8 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
     @questions.each_value do |question|
       next unless question.specific.is_a?(Course::Assessment::Question::Programming)
 
-      question_dir = create_folder(skeleton_dir, question.question_assessments.first.display_title)
+      question_assessment = @assessment.question_assessments.find_by!(question: question)
+      question_dir = create_folder(skeleton_dir, question_assessment.display_title)
       programming_question = question.specific
       programming_question.template_files.each do |template_file|
         file_path = File.join(question_dir, template_file.filename)
