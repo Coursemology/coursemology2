@@ -115,6 +115,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
 
   return (
     <form
+      className="pl-6 pr-3"
       encType="multipart/form-data"
       id="invite-users-individual-form"
       noValidate
