@@ -34,7 +34,7 @@ const translations = defineMessages({
   },
   noAnnouncements: {
     id: 'system.admin.instance.instance.InstanceAnnouncementsIndex.noAnnouncement',
-    defaultMessage: 'There is no announcement',
+    defaultMessage: 'There are no announcements',
   },
 });
 
@@ -60,14 +60,15 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   return (
     <Page>
       {announcementPermission && (
-        <AddButton
-          className="float-right"
-          fixed
-          id="new-announcement-button"
-          onClick={(): void => setIsOpen(true)}
-        >
-          {intl.formatMessage(translations.newAnnouncement)}
-        </AddButton>
+        <div className="w-full flex justify-end">
+          <AddButton
+            fixed
+            id="new-announcement-button"
+            onClick={(): void => setIsOpen(true)}
+          >
+            {intl.formatMessage(translations.newAnnouncement)}
+          </AddButton>
+        </div>
       )}
 
       {announcements.length === 0 ? (

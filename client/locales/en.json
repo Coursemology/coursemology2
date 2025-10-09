@@ -7783,7 +7783,7 @@
     "defaultMessage": "New Announcement"
   },
   "system.admin.instance.instance.InstanceAnnouncementsIndex.noAnnouncement": {
-    "defaultMessage": "There is no announcement"
+    "defaultMessage": "There are no announcements"
   },
   "system.admin.instance.instance.InstanceComponentsForm.fetchComponentsFailure": {
     "defaultMessage": "Failed to fetch component settings."

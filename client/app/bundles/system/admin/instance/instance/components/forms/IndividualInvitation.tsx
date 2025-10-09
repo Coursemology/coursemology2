@@ -102,7 +102,10 @@ const IndividualInvitation: FC<Props> = (props) => {
     <Box key={index} className="flex items-center justify-start">
       {renderInvitationBody}
       <Tooltip title={intl.formatMessage(translations.removeInvitation)}>
-        <IconButton onClick={(): void => fieldsConfig.remove(index)}>
+        <IconButton
+          className="p-3"
+          onClick={(): void => fieldsConfig.remove(index)}
+        >
           <Close />
         </IconButton>
       </Tooltip>
