@@ -1,4 +1,8 @@
-import { RubricData } from 'types/course/rubrics';
+import {
+  RubricAnswerData,
+  RubricData,
+  RubricEvaluationData,
+} from 'types/course/rubrics';
 
 import { APIResponse } from 'api/types';
 
@@ -11,5 +15,19 @@ export default class RubricsAPI extends BaseAssessmentAPI {
 
   index(): APIResponse<RubricData[]> {
     return this.client.get(this.#urlPrefix);
+  }
+
+  answers(): APIResponse<RubricAnswerData[]> {
+    return this.client.get(`${this.#urlPrefix}/answers`);
+  }
+
+  evaluateMockAnswer(
+    rubricId: number,
+    mockAnswerId: number,
+  ): APIResponse<RubricEvaluationData> {
+    return this.client.post(
+      `${this.#urlPrefix}/${rubricId}/mock_answer_evaluations`,
+      { mock_answer_id: mockAnswerId },
+    );
   }
 }

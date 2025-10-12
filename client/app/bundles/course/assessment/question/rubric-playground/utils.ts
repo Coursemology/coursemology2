@@ -1,10 +1,6 @@
 import { UseFormSetValue } from 'react-hook-form';
 import { produce } from 'immer';
-import {
-  CategoryEntity,
-  QuestionRubricGradeEntity,
-  RubricBasedResponseFormData,
-} from 'types/course/assessment/question/rubric-based-responses';
+import { QuestionRubricGradeEntity } from 'types/course/assessment/question/rubric-based-responses';
 
 import { RubricCategoryEntity, RubricHeaderFormData } from './types';
 
@@ -42,7 +38,7 @@ export const handleDeleteGrade = (
       categoryIndex,
       gradeIndex,
     );
-    setValue('categories', updatedCategories);
+    setValue('categories', updatedCategories, { shouldDirty: true });
     return;
   }
 
@@ -50,12 +46,12 @@ export const handleDeleteGrade = (
     const updatedCategories = produce(categories, (draft) => {
       draft.splice(categoryIndex, 1);
     });
-    setValue('categories', updatedCategories);
+    setValue('categories', updatedCategories, { shouldDirty: true });
   } else {
     const updatedCategories = produce(categories, (draft) => {
       draft[categoryIndex].criterions.splice(gradeIndex, 1);
     });
-    setValue('categories', updatedCategories);
+    setValue('categories', updatedCategories, { shouldDirty: true });
   }
 };
 

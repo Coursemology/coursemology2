@@ -31,12 +31,11 @@ import {
 } from './utils';
 
 interface CategoryManagerProps {
-  for: RubricCategoryEntity[];
   disabled?: boolean;
 }
 
 const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
-  const { disabled, for: originalCategories } = props;
+  const { disabled } = props;
 
   const { t } = useTranslation();
 
@@ -56,6 +55,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
     grade: initialGrade,
     explanation: '',
     draft: true,
+    toBeDeleted: false,
   });
 
   const newCategoryObject = (id: number): RubricCategoryEntity => ({
@@ -64,6 +64,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
     criterions: [newCategoryCriterionObject(0, 0)],
     isBonusCategory: false,
     draft: true,
+    toBeDeleted: false,
   });
 
   const handleAddCategory = (): void => {
@@ -85,7 +86,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
       );
     });
 
-    setValue('categories', updatedCategories);
+    setValue('categories', updatedCategories, { shouldDirty: true });
   };
 
   return (
