@@ -14,19 +14,25 @@ interface MuiTableRowProps<C> extends RowRender {
 
 const MuiTableRow = <C,>(props: MuiTableRowProps<C>): JSX.Element => (
   <TableRow className={props.className}>
-    {props.getCells().map((cell, cellIndex) => {
-      const cellProps = props.forEachCell(cell, cellIndex);
-
-      return (
-        <TableCell key={cellProps.id} className={cellProps.className}>
-          {isRowSelector(cellProps.render) ? (
-            <MuiTableRowSelector {...cellProps.render} />
-          ) : (
-            cellProps.render
-          )}
-        </TableCell>
-      );
-    })}
+    {props
+      .getCells()
+      .map((cell, cellIndex) => props.forEachCell(cell, cellIndex))
+      .filter((cellProps) => !cellProps.shouldNotRender)
+      .map((cellProps) => {
+        return (
+          <TableCell
+            key={cellProps.id}
+            className={cellProps.className}
+            colSpan={cellProps.colSpan}
+          >
+            {isRowSelector(cellProps.render) ? (
+              <MuiTableRowSelector {...cellProps.render} />
+            ) : (
+              cellProps.render
+            )}
+          </TableCell>
+        );
+      })}
   </TableRow>
 );
 

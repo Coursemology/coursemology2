@@ -71,7 +71,11 @@ const buildTanStackColumns = <D extends Data>(
       getUniqueValues:
         column.filterProps?.getValue &&
         ((datum): string[] => column.filterProps?.getValue?.(datum) ?? []),
-    }),
+    // For the column definition to be valid, either one of these must be true:
+    // - id is defined; or
+    // - header (title) is a string.
+    // TanStack has type assertions enforcing this, but we do not for now.
+    } as ColumnDef<D, unknown>),
     initialColumns,
   );
 };
