@@ -3,7 +3,8 @@ import {
   RubricCategoryData,
 } from 'types/course/rubrics';
 
-export interface RubricCategoryEntity extends RubricCategoryData {
+export interface RubricCategoryEntity
+  extends Omit<RubricCategoryData, 'maximumGrade'> {
   criterions: RubricCategoryCriterionEntity[];
   toBeDeleted?: boolean;
   draft?: boolean;

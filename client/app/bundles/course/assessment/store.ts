@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+import questionReducer from './question/reducers';
 import editPageReducer from './reducers/editPage';
 import formDialogReducer from './reducers/formDialog';
 import generatePageReducer from './reducers/generation';
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   generatePage: generatePageReducer,
   monitoring: monitoringReducer,
   plagiarism: plagiarismReducer,
+  question: questionReducer,
   statistics: statisticsReducer,
   submission: submissionReducer,
   liveFeedback: liveFeedbackHistoryReducer,
