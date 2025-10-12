@@ -17,6 +17,8 @@ export interface CellRender {
   id: string;
   render: ReactNode | RowSelector;
   className?: string;
+  colSpan?: number;
+  shouldNotRender?: boolean;
 }
 
 interface BodyProps<B, C> {
