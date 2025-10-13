@@ -10,12 +10,13 @@ import { getIdFromUnknown } from 'utilities';
 import CourseAPI from 'api/course';
 import { setAsyncHandle } from 'course/scholaistic/handles';
 
-export const loader: LoaderFunction = ({ params }) =>
+export const loader: LoaderFunction = ({ params, request }) =>
   defer({
     promise: (async (): Promise<ScholaisticAssessmentSubmissionEditData> => {
       const promise = CourseAPI.scholaistic.fetchSubmission(
         getIdFromUnknown(params.assessmentId)!,
         params.submissionId!,
+        new URL(request.url).searchParams.get('attempt') === 'true',
       );
 
       setAsyncHandle(
@@ -40,6 +41,6 @@ export const submissionLoader: LoaderFunction = async ({ params }) => {
     await CourseAPI.scholaistic.findOrCreateSubmission(assessmentId);
 
   return redirect(
-    `/courses/${params.courseId!}/scholaistic/assessments/${assessmentId}/submissions/${data.id}`,
+    `/courses/${params.courseId!}/scholaistic/assessments/${assessmentId}/submissions/${data.id}?attempt=true`,
   );
 };

@@ -17,6 +17,10 @@ class ScholaisticApiService
       "/assessments/#{assessment_id}"
     end
 
+    def attempt_assessment_path(assessment_id)
+      "/assessments/#{assessment_id}/attempt"
+    end
+
     def submissions_path(assessment_id)
       "/administration/assessments/#{assessment_id}/submissions"
     end
