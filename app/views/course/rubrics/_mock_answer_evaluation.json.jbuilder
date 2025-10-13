@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-json.answerId answer_evaluation.answer_id
+json.mockAnswerId answer_evaluation.mock_answer_id
 json.rubricId answer_evaluation.rubric_id
 json.selections answer_evaluation.selections do |selection|
   json.categoryId selection.category_id

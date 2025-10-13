@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::Rubric::RubricAdapter < Course::Rubric::LlmService::RubricAdapter
-
   def initialize(rubric)
+    super()
     @rubric = rubric
   end
 

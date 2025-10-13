@@ -1,43 +1,47 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::MockAnswer::AnswerAdapter <
+# This is distinct from Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter
+# because we want the evaluation results of playground not to immediately affect actual grades.
+class Course::Assessment::Answer::RubricPlaygroundAnswerAdapter <
   Course::Rubric::LlmService::AnswerAdapter
-  def initialize(mock_answer, mock_answer_evaluation)
+  def initialize(answer, answer_evaluation)
     super()
-    @mock_answer = mock_answer
-    @mock_answer_evaluation = mock_answer_evaluation
+    @answer = answer
+    @answer_evaluation = answer_evaluation
   end
 
   def answer_text
-    @mock_answer.answer_text
+    return '' unless @answer.specific.is_a?(Course::Assessment::Answer::RubricBasedResponse)
+
+    @answer.specific.answer_text
   end
 
   def save_llm_results(llm_response)
     category_grades = llm_response['category_grades']
 
-    @mock_answer.class.transaction do
-      if @mock_answer_evaluation.selections.empty?
+    @answer.class.transaction do
+      if @answer_evaluation.selections.empty?
         create_answer_selections
-        @mock_answer_evaluation.reload
+        @answer_evaluation.reload
       end
 
       update_answer_selections(category_grades)
-      @mock_answer_evaluation.feedback = llm_response['feedback']
-      @mock_answer_evaluation.save!
+      @answer_evaluation.feedback = llm_response['feedback']
+      @answer_evaluation.save!
     end
   end
 
   private
 
   def create_answer_selections
-    new_category_selections = @mock_answer_evaluation.rubric.categories.map do |category|
+    new_category_selections = @answer_evaluation.rubric.categories.map do |category|
       {
-        mock_answer_evaluation_id: @mock_answer_evaluation.id,
+        answer_evaluation_id: @answer_evaluation.id,
         category_id: category.id,
         criterion_id: nil
       }
     end
 
-    selections = Course::Rubric::MockAnswerEvaluation::Selection.insert_all(new_category_selections)
+    selections = Course::Rubric::AnswerEvaluation::Selection.insert_all(new_category_selections)
     raise ActiveRecord::Rollback if !new_category_selections.empty? && (selections.nil? || selections.rows.empty?)
   end
 
@@ -46,14 +50,14 @@ class Course::Assessment::Question::MockAnswer::AnswerAdapter <
   # @param [Array<Hash>] category_grades The processed category grades.
   # @return [void]
   def update_answer_selections(category_grades)
-    selection_lookup = @mock_answer_evaluation.selections.index_by(&:category_id)
+    selection_lookup = @answer_evaluation.selections.index_by(&:category_id)
     category_grades.map do |grade_info|
       selection = selection_lookup[grade_info[:category_id]]
       if selection
         selection.update!(criterion_id: grade_info[:criterion_id])
       else
-        Course::Rubric::MockAnswerEvaluation::Selection.create!(
-          mock_answer_evaluation: @mock_answer_evaluation,
+        Course::Rubric::AnswerEvaluation::Selection.create!(
+          answer_evaluation: @answer_evaluation,
           category_id: grade_info[:category_id],
           criterion_id: grade_info[:criterion_id]
         )
