@@ -92,6 +92,31 @@ export const questionRubricsStore = createSlice({
           state.rubrics[rubricId].answerEvaluations[answerId] = {};
         });
     },
+    requestAnswerEvaluation: (
+      state,
+      action: PayloadAction<{
+        answerId: number;
+        rubricId: number;
+      }>
+    ) => {
+      const { rubricId, answerId } = action.payload;
+      if (!(rubricId in state.rubrics)) return;
+      state.rubrics[rubricId].answerEvaluations[answerId] = {
+        jobUrl: '(placeholder)',
+      };
+    },
+    updateAnswerEvaluation: (
+      state,
+      action: PayloadAction<{
+        answerId: number;
+        rubricId: number;
+        evaluation: RubricEvaluationData;
+      }>,
+    ) => {
+      const { rubricId, answerId, evaluation } = action.payload;
+      if (!(rubricId in state.rubrics)) return;
+      state.rubrics[rubricId].answerEvaluations[answerId] = evaluation;
+    },
     initializeMockAnswer: (
       state,
       action: PayloadAction<{
@@ -109,7 +134,20 @@ export const questionRubricsStore = createSlice({
       };
       state.rubrics[rubricId].answerEvaluations[mockAnswerId] = {};
     },
-    insertMockAnswerEvaluation: (
+    requestMockAnswerEvaluation: (
+      state,
+      action: PayloadAction<{
+        mockAnswerId: number;
+        rubricId: number;
+      }>
+    ) => {
+      const { rubricId, mockAnswerId } = action.payload;
+      if (!(rubricId in state.rubrics)) return;
+      state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId] = {
+        jobUrl: '(placeholder)',
+      };
+    },
+    updateMockAnswerEvaluation: (
       state,
       action: PayloadAction<{
         mockAnswerId: number;

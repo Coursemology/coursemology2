@@ -14,10 +14,11 @@ import AddSampleAnswersDialog, {
   AddSampleAnswersFormData,
   AddSampleMode,
 } from './AddSampleAnswersDialog';
+import AnswerEvaluationsTable from './AnswerEvaluationsTable';
 import RubricHeader from './RubricHeader';
 import { fetchQuestionRubricAnswers } from './operations/answers';
 import { fetchQuestionRubrics } from './operations/rubric';
-import { createQuestionMockAnswer } from './operations/mockAnswers';
+import { createQuestionMockAnswer, fetchQuestionRubricMockAnswers } from './operations/mockAnswers';
 
 const RubricPlaygroundPage = (): JSX.Element => {
   const { t } = useTranslation();
@@ -34,14 +35,24 @@ const RubricPlaygroundPage = (): JSX.Element => {
     dispatch(questionRubricsActions.loadRubrics(rubrics));
     setSelectedRubricId(rubrics?.at(-1)?.id ?? 0);
 
-    const answers = await fetchQuestionRubricAnswers();
-    dispatch(questionRubricsActions.loadAnswers(answers));
+      const answers = await fetchQuestionRubricAnswers();
+      dispatch(questionRubricsActions.loadAnswers(answers));
+
+    const mockAnswers = await fetchQuestionRubricMockAnswers();
+    dispatch(questionRubricsActions.loadMockAnswers(mockAnswers));
   };
 
   const selectableAnswers = Object.values(rubricState.answers).filter(
     (answer) =>
+      rubricState.rubrics[selectedRubricId] &&
       !(answer.id in rubricState.rubrics[selectedRubricId].answerEvaluations),
   );
+
+  const maximumGrade = rubricState.rubrics[selectedRubricId]?.categories.reduce(
+    (sum, category) => sum + category.maximumGrade,
+    0,
+  );
+
   return (
     <Preload render={<LoadingIndicator />} while={fetchPlaygroundData}>
       {() => {
@@ -65,6 +76,7 @@ const RubricPlaygroundPage = (): JSX.Element => {
 
             <AddSampleAnswersDialog
               answers={selectableAnswers}
+              maximumGrade={maximumGrade ?? 0}
               onClose={() => setIsAddingAnswers(false)}
               onSubmit={async (
                 data: AddSampleAnswersFormData,
@@ -97,9 +109,10 @@ const RubricPlaygroundPage = (): JSX.Element => {
                       data.addMockAnswerText,
                     );
                     dispatch(
-                      questionRubricsActions.initializeMockAnswerEvaluation({
+                      questionRubricsActions.initializeMockAnswer({
                         rubricId: selectedRubricId,
                         mockAnswerId,
+                        answerText: data.addMockAnswerText,
                       }),
                     );
                     break;
@@ -112,6 +125,7 @@ const RubricPlaygroundPage = (): JSX.Element => {
               }}
               open={isAddingAnswers}
             />
+            <AnswerEvaluationsTable selectedRubricId={selectedRubricId} />
           </>
         );
       }}

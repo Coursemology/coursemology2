@@ -28,10 +28,11 @@ interface Props {
   onClose: () => void;
   open: boolean;
   answers: RubricAnswerData[];
+  maximumGrade: number;
 }
 
 const AddSampleAnswersDialog: FC<Props> = (props) => {
-  const { answers, onSubmit, onClose, open } = props;
+  const { answers, onSubmit, onClose, open, maximumGrade } = props;
 
   const { control, handleSubmit, watch, setValue, getValues } = useForm<{
     addMode: AddSampleMode;
@@ -43,7 +44,7 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
     defaultValues: {
       addMode: AddSampleMode.SPECIFIC_ANSWER,
       addAnswerIds: [],
-      addRandomAnswerCount: 0,
+      addRandomAnswerCount: 1,
       addMockAnswerTitle: '',
       addMockAnswerText: '',
     },
@@ -85,12 +86,12 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
       sortProps: {
         undefinedPriority: 'last',
       },
-      cell: (answer) => `${answer.grade} / `,
+      cell: (answer) => (answer.grade === undefined) ? '' : `${answer.grade} / ${maximumGrade}.0`,
     },
     {
       of: 'answerText',
       title: 'Answer',
-      cell: (answer) => <div className="line-clamp-4">{answer.answerText}</div>,
+      cell: (answer) => <div className="line-clamp-4">{answer.answerText.replace('<p>', '').replace('</p>', '')}</div>,
     },
   ];
 

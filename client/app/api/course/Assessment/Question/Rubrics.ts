@@ -30,4 +30,14 @@ export default class RubricsAPI extends BaseAssessmentAPI {
       { mock_answer_id: mockAnswerId },
     );
   }
+
+  evaluateAnswer(
+    rubricId: number,
+    answerId: number,
+  ): APIResponse<RubricEvaluationData> {
+    return this.client.post(
+      `${this.#urlPrefix}/${rubricId}/answer_evaluations`,
+      { answer_id: answerId },
+    );
+  }
 }
