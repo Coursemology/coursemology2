@@ -21,7 +21,9 @@ class Course::Scholaistic::SubmissionsController < Course::Scholaistic::Controll
     @embed_src =
       ScholaisticApiService.embed!(
         current_course_user,
-        if can?(:manage_scholaistic_submissions, current_course)
+        if params[:attempt] == 'true'
+          ScholaisticApiService.attempt_assessment_path(@scholaistic_assessment.upstream_id)
+        elsif can?(:manage_scholaistic_submissions, current_course)
           ScholaisticApiService.manage_submission_path(@scholaistic_assessment.upstream_id, submission_id)
         else
           ScholaisticApiService.submission_path(@scholaistic_assessment.upstream_id, submission_id)

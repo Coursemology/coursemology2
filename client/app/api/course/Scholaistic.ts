@@ -62,9 +62,11 @@ export default class ScholaisticAPI extends BaseCourseAPI {
   fetchSubmission(
     assessmentId: number,
     submissionId: string,
+    attempt?: boolean,
   ): APIResponse<ScholaisticAssessmentSubmissionEditData> {
     return this.client.get(
       `${this.#urlPrefix}/assessments/${assessmentId}/submissions/${submissionId}`,
+      { params: { attempt } },
     );
   }
 
