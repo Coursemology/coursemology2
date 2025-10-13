@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 
@@ -72,8 +71,9 @@ const Category = ({
   }
   if (hasFetchError) {
     return (
-      <ErrorCard
+      <Note
         message={<FormattedMessage {...translations.fetchFailure} />}
+        severity="error"
       />
     );
   }

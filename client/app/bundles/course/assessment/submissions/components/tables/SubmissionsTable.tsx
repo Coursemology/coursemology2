@@ -117,9 +117,7 @@ const SubmissionsTable: FC<Props> = (props) => {
 
   if (submissions.length === 0)
     return (
-      <Page.PaddedSection>
-        <Note message={intl.formatMessage(translations.noSubmissionsMessage)} />
-      </Page.PaddedSection>
+      <Note message={intl.formatMessage(translations.noSubmissionsMessage)} />
     );
 
   return (

@@ -82,9 +82,7 @@ const UserRequests: FC<Props> = (props) => {
       rejectedEnrolRequests.length === 0
     ) {
       return (
-        <Page.PaddedSection>
-          <Note message={intl.formatMessage(translations.noEnrolRequests)} />
-        </Page.PaddedSection>
+        <Note message={intl.formatMessage(translations.noEnrolRequests)} />
       );
     }
     return undefined;

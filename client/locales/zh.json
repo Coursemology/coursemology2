@@ -6959,6 +6959,9 @@
   "lib.components.core.Note.noteHeader": {
     "defaultMessage": "提示"
   },
+  "lib.components.core.Note.errorHeader": {
+    "defaultMessage": "错误"
+  },
   "lib.components.core.banners.ServerUnreachableBanner.refreshPage": {
     "defaultMessage": "刷新页面"
   },

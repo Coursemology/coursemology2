@@ -1,7 +1,7 @@
 import { DependencyList, useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
 
-import ErrorCard from 'lib/components/core/ErrorCard';
+import Note from 'lib/components/core/Note';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
@@ -70,7 +70,9 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
   }, props.syncsWith ?? []);
 
   if (failed)
-    return <ErrorCard message={t(messagesTranslations.fetchingError)} />;
+    return (
+      <Note message={t(messagesTranslations.fetchingError)} severity="error" />
+    );
 
   const refreshable = (element: JSX.Element): JSX.Element =>
     loading ? props.render : element;
