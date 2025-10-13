@@ -4,8 +4,8 @@ import { WatchGroup } from 'types/channels/liveMonitoring';
 import { MonitoringRequestData } from 'types/course/assessment/monitoring';
 
 import BetaChip from 'lib/components/core/BetaChip';
-import ErrorCard from 'lib/components/core/ErrorCard';
 import Page from 'lib/components/core/layouts/Page';
+import Note from 'lib/components/core/Note';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -54,8 +54,9 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
 
   if (rejected)
     return (
-      <ErrorCard
+      <Note
         message={t(translations.cannotConnectToLiveMonitoringChannel)}
+        severity="error"
       />
     );
 

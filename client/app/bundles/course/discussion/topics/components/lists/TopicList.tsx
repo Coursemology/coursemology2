@@ -45,11 +45,7 @@ const TopicList: FC<TopicListProps> = (props) => {
   }
 
   if (topicList.length === 0) {
-    return (
-      <Grid item style={{ position: 'relative', width: '100%' }} xs>
-        <Note message={t(translations.noTopic)} />
-      </Grid>
-    );
+    return <Note message={t(translations.noTopic)} />;
   }
 
   return (

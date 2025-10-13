@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import { DataHandle } from 'lib/hooks/router/dynamicNest';
 import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -39,7 +39,7 @@ const UserEmailSubscriptions = (): JSX.Element => {
   if (status === 'loading') return <LoadingIndicator />;
 
   if (status === 'error')
-    return <ErrorCard message={t(translations.fetchFailure)} />;
+    return <Note message={t(translations.fetchFailure)} severity="error" />;
 
   return <UserEmailSubscriptionsTable />;
 };

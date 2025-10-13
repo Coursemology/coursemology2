@@ -6993,6 +6993,9 @@
   "lib.components.core.Note.noteHeader": {
     "defaultMessage": "Note"
   },
+  "lib.components.core.Note.errorHeader": {
+    "defaultMessage": "Error"
+  },
   "lib.components.core.banners.ServerUnreachableBanner.refreshPage": {
     "defaultMessage": "Refresh page"
   },

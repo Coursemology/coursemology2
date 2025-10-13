@@ -6980,6 +6980,9 @@
   "lib.components.core.Note.noteHeader": {
     "defaultMessage": "노트"
   },
+  "lib.components.core.Note.errorHeader": {
+    "defaultMessage": "오류"
+  },
   "lib.components.core.banners.ServerUnreachableBanner.refreshPage": {
     "defaultMessage": "페이지 새로고침"
   },
