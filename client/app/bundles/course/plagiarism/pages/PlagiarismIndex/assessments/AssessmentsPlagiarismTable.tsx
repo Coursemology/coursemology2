@@ -487,7 +487,7 @@ const AssessmentsPlagiarismTable: FC = () => {
     >
       <>
         <Table
-          className="border-none"
+          className="border-none -m-6"
           columns={columns}
           data={assessments}
           getRowClassName={(assessment): string =>

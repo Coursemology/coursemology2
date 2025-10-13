@@ -185,7 +185,7 @@ const InstanceGetHelpActivityTable: FC<InstanceGetHelpActivityTableProps> = ({
   ];
 
   return (
-    <div className="m-6">
+    <>
       <Table
         className="border-none"
         columns={columns}
@@ -220,7 +220,7 @@ const InstanceGetHelpActivityTable: FC<InstanceGetHelpActivityTableProps> = ({
           questionNumber={instanceLevelGetHelpInfo.questionNumber}
         />
       </Prompt>
-    </div>
+    </>
   );
 };
 

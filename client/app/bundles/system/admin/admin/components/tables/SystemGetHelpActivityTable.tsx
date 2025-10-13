@@ -211,7 +211,7 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
   ];
 
   return (
-    <div className="m-6">
+    <>
       <Table
         className="border-none"
         columns={columns}
@@ -247,7 +247,7 @@ const SystemGetHelpActivityTable: FC<SystemGetHelpActivityTableProps> = ({
           questionNumber={systemLevelGetHelpInfo.questionNumber}
         />
       </Prompt>
-    </div>
+    </>
   );
 };
 

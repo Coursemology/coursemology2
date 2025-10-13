@@ -444,6 +444,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
       </div>
 
       <Table
+        className="-m-6"
         columns={columns}
         csvDownload={{
           filename: t(translations.liveFeedbackFilename, {
