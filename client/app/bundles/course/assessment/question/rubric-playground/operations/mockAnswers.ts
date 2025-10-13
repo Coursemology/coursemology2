@@ -33,7 +33,7 @@ export const fetchQuestionRubricMockAnswers = async (): Promise<
   }
 };
 
-export const evaluateQuestionMockAnswer = async (
+export const evaluatePlaygroundMockAnswer = async (
   rubricId: number,
   mockAnswerId: number,
 ): Promise<RubricEvaluationData> => {
