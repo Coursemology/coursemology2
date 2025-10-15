@@ -86,12 +86,17 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
       sortProps: {
         undefinedPriority: 'last',
       },
-      cell: (answer) => (answer.grade === undefined) ? '' : `${answer.grade} / ${maximumGrade}.0`,
+      cell: (answer) =>
+        answer.grade === undefined ? '' : `${answer.grade} / ${maximumGrade}.0`,
     },
     {
       of: 'answerText',
       title: 'Answer',
-      cell: (answer) => <div className="line-clamp-4">{answer.answerText.replace('<p>', '').replace('</p>', '')}</div>,
+      cell: (answer) => (
+        <div className="line-clamp-4">
+          {answer.answerText.replace('<p>', '').replace('</p>', '')}
+        </div>
+      ),
     },
   ];
 

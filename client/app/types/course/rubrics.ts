@@ -19,7 +19,20 @@ export interface RubricCategoryCriterionData {
   explanation: string;
 }
 
-export interface RubricEvaluationData {
+export interface RubricAnswerEvaluationData {
+  answerId: number;
+  selections?: {
+    mockAnswerId: number;
+    categoryId: number;
+    criterionId: number;
+    grade: number;
+  }[];
+  feedback?: string;
+  jobUrl?: string;
+}
+
+export interface RubricMockAnswerEvaluationData {
+  mockAnswerId: number;
   selections?: {
     mockAnswerId: number;
     categoryId: number;

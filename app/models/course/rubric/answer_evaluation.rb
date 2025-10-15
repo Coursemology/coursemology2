@@ -8,5 +8,5 @@ class Course::Rubric::AnswerEvaluation < ApplicationRecord
 
   has_many :selections,
            class_name: 'Course::Rubric::AnswerEvaluation::Selection',
-           foreign_key: :answer_evaluation_id, inverse_of: :criterion, dependent: :destroy
+           foreign_key: :answer_evaluation_id, inverse_of: :answer_evaluation, dependent: :destroy
 end

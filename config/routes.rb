@@ -266,11 +266,13 @@ Rails.application.routes.draw do
               get :answers, on: :collection, action: 'rubric_answers'
               get :answer_evaluations, on: :member, action: 'fetch_answer_evaluations'
               post :answer_evaluations, on: :member, action: 'evaluate_answer'
+              delete 'answer_evaluations/:answer_id', on: :member, action: 'delete_answer_evaluations'
               get :mock_answer_evaluations, on: :member, action: 'fetch_mock_answer_evaluations'
               post :mock_answer_evaluations, on: :member, action: 'evaluate_mock_answer'
+              delete 'mock_answer_evaluations/:mock_answer_id', on: :member, action: 'delete_mock_answer_evaluations'
             end
 
-            resources :mock_answers, on: :member, only: [:index, :create]
+            resources :mock_answers, on: :member, only: [:index, :create, :destroy]
           end
 
           namespace :question do

@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import {
   RubricAnswerData,
-  RubricEvaluationData,
+  RubricAnswerEvaluationData,
 } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
@@ -22,14 +22,45 @@ export const fetchQuestionRubricAnswers = async (): Promise<
 export const evaluatePlaygroundAnswer = async (
   rubricId: number,
   answerId: number,
-): Promise<RubricEvaluationData> => {
+): Promise<RubricAnswerEvaluationData> => {
+  try {
+    const response = await CourseAPI.assessment.question.rubrics.evaluateAnswer(
+      rubricId,
+      answerId,
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const fetchRubricAnswerEvaluations = async (
+  rubricId: number,
+): Promise<RubricAnswerEvaluationData[]> => {
   try {
     const response =
-      await CourseAPI.assessment.question.rubrics.evaluateAnswer(
+      await CourseAPI.assessment.question.rubrics.fetchAnswerEvaluations(
         rubricId,
-        answerId,
       );
     return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const deleteAnswerEvaluation = async (
+  rubricId: number,
+  answerId: number,
+): Promise<void> => {
+  try {
+    await CourseAPI.assessment.question.rubrics.deleteAnswerEvaluation(
+      rubricId,
+      answerId,
+    );
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
 
