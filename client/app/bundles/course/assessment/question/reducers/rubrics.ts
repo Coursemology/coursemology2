@@ -1,16 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   RubricAnswerData,
+  RubricAnswerEvaluationData,
   RubricData,
-  RubricEvaluationData,
+  RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
 
 export interface QuestionRubricsState {
   rubrics: Record<
     number,
     RubricData & {
-      answerEvaluations: Record<number, RubricEvaluationData>;
-      mockAnswerEvaluations: Record<number, RubricEvaluationData>;
+      isEvaluationsLoaded: boolean;
+      answerEvaluations: Record<
+        number,
+        RubricAnswerEvaluationData | Record<string, never>
+      >;
+      mockAnswerEvaluations: Record<
+        number,
+        RubricMockAnswerEvaluationData | Record<string, never>
+      >;
     }
   >;
   answers: Record<number, RubricAnswerData>;
@@ -31,16 +39,40 @@ export const questionRubricsStore = createSlice({
       action.payload.forEach((rubric) => {
         state.rubrics[rubric.id] = {
           ...rubric,
+          isEvaluationsLoaded: false,
           answerEvaluations: {},
           mockAnswerEvaluations: {},
         };
       });
     },
-    upsertRubric: (state, action: PayloadAction<RubricData>) => {
-      state.rubrics[action.payload.id] = {
-        ...action.payload,
-        answerEvaluations: {},
-        mockAnswerEvaluations: {},
+    createNewRubric: (
+      state,
+      action: PayloadAction<{
+        rubric: RubricData;
+        selectedRubricId: number;
+      }>,
+    ) => {
+      const { rubric, selectedRubricId } = action.payload;
+
+      state.rubrics[rubric.id] = {
+        ...rubric,
+        // A new rubric will not have any evaluations, so no point querying for them
+        isEvaluationsLoaded: true,
+        answerEvaluations: Object.keys(
+          state.rubrics[selectedRubricId]?.answerEvaluations ?? {},
+        ).reduce(
+          (evaluations, answerId) => ({ ...evaluations, [answerId]: {} }),
+          {},
+        ),
+        mockAnswerEvaluations: Object.keys(
+          state.rubrics[selectedRubricId]?.mockAnswerEvaluations ?? {},
+        ).reduce(
+          (evaluations, mockAnswerId) => ({
+            ...evaluations,
+            [mockAnswerId]: {},
+          }),
+          {},
+        ),
       };
     },
     loadAnswers: (state, action: PayloadAction<RubricAnswerData[]>) => {
@@ -53,29 +85,34 @@ export const questionRubricsStore = createSlice({
         state.mockAnswers[mockAnswer.id] = mockAnswer;
       });
     },
-    loadAnswerEvaluations: (
+    loadRubricEvaluations: (
       state,
       action: PayloadAction<{
         rubricId: number;
-        evaluations: RubricEvaluationData[];
+        answerEvaluations: RubricAnswerEvaluationData[];
+        mockAnswerEvaluations: RubricMockAnswerEvaluationData[];
       }>,
     ) => {
-      const { rubricId, evaluations } = action.payload;
+      const { rubricId, answerEvaluations, mockAnswerEvaluations } =
+        action.payload;
       if (!(rubricId in state.rubrics)) return;
 
-      state.rubrics[rubricId].answerEvaluations = evaluations;
-    },
-    loadMockAnswerEvaluations: (
-      state,
-      action: PayloadAction<{
-        rubricId: number;
-        evaluations: RubricEvaluationData[];
-      }>,
-    ) => {
-      const { rubricId, evaluations } = action.payload;
-      if (!(rubricId in state.rubrics)) return;
-
-      state.rubrics[rubricId].mockAnswerEvaluations = evaluations;
+      state.rubrics[rubricId].answerEvaluations = answerEvaluations.reduce(
+        (map, evaluation) => {
+          map[evaluation.answerId] = evaluation;
+          return map;
+        },
+        {} as Record<number, RubricAnswerEvaluationData>,
+      );
+      state.rubrics[rubricId].mockAnswerEvaluations =
+        mockAnswerEvaluations.reduce(
+          (map, evaluation) => {
+            map[evaluation.mockAnswerId] = evaluation;
+            return map;
+          },
+          {} as Record<number, RubricMockAnswerEvaluationData>,
+        );
+      state.rubrics[rubricId].isEvaluationsLoaded = true;
     },
     initializeAnswerEvaluations: (
       state,
@@ -97,11 +134,12 @@ export const questionRubricsStore = createSlice({
       action: PayloadAction<{
         answerId: number;
         rubricId: number;
-      }>
+      }>,
     ) => {
       const { rubricId, answerId } = action.payload;
       if (!(rubricId in state.rubrics)) return;
       state.rubrics[rubricId].answerEvaluations[answerId] = {
+        answerId,
         jobUrl: '(placeholder)',
       };
     },
@@ -110,12 +148,23 @@ export const questionRubricsStore = createSlice({
       action: PayloadAction<{
         answerId: number;
         rubricId: number;
-        evaluation: RubricEvaluationData;
+        evaluation: RubricAnswerEvaluationData;
       }>,
     ) => {
       const { rubricId, answerId, evaluation } = action.payload;
       if (!(rubricId in state.rubrics)) return;
       state.rubrics[rubricId].answerEvaluations[answerId] = evaluation;
+    },
+    deleteAnswerEvaluation: (
+      state,
+      action: PayloadAction<{
+        answerId: number;
+        rubricId: number;
+      }>,
+    ) => {
+      const { rubricId, answerId } = action.payload;
+      if (!(rubricId in state.rubrics)) return;
+      delete state.rubrics[rubricId].answerEvaluations[answerId];
     },
     initializeMockAnswer: (
       state,
@@ -132,18 +181,19 @@ export const questionRubricsStore = createSlice({
         title: '(Mock Answer)',
         answerText,
       };
-      state.rubrics[rubricId].answerEvaluations[mockAnswerId] = {};
+      state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId] = {};
     },
     requestMockAnswerEvaluation: (
       state,
       action: PayloadAction<{
         mockAnswerId: number;
         rubricId: number;
-      }>
+      }>,
     ) => {
       const { rubricId, mockAnswerId } = action.payload;
       if (!(rubricId in state.rubrics)) return;
       state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId] = {
+        mockAnswerId,
         jobUrl: '(placeholder)',
       };
     },
@@ -152,12 +202,23 @@ export const questionRubricsStore = createSlice({
       action: PayloadAction<{
         mockAnswerId: number;
         rubricId: number;
-        evaluation: RubricEvaluationData;
+        evaluation: RubricMockAnswerEvaluationData;
       }>,
     ) => {
       const { rubricId, mockAnswerId, evaluation } = action.payload;
       if (!(rubricId in state.rubrics)) return;
       state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId] = evaluation;
+    },
+    deleteMockAnswerEvaluation: (
+      state,
+      action: PayloadAction<{
+        mockAnswerId: number;
+        rubricId: number;
+      }>,
+    ) => {
+      const { rubricId, mockAnswerId } = action.payload;
+      if (!(rubricId in state.rubrics)) return;
+      delete state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId];
     },
     triggerRubricEvaluationJob: (
       state,
@@ -175,11 +236,17 @@ export const questionRubricsStore = createSlice({
 
       evaluationIds.forEach((id) => {
         // overwrite old data
-        state.rubrics[rubricId].answerEvaluations[id] = { jobUrl };
+        state.rubrics[rubricId].answerEvaluations[id] = {
+          jobUrl,
+          answerId: id,
+        };
       });
 
       mockEvaluationIds.forEach((id) => {
-        state.rubrics[rubricId].mockAnswerEvaluations[id] = { jobUrl };
+        state.rubrics[rubricId].mockAnswerEvaluations[id] = {
+          jobUrl,
+          mockAnswerId: id,
+        };
       });
     },
   },

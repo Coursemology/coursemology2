@@ -49,10 +49,6 @@ const RubricHeader = (props: {
                 {isRubricExpanded ? <ExpandLess /> : <ExpandMore />}
               </IconButton>
 
-              <IconButton color="info" disabled={false} onClick={() => {}}>
-                <PlayArrow />
-              </IconButton>
-
               <IconButton color="error" disabled={false} onClick={() => {}}>
                 <Delete />
               </IconButton>

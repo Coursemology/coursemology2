@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import {
   RubricAnswerData,
-  RubricEvaluationData,
+  RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
@@ -36,7 +36,7 @@ export const fetchQuestionRubricMockAnswers = async (): Promise<
 export const evaluatePlaygroundMockAnswer = async (
   rubricId: number,
   mockAnswerId: number,
-): Promise<RubricEvaluationData> => {
+): Promise<RubricMockAnswerEvaluationData> => {
   try {
     const response =
       await CourseAPI.assessment.question.rubrics.evaluateMockAnswer(
@@ -44,6 +44,38 @@ export const evaluatePlaygroundMockAnswer = async (
         mockAnswerId,
       );
     return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const fetchRubricMockAnswerEvaluations = async (
+  rubricId: number,
+): Promise<RubricMockAnswerEvaluationData[]> => {
+  try {
+    const response =
+      await CourseAPI.assessment.question.rubrics.fetchMockAnswerEvaluations(
+        rubricId,
+      );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const deleteMockAnswerEvaluation = async (
+  rubricId: number,
+  mockAnswerId: number,
+): Promise<void> => {
+  try {
+    await CourseAPI.assessment.question.rubrics.deleteMockAnswerEvaluation(
+      rubricId,
+      mockAnswerId,
+    );
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
 

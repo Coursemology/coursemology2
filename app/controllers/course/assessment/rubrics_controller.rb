@@ -24,11 +24,11 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
   end
 
   def fetch_answer_evaluations
-    head :ok
+    @answer_evaluations = @rubric.answer_evaluations.includes(answer: { submission: :creator })
   end
 
   def fetch_mock_answer_evaluations
-    head :ok
+    @mock_answer_evaluations = @rubric.mock_answer_evaluations
   end
 
   def evaluate_mock_answer
@@ -69,5 +69,20 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     answer_adapter.save_llm_results(llm_response)
 
     render partial: 'course/rubrics/answer_evaluation', locals: { answer_evaluation: @answer_evaluation }
+  end
+
+  def delete_answer_evaluations
+    answer_evaluation = @rubric.answer_evaluations.find_by(answer_id: params.permit(:answer_id)[:answer_id])
+    answer_evaluation&.destroy!
+  end
+
+  def delete_mock_answer_evaluations
+    mock_answer = @question.mock_answers.find(params.permit(:mock_answer_id)[:mock_answer_id])
+    mock_answer_evaluation = @rubric.mock_answer_evaluations.find_by(
+      mock_answer: mock_answer
+    )
+    mock_answer_evaluation&.destroy!
+    mock_answer.reload
+    mock_answer.destroy! if mock_answer.rubric_evaluations.empty?
   end
 end

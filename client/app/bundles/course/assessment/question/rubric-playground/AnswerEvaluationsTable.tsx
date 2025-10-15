@@ -1,18 +1,21 @@
 import { FC } from 'react';
-import { Button, Tooltip } from '@mui/material';
+import { Close, PlayArrow } from '@mui/icons-material';
+import { Button, IconButton, Tooltip } from '@mui/material';
+import { AppDispatch } from 'store';
 import {
   RubricAnswerData,
+  RubricAnswerEvaluationData,
   RubricCategoryData,
-  RubricEvaluationData,
+  RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
 
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
-import { evaluatePlaygroundMockAnswer } from './operations/mockAnswers';
-import { evaluatePlaygroundAnswer } from './operations/answers';
+import { deleteMockAnswerEvaluation, evaluatePlaygroundMockAnswer } from './operations/mockAnswers';
+import { deleteAnswerEvaluation, evaluatePlaygroundAnswer } from './operations/answers';
 
 import { actions as questionRubricsActions } from '../reducers/rubrics';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
 interface AnswerEvaluationsTableProps {
   selectedRubricId: number;
@@ -34,7 +37,10 @@ interface AnswerTableEntry {
 function answerDataToTableEntry(
   answer: RubricAnswerData,
   isMock: boolean,
-  evaluation?: RubricEvaluationData,
+  evaluation?:
+    | RubricAnswerEvaluationData
+    | RubricMockAnswerEvaluationData
+    | Record<string, never>,
 ): AnswerTableEntry {
   const isEvaluating = Boolean(evaluation?.jobUrl);
   const data: AnswerTableEntry = {
@@ -47,7 +53,7 @@ function answerDataToTableEntry(
   if (evaluation && !isEvaluating) {
     const grades: Record<number, number> = {};
     let totalGrade = 0;
-    if (evaluation.selections?.length) {
+    if (evaluation?.selections?.length) {
       evaluation.selections.forEach((selection) => {
         grades[selection.categoryId] = selection.grade;
         totalGrade += selection.grade;
@@ -55,7 +61,7 @@ function answerDataToTableEntry(
 
       data.evaluation = {
         grades,
-        feedback: evaluation.feedback ?? '',
+        feedback: evaluation?.feedback ?? '',
         totalGrade,
       };
     }
@@ -63,6 +69,72 @@ function answerDataToTableEntry(
 
   return data;
 }
+
+const requestRowEvaluation = (
+  dispatch: AppDispatch,
+  answer: AnswerTableEntry,
+  rubricId: number,
+): void => {
+  if (answer.isMock) {
+    dispatch(
+      questionRubricsActions.requestMockAnswerEvaluation({
+        mockAnswerId: answer.id,
+        rubricId,
+      }),
+    );
+    evaluatePlaygroundMockAnswer(rubricId, answer.id).then((evaluation) => {
+      dispatch(
+        questionRubricsActions.updateMockAnswerEvaluation({
+          mockAnswerId: answer.id,
+          rubricId,
+          evaluation,
+        }),
+      );
+    });
+  } else {
+    dispatch(
+      questionRubricsActions.requestAnswerEvaluation({
+        answerId: answer.id,
+        rubricId,
+      }),
+    );
+    evaluatePlaygroundAnswer(rubricId, answer.id).then((evaluation) => {
+      dispatch(
+        questionRubricsActions.updateAnswerEvaluation({
+          answerId: answer.id,
+          rubricId,
+          evaluation,
+        }),
+      );
+    });
+  }
+};
+
+const deleteRowEvaluation = (
+  dispatch: AppDispatch,
+  answer: AnswerTableEntry,
+  rubricId: number,
+): void => {
+  if (answer.isMock) {
+    deleteMockAnswerEvaluation(rubricId, answer.id).then(() => {
+      dispatch(
+        questionRubricsActions.deleteMockAnswerEvaluation({
+          mockAnswerId: answer.id,
+          rubricId,
+        }),
+      );
+    });
+  } else {
+    deleteAnswerEvaluation(rubricId, answer.id).then(() => {
+      dispatch(
+        questionRubricsActions.deleteAnswerEvaluation({
+          answerId: answer.id,
+          rubricId,
+        }),
+      );
+    });
+  }
+};
 
 const remainingCategoryColumns = (
   category: RubricCategoryData,
@@ -94,7 +166,8 @@ const remainingCategoryColumns = (
       </p>
     </div>
   ),
-  cellUnless: (answer: AnswerTableEntry) => !answer.evaluation || answer.isEvaluating,
+  cellUnless: (answer: AnswerTableEntry) =>
+    !answer.evaluation || answer.isEvaluating,
 });
 
 const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
@@ -114,13 +187,15 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       answerDataToTableEntry(answer, false, answerEvaluations[answer.id]),
     )
     .concat(
-      ...Object.values(mockAnswers).map((mockAnswer) =>
-        answerDataToTableEntry(
-          mockAnswer,
-          true,
-          mockAnswerEvaluations[mockAnswer.id],
+      ...Object.values(mockAnswers)
+        .filter((mockAnswer) => mockAnswer.id in mockAnswerEvaluations)
+        .map((mockAnswer) =>
+          answerDataToTableEntry(
+            mockAnswer,
+            true,
+            mockAnswerEvaluations[mockAnswer.id],
+          ),
         ),
-      ),
     );
 
   const firstCategoryColumn = (
@@ -147,7 +222,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
 
     className: 'p-0',
     cell: (answer: AnswerTableEntry) =>
-      (answer.evaluation && !answer.isEvaluating) ? (
+      answer.evaluation && !answer.isEvaluating ? (
         <div className="space-y-1">
           <p className="m-0 text-center w-full">
             {answer.evaluation?.grades?.[category.id]} / {category.maximumGrade}
@@ -155,60 +230,30 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
         </div>
       ) : (
         <div className="w-full h-full bg-gray-100 px-6 py-3 flex items-center justify-start">
-        <Button
-          className="w-fit whitespace-nowrap"
-          color="primary"
-          disabled={answer.isEvaluating}
-          startIcon={answer.isEvaluating ? (<LoadingIndicator bare size={15} />) : undefined}
-          onClick={() => {
-            if (answer.isMock) {
-              dispatch(
-                questionRubricsActions.requestMockAnswerEvaluation({
-                  mockAnswerId: answer.id,
-                  rubricId: selectedRubricId,
-                }),
-              );
-              evaluatePlaygroundMockAnswer(
-                selectedRubricId,
-                answer.id,
-              ).then((evaluation) => {
-                dispatch(
-                  questionRubricsActions.updateMockAnswerEvaluation({
-                    mockAnswerId: answer.id,
-                    rubricId: selectedRubricId,
-                    evaluation,
-                  }),
-                );
-              });
-            } else {
-              dispatch(
-                questionRubricsActions.requestAnswerEvaluation({
-                  answerId: answer.id,
-                  rubricId: selectedRubricId,
-                }),
-              );
-              evaluatePlaygroundAnswer(
-                selectedRubricId,
-                answer.id,
-              ).then((evaluation) => {
-                dispatch(
-                  questionRubricsActions.updateAnswerEvaluation({
-                    answerId: answer.id,
-                    rubricId: selectedRubricId,
-                    evaluation,
-                  }),
-                );
-              });
+          <Button
+            className="w-fit whitespace-nowrap"
+            color="primary"
+            disabled={answer.isEvaluating}
+            onClick={() =>
+              requestRowEvaluation(dispatch, answer, selectedRubricId)
             }
-          }}
-          variant="outlined"
-        >
-          {answer.isEvaluating ? 'Evaluating' : 'Evaluate'}
-        </Button>
+            startIcon={
+              answer.isEvaluating ? (
+                <LoadingIndicator bare size={15} />
+              ) : (
+                <PlayArrow />
+              )
+            }
+            variant="outlined"
+          >
+            {answer.isEvaluating ? 'Evaluating' : 'Evaluate'}
+          </Button>
         </div>
       ),
     colSpan: (answer: AnswerTableEntry) =>
-      (answer.evaluation && !answer.isEvaluating) ? 1 : categories.length + (categories.length === 1 ? 0 : 1),
+      answer.evaluation && !answer.isEvaluating
+        ? 1
+        : categories.length + (categories.length === 1 ? 0 : 1),
   });
 
   const maximumTotalGrade = categories.reduce(
@@ -222,7 +267,42 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       title: 'Student',
       searchable: true,
       sortable: true,
-      cell: (answer) => answer.title,
+      className: 'relative',
+      cell: (answer) => (
+        <div className="relative w-full h-full">
+          {answer.title}
+          <div className="absolute -top-2 -right-4 flex space-y-0 flex-col">
+            <Tooltip title="Dismiss">
+              <IconButton
+                className="p-0"
+                color="error"
+                disabled={answer.isEvaluating}
+                onClick={() =>
+                  deleteRowEvaluation(dispatch, answer, selectedRubricId)
+                }
+                size="small"
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            {answer.evaluation && (
+              <Tooltip title="Re-evaluate">
+                <IconButton
+                  className="p-0"
+                  color="primary"
+                  disabled={answer.isEvaluating}
+                  onClick={() =>
+                    requestRowEvaluation(dispatch, answer, selectedRubricId)
+                  }
+                  size="small"
+                >
+                  <PlayArrow fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        </div>
+      ),
     },
     ...categories.map((category, categoryIndex) =>
       categoryIndex === 0
@@ -240,21 +320,28 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       searchProps: {
         getValue: (a) => a.evaluation?.totalGrade?.toString(),
       },
-      cell: (answer: AnswerTableEntry) => (
-        Boolean(answer.evaluation) ? (
-        <div className="space-y-1">
-          <p className="m-0 text-center w-full">
-            {answer.evaluation?.totalGrade} / {maximumTotalGrade}{' '}
-          </p>
-        </div>) : <div/>
-      ),
+      cell: (answer: AnswerTableEntry) =>
+        answer.evaluation ? (
+          <div className="space-y-1">
+            <p className="m-0 text-center w-full">
+              {answer.evaluation?.totalGrade} / {maximumTotalGrade}{' '}
+            </p>
+          </div>
+        ) : (
+          <div />
+        ),
       unless: categories.length <= 1,
-      cellUnless: (answer: AnswerTableEntry) => !answer.evaluation || answer.isEvaluating,
+      cellUnless: (answer: AnswerTableEntry) =>
+        !answer.evaluation || answer.isEvaluating,
     },
     {
       of: 'answerText',
       title: 'Answer',
-      cell: (answer) => <div className="line-clamp-4">{answer.answerText.replace('<p>', '').replace('</p>', '')}</div>,
+      cell: (answer) => (
+        <div className="line-clamp-4">
+          {answer.answerText.replace('<p>', '').replace('</p>', '')}
+        </div>
+      ),
     },
     {
       id: 'feedback',
@@ -268,7 +355,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     <Table
       columns={columns}
       data={tableData}
-      getRowClassName={(answer): string => `answer_${answer.id}`}
+      getRowClassName={(): string => `border-y border-black`}
       getRowEqualityData={(answer) => answer}
       getRowId={(instance): string => instance.id.toString()}
     />
