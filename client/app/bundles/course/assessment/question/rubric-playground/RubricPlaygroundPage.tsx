@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Add } from '@mui/icons-material';
 import { Button, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
@@ -9,9 +9,12 @@ import {
   fetchQuestionRubricAnswers,
   fetchQuestionRubricMockAnswers,
   fetchQuestionRubrics,
+  fetchRubricAnswerEvaluations,
+  fetchRubricMockAnswerEvaluations,
 } from 'course/assessment/operations/questions';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import { redirectToNotFound } from 'lib/hooks/router/redirect';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -34,17 +37,47 @@ const RubricPlaygroundPage = (): JSX.Element => {
   );
   const [selectedRubricId, setSelectedRubricId] = useState(0);
 
+  const fetchRubricEvaluationsData = async (
+    rubricId: number,
+  ): Promise<void> => {
+    const [answerEvaluations, mockAnswerEvaluations] = await Promise.all([
+      fetchRubricAnswerEvaluations(rubricId),
+      fetchRubricMockAnswerEvaluations(rubricId),
+    ]);
+    dispatch(
+      questionRubricsActions.loadRubricEvaluations({
+        rubricId,
+        answerEvaluations,
+        mockAnswerEvaluations,
+      }),
+    );
+  };
+
   const fetchPlaygroundData = async (): Promise<void> => {
-    const rubrics = await fetchQuestionRubrics();
-    dispatch(questionRubricsActions.loadRubrics(rubrics));
-    setSelectedRubricId(rubrics?.at(-1)?.id ?? 0);
+    try {
+      const rubrics = await fetchQuestionRubrics();
+      const mostRecentRubricId = rubrics?.at(-1)?.id ?? 0;
+      await dispatch(questionRubricsActions.loadRubrics(rubrics));
+      setSelectedRubricId(mostRecentRubricId);
 
       const answers = await fetchQuestionRubricAnswers();
       dispatch(questionRubricsActions.loadAnswers(answers));
 
-    const mockAnswers = await fetchQuestionRubricMockAnswers();
-    dispatch(questionRubricsActions.loadMockAnswers(mockAnswers));
+      const mockAnswers = await fetchQuestionRubricMockAnswers();
+      dispatch(questionRubricsActions.loadMockAnswers(mockAnswers));
+      await fetchRubricEvaluationsData(mostRecentRubricId);
+    } catch (error) {
+      if ((error as AxiosError)?.response?.status === 404) {
+        redirectToNotFound();
+      }
+    }
   };
+
+  useEffect(() => {
+    if (rubricState.rubrics[selectedRubricId]?.isEvaluationsLoaded === false) {
+      fetchRubricEvaluationsData(selectedRubricId);
+    }
+  }, [selectedRubricId]);
 
   const selectableAnswers = Object.values(rubricState.answers).filter(
     (answer) =>

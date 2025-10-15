@@ -1,7 +1,8 @@
 import {
   RubricAnswerData,
+  RubricAnswerEvaluationData,
   RubricData,
-  RubricEvaluationData,
+  RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
 
 import { APIResponse } from 'api/types';
@@ -24,7 +25,7 @@ export default class RubricsAPI extends BaseAssessmentAPI {
   evaluateMockAnswer(
     rubricId: number,
     mockAnswerId: number,
-  ): APIResponse<RubricEvaluationData> {
+  ): APIResponse<RubricMockAnswerEvaluationData> {
     return this.client.post(
       `${this.#urlPrefix}/${rubricId}/mock_answer_evaluations`,
       { mock_answer_id: mockAnswerId },
@@ -34,10 +35,42 @@ export default class RubricsAPI extends BaseAssessmentAPI {
   evaluateAnswer(
     rubricId: number,
     answerId: number,
-  ): APIResponse<RubricEvaluationData> {
+  ): APIResponse<RubricAnswerEvaluationData> {
     return this.client.post(
       `${this.#urlPrefix}/${rubricId}/answer_evaluations`,
       { answer_id: answerId },
+    );
+  }
+
+  fetchAnswerEvaluations(
+    rubricId: number,
+  ): APIResponse<RubricAnswerEvaluationData[]> {
+    return this.client.get(`${this.#urlPrefix}/${rubricId}/answer_evaluations`);
+  }
+
+  fetchMockAnswerEvaluations(
+    rubricId: number,
+  ): APIResponse<RubricMockAnswerEvaluationData[]> {
+    return this.client.get(
+      `${this.#urlPrefix}/${rubricId}/mock_answer_evaluations`,
+    );
+  }
+
+  deleteAnswerEvaluation(
+    rubricId: number,
+    answerId: number,
+  ): APIResponse<void> {
+    return this.client.delete(
+      `${this.#urlPrefix}/${rubricId}/answer_evaluations/${answerId}`,
+    );
+  }
+
+  deleteMockAnswerEvaluation(
+    rubricId: number,
+    mockAnswerId: number,
+  ): APIResponse<void> {
+    return this.client.delete(
+      `${this.#urlPrefix}/${rubricId}/mock_answer_evaluations/${mockAnswerId}`,
     );
   }
 }

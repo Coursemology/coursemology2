@@ -42,40 +42,41 @@ const buildTanStackColumns = <D extends Data>(
 
   return buildColumns(
     columns,
-    (column) => ({
-      id: column.id,
-      accessorKey: column.of,
-      accessorFn: column.searchProps?.getValue,
-      header: column.title,
-      cell: ({ row: { original: datum } }) => column.cell(datum),
-      enableSorting: Boolean(column.sortable),
-      enableColumnFilter: Boolean(column.filterable),
-      enableGlobalFilter: Boolean(column.searchable),
-      sortingFn: column.sortProps?.sort
-        ? (rowA, rowB): number =>
-            column.sortProps!.sort!(rowA.original, rowB.original)
-        : 'alphanumeric',
-      sortUndefined: column.sortProps?.undefinedPriority ?? false,
-      filterFn:
-        column.filterProps?.shouldInclude &&
-        Object.assign(
-          ({ original: datum }, _: string, filterValue: unknown) =>
-            column.filterProps?.shouldInclude?.(datum, filterValue) ?? true,
-          {
-            resolveFilterValue:
-              column.filterProps?.beforeFilter &&
-              ((value: string): unknown =>
-                column.filterProps?.beforeFilter?.(value) ?? value),
-          },
-        ),
-      getUniqueValues:
-        column.filterProps?.getValue &&
-        ((datum): string[] => column.filterProps?.getValue?.(datum) ?? []),
-    // For the column definition to be valid, either one of these must be true:
-    // - id is defined; or
-    // - header (title) is a string.
-    // TanStack has type assertions enforcing this, but we do not for now.
-    } as ColumnDef<D, unknown>),
+    (column) =>
+      ({
+        id: column.id,
+        accessorKey: column.of,
+        accessorFn: column.searchProps?.getValue,
+        header: column.title,
+        cell: ({ row: { original: datum } }) => column.cell(datum),
+        enableSorting: Boolean(column.sortable),
+        enableColumnFilter: Boolean(column.filterable),
+        enableGlobalFilter: Boolean(column.searchable),
+        sortingFn: column.sortProps?.sort
+          ? (rowA, rowB): number =>
+              column.sortProps!.sort!(rowA.original, rowB.original)
+          : 'alphanumeric',
+        sortUndefined: column.sortProps?.undefinedPriority ?? false,
+        filterFn:
+          column.filterProps?.shouldInclude &&
+          Object.assign(
+            ({ original: datum }, _: string, filterValue: unknown) =>
+              column.filterProps?.shouldInclude?.(datum, filterValue) ?? true,
+            {
+              resolveFilterValue:
+                column.filterProps?.beforeFilter &&
+                ((value: string): unknown =>
+                  column.filterProps?.beforeFilter?.(value) ?? value),
+            },
+          ),
+        getUniqueValues:
+          column.filterProps?.getValue &&
+          ((datum): string[] => column.filterProps?.getValue?.(datum) ?? []),
+        // For the column definition to be valid, either one of these must be true:
+        // - id is defined; or
+        // - header (title) is a string.
+        // TanStack has type assertions enforcing this, but we do not for now.
+      }) as ColumnDef<D, unknown>,
     initialColumns,
   );
 };

@@ -4,8 +4,9 @@ import { McqMrqListData } from 'types/course/assessment/question/multiple-respon
 import { QuestionDuplicationResult } from 'types/course/assessment/questions';
 import {
   RubricAnswerData,
+  RubricAnswerEvaluationData,
   RubricData,
-  RubricEvaluationData,
+  RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
@@ -107,7 +108,7 @@ export const createQuestionMockAnswer = async (
 export const evaluatePlaygroundMockAnswer = async (
   rubricId: number,
   mockAnswerId: number,
-): Promise<RubricEvaluationData> => {
+): Promise<RubricMockAnswerEvaluationData> => {
   try {
     const response =
       await CourseAPI.assessment.question.rubrics.evaluateMockAnswer(
@@ -125,12 +126,27 @@ export const evaluatePlaygroundMockAnswer = async (
 export const evaluatePlaygroundAnswer = async (
   rubricId: number,
   answerId: number,
-): Promise<RubricEvaluationData> => {
+): Promise<RubricAnswerEvaluationData> => {
+  try {
+    const response = await CourseAPI.assessment.question.rubrics.evaluateAnswer(
+      rubricId,
+      answerId,
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const fetchRubricAnswerEvaluations = async (
+  rubricId: number,
+): Promise<RubricAnswerEvaluationData[]> => {
   try {
     const response =
-      await CourseAPI.assessment.question.rubrics.evaluateAnswer(
+      await CourseAPI.assessment.question.rubrics.fetchAnswerEvaluations(
         rubricId,
-        answerId,
       );
     return response.data;
   } catch (error) {
@@ -140,3 +156,50 @@ export const evaluatePlaygroundAnswer = async (
   }
 };
 
+export const fetchRubricMockAnswerEvaluations = async (
+  rubricId: number,
+): Promise<RubricMockAnswerEvaluationData[]> => {
+  try {
+    const response =
+      await CourseAPI.assessment.question.rubrics.fetchMockAnswerEvaluations(
+        rubricId,
+      );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const deleteMockAnswerEvaluation = async (
+  rubricId: number,
+  mockAnswerId: number,
+): Promise<void> => {
+  try {
+    await CourseAPI.assessment.question.rubrics.deleteMockAnswerEvaluation(
+      rubricId,
+      mockAnswerId,
+    );
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const deleteAnswerEvaluation = async (
+  rubricId: number,
+  answerId: number,
+): Promise<void> => {
+  try {
+    await CourseAPI.assessment.question.rubrics.deleteAnswerEvaluation(
+      rubricId,
+      answerId,
+    );
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};

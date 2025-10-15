@@ -18,4 +18,8 @@ export default class MockAnswersAPI extends BaseAssessmentAPI {
       mock_answer: { answer_text: answerText },
     });
   }
+
+  delete(mockAnswerId: number): APIResponse<void> {
+    return this.client.delete(`${this.#urlPrefix}/${mockAnswerId}`);
+  }
 }
