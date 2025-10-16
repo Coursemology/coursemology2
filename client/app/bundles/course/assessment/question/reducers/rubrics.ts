@@ -5,6 +5,7 @@ import {
   RubricData,
   RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
+import { JobStatusResponse } from 'types/jobs';
 
 export interface QuestionRubricsState {
   rubrics: Record<
@@ -23,6 +24,7 @@ export interface QuestionRubricsState {
   >;
   answers: Record<number, RubricAnswerData>;
   mockAnswers: Record<number, RubricAnswerData>;
+  exportJob?: JobStatusResponse;
 }
 
 const initialState: QuestionRubricsState = {
@@ -74,6 +76,9 @@ export const questionRubricsStore = createSlice({
           {},
         ),
       };
+    },
+    deleteRubric: (state, action: PayloadAction<number>) => {
+      delete state.rubrics[action.payload];
     },
     loadAnswers: (state, action: PayloadAction<RubricAnswerData[]>) => {
       action.payload.forEach((answer) => {
@@ -220,34 +225,11 @@ export const questionRubricsStore = createSlice({
       if (!(rubricId in state.rubrics)) return;
       delete state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId];
     },
-    triggerRubricEvaluationJob: (
+    updateRubricExportJob: (
       state,
-      action: PayloadAction<{
-        rubricId: number;
-        jobUrl: string;
-        evaluationIds: number[];
-        mockEvaluationIds: number[];
-      }>,
+      action: PayloadAction<JobStatusResponse>,
     ) => {
-      const { rubricId, jobUrl, evaluationIds, mockEvaluationIds } =
-        action.payload;
-
-      if (!(rubricId in state.rubrics)) return;
-
-      evaluationIds.forEach((id) => {
-        // overwrite old data
-        state.rubrics[rubricId].answerEvaluations[id] = {
-          jobUrl,
-          answerId: id,
-        };
-      });
-
-      mockEvaluationIds.forEach((id) => {
-        state.rubrics[rubricId].mockAnswerEvaluations[id] = {
-          jobUrl,
-          mockAnswerId: id,
-        };
-      });
+      state.exportJob = action.payload;
     },
   },
 });

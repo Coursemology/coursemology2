@@ -182,6 +182,8 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
   const { answers, rubrics, mockAnswers } = useAppSelector(
     (state) => state.assessments.question.rubrics,
   );
+  if (!rubrics[selectedRubricId]) return null;
+
   const { answerEvaluations, mockAnswerEvaluations, categories } =
     rubrics[selectedRubricId];
 

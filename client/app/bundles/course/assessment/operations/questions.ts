@@ -8,9 +8,11 @@ import {
   RubricData,
   RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
+import { JobStatusResponse } from 'types/jobs';
 
 import CourseAPI from 'api/course';
-import { JobStatusResponse } from 'types/jobs';
+
+import { RubricHeaderFormData } from '../question/rubric-playground/types';
 
 export const reorderQuestions = async (
   assessmentId: number,
@@ -71,6 +73,40 @@ export const fetchQuestionRubricAnswers = async (): Promise<
 > => {
   try {
     const response = await CourseAPI.assessment.question.rubrics.answers();
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const createNewRubric = async (
+  formData: RubricHeaderFormData,
+): Promise<RubricData> => {
+  try {
+    const response = await CourseAPI.assessment.question.rubrics.create({
+      grading_prompt: formData.gradingPrompt,
+      categories_attributes: formData.categories.map((category) => ({
+        name: category.name,
+        criterions_attributes: category.criterions.map((criterion) => ({
+          grade: criterion.grade,
+          explanation: criterion.explanation,
+        })),
+      })),
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
+export const deleteRubric = async (rubricId: number): Promise<void> => {
+  try {
+    const response =
+      await CourseAPI.assessment.question.rubrics.delete(rubricId);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
@@ -209,13 +245,12 @@ export const exportEvaluations = async (
   rubricId: number,
 ): Promise<JobStatusResponse> => {
   try {
-    const response = await CourseAPI.assessment.question.rubrics.exportEvaluations(
-      rubricId,
-    );
+    const response =
+      await CourseAPI.assessment.question.rubrics.exportEvaluations(rubricId);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
 
     throw error;
   }
-}
+};

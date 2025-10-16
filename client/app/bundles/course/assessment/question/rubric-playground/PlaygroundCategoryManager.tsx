@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { Add, Delete, Undo } from '@mui/icons-material';
 import {
@@ -130,7 +129,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
                 <TextField
                   className="w-full"
                   disabled
-                  label={t(translations.categoryMaximumGrade)}
+                  label="Max"
                   type="number"
                   value={computeMaximumCategoryGrade(category)}
                   variant="filled"
@@ -185,7 +184,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
                         disableMargins
                         field={field}
                         fieldState={fieldState}
-                        label={t(translations.categoryGrade)}
+                        label="Grade"
                         type="number"
                         variant="filled"
                       />

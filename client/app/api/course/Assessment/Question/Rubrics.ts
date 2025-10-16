@@ -3,12 +3,13 @@ import {
   RubricAnswerEvaluationData,
   RubricData,
   RubricMockAnswerEvaluationData,
+  RubricPostRequestData,
 } from 'types/course/rubrics';
+import { JobStatusResponse } from 'types/jobs';
 
 import { APIResponse } from 'api/types';
 
 import BaseAssessmentAPI from '../Base';
-import { JobStatusResponse } from 'types/jobs';
 
 export default class RubricsAPI extends BaseAssessmentAPI {
   get #urlPrefix(): string {
@@ -21,6 +22,14 @@ export default class RubricsAPI extends BaseAssessmentAPI {
 
   answers(): APIResponse<RubricAnswerData[]> {
     return this.client.get(`${this.#urlPrefix}/answers`);
+  }
+
+  create(data: RubricPostRequestData): APIResponse<RubricData> {
+    return this.client.post(`${this.#urlPrefix}`, data);
+  }
+
+  delete(rubricId: number): APIResponse {
+    return this.client.delete(`${this.#urlPrefix}/${rubricId}`);
   }
 
   evaluateMockAnswer(
@@ -75,11 +84,7 @@ export default class RubricsAPI extends BaseAssessmentAPI {
     );
   }
 
-  exportEvaluations(
-    rubricId: number,
-  ): APIResponse<JobStatusResponse> {
-    return this.client.post(
-      `${this.#urlPrefix}/${rubricId}/export`,
-    )
+  exportEvaluations(rubricId: number): APIResponse<JobStatusResponse> {
+    return this.client.post(`${this.#urlPrefix}/${rubricId}/export`);
   }
 }

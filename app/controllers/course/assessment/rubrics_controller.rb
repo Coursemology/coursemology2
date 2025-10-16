@@ -17,6 +17,20 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     render partial: 'course/rubrics/rubric', locals: { rubric: @rubric }
   end
 
+  def create
+    @rubric.questions = [@question]
+    @rubric.course = current_course
+    if @rubric.save
+      render partial: 'course/rubrics/rubric', locals: { rubric: @rubric }
+    else
+      render json: { errors: @rubric.errors }, status: :bad_request
+    end
+  end
+
+  def destroy
+    @rubric.destroy!
+  end
+
   def rubric_answers
     head :not_found and return unless @question.specific.is_a?(Course::Assessment::Question::RubricBasedResponse)
 
@@ -91,5 +105,11 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
       current_course, @rubric.id, @question.id
     ).job
     render partial: 'jobs/submitted', locals: { job: job }
+  end
+
+  private
+
+  def create_params
+    params.permit([:grading_prompt, categories_attributes: [:name, criterions_attributes: [:grade, :explanation]]])
   end
 end
