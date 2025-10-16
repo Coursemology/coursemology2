@@ -85,4 +85,11 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
     mock_answer.reload
     mock_answer.destroy! if mock_answer.rubric_evaluations.empty?
   end
+
+  def export_evaluations
+    job = Course::Rubric::RubricEvaluationExportJob.perform_later(
+      current_course, @rubric.id, @question.id
+    ).job
+    render partial: 'jobs/submitted', locals: { job: job }
+  end
 end
