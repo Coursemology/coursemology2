@@ -1,97 +1,172 @@
-import { useState } from 'react';
-import { Controller } from 'react-hook-form';
-import { Delete, ExpandLess, ExpandMore, PlayArrow } from '@mui/icons-material';
-import { Card, Chip, IconButton, Typography } from '@mui/material';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Controller,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
+import { Delete, ExpandLess, ExpandMore, Save } from '@mui/icons-material';
+import { Card, Chip, IconButton, Slider, Typography } from '@mui/material';
 
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import Form from 'lib/components/form/Form';
-import { useAppSelector } from 'lib/hooks/store';
-import { formatLongDateTime } from 'lib/moment';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import { formatLongDateTime, formatMiniDateTime } from 'lib/moment';
 
-import CategoryManager from './CategoryManager';
+import { actions as questionRubricsActions } from '../reducers/rubrics';
+
+import PlaygroundCategoryManager from './PlaygroundCategoryManager';
 import { RubricHeaderFormData } from './types';
+import { createNewRubric, deleteRubric } from './operations/rubric';
 
 const RubricHeader = (props: {
   selectedRubricId: number;
+  setSelectedRubricId: Dispatch<SetStateAction<number>>;
 }): JSX.Element | null => {
-  const { selectedRubricId } = props;
-  const [isCategoriesDirty, setIsCategoriesDirty] = useState(false);
+  const { selectedRubricId, setSelectedRubricId } = props;
   const [isRubricExpanded, setIsRubricExpanded] = useState(false);
 
-  const savedRubric = useAppSelector(
+  const dispatch = useAppDispatch();
+  const rubricState = useAppSelector(
     (state) => state.assessments.question.rubrics,
-  ).rubrics[selectedRubricId];
+  );
+  const sortedRubrics = Object.values(rubricState.rubrics).sort((a, b) =>
+    a.createdAt.localeCompare(b.createdAt),
+  );
+  const selectedRubric = rubricState.rubrics[selectedRubricId];
+  const selectedRubricIndex = Object.values(rubricState.rubrics).findIndex(
+    (rubric) => rubric.id === selectedRubricId,
+  );
 
-  if (!savedRubric) return null;
+  const form = useForm<RubricHeaderFormData>({
+    defaultValues: {
+      categories: selectedRubric?.categories ?? [],
+      gradingPrompt: selectedRubric?.gradingPrompt ?? '',
+    },
+  });
+
+  useEffect(() => {
+    form.reset({
+      categories: (selectedRubric?.categories ?? []).map((category) => ({
+        ...category,
+        criterions: category.criterions.map((criterion) => ({
+          ...criterion,
+          draft: false,
+          toBeDeleted: false,
+        })),
+        toBeDeleted: false,
+      })),
+      gradingPrompt: selectedRubric?.gradingPrompt ?? '',
+    });
+  }, [selectedRubricId]);
+
+  if (!selectedRubric) return null;
+
+  const onSubmit: SubmitHandler<RubricHeaderFormData> = async (formData) => {
+    const rubric = await createNewRubric(formData);
+    await dispatch(
+      questionRubricsActions.createNewRubric({
+        rubric,
+        selectedRubricId,
+      }),
+    );
+    setSelectedRubricId(rubric.id);
+  };
+
   return (
     <Card className="sticky top-0 px-4 bg-white z-50" variant="outlined">
-      <Form<RubricHeaderFormData>
-        contextual
-        dirty={isCategoriesDirty}
-        disabled={false}
-        initialValues={{
-          categories: savedRubric.categories ?? [],
-          gradingPrompt: savedRubric.gradingPrompt ?? '',
-        }}
-        onSubmit={() => {}}
-      >
-        {(control) => (
-          <>
-            <div className="flex flex-row space-x-3 items-center">
-              <Typography className="flex-1" variant="body1">
-                Saved Rubric, {formatLongDateTime(savedRubric.createdAt)}
-              </Typography>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {sortedRubrics.length > 1 &&
+          <div className="w-full flex justify-center">
+            <Slider
+              className="w-[90%] pb-10"
+              marks={sortedRubrics.map((rubric, rubricIndex) => ({
+                label:
+                  rubricIndex === 0 || rubricIndex === sortedRubrics.length - 1
+                    ? formatMiniDateTime(rubric.createdAt)
+                    : '',
+                value: rubricIndex,
+              }))}
+              max={sortedRubrics.length - 1}
+              min={0}
+              onChangeCommitted={(_, newIndex) => {
+                setSelectedRubricId(sortedRubrics[newIndex as number].id);
+              }}
+              step={null}
+              value={selectedRubricIndex}
+            />
+          </div>
+        }
+        <div className="flex flex-row space-x-3 items-center">
+          <Typography className="flex-1" variant="body1">
+            Saved Rubric, {formatLongDateTime(selectedRubric.createdAt)}
+            {form.formState.isDirty ? ' (modified)' : ''}
+          </Typography>
 
-              <IconButton
-                disabled={false}
-                onClick={() => setIsRubricExpanded(!isRubricExpanded)}
-              >
-                {isRubricExpanded ? <ExpandLess /> : <ExpandMore />}
-              </IconButton>
+          <IconButton onClick={() => setIsRubricExpanded(!isRubricExpanded)}>
+            {isRubricExpanded ? <ExpandLess /> : <ExpandMore />}
+          </IconButton>
 
-              <IconButton color="error" disabled={false} onClick={() => {}}>
-                <Delete />
-              </IconButton>
+          <IconButton
+            color="info"
+            disabled={!form.formState.isDirty}
+            type="submit"
+          >
+            <Save />
+          </IconButton>
 
-              <Chip
-                className="w-fit whitespace-nowrap"
-                color="primary"
-                label="Highlight for Comparison"
-                onClick={() => {}}
-                variant="outlined"
-              />
+          <Chip
+            className="whitespace-nowrap"
+            color="primary"
+            label="Export"
+            onClick={() => {}}
+            variant="outlined"
+          />
 
-              <Chip
-                className="whitespace-nowrap"
-                color="primary"
-                label="Export to Question"
-                onClick={() => {}}
-                variant="outlined"
+          <IconButton
+            color="error"
+            disabled={Object.keys(rubricState.rubrics).length <= 1}
+            onClick={() => {
+              deleteRubric(selectedRubricId).then(() => {
+                const rubricIdToDelete = selectedRubricId;
+                if (selectedRubricIndex > 0) {
+                  setSelectedRubricId(
+                    sortedRubrics[selectedRubricIndex - 1].id,
+                  );
+                } else {
+                  setSelectedRubricId(sortedRubrics[1].id);
+                }
+                dispatch(questionRubricsActions.deleteRubric(rubricIdToDelete));
+              });
+            }}
+          >
+            <Delete />
+          </IconButton>
+        </div>
+        {isRubricExpanded && (
+          <div className="flex flex-row space-x-4">
+            <div className="w-1/2">
+              <Controller
+                control={form.control}
+                name="gradingPrompt"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormRichTextField
+                    disabled={false}
+                    field={field}
+                    fieldState={fieldState}
+                    fullWidth
+                  />
+                )}
               />
             </div>
-            {isRubricExpanded && (
-              <div className="flex flex-row space-x-4">
-                <div className="w-1/2">
-                  <Controller
-                    control={control}
-                    name="gradingPrompt"
-                    render={({ field, fieldState }): JSX.Element => (
-                      <FormRichTextField
-                        disabled={false}
-                        field={field}
-                        fieldState={fieldState}
-                        fullWidth
-                      />
-                    )}
-                  />
-                </div>
 
-                <CategoryManager disabled={false} />
-              </div>
-            )}
-          </>
+            <div className="w-1/2">
+              <FormProvider {...form}>
+                <PlaygroundCategoryManager disabled={false} />
+              </FormProvider>
+            </div>
+          </div>
         )}
-      </Form>
+      </form>
     </Card>
   );
 };
