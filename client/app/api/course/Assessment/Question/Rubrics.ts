@@ -8,6 +8,7 @@ import {
 import { APIResponse } from 'api/types';
 
 import BaseAssessmentAPI from '../Base';
+import { JobStatusResponse } from 'types/jobs';
 
 export default class RubricsAPI extends BaseAssessmentAPI {
   get #urlPrefix(): string {
@@ -72,5 +73,13 @@ export default class RubricsAPI extends BaseAssessmentAPI {
     return this.client.delete(
       `${this.#urlPrefix}/${rubricId}/mock_answer_evaluations/${mockAnswerId}`,
     );
+  }
+
+  exportEvaluations(
+    rubricId: number,
+  ): APIResponse<JobStatusResponse> {
+    return this.client.post(
+      `${this.#urlPrefix}/${rubricId}/export`,
+    )
   }
 }
