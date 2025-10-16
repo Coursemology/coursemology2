@@ -97,7 +97,10 @@ const RubricPlaygroundPage = (): JSX.Element => {
       {() => {
         return (
           <>
-            <RubricHeader selectedRubricId={selectedRubricId} />
+            <RubricHeader
+              selectedRubricId={selectedRubricId}
+              setSelectedRubricId={setSelectedRubricId}
+            />
 
             <div className="flex flex-row space-x-4 items-center py-2">
               <Typography variant="h6">Sample Answer Evaluations</Typography>

@@ -5,6 +5,17 @@ export interface RubricData {
   gradingPrompt: string;
 }
 
+export interface RubricPostRequestData {
+  grading_prompt: string;
+  categories_attributes: {
+    name: string;
+    criterions_attributes: {
+      grade: number;
+      explanation: string;
+    }[];
+  }[];
+}
+
 export interface RubricCategoryData {
   id: number;
   name: string;
