@@ -10,6 +10,7 @@ import {
 } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
+import { JobStatusResponse } from 'types/jobs';
 
 export const reorderQuestions = async (
   assessmentId: number,
@@ -203,3 +204,18 @@ export const deleteAnswerEvaluation = async (
     throw error;
   }
 };
+
+export const exportEvaluations = async (
+  rubricId: number,
+): Promise<JobStatusResponse> => {
+  try {
+    const response = await CourseAPI.assessment.question.rubrics.exportEvaluations(
+      rubricId,
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+}

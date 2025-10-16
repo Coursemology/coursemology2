@@ -270,6 +270,7 @@ Rails.application.routes.draw do
               get :mock_answer_evaluations, on: :member, action: 'fetch_mock_answer_evaluations'
               post :mock_answer_evaluations, on: :member, action: 'evaluate_mock_answer'
               delete 'mock_answer_evaluations/:mock_answer_id', on: :member, action: 'delete_mock_answer_evaluations'
+              post :export, on: :member, action: 'export_evaluations'
             end
 
             resources :mock_answers, on: :member, only: [:index, :create, :destroy]
