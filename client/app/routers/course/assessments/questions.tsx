@@ -281,7 +281,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
       ],
     },
     {
-      path: ':questionId/rubric-playground',
+      path: ':questionId/rubric_playground',
       lazy: async (): Promise<RouteObject> => {
         const RubricPlayground = (
           await import(

@@ -260,7 +260,7 @@ Rails.application.routes.draw do
           get :auto_feedback_count, on: :member
           patch :publish_auto_feedback, on: :member
 
-          resources :questions, only: [] do
+          resources :questions, only: [:show] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
             resources :rubrics, on: :member, only: [:index, :create, :destroy, :show] do
               get :answers, on: :collection, action: 'rubric_answers'

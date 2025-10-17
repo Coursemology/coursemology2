@@ -3,7 +3,9 @@ import { Add } from '@mui/icons-material';
 import { Button, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
 import sampleSize from 'lodash-es/sampleSize';
+import { getIdFromUnknown } from 'utilities';
 
+import CourseAPI from 'api/course';
 import {
   createQuestionMockAnswer,
   fetchQuestionRubricAnswers,
@@ -14,6 +16,7 @@ import {
 } from 'course/assessment/operations/questions';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
 import { redirectToNotFound } from 'lib/hooks/router/redirect';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -173,6 +176,29 @@ const RubricPlaygroundPage = (): JSX.Element => {
   );
 };
 
-const handle = 'Rubric Playground';
+const handle: DataHandle = (match) => {
+  const { courseId, assessmentId, questionId } = match.params;
+  const parsedQuestionId = getIdFromUnknown(questionId);
+  if (!parsedQuestionId) throw new Error(`Invalid question id: ${questionId}`);
+  return {
+    getData: async (): Promise<CrumbPath> => {
+      const question = (
+        await CourseAPI.assessment.question.questions.fetch(parsedQuestionId)
+      )?.data;
+      if (!question) return {};
+
+      const questionCrumbTitle = question.title
+        ? `${question.defaultTitle}: ${question.title}`
+        : question.defaultTitle;
+      return {
+        activePath: `/courses/${courseId}/assessments/${assessmentId}`,
+        content: [
+          { title: questionCrumbTitle },
+          { title: 'Rubric Playground' },
+        ],
+      };
+    },
+  };
+};
 
 export default Object.assign(RubricPlaygroundPage, { handle });
