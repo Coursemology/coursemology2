@@ -12,7 +12,7 @@ const AIGradingPlaygroundAlert = (props: {
       Try our
       <Link
         className="px-2"
-        to={`/courses/${props.courseId}/assessments/${props.assessmentId}/question/${props.questionId}/rubric-playground`}
+        to={`/courses/${props.courseId}/assessments/${props.assessmentId}/question/${props.questionId}/rubric_playground`}
       >
         AI grading playground
       </Link>

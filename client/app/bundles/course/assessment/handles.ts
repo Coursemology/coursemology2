@@ -71,7 +71,8 @@ export const assessmentHandle: DataHandle = (match) => {
 export const questionHandle: DataHandle = (match, location) => {
   if (
     location.pathname.endsWith('new') ||
-    location.pathname.endsWith('generate')
+    location.pathname.endsWith('generate') ||
+    location.pathname.endsWith('rubric_playground')
   )
     return null;
 

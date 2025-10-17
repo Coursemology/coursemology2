@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Close, PlayArrow } from '@mui/icons-material';
-import { Button, IconButton, Tooltip } from '@mui/material';
+import { Button, IconButton, Tooltip, Typography } from '@mui/material';
 import { AppDispatch } from 'store';
 import {
   RubricAnswerData,
@@ -340,9 +340,12 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       of: 'answerText',
       title: 'Answer',
       cell: (answer) => (
-        <div className="line-clamp-4">
-          {answer.answerText.replace('<p>', '').replace('</p>', '')}
-        </div>
+        <Typography
+          className="whitespace-normal line-clamp-4"
+          dangerouslySetInnerHTML={{
+            __html: answer.answerText,
+          }}
+        />
       ),
     },
     {

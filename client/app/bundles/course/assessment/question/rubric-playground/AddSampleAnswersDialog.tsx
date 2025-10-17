@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, RadioGroup } from '@mui/material';
+import { Checkbox, RadioGroup, Typography } from '@mui/material';
 import { RubricAnswerData } from 'types/course/rubrics';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
@@ -93,9 +93,12 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
       of: 'answerText',
       title: 'Answer',
       cell: (answer) => (
-        <div className="line-clamp-4">
-          {answer.answerText.replace('<p>', '').replace('</p>', '')}
-        </div>
+        <Typography
+          className="whitespace-normal line-clamp-4"
+          dangerouslySetInnerHTML={{
+            __html: answer.answerText,
+          }}
+        />
       ),
     },
   ];

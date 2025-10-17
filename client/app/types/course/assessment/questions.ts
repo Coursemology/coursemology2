@@ -2,11 +2,14 @@ export type OptionalIfNew<T extends 'new' | 'edit'> = T extends 'new'
   ? undefined
   : never;
 
-export interface QuestionData {
+export interface QuestionBaseData {
   id: number;
   number: number;
   defaultTitle: string;
   title: string | null;
+}
+
+export interface QuestionData extends QuestionBaseData {
   unautogradable: boolean;
   plagiarismCheckable: boolean;
   type: string;
