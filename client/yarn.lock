@@ -5712,13 +5712,6 @@ debug@~4.3.1, debug@~4.3.2:
   dependencies:
     ms "^2.1.3"
 
-decache@^3.0.5:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/decache/-/decache-3.1.0.tgz#4f5036fbd6581fcc97237ac3954a244b9536c2da"
-  integrity sha512-p7D6wJ5EJFFq1CcF2lu1XeqKFLBob8jRQGNAvFLTsV3CbSKBl3VtliAVlUIGz2i9H6kEFnI2Amaft5ZopIG2Fw==
-  dependencies:
-    find "^0.2.4"
-
 decimal.js@^10.3.1, decimal.js@^10.4.1:
   version "10.4.2"
   resolved "https://registry.yarnpkg.com/decimal.js/-/decimal.js-10.4.2.tgz#0341651d1d997d86065a2ce3a441fbd0d8e8b98e"
@@ -6961,13 +6954,6 @@ find-up@^5.0.0:
   dependencies:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
-
-find@^0.2.4:
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/find/-/find-0.2.9.tgz#4b73f1ff9e56ad91b76e716407fe5ffe6554bb8c"
-  integrity sha512-7a4/LCiInB9xYMnAUEjLilL9FKclwbwK7VlXw+h5jMvT2TDFeYFCHM24O1XdnC/on/hx8mxVO3FTQkyHZnOghQ==
-  dependencies:
-    traverse-chain "~0.1.0"
 
 flat-cache@^3.0.4:
   version "3.0.4"
@@ -11170,10 +11156,10 @@ rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
-rollbar@^2.26.3:
-  version "2.26.3"
-  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.26.3.tgz#a8b7fde0cc7590b1dc4f4f56ad773b8c72bfb5a8"
-  integrity sha512-Pf6PVH0zFi0dK4Yhj4MBEZX0QwIiHPZRgBHNHkhiujarhT5xunkJZ1T1QaJD0g8ML22f3zA7kKsly1tZZE7cdg==
+rollbar@^2.26.5:
+  version "2.26.5"
+  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.26.5.tgz#6fa61762d73963cfe8788e4cb7b42618b6ce00bd"
+  integrity sha512-4Of0ALl5+CU2glyDy5dWMRRy9Ty81DrY2r46ucbqjtCikbgHoWJNGXbQUWpDaLxsc8Q71LT/yj1bPb9NHbJIFQ==
   dependencies:
     async "~3.2.3"
     console-polyfill "0.3.0"
@@ -11182,8 +11168,6 @@ rollbar@^2.26.3:
     lru-cache "~2.2.1"
     request-ip "~3.3.0"
     source-map "^0.5.7"
-  optionalDependencies:
-    decache "^3.0.5"
 
 rst-selector-parser@^2.2.3:
   version "2.2.3"
@@ -12082,11 +12066,6 @@ tr46@~0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
-
-traverse-chain@~0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/traverse-chain/-/traverse-chain-0.1.0.tgz#61dbc2d53b69ff6091a12a168fd7d433107e40f1"
-  integrity sha512-up6Yvai4PYKhpNp5PkYtx50m3KbwQrqDwbuZP/ItyL64YEWHAvH6Md83LFLV/GRSk/BoUVwwgUzX6SOQSbsfAg==
 
 trim-lines@^3.0.0:
   version "3.0.1"
