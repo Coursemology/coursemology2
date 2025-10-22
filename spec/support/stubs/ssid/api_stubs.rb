@@ -54,44 +54,14 @@ module Ssid::ApiStubs # rubocop:disable Metrics/ModuleLength
     status: 200,
     body: {
       payload: {
-        data: {
-          language: 'javascript',
-          submissionPairs: [
-            {
-              id: '185ek301-eecb-44ce-838e-bf1234f990e1',
-              baseSubmission: '185ek301-eecb-44ce-838e-bf1234f990e1',
-              comparedSubmission: '185ek301-eecb-44ce-838e-bf1234f990e1',
-              similarityScore: 0.5846153846153846
-            }
-          ],
-          ranAt: '2025-07-31T18:23:24.341104+08:00',
-          completedAt: '2025-07-31T18:23:24.341104+08:00',
-          statistics: {
-            total: 12,
-            bins: [
-              6,
-              0,
-              0,
-              0,
-              0,
-              0,
-              1,
-              0,
-              1,
-              3,
-              0,
-              1,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0,
-              0
-            ]
+        data: [
+          {
+            id: '185ek301-eecb-44ce-838e-bf1234f990e1',
+            baseSubmission: '185ek301-eecb-44ce-838e-bf1234f990e1',
+            comparedSubmission: '185ek301-eecb-44ce-838e-bf1234f990e1',
+            similarityScore: 0.5846153846153846
           }
-        }
+        ]
       }
     }.to_json
   }.freeze

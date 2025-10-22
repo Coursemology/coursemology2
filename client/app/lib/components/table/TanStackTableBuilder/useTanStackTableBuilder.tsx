@@ -69,7 +69,14 @@ const useTanStackTableBuilder = <D extends object>(
     onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setSearchKeyword,
-    onPaginationChange: setPagination,
+    onPaginationChange: (current) => {
+      setPagination(current);
+      if (props.pagination?.onPaginationChange) {
+        const newValue =
+          typeof current === 'function' ? current(pagination) : pagination;
+        props.pagination.onPaginationChange(newValue, pagination);
+      }
+    },
     autoResetPageIndex: false,
     state: {
       rowSelection,
@@ -180,6 +187,9 @@ const useTanStackTableBuilder = <D extends object>(
       page: table.getState().pagination.pageIndex,
       pages: props.pagination.rowsPerPage,
       total: table.getFilteredRowModel().rows.length,
+      // TODO: Replace use(s) of tables with this feature with TanStack Virtual
+      // https://tanstack.com/virtual/latest
+      showTotalPlus: props.pagination.showTotalPlus,
       pageSize: table.getState().pagination.pageSize,
       onPageChange: (page): void => table.setPageIndex(page),
       onPageSizeChange: (size): void => table.setPageSize(size),

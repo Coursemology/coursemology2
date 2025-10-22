@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { OpenInNew, PictureAsPdf } from '@mui/icons-material';
 import { IconButton, Tooltip, Typography } from '@mui/material';
+import { PaginationState } from '@tanstack/react-table';
 import {
   AssessmentPlagiarismSubmission,
   AssessmentPlagiarismSubmissionPair,
@@ -18,9 +19,11 @@ import {
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {
+  allLoaded: boolean;
   isLoading: boolean;
   submissionPairs: AssessmentPlagiarismSubmissionPair[];
   downloadSubmissionPairResult: (submissionPairId: number) => void;
+  onPaginationChange: (newValue: PaginationState) => void;
   shareSubmissionPairResult: (submissionPairId: number) => void;
   shareAssessmentResult: () => void;
 }
@@ -69,9 +72,11 @@ const PlagiarismResultsTable: FC<Props> = (props) => {
   const { t } = useTranslation();
 
   const {
+    allLoaded,
     isLoading,
     submissionPairs,
     downloadSubmissionPairResult,
+    onPaginationChange,
     shareSubmissionPairResult,
     shareAssessmentResult,
   } = props;
@@ -210,7 +215,9 @@ const PlagiarismResultsTable: FC<Props> = (props) => {
         indexing={{ indices: true }}
         pagination={{
           rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
-          showAllRows: true,
+          showAllRows: false,
+          showTotalPlus: !allLoaded,
+          onPaginationChange,
         }}
         search={{
           searchPlaceholder: t(translations.searchByStudentName),

@@ -1,11 +1,18 @@
+import { PaginationState } from '@tanstack/react-table';
+
 import { Data } from './ColumnTemplate';
 
 export interface PaginationTemplate {
   initialPageSize?: number;
   initialPageIndex?: number;
+  onPaginationChange?: (
+    newValue: PaginationState,
+    oldValue: PaginationState,
+  ) => void;
   rowsPerPage?: number[];
   showAllRows?: boolean;
   showAllRowsLabel?: string;
+  showTotalPlus?: boolean;
 }
 
 interface SearchProps<D> {

@@ -77,6 +77,7 @@ export interface AssessmentLinkData {
 
 export interface AssessmentPlagiarismState {
   data: AssessmentPlagiarism;
+  isAllSubmissionPairsLoaded: boolean;
 }
 
 export interface PlagiarismAssessmentsState {

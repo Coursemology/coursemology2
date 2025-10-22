@@ -15,6 +15,9 @@ const initialState: AssessmentPlagiarismState = {
     },
     submissionPairs: [],
   },
+  // After the first query populates submissionPairs with the completed state,
+  // subsequent queries should add to the list until a query returns with no more results.
+  isAllSubmissionPairsLoaded: false,
 };
 
 export const plagiarismSlice = createSlice({
@@ -23,21 +26,15 @@ export const plagiarismSlice = createSlice({
   reducers: {
     initialize: (state, action: PayloadAction<AssessmentPlagiarism>) => {
       state.data = action.payload;
+      state.isAllSubmissionPairsLoaded = false;
     },
-    runPlagiarismCheckSuccess: (
-      state,
-      action: PayloadAction<AssessmentPlagiarismStatus>,
-    ) => {
-      state.data.status = action.payload;
-    },
-    pollPlagiarismJobFinished: (
+    addSubmissionPairs: (
       state,
       action: PayloadAction<AssessmentPlagiarism>,
     ) => {
-      state.data = action.payload;
-    },
-    reset: () => {
-      return initialState;
+      state.data.submissionPairs.push(...action.payload.submissionPairs);
+      state.isAllSubmissionPairsLoaded =
+        action.payload.submissionPairs.length === 0;
     },
   },
 });

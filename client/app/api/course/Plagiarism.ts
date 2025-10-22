@@ -35,8 +35,12 @@ export default class PlagiarismAPI extends BaseCourseAPI {
    */
   fetchAssessmentPlagiarism(
     assessmentId: number,
+    limit: number,
+    offset: number,
   ): APIResponse<AssessmentPlagiarism> {
-    return this.client.get(`${this.#urlPrefix}/assessments/${assessmentId}`);
+    return this.client.get(`${this.#urlPrefix}/assessments/${assessmentId}`, {
+      params: { limit, offset },
+    });
   }
 
   /**

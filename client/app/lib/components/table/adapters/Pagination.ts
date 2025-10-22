@@ -2,6 +2,7 @@ interface PaginationProps {
   page: number;
   pageSize: number;
   total: number;
+  showTotalPlus?: boolean;
   pages?: number[];
   allowShowAll?: boolean;
   onPageChange?: (index: number) => void;
