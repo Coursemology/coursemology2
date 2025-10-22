@@ -17,17 +17,20 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
   end
 
   def plagiarism_data
-    main_assessment = current_course.assessments.find(params[:id])
-    @course_users_hash = main_assessment.all_linked_assessments.to_h do |assessment|
-      [assessment.course_id, preload_course_users_hash(assessment.course)]
-    end
+    main_assessment = current_course.assessments.find(plagiarism_data_params[:id])
     @plagiarism_check = main_assessment.plagiarism_check || main_assessment.build_plagiarism_check
     query_and_update_plagiarism_check(main_assessment) if should_query_plagiarism_check?(main_assessment)
     timeout_plagiarism_check(main_assessment) if should_timeout_plagiarism_check?(main_assessment)
 
     if @plagiarism_check.completed?
+      @course_users_hash = main_assessment.all_linked_assessments.to_h do |assessment|
+        [assessment.course_id, preload_course_users_hash(assessment.course)]
+      end
       service = Course::Assessment::Submission::SsidPlagiarismService.new(current_course, main_assessment)
-      @results = service.fetch_plagiarism_result.compact
+      @results = service.fetch_plagiarism_result(
+        plagiarism_data_params[:limit],
+        plagiarism_data_params[:offset]
+      ).compact
       fetch_can_manage_course_hash(get_all_assessments_in_duplication_tree(main_assessment))
     else
       @results = []
@@ -119,6 +122,10 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
   end
 
   private
+
+  def plagiarism_data_params
+    params.permit(:id, :limit, :offset)
+  end
 
   def should_timeout_plagiarism_check?(assessment)
     return false if assessment.plagiarism_check.nil?

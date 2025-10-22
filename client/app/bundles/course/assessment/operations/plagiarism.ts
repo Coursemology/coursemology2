@@ -1,19 +1,23 @@
 import { AxiosError } from 'axios';
-import { dispatch } from 'store';
-import { PlagiarismCheck } from 'types/course/plagiarism';
+import { AssessmentPlagiarism, PlagiarismCheck } from 'types/course/plagiarism';
 
 import CourseAPI from 'api/course';
 
-import { plagiarismActions as actions } from '../reducers/plagiarism';
+// 2 pages, 100 rows per page.
+export const INITIAL_SUBMISSION_PAIR_QUERY_SIZE = 200;
 
 export const fetchAssessmentPlagiarism = async (
   assessmentId: number,
-): Promise<void> => {
+  limit: number,
+  offset: number,
+): Promise<AssessmentPlagiarism> => {
   try {
-    dispatch(actions.reset());
-    const response =
-      await CourseAPI.plagiarism.fetchAssessmentPlagiarism(assessmentId);
-    dispatch(actions.initialize(response.data));
+    const response = await CourseAPI.plagiarism.fetchAssessmentPlagiarism(
+      assessmentId,
+      limit,
+      offset,
+    );
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
