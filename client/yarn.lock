@@ -3048,10 +3048,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
-"@rails/actioncable@^7.1.3":
-  version "7.1.3"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.1.3.tgz#4db480347775aeecd4dde2405659eef74a458881"
-  integrity sha512-ojNvnoZtPN0pYvVFtlO7dyEN9Oml1B6IDM+whGKVak69MMYW99lC2NOWXWeE3bmwEydbP/nn6ERcpfjHVjYQjA==
+"@rails/actioncable@^8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.1.0.tgz#cd884d50a34af9a8c9149ec4e256fbb99a67b37f"
+  integrity sha512-9WSbN548dplVkfCFJFi/CKrJ+P4runAHZLlpXFn0xL+Y6tFJvo3zp92fr4ON9WOhNt8inetu8NJG1xDDAJ8N8g==
 
 "@react-dnd/asap@^4.0.0":
   version "4.0.1"
@@ -3708,10 +3708,10 @@
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
   integrity sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==
 
-"@types/rails__actioncable@^6.1.10":
-  version "6.1.10"
-  resolved "https://registry.yarnpkg.com/@types/rails__actioncable/-/rails__actioncable-6.1.10.tgz#bccab245053810205309db640952a60e24a5a321"
-  integrity sha512-Dr6A/+OTsoTgvnj2ynysjuMvmk2XDI4J71ljPANcODZjMafKeSau2/IJ+B4IuJ6x9bsG/DQpBxNxH6RqmyFzpw==
+"@types/rails__actioncable@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@types/rails__actioncable/-/rails__actioncable-8.0.0.tgz#4a03bbfee659189c7835cd015b69f9cba67c0302"
+  integrity sha512-RqpJJHPqqimRPsecfuD03wGOp/QISmApmZ6MSsISmHcdOZ2zAiF5U6uGTzTNYOY1SYcY9/0+glcz4xlLJrNzwg==
 
 "@types/range-parser@*":
   version "1.2.4"
