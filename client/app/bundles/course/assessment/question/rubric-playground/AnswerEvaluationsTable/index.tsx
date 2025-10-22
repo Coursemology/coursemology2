@@ -1,73 +1,31 @@
 import { FC } from 'react';
 import { Close, PlayArrow } from '@mui/icons-material';
-import { Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { AppDispatch } from 'store';
-import {
-  RubricAnswerData,
-  RubricAnswerEvaluationData,
-  RubricCategoryData,
-  RubricMockAnswerEvaluationData,
-} from 'types/course/rubrics';
+import { RubricCategoryData } from 'types/course/rubrics';
 
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
-import { deleteMockAnswerEvaluation, evaluatePlaygroundMockAnswer } from './operations/mockAnswers';
-import { deleteAnswerEvaluation, evaluatePlaygroundAnswer } from './operations/answers';
+import { deleteMockAnswerEvaluation, evaluatePlaygroundMockAnswer } from '../operations/mockAnswers';
+import { deleteAnswerEvaluation, evaluatePlaygroundAnswer } from '../operations/answers';
 
-import { actions as questionRubricsActions } from '../reducers/rubrics';
+import { actions as questionRubricsActions } from '../../reducers/rubrics';
+
+import CategoryGradeCell from './CategoryGradeCell';
+import PopoverContentCell from './PopoverContentCell';
+import TotalGradeCell from './TotalGradeCell';
+import { AnswerTableEntry } from './types';
+import UnevaluatedCell from './UnevaluatedCell';
+import {
+  answerCategoryGradeGetter,
+  answerDataToTableEntry,
+  answerSortFn,
+  answerTotalGradeGetter,
+  isAnswerAlreadyEvaluated,
+} from './utils';
 
 interface AnswerEvaluationsTableProps {
   selectedRubricId: number;
-}
-
-interface AnswerTableEntry {
-  id: number;
-  title: string;
-  answerText: string;
-  evaluation?: {
-    totalGrade?: number;
-    grades?: Record<number, number>;
-    feedback: string;
-  };
-  isMock?: boolean;
-  isEvaluating: boolean;
-}
-
-function answerDataToTableEntry(
-  answer: RubricAnswerData,
-  isMock: boolean,
-  evaluation?:
-    | RubricAnswerEvaluationData
-    | RubricMockAnswerEvaluationData
-    | Record<string, never>,
-): AnswerTableEntry {
-  const isEvaluating = Boolean(evaluation?.jobUrl);
-  const data: AnswerTableEntry = {
-    id: answer.id,
-    title: answer.title,
-    answerText: answer.answerText,
-    isMock,
-    isEvaluating,
-  };
-  if (evaluation && !isEvaluating) {
-    const grades: Record<number, number> = {};
-    let totalGrade = 0;
-    if (evaluation?.selections?.length) {
-      evaluation.selections.forEach((selection) => {
-        grades[selection.categoryId] = selection.grade;
-        totalGrade += selection.grade;
-      });
-
-      data.evaluation = {
-        grades,
-        feedback: evaluation?.feedback ?? '',
-        totalGrade,
-      };
-    }
-  }
-
-  return data;
 }
 
 const requestRowEvaluation = (
@@ -136,11 +94,12 @@ const deleteRowEvaluation = (
   }
 };
 
-const remainingCategoryColumns = (
+const remainingCategoryGradeColumns = (
   category: RubricCategoryData,
   categoryIndex: number,
 ): ColumnTemplate<AnswerTableEntry> => ({
   id: `grade_${categoryIndex + 1}`,
+  className: 'max-lg:!hidden p-0',
 
   title: () => (
     <Tooltip title={category.name}>
@@ -150,24 +109,16 @@ const remainingCategoryColumns = (
 
   sortable: true,
   sortProps: {
-    sort: (a, b) =>
-      (a.evaluation?.grades?.[category.id] ?? 0) -
-      (b.evaluation?.grades?.[category.id] ?? 0),
+    sort: answerSortFn(answerCategoryGradeGetter(category)),
   },
   searchProps: {
-    getValue: (a): string | undefined =>
-      a.evaluation?.grades?.[category.id]?.toString(),
+    getValue: answerCategoryGradeGetter(category),
   },
 
   cell: (answer: AnswerTableEntry) => (
-    <div className="space-y-1">
-      <p className="m-0 text-center w-full">
-        {answer.evaluation?.grades?.[category.id]} / {category.maximumGrade}
-      </p>
-    </div>
+    <CategoryGradeCell answer={answer} category={category} />
   ),
-  cellUnless: (answer: AnswerTableEntry) =>
-    !answer.evaluation || answer.isEvaluating,
+  cellUnless: (answer: AnswerTableEntry) => !isAnswerAlreadyEvaluated(answer),
 });
 
 const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
@@ -200,7 +151,12 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
         ),
     );
 
-  const firstCategoryColumn = (
+  const maximumTotalGrade = categories.reduce(
+    (sum, category) => sum + category.maximumGrade,
+    0,
+  );
+
+  const firstCategoryGradeColumn = (
     category: RubricCategoryData,
   ): ColumnTemplate<AnswerTableEntry> => ({
     id: `grade_1`,
@@ -212,56 +168,55 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
 
     sortable: true,
     sortProps: {
-      sort: (a, b) =>
-        (a.evaluation?.grades?.[category.id] ?? 0) -
-        (b.evaluation?.grades?.[category.id] ?? 0),
+      sort: answerSortFn(answerCategoryGradeGetter(category)),
     },
 
     searchProps: {
-      getValue: (a): string | undefined =>
-        a.evaluation?.grades?.[category.id]?.toString(),
+      getValue: answerCategoryGradeGetter(category),
     },
 
-    className: 'p-0',
+    className: 'max-lg:!hidden p-0',
     cell: (answer: AnswerTableEntry) =>
-      answer.evaluation && !answer.isEvaluating ? (
-        <div className="space-y-1">
-          <p className="m-0 text-center w-full">
-            {answer.evaluation?.grades?.[category.id]} / {category.maximumGrade}
-          </p>
-        </div>
+      isAnswerAlreadyEvaluated(answer) ? (
+        <CategoryGradeCell answer={answer} category={category} />
       ) : (
-        <div className="w-full h-full bg-gray-100 px-6 py-3 flex items-center justify-start">
-          <Button
-            className="w-fit whitespace-nowrap"
-            color="primary"
-            disabled={answer.isEvaluating}
-            onClick={() =>
-              requestRowEvaluation(dispatch, answer, selectedRubricId)
-            }
-            startIcon={
-              answer.isEvaluating ? (
-                <LoadingIndicator bare size={15} />
-              ) : (
-                <PlayArrow />
-              )
-            }
-            variant="outlined"
-          >
-            {answer.isEvaluating ? 'Evaluating' : 'Evaluate'}
-          </Button>
-        </div>
+        <UnevaluatedCell
+          answer={answer}
+          handleEvaluate={() =>
+            requestRowEvaluation(dispatch, answer, selectedRubricId)
+          }
+        />
       ),
     colSpan: (answer: AnswerTableEntry) =>
-      answer.evaluation && !answer.isEvaluating
+      isAnswerAlreadyEvaluated(answer)
         ? 1
         : categories.length + (categories.length === 1 ? 0 : 1),
   });
 
-  const maximumTotalGrade = categories.reduce(
-    (sum, category) => sum + category.maximumGrade,
-    0,
-  );
+  const smallScreenGradesColumn = {
+    id: 'grade_small',
+    title: 'Grade',
+    sortable: true,
+    className: 'lg:!hidden p-0',
+    sortProps: {
+      sort: answerSortFn(answerTotalGradeGetter),
+    },
+    searchProps: {
+      getValue: answerTotalGradeGetter,
+    },
+    cell: (answer: AnswerTableEntry) =>
+      answer.evaluation ? (
+        <TotalGradeCell answer={answer} maximumTotalGrade={maximumTotalGrade} />
+      ) : (
+        <UnevaluatedCell
+          answer={answer}
+          compact
+          handleEvaluate={() =>
+            requestRowEvaluation(dispatch, answer, selectedRubricId)
+          }
+        />
+      ),
+  };
 
   const columns: ColumnTemplate<AnswerTableEntry>[] = [
     {
@@ -306,53 +261,46 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
         </div>
       ),
     },
+    smallScreenGradesColumn,
     ...categories.map((category, categoryIndex) =>
       categoryIndex === 0
-        ? firstCategoryColumn(category)
-        : remainingCategoryColumns(category, categoryIndex),
+        ? firstCategoryGradeColumn(category)
+        : remainingCategoryGradeColumns(category, categoryIndex),
     ),
     {
       id: 'totalGrade',
       title: 'Total',
       sortable: true,
+      className: 'max-lg:!hidden p-0',
       sortProps: {
-        sort: (x, y) =>
-          (x.evaluation?.totalGrade ?? 0) - (y.evaluation?.totalGrade ?? 0),
+        sort: answerSortFn(answerTotalGradeGetter),
       },
       searchProps: {
-        getValue: (a) => a.evaluation?.totalGrade?.toString(),
+        getValue: answerTotalGradeGetter,
       },
       cell: (answer: AnswerTableEntry) =>
         answer.evaluation ? (
-          <div className="space-y-1">
-            <p className="m-0 text-center w-full">
-              {answer.evaluation?.totalGrade} / {maximumTotalGrade}{' '}
-            </p>
-          </div>
+          <TotalGradeCell
+            answer={answer}
+            maximumTotalGrade={maximumTotalGrade}
+          />
         ) : (
           <div />
         ),
       unless: categories.length <= 1,
       cellUnless: (answer: AnswerTableEntry) =>
-        !answer.evaluation || answer.isEvaluating,
+        !isAnswerAlreadyEvaluated(answer),
     },
     {
       of: 'answerText',
       title: 'Answer',
-      cell: (answer) => (
-        <Typography
-          className="whitespace-normal line-clamp-4"
-          dangerouslySetInnerHTML={{
-            __html: answer.answerText,
-          }}
-        />
-      ),
+      cell: (answer) => <PopoverContentCell content={answer.answerText} />,
     },
     {
       id: 'feedback',
       title: 'Feedback',
       cell: (answer) => (
-        <div className="line-clamp-4">{answer.evaluation?.feedback}</div>
+        <PopoverContentCell content={answer.evaluation?.feedback ?? ''} />
       ),
     },
   ];
