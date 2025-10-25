@@ -174,6 +174,7 @@ module Course::Assessment::AssessmentAbility
     allow_teaching_staff_grade_assessment_submissions
     allow_teaching_staff_manage_assessment_annotations
     allow_teaching_staff_interact_with_live_feedback
+    allow_teaching_staff_manage_mock_answers
     disallow_teaching_staff_publish_assessment_submission_grades
     disallow_teaching_staff_force_submit_assessment_submissions
     disallow_teaching_staff_delete_assessment_submissions
@@ -227,6 +228,11 @@ module Course::Assessment::AssessmentAbility
   def allow_teaching_staff_manage_assessment_annotations
     can :manage, Course::Assessment::Answer::ProgrammingFileAnnotation,
         discussion_topic: { course_id: course.id }
+  end
+
+  def allow_teaching_staff_manage_mock_answers
+    can :manage, Course::Assessment::Question::MockAnswer,
+        { question_assessments: { assessment: assessment_course_hash } }
   end
 
   # Teaching assistants have all assessment abilities except :publish_grades

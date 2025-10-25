@@ -166,10 +166,12 @@ const useTanStackTableBuilder = <D extends object>(
     body: {
       rows: table.getRowModel().rows,
       getCells: (row) => row.getVisibleCells(),
-      forEachCell: (cell, _, index) => ({
+      forEachCell: (cell, row, index) => ({
         id: cell.id,
         render: customCellRender(cell),
         className: getRealColumn(index)?.className,
+        colSpan: getRealColumn(index)?.colSpan?.(row.original),
+        shouldNotRender: getRealColumn(index)?.cellUnless?.(row.original),
       }),
       forEachRow: (row) => ({
         id: row.id,

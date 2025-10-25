@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { StringOrTemplateHeader } from '@tanstack/react-table';
 
 export type Data = object;
 
@@ -10,7 +11,7 @@ interface FilteringProps<D> {
 }
 
 interface SearchingProps<D> {
-  getValue?: (datum: D) => string | undefined;
+  getValue?: (datum: D) => string | number | undefined;
 }
 
 interface SortingProps<D> {
@@ -19,7 +20,7 @@ interface SortingProps<D> {
 }
 
 interface ColumnTemplate<D extends Data> {
-  title: string;
+  title: StringOrTemplateHeader<D, unknown>;
   cell: (datum: D) => ReactNode;
   of?: keyof D;
   id?: string;
@@ -34,6 +35,8 @@ interface ColumnTemplate<D extends Data> {
   sortProps?: SortingProps<D>;
   searchProps?: SearchingProps<D>;
   className?: string;
+  colSpan?: (datum: D) => number;
+  cellUnless?: (datum: D) => boolean;
 }
 
 export default ColumnTemplate;

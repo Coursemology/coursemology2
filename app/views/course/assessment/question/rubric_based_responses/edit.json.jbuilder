@@ -9,6 +9,8 @@ json.partial! 'form', locals: {
   assessment: assessment
 }
 
+json.parentQuestionId question.acting_as.id
+
 json.question do
   json.partial! 'course/assessment/question/form', locals: {
     question: question,
