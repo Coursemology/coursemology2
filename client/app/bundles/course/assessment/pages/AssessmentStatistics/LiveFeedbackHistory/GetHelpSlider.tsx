@@ -22,6 +22,9 @@ const GetHelpSlider = styled(CustomSlider)<SliderProps>(({ theme }) => ({
     '&.Mui-active': {
       boxShadow: `0 0 0 8px #3b82f633`, // 33 = 20% opacity
     },
+    '&.Mui-focusVisible': {
+      boxShadow: `0 0 0 8px #3b82f633`, // 33 = 20% opacity
+    },
   },
   '& .MuiSlider-rail': {
     height: 5,

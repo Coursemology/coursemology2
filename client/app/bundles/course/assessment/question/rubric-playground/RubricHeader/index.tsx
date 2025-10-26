@@ -5,22 +5,34 @@ import {
   SubmitHandler,
   useForm,
 } from 'react-hook-form';
-import { Delete, ExpandLess, ExpandMore, Save } from '@mui/icons-material';
-import { Card, Chip, IconButton, Slider, Typography } from '@mui/material';
+import {
+  Approval,
+  Delete,
+  Difference,
+  ExpandLess,
+  ExpandMore,
+  Save,
+} from '@mui/icons-material';
+import { Card, IconButton, Typography } from '@mui/material';
 import { JobStatus } from 'types/jobs';
 
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import { pollJobRequest } from 'lib/helpers/jobHelpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import loadingToast, { LoadingToast } from 'lib/hooks/toast/loadingToast';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime, formatMiniDateTime } from 'lib/moment';
+import formTranslations from 'lib/translations/form';
 
-import { actions as questionRubricsActions } from '../reducers/rubrics';
+import { actions as questionRubricsActions } from '../../reducers/rubrics';
+import { exportEvaluations } from '../operations/rowEvaluation';
+import { createNewRubric, deleteRubric } from '../operations/rubric';
+import { RubricHeaderFormData } from '../types';
 
+import HeaderButton from './HeaderButton';
 import PlaygroundCategoryManager from './PlaygroundCategoryManager';
-import { RubricHeaderFormData } from './types';
-import { createNewRubric, deleteRubric } from './operations/rubric';
-import { exportEvaluations } from './operations/rowEvaluation';
+import VersionSlider from './VersionSlider';
 
 const EXPORT_JOB_POLL_INTERVAL_MS = 2000;
 
@@ -28,8 +40,11 @@ const RubricHeader = (props: {
   selectedRubricId: number;
   setSelectedRubricId: Dispatch<SetStateAction<number>>;
 }): JSX.Element | null => {
+  const { t } = useTranslation();
+
   const { selectedRubricId, setSelectedRubricId } = props;
   const [isRubricExpanded, setIsRubricExpanded] = useState(false);
+  const [isConfirmingExport, setIsConfirmingExport] = useState(false);
 
   const dispatch = useAppDispatch();
   const rubricState = useAppSelector(
@@ -82,9 +97,7 @@ const RubricHeader = (props: {
   const handleExport = async (): Promise<void> => {
     const jobStatus = await exportEvaluations(selectedRubricId);
     dispatch(questionRubricsActions.updateRubricExportJob(jobStatus));
-    exportJobToastRef.current = loadingToast(
-      'Exporting rubric grading data...',
-    );
+    exportJobToastRef.current = loadingToast('Applying rubric grading data...');
   };
 
   const handleExportJobPolling = async (): Promise<void> => {
@@ -93,7 +106,7 @@ const RubricHeader = (props: {
       if (exportJobToastRef.current) {
         if (jobStatus.status === JobStatus.completed) {
           exportJobToastRef.current.success(
-            'Grading rubric, prompt, and results successfully exported.',
+            'Grading rubric, prompt, and results successfully applied.',
           );
         } else if (jobStatus.status === JobStatus.errored) {
           exportJobToastRef.current.error('Failed to export grading results');
@@ -101,6 +114,17 @@ const RubricHeader = (props: {
       }
       dispatch(questionRubricsActions.updateRubricExportJob(jobStatus));
     }
+  };
+
+  const handleDelete = async (): Promise<void> => {
+    await deleteRubric(selectedRubricId);
+    const rubricIdToDelete = selectedRubricId;
+    if (selectedRubricIndex > 0) {
+      setSelectedRubricId(sortedRubrics[selectedRubricIndex - 1].id);
+    } else {
+      setSelectedRubricId(sortedRubrics[1].id);
+    }
+    dispatch(questionRubricsActions.deleteRubric(rubricIdToDelete));
   };
 
   useEffect(() => {
@@ -123,8 +147,8 @@ const RubricHeader = (props: {
     <Card className="sticky top-0 px-4 bg-white z-50" variant="outlined">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {sortedRubrics.length > 1 && (
-          <div className="w-full flex justify-center">
-            <Slider
+          <div className="w-full flex justify-center pt-10">
+            <VersionSlider
               className="w-[90%] pb-10"
               marks={sortedRubrics.map((rubric, rubricIndex) => ({
                 label:
@@ -139,56 +163,47 @@ const RubricHeader = (props: {
                 setSelectedRubricId(sortedRubrics[newIndex as number].id);
               }}
               step={null}
+              track={false}
               value={selectedRubricIndex}
+              valueLabelDisplay="on"
+              valueLabelFormat={(rubricIndex) =>
+                `${formatLongDateTime(sortedRubrics[rubricIndex].createdAt)}`
+              }
             />
           </div>
         )}
         <div className="flex flex-row space-x-3 items-center">
-          <Typography className="flex-1" variant="body1">
-            Saved Rubric, {formatLongDateTime(selectedRubric.createdAt)}
-            {form.formState.isDirty ? ' (modified)' : ''}
-          </Typography>
-
           <IconButton onClick={() => setIsRubricExpanded(!isRubricExpanded)}>
             {isRubricExpanded ? <ExpandLess /> : <ExpandMore />}
           </IconButton>
 
-          <IconButton
+          <div className="flex-1" />
+
+          <HeaderButton
             color="info"
             disabled={!form.formState.isDirty}
+            icon={<Save />}
+            title={t(formTranslations.save)}
             type="submit"
-          >
-            <Save />
-          </IconButton>
-
-          <Chip
-            className="whitespace-nowrap"
-            color="primary"
-            disabled={rubricState.exportJob?.status === JobStatus.submitted}
-            label="Export"
-            onClick={handleExport}
-            variant="outlined"
           />
 
-          <IconButton
+          <HeaderButton color="info" icon={<Difference />} title="Compare" />
+
+          <HeaderButton
+            color="info"
+            disabled={rubricState.exportJob?.status === JobStatus.submitted}
+            icon={<Approval />}
+            onClick={() => setIsConfirmingExport(true)}
+            title="Apply"
+          />
+
+          <HeaderButton
             color="error"
             disabled={Object.keys(rubricState.rubrics).length <= 1}
-            onClick={() => {
-              deleteRubric(selectedRubricId).then(() => {
-                const rubricIdToDelete = selectedRubricId;
-                if (selectedRubricIndex > 0) {
-                  setSelectedRubricId(
-                    sortedRubrics[selectedRubricIndex - 1].id,
-                  );
-                } else {
-                  setSelectedRubricId(sortedRubrics[1].id);
-                }
-                dispatch(questionRubricsActions.deleteRubric(rubricIdToDelete));
-              });
-            }}
-          >
-            <Delete />
-          </IconButton>
+            icon={<Delete />}
+            onClick={handleDelete}
+            title={t(formTranslations.delete)}
+          />
         </div>
         {isRubricExpanded && (
           <div className="flex flex-row space-x-4">
@@ -214,6 +229,32 @@ const RubricHeader = (props: {
             </div>
           </div>
         )}
+        <Prompt
+          contentClassName="space-y-5"
+          onClickPrimary={() => {
+            setIsConfirmingExport(false);
+            handleExport();
+          }}
+          onClose={() => setIsConfirmingExport(false)}
+          open={isConfirmingExport}
+          primaryColor="info"
+          primaryLabel="Apply"
+          title="Confirm AI Grading Application"
+        >
+          {selectedRubricIndex < sortedRubrics.length - 1 && (
+            <PromptText>
+              You have selected to apply a rubric which is not the latest
+              revision you saved on this page.
+            </PromptText>
+          )}
+
+          <PromptText>
+            Applying this rubric will assign grades to all student answers,
+            including the ones not yet evaluated on this page.
+          </PromptText>
+
+          <PromptText>Are you sure you wish to proceed?</PromptText>
+        </Prompt>
       </form>
     </Card>
   );
