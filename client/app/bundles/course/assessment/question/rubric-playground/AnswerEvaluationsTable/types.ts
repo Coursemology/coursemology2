@@ -7,6 +7,7 @@ export interface AnswerTableEntry {
     grades?: Record<number, number>;
     feedback: string;
   };
+  compareGrades?: (number | undefined)[][];
   isMock?: boolean;
   isEvaluating: boolean;
 }

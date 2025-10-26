@@ -2,6 +2,7 @@ import {
   RubricAnswerData,
   RubricAnswerEvaluationData,
   RubricCategoryData,
+  RubricDataWithEvaluations,
   RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
 
@@ -14,6 +15,7 @@ export function answerDataToTableEntry(
     | RubricAnswerEvaluationData
     | RubricMockAnswerEvaluationData
     | Record<string, never>,
+  compareRubrics?: RubricDataWithEvaluations[],
 ): AnswerTableEntry {
   const isEvaluating = Boolean(evaluation?.jobUrl);
   const data: AnswerTableEntry = {
@@ -38,6 +40,23 @@ export function answerDataToTableEntry(
         totalGrade,
       };
     }
+  }
+
+  if (compareRubrics) {
+    data.compareGrades = compareRubrics.map(
+      (rubric: RubricDataWithEvaluations) => {
+        const selections = isMock
+          ? rubric.mockAnswerEvaluations[answer.id]?.selections ?? []
+          : rubric.answerEvaluations[answer.id]?.selections ?? [];
+
+        return rubric.categories.map((category) => {
+          const selection = selections.find(
+            (s) => s.categoryId === category.id,
+          );
+          return selection?.grade;
+        });
+      },
+    );
   }
 
   return data;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Add } from '@mui/icons-material';
 import { Button, Typography } from '@mui/material';
+import { AxiosError } from 'axios';
 import sampleSize from 'lodash-es/sampleSize';
 import { getIdFromUnknown } from 'utilities';
 
@@ -14,26 +15,24 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import { actions as questionRubricsActions } from '../reducers/rubrics';
 
+import {
+  fetchQuestionRubricAnswers,
+  fetchRubricAnswerEvaluations,
+} from './operations/answers';
+import {
+  createQuestionMockAnswer,
+  fetchQuestionRubricMockAnswers,
+  fetchRubricMockAnswerEvaluations,
+} from './operations/mockAnswers';
+import { fetchQuestionRubrics } from './operations/rubric';
 import AddSampleAnswersDialog, {
   AddSampleAnswersFormData,
   AddSampleMode,
 } from './AddSampleAnswersDialog';
 import AnswerEvaluationsTable from './AnswerEvaluationsTable';
 import RubricHeader from './RubricHeader';
-import {
-  fetchQuestionRubricAnswers,
-  fetchRubricAnswerEvaluations
-} from './operations/answers';
-import { fetchQuestionRubrics } from './operations/rubric';
-import {
-  createQuestionMockAnswer,
-  fetchQuestionRubricMockAnswers,
-  fetchRubricMockAnswerEvaluations
-} from './operations/mockAnswers';
-import { AxiosError } from 'axios';
 
 const RubricPlaygroundPage = (): JSX.Element => {
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isAddingAnswers, setIsAddingAnswers] = useState(false);
 
@@ -41,6 +40,8 @@ const RubricPlaygroundPage = (): JSX.Element => {
     (state) => state.assessments.question.rubrics,
   );
   const [selectedRubricId, setSelectedRubricId] = useState(0);
+  const [isComparing, setIsComparing] = useState(false);
+  const [compareCount, setCompareCount] = useState(2);
 
   const fetchRubricEvaluationsData = async (
     rubricId: number,
@@ -79,10 +80,26 @@ const RubricPlaygroundPage = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (rubricState.rubrics[selectedRubricId]?.isEvaluationsLoaded === false) {
-      fetchRubricEvaluationsData(selectedRubricId);
+    const sortedRubrics = Object.values(rubricState.rubrics).sort((a, b) =>
+      a.createdAt.localeCompare(b.createdAt),
+    );
+    const selectedRubricIndex = Object.values(rubricState.rubrics).findIndex(
+      (rubric) => rubric.id === selectedRubricId,
+    );
+    const rubricIdsToLoad = isComparing
+      ? sortedRubrics
+          .slice(
+            Math.max(0, selectedRubricIndex - compareCount + 1),
+            selectedRubricIndex + 1,
+          )
+          .map((rubric) => rubric.id)
+      : [selectedRubricId];
+    for (const rubricId of rubricIdsToLoad) {
+      if (rubricState.rubrics[rubricId]?.isEvaluationsLoaded === false) {
+        fetchRubricEvaluationsData(rubricId);
+      }
     }
-  }, [selectedRubricId]);
+  }, [selectedRubricId, compareCount]);
 
   const selectableAnswers = Object.values(rubricState.answers).filter(
     (answer) =>
@@ -101,7 +118,11 @@ const RubricPlaygroundPage = (): JSX.Element => {
         return (
           <>
             <RubricHeader
+              compareCount={compareCount}
+              isComparing={isComparing}
               selectedRubricId={selectedRubricId}
+              setCompareCount={setCompareCount}
+              setIsComparing={setIsComparing}
               setSelectedRubricId={setSelectedRubricId}
             />
 
@@ -115,9 +136,12 @@ const RubricPlaygroundPage = (): JSX.Element => {
               >
                 Add Sample Answers
               </Button>
-
-              <div className="flex-1" />
             </div>
+            {isComparing && (
+              <Typography variant="body2">
+                Comparing {compareCount} revisions
+              </Typography>
+            )}
 
             <AddSampleAnswersDialog
               answers={selectableAnswers}
@@ -170,7 +194,11 @@ const RubricPlaygroundPage = (): JSX.Element => {
               }}
               open={isAddingAnswers}
             />
-            <AnswerEvaluationsTable selectedRubricId={selectedRubricId} />
+            <AnswerEvaluationsTable
+              compareCount={compareCount}
+              isComparing={isComparing}
+              selectedRubricId={selectedRubricId}
+            />
           </>
         );
       }}

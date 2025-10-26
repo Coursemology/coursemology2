@@ -5,6 +5,17 @@ export interface RubricData {
   gradingPrompt: string;
 }
 
+export interface RubricDataWithEvaluations extends RubricData {
+  answerEvaluations: Record<
+    number,
+    RubricAnswerEvaluationData | Record<string, never>
+  >;
+  mockAnswerEvaluations: Record<
+    number,
+    RubricMockAnswerEvaluationData | Record<string, never>
+  >;
+}
+
 export interface RubricPostRequestData {
   grading_prompt: string;
   categories_attributes: {

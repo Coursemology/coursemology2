@@ -39,10 +39,21 @@ const EXPORT_JOB_POLL_INTERVAL_MS = 2000;
 const RubricHeader = (props: {
   selectedRubricId: number;
   setSelectedRubricId: Dispatch<SetStateAction<number>>;
+  isComparing: boolean;
+  setIsComparing: Dispatch<SetStateAction<boolean>>;
+  compareCount: number;
+  setCompareCount: Dispatch<SetStateAction<number>>;
 }): JSX.Element | null => {
   const { t } = useTranslation();
 
-  const { selectedRubricId, setSelectedRubricId } = props;
+  const {
+    compareCount,
+    setCompareCount,
+    isComparing,
+    setIsComparing,
+    selectedRubricId,
+    setSelectedRubricId,
+  } = props;
   const [isRubricExpanded, setIsRubricExpanded] = useState(false);
   const [isConfirmingExport, setIsConfirmingExport] = useState(false);
 
@@ -159,15 +170,30 @@ const RubricHeader = (props: {
               }))}
               max={sortedRubrics.length - 1}
               min={0}
-              onChangeCommitted={(_, newIndex) => {
-                setSelectedRubricId(sortedRubrics[newIndex as number].id);
+              onChangeCommitted={(_, newIndexOrIndices) => {
+                if (typeof newIndexOrIndices === 'number') {
+                  setSelectedRubricId(sortedRubrics[newIndexOrIndices].id);
+                } else {
+                  const [compareFromIndex, newIndex] = newIndexOrIndices;
+                  setSelectedRubricId(sortedRubrics[newIndex].id);
+                  setCompareCount(newIndex - compareFromIndex + 1);
+                }
               }}
               step={null}
-              track={false}
-              value={selectedRubricIndex}
+              track={isComparing ? 'normal' : false}
+              value={
+                isComparing
+                  ? [
+                      selectedRubricIndex - compareCount + 1,
+                      selectedRubricIndex,
+                    ]
+                  : selectedRubricIndex
+              }
               valueLabelDisplay="on"
               valueLabelFormat={(rubricIndex) =>
-                `${formatLongDateTime(sortedRubrics[rubricIndex].createdAt)}`
+                rubricIndex === selectedRubricIndex
+                  ? `${formatLongDateTime(sortedRubrics[rubricIndex].createdAt)}`
+                  : ''
               }
             />
           </div>
@@ -187,7 +213,13 @@ const RubricHeader = (props: {
             type="submit"
           />
 
-          <HeaderButton color="info" icon={<Difference />} title="Compare" />
+          <HeaderButton
+            color="info"
+            icon={<Difference />}
+            onClick={() => setIsComparing(!isComparing)}
+            title="Compare"
+            variant={isComparing ? 'contained' : 'outlined'}
+          />
 
           <HeaderButton
             color="info"

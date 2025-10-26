@@ -24,14 +24,27 @@ const HeaderButton: FC<{
       {props.title}
     </Button>
     <Tooltip title={props.title}>
-      <IconButton
-        className="lg:!hidden"
-        color={props.color}
-        disabled={props.disabled}
-        type={props.type}
-      >
-        {props.icon}
-      </IconButton>
+      {props.variant === 'contained' ? (
+        <Button
+          className="lg:!hidden px-0 min-w-16 [&_span]:m-0"
+          color={props.color}
+          disabled={props.disabled}
+          onClick={props.onClick}
+          startIcon={props.icon}
+          type={props.type}
+          variant="contained"
+        />
+      ) : (
+        <IconButton
+          className="lg:!hidden"
+          color={props.color}
+          disabled={props.disabled}
+          onClick={props.onClick}
+          type={props.type}
+        >
+          {props.icon}
+        </IconButton>
+      )}
     </Tooltip>
   </>
 );
