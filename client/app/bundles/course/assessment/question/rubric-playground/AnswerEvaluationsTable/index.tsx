@@ -2,14 +2,20 @@ import { FC } from 'react';
 import { Close, Refresh } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 import { AppDispatch } from 'store';
-import { RubricCategoryData } from 'types/course/rubrics';
+import { RubricCategoryData, RubricData } from 'types/course/rubrics';
 
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
-import { deleteMockAnswerEvaluation, evaluatePlaygroundMockAnswer } from '../operations/mockAnswers';
-import { deleteAnswerEvaluation, evaluatePlaygroundAnswer } from '../operations/answers';
 
 import { actions as questionRubricsActions } from '../../reducers/rubrics';
+import {
+  deleteAnswerEvaluation,
+  evaluatePlaygroundAnswer,
+} from '../operations/answers';
+import {
+  deleteMockAnswerEvaluation,
+  evaluatePlaygroundMockAnswer,
+} from '../operations/mockAnswers';
 
 import CategoryGradeCell from './CategoryGradeCell';
 import PopoverContentCell from './PopoverContentCell';
@@ -25,6 +31,8 @@ import {
 } from './utils';
 
 interface AnswerEvaluationsTableProps {
+  compareCount: number;
+  isComparing: boolean;
   selectedRubricId: number;
 }
 
@@ -94,35 +102,8 @@ const deleteRowEvaluation = (
   }
 };
 
-const remainingCategoryGradeColumns = (
-  category: RubricCategoryData,
-  categoryIndex: number,
-): ColumnTemplate<AnswerTableEntry> => ({
-  id: `grade_${categoryIndex + 1}`,
-  className: 'max-lg:!hidden p-0',
-
-  title: () => (
-    <Tooltip title={category.name}>
-      <span>C{categoryIndex + 1}</span>
-    </Tooltip>
-  ),
-
-  sortable: true,
-  sortProps: {
-    sort: answerSortFn(answerCategoryGradeGetter(category)),
-  },
-  searchProps: {
-    getValue: answerCategoryGradeGetter(category),
-  },
-
-  cell: (answer: AnswerTableEntry) => (
-    <CategoryGradeCell answer={answer} category={category} />
-  ),
-  cellUnless: (answer: AnswerTableEntry) => !isAnswerAlreadyEvaluated(answer),
-});
-
 const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
-  const { selectedRubricId } = props;
+  const { selectedRubricId, isComparing, compareCount } = props;
 
   const dispatch = useAppDispatch();
 
@@ -130,14 +111,32 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     (state) => state.assessments.question.rubrics,
   );
   if (!rubrics[selectedRubricId]) return null;
+  const sortedRubrics = Object.values(rubrics).sort((a, b) =>
+    a.createdAt.localeCompare(b.createdAt),
+  );
+  const selectedRubricIndex = Object.values(rubrics).findIndex(
+    (rubric) => rubric.id === selectedRubricId,
+  );
 
   const { answerEvaluations, mockAnswerEvaluations, categories } =
     rubrics[selectedRubricId];
 
+  const compareRubrics = isComparing
+    ? sortedRubrics.slice(
+        Math.max(0, selectedRubricIndex - compareCount + 1),
+        selectedRubricIndex + 1,
+      )
+    : undefined;
+
   const tableData: AnswerTableEntry[] = Object.values(answers)
     .filter((answer) => answer.id in answerEvaluations)
     .map((answer) =>
-      answerDataToTableEntry(answer, false, answerEvaluations[answer.id]),
+      answerDataToTableEntry(
+        answer,
+        false,
+        answerEvaluations[answer.id],
+        compareRubrics,
+      ),
     )
     .concat(
       ...Object.values(mockAnswers)
@@ -147,6 +146,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
             mockAnswer,
             true,
             mockAnswerEvaluations[mockAnswer.id],
+            compareRubrics,
           ),
         ),
     );
@@ -178,7 +178,13 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     className: 'max-lg:!hidden p-0',
     cell: (answer: AnswerTableEntry) =>
       isAnswerAlreadyEvaluated(answer) ? (
-        <CategoryGradeCell answer={answer} category={category} />
+        <CategoryGradeCell
+          answer={answer}
+          category={category}
+          compareGrades={answer.compareGrades?.map((rubricGrades) =>
+            rubricGrades.at(0),
+          )}
+        />
       ) : (
         <UnevaluatedCell
           answer={answer}
@@ -191,6 +197,39 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
       isAnswerAlreadyEvaluated(answer)
         ? 1
         : categories.length + (categories.length === 1 ? 0 : 1),
+  });
+
+  const remainingCategoryGradeColumns = (
+    category: RubricCategoryData,
+    categoryIndex: number,
+  ): ColumnTemplate<AnswerTableEntry> => ({
+    id: `grade_${categoryIndex + 1}`,
+    className: 'max-lg:!hidden p-0',
+
+    title: () => (
+      <Tooltip title={category.name}>
+        <span>C{categoryIndex + 1}</span>
+      </Tooltip>
+    ),
+
+    sortable: true,
+    sortProps: {
+      sort: answerSortFn(answerCategoryGradeGetter(category)),
+    },
+    searchProps: {
+      getValue: answerCategoryGradeGetter(category),
+    },
+
+    cell: (answer: AnswerTableEntry) => (
+      <CategoryGradeCell
+        answer={answer}
+        category={category}
+        compareGrades={answer.compareGrades?.map((rubricGrades) =>
+          rubricGrades.at(categoryIndex),
+        )}
+      />
+    ),
+    cellUnless: (answer: AnswerTableEntry) => !isAnswerAlreadyEvaluated(answer),
   });
 
   const smallScreenGradesColumn = {

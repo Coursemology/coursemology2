@@ -3,6 +3,7 @@ import {
   RubricAnswerData,
   RubricAnswerEvaluationData,
   RubricData,
+  RubricDataWithEvaluations,
   RubricMockAnswerEvaluationData,
 } from 'types/course/rubrics';
 import { JobStatusResponse } from 'types/jobs';
@@ -10,16 +11,8 @@ import { JobStatusResponse } from 'types/jobs';
 export interface QuestionRubricsState {
   rubrics: Record<
     number,
-    RubricData & {
+    RubricDataWithEvaluations & {
       isEvaluationsLoaded: boolean;
-      answerEvaluations: Record<
-        number,
-        RubricAnswerEvaluationData | Record<string, never>
-      >;
-      mockAnswerEvaluations: Record<
-        number,
-        RubricMockAnswerEvaluationData | Record<string, never>
-      >;
     }
   >;
   answers: Record<number, RubricAnswerData>;

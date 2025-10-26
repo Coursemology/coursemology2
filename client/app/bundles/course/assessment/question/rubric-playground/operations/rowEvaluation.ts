@@ -1,6 +1,7 @@
-import CourseAPI from "api/course";
-import { AxiosError } from "axios";
-import { JobStatusResponse } from "types/jobs";
+import { AxiosError } from 'axios';
+import { JobStatusResponse } from 'types/jobs';
+
+import CourseAPI from 'api/course';
 
 export const exportEvaluations = async (
   rubricId: number,
