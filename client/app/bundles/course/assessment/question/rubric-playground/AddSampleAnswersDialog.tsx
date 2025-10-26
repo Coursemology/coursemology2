@@ -1,6 +1,6 @@
-import { FC } from 'react';
+import { ComponentRef, FC, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Checkbox, RadioGroup, Typography } from '@mui/material';
+import { RadioGroup, Typography } from '@mui/material';
 import { RubricAnswerData } from 'types/course/rubrics';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
@@ -34,7 +34,9 @@ interface Props {
 const AddSampleAnswersDialog: FC<Props> = (props) => {
   const { answers, onSubmit, onClose, open, maximumGrade } = props;
 
-  const { control, handleSubmit, watch, setValue, getValues } = useForm<{
+  const tableRef = useRef<ComponentRef<typeof Table>>(null);
+
+  const { control, handleSubmit, watch, setValue } = useForm<{
     addMode: AddSampleMode;
     addAnswerIds: number[];
     addRandomAnswerCount: number;
@@ -51,26 +53,6 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
   });
 
   const columns: ColumnTemplate<RubricAnswerData>[] = [
-    {
-      id: 'selectAnswer',
-      title: '',
-      cell: (answer) => (
-        <Checkbox
-          defaultChecked={false}
-          onChange={(e) => {
-            const currentAnswerIds = getValues('addAnswerIds');
-            if (e.target.value) {
-              setValue('addAnswerIds', [...currentAnswerIds, answer.id]);
-            } else {
-              setValue(
-                'addAnswerIds',
-                currentAnswerIds.filter((a) => a !== answer.id),
-              );
-            }
-          }}
-        />
-      ),
-    },
     {
       of: 'title',
       title: 'Student',
@@ -108,7 +90,12 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
   return (
     <Prompt
       maxWidth={false}
-      onClickPrimary={handleSubmit(onSubmit)}
+      onClickPrimary={handleSubmit((data: AddSampleAnswersFormData) => {
+        data.addAnswerIds = Object.keys(
+          tableRef.current?.getRowSelectionState() ?? {},
+        ).map((id) => parseInt(id, 10));
+        onSubmit(data);
+      })}
       onClose={onClose}
       open={open}
       primaryLabel="Add"
@@ -135,12 +122,14 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
               />
               {selectedAddMode === AddSampleMode.SPECIFIC_ANSWER && (
                 <Table
+                  ref={tableRef}
                   className="overflow-x-scroll"
                   columns={columns}
                   data={answers}
                   getRowClassName={(answer): string => `answer_${answer.id}`}
                   getRowEqualityData={(answer) => answer}
                   getRowId={(instance): string => instance.id.toString()}
+                  indexing={{ rowSelectable: true }}
                   pagination={{
                     rowsPerPage: [5],
                   }}
@@ -150,6 +139,7 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
                   }}
                   toolbar={{
                     show: true,
+                    keepNative: true,
                   }}
                 />
               )}
