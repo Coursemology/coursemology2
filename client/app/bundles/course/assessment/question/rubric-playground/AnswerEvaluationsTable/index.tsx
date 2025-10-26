@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Close, PlayArrow } from '@mui/icons-material';
+import { Close, Refresh } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 import { AppDispatch } from 'store';
 import { RubricCategoryData } from 'types/course/rubrics';
@@ -253,7 +253,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
                   }
                   size="small"
                 >
-                  <PlayArrow fontSize="small" />
+                  <Refresh fontSize="small" />
                 </IconButton>
               </Tooltip>
             )}

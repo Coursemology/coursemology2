@@ -14,20 +14,19 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../translations';
-
+import translations from '../../../translations';
 import {
   RubricCategoryCriterionEntity,
   RubricCategoryEntity,
   RubricHeaderFormData,
-} from './types';
+} from '../types';
 import {
   categoryClassName,
   computeMaximumCategoryGrade,
   criterionClassName,
   generateNewElementId,
   handleDeleteGrade,
-} from './utils';
+} from '../utils';
 
 interface CategoryManagerProps {
   disabled?: boolean;
