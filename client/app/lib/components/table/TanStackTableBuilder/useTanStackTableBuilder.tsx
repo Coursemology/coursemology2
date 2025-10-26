@@ -184,6 +184,10 @@ const useTanStackTableBuilder = <D extends object>(
           })),
       }),
     },
+    handles: {
+      getPaginationState: () => pagination,
+      getRowSelectionState: () => rowSelection,
+    },
     pagination: props.pagination && {
       allowShowAll: props.pagination.showAllRows,
       page: table.getState().pagination.pageIndex,
