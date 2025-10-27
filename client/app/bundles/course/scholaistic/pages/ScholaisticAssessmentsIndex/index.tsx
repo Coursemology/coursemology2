@@ -101,6 +101,17 @@ const ScholaisticAssessmentsIndex = (): JSX.Element => {
       className: 'whitespace-nowrap pointer-coarse:max-sm:!hidden',
     },
     {
+      of: 'submissionsCount',
+      title: t(assessmentTranslations.submissions),
+      cell: (assessment) => (
+        <Link to={`${assessment.id}/submissions`}>
+          {assessment.submissionsCount} / {assessment.studentsCount}
+        </Link>
+      ),
+      unless: !data.display.canViewSubmissions,
+      className: 'text-right tabular-nums',
+    },
+    {
       id: 'actions',
       title: t(assessmentTranslations.actions),
       className: 'relative',
@@ -109,7 +120,6 @@ const ScholaisticAssessmentsIndex = (): JSX.Element => {
           assessmentId={assessment.id}
           isStartTimeBegin={assessment.isStartTimeBegin}
           showEditButton={data.display.canEditAssessments}
-          showSubmissionsButton={data.display.canViewSubmissions}
           status={assessment.status}
         />
       ),

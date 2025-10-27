@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+can_view_submissions = can?(:view_submissions, Course::ScholaisticAssessment.new(course: current_course))
+
 json.assessments @scholaistic_assessments do |scholaistic_assessment|
   json.id scholaistic_assessment.id
   json.title scholaistic_assessment.title
@@ -9,6 +11,11 @@ json.assessments @scholaistic_assessments do |scholaistic_assessment|
   json.isEndTimePassed scholaistic_assessment.end_at.present? && scholaistic_assessment.end_at < Time.zone.now
   json.status @assessments_status[scholaistic_assessment.id]
   json.baseExp scholaistic_assessment.base_exp if current_course.gamified? && (scholaistic_assessment.base_exp > 0)
+
+  if can_view_submissions
+    json.submissionsCount @submissions_counts[scholaistic_assessment.upstream_id.to_sym]
+    json.studentsCount @students_count
+  end
 end
 
 json.display do
@@ -17,5 +24,5 @@ json.display do
   json.isGamified current_course.gamified?
   json.canEditAssessments can?(:edit, Course::ScholaisticAssessment.new(course: current_course))
   json.canCreateAssessments can?(:create, Course::ScholaisticAssessment.new(course: current_course))
-  json.canViewSubmissions can?(:view_submissions, Course::ScholaisticAssessment.new(course: current_course))
+  json.canViewSubmissions can_view_submissions
 end
