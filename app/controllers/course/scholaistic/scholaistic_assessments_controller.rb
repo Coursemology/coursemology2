@@ -22,6 +22,8 @@ class Course::Scholaistic::ScholaisticAssessmentsController < Course::Scholaisti
          can_attempt_scholaistic_assessment?(assessment) ? :open : :unavailable
        end]
     end
+
+    @students_count = current_course.course_users.student.size
   end
 
   def new
@@ -98,8 +100,7 @@ class Course::Scholaistic::ScholaisticAssessmentsController < Course::Scholaisti
 
       current_course.save!
     end
-  end
 
-  def submission_status(assessment)
+    @submissions_counts = response[:submissions_counts]
   end
 end

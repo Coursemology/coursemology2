@@ -1,4 +1,4 @@
-import { Create, Inventory } from '@mui/icons-material';
+import { Create } from '@mui/icons-material';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import { ScholaisticAssessmentData } from 'types/course/scholaistic';
 
@@ -13,13 +13,11 @@ const ActionButtons = ({
   status,
   isStartTimeBegin,
   showEditButton,
-  showSubmissionsButton,
 }: {
   assessmentId: ScholaisticAssessmentData['id'];
   status: ScholaisticAssessmentData['status'];
   isStartTimeBegin?: boolean;
   showEditButton?: boolean;
-  showSubmissionsButton?: boolean;
 }): JSX.Element => {
   const { t } = useTranslation();
 
@@ -48,19 +46,6 @@ const ActionButtons = ({
           <Link to={`${assessmentId}/edit`}>
             <IconButton className="max-sm:!hidden">
               <Create />
-            </IconButton>
-          </Link>
-        </Tooltip>
-      )}
-
-      {showSubmissionsButton && (
-        <Tooltip
-          disableInteractive
-          title={t(assessmentTranslations.submissions)}
-        >
-          <Link to={`${assessmentId}/submissions`}>
-            <IconButton>
-              <Inventory />
             </IconButton>
           </Link>
         </Tooltip>

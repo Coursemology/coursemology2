@@ -117,8 +117,6 @@ class ScholaisticApiService
 
       {
         assessments: result[:assessments].filter_map do |assessment|
-          next if assessment[:activityType] != 'assessment'
-
           {
             upstream_id: assessment[:id],
             published: assessment[:isPublished],
@@ -129,7 +127,8 @@ class ScholaisticApiService
           }
         end,
         deleted: result[:deleted],
-        last_synced_at: result[:lastSynced]
+        last_synced_at: result[:lastSynced],
+        submissions_counts: result[:submissionCounts]
       }
     end
 

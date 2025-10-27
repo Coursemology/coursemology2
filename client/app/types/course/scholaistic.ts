@@ -8,6 +8,8 @@ export interface ScholaisticAssessmentData {
   isEndTimePassed?: boolean;
   status: 'attempting' | 'submitted' | 'open' | 'unavailable';
   baseExp?: number;
+  submissionsCount?: number;
+  studentsCount?: number;
 }
 
 export interface ScholaisticAssessmentsIndexData {
