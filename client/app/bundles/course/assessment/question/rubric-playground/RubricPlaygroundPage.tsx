@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Add } from '@mui/icons-material';
-import { Button, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
-import sampleSize from 'lodash-es/sampleSize';
 import { getIdFromUnknown } from 'utilities';
 
 import CourseAPI from 'api/course';
@@ -14,27 +11,24 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { actions as questionRubricsActions } from '../reducers/rubrics';
+import { getSelectedRubricData } from '../selectors/rubrics';
 
 import {
   fetchQuestionRubricAnswers,
   fetchRubricAnswerEvaluations,
 } from './operations/answers';
 import {
-  createQuestionMockAnswer,
   fetchQuestionRubricMockAnswers,
   fetchRubricMockAnswerEvaluations,
 } from './operations/mockAnswers';
 import { fetchQuestionRubrics } from './operations/rubric';
-import AddSampleAnswersDialog, {
-  AddSampleAnswersFormData,
-  AddSampleMode,
-} from './AddSampleAnswersDialog';
 import AnswerEvaluationsTable from './AnswerEvaluationsTable';
+import AnswerEvaluationsTableHeader from './AnswerEvaluationsTableHeader';
 import RubricHeader from './RubricHeader';
+import { buildSelectedRubricTableData } from './utils';
 
-const RubricPlaygroundPage = (): JSX.Element => {
+const RubricPlaygroundPage = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
-  const [isAddingAnswers, setIsAddingAnswers] = useState(false);
 
   const rubricState = useAppSelector(
     (state) => state.assessments.question.rubrics,
@@ -42,6 +36,10 @@ const RubricPlaygroundPage = (): JSX.Element => {
   const [selectedRubricId, setSelectedRubricId] = useState(0);
   const [isComparing, setIsComparing] = useState(false);
   const [compareCount, setCompareCount] = useState(2);
+
+  const { sortedRubrics, selectedRubricData } = useAppSelector(
+    getSelectedRubricData(selectedRubricId),
+  );
 
   const fetchRubricEvaluationsData = async (
     rubricId: number,
@@ -58,6 +56,27 @@ const RubricPlaygroundPage = (): JSX.Element => {
       }),
     );
   };
+
+  useEffect(() => {
+    if (typeof selectedRubricData?.index === 'number') {
+      const rubricIdsToLoad = isComparing
+        ? sortedRubrics
+            .slice(
+              Math.max(0, selectedRubricData.index - compareCount + 1),
+              selectedRubricData.index + 1,
+            )
+            .map((rubric) => rubric.id)
+        : [selectedRubricId];
+
+      Promise.all(
+        rubricIdsToLoad
+          .filter(
+            (rubricId) => !rubricState.rubrics[rubricId]?.isEvaluationsLoaded,
+          )
+          .map((rubricId) => fetchRubricEvaluationsData(rubricId)),
+      );
+    }
+  }, [selectedRubricData?.index, compareCount]);
 
   const fetchPlaygroundData = async (): Promise<void> => {
     try {
@@ -79,42 +98,29 @@ const RubricPlaygroundPage = (): JSX.Element => {
     }
   };
 
-  useEffect(() => {
-    const sortedRubrics = Object.values(rubricState.rubrics).sort((a, b) =>
-      a.createdAt.localeCompare(b.createdAt),
-    );
-    const selectedRubricIndex = Object.values(rubricState.rubrics).findIndex(
-      (rubric) => rubric.id === selectedRubricId,
-    );
-    const rubricIdsToLoad = isComparing
-      ? sortedRubrics
-          .slice(
-            Math.max(0, selectedRubricIndex - compareCount + 1),
-            selectedRubricIndex + 1,
-          )
-          .map((rubric) => rubric.id)
-      : [selectedRubricId];
-    for (const rubricId of rubricIdsToLoad) {
-      if (rubricState.rubrics[rubricId]?.isEvaluationsLoaded === false) {
-        fetchRubricEvaluationsData(rubricId);
-      }
-    }
-  }, [selectedRubricId, compareCount]);
-
-  const selectableAnswers = Object.values(rubricState.answers).filter(
-    (answer) =>
-      rubricState.rubrics[selectedRubricId] &&
-      !(answer.id in rubricState.rubrics[selectedRubricId].answerEvaluations),
-  );
-
-  const maximumGrade = rubricState.rubrics[selectedRubricId]?.categories.reduce(
-    (sum, category) => sum + category.maximumGrade,
-    0,
-  );
-
   return (
     <Preload render={<LoadingIndicator />} while={fetchPlaygroundData}>
       {() => {
+        if (!selectedRubricData) return <LoadingIndicator />;
+
+        const {
+          state: selectedRubric,
+          index: selectedRubricIndex,
+          answerCount,
+          answerEvaluatedCount,
+        } = selectedRubricData;
+        const compareRubrics = isComparing
+          ? sortedRubrics.slice(
+              Math.max(0, selectedRubricIndex - compareCount + 1),
+              selectedRubricIndex + 1,
+            )
+          : undefined;
+        const answerEvaluationTableData = buildSelectedRubricTableData(
+          selectedRubric,
+          rubricState.answers,
+          rubricState.mockAnswers,
+          compareRubrics,
+        );
         return (
           <>
             <RubricHeader
@@ -126,78 +132,19 @@ const RubricPlaygroundPage = (): JSX.Element => {
               setSelectedRubricId={setSelectedRubricId}
             />
 
-            <div className="flex flex-row space-x-4 items-center py-2">
-              <Typography variant="h6">Sample Answer Evaluations</Typography>
-              <Button
-                onClick={() => setIsAddingAnswers(true)}
-                size="small"
-                startIcon={<Add />}
-                variant="outlined"
-              >
-                Add Sample Answers
-              </Button>
-            </div>
-            {isComparing && (
-              <Typography variant="body2">
-                Comparing {compareCount} revisions
-              </Typography>
-            )}
-
-            <AddSampleAnswersDialog
-              answers={selectableAnswers}
-              maximumGrade={maximumGrade ?? 0}
-              onClose={() => setIsAddingAnswers(false)}
-              onSubmit={async (
-                data: AddSampleAnswersFormData,
-              ): Promise<void> => {
-                switch (data.addMode) {
-                  case AddSampleMode.SPECIFIC_ANSWER: {
-                    dispatch(
-                      questionRubricsActions.initializeAnswerEvaluations({
-                        answerIds: data.addAnswerIds,
-                        rubricId: selectedRubricId,
-                      }),
-                    );
-                    break;
-                  }
-                  case AddSampleMode.RANDOM_STUDENT: {
-                    const randomAnswerIds = sampleSize(
-                      selectableAnswers,
-                      data.addRandomAnswerCount,
-                    ).map((answer) => answer.id);
-                    dispatch(
-                      questionRubricsActions.initializeAnswerEvaluations({
-                        answerIds: randomAnswerIds,
-                        rubricId: selectedRubricId,
-                      }),
-                    );
-                    break;
-                  }
-                  case AddSampleMode.CUSTOM_ANSWER: {
-                    const mockAnswerId = await createQuestionMockAnswer(
-                      data.addMockAnswerText,
-                    );
-                    dispatch(
-                      questionRubricsActions.initializeMockAnswer({
-                        rubricId: selectedRubricId,
-                        mockAnswerId,
-                        answerText: data.addMockAnswerText,
-                      }),
-                    );
-                    break;
-                  }
-                  default: {
-                    break;
-                  }
-                }
-                setIsAddingAnswers(false);
-              }}
-              open={isAddingAnswers}
-            />
-            <AnswerEvaluationsTable
+            <AnswerEvaluationsTableHeader
+              answerCount={answerCount}
+              answerEvaluatedCount={answerEvaluatedCount}
+              answerEvaluationTableData={answerEvaluationTableData}
               compareCount={compareCount}
               isComparing={isComparing}
-              selectedRubricId={selectedRubricId}
+              selectedRubric={selectedRubric}
+            />
+
+            <AnswerEvaluationsTable
+              data={answerEvaluationTableData}
+              isComparing={isComparing}
+              selectedRubric={selectedRubric}
             />
           </>
         );

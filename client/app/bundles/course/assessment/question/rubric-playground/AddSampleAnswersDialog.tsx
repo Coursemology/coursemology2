@@ -69,7 +69,9 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
         undefinedPriority: 'last',
       },
       cell: (answer) =>
-        answer.grade === undefined ? '' : `${answer.grade} / ${maximumGrade}.0`,
+        typeof answer.grade === 'number'
+          ? `${answer.grade} / ${maximumGrade}`
+          : '',
     },
     {
       of: 'answerText',

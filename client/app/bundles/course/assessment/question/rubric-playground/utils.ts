@@ -1,7 +1,13 @@
 import { UseFormSetValue } from 'react-hook-form';
 import { produce } from 'immer';
 import { QuestionRubricGradeEntity } from 'types/course/assessment/question/rubric-based-responses';
+import {
+  RubricAnswerData,
+  RubricDataWithEvaluations,
+} from 'types/course/rubrics';
 
+import { AnswerTableEntry } from './AnswerEvaluationsTable/types';
+import { answerDataToTableEntry } from './AnswerEvaluationsTable/utils';
 import { RubricCategoryEntity, RubricHeaderFormData } from './types';
 
 export const generateNewElementId = (elements: { id: number }[]): number =>
@@ -90,3 +96,35 @@ export const computeMaximumCategoryGrade = (
       .filter((cat) => !cat.toBeDeleted)
       .map((cat) => Number(cat.grade)),
   );
+
+export const buildSelectedRubricTableData = (
+  selectedRubric: RubricDataWithEvaluations,
+  answers: Record<number, RubricAnswerData>,
+  mockAnswers: Record<number, RubricAnswerData>,
+  compareRubrics?: RubricDataWithEvaluations[],
+): AnswerTableEntry[] => {
+  return Object.values(answers)
+    .filter((answer) => answer.id in selectedRubric.answerEvaluations)
+    .map((answer) =>
+      answerDataToTableEntry(
+        answer,
+        false,
+        selectedRubric.answerEvaluations[answer.id],
+        compareRubrics,
+      ),
+    )
+    .concat(
+      ...Object.values(mockAnswers)
+        .filter(
+          (mockAnswer) => mockAnswer.id in selectedRubric.mockAnswerEvaluations,
+        )
+        .map((mockAnswer) =>
+          answerDataToTableEntry(
+            mockAnswer,
+            true,
+            selectedRubric.mockAnswerEvaluations[mockAnswer.id],
+            compareRubrics,
+          ),
+        ),
+    );
+};

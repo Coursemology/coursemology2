@@ -8,13 +8,12 @@ import {
 } from 'types/course/rubrics';
 import { JobStatusResponse } from 'types/jobs';
 
+export type RubricState = RubricDataWithEvaluations & {
+  isEvaluationsLoaded: boolean;
+};
+
 export interface QuestionRubricsState {
-  rubrics: Record<
-    number,
-    RubricDataWithEvaluations & {
-      isEvaluationsLoaded: boolean;
-    }
-  >;
+  rubrics: Record<number, RubricState>;
   answers: Record<number, RubricAnswerData>;
   mockAnswers: Record<number, RubricAnswerData>;
   exportJob?: JobStatusResponse;
