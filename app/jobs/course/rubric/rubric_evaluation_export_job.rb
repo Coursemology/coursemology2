@@ -74,14 +74,15 @@ class Course::Rubric::RubricEvaluationExportJob < ApplicationJob # rubocop:disab
     end
     rubric_based_response_question.update(
       ai_grading_custom_prompt: rubric.grading_prompt,
+      ai_grading_model_answer: rubric.model_answer,
       categories_attributes: destroy_attributes + create_attributes
     )
     rubric_based_response_question.reload
   end
 
   def build_exported_rubric_hashes(rubric, rubric_based_response_question)
-    source_categories = rubric.categories.order(:name)
-    destination_categories = rubric_based_response_question.categories.order(:name)
+    source_categories = rubric.categories
+    destination_categories = rubric_based_response_question.categories
     exported_criterions_hash = {}
     exported_categories_hash = source_categories.zip(destination_categories).to_h do |src_category, dest_category|
       src_category.criterions.order(:grade).

@@ -991,6 +991,15 @@ const translations = defineMessages({
     defaultMessage:
       'Add grading instructions (e.g. question context, model answer, feedback tone). Leave blank if unsure.',
   },
+  aiGradingModelAnswer: {
+    id: 'course.assessment.question.rubricBasedResponses.aiGradingModelAnswer',
+    defaultMessage: 'Model Answer',
+  },
+  aiGradingModelAnswerDescription: {
+    id: 'course.assessment.question.rubricBasedResponses.aiGradingModelAnswerDescription',
+    defaultMessage:
+      'Add an example answer that would get the maximum grades in each rubric category. Leave blank if unsure.',
+  },
   newSolutionCannotUndo: {
     id: 'course.assessment.question.textResponses.newSolutionCannotUndo',
     defaultMessage:

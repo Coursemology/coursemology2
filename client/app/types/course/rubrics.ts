@@ -3,6 +3,7 @@ export interface RubricData {
   createdAt: string;
   categories: RubricCategoryData[];
   gradingPrompt: string;
+  modelAnswer: string;
 }
 
 export interface RubricDataWithEvaluations extends RubricData {
@@ -18,6 +19,7 @@ export interface RubricDataWithEvaluations extends RubricData {
 
 export interface RubricPostRequestData {
   grading_prompt: string;
+  model_answer: string;
   categories_attributes: {
     name: string;
     criterions_attributes: {

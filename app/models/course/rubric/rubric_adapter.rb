@@ -23,6 +23,10 @@ class Course::Rubric::RubricAdapter < Course::Rubric::LlmService::RubricAdapter
     @rubric.grading_prompt
   end
 
+  def model_answer
+    @rubric.model_answer
+  end
+
   # Generates dynamic JSON schema with separate fields for each category
   # @return [Hash] Dynamic JSON schema with category-specific fields
   def generate_dynamic_schema

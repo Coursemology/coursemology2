@@ -28,7 +28,8 @@ class Course::Rubric::LlmService
       question_title: @question_adapter.question_title,
       question_description: @question_adapter.question_description,
       rubric_categories: @rubric_adapter.formatted_rubric_categories,
-      custom_prompt: @rubric_adapter.grading_prompt
+      custom_prompt: @rubric_adapter.grading_prompt,
+      model_answer: @rubric_adapter.model_answer
     )
     formatted_user_prompt = self.class.user_prompt.format(
       answer_text: @answer_adapter.answer_text

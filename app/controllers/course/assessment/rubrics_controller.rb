@@ -110,6 +110,10 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
   private
 
   def create_params
-    params.permit([:grading_prompt, categories_attributes: [:name, criterions_attributes: [:grade, :explanation]]])
+    params.permit([
+      :grading_prompt,
+      :model_answer,
+      categories_attributes: [:name, criterions_attributes: [:grade, :explanation]]
+    ])
   end
 end

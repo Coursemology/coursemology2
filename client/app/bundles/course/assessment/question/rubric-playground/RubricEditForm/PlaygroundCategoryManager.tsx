@@ -7,6 +7,7 @@ import {
   Paper,
   TextField,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { produce } from 'immer';
 
@@ -18,7 +19,7 @@ import translations from '../../../translations';
 import {
   RubricCategoryCriterionEntity,
   RubricCategoryEntity,
-  RubricHeaderFormData,
+  RubricEditFormData,
 } from '../types';
 import {
   categoryClassName,
@@ -37,7 +38,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
 
   const { t } = useTranslation();
 
-  const { control, watch, setValue } = useFormContext<RubricHeaderFormData>();
+  const { control, watch, setValue } = useFormContext<RubricEditFormData>();
 
   const { append } = useFieldArray({ control, name: 'categories' });
 
@@ -88,10 +89,8 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
   };
 
   return (
-    <Paper
-      className="p-4 overflow-y-scroll h-[387px] space-y-4"
-      variant="outlined"
-    >
+    <Paper className="p-3 space-y-4" variant="outlined">
+      <Typography variant="subtitle2">Grading Categories</Typography>
       <Button
         disabled={disabled}
         onClick={handleAddCategory}

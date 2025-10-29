@@ -8,7 +8,7 @@ import {
 
 import { AnswerTableEntry } from './AnswerEvaluationsTable/types';
 import { answerDataToTableEntry } from './AnswerEvaluationsTable/utils';
-import { RubricCategoryEntity, RubricHeaderFormData } from './types';
+import { RubricCategoryEntity, RubricEditFormData } from './types';
 
 export const generateNewElementId = (elements: { id: number }[]): number =>
   1 + Math.max(-1, ...elements.map((element) => element.id));
@@ -31,7 +31,7 @@ export const handleDeleteGrade = (
   categories: RubricCategoryEntity[],
   categoryIndex: number,
   gradeIndex: number,
-  setValue: UseFormSetValue<RubricHeaderFormData>,
+  setValue: UseFormSetValue<RubricEditFormData>,
 ): void => {
   if (!categories) return;
 

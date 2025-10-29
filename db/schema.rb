@@ -397,6 +397,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_02_070442) do
   create_table "course_assessment_question_rubric_based_responses", force: :cascade do |t|
     t.boolean "ai_grading_enabled", default: true, null: false
     t.string "ai_grading_custom_prompt", default: "", null: false
+    t.string "ai_grading_model_answer", default: "", null: false
   end
 
   create_table "course_assessment_question_rubrics", force: :cascade do |t|
@@ -1179,6 +1180,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_02_070442) do
     t.bigint "course_id", null: false
     t.datetime "created_at", null: false
     t.text "grading_prompt", default: "", null: false
+    t.text "model_answer", default: "", null: false
     t.index ["course_id"], name: "index_course_rubrics_on_course_id"
   end
 

@@ -10,6 +10,10 @@ class Course::Rubric::LlmService::RubricAdapter
     raise NotImplementedError, 'Subclasses must implmement this'
   end
 
+  def model_answer
+    raise NotImplementedError, 'Subclasses must implmement this'
+  end
+
   # Generates dynamic JSON schema with separate fields for each category
   # @return [Hash] Dynamic JSON schema with category-specific fields
   def generate_dynamic_schema

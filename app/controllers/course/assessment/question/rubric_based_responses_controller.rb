@@ -104,7 +104,8 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
 
   def rubric_based_response_question_params
     permitted_params = [
-      :title, :description, :staff_only_comments, :maximum_grade, :ai_grading_enabled, :ai_grading_custom_prompt,
+      :title, :description, :staff_only_comments, :maximum_grade,
+      :ai_grading_enabled, :ai_grading_custom_prompt, :ai_grading_model_answer,
       question_assessment: { skill_ids: [] },
       categories_attributes: [:_destroy, :id, :name,
                               criterions_attributes: [:_destroy, :id, :grade, :explanation]]

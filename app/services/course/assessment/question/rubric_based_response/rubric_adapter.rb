@@ -24,6 +24,10 @@ class Course::Assessment::Question::RubricBasedResponse::RubricAdapter <
     @question.ai_grading_custom_prompt
   end
 
+  def model_answer
+    @question.ai_grading_model_answer
+  end
+
   # Generates dynamic JSON schema with separate fields for each category
   # @return [Hash] Dynamic JSON schema with category-specific fields
   def generate_dynamic_schema

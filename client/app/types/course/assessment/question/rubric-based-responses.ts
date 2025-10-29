@@ -6,6 +6,7 @@ export interface RubricBasedResponseData {
   isAssessmentAutograded: boolean;
   aiGradingEnabled: boolean;
   aiGradingCustomPrompt: string;
+  aiGradingModelAnswer: string;
 }
 
 export interface CategoryData {
@@ -68,5 +69,6 @@ export interface RubricBasedResponsePostData {
     }[];
     ai_grading_enabled?: RubricBasedResponseData['aiGradingEnabled'];
     ai_grading_custom_prompt?: RubricBasedResponseData['aiGradingCustomPrompt'];
+    ai_grading_model_answer?: RubricBasedResponseData['aiGradingModelAnswer'];
   };
 }

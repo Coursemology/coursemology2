@@ -67,6 +67,24 @@ const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
             />
           )}
         />
+      </Subsection>
+
+      <Subsection
+        subtitle={t(translations.aiGradingModelAnswerDescription)}
+        title={t(translations.aiGradingModelAnswer)}
+      >
+        <Controller
+          control={control}
+          name="aiGradingModelAnswer"
+          render={({ field, fieldState }): JSX.Element => (
+            <FormRichTextField
+              disabled={disabled || !aiGradingEnabled}
+              field={field}
+              fieldState={fieldState}
+              fullWidth
+            />
+          )}
+        />
 
         {courseId && assessmentId && questionId && (
           <AIGradingPlaygroundAlert

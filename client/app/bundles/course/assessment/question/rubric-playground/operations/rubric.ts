@@ -3,14 +3,15 @@ import { RubricData } from 'types/course/rubrics';
 
 import CourseAPI from 'api/course';
 
-import { RubricHeaderFormData } from '../types';
+import { RubricEditFormData } from '../types';
 
 export const createNewRubric = async (
-  formData: RubricHeaderFormData,
+  formData: RubricEditFormData,
 ): Promise<RubricData> => {
   try {
     const response = await CourseAPI.assessment.question.rubrics.create({
       grading_prompt: formData.gradingPrompt,
+      model_answer: formData.modelAnswer,
       categories_attributes: formData.categories
         .filter((category) => !category.toBeDeleted)
         .map((category) => ({
