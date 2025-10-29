@@ -52,6 +52,26 @@ export default class RubricsAPI extends BaseAssessmentAPI {
     );
   }
 
+  initializeAnswerEvaluations(
+    rubricId: number,
+    answerIds: number[],
+  ): APIResponse<RubricAnswerEvaluationData[]> {
+    return this.client.post(
+      `${this.#urlPrefix}/${rubricId}/answer_evaluations/initialize`,
+      { answer_ids: answerIds },
+    );
+  }
+
+  initializeMockAnswerEvaluations(
+    rubricId: number,
+    mockAnswerIds: number[],
+  ): APIResponse<RubricMockAnswerEvaluationData[]> {
+    return this.client.post(
+      `${this.#urlPrefix}/${rubricId}/mock_answer_evaluations/initialize`,
+      { mock_answer_ids: mockAnswerIds },
+    );
+  }
+
   fetchAnswerEvaluations(
     rubricId: number,
   ): APIResponse<RubricAnswerEvaluationData[]> {

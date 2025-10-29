@@ -7,14 +7,8 @@ export interface RubricData {
 }
 
 export interface RubricDataWithEvaluations extends RubricData {
-  answerEvaluations: Record<
-    number,
-    RubricAnswerEvaluationData | Record<string, never>
-  >;
-  mockAnswerEvaluations: Record<
-    number,
-    RubricMockAnswerEvaluationData | Record<string, never>
-  >;
+  answerEvaluations: Record<number, RubricAnswerEvaluationData>;
+  mockAnswerEvaluations: Record<number, RubricMockAnswerEvaluationData>;
 }
 
 export interface RubricPostRequestData {

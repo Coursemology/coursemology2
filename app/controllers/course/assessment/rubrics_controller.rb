@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::RubricsController < Course::Assessment::QuestionsController
+class Course::Assessment::RubricsController < Course::Assessment::QuestionsController # rubocop:disable Metrics/ClassLength
   load_resource :rubric, class: 'Course::Rubric', through: :question, except: [:index, :rubric_answers]
 
   def index
@@ -43,6 +43,38 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
 
   def fetch_mock_answer_evaluations
     @mock_answer_evaluations = @rubric.mock_answer_evaluations
+  end
+
+  def initialize_answer_evaluations
+    answer_evaluations = Course::Rubric::AnswerEvaluation.insert_all(
+      params.require(:answer_ids).map do |id|
+        {
+          rubric_id: @rubric.id,
+          answer_id: id
+        }
+      end
+    )
+
+    render partial: 'course/rubrics/answer_evaluation',
+           collection: Course::Rubric::AnswerEvaluation.where(id: answer_evaluations.map { |row| row['id'] }),
+           as: :answer_evaluation
+  end
+
+  def initialize_mock_answer_evaluations
+    mock_answer_evaluations = Course::Rubric::MockAnswerEvaluation.insert_all(
+      params.require(:mock_answer_ids).map do |id|
+        {
+          rubric_id: @rubric.id,
+          mock_answer_id: id
+        }
+      end
+    )
+
+    render partial: 'course/rubrics/mock_answer_evaluation',
+           collection: Course::Rubric::MockAnswerEvaluation.where(
+             id: mock_answer_evaluations.map { |row| row['id'] }
+           ),
+           as: :answer_evaluation
   end
 
   def evaluate_mock_answer
@@ -110,10 +142,16 @@ class Course::Assessment::RubricsController < Course::Assessment::QuestionsContr
   private
 
   def create_params
-    params.permit([
-      :grading_prompt,
-      :model_answer,
-      categories_attributes: [:name, criterions_attributes: [:grade, :explanation]]
-    ])
+    params.permit(
+      [
+        :grading_prompt,
+        :model_answer,
+        categories_attributes: [:name, criterions_attributes: [:grade, :explanation]]
+      ]
+    )
+  end
+
+  def initialize_mock_answer_evaluations_params
+    params.require(:mock_answer_ids)
   end
 end
