@@ -17,10 +17,12 @@ import { getSelectedRubricData } from '../selectors/rubrics';
 import {
   fetchQuestionRubricAnswers,
   fetchRubricAnswerEvaluations,
+  initializeAnswerEvaluations,
 } from './operations/answers';
 import {
   fetchQuestionRubricMockAnswers,
   fetchRubricMockAnswerEvaluations,
+  initializeMockAnswerEvaluations,
 } from './operations/mockAnswers';
 import { createNewRubric, fetchQuestionRubrics } from './operations/rubric';
 import AnswerEvaluationsTable from './AnswerEvaluationsTable';
@@ -124,7 +126,22 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
         selectedRubricId,
       }),
     );
+    await Promise.all([
+      initializeAnswerEvaluations(
+        rubric.id,
+        Object.values(selectedRubricData?.state.answerEvaluations ?? []).map(
+          (evaluation) => evaluation.answerId,
+        ),
+      ),
+      initializeMockAnswerEvaluations(
+        rubric.id,
+        Object.values(
+          selectedRubricData?.state.mockAnswerEvaluations ?? [],
+        ).map((evaluation) => evaluation.mockAnswerId),
+      ),
+    ]);
     setSelectedRubricId(rubric.id);
+    setActiveTab(RubricPlaygroundTab.EVALUATE);
   };
 
   return (

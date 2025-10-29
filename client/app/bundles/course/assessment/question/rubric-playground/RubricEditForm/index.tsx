@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react';
 import {
   Controller,
+  FormProvider,
   SubmitHandler,
-  useForm,
   UseFormReturn,
 } from 'react-hook-form';
 import { Paper, Typography } from '@mui/material';
@@ -84,7 +84,9 @@ const RubricEditForm: FC<RubricEditFormProps> = (props) => {
       </div>
 
       <div className="w-1/2">
-        <PlaygroundCategoryManager disabled={false} />
+        <FormProvider {...form}>
+          <PlaygroundCategoryManager disabled={false} />
+        </FormProvider>
       </div>
     </form>
   );

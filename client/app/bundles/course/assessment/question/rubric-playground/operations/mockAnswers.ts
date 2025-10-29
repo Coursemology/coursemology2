@@ -33,6 +33,26 @@ export const fetchQuestionRubricMockAnswers = async (): Promise<
   }
 };
 
+export const initializeMockAnswerEvaluations = async (
+  rubricId: number,
+  mockAnswerIds: number[],
+): Promise<RubricMockAnswerEvaluationData[]> => {
+  if (!mockAnswerIds.length) return [];
+
+  try {
+    const response =
+      await CourseAPI.assessment.question.rubrics.initializeMockAnswerEvaluations(
+        rubricId,
+        mockAnswerIds,
+      );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+
+    throw error;
+  }
+};
+
 export const evaluatePlaygroundMockAnswer = async (
   rubricId: number,
   mockAnswerId: number,

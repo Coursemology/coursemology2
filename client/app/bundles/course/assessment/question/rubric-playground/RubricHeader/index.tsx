@@ -73,6 +73,10 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
     (state) => state.assessments.question.rubrics,
   );
 
+  const isSliderDisabled =
+    activeTab !== RubricPlaygroundTab.EVALUATE &&
+    activeTab !== RubricPlaygroundTab.COMPARE;
+
   const exportJobPollerRef = useRef<NodeJS.Timeout | null>(null);
   const exportJobToastRef = useRef<LoadingToast | null>(null);
 
@@ -133,8 +137,8 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
       {sortedRubrics.length > 1 && (
         <div className="w-full flex justify-center pt-10">
           <VersionSlider
-            className="w-[90%] pb-10"
-            disabled={activeTab === RubricPlaygroundTab.EDIT}
+            className={`w-[90%] pb-10${isSliderDisabled ? ' opacity-80' : ''}`}
+            disabled={isSliderDisabled}
             marks={sortedRubrics.map((rubric, rubricIndex) => ({
               label:
                 rubricIndex === 0 || rubricIndex === sortedRubrics.length - 1

@@ -51,19 +51,25 @@ export const questionRubricsStore = createSlice({
       state.rubrics[rubric.id] = {
         ...rubric,
         // A new rubric will not have any evaluations, so no point querying for them
+        // However they are initialized separately on BE side to preserve state on page exit
         isEvaluationsLoaded: true,
-        answerEvaluations: Object.keys(
+        answerEvaluations: Object.values(
           state.rubrics[selectedRubricId]?.answerEvaluations ?? {},
         ).reduce(
-          (evaluations, answerId) => ({ ...evaluations, [answerId]: {} }),
+          (evaluations, oldEvaluation) => ({
+            ...evaluations,
+            [oldEvaluation.answerId]: { answerId: oldEvaluation.answerId },
+          }),
           {},
         ),
-        mockAnswerEvaluations: Object.keys(
+        mockAnswerEvaluations: Object.values(
           state.rubrics[selectedRubricId]?.mockAnswerEvaluations ?? {},
         ).reduce(
-          (evaluations, mockAnswerId) => ({
+          (evaluations, oldEvaluation) => ({
             ...evaluations,
-            [mockAnswerId]: {},
+            [oldEvaluation.mockAnswerId]: {
+              mockAnswerId: oldEvaluation.mockAnswerId,
+            },
           }),
           {},
         ),
@@ -123,7 +129,9 @@ export const questionRubricsStore = createSlice({
       answerIds
         .filter((answerId) => answerId in state.answers)
         .forEach((answerId) => {
-          state.rubrics[rubricId].answerEvaluations[answerId] = {};
+          state.rubrics[rubricId].answerEvaluations[answerId] = {
+            answerId,
+          };
         });
     },
     requestAnswerEvaluation: (
@@ -178,7 +186,9 @@ export const questionRubricsStore = createSlice({
         title: '(Mock Answer)',
         answerText,
       };
-      state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId] = {};
+      state.rubrics[rubricId].mockAnswerEvaluations[mockAnswerId] = {
+        mockAnswerId,
+      };
     },
     requestMockAnswerEvaluation: (
       state,

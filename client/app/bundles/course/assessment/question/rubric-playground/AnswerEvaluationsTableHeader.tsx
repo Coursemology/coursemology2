@@ -13,7 +13,11 @@ import {
 
 import { AnswerTableEntry } from './AnswerEvaluationsTable/types';
 import { isAnswerAlreadyEvaluated } from './AnswerEvaluationsTable/utils';
-import { createQuestionMockAnswer } from './operations/mockAnswers';
+import { initializeAnswerEvaluations } from './operations/answers';
+import {
+  createQuestionMockAnswer,
+  initializeMockAnswerEvaluations,
+} from './operations/mockAnswers';
 import { requestRowEvaluation } from './operations/rowEvaluation';
 import AddSampleAnswersDialog, {
   AddSampleAnswersFormData,
@@ -62,6 +66,7 @@ const AnswerEvaluationsTableHeader: FC<{
             rubricId: selectedRubric.id,
           }),
         );
+        await initializeAnswerEvaluations(selectedRubric.id, data.addAnswerIds);
         break;
       }
       case AddSampleMode.RANDOM_STUDENT: {
@@ -75,6 +80,7 @@ const AnswerEvaluationsTableHeader: FC<{
             rubricId: selectedRubric.id,
           }),
         );
+        await initializeAnswerEvaluations(selectedRubric.id, randomAnswerIds);
         break;
       }
       case AddSampleMode.CUSTOM_ANSWER: {
@@ -88,6 +94,9 @@ const AnswerEvaluationsTableHeader: FC<{
             answerText: data.addMockAnswerText,
           }),
         );
+        await initializeMockAnswerEvaluations(selectedRubric.id, [
+          mockAnswerId,
+        ]);
         break;
       }
       default: {
