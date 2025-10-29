@@ -86,13 +86,7 @@ const AIGradingFields = (props: AIGradingFieldsProps): JSX.Element | null => {
           )}
         />
 
-        {courseId && assessmentId && questionId && (
-          <AIGradingPlaygroundAlert
-            assessmentId={assessmentId}
-            courseId={courseId}
-            questionId={questionId}
-          />
-        )}
+        {questionId && <AIGradingPlaygroundAlert questionId={questionId} />}
       </Subsection>
     </Section>
   );

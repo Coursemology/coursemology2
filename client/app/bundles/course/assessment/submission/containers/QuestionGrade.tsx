@@ -6,6 +6,7 @@ import {
   SubmissionQuestionData,
 } from 'types/course/assessment/submission/question/types';
 
+import AIGradingPlaygroundAlert from 'course/assessment/question/components/AIGradingPlaygroundAlert';
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -307,10 +308,17 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           />
         )}
 
-        {editable &&
-          (isProgrammingQuestion || isRubricBasedResponseAndAutogradable) && (
+        {editable && isRubricBasedResponseAndAutogradable && (
+          <div className="flex flex-row items-center">
             <ReevaluateButton questionId={questionId} />
-          )}
+            <div className="flex-1" />
+            <AIGradingPlaygroundAlert
+              answerId={grading.id}
+              className="w-fit text-right py-0 mb-2"
+              questionId={questionId}
+            />
+          </div>
+        )}
 
         <Paper
           className={`transition-none flex items-center space-x-5 px-5 py-4 ring-2 ${

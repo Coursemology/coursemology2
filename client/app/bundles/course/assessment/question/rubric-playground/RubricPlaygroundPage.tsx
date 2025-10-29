@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { RubricAnswerEvaluationData } from 'types/course/rubrics';
 import { getIdFromUnknown } from 'utilities';
 
 import CourseAPI from 'api/course';
@@ -38,6 +40,13 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
   const rubricState = useAppSelector(
     (state) => state.assessments.question.rubrics,
   );
+
+  const [searchParams] = useSearchParams();
+  const sourceAnswerId = parseInt(
+    searchParams.get('source_answer_id') ?? '',
+    10,
+  );
+
   const [selectedRubricId, setSelectedRubricId] = useState(0);
   const [activeTab, setActiveTab] = useState<RubricPlaygroundTab>(
     RubricPlaygroundTab.EVALUATE,
@@ -60,7 +69,7 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
 
   const fetchRubricEvaluationsData = async (
     rubricId: number,
-  ): Promise<void> => {
+  ): Promise<RubricAnswerEvaluationData[]> => {
     const [answerEvaluations, mockAnswerEvaluations] = await Promise.all([
       fetchRubricAnswerEvaluations(rubricId),
       fetchRubricMockAnswerEvaluations(rubricId),
@@ -72,6 +81,7 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
         mockAnswerEvaluations,
       }),
     );
+    return answerEvaluations;
   };
 
   useEffect(() => {
@@ -108,7 +118,23 @@ const RubricPlaygroundPage = (): JSX.Element | null => {
 
       const mockAnswers = await fetchQuestionRubricMockAnswers();
       dispatch(questionRubricsActions.loadMockAnswers(mockAnswers));
-      await fetchRubricEvaluationsData(mostRecentRubricId);
+
+      const answerEvaluations =
+        await fetchRubricEvaluationsData(mostRecentRubricId);
+      if (
+        sourceAnswerId &&
+        !answerEvaluations.find(
+          (evaluation) => evaluation.answerId === sourceAnswerId,
+        )
+      ) {
+        dispatch(
+          questionRubricsActions.initializeAnswerEvaluations({
+            answerIds: [sourceAnswerId],
+            rubricId: mostRecentRubricId,
+          }),
+        );
+        await initializeAnswerEvaluations(mostRecentRubricId, [sourceAnswerId]);
+      }
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 404) {
         redirectToNotFound();
