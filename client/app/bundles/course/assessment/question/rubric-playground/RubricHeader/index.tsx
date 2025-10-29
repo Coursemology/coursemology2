@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import { UseFormReturn } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import {
   Approval,
   Clear,
@@ -21,6 +22,8 @@ import { JobStatus } from 'types/jobs';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import { pollJobRequest } from 'lib/helpers/jobHelpers';
+import { getAssessmentURL } from 'lib/helpers/url-builders';
+import { getAssessmentId, getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import loadingToast, { LoadingToast } from 'lib/hooks/toast/loadingToast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -69,6 +72,7 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
   const [isConfirmingExport, setIsConfirmingExport] = useState(false);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const rubricState = useAppSelector(
     (state) => state.assessments.question.rubrics,
   );
@@ -94,8 +98,11 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
           exportJobToastRef.current.success(
             'Grading rubric, prompt, and results successfully applied.',
           );
+          setTimeout(() => {
+            navigate(getAssessmentURL(getCourseId(), getAssessmentId()));
+          }, 100);
         } else if (jobStatus.status === JobStatus.errored) {
-          exportJobToastRef.current.error('Failed to export grading results');
+          exportJobToastRef.current.error('Failed to apply grading results');
         }
       }
       dispatch(questionRubricsActions.updateRubricExportJob(jobStatus));
