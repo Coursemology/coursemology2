@@ -1,12 +1,15 @@
 class AddV2RubricGradingTables < ActiveRecord::Migration[7.2]
   def change
+    add_column :course_assessment_question_rubric_based_responses, :ai_grading_model_answer, :string, null: false, default: ''
+
     create_table :course_rubrics do |t|
       t.references :course, null: false, index: true,
                    foreign_key: {
                      to_table: :courses
                    }
       t.datetime :created_at, null: false
-      t.text :grading_prompt, default: "", null: false
+      t.text :grading_prompt, default: '', null: false
+      t.text :model_answer, default: '', null: false
     end
 
     create_table :course_rubric_categories do |t|

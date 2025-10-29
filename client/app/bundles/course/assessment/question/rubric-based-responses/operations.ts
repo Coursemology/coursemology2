@@ -47,6 +47,7 @@ const adaptPostData = (
     })),
     ai_grading_enabled: data.aiGradingEnabled,
     ai_grading_custom_prompt: data.aiGradingCustomPrompt,
+    ai_grading_model_answer: data.aiGradingModelAnswer,
   },
 });
 

@@ -3,6 +3,12 @@ import {
   RubricCategoryData,
 } from 'types/course/rubrics';
 
+export enum RubricPlaygroundTab {
+  EDIT,
+  EVALUATE,
+  COMPARE,
+}
+
 export interface RubricCategoryEntity
   extends Omit<RubricCategoryData, 'maximumGrade'> {
   criterions: RubricCategoryCriterionEntity[];
@@ -16,7 +22,8 @@ export interface RubricCategoryCriterionEntity
   draft?: boolean;
 }
 
-export interface RubricHeaderFormData {
+export interface RubricEditFormData {
   categories: RubricCategoryEntity[];
   gradingPrompt: string;
+  modelAnswer: string;
 }

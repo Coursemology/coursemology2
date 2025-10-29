@@ -19,7 +19,7 @@ class Course::Rubric::Category < ApplicationRecord
 
   accepts_nested_attributes_for :criterions, allow_destroy: true
 
-  default_scope { order(Arel.sql('is_bonus_category ASC'), name: :asc) }
+  default_scope { order(Arel.sql('is_bonus_category ASC')) }
 
   scope :without_bonus_category, -> { where(is_bonus_category: false) }
 

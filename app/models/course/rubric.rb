@@ -42,7 +42,8 @@ class Course::Rubric < ApplicationRecord
         v1_rubric_based_response_question.categories.without_bonus_category.map do |c|
           Course::Rubric::Category.build_from_v1(c)
         end,
-      grading_prompt: v1_rubric_based_response_question.ai_grading_custom_prompt
+      grading_prompt: v1_rubric_based_response_question.ai_grading_custom_prompt,
+      model_answer: v1_rubric_based_response_question.ai_grading_model_answer
     )
   end
 

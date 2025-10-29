@@ -4,6 +4,7 @@ import { Button, ButtonProps, IconButton, Tooltip } from '@mui/material';
 const HeaderButton: FC<{
   color?: ButtonProps['color'];
   disabled?: boolean;
+  form?: ButtonProps['form'];
   icon: JSX.Element;
   title: string;
   type?: ButtonProps['type'];
@@ -15,6 +16,7 @@ const HeaderButton: FC<{
       className="max-lg:!hidden whitespace-nowrap"
       color={props.color}
       disabled={props.disabled}
+      form={props.form}
       onClick={props.onClick}
       size="small"
       startIcon={props.icon}
@@ -29,6 +31,7 @@ const HeaderButton: FC<{
           className="lg:!hidden px-0 min-w-16 [&_span]:m-0"
           color={props.color}
           disabled={props.disabled}
+          form={props.form}
           onClick={props.onClick}
           startIcon={props.icon}
           type={props.type}
@@ -39,6 +42,7 @@ const HeaderButton: FC<{
           className="lg:!hidden"
           color={props.color}
           disabled={props.disabled}
+          form={props.form}
           onClick={props.onClick}
           type={props.type}
         >

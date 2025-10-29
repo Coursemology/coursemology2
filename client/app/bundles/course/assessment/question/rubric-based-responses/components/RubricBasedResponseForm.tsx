@@ -43,6 +43,7 @@ const RubricBasedResponseForm = (
       categories: rawData.categories,
       aiGradingEnabled: rawData.aiGradingEnabled,
       aiGradingCustomPrompt: rawData.aiGradingCustomPrompt,
+      aiGradingModelAnswer: rawData.aiGradingModelAnswer,
     };
 
     setSubmitting(true);
