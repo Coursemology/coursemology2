@@ -109,6 +109,22 @@ class ScholaisticApiService
       end
     end
 
+    def all_submissions!(course)
+      result = connection!(:get, 'all-submissions', query: {
+        key: settings(course).integration_key
+      })
+
+      result[:submissions].map do |submission|
+        {
+          upstream_id: submission[:id],
+          upstream_assessment_id: submission[:assessmentId],
+          status: submission[:status]&.to_sym,
+          grade: submission[:grade],
+          creator_email: submission[:creatorEmail]
+        }.compact
+      end
+    end
+
     def assessments!(course)
       result = connection!(:get, 'assessments', query: {
         key: settings(course).integration_key,
