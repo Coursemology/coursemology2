@@ -3,6 +3,7 @@ class Course::Scholaistic::ScholaisticAssessmentsController < Course::Scholaisti
   load_and_authorize_resource :scholaistic_assessment, through: :course, class: Course::ScholaisticAssessment.name
 
   before_action :sync_scholaistic_assessments!, only: [:index, :show, :edit]
+  before_action :sync_all_scholaistic_submissions!, only: [:index]
 
   def index
     submissions_status_hash = ScholaisticApiService.submissions!(

@@ -69,5 +69,12 @@ FactoryBot.define do
         course.set_component_enabled_boolean(:course_plagiarism_component, true)
       end
     end
+
+    trait :with_scholaistic_component_enabled do
+      after(:build) do |course|
+        course.instance.set_component_enabled_boolean!(:course_scholaistic_component, true)
+        course.set_component_enabled_boolean(:course_scholaistic_component, true)
+      end
+    end
   end
 end
