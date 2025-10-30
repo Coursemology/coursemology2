@@ -23,7 +23,6 @@ module Course::SsidFolderConcern
 
   def create_ssid_folder(folder_name, parent_folder_id = nil)
     folder_service = Course::SsidFolderService.new(folder_name, parent_folder_id)
-    response = folder_service.run_create_ssid_folder_service
-    response['id']
+    folder_service.run_create_ssid_folder_service
   end
 end
