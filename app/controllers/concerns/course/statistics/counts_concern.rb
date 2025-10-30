@@ -5,6 +5,9 @@ module Course::Statistics::CountsConcern
   private
 
   def num_attempted_students_hash
+    return {} if @assessments.empty?
+    return @assessments.index_with { 0 } if @all_students.empty?
+
     attempted_submissions_count = ActiveRecord::Base.connection.execute("
       SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
       FROM course_assessment_submissions cas
@@ -21,6 +24,9 @@ module Course::Statistics::CountsConcern
   end
 
   def num_submitted_students_hash
+    return {} if @assessments.empty?
+    return @assessments.index_with { 0 } if @all_students.empty?
+
     submitted_submissions_count = ActiveRecord::Base.connection.execute("
       SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
       FROM course_assessment_submissions cas
@@ -38,6 +44,9 @@ module Course::Statistics::CountsConcern
   end
 
   def num_late_students_hash
+    return {} if @assessments.empty?
+    return @assessments.index_with { 0 } if @all_students.empty?
+
     @personal_end_at_hash = personal_end_at_hash(@assessments.pluck(:id), current_course.id)
     @reference_times_hash = reference_times_hash(@assessments.pluck(:id), current_course.id)
     all_submissions = ActiveRecord::Base.connection.execute("
@@ -56,6 +65,9 @@ module Course::Statistics::CountsConcern
   end
 
   def latest_submission_time_hash
+    return {} if @assessments.empty?
+    return @assessments.index_with { nil } if @all_students.empty?
+
     latest_submissions = ActiveRecord::Base.connection.execute("
       SELECT cas.assessment_id AS id, MAX(cas.submitted_at) AS latest_submitted_at
       FROM course_assessment_submissions cas

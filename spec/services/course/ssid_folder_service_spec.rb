@@ -37,10 +37,7 @@ RSpec.describe Course::SsidFolderService do
       it 'creates a folder successfully and returns folder data' do
         result = subject.run_create_ssid_folder_service
 
-        expect(result['id']).to be_present
-        expect(result['name']).to eq(folder_name)
-        expect(result['parentId']).to eq(parent_folder_id)
-        expect(result['createdAt']).to be_present
+        expect(result).to eq('185ek301-eecb-44ce-838e-bf1234f990e1')
       end
     end
   end

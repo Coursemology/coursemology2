@@ -166,15 +166,21 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
   end
 
   def fetch_can_manage_course_hash(assessments)
-    course_users = CourseUser.where(
+    course_users = CourseUser.includes(:course).where(
       user_id: current_user.id,
       course_id: assessments.map(&:course_id).uniq
     ).index_by(&:course_id)
+    admin_instance_ids = current_user.instance_users.administrator.pluck(:instance_id)
     course_ids = assessments.map(&:course_id).uniq
     @can_manage_course_hash = course_ids.map do |course_id|
       [
         course_id,
-        course_users[course_id]&.manager_or_owner?
+        current_user.administrator? || # System admin
+          (
+            !course_users[course_id]&.course&.instance_id.nil? &&
+              admin_instance_ids.include?(course_users[course_id]&.course&.instance_id)
+          ) || # Instance admin
+          course_users[course_id]&.manager_or_owner?
       ]
     end.to_h
   end
