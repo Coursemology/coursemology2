@@ -76,6 +76,7 @@ export interface SubmissionMiniEntity {
 
   assessmentId: number;
   assessmentTitle: string;
+  assessmentPublished: boolean;
   submittedAt: string;
   status: SubmissionStatus;
 

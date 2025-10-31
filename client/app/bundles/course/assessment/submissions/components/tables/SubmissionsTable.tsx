@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
+import { Block } from '@mui/icons-material';
 import ErrorIcon from '@mui/icons-material/Error';
 import {
   Chip,
@@ -8,23 +9,25 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Tooltip,
 } from '@mui/material';
 import palette from 'theme/palette';
 import { SubmissionMiniEntity } from 'types/course/assessment/submissions';
 
+import assessmentTranslations from 'course/assessment/translations';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
-import Page from 'lib/components/core/layouts/Page';
 import TableContainer from 'lib/components/core/layouts/TableContainer';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatMiniDateTime } from 'lib/moment';
 
 import SubmissionsTableButton from '../buttons/SubmissionsTableButton';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   isGamified: boolean;
   submissions: SubmissionMiniEntity[];
   isPendingTab: boolean;
@@ -102,7 +105,6 @@ const translateStatus: (var1: string) => string = (oldStatus) => {
 
 const SubmissionsTable: FC<Props> = (props) => {
   const {
-    intl,
     isGamified,
     submissions,
     isPendingTab,
@@ -111,45 +113,37 @@ const SubmissionsTable: FC<Props> = (props) => {
     pageNum,
   } = props;
 
+  const { t } = useTranslation();
+
   if (tableIsLoading) {
     return <LoadingIndicator />;
   }
 
   if (submissions.length === 0)
-    return (
-      <Note message={intl.formatMessage(translations.noSubmissionsMessage)} />
-    );
+    return <Note message={t(translations.noSubmissionsMessage)} />;
 
   return (
     <TableContainer dense variant="bare">
       <TableHead>
         <TableRow>
+          <TableCell align="center">{t(translations.tableHeaderSn)}</TableCell>
+          <TableCell>{t(translations.tableHeaderName)}</TableCell>
+          <TableCell>{t(translations.tableHeaderTitle)}</TableCell>
           <TableCell align="center">
-            {intl.formatMessage(translations.tableHeaderSn)}
-          </TableCell>
-          <TableCell>
-            {intl.formatMessage(translations.tableHeaderName)}
-          </TableCell>
-          <TableCell>
-            {intl.formatMessage(translations.tableHeaderTitle)}
+            {t(translations.tableHeaderSubmittedAt)}
           </TableCell>
           <TableCell align="center">
-            {intl.formatMessage(translations.tableHeaderSubmittedAt)}
-          </TableCell>
-          <TableCell align="center">
-            {intl.formatMessage(translations.tableHeaderStatus)}
+            {t(translations.tableHeaderStatus)}
           </TableCell>
           {isPendingTab && (
-            <TableCell>
-              {intl.formatMessage(translations.tableHeaderTutor)}
-            </TableCell>
+            <TableCell>{t(translations.tableHeaderTutor)}</TableCell>
           )}
           <TableCell align="center">
-            {intl.formatMessage(translations.tableHeaderTotalGrade)}
+            {t(translations.tableHeaderTotalGrade)}
           </TableCell>
           {isGamified && (
             <TableCell align="center">
-              {intl.formatMessage(translations.tableHeaderExp)}
+              {t(translations.tableHeaderExp)}
             </TableCell>
           )}
           <TableCell />
@@ -180,6 +174,21 @@ const SubmissionsTable: FC<Props> = (props) => {
               >
                 {submission.assessmentTitle}
               </Link>
+              {!submission.assessmentPublished && (
+                <Tooltip
+                  disableInteractive
+                  title={t(assessmentTranslations.draftHint)}
+                >
+                  <Chip
+                    className="ml-2"
+                    color="warning"
+                    icon={<Block />}
+                    label={t(assessmentTranslations.draft)}
+                    size="small"
+                    variant="outlined"
+                  />
+                </Tooltip>
+              )}
             </TableCell>
             <TableCell align="center">
               {formatMiniDateTime(submission.submittedAt)}
@@ -234,9 +243,7 @@ const SubmissionsTable: FC<Props> = (props) => {
                 </div>
                 {submission.permissions.canSeeGrades &&
                   submission.isGradedNotPublished && (
-                    <CustomTooltip
-                      title={intl.formatMessage(translations.gradeTooltip)}
-                    >
+                    <CustomTooltip title={t(translations.gradeTooltip)}>
                       <ErrorIcon
                         color="error"
                         fontSize="small"
@@ -268,4 +275,4 @@ const SubmissionsTable: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(SubmissionsTable);
+export default SubmissionsTable;

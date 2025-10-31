@@ -3661,7 +3661,7 @@
     "defaultMessage": "Submitted At"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderTitle": {
-    "defaultMessage": "Title"
+    "defaultMessage": "Assessment"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderTotalGrade": {
     "defaultMessage": "Grade"
