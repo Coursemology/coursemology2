@@ -5,6 +5,9 @@ can_manage = current_course_user&.staff? || can?(:manage, current_course)
 
 is_gamified = current_course.gamified?
 
+unless can_manage
+  @submissions = @submissions.select { |submission| @assessments_hash[submission.assessment_id].published? }
+end
 json.submissions @submissions do |submission|
   json.partial! 'submissions_list_data',
                 submission: submission,

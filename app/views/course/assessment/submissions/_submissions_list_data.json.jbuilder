@@ -9,6 +9,7 @@ json.courseUserId course_user.id
 json.courseUserName course_user.name
 
 json.assessmentId assessment.id
+json.assessmentPublished assessment.published?
 json.assessmentTitle assessment.title
 
 json.submittedAt submission.submitted_at

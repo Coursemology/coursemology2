@@ -55,7 +55,7 @@ const translations = defineMessages({
   },
   tableHeaderTitle: {
     id: 'course.courses.PendingTodosTable.tableHeaderTitle',
-    defaultMessage: 'Title',
+    defaultMessage: 'Assessment',
   },
   tableHeaderStartAt: {
     id: 'course.courses.PendingTodosTable.tableHeaderStartAt',

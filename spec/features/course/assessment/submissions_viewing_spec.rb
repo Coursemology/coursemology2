@@ -132,7 +132,7 @@ RSpec.describe 'Course: Submissions Viewing', js: true do
       scenario 'I can view my submitted, graded and published submissions' do
         # Attach a submission of each trait to a unique assessment
         assessments = create_list(:course_assessment_assessment, 4, :with_mcq_question,
-                                  course: course)
+                                  course: course, published: true)
         attempting_submission, submitted_submission, graded_submission, published_submission =
           assessments.zip([:attempting, :submitted, :graded, :published]).map do |assessment, trait|
             create(:submission, trait, assessment: assessment, creator: user)
@@ -150,6 +150,16 @@ RSpec.describe 'Course: Submissions Viewing', js: true do
             expect(page).to have_text('--') if submission.graded?
           end
         end
+      end
+
+      scenario 'I cannot view submissions for draft assessments' do
+        # Attach a submission of each trait to a unique assessment
+        assessment = create(:course_assessment_assessment, :with_mcq_question, course: course)
+        submission = create(:submission, :graded, assessment: assessment, creator: user)
+
+        visit course_submissions_path(course)
+
+        expect(page).not_to have_selector("#submission-button-#{submission.id}")
       end
     end
   end

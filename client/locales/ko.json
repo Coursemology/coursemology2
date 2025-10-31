@@ -3642,7 +3642,7 @@
     "defaultMessage": "제출 시각"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderTitle": {
-    "defaultMessage": "제목"
+    "defaultMessage": "평가"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderTotalGrade": {
     "defaultMessage": "등급"
