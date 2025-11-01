@@ -9,7 +9,7 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
 
   def index
     @assessments = current_course.assessments.
-                   includes(:plagiarism_check, :linked_assessments).
+                   includes(:plagiarism_check, :links, :linked_assessments, :question_assessments, :questions).
                    published.ordered_by_date_and_title
     @all_students = current_course.course_users.students
 

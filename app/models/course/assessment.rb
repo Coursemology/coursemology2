@@ -226,7 +226,7 @@ class Course::Assessment < ApplicationRecord
   end
 
   def num_plagiarism_checkable_questions
-    questions.count(&:plagiarism_checkable?)
+    questions.plagiarism_checkable.size
   end
 
   def initialize_duplicate(duplicator, other) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
