@@ -32,6 +32,10 @@ class Course::Assessment::Question < ApplicationRecord
   delegate :question_type, to: :actable
   delegate :question_type_readable, to: :actable
 
+  # Bulk query scope for retrieving all questions with plagiarism check.
+  # Currently, this is only for programming questions.
+  scope :plagiarism_checkable, -> { where(actable_type: Course::Assessment::Question::Programming.name) }
+
   # Checks if the given question is auto gradable. This defaults to false if the specific
   # question does not implement auto grading. If this returns true, +auto_grader+ is guaranteed
   # to return a valid grader service.
