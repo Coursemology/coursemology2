@@ -225,10 +225,6 @@ class Course::Assessment < ApplicationRecord
     questions.any?(&:csv_downloadable?)
   end
 
-  def num_plagiarism_checkable_questions
-    questions.plagiarism_checkable.size
-  end
-
   def initialize_duplicate(duplicator, other) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     copy_attributes(other, duplicator)
     target_tab = initialize_duplicate_tab(duplicator, other)
