@@ -11,3 +11,4 @@ json.showPersonalizedTimelineFeatures current_course.show_personalized_timeline_
 json.defaultTimelineAlgorithm current_course.default_timeline_algorithm
 json.timeZone current_course.time_zone
 json.advanceStartAtDurationDays current_course.advance_start_at_duration_days
+json.canDelete can?(:destroy, current_course)

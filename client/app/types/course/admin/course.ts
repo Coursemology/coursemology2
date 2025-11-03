@@ -11,6 +11,7 @@ export interface CourseInfo {
   defaultTimelineAlgorithm: 'fixed' | 'fomo' | 'stragglers' | 'otot';
   timeZone: string;
   advanceStartAtDurationDays: number;
+  canDelete: boolean;
 }
 
 export interface CourseAdminItem {

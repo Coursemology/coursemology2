@@ -22,6 +22,7 @@ class Course::Admin::AdminController < Course::Admin::Controller
   end
 
   def destroy
+    authorize!(:destroy, current_course)
     if current_course.destroy
       destroy_success
     else

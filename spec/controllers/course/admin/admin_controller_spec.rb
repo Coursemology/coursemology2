@@ -108,10 +108,10 @@ RSpec.describe Course::Admin::AdminController do
       subject { delete :destroy, params: { course_id: course } }
       before { controller.instance_variable_set(:@course, course) }
 
-      context 'when the user is a Course Manager' do
-        let(:user) { create(:course_manager, course: course).user }
+      context 'when the user is a Course Owner' do
+        let(:user) { create(:course_owner, course: course).user }
 
-        it 'destroys the course' do
+        it 'allows the owner to destroy the course' do
           subject
           expect(controller.current_course).to be_destroyed
         end
@@ -131,16 +131,31 @@ RSpec.describe Course::Admin::AdminController do
         end
       end
 
+      context 'when the user is a Course Manager' do
+        let(:user) { create(:course_manager, course: course).user }
+
+        it 'does not destroy the course' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+          expect(Course.exists?(course.id)).to be_truthy
+        end
+      end
+
       context 'when the user is an Teaching Assistant' do
         let(:user) { create(:course_teaching_assistant, course: course).user }
 
-        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+        it 'does not destroy the course' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+          expect(Course.exists?(course.id)).to be_truthy
+        end
       end
 
       context 'when the user is a Course Student' do
         let(:user) { create(:course_student, course: course).user }
 
-        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+        it 'does not destroy the course' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+          expect(Course.exists?(course.id)).to be_truthy
+        end
       end
     end
   end

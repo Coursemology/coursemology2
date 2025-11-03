@@ -10,8 +10,8 @@ RSpec.feature 'Course: Administration: Administration', js: true do
     let(:course) { create(:course) }
     before { login_as(user, scope: :user) }
 
-    context 'As an Course Manager' do
-      let(:user) { create(:course_manager, course: course).user }
+    context 'As an Course Owner' do
+      let(:user) { create(:course_owner, course: course).user }
 
       scenario 'I can view the Course Admin Sidebar item' do
         visit course_path(course)
@@ -88,6 +88,22 @@ RSpec.feature 'Course: Administration: Administration', js: true do
         end
 
         expect_delete_action.to change(instance.courses, :count).by(-1)
+      end
+    end
+
+    context 'As an Course Manager' do
+      let(:user) { create(:course_owner, course: course).user }
+
+      scenario 'I can view the Course Admin Sidebar item' do
+        visit course_path(course)
+
+        expect(find_sidebar).to have_text(I18n.t('layouts.course_admin.title'))
+      end
+
+      scenario 'I cannot delete the course' do
+        visit course_admin_path(course)
+
+        expect(page).to_not have_button('Delete course', disabled: true)
       end
     end
 

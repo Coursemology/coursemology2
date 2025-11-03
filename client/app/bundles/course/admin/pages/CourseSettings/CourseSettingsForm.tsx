@@ -312,33 +312,36 @@ const CourseSettingsForm = forwardRef<
             </Subsection>
           </Section>
 
-          <Section
-            sticksToNavbar
-            title={t(translations.deleteCourse)}
-            titleColor="error"
-          >
-            <Typography variant="body2">
-              {t(translations.deleteCourseWarning)}
-            </Typography>
+          {props.data.canDelete && (
+            <>
+              <Section
+                sticksToNavbar
+                title={t(translations.deleteCourse)}
+                titleColor="error"
+              >
+                <Typography variant="body2">
+                  {t(translations.deleteCourseWarning)}
+                </Typography>
 
-            <Button
-              color="error"
-              disabled={props.disabled}
-              onClick={(): void => setDeletingCourse(true)}
-              variant="outlined"
-            >
-              {t(translations.deleteThisCourse)}
-            </Button>
-          </Section>
+                <Button
+                  color="error"
+                  disabled={props.disabled}
+                  onClick={(): void => setDeletingCourse(true)}
+                  variant="outlined"
+                >
+                  {t(translations.deleteThisCourse)}
+                </Button>
+              </Section>
 
-          <DeleteCoursePrompt
-            courseTitle={props.data.title}
-            disabled={props.disabled}
-            onClose={closeDeleteCoursePrompt}
-            onConfirmDelete={props.onDeleteCourse}
-            open={deletingCourse}
-          />
-
+              <DeleteCoursePrompt
+                courseTitle={props.data.title}
+                disabled={props.disabled}
+                onClose={closeDeleteCoursePrompt}
+                onConfirmDelete={props.onDeleteCourse}
+                open={deletingCourse}
+              />
+            </>
+          )}
           <OffsetTimesPrompt
             disabled={props.disabled}
             initialDateTime={new Date(props.data.startAt)}

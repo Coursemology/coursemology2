@@ -13,6 +13,11 @@ module Course::CourseAbilityComponent
       allow_staff_show_course_users if course_user.staff?
       define_teaching_staff_course_permissions if course_user.teaching_staff?
       define_owners_course_permissions if course_user.manager_or_owner?
+      if !course_user.user.administrator? &&
+         !course_user.user.instance_users.administrator.exists?(instance_id: course.instance_id) &&
+         course_user.role == 'manager'
+        disallow_managers_delete_course
+      end
     end
 
     super
@@ -59,5 +64,9 @@ module Course::CourseAbilityComponent
     can :manage_users, Course, id: course.id
     can :manage, CourseUser, course_id: course.id
     can :manage, Course::EnrolRequest, course_id: course.id
+  end
+
+  def disallow_managers_delete_course
+    cannot :destroy, Course, id: course.id
   end
 end
