@@ -9,7 +9,7 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
 
   def index
     @assessments = current_course.assessments.
-                   includes(:plagiarism_check, :links, :linked_assessments, :question_assessments, :questions).
+                   includes(:plagiarism_check, :links, :linked_assessments).
                    published.ordered_by_date_and_title
     @all_students = current_course.course_users.students
 
@@ -163,6 +163,7 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
   def fetch_all_assessment_related_statistics_hash
     @num_submitted_students_hash = num_submitted_students_hash
     @latest_submission_time_hash = latest_submission_time_hash
+    @num_plagiarism_checkable_questions_hash = num_plagiarism_checkable_questions_hash
   end
 
   def fetch_can_manage_course_hash(assessments)
@@ -183,5 +184,15 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
           course_users[course_id]&.manager_or_owner?
       ]
     end.to_h
+  end
+
+  def num_plagiarism_checkable_questions_hash
+    Course::QuestionAssessment.
+      unscoped.
+      joins(:question).
+      where(assessment: @assessments).
+      merge(Course::Assessment::Question.plagiarism_checkable).
+      group(:assessment_id).
+      count
   end
 end
