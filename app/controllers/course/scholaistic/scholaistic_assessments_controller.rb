@@ -11,6 +11,10 @@ class Course::Scholaistic::ScholaisticAssessmentsController < Course::Scholaisti
       current_course_user
     )
 
+    @scholaistic_assessments = @scholaistic_assessments.includes(lesson_plan_item: :default_reference_time).sort_by do |assessment|
+      [assessment.start_at.to_i, assessment.title, assessment.id]
+    end
+
     @assessments_status = @scholaistic_assessments.to_h do |assessment|
       submission_status = submissions_status_hash[assessment.upstream_id]&.[](:status)
 
