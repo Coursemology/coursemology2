@@ -39,15 +39,11 @@ const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
     >
       <PromptText>{t(translations.deleteCourseWarning)}</PromptText>
 
-      {/* TODO: Find a way to more elegantly handle HTML markups in translations */}
-      <Typography
-        color="text.secondary"
-        dangerouslySetInnerHTML={{
-          __html: t(translations.pleaseTypeChallengeToConfirmDelete, {
-            challenge: `<code>${challengeText}</code>`,
-          }),
-        }}
-      />
+      <Typography color="text.secondary">
+        {t(translations.pleaseTypeChallengeToConfirmDelete, {
+          challenge: <code>{challengeText}</code>,
+        })}
+      </Typography>
 
       <TextField
         disabled={props.disabled}
