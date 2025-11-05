@@ -2592,8 +2592,26 @@
   "course.assessment.liveFeedback.lineHeader": {
     "defaultMessage": "Line {lineNumber}"
   },
+  "course.assessment.submission.GetHelpChatPage.chatInputText": {
+    "defaultMessage": "How can we help you?"
+  },
+  "course.assessment.submission.GetHelpChatPage.chatMessagesRemaining": {
+    "defaultMessage": "{numMessages, plural, one {# message} other {# messages}} remaining"
+  },
+  "course.assessment.submission.GetHelpChatPage.noChatMessagesRemaining": {
+    "defaultMessage": "You have reached the message limit for this question."
+  },
   "course.assessment.submission.GetHelpChatPage.codeUpdated": {
     "defaultMessage": "Code Updated"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.lineNumber": {
+    "defaultMessage": "Line {lineNumber}"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.fileNameAndLineNumber": {
+    "defaultMessage": "{filename}:{lineNumber}"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.threadExpired": {
+    "defaultMessage": "The chat above has ended. Start a new chat?"
   },
   "course.assessment.plagiarism.plagiarism": {
     "defaultMessage": "Plagiarism Results"

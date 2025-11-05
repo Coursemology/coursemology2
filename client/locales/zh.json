@@ -2558,8 +2558,26 @@
   "course.assessment.liveFeedback.lineHeader": {
     "defaultMessage": "第 {lineNumber} 行"
   },
+  "course.assessment.submission.GetHelpChatPage.chatInputText": {
+    "defaultMessage": "我们如何帮助您？"
+  },
+  "course.assessment.submission.GetHelpChatPage.chatMessagesRemaining": {
+    "defaultMessage": "剩余 {numMessages} 条消息"
+  },
+  "course.assessment.submission.GetHelpChatPage.noChatMessagesRemaining": {
+    "defaultMessage": "您已达到此问题的消息限制。"
+  },
   "course.assessment.submission.GetHelpChatPage.codeUpdated": {
     "defaultMessage": "代码已更新"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.lineNumber": {
+    "defaultMessage": "第 {lineNumber} 行"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.fileNameAndLineNumber": {
+    "defaultMessage": "{filename}:{lineNumber}"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.threadExpired": {
+    "defaultMessage": "上面的聊天已结束。开始新的聊天？"
   },
   "course.assessment.plagiarism.plagiarism": {
     "defaultMessage": "抄袭结果"

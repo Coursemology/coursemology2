@@ -82,6 +82,7 @@ const defaultValue = (answerId: number): LiveFeedbackChatData => {
     chats: [],
     answerFiles: [],
     suggestions: sampleSuggestions(false),
+    remainingMessages: 0,
   };
 };
 
@@ -144,6 +145,7 @@ export const liveFeedbackChatSlice = createSlice({
             isError: message.isError,
           };
         }),
+        remainingMessages: thread.remainingMessages,
       };
 
       liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
@@ -165,6 +167,7 @@ export const liveFeedbackChatSlice = createSlice({
         currentThreadId: null,
         isCurrentThreadExpired: false,
         chats: [],
+        remainingMessages: 0,
       };
 
       liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
@@ -336,6 +339,7 @@ export const liveFeedbackChatSlice = createSlice({
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
           chats: [...liveFeedbackChats.chats, ...summaryChat],
+          remainingMessages: liveFeedbackChats.remainingMessages - 1,
           suggestions: sampleSuggestions(true),
         };
 

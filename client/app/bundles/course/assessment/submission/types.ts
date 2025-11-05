@@ -245,6 +245,7 @@ export interface LiveFeedbackChatData {
   chats: ChatShape[];
   answerFiles: AnswerFile[];
   suggestions: Suggestion[];
+  remainingMessages: number;
 }
 
 export interface LiveFeedbackLocalStorage {
@@ -260,6 +261,7 @@ export interface LiveFeedbackThread {
   threadId: string;
   creatorId: number;
   messages: LiveFeedbackMessage[];
+  remainingMessages: number;
 }
 
 export interface LiveFeedbackMessage {

@@ -147,7 +147,6 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     return this.client.post(
       `${this.#urlPrefix}/${submissionId}/generate_live_feedback`,
       {
-        thread_id: threadId,
         answer_id: answerId,
         message,
         options,
