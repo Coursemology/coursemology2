@@ -1478,8 +1478,26 @@
   "course.assessment.liveFeedback.lineHeader": {
     "defaultMessage": "{lineNumber} 줄"
   },
+  "course.assessment.submission.GetHelpChatPage.chatInputText": {
+    "defaultMessage": "어떻게 도와드릴까요?"
+  },
+  "course.assessment.submission.GetHelpChatPage.chatMessagesRemaining": {
+    "defaultMessage": "{numMessages}개 메시지 남음"
+  },
+  "course.assessment.submission.GetHelpChatPage.noChatMessagesRemaining": {
+    "defaultMessage": "이 질문의 메시지 한도에 도달했습니다."
+  },
   "course.assessment.submission.GetHelpChatPage.codeUpdated": {
     "defaultMessage": "코드가 업데이트되었습니다"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.lineNumber": {
+    "defaultMessage": "{lineNumber} 줄"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.fileNameAndLineNumber": {
+    "defaultMessage": "{filename}:{lineNumber}"
+  },
+  "course.assessment.submission.GetHelpChatPage.ConversationArea.threadExpired": {
+    "defaultMessage": "위의 채팅이 종료되었습니다. 새 채팅을 시작하시겠습니까?"
   },
   "course.assessment.liveFeedback.liveFeedbackName": {
     "defaultMessage": "라이브 피드백"

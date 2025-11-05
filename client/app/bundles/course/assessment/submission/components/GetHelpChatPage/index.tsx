@@ -1,11 +1,13 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { Divider, Paper } from '@mui/material';
+import { Divider, Paper, Typography } from '@mui/material';
 
 import { SYNC_STATUS } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import fetchLiveFeedbackChat from '../../actions/live_feedback';
 import { getLiveFeedbackChatsForAnswerId } from '../../selectors/liveFeedbackChats';
+import translations from '../../translations';
 import { ChatSender } from '../../types';
 
 import ChatInputArea from './ChatInputArea';
@@ -18,8 +20,12 @@ interface GetHelpChatPageProps {
   questionId: number;
 }
 
+const MESSAGE_COUNT_WARN_THRESHOLD = 10;
+
 const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
   const { answerId, questionId } = props;
+
+  const { t } = useTranslation();
 
   const scrollableRef = useRef<HTMLDivElement>(null);
 
@@ -81,6 +87,25 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
         <ConversationArea answerId={answerId} />
       </div>
 
+      {isLiveFeedbackChatLoaded &&
+        typeof liveFeedbackChats?.remainingMessages === 'number' && (
+          <Typography
+            className="pl-2"
+            color={
+              liveFeedbackChats?.remainingMessages <
+              MESSAGE_COUNT_WARN_THRESHOLD
+                ? 'error'
+                : undefined
+            }
+            variant="caption"
+          >
+            {liveFeedbackChats?.remainingMessages > 0
+              ? t(translations.chatMessagesRemaining, {
+                  numMessages: liveFeedbackChats?.remainingMessages,
+                })
+              : t(translations.noChatMessagesRemaining)}
+          </Typography>
+        )}
       <div className="relative flex flex-row items-center">
         {isRenderingSuggestionChips && (
           <SuggestionChips answerId={answerId} syncStatus={syncStatus} />

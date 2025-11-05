@@ -397,8 +397,17 @@ const translations = defineMessages({
         or check the error message in the network response.',
   },
   chatInputText: {
-    id: 'course.assessment.submission.GetHelpChatPage.ChatInputArea',
+    id: 'course.assessment.submission.GetHelpChatPage.chatInputText',
     defaultMessage: 'How can we help you?',
+  },
+  chatMessagesRemaining: {
+    id: 'course.assessment.submission.GetHelpChatPage.chatMessagesRemaining',
+    defaultMessage:
+      '{numMessages, plural, one {# message} other {# messages}} remaining',
+  },
+  noChatMessagesRemaining: {
+    id: 'course.assessment.submission.GetHelpChatPage.noChatMessagesRemaining',
+    defaultMessage: 'You have reached the message limit for this question.',
   },
   liveFeedbackNoneGenerated: {
     id: 'course.assessment.submission.liveFeedbackNoneGenerated',

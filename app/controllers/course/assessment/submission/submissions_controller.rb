@@ -103,7 +103,15 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
     return head :bad_request if @answer.nil?
 
-    @thread_id = live_feedback_params[:thread_id]
+    system_thread = Course::Assessment::LiveFeedback::Thread.
+                    joins(:submission_question).
+                    where(submission_question: { submission_id: @submission.id, question_id: @answer.question.id }).
+                    first
+    @thread_id = system_thread.codaveri_thread_id
+
+    user_messages_count = system_thread.messages.where(creator_id: current_user.id).count
+    head :too_many_requests and return if user_messages_count >= system_thread.max_user_messages
+
     @message = live_feedback_params[:message]
 
     @options = live_feedback_params[:options]
@@ -312,7 +320,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   end
 
   def live_feedback_params
-    params.permit(:thread_id, :message, :answer_id, :option_id, options: [])
+    params.permit(:message, :answer_id, :option_id, options: [])
   end
 
   def create_success_response(submission)

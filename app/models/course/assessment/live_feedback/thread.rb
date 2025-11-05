@@ -24,4 +24,8 @@ class Course::Assessment::LiveFeedback::Thread < ApplicationRecord
 
     errors.add(:base, I18n.t('course.assessment.live_feedback.thread.only_one_active_thread'))
   end
+
+  def max_user_messages
+    30
+  end
 end

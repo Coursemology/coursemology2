@@ -54,6 +54,9 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
   const isPollingLiveFeedback =
     (liveFeedbackChatsForAnswer?.pendingFeedbackToken ?? false) !== false;
   const suggestions = liveFeedbackChatsForAnswer?.suggestions ?? [];
+  const isOutOfMessages =
+    typeof liveFeedbackChatsForAnswer?.remainingMessages === 'number' &&
+    liveFeedbackChatsForAnswer?.remainingMessages <= 0;
 
   const textFieldDisabled =
     isResetting ||
@@ -62,6 +65,7 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
     !currentThreadId ||
     isCurrentThreadExpired ||
     syncStatus === SYNC_STATUS.Failed ||
+    isOutOfMessages ||
     (!graderView && attemptsLeft === 0);
 
   const sendButtonDisabled = textFieldDisabled || input.trim() === '';
@@ -89,7 +93,7 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
   };
 
   return (
-    <div className="flex flex-end p-2 w-full items-center justify-between gap-3">
+    <div className="flex flex-end px-2 pb-2 w-full items-center justify-between gap-3">
       <TextField
         disabled={textFieldDisabled}
         fullWidth
