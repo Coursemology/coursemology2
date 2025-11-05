@@ -360,6 +360,7 @@ export function createLiveFeedbackChat({ submissionId, answerId }) {
               answerId,
               threadId,
               isThreadExpired,
+              remainingMessages: response.data?.remainingMessages,
             }),
           );
         }
@@ -381,6 +382,7 @@ export function fetchLiveFeedbackStatus({ answerId, threadId }) {
               answerId,
               threadId,
               isThreadExpired,
+              remainingMessages: response.data?.remainingMessages,
             }),
           );
         }

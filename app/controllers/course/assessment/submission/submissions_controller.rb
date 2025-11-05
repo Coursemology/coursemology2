@@ -105,7 +105,10 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
     system_thread = Course::Assessment::LiveFeedback::Thread.
                     joins(:submission_question).
-                    where(submission_question: { submission_id: @submission.id, question_id: @answer.question.id }).
+                    where(
+                      submission_question: { submission_id: @submission.id, question_id: @answer.question.id },
+                      is_active: true
+                    ).
                     first
     @thread_id = system_thread.codaveri_thread_id
 
@@ -142,9 +145,13 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     @answer = @submission.answers.find_by(id: answer_params[:answer_id])
     return head :bad_request if @answer.nil?
 
-    status, body = safe_create_and_save_thread_info
+    status, body, max_user_messages = safe_create_and_save_thread_info
 
-    render json: { threadId: body['thread']['id'], threadStatus: body['thread']['status'] },
+    render json: {
+      threadId: body['thread']['id'],
+      threadStatus: body['thread']['status'],
+      remainingMessages: max_user_messages
+    },
            status: status
   end
 
@@ -161,7 +168,10 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     thread = Course::Assessment::LiveFeedback::Thread.find_by(codaveri_thread_id: thread_id)
     thread.update!(is_active: thread_status == 'active')
 
-    render json: { threadStatus: thread_status }, status: response_status
+    render json: {
+      threadStatus: thread_status,
+      remainingMessages: thread.remaining_user_messages(current_user)
+    }, status: response_status
   end
 
   # Reload the current answer or reset it, depending on parameters.
