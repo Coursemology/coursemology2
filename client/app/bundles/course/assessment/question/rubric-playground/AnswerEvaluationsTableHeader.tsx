@@ -117,7 +117,7 @@ const AnswerEvaluationsTableHeader: FC<{
         >
           Add Sample Answers
         </Button>
-        {Boolean(answerCount) && (
+        {Boolean(answerCount) && !isComparing && (
           <Button
             disabled={answerEvaluationTableData.some((row) => row.isEvaluating)}
             onClick={() => {

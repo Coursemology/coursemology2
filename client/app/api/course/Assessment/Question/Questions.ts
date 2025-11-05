@@ -1,4 +1,4 @@
-import { QuestionBaseData } from 'types/course/assessment/questions';
+import { QuestionData } from 'types/course/assessment/questions';
 
 import { APIResponse } from 'api/types';
 
@@ -9,7 +9,7 @@ export default class QuestionsAPI extends BaseAssessmentAPI {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/questions`;
   }
 
-  fetch(questionId: number): APIResponse<QuestionBaseData> {
+  fetch(questionId: number): APIResponse<QuestionData> {
     return this.client.get(`${this.#urlPrefix}/${questionId}`);
   }
 }

@@ -259,7 +259,7 @@ const handle: DataHandle = (match) => {
       return {
         activePath: `/courses/${courseId}/assessments/${assessmentId}`,
         content: [
-          { title: questionCrumbTitle },
+          { title: questionCrumbTitle, url: question.editUrl },
           { title: 'Rubric Playground' },
         ],
       };
