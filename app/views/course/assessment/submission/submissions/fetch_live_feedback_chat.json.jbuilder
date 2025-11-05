@@ -3,7 +3,7 @@ json.id @thread.id
 json.answerId @answer_id
 json.threadId @thread.codaveri_thread_id
 json.creatorId @thread.submission_creator_id
-json.remainingMessages @thread.max_user_messages - @thread.messages.where(creator_id: current_user.id).count
+json.remainingMessages @thread.remaining_user_messages(current_user)
 
 json.messages @thread.messages.each do |message|
   json.content message.content

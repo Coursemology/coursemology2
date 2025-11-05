@@ -20,15 +20,19 @@ module Course::Assessment::LiveFeedback::ThreadConcern
   def existing_thread_status(thread)
     thread_status = thread.is_active? ? 'active' : 'expired'
 
-    [200, 'thread' => { 'id' => thread.codaveri_thread_id, 'status' => thread_status }]
+    [
+      200,
+      { 'thread' => { 'id' => thread.codaveri_thread_id, 'status' => thread_status } },
+      thread.remaining_user_messages(current_user)
+    ]
   end
 
   def create_and_save_thread_if_empty(submission_question)
     status, body = @answer.create_live_feedback_chat
 
-    save_thread_info(body['thread'], submission_question.id)
+    new_thread = save_thread_info(body['thread'], submission_question.id)
 
-    [status, body]
+    [status, body, new_thread.max_user_messages]
   end
 
   def save_thread_info(thread_info, submission_question_id)

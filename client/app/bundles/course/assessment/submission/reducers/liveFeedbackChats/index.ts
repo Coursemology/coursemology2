@@ -230,12 +230,15 @@ export const liveFeedbackChatSlice = createSlice({
         answerId: number;
         threadId: string;
         isThreadExpired: boolean;
+        remainingMessages?: number;
       }>,
     ) => {
-      const { answerId, threadId, isThreadExpired } = action.payload;
+      const { answerId, threadId, isThreadExpired, remainingMessages } =
+        action.payload;
       const changes: Partial<LiveFeedbackChatData> = {
         currentThreadId: threadId,
         isCurrentThreadExpired: isThreadExpired,
+        remainingMessages,
       };
       liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
         id: answerId,

@@ -88,6 +88,7 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
       </div>
 
       {isLiveFeedbackChatLoaded &&
+        Boolean(currentThreadId) &&
         typeof liveFeedbackChats?.remainingMessages === 'number' && (
           <Typography
             className="pl-2"

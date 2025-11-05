@@ -28,4 +28,8 @@ class Course::Assessment::LiveFeedback::Thread < ApplicationRecord
   def max_user_messages
     30
   end
+
+  def remaining_user_messages(user)
+    max_user_messages - messages.where(creator_id: user.id).count
+  end
 end
