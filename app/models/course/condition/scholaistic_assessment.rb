@@ -20,7 +20,7 @@ class Course::Condition::ScholaisticAssessment < ApplicationRecord
     upstream_id = scholaistic_assessment.upstream_id
     submissions = ScholaisticApiService.submissions!([upstream_id], course_user)
 
-    submissions&.[](upstream_id)&.[](:status) == :graded
+    submissions&.[](upstream_id)&.[](:status) == :submitted
   rescue StandardError => e
     Rails.logger.error("Failed to load Scholaistic submission: #{e.message}")
     raise e unless Rails.env.production?
