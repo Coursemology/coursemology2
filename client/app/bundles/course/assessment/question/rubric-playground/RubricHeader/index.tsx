@@ -12,12 +12,12 @@ import {
   Approval,
   Clear,
   Delete,
-  Difference,
   Edit,
-  PlaylistPlay,
+  RadioButtonChecked,
+  RadioButtonUnchecked,
   Save,
 } from '@mui/icons-material';
-import { Card, Typography } from '@mui/material';
+import { Card, Chip, Typography } from '@mui/material';
 import { JobStatus } from 'types/jobs';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
@@ -214,30 +214,49 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
         <div className="flex-1" />
 
         {activeTab !== RubricPlaygroundTab.EDIT && (
-          <HeaderButton
+          <Chip
+            className="whitespace-nowrap px-0 mx-0 select-none"
+            clickable={activeTab !== RubricPlaygroundTab.EVALUATE}
             color="info"
-            icon={<PlaylistPlay />}
-            onClick={() => setActiveTab(RubricPlaygroundTab.EVALUATE)}
-            title="Evaluate"
-            variant={
-              activeTab === RubricPlaygroundTab.EVALUATE
-                ? 'contained'
-                : 'outlined'
+            component="div"
+            label={
+              <div className="space-x-2 flex items-center">
+                {activeTab === RubricPlaygroundTab.EVALUATE ? (
+                  <RadioButtonChecked fontSize="small" />
+                ) : (
+                  <RadioButtonUnchecked fontSize="small" />
+                )}
+                <Typography fontSize="small" fontWeight="500" variant="caption">
+                  Evaluate
+                </Typography>
+              </div>
             }
+            onClick={() => setActiveTab(RubricPlaygroundTab.EVALUATE)}
+            variant="outlined"
           />
         )}
 
-        {activeTab !== RubricPlaygroundTab.EDIT && sortedRubrics.length > 1 && (
-          <HeaderButton
+        {activeTab !== RubricPlaygroundTab.EDIT && (
+          <Chip
+            className="whitespace-nowrap px-0 mx-0 select-none"
+            clickable={activeTab !== RubricPlaygroundTab.COMPARE}
             color="info"
-            icon={<Difference />}
-            onClick={() => setActiveTab(RubricPlaygroundTab.COMPARE)}
-            title="Compare"
-            variant={
-              activeTab === RubricPlaygroundTab.COMPARE
-                ? 'contained'
-                : 'outlined'
+            component="div"
+            disabled={sortedRubrics.length <= 1}
+            label={
+              <div className="space-x-2 flex items-center">
+                {activeTab === RubricPlaygroundTab.COMPARE ? (
+                  <RadioButtonChecked fontSize="small" />
+                ) : (
+                  <RadioButtonUnchecked fontSize="small" />
+                )}
+                <Typography fontSize="small" fontWeight="500" variant="caption">
+                  Compare
+                </Typography>
+              </div>
             }
+            onClick={() => setActiveTab(RubricPlaygroundTab.COMPARE)}
+            variant="outlined"
           />
         )}
 
