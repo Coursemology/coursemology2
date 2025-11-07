@@ -5,12 +5,14 @@ import { RubricCategoryData } from 'types/course/rubrics';
 
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { useAppDispatch } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { RubricState } from '../../reducers/rubrics';
 import {
   deleteRowEvaluation,
   requestRowEvaluation,
 } from '../operations/rowEvaluation';
+import translations from '../translations';
 
 import CategoryGradeCell from './CategoryGradeCell';
 import PopoverContentCell from './PopoverContentCell';
@@ -31,6 +33,7 @@ interface AnswerEvaluationsTableProps {
 }
 
 const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
+  const { t } = useTranslation();
   const { data, selectedRubric, isComparing } = props;
 
   const dispatch = useAppDispatch();
@@ -51,7 +54,11 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     id: `grade_1`,
     title: (() => (
       <Tooltip title={category.name}>
-        <span>{selectedRubric.categories.length === 1 ? 'Grade' : 'C1'}</span>
+        <span>
+          {selectedRubric.categories.length === 1
+            ? t(translations.questionGrade)
+            : t(translations.categoryHeading, { index: 1 })}
+        </span>
       </Tooltip>
     )) as unknown as string,
 
@@ -98,7 +105,9 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
 
     title: () => (
       <Tooltip title={category.name}>
-        <span>C{categoryIndex + 1}</span>
+        <span>
+          {t(translations.categoryHeading, { index: categoryIndex + 1 })}
+        </span>
       </Tooltip>
     ),
 
@@ -125,7 +134,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
 
   const smallScreenGradesColumn = {
     id: 'grade_small',
-    title: 'Grade',
+    title: t(translations.questionGrade),
     sortable: true,
     className: 'lg:!hidden p-0',
     sortProps: {
@@ -151,7 +160,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
   const columns: ColumnTemplate<AnswerTableEntry>[] = [
     {
       of: 'title',
-      title: 'Student',
+      title: t(translations.student),
       searchable: true,
       sortable: true,
       className: 'relative',
@@ -159,7 +168,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
         <div className="relative w-full h-full">
           {answer.title}
           <div className="absolute -top-2 -right-4 flex space-y-0 flex-col">
-            <Tooltip title="Dismiss">
+            <Tooltip title={t(translations.dismiss)}>
               <IconButton
                 className="p-0"
                 color="error"
@@ -173,7 +182,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
               </IconButton>
             </Tooltip>
             {answer.evaluation && (
-              <Tooltip title="Re-evaluate">
+              <Tooltip title={t(translations.reevaluate)}>
                 <IconButton
                   className="p-0"
                   color="primary"
@@ -199,7 +208,7 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     ),
     {
       id: 'totalGrade',
-      title: 'Total',
+      title: t(translations.totalGrade),
       sortable: true,
       className: 'max-lg:!hidden p-0',
       sortProps: {
@@ -223,12 +232,12 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
     },
     {
       of: 'answerText',
-      title: 'Answer',
+      title: t(translations.answer),
       cell: (answer) => <PopoverContentCell content={answer.answerText} />,
     },
     {
       id: 'feedback',
-      title: 'Feedback',
+      title: t(translations.feedback),
       cell: (answer) => (
         <PopoverContentCell content={answer.evaluation?.feedback ?? ''} />
       ),

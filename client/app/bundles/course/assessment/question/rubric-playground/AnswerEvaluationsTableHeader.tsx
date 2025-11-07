@@ -5,6 +5,7 @@ import sampleSize from 'lodash-es/sampleSize';
 import { dispatch } from 'store';
 
 import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import {
   actions as questionRubricsActions,
@@ -19,10 +20,11 @@ import {
   initializeMockAnswerEvaluations,
 } from './operations/mockAnswers';
 import { requestRowEvaluation } from './operations/rowEvaluation';
-import AddSampleAnswersDialog, {
+import AddAnswersPrompt, {
   AddSampleAnswersFormData,
   AddSampleMode,
-} from './AddSampleAnswersDialog';
+} from './AddAnswersPrompt';
+import translations from './translations';
 
 const AnswerEvaluationsTableHeader: FC<{
   answerCount: number;
@@ -32,6 +34,7 @@ const AnswerEvaluationsTableHeader: FC<{
   isComparing: boolean;
   selectedRubric: RubricState;
 }> = (props) => {
+  const { t } = useTranslation();
   const {
     answerCount,
     answerEvaluatedCount,
@@ -108,14 +111,16 @@ const AnswerEvaluationsTableHeader: FC<{
   return (
     <>
       <div className="flex flex-row space-x-4 items-center py-2">
-        <Typography variant="h6">Sample Answer Evaluations</Typography>
+        <Typography variant="h6">
+          {t(translations.sampleAnswerEvaluations)}
+        </Typography>
         <Button
           onClick={() => setIsAddingAnswers(true)}
           size="small"
           startIcon={<Add />}
           variant="outlined"
         >
-          Add Sample Answers
+          {t(translations.addSampleAnswers)}
         </Button>
         {Boolean(answerCount) && !isComparing && (
           <Button
@@ -139,23 +144,26 @@ const AnswerEvaluationsTableHeader: FC<{
             }
             variant="outlined"
           >
-            {!answerEvaluatedCount && `Evaluate All (${answerCount})`}
+            {!answerEvaluatedCount &&
+              t(translations.evaluateAll, { count: answerCount })}
             {Boolean(answerEvaluatedCount) &&
               answerEvaluatedCount === answerCount &&
-              `Re-evaluate All (${answerCount})`}
+              t(translations.reevaluateAll, { count: answerCount })}
             {Boolean(answerEvaluatedCount) &&
               answerEvaluatedCount !== answerCount &&
-              `Evaluate Remaining (${answerCount - answerEvaluatedCount})`}
+              t(translations.evaluateRemaining, {
+                count: answerCount - answerEvaluatedCount,
+              })}
           </Button>
         )}
       </div>
       {isComparing && (
         <Typography variant="body2">
-          Comparing {compareCount} revisions
+          {t(translations.comparingRevisions, { count: compareCount })}
         </Typography>
       )}
 
-      <AddSampleAnswersDialog
+      <AddAnswersPrompt
         answers={selectableAnswers}
         maximumGrade={maximumGrade ?? 0}
         onClose={() => setIsAddingAnswers(false)}

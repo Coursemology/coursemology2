@@ -8,8 +8,10 @@ import {
 import { Paper, Typography } from '@mui/material';
 
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { RubricState } from '../../reducers/rubrics';
+import translations from '../translations';
 import { RubricEditFormData } from '../types';
 
 import PlaygroundCategoryManager from './PlaygroundCategoryManager';
@@ -21,6 +23,7 @@ interface RubricEditFormProps {
 }
 
 const RubricEditForm: FC<RubricEditFormProps> = (props) => {
+  const { t } = useTranslation();
   const { form, selectedRubric, onSubmit } = props;
 
   useEffect(() => {
@@ -47,9 +50,11 @@ const RubricEditForm: FC<RubricEditFormProps> = (props) => {
     >
       <div className="w-1/2">
         <Paper className="p-3 space-y-4" variant="outlined">
-          <Typography variant="subtitle2">Grading Prompt</Typography>
+          <Typography variant="subtitle2">
+            {t(translations.gradingPrompt)}
+          </Typography>
           <Typography variant="caption">
-            Instructions to guide the AI in grading and giving feedback.
+            {t(translations.gradingPromptDescription)}
           </Typography>
           <Controller
             control={form.control}
@@ -64,9 +69,11 @@ const RubricEditForm: FC<RubricEditFormProps> = (props) => {
             )}
           />
 
-          <Typography variant="subtitle2">Model Answer</Typography>
+          <Typography variant="subtitle2">
+            {t(translations.modelAnswer)}
+          </Typography>
           <Typography variant="caption">
-            An example that scores the maximum for each category.
+            {t(translations.modelAnswerDescription)}
           </Typography>
           <Controller
             control={form.control}

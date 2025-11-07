@@ -8,6 +8,9 @@ import Prompt from 'lib/components/core/dialogs/Prompt';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Table, { ColumnTemplate } from 'lib/components/table';
+import useTranslation from 'lib/hooks/useTranslation';
+
+import translations from './translations';
 
 export enum AddSampleMode {
   SPECIFIC_ANSWER = 'SPECIFIC_ANSWER',
@@ -31,7 +34,8 @@ interface Props {
   maximumGrade: number;
 }
 
-const AddSampleAnswersDialog: FC<Props> = (props) => {
+const AddAnswersPrompt: FC<Props> = (props) => {
+  const { t } = useTranslation();
   const { answers, onSubmit, onClose, open, maximumGrade } = props;
 
   const tableRef = useRef<ComponentRef<typeof Table>>(null);
@@ -55,14 +59,14 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
   const columns: ColumnTemplate<RubricAnswerData>[] = [
     {
       of: 'title',
-      title: 'Student',
+      title: t(translations.student),
       searchable: true,
       sortable: true,
       cell: (answer) => answer.title,
     },
     {
       of: 'grade',
-      title: 'Grade',
+      title: t(translations.questionGrade),
       searchable: true,
       sortable: true,
       sortProps: {
@@ -75,7 +79,7 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
     },
     {
       of: 'answerText',
-      title: 'Answer',
+      title: t(translations.answer),
       cell: (answer) => (
         <Typography
           className="whitespace-normal line-clamp-4"
@@ -100,8 +104,8 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
       })}
       onClose={onClose}
       open={open}
-      primaryLabel="Add"
-      title="Add Sample Answers"
+      primaryLabel={t(translations.addAnswersPromptAction)}
+      title={t(translations.addAnswersTitle)}
     >
       <form>
         <Controller
@@ -119,7 +123,7 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
               <RadioButton
                 className="my-0"
                 disabled={false}
-                label="Add existing answers"
+                label={t(translations.addExistingAnswers)}
                 value={AddSampleMode.SPECIFIC_ANSWER}
               />
               {selectedAddMode === AddSampleMode.SPECIFIC_ANSWER && (
@@ -136,8 +140,7 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
                     rowsPerPage: [5],
                   }}
                   search={{
-                    searchPlaceholder:
-                      'Search answers by student name or grade',
+                    searchPlaceholder: t(translations.searchAnswersPlaceholder),
                   }}
                   toolbar={{
                     show: true,
@@ -149,27 +152,29 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
                 className="my-0"
                 disabled={false}
                 label={
-                  <div className="align-middle items-center">
-                    <span> Add </span>
-                    <Controller
-                      control={control}
-                      name="addRandomAnswerCount"
-                      render={({ field, fieldState }) => (
-                        <FormTextField
-                          className="w-16 mx-3"
-                          disabled={
-                            selectedAddMode !== AddSampleMode.RANDOM_STUDENT
-                          }
-                          disableMargins
-                          field={field}
-                          fieldState={fieldState}
-                          inputProps={{ className: 'text-right' }}
-                          type="number"
-                          variant="standard"
+                  <div className="flex items-center">
+                    {t(translations.addRandomStudentAnswers, {
+                      inputComponent: (
+                        <Controller
+                          control={control}
+                          name="addRandomAnswerCount"
+                          render={({ field, fieldState }) => (
+                            <FormTextField
+                              className="w-16 mx-3"
+                              disabled={
+                                selectedAddMode !== AddSampleMode.RANDOM_STUDENT
+                              }
+                              disableMargins
+                              field={field}
+                              fieldState={fieldState}
+                              inputProps={{ className: 'text-right' }}
+                              type="number"
+                              variant="standard"
+                            />
+                          )}
                         />
-                      )}
-                    />
-                    random student answer(s)
+                      ),
+                    })}
                   </div>
                 }
                 value={AddSampleMode.RANDOM_STUDENT}
@@ -177,7 +182,7 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
               <RadioButton
                 className="my-0"
                 disabled={false}
-                label="Write a custom answer"
+                label={t(translations.writeCustomAnswer)}
                 value={AddSampleMode.CUSTOM_ANSWER}
               />
 
@@ -192,7 +197,7 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
                       field={field}
                       fieldState={fieldState}
                       fullWidth
-                      placeholder="Write the answer here"
+                      placeholder={t(translations.writeAnswerPlaceholder)}
                       variant="outlined"
                     />
                   )}
@@ -206,4 +211,4 @@ const AddSampleAnswersDialog: FC<Props> = (props) => {
   );
 };
 
-export default AddSampleAnswersDialog;
+export default AddAnswersPrompt;

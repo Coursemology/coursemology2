@@ -941,14 +941,14 @@ const translations = defineMessages({
   },
   categoryMaximumGrade: {
     id: 'course.assessment.question.rubricBasedResponses.categoryMaximumGrade',
-    defaultMessage: 'Max Grade',
+    defaultMessage: 'Max',
   },
   categoryGrade: {
     id: 'course.assessment.question.rubricBasedResponses.categoryGrade',
-    defaultMessage: 'Band Score',
+    defaultMessage: 'Grade',
   },
-  gradeExplanation: {
-    id: 'course.assessment.question.rubricBasedResponses.gradeExplanation',
+  categoryGradeExplanation: {
+    id: 'course.assessment.question.rubricBasedResponses.categoryGradeExplanation',
     defaultMessage: 'Explanation',
   },
   rubricHint: {

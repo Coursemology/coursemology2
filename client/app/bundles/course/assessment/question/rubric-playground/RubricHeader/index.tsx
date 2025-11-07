@@ -36,6 +36,7 @@ import {
 } from '../../reducers/rubrics';
 import { exportEvaluations } from '../operations/rowEvaluation';
 import { deleteRubric } from '../operations/rubric';
+import translations from '../translations';
 import { RubricEditFormData, RubricPlaygroundTab } from '../types';
 
 import HeaderButton from './HeaderButton';
@@ -87,7 +88,9 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
   const handleExport = async (): Promise<void> => {
     const jobStatus = await exportEvaluations(selectedRubric.id);
     dispatch(questionRubricsActions.updateRubricExportJob(jobStatus));
-    exportJobToastRef.current = loadingToast('Applying rubric grading data...');
+    exportJobToastRef.current = loadingToast(
+      t(translations.applyingRubricGradingData),
+    );
   };
 
   const handleExportJobPolling = async (): Promise<void> => {
@@ -95,14 +98,12 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
       const jobStatus = await pollJobRequest(rubricState.exportJob.jobUrl);
       if (exportJobToastRef.current) {
         if (jobStatus.status === JobStatus.completed) {
-          exportJobToastRef.current.success(
-            'Grading rubric, prompt, and results successfully applied.',
-          );
+          exportJobToastRef.current.success(t(translations.applySuccess));
           setTimeout(() => {
             navigate(getAssessmentURL(getCourseId(), getAssessmentId()));
           }, 100);
         } else if (jobStatus.status === JobStatus.errored) {
-          exportJobToastRef.current.error('Failed to apply grading results');
+          exportJobToastRef.current.error(t(translations.applyFailure));
         }
       }
       dispatch(questionRubricsActions.updateRubricExportJob(jobStatus));
@@ -138,7 +139,9 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
     <Card className="sticky top-0 px-4 bg-white z-50" variant="outlined">
       {sortedRubrics.length === 1 && (
         <Typography className="pt-3" variant="body2">
-          Saved Rubric, {formatLongDateTime(selectedRubric.createdAt)}
+          {t(translations.savedRubric, {
+            date: formatLongDateTime(selectedRubric.createdAt),
+          })}
         </Typography>
       )}
       {sortedRubrics.length > 1 && (
@@ -186,7 +189,7 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
             color="info"
             icon={<Edit />}
             onClick={() => setActiveTab(RubricPlaygroundTab.EDIT)}
-            title="View / Edit Rubric"
+            title={t(translations.viewEditRubric)}
             variant="outlined"
           />
         )}
@@ -227,7 +230,7 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
                   <RadioButtonUnchecked fontSize="small" />
                 )}
                 <Typography fontSize="small" fontWeight="500" variant="caption">
-                  Evaluate
+                  {t(translations.evaluate)}
                 </Typography>
               </div>
             }
@@ -251,7 +254,7 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
                   <RadioButtonUnchecked fontSize="small" />
                 )}
                 <Typography fontSize="small" fontWeight="500" variant="caption">
-                  Compare
+                  {t(translations.compare)}
                 </Typography>
               </div>
             }
@@ -271,7 +274,7 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
               }
               setIsConfirmingExport(true);
             }}
-            title="Apply"
+            title={t(translations.apply)}
           />
         )}
 
@@ -294,22 +297,16 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
         onClose={() => setIsConfirmingExport(false)}
         open={isConfirmingExport}
         primaryColor="info"
-        primaryLabel="Apply"
-        title="Confirm AI Grading Application"
+        primaryLabel={t(translations.apply)}
+        title={t(translations.confirmAIGradingApplication)}
       >
         {selectedRubricIndex < sortedRubrics.length - 1 && (
-          <PromptText>
-            You have selected to apply a rubric which is not the latest revision
-            saved on this page.
-          </PromptText>
+          <PromptText>{t(translations.notLatestRevisionWarning)}</PromptText>
         )}
 
-        <PromptText>
-          Applying this rubric will assign grades to all student answers,
-          including the ones not yet evaluated on this page.
-        </PromptText>
+        <PromptText>{t(translations.applyWillGradeAllAnswers)}</PromptText>
 
-        <PromptText>Are you sure you wish to proceed?</PromptText>
+        <PromptText>{t(translations.confirmProceed)}</PromptText>
       </Prompt>
     </Card>
   );

@@ -31,10 +31,12 @@ import AnswerEvaluationsTable from './AnswerEvaluationsTable';
 import AnswerEvaluationsTableHeader from './AnswerEvaluationsTableHeader';
 import RubricEditForm from './RubricEditForm';
 import RubricHeader from './RubricHeader';
+import translations from './translations';
 import { RubricEditFormData, RubricPlaygroundTab } from './types';
 import { buildSelectedRubricTableData } from './utils';
 
 const RubricPlaygroundPage = (): JSX.Element | null => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const rubricState = useAppSelector(
@@ -260,7 +262,7 @@ const handle: DataHandle = (match) => {
         activePath: `/courses/${courseId}/assessments/${assessmentId}`,
         content: [
           { title: questionCrumbTitle, url: question.editUrl },
-          { title: 'Rubric Playground' },
+          { title: 'Rubric Playground' }, // TODO: Translate this using translations.rubricPlayground
         ],
       };
     },

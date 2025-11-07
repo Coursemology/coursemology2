@@ -15,7 +15,8 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../../translations';
+import assessmentTranslations from '../../../translations';
+import translations from '../translations';
 import {
   RubricCategoryCriterionEntity,
   RubricCategoryEntity,
@@ -90,13 +91,15 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
 
   return (
     <Paper className="p-3 space-y-4" variant="outlined">
-      <Typography variant="subtitle2">Grading Categories</Typography>
+      <Typography variant="subtitle2">
+        {t(translations.gradingCategories)}
+      </Typography>
       <Button
         disabled={disabled}
         onClick={handleAddCategory}
         variant="outlined"
       >
-        {t(translations.addNewCategory)}
+        {t(assessmentTranslations.addNewCategory)}
       </Button>
 
       {categories?.map((category, categoryIndex) => {
@@ -117,7 +120,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
                       disabled={disabled}
                       field={field}
                       fieldState={fieldState}
-                      label={t(translations.categoryName)}
+                      label={t(assessmentTranslations.categoryName)}
                       variant="filled"
                     />
                   )}
@@ -128,7 +131,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
                 <TextField
                   className="w-full"
                   disabled
-                  label="Max"
+                  label={t(assessmentTranslations.categoryMaximumGrade)}
                   type="number"
                   value={computeMaximumCategoryGrade(category)}
                   variant="filled"
@@ -136,7 +139,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
               </div>
 
               <div className="w-[5%] flex flex-col">
-                <Tooltip title={t(translations.addNewGrade)}>
+                <Tooltip title={t(assessmentTranslations.addNewGrade)}>
                   <IconButton
                     color="info"
                     disabled={disabled}
@@ -166,6 +169,9 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
                         field={field}
                         fieldState={fieldState}
                         fullWidth
+                        placeholder={t(
+                          assessmentTranslations.categoryGradeExplanation,
+                        )}
                         variant="filled"
                       />
                     )}
@@ -183,7 +189,7 @@ const CategoryManager = (props: CategoryManagerProps): JSX.Element => {
                         disableMargins
                         field={field}
                         fieldState={fieldState}
-                        label="Grade"
+                        label={t(assessmentTranslations.categoryGrade)}
                         type="number"
                         variant="filled"
                       />
