@@ -2192,6 +2192,138 @@
   "course.assessment.question.textResponses.zeroGrade": {
     "defaultMessage": "0.0"
   },
+  "course.assessment.question.rubricPlayground.rubricPlayground": {
+    "defaultMessage": "루브릭 플레이그라운드"
+  },
+  "course.assessment.question.rubricPlayground.savedRubric": {
+    "defaultMessage": "저장된 루브릭, {date}"
+  },
+  "course.assessment.question.rubricPlayground.viewEditRubric": {
+    "defaultMessage": "루브릭 보기 / 편집"
+  },
+  "course.assessment.question.rubricPlayground.evaluate": {
+    "defaultMessage": "평가"
+  },
+  "course.assessment.question.rubricPlayground.compare": {
+    "defaultMessage": "비교"
+  },
+  "course.assessment.question.rubricPlayground.apply": {
+    "defaultMessage": "적용"
+  },
+  "course.assessment.question.rubricPlayground.confirmAIGradingApplication": {
+    "defaultMessage": "AI 채점 적용 확인"
+  },
+  "course.assessment.question.rubricPlayground.applyingRubricGradingData": {
+    "defaultMessage": "루브릭 채점 데이터 적용 중..."
+  },
+  "course.assessment.question.rubricPlayground.applySuccess": {
+    "defaultMessage": "채점 루브릭, 프롬프트 및 결과가 성공적으로 적용되었습니다."
+  },
+  "course.assessment.question.rubricPlayground.applyFailure": {
+    "defaultMessage": "채점 결과 적용 실패"
+  },
+  "course.assessment.question.rubricPlayground.notLatestRevisionWarning": {
+    "defaultMessage": "이 페이지에 저장된 최신 개정판이 아닌 루브릭을 적용하도록 선택했습니다."
+  },
+  "course.assessment.question.rubricPlayground.applyWillGradeAllAnswers": {
+    "defaultMessage": "이 루브릭을 적용하면 이 페이지에서 아직 평가되지 않은 답변을 포함하여 모든 학생 답변에 점수가 할당됩니다."
+  },
+  "course.assessment.question.rubricPlayground.confirmProceed": {
+    "defaultMessage": "계속 진행하시겠습니까?"
+  },
+  "course.assessment.question.rubricPlayground.sampleAnswerEvaluations": {
+    "defaultMessage": "샘플 답변 평가"
+  },
+  "course.assessment.question.rubricPlayground.addSampleAnswers": {
+    "defaultMessage": "샘플 답변 추가"
+  },
+  "course.assessment.question.rubricPlayground.evaluateAll": {
+    "defaultMessage": "모두 평가 ({count})"
+  },
+  "course.assessment.question.rubricPlayground.reevaluateAll": {
+    "defaultMessage": "모두 재평가 ({count})"
+  },
+  "course.assessment.question.rubricPlayground.evaluateRemaining": {
+    "defaultMessage": "나머지 평가 ({count})"
+  },
+  "course.assessment.question.rubricPlayground.comparingRevisions": {
+    "defaultMessage": "{count}개 개정판 비교 중"
+  },
+  "course.assessment.question.rubricPlayground.addSampleAnswersTitle": {
+    "defaultMessage": "샘플 답변 추가"
+  },
+  "course.assessment.question.rubricPlayground.add": {
+    "defaultMessage": "추가"
+  },
+  "course.assessment.question.rubricPlayground.addExistingAnswers": {
+    "defaultMessage": "기존 답변 추가"
+  },
+  "course.assessment.question.rubricPlayground.student": {
+    "defaultMessage": "학생"
+  },
+  "course.assessment.question.rubricPlayground.questionGrade": {
+    "defaultMessage": "점수"
+  },
+  "course.assessment.question.rubricPlayground.categoryHeading": {
+    "defaultMessage": "카{index}"
+  },
+  "course.assessment.question.rubricPlayground.answer": {
+    "defaultMessage": "답변"
+  },
+  "course.assessment.question.rubricPlayground.searchAnswersPlaceholder": {
+    "defaultMessage": "학생 이름 또는 점수로 답변 검색"
+  },
+  "course.assessment.question.rubricPlayground.addRandomStudentAnswers": {
+    "defaultMessage": "무작위 학생 답변"
+  },
+  "course.assessment.question.rubricPlayground.writeCustomAnswer": {
+    "defaultMessage": "사용자 정의 답변 작성"
+  },
+  "course.assessment.question.rubricPlayground.writeAnswerPlaceholder": {
+    "defaultMessage": "여기에 답변을 작성하세요"
+  },
+  "course.assessment.question.rubricPlayground.dismiss": {
+    "defaultMessage": "닫기"
+  },
+  "course.assessment.question.rubricPlayground.reevaluate": {
+    "defaultMessage": "재평가"
+  },
+  "course.assessment.question.rubricPlayground.totalGrade": {
+    "defaultMessage": "총점"
+  },
+  "course.assessment.question.rubricPlayground.feedback": {
+    "defaultMessage": "피드백"
+  },
+  "course.assessment.question.rubricPlayground.evaluating": {
+    "defaultMessage": "평가 중"
+  },
+  "course.assessment.question.rubricPlayground.gradingPrompt": {
+    "defaultMessage": "채점 프롬프트"
+  },
+  "course.assessment.question.rubricPlayground.gradingPromptDescription": {
+    "defaultMessage": "채점 및 피드백 제공 시 AI를 안내하는 지침입니다."
+  },
+  "course.assessment.question.rubricPlayground.modelAnswer": {
+    "defaultMessage": "모범 답안"
+  },
+  "course.assessment.question.rubricPlayground.modelAnswerDescription": {
+    "defaultMessage": "각 카테고리에서 최대 점수를 받는 예시입니다."
+  },
+  "course.assessment.question.rubricPlayground.gradingCategories": {
+    "defaultMessage": "채점 카테고리"
+  },
+  "course.assessment.question.rubricPlayground.addNewCategory": {
+    "defaultMessage": "새 카테고리 추가"
+  },
+  "course.assessment.question.rubricPlayground.categoryName": {
+    "defaultMessage": "카테고리 이름"
+  },
+  "course.assessment.question.rubricPlayground.max": {
+    "defaultMessage": "최대"
+  },
+  "course.assessment.question.rubricPlayground.addNewGrade": {
+    "defaultMessage": "새 점수 추가"
+  },
   "course.assessment.session.assessmentNotStarted": {
     "defaultMessage": "평가가 아직 시작되지 않았습니다. {startDate} 이후에 다시 방문하세요."
   },

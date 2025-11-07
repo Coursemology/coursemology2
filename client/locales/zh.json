@@ -2132,6 +2132,138 @@
   "course.assessment.question.textResponses.zeroGrade": {
     "defaultMessage": "0.0"
   },
+  "course.assessment.question.rubricPlayground.rubricPlayground": {
+    "defaultMessage": "评分标准试验场"
+  },
+  "course.assessment.question.rubricPlayground.savedRubric": {
+    "defaultMessage": "已保存的评分标准，{date}"
+  },
+  "course.assessment.question.rubricPlayground.viewEditRubric": {
+    "defaultMessage": "查看 / 编辑评分标准"
+  },
+  "course.assessment.question.rubricPlayground.evaluate": {
+    "defaultMessage": "评估"
+  },
+  "course.assessment.question.rubricPlayground.compare": {
+    "defaultMessage": "比较"
+  },
+  "course.assessment.question.rubricPlayground.apply": {
+    "defaultMessage": "应用"
+  },
+  "course.assessment.question.rubricPlayground.confirmAIGradingApplication": {
+    "defaultMessage": "确认应用AI评分"
+  },
+  "course.assessment.question.rubricPlayground.applyingRubricGradingData": {
+    "defaultMessage": "正在应用评分标准数据..."
+  },
+  "course.assessment.question.rubricPlayground.applySuccess": {
+    "defaultMessage": "评分标准、提示和结果已成功应用。"
+  },
+  "course.assessment.question.rubricPlayground.applyFailure": {
+    "defaultMessage": "应用评分结果失败"
+  },
+  "course.assessment.question.rubricPlayground.notLatestRevisionWarning": {
+    "defaultMessage": "您选择应用的评分标准不是此页面上保存的最新版本。"
+  },
+  "course.assessment.question.rubricPlayground.applyWillGradeAllAnswers": {
+    "defaultMessage": "应用此评分标准将为所有学生答案分配成绩，包括此页面上尚未评估的答案。"
+  },
+  "course.assessment.question.rubricPlayground.confirmProceed": {
+    "defaultMessage": "您确定要继续吗？"
+  },
+  "course.assessment.question.rubricPlayground.sampleAnswerEvaluations": {
+    "defaultMessage": "示例答案评估"
+  },
+  "course.assessment.question.rubricPlayground.addSampleAnswers": {
+    "defaultMessage": "添加示例答案"
+  },
+  "course.assessment.question.rubricPlayground.evaluateAll": {
+    "defaultMessage": "全部评估 ({count})"
+  },
+  "course.assessment.question.rubricPlayground.reevaluateAll": {
+    "defaultMessage": "全部重新评估 ({count})"
+  },
+  "course.assessment.question.rubricPlayground.evaluateRemaining": {
+    "defaultMessage": "评估剩余 ({count})"
+  },
+  "course.assessment.question.rubricPlayground.comparingRevisions": {
+    "defaultMessage": "正在比较 {count} 个版本"
+  },
+  "course.assessment.question.rubricPlayground.addSampleAnswersTitle": {
+    "defaultMessage": "添加示例答案"
+  },
+  "course.assessment.question.rubricPlayground.add": {
+    "defaultMessage": "添加"
+  },
+  "course.assessment.question.rubricPlayground.addExistingAnswers": {
+    "defaultMessage": "添加现有答案"
+  },
+  "course.assessment.question.rubricPlayground.student": {
+    "defaultMessage": "学生"
+  },
+  "course.assessment.question.rubricPlayground.questionGrade": {
+    "defaultMessage": "成绩"
+  },
+  "course.assessment.question.rubricPlayground.categoryHeading": {
+    "defaultMessage": "类{index}"
+  },
+  "course.assessment.question.rubricPlayground.answer": {
+    "defaultMessage": "答案"
+  },
+  "course.assessment.question.rubricPlayground.searchAnswersPlaceholder": {
+    "defaultMessage": "按学生姓名或成绩搜索答案"
+  },
+  "course.assessment.question.rubricPlayground.addRandomStudentAnswers": {
+    "defaultMessage": "随机学生答案"
+  },
+  "course.assessment.question.rubricPlayground.writeCustomAnswer": {
+    "defaultMessage": "编写自定义答案"
+  },
+  "course.assessment.question.rubricPlayground.writeAnswerPlaceholder": {
+    "defaultMessage": "在此处编写答案"
+  },
+  "course.assessment.question.rubricPlayground.dismiss": {
+    "defaultMessage": "关闭"
+  },
+  "course.assessment.question.rubricPlayground.reevaluate": {
+    "defaultMessage": "重新评估"
+  },
+  "course.assessment.question.rubricPlayground.totalGrade": {
+    "defaultMessage": "总分"
+  },
+  "course.assessment.question.rubricPlayground.feedback": {
+    "defaultMessage": "反馈"
+  },
+  "course.assessment.question.rubricPlayground.evaluating": {
+    "defaultMessage": "评估中"
+  },
+  "course.assessment.question.rubricPlayground.gradingPrompt": {
+    "defaultMessage": "评分提示"
+  },
+  "course.assessment.question.rubricPlayground.gradingPromptDescription": {
+    "defaultMessage": "指导AI进行评分和提供反馈的说明。"
+  },
+  "course.assessment.question.rubricPlayground.modelAnswer": {
+    "defaultMessage": "标准答案"
+  },
+  "course.assessment.question.rubricPlayground.modelAnswerDescription": {
+    "defaultMessage": "每个类别获得最高分的示例。"
+  },
+  "course.assessment.question.rubricPlayground.gradingCategories": {
+    "defaultMessage": "评分类别"
+  },
+  "course.assessment.question.rubricPlayground.addNewCategory": {
+    "defaultMessage": "添加新类别"
+  },
+  "course.assessment.question.rubricPlayground.categoryName": {
+    "defaultMessage": "类别名称"
+  },
+  "course.assessment.question.rubricPlayground.max": {
+    "defaultMessage": "最大值"
+  },
+  "course.assessment.question.rubricPlayground.addNewGrade": {
+    "defaultMessage": "添加新分数"
+  },
   "course.assessment.session.assessmentNotStarted": {
     "defaultMessage": "测试尚未开始，请在 {startDate} 之后再来。"
   },
