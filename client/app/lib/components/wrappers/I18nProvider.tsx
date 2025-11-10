@@ -22,6 +22,16 @@ const I18nProvider = (props: I18nProviderProps): JSX.Element => {
   const [messages, setMessages] = useState<Record<string, string>>();
 
   useEffect(() => {
+    const localeTrimmed = locale?.trim() || DEFAULT_LOCALE;
+    // https://github.com/moment/moment/issues/3099
+    if (locale === 'zh') {
+      moment.locale('zh-cn');
+    } else {
+      moment.locale(localeTrimmed);
+    }
+  }, [locale]);
+
+  useEffect(() => {
     moment.tz.setDefault(timeZone?.trim() || DEFAULT_TIME_ZONE);
   }, [timeZone]);
 

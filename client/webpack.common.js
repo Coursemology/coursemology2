@@ -55,7 +55,7 @@ module.exports = {
       mode: 'auto',
     }),
     // Do not require all locales in moment
-    new ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en-.*|zh-.*)$/),
+    new ContextReplacementPlugin(/moment\/locale$/, /^\.\/(en.*|zh.*|ko)$/),
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         diagnosticOptions: {
