@@ -4986,7 +4986,7 @@
     "defaultMessage": "没有可用的描述。"
   },
   "course.group.GroupShow.CategoryCard.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}}"
+    "defaultMessage": "{numGroups} 个群组"
   },
   "course.group.GroupShow.CategoryCard.updateFailure": {
     "defaultMessage": "无法更新 {categoryName}。"
@@ -5013,7 +5013,7 @@
     "defaultMessage": "序列号"
   },
   "course.group.GroupShow.GroupManager.ChangeSummaryTable.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}} 已修改"
+    "defaultMessage": "{numGroups} 个群组已修改"
   },
   "course.group.GroupShow.GroupManager.ChangeSummaryTable.switch": {
     "defaultMessage": "角色从 {oldRole} 切换为 {newRole}"
@@ -5037,10 +5037,10 @@
     "defaultMessage": "无法创建 {numFailed} 个组。"
   },
   "course.group.GroupShow.GroupManager.GroupManager.createMultiplePartialFailure": {
-    "defaultMessage": "无法创建 {numFailed} {numFailed, plural, one {group} other {groups}}。"
+    "defaultMessage": "无法创建 {numFailed} 个群组。"
   },
   "course.group.GroupShow.GroupManager.GroupManager.createMultipleSuccess": {
-    "defaultMessage": "{numCreated} {numCreated, plural, one {group was} other {groups were}} 已成功创建。"
+    "defaultMessage": "{numCreated} 个群组已成功创建。"
   },
   "course.group.GroupShow.GroupManager.GroupManager.createSingleFailure": {
     "defaultMessage": "无法创建 {groupName}。"
@@ -5061,7 +5061,7 @@
     "defaultMessage": "保存更改"
   },
   "course.group.GroupShow.GroupManager.GroupManager.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}}"
+    "defaultMessage": "{numGroups} 个群组"
   },
   "course.group.GroupShow.GroupManager.GroupManager.title": {
     "defaultMessage": "管理 {categoryName} 的群组"
@@ -5100,7 +5100,7 @@
     "defaultMessage": "按名称搜索（以逗号分隔以搜索多个）"
   },
   "course.group.GroupShow.GroupManager.GroupUserManager.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers} 个成员"
   },
   "course.group.GroupShow.GroupManager.GroupUserManager.updateFailure": {
     "defaultMessage": "无法更新 {groupName}。"
