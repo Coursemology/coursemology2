@@ -56,7 +56,7 @@ const AssessmentLinkList: FC<Props> = (props) => {
     return (
       <li key={courseId}>
         <ul className="list-none p-0 m-0">
-          <ListSubheader className="bg-neutral-100 font-bold">
+          <ListSubheader className="bg-neutral-100 font-bold leading-none py-4 px-3">
             {courseTitle}
           </ListSubheader>
           {assessments.map((assessment) => {
@@ -101,6 +101,7 @@ const AssessmentLinkList: FC<Props> = (props) => {
                 >
                   <Checkbox
                     checked={isChecked}
+                    className="px-2 py-1"
                     disableRipple
                     edge="start"
                     tabIndex={-1}
@@ -116,7 +117,7 @@ const AssessmentLinkList: FC<Props> = (props) => {
   };
 
   return (
-    <List className="border border-solid border-neutral-300 overflow-y-scroll h-96 p-0">
+    <List className="border border-solid border-neutral-300 flex-1 overflow-y-auto p-0">
       {courseIds.length === 0 && (
         <ListItemButton className="text-neutral-400">
           <ListItemText>{t(translations.noAssessmentsFound)}</ListItemText>
