@@ -5618,15 +5618,6 @@
   "course.plagiarism.PlagiarismIndex.assessments.confirmRerunMessage": {
     "defaultMessage": "某些选定的测验已经完成了抄袭检查。运行新的抄袭检查将删除之前的结果。"
   },
-  "course.statistics.StatisticsIndex.getHelp.header": {
-    "defaultMessage": "最近实时帮助活动（{total} 个对话）"
-  },
-  "course.statistics.StatisticsIndex.getHelp.invalidDateSelection": {
-    "defaultMessage": "结束日期必须大于或等于开始日期"
-  },
-  "course.statistics.StatisticsIndex.getHelp.exceedDateRange": {
-    "defaultMessage": "日期范围不能超过365天"
-  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "成就数（总计：{courseAchievementCount}）"
   },
@@ -5747,6 +5738,66 @@
   "course.statistics.StatisticsIndex.header.statistics": {
     "defaultMessage": "数据"
   },
+  "course.statistics.StatisticsIndex.assessments.title": {
+    "defaultMessage": "标题"
+  },
+  "course.statistics.StatisticsIndex.assessments.startAt": {
+    "defaultMessage": "开始于"
+  },
+  "course.statistics.StatisticsIndex.assessments.tab": {
+    "defaultMessage": "选项卡"
+  },
+  "course.statistics.StatisticsIndex.assessments.category": {
+    "defaultMessage": "类别"
+  },
+  "course.statistics.StatisticsIndex.assessments.numSubmittedStudents": {
+    "defaultMessage": "已提交人数"
+  },
+  "course.statistics.StatisticsIndex.assessments.numAttemptedStudents": {
+    "defaultMessage": "尝试人数"
+  },
+  "course.statistics.StatisticsIndex.assessments.numLateStudents": {
+    "defaultMessage": "迟交人数"
+  },
+  "course.statistics.StatisticsIndex.assessments.averageGrade": {
+    "defaultMessage": "平均成绩"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevGrade": {
+    "defaultMessage": "成绩标准差"
+  },
+  "course.statistics.StatisticsIndex.assessments.averageTimeTaken": {
+    "defaultMessage": "平均时间"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevTimeTaken": {
+    "defaultMessage": "时间标准差"
+  },
+  "course.statistics.StatisticsIndex.assessments.tableTitle": {
+    "defaultMessage": "测验统计（{numStudents} 个学生）"
+  },
+  "course.statistics.StatisticsIndex.assessments.csvFileTitle": {
+    "defaultMessage": "测验统计"
+  },
+  "course.statistics.StatisticsIndex.assessments.searchBar": {
+    "defaultMessage": "按测验标题、选项卡或类别搜索"
+  },
+  "course.statistics.StatisticsIndex.assessments.selectedNUsers": {
+    "defaultMessage": "下载 {numUsers} 个学生的成绩摘要？"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadCsv": {
+    "defaultMessage": "下载"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummary": {
+    "defaultMessage": "下载以下测验的成绩摘要？"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummarySuccess": {
+    "defaultMessage": "成功下载成绩摘要"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryFailure": {
+    "defaultMessage": "下载成绩摘要时出错"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryPending": {
+    "defaultMessage": "正在处理您的下载。请稍候。"
+  },
   "course.statistics.StatisticsIndex.staff.averageMarkingTime": {
     "defaultMessage": "平均时间/测验"
   },
@@ -5767,6 +5818,12 @@
   },
   "course.statistics.StatisticsIndex.staff.tableTitle": {
     "defaultMessage": "员工统计"
+  },
+  "course.statistics.StatisticsIndex.staff.csvFileTitle": {
+    "defaultMessage": "员工统计"
+  },
+  "course.statistics.StatisticsIndex.staff.searchBar": {
+    "defaultMessage": "按员工姓名搜索"
   },
   "course.statistics.StatisticsIndex.staffFailure": {
     "defaultMessage": "获取员工数据失败！"
@@ -5816,6 +5873,12 @@
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "获取学生数据失败！"
   },
+  "course.statistics.StatisticsIndex.tabs.assessments": {
+    "defaultMessage": "测验"
+  },
+  "course.statistics.StatisticsIndex.tabs.getHelp": {
+    "defaultMessage": "获取帮助"
+  },
   "course.statistics.StatisticsIndex.tabs.staff": {
     "defaultMessage": "职员"
   },
@@ -5839,6 +5902,12 @@
   },
   "course.statistics.tabs.course": {
     "defaultMessage": "课程"
+  },
+  "course.statistics.tabs.coursePerformance": {
+    "defaultMessage": "课程表现"
+  },
+  "course.statistics.tabs.courseProgression": {
+    "defaultMessage": "课程进度"
   },
   "course.survey.DeleteSectionButton.deleteSection": {
     "defaultMessage": "删除部分"
@@ -7391,6 +7460,69 @@
   "lib.translations.beta": {
     "defaultMessage": "Beta"
   },
+  "lib.components.getHelp.header": {
+    "defaultMessage": "最近的获取帮助活动 ({total, plural, other {#个对话}})"
+  },
+  "lib.components.getHelp.filter.filterCourseLabel": {
+    "defaultMessage": "按课程筛选"
+  },
+  "lib.components.getHelp.filter.filterAssessmentLabel": {
+    "defaultMessage": "按测验筛选"
+  },
+  "lib.components.getHelp.filter.filterStudentLabel": {
+    "defaultMessage": "按学生筛选"
+  },
+  "lib.components.getHelp.filter.filterStartDateLabel": {
+    "defaultMessage": "开始日期"
+  },
+  "lib.components.getHelp.filter.filterEndDateLabel": {
+    "defaultMessage": "结束日期"
+  },
+  "lib.components.getHelp.filter.lastSevenDays": {
+    "defaultMessage": "最近7天"
+  },
+  "lib.components.getHelp.filter.lastFourteenDays": {
+    "defaultMessage": "最近14天"
+  },
+  "lib.components.getHelp.filter.lastThirtyDays": {
+    "defaultMessage": "最近30天"
+  },
+  "lib.components.getHelp.filter.lastSixMonths": {
+    "defaultMessage": "最近6个月"
+  },
+  "lib.components.getHelp.filter.lastTwelveMonths": {
+    "defaultMessage": "最近12个月"
+  },
+  "lib.components.getHelp.table.studentName": {
+    "defaultMessage": "姓名"
+  },
+  "lib.components.getHelp.table.messageCount": {
+    "defaultMessage": "消息数"
+  },
+  "lib.components.getHelp.table.lastMessage": {
+    "defaultMessage": "最后消息"
+  },
+  "lib.components.getHelp.table.questionNumber": {
+    "defaultMessage": "问题"
+  },
+  "lib.components.getHelp.table.assessmentTitle": {
+    "defaultMessage": "测验"
+  },
+  "lib.components.getHelp.table.createdAt": {
+    "defaultMessage": "最后消息时间"
+  },
+  "lib.components.getHelp.table.courseTitle": {
+    "defaultMessage": "课程"
+  },
+  "lib.components.getHelp.table.instanceTitle": {
+    "defaultMessage": "实例"
+  },
+  "lib.components.getHelp.validation.invalidDateSelection": {
+    "defaultMessage": "结束日期必须大于或等于开始日期"
+  },
+  "lib.components.getHelp.validation.exceedDateRange": {
+    "defaultMessage": "日期范围不能超过365天"
+  },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "无法获取用户。"
   },
@@ -7713,7 +7845,7 @@
     "defaultMessage": "用户"
   },
   "system.admin.instance.instance.InstanceAdminNavigator.getHelp": {
-    "defaultMessage": "实例"
+    "defaultMessage": "获取帮助"
   },
   "system.admin.admin.AdminNavigator.announcements": {
     "defaultMessage": "系统公告"
@@ -7731,7 +7863,7 @@
     "defaultMessage": "用户"
   },
   "system.admin.admin.AdminNavigator.getHelp": {
-    "defaultMessage": "实时帮助"
+    "defaultMessage": "获取帮助"
   },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "无法获取公告"
@@ -7864,123 +7996,6 @@
   },
   "system.admin.admin.UsersTable.updateRoleFailure": {
     "defaultMessage": "无法更新用户的角色。"
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
-    "defaultMessage": "最近实时帮助活动 ({total} 个对话）"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
-    "defaultMessage": "按课程筛选"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterStudentLabel": {
-    "defaultMessage": "按学生筛选"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterStartDateLabel": {
-    "defaultMessage": "开始日期"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterEndDateLabel": {
-    "defaultMessage": "结束日期"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastSevenDays": {
-    "defaultMessage": "最近7天"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastFourteenDays": {
-    "defaultMessage": "最近14天"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastThirtyDays": {
-    "defaultMessage": "最近30天"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastSixMonths": {
-    "defaultMessage": "最近6个月"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastTwelveMonths": {
-    "defaultMessage": "最近12个月"
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection": {
-    "defaultMessage": "结束日期必须大于或等于开始日期"
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange": {
-    "defaultMessage": "日期范围不能超过365天"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.studentName": {
-    "defaultMessage": "姓名"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.messageCount": {
-    "defaultMessage": "消息数"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.lastMessage": {
-    "defaultMessage": "最后一条消息"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.questionNumber": {
-    "defaultMessage": "题号"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.assessmentTitle": {
-    "defaultMessage": "测验"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.createdAt": {
-    "defaultMessage": "最后消息时间"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
-    "defaultMessage": "课程"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.instanceTitle": {
-    "defaultMessage": "实例"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
-    "defaultMessage": "最近实时帮助活动（{total} 个对话）"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
-    "defaultMessage": "结束日期必须晚于或等于开始日期"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.exceedDateRange": {
-    "defaultMessage": "日期范围不能超过365天"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.studentName": {
-    "defaultMessage": "姓名"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.messageCount": {
-    "defaultMessage": "消息数"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.lastMessage": {
-    "defaultMessage": "最新消息"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.questionNumber": {
-    "defaultMessage": "题号"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.assessmentTitle": {
-    "defaultMessage": "测验"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.createdAt": {
-    "defaultMessage": "最新消息时间"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.courseTitle": {
-    "defaultMessage": "课程"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterCourseLabel": {
-    "defaultMessage": "按课程筛选"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStudentLabel": {
-    "defaultMessage": "按学生筛选"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStartDateLabel": {
-    "defaultMessage": "开始日期"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterEndDateLabel": {
-    "defaultMessage": "结束日期"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSevenDays": {
-    "defaultMessage": "最近7天"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastFourteenDays": {
-    "defaultMessage": "最近14天"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastThirtyDays": {
-    "defaultMessage": "最近30天"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSixMonths": {
-    "defaultMessage": "最近6个月"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastTwelveMonths": {
-    "defaultMessage": "最近12个月"
   },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"

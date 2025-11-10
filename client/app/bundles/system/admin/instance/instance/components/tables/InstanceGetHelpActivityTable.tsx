@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { defineMessages } from 'react-intl';
 import { Tooltip } from '@mui/material';
 
 import LiveFeedbackHistoryContent from 'course/assessment/pages/AssessmentStatistics/LiveFeedbackHistory';
@@ -20,37 +19,7 @@ import {
 } from 'lib/helpers/url-builders';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatMiniDateTime } from 'lib/moment';
-
-const translations = defineMessages({
-  studentName: {
-    id: 'system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.studentName',
-    defaultMessage: 'Name',
-  },
-  messageCount: {
-    id: 'system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.messageCount',
-    defaultMessage: '# Msgs',
-  },
-  lastMessage: {
-    id: 'system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.lastMessage',
-    defaultMessage: 'Last Message',
-  },
-  questionNumber: {
-    id: 'system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.questionNumber',
-    defaultMessage: 'Question',
-  },
-  assessmentTitle: {
-    id: 'system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.assessmentTitle',
-    defaultMessage: 'Assessment',
-  },
-  createdAt: {
-    id: 'system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.createdAt',
-    defaultMessage: 'Last Message At',
-  },
-  courseTitle: {
-    id: 'system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.courseTitle',
-    defaultMessage: 'Course',
-  },
-});
+import translations from 'lib/translations/getHelp';
 
 interface InstanceGetHelpActivityTableProps {
   getHelpData: InstanceGetHelpActivity[];

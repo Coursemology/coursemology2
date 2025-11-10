@@ -5658,15 +5658,6 @@
   "course.plagiarism.PlagiarismIndex.assessments.confirmRerunMessage": {
     "defaultMessage": "Some of the selected assessments already have completed plagiarism checks. Running a new plagiarism check will remove the previous results."
   },
-  "course.statistics.StatisticsIndex.getHelp.header": {
-    "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"
-  },
-  "course.statistics.StatisticsIndex.getHelp.invalidDateSelection": {
-    "defaultMessage": "End Date must be after or equal to Start Date"
-  },
-  "course.statistics.StatisticsIndex.getHelp.exceedDateRange": {
-    "defaultMessage": "Date range cannot exceed 365 days"
-  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "No. of Achievements (Total: {courseAchievementCount})"
   },
@@ -5787,6 +5778,66 @@
   "course.statistics.StatisticsIndex.header.statistics": {
     "defaultMessage": "Statistics"
   },
+  "course.statistics.StatisticsIndex.assessments.title": {
+    "defaultMessage": "Title"
+  },
+  "course.statistics.StatisticsIndex.assessments.startAt": {
+    "defaultMessage": "Starts At"
+  },
+  "course.statistics.StatisticsIndex.assessments.tab": {
+    "defaultMessage": "Tab"
+  },
+  "course.statistics.StatisticsIndex.assessments.category": {
+    "defaultMessage": "Category"
+  },
+  "course.statistics.StatisticsIndex.assessments.numSubmittedStudents": {
+    "defaultMessage": "# Submitted"
+  },
+  "course.statistics.StatisticsIndex.assessments.numAttemptedStudents": {
+    "defaultMessage": "# Attempted"
+  },
+  "course.statistics.StatisticsIndex.assessments.numLateStudents": {
+    "defaultMessage": "# Late"
+  },
+  "course.statistics.StatisticsIndex.assessments.averageGrade": {
+    "defaultMessage": "Avg Grade"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevGrade": {
+    "defaultMessage": "Stdev Grade"
+  },
+  "course.statistics.StatisticsIndex.assessments.averageTimeTaken": {
+    "defaultMessage": "Avg Time"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevTimeTaken": {
+    "defaultMessage": "Stdev Time"
+  },
+  "course.statistics.StatisticsIndex.assessments.tableTitle": {
+    "defaultMessage": "Assessments Statistics ({numStudents} students)"
+  },
+  "course.statistics.StatisticsIndex.assessments.csvFileTitle": {
+    "defaultMessage": "Assessments Statistics"
+  },
+  "course.statistics.StatisticsIndex.assessments.searchBar": {
+    "defaultMessage": "Search by Assessment Title, Tab, or Category"
+  },
+  "course.statistics.StatisticsIndex.assessments.selectedNUsers": {
+    "defaultMessage": "Download Score Summary for {numUsers} students?"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadCsv": {
+    "defaultMessage": "Download"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummary": {
+    "defaultMessage": "Download Score Summary for the following Assessments?"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummarySuccess": {
+    "defaultMessage": "Successfully downloaded score summary"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryFailure": {
+    "defaultMessage": "An error occurred while downloading score summary"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryPending": {
+    "defaultMessage": "Your download is being processed. Please wait."
+  },
   "course.statistics.StatisticsIndex.staff.averageMarkingTime": {
     "defaultMessage": "Avg Time / Assessment"
   },
@@ -5807,6 +5858,12 @@
   },
   "course.statistics.StatisticsIndex.staff.tableTitle": {
     "defaultMessage": "Staff Statistics"
+  },
+  "course.statistics.StatisticsIndex.staff.csvFileTitle": {
+    "defaultMessage": "Staff Statistics"
+  },
+  "course.statistics.StatisticsIndex.staff.searchBar": {
+    "defaultMessage": "Search by Staff Name"
   },
   "course.statistics.StatisticsIndex.staffFailure": {
     "defaultMessage": "Failed to fetch staff data!"
@@ -5856,6 +5913,12 @@
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "Failed to fetch student data!"
   },
+  "course.statistics.StatisticsIndex.tabs.assessments": {
+    "defaultMessage": "Assessments"
+  },
+  "course.statistics.StatisticsIndex.tabs.getHelp": {
+    "defaultMessage": "Get Help"
+  },
   "course.statistics.StatisticsIndex.tabs.staff": {
     "defaultMessage": "Staff"
   },
@@ -5879,6 +5942,12 @@
   },
   "course.statistics.tabs.course": {
     "defaultMessage": "Course"
+  },
+  "course.statistics.tabs.coursePerformance": {
+    "defaultMessage": "Course Performance"
+  },
+  "course.statistics.tabs.courseProgression": {
+    "defaultMessage": "Course Progression"
   },
   "course.survey.DeleteSectionButton.deleteSection": {
     "defaultMessage": "Delete Section"
@@ -7425,6 +7494,69 @@
   "lib.translations.beta": {
     "defaultMessage": "Beta"
   },
+  "lib.components.getHelp.header": {
+    "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"
+  },
+  "lib.components.getHelp.filter.filterCourseLabel": {
+    "defaultMessage": "Filter by Course"
+  },
+  "lib.components.getHelp.filter.filterAssessmentLabel": {
+    "defaultMessage": "Filter by Assessment"
+  },
+  "lib.components.getHelp.filter.filterStudentLabel": {
+    "defaultMessage": "Filter by Student"
+  },
+  "lib.components.getHelp.filter.filterStartDateLabel": {
+    "defaultMessage": "Start Date"
+  },
+  "lib.components.getHelp.filter.filterEndDateLabel": {
+    "defaultMessage": "End Date"
+  },
+  "lib.components.getHelp.filter.lastSevenDays": {
+    "defaultMessage": "Last 7 Days"
+  },
+  "lib.components.getHelp.filter.lastFourteenDays": {
+    "defaultMessage": "Last 14 Days"
+  },
+  "lib.components.getHelp.filter.lastThirtyDays": {
+    "defaultMessage": "Last 30 Days"
+  },
+  "lib.components.getHelp.filter.lastSixMonths": {
+    "defaultMessage": "Last 6 Months"
+  },
+  "lib.components.getHelp.filter.lastTwelveMonths": {
+    "defaultMessage": "Last 12 Months"
+  },
+  "lib.components.getHelp.table.studentName": {
+    "defaultMessage": "Name"
+  },
+  "lib.components.getHelp.table.messageCount": {
+    "defaultMessage": "# Msgs"
+  },
+  "lib.components.getHelp.table.lastMessage": {
+    "defaultMessage": "Last Message"
+  },
+  "lib.components.getHelp.table.questionNumber": {
+    "defaultMessage": "Question"
+  },
+  "lib.components.getHelp.table.assessmentTitle": {
+    "defaultMessage": "Assessment"
+  },
+  "lib.components.getHelp.table.createdAt": {
+    "defaultMessage": "Last Message At"
+  },
+  "lib.components.getHelp.table.courseTitle": {
+    "defaultMessage": "Course"
+  },
+  "lib.components.getHelp.table.instanceTitle": {
+    "defaultMessage": "Instance"
+  },
+  "lib.components.getHelp.validation.invalidDateSelection": {
+    "defaultMessage": "End Date must be after or equal to Start Date"
+  },
+  "lib.components.getHelp.validation.exceedDateRange": {
+    "defaultMessage": "Date range cannot exceed 365 days"
+  },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "Failed to fetch users."
   },
@@ -7886,123 +8018,6 @@
   },
   "system.admin.admin.UsersTable.updateRoleFailure": {
     "defaultMessage": "Failed to update user's role."
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
-    "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
-    "defaultMessage": "Filter by Course"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterStudentLabel": {
-    "defaultMessage": "Filter by Student"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterStartDateLabel": {
-    "defaultMessage": "Start Date"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterEndDateLabel": {
-    "defaultMessage": "End Date"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastSevenDays": {
-    "defaultMessage": "Last 7 Days"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastFourteenDays": {
-    "defaultMessage": "Last 14 Days"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastThirtyDays": {
-    "defaultMessage": "Last 30 Days"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastSixMonths": {
-    "defaultMessage": "Last 6 Months"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastTwelveMonths": {
-    "defaultMessage": "Last 12 Months"
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection": {
-    "defaultMessage": "End Date must be after or equal to Start Date"
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange": {
-    "defaultMessage": "Date range cannot exceed 365 days"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.studentName": {
-    "defaultMessage": "Name"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.messageCount": {
-    "defaultMessage": "# Msgs"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.lastMessage": {
-    "defaultMessage": "Last Message"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.questionNumber": {
-    "defaultMessage": "Question"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.assessmentTitle": {
-    "defaultMessage": "Assessment"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.createdAt": {
-    "defaultMessage": "Last Message At"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
-    "defaultMessage": "Course"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.instanceTitle": {
-    "defaultMessage": "Instance"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
-    "defaultMessage": "Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
-    "defaultMessage": "End Date must be after or equal to Start Date"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.exceedDateRange": {
-    "defaultMessage": "Date range cannot exceed 365 days"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.studentName": {
-    "defaultMessage": "Name"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.messageCount": {
-    "defaultMessage": "# Msgs"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.lastMessage": {
-    "defaultMessage": "Last Message"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.questionNumber": {
-    "defaultMessage": "Question"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.assessmentTitle": {
-    "defaultMessage": "Assessment"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.createdAt": {
-    "defaultMessage": "Last Message At"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.courseTitle": {
-    "defaultMessage": "Course"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterCourseLabel": {
-    "defaultMessage": "Filter by Course"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStudentLabel": {
-    "defaultMessage": "Filter by Student"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStartDateLabel": {
-    "defaultMessage": "Start Date"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterEndDateLabel": {
-    "defaultMessage": "End Date"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSevenDays": {
-    "defaultMessage": "Last 7 Days"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastFourteenDays": {
-    "defaultMessage": "Last 14 Days"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastThirtyDays": {
-    "defaultMessage": "Last 30 Days"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSixMonths": {
-    "defaultMessage": "Last 6 Months"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastTwelveMonths": {
-    "defaultMessage": "Last 12 Months"
   },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"
