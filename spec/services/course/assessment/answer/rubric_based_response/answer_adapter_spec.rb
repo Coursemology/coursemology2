@@ -13,9 +13,6 @@ RSpec.describe Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter do
       create(:course_assessment_answer_rubric_based_response, :submitted,
              question: question.acting_as, submission: submission)
     end
-    let!(:grading) do
-      create(:course_assessment_answer_auto_grading, answer: answer)
-    end
 
     subject { Course::Assessment::Answer::RubricBasedResponse::AnswerAdapter.new(answer) }
 

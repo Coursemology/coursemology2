@@ -8,16 +8,8 @@ import {
 } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import {
-  Approval,
-  Clear,
-  Delete,
-  Edit,
-  RadioButtonChecked,
-  RadioButtonUnchecked,
-  Save,
-} from '@mui/icons-material';
-import { Card, Chip, Typography } from '@mui/material';
+import { Approval, Clear, Delete, Edit, Save } from '@mui/icons-material';
+import { Card, FormControlLabel, Radio, Typography } from '@mui/material';
 import { JobStatus } from 'types/jobs';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
@@ -217,49 +209,34 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
         <div className="flex-1" />
 
         {activeTab !== RubricPlaygroundTab.EDIT && (
-          <Chip
-            className="whitespace-nowrap px-0 mx-0 select-none"
-            clickable={activeTab !== RubricPlaygroundTab.EVALUATE}
-            color="info"
-            component="div"
-            label={
-              <div className="space-x-2 flex items-center">
-                {activeTab === RubricPlaygroundTab.EVALUATE ? (
-                  <RadioButtonChecked fontSize="small" />
-                ) : (
-                  <RadioButtonUnchecked fontSize="small" />
-                )}
-                <Typography fontSize="small" fontWeight="500" variant="caption">
-                  {t(translations.evaluate)}
-                </Typography>
-              </div>
+          <FormControlLabel
+            className="select-none"
+            control={
+              <Radio
+                checked={activeTab === RubricPlaygroundTab.EVALUATE}
+                color="info"
+                onChange={() => setActiveTab(RubricPlaygroundTab.EVALUATE)}
+              />
             }
-            onClick={() => setActiveTab(RubricPlaygroundTab.EVALUATE)}
-            variant="outlined"
+            label={t(translations.evaluate)}
+            slotProps={{ typography: { variant: 'subtitle2' } }}
           />
         )}
 
         {activeTab !== RubricPlaygroundTab.EDIT && (
-          <Chip
-            className="whitespace-nowrap px-0 mx-0 select-none"
-            clickable={activeTab !== RubricPlaygroundTab.COMPARE}
-            color="info"
-            component="div"
-            disabled={sortedRubrics.length <= 1}
-            label={
-              <div className="space-x-2 flex items-center">
-                {activeTab === RubricPlaygroundTab.COMPARE ? (
-                  <RadioButtonChecked fontSize="small" />
-                ) : (
-                  <RadioButtonUnchecked fontSize="small" />
-                )}
-                <Typography fontSize="small" fontWeight="500" variant="caption">
-                  {t(translations.compare)}
-                </Typography>
-              </div>
+          <FormControlLabel
+            className="select-none pr-4"
+            control={
+              <Radio
+                checked={activeTab === RubricPlaygroundTab.COMPARE}
+                color="info"
+                disabled={sortedRubrics.length <= 1}
+                onChange={() => setActiveTab(RubricPlaygroundTab.COMPARE)}
+              />
             }
-            onClick={() => setActiveTab(RubricPlaygroundTab.COMPARE)}
-            variant="outlined"
+            disabled={sortedRubrics.length <= 1}
+            label={t(translations.compare)}
+            slotProps={{ typography: { variant: 'subtitle2' } }}
           />
         )}
 

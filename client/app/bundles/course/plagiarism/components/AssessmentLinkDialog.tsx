@@ -1,19 +1,12 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import CompareArrows from '@mui/icons-material/CompareArrows';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import { LinkedAssessment } from 'types/course/plagiarism';
 
 import CourseAPI from 'api/course';
 import { sortByCourseTitleAndTitle } from 'course/group/utils/sort';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -243,69 +236,64 @@ const AssessmentLinkDialog: FC<Props> = (props) => {
   }, [originalLinkedAssessments, linkedAssessments]);
 
   return (
-    <Dialog fullWidth maxWidth="lg" onClose={onClose} open={open}>
-      <DialogTitle>{t(translations.linkAssessments)}</DialogTitle>
-      <DialogContent>
-        {isLoading ? (
-          <LoadingIndicator />
-        ) : (
-          <div className="flex items-end gap-4">
-            <div className="flex-1">
-              <Typography variant="h6">
-                {t(translations.unlinkedAssessments)}
-              </Typography>
-              <TextField
-                className="w-full mb-2"
-                label={t(translations.searchPlaceholder)}
-                onChange={(event) => setUnlinkedSearch(event.target.value)}
-                value={unlinkedSearch}
-                variant="standard"
-              />
-              <AssessmentLinkList
-                assessmentId={assessmentId}
-                assessmentsByCourse={unlinkedAssessmentsByCourse}
-                colourMap={colourMap}
-                onCheck={handleMoveToLinked}
-              />
-            </div>
-            <div className="border border-solid border-neutral-300 flex items-center h-96">
-              <CompareArrows />
-            </div>
-            <div className="flex-1">
-              <Typography variant="h6">
-                {t(translations.linkedAssessments)}
-              </Typography>
-              <TextField
-                className="w-full mb-2"
-                label={t(translations.searchPlaceholder)}
-                onChange={(event) => setLinkedSearch(event.target.value)}
-                value={linkedSearch}
-                variant="standard"
-              />
-              <AssessmentLinkList
-                assessmentId={assessmentId}
-                assessmentsByCourse={linkedAssessmentsByCourse}
-                colourMap={colourMap}
-                isChecked
-                onCheck={handleMoveToUnlinked}
-              />
-            </div>
+    <Prompt
+      cancelDisabled={isUpdating}
+      maxWidth={false}
+      onClickPrimary={handleUpdateLinks}
+      onClose={onClose}
+      open={open}
+      primaryColor="info"
+      primaryDisabled={isLoading || isUpdating || !hasChanges}
+      primaryLabel={t(formTranslations.saveChanges)}
+      title={t(translations.linkAssessments)}
+    >
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <div className="flex items-stretch gap-4">
+          <div className="flex-1 flex flex-col h-[calc(100vh_-_216px)]">
+            <Typography variant="h6">
+              {t(translations.unlinkedAssessments)}
+            </Typography>
+            <TextField
+              className="w-full mb-2"
+              label={t(translations.searchPlaceholder)}
+              onChange={(event) => setUnlinkedSearch(event.target.value)}
+              value={unlinkedSearch}
+              variant="standard"
+            />
+            <AssessmentLinkList
+              assessmentId={assessmentId}
+              assessmentsByCourse={unlinkedAssessmentsByCourse}
+              colourMap={colourMap}
+              onCheck={handleMoveToLinked}
+            />
           </div>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button disabled={isUpdating} onClick={onClose}>
-          {t(formTranslations.cancel)}
-        </Button>
-        <Button
-          color="info"
-          disabled={isLoading || isUpdating || !hasChanges}
-          onClick={handleUpdateLinks}
-        >
-          {t(formTranslations.saveChanges)}
-        </Button>
-      </DialogActions>
-    </Dialog>
+          <div className="border border-solid border-neutral-300 flex items-center">
+            <CompareArrows />
+          </div>
+          <div className="flex-1 flex flex-col h-[calc(100vh_-_216px)]">
+            <Typography variant="h6">
+              {t(translations.linkedAssessments)}
+            </Typography>
+            <TextField
+              className="w-full mb-2"
+              label={t(translations.searchPlaceholder)}
+              onChange={(event) => setLinkedSearch(event.target.value)}
+              value={linkedSearch}
+              variant="standard"
+            />
+            <AssessmentLinkList
+              assessmentId={assessmentId}
+              assessmentsByCourse={linkedAssessmentsByCourse}
+              colourMap={colourMap}
+              isChecked
+              onCheck={handleMoveToUnlinked}
+            />
+          </div>
+        </div>
+      )}
+    </Prompt>
   );
 };
 
