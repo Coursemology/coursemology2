@@ -5007,7 +5007,7 @@
     "defaultMessage": "설명이 없습니다."
   },
   "course.group.GroupShow.CategoryCard.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}}"
+    "defaultMessage": "{numGroups}개 그룹"
   },
   "course.group.GroupShow.CategoryCard.updateFailure": {
     "defaultMessage": "{categoryName} 업데이트 실패."
@@ -5034,7 +5034,7 @@
     "defaultMessage": "일련 번호"
   },
   "course.group.GroupShow.GroupManager.ChangeSummaryTable.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}} 수정됨"
+    "defaultMessage": "{numGroups}개 그룹 수정됨"
   },
   "course.group.GroupShow.GroupManager.ChangeSummaryTable.switch": {
     "defaultMessage": "{oldRole}에서 {newRole}(으)로 역할 전환"
@@ -5058,10 +5058,10 @@
     "defaultMessage": "{numFailed} 그룹 생성 실패."
   },
   "course.group.GroupShow.GroupManager.GroupManager.createMultiplePartialFailure": {
-    "defaultMessage": "{numFailed} {numFailed, plural, one {group} other {groups}} 생성 실패."
+    "defaultMessage": "{numFailed}개 그룹 생성 실패."
   },
   "course.group.GroupShow.GroupManager.GroupManager.createMultipleSuccess": {
-    "defaultMessage": "{numCreated} {numCreated, plural, one {group was} other {groups were}} 성공적으로 생성되었습니다."
+    "defaultMessage": "{numCreated}개 그룹이 성공적으로 생성되었습니다."
   },
   "course.group.GroupShow.GroupManager.GroupManager.createSingleFailure": {
     "defaultMessage": "{groupName} 생성 실패."
@@ -5082,7 +5082,7 @@
     "defaultMessage": "변경 사항 저장"
   },
   "course.group.GroupShow.GroupManager.GroupManager.subtitle": {
-    "defaultMessage": "{numGroups} {numGroups, plural, one {group} other {groups}}"
+    "defaultMessage": "{numGroups}개 그룹"
   },
   "course.group.GroupShow.GroupManager.GroupManager.title": {
     "defaultMessage": "{categoryName}의 그룹 관리"
@@ -5121,7 +5121,7 @@
     "defaultMessage": "이름으로 검색 (여러 개를 검색하려면 쉼표로 구분)"
   },
   "course.group.GroupShow.GroupManager.GroupUserManager.subtitle": {
-    "defaultMessage": "{numMembers} {numMembers, plural, one {member} other {members}}"
+    "defaultMessage": "{numMembers}명의 회원"
   },
   "course.group.GroupShow.GroupManager.GroupUserManager.updateFailure": {
     "defaultMessage": "{groupName} 업데이트 실패."
