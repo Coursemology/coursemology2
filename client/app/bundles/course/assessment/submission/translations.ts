@@ -25,6 +25,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.graded',
     defaultMessage: 'Graded, unpublished',
   },
+  unknown: {
+    id: 'course.assessment.submission.unknown',
+    defaultMessage: 'Unknown status, please contact administrator',
+  },
   answerTooLargeError: {
     id: 'course.assessment.submission.answerTooLargeError',
     defaultMessage: 'Your answer must be less than 2 MB.',

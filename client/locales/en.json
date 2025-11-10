@@ -254,6 +254,24 @@
   "course.achievement.AchievementAward.AchievementAwardManager.saveChanges": {
     "defaultMessage": "Save Changes"
   },
+  "course.achievement.AchievementAward.AchievementAwardSummary.name": {
+    "defaultMessage": "Name"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.userType": {
+    "defaultMessage": "User Type"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.awardedStudents": {
+    "defaultMessage": "Awarded Students"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.revokedStudents": {
+    "defaultMessage": "Revoked Students"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.phantomStudent": {
+    "defaultMessage": "Phantom Student"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.normalStudent": {
+    "defaultMessage": "Normal Student"
+  },
   "course.achievement.AchievementAward.awardAchievement": {
     "defaultMessage": "Award Achievement"
   },
@@ -328,6 +346,24 @@
   },
   "course.achievement.AchievementTable.noAchievement": {
     "defaultMessage": "No achievement"
+  },
+  "course.achievement.AchievementTable.badge": {
+    "defaultMessage": "Badge"
+  },
+  "course.achievement.AchievementTable.title": {
+    "defaultMessage": "Title"
+  },
+  "course.achievement.AchievementTable.description": {
+    "defaultMessage": "Description"
+  },
+  "course.achievement.AchievementTable.requirements": {
+    "defaultMessage": "Requirements"
+  },
+  "course.achievement.AchievementTable.published": {
+    "defaultMessage": "Published"
+  },
+  "course.achievement.AchievementTable.actions": {
+    "defaultMessage": "Actions"
   },
   "course.achievement.AchievementsIndex.achievements": {
     "defaultMessage": "Achievements"
@@ -3714,6 +3750,9 @@
   "course.assessment.submission.submittedAt": {
     "defaultMessage": "Submitted At"
   },
+  "course.assessment.submission.unknown": {
+    "defaultMessage": "Unknown status, please contact administrator"
+  },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "Total Grade"
   },
@@ -5232,6 +5271,24 @@
   "course.leaderboard.LeaderboardTable.experience": {
     "defaultMessage": "Experience"
   },
+  "course.leaderboard.LeaderboardTable.rank": {
+    "defaultMessage": "Rank"
+  },
+  "course.leaderboard.LeaderboardTable.name": {
+    "defaultMessage": "Name"
+  },
+  "course.leaderboard.LeaderboardTable.level": {
+    "defaultMessage": "Level"
+  },
+  "course.leaderboard.LeaderboardTable.averageExperience": {
+    "defaultMessage": "Average Experience"
+  },
+  "course.leaderboard.LeaderboardTable.averageAchievements": {
+    "defaultMessage": "Average Achievements"
+  },
+  "course.leaderboard.LeaderboardTable.members": {
+    "defaultMessage": "Members"
+  },
   "course.leaderboard.LeaderboardTable.titleAchievements": {
     "defaultMessage": "By Achievements"
   },
@@ -5520,6 +5577,15 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "Delete"
   },
+  "course.material.folders.WorkbinTable.name": {
+    "defaultMessage": "Name"
+  },
+  "course.material.folders.WorkbinTable.lastModified": {
+    "defaultMessage": "Last Modified"
+  },
+  "course.material.folders.WorkbinTable.startAt": {
+    "defaultMessage": "Start At"
+  },
   "course.plagiarism.PlagiarismIndex.header.plagiarism": {
     "defaultMessage": "Plagiarism Check"
   },
@@ -5676,6 +5742,9 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoSubmissionCountHeader": {
     "defaultMessage": "Videos Watched (Total: {courseVideoCount})"
   },
+  "course.statistics.StatisticsIndex.course.searchBar": {
+    "defaultMessage": "Search by Student Name"
+  },
   "course.statistics.StatisticsIndex.course.StudentProgressionChart.deadlines": {
     "defaultMessage": "Deadlines"
   },
@@ -5780,6 +5849,9 @@
   },
   "course.statistics.StatisticsIndex.students.videoSubmissionCount": {
     "defaultMessage": "Videos Watched (Total: {courseVideoCount})"
+  },
+  "course.statistics.StatisticsIndex.students.searchBar": {
+    "defaultMessage": "Search by Student Name or Student Type"
   },
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "Failed to fetch student data!"
@@ -6953,6 +7025,24 @@
   },
   "course.video.VideoTable.noVideo": {
     "defaultMessage": "No Video"
+  },
+  "course.video.VideoTable.title": {
+    "defaultMessage": "Title"
+  },
+  "course.video.VideoTable.startAt": {
+    "defaultMessage": "Start At"
+  },
+  "course.video.VideoTable.watchCount": {
+    "defaultMessage": "Watch Count"
+  },
+  "course.video.VideoTable.averageWatched": {
+    "defaultMessage": "Average % Watched"
+  },
+  "course.video.VideoTable.published": {
+    "defaultMessage": "Published"
+  },
+  "course.video.VideoTable.actions": {
+    "defaultMessage": "Actions"
   },
   "course.video.VideosIndex.fetchVideosFailure": {
     "defaultMessage": "Failed to retrieve videos."

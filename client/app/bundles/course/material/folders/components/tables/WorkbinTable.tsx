@@ -1,5 +1,5 @@
 import { FC, memo, ReactNode, useMemo, useState } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import {
   ArrowDropDown as ArrowDropDownIcon,
   ArrowDropUp as ArrowDropUpIcon,
@@ -18,11 +18,12 @@ import {
 } from 'types/course/material/folders';
 
 import TableContainer from 'lib/components/core/layouts/TableContainer';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import TableMaterialRow from './TableMaterialRow';
 import TableSubfolderRow from './TableSubfolderRow';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   currFolderId: number;
   subfolders: FolderMiniEntity[];
   materials: MaterialMiniEntity[];
@@ -30,6 +31,29 @@ interface Props extends WrappedComponentProps {
   canManageKnowledgeBase: boolean;
   isConcrete: boolean;
 }
+
+const translations = defineMessages({
+  name: {
+    id: 'course.material.folders.WorkbinTable.name',
+    defaultMessage: 'Name',
+  },
+  lastModified: {
+    id: 'course.material.folders.WorkbinTable.lastModified',
+    defaultMessage: 'Last Modified',
+  },
+  startAt: {
+    id: 'course.material.folders.WorkbinTable.startAt',
+    defaultMessage: 'Start At',
+  },
+});
+
+const translationsMap: {
+  [key: string]: { id: string; defaultMessage: string };
+} = {
+  Name: translations.name,
+  'Last Modified': translations.lastModified,
+  'Start At': translations.startAt,
+};
 
 const WorkbinTable: FC<Props> = (props) => {
   const {
@@ -43,6 +67,7 @@ const WorkbinTable: FC<Props> = (props) => {
 
   const [sortBy, setSortBy] = useState('Name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const { t } = useTranslation();
 
   const sortedSubfolders = useMemo(() => {
     return subfolders.sort((a, b) => {
@@ -123,7 +148,7 @@ const WorkbinTable: FC<Props> = (props) => {
         }}
         style={{ padding: 0, alignItems: 'center', justifyContent: 'start' }}
       >
-        {columnName}
+        {t(translationsMap[columnName])}
       </Button>
     );
   };
@@ -172,6 +197,6 @@ const WorkbinTable: FC<Props> = (props) => {
   );
 };
 
-export default memo(injectIntl(WorkbinTable), (prevProps, nextProps) => {
+export default memo(WorkbinTable, (prevProps, nextProps) => {
   return equal(prevProps, nextProps);
 });
