@@ -60,7 +60,7 @@ const translations = defineMessages({
   },
   searchBar: {
     id: 'course.statistics.StatisticsIndex.students.searchBar',
-    defaultMessage: 'Search by Students Name or Student Type',
+    defaultMessage: 'Search by Student Name or Student Type',
   },
 });
 

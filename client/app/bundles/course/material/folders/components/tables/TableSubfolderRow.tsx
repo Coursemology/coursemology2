@@ -50,19 +50,13 @@ const TableSubfolderRow: FC<Props> = (props) => {
 
   return (
     <TableRow id={`subfolder-${subfolder.id}`}>
-      <TableCell style={{ minWidth: '200px' }}>
+      <TableCell className="min-w-[200px]">
         <Stack spacing={1}>
           <Stack alignItems="center" direction="row" spacing={0.5}>
             <FolderIcon htmlColor="grey" />
             <Link
-              style={{
-                textOverflow: 'initial',
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
-              }}
-              to={`/courses/${getCourseId()}/materials/folders/${
-                subfolder.id
-              }/`}
+              className="whitespace-normal break-all"
+              to={`/courses/${getCourseId()}/materials/folders/${subfolder.id}`}
               underline="hover"
             >
               {`${subfolder.name} (${subfolder.itemCount})`}
@@ -81,38 +75,20 @@ const TableSubfolderRow: FC<Props> = (props) => {
           {subfolder.description !== null &&
             subfolder.description.length !== 0 && (
               <Typography
+                className="whitespace-normal break-all ml-12 text-gray-500"
                 dangerouslySetInnerHTML={{
                   __html: subfolder.description,
-                }}
-                style={{
-                  color: 'grey',
-                  marginLeft: 30,
-                  textOverflow: 'initial',
-                  whiteSpace: 'normal',
-                  wordBreak: 'break-word',
                 }}
                 variant="body2"
               />
             )}
         </Stack>
       </TableCell>
-      <TableCell
-        style={{
-          width: '240px',
-          maxWidth: '240px',
-          minWidth: '60px',
-        }}
-      >
+      <TableCell className="w-[240px] max-w-[240px] min-w-[60px]">
         {formatFullDateTime(subfolder.updatedAt)}
       </TableCell>
       {!isCurrentCourseStudent && (
-        <TableCell
-          style={{
-            width: '240px',
-            maxWidth: '240px',
-            minWidth: '60px',
-          }}
-        >
+        <TableCell className="w-[240px] max-w-[240px] min-w-[60px]">
           <Stack alignItems="center" direction="row" spacing={0.5}>
             {subfolder.permissions.showSdlWarning && (
               <Tooltip title={t(translations.visibleBecauseSdlTooltip)}>

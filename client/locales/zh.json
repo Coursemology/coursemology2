@@ -254,6 +254,24 @@
   "course.achievement.AchievementAward.AchievementAwardManager.saveChanges": {
     "defaultMessage": "保存更改"
   },
+  "course.achievement.AchievementAward.AchievementAwardSummary.name": {
+    "defaultMessage": "姓名"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.userType": {
+    "defaultMessage": "用户类型"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.awardedStudents": {
+    "defaultMessage": "已授予学生"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.revokedStudents": {
+    "defaultMessage": "已撤销学生"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.phantomStudent": {
+    "defaultMessage": "旁听生"
+  },
+  "course.achievement.AchievementAward.AchievementAwardSummary.normalStudent": {
+    "defaultMessage": "普通学生"
+  },
   "course.achievement.AchievementAward.awardAchievement": {
     "defaultMessage": "获奖成就"
   },
@@ -328,6 +346,24 @@
   },
   "course.achievement.AchievementTable.noAchievement": {
     "defaultMessage": "暂无成就"
+  },
+  "course.achievement.AchievementTable.badge": {
+    "defaultMessage": "徽章"
+  },
+  "course.achievement.AchievementTable.title": {
+    "defaultMessage": "标题"
+  },
+  "course.achievement.AchievementTable.description": {
+    "defaultMessage": "描述"
+  },
+  "course.achievement.AchievementTable.requirements": {
+    "defaultMessage": "要求"
+  },
+  "course.achievement.AchievementTable.published": {
+    "defaultMessage": "已发布"
+  },
+  "course.achievement.AchievementTable.actions": {
+    "defaultMessage": "操作"
   },
   "course.achievement.AchievementsIndex.achievements": {
     "defaultMessage": "成就"
@@ -3677,6 +3713,9 @@
   "course.assessment.submission.submittedAt": {
     "defaultMessage": "提交于"
   },
+  "course.assessment.submission.unknown": {
+    "defaultMessage": "未知状态，请联系管理员"
+  },
   "course.assessment.submission.totalGrade": {
     "defaultMessage": "总成绩"
   },
@@ -5192,6 +5231,24 @@
   "course.leaderboard.LeaderboardTable.experience": {
     "defaultMessage": "经验"
   },
+  "course.leaderboard.LeaderboardTable.rank": {
+    "defaultMessage": "排名"
+  },
+  "course.leaderboard.LeaderboardTable.name": {
+    "defaultMessage": "姓名"
+  },
+  "course.leaderboard.LeaderboardTable.level": {
+    "defaultMessage": "级别"
+  },
+  "course.leaderboard.LeaderboardTable.averageExperience": {
+    "defaultMessage": "平均经验值"
+  },
+  "course.leaderboard.LeaderboardTable.averageAchievements": {
+    "defaultMessage": "平均成就"
+  },
+  "course.leaderboard.LeaderboardTable.members": {
+    "defaultMessage": "成员"
+  },
   "course.leaderboard.LeaderboardTable.titleAchievements": {
     "defaultMessage": "按成就"
   },
@@ -5480,6 +5537,15 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "删除"
   },
+  "course.material.folders.WorkbinTable.name": {
+    "defaultMessage": "名称"
+  },
+  "course.material.folders.WorkbinTable.lastModified": {
+    "defaultMessage": "最后修改"
+  },
+  "course.material.folders.WorkbinTable.startAt": {
+    "defaultMessage": "开始于"
+  },
   "course.plagiarism.PlagiarismIndex.header.plagiarism": {
     "defaultMessage": "抄袭检查"
   },
@@ -5636,6 +5702,9 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoSubmissionCountHeader": {
     "defaultMessage": "已观看视频 (总计: {courseVideoCount})"
   },
+  "course.statistics.StatisticsIndex.course.searchBar": {
+    "defaultMessage": "按学生姓名搜索"
+  },
   "course.statistics.StatisticsIndex.course.StudentProgressionChart.deadlines": {
     "defaultMessage": "截止日期"
   },
@@ -5740,6 +5809,9 @@
   },
   "course.statistics.StatisticsIndex.students.videoSubmissionCount": {
     "defaultMessage": "已观看的视频（总计：{courseVideoCount}）"
+  },
+  "course.statistics.StatisticsIndex.students.searchBar": {
+    "defaultMessage": "按学生姓名或学生类型搜索"
   },
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "获取学生数据失败！"
@@ -6919,6 +6991,24 @@
   },
   "course.video.VideoTable.noVideo": {
     "defaultMessage": "没有视频"
+  },
+  "course.video.VideoTable.title": {
+    "defaultMessage": "标题"
+  },
+  "course.video.VideoTable.startAt": {
+    "defaultMessage": "开始于"
+  },
+  "course.video.VideoTable.watchCount": {
+    "defaultMessage": "观看次数"
+  },
+  "course.video.VideoTable.averageWatched": {
+    "defaultMessage": "平均观看百分比"
+  },
+  "course.video.VideoTable.published": {
+    "defaultMessage": "已发布"
+  },
+  "course.video.VideoTable.actions": {
+    "defaultMessage": "操作"
   },
   "course.video.VideosIndex.fetchVideosFailure": {
     "defaultMessage": "无法检索视频。"

@@ -1,16 +1,17 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { loadAchievementCourseUsers } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
 
 import AchievementAwardManager from './AchievementAwardManager';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   achievementId: number;
   open: boolean;
   handleClose: () => void;
@@ -24,7 +25,7 @@ const translations = defineMessages({
 });
 
 const AchievementAward: FC<Props> = (props) => {
-  const { achievementId, open, handleClose, intl } = props;
+  const { achievementId, open, handleClose } = props;
 
   const [discardDialogOpen, setDiscardDialogOpen] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -34,6 +35,7 @@ const AchievementAward: FC<Props> = (props) => {
     getAchievementEntity(state, achievementId),
   );
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (achievementId && open) {
@@ -70,9 +72,7 @@ const AchievementAward: FC<Props> = (props) => {
         }}
       >
         <DialogTitle>
-          {`${intl.formatMessage(translations.awardAchievement)} - ${
-            achievement.title
-          }`}
+          {`${t(translations.awardAchievement)} - ${achievement.title}`}
         </DialogTitle>
         <DialogContent>
           <AchievementAwardManager
@@ -102,4 +102,4 @@ const AchievementAward: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(AchievementAward);
+export default AchievementAward;

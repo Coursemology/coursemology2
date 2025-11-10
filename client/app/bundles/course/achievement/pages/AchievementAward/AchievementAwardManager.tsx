@@ -1,10 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { Button, Checkbox, Grid, Tooltip, Typography } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
@@ -24,13 +19,14 @@ import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatShortDateTime } from 'lib/moment';
 
 import { awardAchievement } from '../../operations';
 
 import AchievementAwardSummary from './AchievementAwardSummary';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   achievement: AchievementEntity;
   isLoading: boolean;
   handleClose: (skipDialog: boolean) => void;
@@ -77,7 +73,7 @@ const translations = defineMessages({
     id: 'course.achievement.AchievementAward.AchievementAwardManager.note',
     defaultMessage:
       'If an Achievement has conditions associated with it, \
-      Coursemology will automatically award achievements when the student meets those conditions. ',
+        Coursemology will automatically award achievements when the student meets those conditions. ',
   },
   noUser: {
     id: 'course.achievement.AchievementAward.AchievementAwardManager.noUser',
@@ -107,7 +103,7 @@ const getObtainedUserIds = (
   courseUsers.filter((cu) => cu.obtainedAt !== null).map((cu) => cu.id);
 
 const AchievementAwardManager: FC<Props> = (props) => {
-  const { achievement, isLoading, handleClose, intl, setIsDirty } = props;
+  const { achievement, isLoading, handleClose, setIsDirty } = props;
   const achievementUsers = achievement.achievementUsers;
 
   const [openConfirmation, setOpenConfirmation] = useState(false);
@@ -120,6 +116,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const isPristine = equal(Array.from(selectedUserIds), obtainedUserIds);
 
@@ -138,7 +135,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
   }
 
   if (!achievementUsers || achievementUsers.length === 0) {
-    return <Note message={<FormattedMessage {...translations.noUser} />} />;
+    return <Note message={t(translations.noUser)} />;
   }
 
   const onSubmit = (
@@ -147,32 +144,32 @@ const AchievementAwardManager: FC<Props> = (props) => {
   ): Promise<void> =>
     dispatch(awardAchievement(achievementId, courseUserIds))
       .then(() => {
-        toast.success(intl.formatMessage(translations.awardSuccess));
+        toast.success(t(translations.awardSuccess));
         setTimeout(() => {
           navigate(getAchievementURL(getCourseId(), achievementId));
         }, 100);
       })
       .catch(() => {
-        toast.error(intl.formatMessage(translations.awardFailure));
+        toast.error(t(translations.awardFailure));
       });
 
   const options: TableOptions = {
     customToolbar: () => (
       <>
         <Button color="secondary" onClick={(): void => handleClose(false)}>
-          <FormattedMessage {...translations.cancel} />
+          {t(translations.cancel)}
         </Button>
         <Button
           disabled={isPristine}
           onClick={(): void => setSelectedUserIds(new Set(obtainedUserIds))}
         >
-          <FormattedMessage {...translations.resetChanges} />
+          {t(translations.resetChanges)}
         </Button>
         <Button
           disabled={isPristine}
           onClick={(): void => setOpenConfirmation(true)}
         >
-          <FormattedMessage {...translations.saveChanges} />
+          {t(translations.saveChanges)}
         </Button>
       </>
     ),
@@ -201,9 +198,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
     viewColumns: false,
   };
 
-  const columnHeadLabelAchievement = intl.formatMessage(
-    translations.obtainedAchievement,
-  );
+  const columnHeadLabelAchievement = t(translations.obtainedAchievement);
 
   const columns: TableColumns[] = [
     {
@@ -242,7 +237,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
     },
     {
       name: 'id',
-      label: 'Obtained Achievement',
+      label: columnHeadLabelAchievement,
       options: {
         filter: false,
         search: false,
@@ -334,14 +329,12 @@ const AchievementAwardManager: FC<Props> = (props) => {
       </Grid>
       {openConfirmation && (
         <ConfirmationDialog
-          confirmButtonText={<FormattedMessage {...translations.saveChanges} />}
+          confirmButtonText={t(translations.saveChanges)}
           disableCancelButton={isSubmitting}
           disableConfirmButton={isSubmitting}
           message={
             <>
-              <p>
-                <FormattedMessage {...translations.confirmationQuestion} />
-              </p>
+              <p>{t(translations.confirmationQuestion)}</p>
               <AchievementAwardSummary
                 achievementUsers={achievementUsers}
                 initialObtainedUserIds={obtainedUserIds}
@@ -366,4 +359,4 @@ const AchievementAwardManager: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(AchievementAwardManager);
+export default AchievementAwardManager;
