@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { defineMessages, MessageDescriptor } from 'react-intl';
+import { MessageDescriptor } from 'react-intl';
 import {
   Autocomplete,
   Box,
@@ -15,6 +15,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import moment from 'lib/moment';
+import translations from 'lib/translations/getHelp';
 
 export interface GetHelpFilter {
   course: { title: string } | null;
@@ -34,45 +35,6 @@ interface Props {
     t: (msg: MessageDescriptor) => string,
   ) => string;
 }
-
-const translations = defineMessages({
-  filterCourseLabel: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel',
-    defaultMessage: 'Filter by Course',
-  },
-  filterStudentLabel: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.filterStudentLabel',
-    defaultMessage: 'Filter by Student',
-  },
-  filterStartDateLabel: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.filterStartDateLabel',
-    defaultMessage: 'Start Date',
-  },
-  filterEndDateLabel: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.filterEndDateLabel',
-    defaultMessage: 'End Date',
-  },
-  lastSevenDays: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.lastSevenDays',
-    defaultMessage: 'Last 7 Days',
-  },
-  lastFourteenDays: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.lastFourteenDays',
-    defaultMessage: 'Last 14 Days',
-  },
-  lastThirtyDays: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.lastThirtyDays',
-    defaultMessage: 'Last 30 Days',
-  },
-  lastSixMonths: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.lastSixMonths',
-    defaultMessage: 'Last 6 Months',
-  },
-  lastTwelveMonths: {
-    id: 'system.admin.admin.components.SystemGetHelpFilter.lastTwelveMonths',
-    defaultMessage: 'Last 12 Months',
-  },
-});
 
 interface PresetDateRangeChipsProps {
   setSelectedFilter: (newFilter: GetHelpFilter) => void;

@@ -5,28 +5,13 @@ import { Typography } from '@mui/material';
 import { SystemGetHelpActivity } from 'course/statistics/types';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import useTranslation from 'lib/hooks/useTranslation';
+import translations from 'lib/translations/getHelp';
 
 import SystemGetHelpFilter, {
   GetHelpFilter,
 } from '../components/misc/SystemGetHelpFilter';
 import SystemGetHelpActivityTable from '../components/tables/SystemGetHelpActivityTable';
 import { fetchSystemGetHelpActivity } from '../operations';
-
-const translations = defineMessages({
-  header: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.header',
-    defaultMessage:
-      'Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})',
-  },
-  invalidDateSelection: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection',
-    defaultMessage: 'End Date must be after or equal to Start Date',
-  },
-  exceedDateRange: {
-    id: 'system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange',
-    defaultMessage: 'Date range cannot exceed 365 days',
-  },
-});
 
 const getDefaultDateRange = (): { startDate: string; endDate: string } => {
   const end = new Date();

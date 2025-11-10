@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { defineMessages, MessageDescriptor } from 'react-intl';
+import { MessageDescriptor } from 'react-intl';
 import {
   Autocomplete,
   Box,
@@ -15,6 +15,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import moment from 'lib/moment';
+import translations from 'lib/translations/getHelp';
 
 export interface GetHelpFilter {
   assessment: { title: string } | null;
@@ -34,45 +35,6 @@ interface Props {
     t: (msg: MessageDescriptor) => string,
   ) => string;
 }
-
-const translations = defineMessages({
-  filterAssessmentLabel: {
-    id: 'course.statistics.StatisticsIndex.getHelp.filterAssessmentLabel',
-    defaultMessage: 'Filter by Assessment',
-  },
-  filterStudentLabel: {
-    id: 'course.statistics.StatisticsIndex.getHelp.filterStudentLabel',
-    defaultMessage: 'Filter by Student',
-  },
-  filterStartDateLabel: {
-    id: 'course.statistics.StatisticsIndex.getHelp.filterStartDateLabel',
-    defaultMessage: 'Start Date',
-  },
-  filterEndDateLabel: {
-    id: 'course.statistics.StatisticsIndex.getHelp.filterEndDateLabel',
-    defaultMessage: 'End Date',
-  },
-  lastSevenDays: {
-    id: 'course.statistics.StatisticsIndex.getHelp.lastSevenDays',
-    defaultMessage: 'Last 7 Days',
-  },
-  lastFourteenDays: {
-    id: 'course.statistics.StatisticsIndex.getHelp.lastFourteenDays',
-    defaultMessage: 'Last 14 Days',
-  },
-  lastThirtyDays: {
-    id: 'course.statistics.StatisticsIndex.getHelp.lastThirtyDays',
-    defaultMessage: 'Last 30 Days',
-  },
-  lastSixMonths: {
-    id: 'course.statistics.StatisticsIndex.getHelp.lastSixMonths',
-    defaultMessage: 'Last 6 Months',
-  },
-  lastTwelveMonths: {
-    id: 'course.statistics.StatisticsIndex.getHelp.lastTwelveMonths',
-    defaultMessage: 'Last 12 Months',
-  },
-});
 
 interface PresetDateRangeChipsProps {
   setSelectedFilter: (newFilter: GetHelpFilter) => void;

@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 
@@ -19,35 +18,9 @@ import {
 } from 'lib/helpers/url-builders';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatMiniDateTime } from 'lib/moment';
+import translations from 'lib/translations/getHelp';
 
 import assessmentStatisticsTranslations from '../../../../assessment/pages/AssessmentStatistics/translations';
-
-const translations = defineMessages({
-  studentName: {
-    id: 'course.statistics.StatisticsIndex.getHelp.name',
-    defaultMessage: 'Name',
-  },
-  messageCount: {
-    id: 'course.statistics.StatisticsIndex.getHelp.messageCount',
-    defaultMessage: '# Msgs',
-  },
-  lastMessage: {
-    id: 'course.statistics.StatisticsIndex.getHelp.lastMessage',
-    defaultMessage: 'Last Message',
-  },
-  questionNumber: {
-    id: 'course.statistics.StatisticsIndex.getHelp.questionNumber',
-    defaultMessage: 'Question',
-  },
-  assessmentTitle: {
-    id: 'course.statistics.StatisticsIndex.getHelp.assessmentTitle',
-    defaultMessage: 'Assessment',
-  },
-  createdAt: {
-    id: 'course.statistics.StatisticsIndex.getHelp.createdAt',
-    defaultMessage: 'Last Message At',
-  },
-});
 
 const CourseGetHelpStatisticsTable: FC<{
   liveFeedbacks: CourseGetHelpActivity[];

@@ -17,7 +17,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 export const translations = defineMessages({
   assessments: {
-    id: 'course.statistics.StatisticsIndex.header.assessments',
+    id: 'course.statistics.StatisticsIndex.tabs.assessments',
     defaultMessage: 'Assessments',
   },
   statistics: {

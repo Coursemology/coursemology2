@@ -5639,15 +5639,6 @@
   "course.plagiarism.PlagiarismIndex.assessments.confirmRerunMessage": {
     "defaultMessage": "선택한 평가 중 일부는 이미 완료된 표절 검사가 있습니다. 새 표절 검사를 실행하면 이전 결과가 제거됩니다."
   },
-  "course.statistics.StatisticsIndex.getHelp.header": {
-    "defaultMessage": "최근 도움 요청 활동 ({total}건의 대화)"
-  },
-  "course.statistics.StatisticsIndex.getHelp.invalidDateSelection": {
-    "defaultMessage": "종료일은 시작일 이후이거나 같아야 합니다"
-  },
-  "course.statistics.StatisticsIndex.getHelp.exceedDateRange": {
-    "defaultMessage": "날짜 범위는 365일을 초과할 수 없습니다"
-  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
     "defaultMessage": "성과 개수 (총계: {courseAchievementCount})"
   },
@@ -5768,6 +5759,66 @@
   "course.statistics.StatisticsIndex.header.statistics": {
     "defaultMessage": "통계"
   },
+  "course.statistics.StatisticsIndex.assessments.title": {
+    "defaultMessage": "제목"
+  },
+  "course.statistics.StatisticsIndex.assessments.startAt": {
+    "defaultMessage": "시작 시간"
+  },
+  "course.statistics.StatisticsIndex.assessments.tab": {
+    "defaultMessage": "탭"
+  },
+  "course.statistics.StatisticsIndex.assessments.category": {
+    "defaultMessage": "카테고리"
+  },
+  "course.statistics.StatisticsIndex.assessments.numSubmittedStudents": {
+    "defaultMessage": "제출한 학생 수"
+  },
+  "course.statistics.StatisticsIndex.assessments.numAttemptedStudents": {
+    "defaultMessage": "시도한 학생 수"
+  },
+  "course.statistics.StatisticsIndex.assessments.numLateStudents": {
+    "defaultMessage": "지각한 학생 수"
+  },
+  "course.statistics.StatisticsIndex.assessments.averageGrade": {
+    "defaultMessage": "평균 점수"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevGrade": {
+    "defaultMessage": "점수 표준편차"
+  },
+  "course.statistics.StatisticsIndex.assessments.averageTimeTaken": {
+    "defaultMessage": "평균 소요 시간"
+  },
+  "course.statistics.StatisticsIndex.assessments.stdevTimeTaken": {
+    "defaultMessage": "소요 시간 표준편차"
+  },
+  "course.statistics.StatisticsIndex.assessments.tableTitle": {
+    "defaultMessage": "평가 통계 ({numStudents}명의 학생)"
+  },
+  "course.statistics.StatisticsIndex.assessments.csvFileTitle": {
+    "defaultMessage": "평가 통계"
+  },
+  "course.statistics.StatisticsIndex.assessments.searchBar": {
+    "defaultMessage": "평가 제목, 탭 또는 카테고리로 검색"
+  },
+  "course.statistics.StatisticsIndex.assessments.selectedNUsers": {
+    "defaultMessage": "{numUsers}명 학생의 점수 요약을 다운로드하시겠습니까?"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadCsv": {
+    "defaultMessage": "다운로드"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummary": {
+    "defaultMessage": "다음 평가의 점수 요약을 다운로드하시겠습니까?"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummarySuccess": {
+    "defaultMessage": "점수 요약을 성공적으로 다운로드했습니다"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryFailure": {
+    "defaultMessage": "점수 요약 다운로드 중 오류가 발생했습니다"
+  },
+  "course.statistics.StatisticsIndex.assessments.downloadScoreSummaryPending": {
+    "defaultMessage": "다운로드를 처리 중입니다. 잠시 기다려주세요."
+  },
   "course.statistics.StatisticsIndex.staff.averageMarkingTime": {
     "defaultMessage": "평균 평가 시간"
   },
@@ -5788,6 +5839,12 @@
   },
   "course.statistics.StatisticsIndex.staff.tableTitle": {
     "defaultMessage": "교직원 통계"
+  },
+  "course.statistics.StatisticsIndex.staff.csvFileTitle": {
+    "defaultMessage": "교직원 통계"
+  },
+  "course.statistics.StatisticsIndex.staff.searchBar": {
+    "defaultMessage": "교직원 이름으로 검색"
   },
   "course.statistics.StatisticsIndex.staffFailure": {
     "defaultMessage": "교직원 데이터를 가져오는 데 실패했습니다!"
@@ -5837,6 +5894,12 @@
   "course.statistics.StatisticsIndex.studentsFailure": {
     "defaultMessage": "학생 데이터를 가져오는 데 실패했습니다!"
   },
+  "course.statistics.StatisticsIndex.tabs.assessments": {
+    "defaultMessage": "평가"
+  },
+  "course.statistics.StatisticsIndex.tabs.getHelp": {
+    "defaultMessage": "도움 받기"
+  },
   "course.statistics.StatisticsIndex.tabs.staff": {
     "defaultMessage": "스태프"
   },
@@ -5860,6 +5923,12 @@
   },
   "course.statistics.tabs.course": {
     "defaultMessage": "과정"
+  },
+  "course.statistics.tabs.coursePerformance": {
+    "defaultMessage": "과정 성과"
+  },
+  "course.statistics.tabs.courseProgression": {
+    "defaultMessage": "과정 진행"
   },
   "course.survey.DeleteSectionButton.deleteSection": {
     "defaultMessage": "섹션 삭제"
@@ -7412,6 +7481,69 @@
   "lib.translations.beta": {
     "defaultMessage": "베타"
   },
+  "lib.components.getHelp.header": {
+    "defaultMessage": "최근 도움 요청 활동 ({total, plural, other {#개 대화}})"
+  },
+  "lib.components.getHelp.filter.filterCourseLabel": {
+    "defaultMessage": "과정으로 필터링"
+  },
+  "lib.components.getHelp.filter.filterAssessmentLabel": {
+    "defaultMessage": "평가로 필터링"
+  },
+  "lib.components.getHelp.filter.filterStudentLabel": {
+    "defaultMessage": "학생으로 필터링"
+  },
+  "lib.components.getHelp.filter.filterStartDateLabel": {
+    "defaultMessage": "시작 날짜"
+  },
+  "lib.components.getHelp.filter.filterEndDateLabel": {
+    "defaultMessage": "종료 날짜"
+  },
+  "lib.components.getHelp.filter.lastSevenDays": {
+    "defaultMessage": "최근 7일"
+  },
+  "lib.components.getHelp.filter.lastFourteenDays": {
+    "defaultMessage": "최근 14일"
+  },
+  "lib.components.getHelp.filter.lastThirtyDays": {
+    "defaultMessage": "최근 30일"
+  },
+  "lib.components.getHelp.filter.lastSixMonths": {
+    "defaultMessage": "최근 6개월"
+  },
+  "lib.components.getHelp.filter.lastTwelveMonths": {
+    "defaultMessage": "최근 12개월"
+  },
+  "lib.components.getHelp.table.studentName": {
+    "defaultMessage": "이름"
+  },
+  "lib.components.getHelp.table.messageCount": {
+    "defaultMessage": "메시지 수"
+  },
+  "lib.components.getHelp.table.lastMessage": {
+    "defaultMessage": "마지막 메시지"
+  },
+  "lib.components.getHelp.table.questionNumber": {
+    "defaultMessage": "질문"
+  },
+  "lib.components.getHelp.table.assessmentTitle": {
+    "defaultMessage": "평가"
+  },
+  "lib.components.getHelp.table.createdAt": {
+    "defaultMessage": "마지막 메시지 시간"
+  },
+  "lib.components.getHelp.table.courseTitle": {
+    "defaultMessage": "과정"
+  },
+  "lib.components.getHelp.table.instanceTitle": {
+    "defaultMessage": "인스턴스"
+  },
+  "lib.components.getHelp.validation.invalidDateSelection": {
+    "defaultMessage": "종료일은 시작일 이후이거나 같아야 합니다"
+  },
+  "lib.components.getHelp.validation.exceedDateRange": {
+    "defaultMessage": "날짜 범위는 365일을 초과할 수 없습니다"
+  },
   "lib.translations.course.users.fetchUsersFailure": {
     "defaultMessage": "사용자를 가져오는 데 실패했습니다."
   },
@@ -7734,7 +7866,7 @@
     "defaultMessage": "사용자"
   },
   "system.admin.instance.instance.InstanceAdminNavigator.getHelp": {
-    "defaultMessage": "도움받기"
+    "defaultMessage": "도움 받기"
   },
   "system.admin.admin.AdminNavigator.announcements": {
     "defaultMessage": "시스템 공지사항"
@@ -7752,7 +7884,7 @@
     "defaultMessage": "사용자"
   },
   "system.admin.admin.AdminNavigator.getHelp": {
-    "defaultMessage": "도움받기"
+    "defaultMessage": "도움 받기"
   },
   "system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure": {
     "defaultMessage": "공지사항을 가져올 수 없습니다."
@@ -7885,123 +8017,6 @@
   },
   "system.admin.admin.UsersTable.updateRoleFailure": {
     "defaultMessage": "사용자 역할을 업데이트하지 못했습니다."
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.header": {
-    "defaultMessage": "최근 도움 요청 활동 ({total}건의 대화)"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterCourseLabel": {
-    "defaultMessage": "과목으로 필터링"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterStudentLabel": {
-    "defaultMessage": "학생으로 필터링"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterStartDateLabel": {
-    "defaultMessage": "시작일"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.filterEndDateLabel": {
-    "defaultMessage": "종료일"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastSevenDays": {
-    "defaultMessage": "최근 7일"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastFourteenDays": {
-    "defaultMessage": "최근 14일"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastThirtyDays": {
-    "defaultMessage": "최근 30일"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastSixMonths": {
-    "defaultMessage": "최근 6개월"
-  },
-  "system.admin.admin.components.SystemGetHelpFilter.lastTwelveMonths": {
-    "defaultMessage": "최근 12개월"
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.invalidDateSelection": {
-    "defaultMessage": "종료일은 시작일 이후이거나 같아야 합니다"
-  },
-  "system.admin.admin.pages.SystemGetHelpActivityIndex.exceedDateRange": {
-    "defaultMessage": "날짜 범위는 365일을 초과할 수 없습니다"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.studentName": {
-    "defaultMessage": "이름"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.messageCount": {
-    "defaultMessage": "메시지 수"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.lastMessage": {
-    "defaultMessage": "마지막 메시지"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.questionNumber": {
-    "defaultMessage": "문제"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.assessmentTitle": {
-    "defaultMessage": "평가"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.createdAt": {
-    "defaultMessage": "마지막 메시지 시간"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.courseTitle": {
-    "defaultMessage": "과목"
-  },
-  "system.admin.admin.components.tables.SystemGetHelpActivityTable.instanceTitle": {
-    "defaultMessage": "인스턴스"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.header": {
-    "defaultMessage": "최근 도움 요청 활동 ({total}건의 대화)"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.invalidDateSelection": {
-    "defaultMessage": "종료일은 시작일 이후거나 같아야 합니다"
-  },
-  "system.admin.instance.instance.pages.InstanceGetHelpActivityIndex.exceedDateRange": {
-    "defaultMessage": "날짜 범위는 최대 365일을 초과할 수 없습니다"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.studentName": {
-    "defaultMessage": "이름"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.messageCount": {
-    "defaultMessage": "메시지 수"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.lastMessage": {
-    "defaultMessage": "최근 메시지"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.questionNumber": {
-    "defaultMessage": "문항"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.assessmentTitle": {
-    "defaultMessage": "과제"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.createdAt": {
-    "defaultMessage": "최근 메시지 시각"
-  },
-  "system.admin.instance.instance.components.tables.InstanceGetHelpActivityTable.courseTitle": {
-    "defaultMessage": "과목"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterCourseLabel": {
-    "defaultMessage": "과목으로 필터링"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStudentLabel": {
-    "defaultMessage": "학생으로 필터링"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterStartDateLabel": {
-    "defaultMessage": "시작일"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.filterEndDateLabel": {
-    "defaultMessage": "종료일"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSevenDays": {
-    "defaultMessage": "최근 7일"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastFourteenDays": {
-    "defaultMessage": "최근 14일"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastThirtyDays": {
-    "defaultMessage": "최근 30일"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastSixMonths": {
-    "defaultMessage": "최근 6개월"
-  },
-  "system.admin.instance.instance.components.InstanceGetHelpFilter.lastTwelveMonths": {
-    "defaultMessage": "최근 12개월"
   },
   "system.admin.instance.instance.IndividualInvitation.emailPlaceholder": {
     "defaultMessage": "user@example.com"

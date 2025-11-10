@@ -1,32 +1,17 @@
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { defineMessages, MessageDescriptor } from 'react-intl';
+import { MessageDescriptor } from 'react-intl';
 import { Typography } from '@mui/material';
 
 import { fetchCourseGetHelpActivity } from 'course/statistics/operations';
 import { CourseGetHelpActivity } from 'course/statistics/types';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import useTranslation from 'lib/hooks/useTranslation';
+import translations from 'lib/translations/getHelp';
 
 import CourseGetHelpFilter, {
   GetHelpFilter as FilterType,
 } from './CourseGetHelpFilter';
 import CourseGetHelpStatisticsTable from './CourseGetHelpStatisticsTable';
-
-const translations = defineMessages({
-  header: {
-    id: 'course.statistics.StatisticsIndex.getHelp.header',
-    defaultMessage:
-      'Recent Get Help Activity ({total, plural, one {# Conversation} other {# Conversations}})',
-  },
-  invalidDateSelection: {
-    id: 'course.statistics.StatisticsIndex.getHelp.invalidDateSelection',
-    defaultMessage: 'End Date must be after or equal to Start Date',
-  },
-  exceedDateRange: {
-    id: 'course.statistics.StatisticsIndex.getHelp.exceedDateRange',
-    defaultMessage: 'Date range cannot exceed 365 days',
-  },
-});
 
 const getDefaultDateRange = (): { startDate: string; endDate: string } => {
   const end = new Date();
