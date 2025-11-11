@@ -1,4 +1,3 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
 import palette from 'theme/palette';
 import {
   AncestorSubmissionInfo,
@@ -6,34 +5,9 @@ import {
 } from 'types/course/statistics/assessmentStatistics';
 
 import { workflowStates } from 'course/assessment/submission/constants';
+import { submissionStatusTranslation } from 'course/assessment/submission/translations';
 import BarChart from 'lib/components/core/BarChart';
-
-const translations = defineMessages({
-  datasetLabel: {
-    id: 'course.assessment.statistics.SubmissionStatusChart.datasetLabel',
-    defaultMessage: 'Student Submission Statuses',
-  },
-  published: {
-    id: 'course.assessment.statistics.SubmissionStatusChart.published',
-    defaultMessage: 'Graded',
-  },
-  graded: {
-    id: 'course.assessment.statistics.SubmissionStatusChart.graded',
-    defaultMessage: 'Graded, unpublished',
-  },
-  submitted: {
-    id: 'course.assessment.statistics.SubmissionStatusChart.submitted',
-    defaultMessage: 'Submitted',
-  },
-  attempting: {
-    id: 'course.assessment.statistics.SubmissionStatusChart.attempting',
-    defaultMessage: 'Attempting',
-  },
-  unstarted: {
-    id: 'course.assessment.statistics.SubmissionStatusChart.unattempted',
-    defaultMessage: 'Not Started',
-  },
-});
+import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {
   submissions: MainSubmissionInfo[] | AncestorSubmissionInfo[];
@@ -42,6 +16,8 @@ interface Props {
 const SubmissionStatusChart = (props: Props): JSX.Element => {
   const { submissions } = props;
   const workflowStatesArray = Object.values(workflowStates);
+
+  const { t } = useTranslation();
 
   const initialCounts = workflowStatesArray.reduce(
     (counts, w) => ({ ...counts, [w]: 0 }),
@@ -61,7 +37,7 @@ const SubmissionStatusChart = (props: Props): JSX.Element => {
       return {
         count,
         color: palette.submissionStatus[w],
-        label: <FormattedMessage {...translations[w]} />,
+        label: t(submissionStatusTranslation(w)),
       };
     })
     .filter((seg) => seg.count > 0);

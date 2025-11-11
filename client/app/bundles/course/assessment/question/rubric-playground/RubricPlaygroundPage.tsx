@@ -31,12 +31,10 @@ import AnswerEvaluationsTable from './AnswerEvaluationsTable';
 import AnswerEvaluationsTableHeader from './AnswerEvaluationsTableHeader';
 import RubricEditForm from './RubricEditForm';
 import RubricHeader from './RubricHeader';
-import translations from './translations';
 import { RubricEditFormData, RubricPlaygroundTab } from './types';
 import { buildSelectedRubricTableData } from './utils';
 
 const RubricPlaygroundPage = (): JSX.Element | null => {
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const rubricState = useAppSelector(

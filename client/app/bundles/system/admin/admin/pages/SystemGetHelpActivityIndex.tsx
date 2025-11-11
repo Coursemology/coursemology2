@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { defineMessages, MessageDescriptor } from 'react-intl';
+import { MessageDescriptor } from 'react-intl';
 import { Typography } from '@mui/material';
 
 import { SystemGetHelpActivity } from 'course/statistics/types';

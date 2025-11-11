@@ -9,7 +9,7 @@ import {
   justifyPosition,
 } from 'course/assessment/submission/components/GetHelpChatPage/utils';
 import MarkdownText from 'course/assessment/submission/components/MarkdownText';
-import useTranslation, { MessageTranslator } from 'lib/hooks/useTranslation';
+import useTranslation from 'lib/hooks/useTranslation';
 import moment, { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 interface Props {
