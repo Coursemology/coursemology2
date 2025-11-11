@@ -2919,23 +2919,38 @@
   "course.assessment.statistics.gradeViolin.yAxisLabel": {
     "defaultMessage": "Submissions"
   },
+  "course.assessment.statistics.ancestorSelect.current": {
+    "defaultMessage": "Current"
+  },
+  "course.assessment.statistics.ancestorSelect.fromCourse": {
+    "defaultMessage": "From {courseTitle}"
+  },
+  "course.assessment.statistics.ancestorSelect.subtitle": {
+    "defaultMessage": "Compare against past versions of this assessment:"
+  },
+  "course.assessment.statistics.ancestorSelect.title": {
+    "defaultMessage": "Duplication History"
+  },
+  "course.assessment.statistics.attemptCount": {
+    "defaultMessage": "Attempt Count"
+  },
+  "course.assessment.statistics.duplicationHistory": {
+    "defaultMessage": "Duplication History"
+  },
+  "course.assessment.statistics.gradesPerQuestion": {
+    "defaultMessage": "Grades Per Question"
+  },
+  "course.assessment.statistics.includePhantom": {
+    "defaultMessage": "Include Phantom Student"
+  },
+  "course.assessment.statistics.liveFeedback": {
+    "defaultMessage": "Get Help"
+  },
   "course.assessment.statistics.header": {
     "defaultMessage": "Statistics for {title}"
   },
   "course.assessment.statistics.statistics": {
     "defaultMessage": "Statistics"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.attempting": {
-    "defaultMessage": "Attempting"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
-    "defaultMessage": "Student Submission Statuses"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.submitted": {
-    "defaultMessage": "Submitted"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
-    "defaultMessage": "Unattempted"
   },
   "course.assessment.statistics.submissionStatuses": {
     "defaultMessage": "Submission Statuses"
@@ -4494,6 +4509,21 @@
   "course.enrolRequests.UserRequests.rejected": {
     "defaultMessage": "Rejected Enrolment Requests"
   },
+  "course.experiencePoints.downloadCsvButton": {
+    "defaultMessage": "Download CSV"
+  },
+  "course.experiencePoints.downloadFailure": {
+    "defaultMessage": "An error occurred while doing your request for download."
+  },
+  "course.experiencePoints.downloadPending": {
+    "defaultMessage": "Please wait as your request to download is being processed."
+  },
+  "course.experiencePoints.downloadRequestSuccess": {
+    "defaultMessage": "Your request to download is successful"
+  },
+  "course.experiencePoints.filterByNameButton": {
+    "defaultMessage": "Filter by Name"
+  },
   "course.experiencePoints.disbursement.DisbursementForm.createDisbursementFailure": {
     "defaultMessage": "Failed to award experience points."
   },
@@ -4525,7 +4555,10 @@
     "defaultMessage": "Disburse Points"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
-    "defaultMessage": "Disburse Experience Points"
+    "defaultMessage": "Disbursed Experience Points"
+  },
+  "course.experiencePoints.disbursement.DisbursementIndex.experienceTab": {
+    "defaultMessage": "History"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
     "defaultMessage": "Failed to retrieve data."
@@ -5906,6 +5939,9 @@
   },
   "course.statistics.StatisticsIndex.students.videoSubmissionCount": {
     "defaultMessage": "Videos Watched (Total: {courseVideoCount})"
+  },
+  "course.statistics.StatisticsIndex.students.csvFileTitle": {
+    "defaultMessage": "Student Statistics"
   },
   "course.statistics.StatisticsIndex.students.searchBar": {
     "defaultMessage": "Search by Student Name or Student Type"
@@ -7487,6 +7523,9 @@
   },
   "lib.table.MuiTableAdapter.pagination.all": {
     "defaultMessage": "All"
+  },
+  "lib.table.MuiTableAdapter.pagination.rowsPerPage": {
+    "defaultMessage": "Rows per page:"
   },
   "lib.table.MuiTableAdapter.search.search": {
     "defaultMessage": "Search"

@@ -17,6 +17,10 @@ const translations = defineMessages({
     id: 'lib.table.MuiTableAdapter.pagination.all',
     defaultMessage: 'All',
   },
+  rowsPerPage: {
+    id: 'lib.table.MuiTableAdapter.pagination.rowsPerPage',
+    defaultMessage: 'Rows per page:',
+  },
   search: {
     id: 'lib.table.MuiTableAdapter.search.search',
     defaultMessage: 'Search',

@@ -35,8 +35,9 @@ const MuiTablePagination = (props: PaginationProps): JSX.Element => {
       component="div"
       count={props.total}
       labelDisplayedRows={({ from, to, count }) =>
-        `${from}-${to} of ${count}${props.showTotalPlus ? '+' : ''}`
+        `${from}-${to} / ${count}${props.showTotalPlus ? '+' : ''}`
       }
+      labelRowsPerPage={t(translations.rowsPerPage)}
       onPageChange={(_, newPage): void => props.onPageChange?.(newPage)}
       onRowsPerPageChange={(e): void => {
         const pageSize = parseInt(e.target.value, 10);

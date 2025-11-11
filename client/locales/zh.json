@@ -2888,23 +2888,38 @@
   "course.assessment.statistics.gradeViolin.yAxisLabel": {
     "defaultMessage": "提交"
   },
+  "course.assessment.statistics.ancestorSelect.current": {
+    "defaultMessage": "当前"
+  },
+  "course.assessment.statistics.ancestorSelect.fromCourse": {
+    "defaultMessage": "来自 {courseTitle}"
+  },
+  "course.assessment.statistics.ancestorSelect.subtitle": {
+    "defaultMessage": "与此测验的过去版本进行比较："
+  },
+  "course.assessment.statistics.ancestorSelect.title": {
+    "defaultMessage": "复制历史"
+  },
+  "course.assessment.statistics.attemptCount": {
+    "defaultMessage": "尝试次数"
+  },
+  "course.assessment.statistics.duplicationHistory": {
+    "defaultMessage": "复制历史"
+  },
+  "course.assessment.statistics.gradesPerQuestion": {
+    "defaultMessage": "每题分数"
+  },
+  "course.assessment.statistics.includePhantom": {
+    "defaultMessage": "包括虚拟学生"
+  },
+  "course.assessment.statistics.liveFeedback": {
+    "defaultMessage": "获取帮助"
+  },
   "course.assessment.statistics.header": {
     "defaultMessage": "{title} 的统计数据"
   },
   "course.assessment.statistics.statistics": {
     "defaultMessage": "统计数据"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.attempting": {
-    "defaultMessage": "尝试"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
-    "defaultMessage": "学生提交状态"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.submitted": {
-    "defaultMessage": "已提交"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
-    "defaultMessage": "未尝试"
   },
   "course.assessment.statistics.submissionStatuses": {
     "defaultMessage": "提交状态"
@@ -4454,6 +4469,21 @@
   "course.enrolRequests.UserRequests.rejected": {
     "defaultMessage": "拒绝的注册请求"
   },
+  "course.experiencePoints.downloadCsvButton": {
+    "defaultMessage": "下载 CSV"
+  },
+  "course.experiencePoints.downloadFailure": {
+    "defaultMessage": "处理您的下载请求时发生错误。"
+  },
+  "course.experiencePoints.downloadPending": {
+    "defaultMessage": "请稍候，正在处理您的下载请求。"
+  },
+  "course.experiencePoints.downloadRequestSuccess": {
+    "defaultMessage": "您的下载请求已成功"
+  },
+  "course.experiencePoints.filterByNameButton": {
+    "defaultMessage": "按姓名筛选"
+  },
   "course.experiencePoints.disbursement.DisbursementForm.createDisbursementFailure": {
     "defaultMessage": "奖励经验值失败。"
   },
@@ -4485,7 +4515,10 @@
     "defaultMessage": "发放点数"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
-    "defaultMessage": "经验值发放"
+    "defaultMessage": "已发放的经验值"
+  },
+  "course.experiencePoints.disbursement.DisbursementIndex.experienceTab": {
+    "defaultMessage": "历史"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
     "defaultMessage": "无法检索数据。"
@@ -5866,6 +5899,9 @@
   },
   "course.statistics.StatisticsIndex.students.videoSubmissionCount": {
     "defaultMessage": "已观看的视频（总计：{courseVideoCount}）"
+  },
+  "course.statistics.StatisticsIndex.students.csvFileTitle": {
+    "defaultMessage": "学生统计"
   },
   "course.statistics.StatisticsIndex.students.searchBar": {
     "defaultMessage": "按学生姓名或学生类型搜索"
@@ -7452,7 +7488,10 @@
     "defaultMessage": "筛选 {index}"
   },
   "lib.table.MuiTableAdapter.pagination.all": {
-    "defaultMessage": "所有的"
+    "defaultMessage": "所有"
+  },
+  "lib.table.MuiTableAdapter.pagination.rowsPerPage": {
+    "defaultMessage": "每页行数:"
   },
   "lib.table.MuiTableAdapter.search.search": {
     "defaultMessage": "搜索"

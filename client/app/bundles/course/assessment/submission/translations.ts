@@ -1,4 +1,9 @@
 import { defineMessages } from 'react-intl';
+import { PossiblyUnstartedWorkflowState } from 'types/course/assessment/submission/submission';
+
+import { Descriptor } from 'lib/hooks/useTranslation';
+
+import { workflowStates } from './constants';
 
 const translations = defineMessages({
   submissionsHeader: {
@@ -850,5 +855,21 @@ export const scribingTranslations = defineMessages({
     defaultMessage: 'Save error.',
   },
 });
+
+const SubmissionStatusTranslationMapper: Record<
+  PossiblyUnstartedWorkflowState,
+  Descriptor
+> = {
+  attempting: translations.attempting,
+  submitted: translations.submitted,
+  graded: translations.graded,
+  published: translations.published,
+  [workflowStates.Unstarted]: translations.unstarted,
+};
+
+export const submissionStatusTranslation = (
+  status: PossiblyUnstartedWorkflowState,
+): Descriptor =>
+  SubmissionStatusTranslationMapper[status] ?? translations.unknown;
 
 export default translations;

@@ -2771,18 +2771,6 @@
   "course.assessment.skills.SkillsTable.uncategorised": {
     "defaultMessage": "미분류 기술"
   },
-  "course.assessment.statistics.SubmissionStatusChart.attempting": {
-    "defaultMessage": "시도 중"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.datasetLabel": {
-    "defaultMessage": "학생 제출 상태"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.submitted": {
-    "defaultMessage": "제출됨"
-  },
-  "course.assessment.statistics.SubmissionStatusChart.unattempted": {
-    "defaultMessage": "시도하지 않음"
-  },
   "course.assessment.statistics.ancestorFail": {
     "defaultMessage": "이 평가의 이전 반복을 검색하지 못했습니다."
   },
@@ -2872,6 +2860,33 @@
   },
   "course.assessment.statistics.group": {
     "defaultMessage": "그룹"
+  },
+  "course.assessment.statistics.ancestorSelect.current": {
+    "defaultMessage": "현재"
+  },
+  "course.assessment.statistics.ancestorSelect.fromCourse": {
+    "defaultMessage": "{courseTitle}에서"
+  },
+  "course.assessment.statistics.ancestorSelect.subtitle": {
+    "defaultMessage": "이 평가의 이전 버전과 비교:"
+  },
+  "course.assessment.statistics.ancestorSelect.title": {
+    "defaultMessage": "복제 기록"
+  },
+  "course.assessment.statistics.attemptCount": {
+    "defaultMessage": "시도 횟수"
+  },
+  "course.assessment.statistics.duplicationHistory": {
+    "defaultMessage": "복제 기록"
+  },
+  "course.assessment.statistics.gradesPerQuestion": {
+    "defaultMessage": "문제별 점수"
+  },
+  "course.assessment.statistics.includePhantom": {
+    "defaultMessage": "팬텀 학생 포함"
+  },
+  "course.assessment.statistics.liveFeedback": {
+    "defaultMessage": "도움 받기"
   },
   "course.assessment.statistics.header": {
     "defaultMessage": "{title}에 대한 통계"
@@ -4475,6 +4490,21 @@
   "course.enrolRequests.UserRequests.rejected": {
     "defaultMessage": "거부된 등록 요청"
   },
+  "course.experiencePoints.downloadCsvButton": {
+    "defaultMessage": "CSV 다운로드"
+  },
+  "course.experiencePoints.downloadFailure": {
+    "defaultMessage": "다운로드 요청을 처리하는 중 오류가 발생했습니다."
+  },
+  "course.experiencePoints.downloadPending": {
+    "defaultMessage": "다운로드 요청을 처리하는 동안 기다려 주세요."
+  },
+  "course.experiencePoints.downloadRequestSuccess": {
+    "defaultMessage": "다운로드 요청이 성공했습니다"
+  },
+  "course.experiencePoints.filterByNameButton": {
+    "defaultMessage": "이름으로 필터링"
+  },
   "course.experiencePoints.disbursement.DisbursementForm.createDisbursementFailure": {
     "defaultMessage": "경험치 부여 실패."
   },
@@ -4506,7 +4536,10 @@
     "defaultMessage": "점수 부여"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
-    "defaultMessage": "경험치 부여"
+    "defaultMessage": "부여된 경험치"
+  },
+  "course.experiencePoints.disbursement.DisbursementIndex.experienceTab": {
+    "defaultMessage": "기록"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
     "defaultMessage": "데이터를 검색하는 데 실패했습니다."
@@ -5887,6 +5920,9 @@
   },
   "course.statistics.StatisticsIndex.students.videoSubmissionCount": {
     "defaultMessage": "시청한 비디오 (총계: {courseVideoCount})"
+  },
+  "course.statistics.StatisticsIndex.students.csvFileTitle": {
+    "defaultMessage": "학생 통계"
   },
   "course.statistics.StatisticsIndex.students.searchBar": {
     "defaultMessage": "학생 이름 또는 학생 유형으로 검색"
@@ -7474,6 +7510,9 @@
   },
   "lib.table.MuiTableAdapter.pagination.all": {
     "defaultMessage": "모두"
+  },
+  "lib.table.MuiTableAdapter.pagination.rowsPerPage": {
+    "defaultMessage": "페이지당 행 수:"
   },
   "lib.table.MuiTableAdapter.search.search": {
     "defaultMessage": "검색"
