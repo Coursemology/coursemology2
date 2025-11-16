@@ -2250,7 +2250,7 @@
     "defaultMessage": "按学生姓名或成绩搜索答案"
   },
   "course.assessment.question.rubricPlayground.addRandomStudentAnswers": {
-    "defaultMessage": "随机学生答案"
+    "defaultMessage": "添加 {inputComponent} 个随机学生答案"
   },
   "course.assessment.question.rubricPlayground.writeCustomAnswer": {
     "defaultMessage": "编写自定义答案"
@@ -2260,6 +2260,9 @@
   },
   "course.assessment.question.rubricPlayground.dismiss": {
     "defaultMessage": "关闭"
+  },
+  "course.assessment.question.rubricPlayground.noAnswers": {
+    "defaultMessage": "尚未添加示例答案。添加一些以开始。"
   },
   "course.assessment.question.rubricPlayground.reevaluate": {
     "defaultMessage": "重新评估"

@@ -2284,7 +2284,7 @@
     "defaultMessage": "Search answers by student name or grade"
   },
   "course.assessment.question.rubricPlayground.addRandomStudentAnswers": {
-    "defaultMessage": "random student answer(s)"
+    "defaultMessage": "Add {inputComponent} random student answer(s)"
   },
   "course.assessment.question.rubricPlayground.writeCustomAnswer": {
     "defaultMessage": "Write a custom answer"
@@ -2294,6 +2294,9 @@
   },
   "course.assessment.question.rubricPlayground.dismiss": {
     "defaultMessage": "Dismiss"
+  },
+  "course.assessment.question.rubricPlayground.noAnswers": {
+    "defaultMessage": "No sample answers have been added. Add some to get started."
   },
   "course.assessment.question.rubricPlayground.reevaluate": {
     "defaultMessage": "Re-evaluate"

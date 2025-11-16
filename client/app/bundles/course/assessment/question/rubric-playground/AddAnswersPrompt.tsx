@@ -40,7 +40,7 @@ const AddAnswersPrompt: FC<Props> = (props) => {
 
   const tableRef = useRef<ComponentRef<typeof Table>>(null);
 
-  const { control, handleSubmit, watch, setValue } = useForm<{
+  const { control, handleSubmit, watch, setValue, reset } = useForm<{
     addMode: AddSampleMode;
     addAnswerIds: number[];
     addRandomAnswerCount: number;
@@ -100,7 +100,9 @@ const AddAnswersPrompt: FC<Props> = (props) => {
         data.addAnswerIds = Object.keys(
           tableRef.current?.getRowSelectionState() ?? {},
         ).map((id) => parseInt(id, 10));
-        onSubmit(data);
+        onSubmit(data).then(() => {
+          reset();
+        });
       })}
       onClose={onClose}
       open={open}

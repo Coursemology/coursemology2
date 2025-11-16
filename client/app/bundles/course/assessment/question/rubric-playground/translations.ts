@@ -132,6 +132,11 @@ const translations = defineMessages({
     id: 'course.assessment.question.rubricPlayground.dismiss',
     defaultMessage: 'Dismiss',
   },
+  noAnswers: {
+    id: 'course.assessment.question.rubricPlayground.noAnswers',
+    defaultMessage:
+      'No sample answers have been added. Add some to get started.',
+  },
   reevaluate: {
     id: 'course.assessment.question.rubricPlayground.reevaluate',
     defaultMessage: 'Re-evaluate',

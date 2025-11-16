@@ -2310,7 +2310,7 @@
     "defaultMessage": "학생 이름 또는 점수로 답변 검색"
   },
   "course.assessment.question.rubricPlayground.addRandomStudentAnswers": {
-    "defaultMessage": "무작위 학생 답변"
+    "defaultMessage": "{inputComponent}개의 무작위 학생 답변 추가"
   },
   "course.assessment.question.rubricPlayground.writeCustomAnswer": {
     "defaultMessage": "사용자 정의 답변 작성"
@@ -2320,6 +2320,9 @@
   },
   "course.assessment.question.rubricPlayground.dismiss": {
     "defaultMessage": "닫기"
+  },
+  "course.assessment.question.rubricPlayground.noAnswers": {
+    "defaultMessage": "샘플 답변이 추가되지 않았습니다. 시작하려면 추가하세요."
   },
   "course.assessment.question.rubricPlayground.reevaluate": {
     "defaultMessage": "재평가"
