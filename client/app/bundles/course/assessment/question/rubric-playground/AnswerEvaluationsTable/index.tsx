@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Close, Refresh } from '@mui/icons-material';
-import { IconButton, Tooltip } from '@mui/material';
+import { IconButton, Paper, Tooltip, Typography } from '@mui/material';
 import { RubricCategoryData } from 'types/course/rubrics';
 
 import Table, { ColumnTemplate } from 'lib/components/table';
@@ -32,6 +32,17 @@ interface AnswerEvaluationsTableProps {
   isComparing: boolean;
 }
 
+const EmptyTablePlaceholder: FC = () => {
+  const { t } = useTranslation();
+  return (
+    <Paper variant="outlined">
+      <Typography className="text-neutral-500 text-center p-6" variant="body2">
+        {t(translations.noAnswers)}
+      </Typography>
+    </Paper>
+  );
+};
+
 const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
   const { t } = useTranslation();
   const { data, selectedRubric, isComparing } = props;
@@ -39,6 +50,10 @@ const AnswerEvaluationsTable: FC<AnswerEvaluationsTableProps> = (props) => {
   const dispatch = useAppDispatch();
 
   if (!selectedRubric) return null;
+
+  if (data.length === 0) {
+    return <EmptyTablePlaceholder />;
+  }
 
   const maximumTotalGrade = selectedRubric.categories.reduce(
     (sum, category) => sum + category.maximumGrade,
