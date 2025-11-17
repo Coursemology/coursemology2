@@ -12,7 +12,7 @@ can_manage = can?(:manage, assessment)
 
 json.partial! 'assessment_list_data', assessment: @assessment, category: @category, tab: @tab, course: current_course
 
-json.description assessment.description unless @assessment.description.blank?
+json.description format_ckeditor_rich_text(assessment.description) unless @assessment.description.blank?
 json.isStudent current_course_user&.student? || false
 json.autograded assessment.autograded?
 json.hasTodo assessment.has_todo if can_manage

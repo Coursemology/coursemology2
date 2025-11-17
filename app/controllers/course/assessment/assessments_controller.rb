@@ -72,7 +72,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def edit
-    @assessment.description = helpers.format_ckeditor_rich_text(@assessment.description)
+    @assessment.description = helpers.sanitize_ckeditor_rich_text(@assessment.description)
     @programming_questions = @assessment.programming_questions
 
     @programming_qns_invalid_for_koditsu = @programming_questions.reject do |question|
