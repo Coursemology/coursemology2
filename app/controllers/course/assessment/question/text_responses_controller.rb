@@ -26,10 +26,10 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   end
 
   def edit
-    @text_response_question.description = helpers.format_ckeditor_rich_text(@text_response_question.description)
+    @text_response_question.description = helpers.sanitize_ckeditor_rich_text(@text_response_question.description)
     # The explanation field uses the Summernote editor so it needs sanitization.
     @text_response_question.solutions.each do |sol|
-      sol.explanation = helpers.format_ckeditor_rich_text(sol.explanation)
+      sol.explanation = helpers.sanitize_ckeditor_rich_text(sol.explanation)
     end
     @text_response_question.build_at_least_one_group_one_point if @text_response_question.comprehension_question?
   end

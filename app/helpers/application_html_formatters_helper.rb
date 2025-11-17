@@ -108,12 +108,24 @@ module ApplicationHtmlFormattersHelper
     return unless node_name == 'oembed'
     return unless node['url']&.match VIDEO_URL_WHITELIST
 
-    resource = OEmbed::Providers.get(node['url'])
-    new_node = Nokogiri::HTML5.fragment(resource.html).children.first
+    begin
+      resource = OEmbed::Providers.get(node['url'])
+      new_node = Nokogiri::HTML5.fragment(resource.html).children.first
 
-    node.add_next_sibling(new_node)
+      node.add_next_sibling(new_node)
 
-    { node_whitelist: [node] }
+      { node_whitelist: [node] }
+    rescue OEmbed::Error, StandardError => e
+      Rails.logger.error("OEmbed error for URL #{node['url']}: #{e.message}")
+
+      # TODO: Detect this and replace with a better fallback UI on the frontend.
+      fallback_link = Nokogiri::XML::Node.new('a', node.document)
+      fallback_link['href'] = node['url']
+      fallback_link.content = node['url']
+      node.replace(fallback_link)
+
+      { node_whitelist: [fallback_link] }
+    end
   end.freeze
 
   # Transformer to whitelist iframes containing embedded video content

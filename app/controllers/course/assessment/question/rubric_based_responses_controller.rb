@@ -29,13 +29,13 @@ class Course::Assessment::Question::RubricBasedResponsesController < Course::Ass
   end
 
   def edit
-    @rubric_based_response_question.description = helpers.format_ckeditor_rich_text(
+    @rubric_based_response_question.description = helpers.sanitize_ckeditor_rich_text(
       @rubric_based_response_question.description
     )
 
     @rubric_based_response_question.categories.without_bonus_category.each do |category|
       category.criterions.each do |grade|
-        grade.explanation = helpers.format_ckeditor_rich_text(grade.explanation)
+        grade.explanation = helpers.sanitize_ckeditor_rich_text(grade.explanation)
       end
     end
   end
