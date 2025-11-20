@@ -22,8 +22,7 @@ module Course::Assessment::LiveFeedback::ThreadConcern
 
     [
       200,
-      { 'thread' => { 'id' => thread.codaveri_thread_id, 'status' => thread_status } },
-      thread.remaining_user_messages(current_user)
+      'thread' => { 'id' => thread.codaveri_thread_id, 'status' => thread_status }
     ]
   end
 
@@ -32,7 +31,7 @@ module Course::Assessment::LiveFeedback::ThreadConcern
 
     new_thread = save_thread_info(body['thread'], submission_question.id)
 
-    [status, body, new_thread.max_user_messages]
+    [status, body]
   end
 
   def save_thread_info(thread_info, submission_question_id)

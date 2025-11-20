@@ -43,7 +43,8 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
 
   def codaveri_settings_params
     params.require(:settings_codaveri_component).permit(
-      :feedback_workflow, :model, :system_prompt, :override_system_prompt, :live_feedback_enabled
+      :feedback_workflow, :model, :system_prompt, :override_system_prompt, :live_feedback_enabled,
+      :usage_limited_for_get_help, :max_get_help_user_messages
     )
   end
 

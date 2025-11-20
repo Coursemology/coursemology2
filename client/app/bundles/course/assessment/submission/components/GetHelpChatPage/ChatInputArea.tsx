@@ -54,9 +54,14 @@ const ChatInputArea: FC<ChatInputAreaProps> = (props) => {
   const isPollingLiveFeedback =
     (liveFeedbackChatsForAnswer?.pendingFeedbackToken ?? false) !== false;
   const suggestions = liveFeedbackChatsForAnswer?.suggestions ?? [];
+
+  const isGetHelpUsageLimited =
+    liveFeedbackChatsForAnswer &&
+    typeof liveFeedbackChatsForAnswer.maxMessages === 'number';
   const isOutOfMessages =
-    typeof liveFeedbackChatsForAnswer?.remainingMessages === 'number' &&
-    liveFeedbackChatsForAnswer?.remainingMessages <= 0;
+    isGetHelpUsageLimited &&
+    liveFeedbackChatsForAnswer.sentMessages >=
+      liveFeedbackChatsForAnswer.maxMessages!;
 
   const textFieldDisabled =
     isResetting ||

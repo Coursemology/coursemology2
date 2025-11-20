@@ -2,11 +2,12 @@ import { useRef, useState } from 'react';
 import { Control, Controller, UseFormWatch } from 'react-hook-form';
 import { RadioGroup, Typography } from '@mui/material';
 import { CodaveriSettingsEntity } from 'types/course/admin/codaveri';
-import { object, string } from 'yup';
+import { number, object, string } from 'yup';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormRef } from 'lib/components/form/Form';
@@ -24,16 +25,14 @@ interface CodaveriSettingsFormProps {
 
 const validationSchema = object({
   adminSettings: object({
-    systemPrompt: string().test({
-      name: 'custom-system-prompt-nonempty',
-      message: translations.codaveriEmptySystemPrompt,
-      test: (value, testContext) => {
-        return (
-          testContext.parent.useSystemPrompt !== 'override' ||
-          Boolean(value?.trim()?.length)
-        );
-      },
+    systemPrompt: string().when('useSystemPrompt', {
+      is: 'override',
+      then: string().required(translations.codaveriEmptySystemPrompt),
     }),
+  }),
+  maxGetHelpUserMessages: number().when('getHelpUsageLimited', {
+    is: true,
+    then: number().min(1),
   }),
 });
 
@@ -208,6 +207,67 @@ const OverrideSystemPromptField = (
   );
 };
 
+const UsageLimitField = (
+  props: FormFieldProps & { watch: UseFormWatch<CodaveriSettingsEntity> },
+): JSX.Element => {
+  const { control, watch, disabled } = props;
+  const { t } = useTranslation();
+
+  const isUsageLimited = watch('getHelpUsageLimited');
+
+  return (
+    <Controller
+      control={control}
+      name="getHelpUsageLimited"
+      render={({ field, fieldState }): JSX.Element => (
+        <FormCheckboxField
+          disabled={disabled}
+          field={field}
+          fieldState={fieldState}
+          label={
+            <>
+              <Typography variant="body1">
+                {t(translations.getHelpUsageLimit)}
+              </Typography>
+              <Typography
+                color={
+                  disabled || !isUsageLimited
+                    ? 'text.disabled'
+                    : 'text.secondary'
+                }
+                variant="body2"
+              >
+                {t(translations.getHelpUsageLimitDescription)}
+              </Typography>
+
+              <Controller
+                control={control}
+                name="maxGetHelpUserMessages"
+                render={({
+                  field: numberField,
+                  fieldState: numberFieldState,
+                }): JSX.Element => (
+                  <FormTextField
+                    className="mt-4"
+                    disabled={disabled || !isUsageLimited}
+                    field={numberField}
+                    fieldState={numberFieldState}
+                    fullWidth
+                    label={t(translations.maxGetHelpUserMessages)}
+                    type="number"
+                    variant="filled"
+                  />
+                )}
+              />
+            </>
+          }
+          labelClassName="flex items-start"
+        />
+      )}
+    />
+  );
+};
+
 const CodaveriSettingsForm = (
   props: CodaveriSettingsFormProps,
 ): JSX.Element => {
@@ -264,6 +324,12 @@ const CodaveriSettingsForm = (
                 watch={watch}
               />
             )}
+
+            <UsageLimitField
+              control={control}
+              disabled={disabled}
+              watch={watch}
+            />
           </Section>
         );
       }}

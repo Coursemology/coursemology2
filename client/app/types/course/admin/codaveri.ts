@@ -35,6 +35,8 @@ export interface AssessmentCategoryData {
 export interface CodaveriSettingsData {
   feedbackWorkflow: 'none' | 'draft' | 'publish';
   liveFeedbackEnabled: boolean;
+  getHelpUsageLimited: boolean;
+  maxGetHelpUserMessages: number;
   assessmentCategories: AssessmentCategoryData[];
   assessmentTabs: AssessmentTabData[];
   assessments: AssessmentProgrammingQuestionsData[];
@@ -48,6 +50,8 @@ export interface CodaveriSettingsData {
 
 export interface CodaveriSettingsEntity {
   feedbackWorkflow: CodaveriSettingsData['feedbackWorkflow'];
+  getHelpUsageLimited?: boolean;
+  maxGetHelpUserMessages?: number;
   assessmentCategories: AssessmentCategoryData[];
   assessmentTabs: AssessmentTabData[];
   assessments: AssessmentProgrammingQuestionsData[];
@@ -64,6 +68,8 @@ export interface CodaveriSettingsPatchData {
     model?: string;
     system_prompt?: string;
     override_system_prompt?: boolean;
+    usage_limited_for_get_help?: boolean;
+    max_get_help_user_messages?: number;
   };
 }
 

@@ -412,7 +412,7 @@ const translations = defineMessages({
   chatMessagesRemaining: {
     id: 'course.assessment.submission.GetHelpChatPage.chatMessagesRemaining',
     defaultMessage:
-      '{numMessages, plural, one {# message} other {# messages}} remaining',
+      '{numMessages} / {maxMessages} {numMessages, plural, one {message} other {messages}} remaining',
   },
   noChatMessagesRemaining: {
     id: 'course.assessment.submission.GetHelpChatPage.noChatMessagesRemaining',

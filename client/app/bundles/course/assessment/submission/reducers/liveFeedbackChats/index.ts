@@ -82,7 +82,8 @@ const defaultValue = (answerId: number): LiveFeedbackChatData => {
     chats: [],
     answerFiles: [],
     suggestions: sampleSuggestions(false),
-    remainingMessages: 0,
+    sentMessages: 0,
+    maxMessages: undefined,
   };
 };
 
@@ -131,21 +132,27 @@ export const liveFeedbackChatSlice = createSlice({
       const changes: Partial<LiveFeedbackChatData> = {
         isLiveFeedbackChatLoaded: true,
         currentThreadId: thread.threadId,
-        chats: thread.messages.map((message) => {
-          const createdAt = moment(new Date(message.createdAt)).format(
-            SHORT_TIME_FORMAT,
-          );
-          return {
-            sender:
-              message.creatorId === 0
-                ? ChatSender.codaveri
-                : ChatSender.student,
-            message: message.content,
-            createdAt,
-            isError: message.isError,
-          };
-        }),
-        remainingMessages: thread.remainingMessages,
+        chats: thread.messages
+          .toSorted(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+          )
+          .map((message) => {
+            const createdAt = moment(new Date(message.createdAt)).format(
+              SHORT_TIME_FORMAT,
+            );
+            return {
+              sender:
+                message.creatorId === 0
+                  ? ChatSender.codaveri
+                  : ChatSender.student,
+              message: message.content,
+              createdAt,
+              isError: message.isError,
+            };
+          }),
+        sentMessages: thread.sentMessages,
+        maxMessages: thread.maxMessages,
       };
 
       liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
@@ -167,7 +174,8 @@ export const liveFeedbackChatSlice = createSlice({
         currentThreadId: null,
         isCurrentThreadExpired: false,
         chats: [],
-        remainingMessages: 0,
+        sentMessages: 0,
+        maxMessages: undefined,
       };
 
       liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
@@ -230,15 +238,17 @@ export const liveFeedbackChatSlice = createSlice({
         answerId: number;
         threadId: string;
         isThreadExpired: boolean;
-        remainingMessages?: number;
+        sentMessages?: number;
+        maxMessages?: number;
       }>,
     ) => {
-      const { answerId, threadId, isThreadExpired, remainingMessages } =
+      const { answerId, threadId, isThreadExpired, sentMessages, maxMessages } =
         action.payload;
       const changes: Partial<LiveFeedbackChatData> = {
         currentThreadId: threadId,
         isCurrentThreadExpired: isThreadExpired,
-        remainingMessages,
+        sentMessages,
+        maxMessages,
       };
       liveFeedbackChatAdapter.updateOne(state.liveFeedbackChatPerAnswer, {
         id: answerId,
@@ -342,7 +352,7 @@ export const liveFeedbackChatSlice = createSlice({
           isRequestingLiveFeedback: false,
           pendingFeedbackToken: null,
           chats: [...liveFeedbackChats.chats, ...summaryChat],
-          remainingMessages: liveFeedbackChats.remainingMessages - 1,
+          sentMessages: liveFeedbackChats.sentMessages + 1,
           suggestions: sampleSuggestions(true),
         };
 

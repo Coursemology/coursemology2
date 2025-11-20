@@ -48,6 +48,34 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
   const isRenderingSuggestionChips =
     !isRequestingLiveFeedback && !isPollingLiveFeedback && currentThreadId;
 
+  const isGetHelpUsageLimited =
+    liveFeedbackChats && typeof liveFeedbackChats.maxMessages === 'number';
+
+  const MessageLimitText = (): JSX.Element | null => {
+    if (!isGetHelpUsageLimited) return null;
+
+    const remainingMessages =
+      isGetHelpUsageLimited &&
+      liveFeedbackChats.maxMessages! - liveFeedbackChats.sentMessages;
+
+    return (
+      <Typography
+        className="pl-2"
+        color={
+          remainingMessages < MESSAGE_COUNT_WARN_THRESHOLD ? 'error' : undefined
+        }
+        variant="caption"
+      >
+        {remainingMessages > 0
+          ? t(translations.chatMessagesRemaining, {
+              numMessages: remainingMessages,
+              maxMessages: liveFeedbackChats.maxMessages!,
+            })
+          : t(translations.noChatMessagesRemaining)}
+      </Typography>
+    );
+  };
+
   useEffect(() => {
     if (!liveFeedbackChats || liveFeedbackChats?.chats.length === 0) return;
 
@@ -87,26 +115,7 @@ const GetHelpChatPage: FC<GetHelpChatPageProps> = (props) => {
         <ConversationArea answerId={answerId} />
       </div>
 
-      {isLiveFeedbackChatLoaded &&
-        Boolean(currentThreadId) &&
-        typeof liveFeedbackChats?.remainingMessages === 'number' && (
-          <Typography
-            className="pl-2"
-            color={
-              liveFeedbackChats?.remainingMessages <
-              MESSAGE_COUNT_WARN_THRESHOLD
-                ? 'error'
-                : undefined
-            }
-            variant="caption"
-          >
-            {liveFeedbackChats?.remainingMessages > 0
-              ? t(translations.chatMessagesRemaining, {
-                  numMessages: liveFeedbackChats?.remainingMessages,
-                })
-              : t(translations.noChatMessagesRemaining)}
-          </Typography>
-        )}
+      <MessageLimitText />
       <div className="relative flex flex-row items-center">
         {isRenderingSuggestionChips && (
           <SuggestionChips answerId={answerId} syncStatus={syncStatus} />
