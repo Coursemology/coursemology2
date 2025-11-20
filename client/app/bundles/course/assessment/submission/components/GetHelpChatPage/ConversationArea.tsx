@@ -69,7 +69,7 @@ const ConversationArea: FC<ConversationAreaProps> = (props) => {
       })}
       {isCurrentThreadExpired && (
         <div
-          className="justify-self-center cursor-pointer rounded-lg bg-gray-200 pt-3 pl-3 pr-3 pb-2 m-2 w-fit text-wrap break-words hover:underline"
+          className="justify-self-center cursor-pointer rounded-lg bg-gray-200 pt-3 pl-3 pr-3 pb-2 m-2 w-fit text-blue-800 text-wrap break-words hover:underline"
           onClick={() => dispatch(resetLiveFeedbackChat({ answerId }))}
         >
           <Typography

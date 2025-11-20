@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 json.feedbackWorkflow @settings.feedback_workflow
+json.getHelpUsageLimited @settings.usage_limited_for_get_help?
+json.maxGetHelpUserMessages @settings.max_get_help_user_messages
 if can?(:manage_course_admin_settings, current_tenant)
   json.adminSettings do
     json.availableModels Course::Settings::CodaveriComponentValidator.all_models

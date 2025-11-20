@@ -360,7 +360,8 @@ export function createLiveFeedbackChat({ submissionId, answerId }) {
               answerId,
               threadId,
               isThreadExpired,
-              remainingMessages: response.data?.remainingMessages,
+              sentMessages: response.data?.sentMessages,
+              maxMessages: response.data?.maxMessages,
             }),
           );
         }
@@ -382,7 +383,8 @@ export function fetchLiveFeedbackStatus({ answerId, threadId }) {
               answerId,
               threadId,
               isThreadExpired,
-              remainingMessages: response.data?.remainingMessages,
+              sentMessages: response.data?.sentMessages,
+              maxMessages: response.data?.maxMessages,
             }),
           );
         }

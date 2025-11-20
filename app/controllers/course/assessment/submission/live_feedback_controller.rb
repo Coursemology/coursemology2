@@ -34,6 +34,8 @@ class Course::Assessment::Submission::LiveFeedbackController <
 
   def associate_new_message_with_existing_files
     last_message = @thread.messages.where.not(id: @new_message.id).max_by(&:id)
+    return [] if last_message.nil?
+
     file_ids = Course::Assessment::LiveFeedback::MessageFile.where(message_id: last_message.id).pluck(:file_id)
 
     new_message_files = file_ids.map do |file_id|

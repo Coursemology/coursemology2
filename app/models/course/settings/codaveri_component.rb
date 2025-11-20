@@ -50,7 +50,9 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
       feedback_workflow: 'draft',
       model: 'gemini-2.5-pro',
       override_system_prompt: false,
-      system_prompt: ''
+      system_prompt: '',
+      usage_limited_for_get_help: true,
+      max_get_help_user_messages: 30
     }.freeze
   end
 
@@ -91,6 +93,18 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
     settings.is_only_itsp
   end
 
+  # Returns whether get help usage is limited.
+  # @return [Boolean] Whether get help usage is limited
+  def usage_limited_for_get_help?
+    settings.usage_limited_for_get_help
+  end
+
+  # Returns the maximum number of get help messages a user can send.
+  # @return [Integer] The maximum number of get help user messages
+  def max_get_help_user_messages
+    settings.max_get_help_user_messages
+  end
+
   # Sets the feedback workflow of codaveri feedback component
   #
   # @param [String] title The new ITSP requirement
@@ -126,5 +140,19 @@ class Course::Settings::CodaveriComponent < Course::Settings::Component
   def override_system_prompt=(override_system_prompt)
     override_system_prompt = nil if override_system_prompt.nil?
     settings.override_system_prompt = override_system_prompt
+  end
+
+  # Sets whether get help usage is limited.
+  # @param [Boolean] usage_limited_for_get_help The new setting
+  def usage_limited_for_get_help=(usage_limited_for_get_help)
+    usage_limited_for_get_help = nil if usage_limited_for_get_help.nil?
+    settings.usage_limited_for_get_help = usage_limited_for_get_help
+  end
+
+  # Sets the maximum number of get help messages a user can send.
+  # @param [Integer] max_get_help_user_messages The new maximum
+  def max_get_help_user_messages=(max_get_help_user_messages)
+    max_get_help_user_messages = nil if max_get_help_user_messages.nil?
+    settings.max_get_help_user_messages = max_get_help_user_messages
   end
 end

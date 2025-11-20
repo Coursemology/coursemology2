@@ -17,6 +17,8 @@ RSpec.describe Course::Settings::CodaveriComponent do
         expect(course.codaveri_feedback_workflow).to eq(default_settings[:feedback_workflow])
         expect(course.codaveri_system_prompt).to eq(default_settings[:system_prompt])
         expect(course.codaveri_override_system_prompt?).to eq(default_settings[:override_system_prompt])
+        expect(course.codaveri_get_help_usage_limited?).to eq(default_settings[:usage_limited_for_get_help])
+        expect(course.codaveri_max_get_help_user_messages).to eq(default_settings[:max_get_help_user_messages])
       end
 
       it 'populates settings class with correct default values' do
@@ -24,6 +26,8 @@ RSpec.describe Course::Settings::CodaveriComponent do
         expect(settings.feedback_workflow).to eq(default_settings[:feedback_workflow])
         expect(settings.system_prompt).to eq(default_settings[:system_prompt])
         expect(settings.override_system_prompt).to eq(default_settings[:override_system_prompt])
+        expect(settings.usage_limited_for_get_help?).to eq(default_settings[:usage_limited_for_get_help])
+        expect(settings.max_get_help_user_messages).to eq(default_settings[:max_get_help_user_messages])
       end
     end
   end

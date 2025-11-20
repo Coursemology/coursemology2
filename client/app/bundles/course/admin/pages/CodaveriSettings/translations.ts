@@ -165,4 +165,17 @@ export default defineMessages({
     id: 'course.admin.CodaveriSettings.Some',
     defaultMessage: 'Some',
   },
+  getHelpUsageLimit: {
+    id: 'course.admin.CodaveriSettings.getHelpUsageLimit',
+    defaultMessage: 'Limit Get Help messages per student',
+  },
+  getHelpUsageLimitDescription: {
+    id: 'course.admin.CodaveriSettings.getHelpUsageLimitDescription',
+    defaultMessage:
+      'If enabled, students will only be able to send a limited number of messages per question. Students will be able to see this limit and how many messages they have left.',
+  },
+  maxGetHelpUserMessages: {
+    id: 'course.admin.CodaveriSettings.maxGetHelpUserMessages',
+    defaultMessage: 'Maximum messages per question',
+  },
 });

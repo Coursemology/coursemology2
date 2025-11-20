@@ -40,6 +40,8 @@ const convertEntityDataToPatchData = (
     {
       feedback_workflow: data.feedbackWorkflow,
     };
+  patchObject.usage_limited_for_get_help = data.getHelpUsageLimited;
+  patchObject.max_get_help_user_messages = data.maxGetHelpUserMessages;
   if (data.adminSettings) {
     patchObject.model = data.adminSettings.model;
     if (data.adminSettings.systemPrompt?.length) {

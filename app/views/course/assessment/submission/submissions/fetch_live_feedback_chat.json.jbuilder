@@ -3,7 +3,8 @@ json.id @thread.id
 json.answerId @answer_id
 json.threadId @thread.codaveri_thread_id
 json.creatorId @thread.submission_creator_id
-json.remainingMessages @thread.remaining_user_messages(current_user)
+json.sentMessages @thread.sent_user_messages(@thread.submission_creator_id)
+json.maxMessages current_course.codaveri_max_get_help_user_messages if current_course.codaveri_get_help_usage_limited?
 
 json.messages @thread.messages.each do |message|
   json.content message.content

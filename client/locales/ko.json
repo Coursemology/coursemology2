@@ -509,6 +509,15 @@
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "일부"
   },
+  "course.admin.CodaveriSettings.getHelpUsageLimit": {
+    "defaultMessage": "학생당 도움 요청 메시지 제한"
+  },
+  "course.admin.CodaveriSettings.getHelpUsageLimitDescription": {
+    "defaultMessage": "활성화되면 학생은 질문당 제한된 수의 메시지만 보낼 수 있습니다. 학생은 이 제한과 남은 메시지 수를 볼 수 있습니다."
+  },
+  "course.admin.CodaveriSettings.maxGetHelpUserMessages": {
+    "defaultMessage": "질문당 최대 메시지 수"
+  },
   "course.admin.CodaveriSettings.codaveriModel": {
     "defaultMessage": "모델"
   },
@@ -1518,7 +1527,7 @@
     "defaultMessage": "어떻게 도와드릴까요?"
   },
   "course.assessment.submission.GetHelpChatPage.chatMessagesRemaining": {
-    "defaultMessage": "{numMessages}개 메시지 남음"
+    "defaultMessage": "{numMessages} / {maxMessages} 개 메시지 남음"
   },
   "course.assessment.submission.GetHelpChatPage.noChatMessagesRemaining": {
     "defaultMessage": "이 질문의 메시지 한도에 도달했습니다."

@@ -549,6 +549,15 @@
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "Some"
   },
+  "course.admin.CodaveriSettings.getHelpUsageLimit": {
+    "defaultMessage": "Limit Get Help messages per student"
+  },
+  "course.admin.CodaveriSettings.getHelpUsageLimitDescription": {
+    "defaultMessage": "If enabled, students will only be able to send a limited number of messages per question. Students will be able to see this limit and how many messages they have left."
+  },
+  "course.admin.CodaveriSettings.maxGetHelpUserMessages": {
+    "defaultMessage": "Maximum messages per question"
+  },
   "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
     "defaultMessage": "An error occurred while updating the codaveri evaluator settings."
   },
@@ -2767,7 +2776,7 @@
     "defaultMessage": "How can we help you?"
   },
   "course.assessment.submission.GetHelpChatPage.chatMessagesRemaining": {
-    "defaultMessage": "{numMessages, plural, one {# message} other {# messages}} remaining"
+    "defaultMessage": "{numMessages} / {maxMessages} {numMessages, plural, one {message} other {messages}} remaining"
   },
   "course.assessment.submission.GetHelpChatPage.noChatMessagesRemaining": {
     "defaultMessage": "You have reached the message limit for this question."

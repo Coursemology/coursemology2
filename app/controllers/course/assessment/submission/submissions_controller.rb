@@ -112,8 +112,11 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
                     first
     @thread_id = system_thread.codaveri_thread_id
 
-    user_messages_count = system_thread.messages.where(creator_id: current_user.id).count
-    head :too_many_requests and return if user_messages_count >= system_thread.max_user_messages
+    user_messages_count = system_thread.messages.where(creator_id: system_thread.submission_creator_id).count
+    if current_course.codaveri_get_help_usage_limited? &&
+       user_messages_count >= current_course.codaveri_max_get_help_user_messages
+      head :too_many_requests and return
+    end
 
     @message = live_feedback_params[:message]
 
@@ -145,14 +148,12 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     @answer = @submission.answers.find_by(id: answer_params[:answer_id])
     return head :bad_request if @answer.nil?
 
-    status, body, max_user_messages = safe_create_and_save_thread_info
+    status, body = safe_create_and_save_thread_info
 
-    render json: {
-      threadId: body['thread']['id'],
-      threadStatus: body['thread']['status'],
-      remainingMessages: max_user_messages
-    },
-           status: status
+    @thread_id = body['thread']['id']
+    @thread_status = body['thread']['status']
+
+    render status: status
   end
 
   def fetch_live_feedback_status
@@ -163,15 +164,12 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
 
     raise CodaveriError, { status: response_status, body: response_body } if response_status != 200
 
-    thread_status = response_body['data']['thread']['status']
+    @thread_status = response_body['data']['thread']['status']
 
-    thread = Course::Assessment::LiveFeedback::Thread.find_by(codaveri_thread_id: thread_id)
-    thread.update!(is_active: thread_status == 'active')
+    @thread = Course::Assessment::LiveFeedback::Thread.find_by(codaveri_thread_id: thread_id)
+    @thread.update!(is_active: @thread_status == 'active')
 
-    render json: {
-      threadStatus: thread_status,
-      remainingMessages: thread.remaining_user_messages(current_user)
-    }, status: response_status
+    render status: response_status
   end
 
   # Reload the current answer or reset it, depending on parameters.

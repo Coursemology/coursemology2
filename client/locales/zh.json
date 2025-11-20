@@ -533,6 +533,15 @@
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "一些"
   },
+  "course.admin.CodaveriSettings.getHelpUsageLimit": {
+    "defaultMessage": "限制每位学生的获取帮助消息数"
+  },
+  "course.admin.CodaveriSettings.getHelpUsageLimitDescription": {
+    "defaultMessage": "如果启用，学生将只能发送有限数量的消息。学生将能够看到此限制以及剩余的消息数量。"
+  },
+  "course.admin.CodaveriSettings.maxGetHelpUserMessages": {
+    "defaultMessage": "每个问题的最大消息数"
+  },
   "course.admin.CodaveriSettings.errorOccurredWhenUpdatingCodaveriEvaluatorSettings": {
     "defaultMessage": "更新 Codaveri 评估器设置时发生了错误。"
   },
@@ -2733,7 +2742,7 @@
     "defaultMessage": "我们如何帮助您？"
   },
   "course.assessment.submission.GetHelpChatPage.chatMessagesRemaining": {
-    "defaultMessage": "剩余 {numMessages} 条消息"
+    "defaultMessage": "剩余 {numMessages} / {maxMessages} 条消息"
   },
   "course.assessment.submission.GetHelpChatPage.noChatMessagesRemaining": {
     "defaultMessage": "您已达到此问题的消息限制。"
