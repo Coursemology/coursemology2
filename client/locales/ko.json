@@ -509,6 +509,45 @@
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "일부"
   },
+  "course.admin.CodaveriSettings.assessments": {
+    "defaultMessage": "평가"
+  },
+  "course.admin.CodaveriSettings.codaveriEmptySystemPrompt": {
+    "defaultMessage": "기본 시스템 프롬프트를 재정의하려면 사용자 정의 시스템 프롬프트를 입력해야 합니다."
+  },
+  "course.admin.CodaveriSettings.codaveriEngine": {
+    "defaultMessage": "코다베리 엔진"
+  },
+  "course.admin.CodaveriSettings.codaveriEngineDescription": {
+    "defaultMessage": "프로그래밍 코드 피드백을 생성하는 데 사용되는 코다베리 엔진 유형"
+  },
+  "course.admin.CodaveriSettings.codaveriOverrideSystemPrompt": {
+    "defaultMessage": "사용자 정의 시스템 프롬프트 사용"
+  },
+  "course.admin.CodaveriSettings.codaveriOverrideSystemPromptDescription": {
+    "defaultMessage": "학생을 도울 때, 이 지침은 문제 자체에 설정한 지침에 추가로 따르게 됩니다. 문제별 세부 사항을 참조하려면 프롬프트 내에서 다음 변수를 사용할 수 있으며, 아래와 같이 대괄호로 작성합니다:"
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPrompt": {
+    "defaultMessage": "시스템 프롬프트"
+  },
+  "course.admin.CodaveriSettings.codaveriUseDefaultSystemPrompt": {
+    "defaultMessage": "기본 시스템 프롬프트 사용"
+  },
+  "course.admin.CodaveriSettings.evaluatorUpdateSuccess": {
+    "defaultMessage": "{question}이(가) 이제 {evaluator} 평가자를 사용합니다"
+  },
+  "course.admin.CodaveriSettings.expandAll": {
+    "defaultMessage": "모든 질문 펼치기"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettings": {
+    "defaultMessage": "프로그래밍 질문 설정"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettingsSubtitle": {
+    "defaultMessage": "다양한 평가의 프로그래밍 질문에 대해 코다베리를 평가자로 활성화/비활성화합니다."
+  },
+  "course.admin.CodaveriSettings.succesfulUpdateAllEvaluator": {
+    "defaultMessage": "모든 질문을 {evaluator} 평가자를 사용하도록 성공적으로 업데이트했습니다"
+  },
   "course.admin.CodaveriSettings.getHelpUsageLimit": {
     "defaultMessage": "학생당 도움 요청 메시지 제한"
   },

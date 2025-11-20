@@ -549,6 +549,45 @@
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "Some"
   },
+  "course.admin.CodaveriSettings.assessments": {
+    "defaultMessage": "Assessments"
+  },
+  "course.admin.CodaveriSettings.codaveriEmptySystemPrompt": {
+    "defaultMessage": "You must enter a custom system prompt if you want to override the default one."
+  },
+  "course.admin.CodaveriSettings.codaveriEngine": {
+    "defaultMessage": "Codaveri Engine"
+  },
+  "course.admin.CodaveriSettings.codaveriEngineDescription": {
+    "defaultMessage": "Type of codaveri engine used to generate programming code feedback"
+  },
+  "course.admin.CodaveriSettings.codaveriOverrideSystemPrompt": {
+    "defaultMessage": "Use a custom system prompt"
+  },
+  "course.admin.CodaveriSettings.codaveriOverrideSystemPromptDescription": {
+    "defaultMessage": "When assisting students, these instructions will be followed in addition to any you have set on the question itself. To reference question-specific details, you may use these variables within the prompt, writing them with brackets as shown below:"
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPrompt": {
+    "defaultMessage": "System Prompt"
+  },
+  "course.admin.CodaveriSettings.codaveriUseDefaultSystemPrompt": {
+    "defaultMessage": "Use the default system prompt"
+  },
+  "course.admin.CodaveriSettings.evaluatorUpdateSuccess": {
+    "defaultMessage": "{question} is now using {evaluator} evaluator"
+  },
+  "course.admin.CodaveriSettings.expandAll": {
+    "defaultMessage": "Expand All Questions"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettings": {
+    "defaultMessage": "Programming Question Settings"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettingsSubtitle": {
+    "defaultMessage": "Enable/disable Codaveri as evaluator for programming questions in various assessments."
+  },
+  "course.admin.CodaveriSettings.succesfulUpdateAllEvaluator": {
+    "defaultMessage": "Successfully updated all questions to use {evaluator} evaluator"
+  },
   "course.admin.CodaveriSettings.getHelpUsageLimit": {
     "defaultMessage": "Limit Get Help messages per student"
   },

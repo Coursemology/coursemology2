@@ -60,15 +60,15 @@ export default defineMessages({
       'The Codaveri system prompt controls AI behavior when interacting with students.',
   },
   codaveriUseDefaultSystemPrompt: {
-    id: 'course.admin.CodaveriSettings.codaveriSystemPrompt',
+    id: 'course.admin.CodaveriSettings.codaveriUseDefaultSystemPrompt',
     defaultMessage: 'Use the default system prompt',
   },
   codaveriOverrideSystemPrompt: {
-    id: 'course.admin.CodaveriSettings.codaveriSystemPrompt',
+    id: 'course.admin.CodaveriSettings.codaveriOverrideSystemPrompt',
     defaultMessage: 'Use a custom system prompt',
   },
   codaveriOverrideSystemPromptDescription: {
-    id: 'course.admin.CodaveriSettings.codaveriOverrideSystemPrompt',
+    id: 'course.admin.CodaveriSettings.codaveriOverrideSystemPromptDescription',
     defaultMessage:
       'When assisting students, these instructions will be followed in addition to any you have set on the question itself. To reference question-specific details, you may use these variables within the prompt, writing them with brackets as shown below:',
   },

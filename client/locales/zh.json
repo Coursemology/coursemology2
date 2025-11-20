@@ -533,6 +533,60 @@
   "course.admin.CodaveriSettings.Some": {
     "defaultMessage": "一些"
   },
+  "course.admin.CodaveriSettings.feedbackWorkflow": {
+    "defaultMessage": "自动提交后评论"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowDescription": {
+    "defaultMessage": "当包含编程题目的提交被最终提交时，"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowNone": {
+    "defaultMessage": "不生成反馈"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowDraft": {
+    "defaultMessage": "生成草稿反馈，需要工作人员批准"
+  },
+  "course.admin.CodaveriSettings.feedbackWorkflowPublish": {
+    "defaultMessage": "直接向学生发布反馈"
+  },
+  "course.admin.CodaveriSettings.assessments": {
+    "defaultMessage": "评估"
+  },
+  "course.admin.CodaveriSettings.codaveriEmptySystemPrompt": {
+    "defaultMessage": "如果您想覆盖默认系统提示，则必须输入自定义系统提示。"
+  },
+  "course.admin.CodaveriSettings.codaveriEngine": {
+    "defaultMessage": "Codaveri 引擎"
+  },
+  "course.admin.CodaveriSettings.codaveriEngineDescription": {
+    "defaultMessage": "用于生成编程代码反馈的 Codaveri 引擎类型"
+  },
+  "course.admin.CodaveriSettings.codaveriOverrideSystemPrompt": {
+    "defaultMessage": "使用自定义系统提示"
+  },
+  "course.admin.CodaveriSettings.codaveriOverrideSystemPromptDescription": {
+    "defaultMessage": "在帮助学生时，这些指令将与您在题目本身设置的任何指令一起执行。要引用题目特定的详细信息，您可以在提示中使用这些变量，并按照如下所示用括号写出："
+  },
+  "course.admin.CodaveriSettings.codaveriSystemPrompt": {
+    "defaultMessage": "系统提示"
+  },
+  "course.admin.CodaveriSettings.codaveriUseDefaultSystemPrompt": {
+    "defaultMessage": "使用默认系统提示"
+  },
+  "course.admin.CodaveriSettings.evaluatorUpdateSuccess": {
+    "defaultMessage": "{question} 现在使用 {evaluator} 评估器"
+  },
+  "course.admin.CodaveriSettings.expandAll": {
+    "defaultMessage": "展开所有问题"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettings": {
+    "defaultMessage": "编程题目设置"
+  },
+  "course.admin.CodaveriSettings.programmingQuestionSettingsSubtitle": {
+    "defaultMessage": "为各种评估中的编程题目启用/禁用 Codaveri 作为评估器。"
+  },
+  "course.admin.CodaveriSettings.succesfulUpdateAllEvaluator": {
+    "defaultMessage": "成功更新所有问题以使用 {evaluator} 评估器"
+  },
   "course.admin.CodaveriSettings.getHelpUsageLimit": {
     "defaultMessage": "限制每位学生的获取帮助消息数"
   },
