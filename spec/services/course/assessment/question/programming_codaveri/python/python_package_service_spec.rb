@@ -54,9 +54,14 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveri::Python::Python
     end
 
     describe '.top_level_split' do
-      it 'splits the string correctly' do
+      it 'splits the 2-segment string correctly' do
         split_result = subject.send(:top_level_split, 'Testing (a, b),c', ',')
         expect(split_result).to match_array(['Testing (a, b)', 'c'])
+      end
+
+      it 'splits the 3-segment string correctly' do
+        split_result = subject.send(:top_level_split, 'Testing (a, b),c,d', ',')
+        expect(split_result).to match_array(['Testing (a, b)', 'c', 'd'])
       end
 
       context 'when the input string is invalid' do
@@ -65,6 +70,11 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveri::Python::Python
             subject.send(:top_level_split, 'asdf', ',')
           end.to raise_error(TypeError)
         end
+      end
+
+      it 'only returns first 3 segments of multi-argument string' do
+        split_result = subject.send(:top_level_split, 'Testing (a, b),c,d,e', ',')
+        expect(split_result).to match_array(['Testing (a, b)', 'c', 'd'])
       end
     end
   end

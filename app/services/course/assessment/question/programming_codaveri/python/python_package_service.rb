@@ -139,12 +139,11 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
     test_cases_regex.each do |test_case_match|
       test_case_object = default_codaveri_expr_test_case_template
       test_name, indentation, test_content, assertion_type, assertion_content = test_case_match
-
       # prefix
       prefix = test_content.gsub(reg_meta, '').gsub(/^#{indentation}/, '').strip
 
-      # lhsExpression and rhsExpression
-      lhs_expression, rhs_expression =
+      # lhsExpression, rhsExpression, hint
+      lhs_expression, rhs_expression, hint =
         assertion_types[assertion_type.to_sym].call(assertion_content).split('==').map(&:strip)
 
       # display
@@ -157,6 +156,7 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
       test_case_object[:prefix] = prefix
       test_case_object[:lhsExpression] = lhs_expression
       test_case_object[:rhsExpression] = rhs_expression
+      test_case_object[:hint] = hint unless hint.blank?
       test_case_object[:display] = display
 
       @test_case_files.append(test_case_object)
@@ -210,17 +210,30 @@ class Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageSe
     opening = '([{'
     closing = ')]}'
     balance = 0
-    idx = 0
-    while idx < text.length
-      char = text[idx]
+    start_idx = 0
+    end_idx = 0
+    parts = []
+
+    while end_idx < text.length
+      char = text[end_idx]
       if opening.include? char
         balance += 1
       elsif closing.include? char
         balance -= 1
       elsif (char == delimiter) && (balance == 0)
-        return text[0...idx], text[idx + 1...]
+        parts << text[start_idx...end_idx]
+        start_idx = end_idx + 1
+
+        # assertEqual only expects 2-3 arguments
+        return parts if parts.length == 3
       end
-      idx += 1
+      end_idx += 1
+    end
+
+    # Capture last part and return if result becomes valid.
+    if start_idx < text.length
+      parts << text[start_idx...text.length]
+      return parts if parts.length == 2 || parts.length == 3
     end
     raise TypeError, "ill-formatted text: #{text}"
   end
