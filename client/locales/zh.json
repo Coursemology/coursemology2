@@ -2772,7 +2772,7 @@
     "defaultMessage": "运行新的抄袭检查将删除之前的结果。"
   },
   "course.assessment.plagiarism.results": {
-    "defaultMessage": "抄袭结果（前 100 个最相似的提交对）"
+    "defaultMessage": "抄袭结果（提交之间的相似度）"
   },
   "course.assessment.plagiarism.baseSubmission": {
     "defaultMessage": "基准提交"
@@ -2794,6 +2794,9 @@
   },
   "course.assessment.plagiarism.searchByStudentName": {
     "defaultMessage": "按学生姓名搜索"
+  },
+  "course.assessment.plagiarism.showSelfPlagiarism": {
+    "defaultMessage": "包含自我抄袭比较（同一学生，不同课程）"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "答案"

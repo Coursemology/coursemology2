@@ -21,6 +21,7 @@ export interface AncestorAssessmentInfo extends AssessmentInfo {}
 export interface UserInfo {
   id: number;
   name: string;
+  userId: number;
 }
 
 export interface StudentInfo extends UserInfo {

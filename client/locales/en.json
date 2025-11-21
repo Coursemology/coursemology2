@@ -2806,7 +2806,7 @@
     "defaultMessage": "Running a new plagiarism check will remove the previous results."
   },
   "course.assessment.plagiarism.results": {
-    "defaultMessage": "Plagiarism Results (Top 100 Most Similar Submission Pairs)"
+    "defaultMessage": "Plagiarism Results (similarity between submissions)"
   },
   "course.assessment.plagiarism.baseSubmission": {
     "defaultMessage": "Base Submission"
@@ -2828,6 +2828,9 @@
   },
   "course.assessment.plagiarism.searchByStudentName": {
     "defaultMessage": "Search by Student Name"
+  },
+  "course.assessment.plagiarism.showSelfPlagiarism": {
+    "defaultMessage": "Include self-plagiarism comparisons (same student, different courses)"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "Answers"
