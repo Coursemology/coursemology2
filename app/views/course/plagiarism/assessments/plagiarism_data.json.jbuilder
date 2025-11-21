@@ -26,6 +26,7 @@ json.submissionPairs @results do |result|
     json.courseUser do
       json.(course_user, :id, :name)
       json.path course_user_path(course_user.course, course_user)
+      json.userId course_user.user_id
     end
     json.assessmentTitle base_submission.assessment.title
     json.courseTitle base_submission.assessment.course.title
@@ -40,6 +41,7 @@ json.submissionPairs @results do |result|
     json.courseUser do
       json.(course_user, :id, :name)
       json.path course_user_path(course_user.course, course_user)
+      json.userId course_user.user_id
     end
     json.assessmentTitle compared_submission.assessment.title
     json.courseTitle compared_submission.assessment.course.title

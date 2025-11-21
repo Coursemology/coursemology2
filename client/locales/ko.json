@@ -2802,7 +2802,7 @@
     "defaultMessage": "새 표절 검사를 실행하면 이전 결과가 제거됩니다."
   },
   "course.assessment.plagiarism.results": {
-    "defaultMessage": "표절 결과 (가장 유사한 제출 쌍 상위 100개)"
+    "defaultMessage": "표절 결과 (제출물 간 유사도)"
   },
   "course.assessment.plagiarism.baseSubmission": {
     "defaultMessage": "기본 제출"
@@ -2824,6 +2824,9 @@
   },
   "course.assessment.plagiarism.searchByStudentName": {
     "defaultMessage": "학생 이름으로 검색"
+  },
+  "course.assessment.plagiarism.showSelfPlagiarism": {
+    "defaultMessage": "자기 표절 비교 포함 (동일 학생, 다른 과정)"
   },
   "course.assessment.statistics.answers": {
     "defaultMessage": "답변"

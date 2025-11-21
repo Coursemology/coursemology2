@@ -1,7 +1,13 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { OpenInNew, PictureAsPdf } from '@mui/icons-material';
-import { IconButton, Tooltip, Typography } from '@mui/material';
+import {
+  FormControlLabel,
+  IconButton,
+  Switch,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { PaginationState } from '@tanstack/react-table';
 import {
   AssessmentPlagiarismSubmission,
@@ -31,8 +37,7 @@ interface Props {
 const translations = defineMessages({
   results: {
     id: 'course.assessment.plagiarism.results',
-    defaultMessage:
-      'Plagiarism Results (Top 100 Most Similar Submission Pairs)',
+    defaultMessage: 'Plagiarism Results (similarity between submissions)',
   },
   baseSubmission: {
     id: 'course.assessment.plagiarism.baseSubmission',
@@ -66,6 +71,11 @@ const translations = defineMessages({
     id: 'course.assessment.plagiarism.cannotManageSubmission',
     defaultMessage: 'You do not have permission to manage this submission.',
   },
+  showSelfPlagiarism: {
+    id: 'course.assessment.plagiarism.showSelfPlagiarism',
+    defaultMessage:
+      'Include self-plagiarism comparisons (same student, different courses)',
+  },
 });
 
 const PlagiarismResultsTable: FC<Props> = (props) => {
@@ -80,6 +90,8 @@ const PlagiarismResultsTable: FC<Props> = (props) => {
     shareSubmissionPairResult,
     shareAssessmentResult,
   } = props;
+
+  const [isShowingSelfPlagiarism, setIsShowingSelfPlagiarism] = useState(false);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -183,26 +195,52 @@ const PlagiarismResultsTable: FC<Props> = (props) => {
 
   return (
     <>
-      <div className="flex">
-        <Typography className="ml-6" variant="h6">
-          {t(translations.results)}
-        </Typography>
-        {submissionPairs.length > 0 && (
-          <Tooltip title={t(translations.viewReport)}>
-            <IconButton
+      <div className="ml-6 pb-2">
+        <div className="flex">
+          <Typography variant="h6">{t(translations.results)}</Typography>
+          {submissionPairs.length > 0 && (
+            <Tooltip title={t(translations.viewReport)}>
+              <IconButton
+                color="primary"
+                onClick={shareAssessmentResult}
+                size="small"
+              >
+                <OpenInNew />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isShowingSelfPlagiarism}
+              className="toggle-phantom"
               color="primary"
-              onClick={shareAssessmentResult}
-              size="small"
-            >
-              <OpenInNew />
-            </IconButton>
-          </Tooltip>
-        )}
+              onChange={() =>
+                setIsShowingSelfPlagiarism(!isShowingSelfPlagiarism)
+              }
+            />
+          }
+          label={
+            <Typography variant="body1">
+              {t(translations.showSelfPlagiarism)}
+            </Typography>
+          }
+          labelPlacement="end"
+        />
       </div>
       <Table
         className="border-none"
         columns={columns}
-        data={submissionPairs}
+        data={
+          isShowingSelfPlagiarism
+            ? submissionPairs
+            : submissionPairs.filter(
+                (pair) =>
+                  pair.baseSubmission.courseUser.userId !==
+                  pair.comparedSubmission.courseUser.userId,
+              )
+        }
         getRowClassName={(datum): string =>
           `plagiarism_result_${datum.baseSubmission.id}_${datum.comparedSubmission.id} bg-slot-1 hover?:bg-slot-2 slot-1-white slot-2-neutral-100`
         }
