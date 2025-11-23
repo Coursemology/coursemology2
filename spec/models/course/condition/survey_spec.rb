@@ -110,6 +110,77 @@ RSpec.describe Course::Condition::Survey, type: :model do
       end
     end
 
+    describe '#compute_satisfaction_information' do
+      let(:survey) do
+        create(:survey, course: course, published: true, end_at: Time.zone.now + 1.day)
+      end
+      let(:course_user1) { create(:course_user, course: course) }
+      let(:course_user2) { create(:course_user, course: course) }
+      let(:course_user3) { create(:course_user, course: course) }
+      subject { create(:course_condition_survey, survey: survey) }
+
+      context 'when all users have completed the survey' do
+        before do
+          create(:response, survey: survey, course_user: course_user1,
+                            submitted_at: Time.zone.now,
+                            creator: course_user1.user, updater: course_user1.user)
+          create(:response, survey: survey, course_user: course_user2,
+                            submitted_at: Time.zone.now,
+                            creator: course_user2.user, updater: course_user2.user)
+          create(:response, survey: survey, course_user: course_user3,
+                            submitted_at: Time.zone.now,
+                            creator: course_user3.user, updater: course_user3.user)
+        end
+
+        it 'returns true for all users' do
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([true, true, true])
+        end
+      end
+
+      context 'when one user is attempting the survey while the rest have completed it' do
+        before do
+          create(:response, survey: survey, course_user: course_user1,
+                            submitted_at: Time.zone.now,
+                            creator: course_user1.user, updater: course_user1.user)
+          create(:response, survey: survey, course_user: course_user2,
+                            submitted_at: nil, creator: course_user2.user,
+                            updater: course_user2.user)
+          create(:response, survey: survey, course_user: course_user3,
+                            submitted_at: Time.zone.now,
+                            creator: course_user3.user, updater: course_user3.user)
+        end
+
+        it 'returns false for that user and true for the rest' do
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([true, false, true])
+        end
+      end
+
+      context 'when one user has not attempted the survey while the rest have completed it' do
+        before do
+          create(:response, survey: survey, course_user: course_user1,
+                            submitted_at: Time.zone.now,
+                            creator: course_user1.user, updater: course_user1.user)
+          create(:response, survey: survey, course_user: course_user3,
+                            submitted_at: Time.zone.now,
+                            creator: course_user3.user, updater: course_user3.user)
+        end
+
+        it 'returns false for that user and true for the rest' do
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([true, false, true])
+        end
+      end
+
+      context 'when all users have not completed the survey' do
+        it 'returns false for all users' do
+          expect(subject.compute_satisfaction_information([course_user1, course_user2,
+                                                           course_user3])).to eq([false, false, false])
+        end
+      end
+    end
+
     describe '#dependent_object' do
       it 'returns the correct dependent survey object' do
         expect(subject.dependent_object).to eq(subject.survey)

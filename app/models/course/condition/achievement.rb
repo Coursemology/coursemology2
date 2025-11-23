@@ -35,6 +35,24 @@ class Course::Condition::Achievement < ApplicationRecord
     course_user.achievements.exists?(achievement.id)
   end
 
+  # Returns a boolean array denoting whether each of the specified
+  # course users has satisfied the achievement condition.
+  #
+  # @param [Array<CourseUser>] course_users The specified course users.
+  # @return [Array<Boolean>] At each index, true if the corresponding course
+  #   user has the required achievement and false otherwise.
+  def compute_satisfaction_information(course_users)
+    satisfaction_information = Array.new(course_users.length, false)
+    course_user_achievements = Course::UserAchievement.where(course_user: course_users).where(achievement: achievement)
+    course_user_ids_to_indices = course_users.map.with_index { |course_user, index| [course_user.id, index] }.to_h
+
+    course_user_achievements.each do |course_user_achievement|
+      satisfaction_information[course_user_ids_to_indices[course_user_achievement.course_user.id]] = true
+    end
+
+    satisfaction_information
+  end
+
   # Class that the condition depends on.
   def self.dependent_class
     Course::Achievement.name
