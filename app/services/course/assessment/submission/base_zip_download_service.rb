@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::BaseZipDownloadService
+  include TmpCleanupHelper
+
+  def initialize
+    @base_dir = Dir.mktmpdir('coursemology-download-')
+  end
+
   def download_and_zip
     ActsAsTenant.without_tenant do
       download_to_base_dir
@@ -8,10 +14,6 @@ class Course::Assessment::Submission::BaseZipDownloadService
   end
 
   protected
-
-  def initialize
-    @base_dir = Dir.mktmpdir('coursemology-download-')
-  end
 
   # Downloads each submission to its own folder in the base directory.
   def download_to_base_dir
@@ -32,17 +34,26 @@ class Course::Assessment::Submission::BaseZipDownloadService
     end
   end
 
+  def zip_file_path
+    "#{@base_dir}.zip"
+  end
+
   # Zip the directory and write to the file.
   #
   # @return [String] The path to the zip file.
   def zip_base_dir
-    output_file = "#{@base_dir}.zip"
-    Zip::File.open(output_file, Zip::File::CREATE) do |zip_file|
+    Zip::File.open(zip_file_path, Zip::File::CREATE) do |zip_file|
       Dir["#{@base_dir}/**/**"].each do |file|
         zip_file.add(file.sub(File.join("#{@base_dir}/"), ''), file)
       end
     end
 
-    output_file
+    zip_file_path
+  end
+
+  private
+
+  def cleanup_entries
+    [@base_dir, zip_file_path]
   end
 end

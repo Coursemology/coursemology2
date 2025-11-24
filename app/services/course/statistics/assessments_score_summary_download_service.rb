@@ -1,14 +1,19 @@
 # frozen_string_literal: true
 require 'csv'
 class Course::Statistics::AssessmentsScoreSummaryDownloadService
+  include TmpCleanupHelper
   include ApplicationFormattersHelper
 
-  class << self
-    def download(course, assessment_ids, file_name)
-      service = new(course, assessment_ids, file_name)
-      ActsAsTenant.without_tenant do
-        service.generate_csv_report
-      end
+  def initialize(course, assessment_ids, file_name)
+    @course = course
+    @assessment_ids = assessment_ids
+    @file_name = file_name
+    @base_dir = Dir.mktmpdir('assessment-score-summary-')
+  end
+
+  def generate
+    ActsAsTenant.without_tenant do
+      generate_csv_report
     end
   end
 
@@ -25,11 +30,8 @@ class Course::Statistics::AssessmentsScoreSummaryDownloadService
 
   private
 
-  def initialize(course, assessment_ids, file_name)
-    @course = course
-    @assessment_ids = assessment_ids
-    @file_name = file_name
-    @base_dir = Dir.mktmpdir('assessment-score-summary-')
+  def cleanup_entries
+    [@base_dir]
   end
 
   def load_total_grades

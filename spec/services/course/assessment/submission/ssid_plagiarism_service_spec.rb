@@ -21,7 +21,7 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
 
     before do
       allow_any_instance_of(SsidAsyncApiService).to receive(:connection).and_return(connection)
-      allow(Course::Assessment::Submission::SsidZipDownloadService).to receive(:download_and_zip).
+      allow_any_instance_of(Course::Assessment::Submission::SsidZipDownloadService).to receive(:download_and_zip).
         and_return([File.join(Rails.root, 'spec/fixtures/course/ssid/submissions.zip')])
     end
 

@@ -1,20 +1,25 @@
 # frozen_string_literal: true
 require 'csv'
 class Course::Assessment::Submission::StatisticsDownloadService
+  include TmpCleanupHelper
   include ApplicationFormattersHelper
 
-  class << self
-    # Downloads the statistics and zip them.
-    #
-    # @param [Course] current_course The current course the submissions belong to
-    # @param [User] current_user The current user downloading the statistics.
-    # @param [Array<Integer>] submission_ids The ids of the submissions to download statistics for
-    # @return [String] The path to the csv file.
-    def download(current_course, current_user, submission_ids)
-      service = new(current_course, current_user, submission_ids)
-      ActsAsTenant.without_tenant do
-        service.generate_csv_report
-      end
+  # @param [Course] current_course The current course the submissions belong to
+  # @param [User] current_user The current user downloading the statistics.
+  # @param [Array<Integer>] submission_ids The ids of the submissions to download statistics for
+  def initialize(current_course, current_user, submission_ids)
+    @current_user = current_user
+    @submission_ids = submission_ids
+    @current_course = current_course
+    @base_dir = Dir.mktmpdir('coursemology-statistics-')
+  end
+
+  # Downloads the statistics and zip them.
+  #
+  # @return [String] The path to the csv file.
+  def generate
+    ActsAsTenant.without_tenant do
+      generate_csv_report
     end
   end
 
@@ -38,11 +43,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
 
   private
 
-  def initialize(current_course, current_user, submission_ids)
-    @current_user = current_user
-    @submission_ids = submission_ids
-    @current_course = current_course
-    @base_dir = Dir.mktmpdir('coursemology-statistics-')
+  def cleanup_entries
+    [@base_dir]
   end
 
   def download_statistics_header(csv)

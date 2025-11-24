@@ -29,19 +29,30 @@ RSpec.describe Course::Statistics::AssessmentsScoreSummaryDownloadService do
     let!(:submission21) { create(:submission, :published, assessment: assessment1, creator: student2.user) }
     let!(:submission22) { create(:submission, :published, assessment: assessment2, creator: student2.user) }
 
-    describe '#download' do
-      subject do
-        file_name = "#{Pathname.normalize_filename(course.title)}_score_summary_" \
-                    "#{Time.now.strftime '%Y-%m-%d %H%M'}.csv"
-        assessment_ids_list = [assessment1.id, assessment2.id, assessment3.id]
-        Course::Statistics::AssessmentsScoreSummaryDownloadService.send(:download, course,
-                                                                        assessment_ids_list,
-                                                                        file_name)
+    describe '#generate' do
+      let(:file_name) do
+        "#{Pathname.normalize_filename(course.title)}_score_summary_#{Time.now.strftime '%Y-%m-%d %H%M'}.csv"
       end
+      let(:assessment_ids_list) { [assessment1.id, assessment2.id, assessment3.id] }
+      let(:service) { described_class.new(course, assessment_ids_list, file_name) }
+
+      subject { service.generate }
+
+      after { service.cleanup }
 
       context 'when all assessments are chosen for score summary export' do
         let!(:filepath) { subject }
         let!(:csv_lines) { CSV.open(filepath, 'r').readlines }
+
+        it 'cleans up temporary files after cleanup is called' do
+          entries = service.send(:cleanup_entries)
+
+          service.cleanup
+
+          entries.each do |entry|
+            expect(Pathname.new(entry).exist?).to be false
+          end
+        end
 
         it 'downloads non-empty csv with correct information' do
           expect(csv_lines.size).to eq(4)

@@ -23,14 +23,26 @@ RSpec.describe Course::Assessment::Submission::CsvDownloadService do
                                       course: course, creator: student2.user)
     end
 
-    describe '#download' do
-      subject do
-        Course::Assessment::Submission::CsvDownloadService.send(:download, course_staff, assessment1, nil)
-      end
+    describe '#generate' do
+      let(:service) { described_class.new(course_staff, assessment1, nil) }
+
+      subject { service.generate }
+
+      after { service.cleanup }
 
       context 'when there are submissions' do
         let!(:filepath) { subject }
         let!(:csv_lines) { CSV.open(filepath, 'r').readlines }
+
+        it 'cleans up temporary files after cleanup is called' do
+          entries = service.send(:cleanup_entries)
+
+          service.cleanup
+
+          entries.each do |entry|
+            expect(Pathname.new(entry).exist?).to be false
+          end
+        end
 
         it 'downloads non-empty csv' do
           # Check row and column numbers
@@ -54,12 +66,9 @@ RSpec.describe Course::Assessment::Submission::CsvDownloadService do
       end
 
       context 'when assessment contains illegal characters in name' do
-        let!(:filepath) do
-          Course::Assessment::Submission::CsvDownloadService.send(:download,
-                                                                  course_staff,
-                                                                  assessment2,
-                                                                  nil)
-        end
+        let(:service) { described_class.new(course_staff, assessment2, nil) }
+        let!(:filepath) { subject }
+
         it 'downloads non-empty csv with normalized name' do
           expect(File.exist?(filepath)).to be_truthy
           normalized_assessment_title = Pathname.normalize_filename(assessment2.title)

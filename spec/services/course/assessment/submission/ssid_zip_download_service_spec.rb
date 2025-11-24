@@ -14,9 +14,9 @@ RSpec.describe Course::Assessment::Submission::SsidZipDownloadService do
       create(:submission, :submitted, assessment: assessment, course: course, creator: student1.user)
     end
 
-    let(:service) do
-      Course::Assessment::Submission::SsidZipDownloadService.send(:new, assessment)
-    end
+    let(:service) { described_class.new(assessment) }
+
+    after { service.cleanup }
 
     describe '#download_to_base_dir' do
       let(:dir) { service.instance_variable_get(:@base_dir) }
@@ -38,6 +38,30 @@ RSpec.describe Course::Assessment::Submission::SsidZipDownloadService do
         expect(Dir.exist?(File.join(dir, student1_folder))).to be_truthy
         expect(Dir.exist?(File.join(dir, 'skeleton', question_title))).to be_truthy
         expect(File.exist?(File.join(dir, 'skeleton', question_title, template_file.filename))).to be_truthy
+      end
+    end
+
+    describe '#download_and_zip' do
+      subject { service.download_and_zip }
+
+      before { submission1 }
+
+      it 'generates zip files' do
+        expect(subject).to be_an(Array)
+        subject.each do |zip_file|
+          expect(File.exist?(zip_file)).to be_truthy
+        end
+      end
+
+      it 'cleans up temporary files after cleanup is called' do
+        subject
+        entries = service.send(:cleanup_entries)
+
+        service.cleanup
+
+        entries.each do |entry|
+          expect(Pathname.new(entry).exist?).to be false
+        end
       end
     end
   end

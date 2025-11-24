@@ -2,89 +2,98 @@
 require 'csv'
 
 class Course::Survey::SurveyDownloadService
-  class << self
-    # Downloads the survey to its own folder in the base directory.
-    #
-    # @return [String] The path to the csv file.
-    def download(survey)
-      survey_csv = generate_csv(survey)
-      base_dir = Dir.mktmpdir('coursemology-survey-')
-      normalized_filename = "#{Pathname.normalize_filename(survey.title)}.csv"
-      dst_path = File.join(base_dir, normalized_filename)
-      File.open(dst_path, 'w') do |dst_file|
-        dst_file.write(survey_csv)
+  include TmpCleanupHelper
+
+  def initialize(survey)
+    @survey = survey
+    @base_dir = Dir.mktmpdir('coursemology-survey-')
+  end
+
+  # Downloads the survey to its own folder in the base directory.
+  #
+  # @return [String] The path to the csv file.
+  def generate
+    survey_csv = generate_csv
+    normalized_filename = "#{Pathname.normalize_filename(@survey.title)}.csv"
+    dst_path = File.join(@base_dir, normalized_filename)
+    File.open(dst_path, 'w') do |dst_file|
+      dst_file.write(survey_csv)
+    end
+    dst_path
+  end
+
+  private
+
+  def cleanup_entries
+    [@base_dir]
+  end
+
+  # Converts survey to string csv format.
+  #
+  # @return [String] The survey in csv format.
+  def generate_csv
+    responses = Course::Survey::Response.
+                where.not(submitted_at: nil).
+                includes(answers: [:options, :question]).
+                where(survey: @survey)
+    questions = @survey.questions.
+                merge(Course::Survey::Section.order(:weight)).
+                merge(Course::Survey::Question.order(:weight)).
+                to_a
+    header = generate_header(questions)
+
+    CSV.generate(headers: true, force_quotes: true) do |csv|
+      csv << header
+      responses.each do |response|
+        csv << generate_row(response, questions)
       end
-      dst_path
     end
+  end
 
-    private
+  def generate_header(questions)
+    [
+      I18n.t('course.surveys.survey_download_service.created_at'),
+      I18n.t('course.surveys.survey_download_service.updated_at'),
+      I18n.t('course.surveys.survey_download_service.course_user_id'),
+      I18n.t('course.surveys.survey_download_service.name'),
+      I18n.t('course.surveys.survey_download_service.role')
+    ] + questions.map(&:description)
+  end
 
-    # Converts survey to string csv format.
-    #
-    # @param [Course::Survey] survey The survey to be converted
-    # @return [String] The survey in csv format.
-    def generate_csv(survey)
-      responses = Course::Survey::Response.
-                  where.not(submitted_at: nil).
-                  includes(answers: [:options, :question]).
-                  where(survey: survey)
-      questions = survey.questions.
-                  merge(Course::Survey::Section.order(:weight)).
-                  merge(Course::Survey::Question.order(:weight)).
-                  to_a
-      header = generate_header(questions)
-
-      CSV.generate(headers: true, force_quotes: true) do |csv|
-        csv << header
-        responses.each do |response|
-          csv << generate_row(response, questions)
-        end
-      end
+  def generate_row(response, questions)
+    answers_hash = response.answers.to_h { |answer| [answer.question_id, answer] }
+    values = questions.map do |question|
+      answer = answers_hash[question.id]
+      generate_value(answer)
     end
+    [
+      response.submitted_at,
+      response.submitted_at ? response.updated_at : response.submitted_at,
+      response.course_user.id,
+      response.course_user.name,
+      response.course_user.role,
+      *values
+    ]
+  end
 
-    def generate_header(questions)
-      [
-        I18n.t('course.surveys.survey_download_service.created_at'),
-        I18n.t('course.surveys.survey_download_service.updated_at'),
-        I18n.t('course.surveys.survey_download_service.course_user_id'),
-        I18n.t('course.surveys.survey_download_service.name'),
-        I18n.t('course.surveys.survey_download_service.role')
-      ] + questions.map(&:description)
-    end
+  def generate_value(answer)
+    # Handles the case where there is no answer.
+    # This happens when a question is added after the user has submitted a response.
+    return '' if answer.nil?
 
-    def generate_row(response, questions)
-      answers_hash = response.answers.to_h { |answer| [answer.question_id, answer] }
-      values = questions.map do |question|
-        answer = answers_hash[question.id]
-        generate_value(answer)
-      end
-      [
-        response.submitted_at,
-        response.submitted_at ? response.updated_at : response.submitted_at,
-        response.course_user.id,
-        response.course_user.name,
-        response.course_user.role,
-        *values
-      ]
-    end
+    question = answer.question
 
-    def generate_value(answer)
-      # Handles the case where there is no answer.
-      # This happens when a question is added after the user has submitted a response.
-      return '' if answer.nil?
+    return answer.text_response || '' if question.text?
 
-      question = answer.question
+    return generate_mcq_mrq_value(answer) if question.multiple_choice? || question.multiple_response?
 
-      return answer.text_response || '' if question.text?
+    I18n.t('course.surveys.survey_download_service.unknown_question_type')
+  end
 
-      if question.multiple_choice? || question.multiple_response?
-        options = answer.options.
-                  sort_by { |option| option.question_option.weight }.
-                  map { |option| option.question_option.option }
-        return options.join(';')
-      end
-
-      I18n.t('course.surveys.survey_download_service.unknown_question_type')
-    end
+  def generate_mcq_mrq_value(answer)
+    answer.options.
+      sort_by { |option| option.question_option.weight }.
+      map { |option| option.question_option.option }.
+      join(';')
   end
 end

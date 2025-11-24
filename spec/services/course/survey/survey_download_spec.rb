@@ -14,7 +14,7 @@ RSpec.describe Course::Survey::SurveyDownloadService do
 
     describe '#generate_csv' do
       subject do
-        CSV.parse(Course::Survey::SurveyDownloadService.send(:generate_csv, survey))
+        CSV.parse(Course::Survey::SurveyDownloadService.new(survey).send(:generate_csv))
       end
 
       let!(:submitted_responses) do
@@ -62,7 +62,7 @@ RSpec.describe Course::Survey::SurveyDownloadService do
 
     describe '#generate_row' do
       subject do
-        Course::Survey::SurveyDownloadService.send(:generate_row, response.reload, questions)
+        Course::Survey::SurveyDownloadService.new(survey).send(:generate_row, response.reload, questions)
       end
 
       let(:response) do
@@ -110,7 +110,7 @@ RSpec.describe Course::Survey::SurveyDownloadService do
 
     describe '#generate_value' do
       subject do
-        Course::Survey::SurveyDownloadService.send(:generate_value, answer)
+        Course::Survey::SurveyDownloadService.new(survey).send(:generate_value, answer)
       end
 
       let(:response) do

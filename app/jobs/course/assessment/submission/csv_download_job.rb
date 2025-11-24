@@ -11,8 +11,10 @@ class Course::Assessment::Submission::CsvDownloadJob < ApplicationJob
   # @param [Course::Assessment] assessment The assessments to download submissions for.
   # @param [String|nil] course_users The subset of course users whose submissions to download.
   def perform_tracked(current_course_user, assessment, course_users = nil)
-    csv_file = Course::Assessment::Submission::CsvDownloadService.
-               download(current_course_user, assessment, course_users)
+    service = Course::Assessment::Submission::CsvDownloadService.new(current_course_user, assessment, course_users)
+    csv_file = service.generate
     redirect_to SendFile.send_file(csv_file, "#{Pathname.normalize_filename(assessment.title)}.csv")
+  ensure
+    service&.cleanup
   end
 end

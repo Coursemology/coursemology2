@@ -1,20 +1,5 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::Submission::BaseZipDownloadService
-  class << self
-    # Downloads the submissions and zip them.
-    #
-    # @param [CourseUser] course_user The course user downloading the submissions.
-    # @param [Course::Assessment] assessment The assessments to download submissions from.
-    # @param [String|nil] course_users The subset of course users whose submissions to download.
-    # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
-    #   'staff', 'staff_w_phantom'
-    # @return [String] The path to the zip file.
-    def download_and_zip(course_user, assessment, course_users)
-      service = new(course_user, assessment, course_users)
-      service.download_and_zip
-    end
-  end
-
   COURSE_USERS = { my_students: 'my_students',
                    my_students_w_phantom: 'my_students_w_phantom',
                    students: 'students',
@@ -22,8 +7,11 @@ class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::S
                    staff: 'staff',
                    staff_w_phantom: 'staff_w_phantom' }.freeze
 
-  private
-
+  # @param [CourseUser] course_user The course user downloading the submissions.
+  # @param [Course::Assessment] assessment The assessments to download submissions from.
+  # @param [String|nil] course_users The subset of course users whose submissions to download.
+  # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
+  #   'staff', 'staff_w_phantom'
   def initialize(course_user, assessment, course_users)
     super()
     @course_user = course_user
@@ -31,6 +19,8 @@ class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::S
     @questions = assessment.questions.to_h { |q| [q.id, q] }
     @course_users = course_users
   end
+
+  private
 
   # Downloads each submission to its own folder in the base directory.
   def download_to_base_dir
