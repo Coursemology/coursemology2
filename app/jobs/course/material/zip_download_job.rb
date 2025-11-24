@@ -13,7 +13,10 @@ class Course::Material::ZipDownloadJob < ApplicationJob
   #   is useful when you don't want to use the name of the folder as the zip filename (such as the
   #   root folder).
   def perform_tracked(folder, materials, filename = folder.name)
-    zip_file = Course::Material::ZipDownloadService.download_and_zip(folder, materials)
+    service = Course::Material::ZipDownloadService.new(folder, materials)
+    zip_file = service.download_and_zip
     redirect_to SendFile.send_file(zip_file, "#{Pathname.normalize_filename(filename)}.zip")
+  ensure
+    service&.cleanup
   end
 end

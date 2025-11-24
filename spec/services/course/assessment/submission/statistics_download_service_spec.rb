@@ -20,23 +20,38 @@ RSpec.describe Course::Assessment::Submission::StatisticsDownloadService do
                                       course: course, creator: student2.user)
     end
 
-    describe '#download' do
+    describe '#generate' do
       context 'when downloading statistics' do
-        it 'download empty statistics' do
-          empty_path = Course::Assessment::Submission::StatisticsDownloadService.
-                       send(:download, course, course_staff.user, nil)
+        it 'downloads empty statistics' do
+          service = described_class.new(course, course_staff.user, nil)
+          empty_path = service.generate
           expect(File.exist?(empty_path)).to be_truthy
           line_count = File.open(empty_path, 'r').readlines.size
           expect(line_count).to eq(1)
+          service.cleanup
         end
 
-        it 'download non-empty statistics' do
+        it 'downloads non-empty statistics' do
           submission_ids = [submission1.id, submission2.id]
-          non_empty_path = Course::Assessment::Submission::StatisticsDownloadService.
-                           send :download, course, course_staff.user, submission_ids
+          service = described_class.new(course, course_staff.user, submission_ids)
+          non_empty_path = service.generate
           expect(File.exist?(non_empty_path)).to be_truthy
           line_count = File.open(non_empty_path, 'r').readlines.size
           expect(line_count).to eq(1 + submission_ids.length)
+          service.cleanup
+        end
+
+        it 'cleans up temporary files after cleanup is called' do
+          submission_ids = [submission1.id, submission2.id]
+          service = described_class.new(course, course_staff.user, submission_ids)
+          service.generate
+          entries = service.send(:cleanup_entries)
+
+          service.cleanup
+
+          entries.each do |entry|
+            expect(Pathname.new(entry).exist?).to be false
+          end
         end
       end
     end

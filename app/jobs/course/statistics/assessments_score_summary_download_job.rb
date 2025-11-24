@@ -7,7 +7,10 @@ class Course::Statistics::AssessmentsScoreSummaryDownloadJob < ApplicationJob
 
   def perform_tracked(course, assessment_ids)
     file_name = "#{Pathname.normalize_filename(course.title)}_score_summary_#{Time.now.strftime '%Y%m%d_%H%M'}.csv"
-    csv_file = Course::Statistics::AssessmentsScoreSummaryDownloadService.download(course, assessment_ids, file_name)
+    service = Course::Statistics::AssessmentsScoreSummaryDownloadService.new(course, assessment_ids, file_name)
+    csv_file = service.generate
     redirect_to SendFile.send_file(csv_file, file_name)
+  ensure
+    service&.cleanup
   end
 end

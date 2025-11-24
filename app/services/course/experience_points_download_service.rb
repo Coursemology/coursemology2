@@ -1,14 +1,18 @@
 # frozen_string_literal: true
 require 'csv'
 class Course::ExperiencePointsDownloadService
+  include TmpCleanupHelper
   include ApplicationFormattersHelper
 
-  class << self
-    def download(course, course_user_id)
-      service = new(course, course_user_id)
-      ActsAsTenant.without_tenant do
-        service.generate_csv_report
-      end
+  def initialize(course, course_user_id)
+    @course = course
+    @course_user_id = course_user_id || course.course_users.pluck(:id)
+    @base_dir = Dir.mktmpdir('experience-points-')
+  end
+
+  def generate
+    ActsAsTenant.without_tenant do
+      generate_csv_report
     end
   end
 
@@ -28,10 +32,8 @@ class Course::ExperiencePointsDownloadService
 
   private
 
-  def initialize(course, course_user_id)
-    @course = course
-    @course_user_id = course_user_id || course.course_users.pluck(:id)
-    @base_dir = Dir.mktmpdir('experience-points-')
+  def cleanup_entries
+    [@base_dir]
   end
 
   def load_exp_points_records

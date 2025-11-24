@@ -9,7 +9,10 @@ class Course::Survey::SurveyDownloadJob < ApplicationJob
   #
   # @param [Course::Survey] survey
   def perform_tracked(survey)
-    csv_file = Course::Survey::SurveyDownloadService.download(survey)
+    service = Course::Survey::SurveyDownloadService.new(survey)
+    csv_file = service.generate
     redirect_to SendFile.send_file(csv_file, "#{Pathname.normalize_filename(survey.title)}.csv")
+  ensure
+    service&.cleanup
   end
 end

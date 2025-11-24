@@ -20,7 +20,9 @@ RSpec.describe Course::Material::ZipDownloadService do
     let(:material_b) { create(:material, folder: folder_b) }
     let(:material_d) { create(:material, folder: folder_d) }
     let(:materials) { [material_a, material_b, material_d] }
-    let(:service) { Course::Material::ZipDownloadService.send(:new, folder_a, materials) }
+    let(:service) { described_class.new(folder_a, materials) }
+
+    after { service.cleanup }
 
     describe '#download_to_base_dir' do
       let(:dir) { service.instance_variable_get(:@base_dir) }
@@ -69,9 +71,7 @@ RSpec.describe Course::Material::ZipDownloadService do
       end
 
       context 'when some of the materials are selected' do
-        let(:service) do
-          Course::Material::ZipDownloadService.send(:new, folder_a, [material_a, material_b])
-        end
+        let(:service) { described_class.new(folder_a, [material_a, material_b]) }
 
         it 'only downloads the selected materials' do
           # Only selected files and their parent folders should be downloaded
@@ -110,11 +110,22 @@ RSpec.describe Course::Material::ZipDownloadService do
       end
     end
 
-    describe '.download_and_zip' do
-      subject { Course::Material::ZipDownloadService.download_and_zip(folder_a, materials) }
+    describe '#download_and_zip' do
+      subject { service.download_and_zip }
 
       it 'downloads and zips the folder' do
         expect(File.exist?(subject)).to be_truthy
+      end
+
+      it 'cleans up temporary files after cleanup is called' do
+        subject
+        entries = service.send(:cleanup_entries)
+
+        service.cleanup
+
+        entries.each do |entry|
+          expect(Pathname.new(entry).exist?).to be false
+        end
       end
     end
   end

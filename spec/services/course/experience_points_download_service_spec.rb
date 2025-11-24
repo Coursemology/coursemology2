@@ -24,10 +24,10 @@ RSpec.describe Course::ExperiencePointsDownloadService do
                         course_user: student2, points_awarded: 300).acting_as
     end
 
-    describe '#download' do
-      subject do
-        Course::ExperiencePointsDownloadService.send(:download, course, course_user_id)
-      end
+    describe '#generate' do
+      subject { service.generate }
+      let(:service) { described_class.new(course, course_user_id) }
+      after { service.cleanup }
 
       context 'when there are existing records and no filtering of student' do
         let(:course_user_id) { nil }
@@ -48,6 +48,17 @@ RSpec.describe Course::ExperiencePointsDownloadService do
           expect(csv_manual_exp_point_record).to include(student2.name)
           expect(csv_manual_exp_point_record).to include(manual_record3.points_awarded.to_s)
           expect(csv_manual_exp_point_record).to include(manual_record3.reason)
+        end
+
+        it 'cleans up temporary files after cleanup is called' do
+          subject
+          entries = service.send(:cleanup_entries)
+
+          service.cleanup
+
+          entries.each do |entry|
+            expect(Pathname.new(entry).exist?).to be false
+          end
         end
       end
 

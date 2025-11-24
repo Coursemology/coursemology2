@@ -11,8 +11,11 @@ class Course::Assessment::Submission::StatisticsDownloadJob < ApplicationJob
   # @param [User] current_user The user downloading the statistics.
   # @param [Array<Integer>] submission_ids the id of submissions to download statistics for
   def perform_tracked(current_course, current_user, submission_ids)
-    file_path = Course::Assessment::Submission::StatisticsDownloadService.
-                download(current_course, current_user, submission_ids)
+    service = Course::Assessment::Submission::StatisticsDownloadService.
+              new(current_course, current_user, submission_ids)
+    file_path = service.generate
     redirect_to SendFile.send_file(file_path)
+  ensure
+    service&.cleanup
   end
 end

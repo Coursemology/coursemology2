@@ -1,20 +1,34 @@
 # frozen_string_literal: true
 require 'csv'
 class Course::Assessment::Submission::CsvDownloadService
-  class << self
-    # Downloads the submissions in csv format
-    #
-    # @param [CourseUser] current_course_user The course user downloading the submissions.
-    # @param [Course::Assessment] assessment The assessments to download submissions from.
-    # @param [String|nil] course_users_type The subset of course users whose submissions to download.
-    # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
-    #   'staff', 'staff_w_phantom'
-    # @return [String] The path to the csv file.
-    def download(current_course_user, assessment, course_users_type)
-      service = new(current_course_user, assessment, course_users_type)
-      ActsAsTenant.without_tenant do
-        service.generate_csv
-      end
+  include TmpCleanupHelper
+
+  # @param [CourseUser] current_course_user The course user downloading the submissions.
+  # @param [Course::Assessment] assessment The assessments to download submissions from.
+  # @param [String|nil] course_users_type The subset of course users whose submissions to download.
+  # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
+  #   'staff', 'staff_w_phantom'
+  def initialize(current_course_user, assessment, course_users_type)
+    @current_course_user = current_course_user
+    @course_users_type = course_users_type
+    @assessment = assessment
+
+    @question_assessments = Course::QuestionAssessment.where(assessment_id: assessment.id).
+                            includes(:question)
+    @sorted_question_ids = @question_assessments.pluck(:question_id)
+    @questions = Course::Assessment::Question.where(id: @sorted_question_ids).
+                 includes(:actable)
+    @questions_downloadable = @questions.to_h { |q| [q.id, q.csv_downloadable?] }
+
+    @base_dir = Dir.mktmpdir('coursemology-download-')
+  end
+
+  # Downloads the submissions in csv format
+  #
+  # @return [String] The path to the csv file.
+  def generate
+    ActsAsTenant.without_tenant do
+      generate_csv
     end
   end
 
@@ -42,19 +56,8 @@ class Course::Assessment::Submission::CsvDownloadService
 
   private
 
-  def initialize(current_course_user, assessment, course_users_type)
-    @current_course_user = current_course_user
-    @course_users_type = course_users_type
-    @assessment = assessment
-
-    @question_assessments = Course::QuestionAssessment.where(assessment_id: assessment.id).
-                            includes(:question)
-    @sorted_question_ids = @question_assessments.pluck(:question_id)
-    @questions = Course::Assessment::Question.where(id: @sorted_question_ids).
-                 includes(:actable)
-    @questions_downloadable = @questions.to_h { |q| [q.id, q.csv_downloadable?] }
-
-    @base_dir = Dir.mktmpdir('coursemology-download-')
+  def cleanup_entries
+    [@base_dir]
   end
 
   def submissions_csv_header(csv)

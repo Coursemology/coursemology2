@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 class Course::Material::ZipDownloadService
-  class << self
-    # Downloads the materials and zip them.
-    #
-    # @param [Course::Material::Folder] folder The folder containing the materials.
-    # @param [Array<Course::Material>] materials The materials to be downloaded.
-    # @return [String] The path to the zip file.
-    def download_and_zip(folder, materials)
-      service = new(folder, materials)
-      service.download_and_zip
-    end
+  include TmpCleanupHelper
+
+  # @param [Course::Material::Folder] folder The folder containing the materials.
+  # @param [Array<Course::Material>] materials The materials to be downloaded.
+  def initialize(folder, materials)
+    @folder = folder
+    @materials = Array(materials)
+    @base_dir = Dir.mktmpdir('coursemology-download-')
   end
 
+  # Downloads the materials and zip them.
+  #
+  # @return [String] The path to the zip file.
   def download_and_zip
     download_to_base_dir
     zip_base_dir
@@ -19,10 +20,12 @@ class Course::Material::ZipDownloadService
 
   private
 
-  def initialize(folder, materials)
-    @folder = folder
-    @materials = Array(materials)
-    @base_dir = Dir.mktmpdir('coursemology-download-')
+  def cleanup_entries
+    [@base_dir, zip_file_path]
+  end
+
+  def zip_file_path
+    "#{@base_dir}.zip"
   end
 
   # Downloads the materials to the the base directory.
@@ -36,14 +39,13 @@ class Course::Material::ZipDownloadService
   #
   # @return [String] The path to the zip file.
   def zip_base_dir
-    output_file = "#{@base_dir}.zip"
-    Zip::File.open(output_file, Zip::File::CREATE) do |zip_file|
+    Zip::File.open(zip_file_path, Zip::File::CREATE) do |zip_file|
       Dir["#{@base_dir}/**/**"].each do |file|
         zip_file.add(file.sub(File.join("#{@base_dir}/"), ''), file)
       end
     end
 
-    output_file
+    zip_file_path
   end
 
   # Downloads the material and store it in the given directory.

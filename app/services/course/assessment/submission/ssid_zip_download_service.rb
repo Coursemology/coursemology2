@@ -2,18 +2,19 @@
 class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessment::Submission::BaseZipDownloadService
   SSID_MAX_ZIP_FILE_SIZE = 8.megabytes
 
-  class << self
-    # Downloads the submissions and zip them to upload to SSID.
-    #
-    # @param [Course::Assessment] assessment The main assessment for plagiarism check.
-    # @return [String] The path to the zip file.
-    def download_and_zip(assessment)
-      service = new(assessment)
-      service.download_and_zip
-    end
+  # @param [Course::Assessment] assessment The main assessment for plagiarism check.
+  def initialize(assessment)
+    super()
+    @assessment = assessment
+    @questions = assessment.questions.to_h { |q| [q.id, q] }
+    @zip_files = []
   end
 
   private
+
+  def cleanup_entries
+    [@base_dir, *@zip_files]
+  end
 
   # TODO: Move this mapping to polyglot repository.
   # C# and R are not yet supported by SSID, so they are excluded.
@@ -38,12 +39,6 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
     Coursemology::Polyglot::Language::Rust::Rust1Point68 => '.rs',
     Coursemology::Polyglot::Language::TypeScript::TypeScript5Point8 => '.ts'
   }.freeze
-
-  def initialize(assessment)
-    super()
-    @assessment = assessment
-    @questions = assessment.questions.to_h { |q| [q.id, q] }
-  end
 
   # Downloads each submission to its own folder in the base directory.
   def download_to_base_dir
@@ -140,7 +135,7 @@ class Course::Assessment::Submission::SsidZipDownloadService < Course::Assessmen
   # @return [Array] The paths to the zip files.
   def zip_base_dir
     answer_partitions = partition_answers_by_size(answer_size_hash)
-    answer_partitions.map.with_index do |partition, index|
+    @zip_files = answer_partitions.map.with_index do |partition, index|
       output_file = "#{@base_dir}_#{index}.zip"
       Zip::File.open(output_file, Zip::File::CREATE) do |zip_file|
         partition.each do |answer_dir|

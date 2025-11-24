@@ -32,9 +32,9 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
       end
     end
 
-    let(:service) do
-      Course::Assessment::Submission::ZipDownloadService.send(:new, course_staff1, assessment, nil)
-    end
+    let(:service) { described_class.new(course_staff1, assessment, nil) }
+
+    after { service.cleanup }
 
     describe '#download_to_base_dir' do
       let(:dir) { service.instance_variable_get(:@base_dir) }
@@ -223,16 +223,25 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
       end
     end
 
-    describe '.download_and_zip' do
-      subject do
-        Course::Assessment::Submission::ZipDownloadService.
-          download_and_zip(course_staff1, assessment, nil)
-      end
+    describe '#download_and_zip' do
+      subject { service.download_and_zip }
 
       it 'downloads and zips the folder' do
         submission1
         submission2
         expect(File.exist?(subject)).to be_truthy
+      end
+
+      it 'cleans up temporary files after cleanup is called' do
+        submission1
+        subject
+        entries = service.send(:cleanup_entries)
+
+        service.cleanup
+
+        entries.each do |entry|
+          expect(Pathname.new(entry).exist?).to be false
+        end
       end
     end
   end
