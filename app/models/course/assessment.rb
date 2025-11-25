@@ -82,6 +82,9 @@ class Course::Assessment < ApplicationRecord
                             inverse_of: :assessment, dependent: :destroy
   has_many :links, class_name: 'Course::Assessment::Link', inverse_of: :assessment, dependent: :destroy
   has_many :linked_assessments, through: :links, source: :linked_assessment
+  has_many :reverse_links, class_name: 'Course::Assessment::Link', foreign_key: :linked_assessment_id,
+                           inverse_of: :linked_assessment, dependent: :destroy
+  has_many :reverse_linked_assessments, through: :reverse_links, source: :assessment
 
   validate :tab_in_same_course
   validate :selected_test_type_for_grading
@@ -237,12 +240,21 @@ class Course::Assessment < ApplicationRecord
     # the new assessment has links to all linked assessments of the original assessment,
     # as well as the duplicates of those linked assessments if they are duplicated
     # in the same process (i.e course duplication)
-    self.linked_assessments = other.all_linked_assessments.flat_map do |assessment|
+    linked_assessments = other.all_linked_assessments.flat_map do |assessment|
       if duplicator.duplicated?(assessment)
         [assessment, duplicator.duplicate(assessment)]
       else
         assessment
       end
+    end
+    self.linked_assessments = linked_assessments.reject { |assessment| assessment == self }
+
+    # As part of the current duplication process, if any assessment linking to this one is duplicated,
+    # then it should also be linked to the duplicated assessment.
+    other.reverse_linked_assessments.each do |assessment|
+      next unless duplicator.duplicated?(assessment)
+
+      duplicator.duplicate(assessment).linked_assessments << self
     end
 
     # we do creation of Koditsu assessment on-demand, which means that the association
