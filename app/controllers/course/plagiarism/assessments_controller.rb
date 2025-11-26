@@ -2,15 +2,18 @@
 class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
   include Course::UsersHelper
   include Course::Statistics::CountsConcern
-  include Course::Assessment::DuplicationTreeConcern
 
   PLAGIARISM_CHECK_QUERY_INTERVAL = 4.seconds
   PLAGIARISM_CHECK_START_TIMEOUT = 10.minutes
 
   def index
     @assessments = current_course.assessments.
-                   includes(:plagiarism_check, :links, :linked_assessments).
+                   includes(:plagiarism_check).
                    published.ordered_by_date_and_title
+    @linked_assessment_counts_hash = Course::Assessment::Link.
+                                     where(assessment_id: @assessments.pluck(:id)).
+                                     where.not('assessment_id = linked_assessment_id').
+                                     group(:assessment_id).count
     @all_students = current_course.course_users.students
 
     fetch_all_assessment_related_statistics_hash
@@ -23,15 +26,18 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
     timeout_plagiarism_check(main_assessment) if should_timeout_plagiarism_check?(main_assessment)
 
     if @plagiarism_check.completed?
-      @course_users_hash = main_assessment.all_linked_assessments.to_h do |assessment|
-        [assessment.course_id, preload_course_users_hash(assessment.course)]
-      end
       service = Course::Assessment::Submission::SsidPlagiarismService.new(current_course, main_assessment)
       @results = service.fetch_plagiarism_result(
         plagiarism_data_params[:limit],
         plagiarism_data_params[:offset]
       ).compact
-      fetch_can_manage_course_hash(get_all_assessments_in_duplication_tree(main_assessment))
+      submission_ids = (
+        @results.map { |row| row[:base_submission_id] } +
+        @results.map { |row| row[:compared_submission_id] }
+      ).uniq
+      submissions = fetch_plagiarism_data_submissions(submission_ids)
+      @submissions_hash = submissions.index_by(&:id)
+      @can_manage_submissions_hash = fetch_can_manage_rows_hash(submissions)
     else
       @results = []
     end
@@ -105,11 +111,32 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
 
   def linked_and_unlinked_assessments
     assessment = current_course.assessments.find(params[:id])
-    # TODO: properly handle cases for assessments in different instances.
-    all_assessments = get_all_assessments_in_duplication_tree(assessment).reject { |a| a.course.nil? }
-    fetch_can_manage_course_hash(all_assessments)
-    @linked_assessments = assessment.all_linked_assessments.reject { |a| a.course.nil? }
-    @unlinked_assessments = all_assessments - @linked_assessments
+
+    linkable_assessments = Course::Assessment.find_by_sql(<<~SQL.squish
+      SELECT
+        ca.id,
+        clpi.title AS title,
+        c.id AS course_id,
+        c.title AS course_title,
+        cu.id AS viewer_course_user_id,
+        al.id AS link_id
+
+      FROM course_assessments ca
+      INNER JOIN course_lesson_plan_items clpi ON clpi.actable_id = ca.id AND clpi.actable_type = 'Course::Assessment'
+      INNER JOIN course_assessment_tabs tab ON ca.tab_id = tab.id
+      INNER JOIN course_assessment_categories cat ON tab.category_id = cat.id
+      INNER JOIN courses c ON cat.course_id = c.id
+      LEFT OUTER JOIN course_users cu ON cu.course_id = c.id AND cu.user_id = #{current_user.id}
+      LEFT OUTER JOIN course_assessment_links al ON al.assessment_id = #{assessment.id} AND al.linked_assessment_id = ca.id
+      WHERE c.instance_id = #{current_tenant.id} AND
+        (ca.linkable_tree_id = #{assessment.linkable_tree_id} OR al.id IS NOT NULL)
+    SQL
+                                                         )
+
+    @unlinked_assessments, @linked_assessments = linkable_assessments.partition do |row|
+      row.link_id.nil? && row.id != assessment.id
+    end
+    @can_manage_assessment_hash = fetch_can_manage_rows_hash(linkable_assessments)
   end
 
   def update_assessment_links
@@ -160,30 +187,59 @@ class Course::Plagiarism::AssessmentsController < Course::Plagiarism::Controller
     end
   end
 
+  def fetch_plagiarism_data_submissions(submission_ids)
+    return [] if submission_ids.empty?
+
+    Course::Assessment::Submission.find_by_sql(<<~SQL.squish
+      SELECT
+        cas.id,
+        ca.id AS assessment_id,
+        clpi.title AS assessment_title,
+        c.id AS course_id,
+        c.title AS course_title,
+        cas.creator_id,
+        ccu.id AS creator_course_user_id,
+        ccu.name AS creator_course_user_name,
+        vcu.id AS viewer_course_user_id
+      FROM course_assessment_submissions cas
+      INNER JOIN course_assessments ca ON cas.assessment_id = ca.id
+      INNER JOIN course_lesson_plan_items clpi ON clpi.actable_id = ca.id AND clpi.actable_type = 'Course::Assessment'
+      INNER JOIN course_assessment_tabs tab ON ca.tab_id = tab.id
+      INNER JOIN course_assessment_categories cat ON tab.category_id = cat.id
+      INNER JOIN courses c ON cat.course_id = c.id
+      INNER JOIN course_users ccu ON ccu.course_id = c.id AND ccu.user_id = cas.creator_id
+      LEFT OUTER JOIN course_users vcu ON vcu.course_id = c.id AND vcu.user_id = #{current_user.id}
+      WHERE cas.id IN (#{submission_ids.join(', ')})
+    SQL
+                                              )
+  end
+
   def fetch_all_assessment_related_statistics_hash
     @num_submitted_students_hash = num_submitted_students_hash
     @latest_submission_time_hash = latest_submission_time_hash
     @num_plagiarism_checkable_questions_hash = num_plagiarism_checkable_questions_hash
   end
 
-  def fetch_can_manage_course_hash(assessments)
-    course_users = CourseUser.includes(:course).where(
-      user_id: current_user.id,
-      course_id: assessments.map(&:course_id).uniq
-    ).index_by(&:course_id)
-    admin_instance_ids = current_user.instance_users.administrator.pluck(:instance_id)
-    course_ids = assessments.map(&:course_id).uniq
-    @can_manage_course_hash = course_ids.map do |course_id|
+  def fetch_can_manage_rows_hash(rows)
+    return {} if rows.empty?
+
+    is_administrator = viewer_is_administrator?
+    return rows.to_h { |row| [row.id, true] } if is_administrator
+
+    course_users = CourseUser.where(
+      id: rows.map(&:viewer_course_user_id).compact.uniq
+    ).index_by(&:id)
+    rows.to_h do |row|
       [
-        course_id,
-        current_user.administrator? || # System admin
-          (
-            !course_users[course_id]&.course&.instance_id.nil? &&
-              admin_instance_ids.include?(course_users[course_id]&.course&.instance_id)
-          ) || # Instance admin
-          course_users[course_id]&.manager_or_owner?
+        row.id,
+        course_users[row.viewer_course_user_id]&.manager_or_owner?
       ]
-    end.to_h
+    end
+  end
+
+  def viewer_is_administrator?
+    current_user.administrator? || # System admin
+      current_user.instance_users.administrator.pluck(:instance_id).include?(current_tenant.id) # Instance admin
   end
 
   def num_plagiarism_checkable_questions_hash

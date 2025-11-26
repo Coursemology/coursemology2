@@ -17,37 +17,45 @@ json.status do
 end
 
 json.submissionPairs @results do |result|
-  base_submission = result[:base_submission]
-  compared_submission = result[:compared_submission]
+  base_submission = @submissions_hash[result[:base_submission_id]]
+  compared_submission = @submissions_hash[result[:compared_submission_id]]
+
+  next if base_submission.nil? || compared_submission.nil?
 
   json.baseSubmission do
     json.id base_submission.id
-    course_user = @course_users_hash[base_submission.assessment.course_id][base_submission.creator_id]
     json.courseUser do
-      json.(course_user, :id, :name)
-      json.path course_user_path(course_user.course, course_user)
-      json.userId course_user.user_id
+      json.id base_submission.creator_course_user_id
+      json.name base_submission.creator_course_user_name
+      json.path course_user_path(base_submission.course_id, base_submission.creator_course_user_id)
+      json.userId base_submission.creator_id
     end
-    json.assessmentTitle base_submission.assessment.title
-    json.courseTitle base_submission.assessment.course.title
-    json.submissionUrl edit_course_assessment_submission_path(course_user.course, base_submission.assessment,
-                                                              base_submission)
-    json.canManage @can_manage_course_hash[base_submission.assessment.course.id]
+    json.assessmentTitle base_submission.assessment_title
+    json.courseTitle base_submission.course_title
+    json.submissionUrl edit_course_assessment_submission_path(
+      base_submission.course_id,
+      base_submission.assessment_id,
+      base_submission.id
+    )
+    json.canManage @can_manage_submissions_hash[base_submission.id]
   end
 
   json.comparedSubmission do
     json.id compared_submission.id
-    course_user = @course_users_hash[compared_submission.assessment.course_id][compared_submission.creator_id]
     json.courseUser do
-      json.(course_user, :id, :name)
-      json.path course_user_path(course_user.course, course_user)
-      json.userId course_user.user_id
+      json.id compared_submission.creator_course_user_id
+      json.name compared_submission.creator_course_user_name
+      json.path course_user_path(compared_submission.course_id, compared_submission.creator_course_user_id)
+      json.userId compared_submission.creator_id
     end
-    json.assessmentTitle compared_submission.assessment.title
-    json.courseTitle compared_submission.assessment.course.title
-    json.submissionUrl edit_course_assessment_submission_path(course_user.course, compared_submission.assessment,
-                                                              compared_submission)
-    json.canManage @can_manage_course_hash[compared_submission.assessment.course.id]
+    json.assessmentTitle compared_submission.assessment_title
+    json.courseTitle compared_submission.course_title
+    json.submissionUrl edit_course_assessment_submission_path(
+      compared_submission.course_id,
+      compared_submission.assessment_id,
+      compared_submission.id
+    )
+    json.canManage @can_manage_submissions_hash[compared_submission.id]
   end
 
   json.similarityScore result[:similarity_score]

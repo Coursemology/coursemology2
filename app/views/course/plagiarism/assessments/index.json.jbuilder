@@ -11,7 +11,7 @@ json.array! @assessments do |assessment|
   json.numCheckableQuestions @num_plagiarism_checkable_questions_hash[assessment.id] || 0
   json.numSubmitted num_submitted
   json.lastSubmittedAt @latest_submission_time_hash[assessment.id]&.iso8601
-  json.numLinkedAssessments assessment.all_linked_assessments.size
+  json.numLinkedAssessments (@linked_assessment_counts_hash[assessment.id] || 0) + 1
 
   if assessment.plagiarism_check
     json.plagiarismCheck do
