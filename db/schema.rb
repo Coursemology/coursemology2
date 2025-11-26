@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_02_070442) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_26_073121) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -585,7 +585,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_02_070442) do
     t.boolean "is_synced_with_koditsu", default: false, null: false
     t.boolean "show_rubric_to_students"
     t.uuid "ssid_folder_id"
+    t.integer "linkable_tree_id", default: 0, null: false
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
+    t.index ["linkable_tree_id"], name: "index_course_assessments_on_linkable_tree_id"
     t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"
     t.index ["ssid_folder_id"], name: "index_course_assessments_on_ssid_folder_id", unique: true
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"

@@ -75,12 +75,6 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
       let(:limit) { 100 }
       let(:offset) { 200 }
       before do
-        stubs.get(/folders\/.*\/submissions/) do |env|
-          expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/submissions")
-          [Ssid::ApiStubs::FETCH_SSID_SUBMISSIONS_SUCCESS[:status],
-           { 'Content-Type': 'application/json' },
-           Ssid::ApiStubs::FETCH_SSID_SUBMISSIONS_SUCCESS[:body]]
-        end
         stubs.get(/folders\/.*\/plagiarism-checks\/latest\/submission-pairs/) do |env|
           expect(env[:url].to_s).to include(
             "/folders/#{assessment.ssid_folder_id}/plagiarism-checks/latest/submission-pairs"
