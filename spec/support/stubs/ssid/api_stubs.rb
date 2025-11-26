@@ -57,8 +57,14 @@ module Ssid::ApiStubs # rubocop:disable Metrics/ModuleLength
         data: [
           {
             id: '185ek301-eecb-44ce-838e-bf1234f990e1',
-            baseSubmission: '185ek301-eecb-44ce-838e-bf1234f990e1',
-            comparedSubmission: '185ek301-eecb-44ce-838e-bf1234f990e1',
+            baseSubmission: {
+              id: '185ek301-eecb-44ce-838e-bf1234f990e1',
+              name: '185301_STUDENT_ONE'
+            },
+            comparedSubmission: {
+              id: '185ek301-eecb-44ce-838e-bf1234f990e1',
+              name: '185301_STUDENT_ONE'
+            },
             similarityScore: 0.5846153846153846
           }
         ]

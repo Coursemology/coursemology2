@@ -18,20 +18,13 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def fetch_plagiarism_result(limit, offset)
-    ssid_id_to_submission_hash = sync_ssid_submissions
     submission_pair_data = fetch_ssid_submission_pair_data(limit, offset)
     submission_pair_data.map do |pair|
-      base_submission_id = pair['baseSubmission']['id']
-      base_submission = ssid_id_to_submission_hash[base_submission_id]
-      next unless base_submission
-
-      compared_submission_id = pair['comparedSubmission']['id']
-      compared_submission = ssid_id_to_submission_hash[compared_submission_id]
-      next unless compared_submission
-
+      base_submission_id = ssid_submission_to_submission_id(pair['baseSubmission'])
+      compared_submission_id = ssid_submission_to_submission_id(pair['comparedSubmission'])
       {
-        base_submission: base_submission,
-        compared_submission: compared_submission,
+        base_submission_id: base_submission_id,
+        compared_submission_id: compared_submission_id,
         similarity_score: pair['similarityScore'],
         submission_pair_id: pair['id']
       }
@@ -96,27 +89,8 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
     raise SsidError, { status: response_status, body: response_body } unless response_status == 202
   end
 
-  def fetch_ssid_submissions
-    @linked_assessments.flat_map do |assessment|
-      ssid_api_service = SsidAsyncApiService.new("folders/#{assessment.ssid_folder_id}/submissions", {})
-      response_status, response_body = ssid_api_service.get
-      raise SsidError, { status: response_status, body: response_body } unless response_status == 200
-
-      response_body['payload']['data']
-    end
-  end
-
-  def sync_ssid_submissions
-    linked_assessments_with_parent_data = Course::Assessment.
-                                          where(id: @linked_assessments.pluck(:id)).
-                                          includes(submissions: [assessment: :course])
-    submissions_by_id = linked_assessments_with_parent_data.flat_map(&:submissions).index_by(&:id)
-
-    fetch_ssid_submissions.filter_map do |ssid_submission|
-      submission_id = ssid_submission['name'].split('_').first.to_i
-      submission = submissions_by_id[submission_id]
-      [ssid_submission['id'], submission] if submission
-    end.to_h
+  def ssid_submission_to_submission_id(ssid_submission)
+    ssid_submission['name'].split('_').first.to_i
   end
 
   def fetch_ssid_submission_pair_data(limit, offset)

@@ -27,8 +27,8 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
       let(:plagiarism_results) do
         [
           {
-            base_submission: submission1,
-            compared_submission: submission2,
+            base_submission_id: submission1.id,
+            compared_submission_id: submission2.id,
             plagiarism_score: 90,
             submission_pair_id: EXAMPLE_UUID
           }
@@ -206,6 +206,9 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
       let!(:linked_assessment_in_duplication_tree) do
         create(:assessment, :published_with_programming_question, course: course)
       end
+      let!(:linked_assessment_not_in_duplication_tree) do
+        create(:assessment, :published_with_programming_question, course: course)
+      end
       let!(:unlinked_assessment_in_duplication_tree) do
         create(:assessment, :published_with_programming_question, course: course)
       end
@@ -214,22 +217,27 @@ RSpec.describe Course::Plagiarism::AssessmentsController, type: :controller do
       end
 
       before do
-        create(:duplication_traceable_assessment,
-               source: assessment,
-               assessment: unlinked_assessment_in_duplication_tree)
-        create(:duplication_traceable_assessment,
-               source: assessment,
-               assessment: linked_assessment_in_duplication_tree)
+        linked_assessment_in_duplication_tree.update_column(:linkable_tree_id, assessment.id)
+        linked_assessment_in_duplication_tree.reload
+        unlinked_assessment_in_duplication_tree.update_column(:linkable_tree_id, assessment.id)
+        unlinked_assessment_in_duplication_tree.reload
         assessment.linked_assessments << linked_assessment_in_duplication_tree
+        assessment.linked_assessments << linked_assessment_not_in_duplication_tree
       end
 
-      it 'returns linked and unlinked assessments, filtering unlinked to only include those in duplication tree' do
+      it 'returns all linked assessments, including itself and assessments not in duplication tree' do
         get :linked_and_unlinked_assessments, as: :json, params: { course_id: course, id: assessment }
         expect(response).to have_http_status(:success)
         json_response = JSON.parse(response.body)
         expect(json_response['linkedAssessments'].pluck('id')).to contain_exactly(
-          assessment.id, linked_assessment_in_duplication_tree.id
+          assessment.id, linked_assessment_in_duplication_tree.id, linked_assessment_not_in_duplication_tree.id
         )
+      end
+
+      it 'returns all unlinked asessments, filtering unlinked to only include those in duplication tree' do
+        get :linked_and_unlinked_assessments, as: :json, params: { course_id: course, id: assessment }
+        expect(response).to have_http_status(:success)
+        json_response = JSON.parse(response.body)
         expect(json_response['unlinkedAssessments'].pluck('id')).to contain_exactly(
           unlinked_assessment_in_duplication_tree.id
         )
