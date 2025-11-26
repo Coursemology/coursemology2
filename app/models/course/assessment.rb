@@ -16,6 +16,7 @@ class Course::Assessment < ApplicationRecord
   after_initialize :set_defaults, if: :new_record?
   before_validation :propagate_course, if: :new_record?
   before_validation :assign_folder_attributes
+  after_create :set_linkable_tree_id
   after_commit :grade_with_new_test_cases, on: :update
   before_save :save_tab
 
@@ -236,7 +237,7 @@ class Course::Assessment < ApplicationRecord
     self.question_assessments = duplicator.duplicate(other.question_assessments)
     initialize_duplicate_conditions(duplicator, other)
     self.monitor = duplicator.duplicate(other.monitor)
-
+    self.linkable_tree_id = other.linkable_tree_id
     # the new assessment has links to all linked assessments of the original assessment,
     # as well as the duplicates of those linked assessments if they are duplicated
     # in the same process (i.e course duplication)
@@ -331,6 +332,12 @@ class Course::Assessment < ApplicationRecord
   def set_defaults
     self.published = false
     self.autograded ||= false
+  end
+
+  def set_linkable_tree_id
+    return if duplicating?
+
+    update_column(:linkable_tree_id, id)
   end
 
   def tab_in_same_course

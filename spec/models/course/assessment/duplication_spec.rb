@@ -22,16 +22,24 @@ RSpec.describe Course::Assessment, 'duplication' do
         end
 
         context 'when duplicating a single assessment with linked assessments' do
-          it 'preserves links to non-duplicated assessments' do
+          subject do
             duplicator = Duplicator.new([], {
               time_shift: 2.days,
               destination_course: source_course
             })
             duplicate_b = duplicator.duplicate(assessment_b)
             duplicate_b.save!
+            duplicate_b
+          end
 
+          it 'preserves links to non-duplicated assessments' do
             # Should link to original B (where it was duplicated from), and inherit original A and C
-            expect(duplicate_b.linked_assessments).to contain_exactly(assessment_a, assessment_b, assessment_c)
+            expect(subject.linked_assessments).to contain_exactly(assessment_a, assessment_b, assessment_c)
+          end
+
+          it 'inherits linkable_tree_id from original assessment' do
+            expect(subject.id).to_not eq(assessment_b.id)
+            expect(subject.linkable_tree_id).to eq(assessment_b.id)
           end
         end
 
