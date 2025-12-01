@@ -24,7 +24,7 @@ RSpec.feature 'Course: Statistics: Staff', js: true do
       # Create submissions for tutors, with given submitted at and published_at
       let!(:tutor1_submissions) do
         submitted_at = 1.day.ago
-        published_at = submitted_at + 1.day + 1.hour + 1.minute + 1.second
+        published_at = submitted_at + 1.hour
         assessment = create(:assessment, :with_mcq_question, course: course)
         submission = create(:submission, :published,
                             assessment: assessment, course: course, publisher: tutor1.user,
@@ -36,7 +36,7 @@ RSpec.feature 'Course: Statistics: Staff', js: true do
 
       let!(:tutor2_submissions) do
         submitted_at = 2.days.ago
-        published_at = submitted_at + 2.days
+        published_at = submitted_at + 1.day + 1.hour + 1.minute + 1.second
         assessment = create(:assessment, :with_mcq_question, course: course)
         submission = create(:submission, :published,
                             assessment: assessment, course: course, publisher: tutor2.user,
@@ -48,7 +48,7 @@ RSpec.feature 'Course: Statistics: Staff', js: true do
 
       let!(:tutor3_submissions) do
         submitted_at = 2.days.ago
-        published_at = submitted_at + 3.days
+        published_at = submitted_at + 2.days
         assessment = create(:assessment, :with_mcq_question, course: course)
         staff_submission = create(:submission, :published,
                                   assessment: assessment, course: course, publisher: tutor3.user,
@@ -85,14 +85,14 @@ RSpec.feature 'Course: Statistics: Staff', js: true do
           expect(row).to have_selector('td', text: '1') # S/N
           expect(row).to have_selector('td', text: tutor1.name)
           expect(row).to have_selector('td', text: tutor1_submissions.size)
-          expect(row).to have_selector('td', text: "1 #{I18n.t('time.day')} 01:01:01")
+          expect(row).to have_selector('td', text: '01:00:00')
         end
 
         within find('tr', text: tutor2.name) do |row|
           expect(row).to have_selector('td', text: '2')
           expect(row).to have_selector('td', text: tutor2.name)
           expect(row).to have_selector('td', text: tutor2_submissions.size)
-          expect(row).to have_selector('td', text: "2 #{I18n.t('time.day')} 00:00:00")
+          expect(row).to have_selector('td', text: '1 day 01:01:01')
         end
 
         # Do not reflect staff submissions as part of staff statistics.
@@ -100,7 +100,7 @@ RSpec.feature 'Course: Statistics: Staff', js: true do
           expect(row).to have_selector('td', text: '3')
           expect(row).to have_selector('td', text: tutor3.name)
           expect(row).to have_selector('td', text: '1')
-          expect(row).to have_selector('td', text: "3 #{I18n.t('time.day')} 00:00:00")
+          expect(row).to have_selector('td', text: '2 days 00:00:00')
         end
 
         expect(page).not_to have_text(tutor4.name)

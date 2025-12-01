@@ -8,7 +8,7 @@ import { Avatar, Chip } from '@mui/material';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
-import moment, { SHORT_DATE_TIME_FORMAT, SHORT_TIME_FORMAT } from 'lib/moment';
+import moment, { formatShortDateTime, formatShortTime } from 'lib/moment';
 
 const translations = defineMessages({
   notPublished: {
@@ -58,17 +58,13 @@ export const formatDateRange = (startAt, endAt) => {
 
   const end = moment(endAt);
   if (!end.isValid()) {
-    return start.format(SHORT_DATE_TIME_FORMAT);
+    return formatShortDateTime(start);
   }
 
   if (end.isSame(start, 'day')) {
-    return `${start.format(SHORT_DATE_TIME_FORMAT)} - ${end.format(
-      SHORT_TIME_FORMAT,
-    )}`;
+    return `${formatShortDateTime(start)} - ${formatShortTime(end)}`;
   }
-  return `${start.format(SHORT_DATE_TIME_FORMAT)} - ${end.format(
-    SHORT_DATE_TIME_FORMAT,
-  )}`;
+  return `${formatShortDateTime(start)} - ${formatShortDateTime(end)}`;
 };
 
 class Chips extends Component {

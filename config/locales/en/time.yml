@@ -1,5 +1,4 @@
 en:
   time:
-    day: 'day'
     formats:
       default: '%a, %d %b %Y %I:%M:%S %p'

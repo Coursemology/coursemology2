@@ -7,6 +7,7 @@ import { processStaff } from 'course/statistics/utils/parseStaffResponse';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
+import { formatSecondsDuration } from 'lib/moment';
 
 const translations = defineMessages({
   name: {
@@ -82,14 +83,14 @@ const StaffStatisticsTable: FC<Props> = (props) => {
       title: t(translations.averageMarkingTime),
       sortable: true,
       csvDownloadable: true,
-      cell: (staff) => staff.averageMarkingTime,
+      cell: (staff) => formatSecondsDuration(staff.averageMarkingTime),
     },
     {
       of: 'stddev',
       title: t(translations.stddev),
       sortable: true,
       csvDownloadable: true,
-      cell: (staff) => staff.stddev,
+      cell: (staff) => formatSecondsDuration(staff.stddev),
     },
   ];
 

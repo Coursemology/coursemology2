@@ -8,7 +8,7 @@ import { duplicationModes } from 'course/duplication/constants';
 import { duplicateCourse } from 'course/duplication/operations';
 import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
-import moment, { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
+import moment, { formatShortDateTime } from 'lib/moment';
 
 import NewCourseForm from './NewCourseForm';
 
@@ -85,7 +85,7 @@ class DestinationCourseSelector extends Component {
       date: tomorrow.date(),
     });
 
-    const timeNow = moment().format(SHORT_DATE_TIME_FORMAT);
+    const timeNow = formatShortDateTime(new Date());
     const newTitleValues = { title: sourceCourse.title, timestamp: timeNow };
     const initialValues = {
       destination_instance_id: currentInstanceId,
