@@ -25,7 +25,7 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
   end
 
   def csv_download
-    ActionController::Base.helpers.strip_tags(answer_text)
+    ApplicationController.helpers.format_rich_text_for_csv(answer_text)
   end
 
   def download_answer(dir)

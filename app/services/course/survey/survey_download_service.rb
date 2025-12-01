@@ -3,6 +3,7 @@ require 'csv'
 
 class Course::Survey::SurveyDownloadService
   include TmpCleanupHelper
+  include ApplicationFormattersHelper
 
   def initialize(survey)
     @survey = survey
@@ -57,7 +58,7 @@ class Course::Survey::SurveyDownloadService
       I18n.t('course.surveys.survey_download_service.course_user_id'),
       I18n.t('course.surveys.survey_download_service.name'),
       I18n.t('course.surveys.survey_download_service.role')
-    ] + questions.map(&:description)
+    ] + questions.map { |q| format_rich_text_for_csv(q.description) }
   end
 
   def generate_row(response, questions)

@@ -42,7 +42,7 @@ class Course::Assessment::Answer::RubricBasedResponse < ApplicationRecord
   end
 
   def csv_download
-    ActionController::Base.helpers.strip_tags(answer_text)
+    ApplicationController.helpers.format_rich_text_for_csv(answer_text)
   end
 
   def compare_answer(other_answer)
