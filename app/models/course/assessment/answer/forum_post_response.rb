@@ -77,8 +77,7 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
   def readable_string_of(text)
     return nil unless text
 
-    cleaned_text = text.gsub('</p>', "</p>\n").gsub('<br />', "<br />\n").squish
-    ActionController::Base.helpers.strip_tags(cleaned_text)
+    ApplicationController.helpers.format_rich_text_for_csv(text).squish
   end
 
   def destroy_previous_selection

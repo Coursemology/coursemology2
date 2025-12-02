@@ -63,8 +63,8 @@ export interface Staff {
   name: string;
   numGraded: number;
   numStudents: number;
-  averageMarkingTime: string;
-  stddev: string;
+  averageMarkingTime: number;
+  stddev: number;
 }
 
 export interface StaffStatistics {
@@ -125,8 +125,8 @@ export interface CourseAssessment {
   maximumGrade: number;
   averageGrade: number;
   stdevGrade: number;
-  averageTimeTaken: string;
-  stdevTimeTaken: string;
+  averageTimeTaken: number;
+  stdevTimeTaken: number;
   numSubmitted: number;
   numAttempted: number;
   numLate: number;

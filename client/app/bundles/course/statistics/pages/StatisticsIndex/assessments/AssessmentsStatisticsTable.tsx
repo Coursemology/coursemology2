@@ -17,7 +17,7 @@ import {
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
-import { formatMiniDateTime } from 'lib/moment';
+import { formatMiniDateTime, formatSecondsDuration } from 'lib/moment';
 
 import AssessmentsScoreSummaryDownload from './AssessmentsScoreSummaryDownload';
 
@@ -226,14 +226,14 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       of: 'averageTimeTaken',
       title: t(translations.averageTimeTaken),
       sortable: true,
-      cell: (assessment) => assessment.averageTimeTaken,
+      cell: (assessment) => formatSecondsDuration(assessment.averageTimeTaken),
       csvDownloadable: true,
     },
     {
       of: 'stdevTimeTaken',
       title: t(translations.stdevTimeTaken),
       sortable: true,
-      cell: (assessment) => assessment.stdevTimeTaken,
+      cell: (assessment) => formatSecondsDuration(assessment.stdevTimeTaken),
       csvDownloadable: true,
     },
   ];

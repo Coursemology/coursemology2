@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import shuffle from 'lodash-es/shuffle';
 
-import moment, { SHORT_TIME_FORMAT } from 'lib/moment';
+import moment, { formatShortTime } from 'lib/moment';
 
 import {
   getLocalStorageValue,
@@ -138,9 +138,7 @@ export const liveFeedbackChatSlice = createSlice({
               new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
           )
           .map((message) => {
-            const createdAt = moment(new Date(message.createdAt)).format(
-              SHORT_TIME_FORMAT,
-            );
+            const createdAt = formatShortTime(new Date(message.createdAt));
             return {
               sender:
                 message.creatorId === 0
@@ -267,7 +265,7 @@ export const liveFeedbackChatSlice = createSlice({
       const { answerId, message } = action.payload;
       const liveFeedbackChats =
         state.liveFeedbackChatPerAnswer.entities[answerId];
-      const currentTime = moment(new Date()).format(SHORT_TIME_FORMAT);
+      const currentTime = formatShortTime(new Date());
 
       if (liveFeedbackChats) {
         const changes: Partial<LiveFeedbackChatData> = {
@@ -342,7 +340,7 @@ export const liveFeedbackChatSlice = createSlice({
               {
                 sender: ChatSender.codaveri,
                 message: overallContent,
-                createdAt: moment(new Date()).format(SHORT_TIME_FORMAT),
+                createdAt: formatShortTime(new Date()),
                 isError: false,
               },
             ]
@@ -384,7 +382,7 @@ export const liveFeedbackChatSlice = createSlice({
         const newChat: ChatShape = {
           sender: ChatSender.codaveri,
           message: errorMessage,
-          createdAt: moment(new Date()).format(SHORT_TIME_FORMAT),
+          createdAt: formatShortTime(new Date()),
           isError: true,
         };
 

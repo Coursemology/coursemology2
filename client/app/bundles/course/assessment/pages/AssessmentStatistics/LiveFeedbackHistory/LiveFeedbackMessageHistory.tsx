@@ -10,7 +10,7 @@ import {
 } from 'course/assessment/submission/components/GetHelpChatPage/utils';
 import MarkdownText from 'course/assessment/submission/components/MarkdownText';
 import useTranslation from 'lib/hooks/useTranslation';
-import moment, { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
+import { formatShortDateTime } from 'lib/moment';
 
 interface Props {
   messages: LiveFeedbackChatMessage[];
@@ -110,9 +110,7 @@ const LiveFeedbackMessageHistory: FC<Props> = (props) => {
             const message = messages[messageIndex];
             const isStudent = message.creatorId !== 0;
             const isError = message.isError;
-            const createdAt = moment(new Date(message.createdAt)).format(
-              SHORT_DATE_TIME_FORMAT,
-            );
+            const createdAt = formatShortDateTime(message.createdAt);
 
             return (
               <div

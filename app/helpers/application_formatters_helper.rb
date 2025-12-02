@@ -82,4 +82,19 @@ module ApplicationFormattersHelper
     hours = total_seconds / (60 * 60)
     format('%<hours>02dH%<minutes>02dM%<seconds>02dS', hours: hours, minutes: minutes, seconds: seconds)
   end
+
+  # Formats rich text fields for CSV export by stripping HTML tags and decoding HTML entities.
+  # Rich text fields are saved as HTML in the database (from WYSIWYG editors), so this helper
+  # converts them to plain text suitable for CSV files by removing HTML markup and decoding
+  # entities like &nbsp;, &amp;, etc.
+  #
+  # @param [String] text The rich text (HTML) to format
+  # @param [Boolean] preserve_newlines Whether to preserve paragraph/line breaks (default: true)
+  # @return [String] Plain text with HTML tags removed and entities decoded
+  def format_rich_text_for_csv(text)
+    return '' unless text
+
+    cleaned_text = text.gsub('</p>', "</p>\n").gsub('<br />', "<br />\n")
+    HTMLEntities.new.decode(ActionController::Base.helpers.strip_tags(cleaned_text)).strip
+  end
 end

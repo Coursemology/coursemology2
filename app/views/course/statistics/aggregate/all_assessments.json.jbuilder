@@ -24,8 +24,8 @@ json.assessments @assessments do |assessment|
   json.averageGrade grade_stats ? grade_stats[0] : 0
   json.stdevGrade grade_stats ? grade_stats[1] : 0
 
-  json.averageTimeTaken seconds_to_str(duration_stats[0])
-  json.stdevTimeTaken seconds_to_str(duration_stats[1])
+  json.averageTimeTaken duration_stats[0]
+  json.stdevTimeTaken duration_stats[1]
 
   json.numSubmitted @num_submitted_students_hash[assessment.id] || 0
   json.numAttempted @num_attempted_students_hash[assessment.id] || 0

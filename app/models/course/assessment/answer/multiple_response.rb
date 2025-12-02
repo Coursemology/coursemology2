@@ -34,6 +34,6 @@ class Course::Assessment::Answer::MultipleResponse < ApplicationRecord
   end
 
   def csv_download
-    ActionController::Base.helpers.strip_tags(options.map(&:option).join(';'))
+    ApplicationController.helpers.format_rich_text_for_csv(options.map(&:option).join(';'))
   end
 end
