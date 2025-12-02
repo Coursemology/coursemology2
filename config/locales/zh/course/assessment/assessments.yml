@@ -1,8 +1,4 @@
 zh:
-  helpers:
-    buttons:
-      assessment:
-        new: '新测验'
   course:
     assessment:
       assessments:
@@ -14,10 +10,6 @@ zh:
           public_test: '公开'
           private_test: '私有'
           evaluation_test: '评估'
-        new:
-          header: '新测验'
-        edit:
-          header: '编辑测验'
         assessment_question_bundle_buttons:
           question_groups: '组'
           question_bundles: '绑定项'

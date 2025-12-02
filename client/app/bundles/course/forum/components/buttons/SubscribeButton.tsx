@@ -14,7 +14,7 @@ import {
   updateForumTopicSubscription,
 } from '../../operations';
 
-const commonTranslations = {
+const commonTranslations = defineMessages({
   subscribe: {
     id: 'course.forum.SubscribeButton.commonTranslations.subscribe',
     defaultMessage: 'Subscribe',
@@ -31,7 +31,7 @@ const commonTranslations = {
     id: 'course.forum.SubscribeButton.commonTranslations.updateSubscriptionFailure',
     defaultMessage: 'Failed to update subscription - {error}',
   },
-};
+});
 
 const forumTranslations = defineMessages({
   subscribeTooltip: {

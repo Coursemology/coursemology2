@@ -4769,6 +4769,18 @@
   "course.forum.ForumTopicForm.topicType": {
     "defaultMessage": "主题类型"
   },
+  "course.forum.ForumTopicForm.topicType.announcement": {
+    "defaultMessage": "公告"
+  },
+  "course.forum.ForumTopicForm.topicType.normal": {
+    "defaultMessage": "普通"
+  },
+  "course.forum.ForumTopicForm.topicType.question": {
+    "defaultMessage": "问题"
+  },
+  "course.forum.ForumTopicForm.topicType.sticky": {
+    "defaultMessage": "置顶"
+  },
   "course.forum.ForumTopicManagementButtons.deletionConfirm": {
     "defaultMessage": "你确定要删除此主题\"{title}\"吗？"
   },
@@ -4847,9 +4859,6 @@
   "course.forum.ForumTopicShow.topicUnresolvedNote": {
     "defaultMessage": "将有帮助的帖子标记为答案以解决此问题。"
   },
-  "course.forum.ForumTopicTable.announcement": {
-    "defaultMessage": "公告"
-  },
   "course.forum.ForumTopicTable.hidden": {
     "defaultMessage": "该主题对学生是隐藏的。"
   },
@@ -4868,17 +4877,11 @@
   "course.forum.ForumTopicTable.posts": {
     "defaultMessage": "帖子"
   },
-  "course.forum.ForumTopicTable.question": {
-    "defaultMessage": "问题"
-  },
   "course.forum.ForumTopicTable.resolved": {
     "defaultMessage": "问题（已解决）"
   },
   "course.forum.ForumTopicTable.startedBy": {
     "defaultMessage": "开始于"
-  },
-  "course.forum.ForumTopicTable.sticky": {
-    "defaultMessage": "置顶"
   },
   "course.forum.ForumTopicTable.topics": {
     "defaultMessage": "主题"
@@ -5011,6 +5014,18 @@
   },
   "course.forum.ReplyCard.replyTo": {
     "defaultMessage": "回复给 {user}"
+  },
+  "course.forum.SubscribeButton.commonTranslations.manageMySubscription": {
+    "defaultMessage": "管理我的订阅"
+  },
+  "course.forum.SubscribeButton.commonTranslations.subscribe": {
+    "defaultMessage": "订阅"
+  },
+  "course.forum.SubscribeButton.commonTranslations.unsubscribe": {
+    "defaultMessage": "取消订阅"
+  },
+  "course.forum.SubscribeButton.commonTranslations.updateSubscriptionFailure": {
+    "defaultMessage": "更新订阅失败 - {error}"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.adminSettingSubscribed": {
     "defaultMessage": "课程管理员禁用了论坛主题的订阅。"

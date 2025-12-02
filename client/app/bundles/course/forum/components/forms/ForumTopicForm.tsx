@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Controller, UseFormSetError } from 'react-hook-form';
-import { defineMessages } from 'react-intl';
+import { defineMessages, MessageDescriptor } from 'react-intl';
 import { ForumTopicFormData, TopicType } from 'types/course/forums';
 import * as yup from 'yup';
 
@@ -11,6 +11,8 @@ import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
+
+import forumTranslations from '../../translations';
 
 interface Props {
   open: boolean;
@@ -51,10 +53,14 @@ const validationSchema = yup.object({
   isAnonymous: yup.bool(),
 });
 
-const defaultTopicTypes = [
-  { label: TopicType.NORMAL, value: TopicType.NORMAL },
-  { label: TopicType.QUESTION, value: TopicType.QUESTION },
-];
+const defaultTopicTypes = [TopicType.NORMAL, TopicType.QUESTION];
+
+const TopicTypeTranslationMapper: Record<TopicType, MessageDescriptor> = {
+  [TopicType.NORMAL]: forumTranslations.normal,
+  [TopicType.QUESTION]: forumTranslations.question,
+  [TopicType.STICKY]: forumTranslations.sticky,
+  [TopicType.ANNOUNCEMENT]: forumTranslations.announcement,
+};
 
 const ForumTopicForm: FC<Props> = (props) => {
   const {
@@ -69,12 +75,16 @@ const ForumTopicForm: FC<Props> = (props) => {
   } = props;
   const { t } = useTranslation();
 
+  const topicTypeOption = (
+    type: TopicType,
+  ): { label: string; value: TopicType } => ({
+    label: t(TopicTypeTranslationMapper[type]),
+    value: type,
+  });
+
   const topicTypeOptions = availableTopicTypes
-    ? availableTopicTypes.map((type) => ({
-        label: type,
-        value: type,
-      }))
-    : defaultTopicTypes;
+    ? availableTopicTypes.map(topicTypeOption)
+    : defaultTopicTypes.map(topicTypeOption);
 
   return (
     <FormDialog

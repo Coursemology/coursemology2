@@ -1,8 +1,4 @@
 en:
-  helpers:
-    buttons:
-      assessment:
-        new: 'New Assessment'
   course:
     assessment:
       assessments:
@@ -14,10 +10,6 @@ en:
           public_test: 'Public'
           private_test: 'Private'
           evaluation_test: 'Evaluation'
-        new:
-          header: 'New Assessment'
-        edit:
-          header: 'Edit Assessment'
         assessment_question_bundle_buttons:
           question_groups: 'Groups'
           question_bundles: 'Bundles'

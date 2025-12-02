@@ -34,7 +34,7 @@ en:
     users:
       name: 'Users'
     surveys:
-      name: :'breadcrumbs.course.survey.controller.index'
+      name: 'Surveys'
     learning_map:
       name: 'Learning Map'
     codaveri:

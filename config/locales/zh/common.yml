@@ -3,12 +3,5 @@ zh:
     plain_text_link: '%{text} (%{url})'
     click_here: '点击此处'
   helpers:
-    buttons:
-      new: '新%{model}'
-      create: '创建%{model}'
-      edit: '编辑%{model}'
-      update: '更新%{model}'
-      delete: '删除%{model}'
-      delete_confirm_message: '确定吗？'
     password:
       wrong_password: '密码错误'
