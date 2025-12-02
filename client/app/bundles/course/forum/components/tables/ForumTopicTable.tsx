@@ -19,6 +19,7 @@ import Note from 'lib/components/core/Note';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
+import forumTranslations from '../../translations';
 import ForumTopicManagementButtons from '../buttons/ForumTopicManagementButtons';
 import SubscribeButton from '../buttons/SubscribeButton';
 import PostCreatorObject from '../misc/PostCreatorObject';
@@ -41,10 +42,6 @@ const translations = defineMessages({
     id: 'course.forum.ForumTopicTable.locked',
     defaultMessage: 'This topic is closed; it no longer accepts new replies.',
   },
-  question: {
-    id: 'course.forum.ForumTopicTable.question',
-    defaultMessage: 'Question',
-  },
   resolved: {
     id: 'course.forum.ForumTopicTable.resolved',
     defaultMessage: 'Question (Resolved)',
@@ -52,14 +49,6 @@ const translations = defineMessages({
   unresolved: {
     id: 'course.forum.ForumTopicTable.unresolved',
     defaultMessage: 'Question (Unresolved)',
-  },
-  sticky: {
-    id: 'course.forum.ForumTopicTable.sticky',
-    defaultMessage: 'Sticky',
-  },
-  announcement: {
-    id: 'course.forum.ForumTopicTable.announcement',
-    defaultMessage: 'Announcement',
   },
   topics: {
     id: 'course.forum.ForumTopicTable.topics',
@@ -117,12 +106,18 @@ const TopicTypeIcon: FC<{ topic: ForumTopicEntity }> = (props) => {
       break;
     case 'sticky':
       icon = (
-        <StickyNote2 fontSize="small" titleAccess={t(translations.sticky)} />
+        <StickyNote2
+          fontSize="small"
+          titleAccess={t(forumTranslations.sticky)}
+        />
       );
       break;
     case 'announcement':
       icon = (
-        <Campaign fontSize="small" titleAccess={t(translations.announcement)} />
+        <Campaign
+          fontSize="small"
+          titleAccess={t(forumTranslations.announcement)}
+        />
       );
       break;
     default:

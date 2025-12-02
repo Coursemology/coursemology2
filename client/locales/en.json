@@ -4794,6 +4794,18 @@
   "course.forum.ForumTopicForm.topicType": {
     "defaultMessage": "Topic Type"
   },
+  "course.forum.ForumTopicForm.topicType.announcement": {
+    "defaultMessage": "Announcement"
+  },
+  "course.forum.ForumTopicForm.topicType.normal": {
+    "defaultMessage": "Normal"
+  },
+  "course.forum.ForumTopicForm.topicType.question": {
+    "defaultMessage": "Question"
+  },
+  "course.forum.ForumTopicForm.topicType.sticky": {
+    "defaultMessage": "Sticky"
+  },
   "course.forum.ForumTopicManagementButtons.deletionConfirm": {
     "defaultMessage": "Are you sure you wish to delete this topic \"{title}\"?"
   },
@@ -4872,9 +4884,6 @@
   "course.forum.ForumTopicShow.topicUnresolvedNote": {
     "defaultMessage": "Mark helpful post(s) as answer(s) to resolve this question."
   },
-  "course.forum.ForumTopicTable.announcement": {
-    "defaultMessage": "Announcement"
-  },
   "course.forum.ForumTopicTable.hidden": {
     "defaultMessage": "This topic is hidden for students."
   },
@@ -4893,17 +4902,11 @@
   "course.forum.ForumTopicTable.posts": {
     "defaultMessage": "Posts"
   },
-  "course.forum.ForumTopicTable.question": {
-    "defaultMessage": "Question"
-  },
   "course.forum.ForumTopicTable.resolved": {
     "defaultMessage": "Question (Resolved)"
   },
   "course.forum.ForumTopicTable.startedBy": {
     "defaultMessage": "Started By"
-  },
-  "course.forum.ForumTopicTable.sticky": {
-    "defaultMessage": "Sticky"
   },
   "course.forum.ForumTopicTable.topics": {
     "defaultMessage": "Topics"
@@ -5036,6 +5039,18 @@
   },
   "course.forum.ReplyCard.replyTo": {
     "defaultMessage": "Reply to {user}"
+  },
+  "course.forum.SubscribeButton.commonTranslations.manageMySubscription": {
+    "defaultMessage": "Manage My Subscriptions"
+  },
+  "course.forum.SubscribeButton.commonTranslations.subscribe": {
+    "defaultMessage": "Subscribe"
+  },
+  "course.forum.SubscribeButton.commonTranslations.unsubscribe": {
+    "defaultMessage": "Unsubscribe"
+  },
+  "course.forum.SubscribeButton.commonTranslations.updateSubscriptionFailure": {
+    "defaultMessage": "Failed to update subscription - {error}"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.adminSettingSubscribed": {
     "defaultMessage": "Subscription of forum topics is disabled by the course admin."

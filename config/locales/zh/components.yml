@@ -34,7 +34,7 @@ zh:
     users:
       name: '用户'
     surveys:
-      name: :'breadcrumbs.course.survey.controller.index'
+      name: '调查'
     learning_map:
       name: '学习路线'
     codaveri:

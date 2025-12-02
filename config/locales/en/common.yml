@@ -3,12 +3,5 @@ en:
     plain_text_link: '%{text} (%{url})'
     click_here: 'Click here'
   helpers:
-    buttons:
-      new: 'New %{model}'
-      create: 'Create %{model}'
-      edit: 'Edit %{model}'
-      update: 'Update %{model}'
-      delete: 'Delete %{model}'
-      delete_confirm_message: 'Are you sure?'
     password:
       wrong_password: 'Wrong password'

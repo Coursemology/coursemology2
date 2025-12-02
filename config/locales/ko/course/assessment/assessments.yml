@@ -1,8 +1,4 @@
 ko:
-  helpers:
-    buttons:
-      assessment:
-        new: '새 평가'
   course:
     assessment:
       assessments:
@@ -14,10 +10,6 @@ ko:
           public_test: '공개'
           private_test: '비공개'
           evaluation_test: '평가'
-        new:
-          header: '새 평가'
-        edit:
-          header: '평가 편집'
         assessment_question_bundle_buttons:
           question_groups: '그룹'
           question_bundles: '묶음'

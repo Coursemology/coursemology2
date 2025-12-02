@@ -34,7 +34,7 @@ ko:
     users:
       name: '사용자'
     surveys:
-      name: :'breadcrumbs.course.survey.controller.index'
+      name: '설문'
     learning_map:
       name: '학습 지도'
     codaveri:

@@ -4775,6 +4775,18 @@
   "course.forum.ForumTopicForm.topicType": {
     "defaultMessage": "주제 유형"
   },
+  "course.forum.ForumTopicForm.topicType.announcement": {
+    "defaultMessage": "공지"
+  },
+  "course.forum.ForumTopicForm.topicType.normal": {
+    "defaultMessage": "일반"
+  },
+  "course.forum.ForumTopicForm.topicType.question": {
+    "defaultMessage": "질문"
+  },
+  "course.forum.ForumTopicForm.topicType.sticky": {
+    "defaultMessage": "고정"
+  },
   "course.forum.ForumTopicManagementButtons.deletionConfirm": {
     "defaultMessage": "이 주제 \"{title}\"을(를) 삭제하시겠습니까?"
   },
@@ -4853,9 +4865,6 @@
   "course.forum.ForumTopicShow.topicUnresolvedNote": {
     "defaultMessage": "도움이 되는 게시물을 답변으로 표시하여 이 질문을 해결하세요."
   },
-  "course.forum.ForumTopicTable.announcement": {
-    "defaultMessage": "공지"
-  },
   "course.forum.ForumTopicTable.hidden": {
     "defaultMessage": "이 주제는 학생들에게 숨겨져 있습니다."
   },
@@ -4874,17 +4883,11 @@
   "course.forum.ForumTopicTable.posts": {
     "defaultMessage": "게시물"
   },
-  "course.forum.ForumTopicTable.question": {
-    "defaultMessage": "질문"
-  },
   "course.forum.ForumTopicTable.resolved": {
     "defaultMessage": "질문 (해결됨)"
   },
   "course.forum.ForumTopicTable.startedBy": {
     "defaultMessage": "시작한 사람"
-  },
-  "course.forum.ForumTopicTable.sticky": {
-    "defaultMessage": "고정"
   },
   "course.forum.ForumTopicTable.topics": {
     "defaultMessage": "주제"
@@ -5017,6 +5020,18 @@
   },
   "course.forum.ReplyCard.replyTo": {
     "defaultMessage": "{user}에게 답글"
+  },
+  "course.forum.SubscribeButton.commonTranslations.manageMySubscription": {
+    "defaultMessage": "내 구독 관리"
+  },
+  "course.forum.SubscribeButton.commonTranslations.subscribe": {
+    "defaultMessage": "구독"
+  },
+  "course.forum.SubscribeButton.commonTranslations.unsubscribe": {
+    "defaultMessage": "구독 취소"
+  },
+  "course.forum.SubscribeButton.commonTranslations.updateSubscriptionFailure": {
+    "defaultMessage": "구독 업데이트 실패 - {error}"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.adminSettingSubscribed": {
     "defaultMessage": "포럼 주제 구독이 강좌 관리자에 의해 비활성화되었습니다."
