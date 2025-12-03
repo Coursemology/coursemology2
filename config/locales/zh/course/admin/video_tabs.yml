@@ -1,9 +1,0 @@
-zh:
-  course:
-    admin:
-      videos:
-        tabs:
-          index:
-            header: '视频标签'
-          new:
-            header: '新视频标签'

@@ -9,7 +9,7 @@ ko:
       announcement_settings:
         title: :'course.announcements.index.header'
       component_settings:
-        title: :'course.admin.component_settings.index.header'
+        title: '구성 요소'
       sidebar_settings:
         title: '사이드바'
       notifications:

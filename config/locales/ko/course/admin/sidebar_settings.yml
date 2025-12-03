@@ -1,6 +1,0 @@
-ko:
-  course:
-    admin:
-      sidebar_settings:
-        edit:
-          header: '사이드바 순서'

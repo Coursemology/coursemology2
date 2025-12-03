@@ -1,8 +1,0 @@
-en:
-  course:
-    admin:
-      admin:
-        index:
-          header: 'Settings'
-          delete:
-            header: 'Delete Course'

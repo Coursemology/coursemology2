@@ -1,8 +1,0 @@
-zh:
-  course:
-    condition:
-      header: '解锁条件'
-      type:
-        header: '类型'
-      description:
-        header: '描述'

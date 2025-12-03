@@ -1,8 +1,5 @@
 zh:
   activerecord:
-    attributes:
-      course/assessment/assessment:
-        title: '题目'
     errors:
       models:
         course/assessment:

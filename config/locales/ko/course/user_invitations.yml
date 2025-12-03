@@ -4,7 +4,3 @@ ko:
       errors:
         duplicate_user: '%{user}가 제출물에 여러 번 나타납니다.'
         invalid_email: '%{email}이(가) 유효하지 않습니다: %{message}.'
-      index:
-        header: '초대'
-      new:
-        header: '사용자 초대'

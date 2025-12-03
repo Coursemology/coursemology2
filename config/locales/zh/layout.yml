@@ -9,7 +9,7 @@ zh:
       announcement_settings:
         title: :'course.announcements.index.header'
       component_settings:
-        title: :'course.admin.component_settings.index.header'
+        title: '功能组件'
       sidebar_settings:
         title: '侧边栏'
       notifications:

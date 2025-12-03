@@ -1,9 +1,0 @@
-en:
-  course:
-    admin:
-      videos:
-        tabs:
-          index:
-            header: 'Video Tabs'
-          new:
-            header: 'New Video Tab'

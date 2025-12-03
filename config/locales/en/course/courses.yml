@@ -1,7 +1,0 @@
-en:
-  course:
-    courses:
-      index:
-        header: 'Courses'
-      new:
-        header: 'New Course'

@@ -1,7 +1,0 @@
-ko:
-  system:
-    admin:
-      instance:
-        components:
-          edit:
-            header: '구성 요소'

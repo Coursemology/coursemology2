@@ -1,7 +1,0 @@
-ko:
-  course:
-    assessment:
-      submission:
-        logs:
-          index:
-            header: '접속 기록'

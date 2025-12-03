@@ -1,9 +1,0 @@
-en:
-  course:
-    admin:
-      assessments:
-        categories:
-          index:
-            header: 'Categories'
-          new:
-            header: 'New Category'

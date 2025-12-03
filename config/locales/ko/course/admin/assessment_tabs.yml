@@ -1,9 +1,0 @@
-ko:
-  course:
-    admin:
-      assessments:
-        tabs:
-          index:
-            header: '평가 탭'
-          new:
-            header: '새 평가 탭'

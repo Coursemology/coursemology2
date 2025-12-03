@@ -2,12 +2,9 @@ ko:
   user:
     registrations:
       new:
-        header: :'layout.navbar.register'
         used: >
           제공된 초대 코드는 다른 계정에서 사용되었습니다. 해당 계정으로 로그인해 주세요.
         used_with_email: >
           제공된 초대 코드는 %{email}에서 사용되었습니다. 해당 계정으로 로그인해 주세요.
-      edit:
-        header: '계정 설정'
       create:
         verify_recaptcha_alert: '아래 reCAPTCHA에 오류가 발생했습니다. 다시 시도해 주세요.'

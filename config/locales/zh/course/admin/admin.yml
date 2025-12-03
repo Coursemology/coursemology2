@@ -1,8 +1,0 @@
-zh:
-  course:
-    admin:
-      admin:
-        index:
-          header: '设置'
-          delete:
-            header: '删除课程'

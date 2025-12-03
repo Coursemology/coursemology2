@@ -1,12 +1,5 @@
 ko:
   activerecord:
-    attributes:
-      course/course_user:
-        name: '이름'
-      course_user:
-        level_number: '레벨'
-        created_at: '등록일'
-        reference_timeline: '참조 타임라인'
     errors:
       models:
         course_user:

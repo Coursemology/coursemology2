@@ -1,8 +1,5 @@
 ko:
   activerecord:
-    attributes:
-      course/assessment/assessment:
-        title: '제목'
     errors:
       models:
         course/assessment:

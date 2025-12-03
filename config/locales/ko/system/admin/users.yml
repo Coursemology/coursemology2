@@ -1,6 +1,0 @@
-ko:
-  system:
-    admin:
-      users:
-        index:
-          header: '사용자'
