@@ -1,8 +1,0 @@
-ko:
-  course:
-    admin:
-      admin:
-        index:
-          header: '설정'
-          delete:
-            header: '코스 삭제'

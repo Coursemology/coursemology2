@@ -1,8 +1,0 @@
-en:
-  course:
-    condition:
-      header: 'Conditions'
-      type:
-        header: 'Type'
-      description:
-        header: 'Description'

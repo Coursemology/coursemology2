@@ -1,9 +1,0 @@
-en:
-  course:
-    admin:
-      assessments:
-        tabs:
-          index:
-            header: 'Assessment Tabs'
-          new:
-            header: 'New Assessment Tab'

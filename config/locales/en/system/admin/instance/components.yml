@@ -1,7 +1,0 @@
-en:
-  system:
-    admin:
-      instance:
-        components:
-          edit:
-            header: 'Components'

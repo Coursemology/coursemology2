@@ -1,7 +1,0 @@
-en:
-  system:
-    admin:
-      instance:
-        courses:
-          index:
-            header: 'Courses'

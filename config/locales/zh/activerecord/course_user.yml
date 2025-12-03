@@ -1,12 +1,5 @@
 zh:
   activerecord:
-    attributes:
-      course/course_user:
-        name: '用户名'
-      course_user:
-        level_number: '等级'
-        created_at: '加入于'
-        reference_timeline: '引用时间线'
     errors:
       models:
         course_user:

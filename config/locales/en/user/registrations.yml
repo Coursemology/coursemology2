@@ -2,12 +2,9 @@ en:
   user:
     registrations:
       new:
-        header: :'layout.navbar.register'
         used: >
           The provided invitation code has been claimed by another account, please use that account to log in instead.
         used_with_email: >
           The provided invitation code has been claimed by %{email}, please use that account to log in instead.
-      edit:
-        header: 'Account Settings'
       create:
         verify_recaptcha_alert: There was an error with the reCAPTCHA below, please try again.

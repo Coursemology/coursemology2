@@ -1,7 +1,0 @@
-zh:
-  system:
-    admin:
-      instance:
-        components:
-          edit:
-            header: '组件'
