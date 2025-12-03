@@ -1,8 +1,0 @@
-ko:
-  course:
-    admin:
-      component_settings:
-        index:
-          header: '구성 요소'
-        edit:
-          header: '구성 요소 활성화/비활성화'

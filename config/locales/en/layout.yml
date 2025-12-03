@@ -9,7 +9,7 @@ en:
       announcement_settings:
         title: :'course.announcements.index.header'
       component_settings:
-        title: :'course.admin.component_settings.index.header'
+        title: 'Components'
       sidebar_settings:
         title: 'Sidebar'
       notifications:

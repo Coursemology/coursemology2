@@ -1,7 +1,0 @@
-en:
-  system:
-    admin:
-      instance:
-        users:
-          index:
-            header: 'Users'

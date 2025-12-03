@@ -1,9 +1,0 @@
-zh:
-  course:
-    admin:
-      assessments:
-        categories:
-          index:
-            header: '类别'
-          new:
-            header: '新类别'

@@ -1,9 +1,0 @@
-zh:
-  course:
-    admin:
-      component_settings:
-        index:
-          header: '组件'
-        edit:
-          header: '使用/禁用组件'
-

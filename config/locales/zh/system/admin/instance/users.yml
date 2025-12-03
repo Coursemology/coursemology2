@@ -1,7 +1,0 @@
-zh:
-  system:
-    admin:
-      instance:
-        users:
-          index:
-            header: '用户'

@@ -1,7 +1,0 @@
-ko:
-  course:
-    courses:
-      index:
-        header: '코스'
-      new:
-        header: '새 코스'

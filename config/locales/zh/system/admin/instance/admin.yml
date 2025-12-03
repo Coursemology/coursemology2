@@ -1,7 +1,0 @@
-zh:
-  system:
-    admin:
-      instance:
-        admin:
-          index:
-            header: '实例管理'

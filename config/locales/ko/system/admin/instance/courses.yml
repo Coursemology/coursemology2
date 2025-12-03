@@ -1,7 +1,0 @@
-ko:
-  system:
-    admin:
-      instance:
-        courses:
-          index:
-            header: '코스'
