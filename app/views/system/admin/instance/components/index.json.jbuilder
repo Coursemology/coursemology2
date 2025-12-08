@@ -4,8 +4,7 @@ enabled_components = @settings.enabled_component_ids.to_set
 
 json.components do
   json.array! components do |component|
-    json.key component[1]
-    json.displayName component[0]
-    json.enabled enabled_components.include?(component[1])
+    json.key component
+    json.enabled enabled_components.include?(component)
   end
 end

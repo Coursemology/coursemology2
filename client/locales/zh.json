@@ -4001,7 +4001,7 @@
   "course.asssessment.submission.submitNoQuestionExplain": {
     "defaultMessage": "标记为完成？"
   },
-  "course.component": {
+  "course.admin.NotificationSettings.component": {
     "defaultMessage": "组件"
   },
   "course.componentTitles.course_achievements_component": {
@@ -4013,14 +4013,65 @@
   "course.componentTitles.course_assessments_component": {
     "defaultMessage": "测验"
   },
+  "course.componentTitles.course_codaveri_component": {
+    "defaultMessage": "Codaveri 评估和反馈"
+  },
+  "course.componentTitles.course_discussion_topics_component": {
+    "defaultMessage": "评论中心"
+  },
+  "course.componentTitles.course_duplication_component": {
+    "defaultMessage": "复制"
+  },
+  "course.componentTitles.course_experience_points_component": {
+    "defaultMessage": "经验值"
+  },
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "论坛"
+  },
+  "course.componentTitles.course_groups_component": {
+    "defaultMessage": "组"
+  },
+  "course.componentTitles.course_koditsu_platform_component": {
+    "defaultMessage": "Koditsu 考试"
+  },
+  "course.componentTitles.course_leaderboard_component": {
+    "defaultMessage": "排行榜"
+  },
+  "course.componentTitles.course_learning_map_component": {
+    "defaultMessage": "学习路线"
+  },
+  "course.componentTitles.course_lesson_plan_component": {
+    "defaultMessage": "课程计划"
   },
   "course.componentTitles.course_levels_component": {
     "defaultMessage": "等级"
   },
   "course.componentTitles.course_materials_component": {
     "defaultMessage": "材料"
+  },
+  "course.componentTitles.course_monitoring_component": {
+    "defaultMessage": "监听"
+  },
+  "course.componentTitles.course_multiple_reference_timelines_component": {
+    "defaultMessage": "多重参考时间线"
+  },
+  "course.componentTitles.course_plagiarism_component": {
+    "defaultMessage": "SSID 抄袭检查"
+  },
+  "course.componentTitles.course_rag_wise_component": {
+    "defaultMessage": "RagWise 自动论坛回复"
+  },
+  "course.componentTitles.course_scholaistic_component": {
+    "defaultMessage": "角色扮演聊天机器人和评估"
+  },
+  "course.componentTitles.course_settings_component": {
+    "defaultMessage": "设置"
+  },
+  "course.componentTitles.course_statistics_component": {
+    "defaultMessage": "统计"
+  },
+  "course.componentTitles.course_stories_component": {
+    "defaultMessage": "故事"
   },
   "course.componentTitles.course_survey_component": {
     "defaultMessage": "调查"
@@ -4202,8 +4253,56 @@
   "course.courses.Sidebar.administration": {
     "defaultMessage": "课程管理"
   },
+  "course.courses.SidebarItem.admin.duplication": {
+    "defaultMessage": "复制数据"
+  },
+  "course.courses.SidebarItem.admin.multipleReferenceTimelines": {
+    "defaultMessage": "时间线设计工具"
+  },
+  "course.courses.SidebarItem.admin.plagiarism": {
+    "defaultMessage": "SSID 抄袭检查"
+  },
+  "course.courses.SidebarItem.admin.scholaistic.assistants": {
+    "defaultMessage": "学习助手"
+  },
+  "course.courses.SidebarItem.admin.settings": {
+    "defaultMessage": "课程设置"
+  },
+  "course.courses.SidebarItem.admin.settings.components": {
+    "defaultMessage": "功能组件"
+  },
+  "course.courses.SidebarItem.admin.settings.general": {
+    "defaultMessage": "通用"
+  },
+  "course.courses.SidebarItem.admin.settings.notifications": {
+    "defaultMessage": "邮箱"
+  },
+  "course.courses.SidebarItem.admin.settings.sidebar": {
+    "defaultMessage": "侧边栏"
+  },
+  "course.courses.SidebarItem.admin.users.manageUsers": {
+    "defaultMessage": "管理用户"
+  },
+  "course.courses.SidebarItem.assessmentSkills": {
+    "defaultMessage": "技能"
+  },
+  "course.courses.SidebarItem.assessmentSubmissions": {
+    "defaultMessage": "提交"
+  },
+  "course.courses.SidebarItem.discussionTopics": {
+    "defaultMessage": "评论中心"
+  },
+  "course.courses.SidebarItem.experiencePoints": {
+    "defaultMessage": "经验值"
+  },
   "course.courses.SidebarItem.home": {
     "defaultMessage": "主页"
+  },
+  "course.courses.SidebarItem.stories.learn": {
+    "defaultMessage": "学习"
+  },
+  "course.courses.SidebarItem.stories.missionControl": {
+    "defaultMessage": "任务控制"
   },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "忽视"

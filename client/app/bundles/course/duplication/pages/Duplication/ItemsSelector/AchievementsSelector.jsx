@@ -12,7 +12,7 @@ import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
 import { getAchievementBadgeUrl } from 'course/helper/achievements';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 import Thumbnail from 'lib/components/core/Thumbnail';
 
 const translations = defineMessages({
@@ -118,7 +118,7 @@ class AchievementsSelector extends Component {
       <>
         <Typography className="mt-5 mb-5" variant="h2">
           <FormattedMessage
-            {...defaultComponentTitles.course_achievements_component}
+            {...componentTranslations.course_achievements_component}
           />
         </Typography>
         {this.renderBody()}

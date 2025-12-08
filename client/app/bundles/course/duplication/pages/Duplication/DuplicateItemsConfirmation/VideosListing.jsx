@@ -9,7 +9,7 @@ import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { videoTabShape } from 'course/duplication/propTypes';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 const { VIDEO_TAB, VIDEO } = duplicableItemTypes;
 
@@ -102,7 +102,7 @@ class VideoListing extends Component {
       <>
         <ListSubheader disableSticky>
           <FormattedMessage
-            {...defaultComponentTitles.course_videos_component}
+            {...componentTranslations.course_videos_component}
           />
         </ListSubheader>
         <Card>

@@ -14,7 +14,7 @@ import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { surveyShape } from 'course/duplication/propTypes';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 const styles = {
   row: {
@@ -61,7 +61,7 @@ class SurveyListing extends Component {
       <>
         <ListSubheader disableSticky>
           <FormattedMessage
-            {...defaultComponentTitles.course_survey_component}
+            {...componentTranslations.course_survey_component}
           />
         </ListSubheader>
         <Card>

@@ -10,7 +10,7 @@ import TypeBadge from 'course/duplication/components/TypeBadge';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { folderShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 const { FOLDER, MATERIAL } = duplicableItemTypes;
 
@@ -101,7 +101,7 @@ class MaterialsSelector extends Component {
       <>
         <Typography className="mt-5 mb-5" variant="h2">
           <FormattedMessage
-            {...defaultComponentTitles.course_materials_component}
+            {...componentTranslations.course_materials_component}
           />
         </Typography>
         {folders.length > 0 ? (

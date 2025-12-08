@@ -15,7 +15,7 @@ import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';
 import { getAchievementBadgeUrl } from 'course/helper/achievements';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 const styles = {
   badge: {
@@ -73,7 +73,7 @@ class AchievementsListing extends Component {
       <>
         <ListSubheader disableSticky>
           <FormattedMessage
-            {...defaultComponentTitles.course_achievements_component}
+            {...componentTranslations.course_achievements_component}
           />
         </ListSubheader>
         <Card>
