@@ -6,16 +6,11 @@ class Course::LearningMapComponent < SimpleDelegator
     false
   end
 
-  def self.display_name
-    I18n.t('components.learning_map.name')
-  end
-
   def sidebar_items
     [
       {
         key: :learning_map,
         icon: :map,
-        title: t('layouts.learning_map.title'),
         weight: 5,
         path: course_learning_map_path(current_course)
       }

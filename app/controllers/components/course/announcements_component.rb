@@ -3,10 +3,6 @@ class Course::AnnouncementsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
   include Course::UnreadCountsConcern
 
-  def self.display_name
-    I18n.t('components.announcements.name')
-  end
-
   def sidebar_items
     main_sidebar_items + settings_sidebar_items
   end
@@ -18,7 +14,7 @@ class Course::AnnouncementsComponent < SimpleDelegator
       {
         key: :announcements,
         icon: :announcement,
-        title: settings.title || t('course.announcements.sidebar_title'),
+        title: settings.title,
         weight: 1,
         path: course_announcements_path(current_course),
         unread: unread_announcements_count
@@ -29,7 +25,8 @@ class Course::AnnouncementsComponent < SimpleDelegator
   def settings_sidebar_items
     [
       {
-        title: settings.title || t('layouts.course_admin.announcement_settings.title'),
+        key: self.class.key,
+        title: settings.title,
         type: :settings,
         weight: 4,
         path: course_admin_announcements_path(current_course)
