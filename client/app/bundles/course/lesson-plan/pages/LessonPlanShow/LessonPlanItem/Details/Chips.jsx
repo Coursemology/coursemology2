@@ -10,6 +10,8 @@ import PropTypes from 'prop-types';
 
 import moment, { formatShortDateTime, formatShortTime } from 'lib/moment';
 
+import TranslatedItemType from '../../../../containers/TranslatedItemType';
+
 const translations = defineMessages({
   notPublished: {
     id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.Details.Chip.notPublished',
@@ -127,7 +129,7 @@ class Chips extends Component {
             <InfoOutlined />
           </Avatar>
         }
-        label={itemType}
+        label={<TranslatedItemType type={itemType} />}
         style={styles.chip}
       />
     );

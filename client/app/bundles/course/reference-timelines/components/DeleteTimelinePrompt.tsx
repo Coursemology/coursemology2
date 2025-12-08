@@ -46,7 +46,9 @@ const DeleteTimelinePrompt = (
             ? t(translations.confirmRevertAndDeleteTimeline)
             : t(translations.confirmDeleteTimeline)
         }
-        title={t(translations.sureDeletingTimeline, { title: timeline.title })}
+        title={t(translations.sureDeletingTimeline, {
+          title: timeline.title ?? '',
+        })}
       >
         {Boolean(timeline.timesCount) && (
           <PromptText>
