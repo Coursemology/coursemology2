@@ -2,10 +2,6 @@
 class Course::StoriesComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
-  def self.display_name
-    I18n.t('components.stories.name')
-  end
-
   def self.enabled_by_default?
     false
   end
@@ -30,7 +26,7 @@ class Course::StoriesComponent < SimpleDelegator
       {
         key: :learn,
         icon: :learn,
-        title: settings.title || I18n.t('course.stories.learn'),
+        title: settings.title,
         weight: 0,
         path: course_learn_path(current_course)
       }
@@ -42,10 +38,9 @@ class Course::StoriesComponent < SimpleDelegator
 
     [
       {
-        key: :mission_control,
+        key: :sidebar_stories_mission_control,
         icon: :mission_control,
         type: :admin,
-        title: I18n.t('course.stories.mission_control'),
         weight: 1,
         path: course_mission_control_path(current_course)
       }
@@ -55,7 +50,7 @@ class Course::StoriesComponent < SimpleDelegator
   def settings_sidebar_items
     [
       {
-        title: I18n.t('components.stories.name'),
+        key: self.class.key,
         type: :settings,
         weight: 5,
         path: course_admin_stories_path(current_course)

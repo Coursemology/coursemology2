@@ -6,18 +6,13 @@ class Course::ExperiencePointsComponent < SimpleDelegator
     true
   end
 
-  def self.display_name
-    I18n.t('components.experience_points.name')
-  end
-
   def sidebar_items
     return [] unless can_create_experience_points_record?
 
     [
       {
-        key: :experience_points,
+        key: :sidebar_experience_points,
         icon: :experience,
-        title: t('course.experience_points.disbursement.sidebar_title'),
         type: :admin,
         weight: 4,
         path: course_experience_points_records_path(current_course)

@@ -2,10 +2,6 @@
 class Course::MultipleReferenceTimelinesComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
-  def self.display_name
-    I18n.t('components.multiple_reference_timelines.name')
-  end
-
   def self.enabled_by_default?
     false
   end
@@ -15,11 +11,10 @@ class Course::MultipleReferenceTimelinesComponent < SimpleDelegator
 
     [
       {
-        key: :reference_timelines,
+        key: :admin_multiple_reference_timelines,
         icon: :timelines,
         type: :admin,
         weight: 9,
-        title: t('layouts.multiple_reference_timelines.timeline_designer'),
         path: course_reference_timelines_path(current_course)
       }
     ]

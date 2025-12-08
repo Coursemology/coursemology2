@@ -3,10 +3,6 @@ class Course::ScholaisticComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
   include Course::Scholaistic::Concern
 
-  def self.display_name
-    I18n.t('components.scholaistic.name')
-  end
-
   def self.enabled_by_default?
     false
   end
@@ -28,7 +24,7 @@ class Course::ScholaisticComponent < SimpleDelegator
       {
         key: :scholaistic_assessments,
         icon: :chatbot,
-        title: settings.assessments_title || I18n.t('course.scholaistic.assessments'),
+        title: settings.assessments_title,
         weight: 4,
         path: course_scholaistic_assessments_path(current_course)
       }
@@ -57,10 +53,9 @@ class Course::ScholaisticComponent < SimpleDelegator
 
     [
       {
-        key: :scholaistic_assistants,
+        key: :admin_scholaistic_assistants,
         type: :admin,
         icon: :chatbot,
-        title: I18n.t('components.scholaistic.manage_assistants'),
         weight: 9,
         path: course_scholaistic_assistants_path(current_course),
         exact: true
@@ -72,7 +67,7 @@ class Course::ScholaisticComponent < SimpleDelegator
     [
       {
         type: :settings,
-        title: I18n.t('components.scholaistic.name'),
+        key: self.class.key,
         weight: 5,
         path: course_admin_scholaistic_path(current_course)
       }
