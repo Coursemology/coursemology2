@@ -46,6 +46,6 @@ class Course::Material::Controller < Course::ComponentController
   helper_method :component
 
   def root_folder_name
-    component.settings.title || t('course.material.sidebar_title')
+    component.settings.title || current_course.title
   end
 end

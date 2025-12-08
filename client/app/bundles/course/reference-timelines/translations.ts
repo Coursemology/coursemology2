@@ -158,7 +158,7 @@ export default defineMessages({
   },
   defaultTimeline: {
     id: 'course.timelines.defaultTimeline',
-    defaultMessage: 'Default',
+    defaultMessage: 'Default Timeline',
   },
   deleteTime: {
     id: 'course.timelines.deleteTime',

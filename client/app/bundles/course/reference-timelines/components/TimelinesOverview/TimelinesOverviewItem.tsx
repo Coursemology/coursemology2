@@ -46,7 +46,9 @@ const TimelinesOverviewItem = (
 
         toast.error(
           error ??
-            t(translations.errorDeletingTimeline, { title: timeline.title }),
+            t(translations.errorDeletingTimeline, {
+              title: timeline.title ?? '',
+            }),
         );
       });
   };
@@ -62,7 +64,7 @@ const TimelinesOverviewItem = (
         }
         descriptionVariant="caption"
         disabled={timeline.default ?? status === 'loading'}
-        label={timeline.title}
+        label={timeline.title ?? t(translations.defaultTimeline)}
         labelClassName="!-mb-2 line-clamp-1 max-w-[20rem]"
         onChange={(_, checked): void => props.onChangeCheck?.(checked)}
         variant="body2"

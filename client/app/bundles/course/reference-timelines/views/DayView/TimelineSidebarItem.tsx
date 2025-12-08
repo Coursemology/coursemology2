@@ -30,7 +30,7 @@ const TimelineSidebarItem = (props: TimelineSidebarItemProps): JSX.Element => {
       })}
     >
       <Typography className="line-clamp-1" variant="body2">
-        {timeline.title}
+        {timeline.title ?? t(translations.defaultTimeline)}
       </Typography>
 
       {assigned ? (

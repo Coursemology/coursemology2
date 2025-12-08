@@ -4,6 +4,7 @@ import { FolderData } from 'types/course/material/folders';
 import { getIdFromUnknown } from 'utilities';
 
 import CourseAPI from 'api/course';
+import componentTranslations from 'course/translations';
 import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
 
 const translations = defineMessages({
@@ -25,13 +26,25 @@ const translations = defineMessages({
  */
 const buildCrumbPath = (
   courseUrl: string,
-  breadcrumbs: { id: number; name: string }[],
+  breadcrumbs: { id: number; name?: string }[],
 ): CrumbPath => ({
   activePath: `${courseUrl}/materials/folders/${breadcrumbs[0].id}`,
-  content: breadcrumbs.map((crumb) => ({
-    title: crumb.id < 0 ? translations.error : crumb.name,
-    url: `materials/folders/${crumb.id < 0 ? '' : crumb.id}`,
-  })),
+  content: breadcrumbs.map((crumb) => {
+    if (crumb.id < 0) {
+      return {
+        title: translations.error,
+        url: `materials/folders/`,
+      };
+    }
+
+    return {
+      title:
+        crumb.name && crumb.name.length > 0
+          ? crumb.name
+          : componentTranslations.course_materials_component,
+      url: `materials/folders/${crumb.id}`,
+    };
+  }),
 });
 
 /**

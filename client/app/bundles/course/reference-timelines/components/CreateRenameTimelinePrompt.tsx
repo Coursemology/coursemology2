@@ -116,7 +116,7 @@ const CreateRenameTimelinePrompt = (
       }
       title={
         timeline
-          ? t(translations.renameTimelineTitle, { title: timeline.title })
+          ? t(translations.renameTimelineTitle, { title: timeline.title ?? '' })
           : t(translations.newTimeline)
       }
     >

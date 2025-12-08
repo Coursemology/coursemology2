@@ -4,8 +4,10 @@ import {
   TimelineData,
 } from 'types/course/referenceTimelines';
 
+import useTranslation from 'lib/hooks/useTranslation';
 import moment from 'lib/moment';
 
+import translations from '../../translations';
 import { getDaysFromSeconds } from '../../utils';
 
 import TimelineSidebarItem from './TimelineSidebarItem';
@@ -19,6 +21,7 @@ interface ItemsSidebarProps {
 
 const ItemsSidebar = (props: ItemsSidebarProps): JSX.Element => {
   const { for: items, within: timelines } = props;
+  const { t } = useTranslation();
 
   return (
     <aside className={`h-fit shrink-0 ${props.className ?? ''}`}>
@@ -38,7 +41,7 @@ const ItemsSidebar = (props: ItemsSidebarProps): JSX.Element => {
               }
               variant="body2"
             >
-              {item.title}
+              {item.title ?? t(translations.defaultTimeline)}
             </Typography>
           </div>
 
