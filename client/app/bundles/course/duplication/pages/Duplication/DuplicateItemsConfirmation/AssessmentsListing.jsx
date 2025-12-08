@@ -9,7 +9,7 @@ import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { categoryShape } from 'course/duplication/propTypes';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
@@ -177,7 +177,7 @@ class AssessmentsListing extends Component {
       <>
         <ListSubheader disableSticky>
           <FormattedMessage
-            {...defaultComponentTitles.course_assessments_component}
+            {...componentTranslations.course_assessments_component}
           />
         </ListSubheader>
         {categoriesTrees.map((category) =>

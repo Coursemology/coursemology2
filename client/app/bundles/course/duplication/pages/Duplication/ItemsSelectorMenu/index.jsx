@@ -17,7 +17,7 @@ import {
 } from 'course/duplication/constants';
 import { courseShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 import DuplicateButton from '../DuplicateButton';
 
@@ -72,7 +72,7 @@ class ItemsSelectorMenu extends Component {
           </Avatar>
         </ListItemAvatar>
         <ListItemText>
-          <FormattedMessage {...defaultComponentTitles[titleKey]} />
+          <FormattedMessage {...componentTranslations[titleKey]} />
         </ListItemText>
       </ListItem>
     );

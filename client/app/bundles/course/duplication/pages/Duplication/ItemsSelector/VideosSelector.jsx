@@ -11,7 +11,7 @@ import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { videoTabShape } from 'course/duplication/propTypes';
 import { actions } from 'course/duplication/store';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 const { VIDEO_TAB, VIDEO } = duplicableItemTypes;
 
@@ -120,7 +120,7 @@ class VideosSelector extends Component {
       <>
         <Typography className="mt-5 mb-5" variant="h2">
           <FormattedMessage
-            {...defaultComponentTitles.course_videos_component}
+            {...componentTranslations.course_videos_component}
           />
         </Typography>
         {this.renderBody()}

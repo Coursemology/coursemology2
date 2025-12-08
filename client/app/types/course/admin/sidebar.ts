@@ -2,7 +2,7 @@ import { CourseComponentIconName } from 'lib/constants/icons';
 
 export interface SidebarItem {
   id: string;
-  title: string;
+  title?: string;
   weight: number;
   icon: CourseComponentIconName;
 }

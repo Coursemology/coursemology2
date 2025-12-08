@@ -15,7 +15,8 @@ export interface CourseInfo {
 }
 
 export interface CourseAdminItem {
-  title: string;
+  id: string;
+  title?: string;
   weight: number;
   path: string;
 }

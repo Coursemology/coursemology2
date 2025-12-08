@@ -14,6 +14,12 @@ import CourseAPI from 'api/course';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { DataHandle } from 'lib/hooks/router/dynamicNest';
+import useTranslation from 'lib/hooks/useTranslation';
+
+import {
+  getComponentTitle,
+  getComponentTranslationKey,
+} from '../../translations';
 
 const translations = defineMessages({
   courseSettings: {
@@ -34,6 +40,7 @@ export const useItemsReloader = (): (() => void) =>
 
 const SettingsNavigation = (): JSX.Element => {
   const data = useLoaderData() as CourseAdminItems;
+  const { t } = useTranslation();
 
   const [items, setItems] = useState(data);
 
@@ -51,14 +58,14 @@ const SettingsNavigation = (): JSX.Element => {
       <ItemsReloaderContext.Provider value={reloadItems}>
         <div className="flex flex-col">
           <div className="-m-2 pb-10">
-            {items.map(({ title, path }) => (
+            {items.map((item) => (
               <Chip
-                key={path}
-                className={`m-2 ${path === pathname && 'p-[1px]'}`}
-                clickable={path !== pathname}
-                label={title}
-                onClick={(): void => navigate(path)}
-                variant={path === pathname ? 'filled' : 'outlined'}
+                key={item.path}
+                className={`m-2 ${item.path === pathname && 'p-[1px]'}`}
+                clickable={item.path !== pathname}
+                label={getComponentTitle(t, item.id, item.title)}
+                onClick={(): void => navigate(item.path)}
+                variant={item.path === pathname ? 'filled' : 'outlined'}
               />
             ))}
           </div>
@@ -84,7 +91,8 @@ const handle: DataHandle = (match, location) => {
           title: translations.courseSettings,
         },
         {
-          title: currentItem?.title,
+          title:
+            currentItem?.title ?? getComponentTranslationKey(currentItem?.id),
           url: currentItem?.path,
         },
       ],

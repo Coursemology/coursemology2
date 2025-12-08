@@ -4026,7 +4026,7 @@
   "course.asssessment.submission.submitNoQuestionExplain": {
     "defaultMessage": "Mark as completed?"
   },
-  "course.component": {
+  "course.admin.NotificationSettings.component": {
     "defaultMessage": "Component"
   },
   "course.componentTitles.course_achievements_component": {
@@ -4038,14 +4038,65 @@
   "course.componentTitles.course_assessments_component": {
     "defaultMessage": "Assessments"
   },
+  "course.componentTitles.course_codaveri_component": {
+    "defaultMessage": "Codaveri Evaluation and Feedback"
+  },
+  "course.componentTitles.course_discussion_topics_component": {
+    "defaultMessage": "Comments Center"
+  },
+  "course.componentTitles.course_duplication_component": {
+    "defaultMessage": "Duplication"
+  },
+  "course.componentTitles.course_experience_points_component": {
+    "defaultMessage": "Experience Points"
+  },
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "Forums"
+  },
+  "course.componentTitles.course_groups_component": {
+    "defaultMessage": "Groups"
+  },
+  "course.componentTitles.course_koditsu_platform_component": {
+    "defaultMessage": "Koditsu Exam"
+  },
+  "course.componentTitles.course_leaderboard_component": {
+    "defaultMessage": "Leaderboard"
+  },
+  "course.componentTitles.course_learning_map_component": {
+    "defaultMessage": "Learning Map"
+  },
+  "course.componentTitles.course_lesson_plan_component": {
+    "defaultMessage": "Lesson Plan"
   },
   "course.componentTitles.course_levels_component": {
     "defaultMessage": "Levels"
   },
   "course.componentTitles.course_materials_component": {
     "defaultMessage": "Materials"
+  },
+  "course.componentTitles.course_monitoring_component": {
+    "defaultMessage": "Heartbeat Monitoring for Exams"
+  },
+  "course.componentTitles.course_multiple_reference_timelines_component": {
+    "defaultMessage": "Multiple Reference Timelines"
+  },
+  "course.componentTitles.course_plagiarism_component": {
+    "defaultMessage": "SSID Plagiarism Check"
+  },
+  "course.componentTitles.course_rag_wise_component": {
+    "defaultMessage": "RagWise Auto Forum Response"
+  },
+  "course.componentTitles.course_scholaistic_component": {
+    "defaultMessage": "Role-Playing Chatbots & Assessments"
+  },
+  "course.componentTitles.course_settings_component": {
+    "defaultMessage": "Settings"
+  },
+  "course.componentTitles.course_statistics_component": {
+    "defaultMessage": "Statistics"
+  },
+  "course.componentTitles.course_stories_component": {
+    "defaultMessage": "Stories"
   },
   "course.componentTitles.course_survey_component": {
     "defaultMessage": "Surveys"
@@ -4227,8 +4278,56 @@
   "course.courses.Sidebar.administration": {
     "defaultMessage": "Administration"
   },
+  "course.courses.SidebarItem.admin.duplication": {
+    "defaultMessage": "Duplicate Data"
+  },
+  "course.courses.SidebarItem.admin.multipleReferenceTimelines": {
+    "defaultMessage": "Timeline Designer"
+  },
+  "course.courses.SidebarItem.admin.plagiarism": {
+    "defaultMessage": "Plagiarism Check"
+  },
+  "course.courses.SidebarItem.admin.scholaistic.assistants": {
+    "defaultMessage": "Assistants"
+  },
+  "course.courses.SidebarItem.admin.settings": {
+    "defaultMessage": "Course Settings"
+  },
+  "course.courses.SidebarItem.admin.settings.components": {
+    "defaultMessage": "Components"
+  },
+  "course.courses.SidebarItem.admin.settings.general": {
+    "defaultMessage": "General"
+  },
+  "course.courses.SidebarItem.admin.settings.notifications": {
+    "defaultMessage": "Email"
+  },
+  "course.courses.SidebarItem.admin.settings.sidebar": {
+    "defaultMessage": "Sidebar"
+  },
+  "course.courses.SidebarItem.admin.users.manageUsers": {
+    "defaultMessage": "Manage Users"
+  },
+  "course.courses.SidebarItem.assessmentSkills": {
+    "defaultMessage": "Skills"
+  },
+  "course.courses.SidebarItem.assessmentSubmissions": {
+    "defaultMessage": "Submissions"
+  },
+  "course.courses.SidebarItem.discussionTopics": {
+    "defaultMessage": "Comments"
+  },
+  "course.courses.SidebarItem.experiencePoints": {
+    "defaultMessage": "Experience Points"
+  },
   "course.courses.SidebarItem.home": {
     "defaultMessage": "Home"
+  },
+  "course.courses.SidebarItem.stories.learn": {
+    "defaultMessage": "Learn"
+  },
+  "course.courses.SidebarItem.stories.missionControl": {
+    "defaultMessage": "Mission Control"
   },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "Ignore"
