@@ -1,3 +1,55 @@
+import { workflowStates } from 'course/survey/constants';
+
+const processAnswer = (answer) => ({
+  ...answer,
+  grade: parseFloat(answer.grade),
+  maximumGrade: parseFloat(answer.maximumGrade),
+});
+
+export const processSubmission = (submission) => {
+  const totalGrade =
+    submission.totalGrade != null ? parseFloat(submission.totalGrade) : null;
+  const maximumGrade =
+    submission.maximumGrade != null
+      ? parseFloat(submission.maximumGrade)
+      : null;
+  const answers =
+    submission.answers != null ? submission.answers.map(processAnswer) : null;
+  const submittedAt =
+    submission.submittedAt != null ? new Date(submission.submittedAt) : null;
+  const endAt = submission.endAt != null ? new Date(submission.endAt) : null;
+  const dayDifference =
+    submittedAt != null && endAt != null
+      ? Math.floor((submittedAt - endAt) / 86400000)
+      : null;
+
+  return {
+    ...submission,
+    answers,
+    totalGrade,
+    maximumGrade,
+    submittedAt,
+    endAt,
+    dayDifference,
+  };
+};
+
+const WorkflowStatesValueMapper = {
+  [workflowStates.Unstarted]: 0,
+  attempting: 1,
+  submitted: 2,
+  graded: 3,
+  published: 4,
+};
+
+export const sortSubmissionsByWorkflowState = (submissionA, submissionB) =>
+  WorkflowStatesValueMapper[
+    submissionA.workflowState ?? workflowStates.Unstarted
+  ] -
+  WorkflowStatesValueMapper[
+    submissionB.workflowState ?? workflowStates.Unstarted
+  ];
+
 function processDayDifference(dayDifference) {
   if (dayDifference < 0) {
     return `D${dayDifference}`;

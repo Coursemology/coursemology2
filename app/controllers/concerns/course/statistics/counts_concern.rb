@@ -11,12 +11,9 @@ module Course::Statistics::CountsConcern
     attempted_submissions_count = ActiveRecord::Base.connection.execute("
       SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
       FROM course_assessment_submissions cas
-      JOIN course_assessment_answers caa
-      ON cas.id = caa.submission_id
       WHERE
         cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
         AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
-        AND caa.current_answer = TRUE
       GROUP BY cas.assessment_id
                                                                        ")
 
@@ -30,13 +27,10 @@ module Course::Statistics::CountsConcern
     submitted_submissions_count = ActiveRecord::Base.connection.execute("
       SELECT cas.assessment_id AS id, COUNT(DISTINCT cas.creator_id) AS count
       FROM course_assessment_submissions cas
-      JOIN course_assessment_answers caa
-      ON cas.id = caa.submission_id
       WHERE
         cas.creator_id IN (#{@all_students.map(&:user_id).join(', ')})
         AND cas.assessment_id IN (#{@assessments.pluck(:id).join(', ')})
         AND cas.workflow_state != 'attempting'
-        AND caa.current_answer = TRUE
       GROUP BY cas.assessment_id
                                                                        ")
 

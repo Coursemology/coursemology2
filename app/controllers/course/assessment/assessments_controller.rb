@@ -11,6 +11,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   after_action :create_fetch_koditsu_submissions_job, only: [:update]
 
   include Course::Assessment::MonitoringConcern
+  include Course::Statistics::CountsConcern
 
   before_action :load_question_duplication_data, only: [:show, :reorder]
 
@@ -264,13 +265,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   private
 
   def load_assessment_submission_counts
-    real_student_ids = current_course.course_users.students.without_phantom_users.pluck(:user_id)
-    @total_count = real_student_ids.count
-    @assessment_counts = Course::Assessment::Submission.
-                         without_attempting_state.
-                         by_users(real_student_ids).
-                         group(:assessment_id).
-                         count
+    @all_students = current_course.course_users.students.without_phantom_users
+    @assessment_counts = num_submitted_students_hash
   end
 
   def question_order_ids

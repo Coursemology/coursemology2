@@ -1,6 +1,9 @@
 import { FC, ReactNode, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { WorkflowState } from 'types/course/assessment/submission/submission';
+import {
+  PossiblyUnstartedWorkflowState,
+  WorkflowState,
+} from 'types/course/assessment/submission/submission';
 import { MainSubmissionInfo } from 'types/course/statistics/assessmentStatistics';
 
 import {
@@ -25,12 +28,14 @@ import {
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import submissionTranslations from '../../submission/translations';
+import submissionTranslations, {
+  submissionStatusTranslation,
+} from '../../submission/translations';
 
 import { getClassNameForAttemptCountCell } from './classNameUtils';
 import { getAssessmentStatistics, getSubmissionStatistics } from './selectors';
 import translations from './translations';
-import { getJointGroupsName } from './utils';
+import { getJointGroupsName, sortSubmissionsByWorkflowState } from './utils';
 
 interface Props {
   includePhantom: boolean;
@@ -246,10 +251,15 @@ const StudentAttemptCountTable: FC<Props> = ({ includePhantom }) => {
       cell: (datum) => getJointGroupsName(datum.groups),
     },
     {
-      title: t(translations.workflowState),
       of: 'workflowState',
+      title: t(translations.workflowState),
       sortable: true,
-      className: 'center',
+      sortProps: {
+        sort: sortSubmissionsByWorkflowState,
+      },
+      searchProps: {
+        getValue: (datum) => datum.workflowState ?? workflowStates.Unstarted,
+      },
       cell: (datum) => (
         <SubmissionWorkflowState
           linkTo={getEditSubmissionURL(courseId, assessmentId, datum.id)}
@@ -257,6 +267,10 @@ const StudentAttemptCountTable: FC<Props> = ({ includePhantom }) => {
           workflowState={datum.workflowState ?? workflowStates.Unstarted}
         />
       ),
+      className: 'text-left',
+      csvDownloadable: true,
+      csvValue: (workflowState: PossiblyUnstartedWorkflowState) =>
+        t(submissionStatusTranslation(workflowState)),
     },
   ];
 
@@ -294,8 +308,9 @@ const StudentAttemptCountTable: FC<Props> = ({ includePhantom }) => {
               showAllRows: true,
             }}
             search={{
-              searchPlaceholder: t(translations.nameGroupsSearchText),
+              searchPlaceholder: t(translations.nameGroupsGraderSearchText),
             }}
+            toolbar={{ show: true }}
           />
           <AttemptsModal
             answerInfo={answerInfo}

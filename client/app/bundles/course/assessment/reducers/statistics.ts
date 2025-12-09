@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AssessmentStatisticsState } from 'types/course/statistics/assessmentStatistics';
 
-import { processAssessment, processSubmission } from '../utils/statisticsUtils';
+import { processSubmission } from '../pages/AssessmentStatistics/utils';
 
 const initialState: AssessmentStatisticsState = {
   submissionStatistics: [],
@@ -14,15 +14,6 @@ export const statisticsSlice = createSlice({
   name: 'statistics',
   initialState,
   reducers: {
-    initialize: (state, action: PayloadAction<AssessmentStatisticsState>) => {
-      state.assessmentStatistics = processAssessment(
-        action.payload.assessmentStatistics,
-      );
-      state.submissionStatistics =
-        action.payload.submissionStatistics.map(processSubmission);
-      state.liveFeedbackStatistics = action.payload.liveFeedbackStatistics;
-      state.ancestorInfo = action.payload.ancestorInfo;
-    },
     setSubmissionStatistics: (
       state,
       action: PayloadAction<AssessmentStatisticsState['submissionStatistics']>,
