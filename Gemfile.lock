@@ -723,6 +723,7 @@ DEPENDENCIES
   friendly_id
   globalid
   html-pipeline
+  htmlentities
   http_accept_language
   i18n-tasks
   image_optim_rails

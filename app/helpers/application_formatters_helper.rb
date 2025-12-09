@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require 'htmlentities'
+
 # Helpers for formatting objects/values on the application.
 module ApplicationFormattersHelper
   include ApplicationHtmlFormattersHelper
