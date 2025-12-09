@@ -47,6 +47,7 @@ gem 'friendly_id'
 
 # HTML Pipeline and dependencies
 gem 'html-pipeline'
+gem 'htmlentities'
 gem 'sanitize', '>= 4.6.3'
 gem 'rinku'
 gem 'rouge', '~> 3'
