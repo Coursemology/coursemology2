@@ -11,11 +11,10 @@ import {
   MainSubmissionInfo,
 } from 'types/course/statistics/assessmentStatistics';
 
-import { processSubmission } from 'course/assessment/utils/statisticsUtils';
 import GeneralChart from 'lib/components/core/charts/GeneralChart';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { processSubmissionsIntoChartData } from '../utils';
+import { processSubmission, processSubmissionsIntoChartData } from '../utils';
 
 const translations = defineMessages({
   lineDatasetLabel: {

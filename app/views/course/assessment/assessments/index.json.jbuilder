@@ -29,7 +29,7 @@ json.display do
   json.isKoditsuExamEnabled current_course.component_enabled?(Course::KoditsuPlatformComponent)
 end
 
-json.totalStudentCount @total_count if defined?(@total_count)
+json.totalStudentCount @all_students.count if defined?(@all_students)
 json.assessments @assessments do |assessment|
   json.id assessment.id
   json.title assessment.title
