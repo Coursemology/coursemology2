@@ -113,7 +113,7 @@ RSpec.feature 'Course: Statistics: Staff', js: true do
       scenario 'I cannot see the sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).not_to have_text(I18n.t('course.statistics.header'))
+        expect(find_sidebar).not_to have_selector('#sidebar_item_course_statistics_component')
       end
     end
   end

@@ -55,7 +55,7 @@ RSpec.feature 'Course: Lesson Plan', js: true do
       scenario 'I can view the LessonPlan Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('course.lesson_plan.items.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_lesson_plan')
       end
 
       scenario 'I can view all lesson plan items and milestones' do

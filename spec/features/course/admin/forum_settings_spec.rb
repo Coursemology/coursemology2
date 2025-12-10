@@ -25,7 +25,7 @@ RSpec.feature 'Course: Administration: Forums', js: true do
         expect(course.reload.settings(:course_forums_component).title).to eq(new_title)
 
         visit current_path
-        expect(find_sidebar).to have_text(new_title)
+        expect(find_sidebar).to have_selector('#sidebar_item_forums', text: new_title)
 
         fill_in title_field, with: empty_title
         click_button 'Save changes'
@@ -33,7 +33,7 @@ RSpec.feature 'Course: Administration: Forums', js: true do
         expect(course.reload.settings(:course_forums_component).title).to eq(nil)
 
         visit current_path
-        expect(find_sidebar).to have_text(I18n.t('course.forum.forums.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_forums')
       end
 
       scenario 'I can change the forum pagination settings' do

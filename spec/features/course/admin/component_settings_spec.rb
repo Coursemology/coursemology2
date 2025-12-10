@@ -27,10 +27,11 @@ RSpec.feature 'Course: Administration: Components', js: true do
 
       scenario 'I can view the list of enabled/disabled components' do
         visit course_admin_components_path(course)
+        sleep 300
 
         components.each do |component|
-          expect(page).to have_selector('label', text: component.display_name)
-          within find('label', text: component.display_name) do
+          expect(page).to have_selector("label#component_#{component.key}")
+          within find("label#component_#{component.key}") do
             if enabled_components.include?(component)
               expect(page).to have_field(type: 'checkbox', checked: true, visible: false)
             else
@@ -44,7 +45,7 @@ RSpec.feature 'Course: Administration: Components', js: true do
         visit course_admin_components_path(course)
 
         sample_component = components.intersection(enabled_components).sample
-        control = find('label', text: sample_component.display_name)
+        control = find("label#component_#{sample_component.key}")
         control.click
         expect_toastify('Your changes have been saved. Refresh to see the new changes.', dismiss: true)
 

@@ -16,7 +16,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
       scenario 'I can view the Course Admin Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('layouts.course_admin.title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_admin_settings')
       end
 
       scenario 'I can change the course attributes' do
@@ -97,7 +97,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
       scenario 'I can view the Course Admin Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('layouts.course_admin.title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_admin_settings')
       end
 
       scenario 'I cannot delete the course' do
@@ -113,7 +113,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
       scenario 'I cannot view the Course Admin Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).not_to have_text(I18n.t('layouts.course_admin.title'))
+        expect(find_sidebar).not_to have_selector('#sidebar_item_admin_settings')
       end
     end
 
@@ -123,7 +123,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
       scenario 'I cannot view the Course Admin Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).not_to have_text(I18n.t('layouts.course_admin.title'))
+        expect(find_sidebar).not_to have_selector('#sidebar_item_admin_settings')
       end
     end
   end

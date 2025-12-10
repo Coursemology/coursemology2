@@ -18,7 +18,6 @@ RSpec.describe Course::Admin::SidebarSettingsController, type: :controller do
       let(:sample_item) { controller.sidebar_items(type: :normal).sample }
       let(:weight) { 10 }
       let(:sidebar_item_attributes) do
-        id = generate(:nested_attribute_new_id)
         sidebar_item_attributes = [{ id: sample_item[:key], weight: weight }]
         { sidebar_items_attributes: sidebar_item_attributes }
       end
