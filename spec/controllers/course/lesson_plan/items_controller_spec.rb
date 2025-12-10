@@ -66,7 +66,7 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
               subject
 
               expect(json_response['items'].map { |i| i['lesson_plan_item_type'][0] }).
-                to include(I18n.t('components.video.name'))
+                to include(Course::VideosComponent.key.to_s)
             end
           end
 
@@ -113,7 +113,7 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
 
               expect(json_response['items']).not_to be_empty
               expect(json_response['items'].map { |i| i['lesson_plan_item_type'][0] }).
-                not_to include(I18n.t('components.video.name'))
+                not_to include(Course::VideosComponent.key.to_s)
             end
           end
         end

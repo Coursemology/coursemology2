@@ -18,7 +18,7 @@ RSpec.feature 'Course: Duplication', js: true do
         scenario 'I cannot view the Duplication Sidebar item' do
           visit course_path(course)
 
-          expect(find_sidebar).not_to have_text(I18n.t('layouts.duplication.title'))
+          expect(find_sidebar).not_to have_selector('#sidebar_item_admin_duplication')
         end
       end
 
@@ -28,7 +28,7 @@ RSpec.feature 'Course: Duplication', js: true do
         scenario 'I can view the Duplication Sidebar item' do
           visit course_path(course)
 
-          expect(find_sidebar).to have_text(I18n.t('layouts.duplication.title'))
+          expect(find_sidebar).to have_selector('#sidebar_item_admin_duplication')
         end
       end
     end
@@ -39,7 +39,7 @@ RSpec.feature 'Course: Duplication', js: true do
       scenario 'I can view the Duplication Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('layouts.duplication.title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_admin_duplication')
       end
 
       context 'when I am a manager in one specific course' do
@@ -104,7 +104,7 @@ RSpec.feature 'Course: Duplication', js: true do
       scenario 'I cannot view the Duplication Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).not_to have_text(I18n.t('layouts.duplication.title'))
+        expect(find_sidebar).not_to have_selector('#sidebar_item_admin_duplication')
       end
 
       scenario 'I cannot access the duplication page' do

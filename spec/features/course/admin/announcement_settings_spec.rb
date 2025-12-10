@@ -27,7 +27,7 @@ RSpec.feature 'Course: Administration: Announcement', js: true do
 
         # Refresh page to update sidebar
         visit current_path
-        expect(find_sidebar).to have_text(new_title)
+        expect(find_sidebar).to have_selector('#sidebar_item_announcements', text: new_title)
 
         fill_in title_field, with: empty_title
         click_button 'Save changes'
@@ -35,7 +35,7 @@ RSpec.feature 'Course: Administration: Announcement', js: true do
 
         # Refresh page to update sidebar
         visit current_path
-        expect(find_sidebar).to have_text(I18n.t('course.announcements.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_announcements')
       end
     end
   end

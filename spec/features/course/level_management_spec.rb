@@ -24,7 +24,7 @@ RSpec.feature 'Course: Levels', js: true do
       scenario 'I can view the Level Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('course.levels.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_course_levels_component')
       end
 
       scenario 'I can view course levels' do
@@ -66,7 +66,7 @@ RSpec.feature 'Course: Levels', js: true do
       scenario 'I cannot view the Level Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).not_to have_text(I18n.t('course.levels.sidebar_title'))
+        expect(find_sidebar).not_to have_selector('#sidebar_item_course_levels_component')
       end
     end
   end

@@ -27,7 +27,7 @@ RSpec.feature 'System: Administration: Components', type: :feature, js: true do
       settings = Instance::Settings::Components.new(instance)
 
       components.each do |component|
-        expect(page).to have_selector('tr', text: component.display_name)
+        expect(page).to have_selector("tr#component_#{component.key}")
 
         within find("tr#component_#{component.key}") do
           if enabled_components.include?(component)
