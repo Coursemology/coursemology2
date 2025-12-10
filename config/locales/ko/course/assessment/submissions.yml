@@ -1,9 +1,0 @@
-ko:
-  course:
-    assessment:
-      submissions:
-        sidebar_title: :'course.assessment.submissions.index.header'
-        index:
-          header: '제출물'
-        pending:
-          header: '대기 중인 제출물'

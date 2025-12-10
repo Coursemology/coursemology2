@@ -1,7 +1,0 @@
-ko:
-  course:
-    experience_points:
-      disbursement:
-        sidebar_title: '경험치'
-        new:
-          header: '경험 포인트 지급'

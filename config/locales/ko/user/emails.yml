@@ -1,8 +1,6 @@
 ko:
   user:
     emails:
-      index:
-        header: '이메일'
       set_primary:
         no_confirmed_emails: '기본 이메일로 설정할 수 있는 확인된 이메일 주소가 없습니다.'
       send_confirmation:

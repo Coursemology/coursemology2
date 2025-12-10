@@ -1,9 +1,0 @@
-en:
-  course:
-    assessment:
-      submissions:
-        sidebar_title: :'course.assessment.submissions.index.header'
-        index:
-          header: 'Submissions'
-        pending:
-          header: 'Pending Submissions'

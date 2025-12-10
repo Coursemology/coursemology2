@@ -1,7 +1,0 @@
-en:
-  course:
-    achievement:
-      achievements:
-        sidebar_title: :'course.achievement.achievements.index.header'
-        index:
-          header: 'Achievements'
