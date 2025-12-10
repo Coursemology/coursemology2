@@ -1,8 +1,6 @@
 ko:
   course:
     experience_points_records:
-      index:
-        header: '%{name}의 경험치 기록'
       download:
         name: '이름'
         updated_at: '업데이트 날짜'

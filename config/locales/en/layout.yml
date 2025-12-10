@@ -2,36 +2,10 @@ en:
   layout:
     coursemology: 'Coursemology'
   layouts:
-    course_admin:
-      title: 'Course Settings'
-      course_settings:
-        title: 'General'
-      announcement_settings:
-        title: :'course.announcements.index.header'
-      component_settings:
-        title: 'Components'
-      sidebar_settings:
-        title: 'Sidebar'
-      notifications:
-        title: 'Email'
-      lesson_plan:
-        title: 'Lesson Plan'
-      codaveri:
-        title: 'Codaveri Evaluation and Feedback'
-      rag_wise:
-        title: 'RagWise Auto Forum Response'
-    course_users:
-      title: 'Manage Users'
-    duplication:
-      title: 'Duplicate Data'
     mailer:
       greeting: 'Hello, %{user}:'
     code_formatter:
       size_too_big: 'The file is too big and cannot be displayed.'
-    learning_map:
-      title: 'Learning Map'
-    multiple_reference_timelines:
-      timeline_designer: 'Timeline Designer'
     manage_email_subscription:
       tag: 'Unsubscribe'
       message: '%{manage_email_subscription_link} from this email topic.'

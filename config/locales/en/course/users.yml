@@ -1,7 +1,6 @@
 en:
   course:
     users:
-      sidebar_title: :'course.users.index.header'
       role:
         student: 'Student'
         teaching_assistant: 'Teaching Assistant'
@@ -11,9 +10,4 @@ en:
         phantom: 'Phantom'
       new:
         already_registered: 'You are already registered as a %{role}.'
-      students:
-        header: 'Students'
-      staff:
-        header: 'Staff'
-      index:
-        header: 'Students'
+

@@ -1,6 +1,0 @@
-zh:
-  course:
-    announcements:
-      sidebar_title: :'course.announcements.index.header'
-      index:
-        header: '公告'

@@ -1,6 +1,0 @@
-ko:
-  course:
-    levels:
-      sidebar_title: :'course.levels.index.header'
-      index:
-        header: '레벨'

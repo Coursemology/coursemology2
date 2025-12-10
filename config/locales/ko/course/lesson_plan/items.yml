@@ -1,10 +1,4 @@
 ko:
-  course:
-    lesson_plan:
-      items:
-        sidebar_title: :'course.lesson_plan.items.index.header'
-        index:
-          header: '수업 계획'
   activerecord:
     attributes:
       course/lesson_plan/item:

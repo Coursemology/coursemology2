@@ -1,7 +1,6 @@
 ko:
   course:
     users:
-      sidebar_title: :'course.users.index.header'
       role:
         student: '학생'
         teaching_assistant: '조교'
@@ -11,9 +10,3 @@ ko:
         phantom: '팬텀'
       new:
         already_registered: '당신은 이미 %{role}(으)로 등록되어 있습니다.'
-      students:
-        header: '학생들'
-      staff:
-        header: '직원'
-      index:
-        header: '학생들'
