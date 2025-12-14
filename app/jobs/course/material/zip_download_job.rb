@@ -2,6 +2,7 @@
 class Course::Material::ZipDownloadJob < ApplicationJob
   include TrackableJob
   queue_as :lowest
+  retry_on StandardError, attempts: 0
 
   protected
 
