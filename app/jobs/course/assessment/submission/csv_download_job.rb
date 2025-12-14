@@ -2,6 +2,7 @@
 class Course::Assessment::Submission::CsvDownloadJob < ApplicationJob
   include TrackableJob
   queue_as :highest
+  retry_on StandardError, attempts: 0
 
   protected
 
