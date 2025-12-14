@@ -156,7 +156,7 @@ group :production, :test do
   gem 'puma'
 end
 
-group :production, :ci do
+group :production, :test, :ci do
   gem 'aws-sdk-s3'
 end
 
