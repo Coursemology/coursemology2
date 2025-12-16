@@ -4,6 +4,7 @@ export interface RubricData {
   categories: RubricCategoryData[];
   gradingPrompt: string;
   modelAnswer: string;
+  summary: string;
 }
 
 export interface RubricDataWithEvaluations extends RubricData {
