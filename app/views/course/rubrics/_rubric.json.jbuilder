@@ -5,6 +5,7 @@ json.createdAt rubric.created_at.iso8601
 json.questions rubric.questions.map(&:id)
 json.gradingPrompt rubric.grading_prompt
 json.modelAnswer rubric.model_answer
+json.summary rubric.summary
 
 json.categories rubric.categories.each do |category|
   json.id category.id

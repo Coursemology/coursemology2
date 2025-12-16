@@ -47,6 +47,11 @@ class Course::Rubric < ApplicationRecord
     )
   end
 
+  # TODO: Explore smarter ways of generating rubric summaries.
+  def summary
+    grading_prompt.squish
+  end
+
   private
 
   def validate_no_reserved_category_names

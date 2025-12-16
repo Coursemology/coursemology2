@@ -175,6 +175,15 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
           />
         </div>
       )}
+      <Card className="my-3" variant="outlined">
+        <Typography
+          className="p-3 line-clamp-4"
+          dangerouslySetInnerHTML={{
+            __html: selectedRubric.summary,
+          }}
+          variant="body2"
+        />
+      </Card>
       <div className="flex flex-row space-x-3 items-center pb-3">
         {activeTab !== RubricPlaygroundTab.EDIT && (
           <HeaderButton
