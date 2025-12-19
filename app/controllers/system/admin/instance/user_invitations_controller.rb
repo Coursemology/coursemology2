@@ -81,7 +81,7 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
   end
 
   def invitation_service
-    @invitation_service ||= Instance::UserInvitationService.new(current_instance_user, @instance)
+    @invitation_service ||= Instance::UserInvitationService.new(@instance)
   end
 
   def invitations

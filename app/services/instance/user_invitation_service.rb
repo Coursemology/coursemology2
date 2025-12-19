@@ -7,10 +7,8 @@ class Instance::UserInvitationService
 
   # Constructor for the user invitation service object.
   #
-  # @param [User] current_user The user performing this action.
   # @param [Instance] current_instance The instance to invite users to.
-  def initialize(current_user, current_instance)
-    @current_user = current_user
+  def initialize(current_instance)
     @current_instance = current_instance
   end
 

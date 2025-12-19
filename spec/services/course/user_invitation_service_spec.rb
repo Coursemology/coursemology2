@@ -430,6 +430,11 @@ RSpec.describe Course::UserInvitationService, type: :service do
           end
         end
 
+        it 'does not create duplicate instance users' do
+          subject.send(:invite_users, temp_csv_from_attributes(existing_users, existing_roles))
+          expect(instance.instance_users.pluck(:user_id)).to match_array([user.id] + existing_users.map(&:id))
+        end
+
         context 'when a user has requested to enrol to the course' do
           let!(:enrol_request) { create(:course_enrol_request, course: course, user: existing_users.first) }
           it 'removes the enrolment request' do
@@ -491,6 +496,41 @@ RSpec.describe Course::UserInvitationService, type: :service do
             existing_users.each do |user|
               found_user = course.course_users.find { |course_user| course_user.user == user }
               expect(found_user.timeline_algorithm).to eq('otot')
+            end
+          end
+        end
+      end
+
+      context 'when users exist in a different instance' do
+        let(:other_instance) { create(:instance) }
+        let(:users_from_other_instance) do
+          ActsAsTenant.with_tenant(other_instance) do
+            (1..3).map { create(:instance_user).user }
+          end
+        end
+
+        it 'creates course users for them' do
+          ActsAsTenant.with_tenant(instance) do
+            subject.send(:invite_users, temp_csv_from_attributes(users_from_other_instance, new_roles))
+            users_from_other_instance.each do |user|
+              found_user = course.course_users.find { |course_user| course_user.user == user }
+              expect(found_user).not_to be_nil
+            end
+          end
+        end
+
+        it 'creates normal instance users for them' do
+          ActsAsTenant.with_tenant(instance) do
+            subject.send(:invite_users, temp_csv_from_attributes(users_from_other_instance, new_roles))
+
+            expect(
+              instance.instance_users.pluck(:user_id)
+            ).to match_array([user.id] + users_from_other_instance.map(&:id))
+
+            users_from_other_instance.each do |user|
+              instance_user = instance.instance_users.find_by(user: user)
+              expect(instance_user).not_to be_nil
+              expect(instance_user.role).to eq('normal')
             end
           end
         end
