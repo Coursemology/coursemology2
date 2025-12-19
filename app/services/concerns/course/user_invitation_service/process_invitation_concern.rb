@@ -38,12 +38,15 @@ module Course::UserInvitationService::ProcessInvitationConcern
   end
 
   # Given a list of email addresses, returns a Hash containing the mappings from email addresses
-  # to users.
+  # to users. Also returns the associated instance users for the current instance, if they exist.
   #
   # @param [Array<String>] email_addresses An array of email addresses to query.
   # @return [Hash{String=>User}] The mapping from email address to users.
   def find_existing_users(email_addresses)
-    found_users = User.with_email_addresses(email_addresses)
+    found_users = User.with_email_addresses(email_addresses).
+                  includes(:instance_users).
+                  left_outer_joins(:instance_users).
+                  where(instance_users: { instance_id: [@current_instance.id, nil] })
 
     found_users.each.flat_map do |user|
       user.emails.map { |user_email| [user_email.email, user] }
@@ -56,6 +59,8 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # @return [Array(Array<CourseUser>, Array<CourseUser>)] A tuple containing the list of users who were newly enrolled
   #   and already enrolled.
   def add_existing_users(users)
+    ensure_instance_users(users.map { |u| u[:user] })
+
     all_course_users = @current_course.course_users.to_h { |cu| [cu.user_id, cu] }
     existing_course_users = []
     new_course_users = []
@@ -74,6 +79,21 @@ module Course::UserInvitationService::ProcessInvitationConcern
     end
 
     [new_course_users, existing_course_users]
+  end
+
+  # Ensures that all users have instance user records for the current instance.
+  #
+  # @param [Array<User>] users The users to ensure have instance users.
+  # @return [void]
+  def ensure_instance_users(users)
+    missing_user_ids = users.reject { |user| user.instance_users.any? }.map(&:id)
+    return if missing_user_ids.empty?
+
+    missing_instance_users = missing_user_ids.map do |user_id|
+      { instance_id: @current_instance.id, user_id: user_id, role: :normal }
+    end
+
+    InstanceUser.insert_all(missing_instance_users)
   end
 
   # Generates invitations for users to the course.

@@ -39,7 +39,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
 
         context 'when the invitations do not get created successfully' do
           before do
-            stubbed_invitation_service = Instance::UserInvitationService.new(normal_user, instance)
+            stubbed_invitation_service = Instance::UserInvitationService.new(instance)
             stubbed_invitation_service.define_singleton_method(:invite) do |*|
               false
             end

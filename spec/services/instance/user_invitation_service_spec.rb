@@ -15,13 +15,13 @@ RSpec.describe Instance::UserInvitationService, type: :service do
 
     let(:user) { create(:user) }
     let(:stubbed_user_invitation_service) do
-      Instance::UserInvitationService.new(user, instance).tap do |result|
+      Instance::UserInvitationService.new(instance).tap do |result|
         result.define_singleton_method(:invite_users) do |users|
           users
         end
       end
     end
-    subject { Instance::UserInvitationService.new(user, instance) }
+    subject { Instance::UserInvitationService.new(instance) }
 
     let(:existing_roles) { Instance::UserInvitation.roles.keys.sample(3) }
     let(:existing_users) do
