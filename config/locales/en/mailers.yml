@@ -1,0 +1,246 @@
+en:
+  common:
+    # Shared keys used across course mailers, instance mailers, and notifiers
+    mailers:
+      anonymous_course_user: An anonymous user
+      click_here: 'Click here'
+      coursemology: 'Coursemology'
+      greeting: 'Hello, %{user}:'
+      manage_email_subscription:
+        tag: 'Unsubscribe'
+        message: '%{manage_email_subscription_link} from this email topic.'
+      plain_text_link: '%{text} (%{url})'
+      phantom_course_user: '(Phantom)'
+  course:
+    mailer:
+      assessment_closing_reminder_email:
+        subject: '%{course}: Reminder about %{assessment}'
+        message: >
+          Please be reminded that %{assessment} is due on %{time}.
+        message_no_time: >
+          Please be reminded to attempt and submit the assessment - %{assessment}.
+      assessment_closing_summary_email:
+        subject: '%{course}: Reminder about %{assessment}'
+        message: >
+          Emails were sent to the following students to remind them that %{assessment} is due on %{time}:
+
+          %{students}
+        message_no_time: >
+          Emails were sent to the following students to remind them to attempt and submit the assessment - %{assessment}:
+
+          %{students}
+      course_duplicate_failed_email:
+        subject: 'Course Duplication Failed: %{original_course}'
+        message: >
+          Duplication of %{original_course} has failed.
+          Please try again later or contact support if the problem persists.
+      course_duplicated_email:
+        subject: 'Course Duplication Completed: %{new_course}'
+        message: >
+          Duplication of %{original_course} to %{new_course} has completed.
+
+          %{click_here} to view the duplicated course.
+      course_user_deletion_failed_email:
+        subject: 'User %{course_user_name} Failed to be Deleted from %{course_name}'
+        message: >
+          Deletion of %{course_user_name} from the Course %{course_name} has failed.
+          Please try again later or contact support if the problem persists.
+      submission_graded_email:
+        subject: '%{course}: Your submission for %{assessment} has been graded'
+        message: >
+          Click %{submission} to view your grade.
+      survey_closing_reminder_email:
+        subject: '%{course}: Reminder about %{survey}'
+        message: >
+          Please be reminded that %{survey} will expire on %{time}.
+      survey_closing_summary_email:
+        subject: '%{course}: Reminder about %{survey}'
+        message: >
+          Emails were sent to the following students to remind them that %{survey} will expire on %{time}:
+
+          %{student_list}
+      user_added_email:
+        subject: 'Added to Course %{course}'
+        message: >
+          You have been added to the course %{course} on %{coursemology}.
+
+          To view the course, please log in with %{email}.
+      user_enrol_requested_email:
+        subject: 'Enrol Request for %{course}'
+        recipients: 'Course Managers'
+        user_requests_header: 'User Requests'
+        message: >
+          %{user} has requested to enrol in %{course}
+
+
+          You can visit the %{course_requests_page} to view and approve requests.
+      user_invitation_email:
+        subject: 'Invitation to Register for %{course}'
+        message: >
+          You are invited to register for %{course} on %{coursemology}.
+
+
+          You do not seem to have an account registered at this email address (%{email});
+
+          %{click_here} to create an account and accept the invitation.
+
+
+          If you have an existing Coursemology account registered under a different email,
+          visit %{course} and enrol with the following non-transferable registration code:
+      user_rejected_email:
+        subject: 'Course enrolment request rejected - %{course}'
+        message: >
+          Your request to be enrolled in the course - %{course} on %{coursemology} has been rejected!
+  instance:
+    mailer:
+      user_added_email:
+        subject: 'Added to Instance %{instance}'
+        message: >
+          You have been added to the instance %{instance} on %{coursemology}.
+
+          To view the instance, please log in with %{email}.
+
+      user_invitation_email:
+        subject: 'Invitation to %{instance} instance with %{role} role'
+        message: >
+          You are invited to register for the %{instance} instance on %{coursemology}.
+
+
+          You do not seem to have an account registered at this email address (%{email});
+
+          %{click_here} to create an account and accept the invitation.
+  instance_user_role_request_mailer:
+    new_role_request:
+      subject: 'New role request!'
+      empty: '(Not specified)'
+      message_html: >
+        %{user} (%{email}) requests to become an %{role} in the %{instance} instance.
+
+        <strong>Organization</strong>
+
+        %{organization}
+
+
+        <strong>Designation</strong>
+
+        %{designation}
+
+
+        <strong>Reason</strong>
+
+        %{reason}
+
+
+        %{click_here} to review the request.
+    role_request_approved:
+      subject: 'Your role request has been approved!'
+      message: >
+        You have been approved to be an %{role} on Coursemology!
+
+        %{click_here} to create a new course and get started!
+    role_request_rejected:
+      subject: 'Your role request has been rejected!'
+      message_empty: >
+        Your role request to be an %{role} on Coursemology has been rejected!
+      message: >
+        Your role request to be an %{role} on Coursemology has been rejected!
+        Please refer to the message below:
+        %{message}
+  notifiers:
+    course:
+      announcement_notifier:
+        new:
+          course_notifications:
+            email:
+              subject: '%{course} New Announcement: %{announcement}'
+              message: >
+                <p>%{creator} posted a new %{announcement} from course: %{course}</p>
+                %{content}
+      assessment_notifier:
+        opening:
+          course_notifications:
+            email:
+              subject: '%{course} New Assessment Available'
+              message: >
+                New Assessment Available : %{assessment}
+        submitted:
+          user_notifications:
+            email:
+              subject: '%{course} New Submission on: %{assessment}'
+              message: >
+                There is a new submission by %{user}
+
+                Please review and grade the %{submission}.
+      assessment:
+        answer:
+          comment_notifier:
+            annotated:
+              user_notifications:
+                email:
+                  subject: '%{course}: New annotation on %{topic}'
+                  message: >
+                    <p>%{post_author} added an annotation, %{post}</p>
+
+                    <p>You can reply here:</p>
+                    %{topic}
+        submission_question:
+          comment_notifier:
+            replied:
+              user_notifications:
+                email:
+                  subject: '%{course}: New comment on %{topic}'
+                  message: >
+                    <p>%{post_author} commented, %{post}</p>
+
+                    <p>You can reply here:</p>
+                    %{topic}
+      consolidated_opening_reminder_notifier:
+        opening_reminder:
+          course_notifications:
+            email:
+              subject: 'Opening Reminders for %{course}'
+              message: 'The following items are opening in the next 24 hours.'
+            course:
+              assessment:
+                section_header: 'New Assessments Available:'
+              survey:
+                section_header: 'New Surveys Available:'
+              video:
+                section_header: 'New Videos Available:'
+      forum:
+        post_notifier:
+          replied:
+            user_notifications:
+              email:
+                subject: '%{course} New reply for forum topic: %{topic}'
+                message: >
+                  <p>%{post_author} replied,</p>
+                  %{post}
+                  <p>You can respond here: %{topic}</p><br>
+                unsubscribe:
+                  tag: 'Unsubscribe'
+                  message: '%{unsubscribe_link} from email notifications for this forum topic.'
+        topic_notifier:
+          created:
+            user_notifications:
+              email:
+                subject: '%{course} New topic created in forum: %{forum}'
+                message: >
+                  <p>%{topic_author} has created a new topic in the forum: %{topic}</p><br>
+                  %{post}
+                unsubscribe:
+                  tag: 'Unsubscribe'
+                  message: '%{unsubscribe_link} from email notification for this forum.'
+      video_notifier:
+        opening:
+          course_notifications:
+            email:
+              subject: '%{course} New Video Available'
+              message: >
+                New Video Available : %{video}
+        closing:
+          user_notifications:
+            email:
+              subject: '%{course} Reminder for %{video}'
+              message: >
+                Please be reminded that %{video} is due on %{time}

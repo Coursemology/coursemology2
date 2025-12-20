@@ -9,7 +9,7 @@
       organization: @request.organization || t('.empty'),
       designation: @request.designation || t('.empty'),
       reason: @request.reason || t('.empty'),
-      click_here: link_to(t('common.click_here'),
+      click_here: link_to(t('common.mailers.click_here'),
                           instance_user_role_requests_url(host: instance.host))\
     )\
   )

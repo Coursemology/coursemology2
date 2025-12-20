@@ -22,9 +22,9 @@ RSpec.describe ActivityMailer, type: :mailer do
       end
 
       it 'renders the layout' do
-        expect(text).to include(I18n.t('layouts.mailer.greeting', user: user.name))
+        expect(text).to include(I18n.t('common.mailers.greeting', user: user.name))
 
-        expect(html).to include(I18n.t('layouts.mailer.greeting', user: user.name))
+        expect(html).to include(I18n.t('common.mailers.greeting', user: user.name))
       end
 
       it 'sends a multipart email' do
@@ -45,7 +45,7 @@ RSpec.describe ActivityMailer, type: :mailer do
       end
 
       it 'does not render salutation and sign-off' do
-        expect(text).not_to include(I18n.t('layouts.mailer.greeting', user: user.name))
+        expect(text).not_to include(I18n.t('common.mailers.greeting', user: user.name))
       end
     end
   end

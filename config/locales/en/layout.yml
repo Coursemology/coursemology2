@@ -1,11 +1,4 @@
 en:
-  layout:
-    coursemology: 'Coursemology'
   layouts:
-    mailer:
-      greeting: 'Hello, %{user}:'
     code_formatter:
       size_too_big: 'The file is too big and cannot be displayed.'
-    manage_email_subscription:
-      tag: 'Unsubscribe'
-      message: '%{manage_email_subscription_link} from this email topic.'

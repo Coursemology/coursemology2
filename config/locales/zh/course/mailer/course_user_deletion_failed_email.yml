@@ -1,8 +1,0 @@
-zh:
-  course:
-    mailer:
-      course_user_deletion_failed_email:
-        subject: '无法将用户 %{course_user_name} 从 %{course_name} 中删除'
-        message: >
-          无法将用户 %{course_user_name} 从课程 %{course_name} 中删除。
-          请稍后再试，或者如果问题持续，请联系支持团队。
