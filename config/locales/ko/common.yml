@@ -1,7 +1,4 @@
 ko:
-  common:
-    plain_text_link: '%{text} (%{url})'
-    click_here: '여기를 클릭하세요'
   helpers:
     password:
       wrong_password: '잘못된 비밀번호'

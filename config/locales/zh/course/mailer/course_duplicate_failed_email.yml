@@ -1,8 +1,0 @@
-zh:
-  course:
-    mailer:
-      course_duplicate_failed_email:
-        subject: '课程复制失败: %{original_course}'
-        message: >
-          复制%{original_course}失败。
-          请稍后再试，如果问题仍然存在，请联系开发人员。

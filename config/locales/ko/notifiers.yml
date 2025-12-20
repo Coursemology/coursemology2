@@ -1,5 +1,0 @@
-ko:
-  notifiers:
-    course:
-      phantom: '(팬텀)'
-      anonymous_user: '익명의 사용자'

@@ -63,7 +63,7 @@ RSpec.describe User::EmailsController, type: :controller do
           subject
 
           json_result = JSON.parse(response.body)
-          expect(json_result['errors']).to eq(I18n.t('user.emails.send_confirmation.already_confirmed'))
+          expect(json_result['errors']).to eq(I18n.t('errors.user.emails.already_confirmed'))
         end
       end
 

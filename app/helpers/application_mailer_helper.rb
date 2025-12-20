@@ -6,6 +6,6 @@ module ApplicationMailerHelper
   # @param [string] text The text to display
   # @param [string] url The URL to link to
   def plain_link_to(text, url)
-    t('common.plain_text_link', text: text, url: url)
+    t('common.mailers.plain_text_link', text: text, url: url)
   end
 end

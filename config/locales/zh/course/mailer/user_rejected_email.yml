@@ -1,8 +1,0 @@
-zh:
-  course:
-    mailer:
-      user_rejected_email:
-        subject: '课程注册请求被拒绝 - %{course}'
-        message: >
-          你在%{coursemology}上关于%{course}的课程申请已被拒绝!
-

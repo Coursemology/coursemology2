@@ -1,7 +1,4 @@
 en:
-  common:
-    plain_text_link: '%{text} (%{url})'
-    click_here: 'Click here'
   helpers:
     password:
       wrong_password: 'Wrong password'

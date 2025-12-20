@@ -7,6 +7,6 @@ html
 
 body
   p
-    = t('.greeting', user: @recipient.name)
+    = t('common.mailers.greeting', user: @recipient.name)
 
   = yield

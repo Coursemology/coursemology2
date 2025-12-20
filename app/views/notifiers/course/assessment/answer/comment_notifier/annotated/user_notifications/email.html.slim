@@ -11,7 +11,7 @@
 - category_id = assessment.tab.category.id
 
 - message.subject = t('.subject', course: course.title, topic: "#{assessment.title}: #{question_assessment.display_title}")
-- message.subject += ' ' + t('notifiers.course.phantom') if course_user.phantom?
+- message.subject += ' ' + t('common.mailers.phantom_course_user') if course_user.phantom?
 - step = submission.questions.index(question) + 1
 
 = format_html(t('.message',

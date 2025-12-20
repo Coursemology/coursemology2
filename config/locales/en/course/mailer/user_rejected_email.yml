@@ -1,8 +1,0 @@
-en:
-  course:
-    mailer:
-      user_rejected_email:
-        subject: 'Course enrolment request rejected - %{course}'
-        message: >
-          Your request to be enrolled in the course - %{course} on %{coursemology} has been rejected!
-

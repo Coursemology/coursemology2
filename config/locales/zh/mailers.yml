@@ -1,0 +1,246 @@
+zh:
+  common:
+    # Shared keys used across course mailers, instance mailers, and notifiers
+    mailers:
+      anonymous_course_user: 匿名用户
+      click_here: '点击此处'
+      coursemology: 'Coursemology'
+      greeting: '您好，%{user}:'
+      manage_email_subscription:
+        tag: '取消订阅'
+        message: '%{manage_email_subscription_link} 从此电子邮件主题取消订阅。'
+      plain_text_link: '%{text} (%{url})'
+      phantom_course_user: '(幽灵)'
+  course:
+    mailer:
+      assessment_closing_reminder_email:
+        subject: '%{course}: 相关提醒 %{assessment}'
+        message: >
+          请注意 %{assessment} 将截止于 %{time}。
+        message_no_time: >
+          请注意练习并提交 - %{assessment}。
+      assessment_closing_summary_email:
+        subject: '%{course}: 相关提醒 %{assessment}'
+        message: >
+          向以下学生发送了电子邮件，提醒他们%{assessment}将于%{time}截止:
+
+          %{students}
+        message_no_time: >
+          向以下学生发送了电子邮件，提醒他们练习并提交评估测验 %{assessment}:
+
+          %{students}
+      course_duplicate_failed_email:
+        subject: '课程复制失败: %{original_course}'
+        message: >
+          复制%{original_course}失败。
+          请稍后再试，如果问题仍然存在，请联系开发人员。
+      course_duplicated_email:
+        subject: '课程复制完成: %{new_course}'
+        message: >
+          将%{original_course}复制到%{new_course}的工作已经完成。
+
+          %{click_here}查看复制的课程。
+      course_user_deletion_failed_email:
+        subject: '无法将用户 %{course_user_name} 从 %{course_name} 中删除'
+        message: >
+          无法将用户 %{course_user_name} 从课程 %{course_name} 中删除。
+          请稍后再试，或者如果问题持续，请联系支持团队。
+      submission_graded_email:
+        subject: '%{course}: 你%{assessment}的提交已被批改'
+        message: >
+          点击%{submission}查看你的评分。
+      survey_closing_reminder_email:
+        subject: '%{course}: 相关提醒 %{survey}'
+        message: >
+          请注意%{survey}将于%{time}过期。
+      survey_closing_summary_email:
+        subject: '%{course}:相关提醒%{survey}'
+        message: >
+          我们向以下学生发送了电子邮件，提醒他们%{survey}将于%{time}过期:
+
+          %{student_list}
+      user_added_email:
+        subject: '添加至课程%{course}'
+        message: >
+          您已被加入%{coursemology}的课程%{course}。
+
+          要查看该课程，请使用%{email}登录。
+      user_enrol_requested_email:
+        subject: '%{course}加入申请'
+        recipients: '课程管理员'
+        user_requests_header: '用户请求'
+        message: >
+          %{user}申请加入课程%{course}
+
+
+          你可以进入%{course_requests_page}来查看和处理申请。
+      user_invitation_email:
+        subject: '邀请报名参加%{course}'
+        message: >
+          你被邀请加入%{coursemology}的课程%{course}。
+
+
+          你似乎没有在这个电子邮件地址注册的账户 (%{email});
+
+          %{click_here} 来创建一个账户并接受邀请。
+
+          如果你已经使用另一个电子邮箱地址创建了Coursemology账户，
+          查看%{course}并使用以下不可转让的注册码进行注册:
+      user_rejected_email:
+        subject: '课程注册请求被拒绝 - %{course}'
+        message: >
+          你在%{coursemology}上关于%{course}的课程申请已被拒绝!
+
+  instance:
+    mailer:
+      user_added_email:
+        subject: '已加入实例%{instance}'
+        message: >
+          你已被加入%{coursemology}的实例%{instance}。
+
+          要查看该实例，请用以下方式登录%{email}.
+
+      user_invitation_email:
+        subject: '邀请以%{role}加入%{instance}实例'
+        message: >
+          你被邀请加入%{coursemology}上的实例%{instance}
+          你似乎没有以这个电子邮件地址注册的账户（%{email}）；
+          %{click_here}来创建账户并接受邀请。
+  instance_user_role_request_mailer:
+    new_role_request:
+      subject: '新的身份变更申请!'
+      empty: '（未指明）'
+      message_html: >
+        %{user} (%{email})申请在%{instance}中变更身份为%{role}。
+
+        <strong>组织</strong>
+
+        %{organization}
+
+
+        <strong>名称</strong>
+
+        %{designation}
+
+
+        <strong>理由</strong>
+
+        %{reason}
+
+
+        %{click_here}来查看该申请.
+
+    role_request_approved:
+      subject: '你的身份变更申请已通过！'
+      message: >
+        你已被确认为Coursemology中的%{role}!
+
+        %{click_here}来创建一门课程并开始授课吧!
+
+    role_request_rejected:
+      subject: '你的身份变更申请已被拒绝！'
+      message_empty: >
+        您成为Coursemology上的%{role}的请求已被拒绝!
+      message: >
+        您成为Coursemology上的%{role}的请求已被拒绝!
+        请查阅以下信息:
+        %{message}
+  notifiers:
+    course:
+      announcement_notifier:
+        new:
+          course_notifications:
+            email:
+              subject: '%{course}新公告：%{announcement}'
+              message: >
+                <p>%{creator}在课程%{course}发布了新公告%{announcement}：</p>
+                %{content}
+      assessment_notifier:
+        opening:
+          course_notifications:
+            email:
+              subject: '%{course}新的可用测验'
+              message: >
+                新的可用测验 : %{assessment}
+        submitted:
+          user_notifications:
+            email:
+              subject: '%{course} 新提交于 : %{assessment}'
+              message: >
+                %{user} 有一个新的提交 
+
+                请审阅并评分 %{submission}.
+      assessment:
+        answer:
+          comment_notifier:
+            annotated:
+              user_notifications:
+                email:
+                  subject: '%{course}:新批注%{topic}'
+                  message: >
+                    <p>%{post_author}添加了一条批注，%{post}</p>
+
+                    <p>你可以在此处回复：</p>
+                    %{topic}
+        submission_question:
+          comment_notifier:
+            replied:
+              user_notifications:
+                email:
+                  subject: '%{course}：新批注%{topic}'
+                  message: >
+                    <p>%{post_author}添加了一条批注，%{post}</p>
+
+                    <p>你可以在此处回复：</p>
+                    %{topic}
+
+      consolidated_opening_reminder_notifier:
+        opening_reminder:
+          course_notifications:
+            email:
+              subject: '%{course}课程提醒'
+              message: '以下项目将在未来24小时内开放。'
+            course:
+              assessment:
+                section_header: '新的可用测验:'
+              survey:
+                section_header: '新的可用调研:'
+              video:
+                section_header: '新的可用视频:'
+      forum:
+        post_notifier:
+          replied:
+            user_notifications:
+              email:
+                subject: '%{course} 对论坛主题%{topic}的新回复'
+                message: >
+                  <p>%{post_author}回复了，</p>
+                  %{post}
+                  <p>你可以在此处回复：%{topic}</p><br>
+                unsubscribe:
+                  tag: '取消订阅'
+                  message: '%从这个论坛主题的电子邮件通知中{unsubscribe_link}'
+        topic_notifier:
+          created:
+            user_notifications:
+              email:
+                subject: '%{course} 在论坛%{forum}上创建的新话题'
+                message: >
+                  <p>%{topic_author}在论坛中创建了新话题：%{topic}</p><br>
+                  %{post}
+                unsubscribe:
+                  tag: '取消订阅'
+                  message: '%从这个论坛主题的电子邮件通知中{unsubscribe_link}'
+      video_notifier:
+        opening:
+          course_notifications:
+            email:
+              subject: '%{course} 新的可用视频'
+              message: >
+                新的可用视频 : %{video}
+        closing:
+          user_notifications:
+            email:
+              subject: '%{course} %{video} 视频提醒 '
+              message: >
+                请注意%{video}将于%{time}截止

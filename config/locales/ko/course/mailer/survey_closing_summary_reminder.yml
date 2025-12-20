@@ -1,9 +1,0 @@
-ko:
-  course:
-    mailer:
-      survey_closing_summary_email:
-        subject: '%{course}: %{survey}에 대한 알림'
-        message: >
-          %{survey}가 %{time}에 만료될 것임을 알리기 위해 다음 학생들에게 이메일이 발송되었습니다:
-          
-          %{student_list}

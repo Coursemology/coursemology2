@@ -1,0 +1,243 @@
+ko:
+  common:
+    # Shared keys used across course mailers, instance mailers, and notifiers
+    mailers:
+      anonymous_course_user: 익명 사용자
+      click_here: '여기를 클릭하세요'
+      coursemology: 'Coursemology'
+      greeting: '안녕하세요, %{user}:'
+      manage_email_subscription:
+        tag: '구독 취소'
+        message: '%{manage_email_subscription_link} 이 이메일 주제에서 구독을 취소합니다.'
+      plain_text_link: '%{text} (%{url})'
+      phantom_course_user: '(유령)'
+  course:
+    mailer:
+      assessment_closing_reminder_email:
+        subject: '%{course}: %{assessment}에 대한 알림'
+        message: >
+          %{assessment}의 마감일이 %{time}임을 알려드립니다.
+        message_no_time: >
+          평가 - %{assessment}을(를) 시도하고 제출하시기 바랍니다.
+      assessment_closing_summary_email:
+        subject: '%{course}: %{assessment}에 대한 알림'
+        message: >
+          다음 학생들에게 %{assessment}이(가) %{time}에 마감된다는 알림 이메일이 발송되었습니다:
+
+          %{students}
+        message_no_time: >
+          다음 학생들에게 평가 - %{assessment}을(를) 시도하고 제출하라는 알림 이메일이 발송되었습니다:
+
+          %{students}
+      course_duplicate_failed_email:
+        subject: '코스 복제 실패: %{original_course}'
+        message: >
+          %{original_course} 복제가 실패했습니다. 나중에 다시 시도하거나 문제가 지속되면 지원팀에 문의하세요.
+      course_duplicated_email:
+        subject: '코스 복제 완료: %{new_course}'
+        message: >
+          %{original_course}의 복제가 %{new_course}로 완료되었습니다.
+
+          복제된 코스를 보려면 %{click_here}.
+      course_user_deletion_failed_email:
+        subject: '사용자 %{course_user_name}을(를) %{course_name}에서 삭제하지 못했습니다'
+        message: >
+          사용자 %{course_user_name}을(를) %{course_name} 강좌에서 삭제하지 못했습니다.
+          나중에 다시 시도하거나 문제가 지속되면 지원팀에 문의하십시오.
+      submission_graded_email:
+        subject: '%{course}: %{assessment} 제출물이 채점되었습니다'
+        message: >
+          성적을 보려면 %{submission}을 클릭하세요.
+      survey_closing_reminder_email:
+        subject: '%{course}: %{survey}에 대한 알림'
+        message: >
+          %{survey}가 %{time}에 만료될 예정이니 참고하시기 바랍니다.
+      survey_closing_summary_email:
+        subject: '%{course}: %{survey}에 대한 알림'
+        message: >
+          %{survey}가 %{time}에 만료될 것임을 알리기 위해 다음 학생들에게 이메일이 발송되었습니다:
+
+          %{student_list}
+      user_added_email:
+        subject: '%{course} 과정에 추가됨'
+        message: >
+          %{coursemology}의 %{course} 과정에 추가되었습니다.
+
+          과정을 보려면 %{email}로 로그인하세요.
+      user_enrol_requested_email:
+        subject: '%{course} 등록 요청'
+        recipients: '코스 관리자'
+        user_requests_header: '사용자 요청'
+        message: >
+          %{user}님이 %{course}에 등록을 요청했습니다.
+
+
+          요청을 확인하고 승인하려면 %{course_requests_page}를 방문하세요.
+      user_invitation_email:
+        subject: '%{course} 등록 초대'
+        message: >
+          %{coursemology}의 %{course}에 등록하도록 초대되었습니다.
+
+
+          이 이메일 주소(%{email})로 등록된 계정이 없는 것 같습니다;
+
+          계정을 생성하고 초대를 수락하려면 %{click_here}.
+
+
+          다른 이메일로 등록된 Coursemology 계정이 있는 경우, %{course}를 방문하여 다음의 양도 불가능한 등록 코드를 사용하여
+          등록하세요:
+      user_rejected_email:
+        subject: '강좌 등록 요청이 거부되었습니다 - %{course}'
+        message: >
+          %{coursemology}에서 %{course} 강좌에 대한 귀하의 등록 요청이 거부되었습니다!
+  instance:
+    mailer:
+      user_added_email:
+        subject: '인스턴스 %{instance}에 추가됨'
+        message: >
+          당신은 %{coursemology}의 인스턴스 %{instance}에 추가되었습니다.
+
+          인스턴스를 보려면 %{email}로 로그인하세요.
+
+      user_invitation_email:
+        subject: '%{instance} 인스턴스에 %{role} 역할로 초대합니다'
+        message: >
+          %{coursemology}의 %{instance} 인스턴스에 등록하도록 초대되었습니다.
+
+
+          이 이메일 주소(%{email})로 등록된 계정이 없는 것 같습니다;
+
+          계정을 생성하고 초대를 수락하려면 %{click_here} 하세요.
+  instance_user_role_request_mailer:
+    new_role_request:
+      subject: '새로운 역할 요청!'
+      empty: '(지정되지 않음)'
+      message_html: >
+        %{user} (%{email})님이 %{instance} 인스턴스에서 %{role} 역할을 요청했습니다.
+
+        <strong>조직</strong>
+
+        %{organization}
+
+
+        <strong>직함</strong>
+
+        %{designation}
+
+
+        <strong>이유</strong>
+
+        %{reason}
+
+
+        요청을 검토하려면 %{click_here}를 클릭하세요.
+    role_request_approved:
+      subject: '역할 요청이 승인되었습니다!'
+      message: >
+        Coursemology에서 %{role}로 승인되었습니다!
+
+        새 강좌를 만들고 시작하려면 %{click_here}를 클릭하세요!
+    role_request_rejected:
+      subject: '역할 요청이 거부되었습니다!'
+      message_empty: >
+        Coursemology에서 %{role}로의 역할 요청이 거부되었습니다!
+      message: >
+        Coursemology에서 %{role}로의 역할 요청이 거부되었습니다! 아래 메시지를 참조하세요: %{message}
+  notifiers:
+    course:
+      announcement_notifier:
+        new:
+          course_notifications:
+            email:
+              subject: '%{course} 새 공지: %{announcement}'
+              message: >
+                <p>%{creator}님이 %{course} 강좌에 새 공지 %{announcement}을(를) 게시했습니다</p>
+                %{content}
+      assessment_notifier:
+        opening:
+          course_notifications:
+            email:
+              subject: '%{course} 새로운 평가 가능'
+              message: >
+                새로운 평가 가능 : %{assessment}
+        submitted:
+          user_notifications:
+            email:
+              subject: '%{course} 새 제출물: %{assessment}'
+              message: >
+                %{user} 님이 새 제출물을 올렸습니다.
+
+                %{submission}을(를) 검토하고 점수를 매겨주세요.
+      assessment:
+        answer:
+          comment_notifier:
+            annotated:
+              user_notifications:
+                email:
+                  subject: '%{course}: %{topic}에 대한 새 주석'
+                  message: >
+                    <p>%{post_author}님이 주석을 추가했습니다: %{post}</p>
+
+                    <p>여기에서 답장할 수 있습니다: </p>
+                    %{topic}
+        submission_question:
+          comment_notifier:
+            replied:
+              user_notifications:
+                email:
+                  subject: '%{course}: %{topic}에 대한 새 댓글'
+                  message: >
+                    <p>%{post_author}님이 댓글을 남겼습니다: %{post}</p>
+
+                    <p>여기에서 답장할 수 있습니다: </p>
+                    %{topic}
+      consolidated_opening_reminder_notifier:
+        opening_reminder:
+          course_notifications:
+            email:
+              subject: '%{course} 개강 알림'
+              message: '다음 항목이 24시간 내에 열립니다.'
+            course:
+              assessment:
+                section_header: '새로운 평가 가능:'
+              survey:
+                section_header: '새로운 설문조사 가능:'
+              video:
+                section_header: '새로운 비디오 가능:'
+      forum:
+        post_notifier:
+          replied:
+            user_notifications:
+              email:
+                subject: '%{course} 포럼 주제에 대한 새 답글: %{topic}'
+                message: >
+                  <p>%{post_author}님이 답글을 남겼습니다,</p>
+                  %{post}
+                  <p>여기에서 응답할 수 있습니다: '%{topic}</p><br>
+                unsubscribe:
+                  tag: '구독 취소'
+                  message: '이 포럼 주제의 이메일 알림에서 %{unsubscribe_link}'
+        topic_notifier:
+          created:
+            user_notifications:
+              email:
+                subject: '%{course} 포럼에서 새 주제 생성: %{forum}'
+                message: >
+                  <p>%{topic_author}님이 포럼에 새 주제를 생성했습니다: %{topic}</p><br>
+                  %{post}
+                unsubscribe:
+                  tag: '구독 취소'
+                  message: '이 포럼의 이메일 알림에서 %{unsubscribe_link}'
+      video_notifier:
+        opening:
+          course_notifications:
+            email:
+              subject: '%{course} 새 비디오 이용 가능'
+              message: >
+                새 비디오 이용 가능: %{video}
+        closing:
+          user_notifications:
+            email:
+              subject: '%{course} %{video} 알림'
+              message: >
+                %{video}가 %{time}에 마감될 예정이니 참고하시기 바랍니다

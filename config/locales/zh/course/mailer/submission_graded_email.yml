@@ -1,7 +1,0 @@
-zh:
-  course:
-    mailer:
-      submission_graded_email:
-        subject: '%{course}: 你%{assessment}的提交已被批改'
-        message: >
-          点击%{submission}查看你的评分。
