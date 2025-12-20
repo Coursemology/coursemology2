@@ -48,19 +48,19 @@ class Course::Assessment::Submission::StatisticsDownloadService
   end
 
   def download_statistics_header(csv)
-    csv << [I18n.t('course.assessment.submission.submissions.statistics_download_service.name'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.phantom'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.status'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.start_date_time'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.submitted_date_time'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.time_taken'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.graded_date_time'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.grading_time'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.grader'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.publisher'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.exp_points'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.grade'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.max_grade'),
+    csv << [I18n.t('csv.assessment_statistics.headers.name'),
+            I18n.t('csv.assessment_statistics.headers.phantom'),
+            I18n.t('csv.assessment_statistics.headers.status'),
+            I18n.t('csv.assessment_statistics.headers.start_date_time'),
+            I18n.t('csv.assessment_statistics.headers.submitted_date_time'),
+            I18n.t('csv.assessment_statistics.headers.time_taken'),
+            I18n.t('csv.assessment_statistics.headers.graded_date_time'),
+            I18n.t('csv.assessment_statistics.headers.grading_time'),
+            I18n.t('csv.assessment_statistics.headers.grader'),
+            I18n.t('csv.assessment_statistics.headers.publisher'),
+            I18n.t('csv.assessment_statistics.headers.exp_points'),
+            I18n.t('csv.assessment_statistics.headers.grade'),
+            I18n.t('csv.assessment_statistics.headers.max_grade'),
             *csv_header_question_grade]
   end
 
@@ -90,7 +90,7 @@ class Course::Assessment::Submission::StatisticsDownloadService
   end
 
   def csv_empty
-    I18n.t('course.assessment.submission.submissions.statistics_download_service.csv_empty')
+    I18n.t('csv.assessment_statistics.values.empty')
   end
 
   def csv_time_taken(submission)

@@ -1,0 +1,64 @@
+zh:
+  csv:
+    # Assessment submissions - detailed answers export
+    assessment_submissions:
+      headers:
+        name: '姓名'
+        email: 'Email'
+        role: '身份变更'
+        user_type: '用户类型'
+        status: '状态'
+        question_title: '问题标题'
+        question_type: '问题类型'
+      values:
+        normal: '常规'
+        phantom: '虚拟'
+        unstarted: '未开始'
+        no_answer: '无答案'
+      note: 'N/A: 该答案的格式不能放在一个单元格中。'
+
+    # Assessment statistics - summary export
+    assessment_statistics:
+      headers:
+        name: '姓名'
+        phantom: '虚拟用户'
+        status: '状态'
+        grade: '评分'
+        max_grade: '最高分'
+        exp_points: '经验值'
+        start_date_time: '开始日期/时间'
+        submitted_date_time: '提交日期/时间'
+        time_taken: '耗时'
+        graded_date_time: '评分日期/时间'
+        grading_time: '评分耗时'
+        grader: '评分人'
+        publisher: '发布人'
+      values:
+        empty: '-'
+
+    # Experience points records export
+    experience_points:
+      headers:
+        name: '姓名'
+        updated_at: '更新于'
+        updater: '更新者'
+        reason: '理由'
+        exp_points: '经验值奖励已获取'
+
+    # Survey responses export
+    survey:
+      headers:
+        created_at: '创建时间戳'
+        updated_at: '上一次更新时间戳'
+        course_user_id: '课程用户ID'
+        name: '姓名'
+        role: '身份变更'
+      values:
+        unknown_question_type: '未知问题类型'
+
+    # Assessment score summary statistics export
+    score_summary:
+      headers:
+        name: '用户名'
+        type: '学生类型'
+        email: 'Email'

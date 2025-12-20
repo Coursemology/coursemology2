@@ -1,9 +1,0 @@
-ko:
-  course:
-    experience_points_records:
-      download:
-        name: '이름'
-        updated_at: '업데이트 날짜'
-        updater: '업데이트한 사람'
-        reason: '이유'
-        exp_points: '경험치 획득'

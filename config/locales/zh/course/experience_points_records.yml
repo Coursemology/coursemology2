@@ -1,9 +1,0 @@
-zh:
-  course:
-    experience_points_records:
-      download:
-        name: '姓名'
-        updated_at: '更新于'
-        updater: '更新者'
-        reason: '理由'
-        exp_points: '经验值奖励已获取'

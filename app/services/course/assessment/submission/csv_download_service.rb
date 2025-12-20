@@ -62,8 +62,8 @@ class Course::Assessment::Submission::CsvDownloadService
 
   def submissions_csv_header(csv)
     # Question Title
-    question_title = [I18n.t('course.assessment.submission.submissions.csv_download_service.note'), '', '', '',
-                      I18n.t('course.assessment.submission.submissions.csv_download_service.question_title'),
+    question_title = [I18n.t('csv.assessment_submissions.note'), '', '', '',
+                      I18n.t('csv.assessment_submissions.headers.question_title'),
                       *@question_assessments.map(&:display_title)]
     # Remove note if there is no N/A answer
     question_title[0] = '' if @questions_downloadable.values.all?
@@ -71,15 +71,15 @@ class Course::Assessment::Submission::CsvDownloadService
 
     # Question Type
     csv << ['', '', '', '',
-            I18n.t('course.assessment.submission.submissions.csv_download_service.question_type'),
+            I18n.t('csv.assessment_submissions.headers.question_type'),
             *@question_assessments.map { |x| x.question.question_type_readable }]
 
     # Column Header
-    csv << [I18n.t('course.assessment.submission.submissions.csv_download_service.name'),
-            I18n.t('course.assessment.submission.submissions.csv_download_service.email'),
-            I18n.t('course.assessment.submission.submissions.csv_download_service.role'),
-            I18n.t('course.assessment.submission.submissions.csv_download_service.user_type'),
-            I18n.t('course.assessment.submission.submissions.csv_download_service.status')]
+    csv << [I18n.t('csv.assessment_submissions.headers.name'),
+            I18n.t('csv.assessment_submissions.headers.email'),
+            I18n.t('csv.assessment_submissions.headers.role'),
+            I18n.t('csv.assessment_submissions.headers.user_type'),
+            I18n.t('csv.assessment_submissions.headers.status')]
   end
 
   def submissions_csv_row(csv, submission, course_user) # rubocop:disable Metrics/AbcSize
@@ -87,9 +87,9 @@ class Course::Assessment::Submission::CsvDownloadService
                  course_user.user.email,
                  course_user.role,
                  if course_user.phantom?
-                   I18n.t('course.assessment.submission.submissions.csv_download_service.phantom')
+                   I18n.t('csv.assessment_submissions.values.phantom')
                  else
-                   I18n.t('course.assessment.submission.submissions.csv_download_service.normal')
+                   I18n.t('csv.assessment_submissions.values.normal')
                  end]
 
     if submission
@@ -100,7 +100,7 @@ class Course::Assessment::Submission::CsvDownloadService
       end
       row_array.concat([submission.workflow_state, *answer_row])
     else
-      row_array.append(I18n.t('course.assessment.submission.submissions.csv_download_service.unstarted'))
+      row_array.append(I18n.t('csv.assessment_submissions.values.unstarted'))
     end
 
     csv << row_array
@@ -108,7 +108,7 @@ class Course::Assessment::Submission::CsvDownloadService
 
   def generate_answer_row(question, answer)
     return 'N/A' unless @questions_downloadable[question.id]
-    return I18n.t('course.assessment.submission.submissions.csv_download_service.no_answer') if answer.nil?
+    return I18n.t('csv.assessment_submissions.values.no_answer') if answer.nil?
 
     answer.specific.csv_download
   end
