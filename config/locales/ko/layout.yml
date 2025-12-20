@@ -1,11 +1,4 @@
 ko:
-  layout:
-    coursemology: 'Coursemology'
   layouts:
-    mailer:
-      greeting: '안녕하세요, %{user}:'
     code_formatter:
       size_too_big: '파일이 너무 커서 표시할 수 없습니다.'
-    manage_email_subscription:
-      tag: '구독 취소'
-      message: '%{manage_email_subscription_link} 이 이메일 주제에서 구독을 취소합니다.'

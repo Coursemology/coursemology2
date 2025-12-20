@@ -1,7 +1,0 @@
-zh:
-  course:
-    mailer:
-      survey_closing_reminder_email:
-        subject: '%{course}: 相关提醒 %{survey}'
-        message: >
-          请注意%{survey}将于%{time}过期。

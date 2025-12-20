@@ -1,7 +1,0 @@
-ko:
-  course:
-    mailer:
-      user_rejected_email:
-        subject: '강좌 등록 요청이 거부되었습니다 - %{course}'
-        message: >
-          %{coursemology}에서 %{course} 강좌에 대한 귀하의 등록 요청이 거부되었습니다!

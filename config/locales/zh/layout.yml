@@ -1,11 +1,4 @@
 zh:
-  layout:
-    coursemology: 'Coursemology'
   layouts:
-    mailer:
-      greeting: '您好，%{user}:'
     code_formatter:
       size_too_big: '文件过大，无法显示。'
-    manage_email_subscription:
-      tag: '取消订阅'
-      message: '%{manage_email_subscription_link} 从此电子邮件主题取消订阅。'
