@@ -63,8 +63,12 @@ class Course::Statistics::AssessmentsScoreSummaryDownloadService
 
   def download_score_summary(csv)
     # header
-    csv << [I18n.t('course.statistics.name'), I18n.t('course.statistics.email'), I18n.t('course.statistics.type'),
-            *@assessments.map(&:title)]
+    csv << [
+      I18n.t('csv.score_summary.headers.name'),
+      I18n.t('csv.score_summary.headers.email'),
+      I18n.t('csv.score_summary.headers.type'),
+      *@assessments.map(&:title)
+    ]
 
     # content
     @all_students.each do |student|

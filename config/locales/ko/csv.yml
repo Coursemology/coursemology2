@@ -1,0 +1,64 @@
+ko:
+  csv:
+    # Assessment submissions - detailed answers export
+    assessment_submissions:
+      headers:
+        name: '이름'
+        email: '이메일'
+        role: '역할'
+        user_type: '사용자 유형'
+        status: '상태'
+        question_title: '질문 제목'
+        question_type: '질문 유형'
+      values:
+        normal: '일반'
+        phantom: '팬텀'
+        unstarted: '시작되지 않음'
+        no_answer: '답변 없음'
+      note: 'N/A: 답변 형식을 하나의 셀에 맞출 수 없습니다.'
+
+    # Assessment statistics - summary export
+    assessment_statistics:
+      headers:
+        name: '이름'
+        phantom: '팬텀 사용자'
+        status: '상태'
+        grade: '점수'
+        max_grade: '최고 점수'
+        exp_points: '경험치'
+        start_date_time: '시작 날짜/시간'
+        submitted_date_time: '제출 날짜/시간'
+        time_taken: '소요 시간'
+        graded_date_time: '채점 날짜/시간'
+        grading_time: '채점 시간'
+        grader: '채점자'
+        publisher: '발행자'
+      values:
+        empty: '-'
+
+    # Experience points records export
+    experience_points:
+      headers:
+        name: '이름'
+        updated_at: '업데이트 날짜'
+        updater: '업데이트한 사람'
+        reason: '이유'
+        exp_points: '경험치 획득'
+
+    # Survey responses export
+    survey:
+      headers:
+        created_at: '타임스탬프 생성'
+        updated_at: '마지막으로 업데이트된 타임스탬프'
+        course_user_id: '코스 사용자 ID'
+        name: '이름'
+        role: '역할'
+      values:
+        unknown_question_type: '알 수 없는 질문 유형'
+
+    # Assessment score summary statistics export
+    score_summary:
+      headers:
+        name: '이름'
+        type: '학생 유형'
+        email: '이메일'
