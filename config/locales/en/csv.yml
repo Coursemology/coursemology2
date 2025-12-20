@@ -1,0 +1,64 @@
+en:
+  csv:
+    # Assessment submissions - detailed answers export
+    assessment_submissions:
+      headers:
+        name: 'Name'
+        email: 'Email'
+        role: 'Role'
+        user_type: 'User Type'
+        status: 'Status'
+        question_title: 'Question Title'
+        question_type: 'Question Type'
+      values:
+        normal: 'Normal'
+        phantom: 'Phantom'
+        unstarted: 'Unstarted'
+        no_answer: 'No answer'
+      note: 'N/A: The answer format cannot fit in a single cell.'
+
+    # Assessment statistics - summary export
+    assessment_statistics:
+      headers:
+        name: 'Name'
+        phantom: 'Phantom User'
+        status: 'Status'
+        grade: 'Grade'
+        max_grade: 'Maximum Grade'
+        exp_points: 'Experience Points'
+        start_date_time: 'Start Date/Time'
+        submitted_date_time: 'Submitted Date/Time'
+        time_taken: 'Time Taken'
+        graded_date_time: 'Graded Date/Time'
+        grading_time: 'Grading Time'
+        grader: 'Grader(s)'
+        publisher: 'Publisher'
+      values:
+        empty: '-'
+
+    # Experience points records export
+    experience_points:
+      headers:
+        name: 'Name'
+        updated_at: 'Updated At'
+        updater: 'Updater'
+        reason: 'Reason'
+        exp_points: 'EXP Awarded'
+
+    # Survey responses export
+    survey:
+      headers:
+        created_at: 'Create Timestamp'
+        updated_at: 'Last Update Timestamp'
+        course_user_id: 'Course User ID'
+        name: 'Name'
+        role: 'Role'
+      values:
+        unknown_question_type: 'UNKNOWN QUESTION TYPE'
+
+    # Assessment score summary statistics export
+    score_summary:
+      headers:
+        name: 'Name'
+        type: 'Student Type'
+        email: 'Email'

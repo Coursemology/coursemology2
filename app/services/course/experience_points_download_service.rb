@@ -50,11 +50,11 @@ class Course::ExperiencePointsDownloadService
   end
 
   def download_exp_points_header(csv)
-    csv << [I18n.t('course.experience_points_records.download.updated_at'),
-            I18n.t('course.experience_points_records.download.name'),
-            I18n.t('course.experience_points_records.download.updater'),
-            I18n.t('course.experience_points_records.download.reason'),
-            I18n.t('course.experience_points_records.download.exp_points')]
+    csv << [I18n.t('csv.experience_points.headers.updated_at'),
+            I18n.t('csv.experience_points.headers.name'),
+            I18n.t('csv.experience_points.headers.updater'),
+            I18n.t('csv.experience_points.headers.reason'),
+            I18n.t('csv.experience_points.headers.exp_points')]
   end
 
   def download_exp_points(csv, record)

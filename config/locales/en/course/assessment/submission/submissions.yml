@@ -5,32 +5,4 @@ en:
         submissions:
           download_statistics:
             no_submission_statistics: 'No submission fulfilled your requirements for downloading'
-          statistics_download_service:
-            name: 'Name'
-            phantom: 'Phantom User'
-            status: 'Status'
-            grade: 'Grade'
-            max_grade: 'Maximum Grade'
-            exp_points: 'Experience Points'
-            start_date_time: 'Start Date/Time'
-            submitted_date_time: 'Submitted Date/Time'
-            time_taken: 'Time Taken'
-            graded_date_time: 'Graded Date/Time'
-            grading_time: 'Grading Time'
-            grader: 'Grader(s)'
-            publisher: 'Publisher'
-            csv_empty: '-'
-          csv_download_service:
-            note: 'N/A: The answer format cannot fit in a single cell.'
-            name: 'Name'
-            email: 'Email'
-            role: 'Role'
-            user_type: 'User Type'
-            status: 'Status'
-            question_title: 'Question Title'
-            question_type: 'Question Type'
-            normal: 'Normal'
-            phantom: 'Phantom'
-            unstarted: 'Unstarted'
-            no_answer: 'No answer'
 

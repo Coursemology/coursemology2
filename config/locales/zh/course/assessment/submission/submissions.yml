@@ -5,32 +5,4 @@ zh:
         submissions:
           download_statistics:
             no_submission_statistics: '没有提交满足您的下载要求'
-          statistics_download_service:
-            name: '姓名'
-            phantom: '虚拟用户'
-            status: '状态'
-            grade: '评分'
-            max_grade: '最高分'
-            exp_points: '经验值'
-            start_date_time: '开始日期/时间'
-            submitted_date_time: '提交日期/时间'
-            time_taken: '耗时'
-            graded_date_time: '评分日期/时间'
-            grading_time: '评分耗时'
-            grader: '评分人'
-            publisher: '发布人'
-            csv_empty: '-'
-          csv_download_service:
-            note: 'N/A: 该答案的格式不能放在一个单元格中。'
-            name: '姓名'
-            email: 'Email'
-            role: '身份变更'
-            user_type: '用户类型'
-            status: '状态'
-            question_title: '问题标题'
-            question_type: '问题类型'
-            normal: '常规'
-            phantom: '虚拟'
-            unstarted: '未开始'
-            no_answer: '无答案'
 

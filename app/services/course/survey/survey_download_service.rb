@@ -53,11 +53,11 @@ class Course::Survey::SurveyDownloadService
 
   def generate_header(questions)
     [
-      I18n.t('course.surveys.survey_download_service.created_at'),
-      I18n.t('course.surveys.survey_download_service.updated_at'),
-      I18n.t('course.surveys.survey_download_service.course_user_id'),
-      I18n.t('course.surveys.survey_download_service.name'),
-      I18n.t('course.surveys.survey_download_service.role')
+      I18n.t('csv.survey.headers.created_at'),
+      I18n.t('csv.survey.headers.updated_at'),
+      I18n.t('csv.survey.headers.course_user_id'),
+      I18n.t('csv.survey.headers.name'),
+      I18n.t('csv.survey.headers.role')
     ] + questions.map { |q| format_rich_text_for_csv(q.description) }
   end
 
@@ -88,7 +88,7 @@ class Course::Survey::SurveyDownloadService
 
     return generate_mcq_mrq_value(answer) if question.multiple_choice? || question.multiple_response?
 
-    I18n.t('course.surveys.survey_download_service.unknown_question_type')
+    I18n.t('csv.survey.values.unknown_question_type')
   end
 
   def generate_mcq_mrq_value(answer)
