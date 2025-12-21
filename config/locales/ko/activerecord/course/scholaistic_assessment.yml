@@ -1,8 +1,0 @@
-ko:
-  activerecord:
-    errors:
-      models:
-        course/scholaistic_assessment:
-          attributes:
-            time_bonus_exp:
-              bonus_attributes_not_allowed: '보너스 속성은 허용되지 않습니다'

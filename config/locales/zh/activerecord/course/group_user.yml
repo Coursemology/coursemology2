@@ -1,9 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/group_user:
-          not_enrolled: '必须与小组成员加入在同一课程'
-    attributes:
-      course/group_user:
-        manager: '讲师'

@@ -1,6 +1,0 @@
-ko:
-  activerecord:
-    errors:
-      models:
-        course/survey/answer:
-          cannot_be_empty: '이 질문의 답변은 비워둘 수 없습니다.'

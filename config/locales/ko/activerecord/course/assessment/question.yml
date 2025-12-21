@@ -1,8 +1,0 @@
-ko:
-  activerecord:
-    course/assessment/question:
-      question_number: '질문 %{index}'
-      question_with_title: '%{question_number}: %{title}'
-    attributes:
-      course/assessment/question:
-        weight: '순서'

@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/video/session:
-          attributes:
-            session_start:
-              cannot_be_after_session_end: '课时开始时间不能晚于结束时间'

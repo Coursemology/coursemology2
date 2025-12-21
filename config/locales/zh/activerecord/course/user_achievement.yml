@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/user_achievement:
-          attributes:
-            course_user:
-              not_in_course: '选中的用户不在指定课程中'

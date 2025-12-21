@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/personal_time:
-          attributes:
-            start_at:
-              cannot_be_after_end_at: '不能晚于结束时间'

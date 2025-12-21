@@ -1,9 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        course/learning_rate_record:
-          attributes:
-            learning_rate:
-              less_than_min: 'is not >= effective_min'
-              greater_than_max: 'is not <= effective_max'

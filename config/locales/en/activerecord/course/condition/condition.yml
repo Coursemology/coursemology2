@@ -1,9 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        course/condition:
-          attributes:
-            conditional:
-              not_in_same_course: >
-                The conditional that you have selected is not in the same course as the current condition
