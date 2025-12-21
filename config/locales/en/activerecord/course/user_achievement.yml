@@ -1,8 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        course/user_achievement:
-          attributes:
-            course_user:
-              not_in_course: 'Selected user is not in specified course'

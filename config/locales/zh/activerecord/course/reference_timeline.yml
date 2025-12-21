@@ -1,9 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/reference_timeline:
-          attributes:
-            default:
-              taken: '只能有一个默认参考时间轴'
-              cannot_destroy: '无法删除默认参考时间轴'

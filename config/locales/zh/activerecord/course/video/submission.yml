@@ -1,9 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/video/submission:
-          attributes:
-            experience_points_record:
-              inconsistent_user: '创建者必须与课程使用者记录一致'
-          submission_already_exists: '您可能已经创建过一个提交了，要覆盖吗？'

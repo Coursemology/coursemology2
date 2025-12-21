@@ -1,9 +1,0 @@
-ko:
-  activerecord:
-    errors:
-      models:
-        course/assessment/question/multiple_response:
-          attributes:
-            options:
-              no_option: '최소한 하나의 옵션을 포함해야 합니다.'
-              no_correct_option: '최소한 하나의 정답 옵션을 포함해야 합니다.'

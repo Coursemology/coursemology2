@@ -1,9 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        instance/user_role_request:
-          attributes:
-            base:
-              existing_pending_request: >
-                '你有一个已存在的身份变更请求，请刷新页面。'

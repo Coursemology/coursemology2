@@ -1,8 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        generic_announcement:
-          attributes:
-            end_at:
-              cannot_be_before_start_at: 'cannot be before start at'

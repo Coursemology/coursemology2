@@ -1,6 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/user_invitation:
-          existing_invitation: '此电子邮件地址已存在一个未完成的邀请'
