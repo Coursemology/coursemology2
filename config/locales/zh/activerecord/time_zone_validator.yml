@@ -1,6 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      messages:
-        time_zone_validator:
-          invalid_time_zone: '时区不可用。'

@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/monitoring/heartbeat:
-          attributes:
-            seb_payload:
-              invalid_seb_payload: 'seb payload 必须为空或为有效的 JSON 对象'

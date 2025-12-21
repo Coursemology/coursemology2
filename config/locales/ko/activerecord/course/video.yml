@@ -1,9 +1,0 @@
-ko:
-  activerecord:
-    errors:
-      models:
-        course/video:
-          attributes:
-            url:
-              invalid_url: >
-                입력하신 URL의 형식이 올바르지 않습니다. 다시 시도해 주세요.

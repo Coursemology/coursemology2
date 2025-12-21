@@ -1,8 +1,0 @@
-ko:
-  activerecord:
-    errors:
-      models:
-        course/user_achievement:
-          attributes:
-            course_user:
-              not_in_course: '선택한 사용자가 지정된 코스에 없습니다'

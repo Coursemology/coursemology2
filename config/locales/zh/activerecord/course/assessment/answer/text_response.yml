@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/assessment/answer/text_response:
-          attributes:
-            attachments:
-              unique: '文件名不能重复。'

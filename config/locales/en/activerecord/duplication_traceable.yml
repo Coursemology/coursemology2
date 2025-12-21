@@ -1,8 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        duplication_traceable:
-          attributes:
-            source_id:
-              must_exist: 'the source must exist and be an instance of the dependent_class'

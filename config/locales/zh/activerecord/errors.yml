@@ -1,0 +1,231 @@
+zh:
+  activerecord:
+    errors:
+      models:
+        course:
+          attributes:
+            reference_timelines:
+              must_have_at_most_one_default: '至少要包含一个默认值'
+        course/announcement:
+          attributes:
+            end_at:
+              cannot_be_before_start_at: '不能早于起始时间'
+        course/assessment:
+          attributes:
+            no_test_type_chosen: '至少要选择一种测试案例进行评分和经验值计算'
+            tab:
+              not_in_same_course: '您选择的项目与测验不在同一课程中'
+        course/assessment/answer:
+          attributes:
+            question:
+              consistent_assessment: '必须隶属于同一测验'
+            submission:
+              attemptable_state: '必须处于练习状态'
+            grade:
+              no_blank_grade: '如果之前已评分，则成绩不能为空'
+              consistent_grade: '不能超过问题分数上限'
+              non_negative_grade: '不能为负'
+        course/assessment/answer/programming:
+          attributes:
+            files:
+              exceed_size_limit: '您的答案 (%{total_size_mb} MB) 必须小于 2 MB。'
+        course/assessment/answer/text_response:
+          attributes:
+            attachments:
+              unique: '文件名不能重复。'
+        course/assessment/category:
+          deletion: '最后一类不能删除'
+        course/assessment/question/multiple_response:
+          attributes:
+            options:
+              no_option: '至少要包含一个选项。'
+              no_correct_option: '至少要包含一个正确选项。'
+        course/assessment/question/rubric_based_response:
+          attributes:
+            categories:
+              reserved_category_name: '"调整"是一个保留的类别名称，因此无法使用'
+              duplicate_category_names: '类别名称必须在问题评分标准中唯一'
+              at_least_one_category: '至少需要一个评分标准类别'
+        course/assessment/question/rubric_based_response_category:
+          attributes:
+            criterions:
+              duplicate_grades_within_category: '每个类别中的分数必须唯一'
+              at_least_one_grade: '每个类别至少需要一个分数'
+              grade_zero_missing: '每个类别必须包含0分等级'
+              grade_higher_than_maximum_grade: '分数必须小于或等于最大分数'
+        course/assessment/question/text_response:
+          attributes:
+            maximum_grade:
+              invalid_grade: '不能低于答案的最低分数'
+        course/assessment/question/text_response_comprehension_group:
+          attributes:
+            maximum_group_grade:
+              invalid_group_grade: '不能超过该问题的分数上限'
+        course/assessment/question/text_response_comprehension_point:
+          attributes:
+            point_grade:
+              invalid_point_grade: '不能超过该组分数的上限'
+            solutions:
+              more_than_one_compre_lifted_word_solution: '同一点被选中的词必须放在同一行'
+        course/assessment/question/text_response_comprehension_solution:
+          attributes:
+            solution_lemma:
+              solution_lemma_empty: '无法生成任何词条形式：请检查你的拼写。'
+            information:
+              information_empty: '关键字不能为空'
+        course/assessment/question/text_response_solution:
+          attributes:
+            grade:
+              invalid_grade: '不能超过该问题的分数上限'
+        course/assessment/question_bundle_assignment:
+          attributes:
+            submission:
+              must_belong_to_assessment_and_user: '必须属于某个测验和某个用户'
+        course/assessment/skill:
+          attributes:
+            course:
+              consistent_course: '必须属于同一课程'
+        course/assessment/submission:
+          attributes:
+            experience_points_record:
+              inconsistent_user: '创建者必须与课程使用者记录一致'
+              absent_award_attributes: '您提交的材料没有奖励属性，请再试一次或联系开发团队'
+          submission_already_exists: '您可能已经创建过一个提交了，要覆盖吗？'
+          no_bundles_assigned: '当前没有问题分配给你，请联系你的老师寻求帮助。'
+          autograded_no_partial_answer: '有一些更新的答案还没有重新提交。请在最后提交前重新提交所有答案。'
+        course/assessment/tab:
+          deletion: '最后一项无法被删除'
+        course/condition:
+          attributes:
+            conditional:
+              not_in_same_course: '您选择的条件与当前条件不在同一课程中'
+        course/condition/achievement:
+          attributes:
+            achievement:
+              unique_dependency: '不能包含重复的解锁条件'
+              references_self: '不能将它自己作为解锁条件'
+              cyclic_dependency: '不能包含循环的依赖'
+        course/condition/assessment:
+          attributes:
+            assessment:
+              unique_dependency: '不能包含重复的解锁条件'
+              references_self: '不能将它自己作为解锁条件'
+              cyclic_dependency: '不能包含循环的依赖'
+        course/condition/scholaistic_assessment:
+          attributes:
+            scholaistic_assessment:
+              unique_dependency: '不能包含重复的解锁条件'
+              references_self: '不能将它自己作为解锁条件'
+        course/condition/survey:
+          attributes:
+            survey:
+              unique_dependency: '不能包含重复的解锁条件'
+              references_self: '不能将它自己作为解锁条件'
+              cyclic_dependency: '不能包含循环的依赖'
+        course/condition/video:
+          attributes:
+            video:
+              unique_dependency: '不能包含重复的解锁条件'
+              references_self: '不能将它自己作为解锁条件'
+              cyclic_dependency: '不能包含循环的依赖'
+        course/discussion/post:
+          attributes:
+            post:
+              topic_inconsistent: '当前帖子和它的父帖子引用了不同的主题。'
+        course/enrol_request:
+          user_in_course: '你可能已经参加这个课程了，要刷新页面吗？'
+          existing_pending_request: '你可能已经提交过加入课程申请了。'
+          attributes:
+            base:
+              deletion: '由于加入课程申请已被处理，无法撤回。'
+        course/learning_rate_record:
+          attributes:
+            learning_rate:
+              less_than_min: '必须大于有效最小值'
+              greater_than_max: '必须小于有效最小值'
+        course/lesson_plan/item:
+          attributes:
+            bonus_end_at:
+              required: '如果设置了时间奖励经验，则不能为空'
+            reference_times:
+              must_have_at_most_one_default: '至少要有一个默认值'
+        course/monitoring/heartbeat:
+          attributes:
+            seb_payload:
+              invalid_seb_payload: 'seb payload 必须为空或为有效的 JSON 对象'
+        course/monitoring/monitor:
+          attributes:
+            enabled:
+              must_be_password_protected: '评估必须受密码保护才能启用'
+            max_interval_ms:
+              greater_than_min_interval: '必须大于最小间隔'
+            blocks:
+              must_have_browser_authorization_and_session_protection: '必须启用浏览器授权和会话保护'
+            seb_config_key:
+              required_if_using_seb_config_key_browser_authorization: '使用 seb 配置密钥浏览器授权方法时必须提供 seb 配置密钥'
+        course/personal_time:
+          attributes:
+            start_at:
+              cannot_be_after_end_at: '不能晚于结束时间'
+        course/reference_time:
+          attributes:
+            reference_timeline:
+              cannot_destroy_in_default_timeline: '无法修改默认参考时间线'
+            start_at:
+              cannot_be_after_end_at: '不能晚于结束时间'
+            lesson_plan_item:
+              must_be_in_same_course: '必须与参考时间线在同一课程中'
+        course/reference_timeline:
+          attributes:
+            default:
+              taken: '只能有一个默认参考时间轴'
+              cannot_destroy: '无法删除默认参考时间轴'
+        course/scholaistic_assessment:
+          attributes:
+            time_bonus_exp:
+              bonus_attributes_not_allowed: '不允许使用奖励属性'
+        course/survey/answer: '这个问题的答案不能为空。'
+        course/user_achievement:
+          attributes:
+            course_user:
+              not_in_course: '选中的用户不在指定课程中'
+        course/user_invitation: '此电子邮件地址已存在一个未完成的邀请'
+        course/video:
+          attributes:
+            url:
+              invalid_url: '您输入的URL格式不正确，请重试。'
+        course/video/session:
+          attributes:
+            session_start:
+              cannot_be_after_session_end: '课时开始时间不能晚于结束时间'
+        course/video/submission:
+          attributes:
+            experience_points_record:
+              inconsistent_user: '创建者必须与课程使用者记录一致'
+          submission_already_exists: '您可能已经创建过一个提交了，要覆盖吗？'
+        course/video/tab:
+          deletion: '最后一项无法被删除'
+        course_user:
+          attributes:
+            reference_timeline:
+              belongs_to_course: '必须隶属于课程'
+        duplication_traceable:
+          attributes:
+            source_id:
+              must_exist: '源必须存在并且是dependent_class的一个实例。'
+        generic_announcement:
+          attributes:
+            end_at:
+              cannot_be_before_start_at: '不能早于起始时间'
+        instance/user_role_request:
+          attributes:
+            base:
+              existing_pending_request: >
+                '你有一个已存在的身份变更请求，请刷新页面。'
+      messages:
+        filename_validator:
+          invalid_characters: '%{characters}不合法。'
+          tailing_dots: '点号不能出现在文件名末尾。'
+          whitespaces: '空格不能出现在文件名开头或末尾。'
+        time_zone_validator:
+          invalid_time_zone: '时区不可用。'

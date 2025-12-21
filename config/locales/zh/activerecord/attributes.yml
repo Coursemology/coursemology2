@@ -1,0 +1,70 @@
+zh:
+  activerecord:
+    course/assessment/question:
+      question_number: '问题 %{index}'
+      question_with_title: '%{question_number}: %{title}'
+    attributes:
+      course:
+        reference_timelines: '引用时间线'
+      course/assessment/answer:
+        submitted_at: '提交于'
+        grade: '评分'
+        grader: '评分人'
+        graded_at: '批改于'
+      course/assessment/category:
+        weight: '权重'
+      course/assessment/category/title:
+        default: '评估'
+      course/assessment/question:
+        weight: '权重'
+      course/assessment/submission:
+        grade: '总分'
+        status: '状态'
+        submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
+        grader: :'activerecord.attributes.course/assessment/answer.grader'
+        graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
+        attempting: '练习'
+        submitted: '已提交'
+        graded: '已评分，未公布'
+        published: '已评分'
+      course/assessment/tab:
+        weight: '权重'
+      course/assessment/tab/title:
+        default: '默认值'
+      course/condition/assessment/title:
+        minimum_score: '至少取得%{minimum_grade_percentage}以完成%{assessment_title}'
+        complete: '已完成%{assessment_title}'
+      course/condition/level/title:
+        title: '等级 %{value}'
+      course/condition/scholaistic_assessment/title:
+        complete: '已完成%{title}'
+      course/condition/survey/title:
+        complete: '已完成 %{survey_title}'
+      course/condition/video/title:
+        complete: '观看 %{video_title}'
+      course/discussion/post:
+        title_reply_template: '回复 %{title}'
+      course/experience_points_record:
+        points_awarded: '经验值奖励已获取'
+      course/forum/topic/topic_type:
+        normal: '常规'
+        announcement: '公告'
+        question: '提问'
+        sticky: '便签'
+      course/group_user:
+        manager: '讲师'
+      course/lesson_plan/item:
+        base_exp: '经验值'
+        time_bonus_exp: '奖励经验值'
+        reference_times: '引用时间'
+      course/video/tab:
+        weight: '权重'
+      course/video/tab/title:
+        default: '默认'
+      models:
+        course/assessment/question/rubric_based_response:
+          rubric_based_response: '评分标准问题'
+        course/assessment/question/text_response:
+          text_response: '简答题'
+          file_upload: '上传答案文件题'
+          comprehension: '理解题'

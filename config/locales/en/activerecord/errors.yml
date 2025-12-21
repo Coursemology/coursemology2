@@ -1,0 +1,237 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course:
+          attributes:
+            reference_timelines:
+              must_have_at_most_one_default: 'must have at most one default'
+        course/announcement:
+          attributes:
+            end_at:
+              cannot_be_before_start_at: 'cannot be before start at'
+        course/assessment:
+          attributes:
+            no_test_type_chosen: 'At least one type of test case must be selected for grade and exp calculation'
+            tab:
+              not_in_same_course: 'The tab that you have selected is not in the same course as the assessment'
+        course/assessment/answer:
+          attributes:
+            question:
+              consistent_assessment: 'must belong to the same assessment'
+            submission:
+              attemptable_state: 'must be in the attempting state'
+            grade:
+              no_blank_grade: 'Grade must not be empty if it is already graded'
+              consistent_grade: 'must be less than question maximum grade'
+              non_negative_grade: 'cannot be negative'
+        course/assessment/answer/programming:
+          attributes:
+            files:
+              exceed_size_limit: 'Your answer (%{total_size_mb} MB) must be less than 2 MB.'
+        course/assessment/answer/text_response:
+          attributes:
+            attachments:
+              unique: 'File names must be unique'
+        course/assessment/category:
+          deletion: 'the last category cannot be deleted'
+        course/assessment/question/multiple_response:
+          attributes:
+            options:
+              no_option: 'must contain at least one option.'
+              no_correct_option: 'must contain at least one correct option.'
+        course/assessment/question/rubric_based_response:
+          attributes:
+            categories:
+              reserved_category_name: 'Moderation is a reserved category name, and hence cannot be used'
+              duplicate_category_names: 'Category names must be unique within the question rubric'
+              at_least_one_category: 'At least one rubric category is required'
+        course/assessment/question/rubric_based_response_category:
+          attributes:
+            criterions:
+              duplicate_grades_within_category: 'Grade must be unique within the category'
+              at_least_one_grade: 'At least one grade is required within each category'
+              grade_zero_missing: 'Grade 0 must be present for each category'
+              grade_higher_than_maximum_grade: 'Grade must be less than or equal to the maximum grade'
+        course/assessment/question/text_response:
+          attributes:
+            maximum_grade:
+              invalid_grade: 'must be no less than the grade of any solution'
+        course/assessment/question/text_response_comprehension_group:
+          attributes:
+            maximum_group_grade:
+              invalid_group_grade: 'must be no more than the maximum grade of the question'
+        course/assessment/question/text_response_comprehension_point:
+          attributes:
+            point_grade:
+              invalid_point_grade: 'must be no more than the maximum grade of the group'
+            solutions:
+              more_than_one_compre_lifted_word_solution: 'all lifted words for a same point are to be placed together in one row'
+        course/assessment/question/text_response_comprehension_solution:
+          attributes:
+            solution_lemma:
+              solution_lemma_empty: "couldn't generate any lemma form: please check your spelling"
+            information:
+              information_empty: "can't be blank for keyword solution"
+        course/assessment/question/text_response_solution:
+          attributes:
+            grade:
+              invalid_grade: 'must be no more than the maximum grade of the question'
+        course/assessment/question_bundle_assignment:
+          attributes:
+            submission:
+              must_belong_to_assessment_and_user: 'must belong to assessment and user'
+        course/assessment/skill:
+          attributes:
+            course:
+              consistent_course: 'must belong to the same course'
+        course/assessment/submission:
+          attributes:
+            experience_points_record:
+              inconsistent_user: 'creator must be the same as the course user record'
+              absent_award_attributes: >
+                there is no award attributes for your submission, please try again
+                or contact the Coursemology team
+          submission_already_exists: 'Looks like you have already created a submission. Try again?'
+          no_bundles_assigned: 'There are no question bundles assigned for you. Contact your instructor for assistance.'
+          autograded_no_partial_answer: 'There are updated answers which have not been re-submitted yet. Please re-submit all answers before finalising your submission.'
+        course/assessment/tab:
+          deletion: 'the last tab cannot be deleted'
+        course/condition:
+          attributes:
+            conditional:
+              not_in_same_course: 'The conditional that you have selected is not in the same course as the current condition'
+        course/condition/achievement:
+          attributes:
+            achievement:
+              unique_dependency: 'cannot have duplicate conditions'
+              references_self: 'cannot have itself as a condition'
+              cyclic_dependency: 'cannot have cyclic dependency'
+        course/condition/assessment:
+          attributes:
+            assessment:
+              unique_dependency: 'cannot have duplicate conditions'
+              references_self: 'cannot have itself as condition'
+              cyclic_dependency: 'cannot have cyclic dependency'
+        course/condition/scholaistic_assessment:
+          attributes:
+            scholaistic_assessment:
+              unique_dependency: 'cannot have duplicate conditions'
+              references_self: 'cannot have itself as condition'
+        course/condition/survey:
+          attributes:
+            survey:
+              unique_dependency: 'cannot have duplicate conditions'
+              references_self: 'cannot have itself as condition'
+              cyclic_dependency: 'cannot have cyclic dependency'
+        course/condition/video:
+          attributes:
+            video:
+              unique_dependency: 'cannot have duplicate conditions'
+              references_self: 'cannot have itself as condition'
+              cyclic_dependency: 'cannot have cyclic dependency'
+        course/discussion/post:
+          attributes:
+            post:
+              topic_inconsistent: 'The post and its parent post reference a different topic.'
+        course/enrol_request:
+          user_in_course: 'It seems like you are already enrolled in the course. Please try refreshing the page?'
+          existing_pending_request: 'It seems like you have already submitted an enrolment request.'
+          attributes:
+            base:
+              deletion: 'Unable to cancel your enrolment request as it has been processed.'
+        course/group_user:
+          not_enrolled: 'must be enrolled in same course as group'
+        course/learning_rate_record:
+          attributes:
+            learning_rate:
+              less_than_min: 'is not >= effective_min'
+              greater_than_max: 'is not <= effective_max'
+        course/lesson_plan/item:
+          attributes:
+            bonus_end_at:
+              required: 'cannot be blank if time bonus exp is set'
+            reference_times:
+              must_have_at_most_one_default: 'must have at most one default'
+        course/monitoring/heartbeat:
+          attributes:
+            seb_payload:
+              invalid_seb_payload: 'seb payload must be either blank or a valid json object'
+        course/monitoring/monitor:
+          attributes:
+            enabled:
+              must_be_password_protected: 'assessment must be password protected to enable'
+            max_interval_ms:
+              greater_than_min_interval: 'must be greater than min interval'
+            blocks:
+              must_have_browser_authorization_and_session_protection: 'must have browser authorization and session protection enabled'
+            seb_config_key:
+              required_if_using_seb_config_key_browser_authorization: 'must have seb config key if using seb config key browser authorization method'
+        course/personal_time:
+          attributes:
+            start_at:
+              cannot_be_after_end_at: 'cannot be after end at'
+        course/reference_time:
+          attributes:
+            reference_timeline:
+              cannot_destroy_in_default_timeline: 'cannot delete times in default reference timeline'
+            start_at:
+              cannot_be_after_end_at: 'cannot be after end at'
+            lesson_plan_item:
+              must_be_in_same_course: 'must be in the same course as the reference timeline'
+        course/reference_timeline:
+          attributes:
+            default:
+              taken: 'can only have one default reference timeline'
+              cannot_destroy: 'cannot delete default reference timeline'
+        course/scholaistic_assessment:
+          attributes:
+            time_bonus_exp:
+              bonus_attributes_not_allowed: 'bonus attributes are not allowed'
+        course/survey/answer:
+          cannot_be_empty: 'The answer to this question must not be empty.'
+        course/user_achievement:
+          attributes:
+            course_user:
+              not_in_course: 'Selected user is not in specified course'
+        course/user_invitation:
+          existing_invitation: 'an open invitation exists for this email address'
+        course/video:
+          attributes:
+            url:
+              invalid_url: 'The URL you entered is not of the correct format, please try again.'
+        course/video/session:
+          attributes:
+            session_start:
+              cannot_be_after_session_end: 'Session cannot start after ending'
+        course/video/submission:
+          attributes:
+            experience_points_record:
+              inconsistent_user: 'creator must be the same as the course user record'
+          submission_already_exists: 'Looks like you have already created a submission. Try again?'
+        course/video/tab:
+          deletion: 'The last tab cannot be deleted'
+        course_user:
+          attributes:
+            reference_timeline:
+              belongs_to_course: 'must belong to course'
+        duplication_traceable:
+          attributes:
+            source_id:
+              must_exist: 'the source must exist and be an instance of the dependent_class'
+        generic_announcement:
+          attributes:
+            end_at:
+              cannot_be_before_start_at: 'cannot be before start at'
+        instance/user_role_request:
+          attributes:
+            base:
+              existing_pending_request: >
+                'You have an existing role request. Please refresh the page.'
+      messages:
+        filename_validator:
+          invalid_characters: '%{characters} are not allowed.'
+          tailing_dots: 'tailing dots are not allowed.'
+          whitespaces: 'leading or tailing whitespaces are not allowed.'
+        time_zone_validator:
+          invalid_time_zone: 'The time zone is invalid.'

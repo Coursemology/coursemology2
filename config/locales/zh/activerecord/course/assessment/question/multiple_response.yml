@@ -1,9 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/assessment/question/multiple_response:
-          attributes:
-            options:
-              no_option: '至少要包含一个选项。'
-              no_correct_option: '至少要包含一个正确选项。'

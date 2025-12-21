@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        duplication_traceable:
-          attributes:
-            source_id:
-              must_exist: '源必须存在并且是dependent_class的一个实例。'
