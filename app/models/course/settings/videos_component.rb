@@ -8,7 +8,7 @@ class Course::Settings::VideosComponent < Course::Settings::Component
   end
 
   def lesson_plan_item_settings
-    super.merge(component_title: I18n.t('course.video.videos.index.header'))
+    super.merge(component_title: title)
   end
 
   def showable_in_lesson_plan?

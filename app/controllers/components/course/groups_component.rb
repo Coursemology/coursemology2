@@ -3,18 +3,13 @@ class Course::GroupsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
   include Course::Group::GroupManagerConcern
 
-  def self.display_name
-    I18n.t('components.groups.name')
-  end
-
   def sidebar_items
     return [] unless show_group_sidebar_item?
 
     [
       {
-        key: :groups,
+        key: self.class.key,
         icon: :groups,
-        title: I18n.t('course.groups.sidebar_title'),
         type: :admin,
         weight: 7,
         path: group_category_url

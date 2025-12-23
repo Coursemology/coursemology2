@@ -1,8 +1,6 @@
 zh:
   user:
     emails:
-      index:
-        header: '邮箱'
       set_primary:
         no_confirmed_emails: '没有已验证的邮箱地址可以设置为主要邮箱。'
       send_confirmation:

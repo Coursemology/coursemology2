@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
+  component: {
+    id: 'course.admin.NotificationSettings.component',
+    defaultMessage: 'Component',
+  },
   setting: {
     id: 'course.admin.NotificationSettings.setting',
     defaultMessage: 'Setting',

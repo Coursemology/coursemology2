@@ -17,7 +17,7 @@ RSpec.feature 'Courses: Groups', js: true do
       scenario 'I can view the Group Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('course.groups.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_course_groups_component')
       end
 
       scenario 'I can view all the group categories in course' do
@@ -113,7 +113,7 @@ RSpec.feature 'Courses: Groups', js: true do
       scenario 'I can view the Group Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('course.groups.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_course_groups_component')
       end
 
       # scenario 'I can edit my group' do
@@ -149,7 +149,7 @@ RSpec.feature 'Courses: Groups', js: true do
       scenario 'I cannot view the Group Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).not_to have_text(I18n.t('course.groups.sidebar_title'))
+        expect(find_sidebar).not_to have_selector('#sidebar_item_course_groups_component')
       end
     end
   end

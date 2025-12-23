@@ -8,7 +8,7 @@ import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { folderShape } from 'course/duplication/propTypes';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 const { FOLDER, MATERIAL } = duplicableItemTypes;
 const ROOT_CHILDREN_LEVEL = 1;
@@ -112,7 +112,7 @@ class MaterialsListing extends Component {
       <div>
         <ListSubheader disableSticky>
           <FormattedMessage
-            {...defaultComponentTitles.course_materials_component}
+            {...componentTranslations.course_materials_component}
           />
         </ListSubheader>
         <Card>

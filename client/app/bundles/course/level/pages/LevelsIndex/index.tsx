@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { Skeleton, Stack, Typography } from '@mui/material';
 
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 import Page from 'lib/components/core/layouts/Page';
 import Preload from 'lib/components/wrappers/Preload';
 import { useAppDispatch } from 'lib/hooks/store';
@@ -37,7 +37,7 @@ const LevelsIndex = (): JSX.Element => {
     <Page
       title={
         <Typography variant="h5">
-          {t(defaultComponentTitles.course_levels_component)}
+          {t(componentTranslations.course_levels_component)}
         </Typography>
       }
     >

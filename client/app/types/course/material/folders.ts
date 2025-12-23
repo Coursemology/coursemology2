@@ -94,7 +94,7 @@ export interface FolderData {
 export interface BreadcrumbData {
   breadcrumbs: {
     id: number;
-    name: string;
+    name?: string;
   }[];
 }
 

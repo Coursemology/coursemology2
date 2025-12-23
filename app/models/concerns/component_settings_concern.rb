@@ -4,7 +4,7 @@ module ComponentSettingsConcern
 
   # This is used when generating checkboxes for each of the components
   def disableable_component_collection
-    @settable.disableable_components.map { |c| [c.display_name, c.key.to_s] }.sort
+    @settable.disableable_components.map { |c| c.key.to_s }
   end
 
   # Returns the ids of enabled components that can be disabled

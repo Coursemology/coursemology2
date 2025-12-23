@@ -7,6 +7,7 @@ import { Button, MenuItem, MenuList, Popover } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { actions } from '../../store';
+import TranslatedItemType from '../TranslatedItemType';
 
 const translations = defineMessages({
   filter: {
@@ -78,7 +79,7 @@ class LessonPlanFilter extends Component {
                   }
                   style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
-                  {itemType}
+                  <TranslatedItemType type={itemType} />
                   {isVisible && <Done />}
                 </MenuItem>
               );

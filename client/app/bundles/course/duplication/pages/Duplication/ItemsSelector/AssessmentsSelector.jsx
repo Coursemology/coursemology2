@@ -12,7 +12,7 @@ import { duplicableItemTypes } from 'course/duplication/constants';
 import { categoryShape } from 'course/duplication/propTypes';
 import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
 import { actions } from 'course/duplication/store';
-import { defaultComponentTitles } from 'course/translations.intl';
+import componentTranslations from 'course/translations';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
@@ -134,7 +134,7 @@ class AssessmentsSelector extends Component {
       <>
         <Typography className="mt-5 mb-5" variant="h2">
           <FormattedMessage
-            {...defaultComponentTitles.course_assessments_component}
+            {...componentTranslations.course_assessments_component}
           />
         </Typography>
         {categories.length > 0 ? (

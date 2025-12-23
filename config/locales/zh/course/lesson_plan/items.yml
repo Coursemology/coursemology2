@@ -1,10 +1,4 @@
 zh:
-  course:
-    lesson_plan:
-      items:
-        sidebar_title: :'course.lesson_plan.items.index.header'
-        index:
-          header: '课程计划'
   activerecord:
     attributes:
       course/lesson_plan/item:

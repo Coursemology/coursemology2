@@ -2,36 +2,10 @@ zh:
   layout:
     coursemology: 'Coursemology'
   layouts:
-    course_admin:
-      title: '课程设置'
-      course_settings:
-        title: '通用'
-      announcement_settings:
-        title: :'course.announcements.index.header'
-      component_settings:
-        title: '功能组件'
-      sidebar_settings:
-        title: '侧边栏'
-      notifications:
-        title: '邮箱'
-      lesson_plan:
-        title: '课程计划'
-      codaveri:
-        title: 'Codaveri评估和反馈'
-      rag_wise:
-        title: 'RagWise 自动论坛回复'
-    course_users:
-      title: '管理用户'
-    duplication:
-      title: '复制数据'
     mailer:
-      greeting: '你好, %{user}:'
+      greeting: '您好，%{user}:'
     code_formatter:
-      size_too_big: '该文件太大，无法显示。'
-    learning_map:
-      title: '学习计划'
-    multiple_reference_timelines:
-      timeline_designer: '时间线设计工具'
+      size_too_big: '文件过大，无法显示。'
     manage_email_subscription:
       tag: '取消订阅'
-      message: '%{manage_email_subscription_link} 以不再关注该电子邮件主题。'
+      message: '%{manage_email_subscription_link} 从此电子邮件主题取消订阅。'

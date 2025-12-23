@@ -3,10 +3,6 @@ class Course::AssessmentsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
   include Course::UnreadCountsConcern
 
-  def self.display_name
-    I18n.t('components.assessments.name')
-  end
-
   def self.lesson_plan_item_actable_names
     [Course::Assessment.name]
   end
@@ -38,7 +34,6 @@ class Course::AssessmentsComponent < SimpleDelegator
       {
         key: :assessments_submissions,
         icon: :submission,
-        title: t('course.assessment.submissions.sidebar_title'),
         weight: 3,
         path: course_submissions_path(current_course),
         unread: pending_assessment_submissions_count
@@ -51,9 +46,8 @@ class Course::AssessmentsComponent < SimpleDelegator
 
     [
       {
-        key: :assessments_skills,
+        key: :sidebar_assessments_skills,
         icon: :skills,
-        title: t('course.assessment.skills.sidebar_title'),
         type: :admin,
         weight: 8,
         path: course_assessments_skills_path(current_course)
@@ -64,7 +58,7 @@ class Course::AssessmentsComponent < SimpleDelegator
   def admin_settings_items
     [
       {
-        title: t('course.assessment.assessments.sidebar_title'),
+        key: self.class.key,
         type: :settings,
         weight: 5,
         path: course_admin_assessments_path(current_course)

@@ -3,10 +3,6 @@ class Course::ForumsComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
   include Course::UnreadCountsConcern
 
-  def self.display_name
-    I18n.t('components.forums.name')
-  end
-
   def sidebar_items
     main_sidebar_items + settings_sidebar_items
   end
@@ -18,7 +14,7 @@ class Course::ForumsComponent < SimpleDelegator
       {
         key: :forums,
         icon: :forum,
-        title: settings.title || t('course.forum.forums.sidebar_title'),
+        title: settings.title,
         weight: 10,
         path: course_forums_path(current_course),
         unread: unread_forum_topics_count
@@ -29,7 +25,8 @@ class Course::ForumsComponent < SimpleDelegator
   def settings_sidebar_items
     [
       {
-        title: settings.title || t('course.forum.forums.sidebar_title'),
+        key: self.class.key,
+        title: settings.title,
         type: :settings,
         weight: 11,
         path: course_admin_forums_path(current_course)

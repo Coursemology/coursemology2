@@ -2,36 +2,10 @@ ko:
   layout:
     coursemology: 'Coursemology'
   layouts:
-    course_admin:
-      title: '코스 설정'
-      course_settings:
-        title: '일반'
-      announcement_settings:
-        title: :'course.announcements.index.header'
-      component_settings:
-        title: '구성 요소'
-      sidebar_settings:
-        title: '사이드바'
-      notifications:
-        title: '이메일'
-      lesson_plan:
-        title: '수업 계획'
-      codaveri:
-        title: 'Codaveri 평가 및 피드백'
-      rag_wise:
-        title: 'RagWise 자동 포럼 응답'
-    course_users:
-      title: '사용자 관리'
-    duplication:
-      title: '데이터 복제'
     mailer:
       greeting: '안녕하세요, %{user}:'
     code_formatter:
       size_too_big: '파일이 너무 커서 표시할 수 없습니다.'
-    learning_map:
-      title: '학습 지도'
-    multiple_reference_timelines:
-      timeline_designer: '타임라인 디자이너'
     manage_email_subscription:
       tag: '구독 취소'
       message: '%{manage_email_subscription_link} 이 이메일 주제에서 구독을 취소합니다.'

@@ -22,6 +22,11 @@ class Course::Settings::SidebarItem
     @sidebar_item[:title]
   end
 
+  # @return [Symbol | nil] The type of the item.
+  def type
+    @sidebar_item[:type]
+  end
+
   # @return [Integer] The weight of the item.
   def weight
     result = @settings.settings(id).weight if id

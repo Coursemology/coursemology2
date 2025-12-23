@@ -7,9 +7,6 @@ class Course::UsersComponent < SimpleDelegator
     false
   end
 
-  def self.display_name
-    I18n.t('components.users.name')
-  end
 
   def sidebar_items
     main_sidebar_items + admin_sidebar_items
@@ -22,7 +19,6 @@ class Course::UsersComponent < SimpleDelegator
       {
         key: :users,
         icon: :users,
-        title: t('course.users.sidebar_title'),
         weight: 7,
         path: course_users_path(current_course)
       }
@@ -40,9 +36,8 @@ class Course::UsersComponent < SimpleDelegator
 
     [
       {
-        key: :manage_users,
+        key: :admin_users_manage_users,
         icon: :manageUsers,
-        title: t('layouts.course_users.title'),
         type: :admin,
         weight: 2,
         path:

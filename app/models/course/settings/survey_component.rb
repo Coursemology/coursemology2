@@ -3,7 +3,7 @@ class Course::Settings::SurveyComponent < Course::Settings::Component
   include Course::Settings::LessonPlanSettingsConcern
 
   def lesson_plan_item_settings
-    super.merge(component_title: I18n.t('components.surveys.name'))
+    super
   end
 
   def showable_in_lesson_plan?

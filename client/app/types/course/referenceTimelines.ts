@@ -8,7 +8,7 @@ export interface TimeData {
 export interface TimelineData {
   id: number;
   timesCount: number;
-  title: string;
+  title?: string;
   default?: boolean;
   weight?: number;
   assignees?: number;

@@ -3,9 +3,6 @@ ko:
     assessment:
       assessments:
         invalid_questions_order: '평가 질문의 순서가 잘못되었습니다'
-        sidebar_title: :'course.assessment.assessments.index.header'
-        index:
-          header: '평가'
         show:
           public_test: '공개'
           private_test: '비공개'

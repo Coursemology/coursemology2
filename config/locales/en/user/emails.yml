@@ -1,8 +1,6 @@
 en:
   user:
     emails:
-      index:
-        header: 'Emails'
       set_primary:
         no_confirmed_emails: 'There are no confirmed emails to set as the primary email.'
       send_confirmation:

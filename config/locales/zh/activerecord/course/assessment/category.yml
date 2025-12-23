@@ -2,7 +2,7 @@ zh:
   activerecord:
     attributes:
       course/assessment/category/title:
-        default: :'course.assessment.assessments.index.header'
+        default: '评估'
       course/assessment/category:
         weight: '权重'
     errors:

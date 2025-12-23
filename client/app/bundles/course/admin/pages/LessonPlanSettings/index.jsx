@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import { getComponentTranslationKey } from 'course/translations';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -56,7 +57,11 @@ class LessonPlanSettings extends Component {
           options,
         },
       };
-      const values = { setting: tab_title || component_title };
+      const values = {
+        setting: tab_title || component_title || (
+          <FormattedMessage {...getComponentTranslationKey(component)} />
+        ),
+      };
       const successMessage = (
         <FormattedMessage {...translations.updateSuccess} values={values} />
       );
@@ -84,7 +89,11 @@ class LessonPlanSettings extends Component {
           options,
         },
       };
-      const values = { setting: tab_title || component_title };
+      const values = {
+        setting: tab_title || component_title || (
+          <FormattedMessage {...getComponentTranslationKey(component)} />
+        ),
+      };
       const successMessage = (
         <FormattedMessage {...translations.updateSuccess} values={values} />
       );
@@ -126,7 +135,9 @@ class LessonPlanSettings extends Component {
   }
 
   renderComponentSettingRow(setting) {
-    const componentTitle = setting.component_title || setting.component;
+    const componentTitle = setting.component_title || (
+      <FormattedMessage {...getComponentTranslationKey(setting.component)} />
+    );
 
     return (
       <TableRow key={setting.component}>

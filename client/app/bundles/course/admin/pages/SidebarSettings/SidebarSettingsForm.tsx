@@ -18,6 +18,7 @@ import {
 import { produce } from 'immer';
 import { SidebarItem, SidebarItems } from 'types/course/admin/sidebar';
 
+import { getComponentTitle } from 'course/translations';
 import Section from 'lib/components/core/layouts/Section';
 import { defensivelyGetIcon } from 'lib/constants/icons';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -131,7 +132,7 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
                 color={props.disabled ? 'text.disabled' : 'text.primary'}
                 variant="body2"
               >
-                {item.title}
+                {getComponentTitle(t, item.id, item.title)}
               </Typography>
             </TableCell>
           </TableRow>

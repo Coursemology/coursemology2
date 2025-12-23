@@ -1,9 +1,0 @@
-zh:
-  course:
-    assessment:
-      submissions:
-        sidebar_title: :'course.assessment.submissions.index.header'
-        index:
-          header: '提交'
-        pending:
-          header: '等待中的提交'

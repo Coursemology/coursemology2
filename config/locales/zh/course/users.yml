@@ -1,7 +1,6 @@
 zh:
   course:
     users:
-      sidebar_title: :'course.users.index.header'
       role:
         student: '学生'
         teaching_assistant: '助教'
@@ -11,9 +10,3 @@ zh:
         phantom: '虚拟用户'
       new:
         already_registered: '你已注册为%{role}。'
-      students:
-        header: '学生'
-      staff:
-        header: '员工'
-      index:
-        header: '学生'

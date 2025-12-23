@@ -14,8 +14,8 @@ class Course::Controller < ApplicationController
     items = sidebar_items_of_type(type)
 
     items.sort do |a, b|
-      weight_a = weights_hash[a[:key]] || a[:weight]
-      weight_b = weights_hash[b[:key]] || b[:weight]
+      weight_a = weights_hash[a[:type]][a[:key]] || a[:weight]
+      weight_b = weights_hash[b[:type]][b[:key]] || b[:weight]
       (weight_a <=> weight_b).nonzero? || a[:key].to_s <=> b[:key].to_s
     end
   end
@@ -66,14 +66,20 @@ class Course::Controller < ApplicationController
     type ? sidebar_items.select { |item| item.fetch(:type, :normal) == type } : sidebar_items
   end
 
-  # Computes a hash containing the key of each sidebar item, and its defined weight as the value.
+  # Computes a hash to store the weights of sidebar items, including manually overridden weights.
   #
-  # @return [Hash{Symbol=>Integer}]
-  def sidebar_items_weights
+  # @return [Hash{Symbol=>Hash{Symbol=>Integer}}] A nested hash mapping item types and item keys to
+  #   the associated sidebar item's weight.
+
+  def sidebar_items_weights(type: nil)
     sidebar_settings = Course::Settings::Sidebar.new(current_course.settings,
                                                      current_component_host.sidebar_items)
-    defined_sidebar_settings = sidebar_settings.sidebar_items.select { |item| item.id.present? }
-    defined_sidebar_settings.to_h { |item| [item.id, item.weight] }
+    defined_sidebar_settings = sidebar_settings.sidebar_items.select do |item|
+      item.id.present? && (type.nil? || item.type == type)
+    end
+    defined_sidebar_settings.group_by(&:type).transform_values do |items|
+      items.to_h { |item| [item.id, item.weight] }
+    end
   end
 
   def set_last_active_at

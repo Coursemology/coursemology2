@@ -3,9 +3,6 @@ en:
     assessment:
       assessments:
         invalid_questions_order: 'Invalid ordering for assessment questions'
-        sidebar_title: :'course.assessment.assessments.index.header'
-        index:
-          header: 'Assessments'
         show:
           public_test: 'Public'
           private_test: 'Private'

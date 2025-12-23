@@ -2,10 +2,6 @@
 class Course::LeaderboardComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
-  def self.display_name
-    I18n.t('components.leaderboard.name')
-  end
-
   def self.gamified?
     true
   end
@@ -21,7 +17,7 @@ class Course::LeaderboardComponent < SimpleDelegator
       {
         key: :leaderboard,
         icon: :leaderboard,
-        title: settings.title || t('course.leaderboards.sidebar_title'),
+        title: settings.title,
         weight: 6,
         path: course_leaderboard_path(current_course)
       }
@@ -31,7 +27,8 @@ class Course::LeaderboardComponent < SimpleDelegator
   def settings_sidebar_items
     [
       {
-        title: settings.title || t('course.leaderboards.title'),
+        key: self.class.key,
+        title: settings.title,
         type: :settings,
         weight: 8,
         path: course_admin_leaderboard_path(current_course)

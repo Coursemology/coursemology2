@@ -71,11 +71,11 @@ RSpec.describe Course::Controller, type: :controller do
       end
 
       it 'orders sidebar items with the same weight by ascending key' do
-        allow(controller).to receive(:sidebar_items_weights).and_return(Hash.new(1))
-
-        keys = controller.sidebar_items.map { |item| item[:key] }
-        expect(keys.length).not_to eq(0)
-        expect(keys.each_cons(2).all? { |a, b| a.to_s <= b.to_s }).to be_truthy
+        key_sets = controller.sidebar_items.group_by { |item| item[:weight] }
+        expect(key_sets.length).not_to eq(0)
+        expect(
+          key_sets.map { |_, set| set.each_cons(2).all? { |a, b| a[:key].to_s <= b[:key].to_s } }
+        ).to all(be_truthy)
       end
 
       context 'when no type is specified' do

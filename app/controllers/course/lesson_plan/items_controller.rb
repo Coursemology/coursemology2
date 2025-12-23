@@ -74,7 +74,7 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   # @return [Hash{Array<String> => Boolean}]
   def component_visibility_hash
     @component_visibility_hash = component_item_settings.to_h do |setting|
-      [[setting[:component_title]], setting[:visible]]
+      [[setting[:component]], setting[:visible]]
     end
   end
 

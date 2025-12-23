@@ -86,7 +86,7 @@ RSpec.feature 'Course: Announcements', js: true do
       scenario 'I can view the Announcement Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('course.announcements.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_announcements')
       end
 
       scenario 'I can see the started announcements' do

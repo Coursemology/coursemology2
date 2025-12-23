@@ -1,8 +1,6 @@
 en:
   course:
     experience_points_records:
-      index:
-        header: 'Experience Points History for %{name}'
       download:
         name: 'Name'
         updated_at: 'Updated At'
