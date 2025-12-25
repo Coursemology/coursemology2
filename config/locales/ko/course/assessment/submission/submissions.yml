@@ -1,7 +1,0 @@
-ko:
-  course:
-    assessment:
-      submission:
-        submissions:
-          download_statistics:
-            no_submission_statistics: '다운로드 요구 사항을 충족하는 제출물이 없습니다'

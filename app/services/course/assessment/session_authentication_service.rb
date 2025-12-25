@@ -24,7 +24,7 @@ class Course::Assessment::SessionAuthenticationService
       create_new_token if @submission
       true
     else
-      @assessment.errors.add(:password, I18n.t('helpers.password.wrong_password'))
+      @assessment.errors.add(:password, I18n.t('errors.authentication.wrong_password'))
       false
     end
   end

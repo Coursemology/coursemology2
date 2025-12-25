@@ -1,6 +1,0 @@
-en:
-  course:
-    assessment:
-      live_feedback:
-        thread:
-          only_one_active_thread: 'There can be only one active thread per submission question'

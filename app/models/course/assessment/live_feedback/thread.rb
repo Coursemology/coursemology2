@@ -22,7 +22,7 @@ class Course::Assessment::LiveFeedback::Thread < ApplicationRecord
 
     return if active_thread_count <= 1
 
-    errors.add(:base, I18n.t('course.assessment.live_feedback.thread.only_one_active_thread'))
+    errors.add(:base, I18n.t('errors.course.assessment.live_feedback.thread.only_one_active_thread'))
   end
 
   def sent_user_messages(user_id)

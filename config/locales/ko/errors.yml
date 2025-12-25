@@ -1,0 +1,79 @@
+ko:
+  errors:
+    authentication:
+      wrong_password: '잘못된 비밀번호'
+    code_formatter:
+      size_too_big: '파일이 너무 커서 표시할 수 없습니다.'
+    course:
+      users:
+        already_registered: '당신은 이미 %{role}(으)로 등록되어 있습니다.'
+        role:
+          student: '학생'
+          teaching_assistant: '조교'
+          observer: '관찰자'
+          manager: '관리자'
+          owner: '소유자'
+          phantom: '팬텀'
+      user_invitations:
+        duplicate_user: '%{user}가 제출물에 여러 번 나타납니다.'
+        invalid_email: '%{email}이(가) 유효하지 않습니다: %{message}.'
+      user_registrations:
+        invalid_code: '잘못된 초대 코드를 입력하셨습니다.'
+        code_taken: >
+          제공된 초대 코드는 다른 계정에서 사용되었습니다. 해당 계정을 사용하여 코스에 접근해 주세요.
+        code_taken_with_email: >
+          제공된 초대 코드는 %{email}에서 사용되었습니다. 해당 계정을 사용하여 코스에 접근해
+          주세요.
+      assessment:
+        answer:
+          programming_auto_grading:
+            grade:
+              evaluation_failed_syntax: >
+                코드가 올바르게 평가되지 않았습니다. 구문 오류가 있거나 지원되지 않는 라이브러리가
+                사용되었을 수 있습니다. 코드를 다시 확인해 주세요.
+              evaluation_failed_time_or_memory: >
+                코드가 할당된 시간 또는 메모리 제한 내에 완료되지 않았습니다.
+              stdout_too_long: >
+                코드 실행이 너무 많은 stdout 출력을 생성하여 중단되었습니다.
+                불필요한 출력을 제거하고 다시 시도해주세요.
+              stderr_too_long: >
+                코드 실행이 너무 많은 stderr 출력을 생성하여 중단되었습니다.
+                불필요한 출력을 제거하고 다시 시도해주세요.
+              time_limit_error: >
+                시간 제한 초과 (TLE) 오류
+              memory_limit_error: >
+                메모리 제한 초과 (MLE) 오류
+            job:
+              failure:
+                time_limit_breached: >
+                  평가기가 실행 중에 종료되었습니다. 이 문제의 시간 제한이 coursemology에서
+                  허용되는 평가기 시간 제한을 초과했을 수 있습니다. 이 문제에 대해 강사에게 문의하시고, 문제가 계속되면 coursemology
+                  관리자에게 문의하세요.
+                timeout_error: >
+                  작업 실행 시간이 길어져 타임아웃 오류가 발생했습니다. 몇 분 후에 다시 시도해 주세요. 문제가
+                  계속되면 강사나 coursemology 관리자에게 문의하세요.
+                container_unreachable: >
+                  평가기를 위한 도커 생성 중 오류가 발생했습니다. 서버 작업 부하가 높기 때문일
+                  수 있습니다. 몇 분 후에 다시 시도해 주세요. 문제가 계속되면 강사나 coursemology 관리자에게 문의하세요.
+                generic_error: >
+                  오류가 발생했습니다. 서버가 바쁠 수 있으니 몇 분 후에 다시 시도해 보세요. 동일한 문제가
+                  계속되면, coursemology 관리자에게 문의하고 이 페이지의 URL을 제공하며 다음 오류를 함께 제공해주세요: '"%{error}"
+        live_feedback:
+          thread:
+            only_one_active_thread: '제출 질문당 활성화된 스레드는 하나만 존재할 수 있습니다'
+        submission:
+          download_statistics:
+            no_submissions: '다운로드 요구 사항을 충족하는 제출물이 없습니다'
+      survey:
+        responses:
+          no_course_user: '설문 조사를 시작하려면 이 과정의 멤버가 되어야 합니다.'
+    user:
+      emails:
+        no_confirmed_emails: '기본 이메일로 설정할 수 있는 확인된 이메일 주소가 없습니다.'
+        already_confirmed: '%{email}은(는) 이미 확인되었습니다.'
+      registrations:
+        used: >
+          제공된 초대 코드는 다른 계정에서 사용되었습니다. 해당 계정으로 로그인해 주세요.
+        used_with_email: >
+          제공된 초대 코드는 %{email}에서 사용되었습니다. 해당 계정으로 로그인해 주세요.
+        verify_recaptcha_alert: '아래 reCAPTCHA에 오류가 발생했습니다. 다시 시도해 주세요.'

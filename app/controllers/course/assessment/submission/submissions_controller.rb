@@ -250,7 +250,7 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
     if submission_ids.empty?
       return render json: {
-        error: I18n.t('course.assessment.submission.submissions.download_statistics.no_submission_statistics')
+        error: I18n.t('errors.course.assessment.submission.download_statistics.no_submissions')
       }, status: :bad_request
     end
 

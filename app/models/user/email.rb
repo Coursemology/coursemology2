@@ -44,7 +44,7 @@ class User::Email < ApplicationRecord
 
     return if user.set_next_email_as_primary
 
-    errors.add(:base, I18n.t('user.emails.set_primary.no_confirmed_emails'))
+    errors.add(:base, I18n.t('errors.user.emails.no_confirmed_emails'))
     raise ActiveRecord::Rollback
   end
 

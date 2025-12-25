@@ -159,7 +159,7 @@ class Course::UserInvitationsController < Course::ComponentController
   def invalid_course_user_errors
     invalid_course_users.map do |course_user|
       user = self.class.helpers.display_course_user(course_user)
-      t('course.user_invitations.errors.duplicate_user', user: user)
+      t('errors.course.user_invitations.duplicate_user', user: user)
     end
   end
 
@@ -176,7 +176,7 @@ class Course::UserInvitationsController < Course::ComponentController
   def invalid_invitation_email_errors
     invalid_invitations.map do |invitation|
       message = invitation.errors.full_messages.to_sentence
-      t('course.user_invitations.errors.invalid_email', email: invitation.email, message: message)
+      t('errors.course.user_invitations.invalid_email', email: invitation.email, message: message)
     end
   end
 
