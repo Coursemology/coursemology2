@@ -1,5 +1,5 @@
 import { FC, memo, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import equal from 'fast-deep-equal';
 import { CourseUserMiniEntity } from 'types/course/courseUsers';
 
@@ -7,10 +7,11 @@ import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteUser } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   user: CourseUserMiniEntity;
   disabled?: boolean;
 }
@@ -37,7 +38,8 @@ const translations = defineMessages({
 });
 
 const UserManagementButtons: FC<Props> = (props) => {
-  const { intl, user } = props;
+  const { user } = props;
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -52,7 +54,7 @@ const UserManagementButtons: FC<Props> = (props) => {
     return dispatch(deleteUser(user.id))
       .then(() => {
         toast.success(
-          intl.formatMessage(
+          t(
             translations.deletionScheduled,
             userTranslationDict,
           ),
@@ -63,7 +65,7 @@ const UserManagementButtons: FC<Props> = (props) => {
       })
       .catch((error) => {
         toast.error(
-          intl.formatMessage(translations.deletionFailure, userTranslationDict),
+          t(translations.deletionFailure, userTranslationDict),
         );
         throw error;
       })
@@ -74,7 +76,7 @@ const UserManagementButtons: FC<Props> = (props) => {
     <div key={`buttons-${user.id}`} style={{ whiteSpace: 'nowrap' }}>
       <DeleteButton
         className={`user-delete-${user.id}`}
-        confirmMessage={intl.formatMessage(translations.deletionConfirm, {
+        confirmMessage={t(translations.deletionConfirm, {
           role: COURSE_USER_ROLES[user.role],
           name: user.name,
           email: user.email,
@@ -89,4 +91,4 @@ const UserManagementButtons: FC<Props> = (props) => {
   );
 };
 
-export default memo(injectIntl(UserManagementButtons), equal);
+export default memo(UserManagementButtons, equal);

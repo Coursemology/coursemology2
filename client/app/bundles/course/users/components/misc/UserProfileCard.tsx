@@ -1,16 +1,17 @@
 import { FC, MouseEvent } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { scroller } from 'react-scroll';
 import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
 import { CourseUserEntity } from 'types/course/courseUsers';
 
 import Link from 'lib/components/core/Link';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import UserProfileCardStats from './UserProfileCardStats';
 import styles from './UserProfileCard.scss';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   user: CourseUserEntity;
 }
 
@@ -29,7 +30,8 @@ const translations = defineMessages({
   },
 });
 
-const UserProfileCard: FC<Props> = ({ user, intl }) => {
+const UserProfileCard: FC<Props> = ({ user }) => {
+  const { t } = useTranslation();
   const handleScrollToAchievements = (e: MouseEvent): void => {
     e.preventDefault();
     scroller.scrollTo('user-profile-achievements', {
@@ -51,7 +53,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
         {user.level >= 0 && (
           <UserProfileCardStats
             className="user-level-stat"
-            title={intl.formatMessage(translations.level)}
+            title={t(translations.level)}
             value={user.level}
           />
         )}
@@ -59,7 +61,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
           <Link to={user.experiencePointsRecordsUrl ?? ''}>
             <UserProfileCardStats
               className="user-exp-stat"
-              title={intl.formatMessage(translations.exp)}
+              title={t(translations.exp)}
               value={user.exp}
             />
           </Link>
@@ -71,7 +73,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
           >
             <UserProfileCardStats
               className="user-achievements-stat"
-              title={intl.formatMessage(translations.achievements)}
+              title={t(translations.achievements)}
               value={user.achievements.length}
             />
           </Link>
@@ -122,4 +124,4 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
   );
 };
 
-export default injectIntl(UserProfileCard);
+export default UserProfileCard;
