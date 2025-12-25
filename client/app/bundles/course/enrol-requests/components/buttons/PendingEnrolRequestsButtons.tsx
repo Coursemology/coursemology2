@@ -1,5 +1,5 @@
 import { FC, memo, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import equal from 'fast-deep-equal';
 import { EnrolRequestRowData } from 'types/course/enrolRequests';
 
@@ -8,10 +8,11 @@ import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { approveEnrolRequest, rejectEnrolRequest } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   enrolRequest: EnrolRequestRowData;
 }
 const styles = {
@@ -53,7 +54,8 @@ const translations = defineMessages({
 });
 
 const PendingEnrolRequestsButtons: FC<Props> = (props) => {
-  const { intl, enrolRequest } = props;
+  const { enrolRequest } = props;
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isApproving, setIsApproving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -63,7 +65,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
     return dispatch(approveEnrolRequest(enrolRequest))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.approveSuccess, {
+          t(translations.approveSuccess, {
             name: enrolRequest.name,
           }),
         );
@@ -73,7 +75,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.approveFailure, {
+          t(translations.approveFailure, {
             error: errorMessage,
           }),
         );
@@ -86,7 +88,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
     return dispatch(rejectEnrolRequest(enrolRequest.id))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.rejectSuccess, {
+          t(translations.rejectSuccess, {
             name: enrolRequest.name,
           }),
         );
@@ -96,7 +98,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.rejectFailure, {
+          t(translations.rejectFailure, {
             error: errorMessage,
           }),
         );
@@ -111,11 +113,11 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
         disabled={isApproving || isDeleting}
         onClick={onApprove}
         sx={styles.buttonStyle}
-        tooltip={intl.formatMessage(translations.approveTooltip)}
+        tooltip={t(translations.approveTooltip)}
       />
       <DeleteButton
         className={`enrol-request-reject-${enrolRequest.id}`}
-        confirmMessage={intl.formatMessage(translations.rejectConfirm, {
+        confirmMessage={t(translations.rejectConfirm, {
           role: COURSE_USER_ROLES[enrolRequest.role!],
           name: enrolRequest.name,
           email: enrolRequest.email,
@@ -124,14 +126,14 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
         loading={isDeleting}
         onClick={onDelete}
         sx={styles.buttonStyle}
-        tooltip={intl.formatMessage(translations.rejectTooltip)}
+        tooltip={t(translations.rejectTooltip)}
       />
     </div>
   );
 };
 
 export default memo(
-  injectIntl(PendingEnrolRequestsButtons),
+  PendingEnrolRequestsButtons,
   (prevProps, nextProps) => {
     return equal(prevProps.enrolRequest, nextProps.enrolRequest);
   },
