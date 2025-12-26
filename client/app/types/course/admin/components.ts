@@ -1,6 +1,5 @@
 export interface CourseComponent {
   id: string;
-  displayName: string;
   enabled: boolean;
 }
 

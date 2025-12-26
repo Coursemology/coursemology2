@@ -220,13 +220,13 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
   def status_error_messages
     {
       CODAVERI_STATUS_RUNTIME_ERROR =>
-        I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax'),
+        I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax'),
       CODAVERI_STATUS_TIMEOUT =>
-        I18n.t('course.assessment.answer.programming_auto_grading.grade.time_limit_error'),
+        I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.time_limit_error'),
       CODAVERI_STATUS_STDOUT_TOO_LONG =>
-        I18n.t('course.assessment.answer.programming_auto_grading.grade.stdout_too_long'),
+        I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.stdout_too_long'),
       CODAVERI_STATUS_STDERR_TOO_LONG =>
-        I18n.t('course.assessment.answer.programming_auto_grading.grade.stderr_too_long')
+        I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.stderr_too_long')
     }
   end
 
@@ -240,13 +240,13 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService # rubocop:disable
 
     if [CODAVERI_STATUS_EXIT_SIGNAL, CODAVERI_STATUS_INTERNAL_ERROR].include?(compile_status)
       compile_message = result.dig('compile', 'message')
-      return I18n.t('course.assessment.answer.programming_auto_grading.job.failure.generic_error',
+      return I18n.t('errors.course.assessment.answer.programming_auto_grading.job.failure.generic_error',
                     error: "Codaveri transaction id: #{@codaveri_evaluation_transaction_id}, #{compile_message}")
     end
 
     if [CODAVERI_STATUS_EXIT_SIGNAL, CODAVERI_STATUS_INTERNAL_ERROR].include?(run_status)
       run_message = result.dig('run', 'message')
-      return I18n.t('course.assessment.answer.programming_auto_grading.job.failure.generic_error',
+      return I18n.t('errors.course.assessment.answer.programming_auto_grading.job.failure.generic_error',
                     error: "Codaveri transaction id: #{@codaveri_evaluation_transaction_id}, #{run_message}")
     end
 

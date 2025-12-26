@@ -16,7 +16,7 @@ RSpec.feature 'Courses: Staff Management', js: true do
       scenario 'I cannot view the Users Management Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).not_to have_text(I18n.t('layouts.course_users.title'))
+        expect(find_sidebar).not_to have_selector('#sidebar_item_admin_users_manage_users')
       end
     end
 
@@ -27,7 +27,7 @@ RSpec.feature 'Courses: Staff Management', js: true do
       scenario 'I can view the Users Management Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('layouts.course_users.title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_admin_users_manage_users')
       end
 
       scenario 'I cannot access the staff list' do
@@ -43,7 +43,7 @@ RSpec.feature 'Courses: Staff Management', js: true do
       scenario 'I can view the Users Management Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('layouts.course_users.title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_admin_users_manage_users')
       end
 
       scenario 'I can view the list of staff' do

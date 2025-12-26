@@ -1,9 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/learning_rate_record:
-          attributes:
-            learning_rate:
-              less_than_min: '必须大于有效最小值'
-              greater_than_max: '必须小于有效最小值'

@@ -11,7 +11,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
       options = {
         current_user: admin,
         new_start_at: (course.start_at + time_shift).iso8601,
-        new_title: I18n.t('course.duplications.show.new_course_title_prefix')
+        new_title: "#{course.title} copy"
       }
       Course::Duplication::CourseDuplicationService.duplicate_course(course, options)
     end
@@ -48,7 +48,7 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           # Also test that a course with a registration key can be duplicated.
           course.registration_key = 'abcde'
           expect(new_course).to_not be course
-          expect(new_course.title).to eq I18n.t('course.duplications.show.new_course_title_prefix')
+          expect(new_course.title).to eq "#{course.title} copy"
 
           # Throws error if database contraints are violated.
           new_course.save!

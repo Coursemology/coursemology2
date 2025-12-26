@@ -1,5 +1,0 @@
-zh:
-  activerecord:
-    attributes:
-      course/condition/level/title:
-        title: '等级 %{value}'

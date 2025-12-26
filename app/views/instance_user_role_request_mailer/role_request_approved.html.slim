@@ -1,6 +1,6 @@
 = simple_format(\
     t('.message',
       role: @instance_user.role,
-      click_here: link_to(t('common.click_here'), courses_url(host: @instance.host))\
+      click_here: link_to(t('common.mailers.click_here'), courses_url(host: @instance.host))\
     )\
   )

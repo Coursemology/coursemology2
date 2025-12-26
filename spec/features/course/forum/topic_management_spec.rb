@@ -208,7 +208,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
       scenario 'I can view the Forum Sidebar item' do
         visit course_path(course)
 
-        expect(find_sidebar).to have_text(I18n.t('course.forum.forums.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_forums')
       end
 
       scenario 'I can see shown topics' do

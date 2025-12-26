@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      messages:
-        filename_validator:
-          invalid_characters: '%{characters}不合法。'
-          tailing_dots: '点号不能出现在文件名末尾。'
-          whitespaces: '空格不能出现在文件名开头或末尾。'

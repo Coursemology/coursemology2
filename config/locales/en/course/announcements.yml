@@ -1,6 +1,0 @@
-en:
-  course:
-    announcements:
-      sidebar_title: :'course.announcements.index.header'
-      index:
-        header: 'Announcements'

@@ -1,0 +1,70 @@
+ko:
+  activerecord:
+    course/assessment/question:
+      question_number: '질문 %{index}'
+      question_with_title: '%{question_number}: %{title}'
+    attributes:
+      course:
+        reference_timelines: '참조 타임라인'
+      course/assessment/answer:
+        submitted_at: '제출 시각'
+        grade: '점수'
+        grader: '채점자'
+        graded_at: '채점 시각'
+      course/assessment/category:
+        weight: '순서'
+      course/assessment/category/title:
+        default: '평가'
+      course/assessment/question:
+        weight: '순서'
+      course/assessment/submission:
+        grade: '총점'
+        status: '상태'
+        submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
+        grader: :'activerecord.attributes.course/assessment/answer.grader'
+        graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
+        attempting: '시도 중'
+        submitted: '제출됨'
+        graded: '채점 완료, 미공개'
+        published: '채점 완료'
+      course/assessment/tab:
+        weight: '순서'
+      course/assessment/tab/title:
+        default: '기본값'
+      course/condition/assessment/title:
+        minimum_score: '%{assessment_title}에서 최소 %{minimum_grade_percentage} 점수를 획득하세요'
+        complete: '%{assessment_title} 완료'
+      course/condition/level/title:
+        title: '레벨 %{value}'
+      course/condition/scholaistic_assessment/title:
+        complete: '%{title} 완료'
+      course/condition/survey/title:
+        complete: '%{survey_title} 완료'
+      course/condition/video/title:
+        complete: '%{video_title} 시청'
+      course/discussion/post:
+        title_reply_template: '답글: %{title}'
+      course/experience_points_record:
+        points_awarded: '경험치 부여됨'
+      course/forum/topic/topic_type:
+        normal: '일반'
+        announcement: '공지'
+        question: '질문'
+        sticky: '고정'
+      course/group_user:
+        manager: '교사'
+      course/lesson_plan/item:
+        base_exp: '경험치'
+        time_bonus_exp: '보너스 경험치'
+        reference_times: '참조 시간'
+      course/video/tab:
+        weight: '순서'
+      course/video/tab/title:
+        default: '기본값'
+      models:
+        course/assessment/question/rubric_based_response:
+          rubric_based_response: '루브릭 기반 응답 질문'
+        course/assessment/question/text_response:
+          text_response: '서술형 질문'
+          file_upload: '파일 업로드 질문'
+          comprehension: '이해력 질문'

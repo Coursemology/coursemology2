@@ -49,7 +49,7 @@ RSpec.describe Course::Assessment, 'duplication' do
             options = {
               current_user: admin,
               new_start_at: (source_course.start_at + time_shift).iso8601,
-              new_title: I18n.t('course.duplications.show.new_course_title_prefix')
+              new_title: "#{source_course.title} copy"
             }
             Course::Duplication::CourseDuplicationService.duplicate_course(source_course, options)
           end

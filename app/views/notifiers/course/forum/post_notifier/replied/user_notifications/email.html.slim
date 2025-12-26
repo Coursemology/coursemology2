@@ -7,10 +7,10 @@
 
 - course_title = format_inline_text(course.title)
 - topic_title = format_inline_text(topic.title)
-- post_author = post.is_anonymous ? t('notifiers.course.anonymous_user') : format_inline_text(post.author_name)
+- post_author = post.is_anonymous ? t('common.mailers.anonymous_course_user') : format_inline_text(post.author_name)
 
 - message.subject = t('.subject', course: course_title, topic: topic_title)
-- message.subject += ' ' + t('notifiers.course.phantom') if course_user&.phantom?
+- message.subject += ' ' + t('common.mailers.phantom_course_user') if course_user&.phantom?
 
 = format_html(t('.message',
                 topic: link_to(topic_title,

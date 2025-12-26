@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import {
   Switch,
   Table,
@@ -10,15 +10,15 @@ import {
 } from '@mui/material';
 import { ComponentData } from 'types/system/instance/components';
 
+import { getComponentTitle } from 'course/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
 import { indexComponents, updateComponents } from '../operations';
 import { actions } from '../store';
-
-type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchComponentsFailure: {
@@ -35,8 +35,8 @@ const translations = defineMessages({
   },
 });
 
-const InstanceComponentsIndex: FC<Props> = (props) => {
-  const { intl } = props;
+const InstanceComponentsIndex: FC = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -49,9 +49,7 @@ const InstanceComponentsIndex: FC<Props> = (props) => {
         setComponents(data);
         dispatch(actions.initComponentList(data));
       })
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchComponentsFailure)),
-      )
+      .catch(() => toast.error(t(translations.fetchComponentsFailure)))
       .finally(() => {
         setIsLoading(false);
       });
@@ -63,11 +61,9 @@ const InstanceComponentsIndex: FC<Props> = (props) => {
       .then((data) => {
         setComponents(data);
         dispatch(actions.initComponentList(data));
-        toast.success(intl.formatMessage(translations.updateComponentsSuccess));
+        toast.success(t(translations.updateComponentsSuccess));
       })
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.updateComponentsFailed)),
-      )
+      .catch(() => toast.error(t(translations.updateComponentsFailed)))
       .finally(() => setIsUpdating(false));
   };
 
@@ -77,18 +73,14 @@ const InstanceComponentsIndex: FC<Props> = (props) => {
     <Table size="small">
       <TableHead>
         <TableRow>
-          <TableCell>
-            {intl.formatMessage(tableTranslations.component)}
-          </TableCell>
-          <TableCell>
-            {intl.formatMessage(tableTranslations.isEnabled)}
-          </TableCell>
+          <TableCell>{t(tableTranslations.component)}</TableCell>
+          <TableCell>{t(tableTranslations.isEnabled)}</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {components.map((component) => (
           <TableRow key={component.key} id={`component_${component.key}`}>
-            <TableCell>{component.displayName}</TableCell>
+            <TableCell>{getComponentTitle(t, component.key)}</TableCell>
             <TableCell>
               <Switch
                 checked={component.enabled}
@@ -104,4 +96,4 @@ const InstanceComponentsIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(InstanceComponentsIndex);
+export default InstanceComponentsIndex;

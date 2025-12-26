@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Link from 'lib/components/core/Link';
 
 import { fields } from '../../../constants';
+import TranslatedItemType from '../../../containers/TranslatedItemType';
 import { updateItem } from '../../../operations';
 
 import DateCell from './DateCell';
@@ -68,7 +69,11 @@ class ItemRow extends Component {
 
     return (
       <tr>
-        {columnsVisible[fields.ITEM_TYPE] ? <td>{type}</td> : null}
+        {columnsVisible[fields.ITEM_TYPE] ? (
+          <td>
+            <TranslatedItemType type={type} />
+          </td>
+        ) : null}
         <td>
           <Link to={itemPath}>{title}</Link>
         </td>

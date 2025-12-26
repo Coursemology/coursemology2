@@ -31,7 +31,7 @@ RSpec.feature 'Course: Administration: Materials', js: true do
         expect_toastify('Your changes have been saved.')
 
         visit current_path
-        expect(find_sidebar).to have_text(I18n.t('course.material.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_materials')
       end
     end
   end

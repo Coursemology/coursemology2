@@ -1,0 +1,79 @@
+zh:
+  errors:
+    authentication:
+      wrong_password: '密码错误'
+    code_formatter:
+      size_too_big: '文件过大，无法显示。'
+    course:
+      users:
+        already_registered: '你已注册为%{role}。'
+        role:
+          student: '学生'
+          teaching_assistant: '助教'
+          observer: '观察者'
+          manager: '管理员'
+          owner: '拥有者'
+          phantom: '虚拟用户'
+      user_invitations:
+        duplicate_user: '%{user}在提交中出现了多次。'
+        invalid_email: '%{email}无效：%{message}。'
+      user_registrations:
+        invalid_code: '你输入了一个无效的邀请码。'
+        code_taken: >
+          所提供的邀请码已被另一个账户所使用，
+          请使用该账户来访问该课程。
+        code_taken_with_email: >
+          所提供的邀请码已被%{email}使用，
+          请使用该账户访问该课程。
+      assessment:
+        answer:
+          programming_auto_grading:
+            grade:
+              evaluation_failed_syntax: >
+                你的代码无法运行，可能存在语法错误或者使用了不支持的库，请再次检查代码。
+              evaluation_failed_time_or_memory: >
+                你的代码未能在指定的时间/内存限制内完成。
+              stdout_too_long: >
+                由于代码执行时在 stdout 生成了过多输出，因此被终止。
+                请排除不必要的输出后重试。
+              stderr_too_long: >
+                由于代码执行时在 stderr 生成了过多输出，因此被终止。
+                请排除不必要的输出后重试。
+              time_limit_error: >
+                错误：超过时间限制 (TLE)
+              memory_limit_error: >
+                错误：超过内存限制 (MLE)
+            job:
+              failure:
+                time_limit_breached: >
+                  判题机在运行时已被终止，可能是由于该问题的时间限制，超出了 coursemology 中允许的值。
+                  请联系你的讲师检查课程设置，如果问题仍然存在，请联系 coursemology 管理员。
+                timeout_error: >
+                  判题任务运行时间过长导致超时错误。
+                  请在几分钟后重试。如果问题仍然存在，请联系您的课程讲师或 coursemology 管理员。
+                container_unreachable: >
+                  创建判题机docker时出错。 可能是由于服务器工作负载过高。
+                  请在几分钟后重试。如果问题仍然存在，请联系您的课程讲师或 coursemology 管理员。
+                generic_error: >
+                  发生错误。可能是由于服务器繁忙，请在几分钟后重试。如果问题仍然存在，请联系 coursemology 管理员，
+                  并提供此页面的 URL，引用以下错误："%{error}"
+        live_feedback:
+          thread:
+            only_one_active_thread: '每个提交问题只能有一个活动线程'
+        submission:
+          download_statistics:
+            no_submissions: '没有提交满足您的下载要求'
+      survey:
+        responses:
+          no_course_user: '你必须是本课程的成员才能开始调研。'
+    user:
+      emails:
+        no_confirmed_emails: '没有已验证的邮箱地址可以设置为主要邮箱。'
+        already_confirmed: '%{email}已验证。'
+      registrations:
+        used: >
+          所提供的邀请码已被另一个账户所使用，请使用该账户登录。
+        used_with_email: >
+          所提供的邀请码已被%{email}使用，
+          请使用该账户访问该课程。
+        verify_recaptcha_alert: 下方 reCAPTCHA 验证出现错误，请重试。

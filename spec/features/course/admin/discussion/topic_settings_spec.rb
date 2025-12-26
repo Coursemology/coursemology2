@@ -42,13 +42,13 @@ RSpec.feature 'Course: Administration: Discussion:: Topics', js: true do
         expect(page).to have_field(title_field, with: new_title)
 
         visit current_path
-        expect(find_sidebar).to have_text(new_title)
+        expect(find_sidebar).to have_selector('#sidebar_item_discussion_topics', text: new_title)
 
         fill_in title_field, with: empty_title
         click_button 'Save changes'
         expect_toastify('Your changes have been saved.')
         visit current_path
-        expect(find_sidebar).to have_text(I18n.t('course.discussion.topics.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_discussion_topics')
       end
     end
   end

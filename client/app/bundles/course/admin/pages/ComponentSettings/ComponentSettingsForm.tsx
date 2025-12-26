@@ -3,6 +3,7 @@ import { FormControlLabel, Switch } from '@mui/material';
 import { produce } from 'immer';
 import { CourseComponents } from 'types/course/admin/components';
 
+import { getComponentTitle } from 'course/translations';
 import Section from 'lib/components/core/layouts/Section';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -47,7 +48,8 @@ const ComponentSettingsForm = (
           className="mb-0"
           control={<Switch />}
           disabled={props.disabled}
-          label={component.displayName}
+          id={`component_${component.id}`}
+          label={getComponentTitle(t, component.id)}
           onChange={(_, checked): void => toggleComponent(index, checked)}
         />
       ))}

@@ -1,9 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        course/group_user:
-          not_enrolled: 'must be enrolled in same course as group'
-    attributes:
-      course/group_user:
-        manager: 'Tutor'

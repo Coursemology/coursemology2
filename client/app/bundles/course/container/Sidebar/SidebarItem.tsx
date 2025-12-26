@@ -1,5 +1,4 @@
 import { useLayoutEffect, useRef } from 'react';
-import { defineMessages } from 'react-intl';
 import { Link, useLocation } from 'react-router-dom';
 import { Badge, Typography } from '@mui/material';
 import { SidebarItemData } from 'types/course/courses';
@@ -7,6 +6,8 @@ import { SidebarItemData } from 'types/course/courses';
 import { defensivelyGetIcon } from 'lib/constants/icons';
 import { useUnreadCountForItem } from 'lib/hooks/unread';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import { getComponentTitle } from '../../translations';
 
 interface SidebarItemProps {
   of: SidebarItemData;
@@ -17,6 +18,8 @@ interface SidebarItemProps {
 
 const SidebarItem = (props: SidebarItemProps): JSX.Element => {
   const { of: item, square, exact, activePath } = props;
+
+  const { t } = useTranslation();
 
   const location = useLocation();
   const activeUrl = activePath ?? location.pathname + location.search;
@@ -42,6 +45,7 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
     <Link
       ref={ref}
       className={`no-underline ${isActive ? 'text-primary' : 'text-inherit'}`}
+      id={`sidebar_item_${item.key}`}
       to={item.path}
     >
       <div
@@ -62,30 +66,20 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
           className="overflow-hidden text-ellipsis whitespace-nowrap font-medium"
           variant="body2"
         >
-          {item.label}
+          {getComponentTitle(t, item.key, item.label)}
         </Typography>
       </div>
     </Link>
   );
 };
 
-const translations = defineMessages({
-  home: {
-    id: 'course.courses.SidebarItem.home',
-    defaultMessage: 'Home',
-  },
-});
-
 const HomeSidebarItem = (props: { to: string }): JSX.Element => {
-  const { t } = useTranslation();
-
   return (
     <SidebarItem
       exact
       of={{
-        key: 'home',
+        key: 'sidebar_home',
         icon: 'home',
-        label: t(translations.home),
         path: props.to,
       }}
     />

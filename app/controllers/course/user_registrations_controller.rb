@@ -23,8 +23,8 @@ class Course::UserRegistrationsController < Course::ComponentController
   def ensure_unregistered_user
     return unless current_course.course_users.exists?(user: current_user)
 
-    role = t("course.users.role.#{current_course_user.role}")
-    message = t('course.users.new.already_registered', role: role)
+    role = t("errors.course.users.role.#{current_course_user.role}")
+    message = t('errors.course.users.already_registered', role: role)
 
     render json: { errors: message }, status: :conflict
   end

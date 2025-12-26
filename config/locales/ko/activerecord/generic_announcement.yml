@@ -1,8 +1,0 @@
-ko:
-  activerecord:
-    errors:
-      models:
-        generic_announcement:
-          attributes:
-            end_at:
-              cannot_be_before_start_at: '시작 시각보다 이를 수 없습니다'

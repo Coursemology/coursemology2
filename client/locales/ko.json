@@ -4007,7 +4007,7 @@
   "course.asssessment.submission.submitNoQuestionExplain": {
     "defaultMessage": "완료로 표시하시겠습니까?"
   },
-  "course.component": {
+  "course.admin.NotificationSettings.component": {
     "defaultMessage": "구성 요소"
   },
   "course.componentTitles.course_achievements_component": {
@@ -4019,14 +4019,65 @@
   "course.componentTitles.course_assessments_component": {
     "defaultMessage": "평가"
   },
+  "course.componentTitles.course_codaveri_component": {
+    "defaultMessage": "Codaveri 평가 및 피드백"
+  },
+  "course.componentTitles.course_discussion_topics_component": {
+    "defaultMessage": "댓글 센터"
+  },
+  "course.componentTitles.course_duplication_component": {
+    "defaultMessage": "복제"
+  },
+  "course.componentTitles.course_experience_points_component": {
+    "defaultMessage": "경험치"
+  },
   "course.componentTitles.course_forums_component": {
     "defaultMessage": "포럼"
+  },
+  "course.componentTitles.course_groups_component": {
+    "defaultMessage": "그룹"
+  },
+  "course.componentTitles.course_koditsu_platform_component": {
+    "defaultMessage": "Koditsu 시험"
+  },
+  "course.componentTitles.course_leaderboard_component": {
+    "defaultMessage": "리더보드"
+  },
+  "course.componentTitles.course_learning_map_component": {
+    "defaultMessage": "학습 지도"
+  },
+  "course.componentTitles.course_lesson_plan_component": {
+    "defaultMessage": "수업 계획"
   },
   "course.componentTitles.course_levels_component": {
     "defaultMessage": "레벨"
   },
   "course.componentTitles.course_materials_component": {
     "defaultMessage": "자료"
+  },
+  "course.componentTitles.course_monitoring_component": {
+    "defaultMessage": "시험 모니터링"
+  },
+  "course.componentTitles.course_multiple_reference_timelines_component": {
+    "defaultMessage": "다중 참조 타임라인"
+  },
+  "course.componentTitles.course_plagiarism_component": {
+    "defaultMessage": "SSID 표절 검사"
+  },
+  "course.componentTitles.course_rag_wise_component": {
+    "defaultMessage": "RagWise 자동 포럼 응답"
+  },
+  "course.componentTitles.course_scholaistic_component": {
+    "defaultMessage": "롤플레잉 챗봇 및 평가"
+  },
+  "course.componentTitles.course_settings_component": {
+    "defaultMessage": "설정"
+  },
+  "course.componentTitles.course_statistics_component": {
+    "defaultMessage": "통계"
+  },
+  "course.componentTitles.course_stories_component": {
+    "defaultMessage": "이야기"
   },
   "course.componentTitles.course_survey_component": {
     "defaultMessage": "설문조사"
@@ -4208,8 +4259,56 @@
   "course.courses.Sidebar.administration": {
     "defaultMessage": "관리"
   },
+  "course.courses.SidebarItem.admin.duplication": {
+    "defaultMessage": "데이터 복제"
+  },
+  "course.courses.SidebarItem.admin.multipleReferenceTimelines": {
+    "defaultMessage": "타임라인 디자이너"
+  },
+  "course.courses.SidebarItem.admin.plagiarism": {
+    "defaultMessage": "SSID 표절 검사"
+  },
+  "course.courses.SidebarItem.admin.scholaistic.assistants": {
+    "defaultMessage": "학습 조수"
+  },
+  "course.courses.SidebarItem.admin.settings": {
+    "defaultMessage": "코스 설정"
+  },
+  "course.courses.SidebarItem.admin.settings.components": {
+    "defaultMessage": "구성 요소"
+  },
+  "course.courses.SidebarItem.admin.settings.general": {
+    "defaultMessage": "일반"
+  },
+  "course.courses.SidebarItem.admin.settings.notifications": {
+    "defaultMessage": "이메일"
+  },
+  "course.courses.SidebarItem.admin.settings.sidebar": {
+    "defaultMessage": "사이드바"
+  },
+  "course.courses.SidebarItem.admin.users.manageUsers": {
+    "defaultMessage": "사용자 관리"
+  },
+  "course.courses.SidebarItem.assessmentSkills": {
+    "defaultMessage": "기술"
+  },
+  "course.courses.SidebarItem.assessmentSubmissions": {
+    "defaultMessage": "제출물"
+  },
+  "course.courses.SidebarItem.discussionTopics": {
+    "defaultMessage": "댓글 센터"
+  },
+  "course.courses.SidebarItem.experiencePoints": {
+    "defaultMessage": "경험치"
+  },
   "course.courses.SidebarItem.home": {
     "defaultMessage": "홈"
+  },
+  "course.courses.SidebarItem.stories.learn": {
+    "defaultMessage": "배우기"
+  },
+  "course.courses.SidebarItem.stories.missionControl": {
+    "defaultMessage": "미션 컨트롤"
   },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "무시"

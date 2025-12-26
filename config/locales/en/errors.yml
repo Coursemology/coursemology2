@@ -1,0 +1,85 @@
+en:
+  errors:
+    authentication:
+      wrong_password: 'Wrong password'
+    code_formatter:
+      size_too_big: 'The file is too big and cannot be displayed.'
+    course:
+      users:
+        already_registered: 'You are already registered as a %{role}.'
+        role:
+          student: 'Student'
+          teaching_assistant: 'Teaching Assistant'
+          observer: 'Observer'
+          manager: 'Manager'
+          owner: 'Owner'
+          phantom: 'Phantom'
+      user_invitations:
+        duplicate_user: '%{user} appears more than once in the submission.'
+        invalid_email: '%{email} is invalid: %{message}.'
+      user_registrations:
+        invalid_code: 'You have entered an invalid invitation code.'
+        code_taken: >
+          The provided invitation code has been claimed by another account,
+          please use that account the to access the course instead.
+        code_taken_with_email: >
+          The provided invitation code has been claimed by %{email},
+          please use that account to access the course instead.
+      assessment:
+        answer:
+          programming_auto_grading:
+            grade:
+              evaluation_failed_syntax: >
+                Your code failed to evaluate correctly. There might be a syntax error
+                or unsupported libraries are used, please check your code again.
+              evaluation_failed_time_or_memory: >
+                Your code failed to complete within the allocated time or memory limits.
+              stdout_too_long: >
+                Your code's execution was terminated because it generated too much output in stdout.
+                Please exclude unnecessary output and try again.
+              stderr_too_long: >
+                Your code's execution was terminated because it generated too much output in stderr.
+                Please exclude unnecessary output and try again.
+              time_limit_error: >
+                Time Limit Exceeded (TLE) Error
+              memory_limit_error: >
+                Memory Limit Exceeded (MLE) Error
+            job:
+              failure:
+                time_limit_breached: >
+                  The evaluator has been killed while it is still running.
+                  This could be caused by the time limit set for this question exceeds
+                  the allowable evaluator time limit in coursemology.
+                  Please contact your course instructor to check this and if the problem persists,
+                  please contact coursemology admin.
+                timeout_error: >
+                  There is a timeout error as it takes a longer time to run the job. Please try again in a few minutes.
+                  If the problem persists, please contact your course instructor or coursemology admin.
+                container_unreachable: >
+                  There is an error creating a docker for the evaluator.
+                  This could be due to high server workload. Please try again in a few minutes.
+                  If the problem persists, please contact your course instructor or coursemology admin.
+                generic_error: >
+                  Encountered an error. The server may be busy now and
+                  you may want to try again in a few minutes. If the same issue persists,
+                  please contact coursemology admin, provide the URL of this page and
+                  quote the following error: "%{error}"
+        live_feedback:
+          thread:
+            only_one_active_thread: 'There can be only one active thread per submission question'
+        submission:
+          download_statistics:
+            no_submissions: 'No submission fulfilled your requirements for downloading'
+      survey:
+        responses:
+          no_course_user: 'You must be a member of this course to start the survey.'
+    user:
+      emails:
+        no_confirmed_emails: 'There are no confirmed emails to set as the primary email.'
+        already_confirmed: '%{email} was already confirmed.'
+      registrations:
+        used: >
+          The provided invitation code has been claimed by another account, please use that account to log in instead.
+        used_with_email: >
+          The provided invitation code has been claimed by %{email}, please use that account to log in instead.
+        verify_recaptcha_alert: There was an error with the reCAPTCHA below, please try again.

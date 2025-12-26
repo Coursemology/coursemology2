@@ -146,7 +146,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
       let(:user) { create(:course_student, course: course).user }
 
       scenario 'I can view the Material Sidebar item' do
-        expect(find_sidebar).to have_text(I18n.t('course.material.sidebar_title'))
+        expect(find_sidebar).to have_selector('#sidebar_item_materials')
       end
 
       scenario 'I can view valid subfolders' do

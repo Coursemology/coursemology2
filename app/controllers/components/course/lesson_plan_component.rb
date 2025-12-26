@@ -2,10 +2,6 @@
 class Course::LessonPlanComponent < SimpleDelegator
   include Course::ControllerComponentHost::Component
 
-  def self.display_name
-    I18n.t('components.lesson_plan.name')
-  end
-
   def self.lesson_plan_item_actable_names
     [Course::LessonPlan::Event.name]
   end
@@ -21,7 +17,6 @@ class Course::LessonPlanComponent < SimpleDelegator
       {
         key: :lesson_plan,
         icon: :lessonPlan,
-        title: I18n.t('course.lesson_plan.items.sidebar_title'),
         weight: 8,
         path: course_lesson_plan_path(current_course)
       }
@@ -31,7 +26,7 @@ class Course::LessonPlanComponent < SimpleDelegator
   def settings_sidebar_items
     [
       {
-        title: t('layouts.course_admin.lesson_plan.title'),
+        key: self.class.key,
         type: :settings,
         weight: 9,
         path: course_admin_lesson_plan_path(current_course)

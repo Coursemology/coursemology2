@@ -7,10 +7,6 @@ class Course::SettingsComponent < SimpleDelegator
     false
   end
 
-  def self.display_name
-    I18n.t('components.settings.name')
-  end
-
   def sidebar_items
     admin_sidebar_items + settings_sidebar_items
   end
@@ -22,9 +18,8 @@ class Course::SettingsComponent < SimpleDelegator
 
     [
       {
-        key: :admin,
+        key: :admin_settings,
         icon: :settings,
-        title: t('layouts.course_admin.title'),
         type: :admin,
         weight: 100,
         path: course_admin_path(current_course)
@@ -43,7 +38,7 @@ class Course::SettingsComponent < SimpleDelegator
 
   def settings_index_item
     {
-      title: t('layouts.course_admin.course_settings.title'),
+      key: :admin_settings_general,
       type: :settings,
       weight: 1,
       path: course_admin_path(current_course)
@@ -52,7 +47,7 @@ class Course::SettingsComponent < SimpleDelegator
 
   def settings_components_item
     {
-      title: t('layouts.course_admin.component_settings.title'),
+      key: :admin_settings_component_settings,
       type: :settings,
       weight: 2,
       path: course_admin_components_path(current_course)
@@ -61,7 +56,7 @@ class Course::SettingsComponent < SimpleDelegator
 
   def settings_sidebar_item
     {
-      title: t('layouts.course_admin.sidebar_settings.title'),
+      key: :admin_settings_sidebar_settings,
       type: :settings,
       weight: 3,
       path: course_admin_sidebar_path(current_course)
@@ -70,7 +65,7 @@ class Course::SettingsComponent < SimpleDelegator
 
   def settings_notifications
     {
-      title: t('layouts.course_admin.notifications.title'),
+      key: :admin_settings_notifications,
       type: :settings,
       weight: 12,
       path: course_admin_notifications_path(current_course)

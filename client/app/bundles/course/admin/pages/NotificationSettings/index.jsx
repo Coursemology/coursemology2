@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import adminTranslations from 'course/translations.intl';
 import Section from 'lib/components/core/layouts/Section';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import messagesTranslations from 'lib/translations/messages';
@@ -106,7 +105,7 @@ class NotificationSettings extends Component {
         <TableHead>
           <TableRow>
             <TableCell colSpan={1}>
-              <FormattedMessage {...adminTranslations.component} />
+              <FormattedMessage {...translations.component} />
             </TableCell>
             <TableCell colSpan={2}>
               <FormattedMessage {...translations.setting} />
