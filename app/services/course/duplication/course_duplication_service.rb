@@ -39,8 +39,10 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
   #
   # @return [Course] The duplicated course
   def duplicate_course(source_course, destination_instance_id)
-    duplicated_course = Course.transaction do
-      begin
+    duplicated_course = nil
+
+    begin
+      duplicated_course = Course.transaction do
         new_course = duplicator.duplicate(source_course)
         new_course.instance_id = destination_instance_id if destination_instance_id
         new_course.koditsu_workspace_id = nil
@@ -79,12 +81,12 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
         new_course.logo.duplicate_from(source_course.logo) if source_course.logo_url
 
         new_course
-      rescue => _e # TO REMOVE - Testing for production duplication error
-        Rails.logger.debug(message: 'Course duplication error debugging', error: _e, error_message: _e.message)
-        raise ActiveRecord::Rollback
       end
+    ensure
+      # Always notify the user of the duplication result, whether it succeeded or failed
+      notify_duplication_complete(duplicated_course)
     end
-    notify_duplication_complete(duplicated_course)
+
     duplicated_course
   end
 

@@ -238,6 +238,7 @@ class Course::Assessment < ApplicationRecord
     initialize_duplicate_conditions(duplicator, other)
     self.monitor = duplicator.duplicate(other.monitor)
     self.linkable_tree_id = other.linkable_tree_id
+
     # the new assessment has links to all linked assessments of the original assessment,
     # as well as the duplicates of those linked assessments if they are duplicated
     # in the same process (i.e course duplication)
@@ -250,13 +251,13 @@ class Course::Assessment < ApplicationRecord
     end
     self.linked_assessments = linked_assessments.reject { |assessment| assessment == self }
 
-    # As part of the current duplication process, if any assessment linking to this one is duplicated,
-    # then it should also be linked to the duplicated assessment.
-    other.reverse_linked_assessments.each do |assessment|
-      next unless duplicator.duplicated?(assessment)
-
-      duplicator.duplicate(assessment).linked_assessments << self
-    end
+    # if any assessment linking to the original assessment is duplicated,
+    # then the link source's duplicate should also be linked to the duplicated assessment.
+    # This handles the case where the link source is duplicated before the link destination.
+    self.reverse_linked_assessments =
+      other.reverse_linked_assessments.
+      filter { |assessment| duplicator.duplicated?(assessment) }.
+      map { |assessment| duplicator.duplicate(assessment) }
 
     # we do creation of Koditsu assessment on-demand, which means that the association
     # between "other" and its Koditsu assessment is not carried over by duplication

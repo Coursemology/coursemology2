@@ -24,6 +24,12 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
         expect(File.exist?(File.join(Rails.root, 'public', new_course.logo.store_path))).to be true
       end
 
+      it 'sends a success notification email', type: :mailer do
+        expect do
+          new_course
+        end.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
       context 'when saving fails' do
         let!(:invalid_event) do
           create(:course_lesson_plan_event, course: course).tap do |event|
@@ -32,9 +38,11 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
           end
         end
 
-        it 'rolls back the whole transaction' do
-          expect { new_course }.to change { Course.count }.by(0)
-          expect(new_course).to be_nil
+        it 'rolls back the whole transaction, raises an exception, and sends a failure notification email' do
+          expect { new_course }.
+            to raise_error(ActiveRecord::RecordInvalid).
+            and change { Course.count }.by(0).
+            and change { ActionMailer::Base.deliveries.count }.by(1)
         end
       end
 
