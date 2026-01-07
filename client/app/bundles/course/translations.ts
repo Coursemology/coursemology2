@@ -167,6 +167,10 @@ const translations = defineMessages({
     id: 'course.courses.SidebarItem.home',
     defaultMessage: 'Home',
   },
+  sidebar_scholaistic_assessments: {
+    id: 'course.courses.SidebarItem.scholaistic.assessments',
+    defaultMessage: 'Role-Playing Assessments',
+  },
   sidebar_stories_learn: {
     id: 'course.courses.SidebarItem.stories.learn',
     defaultMessage: 'Learn',
@@ -190,6 +194,7 @@ const LegacySidebarItemKeyMapper: Record<string, MessageDescriptor> = {
   lesson_plan: translations.course_lesson_plan_component,
   materials: translations.course_materials_component,
   learn: translations.sidebar_stories_learn,
+  scholaistic_assessments: translations.sidebar_scholaistic_assessments,
   surveys: translations.course_survey_component,
   users: translations.course_users_component,
   videos: translations.course_videos_component,

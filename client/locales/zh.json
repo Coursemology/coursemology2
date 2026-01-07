@@ -4304,6 +4304,9 @@
   "course.courses.SidebarItem.stories.missionControl": {
     "defaultMessage": "任务控制"
   },
+  "course.courses.SidebarItem.scholaistic.assessments": {
+    "defaultMessage": "角色扮演评估"
+  },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "忽视"
   },

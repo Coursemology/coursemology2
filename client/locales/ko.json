@@ -4310,6 +4310,9 @@
   "course.courses.SidebarItem.stories.missionControl": {
     "defaultMessage": "미션 컨트롤"
   },
+  "course.courses.SidebarItem.scholaistic.assessments": {
+    "defaultMessage": "롤플레잉 평가"
+  },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "무시"
   },

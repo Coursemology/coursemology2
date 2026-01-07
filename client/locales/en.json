@@ -4329,6 +4329,9 @@
   "course.courses.SidebarItem.stories.missionControl": {
     "defaultMessage": "Mission Control"
   },
+  "course.courses.SidebarItem.scholaistic.assessments": {
+    "defaultMessage": "Role-Playing Assessments"
+  },
   "course.courses.TodoIgnoreButton.ignore.ignoreButtonText": {
     "defaultMessage": "Ignore"
   },
