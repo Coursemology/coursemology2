@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:24.0.1 as builder
+FROM quay.io/keycloak/keycloak:24.0.1 AS builder
 
 # Enable health and metrics support
 ENV KC_HEALTH_ENABLED=true
@@ -13,7 +13,7 @@ FROM quay.io/keycloak/keycloak:24.0.1
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
 COPY ./singular-keycloak-database-federation/dist /opt/keycloak/providers
-COPY ./theme/coursemology-keycloakify-keycloak-theme-6.1.7.jar /opt/keycloak/providers/coursemology-keycloakify-keycloak-theme-6.1.7.jar
+COPY ./theme/coursemology-keycloakify-keycloak-theme-8.0.0.jar /opt/keycloak/providers/coursemology-keycloakify-keycloak-theme-8.0.0.jar
 COPY ./import/coursemology_realm.json /opt/keycloak/data/import/coursemology_realm.json
 
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
