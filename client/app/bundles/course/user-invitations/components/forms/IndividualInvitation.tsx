@@ -5,10 +5,13 @@ import {
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from 'react-hook-form';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Tooltip } from '@mui/material';
-import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
+import {
+  COURSE_USER_ROLES,
+  ManageCourseUsersPermissions,
+} from 'types/course/courseUsers';
 import {
   IndividualInvite,
   IndividualInvites,
@@ -17,13 +20,12 @@ import {
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import {
-  COURSE_USER_ROLES,
-  TIMELINE_ALGORITHMS,
-} from 'lib/constants/sharedConstants';
+import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
+import useTranslation from 'lib/hooks/useTranslation';
+import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   permissions: ManageCourseUsersPermissions;
   fieldsConfig: {
     control: Control<IndividualInvites>;
@@ -64,13 +66,14 @@ const translations = defineMessages({
   },
 });
 
-const userRoleOptions = Object.keys(COURSE_USER_ROLES).map((roleValue) => ({
-  label: COURSE_USER_ROLES[roleValue],
-  value: roleValue,
-}));
-
 const IndividualInvitation: FC<Props> = (props) => {
-  const { permissions, fieldsConfig, index, intl } = props;
+  const { permissions, fieldsConfig, index } = props;
+  const { t } = useTranslation();
+
+  const userRoleOptions = COURSE_USER_ROLES.map((roleValue) => ({
+    label: t(roleTranslations[roleValue]),
+    value: roleValue,
+  }));
 
   const renderInvitationBody = (
     <Grid alignItems="center" container flexWrap="nowrap">
@@ -82,8 +85,8 @@ const IndividualInvitation: FC<Props> = (props) => {
             field={field}
             fieldState={fieldState}
             id={`name-${index}`}
-            label={intl.formatMessage(tableTranslations.name)}
-            placeholder={intl.formatMessage(translations.namePlaceholder)}
+            label={t(tableTranslations.name)}
+            placeholder={t(translations.namePlaceholder)}
             sx={styles.textInput}
             variant="standard"
           />
@@ -97,8 +100,8 @@ const IndividualInvitation: FC<Props> = (props) => {
             field={field}
             fieldState={fieldState}
             id={`email-${index}`}
-            label={intl.formatMessage(tableTranslations.email)}
-            placeholder={intl.formatMessage(translations.emailPlaceholder)}
+            label={t(tableTranslations.email)}
+            placeholder={t(translations.emailPlaceholder)}
             sx={styles.textInput}
             variant="standard"
           />
@@ -111,7 +114,7 @@ const IndividualInvitation: FC<Props> = (props) => {
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            label={intl.formatMessage(tableTranslations.role)}
+            label={t(tableTranslations.role)}
             options={userRoleOptions}
             sx={styles.textInput}
           />
@@ -125,7 +128,7 @@ const IndividualInvitation: FC<Props> = (props) => {
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              label={intl.formatMessage(tableTranslations.timelineAlgorithm)}
+              label={t(tableTranslations.timelineAlgorithm)}
               options={TIMELINE_ALGORITHMS}
             />
           )}
@@ -138,7 +141,7 @@ const IndividualInvitation: FC<Props> = (props) => {
           <FormCheckboxField
             field={field}
             fieldState={fieldState}
-            label={intl.formatMessage(tableTranslations.phantom)}
+            label={t(tableTranslations.phantom)}
           />
         )}
       />
@@ -148,7 +151,7 @@ const IndividualInvitation: FC<Props> = (props) => {
   return (
     <Box key={index} style={styles.invitation}>
       {renderInvitationBody}
-      <Tooltip title={intl.formatMessage(translations.removeInvitation)}>
+      <Tooltip title={t(translations.removeInvitation)}>
         <IconButton onClick={(): void => fieldsConfig.remove(index)}>
           <Close />
         </IconButton>
@@ -157,4 +160,4 @@ const IndividualInvitation: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(IndividualInvitation);
+export default IndividualInvitation;

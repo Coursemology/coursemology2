@@ -1,9 +1,9 @@
-import { CourseUserRoles, CourseUserShape } from 'types/course/courseUsers';
+import { CourseUserRole, CourseUserShape } from 'types/course/courseUsers';
 
 export interface GroupMember {
   id: number;
   name: string;
-  role: CourseUserRoles;
+  role: CourseUserRole;
   isPhantom: boolean;
   groupRole: 'manager' | 'normal';
 }

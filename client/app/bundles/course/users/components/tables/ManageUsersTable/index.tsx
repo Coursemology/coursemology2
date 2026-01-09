@@ -1,18 +1,13 @@
 import { ReactElement, useMemo } from 'react';
 import { MenuItem, Typography } from '@mui/material';
-import {
-  CourseUserMiniEntity,
-  CourseUserRoles,
-} from 'types/course/courseUsers';
+import { CourseUserMiniEntity, CourseUserRole } from 'types/course/courseUsers';
 
 import Note from 'lib/components/core/Note';
 import Table, { ColumnTemplate } from 'lib/components/table';
-import {
-  COURSE_USER_ROLES,
-  DEFAULT_TABLE_ROWS_PER_PAGE,
-} from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
+import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
 import { getManageCourseUserPermissions } from '../../../selectors';
@@ -159,7 +154,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       cell: (user) => <RoleMenu for={user} />,
       unless: !manageStaff || !permissions?.canManageCourseUsers,
       csvDownloadable: true,
-      csvValue: (value: CourseUserRoles) => COURSE_USER_ROLES[value],
+      csvValue: (value: CourseUserRole) => t(roleTranslations[value]),
     },
     {
       id: 'actions',

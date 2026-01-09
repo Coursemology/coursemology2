@@ -1,4 +1,4 @@
-import { CourseUserRoles } from './course/courseUsers';
+import { CourseUserRole } from './course/courseUsers';
 
 export type UserRoles = 'normal' | 'administrator';
 
@@ -52,7 +52,7 @@ export interface UserCourseListData {
   userCount: number;
   courseUserId: number;
   courseUserName: string;
-  courseUserRole: CourseUserRoles;
+  courseUserRole: CourseUserRole;
   courseUserAchievement: number;
   courseUserLevel: number;
   type: string;
@@ -65,7 +65,7 @@ export interface UserCourseMiniEntity {
   userCount: number;
   courseUserId: number;
   courseUserName: string;
-  courseUserRole: CourseUserRoles;
+  courseUserRole: CourseUserRole;
   courseUserAchievement: number;
   courseUserLevel: number;
   type: string;

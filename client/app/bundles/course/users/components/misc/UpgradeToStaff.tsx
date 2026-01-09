@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { LoadingButton } from '@mui/lab';
@@ -13,21 +13,22 @@ import {
   Typography,
 } from '@mui/material';
 import {
+  COURSE_STAFF_ROLES,
+  CourseStaffRole,
   CourseUserBasicMiniEntity,
-  StaffRoles,
 } from 'types/course/courseUsers';
 
-import { STAFF_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
+import roleTranslations from 'lib/translations/course/users/roles';
+import tableTranslations from 'lib/translations/table';
 
 import { upgradeToStaff } from '../../operations';
 import { getStudentOptionMiniEntities } from '../../selectors';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-
-type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   upgradeSuccess: {
@@ -43,27 +44,21 @@ const translations = defineMessages({
     id: 'course.users.UpgradeToStaff.upgradeHeader',
     defaultMessage: 'Upgrade Student',
   },
-  nameLabel: {
-    id: 'course.users.UpgradeToStaff.nameLabel',
-    defaultMessage: 'Name',
-  },
   upgradeButton: {
     id: 'course.users.UpgradeToStaff.upgradeButton',
     defaultMessage: 'Upgrade to staff',
   },
 });
 
-const UpgradeToStaff: FC<Props> = (props) => {
-  const { intl } = props;
+const UpgradeToStaff: FC = () => {
+  const { t } = useTranslation();
 
   const students = useAppSelector(getStudentOptionMiniEntities);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<
     CourseUserBasicMiniEntity[]
   >([]);
-  const [role, setRole] = useState<StaffRoles>(
-    Object.keys(STAFF_ROLES)[0] as StaffRoles, // object.keys returns string[]; we know it is a StaffRoles
-  );
+  const [role, setRole] = useState<CourseStaffRole>('teaching_assistant');
   const dispatch = useAppDispatch();
 
   const onSubmit = (): Promise<void> => {
@@ -71,11 +66,10 @@ const UpgradeToStaff: FC<Props> = (props) => {
     setSelectedStudents([]);
     return dispatch(upgradeToStaff(selectedStudents, role))
       .then(() => {
-        const roleLabel = STAFF_ROLES[role];
         toast.success(
-          intl.formatMessage(translations.upgradeSuccess, {
+          t(translations.upgradeSuccess, {
             count: selectedStudents.length,
-            role: roleLabel,
+            role: t(roleTranslations[role]),
           }),
         );
       })
@@ -84,7 +78,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.upgradeFailure, {
+          t(translations.upgradeFailure, {
             error: errorMessage,
           }),
         );
@@ -105,7 +99,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
   return (
     <div style={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}>
       <Typography sx={{ marginBottom: '24px' }} variant="h6">
-        {intl.formatMessage(translations.upgradeHeader)}
+        {t(translations.upgradeHeader)}
       </Typography>
       <Grid alignItems="flex-end" container flexDirection="row">
         <Autocomplete
@@ -118,7 +112,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
           renderInput={(params): JSX.Element => (
             <TextField
               {...params}
-              label={intl.formatMessage(translations.nameLabel)}
+              label={t(tableTranslations.name)}
               variant="standard"
             />
           )}
@@ -138,17 +132,19 @@ const UpgradeToStaff: FC<Props> = (props) => {
         />
         <TextField
           id="upgrade-student-role"
-          label="Role"
+          label={t(tableTranslations.role)}
           onChange={handleRoleChange}
           select
           sx={{ minWidth: '300px', marginRight: '12px' }}
           value={role}
           variant="standard"
         >
-          {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
-          {Object.keys(STAFF_ROLES).map((role) => (
-            <MenuItem key={`upgrade-student-role-${role}`} value={role}>
-              {STAFF_ROLES[role]}
+          {COURSE_STAFF_ROLES.map((roleValue) => (
+            <MenuItem
+              key={`upgrade-student-role-${roleValue}`}
+              value={roleValue}
+            >
+              {t(roleTranslations[roleValue])}
             </MenuItem>
           ))}
         </TextField>
@@ -159,11 +155,11 @@ const UpgradeToStaff: FC<Props> = (props) => {
           style={{ marginTop: '4px' }}
           variant="contained"
         >
-          {intl.formatMessage(translations.upgradeButton)}
+          {t(translations.upgradeButton)}
         </LoadingButton>
       </Grid>
     </div>
   );
 };
 
-export default injectIntl(UpgradeToStaff);
+export default UpgradeToStaff;

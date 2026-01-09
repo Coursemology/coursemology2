@@ -7118,9 +7118,6 @@
   "course.users.SelectCourseUser.placeholder": {
     "defaultMessage": "未选择课程用户"
   },
-  "course.users.UpgradeToStaff.nameLabel": {
-    "defaultMessage": "姓名"
-  },
   "course.users.UpgradeToStaff.upgradeButton": {
     "defaultMessage": "升级为助教"
   },
@@ -7753,6 +7750,21 @@
   },
   "lib.translations.course.users.manageUsersHeader": {
     "defaultMessage": "管理用户"
+  },
+  "lib.translations.course.users.roles.student": {
+    "defaultMessage": "学生"
+  },
+  "lib.translations.course.users.roles.teachingAssistant": {
+    "defaultMessage": "助教"
+  },
+  "lib.translations.course.users.roles.observer": {
+    "defaultMessage": "观察者"
+  },
+  "lib.translations.course.users.roles.manager": {
+    "defaultMessage": "管理员"
+  },
+  "lib.translations.course.users.roles.owner": {
+    "defaultMessage": "拥有者"
   },
   "lib.translations.experimental": {
     "defaultMessage": "实验性的"

@@ -5,7 +5,7 @@ import { CourseComponentIconName } from 'lib/constants/icons';
 import { AchievementBadgeData } from './assessment/assessments';
 import { TodoData } from './lesson-plan/todos';
 import { AnnouncementData, AnnouncementEntity } from './announcements';
-import { CourseUserListData, CourseUserRoles } from './courseUsers';
+import { CourseUserListData, CourseUserRole } from './courseUsers';
 import { NotificationData } from './notifications';
 
 export type CoursePermissions = Permissions<'canCreate' | 'isCurrentUser'>;
@@ -100,7 +100,7 @@ export interface CourseLayoutData {
   userName: string;
   courseLogoUrl?: string;
   courseUserName?: string;
-  courseUserRole?: CourseUserRoles;
+  courseUserRole?: CourseUserRole;
   userAvatarUrl?: string;
   homeRedirectsToLearn?: boolean;
   sidebar?: SidebarItemData[];
