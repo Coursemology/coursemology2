@@ -138,6 +138,8 @@ zh:
           attributes:
             base:
               deletion: '由于加入课程申请已被处理，无法撤回。'
+        course/group_user:
+          not_enrolled: '必须与小组在同一课程中注册'
         course/learning_rate_record:
           attributes:
             learning_rate:
@@ -184,12 +186,14 @@ zh:
           attributes:
             time_bonus_exp:
               bonus_attributes_not_allowed: '不允许使用奖励属性'
-        course/survey/answer: '这个问题的答案不能为空。'
+        course/survey/answer:
+          cannot_be_empty: '这个问题的答案不能为空。'
         course/user_achievement:
           attributes:
             course_user:
               not_in_course: '选中的用户不在指定课程中'
-        course/user_invitation: '此电子邮件地址已存在一个未完成的邀请'
+        course/user_invitation:
+          existing_invitation: '此电子邮件地址已存在一个未完成的邀请'
         course/video:
           attributes:
             url:

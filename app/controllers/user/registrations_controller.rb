@@ -7,7 +7,11 @@ class User::RegistrationsController < Devise::RegistrationsController
   # GET /resource/sign_up
   def new
     if @invitation&.confirmed?
-      message = @invitation.confirmer ? t('.used_with_email', email: @invitation.confirmer.email) : t('.used')
+      message = if @invitation.confirmer
+                  t('errors.user.registrations.used_with_email', email: @invitation.confirmer.email)
+                else
+                  t('errors.user.registrations.used')
+                end
       render json: { message: message }, status: :conflict and return
     elsif @invitation.is_a?(Course::UserInvitation)
       course = @invitation.course
@@ -34,7 +38,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   def create
     unless verify_recaptcha
       build_resource(sign_up_params)
-      render json: { errors: { recaptcha: t('user.registrations.create.verify_recaptcha_alert') } },
+      render json: { errors: { recaptcha: t('errors.user.registrations.verify_recaptcha_alert') } },
              status: :unprocessable_entity
       return
     end

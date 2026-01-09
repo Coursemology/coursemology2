@@ -186,12 +186,14 @@ ko:
           attributes:
             time_bonus_exp:
               bonus_attributes_not_allowed: '보너스 속성은 허용되지 않습니다'
-        course/survey/answer: '이 질문의 답변은 비워둘 수 없습니다.'
+        course/survey/answer:
+          cannot_be_empty: '이 질문의 답변은 비워둘 수 없습니다.'
         course/user_achievement:
           attributes:
             course_user:
               not_in_course: '선택한 사용자가 지정된 코스에 없습니다'
-        course/user_invitation: '이 이메일 주소에는 아직 완료되지 않은 초대장이 있습니다'
+        course/user_invitation:
+          existing_invitation: '이 이메일 주소에는 아직 완료되지 않은 초대장이 있습니다'
         course/video:
           attributes:
             url:

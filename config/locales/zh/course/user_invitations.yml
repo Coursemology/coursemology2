@@ -1,7 +1,0 @@
-zh:
-  course:
-    user_invitations:
-      errors:
-        duplicate_user: '%{user}在提交中出现了多次。'
-        invalid_email: '%{email}无效：%{message}。'
-

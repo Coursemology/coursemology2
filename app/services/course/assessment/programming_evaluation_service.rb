@@ -50,7 +50,7 @@ class Course::Assessment::ProgrammingEvaluationService
     attr_reader :stdout, :stderr
 
     def initialize(message, stdout = nil, stderr = nil)
-      message ||= I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
+      message ||= I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
       super(message)
       @stdout = stdout
       @stderr = stderr
@@ -71,14 +71,15 @@ class Course::Assessment::ProgrammingEvaluationService
   # Represents a Time or Docker Memory Limit Exceeded error while evaluating the package.
   class TimeOrMemoryLimitExceededError < Error
     def initialize(message, stdout = nil, stderr = nil)
-      message ||= I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_time_or_memory')
+      message ||=
+        I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.evaluation_failed_time_or_memory')
       super(message, stdout, stderr)
     end
   end
 
   class TimeLimitExceededError < Error
     def initialize(message, stdout = nil, stderr = nil)
-      message ||= I18n.t('course.assessment.answer.programming_auto_grading.grade.time_limit_error')
+      message ||= I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.time_limit_error')
       super(message, stdout, stderr)
     end
   end
@@ -86,7 +87,7 @@ class Course::Assessment::ProgrammingEvaluationService
   # Represents a Time Limit Exceeded error while evaluating the package.
   class MemoryLimitExceededError < Error
     def initialize(message, stdout = nil, stderr = nil)
-      message ||= I18n.t('course.assessment.answer.programming_auto_grading.grade.memory_limit_error')
+      message ||= I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.memory_limit_error')
       super(message, stdout, stderr)
     end
   end
