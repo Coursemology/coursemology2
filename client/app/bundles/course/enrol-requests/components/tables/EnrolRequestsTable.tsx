@@ -1,13 +1,9 @@
 import { FC, memo, ReactElement } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { Checkbox, MenuItem, TextField, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { COURSE_USER_ROLES } from 'types/course/courseUsers';
 import {
   EnrolRequestMiniEntity,
   EnrolRequestRowData,
@@ -16,13 +12,12 @@ import {
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
-import {
-  COURSE_USER_ROLES,
-  TIMELINE_ALGORITHMS,
-} from 'lib/constants/sharedConstants';
+import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
+import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
 import {
@@ -30,7 +25,7 @@ import {
   getManageCourseUsersSharedData,
 } from '../../selectors';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   title: string;
   enrolRequests: EnrolRequestMiniEntity[];
   pendingEnrolRequests?: boolean;
@@ -75,8 +70,9 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     approvedEnrolRequests = false,
     rejectedEnrolRequests = false,
     renderRowActionComponent = null,
-    intl,
   } = props;
+
+  const { t } = useTranslation();
   const permissions = useAppSelector(getManageCourseUserPermissions);
   const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
@@ -85,12 +81,9 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   if (enrolRequests && enrolRequests.length === 0) {
     return (
       <Note
-        message={
-          <FormattedMessage
-            {...translations.noEnrolRequests}
-            values={{ enrolRequestsType: title.toLowerCase() }}
-          />
-        }
+        message={t(translations.noEnrolRequests, {
+          enrolRequestsType: title.toLowerCase(),
+        })}
       />
     );
   }
@@ -98,11 +91,11 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   const requestTypePrefix: string = ((): string => {
     /* eslint-disable no-else-return */
     if (approvedEnrolRequests) {
-      return intl.formatMessage(translations.approved);
+      return t(translations.approved);
     } else if (rejectedEnrolRequests) {
-      return intl.formatMessage(translations.rejected);
+      return t(translations.rejected);
     } else if (pendingEnrolRequests) {
-      return intl.formatMessage(translations.pending);
+      return t(translations.pending);
     }
     return '';
     /* eslint-enable no-else-return */
@@ -135,7 +128,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   const basicColumns: TableColumns[] = [
     {
       name: 'id',
-      label: intl.formatMessage(tableTranslations.id),
+      label: t(tableTranslations.id),
       options: {
         display: false,
         filter: false,
@@ -144,7 +137,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'email',
-      label: intl.formatMessage(tableTranslations.email),
+      label: t(tableTranslations.email),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -159,14 +152,14 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'createdAt',
-      label: intl.formatMessage(tableTranslations.createdAt),
+      label: t(tableTranslations.createdAt),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`createdAt-${enrolRequest.id}`} variant="body2">
-              {enrolRequest.createdAt}
+              {formatLongDateTime(enrolRequest.createdAt)}
             </Typography>
           );
         },
@@ -177,7 +170,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   const pendingEnrolRequestsColumns: TableColumns[] = [
     {
       name: 'name',
-      label: intl.formatMessage(tableTranslations.name),
+      label: t(tableTranslations.name),
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
@@ -198,7 +191,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     ...basicColumns,
     {
       name: 'role',
-      label: intl.formatMessage(tableTranslations.role),
+      label: t(tableTranslations.role),
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
@@ -211,12 +204,12 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               value={value || 'student'}
               variant="standard"
             >
-              {Object.keys(COURSE_USER_ROLES).map((option) => (
+              {COURSE_USER_ROLES.map((option) => (
                 <MenuItem
                   key={`role-${enrolRequest.id}-${option}`}
                   value={option}
                 >
-                  {COURSE_USER_ROLES[option]}
+                  {t(roleTranslations[option])}
                 </MenuItem>
               ))}
             </TextField>
@@ -226,7 +219,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'phantom',
-      label: intl.formatMessage(tableTranslations.phantom),
+      label: t(tableTranslations.phantom),
       options: {
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
           const enrolRequest = enrolRequests[tableMeta.rowIndex];
@@ -246,7 +239,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       ? [
           {
             name: 'timelineAlgorithm',
-            label: intl.formatMessage(tableTranslations.timelineAlgorithm),
+            label: t(tableTranslations.timelineAlgorithm),
             options: {
               alignCenter: false,
               customBodyRender: (
@@ -282,7 +275,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       ? [
           {
             name: 'actions',
-            label: intl.formatMessage(tableTranslations.actions),
+            label: t(tableTranslations.actions),
             options: {
               empty: true,
               sort: false,
@@ -301,7 +294,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   const approvedEnrolRequestsColumns: TableColumns[] = [
     {
       name: 'name',
-      label: intl.formatMessage(tableTranslations.name),
+      label: t(tableTranslations.name),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -317,14 +310,14 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     ...basicColumns,
     {
       name: 'role',
-      label: intl.formatMessage(tableTranslations.role),
+      label: t(tableTranslations.role),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`role-${enrolRequest.id}`} variant="body2">
-              {enrolRequest.role ? COURSE_USER_ROLES[enrolRequest.role] : '-'}
+              {enrolRequest.role ? t(roleTranslations[enrolRequest.role]) : '-'}
             </Typography>
           );
         },
@@ -332,7 +325,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'phantom',
-      label: intl.formatMessage(tableTranslations.phantom),
+      label: t(tableTranslations.phantom),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -353,7 +346,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'approver',
-      label: intl.formatMessage(tableTranslations.approver),
+      label: t(tableTranslations.approver),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -368,7 +361,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'approvedAt',
-      label: intl.formatMessage(tableTranslations.approvedAt),
+      label: t(tableTranslations.approvedAt),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -386,7 +379,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   const rejectedEnrolRequestsColumns: TableColumns[] = [
     {
       name: 'name',
-      label: intl.formatMessage(tableTranslations.name),
+      label: t(tableTranslations.name),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -402,7 +395,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     ...basicColumns,
     {
       name: 'rejector',
-      label: intl.formatMessage(tableTranslations.rejector),
+      label: t(tableTranslations.rejector),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -417,7 +410,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'rejectedAt',
-      label: intl.formatMessage(tableTranslations.rejectedAt),
+      label: t(tableTranslations.rejectedAt),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -452,6 +445,6 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   );
 };
 
-export default memo(injectIntl(EnrolRequestsTable), (prevProps, nextProps) => {
+export default memo(EnrolRequestsTable, (prevProps, nextProps) => {
   return equal(prevProps.enrolRequests, nextProps.enrolRequests);
 });

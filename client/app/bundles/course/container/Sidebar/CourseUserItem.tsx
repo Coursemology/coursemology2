@@ -4,8 +4,8 @@ import { Avatar, Typography } from '@mui/material';
 import { CourseLayoutData } from 'types/course/courses';
 
 import PopupMenu from 'lib/components/core/PopupMenu';
-import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
+import roleTranslations from 'lib/translations/course/users/roles';
 
 import CourseUserProgress from './CourseUserProgress';
 import LevelRing from './LevelRing';
@@ -45,24 +45,30 @@ interface CourseUserNameAndRoleProps {
 
 const CourseUserNameAndRole = (
   props: CourseUserNameAndRoleProps,
-): JSX.Element => (
-  <>
-    <Typography
-      className="overflow-hidden text-ellipsis whitespace-nowrap"
-      variant="body2"
-    >
-      {props.from.courseUserName}
-    </Typography>
+): JSX.Element => {
+  const { t } = useTranslation();
 
-    <Typography
-      className="overflow-hidden text-ellipsis whitespace-nowrap"
-      color="text.secondary"
-      variant="caption"
-    >
-      {COURSE_USER_ROLES[props.from.courseUserRole!]}
-    </Typography>
-  </>
-);
+  return (
+    <>
+      <Typography
+        className="overflow-hidden text-ellipsis whitespace-nowrap"
+        variant="body2"
+      >
+        {props.from.courseUserName}
+      </Typography>
+
+      {props.from.courseUserRole && (
+        <Typography
+          className="overflow-hidden text-ellipsis whitespace-nowrap"
+          color="text.secondary"
+          variant="caption"
+        >
+          {t(roleTranslations[props.from.courseUserRole])}
+        </Typography>
+      )}
+    </>
+  );
+};
 
 const SimpleCourseUserItemContent = (
   props: CourseUserItemProps,

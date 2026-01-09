@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Box,
   Table,
@@ -12,35 +11,33 @@ import {
 import { UserCourseMiniEntity } from 'types/users';
 
 import Link from 'lib/components/core/Link';
-import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
+import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   title: string;
   courses: UserCourseMiniEntity[];
 }
 
-const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
+const CoursesTable: FC<Props> = ({ title, courses }: Props) => {
+  const { t } = useTranslation();
   return (
     <Box style={{ marginBottom: '12px' }}>
       <Typography variant="h6">{title}</Typography>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>
-              {intl.formatMessage(tableTranslations.enrolledAt)}
-            </TableCell>
-            <TableCell>
-              {intl.formatMessage(tableTranslations.course)}
-            </TableCell>
-            <TableCell>{intl.formatMessage(tableTranslations.name)}</TableCell>
-            <TableCell>{intl.formatMessage(tableTranslations.role)}</TableCell>
+            <TableCell>{t(tableTranslations.enrolledAt)}</TableCell>
+            <TableCell>{t(tableTranslations.course)}</TableCell>
+            <TableCell>{t(tableTranslations.name)}</TableCell>
+            <TableCell>{t(tableTranslations.role)}</TableCell>
             <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
-              {intl.formatMessage(tableTranslations.level)}
+              {t(tableTranslations.level)}
             </TableCell>
             <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
-              {intl.formatMessage(tableTranslations.achievements)}
+              {t(tableTranslations.achievements)}
             </TableCell>
           </TableRow>
         </TableHead>
@@ -71,7 +68,7 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
                 </Link>
               </TableCell>
               <TableCell style={{ maxWidth: '100px' }}>
-                {COURSE_USER_ROLES[course.courseUserRole]}
+                {t(roleTranslations[course.courseUserRole])}
               </TableCell>
               <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
                 {course.courseUserLevel}
@@ -87,4 +84,4 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
   );
 };
 
-export default injectIntl(CoursesTable);
+export default CoursesTable;

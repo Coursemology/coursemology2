@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { AppState } from 'store';
+import { COURSE_STAFF_ROLES } from 'types/course/courseUsers';
 import { SelectionKey } from 'types/store';
 import {
   selectEntity,
   selectMiniEntities,
   selectMiniEntity,
 } from 'utilities/store';
-
-import { STAFF_ROLES } from 'lib/constants/sharedConstants';
 
 function getLocalState(state: AppState) {
   return state.users;
@@ -32,7 +31,10 @@ export function getAllStaffMiniEntities(state: AppState) {
   return selectMiniEntities(
     getLocalState(state).users,
     getLocalState(state).users.ids,
-  ).filter((entity) => Object.keys(STAFF_ROLES).indexOf(entity.role) > -1);
+  ).filter(
+    (entity) =>
+      COURSE_STAFF_ROLES.findIndex((role) => role === entity.role) >= 0,
+  );
 }
 
 export function getAllUserOptionMiniEntities(state: AppState) {

@@ -1,4 +1,3 @@
-import type { CourseUserRoles, StaffRoles } from 'types/course/courseUsers';
 import {
   InstanceUserRoles,
   RoleRequestRoles,
@@ -38,17 +37,6 @@ export const ROLE_REQUEST_ROLES: Record<RoleRequestRoles, string> = {
   instructor: 'Instructor',
   administrator: 'Administrator',
 };
-
-export const COURSE_USER_ROLES: Record<CourseUserRoles, string> = {
-  student: 'Student',
-  teaching_assistant: 'Teaching Assistant',
-  manager: 'Manager',
-  owner: 'Owner',
-  observer: 'Observer',
-};
-
-export const { student, ...staffRoles } = COURSE_USER_ROLES;
-export const STAFF_ROLES: Record<StaffRoles, string> = staffRoles;
 
 export const AVAILABLE_LOCALES: { [key in Locale]: string } = {
   en: 'English',
@@ -94,8 +82,6 @@ export default {
   USER_ROLES,
   INSTANCE_USER_ROLES,
   ROLE_REQUEST_ROLES,
-  COURSE_USER_ROLES,
-  STAFF_ROLES,
   AVAILABLE_LOCALES,
 };
 

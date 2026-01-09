@@ -7124,9 +7124,6 @@
   "course.users.SelectCourseUser.placeholder": {
     "defaultMessage": "선택된 과정 사용자가 없습니다."
   },
-  "course.users.UpgradeToStaff.nameLabel": {
-    "defaultMessage": "이름"
-  },
   "course.users.UpgradeToStaff.upgradeButton": {
     "defaultMessage": "직원으로 승격"
   },
@@ -7759,6 +7756,21 @@
   },
   "lib.translations.course.users.manageUsersHeader": {
     "defaultMessage": "사용자 관리"
+  },
+  "lib.translations.course.users.roles.student": {
+    "defaultMessage": "학생"
+  },
+  "lib.translations.course.users.roles.teachingAssistant": {
+    "defaultMessage": "조교"
+  },
+  "lib.translations.course.users.roles.observer": {
+    "defaultMessage": "관찰자"
+  },
+  "lib.translations.course.users.roles.manager": {
+    "defaultMessage": "관리자"
+  },
+  "lib.translations.course.users.roles.owner": {
+    "defaultMessage": "소유자"
   },
   "lib.translations.experimental": {
     "defaultMessage": "실험적"

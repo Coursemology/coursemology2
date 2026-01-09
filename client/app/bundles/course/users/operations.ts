@@ -1,11 +1,11 @@
 import { Operation } from 'store';
 import {
+  CourseStaffRole,
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,
   CourseUserEntity,
   CourseUserMiniEntity,
   LearningRateRecordsEntity,
-  StaffRoles,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
 import {
@@ -144,7 +144,7 @@ export function updateUser(
 
 export function upgradeToStaff(
   users: CourseUserBasicMiniEntity[],
-  role: StaffRoles,
+  role: CourseStaffRole,
 ): Operation {
   return async (dispatch) =>
     CourseAPI.users.upgradeToStaff(users, role).then((response) => {

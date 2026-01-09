@@ -1,21 +1,22 @@
 import { FC, memo } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { CourseUserData } from 'types/course/courseUsers';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
-import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
+import useTranslation from 'lib/hooks/useTranslation';
+import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   title: JSX.Element;
   users: CourseUserData[];
 }
 
 const InvitationResultUsersTable: FC<Props> = (props) => {
-  const { title, users, intl } = props;
+  const { title, users } = props;
+  const { t } = useTranslation();
 
   if (users && users.length === 0) return null;
 
@@ -42,7 +43,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
   const columns: TableColumns[] = [
     {
       name: 'id',
-      label: intl.formatMessage(tableTranslations.id),
+      label: t(tableTranslations.id),
       options: {
         display: false,
         filter: false,
@@ -51,7 +52,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'name',
-      label: intl.formatMessage(tableTranslations.name),
+      label: t(tableTranslations.name),
       options: {
         alignCenter: false,
         sort: false,
@@ -59,7 +60,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'email',
-      label: intl.formatMessage(tableTranslations.email),
+      label: t(tableTranslations.email),
       options: {
         alignCenter: false,
         sort: false,
@@ -67,7 +68,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'phantom',
-      label: intl.formatMessage(tableTranslations.phantom),
+      label: t(tableTranslations.phantom),
       options: {
         sort: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -86,7 +87,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'role',
-      label: intl.formatMessage(tableTranslations.role),
+      label: t(tableTranslations.role),
       options: {
         alignCenter: false,
         sort: false,
@@ -98,7 +99,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
               className="invitation_result_user_role"
               variant="body2"
             >
-              {COURSE_USER_ROLES[user.role]}
+              {t(roleTranslations[user.role])}
             </Typography>
           );
         },
@@ -118,9 +119,6 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
   );
 };
 
-export default memo(
-  injectIntl(InvitationResultUsersTable),
-  (prevProps, nextProps) => {
-    return equal(prevProps.users, nextProps.users);
-  },
-);
+export default memo(InvitationResultUsersTable, (prevProps, nextProps) => {
+  return equal(prevProps.users, nextProps.users);
+});

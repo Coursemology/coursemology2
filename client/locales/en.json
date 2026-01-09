@@ -7137,9 +7137,6 @@
   "course.users.SelectCourseUser.placeholder": {
     "defaultMessage": "No course user selected"
   },
-  "course.users.UpgradeToStaff.nameLabel": {
-    "defaultMessage": "Name"
-  },
   "course.users.UpgradeToStaff.upgradeButton": {
     "defaultMessage": "Upgrade to staff"
   },
@@ -7772,6 +7769,21 @@
   },
   "lib.translations.course.users.manageUsersHeader": {
     "defaultMessage": "Manage Users"
+  },
+  "lib.translations.course.users.roles.student": {
+    "defaultMessage": "Student"
+  },
+  "lib.translations.course.users.roles.teachingAssistant": {
+    "defaultMessage": "Teaching Assistant"
+  },
+  "lib.translations.course.users.roles.observer": {
+    "defaultMessage": "Observer"
+  },
+  "lib.translations.course.users.roles.manager": {
+    "defaultMessage": "Manager"
+  },
+  "lib.translations.course.users.roles.owner": {
+    "defaultMessage": "Owner"
   },
   "lib.translations.experimental": {
     "defaultMessage": "Experimental"

@@ -18,19 +18,22 @@ export type ManageCourseUsersPermissions = Permissions<
   | 'canRegisterWithCode'
 >;
 
-export type CourseUserRoles =
-  | 'student'
-  | 'teaching_assistant'
-  | 'manager'
-  | 'owner'
-  | 'observer';
+export const COURSE_STAFF_ROLES = [
+  'teaching_assistant',
+  'manager',
+  'owner',
+  'observer',
+] as const;
 
-export type StaffRoles = Exclude<CourseUserRoles, 'student'>;
+export const COURSE_USER_ROLES = ['student', ...COURSE_STAFF_ROLES] as const;
+
+export type CourseUserRole = (typeof COURSE_USER_ROLES)[number];
+export type CourseStaffRole = (typeof COURSE_STAFF_ROLES)[number];
 
 export interface CourseUserShape {
   id: number;
   name: string;
-  role: CourseUserRoles;
+  role: CourseUserRole;
   isPhantom: boolean;
 }
 
@@ -39,12 +42,12 @@ export interface CourseUserBasicListData {
   name: string;
   userUrl?: string;
   imageUrl?: string;
-  role?: CourseUserRoles;
+  role?: CourseUserRole;
 }
 
 export interface CourseUserListData extends CourseUserBasicListData {
   email: string;
-  role: CourseUserRoles;
+  role: CourseUserRole;
   phantom?: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
 }
@@ -98,7 +101,7 @@ export interface CourseUserFormData {
   name: string;
   phantom: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
-  role?: CourseUserRoles;
+  role?: CourseUserRole;
 }
 
 /**
@@ -110,7 +113,7 @@ export interface UpdateCourseUserPatchData {
     phantom?: boolean;
     timeline_algorithm?: TimelineAlgorithm;
     reference_timeline_id?: number | null;
-    role?: CourseUserRoles;
+    role?: CourseUserRole;
   };
 }
 

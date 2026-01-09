@@ -1,10 +1,5 @@
 import { FC, memo, ReactElement } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -15,19 +10,18 @@ import {
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
-import {
-  COURSE_USER_ROLES,
-  TIMELINE_ALGORITHMS,
-} from 'lib/constants/sharedConstants';
+import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
+import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
 import { getManageCourseUserPermissions } from '../../selectors';
 import ResendInvitationsButton from '../buttons/ResendAllInvitationsButton';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   title: string;
   invitations: InvitationMiniEntity[];
   pendingInvitations?: boolean;
@@ -57,8 +51,8 @@ const UserInvitationsTable: FC<Props> = (props) => {
     pendingInvitations = false,
     acceptedInvitations = false,
     renderRowActionComponent = null,
-    intl,
   } = props;
+  const { t } = useTranslation();
   const permissions = useAppSelector(getManageCourseUserPermissions);
 
   if (invitations && invitations.length === 0) {
@@ -75,8 +69,8 @@ const UserInvitationsTable: FC<Props> = (props) => {
   }
 
   const invitationTypePrefix: string = pendingInvitations
-    ? intl.formatMessage(translations.pending)
-    : intl.formatMessage(translations.accepted);
+    ? t(translations.pending)
+    : t(translations.accepted);
 
   const options: TableOptions = {
     download: false,
@@ -104,7 +98,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
   const columns: TableColumns[] = [
     {
       name: 'id',
-      label: intl.formatMessage(tableTranslations.id),
+      label: t(tableTranslations.id),
       options: {
         display: false,
         filter: false,
@@ -113,7 +107,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
     },
     {
       name: 'name',
-      label: intl.formatMessage(tableTranslations.name),
+      label: t(tableTranslations.name),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -128,7 +122,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
     },
     {
       name: 'email',
-      label: intl.formatMessage(tableTranslations.email),
+      label: t(tableTranslations.email),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -143,14 +137,14 @@ const UserInvitationsTable: FC<Props> = (props) => {
     },
     {
       name: 'role',
-      label: intl.formatMessage(tableTranslations.role),
+      label: t(tableTranslations.role),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`role-${invitation.id}`} variant="body2">
-              {COURSE_USER_ROLES[invitation.role]}
+              {t(roleTranslations[invitation.role])}
             </Typography>
           );
         },
@@ -158,7 +152,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
     },
     {
       name: 'phantom',
-      label: intl.formatMessage(tableTranslations.phantom),
+      label: t(tableTranslations.phantom),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -173,7 +167,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
     },
     {
       name: 'invitationKey',
-      label: intl.formatMessage(tableTranslations.invitationCode),
+      label: t(tableTranslations.invitationCode),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -191,7 +185,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
   if (pendingInvitations) {
     columns.push({
       name: 'sentAt',
-      label: intl.formatMessage(tableTranslations.invitationSentAt),
+      label: t(tableTranslations.invitationSentAt),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -209,7 +203,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
   if (permissions.canManagePersonalTimes) {
     columns.push({
       name: 'timelineAlgorithm',
-      label: intl.formatMessage(tableTranslations.personalizedTimeline),
+      label: t(tableTranslations.personalizedTimeline),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -229,7 +223,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
   if (acceptedInvitations) {
     columns.push({
       name: 'confirmedAt',
-      label: intl.formatMessage(tableTranslations.invitationAcceptedAt),
+      label: t(tableTranslations.invitationAcceptedAt),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -247,7 +241,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
   if (renderRowActionComponent) {
     columns.push({
       name: 'actions',
-      label: intl.formatMessage(tableTranslations.actions),
+      label: t(tableTranslations.actions),
       options: {
         empty: true,
         sort: false,
@@ -273,9 +267,6 @@ const UserInvitationsTable: FC<Props> = (props) => {
   );
 };
 
-export default memo(
-  injectIntl(UserInvitationsTable),
-  (prevProps, nextProps) => {
-    return equal(prevProps.invitations, nextProps.invitations);
-  },
-);
+export default memo(UserInvitationsTable, (prevProps, nextProps) => {
+  return equal(prevProps.invitations, nextProps.invitations);
+});

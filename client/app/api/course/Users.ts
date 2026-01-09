@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 import {
+  CourseStaffRole,
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,
   CourseUserData,
   CourseUserListData,
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
-  StaffRoles,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
 import { TimelineData } from 'types/course/referenceTimelines';
@@ -110,13 +110,13 @@ export default class UsersAPI extends BaseCourseAPI {
    * Upgrade a user to staff.
    *
    * @param {CourseUserBasicMiniEntity[]} users
-   * @param {StaffRoles} role
+   * @param {CourseStaffRole} role
    * @return {Promise} list of upgraded users
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   upgradeToStaff(
     users: CourseUserBasicMiniEntity[],
-    role: StaffRoles,
+    role: CourseStaffRole,
   ): Promise<AxiosResponse> {
     const userIds = users.map((user) => user.id);
     const params = {
