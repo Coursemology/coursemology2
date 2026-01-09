@@ -1,4 +1,0 @@
-ko:
-  helpers:
-    password:
-      wrong_password: '잘못된 비밀번호'

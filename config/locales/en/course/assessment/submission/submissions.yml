@@ -1,8 +1,0 @@
-en:
-  course:
-    assessment:
-      submission:
-        submissions:
-          download_statistics:
-            no_submission_statistics: 'No submission fulfilled your requirements for downloading'
-

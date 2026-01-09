@@ -33,7 +33,7 @@ class User::EmailsController < ApplicationController
 
   def send_confirmation
     if @email.confirmed?
-      render json: { errors: t('.already_confirmed', email: @email.email) }, status: :bad_request
+      render json: { errors: t('errors.user.emails.already_confirmed', email: @email.email) }, status: :bad_request
     else
       @email.send_confirmation_instructions
       head :ok
