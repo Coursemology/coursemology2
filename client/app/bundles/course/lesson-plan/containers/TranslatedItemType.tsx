@@ -7,7 +7,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 const TranslatedItemType: FC<{ type: string }> = ({ type }) => {
   const { t } = useTranslation();
   const isTypeComponentKey = [
-    'course_surveys_component',
+    'course_survey_component',
     'course_videos_component',
   ].includes(type);
 

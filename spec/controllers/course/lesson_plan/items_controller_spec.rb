@@ -59,6 +59,17 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
             expect(json_response['flags']['canManageLessonPlan']).to be(true)
           end
 
+          context 'when the survey component is enabled' do
+            let!(:survey) { create(:course_survey, course: course) }
+
+            it 'responds with the list of surveys' do
+              subject
+
+              expect(json_response['items'].map { |i| i['lesson_plan_item_type'][0] }).
+                to include(Course::SurveyComponent.key.to_s)
+            end
+          end
+
           context 'when the video component is enabled' do
             let!(:video) { create(:video, course: course) }
 
@@ -98,6 +109,22 @@ RSpec.describe Course::LessonPlan::ItemsController, type: :controller do
                 # Just the 2 lesson plan events
                 expect(json_response['items'].length).to eq(2)
               end
+            end
+          end
+
+          context 'when the survey component is disabled on the course' do
+            before do
+              course.settings(:course_survey_component, :lesson_plan_items).enabled = false
+              course.save!
+            end
+            let!(:survey) { create(:course_survey, course: course) }
+
+            it 'responds with the list of items, excluding surveys' do
+              subject
+
+              expect(json_response['items']).not_to be_empty
+              expect(json_response['items'].map { |i| i['lesson_plan_item_type'][0] }).
+                not_to include(Course::SurveyComponent.key.to_s)
             end
           end
 
