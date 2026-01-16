@@ -9,13 +9,19 @@ interface SubsectionProps {
   contentClassName?: string;
   spaced?: boolean;
   id?: string;
+  startIcon?: ReactNode;
 }
 
 const Subsection = (props: SubsectionProps): JSX.Element => (
   <div className={props.className ?? ''} id={props.id}>
     <div className="mb-4">
       {props.title && (
-        <Typography color="text.primary">{props.title}</Typography>
+        <div className="flex items-center space-x-2">
+          {props.startIcon && (
+            <div className="flex-0 flex items-center">{props.startIcon}</div>
+          )}
+          <Typography color="text.primary">{props.title}</Typography>
+        </div>
       )}
 
       {props.subtitle && (

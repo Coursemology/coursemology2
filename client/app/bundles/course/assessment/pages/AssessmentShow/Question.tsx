@@ -5,8 +5,9 @@ import {
   ContentCopy,
   Create,
   DragIndicator,
+  EditNote,
 } from '@mui/icons-material';
-import { Chip, IconButton, Tooltip, Typography } from '@mui/material';
+import { Alert, Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import { QuestionData } from 'types/course/assessment/questions';
 
 import Link from 'lib/components/core/Link';
@@ -197,6 +198,25 @@ const Question = (props: QuestionProps): JSX.Element => {
               )}
 
               <McqWidget for={question} onChange={props.onUpdate} />
+
+              {question.staffOnlyComments && (
+                <Alert
+                  className="[&_p]:m-0"
+                  icon={
+                    <Tooltip title={t(translations.staffOnlyComments)}>
+                      <EditNote />
+                    </Tooltip>
+                  }
+                  severity="info"
+                >
+                  <Typography
+                    dangerouslySetInnerHTML={{
+                      __html: question.staffOnlyComments,
+                    }}
+                    variant="body2"
+                  />
+                </Alert>
+              )}
             </section>
           </section>
         )}

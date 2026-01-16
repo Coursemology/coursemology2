@@ -98,6 +98,7 @@ export interface SpecificQuestionDataMap {
 export interface SubmissionQuestionBaseData extends QuestionData {
   questionNumber: number;
   questionTitle: string;
+  staffOnlyComments?: string;
   submissionQuestionId: number;
   topicId: number;
   type: QuestionType;
