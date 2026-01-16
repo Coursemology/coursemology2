@@ -93,10 +93,20 @@ module ApplicationFormattersHelper
   # @param [String] text The rich text (HTML) to format
   # @param [Boolean] preserve_newlines Whether to preserve paragraph/line breaks (default: true)
   # @return [String] Plain text with HTML tags removed and entities decoded
-  def format_rich_text_for_csv(text)
+  def clean_html_text(text)
     return '' unless text
 
     cleaned_text = text.gsub('</p>', "</p>\n").gsub('<br />', "<br />\n")
     HTMLEntities.new.decode(ActionController::Base.helpers.strip_tags(cleaned_text)).strip
+  end
+  alias_method :format_rich_text_for_csv, :clean_html_text
+
+  # Checks if the given HTML text is blank after stripping HTML tags and decoding entities.
+  # Useful for checking if rich text fields contain actual content vs just empty HTML markup.
+  #
+  # @param [String] text The HTML text to check
+  # @return [Boolean] true if the text is blank after stripping HTML
+  def clean_html_text_blank?(text)
+    clean_html_text(text).blank?
   end
 end

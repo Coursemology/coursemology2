@@ -13,6 +13,9 @@ is_course_plagiarism_enabled = current_course.component_enabled?(Course::Plagiar
 json.plagiarismCheckable is_course_plagiarism_enabled && question.plagiarism_checkable?
 json.type question_assessment.question.question_type_readable
 json.description format_ckeditor_rich_text(question.description) unless question.description.blank?
+unless clean_html_text_blank?(question.staff_only_comments)
+  json.staffOnlyComments format_ckeditor_rich_text(question.staff_only_comments)
+end
 
 is_programming_question = question.actable_type == Course::Assessment::Question::Programming.name
 is_multiple_response_question = question.actable_type == Course::Assessment::Question::MultipleResponse.name

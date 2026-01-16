@@ -9,6 +9,10 @@ export interface QuestionBaseData {
   title: string | null;
 }
 
+export interface QuestionBaseDataWithUrl extends QuestionBaseData {
+  editUrl?: string;
+}
+
 export interface QuestionData extends QuestionBaseData {
   unautogradable: boolean;
   plagiarismCheckable: boolean;
@@ -16,6 +20,7 @@ export interface QuestionData extends QuestionBaseData {
   isCompatibleWithKoditsu?: boolean;
 
   description?: string;
+  staffOnlyComments?: string;
   editUrl?: string;
   deleteUrl?: string;
   generateFromUrl?: string;

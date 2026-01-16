@@ -19,7 +19,6 @@ class Course::Assessment::QuestionsController < Course::Assessment::Controller
 
   def show
     @question_assessment = @question.question_assessments.find_by!(assessment: @assessment)
-    render 'course/question_assessments/_question_assessment', locals: { question_assessment: @question_assessment }
   end
 
   private

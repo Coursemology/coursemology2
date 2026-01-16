@@ -1,7 +1,7 @@
 // eslint-disable-next-line simple-import-sort/imports
 import { memo } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Divider, Typography } from '@mui/material';
+import { Alert, Divider, Tooltip, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import {
   FIELD_LONG_DEBOUNCE_DELAY_MS,
@@ -14,6 +14,7 @@ import { SubmissionQuestionData } from 'types/course/assessment/submission/quest
 import { QuestionType } from 'types/course/assessment/question';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
+import { EditNote } from '@mui/icons-material';
 import { saveAnswer, updateClientVersion } from '../../actions/answers';
 import { uploadTextResponseFiles } from '../../actions/answers/textResponse';
 
@@ -24,6 +25,7 @@ import { updateAnswerFlagSavingStatus } from '../../reducers/answerFlags';
 import useErrorTranslation from '../../pages/SubmissionEditIndex/useErrorTranslation';
 import { ErrorType } from '../../pages/SubmissionEditIndex/validations/types';
 import translations from '../../translations';
+import assessmentTranslations from '../../../translations';
 
 interface SubmissionAnswerProps<T extends keyof typeof QuestionType> {
   answerId: number | null;
@@ -203,6 +205,25 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
           />
           <Divider />
         </>
+      )}
+
+      {question.staffOnlyComments && graderView && (
+        <Alert
+          className="[&_p]:m-0"
+          icon={
+            <Tooltip title={t(assessmentTranslations.staffOnlyComments)}>
+              <EditNote />
+            </Tooltip>
+          }
+          severity="info"
+        >
+          <Typography
+            dangerouslySetInnerHTML={{
+              __html: question.staffOnlyComments,
+            }}
+            variant="body2"
+          />
+        </Alert>
       )}
 
       <Typography color="text.secondary" variant="caption">

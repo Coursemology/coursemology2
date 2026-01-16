@@ -1,4 +1,5 @@
 import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
+import { EditNote } from '@mui/icons-material';
 import { Alert } from '@mui/material';
 import {
   AvailableSkills,
@@ -94,6 +95,7 @@ const CommonQuestionFields = <T extends FieldValues>(
         </Subsection>
 
         <Subsection
+          startIcon={<EditNote fontSize="small" />}
           subtitle={t(translations.staffOnlyCommentsHint)}
           title={t(translations.staffOnlyComments)}
         >

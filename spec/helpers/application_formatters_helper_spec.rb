@@ -315,69 +315,69 @@ RSpec.describe ApplicationFormattersHelper do
     end
   end
 
-  describe '#format_rich_text_for_csv' do
+  describe '#clean_html_text' do
     context 'when text is nil' do
       it 'returns empty string' do
-        expect(helper.format_rich_text_for_csv(nil)).to eq('')
+        expect(helper.clean_html_text(nil)).to eq('')
       end
     end
 
     context 'when text is empty' do
       it 'returns empty string' do
-        expect(helper.format_rich_text_for_csv('')).to eq('')
+        expect(helper.clean_html_text('')).to eq('')
       end
     end
 
     context 'when text contains HTML tags' do
       it 'strips all HTML tags' do
         html = '<p>Hello <strong>World</strong></p>'
-        expect(helper.format_rich_text_for_csv(html)).to eq('Hello World')
+        expect(helper.clean_html_text(html)).to eq('Hello World')
       end
 
       it 'strips nested HTML tags' do
         html = '<div><p><span>Test</span></p></div>'
-        expect(helper.format_rich_text_for_csv(html)).to eq('Test')
+        expect(helper.clean_html_text(html)).to eq('Test')
       end
     end
 
     context 'when text contains HTML entities' do
       it 'decodes &nbsp; to space' do
         html = '<p>Hello&nbsp;World</p>'
-        expect(helper.format_rich_text_for_csv(html)).to eq('Hello World')
+        expect(helper.clean_html_text(html)).to eq('Hello World')
       end
 
       it 'decodes &amp; to &' do
         html = '<p>Test&amp;Example</p>'
-        expect(helper.format_rich_text_for_csv(html)).to eq('Test&Example')
+        expect(helper.clean_html_text(html)).to eq('Test&Example')
       end
 
       it 'decodes multiple entities' do
         html = '<p>Hello&nbsp;World&amp;Test&lt;Example&gt;</p>'
-        expect(helper.format_rich_text_for_csv(html)).to eq('Hello World&Test<Example>')
+        expect(helper.clean_html_text(html)).to eq('Hello World&Test<Example>')
       end
 
       it 'decodes numeric entities' do
         html = '<p>&#34;Quote&#34;</p>'
-        expect(helper.format_rich_text_for_csv(html)).to eq('"Quote"')
+        expect(helper.clean_html_text(html)).to eq('"Quote"')
       end
     end
 
     context 'when text contains paragraph and line breaks' do
       it 'preserves paragraph breaks as newlines' do
         html = '<p>First paragraph</p><p>Second paragraph</p>'
-        result = helper.format_rich_text_for_csv(html)
+        result = helper.clean_html_text(html)
         expect(result).to eq("First paragraph\nSecond paragraph")
       end
 
       it 'preserves line breaks as newlines' do
         html = '<p>Line 1<br />Line 2</p>'
-        result = helper.format_rich_text_for_csv(html)
+        result = helper.clean_html_text(html)
         expect(result).to eq("Line 1\nLine 2")
       end
 
       it 'handles complex HTML with mixed content' do
         html = '<p>First</p><p>Second<br />Third</p><p>Fourth</p>'
-        result = helper.format_rich_text_for_csv(html)
+        result = helper.clean_html_text(html)
         expect(result).to eq("First\nSecond\nThird\nFourth")
       end
     end
@@ -385,31 +385,31 @@ RSpec.describe ApplicationFormattersHelper do
     context 'edge cases' do
       it 'handles malformed HTML gracefully' do
         html = '<p>Unclosed paragraph'
-        result = helper.format_rich_text_for_csv(html)
+        result = helper.clean_html_text(html)
         expect(result).to eq('Unclosed paragraph')
       end
 
       it 'handles text without any HTML' do
         text = 'Plain text'
-        result = helper.format_rich_text_for_csv(text)
+        result = helper.clean_html_text(text)
         expect(result).to eq('Plain text')
       end
 
       it 'handles mixed plain text and HTML' do
         html = 'Plain <strong>bold</strong> text'
-        result = helper.format_rich_text_for_csv(html)
+        result = helper.clean_html_text(html)
         expect(result).to eq('Plain bold text')
       end
 
       it 'handles script tags (should be stripped)' do
         html = '<p>Safe text</p><script>alert("xss")</script>'
-        result = helper.format_rich_text_for_csv(html)
+        result = helper.clean_html_text(html)
         expect(result).to eq("Safe text\nalert(\"xss\")")
       end
 
       it 'handles literal & character' do
         html = 'Peanut Butter & Jelly'
-        result = helper.format_rich_text_for_csv(html)
+        result = helper.clean_html_text(html)
         expect(result).to eq('Peanut Butter & Jelly')
       end
     end
