@@ -71,8 +71,8 @@ const GenerateProgrammingExportDialog: FC<Props> = (props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const generatePageData = useAppSelector(getAssessmentGenerateQuestionsData);
-  const interval: MutableRefObject<NodeJS.Timer | undefined> =
-    useRef<NodeJS.Timer>();
+  const interval: MutableRefObject<NodeJS.Timeout | undefined> =
+    useRef<NodeJS.Timeout>();
 
   const setToExport = (
     conversation: ConversationState,
