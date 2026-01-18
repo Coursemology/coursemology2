@@ -7,7 +7,7 @@ import type {
 
 let channel: HeartbeatChannel;
 let storage: MonitoringDBActions | null;
-let interval: NodeJS.Timer;
+let interval: NodeJS.Timeout;
 
 const resetInterval = (callback: () => void, timeout: number): void => {
   if (interval) clearInterval(interval);
