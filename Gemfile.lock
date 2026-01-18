@@ -662,7 +662,7 @@ GEM
     uniform_notifier (1.16.0)
     unread (0.14.0)
       activerecord (>= 6.1)
-    uri (1.0.3)
+    uri (1.0.4)
     useragent (0.16.11)
     validates_hostname (1.0.13)
       activerecord (>= 3.0)
