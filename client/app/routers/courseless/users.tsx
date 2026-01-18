@@ -1,4 +1,5 @@
 import { Navigate, RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
@@ -7,7 +8,7 @@ const usersRouter: Translated<RouteObject> = (_) => ({
   children: [
     {
       path: ':userId',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'UserShow' */
@@ -21,7 +22,7 @@ const usersRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           index: true,
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'element'>> => {
             const ConfirmEmailPage = (
               await import(
                 /* webpackChunkName: 'ConfirmEmailPage' */

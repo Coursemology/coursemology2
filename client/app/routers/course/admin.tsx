@@ -1,10 +1,11 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const adminRouter: Translated<RouteObject> = (_) => ({
   path: 'admin',
-  lazy: async (): Promise<RouteObject> => {
+  lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
     const SettingsNavigation = (
       await import(
         /* webpackChunkName: 'SettingsNavigation' */
@@ -21,7 +22,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
   children: [
     {
       index: true,
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'CourseSettings' */
@@ -32,7 +33,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'components',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'ComponentSettings' */
@@ -43,7 +44,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'sidebar',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'SidebarSettings' */
@@ -54,7 +55,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'notifications',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'NotificationSettings' */
@@ -65,7 +66,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'announcements',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'AnnouncementsSettings' */
@@ -76,7 +77,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'assessments',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'AssessmentSettings' */
@@ -87,7 +88,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'materials',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'MaterialsSettings' */
@@ -98,7 +99,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'forums',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'ForumsSettings' */
@@ -109,7 +110,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'leaderboard',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'LeaderboardSettings' */
@@ -120,7 +121,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'comments',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'CommentsSettings' */
@@ -131,7 +132,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'videos',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'VideosSettings' */
@@ -142,7 +143,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'lesson_plan',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'LessonPlanSettings' */
@@ -153,7 +154,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'codaveri',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'CodaveriSettings' */
@@ -164,7 +165,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'scholaistic',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         loader: (await import('course/admin/pages/ScholaisticSettings/loader'))
           .loader,
         Component: (await import('course/admin/pages/ScholaisticSettings'))
@@ -173,7 +174,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'stories',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'StoriesSettings' */
@@ -184,7 +185,7 @@ const adminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'rag_wise',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'RagWiseSettings' */

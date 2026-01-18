@@ -1,12 +1,13 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const questionsRouter: Translated<RouteObject> = (_) => ({
   path: 'question',
-  lazy: async (): Promise<RouteObject> => {
+  lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
     const [questionHandle, QuestionFormOutlet] = await Promise.all([
       import(
         /* webpackChunkName: 'assessmentHandles' */
@@ -29,7 +30,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           path: 'new',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const NewForumPostResponsePage = (
               await import(
                 /* webpackChunkName: 'NewForumPostResponsePage' */
@@ -45,7 +46,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: ':questionId/edit',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'EditForumPostResponsePage' */
@@ -61,7 +62,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           path: 'new',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const NewTextResponse = (
               await import(
                 /* webpackChunkName: 'NewTextResponsePage' */
@@ -77,7 +78,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: ':questionId/edit',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'EditTextResponsePage' */
@@ -93,7 +94,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           path: 'new',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const NewVoicePage = (
               await import(
                 /* webpackChunkName: 'NewVoicePage' */
@@ -109,7 +110,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: ':questionId/edit',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'EditVoicePage' */
@@ -125,7 +126,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           path: 'new',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const NewMcqMrqPage = (
               await import(
                 /* webpackChunkName: 'NewMcqMrqPage' */
@@ -141,7 +142,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: 'generate',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const GenerateMcqMrqQuestionPage = (
               await import(
                 /* webpackChunkName: 'GenerateMcqMrqQuestionPage' */
@@ -157,7 +158,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: ':questionId/edit',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'EditMcqMrqPage' */
@@ -173,7 +174,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           path: 'new',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const ScribingQuestion = (
               await import(
                 /* webpackChunkName: 'ScribingQuestion' */
@@ -189,7 +190,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: ':questionId/edit',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'ScribingQuestion' */
@@ -205,7 +206,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           path: 'new',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const NewRubricBasedResponsePage = (
               await import(
                 /* webpackChunkName: 'NewRubricBasedResponsePage' */
@@ -221,7 +222,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: ':questionId/edit',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'EditRubricBasedResponsePage' */
@@ -237,7 +238,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           path: 'new',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const NewProgrammingQuestionPage = (
               await import(
                 /* webpackChunkName: 'NewProgrammingQuestionPage' */
@@ -253,7 +254,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: 'generate',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const GenerateProgrammingQuestionPage = (
               await import(
                 /* webpackChunkName: 'GenerateProgrammingQuestionPage' */
@@ -269,7 +270,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: ':questionId/edit',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'EditProgrammingQuestionPage' */
@@ -282,7 +283,7 @@ const questionsRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: ':questionId/rubric_playground',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const RubricPlayground = (
           await import(
             /* webpackChunkName: 'RubricPlayground' */

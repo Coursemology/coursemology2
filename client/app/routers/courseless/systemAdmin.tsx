@@ -1,10 +1,11 @@
 import { Navigate, RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const systemAdminRouter: Translated<RouteObject> = (_) => ({
   path: 'admin',
-  lazy: async (): Promise<RouteObject> => {
+  lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
     const AdminNavigator = (
       await import(
         /* webpackChunkName: 'AdminNavigator' */
@@ -24,7 +25,7 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'announcements',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'AnnouncementsIndex' */
@@ -35,7 +36,7 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'users',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'UsersIndex' */
@@ -46,7 +47,7 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'instances',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstancesIndex' */
@@ -57,7 +58,7 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'courses',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'CoursesIndex' */
@@ -68,7 +69,7 @@ const systemAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'get_help',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'SystemGetHelpActivityIndex' */

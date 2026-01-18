@@ -1,10 +1,11 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const surveysRouter: Translated<RouteObject> = (_) => ({
   path: 'surveys',
-  lazy: async (): Promise<RouteObject> => ({
+  lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
     handle: (
       await import(
         /* webpackChunkName: 'SurveyIndex' */
@@ -15,7 +16,7 @@ const surveysRouter: Translated<RouteObject> = (_) => ({
   children: [
     {
       index: true,
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'SurveyIndex' */
@@ -26,7 +27,7 @@ const surveysRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: ':surveyId',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
         handle: (
           await import(
             /* webpackChunkName: 'surveyHandles' */
@@ -37,7 +38,7 @@ const surveysRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           index: true,
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'SurveyShow' */
@@ -48,7 +49,7 @@ const surveysRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: 'results',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const SurveyResults = (
               await import(
                 /* webpackChunkName: 'SurveyResults' */
@@ -67,7 +68,9 @@ const surveysRouter: Translated<RouteObject> = (_) => ({
           children: [
             {
               index: true,
-              lazy: async (): Promise<RouteObject> => {
+              lazy: async (): Promise<
+                WithRequired<RouteObject, 'Component'>
+              > => {
                 const ResponseIndex = (
                   await import(
                     /* webpackChunkName: 'ResponseIndex' */
@@ -86,7 +89,9 @@ const surveysRouter: Translated<RouteObject> = (_) => ({
               children: [
                 {
                   index: true,
-                  lazy: async (): Promise<RouteObject> => {
+                  lazy: async (): Promise<
+                    WithRequired<RouteObject, 'Component'>
+                  > => {
                     const [surveyResponseHandle, ResponseShow] =
                       await Promise.all([
                         import(
@@ -107,7 +112,9 @@ const surveysRouter: Translated<RouteObject> = (_) => ({
                 },
                 {
                   path: 'edit',
-                  lazy: async (): Promise<RouteObject> => ({
+                  lazy: async (): Promise<
+                    WithRequired<RouteObject, 'Component'>
+                  > => ({
                     Component: (
                       await import(
                         /* webpackChunkName: 'ResponseEdit' */

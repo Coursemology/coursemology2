@@ -1,10 +1,11 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const groupsRouter: Translated<RouteObject> = (_) => ({
   path: 'groups',
-  lazy: async (): Promise<RouteObject> => {
+  lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
     const GroupIndex = (
       await import(
         /* webpackChunkName: 'GroupIndex' */
@@ -20,7 +21,7 @@ const groupsRouter: Translated<RouteObject> = (_) => ({
   children: [
     {
       path: ':groupCategoryId',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'GroupShow' */

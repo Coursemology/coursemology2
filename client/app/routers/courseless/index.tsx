@@ -1,4 +1,5 @@
 import { Navigate, RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
@@ -10,7 +11,7 @@ import usersRouter from './users';
 
 const courselessRouter: Translated<RouteObject> = (t) => ({
   path: '*',
-  lazy: async (): Promise<RouteObject> => {
+  lazy: async (): Promise<WithRequired<RouteObject, 'element'>> => {
     const CourselessContainer = (
       await import(
         /* webpackChunkName: 'CourselessContainer' */
@@ -30,7 +31,7 @@ const courselessRouter: Translated<RouteObject> = (t) => ({
     usersRouter(t),
     {
       path: 'announcements',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const GlobalAnnouncementIndex = (
           await import(
             /* webpackChunkName: 'GlobalAnnouncementIndex' */
@@ -46,7 +47,7 @@ const courselessRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'user/profile/edit',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const AccountSettings = (
           await import(
             /* webpackChunkName: 'AccountSettings' */
