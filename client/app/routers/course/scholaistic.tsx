@@ -1,10 +1,11 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const scholaisticRouter: Translated<RouteObject> = (t) => ({
   path: 'scholaistic',
-  lazy: async (): Promise<RouteObject> => ({
+  lazy: async (): Promise<WithRequired<RouteObject, 'ErrorBoundary'>> => ({
     ErrorBoundary: (
       await import('course/scholaistic/components/ScholaisticErrorPage')
     ).default,
@@ -12,13 +13,13 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
   children: [
     {
       path: 'assessments',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
         handle: (await import('course/scholaistic/handles')).assessmentsHandle,
       }),
       children: [
         {
           index: true,
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 'course/scholaistic/pages/ScholaisticAssessmentsIndex'
@@ -33,14 +34,16 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
         },
         {
           path: ':assessmentId',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
             handle: (await import('course/scholaistic/handles'))
               .assessmentHandle,
           }),
           children: [
             {
               index: true,
-              lazy: async (): Promise<RouteObject> => ({
+              lazy: async (): Promise<
+                WithRequired<RouteObject, 'Component'>
+              > => ({
                 Component: (
                   await import(
                     'course/scholaistic/pages/ScholaisticAssessmentView'
@@ -55,7 +58,7 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
             },
             {
               path: 'submission',
-              lazy: async (): Promise<RouteObject> => ({
+              lazy: async (): Promise<WithRequired<RouteObject, 'loader'>> => ({
                 loader: (
                   await import(
                     'course/scholaistic/pages/ScholaisticAssessmentSubmissionEdit/loader'
@@ -68,7 +71,9 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
               children: [
                 {
                   index: true,
-                  lazy: async (): Promise<RouteObject> => ({
+                  lazy: async (): Promise<
+                    WithRequired<RouteObject, 'Component'>
+                  > => ({
                     Component: (
                       await import(
                         'course/scholaistic/pages/ScholaisticAssessmentSubmissionsIndex'
@@ -88,7 +93,9 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
                 },
                 {
                   path: ':submissionId',
-                  lazy: async (): Promise<RouteObject> => ({
+                  lazy: async (): Promise<
+                    WithRequired<RouteObject, 'Component'>
+                  > => ({
                     Component: (
                       await import(
                         'course/scholaistic/pages/ScholaisticAssessmentSubmissionEdit'
@@ -107,7 +114,9 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
             },
             {
               path: 'edit',
-              lazy: async (): Promise<RouteObject> => ({
+              lazy: async (): Promise<
+                WithRequired<RouteObject, 'Component'>
+              > => ({
                 Component: (
                   await import(
                     'course/scholaistic/pages/ScholaisticAssessmentEdit'
@@ -129,7 +138,7 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
         },
         {
           path: 'new',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import('course/scholaistic/pages/ScholaisticAssessmentNew')
             ).default,
@@ -147,7 +156,7 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'assistants',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
         handle: (
           await import('course/scholaistic/pages/ScholaisticAssistantsIndex')
         ).handle,
@@ -155,7 +164,7 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
       children: [
         {
           index: true,
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 'course/scholaistic/pages/ScholaisticAssistantsIndex'
@@ -170,7 +179,7 @@ const scholaisticRouter: Translated<RouteObject> = (t) => ({
         },
         {
           path: ':assistantId',
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import('course/scholaistic/pages/ScholaisticAssistantEdit')
             ).default,

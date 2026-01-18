@@ -1,10 +1,11 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const achievementsRouter: Translated<RouteObject> = (_) => ({
   path: 'achievements',
-  lazy: async (): Promise<RouteObject> => ({
+  lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
     handle: (
       await import(
         /* webpackChunkName: 'AchievementsIndex' */
@@ -15,7 +16,7 @@ const achievementsRouter: Translated<RouteObject> = (_) => ({
   children: [
     {
       index: true,
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'AchievementsIndex' */
@@ -26,7 +27,7 @@ const achievementsRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: ':achievementId',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const [achievementHandle, AchievementShow] = await Promise.all([
           import(
             /* webpackChunkName: 'achievementHandle' */

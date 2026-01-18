@@ -1,10 +1,11 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const statisticsRouter: Translated<RouteObject> = (_) => ({
   path: 'statistics',
-  lazy: async (): Promise<RouteObject> => {
+  lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
     const StatisticsIndex = (
       await import(
         /* webpackChunkName: 'StatisticsIndex' */
@@ -20,7 +21,7 @@ const statisticsRouter: Translated<RouteObject> = (_) => ({
   children: [
     {
       path: 'students',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'StudentsStatistics' */
@@ -31,7 +32,7 @@ const statisticsRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'staff',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'StaffStatistics' */
@@ -42,7 +43,7 @@ const statisticsRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'course',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'CourseStatistics' */
@@ -53,7 +54,7 @@ const statisticsRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'assessments',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'CourseStatistics' */
@@ -64,7 +65,7 @@ const statisticsRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'get_help',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'CourseGetHelpStatistics' */

@@ -1,4 +1,9 @@
 /**
+ * Makes specified keys of T required.
+ */
+export type WithRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
+
+/**
  * User or course user level permission types.
  */
 export type Permissions<T extends string> = {

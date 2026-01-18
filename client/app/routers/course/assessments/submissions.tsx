@@ -1,4 +1,5 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
@@ -7,7 +8,7 @@ const submissionsRouter: Translated<RouteObject> = (_) => ({
   children: [
     {
       index: true,
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const AssessmentSubmissionsIndex = (
           await import(
             /* webpackChunkName: 'AssessmentSubmissionsIndex' */
@@ -26,7 +27,7 @@ const submissionsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           path: 'edit',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const SubmissionEditIndex = (
               await import(
                 /* webpackChunkName: 'SubmissionEditIndex' */
@@ -42,7 +43,7 @@ const submissionsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: 'logs',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const SubmissionLogs = (
               await import(
                 /* webpackChunkName: 'SubmissionLogs' */

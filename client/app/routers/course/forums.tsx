@@ -1,10 +1,11 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const forumsRouter: Translated<RouteObject> = (_) => ({
   path: 'forums',
-  lazy: async (): Promise<RouteObject> => ({
+  lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
     handle: (
       await import(
         /* webpackChunkName: 'forumHandles' */
@@ -15,7 +16,7 @@ const forumsRouter: Translated<RouteObject> = (_) => ({
   children: [
     {
       index: true,
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'ForumsIndex' */
@@ -26,7 +27,7 @@ const forumsRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: ':forumId',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
         handle: (
           await import(
             /* webpackChunkName: 'forumHandles' */
@@ -37,7 +38,7 @@ const forumsRouter: Translated<RouteObject> = (_) => ({
       children: [
         {
           index: true,
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'ForumShow' */
@@ -48,7 +49,7 @@ const forumsRouter: Translated<RouteObject> = (_) => ({
         },
         {
           path: 'topics/:topicId',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
             const [forumTopicHandle, ForumTopicShow] = await Promise.all([
               import(
                 /* webpackChunkName: 'forumHandles' */

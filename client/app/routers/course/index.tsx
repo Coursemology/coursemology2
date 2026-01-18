@@ -1,4 +1,5 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
@@ -18,7 +19,7 @@ import videosRouter from './videos';
 
 const courseRouter: Translated<RouteObject> = (t) => ({
   path: 'courses/:courseId',
-  lazy: async (): Promise<RouteObject> => {
+  lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
     const CourseContainer = (
       await import(
         /* webpackChunkName: 'CourseContainer' */
@@ -51,7 +52,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     scholaisticRouter(t),
     {
       index: true,
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'element'>> => {
         const [CourseShow, LearnRedirect] = await Promise.all([
           import(
             /* webpackChunkName: 'CourseShow' */
@@ -72,7 +73,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'home',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'CourseShow' */
@@ -83,7 +84,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'learn',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const LearnPage = (
           await import(
             /* webpackChunkName: 'LearnPage' */
@@ -99,7 +100,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'mission_control',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const MissionControlPage = (
           await import(
             /* webpackChunkName: 'MissionControlPage' */
@@ -115,7 +116,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'timelines',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const TimelineDesigner = (
           await import(
             /* webpackChunkName: 'TimelineDesigner' */
@@ -131,7 +132,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'announcements',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const [announcementsHandle, AnnouncementsIndex] = await Promise.all([
           import(
             /* webpackChunkName: 'announcementsHandle' */
@@ -151,7 +152,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'comments',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const [commentHandle, CommentIndex] = await Promise.all([
           import(
             /* webpackChunkName: 'commentHandle' */
@@ -171,7 +172,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'leaderboard',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const [leaderboardHandle, LeaderboardIndex] = await Promise.all([
           import(
             /* webpackChunkName: 'leaderboardHandle' */
@@ -191,7 +192,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'learning_map',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'LearningMap' */
@@ -202,7 +203,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'levels',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const LevelsIndex = (
           await import(
             /* webpackChunkName: 'LevelsIndex' */
@@ -218,7 +219,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'duplication',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const Duplication = (
           await import(
             /* webpackChunkName: 'Duplication' */
@@ -234,7 +235,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'enrol_requests',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const [manageUserHandles, UserRequests] = await Promise.all([
           import(
             /* webpackChunkName: 'userHandles' */
@@ -254,7 +255,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'user_invitations',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const [manageUserHandles, UserRequests] = await Promise.all([
           import(
             /* webpackChunkName: 'userHandles' */
@@ -274,7 +275,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'students',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const [manageUserHandles, UserRequests] = await Promise.all([
           import(
             /* webpackChunkName: 'userHandles' */
@@ -294,7 +295,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'staff',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const [manageUserHandles, UserRequests] = await Promise.all([
           import(
             /* webpackChunkName: 'userHandles' */
@@ -314,7 +315,7 @@ const courseRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: 'experience_points_records',
-      lazy: async (): Promise<RouteObject> => {
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
         const ExperiencePointsIndex = (
           await import(
             /* webpackChunkName: 'ExperiencePointsIndex' */

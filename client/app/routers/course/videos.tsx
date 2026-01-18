@@ -1,10 +1,11 @@
 import { RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const videosRouter: Translated<RouteObject> = (t) => ({
   path: 'videos',
-  lazy: async (): Promise<RouteObject> => ({
+  lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
     handle: (
       await import(
         /* webpackChunkName: 'videoHandles' */
@@ -15,7 +16,7 @@ const videosRouter: Translated<RouteObject> = (t) => ({
   children: [
     {
       index: true,
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'VideosIndex' */
@@ -26,7 +27,7 @@ const videosRouter: Translated<RouteObject> = (t) => ({
     },
     {
       path: ':videoId',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
         handle: (
           await import(
             /* webpackChunkName: 'videoHandles' */
@@ -37,7 +38,7 @@ const videosRouter: Translated<RouteObject> = (t) => ({
       children: [
         {
           index: true,
-          lazy: async (): Promise<RouteObject> => ({
+          lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
             Component: (
               await import(
                 /* webpackChunkName: 'VideoShow' */
@@ -51,7 +52,9 @@ const videosRouter: Translated<RouteObject> = (t) => ({
           children: [
             {
               index: true,
-              lazy: async (): Promise<RouteObject> => {
+              lazy: async (): Promise<
+                WithRequired<RouteObject, 'Component'>
+              > => {
                 const VideoSubmissionsIndex = (
                   await import(
                     /* webpackChunkName: 'VideoSubmissionsIndex' */
@@ -67,7 +70,7 @@ const videosRouter: Translated<RouteObject> = (t) => ({
             },
             {
               path: ':submissionId',
-              lazy: async (): Promise<RouteObject> => ({
+              lazy: async (): Promise<WithRequired<RouteObject, 'handle'>> => ({
                 handle: (
                   await import(
                     /* webpackChunkName: 'VideoSubmissionShow' */
@@ -78,7 +81,9 @@ const videosRouter: Translated<RouteObject> = (t) => ({
               children: [
                 {
                   index: true,
-                  lazy: async (): Promise<RouteObject> => ({
+                  lazy: async (): Promise<
+                    WithRequired<RouteObject, 'Component'>
+                  > => ({
                     Component: (
                       await import(
                         /* webpackChunkName: 'VideoSubmissionShow' */
@@ -89,7 +94,9 @@ const videosRouter: Translated<RouteObject> = (t) => ({
                 },
                 {
                   path: 'edit',
-                  lazy: async (): Promise<RouteObject> => ({
+                  lazy: async (): Promise<
+                    WithRequired<RouteObject, 'Component'>
+                  > => ({
                     Component: (
                       await import(
                         /* webpackChunkName: 'VideoSubmissionEdit' */
@@ -104,7 +111,7 @@ const videosRouter: Translated<RouteObject> = (t) => ({
         },
         {
           path: 'attempt',
-          lazy: async (): Promise<RouteObject> => {
+          lazy: async (): Promise<WithRequired<RouteObject, 'loader'>> => {
             const videoAttemptLoader = (
               await import(
                 /* webpackChunkName: 'videoAttemptLoader' */

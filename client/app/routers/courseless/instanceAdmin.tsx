@@ -1,10 +1,11 @@
 import { Navigate, RouteObject } from 'react-router-dom';
+import { WithRequired } from 'types';
 
 import { Translated } from 'lib/hooks/useTranslation';
 
 const instanceAdminRouter: Translated<RouteObject> = (_) => ({
   path: 'admin/instance',
-  lazy: async (): Promise<RouteObject> => {
+  lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => {
     const InstanceAdminNavigator = (
       await import(
         /* webpackChunkName: 'InstanceAdminNavigator' */
@@ -24,7 +25,7 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'announcements',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstanceAnnouncementsIndex' */
@@ -35,7 +36,7 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'components',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstanceComponentsIndex' */
@@ -46,7 +47,7 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'courses',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstanceCoursesIndex' */
@@ -57,7 +58,7 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'users',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstanceUsersIndex' */
@@ -68,7 +69,7 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'users/invite',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstanceUsersInvite' */
@@ -79,7 +80,7 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'user_invitations',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstanceUsersInvitations' */
@@ -90,7 +91,7 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'role_requests',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstanceUserRoleRequestsIndex' */
@@ -101,7 +102,7 @@ const instanceAdminRouter: Translated<RouteObject> = (_) => ({
     },
     {
       path: 'get_help',
-      lazy: async (): Promise<RouteObject> => ({
+      lazy: async (): Promise<WithRequired<RouteObject, 'Component'>> => ({
         Component: (
           await import(
             /* webpackChunkName: 'InstanceGetHelpActivityIndex' */
