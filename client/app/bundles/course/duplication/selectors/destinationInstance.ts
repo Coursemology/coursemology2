@@ -8,7 +8,10 @@ const selectDuplicationStore = (state: AppState): any => state.duplication;
 export const selectDestinationInstances = createSelector(
   selectDuplicationStore,
   (duplicationStore) =>
-    duplicationStore.destinationInstances as DuplicationInstanceListData[],
+    duplicationStore.destinationInstances as Record<
+      number,
+      DuplicationInstanceListData
+    >,
 );
 
 export const selectMetadata = createSelector(
