@@ -38,6 +38,7 @@ const NewCourseForm = (props) => {
     handleSubmit,
     setError,
     formState: { errors },
+    setValue,
   } = useForm({
     mode: 'onSubmit',
     defaultValues: initialValues,
@@ -56,9 +57,11 @@ const NewCourseForm = (props) => {
         name="destination_instance_id"
         render={({ field, fieldState }) => (
           <InstanceDropdown
+            currentInstanceId={initialValues.destination_instance_id}
             disabled={disabled}
             field={field}
             fieldState={fieldState}
+            setValue={setValue}
           />
         )}
       />

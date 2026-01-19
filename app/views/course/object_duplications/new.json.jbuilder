@@ -16,7 +16,8 @@ json.destinationCourses @destination_courses do |course|
   end)
 end
 
-json.destinationInstances @destination_instances do |instance|
+sorted_destination_instances = @destination_instances.sort_by { |i| [i.id == current_tenant.id ? 0 : 1, i.name] }
+json.destinationInstances sorted_destination_instances do |instance|
   json.id instance.id
   json.name instance.name
   json.host instance.host
