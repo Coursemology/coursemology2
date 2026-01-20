@@ -7,7 +7,7 @@
 - category_id = assessment.tab.category.id
 
 - message.subject = t('.subject', course: course.title, assessment: submission.assessment.title)
-- message.subject += ' ' + t('notifiers.course.phantom') if course_user.phantom?
+- message.subject += ' ' + t('common.mailers.phantom_course_user') if course_user.phantom?
 
 = simple_format(t('.message', submission: link_to(:submission, submission_url),
                               user: submission.course_user.name))

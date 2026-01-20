@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    attributes:
-      course/forum/topic/topic_type:
-        normal: '常规'
-        announcement: '公告'
-        question: '提问'
-        sticky: '便签'

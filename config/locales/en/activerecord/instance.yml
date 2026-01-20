@@ -1,9 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        instance/user_role_request:
-          attributes:
-            base:
-              existing_pending_request: >
-                'You have an existing role request. Please refresh the page.'

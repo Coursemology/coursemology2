@@ -1,6 +1,0 @@
-en:
-  activerecord:
-    errors:
-      models:
-        course/survey/answer:
-          cannot_be_empty: 'The answer to this question must not be empty.'

@@ -1,6 +1,0 @@
-ko:
-  activerecord:
-    errors:
-      models:
-        course/user_invitation:
-          existing_invitation: '이 이메일 주소에는 아직 완료되지 않은 초대장이 있습니다'

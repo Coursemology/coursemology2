@@ -1,8 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/condition:
-          attributes:
-            conditional:
-              not_in_same_course: '您选择的条件与当前条件不在同一课程中'

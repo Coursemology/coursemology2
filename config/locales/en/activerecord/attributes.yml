@@ -1,0 +1,71 @@
+en:
+  activerecord:
+    course/assessment/question:
+      question_number: 'Question %{index}'
+      question_with_title: '%{question_number}: %{title}'
+    attributes:
+      course:
+        reference_timelines: 'Reference timelines'
+      course/assessment/answer:
+        submitted_at: 'Submitted At'
+        grade: 'Grade'
+        grader: 'Grader'
+        graded_at: 'Graded At'
+      course/assessment/category:
+        weight: 'Order'
+      course/assessment/category/title:
+        default: 'Assessments'
+      course/assessment/question:
+        weight: 'Order'
+      course/assessment/submission:
+        grade: 'Total Grade'
+        status: 'Status'
+        submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
+        grader: :'activerecord.attributes.course/assessment/answer.grader'
+        graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
+        attempting: 'Attempting'
+        submitted: 'Submitted'
+        graded: 'Graded, unpublished'
+        published: 'Graded'
+      course/assessment/tab:
+        weight: 'Order'
+      course/assessment/tab/title:
+        default: 'Default'
+      course/condition/assessment/title:
+        minimum_score: 'Score at least %{minimum_grade_percentage} for %{assessment_title}'
+        complete: 'Complete %{assessment_title}'
+      course/condition/level/title:
+        title: 'Level %{value}'
+      course/condition/scholaistic_assessment/title:
+        complete: 'Complete %{title}'
+      course/condition/survey/title:
+        complete: 'Complete %{survey_title}'
+      course/condition/video/title:
+        complete: 'Watch %{video_title}'
+      course/discussion/post:
+        title_reply_template: 'Re: %{title}'
+      course/experience_points_record:
+        points_awarded: 'EXP Awarded'
+      course/forum/topic/topic_type:
+        normal: 'Normal'
+        announcement: 'Announcement'
+        question: 'Question'
+        sticky: 'Sticky'
+      course/group_user:
+        manager: 'Tutor'
+      course/lesson_plan/item:
+        base_exp: 'Experience Points'
+        time_bonus_exp: 'Bonus Experience Points'
+        reference_times: 'Reference times'
+      course/video/tab:
+        weight: 'Order'
+      course/video/tab/title:
+        default: 'Default'
+      models:
+        course/assessment/question/rubric_based_response:
+          rubric_based_response: 'Rubric Based Response Question'
+        course/assessment/question/text_response:
+          text_response: 'Text Response Question'
+          file_upload: 'File Upload Question'
+          comprehension: 'Comprehension Question'
+

@@ -41,7 +41,7 @@ module ApplicationHtmlFormattersHelper
   def format_code_block(code, language = nil, start_line = 1)
     if code_size_exceeds_limit?(code)
       content_tag(:div, class: 'alert alert-warning') do
-        I18n.t('layouts.code_formatter.size_too_big')
+        I18n.t('errors.code_formatter.size_too_big')
       end
     else
       sanitize_and_format_code(code, language, start_line)

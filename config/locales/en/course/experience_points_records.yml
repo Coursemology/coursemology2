@@ -1,9 +1,0 @@
-en:
-  course:
-    experience_points_records:
-      download:
-        name: 'Name'
-        updated_at: 'Updated At'
-        updater: 'Updater'
-        reason: 'Reason'
-        exp_points: 'EXP Awarded'

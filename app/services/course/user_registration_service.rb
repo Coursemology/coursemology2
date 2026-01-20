@@ -119,7 +119,7 @@ class Course::UserRegistrationService
   #   parameters.
   # @return [nil]
   def invalid_code(registration)
-    registration.errors.add(:code, I18n.t('course.user_registrations.create.invalid_code'))
+    registration.errors.add(:code, I18n.t('errors.course.user_registrations.invalid_code'))
     nil
   end
 
@@ -127,9 +127,9 @@ class Course::UserRegistrationService
     confirmed_by = invitation.confirmer
     if confirmed_by
       registration.errors.
-        add(:code, I18n.t('course.user_registrations.create.code_taken_with_email', email: confirmed_by.email))
+        add(:code, I18n.t('errors.course.user_registrations.code_taken_with_email', email: confirmed_by.email))
     else
-      registration.errors.add(:code, I18n.t('course.user_registrations.create.code_taken'))
+      registration.errors.add(:code, I18n.t('errors.course.user_registrations.code_taken'))
     end
     nil
   end

@@ -151,7 +151,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService <
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
   def build_failed_test_case_records(question, auto_grading)
     messages = {
-      error: I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
+      error: I18n.t('errors.course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
     }
     remaining_test_cases = question.test_cases - auto_grading.test_results.map(&:test_case)
     remaining_test_cases.map do |test_case|

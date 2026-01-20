@@ -1,9 +1,0 @@
-zh:
-  course:
-    mailer:
-      assessment_closing_reminder_email:
-        subject: '%{course}: 相关提醒 %{assessment}'
-        message: >
-          请注意 %{assessment} 将截止于 %{time}。
-        message_no_time: >
-          请注意练习并提交 - %{assessment}。

@@ -1,9 +1,0 @@
-zh:
-  activerecord:
-    errors:
-      models:
-        course/video:
-          attributes:
-            url:
-              invalid_url: >
-                您输入的URL格式不正确，请重试。
