@@ -44,12 +44,17 @@ RSpec.feature 'Courses: Invitations', js: true do
           find('.dropzone-input').attach_file(invitation_file.path, make_visible: true)
         end
         click_button 'Invite Users from File'
-        expect(find('h6', text: 'New Invitations (2)')).to be_present
+        # A dialog should open confirming invitations have been created.
+        users.each do |user|
+          expect(page).to have_selector('tr', text: user.name.to_s)
+          expect(page).to have_selector('tr', text: user.email.to_s)
+        end
 
         visit course_user_invitations_path(course)
+        # The invitations should also be present in the invitations tab.
         users.each do |user|
-          expect(page).to have_selector('p', text: user.name.to_s)
-          expect(page).to have_selector('p', text: user.email.to_s)
+          expect(page).to have_selector('tr', text: user.name.to_s)
+          expect(page).to have_selector('tr', text: user.email.to_s)
         end
       end
 
@@ -85,42 +90,50 @@ RSpec.feature 'Courses: Invitations', js: true do
         visit course_user_invitations_path(course)
 
         old_time = 1.day.ago
-        invitations = create_list(:course_user_invitation, 3, course: course, sent_at: old_time)
+        invitations = create_list(:course_user_invitation, 4, course: course, sent_at: old_time)
         invitations.first.confirm!(confirmer: user)
         invitation_to_delete = invitations.second
-        invitation_to_resend = invitations.last
+        invitation_to_resend = invitations.third
+        invitations.last.update(is_retryable: false)
         visit course_user_invitations_path(course)
 
-        expect(page).to have_selector('div.invitations-bar-chart')
         invitations.each do |invitation|
-          if invitation.confirmed?
-            expect(page).to have_selector("tr.accepted_invitation_#{invitation.id}")
-          else
-            expect(page).to have_selector("tr.pending_invitation_#{invitation.id}")
-          end
+          status_text = if invitation.confirmed?
+                          'Accepted'
+                        elsif invitation.is_retryable
+                          'Pending'
+                        else
+                          'Failed'
+                        end
+
+          # query for a single row containing both correct email and correct status
+          expect(page).to have_xpath(
+            "//tr[contains(., '#{invitation.email}') and contains(., '#{status_text}')]"
+          )
         end
 
         # Resend individual user_invitation
-        within find("tr.pending_invitation_#{invitation_to_resend.id}") do
-          find("button.invitation-resend-#{invitation_to_resend.id}").click
-        end
+        resend_button = find("button.invitation-resend-#{invitation_to_resend.id}")
+        expect(resend_button.ancestor('tr')).to have_text(invitation_to_resend.email)
+        resend_button.click
         expect_toastify("Resent email invitation to #{invitation_to_resend.email}!")
         expect(invitation_to_resend.reload.sent_at).not_to eq(old_time)
 
         # Resend user_invitation for entire course
-        click_button('Resend All Invitations')
+        click_button('Resend Pending Invitations')
         wait_for_page
         expect(page).to have_current_path(course_user_invitations_path(course))
         expect(invitation_to_delete.reload.sent_at).not_to eq(old_time)
 
         # Delete individual user_invitation
-        within find("tr.pending_invitation_#{invitation_to_delete.id}") do
-          find("button.invitation-delete-#{invitation_to_delete.id}").click
-        end
+        delete_button = find("button.invitation-delete-#{invitation_to_delete.id}")
+        expect(delete_button.ancestor('tr')).to have_text(invitation_to_delete.email)
+        delete_button.click
+
         accept_prompt
 
         expect(page).to have_current_path(course_user_invitations_path(course))
-        expect(page).to_not have_selector("tr.pending_invitation_#{invitation_to_delete.id}")
+        expect(page).not_to have_css("button.invitation-delete-#{invitation_to_delete.id}")
       end
     end
 

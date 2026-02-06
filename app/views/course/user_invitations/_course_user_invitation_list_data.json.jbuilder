@@ -7,6 +7,7 @@ json.role invitation.role
 json.phantom invitation.phantom
 json.timelineAlgorithm invitation.timeline_algorithm
 json.invitationKey invitation.invitation_key
+json.isRetryable invitation.is_retryable
 json.confirmed invitation.confirmed?
 json.sentAt invitation.sent_at
 json.confirmedAt invitation.confirmed_at
