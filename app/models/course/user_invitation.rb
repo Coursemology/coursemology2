@@ -18,6 +18,7 @@ class Course::UserInvitation < ApplicationRecord
 
   # Invitations that haven't been confirmed, i.e. pending the user's acceptance.
   scope :unconfirmed, -> { where(confirmed_at: nil) }
+  scope :retryable, -> { where(is_retryable: true) }
 
   INVITATION_KEY_IDENTIFIER = 'I'
 
@@ -36,6 +37,12 @@ class Course::UserInvitation < ApplicationRecord
 
   def confirmed?
     confirmed_at.present?
+  end
+
+  # Called by MailDeliveryJob when a permanent SMTP error occurs (e.g. invalid address).
+  # Marks the invitation as not retryable to prevent further delivery attempts.
+  def mark_email_as_invalid(_error)
+    update_column(:is_retryable, false)
   end
 
   # Determines roles that current user can invite to current course
