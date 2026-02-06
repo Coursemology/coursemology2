@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_26_073121) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_06_070824) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -1330,6 +1330,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_073121) do
     t.integer "role", default: 0, null: false
     t.boolean "phantom", default: false, null: false
     t.integer "timeline_algorithm"
+    t.boolean "is_retryable", default: true, null: false
     t.index "lower((email)::text)", name: "index_course_user_invitations_on_email"
     t.index ["confirmer_id"], name: "fk__course_user_invitations_confirmer_id"
     t.index ["course_id", "email"], name: "index_course_user_invitations_on_course_id_and_email", unique: true
@@ -1534,6 +1535,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_073121) do
     t.integer "updater_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.boolean "is_retryable", default: true, null: false
     t.index "lower((email)::text)", name: "index_instance_user_invitations_on_lower_email_text"
     t.index ["instance_id", "email"], name: "index_instance_user_invitations_on_instance_id_and_email", unique: true
     t.index ["instance_id"], name: "index_instance_user_invitations_on_instance_id"
