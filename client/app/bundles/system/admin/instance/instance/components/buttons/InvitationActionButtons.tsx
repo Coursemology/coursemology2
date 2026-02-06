@@ -1,5 +1,5 @@
 import { FC, memo, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import equal from 'fast-deep-equal';
 import { InvitationRowData } from 'types/system/instance/invitations';
 
@@ -9,45 +9,47 @@ import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 
 import { deleteInvitation, resendInvitationEmail } from '../../operations';
+import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   invitation: InvitationRowData;
 }
 
 const translations = defineMessages({
   resendTooltip: {
-    id: 'system.admin.instance.instance.PendingInvitationsButtons.resendTooltip',
+    id: 'system.admin.instance.instance.InvitationActionButtons.resendTooltip',
     defaultMessage: 'Resend Invitation',
   },
   resendSuccess: {
-    id: 'system.admin.instance.instance.PendingInvitationsButtons.resendSuccess',
+    id: 'system.admin.instance.instance.InvitationActionButtons.resendSuccess',
     defaultMessage: 'Resent email invitation to {email}!',
   },
   resendFailure: {
-    id: 'system.admin.instance.instance.PendingInvitationsButtons.resendFailure',
+    id: 'system.admin.instance.instance.InvitationActionButtons.resendFailure',
     defaultMessage: 'Failed to resend invitation.',
   },
   deletionTooltip: {
-    id: 'system.admin.instance.instance.PendingInvitationsButtons.deletionTooltip',
+    id: 'system.admin.instance.instance.InvitationActionButtons.deletionTooltip',
     defaultMessage: 'Delete Invitation',
   },
   deletionConfirm: {
-    id: 'system.admin.instance.instance.PendingInvitationsButtons.deletionConfirm',
+    id: 'system.admin.instance.instance.InvitationActionButtons.deletionConfirm',
     defaultMessage:
       'Are you sure you wish to delete invitation to {name} ({email})?',
   },
   deletionSuccess: {
-    id: 'system.admin.instance.instance.PendingInvitationsButtons.deletionSuccess',
+    id: 'system.admin.instance.instance.InvitationActionButtons.deletionSuccess',
     defaultMessage: 'Invitation for {name} was deleted.',
   },
   deletionFailure: {
-    id: 'system.admin.instance.instance.PendingInvitationsButtons.deletionFailure',
+    id: 'system.admin.instance.instance.InvitationActionButtons.deletionFailure',
     defaultMessage: 'Failed to delete user - {error}',
   },
 });
 
-const PendingInvitationsButtons: FC<Props> = (props) => {
-  const { intl, invitation } = props;
+const InvitationActionButtons: FC<Props> = (props) => {
+  const { invitation } = props;
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [isResending, setIsResending] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -56,13 +58,13 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
     return dispatch(resendInvitationEmail(invitation.id))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.resendSuccess, {
+          t(translations.resendSuccess, {
             email: invitation.email,
           }),
         );
       })
       .catch(() => {
-        toast.error(intl.formatMessage(translations.resendFailure));
+        toast.error(t(translations.resendFailure));
       })
       .finally(() => setIsResending(false));
   };
@@ -72,7 +74,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
     return dispatch(deleteInvitation(invitation.id))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.deletionSuccess, {
+          t(translations.deletionSuccess, {
             name: invitation.name,
           }),
         );
@@ -83,7 +85,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.deletionFailure, {
+          t(translations.deletionFailure, {
             error: errorMessage,
           }),
         );
@@ -97,25 +99,25 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
         className={`invitation-resend-${invitation.id} p-0`}
         disabled={isResending || isDeleting}
         onClick={onResend}
-        tooltip={intl.formatMessage(translations.resendTooltip)}
+        tooltip={t(translations.resendTooltip)}
       />
       <DeleteButton
         className={`invitation-delete-${invitation.id}`}
-        confirmMessage={intl.formatMessage(translations.deletionConfirm, {
+        confirmMessage={t(translations.deletionConfirm, {
           name: invitation.name,
           email: invitation.email,
         })}
         disabled={isResending || isDeleting}
         loading={isDeleting}
         onClick={onDelete}
-        tooltip={intl.formatMessage(translations.deletionTooltip)}
+        tooltip={t(translations.deletionTooltip)}
       />
     </div>
   );
 };
 
 export default memo(
-  injectIntl(PendingInvitationsButtons),
+  InvitationActionButtons,
   (prevProps, nextProps) => {
     return equal(prevProps.invitation, nextProps.invitation);
   },
