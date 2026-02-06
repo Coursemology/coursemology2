@@ -8355,6 +8355,9 @@
   "system.admin.instance.instance.InstanceUsersInvitations.accepted": {
     "defaultMessage": "Accepted Invitations"
   },
+  "system.admin.instance.instance.InstanceUsersInvitations.failed": {
+    "defaultMessage": "Failed Invitations"
+  },
   "system.admin.instance.instance.InstanceUsersInvitations.fetch.failure": {
     "defaultMessage": "Failed to fetch invitations."
   },
@@ -8470,13 +8473,16 @@
     "defaultMessage": "Email invitations were successfully resent."
   },
   "system.admin.instance.instance.UserInvitationsTable.accepted": {
-    "defaultMessage": "accepted"
+    "defaultMessage": "Accepted"
+  },
+  "system.admin.instance.instance.UserInvitationsTable.failed": {
+    "defaultMessage": "Failed"
   },
   "system.admin.instance.instance.UserInvitationsTable.noInvitations": {
-    "defaultMessage": "There are no {invitationType}"
+    "defaultMessage": "There are no invitations."
   },
   "system.admin.instance.instance.UserInvitationsTable.pending": {
-    "defaultMessage": "pending"
+    "defaultMessage": "Pending"
   },
   "system.admin.instance.instance.UserInvitationsTable.sentTooltip": {
     "defaultMessage": "Sent {sentAt}"

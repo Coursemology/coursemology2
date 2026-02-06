@@ -27,6 +27,7 @@ export interface InvitationMiniEntity {
   invitationKey: string;
   sentAt: string | null;
   confirmedAt: string | null;
+  isRetryable: boolean;
 }
 
 export interface InvitationListData {
@@ -38,6 +39,7 @@ export interface InvitationListData {
   invitationKey: string;
   sentAt: string | null;
   confirmedAt: string | null;
+  isRetryable: boolean;
 }
 
 /**

@@ -5,7 +5,6 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 
-import PendingInvitationsButtons from '../components/buttons/PendingInvitationsButtons';
 import InstanceUsersTabs from '../components/navigation/InstanceUsersTabs';
 import UserInvitationsTable from '../components/tables/UserInvitationsTable';
 import { fetchInvitations } from '../operations';
@@ -26,14 +25,6 @@ const translations = defineMessages({
     id: 'system.admin.instance.instance.InstanceUsersInvitations.fetch.failure',
     defaultMessage: 'Failed to fetch invitations.',
   },
-  pending: {
-    id: 'system.admin.instance.instance.InstanceUsersInvitations.pending',
-    defaultMessage: 'Pending Invitations',
-  },
-  accepted: {
-    id: 'system.admin.instance.instance.InstanceUsersInvitations.accepted',
-    defaultMessage: 'Accepted Invitations',
-  },
 });
 
 const InstanceUsersInvitations: FC<Props> = (props) => {
@@ -41,12 +32,6 @@ const InstanceUsersInvitations: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const invitations = useAppSelector(getAllInvitationMiniEntities);
 
-  const pendingInvitations = invitations.filter(
-    (invitation) => !invitation.confirmed,
-  );
-  const acceptedInvitations = invitations.filter(
-    (invitation) => invitation.confirmed,
-  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -62,19 +47,8 @@ const InstanceUsersInvitations: FC<Props> = (props) => {
   return (
     <>
       <InstanceUsersTabs currentTab="invitations-tab" />
-      <UserInvitationsTable
-        invitations={pendingInvitations}
-        pendingInvitations
-        renderRowActionComponent={(invitation): JSX.Element => (
-          <PendingInvitationsButtons invitation={invitation} />
-        )}
-        title={intl.formatMessage(translations.pending)}
-      />
-      <UserInvitationsTable
-        acceptedInvitations
-        invitations={acceptedInvitations}
-        title={intl.formatMessage(translations.accepted)}
-      />
+
+      <UserInvitationsTable invitations={invitations} />
     </>
   );
 };
