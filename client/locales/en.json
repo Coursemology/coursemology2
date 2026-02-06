@@ -6852,23 +6852,17 @@
   "course.userInvitations.InvitationsBarChart.accepted": {
     "defaultMessage": "Accepted Invitations"
   },
-  "course.userInvitations.InvitationsBarChart.pending": {
-    "defaultMessage": "Pending"
-  },
-  "course.userInvitations.InvitationsIndex.accepted": {
-    "defaultMessage": "Accepted Invitations"
-  },
   "course.userInvitations.InvitationsIndex.failure": {
     "defaultMessage": "Failed to fetch all invitations"
+  },
+  "course.userInvitations.InvitationsIndex.invitationsHeader": {
+    "defaultMessage": "Invitations"
   },
   "course.userInvitations.InvitationsIndex.invitationsInfo": {
     "defaultMessage": "The page lists all invitations which have been sent out to date.{br}Users can key in their invitation code into the course registration page to manually register into this course."
   },
   "course.userInvitations.InvitationsIndex.manageUsersHeader": {
     "defaultMessage": "Manage Users"
-  },
-  "course.userInvitations.InvitationsIndex.pending": {
-    "defaultMessage": "Pending Invitations"
   },
   "course.userInvitations.InviteUsers.inviteUsersHeader": {
     "defaultMessage": "Invite Users"
@@ -6915,50 +6909,59 @@
   "course.userInvitations.InviteUsersfileUploadForm.invite": {
     "defaultMessage": "Invite Users from File"
   },
-  "course.userInvitations.PendingInvitationsButton.deletionConfirm": {
+  "course.userInvitations.InvitationActionButtons.deletionConfirm": {
     "defaultMessage": "Are you sure you wish to delete invitation to {name} ({email})?"
   },
-  "course.userInvitations.PendingInvitationsButton.deletionFailure": {
+  "course.userInvitations.InvitationActionButtons.deletionFailure": {
     "defaultMessage": "Failed to delete user - {error}"
   },
-  "course.userInvitations.PendingInvitationsButton.deletionSuccess": {
+  "course.userInvitations.InvitationActionButtons.deletionSuccess": {
     "defaultMessage": "Invitation for {name} was deleted."
   },
-  "course.userInvitations.PendingInvitationsButton.deletionTooltip": {
+  "course.userInvitations.InvitationActionButtons.deletionTooltip": {
     "defaultMessage": "Delete Invitation"
   },
-  "course.userInvitations.PendingInvitationsButton.resendFailure": {
+  "course.userInvitations.InvitationActionButtons.resendFailure": {
     "defaultMessage": "Failed to resend invitation - {error}"
   },
-  "course.userInvitations.PendingInvitationsButton.resendSuccess": {
+  "course.userInvitations.InvitationActionButtons.resendSuccess": {
     "defaultMessage": "Resent email invitation to {email}!"
   },
-  "course.userInvitations.PendingInvitationsButton.resendTooltip": {
+  "course.userInvitations.InvitationActionButtons.resendTooltip": {
     "defaultMessage": "Resend Invitation"
   },
   "course.userInvitations.RegistrationCodeButton.registrationCode": {
     "defaultMessage": "Registration Code"
   },
-  "course.userInvitations.ResebdAllInvitationsButton.buttonText": {
-    "defaultMessage": "Resend All Invitations"
+  "course.userInvitations.ResendAllInvitationsButton.buttonText": {
+    "defaultMessage": "Resend Pending Invitations ({count})"
   },
-  "course.userInvitations.ResebdAllInvitationsButton.resendFailure": {
+  "course.userInvitations.ResendAllInvitationsButton.resendFailure": {
     "defaultMessage": "Email invitations failed to resend."
   },
-  "course.userInvitations.ResebdAllInvitationsButton.resendSuccess": {
+  "course.userInvitations.ResendAllInvitationsButton.resendSuccess": {
     "defaultMessage": "Email invitations were successfully resent."
   },
   "course.userInvitations.UploadFileButton.uploadFile": {
     "defaultMessage": "Invite from file"
   },
   "course.userInvitations.UserInvitationsTable.accepted": {
-    "defaultMessage": "accepted"
+    "defaultMessage": "Accepted"
+  },
+  "course.userInvitations.UserInvitationsTable.failed": {
+    "defaultMessage": "Failed"
   },
   "course.userInvitations.UserInvitationsTable.noInvitations": {
-    "defaultMessage": "There are no {invitationType}"
+    "defaultMessage": "There are no invitations."
   },
   "course.userInvitations.UserInvitationsTable.pending": {
-    "defaultMessage": "pending"
+    "defaultMessage": "Pending"
+  },
+  "course.userInvitations.UserInvitationsTable.sentTooltip": {
+    "defaultMessage": "Sent {sentAt}"
+  },
+  "course.userInvitations.UserInvitationsTable.confirmedTooltip": {
+    "defaultMessage": "Accepted {confirmedAt}"
   },
   "course.userNotification.AchievementGainedPopup.unlocked": {
     "defaultMessage": "Achievement Unlocked!"
@@ -8403,25 +8406,25 @@
   "system.admin.instance.instance.InvitationResultDialog.newInvitations": {
     "defaultMessage": "New Invitations ({count})"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.deletionConfirm": {
+  "system.admin.instance.instance.InvitationActionButtons.deletionConfirm": {
     "defaultMessage": "Are you sure you wish to delete invitation to {name} ({email})?"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.deletionFailure": {
+  "system.admin.instance.instance.InvitationActionButtons.deletionFailure": {
     "defaultMessage": "Failed to delete user - {error}"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.deletionSuccess": {
+  "system.admin.instance.instance.InvitationActionButtons.deletionSuccess": {
     "defaultMessage": "Invitation for {name} was deleted."
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.deletionTooltip": {
+  "system.admin.instance.instance.InvitationActionButtons.deletionTooltip": {
     "defaultMessage": "Delete Invitation"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.resendFailure": {
-    "defaultMessage": "Failed to resend invitation."
+  "system.admin.instance.instance.InvitationActionButtons.resendFailure": {
+    "defaultMessage": "Failed to resend invitation - {error}"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.resendSuccess": {
+  "system.admin.instance.instance.InvitationActionButtons.resendSuccess": {
     "defaultMessage": "Resent email invitation to {email}!"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.resendTooltip": {
+  "system.admin.instance.instance.InvitationActionButtons.resendTooltip": {
     "defaultMessage": "Resend Invitation"
   },
   "system.admin.instance.instance.PendingRoleRequestsButton.approveFailure": {
@@ -8458,7 +8461,7 @@
     "defaultMessage": "The role request made by {name} has been rejected."
   },
   "system.admin.instance.instance.ResendAllInvitationsButton.buttonText": {
-    "defaultMessage": "Resend All Invitations"
+    "defaultMessage": "Resend Pending Invitations ({count})"
   },
   "system.admin.instance.instance.ResendAllInvitationsButton.resendFailure": {
     "defaultMessage": "Failed to resend email invitations."
@@ -8474,6 +8477,12 @@
   },
   "system.admin.instance.instance.UserInvitationsTable.pending": {
     "defaultMessage": "pending"
+  },
+  "system.admin.instance.instance.UserInvitationsTable.sentTooltip": {
+    "defaultMessage": "Sent {sentAt}"
+  },
+  "system.admin.instance.instance.UserInvitationsTable.confirmedTooltip": {
+    "defaultMessage": "Accepted {confirmedAt}"
   },
   "system.admin.instance.instance.UsersButton.deleteTooltip": {
     "defaultMessage": "Remove User"

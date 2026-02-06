@@ -1,36 +1,34 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
 import palette from 'theme/palette';
 
 import BarChart from 'lib/components/core/BarChart';
+import useTranslation from 'lib/hooks/useTranslation';
+
+import translations from '../../translations';
 
 interface BarchartProps {
   accepted: number;
   pending: number;
+  failed: number;
 }
 
-const translations = defineMessages({
-  accepted: {
-    id: 'course.userInvitations.InvitationsBarChart.accepted',
-    defaultMessage: 'Accepted Invitations',
-  },
-  pending: {
-    id: 'course.userInvitations.InvitationsBarChart.pending',
-    defaultMessage: 'Pending',
-  },
-});
-
 const InvitationsBarChart = (props: BarchartProps): JSX.Element => {
-  const { accepted, pending } = props;
+  const { accepted, pending, failed } = props;
+  const { t } = useTranslation();
   const data = [
     {
       count: pending,
       color: palette.invitationStatus.pending,
-      label: <FormattedMessage {...translations.pending} />,
+      label: t(translations.pending),
     },
     {
       count: accepted,
       color: palette.invitationStatus.accepted,
-      label: <FormattedMessage {...translations.accepted} />,
+      label: t(translations.accepted),
+    },
+    {
+      count: failed,
+      color: palette.invitationStatus.failed,
+      label: t(translations.failed),
     },
   ];
 

@@ -6836,20 +6836,17 @@
   "course.userInvitations.InvitationsBarChart.pending": {
     "defaultMessage": "待处理"
   },
-  "course.userInvitations.InvitationsIndex.accepted": {
-    "defaultMessage": "已接受邀请"
-  },
   "course.userInvitations.InvitationsIndex.failure": {
     "defaultMessage": "无法获取所有邀请"
+  },
+  "course.userInvitations.InvitationsIndex.invitationsHeader": {
+    "defaultMessage": "邀请"
   },
   "course.userInvitations.InvitationsIndex.invitationsInfo": {
     "defaultMessage": "至今发出的所有邀请已列出。用户可以在课程注册页面输入邀请码，手动注册该课程。"
   },
   "course.userInvitations.InvitationsIndex.manageUsersHeader": {
     "defaultMessage": "管理用户"
-  },
-  "course.userInvitations.InvitationsIndex.pending": {
-    "defaultMessage": "待处理的邀请"
   },
   "course.userInvitations.InviteUsers.inviteUsersHeader": {
     "defaultMessage": "邀请用户"
@@ -6896,37 +6893,37 @@
   "course.userInvitations.InviteUsersfileUploadForm.invite": {
     "defaultMessage": "从文件邀请用户"
   },
-  "course.userInvitations.PendingInvitationsButton.deletionConfirm": {
+  "course.userInvitations.InvitationActionButtons.deletionConfirm": {
     "defaultMessage": "你确定要删除对{name} ({email}) 的邀请吗？"
   },
-  "course.userInvitations.PendingInvitationsButton.deletionFailure": {
+  "course.userInvitations.InvitationActionButtons.deletionFailure": {
     "defaultMessage": "无法删除用户 - {error}"
   },
-  "course.userInvitations.PendingInvitationsButton.deletionSuccess": {
+  "course.userInvitations.InvitationActionButtons.deletionSuccess": {
     "defaultMessage": "对 {name} 的邀请已删除。"
   },
-  "course.userInvitations.PendingInvitationsButton.deletionTooltip": {
+  "course.userInvitations.InvitationActionButtons.deletionTooltip": {
     "defaultMessage": "删除邀请"
   },
-  "course.userInvitations.PendingInvitationsButton.resendFailure": {
+  "course.userInvitations.InvitationActionButtons.resendFailure": {
     "defaultMessage": "无法重新发送邀请 - {error}"
   },
-  "course.userInvitations.PendingInvitationsButton.resendSuccess": {
+  "course.userInvitations.InvitationActionButtons.resendSuccess": {
     "defaultMessage": "向 {email} 重新发送电子邮件邀请！"
   },
-  "course.userInvitations.PendingInvitationsButton.resendTooltip": {
+  "course.userInvitations.InvitationActionButtons.resendTooltip": {
     "defaultMessage": "重新发送邀请"
   },
   "course.userInvitations.RegistrationCodeButton.registrationCode": {
     "defaultMessage": "注册码"
   },
-  "course.userInvitations.ResebdAllInvitationsButton.buttonText": {
-    "defaultMessage": "重新发送所有邀请"
+  "course.userInvitations.ResendAllInvitationsButton.buttonText": {
+    "defaultMessage": "重新发送待处理邀请 ({count})"
   },
-  "course.userInvitations.ResebdAllInvitationsButton.resendFailure": {
+  "course.userInvitations.ResendAllInvitationsButton.resendFailure": {
     "defaultMessage": "电子邮件邀请未能重新发送。"
   },
-  "course.userInvitations.ResebdAllInvitationsButton.resendSuccess": {
+  "course.userInvitations.ResendAllInvitationsButton.resendSuccess": {
     "defaultMessage": "已成功重新发送电子邮件邀请。"
   },
   "course.userInvitations.UploadFileButton.uploadFile": {
@@ -6935,11 +6932,20 @@
   "course.userInvitations.UserInvitationsTable.accepted": {
     "defaultMessage": "已接受"
   },
+  "course.userInvitations.UserInvitationsTable.failed": {
+    "defaultMessage": "失败"
+  },
   "course.userInvitations.UserInvitationsTable.noInvitations": {
-    "defaultMessage": "没有{invitationType}"
+    "defaultMessage": "没有邀请。"
   },
   "course.userInvitations.UserInvitationsTable.pending": {
     "defaultMessage": "待处理"
+  },
+  "course.userInvitations.UserInvitationsTable.sentTooltip": {
+    "defaultMessage": "已于{sentAt}发送"
+  },
+  "course.userInvitations.UserInvitationsTable.confirmedTooltip": {
+    "defaultMessage": "已于{confirmedAt}接受"
   },
   "course.userNotification.AchievementGainedPopup.unlocked": {
     "defaultMessage": "成就解锁！"
@@ -8396,25 +8402,25 @@
   "system.admin.instance.instance.InvitationResultDialog.newInvitations": {
     "defaultMessage": "新邀请（{count}）"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.deletionConfirm": {
+  "system.admin.instance.instance.InvitationActionButtons.deletionConfirm": {
     "defaultMessage": "你确定要删除对{name} ({email}) 的邀请吗？"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.deletionFailure": {
+  "system.admin.instance.instance.InvitationActionButtons.deletionFailure": {
     "defaultMessage": "无法删除用户 - {error}"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.deletionSuccess": {
+  "system.admin.instance.instance.InvitationActionButtons.deletionSuccess": {
     "defaultMessage": "{name} 的邀请已删除。"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.deletionTooltip": {
+  "system.admin.instance.instance.InvitationActionButtons.deletionTooltip": {
     "defaultMessage": "删除邀请"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.resendFailure": {
-    "defaultMessage": "未能重新发送邀请。"
+  "system.admin.instance.instance.InvitationActionButtons.resendFailure": {
+    "defaultMessage": "未能重新发送邀请 - {error}"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.resendSuccess": {
+  "system.admin.instance.instance.InvitationActionButtons.resendSuccess": {
     "defaultMessage": "向 {email} 重新发送电子邮件邀请！"
   },
-  "system.admin.instance.instance.PendingInvitationsButtons.resendTooltip": {
+  "system.admin.instance.instance.InvitationActionButtons.resendTooltip": {
     "defaultMessage": "重新发送邀请"
   },
   "system.admin.instance.instance.PendingRoleRequestsButton.approveFailure": {
@@ -8451,7 +8457,7 @@
     "defaultMessage": "{name} 提出的角色请求已被拒绝。"
   },
   "system.admin.instance.instance.ResendAllInvitationsButton.buttonText": {
-    "defaultMessage": "重新发送所有邀请"
+    "defaultMessage": "重新发送待处理邀请 ({count})"
   },
   "system.admin.instance.instance.ResendAllInvitationsButton.resendFailure": {
     "defaultMessage": "无法重新发送电子邮件邀请。"
@@ -8467,6 +8473,12 @@
   },
   "system.admin.instance.instance.UserInvitationsTable.pending": {
     "defaultMessage": "待处理"
+  },
+  "system.admin.instance.instance.UserInvitationsTable.sentTooltip": {
+    "defaultMessage": "已于{sentAt}发送"
+  },
+  "system.admin.instance.instance.UserInvitationsTable.confirmedTooltip": {
+    "defaultMessage": "已于{confirmedAt}接受"
   },
   "system.admin.instance.instance.UsersButton.deleteTooltip": {
     "defaultMessage": "移除用户"
