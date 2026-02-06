@@ -126,7 +126,7 @@ const useTanStackTableBuilder = <D extends object>(
       forEach: (header, index) => ({
         id: header.id,
         render: customHeaderRender(header),
-        className: getRealColumn(index)?.className,
+        className: getRealColumn(index - initialColumnsLength)?.className,
         sorting: header.column.getCanSort()
           ? {
               sorted: Boolean(header.column.getIsSorted()),
@@ -140,7 +140,8 @@ const useTanStackTableBuilder = <D extends object>(
               uniqueFilterValues: Array.from(
                 header.column.getFacetedUniqueValues().keys(),
               ).sort(),
-              getFilterLabel: getRealColumn(index)?.filterProps?.getLabel,
+              getFilterLabel: getRealColumn(index - initialColumnsLength)
+                ?.filterProps?.getLabel,
               onAddFilter: (value): void => {
                 resetPagination();
                 header.column.setFilterValue((currentFilters?: unknown[]) =>
