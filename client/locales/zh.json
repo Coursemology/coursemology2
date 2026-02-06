@@ -8351,6 +8351,9 @@
   "system.admin.instance.instance.InstanceUsersInvitations.accepted": {
     "defaultMessage": "接受邀请"
   },
+  "system.admin.instance.instance.InstanceUsersInvitations.failed": {
+    "defaultMessage": "失败的邀请"
+  },
   "system.admin.instance.instance.InstanceUsersInvitations.fetch.failure": {
     "defaultMessage": "无法获取邀请。"
   },
@@ -8468,8 +8471,11 @@
   "system.admin.instance.instance.UserInvitationsTable.accepted": {
     "defaultMessage": "已接受"
   },
+  "system.admin.instance.instance.UserInvitationsTable.failed": {
+    "defaultMessage": "失败"
+  },
   "system.admin.instance.instance.UserInvitationsTable.noInvitations": {
-    "defaultMessage": "没有{invitationType}"
+    "defaultMessage": "没有邀请。"
   },
   "system.admin.instance.instance.UserInvitationsTable.pending": {
     "defaultMessage": "待处理"

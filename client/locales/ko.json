@@ -8357,6 +8357,9 @@
   "system.admin.instance.instance.InstanceUsersInvitations.accepted": {
     "defaultMessage": "수락된 초대"
   },
+  "system.admin.instance.instance.InstanceUsersInvitations.failed": {
+    "defaultMessage": "실패한 초대"
+  },
   "system.admin.instance.instance.InstanceUsersInvitations.fetch.failure": {
     "defaultMessage": "초대를 가져오지 못했습니다."
   },
@@ -8474,8 +8477,11 @@
   "system.admin.instance.instance.UserInvitationsTable.accepted": {
     "defaultMessage": "수락됨"
   },
+  "system.admin.instance.instance.UserInvitationsTable.failed": {
+    "defaultMessage": "실패"
+  },
   "system.admin.instance.instance.UserInvitationsTable.noInvitations": {
-    "defaultMessage": "{invitationType}이(가) 없습니다"
+    "defaultMessage": "초대가 없습니다."
   },
   "system.admin.instance.instance.UserInvitationsTable.pending": {
     "defaultMessage": "대기 중"
