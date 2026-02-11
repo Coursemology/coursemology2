@@ -302,7 +302,10 @@ jobs:
       - run:
           name: Install Playwright dependencies
           working_directory: tests
-          command: yarn install; yarn prepare
+          command: |
+            wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
+            yarn install
+            yarn prepare
 
       - run:
           name: Run Playwright tests

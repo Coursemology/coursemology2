@@ -5,7 +5,6 @@ import { unparse } from 'papaparse';
 import { ColumnTemplate, Data } from '../builder';
 
 interface CsvGenerator<D extends Data> {
-  initialColumnsLength: number;
   headers: string[];
   rows: () => Row<D>[];
   getRealColumn: (index: number) => ColumnTemplate<D> | undefined;
@@ -20,7 +19,6 @@ const generateCsv = <D extends Data>(
     options.rows().forEach((row) => {
       const rowData = row
         .getAllCells()
-        .slice(options.initialColumnsLength)
         .reduce<string[]>((cells, cell, index) => {
           const realColumn = options.getRealColumn(index);
           const csvDownloadable = realColumn?.csvDownloadable;

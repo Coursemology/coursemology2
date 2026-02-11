@@ -113,7 +113,7 @@ const StudentsStatisticsTable: FC<Props> = (props) => {
     {
       of: 'email',
       title: t(translations.email),
-      hidden: true,
+      className: 'hidden',
       cell: (student) => student.email,
       csvDownloadable: true,
     },
