@@ -316,7 +316,7 @@ const LiveFeedbackStatisticsTable: FC<Props> = (props) => {
             getValue: (datum) => datum.courseUser.email,
           },
           title: t(translations.email),
-          hidden: true,
+          className: 'hidden',
           cell: (datum) => (
             <div className="flex grow items-center">
               {datum.courseUser.email}

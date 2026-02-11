@@ -28,7 +28,6 @@ interface ColumnTemplate<D extends Data> {
   sortable?: boolean;
   filterable?: boolean;
   searchable?: boolean;
-  hidden?: boolean;
   csvDownloadable?: boolean;
   filterProps?: FilteringProps<D>;
   csvValue?: (value) => string;

@@ -234,7 +234,7 @@ const StudentAttemptCountTable: FC<Props> = ({ includePhantom }) => {
     },
     {
       title: t(translations.email),
-      hidden: true,
+      className: 'hidden',
       csvDownloadable: true,
       searchProps: { getValue: (datum) => datum.courseUser.email },
       cell: (datum) => (

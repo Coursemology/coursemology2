@@ -30,7 +30,7 @@ type TanStackTableProps<D> = TableProps<
 const useTanStackTableBuilder = <D extends object>(
   props: TableTemplate<D>,
 ): TanStackTableProps<D> => {
-  const [columns, getRealColumn, initialColumnsLength] = buildTanStackColumns(
+  const [columns, getRealColumn] = buildTanStackColumns(
     props.columns,
     props.indexing?.rowSelectable,
     props.indexing?.indices,
@@ -83,12 +83,6 @@ const useTanStackTableBuilder = <D extends object>(
       columnFilters,
       globalFilter: searchKeyword.trim(),
       pagination,
-      columnVisibility: Object.fromEntries(
-        props.columns.map((column) => [
-          column.of ?? column.title,
-          !column.hidden,
-        ]),
-      ),
     },
     initialState: {
       sorting: props.sort?.initially && [
@@ -101,17 +95,18 @@ const useTanStackTableBuilder = <D extends object>(
   });
 
   const generateAndDownloadCsv = async (): Promise<void> => {
-    const headers = table.options.columns
-      .slice(initialColumnsLength)
-      .reduce<string[]>((acc, column, index) => {
+    const headers = table.options.columns.reduce<string[]>(
+      (acc, column, index) => {
         const header = column.header || column.id;
         if (header && (getRealColumn(index)?.csvDownloadable ?? false)) {
           acc.push(header as string);
         }
         return acc;
-      }, []);
+      },
+      [],
+    );
+
     const csvData = await generateCsv({
-      initialColumnsLength,
       headers,
       rows: () => table.getCoreRowModel().rows,
       getRealColumn,
