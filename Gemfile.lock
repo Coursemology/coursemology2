@@ -240,14 +240,14 @@ GEM
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
-    faraday (2.12.2)
+    faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
     faraday-multipart (1.1.0)
       multipart-post (~> 2.0)
-    faraday-net_http (3.4.0)
-      net-http (>= 0.5.0)
+    faraday-net_http (3.4.2)
+      net-http (~> 0.5)
     ffi (1.17.1)
     filename (0.1.2)
     flamegraph (0.9.5)
@@ -325,7 +325,7 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
-    json (2.10.2)
+    json (2.18.1)
     json-schema (5.2.2)
       addressable (~> 2.8)
       bigdecimal (~> 3.1)
@@ -400,8 +400,8 @@ GEM
     multipart-post (2.4.1)
     neighbor (0.5.2)
       activerecord (>= 7)
-    net-http (0.6.0)
-      uri
+    net-http (0.9.1)
+      uri (>= 0.11.1)
     net-imap (0.5.7)
       date
       net-protocol
@@ -662,7 +662,7 @@ GEM
     uniform_notifier (1.16.0)
     unread (0.14.0)
       activerecord (>= 6.1)
-    uri (1.0.4)
+    uri (1.1.1)
     useragent (0.16.11)
     validates_hostname (1.0.13)
       activerecord (>= 3.0)
