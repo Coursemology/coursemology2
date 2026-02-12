@@ -1,16 +1,17 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { LoadingButton } from '@mui/lab';
 
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { resendAllInvitations } from '../../operations';
 
 const translations = defineMessages({
   buttonText: {
     id: 'system.admin.instance.instance.ResendAllInvitationsButton.buttonText',
-    defaultMessage: 'Resend All Invitations',
+    defaultMessage: 'Resend Pending Invitations ({count})',
   },
   resendSuccess: {
     id: 'system.admin.instance.instance.ResendAllInvitationsButton.resendSuccess',
@@ -22,34 +23,38 @@ const translations = defineMessages({
   },
 });
 
-type Props = WrappedComponentProps;
+interface Props {
+  count: number;
+}
 
 const ResendAllInvitationsButton: FC<Props> = (props) => {
-  const { intl } = props;
+  const { count } = props;
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleResend = (): Promise<void> => {
     setIsLoading(true);
     return dispatch(resendAllInvitations())
       .then(() => {
-        toast.success(intl.formatMessage(translations.resendSuccess));
+        toast.success(t(translations.resendSuccess));
       })
       .catch(() => {
-        toast.error(intl.formatMessage(translations.resendFailure));
+        toast.error(t(translations.resendFailure));
       })
       .finally(() => setIsLoading(false));
   };
 
   return (
     <LoadingButton
+      disabled={count === 0}
       loading={isLoading}
       onClick={handleResend}
       variant="contained"
     >
-      {intl.formatMessage(translations.buttonText)}
+      {t(translations.buttonText, { count })}
     </LoadingButton>
   );
 };
 
-export default injectIntl(ResendAllInvitationsButton);
+export default ResendAllInvitationsButton;

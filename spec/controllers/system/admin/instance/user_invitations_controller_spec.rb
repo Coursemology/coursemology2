@@ -75,6 +75,14 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
           expect(controller.instance_variable_get(:@invitations)).to be_empty
         end
       end
+
+      context 'if the provided invitation is not retryable' do
+        before { invitation.update_column(:is_retryable, false) }
+        it 'will not load the invitation' do
+          subject
+          expect(controller.instance_variable_get(:@invitations)).to be_empty
+        end
+      end
     end
 
     describe '#resend_invitations' do
@@ -88,6 +96,20 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
         subject
         expect(controller.instance_variable_get(:@invitations)).
           to contain_exactly(*pending_invitations)
+      end
+
+      context 'with non-retryable invitations' do
+        let!(:non_retryable_invitations) do
+          create_list(:instance_user_invitation, 2, instance: instance, is_retryable: false)
+        end
+
+        it 'does not load non-retryable invitations' do
+          subject
+          expect(controller.instance_variable_get(:@invitations)).
+            to contain_exactly(*pending_invitations)
+          expect(controller.instance_variable_get(:@invitations)).
+            not_to include(*non_retryable_invitations)
+        end
       end
     end
   end

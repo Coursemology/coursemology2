@@ -115,6 +115,7 @@ const palette = {
   invitationStatus: {
     pending: colors.grey[100],
     accepted: colors.green[100],
+    failed: colors.red[100],
   },
   links: colors.blue[800],
 };

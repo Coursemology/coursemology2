@@ -87,11 +87,11 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
   def invitations
     @invitations ||= begin
       ids = resend_invitation_params
-      ids ||= @instance.invitations.unconfirmed.select(:id)
+      ids ||= @instance.invitations.retryable.unconfirmed.select(:id)
       if ids.blank?
         []
       else
-        @instance.invitations.unconfirmed.where('instance_user_invitations.id IN (?)', ids)
+        @instance.invitations.retryable.unconfirmed.where('instance_user_invitations.id IN (?)', ids)
       end
     end
   end

@@ -1,4 +1,4 @@
-import { CourseUserData } from './courseUsers';
+import { CourseUserData, CourseUserRole } from './courseUsers';
 import { TimelineAlgorithm } from './personalTimes';
 
 export interface InvitationFileEntity {
@@ -54,32 +54,28 @@ export interface InvitationMiniEntity {
   id: number;
   name: string;
   email: string;
-  role: string;
+  role: CourseUserRole;
   phantom: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
   invitationKey: string;
   confirmed: boolean;
   sentAt: string | null;
   confirmedAt: string | null;
+  isRetryable: boolean;
 }
 
 export interface InvitationListData {
   id: number;
   name: string;
   email: string;
-  role: string;
+  role: CourseUserRole;
   phantom: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
   invitationKey: string;
   confirmed: boolean;
   sentAt: string | null;
   confirmedAt: string | null;
+  isRetryable: boolean;
 }
 
-/**
- * Row data from UserInvitationsTable Datatable
- */
-export interface InvitationRowData extends InvitationMiniEntity {
-  'S/N'?: number;
-  actions?: undefined;
-}
+export type InvitationStatus = 'pending' | 'accepted' | 'failed';
