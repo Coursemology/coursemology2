@@ -46,7 +46,7 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "@tanstack/react-table": "8.16.0",
     "ace-builds": "^1.32.6",
-    "axios": "^1.13.1",
+    "axios": "^1.13.5",
     "babel-plugin-formatjs": "^10.5.14",
     "chart.js": "^3.8.2",
     "chartjs-adapter-moment": "^1.0.1",
