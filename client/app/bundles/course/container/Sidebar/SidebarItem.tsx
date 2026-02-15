@@ -25,9 +25,9 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
   const activeUrl = activePath ?? location.pathname + location.search;
 
   const isActive =
-    exact || item.exact
-      ? activeUrl === item.path
-      : activeUrl.startsWith(item.path);
+    exact ||
+    (item.path &&
+      (item.exact ? activeUrl === item.path : activeUrl.startsWith(item.path)));
 
   const Icon = defensivelyGetIcon(item.icon, isActive ? 'filled' : 'outlined');
 
@@ -41,35 +41,49 @@ const SidebarItem = (props: SidebarItemProps): JSX.Element => {
 
   const unreadCount = useUnreadCountForItem(item.key);
 
-  return (
-    <Link
-      ref={ref}
-      className={`no-underline ${isActive ? 'text-primary' : 'text-inherit'}`}
-      id={`sidebar_item_${item.key}`}
-      to={item.path}
-    >
-      <div
-        className={`flex select-none items-center space-x-5 p-4 transition-transform active:scale-95 active:rounded-xl ${
-          !square ? 'rounded-xl' : ''
-        } ${
-          isActive
-            ? 'bg-primary/10 hover:bg-primary/20 active:bg-primary/30'
-            : 'hover:bg-neutral-200 active:bg-neutral-300'
-        }`}
-        role="button"
+  if (item.path) {
+    return (
+      <Link
+        ref={ref}
+        className={`no-underline ${isActive ? 'text-primary' : 'text-inherit'}`}
+        id={`sidebar_item_${item.key}`}
+        to={item.path}
       >
-        <Badge badgeContent={unreadCount} color="primary" max={999}>
-          <Icon />
-        </Badge>
-
-        <Typography
-          className="overflow-hidden text-ellipsis whitespace-nowrap font-medium"
-          variant="body2"
+        <div
+          className={`flex select-none items-center space-x-5 p-4 transition-transform active:scale-95 active:rounded-xl ${
+            !square ? 'rounded-xl' : ''
+          } ${
+            isActive
+              ? 'bg-primary/10 hover:bg-primary/20 active:bg-primary/30'
+              : 'hover:bg-neutral-200 active:bg-neutral-300'
+          }`}
+          role="button"
         >
-          {getComponentTitle(t, item.key, item.label)}
-        </Typography>
-      </div>
-    </Link>
+          <Badge badgeContent={unreadCount} color="primary" max={999}>
+            <Icon />
+          </Badge>
+
+          <Typography
+            className="overflow-hidden text-ellipsis whitespace-nowrap font-medium"
+            variant="body2"
+          >
+            {getComponentTitle(t, item.key, item.label)}
+          </Typography>
+        </div>
+      </Link>
+    );
+  }
+  return (
+    <div className="flex select-none items-center space-x-5 p-4">
+      <Icon className="text-gray-400" />
+
+      <Typography
+        className="overflow-hidden text-ellipsis whitespace-nowrap font-medium text-gray-400"
+        variant="body2"
+      >
+        {getComponentTitle(t, item.key, item.label)}
+      </Typography>
+    </div>
   );
 };
 

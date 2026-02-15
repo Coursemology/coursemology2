@@ -12,6 +12,12 @@ class Course::UserNotificationsController < Course::Controller
     render json: next_popup_notification, status: :ok
   end
 
+  protected
+
+  def publicly_accessible?
+    Set[:fetch].include?(action_name.to_sym)
+  end
+
   private
 
   # Fetches the first unread popup `UserNotification` for the current course and returns JSON data

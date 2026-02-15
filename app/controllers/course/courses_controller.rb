@@ -8,9 +8,15 @@ class Course::CoursesController < Course::Controller
   end
 
   def show
-    @currently_active_announcements = current_course.announcements.currently_active.includes(:creator)
-    @activity_feeds = recent_activity_feeds.limit(20).preload(activity: [{ object: { topic: { actable: :forum } } },
-                                                                         :actor])
+    head :unauthorized and return unless current_user.present? || current_course.published
+
+    if can?(:manage, current_course) || current_course.user?(current_user)
+      @currently_active_announcements = current_course.announcements.currently_active.includes(:creator)
+      @activity_feeds = recent_activity_feeds.limit(20).preload(
+        activity: [{ object: { topic: { actable: :forum } } }, :actor]
+      )
+    end
+    authorize! :read, current_course unless current_course.published
     load_activity_course_users
     load_todos
     load_items_with_timeline
@@ -41,7 +47,7 @@ class Course::CoursesController < Course::Controller
   protected
 
   def publicly_accessible?
-    Set[:index].include?(action_name.to_sym)
+    Set[:index, :show, :sidebar].include?(action_name.to_sym)
   end
 
   private
@@ -80,6 +86,8 @@ class Course::CoursesController < Course::Controller
   end
 
   def load_items_with_timeline # rubocop:disable Metrics/CyclomaticComplexity
+    return unless current_course_user&.student?
+
     item_ids = [*@video_todos&.map { |todo| todo.item.id },
                 *@assessment_todos&.map { |todo| todo.item.id },
                 *@survey_todos&.map { |todo| todo.item.id }]
@@ -92,6 +100,8 @@ class Course::CoursesController < Course::Controller
   end
 
   def load_activity_course_users
+    return unless can?(:manage, current_course) || current_course.user?(current_user)
+
     activity_user_ids = @activity_feeds.map { |x| x.activity.actor_id }.uniq
     @course_users_hash = current_course.course_users.where(user_id: activity_user_ids).to_h do |course_user|
       [course_user.user_id, course_user]

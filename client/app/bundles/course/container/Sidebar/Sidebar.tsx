@@ -1,5 +1,6 @@
 import { ComponentRef, forwardRef } from 'react';
 import { defineMessages } from 'react-intl';
+import { Typography } from '@mui/material';
 import { CourseLayoutData } from 'types/course/courses';
 
 import BrandingHead from 'lib/components/navigation/BrandingHead';
@@ -15,6 +16,11 @@ const translations = defineMessages({
   administration: {
     id: 'course.courses.Sidebar.administration',
     defaultMessage: 'Administration',
+  },
+  joinCoursemologyMessage: {
+    id: 'course.courses.Sidebar.joinCoursemologyMessage',
+    defaultMessage:
+      'Create a Coursemology account or sign up to join this course.',
   },
 });
 
@@ -43,6 +49,17 @@ const Sidebar = forwardRef<ComponentRef<typeof SidebarContainer>, SidebarProps>(
 
           {data.courseUserName && <CourseUserItem from={data} />}
         </section>
+
+        {!data.userName && (
+          <section className="border-only-b-neutral-200 px-4 py-3">
+            <Typography
+              className="text-neutral-500 leading-tight"
+              variant="caption"
+            >
+              {t(translations.joinCoursemologyMessage)}
+            </Typography>
+          </section>
+        )}
 
         <section className="h-full space-y-4 overflow-y-scroll px-3 py-4">
           {data.sidebar && (

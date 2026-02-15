@@ -78,7 +78,7 @@ export interface NewCourseFormData {
 export interface SidebarItemData {
   key: string;
   label?: string;
-  path: string;
+  path?: string;
   icon: CourseComponentIconName;
   unread?: number;
   exact?: boolean;

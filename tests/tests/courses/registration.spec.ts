@@ -11,7 +11,7 @@ test.describe('with an unconfirmed invitation', () => {
   let invitation;
 
   test.beforeEach(async () => {
-    course = await manufacture({ course: {} });
+    course = await manufacture({ course: { traits: ['published']} });
     invitation = await manufacture({
       course_user_invitation: { course_id: course.id },
     });
@@ -44,7 +44,7 @@ test.describe('allows enrol requests', () => {
   let course: { id: number };
 
   test.beforeEach(async () => {
-    course = await manufacture({ course: { traits: ['enrollable'] } });
+    course = await manufacture({ course: { traits: ['published', 'enrollable'] } });
 
     await clearEmails();
   });

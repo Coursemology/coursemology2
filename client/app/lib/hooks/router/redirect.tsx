@@ -24,11 +24,6 @@ const defensivelyParseURL = (rawURL: string): string | null => {
 const getCurrentURL = (): string =>
   window.location.pathname + window.location.search;
 
-const getAuthenticatableURL = (): string => {
-  const url = new URL('/authentication', window.location.origin);
-  return url.pathname + url.search;
-};
-
 const getForbiddenURL = (): string => {
   const url = new URL('/forbidden', window.location.origin);
   url.searchParams.append(FORBIDDEN_SOURCE_URL_SEARCH_PARAM, getCurrentURL());
@@ -44,18 +39,6 @@ export const useNextURL = (): { nextURL: string | null; expired: boolean } => {
     nextURL: nextRawURL && defensivelyParseURL(nextRawURL),
     expired: Boolean(expired),
   };
-};
-
-/**
- * Redirects to the sign in page with the current URL as the next URL. To be used
- * in scopes outside React and/or React Router, e.g., Axios interceptors.
- * Do not redirect to the same /authentication url.
- *
- * @param expired Whether this redirect is caused by an expired session.
- */
-export const redirectToAuthPage = (): void => {
-  if (!window.location.pathname.startsWith('/auth'))
-    window.location.href = getAuthenticatableURL();
 };
 
 export const redirectToForbidden = (): void => {
