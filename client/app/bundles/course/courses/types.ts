@@ -39,6 +39,7 @@ export interface SubmitEnrolAction {
   type: typeof SUBMIT_ENROL;
   courseId: number;
   id: number;
+  status: string;
 }
 
 export interface CancelEnrolAction {

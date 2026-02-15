@@ -80,7 +80,7 @@ export function submitEnrolRequest(
 ): Operation<SubmitEnrolAction> {
   return async (dispatch) =>
     CourseAPI.courses.submitEnrolRequest(link).then((response) => {
-      return dispatch(actions.submitEnrolRequest(courseId, response.data.id));
+      return dispatch(actions.submitEnrolRequest(courseId, response.data.id, response.data.status));
     });
 }
 

@@ -4,6 +4,7 @@ json.description current_course.description
 json.logo url_to_course_logo(current_course)
 json.published current_course.published
 json.enrollable current_course.enrollable
+json.enrolAutoApprove current_course.enrol_auto_approve
 json.startAt current_course.start_at
 json.endAt current_course.end_at
 json.gamified current_course.gamified

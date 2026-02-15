@@ -47,6 +47,10 @@ export default defineMessages({
     id: 'course.admin.CourseSettings.allowUsersToSendEnrolmentRequests',
     defaultMessage: 'Allow users to send enrolment requests',
   },
+  autoApproveEnrolmentRequests: {
+    id: 'course.admin.CourseSettings.autoApproveEnrolmentRequests',
+    defaultMessage: 'Automatically approve enrolment requests',
+  },
   courseDelivery: {
     id: 'course.admin.CourseSettings.courseDelivery',
     defaultMessage: 'Course delivery',

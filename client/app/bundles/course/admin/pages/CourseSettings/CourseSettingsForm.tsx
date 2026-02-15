@@ -158,6 +158,19 @@ const CourseSettingsForm = forwardRef<
                 />
               )}
             />
+
+            <Controller
+              control={control}
+              name="enrolAutoApprove"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  disabled={props.disabled || !watch('enrollable')}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.autoApproveEnrolmentRequests)}
+                />
+              )}
+            />
           </Section>
 
           <Section sticksToNavbar title={t(translations.timeSettings)}>

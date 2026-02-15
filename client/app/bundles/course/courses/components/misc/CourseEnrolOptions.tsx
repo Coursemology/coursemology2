@@ -51,10 +51,13 @@ const CourseEnrolOptions: FC<Props> = (props) => {
     const courseId = getCourseId()!;
     const link = getEnrolRequestURL(courseId);
     return dispatch(submitEnrolRequest(link, +courseId))
-      .then(() => {
+      .then((action) => {
         toast.success(
           intl.formatMessage(translations.directEnrolSubmitSuccess),
         );
+        if (action.status === 'approved') {
+          window.location.reload();
+        }
       })
       .catch((_error) => {
         toast.error(intl.formatMessage(translations.requestFailedMessage));

@@ -4,6 +4,7 @@ export interface CourseInfo {
   logo: string;
   published: boolean;
   enrollable: boolean;
+  enrolAutoApprove: boolean;
   startAt: Date;
   endAt: Date;
   gamified: boolean;
@@ -27,6 +28,7 @@ export interface CourseInfoPostData {
     description?: CourseInfo['description'];
     published?: CourseInfo['published'];
     enrollable?: CourseInfo['enrollable'];
+    enrol_auto_approve?: CourseInfo['enrolAutoApprove'];
     start_at?: CourseInfo['startAt'];
     end_at?: CourseInfo['endAt'];
     logo?: CourseInfo['logo'];

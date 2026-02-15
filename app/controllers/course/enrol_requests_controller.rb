@@ -14,8 +14,20 @@ class Course::EnrolRequestsController < Course::ComponentController
   def create
     @enrol_request.user = current_user
     if @enrol_request.save
-      Course::Mailer.user_enrol_requested_email(@enrol_request).deliver_later
-      render json: { id: @enrol_request.id }, status: :ok
+      if @enrol_request.course.enrol_auto_approve?
+        course_user = CourseUser.new(course: current_course, user_id: @enrol_request.user_id,
+        name: @enrol_request.user.name, role: :student,
+                        timeline_algorithm: current_course.default_timeline_algorithm)
+        CourseUser.transaction do
+          raise ActiveRecord::Rollback unless course_user.save && @enrol_request.update(approve: true)
+          Course::Mailer.user_added_email(course_user).deliver_later
+        end
+      else
+        Course::Mailer.user_enrol_request_email(@enrol_request).deliver_later
+      end
+      respond_to do |format|
+        format.json { render '_enrol_request_list_data', locals: { enrol_request: @enrol_request }, status: :ok }
+      end
     else
       render json: { errors: @enrol_request.errors.full_messages.to_sentence }, status: :bad_request
     end
