@@ -141,6 +141,7 @@ const DashboardPageRedirects = (): JSX.Element => {
 
       return <Navigate to={lastVisitedCourse.url} />;
     }
+    return <Navigate to="/courses" />;
   }
 
   return <DashboardPage />;

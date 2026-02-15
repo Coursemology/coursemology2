@@ -27,7 +27,6 @@ export const protectedRoutes: RouteObject = {
   path: '*',
   element: <Authenticatable />,
   children: [
-    { path: 'courses/:courseId/*' },
     { path: 'admin/*' },
     { path: 'announcements' },
     { path: 'users/:userId' },

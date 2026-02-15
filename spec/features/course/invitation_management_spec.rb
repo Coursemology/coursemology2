@@ -9,7 +9,7 @@ RSpec.feature 'Courses: Invitations', js: true do
 
     context 'As a Course manager' do
       let(:user) { create(:user) }
-      let(:course) { create(:course, creator: user) }
+      let(:course) { create(:course, :published, creator: user) }
 
       scenario 'I can invite users by individually entering their addresses' do
         invitation = create(:course_user_invitation, course: course)
@@ -138,7 +138,7 @@ RSpec.feature 'Courses: Invitations', js: true do
     end
 
     context 'As a User' do
-      let(:course) { create(:course, :enrollable) }
+      let(:course) { create(:course, :published, :enrollable) }
       let(:instance_user) { create(:instance_user) }
       let(:user) { instance_user.user }
 

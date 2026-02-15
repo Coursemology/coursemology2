@@ -5,10 +5,14 @@ module Course::UnreadCountsConcern
   private
 
   def unread_announcements_count
+    return 0 unless current_user&.present?
+
     current_course.announcements.accessible_by(current_ability).unread_by(current_user).count
   end
 
   def unread_forum_topics_count
+    return 0 unless current_user&.present?
+
     Course::Forum::Topic.from_course(current_course).accessible_by(current_ability).unread_by(current_user).count
   end
 

@@ -5,7 +5,7 @@ RSpec.feature 'Course: Homepage', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
-    let(:course) { create(:course, :enrollable) }
+    let(:course) { create(:course, :published, :enrollable) }
     let(:course_user) { create(:course_student, course: course) }
     let(:registered_user) { course_user.user }
     let(:feed_notifications) do

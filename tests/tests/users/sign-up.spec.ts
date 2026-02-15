@@ -55,8 +55,6 @@ test.describe('user invited to a course', () => {
 
     await page.getSignUpButton().click();
 
-    await page.signIn(invitation.email, password, true);
-
     await expect(page).toHaveURL(new RegExp(course.id));
   });
 
@@ -111,7 +109,7 @@ test.describe('user invited to 2 courses', () => {
   test('can sign up without invitation', async ({ signUpPage: page }) => {
     const { name, email, password } = page.getFieldMocks();
 
-    const course = await manufacture({ course: {} });
+    const course = await manufacture({ course: { traits: ['published']} });
     const invitation = await manufacture({
       course_user_invitation: { email, course_id: course.id },
     });

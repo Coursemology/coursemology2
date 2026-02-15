@@ -64,7 +64,11 @@ const UserMenuButton = (): JSX.Element | null => {
 
   if (!auth.isAuthenticated || !user)
     return (
-      <Button onClick={() => auth.signinRedirect()} variant="contained">
+      <Button
+        className="whitespace-nowrap px-4 py-1"
+        onClick={() => auth.signinRedirect()}
+        variant="contained"
+      >
         {t(translations.signIn)}
       </Button>
     );

@@ -10,6 +10,7 @@ import {
   type SignoutRedirectArgs,
   type SignoutSilentArgs,
   type User,
+  UserManager,
   WebStorageStateStore,
 } from 'oidc-client-ts';
 
@@ -26,13 +27,15 @@ const onSigninCallback = (_user: User | void): void => {
 };
 
 export const oidcConfig = {
-  authority: process.env.OIDC_AUTHORITY,
-  client_id: process.env.OIDC_CLIENT_ID,
-  redirect_uri: process.env.OIDC_REDIRECT_URI,
+  authority: process.env.OIDC_AUTHORITY!,
+  client_id: process.env.OIDC_CLIENT_ID!,
+  redirect_uri: process.env.OIDC_REDIRECT_URI!,
   userStore: new WebStorageStateStore({ store: window.localStorage }), // To persist login information across different sessions
   automaticSilentRenew: true,
   onSigninCallback,
 };
+
+export const AUTH_USER_MANAGER = new UserManager(oidcConfig);
 
 const AuthProvider = (props: AuthProviderProps): JSX.Element => {
   return <OIDCAuthProvider {...oidcConfig}>{props.children}</OIDCAuthProvider>;

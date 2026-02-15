@@ -1,7 +1,10 @@
 import { AxiosResponse } from 'axios';
 
 import {
-  redirectToAuthPage,
+  AUTH_USER_MANAGER,
+  oidcConfig,
+} from 'lib/components/wrappers/AuthProvider';
+import {
   redirectToForbidden,
   redirectToNotFound,
 } from 'lib/hooks/router/redirect';
@@ -24,10 +27,8 @@ const isComponentNotFoundResponse = (response?: AxiosResponse): boolean =>
   response.data?.error?.toLowerCase().includes('component not found'); // NOTE: This string is taken from BE's handle_component_not_found
 
 export const redirectIfMatchesErrorIn = (response?: AxiosResponse): void => {
-  if (isUnauthenticatedResponse(response)) {
-    localStorage.clear();
-    redirectToAuthPage();
-  }
+  if (isUnauthenticatedResponse(response))
+    AUTH_USER_MANAGER.signinRedirect({ redirect_uri: oidcConfig.redirect_uri });
   if (isUnauthorizedResponse(response))
     // Should open a new window and login
     redirectToForbidden();

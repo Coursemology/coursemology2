@@ -60,6 +60,7 @@ class Course::EnrolRequestsController < Course::ComponentController
 
     CourseUser.transaction do
       raise ActiveRecord::Rollback unless course_user.save && @enrol_request.update(approve: true)
+
     end
 
     course_user
