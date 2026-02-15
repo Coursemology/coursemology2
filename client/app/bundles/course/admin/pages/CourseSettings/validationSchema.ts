@@ -7,6 +7,7 @@ const validationSchema = object({
   description: string(),
   published: bool(),
   enrollable: bool(),
+  enrolAutoApprove: bool(),
   startAt: date()
     .required(translations.startTimeRequired)
     .typeError(translations.invalidTimeFormat),

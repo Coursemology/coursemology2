@@ -34,7 +34,7 @@ class Course::Admin::AdminController < Course::Admin::Controller
 
   def course_setting_params
     params.require(:course).
-      permit(:title, :description, :published, :enrollable, :start_at, :end_at, :logo, :gamified,
+      permit(:title, :description, :published, :enrollable, :enrol_auto_approve, :start_at, :end_at, :logo, :gamified,
              :show_personalized_timeline_features, :default_timeline_algorithm,
              :time_zone, :advance_start_at_duration_days)
   end

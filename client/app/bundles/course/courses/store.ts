@@ -157,11 +157,12 @@ export const actions = {
       todoId,
     };
   },
-  submitEnrolRequest(courseId: number, id: number): SubmitEnrolAction {
+  submitEnrolRequest(courseId: number, id: number, status: string): SubmitEnrolAction {
     return {
       type: SUBMIT_ENROL,
       courseId,
       id,
+      status,
     };
   },
   cancelEnrolRequest(courseId: number): CancelEnrolAction {

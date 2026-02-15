@@ -9,6 +9,7 @@ import { RoleRequestBasicListData } from 'types/system/instance/roleRequests';
 import { APIResponse } from 'api/types';
 
 import BaseCourseAPI from './Base';
+import { EnrolRequestListData } from 'types/course/enrolRequests';
 
 export default class CoursesAPI extends BaseCourseAPI {
   #urlPrefix: string = '/courses';
@@ -77,7 +78,7 @@ export default class CoursesAPI extends BaseCourseAPI {
    * Submits an enrol request
    */
 
-  submitEnrolRequest(link: string): APIResponse<{ id: number }> {
+  submitEnrolRequest(link: string): APIResponse<EnrolRequestListData> {
     return this.client.postForm(link);
   }
 
