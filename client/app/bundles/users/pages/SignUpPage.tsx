@@ -7,6 +7,7 @@ import { InvitedSignUpData } from 'types/users';
 import { ValidationError } from 'yup';
 
 import GlobalAPI from 'api';
+import CourseAPI from 'api/course';
 import CAPTCHAField from 'lib/components/core/fields/CAPTCHAField';
 import PasswordTextField from 'lib/components/core/fields/PasswordTextField';
 import TextField from 'lib/components/core/fields/TextField';
@@ -20,7 +21,16 @@ import Widget from '../components/Widget';
 import translations from '../translations';
 import { getValidationErrors, signUpValidationSchema } from '../validations';
 
-type InvitedSignUpLoaderData = null | (InvitedSignUpData & { token: string });
+type InvitedSignUpLoaderData = InvitedSignUpData & { token?: string };
+interface EnrolRequestSignUpLoaderData {
+  enrolCourseId: number;
+  enrolCourseTitle: string;
+}
+
+type SignUpLoaderData =
+  | null
+  | InvitedSignUpLoaderData
+  | EnrolRequestSignUpLoaderData;
 
 function getInvitationJoinTitle(invitation: InvitedSignUpData): string {
   if (invitation.courseTitle) {
@@ -37,7 +47,10 @@ const SignUpPage = (): JSX.Element => {
 
   const [email, setEmail] = useEmailFromAuthPagesContext();
 
-  const invitation = useLoaderData() as InvitedSignUpLoaderData;
+  const loaderData = useLoaderData() as SignUpLoaderData;
+  const invitation = loaderData && 'token' in loaderData ? loaderData : null;
+  const enrolRequestCourse =
+    loaderData && 'enrolCourseId' in loaderData ? loaderData : null;
   if (invitation?.email) setEmail(invitation.email);
 
   const [name, setName] = useState(invitation?.name ?? '');
@@ -107,6 +120,14 @@ const SignUpPage = (): JSX.Element => {
         return;
       }
 
+      if (enrolRequestCourse) {
+        await CourseAPI.courses.submitUnauthenticatedEnrolRequest(
+          `/courses/${enrolRequestCourse.enrolCourseId}/enrol_requests/create_unauthenticated`,
+          result.id,
+          captchaResponse,
+        );
+      }
+
       if (!result.confirmed) {
         navigate('completed', { state: validatedData.email });
       } else {
@@ -146,6 +167,23 @@ const SignUpPage = (): JSX.Element => {
             })}
           </Alert>
         )}
+        {enrolRequestCourse && (
+          <Alert severity="info">
+            {t(translations.completeSignUpToJoin, {
+              course: enrolRequestCourse.enrolCourseTitle,
+              strong: (chunk) => <strong>{chunk}</strong>,
+            })}
+          </Alert>
+        )}
+        <div className="flex space-x-3">
+          <Typography color="text.secondary" variant="body2">
+            {t(translations.alreadyHaveAnAccount)}
+          </Typography>
+
+          <Link disabled={submitting} to="/users/sign_in">
+            {t(translations.signIn)}
+          </Link>
+        </div>
 
         <TextField
           autoFocus={!invitation}
@@ -267,23 +305,26 @@ const SignUpPage = (): JSX.Element => {
           ),
         })}
       </Typography>
-
-      <Widget.Foot className="flex space-x-3">
-        <Typography color="text.secondary" variant="body2">
-          {t(translations.alreadyHaveAnAccount)}
-        </Typography>
-
-        <Link disabled={submitting} to="/users/sign_in">
-          {t(translations.signIn)}
-        </Link>
-      </Widget.Foot>
     </Widget>
   );
 };
 
 const loader: LoaderFunction = async ({ request }) => {
   const token = new URL(request.url).searchParams.get('invitation');
-  if (!token) return null;
+  if (!token) {
+    const enrolCourseIdParam = new URL(request.url).searchParams.get(
+      'enrol_course_id',
+    );
+    if (enrolCourseIdParam) {
+      const id = parseInt(enrolCourseIdParam, 10);
+      const { data } = await CourseAPI.courses.fetch(id);
+      return {
+        enrolCourseId: data.course.id,
+        enrolCourseTitle: data.course.title,
+      } satisfies EnrolRequestSignUpLoaderData;
+    }
+    return null;
+  }
 
   try {
     const { data } = await GlobalAPI.users.verifyInvitationToken(token);

@@ -4,12 +4,12 @@ import {
   CourseListData,
   CoursePermissions,
 } from 'types/course/courses';
+import { EnrolRequestListData } from 'types/course/enrolRequests';
 import { RoleRequestBasicListData } from 'types/system/instance/roleRequests';
 
 import { APIResponse } from 'api/types';
 
 import BaseCourseAPI from './Base';
-import { EnrolRequestListData } from 'types/course/enrolRequests';
 
 export default class CoursesAPI extends BaseCourseAPI {
   #urlPrefix: string = '/courses';
@@ -80,6 +80,20 @@ export default class CoursesAPI extends BaseCourseAPI {
 
   submitEnrolRequest(link: string): APIResponse<EnrolRequestListData> {
     return this.client.postForm(link);
+  }
+
+  /**
+   * Submits an enrol request for an unauthenticated user
+   */
+  submitUnauthenticatedEnrolRequest(
+    link: string,
+    user_id: number,
+    captcha_response: string | null,
+  ): APIResponse {
+    return this.client.post(link, {
+      user_id,
+      'g-recaptcha-response': captcha_response,
+    });
   }
 
   /**

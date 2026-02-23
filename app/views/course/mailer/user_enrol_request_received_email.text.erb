@@ -1,6 +1,5 @@
 <%= t('.message', course: plain_link_to(@course.title, course_url(@course, host: @course.instance.host)),
-                  coursemology: plain_link_to(t('common.mailers.coursemology'), @course.instance.host),
-                  email: @recipient.email) %>
+                  coursemology: plain_link_to(t('common.mailers.coursemology'), @course.instance.host)) %>
 <% if @requires_confirmation %>
 <%= t('.confirm_email', email: @recipient.email) %>
 <% end %>

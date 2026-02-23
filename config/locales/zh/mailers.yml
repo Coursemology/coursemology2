@@ -65,6 +65,8 @@ zh:
           您已被加入%{coursemology}的课程%{course}。
 
           要查看该课程，请使用%{email}登录。
+        confirm_email: >
+          您需要先确认您的账户邮箱（%{email}）才能访问课程。
       user_enrol_requested_email:
         subject: '%{course}加入申请'
         recipients: '课程管理员'
@@ -74,6 +76,14 @@ zh:
 
 
           你可以进入%{course_requests_page}来查看和处理申请。
+      user_enrol_request_received_email:
+        subject: '您对%{course}的注册申请已收到'
+        message: >
+          您申请加入%{coursemology}的课程%{course}已收到。
+
+          您的注册申请获批或被拒时，您将收到另一封邮件通知。
+        confirm_email: >
+          您需要先确认您的账户邮箱（%{email}）才能访问课程。
       user_invitation_email:
         subject: '邀请报名参加%{course}'
         message: >

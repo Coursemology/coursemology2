@@ -16,15 +16,17 @@ class Course::Mailer < ApplicationMailer
     end
   end
 
-  # Sends a notification email to a user informing his registration in a course.
+  # Sends an email notifying a user their enrolment request has been received.
   #
-  # @param [CourseUser] user The user who was added.
-  def user_added_email(user)
+  # @param [Course] course The course the user requested to be enrolled in.
+  # @param [User] user The user who requested the enrolment.
+  # @param [Boolean] requires_confirmation Whether the user still needs to confirm their email.
+  def user_enrol_request_received_email(course, user, requires_confirmation: false)
     ActsAsTenant.without_tenant do
-      @course = user.course
+      @course = course
     end
-    @recipient = user.user
-
+    @recipient = user
+    @requires_confirmation = requires_confirmation
     I18n.with_locale(@recipient.locale) do
       mail(to: @recipient.email, subject: t('.subject', course: @course.title))
     end
@@ -33,6 +35,23 @@ class Course::Mailer < ApplicationMailer
   # Sends a notification email to a user informing his registration in a course.
   #
   # @param [CourseUser] user The user who was added.
+  # @param [Boolean] requires_confirmation Whether the user still needs to confirm their email.
+  def user_added_email(user, requires_confirmation: false)
+    ActsAsTenant.without_tenant do
+      @course = user.course
+    end
+    @recipient = user.user
+    @requires_confirmation = requires_confirmation
+
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject', course: @course.title))
+    end
+  end
+
+  # Sends a notification email to a user informing his registration in a course.
+  #
+  # @param [Course] course The course the user was rejected from.
+  # @param [User] user The user who was rejected.
   def user_rejected_email(course, user)
     ActsAsTenant.without_tenant do
       @course = course

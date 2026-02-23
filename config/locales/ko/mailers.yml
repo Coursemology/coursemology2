@@ -64,6 +64,8 @@ ko:
           %{coursemology}의 %{course} 과정에 추가되었습니다.
 
           과정을 보려면 %{email}로 로그인하세요.
+        confirm_email: >
+          과정에 액세스하려면 먼저 계정 이메일(%{email})을 인증해야 합니다.
       user_enrol_requested_email:
         subject: '%{course} 등록 요청'
         recipients: '코스 관리자'
@@ -73,6 +75,14 @@ ko:
 
 
           요청을 확인하고 승인하려면 %{course_requests_page}를 방문하세요.
+      user_enrol_request_received_email:
+        subject: '%{course}에 대한 등록 요청이 접수되었습니다'
+        message: >
+          %{coursemology}의 %{course} 과정에 등록 요청이 접수되었습니다.
+
+          등록 요청이 승인 또는 거부되면 이메일을 받게 됩니다.
+        confirm_email: >
+          과정에 액세스하려면 먼저 계정 이메일(%{email})을 인증해야 합니다.
       user_invitation_email:
         subject: '%{course} 등록 초대'
         message: >

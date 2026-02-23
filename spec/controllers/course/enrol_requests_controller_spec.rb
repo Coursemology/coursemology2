@@ -16,7 +16,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
     before { controller_sign_in(controller, user) }
 
     describe '#create' do
-      subject { post :create, params: { course_id: course } }
+      subject { post :create, params: { course_id: course, format: 'json' } }
 
       context 'when a user creates a new enrolment request' do
         it 'redirects and sets the proper success flash message' do
@@ -29,9 +29,10 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
           emails = ActionMailer::Base.deliveries.map(&:to).map(&:first)
           email_subjects = ActionMailer::Base.deliveries.map(&:subject)
 
-          expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(emails).to include(admin.email)
+          expect(emails).to include(user.email)
           expect(email_subjects).to include('course.mailer.user_enrol_requested_email.subject')
+          expect(email_subjects).to include('course.mailer.user_enrol_request_received_email.subject')
         end
 
         context 'when there is an existing pending request' do
