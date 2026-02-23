@@ -65,6 +65,8 @@ en:
           You have been added to the course %{course} on %{coursemology}.
 
           To view the course, please log in with %{email}.
+        confirm_email: >
+          You will need to confirm your account email (%{email}) before you can access the course.
       user_enrol_requested_email:
         subject: 'Enrol Request for %{course}'
         recipients: 'Course Managers'
@@ -87,10 +89,18 @@ en:
 
           If you have an existing Coursemology account registered under a different email,
           visit %{course} and enrol with the following non-transferable registration code:
+      user_enrol_request_received_email:
+        subject: 'Your enrolment request for %{course} has been received'
+        message: >
+          Your request to be enrolled in the course - %{course} on %{coursemology} has been received.
+
+          You will receive another email when your enrolment request has been approved or rejected.
+        confirm_email: >
+          You will need to confirm your account email (%{email}) before you can access the course.
       user_rejected_email:
         subject: 'Course enrolment request rejected - %{course}'
         message: >
-          Your request to be enrolled in the course - %{course} on %{coursemology} has been rejected!
+          Your request to be enrolled in the course - %{course} on %{coursemology} has been rejected.
   instance:
     mailer:
       user_added_email:
