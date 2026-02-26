@@ -10,19 +10,27 @@ import {
 
 export interface ScribingFieldData extends AnswerFieldBaseData {}
 
+export interface ScribingAnswerScribble {
+  content: string;
+  creator_name?: string;
+  creator_id: number;
+}
+
+export interface ScribingAnswerContent {
+  image_url: string;
+  user_id: number;
+  answer_id: number;
+  scribbles: ScribingAnswerScribble[];
+}
+
 export interface ScribingAnswerData extends AnswerBaseData {
   questionType: QuestionType.Scribing;
   fields: ScribingFieldData;
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };
-  scribing_answer: {
-    image_url: string;
-    user_id: number;
-    answer_id: number;
-    scribbles: { content: string; creator_name: string; creator_id: number }[];
-  };
+  scribing_answer: ScribingAnswerContent;
 }
 
 // FE Data Type

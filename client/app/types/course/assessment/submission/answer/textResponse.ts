@@ -16,7 +16,7 @@ export interface TextResponseAnswerData extends AnswerBaseData {
   questionType: QuestionType.TextResponse;
   fields: TextResponseFieldData;
   attachments: { id: string; name: string }[];
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };
@@ -29,7 +29,7 @@ export interface FileUploadAnswerData extends AnswerBaseData {
   questionType: QuestionType.FileUpload;
   fields: FileUploadFieldData;
   attachments: { id: string; name: string }[];
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };

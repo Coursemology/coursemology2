@@ -1,7 +1,8 @@
 import { dispatch, store } from 'store';
+import { QuestionType } from 'types/course/assessment/question';
+import { ScribingAnswerData } from 'types/course/assessment/submission/answer/scribing';
 
-import actionTypes from '../../../constants';
-import { updateScribingAnswerInLocal } from '../scribing';
+import { scribingActions } from 'course/assessment/submission/reducers/scribing';
 
 const answerId = 3;
 const scribblesInJSON = 'newScribble';
@@ -11,14 +12,13 @@ const mockSubmission = {
     attemptedAt: '2017-05-11T15:38:11.000+08:00',
     basePoints: 1000,
     graderView: true,
-    showPublicTestCasesOutput: true,
     canUpdate: true,
     isCreator: false,
     late: false,
     maximumGrade: 70,
     pointsAwarded: null,
     submittedAt: '2017-05-11T17:02:17.000+08:00',
-    submitter: 'Jane',
+    submitter: { id: 10, name: 'Jane' },
     workflowState: 'submitted',
   },
   assessment: {},
@@ -40,7 +40,7 @@ const mockSubmission = {
       questionId: 1,
       scribing_answer: {
         answer_id: 23,
-        image_path: '/attachments/image1',
+        image_url: '/attachments/image1',
         scribbles: [
           {
             creator_id: 10,
@@ -49,23 +49,28 @@ const mockSubmission = {
         ],
         user_id: 10,
       },
-    },
+      questionType: QuestionType.Scribing,
+      createdAt: new Date(1494522137000).toISOString(),
+      clientVersion: 1494522137000,
+    } as ScribingAnswerData,
   ],
 };
 
 describe('updateScribingAnswerInLocal', () => {
   it('updates the local scribing answer', async () => {
-    dispatch({
-      type: actionTypes.FETCH_SUBMISSION_SUCCESS,
-      payload: mockSubmission,
-    });
+    dispatch(scribingActions.initialize({ answers: mockSubmission.answers }));
 
     expect(
       store.getState().assessments.submission.scribing[answerId].answer
         .scribbles[0].content,
     ).toBe('oldScribble');
 
-    dispatch(updateScribingAnswerInLocal(answerId, scribblesInJSON));
+    dispatch(
+      scribingActions.updateScribingAnswerInLocal({
+        answerId,
+        scribble: scribblesInJSON,
+      }),
+    );
 
     expect(
       store.getState().assessments.submission.scribing[answerId].answer
