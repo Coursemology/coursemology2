@@ -40,31 +40,37 @@ export const TestCaseTypes = {
   Evaluation: 'evaluation_test',
 };
 
-export const scribingPopoverTypes = mirrorCreator([
+export const SCRIBING_POPOVER_TYPES = [
   'TYPE',
   'DRAW',
   'LINE',
   'SHAPE',
   'LAYER',
-]);
+] as const;
+export type ScribingPopoverType = (typeof SCRIBING_POPOVER_TYPES)[number];
 
-export const scribingToolColor = mirrorCreator([
+export const SCRIBING_TOOLS_WITH_COLOR = [
   'TYPE',
   'DRAW',
   'LINE',
   'SHAPE_BORDER',
   'SHAPE_FILL',
-]);
+] as const;
+export type ScribingToolWithColor = (typeof SCRIBING_TOOLS_WITH_COLOR)[number];
 
-export const scribingToolThickness = mirrorCreator([
+export const SCRIBING_TOOLS_WITH_THICKNESS = [
   'DRAW',
   'LINE',
   'SHAPE_BORDER',
-]);
+] as const;
+export type ScribingToolWithThickness =
+  (typeof SCRIBING_TOOLS_WITH_THICKNESS)[number];
 
-export const scribingToolLineStyle = mirrorCreator(['LINE', 'SHAPE_BORDER']);
+export const SCRIBING_TOOLS_WITH_LINE_STYLE = ['LINE', 'SHAPE_BORDER'] as const;
+export type ScribingToolWithLineStyle =
+  (typeof SCRIBING_TOOLS_WITH_LINE_STYLE)[number];
 
-export const scribingTools = mirrorCreator([
+const SCRIBING_TOOLS = [
   'TYPE',
   'DRAW',
   'LINE',
@@ -76,52 +82,11 @@ export const scribingTools = mirrorCreator([
   'ZOOM_IN',
   'ZOOM_OUT',
   'DELETE',
-]);
+] as const;
+export type ScribingTool = (typeof SCRIBING_TOOLS)[number];
 
-export const scribingShapes = mirrorCreator(['RECT', 'ELLIPSE']);
-
-export const canvasActionTypes = mirrorCreator([
-  'SET_CANVAS',
-  'SET_CANVAS_LOADED',
-  'SET_TOOL_SELECTED',
-  'SET_FONT_FAMILY',
-  'SET_FONT_SIZE',
-  'SET_LINE_STYLE_CHIP',
-  'SET_COLORING_TOOL_COLOR',
-  'SET_TOOL_THICKNESS',
-  'SET_SELECTED_SHAPE',
-  'SET_NO_FILL',
-  'SET_CANVAS_LOADED',
-  'OPEN_POPOVER',
-  'CLOSE_POPOVER',
-  'ADD_LAYER',
-  'SET_LAYER_DISPLAY',
-  'SET_CANVAS_PROPERTIES',
-  'SET_DRAWING_MODE',
-  'SET_CANVAS_CURSOR',
-  'SET_CURRENT_STATE_INDEX',
-  'SET_CANVAS_STATES',
-  'UPDATE_CANVAS_STATE',
-  'SET_ACTIVE_OBJECT',
-  'SET_CANVAS_ZOOM',
-  'RESET_CHANGE_TOOL',
-  'DELETE_CANVAS_OBJECT',
-  'RESET_CANVAS_DELETE',
-  'SET_DISABLE_OBJECT_SELECTION',
-  'RESET_DISABLE_OBJECT_SELECTION',
-  'SET_ENABLE_OBJECT_SELECTION',
-  'RESET_ENABLE_OBJECT_SELECTION',
-  'SET_ENABLE_TEXT_SELECTION',
-  'RESET_ENABLE_TEXT_SELECTION',
-  'SET_CANVAS_DIRTY',
-  'RESET_CANVAS_DIRTY',
-  'SET_CANVAS_SAVE',
-  'RESET_CANVAS_SAVE',
-  'SET_UNDO',
-  'RESET_UNDO',
-  'SET_REDO',
-  'RESET_REDO',
-]);
+const SCRIBING_SHAPES = ['RECT', 'ELLIPSE'] as const;
+export type ScribingShape = (typeof SCRIBING_SHAPES)[number];
 
 export const defaultPastAnswersDisplayed = 3;
 
