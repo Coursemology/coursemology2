@@ -71,6 +71,11 @@ export default {
     // Backported from Tailwind v4, should be removed when we upgrade.
     plugin(({ addUtilities }) => {
       addUtilities({ '.wrap-anywhere': { 'overflow-wrap': 'anywhere' } });
+      addUtilities({
+        '.justify-center-safe': {
+          'justify-content': 'safe center',
+        },
+      });
     }),
     plugin(({ matchUtilities, theme }) => {
       matchUtilities(

@@ -90,11 +90,9 @@ const ColorPickerField = (props) => {
                 label={intl.formatMessage(translations.noFill)}
                 onChange={(event, checked) => {
                   noFillOnCheck(checked);
-                  if (checked) {
-                    onChangeCompleteColorPicker(
-                      `rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},0)`,
-                    );
-                  }
+                  onChangeCompleteColorPicker(
+                    `rgba(${rgbaValues[1]},${rgbaValues[2]},${rgbaValues[3]},${checked ? 0 : 1})`,
+                  );
                 }}
               />
             }
