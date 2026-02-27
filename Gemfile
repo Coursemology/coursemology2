@@ -50,7 +50,7 @@ gem 'html-pipeline'
 gem 'htmlentities'
 gem 'sanitize', '>= 4.6.3'
 gem 'rinku'
-gem 'rouge', '~> 3'
+gem 'rouge', '~> 4'
 gem 'ruby-oembed'
 
 # to help obtaining app wide URI that uniquely identifies model instance
