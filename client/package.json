@@ -206,7 +206,8 @@
   },
   "resolutions": {
     "cheerio": "1.0.0-rc.10",
-    "sharp": "^0.34.2"
+    "sharp": "^0.34.2",
+    "canvas": "^3.2.1"
   },
   "license": "MIT",
   "firstBuildYear": 2013,
