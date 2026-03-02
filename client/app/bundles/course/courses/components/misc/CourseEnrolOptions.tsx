@@ -15,9 +15,9 @@ import CourseInvitationCodeForm from '../forms/CourseInvitationCodeForm';
 
 interface Props {
   registrationInfo: {
-    isDisplayCodeForm: boolean;
-    isInvited: boolean;
-    enrolRequestId: number | null;
+    isDisplayCodeForm?: boolean;
+    isInvited?: boolean;
+    enrolRequestId?: number | null;
     isEnrollable: boolean;
   };
 }

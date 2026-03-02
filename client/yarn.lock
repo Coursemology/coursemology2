@@ -10341,10 +10341,10 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-oidc-client-ts@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-3.0.0.tgz#910b27193b54730dbabd93709ca000f8b1e5bdf2"
-  integrity sha512-YUcel/+C4AmXXhM/geNWc1jBsBVYzd+xhvSl1NMkxKpzZXqhLKmtj1ttSdxtDYm3P2YelnAr4zS4c96+p02iFQ==
+oidc-client-ts@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-3.4.1.tgz#7cad95ba7213cb93b7c141965ce03ad658baa30f"
+  integrity sha512-jNdst/U28Iasukx/L5MP6b274Vr7ftQs6qAhPBCvz6Wt5rPCA+Q/tUmCzfCHHWweWw5szeMy2Gfrm1rITwUKrw==
   dependencies:
     jwt-decode "^4.0.0"
 
@@ -11396,10 +11396,10 @@ react-markdown@^9.0.1:
     unist-util-visit "^5.0.0"
     vfile "^6.0.0"
 
-react-oidc-context@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-oidc-context/-/react-oidc-context-3.0.0.tgz#53de2ce751b975fdce9ae5fb406f9b2b9a452129"
-  integrity sha512-VmSnEGWl3pTMO5zT94pGAwoK58njg6VPVFXbrepUGsLhSM0IVEKN0DtzNJvTtDSUOPA4xnJ6+jiq1fgdrWtHSQ==
+react-oidc-context@^3.2.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-oidc-context/-/react-oidc-context-3.3.0.tgz#ccca8c25c7ba04ca4ec4e3b229b39c122100988f"
+  integrity sha512-302T/ma4AOVAxrHdYctDSKXjCq9KNHT564XEO2yOPxRfxEP58xa4nz+GQinNl8x7CnEXECSM5JEjQJk3Cr5BvA==
 
 react-player@^2.16.0:
   version "2.16.0"
