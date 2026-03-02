@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import {
   type AuthContextProps,
   AuthProvider as OIDCAuthProvider,
@@ -37,8 +37,32 @@ export const oidcConfig = {
 
 export const AUTH_USER_MANAGER = new UserManager(oidcConfig);
 
+/**
+ * Recovers from auth errors that occur during the signin callback, typically
+ * caused by a stale or mismatched `state` param (e.g. a bookmarked callback
+ * URL, or localStorage cleared between redirect and return). Clears the stale
+ * OIDC state and returns the user to the home page to start a fresh login.
+ */
+const AuthErrorRecovery = (): null => {
+  const { error, clearStaleState } = useAuth();
+
+  useEffect(() => {
+    if (error?.source !== 'signinCallback') return;
+    clearStaleState().finally(() =>
+      window.location.replace(window.location.origin),
+    );
+  }, [error, clearStaleState]);
+
+  return null;
+};
+
 const AuthProvider = (props: AuthProviderProps): JSX.Element => {
-  return <OIDCAuthProvider {...oidcConfig}>{props.children}</OIDCAuthProvider>;
+  return (
+    <OIDCAuthProvider {...oidcConfig}>
+      <AuthErrorRecovery />
+      {props.children}
+    </OIDCAuthProvider>
+  );
 };
 
 interface AuthAdapterProps extends AuthContextProps {

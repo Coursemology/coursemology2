@@ -25,9 +25,9 @@ export interface CourseListData {
 export interface CourseData extends CourseListData {
   // Either this exists
   registrationInfo?: {
-    isDisplayCodeForm: boolean;
-    isInvited: boolean;
-    enrolRequestId: number | null;
+    isDisplayCodeForm?: boolean;
+    isInvited?: boolean;
+    enrolRequestId?: number | null;
     isEnrollable: boolean;
   };
   instructors?: CourseUserListData[];
@@ -53,9 +53,9 @@ export interface CourseMiniEntity {
 export interface CourseEntity extends CourseMiniEntity {
   // Either this exists
   registrationInfo?: {
-    isDisplayCodeForm: boolean;
-    isInvited: boolean;
-    enrolRequestId: number | null;
+    isDisplayCodeForm?: boolean;
+    isInvited?: boolean;
+    enrolRequestId?: number | null;
     isEnrollable: boolean;
   };
   instructors?: CourseUserListData[];
