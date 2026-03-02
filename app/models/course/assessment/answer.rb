@@ -116,6 +116,10 @@ class Course::Assessment::Answer < ApplicationRecord
     end
   end
 
+  def can_read_grade?(ability)
+    submission.published? || ability.can?(:grade, submission)
+  end
+
   def assign_params(params)
     self.grade = params[:grade].present? ? params[:grade].to_f : nil
     self.client_version = params[:client_version]

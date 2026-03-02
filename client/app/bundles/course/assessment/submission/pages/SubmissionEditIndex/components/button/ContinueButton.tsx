@@ -26,8 +26,7 @@ const ContinueButton: FC<Props> = (props) => {
   const questionId = questionIds[stepIndex];
   const { isSaving } = submissionFlags;
 
-  const isExplanationCorrect =
-    explanations[questionId] && explanations[questionId].correct;
+  const isExplanationCorrect = explanations[questionId]?.correct;
 
   const isLastQuestion = stepIndex === questionIds.length - 1;
 
