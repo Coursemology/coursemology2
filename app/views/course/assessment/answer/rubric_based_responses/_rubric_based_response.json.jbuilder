@@ -54,9 +54,11 @@ if can_grade
   end
 end
 
-json.explanation do
-  json.correct last_attempt&.correct
-  json.explanations []
+if answer.can_read_grade?(current_ability)
+  json.explanation do
+    json.correct last_attempt&.correct
+    json.explanations []
+  end
 end
 
 if answer.current_answer? && !last_attempt.current_answer?

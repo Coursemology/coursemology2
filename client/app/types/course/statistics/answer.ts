@@ -28,7 +28,7 @@ interface AnswerCommonDetails<T extends keyof typeof QuestionType> {
 export interface McqAnswerDetails
   extends AnswerCommonDetails<'MultipleChoice'> {
   fields: MultipleChoiceFieldData;
-  explanation: {
+  explanation?: {
     correct?: boolean | null;
     explanations?: string[];
   };
@@ -38,7 +38,7 @@ export interface McqAnswerDetails
 export interface MrqAnswerDetails
   extends AnswerCommonDetails<'MultipleResponse'> {
   fields: MultipleResponseFieldData;
-  explanation: {
+  explanation?: {
     correct?: boolean | null;
     explanations?: string[];
   };
@@ -88,7 +88,7 @@ export interface CodaveriFeedback {
 export interface ProgrammingAnswerDetails
   extends AnswerCommonDetails<'Programming'> {
   fields: ProgrammingFieldData;
-  explanation: {
+  explanation?: {
     correct?: boolean;
     explanation: string[];
     failureType: TestCaseType;
@@ -110,7 +110,7 @@ export interface TextResponseAnswerDetails
   extends AnswerCommonDetails<'TextResponse'> {
   fields: TextResponseFieldData;
   attachments: { id: string; name: string }[];
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };
@@ -121,7 +121,7 @@ export interface FileUploadAnswerDetails
   extends AnswerCommonDetails<'FileUpload'> {
   fields: FileUploadFieldData;
   attachments: { id: string; name: string }[];
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };
@@ -133,7 +133,7 @@ export interface ComprehensionAnswerDetails
 
 export interface ScribingAnswerDetails extends AnswerCommonDetails<'Scribing'> {
   fields: ScribingFieldData;
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };
@@ -148,7 +148,7 @@ export interface ScribingAnswerDetails extends AnswerCommonDetails<'Scribing'> {
 export interface VoiceResponseAnswerDetails
   extends AnswerCommonDetails<'VoiceResponse'> {
   fields: VoiceResponseFieldData;
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };
@@ -157,7 +157,7 @@ export interface VoiceResponseAnswerDetails
 export interface ForumPostResponseAnswerDetails
   extends AnswerCommonDetails<'ForumPostResponse'> {
   fields: ForumPostResponseFieldData;
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };

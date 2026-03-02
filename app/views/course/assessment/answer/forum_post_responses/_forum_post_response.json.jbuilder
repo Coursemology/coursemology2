@@ -15,7 +15,9 @@ end
 
 last_attempt = last_attempt(answer)
 
-json.explanation do
-  json.correct last_attempt&.correct
-  json.explanations []
+if answer.can_read_grade?(current_ability)
+  json.explanation do
+    json.correct last_attempt&.correct
+    json.explanations []
+  end
 end
