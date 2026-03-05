@@ -9,7 +9,7 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
 
   # Specific implementation of Course::Assessment::Answer#reset_answer
   def reset_answer
-    self.answer_text = ''
+    self.answer_text = question.actable.formatted_template_text || ''
     save
     acting_as
   end

@@ -34,6 +34,7 @@ const adaptPostData = (
     staff_only_comments: data.question.staffOnlyComments,
     maximum_grade: data.question.maximumGrade,
     question_assessment: { skill_ids: data.question.skillIds },
+    template_text: data.templateText,
     categories_attributes: data.categories?.map((category, _) => ({
       id: category.draft ? undefined : category.id,
       name: category.name,

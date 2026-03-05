@@ -12,7 +12,7 @@ import { useAppSelector } from 'lib/hooks/store';
 
 import ContinueButton from './button/ContinueButton';
 import LiveFeedbackButton from './button/LiveFeedbackButton';
-import ResetProgrammingAnswerButton from './button/ResetProgrammingAnswerButton';
+import ResetAnswerButton from './button/ResetAnswerButton';
 import SubmitButton from './button/SubmitButton';
 
 interface Props {
@@ -38,7 +38,7 @@ const AutogradedActionButtonsRow: FC<Props> = (props) => {
   return (
     attempting && (
       <div className="flex flex-nowrap">
-        <ResetProgrammingAnswerButton questionId={questionId} />
+        <ResetAnswerButton questionId={questionId} />
         <SubmitButton questionId={questionId} />
         <ContinueButton onContinue={handleNext} stepIndex={stepIndex} />
         <Box sx={{ flex: '1', width: '100%' }} />

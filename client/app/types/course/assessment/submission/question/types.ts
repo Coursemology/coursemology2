@@ -30,6 +30,7 @@ interface TextResponseAttachmentData extends TextResponseParentQuestionData {
 }
 
 interface TextResponseQuestionData extends TextResponseAttachmentData {
+  templateText?: string | null;
   solutions?: {
     id: number;
     solutionType: 'exact_match' | 'keyword';
@@ -79,6 +80,7 @@ export interface RubricBasedResponseCategoryQuestionData
 
 interface RubricBasedResponseQuestionData {
   aiGradingEnabled?: boolean;
+  templateText?: string | null;
   categories: RubricBasedResponseCategoryQuestionData[];
 }
 

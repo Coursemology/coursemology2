@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { Controller } from 'react-hook-form';
 import { Alert } from '@mui/material';
 import {
   AttachmentType,
@@ -10,6 +11,7 @@ import {
 
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -39,6 +41,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     ...data,
     question: {
       ...data.question,
+      templateText: data.question?.templateText ?? null,
       attachmentType:
         data.question?.attachmentType ??
         getAttachmentTypeFromMaxAttachment(data.question?.maxAttachments),
@@ -95,6 +98,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
             : question.isAttachmentRequired,
         maxAttachments: getMaxAttachmentFromAttachmentType(question),
         maxAttachmentSize: getMaxAttachmentSize(question),
+        templateText: question.templateText,
       },
       solutions,
     };
@@ -128,9 +132,30 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
             disabled={submitting}
             skillsUrl={data.skillsUrl}
           />
+          {data.questionType === 'text_response' && (
+            <Section
+              sticksToNavbar
+              subtitle={t(translations.templateTextDescription)}
+              title={t(translations.templateText)}
+            >
+              <Controller
+                control={control}
+                name="templateText"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormRichTextField
+                    disabled={submitting}
+                    field={field}
+                    fieldState={fieldState}
+                    fullWidth
+                    variant="filled"
+                  />
+                )}
+              />
+            </Section>
+          )}
           {data.isAssessmentAutograded &&
             data.questionType === 'file_upload' && (
-              <Alert severity="info">{t(translations.fileUploadNote)}</Alert>
+              <Alert severity="warning">{t(translations.fileUploadNote)}</Alert>
             )}
 
           <Section

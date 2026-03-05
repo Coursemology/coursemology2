@@ -47,7 +47,11 @@ class Course::Assessment::Question::RubricBasedResponse < ApplicationRecord
 
   def attempt(submission, last_attempt = nil)
     answer = Course::Assessment::Answer::RubricBasedResponse.new(submission: submission, question: question)
-    answer.answer_text = last_attempt.answer_text if last_attempt
+    if last_attempt
+      answer.answer_text = last_attempt.answer_text
+    else
+      answer.answer_text = template_text unless template_text.blank?
+    end
 
     answer.acting_as
   end

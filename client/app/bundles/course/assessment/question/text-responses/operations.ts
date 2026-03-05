@@ -41,6 +41,7 @@ const adaptPostData = (data: TextResponseData): TextResponsePostData => ({
     max_attachments: data.question.maxAttachments,
     max_attachment_size: data.question.maxAttachmentSize,
     is_attachment_required: data.question.isAttachmentRequired,
+    template_text: data.question.templateText,
     hide_text: data.question.hideText,
     question_assessment: { skill_ids: data.question.skillIds },
     solutions_attributes: data.solutions?.map((solution, _) => ({

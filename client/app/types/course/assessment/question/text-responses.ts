@@ -28,6 +28,7 @@ export interface TextResponseQuestionFormData extends QuestionFormData {
   maxAttachmentSize: number | null;
   isAttachmentRequired: boolean;
   hideText: boolean;
+  templateText: string | null;
 }
 
 export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
@@ -50,6 +51,7 @@ export interface TextResponsePostData {
     description?: TextResponseFormDataQuestion['description'];
     staff_only_comments?: TextResponseFormDataQuestion['staffOnlyComments'];
     maximum_grade: TextResponseFormDataQuestion['maximumGrade'];
+    template_text: TextResponseFormDataQuestion['templateText'];
     max_attachments: TextResponseFormDataQuestion['maxAttachments'];
     max_attachment_size: TextResponseFormDataQuestion['maxAttachmentSize'];
     is_attachment_required: TextResponseFormDataQuestion['isAttachmentRequired'];

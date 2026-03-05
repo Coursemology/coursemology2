@@ -22,4 +22,5 @@ json.question do
 
   json.isAttachmentRequired @text_response_question.is_attachment_required
   json.hideText @text_response_question.hide_text
+  json.templateText @text_response_question.template_text
 end

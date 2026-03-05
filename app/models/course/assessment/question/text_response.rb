@@ -85,6 +85,20 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
     max_attachment_size || DEFAULT_MAX_ATTACHMENT_SIZE_MB
   end
 
+  # Returns the template text formatted appropriately for the question type.
+  # - File upload questions: nil (template has no effect)
+  # - Autogradable questions: plain text (HTML stripped and entities decoded)
+  # - Text response questions: raw HTML for the rich text editor
+  def formatted_template_text
+    return nil if file_upload_question? || template_text.blank?
+
+    if auto_gradable?
+      ApplicationController.helpers.clean_html_text(template_text)
+    else
+      template_text
+    end
+  end
+
   def auto_grader
     if comprehension_question?
       Course::Assessment::Answer::TextResponseComprehensionAutoGradingService.new
@@ -101,6 +115,8 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
       if last_attempt.attachment_references.any?
         answer.attachment_references = last_attempt.attachment_references.map(&:dup)
       end
+    else
+      answer.answer_text = formatted_template_text || ''
     end
     answer.acting_as
   end

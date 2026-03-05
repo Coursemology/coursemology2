@@ -19,6 +19,7 @@ export default function (state = {}, action) {
         action.type === actions.AUTOGRADE_RUBRIC_SUCCESS
           ? action.payload.aiGeneratedComment
           : action.payload;
+      if (!post) return state;
       const { id } = post;
       return {
         ...state,

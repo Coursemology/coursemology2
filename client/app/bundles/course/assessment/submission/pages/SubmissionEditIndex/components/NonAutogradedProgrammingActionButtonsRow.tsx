@@ -10,7 +10,7 @@ import { getSubmission } from 'course/assessment/submission/selectors/submission
 import { useAppSelector } from 'lib/hooks/store';
 
 import LiveFeedbackButton from './button/LiveFeedbackButton';
-import ResetProgrammingAnswerButton from './button/ResetProgrammingAnswerButton';
+import ResetAnswerButton from './button/ResetAnswerButton';
 import RunCodeButton from './button/RunCodeButton';
 
 interface Props {
@@ -33,7 +33,7 @@ const NonAutogradedProgrammingActionButtonsRow: FC<Props> = (props) => {
     attempting &&
     question.type === questionTypes.Programming && (
       <div className="flex flex-nowrap">
-        <ResetProgrammingAnswerButton questionId={questionId} />
+        <ResetAnswerButton questionId={questionId} />
         {question.autogradable && <RunCodeButton questionId={questionId} />}
         <Box sx={{ flex: '1', width: '100%' }} />
         {question.liveFeedbackEnabled && (

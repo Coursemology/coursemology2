@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 json.aiGradingEnabled question.ai_grading_enabled? if can_grade
+json.templateText question.template_text
 if can_grade || (@assessment.show_rubric_to_students? && answer.submission.published?)
   json.categories question.categories.each do |category|
     json.id category.id
