@@ -46,7 +46,9 @@ class Course::Assessment::Submission::Answer::AnswersController <
     mcq = [I18n.t('course.assessment.question.multiple_responses.question_type.multiple_response'),
            I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')]
 
-    !mcq.include?(answer.question.question_type_readable) || @submission.assessment.show_mcq_answer
+    !mcq.include?(answer.question.question_type_readable) ||
+      !@submission.assessment.allow_partial_submission ||
+      @submission.assessment.show_mcq_answer
   end
 
   def auto_grade(answer)

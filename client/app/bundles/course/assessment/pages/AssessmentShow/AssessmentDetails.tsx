@@ -133,15 +133,17 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
                   </TableCell>
                 </TableRow>
 
-                <TableRow>
-                  <TableCell variant="head">
-                    {t(translations.showMcqSubmitResult)}
-                  </TableCell>
+                {assessment.allowPartialSubmission && (
+                  <TableRow>
+                    <TableCell variant="head">
+                      {t(translations.showMcqSubmitResult)}
+                    </TableCell>
 
-                  <TableCell>
-                    {assessment.showMcqAnswer ? '✅' : '❌'}
-                  </TableCell>
-                </TableRow>
+                    <TableCell>
+                      {assessment.showMcqAnswer ? '✅' : '❌'}
+                    </TableCell>
+                  </TableRow>
+                )}
               </>
             )}
           </>

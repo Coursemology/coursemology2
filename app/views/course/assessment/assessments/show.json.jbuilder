@@ -107,7 +107,8 @@ if can_observe
   if assessment.autograded?
     json.skippable assessment.skippable
     json.allowPartialSubmission assessment.allow_partial_submission
-    json.showMcqAnswer assessment.show_mcq_answer
+    # If submitting with incorrect answers is not allowed, we must show the answer to students regardless
+    json.showMcqAnswer !assessment.allow_partial_submission || assessment.show_mcq_answer
   end
 
   is_all_questions_autogradable = questions.map(&:specific).all?(&:auto_gradable?)
