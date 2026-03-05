@@ -117,7 +117,13 @@ class Course::Assessment::Answer < ApplicationRecord
   end
 
   def can_read_grade?(ability)
-    submission.published? || ability.can?(:grade, submission)
+    submission.published? || ability.can?(:grade, submission) ||
+      (submission.assessment.autograded? && !submission.assessment.allow_partial_submission) ||
+      (
+        submission.assessment.autograded? &&
+        actable_type == Course::Assessment::Question::MultipleResponse.name &&
+        submission.assessment.show_mcq_answer
+      )
   end
 
   def assign_params(params)

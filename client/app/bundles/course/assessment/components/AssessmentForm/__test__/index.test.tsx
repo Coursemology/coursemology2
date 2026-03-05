@@ -16,6 +16,8 @@ const INITIAL_VALUES = {
   use_evaluation: false,
   tabbed_view: false,
   published: false,
+  allow_partial_submission: true,
+  show_mcq_answer: false,
   monitoring: {
     enabled: true,
     secret: '',
@@ -105,7 +107,8 @@ describe('<AssessmentForm />', () => {
       expect(form.getByLabelText('Allow to skip steps')).not.toBeChecked();
       expect(
         form.getByLabelText('Allow submission with incorrect answers'),
-      ).not.toBeChecked();
+      ).toBeChecked();
+      expect(form.getByLabelText('Show MCQ submit result')).not.toBeChecked();
       expect(form.getByLabelText('Show private test cases')).not.toBeChecked();
       expect(
         form.getByLabelText('Show evaluation test cases'),
@@ -133,7 +136,6 @@ describe('<AssessmentForm />', () => {
           'Block students from viewing finalized submissions',
         ),
       ).not.toBeChecked();
-      expect(form.getByLabelText('Show MCQ submit result')).not.toBeChecked();
       expect(
         form.getByLabelText('Enable password protection'),
       ).not.toBeChecked();

@@ -16,7 +16,8 @@ json.assessment do
   json.tabbedView @assessment.tabbed_view || @assessment.autograded
   json.showPrivate @assessment.show_private
   json.allowPartialSubmission @assessment.allow_partial_submission
-  json.showMcqAnswer @assessment.show_mcq_answer
+  # If submitting with incorrect answers is not allowed, we must show the answer to students regardless
+  json.showMcqAnswer !@assessment.allow_partial_submission || @assessment.show_mcq_answer
   json.showEvaluation @assessment.show_evaluation
   json.questionIds @submission.questions.pluck(:id)
   json.passwordProtected @assessment.session_password_protected?

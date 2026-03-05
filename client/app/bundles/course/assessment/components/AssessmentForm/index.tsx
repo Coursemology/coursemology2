@@ -79,6 +79,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const passwordProtected = watch('password_protected');
   const sessionProtected = watch('session_protected');
   const hasTimeLimit = watch('has_time_limit');
+  const allowPartialSubmission = watch('allow_partial_submission');
 
   const monitoring = watch('monitoring.enabled');
   const isKoditsuAssessmentEnabled = watch('is_koditsu_enabled');
@@ -598,6 +599,23 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             )}
           />
 
+          {allowPartialSubmission && (
+            <Controller
+              control={control}
+              name="show_mcq_answer"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  description={t(translations.showMcqAnswerHint)}
+                  disabled={!autograded || disabled}
+                  disabledHint={t(translations.unavailableInManuallyGraded)}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.showMcqAnswer)}
+                />
+              )}
+            />
+          )}
+
           <Typography>{t(translations.afterSubmissionGraded)}</Typography>
 
           <Controller
@@ -738,21 +756,6 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             )}
           />
         )} */}
-
-          <Controller
-            control={control}
-            name="show_mcq_answer"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormCheckboxField
-                description={t(translations.showMcqAnswerHint)}
-                disabled={!autograded || disabled}
-                disabledHint={t(translations.unavailableInManuallyGraded)}
-                field={field}
-                fieldState={fieldState}
-                label={t(translations.showMcqAnswer)}
-              />
-            )}
-          />
 
           <Controller
             control={control}
