@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`<DeleteButton /> when the delete button is rendered without confirmation dialog matches the snapshot 1`] = `
 <body>
