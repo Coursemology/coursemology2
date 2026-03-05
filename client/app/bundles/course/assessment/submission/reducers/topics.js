@@ -11,6 +11,12 @@ export default function (state = {}, action) {
       };
     case actions.AUTOGRADE_RUBRIC_SUCCESS:
     case actions.CREATE_COMMENT_SUCCESS: {
+      if (
+        action.type === actions.AUTOGRADE_RUBRIC_SUCCESS &&
+        !action.payload.aiGeneratedComment
+      ) {
+        return state;
+      }
       const { topicId, id: postId } =
         action.type === actions.AUTOGRADE_RUBRIC_SUCCESS
           ? action.payload.aiGeneratedComment

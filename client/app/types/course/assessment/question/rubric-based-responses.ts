@@ -2,6 +2,7 @@ import { AvailableSkills, QuestionFormData } from '../questions';
 
 export interface RubricBasedResponseData {
   question: QuestionFormData;
+  templateText: string | null;
   categories?: CategoryEntity[] | null | undefined;
   isAssessmentAutograded: boolean;
   aiGradingEnabled: boolean;
@@ -67,6 +68,7 @@ export interface RubricBasedResponsePostData {
         _destroy?: QuestionRubricGradeEntity['toBeDeleted'];
       }[];
     }[];
+    template_text?: RubricBasedResponseData['templateText'];
     ai_grading_enabled?: RubricBasedResponseData['aiGradingEnabled'];
     ai_grading_custom_prompt?: RubricBasedResponseData['aiGradingCustomPrompt'];
     ai_grading_model_answer?: RubricBasedResponseData['aiGradingModelAnswer'];

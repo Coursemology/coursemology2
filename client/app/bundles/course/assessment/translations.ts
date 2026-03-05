@@ -513,6 +513,15 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.maxAttachmentSize',
     defaultMessage: 'Max Size per Attachment',
   },
+  templateText: {
+    id: 'course.assessment.question.textResponses.templateText',
+    defaultMessage: 'Template',
+  },
+  templateTextDescription: {
+    id: 'course.assessment.question.textResponses.templateTextDescription',
+    defaultMessage:
+      'Text that appears in the answer area when students attempt this question for the first time.',
+  },
   comprehension: {
     id: 'course.assessment.show.comprehension',
     defaultMessage: 'Comprehension',

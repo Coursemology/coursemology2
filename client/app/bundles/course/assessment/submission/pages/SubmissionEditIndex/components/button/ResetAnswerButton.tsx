@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@mui/material';
+import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
 import { resetAnswer } from 'course/assessment/submission/actions/answers';
 import { questionTypes } from 'course/assessment/submission/constants';
@@ -43,8 +44,21 @@ const ResetProgrammingAnswerButton: FC<Props> = (props) => {
     dispatch(resetAnswer(submissionId, resetAnswerId, questionId, resetField));
   };
 
+  const shouldRender =
+    question.type === questionTypes.Programming ||
+    Boolean(
+      question.type === questionTypes.TextResponse &&
+        (question as SubmissionQuestionData<'TextResponse'>).templateText
+          ?.length,
+    ) ||
+    Boolean(
+      question.type === questionTypes.RubricBasedResponse &&
+        (question as SubmissionQuestionData<'RubricBasedResponse'>).templateText
+          ?.length,
+    );
+
   return (
-    question.type === questionTypes.Programming && (
+    shouldRender && (
       <>
         <Button
           className="mb-2 mr-2"

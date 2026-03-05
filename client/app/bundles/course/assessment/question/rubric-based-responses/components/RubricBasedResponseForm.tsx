@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
+import { Controller } from 'react-hook-form';
 import {
   RubricBasedResponseData,
   RubricBasedResponseFormData,
 } from 'types/course/assessment/question/rubric-based-responses';
 
 import Section from 'lib/components/core/layouts/Section';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import Form, { FormRef } from 'lib/components/form/Form';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -41,6 +43,7 @@ const RubricBasedResponseForm = (
       isAssessmentAutograded: rawData.isAssessmentAutograded,
       question: rawData.question,
       categories: rawData.categories,
+      templateText: rawData.templateText,
       aiGradingEnabled: rawData.aiGradingEnabled,
       aiGradingCustomPrompt: rawData.aiGradingCustomPrompt,
       aiGradingModelAnswer: rawData.aiGradingModelAnswer,
@@ -65,22 +68,43 @@ const RubricBasedResponseForm = (
         onSubmit={handleSubmit}
         validates={schema(t)}
       >
-        <QuestionFields disabled={submitting} disableSettingMaxGrade />
-        <Section
-          sticksToNavbar
-          subtitle={t(translations.rubricHint)}
-          title={t(translations.rubric)}
-        >
-          <CategoryManager
-            disabled={submitting}
-            for={data.categories ?? []}
-            onDirtyChange={setIsCategoriesDirty}
-          />
-        </Section>
-        <AIGradingFields
-          disabled={submitting}
-          questionId={data.parentQuestionId}
-        />
+        {(control): JSX.Element => (
+          <>
+            <QuestionFields disabled={submitting} disableSettingMaxGrade />
+            <Section
+              sticksToNavbar
+              subtitle={t(translations.templateTextDescription)}
+              title={t(translations.templateText)}
+            >
+              <Controller
+                control={control}
+                name="templateText"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormRichTextField
+                    disabled={submitting}
+                    field={field}
+                    fieldState={fieldState}
+                  />
+                )}
+              />
+            </Section>
+            <Section
+              sticksToNavbar
+              subtitle={t(translations.rubricHint)}
+              title={t(translations.rubric)}
+            >
+              <CategoryManager
+                disabled={submitting}
+                for={data.categories ?? []}
+                onDirtyChange={setIsCategoriesDirty}
+              />
+            </Section>
+            <AIGradingFields
+              disabled={submitting}
+              questionId={data.parentQuestionId}
+            />
+          </>
+        )}
       </Form>
     </RubricBasedResponseFormDataProvider>
   );

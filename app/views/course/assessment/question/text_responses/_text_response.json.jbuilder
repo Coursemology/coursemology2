@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 json.autogradable question.auto_gradable?
+json.templateText question.template_text
 
 case question.question_type_sym
 when :file_upload

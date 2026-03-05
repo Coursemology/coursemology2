@@ -25,6 +25,7 @@ import { create, fetchNewFileUpload, fetchNewTextResponse } from './operations';
 const NEW_TEXT_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: false,
+  templateText: null,
   attachmentType: AttachmentType.NO_ATTACHMENT,
   maxAttachments: INITIAL_MAX_ATTACHMENTS,
   maxAttachmentSize: INITIAL_MAX_ATTACHMENT_SIZE,
@@ -34,6 +35,7 @@ const NEW_TEXT_RESPONSE_VALUE = {
 const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
   ...commonQuestionFieldsInitialValues,
   hideText: true,
+  templateText: null,
   attachmentType: AttachmentType.SINGLE_ATTACHMENT,
   maxAttachments: INITIAL_MAX_ATTACHMENTS,
   maxAttachmentSize: INITIAL_MAX_ATTACHMENT_SIZE,
