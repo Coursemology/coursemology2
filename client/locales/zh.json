@@ -2231,6 +2231,12 @@
   "course.assessment.question.textResponses.zeroGrade": {
     "defaultMessage": "0.0"
   },
+  "course.assessment.question.textResponses.templateText": {
+    "defaultMessage": "模版"
+  },
+  "course.assessment.question.textResponses.templateTextDescription": {
+    "defaultMessage": "学生第一次尝试此题时，答题区域中出现的文字。"
+  },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "评分标准试验场"
   },

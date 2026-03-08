@@ -2250,6 +2250,12 @@
   "course.assessment.question.textResponses.zeroGrade": {
     "defaultMessage": "0.0"
   },
+  "course.assessment.question.textResponses.templateText": {
+    "defaultMessage": "Template"
+  },
+  "course.assessment.question.textResponses.templateTextDescription": {
+    "defaultMessage": "Text that appears in the answer area when students attempt this question for the first time."
+  },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "Rubric Playground"
   },

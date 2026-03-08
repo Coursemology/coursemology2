@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Box } from '@mui/material';
 
 import {
   questionTypes,
@@ -13,6 +12,7 @@ import { useAppSelector } from 'lib/hooks/store';
 import ContinueButton from './button/ContinueButton';
 import LiveFeedbackButton from './button/LiveFeedbackButton';
 import ResetAnswerButton from './button/ResetAnswerButton';
+import RunCodeButton from './button/RunCodeButton';
 import SubmitButton from './button/SubmitButton';
 
 interface Props {
@@ -20,7 +20,7 @@ interface Props {
   stepIndex: number;
 }
 
-const AutogradedActionButtonsRow: FC<Props> = (props) => {
+const ActionButtonsRow: FC<Props> = (props) => {
   const { handleNext, stepIndex } = props;
 
   const assessment = useAppSelector(getAssessment);
@@ -35,20 +35,41 @@ const AutogradedActionButtonsRow: FC<Props> = (props) => {
   const questionId = questionIds[stepIndex];
   const question = questions[questionId];
 
+  const leftAlignedButtons = [
+    <ResetAnswerButton key="reset" questionId={questionId} />,
+    !assessment.autograded &&
+      question.type === questionTypes.Programming &&
+      question.autogradable && (
+        <RunCodeButton key="run-code" questionId={questionId} />
+      ),
+    assessment.autograded && (
+      <SubmitButton key="submit" questionId={questionId} />
+    ),
+    assessment.autograded && (
+      <ContinueButton
+        key="continue"
+        onContinue={handleNext}
+        stepIndex={stepIndex}
+      />
+    ),
+  ].filter(Boolean);
+
+  const rightAlignedButtons = [
+    question.type === questionTypes.Programming &&
+      question.liveFeedbackEnabled && (
+        <LiveFeedbackButton key="get-help" answerId={question.answerId} />
+      ),
+  ].filter(Boolean);
+
   return (
     attempting && (
       <div className="flex flex-nowrap">
-        <ResetAnswerButton questionId={questionId} />
-        <SubmitButton questionId={questionId} />
-        <ContinueButton onContinue={handleNext} stepIndex={stepIndex} />
-        <Box sx={{ flex: '1', width: '100%' }} />
-        {question.type === questionTypes.Programming &&
-          question.liveFeedbackEnabled && (
-            <LiveFeedbackButton answerId={question.answerId} />
-          )}
+        {leftAlignedButtons}
+        <div className="flex-1 w-full" />
+        {rightAlignedButtons}
       </div>
     )
   );
 };
 
-export default AutogradedActionButtonsRow;
+export default ActionButtonsRow;
