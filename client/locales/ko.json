@@ -2276,6 +2276,12 @@
   "course.assessment.question.textResponses.zeroGrade": {
     "defaultMessage": "0.0"
   },
+  "course.assessment.question.textResponses.templateText": {
+    "defaultMessage": "템플릿"
+  },
+  "course.assessment.question.textResponses.templateTextDescription": {
+    "defaultMessage": "학생이 이 문제를 처음 시도할 때 답변 영역에 표시되는 텍스트입니다."
+  },
   "course.assessment.question.rubricPlayground.rubricPlayground": {
     "defaultMessage": "루브릭 플레이그라운드"
   },

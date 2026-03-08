@@ -18,10 +18,9 @@ import { useAppSelector } from 'lib/hooks/store';
 import SubmissionAnswer from '../../../components/answers';
 import { ErrorStruct } from '../validations/types';
 
-import AutogradedActionButtonsRow from './AutogradedActionButtonsRow';
+import ActionButtonsRow from './ActionButtonsRow';
 import AutogradingErrorPanel from './AutogradingErrorPanel';
 import ExplanationPanel from './ExplanationPanel';
-import NonAutogradedProgrammingActionButtonsRow from './NonAutogradedProgrammingActionButtonsRow';
 
 interface Props {
   handleNext: () => void;
@@ -78,14 +77,7 @@ const QuestionContent: FC<Props> = (props) => {
           questionNumber: stepIndex + 1,
         }}
       />
-      {autograded ? (
-        <AutogradedActionButtonsRow
-          handleNext={handleNext}
-          stepIndex={stepIndex}
-        />
-      ) : (
-        <NonAutogradedProgrammingActionButtonsRow questionId={question.id} />
-      )}
+      <ActionButtonsRow handleNext={handleNext} stepIndex={stepIndex} />
       {(autograded || isProgrammingQuestion) && (
         <ExplanationPanel questionId={questionId} />
       )}
