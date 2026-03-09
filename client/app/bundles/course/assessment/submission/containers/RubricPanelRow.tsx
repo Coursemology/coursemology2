@@ -6,6 +6,7 @@ import {
   SubmissionQuestionData,
 } from 'types/course/assessment/submission/question/types';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { FIELD_LONG_DEBOUNCE_DELAY_MS } from 'lib/constants/sharedConstants';
 import { getSubmissionId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -87,10 +88,7 @@ const ExplanationCell: FC<{
           {...props}
         />
       ) : (
-        <Typography
-          dangerouslySetInnerHTML={{ __html: explanation }}
-          variant="body2"
-        />
+        <UserHTMLText html={explanation} />
       )}
     </TableCell>
   );

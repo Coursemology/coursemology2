@@ -2,6 +2,8 @@ import { FC, useState } from 'react';
 import { Card, Popover, Typography } from '@mui/material';
 import { RubricCategoryData } from 'types/course/rubrics';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
+
 import { AnswerTableEntry } from './types';
 
 enum ColorPalette {
@@ -70,13 +72,10 @@ const CategoryRow: FC<{
               Not evaluated yet
             </Typography>
           ) : (
-            <Typography
+            <UserHTMLText
               className="relative z-50 m-2"
-              dangerouslySetInnerHTML={{
-                __html: props.explanation ?? '',
-              }}
               display="inline"
-              variant="body2"
+              html={props.explanation ?? ''}
             />
           )}
         </div>

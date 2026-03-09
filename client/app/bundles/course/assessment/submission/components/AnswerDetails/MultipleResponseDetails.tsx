@@ -1,6 +1,7 @@
-import { Checkbox, FormControlLabel, Typography } from '@mui/material';
-import { green } from '@mui/material/colors';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
+
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 import { AnswerDetailsProps } from '../../types';
 
@@ -23,17 +24,11 @@ const MultipleResponseDetails = (
             disabled
             label={
               <b>
-                <Typography
-                  dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-                  style={
-                    option.correct
-                      ? {
-                          backgroundColor: green[50],
-                          verticalAlign: 'middle',
-                        }
-                      : { verticalAlign: 'middle' }
+                <UserHTMLText
+                  className={
+                    option.correct ? 'bg-green-50 align-middle' : 'align-middle'
                   }
-                  variant="body2"
+                  html={option.option.trim()}
                 />
               </b>
             }

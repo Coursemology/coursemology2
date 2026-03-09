@@ -3,6 +3,7 @@ import { CourseMiniEntity } from 'types/course/courses';
 
 import { getCourseLogoUrl } from 'course/helper';
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { getCourseURL } from 'lib/helpers/url-builders';
 
 interface CourseInfoBoxProps {
@@ -36,10 +37,7 @@ const CourseInfoBox = (props: CourseInfoBoxProps): JSX.Element => {
 
         {course.description && (
           <div className="h-[10rem] shrink-0 overflow-auto p-4 border-only-t-neutral-200">
-            <Typography
-              dangerouslySetInnerHTML={{ __html: course.description }}
-              variant="body2"
-            />
+            <UserHTMLText html={course.description} />
           </div>
         )}
       </Paper>

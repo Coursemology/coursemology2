@@ -36,6 +36,7 @@ import {
 import { generationActions as actions } from 'course/assessment/reducers/generation';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
@@ -225,13 +226,10 @@ const GenerateProgrammingExportDialog: FC<Props> = (props) => {
               </div>
 
               <section className="space-y-4 px-6 mb-4">
-                <Typography
+                <UserHTMLText
                   className={`${conversation.toExport ? '' : 'line-through'}`}
                   color={conversation.toExport ? 'default' : 'gray'}
-                  dangerouslySetInnerHTML={{
-                    __html: questionData.description,
-                  }}
-                  variant="body2"
+                  html={questionData.description}
                 />
                 {conversation.exportStatus === 'error' && (
                   <Typography color={red[700]} variant="caption">

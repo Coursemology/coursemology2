@@ -15,6 +15,7 @@ import { grey, orange } from '@mui/material/colors';
 import { CommentPostMiniEntity } from 'types/course/comments';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import { formatLongDateTime } from 'lib/moment';
@@ -235,10 +236,7 @@ const CodaveriCommentCard: FC<Props> = (props) => {
     }
     return (
       <>
-        <Typography
-          dangerouslySetInnerHTML={{ __html: post.text }}
-          variant="body2"
-        />
+        <UserHTMLText html={post.text} />
         {renderRating()}
       </>
     );

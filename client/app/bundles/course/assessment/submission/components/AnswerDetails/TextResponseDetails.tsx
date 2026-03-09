@@ -1,5 +1,6 @@
-import { Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
+
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 import { AnswerDetailsProps } from '../../types';
 
@@ -12,10 +13,7 @@ const TextResponseDetails = (
 
   return (
     <>
-      <Typography
-        dangerouslySetInnerHTML={{ __html: answer.fields.answer_text }}
-        variant="body2"
-      />
+      <UserHTMLText html={answer.fields.answer_text} />
       {question.maxAttachments > 0 && (
         <div className="w-full mt-4 mb-4">
           <AttachmentDetails attachments={answer.attachments} />

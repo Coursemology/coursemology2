@@ -11,6 +11,7 @@ import { Alert, Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import { QuestionData } from 'types/course/assessment/questions';
 
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -189,12 +190,7 @@ const Question = (props: QuestionProps): JSX.Element => {
 
             <section className="space-y-4 px-6 pt-4">
               {question.description && (
-                <Typography
-                  dangerouslySetInnerHTML={{
-                    __html: question.description,
-                  }}
-                  variant="body2"
-                />
+                <UserHTMLText html={question.description} />
               )}
 
               <McqWidget for={question} onChange={props.onUpdate} />
@@ -209,12 +205,7 @@ const Question = (props: QuestionProps): JSX.Element => {
                   }
                   severity="info"
                 >
-                  <Typography
-                    dangerouslySetInnerHTML={{
-                      __html: question.staffOnlyComments,
-                    }}
-                    variant="body2"
-                  />
+                  <UserHTMLText html={question.staffOnlyComments} />
                 </Alert>
               )}
             </section>

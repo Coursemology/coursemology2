@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Checkbox, FormControlLabel, Typography } from '@mui/material';
-import { green } from '@mui/material/colors';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
 import { questionShape } from '../../../propTypes';
@@ -25,19 +25,15 @@ const MultipleResponseOptions = ({
         disabled={readOnly}
         label={
           <b>
-            <Typography
-              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
-              style={
+            <UserHTMLText
+              className={
                 option.correct &&
                 readOnly &&
                 (graderView || (published && showMcqMrqSolution))
-                  ? {
-                      backgroundColor: green[50],
-                      verticalAlign: 'middle',
-                    }
-                  : { verticalAlign: 'middle' }
+                  ? 'bg-green-50 align-middle'
+                  : 'align-middle'
               }
-              variant="body2"
+              html={option.option.trim()}
             />
           </b>
         }

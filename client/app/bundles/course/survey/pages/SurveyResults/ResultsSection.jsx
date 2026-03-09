@@ -1,7 +1,8 @@
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { sectionShape } from 'course/survey/propTypes';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 import ResultsQuestion from './ResultsQuestion';
 
@@ -14,12 +15,7 @@ const styles = {
 const ResultsSection = ({ section, anonymous, answerFilter }) => (
   <Card style={styles.card}>
     <CardHeader
-      subheader={
-        <Typography
-          dangerouslySetInnerHTML={{ __html: section.description }}
-          variant="body2"
-        />
-      }
+      subheader={<UserHTMLText html={section.description} />}
       title={section.title}
     />
     <CardContent>

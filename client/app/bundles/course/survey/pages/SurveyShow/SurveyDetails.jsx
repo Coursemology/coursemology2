@@ -18,6 +18,7 @@ import RespondButton from 'course/survey/containers/RespondButton';
 import { surveyShape } from 'course/survey/propTypes';
 import surveyTranslations from 'course/survey/translations';
 import TableContainer from 'lib/components/core/layouts/TableContainer';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppDispatch } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -67,10 +68,9 @@ const SurveyDetails = (props) => {
         <Typography variant="h6">
           <FormattedMessage {...surveyTranslations.description} />
         </Typography>
-        <Typography
-          dangerouslySetInnerHTML={{ __html: survey.description }}
+        <UserHTMLText
+          html={survey.description}
           style={{ whiteSpace: 'pre-line' }}
-          variant="body2"
         />
       </CardContent>
     );

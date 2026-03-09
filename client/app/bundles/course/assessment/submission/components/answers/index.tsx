@@ -15,6 +15,7 @@ import { QuestionType } from 'types/course/assessment/question';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import { EditNote } from '@mui/icons-material';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { saveAnswer, updateClientVersion } from '../../actions/answers';
 import { uploadTextResponseFiles } from '../../actions/answers/textResponse';
 
@@ -199,10 +200,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
           <Typography color="text.secondary" variant="caption">
             {t(translations.questionDescription)}
           </Typography>
-          <Typography
-            dangerouslySetInnerHTML={{ __html: question.description }}
-            variant="body2"
-          />
+          <UserHTMLText html={question.description} />
           <Divider />
         </>
       )}
@@ -217,12 +215,7 @@ const SubmissionAnswer = <T extends keyof typeof QuestionType>(
           }
           severity="info"
         >
-          <Typography
-            dangerouslySetInnerHTML={{
-              __html: question.staffOnlyComments,
-            }}
-            variant="body2"
-          />
+          <UserHTMLText html={question.staffOnlyComments} />
         </Alert>
       )}
 

@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 
 import InfoLabel from '../InfoLabel';
+import UserHTMLText from '../UserHTMLText';
 
 type CheckboxProps = ComponentProps<typeof MuiCheckbox> & {
   component?: ElementType;
@@ -17,6 +18,7 @@ type CheckboxProps = ComponentProps<typeof MuiCheckbox> & {
   variant?: ComponentProps<typeof Typography>['variant'];
   descriptionVariant?: ComponentProps<typeof Typography>['variant'];
   labelClassName?: string;
+  userHTML?: string | TrustedHTML;
 };
 
 const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
@@ -24,7 +26,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
     const {
       component,
       label,
-      dangerouslySetInnerHTML,
+      userHTML,
       description,
       descriptionVariant,
       disabledHint,
@@ -58,11 +60,8 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
           })}
           disabled={props.disabled}
           label={
-            dangerouslySetInnerHTML ? (
-              <Typography
-                dangerouslySetInnerHTML={dangerouslySetInnerHTML}
-                variant={textVariant}
-              />
+            userHTML ? (
+              <UserHTMLText html={userHTML} variant={textVariant} />
             ) : (
               label
             )

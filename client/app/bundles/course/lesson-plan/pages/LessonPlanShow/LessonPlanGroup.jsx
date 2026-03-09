@@ -14,6 +14,7 @@ import {
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { formatLongDate } from 'lib/moment';
 
 import LessonPlanItem from './LessonPlanItem';
@@ -98,7 +99,7 @@ class LessonPlanGroup extends Component {
           <span>
             {formatLongDate(start_at)}
             <br />
-            <span dangerouslySetInnerHTML={{ __html: description }} />
+            <UserHTMLText html={description} variant="inherit" />
           </span>
         }
         subheaderTypographyProps={{ variant: 'subtitle2' }}

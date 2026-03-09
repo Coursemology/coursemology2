@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Typography } from '@mui/material';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -32,12 +33,7 @@ const AllAttemptsQuestion: FC<Props> = (props) => {
         {question !== null && question !== undefined && (
           <>
             <Typography variant="body1">{question.questionTitle}</Typography>
-            <Typography
-              dangerouslySetInnerHTML={{
-                __html: question.description,
-              }}
-              variant="body2"
-            />
+            <UserHTMLText html={question.description} />
           </>
         )}
       </div>

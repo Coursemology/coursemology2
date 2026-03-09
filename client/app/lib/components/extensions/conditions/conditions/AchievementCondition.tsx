@@ -10,6 +10,7 @@ import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -120,12 +121,10 @@ const AchievementConditionForm = (
                   <div>
                     <Typography>{achievement.title}</Typography>
 
-                    <Typography
+                    <UserHTMLText
                       className="line-clamp-3"
                       color="text.secondary"
-                      dangerouslySetInnerHTML={{
-                        __html: achievement.description,
-                      }}
+                      html={achievement.description}
                       variant="body2"
                     />
                   </div>

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, Chip, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
@@ -42,12 +43,7 @@ const ResponseSection = (props) => {
   return (
     <Card style={styles.card}>
       <CardHeader
-        subheader={
-          <Typography
-            dangerouslySetInnerHTML={{ __html: section.description }}
-            variant="body2"
-          />
-        }
+        subheader={<UserHTMLText html={section.description} />}
         title={section.title}
       />
       <CardContent>
@@ -67,13 +63,7 @@ const ResponseSection = (props) => {
                   variant="outlined"
                 />
               )}
-              <Typography
-                component="div"
-                dangerouslySetInnerHTML={{
-                  __html: question.description,
-                }}
-                variant="body2"
-              />
+              <UserHTMLText html={question.description} />
               {question.answer && question.answer.present ? (
                 <ResponseAnswer
                   {...{

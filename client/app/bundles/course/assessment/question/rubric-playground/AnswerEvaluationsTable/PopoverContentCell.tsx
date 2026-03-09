@@ -1,5 +1,7 @@
 import { FC, useState } from 'react';
-import { Popover, Typography } from '@mui/material';
+import { Popover } from '@mui/material';
+
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 const PopoverContentCell: FC<{ content: string | TrustedHTML }> = (props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
@@ -20,11 +22,9 @@ const PopoverContentCell: FC<{ content: string | TrustedHTML }> = (props) => {
 
   return (
     <>
-      <Typography
+      <UserHTMLText
         className="whitespace-normal line-clamp-4 [&_p]:m-0 text-[13px]"
-        dangerouslySetInnerHTML={{
-          __html: props.content,
-        }}
+        html={props.content}
         onClick={handleClick}
       />
       <Popover
@@ -37,12 +37,7 @@ const PopoverContentCell: FC<{ content: string | TrustedHTML }> = (props) => {
         open={isPopoverOpen}
         slotProps={{ paper: { className: 'w-full max-w-[60%] [&_p]:m-0 p-5' } }}
       >
-        <Typography
-          className="whitespace-normal"
-          dangerouslySetInnerHTML={{
-            __html: props.content,
-          }}
-        />
+        <UserHTMLText className="whitespace-normal" html={props.content} />
       </Popover>
     </>
   );

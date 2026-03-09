@@ -14,6 +14,7 @@ import { HistoryFetchStatus } from 'course/assessment/submission/reducers/histor
 import { AnswerDataWithQuestion } from 'course/assessment/submission/types';
 import Accordion from 'lib/components/core/layouts/Accordion';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -74,12 +75,7 @@ const LastAttemptIndex: FC<Props> = (props) => {
                 <Typography variant="body1">
                   {answer.question.questionTitle}
                 </Typography>
-                <Typography
-                  dangerouslySetInnerHTML={{
-                    __html: answer.question.description,
-                  }}
-                  variant="body2"
-                />
+                <UserHTMLText html={answer.question.description} />
               </div>
             </Accordion>
             <AnswerDetails

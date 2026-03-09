@@ -8,6 +8,7 @@ import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -94,11 +95,10 @@ const AchievementShow: FC<Props> = (props) => {
                   />
                 </Tooltip>
 
-                <Typography
+                <UserHTMLText
                   className="whitespace-normal"
-                  dangerouslySetInnerHTML={{
-                    __html: achievement.description,
-                  }}
+                  html={achievement.description}
+                  variant="body1"
                 />
               </div>
             </Grid>

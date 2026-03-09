@@ -6,6 +6,7 @@ import { produce } from 'immer';
 import { AnnouncementMiniEntity } from 'types/course/announcements';
 
 import GlobalAPI from 'api';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatFullDateTime } from 'lib/moment';
 
@@ -61,13 +62,7 @@ const GlobalAnnouncements = (
             {formatFullDateTime(latestAnnouncement.startTime)}
           </Typography>
 
-          <Typography
-            className="mt-2"
-            dangerouslySetInnerHTML={{
-              __html: latestAnnouncement.content,
-            }}
-            variant="body2"
-          />
+          <UserHTMLText className="mt-2" html={latestAnnouncement.content} />
         </div>
 
         <IconButton onClick={(): Promise<void> => markAsRead(0)} size="small">

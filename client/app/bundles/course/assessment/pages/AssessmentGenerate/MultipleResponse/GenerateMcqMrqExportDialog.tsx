@@ -304,9 +304,9 @@ const GenerateMcqMrqExportDialog: FC<Props> = (props) => {
                             checked={option.correct}
                             className="text-neutral-500"
                             component={isMcq ? Radio : undefined}
-                            dangerouslySetInnerHTML={{ __html: option.option }}
                             labelClassName="items-start"
                             readOnly
+                            userHTML={option.option}
                             variant="body2"
                           />
                         );

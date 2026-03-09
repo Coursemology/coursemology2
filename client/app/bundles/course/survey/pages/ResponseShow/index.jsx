@@ -9,7 +9,6 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -22,6 +21,7 @@ import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { responseShape, surveyShape } from 'course/survey/propTypes';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import withRouter from 'lib/components/navigation/withRouter';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -152,10 +152,7 @@ export class ResponseShow extends Component {
         {survey.description ? (
           <Card>
             <CardContent>
-              <Typography
-                dangerouslySetInnerHTML={{ __html: survey.description }}
-                variant="body2"
-              />
+              <UserHTMLText html={survey.description} />
             </CardContent>
           </Card>
         ) : null}

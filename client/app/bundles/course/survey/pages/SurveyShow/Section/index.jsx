@@ -8,11 +8,11 @@ import {
   CardContent,
   CardHeader,
   ListSubheader,
-  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { sectionShape } from 'course/survey/propTypes';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 import DeleteSectionButton from './DeleteSectionButton';
 import EditSectionButton from './EditSectionButton';
@@ -62,12 +62,7 @@ class Section extends Component {
     return (
       <Card>
         <CardHeader
-          subheader={
-            <Typography
-              dangerouslySetInnerHTML={{ __html: section.description }}
-              variant="body2"
-            />
-          }
+          subheader={<UserHTMLText html={section.description} />}
           title={
             <div className="flex justify-between">
               {section.title}

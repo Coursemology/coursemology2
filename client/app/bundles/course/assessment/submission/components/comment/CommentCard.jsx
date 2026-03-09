@@ -1,14 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { CheckCircleOutline } from '@mui/icons-material';
-import {
-  Avatar,
-  Button,
-  CardHeader,
-  IconButton,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Avatar, Button, CardHeader, IconButton, Tooltip } from '@mui/material';
 import { grey, orange } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -16,6 +9,7 @@ import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -182,9 +176,7 @@ export default class CommentCard extends Component {
       );
     }
 
-    return (
-      <Typography dangerouslySetInnerHTML={{ __html: text }} variant="body2" />
-    );
+    return <UserHTMLText html={text} />;
   }
 
   render() {

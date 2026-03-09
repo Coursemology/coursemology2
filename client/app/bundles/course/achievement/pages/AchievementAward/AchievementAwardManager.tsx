@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-import { Button, Checkbox, Grid, Tooltip, Typography } from '@mui/material';
+import { Button, Checkbox, Grid, Tooltip } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -15,6 +15,7 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
@@ -311,10 +312,9 @@ const AchievementAwardManager: FC<Props> = (props) => {
             />
           </Tooltip>
           <div style={styles.description}>
-            <Typography
-              dangerouslySetInnerHTML={{ __html: achievement.description }}
-              style={{ whiteSpace: 'normal' }}
-              variant="body2"
+            <UserHTMLText
+              className="whitespace-normal"
+              html={achievement.description}
             />
           </div>
         </Grid>

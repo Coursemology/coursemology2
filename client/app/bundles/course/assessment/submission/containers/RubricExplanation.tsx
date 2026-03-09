@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Chip, MenuItem, Select, Typography } from '@mui/material';
+import { Chip, MenuItem, Select } from '@mui/material';
 import { AnswerRubricGradeData } from 'types/course/assessment/question/rubric-based-responses';
 import {
   RubricBasedResponseCategoryQuestionData,
@@ -7,6 +7,7 @@ import {
 } from 'types/course/assessment/submission/question/types';
 
 import TextField from 'lib/components/core/fields/TextField';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -138,9 +139,9 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
         const selected = category.grades.find((g) => g.id === selectedId);
         return (
           <div className="h-20">
-            <Typography
+            <UserHTMLText
               className="line-clamp-1 break-all text-wrap"
-              dangerouslySetInnerHTML={{ __html: selected?.explanation ?? '' }}
+              html={selected?.explanation ?? ''}
               variant="body2"
             />
           </div>
@@ -152,9 +153,9 @@ const RubricExplanation: FC<RubricExplanationProps> = (props) => {
       {category.grades.map((grade) => (
         <MenuItem key={grade.id} className="h-auto" value={grade.id}>
           <div className="flex items-center justify-between w-full">
-            <Typography
+            <UserHTMLText
               className="break-all text-wrap"
-              dangerouslySetInnerHTML={{ __html: grade.explanation }}
+              html={grade.explanation}
               variant="body2"
             />
             <Chip

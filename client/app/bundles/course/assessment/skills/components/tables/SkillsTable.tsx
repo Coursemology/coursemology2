@@ -25,6 +25,7 @@ import {
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 import { TableEnum } from '../../types';
 import SkillManagementButtons from '../buttons/SkillManagementButtons';
@@ -322,14 +323,9 @@ const SkillsTable: FC<Props> = (props: Props) => {
                           padding: '4px 4px',
                         }}
                       >
-                        <Typography
-                          dangerouslySetInnerHTML={{
-                            __html: tableData[indexSelected].description ?? '',
-                          }}
-                          style={{
-                            wordBreak: 'break-word',
-                          }}
-                          variant="body2"
+                        <UserHTMLText
+                          html={tableData[indexSelected].description ?? ''}
+                          style={{ wordBreak: 'break-word' }}
                         />
                       </CardContent>
                     </>

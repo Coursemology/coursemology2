@@ -7,10 +7,10 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { formatLongDateTime } from 'lib/moment';
 
 const MAX_POST_HEIGHT = 60;
@@ -65,20 +65,23 @@ export default class ForumPost extends Component {
         />
         <Divider />
         <CardContent>
-          <Typography
+          <div
             ref={(divElement) => {
               this.divElement = divElement;
             }}
-            dangerouslySetInnerHTML={{ __html: this.props.post.text }}
-            style={{
-              height:
-                this.state.isExpanded || !this.state.isExpandable
-                  ? 'auto'
-                  : MAX_POST_HEIGHT,
-              overflow: 'hidden',
-            }}
-            variant="body2"
-          />
+          >
+            <UserHTMLText
+              html={this.props.post.text}
+              style={{
+                height:
+                  this.state.isExpanded || !this.state.isExpandable
+                    ? 'auto'
+                    : MAX_POST_HEIGHT,
+                overflow: 'hidden',
+              }}
+              variant="body2"
+            />
+          </div>
           {this.state.isExpandable && (
             <Button
               className="forum-post-expand-button"

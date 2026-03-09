@@ -2,6 +2,7 @@ import { Avatar, Typography } from '@mui/material';
 import { AchievementGainedNotification } from 'types/course/userNotifications';
 
 import { getAchievementBadgeUrl } from 'course/helper/achievements';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../translations';
@@ -33,11 +34,7 @@ const AchievementGainedPopup = (
         {notification.title}
       </Typography>
 
-      <Typography
-        className="text-center"
-        dangerouslySetInnerHTML={{ __html: notification.description }}
-        variant="body2"
-      />
+      <UserHTMLText className="text-center" html={notification.description} />
     </PopupDialog>
   );
 };

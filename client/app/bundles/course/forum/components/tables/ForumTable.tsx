@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
 import Email from '@mui/icons-material/Email';
 import Help from '@mui/icons-material/Help';
-import { Tooltip, Typography } from '@mui/material';
+import { Tooltip } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumEntity } from 'types/course/forums';
@@ -10,6 +10,7 @@ import { ForumEntity } from 'types/course/forums';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -135,12 +136,9 @@ const ForumTable: FC<Props> = (props) => {
                   )}
                 </div>
               </div>
-              <Typography
+              <UserHTMLText
                 className="whitespace-normal"
-                dangerouslySetInnerHTML={{
-                  __html: forum.description,
-                }}
-                variant="body2"
+                html={forum.description}
               />
             </>
           );

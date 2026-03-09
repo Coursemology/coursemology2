@@ -61,9 +61,9 @@ const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
             checked={choice.correct}
             className="text-neutral-500"
             component={question.mcqMrqType === 'mcq' ? Radio : undefined}
-            dangerouslySetInnerHTML={{ __html: choice.option }}
             labelClassName="items-start"
             readOnly
+            userHTML={choice.option}
             variant="body2"
           />
         ))}

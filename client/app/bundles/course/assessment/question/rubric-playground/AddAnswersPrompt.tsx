@@ -1,10 +1,11 @@
 import { ComponentRef, FC, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { RadioGroup, Typography } from '@mui/material';
+import { RadioGroup } from '@mui/material';
 import { RubricAnswerData } from 'types/course/rubrics';
 
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Prompt from 'lib/components/core/dialogs/Prompt';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Table, { ColumnTemplate } from 'lib/components/table';
@@ -81,11 +82,9 @@ const AddAnswersPrompt: FC<Props> = (props) => {
       of: 'answerText',
       title: t(translations.answer),
       cell: (answer) => (
-        <Typography
+        <UserHTMLText
           className="whitespace-normal line-clamp-4"
-          dangerouslySetInnerHTML={{
-            __html: answer.answerText,
-          }}
+          html={answer.answerText}
         />
       ),
     },

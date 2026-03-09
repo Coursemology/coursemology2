@@ -1,8 +1,10 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader } from '@mui/material';
 
 import useTranslation from 'lib/hooks/useTranslation';
+
+import UserHTMLText from './UserHTMLText';
 
 interface Props {
   description: string;
@@ -30,10 +32,7 @@ const DescriptionCard: FC<Props> = (props) => {
       />
 
       <CardContent className="pt-0">
-        <Typography
-          dangerouslySetInnerHTML={{ __html: description }}
-          variant="body2"
-        />
+        <UserHTMLText html={description} />
       </CardContent>
     </Card>
   );

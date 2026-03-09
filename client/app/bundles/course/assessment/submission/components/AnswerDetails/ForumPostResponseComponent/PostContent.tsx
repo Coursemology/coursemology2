@@ -7,10 +7,10 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Typography,
 } from '@mui/material';
 import { PostPack } from 'types/course/assessment/submission/answer/forumPostResponse';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { formatLongDateTime } from 'lib/moment';
 
 interface Props {
@@ -56,10 +56,9 @@ const PostContent: FC<Props> = (props) => {
         />
         <Divider />
         <CardContent>
-          <Typography
+          <UserHTMLText
             className={`overflow-hidden ${!isExpanded && contentIsExpandable ? `h-20` : 'h-auto'}`}
-            dangerouslySetInnerHTML={{ __html: post.text }}
-            variant="body2"
+            html={post.text}
           />
           {contentIsExpandable && (
             <Button

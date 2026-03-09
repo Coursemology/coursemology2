@@ -1,5 +1,6 @@
-import { Typography } from '@mui/material';
 import { QuestionType } from 'types/course/assessment/question';
+
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 import RubricPanel from '../../containers/RubricPanel';
 import { AnswerDetailsProps } from '../../types';
@@ -10,10 +11,7 @@ const RubricBasedResponseDetails = (
   const { question, answer } = props;
   return (
     <>
-      <Typography
-        dangerouslySetInnerHTML={{ __html: answer.fields.answer_text }}
-        variant="body2"
-      />
+      <UserHTMLText html={answer.fields.answer_text} />
       <RubricPanel
         answerCategoryGrades={answer.categoryGrades}
         answerId={answer.id}
