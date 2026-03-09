@@ -14,6 +14,7 @@ import { grey, orange } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { formatLongDateTime } from 'lib/moment';
 
 import { postShape } from '../../propTypes';
@@ -234,10 +235,7 @@ const CodaveriCommentCard = (props) => {
 
     return (
       <>
-        <Typography
-          dangerouslySetInnerHTML={{ __html: text }}
-          variant="body2"
-        />
+        <UserHTMLText html={text} />
         {renderRating()}
       </>
     );

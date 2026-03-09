@@ -3,6 +3,7 @@ import { defineMessages } from 'react-intl';
 import { Avatar, Box, CardHeader, Typography } from '@mui/material';
 import { CommentItem } from 'types/course/assessment/submission/submission-question';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -56,10 +57,7 @@ const Comment: FC<Props> = (props) => {
             />
           </div>
           <div className="break-words p-2">
-            <Typography
-              dangerouslySetInnerHTML={{ __html: comment.text }}
-              variant="body2"
-            />
+            <UserHTMLText html={comment.text} />
           </div>
         </Box>
       ))}

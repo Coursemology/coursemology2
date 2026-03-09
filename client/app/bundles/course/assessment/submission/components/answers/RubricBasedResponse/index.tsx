@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Typography } from '@mui/material';
 import { SubmissionQuestionData } from 'types/course/assessment/submission/question/types';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 
 interface RubricBasedResponseAnswerProps {
@@ -24,12 +24,7 @@ const RubricBasedResponseAnswer: FC<RubricBasedResponseAnswerProps> = (
     <Controller
       control={control}
       name={`${answerId}.answer_text`}
-      render={({ field }) => (
-        <Typography
-          dangerouslySetInnerHTML={{ __html: field.value }}
-          variant="body2"
-        />
-      )}
+      render={({ field }) => <UserHTMLText html={field.value} />}
     />
   );
 

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, ListSubheader, Typography } from '@mui/material';
+import { Card, CardContent, ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import {
@@ -16,6 +16,7 @@ import ResponseForm, {
 import { responseShape, surveyShape } from 'course/survey/propTypes';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import withRouter from 'lib/components/navigation/withRouter';
 
 import withSurveyLayout from '../../containers/SurveyLayout';
@@ -106,10 +107,7 @@ const ResponseEdit = (props) => {
       {survey.description ? (
         <Card>
           <CardContent>
-            <Typography
-              dangerouslySetInnerHTML={{ __html: survey.description }}
-              variant="body2"
-            />
+            <UserHTMLText html={survey.description} />
           </CardContent>
         </Card>
       ) : null}

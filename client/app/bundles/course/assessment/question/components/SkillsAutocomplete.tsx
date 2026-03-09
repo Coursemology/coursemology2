@@ -4,6 +4,7 @@ import { Autocomplete, Box, TextField, Typography } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { AvailableSkills } from 'types/course/assessment/questions';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -69,13 +70,10 @@ const SkillsAutocomplete = (props: SkillsAutocompleteProps): JSX.Element => {
             <Typography>{skill.title}</Typography>
 
             {skill.description && (
-              <Typography
+              <UserHTMLText
                 className="line-clamp-3"
                 color="text.secondary"
-                dangerouslySetInnerHTML={{
-                  __html: skill.description,
-                }}
-                variant="body2"
+                html={skill.description}
               />
             )}
           </Box>

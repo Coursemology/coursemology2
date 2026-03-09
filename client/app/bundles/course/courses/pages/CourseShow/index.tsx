@@ -7,6 +7,7 @@ import { CourseEntity } from 'types/course/courses';
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 
@@ -82,8 +83,8 @@ const CourseShow: FC<Props> = (props) => {
                 {intl.formatMessage(translations.descriptionHeader)}
               </Typography>
 
-              <Typography
-                dangerouslySetInnerHTML={{ __html: course.description }}
+              <UserHTMLText
+                html={course.description}
                 id="course-description"
                 variant="body2"
               />

@@ -17,6 +17,7 @@ import withHeartbeatWorker from 'workers/withHeartbeatWorker';
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import withRouter from 'lib/components/navigation/withRouter';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 
@@ -94,10 +95,7 @@ class VisibleSubmissionEditIndex extends Component {
         <CardHeader title={assessment.title} />
         {assessment.description && (
           <CardContent>
-            <Typography
-              dangerouslySetInnerHTML={{ __html: assessment.description }}
-              variant="body2"
-            />
+            <UserHTMLText html={assessment.description} />
           </CardContent>
         )}
         {assessment.files?.length > 0 && (

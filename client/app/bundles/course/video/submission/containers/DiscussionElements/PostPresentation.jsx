@@ -1,6 +1,7 @@
 import { Avatar, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { formatLongDateTime } from 'lib/moment';
 
 import EditPostContainer from './EditPostContainer';
@@ -49,11 +50,7 @@ const PostPresentation = (props) => {
           variant="rounded"
         />
         <div className={styles.contentContainer}>
-          <Typography
-            dangerouslySetInnerHTML={{ __html: props.userLink }}
-            display="inline"
-            variant="body2"
-          />
+          <UserHTMLText display="inline" html={props.userLink} />
           &nbsp;
           <div className={styles.postTimestamp}>
             <Typography variant="body2">
@@ -63,10 +60,7 @@ const PostPresentation = (props) => {
           {props.editMode ? (
             <EditPostContainer postId={props.postId} />
           ) : (
-            <Typography
-              dangerouslySetInnerHTML={{ __html: props.content }}
-              variant="body2"
-            />
+            <UserHTMLText html={props.content} />
           )}
         </div>
       </div>

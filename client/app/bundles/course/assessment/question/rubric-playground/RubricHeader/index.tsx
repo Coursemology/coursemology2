@@ -13,6 +13,7 @@ import { Card, FormControlLabel, Radio, Typography } from '@mui/material';
 import { JobStatus } from 'types/jobs';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { pollJobRequest } from 'lib/helpers/jobHelpers';
 import { getAssessmentURL } from 'lib/helpers/url-builders';
 import { getAssessmentId, getCourseId } from 'lib/helpers/url-helpers';
@@ -176,12 +177,9 @@ const RubricHeader: FC<RubricHeaderProps> = (props) => {
         </div>
       )}
       <Card className="my-3" variant="outlined">
-        <Typography
+        <UserHTMLText
           className="p-3 line-clamp-4"
-          dangerouslySetInnerHTML={{
-            __html: selectedRubric.summary,
-          }}
-          variant="body2"
+          html={selectedRubric.summary}
         />
       </Card>
       <div className="flex flex-row space-x-3 items-center pb-3">

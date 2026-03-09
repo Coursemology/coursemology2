@@ -2,14 +2,7 @@ import { FC, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { CheckCircleOutline } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import {
-  Avatar,
-  Button,
-  CardHeader,
-  IconButton,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Avatar, Button, CardHeader, IconButton, Tooltip } from '@mui/material';
 import { grey, orange } from '@mui/material/colors';
 import { CommentPostMiniEntity } from 'types/course/comments';
 
@@ -18,6 +11,7 @@ import EditButton from 'lib/components/core/buttons/EditButton';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
@@ -207,12 +201,7 @@ const CommentCard: FC<Props> = (props) => {
       );
     }
 
-    return (
-      <Typography
-        dangerouslySetInnerHTML={{ __html: post.text }}
-        variant="body2"
-      />
-    );
+    return <UserHTMLText html={post.text} />;
   };
 
   const renderAuthorName = (): JSX.Element | string => {

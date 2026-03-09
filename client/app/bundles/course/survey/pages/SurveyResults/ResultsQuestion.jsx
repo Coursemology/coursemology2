@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import formTranslations from 'lib/translations/form';
 
 import OptionsQuestionResults from './OptionsQuestionResults';
@@ -70,12 +71,7 @@ class ResultsQuestion extends Component {
     return (
       <Card style={styles.card}>
         <CardContent>
-          <Typography
-            dangerouslySetInnerHTML={{
-              __html: `${index + 1}. ${question.description}`,
-            }}
-            variant="body2"
-          />
+          <UserHTMLText html={`${index + 1}. ${question.description}`} />
           {question.required ? (
             <Typography
               className="italic mt-5"

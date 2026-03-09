@@ -5,11 +5,12 @@ import {
   Folder as FolderIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material';
-import { Stack, TableCell, TableRow, Tooltip, Typography } from '@mui/material';
+import { Stack, TableCell, TableRow, Tooltip } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { FolderMiniEntity } from 'types/course/material/folders';
 
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { MATERIAL_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -74,12 +75,9 @@ const TableSubfolderRow: FC<Props> = (props) => {
           </Stack>
           {subfolder.description !== null &&
             subfolder.description.length !== 0 && (
-              <Typography
+              <UserHTMLText
                 className="whitespace-normal break-all ml-12 text-gray-500"
-                dangerouslySetInnerHTML={{
-                  __html: subfolder.description,
-                }}
-                variant="body2"
+                html={subfolder.description}
               />
             )}
         </Stack>

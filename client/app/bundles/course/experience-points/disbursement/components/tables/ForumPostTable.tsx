@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { CardContent, TableCell, TableRow, Typography } from '@mui/material';
+import { CardContent, TableCell, TableRow } from '@mui/material';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumDisbursementPostEntity } from 'types/course/disbursement';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
@@ -168,13 +169,9 @@ const ForumPostTable: FC<Props> = (props: Props) => {
               padding: '4px 4px',
             }}
           >
-            <Typography
-              dangerouslySetInnerHTML={{
-                __html: data[rowMeta.rowIndex].content,
-              }}
-              style={{
-                wordBreak: 'break-word',
-              }}
+            <UserHTMLText
+              className="break-words"
+              html={data[rowMeta.rowIndex].content}
               variant="body2"
             />
           </CardContent>

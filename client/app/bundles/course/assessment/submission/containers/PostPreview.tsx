@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { ChevronRight } from '@mui/icons-material';
-import { Typography } from '@mui/material';
 import { Annotation } from 'types/course/assessment/submission/annotations';
 
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import stripHtmlTags from 'lib/helpers/htmlFormatHelpers';
 import { useAppSelector } from 'lib/hooks/store';
 
@@ -27,12 +27,7 @@ const PostPreview: FC<Props> = (props) => {
     <div className="flex items-center pl-1 w-full overflow-hidden text-ellipsis whitespace-nowrap">
       <ChevronRight className="mr-2" fontSize="small" />
 
-      <Typography
-        dangerouslySetInnerHTML={{
-          __html: content,
-        }}
-        variant="body2"
-      />
+      <UserHTMLText html={content} />
     </div>
   );
 };

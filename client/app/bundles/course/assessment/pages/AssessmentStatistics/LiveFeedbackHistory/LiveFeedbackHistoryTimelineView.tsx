@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Typography } from '@mui/material';
 
 import Accordion from 'lib/components/core/layouts/Accordion';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -29,12 +30,7 @@ const LiveFeedbackHistoryTimelineView: FC<Props> = (props) => {
         >
           <div className="ml-4 mt-4">
             <Typography variant="body1">{question.title}</Typography>
-            <Typography
-              dangerouslySetInnerHTML={{
-                __html: question.description,
-              }}
-              variant="body2"
-            />
+            <UserHTMLText html={question.description} />
           </div>
         </Accordion>
       </div>

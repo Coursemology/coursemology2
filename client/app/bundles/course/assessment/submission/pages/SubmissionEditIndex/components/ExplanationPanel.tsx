@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Card, CardContent, CardHeader, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader } from '@mui/material';
 
 import {
   questionTypes,
@@ -10,6 +10,7 @@ import { getExplanations } from 'course/assessment/submission/selectors/explanat
 import { getQuestions } from 'course/assessment/submission/selectors/questions';
 import { getSubmission } from 'course/assessment/submission/selectors/submissions';
 import translations from 'course/assessment/submission/translations';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -84,11 +85,10 @@ const ExplanationPanel: FC<Props> = (props) => {
       ) ? null : (
         <CardContent>
           {explanation.explanations.map((exp, idx) => (
-            <Typography
+            <UserHTMLText
               // eslint-disable-next-line react/no-array-index-key
               key={idx}
-              dangerouslySetInnerHTML={{ __html: exp }}
-              variant="body2"
+              html={exp}
             />
           ))}
         </CardContent>

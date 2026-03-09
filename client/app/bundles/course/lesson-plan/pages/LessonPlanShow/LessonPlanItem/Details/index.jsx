@@ -1,8 +1,9 @@
 import { PureComponent } from 'react';
-import { CardContent, CardHeader, Typography } from '@mui/material';
+import { CardContent, CardHeader } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 import Chips from './Chips';
 
@@ -14,10 +15,7 @@ class Details extends PureComponent {
     }
     return (
       <CardContent>
-        <Typography
-          dangerouslySetInnerHTML={{ __html: description }}
-          variant="body2"
-        />
+        <UserHTMLText html={description} />
       </CardContent>
     );
   }

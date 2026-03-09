@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { questionShape } from 'course/assessment/submission/propTypes';
 import Error from 'lib/components/core/Note';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import toast from 'lib/hooks/toast';
 
@@ -19,12 +19,7 @@ const ForumPostResponse = (props) => {
     <Controller
       control={control}
       name={`${answerId}.answer_text`}
-      render={({ field }) => (
-        <Typography
-          dangerouslySetInnerHTML={{ __html: field.value }}
-          variant="body2"
-        />
-      )}
+      render={({ field }) => <UserHTMLText html={field.value} />}
     />
   ) : (
     <Controller

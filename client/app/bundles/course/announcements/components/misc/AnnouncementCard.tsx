@@ -13,6 +13,7 @@ import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import { formatFullDateTime } from 'lib/moment';
@@ -187,10 +188,10 @@ const AnnouncementCard: FC<Props> = (props) => {
           {formatFullDateTime(announcement.startTime)}{' '}
           {intl.formatMessage(translations.timeSeparator)} {renderUserLink()}
         </Typography>
-        <Typography
-          dangerouslySetInnerHTML={{ __html: announcement.content }}
-          style={{ marginTop: 15, overflowWrap: 'anywhere' }}
-          variant="body2"
+
+        <UserHTMLText
+          className="mt-4 wrap-anywhere"
+          html={announcement.content}
         />
       </Paper>
       {showEditOptions && updateOperation && (

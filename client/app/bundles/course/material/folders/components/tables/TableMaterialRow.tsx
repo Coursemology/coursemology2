@@ -1,10 +1,11 @@
 import { FC, memo } from 'react';
 import { Description as DescriptionIcon } from '@mui/icons-material';
-import { Stack, TableCell, TableRow, Typography } from '@mui/material';
+import { Stack, TableCell, TableRow } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { MaterialMiniEntity } from 'types/course/material/folders';
 
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatFullDateTime } from 'lib/moment';
 
@@ -45,11 +46,9 @@ const TableMaterialRow: FC<Props> = (props) => {
           </Stack>
           {material.description !== null &&
             material.description.length !== 0 && (
-              <Typography
+              <UserHTMLText
                 className="whitespace-normal break-all"
-                dangerouslySetInnerHTML={{
-                  __html: material.description,
-                }}
+                html={material.description}
                 variant="body2"
               />
             )}

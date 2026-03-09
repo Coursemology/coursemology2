@@ -68,6 +68,10 @@ export default {
       );
     }),
     containerQueries,
+    // Backported from Tailwind v4, should be removed when we upgrade.
+    plugin(({ addUtilities }) => {
+      addUtilities({ '.wrap-anywhere': { 'overflow-wrap': 'anywhere' } });
+    }),
     plugin(({ matchUtilities, theme }) => {
       matchUtilities(
         {

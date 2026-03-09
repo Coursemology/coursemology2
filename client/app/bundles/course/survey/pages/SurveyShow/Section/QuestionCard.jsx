@@ -13,7 +13,6 @@ import {
   MenuItem,
   Radio,
   TextField,
-  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -21,6 +20,7 @@ import OptionsListItem from 'course/survey/components/OptionsListItem';
 import { questionTypes } from 'course/survey/constants';
 import { questionShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import formTranslations from 'lib/translations/form';
 
 class QuestionCard extends Component {
@@ -160,11 +160,10 @@ class QuestionCard extends Component {
               fontSize="small"
             />
             <div>
-              <Typography
+              <UserHTMLText
                 className="whitespace-normal"
-                dangerouslySetInnerHTML={{
-                  __html: question.description,
-                }}
+                html={question.description}
+                variant="body1"
               />
               {question.required && (
                 <Chip

@@ -1,8 +1,9 @@
 import { PureComponent } from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import Thumbnail from 'lib/components/core/Thumbnail';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 
 const styles = {
   option: {
@@ -65,10 +66,7 @@ class OptionsListItem extends PureComponent {
         <div style={styles.gridOptionBody}>
           {optionText ? (
             <CardContent>
-              <Typography
-                dangerouslySetInnerHTML={{ __html: optionText }}
-                variant="body2"
-              />
+              <UserHTMLText html={optionText} />
             </CardContent>
           ) : null}
           {widget}
@@ -91,11 +89,7 @@ class OptionsListItem extends PureComponent {
         ) : (
           []
         )}
-        <Typography
-          dangerouslySetInnerHTML={{ __html: optionText || null }}
-          style={styles.optionText}
-          variant="body2"
-        />
+        <UserHTMLText html={optionText} style={styles.optionText} />
       </div>
     );
   }

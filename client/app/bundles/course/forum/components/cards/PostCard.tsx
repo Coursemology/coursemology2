@@ -6,11 +6,11 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Typography,
 } from '@mui/material';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { POST_WORKFLOW_STATE } from 'lib/constants/sharedConstants';
 import { useAppSelector } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
@@ -117,10 +117,7 @@ const PostCard: FC<Props> = (props) => {
                 value={editValue}
               />
             ) : (
-              <Typography
-                className="text-2xl"
-                dangerouslySetInnerHTML={{ __html: post.text }}
-              />
+              <UserHTMLText className="text-2xl" html={post.text} />
             )}
           </CardContent>
           <CardActions className="pt-0">

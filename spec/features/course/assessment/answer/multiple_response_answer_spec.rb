@@ -69,7 +69,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
         option = assessment.questions.first.actable.options.first
         element = find('p', text: option.option)
 
-        expect(element.style('background-color')['background-color']).to eq('rgba(232, 245, 233, 1)')
+        expect(element.style('background-color')['background-color']).to eq('rgba(240, 253, 244, 1)')
       end
     end
   end

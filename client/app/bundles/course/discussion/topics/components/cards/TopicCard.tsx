@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { CommentStatusTypes, CommentTopicEntity } from 'types/course/comments';
 
 import Link from 'lib/components/core/Link';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -235,12 +236,7 @@ const TopicCard: FC<TopicCardProps> = (props) => {
         }
       />
       <CardContent>
-        {topic.content && (
-          <Typography
-            dangerouslySetInnerHTML={{ __html: topic.content }}
-            variant="body2"
-          />
-        )}
+        {topic.content && <UserHTMLText html={topic.content} />}
         {postListData.map((post) => {
           return (
             <div key={post.id}>

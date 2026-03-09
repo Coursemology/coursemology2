@@ -13,6 +13,7 @@ import { getAchievementBadgeUrl } from 'course/helper/achievements';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
+import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -182,11 +183,10 @@ const AchievementTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const achievement = achievements[dataIndex];
           return (
-            <Typography
+            <UserHTMLText
               key={achievements[dataIndex].id}
-              dangerouslySetInnerHTML={{ __html: achievement.description }}
-              style={{ whiteSpace: 'normal' }}
-              variant="body2"
+              className="whitespace-normal"
+              html={achievement.description}
             />
           );
         },
