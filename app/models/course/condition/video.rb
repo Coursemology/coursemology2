@@ -41,10 +41,27 @@ class Course::Condition::Video < ApplicationRecord
     user = course_user.user
 
     if minimum_watch_percentage
-      watched_video_with_minimum_watch_percentage_exists?(user, minimum_watch_percentage)
+      watched_video_with_minimum_watch_percentage_exists?(user)
     else
       watched_video_exists?(user)
     end
+  end
+
+  def compute_satisfaction_information(course_users)
+    satisfaction_information = Array.new(course_users.length, false)
+    user_ids = course_users.map(&:user).map(&:id)
+    user_submissions = video.submissions.where(creator_id: user_ids)
+    user_ids_to_indices = user_ids.map.with_index { |user_id, index| [user_id, index] }.to_h
+
+    if minimum_watch_percentage
+      fill_satisfaction_information_with_minimum_watch_percentage(user_submissions, satisfaction_information,
+                                                                  user_ids_to_indices)
+    else
+      fill_satisfaction_information_without_minimum_watch_percentage(user_submissions, satisfaction_information,
+                                                                     user_ids_to_indices)
+    end
+
+    satisfaction_information
   end
 
   # Class that the condition depends on
@@ -77,9 +94,26 @@ class Course::Condition::Video < ApplicationRecord
     video.submissions.by_user(user).exists?
   end
 
-  def watched_video_with_minimum_watch_percentage_exists?(user, minimum_watch_percentage)
+  def watched_video_with_minimum_watch_percentage_exists?(user)
     video.submissions.by_user(user).any? do |submission|
       submission.statistic.percent_watched >= minimum_watch_percentage
+    end
+  end
+
+  def fill_satisfaction_information_with_minimum_watch_percentage(user_submissions, satisfaction_information,
+                                                                  user_ids_to_indices)
+    user_submissions.each do |user_submission|
+      if !satisfaction_information[user_ids_to_indices[user_submission.course_user.user.id]] &&
+         user_submission.statistic.percent_watched >= minimum_watch_percentage
+        satisfaction_information[user_ids_to_indices[user_submission.course_user.user.id]] = true
+      end
+    end
+  end
+
+  def fill_satisfaction_information_without_minimum_watch_percentage(user_submissions, satisfaction_information,
+                                                                     user_ids_to_indices)
+    user_submissions.each do |user_submission|
+      satisfaction_information[user_ids_to_indices[user_submission.course_user.user.id]] = true
     end
   end
 
