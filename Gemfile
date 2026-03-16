@@ -184,7 +184,7 @@ gem 'acts_as_tenant'
 gem 'http_accept_language'
 
 # User authentication
-gem 'devise', '4.9.4'
+gem 'devise', '5.0.2'
 gem 'devise-multi_email'
 gem 'keycloak'
 gem 'jwt'
