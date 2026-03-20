@@ -9,12 +9,14 @@ jest.mock('react-ace', () => {
 
   return {
     __esModule: true,
-    default: forwardRef((props: Record<string, unknown>, ref: unknown) => {
-      const setOptions = props.setOptions as Record<string, unknown>;
-      if (setOptions) mockSetOption(setOptions);
+    default: forwardRef(
+      (props: Record<string, unknown>, _ref: unknown): JSX.Element => {
+        const setOptions = props.setOptions as Record<string, unknown>;
+        if (setOptions) mockSetOption(setOptions);
 
-      return <div data-testid="ace-editor" />;
-    }),
+        return <div data-testid="ace-editor" />;
+      },
+    ),
   };
 });
 

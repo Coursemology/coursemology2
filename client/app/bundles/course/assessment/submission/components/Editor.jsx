@@ -38,7 +38,6 @@ const Editor = (props) => {
       cancelAnimationFrame(frameId);
       observer.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
