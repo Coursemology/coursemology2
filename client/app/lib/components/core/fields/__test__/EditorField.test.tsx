@@ -2,6 +2,9 @@ import { render } from 'test-utils';
 
 import EditorField from '../EditorField';
 
+jest.mock('ace-builds/src-noconflict/theme-github', () => ({}));
+jest.mock('ace-builds/src-noconflict/mode-python', () => ({}));
+
 const mockSetOption = jest.fn();
 
 jest.mock('react-ace', () => {
