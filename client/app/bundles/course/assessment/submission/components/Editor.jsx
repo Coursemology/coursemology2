@@ -4,6 +4,7 @@ import { Stack } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import FormEditorField from 'lib/components/form/fields/EditorField';
+import ResizeObserver from 'utilities/ResizeObserver';
 
 import { fileShape } from '../propTypes';
 
@@ -23,14 +24,22 @@ const Editor = (props) => {
     const container = containerRef.current;
     if (!container) return undefined;
 
+    let frameId;
     const observer = new ResizeObserver(() => {
-      editorRef?.current?.editor?.resize();
+      cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(() => {
+        editorRef?.current?.editor?.resize();
+      });
     });
 
     observer.observe(container);
 
-    return () => observer.disconnect();
-  }, [editorRef]);
+    return () => {
+      cancelAnimationFrame(frameId);
+      observer.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Stack spacing={0.5}>
