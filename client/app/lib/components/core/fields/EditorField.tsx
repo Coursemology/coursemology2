@@ -143,6 +143,15 @@ const EditorField = forwardRef(
           useWorker: false,
           fontFamily: DEFAULT_FONT_FAMILY,
           showInvisibles: true,
+          behavioursEnabled: true,
+          wrapBehavioursEnabled: true,
+          enableMultiselect: true,
+          highlightActiveLine: true,
+          highlightSelectedWord: true,
+          showPrintMargin: false,
+          enableBasicAutocompletion: false,
+          enableLiveAutocompletion: false,
+          enableSnippets: false,
         }}
       />
     );
