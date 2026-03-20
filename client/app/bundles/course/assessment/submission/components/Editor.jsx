@@ -2,9 +2,9 @@ import { Component, useEffect, useRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Stack } from '@mui/material';
 import PropTypes from 'prop-types';
+import ResizeObserver from 'utilities/ResizeObserver';
 
 import FormEditorField from 'lib/components/form/fields/EditorField';
-import ResizeObserver from 'utilities/ResizeObserver';
 
 import { fileShape } from '../propTypes';
 
