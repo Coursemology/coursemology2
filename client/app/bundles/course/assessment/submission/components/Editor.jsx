@@ -24,20 +24,13 @@ const Editor = (props) => {
     const container = containerRef.current;
     if (!container) return undefined;
 
-    let frameId;
     const observer = new ResizeObserver(() => {
-      cancelAnimationFrame(frameId);
-      frameId = requestAnimationFrame(() => {
-        editorRef?.current?.editor?.resize();
-      });
+      editorRef?.current?.editor?.resize();
     });
 
     observer.observe(container);
 
-    return () => {
-      cancelAnimationFrame(frameId);
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
