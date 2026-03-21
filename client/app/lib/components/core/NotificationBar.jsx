@@ -46,6 +46,7 @@ const NotificationBar = (props) => {
     <Snackbar
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       autoHideDuration={autoHideDuration}
+      className="z-modal"
       message={notificationNode}
       onClose={handleClose}
       open={open}
@@ -53,7 +54,6 @@ const NotificationBar = (props) => {
         height: 'auto',
         maxWidth: '100%',
         whiteSpace: 'pre-line',
-        zIndex: 9999,
       }}
       {...options}
     />
