@@ -47,6 +47,14 @@ export default {
         warning: palette.warning.main,
         info: palette.info.main,
       },
+      zIndex: {
+        base: '1',
+        badge: '3',
+        sticky: '100',
+        overlay: '110',
+        dropdown: '1000',
+        modal: '9999',
+      },
     },
   },
   corePlugins: {

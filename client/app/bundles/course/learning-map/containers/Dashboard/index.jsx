@@ -43,7 +43,6 @@ const styles = {
     bottom: 0,
     position: 'sticky',
     textAlign: 'center',
-    zIndex: 999,
   },
 };
 
@@ -204,7 +203,10 @@ const Dashboard = (props) => {
 
   return (
     <>
-      <Card style={{ ...styles.wrapper, backgroundColor: color }}>
+      <Card
+        className="z-dropdown"
+        style={{ ...styles.wrapper, backgroundColor: color }}
+      >
         <CardContent style={styles.content}>
           {text}
           {getActionElements()}
