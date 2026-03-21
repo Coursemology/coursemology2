@@ -49,11 +49,11 @@ const NotificationBar = (props) => {
       message={notificationNode}
       onClose={handleClose}
       open={open}
+      className="z-modal"
       style={{
         height: 'auto',
         maxWidth: '100%',
         whiteSpace: 'pre-line',
-        zIndex: 9999,
       }}
       {...options}
     />

@@ -9,7 +9,6 @@ const styles = {
     position: 'absolute',
     top: 0,
     left: 0,
-    zIndex: 110,
     display: 'flex',
     width: '100%',
     height: '100%',
@@ -22,7 +21,7 @@ const styles = {
 
 const LoaderOverlay = (): JSX.Element => {
   return (
-    <Box sx={styles.overlay}>
+    <Box className="z-overlay" sx={styles.overlay}>
       <Box style={styles.progressContainer}>
         <LoadingIndicator />
       </Box>
