@@ -158,16 +158,30 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   render() {
-    const { isSubmissionBlocked, isLoading } = this.props;
+    const { assessment, isSubmissionBlocked, isLoading, submission } =
+      this.props;
 
     if (isLoading) return <LoadingIndicator />;
     if (isSubmissionBlocked) return <BlockedSubmission />;
+
+    const isBlockedInStudentView =
+      !submission.graderView &&
+      assessment.blockStudentViewingAfterSubmitted &&
+      submission.workflowState !== workflowStates.Attempting &&
+      submission.workflowState !== workflowStates.Published;
+
     return (
       <Page className="space-y-5">
         {this.renderTimeLimitBanner()}
         {this.renderAssessment()}
-        {this.renderProgress()}
-        {this.renderContent()}
+        {isBlockedInStudentView ? (
+          <BlockedSubmission />
+        ) : (
+          <>
+            {this.renderProgress()}
+            {this.renderContent()}
+          </>
+        )}
       </Page>
     );
   }
