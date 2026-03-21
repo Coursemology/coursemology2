@@ -120,6 +120,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.runCode',
     defaultMessage: 'Run Code',
   },
+  runCodeTooltip: {
+    id: 'course.assessment.submission.runCodeShortcut',
+    defaultMessage: '(Ctrl+Shift+Enter) or (⌘+Shift+Enter)',
+  },
   runCodeWithLimit: {
     id: 'course.assessment.submission.runCodeWithLimit',
     defaultMessage:
