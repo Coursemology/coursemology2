@@ -128,8 +128,8 @@ class ConfirmationDialog extends Component {
             ? handleDialogClose
             : onCancel
         }
+        className="z-modal"
         open={open}
-        style={{ zIndex: 9999 }}
       >
         <DialogContent>
           <Typography variant="body2">{confirmationMessage}</Typography>
