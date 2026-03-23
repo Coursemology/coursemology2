@@ -10,6 +10,8 @@ class Course::CoursesController < Course::Controller
   def show
     head :unauthorized and return unless current_user.present? || current_course.published
 
+    return if current_course_user&.is_suspended? && cannot?(:manage, current_course)
+
     if can?(:manage, current_course) || current_course.user?(current_user)
       @currently_active_announcements = current_course.announcements.currently_active.includes(:creator)
       @activity_feeds = recent_activity_feeds.limit(20).preload(

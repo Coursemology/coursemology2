@@ -35,7 +35,7 @@ module Course::UsersControllerManagementConcern
   def students
     respond_to do |format|
       format.json do
-        @course_users = @course_users.students.includes(:groups, user: :emails).order_alphabetically
+        @course_users = @course_users.students.includes(user: :primary_email).order_alphabetically
       end
     end
   end
@@ -44,7 +44,7 @@ module Course::UsersControllerManagementConcern
     respond_to do |format|
       format.json do
         @student_options = @course_users.students.order_alphabetically.pluck(:id, :name, :role)
-        @course_users = @course_users.staff.includes(user: :emails).order_alphabetically
+        @course_users = @course_users.staff.includes(user: :primary_email).order_alphabetically
       end
     end
   end
@@ -178,7 +178,8 @@ module Course::UsersControllerManagementConcern
         render '_user_list_data', locals: {
           course_user: @course_user,
           should_show_timeline: true,
-          should_show_phantom: true
+          should_show_phantom: true,
+          groups: nil
         }, status: :ok
       end
     end
