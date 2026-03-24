@@ -121,7 +121,7 @@ class Course::Assessment::Answer < ApplicationRecord
       (submission.assessment.autograded? && !submission.assessment.allow_partial_submission) ||
       (
         submission.assessment.autograded? &&
-        actable_type == Course::Assessment::Question::MultipleResponse.name &&
+        actable_type == Course::Assessment::Answer::MultipleResponse.name &&
         submission.assessment.show_mcq_answer
       )
   end
