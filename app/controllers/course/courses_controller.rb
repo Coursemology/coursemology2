@@ -18,6 +18,7 @@ class Course::CoursesController < Course::Controller
         activity: [{ object: { topic: { actable: :forum } } }, :actor]
       )
     end
+
     authorize! :read, current_course unless current_course.published
     load_activity_course_users
     load_todos

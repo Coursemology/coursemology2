@@ -49,6 +49,7 @@ export interface CourseUserListData extends CourseUserBasicListData {
   email: string;
   role: CourseUserRole;
   phantom?: boolean;
+  isSuspended?: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
 }
 
@@ -62,6 +63,7 @@ export interface CourseUserBasicMiniEntity {
 
 export interface CourseUserMiniEntity extends CourseUserBasicMiniEntity {
   phantom?: CourseUserListData['phantom'];
+  isSuspended?: CourseUserListData['isSuspended'];
   email: CourseUserListData['email'];
   role: CourseUserListData['role'];
   timelineAlgorithm?: CourseUserListData['timelineAlgorithm'];

@@ -8,7 +8,7 @@ import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from './translations';
+import translations from '../../../translations';
 
 interface UserNameFieldProps {
   for: CourseUserMiniEntity;
@@ -46,7 +46,7 @@ const UserNameField = (props: UserNameFieldProps): JSX.Element => {
   return (
     <InlineEditTextField
       key={user.id}
-      className="course_user_name"
+      className={`course_user_name ${user.isSuspended ? 'text-neutral-400' : ''}`}
       onUpdate={(newName): Promise<void> => handleNameUpdate(newName)}
       updateValue={(): void => {}}
       value={user.name}

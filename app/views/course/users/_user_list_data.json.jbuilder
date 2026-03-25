@@ -6,6 +6,7 @@ json.id course_user.id if course_user.id
 json.name course_user.name.strip
 json.imageUrl user_image(course_user.user)
 json.email course_user.user.primary_email&.email || course_user.user.email
+json.isSuspended course_user.is_suspended
 
 json.referenceTimelineId current_course.reference_timeline_for(course_user)
 json.timelineAlgorithm course_user.timeline_algorithm if should_show_timeline

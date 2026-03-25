@@ -1,7 +1,6 @@
 import {
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,
-  CourseUserData,
   CourseUserEntity,
   CourseUserListData,
   CourseUserMiniEntity,
@@ -35,7 +34,7 @@ export interface SaveUserListAction {
 
 export interface SaveUserAction {
   type: typeof SAVE_USER;
-  user: CourseUserData;
+  user: Partial<CourseUserMiniEntity> & { id: number };
 }
 
 export interface SaveManageUserListAction {

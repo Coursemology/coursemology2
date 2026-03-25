@@ -10,7 +10,7 @@ import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from './translations';
+import translations from '../../../translations';
 
 interface AlgorithmMenuProps {
   for: CourseUserMiniEntity;

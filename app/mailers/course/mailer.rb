@@ -126,6 +126,34 @@ class Course::Mailer < ApplicationMailer
     end
   end
 
+  # Sends a notification email to a user informing them they have been suspended from a course.
+  #
+  # @param [CourseUser] course_user The course user who was suspended.
+  def user_suspended_email(course_user)
+    ActsAsTenant.without_tenant do
+      @course = course_user.course
+    end
+    @recipient = course_user.user
+
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject', course: @course.title))
+    end
+  end
+
+  # Sends a notification email to a user informing them their suspension has been lifted.
+  #
+  # @param [CourseUser] course_user The course user who was unsuspended.
+  def user_unsuspended_email(course_user)
+    ActsAsTenant.without_tenant do
+      @course = course_user.course
+    end
+    @recipient = course_user.user
+
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject', course: @course.title))
+    end
+  end
+
   def course_user_deletion_failed_email(course, course_user, user)
     return unless user.email
 

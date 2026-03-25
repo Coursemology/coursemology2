@@ -6992,11 +6992,26 @@
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "分配到时间线"
   },
+  "course.users.ManageUsersTable.bulkActions": {
+    "defaultMessage": "批量操作"
+  },
   "course.users.ManageUsersTable.bulkChangeTimelineFailure": {
     "defaultMessage": "未能将 {n} 名学生的参考时间线更新为 {timeline}。"
   },
   "course.users.ManageUsersTable.bulkChangeTimelineSuccess": {
     "defaultMessage": "更新了 {n} 个学生的参考时间线为{timeline}。"
+  },
+  "course.users.ManageUsersTable.bulkSuspendFailure": {
+    "defaultMessage": "未能暂停 {n} 名学生。"
+  },
+  "course.users.ManageUsersTable.bulkSuspendSuccess": {
+    "defaultMessage": "已成功暂停 {n} 名学生。"
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendFailure": {
+    "defaultMessage": "未能取消暂停 {n} 名学生。"
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendSuccess": {
+    "defaultMessage": "已成功取消暂停 {n} 名学生。"
   },
   "course.users.ManageUsersTable.changeAlgorithmFailure": {
     "defaultMessage": "未能将 {name} 的时间线算法更新到{timeline}。"
@@ -7142,14 +7157,35 @@
   "course.users.UpgradeToStaff.upgradeSuccess": {
     "defaultMessage": "{count, plural, =0 {无用户} one {# 新用户已经} other {# 新用户已经}} 升级到 {role}"
   },
-  "course.users.UserManagementButtons.deletionConfirm": {
+  "course.users.ManageUsersTable.deletionConfirm": {
     "defaultMessage": "你确定要删除{role} {name} ({email}) 吗？"
   },
-  "course.users.UserManagementButtons.deletionFailure": {
+  "course.users.ManageUsersTable.deletionFailure": {
     "defaultMessage": "删除用户失败。"
   },
-  "course.users.UserManagementButtons.deletionSuccess": {
+  "course.users.ManageUsersTable.deletionScheduled": {
+    "defaultMessage": "{role} {name} ({email}) 已计划删除。"
+  },
+  "course.users.ManageUsersTable.deletionSuccess": {
     "defaultMessage": "用户已被删除。"
+  },
+  "course.users.ManageUsersTable.suspend": {
+    "defaultMessage": "暂停"
+  },
+  "course.users.ManageUsersTable.suspendFailure": {
+    "defaultMessage": "无法暂停 {name}。"
+  },
+  "course.users.ManageUsersTable.suspendSuccess": {
+    "defaultMessage": "{name} 现已被暂停。在取消暂停之前，他们无法访问此课程。"
+  },
+  "course.users.ManageUsersTable.unsuspend": {
+    "defaultMessage": "取消暂停"
+  },
+  "course.users.ManageUsersTable.unsuspendFailure": {
+    "defaultMessage": "无法取消暂停 {name}。"
+  },
+  "course.users.ManageUsersTable.unsuspendSuccess": {
+    "defaultMessage": "{name} 不再被暂停。他们现在可以访问课程。"
   },
   "course.users.UserManagementTabs.enrolRequestsTitle": {
     "defaultMessage": "注册请求"
