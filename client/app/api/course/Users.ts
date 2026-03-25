@@ -143,4 +143,16 @@ export default class UsersAPI extends BaseCourseAPI {
       params,
     );
   }
+
+  suspend(ids: CourseUserBasicMiniEntity['id'][]): Promise<AxiosResponse> {
+    const params = { course_users: { ids } };
+
+    return this.client.patch(`${this.#urlPrefix}/users/suspend`, params);
+  }
+
+  unsuspend(ids: CourseUserBasicMiniEntity['id'][]): Promise<AxiosResponse> {
+    const params = { course_users: { ids } };
+
+    return this.client.patch(`${this.#urlPrefix}/users/unsuspend`, params);
+  }
 }

@@ -135,9 +135,6 @@ export function updateUser(
         dispatch(actions.updateUserOption(userOption));
       }
 
-      // TODO: Fix `actions.saveUser`'s params to support handling `CourseUserMiniEntity`.
-      // This should trigger a TypeScript type mismatch because `response.data` could be
-      // of type `CourseUserMiniEntity`, but `actions.saveUser` only accepts `CourseUserData`.
       dispatch(actions.saveUser(response.data));
     });
 }
@@ -162,15 +159,29 @@ export function assignToTimeline(
   return async (dispatch) => {
     await CourseAPI.users.assignToTimeline(ids, timelineId);
     ids.forEach((id) => {
-      // @ts-ignore: ignore type mismatch between this object and `CourseUserData`
-      // TODO: Fix `actions.saveUser`'s params to support handling `CourseUserMiniEntity`.
-      // The dispatch in `updateUser` above technically should also fire the same error.
-      // The only reason it does not is because the `response` is not typed, and thus
-      // its `response.data` is `any`, thus is assignable to `CourseUserData`.
-      //
-      // This line still technically works because `saveEntityToStore` thankfully
-      // intelligently merges the old and new entities.
       dispatch(actions.saveUser({ id, referenceTimelineId: timelineId }));
+    });
+  };
+}
+
+export function suspendUsers(
+  ids: CourseUserBasicMiniEntity['id'][],
+): Operation {
+  return async (dispatch) => {
+    await CourseAPI.users.suspend(ids);
+    ids.forEach((id) => {
+      dispatch(actions.saveUser({ id, isSuspended: true }));
+    });
+  };
+}
+
+export function unsuspendUsers(
+  ids: CourseUserBasicMiniEntity['id'][],
+): Operation {
+  return async (dispatch) => {
+    await CourseAPI.users.unsuspend(ids);
+    ids.forEach((id) => {
+      dispatch(actions.saveUser({ id, isSuspended: false }));
     });
   };
 }

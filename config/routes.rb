@@ -455,6 +455,8 @@ Rails.application.routes.draw do
         patch 'manage_email_subscription' => 'user_email_subscriptions#update'
 
         patch 'assign_timeline', on: :collection
+        patch 'suspend', on: :collection
+        patch 'unsuspend', on: :collection
       end
       post 'register' => 'user_registrations#create'
       get 'students' => 'users#students', as: :users_students

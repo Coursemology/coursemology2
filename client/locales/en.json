@@ -7008,11 +7008,26 @@
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "Assign to timeline"
   },
+  "course.users.ManageUsersTable.bulkActions": {
+    "defaultMessage": "Bulk Actions"
+  },
   "course.users.ManageUsersTable.bulkChangeTimelineFailure": {
     "defaultMessage": "Failed to update {n, plural, =1 {# student''s} other {# students''}} reference timelines to {timeline}."
   },
   "course.users.ManageUsersTable.bulkChangeTimelineSuccess": {
     "defaultMessage": "Updated {n, plural, =1 {# student''s} other {# students''}} reference timelines to {timeline}."
+  },
+  "course.users.ManageUsersTable.bulkSuspendFailure": {
+    "defaultMessage": "Failed to suspend {n, plural, =1 {# student} other {# students}}."
+  },
+  "course.users.ManageUsersTable.bulkSuspendSuccess": {
+    "defaultMessage": "Suspended {n, plural, =1 {# student} other {# students}} successfully."
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendFailure": {
+    "defaultMessage": "Failed to unsuspend {n, plural, =1 {# student} other {# students}}."
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendSuccess": {
+    "defaultMessage": "Unsuspended {n, plural, =1 {# student} other {# students}} successfully."
   },
   "course.users.ManageUsersTable.changeAlgorithmFailure": {
     "defaultMessage": "Failed to update {name}'s timeline algorithm to {timeline}."
@@ -7158,14 +7173,35 @@
   "course.users.UpgradeToStaff.upgradeSuccess": {
     "defaultMessage": "{count, plural, =0 {No users were} one {# new user has} other {# new users have}} been upgraded to {role}"
   },
-  "course.users.UserManagementButtons.deletionConfirm": {
+  "course.users.ManageUsersTable.deletionConfirm": {
     "defaultMessage": "Are you sure you wish to delete {role} {name} ({email})?"
   },
-  "course.users.UserManagementButtons.deletionFailure": {
+  "course.users.ManageUsersTable.deletionFailure": {
     "defaultMessage": "Failed to delete user."
   },
-  "course.users.UserManagementButtons.deletionSuccess": {
+  "course.users.ManageUsersTable.deletionScheduled": {
+    "defaultMessage": "{role} {name} ({email}) has been scheduled for deletion."
+  },
+  "course.users.ManageUsersTable.deletionSuccess": {
     "defaultMessage": "User was deleted."
+  },
+  "course.users.ManageUsersTable.suspend": {
+    "defaultMessage": "Suspend"
+  },
+  "course.users.ManageUsersTable.suspendFailure": {
+    "defaultMessage": "Failed to suspend {name}."
+  },
+  "course.users.ManageUsersTable.suspendSuccess": {
+    "defaultMessage": "{name} is now suspended. They cannot access this course until they are unsuspended."
+  },
+  "course.users.ManageUsersTable.unsuspend": {
+    "defaultMessage": "Unsuspend"
+  },
+  "course.users.ManageUsersTable.unsuspendFailure": {
+    "defaultMessage": "Failed to unsuspend {name}."
+  },
+  "course.users.ManageUsersTable.unsuspendSuccess": {
+    "defaultMessage": "{name} is no longer suspended. They can now access the course."
   },
   "course.users.UserManagementTabs.enrolRequestsTitle": {
     "defaultMessage": "Enrol Requests"

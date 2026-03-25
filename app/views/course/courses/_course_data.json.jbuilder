@@ -54,3 +54,7 @@ if can?(:manage, current_course) || current_course.user?(current_user)
     json.partial! notification_view_path(notification),	notification: notification if notification.activity.object
   end
 end
+
+is_suspended_user = current_course_user&.is_suspended && cannot?(:manage, current_course)
+json.isSuspendedUser is_suspended_user
+json.suspensionMessage current_course.suspension_message if is_suspended_user

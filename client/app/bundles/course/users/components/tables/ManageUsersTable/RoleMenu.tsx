@@ -13,7 +13,7 @@ import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
 import roleTranslations from 'lib/translations/course/users/roles';
 
-import translations from './translations';
+import translations from '../../../translations';
 
 interface RoleMenuProps {
   for: CourseUserMiniEntity;

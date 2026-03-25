@@ -20,6 +20,70 @@ RSpec.describe Course::CoursesController, type: :controller do
       end
     end
 
+    describe '#show' do
+      run_rescue
+      render_views
+
+      let(:user) { create(:user) }
+      let(:course) { create(:course, published: true) }
+      subject { get :show, as: :json, params: { id: course } }
+
+      context 'when the user is an active enrolled student' do
+        before { controller_sign_in(controller, user) }
+        let!(:course_user) { create(:course_student, course: course, user: user) }
+
+        it { is_expected.to have_http_status(:ok) }
+
+        it 'renders full course data' do
+          subject
+          expect(JSON.parse(response.body).dig('course', 'isSuspendedUser')).to be false
+        end
+      end
+
+      context 'when the user is a suspended student' do
+        before { controller_sign_in(controller, user) }
+        let!(:course_user) { create(:course_student, :suspended, course: course, user: user) }
+
+        it { is_expected.to have_http_status(:ok) }
+
+        it 'sets isSuspendedUser in the response body' do
+          subject
+          expect(JSON.parse(response.body).dig('course', 'isSuspendedUser')).to be true
+        end
+
+        it 'includes the suspension message in the response body' do
+          subject
+          expect(JSON.parse(response.body).fetch('course')).to have_key('suspensionMessage')
+        end
+      end
+
+      context 'when the user is not enrolled' do
+        before { controller_sign_in(controller, user) }
+
+        context 'when the course is published' do
+          it { is_expected.to have_http_status(:ok) }
+        end
+
+        context 'when the course is not published' do
+          let(:course) { create(:course, published: false) }
+
+          it { is_expected.to have_http_status(:forbidden) }
+        end
+      end
+
+      context 'when the user is not logged in' do
+        context 'when the course is published' do
+          it { is_expected.to have_http_status(:ok) }
+        end
+
+        context 'when the course is not published' do
+          let(:course) { create(:course, published: false) }
+
+          it { is_expected.to have_http_status(:unauthorized) }
+        end
+      end
+    end
+
     describe '#index' do
       context 'when there is no user logged in' do
         it 'allows unauthenticated access' do

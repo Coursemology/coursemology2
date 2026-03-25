@@ -6998,11 +6998,26 @@
   "course.users.ManageUsersTable.assignToTimeline": {
     "defaultMessage": "타임라인에 할당"
   },
+  "course.users.ManageUsersTable.bulkActions": {
+    "defaultMessage": "일괄 작업"
+  },
   "course.users.ManageUsersTable.bulkChangeTimelineFailure": {
     "defaultMessage": "{n, plural, =1 {#명의 학생의} other {#명의 학생들의}} 참조 타임라인을 {timeline}(으)로 업데이트하지 못했습니다."
   },
   "course.users.ManageUsersTable.bulkChangeTimelineSuccess": {
     "defaultMessage": "{n, plural, =1 {#명의 학생의} other {#명의 학생들의}} 참조 타임라인을 {timeline}(으)로 업데이트했습니다."
+  },
+  "course.users.ManageUsersTable.bulkSuspendFailure": {
+    "defaultMessage": "{n, plural, =1 {#명의 학생} other {#명의 학생들}}을(를) 정지하지 못했습니다."
+  },
+  "course.users.ManageUsersTable.bulkSuspendSuccess": {
+    "defaultMessage": "{n, plural, =1 {#명의 학생} other {#명의 학생들}}을(를) 성공적으로 정지했습니다."
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendFailure": {
+    "defaultMessage": "{n, plural, =1 {#명의 학생} other {#명의 학생들}}의 정지를 해제하지 못했습니다."
+  },
+  "course.users.ManageUsersTable.bulkUnsuspendSuccess": {
+    "defaultMessage": "{n, plural, =1 {#명의 학생} other {#명의 학생들}}을(를) 성공적으로 정지 해제했습니다."
   },
   "course.users.ManageUsersTable.changeAlgorithmFailure": {
     "defaultMessage": "{name}의 타임라인 알고리즘을 {timeline}(으)로 업데이트하지 못했습니다."
@@ -7148,14 +7163,35 @@
   "course.users.UpgradeToStaff.upgradeSuccess": {
     "defaultMessage": "{count, plural, =0 {사용자가 없습니다.} one {#명의 사용자가} other {#명의 사용자가}} {role}(으)로 승격되었습니다."
   },
-  "course.users.UserManagementButtons.deletionConfirm": {
+  "course.users.ManageUsersTable.deletionConfirm": {
     "defaultMessage": "{role} {name} ({email})을(를) 삭제하시겠습니까?"
   },
-  "course.users.UserManagementButtons.deletionFailure": {
+  "course.users.ManageUsersTable.deletionFailure": {
     "defaultMessage": "사용자 삭제에 실패했습니다."
   },
-  "course.users.UserManagementButtons.deletionSuccess": {
+  "course.users.ManageUsersTable.deletionScheduled": {
+    "defaultMessage": "{role} {name} ({email}) 삭제가 예약되었습니다."
+  },
+  "course.users.ManageUsersTable.deletionSuccess": {
     "defaultMessage": "사용자가 삭제되었습니다."
+  },
+  "course.users.ManageUsersTable.suspend": {
+    "defaultMessage": "정지"
+  },
+  "course.users.ManageUsersTable.suspendFailure": {
+    "defaultMessage": "{name}을(를) 정지하지 못했습니다."
+  },
+  "course.users.ManageUsersTable.suspendSuccess": {
+    "defaultMessage": "{name}이(가) 이제 정지되었습니다. 정지가 해제될 때까지 이 과정에 접근할 수 없습니다."
+  },
+  "course.users.ManageUsersTable.unsuspend": {
+    "defaultMessage": "정지 해제"
+  },
+  "course.users.ManageUsersTable.unsuspendFailure": {
+    "defaultMessage": "{name}의 정지를 해제하지 못했습니다."
+  },
+  "course.users.ManageUsersTable.unsuspendSuccess": {
+    "defaultMessage": "{name}의 정지가 해제되었습니다. 이제 과정에 접근할 수 있습니다."
   },
   "course.users.UserManagementTabs.enrolRequestsTitle": {
     "defaultMessage": "등록 요청"

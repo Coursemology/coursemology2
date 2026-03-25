@@ -37,7 +37,8 @@ class Course::UsersController < Course::ComponentController
         @course_users ||= course_users.without_phantom_users.students.
                           includes(:groups, user: [:emails]).order_alphabetically
       end
-
+    when 'suspend', 'unsuspend'
+      super
     else
       return if super
 

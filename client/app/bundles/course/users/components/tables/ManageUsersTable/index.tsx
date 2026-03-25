@@ -11,13 +11,13 @@ import roleTranslations from 'lib/translations/course/users/roles';
 import tableTranslations from 'lib/translations/table';
 
 import { getManageCourseUserPermissions } from '../../../selectors';
+import translations from '../../../translations';
 
 import ActiveTableToolbar from './ActiveTableToolbar';
 import AlgorithmMenu from './AlgorithmMenu';
 import PhantomSwitch from './PhantomSwitch';
 import RoleMenu from './RoleMenu';
 import TimelineMenu from './TimelineMenu';
-import translations from './translations';
 import UserNameField from './UserNameField';
 
 interface ManageUsersTableProps {
@@ -161,6 +161,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       title: t(tableTranslations.actions),
       cell: (user) => renderRowActionComponent?.(user),
       unless: !renderRowActionComponent,
+      className: 'text-center',
     },
   ];
 
