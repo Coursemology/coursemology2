@@ -9,7 +9,6 @@ const styles = {
     marginRight: 3,
   },
   withTooltip: {
-    zIndex: 3,
     position: 'relative',
   },
 };
@@ -21,6 +20,7 @@ const UnpublishedIcon = ({ tooltipId }) => {
   return (
     <Block
       data-tooltip-id={tooltipId}
+      className="z-badge"
       style={{ ...styles.unpublishedIcon, ...styles.withTooltip }}
     />
   );
