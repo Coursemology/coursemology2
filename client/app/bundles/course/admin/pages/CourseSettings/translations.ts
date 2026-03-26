@@ -154,6 +154,19 @@ export default defineMessages({
     id: 'course.admin.CourseSettings.daysInAdvance',
     defaultMessage: 'Days in advance',
   },
+  suspension: {
+    id: 'course.admin.CourseSettings.suspension',
+    defaultMessage: 'Account suspension',
+  },
+  suspensionMessage: {
+    id: 'course.admin.CourseSettings.suspensionMessage',
+    defaultMessage: 'Suspension message',
+  },
+  suspensionMessageDescription: {
+    id: 'course.admin.CourseSettings.suspensionMessageDescription',
+    defaultMessage:
+      'This message will be shown to users whose access to this course has been suspended. Leave blank to show a default message.',
+  },
   deleteCourse: {
     id: 'course.admin.CourseSettings.deleteCourse',
     defaultMessage: 'Delete course',

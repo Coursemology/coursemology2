@@ -59,6 +59,12 @@
   "app.ErrorPage.notFoundSubtitle": {
     "defaultMessage": "Check if you've typed the correct address, try again later, or <home>go back home</home>."
   },
+  "app.ErrorPage.suspended": {
+    "defaultMessage": "Your access to this course has been suspended."
+  },
+  "app.ErrorPage.suspendedSubtitle": {
+    "defaultMessage": "Please contact your instructors or the course staff."
+  },
   "app.Footer.contactUs": {
     "defaultMessage": "Contact Us"
   },
@@ -755,6 +761,15 @@
   },
   "course.admin.CourseSettings.stragglersDescription": {
     "defaultMessage": "Leave no one behind; subsequent closing reference timings will be pushed back if students complete their assessments late."
+  },
+  "course.admin.CourseSettings.suspension": {
+    "defaultMessage": "Account suspension"
+  },
+  "course.admin.CourseSettings.suspensionMessage": {
+    "defaultMessage": "Suspension message"
+  },
+  "course.admin.CourseSettings.suspensionMessageDescription": {
+    "defaultMessage": "This message will be shown to users whose access to this course has been suspended. Leave blank to show a default message."
   },
   "course.admin.CourseSettings.timeSettings": {
     "defaultMessage": "Time settings"

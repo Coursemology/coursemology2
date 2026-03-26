@@ -59,6 +59,12 @@
   "app.ErrorPage.notFoundSubtitle": {
     "defaultMessage": "주소를 올바르게 입력했는지 확인하고, 나중에 다시 시도하거나, <home>홈으로 돌아가기</home>를 클릭하세요."
   },
+  "app.ErrorPage.suspended": {
+    "defaultMessage": "이 과정에 대한 접근이 정지되었습니다."
+  },
+  "app.ErrorPage.suspendedSubtitle": {
+    "defaultMessage": "강사 또는 과정 담당자에게 문의하세요."
+  },
   "app.Footer.contactUs": {
     "defaultMessage": "문의하기"
   },
@@ -754,6 +760,15 @@
   },
   "course.admin.CourseSettings.stragglersDescription": {
     "defaultMessage": "뒤처진 학생을 위해 다음 폐쇄 참조 시간이 연기됩니다."
+  },
+  "course.admin.CourseSettings.suspension": {
+    "defaultMessage": "계정 정지"
+  },
+  "course.admin.CourseSettings.suspensionMessage": {
+    "defaultMessage": "정지 메시지"
+  },
+  "course.admin.CourseSettings.suspensionMessageDescription": {
+    "defaultMessage": "이 메시지는 이 과정에 대한 접근이 정지된 사용자에게 표시됩니다. 기본 메시지를 표시하려면 비워 두세요."
   },
   "course.admin.CourseSettings.timeSettings": {
     "defaultMessage": "시간 설정"

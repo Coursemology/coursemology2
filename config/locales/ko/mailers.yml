@@ -100,6 +100,18 @@ ko:
         subject: '강좌 등록 요청이 거부되었습니다 - %{course}'
         message: >
           %{coursemology}에서 %{course} 강좌에 대한 귀하의 등록 요청이 거부되었습니다!
+      user_suspended_email:
+        subject: '%{course}에서 정지됨'
+        message: >
+          %{coursemology}의 %{course} 강좌에 대한 접근이 정지되었습니다.
+        default_suspension_message: >
+          강사 또는 강좌 스태프에게 문의하시기 바랍니다.
+      user_unsuspended_email:
+        subject: '%{course}의 정지 해제'
+        message: >
+          %{coursemology}의 %{course} 강좌에 대한 접근이 복원되었습니다.
+
+          이제 강좌에 다시 접근할 수 있습니다.
   instance:
     mailer:
       user_added_email:

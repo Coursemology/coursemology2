@@ -100,6 +100,18 @@ zh:
         subject: '课程注册请求被拒绝 - %{course}'
         message: >
           你在%{coursemology}上关于%{course}的课程申请已被拒绝!
+      user_suspended_email:
+        subject: '已被暂停访问%{course}'
+        message: >
+          您在%{coursemology}上访问课程%{course}的权限已被暂停。
+        default_suspension_message: >
+          请联系您的讲师或课程工作人员。
+      user_unsuspended_email:
+        subject: '%{course}的暂停已解除'
+        message: >
+          您在%{coursemology}上访问课程%{course}的权限已恢复。
+
+          您现在可以重新访问该课程。
 
   instance:
     mailer:
