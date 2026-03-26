@@ -1,19 +1,33 @@
 import { ReactNode } from 'react';
 import { defineMessages } from 'react-intl';
-import { LoaderFunction, redirect, useLoaderData } from 'react-router-dom';
+import {
+  LoaderFunction,
+  redirect,
+  useLoaderData,
+  useNavigate,
+} from 'react-router-dom';
 import { Typography } from '@mui/material';
 import forbiddenIllustration from 'assets/forbidden-illustration.svg?url';
 import notFoundIllustration from 'assets/not-found-illustration.svg?url';
 
+import { loadCourse } from 'course/courses/operations';
+import { getCourseEntity } from 'course/courses/selectors';
 import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 import {
   Attributions,
   useSetAttributions,
 } from 'lib/components/wrappers/AttributionsProvider';
-import { getForbiddenSourceURL } from 'lib/hooks/router/redirect';
+import { getCourseIdFromString } from 'lib/helpers/url-helpers';
+import {
+  getForbiddenSourceURL,
+  getSuspendedSourceURL,
+} from 'lib/hooks/router/redirect';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import toast from 'lib/hooks/toast/toast';
 import useEffectOnce from 'lib/hooks/useEffectOnce';
 import useTranslation from 'lib/hooks/useTranslation';
+import courseTranslations from 'lib/translations/course';
 
 const translations = defineMessages({
   notFound: {
@@ -46,6 +60,10 @@ const translations = defineMessages({
     defaultMessage:
       'Graphic of an astronaut floating in space is created by <author>Storyset</author> from ' +
       '<source>www.storyset.com</source>, with modifications.',
+  },
+  suspended: {
+    id: 'app.ErrorPage.suspended',
+    defaultMessage: 'Your access to this course has been suspended.',
   },
   error: {
     id: 'app.ErrorPage.error',
@@ -210,7 +228,80 @@ const forbiddenPageLoader: LoaderFunction = async ({ request }) => {
   return sourceURL;
 };
 
+const SuspendedPage = (): JSX.Element => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const { courseId, sourceURL } = useLoaderData() as {
+    courseId: string;
+    sourceURL: string | null;
+  };
+
+  const dispatch = useAppDispatch();
+  const course = useAppSelector((state) => getCourseEntity(state, +courseId!));
+
+  useEffectOnce(() => {
+    if (sourceURL) window.history.replaceState(null, '', sourceURL);
+    if (courseId) {
+      dispatch(loadCourse(+courseId))
+        .then(({ course: courseResponse }) => {
+          if (!courseResponse.isSuspendedUser) {
+            navigate(sourceURL ?? `/courses/${courseId}`, { replace: true });
+          }
+        })
+        .catch(() => toast.error(t(courseTranslations.fetchCourseFailure)));
+    }
+  });
+
+  return (
+    <ErrorPage
+      attributions={[
+        {
+          name: 'Forbidden illustration',
+          content: t(translations.forbiddenIllustrationAttribution, {
+            author: (chunk) => (
+              <Link
+                color="inherit"
+                external
+                href="https://storyset.com/people"
+                variant="caption"
+              >
+                {chunk}
+              </Link>
+            ),
+            source: (chunk) => (
+              <Link
+                color="inherit"
+                external
+                href="https://storyset.com"
+                variant="caption"
+              >
+                {chunk}
+              </Link>
+            ),
+          }),
+        },
+      ]}
+      illustrationAlt="Forbidden illustration"
+      illustrationSrc={forbiddenIllustration}
+      subtitle={course?.suspensionMessage ?? t(courseTranslations.suspendedSubtitle)}
+      tip={sourceURL}
+      title={t(translations.suspended)}
+    />
+  );
+};
+
+const suspendedPageLoader: LoaderFunction = async ({ request }) => {
+  const sourceURL = getSuspendedSourceURL(request.url);
+  if (!sourceURL) return redirect('/');
+  const courseId = getCourseIdFromString(sourceURL);
+  if (!courseId) return redirect('/');
+
+  return { sourceURL, courseId };
+};
+
 export default {
   NotFound: NotFoundPage,
   Forbidden: Object.assign(ForbiddenPage, { loader: forbiddenPageLoader }),
+  Suspended: Object.assign(SuspendedPage, { loader: suspendedPageLoader }),
 };

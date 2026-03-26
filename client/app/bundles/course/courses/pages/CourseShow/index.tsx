@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { defineMessages } from 'react-intl';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { CourseEntity } from 'types/course/courses';
 
@@ -10,6 +10,8 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
+import useTranslation from 'lib/hooks/useTranslation';
+import courseTranslations from 'lib/translations/course';
 
 import CourseAnnouncements from '../../components/misc/CourseAnnouncements';
 import CourseEnrolOptions from '../../components/misc/CourseEnrolOptions';
@@ -18,13 +20,7 @@ import PendingTodosTable from '../../components/tables/PendingTodosTable';
 import { loadCourse } from '../../operations';
 import { getCourseEntity } from '../../selectors';
 
-type Props = WrappedComponentProps;
-
 const translations = defineMessages({
-  fetchCourseFailure: {
-    id: 'course.courses.CourseShow.fetchCourseFailure',
-    defaultMessage: 'Failed to fetch information of the course.',
-  },
   descriptionHeader: {
     id: 'course.courses.CourseShow.descriptionHeader',
     defaultMessage: 'Description',
@@ -42,20 +38,27 @@ const getShouldShowEnrolOptions = (course: CourseEntity): boolean => {
   return info.isDisplayCodeForm || info.isEnrollable;
 };
 
-const CourseShow: FC<Props> = (props) => {
-  const { intl } = props;
+const CourseShow: FC = () => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { courseId } = useParams();
   const course = useAppSelector((state) => getCourseEntity(state, +courseId!));
 
   useEffect(() => {
     if (courseId) {
       dispatch(loadCourse(+courseId))
+        .then(({ course: courseResponse }) => {
+          if (courseResponse.isSuspendedUser) {
+            navigate(
+              `/suspended?from=${encodeURIComponent(window.location.href)}`,
+              { replace: true },
+            );
+          }
+        })
         .finally(() => setIsLoading(false))
-        .catch(() =>
-          toast.error(intl.formatMessage(translations.fetchCourseFailure)),
-        );
+        .catch(() => toast.error(t(courseTranslations.fetchCourseFailure)));
     }
   }, [dispatch, courseId]);
 
@@ -80,7 +83,7 @@ const CourseShow: FC<Props> = (props) => {
           {course.description.trim() && (
             <section className="space-y-2">
               <Typography variant="h6">
-                {intl.formatMessage(translations.descriptionHeader)}
+                {t(translations.descriptionHeader)}
               </Typography>
 
               <UserHTMLText
@@ -93,7 +96,7 @@ const CourseShow: FC<Props> = (props) => {
 
           <section className="space-y-2">
             <Typography variant="h6">
-              {intl.formatMessage(translations.instructorsHeader)}
+              {t(translations.instructorsHeader)}
             </Typography>
 
             <div className="-m-4 flex flex-wrap">
@@ -146,4 +149,4 @@ const CourseShow: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(CourseShow);
+export default CourseShow;

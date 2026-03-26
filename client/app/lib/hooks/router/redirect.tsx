@@ -45,11 +45,22 @@ export const redirectToForbidden = (): void => {
   window.location.href = getForbiddenURL();
 };
 
+export const redirectToSuspended = (): void => {
+  const url = new URL('/suspended', window.location.origin);
+  url.searchParams.append(FORBIDDEN_SOURCE_URL_SEARCH_PARAM, getCurrentURL());
+  window.location.href = url.pathname + url.search;
+};
+
 export const redirectToNotFound = (): void => {
   window.location.href = '/404';
 };
 
 export const getForbiddenSourceURL = (rawURL: string): string | null => {
+  const url = new URL(rawURL);
+  return url.searchParams.get(FORBIDDEN_SOURCE_URL_SEARCH_PARAM);
+};
+
+export const getSuspendedSourceURL = (rawURL: string): string | null => {
   const url = new URL(rawURL);
   return url.searchParams.get(FORBIDDEN_SOURCE_URL_SEARCH_PARAM);
 };
