@@ -6,10 +6,10 @@
  *
  * Taken from http://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js
  */
-function getUrlParameter(sParam) {
+function getUrlParameter(sParam: string): string {
   const sPageURL = decodeURIComponent(window.location.search.substring(1));
   const sURLVariables = sPageURL.split('&');
-  let sParameterName;
+  let sParameterName: string[];
 
   for (let i = 0; i < sURLVariables.length; i++) {
     sParameterName = sURLVariables[i].split('=');
@@ -21,144 +21,128 @@ function getUrlParameter(sParam) {
   return '';
 }
 
+function getCourseIdFromString(str: string): string | null {
+  const match = str.match(/\/courses\/(\d+)/);
+  return match?.[1] ?? null;
+}
+
 /**
  * Get the course id from URL.
- *
- * return {number}
  */
-function getCourseId() {
-  const match = window.location.pathname.match(/^\/courses\/(\d+)/);
-  return match && match[1];
+function getCourseId(): string | null {
+  return getCourseIdFromString(window.location.pathname);
 }
 
 /**
  * Get the survey id from URL.
- *
- * return {number}
  */
-function getSurveyId() {
+function getSurveyId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/surveys\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the achievement id from URL.
- *
- * return {number}
  */
-function getAchievementId() {
+function getAchievementId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/achievements\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the assessment id from URL.
- *
- * return {number}
  */
-function getAssessmentId() {
+function getAssessmentId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/assessments\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the (abstract) question id from URL.
- *
- * return {number}
  */
-function getQuestionId() {
+function getQuestionId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/assessments\/\d+\/question\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the submission id from URL.
- *
- * return {number}
  */
-function getSubmissionId() {
+function getSubmissionId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/assessments\/\d+\/submissions\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the scribing id from URL.
- *
- * return {number}
  */
-function getScribingId() {
+function getScribingId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/assessments\/\d+\/question\/scribing\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the video id from URL.
- *
- * @returns {number}
  */
-function getVideoId() {
+function getVideoId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/videos\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the course user id from URL.
- *
- * return {number}
  */
-function getCourseUserId() {
+function getCourseUserId(): string | null {
   const match = window.location.pathname.match(/^\/courses\/\d+\/users\/(\d+)/);
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
-function getSubmissionQuestionId() {
+function getSubmissionQuestionId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/assessments\/\d+\/submission_questions\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the video submission id from URL.
- *
- * return {number}
  */
-function getVideoSubmissionId() {
+function getVideoSubmissionId(): string | null {
   const match = window.location.pathname.match(
     /^\/courses\/\d+\/videos\/\d+\/submissions\/(\d+)/,
   );
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 /**
  * Get the current path from URL.
  *
  * e.g. /courses/15/users/invite
- * return {string}
  */
-function getCurrentPath() {
+function getCurrentPath(): string | null {
   const match = window.location.pathname.match(/(^\/courses\/\d+\/.+)/);
-  return match && match[1];
+  return match?.[1] ?? null;
 }
 
 export {
   getAchievementId,
   getAssessmentId,
   getCourseId,
+  getCourseIdFromString,
   getCourseUserId,
   getCurrentPath,
   getQuestionId,

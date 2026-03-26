@@ -12,6 +12,19 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
 
     before { controller_sign_in(controller, user) }
 
+    context 'when the user is a suspended student' do
+      run_rescue
+
+      let(:user) { create(:user) }
+      let!(:course_user) { create(:course_student, :suspended, course: course, user: user) }
+      subject { get :index, as: :json, params: { course_id: course } }
+
+      it 'returns 403 with the suspended flag' do
+        expect(subject).to have_http_status(:forbidden)
+        expect(JSON.parse(response.body)['is_suspended']).to be true
+      end
+    end
+
     describe '#show' do
       render_views
       subject { get :show, as: :json, params: { course_id: course, id: folder_stub } }

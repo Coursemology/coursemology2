@@ -56,6 +56,12 @@ class Course::Controller < ApplicationController
 
   private
 
+  def handle_access_denied(exception)
+    return super unless current_course_user&.is_suspended?
+
+    render json: { is_suspended: true, errors: exception.message }, status: :forbidden
+  end
+
   # Selects sidebar items of the given type.
   #
   # @param [nil|Symbol] type The type of sidebar items to return. This can be nil to retrieve all

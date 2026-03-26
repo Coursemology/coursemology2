@@ -15,7 +15,7 @@ json.instructors instructors do |instructor|
   json.imageUrl user_image(instructor)
 end
 
-if can?(:manage, current_course) || current_course.user?(current_user)
+if can?(:manage, current_course) || (current_course.user?(current_user) && !current_course_user&.is_suspended)
   # Announcements
   if @currently_active_announcements && !@currently_active_announcements.empty?
     json.currentlyActiveAnnouncements @currently_active_announcements do |announcement|
