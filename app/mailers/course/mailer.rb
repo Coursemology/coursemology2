@@ -134,6 +134,7 @@ class Course::Mailer < ApplicationMailer
       @course = course_user.course
     end
     @recipient = course_user.user
+    @suspension_message = @course.suspension_message.presence
 
     I18n.with_locale(@recipient.locale) do
       mail(to: @recipient.email, subject: t('.subject', course: @course.title))

@@ -59,6 +59,12 @@
   "app.ErrorPage.notFoundSubtitle": {
     "defaultMessage": "检查你输入的地址是否正确，请重试或者<home>返回主页</home>。"
   },
+  "app.ErrorPage.suspended": {
+    "defaultMessage": "您访问此课程的权限已被暂停。"
+  },
+  "app.ErrorPage.suspendedSubtitle": {
+    "defaultMessage": "请联系您的讲师或课程工作人员。"
+  },
   "app.Footer.contactUs": {
     "defaultMessage": "联系我们"
   },
@@ -754,6 +760,15 @@
   },
   "course.admin.CourseSettings.stragglersDescription": {
     "defaultMessage": "不让任何人掉队；如果学生延迟完成测验，随后的关闭参考时间将被推迟。"
+  },
+  "course.admin.CourseSettings.suspension": {
+    "defaultMessage": "账户暂停"
+  },
+  "course.admin.CourseSettings.suspensionMessage": {
+    "defaultMessage": "暂停消息"
+  },
+  "course.admin.CourseSettings.suspensionMessageDescription": {
+    "defaultMessage": "此消息将显示给访问此课程的权限已被暂停的用户。留空以显示默认消息。"
   },
   "course.admin.CourseSettings.timeSettings": {
     "defaultMessage": "时间设置"

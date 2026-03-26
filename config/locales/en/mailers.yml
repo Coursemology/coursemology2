@@ -105,8 +105,8 @@ en:
         subject: 'Suspended from %{course}'
         message: >
           Your access to the course %{course} on %{coursemology} has been suspended.
-
-          Please contact your instructor or the course staff.
+        default_suspension_message: >
+          Please contact your instructors or the course staff.
       user_unsuspended_email:
         subject: 'Suspension lifted for %{course}'
         message: >

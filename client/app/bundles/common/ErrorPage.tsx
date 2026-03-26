@@ -284,7 +284,9 @@ const SuspendedPage = (): JSX.Element => {
       ]}
       illustrationAlt="Forbidden illustration"
       illustrationSrc={forbiddenIllustration}
-      subtitle={course?.suspensionMessage ?? t(courseTranslations.suspendedSubtitle)}
+      subtitle={
+        course?.suspensionMessage ?? t(courseTranslations.suspendedSubtitle)
+      }
       tip={sourceURL}
       title={t(translations.suspended)}
     />

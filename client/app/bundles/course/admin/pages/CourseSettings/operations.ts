@@ -29,6 +29,7 @@ export const updateCourseSettings = async (
       published: data.published,
       enrollable: data.enrollable,
       enrol_auto_approve: data.enrolAutoApprove,
+      suspension_message: data.suspensionMessage,
       start_at: data.startAt,
       end_at: data.endAt,
       gamified: data.gamified,

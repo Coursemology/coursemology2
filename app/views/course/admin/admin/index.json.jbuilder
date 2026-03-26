@@ -13,3 +13,4 @@ json.defaultTimelineAlgorithm current_course.default_timeline_algorithm
 json.timeZone current_course.time_zone
 json.advanceStartAtDurationDays current_course.advance_start_at_duration_days
 json.canDelete can?(:destroy, current_course)
+json.suspensionMessage current_course.suspension_message unless current_course.suspension_message.blank?

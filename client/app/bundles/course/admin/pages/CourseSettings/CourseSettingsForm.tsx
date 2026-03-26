@@ -16,6 +16,7 @@ import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormRef } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
+import courseTranslations from 'lib/translations/course';
 
 import DeleteCoursePrompt from './DeleteCoursePrompt';
 import OffsetTimesPrompt from './OffsetTimesPrompt';
@@ -319,6 +320,27 @@ const CourseSettingsForm = forwardRef<
                     label={t(translations.daysInAdvance)}
                     type="number"
                     variant="filled"
+                  />
+                )}
+              />
+            </Subsection>
+          </Section>
+
+          <Section sticksToNavbar title={t(translations.suspension)}>
+            <Subsection
+              subtitle={t(translations.suspensionMessageDescription)}
+              title={t(translations.suspensionMessage)}
+            >
+              <Controller
+                control={control}
+                name="suspensionMessage"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormTextField
+                    disabled={props.disabled}
+                    field={field}
+                    fieldState={fieldState}
+                    fullWidth
+                    placeholder={t(courseTranslations.suspendedSubtitle)}
                   />
                 )}
               />
