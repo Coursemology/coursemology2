@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Button } from '@mui/material';
+import Hotkeys from 'react-hot-keys';
+import { FormattedMessage } from 'react-intl';
+import { Button, Tooltip } from '@mui/material';
 
 import { submitAnswer } from 'course/assessment/submission/actions/answers';
 import { getQuestionFlags } from 'course/assessment/submission/selectors/questionFlags';
@@ -47,25 +49,40 @@ const RunCodeButton: FC<Props> = (props) => {
     });
   };
 
+  const isDisabled =
+    isAutograding ||
+    isResetting ||
+    isSaving ||
+    (!graderView && attemptsLeft === 0);
+
   return (
-    <Button
-      className="mb-2 mr-2"
-      color="secondary"
-      disabled={
-        isAutograding ||
-        isResetting ||
-        isSaving ||
-        (!graderView && attemptsLeft === 0)
-      }
-      endIcon={isAutograding && <LoadingIndicator bare size={20} />}
-      id="run-code"
-      onClick={() => onSubmitAnswer()}
-      variant="contained"
-    >
-      {attemptLimit
-        ? t(translations.runCodeWithLimit, { attemptsLeft: attemptsLeft ?? '' })
-        : t(translations.runCode)}
-    </Button>
+    <>
+      <Hotkeys
+        disabled={isDisabled}
+        filter={() => true}
+        keyName="command+shift+enter,control+shift+enter"
+        onKeyDown={() => onSubmitAnswer()}
+      />
+      <Tooltip
+        title={<FormattedMessage {...translations.runCodeTooltip} />}
+      >
+        <Button
+          className="mb-2 mr-2"
+          color="secondary"
+          disabled={isDisabled}
+          endIcon={isAutograding && <LoadingIndicator bare size={20} />}
+          id="run-code"
+          onClick={() => onSubmitAnswer()}
+          variant="contained"
+        >
+          {attemptLimit
+            ? t(translations.runCodeWithLimit, {
+                attemptsLeft: attemptsLeft ?? '',
+              })
+            : t(translations.runCode)}
+        </Button>
+      </Tooltip>
+    </>
   );
 };
 
