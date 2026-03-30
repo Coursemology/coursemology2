@@ -4,4 +4,10 @@ class Course::Assessment::LiveFeedbackComment < ApplicationRecord
 
   validates :line_number, presence: true
   validates :comment, presence: true
+
+  before_save :sanitize_text
+
+  def sanitize_text
+    self.comment = ApplicationController.helpers.sanitize_ckeditor_rich_text(comment)
+  end
 end

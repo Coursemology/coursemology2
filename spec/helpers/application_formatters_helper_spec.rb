@@ -258,6 +258,59 @@ RSpec.describe ApplicationFormattersHelper do
         expect(helper.sanitize('<script/>')).to be_empty
       end
     end
+
+    describe '#sanitize_ckeditor_rich_text' do
+      it 'leaves plain text without combining marks unchanged' do
+        html = '<p>Hello World</p>'
+        expect(helper.sanitize_ckeditor_rich_text(html)).to include('Hello World')
+      end
+
+      it 'preserves single combining marks (normal accented characters)' do
+        html = "<p>Cafe\u0301 and Nin\u0303o</p>"
+        result = helper.sanitize_ckeditor_rich_text(html)
+        expect(result).to include("e\u0301") # é via combining mark
+        expect(result).to include("n\u0303") # ñ via combining mark
+      end
+
+      it 'preserves multiple combining marks' do
+        html = "<p>Ta\u0302\u0301t ca\u0309 mo\u0323i ngu\u031bo\u031b\u0300i sinh ra \u0111e\u0302\u0300u</p>"
+        result = helper.sanitize_ckeditor_rich_text(html)
+        expect(result).to include("\u0302\u0301") # 2 combining marks on 'a'
+        expect(result).to include("\u0309") # 1 combining mark on 'a'
+        expect(result).to include("\u0323") # 1 combining mark on 'o'
+        expect(result).to include("\u031b\u0300") # 2 combining marks on 'o'
+        expect(result).to include("\u0302\u0300") # 2 combining marks on 'e'
+      end
+
+      it 'preserves text with exactly 3 combining marks' do
+        html = "<p>e\u0300\u0301\u0302</p>"
+        result = helper.sanitize_ckeditor_rich_text(html)
+        expect(result).to match(/\p{M}{3}/)
+        expect(result).not_to match(/\p{M}{4}/)
+      end
+
+      it 'collapses 4 combining marks down to 3' do
+        html = "<p>e\u0300\u0301\u0302\u0303</p>"
+        result = helper.sanitize_ckeditor_rich_text(html)
+        expect(result).not_to match(/\p{M}{4,}/)
+        expect(result).to match(/e\p{M}{3}(?!\p{M})/)
+      end
+
+      it 'collapses Zalgo-style text with many combining marks down to 3' do
+        # 10 combining marks on a single base character
+        zalgo = "e#{(0x0300..0x0309).map { |cp| cp.chr(Encoding::UTF_8) }.join}"
+        html = "<p>#{zalgo}</p>"
+        result = helper.sanitize_ckeditor_rich_text(html)
+        expect(result).not_to match(/\p{M}{4,}/)
+      end
+
+      it 'handles multiple Zalgo sequences in the same text node' do
+        combining_run = (0x0300..0x0309).map { |cp| cp.chr(Encoding::UTF_8) }.join
+        html = "<p>a#{combining_run} and b#{combining_run}</p>"
+        result = helper.sanitize_ckeditor_rich_text(html)
+        expect(result).not_to match(/\p{M}{4,}/)
+      end
+    end
   end
 
   describe 'user display helper' do
