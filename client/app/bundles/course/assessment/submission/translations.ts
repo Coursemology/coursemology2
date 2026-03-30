@@ -56,7 +56,7 @@ const translations = defineMessages({
   },
   finalise: {
     id: 'course.assessment.submission.finalise',
-    defaultMessage: 'Finalise Submission',
+    defaultMessage: 'Finalise all answers',
   },
   unsubmit: {
     id: 'course.assessment.submission.unsubmit',
@@ -116,14 +116,19 @@ const translations = defineMessages({
     id: 'course.assessment.submission.submitShortcut',
     defaultMessage: '(Ctrl+Enter) or (⌘+Enter)',
   },
-  runCode: {
-    id: 'course.assessment.submission.runCode',
-    defaultMessage: 'Run Code',
+  checkAnswer: {
+    id: 'course.assessment.submission.checkAnswer',
+    defaultMessage: 'Check Answer',
   },
-  runCodeWithLimit: {
-    id: 'course.assessment.submission.runCodeWithLimit',
+  submitWithLimit: {
+    id: 'course.assessment.submission.submitWithLimit',
     defaultMessage:
-      'Run Code ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)',
+      'Submit ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)',
+  },
+  checkAnswerWithLimit: {
+    id: 'course.assessment.submission.checkAnswerWithLimit',
+    defaultMessage:
+      'Check Answer ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)',
   },
   reevaluate: {
     id: 'course.assessment.submission.reevaluate',
@@ -248,14 +253,14 @@ const translations = defineMessages({
   submitConfirmation: {
     id: 'course.assessment.submission.submitConfirmation',
     defaultMessage:
-      'THIS ACTION IS IRREVERSIBLE Are you sure you want to submit? \
-                    You will no longer be able to amend your submission!',
+      'After finalising, you will no longer be able to change your answers for this assessment. \
+      THIS ACTION IS IRREVERSIBLE! Are you sure you want to proceed?',
   },
   unsubmitConfirmation: {
     id: 'course.assessment.submission.unsubmitConfirmation',
     defaultMessage:
       'This will reset the submission time and permit the student to change \
-                    their submission. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?',
+                    their answers. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?',
   },
   submitError: {
     id: 'course.assessment.submission.submitError',

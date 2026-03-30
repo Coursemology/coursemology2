@@ -12,7 +12,6 @@ import { useAppSelector } from 'lib/hooks/store';
 import ContinueButton from './button/ContinueButton';
 import LiveFeedbackButton from './button/LiveFeedbackButton';
 import ResetAnswerButton from './button/ResetAnswerButton';
-import RunCodeButton from './button/RunCodeButton';
 import SubmitButton from './button/SubmitButton';
 
 interface Props {
@@ -37,14 +36,7 @@ const ActionButtonsRow: FC<Props> = (props) => {
 
   const leftAlignedButtons = [
     <ResetAnswerButton key="reset" questionId={questionId} />,
-    !assessment.autograded &&
-      question.type === questionTypes.Programming &&
-      question.autogradable && (
-        <RunCodeButton key="run-code" questionId={questionId} />
-      ),
-    assessment.autograded && (
-      <SubmitButton key="submit" questionId={questionId} />
-    ),
+    <SubmitButton key="submit" questionId={questionId} />,
     assessment.autograded && (
       <ContinueButton
         key="continue"

@@ -3586,7 +3586,7 @@
     "defaultMessage": "EXP Awarded"
   },
   "course.assessment.submission.finalise": {
-    "defaultMessage": "Finalise Submission"
+    "defaultMessage": "Finalise all answers"
   },
   "course.assessment.submission.forceSubmitConfirmation": {
     "defaultMessage": "There are currently {unattempted} unattempted and {attempting} attempting user(s) ({selectedUsers}) for this assessment. Are you sure you want to force submit all submissions? Doing so will cause all questions to be awarded ZERO marks for non-autograded assessments. NOTE THAT THIS ACTION IS IRREVERSIBLE!"
@@ -3774,11 +3774,14 @@
   "course.assessment.submission.resetConfirmation": {
     "defaultMessage": "Are you sure you want to reset your answer? This action is irreversible and you will lose all your current work for this question."
   },
-  "course.assessment.submission.runCode": {
-    "defaultMessage": "Run Code"
+  "course.assessment.submission.checkAnswer": {
+    "defaultMessage": "Check Answer"
   },
-  "course.assessment.submission.runCodeWithLimit": {
-    "defaultMessage": "Run Code ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)"
+  "course.assessment.submission.checkAnswerWithLimit": {
+    "defaultMessage": "Check Answer ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)"
+  },
+  "course.assessment.submission.submitWithLimit": {
+    "defaultMessage": "Submit ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)"
   },
   "course.assessment.submission.saveDraft": {
     "defaultMessage": "Save Draft"
@@ -3826,7 +3829,7 @@
     "defaultMessage": "Submissions: {assessment}"
   },
   "course.assessment.submission.submitConfirmation": {
-    "defaultMessage": "THIS ACTION IS IRREVERSIBLE Are you sure you want to submit? You will no longer be able to amend your submission!"
+    "defaultMessage": "After finalising, you will no longer be able to change your answers for this assessment. THIS ACTION IS IRREVERSIBLE! Are you sure you want to proceed?"
   },
   "course.assessment.submission.submitError": {
     "defaultMessage": "Failure to submit answer. Please check the errors for your answers"
@@ -3862,7 +3865,7 @@
     "defaultMessage": "Unsubmit Submission"
   },
   "course.assessment.submission.unsubmitAllConfirmation": {
-    "defaultMessage": "Are you sure you want to UNSUBMIT the submissions for all {users}? All submissions will be unsubmitted and this will reset the submission time and permit the users to change their submissions. NOTE THAT THIS ACTION IS IRREVERSIBLE"
+    "defaultMessage": "Are you sure you want to UNSUBMIT the submissions for all {users}? All submissions will be unsubmitted and this will reset the submission time and permit the users to change their answers. NOTE THAT THIS ACTION IS IRREVERSIBLE"
   },
   "course.assessment.submission.unsubmitAllSubmissionsJobPending": {
     "defaultMessage": "Please wait as the submissions are currently being unsubmitted."
@@ -3871,7 +3874,7 @@
     "defaultMessage": "All submissions above have been successfully unsubmitted."
   },
   "course.assessment.submission.unsubmitConfirmation": {
-    "defaultMessage": "This will reset the submission time and permit the student to change their submission. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?"
+    "defaultMessage": "This will reset the submission time and permit the student to change their answers. NOTE THAT YOU CANNOT UNDO THIS!! Are you sure you want to proceed?"
   },
   "course.assessment.submission.unsubmitSubmissionSuccess": {
     "defaultMessage": "{name}'s submission has been successfully unsubmitted."

@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 json.aiGradingEnabled question.ai_grading_enabled? if can_grade
+
+# TODO: Discuss flow to handle autograded rubric based response questions / decide when to auto-publish.
+# For now, this maintains existing behavior where students know answer submitted but not results until manually graded.
+json.autogradable false
 json.templateText question.template_text
 if can_grade || (@assessment.show_rubric_to_students? && answer.submission.published?)
   json.categories question.categories.each do |category|
