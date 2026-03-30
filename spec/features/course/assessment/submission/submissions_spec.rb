@@ -59,7 +59,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions', js: true do
           find('label', text: correct_option.option).click
           wait_for_autosave
 
-          click_button('Finalise Submission')
+          find('button[data-testid="FinaliseButton"]').click
           click_button('Continue')
           wait_for_page
 

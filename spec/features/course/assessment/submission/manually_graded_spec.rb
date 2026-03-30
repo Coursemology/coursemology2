@@ -90,7 +90,7 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
-        click_button('Finalise Submission')
+        find('button[data-testid="FinaliseButton"]').click
         accept_confirm_dialog do
           wait_for_job
         end
@@ -240,8 +240,8 @@ RSpec.describe 'Course: Assessment: Submissions: Manually Graded Assessments', j
         visit edit_course_assessment_submission_path(course, multiple_programming_assessment,
                                                      multiple_programming_submission)
 
-        # The Run Code button is only shown for the auto_gradable? questions
-        expect(page).to have_button('Run Code', exact_text: false, count: 2)
+        # The Submit / Check Answer button is only shown for the auto_gradable? questions
+        expect(page).to have_selector('button[data-testid="SubmitButton"]', count: 2)
       end
 
       scenario 'I see submitted programming answers with code tags' do

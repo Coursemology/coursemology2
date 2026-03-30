@@ -3573,7 +3573,7 @@
     "defaultMessage": "获得的经验值"
   },
   "course.assessment.submission.finalise": {
-    "defaultMessage": "完成提交"
+    "defaultMessage": "完成所有答案"
   },
   "course.assessment.submission.forceSubmitConfirmation": {
     "defaultMessage": "目前有 {unattempted} 位未尝试和 {attempting} 位尝试此测验的用户 ({selectedUsers})。你确定要强制提交所有吗？这样做会导致所有提交在非自动评分中获得0分。请注意，此操作不可逆！"
@@ -3752,11 +3752,14 @@
   "course.assessment.submission.resetConfirmation": {
     "defaultMessage": "你确定要重置你的答案吗？这个操作是不可逆的，你将失去你当前为这个问题所做的所有工作。"
   },
-  "course.assessment.submission.runCode": {
-    "defaultMessage": "运行代码"
+  "course.assessment.submission.checkAnswer": {
+    "defaultMessage": "检查答案"
   },
-  "course.assessment.submission.runCodeWithLimit": {
-    "defaultMessage": "运行代码（{attemptsLeft, plural, one {# attempt} other {# attempts}} left）"
+  "course.assessment.submission.checkAnswerWithLimit": {
+    "defaultMessage": "检查答案（{attemptsLeft, plural, one {# 次} other {# 次}}剩余）"
+  },
+  "course.assessment.submission.submitWithLimit": {
+    "defaultMessage": "提交（{attemptsLeft, plural, one {# 次} other {# 次}}剩余）"
   },
   "course.assessment.submission.saveDraft": {
     "defaultMessage": "保存草稿"
@@ -3804,7 +3807,7 @@
     "defaultMessage": "提交：{assessment}"
   },
   "course.assessment.submission.submitConfirmation": {
-    "defaultMessage": "此操作不可撤销 你确定要提交吗？你将无法再修改你的提交！"
+    "defaultMessage": "最终提交后，你将无法再更改此评估的答案。此操作不可撤销！你确定要继续吗？"
   },
   "course.assessment.submission.submitError": {
     "defaultMessage": "未能提交答案。请检查你的答案的错误"
@@ -3849,7 +3852,7 @@
     "defaultMessage": "以上所有提交均已成功取消提交。"
   },
   "course.assessment.submission.unsubmitConfirmation": {
-    "defaultMessage": "这将重置提交时间并允许学生更改他们的提交。请注意，此操作无法撤消！你确定要继续吗？"
+    "defaultMessage": "这将重置提交时间并允许学生更改他们的答案。请注意，此操作无法撤消！你确定要继续吗？"
   },
   "course.assessment.submission.unsubmitSubmissionSuccess": {
     "defaultMessage": "{name} 的提交已成功取消提交。"

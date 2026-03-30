@@ -23,7 +23,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
 
           answer_id = submission.answers.first.id
           find_field(name: "#{answer_id}.answer_text").set('Test')
-          click_button('Finalise Submission')
+          find('button[data-testid="FinaliseButton"]').click
           accept_confirm_dialog do
             wait_for_job
           end
