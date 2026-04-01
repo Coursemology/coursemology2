@@ -168,7 +168,7 @@ group :production do
   gem 'fog-aws', '>= 3.19'
   gem 'flamegraph'
   gem 'stackprof'
-  gem 'sidekiq'
+  gem 'sidekiq', '~> 7.3.10'
   gem 'sidekiq-cron'
   gem 'rollbar', '>= 1.5.3'
 
