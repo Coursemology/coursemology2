@@ -119,6 +119,7 @@ class ConfirmationDialog extends Component {
 
     return (
       <Dialog
+        className="z-modal"
         data-testid="ConfirmationDialog"
         disableEscapeKeyDown={disableCancelButton || disableConfirmButton}
         fullWidth
@@ -129,7 +130,6 @@ class ConfirmationDialog extends Component {
             : onCancel
         }
         open={open}
-        style={{ zIndex: 9999 }}
       >
         <DialogContent>
           <Typography variant="body2">{confirmationMessage}</Typography>
