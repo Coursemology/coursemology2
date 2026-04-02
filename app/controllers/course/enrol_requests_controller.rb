@@ -26,11 +26,11 @@ class Course::EnrolRequestsController < Course::ComponentController
   end
 
   def create_unauthenticated # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    unless verify_recaptcha
-      render json: { errors: { recaptcha: t('errors.user.registrations.verify_recaptcha_alert') } },
-             status: :unprocessable_entity
-      return
-    end
+    # unless verify_recaptcha
+    #   render json: { errors: { recaptcha: t('errors.user.registrations.verify_recaptcha_alert') } },
+    #          status: :unprocessable_entity
+    #   return
+    # end
 
     user_id = create_unauthenticated_params.to_i
     user = User.find_by(id: user_id)
