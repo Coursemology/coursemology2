@@ -57,7 +57,7 @@ class Course::Controller < ApplicationController
   private
 
   def handle_access_denied(exception)
-    return super unless current_course_user&.is_suspended?
+    return super unless current_course_user&.suspended_from_course?(current_ability)
 
     render json: { is_suspended: true, errors: exception.message }, status: :forbidden
   end

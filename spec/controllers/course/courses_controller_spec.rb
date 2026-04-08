@@ -42,6 +42,7 @@ RSpec.describe Course::CoursesController, type: :controller do
 
       context 'when the user is a suspended student' do
         before { controller_sign_in(controller, user) }
+        let(:course) { create(:course, published: true, user_suspension_message: 'You are suspended.') }
         let!(:course_user) { create(:course_student, :suspended, course: course, user: user) }
 
         it { is_expected.to have_http_status(:ok) }
@@ -54,6 +55,48 @@ RSpec.describe Course::CoursesController, type: :controller do
         it 'includes the suspension message in the response body' do
           subject
           expect(JSON.parse(response.body).fetch('course')).to have_key('userSuspensionMessage')
+        end
+      end
+
+      context 'when the course is suspended and the user is a student' do
+        before { controller_sign_in(controller, user) }
+        let(:course) do
+          create(
+            :course,
+            published: true,
+            is_suspended: true,
+            course_suspension_message: 'This course is suspended.'
+          )
+        end
+        let!(:course_user) { create(:course_student, course: course, user: user) }
+
+        it { is_expected.to have_http_status(:ok) }
+
+        it 'sets isSuspended and isSuspendedUser in the response body' do
+          subject
+          course_data = JSON.parse(response.body).fetch('course')
+          expect(course_data['isSuspended']).to be true
+          expect(course_data['isSuspendedUser']).to be true
+        end
+
+        it 'includes the course suspension message in the response body' do
+          subject
+          expect(JSON.parse(response.body).fetch('course')).to have_key('courseSuspensionMessage')
+        end
+      end
+
+      context 'when the course is suspended and the user is a manager' do
+        before { controller_sign_in(controller, user) }
+        let(:course) { create(:course, published: true, is_suspended: true) }
+        let!(:course_user) { create(:course_manager, course: course, user: user) }
+
+        it { is_expected.to have_http_status(:ok) }
+
+        it 'sets isSuspended but not isSuspendedUser in the response body' do
+          subject
+          course_data = JSON.parse(response.body).fetch('course')
+          expect(course_data['isSuspended']).to be true
+          expect(course_data['isSuspendedUser']).to be false
         end
       end
 

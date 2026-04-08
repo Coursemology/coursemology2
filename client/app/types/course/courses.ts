@@ -74,6 +74,8 @@ export interface CourseEntity extends CourseMiniEntity {
   permissions: CourseDataPermissions;
   isSuspendedUser?: boolean;
   userSuspensionMessage?: string;
+  isSuspended: boolean;
+  courseSuspensionMessage?: string;
 }
 
 export interface NewCourseFormData {

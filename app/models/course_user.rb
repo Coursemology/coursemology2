@@ -213,6 +213,16 @@ class CourseUser < ApplicationRecord
     student? && !phantom
   end
 
+  # Test whether this course_user should be blocked from accessing the course.
+  # This can be either because the user is suspended, or the course itself is suspended.
+  # Users with manage permissions (managers, owners, site admins) are unaffected by suspension,
+  # since they need to be able to access the course to unsuspend it.
+  #
+  # @return [Boolean]
+  def suspended_from_course?(ability)
+    !!ability&.cannot?(:manage, course) && ((student? && course.is_suspended) || is_suspended)
+  end
+
   # Returns my students in the course.
   # If a course_user is the manager of a group, all other users in the group with the group role of
   # normal will be considered as the students of the course_user.

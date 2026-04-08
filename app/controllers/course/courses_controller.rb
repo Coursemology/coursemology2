@@ -10,7 +10,7 @@ class Course::CoursesController < Course::Controller
   def show
     head :unauthorized and return unless current_user.present? || current_course.published
 
-    return if current_course_user&.is_suspended? && cannot?(:manage, current_course)
+    return if current_course_user&.suspended_from_course?(current_ability)
 
     if can?(:manage, current_course) || current_course.user?(current_user)
       @currently_active_announcements = current_course.announcements.currently_active.includes(:creator)

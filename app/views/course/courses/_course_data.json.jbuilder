@@ -15,7 +15,8 @@ json.instructors instructors do |instructor|
   json.imageUrl user_image(instructor)
 end
 
-if can?(:manage, current_course) || (current_course.user?(current_user) && !current_course_user&.is_suspended)
+is_suspended_user = current_course_user&.suspended_from_course?(current_ability)
+if can?(:manage, current_course) || (current_course.user?(current_user) && !is_suspended_user)
   # Announcements
   if @currently_active_announcements && !@currently_active_announcements.empty?
     json.currentlyActiveAnnouncements @currently_active_announcements do |announcement|
@@ -55,7 +56,11 @@ if can?(:manage, current_course) || (current_course.user?(current_user) && !curr
   end
 end
 
-is_suspended_user = current_course_user&.is_suspended && cannot?(:manage, current_course)
+json.isSuspended current_course.is_suspended
 json.isSuspendedUser is_suspended_user
-json.courseSuspensionMessage current_course.course_suspension_message if current_course.is_suspended && !current_course.course_suspension_message.blank?
-json.userSuspensionMessage current_course.user_suspension_message if is_suspended_user && !current_course.user_suspension_message.blank?
+if current_course.is_suspended && !current_course.course_suspension_message.blank?
+  json.courseSuspensionMessage current_course.course_suspension_message
+end
+if is_suspended_user && !current_course.user_suspension_message.blank?
+  json.userSuspensionMessage current_course.user_suspension_message
+end
