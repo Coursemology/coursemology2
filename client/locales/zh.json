@@ -59,11 +59,14 @@
   "app.ErrorPage.notFoundSubtitle": {
     "defaultMessage": "检查你输入的地址是否正确，请重试或者<home>返回主页</home>。"
   },
-  "app.ErrorPage.suspended": {
+  "app.ErrorPage.userSuspended": {
     "defaultMessage": "您访问此课程的权限已被暂停。"
   },
   "app.ErrorPage.suspendedSubtitle": {
     "defaultMessage": "请联系您的讲师或课程工作人员。"
+  },
+  "app.ErrorPage.courseSuspended": {
+    "defaultMessage": "此课程已被暂停。"
   },
   "app.Footer.contactUs": {
     "defaultMessage": "联系我们"
@@ -762,13 +765,43 @@
     "defaultMessage": "不让任何人掉队；如果学生延迟完成测验，随后的关闭参考时间将被推迟。"
   },
   "course.admin.CourseSettings.suspension": {
-    "defaultMessage": "账户暂停"
+    "defaultMessage": "访问暂停"
   },
-  "course.admin.CourseSettings.suspensionMessage": {
-    "defaultMessage": "暂停消息"
+  "course.admin.CourseSettings.suspendCourse": {
+    "defaultMessage": "暂停课程"
   },
-  "course.admin.CourseSettings.suspensionMessageDescription": {
-    "defaultMessage": "此消息将显示给访问此课程的权限已被暂停的用户。留空以显示默认消息。"
+  "course.admin.CourseSettings.suspendCourseDescription": {
+    "defaultMessage": "被暂停的课程对所有学生不可访问。讲师仍可访问课程，所有学生数据将被保留。"
+  },
+  "course.admin.CourseSettings.unsuspendCourse": {
+    "defaultMessage": "解除课程暂停"
+  },
+  "course.admin.CourseSettings.courseSuspensionMessage": {
+    "defaultMessage": "课程暂停消息"
+  },
+  "course.admin.CourseSettings.courseSuspensionMessageDescription": {
+    "defaultMessage": "此消息将在课程暂停期间显示给用户。留空以显示默认消息。"
+  },
+  "course.admin.CourseSettings.suspendCoursePromptText": {
+    "defaultMessage": "确定要暂停此课程吗？所有学生将无法访问，直到暂停被解除。"
+  },
+  "course.admin.CourseSettings.suspendCourseSuccess": {
+    "defaultMessage": "此课程已被暂停。"
+  },
+  "course.admin.CourseSettings.suspendCourseFailure": {
+    "defaultMessage": "暂停课程时发生错误。"
+  },
+  "course.admin.CourseSettings.unsuspendCourseSuccess": {
+    "defaultMessage": "此课程的暂停已解除。"
+  },
+  "course.admin.CourseSettings.unsuspendCourseFailure": {
+    "defaultMessage": "解除课程暂停时发生错误。"
+  },
+  "course.admin.CourseSettings.userSuspensionMessage": {
+    "defaultMessage": "用户暂停消息"
+  },
+  "course.admin.CourseSettings.userSuspensionMessageDescription": {
+    "defaultMessage": "此消息将显示给访问此课程的权限已被暂停的个别用户。留空以显示默认消息。"
   },
   "course.admin.CourseSettings.timeSettings": {
     "defaultMessage": "时间设置"

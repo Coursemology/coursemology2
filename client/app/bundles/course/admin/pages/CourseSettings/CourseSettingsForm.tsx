@@ -6,6 +6,7 @@ import { CourseInfo, TimeOffset, TimeZones } from 'types/course/admin/course';
 import { getCourseLogoUrl } from 'course/helper';
 import AvatarSelector from 'lib/components/core/AvatarSelector';
 import RadioButton from 'lib/components/core/buttons/RadioButton';
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import InfoLabel from 'lib/components/core/InfoLabel';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
@@ -28,6 +29,8 @@ interface CourseSettingsFormProps {
   timeZones: TimeZones;
   onSubmit: (data: CourseInfo, timeOffset?: TimeOffset) => void;
   onDeleteCourse: () => void;
+  onSuspendCourse: () => void;
+  onUnsuspendCourse: () => void;
   onUploadCourseLogo: (image: File, onSuccess: () => void) => void;
   disabled: boolean;
 }
@@ -38,11 +41,13 @@ const CourseSettingsForm = forwardRef<
 >((props, ref): JSX.Element => {
   const { t } = useTranslation();
   const [offsetTimesPrompt, setOffsetTimesPrompt] = useState(false);
+  const [suspendingCourse, setSuspendingCourse] = useState(false);
   const [deletingCourse, setDeletingCourse] = useState(false);
   const [stagedLogo, setStagedLogo] = useState<File>();
 
   const closeOffsetTimesPrompt = (): void => setOffsetTimesPrompt(false);
   const closeDeleteCoursePrompt = (): void => setDeletingCourse(false);
+  const closeSuspendingCoursePrompt = (): void => setSuspendingCourse(false);
 
   const timeZonesOptions = useMemo(
     () =>
@@ -327,13 +332,72 @@ const CourseSettingsForm = forwardRef<
           </Section>
 
           <Section sticksToNavbar title={t(translations.suspension)}>
+            {props.data.canSuspendCourse && (
+              <>
+                <Typography variant="body2">
+                  {t(translations.suspendCourseDescription)}
+                </Typography>
+                {!props.data.isSuspended && (
+                  <Button
+                    color="warning"
+                    disabled={props.disabled}
+                    onClick={() => setSuspendingCourse(true)}
+                    variant="outlined"
+                  >
+                    {t(translations.suspendCourse)}
+                  </Button>
+                )}
+                <Prompt
+                  onClickPrimary={() => {
+                    props.onSuspendCourse();
+                    setSuspendingCourse(false);
+                  }}
+                  onClose={closeSuspendingCoursePrompt}
+                  open={suspendingCourse}
+                  primaryColor="warning"
+                  primaryLabel={t(translations.suspendCourse)}
+                >
+                  <PromptText>
+                    {t(translations.suspendCoursePromptText)}
+                  </PromptText>
+                </Prompt>
+                {props.data.isSuspended && (
+                  <Button
+                    color="warning"
+                    disabled={props.disabled}
+                    onClick={props.onUnsuspendCourse}
+                    variant="outlined"
+                  >
+                    {t(translations.unsuspendCourse)}
+                  </Button>
+                )}
+                <Subsection
+                  subtitle={t(translations.courseSuspensionMessageDescription)}
+                  title={t(translations.courseSuspensionMessage)}
+                >
+                  <Controller
+                    control={control}
+                    name="courseSuspensionMessage"
+                    render={({ field, fieldState }): JSX.Element => (
+                      <FormTextField
+                        disabled={props.disabled}
+                        field={field}
+                        fieldState={fieldState}
+                        fullWidth
+                        placeholder={t(courseTranslations.suspendedSubtitle)}
+                      />
+                    )}
+                  />
+                </Subsection>
+              </>
+            )}
             <Subsection
-              subtitle={t(translations.suspensionMessageDescription)}
-              title={t(translations.suspensionMessage)}
+              subtitle={t(translations.userSuspensionMessageDescription)}
+              title={t(translations.userSuspensionMessage)}
             >
               <Controller
                 control={control}
-                name="suspensionMessage"
+                name="userSuspensionMessage"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
                     disabled={props.disabled}

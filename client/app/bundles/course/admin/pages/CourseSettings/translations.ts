@@ -154,19 +154,6 @@ export default defineMessages({
     id: 'course.admin.CourseSettings.daysInAdvance',
     defaultMessage: 'Days in advance',
   },
-  suspension: {
-    id: 'course.admin.CourseSettings.suspension',
-    defaultMessage: 'Account suspension',
-  },
-  suspensionMessage: {
-    id: 'course.admin.CourseSettings.suspensionMessage',
-    defaultMessage: 'Suspension message',
-  },
-  suspensionMessageDescription: {
-    id: 'course.admin.CourseSettings.suspensionMessageDescription',
-    defaultMessage:
-      'This message will be shown to users whose access to this course has been suspended. Leave blank to show a default message.',
-  },
   deleteCourse: {
     id: 'course.admin.CourseSettings.deleteCourse',
     defaultMessage: 'Delete course',
@@ -221,6 +208,62 @@ export default defineMessages({
   invalidTimeFormat: {
     id: 'course.admin.CourseSettings.invalidTimeFormat',
     defaultMessage: 'Invalid Date and/or Time',
+  },
+  suspension: {
+    id: 'course.admin.CourseSettings.suspension',
+    defaultMessage: 'Access suspension',
+  },
+  suspendCourse: {
+    id: 'course.admin.CourseSettings.suspendCourse',
+    defaultMessage: 'Suspend course',
+  },
+  suspendCourseDescription: {
+    id: 'course.admin.CourseSettings.suspendCourseDescription',
+    defaultMessage:
+      'A suspended course is inaccessible to all students. Instructors can still access the course and all student data will be retained.',
+  },
+  unsuspendCourse: {
+    id: 'course.admin.CourseSettings.unsuspendCourse',
+    defaultMessage: 'Unsuspend course',
+  },
+  courseSuspensionMessage: {
+    id: 'course.admin.CourseSettings.courseSuspensionMessage',
+    defaultMessage: 'Course suspension message',
+  },
+  courseSuspensionMessageDescription: {
+    id: 'course.admin.CourseSettings.courseSuspensionMessageDescription',
+    defaultMessage:
+      'This message will be shown to users while this course is suspended. Leave blank to show a default message.',
+  },
+  suspendCoursePromptText: {
+    id: 'course.admin.CourseSettings.suspendCoursePromptText',
+    defaultMessage:
+      'Are you sure you want to suspend this course? All students will not be able to access it until it is unsuspended.',
+  },
+  suspendCourseSuccess: {
+    id: 'course.admin.CourseSettings.suspendCourseSuccess',
+    defaultMessage: 'This course has been suspended.',
+  },
+  suspendCourseFailure: {
+    id: 'course.admin.CourseSettings.suspendCourseFailure',
+    defaultMessage: 'An error occurred while suspending this course.',
+  },
+  unsuspendCourseSuccess: {
+    id: 'course.admin.CourseSettings.unsuspendCourseSuccess',
+    defaultMessage: 'This course has been unsuspended.',
+  },
+  unsuspendCourseFailure: {
+    id: 'course.admin.CourseSettings.unsuspendCourseFailure',
+    defaultMessage: 'An error occurred while unsuspending this course.',
+  },
+  userSuspensionMessage: {
+    id: 'course.admin.CourseSettings.userSuspensionMessage',
+    defaultMessage: 'User suspension message',
+  },
+  userSuspensionMessageDescription: {
+    id: 'course.admin.CourseSettings.userSuspensionMessageDescription',
+    defaultMessage:
+      'This message will be shown to users whose access to this course has been suspended. Leave blank to show a default message.',
   },
   deleteCoursePromptAction: {
     id: 'course.admin.CourseSettingst.deleteCoursePromptAction',

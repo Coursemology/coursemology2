@@ -61,9 +61,13 @@ const translations = defineMessages({
       'Graphic of an astronaut floating in space is created by <author>Storyset</author> from ' +
       '<source>www.storyset.com</source>, with modifications.',
   },
-  suspended: {
-    id: 'app.ErrorPage.suspended',
+  userSuspended: {
+    id: 'app.ErrorPage.userSuspended',
     defaultMessage: 'Your access to this course has been suspended.',
+  },
+  courseSuspended: {
+    id: 'app.ErrorPage.courseSuspended',
+    defaultMessage: 'This course has been suspended.',
   },
   error: {
     id: 'app.ErrorPage.error',
@@ -285,10 +289,10 @@ const SuspendedPage = (): JSX.Element => {
       illustrationAlt="Forbidden illustration"
       illustrationSrc={forbiddenIllustration}
       subtitle={
-        course?.suspensionMessage ?? t(courseTranslations.suspendedSubtitle)
+        course?.userSuspensionMessage ?? t(courseTranslations.suspendedSubtitle)
       }
       tip={sourceURL}
-      title={t(translations.suspended)}
+      title={t(translations.userSuspended)}
     />
   );
 };
