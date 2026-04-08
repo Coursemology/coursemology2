@@ -53,7 +53,7 @@ RSpec.describe Course::CoursesController, type: :controller do
 
         it 'includes the suspension message in the response body' do
           subject
-          expect(JSON.parse(response.body).fetch('course')).to have_key('suspensionMessage')
+          expect(JSON.parse(response.body).fetch('course')).to have_key('userSuspensionMessage')
         end
       end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_20_023538) do
+ActiveRecord::Schema[7.2].define(version: 2026_04_06_122130) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
@@ -1480,7 +1480,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_20_023538) do
     t.string "koditsu_workspace_id"
     t.uuid "ssid_folder_id"
     t.boolean "enrol_auto_approve", default: false, null: false
-    t.text "suspension_message"
+    t.text "user_suspension_message"
+    t.boolean "is_suspended", default: false, null: false
+    t.text "course_suspension_message"
     t.index ["creator_id"], name: "fk__courses_creator_id"
     t.index ["instance_id"], name: "fk__courses_instance_id"
     t.index ["registration_key"], name: "index_courses_on_registration_key", unique: true

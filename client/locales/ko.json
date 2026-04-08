@@ -59,11 +59,14 @@
   "app.ErrorPage.notFoundSubtitle": {
     "defaultMessage": "주소를 올바르게 입력했는지 확인하고, 나중에 다시 시도하거나, <home>홈으로 돌아가기</home>를 클릭하세요."
   },
-  "app.ErrorPage.suspended": {
+  "app.ErrorPage.userSuspended": {
     "defaultMessage": "이 과정에 대한 접근이 정지되었습니다."
   },
   "app.ErrorPage.suspendedSubtitle": {
     "defaultMessage": "강사 또는 과정 담당자에게 문의하세요."
+  },
+  "app.ErrorPage.courseSuspended": {
+    "defaultMessage": "이 과정은 현재 정지되어 있습니다."
   },
   "app.Footer.contactUs": {
     "defaultMessage": "문의하기"
@@ -762,13 +765,43 @@
     "defaultMessage": "뒤처진 학생을 위해 다음 폐쇄 참조 시간이 연기됩니다."
   },
   "course.admin.CourseSettings.suspension": {
-    "defaultMessage": "계정 정지"
+    "defaultMessage": "접근 정지"
   },
-  "course.admin.CourseSettings.suspensionMessage": {
-    "defaultMessage": "정지 메시지"
+  "course.admin.CourseSettings.suspendCourse": {
+    "defaultMessage": "과정 정지"
   },
-  "course.admin.CourseSettings.suspensionMessageDescription": {
-    "defaultMessage": "이 메시지는 이 과정에 대한 접근이 정지된 사용자에게 표시됩니다. 기본 메시지를 표시하려면 비워 두세요."
+  "course.admin.CourseSettings.suspendCourseDescription": {
+    "defaultMessage": "정지된 과정은 모든 학생이 접근할 수 없습니다. 강사는 과정에 계속 접근할 수 있으며 모든 학생 데이터는 보존됩니다."
+  },
+  "course.admin.CourseSettings.unsuspendCourse": {
+    "defaultMessage": "과정 정지 해제"
+  },
+  "course.admin.CourseSettings.courseSuspensionMessage": {
+    "defaultMessage": "과정 정지 메시지"
+  },
+  "course.admin.CourseSettings.courseSuspensionMessageDescription": {
+    "defaultMessage": "이 메시지는 과정이 정지된 동안 사용자에게 표시됩니다. 기본 메시지를 표시하려면 비워 두세요."
+  },
+  "course.admin.CourseSettings.suspendCoursePromptText": {
+    "defaultMessage": "이 과정을 정지하시겠습니까? 정지가 해제될 때까지 모든 학생이 접근할 수 없게 됩니다."
+  },
+  "course.admin.CourseSettings.suspendCourseSuccess": {
+    "defaultMessage": "이 과정이 정지되었습니다."
+  },
+  "course.admin.CourseSettings.suspendCourseFailure": {
+    "defaultMessage": "과정을 정지하는 중 오류가 발생했습니다."
+  },
+  "course.admin.CourseSettings.unsuspendCourseSuccess": {
+    "defaultMessage": "이 과정의 정지가 해제되었습니다."
+  },
+  "course.admin.CourseSettings.unsuspendCourseFailure": {
+    "defaultMessage": "과정 정지를 해제하는 중 오류가 발생했습니다."
+  },
+  "course.admin.CourseSettings.userSuspensionMessage": {
+    "defaultMessage": "사용자 정지 메시지"
+  },
+  "course.admin.CourseSettings.userSuspensionMessageDescription": {
+    "defaultMessage": "이 메시지는 이 과정에 대한 접근이 정지된 개별 사용자에게 표시됩니다. 기본 메시지를 표시하려면 비워 두세요."
   },
   "course.admin.CourseSettings.timeSettings": {
     "defaultMessage": "시간 설정"

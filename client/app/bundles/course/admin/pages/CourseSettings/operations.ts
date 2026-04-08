@@ -29,7 +29,8 @@ export const updateCourseSettings = async (
       published: data.published,
       enrollable: data.enrollable,
       enrol_auto_approve: data.enrolAutoApprove,
-      suspension_message: data.suspensionMessage,
+      course_suspension_message: data.courseSuspensionMessage,
+      user_suspension_message: data.userSuspensionMessage,
       start_at: data.startAt,
       end_at: data.endAt,
       gamified: data.gamified,
@@ -66,6 +67,24 @@ export const updateCourseLogo = async (file: File): Promise<CourseInfo> => {
 export const deleteCourse = async (): Promise<void> => {
   try {
     await CourseAPI.admin.course.delete();
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const suspendCourse = async (): Promise<void> => {
+  try {
+    await CourseAPI.admin.course.suspend();
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
+export const unsuspendCourse = async (): Promise<void> => {
+  try {
+    await CourseAPI.admin.course.unsuspend();
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;

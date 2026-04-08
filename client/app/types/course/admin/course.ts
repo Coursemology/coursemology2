@@ -13,7 +13,10 @@ export interface CourseInfo {
   timeZone: string;
   advanceStartAtDurationDays: number;
   canDelete: boolean;
-  suspensionMessage?: string;
+  canSuspendCourse: boolean;
+  userSuspensionMessage?: string;
+  isSuspended: boolean;
+  courseSuspensionMessage?: string;
 }
 
 export interface CourseAdminItem {
@@ -39,7 +42,8 @@ export interface CourseInfoPostData {
     time_zone?: CourseInfo['timeZone'];
     advance_start_at_duration_days?: CourseInfo['advanceStartAtDurationDays'];
     time_offset?: TimeOffset;
-    suspension_message?: CourseInfo['suspensionMessage'];
+    course_suspension_message?: CourseInfo['courseSuspensionMessage'];
+    user_suspension_message?: CourseInfo['userSuspensionMessage'];
   };
 }
 

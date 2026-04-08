@@ -30,12 +30,28 @@ class Course::Admin::AdminController < Course::Admin::Controller
     end
   end
 
+  def suspend
+    authorize!(:manage, current_course)
+    current_course.update!(is_suspended: true)
+    head :no_content
+  end
+
+  def unsuspend
+    authorize!(:manage, current_course)
+    current_course.update!(is_suspended: false)
+    head :no_content
+  end
+
   private
 
   def course_setting_params
     params.require(:course).
-      permit(:title, :description, :published, :enrollable, :enrol_auto_approve, :start_at, :end_at, :logo, :gamified,
-             :show_personalized_timeline_features, :default_timeline_algorithm, :suspension_message,
+      permit(:title, :description,
+             :published, :enrollable, :enrol_auto_approve,
+             :start_at, :end_at,
+             :logo, :gamified,
+             :show_personalized_timeline_features, :default_timeline_algorithm,
+             :user_suspension_message, :course_suspension_message,
              :time_zone, :advance_start_at_duration_days)
   end
 
