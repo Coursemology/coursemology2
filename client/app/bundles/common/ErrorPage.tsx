@@ -243,6 +243,9 @@ const SuspendedPage = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
   const course = useAppSelector((state) => getCourseEntity(state, +courseId!));
+  const suspendedSubtitle = course?.isSuspended
+    ? course?.courseSuspensionMessage
+    : course?.userSuspensionMessage;
 
   useEffectOnce(() => {
     if (sourceURL) window.history.replaceState(null, '', sourceURL);
@@ -288,11 +291,13 @@ const SuspendedPage = (): JSX.Element => {
       ]}
       illustrationAlt="Forbidden illustration"
       illustrationSrc={forbiddenIllustration}
-      subtitle={
-        course?.userSuspensionMessage ?? t(courseTranslations.suspendedSubtitle)
-      }
+      subtitle={suspendedSubtitle ?? t(courseTranslations.suspendedSubtitle)}
       tip={sourceURL}
-      title={t(translations.userSuspended)}
+      title={
+        course?.isSuspended
+          ? t(translations.courseSuspended)
+          : t(translations.userSuspended)
+      }
     />
   );
 };

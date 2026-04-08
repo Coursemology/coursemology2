@@ -334,6 +334,67 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
+    describe '#suspended_from_course?' do
+      def ability_for(course_user)
+        Ability.new(course_user.user, course, course_user)
+      end
+
+      context 'when the course is not suspended' do
+        it 'returns false for an active student' do
+          expect(student.suspended_from_course?(ability_for(student))).to be false
+        end
+
+        it 'returns true for an individually suspended student' do
+          student.update!(is_suspended: true)
+          expect(student.suspended_from_course?(ability_for(student))).to be true
+        end
+
+        it 'returns false for an individually suspended manager' do
+          manager.update!(is_suspended: true)
+          expect(manager.suspended_from_course?(ability_for(manager))).to be false
+        end
+
+        it 'returns false for an individually suspended owner' do
+          course_owner.update!(is_suspended: true)
+          expect(course_owner.suspended_from_course?(ability_for(course_owner))).to be false
+        end
+
+        it 'returns true for an individually suspended teaching assistant' do
+          teaching_assistant.update!(is_suspended: true)
+          expect(teaching_assistant.suspended_from_course?(ability_for(teaching_assistant))).to be true
+        end
+
+        it 'returns true for an individually suspended observer' do
+          observer.update!(is_suspended: true)
+          expect(observer.suspended_from_course?(ability_for(observer))).to be true
+        end
+      end
+
+      context 'when the course is suspended' do
+        before { course.update!(is_suspended: true) }
+
+        it 'returns true for an active student' do
+          expect(student.suspended_from_course?(ability_for(student))).to be true
+        end
+
+        it 'returns false for a manager' do
+          expect(manager.suspended_from_course?(ability_for(manager))).to be false
+        end
+
+        it 'returns false for an owner' do
+          expect(course_owner.suspended_from_course?(ability_for(course_owner))).to be false
+        end
+
+        it 'returns false for a teaching assistant' do
+          expect(teaching_assistant.suspended_from_course?(ability_for(teaching_assistant))).to be false
+        end
+
+        it 'returns false for an observer' do
+          expect(observer.suspended_from_course?(ability_for(observer))).to be false
+        end
+      end
+    end
+
     describe '#latest_learning_rate_record' do
       it 'returns the latest learning rate record' do
         create(:learning_rate_record, course_user: student, learning_rate: 1)

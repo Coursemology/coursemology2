@@ -104,6 +104,75 @@ RSpec.describe Course::Admin::AdminController do
       end
     end
 
+    describe '#suspend' do
+      subject { patch :suspend, params: { course_id: course } }
+
+      context 'when the user is a Course Owner' do
+        let(:user) { create(:course_owner, course: course).user }
+
+        it 'suspends the course' do
+          subject
+          expect(course.reload.is_suspended).to be true
+        end
+      end
+
+      context 'when the user is a Course Manager' do
+        let(:user) { create(:course_manager, course: course).user }
+
+        it 'suspends the course' do
+          subject
+          expect(course.reload.is_suspended).to be true
+        end
+      end
+
+      context 'when the user is a Teaching Assistant' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the user is a Course Student' do
+        let(:user) { create(:course_student, course: course).user }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
+
+    describe '#unsuspend' do
+      let(:course) { create(:course, is_suspended: true) }
+      subject { patch :unsuspend, params: { course_id: course } }
+
+      context 'when the user is a Course Owner' do
+        let(:user) { create(:course_owner, course: course).user }
+
+        it 'unsuspends the course' do
+          subject
+          expect(course.reload.is_suspended).to be false
+        end
+      end
+
+      context 'when the user is a Course Manager' do
+        let(:user) { create(:course_manager, course: course).user }
+
+        it 'unsuspends the course' do
+          subject
+          expect(course.reload.is_suspended).to be false
+        end
+      end
+
+      context 'when the user is a Teaching Assistant' do
+        let(:user) { create(:course_teaching_assistant, course: course).user }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+
+      context 'when the user is a Course Student' do
+        let(:user) { create(:course_student, course: course).user }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
+
     describe '#destroy' do
       subject { delete :destroy, params: { course_id: course } }
       before { controller.instance_variable_set(:@course, course) }
