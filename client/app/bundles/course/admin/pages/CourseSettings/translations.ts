@@ -263,7 +263,7 @@ export default defineMessages({
   userSuspensionMessageDescription: {
     id: 'course.admin.CourseSettings.userSuspensionMessageDescription',
     defaultMessage:
-      'This message will be shown to users whose access to this course has been suspended. Leave blank to show a default message.',
+      'This message will be shown to individual users whose access to this course has been suspended. Leave blank to show a default message.',
   },
   deleteCoursePromptAction: {
     id: 'course.admin.CourseSettingst.deleteCoursePromptAction',

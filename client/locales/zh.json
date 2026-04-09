@@ -66,7 +66,7 @@
     "defaultMessage": "请联系您的讲师或课程工作人员。"
   },
   "app.ErrorPage.courseSuspended": {
-    "defaultMessage": "此课程已被暂停。"
+    "defaultMessage": "此课程已暂停。"
   },
   "app.Footer.contactUs": {
     "defaultMessage": "联系我们"
@@ -4141,6 +4141,15 @@
   },
   "course.courses.CourseAnnouncements.announcementHeader": {
     "defaultMessage": "公告"
+  },
+  "course.courses.CourseSuspendedAlert.header": {
+    "defaultMessage": "此课程已暂停。讲师仍可访问，但学生无法访问。"
+  },
+  "course.courses.CourseSuspendedAlert.canSuspendMessage": {
+    "defaultMessage": "您可以在{link}页面解除暂停。"
+  },
+  "course.courses.CourseSuspendedAlert.cannotSuspendMessage": {
+    "defaultMessage": "如果您认为这是错误，请联系课程管理员或所有者请其解除暂停。"
   },
   "course.courses.CourseDisplay.noCourse": {
     "defaultMessage": "还没有课程..."

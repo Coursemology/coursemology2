@@ -57,6 +57,7 @@ if can?(:manage, current_course) || (current_course.user?(current_user) && !is_s
 end
 
 json.isSuspended current_course.is_suspended
+json.canSuspendCourse can?(:manage, current_course)
 json.isSuspendedUser is_suspended_user
 if current_course.is_suspended && !current_course.course_suspension_message.blank?
   json.courseSuspensionMessage current_course.course_suspension_message

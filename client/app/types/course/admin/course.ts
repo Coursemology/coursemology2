@@ -13,7 +13,6 @@ export interface CourseInfo {
   timeZone: string;
   advanceStartAtDurationDays: number;
   canDelete: boolean;
-  canSuspendCourse: boolean;
   userSuspensionMessage?: string;
   isSuspended: boolean;
   courseSuspensionMessage?: string;

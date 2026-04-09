@@ -35,7 +35,7 @@ module Course::CourseAbilityComponent
   end
 
   def allow_registered_users_showing_course
-    can :read, Course, id: course.id unless course_user.is_suspended || course.is_suspended
+    can :read, Course, id: course.id unless course_user.is_suspended || (course.is_suspended && course_user.student?)
   end
 
   def allow_staff_show_course_users
