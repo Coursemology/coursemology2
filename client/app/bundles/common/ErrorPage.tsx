@@ -67,7 +67,7 @@ const translations = defineMessages({
   },
   courseSuspended: {
     id: 'app.ErrorPage.courseSuspended',
-    defaultMessage: 'This course has been suspended.',
+    defaultMessage: 'This course is suspended.',
   },
   error: {
     id: 'app.ErrorPage.error',

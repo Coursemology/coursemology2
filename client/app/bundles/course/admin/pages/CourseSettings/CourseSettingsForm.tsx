@@ -3,6 +3,7 @@ import { Controller } from 'react-hook-form';
 import { Button, Grid, RadioGroup, Typography } from '@mui/material';
 import { CourseInfo, TimeOffset, TimeZones } from 'types/course/admin/course';
 
+import CourseSuspendedAlert from 'course/courses/components/misc/CourseSuspendedAlert';
 import { getCourseLogoUrl } from 'course/helper';
 import AvatarSelector from 'lib/components/core/AvatarSelector';
 import RadioButton from 'lib/components/core/buttons/RadioButton';
@@ -332,65 +333,62 @@ const CourseSettingsForm = forwardRef<
           </Section>
 
           <Section sticksToNavbar title={t(translations.suspension)}>
-            {props.data.canSuspendCourse && (
-              <>
-                <Typography variant="body2">
-                  {t(translations.suspendCourseDescription)}
-                </Typography>
-                {!props.data.isSuspended && (
-                  <Button
-                    color="warning"
-                    disabled={props.disabled}
-                    onClick={() => setSuspendingCourse(true)}
-                    variant="outlined"
-                  >
-                    {t(translations.suspendCourse)}
-                  </Button>
-                )}
-                <Prompt
-                  onClickPrimary={() => {
-                    props.onSuspendCourse();
-                    setSuspendingCourse(false);
-                  }}
-                  onClose={closeSuspendingCoursePrompt}
-                  open={suspendingCourse}
-                  primaryColor="warning"
-                  primaryLabel={t(translations.suspendCourse)}
-                >
-                  <PromptText>
-                    {t(translations.suspendCoursePromptText)}
-                  </PromptText>
-                </Prompt>
-                {props.data.isSuspended && (
-                  <Button
-                    color="warning"
-                    disabled={props.disabled}
-                    onClick={props.onUnsuspendCourse}
-                    variant="outlined"
-                  >
-                    {t(translations.unsuspendCourse)}
-                  </Button>
-                )}
-                <Subsection
-                  subtitle={t(translations.courseSuspensionMessageDescription)}
-                  title={t(translations.courseSuspensionMessage)}
-                >
-                  <Controller
-                    control={control}
-                    name="courseSuspensionMessage"
-                    render={({ field, fieldState }): JSX.Element => (
-                      <FormTextField
-                        disabled={props.disabled}
-                        field={field}
-                        fieldState={fieldState}
-                        fullWidth
-                        placeholder={t(courseTranslations.suspendedSubtitle)}
-                      />
-                    )}
-                  />
-                </Subsection>
-              </>
+            <Typography variant="body2">
+              {t(translations.suspendCourseDescription)}
+            </Typography>
+            {props.data.isSuspended && (
+              <CourseSuspendedAlert canSuspendCourse />
             )}
+            {!props.data.isSuspended && (
+              <Button
+                color="warning"
+                disabled={props.disabled}
+                onClick={() => setSuspendingCourse(true)}
+                variant="outlined"
+              >
+                {t(translations.suspendCourse)}
+              </Button>
+            )}
+            <Prompt
+              onClickPrimary={() => {
+                props.onSuspendCourse();
+                setSuspendingCourse(false);
+              }}
+              onClose={closeSuspendingCoursePrompt}
+              open={suspendingCourse}
+              primaryColor="warning"
+              primaryLabel={t(translations.suspendCourse)}
+            >
+              <PromptText>{t(translations.suspendCoursePromptText)}</PromptText>
+            </Prompt>
+            {props.data.isSuspended && (
+              <Button
+                color="warning"
+                disabled={props.disabled}
+                onClick={props.onUnsuspendCourse}
+                variant="outlined"
+              >
+                {t(translations.unsuspendCourse)}
+              </Button>
+            )}
+            <Subsection
+              subtitle={t(translations.courseSuspensionMessageDescription)}
+              title={t(translations.courseSuspensionMessage)}
+            >
+              <Controller
+                control={control}
+                name="courseSuspensionMessage"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormTextField
+                    disabled={props.disabled}
+                    field={field}
+                    fieldState={fieldState}
+                    fullWidth
+                    placeholder={t(courseTranslations.suspendedSubtitle)}
+                  />
+                )}
+              />
+            </Subsection>
             <Subsection
               subtitle={t(translations.userSuspensionMessageDescription)}
               title={t(translations.userSuspensionMessage)}

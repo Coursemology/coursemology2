@@ -16,6 +16,7 @@ import courseTranslations from 'lib/translations/course';
 import CourseAnnouncements from '../../components/misc/CourseAnnouncements';
 import CourseEnrolOptions from '../../components/misc/CourseEnrolOptions';
 import CourseNotifications from '../../components/misc/CourseNotifications';
+import CourseSuspendedAlert from '../../components/misc/CourseSuspendedAlert';
 import PendingTodosTable from '../../components/tables/PendingTodosTable';
 import { loadCourse } from '../../operations';
 import { getCourseEntity } from '../../selectors';
@@ -72,6 +73,12 @@ const CourseShow: FC = () => {
 
   return (
     <Page className="space-y-5">
+      {course.isSuspended && (
+        <CourseSuspendedAlert
+          canSuspendCourse={course.canSuspendCourse}
+          linkToSettings
+        />
+      )}
       {!course.permissions.isCurrentCourseUser && (
         <>
           {getShouldShowEnrolOptions(course) && (
