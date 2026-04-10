@@ -76,7 +76,10 @@ module.exports = {
         test: /\.css$/,
         use: [
           'style-loader',
-          { loader: 'css-loader', options: { sourceMap: false } },
+          {
+            loader: 'css-loader',
+            options: { modules: false, sourceMap: false },
+          },
           'postcss-loader',
         ],
         include: cssIncludes.map((path) => resolve(__dirname, path)),
@@ -91,6 +94,8 @@ module.exports = {
               sourceMap: false,
               modules: {
                 localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+                namedExport: false,
+                exportLocalsConvention: 'as-is',
               },
             },
           },
