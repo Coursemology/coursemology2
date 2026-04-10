@@ -11,7 +11,6 @@ import Preload from 'lib/components/wrappers/Preload';
 import { CrumbPath, DataHandle } from 'lib/hooks/router/dynamicNest';
 import { redirectToNotFound } from 'lib/hooks/router/redirect';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
-import useTranslation from 'lib/hooks/useTranslation';
 
 import { actions as questionRubricsActions } from '../reducers/rubrics';
 import { getSelectedRubricData } from '../selectors/rubrics';

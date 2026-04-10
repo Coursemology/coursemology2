@@ -4,19 +4,19 @@ import {
   type EntityState,
   PayloadAction,
 } from '@reduxjs/toolkit';
-import shuffle from 'lodash-es/shuffle';
 
-import moment, { formatShortTime } from 'lib/moment';
+// import shuffle from 'lodash-es/shuffle';
+import { formatShortTime } from 'lib/moment';
 
 import {
   getLocalStorageValue,
   modifyLocalStorageValue,
   setLocalStorageValue,
 } from '../../localStorage/liveFeedbackChat/operations';
-import {
-  suggestionFixesMapping,
-  suggestionMapping,
-} from '../../suggestionTranslations';
+// import {
+//   suggestionFixesMapping,
+//   suggestionMapping,
+// } from '../../suggestionTranslations';
 import {
   AnswerFile,
   ChatSender,

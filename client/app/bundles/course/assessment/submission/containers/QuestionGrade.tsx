@@ -308,6 +308,10 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           />
         )}
 
+        {editable && isProgrammingQuestion && (
+          <ReevaluateButton questionId={questionId} />
+        )}
+
         {editable && isRubricBasedResponseAndAutogradable && (
           <div className="flex flex-row items-center">
             <ReevaluateButton questionId={questionId} />

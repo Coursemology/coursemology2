@@ -191,7 +191,7 @@
     "react-refresh": "^0.14.2",
     "redux-logger": "^3.0.6",
     "sass": "^1.76.0",
-    "sass-loader": "^14.1.0",
+    "sass-loader": "^16.0.7",
     "sharp": "^0.34.2",
     "style-loader": "^3.3.4",
     "svgo": "^3.3.3",
