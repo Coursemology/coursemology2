@@ -17,7 +17,7 @@ export interface RubricBasedResponseFieldData extends AnswerFieldBaseData {
 export interface RubricBasedResponseAnswerData extends AnswerBaseData {
   questionType: QuestionType.RubricBasedResponse;
   fields: RubricBasedResponseFieldData;
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };

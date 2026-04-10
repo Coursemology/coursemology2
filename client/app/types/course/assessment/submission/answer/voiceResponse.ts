@@ -15,7 +15,7 @@ export interface VoiceResponseFieldData extends AnswerFieldBaseData {
 export interface VoiceResponseAnswerData extends AnswerBaseData {
   questionType: QuestionType.VoiceResponse;
   fields: VoiceResponseFieldData;
-  explanation: {
+  explanation?: {
     correct: boolean | null;
     explanations: string[];
   };

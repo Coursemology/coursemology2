@@ -1,10 +1,11 @@
 import { dispatch } from 'store';
-import { render } from 'test-utils';
+import { act, render } from 'test-utils';
+import { QuestionType } from 'types/course/assessment/question';
+import { ScribingAnswerData } from 'types/course/assessment/submission/answer/scribing';
 
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
 
-import { setCanvasLoaded } from '../../../actions/answers/scribing';
-import actionTypes from '../../../constants';
+import { scribingActions } from '../../../reducers/scribing';
 
 const assessmentId = 1;
 const submissionId = 2;
@@ -43,25 +44,29 @@ const mockSubmission = {
       questionId: 1,
       scribing_answer: {
         answer_id: 23,
-        image_path: '/attachments/image1',
+        image_url: '/attachments/image1',
         scribbles: [],
         user_id: 10,
       },
-    },
+      questionType: QuestionType.Scribing,
+      createdAt: new Date(1494522137000).toISOString(),
+      clientVersion: 1494522137000,
+    } as ScribingAnswerData,
   ],
 };
 
 describe('ScribingView', () => {
   it('renders canvas', async () => {
-    dispatch({
-      type: actionTypes.FETCH_SUBMISSION_SUCCESS,
-      payload: mockSubmission,
-    });
+    await act(() =>
+      dispatch(scribingActions.initialize({ answers: mockSubmission.answers })),
+    );
 
     const loaded = true;
     const url = `/courses/${global.courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
 
-    dispatch(setCanvasLoaded(answerId, loaded));
+    await act(() =>
+      dispatch(scribingActions.setCanvasLoaded({ answerId, loaded })),
+    );
 
     const page = render(<ScribingView answerId={answerId} />, { at: [url] });
 
