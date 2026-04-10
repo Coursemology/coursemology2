@@ -9,7 +9,7 @@ import UserHTMLText from 'lib/components/core/UserHTMLText';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatFullDateTime } from 'lib/moment';
 
-import KnowledgeBaseSwitch from '../buttons/KnowledgeBaseSwitch';
+// import KnowledgeBaseSwitch from '../buttons/KnowledgeBaseSwitch';
 import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
   material: MaterialMiniEntity;
   isCurrentCourseStudent: boolean;
   isConcrete: boolean;
-  canManageKnowledgeBase: boolean;
+  // canManageKnowledgeBase: boolean;
 }
 
 const TableMaterialRow: FC<Props> = (props) => {
@@ -26,7 +26,7 @@ const TableMaterialRow: FC<Props> = (props) => {
     material,
     isCurrentCourseStudent,
     isConcrete,
-    canManageKnowledgeBase,
+    // canManageKnowledgeBase,
   } = props;
 
   return (

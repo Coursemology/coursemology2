@@ -1,5 +1,4 @@
 import { FC, memo, useState } from 'react';
-import { defineMessages } from 'react-intl';
 import {
   AddModeratorOutlined,
   RemoveModeratorOutlined,

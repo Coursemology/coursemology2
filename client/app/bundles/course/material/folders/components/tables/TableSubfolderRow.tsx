@@ -23,7 +23,7 @@ interface Props {
   subfolder: FolderMiniEntity;
   isCurrentCourseStudent: boolean;
   isConcrete: boolean;
-  canManageKnowledgeBase: boolean;
+  // canManageKnowledgeBase: boolean;
 }
 
 const translations = defineMessages({
@@ -45,7 +45,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
     subfolder,
     isCurrentCourseStudent,
     isConcrete,
-    canManageKnowledgeBase,
+    // canManageKnowledgeBase,
   } = props;
   const { t } = useTranslation();
 

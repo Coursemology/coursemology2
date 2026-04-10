@@ -172,7 +172,7 @@ const WorkbinTable: FC<Props> = (props) => {
           return (
             <TableSubfolderRow
               key={`subfolder-${subfolder.id}`}
-              canManageKnowledgeBase={canManageKnowledgeBase}
+              // canManageKnowledgeBase={canManageKnowledgeBase}
               currFolderId={currFolderId}
               isConcrete={isConcrete}
               isCurrentCourseStudent={isCurrentCourseStudent}
@@ -184,7 +184,7 @@ const WorkbinTable: FC<Props> = (props) => {
           return (
             <TableMaterialRow
               key={`material-${material.id}`}
-              canManageKnowledgeBase={canManageKnowledgeBase}
+              // canManageKnowledgeBase={canManageKnowledgeBase}
               currFolderId={currFolderId}
               isConcrete={isConcrete}
               isCurrentCourseStudent={isCurrentCourseStudent}
