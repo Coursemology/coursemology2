@@ -7,6 +7,7 @@
     "yarn": "^1.0.0"
   },
   "scripts": {
+    "clean-install": "yarn install --force --frozen-lockfile",
     "test": "TZ=Asia/Singapore yarn run jest",
     "testci": "TZ=Asia/Singapore yarn run jest --maxWorkers=4 --collectCoverage=true",
     "build:test": "export NODE_ENV=test && export BABEL_ENV=e2e-test && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
@@ -19,7 +20,7 @@
     "lint-tests": "eslint . --ext .test.js --ext .test.jsx --ext .test.ts --ext .test.tsx --cache",
     "lint": "yarn run lint-src && yarn run lint-tests && prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "lint-fix": "yarn run lint-src --fix && yarn run lint-tests --fix && prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "postinstall": "cd vendor/recorderjs && NODE_ENV=development yarn install",
+    "postinstall": "cd vendor/recorderjs && NODE_ENV=development yarn install --force --frozen-lockfile",
     "check-types": "tsc"
   },
   "cacheDirectories": [

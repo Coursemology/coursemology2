@@ -9,7 +9,7 @@ These commands should be run with the working directory `coursemology2/client` (
 1. Install javascript dependencies
 
    ```sh
-   yarn
+   yarn run clean-install
    ```
 
 2. Run the following command to initialize `.env` files over here
