@@ -80,7 +80,7 @@ commands:
       - run:
           name: Install client Yarn dependencies
           working_directory: client
-          command: yarn install
+          command: yarn run clean-install
 
       - save_cache:
           paths:
@@ -305,7 +305,7 @@ jobs:
           working_directory: tests
           command: |
             wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc >/dev/null
-            yarn install
+            yarn run clean-install
             yarn prepare
 
       - run:

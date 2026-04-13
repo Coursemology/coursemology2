@@ -9,6 +9,7 @@
     "nyc": "^18.0.0"
   },
   "scripts": {
+    "clean-install": "yarn install --force --frozen-lockfile",
     "prepare": "npx playwright install --with-deps",
     "test": "npx playwright test",
     "coverage": "npx nyc report --reporter=lcovonly --exclude-after-remap false"
