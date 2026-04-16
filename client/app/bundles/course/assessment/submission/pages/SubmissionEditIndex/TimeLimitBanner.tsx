@@ -88,7 +88,7 @@ const TimeLimitBanner: FC<Props> = (props) => {
   if (currentRemainingTime > 0) {
     TimeBanner = (
       <Banner
-        className="bg-red-700 text-white border-only-b-fuchsia-200 fixed top-0 right-0"
+        className="bg-red-700 text-white border-only-b-fuchsia-200 fixed top-0 right-0 z-dropdown"
         icon={<HourglassTop />}
       >
         <FormattedMessage
@@ -100,7 +100,7 @@ const TimeLimitBanner: FC<Props> = (props) => {
   } else {
     TimeBanner = (
       <Banner
-        className="bg-yellow-700 text-white border-only-b-fuchsia-200 fixed top-0 right-0"
+        className="bg-yellow-700 text-white border-only-b-fuchsia-200 fixed top-0 right-0 z-dropdown"
         icon={<HourglassTop />}
       >
         {currentBufferTime > 0 ? (
