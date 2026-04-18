@@ -44,10 +44,12 @@ RSpec.describe Course::EnrolRequest, type: :model do
       end
 
       context 'when a request is already approved' do
-        let!(:approved_request) { create(:course_enrol_request, :approved, course: course, user: user) }
+        let!(:approved_request) { create(:course_enrol_request, course: course, user: user) }
         subject { approved_request.destroy }
 
         it 'can be destroyed' do
+          approved_request.update(approve: true)
+          approved_request.reload
           subject
           expect(approved_request).to be_destroyed
         end
