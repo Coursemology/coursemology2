@@ -203,7 +203,7 @@
     "webpack": "^5.105.4",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.2.3",
-    "webpack-merge": "^5.10.0"
+    "webpack-merge": "^6.0.1"
   },
   "resolutions": {
     "cheerio": "1.0.0-rc.10",
