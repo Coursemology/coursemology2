@@ -8,6 +8,7 @@ import {
   PasswordPostData,
   ProfileData,
   ProfilePostData,
+  SignUpResponseData,
   UserBasicMiniEntity,
   UserCourseListData,
 } from 'types/users';
@@ -89,7 +90,8 @@ export default class UsersAPI extends BaseAPI {
     password: string,
     captchaResponse: string,
     invitation?: string,
-  ): APIResponse<{ id: number | null; confirmed: boolean }> {
+    enrolCourseId?: number,
+  ): APIResponse<SignUpResponseData> {
     const formData = new FormData();
 
     formData.append('user[name]', name);
@@ -98,6 +100,7 @@ export default class UsersAPI extends BaseAPI {
     formData.append('user[password_confirmation]', password);
     formData.append('g-recaptcha-response', captchaResponse);
     if (invitation) formData.append('invitation', invitation);
+    if (enrolCourseId) formData.append('enrol_course_id', enrolCourseId.toString());
 
     return this.client.post(this.#urlPrefix, formData);
   }

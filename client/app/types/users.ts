@@ -1,4 +1,5 @@
 import { CourseUserRole } from './course/courseUsers';
+import { EnrolRequestListData } from './course/enrolRequests';
 
 export type UserRoles = 'normal' | 'administrator';
 
@@ -149,4 +150,10 @@ export interface InvitedSignUpData {
   courseId?: string;
   instanceName?: string;
   instanceHost?: string;
+}
+
+export interface SignUpResponseData {
+  id: number;
+  confirmed: boolean;
+  enrolRequest?: EnrolRequestListData;
 }

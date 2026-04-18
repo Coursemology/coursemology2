@@ -11,6 +11,9 @@ class Course::EnrolRequest < ApplicationRecord
     state :rejected
   end
 
+  before_save :auto_approve, if: -> { new_record? && course.enrol_auto_approve? }
+  after_commit :send_enrol_request_notifications, on: :create
+
   validate :validate_user_not_in_course, on: :create
   validates :course, presence: true
   validates :user, presence: true
@@ -33,7 +36,41 @@ class Course::EnrolRequest < ApplicationRecord
     false
   end
 
+  def create_course_user(course_user_params)
+    course_user = CourseUser.new(course_user_params.
+      reverse_merge(course: course, user_id: user_id,
+                    timeline_algorithm: course.default_timeline_algorithm))
+
+    course_user.save!
+    course_user
+  end
+
   private
+
+  def auto_approve
+    ActiveRecord::Base.transaction do
+      create_course_user(name: user.name, role: :student, creator: User.system, updater: User.system)
+
+      self.workflow_state = 'approved'
+      self.confirmed_at = Time.zone.now
+      self.confirmer = User.system
+      save!
+    end
+  end
+
+  def send_enrol_request_notifications
+    if approved?
+      Course::Mailer.user_added_email(
+        CourseUser.find_by(course: course, user: user),
+        requires_confirmation: !user.primary_email&.confirmed?
+      ).deliver_later
+    else
+      Course::Mailer.user_enrol_requested_email(self).deliver_later
+      Course::Mailer.user_enrol_request_received_email(
+        course, user, requires_confirmation: !user.primary_email&.confirmed?
+      ).deliver_later
+    end
+  end
 
   # Ensure that there are no enrol requests by users in the course.
   def validate_user_not_in_course

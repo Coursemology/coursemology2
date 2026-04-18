@@ -2,8 +2,7 @@
 class Course::EnrolRequestsController < Course::ComponentController
   include Signals::EmissionConcern
 
-  skip_authorize_resource :course, only: [:create, :destroy, :create_unauthenticated]
-  skip_load_and_authorize_resource :enrol_request, only: [:create_unauthenticated]
+  skip_authorize_resource :course, only: [:create, :destroy]
   load_and_authorize_resource :enrol_request, through: :course, class: 'Course::EnrolRequest'
 
   signals :enrol_requests, after: [:index, :approve, :reject]
@@ -14,63 +13,24 @@ class Course::EnrolRequestsController < Course::ComponentController
 
   def create
     @enrol_request.user = current_user
-    begin
-      respond_to do |format|
-        format.json do
-          render '_enrol_request_list_data', locals: { enrol_request: save_enrol_request(false) }, status: :ok
-        end
-      end
-    rescue StandardError => e
-      render json: { errors: e.message }, status: :bad_request
-    end
-  end
-
-  def create_unauthenticated # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    unless verify_recaptcha
-      render json: { errors: { recaptcha: t('errors.user.registrations.verify_recaptcha_alert') } },
-             status: :unprocessable_entity
-      return
-    end
-
-    user_id = create_unauthenticated_params.to_i
-    user = User.find_by(id: user_id)
-    head :not_found and return unless user
-
-    authorize!(:read, current_course) unless current_course.published
-
-    head :unauthorized and return if current_user && current_user.id != user_id
-    head :conflict and return unless user.emails.confirmed.empty?
-
-    @enrol_request = current_course.enrol_requests.new(user: user, creator: user, updater: user)
-    begin
-      respond_to do |format|
-        format.json do
-          render '_enrol_request_list_data', locals: { enrol_request: save_enrol_request(true) }, status: :ok
-        end
-      end
-    rescue StandardError => e
-      render json: { errors: e.message }, status: :bad_request
-    end
-  end
-
-  # Allow users to withdraw their requests to register for a course that are pending
-  # approval/rejection.
-  def destroy
-    if @enrol_request.validate_before_destroy && @enrol_request.destroy
-      head :ok
+    @enrol_request.course = current_course
+    if @enrol_request.save
+      render '_enrol_request_list_data', locals: { enrol_request: @enrol_request }
     else
-      render json: { errors: @enrol_request.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @enrol_request.errors }, status: :bad_request
     end
   end
 
   # Approve the given enrolment request and creates the course user.
   def approve
-    course_user = create_course_user
-    if course_user.persisted?
-      Course::Mailer.user_added_email(course_user).deliver_later
-      approve_success
-    else
-      approve_failure(course_user)
+    ActiveRecord::Base.transaction do
+      course_user = create_course_user
+      if course_user.persisted? && @enrol_request.update(approve: true)
+        Course::Mailer.user_added_email(course_user).deliver_later
+        approve_success
+      else
+        approve_failure(course_user)
+      end
     end
   end
 
@@ -85,61 +45,8 @@ class Course::EnrolRequestsController < Course::ComponentController
 
   private
 
-  def save_enrol_request(requires_confirmation)
-    raise StandardError, @enrol_request.errors.full_messages.to_sentence unless @enrol_request.save
-
-    if @enrol_request.course.enrol_auto_approve
-      handle_enrol_request_auto_approval(requires_confirmation)
-    else
-      Course::Mailer.user_enrol_requested_email(@enrol_request).deliver_later
-      Course::Mailer.user_enrol_request_received_email(
-        current_course, @enrol_request.user, requires_confirmation: requires_confirmation
-      ).deliver_later
-    end
-
-    @enrol_request.reload
-  end
-
-  def handle_enrol_request_auto_approval(requires_confirmation)
-    course_user = CourseUser.new(
-      course: current_course,
-      user_id: @enrol_request.user_id,
-      name: @enrol_request.user.name,
-      role: :student,
-      timeline_algorithm: current_course.default_timeline_algorithm,
-      creator: User.system,
-      updater: User.system
-    )
-    CourseUser.transaction do
-      course_user.save!
-      @enrol_request.update!(approve: true, confirmer: User.system)
-
-      Course::Mailer.user_added_email(course_user, requires_confirmation: requires_confirmation).deliver_later
-    end
-  end
-
-  def create_course_user
-    course_user = CourseUser.new(course_user_params.
-      reverse_merge(course: current_course, user_id: @enrol_request.user_id,
-                    timeline_algorithm: current_course.default_timeline_algorithm))
-
-    CourseUser.transaction do
-      raise ActiveRecord::Rollback unless course_user.save && @enrol_request.update(approve: true)
-    end
-
-    course_user
-  end
-
   def course_user_params
     params.require(:course_user).permit(:name, :role, :phantom, :timeline_algorithm).to_h
-  end
-
-  def publicly_accessible?
-    action_name.to_sym == :create_unauthenticated
-  end
-
-  def create_unauthenticated_params
-    params.required(:user_id)
   end
 
   # @return [Course::UsersComponent]

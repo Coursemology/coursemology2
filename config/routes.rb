@@ -392,7 +392,6 @@ Rails.application.routes.draw do
       end
 
       resources :enrol_requests, only: [:index, :create, :destroy] do
-        post :create_unauthenticated, on: :collection
         patch 'approve', on: :member
         patch 'reject', on: :member
       end

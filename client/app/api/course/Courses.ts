@@ -83,20 +83,6 @@ export default class CoursesAPI extends BaseCourseAPI {
   }
 
   /**
-   * Submits an enrol request for an unauthenticated user
-   */
-  submitUnauthenticatedEnrolRequest(
-    link: string,
-    user_id: number,
-    captcha_response: string | null,
-  ): APIResponse {
-    return this.client.post(link, {
-      user_id,
-      'g-recaptcha-response': captcha_response,
-    });
-  }
-
-  /**
    * Cancels a pending enrol request
    */
   cancelEnrolRequest(link: string): APIResponse {

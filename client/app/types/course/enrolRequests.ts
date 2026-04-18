@@ -18,7 +18,7 @@ export interface EnrolRequestListData {
   id: number;
   name: string;
   email: string;
-  status: string;
+  status: 'pending' | 'approved' | 'rejected';
   phantom: boolean;
   role?: CourseUserRole;
   timelineAlgorithm?: TimelineAlgorithm;
