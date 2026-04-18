@@ -19,7 +19,6 @@ RSpec.feature 'User: Profile', js: true do
         fill_in 'name', with: new_name
         select time_zone, from: 'timeZone'
         click_button 'Save changes'
-        wait_for_page
 
         expect(page).to have_field('name', with: new_name)
         expect(user.reload.time_zone).to eq(time_zone)
@@ -32,10 +31,11 @@ RSpec.feature 'User: Profile', js: true do
           find('label', text: 'Change', visible: false).click
         end
 
-        click_button 'Done'
+        expect(page).to have_selector('img')
+        find('button', text: 'Done').click
         click_button 'Save changes'
-        wait_for_page
 
+        expect_toastify('Your profile picture was successfully updated.')
         expect(user.reload.profile_photo.url).to be_present
       end
     end
