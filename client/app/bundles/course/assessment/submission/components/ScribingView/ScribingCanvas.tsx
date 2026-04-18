@@ -89,6 +89,10 @@ interface FabricObjectJson {
 
 // Helpers
 
+const clamp = (num: number, min: number, max: number): number => {
+  return Math.min(Math.max(num, min), max);
+};
+
 /**
  * Scales/unscales the given scribbles by a standard number.
  * Legacy method needed to support migrated v1 scribing questions.
@@ -332,7 +336,7 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
       event: TPointerEvent,
     ): XY | undefined => {
       if (!event) return undefined;
-      const pointer = canvas.getViewportPoint(event);
+      const pointer = canvas.getScenePoint(event);
       return {
         x: pointer.x,
         y: pointer.y,
@@ -357,19 +361,27 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
     const generateMouseDragProperties = (
       point1: XY | undefined,
       point2: XY,
+      maxWidth: number,
+      maxHeight: number,
     ): {
       left: number;
       top: number;
       width: number;
       height: number;
-    } => ({
-      left:
-        (point1?.x ?? point2.x) < point2.x ? point1?.x ?? point2.x : point2.x,
-      top:
-        (point1?.y ?? point2.y) < point2.y ? point1?.y ?? point2.y : point2.y,
-      width: Math.abs((point1?.x ?? point2.x) - point2.x),
-      height: Math.abs((point1?.y ?? point2.y) - point2.y),
-    });
+    } => {
+      point2 = {
+        x: clamp(point2.x, 0, maxWidth),
+        y: clamp(point2.y, 0, maxHeight),
+      };
+      return {
+        left:
+          typeof point1?.x === 'number' ? (point1.x + point2.x) / 2 : point2.x,
+        top:
+          typeof point1?.y === 'number' ? (point1.y + point2.y) / 2 : point2.y,
+        width: Math.abs((point1?.x ?? point2.x) - point2.x),
+        height: Math.abs((point1?.y ?? point2.y) - point2.y),
+      };
+    };
 
     const disableObjectSelection = (canvas: Canvas): void => {
       canvas.selection = false;
@@ -787,16 +799,16 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
         // Do moving action
         const tryMove = (left: number, top: number): void => {
           // limit moving
-          let finalLeft = Math.min(left, 0);
-          finalLeft = Math.max(
-            finalLeft,
+          const finalLeft = clamp(
+            left,
             (canvas.getZoom() * scribing.canvasWidth - canvas.getWidth()) * -1,
+            0,
           );
-          let finalTop = Math.min(top, 0);
-          finalTop = Math.max(
-            finalTop,
+          const finalTop = clamp(
+            top,
             (canvas.getZoom() * scribing.canvasHeight - canvas.getHeight()) *
               -1,
+            0,
           );
 
           // apply calculated move transforms
@@ -817,7 +829,10 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
             scribing.selectedTool === 'LINE' &&
             !isOverActiveObject.current
           ) {
-            line.current?.set({ x2: dragPointer.x, y2: dragPointer.y });
+            line.current?.set({
+              x2: clamp(dragPointer.x, 0, canvas.getWidth()),
+              y2: clamp(dragPointer.y, 0, canvas.getHeight()),
+            });
             canvas.renderAll();
           } else if (
             dragPointer &&
@@ -829,6 +844,8 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
                 const dragProps = generateMouseDragProperties(
                   mouseCanvasDragStartPoint.current,
                   dragPointer,
+                  canvas.getWidth(),
+                  canvas.getHeight(),
                 );
                 rect.current?.set({
                   left: dragProps.left,
@@ -843,6 +860,8 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
                 const dragProps = generateMouseDragProperties(
                   mouseCanvasDragStartPoint.current,
                   dragPointer,
+                  canvas.getWidth(),
+                  canvas.getHeight(),
                 );
                 ellipse.current?.set({
                   left: dragProps.left,
@@ -935,14 +954,17 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
         const centerPoint = object.getCenterPoint();
         const offsetX = object.left - centerPoint.x;
         const offsetY = object.top - centerPoint.y;
-        object.top = Math.min(
-          Math.max(height / 2 + offsetY, object.top),
+        object.top = clamp(
+          object.top,
+          height / 2 + offsetY,
           canvas.height - height / 2 + offsetY,
         );
-        object.left = Math.min(
-          Math.max(width / 2 + offsetX, object.left),
+        object.left = clamp(
+          object.left,
+          width / 2 + offsetX,
           canvas.width - width / 2 + offsetX,
         );
+
         object.setCoords();
       },
     );
@@ -1119,16 +1141,14 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
           const initialZoom =
             Math.floor((container.getBoundingClientRect().width * 10) / width) /
             10;
-          scribingActions.setCanvasZoom({
-            answerId,
-            canvasZoom: initialZoom,
-          });
 
-          canvas.setDimensions({
-            width: width * initialZoom,
-            height: height * initialZoom,
-          });
-          canvas.zoomToPoint(new Point(0, 0), initialZoom);
+          canvas.setDimensions(
+            {
+              width: width * initialZoom,
+              height: height * initialZoom,
+            },
+            { cssOnly: true },
+          );
           dispatch(
             scribingActions.setCanvasZoom({
               answerId,
@@ -1189,18 +1209,24 @@ const ScribingCanvas = forwardRef<ScribingCanvasRef, ScribingCanvasProps>(
     useEffect(
       withCanvas((canvas, scribing) => {
         const container = containerRef.current;
+        let zoomRatio = scribing.canvasZoom;
         if (container && Boolean(container.firstElementChild)) {
           const scaleRatio = Math.min(
             scribing.canvasZoom,
             container.getBoundingClientRect().width / scribing.canvasWidth,
           );
 
-          canvas.setDimensions({
-            width: scribing.canvasWidth * scaleRatio,
-            height: scribing.canvasHeight * scaleRatio,
-          });
+          canvas.setDimensions(
+            {
+              width: scribing.canvasWidth * scaleRatio,
+              height: scribing.canvasHeight * scaleRatio,
+            },
+            { cssOnly: true },
+          );
+
+          zoomRatio = scribing.canvasZoom / scaleRatio;
         }
-        canvas.zoomToPoint(new Point(0, 0), scribing.canvasZoom);
+        canvas.zoomToPoint(new Point(0, 0), zoomRatio);
         canvas.fire('mouse:move', {
           isForced: true,
         } as unknown as TPointerEventInfo);
