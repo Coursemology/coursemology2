@@ -5,7 +5,7 @@ class AwsWrappedClient
   # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instancedata-data-retrieval.html
   CREDENTIALS_URL = 'http://169.254.169.254/latest/meta-data/iam/security-credentials/'
 
-  def initialize(client_class, region: ENV.fetch('AWS_REGION', nil))
+  def initialize(client_class, region: Rails.application.credentials.aws.s3_file_bucket.region)
     @client_class = client_class
     @region = region
     refresh_token

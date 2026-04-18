@@ -48,7 +48,7 @@ RSpec.describe SendFile do
       stub_const('S3_CLIENT', s3_client)
       stub_const('SendFile::MULTIPART_CHUNK_SIZE', 100)
       stub_const('SendFile::MIN_MULTIPART_UPLOAD_SIZE', 1000)
-      allow(ENV).to receive(:fetch).with('AWS_BUCKET', nil).and_return(bucket)
+      allow(Rails.application.credentials).to receive_message_chain(:aws, :s3_file_bucket, :bucket).and_return(bucket)
       allow(Time).to receive(:now).and_return(time_now)
       allow(time_now).to receive(:to_i).and_return(123)
     end
@@ -113,7 +113,7 @@ RSpec.describe SendFile do
 
     before do
       stub_const('S3_CLIENT', s3_client)
-      allow(ENV).to receive(:fetch).with('AWS_BUCKET', nil).and_return(bucket)
+      allow(Rails.application.credentials).to receive_message_chain(:aws, :s3_file_bucket, :bucket).and_return(bucket)
       s3_client.stub_responses(:put_object, {})
     end
 
@@ -139,7 +139,7 @@ RSpec.describe SendFile do
     before do
       stub_const('S3_CLIENT', s3_client)
       stub_const('SendFile::MULTIPART_CHUNK_SIZE', 100)
-      allow(ENV).to receive(:fetch).with('AWS_BUCKET', nil).and_return(bucket)
+      allow(Rails.application.credentials).to receive_message_chain(:aws, :s3_file_bucket, :bucket).and_return(bucket)
       s3_client.stub_responses(:create_multipart_upload, upload_id: upload_id)
       s3_client.stub_responses(:upload_part, [
                                  { etag: 'etag-1' },
