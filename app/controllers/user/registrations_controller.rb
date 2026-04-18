@@ -46,6 +46,21 @@ class User::RegistrationsController < Devise::RegistrationsController
     User.transaction do
       super
 
+      if resource.persisted? && invitation_params[:enrol_course_id]
+        enrol_course = Course.find_by(id: invitation_params[:enrol_course_id])
+        head :not_found and return unless enrol_course
+
+        # this endpoint is accessible to unauthenticated users, so authorize! isn't used
+        head :forbidden and return unless enrol_course.published && enrol_course.enrollable
+
+        @enrol_request = Course::EnrolRequest.create!(
+          user: @user,
+          course_id: invitation_params[:enrol_course_id],
+          creator: @user,
+          updater: @user
+        )
+      end
+
       @invitation.confirm!(confirmer: resource) if @invitation && !@invitation.confirmed? && resource.persisted?
       @user = resource
     end
@@ -105,6 +120,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   end
 
   def load_invitation
+    invitation_param = invitation_params[:invitation]
     return if invitation_param.blank?
 
     case invitation_param.first
@@ -115,8 +131,8 @@ class User::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  def invitation_param
-    params.permit(:invitation)[:invitation]
+  def invitation_params
+    params.permit(:invitation, :enrol_course_id)
   end
 
   def authenticate_scope!
