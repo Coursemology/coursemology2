@@ -91,15 +91,13 @@ RSpec.feature 'Course: Achievements', js: true do
         edit_button = condition_row.first('button', visible: false)
 
         hover_then_click edit_button
-        assessment_field = find_field('Assessment')
-        expect(assessment_field.value).to include(valid_assessment_as_condition.title)
-        assessment_field.click
+        find_field('Assessment', with: valid_assessment_as_condition.title).click
         find('li', text: assessment_to_change_to.title).click
         click_button 'Update condition'
 
         expect_toastify('Your changes have been saved.')
         hover_then_click condition_row.first('button', visible: false)
-        expect(find_field('Assessment').value).to include(assessment_to_change_to.title)
+        expect(page).to have_field('Assessment', with: assessment_to_change_to.title)
         find('button.prompt-cancel-btn').click
 
         # Delete achievement condition
@@ -132,13 +130,13 @@ RSpec.feature 'Course: Achievements', js: true do
         edit_button = condition_row.first('button', visible: false)
 
         hover_then_click edit_button
-        expect(find_field('minimumLevel').value).to eq(minimum_level)
+        expect(page).to have_field('minimumLevel', with: minimum_level)
         fill_in 'minimumLevel', with: new_minimum_level
         click_button 'Update condition'
 
         expect_toastify('Your changes have been saved.')
         hover_then_click condition_row.first('button', visible: false)
-        expect(find_field('minimumLevel').value).to eq(new_minimum_level)
+        expect(page).to have_field('minimumLevel', with: new_minimum_level)
         find('button.prompt-cancel-btn').click
 
         # Delete level condition
@@ -172,15 +170,14 @@ RSpec.feature 'Course: Achievements', js: true do
         edit_button = condition_row.first('button', visible: false)
 
         hover_then_click edit_button
-        survey_field = find_field('Survey')
-        expect(survey_field.value).to include(valid_survey_as_condition.title)
+        survey_field = find_field('Survey', with: valid_survey_as_condition.title)
         survey_field.click
         find('li', text: survey_to_change_to.title).click
         click_button 'Update condition'
 
         expect_toastify('Your changes have been saved.')
         hover_then_click condition_row.first('button', visible: false)
-        expect(find_field('Survey').value).to include(survey_to_change_to.title)
+        expect(page).to have_field('Survey', with: survey_to_change_to.title)
         find('button.prompt-cancel-btn').click
 
         # Delete survey condition
