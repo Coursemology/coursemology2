@@ -57,7 +57,7 @@ class Course::Assessment::Question::MrqGenerationService
         }
       }
     ).completion
-    parse_llm_response(response)
+    shuffle_output_options!(parse_llm_response(response))
   end
 
   private
@@ -66,13 +66,15 @@ class Course::Assessment::Question::MrqGenerationService
   # @return [Array<Hash>] Array of messages formatted for the LLM chat
   def build_messages
     system_prompt, user_prompt = select_prompts
+    source_question_options = @source_question_data&.dig('options') || []
+    @shuffle_options = true if source_question_options.empty?
     formatted_system_prompt = system_prompt.format
     formatted_user_prompt = user_prompt.format(
       custom_prompt: @custom_prompt,
       number_of_questions: @number_of_questions,
       source_question_title: @source_question_data&.dig('title') || '',
       source_question_description: @source_question_data&.dig('description') || '',
-      source_question_options: format_source_options(@source_question_data&.dig('options') || [])
+      source_question_options: format_source_options(source_question_options)
     )
     [
       { role: 'system', content: formatted_system_prompt },
@@ -110,5 +112,14 @@ class Course::Assessment::Question::MrqGenerationService
       parser: self.class.output_parser
     )
     fix_parser.parse(response)
+  end
+
+  def shuffle_output_options!(parsed_output)
+    return parsed_output unless @shuffle_options
+
+    parsed_output['questions'].each do |question|
+      question['options']&.shuffle!
+    end
+    parsed_output
   end
 end

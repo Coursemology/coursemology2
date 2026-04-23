@@ -116,6 +116,63 @@ RSpec.describe Course::Assessment::Question::MrqGenerationService do
           expect(result['questions'].length).to eq(1)
         end
       end
+
+      context 'shuffle behavior based on source question options' do
+        let(:mock_options) { [{ 'option' => 'A', 'correct' => true }, { 'option' => 'B', 'correct' => false }] }
+        let(:mock_parsed_output) { { 'questions' => [{ 'title' => 'Q', 'options' => mock_options }] } }
+
+        before do
+          allow(subject).to receive(:parse_llm_response).and_return(mock_parsed_output)
+        end
+
+        context 'when source question has existing options' do
+          let(:params) do
+            {
+              custom_prompt: 'Generate questions about basic mathematics',
+              number_of_questions: 1,
+              source_question_data: {
+                'title' => 'Sample',
+                'description' => 'Desc',
+                'options' => [{ 'option' => 'Option 1', 'correct' => true }]
+              }
+            }
+          end
+
+          it 'does not shuffle the generated options' do
+            expect(mock_options).not_to receive(:shuffle!)
+            subject.generate_questions
+          end
+        end
+
+        context 'when source question options are empty' do
+          let(:params) do
+            {
+              custom_prompt: 'Generate questions about basic mathematics',
+              number_of_questions: 1,
+              source_question_data: { 'title' => 'Sample', 'description' => 'Desc', 'options' => [] }
+            }
+          end
+
+          it 'shuffles the generated options' do
+            expect(mock_options).to receive(:shuffle!)
+            subject.generate_questions
+          end
+        end
+
+        context 'when source_question_data is absent' do
+          let(:params) do
+            {
+              custom_prompt: 'Generate questions about basic mathematics',
+              number_of_questions: 1
+            }
+          end
+
+          it 'shuffles the generated options' do
+            expect(mock_options).to receive(:shuffle!)
+            subject.generate_questions
+          end
+        end
+      end
     end
 
     describe '#format_source_options' do
