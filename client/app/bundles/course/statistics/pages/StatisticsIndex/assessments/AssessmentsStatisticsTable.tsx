@@ -196,12 +196,13 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       sortable: true,
       className: NUM_CELL_CLASS_NAME,
       cell: (assessment): JSX.Element => {
-        const averageGrade = parseFloat(
-          Number(assessment.averageGrade).toFixed(1),
-        );
         const maximumGrade = parseFloat(
           Number(assessment.maximumGrade).toFixed(1),
         );
+        const averageGrade =
+          assessment.averageGrade === undefined
+            ? '--'
+            : parseFloat(Number(assessment.averageGrade).toFixed(1));
         return (
           <div className={NUM_CELL_CLASS_NAME}>
             {`${averageGrade} / ${maximumGrade}`}
@@ -217,7 +218,9 @@ const AssessmentsStatisticsTable: FC<Props> = (props) => {
       className: NUM_CELL_CLASS_NAME,
       cell: (assessment) => (
         <div className={NUM_CELL_CLASS_NAME}>
-          {parseFloat(Number(assessment.stdevGrade).toFixed(1))}
+          {assessment.stdevGrade === undefined
+            ? '--'
+            : parseFloat(Number(assessment.stdevGrade).toFixed(1))}
         </div>
       ),
       csvDownloadable: true,

@@ -210,6 +210,37 @@ RSpec.describe Course::Statistics::AggregateController, type: :controller do
         before { controller_sign_in(controller, user) }
         it { expect(subject).to be_successful }
       end
+
+      context 'when the course has no students' do
+        let(:user) { create(:course_manager, course: course).user }
+        before do
+          course.course_users.students.delete_all
+          controller_sign_in(controller, user)
+        end
+
+        it 'returns successfully without crashing on empty student set' do
+          expect(subject).to be_successful
+        end
+      end
+
+      context 'when an assessment has no submissions' do
+        render_views
+        let!(:empty_assessment) do
+          create(:assessment, :published, course: course, end_at: 1.hour.from_now)
+        end
+        let(:user) { create(:course_manager, course: course).user }
+        before { controller_sign_in(controller, user) }
+
+        it 'omits grade and duration stat keys from the JSON for that assessment' do
+          subject
+          json = JSON.parse(response.body)
+          result = json['assessments'].find { |a| a['id'] == empty_assessment.id }
+          expect(result).not_to have_key('averageGrade')
+          expect(result).not_to have_key('stdevGrade')
+          expect(result).not_to have_key('averageTimeTaken')
+          expect(result).not_to have_key('stdevTimeTaken')
+        end
+      end
     end
 
     describe '#activity_get_help' do

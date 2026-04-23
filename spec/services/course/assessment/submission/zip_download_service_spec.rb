@@ -68,7 +68,7 @@ RSpec.describe Course::Assessment::Submission::ZipDownloadService do
         group
       end
 
-      types = Course::Assessment::Submission::ZipDownloadService::COURSE_USERS
+      types = CourseUser::COURSE_USER_TYPES
 
       before do
         submission1
