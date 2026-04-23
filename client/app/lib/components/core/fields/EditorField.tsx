@@ -127,14 +127,12 @@ const EditorField = forwardRef(
             }
           }
 
-          if (language === 'python')
-            editor.onPaste = (originalText, event: ClipboardEvent): void => {
-              event.preventDefault();
-
+          if (language === 'python') {
+            editor.on('paste', (e: { text: string }): void => {
               const spaces = ' '.repeat(editor.getOption('tabSize') ?? 4);
-              const text = originalText.replaceAll('\t', spaces);
-              editor.commands.exec('paste', editor, { text, event });
-            };
+              e.text = e.text.replaceAll('\t', spaces);
+            });
+          }
         }}
         setOptions={{
           ...otherProps.setOptions,
