@@ -1047,6 +1047,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.keyword',
     defaultMessage: 'Keyword',
   },
+  spreadsheetFormula: {
+    id: 'course.assessment.question.textResponses.spreadsheetFormula',
+    defaultMessage: 'Spreadsheet Formula',
+  },
   grade: {
     id: 'course.assessment.question.textResponses.grade',
     defaultMessage: 'Grade',

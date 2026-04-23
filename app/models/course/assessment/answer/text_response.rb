@@ -19,6 +19,12 @@ class Course::Assessment::Answer::TextResponse < ApplicationRecord
     answer_text.strip.encode(universal_newline: true)
   end
 
+  # Programming answers should be graded in a job.
+  # TODO: only outsource to job if question contains at least one Excel solution.
+  def grade_inline?
+    false
+  end
+
   def download(dir)
     download_answer(dir) unless question.actable.file_upload_question?
     attachments.each { |a| download_attachment(a, dir) }

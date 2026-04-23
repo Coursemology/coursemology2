@@ -1,9 +1,11 @@
 import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
 
+export type SolutionType = 'exact_match' | 'keyword' | 'spreadsheet_formula';
+
 export interface SolutionData {
   id: number | string;
   solution: string;
-  solutionType: 'exact_match' | 'keyword';
+  solutionType: SolutionType;
   grade: number | string;
   explanation: string;
 }

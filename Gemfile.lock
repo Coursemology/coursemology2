@@ -21,13 +21,6 @@ GIT
       activerecord (>= 6.0.0, < 8)
 
 GIT
-  remote: https://github.com/Coursemology/polyglot
-  revision: bf38cf4d4e8a4ee732c604fc27db2263257a23ec
-  specs:
-    coursemology-polyglot (0.4.2)
-      activesupport (>= 4.2)
-
-GIT
   remote: https://github.com/Coursemology/rwordnet
   revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
   specs:
@@ -48,6 +41,12 @@ GIT
     active_record_upsert (0.11.2)
       activerecord (>= 5.2, < 8.0)
       pg (>= 0.18, < 2.0)
+
+PATH
+  remote: ../polyglot
+  specs:
+    coursemology-polyglot (0.4.3)
+      activesupport (>= 4.2)
 
 GEM
   remote: https://rubygems.org/

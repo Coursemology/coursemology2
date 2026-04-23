@@ -3,7 +3,7 @@ import { Undo } from '@mui/icons-material';
 import { IconButton, Select, Tooltip, Typography } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 import { produce } from 'immer';
-import { SolutionEntity } from 'types/course/assessment/question/text-responses';
+import { SolutionEntity, SolutionType } from 'types/course/assessment/question/text-responses';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import TextField from 'lib/components/core/fields/TextField';
@@ -105,7 +105,7 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                 onChange={(type): void =>
                   update(
                     'solutionType',
-                    type.target.value as 'exact_match' | 'keyword',
+                    type.target.value as SolutionType,
                   )
                 }
                 value={solution.solutionType}
@@ -115,6 +115,9 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                   {t(translations.exactMatch)}
                 </option>
                 <option value="keyword">{t(translations.keyword)}</option>
+                <option value="spreadsheet_formula">
+                  {t(translations.spreadsheetFormula)}
+                </option>
               </Select>
               {error?.solutionType && (
                 <FormHelperText error={!!error?.solutionType}>

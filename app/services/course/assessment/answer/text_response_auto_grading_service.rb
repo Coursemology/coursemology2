@@ -18,17 +18,24 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   def evaluate_answer(answer)
     question = answer.question.actable
     answer_text = answer.normalized_answer_text
-    exact_matches, keywords = question.solutions.partition(&:exact_match?)
+    exact_matches = question.solutions.select(&:exact_match?)
+    keywords = question.solutions.select(&:keyword?)
+    spreadsheet_formulas = question.solutions.select(&:spreadsheet_formula?)
 
-    solutions = find_exact_match(answer_text, exact_matches)
+    solution = find_correct_exact_match_solution(answer_text, exact_matches)
     # If there is no exact match, we fall back to keyword matches.
     # Solutions are always kept in an array for easier use of #grade_for and #explanations_for
-    solutions = solutions.present? ? [solutions] : find_keywords(answer_text, keywords)
+    correct_solutions = if solution
+                          [solution]
+                        else
+                          find_correct_keyword_solutions(answer_text, keywords) +
+                          find_correct_spreadsheet_formula_solutions(answer_text, spreadsheet_formulas)
+                        end
 
     [
-      correctness_for(question, solutions),
-      grade_for(question, solutions),
-      explanations_for(solutions)
+      correctness_for(question, correct_solutions),
+      grade_for(question, correct_solutions),
+      explanations_for(correct_solutions)
     ]
   end
 
@@ -39,7 +46,7 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   to be matched against answer_text.
   # @return [Course::Assessment::Question::TextResponseSolution] Solution that exactly matches
   #   the answer.
-  def find_exact_match(answer_text, solutions)
+  def find_correct_exact_match_solution(answer_text, solutions)
     # comparison is case insensitive
     solutions.find { |s| s.solution.encode(universal_newline: true).casecmp(answer_text) == 0 }
   end
@@ -51,9 +58,23 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #   to be matched against answer_text.
   # @return [Array<Course::Assessment::Question::TextResponseSolution>] Solutions that matches
   #   the answer.
-  def find_keywords(answer_text, solutions)
+  def find_correct_keyword_solutions(answer_text, solutions)
     # TODO(minqi): Add tokenizer and stemmer for more natural keyword matching.
     solutions.select { |s| answer_text.downcase.include?(s.solution.downcase) }
+  end
+
+  # Returns the spreadsheet formula solutions that matches the given answer text.
+  def find_correct_spreadsheet_formula_solutions(answer_text, solutions)
+    container = CoursemologyDockerContainer.create(
+      'coursemology/evaluator-image-python:3.14',
+      argv: ['~/autograde_spreadsheet.py'],
+      entrypoint: ['python3']
+    )
+    container.store_file('~/autograde_spreadsheet.py', File.read(File.join(__dir__, 'autograde_spreadsheet.py')))
+    container.store_file('~/test_spreadsheet.xlsx', File.read(File.join(__dir__, 'test_spreadsheet.xlsx')))
+    container.execute
+    p({ evaluation_result: container.evaluation_result })
+    solutions
   end
 
   # Returns the grade for a question with all matched solutions.
