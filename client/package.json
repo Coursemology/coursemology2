@@ -199,7 +199,7 @@
     "tailwindcss": "^3.4.19",
     "terser-webpack-plugin": "^5.3.17",
     "ts-jest": "^29.4.6",
-    "typescript": "^5.4.3",
+    "typescript": "^5.9.3",
     "webpack": "^5.106.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.2.3",
