@@ -620,8 +620,8 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     should_not (1.1.0)
-    shoulda-matchers (6.4.0)
-      activesupport (>= 5.2.0)
+    shoulda-matchers (7.0.1)
+      activesupport (>= 7.1)
     sidekiq (7.3.10)
       base64
       connection_pool (>= 2.3.0, < 3)
