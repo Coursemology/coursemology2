@@ -218,4 +218,85 @@ RSpec.describe Course::Assessment::Java::JavaProgrammingTestCaseReport do
       end
     end
   end
+
+  context 'when given a report with newlines and special characters in attributes' do
+    let(:report_path) do
+      File.join(Rails.root, 'spec/fixtures/course/programming_java_test_report_newlines.xml')
+    end
+
+    let(:parsed_report) do
+      Course::Assessment::Java::JavaProgrammingTestCaseReport.new(File.read(report_path))
+    end
+    subject { parsed_report }
+
+    describe '#test_cases' do
+      it 'returns all the test cases in the report' do
+        expect(subject.test_cases.length).to eq(6)
+      end
+    end
+
+    describe Course::Assessment::Java::JavaProgrammingTestCaseReport::TestCase do
+      let(:test_cases) { parsed_report.test_cases }
+
+      context 'when the attribute value contains a real newline inside CDATA' do
+        # test_public_03: output/expected span multiple lines in the XML
+        let(:test_case) { test_cases[2] }
+        subject { test_case }
+
+        describe '#output' do
+          it 'preserves the newline as a newline character' do
+            expect(subject.output).to eq(" \u{1F60E}   \ncoolman")
+          end
+        end
+
+        describe '#expected' do
+          it 'preserves the newline as a newline character' do
+            expect(subject.expected).to eq(" 8-)   \ncoolman")
+          end
+        end
+      end
+
+      context 'when the attribute value contains literal &#10; text alongside real newlines' do
+        # test_public_05: the core bug — &#10; must survive as text, not become a newline
+        let(:test_case) { test_cases[4] }
+        subject { test_case }
+
+        describe '#output' do
+          it 'keeps literal &#10; as text and real newlines as newline characters' do
+            expect(subject.output).to eq("fake&#10;real\nfake&#10;end")
+          end
+        end
+
+        describe '#expected' do
+          it 'keeps literal &#10; as text and real newlines as newline characters' do
+            expect(subject.expected).to eq("fake&#10;real\nfake&#10;end")
+          end
+        end
+      end
+
+      context 'when the attribute value contains ]]> requiring CDATA section splitting' do
+        # test_public_06: ]]> is encoded as ]]]]><![CDATA[> across two CDATA sections
+        let(:test_case) { test_cases[5] }
+        subject { test_case }
+
+        describe '#output' do
+          it 'reassembles the split CDATA sections into the original string' do
+            expect(subject.output).to eq('hehehe")]]></message>')
+          end
+        end
+
+        describe '#expected' do
+          it 'reassembles the split CDATA sections into the original string' do
+            expect(subject.expected).to eq('hehehe")]]></message>')
+          end
+        end
+
+        describe '#expression' do
+          it 'reassembles the split CDATA sections into the original string' do
+            expect(subject.expression).to eq('EmojiChecker.containsEmoji("hehehe\")]]></message>")')
+          end
+        end
+      end
+    end
+  end
 end
