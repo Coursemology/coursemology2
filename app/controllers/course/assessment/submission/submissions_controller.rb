@@ -27,13 +27,6 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   delegate_to_service(:load_or_create_answers)
   delegate_to_service(:load_or_create_submission_questions)
 
-  COURSE_USERS = { my_students: 'my_students',
-                   my_students_w_phantom: 'my_students_w_phantom',
-                   students: 'students',
-                   students_w_phantom: 'students_w_phantom',
-                   staff: 'staff',
-                   staff_w_phantom: 'staff_w_phantom' }.freeze
-
   def index
     authorize!(:view_all_submissions, @assessment)
 
@@ -400,21 +393,8 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
     end
   end
 
-  def course_user_ids # rubocop:disable Metrics/AbcSize
-    @course_user_ids ||= case params[:course_users]
-                         when COURSE_USERS[:my_students]
-                           current_course_user.my_students.without_phantom_users
-                         when COURSE_USERS[:my_students_w_phantom]
-                           current_course_user.my_students
-                         when COURSE_USERS[:students_w_phantom]
-                           @assessment.course.course_users.students
-                         when COURSE_USERS[:staff]
-                           @assessment.course.course_users.staff.without_phantom_users
-                         when COURSE_USERS[:staff_w_phantom]
-                           @assessment.course.course_users.staff
-                         else
-                           @assessment.course.course_users.students.without_phantom_users
-                         end.select(:user_id)
+  def course_user_ids
+    @course_user_ids ||= current_course_user.users_in_course_by_type(params[:course_users]).select(:user_id)
   end
 
   def user_ids_without_submission

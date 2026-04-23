@@ -15,11 +15,6 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   before_action :load_question_duplication_data, only: [:show, :reorder]
 
-  COURSE_USERS = { my_students: 'my_students',
-                   my_students_w_phantom: 'my_students_w_phantom',
-                   students: 'students',
-                   students_w_phantom: 'students_w_phantom' }.freeze
-
   def index
     @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
 
@@ -198,7 +193,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def remind
     authorize!(:manage, @assessment)
-    return head :bad_request unless student_course_users
+    return head :bad_request unless CourseUser.valid_course_user_type?(params[:course_users])
 
     Course::Assessment::ReminderService.
       send_closing_reminder(@assessment, student_course_users.pluck(:id), include_unsubscribed: true)
@@ -210,7 +205,6 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # if more feedback types are added this function should be extended.
   def auto_feedback_count
     authorize!(:manage, @assessment)
-    return head :bad_request unless student_course_users
 
     render json: {
       count: draft_file_annotation_posts(student_course_users).count
@@ -220,7 +214,6 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # Publish all automated feedback in this assessment's submissions.
   def publish_auto_feedback
     authorize!(:manage, @assessment)
-    return head :bad_request unless student_course_users
 
     ActiveRecord::Base.transaction do
       posts = draft_file_annotation_posts(student_course_users)
@@ -448,18 +441,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def student_course_users
-    case params[:course_users]
-    when COURSE_USERS[:my_students]
-      current_course_user.my_students.without_phantom_users
-    when COURSE_USERS[:my_students_w_phantom]
-      current_course_user.my_students
-    when COURSE_USERS[:students_w_phantom]
-      @assessment.course.course_users.students
-    when COURSE_USERS[:students]
-      @assessment.course.course_users.students.without_phantom_users
-    else
-      false
-    end
+    current_course_user.users_in_course_by_type(params[:course_users])
   end
 
   def can_access_assessment?

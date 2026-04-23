@@ -5,11 +5,6 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   skip_load_and_authorize_resource :survey, only: [:new, :create]
   build_and_authorize_new_lesson_plan_item :survey, class: Course::Survey, through: :course, only: [:new, :create]
 
-  COURSE_USERS = { my_students: 'my_students',
-                   my_students_w_phantom: 'my_students_w_phantom',
-                   students: 'students',
-                   students_w_phantom: 'students_w_phantom' }.freeze
-
   def index
     @surveys = @surveys.includes(responses: { experience_points_record: :course_user })
     preload_student_submitted_responses_counts
@@ -50,7 +45,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def remind
     authorize!(:manage, @survey)
-    return head :bad_request unless student_course_users
+    return head :bad_request unless CourseUser.valid_course_user_type?(params[:course_users])
 
     Course::Survey::ReminderService.
       send_closing_reminder(
@@ -73,18 +68,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   private
 
   def student_course_users
-    case params[:course_users]
-    when COURSE_USERS[:my_students]
-      current_course_user.my_students.without_phantom_users
-    when COURSE_USERS[:my_students_w_phantom]
-      current_course_user.my_students
-    when COURSE_USERS[:students_w_phantom]
-      @survey.course.course_users.students
-    when COURSE_USERS[:students]
-      @survey.course.course_users.students.without_phantom_users
-    else
-      false
-    end
+    current_course_user.users_in_course_by_type(params[:course_users])
   end
 
   def render_survey_with_questions_json

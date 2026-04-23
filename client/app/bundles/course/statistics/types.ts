@@ -123,10 +123,10 @@ export interface CourseAssessment {
   tab: TabInfo;
   category: CategoryInfo;
   maximumGrade: number;
-  averageGrade: number;
-  stdevGrade: number;
-  averageTimeTaken: number;
-  stdevTimeTaken: number;
+  averageGrade?: number;
+  stdevGrade?: number;
+  averageTimeTaken?: number;
+  stdevTimeTaken?: number;
   numSubmitted: number;
   numAttempted: number;
   numLate: number;

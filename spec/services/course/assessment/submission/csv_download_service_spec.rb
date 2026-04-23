@@ -65,6 +65,39 @@ RSpec.describe Course::Assessment::Submission::CsvDownloadService do
         end
       end
 
+      context 'when filtering by my_students' do
+        let!(:group) do
+          grp = create(:course_group, course: course)
+          create(:course_group_manager, course: course, group: grp, course_user: course_staff)
+          create(:course_group_student, course: course, group: grp, course_user: student1)
+          create(:course_group_student, course: course, group: grp, course_user: student2)
+          grp
+        end
+        let(:service) { described_class.new(course_staff, assessment1, 'my_students') }
+
+        it 'returns only the non-phantom students in the group without raising a SQL error' do
+          users = service.send(:course_users)
+          expect(users).to include(student1, student2)
+          expect(users).not_to include(student3)
+        end
+      end
+
+      context 'when there are phantom and non-phantom students' do
+        let!(:phantom) { create(:course_student, :phantom, course: course, name: 'Zeta Phantom') }
+        let!(:alpha) { create(:course_student, course: course, name: 'Alpha Normal') }
+        let(:service) { described_class.new(course_staff, assessment1, 'students_w_phantom') }
+
+        it 'places phantom students before non-phantom students, each group sorted alphabetically' do
+          users = service.send(:course_users)
+          non_phantoms = users.reject(&:phantom?)
+          phantoms = users.select(&:phantom?)
+
+          expect(users.index(phantoms.last)).to be < users.index(non_phantoms.first)
+          expect(non_phantoms.map(&:name)).to eq(non_phantoms.map(&:name).sort)
+          expect(phantoms.map(&:name)).to eq(phantoms.map(&:name).sort)
+        end
+      end
+
       context 'when assessment contains illegal characters in name' do
         let(:service) { described_class.new(course_staff, assessment2, nil) }
         let!(:filepath) { subject }

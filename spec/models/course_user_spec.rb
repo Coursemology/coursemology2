@@ -407,15 +407,25 @@ RSpec.describe CourseUser, type: :model do
 
     context 'when there are students in groups' do
       let(:group_owner) { create(:course_manager, course: course) }
-      before do
-        group = create(:course_group, course: course)
-        create(:course_group_user, course: course, group: group, course_user: student)
-        create(:course_group_manager, course: course, group: group, course_user: group_owner)
+      let!(:group) do
+        grp = create(:course_group, course: course)
+        create(:course_group_user, course: course, group: grp, course_user: student)
+        create(:course_group_manager, course: course, group: grp, course_user: group_owner)
+        grp
       end
 
       describe '#my_students' do
-        it 'returns all the normal users in the group' do
+        it 'returns all the normal students in the group' do
           expect(group_owner.my_students).to contain_exactly(student)
+        end
+
+        context 'when a non-student is a normal member of the group' do
+          let!(:group_ta) { create(:course_teaching_assistant, course: course) }
+          before { create(:course_group_user, course: course, group: group, course_user: group_ta) }
+
+          it 'does not include the non-student' do
+            expect(group_owner.my_students).not_to include(group_ta)
+          end
         end
       end
 
@@ -423,6 +433,62 @@ RSpec.describe CourseUser, type: :model do
         it 'returns the managers of the student' do
           expect(student.my_managers).to contain_exactly(group_owner)
         end
+      end
+    end
+
+    describe '#users_in_course_by_type' do
+      let(:group_owner) { create(:course_manager, course: course) }
+      let!(:phantom_student) { create(:course_student, :phantom, course: course) }
+      let!(:ta) { create(:course_teaching_assistant, course: course) }
+      let!(:phantom_ta) { create(:course_teaching_assistant, :phantom, course: course) }
+      let!(:group) do
+        grp = create(:course_group, course: course)
+        create(:course_group_manager, course: course, group: grp, course_user: group_owner)
+        create(:course_group_student, course: course, group: grp, course_user: student)
+        create(:course_group_student, course: course, group: grp, course_user: phantom_student)
+        grp
+      end
+
+      it "returns non-phantom students for 'students'" do
+        result = group_owner.users_in_course_by_type('students')
+        expect(result).to include(student)
+        expect(result).not_to include(phantom_student, ta)
+      end
+
+      it "returns all students including phantoms for 'students_w_phantom'" do
+        result = group_owner.users_in_course_by_type('students_w_phantom')
+        expect(result).to include(student, phantom_student)
+        expect(result).not_to include(ta)
+      end
+
+      it "returns non-phantom group students for 'my_students'" do
+        result = group_owner.users_in_course_by_type('my_students')
+        expect(result).to include(student)
+        expect(result).not_to include(phantom_student, ta)
+      end
+
+      it "returns all group students including phantoms for 'my_students_w_phantom'" do
+        result = group_owner.users_in_course_by_type('my_students_w_phantom')
+        expect(result).to include(student, phantom_student)
+        expect(result).not_to include(ta)
+      end
+
+      it "returns non-phantom staff for 'staff'" do
+        result = group_owner.users_in_course_by_type('staff')
+        expect(result).to include(ta)
+        expect(result).not_to include(phantom_ta, student)
+      end
+
+      it "returns all staff including phantoms for 'staff_w_phantom'" do
+        result = group_owner.users_in_course_by_type('staff_w_phantom')
+        expect(result).to include(ta, phantom_ta)
+        expect(result).not_to include(student)
+      end
+
+      it 'defaults to non-phantom students for unknown types' do
+        result = group_owner.users_in_course_by_type(nil)
+        expect(result).to include(student)
+        expect(result).not_to include(phantom_student, ta)
       end
     end
 

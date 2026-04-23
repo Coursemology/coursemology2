@@ -47,13 +47,6 @@ class Course::Assessment::Submission::CsvDownloadService
     csv_file_path
   end
 
-  COURSE_USERS = { my_students: 'my_students',
-                   my_students_w_phantom: 'my_students_w_phantom',
-                   students: 'students',
-                   students_w_phantom: 'students_w_phantom',
-                   staff: 'staff',
-                   staff_w_phantom: 'staff_w_phantom' }.freeze
-
   private
 
   def cleanup_entries
@@ -113,21 +106,9 @@ class Course::Assessment::Submission::CsvDownloadService
     answer.specific.csv_download
   end
 
-  def course_users # rubocop:disable Metrics/AbcSize
-    @course_users ||=
-      case @course_users_type
-      when COURSE_USERS[:my_students]
-        @current_course_user.my_students.without_phantom_users
-      when COURSE_USERS[:my_students_w_phantom]
-        @current_course_user.my_students
-      when COURSE_USERS[:students_w_phantom]
-        @assessment.course.course_users.students
-      when COURSE_USERS[:staff]
-        @assessment.course.course_users.staff.without_phantom_users
-      when COURSE_USERS[:staff_w_phantom]
-        @assessment.course.course_users.staff
-      else
-        @assessment.course.course_users.students.without_phantom_users
-      end.order_phantom_user.order_alphabetically.includes(user: :emails)
+  def course_users
+    # We cannot use ORDER BY because it conflicts with the selection
+    @course_users ||= @current_course_user.users_in_course_by_type(@course_users_type).
+                      includes(user: :emails).sort_by { |cu| [cu.phantom? ? 0 : 1, cu.name] }
   end
 end

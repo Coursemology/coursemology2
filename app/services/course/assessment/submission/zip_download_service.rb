@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::Submission::BaseZipDownloadService
-  COURSE_USERS = { my_students: 'my_students',
-                   my_students_w_phantom: 'my_students_w_phantom',
-                   students: 'students',
-                   students_w_phantom: 'students_w_phantom',
-                   staff: 'staff',
-                   staff_w_phantom: 'staff_w_phantom' }.freeze
-
   # @param [CourseUser] course_user The course user downloading the submissions.
   # @param [Course::Assessment] assessment The assessments to download submissions from.
   # @param [String|nil] course_users The subset of course users whose submissions to download.
@@ -44,21 +37,7 @@ class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::S
     end
   end
 
-  def course_user_ids # rubocop:disable Metrics/AbcSize
-    @course_user_ids ||=
-      case @course_users
-      when COURSE_USERS[:my_students]
-        @course_user.my_students.without_phantom_users
-      when COURSE_USERS[:my_students_w_phantom]
-        @course_user.my_students
-      when COURSE_USERS[:students_w_phantom]
-        @assessment.course.course_users.students
-      when COURSE_USERS[:staff]
-        @assessment.course.course_users.staff.without_phantom_users
-      when COURSE_USERS[:staff_w_phantom]
-        @assessment.course.course_users.staff
-      else
-        @assessment.course.course_users.students.without_phantom_users
-      end.select(:user_id)
+  def course_user_ids
+    @course_user_ids ||= @course_user.users_in_course_by_type(@course_users).select(:user_id)
   end
 end
