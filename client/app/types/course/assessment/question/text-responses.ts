@@ -1,16 +1,36 @@
 import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
 
+export type SolutionType = 'exact_match' | 'keyword' | 'spreadsheet_formula';
+
 export interface SolutionData {
   id: number | string;
   solution: string;
-  solutionType: 'exact_match' | 'keyword';
+  solutionType: SolutionType;
   grade: number | string;
   explanation: string;
+  isMatchCase?: boolean;
+  spreadsheet?: (ExistingSpreadsheet | NewSpreadsheet | {}) & {
+    isRandomizationEnabled: boolean;
+    variables: Record<string, number | string | {
+      min: number;
+      max: number;
+    }>;
+  }
+}
+
+export interface ExistingSpreadsheet {
+  filename: string;
+  size: number;
+  id: number;
 }
 
 export interface SolutionEntity extends SolutionData {
   toBeDeleted?: boolean;
   draft?: boolean;
+}
+
+export interface NewSpreadsheet {
+  raw: File;
 }
 
 export enum AttachmentType {
@@ -66,6 +86,13 @@ export interface TextResponsePostData {
       grade?: SolutionEntity['grade'];
       explanation?: SolutionEntity['explanation'];
       _destroy?: SolutionEntity['toBeDeleted'];
+      is_match_case?: boolean;
+      test_spreadsheet_attributes?: {
+        id?: number | string;
+        file?: File;
+        variables?: string;
+        is_randomization_enabled?: boolean;
+      };
     }[];
   };
 }

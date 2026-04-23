@@ -1047,6 +1047,18 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.keyword',
     defaultMessage: 'Keyword',
   },
+  spreadsheetFormula: {
+    id: 'course.assessment.question.textResponses.spreadsheetFormula',
+    defaultMessage: 'Spreadsheet Formula',
+  },
+  testSpreadsheet: {
+    id: 'course.assessment.question.textResponses.testSpreadsheet',
+    defaultMessage: 'Test spreadsheet',
+  },
+  testSpreadsheetDescription: {
+    id: 'course.assessment.question.textResponses.testSpreadsheetDescription',
+    defaultMessage: 'A test spreadsheet is required to auto grade the student answer.',
+  },
   grade: {
     id: 'course.assessment.question.textResponses.grade',
     defaultMessage: 'Grade',

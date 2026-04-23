@@ -1,5 +1,6 @@
 import { QuestionType } from '../../question';
 import { CategoryData } from '../../question/rubric-based-responses';
+import { SolutionType } from '../../question/text-responses';
 
 interface QuestionData {
   id: number;
@@ -33,7 +34,7 @@ interface TextResponseQuestionData extends TextResponseAttachmentData {
   templateText?: string | null;
   solutions?: {
     id: number;
-    solutionType: 'exact_match' | 'keyword';
+    solutionType: SolutionType;
     solution: string;
     grade: number;
   };

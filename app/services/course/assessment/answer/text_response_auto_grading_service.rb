@@ -9,6 +9,8 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
 
   private
 
+  SolutionEvaluationResult = Struct.new(:solution, :grade, :explanation)
+
   # Grades the given answer.
   #
   # @param [Course::Assessment::Answer::TextResponse] answer The answer specified by the
@@ -18,28 +20,39 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   def evaluate_answer(answer)
     question = answer.question.actable
     answer_text = answer.normalized_answer_text
-    exact_matches, keywords = question.solutions.partition(&:exact_match?)
+    exact_matches = question.solutions.select(&:exact_match?)
+    keywords = question.solutions.select(&:keyword?)
+    spreadsheet_formulas = question.solutions.select(&:spreadsheet_formula?)
 
-    solutions = find_exact_match(answer_text, exact_matches)
-    # If there is no exact match, we fall back to keyword matches.
+    exact_match_solution = find_correct_exact_match_solution(answer_text, exact_matches)
     # Solutions are always kept in an array for easier use of #grade_for and #explanations_for
-    solutions = solutions.present? ? [solutions] : find_keywords(answer_text, keywords)
-
+    evaluation_results = if exact_match_solution
+                           [
+                             SolutionEvaluationResult.new(
+                               exact_match_solution,
+                               exact_match_solution.grade,
+                               exact_match_solution.explanation
+                             )
+                           ]
+                         else
+                           evaluate_correct_keyword_solutions(answer_text, keywords) +
+                           evaluate_spreadsheet_formula_solutions(answer_text, spreadsheet_formulas)
+                         end
     [
-      correctness_for(question, solutions),
-      grade_for(question, solutions),
-      explanations_for(solutions)
+      correctness_for(question, evaluation_results),
+      grade_for(question, evaluation_results),
+      explanations_for(evaluation_results)
     ]
   end
 
   # Returns one solution that exactly matches the answer.
   #
   # @param [String] answer_text The answer text entered by the student.
-  # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions
+  # @param [Array<Course::Assessment::Question::TextResponse::Solution>] solutions The solutions
   #   to be matched against answer_text.
-  # @return [Course::Assessment::Question::TextResponseSolution] Solution that exactly matches
+  # @return [Course::Assessment::Question::TextResponse::Solution] Solution that exactly matches
   #   the answer.
-  def find_exact_match(answer_text, solutions)
+  def find_correct_exact_match_solution(answer_text, solutions)
     # comparison is case insensitive
     solutions.find { |s| s.solution.encode(universal_newline: true).casecmp(answer_text) == 0 }
   end
@@ -47,13 +60,61 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   # Returns the keywords found in the given answer text.
   #
   # @param [String] answer_text The answer text entered by the student.
-  # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions
+  # @param [Array<Course::Assessment::Question::TextResponse::Solution>] solutions The solutions
   #   to be matched against answer_text.
-  # @return [Array<Course::Assessment::Question::TextResponseSolution>] Solutions that matches
+  # @return [Array<Course::Assessment::Question::TextResponse::Solution>] Solutions that matches
   #   the answer.
-  def find_keywords(answer_text, solutions)
+  def evaluate_correct_keyword_solutions(answer_text, solutions)
     # TODO(minqi): Add tokenizer and stemmer for more natural keyword matching.
-    solutions.select { |s| answer_text.downcase.include?(s.solution.downcase) }
+    solutions.select { |s| answer_text.downcase.include?(s.solution.downcase) }.
+      map { |s| SolutionEvaluationResult.new(s, s.grade, s.explanation) }
+  end
+
+  def normalize_formula_text(text)
+    formula_text = text.strip
+    formula_text.start_with?('=') ? formula_text : "=#{formula_text}"
+  end
+
+  # Returns the spreadsheet formula solutions that matches the given answer text.
+  def evaluate_spreadsheet_formula_solutions(answer_text, solutions)
+    container = CoursemologyDockerContainer.create(
+      'coursemology/evaluator-image-python:3.14',
+      argv: ["#{CoursemologyDockerContainer::HOME_PATH}/autograde_spreadsheet.py"],
+      entrypoint: ['python3']
+    )
+    container.store_file("#{CoursemologyDockerContainer::HOME_PATH}/tests.json", {
+      answer: normalize_formula_text(answer_text),
+      solutions: solutions.map do |solution|
+        {
+          id: solution.id,
+          solution: normalize_formula_text(solution.solution),
+          variables: solution.test_spreadsheet.variables,
+          spreadsheet: solution.test_spreadsheet&.attachment&.open(binmode: true) do |file|
+            tar = StringIO.new(Docker::Util.create_tar({ solution.test_spreadsheet.container_filename => file.read }))
+            container.archive_in_stream(CoursemologyDockerContainer::HOME_PATH) do
+              tar.read(Excon.defaults[:chunk_size]).to_s
+            end
+            {
+              id: solution.test_spreadsheet.id,
+              filename: solution.test_spreadsheet.container_filename
+            }
+          end
+        }
+      end
+    }.to_json)
+    container.store_file("#{CoursemologyDockerContainer::HOME_PATH}/autograde_spreadsheet.py", File.read(File.join(__dir__, 'autograde_spreadsheet.py')))
+    container.execute_package
+    results = JSON.parse(container.read_file("#{CoursemologyDockerContainer::HOME_PATH}/result.json"))
+    results['evaluated_solutions'].map do |result|
+      solution = solutions.find { |s| s.id == result['solution_id'] }
+      SolutionEvaluationResult.new(
+        solution,
+        solution.grade * result['results'].count { |s| s['correct'] },
+        solution.explanation
+      )
+    end
+  ensure
+    container&.delete
   end
 
   # Returns the grade for a question with all matched solutions.
@@ -63,30 +124,27 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
   #
   # @param [Course::Assessment::Question::TextResponse] question The question answered by the
   #   student.
-  # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions that
-  #   matches the student's answer.
+  # @param [Array<SolutionEvaluationResult>] evaluation_results The evaluation results for the student's answer.
   # @return [Integer] The grade for the question.
-  def grade_for(question, solutions)
-    [solutions.map(&:grade).reduce(0, :+), question.maximum_grade].min
+  def grade_for(question, evaluation_results)
+    [evaluation_results.map(&:grade).reduce(0, :+), question.maximum_grade].min
   end
 
   # Returns the explanations for the given options.
   #
-  # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions to
-  #   obtain the explanations for.
+  # @param [Array<SolutionEvaluationResult>] evaluation_results The evaluation results for the student's answer.
   # @return [Array<String>] The explanations for the given solutions.
-  def explanations_for(solutions)
-    solutions.map(&:explanation).tap(&:compact!)
+  def explanations_for(evaluation_results)
+    evaluation_results.map(&:explanation).tap(&:compact!)
   end
 
   # Mark the correctness of the answer based on solutions.
   #
   # @param [Course::Assessment::Question::TextResponse] question The question answered by the
   #   student.
-  # @param [Array<Course::Assessment::Question::TextResponseSolution>] solutions The solutions that
-  #   matches the student's answer.
+  # @param [Array<SolutionEvaluationResult>] evaluation_results The evaluation results for the student's answer.
   # @return [Boolean] correct True if the answer is correct.
-  def correctness_for(question, solutions)
-    solutions.map(&:grade).sum >= question.maximum_grade
+  def correctness_for(question, evaluation_results)
+    grade_for(question, evaluation_results) >= question.maximum_grade
   end
 end

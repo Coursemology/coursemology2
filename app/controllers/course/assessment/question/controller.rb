@@ -45,7 +45,9 @@ class Course::Assessment::Question::Controller < Course::Assessment::ComponentCo
   end
 
   def update_skill_ids_if_params_present(question_assessment_params)
-    skill_ids_params = question_assessment_params[:skill_ids] unless question_assessment_params[:skill_ids].nil?
+    return if question_assessment_params.nil? || question_assessment_params[:skill_ids].nil?
+
+    skill_ids_params = question_assessment_params[:skill_ids]
     @question_assessment.skill_ids = skill_ids_params unless skill_ids_params.nil?
   end
 

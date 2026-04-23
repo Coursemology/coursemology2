@@ -6,7 +6,7 @@
 # the points.
 #
 # TextResponse
-# ├── TextResponseSolution (no change)
+# ├── TextResponse::Solution (no change)
 # └── TextResponseComprehensionGroup *
 #     └── TextResponseComprehensionPoint *
 #         └── TextResponseComprehensionSolution *

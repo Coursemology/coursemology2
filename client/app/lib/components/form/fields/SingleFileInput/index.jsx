@@ -36,20 +36,19 @@ class FormSingleFileInput extends Component {
 
   onCancel = (e) => {
     this.setState({ file: null }, this.updateStore(undefined));
+    this.props.onChange?.(undefined);
     e.stopPropagation();
   };
 
   onDrop = (files) => {
     this.setState({ file: files[0] }, this.updateStore(files[0]));
+    this.props.onChange?.(files[0]);
   };
 
   updateStore = (file) => {
-    const {
-      field: {
-        onChange,
-        value: { url, name },
-      },
-    } = this.props;
+    const { field } = this.props;
+    if (!field) return;
+    const { onChange, value: { url, name } } = field;
     onChange({ file, url, name });
   };
 
@@ -59,6 +58,8 @@ class FormSingleFileInput extends Component {
       disabled,
       previewComponent: PreviewComponent,
       label,
+      variant,
+      padding = 'p-10',
     } = this.props;
     const {
       field: {
@@ -81,19 +82,24 @@ class FormSingleFileInput extends Component {
               {...getRootProps({
                 className: `
                 dropzone-input select-none cursor-pointer
-                flex h-100 p-10 items-center justify-center text-center
-                shadow-md rounded-md
+                flex h-100 ${padding} items-center justify-center text-center
+                rounded-md
+                ${variant === 'outlined'
+                  ? 'border border-solid border-neutral-300'
+                  : 'shadow-md'}
               `,
               })}
             >
               <input {...getInputProps()} />
 
-              <PreviewComponent
-                file={this.state.file}
-                handleCancel={this.onCancel}
-                originalName={name}
-                originalUrl={url}
-              />
+              {PreviewComponent && (
+                <PreviewComponent
+                  file={this.state.file}
+                  handleCancel={this.onCancel}
+                  originalName={name}
+                  originalUrl={url}
+                />
+              )}
 
               {error && (
                 <div className="error-message" style={styles.fileLabelError}>
@@ -109,12 +115,15 @@ class FormSingleFileInput extends Component {
 }
 
 FormSingleFileInput.propTypes = {
-  field: PropTypes.object.isRequired,
-  fieldState: PropTypes.object.isRequired,
+  field: PropTypes.object,
+  fieldState: PropTypes.object,
   accept: PropTypes.object,
   disabled: PropTypes.bool,
+  onChange: PropTypes.func,
   previewComponent: PropTypes.func,
   label: PropTypes.string,
+  variant: PropTypes.oneOf(['outlined']),
+  padding: PropTypes.string,
 };
 
 FormSingleFileInput.defaultProps = {
