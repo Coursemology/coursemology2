@@ -199,7 +199,7 @@ gem 'filename'
 # Required by CarrierWave, for image resizing
 gem 'mini_magick'
 # Library for reading and writing zip files
-gem 'rubyzip', require: 'zip'
+gem 'rubyzip', '~> 3.0', require: 'zip'
 # Manipulating XML files, needed for programming evaluation test report parsing.
 gem 'nokogiri', '>= 1.18.8'
 

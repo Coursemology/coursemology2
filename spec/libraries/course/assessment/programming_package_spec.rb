@@ -11,13 +11,9 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
                                        'empty_programming_question_template.zip')
 
   def temp_package_path
-    temp_package_stream.tap(&:close).path
-  end
-
-  def temp_package_stream
-    package_path = Rails.application.config.x.temp_folder.join('spec/packages')
-    FileUtils.mkdir_p(package_path) unless Dir.exist?(package_path)
-    Tempfile.create('programming_package', package_path)
+    package_dir = Rails.application.config.x.temp_folder.join('spec/packages')
+    FileUtils.mkdir_p(package_dir) unless Dir.exist?(package_dir)
+    package_dir.join("programming_package_#{SecureRandom.hex}").to_s
   end
 
   def open_package(path)
@@ -34,14 +30,9 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
       end
     end
 
-    context 'when a file stream is specified' do
-      let(:package_stream) { temp_package_stream }
-      subject { open_package(package_stream) }
-      before do
-        IO.copy_stream(self.class::PACKAGE_PATH, package_stream)
-        package_stream.seek(0)
-      end
-
+    context 'when a File object is specified' do
+      let(:package_path) { File.new(self.class::PACKAGE_PATH, 'rb') }
+      after { package_path.close }
       it 'opens the file' do
         expect(subject.submission_files).not_to be_empty
       end
@@ -65,6 +56,7 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
 
       context 'when a File is given' do
         let(:package_path) { File.new(self.class::PACKAGE_PATH, 'rb') }
+        after { package_path.close }
         it 'returns the path to the File' do
           expect(subject.path).to eq(self.class::PACKAGE_PATH)
         end
