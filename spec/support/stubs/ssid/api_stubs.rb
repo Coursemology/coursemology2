@@ -15,7 +15,19 @@ module Ssid::ApiStubs # rubocop:disable Metrics/ModuleLength
     }.to_json
   }.freeze
 
-  UPLOAD_ANSWERS_SUCCESS = {
+  GET_PRESIGNED_UPLOAD_URL_SUCCESS = {
+    status: 200,
+    body: {
+      payload: {
+        data: {
+          url: 'http://localhost:53897/',
+          fields: { 'key' => 'uploads/test.zip', 'policy' => 'base64encodedpolicy' }
+        }
+      }
+    }.to_json
+  }.freeze
+
+  MULTIPART_UPLOAD_SUCCESS = {
     status: 204,
     body: nil
   }.freeze

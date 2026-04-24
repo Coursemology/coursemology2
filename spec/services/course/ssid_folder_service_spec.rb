@@ -18,7 +18,7 @@ RSpec.describe Course::SsidFolderService do
     end
 
     before do
-      allow_any_instance_of(SsidAsyncApiService).to receive(:connection).and_return(connection)
+      allow_any_instance_of(SsidApiService).to receive(:connection).and_return(connection)
     end
 
     after do

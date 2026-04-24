@@ -32,7 +32,7 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def download_submission_pair_result(submission_pair_id)
-    ssid_api_service = SsidAsyncApiService.new(
+    ssid_api_service = SsidApiService.new(
       "submission-pairs/#{submission_pair_id}/report", {}
     )
     response_status, response_body = ssid_api_service.get
@@ -52,7 +52,7 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def fetch_plagiarism_check_result
-    ssid_api_service = SsidAsyncApiService.new("folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks", {})
+    ssid_api_service = SsidApiService.new("folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks", {})
     response_status, response_body = ssid_api_service.get
     raise SsidError, { status: response_status, body: response_body } unless response_status == 200
 
@@ -67,13 +67,28 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
     end
   end
 
+  def prepare_ssid_presigned_request(assessment)
+    ssid_api_service = SsidApiService.new("folders/#{assessment.ssid_folder_id}/uploads", {})
+    response_status, response_body = ssid_api_service.post
+    raise SsidError, { status: response_status, body: response_body } unless response_status == 200
+
+    upload_url = response_body['payload']['data']['url']
+    unless SsidApiService.upload_whitelist.match?(upload_url)
+      raise SsidError, { status: 500, body: 'Invalid presigned URL' }
+    end
+
+    [upload_url, response_body['payload']['data']['fields']]
+  end
+
   def run_upload_answers
     @linked_assessments.each do |assessment|
+      upload_url, upload_fields = prepare_ssid_presigned_request(assessment)
       service = Course::Assessment::Submission::SsidZipDownloadService.new(assessment)
       zip_files = service.download_and_zip
-      ssid_api_service = SsidAsyncApiService.new("folders/#{assessment.ssid_folder_id}/submissions", {})
+      ssid_api_service = SsidApiService.new('', {}, upload_url)
       zip_files.each do |zip_file|
-        response_status, response_body = ssid_api_service.post_multipart(zip_file)
+        form_data = upload_fields.merge('file' => Faraday::Multipart::FilePart.new(zip_file, 'application/zip'))
+        response_status, response_body = ssid_api_service.post_multipart(form_data)
         raise SsidError, { status: response_status, body: response_body } unless response_status == 204
       end
     ensure
@@ -82,7 +97,7 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def send_plagiarism_check_request
-    ssid_api_service = SsidAsyncApiService.new("folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks", {
+    ssid_api_service = SsidApiService.new("folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks", {
       comparedFolderIds: @linked_assessments.pluck(:ssid_folder_id)
     })
     response_status, response_body = ssid_api_service.post
@@ -94,7 +109,7 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def fetch_ssid_submission_pair_data(limit, offset)
-    ssid_api_service = SsidAsyncApiService.new(
+    ssid_api_service = SsidApiService.new(
       "folders/#{@main_assessment.ssid_folder_id}/plagiarism-checks/latest/submission-pairs",
       { limit: limit, offset: offset }
     )
@@ -105,7 +120,7 @@ class Course::Assessment::Submission::SsidPlagiarismService # rubocop:disable Me
   end
 
   def create_ssid_shared_resource_link(resource_type, resource_id)
-    ssid_api_service = SsidAsyncApiService.new('shared-resources', {
+    ssid_api_service = SsidApiService.new('shared-resources', {
       resourceType: resource_type,
       resourceId: resource_id
     })

@@ -11,7 +11,7 @@ Each environment has two files:
 - `<environment>.key`, the decryption key that allows reading the `.yml.enc` file. **Keys from deployed environments (staging and production) must NEVER BE COMMITTED.** Once leaked, all secrets in the environment will be compromised.
 - `<environment>.yml.enc`, an encrypted YAML file containing sensitive environment data (e.g. API keys). While theoretically safe to commit because the data is unreadable without the decryption key, we currently do not commit files containing real sensitive data as an additional safety measure.
 
-The `development` and `test` key files are checked into this repository, so local development works out of the box. The sample credentials use the same structure as staging/production but with redacted values, so external API integrations (e.g. Codaveri, AWS) will not function.
+The `test` key files are checked into this repository. The sample credentials use the same structure as other environments but with redacted values, so external API integrations (e.g. Codaveri, AWS) will not function.
 
 If you are a Coursemology team member who needs working credentials, contact current staff for the appropriate credentials file.
 

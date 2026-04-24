@@ -20,7 +20,8 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
     end
 
     before do
-      allow_any_instance_of(SsidAsyncApiService).to receive(:connection).and_return(connection)
+      allow(SsidApiService).to receive(:api_url).and_return('http://localhost:53897')
+      allow_any_instance_of(SsidApiService).to receive(:connection).and_return(connection)
       allow_any_instance_of(Course::Assessment::Submission::SsidZipDownloadService).to receive(:download_and_zip).
         and_return([File.join(Rails.root, 'spec/fixtures/course/ssid/submissions.zip')])
     end
@@ -38,36 +39,66 @@ RSpec.describe Course::Assessment::Submission::SsidPlagiarismService do
     end
 
     describe '#start_plagiarism_check' do
-      before do
-        stubs.post('/folders') do
-          [Ssid::ApiStubs::CREATE_FOLDER_SUCCESS[:status],
-           { 'Content-Type': 'application/json' },
-           Ssid::ApiStubs::CREATE_FOLDER_SUCCESS[:body]]
+      context 'when presigned URL matches whitelist' do
+        before do
+          allow(SsidApiService).to receive(:upload_whitelist).and_return(/.*/)
+          stubs.post('/folders') do
+            [Ssid::ApiStubs::CREATE_FOLDER_SUCCESS[:status],
+             { 'Content-Type': 'application/json' },
+             Ssid::ApiStubs::CREATE_FOLDER_SUCCESS[:body]]
+          end
+          stubs.post(/folders\/.*\/uploads/) do |env|
+            expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/uploads")
+            [Ssid::ApiStubs::GET_PRESIGNED_UPLOAD_URL_SUCCESS[:status],
+             { 'Content-Type': 'application/json' },
+             Ssid::ApiStubs::GET_PRESIGNED_UPLOAD_URL_SUCCESS[:body]]
+          end
+          stubs.post('/') do
+            [Ssid::ApiStubs::MULTIPART_UPLOAD_SUCCESS[:status],
+             {},
+             Ssid::ApiStubs::MULTIPART_UPLOAD_SUCCESS[:body]]
+          end
+          stubs.post(/folders\/.*\/plagiarism-checks/) do |env|
+            expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/plagiarism-checks")
+            [Ssid::ApiStubs::SEND_PLAGIARISM_CHECK_SUCCESS[:status],
+             { 'Content-Type': 'application/json' },
+             Ssid::ApiStubs::SEND_PLAGIARISM_CHECK_SUCCESS[:body]]
+          end
+          stubs.get(/folders\/.*\/plagiarism-checks/) do |env|
+            expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/plagiarism-checks")
+            [Ssid::ApiStubs::FETCH_PLAGIARISM_CHECK_SUCCESSFUL[:status],
+             { 'Content-Type': 'application/json' },
+             Ssid::ApiStubs::FETCH_PLAGIARISM_CHECK_SUCCESSFUL[:body]]
+          end
         end
-        stubs.post(/folders\/.*\/submissions/) do |env|
-          expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/submissions")
-          [Ssid::ApiStubs::UPLOAD_ANSWERS_SUCCESS[:status],
-           { 'Content-Type': 'application/json' },
-           Ssid::ApiStubs::UPLOAD_ANSWERS_SUCCESS[:body]]
-        end
-        stubs.post(/folders\/.*\/plagiarism-checks/) do |env|
-          expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/plagiarism-checks")
-          [Ssid::ApiStubs::SEND_PLAGIARISM_CHECK_SUCCESS[:status],
-           { 'Content-Type': 'application/json' },
-           Ssid::ApiStubs::SEND_PLAGIARISM_CHECK_SUCCESS[:body]]
-        end
-        stubs.get(/folders\/.*\/plagiarism-checks/) do |env|
-          expect(env[:url].to_s).to include("/folders/#{assessment.ssid_folder_id}/plagiarism-checks")
-          [Ssid::ApiStubs::FETCH_PLAGIARISM_CHECK_SUCCESSFUL[:status],
-           { 'Content-Type': 'application/json' },
-           Ssid::ApiStubs::FETCH_PLAGIARISM_CHECK_SUCCESSFUL[:body]]
+
+        it 'completes similarity check successfully' do
+          subject.start_plagiarism_check
+          response = subject.fetch_plagiarism_check_result
+          expect(response['status']).to eq('successful')
         end
       end
 
-      it 'completes similarity check successfully' do
-        subject.start_plagiarism_check
-        response = subject.fetch_plagiarism_check_result
-        expect(response['status']).to eq('successful')
+      context 'when presigned URL does not match whitelist' do
+        before do
+          allow(SsidApiService).to receive(:upload_whitelist).and_return(/^https:\/\/trusted\.s3\.amazonaws\.com/)
+          stubs.post('/folders') do
+            [Ssid::ApiStubs::CREATE_FOLDER_SUCCESS[:status],
+             { 'Content-Type': 'application/json' },
+             Ssid::ApiStubs::CREATE_FOLDER_SUCCESS[:body]]
+          end
+          stubs.post(/folders\/.*\/uploads/) do
+            [Ssid::ApiStubs::GET_PRESIGNED_UPLOAD_URL_SUCCESS[:status],
+             { 'Content-Type': 'application/json' },
+             Ssid::ApiStubs::GET_PRESIGNED_UPLOAD_URL_SUCCESS[:body]]
+          end
+        end
+
+        it 'raises SsidError before uploading' do
+          expect_any_instance_of(Course::Assessment::Submission::SsidZipDownloadService).
+            not_to receive(:download_and_zip)
+          expect { subject.start_plagiarism_check }.to raise_error(SsidError)
+        end
       end
     end
 

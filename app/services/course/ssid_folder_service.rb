@@ -5,7 +5,7 @@ class Course::SsidFolderService
   end
 
   def run_create_ssid_folder_service
-    ssid_api_service = SsidAsyncApiService.new('folders', @folder_object)
+    ssid_api_service = SsidApiService.new('folders', @folder_object)
     response_status, response_body = ssid_api_service.post
 
     # If id is lost in our DB somehow, we can recover it if SSID returns a 409
