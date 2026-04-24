@@ -1,13 +1,20 @@
 # frozen_string_literal: true
 
-class SsidAsyncApiService
-  def config
-    ENV.fetch('SSID_URL')
+class SsidApiService
+  def self.api_url
+    Rails.application.credentials.ssid.url
   end
 
-  def initialize(api_namespace, payload)
+  # Validate that the URL is in the whitelist before allowing uploads to it.
+  # This is to prevent leaking data in case the SSID response is intercepted.
+  def self.upload_whitelist
+    Regexp.new(Rails.application.credentials.ssid.upload_whitelist_pattern)
+  end
+
+  def initialize(api_namespace, payload, url = nil)
     @api_namespace = api_namespace
     @payload = payload
+    @url = url || self.class.api_url
   end
 
   def post
@@ -20,8 +27,7 @@ class SsidAsyncApiService
     [500, nil]
   end
 
-  def post_multipart(file_path)
-    form_data = { 'file' => Faraday::Multipart::FilePart.new(file_path, 'application/zip') }
+  def post_multipart(form_data)
     response = connection.post(@api_namespace) do |req|
       req.body = form_data
     end
@@ -42,8 +48,10 @@ class SsidAsyncApiService
   private
 
   def connection
-    @connection ||= Faraday.new(url: config) do |builder|
-      builder.request :authorization, 'Bearer', -> { ENV.fetch('SSID_API_KEY', nil) }
+    @connection ||= Faraday.new(url: @url) do |builder|
+      if @url == self.class.api_url
+        builder.request :authorization, 'Bearer', -> { Rails.application.credentials.ssid.api_key }
+      end
       builder.request :multipart
     end
   end
