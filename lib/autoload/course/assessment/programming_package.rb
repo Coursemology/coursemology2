@@ -50,16 +50,16 @@ class Course::Assessment::ProgrammingPackage
   #
   # @overload initialize(path)
   #   @param [String|Pathname] path The path to the package on disk.
-  # @overload initialize(stream)
-  #   @param [IO] stream The stream to the file.
-  def initialize(path_or_stream)
-    case path_or_stream
+  # @overload initialize(file)
+  #   @param [File] file The file object.
+  def initialize(path_or_file)
+    case path_or_file
     when String, Pathname
-      @path = path_or_stream
-    when IO
-      @stream = path_or_stream
+      @path = path_or_file
+    when File
+      @file_stream_obj = path_or_file
     else
-      raise ArgumentError, 'Invalid path or stream object'
+      raise ArgumentError, 'Invalid path or File object'
     end
   end
 
@@ -72,8 +72,8 @@ class Course::Assessment::ProgrammingPackage
       @file.name
     elsif @path
       @path.to_s
-    elsif @stream.is_a?(File)
-      @stream.path
+    elsif @file_stream_obj
+      @file_stream_obj.path
     end
   end
 
@@ -170,8 +170,8 @@ class Course::Assessment::ProgrammingPackage
     ensure_file_open!
     @file.each do |entry|
       entry_path = File.join(destination, entry.name)
-      FileUtils.mkdir_p(File.dirname(entry_path))
-      @file.extract(entry, entry_path) unless File.exist?(entry_path)
+      FileUtils.mkdir_p(destination)
+      @file.extract(entry, destination_directory: destination) unless File.exist?(entry_path)
     end
   end
 
@@ -219,10 +219,8 @@ class Course::Assessment::ProgrammingPackage
 
     if @path
       @file = Zip::File.open(@path.to_s)
-    elsif @stream
-      @file = Zip::File.new(@stream&.path, true)
-      @file.read_from_stream(@stream)
-      @file.instance_variable_set(:@stored_entries, @file.instance_variable_get(:@entry_set).dup)
+    elsif @file_stream_obj
+      @file = Zip::File.open_buffer(@file_stream_obj)
     end
     raise IllegalStateError unless @file
   end

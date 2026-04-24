@@ -11,13 +11,9 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
                                        'empty_programming_question_template.zip')
 
   def temp_package_path
-    temp_package_stream.tap(&:close).path
-  end
-
-  def temp_package_stream
     package_path = Rails.application.config.x.temp_folder.join('spec/packages')
     FileUtils.mkdir_p(package_path) unless Dir.exist?(package_path)
-    Tempfile.create('programming_package', package_path)
+    Tempfile.create('programming_package', package_path).tap(&:close).path
   end
 
   def open_package(path)
@@ -34,14 +30,8 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
       end
     end
 
-    context 'when a file stream is specified' do
-      let(:package_stream) { temp_package_stream }
-      subject { open_package(package_stream) }
-      before do
-        IO.copy_stream(self.class::PACKAGE_PATH, package_stream)
-        package_stream.seek(0)
-      end
-
+    context 'when a File object is specified' do
+      let(:package_path) { File.new(self.class::PACKAGE_PATH, 'rb') }
       it 'opens the file' do
         expect(subject.submission_files).not_to be_empty
       end
