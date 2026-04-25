@@ -10,6 +10,9 @@ updates:
       semver-major-days: 30
       semver-minor-days: 7
       semver-patch-days: 3
+    groups:
+      dev-dependencies:
+        dependency-type: development
 
   - package-ecosystem: npm
     directory: '/client'
@@ -21,6 +24,9 @@ updates:
       semver-major-days: 30
       semver-minor-days: 7
       semver-patch-days: 3
+    groups:
+      dev-dependencies:
+        dependency-type: development
 
   - package-ecosystem: npm
     directory: '/tests'
@@ -32,3 +38,7 @@ updates:
       semver-major-days: 30
       semver-minor-days: 7
       semver-patch-days: 3
+    groups:
+      all-dependencies:
+        patterns:
+          - '*'
