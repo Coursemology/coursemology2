@@ -1,17 +1,18 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import { FixedSizeList as List } from 'react-window';
+import {
+  forwardRef,
+  UIEventHandler,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
+import { Grid, GridImperativeAPI } from 'react-window';
 import { Button, Typography } from '@mui/material';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import moment from 'lib/moment';
 
 import translations from '../../translations';
-import {
-  DAY_WIDTH_PIXELS,
-  getDaysFromSeconds,
-  getSecondsFromDays,
-} from '../../utils';
+import { DAY_WIDTH_PIXELS, getSecondsFromDays } from '../../utils';
 
 import DayColumn from './DayColumn';
 
@@ -24,7 +25,8 @@ const MAX_DAYS = 100_000_000 as const;
 
 interface DayCalendarProps {
   className?: string;
-  onScroll?: (offset: number) => void;
+  onScroll?: UIEventHandler<HTMLDivElement>;
+  scrollToToday: () => void;
 }
 
 export interface DayCalendarRef {
@@ -36,15 +38,14 @@ const DayCalendar = forwardRef<DayCalendarRef, DayCalendarProps>(
   (props, ref): JSX.Element => {
     const { t } = useTranslation();
 
-    const calendarRef = useRef<List>(null);
+    const calendarRef = useRef<GridImperativeAPI>(null);
 
     useImperativeHandle(ref, () => ({
       scrollTo: (offset): void => {
-        if (calendarRef.current) calendarRef.current.scrollTo(offset);
+        calendarRef.current?.element?.scrollTo({ left: offset });
       },
       scrollToItem: (index): void => {
-        if (calendarRef.current)
-          calendarRef.current.scrollToItem(index, 'start');
+        calendarRef.current?.scrollToColumn({ index, align: 'start' });
       },
     }));
 
@@ -54,18 +55,13 @@ const DayCalendar = forwardRef<DayCalendarRef, DayCalendarProps>(
 
     return (
       <div className={`h-full w-full ${props.className ?? ''}`}>
-        <nav className="flex h-16 items-start justify-between px-5">
+        <nav className="flex h-16 items-start justify-between px-5 w-full">
           <div className="flex items-center justify-center rounded-xl border border-solid border-neutral-200 px-3">
             <Typography variant="subtitle1">{monthDisplay}</Typography>
           </div>
-
           <Button
-            onClick={(): void => {
-              const todayIndex =
-                getDaysFromSeconds(moment().startOf('day').unix()) + 1;
-
-              calendarRef.current?.scrollToItem(todayIndex, 'center');
-            }}
+            className="absolute right-5"
+            onClick={props.scrollToToday}
             size="small"
             variant="outlined"
           >
@@ -73,34 +69,27 @@ const DayCalendar = forwardRef<DayCalendarRef, DayCalendarProps>(
           </Button>
         </nav>
 
-        <AutoSizer>
-          {({ height, width }): JSX.Element => (
-            <List
-              ref={calendarRef}
-              height={height ?? 0}
-              initialScrollOffset={
-                getDaysFromSeconds(moment().unix()) * DAY_WIDTH_PIXELS
-              }
-              itemCount={MAX_DAYS}
-              itemSize={DAY_WIDTH_PIXELS}
-              layout="horizontal"
-              onItemsRendered={({ visibleStartIndex }): void => {
-                const visibleStartDay = moment.unix(
-                  getSecondsFromDays(visibleStartIndex),
-                );
+        <Grid
+          cellComponent={DayColumn}
+          cellProps={{}}
+          className="h-full"
+          columnCount={MAX_DAYS}
+          columnWidth={DAY_WIDTH_PIXELS}
+          gridRef={calendarRef}
+          onCellsRendered={({ columnStartIndex }): void => {
+            const visibleStartDay = moment.unix(
+              getSecondsFromDays(columnStartIndex),
+            );
 
-                setMonthDisplay(visibleStartDay.format('MMMM YYYY'));
-              }}
-              onScroll={({ scrollOffset }): void =>
-                props.onScroll?.(scrollOffset)
-              }
-              overscanCount={5}
-              width={width ?? 0}
-            >
-              {DayColumn}
-            </List>
-          )}
-        </AutoSizer>
+            setMonthDisplay(visibleStartDay.format('MMMM YYYY'));
+          }}
+          onScroll={(e) => {
+            props.onScroll?.(e);
+          }}
+          overscanCount={5}
+          rowCount={1}
+          rowHeight="100%"
+        />
       </div>
     );
   },
