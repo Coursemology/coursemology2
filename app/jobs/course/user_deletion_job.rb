@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 class Course::UserDeletionJob < ApplicationJob
-  protected
-
   def perform(course, course_user, current_user)
     ActsAsTenant.without_tenant do
       unless course_user.destroy

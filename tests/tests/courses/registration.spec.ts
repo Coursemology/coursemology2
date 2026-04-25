@@ -2,7 +2,7 @@ import {
   test,
   expect,
   manufacture,
-  getLastSentEmail,
+  expectLastSentEmail,
   clearEmails,
 } from 'helpers';
 
@@ -61,8 +61,7 @@ test.describe('allows enrol requests', () => {
       page.getByText('enrol request has been submitted'),
     ).toBeVisible();
 
-    const notificationEmail = await getLastSentEmail();
-    expect(notificationEmail?.subject).toContain('Enrol Request');
+    await expectLastSentEmail((email) => email && email.subject.includes('Enrol Request'));
 
     page.getByRole('button', { name: 'Cancel request' }).click();
 

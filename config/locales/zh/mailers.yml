@@ -49,6 +49,10 @@ zh:
         subject: '%{course}: 你%{assessment}的提交已被批改'
         message: >
           点击%{submission}查看你的评分。
+      video_closing_reminder_email:
+        subject: '%{course} %{video} 视频提醒'
+        message: >
+          请注意%{video}将于%{time}截止。
       survey_closing_reminder_email:
         subject: '%{course}: 相关提醒 %{survey}'
         message: >

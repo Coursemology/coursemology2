@@ -108,13 +108,13 @@ end
 
 group :development, :test do
   # Use RSpec for Behaviour testing
-  gem 'rspec-rails', '~> 6'
+  gem 'rspec-rails', '~> 8'
 
   gem 'rubocop', '~> 1.86'
 
   # Factory Bot for factories
   # fix for https://github.com/thoughtbot/factory_bot/issues/1690
-  gem 'factory_bot', '~> 6.5.1'
+  gem 'factory_bot', '~> 6.5.6'
   gem 'factory_bot_rails'
 
   # Checks that all translations are used and defined
