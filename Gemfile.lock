@@ -236,7 +236,7 @@ GEM
     et-orbi (1.2.11)
       tzinfo
     event_stream_parser (1.0.0)
-    excon (1.3.0)
+    excon (1.4.2)
       logger
     exifr (1.4.0)
     factory_bot (6.5.1)
@@ -255,7 +255,7 @@ GEM
     ffi (1.17.1)
     filename (0.1.2)
     flamegraph (0.9.5)
-    fog-aws (3.33.0)
+    fog-aws (3.33.2)
       base64 (>= 0.2, < 0.4)
       fog-core (~> 2.6)
       fog-json (~> 1.1)
@@ -265,13 +265,13 @@ GEM
       excon (~> 1.0)
       formatador (>= 0.2, < 2.0)
       mime-types
-    fog-json (1.2.0)
+    fog-json (1.3.0)
       fog-core
       multi_json (~> 1.10)
     fog-xml (0.1.5)
       fog-core
       nokogiri (>= 1.5.11, < 2.0.0)
-    formatador (1.2.0)
+    formatador (1.2.3)
       reline
     friendly_id (5.5.1)
       activerecord (>= 4.0.0)
@@ -393,7 +393,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0826)
+    mime-types-data (3.2026.0414)
     mimemagic (0.4.3)
       nokogiri (~> 1)
       rake
@@ -401,7 +401,7 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (5.27.0)
-    multi_json (1.17.0)
+    multi_json (1.20.1)
     multipart-post (2.4.1)
     neighbor (0.5.2)
       activerecord (>= 7)
