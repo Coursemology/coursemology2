@@ -49,6 +49,10 @@ en:
         subject: '%{course}: Your submission for %{assessment} has been graded'
         message: >
           Click %{submission} to view your grade.
+      video_closing_reminder_email:
+        subject: '%{course}: Reminder for %{video}'
+        message: >
+          Please be reminded that %{video} is due on %{time}.
       survey_closing_reminder_email:
         subject: '%{course}: Reminder about %{survey}'
         message: >

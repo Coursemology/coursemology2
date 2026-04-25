@@ -48,6 +48,10 @@ ko:
         subject: '%{course}: %{assessment} 제출물이 채점되었습니다'
         message: >
           성적을 보려면 %{submission}을 클릭하세요.
+      video_closing_reminder_email:
+        subject: '%{course} %{video} 알림'
+        message: >
+          %{video}가 %{time}에 마감될 예정이니 참고하시기 바랍니다.
       survey_closing_reminder_email:
         subject: '%{course}: %{survey}에 대한 알림'
         message: >

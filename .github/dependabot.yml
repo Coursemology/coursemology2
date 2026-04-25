@@ -24,9 +24,6 @@ updates:
       semver-major-days: 30
       semver-minor-days: 7
       semver-patch-days: 3
-    groups:
-      dev-dependencies:
-        dependency-type: development
 
   - package-ecosystem: npm
     directory: '/tests'

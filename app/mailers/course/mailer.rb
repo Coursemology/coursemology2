@@ -221,6 +221,23 @@ class Course::Mailer < ApplicationMailer
     end
   end
 
+  # Send a reminder of the video closing to a single user.
+  #
+  # @param [User] recipient The student who has not watched the video yet.
+  # @param [Course::Video] video The video that is closing.
+  def video_closing_reminder_email(recipient, video)
+    ActsAsTenant.without_tenant do
+      @course = video.course
+    end
+    @recipient = recipient
+    @video = video
+
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email,
+           subject: t('.subject', course: @course.title, video: @video.title))
+    end
+  end
+
   # Send a reminder of the survey closing to a single user.
   #
   # @param [User] recipient The student who has not completed the survey.

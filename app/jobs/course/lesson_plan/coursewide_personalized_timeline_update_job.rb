@@ -3,8 +3,6 @@ class Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob < ApplicationJ
   include Course::LessonPlan::PersonalizationConcern
   queue_as :lowest
 
-  protected
-
   def perform(lesson_plan_item)
     instance = Course.unscoped { lesson_plan_item.course.instance }
     ActsAsTenant.with_tenant(instance) do
