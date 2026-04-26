@@ -1,9 +1,8 @@
 import { ReactNode } from 'react';
 import { ToastContainer, TypeOptions } from 'react-toastify';
-import { injectStyle } from 'react-toastify/dist/inject-style';
 import { Close } from '@mui/icons-material';
 
-injectStyle();
+import 'react-toastify/dist/ReactToastify.css';
 
 export const DEFAULT_TOAST_TIMEOUT_MS = 5000 as const;
 
@@ -26,13 +25,14 @@ const ToastProvider = (props: ToastProviderProps): JSX.Element => {
 
       <ToastContainer
         autoClose={DEFAULT_TOAST_TIMEOUT_MS}
-        bodyClassName={(): string => 'flex'}
+        className="flex"
         closeButton={<Close />}
+        closeOnClick
         draggable={false}
         hideProgressBar
         position="bottom-center"
         toastClassName={(toast): string =>
-          `relative shadow-xl rounded-lg mb-4 flex p-5 items-start justify-between ${
+          `relative shadow-xl rounded-lg mb-4 flex p-5 items-start justify-between w-[320px] [&_p]:w-full ${
             colors[toast?.type ?? 'default']
           }`
         }

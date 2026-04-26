@@ -30,7 +30,11 @@ exports[`<DeleteButton /> when the delete button is rendered without confirmatio
         />
       </button>
     </span>
-    <div
+    <section
+      aria-atomic="false"
+      aria-label="Notifications Alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
       class="Toastify"
     />
   </div>
