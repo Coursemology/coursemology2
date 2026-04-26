@@ -30,7 +30,11 @@ exports[`<EditButton /> matches the snapshot 1`] = `
         />
       </button>
     </span>
-    <div
+    <section
+      aria-atomic="false"
+      aria-label="Notifications Alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
       class="Toastify"
     />
   </div>
