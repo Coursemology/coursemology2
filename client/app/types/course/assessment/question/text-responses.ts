@@ -10,10 +10,22 @@ export interface SolutionData {
   explanation: string;
 }
 
+export interface ExistingSpreadsheet {
+  id: number;
+  filename: string;
+  size: number;
+  toBeDeleted?: boolean;
+}
+
 export interface SolutionEntity extends SolutionData {
   toBeDeleted?: boolean;
   draft?: boolean;
-  spreadsheets?: File[];
+  spreadsheets?: (ExistingSpreadsheet | NewSpreadsheet)[];
+}
+
+export interface NewSpreadsheet {
+  id: number;
+  raw: File;
 }
 
 export enum AttachmentType {

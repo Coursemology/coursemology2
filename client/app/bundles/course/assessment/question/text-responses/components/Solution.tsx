@@ -1,19 +1,20 @@
 import { ChangeEventHandler, forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { Add, Undo } from '@mui/icons-material';
-import { Button, IconButton, Select, Tooltip, Typography } from '@mui/material';
+import { Add, Delete, Undo } from '@mui/icons-material';
+import { Button, IconButton, Select, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 import { produce } from 'immer';
-import { SolutionEntity, SolutionType } from 'types/course/assessment/question/text-responses';
+import { ExistingSpreadsheet, NewSpreadsheet, SolutionEntity, SolutionType } from 'types/course/assessment/question/text-responses';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import TextField from 'lib/components/core/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 import translations from '../../../translations';
 import useDirty from '../../commons/useDirty';
 import { SolutionErrors } from '../commons/validations';
-import file from 'react-player/file';
+import { formatReadableBytes } from 'utilities';
 
 interface SolutionProps {
   for: SolutionEntity;
@@ -28,6 +29,73 @@ export interface SolutionRef {
   resetError: () => void;
   setError: (error: SolutionErrors) => void;
 }
+
+const ExistingSpreadsheetRow = ({ of, handleClickDelete, disabled }:
+  { of: ExistingSpreadsheet; handleClickDelete: () => void; disabled?: boolean }): JSX.Element => {
+  const { toBeDeleted, filename, size } = of;
+
+  return (
+    <TableRow
+      className={`${
+        toBeDeleted ? 'bg-neutral-200 line-through' : ''
+      }`}
+    >
+      <TableCell className="break-all">{filename}</TableCell>
+
+      <TableCell className="whitespace-nowrap">
+        {formatReadableBytes(size, 2)}
+      </TableCell>
+
+      <TableCell>
+        {toBeDeleted ? (
+          <IconButton
+            color="info"
+            disabled={disabled}
+            edge="end"
+            onClick={handleClickDelete}
+          >
+            <Undo />
+          </IconButton>
+        ) : (
+          <IconButton
+            color="error"
+            disabled={disabled}
+            edge="end"
+            onClick={handleClickDelete}
+          >
+            <Delete />
+          </IconButton>
+        )}
+      </TableCell>
+    </TableRow>
+  );
+};
+
+const NewSpreadsheetRow = ({ of, handleClickDelete, disabled }:
+  { of: NewSpreadsheet; handleClickDelete: () => void; disabled?: boolean }): JSX.Element => {
+  const { raw } = of;
+  
+  return (
+    <TableRow className="bg-lime-50">
+      <TableCell className="break-all">{raw.name}</TableCell>
+
+      <TableCell className="whitespace-nowrap">
+        {formatReadableBytes(raw.size, 2)}
+      </TableCell>
+
+      <TableCell>
+          <IconButton
+            color="error"
+            disabled={disabled}
+            edge="end"
+            onClick={handleClickDelete}
+          >
+            <Delete />
+          </IconButton>
+      </TableCell>
+    </TableRow>
+  );
+};
 
 const Solution = forwardRef<SolutionRef, SolutionProps>(
   (props, ref): JSX.Element => {
@@ -92,7 +160,10 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
       if (e.target.files) {
         for (const file of e.target.files) {
           console.log({ file });
-          spreadsheets.push(file);
+          spreadsheets.push({
+            id: Date.now(), // Temporary ID for rendering, should be replaced with actual ID from backend after upload
+            raw: file
+          });
         }
       }
       update('spreadsheets', spreadsheets);
@@ -116,11 +187,11 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                 id="solution-type"
                 name="solutionType"
                 native
-                onChange={(type): void =>
+                onChange={(type): void => {
                   update(
                     'solutionType',
                     type.target.value as SolutionType,
-                  )
+                  )}
                 }
                 value={solution.solutionType}
                 variant="outlined"
@@ -161,7 +232,7 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
           <div className="flex flex-row space-x-4">
             <div className="flex w-2/4 flex-col space-y-2">
               <FormHelperText>{t(translations.solution)}</FormHelperText>
-              <TextField
+              {/* <TextField
                 disabled={toBeDeleted || disabled}
                 error={error?.solution && formatErrorMessage(error.solution)}
                 multiline
@@ -169,6 +240,12 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                 onChange={(e): void => update('solution', e.target.value)}
                 rows={2}
                 value={solution.solution}
+              /> */}
+              <textarea
+                name="solution"
+                onChange={(e): void => update('solution', e.target.value)}
+                value={solution.solution || ''}
+                className='h-full'
               />
               {error?.solution && (
                 <FormHelperText error={!!error?.solution}>
@@ -199,6 +276,15 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
             </div>
           </div>
 
+
+            
+          {solution.solutionType === 'spreadsheet_formula' && (
+            <TableContainer dense variant='outlined'>
+              <TableHead>
+                <TableRow>
+                  <TableCell className="flex items-center space-x-2">
+                    <p>Test spreadsheets</p>
+
           <Button
             disabled={props.disabled}
             size="small"
@@ -216,6 +302,44 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
             accept='.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.ods,application/vnd.oasis.opendocument.spreadsheet'
           />
             </Button>
+
+                  </TableCell>
+                  <TableCell>{t(translations.fileSize)}</TableCell>
+                  <TableCell />
+                </TableRow>
+              </TableHead>
+    
+              <TableBody>
+                {(solution.spreadsheets ?? []).map((sheet) => {
+                  if ('raw' in sheet) {
+                    return <NewSpreadsheetRow
+                      key={sheet.id}
+                      of={sheet}
+                      handleClickDelete={() => {
+                        const spreadsheets = solution.spreadsheets?.filter(s => s.id !== sheet.id);
+                        update('spreadsheets', spreadsheets);
+  }}/>
+} else {
+                    return <ExistingSpreadsheetRow
+                      key={sheet.id}
+                      of={sheet}
+                      handleClickDelete={() => {
+                        const spreadsheets = solution.spreadsheets?.map(s => s.id === sheet.id ? { ...s, toBeDeleted: !(s as ExistingSpreadsheet).toBeDeleted } : s);
+                        update('spreadsheets', spreadsheets);
+                      }}
+                    />
+                  }
+                })}
+              </TableBody>
+              {solution.spreadsheets?.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center bg-neutral-100 text-neutral-500">
+                    Add at least one spreadsheet to autograde the formula solution.
+                  </TableCell>
+                </TableRow>
+)}
+            </TableContainer>
+          )}
           {solution.draft && (
             <Typography className="italic text-neutral-500" variant="body2">
               {t(translations.newSolutionCannotUndo)}

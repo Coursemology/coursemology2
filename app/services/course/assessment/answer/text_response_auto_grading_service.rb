@@ -101,7 +101,8 @@ class Course::Assessment::Answer::TextResponseAutoGradingService < \
             }
           end
         }
-      end
+      end,
+      variables: {}
     }.to_json)
     container.store_file("#{CoursemologyDockerContainer::HOME_PATH}/autograde_spreadsheet.py", File.read(File.join(__dir__, 'autograde_spreadsheet.py')))
     container.execute_package

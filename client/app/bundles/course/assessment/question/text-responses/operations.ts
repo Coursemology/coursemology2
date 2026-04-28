@@ -82,9 +82,20 @@ const adaptPostData = (data: TextResponseData): TextResponsePostData => ({
       grade: solution.grade,
       explanation: solution.explanation,
       _destroy: solution.toBeDeleted,
-      test_spreadsheets_attributes: solution.spreadsheets?.map((file) => ({
-        file: file instanceof File ? file : undefined,
-      })) ?? [],
+      test_spreadsheets_attributes: solution.spreadsheets?.map((file) => {
+        if ('raw' in file) {
+          return {
+            file: file.raw,
+          };
+        } else if (file.toBeDeleted) {
+          return {
+            id: file.id,
+            _destroy: true,
+          };
+        } else {
+          return null;
+        }
+      }).filter((v) => v !== null) as { file?: File; id?: number; _destroy?: boolean }[] ?? [],
     })),
   },
 });
