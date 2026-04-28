@@ -1,6 +1,6 @@
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { Undo } from '@mui/icons-material';
-import { IconButton, Select, Tooltip, Typography } from '@mui/material';
+import { ChangeEventHandler, forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { Add, Undo } from '@mui/icons-material';
+import { Button, IconButton, Select, Tooltip, Typography } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 import { produce } from 'immer';
 import { SolutionEntity, SolutionType } from 'types/course/assessment/question/text-responses';
@@ -13,6 +13,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../../translations';
 import useDirty from '../../commons/useDirty';
 import { SolutionErrors } from '../commons/validations';
+import file from 'react-player/file';
 
 interface SolutionProps {
   for: SolutionEntity;
@@ -82,6 +83,19 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
 
       update('toBeDeleted', undefined);
       setToBeDeleted(false);
+    };
+    
+    const handleFileInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+      if (props.disabled) return;
+
+      const spreadsheets = solution.spreadsheets ? [...solution.spreadsheets] : [];
+      if (e.target.files) {
+        for (const file of e.target.files) {
+          console.log({ file });
+          spreadsheets.push(file);
+        }
+      }
+      update('spreadsheets', spreadsheets);
     };
 
     return (
@@ -184,6 +198,24 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
               )}
             </div>
           </div>
+
+          <Button
+            disabled={props.disabled}
+            size="small"
+            startIcon={<Add />}
+            variant="outlined"
+          >
+            {t(translations.addFiles)}
+
+            <input
+              className="absolute bottom-0 left-0 right-0 top-0 opacity-0 cursor-pointer"
+              disabled={props.disabled}
+              multiple
+              onChange={handleFileInputChange}
+            type="file"
+            accept='.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.ods,application/vnd.oasis.opendocument.spreadsheet'
+          />
+            </Button>
           {solution.draft && (
             <Typography className="italic text-neutral-500" variant="body2">
               {t(translations.newSolutionCannotUndo)}

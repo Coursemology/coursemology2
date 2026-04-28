@@ -6,7 +6,7 @@ RSpec.describe Course::Assessment::Question::TextResponse, type: :model do
 
   it 'has many solutions' do
     expect(subject).to have_many(:solutions).
-      class_name(Course::Assessment::Question::TextResponseSolution.name).
+      class_name(Course::Assessment::Question::TextResponse::Solution.name).
       dependent(:destroy)
   end
   it { is_expected.to accept_nested_attributes_for(:solutions) }

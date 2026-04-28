@@ -13,7 +13,7 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
                                   allow_nil: true
   validate :validate_grade
 
-  has_many :solutions, class_name: 'Course::Assessment::Question::TextResponseSolution',
+  has_many :solutions, class_name: 'Course::Assessment::Question::TextResponse::Solution',
                        dependent: :destroy, foreign_key: :question_id, inverse_of: :question
 
   has_many :groups, class_name: 'Course::Assessment::Question::TextResponseComprehensionGroup',

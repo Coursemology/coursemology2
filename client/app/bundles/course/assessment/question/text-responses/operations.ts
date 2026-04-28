@@ -32,6 +32,37 @@ export const fetchEdit = async (
   return response.data;
 };
 
+const objectToFormData = (
+  obj: unknown,
+  formData: FormData = new FormData(),
+  parentKey = '',
+): FormData => {
+  if (obj === null || obj === undefined) {
+    return formData;
+  } else if (obj instanceof File) {
+    formData.append(parentKey, obj);
+  } else if (typeof obj === 'boolean') {
+    formData.append(parentKey, obj ? '1' : '0');
+  } else if (typeof obj === 'number') {
+    formData.append(parentKey, String(obj));
+  } else if (typeof obj === 'string') {
+    formData.append(parentKey, obj);
+  } else if (Array.isArray(obj)) {
+    obj.forEach((item, index) => {
+      objectToFormData(item, formData, `${parentKey}[${index}]`);
+    });
+  } else {
+    Object.entries(obj as Record<string, unknown>).forEach(([key, value]) => {
+      objectToFormData(
+        value,
+        formData,
+        parentKey ? `${parentKey}[${key}]` : key,
+      );
+    });
+  }
+  return formData;
+};
+
 const adaptPostData = (data: TextResponseData): TextResponsePostData => ({
   question_text_response: {
     title: data.question.title,
@@ -51,16 +82,19 @@ const adaptPostData = (data: TextResponseData): TextResponsePostData => ({
       grade: solution.grade,
       explanation: solution.explanation,
       _destroy: solution.toBeDeleted,
+      test_spreadsheets_attributes: solution.spreadsheets?.map((file) => ({
+        file: file instanceof File ? file : undefined,
+      })) ?? [],
     })),
   },
 });
 
 export const create = async (data: TextResponseData): Promise<JustRedirect> => {
-  const adaptedData = adaptPostData(data);
+  const formData = objectToFormData(adaptPostData(data));
 
   try {
     const response =
-      await CourseAPI.assessment.question.textResponse.create(adaptedData);
+      await CourseAPI.assessment.question.textResponse.create(formData);
 
     return response.data;
   } catch (error) {
@@ -73,12 +107,12 @@ export const update = async (
   id: number,
   data: TextResponseData,
 ): Promise<JustRedirect> => {
-  const adaptedData = adaptPostData(data);
+  const formData = objectToFormData(adaptPostData(data));
 
   try {
     const response = await CourseAPI.assessment.question.textResponse.update(
       id,
-      adaptedData,
+      formData,
     );
     return response.data;
   } catch (error) {

@@ -69,6 +69,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     if (questionType === 'file_upload') return [];
 
     const solutions = solutionsRef.current?.getSolutions() ?? [];
+    console.log({ solutions });
     const errors = await validateSolutions(solutions);
 
     if (errors) {

@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
+class Course::Assessment::Question::TextResponse::Solution < ApplicationRecord
   enum :solution_type, [:exact_match, :keyword, :spreadsheet_formula]
 
   before_validation :strip_whitespace
@@ -12,8 +12,10 @@ class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
 
   belongs_to :question, class_name: 'Course::Assessment::Question::TextResponse',
                         inverse_of: :solutions
-  has_many :spreadsheets, class_name: 'Course::Assessment::Question::TextResponseSolutionSpreadsheet',
+  has_many :test_spreadsheets, class_name: 'Course::Assessment::Question::TextResponse::Solution::Spreadsheet',
                         inverse_of: :solution, dependent: :destroy, autosave: true
+
+  accepts_nested_attributes_for :test_spreadsheets, allow_destroy: true
 
   def initialize_duplicate(duplicator, other)
     self.question = duplicator.duplicate(other.question)

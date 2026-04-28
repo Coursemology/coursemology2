@@ -13,6 +13,7 @@ export interface SolutionData {
 export interface SolutionEntity extends SolutionData {
   toBeDeleted?: boolean;
   draft?: boolean;
+  spreadsheets?: File[];
 }
 
 export enum AttachmentType {
@@ -68,6 +69,11 @@ export interface TextResponsePostData {
       grade?: SolutionEntity['grade'];
       explanation?: SolutionEntity['explanation'];
       _destroy?: SolutionEntity['toBeDeleted'];
+      test_spreadsheets_attributes?: {
+        id?: number | string;
+        file?: File;
+        _destroy?: boolean;
+      }[];
     }[];
   };
 }
