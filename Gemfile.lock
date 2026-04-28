@@ -254,7 +254,7 @@ GEM
       multipart-post (~> 2.0)
     faraday-net_http (3.4.2)
       net-http (~> 0.5)
-    ffi (1.17.1)
+    ffi (1.17.4)
     filename (0.1.2)
     flamegraph (0.9.5)
     fog-aws (3.33.2)
