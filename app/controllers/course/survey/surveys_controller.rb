@@ -45,7 +45,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def remind
     authorize!(:manage, @survey)
-    return head :bad_request unless CourseUser.valid_course_user_type?(params[:course_users])
+    return head :bad_request unless Course.valid_course_user_type?(params[:course_users])
 
     Course::Survey::ReminderService.
       send_closing_reminder(
@@ -68,7 +68,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   private
 
   def student_course_users
-    current_course_user.users_in_course_by_type(params[:course_users])
+    current_course.course_users_by_type(params[:course_users], current_course_user)
   end
 
   def render_survey_with_questions_json

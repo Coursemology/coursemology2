@@ -170,15 +170,6 @@ class CourseUser < ApplicationRecord
     where(user_id: user.id)
   end)
 
-  COURSE_USER_TYPES = {
-    my_students: 'my_students',
-    my_students_w_phantom: 'my_students_w_phantom',
-    students: 'students',
-    students_w_phantom: 'students_w_phantom',
-    staff: 'staff',
-    staff_w_phantom: 'staff_w_phantom'
-  }.freeze
-
   # Test whether the current scope includes the current user.
   #
   # @param [User] user The user to check
@@ -253,27 +244,6 @@ class CourseUser < ApplicationRecord
 
   def latest_learning_rate_record
     learning_rate_records.limit(1).first
-  end
-
-  def self.valid_course_user_type?(type)
-    COURSE_USER_TYPES.value?(type)
-  end
-
-  def users_in_course_by_type(type)
-    case type
-    when COURSE_USER_TYPES[:my_students]
-      my_students.without_phantom_users
-    when COURSE_USER_TYPES[:my_students_w_phantom]
-      my_students
-    when COURSE_USER_TYPES[:students_w_phantom]
-      course.students
-    when COURSE_USER_TYPES[:staff]
-      course.staff.without_phantom_users
-    when COURSE_USER_TYPES[:staff_w_phantom]
-      course.staff
-    else
-      course.students.without_phantom_users # :students is the default type
-    end
   end
 
   private
