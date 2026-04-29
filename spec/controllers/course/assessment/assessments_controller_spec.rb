@@ -233,7 +233,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         get :auto_feedback_count, as: :json, params: {
           course_id: course,
           id: assessment,
-          course_users: CourseUser::COURSE_USER_TYPES[:students]
+          course_users: Course::COURSE_USER_TYPES[:students]
         }
       end
 
@@ -269,7 +269,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
         patch :publish_auto_feedback, as: :json, params: {
           course_id: course,
           id: assessment,
-          course_users: CourseUser::COURSE_USER_TYPES[:students],
+          course_users: Course::COURSE_USER_TYPES[:students],
           rating: 4
         }
       end

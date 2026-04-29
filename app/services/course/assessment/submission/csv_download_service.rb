@@ -3,14 +3,14 @@ require 'csv'
 class Course::Assessment::Submission::CsvDownloadService
   include TmpCleanupHelper
 
-  # @param [CourseUser] current_course_user The course user downloading the submissions.
+  # @param [CourseUser|nil] current_course_user The course user downloading the submissions.
   # @param [Course::Assessment] assessment The assessments to download submissions from.
-  # @param [String|nil] course_users_type The subset of course users whose submissions to download.
+  # @param [String|nil] course_user_type The subset of course users whose submissions to download.
   # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
   #   'staff', 'staff_w_phantom'
-  def initialize(current_course_user, assessment, course_users_type)
+  def initialize(current_course_user, assessment, course_user_type)
     @current_course_user = current_course_user
-    @course_users_type = course_users_type
+    @course_user_type = course_user_type
     @assessment = assessment
 
     @question_assessments = Course::QuestionAssessment.where(assessment_id: assessment.id).
@@ -108,7 +108,8 @@ class Course::Assessment::Submission::CsvDownloadService
 
   def course_users
     # We cannot use ORDER BY because it conflicts with the selection
-    @course_users ||= @current_course_user.users_in_course_by_type(@course_users_type).
+    source_course = @current_course_user&.course || @assessment.course
+    @course_users ||= source_course.course_users_by_type(@course_user_type, @current_course_user).
                       includes(user: :emails).sort_by { |cu| [cu.phantom? ? 0 : 1, cu.name] }
   end
 end

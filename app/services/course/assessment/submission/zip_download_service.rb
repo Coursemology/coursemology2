@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::Submission::BaseZipDownloadService
-  # @param [CourseUser] course_user The course user downloading the submissions.
+  # @param [CourseUser|nil] current_course_user The course user downloading the submissions.
   # @param [Course::Assessment] assessment The assessments to download submissions from.
-  # @param [String|nil] course_users The subset of course users whose submissions to download.
+  # @param [String|nil] course_user_type The subset of course users whose submissions to download.
   # Accepted values: 'my_students', 'my_students_w_phantom', 'students', 'students_w_phantom'
   #   'staff', 'staff_w_phantom'
-  def initialize(course_user, assessment, course_users)
+  def initialize(current_course_user, assessment, course_user_type)
     super()
-    @course_user = course_user
+    @current_course_user = current_course_user
     @assessment = assessment
     @questions = assessment.questions.to_h { |q| [q.id, q] }
-    @course_users = course_users
+    @course_user_type = course_user_type
   end
 
   private
@@ -38,6 +38,7 @@ class Course::Assessment::Submission::ZipDownloadService < Course::Assessment::S
   end
 
   def course_user_ids
-    @course_user_ids ||= @course_user.users_in_course_by_type(@course_users).select(:user_id)
+    source_course = @current_course_user&.course || @assessment.course
+    @course_user_ids ||= source_course.course_users_by_type(@course_user_type, @current_course_user).select(:user_id)
   end
 end

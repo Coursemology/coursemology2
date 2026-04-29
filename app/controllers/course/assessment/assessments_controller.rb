@@ -193,7 +193,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def remind
     authorize!(:manage, @assessment)
-    return head :bad_request unless CourseUser.valid_course_user_type?(params[:course_users])
+    return head :bad_request unless Course.valid_course_user_type?(params[:course_users])
 
     Course::Assessment::ReminderService.
       send_closing_reminder(@assessment, student_course_users.pluck(:id), include_unsubscribed: true)
@@ -441,7 +441,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def student_course_users
-    current_course_user.users_in_course_by_type(params[:course_users])
+    current_course.course_users_by_type(params[:course_users], current_course_user)
   end
 
   def can_access_assessment?

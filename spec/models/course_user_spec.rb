@@ -436,62 +436,6 @@ RSpec.describe CourseUser, type: :model do
       end
     end
 
-    describe '#users_in_course_by_type' do
-      let(:group_owner) { create(:course_manager, course: course) }
-      let!(:phantom_student) { create(:course_student, :phantom, course: course) }
-      let!(:ta) { create(:course_teaching_assistant, course: course) }
-      let!(:phantom_ta) { create(:course_teaching_assistant, :phantom, course: course) }
-      let!(:group) do
-        grp = create(:course_group, course: course)
-        create(:course_group_manager, course: course, group: grp, course_user: group_owner)
-        create(:course_group_student, course: course, group: grp, course_user: student)
-        create(:course_group_student, course: course, group: grp, course_user: phantom_student)
-        grp
-      end
-
-      it "returns non-phantom students for 'students'" do
-        result = group_owner.users_in_course_by_type('students')
-        expect(result).to include(student)
-        expect(result).not_to include(phantom_student, ta)
-      end
-
-      it "returns all students including phantoms for 'students_w_phantom'" do
-        result = group_owner.users_in_course_by_type('students_w_phantom')
-        expect(result).to include(student, phantom_student)
-        expect(result).not_to include(ta)
-      end
-
-      it "returns non-phantom group students for 'my_students'" do
-        result = group_owner.users_in_course_by_type('my_students')
-        expect(result).to include(student)
-        expect(result).not_to include(phantom_student, ta)
-      end
-
-      it "returns all group students including phantoms for 'my_students_w_phantom'" do
-        result = group_owner.users_in_course_by_type('my_students_w_phantom')
-        expect(result).to include(student, phantom_student)
-        expect(result).not_to include(ta)
-      end
-
-      it "returns non-phantom staff for 'staff'" do
-        result = group_owner.users_in_course_by_type('staff')
-        expect(result).to include(ta)
-        expect(result).not_to include(phantom_ta, student)
-      end
-
-      it "returns all staff including phantoms for 'staff_w_phantom'" do
-        result = group_owner.users_in_course_by_type('staff_w_phantom')
-        expect(result).to include(ta, phantom_ta)
-        expect(result).not_to include(student)
-      end
-
-      it 'defaults to non-phantom students for unknown types' do
-        result = group_owner.users_in_course_by_type(nil)
-        expect(result).to include(student)
-        expect(result).not_to include(phantom_student, ta)
-      end
-    end
-
     context 'when the same user is registered into the same course twice' do
       subject do
         create(:course_student, course: student.course, user: student.user, role: :student)

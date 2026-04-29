@@ -394,7 +394,8 @@ class Course::Assessment::Submission::SubmissionsController < # rubocop:disable 
   end
 
   def course_user_ids
-    @course_user_ids ||= current_course_user.users_in_course_by_type(params[:course_users]).select(:user_id)
+    @course_user_ids ||=
+      current_course.course_users_by_type(params[:course_users], current_course_user).select(:user_id)
   end
 
   def user_ids_without_submission
