@@ -44,6 +44,59 @@ Once each component has been set up and is running on their own terminals, you c
 email: `test@example.org`
 password: `Coursemology!`
 
+### Running using HTTPS locally
+
+These commands should be run from the repository root directory, unless otherwise noted.
+
+`lvh.me` is a public domain that resolves to `127.0.0.1`. It is used instead of `localhost` because browsers enforce stricter security policies on `localhost` that can break the OAuth redirect flow over HTTPS.
+
+1. Generate a self-signed certificate and key for `lvh.me`:
+
+   ```sh
+   openssl req -x509 -newkey rsa:4096 -sha256 -days 365 -nodes \
+     -keyout config/credentials/server.key \
+     -out config/credentials/server.crt \
+     -subj "/CN=lvh.me" \
+     -addext "subjectAltName=DNS:lvh.me,DNS:*.lvh.me"
+   ```
+
+   Puma and the webpack dev server both use these files automatically on startup.
+
+2. Update the Keycloak redirect URIs to use HTTPS:
+
+   ```sh
+   bundle exec rake "keycloak:push_redirect_uris[https://lvh.me:8080]"
+   ```
+
+3. Start the app server with the public hostname:
+
+   ```sh
+   RAILS_HOSTNAME=lvh.me:8080 RAILS_ENV=development bundle exec puma
+   ```
+
+4. Start the client in HTTPS mode (from the `client/` directory):
+
+   ```sh
+   yarn build:development-https
+   ```
+
+Access the app at `https://lvh.me:8080`. Your browser will show a certificate warning for the self-signed cert — ignore it or add a security exception.
+
+#### Reverting to HTTP
+
+1. Remove the certificate files so Puma falls back to HTTP:
+
+   ```sh
+   rm config/credentials/server.crt config/credentials/server.key
+   ```
+
+2. Restore the Keycloak redirect URIs:
+
+   ```sh
+   bundle exec rake "keycloak:push_redirect_uris"
+   ```
+
+3. Restart both the app server and client using the standard commands.
 
 
 ## Found Boogs?

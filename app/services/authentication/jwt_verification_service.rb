@@ -2,7 +2,6 @@
 
 class Authentication::JwtVerificationService < Authentication::VerificationService
   JWKS_CACHE_KEY = 'auth/jwks'
-  JWKS_URL = ENV['KEYCLOAK_AUTH_JWKS_URL'].freeze
 
   class << self
     delegate :validate_token, to: :new
@@ -18,6 +17,18 @@ class Authentication::JwtVerificationService < Authentication::VerificationServi
 
   private
 
+  def jwks_url
+    Rails.application.credentials.dig(:keycloak, :jwks_url)
+  end
+
+  def iss
+    Rails.application.credentials.dig(:keycloak, :iss)
+  end
+
+  def aud
+    Rails.application.credentials.dig(:keycloak, :aud)
+  end
+
   def jwk_loader
     lambda do |options|
       jwks(force: options[:invalidate]) || {}
@@ -31,7 +42,7 @@ class Authentication::JwtVerificationService < Authentication::VerificationServi
   end
 
   def fetch_jwks
-    jwks_uri = URI(JWKS_URL)
+    jwks_uri = URI(jwks_url)
     jwks_response = Net::HTTP.get_response(jwks_uri)
 
     JSON.parse(jwks_response.body.to_s) if jwks_response.is_a? Net::HTTPSuccess
@@ -40,9 +51,9 @@ class Authentication::JwtVerificationService < Authentication::VerificationServi
   def decode_token(access_token)
     JWT.decode(access_token, nil, true, {
       algorithms: 'RS256',
-      iss: ENV['KEYCLOAK_ISS'],
+      iss: iss,
       verify_iss: true,
-      aud: ENV['KEYCLOAK_AUD'],
+      aud: aud,
       verify_aud: true,
       jwks: jwk_loader
     })
