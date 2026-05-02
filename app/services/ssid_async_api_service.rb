@@ -1,13 +1,18 @@
 # frozen_string_literal: true
 
 class SsidAsyncApiService
-  def config
-    ENV.fetch('SSID_URL')
+  def self.api_url
+    Rails.application.credentials.dig(:ssid, :url)
   end
 
-  def initialize(api_namespace, payload)
+  def self.api_key
+    Rails.application.credentials.dig(:ssid, :api_key)
+  end
+
+  def initialize(api_namespace, payload, url = nil)
     @api_namespace = api_namespace
     @payload = payload
+    @url = url || self.class.api_url
   end
 
   def post
@@ -42,8 +47,8 @@ class SsidAsyncApiService
   private
 
   def connection
-    @connection ||= Faraday.new(url: config) do |builder|
-      builder.request :authorization, 'Bearer', -> { ENV.fetch('SSID_API_KEY', nil) }
+    @connection ||= Faraday.new(url: @url) do |builder|
+      builder.request :authorization, 'Bearer', -> { self.class.api_key } if @url == self.class.api_url
       builder.request :multipart
     end
   end

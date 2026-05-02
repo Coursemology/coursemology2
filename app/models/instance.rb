@@ -44,7 +44,7 @@ class Instance < ApplicationRecord
     end
   end
 
-  after_commit :push_redirect_uris_to_keycloak
+  after_commit :push_redirect_uris_to_keycloak, unless: -> { Rails.env.test? }
 
   validates :host, hostname: true, if: :should_validate_host?
   validates :name, length: { maximum: 255 }, presence: true
@@ -138,31 +138,50 @@ class Instance < ApplicationRecord
     super
   end
 
-  private
+  def redirect_uri
+    default_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080')
+
+    redirect_host = if read_attribute(:host) == '*'
+                      default_host
+                    else
+                      host.gsub('coursemology.org', default_host)
+                    end
+
+    protocol = if Rails.env.development? && ENV['RAILS_USE_HTTP']
+                 'http'
+               else
+                 'https'
+               end
+
+    "#{protocol}://#{redirect_host}"
+  end
 
   def push_redirect_uris_to_keycloak
-    return if ENV['RAILS_ENV'] == 'test'
+    access_token = token_from_client_credentials
+    frontend_client_uuid = keycloak_frontend_client_uuid(access_token)
+    raise "Keycloak frontend client not found for client_id: #{frontend_client_id}" if frontend_client_uuid.blank?
 
-    client_id = ENV.fetch('KEYCLOAK_BE_CLIENT_ID', nil)
-    client_secret = ENV.fetch('KEYCLOAK_BE_CLIENT_SECRET', nil)
-    credentials = Keycloak::Client.get_token_by_client_credentials(client_id, client_secret)
-    access_token = JSON.parse(credentials)['access_token']
-    service = "clients/#{ENV.fetch('KEYCLOAK_FE_CLIENT_UUID', nil)}"
-
-    hosts = Instance.all.pluck(:host)
-    redirect_uris = hosts.map { |h| convert_host_to_redirect_uri(h) }
+    service = "clients/#{frontend_client_uuid}"
+    redirect_uris = Instance.all.map(&:redirect_uri).map { |uri| "#{uri}/*" }
     Keycloak::Admin.generic_put(service, nil, { redirectUris: redirect_uris }, access_token)
   end
 
-  def convert_host_to_redirect_uri(host)
-    default_host = (ENV['RAILS_ENV'] == 'development') ? 'localhost:8080' : ENV.fetch('RAILS_HOSTNAME', nil)
+  private
 
-    host = if host == '*'
-             default_host
-           else
-             host.gsub('coursemology.org', default_host)
-           end
-    (ENV['RACK_ENV'] == 'development') ? "http://#{host}/*" : "https://#{host}/*"
+  def frontend_client_id
+    Rails.application.credentials.dig(:keycloak, :frontend, :client_id)
+  end
+
+  def token_from_client_credentials
+    client_id = Rails.application.credentials.dig(:keycloak, :backend, :client_id)
+    client_secret = Rails.application.credentials.dig(:keycloak, :backend, :client_secret)
+    credentials = Keycloak::Client.get_token_by_client_credentials(client_id, client_secret)
+    JSON.parse(credentials)['access_token']
+  end
+
+  def keycloak_frontend_client_uuid(access_token)
+    clients = Keycloak::Admin.get_clients({ clientId: frontend_client_id }, access_token)
+    JSON.parse(clients).dig(0, 'id')
   end
 
   def should_validate_host?

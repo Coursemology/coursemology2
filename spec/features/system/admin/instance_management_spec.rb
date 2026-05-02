@@ -70,7 +70,7 @@ RSpec.feature 'System: Administration: Instances', js: true do
 
         instances.each do |instance|
           expect(page).to have_selector("div.instance_name_field_#{instance.id}", exact_text: instance.name)
-          expect(page).to have_link(nil, href: "//#{instance.host}/admin/instances")
+          expect(page).to have_link(nil, href: "#{instance.redirect_uri}/admin/instances")
         end
       end
 

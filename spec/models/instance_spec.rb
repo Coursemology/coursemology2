@@ -117,6 +117,186 @@ RSpec.describe Instance do
     end
   end
 
+  describe '#redirect_uri' do
+    around do |example|
+      orig_hostname = ENV.fetch('RAILS_HOSTNAME', nil)
+      orig_use_http = ENV.fetch('RAILS_USE_HTTP', nil)
+      example.run
+    ensure
+      orig_hostname.nil? ? ENV.delete('RAILS_HOSTNAME') : (ENV['RAILS_HOSTNAME'] = orig_hostname)
+      orig_use_http.nil? ? ENV.delete('RAILS_USE_HTTP') : (ENV['RAILS_USE_HTTP'] = orig_use_http)
+    end
+
+    context 'when the instance is the default instance' do
+      subject(:instance) { Instance.default }
+
+      context 'when RAILS_HOSTNAME is not set' do
+        before { ENV.delete('RAILS_HOSTNAME') }
+
+        it 'falls back to https://localhost:8080' do
+          expect(instance.redirect_uri).to eq('https://localhost:8080')
+        end
+      end
+
+      context 'when RAILS_HOSTNAME is "coursemology.org"' do
+        before { ENV['RAILS_HOSTNAME'] = 'coursemology.org' }
+
+        it 'returns https://coursemology.org' do
+          expect(instance.redirect_uri).to eq('https://coursemology.org')
+        end
+      end
+
+      context 'when RAILS_HOSTNAME is "staging.coursemology.org"' do
+        before { ENV['RAILS_HOSTNAME'] = 'staging.coursemology.org' }
+
+        it 'returns https://staging.coursemology.org' do
+          expect(instance.redirect_uri).to eq('https://staging.coursemology.org')
+        end
+      end
+
+      context 'when RAILS_HOSTNAME is "lvh.me:8080"' do
+        before { ENV['RAILS_HOSTNAME'] = 'lvh.me:8080' }
+
+        it 'returns https://lvh.me:8080' do
+          expect(instance.redirect_uri).to eq('https://lvh.me:8080')
+        end
+      end
+    end
+
+    context 'when the instance has host "coursemology.org"' do
+      subject(:instance) { build(:instance, host: 'coursemology.org') }
+
+      context 'when RAILS_HOSTNAME is not set' do
+        before { ENV.delete('RAILS_HOSTNAME') }
+
+        it 'falls back to https://localhost:8080' do
+          expect(instance.redirect_uri).to eq('https://localhost:8080')
+        end
+      end
+
+      context 'when RAILS_HOSTNAME is "coursemology.org"' do
+        before { ENV['RAILS_HOSTNAME'] = 'coursemology.org' }
+
+        it 'returns https://coursemology.org' do
+          expect(instance.redirect_uri).to eq('https://coursemology.org')
+        end
+      end
+
+      context 'when RAILS_HOSTNAME is "staging.coursemology.org"' do
+        before { ENV['RAILS_HOSTNAME'] = 'staging.coursemology.org' }
+
+        it 'returns https://staging.coursemology.org' do
+          expect(instance.redirect_uri).to eq('https://staging.coursemology.org')
+        end
+      end
+    end
+
+    context 'when the instance has host "tenant.coursemology.org"' do
+      subject(:instance) { build(:instance, host: 'tenant.coursemology.org') }
+
+      context 'when RAILS_HOSTNAME is "coursemology.org"' do
+        before { ENV['RAILS_HOSTNAME'] = 'coursemology.org' }
+
+        it 'preserves the subdomain' do
+          expect(instance.redirect_uri).to eq('https://tenant.coursemology.org')
+        end
+      end
+
+      context 'when RAILS_HOSTNAME is "staging.coursemology.org"' do
+        before { ENV['RAILS_HOSTNAME'] = 'staging.coursemology.org' }
+
+        it 'maps the subdomain to the staging host' do
+          expect(instance.redirect_uri).to eq('https://tenant.staging.coursemology.org')
+        end
+      end
+    end
+
+    describe 'protocol selection' do
+      subject(:instance) { Instance.default }
+
+      before { ENV.delete('RAILS_HOSTNAME') }
+
+      context 'in a non-development environment' do
+        it 'uses https' do
+          expect(instance.redirect_uri).to start_with('https://')
+        end
+      end
+
+      context 'in development without RAILS_USE_HTTP' do
+        before do
+          allow(Rails.env).to receive(:development?).and_return(true)
+          ENV.delete('RAILS_USE_HTTP')
+        end
+
+        it 'uses https' do
+          expect(instance.redirect_uri).to start_with('https://')
+        end
+      end
+
+      context 'in development with RAILS_USE_HTTP set' do
+        before do
+          allow(Rails.env).to receive(:development?).and_return(true)
+          ENV['RAILS_USE_HTTP'] = '1'
+        end
+
+        it 'uses http' do
+          expect(instance.redirect_uri).to start_with('http://')
+        end
+      end
+    end
+  end
+
+  describe '#push_redirect_uris_to_keycloak' do
+    subject(:instance) { Instance.default }
+
+    let(:access_token) { 'test-access-token' }
+    let(:client_uuid) { 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee' }
+    let(:frontend_client_id) { 'coursemology-frontend' }
+
+    before do
+      creds = Rails.application.credentials
+      allow(creds).to receive(:dig).with(:keycloak, :backend, :client_id).and_return('backend-client')
+      allow(creds).to receive(:dig).with(:keycloak, :backend, :client_secret).and_return('backend-secret')
+      allow(creds).to receive(:dig).with(:keycloak, :frontend, :client_id).and_return(frontend_client_id)
+      allow(Keycloak::Client).to receive(:get_token_by_client_credentials).
+        and_return({ access_token: access_token }.to_json)
+      allow(Keycloak::Admin).to receive(:get_clients).
+        and_return([{ 'id' => client_uuid, 'clientId' => frontend_client_id }].to_json)
+      allow(Keycloak::Admin).to receive(:generic_put).and_return(true)
+    end
+
+    describe '#keycloak_frontend_client_uuid' do
+      it 'queries Keycloak using the frontend client ID' do
+        instance.push_redirect_uris_to_keycloak
+        expect(Keycloak::Admin).to have_received(:get_clients).with({ clientId: frontend_client_id }, access_token)
+      end
+
+      it 'extracts the UUID from the first result' do
+        instance.push_redirect_uris_to_keycloak
+        expect(Keycloak::Admin).to have_received(:generic_put).
+          with("clients/#{client_uuid}", anything, anything, anything)
+      end
+
+      context 'when the client list response is empty' do
+        before do
+          allow(Keycloak::Admin).to receive(:get_clients).and_return([].to_json)
+        end
+
+        it 'raises an error' do
+          expect { instance.push_redirect_uris_to_keycloak }.
+            to raise_error(RuntimeError, /Keycloak frontend client not found/)
+        end
+      end
+    end
+
+    it 'pushes redirect URIs for all instances' do
+      instance.push_redirect_uris_to_keycloak
+      expected_uris = Instance.all.map { |i| "#{i.redirect_uri}/*" }
+      expect(Keycloak::Admin).to have_received(:generic_put).
+        with("clients/#{client_uuid}", nil, { redirectUris: expected_uris }, access_token)
+    end
+  end
+
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     describe '.active_course_count' do

@@ -12,6 +12,7 @@ export interface InstanceBasicListData {
   id: number;
   name: string;
   host: string;
+  redirectUri: string;
 }
 
 export interface InstanceListData extends InstanceBasicListData {
@@ -26,6 +27,7 @@ export interface InstanceBasicMiniEntity {
   id: number;
   name: string;
   host: string;
+  redirectUri: string;
 }
 
 export interface InstanceMiniEntity extends InstanceBasicMiniEntity {

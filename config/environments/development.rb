@@ -34,6 +34,9 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  # Disable request forgery protection in development environment.
+  config.action_controller.allow_forgery_protection = false
+
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
@@ -67,10 +70,10 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.x.default_app_host = 'localhost'
-  config.x.default_host = "#{config.x.default_app_host}:3000"
+  config.x.default_app_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080').gsub(/:\d+/, '')
+  config.x.default_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080')
 
-  config.action_mailer.default_url_options = { host: "#{config.x.default_app_host}:3000" }
+  config.action_mailer.default_url_options = { host: "#{config.x.default_app_host}" }
 
   # Rails 6.0.5.1 security patch
   # To find out more unpermitted classes and add below then uncomment

@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { merge } = require('webpack-merge');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
@@ -5,8 +6,9 @@ const common = require('./webpack.common');
 const packageJSON = require('./package.json');
 
 const SERVER_PORT = packageJSON.devServer.serverPort;
-const CLIENT_PORT = packageJSON.devServer.clientPort;
-const APP_HOST = packageJSON.devServer.appHost;
+const APP_HOST = process.env.USE_DEVELOPMENT_HTTPS
+  ? packageJSON.httpsDevServer.appHost
+  : packageJSON.devServer.appHost;
 
 const BLUE_ANSI = '\x1b[36m%s\x1b[0m';
 
@@ -21,6 +23,18 @@ const bypassProxyIf = [
   (request) => request.url.startsWith('/oauth'),
 ];
 
+const serverConfig = process.env.USE_DEVELOPMENT_HTTPS
+  ? {
+      type: 'https',
+      options: {
+        cert: fs.readFileSync(packageJSON.httpsDevServer.certPath),
+        key: fs.readFileSync(packageJSON.httpsDevServer.keyPath),
+      },
+    }
+  : {
+      type: 'http',
+    };
+
 /**
  * @type {import('webpack').Configuration}
  */
@@ -28,7 +42,7 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'eval-cheap-module-source-map',
   devServer: {
-    port: CLIENT_PORT,
+    server: serverConfig,
     allowedHosts: [`.${APP_HOST}`],
     historyApiFallback: true,
     devMiddleware: {
@@ -36,16 +50,17 @@ module.exports = merge(common, {
     },
     proxy: [
       {
+        secure: false,
         context: () => true,
         changeOrigin: true,
         onProxyReq: (proxyReq) => {
           proxyReq.setHeader(
             'origin',
-            `http://${proxyReq.host}:${SERVER_PORT}`,
+            `${serverConfig.type}://${proxyReq.host}:${SERVER_PORT}`,
           );
         },
         router: (request) => ({
-          protocol: 'http:',
+          protocol: `${request.protocol}:`,
           host: request.headers.host.split(':')[0],
           port: SERVER_PORT,
         }),

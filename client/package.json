@@ -13,6 +13,7 @@
     "build:test": "export NODE_ENV=test && export BABEL_ENV=e2e-test && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
     "build:development": "yarn run build:translations && webpack serve --config webpack.dev.js",
+    "build:development-https": "yarn run build:translations && USE_DEVELOPMENT_HTTPS=1 OIDC_REDIRECT_URI=https://lvh.me:8080 webpack serve --config webpack.dev.js",
     "build:profile": "yarn run build:translations && webpack serve --config webpack.profile.js --progress=profile",
     "build:translations": "formatjs compile-folder --ast locales compiled-locales",
     "extract-translations": "formatjs extract \"app/**/*.{js,jsx,ts,tsx}\" --ignore='**/*.d.ts' --out-file ./locales/en.json",
@@ -213,6 +214,12 @@
   "main": "app/index.js",
   "devServer": {
     "appHost": "localhost",
+    "serverPort": 3000
+  },
+  "httpsDevServer": {
+    "appHost": "lvh.me",
+    "certPath": "../config/credentials/server.crt",
+    "keyPath": "../config/credentials/server.key",
     "serverPort": 3000
   }
 }
