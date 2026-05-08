@@ -27,15 +27,17 @@ class User::Email < ApplicationRecord
   def accept_all_pending_invitations
     return unless confirmed?
 
-    all_unconfirmed_invitations = Course::UserInvitation.where(email: email).unconfirmed
+    ActsAsTenant.without_tenant do
+      all_unconfirmed_invitations = Course::UserInvitation.where(email: email).unconfirmed
 
-    all_unconfirmed_invitations.each do |unconfirmed_invitation|
-      if enrolled_course_ids.include?(unconfirmed_invitation.course_id)
-        unconfirmed_invitation.confirm!(confirmer: user)
-        next
+      all_unconfirmed_invitations.each do |unconfirmed_invitation|
+        if enrolled_course_ids.include?(unconfirmed_invitation.course_id)
+          unconfirmed_invitation.confirm!(confirmer: user)
+          next
+        end
+        user.build_course_user_from_invitation(unconfirmed_invitation)
+        unconfirmed_invitation.confirm!(confirmer: user) if user.save && user.persisted?
       end
-      user.build_course_user_from_invitation(unconfirmed_invitation)
-      unconfirmed_invitation.confirm!(confirmer: user) if user.save && user.persisted?
     end
   end
 
