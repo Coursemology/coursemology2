@@ -73,7 +73,7 @@ Rails.application.configure do
   config.x.default_app_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080').gsub(/:\d+/, '')
   config.x.default_host = ENV.fetch('RAILS_HOSTNAME', 'localhost:8080')
 
-  config.action_mailer.default_url_options = { host: "#{config.x.default_app_host}" }
+  config.action_mailer.default_url_options = { host: config.x.default_app_host }
 
   # Rails 6.0.5.1 security patch
   # To find out more unpermitted classes and add below then uncomment
