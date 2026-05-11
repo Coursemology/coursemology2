@@ -17,7 +17,7 @@ end
 json.attachments answer.attachments do |attachment|
   json.id attachment.id
   json.name attachment.name
-  json.url attachment.url
+  json.url attachment_reference_url(attachment)
 end
 
 last_attempt = last_attempt(answer)
