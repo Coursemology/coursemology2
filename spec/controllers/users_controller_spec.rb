@@ -72,6 +72,29 @@ RSpec.describe UsersController, type: :controller do
           end
         end
       end
+
+      context 'when the viewer is a global administrator' do
+        let(:other_instance) { create(:instance) }
+        let(:target_user) { create(:user) }
+
+        before do
+          user.update!(role: :administrator)
+          target_user # force creation within tenant context before leaving it
+          ActsAsTenant.without_tenant do
+            create(:instance_user, instance: other_instance, user: target_user, role: :instructor)
+          end
+        end
+
+        subject { get :show, as: :json, params: { id: target_user.id } }
+
+        it 'includes the instances block with the correct instanceRole in the JSON' do
+          subject
+          json = JSON.parse(response.body, symbolize_names: true)
+          expect(json[:instances]).to be_an(Array)
+          expect(json[:instances].length).to eq(1)
+          expect(json[:instances].first[:instanceRole]).to eq('instructor')
+        end
+      end
     end
   end
 end

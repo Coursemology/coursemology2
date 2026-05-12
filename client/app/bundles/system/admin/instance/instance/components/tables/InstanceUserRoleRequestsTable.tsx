@@ -1,5 +1,5 @@
 import { FC, memo, ReactElement, useMemo } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { MenuItem, TextField, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -7,16 +7,18 @@ import {
   RoleRequestMiniEntity,
   RoleRequestRowData,
 } from 'types/system/instance/roleRequests';
+import { INSTANCE_STAFF_ROLES } from 'types/system/instance/users';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
-import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 import tableTranslations from 'lib/translations/table';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   title: string;
   roleRequests: RoleRequestMiniEntity[];
   pendingRoleRequests?: boolean;
@@ -52,18 +54,18 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
     approvedRoleRequests = false,
     rejectedRoleRequests = false,
     renderRowActionComponent = null,
-    intl,
   } = props;
+  const { t } = useTranslation();
 
   const requestTypePrefix: string = useMemo((): string => {
     if (approvedRoleRequests) {
-      return intl.formatMessage(translations.approved);
+      return t(translations.approved);
     }
     if (rejectedRoleRequests) {
-      return intl.formatMessage(translations.rejected);
+      return t(translations.rejected);
     }
     if (pendingRoleRequests) {
-      return intl.formatMessage(translations.pending);
+      return t(translations.pending);
     }
     return '';
   }, [approvedRoleRequests, rejectedRoleRequests, pendingRoleRequests]);
@@ -71,7 +73,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
   if (roleRequests && roleRequests.length === 0) {
     return (
       <Note
-        message={intl.formatMessage(translations.noEnrolRequests, {
+        message={t(translations.noEnrolRequests, {
           enrolRequestsType: title.toLowerCase(),
         })}
       />
@@ -107,7 +109,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
   const columns: TableColumns[] = [
     {
       name: 'id',
-      label: intl.formatMessage(tableTranslations.id),
+      label: t(tableTranslations.id),
       options: {
         display: false,
         filter: false,
@@ -116,7 +118,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'name',
-      label: intl.formatMessage(tableTranslations.name),
+      label: t(tableTranslations.name),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -133,28 +135,28 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
     },
     {
       name: 'email',
-      label: intl.formatMessage(tableTranslations.email),
+      label: t(tableTranslations.email),
       options: {
         alignCenter: false,
       },
     },
     {
       name: 'organization',
-      label: intl.formatMessage(tableTranslations.organization),
+      label: t(tableTranslations.organization),
       options: {
         alignCenter: false,
       },
     },
     {
       name: 'designation',
-      label: intl.formatMessage(tableTranslations.designation),
+      label: t(tableTranslations.designation),
       options: {
         alignCenter: false,
       },
     },
     {
       name: 'reason',
-      label: intl.formatMessage(tableTranslations.reason),
+      label: t(tableTranslations.reason),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -174,14 +176,22 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       ...[
         {
           name: 'role',
-          label: intl.formatMessage(tableTranslations.role),
+          label: t(tableTranslations.role),
           options: {
             alignCenter: false,
+            customBodyRenderLite: (dataIndex): JSX.Element => {
+              const roleRequest = roleRequests[dataIndex];
+              return (
+                <Typography key={`role-${roleRequest.id}`} variant="body2">
+                  {t(instanceRoleTranslations[roleRequest.role])}
+                </Typography>
+              );
+            },
           },
         },
         {
           name: 'createdAt',
-          label: intl.formatMessage(tableTranslations.requestedAt),
+          label: t(tableTranslations.requestedAt),
           options: {
             alignCenter: false,
             customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -196,14 +206,14 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
         },
         {
           name: 'confirmedBy',
-          label: intl.formatMessage(tableTranslations.approver),
+          label: t(tableTranslations.approver),
           options: {
             alignCenter: false,
           },
         },
         {
           name: 'confirmedAt',
-          label: intl.formatMessage(tableTranslations.approvedAt),
+          label: t(tableTranslations.approvedAt),
           options: {
             alignCenter: false,
             customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -226,7 +236,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       ...[
         {
           name: 'role',
-          label: intl.formatMessage(tableTranslations.role),
+          label: t(tableTranslations.role),
           options: {
             alignCenter: false,
             customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
@@ -239,12 +249,12 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
                   value={value || 'normal'}
                   variant="standard"
                 >
-                  {Object.keys(ROLE_REQUEST_ROLES).map((option) => (
+                  {INSTANCE_STAFF_ROLES.map((option) => (
                     <MenuItem
                       key={`role-${roleRequest.id}-${option}`}
                       value={option}
                     >
-                      {ROLE_REQUEST_ROLES[option]}
+                      {t(instanceRoleTranslations[option])}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -254,7 +264,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
         },
         {
           name: 'createdAt',
-          label: intl.formatMessage(tableTranslations.requestedAt),
+          label: t(tableTranslations.requestedAt),
           options: {
             alignCenter: false,
             customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -271,7 +281,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
           ? [
               {
                 name: 'actions',
-                label: intl.formatMessage(tableTranslations.actions),
+                label: t(tableTranslations.actions),
                 options: {
                   empty: true,
                   sort: false,
@@ -294,7 +304,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       ...[
         {
           name: 'createdAt',
-          label: intl.formatMessage(tableTranslations.requestedAt),
+          label: t(tableTranslations.requestedAt),
           options: {
             alignCenter: false,
             customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -309,14 +319,14 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
         },
         {
           name: 'confirmedBy',
-          label: intl.formatMessage(tableTranslations.rejector),
+          label: t(tableTranslations.rejector),
           options: {
             alignCenter: false,
           },
         },
         {
           name: 'confirmedAt',
-          label: intl.formatMessage(tableTranslations.rejectedAt),
+          label: t(tableTranslations.rejectedAt),
           options: {
             alignCenter: false,
             customBodyRenderLite: (dataIndex): JSX.Element => {
@@ -334,7 +344,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
         },
         {
           name: 'rejectionMessage',
-          label: intl.formatMessage(tableTranslations.rejectionMessage),
+          label: t(tableTranslations.rejectionMessage),
           options: {
             alignCenter: false,
           },
@@ -355,9 +365,6 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
   );
 };
 
-export default memo(
-  injectIntl(InstanceUserRoleRequestsTable),
-  (prevProps, nextProps) => {
-    return equal(prevProps.roleRequests, nextProps.roleRequests);
-  },
-);
+export default memo(InstanceUserRoleRequestsTable, (prevProps, nextProps) => {
+  return equal(prevProps.roleRequests, nextProps.roleRequests);
+});

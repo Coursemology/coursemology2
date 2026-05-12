@@ -5,20 +5,22 @@ import {
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from 'react-hook-form';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Tooltip } from '@mui/material';
 import {
   IndividualInvite,
   IndividualInvites,
 } from 'types/system/instance/invitations';
+import { INSTANCE_USER_ROLES } from 'types/system/instance/users';
 
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
+import useTranslation from 'lib/hooks/useTranslation';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 import tableTranslations from 'lib/translations/table';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   fieldsConfig: {
     control: Control<IndividualInvites>;
     fields: IndividualInvite[];
@@ -43,13 +45,14 @@ const translations = defineMessages({
   },
 });
 
-const userRoleOptions = Object.keys(INSTANCE_USER_ROLES).map((roleValue) => ({
-  label: INSTANCE_USER_ROLES[roleValue],
-  value: roleValue,
-}));
-
 const IndividualInvitation: FC<Props> = (props) => {
-  const { fieldsConfig, index, intl } = props;
+  const { fieldsConfig, index } = props;
+  const { t } = useTranslation();
+
+  const userRoleOptions = INSTANCE_USER_ROLES.map((roleValue) => ({
+    label: t(instanceRoleTranslations[roleValue]),
+    value: roleValue,
+  }));
 
   const renderInvitationBody = (
     <Grid alignItems="center" container flexWrap="nowrap">
@@ -62,8 +65,8 @@ const IndividualInvitation: FC<Props> = (props) => {
             fieldState={fieldState}
             fullWidth
             id={`name-${index}`}
-            label={intl.formatMessage(tableTranslations.name)}
-            placeholder={intl.formatMessage(translations.namePlaceholder)}
+            label={t(tableTranslations.name)}
+            placeholder={t(translations.namePlaceholder)}
             variant="standard"
           />
         )}
@@ -77,8 +80,8 @@ const IndividualInvitation: FC<Props> = (props) => {
             fieldState={fieldState}
             fullWidth
             id={`email-${index}`}
-            label={intl.formatMessage(tableTranslations.email)}
-            placeholder={intl.formatMessage(translations.emailPlaceholder)}
+            label={t(tableTranslations.email)}
+            placeholder={t(translations.emailPlaceholder)}
             variant="standard"
           />
         )}
@@ -90,7 +93,7 @@ const IndividualInvitation: FC<Props> = (props) => {
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            label={intl.formatMessage(tableTranslations.role)}
+            label={t(tableTranslations.role)}
             options={userRoleOptions}
           />
         )}
@@ -101,7 +104,7 @@ const IndividualInvitation: FC<Props> = (props) => {
   return (
     <Box key={index} className="flex items-center justify-start">
       {renderInvitationBody}
-      <Tooltip title={intl.formatMessage(translations.removeInvitation)}>
+      <Tooltip title={t(translations.removeInvitation)}>
         <IconButton
           className="p-3"
           onClick={(): void => fieldsConfig.remove(index)}
@@ -113,4 +116,4 @@ const IndividualInvitation: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(IndividualInvitation);
+export default IndividualInvitation;

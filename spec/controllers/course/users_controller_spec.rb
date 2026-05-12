@@ -386,6 +386,26 @@ RSpec.describe Course::UsersController, type: :controller do
         end
       end
 
+      context 'when the viewer is a teaching assistant' do
+        let!(:viewer) { create(:course_teaching_assistant, course: course, user: user) }
+
+        it 'includes userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data['userId']).to eq(student.user_id)
+        end
+      end
+
+      context 'when the viewer is an observer' do
+        let!(:viewer) { create(:course_observer, course: course, user: user) }
+
+        it 'includes userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data['userId']).to eq(student.user_id)
+        end
+      end
+
       context 'when the viewer is a student' do
         let!(:viewer) { create(:course_student, course: course, user: user) }
 

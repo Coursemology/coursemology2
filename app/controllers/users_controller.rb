@@ -21,7 +21,8 @@ class UsersController < ApplicationController
     ActsAsTenant.without_tenant do
       @user.instance_users.
         includes(:instance).
-        where.not(instance_id: tenant.id)
+        where.not(instance_id: tenant.id).
+        to_a
     end
   end
 end

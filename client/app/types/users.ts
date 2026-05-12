@@ -2,7 +2,9 @@ import { CourseUserRole } from './course/courseUsers';
 import { EnrolRequestListData } from './course/enrolRequests';
 import { InstanceUserRoles } from './system/instance/users';
 
-export type UserRoles = 'normal' | 'administrator';
+export const USER_ROLES = ['normal', 'administrator'] as const;
+
+export type UserRoles = (typeof USER_ROLES)[number];
 
 export interface UserBasicListData {
   id: number;

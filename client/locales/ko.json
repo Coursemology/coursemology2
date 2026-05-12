@@ -7955,6 +7955,15 @@
   "lib.translations.form.messages.unsavedChanges": {
     "defaultMessage": "저장되지 않은 변경 사항이 있습니다."
   },
+  "lib.translations.instance.users.roles.normal": {
+    "defaultMessage": "일반 사용자"
+  },
+  "lib.translations.instance.users.roles.instructor": {
+    "defaultMessage": "교사"
+  },
+  "lib.translations.instance.users.roles.administrator": {
+    "defaultMessage": "관리자"
+  },
   "lib.translations.myStudentsIncludingPhantoms": {
     "defaultMessage": "내 학생들 (팬텀 포함)"
   },

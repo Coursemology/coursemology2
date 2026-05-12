@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import {
   Box,
@@ -13,15 +12,17 @@ import {
 import { InstanceBasicMiniEntity } from 'types/system/instances';
 
 import Link from 'lib/components/core/Link';
-import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
+import useTranslation from 'lib/hooks/useTranslation';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 import tableTranslations from 'lib/translations/table';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   title: string;
   instances: InstanceBasicMiniEntity[];
 }
 
-const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
+const InstancesTable: FC<Props> = ({ title, instances }: Props) => {
+  const { t } = useTranslation();
   const { userId } = useParams();
 
   return (
@@ -30,10 +31,8 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>
-              {intl.formatMessage(tableTranslations.instance)}
-            </TableCell>
-            <TableCell>{intl.formatMessage(tableTranslations.role)}</TableCell>
+            <TableCell>{t(tableTranslations.instance)}</TableCell>
+            <TableCell>{t(tableTranslations.role)}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -52,7 +51,7 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
               <TableCell>
                 <Typography className="instance_role" variant="body2">
                   {instance.instanceRole
-                    ? INSTANCE_USER_ROLES[instance.instanceRole]
+                    ? t(instanceRoleTranslations[instance.instanceRole])
                     : '-'}
                 </Typography>
               </TableCell>
@@ -64,4 +63,4 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
   );
 };
 
-export default injectIntl(InstancesTable);
+export default InstancesTable;
