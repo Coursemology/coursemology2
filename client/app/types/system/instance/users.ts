@@ -1,6 +1,10 @@
-export type InstanceUserRoles = 'normal' | 'administrator' | 'instructor';
+export const INSTANCE_STAFF_ROLES = ['instructor', 'administrator'] as const;
 
-export type RoleRequestRoles = Exclude<InstanceUserRoles, 'normal'>;
+export const INSTANCE_USER_ROLES = ['normal', ...INSTANCE_STAFF_ROLES] as const;
+
+export type InstanceUserRoles = (typeof INSTANCE_USER_ROLES)[number];
+
+export type RoleRequestRoles = (typeof INSTANCE_STAFF_ROLES)[number];
 
 export interface InstanceUserListData {
   id: number;

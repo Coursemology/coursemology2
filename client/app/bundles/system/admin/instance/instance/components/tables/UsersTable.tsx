@@ -13,6 +13,7 @@ import {
   TableState,
 } from 'types/components/DataTable';
 import {
+  INSTANCE_USER_ROLES,
   InstanceAdminStats,
   InstanceUserMiniEntity,
   InstanceUserRoles,
@@ -23,12 +24,12 @@ import Link from 'lib/components/core/Link';
 import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
   FIELD_DEBOUNCE_DELAY_MS,
-  INSTANCE_USER_ROLES,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 import tableTranslations from 'lib/translations/table';
 
 import { indexUsers, updateUser } from '../../operations';
@@ -99,7 +100,7 @@ const UsersTable: FC<Props> = (props) => {
         toast.success(
           t(translations.changeRoleSuccess, {
             name: user.name,
-            role: INSTANCE_USER_ROLES[newRole],
+            role: t(instanceRoleTranslations[newRole as InstanceUserRoles]),
           }),
         );
       })
@@ -277,13 +278,13 @@ const UsersTable: FC<Props> = (props) => {
               value={value}
               variant="standard"
             >
-              {Object.keys(INSTANCE_USER_ROLES).map((option) => (
+              {INSTANCE_USER_ROLES.map((option) => (
                 <MenuItem
                   key={`role-${userId}-${option}`}
                   id={`role-${userId}-${option}`}
                   value={option}
                 >
-                  {INSTANCE_USER_ROLES[option]}
+                  {t(instanceRoleTranslations[option])}
                 </MenuItem>
               ))}
             </TextField>

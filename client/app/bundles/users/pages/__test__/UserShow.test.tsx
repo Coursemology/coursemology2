@@ -61,7 +61,7 @@ describe('<UserShow />', () => {
       expect(screen.getByText('Normal')).toBeInTheDocument();
     });
 
-    it('displays a dash when instanceRole is absent', async () => {
+    it('renders no role element when instanceRole is absent', async () => {
       mock.onGet('/users/3').reply(200, {
         user: baseUser,
         currentCourses: [],
@@ -74,7 +74,7 @@ describe('<UserShow />', () => {
       await waitFor(() =>
         expect(screen.getByText('Caitlyn')).toBeInTheDocument(),
       );
-      expect(screen.getByText('-')).toBeInTheDocument();
+      expect(screen.queryByTestId('instance-role')).not.toBeInTheDocument();
     });
   });
 });
