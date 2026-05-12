@@ -1,5 +1,6 @@
 import { CourseUserRole } from './course/courseUsers';
 import { EnrolRequestListData } from './course/enrolRequests';
+import { InstanceUserRoles } from './system/instance/users';
 
 export type UserRoles = 'normal' | 'administrator';
 
@@ -7,6 +8,7 @@ export interface UserBasicListData {
   id: number;
   name: string;
   imageUrl?: string;
+  instanceRole?: InstanceUserRoles;
 }
 export interface UserListData {
   id: number;
@@ -27,6 +29,7 @@ export interface UserBasicMiniEntity {
   id: number;
   name: string;
   imageUrl?: string;
+  instanceRole?: InstanceUserRoles;
 }
 
 export interface UserMiniEntity extends UserBasicMiniEntity {

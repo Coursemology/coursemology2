@@ -15,6 +15,22 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
 
     before { controller_sign_in(controller, user) }
 
+    describe '#index' do
+      render_views
+
+      let!(:pending_request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
+
+      before { controller_sign_in(controller, admin) }
+      subject { get :index, format: :json }
+
+      it 'includes userId for each role request' do
+        subject
+        json = JSON.parse(response.body, symbolize_names: true)
+        request_json = json[:roleRequests].find { |r| r[:id] == pending_request.id }
+        expect(request_json[:userId]).to eq(user.id)
+      end
+    end
+
     describe '#create' do
       subject do
         post :create, params: { user_role_request:

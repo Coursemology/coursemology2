@@ -13,6 +13,7 @@ import {
 import { InstanceBasicMiniEntity } from 'types/system/instances';
 
 import Link from 'lib/components/core/Link';
+import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -32,6 +33,7 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
             <TableCell>
               {intl.formatMessage(tableTranslations.instance)}
             </TableCell>
+            <TableCell>{intl.formatMessage(tableTranslations.role)}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -45,6 +47,13 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
                   >
                     {instance.name}
                   </Link>
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography className="instance_role" variant="body2">
+                  {instance.instanceRole
+                    ? INSTANCE_USER_ROLES[instance.instanceRole]
+                    : '-'}
                 </Typography>
               </TableCell>
             </TableRow>

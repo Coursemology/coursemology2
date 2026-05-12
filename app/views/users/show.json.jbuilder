@@ -3,6 +3,7 @@ json.user do
   json.id @user.id
   json.name @user.name.strip
   json.imageUrl user_image(@user)
+  json.instanceRole @instance_user&.role
 end
 
 if @current_courses.any?
@@ -18,7 +19,7 @@ if @completed_courses.any?
 end
 
 if current_user&.administrator? && @instances.any?
-  json.instances @instances.each do |instance|
-    json.partial! 'instance_list_data', instance: instance
+  json.instances @instances.each do |instance_user|
+    json.partial! 'instance_list_data', instance_user: instance_user
   end
 end

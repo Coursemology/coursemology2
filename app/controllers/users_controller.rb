@@ -9,14 +9,19 @@ class UsersController < ApplicationController
       course_users = @user.course_users.with_course_statistics.from_instance(current_tenant)
       @current_courses = course_users.merge(Course.current).order(created_at: :desc)
       @completed_courses = course_users.merge(Course.completed).order(created_at: :desc)
-      @instances = other_instances
+
+      tenant_id = current_tenant.id
+
+      ActsAsTenant.without_tenant do
+        all_instance_users = InstanceUser.includes(:instance).
+                             where(user_id: @user.id).
+                             to_a
+
+        instance_users, @instances =
+          all_instance_users.partition { |iu| iu.instance_id == tenant_id }
+
+        @instance_user = instance_users.first
+      end
     end
-  end
-
-  private
-
-  def other_instances
-    tenant = current_tenant
-    ActsAsTenant.without_tenant { Instance.containing_user(@user) - [tenant] }
   end
 end
