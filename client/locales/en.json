@@ -8001,6 +8001,15 @@
   "lib.translations.form.validation.startEndDateValidationError": {
     "defaultMessage": "Must be after Start Date"
   },
+  "lib.translations.instance.users.roles.normal": {
+    "defaultMessage": "Normal"
+  },
+  "lib.translations.instance.users.roles.instructor": {
+    "defaultMessage": "Instructor"
+  },
+  "lib.translations.instance.users.roles.administrator": {
+    "defaultMessage": "Administrator"
+  },
   "lib.translations.messages.fetchingError": {
     "defaultMessage": "An error occurred when loading your data. Please reload and try again."
   },

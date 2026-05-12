@@ -1,8 +1,4 @@
-import {
-  InstanceUserRoles,
-  RoleRequestRoles,
-} from 'types/system/instance/users';
-import type { Locale, UserRoles } from 'types/users';
+import type { Locale } from 'types/users';
 import mirrorCreator from 'utilities/mirrorCreator';
 
 // Form options
@@ -21,22 +17,6 @@ export const TIMELINE_ALGORITHMS = [
   { value: 'stragglers', label: 'Stragglers' },
   { value: 'otot', label: 'Otot' },
 ];
-
-export const USER_ROLES: Record<UserRoles, string> = {
-  normal: 'Normal',
-  administrator: 'Administrator',
-};
-
-export const INSTANCE_USER_ROLES: Record<InstanceUserRoles, string> = {
-  normal: 'Normal',
-  instructor: 'Instructor',
-  administrator: 'Administrator',
-};
-
-export const ROLE_REQUEST_ROLES: Record<RoleRequestRoles, string> = {
-  instructor: 'Instructor',
-  administrator: 'Administrator',
-};
 
 export const AVAILABLE_LOCALES: { [key in Locale]: string } = {
   en: 'English',
@@ -79,9 +59,6 @@ export const ASSESSMENT_SIMILARITY_WORKFLOW_STATE = mirrorCreator([
 
 export default {
   TIMELINE_ALGORITHMS,
-  USER_ROLES,
-  INSTANCE_USER_ROLES,
-  ROLE_REQUEST_ROLES,
   AVAILABLE_LOCALES,
 };
 

@@ -8,9 +8,9 @@ import { InvitationMiniEntity } from 'types/system/instance/invitations';
 import Note from 'lib/components/core/Note';
 import { ColumnTemplate } from 'lib/components/table';
 import Table from 'lib/components/table/Table';
-import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatMiniDateTime } from 'lib/moment';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 import tableTranslations from 'lib/translations/table';
 
 import InvitationActionButtons from '../buttons/InvitationActionButtons';
@@ -177,7 +177,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       of: 'role',
       title: t(tableTranslations.role),
       sortable: true,
-      cell: (datum) => INSTANCE_USER_ROLES[datum.role],
+      cell: (datum) => t(instanceRoleTranslations[datum.role]),
     },
     {
       id: 'status',

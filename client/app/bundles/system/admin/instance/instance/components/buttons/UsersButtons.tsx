@@ -5,10 +5,10 @@ import { InstanceUserMiniEntity } from 'types/system/instance/users';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
-import { USER_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 
 import { deleteUser } from '../../operations';
 
@@ -78,7 +78,7 @@ const UserManagementButtons: FC<Props> = (props) => {
         loading={isDeleting}
         onClick={onDelete}
         title={t(translations.deletionConfirmTitle, {
-          role: USER_ROLES[user.role],
+          role: t(instanceRoleTranslations[user.role]),
           name: user.name,
           email: user.email,
         })}

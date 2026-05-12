@@ -7985,6 +7985,15 @@
   "lib.translations.form.validation.startEndDateValidationError": {
     "defaultMessage": "必须在开始日期之后"
   },
+  "lib.translations.instance.users.roles.normal": {
+    "defaultMessage": "普通用户"
+  },
+  "lib.translations.instance.users.roles.instructor": {
+    "defaultMessage": "教学导师"
+  },
+  "lib.translations.instance.users.roles.administrator": {
+    "defaultMessage": "平台管理员"
+  },
   "lib.translations.messages.fetchingError": {
     "defaultMessage": "加载数据时出错。请重新加载并重试。"
   },

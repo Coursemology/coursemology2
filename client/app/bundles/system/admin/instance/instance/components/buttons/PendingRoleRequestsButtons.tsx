@@ -6,10 +6,10 @@ import { RoleRequestRowData } from 'types/system/instance/roleRequests';
 import AcceptButton from 'lib/components/core/buttons/AcceptButton';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EmailButton from 'lib/components/core/buttons/EmailButton';
-import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch } from 'lib/hooks/store';
 import toast from 'lib/hooks/toast';
 import useTranslation from 'lib/hooks/useTranslation';
+import instanceRoleTranslations from 'lib/translations/instance/users/roles';
 
 import { approveRoleRequest, rejectRoleRequest } from '../../operations';
 import RejectWithMessageForm from '../forms/RejectWithMessageForm';
@@ -131,7 +131,7 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
       <DeleteButton
         className={`role-request-reject-${roleRequest.id} p-0`}
         confirmMessage={t(translations.rejectConfirm, {
-          role: ROLE_REQUEST_ROLES[roleRequest.role!],
+          role: t(instanceRoleTranslations[roleRequest.role!]),
           name: roleRequest.name,
           email: roleRequest.email,
         })}
