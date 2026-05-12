@@ -9,6 +9,7 @@ import {
 } from 'types/system/instance/roleRequests';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import Note from 'lib/components/core/Note';
 import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
@@ -120,10 +121,12 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`name-${roleRequest.id}`} variant="body2">
-              {roleRequest.name}
-            </Typography>
+          return roleRequest.userId ? (
+            <Link to={`/users/${roleRequest.userId}`}>
+              <Typography variant="body2">{roleRequest.name}</Typography>
+            </Link>
+          ) : (
+            <Typography variant="body2">{roleRequest.name}</Typography>
           );
         },
       },

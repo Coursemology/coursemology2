@@ -365,5 +365,36 @@ RSpec.describe Course::UsersController, type: :controller do
         end
       end
     end
+    describe '#show' do
+      render_views
+
+      let(:student) { create(:course_student, course: course) }
+
+      before { controller_sign_in(controller, user) }
+
+      subject do
+        get :show, as: :json, params: { course_id: course, id: student }
+      end
+
+      context 'when the viewer is a staff member' do
+        let!(:viewer) { create(:course_manager, course: course, user: user) }
+
+        it 'includes userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data['userId']).to eq(student.user_id)
+        end
+      end
+
+      context 'when the viewer is a student' do
+        let!(:viewer) { create(:course_student, course: course, user: user) }
+
+        it 'does not include userId in the response' do
+          subject
+          user_data = JSON.parse(response.body)['user']
+          expect(user_data).not_to have_key('userId')
+        end
+      end
+    end
   end
 end

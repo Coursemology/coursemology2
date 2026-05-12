@@ -3,6 +3,7 @@ should_show_timeline ||= false
 should_show_phantom ||= false
 
 json.id course_user.id if course_user.id
+json.userId course_user.user_id if current_course_user&.staff? || current_user&.administrator?
 json.name course_user.name.strip
 json.imageUrl user_image(course_user.user)
 json.email course_user.user.primary_email&.email || course_user.user.email

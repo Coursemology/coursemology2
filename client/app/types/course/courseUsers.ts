@@ -39,6 +39,7 @@ export interface CourseUserShape {
 
 export interface CourseUserBasicListData {
   id: number;
+  userId?: number;
   name: string;
   userUrl?: string;
   imageUrl?: string;
@@ -55,6 +56,7 @@ export interface CourseUserListData extends CourseUserBasicListData {
 
 export interface CourseUserBasicMiniEntity {
   id: CourseUserBasicListData['id'];
+  userId?: CourseUserBasicListData['userId'];
   name: CourseUserBasicListData['name'];
   userUrl?: CourseUserBasicListData['userUrl'];
   imageUrl?: CourseUserBasicListData['userUrl'];

@@ -9,6 +9,7 @@ class UsersController < ApplicationController
       course_users = @user.course_users.with_course_statistics.from_instance(current_tenant)
       @current_courses = course_users.merge(Course.current).order(created_at: :desc)
       @completed_courses = course_users.merge(Course.completed).order(created_at: :desc)
+      @instance_user = current_tenant.instance_users.find_by(user: @user)
       @instances = other_instances
     end
   end
@@ -17,6 +18,10 @@ class UsersController < ApplicationController
 
   def other_instances
     tenant = current_tenant
-    ActsAsTenant.without_tenant { Instance.containing_user(@user) - [tenant] }
+    ActsAsTenant.without_tenant do
+      @user.instance_users.
+        includes(:instance).
+        where.not(instance_id: tenant.id)
+    end
   end
 end
