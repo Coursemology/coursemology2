@@ -112,7 +112,13 @@ const UserProfileCard: FC<Props> = ({ user }) => {
             direction="column"
             item
           >
-            <Typography variant="h5">{user.name}</Typography>
+            {user.userId ? (
+              <Link to={`/users/${user.userId}`}>
+                <Typography variant="h5">{user.name}</Typography>
+              </Link>
+            ) : (
+              <Typography variant="h5">{user.name}</Typography>
+            )}
             <Typography>
               <strong>{t(roleTranslations[user.role])}</strong>
             </Typography>

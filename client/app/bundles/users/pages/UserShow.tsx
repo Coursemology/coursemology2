@@ -5,6 +5,7 @@ import { Avatar, Grid, Typography } from '@mui/material';
 
 import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import CoursesTable from '../components/tables/CoursesTable';
@@ -66,6 +67,7 @@ const UserShow: FC<Props> = (props) => {
   return (
     <Page>
       <Grid
+        alignItems="center"
         className="global-user-profile"
         container
         direction="row"
@@ -84,13 +86,26 @@ const UserShow: FC<Props> = (props) => {
           <Avatar src={user.imageUrl} style={styles.image} />
         </Grid>
         <Grid
-          alignItems="center"
           container
           direction="row"
           item
           justifyContent={{ xs: 'center', sm: 'start' }}
         >
-          <Typography variant="h5">{user.name}</Typography>
+          <Grid
+            alignItems={{ xs: 'center', sm: 'start' }}
+            container
+            direction="column"
+            item
+          >
+            <Typography variant="h5">{user.name}</Typography>
+            <Typography>
+              <strong>
+                {user.instanceRole
+                  ? INSTANCE_USER_ROLES[user.instanceRole]
+                  : '-'}
+              </strong>
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
       {currentCourses.length > 0 && (

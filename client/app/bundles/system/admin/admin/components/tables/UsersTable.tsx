@@ -280,7 +280,7 @@ const UsersTable: FC<Props> = (props) => {
               {user.instances.map((instance) => (
                 <li key={instance.name} className="list-none">
                   <Link
-                    href={`//${instance.host}/admin/users`}
+                    href={`//${instance.host}/users/${user.id}`}
                     underline="hover"
                   >
                     {t(translations.userInstanceEntry, {

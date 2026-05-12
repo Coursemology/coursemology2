@@ -2,6 +2,7 @@ import { RoleRequestRoles } from './users';
 
 export interface RoleRequestBasicListData {
   id: number;
+  userId?: number;
   role: RoleRequestRoles;
   organization: string;
   designation: string;
