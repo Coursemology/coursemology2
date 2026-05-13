@@ -658,7 +658,7 @@ GEM
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
     ssrf_filter (1.5.0)
-    stackprof (0.2.27)
+    stackprof (0.2.28)
     stringio (3.2.0)
     temple (0.10.4)
     terminal-table (4.0.0)
