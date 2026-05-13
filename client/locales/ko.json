@@ -3629,8 +3629,11 @@
   "course.assessment.submission.gradePrefilled": {
     "defaultMessage": "미리 채워진"
   },
-  "course.assessment.submission.gradePrefilledHint": {
+  "course.assessment.submission.gradePrefilledFullHint": {
     "defaultMessage": "자동 채점기가 정답으로 판단한 최대 점수가 미리 채워져 있습니다."
+  },
+  "course.assessment.submission.gradePrefilledZeroHint": {
+    "defaultMessage": "자동 채점기가 오답으로 판단했기 때문에 0점이 미리 채워져 있습니다."
   },
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "등급 요약"

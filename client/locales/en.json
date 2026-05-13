@@ -3651,8 +3651,11 @@
   "course.assessment.submission.gradePrefilled": {
     "defaultMessage": "Pre-filled"
   },
-  "course.assessment.submission.gradePrefilledHint": {
+  "course.assessment.submission.gradePrefilledFullHint": {
     "defaultMessage": "The maximum grade has been pre-filled for you because it was deemed correct by the autograder."
+  },
+  "course.assessment.submission.gradePrefilledZeroHint": {
+    "defaultMessage": "The grade of 0 has been pre-filled for you because it was deemed incorrect by the autograder."
   },
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "Grade Summary"

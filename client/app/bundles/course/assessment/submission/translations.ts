@@ -103,10 +103,15 @@ const translations = defineMessages({
     id: 'course.assessment.submission.gradePrefilled',
     defaultMessage: 'Pre-filled',
   },
-  gradePrefilledHint: {
-    id: 'course.assessment.submission.gradePrefilledHint',
+  gradePrefilledFullHint: {
+    id: 'course.assessment.submission.gradePrefilledFullHint',
     defaultMessage:
       'The maximum grade has been pre-filled for you because it was deemed correct by the autograder.',
+  },
+  gradePrefilledZeroHint: {
+    id: 'course.assessment.submission.gradePrefilledZeroHint',
+    defaultMessage:
+      'The grade of 0 has been pre-filled for you because it was deemed incorrect by the autograder.',
   },
   submit: {
     id: 'course.asssessment.submission.submit',

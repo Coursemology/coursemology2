@@ -4,6 +4,30 @@ import { arrayToObjectWithKey } from 'utilities/array';
 
 import actions, { questionTypes } from '../../constants';
 
+/**
+ * Represents a student's answer to a question, as returned by the server.
+ *
+ * @typedef {Object} Answer
+ * @property {number} questionId
+ * @property {{ grade: number|null, id: number }} grading
+ * @property {{ correct: boolean }} [explanation]
+ * @property {Object} [testCases]
+ */
+
+/**
+ * Defines the prefill behaviour for a question type.
+ * `isFullCreditPrefillable` determines whether the maximum grade should be prefilled for a correct answer.
+ * `isZeroCreditPrefillable` determines whether 0 should be prefilled for an incorrect answer.
+ *
+ * @typedef {{ isFullCreditPrefillable: (answer: Answer) => boolean, isZeroCreditPrefillable: boolean }} PrefillPolicy
+ */
+
+/**
+ * The initial Redux state for the grading slice.
+ *
+ * @type {{ questions: Record<number, Object>, expMultiplier: number, exp: number, basePoints: number,
+ *   maximumGrade: number }}
+ */
 const initialState = {
   questions: {},
   expMultiplier: 1,
@@ -12,8 +36,24 @@ const initialState = {
   maximumGrade: 0,
 };
 
+/**
+ * Sums all truthy values in an array, ignoring nulls and undefineds.
+ *
+ * @param {Array<number|null|undefined>} array
+ * @returns {number}
+ */
 const sum = (array) => array.filter((i) => i).reduce((acc, i) => acc + i, 0);
 
+/**
+ * Computes the EXP awarded for a submission based on the total grade achieved.
+ *
+ * @param {Record<number, { grade: number|null }>} questions
+ * @param {number} maximumGrade
+ * @param {number} basePoints
+ * @param {number} expMultiplier
+ * @param {number} [bonusAwarded]
+ * @returns {number}
+ */
 export const computeExp = (
   questions,
   maximumGrade,
@@ -29,74 +69,183 @@ export const computeExp = (
   );
 };
 
-const extractGrades = (answers) =>
+/**
+ * Extracts grades from a list of answers, keyed by question ID.
+ *
+ * `prefillStatus` and `prefilled` are client-side-only fields that the server never returns.
+ * They are carried forward from `existingQuestions` so that save/mark/publish actions do not
+ * reset them to `undefined`.
+ *
+ * @param {Answer[]} answers
+ * @param {Record<number, Object>} [existingQuestions={}] - Current Redux grading state, used to
+ *   preserve client-side fields across server round-trips.
+ * @returns {Record<number, Object>}
+ */
+const extractGrades = (answers, existingQuestions = {}) =>
   answers.reduce((draft, { questionId, grading }) => {
     draft[questionId] = {
       ...grading,
       originalGrade: grading.grade,
+      prefillStatus: existingQuestions[questionId]?.prefillStatus ?? 'none',
+      prefilled: existingQuestions[questionId]?.prefilled ?? false,
     };
 
     return draft;
   }, {});
 
-const isSpecificAnswerGradePrefillableMap = {
-  [questionTypes.MultipleChoice]: () => true,
-  [questionTypes.MultipleResponse]: () => true,
-  [questionTypes.Programming]: (answer) => {
-    const { testCases } = answer;
-    const isPublicTestCasesExist = testCases?.public_test?.length > 0;
-    const isPrivateTestCasesExist = testCases?.private_test?.length > 0;
-    const isEvaluationTestCasesExist = testCases?.evaluation_test?.length > 0;
-    return (
-      isPublicTestCasesExist ||
-      isPrivateTestCasesExist ||
-      isEvaluationTestCasesExist
-    );
-  },
-  [questionTypes.RubricBasedResponse]: () => false,
-  [questionTypes.TextResponse]: () => false,
-  [questionTypes.Comprehension]: () => false,
-  [questionTypes.FileUpload]: () => false,
-  [questionTypes.Scribing]: () => false,
-  [questionTypes.VoiceResponse]: () => false,
-  [questionTypes.ForumPostResponse]: () => false,
-};
-
-const isAnswerGradePrefillable = (answer, questionType) => {
-  const isAnswerPrefillable =
-    answer.grading.grade === null && answer.explanation?.correct;
-  const isSpecificAnswerPrefillable =
-    isSpecificAnswerGradePrefillableMap[questionType](answer);
-  return isAnswerPrefillable && isSpecificAnswerPrefillable;
+/**
+ * Never prefills any grade regardless of correctness.
+ * Used for question types where auto-grading is not applicable.
+ *
+ * @type {PrefillPolicy}
+ */
+const NEVER_PREFILL_POLICY = {
+  isFullCreditPrefillable: () => false,
+  isZeroCreditPrefillable: false,
 };
 
 /**
- * Extracts grades from `payload.answer`, and pre-fills the maximum grade for correct
- * answers that have not been graded. "Correct" follows the definition of
- * `explanation.correct` from the server.
+ * Prefills maximum grade for correct answers and 0 for incorrect answers.
+ * Used for question types with no partial credit.
+ *
+ * @type {PrefillPolicy}
+ */
+const ALWAYS_PREFILL_POLICY = {
+  isFullCreditPrefillable: () => true,
+  isZeroCreditPrefillable: true,
+};
+
+/**
+ * Prefills maximum grade for correct answers, but does not prefill 0 for incorrect answers.
+ * Used for question types where partial credit is possible.
+ *
+ * @type {PrefillPolicy}
+ */
+const ONLY_PREFILL_FULL_POLICY = {
+  isFullCreditPrefillable: () => true,
+  isZeroCreditPrefillable: false,
+};
+
+/**
+ * Prefills maximum grade for correct programming answers only when test cases exist.
+ * Does not prefill 0 since partial grading is possible.
+ *
+ * @type {PrefillPolicy}
+ */
+const PROGRAMMING_PREFILL_POLICY = {
+  isFullCreditPrefillable: ({ testCases }) =>
+    (testCases?.public_test?.length ?? 0) > 0 ||
+    (testCases?.private_test?.length ?? 0) > 0 ||
+    (testCases?.evaluation_test?.length ?? 0) > 0,
+
+  // Partial grading is possible
+  isZeroCreditPrefillable: false,
+};
+
+/**
+ * Maps each question type to its prefill policy.
+ *
+ * @type {Record<string, PrefillPolicy>}
+ */
+const PrefillPolicyMapper = {
+  [questionTypes.MultipleChoice]: ALWAYS_PREFILL_POLICY,
+  [questionTypes.MultipleResponse]: ONLY_PREFILL_FULL_POLICY,
+  [questionTypes.Programming]: PROGRAMMING_PREFILL_POLICY,
+  [questionTypes.TextResponse]: ONLY_PREFILL_FULL_POLICY,
+  [questionTypes.Comprehension]: ONLY_PREFILL_FULL_POLICY,
+  [questionTypes.FileUpload]: NEVER_PREFILL_POLICY,
+  [questionTypes.Scribing]: NEVER_PREFILL_POLICY,
+  [questionTypes.VoiceResponse]: NEVER_PREFILL_POLICY,
+  [questionTypes.ForumPostResponse]: NEVER_PREFILL_POLICY,
+  [questionTypes.RubricBasedResponse]: NEVER_PREFILL_POLICY,
+};
+
+/**
+ * Returns the grade to prefill for an answer based on its question type's policy.
+ * Returns the existing grade if one is already set, otherwise applies the policy.
+ * Returns null if no prefill is applicable.
+ *
+ * @param {Answer} answer
+ * @param {string} questionType
+ * @param {number} maxGrade
+ * @returns {{ grade: number|null, prefillStatus: string }}
+ */
+const getPrefillResult = (answer, questionType, maxGrade) => {
+  const existingGrade = answer?.grading?.grade;
+  if (existingGrade != null) {
+    return {
+      grade: existingGrade,
+      prefillStatus: 'none',
+    };
+  }
+
+  const policy = PrefillPolicyMapper[questionType];
+
+  if (
+    answer?.explanation?.correct === true &&
+    policy?.isFullCreditPrefillable(answer)
+  ) {
+    return {
+      grade: maxGrade,
+      prefillStatus: 'full',
+    };
+  }
+
+  if (
+    answer?.explanation?.correct === false &&
+    policy?.isZeroCreditPrefillable
+  ) {
+    return {
+      grade: 0,
+      prefillStatus: 'zero',
+    };
+  }
+
+  return { grade: null, prefillStatus: 'none' };
+};
+
+/**
+ * Extracts grades from `payload.answers` and pre-fills them where applicable based on each
+ * question type's prefill policy:
+ * - maximum grade for correct answers (where the policy allows full-credit prefill)
+ * - 0 for incorrect answers (where the policy allows zero-credit prefill)
+ * Answers that have already been graded are left unchanged.
+ * "Correct" and "incorrect" follows the definition of `explanation.correct` from the server.
+ *
+ * @param {{ questions: Object[], answers: Answer[] }} payload
+ * @returns {Record<number, Object>}
  */
 const extractPrefillableGrades = (payload) => {
   const mapQuestionIdToQuestion = arrayToObjectWithKey(payload.questions, 'id');
 
   return payload.answers.reduce((draft, answer) => {
     const { questionId, grading } = answer;
-    const prefillable = isAnswerGradePrefillable(
+    const question = mapQuestionIdToQuestion[questionId];
+    const { grade, prefillStatus } = getPrefillResult(
       answer,
-      mapQuestionIdToQuestion[questionId].type,
+      question.type,
+      question.maximumGrade,
     );
     draft[questionId] = {
       ...grading,
       originalGrade: grading.grade,
-      grade: prefillable
-        ? mapQuestionIdToQuestion[questionId].maximumGrade
-        : grading.grade,
-      prefilled: prefillable,
+      grade,
+      prefillStatus,
+      // for backwards compatibility, to be removed after prefillStatus is fully adopted
+      prefilled: prefillStatus !== 'none',
     };
 
     return draft;
   }, {});
 };
 
+/**
+ * Grading reducer. Manages per-question grades, EXP, and base points for a submission.
+ *
+ * @param {typeof initialState} state
+ * @param {{ type: string, [key: string]: any }} action
+ * @returns {typeof initialState}
+ */
 export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS: {
@@ -130,7 +279,10 @@ export default function (state = initialState, action) {
     }
     case actions.SAVE_GRADE_SUCCESS: {
       const basePoints = action.payload.submission.basePoints;
-      const questionWithGrades = extractGrades(action.payload.answers);
+      const questionWithGrades = extractGrades(
+        action.payload.answers,
+        state.questions,
+      );
       const maxGrade = sum(
         Object.values(action.payload.questions).map((q) => q.maximumGrade),
       );
@@ -165,7 +317,10 @@ export default function (state = initialState, action) {
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS: {
       const basePoints = action.payload.submission.basePoints;
-      const questionWithGrades = extractGrades(action.payload.answers);
+      const questionWithGrades = extractGrades(
+        action.payload.answers,
+        state.questions,
+      );
       const maxGrade = sum(
         Object.values(action.payload.questions).map((q) => q.maximumGrade),
       );
@@ -185,7 +340,8 @@ export default function (state = initialState, action) {
         [action.id]: {
           ...state.questions[action.id],
           grade: action.grade,
-          autofilled: false,
+          prefilled: false,
+          prefillStatus: 'none',
         },
       };
 

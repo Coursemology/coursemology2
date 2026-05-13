@@ -23,6 +23,8 @@ type TestCaseTypes = 'public_test' | 'private_test' | 'evaluation_test';
 
 type JobStatus = 'submitted' | 'completed' | 'errored';
 
+export type QuestionGradePrefillStatus = 'none' | 'zero' | 'full';
+
 export interface AssessmentState {
   allowPartialSubmission: boolean;
   autograded: boolean;
@@ -155,6 +157,7 @@ export interface GradeWithPrefilledStatus {
   originalGrade: number;
   grade: number;
   prefilled: boolean;
+  prefillStatus: QuestionGradePrefillStatus;
 }
 
 export interface GradingState {

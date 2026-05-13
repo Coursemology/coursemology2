@@ -3638,8 +3638,11 @@
   "course.assessment.submission.gradePrefilled": {
     "defaultMessage": "预先填写"
   },
-  "course.assessment.submission.gradePrefilledHint": {
+  "course.assessment.submission.gradePrefilledFullHint": {
     "defaultMessage": "已为你预填最高成绩，因为自动评分器认为它是正确的。"
+  },
+  "course.assessment.submission.gradePrefilledZeroHint": {
+    "defaultMessage": "已为你预填0分，因为自动评分器认为它是不正确的。"
   },
   "course.assessment.submission.gradeSummary": {
     "defaultMessage": "成绩总结"
