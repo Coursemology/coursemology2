@@ -141,7 +141,7 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
 
   if (!grading) return null;
 
-  const dirty = (grading.originalGrade ?? 0) !== (grading.grade ?? 0);
+  const dirty = grading.originalGrade !== grading.grade;
 
   let savingIndicator: React.ReactNode | null = null;
 
@@ -270,8 +270,8 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
       </div>
 
       <div className="px-4 space-x-4">
-        {grading.prefilled && (
-          <Tooltip title={t(translations.gradePrefilledHint)}>
+        {grading.prefillStatus === 'full' && (
+          <Tooltip title={t(translations.gradePrefilledFullHint)}>
             <Chip
               className="slot-1-neutral-400 border-slot-1 text-slot-1"
               label={t(translations.gradePrefilled)}
@@ -281,6 +281,16 @@ const QuestionGrade: FC<QuestionGradeProps> = (props) => {
           </Tooltip>
         )}
 
+        {grading.prefillStatus === 'zero' && (
+          <Tooltip title={t(translations.gradePrefilledZeroHint)}>
+            <Chip
+              className="slot-1-neutral-400 border-slot-1 text-slot-1"
+              label={t(translations.gradePrefilled)}
+              size="small"
+              variant="outlined"
+            />
+          </Tooltip>
+        )}
         {savingIndicator}
       </div>
     </div>
